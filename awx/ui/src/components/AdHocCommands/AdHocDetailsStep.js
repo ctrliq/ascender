@@ -184,7 +184,7 @@ function AdHocDetailsStep({ moduleOptions }) {
               aria-label={t`Show changes`}
               labelHelp={
                 <Popover
-                  content={t`If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible’s --diff mode.`}
+                  content={t`If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode.`}
                 />
               }
             >

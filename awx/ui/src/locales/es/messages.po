@@ -127,13 +127,9 @@ msgstr "No se pudo eliminar una o más plantillas de notificación."
 msgid "Managed by Policy"
 msgstr "Gestionado por la política"
 
-#: components/Search/AdvancedSearch.js:448
+#: components/Search/AdvancedSearch.js:447
 msgid "Advanced search documentation"
 msgstr "Documentación de búsqueda avanzada"
-
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:95
-msgid "Delete Group?"
-msgstr "Eliminar grupo"
 
 #: components/HealthCheckButton/HealthCheckButton.js:24
 msgid "{selectedItemsCount, plural, one {Click to run a health check on the selected instance.} other {Click to run a health check on the selected instances.}}"
@@ -163,7 +159,7 @@ msgstr "Eliminar proyecto"
 
 #: screens/TopologyView/Tooltip.js:300
 msgid "{forks, plural, one {# fork} other {# forks}}"
-msgstr "{forks, plural, one {# fork} other {# forks}}"
+msgstr "{forks, plural, one {# tenedor} other {# tenedores}}"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.js:190
 #: routeConfig.js:93
@@ -174,6 +170,9 @@ msgstr "{forks, plural, one {# fork} other {# forks}}"
 #: screens/Project/ProjectList/ProjectList.js:249
 #: screens/Project/Projects.js:13
 #: screens/Project/Projects.js:24
+#: util/getRelatedResourceDeleteDetails.js:59
+#: util/getRelatedResourceDeleteDetails.js:194
+#: util/getRelatedResourceDeleteDetails.js:224
 msgid "Projects"
 msgstr "Proyectos"
 
@@ -718,6 +717,11 @@ msgstr "Métricas"
 #: screens/CredentialType/CredentialTypes.js:25
 msgid "Create new credential Type"
 msgstr "Crear un nuevo tipo de credencial"
+
+#: screens/Inventory/shared/Inventory.helptext.js:104
+#: screens/Inventory/shared/Inventory.helptext.js:119
+msgid "If you want the Inventory Source to update on launch, click on Update on Launch, and also go to "
+msgstr "Si desea que la fuente de inventario se actualice al ejecutar, haga clic en Actualizar al ejecutar y también vaya a "
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeAddModal.js:109
 msgid "Add Node"
@@ -1371,10 +1375,12 @@ msgstr "Esta plantilla de trabajo del flujo de trabajo está siendo utilizada po
 #: screens/Inventory/SmartInventory.js:69
 #: screens/Job/JobOutput/shared/OutputToolbar.js:139
 #: screens/SubscriptionUsage/ChartComponents/UsageChart.js:73
+#: util/getRelatedResourceDeleteDetails.js:122
 msgid "Hosts"
 msgstr "Servidores"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:37
+#: components/Schedule/shared/buildRuleObj.js:91
 #: components/Schedule/shared/FrequencyDetailSubform.js:191
 #: components/Schedule/shared/FrequencyDetailSubform.js:212
 msgid "Frequency did not match an expected value"
@@ -1462,17 +1468,9 @@ msgstr "Búsqueda difusa en los campos id, nombre o descripción."
 msgid "Launch management job"
 msgstr "Ejecutar tarea de gestión"
 
-#: screens/Instances/Shared/RemoveInstanceButton.js:90
-msgid "This intance is currently being used by other resources. Are you sure you want to delete it?"
-msgstr "Esta intención está siendo utilizada actualmente por otros recursos. ¿Seguro que quieres eliminarlo?"
-
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:143
 msgid "Add existing group"
 msgstr "Agregar grupo existente"
-
-#: screens/Instances/Shared/RemoveInstanceButton.js:91
-msgid "Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?"
-msgstr "Desaprovisionar estas instancias podría afectar a otros recursos que dependen de ellas. ¿Está seguro de que desea eliminar de todos modos?"
 
 #: screens/Setting/Settings.js:89
 msgid "LDAP 4"
@@ -1648,10 +1646,10 @@ msgstr "Crear nuevo inventario federado"
 #: components/Lookup/HostListItem.js:9
 #: components/Lookup/InstanceGroupsLookup.js:102
 #: components/Lookup/InstanceGroupsLookup.js:113
-#: components/Lookup/InventoryLookup.js:157
-#: components/Lookup/InventoryLookup.js:172
-#: components/Lookup/InventoryLookup.js:213
-#: components/Lookup/InventoryLookup.js:228
+#: components/Lookup/InventoryLookup.js:156
+#: components/Lookup/InventoryLookup.js:171
+#: components/Lookup/InventoryLookup.js:212
+#: components/Lookup/InventoryLookup.js:227
 #: components/Lookup/MultiCredentialsLookup.js:195
 #: components/Lookup/MultiCredentialsLookup.js:210
 #: components/Lookup/OrganizationLookup.js:130
@@ -2007,7 +2005,7 @@ msgstr "Permitir la invalidación de la rama"
 msgid "Edit Credential"
 msgstr "Modificar credencial"
 
-#: components/Search/AdvancedSearch.js:373
+#: components/Search/AdvancedSearch.js:372
 msgid "Key"
 msgstr "Clave"
 
@@ -2037,10 +2035,6 @@ msgstr "Usuario"
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:8
 msgid "The organization that owns this workflow job template."
 msgstr "La organización propietaria de esta plantilla de trabajo del flujo de trabajo."
-
-#: components/RelatedTemplateList/RelatedTemplateList.js:225
-msgid "Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?"
-msgstr "La eliminación de estas plantillas podría afectar a algunos nodos de flujo de trabajo que dependen de ellas. ¿Está seguro de que desea eliminar de todos modos?"
 
 #: screens/Setting/shared/SharedFields.js:139
 #: screens/Setting/shared/SharedFields.js:145
@@ -2162,27 +2156,6 @@ msgstr "Ejemplos de URL para el control de código fuente GIT incluyen:"
 msgid "Input configuration"
 msgstr "Configuración de entrada"
 
-#. placeholder {0}: groups.length
-#. placeholder {0}: inventory.inventory_sources_with_failures
-#. placeholder {0}: itemsToRemove.length
-#. placeholder {1}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useNavigate } from 'react-router'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card, PageSection, DropdownItem, } from '@patternfly/react-core'; import { InventoriesAPI } from 'api'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import useSelected from 'hooks/useSelected'; import useToast, { AlertVariant } from 'hooks/useToast'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString } from 'util/qs'; import AddDropDownButton from 'components/AddDropDownButton'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import useWsInventories from './useWsInventories'; import InventoryListItem from './InventoryListItem'; const QS_CONFIG = getQSConfig('inventory', { page: 1, page_size: 20, order_by: 'name', }); function InventoryList() { const location = useLocation(); const navigate = useNavigate(); const { addToast, Toast, toastProps } = useToast(); const { t } = useLingui(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchInventories, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ InventoriesAPI.read(params), InventoriesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchInventories(); }, [fetchInventories]); const fetchInventoriesById = useCallback( async (ids) => { const params = { ...parseQueryString(QS_CONFIG, location.search) }; params.id__in = ids.join(','); const { data } = await InventoriesAPI.read(params); return data.results; }, [location.search] ); const inventories = useWsInventories( results, fetchInventories, fetchInventoriesById, QS_CONFIG ); const { selected, isAllSelected, handleSelect, selectAll, clearSelected } = useSelected(inventories); const { isLoading: isDeleteLoading, deleteItems: deleteInventories, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all(selected.map((team) => InventoriesAPI.destroy(team.id))), [selected] ), { allItemsSelected: isAllSelected, } ); const handleInventoryDelete = async () => { await deleteInventories(); clearSelected(); }; const handleCopy = useCallback( (newInventoryId) => { addToast({ id: newInventoryId, title: t`Inventory copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const hasContentLoading = isDeleteLoading || isLoading; const canAdd = actions && actions.POST; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory( selected[0] ); const addInventory = t`Add inventory`; const addSmartInventory = t`Add smart inventory`; const addConstructedInventory = t`Add constructed inventory`; const addFederatedInventory = t`Add federated inventory`; const addButton = ( <AddDropDownButton ouiaId="add-inventory-button" key="add" dropdownItems={[ <DropdownItem ouiaId="add-inventory-item" onClick={() => navigate('/inventories/inventory/add/')} key={addInventory} aria-label={addInventory} > {addInventory} </DropdownItem>, <DropdownItem ouiaId="add-smart-inventory-item" onClick={() => navigate('/inventories/smart_inventory/add/')} key={addSmartInventory} aria-label={addSmartInventory} > {addSmartInventory} </DropdownItem>, <DropdownItem ouiaId="add-constructed-inventory-item" onClick={() => navigate('/inventories/constructed_inventory/add/')} key={addConstructedInventory} aria-label={addConstructedInventory} > {addConstructedInventory} </DropdownItem>, <DropdownItem ouiaId="add-federated-inventory-item" onClick={() => navigate('/inventories/federated_inventory/add/')} key={addFederatedInventory} aria-label={addFederatedInventory} > {addFederatedInventory} </DropdownItem>, ]} /> ); return ( <> <PageSection hasBodyWrapper={false}> <Card> <PaginatedTable contentError={contentError} hasContentLoading={hasContentLoading} items={inventories} itemCount={itemCount} pluralizedItemName={t`Inventories`} qsConfig={QS_CONFIG} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Inventory Type`, key: 'or__kind', options: [ ['', t`Inventory`], ['smart', t`Smart Inventory`], ['constructed', t`Constructed Inventory`], ['federated', t`Federated Inventory`], ], }, { name: t`Organization`, key: 'organization__name', }, { name: t`Description`, key: 'description__icontains', }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, ]} toolbarSortColumns={[ { name: t`Name`, key: 'name', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} clearSelected={clearSelected} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Sync Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Organization`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleInventoryDelete} itemsToDelete={selected} pluralizedItemName={t`Inventories`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`} other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`} /> } warningMessage={ <Plural value={selected.length} one={t`The inventory will be in a pending status until the final delete is processed.`} other={t`The inventories will be in a pending status until the final delete is processed.`} /> } />, ]} /> )} renderRow={(inventory, index) => ( <InventoryListItem key={inventory.id} value={inventory.name} inventory={inventory} rowIndex={index} fetchInventories={fetchInventories} onSelect={() => { if (!inventory.pending_deletion) { handleSelect(inventory); } }} onCopy={handleCopy} isSelected={selected.some((row) => row.id === inventory.id)} /> )} emptyStateControls={canAdd && addButton} /> </Card> <AlertModal isOpen={deletionError} variant="error" aria-label={t`Deletion Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventories.`} <ErrorDetail error={deletionError} /> </AlertModal> </PageSection> <Toast {...toastProps} /> </> ); } export default InventoryList; 
-#. placeholder {1}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useParams } from 'react-router'; import { Plural, useLingui } from '@lingui/react/macro'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; import { getQSConfig, parseQueryString } from 'util/qs'; import { InventoriesAPI, InventorySourcesAPI } from 'api'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarAddButton, ToolbarDeleteButton, ToolbarSyncSourceButton, getSearchableKeys, } from 'components/PaginatedTable'; import useSelected from 'hooks/useSelected'; import DatalistToolbar from 'components/DataListToolbar'; import AlertModal from 'components/AlertModal/AlertModal'; import ErrorDetail from 'components/ErrorDetail/ErrorDetail'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import InventorySourceListItem from './InventorySourceListItem'; import useWsInventorySources from './useWsInventorySources'; const QS_CONFIG = getQSConfig('inventory-sources', { page: 1, page_size: 20, order_by: 'name', }); function InventorySourceList() { const { t } = useLingui(); const { inventoryType, id } = useParams(); const { search } = useLocation(); const { isLoading, error: fetchError, result: { result, sourceCount, sourceChoices, sourceChoicesOptions, searchableKeys, relatedSearchableKeys, }, request: fetchSources, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, search); const results = await Promise.all([ InventoriesAPI.readSources(id, params), InventorySourcesAPI.readOptions(), ]); return { result: results[0].data.results, sourceCount: results[0].data.count, sourceChoices: results[1].data.actions.GET.source.choices, sourceChoicesOptions: results[1].data.actions, searchableKeys: getSearchableKeys(results[1].data.actions?.GET), relatedSearchableKeys: ( results[1]?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), }; }, [id, search]), { result: [], sourceCount: 0, sourceChoices: [], searchableKeys: [], relatedSearchableKeys: [], } ); const sources = useWsInventorySources(result); const canSyncSources = sources.length > 0 && sources.every((source) => source.summary_fields.user_capabilities.start); const { isLoading: isSyncAllLoading, error: syncAllError, request: syncAll, } = useRequest( useCallback(async () => { if (canSyncSources) { await InventoriesAPI.syncAllSources(id); } }, [id, canSyncSources]) ); useEffect(() => { fetchSources(); }, [fetchSources]); const { selected, isAllSelected, handleSelect, clearSelected, selectAll } = useSelected(sources); const { isLoading: isDeleteLoading, deleteItems: handleDeleteSources, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all( selected.map(({ id: sourceId }) => InventorySourcesAPI.destroy(sourceId) ), [] ), [selected] ), { fetchItems: fetchSources, allItemsSelected: isAllSelected, qsConfig: QS_CONFIG, } ); const { error: syncError, dismissError } = useDismissableError(syncAllError); const deleteRelatedInventoryResources = (resourceId) => [ InventorySourcesAPI.destroyHosts(resourceId), InventorySourcesAPI.destroyGroups(resourceId), ]; const { isLoading: deleteRelatedResourcesLoading, deletionError: deleteRelatedResourcesError, deleteItems: handleDeleteRelatedResources, } = useDeleteItems( useCallback( async () => Promise.all( selected .map(({ id: resourceId }) => deleteRelatedInventoryResources(resourceId) ) .flat() ), [selected] ) ); const handleDelete = async () => { await handleDeleteRelatedResources(); if (!deleteRelatedResourcesError) { await handleDeleteSources(); } clearSelected(); }; const canAdd = sourceChoicesOptions && Object.prototype.hasOwnProperty.call(sourceChoicesOptions, 'POST'); const listUrl = `/inventories/${inventoryType}/${id}/sources/`; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventorySource( selected[0]?.id ); return ( <> <PaginatedTable contentError={fetchError} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} hasContentLoading={ isLoading || isDeleteLoading || isSyncAllLoading || deleteRelatedResourcesLoading } items={sources} itemCount={sourceCount} pluralizedItemName={t`Inventory Sources`} qsConfig={QS_CONFIG} clearSelected={clearSelected} renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [<ToolbarAddButton key="add" linkTo={`${listUrl}add`} />] : []), <ToolbarDeleteButton key="delete" onDelete={handleDelete} itemsToDelete={selected} pluralizedItemName={t`Inventory Sources`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`} other={t`Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway`} /> } />, ...(canSyncSources ? [<ToolbarSyncSourceButton onClick={syncAll} />] : []), ]} /> )} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderRow={(inventorySource, index) => { const label = sourceChoices.find( ([scMatch]) => inventorySource.source === scMatch ); return ( <InventorySourceListItem key={inventorySource.id} source={inventorySource} onSelect={() => handleSelect(inventorySource)} label={label[1]} detailUrl={`${listUrl}${inventorySource.id}`} isSelected={selected.some((row) => row.id === inventorySource.id)} rowIndex={index} /> ); }} /> {syncError && ( <AlertModal aria-label={t`Sync error`} isOpen={syncError} variant="error" title={t`Error!`} onClose={dismissError} > {t`Failed to sync some or all inventory sources.`} <ErrorDetail error={syncError} /> </AlertModal> )} {(deletionError || deleteRelatedResourcesError) && ( <AlertModal aria-label={t`Delete error`} isOpen={deletionError || deleteRelatedResourcesError} variant="error" title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventory sources.`} <ErrorDetail error={deletionError || deleteRelatedResourcesError} /> </AlertModal> )} </> ); } export default InventorySourceList; 
-#. placeholder {1}: import React, { useCallback, useEffect } from 'react'; import { useParams, useLocation } from 'react-router'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card } from '@patternfly/react-core'; import { JobTemplatesAPI } from 'api'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarAddButton, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString, mergeParams, encodeQueryString, } from 'util/qs'; import useWsTemplates from 'hooks/useWsTemplates'; import useSelected from 'hooks/useSelected'; import useExpanded from 'hooks/useExpanded'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import { TemplateListItem } from 'components/TemplateList'; import useToast, { AlertVariant } from 'hooks/useToast'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; const QS_CONFIG = getQSConfig('template', { page: 1, page_size: 20, order_by: 'name', }); const resources = { projects: 'project', inventories: 'inventory', credentials: 'credentials', }; function RelatedTemplateList({ searchParams, resourceName = null }) { const { t } = useLingui(); const { id } = useParams(); const location = useLocation(); const { addToast, Toast, toastProps } = useToast(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchTemplates, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ JobTemplatesAPI.read(mergeParams(params, searchParams)), JobTemplatesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), // eslint-disable-line react-hooks/exhaustive-deps { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchTemplates(); }, [fetchTemplates]); const jobTemplates = useWsTemplates(results); const { selected, isAllSelected, handleSelect, clearSelected, selectAll } = useSelected(jobTemplates); const { expanded, isAllExpanded, handleExpand, expandAll } = useExpanded(jobTemplates); const { isLoading: isDeleteLoading, deleteItems: deleteTemplates, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all( selected.map((template) => JobTemplatesAPI.destroy(template.id)) ), [selected] ), { qsConfig: QS_CONFIG, allItemsSelected: isAllSelected, fetchItems: fetchTemplates, } ); const handleCopy = useCallback( (newTemplateId) => { addToast({ id: newTemplateId, title: t`Template copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const handleTemplateDelete = async () => { await deleteTemplates(); clearSelected(); }; const canAddJT = actions && Object.prototype.hasOwnProperty.call(actions, 'POST'); let linkTo = ''; if (resourceName) { const queryString = { resource_id: id, resource_name: resourceName, resource_type: resources[location.pathname.split('/')[1]], resource_kind: null, }; if (Array.isArray(resourceName)) { const [name, kind] = resourceName; queryString.resource_name = name; queryString.resource_kind = kind; } const qs = encodeQueryString(queryString); linkTo = `/templates/job_template/add/?${qs}`; } else { linkTo = '/templates/job_template/add'; } const addButton = <ToolbarAddButton key="add" linkTo={linkTo} />; const deleteDetailsRequests = relatedResourceDeleteRequests(t).template( selected[0] ); return ( <> <Card> <PaginatedTable contentError={contentError} hasContentLoading={isDeleteLoading || isLoading} items={jobTemplates} itemCount={itemCount} pluralizedItemName={t`Job templates`} qsConfig={QS_CONFIG} clearSelected={clearSelected} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, { name: t`Playbook name`, key: 'job_template__playbook__icontains', }, { name: t`Label`, key: 'labels__name__icontains', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} headerRow={ <HeaderRow qsConfig={QS_CONFIG} isExpandable> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell sortKey="type">{t`Type`}</HeaderCell> <HeaderCell>{t`Recent jobs`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} isAllExpanded={isAllExpanded} onExpandAll={expandAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAddJT ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleTemplateDelete} itemsToDelete={selected} pluralizedItemName={t`Job templates`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This template is currently being used by some workflow nodes. Are you sure you want to delete it?`} other={t`Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?`} /> } />, ]} /> )} renderRow={(template, index) => ( <TemplateListItem key={template.id} value={template.name} template={template} detailUrl={`/templates/${template.type}/${template.id}`} onSelect={() => handleSelect(template)} isExpanded={expanded.some((row) => row.id === template.id)} onExpand={() => handleExpand(template)} onCopy={handleCopy} isSelected={selected.some((row) => row.id === template.id)} fetchTemplates={fetchTemplates} rowIndex={index} /> )} emptyStateControls={canAddJT && addButton} /> </Card> <Toast {...toastProps} /> <AlertModal isOpen={deletionError} variant="danger" title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more job templates.`} <ErrorDetail error={deletionError} /> </AlertModal> </> ); } export default RelatedTemplateList; 
-#. placeholder {2}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useNavigate } from 'react-router'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card, PageSection, DropdownItem, } from '@patternfly/react-core'; import { InventoriesAPI } from 'api'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import useSelected from 'hooks/useSelected'; import useToast, { AlertVariant } from 'hooks/useToast'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString } from 'util/qs'; import AddDropDownButton from 'components/AddDropDownButton'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import useWsInventories from './useWsInventories'; import InventoryListItem from './InventoryListItem'; const QS_CONFIG = getQSConfig('inventory', { page: 1, page_size: 20, order_by: 'name', }); function InventoryList() { const location = useLocation(); const navigate = useNavigate(); const { addToast, Toast, toastProps } = useToast(); const { t } = useLingui(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchInventories, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ InventoriesAPI.read(params), InventoriesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchInventories(); }, [fetchInventories]); const fetchInventoriesById = useCallback( async (ids) => { const params = { ...parseQueryString(QS_CONFIG, location.search) }; params.id__in = ids.join(','); const { data } = await InventoriesAPI.read(params); return data.results; }, [location.search] ); const inventories = useWsInventories( results, fetchInventories, fetchInventoriesById, QS_CONFIG ); const { selected, isAllSelected, handleSelect, selectAll, clearSelected } = useSelected(inventories); const { isLoading: isDeleteLoading, deleteItems: deleteInventories, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all(selected.map((team) => InventoriesAPI.destroy(team.id))), [selected] ), { allItemsSelected: isAllSelected, } ); const handleInventoryDelete = async () => { await deleteInventories(); clearSelected(); }; const handleCopy = useCallback( (newInventoryId) => { addToast({ id: newInventoryId, title: t`Inventory copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const hasContentLoading = isDeleteLoading || isLoading; const canAdd = actions && actions.POST; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory( selected[0] ); const addInventory = t`Add inventory`; const addSmartInventory = t`Add smart inventory`; const addConstructedInventory = t`Add constructed inventory`; const addFederatedInventory = t`Add federated inventory`; const addButton = ( <AddDropDownButton ouiaId="add-inventory-button" key="add" dropdownItems={[ <DropdownItem ouiaId="add-inventory-item" onClick={() => navigate('/inventories/inventory/add/')} key={addInventory} aria-label={addInventory} > {addInventory} </DropdownItem>, <DropdownItem ouiaId="add-smart-inventory-item" onClick={() => navigate('/inventories/smart_inventory/add/')} key={addSmartInventory} aria-label={addSmartInventory} > {addSmartInventory} </DropdownItem>, <DropdownItem ouiaId="add-constructed-inventory-item" onClick={() => navigate('/inventories/constructed_inventory/add/')} key={addConstructedInventory} aria-label={addConstructedInventory} > {addConstructedInventory} </DropdownItem>, <DropdownItem ouiaId="add-federated-inventory-item" onClick={() => navigate('/inventories/federated_inventory/add/')} key={addFederatedInventory} aria-label={addFederatedInventory} > {addFederatedInventory} </DropdownItem>, ]} /> ); return ( <> <PageSection hasBodyWrapper={false}> <Card> <PaginatedTable contentError={contentError} hasContentLoading={hasContentLoading} items={inventories} itemCount={itemCount} pluralizedItemName={t`Inventories`} qsConfig={QS_CONFIG} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Inventory Type`, key: 'or__kind', options: [ ['', t`Inventory`], ['smart', t`Smart Inventory`], ['constructed', t`Constructed Inventory`], ['federated', t`Federated Inventory`], ], }, { name: t`Organization`, key: 'organization__name', }, { name: t`Description`, key: 'description__icontains', }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, ]} toolbarSortColumns={[ { name: t`Name`, key: 'name', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} clearSelected={clearSelected} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Sync Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Organization`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleInventoryDelete} itemsToDelete={selected} pluralizedItemName={t`Inventories`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`} other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`} /> } warningMessage={ <Plural value={selected.length} one={t`The inventory will be in a pending status until the final delete is processed.`} other={t`The inventories will be in a pending status until the final delete is processed.`} /> } />, ]} /> )} renderRow={(inventory, index) => ( <InventoryListItem key={inventory.id} value={inventory.name} inventory={inventory} rowIndex={index} fetchInventories={fetchInventories} onSelect={() => { if (!inventory.pending_deletion) { handleSelect(inventory); } }} onCopy={handleCopy} isSelected={selected.some((row) => row.id === inventory.id)} /> )} emptyStateControls={canAdd && addButton} /> </Card> <AlertModal isOpen={deletionError} variant="error" aria-label={t`Deletion Error`} title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventories.`} <ErrorDetail error={deletionError} /> </AlertModal> </PageSection> <Toast {...toastProps} /> </> ); } export default InventoryList; 
-#. placeholder {2}: import React, { useCallback, useEffect } from 'react'; import { useLocation, useParams } from 'react-router'; import { Plural, useLingui } from '@lingui/react/macro'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; import { getQSConfig, parseQueryString } from 'util/qs'; import { InventoriesAPI, InventorySourcesAPI } from 'api'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarAddButton, ToolbarDeleteButton, ToolbarSyncSourceButton, getSearchableKeys, } from 'components/PaginatedTable'; import useSelected from 'hooks/useSelected'; import DatalistToolbar from 'components/DataListToolbar'; import AlertModal from 'components/AlertModal/AlertModal'; import ErrorDetail from 'components/ErrorDetail/ErrorDetail'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; import InventorySourceListItem from './InventorySourceListItem'; import useWsInventorySources from './useWsInventorySources'; const QS_CONFIG = getQSConfig('inventory-sources', { page: 1, page_size: 20, order_by: 'name', }); function InventorySourceList() { const { t } = useLingui(); const { inventoryType, id } = useParams(); const { search } = useLocation(); const { isLoading, error: fetchError, result: { result, sourceCount, sourceChoices, sourceChoicesOptions, searchableKeys, relatedSearchableKeys, }, request: fetchSources, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, search); const results = await Promise.all([ InventoriesAPI.readSources(id, params), InventorySourcesAPI.readOptions(), ]); return { result: results[0].data.results, sourceCount: results[0].data.count, sourceChoices: results[1].data.actions.GET.source.choices, sourceChoicesOptions: results[1].data.actions, searchableKeys: getSearchableKeys(results[1].data.actions?.GET), relatedSearchableKeys: ( results[1]?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), }; }, [id, search]), { result: [], sourceCount: 0, sourceChoices: [], searchableKeys: [], relatedSearchableKeys: [], } ); const sources = useWsInventorySources(result); const canSyncSources = sources.length > 0 && sources.every((source) => source.summary_fields.user_capabilities.start); const { isLoading: isSyncAllLoading, error: syncAllError, request: syncAll, } = useRequest( useCallback(async () => { if (canSyncSources) { await InventoriesAPI.syncAllSources(id); } }, [id, canSyncSources]) ); useEffect(() => { fetchSources(); }, [fetchSources]); const { selected, isAllSelected, handleSelect, clearSelected, selectAll } = useSelected(sources); const { isLoading: isDeleteLoading, deleteItems: handleDeleteSources, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all( selected.map(({ id: sourceId }) => InventorySourcesAPI.destroy(sourceId) ), [] ), [selected] ), { fetchItems: fetchSources, allItemsSelected: isAllSelected, qsConfig: QS_CONFIG, } ); const { error: syncError, dismissError } = useDismissableError(syncAllError); const deleteRelatedInventoryResources = (resourceId) => [ InventorySourcesAPI.destroyHosts(resourceId), InventorySourcesAPI.destroyGroups(resourceId), ]; const { isLoading: deleteRelatedResourcesLoading, deletionError: deleteRelatedResourcesError, deleteItems: handleDeleteRelatedResources, } = useDeleteItems( useCallback( async () => Promise.all( selected .map(({ id: resourceId }) => deleteRelatedInventoryResources(resourceId) ) .flat() ), [selected] ) ); const handleDelete = async () => { await handleDeleteRelatedResources(); if (!deleteRelatedResourcesError) { await handleDeleteSources(); } clearSelected(); }; const canAdd = sourceChoicesOptions && Object.prototype.hasOwnProperty.call(sourceChoicesOptions, 'POST'); const listUrl = `/inventories/${inventoryType}/${id}/sources/`; const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventorySource( selected[0]?.id ); return ( <> <PaginatedTable contentError={fetchError} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} hasContentLoading={ isLoading || isDeleteLoading || isSyncAllLoading || deleteRelatedResourcesLoading } items={sources} itemCount={sourceCount} pluralizedItemName={t`Inventory Sources`} qsConfig={QS_CONFIG} clearSelected={clearSelected} renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAdd ? [<ToolbarAddButton key="add" linkTo={`${listUrl}add`} />] : []), <ToolbarDeleteButton key="delete" onDelete={handleDelete} itemsToDelete={selected} pluralizedItemName={t`Inventory Sources`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?`} other={t`Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway`} /> } />, ...(canSyncSources ? [<ToolbarSyncSourceButton onClick={syncAll} />] : []), ]} /> )} headerRow={ <HeaderRow qsConfig={QS_CONFIG}> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell>{t`Status`}</HeaderCell> <HeaderCell>{t`Type`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderRow={(inventorySource, index) => { const label = sourceChoices.find( ([scMatch]) => inventorySource.source === scMatch ); return ( <InventorySourceListItem key={inventorySource.id} source={inventorySource} onSelect={() => handleSelect(inventorySource)} label={label[1]} detailUrl={`${listUrl}${inventorySource.id}`} isSelected={selected.some((row) => row.id === inventorySource.id)} rowIndex={index} /> ); }} /> {syncError && ( <AlertModal aria-label={t`Sync error`} isOpen={syncError} variant="error" title={t`Error!`} onClose={dismissError} > {t`Failed to sync some or all inventory sources.`} <ErrorDetail error={syncError} /> </AlertModal> )} {(deletionError || deleteRelatedResourcesError) && ( <AlertModal aria-label={t`Delete error`} isOpen={deletionError || deleteRelatedResourcesError} variant="error" title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more inventory sources.`} <ErrorDetail error={deletionError || deleteRelatedResourcesError} /> </AlertModal> )} </> ); } export default InventorySourceList; 
-#. placeholder {2}: import React, { useCallback, useEffect } from 'react'; import { useParams, useLocation } from 'react-router'; import { Plural, useLingui } from '@lingui/react/macro'; import { Card } from '@patternfly/react-core'; import { JobTemplatesAPI } from 'api'; import AlertModal from 'components/AlertModal'; import DatalistToolbar from 'components/DataListToolbar'; import ErrorDetail from 'components/ErrorDetail'; import PaginatedTable, { HeaderRow, HeaderCell, ToolbarAddButton, ToolbarDeleteButton, getSearchableKeys, } from 'components/PaginatedTable'; import { getQSConfig, parseQueryString, mergeParams, encodeQueryString, } from 'util/qs'; import useWsTemplates from 'hooks/useWsTemplates'; import useSelected from 'hooks/useSelected'; import useExpanded from 'hooks/useExpanded'; import useRequest, { useDeleteItems } from 'hooks/useRequest'; import { TemplateListItem } from 'components/TemplateList'; import useToast, { AlertVariant } from 'hooks/useToast'; import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails'; const QS_CONFIG = getQSConfig('template', { page: 1, page_size: 20, order_by: 'name', }); const resources = { projects: 'project', inventories: 'inventory', credentials: 'credentials', }; function RelatedTemplateList({ searchParams, resourceName = null }) { const { t } = useLingui(); const { id } = useParams(); const location = useLocation(); const { addToast, Toast, toastProps } = useToast(); const { result: { results, itemCount, actions, relatedSearchableKeys, searchableKeys, }, error: contentError, isLoading, request: fetchTemplates, } = useRequest( useCallback(async () => { const params = parseQueryString(QS_CONFIG, location.search); const [response, actionsResponse] = await Promise.all([ JobTemplatesAPI.read(mergeParams(params, searchParams)), JobTemplatesAPI.readOptions(), ]); return { results: response.data.results, itemCount: response.data.count, actions: actionsResponse.data.actions, relatedSearchableKeys: ( actionsResponse?.data?.related_search_fields || [] ).map((val) => val.slice(0, -8)), searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET), }; }, [location]), // eslint-disable-line react-hooks/exhaustive-deps { results: [], itemCount: 0, actions: {}, relatedSearchableKeys: [], searchableKeys: [], } ); useEffect(() => { fetchTemplates(); }, [fetchTemplates]); const jobTemplates = useWsTemplates(results); const { selected, isAllSelected, handleSelect, clearSelected, selectAll } = useSelected(jobTemplates); const { expanded, isAllExpanded, handleExpand, expandAll } = useExpanded(jobTemplates); const { isLoading: isDeleteLoading, deleteItems: deleteTemplates, deletionError, clearDeletionError, } = useDeleteItems( useCallback( () => Promise.all( selected.map((template) => JobTemplatesAPI.destroy(template.id)) ), [selected] ), { qsConfig: QS_CONFIG, allItemsSelected: isAllSelected, fetchItems: fetchTemplates, } ); const handleCopy = useCallback( (newTemplateId) => { addToast({ id: newTemplateId, title: t`Template copied successfully`, variant: AlertVariant.success, hasTimeout: true, }); }, [addToast, t] ); const handleTemplateDelete = async () => { await deleteTemplates(); clearSelected(); }; const canAddJT = actions && Object.prototype.hasOwnProperty.call(actions, 'POST'); let linkTo = ''; if (resourceName) { const queryString = { resource_id: id, resource_name: resourceName, resource_type: resources[location.pathname.split('/')[1]], resource_kind: null, }; if (Array.isArray(resourceName)) { const [name, kind] = resourceName; queryString.resource_name = name; queryString.resource_kind = kind; } const qs = encodeQueryString(queryString); linkTo = `/templates/job_template/add/?${qs}`; } else { linkTo = '/templates/job_template/add'; } const addButton = <ToolbarAddButton key="add" linkTo={linkTo} />; const deleteDetailsRequests = relatedResourceDeleteRequests(t).template( selected[0] ); return ( <> <Card> <PaginatedTable contentError={contentError} hasContentLoading={isDeleteLoading || isLoading} items={jobTemplates} itemCount={itemCount} pluralizedItemName={t`Job templates`} qsConfig={QS_CONFIG} clearSelected={clearSelected} toolbarSearchColumns={[ { name: t`Name`, key: 'name__icontains', isDefault: true, }, { name: t`Created By (Username)`, key: 'created_by__username__icontains', }, { name: t`Modified By (Username)`, key: 'modified_by__username__icontains', }, { name: t`Playbook name`, key: 'job_template__playbook__icontains', }, { name: t`Label`, key: 'labels__name__icontains', }, ]} toolbarSearchableKeys={searchableKeys} toolbarRelatedSearchableKeys={relatedSearchableKeys} headerRow={ <HeaderRow qsConfig={QS_CONFIG} isExpandable> <HeaderCell sortKey="name">{t`Name`}</HeaderCell> <HeaderCell sortKey="type">{t`Type`}</HeaderCell> <HeaderCell>{t`Recent jobs`}</HeaderCell> <HeaderCell>{t`Actions`}</HeaderCell> </HeaderRow> } renderToolbar={(props) => ( <DatalistToolbar {...props} isAllSelected={isAllSelected} onSelectAll={selectAll} isAllExpanded={isAllExpanded} onExpandAll={expandAll} qsConfig={QS_CONFIG} additionalControls={[ ...(canAddJT ? [addButton] : []), <ToolbarDeleteButton key="delete" onDelete={handleTemplateDelete} itemsToDelete={selected} pluralizedItemName={t`Job templates`} deleteDetailsRequests={deleteDetailsRequests} deleteMessage={ <Plural value={selected.length} one={t`This template is currently being used by some workflow nodes. Are you sure you want to delete it?`} other={t`Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?`} /> } />, ]} /> )} renderRow={(template, index) => ( <TemplateListItem key={template.id} value={template.name} template={template} detailUrl={`/templates/${template.type}/${template.id}`} onSelect={() => handleSelect(template)} isExpanded={expanded.some((row) => row.id === template.id)} onExpand={() => handleExpand(template)} onCopy={handleCopy} isSelected={selected.some((row) => row.id === template.id)} fetchTemplates={fetchTemplates} rowIndex={index} /> )} emptyStateControls={canAddJT && addButton} /> </Card> <Toast {...toastProps} /> <AlertModal isOpen={deletionError} variant="danger" title={t`Error!`} onClose={clearDeletionError} > {t`Failed to delete one or more job templates.`} <ErrorDetail error={deletionError} /> </AlertModal> </> ); } export default RelatedTemplateList; 
-#: components/RelatedTemplateList/RelatedTemplateList.js:222
-#: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:185
-#: screens/Instances/Shared/RemoveInstanceButton.js:88
-#: screens/Inventory/InventoryList/InventoryList.js:264
-#: screens/Inventory/InventoryList/InventoryList.js:271
-#: screens/Inventory/InventoryList/InventoryListItem.js:65
-#: screens/Inventory/InventorySources/InventorySourceList.js:197
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:93
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:122
-msgid "{0, plural, one {{1}} other {{2}}}"
-msgstr "{0, plural, one {{1}} other {{2}}}"
-
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:161
 msgid "Delete smart inventory"
 msgstr "Eliminar inventario inteligente"
@@ -2266,6 +2239,11 @@ msgstr "Cada vez que se ejecuta un trabajo utilizando este proyecto, actualice l
 msgid "{interval} week"
 msgstr "{interval} semana"
 
+#. placeholder {0}: selected.length
+#: screens/Inventory/InventoryList/InventoryList.js:264
+msgid "{0, plural, one {This inventory is currently being used by some templates. Are you sure you want to delete it?} other {Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?}}"
+msgstr "{0, plural, one {Este inventario está siendo utilizado actualmente por algunas plantillas. ¿Está seguro de que desea eliminarlo?} other {Eliminar estos inventarios podría afectar a algunas plantillas que dependen de ellos. ¿Está seguro de que desea eliminarlos de todos modos?}}"
+
 #: components/LabelSelect/LabelSelect.js:133
 msgid "Select Labels"
 msgstr "Seleccionar etiquetas"
@@ -2282,6 +2260,10 @@ msgstr "Tipo de suscripción"
 #: screens/Instances/Shared/RemoveInstanceButton.js:80
 msgid "Select a row to remove"
 msgstr "Seleccionar una fila para denegar"
+
+#: components/Search/AdvancedSearch.js:74
+msgid "Returns results that have values other than this one as well as other filters."
+msgstr "Devuelve resultados que tienen valores distintos a este así como otros filtros."
 
 #: components/LaunchButton/ReLaunchDropDown.js:27
 #: components/LaunchButton/ReLaunchDropDown.js:31
@@ -2689,8 +2671,8 @@ msgstr "Copiar salida"
 #: components/LaunchPrompt/steps/SurveyStep.js:194
 #: components/LaunchPrompt/steps/SurveyStep.js:329
 #: components/MultiSelect/TagMultiSelect.js:130
-#: components/Search/AdvancedSearch.js:242
-#: components/Search/AdvancedSearch.js:428
+#: components/Search/AdvancedSearch.js:241
+#: components/Search/AdvancedSearch.js:427
 #: components/Search/LookupTypeInput.js:192
 #: components/Search/RelatedLookupTypeInput.js:120
 #: screens/Credential/shared/CredentialForm.js:220
@@ -2700,7 +2682,7 @@ msgstr "Copiar salida"
 msgid "No results found"
 msgstr "No se encontraron resultados"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.js:192
+#: components/LaunchPrompt/steps/OtherPromptsStep.js:190
 #: components/PromptDetail/PromptDetail.js:380
 #: components/PromptDetail/PromptJobTemplateDetail.js:161
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:514
@@ -2852,7 +2834,7 @@ msgstr "0 (Normal)"
 msgid "Node Alias"
 msgstr "Alias del nodo"
 
-#: components/Search/AdvancedSearch.js:442
+#: components/Search/AdvancedSearch.js:441
 #: components/Search/Search.js:357
 #: components/Search/Search.js:384
 msgid "Search submit button"
@@ -2875,6 +2857,10 @@ msgstr "Método HTTP"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:131
 msgid "Notification type"
 msgstr "Tipo de notificación"
+
+#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:126
+msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>User Guide</1>."
+msgstr "Un manifiesto de suscripción es una exportación de una suscripción de Red Hat. Para generar un manifiesto de suscripción, vaya a <0>access.redhat.com</0>. Para obtener más información, consulte la <1>Guía del usuario</1>."
 
 #: screens/User/UserToken/UserToken.js:100
 msgid "View Tokens"
@@ -3146,6 +3132,7 @@ msgstr "Servidor fallido"
 #: screens/User/Users.js:32
 #: screens/User/UserTeams/UserTeamList.js:173
 #: screens/User/UserTeams/UserTeamList.js:244
+#: util/getRelatedResourceDeleteDetails.js:173
 msgid "Teams"
 msgstr "Equipos"
 
@@ -3208,7 +3195,6 @@ msgid "Timeout minutes"
 msgstr "Tiempo de espera en minutos"
 
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:335
-#: screens/Inventory/InventorySources/InventorySourceList.js:199
 msgid "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
 msgstr "Esta fuente de inventario está siendo utilizada por otros recursos que dependen de ella. ¿Está seguro de que desea eliminarla?"
 
@@ -3240,6 +3226,19 @@ msgstr "Detalles de la programación"
 #: screens/ActivityStream/ActivityStreamDetailButton.js:38
 msgid "Event detail"
 msgstr "Detalles del evento"
+
+#: screens/Template/Survey/SurveyQuestionForm.js:46
+msgid "Choose an answer type or format you want as the prompt for the user.\n"
+"          Refer to the Ascender Documentation for more additional\n"
+"          information about each option."
+msgstr "Elija un tipo o formato de respuesta que desee como indicación para el usuario.\n"
+"          Consulte la documentación de Ascender para obtener información\n"
+"          adicional sobre cada opción."
+
+#. placeholder {0}: groups.length
+#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:93
+msgid "{0, plural, one {Delete Group?} other {Delete Groups?}}"
+msgstr "{0, plural, one {¿Eliminar grupo?} other {¿Eliminar grupos?}}"
 
 #: components/DisassociateButton/DisassociateButton.js:83
 msgid "Select a row to disassociate"
@@ -3380,11 +3379,6 @@ msgstr "Menor o igual que la comparación."
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:375
 msgid "Delete"
 msgstr "ELIMINAR"
-
-#. placeholder {0}: import React, { useEffect } from 'react'; import { useField } from 'formik'; import { Button, Flex, FormGroup } from '@patternfly/react-core'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { required } from 'util/validators'; import FormField, { CheckboxField, PasswordField } from 'components/FormField'; import { useConfig } from 'contexts/Config'; import { Trans, useLingui } from '@lingui/react/macro'; const ANALYTICSLINK = 'https://www.ansible.com/products/automation-analytics'; function AnalyticsStep() { const { t } = useLingui(); const config = useConfig(); const [manifest] = useField('manifest_file'); const [insights] = useField('insights'); const [, , usernameHelpers] = useField('username'); const [, , passwordHelpers] = useField('password'); const requireCredentialFields = manifest.value && insights.value; useEffect(() => { if (!requireCredentialFields) { usernameHelpers.setValue(''); passwordHelpers.setValue(''); } // eslint-disable-next-line react-hooks/exhaustive-deps }, [requireCredentialFields]); return ( <Flex spaceItems={{ default: 'spaceItemsMd' }} direction={{ default: 'column' }} > <Trans>User and Automation Analytics</Trans> <p> <Trans> By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see{' '} <Button component="a" href={`${getDocsBaseUrl( config )}/html/administration/usability_data_collection.html#automation-analytics`} variant="link" isInline ouiaId="tower-documentation-link" target="_blank" rel="noopener noreferrer" > {t`this Tower documentation page`} </Button> . Uncheck the following boxes to disable this feature. </Trans> </p> <FormGroup fieldId="pendo"> <CheckboxField name="pendo" isDisabled={!config.me.is_superuser} aria-label={t`User analytics`} label={t`User analytics`} id="pendo-field" description={t`This data is used to enhance future releases of the Tower Software and help streamline customer experience and success.`} /> </FormGroup> <FormGroup fieldId="insights"> <CheckboxField name="insights" isDisabled={!config.me.is_superuser} aria-label={t`Automation Analytics`} label={t`Automation Analytics`} id="insights-field" description={t`This data is used to enhance future releases of the Software and to provide Automation Analytics.`} /> </FormGroup> {requireCredentialFields && ( <> <br /> <p> <Trans> Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics. </Trans> </p> <FormField id="username-field" isDisabled={!config.me.is_superuser} isRequired={requireCredentialFields} label={t`Username`} name="username" type="text" validate={required(null)} /> <PasswordField id="password-field" isDisabled={!config.me.is_superuser} isRequired={requireCredentialFields} label={t`Password`} name="password" validate={required(null)} /> </> )} <Flex alignItems={{ default: 'alignItemsCenter' }}> <img width="300" src="static/media/insights-analytics-dashboard.jpeg" alt={t`Automation Analytics dashboard`} /> <Button component="a" href={ANALYTICSLINK} target="_blank" variant="secondary" ouiaId="analytics-link" rel="noopener noreferrer" > <Trans>Learn more about Automation Analytics</Trans> </Button> </Flex> </Flex> ); } export default AnalyticsStep; 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:37
-msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>{0}</0>. Uncheck the following boxes to disable this feature."
-msgstr "De forma predeterminada, recopilamos y transmitimos datos analíticos sobre el uso del servicio a Red Hat. Hay dos categorías de datos recopilados por el servicio. Para obtener más información, consulte <0>{0}</0>. Desmarque las siguientes casillas para desactivar esta función."
 
 #: components/StatusLabel/StatusLabel.js:53
 #: screens/Job/JobOutput/shared/HostStatusBar.js:43
@@ -3543,11 +3537,6 @@ msgstr "Sistema"
 msgid "This action will delete the following:"
 msgstr "Esta acción eliminará lo siguiente:"
 
-#. placeholder {0}: import React, { useState } from 'react'; import { useField, useFormikContext } from 'formik'; import styled from 'styled-components'; import { TimesIcon } from '@patternfly/react-icons'; import { Button, Divider, FileUpload, Flex, FlexItem, FormGroup, FormHelperText, HelperText, HelperTextItem, ToggleGroup, ToggleGroupItem, Tooltip, } from '@patternfly/react-core'; import { useConfig } from 'contexts/Config'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import useModal from 'hooks/useModal'; import FormField, { PasswordField } from 'components/FormField'; import Popover from 'components/Popover'; import { Trans, useLingui } from '@lingui/react/macro'; import SubscriptionModal from './SubscriptionModal'; const LICENSELINK = 'https://www.ansible.com/license'; const FileUploadField = styled(FormGroup)` && { max-width: 500px; width: 100%; } `; function SubscriptionStep() { const { t } = useLingui(); const config = useConfig(); const hasValidKey = Boolean(config?.license_info?.valid_key); const { values } = useFormikContext(); const [isSelected, setIsSelected] = useState( values.subscription ? 'selectSubscription' : 'uploadManifest' ); const { isModalOpen, toggleModal, closeModal } = useModal(); const [manifest, manifestMeta, manifestHelpers] = useField('manifest_file'); const [manifestFilename, , manifestFilenameHelpers] = useField('manifest_filename'); const [subscription, , subscriptionHelpers] = useField('subscription'); const [username] = useField('username'); const [password] = useField('password'); return ( <Flex direction={{ default: 'column' }} spaceItems={{ default: 'spaceItemsMd' }} alignItems={{ default: 'alignItemsBaseline' }} > {!hasValidKey && ( <> <b> {t`Welcome to Red Hat Ansible Automation Platform! Please complete the steps below to activate your subscription.`} </b> <p> {t`If you do not have a subscription, you can visit Red Hat to obtain a trial subscription.`} </p> <Button aria-label={t`Request subscription`} component="a" href={LICENSELINK} ouiaId="request-subscription-button" target="_blank" variant="secondary" rel="noopener noreferrer" > {t`Request subscription`} </Button> <Divider /> </> )} <p> {t`Select your Ansible Automation Platform subscription to use.`} </p> <ToggleGroup> <ToggleGroupItem text={t`Subscription manifest`} isSelected={isSelected === 'uploadManifest'} onChange={() => setIsSelected('uploadManifest')} id="subscription-manifest" /> <ToggleGroupItem text={t`Username / password`} isSelected={isSelected === 'selectSubscription'} onChange={() => setIsSelected('selectSubscription')} id="username-password" /> </ToggleGroup> {isSelected === 'uploadManifest' ? ( <> <p> <Trans> Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to{' '} <Button component="a" href="https://access.redhat.com/management/subscription_allocations" variant="link" target="_blank" ouiaId="subscription-allocations-link" rel="noopener noreferrer" isInline > subscription allocations </Button>{' '} on the Red Hat Customer Portal. </Trans> </p> <FileUploadField fieldId="subscription-manifest" label={t`Red Hat subscription manifest`} labelHelp={ <Popover content={ <Trans> A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to{' '} <Button component="a" href="https://access.redhat.com/management/subscription_allocations" variant="link" target="_blank" rel="noopener noreferrer" isInline ouiaId="subscription-allocations-link" > access.redhat.com </Button> . For more information, see the{' '} <Button component="a" href={`${getDocsBaseUrl( config )}/userguide/import_license.html`} variant="link" target="_blank" rel="noopener noreferrer" ouiaId="import-license-link" isInline > {t`User Guide`} </Button> . </Trans> } /> } > <FileUpload id="upload-manifest" value={manifest.value} filename={manifestFilename.value} browseButtonText={t`Browse`} clearButtonText={t`Clear`} isDisabled={!config?.me?.is_superuser} onFileInputChange={(_event, file) => { manifestFilenameHelpers.setValue(file.name); manifestHelpers.setError(false); const reader = new FileReader(); reader.onload = () => { manifestHelpers.setValue(reader.result); }; reader.readAsDataURL(file); }} onClearClick={() => { manifestFilenameHelpers.setValue(''); manifestHelpers.setValue(''); }} dropzoneProps={{ accept: { 'application/zip': ['.zip'] }, onDropRejected: () => manifestHelpers.setError(true), }} /> <FormHelperText> <HelperText> <HelperTextItem variant={manifestMeta.error ? 'error' : 'default'} > {manifestMeta.error ? t`Invalid file format. Please upload a valid Red Hat Subscription Manifest.` : t`Upload a .zip file`} </HelperTextItem> </HelperText> </FormHelperText> </FileUploadField> </> ) : ( <> <p> {t`Provide your Red Hat or Red Hat Satellite credentials below and you can choose from a list of your available subscriptions. The credentials you use will be stored for future use in retrieving renewal or expanded subscriptions.`} </p> <Flex direction={{ default: 'column', md: 'row' }} spaceItems={{ default: 'spaceItemsMd' }} alignItems={{ md: 'alignItemsFlexEnd' }} fullWidth={{ default: 'fullWidth' }} > <FormField id="username-field" label={t`Username`} name="username" type="text" isDisabled={!config.me.is_superuser} /> <PasswordField id="password-field" name="password" label={t`Password`} isDisabled={!config.me.is_superuser} /> <Button aria-label={t`Get subscriptions`} ouiaId="subscription-modal-button" onClick={toggleModal} style={{ maxWidth: 'fit-content' }} isDisabled={!(username.value && password.value)} > {t`Get subscription`} </Button> {isModalOpen && ( <SubscriptionModal subscriptionCreds={{ username: username.value, password: password.value, }} selectedSubscription={subscription?.value} onClose={closeModal} onConfirm={(value) => subscriptionHelpers.setValue(value)} /> )} </Flex> {subscription.value && ( <Flex id="selected-subscription" alignSelf={{ default: 'alignSelfFlexStart' }} spaceItems={{ default: 'spaceItemsMd' }} > <b>{t`Selected`}</b> <FlexItem> <i>{subscription?.value?.subscription_name}</i> <Tooltip trigger="mouseenter focus click" content={t`Clear subscription`} > <Button icon={<TimesIcon />} onClick={() => subscriptionHelpers.setValue(null)} variant="plain" aria-label={t`Clear subscription selection`} ouiaId="clear-subscription-selection" /> </Tooltip> </FlexItem> </Flex> )} </> )} </Flex> ); } export default SubscriptionStep; 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:126
-msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>{0}</1>."
-msgstr "Un manifiesto de suscripción es una exportación de una suscripción de Red Hat. Para generar un manifiesto de suscripción, vaya a <0>access.redhat.com</0>. Para obtener más información, consulte la <1>{0}</1>."
-
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:25
 msgid "{interval} minutes"
 msgstr "{interval} minutos"
@@ -3560,6 +3549,7 @@ msgstr "Varios ajustes de autenticación"
 msgid "Local"
 msgstr "Local"
 
+#: components/Lookup/InventoryLookup.js:133
 #: screens/Job/Job.helptext.js:6
 #: screens/Template/shared/JobTemplate.helptext.js:8
 msgid "Select the inventory containing the hosts you want this job to manage."
@@ -3569,7 +3559,7 @@ msgstr "Seleccione el inventario que contiene los hosts que desea que gestione e
 msgid "Alert modal"
 msgstr "Modal de alerta"
 
-#: components/Search/AdvancedSearch.js:209
+#: components/Search/AdvancedSearch.js:208
 msgid "Set type"
 msgstr "Establecer tipo"
 
@@ -3812,6 +3802,8 @@ msgstr "Este campo debe ser un número y tener un valor entre {0} y {1}"
 msgid "Done"
 msgstr "Finalizado"
 
+#: components/AdHocCommands/AdHocDetailsStep.js:187
+#: components/LaunchPrompt/steps/OtherPromptsStep.js:184
 #: screens/Template/shared/JobTemplate.helptext.js:21
 msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
 msgstr "Si está habilitado, muestra los cambios realizados por las tareas de Ansible, cuando es compatible. Esto equivale al modo --diff de Ansible."
@@ -3922,11 +3914,9 @@ msgstr "Extraer"
 msgid "Environment variables or extra variables that specify the values a credential type can inject."
 msgstr "Variables de entorno o variables extra que especifican los valores que un tipo de credencial puede inyectar."
 
-#. placeholder {0}: import React, { useCallback, useEffect, useState } from 'react'; import { useNavigate, useParams } from 'react-router'; import { Trans, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI, InstanceGroupsAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import DisassociateButton from 'components/DisassociateButton'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import RoutedTabs from 'components/RoutedTabs'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import HealthCheckAlert from 'components/HealthCheckAlert'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; const Unavailable = styled.span` color: var(--pf-v6-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetails({ setBreadcrumb, instanceGroup }) { const { t, i18n } = useLingui(); const config = useConfig(); const { id, instanceId } = useParams(); const navigate = useNavigate(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const [forks, setForks] = useState(); const policyRulesDocsLink = `${getDocsBaseUrl( config )}/html/administration/containers_instance_groups.html#ag-instance-group-policies`; const { isLoading, error: contentError, request: fetchDetails, result: { instance }, } = useRequest( useCallback(async () => { const { data: { results }, } = await InstanceGroupsAPI.readInstances(instanceGroup.id); const isAssociated = results.some( ({ id: instId }) => instId === parseInt(instanceId, 10) ); if (isAssociated) { const { data: details } = await InstancesAPI.readDetail(instanceId); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(instanceId); setHealthCheck(healthCheckData); } setBreadcrumb(instanceGroup, details); setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details }; } throw new Error( `This instance is not associated with this instance group` ); }, [instanceId, setBreadcrumb, instanceGroup]), { instance: {}, isLoading: true } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(instanceId); if (status === 200) { setShowHealthCheckAlert(true); } }, [instanceId]) ); const { deleteItems: disassociateInstance, deletionError: disassociateError, } = useDeleteItems( useCallback(async () => { await InstanceGroupsAPI.disassociateInstance( instanceGroup.id, instance.id ); navigate(`/instance_groups/${instanceGroup.id}/instances`); }, [instanceGroup.id, instance.id, navigate]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(instance.id, values); }, [instance] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( disassociateError || updateInstanceError || healthCheckError ); const tabsArray = [ { name: ( <> <CaretLeftIcon /> {t`Back to Instances`} </> ), link: `/instance_groups/${id}/instances`, id: 99, }, { name: t`Details`, link: `/instance_groups/${id}/instances/${instanceId}/details`, id: 0, }, ]; if (contentError) { return <ContentError error={contentError} />; } if (isLoading) { return <ContentLoading />; } const isExecutionNode = instance.node_type === 'execution'; return ( <> <RoutedTabs tabsArray={tabsArray} /> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> <Detail label={t`Last Health Check`} helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Capacity Adjustment`} value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })} </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={(_event, value) => handleChangeValue(value)} isDisabled={!config?.me?.is_superuser || !instance.enabled} data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round(100 - instance.percent_capacity_remaining)} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {config?.me?.is_superuser && instance.node_type !== 'control' && ( <DisassociateButton verifyCannotDisassociate={instanceGroup.name === 'controlplane'} key="disassociate" onDisassociate={disassociateInstance} itemsToDisassociate={[instance]} isProtectedInstanceGroup={instanceGroup.name === 'controlplane'} modalTitle={t`Disassociate instance from instance group?`} modalNote={ instance.managed_by_policy ? ( <Trans> <b> {t`Note: This instance may be re-associated with this instance group if it is managed by `} <a href={policyRulesDocsLink} target="_blank" rel="noopener noreferrer" > {t`policy rules.`} </a> </b> </Trans> ) : null } /> )} <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} /> </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetails; 
-#. placeholder {1}: import React, { useCallback, useEffect, useState } from 'react'; import { useNavigate, useParams } from 'react-router'; import { Trans, useLingui } from '@lingui/react/macro'; import { Button, Progress, ProgressMeasureLocation, ProgressSize, CodeBlock, CodeBlockCode, Tooltip, Slider, } from '@patternfly/react-core'; import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons'; import styled from 'styled-components'; import { useConfig } from 'contexts/Config'; import { InstancesAPI, InstanceGroupsAPI } from 'api'; import useDebounce from 'hooks/useDebounce'; import AlertModal from 'components/AlertModal'; import ErrorDetail from 'components/ErrorDetail'; import DisassociateButton from 'components/DisassociateButton'; import InstanceToggle from 'components/InstanceToggle'; import { CardBody, CardActionsRow } from 'components/Card'; import getDocsBaseUrl from 'util/getDocsBaseUrl'; import { formatDateString } from 'util/dates'; import RoutedTabs from 'components/RoutedTabs'; import ContentError from 'components/ContentError'; import ContentLoading from 'components/ContentLoading'; import { Detail, DetailList } from 'components/DetailList'; import HealthCheckAlert from 'components/HealthCheckAlert'; import StatusLabel from 'components/StatusLabel'; import useRequest, { useDeleteItems, useDismissableError, } from 'hooks/useRequest'; const Unavailable = styled.span` color: var(--pf-v6-global--danger-color--200); `; const SliderHolder = styled.div` display: flex; align-items: center; justify-content: space-between; `; const SliderForks = styled.div` flex-grow: 1; margin-right: 8px; margin-left: 8px; text-align: center; `; function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) { const minCapacity = Math.min(memCapacity, cpuCapacity); const maxCapacity = Math.max(memCapacity, cpuCapacity); return Math.floor( minCapacity + (maxCapacity - minCapacity) * selectedCapacityAdjustment ); } function InstanceDetails({ setBreadcrumb, instanceGroup }) { const { t, i18n } = useLingui(); const config = useConfig(); const { id, instanceId } = useParams(); const navigate = useNavigate(); const [healthCheck, setHealthCheck] = useState({}); const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false); const [forks, setForks] = useState(); const policyRulesDocsLink = `${getDocsBaseUrl( config )}/html/administration/containers_instance_groups.html#ag-instance-group-policies`; const { isLoading, error: contentError, request: fetchDetails, result: { instance }, } = useRequest( useCallback(async () => { const { data: { results }, } = await InstanceGroupsAPI.readInstances(instanceGroup.id); const isAssociated = results.some( ({ id: instId }) => instId === parseInt(instanceId, 10) ); if (isAssociated) { const { data: details } = await InstancesAPI.readDetail(instanceId); if (details.node_type === 'execution') { const { data: healthCheckData } = await InstancesAPI.readHealthCheckDetail(instanceId); setHealthCheck(healthCheckData); } setBreadcrumb(instanceGroup, details); setForks( computeForks( details.mem_capacity, details.cpu_capacity, details.capacity_adjustment ) ); return { instance: details }; } throw new Error( `This instance is not associated with this instance group` ); }, [instanceId, setBreadcrumb, instanceGroup]), { instance: {}, isLoading: true } ); useEffect(() => { fetchDetails(); }, [fetchDetails]); const { error: healthCheckError, request: fetchHealthCheck } = useRequest( useCallback(async () => { const { status } = await InstancesAPI.healthCheck(instanceId); if (status === 200) { setShowHealthCheckAlert(true); } }, [instanceId]) ); const { deleteItems: disassociateInstance, deletionError: disassociateError, } = useDeleteItems( useCallback(async () => { await InstanceGroupsAPI.disassociateInstance( instanceGroup.id, instance.id ); navigate(`/instance_groups/${instanceGroup.id}/instances`); }, [instanceGroup.id, instance.id, navigate]) ); const { error: updateInstanceError, request: updateInstance } = useRequest( useCallback( async (values) => { await InstancesAPI.update(instance.id, values); }, [instance] ) ); const debounceUpdateInstance = useDebounce(updateInstance, 200); const handleChangeValue = (value) => { const roundedValue = Math.round(value * 100) / 100; setForks( computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue) ); debounceUpdateInstance({ capacity_adjustment: roundedValue }); }; const formatHealthCheckTimeStamp = (last) => ( <> {formatDateString(last)} {instance.health_check_pending ? ( <> {' '} <OutlinedClockIcon /> </> ) : null} </> ); const { error, dismissError } = useDismissableError( disassociateError || updateInstanceError || healthCheckError ); const tabsArray = [ { name: ( <> <CaretLeftIcon /> {t`Back to Instances`} </> ), link: `/instance_groups/${id}/instances`, id: 99, }, { name: t`Details`, link: `/instance_groups/${id}/instances/${instanceId}/details`, id: 0, }, ]; if (contentError) { return <ContentError error={contentError} />; } if (isLoading) { return <ContentLoading />; } const isExecutionNode = instance.node_type === 'execution'; return ( <> <RoutedTabs tabsArray={tabsArray} /> {showHealthCheckAlert ? ( <HealthCheckAlert onSetHealthCheckAlert={setShowHealthCheckAlert} /> ) : null} <CardBody> <DetailList gutter="sm"> <Detail label={t`Host Name`} value={instance.hostname} dataCy="instance-detail-name" /> <Detail label={t`Status`} value={ instance.node_state ? ( <StatusLabel status={instance.node_state} /> ) : null } /> <Detail label={t`Policy Type`} value={ instance.managed_by_policy ? t`Auto` : t`Manual` } /> <Detail label={t`Running Jobs`} value={instance.jobs_running} /> <Detail label={t`Total Jobs`} value={instance.jobs_total} /> <Detail label={t`Last Health Check`} helpText={ <> {t`Health checks are asynchronous tasks. See the`}{' '} <a href={`${getDocsBaseUrl( config )}/html/administration/instances.html#health-check`} target="_blank" rel="noopener noreferrer" > {t`documentation`} </a>{' '} {t`for more info.`} </> } value={formatHealthCheckTimeStamp(instance.last_health_check)} /> <Detail label={t`Node Type`} value={instance.node_type} /> <Detail label={t`Capacity Adjustment`} value={ <SliderHolder data-cy="slider-holder"> <div data-cy="cpu-capacity"> {t`CPU ${instance.cpu_capacity}`} </div> <SliderForks data-cy="slider-forks"> <div data-cy="number-forks"> {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })} </div> <Slider areCustomStepsContinuous max={1} min={0} step={0.1} value={instance.capacity_adjustment} onChange={(_event, value) => handleChangeValue(value)} isDisabled={!config?.me?.is_superuser || !instance.enabled} data-cy="slider" /> </SliderForks> <div data-cy="mem-capacity"> {t`RAM ${instance.mem_capacity}`} </div> </SliderHolder> } /> <Detail label={t`Used Capacity`} value={ instance.enabled ? ( <Progress title={t`Used capacity`} value={Math.round(100 - instance.percent_capacity_remaining)} measureLocation={ProgressMeasureLocation.top} size={ProgressSize.sm} aria-label={t`Used capacity`} /> ) : ( <Unavailable>{t`Unavailable`}</Unavailable> ) } /> {healthCheck?.errors && ( <Detail fullWidth label={t`Errors`} value={ <CodeBlock> <CodeBlockCode>{healthCheck?.errors}</CodeBlockCode> </CodeBlock> } /> )} </DetailList> <CardActionsRow> {isExecutionNode && ( <Tooltip content={t`Run a health check on the instance`}> <Button isDisabled={ !config?.me?.is_superuser || instance.health_check_pending } variant="primary" ouiaId="health-check-button" onClick={fetchHealthCheck} isLoading={instance.health_check_pending} spinnerAriaLabel={t`Running health check`} > {instance.health_check_pending ? t`Running health check` : t`Run health check`} </Button> </Tooltip> )} {config?.me?.is_superuser && instance.node_type !== 'control' && ( <DisassociateButton verifyCannotDisassociate={instanceGroup.name === 'controlplane'} key="disassociate" onDisassociate={disassociateInstance} itemsToDisassociate={[instance]} isProtectedInstanceGroup={instanceGroup.name === 'controlplane'} modalTitle={t`Disassociate instance from instance group?`} modalNote={ instance.managed_by_policy ? ( <Trans> <b> {t`Note: This instance may be re-associated with this instance group if it is managed by `} <a href={policyRulesDocsLink} target="_blank" rel="noopener noreferrer" > {t`policy rules.`} </a> </b> </Trans> ) : null } /> )} <InstanceToggle css="display: inline-flex;" fetchInstances={fetchDetails} instance={instance} /> </CardActionsRow> {error && ( <AlertModal isOpen={error} onClose={dismissError} title={t`Error!`} variant="error" > {updateInstanceError ? t`Failed to update capacity adjustment.` : t`Failed to disassociate one or more instances.`} <ErrorDetail error={error} /> </AlertModal> )} </CardBody> </> ); } export default InstanceDetails; 
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:341
-msgid "<0>{0}<1>{1}</1></0>"
-msgstr "<0>{0}<1>{1}</1></0>"
+#: util/getRelatedResourceDeleteDetails.js:139
+msgid "Workflow Job Templates"
+msgstr "Plantillas de trabajo para flujo de trabajo"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:191
 msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
@@ -4169,10 +4159,6 @@ msgstr "Configuración de RADIUS"
 msgid "Workflow job templates"
 msgstr "Plantillas de trabajo del flujo de trabajo"
 
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:52
-msgid "this Tower documentation page"
-msgstr "esta página de documentación de la Torre"
-
 #: screens/Instances/Shared/InstanceForm.js:65
 msgid "Sets the role that this instance will play within mesh topology. Default is \"execution.\""
 msgstr "Establece el papel que desempeñará esta instancia dentro de la topología de malla. Por defecto es \"ejecución\"."
@@ -4284,7 +4270,7 @@ msgstr "Clave API de Grafana"
 msgid "You do not have permission to disassociate the following: {itemsUnableToDisassociate}"
 msgstr "No tiene permiso para desvincular lo siguiente: {itemsUnableToDisassociate}"
 
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:371
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:372
 #: screens/InstanceGroup/Instances/InstanceListItem.js:258
 #: screens/Instances/InstanceDetail/InstanceDetail.js:417
 #: screens/Instances/InstanceList/InstanceListItem.js:276
@@ -4300,6 +4286,11 @@ msgstr "Porcentaje mínimo de todas las instancias que se asignarán automática
 #: components/JobCancelButton/JobCancelButton.js:89
 msgid "Confirm cancellation"
 msgstr "Confirmar cancelación"
+
+#. placeholder {0}: groups.length
+#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:122
+msgid "{0, plural, one {Are you sure you want delete the group below?} other {Are you sure you want delete the groups below?}}"
+msgstr "{0, plural, one {¿Está seguro de que desea eliminar el grupo que se muestra a continuación?} other {¿Está seguro de que desea eliminar los grupos que se muestran a continuación?}}"
 
 #: components/Sort/Sort.js:141
 msgid "Sort"
@@ -4460,6 +4451,7 @@ msgstr "Modificar plantilla"
 #: screens/Application/Applications.js:38
 #: screens/Application/ApplicationsList/ApplicationsList.js:111
 #: screens/Application/ApplicationsList/ApplicationsList.js:146
+#: util/getRelatedResourceDeleteDetails.js:208
 msgid "Applications"
 msgstr "Aplicaciones"
 
@@ -4469,12 +4461,12 @@ msgid "All jobs"
 msgstr "Todas las tareas"
 
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:184
-msgid "If enabled, show the changes made\n"
-"              by Ansible tasks, where supported. This is equivalent to Ansible’s\n"
-"              --diff mode."
-msgstr "Si se habilita, muestra los cambios realizados\n"
-"              por las tareas de Ansible, donde sea compatible. Esto es equivalente al modo\n"
-"              --diff de Ansible."
+#~ msgid "If enabled, show the changes made\n"
+#~ "              by Ansible tasks, where supported. This is equivalent to Ansible’s\n"
+#~ "              --diff mode."
+#~ msgstr "Si se habilita, muestra los cambios realizados\n"
+#~ "              por las tareas de Ansible, donde sea compatible. Esto es equivalente al modo\n"
+#~ "              --diff de Ansible."
 
 #: screens/InstanceGroup/Instances/InstanceList.js:364
 msgid "<0>Note: Manually associated instances may be automatically disassociated from an instance group if the instance is managed by <1>policy rules.</1></0>"
@@ -4580,7 +4572,7 @@ msgstr "Ver detalles de la organización"
 #: screens/Host/HostGroups/HostGroupsList.js:241
 #: screens/Host/HostList/HostList.js:233
 #: screens/HostMetrics/HostMetricsDeleteButton.js:104
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:367
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:368
 #: screens/InstanceGroup/Instances/InstanceList.js:386
 #: screens/InstanceGroup/Instances/InstanceListItem.js:254
 #: screens/Instances/InstanceDetail/InstanceDetail.js:413
@@ -4713,14 +4705,6 @@ msgstr "No se pudo asociar el rol"
 msgid "Failed to delete one or more projects."
 msgstr "No se pudo eliminar uno o más proyectos."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:46
-msgid "Choose an answer type or format you want as the prompt for the user.\n"
-"          Refer to the Ansible Controller Documentation for more additional\n"
-"          information about each option."
-msgstr "Elija un tipo o formato de respuesta que desee como indicación para el usuario.\n"
-"          Consulte la documentación de Ansible Controller para obtener información\n"
-"          adicional sobre cada opción."
-
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:208
 msgid "Set source path to"
 msgstr "Establecer la ruta de origen en"
@@ -4760,6 +4744,7 @@ msgstr "Iniciar sesión con organizaciones GitHub Enterprise"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:171
 #: screens/NotificationTemplate/NotificationTemplates.js:14
 #: screens/NotificationTemplate/NotificationTemplates.js:21
+#: util/getRelatedResourceDeleteDetails.js:180
 msgid "Notification Templates"
 msgstr "Plantillas de notificación"
 
@@ -4927,6 +4912,8 @@ msgstr "Advertencia del sistema"
 #: screens/Organization/Organization.js:131
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.js:77
 #: screens/Organization/Organizations.js:35
+#: util/getRelatedResourceDeleteDetails.js:80
+#: util/getRelatedResourceDeleteDetails.js:187
 msgid "Execution Environments"
 msgstr "Entornos de ejecución"
 
@@ -5135,7 +5122,7 @@ msgstr "Contraer"
 
 #: components/JobList/JobListItem.js:320
 #: components/LabelLists/LabelLists.js:56
-#: components/LaunchPrompt/steps/OtherPromptsStep.js:224
+#: components/LaunchPrompt/steps/OtherPromptsStep.js:222
 #: components/PromptDetail/PromptDetail.js:338
 #: components/PromptDetail/PromptJobTemplateDetail.js:220
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:121
@@ -5197,6 +5184,7 @@ msgstr "Mes"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:383
 #: screens/Template/shared/JobTemplateForm.js:401
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:49
+#: util/getRelatedResourceDeleteDetails.js:90
 msgid "Credentials"
 msgstr "Credenciales"
 
@@ -5264,7 +5252,7 @@ msgstr "Copiar"
 msgid "Red Hat Satellite 6"
 msgstr "Red Hat Satellite 6"
 
-#: components/Search/AdvancedSearch.js:278
+#: components/Search/AdvancedSearch.js:277
 msgid "Remove the current search related to ansible facts to enable another search using this key."
 msgstr "Elimine la búsqueda actual relacionada con los hechos factibles para habilitar otra búsqueda usando esta clave."
 
@@ -5305,6 +5293,11 @@ msgstr "Realice una búsqueda para definir un filtro de host"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:507
 msgid "Notification test failed."
 msgstr "Error en la prueba de notificación."
+
+#. placeholder {0}: itemsToRemove.length
+#: screens/Instances/Shared/RemoveInstanceButton.js:88
+msgid "{0, plural, one {This intance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
+msgstr "{0, plural, one {Esta instancia está siendo utilizada actualmente por otros recursos. ¿Está seguro de que desea eliminarla?} other {Desaprovisionar estas instancias podría afectar a otros recursos que dependen de ellas. ¿Está seguro de que desea eliminarlas de todos modos?}}"
 
 #: components/Pagination/Pagination.js:25
 msgid "items"
@@ -5356,10 +5349,6 @@ msgstr "Nombre del recurso"
 msgid "select module"
 msgstr "seleccionar módulo"
 
-#: components/JobList/JobListCancelButton.js:174
-msgid "This action will cancel the following jobs:"
-msgstr "Esta acción cancelará las siguientes tareas:"
-
 #: components/PromptDetail/PromptProjectDetail.js:127
 #: screens/Project/ProjectDetail/ProjectDetail.js:245
 #: screens/Project/shared/ProjectForm.js:300
@@ -5400,6 +5389,10 @@ msgstr "Establecer un valor para este campo"
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:273
 msgid "Failed to deny one or more workflow approval."
 msgstr "No se ha podido denegar la aprobación de uno o más flujos de trabajo."
+
+#: components/Search/AdvancedSearch.js:62
+msgid "Returns results that satisfy this one as well as other filters.  This is the default set type if nothing is selected."
+msgstr "Devuelve resultados que satisfacen este filtro así como otros filtros.  Este es el tipo de conjunto predeterminado si no se selecciona nada."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/WorkflowJobTemplatesList.js:99
 msgid "Organization (Name)"
@@ -5482,7 +5475,7 @@ msgid "Next"
 msgstr "Siguiente"
 
 #: components/LabelSelect/LabelSelect.js:192
-#: components/LaunchPrompt/steps/OtherPromptsStep.js:230
+#: components/LaunchPrompt/steps/OtherPromptsStep.js:228
 #: components/MultiSelect/TagMultiSelect.js:126
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.js:131
 #: screens/Inventory/shared/InventoryForm.js:91
@@ -5547,9 +5540,10 @@ msgstr "No se encontraron suscripciones"
 msgid "Add team permissions"
 msgstr "Agregar permisos de equipo"
 
-#: components/JobList/JobListCancelButton.js:173
-msgid "This action will cancel the following job:"
-msgstr "Esta acción cancelará la siguiente tarea:"
+#. placeholder {0}: selected.length
+#: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:185
+msgid "{0, plural, one {This instance group is currently being by other resources. Are you sure you want to delete it?} other {Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
+msgstr "{0, plural, one {Este grupo de instancias está siendo utilizado actualmente por otros recursos. ¿Está seguro de que desea eliminarlo?} other {Eliminar estos grupos de instancias podría afectar a otros recursos que dependen de ellos. ¿Está seguro de que desea eliminarlos de todos modos?}}"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:506
 msgid "Source phone number"
@@ -5783,6 +5777,8 @@ msgstr "Tipos de estado de los enlaces"
 #: screens/ExecutionEnvironment/ExecutionEnvironment.js:69
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.js:83
 #: screens/Template/Templates.js:18
+#: util/getRelatedResourceDeleteDetails.js:217
+#: util/getRelatedResourceDeleteDetails.js:274
 msgid "Templates"
 msgstr "Plantillas"
 
@@ -5848,6 +5844,7 @@ msgstr "rama de fuente de control"
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:113
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:116
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:431
+#: util/getRelatedResourceDeleteDetails.js:281
 msgid "Instance Groups"
 msgstr "Grupos de instancias"
 
@@ -5927,10 +5924,6 @@ msgstr "Definición de inventario de grupos anidados:"
 msgid "Prompt for limit on launch."
 msgstr "Preguntar por el límite al ejecutar."
 
-#: components/JobList/JobListCancelButton.js:96
-msgid "Cancel selected job"
-msgstr "Cancelar la tarea seleccionada"
-
 #: screens/Job/JobDetail/JobDetail.js:254
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.js:224
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.js:73
@@ -5998,6 +5991,8 @@ msgstr "Encuesta"
 #: screens/User/User.js:65
 #: screens/User/UserOrganizations/UserOrganizationList.js:73
 #: screens/User/Users.js:33
+#: util/getRelatedResourceDeleteDetails.js:231
+#: util/getRelatedResourceDeleteDetails.js:265
 msgid "Organizations"
 msgstr "Organizaciones"
 
@@ -6062,10 +6057,6 @@ msgstr "Advertencia: {selectedValue} es un enlace a {0} y se guardará así."
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:118
 msgid "Workflow Job 1/{0}"
 msgstr "Tarea en flujo de trabajo 1/{0}"
-
-#: screens/Inventory/InventoryList/InventoryList.js:274
-msgid "The inventories will be in a pending status until the final delete is processed."
-msgstr "Los inventarios estarán en un estado pendiente hasta que se procese la eliminación final."
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.js:131
 msgid "Last recalculation date:"
@@ -6267,6 +6258,9 @@ msgstr "Jueves"
 #: screens/Inventory/SmartInventory.js:76
 #: screens/Project/Project.js:117
 #: screens/Project/Projects.js:31
+#: util/getRelatedResourceDeleteDetails.js:55
+#: util/getRelatedResourceDeleteDetails.js:100
+#: util/getRelatedResourceDeleteDetails.js:132
 msgid "Job Templates"
 msgstr "Plantillas de trabajo"
 
@@ -6363,10 +6357,6 @@ msgstr "Cómo usar el plugin de inventario construido"
 msgid "This field must not contain spaces"
 msgstr "Este campo no debe contener espacios"
 
-#: screens/Inventory/InventoryList/InventoryList.js:266
-msgid "This inventory is currently being used by some templates. Are you sure you want to delete it?"
-msgstr "Este inventario está siendo utilizado actualmente por algunas plantillas. ¿Seguro que quieres eliminarlo?"
-
 #: routeConfig.js:135
 #: screens/ActivityStream/ActivityStream.js:125
 #: screens/ActivityStream/ActivityStream.js:224
@@ -6393,6 +6383,10 @@ msgstr "Seleccione una rama para el flujo de trabajo."
 #: screens/Template/Survey/SurveyQuestionForm.js:262
 msgid "Refer to the"
 msgstr "Consulte"
+
+#: util/getRelatedResourceDeleteDetails.js:73
+msgid "Credential Input Sources"
+msgstr "Fuentes de entrada de credenciales"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:432
 msgid "Second"
@@ -6490,6 +6484,7 @@ msgstr "Pestaña de detalles"
 #: screens/Inventory/shared/InventorySourceSubForms/TerraformSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/VirtualizationSubForm.js:39
 #: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:39
+#: util/getRelatedResourceDeleteDetails.js:166
 msgid "Credential"
 msgstr "Credencial"
 
@@ -6724,6 +6719,8 @@ msgstr "min"
 
 #: screens/Inventory/InventorySources/InventorySourceList.js:177
 #: screens/Inventory/InventorySources/InventorySourceList.js:194
+#: util/getRelatedResourceDeleteDetails.js:66
+#: util/getRelatedResourceDeleteDetails.js:146
 msgid "Inventory Sources"
 msgstr "Fuentes de inventario"
 
@@ -6751,10 +6748,6 @@ msgstr "Slack"
 #: screens/InstanceGroup/InstanceGroup.js:91
 msgid "Instance group not found."
 msgstr "No se encontró el grupo de instancias."
-
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:343
-msgid "Note: This instance may be re-associated with this instance group if it is managed by "
-msgstr "Nota: Esta instancia puede volver a asociarse con este grupo de instancias si es administrada por "
 
 #: screens/Instances/Shared/RemoveInstanceButton.js:172
 msgid "cancel remove"
@@ -6883,7 +6876,7 @@ msgstr "Esta entrada de inventario construida\n"
 msgid "Disassociate instance from instance group?"
 msgstr "¿Disociar instancia del grupo de instancias?"
 
-#: components/Search/AdvancedSearch.js:374
+#: components/Search/AdvancedSearch.js:373
 msgid "Key typeahead"
 msgstr "Escritura anticipada de la clave"
 
@@ -6923,8 +6916,8 @@ msgstr "Seguir"
 #: components/LaunchPrompt/steps/CredentialsStep.js:254
 #: components/LaunchPrompt/steps/InventoryStep.js:93
 #: components/Lookup/CredentialLookup.js:194
-#: components/Lookup/InventoryLookup.js:166
-#: components/Lookup/InventoryLookup.js:222
+#: components/Lookup/InventoryLookup.js:165
+#: components/Lookup/InventoryLookup.js:221
 #: components/Lookup/MultiCredentialsLookup.js:204
 #: components/Lookup/OrganizationLookup.js:139
 #: components/Lookup/ProjectLookup.js:149
@@ -7033,6 +7026,7 @@ msgstr "Elegir un directorio de playbook"
 #: screens/Job/JobDetail/JobDetail.js:286
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:100
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:222
+#: util/getRelatedResourceDeleteDetails.js:104
 msgid "Workflow Job Template"
 msgstr "Plantilla de trabajo para flujo de trabajo"
 
@@ -7194,10 +7188,6 @@ msgstr "Mostrar detalles del evento"
 msgid "Gathering Facts"
 msgstr "Obteniendo facts"
 
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:124
-msgid "Are you sure you want delete the group below?"
-msgstr "¿Está seguro de que quiere eliminar el grupo?"
-
 #: components/AdHocCommands/AdHocDetailsStep.js:215
 msgid "Enables creation of a provisioning\n"
 "                              callback URL. Using the URL a host can contact {brandName}\n"
@@ -7219,7 +7209,7 @@ msgstr "Hora de finalización"
 msgid "Recent jobs"
 msgstr "Trabajos recientes"
 
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:372
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:373
 #: screens/InstanceGroup/Instances/InstanceList.js:391
 #: screens/Instances/InstanceDetail/InstanceDetail.js:418
 msgid "Failed to disassociate one or more instances."
@@ -7262,6 +7252,10 @@ msgstr "Filtro de host"
 #: screens/Project/shared/Project.helptext.js:97
 msgid "Time in seconds to consider a project to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest project update. If it is older than Cache Timeout, it is not considered current, and a new project update will be performed."
 msgstr "Tiempo en segundos para considerar que un proyecto está actualizado. Durante las ejecuciones de trabajos y las devoluciones de llamada, el sistema de tareas evaluará la marca de tiempo de la última actualización del proyecto. Si es anterior al tiempo de espera de la caché, no se considera actual y se realizará una nueva actualización del proyecto."
+
+#: components/JobList/JobListCancelButton.js:171
+msgid "{numJobsToCancel, plural, one {This action will cancel the following job:} other {This action will cancel the following jobs:}}"
+msgstr "{numJobsToCancel, plural, one {Esta acción cancelará el siguiente trabajo:} other {Esta acción cancelará los siguientes trabajos:}}"
 
 #: screens/ActivityStream/ActivityStream.js:269
 msgid "Keyword"
@@ -7387,7 +7381,7 @@ msgstr "Volver a ejecutar desde:"
 msgid "To create a smart inventory using ansible facts, go to the smart inventory screen."
 msgstr "Para crear un inventario inteligente con los hechos de ansible, vaya a la pantalla de inventario inteligente."
 
-#: components/Search/AdvancedSearch.js:413
+#: components/Search/AdvancedSearch.js:412
 msgid "Related Keys"
 msgstr "Teclas relacionadas"
 
@@ -7648,8 +7642,8 @@ msgstr "Correo electrónico"
 msgid "Case-insensitive version of regex."
 msgstr "Versión de regex que no distingue mayúsculas de minúsculas."
 
-#: components/Search/AdvancedSearch.js:283
-#: components/Search/AdvancedSearch.js:299
+#: components/Search/AdvancedSearch.js:282
+#: components/Search/AdvancedSearch.js:298
 msgid "Advanced search value input"
 msgstr "Entrada de valores de búsqueda avanzada"
 
@@ -7695,10 +7689,6 @@ msgstr "Proporcione un valor para este campo o seleccione la opción Preguntar a
 msgid "External Secret Management System"
 msgstr "Sistema externo de gestión de claves secretas"
 
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:125
-msgid "Are you sure you want delete the groups below?"
-msgstr "¿Está seguro de que desea eliminar los grupos a continuación?"
-
 #: components/AdHocCommands/AdHocDetailsStep.js:156
 msgid "here"
 msgstr "aquí"
@@ -7743,10 +7733,10 @@ msgid "Sign in with GitHub Enterprise Teams"
 msgstr "Iniciar sesión con equipos de GitHub Enterprise"
 
 #: components/Lookup/InventoryLookup.js:133
-msgid "Select the inventory containing the hosts\n"
-"            you want this job to manage."
-msgstr "Seleccione el inventario que contiene los hosts\n"
-"            que desea que este trabajo gestione."
+#~ msgid "Select the inventory containing the hosts\n"
+#~ "            you want this job to manage."
+#~ msgstr "Seleccione el inventario que contiene los hosts\n"
+#~ "            que desea que este trabajo gestione."
 
 #: components/AdHocCommands/AdHocDetailsStep.js:108
 #: components/AdHocCommands/AdHocDetailsStep.js:110
@@ -7757,10 +7747,6 @@ msgstr "Argumentos"
 msgid "Construct 2 groups, limit to intersection"
 msgstr "Construir 2 grupos, límite de intersección"
 
-#: screens/Inventory/InventoryList/InventoryListItem.js:68
-msgid "# sources with sync failures."
-msgstr "# fuentes con fallos de sincronización."
-
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:30
 msgid "Webhook URL for this workflow job template."
 msgstr "URL de webhook para esta plantilla de trabajo del flujo de trabajo."
@@ -7768,6 +7754,10 @@ msgstr "URL de webhook para esta plantilla de trabajo del flujo de trabajo."
 #: components/Schedule/shared/ScheduleFormFields.js:93
 msgid "Start date/time"
 msgstr "Fecha/hora de inicio"
+
+#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:37
+msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>this Tower documentation page</0>. Uncheck the following boxes to disable this feature."
+msgstr "De forma predeterminada, recopilamos y transmitimos datos analíticos sobre el uso del servicio a Red Hat. Hay dos categorías de datos recopilados por el servicio. Para obtener más información, consulte <0>esta página de documentación de la Torre</0>. Desmarque las siguientes casillas para desactivar esta función."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:231
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:228
@@ -7801,10 +7791,6 @@ msgstr "No se pudo disociar uno o más grupos."
 #: screens/User/UserTokens/UserTokens.js:51
 msgid "Token information"
 msgstr "Información del token"
-
-#: screens/Inventory/InventoryList/InventoryListItem.js:67
-msgid "# source with sync failures."
-msgstr "# source con errores de sincronización."
 
 #: components/Workflow/WorkflowNodeHelp.js:112
 msgid "Never Updated"
@@ -7917,6 +7903,11 @@ msgstr "Volver a Configuración"
 #: screens/User/UserDetail/UserDetail.js:88
 msgid "Default"
 msgstr "Predeterminado"
+
+#. placeholder {0}: values.end
+#: components/Schedule/shared/buildRuleObj.js:111
+msgid "End did not match an expected value ({0})"
+msgstr "El final no coincide con un valor esperado ({0})"
 
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:114
 msgid "Add instance group"
@@ -8253,7 +8244,7 @@ msgstr "Tarea"
 msgid "Regions"
 msgstr "Regiones"
 
-#: components/Search/AdvancedSearch.js:315
+#: components/Search/AdvancedSearch.js:314
 msgid "Set type disabled for related search field fuzzy searches"
 msgstr "Establecer el tipo deshabilitado para las búsquedas difusas de campos de búsqueda relacionados"
 
@@ -8273,10 +8264,6 @@ msgstr "No puede actuar en las siguientes aprobaciones de flujo de trabajo: {ite
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerStartScreen.js:45
 msgid "Please click the Start button to begin."
 msgstr "Haga clic en el botón de inicio para comenzar."
-
-#: components/RelatedTemplateList/RelatedTemplateList.js:224
-msgid "This template is currently being used by some workflow nodes. Are you sure you want to delete it?"
-msgstr "Esta plantilla está siendo utilizada actualmente por algunos nodos de flujo de trabajo. ¿Seguro que quieres eliminarlo?"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:346
 msgid "First Run"
@@ -8764,10 +8751,6 @@ msgstr "Total de anfitriones"
 msgid "This field must be greater than 0"
 msgstr "Este campo debe ser mayor que 0"
 
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:152
-msgid "User Guide"
-msgstr "Manual de usuario"
-
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:47
 msgid "Workflow Link"
 msgstr "Enlace del flujo de trabajo"
@@ -8834,6 +8817,8 @@ msgstr "Carga de contenido"
 #: screens/Inventory/Inventories.js:44
 #: screens/Inventory/InventoryList/InventoryList.js:196
 #: screens/Inventory/InventoryList/InventoryList.js:261
+#: util/getRelatedResourceDeleteDetails.js:201
+#: util/getRelatedResourceDeleteDetails.js:269
 msgid "Inventories"
 msgstr "Inventarios"
 
@@ -8851,10 +8836,6 @@ msgstr "Habilitado"
 #: components/Pagination/Pagination.js:28
 msgid "Items per page"
 msgstr "Elementos por página"
-
-#: components/JobList/JobListCancelButton.js:97
-msgid "Cancel selected jobs"
-msgstr "Cancelar las tareas seleccionadas"
 
 #: util/validators.js:111
 #: util/validators.js:195
@@ -8957,6 +8938,11 @@ msgstr "El archivo de inventario a sincronizar por esta fuente. Puede selecciona
 #: screens/Job/Job.js:168
 msgid "View all Jobs."
 msgstr "Ver todas las tareas."
+
+#. placeholder {0}: selected.length
+#: screens/Inventory/InventorySources/InventorySourceList.js:197
+msgid "{0, plural, one {This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?} other {Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway}}"
+msgstr "{0, plural, one {Esta fuente de inventario está siendo utilizada actualmente por otros recursos que dependen de ella. ¿Está seguro de que desea eliminarla?} other {Eliminar estas fuentes de inventario podría afectar a otros recursos que dependen de ellas. ¿Está seguro de que desea eliminarlas de todos modos?}}"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:264
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:322
@@ -9156,6 +9142,11 @@ msgstr "Ejecuciones de trabajo"
 msgid "Failed to delete smart inventory."
 msgstr "No se pudo eliminar el inventario inteligente."
 
+#. placeholder {0}: inventory.inventory_sources_with_failures
+#: screens/Inventory/InventoryList/InventoryListItem.js:65
+msgid "{0, plural, one {# source with sync failures.} other {# sources with sync failures.}}"
+msgstr "{0, plural, one {# fuente con fallos de sincronización.} other {# fuentes con fallos de sincronización.}}"
+
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:181
 #: screens/Instances/Instance.js:32
 msgid "Back to Instances"
@@ -9193,7 +9184,6 @@ msgid "Redirecting to dashboard"
 msgstr "Redirigir al panel de control"
 
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:138
-#: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:187
 msgid "This instance group is currently being by other resources. Are you sure you want to delete it?"
 msgstr "Este grupo de instancias está siendo utilizado por otros recursos. ¿Está seguro de que desea eliminarlo?"
 
@@ -9222,6 +9212,10 @@ msgstr "Cuerpo del mensaje de flujo de trabajo aprobado"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:103
 msgid "OpenStack"
 msgstr "OpenStack"
+
+#: components/Search/AdvancedSearch.js:67
+msgid "Returns results that satisfy this one or any other filters."
+msgstr "Devuelve resultados que satisfacen este filtro o cualquier otro filtro."
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:78
 msgid "required"
@@ -9467,7 +9461,7 @@ msgstr "Disociar rol"
 msgid "Required"
 msgstr "Obligatorio"
 
-#: components/Search/AdvancedSearch.js:210
+#: components/Search/AdvancedSearch.js:209
 msgid "Set type typeahead"
 msgstr "Establecer escritura anticipada del tipo"
 
@@ -9522,10 +9516,6 @@ msgstr "Copiar credencial"
 msgid "Token"
 msgstr "Token"
 
-#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:349
-msgid "policy rules."
-msgstr "normas de su póliza "
-
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:100
 msgid "weekday"
 msgstr "día laborable"
@@ -9564,6 +9554,7 @@ msgid "User Type"
 msgstr "Tipo de usuario"
 
 #. placeholder {0}: selected.length
+#: components/RelatedTemplateList/RelatedTemplateList.js:222
 #: components/TemplateList/TemplateList.js:276
 msgid "{0, plural, one {This template is currently being used by some workflow nodes. Are you sure you want to delete it?} other {Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This template is currently being used by some workflow nodes. Are you sure you want to delete it?} other {Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?}}"
@@ -9833,10 +9824,6 @@ msgstr "Mensaje de flujo de trabajo pendiente"
 msgid "Errors"
 msgstr "Errores"
 
-#: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:188
-msgid "Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?"
-msgstr "La eliminación de estos grupos de instancias podría afectar a otros recursos que dependen de ellos. ¿Está seguro de que desea eliminar de todos modos?"
-
 #: screens/Project/ProjectDetail/ProjectDetail.js:200
 msgid "Source Control Revision"
 msgstr "Revisión de fuente de control"
@@ -9975,16 +9962,11 @@ msgstr "Falta el entorno de ejecución o se ha eliminado."
 msgid "Waiting"
 msgstr "Esperando"
 
-#: screens/Inventory/shared/Inventory.helptext.js:104
-#: screens/Inventory/shared/Inventory.helptext.js:119
-msgid "If you want the Inventory Source to update on launch , click on Update on Launch, and also go to "
-msgstr "Si desea que la fuente de inventario se actualice al ejecutar, haga clic en Actualizar al ejecutar y también vaya a "
-
 #: screens/Template/shared/JobTemplate.helptext.js:32
 msgid "If enabled, run this playbook as an administrator."
 msgstr "Si está habilitado, ejecute este playbook como administrador."
 
-#: components/Search/AdvancedSearch.js:179
+#: components/Search/AdvancedSearch.js:178
 msgid "Set type select"
 msgstr "Establecer selección del tipo"
 
@@ -10090,6 +10072,11 @@ msgstr "Nombre"
 msgid "Webhooks"
 msgstr "Webhooks"
 
+#. placeholder {0}: selected.length
+#: screens/Inventory/InventoryList/InventoryList.js:271
+msgid "{0, plural, one {The inventory will be in a pending status until the final delete is processed.} other {The inventories will be in a pending status until the final delete is processed.}}"
+msgstr "{0, plural, one {El inventario estará en estado pendiente hasta que se procese la eliminación final.} other {Los inventarios estarán en estado pendiente hasta que se procese la eliminación final.}}"
+
 #: components/JobList/JobListItem.js:145
 #: screens/Job/JobOutput/shared/OutputToolbar.js:192
 msgid "Relaunch using host parameters"
@@ -10100,8 +10087,8 @@ msgid "This action will soft delete the following:"
 msgstr "Esta acción eliminará suavemente lo siguiente:"
 
 #: components/AdHocCommands/AdHocDetailsStep.js:187
-msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible’s --diff mode."
-msgstr "Si se habilita esta opción, muestre los cambios realizados por las tareas de Ansible, donde sea compatible. Esto es equivalente al modo --diff de Ansible."
+#~ msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible’s --diff mode."
+#~ msgstr "Si se habilita esta opción, muestre los cambios realizados por las tareas de Ansible, donde sea compatible. Esto es equivalente al modo --diff de Ansible."
 
 #: screens/Instances/Instance.js:64
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:104
@@ -10530,13 +10517,6 @@ msgstr "Ingresar al menos un filtro de búsqueda para crear un nuevo inventario 
 msgid "Filter By {name}"
 msgstr "Filtrar por {name}"
 
-#. placeholder {0}: import React, { useContext, useEffect, useState } from 'react'; import { Plural, useLingui } from '@lingui/react/macro'; import { Button, Tooltip, DropdownItem, } from '@patternfly/react-core'; import { KebabifiedContext } from 'contexts/Kebabified'; import { isJobRunning } from 'util/jobs'; import AlertModal from '../AlertModal'; function cannotCancelBecausePermissions(job) { return ( !job.summary_fields.user_capabilities.start && isJobRunning(job.status) ); } function cannotCancelBecauseNotRunning(job) { return !isJobRunning(job.status); } function JobListCancelButton({ jobsToCancel = [], onCancel = () => {} }) { const { t } = useLingui(); const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext); const [isModalOpen, setIsModalOpen] = useState(false); const numJobsToCancel = jobsToCancel.length; const handleCancelJob = () => { onCancel(); toggleModal(); }; const toggleModal = () => { setIsModalOpen(!isModalOpen); }; useEffect(() => { if (isKebabified) { onKebabModalChange(isModalOpen); } }, [isKebabified, isModalOpen, onKebabModalChange]); const renderTooltip = () => { const cannotCancelPermissions = jobsToCancel .filter(cannotCancelBecausePermissions) .map((job) => job.name); const cannotCancelNotRunning = jobsToCancel .filter(cannotCancelBecauseNotRunning) .map((job) => job.name); const numJobsUnableToCancel = cannotCancelPermissions.concat( cannotCancelNotRunning ).length; if (numJobsUnableToCancel > 0) { return ( <div> {cannotCancelPermissions.length > 0 && ( <div> <Plural value={cannotCancelPermissions.length} one="You do not have permission to cancel the following job:" other="You do not have permission to cancel the following jobs:" /> {cannotCancelPermissions.map((job, i) => ( <strong key={job}> {' '} {job} {i !== cannotCancelPermissions.length - 1 ? ',' : ''} </strong> ))} </div> )} {cannotCancelNotRunning.length > 0 && ( <div> <Plural value={cannotCancelNotRunning.length} one="You cannot cancel the following job because it is not running:" other="You cannot cancel the following jobs because they are not running:" /> {cannotCancelNotRunning.map((job, i) => ( <strong key={job}> {' '} {job} {i !== cannotCancelNotRunning.length - 1 ? ',' : ''} </strong> ))} </div> )} </div> ); } if (numJobsToCancel > 0) { return ( <Plural value={numJobsToCancel} one={t`Cancel selected job`} other={t`Cancel selected jobs`} /> ); } return t`Select a job to cancel`; }; const isDisabled = jobsToCancel.length === 0 || jobsToCancel.some(cannotCancelBecausePermissions) || jobsToCancel.some(cannotCancelBecauseNotRunning); const cancelJobText = ( <Plural value={numJobsToCancel} one="Cancel job" other="Cancel jobs" /> ); return ( <> {isKebabified ? ( <DropdownItem key="cancel-job" isDisabled={isDisabled} component="button" aria-labelledby="jobs-list-cancel-button" onClick={toggleModal} ouiaId="cancel-job-dropdown-item" > {cancelJobText} </DropdownItem> ) : ( <Tooltip content={renderTooltip()} position="top"> <div> <Button id="jobs-list-cancel-button" ouiaId="cancel-job-button" variant="secondary" aria-labelledby="jobs-list-cancel-button" onClick={toggleModal} isDisabled={isDisabled} > {cancelJobText} </Button> </div> </Tooltip> )} {isModalOpen && ( <AlertModal variant="danger" title={cancelJobText} isOpen={isModalOpen} onClose={toggleModal} actions={[ <Button ouiaId="cancel-job-confirm-button" id="cancel-job-confirm-button" key="delete" variant="danger" aria-labelledby="cancel-job-confirm-button" onClick={handleCancelJob} > {cancelJobText} </Button>, <Button ouiaId="cancel-job-return-button" id="cancel-job-return-button" key="cancel" variant="secondary" aria-label={t`Return`} onClick={toggleModal} > {t`Return`} </Button>, ]} > <div style={{ marginBottom: '0.75rem' }}> <Plural value={numJobsToCancel} one={t`This action will cancel the following job:`} other={t`This action will cancel the following jobs:`} /> </div> {jobsToCancel.map((job) => ( <span key={job.id}> <strong>{job.name}</strong> <br /> </span> ))} </AlertModal> )} </> ); } export default JobListCancelButton; 
-#. placeholder {1}: import React, { useContext, useEffect, useState } from 'react'; import { Plural, useLingui } from '@lingui/react/macro'; import { Button, Tooltip, DropdownItem, } from '@patternfly/react-core'; import { KebabifiedContext } from 'contexts/Kebabified'; import { isJobRunning } from 'util/jobs'; import AlertModal from '../AlertModal'; function cannotCancelBecausePermissions(job) { return ( !job.summary_fields.user_capabilities.start && isJobRunning(job.status) ); } function cannotCancelBecauseNotRunning(job) { return !isJobRunning(job.status); } function JobListCancelButton({ jobsToCancel = [], onCancel = () => {} }) { const { t } = useLingui(); const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext); const [isModalOpen, setIsModalOpen] = useState(false); const numJobsToCancel = jobsToCancel.length; const handleCancelJob = () => { onCancel(); toggleModal(); }; const toggleModal = () => { setIsModalOpen(!isModalOpen); }; useEffect(() => { if (isKebabified) { onKebabModalChange(isModalOpen); } }, [isKebabified, isModalOpen, onKebabModalChange]); const renderTooltip = () => { const cannotCancelPermissions = jobsToCancel .filter(cannotCancelBecausePermissions) .map((job) => job.name); const cannotCancelNotRunning = jobsToCancel .filter(cannotCancelBecauseNotRunning) .map((job) => job.name); const numJobsUnableToCancel = cannotCancelPermissions.concat( cannotCancelNotRunning ).length; if (numJobsUnableToCancel > 0) { return ( <div> {cannotCancelPermissions.length > 0 && ( <div> <Plural value={cannotCancelPermissions.length} one="You do not have permission to cancel the following job:" other="You do not have permission to cancel the following jobs:" /> {cannotCancelPermissions.map((job, i) => ( <strong key={job}> {' '} {job} {i !== cannotCancelPermissions.length - 1 ? ',' : ''} </strong> ))} </div> )} {cannotCancelNotRunning.length > 0 && ( <div> <Plural value={cannotCancelNotRunning.length} one="You cannot cancel the following job because it is not running:" other="You cannot cancel the following jobs because they are not running:" /> {cannotCancelNotRunning.map((job, i) => ( <strong key={job}> {' '} {job} {i !== cannotCancelNotRunning.length - 1 ? ',' : ''} </strong> ))} </div> )} </div> ); } if (numJobsToCancel > 0) { return ( <Plural value={numJobsToCancel} one={t`Cancel selected job`} other={t`Cancel selected jobs`} /> ); } return t`Select a job to cancel`; }; const isDisabled = jobsToCancel.length === 0 || jobsToCancel.some(cannotCancelBecausePermissions) || jobsToCancel.some(cannotCancelBecauseNotRunning); const cancelJobText = ( <Plural value={numJobsToCancel} one="Cancel job" other="Cancel jobs" /> ); return ( <> {isKebabified ? ( <DropdownItem key="cancel-job" isDisabled={isDisabled} component="button" aria-labelledby="jobs-list-cancel-button" onClick={toggleModal} ouiaId="cancel-job-dropdown-item" > {cancelJobText} </DropdownItem> ) : ( <Tooltip content={renderTooltip()} position="top"> <div> <Button id="jobs-list-cancel-button" ouiaId="cancel-job-button" variant="secondary" aria-labelledby="jobs-list-cancel-button" onClick={toggleModal} isDisabled={isDisabled} > {cancelJobText} </Button> </div> </Tooltip> )} {isModalOpen && ( <AlertModal variant="danger" title={cancelJobText} isOpen={isModalOpen} onClose={toggleModal} actions={[ <Button ouiaId="cancel-job-confirm-button" id="cancel-job-confirm-button" key="delete" variant="danger" aria-labelledby="cancel-job-confirm-button" onClick={handleCancelJob} > {cancelJobText} </Button>, <Button ouiaId="cancel-job-return-button" id="cancel-job-return-button" key="cancel" variant="secondary" aria-label={t`Return`} onClick={toggleModal} > {t`Return`} </Button>, ]} > <div style={{ marginBottom: '0.75rem' }}> <Plural value={numJobsToCancel} one={t`This action will cancel the following job:`} other={t`This action will cancel the following jobs:`} /> </div> {jobsToCancel.map((job) => ( <span key={job.id}> <strong>{job.name}</strong> <br /> </span> ))} </AlertModal> )} </> ); } export default JobListCancelButton; 
-#: components/JobList/JobListCancelButton.js:94
-#: components/JobList/JobListCancelButton.js:171
-msgid "{numJobsToCancel, plural, one {{0}} other {{1}}}"
-msgstr "{numJobsToCancel, plural, one {{0}} other {{1}}}"
-
 #: components/Workflow/WorkflowTools.js:86
 msgid "Fit the graph to the available screen size"
 msgstr "Ajustar el gráfico al tamaño de la pantalla disponible"
@@ -10549,10 +10529,6 @@ msgstr "Procesamiento de eventos completo."
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:238
 msgid "Add a new node"
 msgstr "Agregar un nuevo nodo"
-
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:96
-msgid "Delete Groups?"
-msgstr "Eliminar grupos"
 
 #: screens/Organization/OrganizationList/OrganizationList.js:144
 #: screens/Organization/OrganizationList/OrganizationListItem.js:39
@@ -10587,7 +10563,7 @@ msgstr "LDAP2"
 msgid "Field contains value."
 msgstr "El campo contiene un valor."
 
-#: components/Search/AdvancedSearch.js:344
+#: components/Search/AdvancedSearch.js:343
 msgid "Key select"
 msgstr "Seleccionar clave"
 
@@ -10768,8 +10744,8 @@ msgstr "Modificar nodo"
 #: components/LaunchPrompt/steps/SurveyStep.js:178
 #: components/LaunchPrompt/steps/SurveyStep.js:308
 #: components/MultiSelect/TagMultiSelect.js:96
-#: components/Search/AdvancedSearch.js:220
-#: components/Search/AdvancedSearch.js:384
+#: components/Search/AdvancedSearch.js:219
+#: components/Search/AdvancedSearch.js:383
 #: components/Search/LookupTypeInput.js:182
 #: components/Search/RelatedLookupTypeInput.js:108
 #: screens/Credential/shared/CredentialForm.js:200
@@ -10843,10 +10819,6 @@ msgstr "LDAP1"
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:113
 msgid "Add container group"
 msgstr "Agregar grupo de contenedores"
-
-#: screens/Inventory/InventoryList/InventoryList.js:273
-msgid "The inventory will be in a pending status until the final delete is processed."
-msgstr "El inventario estará en estado pendiente hasta que se procese la eliminación final."
 
 #: components/AppContainer/AppContainer.js:152
 msgid "Continue"
@@ -10979,10 +10951,6 @@ msgstr "Mostrar cambios"
 msgid "Exact search on name field."
 msgstr "Búsqueda exacta en el campo de nombre."
 
-#: screens/Inventory/InventoryList/InventoryList.js:267
-msgid "Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?"
-msgstr "La eliminación de estos inventarios podría afectar a algunas plantillas que dependen de ellos. ¿Está seguro de que desea eliminar de todos modos?"
-
 #: screens/Inventory/InventorySources/InventorySourceList.js:249
 msgid "Delete error"
 msgstr "Eliminar el error"
@@ -10998,10 +10966,6 @@ msgstr "Si se especifica, este campo se mostrará en el nodo en lugar del nombre
 #: screens/Login/Login.js:279
 msgid "Sign in with GitHub"
 msgstr "Iniciar sesión con GitHub"
-
-#: screens/Inventory/InventorySources/InventorySourceList.js:200
-msgid "Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway"
-msgstr "La eliminación de estas fuentes de inventario podría afectar a otros recursos que dependen de ellas. ¿Está seguro de que desea eliminar de todos modos?"
 
 #: util/validators.js:33
 msgid "Invalid time format"
@@ -11109,6 +11073,10 @@ msgstr "Espere hasta que se complete la vista de topología..."
 #: components/AssociateModal/AssociateModal.js:45
 msgid "Select Items"
 msgstr "Seleccionar elementos"
+
+#: components/JobList/JobListCancelButton.js:94
+msgid "{numJobsToCancel, plural, one {Cancel selected job} other {Cancel selected jobs}}"
+msgstr "{numJobsToCancel, plural, one {Cancelar el trabajo seleccionado} other {Cancelar los trabajos seleccionados}}"
 
 #: screens/Application/Applications.js:41
 #: screens/Credential/Credentials.js:29
@@ -11229,7 +11197,7 @@ msgstr "No se encontró la tarea."
 msgid "Failed hosts"
 msgstr "Hosts fallidos"
 
-#: components/Search/AdvancedSearch.js:396
+#: components/Search/AdvancedSearch.js:395
 msgid "Direct Keys"
 msgstr "Teclas directas"
 
@@ -11260,6 +11228,10 @@ msgstr "Tareas de gestión"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:667
 msgid "Failed to delete schedule."
 msgstr "No se pudo eliminar la programación."
+
+#: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:341
+msgid "<0>Note: This instance may be re-associated with this instance group if it is managed by <1>policy rules.</1></0>"
+msgstr "<0>Nota: Esta instancia puede volver a asociarse con este grupo de instancias si es administrada por <1>reglas de política.</1></0>"
 
 #: screens/TopologyView/Tooltip.js:242
 msgid "Instance type"
@@ -11492,6 +11464,12 @@ msgstr "El número máximo de hosts que se permite gestionar a esta organizació
 msgid "Associate role error"
 msgstr "Asociar error del rol"
 
+#: util/getRelatedResourceDeleteDetails.js:114
+#: util/getRelatedResourceDeleteDetails.js:156
+#: util/getRelatedResourceDeleteDetails.js:259
+msgid "Workflow Job Template Nodes"
+msgstr "Nodos de plantilla de trabajo para flujo de trabajo"
+
 #: components/Lookup/HostFilterLookup.js:148
 msgid "Insights system ID"
 msgstr "ID del sistema de Insights"
@@ -11569,8 +11547,8 @@ msgstr "Habilita la creación de una URL de devolución de llamada de aprovision
 
 #: components/AdHocCommands/AdHocDetailsStep.js:194
 #: components/HostToggle/HostToggle.js:64
+#: components/LaunchPrompt/steps/OtherPromptsStep.js:190
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:192
-#: components/LaunchPrompt/steps/OtherPromptsStep.js:194
 #: components/PromptDetail/PromptDetail.js:379
 #: components/PromptDetail/PromptJobTemplateDetail.js:161
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:514
@@ -11625,8 +11603,8 @@ msgstr "{0} segundos"
 msgid "Inventory Type"
 msgstr "Tipo de inventario"
 
-#: components/Search/AdvancedSearch.js:286
-#: components/Search/AdvancedSearch.js:302
+#: components/Search/AdvancedSearch.js:285
+#: components/Search/AdvancedSearch.js:301
 msgid "First, select a key"
 msgstr "Primero, seleccione una clave"
 
@@ -11714,6 +11692,7 @@ msgstr "No se pudo asociar."
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.js:244
 #: screens/Inventory/InventoryList/InventoryListItem.js:129
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:259
+#: util/getRelatedResourceDeleteDetails.js:118
 msgid "Groups"
 msgstr "Grupos"
 
@@ -11756,8 +11735,8 @@ msgstr "Nodos gestionados"
 #: components/LaunchPrompt/steps/CredentialsStep.js:250
 #: components/LaunchPrompt/steps/InventoryStep.js:89
 #: components/Lookup/CredentialLookup.js:190
-#: components/Lookup/InventoryLookup.js:162
-#: components/Lookup/InventoryLookup.js:218
+#: components/Lookup/InventoryLookup.js:161
+#: components/Lookup/InventoryLookup.js:217
 #: components/Lookup/MultiCredentialsLookup.js:200
 #: components/Lookup/OrganizationLookup.js:135
 #: components/Lookup/ProjectLookup.js:153
@@ -11888,10 +11867,10 @@ msgstr "Iniciar alternancia de notificaciones"
 #: components/Lookup/HostFilterLookup.js:435
 #: components/Lookup/HostListItem.js:11
 #: components/Lookup/InventoryLookup.js:129
-#: components/Lookup/InventoryLookup.js:138
-#: components/Lookup/InventoryLookup.js:179
-#: components/Lookup/InventoryLookup.js:194
-#: components/Lookup/InventoryLookup.js:235
+#: components/Lookup/InventoryLookup.js:137
+#: components/Lookup/InventoryLookup.js:178
+#: components/Lookup/InventoryLookup.js:193
+#: components/Lookup/InventoryLookup.js:234
 #: components/PromptDetail/PromptDetail.js:233
 #: components/PromptDetail/PromptInventorySourceDetail.js:74
 #: components/PromptDetail/PromptJobTemplateDetail.js:118
@@ -11929,6 +11908,10 @@ msgstr "Este campo debe ser un número y tener un valor entre {min} y {max}"
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:96
 msgid "Update on launch"
 msgstr "Actualizar al ejecutar"
+
+#: screens/Template/Survey/MultipleChoiceField.js:39
+msgid "There must be a value in at least one input"
+msgstr "Debe haber un valor en al menos una entrada"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.js:105
 msgid "Add hosts to group based on Jinja2 conditionals."

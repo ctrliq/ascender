@@ -1,5 +1,6 @@
 import { RRule } from 'rrule';
 import { DateTime } from 'luxon';
+import { t } from '@lingui/core/macro';
 import { getRRuleDayConstants } from 'util/dates';
 
 window.RRule = RRule;
@@ -35,7 +36,7 @@ function pad(num) {
   return num < 10 ? `0${num}` : num;
 }
 
-export default function buildRuleObj(values, includeStart, t) {
+export default function buildRuleObj(values, includeStart) {
   const ruleObj = {
     interval: values.interval,
   };

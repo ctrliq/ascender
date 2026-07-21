@@ -64,8 +64,8 @@ function InventoryListItem({
       tooltipContent = (
         <Plural
           value={inventory.inventory_sources_with_failures}
-          one={t`# source with sync failures.`}
-          other={t`# sources with sync failures.`}
+          one="# source with sync failures."
+          other="# sources with sync failures."
         />
       );
     } else {

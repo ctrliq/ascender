@@ -49,7 +49,7 @@ function AnalyticsStep() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            {t`this Tower documentation page`}
+            this Tower documentation page
           </Button>
           . Uncheck the following boxes to disable this feature.
         </Trans>

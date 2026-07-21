@@ -9,10 +9,12 @@ import {
   ExecutionEnvironmentsAPI,
   CredentialInputSourcesAPI,
 } from 'api';
+import { i18n } from '@lingui/core';
 import {
   getRelatedResourceDeleteCounts,
   relatedResourceDeleteRequests,
 } from './getRelatedResourceDeleteDetails';
+import en from '../locales/en/messages';
 
 // Mock t function for testing
 const t = (str) => str;
@@ -31,6 +33,11 @@ jest.mock('../api/models/NotificationTemplates');
 jest.mock('../api/models/Teams');
 
 describe('delete details', () => {
+  beforeAll(() => {
+    i18n.load({ en });
+    i18n.activate('en');
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });

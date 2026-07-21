@@ -28,22 +28,22 @@ const CheckIcon = styled(PFCheckIcon)`
     props.selected && `color: var(--pf-v6-c-button--m-secondary--active--Color)`};
 `;
 
-const validate = (t) => (value) => {
-  let message;
-  const hasValue = value.find(({ choice }) =>
-    choice.trim().length > 0 ? choice : undefined
-  );
-  if (!hasValue) {
-    message = t`There must be a value in at least one input`;
-  }
-  return message;
-};
 function MultipleChoiceField({ label, tooltip }) {
   const { t } = useLingui();
+  const validate = (value) => {
+    let message;
+    const hasValue = value.find(({ choice }) =>
+      choice.trim().length > 0 ? choice : undefined
+    );
+    if (!hasValue) {
+      message = t`There must be a value in at least one input`;
+    }
+    return message;
+  };
   const [formattedChoicesField, formattedChoicesMeta, formattedChoicesHelpers] =
     useField({
       name: 'formattedChoices',
-      validate: validate(t),
+      validate,
     });
 
   const [typeField] = useField('type');
