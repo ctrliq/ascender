@@ -79,6 +79,10 @@ msgstr "निर्मित इन्वेंटरी उदाहरण"
 msgid "Artifact key"
 msgstr "आर्टिफ़ैक्ट कुंजी"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:99
+msgid "day"
+msgstr "दिन"
+
 #: screens/Job/JobOutput/shared/OutputToolbar.js:132
 msgid "Task Count"
 msgstr "कार्य संख्या"
@@ -176,6 +180,7 @@ msgid "Projects"
 msgstr "प्रोजेक्ट्स"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:48
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:98
 #: components/Schedule/shared/FrequencyDetailSubform.js:345
 #: components/Schedule/shared/FrequencyDetailSubform.js:482
 msgid "Saturday"
@@ -910,6 +915,7 @@ msgid "View Template Details"
 msgstr "टेम्पलेट विवरण देखें"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:47
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:97
 #: components/Schedule/shared/FrequencyDetailSubform.js:332
 #: components/Schedule/shared/FrequencyDetailSubform.js:477
 msgid "Friday"
@@ -973,6 +979,7 @@ msgstr "चलाएं"
 msgid "Choose the resources that will be receiving new roles.  You'll be able to select the roles to apply in the next step.  Note that the resources chosen here will receive all roles chosen in the next step."
 msgstr "वे संसाधन चुनें जो नई भूमिकाएं प्राप्त करेंगे। आप अगले चरण में लागू करने के लिए भूमिकाएं चुन सकेंगे। ध्यान दें कि यहां चुने गए संसाधन अगले चरण में चुनी गई सभी भूमिकाएं प्राप्त करेंगे।"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:144
 #: components/Schedule/shared/FrequencyDetailSubform.js:124
 msgid "May"
 msgstr "मई"
@@ -1150,6 +1157,7 @@ msgstr "{interval} मिनट"
 msgid "Failure Explanation:"
 msgstr "विफलता स्पष्टीकरण:"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:141
 #: components/Schedule/shared/FrequencyDetailSubform.js:109
 msgid "February"
 msgstr "फ़रवरी"
@@ -2439,6 +2447,10 @@ msgstr "चौथा"
 msgid "Health check request(s) submitted. Please wait and reload the page."
 msgstr "हेल्थ चेक अनुरोध सबमिट किए गए। कृपया प्रतीक्षा करें और पृष्ठ पुनः लोड करें।"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:101
+msgid "weekend day"
+msgstr "सप्ताहांत का दिन"
+
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:103
 msgid "Execution environment copied successfully"
 msgstr "निष्पादन वातावरण सफलतापूर्वक कॉपी किया गया"
@@ -3531,11 +3543,13 @@ msgid "At least one value must be selected for this field."
 msgstr "इस फ़ील्ड के लिए कम से कम एक मान चुना जाना चाहिए।"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:49
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:92
 #: components/Schedule/shared/FrequencyDetailSubform.js:267
 #: components/Schedule/shared/FrequencyDetailSubform.js:452
 msgid "Sunday"
 msgstr "रविवार"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:147
 #: components/Schedule/shared/FrequencyDetailSubform.js:139
 msgid "August"
 msgstr "अगस्त"
@@ -3796,6 +3810,7 @@ msgstr "ज़ूम इन करें"
 msgid "Project checkout results"
 msgstr "प्रोजेक्ट चेकआउट परिणाम"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:149
 #: components/Schedule/shared/FrequencyDetailSubform.js:149
 msgid "October"
 msgstr "अक्टूबर"
@@ -4398,6 +4413,11 @@ msgstr "यदि सक्षम है, तो Ansible कार्यों �
 msgid "<0>Note: Manually associated instances may be automatically disassociated from an instance group if the instance is managed by <1>policy rules.</1></0>"
 msgstr "<0>नोट: यदि इंस्टेंस <1>नीति नियमों</1> द्वारा प्रबंधित है तो मैन्युअल रूप से संबद्ध इंस्टेंसों को इंस्टेंस समूह से स्वचालित रूप से अलग किया जा सकता है।</0>"
 
+#. placeholder {0}: options.runOnDayNumber
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:111
+msgid "Day {0}"
+msgstr "दिन {0}"
+
 #: screens/Project/ProjectList/ProjectListItem.js:120
 msgid "Refresh project revision"
 msgstr "प्रोजेक्ट रिवीज़न रीफ़्रेश करें"
@@ -4636,6 +4656,7 @@ msgid "Edit Project"
 msgstr "प्रोजेक्ट संपादित करें"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:44
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:94
 #: components/Schedule/shared/FrequencyDetailSubform.js:293
 #: components/Schedule/shared/FrequencyDetailSubform.js:462
 msgid "Tuesday"
@@ -5177,6 +5198,7 @@ msgstr "प्रोजेक्ट बेस पथ"
 msgid "Project copied successfully"
 msgstr "प्रोजेक्ट सफलतापूर्वक कॉपी किया गया"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:142
 #: components/Schedule/shared/FrequencyDetailSubform.js:114
 msgid "March"
 msgstr "मार्च"
@@ -5208,6 +5230,7 @@ msgstr "सूचना परीक्षण विफल।"
 msgid "items"
 msgstr "आइटम"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:148
 #: components/Schedule/shared/FrequencyDetailSubform.js:144
 msgid "September"
 msgstr "सितंबर"
@@ -5329,6 +5352,7 @@ msgid "Notification Color"
 msgstr "सूचना रंग"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:43
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:93
 #: components/Schedule/shared/FrequencyDetailSubform.js:280
 #: components/Schedule/shared/FrequencyDetailSubform.js:457
 msgid "Monday"
@@ -6132,6 +6156,7 @@ msgid "Enable simplified login for your {brandName} applications"
 msgstr "अपने {brandName} एप्लिकेशन के लिए सरलीकृत लॉगिन सक्षम करें"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:46
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:96
 #: components/Schedule/shared/FrequencyDetailSubform.js:319
 #: components/Schedule/shared/FrequencyDetailSubform.js:472
 msgid "Thursday"
@@ -7036,6 +7061,7 @@ msgstr "विफल जॉब्स"
 msgid "No items found."
 msgstr "कोई आइटम नहीं मिला।"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:143
 #: components/Schedule/shared/FrequencyDetailSubform.js:119
 msgid "April"
 msgstr "अप्रैल"
@@ -7221,7 +7247,7 @@ msgid "Last Ran"
 msgstr "अंतिम बार चला"
 
 #. placeholder {0}: options.runOnTheOccurrence
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:132
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:124
 msgid "{0, selectordinal, one {The first {dayOfWeek}} two {The second {dayOfWeek}} =3 {The third {dayOfWeek}} =4 {The fourth {dayOfWeek}} =5 {The fifth {dayOfWeek}}}"
 msgstr "{0, selectordinal, one {पहला {dayOfWeek}} two {दूसरा {dayOfWeek}} =3 {तीसरा {dayOfWeek}} =4 {चौथा {dayOfWeek}} =5 {पांचवां {dayOfWeek}}}"
 
@@ -7948,7 +7974,7 @@ msgid "Customize pod specification"
 msgstr "पॉड विनिर्देश अनुकूलित करें"
 
 #. placeholder {0}: options.runOnTheOccurrence
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:179
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:171
 msgid "{0, selectordinal, one {The first {weekday} of {month}} two {The second {weekday} of {month}} =3 {The third {weekday} of {month}} =4 {The fourth {weekday} of {month}} =5 {The fifth {weekday} of {month}}}"
 msgstr "{0, selectordinal, one {{month} का पहला {weekday}} two {{month} का दूसरा {weekday}} =3 {{month} का तीसरा {weekday}} =4 {{month} का चौथा {weekday}} =5 {{month} का पांचवां {weekday}}}"
 
@@ -8031,6 +8057,10 @@ msgstr "रिवीज़न के लिए रीफ़्रेश कर�
 msgid "Project sync failures"
 msgstr "प्रोजेक्ट सिंक विफलताएं"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:110
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:119
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:156
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:166
 #: components/Schedule/shared/FrequencyDetailSubform.js:368
 msgid "Run on"
 msgstr "इस पर चलाएं"
@@ -8048,6 +8078,10 @@ msgstr "Amazon EC2"
 #: screens/Instances/InstancePeers/InstancePeerList.js:197
 msgid "Peer removed. Please be sure to run the install bundle for {0} again in order to see changes take effect."
 msgstr "पीयर हटाया गया। परिवर्तन प्रभावी होते देखने के लिए कृपया {0} के लिए इंस्टॉल बंडल फिर से चलाना सुनिश्चित करें।"
+
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:169
+msgid "The last {weekday} of {month}"
+msgstr "{month} का अंतिम {weekday}"
 
 #: screens/Job/JobOutput/PageControls.js:53
 msgid "Collapse all job events"
@@ -8283,6 +8317,7 @@ msgstr "{0} को अनुमोदित करने में विफल�
 msgid "Run type"
 msgstr "रन प्रकार"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:192
 #: components/Schedule/shared/FrequencyDetailSubform.js:543
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:82
 #: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:57
@@ -8321,6 +8356,11 @@ msgstr "लॉन्च पर रिवीज़न अपडेट करे�
 #: screens/Job/Job.helptext.js:7
 msgid "The project containing the playbook this job will execute."
 msgstr "वह प्रोजेक्ट जिसमें वह प्लेबुक है जिसे यह जॉब निष्पादित करेगा।"
+
+#. placeholder {0}: numOccurrences === 1 ? 'occurrence' : 'occurrences'
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:195
+msgid "After {numOccurrences} {0}"
+msgstr "{numOccurrences} {0} के बाद"
 
 #: screens/Credential/shared/CredentialForm.js:189
 msgid "Select Credential Type"
@@ -8406,6 +8446,7 @@ msgstr "JSON या YAML सिंटैक्स का उपयोग कर�
 msgid "Warning"
 msgstr "चेतावनी"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:151
 #: components/Schedule/shared/FrequencyDetailSubform.js:159
 msgid "December"
 msgstr "दिसंबर"
@@ -8538,6 +8579,7 @@ msgstr "फ़ील्ड मान से प्रारंभ होता �
 msgid "Workflow documentation"
 msgstr "वर्कफ़्लो दस्तावेज़ीकरण"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:140
 #: components/Schedule/shared/FrequencyDetailSubform.js:104
 msgid "January"
 msgstr "जनवरी"
@@ -9171,6 +9213,7 @@ msgstr "प्ले"
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise Team"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:150
 #: components/Schedule/shared/FrequencyDetailSubform.js:154
 msgid "November"
 msgstr "नवंबर"
@@ -9333,6 +9376,10 @@ msgstr "टोकन"
 msgid "policy rules."
 msgstr "नीति नियम।"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:100
+msgid "weekday"
+msgstr "कार्यदिवस"
+
 #: components/StatusLabel/StatusLabel.js:58
 #: screens/TopologyView/Legend.js:179
 msgid "Deprovisioning"
@@ -9460,6 +9507,7 @@ msgstr "/ (प्रोजेक्ट रूट)"
 msgid "Last seen"
 msgstr "अंतिम बार देखा गया"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:146
 #: components/Schedule/shared/FrequencyDetailSubform.js:134
 msgid "July"
 msgstr "जुलाई"
@@ -9940,6 +9988,7 @@ msgid "Expand section"
 msgstr "अनुभाग विस्तृत करें"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:45
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:95
 #: components/Schedule/shared/FrequencyDetailSubform.js:306
 #: components/Schedule/shared/FrequencyDetailSubform.js:467
 msgid "Wednesday"
@@ -10056,6 +10105,10 @@ msgstr "प्लेबुक निष्पादित करते समय
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:97
 msgid "Field for passing a custom Kubernetes or OpenShift Pod specification."
 msgstr "कस्टम Kubernetes या OpenShift पॉड विनिर्देश पास करने के लिए फ़ील्ड।"
+
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:122
+msgid "The last {dayOfWeek}"
+msgstr "अंतिम {dayOfWeek}"
 
 #: screens/Inventory/shared/InventorySourceSyncButton.js:37
 msgid "Start sync source"
@@ -10565,7 +10618,7 @@ msgstr "{0} को समाप्त होता है"
 msgid "Tools"
 msgstr "टूल"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:82
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:206
 #: components/Schedule/shared/FrequencyDetailSubform.js:538
 msgid "End"
 msgstr "समाप्ति"
@@ -11392,6 +11445,7 @@ msgstr "पहले, एक कुंजी चुनें"
 msgid "Select source path"
 msgstr "स्रोत पथ चुनें"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:145
 #: components/Schedule/shared/FrequencyDetailSubform.js:129
 msgid "June"
 msgstr "जून"

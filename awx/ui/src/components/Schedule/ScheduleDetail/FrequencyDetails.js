@@ -72,17 +72,8 @@ export default function FrequencyDetails({
             dataCy={`${prefix}-days-of-week`}
           />
         ) : null}
-        <RunOnDetail
-          type={type}
-          options={options}
-          prefix={prefix}
-          t={t}
-        />
-        <Detail
-          label={t`End`}
-          value={getEndValue(type, options, timezone, t)}
-          dataCy={`${prefix}-end`}
-        />
+        <RunOnDetail type={type} options={options} prefix={prefix} />
+        <EndDetail options={options} timezone={timezone} prefix={prefix} />
       </DetailList>
     </div>
   );
@@ -94,7 +85,8 @@ function sortWeekday(a, b) {
   return a.weekday - b.weekday;
 }
 
-function RunOnDetail({ type, options, prefix, t }) {
+function RunOnDetail({ type, options, prefix }) {
+  const { t } = useLingui();
   const weekdays = React.useMemo(
     () => ({
       sunday: t`Sunday`,
@@ -193,20 +185,23 @@ function RunOnDetail({ type, options, prefix, t }) {
   return null;
 }
 
-function getEndValue(type, options, timezone, t) {
+function EndDetail({ options, timezone, prefix }) {
+  const { t } = useLingui();
+  let value;
   if (options.end === 'never') {
-    return t`Never`;
-  }
-  if (options.end === 'after') {
+    value = t`Never`;
+  } else if (options.end === 'after') {
     const numOccurrences = options.occurrences;
-    return t`After ${numOccurrences} ${numOccurrences === 1 ? 'occurrence' : 'occurrences'}`;
+    value = t`After ${numOccurrences} ${numOccurrences === 1 ? 'occurrence' : 'occurrences'}`;
+  } else {
+    const date = DateTime.fromFormat(
+      `${options.endDate} ${options.endTime}`,
+      'yyyy-MM-dd h:mm a',
+      {
+        zone: timezone,
+      }
+    );
+    value = formatDateString(date, timezone);
   }
-  const date = DateTime.fromFormat(
-    `${options.endDate} ${options.endTime}`,
-    'yyyy-MM-dd h:mm a',
-    {
-      zone: timezone,
-    }
-  );
-  return formatDateString(date, timezone);
+  return <Detail label={t`End`} value={value} dataCy={`${prefix}-end`} />;
 }

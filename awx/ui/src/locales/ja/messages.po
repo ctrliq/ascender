@@ -77,6 +77,10 @@ msgstr "構築されたインベントリの例"
 msgid "Artifact key"
 msgstr "アーティファクトキー"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:99
+msgid "day"
+msgstr "日"
+
 #: screens/Job/JobOutput/shared/OutputToolbar.js:132
 msgid "Task Count"
 msgstr "タスク数"
@@ -174,6 +178,7 @@ msgid "Projects"
 msgstr "プロジェクト"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:48
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:98
 #: components/Schedule/shared/FrequencyDetailSubform.js:345
 #: components/Schedule/shared/FrequencyDetailSubform.js:482
 msgid "Saturday"
@@ -908,6 +913,7 @@ msgid "View Template Details"
 msgstr "テンプレートの詳細の表示"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:47
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:97
 #: components/Schedule/shared/FrequencyDetailSubform.js:332
 #: components/Schedule/shared/FrequencyDetailSubform.js:477
 msgid "Friday"
@@ -971,6 +977,7 @@ msgstr "実行"
 msgid "Choose the resources that will be receiving new roles.  You'll be able to select the roles to apply in the next step.  Note that the resources chosen here will receive all roles chosen in the next step."
 msgstr "新しいロールを受け取るリソースを選択します。次のステップで適用するロールを選択できます。ここで選択したリソースは、次のステップで選択したすべてのロールを受け取ることに注意してください。"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:144
 #: components/Schedule/shared/FrequencyDetailSubform.js:124
 msgid "May"
 msgstr "5 月"
@@ -1148,6 +1155,7 @@ msgstr "{interval} 分"
 msgid "Failure Explanation:"
 msgstr "失敗の説明:"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:141
 #: components/Schedule/shared/FrequencyDetailSubform.js:109
 msgid "February"
 msgstr "2 月"
@@ -2437,6 +2445,10 @@ msgstr "第 4"
 msgid "Health check request(s) submitted. Please wait and reload the page."
 msgstr "送信されたヘルスチェックリクエスト。ページをリロードしてお待ちください。"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:101
+msgid "weekend day"
+msgstr "週末の日"
+
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:103
 msgid "Execution environment copied successfully"
 msgstr "実行環境が正常にコピーされました"
@@ -3528,11 +3540,13 @@ msgid "At least one value must be selected for this field."
 msgstr "このフィールドには、少なくとも 1 つの値を選択する必要があります。"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:49
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:92
 #: components/Schedule/shared/FrequencyDetailSubform.js:267
 #: components/Schedule/shared/FrequencyDetailSubform.js:452
 msgid "Sunday"
 msgstr "日曜"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:147
 #: components/Schedule/shared/FrequencyDetailSubform.js:139
 msgid "August"
 msgstr "8 月"
@@ -3793,6 +3807,7 @@ msgstr "ズームイン"
 msgid "Project checkout results"
 msgstr "プロジェクトのチェックアウト結果"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:149
 #: components/Schedule/shared/FrequencyDetailSubform.js:149
 msgid "October"
 msgstr "10 月"
@@ -4395,6 +4410,11 @@ msgstr "有効にすると、サポートされている場合に Ansible タス
 msgid "<0>Note: Manually associated instances may be automatically disassociated from an instance group if the instance is managed by <1>policy rules.</1></0>"
 msgstr "< 0 >注：インスタンスが< 1 >ポリシールールによって管理されている場合、手動で関連付けられたインスタンスはインスタンスグループから自動的に分離されることがあります。</ 1 ></ 0 >"
 
+#. placeholder {0}: options.runOnDayNumber
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:111
+msgid "Day {0}"
+msgstr "{0} 日"
+
 #: screens/Project/ProjectList/ProjectListItem.js:120
 msgid "Refresh project revision"
 msgstr "プロジェクトリビジョンの更新"
@@ -4633,6 +4653,7 @@ msgid "Edit Project"
 msgstr "プロジェクトの編集"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:44
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:94
 #: components/Schedule/shared/FrequencyDetailSubform.js:293
 #: components/Schedule/shared/FrequencyDetailSubform.js:462
 msgid "Tuesday"
@@ -5174,6 +5195,7 @@ msgstr "プロジェクトのベースパス"
 msgid "Project copied successfully"
 msgstr "プロジェクトが正常にコピーされました"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:142
 #: components/Schedule/shared/FrequencyDetailSubform.js:114
 msgid "March"
 msgstr "3 月"
@@ -5205,6 +5227,7 @@ msgstr "通知テストに失敗しました。"
 msgid "items"
 msgstr "項目"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:148
 #: components/Schedule/shared/FrequencyDetailSubform.js:144
 msgid "September"
 msgstr "9 月"
@@ -5326,6 +5349,7 @@ msgid "Notification Color"
 msgstr "通知の色"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:43
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:93
 #: components/Schedule/shared/FrequencyDetailSubform.js:280
 #: components/Schedule/shared/FrequencyDetailSubform.js:457
 msgid "Monday"
@@ -6129,6 +6153,7 @@ msgid "Enable simplified login for your {brandName} applications"
 msgstr "{brandName} アプリケーションの簡単ログインの有効化"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:46
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:96
 #: components/Schedule/shared/FrequencyDetailSubform.js:319
 #: components/Schedule/shared/FrequencyDetailSubform.js:472
 msgid "Thursday"
@@ -7033,6 +7058,7 @@ msgstr "失敗したジョブ"
 msgid "No items found."
 msgstr "項目は見つかりません。"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:143
 #: components/Schedule/shared/FrequencyDetailSubform.js:119
 msgid "April"
 msgstr "4 月"
@@ -7218,7 +7244,7 @@ msgid "Last Ran"
 msgstr "最終実行日時"
 
 #. placeholder {0}: options.runOnTheOccurrence
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:132
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:124
 msgid "{0, selectordinal, one {The first {dayOfWeek}} two {The second {dayOfWeek}} =3 {The third {dayOfWeek}} =4 {The fourth {dayOfWeek}} =5 {The fifth {dayOfWeek}}}"
 msgstr "{0, selectordinal, one {The first {dayOfWeek}} two {The second {dayOfWeek}} =3 {The third {dayOfWeek}} =4 {The fourth {dayOfWeek}} =5 {The fifth {dayOfWeek}}}"
 
@@ -7945,7 +7971,7 @@ msgid "Customize pod specification"
 msgstr "Pod 仕様のカスタマイズ"
 
 #. placeholder {0}: options.runOnTheOccurrence
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:179
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:171
 msgid "{0, selectordinal, one {The first {weekday} of {month}} two {The second {weekday} of {month}} =3 {The third {weekday} of {month}} =4 {The fourth {weekday} of {month}} =5 {The fifth {weekday} of {month}}}"
 msgstr "{0, selectordinal, one {The first {weekday} of {month}} two {The second {weekday} of {month}} =3 {The third {weekday} of {month}} =4 {The fourth {weekday} of {month}} =5 {The fifth {weekday} of {month}}}"
 
@@ -8027,6 +8053,10 @@ msgstr "リビジョンの更新"
 msgid "Project sync failures"
 msgstr "プロジェクトの同期の失敗"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:110
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:119
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:156
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:166
 #: components/Schedule/shared/FrequencyDetailSubform.js:368
 msgid "Run on"
 msgstr "実行:"
@@ -8044,6 +8074,10 @@ msgstr "Amazon EC2"
 #: screens/Instances/InstancePeers/InstancePeerList.js:197
 msgid "Peer removed. Please be sure to run the install bundle for {0} again in order to see changes take effect."
 msgstr "ピアが削除されました。変更が有効になるのを確認するには、 {0} のインストールバンドルを再度実行してください。"
+
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:169
+msgid "The last {weekday} of {month}"
+msgstr "{month} の最後の {weekday}"
 
 #: screens/Job/JobOutput/PageControls.js:53
 msgid "Collapse all job events"
@@ -8279,6 +8313,7 @@ msgstr "{0} を承認できませんでした。"
 msgid "Run type"
 msgstr "実行タイプ"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:192
 #: components/Schedule/shared/FrequencyDetailSubform.js:543
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:82
 #: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:57
@@ -8317,6 +8352,11 @@ msgstr "起動時のリビジョン更新"
 #: screens/Job/Job.helptext.js:7
 msgid "The project containing the playbook this job will execute."
 msgstr "このジョブが実行する playbook が含まれるプロジェクトです。"
+
+#. placeholder {0}: numOccurrences === 1 ? 'occurrence' : 'occurrences'
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:195
+msgid "After {numOccurrences} {0}"
+msgstr "{numOccurrences} {0} 後"
 
 #: screens/Credential/shared/CredentialForm.js:189
 msgid "Select Credential Type"
@@ -8402,6 +8442,7 @@ msgstr "JSON または YAML 構文のいずれかを使用してインジェク�
 msgid "Warning"
 msgstr "警告"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:151
 #: components/Schedule/shared/FrequencyDetailSubform.js:159
 msgid "December"
 msgstr "12 月"
@@ -8534,6 +8575,7 @@ msgstr "値で開始するフィールド。"
 msgid "Workflow documentation"
 msgstr "ワークフロードキュメント"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:140
 #: components/Schedule/shared/FrequencyDetailSubform.js:104
 msgid "January"
 msgstr "1 月"
@@ -9167,6 +9209,7 @@ msgstr "プレイ"
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise チーム"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:150
 #: components/Schedule/shared/FrequencyDetailSubform.js:154
 msgid "November"
 msgstr "11 月"
@@ -9329,6 +9372,10 @@ msgstr "トークン"
 msgid "policy rules."
 msgstr "ポリシールールを参照してください。"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:100
+msgid "weekday"
+msgstr "平日"
+
 #: components/StatusLabel/StatusLabel.js:58
 #: screens/TopologyView/Legend.js:179
 msgid "Deprovisioning"
@@ -9456,6 +9503,7 @@ msgstr "/ (プロジェクト root)"
 msgid "Last seen"
 msgstr "最終表示"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:146
 #: components/Schedule/shared/FrequencyDetailSubform.js:134
 msgid "July"
 msgstr "7 月"
@@ -9936,6 +9984,7 @@ msgid "Expand section"
 msgstr "セクションの展開"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:45
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:95
 #: components/Schedule/shared/FrequencyDetailSubform.js:306
 #: components/Schedule/shared/FrequencyDetailSubform.js:467
 msgid "Wednesday"
@@ -10052,6 +10101,10 @@ msgstr "playbook の実行時に使用する並列または同時プロセスの
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:97
 msgid "Field for passing a custom Kubernetes or OpenShift Pod specification."
 msgstr "カスタムの Kubernetes または OpenShift Pod 仕様を渡すためのフィールド。"
+
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:122
+msgid "The last {dayOfWeek}"
+msgstr "最後の {dayOfWeek}"
 
 #: screens/Inventory/shared/InventorySourceSyncButton.js:37
 msgid "Start sync source"
@@ -10561,7 +10614,7 @@ msgstr "有効期限: {0}"
 msgid "Tools"
 msgstr "ツール"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:82
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:206
 #: components/Schedule/shared/FrequencyDetailSubform.js:538
 msgid "End"
 msgstr "終了"
@@ -11388,6 +11441,7 @@ msgstr "先にキーを選択"
 msgid "Select source path"
 msgstr "ソースパスの選択"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:145
 #: components/Schedule/shared/FrequencyDetailSubform.js:129
 msgid "June"
 msgstr "6 月"

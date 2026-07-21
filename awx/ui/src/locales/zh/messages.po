@@ -77,6 +77,10 @@ msgstr "构建的库存示例"
 msgid "Artifact key"
 msgstr "工件密钥"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:99
+msgid "day"
+msgstr "日"
+
 #: screens/Job/JobOutput/shared/OutputToolbar.js:132
 msgid "Task Count"
 msgstr "任务计数"
@@ -174,6 +178,7 @@ msgid "Projects"
 msgstr "项目"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:48
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:98
 #: components/Schedule/shared/FrequencyDetailSubform.js:345
 #: components/Schedule/shared/FrequencyDetailSubform.js:482
 msgid "Saturday"
@@ -908,6 +913,7 @@ msgid "View Template Details"
 msgstr "查看模板详情"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:47
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:97
 #: components/Schedule/shared/FrequencyDetailSubform.js:332
 #: components/Schedule/shared/FrequencyDetailSubform.js:477
 msgid "Friday"
@@ -971,6 +977,7 @@ msgstr "运行"
 msgid "Choose the resources that will be receiving new roles.  You'll be able to select the roles to apply in the next step.  Note that the resources chosen here will receive all roles chosen in the next step."
 msgstr "选择将获得新角色的资源。您可以选择下一步中要应用的角色。请注意，此处选择的资源将接收下一步中选择的所有角色。"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:144
 #: components/Schedule/shared/FrequencyDetailSubform.js:124
 msgid "May"
 msgstr "5 月"
@@ -1148,6 +1155,7 @@ msgstr "{interval} 分钟"
 msgid "Failure Explanation:"
 msgstr "解释失败："
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:141
 #: components/Schedule/shared/FrequencyDetailSubform.js:109
 msgid "February"
 msgstr "2 月"
@@ -2437,6 +2445,10 @@ msgstr "第四"
 msgid "Health check request(s) submitted. Please wait and reload the page."
 msgstr "提交健康检查请求。请等待并重新载入页面。"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:101
+msgid "weekend day"
+msgstr "周末日"
+
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:103
 msgid "Execution environment copied successfully"
 msgstr "执行环境复制成功"
@@ -3528,11 +3540,13 @@ msgid "At least one value must be selected for this field."
 msgstr "此字段至少选择一个值。"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:49
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:92
 #: components/Schedule/shared/FrequencyDetailSubform.js:267
 #: components/Schedule/shared/FrequencyDetailSubform.js:452
 msgid "Sunday"
 msgstr "周日"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:147
 #: components/Schedule/shared/FrequencyDetailSubform.js:139
 msgid "August"
 msgstr "8 月"
@@ -3793,6 +3807,7 @@ msgstr "放大"
 msgid "Project checkout results"
 msgstr "项目检出结果"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:149
 #: components/Schedule/shared/FrequencyDetailSubform.js:149
 msgid "October"
 msgstr "10 月"
@@ -4395,6 +4410,11 @@ msgstr "如果启用，则在支持的情况下显示 Ansible 任务所做的\n"
 msgid "<0>Note: Manually associated instances may be automatically disassociated from an instance group if the instance is managed by <1>policy rules.</1></0>"
 msgstr "< 0 >注意：如果实例由< 1 >策略规则管理，则手动关联的实例可能会自动与实例组解除关联。</1 > </0 >"
 
+#. placeholder {0}: options.runOnDayNumber
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:111
+msgid "Day {0}"
+msgstr "第 {0} 天"
+
 #: screens/Project/ProjectList/ProjectListItem.js:120
 msgid "Refresh project revision"
 msgstr "重新刷新项目修订版本"
@@ -4633,6 +4653,7 @@ msgid "Edit Project"
 msgstr "编辑项目"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:44
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:94
 #: components/Schedule/shared/FrequencyDetailSubform.js:293
 #: components/Schedule/shared/FrequencyDetailSubform.js:462
 msgid "Tuesday"
@@ -5174,6 +5195,7 @@ msgstr "项目基本路径"
 msgid "Project copied successfully"
 msgstr "成功复制的项目"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:142
 #: components/Schedule/shared/FrequencyDetailSubform.js:114
 msgid "March"
 msgstr "3 月"
@@ -5205,6 +5227,7 @@ msgstr "通知测试失败。"
 msgid "items"
 msgstr "项"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:148
 #: components/Schedule/shared/FrequencyDetailSubform.js:144
 msgid "September"
 msgstr "9 月"
@@ -5326,6 +5349,7 @@ msgid "Notification Color"
 msgstr "通知颜色"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:43
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:93
 #: components/Schedule/shared/FrequencyDetailSubform.js:280
 #: components/Schedule/shared/FrequencyDetailSubform.js:457
 msgid "Monday"
@@ -6129,6 +6153,7 @@ msgid "Enable simplified login for your {brandName} applications"
 msgstr "为您的 {brandName} 应用启用简化的登录"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:46
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:96
 #: components/Schedule/shared/FrequencyDetailSubform.js:319
 #: components/Schedule/shared/FrequencyDetailSubform.js:472
 msgid "Thursday"
@@ -7033,6 +7058,7 @@ msgstr "失败的作业"
 msgid "No items found."
 msgstr "没有找到项。"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:143
 #: components/Schedule/shared/FrequencyDetailSubform.js:119
 msgid "April"
 msgstr "4 月"
@@ -7218,7 +7244,7 @@ msgid "Last Ran"
 msgstr "最后运行"
 
 #. placeholder {0}: options.runOnTheOccurrence
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:132
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:124
 msgid "{0, selectordinal, one {The first {dayOfWeek}} two {The second {dayOfWeek}} =3 {The third {dayOfWeek}} =4 {The fourth {dayOfWeek}} =5 {The fifth {dayOfWeek}}}"
 msgstr "{0, selectordinal, one {The first {dayOfWeek}} two {The second {dayOfWeek}} =3 {The third {dayOfWeek}} =4 {The fourth {dayOfWeek}} =5 {The fifth {dayOfWeek}}}"
 
@@ -7945,7 +7971,7 @@ msgid "Customize pod specification"
 msgstr "自定义 Pod 规格"
 
 #. placeholder {0}: options.runOnTheOccurrence
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:179
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:171
 msgid "{0, selectordinal, one {The first {weekday} of {month}} two {The second {weekday} of {month}} =3 {The third {weekday} of {month}} =4 {The fourth {weekday} of {month}} =5 {The fifth {weekday} of {month}}}"
 msgstr "{0, selectordinal, one {The first {weekday} of {month}} two {The second {weekday} of {month}} =3 {The third {weekday} of {month}} =4 {The fourth {weekday} of {month}} =5 {The fifth {weekday} of {month}}}"
 
@@ -8027,6 +8053,10 @@ msgstr "重新刷新修订版本"
 msgid "Project sync failures"
 msgstr "项目同步失败"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:110
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:119
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:156
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:166
 #: components/Schedule/shared/FrequencyDetailSubform.js:368
 msgid "Run on"
 msgstr "运行于"
@@ -8044,6 +8074,10 @@ msgstr "Amazon EC2"
 #: screens/Instances/InstancePeers/InstancePeerList.js:197
 msgid "Peer removed. Please be sure to run the install bundle for {0} again in order to see changes take effect."
 msgstr "已删除对等点。请确保再次运行 {0} 的安装捆绑包，以便看到更改生效。"
+
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:169
+msgid "The last {weekday} of {month}"
+msgstr "{month}的最后一个 {weekday}"
 
 #: screens/Job/JobOutput/PageControls.js:53
 msgid "Collapse all job events"
@@ -8279,6 +8313,7 @@ msgstr "批准 {0} 失败。"
 msgid "Run type"
 msgstr "运行类型"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:192
 #: components/Schedule/shared/FrequencyDetailSubform.js:543
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:82
 #: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:57
@@ -8317,6 +8352,11 @@ msgstr "启动时更新修订"
 #: screens/Job/Job.helptext.js:7
 msgid "The project containing the playbook this job will execute."
 msgstr "包含此任务将执行的 playbook 的项目。"
+
+#. placeholder {0}: numOccurrences === 1 ? 'occurrence' : 'occurrences'
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:195
+msgid "After {numOccurrences} {0}"
+msgstr "{numOccurrences} {0} 之后"
 
 #: screens/Credential/shared/CredentialForm.js:189
 msgid "Select Credential Type"
@@ -8402,6 +8442,7 @@ msgstr "使用 JSON 或 YAML 语法输入注入程序。示例语法请参阅 An
 msgid "Warning"
 msgstr "警告"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:151
 #: components/Schedule/shared/FrequencyDetailSubform.js:159
 msgid "December"
 msgstr "12 月"
@@ -8534,6 +8575,7 @@ msgstr "字段以值开头。"
 msgid "Workflow documentation"
 msgstr "工作流文档"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:140
 #: components/Schedule/shared/FrequencyDetailSubform.js:104
 msgid "January"
 msgstr "1 月"
@@ -9167,6 +9209,7 @@ msgstr "播放"
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise Team"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:150
 #: components/Schedule/shared/FrequencyDetailSubform.js:154
 msgid "November"
 msgstr "11 月"
@@ -9329,6 +9372,10 @@ msgstr "令牌"
 msgid "policy rules."
 msgstr "政策规则。"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:100
+msgid "weekday"
+msgstr "工作日"
+
 #: components/StatusLabel/StatusLabel.js:58
 #: screens/TopologyView/Legend.js:179
 msgid "Deprovisioning"
@@ -9456,6 +9503,7 @@ msgstr "/ (project root)"
 msgid "Last seen"
 msgstr "最后看到"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:146
 #: components/Schedule/shared/FrequencyDetailSubform.js:134
 msgid "July"
 msgstr "7 月"
@@ -9936,6 +9984,7 @@ msgid "Expand section"
 msgstr "展开部分"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:45
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:95
 #: components/Schedule/shared/FrequencyDetailSubform.js:306
 #: components/Schedule/shared/FrequencyDetailSubform.js:467
 msgid "Wednesday"
@@ -10052,6 +10101,10 @@ msgstr "执行 playbook 时要使用的并行或同时进程的数量。空值�
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:97
 msgid "Field for passing a custom Kubernetes or OpenShift Pod specification."
 msgstr "用于传递自定义 Kubernetes 或 OpenShift Pod 规格的字段。"
+
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:122
+msgid "The last {dayOfWeek}"
+msgstr "最后一个 {dayOfWeek}"
 
 #: screens/Inventory/shared/InventorySourceSyncButton.js:37
 msgid "Start sync source"
@@ -10561,7 +10614,7 @@ msgstr "到期时间 {0}"
 msgid "Tools"
 msgstr "工具"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:82
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:206
 #: components/Schedule/shared/FrequencyDetailSubform.js:538
 msgid "End"
 msgstr "结束"
@@ -11388,6 +11441,7 @@ msgstr "首先，选择一个密钥"
 msgid "Select source path"
 msgstr "选择源路径"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:145
 #: components/Schedule/shared/FrequencyDetailSubform.js:129
 msgid "June"
 msgstr "6 月"

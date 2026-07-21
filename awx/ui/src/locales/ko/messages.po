@@ -77,6 +77,10 @@ msgstr "구축된 인벤토리 예시"
 msgid "Artifact key"
 msgstr "아티팩트 키"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:99
+msgid "day"
+msgstr "일"
+
 #: screens/Job/JobOutput/shared/OutputToolbar.js:132
 msgid "Task Count"
 msgstr "작업 수"
@@ -174,6 +178,7 @@ msgid "Projects"
 msgstr "프로젝트"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:48
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:98
 #: components/Schedule/shared/FrequencyDetailSubform.js:345
 #: components/Schedule/shared/FrequencyDetailSubform.js:482
 msgid "Saturday"
@@ -908,6 +913,7 @@ msgid "View Template Details"
 msgstr "템플릿 세부 정보 보기"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:47
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:97
 #: components/Schedule/shared/FrequencyDetailSubform.js:332
 #: components/Schedule/shared/FrequencyDetailSubform.js:477
 msgid "Friday"
@@ -971,6 +977,7 @@ msgstr "실행"
 msgid "Choose the resources that will be receiving new roles.  You'll be able to select the roles to apply in the next step.  Note that the resources chosen here will receive all roles chosen in the next step."
 msgstr "새 역할을 받을 리소스를 선택합니다. 다음 단계에서 적용할 역할을 선택할 수 있습니다. 여기에서 선택한 리소스에는 다음 단계에서 선택한 모든 역할이 수신됩니다."
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:144
 #: components/Schedule/shared/FrequencyDetailSubform.js:124
 msgid "May"
 msgstr "5월"
@@ -1148,6 +1155,7 @@ msgstr "{interval} 분"
 msgid "Failure Explanation:"
 msgstr "실패 설명:"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:141
 #: components/Schedule/shared/FrequencyDetailSubform.js:109
 msgid "February"
 msgstr "2월"
@@ -2437,6 +2445,10 @@ msgstr "네 번째"
 msgid "Health check request(s) submitted. Please wait and reload the page."
 msgstr "상태 점검 요청이 제출되었습니다. 잠시 기다렸다가 페이지를 다시 로드하십시오."
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:101
+msgid "weekend day"
+msgstr "주말"
+
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.js:103
 msgid "Execution environment copied successfully"
 msgstr "실행 환경이 성공적으로 복사되었습니다"
@@ -3528,11 +3540,13 @@ msgid "At least one value must be selected for this field."
 msgstr "이 필드에 대해 하나 이상의 값을 선택해야 합니다."
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:49
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:92
 #: components/Schedule/shared/FrequencyDetailSubform.js:267
 #: components/Schedule/shared/FrequencyDetailSubform.js:452
 msgid "Sunday"
 msgstr "이벤트"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:147
 #: components/Schedule/shared/FrequencyDetailSubform.js:139
 msgid "August"
 msgstr "8월"
@@ -3793,6 +3807,7 @@ msgstr "확대"
 msgid "Project checkout results"
 msgstr "프로젝트 체크아웃 결과"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:149
 #: components/Schedule/shared/FrequencyDetailSubform.js:149
 msgid "October"
 msgstr "10월"
@@ -4395,6 +4410,11 @@ msgstr "활성화된 경우, 지원되는 곳에서 Ansible 작업이\n"
 msgid "<0>Note: Manually associated instances may be automatically disassociated from an instance group if the instance is managed by <1>policy rules.</1></0>"
 msgstr "< 0 > 참고: 인스턴스가 < 1 > 정책 규칙에 의해 관리되는 경우 수동으로 연결된 인스턴스가 인스턴스 그룹에서 자동으로 연결 해제될 수 있습니다. </1 > </0 >"
 
+#. placeholder {0}: options.runOnDayNumber
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:111
+msgid "Day {0}"
+msgstr "{0}일"
+
 #: screens/Project/ProjectList/ProjectListItem.js:120
 msgid "Refresh project revision"
 msgstr "프로젝트 버전 새로 고침"
@@ -4633,6 +4653,7 @@ msgid "Edit Project"
 msgstr "프로젝트 편집"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:44
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:94
 #: components/Schedule/shared/FrequencyDetailSubform.js:293
 #: components/Schedule/shared/FrequencyDetailSubform.js:462
 msgid "Tuesday"
@@ -5174,6 +5195,7 @@ msgstr "프로젝트 기본 경로"
 msgid "Project copied successfully"
 msgstr "프로젝트가 성공적으로 복사됨"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:142
 #: components/Schedule/shared/FrequencyDetailSubform.js:114
 msgid "March"
 msgstr "3월"
@@ -5205,6 +5227,7 @@ msgstr "알림 테스트에 실패했습니다."
 msgid "items"
 msgstr "항목"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:148
 #: components/Schedule/shared/FrequencyDetailSubform.js:144
 msgid "September"
 msgstr "9월"
@@ -5326,6 +5349,7 @@ msgid "Notification Color"
 msgstr "알림 색상"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:43
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:93
 #: components/Schedule/shared/FrequencyDetailSubform.js:280
 #: components/Schedule/shared/FrequencyDetailSubform.js:457
 msgid "Monday"
@@ -6129,6 +6153,7 @@ msgid "Enable simplified login for your {brandName} applications"
 msgstr "{brandName} 애플리케이션에 대한 간편 로그인 활성화"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:46
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:96
 #: components/Schedule/shared/FrequencyDetailSubform.js:319
 #: components/Schedule/shared/FrequencyDetailSubform.js:472
 msgid "Thursday"
@@ -7033,6 +7058,7 @@ msgstr "실패한 작업"
 msgid "No items found."
 msgstr "항목을 찾을 수 없습니다."
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:143
 #: components/Schedule/shared/FrequencyDetailSubform.js:119
 msgid "April"
 msgstr "4월"
@@ -7218,7 +7244,7 @@ msgid "Last Ran"
 msgstr "마지막 실행"
 
 #. placeholder {0}: options.runOnTheOccurrence
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:132
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:124
 msgid "{0, selectordinal, one {The first {dayOfWeek}} two {The second {dayOfWeek}} =3 {The third {dayOfWeek}} =4 {The fourth {dayOfWeek}} =5 {The fifth {dayOfWeek}}}"
 msgstr "{0, selectordinal, one {The first {dayOfWeek}} two {The second {dayOfWeek}} =3 {The third {dayOfWeek}} =4 {The fourth {dayOfWeek}} =5 {The fifth {dayOfWeek}}}"
 
@@ -7945,7 +7971,7 @@ msgid "Customize pod specification"
 msgstr "Pod 사양 사용자 정의"
 
 #. placeholder {0}: options.runOnTheOccurrence
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:179
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:171
 msgid "{0, selectordinal, one {The first {weekday} of {month}} two {The second {weekday} of {month}} =3 {The third {weekday} of {month}} =4 {The fourth {weekday} of {month}} =5 {The fifth {weekday} of {month}}}"
 msgstr "{0, selectordinal, one {The first {weekday} of {month}} two {The second {weekday} of {month}} =3 {The third {weekday} of {month}} =4 {The fourth {weekday} of {month}} =5 {The fifth {weekday} of {month}}}"
 
@@ -8027,6 +8053,10 @@ msgstr "버전 새로 고침"
 msgid "Project sync failures"
 msgstr "프로젝트 동기화 실패"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:110
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:119
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:156
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:166
 #: components/Schedule/shared/FrequencyDetailSubform.js:368
 msgid "Run on"
 msgstr "실행"
@@ -8044,6 +8074,10 @@ msgstr "Amazon EC2"
 #: screens/Instances/InstancePeers/InstancePeerList.js:197
 msgid "Peer removed. Please be sure to run the install bundle for {0} again in order to see changes take effect."
 msgstr "피어가 제거되었습니다. 변경 사항을 적용하려면 {0} 에 대한 설치 번들을 다시 실행하십시오."
+
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:169
+msgid "The last {weekday} of {month}"
+msgstr "{month}의 마지막 {weekday}"
 
 #: screens/Job/JobOutput/PageControls.js:53
 msgid "Collapse all job events"
@@ -8279,6 +8313,7 @@ msgstr "승인하지 못했습니다 {0}."
 msgid "Run type"
 msgstr "실행 유형"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:192
 #: components/Schedule/shared/FrequencyDetailSubform.js:543
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.js:82
 #: screens/WorkflowApproval/shared/WorkflowApprovalUtils.js:57
@@ -8317,6 +8352,11 @@ msgstr "시작 시 버전 업데이트"
 #: screens/Job/Job.helptext.js:7
 msgid "The project containing the playbook this job will execute."
 msgstr "이 작업이 실행할 playbook이 포함된 프로젝트입니다."
+
+#. placeholder {0}: numOccurrences === 1 ? 'occurrence' : 'occurrences'
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:195
+msgid "After {numOccurrences} {0}"
+msgstr "{numOccurrences} {0} 후"
 
 #: screens/Credential/shared/CredentialForm.js:189
 msgid "Select Credential Type"
@@ -8402,6 +8442,7 @@ msgstr "JSON 또는 YAML 구문을 사용하여 인젝터를 입력합니다. �
 msgid "Warning"
 msgstr "경고"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:151
 #: components/Schedule/shared/FrequencyDetailSubform.js:159
 msgid "December"
 msgstr "12월"
@@ -8534,6 +8575,7 @@ msgstr "필드는 값으로 시작합니다."
 msgid "Workflow documentation"
 msgstr "워크플로우 문서"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:140
 #: components/Schedule/shared/FrequencyDetailSubform.js:104
 msgid "January"
 msgstr "1월"
@@ -9167,6 +9209,7 @@ msgstr "플레이"
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise 팀"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:150
 #: components/Schedule/shared/FrequencyDetailSubform.js:154
 msgid "November"
 msgstr "11월"
@@ -9329,6 +9372,10 @@ msgstr "토큰"
 msgid "policy rules."
 msgstr "정책 규칙"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:100
+msgid "weekday"
+msgstr "평일"
+
 #: components/StatusLabel/StatusLabel.js:58
 #: screens/TopologyView/Legend.js:179
 msgid "Deprovisioning"
@@ -9456,6 +9503,7 @@ msgstr "/ (프로젝트 root)"
 msgid "Last seen"
 msgstr "마지막 확인"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:146
 #: components/Schedule/shared/FrequencyDetailSubform.js:134
 msgid "July"
 msgstr "7월"
@@ -9936,6 +9984,7 @@ msgid "Expand section"
 msgstr "섹션 확장"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:45
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:95
 #: components/Schedule/shared/FrequencyDetailSubform.js:306
 #: components/Schedule/shared/FrequencyDetailSubform.js:467
 msgid "Wednesday"
@@ -10052,6 +10101,10 @@ msgstr "playbook을 실행하는 동안 사용할 병렬 또는 동시 프로세
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:97
 msgid "Field for passing a custom Kubernetes or OpenShift Pod specification."
 msgstr "사용자 정의 Kubernetes 또는 OpenShift Pod 사양을 전달하는 필드입니다."
+
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:122
+msgid "The last {dayOfWeek}"
+msgstr "마지막 {dayOfWeek}"
 
 #: screens/Inventory/shared/InventorySourceSyncButton.js:37
 msgid "Start sync source"
@@ -10561,7 +10614,7 @@ msgstr "{0}에 만료됨"
 msgid "Tools"
 msgstr "툴"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:82
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:206
 #: components/Schedule/shared/FrequencyDetailSubform.js:538
 msgid "End"
 msgstr "종료"
@@ -11388,6 +11441,7 @@ msgstr "먼저 키 선택"
 msgid "Select source path"
 msgstr "소스 경로 선택"
 
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:145
 #: components/Schedule/shared/FrequencyDetailSubform.js:129
 msgid "June"
 msgstr "6월"
