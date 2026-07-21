@@ -1,7 +1,8 @@
 import React from 'react';
+import { t } from '@lingui/core/macro';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 
-function getHelpText(t) {
+function getHelpText() {
   return {
     jobType: t`For job templates, select run to execute the playbook. Select check to only check playbook syntax, test environment setup, and report problems without executing the playbook.`,
     inventory: t`Select the inventory containing the hosts you want this job to manage.`,
@@ -31,7 +32,7 @@ function getHelpText(t) {
     privilegeEscalation: t`If enabled, run this playbook as an administrator.`,
     enableWebhook: t`Enable webhook for this template.`,
     concurrentJobs: t`If enabled, simultaneous runs of this job template will be allowed.`,
-    preventInstanceGroupFallback: t`If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on.\n      Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied.`,
+    preventInstanceGroupFallback: t`If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied.`,
     enableFactStorage: t`If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime.`,
     enabledOptions: (
       <>

@@ -29,8 +29,8 @@ const FieldHeader = styled.div`
 function OtherPromptsStep({ launchConfig, variablesMode, onVarModeChange }) {
   const { t } = useLingui();
   const helpTextSource = launchConfig.job_template_data
-    ? jobHelpText
-    : workflowHelpText;
+    ? jobHelpText()
+    : workflowHelpText();
   return (
     <div data-cy="other-prompts">
       <Form
@@ -181,9 +181,7 @@ function ShowChangesToggle() {
           <span className="pf-v6-c-form__label-text">
             {t`Show Changes`}
             <Popover
-              content={t`If enabled, show the changes made
-              by Ansible tasks, where supported. This is equivalent to Ansible’s
-              --diff mode.`}
+              content={t`If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode.`}
             />
           </span>
         </label>

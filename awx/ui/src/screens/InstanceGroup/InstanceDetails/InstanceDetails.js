@@ -340,13 +340,14 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
                 instance.managed_by_policy ? (
                   <Trans>
                     <b>
-                      {t`Note: This instance may be re-associated with this instance group if it is managed by `}
+                      Note: This instance may be re-associated with this instance
+                      group if it is managed by{' '}
                       <a
                         href={policyRulesDocsLink}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        {t`policy rules.`}
+                        policy rules.
                       </a>
                     </b>
                   </Trans>

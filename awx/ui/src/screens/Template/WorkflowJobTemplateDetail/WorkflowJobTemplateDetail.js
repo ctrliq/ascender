@@ -42,7 +42,7 @@ function WorkflowJobTemplateDetail({ template }) {
     limit,
   } = template;
   const { t } = useLingui();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const urlOrigin = window.location.origin;
   const navigate = useNavigate();
 

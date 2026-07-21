@@ -149,7 +149,7 @@ function SubscriptionStep() {
                       ouiaId="import-license-link"
                       isInline
                     >
-                      {t`User Guide`}
+                      User Guide
                     </Button>
                     .
                   </Trans>

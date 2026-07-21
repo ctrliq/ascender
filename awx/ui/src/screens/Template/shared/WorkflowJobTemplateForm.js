@@ -48,7 +48,7 @@ function WorkflowJobTemplateForm({
   isInventoryDisabled = false,
 }) {
   const { t } = useLingui();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [enableWebhooks, setEnableWebhooks] = useState(
     Boolean(template.webhook_service)

@@ -87,8 +87,8 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
     <div>
       <Plural
         value={itemsToRemove.length}
-        one={t`This intance is currently being used by other resources. Are you sure you want to delete it?`}
-        other={t`Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?`}
+        one="This instance is currently being used by other resources. Are you sure you want to delete it?"
+        other="Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?"
       />
       {removeDetails &&
         Object.entries(removeDetails).map(([key, value]) => (

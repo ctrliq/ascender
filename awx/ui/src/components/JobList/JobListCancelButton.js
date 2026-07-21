@@ -93,8 +93,8 @@ function JobListCancelButton({ jobsToCancel = [], onCancel = () => {} }) {
       return (
         <Plural
           value={numJobsToCancel}
-          one={t`Cancel selected job`}
-          other={t`Cancel selected jobs`}
+          one="Cancel selected job"
+          other="Cancel selected jobs"
         />
       );
     }
@@ -170,8 +170,8 @@ function JobListCancelButton({ jobsToCancel = [], onCancel = () => {} }) {
           <div style={{ marginBottom: '0.75rem' }}>
             <Plural
               value={numJobsToCancel}
-              one={t`This action will cancel the following job:`}
-              other={t`This action will cancel the following jobs:`}
+              one="This action will cancel the following job:"
+              other="This action will cancel the following jobs:"
             />
           </div>
           {jobsToCancel.map((job) => (

@@ -1,6 +1,7 @@
+import { t } from '@lingui/core/macro';
 import { formatDateString } from 'util/dates';
 
-export function getTooltip(workflowApproval, t) {
+export function getTooltip(workflowApproval) {
   if (workflowApproval.status === 'successful') {
     if (workflowApproval.summary_fields?.approved_or_denied_by?.username) {
       return t`Approved by ${
@@ -43,13 +44,15 @@ export function getStatus(workflowApproval) {
 
 export function getPendingLabel(workflowApproval) {
   if (!workflowApproval.approval_expiration) {
-    return 'Never expires';
+    return t`Never expires`;
   }
 
-  return `Expires on ${formatDateString(workflowApproval.approval_expiration)}`;
+  return t`Expires on ${formatDateString(
+    workflowApproval.approval_expiration
+  )}`;
 }
 
-export function getDetailPendingLabel(workflowApproval, t) {
+export function getDetailPendingLabel(workflowApproval) {
   if (!workflowApproval.approval_expiration) {
     return t`Never`;
   }

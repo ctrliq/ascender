@@ -50,7 +50,7 @@ jest.mock('components/CodeEditor', () => ({
 
 jest.mock('../shared/WorkflowApprovalUtils', () => ({
   ...jest.requireActual('../shared/WorkflowApprovalUtils'),
-  getDetailPendingLabel: (workflowApproval, t) => {
+  getDetailPendingLabel: (workflowApproval) => {
     if (!workflowApproval.approval_expiration) {
       return 'Never';
     }

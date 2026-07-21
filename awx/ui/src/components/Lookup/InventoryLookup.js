@@ -130,8 +130,7 @@ function InventoryLookup({
       promptId={promptId}
       promptName={promptName}
       isDisabled={isDisabled}
-      tooltip={t`Select the inventory containing the hosts
-            you want this job to manage.`}
+      tooltip={t`Select the inventory containing the hosts you want this job to manage.`}
     >
       <Lookup
         id="inventory-lookup"

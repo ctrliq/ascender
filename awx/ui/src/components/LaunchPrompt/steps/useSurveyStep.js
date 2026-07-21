@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLingui } from '@lingui/react/macro';
+import { t } from '@lingui/core/macro';
 import { useFormikContext } from 'formik';
 import SurveyStep from './SurveyStep';
 import StepName from './StepName';
@@ -12,7 +12,6 @@ export default function useSurveyStep(
   resource,
   visitedSteps
 ) {
-  const { t } = useLingui();
   const { setFieldError, values } = useFormikContext();
   const hasError =
     Object.keys(visitedSteps).includes(STEP_ID) &&
@@ -49,8 +48,7 @@ export default function useSurveyStep(
         surveyConfig.spec.forEach((question) => {
           const errMessage = validateSurveyField(
             question,
-            values[`survey_${question.variable}`],
-            t
+            values[`survey_${question.variable}`]
           );
           if (errMessage) {
             setFieldError(`survey_${question.variable}`, errMessage);
@@ -93,7 +91,7 @@ function getInitialValues(launchConfig, surveyConfig, resource) {
   return values;
 }
 
-function validateSurveyField(question, value, t) {
+function validateSurveyField(question, value) {
   const isTextField = ['text', 'textarea'].includes(question.type);
   const isNumeric = ['integer', 'float'].includes(question.type);
   if (isTextField && (value || value === 0)) {

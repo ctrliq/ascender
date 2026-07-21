@@ -222,6 +222,7 @@
     "moduleNameMapper": {
       "^history$": "<rootDir>/testUtils/historyShim.js",
       "^react-native$": "react-native-web",
+      "(^|/)themeRegistry(\\.js)?$": "<rootDir>/testUtils/themeRegistryMock.js",
       "^.+\\.module\\.(css|sass|scss)$": "<rootDir>/config/jest/cssModulesTransform.js"
     },
     "moduleFileExtensions": [

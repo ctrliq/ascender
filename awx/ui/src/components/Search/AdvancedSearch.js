@@ -43,29 +43,6 @@ const AdvancedGroup = styled.div`
   }
 `;
 
-const prefixOptions = (t, enableNegativeFiltering) => {
-  const opts = [
-    {
-      id: 'and-option-select',
-      value: 'and',
-      description: t`Returns results that satisfy this one as well as other filters.  This is the default set type if nothing is selected.`,
-    },
-    {
-      id: 'or-option-select',
-      value: 'or',
-      description: t`Returns results that satisfy this one or any other filters.`,
-    },
-  ];
-  if (enableNegativeFiltering) {
-    opts.push({
-      id: 'not-option-select',
-      value: 'not',
-      description: t`Returns results that have values other than this one as well as other filters.`,
-    });
-  }
-  return opts;
-};
-
 function AdvancedSearch({
   onSearch,
   searchableKeys = [],
@@ -77,6 +54,28 @@ function AdvancedSearch({
   isFilterCleared,
 }) {
   const { t } = useLingui();
+  const prefixOptions = (enableNegative) => {
+    const opts = [
+      {
+        id: 'and-option-select',
+        value: 'and',
+        description: t`Returns results that satisfy this one as well as other filters.  This is the default set type if nothing is selected.`,
+      },
+      {
+        id: 'or-option-select',
+        value: 'or',
+        description: t`Returns results that satisfy this one or any other filters.`,
+      },
+    ];
+    if (enableNegative) {
+      opts.push({
+        id: 'not-option-select',
+        value: 'not',
+        description: t`Returns results that have values other than this one as well as other filters.`,
+      });
+    }
+    return opts;
+  };
   const relatedKeys = relatedSearchableKeys.filter(
     (sKey) => !searchableKeys.map(({ key }) => key).includes(sKey)
   );
@@ -167,7 +166,7 @@ function AdvancedSearch({
     }
   };
 
-  const allPrefixOptions = prefixOptions(t, enableNegativeFiltering);
+  const allPrefixOptions = prefixOptions(enableNegativeFiltering);
   const filteredPrefixOptions = prefixFilterValue
     ? allPrefixOptions.filter((opt) =>
         opt.value.toLowerCase().includes(prefixFilterValue.toLowerCase())

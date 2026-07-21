@@ -263,15 +263,15 @@ function InventoryList() {
                     deleteMessage={
                       <Plural
                         value={selected.length}
-                        one={t`This inventory is currently being used by some templates. Are you sure you want to delete it?`}
-                        other={t`Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?`}
+                        one="This inventory is currently being used by some templates. Are you sure you want to delete it?"
+                        other="Deleting these inventories could impact some templates that rely on them. Are you sure you want to delete anyway?"
                       />
                     }
                     warningMessage={
                       <Plural
                         value={selected.length}
-                        one={t`The inventory will be in a pending status until the final delete is processed.`}
-                        other={t`The inventories will be in a pending status until the final delete is processed.`}
+                        one="The inventory will be in a pending status until the final delete is processed."
+                        other="The inventories will be in a pending status until the final delete is processed."
                       />
                     }
                   />,

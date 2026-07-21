@@ -1,6 +1,7 @@
 import React from 'react';
+import { t } from '@lingui/core/macro';
 
-const jobHelpText = (t) => ({
+const jobHelpText = () => ({
   jobType: t`For job templates, select run to execute the playbook. Select check to only check playbook syntax, test environment setup, and report problems without executing the playbook.`,
   inventory: t`Select the inventory containing the hosts you want this job to manage.`,
   project: t`The project containing the playbook this job will execute.`,

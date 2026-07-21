@@ -92,8 +92,8 @@ const InventoryGroupsDeleteModal = ({
           title={
             <Plural
               value={groups.length}
-              one={t`Delete Group?`}
-              other={t`Delete Groups?`}
+              one="Delete Group?"
+              other="Delete Groups?"
             />
           }
           onClose={() => setIsModalOpen(false)}
@@ -121,8 +121,8 @@ const InventoryGroupsDeleteModal = ({
         >
           <Plural
             value={groups.length}
-            one={t`Are you sure you want delete the group below?`}
-            other={t`Are you sure you want delete the groups below?`}
+            one="Are you sure you want to delete the group below?"
+            other="Are you sure you want to delete the groups below?"
           />
 
           <div css="padding: 24px 0;">

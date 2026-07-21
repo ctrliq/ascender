@@ -11,10 +11,13 @@ module.exports = defineConfig({
   ],
   compileNamespace: 'cjs',
   fallbackLocales: { default: 'en' },
-  format: formatter(),
-  locales: ['en', 'es', 'fr', 'ko', 'nl', 'zh', 'ja', 'zu'],
+  locales: ['en', 'es', 'fr', 'hi', 'ko', 'nl', 'zh', 'ja', 'ar'],
   orderBy: 'messageId',
   rootDir: './src',
   runtimeConfigModule: ['@lingui/core', 'i18n'],
   sourceLocale: 'en',
+  format: formatter({
+    lineNumbers: true,
+    foldLength: 0 // Don't wrap long lines
+  }),
 });

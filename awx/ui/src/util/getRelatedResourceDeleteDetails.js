@@ -15,6 +15,7 @@ import {
   OrganizationsAPI,
   InstanceGroupsAPI,
 } from 'api';
+import { t } from '@lingui/core/macro';
 
 export async function getRelatedResourceDeleteCounts(requests) {
   const results = {};
@@ -44,7 +45,7 @@ export async function getRelatedResourceDeleteCounts(requests) {
   };
 }
 
-export const relatedResourceDeleteRequests = (t) => ({
+export const relatedResourceDeleteRequests = () => ({
   credential: (selected) => [
     {
       request: () =>

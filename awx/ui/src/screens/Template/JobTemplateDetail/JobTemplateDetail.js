@@ -35,7 +35,7 @@ import getHelpText from '../shared/JobTemplate.helptext';
 
 function JobTemplateDetail({ template }) {
   const { t } = useLingui();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const {
     ask_inventory_on_launch,
     allow_simultaneous,

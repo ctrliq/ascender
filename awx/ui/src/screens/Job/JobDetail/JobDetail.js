@@ -41,7 +41,7 @@ const StatusDetailValue = styled.div`
 
 function JobDetail({ job, inventorySourceLabels }) {
   const { t } = useLingui();
-  const jobHelpText = getJobHelpText(t);
+  const jobHelpText = getJobHelpText();
   const { me } = useConfig();
   const {
     created_by,
