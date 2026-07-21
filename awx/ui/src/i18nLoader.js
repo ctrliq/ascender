@@ -44,5 +44,14 @@ export async function dynamicActivate(locale, pseudolocalization = false) {
     const language = locale.split(/[-_]/)[0];
     document.documentElement.lang = language;
     document.documentElement.dir = rtlLocales.has(language) ? 'rtl' : 'ltr';
+
+    // Persist the selected language in Django's language cookie so that
+    // backend-rendered translations (e.g. OPTIONS `help_text` sourced from
+    // model `gettext_lazy` strings) are returned in the same language as the
+    // UI. Django's LocaleMiddleware reads this cookie (default name
+    // `django_language`) when determining the request locale. Without this,
+    // the backend cannot know the UI language and falls back to English.
+    const oneYearInSeconds = 60 * 60 * 24 * 365;
+    document.cookie = `django_language=${language}; path=/; max-age=${oneYearInSeconds}; samesite=lax`;
   }
 }

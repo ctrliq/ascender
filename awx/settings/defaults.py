@@ -83,6 +83,26 @@ TIME_ZONE = 'UTC'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
+# Languages that have translation catalogs under awx/locale/<code>/. Declaring
+# this explicitly (rather than relying on Django's full global LANGUAGES list)
+# ensures LocaleMiddleware selects the exact catalog code we ship. In
+# particular Django's global list only has 'zh-hans'/'zh-hant', so without this
+# a request asking for 'zh' would resolve to 'zh-hans' (which has no catalog)
+# and fall back to English. These codes must match SUPPORTED_UI_LOCALES in
+# awx/api/serializers.py and the directory names under awx/locale/.
+LANGUAGES = [
+    ('en-us', 'English (US)'),
+    ('en', 'English'),
+    ('ar', 'Arabic'),
+    ('es', 'Spanish'),
+    ('fr', 'French'),
+    ('hi', 'Hindi'),
+    ('ja', 'Japanese'),
+    ('ko', 'Korean'),
+    ('nl', 'Dutch'),
+    ('zh', 'Chinese'),
+]
+
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = True
