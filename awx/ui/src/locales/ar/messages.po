@@ -2854,6 +2854,10 @@ msgstr "ليس لديك إذن لحذف المجموعات التالية: {item
 msgid "HTTP Method"
 msgstr "طريقة HTTP"
 
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
+msgid "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
+msgstr "بيئة التنفيذ التي ستُستخدم للمهام داخل هذه المؤسسة. ستُستخدم كخيار احتياطي عندما لا تكون بيئة التنفيذ قد عُيّنت صراحةً على مستوى المشروع أو قالب المهمة أو سير العمل."
+
 #: components/NotificationList/NotificationList.js:190
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:131
 msgid "Notification type"
@@ -7249,7 +7253,6 @@ msgstr "ملف أو دليل أو نص برمجي"
 msgid "Resource type"
 msgstr "نوع المورد"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
 #: screens/Organization/shared/OrganizationForm.js:92
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "بيئة التنفيذ التي ستُستخدم للمهام داخل هذه المؤسسة. سيتم استخدام هذا كخيار احتياطي عندما لم يتم تعيين بيئة تنفيذ صراحةً على مستوى المشروع أو قالب المهمة أو سير العمل."
@@ -8433,11 +8436,6 @@ msgstr "تحديث المراجعة عند الإطلاق"
 #: screens/Job/Job.helptext.js:7
 msgid "The project containing the playbook this job will execute."
 msgstr "المشروع الذي يحتوي على Playbook الذي ستنفذه هذه المهمة."
-
-#. placeholder {0}: numOccurrences === 1 ? 'occurrence' : 'occurrences'
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:195
-msgid "After {numOccurrences} {0}"
-msgstr "بعد {numOccurrences} {0}"
 
 #: screens/Credential/shared/CredentialForm.js:189
 msgid "Select Credential Type"
@@ -10745,7 +10743,7 @@ msgstr "تنتهي الصلاحية في {0}"
 msgid "Tools"
 msgstr "الأدوات"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:206
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:212
 #: components/Schedule/shared/FrequencyDetailSubform.js:538
 msgid "End"
 msgstr "النهاية"
@@ -11584,6 +11582,10 @@ msgstr "{0} ثانية"
 #: screens/Inventory/InventoryList/InventoryList.js:205
 msgid "Inventory Type"
 msgstr "نوع المخزون"
+
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:196
+msgid "{numOccurrences, plural, one {After # occurrence} other {After # occurrences}}"
+msgstr "{numOccurrences, plural, one {بعد # تكرار} other {بعد # تكرارات}}"
 
 #: components/Search/AdvancedSearch.js:285
 #: components/Search/AdvancedSearch.js:301

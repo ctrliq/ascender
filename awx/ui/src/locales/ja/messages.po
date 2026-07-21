@@ -2852,6 +2852,10 @@ msgstr "次のグループを削除する権限がありません: {itemsUnableT
 msgid "HTTP Method"
 msgstr "HTTP メソッド"
 
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
+msgid "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
+msgstr "この組織内のジョブに使用される実行環境。プロジェクト、ジョブテンプレート、またはワークフローのレベルで実行環境が明示的に割り当てられていない場合のフォールバックとして使用されます。"
+
 #: components/NotificationList/NotificationList.js:190
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:131
 msgid "Notification type"
@@ -7246,7 +7250,6 @@ msgstr "ファイル、ディレクトリー、またはスクリプト"
 msgid "Resource type"
 msgstr "リソースタイプ"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
 #: screens/Organization/shared/OrganizationForm.js:92
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "この組織内のジョブに使用される実行環境。これは、実行環境がプロジェクト、ジョブテンプレート、またはワークフローレベルで明示的に割り当てられていない場合にフォールバックとして使用されます。"
@@ -8429,11 +8432,6 @@ msgstr "起動時のリビジョン更新"
 #: screens/Job/Job.helptext.js:7
 msgid "The project containing the playbook this job will execute."
 msgstr "このジョブが実行する playbook が含まれるプロジェクトです。"
-
-#. placeholder {0}: numOccurrences === 1 ? 'occurrence' : 'occurrences'
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:195
-msgid "After {numOccurrences} {0}"
-msgstr "{numOccurrences} {0} 後"
 
 #: screens/Credential/shared/CredentialForm.js:189
 msgid "Select Credential Type"
@@ -10741,7 +10739,7 @@ msgstr "有効期限: {0}"
 msgid "Tools"
 msgstr "ツール"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:206
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:212
 #: components/Schedule/shared/FrequencyDetailSubform.js:538
 msgid "End"
 msgstr "終了"
@@ -11580,6 +11578,10 @@ msgstr "{0} 秒"
 #: screens/Inventory/InventoryList/InventoryList.js:205
 msgid "Inventory Type"
 msgstr "インベントリーのタイプ"
+
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:196
+msgid "{numOccurrences, plural, one {After # occurrence} other {After # occurrences}}"
+msgstr "{numOccurrences, plural, one {# 回の発生後} other {# 回の発生後}}"
 
 #: components/Search/AdvancedSearch.js:285
 #: components/Search/AdvancedSearch.js:301

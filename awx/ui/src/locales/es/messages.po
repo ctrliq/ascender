@@ -2853,6 +2853,10 @@ msgstr "No tiene permiso para eliminar los siguientes Grupos: {itemsUnableToDele
 msgid "HTTP Method"
 msgstr "Método HTTP"
 
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
+msgid "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
+msgstr "El entorno de ejecución que se utilizará para las tareas dentro de esta organización. Se utilizará como alternativa cuando no se haya asignado explícitamente un entorno de ejecución a nivel de proyecto, plantilla de trabajo o flujo de trabajo."
+
 #: components/NotificationList/NotificationList.js:190
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:131
 msgid "Notification type"
@@ -7248,7 +7252,6 @@ msgstr "Archivo, directorio o script"
 msgid "Resource type"
 msgstr "Agregar tipo de recurso"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
 #: screens/Organization/shared/OrganizationForm.js:92
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "El entorno de ejecución que se utilizará para las tareas dentro de esta organización. Se utilizará como reserva cuando no se haya asignado explícitamente un entorno de ejecución en el nivel de proyecto, plantilla de trabajo o flujo de trabajo."
@@ -8431,11 +8434,6 @@ msgstr "Revisión de actualización durante el lanzamiento"
 #: screens/Job/Job.helptext.js:7
 msgid "The project containing the playbook this job will execute."
 msgstr "El proyecto que contiene el playbook que ejecutará este trabajo."
-
-#. placeholder {0}: numOccurrences === 1 ? 'occurrence' : 'occurrences'
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:195
-msgid "After {numOccurrences} {0}"
-msgstr "Después de {numOccurrences} {0}"
 
 #: screens/Credential/shared/CredentialForm.js:189
 msgid "Select Credential Type"
@@ -10743,7 +10741,7 @@ msgstr "Expira el {0}"
 msgid "Tools"
 msgstr "Herramientas"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:206
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:212
 #: components/Schedule/shared/FrequencyDetailSubform.js:538
 msgid "End"
 msgstr "Fin"
@@ -11582,6 +11580,10 @@ msgstr "{0} segundos"
 #: screens/Inventory/InventoryList/InventoryList.js:205
 msgid "Inventory Type"
 msgstr "Tipo de inventario"
+
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:196
+msgid "{numOccurrences, plural, one {After # occurrence} other {After # occurrences}}"
+msgstr "{numOccurrences, plural, one {Después de # ocurrencia} other {Después de # ocurrencias}}"
 
 #: components/Search/AdvancedSearch.js:285
 #: components/Search/AdvancedSearch.js:301

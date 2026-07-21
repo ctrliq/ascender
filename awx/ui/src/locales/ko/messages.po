@@ -2852,6 +2852,10 @@ msgstr "다음 그룹을 삭제할 권한이 없습니다. {itemsUnableToDelete}
 msgid "HTTP Method"
 msgstr "HTTP 방법"
 
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
+msgid "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
+msgstr "이 조직 내의 작업에 사용될 실행 환경입니다. 프로젝트, 작업 템플릿 또는 워크플로우 수준에서 실행 환경이 명시적으로 할당되지 않은 경우 대체로 사용됩니다."
+
 #: components/NotificationList/NotificationList.js:190
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:131
 msgid "Notification type"
@@ -7246,7 +7250,6 @@ msgstr "파일, 디렉터리 또는 스크립트"
 msgid "Resource type"
 msgstr "리소스 유형"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
 #: screens/Organization/shared/OrganizationForm.js:92
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "이 조직 내의 작업에 사용할 실행 환경입니다. 실행 환경이 프로젝트, 작업 템플릿 또는 워크플로 수준에서 명시적으로 할당되지 않은 경우 폴백으로 사용됩니다."
@@ -8429,11 +8432,6 @@ msgstr "시작 시 버전 업데이트"
 #: screens/Job/Job.helptext.js:7
 msgid "The project containing the playbook this job will execute."
 msgstr "이 작업이 실행할 playbook이 포함된 프로젝트입니다."
-
-#. placeholder {0}: numOccurrences === 1 ? 'occurrence' : 'occurrences'
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:195
-msgid "After {numOccurrences} {0}"
-msgstr "{numOccurrences} {0} 후"
 
 #: screens/Credential/shared/CredentialForm.js:189
 msgid "Select Credential Type"
@@ -10741,7 +10739,7 @@ msgstr "{0}에 만료됨"
 msgid "Tools"
 msgstr "툴"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:206
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:212
 #: components/Schedule/shared/FrequencyDetailSubform.js:538
 msgid "End"
 msgstr "종료"
@@ -11580,6 +11578,10 @@ msgstr "{0} 초"
 #: screens/Inventory/InventoryList/InventoryList.js:205
 msgid "Inventory Type"
 msgstr "인벤토리 유형"
+
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:196
+msgid "{numOccurrences, plural, one {After # occurrence} other {After # occurrences}}"
+msgstr "{numOccurrences, plural, one {# 회 발생 후} other {# 회 발생 후}}"
 
 #: components/Search/AdvancedSearch.js:285
 #: components/Search/AdvancedSearch.js:301

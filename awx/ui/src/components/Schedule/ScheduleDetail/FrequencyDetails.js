@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { SelectOrdinal, useLingui } from '@lingui/react/macro';
+import { Plural, SelectOrdinal, useLingui } from '@lingui/react/macro';
 import { DateTime } from 'luxon';
 import { formatDateString } from 'util/dates';
 import { DetailList, Detail } from '../../DetailList';
@@ -192,7 +192,13 @@ function EndDetail({ options, timezone, prefix }) {
     value = t`Never`;
   } else if (options.end === 'after') {
     const numOccurrences = options.occurrences;
-    value = t`After ${numOccurrences} ${numOccurrences === 1 ? 'occurrence' : 'occurrences'}`;
+    value = (
+      <Plural
+        value={numOccurrences}
+        one="After # occurrence"
+        other="After # occurrences"
+      />
+    );
   } else {
     const date = DateTime.fromFormat(
       `${options.endDate} ${options.endTime}`,

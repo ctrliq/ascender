@@ -2852,6 +2852,10 @@ msgstr "U hebt geen machtiging om de volgende groepen te verwijderen: {itemsUnab
 msgid "HTTP Method"
 msgstr "HTTP-methode"
 
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
+msgid "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
+msgstr "De uitvoeringsomgeving die wordt gebruikt voor taken binnen deze organisatie. Deze wordt gebruikt als terugvaloptie wanneer er niet expliciet een uitvoeringsomgeving is toegewezen op project-, taaksjabloon- of workflowniveau."
+
 #: components/NotificationList/NotificationList.js:190
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:131
 msgid "Notification type"
@@ -7246,7 +7250,6 @@ msgstr "Bestand, map of script"
 msgid "Resource type"
 msgstr "Brontype toevoegen"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
 #: screens/Organization/shared/OrganizationForm.js:92
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "De uitvoeringsomgeving die zal worden gebruikt voor taken binnen deze organisatie. Dit wordt gebruikt als terugvalpunt wanneer er geen uitvoeringsomgeving expliciet is toegewezen op project-, taaksjabloon- of workflowniveau."
@@ -8429,11 +8432,6 @@ msgstr "Herziening updaten bij opstarten"
 #: screens/Job/Job.helptext.js:7
 msgid "The project containing the playbook this job will execute."
 msgstr "Het project dat het playbook bevat dat deze taak zal uitvoeren."
-
-#. placeholder {0}: numOccurrences === 1 ? 'occurrence' : 'occurrences'
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:195
-msgid "After {numOccurrences} {0}"
-msgstr "Na {numOccurrences} {0}"
 
 #: screens/Credential/shared/CredentialForm.js:189
 msgid "Select Credential Type"
@@ -10741,7 +10739,7 @@ msgstr "Verloopt op {0}"
 msgid "Tools"
 msgstr "Gereedschap"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:206
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:212
 #: components/Schedule/shared/FrequencyDetailSubform.js:538
 msgid "End"
 msgstr "Einde"
@@ -11580,6 +11578,10 @@ msgstr "{0} seconden"
 #: screens/Inventory/InventoryList/InventoryList.js:205
 msgid "Inventory Type"
 msgstr "Type inventaris"
+
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:196
+msgid "{numOccurrences, plural, one {After # occurrence} other {After # occurrences}}"
+msgstr "{numOccurrences, plural, one {Na # keer} other {Na # keer}}"
 
 #: components/Search/AdvancedSearch.js:285
 #: components/Search/AdvancedSearch.js:301

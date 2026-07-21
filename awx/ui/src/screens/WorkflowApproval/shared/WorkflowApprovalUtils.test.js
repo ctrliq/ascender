@@ -16,9 +16,12 @@ async function activate() {
   i18n.load('en', messages);
   i18n.activate('en');
 }
-activate();
 
 describe('<WorkflowApproval />', () => {
+  beforeAll(async () => {
+    await activate();
+  });
+
   test('shows no expiration when approval status is pending and no approval_expiration', () => {
     expect(getPendingLabel(workflowApproval)).toEqual('Never expires');
   });

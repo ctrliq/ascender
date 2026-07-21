@@ -2854,6 +2854,10 @@ msgstr "आपके पास निम्न समूह हटाने क�
 msgid "HTTP Method"
 msgstr "HTTP विधि"
 
+#: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
+msgid "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
+msgstr "इस संगठन के भीतर कार्यों के लिए उपयोग किया जाने वाला निष्पादन वातावरण। इसका उपयोग तब फ़ॉलबैक के रूप में किया जाएगा जब प्रोजेक्ट, कार्य टेम्पलेट या वर्कफ़्लो स्तर पर कोई निष्पादन वातावरण स्पष्ट रूप से असाइन नहीं किया गया हो।"
+
 #: components/NotificationList/NotificationList.js:190
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:131
 msgid "Notification type"
@@ -7249,7 +7253,6 @@ msgstr "फ़ाइल, निर्देशिका या स्क्र�
 msgid "Resource type"
 msgstr "संसाधन प्रकार"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.js:101
 #: screens/Organization/shared/OrganizationForm.js:92
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "वह निष्पादन वातावरण जो इस संगठन के भीतर जॉब्स के लिए उपयोग किया जाएगा। इसका उपयोग फ़ॉलबैक के रूप में तब किया जाएगा जब प्रोजेक्ट, जॉब टेम्पलेट या वर्कफ़्लो स्तर पर स्पष्ट रूप से कोई निष्पादन वातावरण असाइन नहीं किया गया हो।"
@@ -8433,11 +8436,6 @@ msgstr "लॉन्च पर रिवीज़न अपडेट करे�
 #: screens/Job/Job.helptext.js:7
 msgid "The project containing the playbook this job will execute."
 msgstr "वह प्रोजेक्ट जिसमें वह प्लेबुक है जिसे यह जॉब निष्पादित करेगा।"
-
-#. placeholder {0}: numOccurrences === 1 ? 'occurrence' : 'occurrences'
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:195
-msgid "After {numOccurrences} {0}"
-msgstr "{numOccurrences} {0} के बाद"
 
 #: screens/Credential/shared/CredentialForm.js:189
 msgid "Select Credential Type"
@@ -10745,7 +10743,7 @@ msgstr "{0} को समाप्त होता है"
 msgid "Tools"
 msgstr "टूल"
 
-#: components/Schedule/ScheduleDetail/FrequencyDetails.js:206
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:212
 #: components/Schedule/shared/FrequencyDetailSubform.js:538
 msgid "End"
 msgstr "समाप्ति"
@@ -11584,6 +11582,10 @@ msgstr "{0} सेकंड"
 #: screens/Inventory/InventoryList/InventoryList.js:205
 msgid "Inventory Type"
 msgstr "इन्वेंटरी प्रकार"
+
+#: components/Schedule/ScheduleDetail/FrequencyDetails.js:196
+msgid "{numOccurrences, plural, one {After # occurrence} other {After # occurrences}}"
+msgstr "{numOccurrences, plural, one {# घटना के बाद} other {# घटनाओं के बाद}}"
 
 #: components/Search/AdvancedSearch.js:285
 #: components/Search/AdvancedSearch.js:301
