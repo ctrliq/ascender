@@ -18,7 +18,7 @@ function ApplicationDetails({
   clientTypeOptions,
 }) {
   const { t } = useLingui();
-  const applicationHelpTextStrings = getApplicationHelpTextStrings(t);
+  const applicationHelpTextStrings = getApplicationHelpTextStrings();
   const navigate = useNavigate();
   const {
     isLoading: deleteLoading,

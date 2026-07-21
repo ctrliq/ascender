@@ -48,7 +48,7 @@ msgstr "ワークフローの承認が見つかりません。"
 
 #: screens/Credential/shared/CredentialFormFields/CredentialField.js:86
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:49
-#: screens/Setting/shared/SharedFields.js:533
+#: screens/Setting/shared/SharedFields.js:520
 msgid "Browse…"
 msgstr "参照…"
 
@@ -276,6 +276,7 @@ msgid "This credential type is currently being used by some credentials and cann
 msgstr "この認証タイプは、現在一部の認証情報で使用されているため、削除できません"
 
 #: screens/Job/Job.helptext.js:16
+#: screens/Template/shared/JobTemplate.helptext.js:18
 msgid "Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory."
 msgstr "このジョブテンプレートで行われる作業を指定された数のジョブスライスに分割します。各スライスはインベントリーの一部に対して同じタスクを実行します。"
 
@@ -404,6 +405,11 @@ msgstr "リビジョンが利用可能になる前に、プロジェクトを同
 msgid "Policy Type"
 msgstr "ポリシータイプ"
 
+#. placeholder {0}: question.max
+#: components/LaunchPrompt/steps/useSurveyStep.js:102
+msgid "This field must not exceed {0} characters"
+msgstr "このフィールドは {0} 文字を超えてはなりません"
+
 #: components/StatusLabel/StatusLabel.js:49
 msgid "Timed out"
 msgstr "タイムアウト"
@@ -480,6 +486,10 @@ msgstr "常時"
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:28
 msgid "There was an error parsing the file. Please check the file formatting and try again."
 msgstr "ファイルの解析中にエラーが発生しました。ファイルのフォーマットを確認して、再試行してください。"
+
+#: util/validators.js:43
+msgid "This field must not exceed {max} characters"
+msgstr "このフィールドは {max} 文字を超えてはなりません"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:128
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:134
@@ -847,6 +857,10 @@ msgstr "ワークフローテンプレートの追加"
 msgid "Back to Tokens"
 msgstr "トークンに戻る"
 
+#: screens/Template/shared/JobTemplate.helptext.js:51
+msgid "Webhooks: Enable webhook for this template."
+msgstr "Webhook: このテンプレートの webhook を有効にします。"
+
 #: screens/Setting/Settings.js:90
 msgid "LDAP 5"
 msgstr "LDAP 5"
@@ -1050,6 +1064,10 @@ msgstr "削除エラー"
 msgid "View all Teams."
 msgstr "すべてのチームを表示します。"
 
+#: util/validators.js:185
+msgid "This field must be a regular expression"
+msgstr "このフィールドは正規表現でなければなりません"
+
 #: screens/Job/JobDetail/JobDetail.js:616
 msgid "Artifacts"
 msgstr "アーティファクト"
@@ -1143,6 +1161,10 @@ msgstr "保存して終了"
 msgid "Select the inventory that this host will belong to."
 msgstr "このホストが属するインベントリーを選択します。"
 
+#: screens/Template/shared/JobTemplate.helptext.js:25
+msgid "Select a webhook service."
+msgstr "webhook サービスを選択します。"
+
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:84
 msgid "Out of compliance"
 msgstr "コンプライアンス違反"
@@ -1163,6 +1185,10 @@ msgstr "2 月"
 #: screens/Setting/Settings.js:195
 msgid "View all settings"
 msgstr "すべての設定の表示"
+
+#: screens/Template/shared/JobTemplate.helptext.js:27
+msgid "Webhook services can use this as a shared secret."
+msgstr "webhook サービスはこれを共有シークレットとして使用できます。"
 
 #: screens/ManagementJob/ManagementJob.js:133
 msgid "View all management jobs"
@@ -1186,6 +1212,7 @@ msgid "timed out"
 msgstr "タイムアウト"
 
 #: screens/Job/Job.helptext.js:14
+#: screens/Template/shared/JobTemplate.helptext.js:16
 msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the playbook. Multiple patterns are allowed. Refer to Ansible documentation for more information and examples on patterns."
 msgstr "playbook によって管理または影響を受けるホストのリストをさらに制限するホストパターンを指定します。複数のパターンを使用できます。パターンに関する詳細および例については、Ansible のドキュメントを参照してください。"
 
@@ -1287,6 +1314,7 @@ msgstr "ノードタイプ"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:70
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:127
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:450
+#: screens/Template/shared/JobTemplate.helptext.js:72
 #: screens/Template/Survey/SurveyQuestionForm.js:270
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:314
 msgid "documentation"
@@ -1375,6 +1403,10 @@ msgstr "一致するホストがありません"
 #: components/PromptDetail/PromptInventorySourceDetail.js:154
 msgid "Only Group By"
 msgstr "グループ化のみ"
+
+#: screens/Setting/shared/SharedFields.js:80
+msgid "More information for"
+msgstr "詳細情報:"
 
 #: screens/Login/Login.js:156
 msgid "There was a problem logging in. Please try again."
@@ -2010,9 +2042,9 @@ msgstr "このワークフロージョブテンプレートを所有する組織
 msgid "Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?"
 msgstr "これらのテンプレートを削除すると、それらに依存する一部のワークフローノードに影響を与える可能性があります。本当に削除してもよろしいですか？"
 
-#: screens/Setting/shared/SharedFields.js:138
-#: screens/Setting/shared/SharedFields.js:144
-#: screens/Setting/shared/SharedFields.js:343
+#: screens/Setting/shared/SharedFields.js:139
+#: screens/Setting/shared/SharedFields.js:145
+#: screens/Setting/shared/SharedFields.js:337
 msgid "Confirm"
 msgstr "確認"
 
@@ -2025,6 +2057,10 @@ msgstr "成功メッセージボディー"
 #: screens/Dashboard/DashboardGraph.js:178
 msgid "Playbook run"
 msgstr "Playbook 実行"
+
+#: screens/Template/shared/JobTemplate.helptext.js:9
+msgid "Select the project containing the playbook you want this job to execute."
+msgstr "このジョブに実行させたい playbook が含まれるプロジェクトを選択します。"
 
 #: components/Pagination/Pagination.js:30
 msgid "Go to first page"
@@ -2065,6 +2101,10 @@ msgstr "ラベル"
 #: screens/Setting/shared/RevertAllAlert.js:25
 msgid "Revert all"
 msgstr "すべて元に戻す"
+
+#: screens/Application/shared/Application.helptext.js:6
+msgid "Allowed URIs list, space separated"
+msgstr "許可される URI のリスト (スペース区切り)"
 
 #: screens/Setting/MiscSystem/MiscSystem.js:38
 msgid "View Miscellaneous System settings"
@@ -2408,7 +2448,7 @@ msgstr "管理ジョブの起動エラー"
 msgid "Search"
 msgstr "検索"
 
-#: screens/Setting/shared/SharedFields.js:337
+#: screens/Setting/shared/SharedFields.js:331
 msgid "confirm edit login redirect"
 msgstr "ログインリダイレクトの編集の確認"
 
@@ -2556,6 +2596,7 @@ msgstr "有効化されると、インベントリーは、関連付けられた
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:72
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:129
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:452
+#: screens/Template/shared/JobTemplate.helptext.js:74
 #: screens/Template/Survey/SurveyQuestionForm.js:272
 msgid "for more information."
 msgstr "(詳細情報)"
@@ -2895,6 +2936,10 @@ msgstr "インプットインベントリ"
 msgid "of"
 msgstr "/"
 
+#: util/validators.js:52
+msgid "This field must be at least {min} characters"
+msgstr "このフィールドは {min} 文字以上でなければなりません"
+
 #: screens/ActivityStream/ActivityStreamDetailButton.js:56
 msgid "Action"
 msgstr "アクション"
@@ -2936,6 +2981,11 @@ msgstr "ワークフロージョブテンプレートの Wbhook キー"
 #: components/Schedule/shared/FrequencyDetailSubform.js:589
 msgid "Occurrences"
 msgstr "実行回数"
+
+#. placeholder {0}: phoneNumbers.length
+#: util/validators.js:138
+msgid "{0, plural, one {Please enter a valid phone number.} other {Please enter valid phone numbers.}}"
+msgstr "{0, plural, one {有効な電話番号を入力してください。} other {有効な電話番号を入力してください。}}"
 
 #: screens/Host/Host.js:63
 #: screens/Host/HostFacts/HostFacts.js:45
@@ -3203,11 +3253,14 @@ msgid "{intervalValue, plural, one {hour} other {hours}}"
 msgstr "{intervalValue, plural, one {hour} other {hours}}"
 
 #: components/AdHocCommands/useAdHocDetailsStep.js:58
+#: components/LaunchPrompt/steps/useSurveyStep.js:111
 #: screens/Inventory/shared/ConstructedInventoryForm.js:39
 #: screens/Inventory/shared/FederatedInventoryForm.js:27
 #: screens/Template/shared/JobTemplateForm.js:176
 #: screens/User/shared/UserForm.js:123
 #: screens/User/shared/UserForm.js:134
+#: util/validators.js:5
+#: util/validators.js:76
 msgid "This field must not be blank"
 msgstr "このフィールドを空欄にすることはできません"
 
@@ -3507,6 +3560,7 @@ msgid "Local"
 msgstr "ローカル"
 
 #: screens/Job/Job.helptext.js:6
+#: screens/Template/shared/JobTemplate.helptext.js:8
 msgid "Select the inventory containing the hosts you want this job to manage."
 msgstr "このジョブに管理させるホストが含まれるインベントリーを選択します。"
 
@@ -3611,9 +3665,9 @@ msgstr "このアクションにより、このユーザーのすべてのロー
 #: screens/Setting/shared/RevertAllAlert.js:34
 #: screens/Setting/shared/RevertFormActionGroup.js:31
 #: screens/Setting/shared/RevertFormActionGroup.js:37
-#: screens/Setting/shared/SharedFields.js:150
-#: screens/Setting/shared/SharedFields.js:156
-#: screens/Setting/shared/SharedFields.js:353
+#: screens/Setting/shared/SharedFields.js:151
+#: screens/Setting/shared/SharedFields.js:157
+#: screens/Setting/shared/SharedFields.js:347
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:79
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:102
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:108
@@ -3680,6 +3734,10 @@ msgstr "すべてのアプリケーションを表示します。"
 msgid "Minimum length"
 msgstr "最小長"
 
+#: util/validators.js:61
+msgid "This field must be a number and have a value less than {max}"
+msgstr "このフィールドは数値で、{max} 未満の値である必要があります"
+
 #: components/Lookup/HostFilterLookup.js:355
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:119
 msgid "Smart host filter"
@@ -3740,12 +3798,22 @@ msgstr "この表には、構築済みインベントリープラグインの\n"
 msgid "Convergence select"
 msgstr "収束 (コンバージェンス) 選択"
 
+#. placeholder {0}: question.min
+#. placeholder {1}: question.max
+#: components/LaunchPrompt/steps/useSurveyStep.js:107
+msgid "This field must be a number and have a value between {0} and {1}"
+msgstr "このフィールドは数値で、{0} から {1} までの値である必要があります"
+
 #: components/CodeEditor/VariablesDetail.js:125
 #: components/CodeEditor/VariablesDetail.js:131
 #: components/CodeEditor/VariablesField.js:154
 #: components/CodeEditor/VariablesField.js:160
 msgid "Done"
 msgstr "完了"
+
+#: screens/Template/shared/JobTemplate.helptext.js:21
+msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
+msgstr "有効にすると、サポートされている場合に Ansible タスクによって行われた変更を表示します。これは Ansible の --diff モードと同等です。"
 
 #: components/Lookup/HostFilterLookup.js:417
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:250
@@ -4330,6 +4398,7 @@ msgid "This will cancel all subsequent nodes in this workflow"
 msgstr "これにより、このワークフローの後続のノードがすべてキャンセルされます"
 
 #: screens/Job/Job.helptext.js:11
+#: screens/Template/shared/JobTemplate.helptext.js:13
 msgid "Select credentials for accessing the nodes this job will be ran against. You can only select one credential of each type. For machine credentials (SSH), checking \"Prompt on launch\" without selecting credentials will require you to select a machine credential at run time. If you select credentials and check \"Prompt on launch\", the selected credential(s) become the defaults that can be updated at run time."
 msgstr "このジョブの実行対象となるノードにアクセスするための認証情報を選択します。各タイプにつき 1 つの認証情報のみを選択できます。マシン認証情報 (SSH) の場合、認証情報を選択せずに「起動時に入力を求める」をオンにすると、実行時にマシン認証情報を選択する必要があります。認証情報を選択して「起動時に入力を求める」をオンにすると、選択した認証情報が実行時に更新可能なデフォルト値になります。"
 
@@ -4418,6 +4487,10 @@ msgstr "{0} 日"
 #: screens/Project/ProjectList/ProjectListItem.js:120
 msgid "Refresh project revision"
 msgstr "プロジェクトリビジョンの更新"
+
+#: screens/Template/shared/JobTemplate.helptext.js:28
+msgid "Optionally select the credential to use to send status updates back to the webhook service."
+msgstr "(任意) ステータス更新を webhook サービスに送り返すために使用する認証情報を選択します。"
 
 #: screens/Setting/Settings.js:112
 msgid "RADIUS"
@@ -4600,6 +4673,10 @@ msgstr "すべてのノードの削除の確認"
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:113
 msgid "Clean"
 msgstr "クリーニング"
+
+#: screens/Template/shared/JobTemplate.helptext.js:26
+msgid "Webhook services can launch jobs with this workflow job template by making a POST request to this URL."
+msgstr "webhook サービスは、この URL に POST リクエストを行うことで、このワークフロージョブテンプレートでジョブを起動できます。"
 
 #: components/AdHocCommands/useAdHocCredentialPasswordStep.js:45
 #: components/LaunchPrompt/steps/useCredentialPasswordsStep.js:51
@@ -5000,6 +5077,10 @@ msgstr "GitHub チームでサインイン"
 msgid "Inventory copied successfully"
 msgstr "インベントリーが正常にコピーされました"
 
+#: screens/Template/shared/JobTemplate.helptext.js:36
+msgid "If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime."
+msgstr "有効にすると、収集されたファクトが保存され、ホストレベルで表示できるようになります。ファクトは永続化され、実行時にファクトキャッシュに注入されます。"
+
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:260
 msgid "The number of distinct users that must approve before the workflow continues. A single denial always denies the node."
 msgstr "ワークフローが続行される前に承認する必要がある個別ユーザーの数。1 回の拒否で常にノードが拒否されます。"
@@ -5371,6 +5452,7 @@ msgid "Application information"
 msgstr "アプリケーション情報"
 
 #: screens/Job/Job.helptext.js:15
+#: screens/Template/shared/JobTemplate.helptext.js:17
 msgid "Control the level of output ansible will produce as the playbook executes."
 msgstr "playbook の実行時に ansible が生成する出力のレベルを制御します。"
 
@@ -5421,7 +5503,7 @@ msgstr "このジョブを取り消す要求を送信してよろしいですか
 msgid "Port"
 msgstr "ポート"
 
-#: screens/Setting/shared/SharedFields.js:160
+#: screens/Setting/shared/SharedFields.js:161
 msgid "Are you sure you want to disable local authentication?  Doing so could impact users' ability to log in and the system administrator's ability to reverse this change."
 msgstr "ローカル認証を無効にしてもよろしいですか? これを行うと、ユーザーのログイン機能と、システム管理者がこの変更を元に戻す機能に影響を与える可能性があります。"
 
@@ -5799,6 +5881,10 @@ msgstr "Red Hat, Inc."
 msgid "Workflow Cancelled "
 msgstr "ワークフローがキャンセルされました "
 
+#: screens/Template/shared/JobTemplate.helptext.js:29
+msgid "Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true."
+msgstr "ジョブ実行で使用するブランチ。空欄の場合はプロジェクトのデフォルトが使用されます。プロジェクトの allow_override フィールドが true に設定されている場合にのみ許可されます。"
+
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:132
 msgid "Workflow Statuses"
 msgstr "ワークフローのステータス"
@@ -5853,6 +5939,10 @@ msgstr "開始"
 msgid "Pending Workflow Approvals"
 msgstr "保留中のワークフロー承認"
 
+#: util/validators.js:161
+msgid "Please enter a valid URL"
+msgstr "有効な URL を入力してください"
+
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:129
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.js:39
 #: screens/Instances/InstancePeers/InstancePeerList.js:253
@@ -5888,7 +5978,7 @@ msgstr "最終使用日時"
 msgid "This credential is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "この認証情報は、現在他のリソースで使用されています。削除してもよろしいですか?"
 
-#: components/LaunchPrompt/steps/useSurveyStep.js:27
+#: components/LaunchPrompt/steps/useSurveyStep.js:26
 #: screens/Template/Template.js:153
 #: screens/Template/Templates.js:49
 #: screens/Template/WorkflowJobTemplate.js:138
@@ -5913,6 +6003,10 @@ msgstr "組織"
 #: components/Schedule/shared/ScheduleFormFields.js:137
 msgid "None (run once)"
 msgstr "なし (1回実行)"
+
+#: screens/Template/shared/JobTemplate.helptext.js:53
+msgid "Prevent Instance Group Fallback: If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on."
+msgstr "インスタンスグループのフォールバックの防止: 有効にすると、ジョブテンプレートは、実行対象の優先インスタンスグループのリストにインベントリーまたは組織のインスタンスグループを追加できないようにします。"
 
 #: screens/User/UserList/UserListItem.js:48
 msgid "social login"
@@ -6036,11 +6130,12 @@ msgstr "評価対象"
 msgid "Back to Dashboard."
 msgstr "ダッシュボードに戻る"
 
-#: screens/Setting/shared/SharedFields.js:348
+#: screens/Setting/shared/SharedFields.js:342
 msgid "cancel edit login redirect"
 msgstr "ログインリダイレクトの編集をキャンセルする"
 
 #: screens/Job/Job.helptext.js:20
+#: screens/Template/shared/JobTemplate.helptext.js:24
 msgid "Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 msgstr "スキップタグは、大規模な playbook があり、play またはタスクの特定の部分をスキップしたい場合に便利です。複数のタグを区切るにはカンマを使用します。タグの使用方法の詳細については、ドキュメントを参照してください。"
 
@@ -6071,6 +6166,7 @@ msgid "Delete Team"
 msgstr "チームの削除"
 
 #: screens/Job/Job.helptext.js:9
+#: screens/Template/shared/JobTemplate.helptext.js:11
 msgid "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
 msgstr "このジョブテンプレートの起動時に使用される実行環境です。解決された実行環境は、このジョブテンプレートに別の実行環境を明示的に割り当てることで上書きできます。"
 
@@ -6123,6 +6219,7 @@ msgid "Test passed"
 msgstr "テスト合格。"
 
 #: screens/Job/Job.helptext.js:18
+#: screens/Template/shared/JobTemplate.helptext.js:22
 msgid "Select the Instance Groups for this Job Template to run on."
 msgstr "このジョブテンプレートを実行するインスタンスグループを選択します。"
 
@@ -6209,6 +6306,7 @@ msgid "Expires"
 msgstr "有効期限"
 
 #: screens/Job/Job.helptext.js:12
+#: screens/Template/shared/JobTemplate.helptext.js:14
 msgid "Optional labels that describe this job template, such as 'dev' or 'test'. Labels can be used to group and filter job templates and completed jobs."
 msgstr "このジョブテンプレートを説明する任意のラベル ('dev' や 'test' など)。ラベルを使用して、ジョブテンプレートや完了したジョブをグループ化してフィルタリングできます。"
 
@@ -6259,6 +6357,10 @@ msgstr "質問の削除"
 msgid "How to use constructed inventory plugin"
 msgstr "構築されたインベントリプラグインの使用方法"
 
+#: util/validators.js:101
+msgid "This field must not contain spaces"
+msgstr "このフィールドにスペースを含めることはできません"
+
 #: screens/Inventory/InventoryList/InventoryList.js:266
 msgid "This inventory is currently being used by some templates. Are you sure you want to delete it?"
 msgstr "このインベントリは現在、一部のテンプレートで使用されています。本当に削除してもよろしいですか？"
@@ -6285,6 +6387,7 @@ msgstr "例外"
 msgid "Select a branch for the workflow."
 msgstr "ワークフローのブランチを選択します。"
 
+#: screens/Template/shared/JobTemplate.helptext.js:66
 #: screens/Template/Survey/SurveyQuestionForm.js:262
 msgid "Refer to the"
 msgstr "参照:"
@@ -6622,6 +6725,10 @@ msgstr "分"
 msgid "Inventory Sources"
 msgstr "インベントリーソース"
 
+#: screens/Template/shared/JobTemplate.helptext.js:34
+msgid "If enabled, simultaneous runs of this job template will be allowed."
+msgstr "有効にすると、このジョブテンプレートの同時実行が許可されます。"
+
 #: screens/Template/shared/WorkflowJobTemplateForm.js:273
 msgid "Enable Concurrent Jobs"
 msgstr "同時実行ジョブの有効化"
@@ -6714,7 +6821,7 @@ msgstr "権限昇格のパスワード"
 msgid "Please try another search using the filter above"
 msgstr "上記のフィルターを使用して別の検索を試してください。"
 
-#: screens/Setting/shared/SharedFields.js:357
+#: screens/Setting/shared/SharedFields.js:351
 msgid "Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled."
 msgstr "ログインリダイレクトのオーバーライド URL を編集してもよろしいですか？これを行うと、ローカルの認証情報も無効になると、ユーザーのシステムへのログイン機能に影響があります。"
 
@@ -6982,6 +7089,10 @@ msgstr "日付"
 msgid "User and Automation Analytics"
 msgstr "ユーザーおよび自動化アナリティクス"
 
+#: screens/Template/shared/JobTemplate.helptext.js:46
+msgid "Privilege escalation: If enabled, run this playbook as an administrator."
+msgstr "権限昇格: 有効にすると、この playbook を管理者として実行します。"
+
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:198
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:161
 msgid "Value to compare the artifact against. Interpreted as JSON when possible (e.g. true, 3), otherwise as a plain string."
@@ -7015,6 +7126,10 @@ msgstr "関連グループの読み込みに失敗しました。"
 msgid "Subscription Compliance"
 msgstr "サブスクリプションのコンプライアンス"
 
+#: util/validators.js:64
+msgid "This field must be a number and have a value greater than {min}"
+msgstr "このフィールドは数値で、{min} より大きい値である必要があります"
+
 #: components/LaunchButton/ReLaunchDropDown.js:43
 #: components/PromptDetail/PromptDetail.js:138
 #: screens/Metrics/Metrics.js:84
@@ -7042,6 +7157,7 @@ msgid "Workflow timed out message"
 msgstr "ワークフローのタイムアウトメッセージ"
 
 #: screens/Job/Job.helptext.js:10
+#: screens/Template/shared/JobTemplate.helptext.js:12
 msgid "Select the playbook to be executed by this job."
 msgstr "このジョブで実行する playbook を選択します。"
 
@@ -7495,6 +7611,7 @@ msgstr "GitHub Enterprise でサインイン"
 #: screens/Template/shared/WorkflowJobTemplateForm.js:137
 #: screens/Template/Survey/SurveyQuestionForm.js:30
 #: screens/User/shared/UserForm.js:195
+#: util/validators.js:202
 msgid "Select a value for this field"
 msgstr "このフィールドの値の選択"
 
@@ -7668,6 +7785,7 @@ msgid "Redirecting to subscription detail"
 msgstr "サブスクリプションの詳細へのリダイレクト"
 
 #: screens/Job/Job.helptext.js:17
+#: screens/Template/shared/JobTemplate.helptext.js:20
 msgid "The amount of time (in seconds) to run before the job is canceled. Defaults to 0 for no job timeout."
 msgstr "ジョブがキャンセルされるまでの実行時間 (秒単位)。デフォルトは 0 で、ジョブのタイムアウトはありません。"
 
@@ -7697,6 +7815,10 @@ msgstr "未更新"
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:145
 msgid "Successful"
 msgstr "成功"
+
+#: screens/Template/shared/JobTemplate.helptext.js:40
+msgid "Concurrent jobs: If enabled, simultaneous runs of this job template will be allowed."
+msgstr "同時ジョブ: 有効にすると、このジョブテンプレートの同時実行が許可されます。"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:137
 msgid "Task Started"
@@ -8588,6 +8710,10 @@ msgstr "Azure AD でサインイン"
 msgid "Relaunch all hosts"
 msgstr "すべてのホストの再起動"
 
+#: screens/Template/shared/JobTemplate.helptext.js:43
+msgid "Fact storage: If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime.."
+msgstr "ファクトストレージ: 有効にすると、収集されたファクトが保存され、ホストレベルで表示できるようになります。ファクトは永続化され、実行時にファクトキャッシュに注入されます。"
+
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:117
 msgid "Delete credential type"
 msgstr "認証情報タイプの削除"
@@ -8632,6 +8758,10 @@ msgstr "プロジェクトを同期できませんでした。"
 msgid "Total hosts"
 msgstr "ホストの合計"
 
+#: util/validators.js:198
+msgid "This field must be greater than 0"
+msgstr "このフィールドは 0 より大きくなければなりません"
+
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:152
 msgid "User Guide"
 msgstr "ユーザーガイド"
@@ -8648,6 +8778,10 @@ msgstr "認証情報が正常にコピーされました"
 msgid "The search filter did not produce any results…"
 msgstr "検索フィルターで結果が生成されませんでした…"
 
+#: util/validators.js:127
+msgid "This field must be a number"
+msgstr "このフィールドは数値でなければなりません"
+
 #: screens/Job/JobOutput/PageControls.js:82
 msgid "Scroll last"
 msgstr "最後にスクロール"
@@ -8659,6 +8793,10 @@ msgstr "関連するチームの関連付けを解除しますか?"
 #: components/Schedule/shared/FrequencyDetailSubform.js:441
 msgid "Last"
 msgstr "最終"
+
+#: screens/Template/shared/JobTemplate.helptext.js:33
+msgid "Enable webhook for this template."
+msgstr "このテンプレートの webhook を有効にします。"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:567
 msgid "On date"
@@ -8715,6 +8853,11 @@ msgstr "項目/ページ"
 #: components/JobList/JobListCancelButton.js:97
 msgid "Cancel selected jobs"
 msgstr "選択したジョブの取り消し"
+
+#: util/validators.js:111
+#: util/validators.js:195
+msgid "This field must be an integer"
+msgstr "このフィールドは整数でなければなりません"
 
 #: components/Workflow/WorkflowStartNode.js:64
 #: screens/Job/WorkflowOutput/WorkflowOutput.js:77
@@ -8783,6 +8926,7 @@ msgid "No output found for this job."
 msgstr "このジョブの出力は見つかりません"
 
 #: screens/Job/Job.helptext.js:5
+#: screens/Template/shared/JobTemplate.helptext.js:7
 msgid "For job templates, select run to execute the playbook. Select check to only check playbook syntax, test environment setup, and report problems without executing the playbook."
 msgstr "ジョブテンプレートの場合、run を選択して playbook を実行します。check を選択すると、playbook の構文チェック、環境設定のテスト、および問題の報告のみが行われ、playbook は実行されません。"
 
@@ -9200,6 +9344,10 @@ msgstr "Webhook キー"
 msgid "Select a Node Type"
 msgstr "ノードタイプの選択"
 
+#: screens/Application/shared/Application.helptext.js:4
+msgid "The Grant type the user must use to acquire tokens for this application"
+msgstr "このアプリケーションのトークンを取得するためにユーザーが使用する必要がある付与タイプ"
+
 #: screens/Job/JobOutput/HostEventModal.js:133
 msgid "Play"
 msgstr "プレイ"
@@ -9303,6 +9451,10 @@ msgstr "ユーザーの詳細"
 msgid "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 msgstr "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 
+#: screens/Template/shared/JobTemplate.helptext.js:35
+msgid "If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
+msgstr "有効にすると、ジョブテンプレートは、実行対象の優先インスタンスグループのリストにインベントリーまたは組織のインスタンスグループを追加できないようにします。注記: この設定が有効で空のリストを指定した場合、グローバルインスタンスグループが適用されます。"
+
 #: screens/Team/TeamRoles/TeamRolesList.js:205
 #: screens/User/UserRoles/UserRolesList.js:202
 msgid "Disassociate role"
@@ -9392,6 +9544,7 @@ msgid "Failed to associate peer."
 msgstr "ピアの関連付けに失敗しました。"
 
 #: screens/Job/Job.helptext.js:19
+#: screens/Template/shared/JobTemplate.helptext.js:23
 msgid "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 msgstr "タグは、大規模な playbook があり、play またはタスクの特定の部分を実行したい場合に便利です。複数のタグを区切るにはカンマを使用します。タグの使用方法の詳細については、ドキュメントを参照してください。"
 
@@ -9825,6 +9978,10 @@ msgstr "待機中"
 msgid "If you want the Inventory Source to update on launch , click on Update on Launch, and also go to "
 msgstr "インベントリーソースを起動時に更新する場合は、「起動時に更新」をクリックし、次の場所にも移動します: "
 
+#: screens/Template/shared/JobTemplate.helptext.js:32
+msgid "If enabled, run this playbook as an administrator."
+msgstr "有効にすると、この playbook を管理者として実行します。"
+
 #: components/Search/AdvancedSearch.js:179
 msgid "Set type select"
 msgstr "タイプ選択の設定"
@@ -10095,6 +10252,7 @@ msgid "Current page"
 msgstr "現在のページ"
 
 #: screens/Job/Job.helptext.js:25
+#: screens/Template/shared/JobTemplate.helptext.js:59
 msgid "The number of parallel or simultaneous processes to use while executing the playbook. An empty value, or a value less than 1 will use the Ansible default which is usually 5. The default number of forks can be overwritten with a change to"
 msgstr "playbook の実行時に使用する並列または同時プロセスの数。空の値または 1 未満の値の場合、通常は 5 である Ansible のデフォルトが使用されます。デフォルトのフォーク数は、次を変更することで上書きできます"
 
@@ -10111,6 +10269,7 @@ msgid "Start sync source"
 msgstr "同期ソースの開始"
 
 #: screens/Job/Job.helptext.js:13
+#: screens/Template/shared/JobTemplate.helptext.js:15
 msgid "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook. Provide key/value pairs using either YAML or JSON. Refer to the documentation for example syntax."
 msgstr "追加のコマンドライン変数を playbook に渡します。これは ansible-playbook の -e または --extra-vars コマンドラインパラメーターです。YAML または JSON を使用してキー/値のペアを指定します。構文の例についてはドキュメントを参照してください。"
 
@@ -10122,6 +10281,10 @@ msgstr "非表示"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.js:137
 msgid "The resource associated with this node has been deleted."
 msgstr "このノードに関連付けられているリソースは、削除されました。"
+
+#: screens/Application/shared/Application.helptext.js:5
+msgid "Set to Public or Confidential depending on how secure the client device is."
+msgstr "クライアントデバイスの安全性に応じて、Public または Confidential に設定します。"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:64
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:85
@@ -10327,6 +10490,11 @@ msgstr "フィールドを新しい値に置き換え"
 msgid "Confirm link removal"
 msgstr "リンク削除の確認"
 
+#. placeholder {0}: question.min
+#: components/LaunchPrompt/steps/useSurveyStep.js:99
+msgid "This field must be at least {0} characters"
+msgstr "このフィールドは {0} 文字以上でなければなりません"
+
 #: components/JobList/JobListItem.js:205
 #: components/PromptDetail/PromptInventorySourceDetail.js:82
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:207
@@ -10433,7 +10601,7 @@ msgstr "チェックされていない場合、外部ソースに見つからな
 msgid "Account token"
 msgstr "アカウントトークン"
 
-#: screens/Setting/shared/SharedFields.js:297
+#: screens/Setting/shared/SharedFields.js:291
 msgid "Edit Login redirect override URL"
 msgstr "ログインリダイレクトのオーバーライド URL"
 
@@ -10489,6 +10657,10 @@ msgstr "グループ合計"
 #: screens/Template/shared/WebhookSubForm.js:231
 msgid "Webhook Credential"
 msgstr "Webhook の認証情報"
+
+#: screens/Template/shared/JobTemplate.helptext.js:49
+msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ansible AWX and request a configuration update using this job template."
+msgstr "プロビジョニングコールバック: プロビジョニングコールバック URL の作成を有効にします。この URL を使用して、ホストは Ansible AWX に接続し、このジョブテンプレートを使用して設定の更新を要求できます。"
 
 #: screens/User/shared/UserTokenForm.js:27
 msgid "Please enter a value."
@@ -10546,8 +10718,12 @@ msgstr "ジョブタイプの選択"
 msgid "Cancel {0}"
 msgstr "{0} の取り消し"
 
-#: screens/Setting/shared/SharedFields.js:327
-#: screens/Setting/shared/SharedFields.js:329
+#: screens/Template/shared/JobTemplate.helptext.js:19
+msgid "Optional comma separated list of host names to include in every job slice, in addition to the hosts of the slice itself. Useful when a play targets a coordinating host, such as localhost, that all slices depend on. Names are matched exactly against inventory hosts; groups and patterns are not supported. Pinned hosts run their plays once per slice."
+msgstr "スライス自体のホストに加えて、各ジョブスライスに含めるホスト名のオプションのコンマ区切りリスト。すべてのスライスが依存する localhost などの調整ホストを play が対象とする場合に便利です。名前はインベントリーホストと完全に一致します。グループとパターンはサポートされていません。固定されたホストは、スライスごとに 1 回 play を実行します。"
+
+#: screens/Setting/shared/SharedFields.js:321
+#: screens/Setting/shared/SharedFields.js:323
 msgid "Edit login redirect override URL"
 msgstr "ログインリダイレクトのオーバーライド URL"
 
@@ -10599,7 +10775,7 @@ msgstr "ノードの編集"
 #: screens/Credential/shared/CredentialFormFields/CredentialField.js:87
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:50
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:186
-#: screens/Setting/shared/SharedFields.js:534
+#: screens/Setting/shared/SharedFields.js:521
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:165
 #: screens/Template/shared/PlaybookSelect.js:127
 msgid "Clear"
@@ -10708,6 +10884,10 @@ msgstr "エラーメッセージ"
 msgid "Instance Group"
 msgstr "インスタンスグループ"
 
+#: util/validators.js:94
+msgid "Invalid email address"
+msgstr "無効なメールアドレスです"
+
 #: components/PromptDetail/PromptJobTemplateDetail.js:97
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:61
 #: components/TemplateList/TemplateList.js:251
@@ -10742,6 +10922,7 @@ msgid "Email Options"
 msgstr "メールオプション"
 
 #: screens/Job/Job.helptext.js:27
+#: screens/Template/shared/JobTemplate.helptext.js:61
 msgid "Refer to the Ansible documentation for details about the configuration file."
 msgstr "設定ファイルの詳細については、Ansible のドキュメントを参照してください。"
 
@@ -10819,6 +11000,10 @@ msgstr "GitHub でサインイン"
 #: screens/Inventory/InventorySources/InventorySourceList.js:200
 msgid "Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway"
 msgstr "これらのインベントリソースを削除すると、それらに依存する他のリソースに影響を与える可能性があります。本当に削除してもよろしいですか？"
+
+#: util/validators.js:33
+msgid "Invalid time format"
+msgstr "無効な時間形式です"
 
 #: screens/Job/JobDetail/JobDetail.js:196
 msgid "Unknown Project"
@@ -11217,6 +11402,10 @@ msgstr "ロード中"
 msgid "Cancel Workflow"
 msgstr "ワークフローの取り消し"
 
+#: screens/Template/shared/JobTemplate.helptext.js:10
+msgid "The container image to be used for execution."
+msgstr "実行に使用するコンテナーイメージ。"
+
 #: components/JobList/JobList.js:201
 msgid "Please run a job to populate this list."
 msgstr "ジョブを実行してこのリストに入力してください。"
@@ -11372,6 +11561,10 @@ msgstr "ホストの再試行"
 msgid "Webhook Service"
 msgstr "Webhook サービス"
 
+#: screens/Template/shared/JobTemplate.helptext.js:31
+msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
+msgstr "プロビジョニングコールバック URL の作成を有効にします。この URL を使用して、ホストは {brandName} に接続し、このジョブテンプレートを使用して設定の更新を要求できます。"
+
 #: components/AdHocCommands/AdHocDetailsStep.js:194
 #: components/HostToggle/HostToggle.js:64
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:192
@@ -11383,7 +11576,7 @@ msgstr "Webhook サービス"
 #: screens/Instances/InstanceDetail/InstanceDetail.js:238
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:48
 #: screens/Setting/shared/SettingDetail.js:99
-#: screens/Setting/shared/SharedFields.js:168
+#: screens/Setting/shared/SharedFields.js:169
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:283
 #: screens/Template/shared/JobTemplateForm.js:542
 msgid "On"
@@ -11724,6 +11917,10 @@ msgstr "通知開始の切り替え"
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:288
 msgid "Inventory"
 msgstr "インベントリー"
+
+#: util/validators.js:67
+msgid "This field must be a number and have a value between {min} and {max}"
+msgstr "このフィールドは数値で、{min} から {max} までの値である必要があります"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:49
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:139

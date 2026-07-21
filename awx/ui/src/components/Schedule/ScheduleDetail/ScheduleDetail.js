@@ -98,7 +98,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
     timezone,
     verbosity,
   } = schedule;
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const pathRoot = pathname.substr(0, pathname.indexOf('schedules'));

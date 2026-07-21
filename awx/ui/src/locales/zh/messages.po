@@ -48,7 +48,7 @@ msgstr "未找到工作流批准。"
 
 #: screens/Credential/shared/CredentialFormFields/CredentialField.js:86
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:49
-#: screens/Setting/shared/SharedFields.js:533
+#: screens/Setting/shared/SharedFields.js:520
 msgid "Browse…"
 msgstr "浏览..."
 
@@ -276,6 +276,7 @@ msgid "This credential type is currently being used by some credentials and cann
 msgstr "一些凭证目前正在使用此凭证类型，无法删除"
 
 #: screens/Job/Job.helptext.js:16
+#: screens/Template/shared/JobTemplate.helptext.js:18
 msgid "Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory."
 msgstr "将此任务模板完成的工作划分为指定数量的任务切片，每个切片针对清单的一部分运行相同的任务。"
 
@@ -404,6 +405,11 @@ msgstr "项目必须在修订可用前同步。"
 msgid "Policy Type"
 msgstr "策略类型"
 
+#. placeholder {0}: question.max
+#: components/LaunchPrompt/steps/useSurveyStep.js:102
+msgid "This field must not exceed {0} characters"
+msgstr "此字段不得超过 {0} 个字符"
+
 #: components/StatusLabel/StatusLabel.js:49
 msgid "Timed out"
 msgstr "超时"
@@ -480,6 +486,10 @@ msgstr "始终"
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:28
 msgid "There was an error parsing the file. Please check the file formatting and try again."
 msgstr "解析该文件时出错。请检查文件格式然后重试。"
+
+#: util/validators.js:43
+msgid "This field must not exceed {max} characters"
+msgstr "此字段不得超过 {max} 个字符"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:128
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:134
@@ -847,6 +857,10 @@ msgstr "添加工作流模板"
 msgid "Back to Tokens"
 msgstr "返回到令牌"
 
+#: screens/Template/shared/JobTemplate.helptext.js:51
+msgid "Webhooks: Enable webhook for this template."
+msgstr "Webhook：为此模板启用 webhook。"
+
 #: screens/Setting/Settings.js:90
 msgid "LDAP 5"
 msgstr "LDAP 5"
@@ -1050,6 +1064,10 @@ msgstr "删除错误"
 msgid "View all Teams."
 msgstr "查看所有团队。"
 
+#: util/validators.js:185
+msgid "This field must be a regular expression"
+msgstr "此字段必须是正则表达式"
+
 #: screens/Job/JobDetail/JobDetail.js:616
 msgid "Artifacts"
 msgstr "工件"
@@ -1143,6 +1161,10 @@ msgstr "保存并退出"
 msgid "Select the inventory that this host will belong to."
 msgstr "选择此主机要属于的清单。"
 
+#: screens/Template/shared/JobTemplate.helptext.js:25
+msgid "Select a webhook service."
+msgstr "选择一个 webhook 服务。"
+
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:84
 msgid "Out of compliance"
 msgstr "不合规"
@@ -1163,6 +1185,10 @@ msgstr "2 月"
 #: screens/Setting/Settings.js:195
 msgid "View all settings"
 msgstr "查看所有设置"
+
+#: screens/Template/shared/JobTemplate.helptext.js:27
+msgid "Webhook services can use this as a shared secret."
+msgstr "Webhook 服务可以将此用作共享密钥。"
 
 #: screens/ManagementJob/ManagementJob.js:133
 msgid "View all management jobs"
@@ -1186,6 +1212,7 @@ msgid "timed out"
 msgstr "超时"
 
 #: screens/Job/Job.helptext.js:14
+#: screens/Template/shared/JobTemplate.helptext.js:16
 msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the playbook. Multiple patterns are allowed. Refer to Ansible documentation for more information and examples on patterns."
 msgstr "提供主机模式以进一步限制将由 playbook 管理或影响的主机列表。允许使用多个模式。有关模式的更多信息和示例，请参阅 Ansible 文档。"
 
@@ -1287,6 +1314,7 @@ msgstr "节点类型"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:70
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:127
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:450
+#: screens/Template/shared/JobTemplate.helptext.js:72
 #: screens/Template/Survey/SurveyQuestionForm.js:270
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:314
 msgid "documentation"
@@ -1375,6 +1403,10 @@ msgstr "未匹配主机"
 #: components/PromptDetail/PromptInventorySourceDetail.js:154
 msgid "Only Group By"
 msgstr "唯一分组标准"
+
+#: screens/Setting/shared/SharedFields.js:80
+msgid "More information for"
+msgstr "更多信息："
 
 #: screens/Login/Login.js:156
 msgid "There was a problem logging in. Please try again."
@@ -2010,9 +2042,9 @@ msgstr "拥有此工作流作业模板的组织。"
 msgid "Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?"
 msgstr "删除这些模板可能会影响依赖它们的一些工作流节点。您确定要删除吗？"
 
-#: screens/Setting/shared/SharedFields.js:138
-#: screens/Setting/shared/SharedFields.js:144
-#: screens/Setting/shared/SharedFields.js:343
+#: screens/Setting/shared/SharedFields.js:139
+#: screens/Setting/shared/SharedFields.js:145
+#: screens/Setting/shared/SharedFields.js:337
 msgid "Confirm"
 msgstr "确认"
 
@@ -2025,6 +2057,10 @@ msgstr "成功消息正文"
 #: screens/Dashboard/DashboardGraph.js:178
 msgid "Playbook run"
 msgstr "Playbook 运行"
+
+#: screens/Template/shared/JobTemplate.helptext.js:9
+msgid "Select the project containing the playbook you want this job to execute."
+msgstr "选择包含您希望此任务执行的 playbook 的项目。"
 
 #: components/Pagination/Pagination.js:30
 msgid "Go to first page"
@@ -2065,6 +2101,10 @@ msgstr "标志"
 #: screens/Setting/shared/RevertAllAlert.js:25
 msgid "Revert all"
 msgstr "恢复所有"
+
+#: screens/Application/shared/Application.helptext.js:6
+msgid "Allowed URIs list, space separated"
+msgstr "允许的 URI 列表，以空格分隔"
 
 #: screens/Setting/MiscSystem/MiscSystem.js:38
 msgid "View Miscellaneous System settings"
@@ -2408,7 +2448,7 @@ msgstr "管理作业启动错误"
 msgid "Search"
 msgstr "搜索"
 
-#: screens/Setting/shared/SharedFields.js:337
+#: screens/Setting/shared/SharedFields.js:331
 msgid "confirm edit login redirect"
 msgstr "确认编辑登录重定向"
 
@@ -2556,6 +2596,7 @@ msgstr "如果启用，则该清单将阻止将任何机构实例组添加到运
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:72
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:129
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:452
+#: screens/Template/shared/JobTemplate.helptext.js:74
 #: screens/Template/Survey/SurveyQuestionForm.js:272
 msgid "for more information."
 msgstr "更多信息。"
@@ -2895,6 +2936,10 @@ msgstr "输入库存"
 msgid "of"
 msgstr "的"
 
+#: util/validators.js:52
+msgid "This field must be at least {min} characters"
+msgstr "此字段必须至少包含 {min} 个字符"
+
 #: screens/ActivityStream/ActivityStreamDetailButton.js:56
 msgid "Action"
 msgstr "操作"
@@ -2936,6 +2981,11 @@ msgstr "工作流作业模板 webhook 密钥"
 #: components/Schedule/shared/FrequencyDetailSubform.js:589
 msgid "Occurrences"
 msgstr "发生次数"
+
+#. placeholder {0}: phoneNumbers.length
+#: util/validators.js:138
+msgid "{0, plural, one {Please enter a valid phone number.} other {Please enter valid phone numbers.}}"
+msgstr "{0, plural, one {请输入有效的电话号码。} other {请输入有效的电话号码。}}"
 
 #: screens/Host/Host.js:63
 #: screens/Host/HostFacts/HostFacts.js:45
@@ -3203,11 +3253,14 @@ msgid "{intervalValue, plural, one {hour} other {hours}}"
 msgstr "{intervalValue, plural, one {hour} other {hours}}"
 
 #: components/AdHocCommands/useAdHocDetailsStep.js:58
+#: components/LaunchPrompt/steps/useSurveyStep.js:111
 #: screens/Inventory/shared/ConstructedInventoryForm.js:39
 #: screens/Inventory/shared/FederatedInventoryForm.js:27
 #: screens/Template/shared/JobTemplateForm.js:176
 #: screens/User/shared/UserForm.js:123
 #: screens/User/shared/UserForm.js:134
+#: util/validators.js:5
+#: util/validators.js:76
 msgid "This field must not be blank"
 msgstr "此字段不能为空"
 
@@ -3507,6 +3560,7 @@ msgid "Local"
 msgstr "本地"
 
 #: screens/Job/Job.helptext.js:6
+#: screens/Template/shared/JobTemplate.helptext.js:8
 msgid "Select the inventory containing the hosts you want this job to manage."
 msgstr "选择包含您希望此任务管理的主机的清单。"
 
@@ -3611,9 +3665,9 @@ msgstr "此操作将从所选团队中解除该用户的所有角色。"
 #: screens/Setting/shared/RevertAllAlert.js:34
 #: screens/Setting/shared/RevertFormActionGroup.js:31
 #: screens/Setting/shared/RevertFormActionGroup.js:37
-#: screens/Setting/shared/SharedFields.js:150
-#: screens/Setting/shared/SharedFields.js:156
-#: screens/Setting/shared/SharedFields.js:353
+#: screens/Setting/shared/SharedFields.js:151
+#: screens/Setting/shared/SharedFields.js:157
+#: screens/Setting/shared/SharedFields.js:347
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:79
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:102
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:108
@@ -3680,6 +3734,10 @@ msgstr "查看所有应用程序。"
 msgid "Minimum length"
 msgstr "最小长度"
 
+#: util/validators.js:61
+msgid "This field must be a number and have a value less than {max}"
+msgstr "此字段必须是数字，且值小于 {max}"
+
 #: components/Lookup/HostFilterLookup.js:355
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:119
 msgid "Smart host filter"
@@ -3740,12 +3798,22 @@ msgstr "此表提供了构建的库存插件的\n"
 msgid "Convergence select"
 msgstr "趋同选择"
 
+#. placeholder {0}: question.min
+#. placeholder {1}: question.max
+#: components/LaunchPrompt/steps/useSurveyStep.js:107
+msgid "This field must be a number and have a value between {0} and {1}"
+msgstr "此字段必须是数字，且值介于 {0} 和 {1} 之间"
+
 #: components/CodeEditor/VariablesDetail.js:125
 #: components/CodeEditor/VariablesDetail.js:131
 #: components/CodeEditor/VariablesField.js:154
 #: components/CodeEditor/VariablesField.js:160
 msgid "Done"
 msgstr "完成"
+
+#: screens/Template/shared/JobTemplate.helptext.js:21
+msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
+msgstr "如果启用，在受支持的情况下显示 Ansible 任务所做的更改。这等同于 Ansible 的 --diff 模式。"
 
 #: components/Lookup/HostFilterLookup.js:417
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:250
@@ -4330,6 +4398,7 @@ msgid "This will cancel all subsequent nodes in this workflow"
 msgstr "这将取消此工作流中的所有后续节点"
 
 #: screens/Job/Job.helptext.js:11
+#: screens/Template/shared/JobTemplate.helptext.js:13
 msgid "Select credentials for accessing the nodes this job will be ran against. You can only select one credential of each type. For machine credentials (SSH), checking \"Prompt on launch\" without selecting credentials will require you to select a machine credential at run time. If you select credentials and check \"Prompt on launch\", the selected credential(s) become the defaults that can be updated at run time."
 msgstr "选择用于访问此任务将针对其运行的节点的凭证。每种类型只能选择一个凭证。对于计算机凭证 (SSH)，在不选择凭证的情况下勾选“启动时提示”将要求您在运行时选择计算机凭证。如果您选择凭证并勾选“启动时提示”，则所选凭证将成为可在运行时更新的默认值。"
 
@@ -4418,6 +4487,10 @@ msgstr "第 {0} 天"
 #: screens/Project/ProjectList/ProjectListItem.js:120
 msgid "Refresh project revision"
 msgstr "重新刷新项目修订版本"
+
+#: screens/Template/shared/JobTemplate.helptext.js:28
+msgid "Optionally select the credential to use to send status updates back to the webhook service."
+msgstr "（可选）选择用于将状态更新发送回 webhook 服务的凭证。"
 
 #: screens/Setting/Settings.js:112
 msgid "RADIUS"
@@ -4600,6 +4673,10 @@ msgstr "确认删除所有节点"
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:113
 msgid "Clean"
 msgstr "清理"
+
+#: screens/Template/shared/JobTemplate.helptext.js:26
+msgid "Webhook services can launch jobs with this workflow job template by making a POST request to this URL."
+msgstr "Webhook 服务可以通过向此 URL 发出 POST 请求来使用此工作流任务模板启动任务。"
 
 #: components/AdHocCommands/useAdHocCredentialPasswordStep.js:45
 #: components/LaunchPrompt/steps/useCredentialPasswordsStep.js:51
@@ -5000,6 +5077,10 @@ msgstr "使用 GitHub Teams 登录"
 msgid "Inventory copied successfully"
 msgstr "成功复制清单"
 
+#: screens/Template/shared/JobTemplate.helptext.js:36
+msgid "If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime."
+msgstr "如果启用，这将存储收集的事实，以便可以在主机级别查看它们。事实会被持久化并在运行时注入到事实缓存中。"
+
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:260
 msgid "The number of distinct users that must approve before the workflow continues. A single denial always denies the node."
 msgstr "在工作流继续之前必须批准的不同用户数。单次拒绝始终会拒绝该节点。"
@@ -5371,6 +5452,7 @@ msgid "Application information"
 msgstr "应用程序信息"
 
 #: screens/Job/Job.helptext.js:15
+#: screens/Template/shared/JobTemplate.helptext.js:17
 msgid "Control the level of output ansible will produce as the playbook executes."
 msgstr "控制 playbook 执行时 ansible 将产生的输出级别。"
 
@@ -5421,7 +5503,7 @@ msgstr "您确定要提交取消此任务的请求吗？"
 msgid "Port"
 msgstr "端口"
 
-#: screens/Setting/shared/SharedFields.js:160
+#: screens/Setting/shared/SharedFields.js:161
 msgid "Are you sure you want to disable local authentication?  Doing so could impact users' ability to log in and the system administrator's ability to reverse this change."
 msgstr "您确定要禁用本地身份验证吗？这样做可能会影响用户登录的能力，以及系统管理员撤销此更改的能力。"
 
@@ -5799,6 +5881,10 @@ msgstr "Red Hat, Inc."
 msgid "Workflow Cancelled "
 msgstr "工作流已取消 "
 
+#: screens/Template/shared/JobTemplate.helptext.js:29
+msgid "Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true."
+msgstr "任务运行中要使用的分支。如果为空，则使用项目默认值。仅当项目的 allow_override 字段设置为 true 时才允许。"
+
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:132
 msgid "Workflow Statuses"
 msgstr "工作流状态"
@@ -5853,6 +5939,10 @@ msgstr "已开始"
 msgid "Pending Workflow Approvals"
 msgstr "等待工作流批准"
 
+#: util/validators.js:161
+msgid "Please enter a valid URL"
+msgstr "请输入有效的 URL"
+
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:129
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.js:39
 #: screens/Instances/InstancePeers/InstancePeerList.js:253
@@ -5888,7 +5978,7 @@ msgstr "最后使用"
 msgid "This credential is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "其他资源目前正在使用此凭证。确定要删除它吗？"
 
-#: components/LaunchPrompt/steps/useSurveyStep.js:27
+#: components/LaunchPrompt/steps/useSurveyStep.js:26
 #: screens/Template/Template.js:153
 #: screens/Template/Templates.js:49
 #: screens/Template/WorkflowJobTemplate.js:138
@@ -5913,6 +6003,10 @@ msgstr "机构"
 #: components/Schedule/shared/ScheduleFormFields.js:137
 msgid "None (run once)"
 msgstr "无（运行一次）"
+
+#: screens/Template/shared/JobTemplate.helptext.js:53
+msgid "Prevent Instance Group Fallback: If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on."
+msgstr "阻止实例组回退：如果启用，任务模板将阻止将任何清单或组织实例组添加到要运行的首选实例组列表中。"
 
 #: screens/User/UserList/UserListItem.js:48
 msgid "social login"
@@ -6036,11 +6130,12 @@ msgstr "评估时机"
 msgid "Back to Dashboard."
 msgstr "返回到仪表盘。"
 
-#: screens/Setting/shared/SharedFields.js:348
+#: screens/Setting/shared/SharedFields.js:342
 msgid "cancel edit login redirect"
 msgstr "取消编辑登录重定向"
 
 #: screens/Job/Job.helptext.js:20
+#: screens/Template/shared/JobTemplate.helptext.js:24
 msgid "Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 msgstr "当您有一个大型 playbook 并且想要跳过 play 或任务的特定部分时，跳过标签非常有用。使用逗号分隔多个标签。有关标签用法的详细信息，请参阅文档。"
 
@@ -6071,6 +6166,7 @@ msgid "Delete Team"
 msgstr "删除团队"
 
 #: screens/Job/Job.helptext.js:9
+#: screens/Template/shared/JobTemplate.helptext.js:11
 msgid "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
 msgstr "启动此任务模板时将使用的执行环境。可以通过为此任务模板显式分配不同的执行环境来覆盖解析的执行环境。"
 
@@ -6123,6 +6219,7 @@ msgid "Test passed"
 msgstr "测试通过"
 
 #: screens/Job/Job.helptext.js:18
+#: screens/Template/shared/JobTemplate.helptext.js:22
 msgid "Select the Instance Groups for this Job Template to run on."
 msgstr "选择此任务模板要在其上运行的实例组。"
 
@@ -6209,6 +6306,7 @@ msgid "Expires"
 msgstr "过期"
 
 #: screens/Job/Job.helptext.js:12
+#: screens/Template/shared/JobTemplate.helptext.js:14
 msgid "Optional labels that describe this job template, such as 'dev' or 'test'. Labels can be used to group and filter job templates and completed jobs."
 msgstr "描述此任务模板的可选标签，例如 'dev' 或 'test'。标签可用于对任务模板和已完成的任务进行分组和过滤。"
 
@@ -6259,6 +6357,10 @@ msgstr "删除问题"
 msgid "How to use constructed inventory plugin"
 msgstr "如何使用构建的库存插件"
 
+#: util/validators.js:101
+msgid "This field must not contain spaces"
+msgstr "此字段不得包含空格"
+
 #: screens/Inventory/InventoryList/InventoryList.js:266
 msgid "This inventory is currently being used by some templates. Are you sure you want to delete it?"
 msgstr "此库存当前正被一些模板使用。您确定要删除它吗？"
@@ -6285,6 +6387,7 @@ msgstr "例外"
 msgid "Select a branch for the workflow."
 msgstr "为工作流选择一个分支。"
 
+#: screens/Template/shared/JobTemplate.helptext.js:66
 #: screens/Template/Survey/SurveyQuestionForm.js:262
 msgid "Refer to the"
 msgstr "请参阅"
@@ -6622,6 +6725,10 @@ msgstr "分钟"
 msgid "Inventory Sources"
 msgstr "清单源"
 
+#: screens/Template/shared/JobTemplate.helptext.js:34
+msgid "If enabled, simultaneous runs of this job template will be allowed."
+msgstr "如果启用，将允许同时运行此任务模板。"
+
 #: screens/Template/shared/WorkflowJobTemplateForm.js:273
 msgid "Enable Concurrent Jobs"
 msgstr "启用并发作业"
@@ -6714,7 +6821,7 @@ msgstr "权限升级密码"
 msgid "Please try another search using the filter above"
 msgstr "请使用上面的过滤器尝试另一个搜索"
 
-#: screens/Setting/shared/SharedFields.js:357
+#: screens/Setting/shared/SharedFields.js:351
 msgid "Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled."
 msgstr "您确定要编辑登录重定向覆盖 URL? 这样做可能会影响用户在同时禁用本地身份验证后登录系统的能力。"
 
@@ -6982,6 +7089,10 @@ msgstr "日期"
 msgid "User and Automation Analytics"
 msgstr "用户和 Automation Analytics"
 
+#: screens/Template/shared/JobTemplate.helptext.js:46
+msgid "Privilege escalation: If enabled, run this playbook as an administrator."
+msgstr "权限提升：如果启用，以管理员身份运行此 playbook。"
+
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:198
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:161
 msgid "Value to compare the artifact against. Interpreted as JSON when possible (e.g. true, 3), otherwise as a plain string."
@@ -7015,6 +7126,10 @@ msgstr "加载相关组失败。"
 msgid "Subscription Compliance"
 msgstr "订阅合规性"
 
+#: util/validators.js:64
+msgid "This field must be a number and have a value greater than {min}"
+msgstr "此字段必须是数字，且值大于 {min}"
+
 #: components/LaunchButton/ReLaunchDropDown.js:43
 #: components/PromptDetail/PromptDetail.js:138
 #: screens/Metrics/Metrics.js:84
@@ -7042,6 +7157,7 @@ msgid "Workflow timed out message"
 msgstr "工作流超时信息"
 
 #: screens/Job/Job.helptext.js:10
+#: screens/Template/shared/JobTemplate.helptext.js:12
 msgid "Select the playbook to be executed by this job."
 msgstr "选择此任务要执行的 playbook。"
 
@@ -7495,6 +7611,7 @@ msgstr "使用 GitHub Enterprise 登录"
 #: screens/Template/shared/WorkflowJobTemplateForm.js:137
 #: screens/Template/Survey/SurveyQuestionForm.js:30
 #: screens/User/shared/UserForm.js:195
+#: util/validators.js:202
 msgid "Select a value for this field"
 msgstr "为这个字段选择一个值"
 
@@ -7668,6 +7785,7 @@ msgid "Redirecting to subscription detail"
 msgstr "重定向到订阅详情"
 
 #: screens/Job/Job.helptext.js:17
+#: screens/Template/shared/JobTemplate.helptext.js:20
 msgid "The amount of time (in seconds) to run before the job is canceled. Defaults to 0 for no job timeout."
 msgstr "任务被取消前的运行时间（以秒为单位）。默认为 0，表示没有任务超时。"
 
@@ -7697,6 +7815,10 @@ msgstr "永不更新"
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:145
 msgid "Successful"
 msgstr "成功"
+
+#: screens/Template/shared/JobTemplate.helptext.js:40
+msgid "Concurrent jobs: If enabled, simultaneous runs of this job template will be allowed."
+msgstr "并发任务：如果启用，将允许同时运行此任务模板。"
 
 #: screens/Job/JobOutput/JobOutputSearch.js:137
 msgid "Task Started"
@@ -8588,6 +8710,10 @@ msgstr "使用 Azure AD 登陆"
 msgid "Relaunch all hosts"
 msgstr "重新启动所有主机"
 
+#: screens/Template/shared/JobTemplate.helptext.js:43
+msgid "Fact storage: If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime.."
+msgstr "事实存储：如果启用，这将存储收集的事实，以便可以在主机级别查看它们。事实会被持久化并在运行时注入到事实缓存中。"
+
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:117
 msgid "Delete credential type"
 msgstr "删除凭证类型"
@@ -8632,6 +8758,10 @@ msgstr "同步项目失败。"
 msgid "Total hosts"
 msgstr "主机总数"
 
+#: util/validators.js:198
+msgid "This field must be greater than 0"
+msgstr "此字段必须大于 0"
+
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:152
 msgid "User Guide"
 msgstr "用户指南"
@@ -8648,6 +8778,10 @@ msgstr "成功复制的凭证"
 msgid "The search filter did not produce any results…"
 msgstr "搜索过滤器没有产生任何结果…"
 
+#: util/validators.js:127
+msgid "This field must be a number"
+msgstr "此字段必须是数字"
+
 #: screens/Job/JobOutput/PageControls.js:82
 msgid "Scroll last"
 msgstr "滚动到最后"
@@ -8659,6 +8793,10 @@ msgstr "解除关联相关的团队？"
 #: components/Schedule/shared/FrequencyDetailSubform.js:441
 msgid "Last"
 msgstr "最后"
+
+#: screens/Template/shared/JobTemplate.helptext.js:33
+msgid "Enable webhook for this template."
+msgstr "为此模板启用 webhook。"
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:567
 msgid "On date"
@@ -8715,6 +8853,11 @@ msgstr "每页的项"
 #: components/JobList/JobListCancelButton.js:97
 msgid "Cancel selected jobs"
 msgstr "取消所选作业"
+
+#: util/validators.js:111
+#: util/validators.js:195
+msgid "This field must be an integer"
+msgstr "此字段必须是整数"
 
 #: components/Workflow/WorkflowStartNode.js:64
 #: screens/Job/WorkflowOutput/WorkflowOutput.js:77
@@ -8783,6 +8926,7 @@ msgid "No output found for this job."
 msgstr "没有为该作业找到输出。"
 
 #: screens/Job/Job.helptext.js:5
+#: screens/Template/shared/JobTemplate.helptext.js:7
 msgid "For job templates, select run to execute the playbook. Select check to only check playbook syntax, test environment setup, and report problems without executing the playbook."
 msgstr "对于任务模板，选择 run 以执行 playbook。选择 check 仅检查 playbook 语法、测试环境设置并报告问题，而不执行 playbook。"
 
@@ -9200,6 +9344,10 @@ msgstr "Webhook 密钥"
 msgid "Select a Node Type"
 msgstr "选择节点类型"
 
+#: screens/Application/shared/Application.helptext.js:4
+msgid "The Grant type the user must use to acquire tokens for this application"
+msgstr "用户为此应用程序获取令牌时必须使用的授权类型"
+
 #: screens/Job/JobOutput/HostEventModal.js:133
 msgid "Play"
 msgstr "播放"
@@ -9303,6 +9451,10 @@ msgstr "用户详情"
 msgid "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 msgstr "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 
+#: screens/Template/shared/JobTemplate.helptext.js:35
+msgid "If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
+msgstr "如果启用，任务模板将阻止将任何清单或组织实例组添加到要运行的首选实例组列表中。注意：如果启用此设置且您提供了空列表，则将应用全局实例组。"
+
 #: screens/Team/TeamRoles/TeamRolesList.js:205
 #: screens/User/UserRoles/UserRolesList.js:202
 msgid "Disassociate role"
@@ -9392,6 +9544,7 @@ msgid "Failed to associate peer."
 msgstr "无法关联对等点。"
 
 #: screens/Job/Job.helptext.js:19
+#: screens/Template/shared/JobTemplate.helptext.js:23
 msgid "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 msgstr "当您有一个大型 playbook 并且想要运行 play 或任务的特定部分时，标签非常有用。使用逗号分隔多个标签。有关标签用法的详细信息，请参阅文档。"
 
@@ -9825,6 +9978,10 @@ msgstr "等待"
 msgid "If you want the Inventory Source to update on launch , click on Update on Launch, and also go to "
 msgstr "如果您希望清单源在启动时更新，请点击「启动时更新」，并转到 "
 
+#: screens/Template/shared/JobTemplate.helptext.js:32
+msgid "If enabled, run this playbook as an administrator."
+msgstr "如果启用，以管理员身份运行此 playbook。"
+
 #: components/Search/AdvancedSearch.js:179
 msgid "Set type select"
 msgstr "设置类型选项"
@@ -10095,6 +10252,7 @@ msgid "Current page"
 msgstr "当前页"
 
 #: screens/Job/Job.helptext.js:25
+#: screens/Template/shared/JobTemplate.helptext.js:59
 msgid "The number of parallel or simultaneous processes to use while executing the playbook. An empty value, or a value less than 1 will use the Ansible default which is usually 5. The default number of forks can be overwritten with a change to"
 msgstr "执行 playbook 时要使用的并行或同时进程的数量。空值或小于 1 的值将使用 Ansible 默认值，通常为 5。可以通过更改以下内容来覆盖默认的 forks 数量"
 
@@ -10111,6 +10269,7 @@ msgid "Start sync source"
 msgstr "启动同步源"
 
 #: screens/Job/Job.helptext.js:13
+#: screens/Template/shared/JobTemplate.helptext.js:15
 msgid "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook. Provide key/value pairs using either YAML or JSON. Refer to the documentation for example syntax."
 msgstr "向 playbook 传递额外的命令行变量。这是 ansible-playbook 的 -e 或 --extra-vars 命令行参数。使用 YAML 或 JSON 提供键/值对。有关语法示例，请参阅文档。"
 
@@ -10122,6 +10281,10 @@ msgstr "隐藏"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.js:137
 msgid "The resource associated with this node has been deleted."
 msgstr "已删除与该节点关联的资源。"
+
+#: screens/Application/shared/Application.helptext.js:5
+msgid "Set to Public or Confidential depending on how secure the client device is."
+msgstr "根据客户端设备的安全程度设置为 Public 或 Confidential。"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:64
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:85
@@ -10327,6 +10490,11 @@ msgstr "使用新值替换项"
 msgid "Confirm link removal"
 msgstr "确认链接删除"
 
+#. placeholder {0}: question.min
+#: components/LaunchPrompt/steps/useSurveyStep.js:99
+msgid "This field must be at least {0} characters"
+msgstr "此字段必须至少包含 {0} 个字符"
+
 #: components/JobList/JobListItem.js:205
 #: components/PromptDetail/PromptInventorySourceDetail.js:82
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:207
@@ -10433,7 +10601,7 @@ msgstr "如果未选中，在外部源上未找到的本地子主机和组将保
 msgid "Account token"
 msgstr "帐户令牌"
 
-#: screens/Setting/shared/SharedFields.js:297
+#: screens/Setting/shared/SharedFields.js:291
 msgid "Edit Login redirect override URL"
 msgstr "编辑登录重定向覆写 URL"
 
@@ -10489,6 +10657,10 @@ msgstr "团体总数"
 #: screens/Template/shared/WebhookSubForm.js:231
 msgid "Webhook Credential"
 msgstr "Webhook 凭证"
+
+#: screens/Template/shared/JobTemplate.helptext.js:49
+msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ansible AWX and request a configuration update using this job template."
+msgstr "置备回调：启用创建置备回调 URL。使用该 URL，主机可以联系 Ansible AWX 并使用此任务模板请求配置更新。"
 
 #: screens/User/shared/UserTokenForm.js:27
 msgid "Please enter a value."
@@ -10546,8 +10718,12 @@ msgstr "选择作业类型"
 msgid "Cancel {0}"
 msgstr "取消 {0}"
 
-#: screens/Setting/shared/SharedFields.js:327
-#: screens/Setting/shared/SharedFields.js:329
+#: screens/Template/shared/JobTemplate.helptext.js:19
+msgid "Optional comma separated list of host names to include in every job slice, in addition to the hosts of the slice itself. Useful when a play targets a coordinating host, such as localhost, that all slices depend on. Names are matched exactly against inventory hosts; groups and patterns are not supported. Pinned hosts run their plays once per slice."
+msgstr "可选的以逗号分隔的主机名列表，除了切片本身的主机之外，还包含在每个任务切片中。当 play 以协调主机（例如 localhost）为目标且所有切片都依赖于它时非常有用。名称与清单主机完全匹配；不支持组和模式。固定主机每个切片运行一次其 play。"
+
+#: screens/Setting/shared/SharedFields.js:321
+#: screens/Setting/shared/SharedFields.js:323
 msgid "Edit login redirect override URL"
 msgstr "编辑登录重定向覆写 URL"
 
@@ -10599,7 +10775,7 @@ msgstr "编辑节点"
 #: screens/Credential/shared/CredentialFormFields/CredentialField.js:87
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:50
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:186
-#: screens/Setting/shared/SharedFields.js:534
+#: screens/Setting/shared/SharedFields.js:521
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:165
 #: screens/Template/shared/PlaybookSelect.js:127
 msgid "Clear"
@@ -10708,6 +10884,10 @@ msgstr "错误消息"
 msgid "Instance Group"
 msgstr "实例组"
 
+#: util/validators.js:94
+msgid "Invalid email address"
+msgstr "电子邮件地址无效"
+
 #: components/PromptDetail/PromptJobTemplateDetail.js:97
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:61
 #: components/TemplateList/TemplateList.js:251
@@ -10742,6 +10922,7 @@ msgid "Email Options"
 msgstr "电子邮件选项"
 
 #: screens/Job/Job.helptext.js:27
+#: screens/Template/shared/JobTemplate.helptext.js:61
 msgid "Refer to the Ansible documentation for details about the configuration file."
 msgstr "有关配置文件的详细信息，请参阅 Ansible 文档。"
 
@@ -10819,6 +11000,10 @@ msgstr "使用 GitHub 登陆"
 #: screens/Inventory/InventorySources/InventorySourceList.js:200
 msgid "Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway"
 msgstr "删除这些库存源可能会影响依赖它们的其他资源。您确定要删除吗？"
+
+#: util/validators.js:33
+msgid "Invalid time format"
+msgstr "时间格式无效"
 
 #: screens/Job/JobDetail/JobDetail.js:196
 msgid "Unknown Project"
@@ -11217,6 +11402,10 @@ msgstr "正在加载"
 msgid "Cancel Workflow"
 msgstr "取消工作流"
 
+#: screens/Template/shared/JobTemplate.helptext.js:10
+msgid "The container image to be used for execution."
+msgstr "用于执行的容器镜像。"
+
 #: components/JobList/JobList.js:201
 msgid "Please run a job to populate this list."
 msgstr "请运行一个作业来填充此列表。"
@@ -11372,6 +11561,10 @@ msgstr "主机重试"
 msgid "Webhook Service"
 msgstr "Webhook 服务"
 
+#: screens/Template/shared/JobTemplate.helptext.js:31
+msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
+msgstr "启用创建置备回调 URL。使用该 URL，主机可以联系 {brandName} 并使用此任务模板请求配置更新。"
+
 #: components/AdHocCommands/AdHocDetailsStep.js:194
 #: components/HostToggle/HostToggle.js:64
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:192
@@ -11383,7 +11576,7 @@ msgstr "Webhook 服务"
 #: screens/Instances/InstanceDetail/InstanceDetail.js:238
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:48
 #: screens/Setting/shared/SettingDetail.js:99
-#: screens/Setting/shared/SharedFields.js:168
+#: screens/Setting/shared/SharedFields.js:169
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:283
 #: screens/Template/shared/JobTemplateForm.js:542
 msgid "On"
@@ -11724,6 +11917,10 @@ msgstr "切换通知开始"
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:288
 msgid "Inventory"
 msgstr "清单"
+
+#: util/validators.js:67
+msgid "This field must be a number and have a value between {min} and {max}"
+msgstr "此字段必须是数字，且值介于 {min} 和 {max} 之间"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:49
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:139

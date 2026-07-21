@@ -65,8 +65,9 @@ const SettingGroup = ({
   onRevertCallback,
   popoverContent,
   validated,
-  t,
-}) => (
+}) => {
+  const { t } = useLingui();
+  return (
       <FormGroup
     fieldId={fieldId}
     id={`${fieldId}-field`}
@@ -98,7 +99,8 @@ const SettingGroup = ({
       </FormHelperText>
     )}
   </FormGroup>
-);
+  );
+};
 const BooleanField = ({
   ariaLabel = '',
   name,
@@ -119,7 +121,6 @@ const BooleanField = ({
       isDisabled={disabled}
       label={config.label}
       popoverContent={config.help_text}
-      t={t}
     >
       {isModalOpen && (
         <AlertModal
@@ -179,7 +180,6 @@ const BooleanField = ({
   ) : null;
 };
 const ChoiceField = ({ name, config, isRequired = false }) => {
-  const { t } = useLingui();
   const validate = isRequired ? required(null) : null;
   const [field, meta] = useField({ name, validate });
   const isValid = !meta.error || !meta.touched;
@@ -193,7 +193,6 @@ const ChoiceField = ({ name, config, isRequired = false }) => {
       label={config.label}
       popoverContent={config.help_text}
       validated={isValid ? 'default' : 'error'}
-      t={t}
     >
       <AnsibleSelect
         id={name}
@@ -210,7 +209,6 @@ const ChoiceField = ({ name, config, isRequired = false }) => {
   ) : null;
 };
 const EncryptedField = ({ name, config, isRequired = false }) => {
-  const { t } = useLingui();
   const validate = isRequired ? required(null) : null;
   const [, meta] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
@@ -224,7 +222,6 @@ const EncryptedField = ({ name, config, isRequired = false }) => {
       label={config.label}
       popoverContent={config.help_text}
       validated={isValid ? 'default' : 'error'}
-      t={t}
     >
       <InputGroup>
         <InputGroupItem isFill><PasswordInput
@@ -239,7 +236,6 @@ const EncryptedField = ({ name, config, isRequired = false }) => {
   ) : null;
 };
 const ExecutionEnvField = ({ name, config, isRequired = false }) => {
-  const { t } = useLingui();
   const [field, meta, helpers] = useField({ name });
   return config ? (
     <SettingGroup
@@ -251,7 +247,6 @@ const ExecutionEnvField = ({ name, config, isRequired = false }) => {
       popoverContent={config.help_text}
       isDisabled={field.value === null}
       onRevertCallback={() => helpers.setValue(config.default)}
-      t={t}
     >
       <ExecutionEnvironmentLookup
         value={field.value}
@@ -289,7 +284,6 @@ const InputAlertField = ({ name, config }) => {
         popoverContent={config.help_text}
         validated={isValid ? 'default' : 'error'}
         isDisabled={isDisable}
-        t={t}
       >
         <Selected>
           {isDisable && (
@@ -367,7 +361,6 @@ const InputField = ({
   type = 'text',
   isRequired = false,
 }) => {
-  const { t } = useLingui();
   const min_value = config?.min_value ?? Number.MIN_SAFE_INTEGER;
   const max_value = config?.max_value ?? Number.MAX_SAFE_INTEGER;
   const validators = [
@@ -387,7 +380,6 @@ const InputField = ({
       label={config.label}
       popoverContent={config.help_text}
       validated={isValid ? 'default' : 'error'}
-      t={t}
     >
       <TextInput
         type={type}
@@ -405,7 +397,6 @@ const InputField = ({
   ) : null;
 };
 const TextAreaField = ({ name, config, isRequired = false }) => {
-  const { t } = useLingui();
   const validate = isRequired ? required(null) : null;
   const [field, meta] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
@@ -419,7 +410,6 @@ const TextAreaField = ({ name, config, isRequired = false }) => {
       label={config.label}
       popoverContent={config.help_text}
       validated={isValid ? 'default' : 'error'}
-      t={t}
     >
       <TextArea
         id={name}
@@ -437,7 +427,6 @@ const TextAreaField = ({ name, config, isRequired = false }) => {
   ) : null;
 };
 const ObjectField = ({ name, config, revertValue, isRequired = false }) => {
-  const { t } = useLingui();
   const validate = isRequired ? required(null) : null;
   const [field, meta, helpers] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
@@ -456,7 +445,6 @@ const ObjectField = ({ name, config, revertValue, isRequired = false }) => {
         label={config.label}
         popoverContent={config.help_text}
         validated={isValid ? 'default' : 'error'}
-        t={t}
       >
         <CodeEditor
           {...field}
@@ -504,7 +492,6 @@ const FileUploadField = ({
         popoverContent={config.help_text}
         validated={isValid ? 'default' : 'error'}
         onRevertCallback={() => setFilename('')}
-        t={t}
       >
         <FileUpload
           id={name}

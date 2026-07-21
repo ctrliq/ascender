@@ -23,7 +23,7 @@ function ApplicationFormFields({
   clientTypeOptions,
 }) {
   const { t } = useLingui();
-  const applicationHelpTextStrings = getApplicationHelpTextStrings(t);
+  const applicationHelpTextStrings = getApplicationHelpTextStrings();
   const { pathname } = useLocation();
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [organizationField, organizationMeta, organizationHelpers] =

@@ -48,7 +48,7 @@ msgstr "워크플로우 승인을 찾을 수 없습니다."
 
 #: screens/Credential/shared/CredentialFormFields/CredentialField.js:86
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:49
-#: screens/Setting/shared/SharedFields.js:533
+#: screens/Setting/shared/SharedFields.js:520
 msgid "Browse…"
 msgstr "검색 중..."
 
@@ -276,6 +276,7 @@ msgid "This credential type is currently being used by some credentials and cann
 msgstr "현재 일부 인증 정보에서 이 인증 정보 유형을 사용하고 있으며 삭제할 수 없습니다."
 
 #: screens/Job/Job.helptext.js:16
+#: screens/Template/shared/JobTemplate.helptext.js:18
 msgid "Divide the work done by this job template into the specified number of job slices, each running the same tasks against a portion of the inventory."
 msgstr "이 작업 템플릿에서 수행하는 작업을 지정된 수의 작업 슬라이스로 나눕니다. 각 슬라이스는 인벤토리의 일부에 대해 동일한 작업을 실행합니다."
 
@@ -404,6 +405,11 @@ msgstr "버전을 사용할 수 있으려면 프로젝트를 동기화해야 합
 msgid "Policy Type"
 msgstr "정책 유형"
 
+#. placeholder {0}: question.max
+#: components/LaunchPrompt/steps/useSurveyStep.js:102
+msgid "This field must not exceed {0} characters"
+msgstr "이 필드는 {0}자를 초과할 수 없습니다"
+
 #: components/StatusLabel/StatusLabel.js:49
 msgid "Timed out"
 msgstr "시간 초과"
@@ -480,6 +486,10 @@ msgstr "항상"
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:28
 msgid "There was an error parsing the file. Please check the file formatting and try again."
 msgstr "파일을 구문 분석하는 동안 오류가 발생했습니다. 파일 형식을 확인하고 다시 시도하십시오."
+
+#: util/validators.js:43
+msgid "This field must not exceed {max} characters"
+msgstr "이 필드는 {max}자를 초과할 수 없습니다"
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:128
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:134
@@ -847,6 +857,10 @@ msgstr "워크플로우 템플릿 추가"
 msgid "Back to Tokens"
 msgstr "토큰으로 돌아가기"
 
+#: screens/Template/shared/JobTemplate.helptext.js:51
+msgid "Webhooks: Enable webhook for this template."
+msgstr "Webhook: 이 템플릿에 대한 webhook을 활성화합니다."
+
 #: screens/Setting/Settings.js:90
 msgid "LDAP 5"
 msgstr "LDAP 5"
@@ -1050,6 +1064,10 @@ msgstr "삭제 오류"
 msgid "View all Teams."
 msgstr "모든 팀 보기."
 
+#: util/validators.js:185
+msgid "This field must be a regular expression"
+msgstr "이 필드는 정규 표현식이어야 합니다"
+
 #: screens/Job/JobDetail/JobDetail.js:616
 msgid "Artifacts"
 msgstr "아티팩트"
@@ -1143,6 +1161,10 @@ msgstr "저장 및 종료"
 msgid "Select the inventory that this host will belong to."
 msgstr "이 호스트가 속할 인벤토리를 선택합니다."
 
+#: screens/Template/shared/JobTemplate.helptext.js:25
+msgid "Select a webhook service."
+msgstr "webhook 서비스를 선택합니다."
+
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:84
 msgid "Out of compliance"
 msgstr "규정 준수 외"
@@ -1163,6 +1185,10 @@ msgstr "2월"
 #: screens/Setting/Settings.js:195
 msgid "View all settings"
 msgstr "모든 설정 보기"
+
+#: screens/Template/shared/JobTemplate.helptext.js:27
+msgid "Webhook services can use this as a shared secret."
+msgstr "webhook 서비스는 이를 공유 시크릿으로 사용할 수 있습니다."
 
 #: screens/ManagementJob/ManagementJob.js:133
 msgid "View all management jobs"
@@ -1186,6 +1212,7 @@ msgid "timed out"
 msgstr "시간 초과"
 
 #: screens/Job/Job.helptext.js:14
+#: screens/Template/shared/JobTemplate.helptext.js:16
 msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the playbook. Multiple patterns are allowed. Refer to Ansible documentation for more information and examples on patterns."
 msgstr "playbook에 의해 관리되거나 영향을 받는 호스트 목록을 추가로 제한하는 호스트 패턴을 제공합니다. 여러 패턴이 허용됩니다. 패턴에 대한 자세한 정보와 예제는 Ansible 설명서를 참조하십시오."
 
@@ -1287,6 +1314,7 @@ msgstr "노드 유형"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:70
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:127
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:450
+#: screens/Template/shared/JobTemplate.helptext.js:72
 #: screens/Template/Survey/SurveyQuestionForm.js:270
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:314
 msgid "documentation"
@@ -1375,6 +1403,10 @@ msgstr "일치하는 호스트가 없음"
 #: components/PromptDetail/PromptInventorySourceDetail.js:154
 msgid "Only Group By"
 msgstr "그룹 별로만"
+
+#: screens/Setting/shared/SharedFields.js:80
+msgid "More information for"
+msgstr "추가 정보:"
 
 #: screens/Login/Login.js:156
 msgid "There was a problem logging in. Please try again."
@@ -2010,9 +2042,9 @@ msgstr "이 워크플로우 작업 템플릿을 소유한 조직입니다."
 msgid "Deleting these templates could impact some workflow nodes that rely on them. Are you sure you want to delete anyway?"
 msgstr "이러한 템플릿을 삭제하면 해당 템플릿에 의존하는 일부 워크플로 노드에 영향을 미칠 수 있습니다. 그래도 삭제하시겠습니까?"
 
-#: screens/Setting/shared/SharedFields.js:138
-#: screens/Setting/shared/SharedFields.js:144
-#: screens/Setting/shared/SharedFields.js:343
+#: screens/Setting/shared/SharedFields.js:139
+#: screens/Setting/shared/SharedFields.js:145
+#: screens/Setting/shared/SharedFields.js:337
 msgid "Confirm"
 msgstr "확인"
 
@@ -2025,6 +2057,10 @@ msgstr "성공 메시지 본문"
 #: screens/Dashboard/DashboardGraph.js:178
 msgid "Playbook run"
 msgstr "플레이북 실행"
+
+#: screens/Template/shared/JobTemplate.helptext.js:9
+msgid "Select the project containing the playbook you want this job to execute."
+msgstr "이 작업이 실행할 playbook이 포함된 프로젝트를 선택합니다."
 
 #: components/Pagination/Pagination.js:30
 msgid "Go to first page"
@@ -2065,6 +2101,10 @@ msgstr "레이블"
 #: screens/Setting/shared/RevertAllAlert.js:25
 msgid "Revert all"
 msgstr "모두 되돌리기"
+
+#: screens/Application/shared/Application.helptext.js:6
+msgid "Allowed URIs list, space separated"
+msgstr "허용된 URI 목록, 공백으로 구분"
 
 #: screens/Setting/MiscSystem/MiscSystem.js:38
 msgid "View Miscellaneous System settings"
@@ -2408,7 +2448,7 @@ msgstr "관리 작업 시작 오류"
 msgid "Search"
 msgstr "검색"
 
-#: screens/Setting/shared/SharedFields.js:337
+#: screens/Setting/shared/SharedFields.js:331
 msgid "confirm edit login redirect"
 msgstr "로그인 리디렉션 편집 확인"
 
@@ -2556,6 +2596,7 @@ msgstr "활성화하면 인벤토리에서 연결된 작업 템플릿을 실행�
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:72
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:129
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:452
+#: screens/Template/shared/JobTemplate.helptext.js:74
 #: screens/Template/Survey/SurveyQuestionForm.js:272
 msgid "for more information."
 msgstr "자세한 내용"
@@ -2895,6 +2936,10 @@ msgstr "재고 입력"
 msgid "of"
 msgstr "/"
 
+#: util/validators.js:52
+msgid "This field must be at least {min} characters"
+msgstr "이 필드는 최소 {min}자 이상이어야 합니다"
+
 #: screens/ActivityStream/ActivityStreamDetailButton.js:56
 msgid "Action"
 msgstr "동작"
@@ -2936,6 +2981,11 @@ msgstr "워크플로 작업 템플릿 webhook 키"
 #: components/Schedule/shared/FrequencyDetailSubform.js:589
 msgid "Occurrences"
 msgstr "발생"
+
+#. placeholder {0}: phoneNumbers.length
+#: util/validators.js:138
+msgid "{0, plural, one {Please enter a valid phone number.} other {Please enter valid phone numbers.}}"
+msgstr "{0, plural, one {유효한 전화번호를 입력하십시오.} other {유효한 전화번호를 입력하십시오.}}"
 
 #: screens/Host/Host.js:63
 #: screens/Host/HostFacts/HostFacts.js:45
@@ -3203,11 +3253,14 @@ msgid "{intervalValue, plural, one {hour} other {hours}}"
 msgstr "{intervalValue, plural, one {hour} other {hours}}"
 
 #: components/AdHocCommands/useAdHocDetailsStep.js:58
+#: components/LaunchPrompt/steps/useSurveyStep.js:111
 #: screens/Inventory/shared/ConstructedInventoryForm.js:39
 #: screens/Inventory/shared/FederatedInventoryForm.js:27
 #: screens/Template/shared/JobTemplateForm.js:176
 #: screens/User/shared/UserForm.js:123
 #: screens/User/shared/UserForm.js:134
+#: util/validators.js:5
+#: util/validators.js:76
 msgid "This field must not be blank"
 msgstr "이 필드는 비워 둘 수 없습니다."
 
@@ -3507,6 +3560,7 @@ msgid "Local"
 msgstr "지역"
 
 #: screens/Job/Job.helptext.js:6
+#: screens/Template/shared/JobTemplate.helptext.js:8
 msgid "Select the inventory containing the hosts you want this job to manage."
 msgstr "이 작업이 관리할 호스트가 포함된 인벤토리를 선택합니다."
 
@@ -3611,9 +3665,9 @@ msgstr "이 작업은 선택한 팀에서 이 사용자의 모든 역할을 제�
 #: screens/Setting/shared/RevertAllAlert.js:34
 #: screens/Setting/shared/RevertFormActionGroup.js:31
 #: screens/Setting/shared/RevertFormActionGroup.js:37
-#: screens/Setting/shared/SharedFields.js:150
-#: screens/Setting/shared/SharedFields.js:156
-#: screens/Setting/shared/SharedFields.js:353
+#: screens/Setting/shared/SharedFields.js:151
+#: screens/Setting/shared/SharedFields.js:157
+#: screens/Setting/shared/SharedFields.js:347
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.js:79
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:102
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionModal.js:108
@@ -3680,6 +3734,10 @@ msgstr "모든 애플리케이션 보기."
 msgid "Minimum length"
 msgstr "최소 길이"
 
+#: util/validators.js:61
+msgid "This field must be a number and have a value less than {max}"
+msgstr "이 필드는 숫자여야 하며 {max}보다 작은 값이어야 합니다"
+
 #: components/Lookup/HostFilterLookup.js:355
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:119
 msgid "Smart host filter"
@@ -3740,12 +3798,22 @@ msgstr "이 표는 구성된 인벤토리 플러그인의\n"
 msgid "Convergence select"
 msgstr "통합 선택"
 
+#. placeholder {0}: question.min
+#. placeholder {1}: question.max
+#: components/LaunchPrompt/steps/useSurveyStep.js:107
+msgid "This field must be a number and have a value between {0} and {1}"
+msgstr "이 필드는 숫자여야 하며 {0}과(와) {1} 사이의 값이어야 합니다"
+
 #: components/CodeEditor/VariablesDetail.js:125
 #: components/CodeEditor/VariablesDetail.js:131
 #: components/CodeEditor/VariablesField.js:154
 #: components/CodeEditor/VariablesField.js:160
 msgid "Done"
 msgstr "완료"
+
+#: screens/Template/shared/JobTemplate.helptext.js:21
+msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
+msgstr "활성화하면 지원되는 경우 Ansible 작업으로 변경된 사항을 표시합니다. 이는 Ansible의 --diff 모드와 동일합니다."
 
 #: components/Lookup/HostFilterLookup.js:417
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.js:250
@@ -4330,6 +4398,7 @@ msgid "This will cancel all subsequent nodes in this workflow"
 msgstr "이 워크플로우의 모든 후속 노드가 취소됩니다."
 
 #: screens/Job/Job.helptext.js:11
+#: screens/Template/shared/JobTemplate.helptext.js:13
 msgid "Select credentials for accessing the nodes this job will be ran against. You can only select one credential of each type. For machine credentials (SSH), checking \"Prompt on launch\" without selecting credentials will require you to select a machine credential at run time. If you select credentials and check \"Prompt on launch\", the selected credential(s) become the defaults that can be updated at run time."
 msgstr "이 작업이 실행될 노드에 액세스하기 위한 인증 정보를 선택합니다. 각 유형당 하나의 인증 정보만 선택할 수 있습니다. 머신 인증 정보(SSH)의 경우 인증 정보를 선택하지 않고 “시작 시 입력 요청”을 선택하면 런타임에 머신 인증 정보를 선택해야 합니다. 인증 정보를 선택하고 “시작 시 입력 요청”을 선택하면 선택한 인증 정보가 런타임에 업데이트할 수 있는 기본값이 됩니다."
 
@@ -4418,6 +4487,10 @@ msgstr "{0}일"
 #: screens/Project/ProjectList/ProjectListItem.js:120
 msgid "Refresh project revision"
 msgstr "프로젝트 버전 새로 고침"
+
+#: screens/Template/shared/JobTemplate.helptext.js:28
+msgid "Optionally select the credential to use to send status updates back to the webhook service."
+msgstr "선택적으로 상태 업데이트를 webhook 서비스로 다시 보내는 데 사용할 인증 정보를 선택합니다."
 
 #: screens/Setting/Settings.js:112
 msgid "RADIUS"
@@ -4600,6 +4673,10 @@ msgstr "모든 노드 제거 확인"
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:113
 msgid "Clean"
 msgstr "정리"
+
+#: screens/Template/shared/JobTemplate.helptext.js:26
+msgid "Webhook services can launch jobs with this workflow job template by making a POST request to this URL."
+msgstr "webhook 서비스는 이 URL에 POST 요청을 하여 이 워크플로 작업 템플릿으로 작업을 시작할 수 있습니다."
 
 #: components/AdHocCommands/useAdHocCredentialPasswordStep.js:45
 #: components/LaunchPrompt/steps/useCredentialPasswordsStep.js:51
@@ -5000,6 +5077,10 @@ msgstr "GitHub 팀으로 로그인"
 msgid "Inventory copied successfully"
 msgstr "인벤토리가 성공적으로 복사됨"
 
+#: screens/Template/shared/JobTemplate.helptext.js:36
+msgid "If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime."
+msgstr "활성화하면 수집된 팩트를 저장하여 호스트 수준에서 볼 수 있습니다. 팩트는 유지되며 런타임에 팩트 캐시에 삽입됩니다."
+
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:260
 msgid "The number of distinct users that must approve before the workflow continues. A single denial always denies the node."
 msgstr "워크플로우가 계속되기 전에 승인해야 하는 고유 사용자 수입니다. 단 한 번의 거부로 항상 노드가 거부됩니다."
@@ -5371,6 +5452,7 @@ msgid "Application information"
 msgstr "애플리케이션 정보"
 
 #: screens/Job/Job.helptext.js:15
+#: screens/Template/shared/JobTemplate.helptext.js:17
 msgid "Control the level of output ansible will produce as the playbook executes."
 msgstr "playbook이 실행될 때 ansible이 생성하는 출력 수준을 제어합니다."
 
@@ -5421,7 +5503,7 @@ msgstr "이 작업을 취소하기 위한 요청을 제출하시겠습니까?"
 msgid "Port"
 msgstr "포트"
 
-#: screens/Setting/shared/SharedFields.js:160
+#: screens/Setting/shared/SharedFields.js:161
 msgid "Are you sure you want to disable local authentication?  Doing so could impact users' ability to log in and the system administrator's ability to reverse this change."
 msgstr "로컬 인증을 비활성화하시겠습니까? 이렇게 하면 로그인할 수 있는 사용자와 시스템 관리자가 이러한 변경을 취소할 수 있습니다."
 
@@ -5799,6 +5881,10 @@ msgstr "Red Hat, Inc."
 msgid "Workflow Cancelled "
 msgstr "워크플로우가 취소되었습니다 "
 
+#: screens/Template/shared/JobTemplate.helptext.js:29
+msgid "Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true."
+msgstr "작업 실행에 사용할 브랜치입니다. 비어 있으면 프로젝트 기본값이 사용됩니다. 프로젝트의 allow_override 필드가 true로 설정된 경우에만 허용됩니다."
+
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:132
 msgid "Workflow Statuses"
 msgstr "워크플로우 상태"
@@ -5853,6 +5939,10 @@ msgstr "시작됨"
 msgid "Pending Workflow Approvals"
 msgstr "워크플로우 승인 보류 중"
 
+#: util/validators.js:161
+msgid "Please enter a valid URL"
+msgstr "유효한 URL을 입력하십시오"
+
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:129
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.js:39
 #: screens/Instances/InstancePeers/InstancePeerList.js:253
@@ -5888,7 +5978,7 @@ msgstr "마지막으로 사용됨"
 msgid "This credential is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "현재 다른 리소스에서 이 인증 정보를 사용하고 있습니다. 삭제하시겠습니까?"
 
-#: components/LaunchPrompt/steps/useSurveyStep.js:27
+#: components/LaunchPrompt/steps/useSurveyStep.js:26
 #: screens/Template/Template.js:153
 #: screens/Template/Templates.js:49
 #: screens/Template/WorkflowJobTemplate.js:138
@@ -5913,6 +6003,10 @@ msgstr "조직"
 #: components/Schedule/shared/ScheduleFormFields.js:137
 msgid "None (run once)"
 msgstr "없음 (한 번 실행)"
+
+#: screens/Template/shared/JobTemplate.helptext.js:53
+msgid "Prevent Instance Group Fallback: If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on."
+msgstr "인스턴스 그룹 폴백 방지: 활성화하면 작업 템플릿이 실행할 기본 설정 인스턴스 그룹 목록에 인벤토리 또는 조직 인스턴스 그룹을 추가하지 못하게 합니다."
 
 #: screens/User/UserList/UserListItem.js:48
 msgid "social login"
@@ -6036,11 +6130,12 @@ msgstr "평가 대상"
 msgid "Back to Dashboard."
 msgstr "대시보드로 돌아가기"
 
-#: screens/Setting/shared/SharedFields.js:348
+#: screens/Setting/shared/SharedFields.js:342
 msgid "cancel edit login redirect"
 msgstr "로그인 리디렉션 편집 취소"
 
 #: screens/Job/Job.helptext.js:20
+#: screens/Template/shared/JobTemplate.helptext.js:24
 msgid "Skip tags are useful when you have a large playbook, and you want to skip specific parts of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 msgstr "건너뛰기 태그는 대규모 playbook이 있고 play 또는 작업의 특정 부분을 건너뛰려는 경우에 유용합니다. 여러 태그를 구분하려면 쉼표를 사용합니다. 태그 사용에 대한 자세한 내용은 설명서를 참조하십시오."
 
@@ -6071,6 +6166,7 @@ msgid "Delete Team"
 msgstr "팀 삭제"
 
 #: screens/Job/Job.helptext.js:9
+#: screens/Template/shared/JobTemplate.helptext.js:11
 msgid "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
 msgstr "이 작업 템플릿을 시작할 때 사용할 실행 환경입니다. 확인된 실행 환경은 이 작업 템플릿에 다른 실행 환경을 명시적으로 할당하여 재정의할 수 있습니다."
 
@@ -6123,6 +6219,7 @@ msgid "Test passed"
 msgstr "통과"
 
 #: screens/Job/Job.helptext.js:18
+#: screens/Template/shared/JobTemplate.helptext.js:22
 msgid "Select the Instance Groups for this Job Template to run on."
 msgstr "이 작업 템플릿이 실행될 인스턴스 그룹을 선택합니다."
 
@@ -6209,6 +6306,7 @@ msgid "Expires"
 msgstr "만료"
 
 #: screens/Job/Job.helptext.js:12
+#: screens/Template/shared/JobTemplate.helptext.js:14
 msgid "Optional labels that describe this job template, such as 'dev' or 'test'. Labels can be used to group and filter job templates and completed jobs."
 msgstr "이 작업 템플릿을 설명하는 선택적 레이블입니다(예: 'dev' 또는 'test'). 레이블을 사용하여 작업 템플릿과 완료된 작업을 그룹화하고 필터링할 수 있습니다."
 
@@ -6259,6 +6357,10 @@ msgstr "질문 삭제"
 msgid "How to use constructed inventory plugin"
 msgstr "구성된 인벤토리 플러그인 사용 방법"
 
+#: util/validators.js:101
+msgid "This field must not contain spaces"
+msgstr "이 필드에는 공백을 포함할 수 없습니다"
+
 #: screens/Inventory/InventoryList/InventoryList.js:266
 msgid "This inventory is currently being used by some templates. Are you sure you want to delete it?"
 msgstr "이 인벤토리는 현재 일부 템플릿에서 사용되고 있습니다. 정말로 삭제하시겠습니까?"
@@ -6285,6 +6387,7 @@ msgstr "예외"
 msgid "Select a branch for the workflow."
 msgstr "워크플로우에 사용할 브랜치를 선택합니다."
 
+#: screens/Template/shared/JobTemplate.helptext.js:66
 #: screens/Template/Survey/SurveyQuestionForm.js:262
 msgid "Refer to the"
 msgstr "참조"
@@ -6622,6 +6725,10 @@ msgstr "분"
 msgid "Inventory Sources"
 msgstr "인벤토리 소스"
 
+#: screens/Template/shared/JobTemplate.helptext.js:34
+msgid "If enabled, simultaneous runs of this job template will be allowed."
+msgstr "활성화하면 이 작업 템플릿의 동시 실행이 허용됩니다."
+
 #: screens/Template/shared/WorkflowJobTemplateForm.js:273
 msgid "Enable Concurrent Jobs"
 msgstr "동시 작업 활성화"
@@ -6714,7 +6821,7 @@ msgstr "권한 에스컬레이션 암호"
 msgid "Please try another search using the filter above"
 msgstr "위의 필터를 사용하여 다른 검색을 시도하십시오."
 
-#: screens/Setting/shared/SharedFields.js:357
+#: screens/Setting/shared/SharedFields.js:351
 msgid "Are you sure you want to edit login redirect override URL?  Doing so could impact users' ability to log in to the system once local authentication is also disabled."
 msgstr "로그인 리디렉션 재정의 URL을 편집하시겠습니까? 편집하는 경우 로컬 인증이 비활성화되어 있는 동안 사용자가 시스템에 로그인하는 데 영향을 미칠 수 있습니다."
 
@@ -6982,6 +7089,10 @@ msgstr "날짜"
 msgid "User and Automation Analytics"
 msgstr "사용자 및 자동화 분석"
 
+#: screens/Template/shared/JobTemplate.helptext.js:46
+msgid "Privilege escalation: If enabled, run this playbook as an administrator."
+msgstr "권한 상승: 활성화하면 이 playbook을 관리자로 실행합니다."
+
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:198
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:161
 msgid "Value to compare the artifact against. Interpreted as JSON when possible (e.g. true, 3), otherwise as a plain string."
@@ -7015,6 +7126,10 @@ msgstr "관련 그룹을 로드하지 못했습니다."
 msgid "Subscription Compliance"
 msgstr "구독 규정 준수"
 
+#: util/validators.js:64
+msgid "This field must be a number and have a value greater than {min}"
+msgstr "이 필드는 숫자여야 하며 {min}보다 큰 값이어야 합니다"
+
 #: components/LaunchButton/ReLaunchDropDown.js:43
 #: components/PromptDetail/PromptDetail.js:138
 #: screens/Metrics/Metrics.js:84
@@ -7042,6 +7157,7 @@ msgid "Workflow timed out message"
 msgstr "워크플로우 시간 초과 메시지"
 
 #: screens/Job/Job.helptext.js:10
+#: screens/Template/shared/JobTemplate.helptext.js:12
 msgid "Select the playbook to be executed by this job."
 msgstr "이 작업에서 실행할 playbook을 선택합니다."
 
@@ -7495,6 +7611,7 @@ msgstr "GitHub Enterprise로 로그인"
 #: screens/Template/shared/WorkflowJobTemplateForm.js:137
 #: screens/Template/Survey/SurveyQuestionForm.js:30
 #: screens/User/shared/UserForm.js:195
+#: util/validators.js:202
 msgid "Select a value for this field"
 msgstr "이 필드의 값을 선택"
 
@@ -7668,6 +7785,7 @@ msgid "Redirecting to subscription detail"
 msgstr "서브스크립션 세부 정보로 리디렉션"
 
 #: screens/Job/Job.helptext.js:17
+#: screens/Template/shared/JobTemplate.helptext.js:20
 msgid "The amount of time (in seconds) to run before the job is canceled. Defaults to 0 for no job timeout."
 msgstr "작업이 취소되기 전에 실행되는 시간(초)입니다. 작업 시간 초과가 없도록 기본값은 0입니다."
 
@@ -7697,6 +7815,10 @@ msgstr "업데이트되지 않음"
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:145
 msgid "Successful"
 msgstr "성공"
+
+#: screens/Template/shared/JobTemplate.helptext.js:40
+msgid "Concurrent jobs: If enabled, simultaneous runs of this job template will be allowed."
+msgstr "동시 작업: 활성화하면 이 작업 템플릿의 동시 실행이 허용됩니다."
 
 #: screens/Job/JobOutput/JobOutputSearch.js:137
 msgid "Task Started"
@@ -8588,6 +8710,10 @@ msgstr "Azure AD로 로그인"
 msgid "Relaunch all hosts"
 msgstr "모든 호스트 다시 시작"
 
+#: screens/Template/shared/JobTemplate.helptext.js:43
+msgid "Fact storage: If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime.."
+msgstr "팩트 스토리지: 활성화하면 수집된 팩트를 저장하여 호스트 수준에서 볼 수 있습니다. 팩트는 유지되며 런타임에 팩트 캐시에 삽입됩니다."
+
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.js:117
 msgid "Delete credential type"
 msgstr "인증 정보 유형 삭제"
@@ -8632,6 +8758,10 @@ msgstr "프로젝트를 동기화하지 못했습니다."
 msgid "Total hosts"
 msgstr "총 호스트"
 
+#: util/validators.js:198
+msgid "This field must be greater than 0"
+msgstr "이 필드는 0보다 커야 합니다"
+
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:152
 msgid "User Guide"
 msgstr "사용자 가이드"
@@ -8648,6 +8778,10 @@ msgstr "인증 정보가 성공적으로 복사됨"
 msgid "The search filter did not produce any results…"
 msgstr "검색 필터에서 결과를 생성하지 않았습니다."
 
+#: util/validators.js:127
+msgid "This field must be a number"
+msgstr "이 필드는 숫자여야 합니다"
+
 #: screens/Job/JobOutput/PageControls.js:82
 msgid "Scroll last"
 msgstr "마지막 스크롤"
@@ -8659,6 +8793,10 @@ msgstr "관련 팀을 분리하시겠습니까?"
 #: components/Schedule/shared/FrequencyDetailSubform.js:441
 msgid "Last"
 msgstr "마지막"
+
+#: screens/Template/shared/JobTemplate.helptext.js:33
+msgid "Enable webhook for this template."
+msgstr "이 템플릿에 대한 webhook을 활성화합니다."
 
 #: components/Schedule/shared/FrequencyDetailSubform.js:567
 msgid "On date"
@@ -8715,6 +8853,11 @@ msgstr "페이지당 항목"
 #: components/JobList/JobListCancelButton.js:97
 msgid "Cancel selected jobs"
 msgstr "선택한 작업 취소"
+
+#: util/validators.js:111
+#: util/validators.js:195
+msgid "This field must be an integer"
+msgstr "이 필드는 정수여야 합니다"
 
 #: components/Workflow/WorkflowStartNode.js:64
 #: screens/Job/WorkflowOutput/WorkflowOutput.js:77
@@ -8783,6 +8926,7 @@ msgid "No output found for this job."
 msgstr "이 작업에 대한 출력을 찾을 수 없습니다."
 
 #: screens/Job/Job.helptext.js:5
+#: screens/Template/shared/JobTemplate.helptext.js:7
 msgid "For job templates, select run to execute the playbook. Select check to only check playbook syntax, test environment setup, and report problems without executing the playbook."
 msgstr "작업 템플릿의 경우 run을 선택하여 playbook을 실행합니다. check를 선택하면 playbook을 실행하지 않고 playbook 구문 확인, 환경 설정 테스트 및 문제 보고만 수행합니다."
 
@@ -9200,6 +9344,10 @@ msgstr "Webhook 키"
 msgid "Select a Node Type"
 msgstr "노드 유형 선택"
 
+#: screens/Application/shared/Application.helptext.js:4
+msgid "The Grant type the user must use to acquire tokens for this application"
+msgstr "사용자가 이 애플리케이션의 토큰을 획득하기 위해 사용해야 하는 권한 부여 유형"
+
 #: screens/Job/JobOutput/HostEventModal.js:133
 msgid "Play"
 msgstr "플레이"
@@ -9303,6 +9451,10 @@ msgstr "사용자 세부 정보"
 msgid "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 msgstr "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 
+#: screens/Template/shared/JobTemplate.helptext.js:35
+msgid "If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
+msgstr "활성화하면 작업 템플릿이 실행할 기본 설정 인스턴스 그룹 목록에 인벤토리 또는 조직 인스턴스 그룹을 추가하지 못하게 합니다. 참고: 이 설정이 활성화되어 있고 빈 목록을 제공한 경우 전역 인스턴스 그룹이 적용됩니다."
+
 #: screens/Team/TeamRoles/TeamRolesList.js:205
 #: screens/User/UserRoles/UserRolesList.js:202
 msgid "Disassociate role"
@@ -9392,6 +9544,7 @@ msgid "Failed to associate peer."
 msgstr "동료를 연결하지 못했습니다."
 
 #: screens/Job/Job.helptext.js:19
+#: screens/Template/shared/JobTemplate.helptext.js:23
 msgid "Tags are useful when you have a large playbook, and you want to run a specific part of a play or task. Use commas to separate multiple tags. Refer to the documentation for details on the usage of tags."
 msgstr "태그는 대규모 playbook이 있고 play 또는 작업의 특정 부분을 실행하려는 경우에 유용합니다. 여러 태그를 구분하려면 쉼표를 사용합니다. 태그 사용에 대한 자세한 내용은 설명서를 참조하십시오."
 
@@ -9825,6 +9978,10 @@ msgstr "대기 중"
 msgid "If you want the Inventory Source to update on launch , click on Update on Launch, and also go to "
 msgstr "인벤토리 소스를 시작 시 업데이트하려면 시작 시 업데이트를 클릭하고 다음 위치로도 이동하십시오: "
 
+#: screens/Template/shared/JobTemplate.helptext.js:32
+msgid "If enabled, run this playbook as an administrator."
+msgstr "활성화하면 이 playbook을 관리자로 실행합니다."
+
 #: components/Search/AdvancedSearch.js:179
 msgid "Set type select"
 msgstr "설정 유형 선택"
@@ -10095,6 +10252,7 @@ msgid "Current page"
 msgstr "현재 페이지"
 
 #: screens/Job/Job.helptext.js:25
+#: screens/Template/shared/JobTemplate.helptext.js:59
 msgid "The number of parallel or simultaneous processes to use while executing the playbook. An empty value, or a value less than 1 will use the Ansible default which is usually 5. The default number of forks can be overwritten with a change to"
 msgstr "playbook을 실행하는 동안 사용할 병렬 또는 동시 프로세스 수입니다. 빈 값 또는 1보다 작은 값은 일반적으로 5인 Ansible 기본값을 사용합니다. 기본 포크 수는 다음을 변경하여 재정의할 수 있습니다"
 
@@ -10111,6 +10269,7 @@ msgid "Start sync source"
 msgstr "동기화 소스 시작"
 
 #: screens/Job/Job.helptext.js:13
+#: screens/Template/shared/JobTemplate.helptext.js:15
 msgid "Pass extra command line variables to the playbook. This is the -e or --extra-vars command line parameter for ansible-playbook. Provide key/value pairs using either YAML or JSON. Refer to the documentation for example syntax."
 msgstr "추가 명령줄 변수를 playbook에 전달합니다. 이것은 ansible-playbook의 -e 또는 --extra-vars 명령줄 매개변수입니다. YAML 또는 JSON을 사용하여 키/값 쌍을 제공합니다. 구문 예제는 설명서를 참조하십시오."
 
@@ -10122,6 +10281,10 @@ msgstr "숨기기"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.js:137
 msgid "The resource associated with this node has been deleted."
 msgstr "이 노드와 연결된 리소스가 삭제되었습니다."
+
+#: screens/Application/shared/Application.helptext.js:5
+msgid "Set to Public or Confidential depending on how secure the client device is."
+msgstr "클라이언트 장치의 보안 수준에 따라 Public 또는 Confidential로 설정합니다."
 
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:64
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:85
@@ -10327,6 +10490,11 @@ msgstr "필드를 새 값으로 교체"
 msgid "Confirm link removal"
 msgstr "링크 삭제 확인"
 
+#. placeholder {0}: question.min
+#: components/LaunchPrompt/steps/useSurveyStep.js:99
+msgid "This field must be at least {0} characters"
+msgstr "이 필드는 최소 {0}자 이상이어야 합니다"
+
 #: components/JobList/JobListItem.js:205
 #: components/PromptDetail/PromptInventorySourceDetail.js:82
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:207
@@ -10433,7 +10601,7 @@ msgstr "선택하지 않으면 외부 소스에서 찾을 수 없는 로컬 하�
 msgid "Account token"
 msgstr "계정 토큰"
 
-#: screens/Setting/shared/SharedFields.js:297
+#: screens/Setting/shared/SharedFields.js:291
 msgid "Edit Login redirect override URL"
 msgstr "로그인 리디렉션 덮어쓰기 URL 편집"
 
@@ -10489,6 +10657,10 @@ msgstr "총 그룹"
 #: screens/Template/shared/WebhookSubForm.js:231
 msgid "Webhook Credential"
 msgstr "Webhook 인증 정보"
+
+#: screens/Template/shared/JobTemplate.helptext.js:49
+msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ansible AWX and request a configuration update using this job template."
+msgstr "프로비저닝 콜백: 프로비저닝 콜백 URL 생성을 활성화합니다. 이 URL을 사용하여 호스트는 Ansible AWX에 연결하고 이 작업 템플릿을 사용하여 구성 업데이트를 요청할 수 있습니다."
 
 #: screens/User/shared/UserTokenForm.js:27
 msgid "Please enter a value."
@@ -10546,8 +10718,12 @@ msgstr "작업 유형 선택"
 msgid "Cancel {0}"
 msgstr "취소 {0}"
 
-#: screens/Setting/shared/SharedFields.js:327
-#: screens/Setting/shared/SharedFields.js:329
+#: screens/Template/shared/JobTemplate.helptext.js:19
+msgid "Optional comma separated list of host names to include in every job slice, in addition to the hosts of the slice itself. Useful when a play targets a coordinating host, such as localhost, that all slices depend on. Names are matched exactly against inventory hosts; groups and patterns are not supported. Pinned hosts run their plays once per slice."
+msgstr "슬라이스 자체의 호스트 외에도 각 작업 슬라이스에 포함할 호스트 이름의 선택적 쉼표로 구분된 목록입니다. play가 모든 슬라이스가 의존하는 localhost와 같은 조정 호스트를 대상으로 할 때 유용합니다. 이름은 인벤토리 호스트와 정확히 일치합니다. 그룹과 패턴은 지원되지 않습니다. 고정된 호스트는 슬라이스당 한 번씩 play를 실행합니다."
+
+#: screens/Setting/shared/SharedFields.js:321
+#: screens/Setting/shared/SharedFields.js:323
 msgid "Edit login redirect override URL"
 msgstr "로그인 리디렉션 덮어쓰기 URL 편집"
 
@@ -10599,7 +10775,7 @@ msgstr "노드 편집"
 #: screens/Credential/shared/CredentialFormFields/CredentialField.js:87
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.js:50
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:186
-#: screens/Setting/shared/SharedFields.js:534
+#: screens/Setting/shared/SharedFields.js:521
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:165
 #: screens/Template/shared/PlaybookSelect.js:127
 msgid "Clear"
@@ -10708,6 +10884,10 @@ msgstr "오류 메시지"
 msgid "Instance Group"
 msgstr "인스턴스 그룹"
 
+#: util/validators.js:94
+msgid "Invalid email address"
+msgstr "유효하지 않은 이메일 주소입니다"
+
 #: components/PromptDetail/PromptJobTemplateDetail.js:97
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:61
 #: components/TemplateList/TemplateList.js:251
@@ -10742,6 +10922,7 @@ msgid "Email Options"
 msgstr "이메일 옵션"
 
 #: screens/Job/Job.helptext.js:27
+#: screens/Template/shared/JobTemplate.helptext.js:61
 msgid "Refer to the Ansible documentation for details about the configuration file."
 msgstr "구성 파일에 대한 자세한 내용은 Ansible 설명서를 참조하십시오."
 
@@ -10819,6 +11000,10 @@ msgstr "GitHub로 로그인"
 #: screens/Inventory/InventorySources/InventorySourceList.js:200
 msgid "Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway"
 msgstr "이러한 인벤토리 소스를 삭제하면 인벤토리에 의존하는 다른 리소스에 영향을 미칠 수 있습니다. 그래도 삭제하시겠습니까?"
+
+#: util/validators.js:33
+msgid "Invalid time format"
+msgstr "유효하지 않은 시간 형식입니다"
 
 #: screens/Job/JobDetail/JobDetail.js:196
 msgid "Unknown Project"
@@ -11217,6 +11402,10 @@ msgstr "로딩 중"
 msgid "Cancel Workflow"
 msgstr "워크플로우 취소"
 
+#: screens/Template/shared/JobTemplate.helptext.js:10
+msgid "The container image to be used for execution."
+msgstr "실행에 사용할 컨테이너 이미지입니다."
+
 #: components/JobList/JobList.js:201
 msgid "Please run a job to populate this list."
 msgstr "이 목록을 채우려면 작업을 실행하십시오."
@@ -11372,6 +11561,10 @@ msgstr "호스트 재시도"
 msgid "Webhook Service"
 msgstr "Webhook 서비스"
 
+#: screens/Template/shared/JobTemplate.helptext.js:31
+msgid "Enables creation of a provisioning callback URL. Using the URL a host can contact {brandName} and request a configuration update using this job template."
+msgstr "프로비저닝 콜백 URL 생성을 활성화합니다. 이 URL을 사용하여 호스트는 {brandName}에 연결하고 이 작업 템플릿을 사용하여 구성 업데이트를 요청할 수 있습니다."
+
 #: components/AdHocCommands/AdHocDetailsStep.js:194
 #: components/HostToggle/HostToggle.js:64
 #: components/LaunchPrompt/steps/OtherPromptsStep.js:192
@@ -11383,7 +11576,7 @@ msgstr "Webhook 서비스"
 #: screens/Instances/InstanceDetail/InstanceDetail.js:238
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:48
 #: screens/Setting/shared/SettingDetail.js:99
-#: screens/Setting/shared/SharedFields.js:168
+#: screens/Setting/shared/SharedFields.js:169
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:283
 #: screens/Template/shared/JobTemplateForm.js:542
 msgid "On"
@@ -11724,6 +11917,10 @@ msgstr "알림 시작 전환"
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:288
 msgid "Inventory"
 msgstr "인벤토리"
+
+#: util/validators.js:67
+msgid "This field must be a number and have a value between {min} and {max}"
+msgstr "이 필드는 숫자여야 하며 {min}과(와) {max} 사이의 값이어야 합니다"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:49
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:139

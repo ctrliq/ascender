@@ -33,7 +33,7 @@ export default function ScheduleFormFields({
   zoneLinks,
 }) {
   const { t } = useLingui();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const [timezone, timezoneMeta] = useField({
     name: 'timezone',
     validate: required(t`Select a value for this field`),

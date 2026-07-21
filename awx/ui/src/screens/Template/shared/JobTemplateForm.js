@@ -81,7 +81,7 @@ function JobTemplateForm({
   isOverrideDisabledLookup = false, // TODO: this is a confusing variable name
 }) {
   const { t } = useLingui();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const [contentError, setContentError] = useState(false);
   const [allowCallbacks, setAllowCallbacks] = useState(
     Boolean(template?.host_config_key)
