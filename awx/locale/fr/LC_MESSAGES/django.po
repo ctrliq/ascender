@@ -88,11 +88,11 @@ msgstr "URL vers laquelle les utilisateurs non autorisés sont redirigés pour s
 
 #: awx/api/conf.py:103
 msgid "Allow anonymous users to poll metrics"
-msgstr ""
+msgstr "Autoriser les utilisateurs anonymes à interroger les métriques"
 
 #: awx/api/conf.py:104
 msgid "If true, anonymous users are allowed to poll metrics."
-msgstr ""
+msgstr "Si vrai, les utilisateurs anonymes sont autorisés à interroger les métriques."
 
 #: awx/api/conf.py:112
 msgid "There are no remote authentication systems configured."
@@ -245,23 +245,23 @@ msgstr "Mot de passe requis pour le nouvel utilisateur."
 
 #: awx/api/serializers.py:1009
 msgid "Password max length is {}"
-msgstr ""
+msgstr "La longueur maximale du mot de passe est {}"
 
 #: awx/api/serializers.py:1011
 msgid "Password must be at least {} characters long."
-msgstr ""
+msgstr "Le mot de passe doit comporter au moins {} caractères."
 
 #: awx/api/serializers.py:1013
 msgid "Password must contain at least {} digits."
-msgstr ""
+msgstr "Le mot de passe doit contenir au moins {} chiffres."
 
 #: awx/api/serializers.py:1016
 msgid "Password must contain at least {} uppercase characters."
-msgstr ""
+msgstr "Le mot de passe doit contenir au moins {} caractères majuscules."
 
 #: awx/api/serializers.py:1020
 msgid "Password must contain at least {} special characters."
-msgstr ""
+msgstr "Le mot de passe doit contenir au moins {} caractères spéciaux."
 
 #: awx/api/serializers.py:1096
 #, python-format
@@ -353,19 +353,19 @@ msgstr "Les inventaires smart doivent spécifier le host_filter"
 
 #: awx/api/serializers.py:1793
 msgid "The source_vars for the related auto-created inventory source, special to constructed inventory."
-msgstr ""
+msgstr "Les source_vars de la source d'inventaire créée automatiquement associée, spécifiques à l'inventaire construit."
 
 #: awx/api/serializers.py:1800
 msgid "The cache timeout for the related auto-created inventory source, special to constructed inventory"
-msgstr ""
+msgstr "Le délai d'expiration du cache pour la source d'inventaire créée automatiquement associée, spécifique à l'inventaire construit"
 
 #: awx/api/serializers.py:1806
 msgid "The limit to restrict the returned hosts for the related auto-created inventory source, special to constructed inventory."
-msgstr ""
+msgstr "La limite pour restreindre les hôtes renvoyés pour la source d'inventaire créée automatiquement associée, spécifique à l'inventaire construit."
 
 #: awx/api/serializers.py:1814
 msgid "The verbosity level for the related auto-created inventory source, special to constructed inventory"
-msgstr ""
+msgstr "Le niveau de verbosité pour la source d'inventaire créée automatiquement associée, spécifique à l'inventaire construit"
 
 #: awx/api/serializers.py:1963
 #, python-format
@@ -398,11 +398,11 @@ msgstr "Impossible de créer de Groupe pour l’ Inventaire Smart"
 
 #: awx/api/serializers.py:2097
 msgid "Primary Key ID of inventory to add hosts to."
-msgstr ""
+msgstr "ID de clé primaire de l'inventaire auquel ajouter des hôtes."
 
 #: awx/api/serializers.py:2104
 msgid "List of hosts to be created, JSON. e.g. [{\"name\": \"example.com\"}, {\"name\": \"127.0.0.1\"}]"
-msgstr ""
+msgstr "Liste des hôtes à créer, JSON. p. ex. [{\"name\": \"example.com\"}, {\"name\": \"127.0.0.1\"}]"
 
 #: awx/api/serializers.py:2124 awx/main/access.py:405 awx/main/access.py:416
 #, python-format
@@ -421,21 +421,21 @@ msgstr "Le nombre de licences d'instances %s a été dépassé."
 
 #: awx/api/serializers.py:2148
 msgid "Hosts can only be created in manual inventories (not smart or constructed types)."
-msgstr ""
+msgstr "Les hôtes ne peuvent être créés que dans des inventaires manuels (pas de types intelligent ou construit)."
 
 #: awx/api/serializers.py:2150
 msgid "Number of hosts exceeds system setting BULK_HOST_MAX_CREATE"
-msgstr ""
+msgstr "Le nombre d'hôtes dépasse le paramètre système BULK_HOST_MAX_CREATE"
 
 #: awx/api/serializers.py:2153
 #, python-brace-format
 msgid "Inventory with id {inv.id} not found or lack permissions to add hosts."
-msgstr ""
+msgstr "Inventaire avec l'id {inv.id} introuvable ou permissions insuffisantes pour ajouter des hôtes."
 
 #: awx/api/serializers.py:2158
 #, python-brace-format
 msgid "Hostnames must be unique in an inventory. Duplicates found: {duplicate_new_names}"
-msgstr ""
+msgstr "Les noms d'hôte doivent être uniques dans un inventaire. Doublons trouvés : {duplicate_new_names}"
 
 #: awx/api/serializers.py:2177
 #, fuzzy, python-brace-format
@@ -445,12 +445,12 @@ msgstr "Impossible de créer un Hôte pour l' Inventaire Smart"
 
 #: awx/api/serializers.py:2212
 msgid "List of hosts ids to be deleted, e.g. [105, 130, 131, 200]"
-msgstr ""
+msgstr "Liste des ids d'hôtes à supprimer, p. ex. [105, 130, 131, 200]"
 
 #: awx/api/serializers.py:2284
 #, python-brace-format
 msgid "cannot delete hosts, host deletion error {e}"
-msgstr ""
+msgstr "impossible de supprimer les hôtes, erreur de suppression d'hôte {e}"
 
 #: awx/api/serializers.py:2347
 msgid "Cloud credential to use for inventory updates."
@@ -472,7 +472,7 @@ msgstr "Impossible de créer une Source d'inventaire pour l' Inventaire Smart"
 
 #: awx/api/serializers.py:2521
 msgid "Cannot change field '{}' on a constructed inventory source."
-msgstr ""
+msgstr "Impossible de modifier le champ '{}' sur une source d'inventaire construit."
 
 #: awx/api/serializers.py:2524
 msgid "Project required for scm type sources."
@@ -533,7 +533,7 @@ msgstr "Vous ne pouvez pas modifier le type d'identifiants, car cela peut compro
 
 #: awx/api/serializers.py:3020
 msgid "Vault IDs cannot be changed once they have been created."
-msgstr ""
+msgstr "Les ID Vault ne peuvent pas être modifiés une fois créés."
 
 #: awx/api/serializers.py:3032
 msgid "Write-only field used to add user to owner role. If provided, do not give either team or organization. Only valid for creation."
@@ -670,11 +670,11 @@ msgstr "L'inventaire associé à ce flux de travail est en cours de suppression.
 
 #: awx/api/serializers.py:4786
 msgid "Primary key of the template for this job, can be a job template or inventory source."
-msgstr ""
+msgstr "Clé primaire du modèle pour ce travail ; peut être un modèle de travail ou une source d'inventaire."
 
 #: awx/api/serializers.py:4815
 msgid "List of jobs to be launched, JSON. e.g. [{\"unified_job_template\": 7}, {\"unified_job_template\": 10}]"
-msgstr ""
+msgstr "Liste des travaux à lancer, JSON. p. ex. [{\"unified_job_template\": 7}, {\"unified_job_template\": 10}]"
 
 #: awx/api/serializers.py:4825
 #, fuzzy
@@ -684,26 +684,26 @@ msgstr "Hériter des permissions à partir des rôles d'organisation. Si vous le
 
 #: awx/api/serializers.py:4842
 msgid "Number of requested jobs exceeds system setting BULK_JOB_MAX_LAUNCH"
-msgstr ""
+msgstr "Le nombre de travaux demandés dépasse le paramètre système BULK_JOB_MAX_LAUNCH"
 
 #: awx/api/serializers.py:4847
 msgid "Identifier {node['identifier']} not unique"
-msgstr ""
+msgstr "L'identifiant {node['identifier']} n'est pas unique"
 
 #: awx/api/serializers.py:4883
 #, python-brace-format
 msgid "Template types {type_names} not allowed in bulk jobs"
-msgstr ""
+msgstr "Les types de modèle {type_names} ne sont pas autorisés dans les travaux en masse"
 
 #: awx/api/serializers.py:4922
 #, python-brace-format
 msgid "{model_name} {not_allowed} not found or you don't have permissions to access it"
-msgstr ""
+msgstr "{model_name} {not_allowed} introuvable ou vous n'avez pas les permissions pour y accéder"
 
 #: awx/api/serializers.py:5027
 #, python-brace-format
 msgid "Organization {requested_org.id} not found or you don't have permissions to access it"
-msgstr ""
+msgstr "Organisation {requested_org.id} introuvable ou vous n'avez pas les permissions pour y accéder"
 
 #: awx/api/serializers.py:5093
 msgid "Message type '{}' invalid, must be either 'message' or 'body'"
@@ -799,11 +799,11 @@ msgstr "RRULE obligatoire dans rrule."
 
 #: awx/api/serializers.py:5356
 msgid "EXDATE not allowed in rrule."
-msgstr ""
+msgstr "EXDATE n'est pas autorisé dans rrule."
 
 #: awx/api/serializers.py:5358
 msgid "RDATE not allowed in rrule."
-msgstr ""
+msgstr "RDATE n'est pas autorisé dans rrule."
 
 #: awx/api/serializers.py:5361
 #, fuzzy
@@ -839,11 +839,11 @@ msgstr "L'analyse rrule n'a pas pu être validée : {}"
 
 #: awx/api/serializers.py:5393
 msgid "The timezone this schedule runs in. This field is extracted from the RRULE. If the timezone in the RRULE is a link to another timezone, the link will be reflected in this field."
-msgstr ""
+msgstr "Le fuseau horaire dans lequel cette planification s'exécute. Ce champ est extrait de la RRULE. Si le fuseau horaire dans la RRULE est un lien vers un autre fuseau horaire, le lien sera reflété dans ce champ."
 
 #: awx/api/serializers.py:5397
 msgid "The date this schedule will end. This field is computed from the RRULE. If the schedule does not end an empty string will be returned"
-msgstr ""
+msgstr "La date à laquelle cette planification prendra fin. Ce champ est calculé à partir de la RRULE. Si la planification ne se termine pas, une chaîne vide sera renvoyée"
 
 #: awx/api/serializers.py:5451
 msgid "Inventory Source must be a cloud resource."
@@ -863,19 +863,19 @@ msgstr "Le nombre de jobs qui ciblent cette instance."
 
 #: awx/api/serializers.py:5526
 msgid "Primary keys of receptor addresses to peer to."
-msgstr ""
+msgstr "Clés primaires des adresses de récepteur avec lesquelles appairer."
 
 #: awx/api/serializers.py:5681
 msgid "Can only create instances on Kubernetes or OpenShift."
-msgstr ""
+msgstr "Les instances ne peuvent être créées que sur Kubernetes ou OpenShift."
 
 #: awx/api/serializers.py:5687
 msgid "Cannot enable peers_from_control_nodes if listener_port is not set."
-msgstr ""
+msgstr "Impossible d'activer peers_from_control_nodes si listener_port n'est pas défini."
 
 #: awx/api/serializers.py:5693
 msgid "Can only create execution or hop nodes."
-msgstr ""
+msgstr "Seuls des nœuds d'exécution ou de saut peuvent être créés."
 
 #: awx/api/serializers.py:5696
 #, fuzzy
@@ -885,19 +885,19 @@ msgstr "Impossible de modifier %s."
 
 #: awx/api/serializers.py:5704
 msgid "Can only change the state on Kubernetes or OpenShift."
-msgstr ""
+msgstr "L'état ne peut être modifié que sur Kubernetes ou OpenShift."
 
 #: awx/api/serializers.py:5706
 msgid "Can only change instances to the 'deprovisioning' state."
-msgstr ""
+msgstr "Les instances ne peuvent être changées qu'à l'état 'deprovisioning'."
 
 #: awx/api/serializers.py:5708
 msgid "Cannot deprovision managed nodes."
-msgstr ""
+msgstr "Impossible de déprovisionner les nœuds gérés."
 
 #: awx/api/serializers.py:5711
 msgid "Can only create instances in the 'installed' state."
-msgstr ""
+msgstr "Les instances ne peuvent être créées qu'à l'état 'installed'."
 
 #: awx/api/serializers.py:5720
 #, fuzzy
@@ -919,7 +919,7 @@ msgstr "Impossible de modifier le local_path pour les projets basés-{scm_type}"
 
 #: awx/api/serializers.py:5741
 msgid "Cannot peer to the same instance more than once."
-msgstr ""
+msgstr "Impossible d'appairer avec la même instance plus d'une fois."
 
 #: awx/api/serializers.py:5749
 #, fuzzy
@@ -929,11 +929,11 @@ msgstr "Impossible de modifier %s."
 
 #: awx/api/serializers.py:5752
 msgid "Setting peers manually for managed nodes is not allowed."
-msgstr ""
+msgstr "La définition manuelle des pairs pour les nœuds gérés n'est pas autorisée."
 
 #: awx/api/serializers.py:5756
 msgid "Instance cannot peer to its own address."
-msgstr ""
+msgstr "Une instance ne peut pas s'appairer avec sa propre adresse."
 
 #: awx/api/serializers.py:5762
 #, fuzzy, python-brace-format
@@ -943,7 +943,7 @@ msgstr "Instances membres de ce GroupeInstances."
 
 #: awx/api/serializers.py:5768
 msgid "Cannot change peers_from_control_nodes for managed nodes."
-msgstr ""
+msgstr "Impossible de modifier peers_from_control_nodes pour les nœuds gérés."
 
 #: awx/api/serializers.py:5824
 msgid "Count of all jobs that target this instance group"
@@ -977,15 +977,15 @@ msgstr "Job de gestion"
 
 #: awx/api/serializers.py:5855
 msgid "Maximum number of concurrent jobs to run on a group. When set to zero, no maximum is enforced."
-msgstr ""
+msgstr "Nombre maximal de travaux simultanés à exécuter sur un groupe. Lorsqu'il est défini sur zéro, aucun maximum n'est appliqué."
 
 #: awx/api/serializers.py:5862
 msgid "Max Forks"
-msgstr ""
+msgstr "Forks maximum"
 
 #: awx/api/serializers.py:5863
 msgid "Maximum number of forks to execute concurrently on a group. When set to zero, no maximum is enforced."
-msgstr ""
+msgstr "Nombre maximal de forks à exécuter simultanément sur un groupe. Lorsqu'il est défini sur zéro, aucun maximum n'est appliqué."
 
 #: awx/api/serializers.py:5868
 msgid "Policy Instance List"
@@ -1017,7 +1017,7 @@ msgstr "Les instances conteneurisées ne peuvent pas être gérées via l'API"
 #: awx/api/serializers.py:5927
 #, python-format
 msgid "%s instance group policy_instance_percentage may not be changed from the initial value set by the installer."
-msgstr ""
+msgstr "Le policy_instance_percentage du groupe d'instances %s ne peut pas être modifié par rapport à la valeur initiale définie par le programme d'installation."
 
 #: awx/api/serializers.py:5940 awx/api/serializers.py:5943
 #, python-format
@@ -1093,15 +1093,15 @@ msgstr "Jobs d'instance"
 
 #: awx/api/views/__init__.py:414
 msgid "Peers"
-msgstr ""
+msgstr "Pairs"
 
 #: awx/api/views/__init__.py:424 awx/api/views/__init__.py:433
 msgid "Receptor Addresses"
-msgstr ""
+msgstr "Adresses de récepteur"
 
 #: awx/api/views/__init__.py:440
 msgid "Receptor Address Detail"
-msgstr ""
+msgstr "Détail de l'adresse de récepteur"
 
 #: awx/api/views/__init__.py:448
 msgid "Instance's Instance Groups"
@@ -1110,17 +1110,17 @@ msgstr "Groupes d'instances de l'instance"
 #: awx/api/views/__init__.py:456
 #, python-brace-format
 msgid "Cannot change instance group membership of control-only node: {parent.hostname}."
-msgstr ""
+msgstr "Impossible de modifier l'appartenance au groupe d'instances du nœud de contrôle uniquement : {parent.hostname}."
 
 #: awx/api/views/__init__.py:458
 #, python-brace-format
 msgid "Cannot change instance group membership of hop node : {parent.hostname}."
-msgstr ""
+msgstr "Impossible de modifier l'appartenance au groupe d'instances du nœud de saut : {parent.hostname}."
 
 #: awx/api/views/__init__.py:466
 #, python-brace-format
 msgid "Cannot disassociate hybrid instance {parent.hostname} from {sub.name}."
-msgstr ""
+msgstr "Impossible de dissocier l'instance hybride {parent.hostname} de {sub.name}."
 
 #: awx/api/views/__init__.py:471
 #, fuzzy
@@ -1147,17 +1147,17 @@ msgstr "Instances du groupe d'instances"
 #: awx/api/views/__init__.py:560
 #, python-brace-format
 msgid "Cannot change instance group membership of control-only node: {sub.hostname}."
-msgstr ""
+msgstr "Impossible de modifier l'appartenance au groupe d'instances du nœud de contrôle uniquement : {sub.hostname}."
 
 #: awx/api/views/__init__.py:562
 #, python-brace-format
 msgid "Cannot change instance group membership of hop node : {sub.hostname}."
-msgstr ""
+msgstr "Impossible de modifier l'appartenance au groupe d'instances du nœud de saut : {sub.hostname}."
 
 #: awx/api/views/__init__.py:570
 #, python-brace-format
 msgid "Cannot disassociate hybrid node {sub.hostname} from {parent.name}."
-msgstr ""
+msgstr "Impossible de dissocier le nœud hybride {sub.hostname} de {parent.name}."
 
 #: awx/api/views/__init__.py:575
 msgid "Schedules"
@@ -1332,7 +1332,7 @@ msgstr "Détails du paramètre"
 
 #: awx/api/views/__init__.py:1633
 msgid "Host Metrics Summary Monthly"
-msgstr ""
+msgstr "Résumé mensuel des métriques d'hôte"
 
 #: awx/api/views/__init__.py:1670
 msgid "The inventory for this host is already being deleted."
@@ -1340,7 +1340,7 @@ msgstr "L'inventaire associé à cet hôte est en cours de suppression."
 
 #: awx/api/views/__init__.py:1672
 msgid "Delete constructed inventory hosts from input inventory."
-msgstr ""
+msgstr "Supprimer les hôtes de l'inventaire construit de l'inventaire d'entrée."
 
 #: awx/api/views/__init__.py:1835
 msgid "Cyclical Group association."
@@ -1592,23 +1592,23 @@ msgstr "Autoriser"
 
 #: awx/api/views/analytics.py:259
 msgid "Reports"
-msgstr ""
+msgstr "Rapports"
 
 #: awx/api/views/analytics.py:264
 msgid "Report"
-msgstr ""
+msgstr "Rapport"
 
 #: awx/api/views/analytics.py:268
 msgid "Report Options"
-msgstr ""
+msgstr "Options de rapport"
 
 #: awx/api/views/analytics.py:272
 msgid "Adoption Rate"
-msgstr ""
+msgstr "Taux d'adoption"
 
 #: awx/api/views/analytics.py:276
 msgid "Event Explorer"
-msgstr ""
+msgstr "Explorateur d'événements"
 
 #: awx/api/views/analytics.py:280
 #, fuzzy
@@ -1618,7 +1618,7 @@ msgstr "Échec de l'hôte"
 
 #: awx/api/views/analytics.py:284
 msgid "Job Explorer"
-msgstr ""
+msgstr "Explorateur de travaux"
 
 #: awx/api/views/analytics.py:288
 #, fuzzy
@@ -1640,7 +1640,7 @@ msgstr "Modèle de tâche"
 
 #: awx/api/views/bulk.py:23
 msgid "Bulk"
-msgstr ""
+msgstr "En masse"
 
 #: awx/api/views/instance_install_bundle.py:48
 #, fuzzy
@@ -1650,7 +1650,7 @@ msgstr "Instances"
 
 #: awx/api/views/instance_install_bundle.py:58
 msgid "Install bundle can only be generated for execution or hop nodes."
-msgstr ""
+msgstr "Le paquet d'installation ne peut être généré que pour les nœuds d'exécution ou de saut."
 
 #: awx/api/views/inventory.py:55
 msgid "Inventory Update Events List"
@@ -1675,11 +1675,11 @@ msgstr "Nombre maximum de libellés {} atteint."
 
 #: awx/api/views/labels.py:67
 msgid "Labels"
-msgstr ""
+msgstr "Étiquettes"
 
 #: awx/api/views/mesh_visualizer.py:13
 msgid "Mesh Visualizer"
-msgstr ""
+msgstr "Visualiseur de maillage"
 
 #: awx/api/views/metrics.py:30
 msgid "Metrics"
@@ -1976,12 +1976,12 @@ msgstr "{path} n'est pas un choix de chemin d'accès valide."
 #: awx/conf/fields.py:127
 #, python-brace-format
 msgid "{scontext} is not a valid mount option. Allowed types are {mount_types}"
-msgstr ""
+msgstr "{scontext} n'est pas une option de montage valide. Les types autorisés sont {mount_types}"
 
 #: awx/conf/fields.py:128
 #, python-brace-format
 msgid "Invalid syntax. A string HOST-DIR[:CONTAINER-DIR[:OPTIONS]] is expected but got {path}."
-msgstr ""
+msgstr "Syntaxe non valide. Une chaîne HOST-DIR[:CONTAINER-DIR[:OPTIONS]] est attendue mais {path} a été obtenu."
 
 #: awx/conf/fields.py:190
 msgid "Enter a valid URL"
@@ -2220,11 +2220,11 @@ msgstr "Données sur les flux de travail"
 
 #: awx/main/analytics/collectors.py:597
 msgid "Host Metric data, incremental/full sync"
-msgstr ""
+msgstr "Données de métrique d'hôte, synchronisation incrémentielle/complète"
 
 #: awx/main/analytics/collectors.py:618
 msgid "HostMetricSummaryMonthly export, full sync"
-msgstr ""
+msgstr "Export HostMetricSummaryMonthly, synchronisation complète"
 
 #: awx/main/apps.py:7
 msgid "Main"
@@ -2292,7 +2292,7 @@ msgstr ""
 
 #: awx/main/conf.py:102
 msgid "CSRF Trusted Origins List"
-msgstr ""
+msgstr "Liste des origines de confiance CSRF"
 
 #: awx/main/conf.py:104
 #, fuzzy
@@ -2348,7 +2348,7 @@ msgstr "Ce mot de passe est utilisé pour récupérer les informations relatives
 
 #: awx/main/conf.py:180
 msgid "Automation Analytics upload URL"
-msgstr ""
+msgstr "URL de téléversement d'Automation Analytics"
 
 #: awx/main/conf.py:181
 #, fuzzy
@@ -2452,11 +2452,11 @@ msgstr "Variables d'environnement supplémentaires définies pour les exécution
 
 #: awx/main/conf.py:303
 msgid "K8S Ansible Runner Keep-Alive Message Interval"
-msgstr ""
+msgstr "Intervalle des messages keep-alive de l'exécuteur Ansible sur K8S"
 
 #: awx/main/conf.py:304
 msgid "Only applies to jobs running in a Container Group. If not 0, send a message every so-many seconds to keep connection open."
-msgstr ""
+msgstr "S'applique uniquement aux travaux exécutés dans un groupe de conteneurs. Si différent de 0, envoie un message toutes les quelques secondes pour maintenir la connexion ouverte."
 
 #: awx/main/conf.py:313
 #, fuzzy
@@ -2466,7 +2466,7 @@ msgstr "Variables d'environnement supplémentaires"
 
 #: awx/main/conf.py:315
 msgid "Additional environment variables set for invocations of ansible-galaxy within project updates. Useful if you must use a proxy server for ansible-galaxy but not git."
-msgstr ""
+msgstr "Variables d'environnement supplémentaires définies pour les invocations d'ansible-galaxy lors des mises à jour de projet. Utile si vous devez utiliser un serveur proxy pour ansible-galaxy mais pas pour git."
 
 #: awx/main/conf.py:327
 #, fuzzy
@@ -2506,11 +2506,11 @@ msgstr "Permet aux collections d'être téléchargés dynamiquement à partir du
 
 #: awx/main/conf.py:366
 msgid "Enable Ansible 2.9 Compatibility"
-msgstr ""
+msgstr "Activer la compatibilité Ansible 2.9"
 
 #: awx/main/conf.py:367
 msgid "If enabled, sets ANSIBLE_COLLECTIONS_PATHS for legacy Ansible 2.9 compatibility."
-msgstr ""
+msgstr "Si activé, définit ANSIBLE_COLLECTIONS_PATHS pour la compatibilité héritée avec Ansible 2.9."
 
 #: awx/main/conf.py:376
 msgid "Follow symlinks"
@@ -2522,11 +2522,11 @@ msgstr "Suivez les liens symboliques lorsque vous recherchez des playbooks. Sach
 
 #: awx/main/conf.py:389
 msgid "Expose host paths for Container Groups"
-msgstr ""
+msgstr "Exposer les chemins d'hôte pour les groupes de conteneurs"
 
 #: awx/main/conf.py:391
 msgid "Expose paths via hostPath for the Pods created by a Container Group. HostPath volumes present many security risks, and it is a best practice to avoid the use of HostPaths when possible. "
-msgstr ""
+msgstr "Exposer les chemins via hostPath pour les Pods créés par un groupe de conteneurs. Les volumes HostPath présentent de nombreux risques de sécurité, et il est recommandé d'éviter l'utilisation des HostPaths lorsque c'est possible. "
 
 #: awx/main/conf.py:402
 msgid "Ignore Ansible Galaxy SSL Certificate Verification"
@@ -2592,7 +2592,7 @@ msgstr "Délai d'attente par défaut des tâches"
 
 #: awx/main/conf.py:483
 msgid "If no output is detected from ansible in this number of seconds the execution will be terminated. Use value of 0 to indicate that no idle timeout should be imposed."
-msgstr ""
+msgstr "Si aucune sortie n'est détectée d'ansible pendant ce nombre de secondes, l'exécution sera arrêtée. Utilisez la valeur 0 pour indiquer qu'aucun délai d'inactivité ne doit être imposé."
 
 #: awx/main/conf.py:496
 msgid "Default Inventory Update Timeout"
@@ -2766,7 +2766,7 @@ msgstr "Nombre maximum d'hôtes autorisés à être gérés par cette organisati
 
 #: awx/main/conf.py:715
 msgid "Defines how large the rsyslog action queue can grow in number of messages stored. This can have an impact on memory utilization. When the queue reaches 75% of this number, the queue will start writing to disk (queue.highWatermark in rsyslog). When it reaches 90%, NOTICE, INFO, and DEBUG messages will start to be discarded (queue.discardMark with queue.discardSeverity=5)."
-msgstr ""
+msgstr "Définit la taille maximale que peut atteindre la file d'attente d'actions rsyslog en nombre de messages stockés. Cela peut avoir un impact sur l'utilisation de la mémoire. Lorsque la file atteint 75 % de ce nombre, elle commence à écrire sur le disque (queue.highWatermark dans rsyslog). Lorsqu'elle atteint 90 %, les messages NOTICE, INFO et DEBUG commencent à être ignorés (queue.discardMark avec queue.discardSeverity=5)."
 
 #: awx/main/conf.py:730
 #, fuzzy
@@ -2798,7 +2798,7 @@ msgstr "Activation du débogage de la verbosité élevée de rsyslogd. Utile pou
 
 #: awx/main/conf.py:766
 msgid "Log Format For API 4XX Errors"
-msgstr ""
+msgstr "Format de journalisation pour les erreurs 4XX de l'API"
 
 #: awx/main/conf.py:768
 msgid ""
@@ -2809,7 +2809,7 @@ msgid ""
 "remote_addr - The remote address seen for the user\n"
 "error - The error set by the api endpoint\n"
 "Variables need to be in the format {<variable name>}."
-msgstr ""
+msgstr "Le format des messages journalisés lorsqu'une erreur 4XX de l'API se produit ; les variables suivantes seront substituées : \nstatus_code - Le code d'état HTTP de l'erreur\nuser_name - Le nom d'utilisateur tentant d'utiliser l'API\nurl_path - Le chemin URL vers le point de terminaison de l'API appelé\nremote_addr - L'adresse distante vue pour l'utilisateur\nerror - L'erreur définie par le point de terminaison de l'api\nLes variables doivent être au format {<variable name>}."
 
 #: awx/main/conf.py:785
 #, fuzzy
@@ -2839,11 +2839,11 @@ msgstr "Indique si l'instance fait partie d'un déploiement basé sur Kubernetes
 
 #: awx/main/conf.py:826 awx/main/conf.py:827
 msgid "Max jobs to allow bulk jobs to launch"
-msgstr ""
+msgstr "Nombre maximal de travaux que les travaux en masse peuvent lancer"
 
 #: awx/main/conf.py:828 awx/main/conf.py:838 awx/main/conf.py:848
 msgid "Bulk Actions"
-msgstr ""
+msgstr "Actions en masse"
 
 #: awx/main/conf.py:836 awx/main/conf.py:837
 #, fuzzy
@@ -2859,31 +2859,31 @@ msgstr "Nombre maximum d'hôtes autorisés à être gérés par cette organisati
 
 #: awx/main/conf.py:856
 msgid "Enable Preview of New User Interface"
-msgstr ""
+msgstr "Activer l'aperçu de la nouvelle interface utilisateur"
 
 #: awx/main/conf.py:857
 msgid "Enable preview of new user interface."
-msgstr ""
+msgstr "Activer l'aperçu de la nouvelle interface utilisateur."
 
 #: awx/main/conf.py:866
 msgid "Default model for AWX - no subscription. Deletion of host_metrics will not be considered for purposes of managed host counting"
-msgstr ""
+msgstr "Modèle par défaut pour AWX - sans abonnement. La suppression de host_metrics ne sera pas prise en compte pour le décompte des hôtes gérés"
 
 #: awx/main/conf.py:869
 msgid "Usage based on unique managed nodes in a large historical time frame and delete functionality for no longer used managed nodes"
-msgstr ""
+msgstr "Utilisation basée sur les nœuds gérés uniques sur une large période historique et fonctionnalité de suppression pour les nœuds gérés qui ne sont plus utilisés"
 
 #: awx/main/conf.py:874
 msgid "Defines subscription usage model and shows Host Metrics"
-msgstr ""
+msgstr "Définit le modèle d'utilisation de l'abonnement et affiche les métriques d'hôte"
 
 #: awx/main/conf.py:882
 msgid "Last cleanup date for HostMetrics"
-msgstr ""
+msgstr "Dernière date de nettoyage pour HostMetrics"
 
 #: awx/main/conf.py:891
 msgid "Last computing date of HostMetricSummaryMonthly"
-msgstr ""
+msgstr "Dernière date de calcul de HostMetricSummaryMonthly"
 
 #: awx/main/conf.py:900
 #, fuzzy
@@ -2899,11 +2899,11 @@ msgstr "Activez ou désactivez le suivi analytique de l'utilisateur."
 
 #: awx/main/conf.py:910
 msgid "Debug Web Requests"
-msgstr ""
+msgstr "Déboguer les requêtes web"
 
 #: awx/main/conf.py:912
 msgid "Debug web request python timing"
-msgstr ""
+msgstr "Déboguer le minutage python des requêtes web"
 
 #: awx/main/conf.py:920
 #, fuzzy
@@ -2913,15 +2913,15 @@ msgstr "Registre des conteneurs"
 
 #: awx/main/conf.py:922
 msgid "List of options to pass to podman run example: ['--network', 'slirp4netns:enable_ipv6=true', '--log-level', 'debug']"
-msgstr ""
+msgstr "Liste des options à passer à podman run, exemple : ['--network', 'slirp4netns:enable_ipv6=true', '--log-level', 'debug']"
 
 #: awx/main/conf.py:930
 msgid "Release Receptor Work"
-msgstr ""
+msgstr "Libérer le travail du récepteur"
 
 #: awx/main/conf.py:932
 msgid "Release receptor work"
-msgstr ""
+msgstr "Libérer le travail du récepteur"
 
 #: awx/main/conf.py:958 awx/main/conf.py:982 awx/sso/conf.py:1655
 msgid "\n"
@@ -2993,7 +2993,7 @@ msgstr "Amazon Web Services"
 
 #: awx/main/credential_plugins/aim.py:20
 msgid "The CCP Web Service ID. Leave blank to default to AIMWebService."
-msgstr ""
+msgstr "L'ID du service web CCP. Laissez vide pour utiliser AIMWebService par défaut."
 
 #: awx/main/credential_plugins/aim.py:24
 msgid "Application ID"
@@ -3032,7 +3032,7 @@ msgstr "Requête d'objet"
 
 #: awx/main/credential_plugins/aim.py:61
 msgid "The property of the object to return. Available properties: Username, Password and Address."
-msgstr ""
+msgstr "La propriété de l'objet à renvoyer. Propriétés disponibles : Username, Password et Address."
 
 #: awx/main/credential_plugins/aim.py:65
 msgid "Reason"
@@ -3062,7 +3062,7 @@ msgstr "Version secrète"
 
 #: awx/main/credential_plugins/aws_secretsmanager.py:27
 msgid "Region which the secrets manager is located"
-msgstr ""
+msgstr "Région dans laquelle se trouve le gestionnaire de secrets"
 
 #: awx/main/credential_plugins/aws_secretsmanager.py:31
 #, fuzzy
@@ -3242,11 +3242,11 @@ msgstr "Le champ à extraire du secret"
 
 #: awx/main/credential_plugins/dsv.py:50
 msgid "Should the secret be base64 decoded?"
-msgstr ""
+msgstr "Le secret doit-il être décodé en base64 ?"
 
 #: awx/main/credential_plugins/dsv.py:51
 msgid "Specify whether the secret should be base64 decoded, typically used for storing files, such as SSH keys"
-msgstr ""
+msgstr "Indiquez si le secret doit être décodé en base64, généralement utilisé pour stocker des fichiers, tels que des clés SSH"
 
 #: awx/main/credential_plugins/dsv.py:64
 msgid "URL template"
@@ -3297,7 +3297,7 @@ msgstr "ID secrète pour l'authentification AppRole"
 
 #: awx/main/credential_plugins/hashivault.py:50
 msgid "The PEM-encoded client certificate used for TLS client authentication. This should include the certificate and any intermediate certififcates."
-msgstr ""
+msgstr "Le certificat client encodé en PEM utilisé pour l'authentification client TLS. Il doit inclure le certificat et tout certificat intermédiaire."
 
 #: awx/main/credential_plugins/hashivault.py:56
 #, fuzzy
@@ -3307,7 +3307,7 @@ msgstr "Certificat client"
 
 #: awx/main/credential_plugins/hashivault.py:60
 msgid "The certificate private key used for TLS client authentication."
-msgstr ""
+msgstr "La clé privée du certificat utilisée pour l'authentification client TLS."
 
 #: awx/main/credential_plugins/hashivault.py:64
 #, fuzzy
@@ -3317,7 +3317,7 @@ msgstr "URL d'authentification"
 
 #: awx/main/credential_plugins/hashivault.py:68
 msgid "The role configured in Hashicorp Vault for TLS client authentication. If not provided, Hashicorp Vault may assign roles based on the certificate used."
-msgstr ""
+msgstr "Le rôle configuré dans Hashicorp Vault pour l'authentification client TLS. S'il n'est pas fourni, Hashicorp Vault peut attribuer des rôles en fonction du certificat utilisé."
 
 #: awx/main/credential_plugins/hashivault.py:74
 msgid "Namespace name (Vault Enterprise only)"
@@ -3335,7 +3335,7 @@ msgstr "Kubernetes"
 
 #: awx/main/credential_plugins/hashivault.py:85
 msgid "The Role for Kubernetes Authentication. This is the named role, configured in Vault server, for AWX pod auth policies. see https://www.vaultproject.io/docs/auth/kubernetes#configuration"
-msgstr ""
+msgstr "Le rôle pour l'authentification Kubernetes. Il s'agit du rôle nommé, configuré dans le serveur Vault, pour les politiques d'authentification des pods AWX. voir https://www.vaultproject.io/docs/auth/kubernetes#configuration"
 
 #: awx/main/credential_plugins/hashivault.py:95
 #, fuzzy
@@ -3746,7 +3746,7 @@ msgstr "Galaxie/Pôle d'automatisation"
 
 #: awx/main/models/credential/__init__.py:346
 msgid "Cryptography"
-msgstr ""
+msgstr "Cryptographie"
 
 #: awx/main/models/credential/__init__.py:358
 msgid "Enter injectors using either JSON or YAML syntax. Refer to the documentation for example syntax."
@@ -3953,7 +3953,7 @@ msgstr "Ce jeton doit provenir de vos paramètres de profil dans GitLab"
 
 #: awx/main/models/credential/__init__.py:937
 msgid "Bitbucket Data Center HTTP Access Token"
-msgstr ""
+msgstr "Jeton d'accès HTTP Bitbucket Data Center"
 
 #: awx/main/models/credential/__init__.py:946
 #, fuzzy
@@ -4008,31 +4008,31 @@ msgstr "Jeton d'accès personnel"
 
 #: awx/main/models/credential/__init__.py:1034
 msgid "CIQ Depot"
-msgstr ""
+msgstr "CIQ Depot"
 
 #: awx/main/models/credential/__init__.py:1040
 msgid "CIQ Depot Server"
-msgstr ""
+msgstr "Serveur CIQ Depot"
 
 #: awx/main/models/credential/__init__.py:1042
 msgid "A CIQ Depot server."
-msgstr ""
+msgstr "Un serveur CIQ Depot."
 
 #: awx/main/models/credential/__init__.py:1047
 msgid "CIQ Depot User"
-msgstr ""
+msgstr "Utilisateur CIQ Depot"
 
 #: awx/main/models/credential/__init__.py:1049
 msgid "A CIQ Depot user."
-msgstr ""
+msgstr "Un utilisateur CIQ Depot."
 
 #: awx/main/models/credential/__init__.py:1053
 msgid "CIQ Depot Token"
-msgstr ""
+msgstr "Jeton CIQ Depot"
 
 #: awx/main/models/credential/__init__.py:1056
 msgid "A CIQ Depot Token."
-msgstr ""
+msgstr "Un jeton CIQ Depot."
 
 #: awx/main/models/credential/__init__.py:1073
 msgid "OpenShift or Kubernetes API Bearer Token"
@@ -4107,7 +4107,7 @@ msgstr "Clé publique non signée"
 
 #: awx/main/models/credential/__init__.py:1185
 msgid "GPG Public Key used to validate content signatures."
-msgstr ""
+msgstr "Clé publique GPG utilisée pour valider les signatures de contenu."
 
 #: awx/main/models/credential/__init__.py:1195
 #, fuzzy
@@ -4123,7 +4123,7 @@ msgstr "Configuration"
 
 #: awx/main/models/credential/__init__.py:1205
 msgid "Terraform backend config as Hashicorp configuration language."
-msgstr ""
+msgstr "Configuration du backend Terraform en langage de configuration Hashicorp."
 
 #: awx/main/models/credential/__init__.py:1244
 msgid "Target must be a non-external credential"
@@ -4296,15 +4296,15 @@ msgstr "Extraire l'image avant de l'exécuter ?"
 
 #: awx/main/models/ha.py:75
 msgid "Field source and target must be unique together."
-msgstr ""
+msgstr "Les champs source et target doivent être uniques ensemble."
 
 #: awx/main/models/ha.py:79
 msgid "The source instance of this peer link."
-msgstr ""
+msgstr "L'instance source de ce lien d'appairage."
 
 #: awx/main/models/ha.py:80
 msgid "The target receptor address of this peer link."
-msgstr ""
+msgstr "L'adresse de récepteur cible de ce lien d'appairage."
 
 #: awx/main/models/ha.py:83
 #, fuzzy
@@ -4314,15 +4314,15 @@ msgstr "En attente"
 
 #: awx/main/models/ha.py:84
 msgid "Established"
-msgstr ""
+msgstr "Établi"
 
 #: awx/main/models/ha.py:85
 msgid "Removing"
-msgstr ""
+msgstr "Suppression"
 
 #: awx/main/models/ha.py:88
 msgid "Indicates the current life cycle stage of this peer link."
-msgstr ""
+msgstr "Indique l'étape actuelle du cycle de vie de ce lien d'appairage."
 
 #: awx/main/models/ha.py:103
 #, fuzzy
@@ -4332,47 +4332,47 @@ msgstr "les ID de champ doivent être uniques (%s)"
 
 #: awx/main/models/ha.py:135
 msgid "Total system memory of this instance in bytes."
-msgstr ""
+msgstr "Mémoire système totale de cette instance en octets."
 
 #: awx/main/models/ha.py:141
 msgid "Any error details from the last health check."
-msgstr ""
+msgstr "Tout détail d'erreur du dernier contrôle d'état."
 
 #: awx/main/models/ha.py:146
 msgid "Last time instance ran its heartbeat task for main cluster nodes. Last known connection to receptor mesh for execution nodes."
-msgstr ""
+msgstr "Dernière fois que l'instance a exécuté sa tâche de battement de cœur pour les nœuds du cluster principal. Dernière connexion connue au maillage de récepteur pour les nœuds d'exécution."
 
 #: awx/main/models/ha.py:151
 msgid "The last time a health check was initiated on this instance."
-msgstr ""
+msgstr "La dernière fois qu'un contrôle d'état a été lancé sur cette instance."
 
 #: awx/main/models/ha.py:156
 msgid "Last time a health check was ran on this instance to refresh cpu, memory, and capacity."
-msgstr ""
+msgstr "Dernière fois qu'un contrôle d'état a été exécuté sur cette instance pour actualiser le processeur, la mémoire et la capacité."
 
 #: awx/main/models/ha.py:177
 msgid "Control plane node"
-msgstr ""
+msgstr "Nœud du plan de contrôle"
 
 #: awx/main/models/ha.py:178
 msgid "Execution plane node"
-msgstr ""
+msgstr "Nœud du plan d'exécution"
 
 #: awx/main/models/ha.py:179
 msgid "Controller and execution"
-msgstr ""
+msgstr "Contrôleur et exécution"
 
 #: awx/main/models/ha.py:180
 msgid "Message-passing node, no execution capability"
-msgstr ""
+msgstr "Nœud de transmission de messages, sans capacité d'exécution"
 
 #: awx/main/models/ha.py:182
 msgid "Role that this node plays in the mesh."
-msgstr ""
+msgstr "Rôle que ce nœud joue dans le maillage."
 
 #: awx/main/models/ha.py:185
 msgid "Provisioning"
-msgstr ""
+msgstr "Provisionnement"
 
 #: awx/main/models/ha.py:186
 #, fuzzy
@@ -4400,15 +4400,15 @@ msgstr "Champ '{}' non disponible"
 
 #: awx/main/models/ha.py:190
 msgid "De-provisioning"
-msgstr ""
+msgstr "Déprovisionnement"
 
 #: awx/main/models/ha.py:191
 msgid "De-provisioning Failure"
-msgstr ""
+msgstr "Échec du déprovisionnement"
 
 #: awx/main/models/ha.py:194
 msgid "Indicates the current life cycle stage of this instance."
-msgstr ""
+msgstr "Indique l'étape actuelle du cycle de vie de cette instance."
 
 #: awx/main/models/ha.py:197
 #, fuzzy
@@ -4434,7 +4434,7 @@ msgstr "Nombre maximal de messages à mettre à jour par seconde dans l'interfac
 
 #: awx/main/models/ha.py:453
 msgid "Max forks to execute on this group. Zero means no limit."
-msgstr ""
+msgstr "Forks maximum à exécuter sur ce groupe. Zéro signifie aucune limite."
 
 #: awx/main/models/ha.py:454
 msgid "Percentage of Instances to automatically assign to this group"
@@ -4458,7 +4458,7 @@ msgstr "Hôtes pour inventaire générés avec la propriété host_filter."
 
 #: awx/main/models/inventory.py:87
 msgid "Parse list of source inventories with the constructed inventory plugin."
-msgstr ""
+msgstr "Analyser la liste des inventaires source avec le plugin d'inventaire construit."
 
 #: awx/main/models/inventory.py:92
 msgid "inventories"
@@ -4510,7 +4510,7 @@ msgstr "Filtre appliqué aux hôtes de cet inventaire."
 
 #: awx/main/models/inventory.py:165
 msgid "Only valid for constructed inventories, this links to the inventories that will be used."
-msgstr ""
+msgstr "Valide uniquement pour les inventaires construits, ceci renvoie aux inventaires qui seront utilisés."
 
 #: awx/main/models/inventory.py:196
 msgid "Flag indicating the inventory is being deleted."
@@ -4586,15 +4586,15 @@ msgstr "Quand l'hôte a été automatisé pour la dernière fois contre"
 
 #: awx/main/models/inventory.py:872
 msgid "How many times was the host automated"
-msgstr ""
+msgstr "Combien de fois l'hôte a été automatisé"
 
 #: awx/main/models/inventory.py:873
 msgid "How many times was the host deleted"
-msgstr ""
+msgstr "Combien de fois l'hôte a été supprimé"
 
 #: awx/main/models/inventory.py:875
 msgid "Boolean flag saying whether the host is deleted and therefore not counted into the subscription consumption"
-msgstr ""
+msgstr "Indicateur booléen indiquant si l'hôte est supprimé et donc non comptabilisé dans la consommation de l'abonnement"
 
 #: awx/main/models/inventory.py:877
 #, fuzzy
@@ -4604,19 +4604,19 @@ msgstr "Peut gérer tous les inventaires de %s"
 
 #: awx/main/models/inventory.py:904
 msgid "How many unique hosts are consumed from the license"
-msgstr ""
+msgstr "Combien d'hôtes uniques sont consommés depuis la licence"
 
 #: awx/main/models/inventory.py:905
 msgid "'License capacity as max. number of unique hosts"
-msgstr ""
+msgstr "'Capacité de licence en nombre max. d'hôtes uniques"
 
 #: awx/main/models/inventory.py:906
 msgid "How many hosts were added in the associated month, consuming more license capacity"
-msgstr ""
+msgstr "Combien d'hôtes ont été ajoutés au cours du mois associé, consommant davantage de capacité de licence"
 
 #: awx/main/models/inventory.py:907
 msgid "How many hosts were deleted in the associated month, freeing the license capacity"
-msgstr ""
+msgstr "Combien d'hôtes ont été supprimés au cours du mois associé, libérant la capacité de licence"
 
 #: awx/main/models/inventory.py:919
 msgid "File, Directory or Script"
@@ -4624,7 +4624,7 @@ msgstr "Fichier, répertoire ou script"
 
 #: awx/main/models/inventory.py:920
 msgid "Template additional groups and hostvars at runtime"
-msgstr ""
+msgstr "Modéliser des groupes et hostvars supplémentaires à l'exécution"
 
 #: awx/main/models/inventory.py:921
 msgid "Sourced from a Project"
@@ -4636,7 +4636,7 @@ msgstr "Amazon EC2"
 
 #: awx/main/models/inventory.py:928
 msgid "Terraform State"
-msgstr ""
+msgstr "État Terraform"
 
 #: awx/main/models/inventory.py:958
 msgid "Inventory source variables in YAML or JSON format."
@@ -4677,7 +4677,7 @@ msgstr "Délai écoulé (en secondes) avant que la tâche ne soit annulée."
 
 #: awx/main/models/inventory.py:1024
 msgid "Enter host, group or pattern match"
-msgstr ""
+msgstr "Saisissez un hôte, un groupe ou une correspondance de motif"
 
 #: awx/main/models/inventory.py:1046
 #, python-format
@@ -4758,7 +4758,7 @@ msgstr "Le projet ne permet pas de remplacer la branche."
 
 #: awx/main/models/jobs.py:482
 msgid "Job inventory does not have enough hosts for slicing"
-msgstr ""
+msgstr "L'inventaire du travail n'a pas assez d'hôtes pour le découpage"
 
 #: awx/main/models/jobs.py:492 awx/main/models/workflow.py:599
 msgid "Field is not configured to prompt on launch."
@@ -5089,7 +5089,7 @@ msgstr "Permet de modifier la branche ou la révision SCM dans un modèle de tâ
 
 #: awx/main/models/projects.py:297
 msgid "An optional credential used for validating files in the project against unexpected changes."
-msgstr ""
+msgstr "Un identifiant facultatif utilisé pour valider les fichiers du projet contre des modifications inattendues."
 
 #: awx/main/models/projects.py:306
 msgid "The last revision fetched by a project update"
@@ -5117,7 +5117,7 @@ msgstr "L'organisation ne peut pas être modifiée lorsqu'elle est utilisée par
 
 #: awx/main/models/projects.py:495
 msgid "Last project update failed due to signature validation failure."
-msgstr ""
+msgstr "La dernière mise à jour du projet a échoué en raison d'un échec de validation de signature."
 
 #: awx/main/models/projects.py:497
 msgid "Missing a revision to run due to failed project update."
@@ -5304,35 +5304,35 @@ msgstr "role_ancestors"
 
 #: awx/main/models/receptor_address.py:20
 msgid "Receptor address must be unique."
-msgstr ""
+msgstr "L'adresse de récepteur doit être unique."
 
 #: awx/main/models/receptor_address.py:24
 msgid "Routable address for this instance."
-msgstr ""
+msgstr "Adresse routable pour cette instance."
 
 #: awx/main/models/receptor_address.py:25
 msgid "Port for the address."
-msgstr ""
+msgstr "Port pour l'adresse."
 
 #: awx/main/models/receptor_address.py:26
 msgid "Websocket path."
-msgstr ""
+msgstr "Chemin du websocket."
 
 #: awx/main/models/receptor_address.py:28
 msgid "Protocol to use for the Receptor listener, 'tcp', 'wss', or 'ws'."
-msgstr ""
+msgstr "Protocole à utiliser pour l'écouteur Receptor : 'tcp', 'wss' ou 'ws'."
 
 #: awx/main/models/receptor_address.py:30
 msgid "If True, only routable within the Kubernetes cluster."
-msgstr ""
+msgstr "Si True, routable uniquement au sein du cluster Kubernetes."
 
 #: awx/main/models/receptor_address.py:31
 msgid "If True, this address is the canonical address for the instance."
-msgstr ""
+msgstr "Si True, cette adresse est l'adresse canonique de l'instance."
 
 #: awx/main/models/receptor_address.py:32
 msgid "If True, control plane cluster nodes should automatically peer to it."
-msgstr ""
+msgstr "Si True, les nœuds du cluster du plan de contrôle doivent s'y appairer automatiquement."
 
 #: awx/main/models/schedules.py:79
 msgid "Enables processing of this schedule."
@@ -5465,11 +5465,11 @@ msgstr "Groupe d'instances sous lequel la tâche a été exécutée"
 
 #: awx/main/models/unified_jobs.py:716
 msgid "A cached list with pk values from preferred instance groups."
-msgstr ""
+msgstr "Une liste en cache avec les valeurs pk des groupes d'instances préférés."
 
 #: awx/main/models/unified_jobs.py:718
 msgid "Number of forks an instance consumes when running this job."
-msgstr ""
+msgstr "Nombre de forks qu'une instance consomme lors de l'exécution de ce travail."
 
 #: awx/main/models/unified_jobs.py:725
 msgid "The organization used to determine access to this unified job."
@@ -5485,7 +5485,7 @@ msgstr "La version d'Ansible Core installée dans l'environnement d'exécution."
 
 #: awx/main/models/unified_jobs.py:749
 msgid "Playbook stats from the Ansible playbook_on_stats event."
-msgstr ""
+msgstr "Statistiques du playbook issues de l'événement playbook_on_stats d'Ansible."
 
 #: awx/main/models/unified_jobs.py:752
 msgid "The Receptor work unit ID associated with this job."
@@ -5526,7 +5526,7 @@ msgstr "Délai (en secondes) avant que le nœud d'approbation n'expire et n'éch
 
 #: awx/main/models/workflow.py:845
 msgid "The time this approval will expire. This is the created time plus timeout, used for filtering."
-msgstr ""
+msgstr "Le moment où cette approbation expirera. Il s'agit de l'heure de création plus le délai d'expiration, utilisé pour le filtrage."
 
 #: awx/main/models/workflow.py:847
 msgid "Shows when an approval node (with a timeout assigned to it) has timed out."
@@ -5575,7 +5575,7 @@ msgstr "Exception lors de la connexion à Twilio : {}"
 
 #: awx/main/notifications/twilio_backend.py:45
 msgid "FROM: {} / TO: {}"
-msgstr ""
+msgstr "DE : {} / À : {}"
 
 #: awx/main/scheduler/dag_workflow.py:163
 #, python-brace-format
@@ -5642,11 +5642,11 @@ msgstr "La tâche n'a pas pu démarrer car aucun environnement d'exécution n'a 
 
 #: awx/main/tasks/system.py:124
 msgid "Instance received normal shutdown signal"
-msgstr ""
+msgstr "L'instance a reçu un signal d'arrêt normal"
 
 #: awx/main/tasks/system.py:630
 msgid "Another cluster node has determined this instance to be unresponsive"
-msgstr ""
+msgstr "Un autre nœud du cluster a déterminé que cette instance ne répond pas"
 
 #: awx/main/tasks/system.py:763
 msgid "Scheduled job could not start because it                     was not in the right state or required manual credentials"
@@ -5666,11 +5666,11 @@ msgstr "Aucun chemin de traitement des erreurs pour le ou les nœuds de tâche d
 #: awx/main/tests/unit/tasks/test_runner_callback.py:28
 #: awx/main/tests/unit/tasks/test_runner_callback.py:31
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: awx/main/tests/unit/tasks/test_runner_callback.py:32
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: awx/main/utils/common.py:252
 #, python-format
@@ -5898,11 +5898,11 @@ msgstr "Lorsqu'il est défini sur une liste vide `[]`, ce paramètre empêche la
 
 #: awx/sso/conf.py:155
 msgid "Use Email address for usernames"
-msgstr ""
+msgstr "Utiliser l'adresse e-mail comme nom d'utilisateur"
 
 #: awx/sso/conf.py:156
 msgid "Enabling this setting will tell social auth to use the full Email as username instead of the full name"
-msgstr ""
+msgstr "L'activation de ce paramètre indiquera à social auth d'utiliser l'e-mail complet comme nom d'utilisateur au lieu du nom complet"
 
 #: awx/sso/conf.py:174
 msgid "LDAP Server URI"
@@ -6118,7 +6118,7 @@ msgstr "Choisissez le protocole d'authentification utilisé par le client TACACS
 
 #: awx/sso/conf.py:561
 msgid "TACACS+ client address sending enabled"
-msgstr ""
+msgstr "Envoi de l'adresse du client TACACS+ activé"
 
 #: awx/sso/conf.py:562
 #, fuzzy
@@ -6479,7 +6479,7 @@ msgstr "Clé API"
 #: awx/sso/conf.py:1237 awx/sso/conf.py:1248 awx/sso/conf.py:1260
 #: awx/sso/conf.py:1270
 msgid "Generic OIDC"
-msgstr ""
+msgstr "OIDC générique"
 
 #: awx/sso/conf.py:1246
 #, fuzzy
@@ -6495,11 +6495,11 @@ msgstr "Secret OAuth2 (secret client) de votre application Azure AD."
 
 #: awx/sso/conf.py:1258
 msgid "OIDC Provider URL"
-msgstr ""
+msgstr "URL du fournisseur OIDC"
 
 #: awx/sso/conf.py:1259
 msgid "The URL for your OIDC provider including the path up to /.well-known/openid-configuration"
-msgstr ""
+msgstr "L'URL de votre fournisseur OIDC, y compris le chemin jusqu'à /.well-known/openid-configuration"
 
 #: awx/sso/conf.py:1268
 #, fuzzy
@@ -6659,39 +6659,39 @@ msgstr "Mappage d'attributs d'équipe SAML"
 
 #: awx/sso/conf.py:1582
 msgid "Used to map super users and system auditors from SAML."
-msgstr ""
+msgstr "Utilisé pour mapper les super-utilisateurs et les auditeurs système depuis SAML."
 
 #: awx/sso/conf.py:1602
 msgid "Minimum number of characters in local password"
-msgstr ""
+msgstr "Nombre minimal de caractères dans le mot de passe local"
 
 #: awx/sso/conf.py:1603
 msgid "Minimum number of characters required in a local password. 0 means no minimum"
-msgstr ""
+msgstr "Nombre minimal de caractères requis dans un mot de passe local. 0 signifie aucun minimum"
 
 #: awx/sso/conf.py:1613
 msgid "Minimum number of digit characters in local password"
-msgstr ""
+msgstr "Nombre minimal de chiffres dans le mot de passe local"
 
 #: awx/sso/conf.py:1614
 msgid "Minimum number of digit characters required in a local password. 0 means no minimum"
-msgstr ""
+msgstr "Nombre minimal de chiffres requis dans un mot de passe local. 0 signifie aucun minimum"
 
 #: awx/sso/conf.py:1624
 msgid "Minimum number of uppercase characters in local password"
-msgstr ""
+msgstr "Nombre minimal de caractères majuscules dans le mot de passe local"
 
 #: awx/sso/conf.py:1625
 msgid "Minimum number of uppercase characters required in a local password. 0 means no minimum"
-msgstr ""
+msgstr "Nombre minimal de caractères majuscules requis dans un mot de passe local. 0 signifie aucun minimum"
 
 #: awx/sso/conf.py:1635
 msgid "Minimum number of special characters in local password"
-msgstr ""
+msgstr "Nombre minimal de caractères spéciaux dans le mot de passe local"
 
 #: awx/sso/conf.py:1636
 msgid "Minimum number of special characters required in a local password. 0 means no minimum"
-msgstr ""
+msgstr "Nombre minimal de caractères spéciaux requis dans un mot de passe local. 0 signifie aucun minimum"
 
 #: awx/sso/fields.py:78
 msgid "Invalid field."

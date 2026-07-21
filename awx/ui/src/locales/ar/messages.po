@@ -457,7 +457,7 @@ msgstr "{dateStr} بواسطة <0>{username}</0>"
 msgid "Basic auth password"
 msgstr "كلمة مرور المصادقة الأساسية"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:91
+#: screens/Template/Survey/SurveyQuestionForm.js:90
 msgid "Multiple Choice (multiple select)"
 msgstr "اختيار متعدد (تحديد متعدد)"
 
@@ -1321,7 +1321,7 @@ msgstr "أنواع العقد"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:127
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:450
 #: screens/Template/shared/JobTemplate.helptext.js:72
-#: screens/Template/Survey/SurveyQuestionForm.js:270
+#: screens/Template/Survey/SurveyQuestionForm.js:269
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:314
 msgid "documentation"
 msgstr "التوثيق"
@@ -2195,7 +2195,7 @@ msgstr "{0, plural, one {نوع بيانات الاعتماد هذا قيد ال
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:143
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:103
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:222
-#: screens/Template/Survey/SurveyQuestionForm.js:82
+#: screens/Template/Survey/SurveyQuestionForm.js:81
 #: screens/User/shared/UserForm.js:119
 msgid "Password"
 msgstr "كلمة المرور"
@@ -2581,7 +2581,7 @@ msgstr "إذا كان مُفعّلاً، فسيمنع المخزون إضافة 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:129
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:452
 #: screens/Template/shared/JobTemplate.helptext.js:74
-#: screens/Template/Survey/SurveyQuestionForm.js:272
+#: screens/Template/Survey/SurveyQuestionForm.js:271
 msgid "for more information."
 msgstr "لمزيد من المعلومات."
 
@@ -2809,7 +2809,7 @@ msgstr "رسالة النجاح"
 msgid "Update cache timeout"
 msgstr "تحديث مهلة ذاكرة التخزين المؤقت"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:164
+#: screens/Template/Survey/SurveyQuestionForm.js:163
 msgid "Question"
 msgstr "سؤال"
 
@@ -3146,7 +3146,7 @@ msgstr "تم اتخاذ إجراء بشأن سير العمل هذا بالفع�
 msgid "Select the credential you want to use when accessing the remote hosts to run the command. Choose the credential containing the username and SSH key or password that Ansible will need to log into the remote hosts."
 msgstr "حدد بيانات الاعتماد التي تريد استخدامها عند الوصول إلى المضيفين البعيدين لتشغيل الأمر. اختر بيانات الاعتماد التي تحتوي على اسم المستخدم ومفتاح SSH أو كلمة المرور التي سيحتاجها Ansible لتسجيل الدخول إلى المضيفين البعيدين."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:181
+#: screens/Template/Survey/SurveyQuestionForm.js:180
 msgid "The suggested format for variable names is lowercase and\n"
 "                underscore-separated (for example, foo_bar, user_id, host_name,\n"
 "                etc.). Variable names with spaces are not allowed."
@@ -3227,14 +3227,6 @@ msgstr "تفاصيل الجدول"
 #: screens/ActivityStream/ActivityStreamDetailButton.js:38
 msgid "Event detail"
 msgstr "تفاصيل الحدث"
-
-#: screens/Template/Survey/SurveyQuestionForm.js:46
-msgid "Choose an answer type or format you want as the prompt for the user.\n"
-"          Refer to the Ascender Documentation for more additional\n"
-"          information about each option."
-msgstr "اختر نوع أو تنسيق الإجابة التي تريدها كمطالبة للمستخدم.\n"
-"          راجع توثيق Ascender لمزيد من المعلومات\n"
-"          الإضافية حول كل خيار."
 
 #. placeholder {0}: groups.length
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:93
@@ -3455,7 +3447,7 @@ msgstr "لا يوجد YAML متاح"
 msgid "Edit Order"
 msgstr "تحرير الترتيب"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:215
+#: screens/Template/Survey/SurveyQuestionForm.js:214
 msgid "Minimum"
 msgstr "الحد الأدنى"
 
@@ -3723,7 +3715,7 @@ msgstr "عقدة Controller"
 msgid "View all applications."
 msgstr "عرض جميع التطبيقات."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:199
+#: screens/Template/Survey/SurveyQuestionForm.js:198
 msgid "Minimum length"
 msgstr "الحد الأدنى للطول"
 
@@ -4209,7 +4201,7 @@ msgstr "الوصف"
 msgid "Failed to delete one or more inventories."
 msgstr "فشل حذف مخزون واحد أو أكثر."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:94
+#: screens/Template/Survey/SurveyQuestionForm.js:93
 msgid "Float"
 msgstr "Float"
 
@@ -4288,11 +4280,6 @@ msgstr "الحد الأدنى لنسبة جميع المثيلات التي سي
 #: components/JobCancelButton/JobCancelButton.js:89
 msgid "Confirm cancellation"
 msgstr "تأكيد الإلغاء"
-
-#. placeholder {0}: groups.length
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:122
-msgid "{0, plural, one {Are you sure you want delete the group below?} other {Are you sure you want delete the groups below?}}"
-msgstr "{0, plural, one {هل أنت متأكد من أنك تريد حذف المجموعة أدناه؟} other {هل أنت متأكد من أنك تريد حذف المجموعات أدناه؟}}"
 
 #: components/Sort/Sort.js:141
 msgid "Sort"
@@ -4461,14 +4448,6 @@ msgstr "التطبيقات"
 #: screens/Dashboard/DashboardGraph.js:204
 msgid "All jobs"
 msgstr "جميع المهام"
-
-#: components/LaunchPrompt/steps/OtherPromptsStep.js:184
-#~ msgid "If enabled, show the changes made\n"
-#~ "              by Ansible tasks, where supported. This is equivalent to Ansible’s\n"
-#~ "              --diff mode."
-#~ msgstr "إذا كان مُفعّلاً، أظهر التغييرات التي أجرتها\n"
-#~ "              مهام Ansible، حيثما كان مدعومًا. هذا يعادل وضع\n"
-#~ "              --diff في Ansible."
 
 #: screens/InstanceGroup/Instances/InstanceList.js:364
 msgid "<0>Note: Manually associated instances may be automatically disassociated from an instance group if the instance is managed by <1>policy rules.</1></0>"
@@ -5295,11 +5274,6 @@ msgstr "قم بإجراء بحث لتحديد مرشح مضيف"
 msgid "Notification test failed."
 msgstr "فشل اختبار الإشعار."
 
-#. placeholder {0}: itemsToRemove.length
-#: screens/Instances/Shared/RemoveInstanceButton.js:88
-msgid "{0, plural, one {This intance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-msgstr "{0, plural, one {يتم استخدام هذا المثيل حاليًا بواسطة موارد أخرى. هل أنت متأكد من أنك تريد حذفه؟} other {قد يؤثر إلغاء توفير هذه المثيلات على موارد أخرى تعتمد عليها. هل أنت متأكد من أنك تريد الحذف على أي حال؟}}"
-
 #: components/Pagination/Pagination.js:25
 msgid "items"
 msgstr "العناصر"
@@ -5326,7 +5300,7 @@ msgstr "تحديث الإعدادات المتعلقة بالمهام ضمن {br
 msgid "Provisioning"
 msgstr "التوفير"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:259
+#: screens/Template/Survey/SurveyQuestionForm.js:258
 msgid "Multiple Choice Options"
 msgstr "خيارات الاختيار المتعدد"
 
@@ -5540,11 +5514,6 @@ msgstr "لم يتم العثور على اشتراكات"
 #: screens/Team/TeamRoles/TeamRolesList.js:198
 msgid "Add team permissions"
 msgstr "إضافة أذونات الفريق"
-
-#. placeholder {0}: selected.length
-#: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:185
-msgid "{0, plural, one {This instance group is currently being by other resources. Are you sure you want to delete it?} other {Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-msgstr "{0, plural, one {تُستخدم مجموعة المثيلات هذه حاليًا بواسطة موارد أخرى. هل أنت متأكد من أنك تريد حذفها؟} other {قد يؤثر حذف مجموعات المثيلات هذه على موارد أخرى تعتمد عليها. هل أنت متأكد من أنك تريد الحذف على أي حال؟}}"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:506
 msgid "Source phone number"
@@ -6381,7 +6350,7 @@ msgid "Select a branch for the workflow."
 msgstr "حدد فرعًا لسير العمل."
 
 #: screens/Template/shared/JobTemplate.helptext.js:66
-#: screens/Template/Survey/SurveyQuestionForm.js:262
+#: screens/Template/Survey/SurveyQuestionForm.js:261
 msgid "Refer to the"
 msgstr "راجع"
 
@@ -6972,7 +6941,7 @@ msgstr "ملاحظة: يفترض هذا الحقل أن اسم الجهاز ال
 msgid "GitHub Default"
 msgstr "GitHub Default"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:221
+#: screens/Template/Survey/SurveyQuestionForm.js:220
 msgid "Maximum"
 msgstr "الحد الأقصى"
 
@@ -7347,7 +7316,7 @@ msgstr "قد تكون بيئات التنفيذ هذه قيد الاستخدام
 msgid "Job Templates with a missing inventory or project cannot be selected when creating or editing nodes.  Select another template or fix the missing fields to proceed."
 msgstr "لا يمكن تحديد قوالب المهام ذات المخزون أو المشروع المفقود عند إنشاء العقد أو تحريرها. حدد قالبًا آخر أو أصلح الحقول المفقودة للمتابعة."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:93
+#: screens/Template/Survey/SurveyQuestionForm.js:92
 msgid "Integer"
 msgstr "Integer"
 
@@ -7473,7 +7442,7 @@ msgstr "مزامنة"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:184
 #: screens/Template/shared/JobTemplateForm.js:273
 #: screens/Template/shared/WorkflowJobTemplateForm.js:123
-#: screens/Template/Survey/SurveyQuestionForm.js:172
+#: screens/Template/Survey/SurveyQuestionForm.js:171
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:114
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:195
 #: screens/User/shared/UserTokenForm.js:69
@@ -7733,12 +7702,6 @@ msgstr "نافذة التغييرات غير المحفوظة"
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "تسجيل الدخول باستخدام GitHub Enterprise Teams"
 
-#: components/Lookup/InventoryLookup.js:133
-#~ msgid "Select the inventory containing the hosts\n"
-#~ "            you want this job to manage."
-#~ msgstr "حدد المخزون الذي يحتوي على المضيفين\n"
-#~ "            الذين تريد أن تديرهم هذه المهمة."
-
 #: components/AdHocCommands/AdHocDetailsStep.js:108
 #: components/AdHocCommands/AdHocDetailsStep.js:110
 msgid "Arguments"
@@ -7877,6 +7840,11 @@ msgstr "تصحيح"
 #: screens/Job/JobOutput/JobOutputSearch.js:153
 msgid "Clear all filters"
 msgstr "مسح جميع المرشحات"
+
+#. placeholder {0}: itemsToRemove.length
+#: screens/Instances/Shared/RemoveInstanceButton.js:88
+msgid "{0, plural, one {This instance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
+msgstr "{0, plural, one {يتم استخدام هذا المثيل حاليًا بواسطة موارد أخرى. هل أنت متأكد من أنك تريد حذفه؟} other {قد يؤثر إلغاء توفير هذه المثيلات على موارد أخرى تعتمد عليها. هل أنت متأكد من أنك تريد الحذف على أي حال؟}}"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:57
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:75
@@ -8048,7 +8016,7 @@ msgstr "من الصعب تقديم مواصفات\n"
 msgid "Job Slice Parent"
 msgstr "أصل شريحة المهمة"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:86
+#: screens/Template/Survey/SurveyQuestionForm.js:85
 msgid "Multiple Choice (single select)"
 msgstr "اختيار متعدد (تحديد واحد)"
 
@@ -8622,7 +8590,7 @@ msgstr "المطالبة بمجموعات المثيلات عند الإطلاق
 msgid "Workflow pending message body"
 msgstr "نص رسالة سير العمل المعلّق"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:178
+#: screens/Template/Survey/SurveyQuestionForm.js:177
 msgid "Answer variable name"
 msgstr "اسم متغير الإجابة"
 
@@ -8906,6 +8874,11 @@ msgstr "قم بتمرير متغيرات سطر أوامر إضافية إلى �
 msgid "Instance details"
 msgstr "تفاصيل المثيل"
 
+#. placeholder {0}: selected.length
+#: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:185
+msgid "{0, plural, one {This instance group is currently being used by other resources. Are you sure you want to delete it?} other {Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
+msgstr "{0, plural, one {تُستخدم مجموعة المثيلات هذه حاليًا من قبل موارد أخرى. هل أنت متأكد من أنك تريد حذفها؟} other {قد يؤثر حذف مجموعات المثيلات هذه على موارد أخرى تعتمد عليها. هل أنت متأكد من أنك تريد الحذف على أي حال؟}}"
+
 #: screens/Job/JobOutput/EmptyOutput.js:60
 msgid "No output found for this job."
 msgstr "لم يتم العثور على مخرجات لهذه المهمة."
@@ -8941,11 +8914,6 @@ msgstr "ملف المخزون المراد مزامنته بواسطة هذا ا
 msgid "View all Jobs."
 msgstr "عرض جميع المهام."
 
-#. placeholder {0}: selected.length
-#: screens/Inventory/InventorySources/InventorySourceList.js:197
-msgid "{0, plural, one {This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?} other {Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway}}"
-msgstr "{0, plural, one {يُستخدم مصدر المخزون هذا حاليًا بواسطة موارد أخرى تعتمد عليه. هل أنت متأكد من أنك تريد حذفه؟} other {قد يؤثر حذف مصادر المخزون هذه على موارد أخرى تعتمد عليها. هل أنت متأكد من أنك تريد الحذف على أي حال؟}}"
-
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:264
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:322
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:362
@@ -8977,7 +8945,7 @@ msgstr "عرض جميع بيئات التنفيذ"
 msgid "Sources"
 msgstr "المصادر"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:81
+#: screens/Template/Survey/SurveyQuestionForm.js:80
 msgid "Textarea"
 msgstr "منطقة نص"
 
@@ -9459,7 +9427,7 @@ msgid "Disassociate role"
 msgstr "إلغاء ربط الدور"
 
 #: screens/Template/Survey/SurveyListItem.js:55
-#: screens/Template/Survey/SurveyQuestionForm.js:189
+#: screens/Template/Survey/SurveyQuestionForm.js:188
 msgid "Required"
 msgstr "مطلوب"
 
@@ -10088,10 +10056,6 @@ msgstr "إعادة الإطلاق باستخدام معلمات المضيف"
 msgid "This action will soft delete the following:"
 msgstr "سيؤدي هذا الإجراء إلى الحذف المؤقت لما يلي:"
 
-#: components/AdHocCommands/AdHocDetailsStep.js:187
-#~ msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible’s --diff mode."
-#~ msgstr "إذا كان مُفعّلاً، أظهر التغييرات التي أجرتها مهام Ansible، حيثما كان مدعومًا. هذا يعادل وضع --diff في Ansible."
-
 #: screens/Instances/Instance.js:64
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:104
 #: screens/Instances/Instances.js:30
@@ -10420,6 +10384,11 @@ msgstr "عرض جميع الرموز المميزة."
 msgid "View Inventory Groups"
 msgstr "عرض مجموعات المخزون"
 
+#. placeholder {0}: selected.length
+#: screens/Inventory/InventorySources/InventorySourceList.js:197
+msgid "{0, plural, one {This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?} other {Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete them anyway?}}"
+msgstr "{0, plural, one {يُستخدم مصدر المخزون هذا حاليًا من قبل موارد أخرى تعتمد عليه. هل أنت متأكد من أنك تريد حذفه؟} other {قد يؤثر حذف مصادر المخزون هذه على موارد أخرى تعتمد عليها. هل أنت متأكد من أنك تريد حذفها على أي حال؟}}"
+
 #: components/Search/LookupTypeInput.js:102
 msgid "Less than comparison."
 msgstr "مقارنة أقل من."
@@ -10626,6 +10595,12 @@ msgstr "Twilio"
 msgid "Survey Toggle"
 msgstr "تبديل الاستبيان"
 
+#: screens/Template/Survey/SurveyQuestionForm.js:46
+msgid "Choose an answer type or format you want as the prompt for the user.\n"
+"          Refer to the Ascender Documentation for additional information about each option."
+msgstr "اختر نوع أو تنسيق الإجابة الذي تريده كمطالبة للمستخدم.\n"
+"          راجع وثائق Ascender للحصول على معلومات إضافية حول كل خيار."
+
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:187
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:111
 msgid "Total groups"
@@ -10787,7 +10762,7 @@ msgstr "علامة تبويب YAML"
 msgid "IRC server port"
 msgstr "منفذ خادم IRC"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:80
+#: screens/Template/Survey/SurveyQuestionForm.js:79
 #: screens/Template/Survey/SurveyReorderModal.js:217
 msgid "Text"
 msgstr "نص"
@@ -10884,7 +10859,7 @@ msgstr "النشاط"
 msgid "Inventories with sources cannot be copied"
 msgstr "لا يمكن نسخ المخزونات التي لها مصادر"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:205
+#: screens/Template/Survey/SurveyQuestionForm.js:204
 msgid "Maximum length"
 msgstr "الحد الأقصى للطول"
 
@@ -10902,9 +10877,9 @@ msgstr "خيارات البريد الإلكتروني"
 msgid "Refer to the Ansible documentation for details about the configuration file."
 msgstr "راجع وثائق Ansible للحصول على تفاصيل حول ملف التكوين."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:239
-#: screens/Template/Survey/SurveyQuestionForm.js:247
-#: screens/Template/Survey/SurveyQuestionForm.js:254
+#: screens/Template/Survey/SurveyQuestionForm.js:238
+#: screens/Template/Survey/SurveyQuestionForm.js:246
+#: screens/Template/Survey/SurveyQuestionForm.js:253
 msgid "Default answer"
 msgstr "الإجابة الافتراضية"
 
@@ -11071,6 +11046,11 @@ msgstr "المهلة"
 #: screens/TopologyView/ContentLoading.js:41
 msgid "Please wait until the topology view is populated..."
 msgstr "يرجى الانتظار حتى يتم ملء عرض الطوبولوجيا..."
+
+#. placeholder {0}: groups.length
+#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:122
+msgid "{0, plural, one {Are you sure you want to delete the group below?} other {Are you sure you want to delete the groups below?}}"
+msgstr "{0, plural, one {هل أنت متأكد من أنك تريد حذف المجموعة أدناه؟} other {هل أنت متأكد من أنك تريد حذف المجموعات أدناه؟}}"
 
 #: components/AssociateModal/AssociateModal.js:45
 msgid "Select Items"

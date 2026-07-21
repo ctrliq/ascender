@@ -121,8 +121,8 @@ const InventoryGroupsDeleteModal = ({
         >
           <Plural
             value={groups.length}
-            one="Are you sure you want delete the group below?"
-            other="Are you sure you want delete the groups below?"
+            one="Are you sure you want to delete the group below?"
+            other="Are you sure you want to delete the groups below?"
           />
 
           <div css="padding: 24px 0;">

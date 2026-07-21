@@ -455,7 +455,7 @@ msgstr "{dateStr} (<0>{username}</0> 기준)"
 msgid "Basic auth password"
 msgstr "기본 인증 암호"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:91
+#: screens/Template/Survey/SurveyQuestionForm.js:90
 msgid "Multiple Choice (multiple select)"
 msgstr "다중 선택(여러 선택)"
 
@@ -1319,7 +1319,7 @@ msgstr "노드 유형"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:127
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:450
 #: screens/Template/shared/JobTemplate.helptext.js:72
-#: screens/Template/Survey/SurveyQuestionForm.js:270
+#: screens/Template/Survey/SurveyQuestionForm.js:269
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:314
 msgid "documentation"
 msgstr "문서"
@@ -2193,7 +2193,7 @@ msgstr "{0, plural, one {This credential type is currently being used by some cr
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:143
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:103
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:222
-#: screens/Template/Survey/SurveyQuestionForm.js:82
+#: screens/Template/Survey/SurveyQuestionForm.js:81
 #: screens/User/shared/UserForm.js:119
 msgid "Password"
 msgstr "암호"
@@ -2579,7 +2579,7 @@ msgstr "활성화하면 인벤토리에서 연결된 작업 템플릿을 실행�
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:129
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:452
 #: screens/Template/shared/JobTemplate.helptext.js:74
-#: screens/Template/Survey/SurveyQuestionForm.js:272
+#: screens/Template/Survey/SurveyQuestionForm.js:271
 msgid "for more information."
 msgstr "자세한 내용"
 
@@ -2807,7 +2807,7 @@ msgstr "성공 메시지"
 msgid "Update cache timeout"
 msgstr "캐시 시간 초과 업데이트"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:164
+#: screens/Template/Survey/SurveyQuestionForm.js:163
 msgid "Question"
 msgstr "질문"
 
@@ -3144,7 +3144,7 @@ msgstr "이 워크플로우는 이미 수행되었습니다."
 msgid "Select the credential you want to use when accessing the remote hosts to run the command. Choose the credential containing the username and SSH key or password that Ansible will need to log into the remote hosts."
 msgstr "원격 호스트에 액세스하여 명령을 실행할 때 사용할 인증 정보를 선택합니다. Ansible에서 원격 호스트에 로그인해야 하는 사용자 이름 및 SSH 키 또는 암호가 포함된 인증 정보를 선택합니다."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:181
+#: screens/Template/Survey/SurveyQuestionForm.js:180
 msgid "The suggested format for variable names is lowercase and\n"
 "                underscore-separated (for example, foo_bar, user_id, host_name,\n"
 "                etc.). Variable names with spaces are not allowed."
@@ -3225,14 +3225,6 @@ msgstr "일정 세부 정보"
 #: screens/ActivityStream/ActivityStreamDetailButton.js:38
 msgid "Event detail"
 msgstr "이벤트 세부 정보"
-
-#: screens/Template/Survey/SurveyQuestionForm.js:46
-msgid "Choose an answer type or format you want as the prompt for the user.\n"
-"          Refer to the Ascender Documentation for more additional\n"
-"          information about each option."
-msgstr "사용자에게 표시할 프롬프트로 원하는 응답 유형 또는 형식을 선택합니다.\n"
-"          각 옵션에 대한 자세한 정보는 Ascender\n"
-"          설명서를 참조하십시오."
 
 #. placeholder {0}: groups.length
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:93
@@ -3452,7 +3444,7 @@ msgstr "사용할 수 있는 YAML 없음"
 msgid "Edit Order"
 msgstr "순서 편집"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:215
+#: screens/Template/Survey/SurveyQuestionForm.js:214
 msgid "Minimum"
 msgstr "최소"
 
@@ -3720,7 +3712,7 @@ msgstr "컨트롤러 노드"
 msgid "View all applications."
 msgstr "모든 애플리케이션 보기."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:199
+#: screens/Template/Survey/SurveyQuestionForm.js:198
 msgid "Minimum length"
 msgstr "최소 길이"
 
@@ -4206,7 +4198,7 @@ msgstr "설명"
 msgid "Failed to delete one or more inventories."
 msgstr "하나 이상의 인벤토리를 삭제하지 못했습니다."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:94
+#: screens/Template/Survey/SurveyQuestionForm.js:93
 msgid "Float"
 msgstr "부동 값"
 
@@ -4285,11 +4277,6 @@ msgstr "새 인스턴스가 온라인 상태가 될 때 이 그룹에 자동으�
 #: components/JobCancelButton/JobCancelButton.js:89
 msgid "Confirm cancellation"
 msgstr "취소 확인"
-
-#. placeholder {0}: groups.length
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:122
-msgid "{0, plural, one {Are you sure you want delete the group below?} other {Are you sure you want delete the groups below?}}"
-msgstr "{0, plural, one {아래 그룹을 삭제하시겠습니까?} other {아래 그룹을 삭제하시겠습니까?}}"
 
 #: components/Sort/Sort.js:141
 msgid "Sort"
@@ -4458,14 +4445,6 @@ msgstr "애플리케이션"
 #: screens/Dashboard/DashboardGraph.js:204
 msgid "All jobs"
 msgstr "모든 작업"
-
-#: components/LaunchPrompt/steps/OtherPromptsStep.js:184
-#~ msgid "If enabled, show the changes made\n"
-#~ "              by Ansible tasks, where supported. This is equivalent to Ansible’s\n"
-#~ "              --diff mode."
-#~ msgstr "활성화된 경우, 지원되는 곳에서 Ansible 작업이\n"
-#~ "              변경한 내용을 표시합니다. 이는 Ansible의\n"
-#~ "              --diff 모드와 동일합니다."
 
 #: screens/InstanceGroup/Instances/InstanceList.js:364
 msgid "<0>Note: Manually associated instances may be automatically disassociated from an instance group if the instance is managed by <1>policy rules.</1></0>"
@@ -5292,11 +5271,6 @@ msgstr "호스트 필터를 정의하여 검색을 수행"
 msgid "Notification test failed."
 msgstr "알림 테스트에 실패했습니다."
 
-#. placeholder {0}: itemsToRemove.length
-#: screens/Instances/Shared/RemoveInstanceButton.js:88
-msgid "{0, plural, one {This intance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-msgstr "{0, plural, one {이 인스턴스는 현재 다른 리소스에서 사용 중입니다. 정말 삭제하시겠습니까?} other {이 인스턴스의 프로비저닝을 해제하면 이에 의존하는 다른 리소스에 영향을 줄 수 있습니다. 그래도 삭제하시겠습니까?}}"
-
 #: components/Pagination/Pagination.js:25
 msgid "items"
 msgstr "항목"
@@ -5323,7 +5297,7 @@ msgstr "{brandName}의 작업 관련 설정 업데이트"
 msgid "Provisioning"
 msgstr "프로비저닝"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:259
+#: screens/Template/Survey/SurveyQuestionForm.js:258
 msgid "Multiple Choice Options"
 msgstr "다중 선택 옵션"
 
@@ -5537,11 +5511,6 @@ msgstr "서브스크립션을 찾을 수 없음"
 #: screens/Team/TeamRoles/TeamRolesList.js:198
 msgid "Add team permissions"
 msgstr "팀 권한 추가"
-
-#. placeholder {0}: selected.length
-#: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:185
-msgid "{0, plural, one {This instance group is currently being by other resources. Are you sure you want to delete it?} other {Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-msgstr "{0, plural, one {이 인스턴스 그룹은 현재 다른 리소스에서 사용 중입니다. 정말 삭제하시겠습니까?} other {이 인스턴스 그룹을 삭제하면 이에 의존하는 다른 리소스에 영향을 줄 수 있습니다. 그래도 삭제하시겠습니까?}}"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:506
 msgid "Source phone number"
@@ -6378,7 +6347,7 @@ msgid "Select a branch for the workflow."
 msgstr "워크플로우에 사용할 브랜치를 선택합니다."
 
 #: screens/Template/shared/JobTemplate.helptext.js:66
-#: screens/Template/Survey/SurveyQuestionForm.js:262
+#: screens/Template/Survey/SurveyQuestionForm.js:261
 msgid "Refer to the"
 msgstr "참조"
 
@@ -6969,7 +6938,7 @@ msgstr "참고: 이 필드는 원격 이름이 “origin”이라고 가정합�
 msgid "GitHub Default"
 msgstr "GitHub 기본값"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:221
+#: screens/Template/Survey/SurveyQuestionForm.js:220
 msgid "Maximum"
 msgstr "최대"
 
@@ -7344,7 +7313,7 @@ msgstr "이러한 실행 환경은 해당 환경에 의존하는 다른 리소�
 msgid "Job Templates with a missing inventory or project cannot be selected when creating or editing nodes.  Select another template or fix the missing fields to proceed."
 msgstr "노드를 생성하거나 편집할 때 인벤토리 또는 프로젝트가 누락된 작업 템플릿을 선택할 수 없습니다. 다른 템플릿을 선택하거나 누락된 필드를 수정하여 계속 진행합니다."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:93
+#: screens/Template/Survey/SurveyQuestionForm.js:92
 msgid "Integer"
 msgstr "정수"
 
@@ -7470,7 +7439,7 @@ msgstr "동기화"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:184
 #: screens/Template/shared/JobTemplateForm.js:273
 #: screens/Template/shared/WorkflowJobTemplateForm.js:123
-#: screens/Template/Survey/SurveyQuestionForm.js:172
+#: screens/Template/Survey/SurveyQuestionForm.js:171
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:114
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:195
 #: screens/User/shared/UserTokenForm.js:69
@@ -7730,12 +7699,6 @@ msgstr "저장되지 않은 변경 사항 모달"
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "GitHub Enterprise 팀으로 로그인"
 
-#: components/Lookup/InventoryLookup.js:133
-#~ msgid "Select the inventory containing the hosts\n"
-#~ "            you want this job to manage."
-#~ msgstr "이 작업으로 관리할 호스트가 포함된\n"
-#~ "            인벤토리를 선택합니다."
-
 #: components/AdHocCommands/AdHocDetailsStep.js:108
 #: components/AdHocCommands/AdHocDetailsStep.js:110
 msgid "Arguments"
@@ -7874,6 +7837,11 @@ msgstr "디버그"
 #: screens/Job/JobOutput/JobOutputSearch.js:153
 msgid "Clear all filters"
 msgstr "모든 필터 지우기"
+
+#. placeholder {0}: itemsToRemove.length
+#: screens/Instances/Shared/RemoveInstanceButton.js:88
+msgid "{0, plural, one {This instance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
+msgstr "{0, plural, one {이 인스턴스는 현재 다른 리소스에서 사용 중입니다. 정말 삭제하시겠습니까?} other {이 인스턴스의 프로비저닝을 해제하면 이에 의존하는 다른 리소스에 영향을 줄 수 있습니다. 그래도 삭제하시겠습니까?}}"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:57
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:75
@@ -8045,7 +8013,7 @@ msgstr "시스템 팩트를 채우려면 `gather_facts: true`가\n"
 msgid "Job Slice Parent"
 msgstr "작업 분할 부모"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:86
+#: screens/Template/Survey/SurveyQuestionForm.js:85
 msgid "Multiple Choice (single select)"
 msgstr "다중 선택(단일 선택)"
 
@@ -8618,7 +8586,7 @@ msgstr "시작 시 인스턴스 그룹을 입력하라는 메시지를 표시합
 msgid "Workflow pending message body"
 msgstr "워크플로우 보류 메시지 본문"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:178
+#: screens/Template/Survey/SurveyQuestionForm.js:177
 msgid "Answer variable name"
 msgstr "응답 변수 이름"
 
@@ -8902,6 +8870,11 @@ msgstr "워크플로우에 추가 명령줄 변수를 전달합니다."
 msgid "Instance details"
 msgstr "인스턴스 세부 정보"
 
+#. placeholder {0}: selected.length
+#: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:185
+msgid "{0, plural, one {This instance group is currently being used by other resources. Are you sure you want to delete it?} other {Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
+msgstr "{0, plural, one {이 인스턴스 그룹은 현재 다른 리소스에서 사용 중입니다. 삭제하시겠습니까?} other {이러한 인스턴스 그룹을 삭제하면 이에 의존하는 다른 리소스에 영향을 줄 수 있습니다. 그래도 삭제하시겠습니까?}}"
+
 #: screens/Job/JobOutput/EmptyOutput.js:60
 msgid "No output found for this job."
 msgstr "이 작업에 대한 출력을 찾을 수 없습니다."
@@ -8937,11 +8910,6 @@ msgstr "이 소스에 의해 동기화될 인벤토리 파일. 드롭다운에�
 msgid "View all Jobs."
 msgstr "모든 작업 보기."
 
-#. placeholder {0}: selected.length
-#: screens/Inventory/InventorySources/InventorySourceList.js:197
-msgid "{0, plural, one {This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?} other {Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway}}"
-msgstr "{0, plural, one {이 인벤토리 소스는 현재 이에 의존하는 다른 리소스에서 사용 중입니다. 정말 삭제하시겠습니까?} other {이 인벤토리 소스를 삭제하면 이에 의존하는 다른 리소스에 영향을 줄 수 있습니다. 그래도 삭제하시겠습니까?}}"
-
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:264
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:322
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:362
@@ -8973,7 +8941,7 @@ msgstr "모든 실행 환경 보기"
 msgid "Sources"
 msgstr "소스"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:81
+#: screens/Template/Survey/SurveyQuestionForm.js:80
 msgid "Textarea"
 msgstr "텍스트 영역"
 
@@ -9455,7 +9423,7 @@ msgid "Disassociate role"
 msgstr "역할 연결 해제"
 
 #: screens/Template/Survey/SurveyListItem.js:55
-#: screens/Template/Survey/SurveyQuestionForm.js:189
+#: screens/Template/Survey/SurveyQuestionForm.js:188
 msgid "Required"
 msgstr "필수 항목"
 
@@ -10084,10 +10052,6 @@ msgstr "호스트 매개변수를 사용하여 다시 시작"
 msgid "This action will soft delete the following:"
 msgstr "이 작업은 다음을 부드럽게 삭제합니다."
 
-#: components/AdHocCommands/AdHocDetailsStep.js:187
-#~ msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible’s --diff mode."
-#~ msgstr "활성화된 경우 지원되는 Ansible 작업에서 변경한 내용을 표시합니다. 이는 Ansible의 --diff 모드와 동일합니다."
-
 #: screens/Instances/Instance.js:64
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:104
 #: screens/Instances/Instances.js:30
@@ -10416,6 +10380,11 @@ msgstr "모든 토큰 보기"
 msgid "View Inventory Groups"
 msgstr "인벤토리 그룹 보기"
 
+#. placeholder {0}: selected.length
+#: screens/Inventory/InventorySources/InventorySourceList.js:197
+msgid "{0, plural, one {This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?} other {Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete them anyway?}}"
+msgstr "{0, plural, one {이 인벤토리 소스는 현재 이에 의존하는 다른 리소스에서 사용 중입니다. 삭제하시겠습니까?} other {이러한 인벤토리 소스를 삭제하면 이에 의존하는 다른 리소스에 영향을 줄 수 있습니다. 그래도 삭제하시겠습니까?}}"
+
 #: components/Search/LookupTypeInput.js:102
 msgid "Less than comparison."
 msgstr "비교 값보다 적습니다."
@@ -10622,6 +10591,12 @@ msgstr "Twilio"
 msgid "Survey Toggle"
 msgstr "설문조사 토글"
 
+#: screens/Template/Survey/SurveyQuestionForm.js:46
+msgid "Choose an answer type or format you want as the prompt for the user.\n"
+"          Refer to the Ascender Documentation for additional information about each option."
+msgstr "사용자에게 표시할 프롬프트로 원하는 답변 유형 또는 형식을 선택하세요.\n"
+"          각 옵션에 대한 추가 정보는 Ascender 설명서를 참조하세요."
+
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:187
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:111
 msgid "Total groups"
@@ -10783,7 +10758,7 @@ msgstr "YAML 탭"
 msgid "IRC server port"
 msgstr "IRC 서버 포트"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:80
+#: screens/Template/Survey/SurveyQuestionForm.js:79
 #: screens/Template/Survey/SurveyReorderModal.js:217
 msgid "Text"
 msgstr "텍스트"
@@ -10880,7 +10855,7 @@ msgstr "활동"
 msgid "Inventories with sources cannot be copied"
 msgstr "소스와 함께 인벤토리를 복사할 수 없습니다."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:205
+#: screens/Template/Survey/SurveyQuestionForm.js:204
 msgid "Maximum length"
 msgstr "최대 길이"
 
@@ -10898,9 +10873,9 @@ msgstr "이메일 옵션"
 msgid "Refer to the Ansible documentation for details about the configuration file."
 msgstr "구성 파일에 대한 자세한 내용은 Ansible 설명서를 참조하십시오."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:239
-#: screens/Template/Survey/SurveyQuestionForm.js:247
-#: screens/Template/Survey/SurveyQuestionForm.js:254
+#: screens/Template/Survey/SurveyQuestionForm.js:238
+#: screens/Template/Survey/SurveyQuestionForm.js:246
+#: screens/Template/Survey/SurveyQuestionForm.js:253
 msgid "Default answer"
 msgstr "기본 응답"
 
@@ -11067,6 +11042,11 @@ msgstr "시간 초과"
 #: screens/TopologyView/ContentLoading.js:41
 msgid "Please wait until the topology view is populated..."
 msgstr "토폴로지 보기가 채워질 때까지 기다리십시오..."
+
+#. placeholder {0}: groups.length
+#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:122
+msgid "{0, plural, one {Are you sure you want to delete the group below?} other {Are you sure you want to delete the groups below?}}"
+msgstr "{0, plural, one {아래 그룹을 삭제하시겠습니까?} other {아래 그룹을 삭제하시겠습니까?}}"
 
 #: components/AssociateModal/AssociateModal.js:45
 msgid "Select Items"

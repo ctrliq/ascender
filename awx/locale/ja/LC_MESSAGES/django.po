@@ -88,11 +88,11 @@ msgstr "権限のないユーザーがログインできるように、リダイ
 
 #: awx/api/conf.py:103
 msgid "Allow anonymous users to poll metrics"
-msgstr ""
+msgstr "匿名ユーザーによるメトリクスのポーリングを許可する"
 
 #: awx/api/conf.py:104
 msgid "If true, anonymous users are allowed to poll metrics."
-msgstr ""
+msgstr "true の場合、匿名ユーザーはメトリクスをポーリングできます。"
 
 #: awx/api/conf.py:112
 msgid "There are no remote authentication systems configured."
@@ -245,23 +245,23 @@ msgstr "新規ユーザーのパスワードを入力してください。"
 
 #: awx/api/serializers.py:1009
 msgid "Password max length is {}"
-msgstr ""
+msgstr "パスワードの最大長は {} です"
 
 #: awx/api/serializers.py:1011
 msgid "Password must be at least {} characters long."
-msgstr ""
+msgstr "パスワードは {} 文字以上である必要があります。"
 
 #: awx/api/serializers.py:1013
 msgid "Password must contain at least {} digits."
-msgstr ""
+msgstr "パスワードには少なくとも {} 個の数字が含まれている必要があります。"
 
 #: awx/api/serializers.py:1016
 msgid "Password must contain at least {} uppercase characters."
-msgstr ""
+msgstr "パスワードには少なくとも {} 個の大文字が含まれている必要があります。"
 
 #: awx/api/serializers.py:1020
 msgid "Password must contain at least {} special characters."
-msgstr ""
+msgstr "パスワードには少なくとも {} 個の特殊文字が含まれている必要があります。"
 
 #: awx/api/serializers.py:1096
 #, python-format
@@ -353,19 +353,19 @@ msgstr "スマートインベントリーは host_filter を指定する必要�
 
 #: awx/api/serializers.py:1793
 msgid "The source_vars for the related auto-created inventory source, special to constructed inventory."
-msgstr ""
+msgstr "関連する自動作成されたインベントリーソースの source_vars。構築されたインベントリーに固有です。"
 
 #: awx/api/serializers.py:1800
 msgid "The cache timeout for the related auto-created inventory source, special to constructed inventory"
-msgstr ""
+msgstr "関連する自動作成インベントリーソースのキャッシュタイムアウト。構築済みインベントリー固有です"
 
 #: awx/api/serializers.py:1806
 msgid "The limit to restrict the returned hosts for the related auto-created inventory source, special to constructed inventory."
-msgstr ""
+msgstr "関連する自動作成インベントリーソースで返されるホストを制限する上限。構築済みインベントリー固有です。"
 
 #: awx/api/serializers.py:1814
 msgid "The verbosity level for the related auto-created inventory source, special to constructed inventory"
-msgstr ""
+msgstr "関連する自動作成インベントリーソースの詳細レベル。構築済みインベントリー固有です"
 
 #: awx/api/serializers.py:1963
 #, python-format
@@ -398,11 +398,11 @@ msgstr "スマートインベントリーのグループを作成できません
 
 #: awx/api/serializers.py:2097
 msgid "Primary Key ID of inventory to add hosts to."
-msgstr ""
+msgstr "ホストを追加するインベントリーの主キー ID。"
 
 #: awx/api/serializers.py:2104
 msgid "List of hosts to be created, JSON. e.g. [{\"name\": \"example.com\"}, {\"name\": \"127.0.0.1\"}]"
-msgstr ""
+msgstr "作成するホストのリスト (JSON)。例: [{\"name\": \"example.com\"}, {\"name\": \"127.0.0.1\"}]"
 
 #: awx/api/serializers.py:2124 awx/main/access.py:405 awx/main/access.py:416
 #, python-format
@@ -421,21 +421,21 @@ msgstr "%s インスタンスのライセンス数を超えました。"
 
 #: awx/api/serializers.py:2148
 msgid "Hosts can only be created in manual inventories (not smart or constructed types)."
-msgstr ""
+msgstr "ホストは手動インベントリーでのみ作成できます (スマートまたは構築済みタイプでは作成できません)。"
 
 #: awx/api/serializers.py:2150
 msgid "Number of hosts exceeds system setting BULK_HOST_MAX_CREATE"
-msgstr ""
+msgstr "ホスト数がシステム設定 BULK_HOST_MAX_CREATE を超えています"
 
 #: awx/api/serializers.py:2153
 #, python-brace-format
 msgid "Inventory with id {inv.id} not found or lack permissions to add hosts."
-msgstr ""
+msgstr "ID {inv.id} のインベントリーが見つからないか、ホストを追加する権限がありません。"
 
 #: awx/api/serializers.py:2158
 #, python-brace-format
 msgid "Hostnames must be unique in an inventory. Duplicates found: {duplicate_new_names}"
-msgstr ""
+msgstr "ホスト名はインベントリー内で一意である必要があります。重複が見つかりました: {duplicate_new_names}"
 
 #: awx/api/serializers.py:2177
 #, fuzzy, python-brace-format
@@ -445,12 +445,12 @@ msgstr "スマートインベントリーのホストを作成できません"
 
 #: awx/api/serializers.py:2212
 msgid "List of hosts ids to be deleted, e.g. [105, 130, 131, 200]"
-msgstr ""
+msgstr "削除するホスト ID のリスト。例: [105, 130, 131, 200]"
 
 #: awx/api/serializers.py:2284
 #, python-brace-format
 msgid "cannot delete hosts, host deletion error {e}"
-msgstr ""
+msgstr "ホストを削除できません。ホスト削除エラー {e}"
 
 #: awx/api/serializers.py:2347
 msgid "Cloud credential to use for inventory updates."
@@ -472,7 +472,7 @@ msgstr "スマートインベントリーのインベントリーソースを作
 
 #: awx/api/serializers.py:2521
 msgid "Cannot change field '{}' on a constructed inventory source."
-msgstr ""
+msgstr "構築済みインベントリーソースのフィールド '{}' は変更できません。"
 
 #: awx/api/serializers.py:2524
 msgid "Project required for scm type sources."
@@ -533,7 +533,7 @@ msgstr "認証情報の認証情報タイプを変更することはできませ
 
 #: awx/api/serializers.py:3020
 msgid "Vault IDs cannot be changed once they have been created."
-msgstr ""
+msgstr "Vault ID は一度作成すると変更できません。"
 
 #: awx/api/serializers.py:3032
 msgid "Write-only field used to add user to owner role. If provided, do not give either team or organization. Only valid for creation."
@@ -670,11 +670,11 @@ msgstr "このワークフローに関連付けられているインベントリ
 
 #: awx/api/serializers.py:4786
 msgid "Primary key of the template for this job, can be a job template or inventory source."
-msgstr ""
+msgstr "このジョブのテンプレートの主キー。ジョブテンプレートまたはインベントリーソースを指定できます。"
 
 #: awx/api/serializers.py:4815
 msgid "List of jobs to be launched, JSON. e.g. [{\"unified_job_template\": 7}, {\"unified_job_template\": 10}]"
-msgstr ""
+msgstr "起動するジョブのリスト (JSON)。例: [{\"unified_job_template\": 7}, {\"unified_job_template\": 10}]"
 
 #: awx/api/serializers.py:4825
 #, fuzzy
@@ -684,26 +684,26 @@ msgstr "組織ロールからパーミッションを継承します。作成時
 
 #: awx/api/serializers.py:4842
 msgid "Number of requested jobs exceeds system setting BULK_JOB_MAX_LAUNCH"
-msgstr ""
+msgstr "要求されたジョブ数がシステム設定 BULK_JOB_MAX_LAUNCH を超えています"
 
 #: awx/api/serializers.py:4847
 msgid "Identifier {node['identifier']} not unique"
-msgstr ""
+msgstr "識別子 {node['identifier']} が一意ではありません"
 
 #: awx/api/serializers.py:4883
 #, python-brace-format
 msgid "Template types {type_names} not allowed in bulk jobs"
-msgstr ""
+msgstr "テンプレートタイプ {type_names} は一括ジョブでは許可されていません"
 
 #: awx/api/serializers.py:4922
 #, python-brace-format
 msgid "{model_name} {not_allowed} not found or you don't have permissions to access it"
-msgstr ""
+msgstr "{model_name} {not_allowed} が見つからないか、アクセスする権限がありません"
 
 #: awx/api/serializers.py:5027
 #, python-brace-format
 msgid "Organization {requested_org.id} not found or you don't have permissions to access it"
-msgstr ""
+msgstr "組織 {requested_org.id} が見つからないか、アクセスする権限がありません"
 
 #: awx/api/serializers.py:5093
 msgid "Message type '{}' invalid, must be either 'message' or 'body'"
@@ -799,11 +799,11 @@ msgstr "RRULE が rrule で必要です。"
 
 #: awx/api/serializers.py:5356
 msgid "EXDATE not allowed in rrule."
-msgstr ""
+msgstr "EXDATE は rrule では許可されていません。"
 
 #: awx/api/serializers.py:5358
 msgid "RDATE not allowed in rrule."
-msgstr ""
+msgstr "RDATE は rrule では許可されていません。"
 
 #: awx/api/serializers.py:5361
 #, fuzzy
@@ -839,11 +839,11 @@ msgstr "rrule の構文解析で検証に失敗しました: {}"
 
 #: awx/api/serializers.py:5393
 msgid "The timezone this schedule runs in. This field is extracted from the RRULE. If the timezone in the RRULE is a link to another timezone, the link will be reflected in this field."
-msgstr ""
+msgstr "このスケジュールが実行されるタイムゾーン。このフィールドは RRULE から抽出されます。RRULE のタイムゾーンが別のタイムゾーンへのリンクである場合、そのリンクがこのフィールドに反映されます。"
 
 #: awx/api/serializers.py:5397
 msgid "The date this schedule will end. This field is computed from the RRULE. If the schedule does not end an empty string will be returned"
-msgstr ""
+msgstr "このスケジュールが終了する日付。このフィールドは RRULE から計算されます。スケジュールが終了しない場合は空の文字列が返されます"
 
 #: awx/api/serializers.py:5451
 msgid "Inventory Source must be a cloud resource."
@@ -863,19 +863,19 @@ msgstr "このインスタンスをターゲットに設定するすべてのジ
 
 #: awx/api/serializers.py:5526
 msgid "Primary keys of receptor addresses to peer to."
-msgstr ""
+msgstr "ピアリングするレセプターアドレスの主キー。"
 
 #: awx/api/serializers.py:5681
 msgid "Can only create instances on Kubernetes or OpenShift."
-msgstr ""
+msgstr "インスタンスは Kubernetes または OpenShift でのみ作成できます。"
 
 #: awx/api/serializers.py:5687
 msgid "Cannot enable peers_from_control_nodes if listener_port is not set."
-msgstr ""
+msgstr "listener_port が設定されていない場合、peers_from_control_nodes を有効にできません。"
 
 #: awx/api/serializers.py:5693
 msgid "Can only create execution or hop nodes."
-msgstr ""
+msgstr "実行ノードまたはホップノードのみ作成できます。"
 
 #: awx/api/serializers.py:5696
 #, fuzzy
@@ -885,19 +885,19 @@ msgstr "%s を変更できません。"
 
 #: awx/api/serializers.py:5704
 msgid "Can only change the state on Kubernetes or OpenShift."
-msgstr ""
+msgstr "状態は Kubernetes または OpenShift でのみ変更できます。"
 
 #: awx/api/serializers.py:5706
 msgid "Can only change instances to the 'deprovisioning' state."
-msgstr ""
+msgstr "インスタンスは 'deprovisioning' 状態にのみ変更できます。"
 
 #: awx/api/serializers.py:5708
 msgid "Cannot deprovision managed nodes."
-msgstr ""
+msgstr "管理対象ノードのプロビジョニングを解除できません。"
 
 #: awx/api/serializers.py:5711
 msgid "Can only create instances in the 'installed' state."
-msgstr ""
+msgstr "インスタンスは 'installed' 状態でのみ作成できます。"
 
 #: awx/api/serializers.py:5720
 #, fuzzy
@@ -919,7 +919,7 @@ msgstr "{scm_type} ベースのプロジェクトの local_path を変更でき�
 
 #: awx/api/serializers.py:5741
 msgid "Cannot peer to the same instance more than once."
-msgstr ""
+msgstr "同じインスタンスに複数回ピアリングすることはできません。"
 
 #: awx/api/serializers.py:5749
 #, fuzzy
@@ -929,11 +929,11 @@ msgstr "%s を変更できません。"
 
 #: awx/api/serializers.py:5752
 msgid "Setting peers manually for managed nodes is not allowed."
-msgstr ""
+msgstr "管理対象ノードのピアを手動で設定することは許可されていません。"
 
 #: awx/api/serializers.py:5756
 msgid "Instance cannot peer to its own address."
-msgstr ""
+msgstr "インスタンスは自身のアドレスにピアリングできません。"
 
 #: awx/api/serializers.py:5762
 #, fuzzy, python-brace-format
@@ -943,7 +943,7 @@ msgstr "このインスタンスグループのメンバーであるインスタ
 
 #: awx/api/serializers.py:5768
 msgid "Cannot change peers_from_control_nodes for managed nodes."
-msgstr ""
+msgstr "管理対象ノードの peers_from_control_nodes は変更できません。"
 
 #: awx/api/serializers.py:5824
 msgid "Count of all jobs that target this instance group"
@@ -977,15 +977,15 @@ msgstr "管理ジョブ"
 
 #: awx/api/serializers.py:5855
 msgid "Maximum number of concurrent jobs to run on a group. When set to zero, no maximum is enforced."
-msgstr ""
+msgstr "グループで同時に実行するジョブの最大数。ゼロに設定すると、最大数は適用されません。"
 
 #: awx/api/serializers.py:5862
 msgid "Max Forks"
-msgstr ""
+msgstr "最大フォーク数"
 
 #: awx/api/serializers.py:5863
 msgid "Maximum number of forks to execute concurrently on a group. When set to zero, no maximum is enforced."
-msgstr ""
+msgstr "グループで同時に実行するフォークの最大数。ゼロに設定すると、最大数は適用されません。"
 
 #: awx/api/serializers.py:5868
 msgid "Policy Instance List"
@@ -1017,7 +1017,7 @@ msgstr "コンテナー化されたインスタンスは API で管理されな�
 #: awx/api/serializers.py:5927
 #, python-format
 msgid "%s instance group policy_instance_percentage may not be changed from the initial value set by the installer."
-msgstr ""
+msgstr "インスタンスグループ %s の policy_instance_percentage は、インストーラーが設定した初期値から変更できません。"
 
 #: awx/api/serializers.py:5940 awx/api/serializers.py:5943
 #, python-format
@@ -1093,15 +1093,15 @@ msgstr "インスタンスジョブ"
 
 #: awx/api/views/__init__.py:414
 msgid "Peers"
-msgstr ""
+msgstr "ピア"
 
 #: awx/api/views/__init__.py:424 awx/api/views/__init__.py:433
 msgid "Receptor Addresses"
-msgstr ""
+msgstr "レセプターアドレス"
 
 #: awx/api/views/__init__.py:440
 msgid "Receptor Address Detail"
-msgstr ""
+msgstr "レセプターアドレスの詳細"
 
 #: awx/api/views/__init__.py:448
 msgid "Instance's Instance Groups"
@@ -1110,17 +1110,17 @@ msgstr "インスタンスのインスタンスグループ"
 #: awx/api/views/__init__.py:456
 #, python-brace-format
 msgid "Cannot change instance group membership of control-only node: {parent.hostname}."
-msgstr ""
+msgstr "制御専用ノードのインスタンスグループメンバーシップは変更できません: {parent.hostname}。"
 
 #: awx/api/views/__init__.py:458
 #, python-brace-format
 msgid "Cannot change instance group membership of hop node : {parent.hostname}."
-msgstr ""
+msgstr "ホップノードのインスタンスグループメンバーシップは変更できません: {parent.hostname}。"
 
 #: awx/api/views/__init__.py:466
 #, python-brace-format
 msgid "Cannot disassociate hybrid instance {parent.hostname} from {sub.name}."
-msgstr ""
+msgstr "ハイブリッドインスタンス {parent.hostname} を {sub.name} から関連付け解除できません。"
 
 #: awx/api/views/__init__.py:471
 #, fuzzy
@@ -1147,17 +1147,17 @@ msgstr "インスタンスグループのインスタンス"
 #: awx/api/views/__init__.py:560
 #, python-brace-format
 msgid "Cannot change instance group membership of control-only node: {sub.hostname}."
-msgstr ""
+msgstr "制御専用ノードのインスタンスグループメンバーシップは変更できません: {sub.hostname}。"
 
 #: awx/api/views/__init__.py:562
 #, python-brace-format
 msgid "Cannot change instance group membership of hop node : {sub.hostname}."
-msgstr ""
+msgstr "ホップノードのインスタンスグループメンバーシップは変更できません: {sub.hostname}。"
 
 #: awx/api/views/__init__.py:570
 #, python-brace-format
 msgid "Cannot disassociate hybrid node {sub.hostname} from {parent.name}."
-msgstr ""
+msgstr "ハイブリッドノード {sub.hostname} を {parent.name} から関連付け解除できません。"
 
 #: awx/api/views/__init__.py:575
 msgid "Schedules"
@@ -1332,7 +1332,7 @@ msgstr "設定の詳細"
 
 #: awx/api/views/__init__.py:1633
 msgid "Host Metrics Summary Monthly"
-msgstr ""
+msgstr "ホストメトリクスの月次サマリー"
 
 #: awx/api/views/__init__.py:1670
 msgid "The inventory for this host is already being deleted."
@@ -1340,7 +1340,7 @@ msgstr "このホストのインベントリーはすでに削除されていま
 
 #: awx/api/views/__init__.py:1672
 msgid "Delete constructed inventory hosts from input inventory."
-msgstr ""
+msgstr "入力インベントリーから構築済みインベントリーのホストを削除します。"
 
 #: awx/api/views/__init__.py:1835
 msgid "Cyclical Group association."
@@ -1592,23 +1592,23 @@ msgstr "承認"
 
 #: awx/api/views/analytics.py:259
 msgid "Reports"
-msgstr ""
+msgstr "レポート"
 
 #: awx/api/views/analytics.py:264
 msgid "Report"
-msgstr ""
+msgstr "レポート"
 
 #: awx/api/views/analytics.py:268
 msgid "Report Options"
-msgstr ""
+msgstr "レポートオプション"
 
 #: awx/api/views/analytics.py:272
 msgid "Adoption Rate"
-msgstr ""
+msgstr "導入率"
 
 #: awx/api/views/analytics.py:276
 msgid "Event Explorer"
-msgstr ""
+msgstr "イベントエクスプローラー"
 
 #: awx/api/views/analytics.py:280
 #, fuzzy
@@ -1618,7 +1618,7 @@ msgstr "ホストの失敗"
 
 #: awx/api/views/analytics.py:284
 msgid "Job Explorer"
-msgstr ""
+msgstr "ジョブエクスプローラー"
 
 #: awx/api/views/analytics.py:288
 #, fuzzy
@@ -1640,7 +1640,7 @@ msgstr "ジョブテンプレート"
 
 #: awx/api/views/bulk.py:23
 msgid "Bulk"
-msgstr ""
+msgstr "一括"
 
 #: awx/api/views/instance_install_bundle.py:48
 #, fuzzy
@@ -1650,7 +1650,7 @@ msgstr "インスタンス"
 
 #: awx/api/views/instance_install_bundle.py:58
 msgid "Install bundle can only be generated for execution or hop nodes."
-msgstr ""
+msgstr "インストールバンドルは実行ノードまたはホップノードに対してのみ生成できます。"
 
 #: awx/api/views/inventory.py:55
 msgid "Inventory Update Events List"
@@ -1675,11 +1675,11 @@ msgstr "{} のラベルの最大数に達しました。"
 
 #: awx/api/views/labels.py:67
 msgid "Labels"
-msgstr ""
+msgstr "ラベル"
 
 #: awx/api/views/mesh_visualizer.py:13
 msgid "Mesh Visualizer"
-msgstr ""
+msgstr "メッシュビジュアライザー"
 
 #: awx/api/views/metrics.py:30
 msgid "Metrics"
@@ -1976,12 +1976,12 @@ msgstr "{path} は有効なパスではありません。"
 #: awx/conf/fields.py:127
 #, python-brace-format
 msgid "{scontext} is not a valid mount option. Allowed types are {mount_types}"
-msgstr ""
+msgstr "{scontext} は有効なマウントオプションではありません。許可されるタイプは {mount_types} です"
 
 #: awx/conf/fields.py:128
 #, python-brace-format
 msgid "Invalid syntax. A string HOST-DIR[:CONTAINER-DIR[:OPTIONS]] is expected but got {path}."
-msgstr ""
+msgstr "構文が無効です。文字列 HOST-DIR[:CONTAINER-DIR[:OPTIONS]] が期待されますが、{path} が指定されました。"
 
 #: awx/conf/fields.py:190
 msgid "Enter a valid URL"
@@ -2220,11 +2220,11 @@ msgstr "ワークフローに関するデータ"
 
 #: awx/main/analytics/collectors.py:597
 msgid "Host Metric data, incremental/full sync"
-msgstr ""
+msgstr "ホストメトリクスデータ、増分/完全同期"
 
 #: awx/main/analytics/collectors.py:618
 msgid "HostMetricSummaryMonthly export, full sync"
-msgstr ""
+msgstr "HostMetricSummaryMonthly のエクスポート、完全同期"
 
 #: awx/main/apps.py:7
 msgid "Main"
@@ -2290,7 +2290,7 @@ msgstr "サービスがリバースプロキシー/ロードバランサーの�
 
 #: awx/main/conf.py:102
 msgid "CSRF Trusted Origins List"
-msgstr ""
+msgstr "CSRF 信頼済みオリジンリスト"
 
 #: awx/main/conf.py:104
 #, fuzzy
@@ -2344,7 +2344,7 @@ msgstr "このパスワードは、サブスクリプションおよびコンテ
 
 #: awx/main/conf.py:180
 msgid "Automation Analytics upload URL"
-msgstr ""
+msgstr "Automation Analytics のアップロード URL"
 
 #: awx/main/conf.py:181
 #, fuzzy
@@ -2448,11 +2448,11 @@ msgstr "Playbook 実行、インベントリー更新、プロジェクト更新
 
 #: awx/main/conf.py:303
 msgid "K8S Ansible Runner Keep-Alive Message Interval"
-msgstr ""
+msgstr "K8S Ansible ランナーのキープアライブメッセージ間隔"
 
 #: awx/main/conf.py:304
 msgid "Only applies to jobs running in a Container Group. If not 0, send a message every so-many seconds to keep connection open."
-msgstr ""
+msgstr "コンテナーグループで実行されるジョブにのみ適用されます。0 以外の場合、接続を維持するために指定された秒数ごとにメッセージを送信します。"
 
 #: awx/main/conf.py:313
 #, fuzzy
@@ -2462,7 +2462,7 @@ msgstr "追加の環境変数"
 
 #: awx/main/conf.py:315
 msgid "Additional environment variables set for invocations of ansible-galaxy within project updates. Useful if you must use a proxy server for ansible-galaxy but not git."
-msgstr ""
+msgstr "プロジェクト更新内で ansible-galaxy を呼び出す際に設定される追加の環境変数。ansible-galaxy にはプロキシサーバーを使用する必要があるが git には使用しない場合に便利です。"
 
 #: awx/main/conf.py:327
 #, fuzzy
@@ -2502,11 +2502,11 @@ msgstr "コレクションが SCM プロジェクトの requirements.yml ファ�
 
 #: awx/main/conf.py:366
 msgid "Enable Ansible 2.9 Compatibility"
-msgstr ""
+msgstr "Ansible 2.9 互換性を有効にする"
 
 #: awx/main/conf.py:367
 msgid "If enabled, sets ANSIBLE_COLLECTIONS_PATHS for legacy Ansible 2.9 compatibility."
-msgstr ""
+msgstr "有効にすると、レガシーな Ansible 2.9 互換性のために ANSIBLE_COLLECTIONS_PATHS を設定します。"
 
 #: awx/main/conf.py:376
 msgid "Follow symlinks"
@@ -2518,11 +2518,11 @@ msgstr "Playbook のスキャン時にシンボリックリンクをたどりま
 
 #: awx/main/conf.py:389
 msgid "Expose host paths for Container Groups"
-msgstr ""
+msgstr "コンテナーグループのホストパスを公開する"
 
 #: awx/main/conf.py:391
 msgid "Expose paths via hostPath for the Pods created by a Container Group. HostPath volumes present many security risks, and it is a best practice to avoid the use of HostPaths when possible. "
-msgstr ""
+msgstr "コンテナーグループによって作成された Pod に対して hostPath 経由でパスを公開します。HostPath ボリュームには多くのセキュリティリスクがあり、可能な限り HostPath の使用を避けることがベストプラクティスです。"
 
 #: awx/main/conf.py:402
 msgid "Ignore Ansible Galaxy SSL Certificate Verification"
@@ -2588,7 +2588,7 @@ msgstr "デフォルトのジョブタイムアウト"
 
 #: awx/main/conf.py:483
 msgid "If no output is detected from ansible in this number of seconds the execution will be terminated. Use value of 0 to indicate that no idle timeout should be imposed."
-msgstr ""
+msgstr "この秒数の間に ansible からの出力が検出されない場合、実行は終了されます。アイドルタイムアウトを課さないことを示すには値 0 を使用します。"
 
 #: awx/main/conf.py:496
 msgid "Default Inventory Update Timeout"
@@ -2762,7 +2762,7 @@ msgstr "この組織が管理可能な最大ホスト数"
 
 #: awx/main/conf.py:715
 msgid "Defines how large the rsyslog action queue can grow in number of messages stored. This can have an impact on memory utilization. When the queue reaches 75% of this number, the queue will start writing to disk (queue.highWatermark in rsyslog). When it reaches 90%, NOTICE, INFO, and DEBUG messages will start to be discarded (queue.discardMark with queue.discardSeverity=5)."
-msgstr ""
+msgstr "rsyslog アクションキューが保存するメッセージ数でどこまで大きくなれるかを定義します。これはメモリー使用量に影響を与える可能性があります。キューがこの数の 75% に達すると、ディスクへの書き込みを開始します (rsyslog の queue.highWatermark)。90% に達すると、NOTICE、INFO、DEBUG メッセージが破棄され始めます (queue.discardMark、queue.discardSeverity=5)。"
 
 #: awx/main/conf.py:730
 #, fuzzy
@@ -2794,7 +2794,7 @@ msgstr "rsyslogd の詳細デバッグを有効にしました。外部ログ集
 
 #: awx/main/conf.py:766
 msgid "Log Format For API 4XX Errors"
-msgstr ""
+msgstr "API 4XX エラーのログ形式"
 
 #: awx/main/conf.py:768
 msgid ""
@@ -2805,7 +2805,7 @@ msgid ""
 "remote_addr - The remote address seen for the user\n"
 "error - The error set by the api endpoint\n"
 "Variables need to be in the format {<variable name>}."
-msgstr ""
+msgstr "API 4XX エラーが発生したときにログに記録されるメッセージの形式。以下の変数が置換されます: \nstatus_code - エラーの HTTP ステータスコード\nuser_name - API の使用を試みているユーザー名\nurl_path - 呼び出された API エンドポイントへの URL パス\nremote_addr - ユーザーに対して確認されたリモートアドレス\nerror - api エンドポイントによって設定されたエラー\n変数は {<variable name>} の形式である必要があります。"
 
 #: awx/main/conf.py:785
 #, fuzzy
@@ -2835,11 +2835,11 @@ msgstr "インスタンスが kubernetes ベースのデプロイに含まれて
 
 #: awx/main/conf.py:826 awx/main/conf.py:827
 msgid "Max jobs to allow bulk jobs to launch"
-msgstr ""
+msgstr "一括ジョブが起動できるジョブの最大数"
 
 #: awx/main/conf.py:828 awx/main/conf.py:838 awx/main/conf.py:848
 msgid "Bulk Actions"
-msgstr ""
+msgstr "一括アクション"
 
 #: awx/main/conf.py:836 awx/main/conf.py:837
 #, fuzzy
@@ -2855,31 +2855,31 @@ msgstr "この組織が管理可能な最大ホスト数"
 
 #: awx/main/conf.py:856
 msgid "Enable Preview of New User Interface"
-msgstr ""
+msgstr "新しいユーザーインターフェイスのプレビューを有効にする"
 
 #: awx/main/conf.py:857
 msgid "Enable preview of new user interface."
-msgstr ""
+msgstr "新しいユーザーインターフェイスのプレビューを有効にします。"
 
 #: awx/main/conf.py:866
 msgid "Default model for AWX - no subscription. Deletion of host_metrics will not be considered for purposes of managed host counting"
-msgstr ""
+msgstr "AWX のデフォルトモデル - サブスクリプションなし。管理対象ホストのカウントの目的では host_metrics の削除は考慮されません"
 
 #: awx/main/conf.py:869
 msgid "Usage based on unique managed nodes in a large historical time frame and delete functionality for no longer used managed nodes"
-msgstr ""
+msgstr "大きな履歴期間内の一意の管理対象ノードに基づく使用量、および使用されなくなった管理対象ノードの削除機能"
 
 #: awx/main/conf.py:874
 msgid "Defines subscription usage model and shows Host Metrics"
-msgstr ""
+msgstr "サブスクリプション使用モデルを定義し、ホストメトリクスを表示します"
 
 #: awx/main/conf.py:882
 msgid "Last cleanup date for HostMetrics"
-msgstr ""
+msgstr "HostMetrics の最終クリーンアップ日"
 
 #: awx/main/conf.py:891
 msgid "Last computing date of HostMetricSummaryMonthly"
-msgstr ""
+msgstr "HostMetricSummaryMonthly の最終計算日"
 
 #: awx/main/conf.py:900
 #, fuzzy
@@ -2895,11 +2895,11 @@ msgstr "ユーザーアナリティクストラッキングの有効化/無効�
 
 #: awx/main/conf.py:910
 msgid "Debug Web Requests"
-msgstr ""
+msgstr "Web リクエストをデバッグする"
 
 #: awx/main/conf.py:912
 msgid "Debug web request python timing"
-msgstr ""
+msgstr "Web リクエストの python タイミングをデバッグする"
 
 #: awx/main/conf.py:920
 #, fuzzy
@@ -2909,15 +2909,15 @@ msgstr "コンテナーレジストリー"
 
 #: awx/main/conf.py:922
 msgid "List of options to pass to podman run example: ['--network', 'slirp4netns:enable_ipv6=true', '--log-level', 'debug']"
-msgstr ""
+msgstr "podman run に渡すオプションのリスト。例: ['--network', 'slirp4netns:enable_ipv6=true', '--log-level', 'debug']"
 
 #: awx/main/conf.py:930
 msgid "Release Receptor Work"
-msgstr ""
+msgstr "レセプターの作業を解放する"
 
 #: awx/main/conf.py:932
 msgid "Release receptor work"
-msgstr ""
+msgstr "レセプターの作業を解放する"
 
 #: awx/main/conf.py:958 awx/main/conf.py:982 awx/sso/conf.py:1655
 msgid "\n"
@@ -2989,7 +2989,7 @@ msgstr "Amazon Web Services"
 
 #: awx/main/credential_plugins/aim.py:20
 msgid "The CCP Web Service ID. Leave blank to default to AIMWebService."
-msgstr ""
+msgstr "CCP Web サービス ID。空白のままにするとデフォルトで AIMWebService になります。"
 
 #: awx/main/credential_plugins/aim.py:24
 msgid "Application ID"
@@ -3028,7 +3028,7 @@ msgstr "オブジェクトのクエリー"
 
 #: awx/main/credential_plugins/aim.py:61
 msgid "The property of the object to return. Available properties: Username, Password and Address."
-msgstr ""
+msgstr "返すオブジェクトのプロパティ。利用可能なプロパティ: Username、Password、Address。"
 
 #: awx/main/credential_plugins/aim.py:65
 msgid "Reason"
@@ -3058,7 +3058,7 @@ msgstr "シークレットのバージョン"
 
 #: awx/main/credential_plugins/aws_secretsmanager.py:27
 msgid "Region which the secrets manager is located"
-msgstr ""
+msgstr "シークレットマネージャーが配置されているリージョン"
 
 #: awx/main/credential_plugins/aws_secretsmanager.py:31
 #, fuzzy
@@ -3238,11 +3238,11 @@ msgstr "シークレットから抽出するフィールド"
 
 #: awx/main/credential_plugins/dsv.py:50
 msgid "Should the secret be base64 decoded?"
-msgstr ""
+msgstr "シークレットを base64 デコードする必要がありますか?"
 
 #: awx/main/credential_plugins/dsv.py:51
 msgid "Specify whether the secret should be base64 decoded, typically used for storing files, such as SSH keys"
-msgstr ""
+msgstr "シークレットを base64 デコードするかどうかを指定します。通常、SSH キーなどのファイルを保存するために使用されます"
 
 #: awx/main/credential_plugins/dsv.py:64
 msgid "URL template"
@@ -3293,7 +3293,7 @@ msgstr "AppRole 認証のシークレット ID"
 
 #: awx/main/credential_plugins/hashivault.py:50
 msgid "The PEM-encoded client certificate used for TLS client authentication. This should include the certificate and any intermediate certififcates."
-msgstr ""
+msgstr "TLS クライアント認証に使用される PEM エンコードのクライアント証明書。これには証明書と中間証明書を含める必要があります。"
 
 #: awx/main/credential_plugins/hashivault.py:56
 #, fuzzy
@@ -3303,7 +3303,7 @@ msgstr "クライアント証明書"
 
 #: awx/main/credential_plugins/hashivault.py:60
 msgid "The certificate private key used for TLS client authentication."
-msgstr ""
+msgstr "TLS クライアント認証に使用される証明書の秘密鍵。"
 
 #: awx/main/credential_plugins/hashivault.py:64
 #, fuzzy
@@ -3313,7 +3313,7 @@ msgstr "認証 URL"
 
 #: awx/main/credential_plugins/hashivault.py:68
 msgid "The role configured in Hashicorp Vault for TLS client authentication. If not provided, Hashicorp Vault may assign roles based on the certificate used."
-msgstr ""
+msgstr "TLS クライアント認証のために Hashicorp Vault で設定されたロール。指定されない場合、Hashicorp Vault は使用される証明書に基づいてロールを割り当てることがあります。"
 
 #: awx/main/credential_plugins/hashivault.py:74
 msgid "Namespace name (Vault Enterprise only)"
@@ -3331,7 +3331,7 @@ msgstr "Kubernetes"
 
 #: awx/main/credential_plugins/hashivault.py:85
 msgid "The Role for Kubernetes Authentication. This is the named role, configured in Vault server, for AWX pod auth policies. see https://www.vaultproject.io/docs/auth/kubernetes#configuration"
-msgstr ""
+msgstr "Kubernetes 認証のロール。これは、AWX Pod 認証ポリシー用に Vault サーバーで設定された名前付きロールです。https://www.vaultproject.io/docs/auth/kubernetes#configuration を参照してください"
 
 #: awx/main/credential_plugins/hashivault.py:95
 #, fuzzy
@@ -3742,7 +3742,7 @@ msgstr "Galaxy / Automation Hub"
 
 #: awx/main/models/credential/__init__.py:346
 msgid "Cryptography"
-msgstr ""
+msgstr "暗号化"
 
 #: awx/main/models/credential/__init__.py:358
 msgid "Enter injectors using either JSON or YAML syntax. Refer to the documentation for example syntax."
@@ -3949,7 +3949,7 @@ msgstr "このトークンは GitLab のプロファイル設定から取得す�
 
 #: awx/main/models/credential/__init__.py:937
 msgid "Bitbucket Data Center HTTP Access Token"
-msgstr ""
+msgstr "Bitbucket Data Center HTTP アクセストークン"
 
 #: awx/main/models/credential/__init__.py:946
 #, fuzzy
@@ -4004,31 +4004,31 @@ msgstr "パーソナルアクセストークン"
 
 #: awx/main/models/credential/__init__.py:1034
 msgid "CIQ Depot"
-msgstr ""
+msgstr "CIQ Depot"
 
 #: awx/main/models/credential/__init__.py:1040
 msgid "CIQ Depot Server"
-msgstr ""
+msgstr "CIQ Depot サーバー"
 
 #: awx/main/models/credential/__init__.py:1042
 msgid "A CIQ Depot server."
-msgstr ""
+msgstr "CIQ Depot サーバー。"
 
 #: awx/main/models/credential/__init__.py:1047
 msgid "CIQ Depot User"
-msgstr ""
+msgstr "CIQ Depot ユーザー"
 
 #: awx/main/models/credential/__init__.py:1049
 msgid "A CIQ Depot user."
-msgstr ""
+msgstr "CIQ Depot ユーザー。"
 
 #: awx/main/models/credential/__init__.py:1053
 msgid "CIQ Depot Token"
-msgstr ""
+msgstr "CIQ Depot トークン"
 
 #: awx/main/models/credential/__init__.py:1056
 msgid "A CIQ Depot Token."
-msgstr ""
+msgstr "CIQ Depot トークン。"
 
 #: awx/main/models/credential/__init__.py:1073
 msgid "OpenShift or Kubernetes API Bearer Token"
@@ -4103,7 +4103,7 @@ msgstr "未署名の公開鍵"
 
 #: awx/main/models/credential/__init__.py:1185
 msgid "GPG Public Key used to validate content signatures."
-msgstr ""
+msgstr "コンテンツ署名の検証に使用される GPG 公開鍵。"
 
 #: awx/main/models/credential/__init__.py:1195
 #, fuzzy
@@ -4119,7 +4119,7 @@ msgstr "Configuration (構成)"
 
 #: awx/main/models/credential/__init__.py:1205
 msgid "Terraform backend config as Hashicorp configuration language."
-msgstr ""
+msgstr "Hashicorp 設定言語としての Terraform バックエンド設定。"
 
 #: awx/main/models/credential/__init__.py:1244
 msgid "Target must be a non-external credential"
@@ -4292,15 +4292,15 @@ msgstr "実行前にイメージをプルしますか?"
 
 #: awx/main/models/ha.py:75
 msgid "Field source and target must be unique together."
-msgstr ""
+msgstr "フィールド source と target は組み合わせで一意である必要があります。"
 
 #: awx/main/models/ha.py:79
 msgid "The source instance of this peer link."
-msgstr ""
+msgstr "このピアリンクのソースインスタンス。"
 
 #: awx/main/models/ha.py:80
 msgid "The target receptor address of this peer link."
-msgstr ""
+msgstr "このピアリンクのターゲットレセプターアドレス。"
 
 #: awx/main/models/ha.py:83
 #, fuzzy
@@ -4310,15 +4310,15 @@ msgstr "保留中"
 
 #: awx/main/models/ha.py:84
 msgid "Established"
-msgstr ""
+msgstr "確立済み"
 
 #: awx/main/models/ha.py:85
 msgid "Removing"
-msgstr ""
+msgstr "削除中"
 
 #: awx/main/models/ha.py:88
 msgid "Indicates the current life cycle stage of this peer link."
-msgstr ""
+msgstr "このピアリンクの現在のライフサイクルステージを示します。"
 
 #: awx/main/models/ha.py:103
 #, fuzzy
@@ -4328,47 +4328,47 @@ msgstr "フィールド ID は固有でなければなりません (%s)"
 
 #: awx/main/models/ha.py:135
 msgid "Total system memory of this instance in bytes."
-msgstr ""
+msgstr "このインスタンスのシステムメモリー合計 (バイト単位)。"
 
 #: awx/main/models/ha.py:141
 msgid "Any error details from the last health check."
-msgstr ""
+msgstr "前回のヘルスチェックからのエラーの詳細。"
 
 #: awx/main/models/ha.py:146
 msgid "Last time instance ran its heartbeat task for main cluster nodes. Last known connection to receptor mesh for execution nodes."
-msgstr ""
+msgstr "メインクラスターノードについてインスタンスが最後にハートビートタスクを実行した時刻。実行ノードについてはレセプターメッシュへの最後に確認された接続。"
 
 #: awx/main/models/ha.py:151
 msgid "The last time a health check was initiated on this instance."
-msgstr ""
+msgstr "このインスタンスでヘルスチェックが最後に開始された時刻。"
 
 #: awx/main/models/ha.py:156
 msgid "Last time a health check was ran on this instance to refresh cpu, memory, and capacity."
-msgstr ""
+msgstr "CPU、メモリー、容量を更新するためにこのインスタンスでヘルスチェックが最後に実行された時刻。"
 
 #: awx/main/models/ha.py:177
 msgid "Control plane node"
-msgstr ""
+msgstr "コントロールプレーンノード"
 
 #: awx/main/models/ha.py:178
 msgid "Execution plane node"
-msgstr ""
+msgstr "実行プレーンノード"
 
 #: awx/main/models/ha.py:179
 msgid "Controller and execution"
-msgstr ""
+msgstr "コントローラーおよび実行"
 
 #: awx/main/models/ha.py:180
 msgid "Message-passing node, no execution capability"
-msgstr ""
+msgstr "メッセージパッシングノード、実行機能なし"
 
 #: awx/main/models/ha.py:182
 msgid "Role that this node plays in the mesh."
-msgstr ""
+msgstr "このノードがメッシュ内で果たす役割。"
 
 #: awx/main/models/ha.py:185
 msgid "Provisioning"
-msgstr ""
+msgstr "プロビジョニング中"
 
 #: awx/main/models/ha.py:186
 #, fuzzy
@@ -4396,15 +4396,15 @@ msgstr "フィールド '{}' が利用できません"
 
 #: awx/main/models/ha.py:190
 msgid "De-provisioning"
-msgstr ""
+msgstr "プロビジョニング解除中"
 
 #: awx/main/models/ha.py:191
 msgid "De-provisioning Failure"
-msgstr ""
+msgstr "プロビジョニング解除の失敗"
 
 #: awx/main/models/ha.py:194
 msgid "Indicates the current life cycle stage of this instance."
-msgstr ""
+msgstr "このインスタンスの現在のライフサイクルステージを示します。"
 
 #: awx/main/models/ha.py:197
 #, fuzzy
@@ -4430,7 +4430,7 @@ msgstr "1 秒あたりの UI ライブジョブ出力を更新するメッセー
 
 #: awx/main/models/ha.py:453
 msgid "Max forks to execute on this group. Zero means no limit."
-msgstr ""
+msgstr "このグループで実行する最大フォーク数。ゼロは制限なしを意味します。"
 
 #: awx/main/models/ha.py:454
 msgid "Percentage of Instances to automatically assign to this group"
@@ -4454,7 +4454,7 @@ msgstr "host_filter プロパティーを使用して生成されたインベン
 
 #: awx/main/models/inventory.py:87
 msgid "Parse list of source inventories with the constructed inventory plugin."
-msgstr ""
+msgstr "構築済みインベントリープラグインを使用してソースインベントリーのリストを解析します。"
 
 #: awx/main/models/inventory.py:92
 msgid "inventories"
@@ -4506,7 +4506,7 @@ msgstr "このインべントリーのホストに適用されるフィルター
 
 #: awx/main/models/inventory.py:165
 msgid "Only valid for constructed inventories, this links to the inventories that will be used."
-msgstr ""
+msgstr "構築済みインベントリーに対してのみ有効で、使用されるインベントリーにリンクします。"
 
 #: awx/main/models/inventory.py:196
 msgid "Flag indicating the inventory is being deleted."
@@ -4582,15 +4582,15 @@ msgstr "ホストが最後に自動化された日時"
 
 #: awx/main/models/inventory.py:872
 msgid "How many times was the host automated"
-msgstr ""
+msgstr "ホストが自動化された回数"
 
 #: awx/main/models/inventory.py:873
 msgid "How many times was the host deleted"
-msgstr ""
+msgstr "ホストが削除された回数"
 
 #: awx/main/models/inventory.py:875
 msgid "Boolean flag saying whether the host is deleted and therefore not counted into the subscription consumption"
-msgstr ""
+msgstr "ホストが削除されているため、サブスクリプション消費にカウントされないかどうかを示すブールフラグ"
 
 #: awx/main/models/inventory.py:877
 #, fuzzy
@@ -4600,19 +4600,19 @@ msgstr "%s のすべてのインベントリーが管理可能"
 
 #: awx/main/models/inventory.py:904
 msgid "How many unique hosts are consumed from the license"
-msgstr ""
+msgstr "ライセンスから消費される一意のホストの数"
 
 #: awx/main/models/inventory.py:905
 msgid "'License capacity as max. number of unique hosts"
-msgstr ""
+msgstr "'一意のホストの最大数としてのライセンス容量"
 
 #: awx/main/models/inventory.py:906
 msgid "How many hosts were added in the associated month, consuming more license capacity"
-msgstr ""
+msgstr "関連する月に追加され、より多くのライセンス容量を消費したホストの数"
 
 #: awx/main/models/inventory.py:907
 msgid "How many hosts were deleted in the associated month, freeing the license capacity"
-msgstr ""
+msgstr "関連する月に削除され、ライセンス容量を解放したホストの数"
 
 #: awx/main/models/inventory.py:919
 msgid "File, Directory or Script"
@@ -4620,7 +4620,7 @@ msgstr "ファイル、ディレクトリーまたはスクリプト"
 
 #: awx/main/models/inventory.py:920
 msgid "Template additional groups and hostvars at runtime"
-msgstr ""
+msgstr "実行時に追加のグループと hostvars をテンプレート化する"
 
 #: awx/main/models/inventory.py:921
 msgid "Sourced from a Project"
@@ -4632,7 +4632,7 @@ msgstr "Amazon EC2"
 
 #: awx/main/models/inventory.py:928
 msgid "Terraform State"
-msgstr ""
+msgstr "Terraform の状態"
 
 #: awx/main/models/inventory.py:958
 msgid "Inventory source variables in YAML or JSON format."
@@ -4673,7 +4673,7 @@ msgstr "タスクが取り消される前の実行時間 (秒数)。"
 
 #: awx/main/models/inventory.py:1024
 msgid "Enter host, group or pattern match"
-msgstr ""
+msgstr "ホスト、グループ、またはパターンマッチを入力してください"
 
 #: awx/main/models/inventory.py:1046
 #, python-format
@@ -4754,7 +4754,7 @@ msgstr "プロジェクトではブランチの上書きはできません。"
 
 #: awx/main/models/jobs.py:482
 msgid "Job inventory does not have enough hosts for slicing"
-msgstr ""
+msgstr "ジョブのインベントリーにはスライスに十分なホストがありません"
 
 #: awx/main/models/jobs.py:492 awx/main/models/workflow.py:599
 msgid "Field is not configured to prompt on launch."
@@ -5085,7 +5085,7 @@ msgstr "このプロジェクトを使用するジョブテンプレートで SC
 
 #: awx/main/models/projects.py:297
 msgid "An optional credential used for validating files in the project against unexpected changes."
-msgstr ""
+msgstr "予期しない変更に対してプロジェクト内のファイルを検証するために使用されるオプションの認証情報。"
 
 #: awx/main/models/projects.py:306
 msgid "The last revision fetched by a project update"
@@ -5113,7 +5113,7 @@ msgstr "組織は、ジョブテンプレートで使用中の場合には変更
 
 #: awx/main/models/projects.py:495
 msgid "Last project update failed due to signature validation failure."
-msgstr ""
+msgstr "署名検証の失敗により、前回のプロジェクト更新が失敗しました。"
 
 #: awx/main/models/projects.py:497
 msgid "Missing a revision to run due to failed project update."
@@ -5300,35 +5300,35 @@ msgstr "role_ancestors"
 
 #: awx/main/models/receptor_address.py:20
 msgid "Receptor address must be unique."
-msgstr ""
+msgstr "レセプターアドレスは一意である必要があります。"
 
 #: awx/main/models/receptor_address.py:24
 msgid "Routable address for this instance."
-msgstr ""
+msgstr "このインスタンスのルーティング可能なアドレス。"
 
 #: awx/main/models/receptor_address.py:25
 msgid "Port for the address."
-msgstr ""
+msgstr "アドレスのポート。"
 
 #: awx/main/models/receptor_address.py:26
 msgid "Websocket path."
-msgstr ""
+msgstr "Websocket のパス。"
 
 #: awx/main/models/receptor_address.py:28
 msgid "Protocol to use for the Receptor listener, 'tcp', 'wss', or 'ws'."
-msgstr ""
+msgstr "Receptor リスナーに使用するプロトコル ('tcp'、'wss'、または 'ws')。"
 
 #: awx/main/models/receptor_address.py:30
 msgid "If True, only routable within the Kubernetes cluster."
-msgstr ""
+msgstr "True の場合、Kubernetes クラスター内でのみルーティング可能です。"
 
 #: awx/main/models/receptor_address.py:31
 msgid "If True, this address is the canonical address for the instance."
-msgstr ""
+msgstr "True の場合、このアドレスはインスタンスの正規アドレスです。"
 
 #: awx/main/models/receptor_address.py:32
 msgid "If True, control plane cluster nodes should automatically peer to it."
-msgstr ""
+msgstr "True の場合、コントロールプレーンのクラスターノードは自動的にこれにピアリングする必要があります。"
 
 #: awx/main/models/schedules.py:79
 msgid "Enables processing of this schedule."
@@ -5461,11 +5461,11 @@ msgstr "ジョブが実行されたインスタンスグループ"
 
 #: awx/main/models/unified_jobs.py:716
 msgid "A cached list with pk values from preferred instance groups."
-msgstr ""
+msgstr "優先インスタンスグループの pk 値を含むキャッシュされたリスト。"
 
 #: awx/main/models/unified_jobs.py:718
 msgid "Number of forks an instance consumes when running this job."
-msgstr ""
+msgstr "このジョブの実行時にインスタンスが消費するフォークの数。"
 
 #: awx/main/models/unified_jobs.py:725
 msgid "The organization used to determine access to this unified job."
@@ -5481,7 +5481,7 @@ msgstr "実行環境にインストールされている Ansible Core のバー�
 
 #: awx/main/models/unified_jobs.py:749
 msgid "Playbook stats from the Ansible playbook_on_stats event."
-msgstr ""
+msgstr "Ansible の playbook_on_stats イベントからの Playbook 統計。"
 
 #: awx/main/models/unified_jobs.py:752
 msgid "The Receptor work unit ID associated with this job."
@@ -5522,7 +5522,7 @@ msgstr "承認ノードが期限切れになり、失敗するまでの時間 (�
 
 #: awx/main/models/workflow.py:845
 msgid "The time this approval will expire. This is the created time plus timeout, used for filtering."
-msgstr ""
+msgstr "この承認が期限切れになる時刻。これは作成時刻にタイムアウトを加えたもので、フィルタリングに使用されます。"
 
 #: awx/main/models/workflow.py:847
 msgid "Shows when an approval node (with a timeout assigned to it) has timed out."
@@ -5571,7 +5571,7 @@ msgstr "Twilio への接続時の例外: {}"
 
 #: awx/main/notifications/twilio_backend.py:45
 msgid "FROM: {} / TO: {}"
-msgstr ""
+msgstr "FROM: {} / TO: {}"
 
 #: awx/main/scheduler/dag_workflow.py:163
 #, python-brace-format
@@ -5638,11 +5638,11 @@ msgstr "実行環境が見つからなかったため、ジョブを開始でき
 
 #: awx/main/tasks/system.py:124
 msgid "Instance received normal shutdown signal"
-msgstr ""
+msgstr "インスタンスが通常のシャットダウンシグナルを受信しました"
 
 #: awx/main/tasks/system.py:630
 msgid "Another cluster node has determined this instance to be unresponsive"
-msgstr ""
+msgstr "別のクラスターノードがこのインスタンスを応答なしと判断しました"
 
 #: awx/main/tasks/system.py:763
 msgid "Scheduled job could not start because it                     was not in the right state or required manual credentials"
@@ -5662,11 +5662,11 @@ msgstr "ワークフロージョブのノードにエラーハンドルパスが
 #: awx/main/tests/unit/tasks/test_runner_callback.py:28
 #: awx/main/tests/unit/tasks/test_runner_callback.py:31
 msgid "2"
-msgstr ""
+msgstr "2"
 
 #: awx/main/tests/unit/tasks/test_runner_callback.py:32
 msgid "3"
-msgstr ""
+msgstr "3"
 
 #: awx/main/utils/common.py:252
 #, python-format
@@ -5891,11 +5891,11 @@ msgstr "空リスト `[]`に設定される場合、この設定により新規�
 
 #: awx/sso/conf.py:155
 msgid "Use Email address for usernames"
-msgstr ""
+msgstr "ユーザー名にメールアドレスを使用する"
 
 #: awx/sso/conf.py:156
 msgid "Enabling this setting will tell social auth to use the full Email as username instead of the full name"
-msgstr ""
+msgstr "この設定を有効にすると、social auth はフルネームの代わりに完全なメールアドレスをユーザー名として使用するようになります"
 
 #: awx/sso/conf.py:174
 msgid "LDAP Server URI"
@@ -6111,7 +6111,7 @@ msgstr "TACACS+ クライアントによって使用される認証プロトコ�
 
 #: awx/sso/conf.py:561
 msgid "TACACS+ client address sending enabled"
-msgstr ""
+msgstr "TACACS+ クライアントアドレスの送信が有効"
 
 #: awx/sso/conf.py:562
 #, fuzzy
@@ -6472,7 +6472,7 @@ msgstr "API キー"
 #: awx/sso/conf.py:1237 awx/sso/conf.py:1248 awx/sso/conf.py:1260
 #: awx/sso/conf.py:1270
 msgid "Generic OIDC"
-msgstr ""
+msgstr "汎用 OIDC"
 
 #: awx/sso/conf.py:1246
 #, fuzzy
@@ -6488,11 +6488,11 @@ msgstr "Azure AD アプリケーションからの OAuth2 シークレット (�
 
 #: awx/sso/conf.py:1258
 msgid "OIDC Provider URL"
-msgstr ""
+msgstr "OIDC プロバイダー URL"
 
 #: awx/sso/conf.py:1259
 msgid "The URL for your OIDC provider including the path up to /.well-known/openid-configuration"
-msgstr ""
+msgstr "/.well-known/openid-configuration までのパスを含む OIDC プロバイダーの URL"
 
 #: awx/sso/conf.py:1268
 #, fuzzy
@@ -6652,39 +6652,39 @@ msgstr "SAML チーム属性マッピング"
 
 #: awx/sso/conf.py:1582
 msgid "Used to map super users and system auditors from SAML."
-msgstr ""
+msgstr "SAML からスーパーユーザーとシステム監査者をマッピングするために使用されます。"
 
 #: awx/sso/conf.py:1602
 msgid "Minimum number of characters in local password"
-msgstr ""
+msgstr "ローカルパスワードの最小文字数"
 
 #: awx/sso/conf.py:1603
 msgid "Minimum number of characters required in a local password. 0 means no minimum"
-msgstr ""
+msgstr "ローカルパスワードに必要な最小文字数。0 は最小なしを意味します"
 
 #: awx/sso/conf.py:1613
 msgid "Minimum number of digit characters in local password"
-msgstr ""
+msgstr "ローカルパスワードの最小数字文字数"
 
 #: awx/sso/conf.py:1614
 msgid "Minimum number of digit characters required in a local password. 0 means no minimum"
-msgstr ""
+msgstr "ローカルパスワードに必要な最小数字文字数。0 は最小なしを意味します"
 
 #: awx/sso/conf.py:1624
 msgid "Minimum number of uppercase characters in local password"
-msgstr ""
+msgstr "ローカルパスワードの最小大文字数"
 
 #: awx/sso/conf.py:1625
 msgid "Minimum number of uppercase characters required in a local password. 0 means no minimum"
-msgstr ""
+msgstr "ローカルパスワードに必要な最小大文字数。0 は最小なしを意味します"
 
 #: awx/sso/conf.py:1635
 msgid "Minimum number of special characters in local password"
-msgstr ""
+msgstr "ローカルパスワードの最小特殊文字数"
 
 #: awx/sso/conf.py:1636
 msgid "Minimum number of special characters required in a local password. 0 means no minimum"
-msgstr ""
+msgstr "ローカルパスワードに必要な最小特殊文字数。0 は最小なしを意味します"
 
 #: awx/sso/fields.py:78
 msgid "Invalid field."

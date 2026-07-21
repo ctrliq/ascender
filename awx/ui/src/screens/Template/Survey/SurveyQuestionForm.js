@@ -44,8 +44,7 @@ function AnswerTypeField() {
       labelHelp={
         <Popover
           content={t`Choose an answer type or format you want as the prompt for the user.
-          Refer to the Ascender Documentation for more additional
-          information about each option.`}
+          Refer to the Ascender Documentation for additional information about each option.`}
         />
       }
       isRequired

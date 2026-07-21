@@ -455,7 +455,7 @@ msgstr "{dateStr} door<0>{username}</0>"
 msgid "Basic auth password"
 msgstr "Wachtwoord basisauthenticatie"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:91
+#: screens/Template/Survey/SurveyQuestionForm.js:90
 msgid "Multiple Choice (multiple select)"
 msgstr "Meerkeuze-opties (meerdere keuzes mogelijk)"
 
@@ -1319,7 +1319,7 @@ msgstr "Typen knooppunten"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:127
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:450
 #: screens/Template/shared/JobTemplate.helptext.js:72
-#: screens/Template/Survey/SurveyQuestionForm.js:270
+#: screens/Template/Survey/SurveyQuestionForm.js:269
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:314
 msgid "documentation"
 msgstr "documentatie"
@@ -2193,7 +2193,7 @@ msgstr "{0, plural, one {This credential type is currently being used by some cr
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:143
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.js:103
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:222
-#: screens/Template/Survey/SurveyQuestionForm.js:82
+#: screens/Template/Survey/SurveyQuestionForm.js:81
 #: screens/User/shared/UserForm.js:119
 msgid "Password"
 msgstr "Wachtwoord"
@@ -2579,7 +2579,7 @@ msgstr "Indien ingeschakeld, voorkomt deze inventaris dat instantiegroepen voor 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:129
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:452
 #: screens/Template/shared/JobTemplate.helptext.js:74
-#: screens/Template/Survey/SurveyQuestionForm.js:272
+#: screens/Template/Survey/SurveyQuestionForm.js:271
 msgid "for more information."
 msgstr "voor meer informatie."
 
@@ -2807,7 +2807,7 @@ msgstr "Succesbericht"
 msgid "Update cache timeout"
 msgstr "Time-out van updatecache"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:164
+#: screens/Template/Survey/SurveyQuestionForm.js:163
 msgid "Question"
 msgstr "Vraag"
 
@@ -3144,7 +3144,7 @@ msgstr "Deze workflow is reeds in gang gezet"
 msgid "Select the credential you want to use when accessing the remote hosts to run the command. Choose the credential containing the username and SSH key or password that Ansible will need to log into the remote hosts."
 msgstr "Selecteer de toegangsgegevens die u wilt gebruiken bij het aanspreken van externe hosts om de opdracht uit te voeren. Kies de toegangsgegevens die de gebruikersnaam en de SSH-sleutel of het wachtwoord bevatten die Ansible nodig heeft om aan te melden bij de hosts of afstand."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:181
+#: screens/Template/Survey/SurveyQuestionForm.js:180
 msgid "The suggested format for variable names is lowercase and\n"
 "                underscore-separated (for example, foo_bar, user_id, host_name,\n"
 "                etc.). Variable names with spaces are not allowed."
@@ -3225,14 +3225,6 @@ msgstr "Details van schema"
 #: screens/ActivityStream/ActivityStreamDetailButton.js:38
 msgid "Event detail"
 msgstr "Gebeurtenisinformatie weergeven"
-
-#: screens/Template/Survey/SurveyQuestionForm.js:46
-msgid "Choose an answer type or format you want as the prompt for the user.\n"
-"          Refer to the Ascender Documentation for more additional\n"
-"          information about each option."
-msgstr "Kies een antwoordtype of -indeling die u als prompt voor de gebruiker wilt.\n"
-"          Raadpleeg de Ascender-documentatie voor meer aanvullende\n"
-"          informatie over elke optie."
 
 #. placeholder {0}: groups.length
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:93
@@ -3452,7 +3444,7 @@ msgstr "Geen yaml beschikbaar"
 msgid "Edit Order"
 msgstr "Volgorde bewerken"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:215
+#: screens/Template/Survey/SurveyQuestionForm.js:214
 msgid "Minimum"
 msgstr "Minimum"
 
@@ -3720,7 +3712,7 @@ msgstr "Naam controller"
 msgid "View all applications."
 msgstr "Geef alle toepassingen weer."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:199
+#: screens/Template/Survey/SurveyQuestionForm.js:198
 msgid "Minimum length"
 msgstr "Minimumlengte"
 
@@ -4206,7 +4198,7 @@ msgstr "omschrijving"
 msgid "Failed to delete one or more inventories."
 msgstr "Een of meer inventarissen kunnen niet worden verwijderd."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:94
+#: screens/Template/Survey/SurveyQuestionForm.js:93
 msgid "Float"
 msgstr "Drijven"
 
@@ -4285,11 +4277,6 @@ msgstr "Minimumpercentage van alle instanties dat automatisch\n"
 #: components/JobCancelButton/JobCancelButton.js:89
 msgid "Confirm cancellation"
 msgstr "Annuleren bevestigen"
-
-#. placeholder {0}: groups.length
-#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:122
-msgid "{0, plural, one {Are you sure you want delete the group below?} other {Are you sure you want delete the groups below?}}"
-msgstr "{0, plural, one {Weet u zeker dat u de onderstaande groep wilt verwijderen?} other {Weet u zeker dat u de onderstaande groepen wilt verwijderen?}}"
 
 #: components/Sort/Sort.js:141
 msgid "Sort"
@@ -4458,14 +4445,6 @@ msgstr "Toepassingen"
 #: screens/Dashboard/DashboardGraph.js:204
 msgid "All jobs"
 msgstr "Alle taken"
-
-#: components/LaunchPrompt/steps/OtherPromptsStep.js:184
-#~ msgid "If enabled, show the changes made\n"
-#~ "              by Ansible tasks, where supported. This is equivalent to Ansible’s\n"
-#~ "              --diff mode."
-#~ msgstr "Indien ingeschakeld, worden de wijzigingen die door\n"
-#~ "              Ansible-taken zijn aangebracht weergegeven, waar ondersteund. Dit is gelijk aan Ansible’s\n"
-#~ "              --diff-modus."
 
 #: screens/InstanceGroup/Instances/InstanceList.js:364
 msgid "<0>Note: Manually associated instances may be automatically disassociated from an instance group if the instance is managed by <1>policy rules.</1></0>"
@@ -5292,11 +5271,6 @@ msgstr "Voer een zoekopdracht uit om een hostfilter te definiëren"
 msgid "Notification test failed."
 msgstr "Berichttest mislukt."
 
-#. placeholder {0}: itemsToRemove.length
-#: screens/Instances/Shared/RemoveInstanceButton.js:88
-msgid "{0, plural, one {This intance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-msgstr "{0, plural, one {Deze instantie wordt momenteel gebruikt door andere resources. Weet u zeker dat u deze wilt verwijderen?} other {Het deprovisioneren van deze instanties kan gevolgen hebben voor andere resources die ervan afhankelijk zijn. Weet u zeker dat u ze toch wilt verwijderen?}}"
-
 #: components/Pagination/Pagination.js:25
 msgid "items"
 msgstr "items"
@@ -5323,7 +5297,7 @@ msgstr "Instellingen bijwerken die betrekking hebben op taken binnen {brandName}
 msgid "Provisioning"
 msgstr "Voorziening"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:259
+#: screens/Template/Survey/SurveyQuestionForm.js:258
 msgid "Multiple Choice Options"
 msgstr "Meerkeuze-opties"
 
@@ -5537,11 +5511,6 @@ msgstr "Geen abonnementen gevonden"
 #: screens/Team/TeamRoles/TeamRolesList.js:198
 msgid "Add team permissions"
 msgstr "Teammachtigingen toevoegen"
-
-#. placeholder {0}: selected.length
-#: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:185
-msgid "{0, plural, one {This instance group is currently being by other resources. Are you sure you want to delete it?} other {Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
-msgstr "{0, plural, one {Deze instantiegroep wordt momenteel gebruikt door andere resources. Weet u zeker dat u deze wilt verwijderen?} other {Het verwijderen van deze instantiegroepen kan gevolgen hebben voor andere resources die ervan afhankelijk zijn. Weet u zeker dat u ze toch wilt verwijderen?}}"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:506
 msgid "Source phone number"
@@ -6378,7 +6347,7 @@ msgid "Select a branch for the workflow."
 msgstr "Selecteer een branch voor de workflow."
 
 #: screens/Template/shared/JobTemplate.helptext.js:66
-#: screens/Template/Survey/SurveyQuestionForm.js:262
+#: screens/Template/Survey/SurveyQuestionForm.js:261
 msgid "Refer to the"
 msgstr "Raadpleeg de"
 
@@ -6969,7 +6938,7 @@ msgstr "Opmerking: dit veld gaat ervan uit dat de naam van de remote «origin» 
 msgid "GitHub Default"
 msgstr "GitHub-standaard"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:221
+#: screens/Template/Survey/SurveyQuestionForm.js:220
 msgid "Maximum"
 msgstr "Maximum"
 
@@ -7344,7 +7313,7 @@ msgstr "Deze uitvoeringsomgevingen kunnen worden gebruikt door andere bronnen di
 msgid "Job Templates with a missing inventory or project cannot be selected when creating or editing nodes.  Select another template or fix the missing fields to proceed."
 msgstr "Taaksjablonen met een ontbrekende inventaris of een ontbrekend project kunnen niet worden geselecteerd tijdens het maken of bewerken van knooppunten. Selecteer een andere sjabloon of herstel de ontbrekende velden om verder te gaan."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:93
+#: screens/Template/Survey/SurveyQuestionForm.js:92
 msgid "Integer"
 msgstr "Geheel getal"
 
@@ -7470,7 +7439,7 @@ msgstr "Synchroniseren"
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:184
 #: screens/Template/shared/JobTemplateForm.js:273
 #: screens/Template/shared/WorkflowJobTemplateForm.js:123
-#: screens/Template/Survey/SurveyQuestionForm.js:172
+#: screens/Template/Survey/SurveyQuestionForm.js:171
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:114
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:195
 #: screens/User/shared/UserTokenForm.js:69
@@ -7730,12 +7699,6 @@ msgstr "Modus Niet-opgeslagen wijzigingen"
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "Aanmelden met GitHub Enterprise-teams"
 
-#: components/Lookup/InventoryLookup.js:133
-#~ msgid "Select the inventory containing the hosts\n"
-#~ "            you want this job to manage."
-#~ msgstr "Selecteer de inventaris met de hosts\n"
-#~ "            die u door deze taak wilt laten beheren."
-
 #: components/AdHocCommands/AdHocDetailsStep.js:108
 #: components/AdHocCommands/AdHocDetailsStep.js:110
 msgid "Arguments"
@@ -7874,6 +7837,11 @@ msgstr "Foutopsporing"
 #: screens/Job/JobOutput/JobOutputSearch.js:153
 msgid "Clear all filters"
 msgstr "Alle filters wissen"
+
+#. placeholder {0}: itemsToRemove.length
+#: screens/Instances/Shared/RemoveInstanceButton.js:88
+msgid "{0, plural, one {This instance is currently being used by other resources. Are you sure you want to delete it?} other {Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
+msgstr "{0, plural, one {Deze instantie wordt momenteel gebruikt door andere resources. Weet u zeker dat u deze wilt verwijderen?} other {Het deprovisioneren van deze instanties kan gevolgen hebben voor andere resources die ervan afhankelijk zijn. Weet u zeker dat u ze toch wilt verwijderen?}}"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:57
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:75
@@ -8045,7 +8013,7 @@ msgstr "Het is moeilijk om een specificatie te geven voor\n"
 msgid "Job Slice Parent"
 msgstr "Ouder taken verdelen"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:86
+#: screens/Template/Survey/SurveyQuestionForm.js:85
 msgid "Multiple Choice (single select)"
 msgstr "Meerkeuze-opties (één keuze mogelijk)"
 
@@ -8618,7 +8586,7 @@ msgstr "Vraag om instantiegroepen bij opstarten."
 msgid "Workflow pending message body"
 msgstr "Workflow Berichtenbody in behandeling"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:178
+#: screens/Template/Survey/SurveyQuestionForm.js:177
 msgid "Answer variable name"
 msgstr "Antwoord naam variabele"
 
@@ -8902,6 +8870,11 @@ msgstr "Geef extra opdrachtregelvariabelen door aan de workflow."
 msgid "Instance details"
 msgstr "Instantiedetails"
 
+#. placeholder {0}: selected.length
+#: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.js:185
+msgid "{0, plural, one {This instance group is currently being used by other resources. Are you sure you want to delete it?} other {Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?}}"
+msgstr "{0, plural, one {Deze instantiegroep wordt momenteel gebruikt door andere resources. Weet u zeker dat u deze wilt verwijderen?} other {Het verwijderen van deze instantiegroepen kan invloed hebben op andere resources die ervan afhankelijk zijn. Weet u zeker dat u ze toch wilt verwijderen?}}"
+
 #: screens/Job/JobOutput/EmptyOutput.js:60
 msgid "No output found for this job."
 msgstr "Geen output gevonden voor deze taak."
@@ -8937,11 +8910,6 @@ msgstr "Het inventarisbestand dat door deze bron moet worden gesynchroniseerd. U
 msgid "View all Jobs."
 msgstr "Geef alle taken weer."
 
-#. placeholder {0}: selected.length
-#: screens/Inventory/InventorySources/InventorySourceList.js:197
-msgid "{0, plural, one {This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?} other {Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete anyway}}"
-msgstr "{0, plural, one {Deze inventarisbron wordt momenteel gebruikt door andere resources die ervan afhankelijk zijn. Weet u zeker dat u deze wilt verwijderen?} other {Het verwijderen van deze inventarisbronnen kan gevolgen hebben voor andere resources die ervan afhankelijk zijn. Weet u zeker dat u ze toch wilt verwijderen?}}"
-
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:264
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:322
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.js:362
@@ -8973,7 +8941,7 @@ msgstr "Alle uitvoeringsomgevingen weergeven"
 msgid "Sources"
 msgstr "Bronnen"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:81
+#: screens/Template/Survey/SurveyQuestionForm.js:80
 msgid "Textarea"
 msgstr "Tekstgebied"
 
@@ -9455,7 +9423,7 @@ msgid "Disassociate role"
 msgstr "Rol loskoppelen"
 
 #: screens/Template/Survey/SurveyListItem.js:55
-#: screens/Template/Survey/SurveyQuestionForm.js:189
+#: screens/Template/Survey/SurveyQuestionForm.js:188
 msgid "Required"
 msgstr "Vereist"
 
@@ -10084,10 +10052,6 @@ msgstr "Opnieuw opstarten met hostparameters"
 msgid "This action will soft delete the following:"
 msgstr "Met deze actie wordt het volgende zacht verwijderd:"
 
-#: components/AdHocCommands/AdHocDetailsStep.js:187
-#~ msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible’s --diff mode."
-#~ msgstr "Als deze mogelijkheid ingeschakeld is, worden de wijzigingen die aangebracht zijn door Ansible-taken weergegeven, waar ondersteund. Dit staat gelijk aan de diff-modus van Ansible."
-
 #: screens/Instances/Instance.js:64
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressList.js:104
 #: screens/Instances/Instances.js:30
@@ -10416,6 +10380,11 @@ msgstr "Geef alle tokens weer."
 msgid "View Inventory Groups"
 msgstr "Inventarisgroepen weergeven"
 
+#. placeholder {0}: selected.length
+#: screens/Inventory/InventorySources/InventorySourceList.js:197
+msgid "{0, plural, one {This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?} other {Deleting these inventory sources could impact other resources that rely on them. Are you sure you want to delete them anyway?}}"
+msgstr "{0, plural, one {Deze inventarisbron wordt momenteel gebruikt door andere resources die ervan afhankelijk zijn. Weet u zeker dat u deze wilt verwijderen?} other {Het verwijderen van deze inventarisbronnen kan invloed hebben op andere resources die ervan afhankelijk zijn. Weet u zeker dat u ze toch wilt verwijderen?}}"
+
 #: components/Search/LookupTypeInput.js:102
 msgid "Less than comparison."
 msgstr "Minder dan vergelijking."
@@ -10622,6 +10591,12 @@ msgstr "Twilio"
 msgid "Survey Toggle"
 msgstr "Vragenlijst schakelen"
 
+#: screens/Template/Survey/SurveyQuestionForm.js:46
+msgid "Choose an answer type or format you want as the prompt for the user.\n"
+"          Refer to the Ascender Documentation for additional information about each option."
+msgstr "Kies een antwoordtype of -indeling dat u als prompt voor de gebruiker wilt.\n"
+"          Raadpleeg de Ascender-documentatie voor aanvullende informatie over elke optie."
+
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:187
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:111
 msgid "Total groups"
@@ -10783,7 +10758,7 @@ msgstr "Tabblad yaml"
 msgid "IRC server port"
 msgstr "IRC-serverpoort"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:80
+#: screens/Template/Survey/SurveyQuestionForm.js:79
 #: screens/Template/Survey/SurveyReorderModal.js:217
 msgid "Text"
 msgstr "Tekst"
@@ -10880,7 +10855,7 @@ msgstr "Activiteit"
 msgid "Inventories with sources cannot be copied"
 msgstr "Inventarissen met bronnen kunnen niet gekopieerd worden"
 
-#: screens/Template/Survey/SurveyQuestionForm.js:205
+#: screens/Template/Survey/SurveyQuestionForm.js:204
 msgid "Maximum length"
 msgstr "Maximumlengte"
 
@@ -10898,9 +10873,9 @@ msgstr "E-mailopties"
 msgid "Refer to the Ansible documentation for details about the configuration file."
 msgstr "Raadpleeg de Ansible-documentatie voor details over het configuratiebestand."
 
-#: screens/Template/Survey/SurveyQuestionForm.js:239
-#: screens/Template/Survey/SurveyQuestionForm.js:247
-#: screens/Template/Survey/SurveyQuestionForm.js:254
+#: screens/Template/Survey/SurveyQuestionForm.js:238
+#: screens/Template/Survey/SurveyQuestionForm.js:246
+#: screens/Template/Survey/SurveyQuestionForm.js:253
 msgid "Default answer"
 msgstr "Standaardantwoord"
 
@@ -11067,6 +11042,11 @@ msgstr "Time-out"
 #: screens/TopologyView/ContentLoading.js:41
 msgid "Please wait until the topology view is populated..."
 msgstr "Wacht totdat de topologie-weergave is ingevuld..."
+
+#. placeholder {0}: groups.length
+#: screens/Inventory/shared/InventoryGroupsDeleteModal.js:122
+msgid "{0, plural, one {Are you sure you want to delete the group below?} other {Are you sure you want to delete the groups below?}}"
+msgstr "{0, plural, one {Weet u zeker dat u de onderstaande groep wilt verwijderen?} other {Weet u zeker dat u de onderstaande groepen wilt verwijderen?}}"
 
 #: components/AssociateModal/AssociateModal.js:45
 msgid "Select Items"

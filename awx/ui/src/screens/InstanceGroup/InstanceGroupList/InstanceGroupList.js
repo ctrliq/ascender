@@ -184,7 +184,7 @@ function InstanceGroupList() {
                     deleteMessage={
                       <Plural
                         value={selected.length}
-                        one="This instance group is currently being by other resources. Are you sure you want to delete it?"
+                        one="This instance group is currently being used by other resources. Are you sure you want to delete it?"
                         other="Deleting these instance groups could impact other resources that rely on them. Are you sure you want to delete anyway?"
                       />
                     }
