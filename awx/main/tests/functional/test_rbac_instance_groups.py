@@ -4,6 +4,7 @@ from awx.main.access import (
     InstanceGroupAccess,
     OrganizationAccess,
     InventoryAccess,
+    InventorySourceAccess,
     JobTemplateAccess,
 )
 
@@ -39,6 +40,21 @@ def test_ig_role_based_associability(default_instance_group, rando, organization
     assert allowed == JobTemplateAccess(rando).can_attach(objects.job_template, default_instance_group, 'instance_groups', None)
     assert allowed == InventoryAccess(rando).can_attach(objects.inventory, default_instance_group, 'instance_groups', None)
     assert allowed == OrganizationAccess(rando).can_attach(objects.organization, default_instance_group, 'instance_groups', None)
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    "obj_perm,subobj_perm,allowed",
+    [('admin_role', 'use_role', True), ('admin_role', 'read_role', False), ('use_role', 'use_role', False), ('admin_role', 'admin_role', True)],
+)
+def test_ig_inventory_source_associability(default_instance_group, rando, inventory_source, obj_perm, subobj_perm, allowed):
+    if obj_perm:
+        getattr(inventory_source.inventory, obj_perm).members.add(rando)
+    if subobj_perm:
+        getattr(default_instance_group, subobj_perm).members.add(rando)
+
+    assert allowed == InventorySourceAccess(rando).can_attach(inventory_source, default_instance_group, 'instance_groups', None)
+    assert allowed == InventorySourceAccess(rando).can_unattach(inventory_source, default_instance_group, 'instance_groups', None)
 
 
 @pytest.mark.django_db

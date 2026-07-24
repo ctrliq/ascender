@@ -2516,6 +2516,7 @@ class InventorySourceSerializer(UnifiedJobTemplateSerializer, InventorySourceOpt
                 activity_stream=self.reverse('api:inventory_source_activity_stream_list', kwargs={'pk': obj.pk}),
                 hosts=self.reverse('api:inventory_source_hosts_list', kwargs={'pk': obj.pk}),
                 groups=self.reverse('api:inventory_source_groups_list', kwargs={'pk': obj.pk}),
+                instance_groups=self.reverse('api:inventory_source_instance_groups_list', kwargs={'pk': obj.pk}),
                 notification_templates_started=self.reverse('api:inventory_source_notification_templates_started_list', kwargs={'pk': obj.pk}),
                 notification_templates_success=self.reverse('api:inventory_source_notification_templates_success_list', kwargs={'pk': obj.pk}),
                 notification_templates_error=self.reverse('api:inventory_source_notification_templates_error_list', kwargs={'pk': obj.pk}),

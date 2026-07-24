@@ -37,7 +37,9 @@ jest.mock(
           <button
             type="button"
             aria-label="mock-submit"
-            onClick={() => onSubmit(mockInvSrc)}
+            onClick={() =>
+              onSubmit({ ...mockInvSrc, instanceGroups: [{ id: 100 }] })
+            }
           />
           <button type="button" aria-label="mock-cancel" onClick={onCancel} />
           {submitError ? <div data-testid="mock-submit-error" /> : null}
@@ -46,6 +48,12 @@ jest.mock(
 );
 
 describe('<InventorySourceEdit />', () => {
+  beforeEach(() => {
+    InventorySourcesAPI.readInstanceGroups.mockResolvedValue({
+      data: { results: [] },
+    });
+  });
+
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -85,6 +93,11 @@ describe('<InventorySourceEdit />', () => {
       update_on_launch: false,
       verbosity: 1,
     });
+    expect(InventorySourcesAPI.orderInstanceGroups).toHaveBeenCalledWith(
+      23,
+      [{ id: 100 }],
+      []
+    );
   });
 
   test('should navigate to inventory source detail after successful submission', async () => {

@@ -2,9 +2,10 @@ import Base from '../Base';
 import NotificationsMixin from '../mixins/Notifications.mixin';
 import LaunchUpdateMixin from '../mixins/LaunchUpdate.mixin';
 import SchedulesMixin from '../mixins/Schedules.mixin';
+import InstanceGroupsMixin from '../mixins/InstanceGroups.mixin';
 
-class InventorySources extends LaunchUpdateMixin(
-  NotificationsMixin(SchedulesMixin(Base))
+class InventorySources extends InstanceGroupsMixin(
+  LaunchUpdateMixin(NotificationsMixin(SchedulesMixin(Base)))
 ) {
   constructor(http) {
     super(http);

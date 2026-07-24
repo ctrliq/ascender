@@ -1424,8 +1424,11 @@ class InventoryUpdate(UnifiedJob, InventorySourceOptions, JobNotificationMixin, 
     @property
     def preferred_instance_groups(self):
         selected_groups = []
+        # Instance groups set directly on the inventory source take precedence over the inventory's
+        for instance_group in self.inventory_source.instance_groups.all():
+            selected_groups.append(instance_group)
         if self.inventory_source.inventory is not None:
-            # Add the inventory sources IG to the selected IGs first
+            # Add the inventory's IGs to the selected IGs next
             for instance_group in self.inventory_source.inventory.instance_groups.all():
                 selected_groups.append(instance_group)
             # If the inventory allows for fallback and we have an organization then also append the orgs IGs to the end of the list
