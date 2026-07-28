@@ -1126,10 +1126,10 @@ class InventorySourceAccess(NotificationAttachMixin, UnifiedCredentialsMixin, Ba
         return super(InventorySourceAccess, self).can_attach(obj, sub_obj, relationship, data, skip_sub_obj_read_check=skip_sub_obj_read_check)
 
     @check_superuser
-    def can_unattach(self, obj, sub_obj, relationship, *args, **kwargs):
+    def can_unattach(self, obj, sub_obj, relationship, data=None, skip_sub_obj_read_check=False):
         if relationship == 'instance_groups':
-            return self.can_attach(obj, sub_obj, relationship, *args, **kwargs)
-        return super(InventorySourceAccess, self).can_unattach(obj, sub_obj, relationship, *args, **kwargs)
+            return self.can_attach(obj, sub_obj, relationship, data, skip_sub_obj_read_check=skip_sub_obj_read_check)
+        return super(InventorySourceAccess, self).can_unattach(obj, sub_obj, relationship, data)
 
 
 class InventoryUpdateAccess(BaseAccess):

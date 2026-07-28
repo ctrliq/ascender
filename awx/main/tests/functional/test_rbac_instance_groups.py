@@ -55,6 +55,8 @@ def test_ig_inventory_source_associability(default_instance_group, rando, invent
 
     assert allowed == InventorySourceAccess(rando).can_attach(inventory_source, default_instance_group, 'instance_groups', None)
     assert allowed == InventorySourceAccess(rando).can_unattach(inventory_source, default_instance_group, 'instance_groups', None)
+    # data is optional for unattach checks, callers are allowed to omit it
+    assert allowed == InventorySourceAccess(rando).can_unattach(inventory_source, default_instance_group, 'instance_groups')
 
 
 @pytest.mark.django_db
