@@ -2294,6 +2294,14 @@ class InventorySourceCredentialsList(SubListAttachDetachAPIView):
         return None
 
 
+class InventorySourceInstanceGroupsList(SubListAttachDetachAPIView):
+    model = models.InstanceGroup
+    serializer_class = serializers.InstanceGroupSerializer
+    parent_model = models.InventorySource
+    relationship = 'instance_groups'
+    filter_read_permission = False
+
+
 class InventorySourceUpdateView(RetrieveAPIView):
     model = models.InventorySource
     obj_permission_type = 'start'

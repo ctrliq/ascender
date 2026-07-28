@@ -1117,6 +1117,20 @@ class InventorySourceAccess(NotificationAttachMixin, UnifiedCredentialsMixin, Ba
             return self.user in obj.inventory.update_role
         return False
 
+    @check_superuser
+    def can_attach(self, obj, sub_obj, relationship, data, skip_sub_obj_read_check=False):
+        if relationship == 'instance_groups':
+            if not obj.inventory:
+                return False
+            return self.user in sub_obj.use_role and self.user in obj.inventory.admin_role
+        return super(InventorySourceAccess, self).can_attach(obj, sub_obj, relationship, data, skip_sub_obj_read_check=skip_sub_obj_read_check)
+
+    @check_superuser
+    def can_unattach(self, obj, sub_obj, relationship, data=None, skip_sub_obj_read_check=False):
+        if relationship == 'instance_groups':
+            return self.can_attach(obj, sub_obj, relationship, data, skip_sub_obj_read_check=skip_sub_obj_read_check)
+        return super(InventorySourceAccess, self).can_unattach(obj, sub_obj, relationship, data)
+
 
 class InventoryUpdateAccess(BaseAccess):
     """

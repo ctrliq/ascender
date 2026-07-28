@@ -20,6 +20,7 @@ const invSourceData = {
   update_cache_timeout: 0,
   update_on_launch: false,
   verbosity: 1,
+  instanceGroups: [{ id: 100 }, { id: 200 }],
 };
 
 const mockInventory = {
@@ -94,6 +95,30 @@ describe('<InventorySourceAdd />', () => {
       update_on_launch: false,
       verbosity: 1,
     });
+  });
+
+  test('should associate instance groups after creation', async () => {
+    InventorySourcesAPI.create.mockResolvedValue({ data: { id: 55 } });
+    const { user } = renderWithContexts(
+      <InventorySourceAdd inventory={mockInventory} />
+    );
+    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+
+    await waitFor(() =>
+      expect(InventorySourcesAPI.associateInstanceGroup).toHaveBeenCalledTimes(
+        2
+      )
+    );
+    expect(InventorySourcesAPI.associateInstanceGroup).toHaveBeenNthCalledWith(
+      1,
+      55,
+      100
+    );
+    expect(InventorySourcesAPI.associateInstanceGroup).toHaveBeenNthCalledWith(
+      2,
+      55,
+      200
+    );
   });
 
   test('successful form submission should trigger redirect', async () => {

@@ -12,6 +12,7 @@ from awx.api.views import (
     InventorySourceSchedulesList,
     InventorySourceCredentialsList,
     InventorySourceGroupsList,
+    InventorySourceInstanceGroupsList,
     InventorySourceHostsList,
     InventorySourceNotificationTemplatesErrorList,
     InventorySourceNotificationTemplatesStartedList,
@@ -26,6 +27,7 @@ urls = [
     path('<int:pk>/activity_stream/', InventorySourceActivityStreamList.as_view(), name='inventory_source_activity_stream_list'),
     path('<int:pk>/schedules/', InventorySourceSchedulesList.as_view(), name='inventory_source_schedules_list'),
     path('<int:pk>/credentials/', InventorySourceCredentialsList.as_view(), name='inventory_source_credentials_list'),
+    path('<int:pk>/instance_groups/', InventorySourceInstanceGroupsList.as_view(), name='inventory_source_instance_groups_list'),
     path('<int:pk>/groups/', InventorySourceGroupsList.as_view(), name='inventory_source_groups_list'),
     path('<int:pk>/hosts/', InventorySourceHostsList.as_view(), name='inventory_source_hosts_list'),
     path(

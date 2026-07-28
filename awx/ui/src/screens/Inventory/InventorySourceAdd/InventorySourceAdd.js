@@ -11,8 +11,14 @@ function InventorySourceAdd({ inventory }) {
   const { id, organization } = inventory;
 
   const { error, request, result } = useRequest(
-    useCallback(async (values) => {
+    useCallback(async ({ instanceGroups, ...values }) => {
       const { data } = await InventorySourcesAPI.create(values);
+      /* eslint-disable no-await-in-loop, no-restricted-syntax */
+      // Resolve Promises sequentially to maintain order and avoid race condition
+      for (const group of instanceGroups || []) {
+        await InventorySourcesAPI.associateInstanceGroup(data.id, group.id);
+      }
+      /* eslint-enable no-await-in-loop, no-restricted-syntax */
       return data;
     }, [])
   );
@@ -34,6 +40,7 @@ function InventorySourceAdd({ inventory }) {
       source_project,
       source_script,
       execution_environment,
+      instanceGroups,
       ...remainingForm
     } = form;
 
@@ -50,6 +57,7 @@ function InventorySourceAdd({ inventory }) {
       inventory: id,
       source_script: source_script?.id || null,
       execution_environment: execution_environment?.id || null,
+      instanceGroups,
       ...sourcePath,
       ...sourceProject,
       ...remainingForm,

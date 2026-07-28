@@ -15,7 +15,10 @@ import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
 import FormField, { FormSubmitError } from 'components/FormField';
 import { FormColumnLayout, SubFormLayout } from 'components/FormLayout';
 
-import { ExecutionEnvironmentLookup } from 'components/Lookup';
+import {
+  ExecutionEnvironmentLookup,
+  InstanceGroupsLookup,
+} from 'components/Lookup';
 import {
   AzureSubForm,
   EC2SubForm,
@@ -89,6 +92,8 @@ const InventorySourceFormFields = ({
     executionEnvironmentMeta,
     executionEnvironmentHelpers,
   ] = useField('execution_environment');
+  const [instanceGroupsField, , instanceGroupsHelpers] =
+    useField('instanceGroups');
 
   const resetSubFormFields = (sourceType) => {
     if (sourceType === initialValues.source) {
@@ -143,6 +148,12 @@ const InventorySourceFormFields = ({
         onChange={handleExecutionEnvironmentUpdate}
         globallyAvailable
         organizationId={organizationId}
+      />
+      <InstanceGroupsLookup
+        value={instanceGroupsField.value}
+        onChange={(value) => instanceGroupsHelpers.setValue(value)}
+        tooltip={t`Select the Instance Groups this inventory source sync should run on. If unset, the sync runs on the instance groups of the inventory or its organization.`}
+        fieldName="instanceGroups"
       />
       <FormGroup
         fieldId="source"
@@ -271,11 +282,13 @@ const InventorySourceForm = ({
   onCancel,
   onSubmit,
   source,
+  instanceGroups = [],
   submitError = null,
   organizationId,
 }) => {
   const initialValues = {
     credential: source?.summary_fields?.credential || null,
+    instanceGroups: instanceGroups || [],
     description: source?.description || '',
     name: source?.name || '',
     overwrite: source?.overwrite || false,

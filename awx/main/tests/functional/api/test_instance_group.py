@@ -137,7 +137,7 @@ def test_delete_rename_tower_instance_group_prevented(
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('source_model', ['job_template', 'inventory', 'organization'], indirect=True)
+@pytest.mark.parametrize('source_model', ['job_template', 'inventory', 'organization', 'inventory_source'], indirect=True)
 def test_instance_group_order_persistence(get, post, admin, source_model):
     # create several instance groups in random order
     total = 5
@@ -165,6 +165,20 @@ def test_instance_group_order_persistence(get, post, admin, source_model):
         resp = get(url, admin)
         assert resp.data['count'] == total
         assert [ig['name'] for ig in resp.data['results']] == [ig.name for ig in before]
+
+
+@pytest.mark.django_db
+def test_inventory_source_instance_group_attach_permissions(get, post, rando, inventory_source, instance_group):
+    url = reverse('api:inventory_source_instance_groups_list', kwargs={'pk': inventory_source.pk})
+    inventory_source.inventory.admin_role.members.add(rando)
+    # inventory admin without use permission on the instance group cannot attach it
+    post(url, {'associate': True, 'id': instance_group.id}, rando, expect=403)
+    assert list(inventory_source.instance_groups.all()) == []
+    instance_group.use_role.members.add(rando)
+    post(url, {'associate': True, 'id': instance_group.id}, rando, expect=204)
+    assert list(inventory_source.instance_groups.all()) == [instance_group]
+    post(url, {'disassociate': True, 'id': instance_group.id}, rando, expect=204)
+    assert list(inventory_source.instance_groups.all()) == []
 
 
 @pytest.mark.django_db

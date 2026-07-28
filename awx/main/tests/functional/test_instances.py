@@ -423,9 +423,11 @@ class TestInstanceGroupOrdering:
         inventory_source.inventory.instance_groups.add(ig_inv)
         assert iu.preferred_instance_groups == [ig_inv, ig_org]
         inventory_source.instance_groups.add(ig_tmp)
-        # API does not allow setting IGs on inventory source, so ignore those
-        assert iu.preferred_instance_groups == [ig_inv, ig_org]
+        # Instance groups on the inventory source take precedence over the inventory's
+        assert iu.preferred_instance_groups == [ig_tmp, ig_inv, ig_org]
         inventory_source.inventory.prevent_instance_group_fallback = True
+        assert iu.preferred_instance_groups == [ig_tmp, ig_inv]
+        inventory_source.instance_groups.remove(ig_tmp)
         assert iu.preferred_instance_groups == [ig_inv]
 
     def test_job_instance_groups(self, instance_group_factory, inventory, project, default_instance_group):

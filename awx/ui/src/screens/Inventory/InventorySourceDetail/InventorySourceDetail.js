@@ -14,6 +14,7 @@ import CredentialChip from 'components/CredentialChip';
 import DeleteButton from 'components/DeleteButton';
 import ErrorDetail from 'components/ErrorDetail';
 import ExecutionEnvironmentDetail from 'components/ExecutionEnvironmentDetail';
+import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import JobCancelButton from 'components/JobCancelButton';
 import StatusLabel from 'components/StatusLabel';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -51,6 +52,20 @@ function InventorySourceDetail({ inventorySource }) {
       );
     }, [])
   );
+
+  const { result: instanceGroups, request: fetchInstanceGroups } = useRequest(
+    useCallback(async () => {
+      const { data } = await InventorySourcesAPI.readInstanceGroups(
+        inventorySource.id
+      );
+      return data.results;
+    }, [inventorySource.id]),
+    []
+  );
+
+  useEffect(() => {
+    fetchInstanceGroups();
+  }, [fetchInstanceGroups]);
 
   const {
     created,
@@ -218,6 +233,13 @@ function InventorySourceDetail({ inventorySource }) {
         <ExecutionEnvironmentDetail
           executionEnvironment={execution_environment}
         />
+        {instanceGroups && instanceGroups.length > 0 && (
+          <Detail
+            fullWidth
+            label={t`Instance Groups`}
+            value={<InstanceGroupLabels labels={instanceGroups} isLinkable />}
+          />
+        )}
         {source_project && (
           <Detail
             label={t`Project`}
