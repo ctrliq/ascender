@@ -14,6 +14,7 @@ Users and admins upload machine and cloud credentials so that automation can acc
 - :ref:`ug_credentials_centrify`
 - :ref:`ug_credentials_cyberarkccp`
 - :ref:`ug_credentials_cyberarkconjur`
+- :ref:`ug_credentials_github_app`
 - :ref:`ug_credentials_hashivault` (KV)
 - :ref:`ug_credentials_hashivaultssh`
 - :ref:`ug_credentials_azurekeyvault` (KMS)
@@ -90,6 +91,9 @@ Use the Ascender User Interface to configure and use each of the supported 3-par
    * - 
      - Secret Version
      - Specify a version of the secret, if necessary, otherwise, leave it empty to use the latest version.
+   * - *GitHub App Installation Access Token Lookup*
+     - Description
+     - Optional note describing the linked field. No metadata is required to retrieve the token.
    * - *HashiVault Secret Lookup*
      - Name of Secret Backend
      - Specify the name of the KV backend to use. Leave it blank to use the first path segment of the **Path to Secret** field instead.
@@ -235,6 +239,39 @@ Below shows an example of a configured CyberArk Conjur credential.
 
 .. image:: ../common/images/credentials-create-cyberark-conjur-credential.png
    :alt: Example new CyberArk Conjur Secret lookup dialog
+
+.. _ug_credentials_github_app:
+
+GitHub App Installation Access Token Lookup
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+.. index::
+   single: GitHub App
+   pair: credential; GitHub App
+
+This plugin allows a `GitHub App <https://docs.github.com/en/apps/creating-github-apps/about-creating-github-apps/about-creating-github-apps>`_ to be used as a credential input source, generating installation access tokens scoped to the repositories its installation has been granted access to. Because the tokens are issued to an App owned by the organization rather than to an individual account, they are commonly used in place of a personal access token for authenticating :ref:`ug_credentials_scm` used by projects.
+
+Register the GitHub App and install it before configuring the lookup. The App requires the **Contents: Read-only** repository permission for Git access over HTTPS. It is installed on an organization or personal account, and during installation is granted access to either all repositories or a selected list. The generated token can only reach repositories the installation was granted access to, so verify that the repositories used by your projects are included. Each organization the App is installed on has its own installation, with its own installation ID.
+
+When **GitHub App Installation Access Token Lookup** is selected for **Credential Type**, provide the following attributes to properly configure your lookup:
+
+- **GitHub API endpoint URL**: provide the URL used for communicating with the GitHub API. Use ``https://api.github.com`` for GitHub.com, ``https://gh.your.org/api/v3`` for a self-hosted Enterprise instance, or ``https://api.SUBDOMAIN.ghe.com`` for Enterprise Cloud
+- **GitHub App ID or Client ID** (required): provide either identifier for the App, found on the App's settings page under **Developer settings > GitHub Apps**
+- **GitHub App Installation ID** (required): provide the identifier of the App installation, found at the end of the installation's configuration URL, for example ``59980338`` in ``https://github.com/settings/installations/59980338``
+- **RSA Private Key** (required): include the ``BEGIN RSA PRIVATE KEY`` and ``END RSA PRIVATE KEY`` lines when pasting the contents of the PEM file generated for the App
+
+Below shows the GitHub App Installation Access Token Lookup credential form. Click **Test** to verify that Ascender can generate a token before saving.
+
+.. image:: ../common/images/credentials-create-github-app-credential.png
+   :width: 1400px
+   :alt: Example new GitHub App Installation Access Token lookup dialog
+
+To use the lookup for project syncs, link it to the **Password** field of a Source Control credential, and set that credential's **Username** to ``x-access-token``, which GitHub requires as the username when the password is an installation access token. The example below shows a Source Control credential whose **Password** field is retrieved from the GitHub App lookup.
+
+.. image:: ../common/images/credentials-github-app-scm-target.png
+   :width: 1400px
+   :alt: Example Source Control credential with its password linked to a GitHub App lookup
+
+Installation access tokens expire one hour after they are issued. Ascender resolves linked input fields each time the credential is used, so a new token is generated for every project sync and no rotation is required.
 
 .. _ug_credentials_hashivault:
 

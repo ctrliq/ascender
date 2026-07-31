@@ -128,7 +128,7 @@ The following credential types are supported with Ascender:
 .. contents::
     :local:
 
-The credential types associated with AWS Secrets Manager, Centrify, CyberArk, HashiCorp Vault, Microsoft Azure Key Management System (KMS), and Thycotic are part of the credential plugins capability that allows an external system to lookup your secrets information. See the :ref:`ug_credential_plugins` section for further detail.
+The credential types associated with AWS Secrets Manager, Centrify, CyberArk, GitHub App, HashiCorp Vault, Microsoft Azure Key Management System (KMS), and Thycotic are part of the credential plugins capability that allows an external system to lookup your secrets information. See the :ref:`ug_credential_plugins` section for further detail.
 
 
 .. _ug_credentials_aws:
@@ -218,6 +218,11 @@ This is considered part of the secret management capability. See :ref:`ug_creden
 CyberArk Conjur Secrets Manager Lookup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 This is considered part of the secret management capability. See :ref:`ug_credentials_cyberarkconjur` for more detail.
+
+
+GitHub App Installation Access Token Lookup
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+This is considered part of the secret management capability. See :ref:`ug_credentials_github_app` for more detail.
 
 
 .. _ug_credentials_github:
@@ -618,6 +623,8 @@ RHV credentials have the following inputs that are required:
 -  **Password**: The password to use to connect to it.
 -  **CA File**: Optionally provide an absolute path to the oVirt certificate file (it may end in ``.pem``, ``.cer`` and ``.crt`` extensions, but preferably ``.pem`` for consistency)
 
+
+.. _ug_credentials_scm:
 
 Source Control
 ^^^^^^^^^^^^^^^^
