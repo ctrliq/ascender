@@ -500,11 +500,11 @@ class JobNotificationMixin(object):
             except (TemplateSyntaxError, UndefinedError, SecurityError) as e:
                 body = '\r\n'.join([e.message, ''.join(traceback.format_exception(None, e, e.__traceback__).replace('\n', '\r\n'))])
 
-        # https://datatracker.ietf.org/doc/html/rfc2822#section-2.2
-        # Body should have at least 2 CRLF, some clients will interpret
-        # the email incorrectly with blank body.  So we will check that
+        # Only replace the body when the template renders to nothing
+        # (empty or whitespace-only). Short single-line bodies, such as a
+        # compact JSON webhook payload, must be passed through unchanged.
 
-        if len(body.strip().splitlines()) <= 2:
+        if len(body.strip().splitlines()) < 1:
             # blank body
             body = '\r\n'.join(
                 [
