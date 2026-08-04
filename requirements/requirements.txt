@@ -77,7 +77,7 @@ click==8.1.7
     # via receptorctl
 constantly==23.10.4
     # via twisted
-cryptography==49.0.0
+cryptography==50.0.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   autobahn
@@ -321,7 +321,7 @@ pyjwt[crypto]==2.13.0
     #   twilio
 pynacl==1.6.2
     # via pygithub
-pyopenssl==26.3.0
+pyopenssl==26.4.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   twisted
