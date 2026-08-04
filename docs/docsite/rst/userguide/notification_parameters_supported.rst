@@ -52,6 +52,7 @@ This section describes the list of supported job attributes and the proper synta
    - ``rescued`` (integer)
    - ``ignored`` (integer)
    - ``failed`` (boolean)
+- ``hosts`` - (list) names of the hosts the job ran against, sorted alphabetically. Only populated for jobs that track per-host results; the list is capped at 1000 entries to keep notification payloads bounded for very large inventories.
 - ``summary_fields``:
    - ``inventory``
       - ``id`` - (integer) database ID for inventory
