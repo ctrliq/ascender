@@ -25,6 +25,7 @@ class TestJobNotificationMixin(object):
             'force_handlers': bool,
             'forks': int,
             'host_status_counts': {'skipped': int, 'ok': int, 'changed': int, 'failures': int, 'dark': int, 'processed': int, 'rescued': int, 'failed': bool},
+            'hosts': list,
             'id': int,
             'job_explanation': str,
             'job_slice_count': int,
@@ -122,6 +123,17 @@ class TestJobNotificationMixin(object):
 
         context = job.context(job_serialization)
         self.check_structure(TestJobNotificationMixin.CONTEXT_STRUCTURE, context)
+
+    @pytest.mark.django_db
+    def test_context_hosts(self):
+        job = Job.objects.create(name='fake-job')
+        job.job_host_summaries.create(host_name='host-b', failed=False, ok=1, changed=0, failures=0)
+        job.job_host_summaries.create(host_name='host-a', failed=False, ok=1, changed=0, failures=0)
+
+        job_serialization = UnifiedJobSerializer(job).to_representation(job)
+        context = job.context(job_serialization)
+
+        assert context['job']['hosts'] == ['host-a', 'host-b']
 
     @pytest.mark.django_db
     def test_context_job_metadata_with_unicode(self):

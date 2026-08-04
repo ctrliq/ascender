@@ -245,6 +245,9 @@ class Notification(CreatedModifiedModel):
 
 class JobNotificationMixin(object):
     STATUS_TO_TEMPLATE_TYPE = {'succeeded': 'success', 'running': 'started', 'failed': 'error'}
+    # Maximum number of host names exposed in the notification context to keep
+    # payloads bounded for jobs run against very large inventories.
+    HOST_LIST_MAX = 1000
     # Tree of fields that can be safely referenced in a notification message
     JOB_FIELDS_ALLOWED_LIST = [
         'id',
@@ -334,6 +337,7 @@ class JobNotificationMixin(object):
                 'force_handlers': False,
                 'forks': 0,
                 'host_status_counts': {'skipped': 1, 'ok': 5, 'changed': 3, 'failures': 0, 'dark': 0, 'failed': False, 'processed': 0, 'rescued': 0},
+                'hosts': ['host1', 'host2'],
                 'id': 42,
                 'job_explanation': 'Sample job explanation',
                 'job_slice_count': 1,
@@ -444,6 +448,11 @@ class JobNotificationMixin(object):
                     node[safe_field] = fields[safe_field]
 
         build_context(context['job'], serialized_job, self.JOB_FIELDS_ALLOWED_LIST)
+
+        # Expose the list of hosts the job ran against. Only jobs that track
+        # per-host results (i.e. real Jobs) have job_host_summaries.
+        if hasattr(self, 'job_host_summaries'):
+            context['job']['hosts'] = list(self.job_host_summaries.values_list('host_name', flat=True).order_by('host_name')[: self.HOST_LIST_MAX])
 
         return context
 
