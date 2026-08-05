@@ -7,6 +7,7 @@ from collections import namedtuple
 
 from cryptography.fernet import Fernet, InvalidToken
 from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives.ciphers import algorithms
 from django.utils.encoding import smart_str, smart_bytes
 
 __all__ = ['get_encryption_key', 'encrypt_field', 'decrypt_field', 'encrypt_value', 'decrypt_value', 'encrypt_dict']
@@ -29,6 +30,10 @@ class Fernet256(Fernet):
 
         self._signing_key = key[:32]
         self._encryption_key = key[32:]
+        # Fernet._encrypt_from_parts and Fernet._decrypt_data build their Cipher from
+        # self._aes, which Fernet.__init__ sets as of cryptography 50.0.0. Overriding
+        # __init__ without setting it makes every encrypt/decrypt raise AttributeError.
+        self._aes = algorithms.AES(self._encryption_key)
         self._backend = backend
 
 
