@@ -44,6 +44,15 @@ html_theme_path = ["."]
 pygments_style = "ansible"
 highlight_language = "YAML+Jinja"
 
+# dark mode assets, relative to _static
+html_css_files = [
+    'css/dark.css',
+    'css/pygments-dark.css',
+]
+html_js_files = [
+    'js/theme-toggle.js',
+]
+
 source_suffix = '.rst'
 master_doc = 'index'
 

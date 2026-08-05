@@ -493,3 +493,6 @@ tr .ansibleOptionLink {
 
 /*! Make sure that environment variable links are blue */
 .rst-content code.xref.std-envvar { color: #2980b9; }
+
+/*! Theme toggle icon in the top nav */
+.asc-theme-toggle svg { vertical-align: middle; }

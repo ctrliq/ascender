@@ -1,4 +1,16 @@
 <!-- extra head elements for Ansible beyond RTD Sphinx Theme -->
+
+{# Stamp the theme before the body renders - do not move below the head #}
+<script>
+  (function () {
+    var stored = null;
+    try {
+      stored = localStorage.getItem('ascender-docs-theme');
+    } catch (e) {}
+    document.documentElement.setAttribute('data-theme', stored || 'dark');
+  })();
+</script>
+
 {% if theme_swift_id %}
 <!-- <meta class="swiftype" name="published_at" data-type="date" content="2017-12-13" /> -->
 <meta class="swiftype" name="version" data-type="string" content="{{ version }}">
