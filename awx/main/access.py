@@ -204,8 +204,19 @@ def consumer_access(group_name):
     """
     consumer_access returns the proper Access class based on group_name
     for a channels consumer.
+
+    Every group name produced by awx.main.models.events.emit_event_detail
+    must be represented here, otherwise the consumer has no way to
+    authorize a subscription to that event stream.
     """
-    class_map = {'job_events': JobAccess, 'workflow_events': WorkflowJobAccess, 'ad_hoc_command_events': AdHocCommandAccess}
+    class_map = {
+        'job_events': JobAccess,
+        'workflow_events': WorkflowJobAccess,
+        'ad_hoc_command_events': AdHocCommandAccess,
+        'project_update_events': ProjectUpdateAccess,
+        'inventory_update_events': InventoryUpdateAccess,
+        'system_job_events': SystemJobAccess,
+    }
     return class_map.get(group_name)
 
 

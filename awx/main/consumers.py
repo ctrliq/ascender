@@ -179,7 +179,18 @@ class EventConsumer(AsyncJsonWebsocketConsumer):
                     for oid in v:
                         name = '{}-{}'.format(group_name, oid)
                         access_cls = consumer_access(group_name)
-                        if access_cls is not None:
+                        if access_cls is None:
+                            # Event streams are scoped to a single object, so subscribing to one
+                            # without an authorization check would expose another user's stdout.
+                            # Deny instead of falling through, so that adding a new event type
+                            # cannot silently reintroduce unauthorized access.
+                            if group_name.endswith('_events'):
+                                # group_name comes from the client payload, so %r keeps a
+                                # crafted value from forging additional log lines.
+                                logger.error("access denied to channel %r, no access class registered, for %s", group_name, user.username)
+                                await self.send_json({"error": "access denied to channel {0} for resource id {1}".format(group_name, oid)})
+                                continue
+                        else:
                             user_access = access_cls(user)
                             if not await self.user_can_see_object_id(user_access, oid):
                                 await self.send_json({"error": "access denied to channel {0} for resource id {1}".format(group_name, oid)})
