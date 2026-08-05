@@ -1,0 +1,330 @@
+/*! Dark mode, scoped to html[data-theme="dark"] and stamped on the document
+ * element by extrahead.html. Palette from the Ascender UI dark theme,
+ * awx/ui/src/themes/dark.css.
+ */
+html[data-theme="dark"] {
+    color-scheme: dark;
+
+    --asc-bg: #1a1e25;
+    --asc-surface: #22262f;
+    --asc-surface-raised: #2b3038;
+    --asc-border: #373a41;
+
+    --asc-text: #cecfd2;
+    --asc-text-strong: #e4e6e9;
+    --asc-text-muted: #94979c;
+
+    --asc-link: #53b1fd;
+    --asc-link-hover: #8ecbfe;
+    --asc-brand: #12a66f;
+
+    --asc-success: #17b26a;
+    --asc-danger: #f04438;
+    --asc-danger-text: #ff7b72;
+    --asc-warning: #f0ab00;
+    --asc-info: #53b1fd;
+}
+
+/*! page surfaces */
+html[data-theme="dark"] body,
+html[data-theme="dark"] .wy-body-for-nav,
+html[data-theme="dark"] .wy-nav-content-wrap,
+html[data-theme="dark"] .wy-nav-content {
+    background: var(--asc-bg);
+    color: var(--asc-text);
+}
+
+html[data-theme="dark"] .rst-content .toctree-wrapper > p.caption,
+html[data-theme="dark"] h1,
+html[data-theme="dark"] h2,
+html[data-theme="dark"] h3,
+html[data-theme="dark"] h4,
+html[data-theme="dark"] h5,
+html[data-theme="dark"] h6,
+html[data-theme="dark"] legend {
+    color: var(--asc-text-strong);
+}
+
+html[data-theme="dark"] hr {
+    border-top-color: var(--asc-border);
+}
+
+/*! links */
+html[data-theme="dark"] a,
+html[data-theme="dark"] .rst-content a,
+html[data-theme="dark"] .rst-content code.xref.std-envvar {
+    color: var(--asc-link);
+}
+
+html[data-theme="dark"] a:hover,
+html[data-theme="dark"] .rst-content a:hover {
+    color: var(--asc-link-hover);
+}
+
+html[data-theme="dark"] a:visited,
+html[data-theme="dark"] .rst-content a:visited {
+    color: var(--asc-link);
+}
+
+html[data-theme="dark"] a:focus-visible,
+html[data-theme="dark"] button:focus-visible,
+html[data-theme="dark"] input:focus-visible {
+    outline: 2px solid var(--asc-link);
+    outline-offset: 2px;
+}
+
+/*! left navigation */
+html[data-theme="dark"] .wy-nav-side,
+html[data-theme="dark"] .wy-side-scroll {
+    background: var(--asc-surface);
+}
+
+html[data-theme="dark"] .wy-nav-top,
+html[data-theme="dark"] .wy-side-nav-search {
+    background-color: var(--asc-surface-raised);
+}
+
+html[data-theme="dark"] .wy-side-nav-search > a,
+html[data-theme="dark"] .wy-side-nav-search .wy-dropdown > a {
+    color: var(--asc-text-strong);
+}
+
+html[data-theme="dark"] .wy-side-nav-search input[type="text"] {
+    background-color: var(--asc-bg);
+    border-color: var(--asc-border);
+    color: var(--asc-text);
+}
+
+html[data-theme="dark"] .wy-menu-vertical header,
+html[data-theme="dark"] .wy-menu-vertical p.caption {
+    color: var(--asc-brand);
+}
+
+html[data-theme="dark"] .wy-menu-vertical a {
+    color: var(--asc-text);
+}
+
+html[data-theme="dark"] .wy-menu-vertical a:hover {
+    background-color: var(--asc-surface-raised);
+    color: var(--asc-text-strong);
+}
+
+html[data-theme="dark"] .wy-menu-vertical li.current,
+html[data-theme="dark"] .wy-menu-vertical li.toctree-l2.current,
+html[data-theme="dark"] .wy-menu-vertical li.toctree-l3.current,
+html[data-theme="dark"] .wy-menu-vertical li.toctree-l2.current > a,
+html[data-theme="dark"] .wy-menu-vertical li.toctree-l3.current > a,
+html[data-theme="dark"] .wy-menu-vertical li.toctree-l2.current li.toctree-l3 > a,
+html[data-theme="dark"] .wy-menu-vertical li.toctree-l3.current li.toctree-l4 > a {
+    background: var(--asc-surface-raised);
+    color: var(--asc-text);
+}
+
+html[data-theme="dark"] .wy-menu-vertical li.current > a,
+html[data-theme="dark"] .wy-menu-vertical li.on a {
+    background: var(--asc-bg);
+    border-color: var(--asc-border);
+    color: var(--asc-text-strong);
+}
+
+html[data-theme="dark"] .wy-menu-vertical li.current > a:hover,
+html[data-theme="dark"] .wy-menu-vertical li.on a:hover {
+    background: var(--asc-surface-raised);
+}
+
+html[data-theme="dark"] .wy-menu-vertical li.current a {
+    border-right-color: var(--asc-border);
+}
+
+html[data-theme="dark"] .wy-menu-vertical li.current a:hover {
+    background: var(--asc-surface-raised);
+}
+
+html[data-theme="dark"] .wy-menu-vertical li.toctree-l1.current > a {
+    border-top-color: var(--asc-border);
+    border-bottom-color: var(--asc-border);
+}
+
+/*! version chooser and banner */
+html[data-theme="dark"] .wy-side-nav-search .version,
+html[data-theme="dark"] .rst-versions .rst-current-version {
+    color: var(--asc-text-muted);
+}
+
+html[data-theme="dark"] .rst-versions,
+html[data-theme="dark"] .rst-versions .rst-other-versions {
+    background: var(--asc-surface);
+    color: var(--asc-text);
+}
+
+html[data-theme="dark"] .rst-versions .rst-current-version {
+    background: var(--asc-surface-raised);
+}
+
+/*! code blocks and inline literals */
+html[data-theme="dark"] .rst-content div[class^="highlight"],
+html[data-theme="dark"] .rst-content pre.literal-block,
+html[data-theme="dark"] .highlight {
+    background: var(--asc-surface);
+    border-color: var(--asc-border);
+}
+
+html[data-theme="dark"] .rst-content code,
+html[data-theme="dark"] .rst-content tt,
+html[data-theme="dark"] code {
+    background: var(--asc-surface-raised);
+    border-color: var(--asc-border);
+    color: var(--asc-text-strong);
+}
+
+html[data-theme="dark"] .rst-content code.literal,
+html[data-theme="dark"] .rst-content tt.literal {
+    color: var(--asc-danger-text);
+}
+
+html[data-theme="dark"] .linenodiv pre,
+html[data-theme="dark"] .rst-content .linenodiv pre {
+    background: var(--asc-surface);
+    border-right-color: var(--asc-border);
+    color: var(--asc-text-muted);
+}
+
+/*! tables */
+html[data-theme="dark"] .rst-content table.docutils,
+html[data-theme="dark"] .rst-content table.field-list,
+html[data-theme="dark"] .wy-table-bordered-all,
+html[data-theme="dark"] .rst-content table.docutils td,
+html[data-theme="dark"] .rst-content table.docutils th,
+html[data-theme="dark"] .wy-table-bordered-all td,
+html[data-theme="dark"] .wy-table-bordered-all th {
+    border-color: var(--asc-border);
+}
+
+html[data-theme="dark"] .rst-content table.docutils thead th,
+html[data-theme="dark"] .wy-table thead th {
+    background: var(--asc-surface-raised);
+    color: var(--asc-text-strong);
+    border-color: var(--asc-border);
+}
+
+html[data-theme="dark"] .rst-content table.docutils:not(.field-list) tr:nth-child(2n-1) td,
+html[data-theme="dark"] .wy-table-backed,
+html[data-theme="dark"] .wy-table-odd td,
+html[data-theme="dark"] .wy-table-striped tr:nth-child(2n-1) td {
+    background: var(--asc-surface);
+}
+
+html[data-theme="dark"] .rst-content table.docutils caption,
+html[data-theme="dark"] .rst-content table.field-list caption,
+html[data-theme="dark"] .wy-table caption {
+    color: var(--asc-text-strong);
+}
+
+/*! admonitions */
+html[data-theme="dark"] .rst-content .admonition,
+html[data-theme="dark"] .rst-content .note,
+html[data-theme="dark"] .rst-content .seealso,
+html[data-theme="dark"] .wy-alert {
+    background: var(--asc-surface);
+    color: var(--asc-text);
+}
+
+html[data-theme="dark"] .rst-content .admonition-title,
+html[data-theme="dark"] .wy-alert-title {
+    background: var(--asc-info);
+    color: var(--asc-bg);
+}
+
+html[data-theme="dark"] .rst-content .warning .admonition-title,
+html[data-theme="dark"] .rst-content .caution .admonition-title,
+html[data-theme="dark"] .rst-content .attention .admonition-title,
+html[data-theme="dark"] .wy-alert.wy-alert-warning .wy-alert-title {
+    background: var(--asc-warning);
+    color: var(--asc-bg);
+}
+
+html[data-theme="dark"] .rst-content .danger .admonition-title,
+html[data-theme="dark"] .rst-content .error .admonition-title,
+html[data-theme="dark"] .wy-alert.wy-alert-danger .wy-alert-title {
+    background: var(--asc-danger);
+    color: var(--asc-bg);
+}
+
+html[data-theme="dark"] .rst-content .tip .admonition-title,
+html[data-theme="dark"] .rst-content .hint .admonition-title,
+html[data-theme="dark"] .rst-content .important .admonition-title,
+html[data-theme="dark"] .wy-alert.wy-alert-success .wy-alert-title {
+    background: var(--asc-success);
+    color: var(--asc-bg);
+}
+
+/*! definition lists */
+html[data-theme="dark"] .rst-content dl:not(.docutils) dt {
+    background: var(--asc-surface-raised);
+    border-top-color: var(--asc-brand);
+    color: var(--asc-brand);
+}
+
+html[data-theme="dark"] .rst-content dl:not(.docutils) dl dt {
+    background: var(--asc-surface);
+    border-left-color: var(--asc-border);
+    color: var(--asc-text);
+}
+
+html[data-theme="dark"] .rst-content blockquote {
+    color: var(--asc-text-muted);
+}
+
+/*! matte behind screenshots, which are captured against the light UI */
+html[data-theme="dark"] .rst-content img {
+    background: #f7f7f7;
+    border: 1px solid var(--asc-border);
+    border-radius: 4px;
+    padding: 4px;
+}
+
+html[data-theme="dark"] .rst-content .DocSiteNav-logo,
+html[data-theme="dark"] .rst-content img.no-matte {
+    background: none;
+    border: 0;
+    padding: 0;
+}
+
+/*! search results */
+html[data-theme="dark"] .search li,
+html[data-theme="dark"] .rst-content .search li {
+    border-bottom-color: var(--asc-border);
+}
+
+html[data-theme="dark"] .search li:first-child {
+    border-top-color: var(--asc-border);
+}
+
+html[data-theme="dark"] .highlighted {
+    background: var(--asc-warning);
+    color: var(--asc-bg);
+}
+
+/*! footer and prev/next buttons */
+html[data-theme="dark"] footer,
+html[data-theme="dark"] footer span.commit code,
+html[data-theme="dark"] .rst-content .sourcelink {
+    color: var(--asc-text-muted);
+}
+
+html[data-theme="dark"] .rst-footer-buttons .btn,
+html[data-theme="dark"] .btn-neutral {
+    background: var(--asc-surface-raised) !important;
+    border-color: var(--asc-border);
+    color: var(--asc-text) !important;
+}
+
+html[data-theme="dark"] .rst-footer-buttons .btn:hover,
+html[data-theme="dark"] .btn-neutral:hover {
+    background: var(--asc-surface) !important;
+}
+
+html[data-theme="dark"] hr,
+html[data-theme="dark"] .rst-content hr {
+    border-color: var(--asc-border);
+}
