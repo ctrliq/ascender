@@ -254,13 +254,22 @@ def test_system_job_template_can_start(mocker):
 
 def test_consumer_access_covers_all_event_groups():
     """
-    Every group name emitted by emit_event_detail must map to an Access class,
-    otherwise the websocket consumer cannot authorize a subscription to it.
+    Every object scoped event group must map to an Access class, otherwise the
+    websocket consumer cannot authorize a subscription to it.
+
+    There are two producers of such groups:
+      - emit_event_detail in awx.main.models.events, which derives the name from
+        the event class, so those names are derived here rather than restated
+      - UnifiedJob._websocket_emit_status, which emits the literal
+        'workflow_events' group, so that one is asserted explicitly
     """
     from awx.main.access import consumer_access
     from awx.main.models.events import AdHocCommandEvent, InventoryUpdateEvent, JobEvent, ProjectUpdateEvent, SystemJobEvent
     from awx.main.utils import camelcase_to_underscore
 
-    for cls in (JobEvent, AdHocCommandEvent, ProjectUpdateEvent, InventoryUpdateEvent, SystemJobEvent):
-        group_name = camelcase_to_underscore(cls.__name__) + 's'
+    event_classes = (JobEvent, AdHocCommandEvent, ProjectUpdateEvent, InventoryUpdateEvent, SystemJobEvent)
+    group_names = [camelcase_to_underscore(cls.__name__) + 's' for cls in event_classes]
+    group_names.append('workflow_events')
+
+    for group_name in group_names:
         assert consumer_access(group_name) is not None, f'no Access class registered for websocket group {group_name}'

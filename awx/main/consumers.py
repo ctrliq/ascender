@@ -185,7 +185,9 @@ class EventConsumer(AsyncJsonWebsocketConsumer):
                             # Deny instead of falling through, so that adding a new event type
                             # cannot silently reintroduce unauthorized access.
                             if group_name.endswith('_events'):
-                                logger.error(f"access denied to channel {group_name}, no access class registered, for {user.username}")
+                                # group_name comes from the client payload, so %r keeps a
+                                # crafted value from forging additional log lines.
+                                logger.error("access denied to channel %r, no access class registered, for %s", group_name, user.username)
                                 await self.send_json({"error": "access denied to channel {0} for resource id {1}".format(group_name, oid)})
                                 continue
                         else:
