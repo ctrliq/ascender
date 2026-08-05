@@ -250,3 +250,17 @@ def test_system_job_template_can_start(mocker):
     user.is_superuser = True
     access = SystemJobTemplateAccess(user)
     assert access.can_start(None)
+
+
+def test_consumer_access_covers_all_event_groups():
+    """
+    Every group name emitted by emit_event_detail must map to an Access class,
+    otherwise the websocket consumer cannot authorize a subscription to it.
+    """
+    from awx.main.access import consumer_access
+    from awx.main.models.events import AdHocCommandEvent, InventoryUpdateEvent, JobEvent, ProjectUpdateEvent, SystemJobEvent
+    from awx.main.utils import camelcase_to_underscore
+
+    for cls in (JobEvent, AdHocCommandEvent, ProjectUpdateEvent, InventoryUpdateEvent, SystemJobEvent):
+        group_name = camelcase_to_underscore(cls.__name__) + 's'
+        assert consumer_access(group_name) is not None, f'no Access class registered for websocket group {group_name}'
