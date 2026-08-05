@@ -164,6 +164,27 @@ class TestJobLifeCycle:
         assert node.retry_attempts == node.max_retries
         assert jt.jobs.count() == 1
 
+    def test_workflow_fails_when_routed_node_cannot_spawn(self, inventory, project, controlplane_instance_group):
+        # a routed JT inside a workflow whose routing value names a missing
+        # instance group must fail the workflow, not crash the manager cycle
+        group = inventory.groups.create(name='dc1', variables={'dc_instance_group': 'missing-nodes'})
+        group.hosts.add(inventory.hosts.create(name='host1'))
+        inventory.hosts.create(name='host2')
+        jt = JobTemplate.objects.create(
+            name='routed-in-wf', inventory=inventory, project=project, playbook='helloworld.yml', instance_group_routing_var='dc_instance_group'
+        )
+        wfjt = WorkflowJobTemplate.objects.create(name='wf-routed')
+        wfjt.workflow_nodes.create(unified_job_template=jt)
+        wj = wfjt.create_unified_job()
+        wj.signal_start()
+
+        self.run_tm(TaskManager(), [mock.call('running')])
+        self.run_tm(WorkflowManager(), [mock.call('failed')])
+
+        wj.refresh_from_db()
+        assert wj.status == 'failed'
+        assert 'missing-nodes' in wj.job_explanation
+
     def test_task_manager_workflow_workflow_rescheduling(self, controlplane_instance_group):
         wfjts = [WorkflowJobTemplate.objects.create(name='foo')]
         for i in range(5):

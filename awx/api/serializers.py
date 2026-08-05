@@ -3226,6 +3226,7 @@ class JobOptionsSerializer(LabelsListMixin, BaseSerializer):
             'forks',
             'limit',
             'job_slice_pinned_hosts',
+            'instance_group_routing_var',
             'verbosity',
             'extra_vars',
             'job_tags',
@@ -3442,6 +3443,13 @@ class JobTemplateSerializer(JobTemplateMixin, UnifiedJobTemplateSerializer, JobO
         elif inventory is None and not get_field_from_model_or_attrs('ask_inventory_on_launch'):
             raise serializers.ValidationError({'inventory': prompting_error_message})
 
+        instance_group_routing_var = get_field_from_model_or_attrs('instance_group_routing_var')
+        if instance_group_routing_var:
+            if not re.match(r'^[a-zA-Z_][a-zA-Z0-9_]*$', instance_group_routing_var):
+                raise serializers.ValidationError({'instance_group_routing_var': _("Must be a valid variable name.")})
+            if (get_field_from_model_or_attrs('job_slice_count') or 1) > 1:
+                raise serializers.ValidationError({'instance_group_routing_var': _("Instance group routing cannot be combined with job slicing.")})
+
         return super(JobTemplateSerializer, self).validate(attrs)
 
     def validate_extra_vars(self, value):
@@ -3492,6 +3500,7 @@ class JobSerializer(UnifiedJobSerializer, JobOptionsSerializer):
             'diff_mode',
             'job_slice_number',
             'job_slice_count',
+            'instance_group_routing_value',
             'webhook_service',
             'webhook_credential',
             'webhook_guid',

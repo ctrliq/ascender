@@ -11,6 +11,7 @@ import sys
 import signal
 
 # Django
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.db import transaction
 from django.utils.translation import gettext_lazy as _, gettext_noop
 from django.utils.timezone import now as tz_now
@@ -229,7 +230,23 @@ class WorkflowManager(TaskBase):
                     superseded_job_id = spawn_node.job_id
                     is_retry = superseded_job_id is not None
                     kv = spawn_node.get_job_kwargs()
-                    job = spawn_node.unified_job_template.create_unified_job(**kv)
+                    try:
+                        job = spawn_node.unified_job_template.create_unified_job(**kv)
+                    except DjangoValidationError as exc:
+                        # e.g. instance group routing pointing at an instance group
+                        # that does not exist; fail this workflow loudly instead of
+                        # crashing the scheduling cycle for every workflow
+                        logger.warning('Failed to spawn job in %s for node %s: %s', workflow_job.log_format, spawn_node.pk, ' '.join(exc.messages))
+                        workflow_job.status = 'failed'
+                        workflow_job.job_explanation = gettext_noop("Workflow job could not spawn a job for one of its nodes: {}").format(
+                            ' '.join(exc.messages)
+                        )
+                        workflow_job.start_args = ''  # blank field to remove encrypted passwords
+                        workflow_job.save(update_fields=['status', 'job_explanation', 'start_args'])
+                        workflow_job.websocket_emit_status('failed')
+                        workflow_job.send_notification_templates('failed')
+                        result.append(workflow_job.id)
+                        break
                     spawn_node.job = job
                     if is_retry:
                         spawn_node.retry_attempts += 1

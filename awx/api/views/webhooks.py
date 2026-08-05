@@ -4,6 +4,7 @@ import hmac
 import logging
 import urllib.parse
 
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.utils.encoding import force_bytes
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.csrf import csrf_exempt
@@ -181,7 +182,12 @@ class WebhookReceiverBase(APIView):
             kwargs['extra_vars']['{}_webhook_status_api'.format(name)] = status_api
             kwargs['extra_vars']['{}_webhook_payload'.format(name)] = request.data
 
-        new_job = obj.create_unified_job(**kwargs)
+        try:
+            new_job = obj.create_unified_job(**kwargs)
+        except DjangoValidationError as exc:
+            # e.g. instance group routing pointing at an instance group that does
+            # not exist; answer with a 4xx instead of letting the SCM see a 500
+            return Response(dict(errors=exc.messages), status=status.HTTP_400_BAD_REQUEST)
         new_job.signal_start()
 
         return Response({'message': "Job queued."}, status=status.HTTP_202_ACCEPTED)

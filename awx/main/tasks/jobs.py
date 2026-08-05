@@ -328,6 +328,9 @@ class BaseTask(object):
             script_params['slice_number'] = instance.job_slice_number
             script_params['slice_count'] = instance.job_slice_count
             script_params['slice_pinned_hosts'] = instance.job_slice_pinned_hosts_list
+        if getattr(instance, 'is_ig_routed', False):
+            script_params['ig_routing_var'] = instance.instance_group_routing_var
+            script_params['ig_routing_value'] = instance.instance_group_routing_value
 
         return self.write_inventory_file(instance.inventory, private_data_dir, 'hosts', script_params)
 

@@ -121,6 +121,20 @@ class JobOptions(BaseModel):
             'not supported. Has no effect unless the job is sliced.'
         ),
     )
+    instance_group_routing_var = models.CharField(
+        max_length=1024,
+        blank=True,
+        default='',
+        help_text=_(
+            'Name of an inventory variable used to route hosts to instance groups at launch. '
+            'When set, hosts are grouped by the value of this variable (host variables win over '
+            'group variables) and the launch spawns one job per group, restricted to its hosts '
+            'and assigned to the instance group named by the value. Hosts without the variable '
+            'run in an extra job with the normal instance group selection. Launch fails if a '
+            'value does not name an existing instance group or the launching user lacks use '
+            'permission on it. Cannot be combined with job slicing.'
+        ),
+    )
     verbosity = models.PositiveIntegerField(
         choices=VERBOSITY_CHOICES,
         blank=True,
@@ -381,10 +395,13 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
         """
         return self.create_unified_job(**kwargs)
 
-    def get_effective_slice_ct(self, kwargs):
-        actual_inventory = self.inventory
+    def _get_actual_inventory(self, kwargs):
         if self.ask_inventory_on_launch and 'inventory' in kwargs:
-            actual_inventory = kwargs['inventory']
+            return kwargs['inventory']
+        return self.inventory
+
+    def get_effective_slice_ct(self, kwargs):
+        actual_inventory = self._get_actual_inventory(kwargs)
         actual_slice_count = self.job_slice_count
         if self.ask_job_slice_count_on_launch and 'job_slice_count' in kwargs:
             actual_slice_count = kwargs['job_slice_count']
@@ -399,6 +416,72 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
             return min(actual_slice_count, host_count)
         else:
             return actual_slice_count
+
+    def get_ig_routing_buckets(self, inventory):
+        """
+        Group the inventory hosts by the value of the routing variable.
+        Returns a list of (value, InstanceGroup) tuples, one per distinct value,
+        plus a final ('', None) bucket if any host does not resolve the variable.
+        Returns an empty list when no host resolves it, so routing is a no-op.
+        Raises ValidationError if a value does not name an existing instance group.
+        """
+        from awx.main.models.ha import InstanceGroup
+
+        routed_values = inventory.resolve_host_variable(self.instance_group_routing_var)
+        values = sorted(set(routed_values.values()))
+        if not values:
+            return []
+        instance_groups = {ig.name: ig for ig in InstanceGroup.objects.filter(name__in=values)}
+        missing = [value for value in values if value not in instance_groups]
+        if missing:
+            raise ValidationError(
+                _('Instance group routing variable "%(var)s" resolves to instance groups that do not exist: %(names)s')
+                % {'var': self.instance_group_routing_var, 'names': ', '.join(missing)}
+            )
+        buckets = [(value, instance_groups[value]) for value in values]
+        if len(routed_values) < inventory.hosts.filter(enabled=True).count():
+            buckets.append(('', None))
+        return buckets
+
+    def get_ig_routing_launch_error(self, user, kwargs):
+        """
+        Validate that launching with the given prompts may route jobs to the
+        instance groups the inventory names. Returns (error, buckets): an error
+        message (or None) and the computed routing buckets (or None when routing
+        does not apply), so the caller can hand the validated buckets back to
+        create_unified_job and avoid recomputing them. The use_role check
+        mirrors the one JobLaunchConfigAccess applies to instance groups
+        prompted at launch.
+        """
+        from awx.main.models.ha import InstanceGroup
+
+        if not self.instance_group_routing_var:
+            return None, None
+        if kwargs.get('instance_groups'):
+            return None, None
+        if self.get_effective_slice_ct(kwargs) > 1:
+            return _('Instance group routing cannot be combined with job slicing. Launch with a job slice count of 1.'), None
+        actual_inventory = self._get_actual_inventory(kwargs)
+        if actual_inventory is None or getattr(actual_inventory, 'kind', None) == 'federated':
+            return None, None
+        try:
+            buckets = self.get_ig_routing_buckets(actual_inventory)
+        except ValidationError as exc:
+            return ' '.join(exc.messages), None
+        if user is None or user.is_superuser:
+            return None, buckets
+        routed_igs = [instance_group for value, instance_group in buckets if instance_group is not None]
+        if not routed_igs:
+            return None, buckets
+        accessible_qs = InstanceGroup.accessible_pk_qs(user, 'use_role')
+        denied = sorted(
+            InstanceGroup.objects.filter(pk__in=[instance_group.pk for instance_group in routed_igs])
+            .exclude(pk__in=accessible_qs)
+            .values_list('name', flat=True)
+        )
+        if denied:
+            return _('You do not have use permission on instance groups this job would be routed to: %(names)s') % {'names': ', '.join(denied)}, None
+        return None, buckets
 
     def save(self, *args, **kwargs):
         update_fields = kwargs.get('update_fields', [])
@@ -433,32 +516,51 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
     def create_unified_job(self, **kwargs):
         prevent_slicing = kwargs.pop('_prevent_slicing', False)
         prevent_federation = kwargs.pop('_prevent_federation', False)
+        prevent_ig_routing = kwargs.pop('_prevent_ig_routing', False)
+        # buckets already computed (and RBAC checked) by the launch endpoint
+        precomputed_routing_buckets = kwargs.pop('_ig_routing_buckets', None)
 
-        # Determine the effective inventory for federation detection
-        actual_inventory = self.inventory
-        if self.ask_inventory_on_launch and 'inventory' in kwargs:
-            actual_inventory = kwargs['inventory']
+        # Determine the effective inventory for federation and routing detection
+        actual_inventory = self._get_actual_inventory(kwargs)
         federated_event = bool(actual_inventory and getattr(actual_inventory, 'kind', None) == 'federated' and not prevent_federation)
 
         slice_ct = self.get_effective_slice_ct(kwargs)
         slice_event = bool(slice_ct > 1 and (not prevent_slicing))
-        if federated_event:
-            # A Federated Inventory generates a WorkflowJob with one node per source inventory,
-            # each inheriting that inventory's instance groups for automatic IG routing.
+
+        routing_buckets = []
+        if (
+            self.instance_group_routing_var
+            and not prevent_ig_routing
+            and not federated_event
+            and not slice_event
+            # instance groups given at launch are an explicit override of the routing
+            and not kwargs.get('instance_groups')
+            and actual_inventory is not None
+            and getattr(actual_inventory, 'kind', None) != 'federated'
+        ):
+            if precomputed_routing_buckets is not None:
+                routing_buckets = precomputed_routing_buckets
+            else:
+                routing_buckets = self.get_ig_routing_buckets(actual_inventory)
+        routing_event = bool(len(routing_buckets) > 1)
+
+        if federated_event or slice_event or routing_event:
+            # Federated inventories, sliced jobs and instance group routing all
+            # generate a WorkflowJob rather than a Job: one node per source
+            # inventory, per slice, or per routing bucket respectively.
             from awx.main.models.workflow import WorkflowJobTemplate, WorkflowJobNode
 
             kwargs['_unified_job_class'] = WorkflowJobTemplate._get_unified_job_class()
             kwargs['_parent_field_name'] = "job_template"
             kwargs.setdefault('_eager_fields', {})
             kwargs['_eager_fields']['is_sliced_job'] = True
-        elif slice_event:
-            # A Slice Job Template will generate a WorkflowJob rather than a Job
-            from awx.main.models.workflow import WorkflowJobTemplate, WorkflowJobNode
-
-            kwargs['_unified_job_class'] = WorkflowJobTemplate._get_unified_job_class()
-            kwargs['_parent_field_name'] = "job_template"
+        elif len(routing_buckets) == 1:
+            # All hosts routed to the same place, launch a plain job on it
+            value, instance_group = routing_buckets[0]
             kwargs.setdefault('_eager_fields', {})
-            kwargs['_eager_fields']['is_sliced_job'] = True
+            kwargs['_eager_fields']['instance_group_routing_value'] = value
+            if instance_group is not None:
+                kwargs['instance_groups'] = [instance_group]
         elif self.job_slice_count > 1 and (not prevent_slicing):
             # Unique case where JT was set to slice but hosts not available
             kwargs.setdefault('_eager_fields', {})
@@ -483,6 +585,12 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
             for idx in range(slice_ct):
                 create_kwargs = dict(workflow_job=job, unified_job_template=self, ancestor_artifacts=dict(job_slice=idx + 1))
                 WorkflowJobNode.objects.create(**create_kwargs)
+        elif routing_event:
+            for value, instance_group in routing_buckets:
+                ancestor_artifacts = dict(ig_routing_value=value)
+                if instance_group is not None:
+                    ancestor_artifacts['ig_routing_instance_group_id'] = instance_group.id
+                WorkflowJobNode.objects.create(workflow_job=job, unified_job_template=self, ancestor_artifacts=ancestor_artifacts)
         return job
 
     def get_absolute_url(self, request=None):
@@ -691,6 +799,15 @@ class Job(UnifiedJob, JobOptions, SurveyJobMixin, JobNotificationMixin, TaskMana
         default=1,
         help_text=_("If ran as part of sliced jobs, the total number of slices. If 1, job is not part of a sliced job."),
     )
+    instance_group_routing_value = models.TextField(
+        null=True,
+        default=None,
+        editable=False,
+        help_text=_(
+            "If created by instance group routing, the routing variable value that selected this job's bucket of hosts. "
+            "An empty string means the bucket of hosts that do not resolve the variable. Null when the job was not routed."
+        ),
+    )
 
     def _get_parent_field_name(self):
         return 'job_template'
@@ -738,11 +855,25 @@ class Job(UnifiedJob, JobOptions, SurveyJobMixin, JobNotificationMixin, TaskMana
         # target same slice as original job
         new_prompts['_prevent_slicing'] = True
         new_prompts['_prevent_federation'] = True
+        new_prompts['_prevent_ig_routing'] = True
         new_prompts.setdefault('_eager_fields', {})
         new_prompts['_eager_fields']['inventory_id'] = self.inventory_id
         new_prompts['_eager_fields']['job_slice_number'] = self.job_slice_number
         new_prompts['_eager_fields']['job_slice_count'] = self.job_slice_count
+        # target the same routing bucket as the original job, even if the routing
+        # var changed on the template since; the routed instance group comes back
+        # through the launch config prompts
+        new_prompts['_eager_fields']['instance_group_routing_var'] = self.instance_group_routing_var
+        new_prompts['_eager_fields']['instance_group_routing_value'] = self.instance_group_routing_value
         return super(Job, self).copy_unified_job(**new_prompts)
+
+    @property
+    def is_ig_routed(self):
+        return bool(self.instance_group_routing_var) and self.instance_group_routing_value is not None
+
+    def filter_hosts_to_ig_routing_bucket(self, hosts):
+        """Restrict hosts to the ones belonging to this routed job's bucket."""
+        return self.inventory.filter_hosts_to_routing_bucket(hosts, self.instance_group_routing_var, self.instance_group_routing_value)
 
     def get_passwords_needed_to_start(self):
         return self.passwords_needed_to_start
@@ -787,6 +918,8 @@ class Job(UnifiedJob, JobOptions, SurveyJobMixin, JobNotificationMixin, TaskMana
                     count_hosts = (count_hosts + self.job_slice_count - self.job_slice_number) // self.job_slice_count
                     # pinned hosts run in every slice on top of its share
                     count_hosts += pinned_ct
+                elif self.is_ig_routed:
+                    count_hosts = len(self.filter_hosts_to_ig_routing_bucket(self.inventory.hosts.filter(enabled=True).only('id', 'name')))
             else:
                 count_hosts = 5 if self.forks == 0 else self.forks
         return min(count_hosts, 5 if self.forks == 0 else self.forks) + 1
@@ -949,6 +1082,9 @@ class Job(UnifiedJob, JobOptions, SurveyJobMixin, JobNotificationMixin, TaskMana
 
         host_qs = host_qs.only(*HOST_FACTS_FIELDS)
         host_qs = self.inventory.get_sliced_hosts(host_qs, self.job_slice_number, self.job_slice_count, pinned_hosts=self.job_slice_pinned_hosts_list)
+        if self.is_ig_routed:
+            # routed jobs only run their bucket of hosts, keep the fact cache aligned
+            host_qs = self.filter_hosts_to_ig_routing_bucket(host_qs)
         return host_qs
 
 

@@ -2446,6 +2446,14 @@ class JobTemplateLaunch(RetrieveAPIView):
         if not request.user.can_access(models.JobLaunchConfig, 'add', serializer.validated_data, template=obj):
             raise PermissionDenied()
 
+        ig_routing_error, ig_routing_buckets = obj.get_ig_routing_launch_error(request.user, serializer.validated_data)
+        if ig_routing_error:
+            return Response(dict(errors=[ig_routing_error]), status=status.HTTP_400_BAD_REQUEST)
+        if ig_routing_buckets is not None:
+            # hand the validated buckets to create_unified_job, so the launch
+            # routes to exactly the instance groups that passed the check
+            serializer.validated_data['_ig_routing_buckets'] = ig_routing_buckets
+
         passwords = serializer.validated_data.pop('credential_passwords', {})
         new_job = obj.create_unified_job(**serializer.validated_data)
         result = new_job.signal_start(**passwords)
@@ -2867,6 +2875,7 @@ class JobTemplateCallback(GenericAPIView):
             extra_vars_redacted, removed = extract_ansible_vars(extra_vars)
             kv['extra_vars'] = extra_vars_redacted
         kv['_prevent_slicing'] = True  # will only run against 1 host, so no point
+        kv['_prevent_ig_routing'] = True  # same reason: a single host needs no routing fan-out
         with transaction.atomic():
             job = job_template.create_job(**kv)
 
@@ -3279,6 +3288,34 @@ class WorkflowJobRelaunch(GenericAPIView):
             jt = obj.job_template
             if not jt:
                 raise ParseError(_('Cannot relaunch slice workflow job orphaned from job template.'))
+            # classify by what actually spawned the workflow, not by the current
+            # (editable) template configuration
+            is_ig_routed_workflow = any('ig_routing_value' in node.ancestor_artifacts for node in obj.workflow_nodes.all())
+            # the relaunch re-applies the original prompts, so it targets the
+            # prompted inventory when the template asks for one, or whatever
+            # inventory the template has now otherwise
+            relaunch_inventory = obj.inventory if (jt.ask_inventory_on_launch and obj.inventory) else jt.inventory
+            if is_ig_routed_workflow:
+                if not jt.instance_group_routing_var:
+                    raise ParseError(
+                        _('Cannot relaunch instance group routed workflow job: the job template no longer routes by variable. Launch the job template instead.')
+                    )
+                if relaunch_inventory is None:
+                    raise ParseError(_('Cannot relaunch instance group routed workflow job without an inventory.'))
+                if getattr(relaunch_inventory, 'kind', None) != 'federated':
+                    # routing buckets are recomputed at relaunch, so only require
+                    # that the inventory still fans out and that the relaunching
+                    # user may use the routed instance groups
+                    relaunch_kwargs = {'inventory': relaunch_inventory} if jt.ask_inventory_on_launch else {}
+                    ig_routing_error, ig_routing_buckets = jt.get_ig_routing_launch_error(request.user, relaunch_kwargs)
+                    if ig_routing_error:
+                        raise ParseError(ig_routing_error)
+                    if ig_routing_buckets is None or len(ig_routing_buckets) <= 1:
+                        raise ParseError(
+                            _(
+                                'Cannot relaunch instance group routed workflow job: the inventory no longer routes to multiple instance groups. Launch the job template instead.'
+                            )
+                        )
             elif getattr(obj.inventory, 'kind', None) != 'federated' and (
                 not obj.inventory or jt.get_effective_slice_ct({'inventory': obj.inventory}) != obj.workflow_nodes.count()
             ):
