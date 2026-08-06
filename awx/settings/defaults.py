@@ -1234,3 +1234,9 @@ from ansible_base.lib import dynamic_config  # noqa: E402
 
 settings_file = os.path.join(os.path.dirname(dynamic_config.__file__), 'dynamic_settings.py')
 include(settings_file)
+
+# dynamic_settings sets DEFAULT_FILTER_BACKENDS. Swap the generic field lookup backend for the
+# one that resolves the Host fields derived from JobHostSummary.
+REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS'] = tuple(
+    'awx.api.filters.HostFieldLookupBackend' if backend.endswith('.FieldLookupBackend') else backend for backend in REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS']
+)
