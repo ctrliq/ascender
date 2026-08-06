@@ -14,6 +14,11 @@ from datetime import timedelta
 
 # python-ldap
 import ldap
+
+# Django
+from django.core.exceptions import ImproperlyConfigured
+
+# django-split-settings
 from split_settings.tools import include
 
 DEBUG = True
@@ -1236,7 +1241,13 @@ settings_file = os.path.join(os.path.dirname(dynamic_config.__file__), 'dynamic_
 include(settings_file)
 
 # dynamic_settings sets DEFAULT_FILTER_BACKENDS. Swap the generic field lookup backend for the
-# one that resolves the Host fields derived from JobHostSummary.
+# one that resolves the Host fields derived from JobHostSummary. A miss here would put the
+# derived filters back to matching nothing, which is silent, so refuse to start instead.
+generic_field_lookup_backend = 'ansible_base.rest_filters.rest_framework.field_lookup_backend.FieldLookupBackend'
+if generic_field_lookup_backend not in REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS']:
+    raise ImproperlyConfigured(
+        'Expected {} in REST_FRAMEWORK["DEFAULT_FILTER_BACKENDS"], found {}.'.format(generic_field_lookup_backend, REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS'])
+    )
 REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS'] = tuple(
-    'awx.api.filters.HostFieldLookupBackend' if backend.endswith('.FieldLookupBackend') else backend for backend in REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS']
+    'awx.api.filters.HostFieldLookupBackend' if backend == generic_field_lookup_backend else backend for backend in REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS']
 )

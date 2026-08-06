@@ -161,11 +161,18 @@ class SmartFilter(object):
                 q = reduce(lambda x, y: x | y, [models.Q(**{u'%s__icontains' % _k: _v}) for _k, _v in kwargs.items()])
                 self.result = Host.objects.filter(q)
             else:
-                # detect loops and restrict access to sensitive fields
                 # this import is intentional here to avoid a circular import
-                from ansible_base.rest_filters.rest_framework.field_lookup_backend import FieldLookupBackend
+                from awx.api.filters import DERIVED_HOST_FIELDS, HostFieldLookupBackend
 
-                FieldLookupBackend().get_field_from_lookup(Host, k)
+                # both branches resolve through get_fields_from_path, which is what detects
+                # loops and restricts access to sensitive fields
+                backend = HostFieldLookupBackend()
+                if k.partition('__')[0] in DERIVED_HOST_FIELDS:
+                    # these columns hold nothing, so resolve them the way the REST filters
+                    # do and keep smart inventories agreeing with /api/v2/hosts/
+                    v, k, _ = backend.value_to_python(Host, k, v)
+                else:
+                    backend.get_field_from_lookup(Host, k)
                 kwargs[k] = v
                 self.result = Host.objects.filter(**kwargs)
 
