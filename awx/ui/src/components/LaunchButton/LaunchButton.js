@@ -9,6 +9,7 @@ import {
   ProjectsAPI,
   WorkflowJobsAPI,
   WorkflowJobTemplatesAPI,
+  ExecutionEnvironmentBuilderBuildsAPI,
 } from 'api';
 import useToast, { AlertVariant } from 'hooks/useToast';
 import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
@@ -192,6 +193,8 @@ function LaunchButton({ resource, children }) {
       readRelaunch = AdHocCommandsAPI.readRelaunch(resource.id);
     } else if (resource.type === 'job') {
       readRelaunch = JobsAPI.readRelaunch(resource.id);
+    } else if (resource.type === 'execution_environment_builder_build') {
+      readRelaunch = ExecutionEnvironmentBuilderBuildsAPI.readRelaunch(resource.id);
     }
 
     try {
@@ -213,6 +216,8 @@ function LaunchButton({ resource, children }) {
           relaunch = AdHocCommandsAPI.relaunch(resource.id);
         } else if (resource.type === 'job') {
           relaunch = JobsAPI.relaunch(resource.id, params || {});
+        } else if (resource.type === 'execution_environment_builder_build') {
+          relaunch = ExecutionEnvironmentBuilderBuildsAPI.relaunch(resource.id, params || {});
         }
         const { data: job } = await relaunch;
         if (isMounted.current) {

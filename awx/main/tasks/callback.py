@@ -334,3 +334,7 @@ class RunnerCallbackForAdHocCommand(RunnerCallback):
 
 class RunnerCallbackForSystemJob(RunnerCallback):
     pass
+
+
+class RunnerCallbackForExecutionEnvironmentBuilderBuild(RunnerCallback):
+    pass
