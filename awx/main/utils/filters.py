@@ -170,7 +170,12 @@ class SmartFilter(object):
                 if k.partition('__')[0] in DERIVED_HOST_FIELDS:
                     # these columns hold nothing, so resolve them the way the REST filters
                     # do and keep smart inventories agreeing with /api/v2/hosts/
-                    v, k, _ = backend.value_to_python(Host, k, v)
+                    v, lookup, _ = backend.value_to_python(Host, k, v)
+                    if isinstance(lookup, list):
+                        # a __search key resolves to several lookups; _expand_search turns
+                        # those away first, and the grammar cannot express the OR anyway
+                        raise ParseException('%s is not supported in host filters' % k)
+                    k = lookup
                 else:
                     backend.get_field_from_lookup(Host, k)
                 kwargs[k] = v

@@ -132,6 +132,15 @@ def test_smart_inventory_host_filter(inventory_with_hosts, get, admin):
 
 
 @pytest.mark.django_db
+def test_smart_inventory_rejects_search(inventory_with_hosts, get, admin):
+    run_job(inventory_with_hosts, name='nightly build', ok=['passing'])
+
+    for lookup in ('last_job__search=nightly', 'last_job_host_summary__search=nightly'):
+        response = get(host_list('?host_filter=%s' % urllib.parse.quote(lookup, safe='')), admin)
+        assert response.status_code == 400
+
+
+@pytest.mark.django_db
 def test_other_models_filter_their_own_column(job_template, get, admin):
     job = Job.objects.create(job_template=job_template, name='template run')
     job_template.last_job = job
