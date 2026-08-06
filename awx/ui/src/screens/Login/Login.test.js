@@ -440,4 +440,60 @@ describe('<Login />', () => {
       container.querySelectorAll('[data-cy="social-auth-google"]')
     ).toHaveLength(0);
   });
+
+  test('SAML button uses the configured label', async () => {
+    AuthAPI.read.mockResolvedValue({
+      data: {
+        'saml:entra': {
+          login_url: '/sso/login/saml/?idp=entra',
+          complete_url: 'https://localhost:8043/sso/complete/saml/',
+          metadata_url: '/sso/metadata/saml/',
+          label: 'Entra ID',
+        },
+      },
+    });
+
+    const { container } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    await waitFor(() =>
+      expect(
+        container.querySelectorAll('[data-cy="social-auth-saml"]')
+      ).toHaveLength(1)
+    );
+    expect(
+      container.querySelector('[data-cy="social-auth-saml"]').textContent
+    ).toEqual('Sign in with Entra ID');
+  });
+
+  test('SAML button falls back to the IdP key when no label is set', async () => {
+    AuthAPI.read.mockResolvedValue({
+      data: {
+        saml: {
+          login_url: '/sso/login/saml/',
+          complete_url: 'https://localhost:8043/sso/complete/saml/',
+          metadata_url: '/sso/metadata/saml/',
+        },
+        'saml:onelogin': {
+          login_url: '/sso/login/saml/?idp=onelogin',
+          complete_url: 'https://localhost:8043/sso/complete/saml/',
+          metadata_url: '/sso/metadata/saml/',
+        },
+      },
+    });
+
+    const { container } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    await waitFor(() =>
+      expect(
+        container.querySelectorAll('[data-cy="social-auth-saml"]')
+      ).toHaveLength(2)
+    );
+    const buttons = container.querySelectorAll('[data-cy="social-auth-saml"]');
+    expect(buttons[0].textContent).toEqual('Sign in with SAML');
+    expect(buttons[1].textContent).toEqual('Sign in with SAML onelogin');
+  });
 });
