@@ -90,7 +90,7 @@
   outline: none;
 }
 
-.ascender-login .pf-v6-c-login__main-footer:has(.pf-v6-c-login__footer:empty) {
+.ascender-login .pf-v6-c-login__footer:empty {
   display: none;
 }
 
