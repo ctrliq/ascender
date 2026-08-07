@@ -44,7 +44,7 @@ function SurveyListItem({ canEdit, question, isChecked, onSelect, rowIndex }) {
       >
         <>
           <Link
-            to={`survey/edit?question_variable=${encodeURIComponent(
+            to={`edit?question_variable=${encodeURIComponent(
               question.variable
             )}`}
           >
@@ -98,7 +98,7 @@ function SurveyListItem({ canEdit, question, isChecked, onSelect, rowIndex }) {
               ouiaId={`edit-survey-${question.variable}`}
               variant="plain"
               component={Link}
-              to={`survey/edit?question_variable=${encodeURIComponent(
+              to={`edit?question_variable=${encodeURIComponent(
                 question.variable
               )}`}
              />
