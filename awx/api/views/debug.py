@@ -2,9 +2,9 @@ from collections import OrderedDict
 
 from django.conf import settings
 
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from awx.api.generics import APIView
+from awx.api.permissions import IsSuperuser
 
 from awx.main.scheduler import TaskManager, DependencyManager, WorkflowManager
 
@@ -12,7 +12,7 @@ from awx.main.scheduler import TaskManager, DependencyManager, WorkflowManager
 class TaskManagerDebugView(APIView):
     _ignore_model_permissions = True
     exclude_from_schema = True
-    permission_classes = [AllowAny]
+    permission_classes = [IsSuperuser]
     prefix = 'Task'
 
     def get(self, request):
@@ -27,7 +27,7 @@ class TaskManagerDebugView(APIView):
 class DependencyManagerDebugView(APIView):
     _ignore_model_permissions = True
     exclude_from_schema = True
-    permission_classes = [AllowAny]
+    permission_classes = [IsSuperuser]
     prefix = 'Dependency'
 
     def get(self, request):
@@ -42,7 +42,7 @@ class DependencyManagerDebugView(APIView):
 class WorkflowManagerDebugView(APIView):
     _ignore_model_permissions = True
     exclude_from_schema = True
-    permission_classes = [AllowAny]
+    permission_classes = [IsSuperuser]
     prefix = 'Workflow'
 
     def get(self, request):
@@ -57,7 +57,7 @@ class WorkflowManagerDebugView(APIView):
 class DebugRootView(APIView):
     _ignore_model_permissions = True
     exclude_from_schema = True
-    permission_classes = [AllowAny]
+    permission_classes = [IsSuperuser]
 
     def get(self, request, format=None):
         '''List of available debug urls'''
