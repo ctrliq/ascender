@@ -5,7 +5,7 @@ import datetime
 import pytest
 
 # from awx.main.models import NotificationTemplates, Notifications, JobNotificationMixin
-from awx.main.models import AdHocCommand, InventoryUpdate, Job, JobNotificationMixin, ProjectUpdate, Schedule, SystemJob, WorkflowJob
+from awx.main.models import AdHocCommand, InventoryUpdate, Job, JobNotificationMixin, NotificationTemplate, ProjectUpdate, Schedule, SystemJob, WorkflowJob
 from awx.api.serializers import UnifiedJobSerializer
 
 
@@ -141,6 +141,20 @@ class TestJobNotificationMixin(object):
         job_serialization = UnifiedJobSerializer(job).to_representation(job)
         context = job.context(job_serialization)
         assert '批量安装项目' in context['job_metadata']
+
+    @pytest.mark.django_db
+    @pytest.mark.parametrize('bad_template', ['{% badtag %}', 'Job {{ name '])
+    def test_build_notification_message_handles_template_render_error(self, bad_template):
+        """A custom template with a Jinja syntax error must yield a readable error
+        message, not raise. traceback.format_exception returns a list, so the .replace
+        must apply to the joined string."""
+        job = Job.objects.create(name='fake-job')
+        nt = NotificationTemplate(name='broken', notification_type='webhook', messages={'started': {'message': bad_template, 'body': ''}})
+
+        msg, body = job.build_notification_message(nt, 'running')
+
+        assert isinstance(msg, str)
+        assert 'Traceback' in msg
 
     def test_context_stub(self):
         """The context stub is a fake context used to validate custom notification messages. Ensure that

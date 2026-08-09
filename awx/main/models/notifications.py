@@ -492,13 +492,13 @@ class JobNotificationMixin(object):
             try:
                 msg = env.from_string(msg_template).render(**context)
             except (TemplateSyntaxError, UndefinedError, SecurityError) as e:
-                msg = '\r\n'.join([e.message, ''.join(traceback.format_exception(None, e, e.__traceback__).replace('\n', '\r\n'))])
+                msg = '\r\n'.join([e.message, ''.join(traceback.format_exception(None, e, e.__traceback__)).replace('\n', '\r\n')])
 
         if body_template:
             try:
                 body = env.from_string(body_template).render(**context)
             except (TemplateSyntaxError, UndefinedError, SecurityError) as e:
-                body = '\r\n'.join([e.message, ''.join(traceback.format_exception(None, e, e.__traceback__).replace('\n', '\r\n'))])
+                body = '\r\n'.join([e.message, ''.join(traceback.format_exception(None, e, e.__traceback__)).replace('\n', '\r\n')])
 
         # Only replace the body when the template renders to nothing
         # (empty or whitespace-only). Short single-line bodies, such as a
