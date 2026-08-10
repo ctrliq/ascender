@@ -24,6 +24,7 @@ __all__ = [
     'InventoryInventorySourcesUpdatePermission',
     'UserPermission',
     'IsSystemAdminOrAuditor',
+    'IsSuperuser',
     'WorkflowApprovalPermission',
     'AnalyticsPermission',
 ]
@@ -246,6 +247,15 @@ class IsSystemAdminOrAuditor(permissions.BasePermission):
         if request.method == 'GET':
             return request.user.is_superuser or request.user.is_system_auditor
         return request.user.is_superuser
+
+
+class IsSuperuser(permissions.BasePermission):
+    """
+    Allows access only to system superusers.
+    """
+
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.is_authenticated and request.user.is_superuser)
 
 
 class WebhookKeyPermission(permissions.BasePermission):
