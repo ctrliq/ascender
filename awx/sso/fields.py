@@ -663,6 +663,7 @@ class SAMLIdPField(HybridDictField):
     attr_last_name = fields.CharField(required=False)
     attr_username = fields.CharField(required=False)
     attr_email = fields.CharField(required=False)
+    label = fields.CharField(required=False)
 
 
 class SAMLEnabledIdPsField(fields.DictField):

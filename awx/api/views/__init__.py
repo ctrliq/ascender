@@ -708,6 +708,9 @@ class AuthView(APIView):
                 for idp in sorted(settings.SOCIAL_AUTH_SAML_ENABLED_IDPS.keys()):
                     saml_backend_data = dict(backend_data.items())
                     saml_backend_data['login_url'] = '%s?idp=%s' % (login_url, idp)
+                    label = settings.SOCIAL_AUTH_SAML_ENABLED_IDPS[idp].get('label')
+                    if label:
+                        saml_backend_data['label'] = label
                     full_backend_name = '%s:%s' % (name, idp)
                     if (err_backend == full_backend_name or err_backend == name) and err_message:
                         saml_backend_data['error'] = err_message

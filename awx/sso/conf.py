@@ -1475,8 +1475,10 @@ register(
         'Configure the Entity ID, SSO URL and certificate for each identity'
         ' provider (IdP) in use. Multiple SAML IdPs are supported. Some IdPs'
         ' may provide user data using attribute names that differ from the'
-        ' default OIDs. Attribute names may be overridden for each IdP. Refer'
-        ' to the Ansible documentation for additional details and syntax.'
+        ' default OIDs. Attribute names may be overridden for each IdP. An'
+        ' optional label may be set for each IdP to control the text of its'
+        ' login button. Refer to the Ansible documentation for additional'
+        ' details and syntax.'
     ),
     category=_('SAML'),
     category_slug='saml',

@@ -105,3 +105,26 @@
 .ascender-login .pf-v6-c-alert.pf-m-warning .pf-v6-c-alert__title {
   color: var(--pf-v6-global--Color--100);
 }
+
+.ascender-login .ascender-login__sso {
+  margin-top: 1.5rem;
+}
+
+.ascender-login .ascender-login__sso-separator {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  color: var(--pf-v6-global--Color--300);
+}
+
+.ascender-login .ascender-login__sso-separator::before,
+.ascender-login .ascender-login__sso-separator::after {
+  flex: 1;
+  content: '';
+  border-top: 1px solid var(--pf-v6-global--BorderColor--100);
+}
+
+.ascender-login .ascender-login__sso .pf-v6-c-button + .pf-v6-c-button {
+  margin-top: 0.5rem;
+}
