@@ -1,5 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
+import { Routes, Route } from 'react-router';
+import { createMemoryHistory } from 'history';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SurveyListItem from './SurveyListItem';
 
@@ -8,6 +10,40 @@ const renderInTable = (ui) =>
     <table>
       <tbody>{ui}</tbody>
     </table>
+  );
+
+// Mirrors how the app mounts the list: Template.js routes "survey/*" to
+// TemplateSurvey, which renders SurveyList from its own index route. Relative
+// link targets resolve against that route path, so hrefs are only meaningful
+// when the item is mounted at the same depth.
+const renderAtSurveyRoute = (ui) =>
+  renderWithContexts(
+    <Routes>
+      <Route
+        path="/templates/:templateType/:id/survey/*"
+        element={
+          <Routes>
+            <Route
+              index
+              element={
+                <table>
+                  <tbody>{ui}</tbody>
+                </table>
+              }
+            />
+          </Routes>
+        }
+      />
+    </Routes>,
+    {
+      context: {
+        router: {
+          history: createMemoryHistory({
+            initialEntries: ['/templates/job_template/59/survey'],
+          }),
+        },
+      },
+    }
   );
 
 describe('<SurveyListItem />', () => {
@@ -145,7 +181,7 @@ describe('<SurveyListItem />', () => {
   });
 
   test('edit button shown to users with edit capabilities', () => {
-    renderInTable(
+    renderAtSurveyRoute(
       <SurveyListItem
         question={item}
         isFirst
@@ -161,7 +197,24 @@ describe('<SurveyListItem />', () => {
     expect(editLink).toBeInTheDocument();
     expect(editLink).toHaveAttribute(
       'href',
-      '/survey/edit?question_variable=buzz'
+      '/templates/job_template/59/survey/edit?question_variable=buzz'
+    );
+  });
+
+  test('question name links to the edit form for that question', () => {
+    renderAtSurveyRoute(
+      <SurveyListItem
+        question={item}
+        isFirst
+        isLast
+        isChecked={false}
+        canEdit
+      />
+    );
+
+    expect(screen.getByRole('link', { name: 'Foo' })).toHaveAttribute(
+      'href',
+      '/templates/job_template/59/survey/edit?question_variable=buzz'
     );
   });
 });
