@@ -690,7 +690,7 @@ class TaskManager(TaskBase):
         # Reset waiting jobs whose controller_node was deprovisioned (e.g. K8s pod replaced).
         # These jobs will never be picked up because no live node is listening for them.
         registered_control_nodes = Instance.objects.filter(node_type__in=('control', 'hybrid')).values_list('hostname', flat=True)
-        orphaned_waiting = UnifiedJob.objects.filter(status='waiting').exclude(controller_node__in=registered_control_nodes)
+        orphaned_waiting = UnifiedJob.objects.filter(status='waiting').exclude(controller_node='').exclude(controller_node__in=registered_control_nodes)
         for j in orphaned_waiting:
             logger.warning(f'{j.controller_node} is not a registered instance; resetting {j.log_format} to pending')
             j.status = 'pending'

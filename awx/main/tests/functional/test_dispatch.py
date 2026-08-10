@@ -474,6 +474,20 @@ class TestJobReaper(object):
         assert job.status == 'waiting'
         assert job.controller_node == 'awx-task-live'
 
+    def test_waiting_job_not_reset_when_controller_node_unassigned(self):
+        """A waiting job with no controller_node assigned yet is not orphaned
+        and should not be swept by the deprovisioned-controller check."""
+        from awx.main.scheduler import TaskManager
+
+        Instance(hostname='awx-task-live', node_type='control').save()
+        job = Job.objects.create(status='waiting', controller_node='', execution_node='')
+
+        tm = TaskManager()
+        tm.reap_jobs_from_orphaned_instances()
+
+        job.refresh_from_db()
+        assert job.status == 'waiting'
+
 
 @pytest.mark.django_db
 class TestScheduler:
