@@ -50,7 +50,7 @@ class HostLatestSummaryQuerySet(models.QuerySet):
         latest_summary = JobHostSummary.objects.filter(host_id=OuterRef('pk')).order_by('-id')
         return self.annotate(
             _latest_summary_id=Subquery(latest_summary.values('id')[:1]),
-        )
+        ).defer('ansible_facts')
 
     def _fetch_all(self):
         super()._fetch_all()
