@@ -2248,9 +2248,6 @@ class InventorySourceGroupsList(SubListDestroyAPIView):
     relationship = 'groups'
     check_sub_obj_permission = False
 
-    def get_queryset(self):
-        return super().get_queryset().with_latest_summary_id()
-
     def perform_list_destroy(self, instance_list):
         inv_source = self.get_parent_object()
         with ignore_inventory_computed_fields():
