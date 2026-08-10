@@ -142,8 +142,7 @@ class JobOptions(BaseModel):
         blank=True,
         default=False,
     )
-    skip_tags = models.CharField(
-        max_length=1024,
+    skip_tags = models.TextField(
         blank=True,
         default='',
     )
