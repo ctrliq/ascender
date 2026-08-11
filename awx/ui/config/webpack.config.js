@@ -12,7 +12,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-const { InjectManifestPlugin } = require('inject-manifest-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const ESLintPlugin = require('eslint-webpack-plugin');
@@ -56,9 +55,6 @@ const imageInlineSizeLimit = parseInt(
 
 // Check if TypeScript is setup
 const useTypeScript = fs.existsSync(paths.appTsConfig);
-
-// Get the path to the uncompiled service worker (if it exists).
-const swSrc = paths.swSrc;
 
 // style files regexes
 const cssRegex = /\.css$/;
@@ -535,7 +531,6 @@ module.exports = function (webpackEnv) {
           {
             inject: true,
             template: paths.appHtml,
-            excludeChunks: ['service-worker'],
           },
           isEnvProduction
             ? {
@@ -605,11 +600,6 @@ module.exports = function (webpackEnv) {
         publicPath: paths.publicUrlOrPath,
         generate: (seed, files, entrypoints) => {
           const manifestFiles = files.reduce((manifest, file) => {
-            // Exclude the hashed service-worker chunk — it gets moved to the
-            // build root by InjectManifestPlugin, so the static/js/ path is wrong.
-            if (/service-worker\.[a-f0-9]+\.js/.test(file.name)) {
-              return manifest;
-            }
             manifest[file.name] = file.path;
             return manifest;
           }, seed);
@@ -632,15 +622,6 @@ module.exports = function (webpackEnv) {
         resourceRegExp: /^\.\/locale$/,
         contextRegExp: /moment$/,
       }),
-      // Generate a service worker script that will precache, and keep up to date,
-      // the HTML & assets that are part of the webpack build.
-      isEnvProduction &&
-        fs.existsSync(swSrc) &&
-        new InjectManifestPlugin({
-          file: `./${path.relative(paths.appPath, swSrc)}`,
-          exclude: ['**/*.map', 'asset-manifest.json', '**/LICENSE*'],
-          removeHash: true,
-        }),
       // Redirect PatternFly React Core asset requests to PatternFly assets
       new webpack.NormalModuleReplacementPlugin(
         /^\.\/assets\/(fonts|pficon)\/.*\.(woff2?|ttf|eot)$/,
