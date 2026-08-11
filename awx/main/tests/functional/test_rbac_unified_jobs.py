@@ -121,6 +121,56 @@ def test_unified_job_list_org_member_sees_nothing(user, get):
 
 
 @pytest.mark.django_db
+def test_unified_job_list_superuser_no_roles_sees_all(user, get):
+    """A superuser with zero role memberships sees all jobs. Superusers are
+    handled by the BaseAccess.get_queryset short-circuit, so the empty-role-set
+    early exit in filtered_queryset must never be reachable for them."""
+    superuser = user('uj-superuser', True)
+    # Old-RBAC signals auto-enroll superusers in the system_administrator
+    # singleton role; strip role memberships (restoring the flag without
+    # signals) to prove the bypass does not depend on any role rows.
+    superuser.roles.clear()
+    type(superuser).objects.filter(pk=superuser.pk).update(is_superuser=True)
+    superuser.refresh_from_db()
+    assert superuser.is_superuser
+    assert superuser.roles.count() == 0
+
+    org = Organization.objects.create(name='uj-super-org')
+    inventory = org.inventories.create(name='uj-super-inv')
+    project = Project.objects.create(name='uj-super-project', organization=org)
+    jt = JobTemplate.objects.create(name='uj-super-jt', project=project, inventory=inventory, organization=org)
+    job = jt.create_unified_job()
+
+    response = get(reverse('api:unified_job_list'), superuser)
+    assert response.status_code == 200
+    result_ids = [r['id'] for r in response.data['results']]
+    assert job.pk in result_ids
+
+
+@pytest.mark.django_db
+def test_unified_job_list_system_auditor_sees_all(system_auditor, get):
+    """System auditors bypass filtered_queryset via BaseAccess.get_queryset —
+    the closest analog of upstream's singleton-permission shortcut paths."""
+    org = Organization.objects.create(name='uj-sysaud-org')
+    inventory = org.inventories.create(name='uj-sysaud-inv')
+    project = Project.objects.create(name='uj-sysaud-project', organization=org)
+    jt = JobTemplate.objects.create(name='uj-sysaud-jt', project=project, inventory=inventory, organization=org)
+    job = jt.create_unified_job()
+
+    inv_src = InventorySource.objects.create(name='uj-sysaud-invsrc', inventory=inventory, source='ec2')
+    inv_update = InventoryUpdate.objects.create(inventory_source=inv_src, source=inv_src.source)
+
+    adhoc = AdHocCommand.objects.create(name='uj-sysaud-adhoc', inventory=inventory)
+
+    response = get(reverse('api:unified_job_list'), system_auditor)
+    assert response.status_code == 200
+    result_ids = [r['id'] for r in response.data['results']]
+    assert job.pk in result_ids
+    assert inv_update.pk in result_ids
+    assert adhoc.pk in result_ids
+
+
+@pytest.mark.django_db
 def test_unified_job_list_rando_sees_nothing(rando, get):
     """Unprivileged user sees no unified jobs."""
     org = Organization.objects.create(name='uj-rando-org')
