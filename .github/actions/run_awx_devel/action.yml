@@ -20,11 +20,18 @@ runs:
 
     - name: Upgrade ansible-core
       shell: bash
-      run: python3 -m pip install --upgrade ansible-core
+      # Constrained to the tested minor series so new upstream releases can't
+      # change CI behavior mid-flight; bump deliberately after validating.
+      run: python3 -m pip install --upgrade 'ansible-core~=2.21.0'
 
     - name: Install system deps
       shell: bash
-      run: sudo apt-get install -y gettext
+      # Refresh the package index first: GitHub-hosted runners ship with apt
+      # lists frozen at image-build time, and installs can 404 once mirrors
+      # rotate package versions.
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gettext
 
     - name: Start the development environment
       shell: bash

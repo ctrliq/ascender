@@ -40,7 +40,7 @@ register(
     allow_blank=True,
     default='',
     label=_('Custom Browser Title'),
-    help_text=_('If set, this text will replace the default brand name in the ' 'browser tab title throughout the application.'),
+    help_text=_('If set, this text will replace the default brand name in the browser tab title throughout the application.'),
     category=_('UI'),
     category_slug='ui',
 )

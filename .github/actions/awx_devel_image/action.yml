@@ -17,7 +17,9 @@ runs:
 
     - name: Install ansible-core for generating Dockerfile.dev
       shell: bash
-      run: python3 -m pip install --upgrade ansible-core
+      # Constrained to the tested minor series so new upstream releases can't
+      # change CI behavior mid-flight; bump deliberately after validating.
+      run: python3 -m pip install --upgrade 'ansible-core~=2.21.0'
 
     - name: Log in to registry
       shell: bash
