@@ -457,6 +457,14 @@ class Project(UnifiedJobTemplate, ProjectOptions, ResourceMixin, RelatedJobsMixi
 
     @property
     def cache_id(self):
+        # Prefer scm_revision as the cache key if available. This guarantees that project changes are tracked correctly
+        # even over multiple nodes. The scm_revision is a hex string and thus safe to be used as a directory name.
+        if self.scm_revision:
+            return self.scm_revision
+
+        # If no scm_revision is available (e.g. non-scm projects), use last_job_id. It is a global ID in the
+        # database. This means that when a project sync runs on one node, all other nodes become outdated,
+        # resulting in unnecessary re-syncs.
         return str(self.last_job_id)
 
     @property
@@ -638,7 +646,7 @@ class ProjectUpdate(UnifiedJob, ProjectOptions, JobNotificationMixin, TaskManage
 
     @property
     def cache_id(self):
-        if self.branch_override or self.job_type == 'check' or (not self.project):
+        if self.branch_override or (not self.project):
             return str(self.id)
         return self.project.cache_id
 
