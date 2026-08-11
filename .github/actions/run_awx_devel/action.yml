@@ -41,6 +41,14 @@ runs:
         COMPOSE_UP_OPTS="-d" \
         make docker-compose
 
+    - name: Dump container diagnostics
+      shell: bash
+      run: |
+        echo "--- image ---"
+        docker inspect tools_awx_1 --format 'image={{.Config.Image}} ({{.Image}}) user={{.Config.User}}'
+        echo "--- runtime user and rsyslog permissions ---"
+        docker exec tools_awx_1 bash -c 'id; ls -land /var/lib/awx /var/lib/awx/rsyslog; ls -lan /var/lib/awx/rsyslog/'
+
     - name: Wait for the development environment and set the admin password
       shell: bash
       run: |
@@ -50,6 +58,8 @@ runs:
             echo "Timing out, the API never came up"
             docker ps -a
             docker logs tools_awx_1 || true
+            echo "--- rsyslog diagnostics ---"
+            docker exec tools_awx_1 bash -c 'id; ls -lan /var/lib/awx/rsyslog/; ps aux' || true
             exit 1
           fi
           echo "Waiting for the API..."
