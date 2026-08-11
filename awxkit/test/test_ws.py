@@ -68,4 +68,3 @@ def test_unsubscribe_ack_sets_event():
     client = WSClient("token", "hostname", 566, False)
     client._on_message(client.ws, '{"groups_current": {}}')
     assert client._pending_unsubscribe.is_set()
-

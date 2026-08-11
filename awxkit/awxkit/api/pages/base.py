@@ -8,7 +8,6 @@ from awxkit.config import config
 from awxkit.api.resources import resources
 import awxkit.exceptions as exc
 
-
 log = logging.getLogger(__name__)
 
 
