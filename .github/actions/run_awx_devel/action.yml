@@ -13,6 +13,18 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Disable the host AppArmor profile for rsyslogd
+      shell: bash
+      # Ubuntu runners ship an AppArmor profile for /usr/sbin/rsyslogd, and
+      # AppArmor confines by binary path even inside containers — so rsyslogd
+      # in the dev environment gets EACCES reading its own config despite
+      # correct file permissions. Same fix as upstream AWX CI.
+      run: |
+        if [ -f /etc/apparmor.d/usr.sbin.rsyslogd ]; then
+          sudo ln -sf /etc/apparmor.d/usr.sbin.rsyslogd /etc/apparmor.d/disable/
+          sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.rsyslogd
+        fi
+
     - name: Build ascender_devel image for the development environment
       uses: ./.github/actions/awx_devel_image
       with:
