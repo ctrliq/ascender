@@ -19,6 +19,14 @@ def _options(databases):
 
 
 def _fake_uwsgi(harakiri):
+    # Real uwsgi builds expose opt with str keys and bytes values
+    mod = types.ModuleType('uwsgi')
+    mod.opt = {'harakiri': str(harakiri).encode()}
+    return mod
+
+
+def _fake_uwsgi_bytes_keys(harakiri):
+    # Some uwsgi versions/builds use bytes keys instead
     mod = types.ModuleType('uwsgi')
     mod.opt = {b'harakiri': str(harakiri).encode()}
     return mod
@@ -28,6 +36,12 @@ class TestSetStatementTimeout:
     def test_derives_from_uwsgi_harakiri(self):
         databases = _make_databases()
         with mock.patch.dict('sys.modules', {'uwsgi': _fake_uwsgi(115)}):
+            set_statement_timeout(databases)
+        assert _options(databases) == "-c statement_timeout=110000"
+
+    def test_derives_from_uwsgi_harakiri_bytes_keys(self):
+        databases = _make_databases()
+        with mock.patch.dict('sys.modules', {'uwsgi': _fake_uwsgi_bytes_keys(115)}):
             set_statement_timeout(databases)
         assert _options(databases) == "-c statement_timeout=110000"
 

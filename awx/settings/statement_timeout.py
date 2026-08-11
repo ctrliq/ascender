@@ -20,11 +20,12 @@ def set_statement_timeout(DATABASES, DATABASE_STATEMENT_TIMEOUT=None):
     try:
         import uwsgi
 
-        harakiri = int(uwsgi.opt.get(b'harakiri', 0))
+        # uwsgi.opt key type (str vs bytes) varies across uwsgi versions/builds
+        harakiri = int(uwsgi.opt.get('harakiri', uwsgi.opt.get(b'harakiri', 0)) or 0)
         if harakiri > 0:
             margin = min(5, max(1, int(harakiri * 0.1)))
             timeout_ms = max(1000, (harakiri - margin) * 1000)
-    except (ImportError, ValueError):
+    except (ImportError, ValueError, TypeError):
         pass
 
     if timeout_ms is None:
