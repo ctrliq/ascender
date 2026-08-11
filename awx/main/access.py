@@ -11,6 +11,7 @@ from functools import reduce
 from django.conf import settings
 from django.db.models import Q, Prefetch
 from django.contrib.auth.models import User
+from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist, FieldDoesNotExist
 
@@ -77,6 +78,7 @@ from awx.main.models import (
     ROLE_SINGLETON_SYSTEM_AUDITOR,
 )
 from awx.main.models.mixins import ResourceMixin
+from awx.main.models.rbac import RoleAncestorEntry
 
 __all__ = [
     'get_user_queryset',
@@ -2587,41 +2589,50 @@ class UnifiedJobAccess(BaseAccess):
     # )
 
     def filtered_queryset(self):
-        # Each RBAC branch is a separate queryset combined with UNION instead
-        # of a 4-way OR, so the database can pick an optimal plan per branch.
-        inv_pk_qs = Inventory._accessible_pk_qs(Inventory, self.user, 'read_role')
+        # Pre-compute the user's direct role memberships once and pass them
+        # as literal parameters to each RBAC branch, and use OR (not UNION)
+        # so the database can single-pass filter with an early LIMIT exit.
+        # UNION forces materialization of every accessible job id before
+        # ordering/LIMIT can apply, and repeats the role-membership subquery
+        # in every branch.
+        user_role_ids = list(self.user.roles.values_list('id', flat=True))
+        if not user_role_ids:
+            return self.model.objects.none()
 
-        by_template = (
-            self.model.objects.filter(unified_job_template_id__in=UnifiedJobTemplate.accessible_pk_qs(self.user, 'read_role'))
-            .order_by()
-            .values_list('pk', flat=True)
-        )
-
-        by_inventory_update = (
-            InventoryUpdate.objects.filter(
-                inventory_source__inventory_id__in=inv_pk_qs,
+        ujt_accessible = (
+            RoleAncestorEntry.objects.filter(
+                ancestor_id__in=user_role_ids,
+                role_field='read_role',
+                content_type_id__in=UnifiedJobTemplate._submodels_with_roles(),
             )
-            .order_by()
-            .values_list('pk', flat=True)
+            .values_list('object_id')
+            .distinct()
         )
 
-        by_adhoc = (
-            AdHocCommand.objects.filter(
-                inventory_id__in=inv_pk_qs,
+        inv_accessible = (
+            RoleAncestorEntry.objects.filter(
+                ancestor_id__in=user_role_ids,
+                role_field='read_role',
+                content_type_id=ContentType.objects.get_for_model(Inventory).id,
             )
-            .order_by()
-            .values_list('pk', flat=True)
+            .values_list('object_id')
+            .distinct()
         )
 
-        by_org_auditor = (
-            self.model.objects.filter(
-                organization__in=Organization.objects.filter(Q(admin_role__members=self.user) | Q(auditor_role__members=self.user)),
+        return self.model.objects.filter(
+            Q(unified_job_template_id__in=ujt_accessible)
+            | Q(
+                pk__in=InventoryUpdate.objects.filter(
+                    inventory_source__inventory_id__in=inv_accessible,
+                ).values('pk')
             )
-            .order_by()
-            .values_list('pk', flat=True)
+            | Q(
+                pk__in=AdHocCommand.objects.filter(
+                    inventory_id__in=inv_accessible,
+                ).values('pk')
+            )
+            | Q(organization__in=Organization.objects.filter(Q(admin_role_id__in=user_role_ids) | Q(auditor_role_id__in=user_role_ids)))
         )
-
-        return self.model.objects.filter(pk__in=by_template.union(by_inventory_update, by_adhoc, by_org_auditor))
 
     def get_queryset(self):
         return super(UnifiedJobAccess, self).get_queryset().filter(workflowapproval__isnull=True)
