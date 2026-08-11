@@ -26,21 +26,40 @@ runs:
       run: |
         echo "${{ inputs.github-token }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-    - name: Pre-pull latest devel image to warm cache
-      shell: bash
-      run: |
-        # Best effort: the devel image may not exist yet for this owner.
-        # docker-compose-build uses ascender_devel:$COMPOSE_TAG as its cache
-        # source, so retag whatever we pulled to match.
-        if docker pull -q ghcr.io/${OWNER_LC}/ascender_devel:latest; then
-          docker tag ghcr.io/${OWNER_LC}/ascender_devel:latest ghcr.io/${OWNER_LC}/ascender_devel:${COMPOSE_TAG}
-        fi
-      env:
-        COMPOSE_TAG: ${{ github.base_ref || 'main' }}
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@d7f5e7f509e45cec5c76c4d5afdd7de93d0b3df5  # v4.1.0
 
+    - name: Expose GitHub Actions runtime for the buildx gha cache backend
+      uses: crazy-max/ghaction-github-runtime@3cb05d89e1f492524af3d41a1c98c83bc3025124  # v3.1.0
+
+    # NOTE: the cache lives in the GitHub Actions cache (type=gha), NOT in the
+    # ghcr.io ascender_devel images. Those are intentionally production-style
+    # builds (for testing in kubernetes-like environments) rendered from a
+    # different Dockerfile — they provide no usable layer cache for this
+    # dev-mode build, and must never be retagged as the dev image: without
+    # podman the dev environment starts but cannot run jobs.
+    # PR runs restore cache written by pushes to main (seed_ci_image_cache.yml)
+    # and by earlier runs of the same PR.
     - name: Build image for current source checkout
       shell: bash
       run: |
-        DEV_DOCKER_TAG_BASE=ghcr.io/${OWNER_LC} \
-        COMPOSE_TAG=${{ github.base_ref || 'main' }} \
-        make docker-compose-build
+        make Dockerfile.dev
+        docker buildx build \
+          --load \
+          --cache-from type=gha,scope=${{ github.repository }}-devel-ci \
+          --cache-to "type=gha,scope=${{ github.repository }}-devel-ci,mode=max" \
+          -t ghcr.io/${OWNER_LC}/ascender_devel:${COMPOSE_TAG} \
+          -f Dockerfile.dev .
+      env:
+        COMPOSE_TAG: ${{ github.base_ref || 'main' }}
+
+    - name: Verify the built image has the dev-mode pieces
+      shell: bash
+      # Guards against a non-dev image sneaking in under the devel tag (e.g. a
+      # bad cache pre-pull surviving a skipped build) — without podman the dev
+      # environment starts fine but cannot run any jobs, which is much harder
+      # to diagnose downstream.
+      run: |
+        docker run --rm ghcr.io/${OWNER_LC}/ascender_devel:${COMPOSE_TAG} which podman
+      env:
+        COMPOSE_TAG: ${{ github.base_ref || 'main' }}
