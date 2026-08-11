@@ -44,6 +44,11 @@ DATABASES = {
     }
 }
 
+# Optional manual override for statement_timeout (ms) on web worker DB
+# connections.  When running under uwsgi, the timeout is auto-derived from
+# the harakiri value.  Set this for non-uwsgi deployments or to override.
+DATABASE_STATEMENT_TIMEOUT = None
+
 # Special database overrides for dispatcher connections listening to pg_notify
 LISTENER_DATABASES = {
     'default': {
