@@ -33,8 +33,16 @@ def test_project_update_cache_id_uses_project_cache_for_check_jobs():
     assert pu.cache_id == proj.cache_id
 
 
+def test_project_update_cache_id_prefers_own_scm_revision():
+    # After a check update fetches a new revision, the update's scm_revision is set before the
+    # project's is; the cache must be keyed on the newly fetched revision, not the stale one.
+    proj = Project(name="myproj", scm_type='git', scm_branch='main', scm_revision='34dbdd6bcbb99ee9ccb90a30ec0d7de17c9d0b3a')
+    pu = ProjectUpdate(project=proj, job_type='check', scm_branch='main', scm_revision='deadbeefcbb99ee9ccb90a30ec0d7de17c9d0b3a')
+    assert pu.cache_id == 'deadbeefcbb99ee9ccb90a30ec0d7de17c9d0b3a'
+
+
 def test_project_update_cache_id_branch_override_bypasses_cache():
     proj = Project(name="myproj", scm_type='git', scm_branch='main', scm_revision='34dbdd6bcbb99ee9ccb90a30ec0d7de17c9d0b3a')
-    pu = ProjectUpdate(project=proj, job_type='run', scm_branch='other-branch')
+    pu = ProjectUpdate(project=proj, job_type='run', scm_branch='other-branch', scm_revision='deadbeefcbb99ee9ccb90a30ec0d7de17c9d0b3a')
     pu.id = 7
     assert pu.cache_id == '7'

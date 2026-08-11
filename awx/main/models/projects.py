@@ -648,6 +648,11 @@ class ProjectUpdate(UnifiedJob, ProjectOptions, JobNotificationMixin, TaskManage
     def cache_id(self):
         if self.branch_override or (not self.project):
             return str(self.id)
+        # Prefer the revision this update actually fetched. The project's scm_revision is only
+        # updated after the cache is written, so during post-run cache handling project.cache_id
+        # can still reflect the previous revision.
+        if self.scm_revision:
+            return self.scm_revision
         return self.project.cache_id
 
     def result_stdout_raw_limited(self, start_line=0, end_line=None, redact_sensitive=True):

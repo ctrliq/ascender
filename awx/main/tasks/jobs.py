@@ -1415,7 +1415,13 @@ class RunProjectUpdate(BaseTask):
             if status == 'successful' and 'install_' in instance.job_tags:
                 # Clear other caches before saving this one, and if branch is overridden
                 # do not clear cache for main branch, but do clear it for other branches
-                self.clear_project_cache(base_path, keep_value=instance.project.cache_id)
+                if instance.branch_override:
+                    keep_value = instance.project.cache_id
+                else:
+                    # Keep the directory about to be written; the project's scm_revision (and
+                    # therefore project.cache_id) is only updated further below.
+                    keep_value = instance.cache_id
+                self.clear_project_cache(base_path, keep_value=keep_value)
                 cache_path = os.path.join(base_path, instance.cache_id)
                 if os.path.exists(stage_path):
                     if os.path.exists(cache_path):
