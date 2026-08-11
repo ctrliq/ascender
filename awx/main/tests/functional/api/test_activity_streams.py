@@ -179,6 +179,35 @@ def test_activity_stream_pagination_uses_unfiltered_count(get, organization, pro
 
 
 @pytest.mark.django_db
+def test_activity_stream_filtered_request_uses_accurate_count(get, organization, project, admin, settings):
+    """When the client filters or searches, 'count' must match the filtered
+    queryset, not the whole table -- otherwise clients paginate against the
+    table count and render phantom empty pages."""
+    settings.ACTIVITY_STREAM_ENABLED = True
+
+    total_entries = ActivityStream.objects.count()
+    assert total_entries > 0
+
+    url = reverse('api:activity_stream_list')
+
+    # a search matching nothing must report zero, not the table count
+    response = get(url + '?search=zzz-no-match-anywhere', admin)
+    assert response.status_code == 200
+    assert response.data['count'] == 0
+    assert response.data['results'] == []
+
+    # paging past the end of the filtered results is a 404, not a phantom page
+    response = get(url + '?search=zzz-no-match-anywhere&page=2&page_size=1', admin)
+    assert response.status_code == 404
+
+    # a field filter reports the filtered count
+    expected = ActivityStream.objects.filter(operation='create').count()
+    response = get(url + '?operation=create', admin)
+    assert response.status_code == 200
+    assert response.data['count'] == expected
+
+
+@pytest.mark.django_db
 def test_stream_user_direct_role_updates(get, post, organization_factory):
     objects = organization_factory('test_org', superusers=['admin'], users=['test'], inventories=['inv1'])
 

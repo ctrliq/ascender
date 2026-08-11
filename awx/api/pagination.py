@@ -88,7 +88,26 @@ class Pagination(pagination.PageNumberPagination):
 
 
 class ActivityStreamPagination(Pagination):
+    """Fast unfiltered count for the default listing only.
+
+    A search or field filter must report the count of the filtered queryset —
+    otherwise clients paginate against the full table count and render phantom
+    empty pages.  Those requests fall back to the normal (slow) count.
+    """
+
     django_paginator_class = ActivityStreamPaginator
+
+    # Query params that do not narrow the result set; any other param means
+    # the client is filtering and the count must match the filtered queryset.
+    NON_FILTER_PARAMS = frozenset(('page', 'page_size', 'format', 'order', 'order_by', 'count_disabled', 'no_truncate'))
+
+    def paginate_queryset(self, queryset, request, **kwargs):
+        if any(param not in self.NON_FILTER_PARAMS for param in request.query_params):
+            self.django_paginator_class = DjangoPaginator
+        try:
+            return super().paginate_queryset(queryset, request, **kwargs)
+        finally:
+            self.django_paginator_class = ActivityStreamPaginator
 
 
 class LimitPagination(pagination.BasePagination):
