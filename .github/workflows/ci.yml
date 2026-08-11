@@ -1,0 +1,71 @@
+---
+# Modifications Copyright (c) 2026 Ctrl IQ, Inc.
+name: CI
+env:
+  LC_ALL: "C.UTF-8" # prevent ERROR: Ansible could not initialize the preferred locale: unsupported locale setting
+  CI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  DEV_DOCKER_OWNER: ${{ github.repository_owner }}
+  COMPOSE_TAG: ${{ github.base_ref || 'main' }}
+on:
+  pull_request:
+jobs:
+  common-tests:
+    name: ${{ matrix.tests.name }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      packages: read
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        tests:
+          - name: api-test
+            command: /start_tests.sh
+          - name: api-migrations
+            command: /start_tests.sh test_migrations
+          - name: api-lint
+            command: /var/lib/awx/venv/awx/bin/tox -e linters
+          - name: ui-lint
+            command: make ui-lint
+          - name: ui-test-screens
+            command: make ui-test-screens
+          - name: ui-test-general
+            command: make ui-test-general
+    steps:
+      - name: Checkout ascender
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+
+      - name: Build ascender_devel image for running checks
+        uses: ./.github/actions/awx_devel_image
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run check ${{ matrix.tests.name }}
+        run: AWX_DOCKER_CMD='${{ matrix.tests.command }}' make docker-runner
+
+  dev-env:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      packages: read
+      contents: read
+    steps:
+      - name: Checkout ascender
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+
+      - name: Start the development environment
+        uses: ./.github/actions/run_awx_devel
+        with:
+          build-ui: false
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install the ctrliq.ascender collection for the smoke test
+        run: ansible-galaxy collection install ctrliq.ascender
+
+      - name: Run smoke test
+        run: ansible-playbook tools/docker-compose/ansible/smoke-test.yml -v
+
+      - name: Get logs from the development environment on failure
+        if: failure()
+        run: docker logs tools_awx_1 || true

@@ -1,5 +1,7 @@
-name: Setup images for AWX
-description: Builds new awx_devel image
+---
+# Modifications Copyright (c) 2026 Ctrl IQ, Inc.
+name: Setup images for Ascender
+description: Builds new ascender_devel image
 inputs:
   github-token:
     description: GitHub Token for registry access
@@ -7,15 +9,15 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Get python version from Makefile
-      shell: bash
-      run: echo py_version=`make PYTHON_VERSION` >> $GITHUB_ENV
-
     - name: Set lower case owner name
       shell: bash
       run: echo "OWNER_LC=${OWNER,,}" >> $GITHUB_ENV
       env:
         OWNER: '${{ github.repository_owner }}'
+
+    - name: Install ansible-core for generating Dockerfile.dev
+      shell: bash
+      run: python3 -m pip install --upgrade ansible-core
 
     - name: Log in to registry
       shell: bash
@@ -24,11 +26,19 @@ runs:
 
     - name: Pre-pull latest devel image to warm cache
       shell: bash
-      run: docker pull ghcr.io/${OWNER_LC}/awx_devel:${{ github.base_ref }}
+      run: |
+        # Best effort: the devel image may not exist yet for this owner.
+        # docker-compose-build uses ascender_devel:$COMPOSE_TAG as its cache
+        # source, so retag whatever we pulled to match.
+        if docker pull -q ghcr.io/${OWNER_LC}/ascender_devel:latest; then
+          docker tag ghcr.io/${OWNER_LC}/ascender_devel:latest ghcr.io/${OWNER_LC}/ascender_devel:${COMPOSE_TAG}
+        fi
+      env:
+        COMPOSE_TAG: ${{ github.base_ref || 'main' }}
 
     - name: Build image for current source checkout
       shell: bash
       run: |
         DEV_DOCKER_TAG_BASE=ghcr.io/${OWNER_LC} \
-        COMPOSE_TAG=${{ github.base_ref }} \
+        COMPOSE_TAG=${{ github.base_ref || 'main' }} \
         make docker-compose-build

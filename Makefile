@@ -337,7 +337,7 @@ test_migrations:
 
 ## Runs AWX_DOCKER_CMD inside a new docker container.
 docker-runner:
-	docker run -u $(shell id -u) --rm -v $(shell pwd):/ascender_devel/:Z --workdir=/ascender_devel $(DEVEL_IMAGE_NAME) $(AWX_DOCKER_CMD)
+	docker run -u $(shell id -u) --rm -v $(shell pwd):/awx_devel/:Z --workdir=/awx_devel $(DEVEL_IMAGE_NAME) $(AWX_DOCKER_CMD)
 
 test_unit:
 	@if [ "$(VENV_BASE)" ]; then \
