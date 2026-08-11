@@ -103,7 +103,9 @@ describe('<SubscriptionStep />', () => {
     const { container } = renderStep();
     expect(container.querySelector('#username-field')).toBeNull();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Username / password' }));
+    fireEvent.click(
+      screen.getByRole('button', { name: 'Username / password' })
+    );
 
     const usernameInput = container.querySelector('#username-field');
     const passwordInput = container.querySelector('#password-field');

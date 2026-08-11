@@ -25,7 +25,8 @@ const HelperTextWrapper = styled.div`
 const CheckIcon = styled(PFCheckIcon)`
   color: var(--pf-v6-c-button--m-plain--disabled--Color);
   ${(props) =>
-    props.selected && `color: var(--pf-v6-c-button--m-secondary--active--Color)`};
+    props.selected &&
+    `color: var(--pf-v6-c-button--m-secondary--active--Color)`};
 `;
 
 function MultipleChoiceField({ label, tooltip }) {

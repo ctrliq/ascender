@@ -142,9 +142,7 @@ describe('<ApplicationTokenList/>', () => {
     const { user } = renderWithContexts(<ApplicationTokenList />);
     await screen.findAllByRole('link', { name: 'admin' });
 
-    const row = screen
-      .getAllByRole('link', { name: 'admin' })[0]
-      .closest('tr');
+    const row = screen.getAllByRole('link', { name: 'admin' })[0].closest('tr');
     const checkbox = within(row).getByRole('checkbox');
     await user.click(checkbox);
     expect(checkbox).toBeChecked();
@@ -196,9 +194,7 @@ describe('<ApplicationTokenList/>', () => {
     const { user } = renderWithContexts(<ApplicationTokenList />);
     await screen.findAllByRole('link', { name: 'admin' });
 
-    const row = screen
-      .getAllByRole('link', { name: 'admin' })[0]
-      .closest('tr');
+    const row = screen.getAllByRole('link', { name: 'admin' })[0].closest('tr');
     await user.click(within(row).getByRole('checkbox'));
 
     await user.click(screen.getByRole('button', { name: 'Delete' }));

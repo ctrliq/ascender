@@ -73,9 +73,7 @@ describe('<SurveyReorderModal />', () => {
 
     // Question 1: text input, disabled, with the default value.
     expect(screen.getByText('Text Question')).toBeInTheDocument();
-    const question1Value = document.querySelector(
-      '#survey-preview-text-dfgh'
-    );
+    const question1Value = document.querySelector('#survey-preview-text-dfgh');
     expect(question1Value).toBeInTheDocument();
     expect(question1Value).toHaveValue('Text Question Value');
     expect(question1Value).toBeDisabled();
@@ -149,7 +147,9 @@ describe('<SurveyReorderModal />', () => {
       />
     );
 
-    const rows = document.querySelectorAll('[data-ouia-component-id^="survey-order-row-"]');
+    const rows = document.querySelectorAll(
+      '[data-ouia-component-id^="survey-order-row-"]'
+    );
     const firstRow = rows[0];
     const thirdRow = rows[2];
 

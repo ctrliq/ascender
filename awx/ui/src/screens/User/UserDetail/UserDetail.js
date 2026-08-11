@@ -92,26 +92,15 @@ function UserDetail({ user }) {
         {userAuthType && (
           <Detail
             label={t`Type`}
-            value={
-              <Label aria-label={t`login type`}>{userAuthType}</Label>
-            }
+            value={<Label aria-label={t`login type`}>{userAuthType}</Label>}
           />
         )}
         {last_login && (
-          <Detail
-            label={t`Last Login`}
-            value={formatDateString(last_login)}
-          />
+          <Detail label={t`Last Login`} value={formatDateString(last_login)} />
         )}
-        <Detail
-          label={t`Created`}
-          value={formatDateString(created)}
-        />
+        <Detail label={t`Created`} value={formatDateString(created)} />
         {modified && (
-          <Detail
-            label={t`Last Modified`}
-            value={formatDateString(modified)}
-          />
+          <Detail label={t`Last Modified`} value={formatDateString(modified)} />
         )}
       </DetailList>
       <CardActionsRow>

@@ -1,11 +1,7 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
-import {
-	Label, Content,
-	ContentVariants,
-
-} from '@patternfly/react-core';
+import { Label, Content, ContentVariants } from '@patternfly/react-core';
 
 import { Detail, DeletedDetail } from '../DetailList';
 import { VariablesDetail } from '../CodeEditor';
@@ -94,10 +90,7 @@ function PromptInventorySourceDetail({ resource }) {
         executionEnvironment={summary_fields?.execution_environment}
       />
       <Detail label={t`Inventory File`} value={source_path} />
-      <Detail
-        label={t`Verbosity`}
-        value={VERBOSITY(t)[verbosity]}
-      />
+      <Detail label={t`Verbosity`} value={VERBOSITY(t)[verbosity]} />
       <Detail
         label={t`Cache Timeout`}
         value={`${update_cache_timeout} ${t`Seconds`}`}
@@ -121,7 +114,7 @@ function PromptInventorySourceDetail({ resource }) {
               ouiaId="prompt-region-chips"
             >
               {source_regions.split(',').map((region) => (
-                <Label variant="outline" key={region} >
+                <Label variant="outline" key={region}>
                   {region}
                 </Label>
               ))}
@@ -140,7 +133,7 @@ function PromptInventorySourceDetail({ resource }) {
               ouiaId="prompt-instance-filter-chips"
             >
               {instance_filters.split(',').map((filter) => (
-                <Label variant="outline" key={filter} >
+                <Label variant="outline" key={filter}>
                   {filter}
                 </Label>
               ))}
@@ -159,7 +152,7 @@ function PromptInventorySourceDetail({ resource }) {
               ouiaId="prompt-only-group-by-chips"
             >
               {group_by.split(',').map((group) => (
-                <Label variant="outline" key={group} >
+                <Label variant="outline" key={group}>
                   {group}
                 </Label>
               ))}
@@ -168,11 +161,7 @@ function PromptInventorySourceDetail({ resource }) {
         />
       )}
       {optionsList && (
-        <Detail
-          fullWidth
-          label={t`Enabled Options`}
-          value={optionsList}
-        />
+        <Detail fullWidth label={t`Enabled Options`} value={optionsList} />
       )}
       {source_vars && (
         <VariablesDetail

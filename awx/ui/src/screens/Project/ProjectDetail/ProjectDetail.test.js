@@ -209,7 +209,9 @@ describe('<ProjectDetail />', () => {
       },
     });
     await screen.findByText('Name');
-    expect(screen.queryByRole('link', { name: 'edit' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'edit' })
+    ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Sync Project' })
     ).not.toBeInTheDocument();

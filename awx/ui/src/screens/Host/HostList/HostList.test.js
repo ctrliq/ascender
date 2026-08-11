@@ -124,9 +124,7 @@ describe('<HostList />', () => {
     await screen.findByRole('link', { name: 'Host 1' });
 
     expect(HostsAPI.read).toHaveBeenCalled();
-    expect(
-      screen.getAllByRole('link', { name: /^Host \d$/ })
-    ).toHaveLength(3);
+    expect(screen.getAllByRole('link', { name: /^Host \d$/ })).toHaveLength(3);
   });
 
   test('should select and deselect a single item', async () => {

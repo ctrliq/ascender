@@ -6,6 +6,8 @@ import CheckboxCard from './CheckboxCard';
 describe('<CheckboxCard />', () => {
   test('initially renders without crashing', () => {
     renderWithContexts(<CheckboxCard name="Foobar" itemId={5} />);
-    expect(screen.getByRole('checkbox', { name: 'Foobar' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('checkbox', { name: 'Foobar' })
+    ).toBeInTheDocument();
   });
 });

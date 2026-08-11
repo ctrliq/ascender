@@ -57,7 +57,9 @@ describe('<ExecutionEnvironmentDetails/>', () => {
 
   test('should render details properly', async () => {
     renderWithContexts(
-      <ExecutionEnvironmentDetails executionEnvironment={executionEnvironment} />
+      <ExecutionEnvironmentDetails
+        executionEnvironment={executionEnvironment}
+      />
     );
     await waitFor(() => expect(screen.getByText('Image')).toBeInTheDocument());
     assertDetail('Image', executionEnvironment.image);

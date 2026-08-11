@@ -156,7 +156,9 @@ describe('ScheduleListItem', () => {
 
     test('Next run correctly shown', () => {
       renderItem({ schedule: readOnlySchedule });
-      expect(cellByLabel('Next Run')).toHaveTextContent('2/20/2020, 12:00:00 AM');
+      expect(cellByLabel('Next Run')).toHaveTextContent(
+        '2/20/2020, 12:00:00 AM'
+      );
     });
 
     test('Edit button hidden', () => {

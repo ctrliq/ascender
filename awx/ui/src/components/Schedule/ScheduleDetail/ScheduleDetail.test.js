@@ -169,9 +169,7 @@ describe('<ScheduleDetail />', () => {
     expect(screen.queryByText('Prompted Values')).not.toBeInTheDocument();
     expect(screen.queryByText('Job Type')).not.toBeInTheDocument();
     expect(screen.queryByText('Inventory')).not.toBeInTheDocument();
-    expect(
-      screen.queryByText('Source Control Branch')
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Source Control Branch')).not.toBeInTheDocument();
     expect(screen.queryByText('Limit')).not.toBeInTheDocument();
     expect(screen.queryByText('Verbosity')).not.toBeInTheDocument();
     expect(screen.queryByText('Show Changes')).not.toBeInTheDocument();
@@ -183,9 +181,7 @@ describe('<ScheduleDetail />', () => {
     expect(screen.queryByText('Forks')).not.toBeInTheDocument();
     expect(screen.queryByText('Labels')).not.toBeInTheDocument();
     expect(screen.queryByText('Instance Groups')).not.toBeInTheDocument();
-    expect(
-      screen.queryByText('Execution Environment')
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Execution Environment')).not.toBeInTheDocument();
     expect(screen.queryByText('Variables')).not.toBeInTheDocument();
   });
 
@@ -229,7 +225,9 @@ describe('<ScheduleDetail />', () => {
     // the Detail renders null (no DOM node) even though ask_verbosity_on_launch
     // is true. RTL can only see the (absent) DOM, so we assert the
     // empty-value behavior here. See VerbositySelectField VERBOSITY().
-    expect(document.querySelector('#schedule-verbosity')).not.toBeInTheDocument();
+    expect(
+      document.querySelector('#schedule-verbosity')
+    ).not.toBeInTheDocument();
     expect(screen.getByText('Show Changes')).toBeInTheDocument();
     expect(screen.getByText('Credentials')).toBeInTheDocument();
     expect(screen.getByText('Job Tags')).toBeInTheDocument();

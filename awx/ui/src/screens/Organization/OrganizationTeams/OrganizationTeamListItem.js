@@ -20,14 +20,15 @@ function OrganizationTeamListItem({ team, detailUrl }) {
           visible={team.summary_fields.user_capabilities.edit}
           tooltip={t`Edit Team`}
         >
-          <Button icon={<PencilAltIcon />}
+          <Button
+            icon={<PencilAltIcon />}
             ouiaId={`${team.id}-edit-button`}
             aria-label={t`Edit Team`}
             css="grid-column: 2"
             variant="plain"
             component={Link}
             to={`${detailUrl}/edit`}
-           />
+          />
         </ActionItem>
       </ActionsTd>
     </Tr>

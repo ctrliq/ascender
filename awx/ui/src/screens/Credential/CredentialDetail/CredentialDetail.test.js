@@ -78,7 +78,10 @@ describe('<CredentialDetail />', () => {
 
     assertDetail('Name', mockCredential.name);
     assertDetail('Description', mockCredential.description);
-    assertDetail('Organization', mockCredential.summary_fields.organization.name);
+    assertDetail(
+      'Organization',
+      mockCredential.summary_fields.organization.name
+    );
     assertDetail(
       'Credential Type',
       mockCredential.summary_fields.credential_type.name
@@ -134,7 +137,9 @@ describe('<CredentialDetail />', () => {
       await screen.findByRole('button', { name: 'Confirm Delete' })
     );
 
-    await waitFor(() => expect(CredentialsAPI.destroy).toHaveBeenCalledTimes(1));
+    await waitFor(() =>
+      expect(CredentialsAPI.destroy).toHaveBeenCalledTimes(1)
+    );
   });
 
   test('should show error modal when credential is not successfully deleted from api', async () => {

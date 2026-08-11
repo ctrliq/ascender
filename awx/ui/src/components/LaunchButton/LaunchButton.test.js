@@ -168,9 +168,7 @@ describe('LaunchButton', () => {
     );
     await user.click(screen.getByRole('button', { name: 'relaunch' }));
     expect(JobsAPI.readRelaunch).toHaveBeenCalledWith(1);
-    await waitFor(() =>
-      expect(JobsAPI.relaunch).toHaveBeenCalledWith(1, {})
-    );
+    await waitFor(() => expect(JobsAPI.relaunch).toHaveBeenCalledWith(1, {}));
     await waitFor(() =>
       expect(history.location.pathname).toEqual('/jobs/9000/output')
     );

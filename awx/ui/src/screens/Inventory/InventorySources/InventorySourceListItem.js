@@ -3,9 +3,7 @@ import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
-import {
-  PencilAltIcon,
-} from '@patternfly/react-icons';
+import { PencilAltIcon } from '@patternfly/react-icons';
 
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import StatusLabel from 'components/StatusLabel';
@@ -106,13 +104,14 @@ function InventorySourceListItem({
           visible={source.summary_fields.user_capabilities.edit}
           tooltip={t`Edit`}
         >
-          <Button icon={<PencilAltIcon />}
+          <Button
+            icon={<PencilAltIcon />}
             ouiaId={`${source.id}-edit-button`}
             aria-label={t`Edit Source`}
             variant="plain"
             component={Link}
             to={`${detailUrl}/edit`}
-           />
+          />
         </ActionItem>
       </ActionsTd>
     </Tr>

@@ -38,12 +38,8 @@ function CodeDetail({
   return (
     <CodeWrapper>
       <CodeLabel data-cy={labelCy}>
-        <label htmlFor={editorId}>
-          {label}
-        </label>
-        {helpText && (
-          <Popover header={label} content={helpText} id={dataCy} />
-        )}
+        <label htmlFor={editorId}>{label}</label>
+        {helpText && <Popover header={label} content={helpText} id={dataCy} />}
       </CodeLabel>
       <EditorWrapper data-cy={valueCy}>
         <CodeEditor

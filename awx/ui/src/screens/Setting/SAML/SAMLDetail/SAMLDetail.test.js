@@ -106,9 +106,7 @@ describe('<SAMLDetail />', () => {
     expect(
       screen.getByText('SAML Organization Attribute Mapping')
     ).toBeInTheDocument();
-    expect(
-      screen.getByText('SAML Team Attribute Mapping')
-    ).toBeInTheDocument();
+    expect(screen.getByText('SAML Team Attribute Mapping')).toBeInTheDocument();
   });
 
   test('should hide edit button from non-superusers', async () => {

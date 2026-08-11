@@ -23,9 +23,7 @@ function RADIUS() {
             path="*"
             element={
               <ContentError isNotFound>
-                <Link to={`${baseURL}/details`}>
-                  {t`View RADIUS settings`}
-                </Link>
+                <Link to={`${baseURL}/details`}>{t`View RADIUS settings`}</Link>
               </ContentError>
             }
           />

@@ -65,7 +65,9 @@ describe('<InventorySourceListItem />', () => {
     expect(nameCell).toHaveTextContent('Foo');
     expect(typeCell).toHaveTextContent('Source Bar');
     // Sync button (InventorySourceSyncButton) + edit pencil link
-    expect(screen.getByRole('link', { name: 'Edit Source' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Edit Source' })
+    ).toBeInTheDocument();
     expect(
       screen.getByRole('button', { name: 'Start sync source' })
     ).toBeInTheDocument();
@@ -102,7 +104,9 @@ describe('<InventorySourceListItem />', () => {
     expect(
       screen.queryByRole('button', { name: 'Start sync source' })
     ).not.toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Edit Source' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Edit Source' })
+    ).toBeInTheDocument();
   });
 
   test('should not render edit buttons', () => {

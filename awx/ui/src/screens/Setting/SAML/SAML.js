@@ -23,9 +23,7 @@ function SAML() {
             path="*"
             element={
               <ContentError isNotFound>
-                <Link to={`${baseURL}/details`}>
-                  {t`View SAML settings`}
-                </Link>
+                <Link to={`${baseURL}/details`}>{t`View SAML settings`}</Link>
               </ContentError>
             }
           />

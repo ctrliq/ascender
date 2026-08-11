@@ -1221,7 +1221,9 @@ describe('useJobEvents', () => {
         },
       });
 
-      wrapper = mountAsync(<HookTest fetchChildrenSummary={fetchChildrenSummary} />);
+      wrapper = mountAsync(
+        <HookTest fetchChildrenSummary={fetchChildrenSummary} />
+      );
       const laterEvents = [
         {
           id: 151,

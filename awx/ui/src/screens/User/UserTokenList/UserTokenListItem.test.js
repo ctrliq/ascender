@@ -45,7 +45,9 @@ describe('<UserTokenListItem />', () => {
       </table>
     );
     expect(screen.getByRole('row')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Foobar app' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Foobar app' })
+    ).toBeInTheDocument();
   });
 
   test('should render application access token row properly', () => {
@@ -59,7 +61,9 @@ describe('<UserTokenListItem />', () => {
     expect(
       screen.getByRole('checkbox', { name: 'Select row 0' })
     ).not.toBeChecked();
-    expect(screen.getByRole('link', { name: 'Foobar app' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Foobar app' })
+    ).toBeInTheDocument();
     expect(screen.getByText('Foobar-token')).toBeInTheDocument();
     expect(screen.getByText('Read')).toBeInTheDocument();
     expect(screen.getByText('10/25/3019, 3:06:43 PM')).toBeInTheDocument();
@@ -104,6 +108,8 @@ describe('<UserTokenListItem />', () => {
         </tbody>
       </table>
     );
-    expect(screen.getByRole('checkbox', { name: 'Select row 0' })).toBeChecked();
+    expect(
+      screen.getByRole('checkbox', { name: 'Select row 0' })
+    ).toBeChecked();
   });
 });

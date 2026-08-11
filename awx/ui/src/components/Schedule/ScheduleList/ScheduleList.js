@@ -143,10 +143,7 @@ function ScheduleList({
         }
       });
     }
-    return (
-      missingValues &&
-      t`This schedule is missing required survey values`
-    );
+    return missingValues && t`This schedule is missing required survey values`;
   };
   let emptyContentMessage = t`Please add a Schedule to populate this list.`;
 

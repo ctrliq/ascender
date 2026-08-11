@@ -62,7 +62,11 @@ function Legend() {
       <Content>
         <Text
           component={ContentVariants.small}
-          style={{ fontWeight: 'bold', color: "var(--pf-t--global--text--color--100)", marginTop: 0 }}
+          style={{
+            fontWeight: 'bold',
+            color: 'var(--pf-t--global--text--color--100)',
+            marginTop: 0,
+          }}
         >
           {t`Legend`}
         </Text>
@@ -104,15 +108,11 @@ function Legend() {
               h
             </Button>
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {t`Hop node`}
-          </DescriptionListDescription>
+          <DescriptionListDescription>{t`Hop node`}</DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
       <Content>
-        <Text component={ContentVariants.small}>
-          {t`Node state types`}
-        </Text>
+        <Text component={ContentVariants.small}>{t`Node state types`}</Text>
       </Content>
       <DescriptionList isHorizontal isFluid>
         <DescriptionListGroup>
@@ -127,9 +127,7 @@ function Legend() {
               style={{ backgroundColor: '#3E8635' }}
             />
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {t`Ready`}
-          </DescriptionListDescription>
+          <DescriptionListDescription>{t`Ready`}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -191,9 +189,7 @@ function Legend() {
               style={{ backgroundColor: '#C9190B' }}
             />
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {t`Error`}
-          </DescriptionListDescription>
+          <DescriptionListDescription>{t`Error`}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -204,14 +200,16 @@ function Legend() {
                 cy="10"
                 fill="transparent"
                 strokeWidth="1px"
-                style={{ stroke: "var(--pf-t--global--border--color--default)" }}
+                style={{
+                  stroke: 'var(--pf-t--global--border--color--default)',
+                }}
               />
               <text
                 x="10"
                 y="10"
                 textAnchor="middle"
                 dominantBaseline="central"
-                style={{ fill: "var(--pf-t--global--text--color--100)" }}
+                style={{ fill: 'var(--pf-t--global--text--color--100)' }}
                 fontSize="11px"
                 fontFamily="inherit"
                 fontWeight="400"
@@ -220,9 +218,7 @@ function Legend() {
               </text>
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {t`Enabled`}
-          </DescriptionListDescription>
+          <DescriptionListDescription>{t`Enabled`}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -234,14 +230,16 @@ function Legend() {
                 fill="transparent"
                 strokeDasharray="5"
                 strokeWidth="1px"
-                style={{ stroke: "var(--pf-t--global--border--color--default)" }}
+                style={{
+                  stroke: 'var(--pf-t--global--border--color--default)',
+                }}
               />
               <text
                 x="10"
                 y="10"
                 textAnchor="middle"
                 dominantBaseline="central"
-                style={{ fill: "var(--pf-t--global--text--color--100)" }}
+                style={{ fill: 'var(--pf-t--global--text--color--100)' }}
                 fontSize="11px"
                 fontFamily="inherit"
                 fontWeight="400"
@@ -250,15 +248,11 @@ function Legend() {
               </text>
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {t`Disabled`}
-          </DescriptionListDescription>
+          <DescriptionListDescription>{t`Disabled`}</DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
       <Content>
-        <Text component={ContentVariants.small}>
-          {t`Link state types`}
-        </Text>
+        <Text component={ContentVariants.small}>{t`Link state types`}</Text>
       </Content>
       <DescriptionList isHorizontal isFluid>
         <DescriptionListGroup>
@@ -292,9 +286,7 @@ function Legend() {
               />
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {t`Adding`}
-          </DescriptionListDescription>
+          <DescriptionListDescription>{t`Adding`}</DescriptionListDescription>
         </DescriptionListGroup>
         <DescriptionListGroup>
           <DescriptionListTerm>
@@ -310,9 +302,7 @@ function Legend() {
               />
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>
-            {t`Removing`}
-          </DescriptionListDescription>
+          <DescriptionListDescription>{t`Removing`}</DescriptionListDescription>
         </DescriptionListGroup>
       </DescriptionList>
     </Wrapper>

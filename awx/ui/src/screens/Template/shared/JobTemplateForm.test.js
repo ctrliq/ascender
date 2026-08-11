@@ -220,7 +220,9 @@ describe('<JobTemplateForm />', () => {
     );
     await screen.findByRole('button', { name: 'Save' });
 
-    expect(document.getElementById('template-scm-branch')).not.toBeInTheDocument();
+    expect(
+      document.getElementById('template-scm-branch')
+    ).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'select project' }));
 

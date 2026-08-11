@@ -9,9 +9,7 @@ const updateStorage = debounce((key, val) => {
 }, 500);
 
 function getCookie(name) {
-  const match = document.cookie.match(
-    new RegExp(`(?:^|;\\s*)${name}=([^;]*)`)
-  );
+  const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`));
   return match ? decodeURIComponent(match[1]) : null;
 }
 
@@ -51,9 +49,7 @@ async function handleResponse(fetchResponse) {
   const response = { data, status, headers };
 
   if (!fetchResponse.ok) {
-    const error = new Error(
-      `Request failed with status code ${status}`
-    );
+    const error = new Error(`Request failed with status code ${status}`);
     error.response = response;
     throw error;
   }
@@ -96,9 +92,17 @@ function makeRequest(method, url, dataOrConfig, config) {
   const fetchOptions = { method, headers, credentials: 'same-origin' };
 
   // Pass through fetch-specific options
-  const fetchOptionKeys = ['signal', 'cache', 'redirect', 'referrer', 'referrerPolicy', 'mode', 'credentials'];
+  const fetchOptionKeys = [
+    'signal',
+    'cache',
+    'redirect',
+    'referrer',
+    'referrerPolicy',
+    'mode',
+    'credentials',
+  ];
   if (reqConfig) {
-    fetchOptionKeys.forEach(key => {
+    fetchOptionKeys.forEach((key) => {
       if (reqConfig[key] !== undefined) {
         fetchOptions[key] = reqConfig[key];
       }

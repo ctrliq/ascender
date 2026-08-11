@@ -13,11 +13,7 @@ i18n.activate('en');
 
 // Custom render function with I18n context
 const renderWithI18n = (component) => {
-  return render(
-    <I18nProvider i18n={i18n}>
-      {component}
-    </I18nProvider>
-  );
+  return render(<I18nProvider i18n={i18n}>{component}</I18nProvider>);
 };
 
 jest.mock('api');

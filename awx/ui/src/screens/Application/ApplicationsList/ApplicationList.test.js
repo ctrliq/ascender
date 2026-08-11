@@ -51,7 +51,9 @@ describe('<ApplicationsList/>', () => {
 
     renderWithContexts(<ApplicationsList />);
 
-    expect(await screen.findByRole('link', { name: 'Foo' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('link', { name: 'Foo' })
+    ).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Bar' })).toBeInTheDocument();
     expect(ApplicationsAPI.read).toHaveBeenCalled();
     expect(ApplicationsAPI.readOptions).toHaveBeenCalled();

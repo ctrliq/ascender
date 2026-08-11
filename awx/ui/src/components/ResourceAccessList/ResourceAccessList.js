@@ -196,12 +196,8 @@ function ResourceAccessList({ apiModel, resource }) {
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
             <HeaderCell sortKey="username">{t`Username`}</HeaderCell>
-            <HeaderCell sortKey="first_name">
-              {t`First name`}
-            </HeaderCell>
-            <HeaderCell sortKey="last_name">
-              {t`Last name`}
-            </HeaderCell>
+            <HeaderCell sortKey="first_name">{t`First name`}</HeaderCell>
+            <HeaderCell sortKey="last_name">{t`Last name`}</HeaderCell>
             <HeaderCell>{t`Roles`}</HeaderCell>
           </HeaderRow>
         }

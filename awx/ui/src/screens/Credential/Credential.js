@@ -3,12 +3,14 @@ import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useParams,
-  useLocation } from 'react-router';
+  useLocation,
+} from 'react-router';
 import useRequest from 'hooks/useRequest';
 import { ResourceAccessList } from 'components/ResourceAccessList';
 import ContentError from 'components/ContentError';
@@ -109,9 +111,7 @@ function Credential({ setBreadcrumb }) {
             {contentError.response && contentError.response.status === 404 && (
               <span>
                 {t`Credential not found.`}{' '}
-                <Link to="/credentials">
-                  {t`View all Credentials.`}
-                </Link>
+                <Link to="/credentials">{t`View all Credentials.`}</Link>
               </span>
             )}
           </ContentError>

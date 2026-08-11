@@ -68,7 +68,9 @@ describe('<ConstructedInventoryAdd />', () => {
     const { user } = renderWithContexts(<ConstructedInventoryAdd />, {
       context: { router: { history } },
     });
-    await user.click(await screen.findByRole('button', { name: 'mock-cancel' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-cancel' })
+    );
 
     expect(history.location.pathname).toEqual('/inventories');
   });
@@ -80,7 +82,9 @@ describe('<ConstructedInventoryAdd />', () => {
     const { user } = renderWithContexts(<ConstructedInventoryAdd />, {
       context: { router: { history } },
     });
-    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     await waitFor(() =>
       expect(history.location.pathname).toBe(
@@ -91,7 +95,9 @@ describe('<ConstructedInventoryAdd />', () => {
 
   test('should make expected api requests on submit', async () => {
     const { user } = renderWithContexts(<ConstructedInventoryAdd />);
-    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     await waitFor(() =>
       expect(ConstructedInventoriesAPI.create).toHaveBeenCalledTimes(1)
@@ -104,7 +110,9 @@ describe('<ConstructedInventoryAdd />', () => {
   test('unsuccessful form submission should show an error message', async () => {
     ConstructedInventoriesAPI.create.mockRejectedValueOnce(new Error('boom'));
     const { user } = renderWithContexts(<ConstructedInventoryAdd />);
-    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     expect(await screen.findByTestId('mock-submit-error')).toBeInTheDocument();
   });

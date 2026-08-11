@@ -82,11 +82,7 @@ function HostDetail({ host }) {
             </Link>
           }
         />
-        <UserDateDetail
-          date={created}
-          label={t`Created`}
-          user={created_by}
-        />
+        <UserDateDetail date={created} label={t`Created`} user={created_by} />
         <UserDateDetail
           date={modified}
           label={t`Last Modified`}

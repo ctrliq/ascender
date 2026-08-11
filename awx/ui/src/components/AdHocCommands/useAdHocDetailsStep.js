@@ -44,19 +44,13 @@ export default function useAdHocDetailsStep(visited, moduleOptions) {
     validate: () => {
       if (Object.keys(touched).includes('module_name' || 'module_args')) {
         if (!values.module_name) {
-          setFieldError(
-            'module_name',
-            t`This field must not be blank.`
-          );
+          setFieldError('module_name', t`This field must not be blank.`);
         }
         if (
           values.module_name === ('command' || 'shell') &&
           !values.module_args
         ) {
-          setFieldError(
-            'module_args',
-            t`This field must not be blank`
-          );
+          setFieldError('module_args', t`This field must not be blank`);
         }
       }
     },

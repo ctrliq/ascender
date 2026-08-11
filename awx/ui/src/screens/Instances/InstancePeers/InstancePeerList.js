@@ -246,12 +246,8 @@ function InstancePeerList({ setBreadcrumb }) {
             </HeaderCell>
             <HeaderCell sortKey="address">{t`Address`}</HeaderCell>
             <HeaderCell sortKey="port">{t`Port`}</HeaderCell>
-            <HeaderCell sortKey="node_type">
-              {t`Node Type`}
-            </HeaderCell>
-            <HeaderCell sortKey="canonical">
-              {t`Canonical`}
-            </HeaderCell>
+            <HeaderCell sortKey="node_type">{t`Node Type`}</HeaderCell>
+            <HeaderCell sortKey="canonical">{t`Canonical`}</HeaderCell>
           </HeaderRow>
         }
         renderToolbar={(props) => (

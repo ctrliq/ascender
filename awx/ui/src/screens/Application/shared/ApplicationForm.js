@@ -3,9 +3,12 @@ import { useLocation } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
-import { Form, FormGroup, FormHelperText,
-HelperText,
-HelperTextItem,
+import {
+  Form,
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 
 import { required } from 'util/validators';
@@ -81,9 +84,9 @@ function ApplicationFormFields({
         isRequired
         label={t`Authorization grant type`}
         labelHelp={
-        <Popover
-        content={applicationHelpTextStrings.authorizationGrantType}
-        />
+          <Popover
+            content={applicationHelpTextStrings.authorizationGrantType}
+          />
         }
       >
         <AnsibleSelect

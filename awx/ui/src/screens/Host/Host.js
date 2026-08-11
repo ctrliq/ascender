@@ -2,12 +2,14 @@ import React, { useCallback, useEffect } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useParams,
-  useLocation } from 'react-router';
+  useLocation,
+} from 'react-router';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import RoutedTabs from 'components/RoutedTabs';
@@ -119,9 +121,7 @@ function Host({ setBreadcrumb }) {
             <Route path="details" element={<HostDetail host={host} />} />
           )}
           {host && <Route path="edit" element={<HostEdit host={host} />} />}
-          {host && (
-            <Route path="facts" element={<HostFacts host={host} />} />
-          )}
+          {host && <Route path="facts" element={<HostFacts host={host} />} />}
           {/* /* so the nested <HostGroups> route tree can match the rest */}
           {host && (
             <Route path="groups/*" element={<HostGroups host={host} />} />
@@ -136,9 +136,7 @@ function Host({ setBreadcrumb }) {
             path="*"
             element={
               <ContentError isNotFound>
-                <Link to={`/hosts/${id}/details`}>
-                  {t`View Host Details`}
-                </Link>
+                <Link to={`/hosts/${id}/details`}>{t`View Host Details`}</Link>
               </ContentError>
             }
           />

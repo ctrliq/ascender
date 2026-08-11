@@ -87,7 +87,9 @@ describe('<SurveyQuestionForm />', () => {
       'number'
     );
     await waitFor(() =>
-      expect(document.querySelector('textarea#question-default')).toBeInTheDocument()
+      expect(
+        document.querySelector('textarea#question-default')
+      ).toBeInTheDocument()
     );
   });
 
@@ -129,9 +131,9 @@ describe('<SurveyQuestionForm />', () => {
 
     await screen.findByText('Multiple Choice Options');
     // exactly one empty-choice text input and one default-toggle button
-    expect(
-      screen.getAllByRole('textbox', { name: 'new choice' })
-    ).toHaveLength(1);
+    expect(screen.getAllByRole('textbox', { name: 'new choice' })).toHaveLength(
+      1
+    );
     expect(
       screen.getAllByRole('button', { name: 'Click to toggle default value' })
     ).toHaveLength(1);
@@ -148,9 +150,9 @@ describe('<SurveyQuestionForm />', () => {
     selectType('multiselect');
 
     await screen.findByText('Multiple Choice Options');
-    expect(
-      screen.getAllByRole('textbox', { name: 'new choice' })
-    ).toHaveLength(1);
+    expect(screen.getAllByRole('textbox', { name: 'new choice' })).toHaveLength(
+      1
+    );
     expect(
       screen.getAllByRole('button', { name: 'Click to toggle default value' })
     ).toHaveLength(1);
@@ -233,9 +235,7 @@ describe('<SurveyQuestionForm />', () => {
     // not selected yet
     const alexUnselected = iconClass('alex');
     fireEvent.click(toggleButton('alex'));
-    await waitFor(() =>
-      expect(iconClass('alex')).not.toEqual(alexUnselected)
-    );
+    await waitFor(() => expect(iconClass('alex')).not.toEqual(alexUnselected));
     const alexSelected = iconClass('alex');
 
     // adding a new choice via Enter on the last (alex) input
@@ -257,9 +257,7 @@ describe('<SurveyQuestionForm />', () => {
     );
 
     fireEvent.click(toggleButton('spencer'));
-    await waitFor(() =>
-      expect(iconClass('spencer')).toEqual(alexSelected)
-    );
+    await waitFor(() => expect(iconClass('spencer')).toEqual(alexSelected));
 
     // multiselect keeps multiple defaults; toggling alex back off
     fireEvent.click(toggleButton('alex'));
@@ -284,9 +282,7 @@ describe('<SurveyQuestionForm />', () => {
 
     const alexUnselected = iconClass('alex');
     fireEvent.click(toggleButton('alex'));
-    await waitFor(() =>
-      expect(iconClass('alex')).not.toEqual(alexUnselected)
-    );
+    await waitFor(() => expect(iconClass('alex')).not.toEqual(alexUnselected));
     const alexSelected = iconClass('alex');
     expect(
       document.querySelectorAll('#formattedChoices .pf-v6-c-input-group')

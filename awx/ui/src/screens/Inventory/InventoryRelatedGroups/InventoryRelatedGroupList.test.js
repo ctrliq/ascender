@@ -97,9 +97,9 @@ describe('<InventoryRelatedGroupList />', () => {
     await screen.findAllByRole('link', { name: /Inventory 0/ });
     expect(GroupsAPI.readChildren).toHaveBeenCalled();
     expect(InventoriesAPI.readGroupsOptions).toHaveBeenCalled();
-    expect(
-      screen.getAllByRole('link', { name: /Inventory 0/ })
-    ).toHaveLength(3);
+    expect(screen.getAllByRole('link', { name: /Inventory 0/ })).toHaveLength(
+      3
+    );
   });
 
   test('should render Run Commands Button', async () => {
@@ -151,7 +151,9 @@ describe('<InventoryRelatedGroupList />', () => {
     });
     renderUnder(url);
     await screen.findAllByRole('link', { name: /Inventory 0/ });
-    expect(screen.queryByRole('button', { name: 'Add' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Add' })
+    ).not.toBeInTheDocument();
   });
 
   test('should associate existing group', async () => {

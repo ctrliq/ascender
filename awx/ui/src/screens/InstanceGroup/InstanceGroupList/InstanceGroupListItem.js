@@ -67,9 +67,7 @@ function InstanceGroupListItem({
           ? t`Container group`.toString()
           : t`Instance group`.toString()}
       </Td>
-      <Td dataLabel={t`Running jobs`}>
-        {instanceGroup.jobs_running}
-      </Td>
+      <Td dataLabel={t`Running jobs`}>{instanceGroup.jobs_running}</Td>
       <Td dataLabel={t`Total jobs`}>{instanceGroup.jobs_total}</Td>
       <Td dataLabel={t`Instances`}>{instanceGroup.instances}</Td>
       <Td dataLabel={t`Capacity`}>{usedCapacity(instanceGroup)}</Td>
@@ -78,7 +76,8 @@ function InstanceGroupListItem({
           visible={instanceGroup.summary_fields.user_capabilities.edit}
           tooltip={t`Edit instance group`}
         >
-          <Button icon={<PencilAltIcon />}
+          <Button
+            icon={<PencilAltIcon />}
             ouiaId={`${instanceGroup.id}-edit-button`}
             aria-label={t`Edit instance group`}
             variant="plain"
@@ -88,7 +87,7 @@ function InstanceGroupListItem({
                 ? `/instance_groups/container_group/${instanceGroup.id}/edit`
                 : `/instance_groups/${instanceGroup.id}/edit`
             }
-           />
+          />
         </ActionItem>
       </ActionsTd>
     </Tr>

@@ -103,9 +103,7 @@ describe('<InstanceListItem/>', () => {
 
   test('should mount successfully', () => {
     renderItem();
-    expect(
-      screen.getByRole('link', { name: 'awx' })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'awx' })).toBeInTheDocument();
   });
 
   test('should calculate number of forks when slide changes', async () => {
@@ -135,7 +133,9 @@ describe('<InstanceListItem/>', () => {
       const adj =
         Math.round(Number(slider.getAttribute('aria-valuenow')) * 100) / 100;
       const expected = computeForks(1, 24, adj);
-      const text = container.querySelector('[data-cy="number-forks"]').textContent;
+      const text = container.querySelector(
+        '[data-cy="number-forks"]'
+      ).textContent;
       expect(text).toContain(String(expected));
       expect(text).toContain(expected === 1 ? 'fork' : 'forks');
     });

@@ -22,7 +22,10 @@ const mockMe = {
 // WorkflowJobTemplate is a v6 descendant mounted by Templates at
 // workflow_job_template/:id/*; mount it under the same real v6 route so it
 // reads :id and its relative child routes resolve.
-function renderWFJT(entry = '/templates/workflow_job_template/1/foobar', me = mockMe) {
+function renderWFJT(
+  entry = '/templates/workflow_job_template/1/foobar',
+  me = mockMe
+) {
   const history = createMemoryHistory({ initialEntries: [entry] });
   return renderWithContexts(
     <Routes>

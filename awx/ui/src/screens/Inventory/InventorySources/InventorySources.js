@@ -27,10 +27,7 @@ function InventorySources({ inventory, setBreadcrumb }) {
           </Config>
         }
       />
-      <Route
-        index
-        element={<InventorySourceList />}
-      />
+      <Route index element={<InventorySourceList />} />
     </Routes>
   );
 }

@@ -26,9 +26,7 @@ describe('<JobCancelButton/>', () => {
       />
     );
     // default (non-icon) button renders the "Cancel Job" text, no MinusCircleIcon
-    expect(
-      screen.getByRole('button', { name: 'Title' })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Title' })).toBeInTheDocument();
     expect(screen.getByText('Cancel Job')).toBeInTheDocument();
     expect(document.querySelector('.pf-v6-c-button svg')).toBeNull();
   });
@@ -153,9 +151,7 @@ describe('<JobCancelButton/>', () => {
     await user.click(
       screen.getByRole('button', { name: 'Confirm cancel job' })
     );
-    await waitFor(() =>
-      expect(WorkflowJobsAPI.cancel).toHaveBeenCalledWith(1)
-    );
+    await waitFor(() => expect(WorkflowJobsAPI.cancel).toHaveBeenCalledWith(1));
   });
 
   test('should cancel job with unknown type via JobsAPI', async () => {

@@ -1,11 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Link,
-  Routes,
-  Route,
-  Navigate,
-  useParams } from 'react-router';
+import { Link, Routes, Route, Navigate, useParams } from 'react-router';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import { useConfig } from 'contexts/Config';

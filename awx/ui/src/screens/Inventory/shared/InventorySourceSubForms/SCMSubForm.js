@@ -2,18 +2,18 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import {
-	Button,
-	FormGroup,
-	FormHelperText,
-	HelperText,
-	HelperTextItem,
-	MenuToggle,
-	Select,
-	SelectList,
-	SelectOption,
-	TextInputGroup,
-	TextInputGroupMain,
-	TextInputGroupUtilities,
+  Button,
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  MenuToggle,
+  Select,
+  SelectList,
+  SelectOption,
+  TextInputGroup,
+  TextInputGroupMain,
+  TextInputGroupUtilities,
 } from '@patternfly/react-core';
 import { TimesIcon } from '@patternfly/react-icons';
 import { ProjectsAPI } from 'api';
@@ -160,7 +160,11 @@ const SCMSubForm = ({ autoPopulateProject }) => {
             >
               <TextInputGroup isPlain>
                 <TextInputGroupMain
-                  value={filterValue !== '' ? filterValue : (sourcePathField.value || '')}
+                  value={
+                    filterValue !== ''
+                      ? filterValue
+                      : sourcePathField.value || ''
+                  }
                   onClick={() => setIsOpen(true)}
                   onChange={(_event, val) => {
                     setFilterValue(val);
@@ -177,14 +181,15 @@ const SCMSubForm = ({ autoPopulateProject }) => {
                 />
                 {(filterValue || sourcePathField.value) && (
                   <TextInputGroupUtilities>
-                    <Button icon={<TimesIcon />}
+                    <Button
+                      icon={<TimesIcon />}
                       variant="plain"
                       onClick={() => {
                         sourcePathHelpers.setValue('');
                         setFilterValue('');
                       }}
                       aria-label={t`Clear`}
-                     />
+                    />
                   </TextInputGroupUtilities>
                 )}
               </TextInputGroup>
@@ -209,13 +214,12 @@ const SCMSubForm = ({ autoPopulateProject }) => {
               </SelectOption>
             )}
             {filteredPaths.length === 0 && !showCreateOption && (
-              <SelectOption isDisabled>
-                {t`No results found`}
-              </SelectOption>
+              <SelectOption isDisabled>{t`No results found`}</SelectOption>
             )}
           </SelectList>
         </Select>
-        {((sourcePathMeta.touched && sourcePathMeta.error) || sourcePathError?.message) && (
+        {((sourcePathMeta.touched && sourcePathMeta.error) ||
+          sourcePathError?.message) && (
           <FormHelperText>
             <HelperText>
               <HelperTextItem variant="error">

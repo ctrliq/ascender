@@ -129,25 +129,27 @@ function NotificationTemplateListItem({
         </Td>
         <ActionsTd dataLabel={t`Actions`}>
           <ActionItem visible tooltip={t`Test notification`}>
-            <Button icon={<BellIcon />}
+            <Button
+              icon={<BellIcon />}
               ouiaId={`notification-test-button-${template.id}`}
               aria-label={t`Test Notification`}
               variant="plain"
               onClick={sendTestNotification}
               isDisabled={isLoading || status === 'running'}
-             />
+            />
           </ActionItem>
           <ActionItem
             visible={template.summary_fields.user_capabilities.edit}
             tooltip={t`Edit`}
           >
-            <Button icon={<PencilAltIcon />}
+            <Button
+              icon={<PencilAltIcon />}
               ouiaId={`notification-edit-button-${template.id}`}
               aria-label={t`Edit Notification Template`}
               variant="plain"
               component={Link}
               to={`/notification_templates/${template.id}/edit`}
-             />
+            />
           </ActionItem>
           <ActionItem
             visible={template.summary_fields.user_capabilities.copy}

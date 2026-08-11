@@ -87,9 +87,7 @@ describe('<GitHubEdit />', () => {
     await user.clear(keyInput);
     await user.type(keyInput, 'new key');
     await user.click(container.querySelector('button[aria-label="Save"]'));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     // the org/team maps are unchanged from their initial values; the CodeEditor
     // (react-ace) renders empty under jsdom so it cannot be driven here, so we
     // assert the map values pass through unchanged rather than editing them.
@@ -145,8 +143,6 @@ describe('<GitHubEdit />', () => {
         <GitHubEdit />
       </SettingsProvider>
     );
-    expect(
-      await screen.findByText(/Something went wrong/)
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/Something went wrong/)).toBeInTheDocument();
   });
 });

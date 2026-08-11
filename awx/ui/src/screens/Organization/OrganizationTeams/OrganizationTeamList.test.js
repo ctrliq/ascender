@@ -78,7 +78,9 @@ describe('<OrganizationTeamList />', () => {
   test('should render the fetched teams', async () => {
     renderWithContexts(<OrganizationTeamList id={1} searchString="" />);
 
-    expect(await screen.findByRole('link', { name: 'one' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('link', { name: 'one' })
+    ).toBeInTheDocument();
     ['two', 'three', 'four', 'five'].forEach((name) => {
       expect(screen.getByRole('link', { name })).toBeInTheDocument();
     });

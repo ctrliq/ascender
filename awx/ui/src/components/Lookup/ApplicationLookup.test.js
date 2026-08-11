@@ -52,9 +52,7 @@ describe('ApplicationLookup', () => {
       </Formik>
     );
     expect(await screen.findByText('Application')).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'Search' })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
   });
 
   test('should fetch applications', async () => {
@@ -67,9 +65,7 @@ describe('ApplicationLookup', () => {
         />
       </Formik>
     );
-    await waitFor(() =>
-      expect(ApplicationsAPI.read).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(ApplicationsAPI.read).toHaveBeenCalledTimes(1));
   });
 
   test('should display label', async () => {

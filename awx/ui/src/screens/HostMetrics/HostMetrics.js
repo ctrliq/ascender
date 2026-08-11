@@ -113,9 +113,7 @@ function HostMetrics() {
             )}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="hostname">
-                  {t`Hostname`}
-                </HeaderCell>
+                <HeaderCell sortKey="hostname">{t`Hostname`}</HeaderCell>
                 <HeaderCell
                   sortKey="first_automation"
                   tooltip={t`When was the host first automated`}

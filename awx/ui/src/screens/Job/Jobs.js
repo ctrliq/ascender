@@ -1,10 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import {
-  Routes,
-  Route,
-  Navigate,
-  useParams,
-} from 'react-router';
+import { Routes, Route, Navigate, useParams } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 import { PageSection } from '@patternfly/react-core';
@@ -26,10 +21,7 @@ function TypeRedirect({ view }) {
 function SystemRedirect() {
   const { id, '*': rest } = useParams();
   return (
-    <Navigate
-      to={`/jobs/management/${id}${rest ? `/${rest}` : ''}`}
-      replace
-    />
+    <Navigate to={`/jobs/management/${id}${rest ? `/${rest}` : ''}`} replace />
   );
 }
 
@@ -71,14 +63,8 @@ function Jobs() {
           }
         />
         <Route path="system/:id/*" element={<SystemRedirect />} />
-        <Route
-          path=":id/details"
-          element={<TypeRedirect view="details" />}
-        />
-        <Route
-          path=":id/output"
-          element={<TypeRedirect view="output" />}
-        />
+        <Route path=":id/details" element={<TypeRedirect view="details" />} />
+        <Route path=":id/output" element={<TypeRedirect view="output" />} />
         {/* /* so the nested <Job> route tree can match details/output */}
         <Route
           path=":typeSegment/:id/*"

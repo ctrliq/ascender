@@ -4,21 +4,21 @@ import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 
 import {
-	ActionGroup,
-	Button,
-	Form,
-	FormGroup,
-	Tooltip,
-	FormHelperText,
-	HelperText,
-	HelperTextItem,
-	MenuToggle,
-	Select,
-	SelectList,
-	SelectOption,
-	TextInputGroup,
-	TextInputGroupMain,
-	TextInputGroupUtilities,
+  ActionGroup,
+  Button,
+  Form,
+  FormGroup,
+  Tooltip,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  MenuToggle,
+  Select,
+  SelectList,
+  SelectOption,
+  TextInputGroup,
+  TextInputGroupMain,
+  TextInputGroupUtilities,
 } from '@patternfly/react-core';
 import { TimesIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
@@ -167,7 +167,9 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
           }}
           isExpanded={isSelectOpen}
           isDisabled={isCredentialTypeDisabled}
-          style={isCredentialTypeDisabled ? { cursor: 'not-allowed' } : undefined}
+          style={
+            isCredentialTypeDisabled ? { cursor: 'not-allowed' } : undefined
+          }
         >
           <TextInputGroup isPlain isDisabled={isCredentialTypeDisabled}>
             <TextInputGroupMain
@@ -190,7 +192,8 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
             />
             {(filterValue || selectedLabel) && !isCredentialTypeDisabled && (
               <TextInputGroupUtilities>
-                <Button icon={<TimesIcon />}
+                <Button
+                  icon={<TimesIcon />}
                   variant="plain"
                   onClick={() => {
                     setCredentialTypeId(undefined);
@@ -198,7 +201,7 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
                     setFilterValue('');
                   }}
                   aria-label={t`Clear`}
-                 />
+                />
               </TextInputGroupUtilities>
             )}
           </TextInputGroup>
@@ -216,9 +219,7 @@ function CredentialFormFields({ initialTypeId, credentialTypes }) {
           </SelectOption>
         ))}
         {filteredOptions.length === 0 && (
-          <SelectOption isDisabled>
-            {t`No results found`}
-          </SelectOption>
+          <SelectOption isDisabled>{t`No results found`}</SelectOption>
         )}
       </SelectList>
     </StyledSelect>

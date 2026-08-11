@@ -45,7 +45,9 @@ function expectCommonGroups() {
 function machineFieldExpects(container) {
   expectCommonGroups();
   expectGroup('Username');
-  expect(container.querySelector('input#credential-password')).toBeInTheDocument();
+  expect(
+    container.querySelector('input#credential-password')
+  ).toBeInTheDocument();
   expectGroup('SSH Private Key');
   expectGroup('Signed SSH Certificate');
   expect(
@@ -92,9 +94,7 @@ async function renderForm(props) {
   );
   // OrganizationLookup fetches on mount; let it settle to avoid act warnings
   await screen.findByText('Name');
-  await waitFor(() =>
-    expect(OrganizationsAPI.read).toHaveBeenCalled()
-  );
+  await waitFor(() => expect(OrganizationsAPI.read).toHaveBeenCalled());
   return result;
 }
 
@@ -153,8 +153,12 @@ describe('<CredentialForm />', () => {
 
       await selectCredentialType(user, 'Google Compute Engine');
       gceFieldExpects();
-      expect(container.querySelector('input#credential-username')).toHaveValue('');
-      expect(container.querySelector('input#credential-project')).toHaveValue('');
+      expect(container.querySelector('input#credential-username')).toHaveValue(
+        ''
+      );
+      expect(container.querySelector('input#credential-project')).toHaveValue(
+        ''
+      );
       expect(
         container.querySelector('textarea#credential-ssh_key_data')
       ).toHaveValue('');
@@ -171,9 +175,9 @@ describe('<CredentialForm />', () => {
       fireEvent.change(fileInput, { target: { files: [file] } });
 
       await waitFor(() =>
-        expect(container.querySelector('input#credential-username')).toHaveValue(
-          'testemail@ansible.com'
-        )
+        expect(
+          container.querySelector('input#credential-username')
+        ).toHaveValue('testemail@ansible.com')
       );
       expect(container.querySelector('input#credential-project')).toHaveValue(
         'test123'
@@ -193,11 +197,13 @@ describe('<CredentialForm />', () => {
       ).getByRole('button', { name: 'Clear' });
       await user.click(gceClearButton);
       await waitFor(() =>
-        expect(container.querySelector('input#credential-username')).toHaveValue(
-          ''
-        )
+        expect(
+          container.querySelector('input#credential-username')
+        ).toHaveValue('')
       );
-      expect(container.querySelector('input#credential-project')).toHaveValue('');
+      expect(container.querySelector('input#credential-project')).toHaveValue(
+        ''
+      );
       expect(
         container.querySelector('textarea#credential-ssh_key_data')
       ).toHaveValue('');

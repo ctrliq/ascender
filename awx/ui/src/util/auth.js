@@ -1,4 +1,3 @@
-
 export function isAuthenticated(cookie) {
   if (!cookie) {
     return false;

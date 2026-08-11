@@ -3,14 +3,14 @@ import styled from 'styled-components';
 
 import { useLingui } from '@lingui/react/macro';
 import {
-	Card,
-	CardHeader,
-	CardBody,
-	MenuToggle,
-	PageSection,
-	Select,
-	SelectList,
-	SelectOption,
+  Card,
+  CardHeader,
+  CardBody,
+  MenuToggle,
+  PageSection,
+  Select,
+  SelectList,
+  SelectOption,
 } from '@patternfly/react-core';
 
 import useRequest from 'hooks/useRequest';
@@ -130,18 +130,10 @@ function DashboardGraph() {
             )}
           >
             <SelectList>
-              <SelectOption value="month">
-                {t`Past month`}
-              </SelectOption>
-              <SelectOption value="two_weeks">
-                {t`Past two weeks`}
-              </SelectOption>
-              <SelectOption value="week">
-                {t`Past week`}
-              </SelectOption>
-              <SelectOption value="day">
-                {t`Past 24 hours`}
-              </SelectOption>
+              <SelectOption value="month">{t`Past month`}</SelectOption>
+              <SelectOption value="two_weeks">{t`Past two weeks`}</SelectOption>
+              <SelectOption value="week">{t`Past week`}</SelectOption>
+              <SelectOption value="day">{t`Past 24 hours`}</SelectOption>
             </SelectList>
           </Select>
           <Select
@@ -165,15 +157,9 @@ function DashboardGraph() {
             )}
           >
             <SelectList>
-              <SelectOption value="all">
-                {t`All job types`}
-              </SelectOption>
-              <SelectOption value="inv_sync">
-                {t`Inventory sync`}
-              </SelectOption>
-              <SelectOption value="scm_update">
-                {t`SCM update`}
-              </SelectOption>
+              <SelectOption value="all">{t`All job types`}</SelectOption>
+              <SelectOption value="inv_sync">{t`Inventory sync`}</SelectOption>
+              <SelectOption value="scm_update">{t`SCM update`}</SelectOption>
               <SelectOption value="playbook_run">
                 {t`Playbook run`}
               </SelectOption>
@@ -191,7 +177,9 @@ function DashboardGraph() {
             toggle={(toggleRef) => (
               <MenuToggle
                 ref={toggleRef}
-                onClick={() => setIsJobStatusDropdownOpen(!isJobStatusDropdownOpen)}
+                onClick={() =>
+                  setIsJobStatusDropdownOpen(!isJobStatusDropdownOpen)
+                }
                 isExpanded={isJobStatusDropdownOpen}
                 style={{ minWidth: '165px' }}
               >
@@ -200,15 +188,11 @@ function DashboardGraph() {
             )}
           >
             <SelectList>
-              <SelectOption value="all">
-                {t`All jobs`}
-              </SelectOption>
+              <SelectOption value="all">{t`All jobs`}</SelectOption>
               <SelectOption value="successful">
                 {t`Successful jobs`}
               </SelectOption>
-              <SelectOption value="failed">
-                {t`Failed jobs`}
-              </SelectOption>
+              <SelectOption value="failed">{t`Failed jobs`}</SelectOption>
             </SelectList>
           </Select>
         </GraphCardActions>

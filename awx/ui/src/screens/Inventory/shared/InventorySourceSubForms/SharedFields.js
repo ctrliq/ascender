@@ -73,10 +73,7 @@ export const OptionsField = () => {
   return (
     <>
       <FormFullWidthLayout>
-        <FormGroup
-          fieldId="option-checkboxes"
-          label={t`Update options`}
-        >
+        <FormGroup fieldId="option-checkboxes" label={t`Update options`}>
           <FormCheckboxLayout>
             <CheckboxField
               id="overwrite"

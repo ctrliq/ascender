@@ -52,9 +52,7 @@ describe('<GitHubEnterpriseTeamEdit />', () => {
 
   test('initially renders the expected form fields', async () => {
     await setup();
-    expect(
-      screen.getByText('GitHub Enterprise Team URL')
-    ).toBeInTheDocument();
+    expect(screen.getByText('GitHub Enterprise Team URL')).toBeInTheDocument();
     expect(
       screen.getByText('GitHub Enterprise Team API URL')
     ).toBeInTheDocument();
@@ -105,9 +103,7 @@ describe('<GitHubEnterpriseTeamEdit />', () => {
     await user.clear(urlInput);
     await user.type(urlInput, 'https://localhost');
     await user.click(container.querySelector('button[aria-label="Save"]'));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     // org/team maps start as null and are not editable in jsdom (react-ace
     // renders empty); they pass through unchanged.
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
@@ -165,8 +161,6 @@ describe('<GitHubEnterpriseTeamEdit />', () => {
         <GitHubEnterpriseTeamEdit />
       </SettingsProvider>
     );
-    expect(
-      await screen.findByText(/Something went wrong/)
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/Something went wrong/)).toBeInTheDocument();
   });
 });

@@ -36,26 +36,32 @@ self.addEventListener('activate', (event) => {
     caches
       .open(CACHE_NAME)
       .then((cache) =>
-        cache.keys().then((requests) =>
-          Promise.all(
-            requests
-              .filter(
-                (request) =>
-                  !expectedUrls.has(new URL(request.url, self.location).pathname)
-              )
-              .map((request) => cache.delete(request))
+        cache
+          .keys()
+          .then((requests) =>
+            Promise.all(
+              requests
+                .filter(
+                  (request) =>
+                    !expectedUrls.has(
+                      new URL(request.url, self.location).pathname
+                    )
+                )
+                .map((request) => cache.delete(request))
+            )
           )
-        )
       )
       // Also remove any caches from older naming schemes.
       .then(() =>
-        caches.keys().then((cacheNames) =>
-          Promise.all(
-            cacheNames
-              .filter((name) => name !== CACHE_NAME)
-              .map((name) => caches.delete(name))
+        caches
+          .keys()
+          .then((cacheNames) =>
+            Promise.all(
+              cacheNames
+                .filter((name) => name !== CACHE_NAME)
+                .map((name) => caches.delete(name))
+            )
           )
-        )
       )
       .then(() => self.clients.claim())
   );

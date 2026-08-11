@@ -175,10 +175,11 @@ function MultiCredentialsLookup({
                 onChange={(e, id) => {
                   // Reset query params when the category of credentials is changed
                   navigate(
-{
-                    search: '',
-                  },
-                  { replace: true });
+                    {
+                      search: '',
+                    },
+                    { replace: true }
+                  );
                   setSelectedType(
                     credentialTypes.find((o) => o.id === parseInt(id, 10))
                   );

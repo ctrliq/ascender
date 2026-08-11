@@ -31,13 +31,8 @@ function NotificationListItem({
           <b>{notification.name}</b>
         </Link>
       </Td>
-      <Td dataLabel={t`Type`}>
-        {typeLabels[notification.notification_type]}
-      </Td>
-      <ActionsTd
-        dataLabel={t`Options`}
-        gridColumns="120px 120px 120px 120px"
-      >
+      <Td dataLabel={t`Type`}>{typeLabels[notification.notification_type]}</Td>
+      <ActionsTd dataLabel={t`Options`} gridColumns="120px 120px 120px 120px">
         <ActionItem visible={showApprovalsToggle}>
           <Switch
             id={`notification-${notification.id}-approvals-toggle`}

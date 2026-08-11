@@ -12,16 +12,16 @@ export default function useInstanceGroupsStep(
 ) {
   const { t } = useLingui();
   return {
-    step: !launchConfig.ask_instance_groups_on_launch ? null : {
-      id: STEP_ID,
-      name: (
-        <StepName id="instance-groups-step">
-          {t`Instance Groups`}
-        </StepName>
-      ),
-      component: <InstanceGroupsStep />,
-      enableNext: true,
-    },
+    step: !launchConfig.ask_instance_groups_on_launch
+      ? null
+      : {
+          id: STEP_ID,
+          name: (
+            <StepName id="instance-groups-step">{t`Instance Groups`}</StepName>
+          ),
+          component: <InstanceGroupsStep />,
+          enableNext: true,
+        },
     initialValues: getInitialValues(launchConfig, instanceGroups),
     isReady: true,
     contentError: null,

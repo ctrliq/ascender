@@ -6,12 +6,7 @@ import Popover from 'components/Popover';
 import AnsibleSelect from 'components/AnsibleSelect';
 import FieldWithPrompt from 'components/FieldWithPrompt';
 
-function VerbositySelectField({
-  fieldId,
-  promptId,
-  promptName,
-  tooltip,
-}) {
+function VerbositySelectField({ fieldId, promptId, promptName, tooltip }) {
   const { t } = useLingui();
 
   const getVerbosityOptions = () => ({
@@ -23,11 +18,13 @@ function VerbositySelectField({
     5: t`5 (WinRM Debug)`,
   });
 
-  const VERBOSE_OPTIONS = Object.entries(getVerbosityOptions()).map(([k, v]) => ({
-    key: `${k}`,
-    value: `${k}`,
-    label: v,
-  }));
+  const VERBOSE_OPTIONS = Object.entries(getVerbosityOptions()).map(
+    ([k, v]) => ({
+      key: `${k}`,
+      value: `${k}`,
+      label: v,
+    })
+  );
   const [verbosityField, , verbosityHelpers] = useField('verbosity');
   return promptId ? (
     <FieldWithPrompt

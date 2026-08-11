@@ -100,7 +100,10 @@ function TemplateSurvey({ template, canEdit }) {
           <Route
             path="add"
             element={
-              <SurveyQuestionAdd survey={survey} updateSurvey={updateSurveySpec} />
+              <SurveyQuestionAdd
+                survey={survey}
+                updateSurvey={updateSurveySpec}
+              />
             }
           />
         )}

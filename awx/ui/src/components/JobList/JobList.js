@@ -263,12 +263,8 @@ function JobList({
               <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
               <HeaderCell sortKey="status">{t`Status`}</HeaderCell>
               {showTypeColumn && <HeaderCell>{t`Type`}</HeaderCell>}
-              <HeaderCell sortKey="started">
-                {t`Start Time`}
-              </HeaderCell>
-              <HeaderCell sortKey="finished">
-                {t`Finish Time`}
-              </HeaderCell>
+              <HeaderCell sortKey="started">{t`Start Time`}</HeaderCell>
+              <HeaderCell sortKey="finished">{t`Finish Time`}</HeaderCell>
               <HeaderCell>{t`Actions`}</HeaderCell>
             </HeaderRow>
           }

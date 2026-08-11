@@ -7,10 +7,7 @@ import InventoryHostGroupsList from './InventoryHostGroupsList';
 function InventoryHostGroups() {
   return (
     <Routes>
-      <Route
-        index
-        element={<InventoryHostGroupsList />}
-      />
+      <Route index element={<InventoryHostGroupsList />} />
     </Routes>
   );
 }

@@ -75,11 +75,7 @@ function InventoryHostDetail({ host }) {
           isEmpty={recentPlaybookJobs?.length === 0}
         />
         <Detail label={t`Description`} value={description} />
-        <UserDateDetail
-          date={created}
-          label={t`Created`}
-          user={created_by}
-        />
+        <UserDateDetail date={created} label={t`Created`} user={created_by} />
         <UserDateDetail
           date={modified}
           label={t`Last Modified`}

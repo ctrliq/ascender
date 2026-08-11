@@ -108,10 +108,7 @@ describe('getRRuleDayConstants', () => {
       RRule.TH,
       RRule.FR,
     ]);
-    expect(getRRuleDayConstants('weekendDay')).toEqual([
-      RRule.SA,
-      RRule.SU,
-    ]);
+    expect(getRRuleDayConstants('weekendDay')).toEqual([RRule.SA, RRule.SU]);
     expect(() => getRRuleDayConstants('foobar')).toThrow();
   });
 });

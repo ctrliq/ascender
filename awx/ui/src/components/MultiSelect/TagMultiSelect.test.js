@@ -20,7 +20,9 @@ describe('<TagMultiSelect />', () => {
     const { user } = renderWithContexts(
       <TagMultiSelect value="" onChange={jest.fn()} />
     );
-    expect(screen.queryByRole('list', { name: 'Label group category' })).toBeNull();
+    expect(
+      screen.queryByRole('list', { name: 'Label group category' })
+    ).toBeNull();
 
     const input = screen.getByRole('textbox', { name: 'Select tags' });
     await user.click(input);

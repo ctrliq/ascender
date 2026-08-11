@@ -121,7 +121,9 @@ describe('ScheduleList', () => {
         await screen.findByRole('button', { name: 'confirm delete' })
       );
 
-      await waitFor(() => expect(SchedulesAPI.destroy).toHaveBeenCalledTimes(1));
+      await waitFor(() =>
+        expect(SchedulesAPI.destroy).toHaveBeenCalledTimes(1)
+      );
     });
 
     test('should show error modal when schedule is not successfully deleted from api', async () => {
@@ -147,7 +149,9 @@ describe('ScheduleList', () => {
 
     test('should call api update schedules when toggle clicked', async () => {
       const { user } = renderList();
-      await screen.findByRole('link', { name: 'Mock Inventory Update Schedule' });
+      await screen.findByRole('link', {
+        name: 'Mock Inventory Update Schedule',
+      });
       const toggle = document.querySelector('#schedule-5-toggle');
       await user.click(toggle);
       await waitFor(() => expect(SchedulesAPI.update).toHaveBeenCalledTimes(1));
@@ -188,7 +192,9 @@ describe('ScheduleList', () => {
         launchConfig: { survey_enabled: true },
         surveyConfig: { spec: [{ required: true, default: null }] },
       });
-      await screen.findByRole('link', { name: 'Mock Inventory Update Schedule' });
+      await screen.findByRole('link', {
+        name: 'Mock Inventory Update Schedule',
+      });
       // schedule 5 is missing required survey values -> its toggle is disabled
       expect(document.querySelector('#schedule-5-toggle')).toBeDisabled();
       // a warning icon is rendered for each row that is missing survey values

@@ -164,9 +164,7 @@ function Dashboard() {
               <Tab
                 aria-label={t`Recent Templates list tab`}
                 eventKey={2}
-                title={
-                  <TabTitleText>{t`Recent Templates`}</TabTitleText>
-                }
+                title={<TabTitleText>{t`Recent Templates`}</TabTitleText>}
                 ouiaId="recent-templates-list-tab"
               >
                 <div>

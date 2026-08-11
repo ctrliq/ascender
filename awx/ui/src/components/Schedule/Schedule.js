@@ -1,12 +1,14 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useLocation,
-  useParams } from 'react-router';
+  useParams,
+} from 'react-router';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { SchedulesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
@@ -79,9 +81,7 @@ function Schedule({
         {error.response && error.response.status === 404 && (
           <span>
             {t`Schedule not found.`}{' '}
-            <Link to={`${pathRoot}schedules`}>
-              {t`View Schedules`}
-            </Link>
+            <Link to={`${pathRoot}schedules`}>{t`View Schedules`}</Link>
           </span>
         )}
       </ContentError>

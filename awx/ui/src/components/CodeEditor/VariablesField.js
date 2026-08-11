@@ -3,14 +3,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import styled from 'styled-components';
-import {
-	Split,
-	SplitItem,
-	Button
-} from '@patternfly/react-core';
-import {
-	Modal
-} from '@patternfly/react-core/deprecated';
+import { Split, SplitItem, Button } from '@patternfly/react-core';
+import { Modal } from '@patternfly/react-core/deprecated';
 import { ExpandArrowsAltIcon } from '@patternfly/react-icons';
 import {
   yamlToJson,
@@ -178,7 +172,10 @@ function VariablesField({
         </div>
       </Modal>
       {meta.error ? (
-        <div className="pf-v6-c-form__helper-text pf-m-error" aria-live="polite">
+        <div
+          className="pf-v6-c-form__helper-text pf-m-error"
+          aria-live="polite"
+        >
           {(Array.isArray(meta.error) ? meta.error : [meta.error]).map(
             (errorMessage) => (
               <p key={errorMessage}>{errorMessage}</p>
@@ -226,7 +223,10 @@ function VariablesFieldInternals({
             <label htmlFor={id} className="pf-v6-c-form__label">
               <span className="pf-v6-c-form__label-text">{label}</span>
               {isRequired && (
-                <span className="pf-v6-c-form__label-required" aria-hidden="true">
+                <span
+                  className="pf-v6-c-form__label-required"
+                  aria-hidden="true"
+                >
                   {' '}
                   *{' '}
                 </span>
@@ -254,12 +254,13 @@ function VariablesFieldInternals({
           />
         )}
         {onExpand && (
-          <Button icon={<ExpandArrowsAltIcon />}
+          <Button
+            icon={<ExpandArrowsAltIcon />}
             variant="plain"
             aria-label={t`Expand input`}
             onClick={onExpand}
             ouiaId={`${id}-expand`}
-           />
+          />
         )}
       </FieldHeader>
       <CodeEditor

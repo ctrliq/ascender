@@ -90,9 +90,9 @@ describe('<Login />', () => {
       <AWXLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
-    expect(
-      container.querySelectorAll('form[autocomplete="off"]')
-    ).toHaveLength(1);
+    expect(container.querySelectorAll('form[autocomplete="off"]')).toHaveLength(
+      1
+    );
   });
 
   test('custom logo renders Brand component with correct src and alt', async () => {
@@ -183,9 +183,7 @@ describe('<Login />', () => {
 
     expect(getUsernameInput(container).value).toEqual('');
     expect(getPasswordInput(container).value).toEqual('');
-    expect(
-      container.querySelector('.pf-v6-c-form__helper-text')
-    ).toBeNull();
+    expect(container.querySelector('.pf-v6-c-form__helper-text')).toBeNull();
 
     await user.type(getUsernameInput(container), 'un');
     await user.type(getPasswordInput(container), 'pw');
@@ -211,9 +209,7 @@ describe('<Login />', () => {
     expect(getUsernameInput(container).value).toEqual('foo');
     expect(getPasswordInput(container).value).toEqual('bar');
     await waitFor(() =>
-      expect(
-        container.querySelector('.pf-v6-c-form__helper-text')
-      ).toBeNull()
+      expect(container.querySelector('.pf-v6-c-form__helper-text')).toBeNull()
     );
     expect(getUsernameInput(container)).toHaveAttribute(
       'aria-invalid',

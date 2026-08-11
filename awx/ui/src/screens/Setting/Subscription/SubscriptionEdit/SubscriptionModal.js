@@ -2,22 +2,13 @@ import React, { useCallback, useEffect } from 'react';
 
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
-	Button,
-	EmptyState,
-	EmptyStateBody,
-	EmptyStateFooter
+  Button,
+  EmptyState,
+  EmptyStateBody,
+  EmptyStateFooter,
 } from '@patternfly/react-core';
-import {
-	Modal
-} from '@patternfly/react-core/deprecated';
-import {
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
-} from '@patternfly/react-table';
+import { Modal } from '@patternfly/react-core/deprecated';
+import { Table, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 
 import { ConfigAPI } from 'api';
@@ -111,7 +102,12 @@ function SubscriptionModal({
     >
       {isLoading && <ContentLoading />}
       {!isLoading && error && (
-        <EmptyState  headingLevel="h3" icon={ExclamationTriangleIcon}  titleText={<Trans>No subscriptions found</Trans>} variant="full">
+        <EmptyState
+          headingLevel="h3"
+          icon={ExclamationTriangleIcon}
+          titleText={<Trans>No subscriptions found</Trans>}
+          variant="full"
+        >
           <EmptyStateBody>
             <Trans>
               We were unable to locate licenses associated with this account.
@@ -125,9 +121,11 @@ function SubscriptionModal({
             >
               <Trans>Return to subscription management.</Trans>
             </Button>
-          </EmptyStateBody><EmptyStateFooter>
-          <ErrorDetail error={error} />
-        </EmptyStateFooter></EmptyState>
+          </EmptyStateBody>
+          <EmptyStateFooter>
+            <ErrorDetail error={error} />
+          </EmptyStateFooter>
+        </EmptyState>
       )}
       {!isLoading && !error && subscriptions?.length === 0 && (
         <ContentEmpty
@@ -136,10 +134,7 @@ function SubscriptionModal({
         />
       )}
       {!isLoading && !error && subscriptions?.length > 0 && (
-        <Table
-          variant="compact"
-          aria-label={t`Subscriptions table`}
-        >
+        <Table variant="compact" aria-label={t`Subscriptions table`}>
           <Thead>
             <Tr ouiaId="subscription-table-header">
               <Th screenReaderText={t`Row select`} />
@@ -165,9 +160,7 @@ function SubscriptionModal({
                     rowIndex: `row-${subscription.id}`,
                   }}
                 />
-                <Td dataLabel={t`Trial`}>
-                  {subscription.subscription_name}
-                </Td>
+                <Td dataLabel={t`Trial`}>{subscription.subscription_name}</Td>
                 <Td dataLabel={t`Managed nodes`}>
                   {subscription.instance_count}
                 </Td>

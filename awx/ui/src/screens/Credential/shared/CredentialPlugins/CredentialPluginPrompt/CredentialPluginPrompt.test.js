@@ -93,9 +93,7 @@ describe('<CredentialPluginPrompt />', () => {
       // wait for the credentials list to load
       await screen.findByText('CyberArk Conjur Secrets Manager Lookup');
 
-      expect(
-        screen.getByText('Microsoft Azure Key Vault')
-      ).toBeInTheDocument();
+      expect(screen.getByText('Microsoft Azure Key Vault')).toBeInTheDocument();
       expect(
         screen.getByText('HashiCorp Vault Secret Lookup')
       ).toBeInTheDocument();
@@ -160,9 +158,7 @@ describe('<CredentialPluginPrompt />', () => {
         .mockImplementation((...args) => {
           if (
             typeof args[0] === 'string' &&
-            args[0].includes(
-              'changing an uncontrolled input to be controlled'
-            )
+            args[0].includes('changing an uncontrolled input to be controlled')
           ) {
             return;
           }

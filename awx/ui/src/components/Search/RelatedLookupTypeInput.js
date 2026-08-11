@@ -99,23 +99,22 @@ function RelatedLookupTypeInput({
             />
             {(filterValue || value) && (
               <TextInputGroupUtilities>
-                <Button icon={<TimesIcon />}
+                <Button
+                  icon={<TimesIcon />}
                   variant="plain"
                   onClick={() => {
                     setValue(null);
                     setFilterValue('');
                   }}
                   aria-label={t`Clear`}
-                 />
+                />
               </TextInputGroupUtilities>
             )}
           </TextInputGroup>
         </MenuToggle>
       )}
     >
-      <SelectList
-        style={{ maxHeight: maxSelectHeight, overflowY: 'auto' }}
-      >
+      <SelectList style={{ maxHeight: maxSelectHeight, overflowY: 'auto' }}>
         {filteredOptions.length === 0 ? (
           <SelectOption isDisabled>{t`No results found`}</SelectOption>
         ) : (

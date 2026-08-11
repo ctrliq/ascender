@@ -31,20 +31,19 @@ const mockInventory = {
 jest.mock(
   '../shared/InventorySourceForm',
   () =>
-    ({ onSubmit, onCancel, submitError }) =>
-      (
-        <div>
-          <button
-            type="button"
-            aria-label="mock-submit"
-            onClick={() =>
-              onSubmit({ ...mockInvSrc, instanceGroups: [{ id: 100 }] })
-            }
-          />
-          <button type="button" aria-label="mock-cancel" onClick={onCancel} />
-          {submitError ? <div data-testid="mock-submit-error" /> : null}
-        </div>
-      )
+    ({ onSubmit, onCancel, submitError }) => (
+      <div>
+        <button
+          type="button"
+          aria-label="mock-submit"
+          onClick={() =>
+            onSubmit({ ...mockInvSrc, instanceGroups: [{ id: 100 }] })
+          }
+        />
+        <button type="button" aria-label="mock-cancel" onClick={onCancel} />
+        {submitError ? <div data-testid="mock-submit-error" /> : null}
+      </div>
+    )
 );
 
 describe('<InventorySourceEdit />', () => {
@@ -62,7 +61,9 @@ describe('<InventorySourceEdit />', () => {
     renderWithContexts(
       <InventorySourceEdit inventory={mockInventory} source={mockInvSrc} />
     );
-    expect(await screen.findByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    ).toBeInTheDocument();
   });
 
   test('handleSubmit should call api update', async () => {
@@ -70,7 +71,9 @@ describe('<InventorySourceEdit />', () => {
     const { user } = renderWithContexts(
       <InventorySourceEdit inventory={mockInventory} source={mockInvSrc} />
     );
-    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     await waitFor(() =>
       expect(InventorySourcesAPI.replace).toHaveBeenCalledTimes(1)
@@ -107,7 +110,9 @@ describe('<InventorySourceEdit />', () => {
       <InventorySourceEdit inventory={mockInventory} source={mockInvSrc} />,
       { context: { router: { history } } }
     );
-    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     await waitFor(() =>
       expect(history.location.pathname).toEqual(
@@ -122,7 +127,9 @@ describe('<InventorySourceEdit />', () => {
       <InventorySourceEdit inventory={mockInventory} source={mockInvSrc} />,
       { context: { router: { history } } }
     );
-    await user.click(await screen.findByRole('button', { name: 'mock-cancel' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-cancel' })
+    );
     expect(history.location.pathname).toEqual(
       '/inventories/inventory/1/sources/23/details'
     );
@@ -139,7 +146,9 @@ describe('<InventorySourceEdit />', () => {
       <InventorySourceEdit inventory={mockInventory} source={mockInvSrc} />
     );
     expect(screen.queryByTestId('mock-submit-error')).toBeNull();
-    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
     expect(await screen.findByTestId('mock-submit-error')).toBeInTheDocument();
   });
 });

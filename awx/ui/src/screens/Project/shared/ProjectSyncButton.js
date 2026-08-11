@@ -37,11 +37,7 @@ function ProjectSyncButton({ projectId, lastJobStatus = null }) {
               variant={isDetailsView ? 'secondary' : 'plain'}
               isDisabled={isDisabled}
             >
-              {pathname.endsWith('/details') ? (
-                t`Sync`
-              ) : (
-                <SyncIcon />
-              )}
+              {pathname.endsWith('/details') ? t`Sync` : <SyncIcon />}
             </Button>
           </div>
         </Tooltip>

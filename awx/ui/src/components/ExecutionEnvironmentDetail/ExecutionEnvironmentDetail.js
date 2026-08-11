@@ -67,9 +67,7 @@ function ExecutionEnvironmentDetail({
             <span>
               <Popover
                 className="missing-execution-environment"
-                headerContent={
-                  <div>{t`Execution Environment Missing`}</div>
-                }
+                headerContent={<div>{t`Execution Environment Missing`}</div>}
                 bodyContent={
                   <div>
                     <Trans>

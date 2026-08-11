@@ -57,7 +57,9 @@ describe('<CredentialType />', () => {
 
   test('fetches the credential type detail', async () => {
     renderAt('/credential_types/42/details');
-    expect(await screen.findByText('CredentialTypeDetails')).toBeInTheDocument();
+    expect(
+      await screen.findByText('CredentialTypeDetails')
+    ).toBeInTheDocument();
     // real route params are strings (the previous test mocked a number)
     expect(CredentialTypesAPI.readDetail).toHaveBeenCalledWith('42');
   });
@@ -77,7 +79,9 @@ describe('<CredentialType />', () => {
 
   test('redirects the index path to details', async () => {
     const { history } = renderAt('/credential_types/42');
-    expect(await screen.findByText('CredentialTypeDetails')).toBeInTheDocument();
+    expect(
+      await screen.findByText('CredentialTypeDetails')
+    ).toBeInTheDocument();
     await waitFor(() =>
       expect(history.location.pathname).toBe('/credential_types/42/details')
     );

@@ -112,28 +112,28 @@ describe('<CredentialAdd />', () => {
     test('handleSubmit should call the api and redirect to details page', async () => {
       await act(async () => {
         await formProps.onSubmit({
-        user: 1,
-        name: 'foo',
-        description: 'bar',
-        credential_type: '1',
-        inputs: {
-          username: {
-            credential: {
-              id: 1,
-              name: 'Some cred',
+          user: 1,
+          name: 'foo',
+          description: 'bar',
+          credential_type: '1',
+          inputs: {
+            username: {
+              credential: {
+                id: 1,
+                name: 'Some cred',
+              },
+              inputs: {
+                foo: 'bar',
+              },
             },
-            inputs: {
-              foo: 'bar',
-            },
+            password: 'foo',
+            ssh_key_data: 'bar',
+            ssh_public_key_data: 'baz',
+            ssh_key_unlock: 'foobar',
+            become_method: '',
+            become_username: '',
+            become_password: '',
           },
-          password: 'foo',
-          ssh_key_data: 'bar',
-          ssh_public_key_data: 'baz',
-          ssh_key_unlock: 'foobar',
-          become_method: '',
-          become_username: '',
-          become_password: '',
-        },
           passwordPrompts: {
             become_password: true,
           },

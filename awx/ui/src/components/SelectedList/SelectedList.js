@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-	Label, Split as PFSplit,
-	SplitItem
-} from '@patternfly/react-core';
+import { Label, Split as PFSplit, SplitItem } from '@patternfly/react-core';
 
 import styled from 'styled-components';
 import ChipGroup from '../ChipGroup';
@@ -29,7 +26,7 @@ function SelectedList({
   const renderChip =
     renderItemChip ||
     (({ item, removeItem }) => (
-      <Label variant="outline" key={item.id} onClose={removeItem} >
+      <Label variant="outline" key={item.id} onClose={removeItem}>
         {item[displayKey]}
       </Label>
     ));

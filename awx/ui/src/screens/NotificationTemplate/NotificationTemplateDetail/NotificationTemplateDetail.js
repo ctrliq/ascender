@@ -1,10 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
-import {
-  Button,
-  Content,
-  ContentVariants,
-  } from '@patternfly/react-core';
+import { Button, Content, ContentVariants } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 import AlertModal from 'components/AlertModal';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -90,14 +86,10 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
   const renderOptions = (
     <Content component={ContentVariants.ul}>
       {configuration.use_ssl && (
-        <Content component={ContentVariants.li}>
-          {t`Use SSL`}
-        </Content>
+        <Content component={ContentVariants.li}>{t`Use SSL`}</Content>
       )}
       {configuration.use_tls && (
-        <Content component={ContentVariants.li}>
-          {t`Use TLS`}
-        </Content>
+        <Content component={ContentVariants.li}>{t`Use TLS`}</Content>
       )}
     </Content>
   );
@@ -144,11 +136,7 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
   return (
     <CardBody>
       <DetailList gutter="sm">
-        <Detail
-          label={t`Name`}
-          value={template.name}
-          dataCy="nt-detail-name"
-        />
+        <Detail label={t`Name`} value={template.name} dataCy="nt-detail-name" />
         <Detail
           label={t`Description`}
           value={template.description}
@@ -251,11 +239,7 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
             />
             <Detail
               label={t`Disable SSL Verification`}
-              value={
-                configuration.grafana_no_verify_ssl
-                  ? t`True`
-                  : t`False`
-              }
+              value={configuration.grafana_no_verify_ssl ? t`True` : t`False`}
               dataCy="nt-detail-disable-ssl"
             />
           </>
@@ -285,9 +269,7 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
             />
             <Detail
               label={t`SSL Connection`}
-              value={
-                configuration.use_ssl ? t`True` : t`False`
-              }
+              value={configuration.use_ssl ? t`True` : t`False`}
               dataCy="nt-detail-irc-ssl"
             />
           </>
@@ -317,9 +299,7 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
             <Detail
               label={t`Disable SSL Verification`}
               value={
-                configuration.mattermost_no_verify_ssl
-                  ? t`True`
-                  : t`False`
+                configuration.mattermost_no_verify_ssl ? t`True` : t`False`
               }
               dataCy="nt-detail-disable-ssl"
             />
@@ -364,9 +344,7 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
             <Detail
               label={t`Disable SSL Verification`}
               value={
-                configuration.rocketchat_no_verify_ssl
-                  ? t`True`
-                  : t`False`
+                configuration.rocketchat_no_verify_ssl ? t`True` : t`False`
               }
               dataCy="nt-detail-disable-ssl"
             />
@@ -424,9 +402,7 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
             <Detail
               label={t`Disable SSL Verification`}
               value={
-                configuration.disable_ssl_verification
-                  ? t`True`
-                  : t`False`
+                configuration.disable_ssl_verification ? t`True` : t`False`
               }
               dataCy="nt-detail-disable-ssl"
             />

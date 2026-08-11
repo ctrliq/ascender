@@ -155,12 +155,12 @@ function InstanceListItem({
         <Td dataLabel={t`Node Type`}>{instance.node_type}</Td>
         <Td dataLabel={t`Capacity Adjustment`}>
           <SliderHolder data-cy="slider-holder">
-            <div data-cy="cpu-capacity">
-              {t`CPU ${instance.cpu_capacity}`}
-            </div>
+            <div data-cy="cpu-capacity">{t`CPU ${instance.cpu_capacity}`}</div>
             <SliderForks data-cy="slider-forks">
               <div data-cy="number-forks">
-                {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })}
+                {i18n._('{count, plural, one {# fork} other {# forks}}', {
+                  count: forks,
+                })}
               </div>
               <Slider
                 areCustomStepsContinuous
@@ -173,9 +173,7 @@ function InstanceListItem({
                 data-cy="slider"
               />
             </SliderForks>
-            <div data-cy="mem-capacity">
-              {t`RAM ${instance.mem_capacity}`}
-            </div>
+            <div data-cy="mem-capacity">{t`RAM ${instance.mem_capacity}`}</div>
           </SliderHolder>
         </Td>
         <Td
@@ -218,11 +216,7 @@ function InstanceListItem({
               <Detail
                 data-cy="policy-type"
                 label={t`Policy Type`}
-                value={
-                  instance.managed_by_policy
-                    ? t`Auto`
-                    : t`Manual`
-                }
+                value={instance.managed_by_policy ? t`Auto` : t`Manual`}
               />
               <Detail
                 data-cy="last-health-check"

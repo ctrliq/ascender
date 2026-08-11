@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-	Button,
-	Tooltip,
-	DropdownItem,
-} from '@patternfly/react-core';
+import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -27,11 +23,7 @@ function ToolbarSyncSourceButton({ onClick = null }) {
   }
 
   return (
-    <Tooltip
-      key="update"
-      content={t`Sync all sources`}
-      position="top"
-    >
+    <Tooltip key="update" content={t`Sync all sources`} position="top">
       <Button
         ouiaId="sync-all-button"
         onClick={onClick}

@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useLocation,
-  useParams } from 'react-router';
+  useParams,
+} from 'react-router';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
@@ -156,9 +158,7 @@ function Organization({ setBreadcrumb, me }) {
             {organizationError.response.status === 404 && (
               <span>
                 {t`Organization not found.`}{' '}
-                <Link to="/organizations">
-                  {t`View all Organizations.`}
-                </Link>
+                <Link to="/organizations">{t`View all Organizations.`}</Link>
               </span>
             )}
           </ContentError>

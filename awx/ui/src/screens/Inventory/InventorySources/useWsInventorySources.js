@@ -12,23 +12,20 @@ export default function useWsInventorySources(initialSources) {
     setSources(initialSources);
   }, [initialSources]);
 
-  useEffect(
-    () => {
-      if (!lastMessage?.unified_job_id || !lastMessage?.inventory_source_id) {
-        return;
-      }
+  useEffect(() => {
+    if (!lastMessage?.unified_job_id || !lastMessage?.inventory_source_id) {
+      return;
+    }
 
-      const sourceId = lastMessage.inventory_source_id;
-      setSources((currentSources) => {
-        const index = currentSources.findIndex((s) => s.id === sourceId);
-        if (index > -1) {
-          return updateSource(currentSources, index, lastMessage);
-        }
-        return currentSources;
-      });
-    },
-    [lastMessage]
-  );
+    const sourceId = lastMessage.inventory_source_id;
+    setSources((currentSources) => {
+      const index = currentSources.findIndex((s) => s.id === sourceId);
+      if (index > -1) {
+        return updateSource(currentSources, index, lastMessage);
+      }
+      return currentSources;
+    });
+  }, [lastMessage]);
 
   return sources;
 }

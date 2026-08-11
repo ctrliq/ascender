@@ -371,12 +371,12 @@ function JobTemplateForm({
             />
           </FieldWithPrompt>
         )}
-          <FormGroup
-            fieldId="template-playbook"
-            isRequired
-            label={t`Playbook`}
-            labelHelp={<Popover content={helpText.playbook} />}
-          >
+        <FormGroup
+          fieldId="template-playbook"
+          isRequired
+          label={t`Playbook`}
+          labelHelp={<Popover content={helpText.playbook} />}
+        >
           <PlaybookSelect
             onChange={handlePlaybookUpdate}
             projectId={projectField.value?.id}
@@ -541,7 +541,9 @@ function JobTemplateForm({
                 id="template-show-changes"
                 label={diffModeField.value ? t`On` : t`Off`}
                 isChecked={diffModeField.value}
-                onChange={(_event, checked) => diffModeHelpers.setValue(checked)}
+                onChange={(_event, checked) =>
+                  diffModeHelpers.setValue(checked)
+                }
               />
             </FieldWithPrompt>
             <FormFullWidthLayout>

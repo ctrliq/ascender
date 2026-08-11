@@ -25,7 +25,9 @@ function GceFileUploadField() {
       setFieldValue('inputs.ssh_key_data', json.private_key || '');
       setFileError(null);
     } catch {
-      setFileError(t`There was an error parsing the file. Please check the file formatting and try again.`);
+      setFileError(
+        t`There was an error parsing the file. Please check the file formatting and try again.`
+      );
     }
   };
 

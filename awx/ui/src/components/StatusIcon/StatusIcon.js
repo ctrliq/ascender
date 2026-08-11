@@ -1,12 +1,12 @@
 import React from 'react';
 import icons from './icons';
 
-const green = "--pf-t--global--color--status--success--default";
-const red = "--pf-t--global--color--status--danger--default";
-const blue = "--pf-t--global--color--brand--default";
-const lightBlue = "--ascender-status-running-color";
-const orange = "--ascender-status-canceled-color";
-const gray = "--pf-t--global--text--color--300";
+const green = '--pf-t--global--color--status--success--default';
+const red = '--pf-t--global--color--status--danger--default';
+const blue = '--pf-t--global--color--brand--default';
+const lightBlue = '--ascender-status-running-color';
+const orange = '--ascender-status-canceled-color';
+const gray = '--pf-t--global--text--color--300';
 const colors = {
   success: green,
   successful: green,

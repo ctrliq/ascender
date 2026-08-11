@@ -3,11 +3,7 @@ import { useParams, useNavigate } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 
-import {
-	Button,
-	Tooltip,
-	DropdownItem,
-} from '@patternfly/react-core';
+import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
 
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { InventoriesAPI, CredentialTypesAPI } from 'api';

@@ -177,9 +177,7 @@ function NotificationTemplatesList() {
               <HeaderRow qsConfig={QS_CONFIG}>
                 <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
                 <HeaderCell>{t`Status`}</HeaderCell>
-                <HeaderCell sortKey="notification_type">
-                  {t`Type`}
-                </HeaderCell>
+                <HeaderCell sortKey="notification_type">{t`Type`}</HeaderCell>
                 <HeaderCell sortKey="organization">
                   {t`Organization`}
                 </HeaderCell>

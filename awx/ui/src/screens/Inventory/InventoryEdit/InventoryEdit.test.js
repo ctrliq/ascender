@@ -112,7 +112,9 @@ describe('<InventoryEdit />', () => {
     renderWithContexts(<InventoryEdit inventory={mockInventory} />, {
       context: { router: { history } },
     });
-    expect(await screen.findByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    ).toBeInTheDocument();
   });
 
   test('called InventoriesAPI.readInstanceGroups', async () => {
@@ -128,7 +130,9 @@ describe('<InventoryEdit />', () => {
       <InventoryEdit inventory={mockInventory} />,
       { context: { router: { history } } }
     );
-    await user.click(await screen.findByRole('button', { name: 'mock-cancel' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-cancel' })
+    );
     expect(history.location.pathname).toEqual(
       '/inventories/inventory/1/details'
     );
@@ -138,7 +142,9 @@ describe('<InventoryEdit />', () => {
     const { user } = renderWithContexts(
       <InventoryEdit inventory={mockInventory} />
     );
-    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     await waitFor(() =>
       expect(InventoriesAPI.update).toHaveBeenCalledWith(1, {

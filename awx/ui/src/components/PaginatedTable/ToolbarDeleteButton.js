@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
-	Alert,
-	Badge,
-	Button,
-	Tooltip,
-	DropdownItem,
+  Alert,
+  Badge,
+  Button,
+  Tooltip,
+  DropdownItem,
 } from '@patternfly/react-core';
 
 import { useLingui } from '@lingui/react/macro';
@@ -223,7 +223,9 @@ function ToolbarDeleteButton({
             </Button>,
           ]}
         >
-          <div style={{ marginBottom: '0.75rem' }}>{t`This action will delete the following:`}</div>
+          <div
+            style={{ marginBottom: '0.75rem' }}
+          >{t`This action will delete the following:`}</div>
           {itemsToDelete.map((item) => (
             <span key={item.id} id={`item-to-be-deleted-${item.id}`}>
               <strong>{item.name || item.username || item.image}</strong>

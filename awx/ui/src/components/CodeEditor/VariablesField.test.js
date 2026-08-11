@@ -183,7 +183,10 @@ describe('VariablesField', () => {
 
   it('should initialize to JSON if value is JSON', async () => {
     renderWithContexts(
-      <Formik initialValues={{ variables: '{"foo": "bar"}' }} onSubmit={jest.fn()}>
+      <Formik
+        initialValues={{ variables: '{"foo": "bar"}' }}
+        onSubmit={jest.fn()}
+      >
         {() => (
           <VariablesField id="the-field" name="variables" label="Variables" />
         )}

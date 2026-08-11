@@ -18,7 +18,9 @@ describe('<ScreenHeader />', () => {
       <ScreenHeader streamType="all_activity" breadcrumbConfig={config} />,
       {
         context: {
-          router: { history: createMemoryHistory({ initialEntries: [pathname] }) },
+          router: {
+            history: createMemoryHistory({ initialEntries: [pathname] }),
+          },
         },
       }
     );

@@ -8,8 +8,8 @@ import {
 } from './shared';
 
 const HIDDEN_PASSWORD_PROMPTS = [
-  "SSH password: ",
-  "BECOME password[defaults to SSH password]: "
+  'SSH password: ',
+  'BECOME password[defaults to SSH password]: ',
 ];
 
 function JobEvent({
@@ -25,66 +25,66 @@ function JobEvent({
   jobStatus,
   ref,
 }) {
-    const numOutputLines = lineTextHtml?.length || 0;
-    useEffect(() => {
-      const timeout = setTimeout(measure, 0);
-      return () => {
-        clearTimeout(timeout);
-      };
-    }, [numOutputLines, isCollapsed, measure, jobStatus]);
+  const numOutputLines = lineTextHtml?.length || 0;
+  useEffect(() => {
+    const timeout = setTimeout(measure, 0);
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [numOutputLines, isCollapsed, measure, jobStatus]);
 
-    const handleClick = useCallback(() => {
-      const selection = window.getSelection();
-      if (selection && selection.toString().length > 0) {
-        return;
-      }
-      onJobEventClick();
-    }, [onJobEventClick]);
-
-    let toggleLineIndex = -1;
-    if (hasChildren) {
-      lineTextHtml.forEach(({ html }, index) => {
-        if (html) {
-          toggleLineIndex = index;
-        }
-      });
+  const handleClick = useCallback(() => {
+    const selection = window.getSelection();
+    if (selection && selection.toString().length > 0) {
+      return;
     }
-    return !event.stdout ? null : (
-      <div ref={ref} style={style} type={event.type}>
-        {lineTextHtml.map(({ lineNumber, html }, index) => {
-          if (lineNumber < 0) {
-            return null;
-          }
-          if (HIDDEN_PASSWORD_PROMPTS.includes(html)) {
-            return null;
-          }
-          const canToggle = index === toggleLineIndex && !event.isTracebackOnly;
-          return (
-            <JobEventLine
-              onClick={isClickable ? handleClick : undefined}
-              key={`${event.counter}-${lineNumber}`}
-              $isClickable={isClickable}
-            >
-              <JobEventLineToggle
-                canToggle={canToggle}
-                isCollapsed={isCollapsed}
-                onToggle={onToggleCollapsed}
-              />
-              <JobEventLineNumber>
-                {!event.isTracebackOnly ? lineNumber : ''}
-                <JobEventEllipsis isCollapsed={isCollapsed && canToggle} />
-              </JobEventLineNumber>
-              <JobEventLineText
-                type="job_event_line_text"
-                dangerouslySetInnerHTML={{
-                  __html: html,
-                }}
-              />
-            </JobEventLine>
-          );
-        })}
-      </div>
-    );
+    onJobEventClick();
+  }, [onJobEventClick]);
+
+  let toggleLineIndex = -1;
+  if (hasChildren) {
+    lineTextHtml.forEach(({ html }, index) => {
+      if (html) {
+        toggleLineIndex = index;
+      }
+    });
+  }
+  return !event.stdout ? null : (
+    <div ref={ref} style={style} type={event.type}>
+      {lineTextHtml.map(({ lineNumber, html }, index) => {
+        if (lineNumber < 0) {
+          return null;
+        }
+        if (HIDDEN_PASSWORD_PROMPTS.includes(html)) {
+          return null;
+        }
+        const canToggle = index === toggleLineIndex && !event.isTracebackOnly;
+        return (
+          <JobEventLine
+            onClick={isClickable ? handleClick : undefined}
+            key={`${event.counter}-${lineNumber}`}
+            $isClickable={isClickable}
+          >
+            <JobEventLineToggle
+              canToggle={canToggle}
+              isCollapsed={isCollapsed}
+              onToggle={onToggleCollapsed}
+            />
+            <JobEventLineNumber>
+              {!event.isTracebackOnly ? lineNumber : ''}
+              <JobEventEllipsis isCollapsed={isCollapsed && canToggle} />
+            </JobEventLineNumber>
+            <JobEventLineText
+              type="job_event_line_text"
+              dangerouslySetInnerHTML={{
+                __html: html,
+              }}
+            />
+          </JobEventLine>
+        );
+      })}
+    </div>
+  );
 }
 
 export default JobEvent;

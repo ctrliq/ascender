@@ -40,9 +40,7 @@ global.console = {
   // fail tests that log errors.
   // adapted from https://github.com/facebook/jest/issues/6121#issuecomment-708330601
   error: (...args) => {
-    if (
-      !networkRequestUrl
-    ) {
+    if (!networkRequestUrl) {
       hasConsoleError = true;
       error(...args);
     }
@@ -56,7 +54,9 @@ global.console = {
       warnMsg = raw.message;
     }
     if (
-      warnMsg.includes('Formik called `handleChange`, but you forgot to pass an `id` or `name`') ||
+      warnMsg.includes(
+        'Formik called `handleChange`, but you forgot to pass an `id` or `name`'
+      ) ||
       warnMsg.includes('Table headers must have an accessible name')
     ) {
       return;

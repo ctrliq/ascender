@@ -73,7 +73,8 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
       </div>
       {useCustomField.value && (
         <SubFormLayout>
-          <Content component="p"
+          <Content
+            component="p"
             className="pf-v6-c-content"
             css="margin-bottom: var(--pf-v6-c-content--MarginBottom)"
           >

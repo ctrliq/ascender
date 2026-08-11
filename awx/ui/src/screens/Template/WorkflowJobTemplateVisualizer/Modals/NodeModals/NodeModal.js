@@ -5,10 +5,10 @@ import { useLingui } from '@lingui/react/macro';
 import { Formik, useFormikContext } from 'formik';
 import * as yaml from 'js-yaml';
 import {
-	Button,
-	Form,
-	WizardFooterWrapper,
-	useWizardContext,
+  Button,
+  Form,
+  WizardFooterWrapper,
+  useWizardContext,
 } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
@@ -346,7 +346,6 @@ const NodeModalInner = ({ title, ...rest }) => {
         resourceDefaultCredentials: defaultCredentials,
         labels: defaultLabels,
       };
-
     }, [values.nodeResource, values.nodeType]),
     {}
   );

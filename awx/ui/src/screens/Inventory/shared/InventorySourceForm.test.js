@@ -74,9 +74,7 @@ describe('<InventorySourceForm />', () => {
     // ExecutionEnvironmentLookup renders a FormGroup labelled "Execution
     // Environment"
     expect(screen.getByText('Execution Environment')).toBeInTheDocument();
-    expect(
-      screen.queryByText('Ansible Environment')
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Ansible Environment')).not.toBeInTheDocument();
   });
 
   test('should display subform when source dropdown has a value', async () => {

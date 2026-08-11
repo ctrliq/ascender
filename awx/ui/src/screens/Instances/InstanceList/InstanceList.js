@@ -229,9 +229,7 @@ function InstanceList() {
                   {t`Name`}
                 </HeaderCell>
                 <HeaderCell sortKey="errors">{t`Status`}</HeaderCell>
-                <HeaderCell sortKey="node_type">
-                  {t`Node Type`}
-                </HeaderCell>
+                <HeaderCell sortKey="node_type">{t`Node Type`}</HeaderCell>
                 <HeaderCell>{t`Capacity Adjustment`}</HeaderCell>
                 <HeaderCell>{t`Used Capacity`}</HeaderCell>
                 <HeaderCell>{t`Actions`}</HeaderCell>

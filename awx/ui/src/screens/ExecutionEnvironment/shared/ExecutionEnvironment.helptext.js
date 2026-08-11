@@ -6,7 +6,8 @@ function getHelpText(t) {
     image: (
       <span>
         <Trans>
-          The full image location, including the container registry, image name, and version tag.
+          The full image location, including the container registry, image name,
+          and version tag.
         </Trans>
         <br />
         <br />

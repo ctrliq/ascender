@@ -4,10 +4,7 @@
 
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router';
-import {
-	Label, Button,
-	Tooltip
-} from '@patternfly/react-core';
+import { Label, Button, Tooltip } from '@patternfly/react-core';
 
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
@@ -135,7 +132,12 @@ function TemplateListItem({
                 content={t`Resources are missing from this template.`}
                 position="right"
               >
-                <ExclamationTriangleIcon style={{ color: 'var(--pf-t--global--color--status--danger--default)' }} />
+                <ExclamationTriangleIcon
+                  style={{
+                    color:
+                      'var(--pf-t--global--color--status--danger--default)',
+                  }}
+                />
               </Tooltip>
             </span>
           )}
@@ -156,7 +158,8 @@ function TemplateListItem({
             visible={template.type === 'workflow_job_template'}
             tooltip={t`Visualizer`}
           >
-            <Button icon={<ProjectDiagramIcon />}
+            <Button
+              icon={<ProjectDiagramIcon />}
               ouiaId={`${template.id}-visualizer-button`}
               id={`template-action-visualizer-${template.id}`}
               isDisabled={isDisabled}
@@ -164,7 +167,7 @@ function TemplateListItem({
               variant="plain"
               component={Link}
               to={`/templates/workflow_job_template/${template.id}/visualizer`}
-             />
+            />
           </ActionItem>
           <ActionItem
             visible={template.summary_fields.user_capabilities.start}
@@ -172,14 +175,15 @@ function TemplateListItem({
           >
             <LaunchButton resource={template}>
               {({ handleLaunch, isLaunching }) => (
-                <Button icon={<RocketIcon />}
+                <Button
+                  icon={<RocketIcon />}
                   ouiaId={`${template.id}-launch-button`}
                   id={`template-action-launch-${template.id}`}
                   isDisabled={isDisabled || isLaunching}
                   aria-label={t`Launch template`}
                   variant="plain"
                   onClick={handleLaunch}
-                 />
+                />
               )}
             </LaunchButton>
           </ActionItem>
@@ -187,7 +191,8 @@ function TemplateListItem({
             visible={template.summary_fields.user_capabilities.edit}
             tooltip={t`Edit Template`}
           >
-            <Button icon={<PencilAltIcon />}
+            <Button
+              icon={<PencilAltIcon />}
               ouiaId={`${template.id}-edit-button`}
               id={`template-action-edit-${template.id}`}
               isDisabled={isDisabled}
@@ -195,7 +200,7 @@ function TemplateListItem({
               variant="plain"
               component={Link}
               to={`/templates/${template.type}/${template.id}/edit`}
-             />
+            />
           </ActionItem>
           <ActionItem
             tooltip={t`Copy Template`}
@@ -309,7 +314,8 @@ function TemplateListItem({
                       ouiaId={`template-${template.id}-label-chips`}
                     >
                       {summaryFields.labels.results.map((l) => (
-                        <Label variant="outline"
+                        <Label
+                          variant="outline"
                           key={l.id}
 
                           data-ouia-component-id={`label-${l.id}-chip`}

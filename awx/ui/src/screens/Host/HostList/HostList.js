@@ -169,9 +169,7 @@ function HostList() {
             <HeaderRow qsConfig={QS_CONFIG}>
               <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
               <HeaderCell>{t`Activity`}</HeaderCell>
-              <HeaderCell sortKey="description">
-                {t`Description`}
-              </HeaderCell>
+              <HeaderCell sortKey="description">{t`Description`}</HeaderCell>
               <HeaderCell>{t`Inventory`}</HeaderCell>
               <HeaderCell>{t`Actions`}</HeaderCell>
             </HeaderRow>
@@ -220,9 +218,7 @@ function HostList() {
             />
           )}
           emptyStateControls={
-            canAdd ? (
-              <ToolbarAddButton key="add" linkTo="/hosts/add" />
-            ) : null
+            canAdd ? <ToolbarAddButton key="add" linkTo="/hosts/add" /> : null
           }
         />
       </Card>

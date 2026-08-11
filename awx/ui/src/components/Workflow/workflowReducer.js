@@ -276,7 +276,7 @@ function deleteLink(state) {
   const { links, linkToDelete } = state;
   const newLinks = [...links];
 
-  for (let i = newLinks.length; i--; ) {
+  for (let i = newLinks.length; i--;) {
     const link = newLinks[i];
 
     if (
@@ -355,7 +355,7 @@ function removeLinksFromDeletedNode(
   children,
   parents
 ) {
-  for (let i = newLinks.length; i--; ) {
+  for (let i = newLinks.length; i--;) {
     const link = newLinks[i];
 
     if (!linkParentMapping[link.target.id]) {

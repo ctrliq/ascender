@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect } from 'react';
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useParams,
-  useLocation } from 'react-router';
+  useLocation,
+} from 'react-router';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
@@ -97,9 +99,7 @@ function SmartInventory({ setBreadcrumb }) {
             {contentError?.response?.status === 404 && (
               <span>
                 {t`Smart Inventory not found.`}{' '}
-                <Link to="/inventories">
-                  {t`View all Inventories.`}
-                </Link>
+                <Link to="/inventories">{t`View all Inventories.`}</Link>
               </span>
             )}
           </ContentError>

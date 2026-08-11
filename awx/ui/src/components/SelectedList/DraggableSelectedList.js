@@ -19,10 +19,7 @@ const RemoveActionSection = styled(DataListAction)`
   }
 `;
 
-function DraggableSelectedList({
-  selected = [],
-  onRemove = () => null,
-}) {
+function DraggableSelectedList({ selected = [], onRemove = () => null }) {
   const { t } = useLingui();
 
   const removeItem = (item) => {
@@ -36,10 +33,7 @@ function DraggableSelectedList({
   const orderedList = selected.map((item) => item?.name);
 
   return (
-    <DataList
-      aria-label={t`Selected items list.`}
-      data-cy="draggable-list"
-    >
+    <DataList aria-label={t`Selected items list.`} data-cy="draggable-list">
       {orderedList.map((label, index) => {
         const rowPosition = index + 1;
         return (
@@ -52,16 +46,14 @@ function DraggableSelectedList({
                   </DataListCell>,
                 ]}
               />
-              <RemoveActionSection
-                aria-label={t`Actions`}
-                id={rowPosition}
-              >
-                <Button icon={<TimesIcon />}
+              <RemoveActionSection aria-label={t`Actions`} id={rowPosition}>
+                <Button
+                  icon={<TimesIcon />}
                   onClick={() => removeItem(label)}
                   variant="plain"
                   aria-label={t`Remove`}
                   ouiaId={`draggable-list-remove-${label}`}
-                 />
+                />
               </RemoveActionSection>
             </DataListItemRow>
           </DataListItem>

@@ -66,7 +66,11 @@ describe('<NotificationList />', () => {
     });
 
     ({ container, user } = renderWithContexts(
-      <NotificationList id={1} canToggleNotifications apiModel={JobTemplatesAPI} />
+      <NotificationList
+        id={1}
+        canToggleNotifications
+        apiModel={JobTemplatesAPI}
+      />
     ));
 
     await waitFor(() =>

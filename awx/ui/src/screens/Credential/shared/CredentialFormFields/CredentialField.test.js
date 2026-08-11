@@ -20,7 +20,11 @@ jest.mock('react-router', () => ({
   }),
 }));
 
-function renderField(initialInputs, type = credentialType, options = fieldOptions) {
+function renderField(
+  initialInputs,
+  type = credentialType,
+  options = fieldOptions
+) {
   return renderWithContexts(
     <Formik
       initialValues={{
@@ -83,9 +87,9 @@ describe('<CredentialField />', () => {
     await user.click(replaceButton);
     expect(container.querySelector('#credential-password')).not.toBeDisabled();
     expect(container.querySelector('#credential-password')).toHaveValue('');
-    expect(
-      container.querySelector('#credential-password')
-    ).not.toHaveAttribute('placeholder');
+    expect(container.querySelector('#credential-password')).not.toHaveAttribute(
+      'placeholder'
+    );
 
     // revert back to the encrypted/disabled state
     await user.click(

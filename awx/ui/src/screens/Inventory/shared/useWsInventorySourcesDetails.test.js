@@ -14,7 +14,9 @@ function Test({ inventorySource }) {
 }
 
 function readResult(container) {
-  return JSON.parse(container.querySelector('[data-testid="result"]').textContent);
+  return JSON.parse(
+    container.querySelector('[data-testid="result"]').textContent
+  );
 }
 
 describe('useWsInventorySourceDetails', () => {

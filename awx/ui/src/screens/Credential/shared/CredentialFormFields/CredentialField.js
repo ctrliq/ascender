@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useLocation } from 'react-router';
 import { useField, useFormikContext } from 'formik';
@@ -11,7 +10,8 @@ import {
   FormGroup,
   InputGroup,
   TextInput,
-  Tooltip, InputGroupItem,
+  Tooltip,
+  InputGroupItem,
   FormHelperText,
   HelperText,
   HelperTextItem,
@@ -49,13 +49,10 @@ function CredentialInput({
         !passwordPromptsField.value && (
           <Tooltip
             id={`credential-${fieldOptions.id}-replace-tooltip`}
-            content={
-              meta.value !== meta.initialValue
-                ? t`Revert`
-                : t`Replace`
-            }
+            content={meta.value !== meta.initialValue ? t`Revert` : t`Replace`}
           >
-            <Button icon={<PficonHistoryIcon />}
+            <Button
+              icon={<PficonHistoryIcon />}
               id={`credential-${fieldOptions.id}-replace-button`}
               variant={ButtonVariant.control}
               aria-label={
@@ -70,7 +67,7 @@ function CredentialInput({
                   helpers.setValue('', false);
                 }
               }}
-             />
+            />
           </Tooltip>
         )}
     </>
@@ -109,21 +106,14 @@ function CredentialInput({
       return (
         <InputGroup>
           {RevertReplaceButton}
-          <InputGroupItem isFill><FileUpload
-            {...fileUploadProps}
-            {...rest}
-          /></InputGroupItem>
+          <InputGroupItem isFill>
+            <FileUpload {...fileUploadProps} {...rest} />
+          </InputGroupItem>
         </InputGroup>
       );
     }
 
-    return (
-      <FileUpload
-        {...fileUploadProps}
-        {...rest}
-        isDisabled={false}
-      />
-    );
+    return <FileUpload {...fileUploadProps} {...rest} isDisabled={false} />;
   }
 
   if (fieldOptions.secret) {
@@ -203,9 +193,7 @@ function CredentialField({ credentialType, fieldOptions }) {
         {!isValid && (
           <FormHelperText>
             <HelperText>
-              <HelperTextItem variant="error">
-                {meta.error}
-              </HelperTextItem>
+              <HelperTextItem variant="error">{meta.error}</HelperTextItem>
             </HelperText>
           </FormHelperText>
         )}

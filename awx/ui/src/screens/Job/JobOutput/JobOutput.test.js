@@ -116,7 +116,9 @@ describe('<JobOutput />', () => {
     });
     expect(JobsAPI.destroy).toHaveBeenCalledTimes(1);
 
-    await user.click(within(errorModal).getByRole('button', { name: /close/i }));
+    await user.click(
+      within(errorModal).getByRole('button', { name: /close/i })
+    );
     await waitFor(() =>
       expect(
         screen.queryByRole('dialog', { name: /Job Delete Error/ })
@@ -141,7 +143,9 @@ describe('<JobOutput />', () => {
     const { container } = renderWithContexts(<JobOutput job={mockJob} />);
     // ContentError renders a PF empty state.
     await waitFor(() =>
-      expect(container.querySelector('.pf-v6-c-empty-state')).toBeInTheDocument()
+      expect(
+        container.querySelector('.pf-v6-c-empty-state')
+      ).toBeInTheDocument()
     );
   });
 
@@ -157,9 +161,7 @@ describe('<JobOutput />', () => {
     renderWithContexts(<JobOutput job={{ ...mockJob, status: 'failed' }} />);
     // EmptyOutput renders a PF empty state once the (empty) load settles.
     await waitFor(() =>
-      expect(
-        document.querySelector('.pf-v6-c-empty-state')
-      ).toBeInTheDocument()
+      expect(document.querySelector('.pf-v6-c-empty-state')).toBeInTheDocument()
     );
   });
 

@@ -125,9 +125,7 @@ function InstanceListenerAddressList({ setBreadcrumb }) {
             <HeaderCell sortKey="address">{t`Address`}</HeaderCell>
             <HeaderCell sortKey="port">{t`Port`}</HeaderCell>
             <HeaderCell sortKey="protocol">{t`Protocol`}</HeaderCell>
-            <HeaderCell sortKey="canonical">
-              {t`Canonical`}
-            </HeaderCell>
+            <HeaderCell sortKey="canonical">{t`Canonical`}</HeaderCell>
           </HeaderRow>
         }
         renderToolbar={(props) => (

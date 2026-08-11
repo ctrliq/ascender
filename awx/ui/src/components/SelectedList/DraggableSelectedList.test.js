@@ -16,10 +16,7 @@ describe('<DraggableSelectedList />', () => {
       },
     ];
     renderWithContexts(
-      <DraggableSelectedList
-        selected={mockSelected}
-        onRemove={() => {}}
-      />
+      <DraggableSelectedList selected={mockSelected} onRemove={() => {}} />
     );
     const rows = screen.getAllByRole('listitem');
     expect(rows).toHaveLength(2);
@@ -29,10 +26,7 @@ describe('<DraggableSelectedList />', () => {
 
   test('should not render when selected list is empty', () => {
     renderWithContexts(
-      <DraggableSelectedList
-        selected={[]}
-        onRemove={() => {}}
-      />
+      <DraggableSelectedList selected={[]} onRemove={() => {}} />
     );
     expect(screen.queryByRole('list')).not.toBeInTheDocument();
   });
@@ -67,10 +61,7 @@ describe('<DraggableSelectedList />', () => {
       },
     ];
     renderWithContexts(
-      <DraggableSelectedList
-        selected={mockSelected}
-        onRemove={() => {}}
-      />
+      <DraggableSelectedList selected={mockSelected} onRemove={() => {}} />
     );
 
     const removeButtons = screen.getAllByRole('button', { name: 'Remove' });

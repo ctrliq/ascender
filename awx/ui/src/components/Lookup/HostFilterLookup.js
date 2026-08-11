@@ -5,21 +5,19 @@ import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import { SearchIcon } from '@patternfly/react-icons';
 import {
-	Label, Alert as PFAlert,
-	Button,
-	ButtonVariant,
-	FormGroup,
-	FormHelperText,
-	HelperText,
-	HelperTextItem,
-	InputGroup,
-	Tooltip,
-	InputGroupItem
+  Label,
+  Alert as PFAlert,
+  Button,
+  ButtonVariant,
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  InputGroup,
+  Tooltip,
+  InputGroupItem,
 } from '@patternfly/react-core';
-import {
-
-	Modal
-} from '@patternfly/react-core/deprecated';
+import { Modal } from '@patternfly/react-core/deprecated';
 import { HostsAPI } from 'api';
 import { getQSConfig, mergeParams, parseQueryString } from 'util/qs';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
@@ -226,11 +224,12 @@ function HostFilterLookup({
     onChange(hostFilterString);
     closeModal();
     navigate(
-{
-      pathname: `${location.pathname}`,
-      search: '',
-    },
-    { replace: true });
+      {
+        pathname: `${location.pathname}`,
+        search: '',
+      },
+      { replace: true }
+    );
   };
 
   const removeHostFilter = (filter) => {
@@ -277,11 +276,12 @@ function HostFilterLookup({
 
   const handleOpenModal = () => {
     navigate(
-{
-      pathname: `${location.pathname}`,
-      search: queryString,
-    },
-    { replace: true });
+      {
+        pathname: `${location.pathname}`,
+        search: queryString,
+      },
+      { replace: true }
+    );
     fetchHosts(organizationId);
     toggleModal();
   };
@@ -289,62 +289,69 @@ function HostFilterLookup({
   const handleClose = () => {
     closeModal();
     navigate(
-{
-      pathname: `${location.pathname}`,
-      search: '',
-    },
-    { replace: true });
+      {
+        pathname: `${location.pathname}`,
+        search: '',
+      },
+      { replace: true }
+    );
   };
 
   const renderLookup = () => (
     <InputGroup onBlur={onBlur}>
-      <InputGroupItem><Button icon={<SearchIcon />}
-        ouiaId="host-filter-search-button"
-        aria-label={t`Search`}
-        id="host-filter"
-        isDisabled={isDisabled}
-        onClick={handleOpenModal}
-        variant={ButtonVariant.control}
-       /></InputGroupItem>
-      <InputGroupItem><ChipHolder className="pf-v6-c-form-control">
-        {searchColumns.map(({ name, key }) => (
-          <ChipGroup
-            categoryName={name}
-            key={name}
-            numChips={5}
-            totalChips={chips[key]?.chips?.length || 0}
-            ouiaId="host-filter-search-chips"
-          >
-            {chips[key]?.chips?.map((chip) => (
-              <Label variant="outline" key={chip.key} >
-                {chip.node}
-              </Label>
-            ))}
-          </ChipGroup>
-        ))}
-        {/* Parse advanced search chips */}
-        {Object.keys(chips).length > 0 &&
-          Object.keys(chips)
-            .filter((val) => chips[val].chips.length > 0)
-            .filter(
-              (val) => searchColumns.map((val2) => val2.key).indexOf(val) === -1
-            )
-            .map((leftoverKey) => (
-              <ChipGroup
-                categoryName={chips[leftoverKey].key}
-                key={chips[leftoverKey].key}
-                numChips={5}
-                totalChips={chips[leftoverKey]?.chips?.length || 0}
-                ouiaId="host-filter-advanced-search-chips"
-              >
-                {chips[leftoverKey]?.chips?.map((chip) => (
-                  <Label variant="outline" key={chip.key} >
-                    {chip.node}
-                  </Label>
-                ))}
-              </ChipGroup>
-            ))}
-      </ChipHolder></InputGroupItem>
+      <InputGroupItem>
+        <Button
+          icon={<SearchIcon />}
+          ouiaId="host-filter-search-button"
+          aria-label={t`Search`}
+          id="host-filter"
+          isDisabled={isDisabled}
+          onClick={handleOpenModal}
+          variant={ButtonVariant.control}
+        />
+      </InputGroupItem>
+      <InputGroupItem>
+        <ChipHolder className="pf-v6-c-form-control">
+          {searchColumns.map(({ name, key }) => (
+            <ChipGroup
+              categoryName={name}
+              key={name}
+              numChips={5}
+              totalChips={chips[key]?.chips?.length || 0}
+              ouiaId="host-filter-search-chips"
+            >
+              {chips[key]?.chips?.map((chip) => (
+                <Label variant="outline" key={chip.key}>
+                  {chip.node}
+                </Label>
+              ))}
+            </ChipGroup>
+          ))}
+          {/* Parse advanced search chips */}
+          {Object.keys(chips).length > 0 &&
+            Object.keys(chips)
+              .filter((val) => chips[val].chips.length > 0)
+              .filter(
+                (val) =>
+                  searchColumns.map((val2) => val2.key).indexOf(val) === -1
+              )
+              .map((leftoverKey) => (
+                <ChipGroup
+                  categoryName={chips[leftoverKey].key}
+                  key={chips[leftoverKey].key}
+                  numChips={5}
+                  totalChips={chips[leftoverKey]?.chips?.length || 0}
+                  ouiaId="host-filter-advanced-search-chips"
+                >
+                  {chips[leftoverKey]?.chips?.map((chip) => (
+                    <Label variant="outline" key={chip.key}>
+                      {chip.node}
+                    </Label>
+                  ))}
+                </ChipGroup>
+              ))}
+        </ChipHolder>
+      </InputGroupItem>
     </InputGroup>
   );
 
@@ -429,9 +436,7 @@ function HostFilterLookup({
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
                 <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-                <HeaderCell sortKey="description">
-                  {t`Description`}
-                </HeaderCell>
+                <HeaderCell sortKey="description">{t`Description`}</HeaderCell>
                 <HeaderCell>{t`Inventory`}</HeaderCell>
               </HeaderRow>
             }
@@ -455,9 +460,7 @@ function HostFilterLookup({
       {!isValid && (
         <FormHelperText>
           <HelperText>
-            <HelperTextItem variant="error">
-              {helperTextInvalid}
-            </HelperTextItem>
+            <HelperTextItem variant="error">{helperTextInvalid}</HelperTextItem>
           </HelperText>
         </FormHelperText>
       )}

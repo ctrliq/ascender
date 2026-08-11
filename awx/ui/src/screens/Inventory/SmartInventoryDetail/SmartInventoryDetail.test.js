@@ -166,9 +166,7 @@ describe('<SmartInventoryDetail />', () => {
         },
       };
 
-      renderWithContexts(
-        <SmartInventoryDetail inventory={readOnlySmartInv} />
-      );
+      renderWithContexts(<SmartInventoryDetail inventory={readOnlySmartInv} />);
 
       await screen.findByText('Smart Inv');
       expect(

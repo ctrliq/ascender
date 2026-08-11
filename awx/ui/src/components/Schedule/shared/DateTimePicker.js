@@ -45,9 +45,7 @@ function DateTimePicker({ dateFieldName, timeFieldName, label }) {
       <DateTimeGroup>
         <DatePicker
           aria-label={
-            dateFieldName.startsWith('start')
-              ? t`Start date`
-              : t`End date`
+            dateFieldName.startsWith('start') ? t`Start date` : t`End date`
           }
           {...dateField}
           value={dateField.value.split('T')[0]}
@@ -57,9 +55,7 @@ function DateTimePicker({ dateFieldName, timeFieldName, label }) {
           placeholder="hh:mm AM/PM"
           stepMinutes={15}
           aria-label={
-            timeFieldName.startsWith('start')
-              ? t`Start time`
-              : t`End time`
+            timeFieldName.startsWith('start') ? t`Start time` : t`End time`
           }
           time={timeField.value}
           {...timeField}
@@ -69,18 +65,14 @@ function DateTimePicker({ dateFieldName, timeFieldName, label }) {
       {dateMeta.touched && dateMeta.error && (
         <FormHelperText>
           <HelperText>
-            <HelperTextItem variant="error">
-              {dateMeta.error}
-            </HelperTextItem>
+            <HelperTextItem variant="error">{dateMeta.error}</HelperTextItem>
           </HelperText>
         </FormHelperText>
       )}
       {timeMeta.touched && timeMeta.error && (
         <FormHelperText>
           <HelperText>
-            <HelperTextItem variant="error">
-              {timeMeta.error}
-            </HelperTextItem>
+            <HelperTextItem variant="error">{timeMeta.error}</HelperTextItem>
           </HelperText>
         </FormHelperText>
       )}

@@ -32,14 +32,12 @@ function InstanceGroups() {
         [`/instance_groups/${instanceGroups.id}/details`]: t`Details`,
         [`/instance_groups/${instanceGroups.id}/instances`]: t`Instances`,
         [`/instance_groups/${instanceGroups.id}/instances/${instance?.id}`]: `${instance?.hostname}`,
-        [`/instance_groups/${instanceGroups.id}/instances/${instance?.id}/details`]:
-          t`Instance details`,
+        [`/instance_groups/${instanceGroups.id}/instances/${instance?.id}/details`]: t`Instance details`,
         [`/instance_groups/${instanceGroups.id}/jobs`]: t`Jobs`,
         [`/instance_groups/${instanceGroups.id}/edit`]: t`Edit details`,
         [`/instance_groups/${instanceGroups.id}`]: `${instanceGroups.name}`,
 
-        [`/instance_groups/container_group/${instanceGroups.id}/details`]:
-          t`Details`,
+        [`/instance_groups/container_group/${instanceGroups.id}/details`]: t`Details`,
         [`/instance_groups/container_group/${instanceGroups.id}/jobs`]: t`Jobs`,
         [`/instance_groups/container_group/${instanceGroups.id}/edit`]: t`Edit details`,
         [`/instance_groups/container_group/${instanceGroups.id}`]: `${instanceGroups.name}`,
@@ -59,19 +57,13 @@ function InstanceGroups() {
         breadcrumbConfig={breadcrumbConfig}
       />
       <Routes>
-        <Route
-          path="container_group/add"
-          element={<ContainerGroupAdd />}
-        />
+        <Route path="container_group/add" element={<ContainerGroupAdd />} />
         {/* /* so the nested <ContainerGroup> route tree can match the rest */}
         <Route
           path="container_group/:id/*"
           element={<ContainerGroup setBreadcrumb={buildBreadcrumbConfig} />}
         />
-        <Route
-          path="add"
-          element={<InstanceGroupAdd />}
-        />
+        <Route path="add" element={<InstanceGroupAdd />} />
         {/* /* so the nested <InstanceGroup> route tree can match the rest */}
         <Route
           path=":id/*"

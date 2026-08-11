@@ -146,9 +146,7 @@ describe('<InstanceDetails/>', () => {
     expect(InstancesAPI.readHealthCheckDetail).toHaveBeenCalledWith(1);
     expect(InstancesAPI.readDetail).toHaveBeenCalledWith(1);
 
-    expect(
-      screen.getByRole('button', { name: 'Disassociate' })
-    ).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Disassociate' })).toBeEnabled();
     expect(
       screen.getByRole('button', { name: 'Run health check' })
     ).toBeEnabled();
@@ -230,23 +228,22 @@ describe('<InstanceDetails/>', () => {
     expect(screen.queryByText('Error!')).not.toBeInTheDocument();
   });
 
-  test.each([
-    ['hybrid'],
-    ['hop'],
-    ['control'],
-  ])('hide health check button for %s (non-execution) nodes', async (nodeType) => {
-    setMe({ is_superuser: true });
-    InstancesAPI.readDetail.mockResolvedValue(
-      instanceDetail({ node_type: nodeType })
-    );
-    renderDetails();
-    // The toggle always renders once details load; use it as a ready signal.
-    await screen.findByRole('switch', { name: 'Toggle instance' });
+  test.each([['hybrid'], ['hop'], ['control']])(
+    'hide health check button for %s (non-execution) nodes',
+    async (nodeType) => {
+      setMe({ is_superuser: true });
+      InstancesAPI.readDetail.mockResolvedValue(
+        instanceDetail({ node_type: nodeType })
+      );
+      renderDetails();
+      // The toggle always renders once details load; use it as a ready signal.
+      await screen.findByRole('switch', { name: 'Toggle instance' });
 
-    expect(
-      screen.queryByRole('button', { name: 'Run health check' })
-    ).not.toBeInTheDocument();
-  });
+      expect(
+        screen.queryByRole('button', { name: 'Run health check' })
+      ).not.toBeInTheDocument();
+    }
+  );
 
   test('should call disassociate', async () => {
     setMe({ is_superuser: true });

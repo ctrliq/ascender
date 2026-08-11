@@ -2,27 +2,18 @@ import React, { useState, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { GripVerticalIcon } from '@patternfly/react-icons';
 import {
-	Label,
-	LabelGroup,
-	MenuToggle,
-	Select,
-	SelectList,
-	SelectOption,
-	TextInput,
-	TextArea,
-	Button
+  Label,
+  LabelGroup,
+  MenuToggle,
+  Select,
+  SelectList,
+  SelectOption,
+  TextInput,
+  TextArea,
+  Button,
 } from '@patternfly/react-core';
-import {
-	Modal
-} from '@patternfly/react-core/deprecated';
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-} from '@patternfly/react-table';
+import { Modal } from '@patternfly/react-core/deprecated';
+import { Table, Thead, Tbody, Tr, Th, Td } from '@patternfly/react-table';
 
 function SurveyReorderModal({
   questions,
@@ -255,9 +246,7 @@ function SurveyReorderModal({
           <Tr ouiaId="survey-order-table-header">
             <Th dataLabel={t`Order`}>{t`Order`}</Th>
             <Th dataLabel={t`Name`}>{t`Name`}</Th>
-            <Th dataLabel={t`Default Answer(s)`}>
-              {t`Default Answer(s)`}
-            </Th>
+            <Th dataLabel={t`Default Answer(s)`}>{t`Default Answer(s)`}</Th>
           </Tr>
         </Thead>
         <Tbody onDragOver={onDragOver} onDragLeave={onDragLeave} ref={ref}>
@@ -277,9 +266,7 @@ function SurveyReorderModal({
               <Td dataLabel={t`Name`} aria-label={q.question_name}>
                 {q.question_name}
               </Td>
-              <Td dataLabel={t`Default Answer(s)`}>
-                {defaultAnswer(q)}
-              </Td>
+              <Td dataLabel={t`Default Answer(s)`}>{defaultAnswer(q)}</Td>
             </Tr>
           ))}
         </Tbody>

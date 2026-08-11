@@ -34,7 +34,9 @@ function MiscAuthentication() {
             path="*"
             element={
               <ContentError isNotFound>
-                <Link to={`${baseURL}/details`}>{t`View Miscellaneous Authentication settings`}</Link>
+                <Link
+                  to={`${baseURL}/details`}
+                >{t`View Miscellaneous Authentication settings`}</Link>
               </ContentError>
             }
           />

@@ -81,7 +81,9 @@ function VisualizerToolbar({
             <ActionButton
               aria-label={t`Toggle legend`}
               id="visualizer-toggle-legend"
-              className={totalNodes > 0 && showLegend ? 'pf-m-active' : undefined}
+              className={
+                totalNodes > 0 && showLegend ? 'pf-m-active' : undefined
+              }
               isDisabled={totalNodes === 0}
               onClick={() => dispatch({ type: 'TOGGLE_LEGEND' })}
               variant="plain"
@@ -93,7 +95,9 @@ function VisualizerToolbar({
             <ActionButton
               aria-label={t`Toggle tools`}
               id="visualizer-toggle-tools"
-              className={totalNodes > 0 && showTools ? 'pf-m-active' : undefined}
+              className={
+                totalNodes > 0 && showTools ? 'pf-m-active' : undefined
+              }
               isDisabled={totalNodes === 0}
               onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })}
               variant="plain"
@@ -101,10 +105,7 @@ function VisualizerToolbar({
               <WrenchIcon />
             </ActionButton>
           </Tooltip>
-          <Tooltip
-            content={t`Workflow documentation`}
-            position="bottom"
-          >
+          <Tooltip content={t`Workflow documentation`} position="bottom">
             <ActionButton
               aria-label={t`Workflow documentation`}
               id="visualizer-documentation"
@@ -121,10 +122,7 @@ function VisualizerToolbar({
           </Tooltip>
           {template.summary_fields?.user_capabilities?.start && (
             <Tooltip content={t`Launch workflow`} position="bottom">
-              <LaunchButton
-                resource={template}
-                aria-label={t`Launch workflow`}
-              >
+              <LaunchButton resource={template} aria-label={t`Launch workflow`}>
                 {({ handleLaunch, isLaunching }) => (
                   <ActionButton
                     id="visualizer-launch"
@@ -142,10 +140,7 @@ function VisualizerToolbar({
           )}
           {!readOnly && (
             <>
-              <Tooltip
-                content={t`Delete all nodes`}
-                position="bottom"
-              >
+              <Tooltip content={t`Delete all nodes`} position="bottom">
                 <ActionButton
                   id="visualizer-delete-all"
                   aria-label={t`Delete all nodes`}
@@ -173,13 +168,14 @@ function VisualizerToolbar({
               </Button>
             </>
           )}
-          <Button icon={<TimesIcon />}
+          <Button
+            icon={<TimesIcon />}
             ouiaId="visualizer-close-button"
             id="visualizer-close"
             aria-label={t`Close`}
             onClick={onClose}
             variant="plain"
-           />
+          />
         </div>
       </div>
     </div>

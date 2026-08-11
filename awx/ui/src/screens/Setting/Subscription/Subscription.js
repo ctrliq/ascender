@@ -18,10 +18,7 @@ function Subscription() {
             index
             element={<Navigate to={`${baseURL}/details`} replace />}
           />
-          <Route
-            path="details"
-            element={<SubscriptionDetail />}
-          />
+          <Route path="details" element={<SubscriptionDetail />} />
           <Route path="edit" element={<SubscriptionEdit />} />
           <Route
             path="*"

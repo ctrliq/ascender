@@ -15,7 +15,9 @@ describe('WorkflowTools', () => {
       />
     );
     expect(
-      container.querySelector('[data-ouia-component-id="visualizer-zoom-in-button"]')
+      container.querySelector(
+        '[data-ouia-component-id="visualizer-zoom-in-button"]'
+      )
     ).toBeInTheDocument();
   });
   test('clicking zoom/pan buttons passes callback correct values', async () => {

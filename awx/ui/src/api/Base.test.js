@@ -2,7 +2,10 @@ import Base from './Base';
 
 function mockFetchResponse(overrides = {}) {
   const headers = new Headers(overrides.headers || {});
-  const text = overrides.text !== undefined ? overrides.text : JSON.stringify(overrides.json || {});
+  const text =
+    overrides.text !== undefined
+      ? overrides.text
+      : JSON.stringify(overrides.json || {});
   return {
     ok: overrides.ok !== undefined ? overrides.ok : true,
     status: overrides.status || 200,
@@ -123,10 +126,12 @@ describe('defaultHttp (fetch-based client)', () => {
 
   beforeEach(() => {
     global.fetch = jest.fn(() =>
-      Promise.resolve(mockFetchResponse({
-        headers: { 'content-type': 'application/json' },
-        json: { results: [] },
-      }))
+      Promise.resolve(
+        mockFetchResponse({
+          headers: { 'content-type': 'application/json' },
+          json: { results: [] },
+        })
+      )
     );
     // Clear any cookies from previous tests
     document.cookie = 'csrftoken=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
@@ -172,13 +177,17 @@ describe('defaultHttp (fetch-based client)', () => {
 
   test('POST with string body sends it as-is without overriding Content-Type', async () => {
     const formData = 'username=foo&password=bar';
-    const customHeaders = { 'Content-Type': 'application/x-www-form-urlencoded' };
+    const customHeaders = {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
 
     await api.http.post('/api/login/', formData, { headers: customHeaders });
 
     const [, options] = global.fetch.mock.calls[0];
     expect(options.body).toBe(formData);
-    expect(options.headers['Content-Type']).toBe('application/x-www-form-urlencoded');
+    expect(options.headers['Content-Type']).toBe(
+      'application/x-www-form-urlencoded'
+    );
   });
 
   test('custom config headers are merged onto defaults', async () => {

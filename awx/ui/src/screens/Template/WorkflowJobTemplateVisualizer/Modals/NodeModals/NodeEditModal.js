@@ -73,11 +73,7 @@ function NodeEditModal() {
   };
 
   return (
-    <NodeModal
-      askLinkType={false}
-      onSave={updateNode}
-      title={t`Edit Node`}
-    />
+    <NodeModal askLinkType={false} onSave={updateNode} title={t`Edit Node`} />
   );
 }
 

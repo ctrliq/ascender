@@ -222,16 +222,9 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
           />
           <Detail
             label={t`Policy Type`}
-            value={
-              instance.managed_by_policy
-                ? t`Auto`
-                : t`Manual`
-            }
+            value={instance.managed_by_policy ? t`Auto` : t`Manual`}
           />
-          <Detail
-            label={t`Running Jobs`}
-            value={instance.jobs_running}
-          />
+          <Detail label={t`Running Jobs`} value={instance.jobs_running} />
           <Detail label={t`Total Jobs`} value={instance.jobs_total} />
           <Detail
             label={t`Last Health Check`}
@@ -262,7 +255,9 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
                 </div>
                 <SliderForks data-cy="slider-forks">
                   <div data-cy="number-forks">
-                    {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })}
+                    {i18n._('{count, plural, one {# fork} other {# forks}}', {
+                      count: forks,
+                    })}
                   </div>
                   <Slider
                     areCustomStepsContinuous
@@ -340,8 +335,8 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
                 instance.managed_by_policy ? (
                   <Trans>
                     <b>
-                      Note: This instance may be re-associated with this instance
-                      group if it is managed by{' '}
+                      Note: This instance may be re-associated with this
+                      instance group if it is managed by{' '}
                       <a
                         href={policyRulesDocsLink}
                         target="_blank"

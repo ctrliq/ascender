@@ -152,9 +152,7 @@ describe('<ProjectForm />', () => {
     expect(await screen.findByText('Source Control URL')).toBeInTheDocument();
     expect(screen.getByText('Source Control Credential')).toBeInTheDocument();
     // OrganizationLookup renders the prefilled org name in its text input
-    expect(
-      document.querySelector('input#organization')
-    ).toBeInTheDocument();
+    expect(document.querySelector('input#organization')).toBeInTheDocument();
   });
 
   test('git project with a webhook service mounts with the webhook subform open', async () => {

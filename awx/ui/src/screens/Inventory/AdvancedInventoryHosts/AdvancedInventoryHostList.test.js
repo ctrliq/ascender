@@ -64,9 +64,9 @@ describe('<AdvancedInventoryHostList />', () => {
     await screen.findAllByRole('link', { name: /dummy/ });
     expect(InventoriesAPI.readHosts).toHaveBeenCalled();
     // three hosts each render a selectable row checkbox
-    expect(screen.getAllByRole('checkbox', { name: /select row/i })).toHaveLength(
-      3
-    );
+    expect(
+      screen.getAllByRole('checkbox', { name: /select row/i })
+    ).toHaveLength(3);
   });
 
   test('should select and deselect all items', async () => {

@@ -52,9 +52,10 @@ describe('<HostsListItem />', () => {
 
   test('edit button shown to users with edit capabilities', () => {
     renderItem(mockHost);
-    expect(
-      screen.getByRole('link', { name: 'Edit Host' })
-    ).toHaveAttribute('href', '/hosts/1/edit');
+    expect(screen.getByRole('link', { name: 'Edit Host' })).toHaveAttribute(
+      'href',
+      '/hosts/1/edit'
+    );
   });
 
   test('edit button hidden from users without edit capabilities', () => {

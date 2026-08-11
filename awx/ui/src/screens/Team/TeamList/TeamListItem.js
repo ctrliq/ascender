@@ -41,13 +41,14 @@ function TeamListItem({ team, isSelected, onSelect, detailUrl, rowIndex }) {
           visible={team.summary_fields.user_capabilities.edit}
           tooltip={t`Edit Team`}
         >
-          <Button icon={<PencilAltIcon />}
+          <Button
+            icon={<PencilAltIcon />}
             ouiaId={`${team.id}-edit-button`}
             aria-label={t`Edit Team`}
             variant="plain"
             component={Link}
             to={`/teams/${team.id}/edit`}
-           />
+          />
         </ActionItem>
       </ActionsTd>
     </Tr>

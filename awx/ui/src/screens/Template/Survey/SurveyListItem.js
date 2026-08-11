@@ -1,9 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import {
-	Label, Tooltip,
-	Button
-} from '@patternfly/react-core';
+import { Label, Tooltip, Button } from '@patternfly/react-core';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -76,7 +73,8 @@ function SurveyListItem({ canEdit, question, isChecked, onSelect, rowIndex }) {
               ouiaId="multiselect-default-chips"
             >
               {question.default.split('\n').map((chip) => (
-                <Label variant="outline"
+                <Label
+                  variant="outline"
                   key={chip}
 
                   data-ouia-component-id={`multiselect-default-${chip}-chip`}
@@ -94,14 +92,15 @@ function SurveyListItem({ canEdit, question, isChecked, onSelect, rowIndex }) {
       <SurveyActionsTd dataLabel={t`Actions`}>
         <ActionItem visible={canEdit}>
           <Tooltip content={t`Edit Survey`} position="top">
-            <Button icon={<PencilAltIcon />}
+            <Button
+              icon={<PencilAltIcon />}
               ouiaId={`edit-survey-${question.variable}`}
               variant="plain"
               component={Link}
               to={`edit?question_variable=${encodeURIComponent(
                 question.variable
               )}`}
-             />
+            />
           </Tooltip>
         </ActionItem>
       </SurveyActionsTd>

@@ -44,7 +44,8 @@ function renderToolbar(jobOverride, contextOverride, onDelete) {
   );
 }
 
-const byOuia = (id) => document.querySelector(`[data-ouia-component-id="${id}"]`);
+const byOuia = (id) =>
+  document.querySelector(`[data-ouia-component-id="${id}"]`);
 
 const nodes = [{ id: 1 }, { id: 2 }, { id: 3, isDeleted: true }];
 

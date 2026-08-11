@@ -3,14 +3,14 @@ import { useLocation, useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import {
-	Card,
-	MenuToggle,
-	PageSection,
-	Select,
-	SelectGroup,
-	SelectList,
-	SelectOption,
-	Title,
+  Card,
+  MenuToggle,
+  PageSection,
+  Select,
+  SelectGroup,
+  SelectList,
+  SelectOption,
+  Title,
 } from '@patternfly/react-core';
 
 import DatalistToolbar from 'components/DataListToolbar';
@@ -133,7 +133,8 @@ function ActivityStream() {
 
   return (
     <>
-      <PageSection hasBodyWrapper={false}
+      <PageSection
+        hasBodyWrapper={false}
         className="pf-m-condensed"
         style={{ display: 'flex', justifyContent: 'space-between' }}
       >
@@ -173,12 +174,8 @@ function ActivityStream() {
               <SelectOption value="all">
                 {t`Dashboard (all activity)`}
               </SelectOption>
-              <SelectOption value="job">
-                {t`Jobs`}
-              </SelectOption>
-              <SelectOption value="schedule">
-                {t`Schedules`}
-              </SelectOption>
+              <SelectOption value="job">{t`Jobs`}</SelectOption>
+              <SelectOption value="schedule">{t`Schedules`}</SelectOption>
               <SelectOption value="workflow_approval">
                 {t`Workflow Approvals`}
               </SelectOption>
@@ -186,23 +183,13 @@ function ActivityStream() {
           </SelectGroup>
           <SelectGroup label={t`Resources`} key="resources">
             <SelectList>
-              <SelectOption
-                value="job_template,workflow_job_template,workflow_job_template_node"
-              >
+              <SelectOption value="job_template,workflow_job_template,workflow_job_template_node">
                 {t`Templates`}
               </SelectOption>
-              <SelectOption value="credential">
-                {t`Credentials`}
-              </SelectOption>
-              <SelectOption value="project">
-                {t`Projects`}
-              </SelectOption>
-              <SelectOption value="inventory">
-                {t`Inventories`}
-              </SelectOption>
-              <SelectOption value="host">
-                {t`Hosts`}
-              </SelectOption>
+              <SelectOption value="credential">{t`Credentials`}</SelectOption>
+              <SelectOption value="project">{t`Projects`}</SelectOption>
+              <SelectOption value="inventory">{t`Inventories`}</SelectOption>
+              <SelectOption value="host">{t`Hosts`}</SelectOption>
             </SelectList>
           </SelectGroup>
           <SelectGroup label={t`Access`} key="access">
@@ -210,12 +197,8 @@ function ActivityStream() {
               <SelectOption value="organization">
                 {t`Organizations`}
               </SelectOption>
-              <SelectOption value="user">
-                {t`Users`}
-              </SelectOption>
-              <SelectOption value="team">
-                {t`Teams`}
-              </SelectOption>
+              <SelectOption value="user">{t`Users`}</SelectOption>
+              <SelectOption value="team">{t`Teams`}</SelectOption>
             </SelectList>
           </SelectGroup>
           <SelectGroup label={t`Administration`} key="administration">
@@ -223,34 +206,24 @@ function ActivityStream() {
               <SelectOption value="credential_type">
                 {t`Credential Types`}
               </SelectOption>
-              <SelectOption
-                value="notification_template"
-              >
+              <SelectOption value="notification_template">
                 {t`Notification Templates`}
               </SelectOption>
-              <SelectOption value="instance">
-                {t`Instances`}
-              </SelectOption>
+              <SelectOption value="instance">{t`Instances`}</SelectOption>
               <SelectOption value="instance_group">
                 {t`Instance Groups`}
               </SelectOption>
-              <SelectOption
-                value="o_auth2_application,o_auth2_access_token"
-              >
+              <SelectOption value="o_auth2_application,o_auth2_access_token">
                 {t`Applications & Tokens`}
               </SelectOption>
-              <SelectOption
-                value="execution_environment"
-              >
+              <SelectOption value="execution_environment">
                 {t`Execution Environments`}
               </SelectOption>
             </SelectList>
           </SelectGroup>
           <SelectGroup label={t`Settings`} key="settings">
             <SelectList>
-              <SelectOption value="setting">
-                {t`Settings`}
-              </SelectOption>
+              <SelectOption value="setting">{t`Settings`}</SelectOption>
             </SelectList>
           </SelectGroup>
         </Select>

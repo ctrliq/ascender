@@ -93,9 +93,7 @@ describe('<OIDCEdit />', () => {
     await user.clear(endpointInput);
     await user.type(endpointInput, 'https://example.com');
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       SOCIAL_AUTH_OIDC_KEY: 'new key',
       SOCIAL_AUTH_OIDC_SECRET: '',

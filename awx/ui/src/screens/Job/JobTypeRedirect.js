@@ -58,9 +58,7 @@ function JobTypeRedirect({ id, view = 'output' }) {
     );
   }
   const typeSegment = JOB_TYPE_URL_SEGMENTS[job.type];
-  return (
-    <Navigate to={`/jobs/${typeSegment}/${job.id}/${view}`} replace />
-  );
+  return <Navigate to={`/jobs/${typeSegment}/${job.id}/${view}`} replace />;
 }
 
 export default JobTypeRedirect;

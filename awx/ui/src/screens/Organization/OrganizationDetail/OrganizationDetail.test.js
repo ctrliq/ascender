@@ -67,8 +67,9 @@ describe('<OrganizationDetail />', () => {
   });
 
   test('should build the proper number of delete detail requests', () => {
-    const deleteDetailsRequests =
-      relatedResourceDeleteRequests((str) => str).organization(mockOrganization);
+    const deleteDetailsRequests = relatedResourceDeleteRequests(
+      (str) => str
+    ).organization(mockOrganization);
     expect(deleteDetailsRequests).toHaveLength(7);
   });
 
@@ -124,7 +125,9 @@ describe('<OrganizationDetail />', () => {
 
     renderWithContexts(<OrganizationDetail organization={readOnlyOrg} />);
     await screen.findByText('Name');
-    expect(screen.queryByRole('link', { name: 'Edit' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'Edit' })
+    ).not.toBeInTheDocument();
   });
 
   test('expected api calls are made for delete', async () => {
@@ -140,7 +143,9 @@ describe('<OrganizationDetail />', () => {
       await screen.findByRole('button', { name: 'Confirm Delete' })
     );
 
-    await waitFor(() => expect(OrganizationsAPI.destroy).toHaveBeenCalledTimes(1));
+    await waitFor(() =>
+      expect(OrganizationsAPI.destroy).toHaveBeenCalledTimes(1)
+    );
   });
 
   test('should show content error for failed instance group fetch', async () => {

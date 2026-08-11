@@ -46,9 +46,7 @@ describe('<InventoryGroupHostListItem />', () => {
       name: mockHost.name,
     });
     expect(nameLink).toHaveAttribute('href', '/host/1');
-    expect(
-      screen.getByText(mockHost.description)
-    ).toBeInTheDocument();
+    expect(screen.getByText(mockHost.description)).toBeInTheDocument();
   });
 
   test('edit button shown to users with edit capabilities', () => {
@@ -62,9 +60,7 @@ describe('<InventoryGroupHostListItem />', () => {
         },
       },
     });
-    expect(
-      screen.getByRole('link', { name: 'Edit Host' })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Edit Host' })).toBeInTheDocument();
   });
 
   test('edit button hidden from users without edit capabilities', () => {

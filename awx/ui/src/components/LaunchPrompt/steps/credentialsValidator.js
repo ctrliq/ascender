@@ -35,8 +35,8 @@ export default function credentialsValidator(
 
     if (missingCredentialTypes.length > 0) {
       return t`Job Template default credentials must be replaced with one of the same type.  Please select a credential for the following types in order to proceed: ${missingCredentialTypes.join(
-          ', '
-        )}`;
+        ', '
+      )}`;
     }
   }
 
@@ -49,8 +49,8 @@ export default function credentialsValidator(
     });
     if (credentialsThatPrompt.length > 0) {
       return t`Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: ${credentialsThatPrompt.join(
-          ', '
-        )}`;
+        ', '
+      )}`;
     }
   }
 

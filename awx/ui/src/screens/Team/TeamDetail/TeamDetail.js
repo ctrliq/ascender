@@ -35,11 +35,7 @@ function TeamDetail({ team }) {
   return (
     <CardBody>
       <DetailList>
-        <Detail
-          label={t`Name`}
-          value={name}
-          dataCy="team-detail-name"
-        />
+        <Detail label={t`Name`} value={name} dataCy="team-detail-name" />
         <Detail label={t`Description`} value={description} />
         <Detail
           label={t`Organization`}
@@ -49,14 +45,8 @@ function TeamDetail({ team }) {
             </Link>
           }
         />
-        <Detail
-          label={t`Created`}
-          value={formatDateString(created)}
-        />
-        <Detail
-          label={t`Last Modified`}
-          value={formatDateString(modified)}
-        />
+        <Detail label={t`Created`} value={formatDateString(created)} />
+        <Detail label={t`Last Modified`} value={formatDateString(modified)} />
       </DetailList>
       <CardActionsRow>
         {summary_fields.user_capabilities &&

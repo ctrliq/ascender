@@ -35,12 +35,13 @@ function CredentialPluginSelected({
           content={t`Edit Credential Plugin Configuration`}
           position="top"
         >
-          <Button icon={<KeyIcon />}
+          <Button
+            icon={<KeyIcon />}
             ouiaId={`credential-field-${fieldId}-edit-plugin-button`}
             aria-label={t`Edit Credential Plugin Configuration`}
             onClick={onEditPlugin}
             variant={ButtonVariant.control}
-           />
+          />
         </Tooltip>
       </SelectedCredential>
       <PluginHelpText>

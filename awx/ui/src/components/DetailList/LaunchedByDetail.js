@@ -26,7 +26,8 @@ export default function LaunchedByDetail({ job, dataCy = null }) {
       case 'webhook':
         value = t`Webhook`;
         link =
-          (jobTemplate && `/templates/job_template/${jobTemplate.id}/details`) ||
+          (jobTemplate &&
+            `/templates/job_template/${jobTemplate.id}/details`) ||
           (workflowJT &&
             `/templates/workflow_job_template/${workflowJT.id}/details`);
         break;

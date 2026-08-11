@@ -5,22 +5,22 @@ export function getTooltip(workflowApproval) {
   if (workflowApproval.status === 'successful') {
     if (workflowApproval.summary_fields?.approved_or_denied_by?.username) {
       return t`Approved by ${
-          workflowApproval.summary_fields.approved_or_denied_by.username
-        } - ${formatDateString(workflowApproval.finished)}`;
+        workflowApproval.summary_fields.approved_or_denied_by.username
+      } - ${formatDateString(workflowApproval.finished)}`;
     }
     return t`Approved - ${formatDateString(
-        workflowApproval.finished
-      )}.  See the Activity Stream for more information.`;
+      workflowApproval.finished
+    )}.  See the Activity Stream for more information.`;
   }
   if (workflowApproval.status === 'failed' && workflowApproval.failed) {
     if (workflowApproval.summary_fields?.approved_or_denied_by?.username) {
       return t`Denied by ${
-          workflowApproval.summary_fields.approved_or_denied_by.username
-        } - ${formatDateString(workflowApproval.finished)}`;
+        workflowApproval.summary_fields.approved_or_denied_by.username
+      } - ${formatDateString(workflowApproval.finished)}`;
     }
     return t`Denied - ${formatDateString(
-        workflowApproval.finished
-      )}.  See the Activity Stream for more information.`;
+      workflowApproval.finished
+    )}.  See the Activity Stream for more information.`;
   }
   return '';
 }

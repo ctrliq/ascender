@@ -216,9 +216,7 @@ function NotificationList({
         headerRow={
           <HeaderRow qsConfig={QS_CONFIG} isSelectable={false}>
             <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-            <HeaderCell sortKey="notification_type">
-              {t`Type`}
-            </HeaderCell>
+            <HeaderCell sortKey="notification_type">{t`Type`}</HeaderCell>
             <HeaderCell>{t`Options`}</HeaderCell>
           </HeaderRow>
         }

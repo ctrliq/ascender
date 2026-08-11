@@ -61,10 +61,7 @@ function AdHocPreviewStep({ hasErrors, values }) {
           />
         )}
         {verbosity && (
-          <Detail
-            label={t`Verbosity`}
-            value={VERBOSITY(t)[values.verbosity]}
-          />
+          <Detail label={t`Verbosity`} value={VERBOSITY(t)[values.verbosity]} />
         )}
         {extra_vars && (
           <VariablesDetail

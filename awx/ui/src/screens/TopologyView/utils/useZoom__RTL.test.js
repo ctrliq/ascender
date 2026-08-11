@@ -12,11 +12,7 @@ i18n.activate('en');
 
 // Helper function to render components with I18n context
 function renderWithI18n(component) {
-  return render(
-    <I18nProvider i18n={i18n}>
-      {component}
-    </I18nProvider>
-  );
+  return render(<I18nProvider i18n={i18n}>{component}</I18nProvider>);
 }
 
 afterEach(() => {

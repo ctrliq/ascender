@@ -23,29 +23,31 @@ export default function useInventoryStep(launchConfig, resource, visitedSteps) {
         !meta.value;
 
   return {
-    step: !launchConfig.ask_inventory_on_launch ? null : {
-      id: STEP_ID,
-      name: (
-        <StepName hasErrors={formError} id="inventory-step">
-          {t`Inventory`}
-        </StepName>
-      ),
-      component: (
-        <InventoryStep
-          warningMessage={
-            resource.type === 'workflow_job_template' ? (
-              <InventoryAlert
-                ouiaId="InventoryStep-alert"
-                variant="warning"
-                isInline
-                title={t`This inventory is applied to all workflow nodes within this workflow (${resource.name}) that prompt for an inventory.`}
-              />
-            ) : null
-          }
-        />
-      ),
-      enableNext: true,
-    },
+    step: !launchConfig.ask_inventory_on_launch
+      ? null
+      : {
+          id: STEP_ID,
+          name: (
+            <StepName hasErrors={formError} id="inventory-step">
+              {t`Inventory`}
+            </StepName>
+          ),
+          component: (
+            <InventoryStep
+              warningMessage={
+                resource.type === 'workflow_job_template' ? (
+                  <InventoryAlert
+                    ouiaId="InventoryStep-alert"
+                    variant="warning"
+                    isInline
+                    title={t`This inventory is applied to all workflow nodes within this workflow (${resource.name}) that prompt for an inventory.`}
+                  />
+                ) : null
+              }
+            />
+          ),
+          enableNext: true,
+        },
     initialValues: getInitialValues(launchConfig, resource),
     isReady: true,
     contentError: null,

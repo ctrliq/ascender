@@ -58,9 +58,9 @@ describe('VisualizerToolbar', () => {
   test('Shows correct number of nodes', () => {
     // The start node (id=1) and deleted nodes (isDeleted=true) should be ignored
     renderToolbar();
-    expect(document.querySelector('#visualizer-total-nodes-badge')).toHaveTextContent(
-      '1'
-    );
+    expect(
+      document.querySelector('#visualizer-total-nodes-badge')
+    ).toHaveTextContent('1');
   });
 
   test('Should display action buttons', () => {

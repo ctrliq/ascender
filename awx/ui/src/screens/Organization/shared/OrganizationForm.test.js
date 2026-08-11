@@ -109,9 +109,7 @@ describe('<OrganizationForm />', () => {
         }}
       />
     );
-    expect(
-      await screen.findByTestId('credential-lookup')
-    ).toBeInTheDocument();
+    expect(await screen.findByTestId('credential-lookup')).toBeInTheDocument();
     expect(screen.getAllByTestId('galaxy-credential-chip')).toHaveLength(1);
   });
 

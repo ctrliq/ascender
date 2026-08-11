@@ -297,7 +297,10 @@ describe('<ResourceAccessList />', () => {
 
   const renderOrg = () =>
     renderWithContexts(
-      <ResourceAccessList resource={organization} apiModel={OrganizationsAPI} />,
+      <ResourceAccessList
+        resource={organization}
+        apiModel={OrganizationsAPI}
+      />,
       {
         context: {
           router: {

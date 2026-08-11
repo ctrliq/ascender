@@ -8,10 +8,7 @@ import InventoryHostList from './InventoryHostList';
 function InventoryHosts({ setBreadcrumb, inventory }) {
   return (
     <Routes>
-      <Route
-        path="add"
-        element={<InventoryHostAdd inventory={inventory} />}
-      />
+      <Route path="add" element={<InventoryHostAdd inventory={inventory} />} />
       {/* /* so the nested <InventoryHost> route tree can match */}
       <Route
         path=":hostId/*"
@@ -19,10 +16,7 @@ function InventoryHosts({ setBreadcrumb, inventory }) {
           <InventoryHost setBreadcrumb={setBreadcrumb} inventory={inventory} />
         }
       />
-      <Route
-        index
-        element={<InventoryHostList />}
-      />
+      <Route index element={<InventoryHostList />} />
     </Routes>
   );
 }

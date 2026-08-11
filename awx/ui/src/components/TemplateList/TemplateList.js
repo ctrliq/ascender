@@ -5,10 +5,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
-import {
-	Card,
-	DropdownItem,
-} from '@patternfly/react-core';
+import { Card, DropdownItem } from '@patternfly/react-core';
 
 import {
   JobTemplatesAPI,
@@ -249,9 +246,7 @@ function TemplateList({ defaultParams }) {
             <HeaderRow qsConfig={qsConfig} isExpandable>
               <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
               <HeaderCell>{t`Activity`}</HeaderCell>
-              <HeaderCell sortKey="last_job_run">
-                {t`Last Ran`}
-              </HeaderCell>
+              <HeaderCell sortKey="last_job_run">{t`Last Ran`}</HeaderCell>
               <HeaderCell sortKey="type">{t`Type`}</HeaderCell>
               <HeaderCell>{t`Actions`}</HeaderCell>
             </HeaderRow>

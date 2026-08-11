@@ -33,14 +33,15 @@ function CopyButton({
 
   return (
     <>
-      <Button icon={<CopyIcon />}
+      <Button
+        icon={<CopyIcon />}
         id={id}
         ouiaId={ouiaId}
         isDisabled={isLoading || isDisabled}
         aria-label={t`Copy`}
         variant="plain"
         onClick={copyItemToAPI}
-       />
+      />
       {error && (
         <AlertModal
           aria-label={t`Copy Error`}

@@ -1,12 +1,8 @@
-
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import {
-  useVirtualizer,
-  defaultRangeExtractor,
-} from '@tanstack/react-virtual';
+import { useVirtualizer, defaultRangeExtractor } from '@tanstack/react-virtual';
 import { Button, Alert } from '@patternfly/react-core';
 
 import AlertModal from 'components/AlertModal';
@@ -140,10 +136,7 @@ export function computeOverscanIndices(
   const clampedStart = Math.max(selectedRowRange.start, viewMid - halfBudget);
   const clampedEnd = Math.min(selectedRowRange.end, viewMid + halfBudget);
   return {
-    overscanStartIndex: Math.min(
-      defaultStart,
-      Math.max(0, clampedStart)
-    ),
+    overscanStartIndex: Math.min(defaultStart, Math.max(0, clampedStart)),
     overscanStopIndex: Math.max(
       defaultStop,
       Math.min(cellCount - 1, clampedEnd)
@@ -168,8 +161,7 @@ export function computeOverscanIndices(
 // phase) so it runs before the overlay's own handler.
 if (typeof window !== 'undefined' && !window.__ascResizeObserverErrorSilenced) {
   const isResizeObserverLoopError = (message) =>
-    typeof message === 'string' &&
-    message.includes('ResizeObserver loop');
+    typeof message === 'string' && message.includes('ResizeObserver loop');
   window.addEventListener(
     'error',
     (event) => {
@@ -183,7 +175,12 @@ if (typeof window !== 'undefined' && !window.__ascResizeObserverErrorSilenced) {
   window.__ascResizeObserverErrorSilenced = true;
 }
 
-function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys, onJobRefresh }) {
+function JobOutput({
+  job,
+  eventRelatedSearchableKeys,
+  eventSearchableKeys,
+  onJobRefresh,
+}) {
   const { t } = useLingui();
   const location = useLocation();
   const parentRef = useRef(null);
@@ -1049,7 +1046,11 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys, onJob
           isTemplateJob={job.type === 'job'}
           isAllCollapsed={isAllCollapsed}
         />
-        <OutputWrapper ref={outputRef} $cssMap={cssMap} className="ascender-output-wrapper">
+        <OutputWrapper
+          ref={outputRef}
+          $cssMap={cssMap}
+          className="ascender-output-wrapper"
+        >
           {showEmptyOutput ? (
             <EmptyOutput
               job={job}
@@ -1063,7 +1064,11 @@ function JobOutput({ job, eventRelatedSearchableKeys, eventSearchableKeys, onJob
               onUnmount={() => {}}
             />
           ) : (
-            <ScrollContainer ref={parentRef} onScroll={handleScroll} className="ascender-output-scroll">
+            <ScrollContainer
+              ref={parentRef}
+              onScroll={handleScroll}
+              className="ascender-output-scroll"
+            >
               {hasContentLoading ? (
                 <ContentLoading />
               ) : (

@@ -72,9 +72,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
     name: `${prefix}.daysOfWeek`,
     validate: (val) => {
       if (frequency === 'week') {
-        return required(t`Select a value for this field`)(
-          val?.length > 0
-        );
+        return required(t`Select a value for this field`)(val?.length > 0);
       }
       return undefined;
     },
@@ -249,17 +247,17 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
         )}
       </FormGroup>
       {frequency === 'week' && (
-      <FormGroup
-        name={`${prefix}.daysOfWeek`}
-        fieldId={`schedule-days-of-week-${id}`}
-        isRequired
-        label={t`On days`}
-      >
+        <FormGroup
+          name={`${prefix}.daysOfWeek`}
+          fieldId={`schedule-days-of-week-${id}`}
+          isRequired
+          label={t`On days`}
+        >
           <div css="display: flex">
             <Checkbox
               label={t`Sun`}
-              isChecked={daysOfWeek.value?.some(day =>
-                (day === RRule.SU) || (day.weekday === RRule.SU.weekday)
+              isChecked={daysOfWeek.value?.some(
+                (day) => day === RRule.SU || day.weekday === RRule.SU.weekday
               )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.SU, checked);
@@ -271,8 +269,8 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             />
             <Checkbox
               label={t`Mon`}
-              isChecked={daysOfWeek.value?.some(day =>
-                (day === RRule.MO) || (day.weekday === RRule.MO.weekday)
+              isChecked={daysOfWeek.value?.some(
+                (day) => day === RRule.MO || day.weekday === RRule.MO.weekday
               )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.MO, checked);
@@ -284,8 +282,8 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             />
             <Checkbox
               label={t`Tue`}
-              isChecked={daysOfWeek.value?.some(day =>
-                (day === RRule.TU) || (day.weekday === RRule.TU.weekday)
+              isChecked={daysOfWeek.value?.some(
+                (day) => day === RRule.TU || day.weekday === RRule.TU.weekday
               )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.TU, checked);
@@ -297,8 +295,8 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             />
             <Checkbox
               label={t`Wed`}
-              isChecked={daysOfWeek.value?.some(day =>
-                (day === RRule.WE) || (day.weekday === RRule.WE.weekday)
+              isChecked={daysOfWeek.value?.some(
+                (day) => day === RRule.WE || day.weekday === RRule.WE.weekday
               )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.WE, checked);
@@ -310,8 +308,8 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             />
             <Checkbox
               label={t`Thu`}
-              isChecked={daysOfWeek.value?.some(day =>
-                (day === RRule.TH) || (day.weekday === RRule.TH.weekday)
+              isChecked={daysOfWeek.value?.some(
+                (day) => day === RRule.TH || day.weekday === RRule.TH.weekday
               )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.TH, checked);
@@ -323,8 +321,8 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             />
             <Checkbox
               label={t`Fri`}
-              isChecked={daysOfWeek.value?.some(day =>
-                (day === RRule.FR) || (day.weekday === RRule.FR.weekday)
+              isChecked={daysOfWeek.value?.some(
+                (day) => day === RRule.FR || day.weekday === RRule.FR.weekday
               )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.FR, checked);
@@ -336,8 +334,8 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             />
             <Checkbox
               label={t`Sat`}
-              isChecked={daysOfWeek.value?.some(day =>
-                (day === RRule.SA) || (day.weekday === RRule.SA.weekday)
+              isChecked={daysOfWeek.value?.some(
+                (day) => day === RRule.SA || day.weekday === RRule.SA.weekday
               )}
               onChange={(checked) => {
                 updateDaysOfWeek(RRule.SA, checked);
@@ -361,12 +359,12 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
       )}
       {(frequency === 'month' || frequency === 'year') &&
         !Number.isNaN(new Date(startDate.value)) && (
-        <FormGroup
-          name={`${prefix}.runOn`}
-          fieldId={`schedule-run-on-${id}`}
-          isRequired
-          label={t`Run on`}
-        >
+          <FormGroup
+            name={`${prefix}.runOn`}
+            fieldId={`schedule-run-on-${id}`}
+            isRequired
+            label={t`Run on`}
+          >
             <RunOnRadio
               id={`schedule-run-on-day-${id}`}
               name={`${prefix}.runOn`}
@@ -531,12 +529,12 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
             )}
           </FormGroup>
         )}
-          <FormGroup
-            name={`${prefix}.end`}
-            fieldId={`schedule-end-${id}`}
-            isRequired
-            label={t`End`}
-          >
+      <FormGroup
+        name={`${prefix}.end`}
+        fieldId={`schedule-end-${id}`}
+        isRequired
+        label={t`End`}
+      >
         <Radio
           id={`end-never-${id}`}
           name={`${prefix}.end`}
@@ -576,9 +574,7 @@ const FrequencyDetailSubform = ({ frequency, prefix, isException }) => {
         {endMeta.error && (
           <FormHelperText>
             <HelperText>
-              <HelperTextItem variant="error">
-                {endMeta.error}
-              </HelperTextItem>
+              <HelperTextItem variant="error">{endMeta.error}</HelperTextItem>
             </HelperText>
           </FormHelperText>
         )}

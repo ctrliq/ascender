@@ -84,9 +84,7 @@ describe('<RADIUSEdit />', () => {
       )
     );
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       RADIUS_SERVER: 'radius.new_mock.org',
       RADIUS_PORT: 1812,

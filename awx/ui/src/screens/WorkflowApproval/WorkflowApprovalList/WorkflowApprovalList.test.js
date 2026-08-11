@@ -53,7 +53,9 @@ describe('<WorkflowApprovalList />', () => {
   test('should select workflow approval when checked', async () => {
     const { user } = await renderList();
 
-    const row = screen.getByRole('link', { name: deletableRowName }).closest('tr');
+    const row = screen
+      .getByRole('link', { name: deletableRowName })
+      .closest('tr');
     const checkbox = within(row).getByRole('checkbox');
     expect(checkbox).not.toBeChecked();
 
@@ -79,7 +81,9 @@ describe('<WorkflowApprovalList />', () => {
   test('Delete button is active', async () => {
     const { user } = await renderList();
 
-    const row = screen.getByRole('link', { name: deletableRowName }).closest('tr');
+    const row = screen
+      .getByRole('link', { name: deletableRowName })
+      .closest('tr');
     await user.click(within(row).getByRole('checkbox'));
 
     expect(screen.getByRole('button', { name: 'Delete' })).toBeEnabled();
@@ -88,7 +92,9 @@ describe('<WorkflowApprovalList />', () => {
   test('should call delete api', async () => {
     const { user } = await renderList();
 
-    const row = screen.getByRole('link', { name: deletableRowName }).closest('tr');
+    const row = screen
+      .getByRole('link', { name: deletableRowName })
+      .closest('tr');
     await user.click(within(row).getByRole('checkbox'));
 
     expect(screen.getByRole('button', { name: 'Delete' })).toBeEnabled();
@@ -121,7 +127,9 @@ describe('<WorkflowApprovalList />', () => {
     const { user } = await renderList();
     expect(WorkflowApprovalsAPI.read).toHaveBeenCalledTimes(1);
 
-    const row = screen.getByRole('link', { name: deletableRowName }).closest('tr');
+    const row = screen
+      .getByRole('link', { name: deletableRowName })
+      .closest('tr');
     await user.click(within(row).getByRole('checkbox'));
 
     expect(screen.getByRole('button', { name: 'Delete' })).toBeEnabled();
