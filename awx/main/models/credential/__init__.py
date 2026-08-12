@@ -751,6 +751,17 @@ ManagedCredentialType(
     managed=True,
     inputs={
         'fields': [
+            # Form renders three fields per row, in order. Rows are grouped by
+            # auth mode: shared + password identity / password scoping / application credential.
+            {
+                'id': 'host',
+                'label': gettext_noop('Host (Authentication URL)'),
+                'type': 'string',
+                'help_text': gettext_noop(
+                    'The host to authenticate with. For example, https://openstack.business.com/v2.0/. '
+                    'Authenticate with either a username and password or an application credential.'
+                ),
+            },
             {
                 'id': 'username',
                 'label': gettext_noop('Username'),
@@ -765,10 +776,27 @@ ManagedCredentialType(
                 'help_text': gettext_noop('Required for password authentication. Leave blank when using an application credential.'),
             },
             {
-                'id': 'host',
-                'label': gettext_noop('Host (Authentication URL)'),
+                'id': 'project',
+                'label': gettext_noop('Project (Tenant Name)'),
                 'type': 'string',
-                'help_text': gettext_noop('The host to authenticate with.  For example, https://openstack.business.com/v2.0/'),
+                'help_text': gettext_noop('Password authentication only. Ignored when using an application credential.'),
+            },
+            {
+                'id': 'project_domain_name',
+                'label': gettext_noop('Project (Domain Name)'),
+                'type': 'string',
+                'help_text': gettext_noop('Password authentication only. Ignored when using an application credential.'),
+            },
+            {
+                'id': 'domain',
+                'label': gettext_noop('Domain Name'),
+                'type': 'string',
+                'help_text': gettext_noop(
+                    'OpenStack domains define administrative boundaries. '
+                    'It is only needed for Keystone v3 authentication '
+                    'URLs. Password authentication only; ignored when '
+                    'using an application credential.'
+                ),
             },
             {
                 'id': 'application_credential_id',
@@ -786,27 +814,6 @@ ManagedCredentialType(
                 'type': 'string',
                 'secret': True,
                 'help_text': gettext_noop('Secret of a Keystone application credential.'),
-            },
-            {
-                'id': 'project',
-                'label': gettext_noop('Project (Tenant Name)'),
-                'type': 'string',
-            },
-            {
-                'id': 'project_domain_name',
-                'label': gettext_noop('Project (Domain Name)'),
-                'type': 'string',
-            },
-            {
-                'id': 'domain',
-                'label': gettext_noop('Domain Name'),
-                'type': 'string',
-                'help_text': gettext_noop(
-                    'OpenStack domains define administrative boundaries. '
-                    'It is only needed for Keystone v3 authentication '
-                    'URLs. Refer to the documentation for '
-                    'common scenarios.'
-                ),
             },
             {
                 'id': 'region',
