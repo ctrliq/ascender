@@ -8,31 +8,74 @@
 # The goal here is to essentially tests that the awx user is
 # able to run `podman run`.
 #
+# Unlike upstream AWX, Ascender's create_preload_data does not create
+# the Demo Job Template, so this playbook creates its own smoke test
+# resources through the API instead of assuming they exist.
+#
 - name: Test that the development environment is able to launch a job
   hosts: localhost
+  vars:
+    controller_host: "http://localhost:8013"
+    controller_username: "admin"
+    controller_password: "password"
+  environment:
+    CONTROLLER_HOST: "{{ controller_host }}"
+    CONTROLLER_USERNAME: "{{ controller_username }}"
+    CONTROLLER_PASSWORD: "{{ controller_password }}"
+    CONTROLLER_VERIFY_SSL: "false"
   tasks:
     - name: Reset admin password
       shell: |
         docker exec -i tools_awx_1 bash <<EOSH
-          awx-manage update_password --username=admin --password=password
+          awx-manage update_password --username=admin --password={{ controller_password }}
           awx-manage create_preload_data
         EOSH
+      when: reset_admin_password | default(true) | bool
 
     - block:
-        - name: Launch Demo Job Template
-          ctrliq.ascender.job_launch:
-            name: Demo Job Template
+        - name: Create smoke test organization
+          ctrliq.ascender.organization:
+            name: CI Smoke Test Org
+
+        - name: Create smoke test project
+          ctrliq.ascender.project:
+            name: CI Smoke Test Project
+            organization: CI Smoke Test Org
+            scm_type: git
+            scm_url: https://github.com/ansible/ansible-tower-samples
             wait: yes
-            validate_certs: no
-            controller_host: "http://localhost:8013"
-            controller_username: "admin"
-            controller_password: "password"
+
+        - name: Create smoke test inventory
+          ctrliq.ascender.inventory:
+            name: CI Smoke Test Inventory
+            organization: CI Smoke Test Org
+
+        - name: Add localhost to the smoke test inventory
+          ctrliq.ascender.host:
+            name: localhost
+            inventory: CI Smoke Test Inventory
+            variables:
+              ansible_connection: local
+
+        - name: Create smoke test job template
+          ctrliq.ascender.job_template:
+            name: CI Smoke Test Job Template
+            organization: CI Smoke Test Org
+            project: CI Smoke Test Project
+            inventory: CI Smoke Test Inventory
+            playbook: hello_world.yml
+
+        - name: Launch smoke test job template
+          ctrliq.ascender.job_launch:
+            name: CI Smoke Test Job Template
+            wait: yes
+            timeout: 300
       rescue:
         - name: Get list of project updates and jobs
           uri:
-            url: "http://localhost:8013/api/v2/{{ resource }}/"
-            user: admin
-            password: "password"
+            url: "{{ controller_host }}/api/v2/{{ resource }}/"
+            user: "{{ controller_username }}"
+            password: "{{ controller_password }}"
             force_basic_auth: yes
           register: job_lists
           loop:
@@ -43,9 +86,9 @@
 
         - name: Get all job and project details
           uri:
-            url: "http://localhost:8013{{ endpoint }}"
-            user: admin
-            password: "password"
+            url: "{{ controller_host }}{{ endpoint }}"
+            user: "{{ controller_username }}"
+            password: "{{ controller_password }}"
             force_basic_auth: yes
           loop: |
             {{ job_lists.results | map(attribute='json') | map(attribute='results') | flatten | map(attribute='url') }}

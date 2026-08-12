@@ -2,9 +2,12 @@ import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import { minMaxValue, required } from 'util/validators';
-import { Form, FormGroup, FormHelperText,
-HelperText,
-HelperTextItem,
+import {
+  Form,
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 import { VariablesField } from 'components/CodeEditor';
 import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
@@ -178,7 +181,9 @@ function ConstructedInventoryForm({
     organization: constructedInventory?.summary_fields?.organization || null,
     update_cache_timeout: constructedInventory?.update_cache_timeout || 0,
     verbosity: constructedInventory?.verbosity || 0,
-    source_vars: constructedInventory?.source_vars || '---\nplugin: constructed\nstrict: true',
+    source_vars:
+      constructedInventory?.source_vars ||
+      '---\nplugin: constructed\nstrict: true',
   };
 
   return (

@@ -86,9 +86,7 @@ describe('<LDAPEdit />', () => {
     await user.click(
       screen.getByRole('button', { name: 'Confirm revert all' })
     );
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       AUTH_LDAP_BIND_DN: '',
       AUTH_LDAP_BIND_PASSWORD: '',
@@ -131,9 +129,7 @@ describe('<LDAPEdit />', () => {
     await user.clear(serverUriInput);
     await user.type(serverUriInput, 'ldap://mock.example.com');
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     // The AUTH_LDAP_TEAM_MAP CodeEditor cannot be driven through the DOM under
     // jsdom (react-ace renders no usable input), so the original test's
     // team-map edit is folded out: AUTH_LDAP_TEAM_MAP stays at its default {}.
@@ -202,8 +198,8 @@ describe('<LDAPEdit />', () => {
     const { container } = await renderEdit('5');
     expect(container.querySelector('#AUTH_LDAP_SERVER_URI')).toBeNull();
     expect(container.querySelector('#AUTH_LDAP_5_SERVER_URI')).not.toBeNull();
-    expect(
-      container.querySelector('#AUTH_LDAP_5_SERVER_URI').value
-    ).toEqual('ldap://ldap5.example.com');
+    expect(container.querySelector('#AUTH_LDAP_5_SERVER_URI').value).toEqual(
+      'ldap://ldap5.example.com'
+    );
   });
 });

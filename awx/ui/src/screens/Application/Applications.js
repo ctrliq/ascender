@@ -3,13 +3,11 @@ import styled from 'styled-components';
 import { Routes, Route } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
-	Alert,
-	ClipboardCopy,
-	ClipboardCopyVariant
+  Alert,
+  ClipboardCopy,
+  ClipboardCopyVariant,
 } from '@patternfly/react-core';
-import {
-	Modal
-} from '@patternfly/react-core/deprecated';
+import { Modal } from '@patternfly/react-core/deprecated';
 import ScreenHeader from 'components/ScreenHeader';
 import { Detail, DetailList } from 'components/DetailList';
 import PersistentFilters from 'components/PersistentFilters';
@@ -91,10 +89,7 @@ function Applications() {
             />
           )}
           <DetailList stacked>
-            <Detail
-              label={t`Name`}
-              value={applicationModalSource.name}
-            />
+            <Detail label={t`Name`} value={applicationModalSource.name} />
             {applicationModalSource.client_id && (
               <Detail
                 label={t`Client ID`}

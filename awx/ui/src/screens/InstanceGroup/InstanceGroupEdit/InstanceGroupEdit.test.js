@@ -17,17 +17,24 @@ const mockUpdatedInstanceGroup = {
 
 // Mock the shared form so the test drives InstanceGroupEdit's own submit/cancel
 // handlers directly. The form itself is covered by InstanceGroupForm.test.js.
-jest.mock('../shared/InstanceGroupForm', () => ({ onSubmit, onCancel, submitError }) => (
-  <div>
-    {submitError && <div>FormSubmitError</div>}
-    <button type="button" onClick={() => onSubmit(mockUpdatedInstanceGroup)}>
-      mock submit
-    </button>
-    <button type="button" aria-label="Cancel" onClick={onCancel}>
-      Cancel
-    </button>
-  </div>
-));
+jest.mock(
+  '../shared/InstanceGroupForm',
+  () =>
+    ({ onSubmit, onCancel, submitError }) => (
+      <div>
+        {submitError && <div>FormSubmitError</div>}
+        <button
+          type="button"
+          onClick={() => onSubmit(mockUpdatedInstanceGroup)}
+        >
+          mock submit
+        </button>
+        <button type="button" aria-label="Cancel" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    )
+);
 
 const instanceGroupData = {
   id: 42,
@@ -116,7 +123,9 @@ describe('<InstanceGroupEdit>', () => {
         data: { detail: 'An error occurred' },
       },
     };
-    InstanceGroupsAPI.update.mockImplementationOnce(() => Promise.reject(error));
+    InstanceGroupsAPI.update.mockImplementationOnce(() =>
+      Promise.reject(error)
+    );
     const { user } = renderWithContexts(
       <InstanceGroupEdit instanceGroup={instanceGroupData} />,
       { context: { router: { history } } }

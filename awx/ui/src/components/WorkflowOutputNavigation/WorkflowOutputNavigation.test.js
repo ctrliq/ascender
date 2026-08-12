@@ -8,15 +8,28 @@ jest.mock('./WorkflowOutputNavigation', () => {
   const mockReact = require('react');
   return function MockWorkflowOutputNavigation({ relatedJobs, parentRef }) {
     const [isOpen, setIsOpen] = mockReact.useState(false);
-    
-    return mockReact.createElement('div', null,
-      mockReact.createElement('button', { onClick: () => setIsOpen(true) }, 'Open'),
-      isOpen && mockReact.createElement('div', { role: 'dialog', 'aria-label': 'Workflow Nodes' },
-        mockReact.createElement('div', null, 'Workflow Nodes'),
-        relatedJobs.map(({ summary_fields }) => 
-          mockReact.createElement('div', { key: summary_fields.job.id }, summary_fields.job.name)
+
+    return mockReact.createElement(
+      'div',
+      null,
+      mockReact.createElement(
+        'button',
+        { onClick: () => setIsOpen(true) },
+        'Open'
+      ),
+      isOpen &&
+        mockReact.createElement(
+          'div',
+          { role: 'dialog', 'aria-label': 'Workflow Nodes' },
+          mockReact.createElement('div', null, 'Workflow Nodes'),
+          relatedJobs.map(({ summary_fields }) =>
+            mockReact.createElement(
+              'div',
+              { key: summary_fields.job.id },
+              summary_fields.job.name
+            )
+          )
         )
-      )
     );
   };
 });

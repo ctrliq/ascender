@@ -12,7 +12,9 @@ function getCancelButton() {
 
 describe('<JobListCancelButton />', () => {
   test('should be disabled when no rows are selected', async () => {
-    const { user } = renderWithContexts(<JobListCancelButton jobsToCancel={[]} />);
+    const { user } = renderWithContexts(
+      <JobListCancelButton jobsToCancel={[]} />
+    );
     expect(getCancelButton()).toBeDisabled();
 
     // Tooltip content is rendered on hover; asserts the

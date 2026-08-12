@@ -94,23 +94,23 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
     return () => clearInterval(timer);
   }, [isRunning, jobStarted]);
 
-  let borderColor = "var(--pf-t--global--border--color--default)";
+  let borderColor = 'var(--pf-t--global--border--color--default)';
 
   if (job) {
     if (job.status === 'failed' || job.status === 'error') {
-      borderColor = "var(--pf-t--global--color--status--danger--default)";
+      borderColor = 'var(--pf-t--global--color--status--danger--default)';
     }
     if (job.status === 'canceled') {
-      borderColor = "var(--ascender-status-canceled-color)";
+      borderColor = 'var(--ascender-status-canceled-color)';
     }
     if (job.status === 'successful' || job.status === 'ok') {
-      borderColor = "var(--pf-t--global--color--status--success--default)";
+      borderColor = 'var(--pf-t--global--color--status--success--default)';
     }
     if (job.status === 'running') {
-      borderColor = "var(--ascender-status-running-color)";
+      borderColor = 'var(--ascender-status-running-color)';
     }
   } else if (priorRunSucceeded) {
-    borderColor = "var(--pf-t--global--color--status--success--default)";
+    borderColor = 'var(--pf-t--global--color--status--success--default)';
   }
 
   const handleNodeClick = () => {

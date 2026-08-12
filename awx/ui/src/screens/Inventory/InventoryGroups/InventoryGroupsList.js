@@ -144,9 +144,7 @@ function InventoryGroupsList() {
       headerRow={
         <HeaderRow qsConfig={QS_CONFIG}>
           <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-          {isNotConstructedInventory && (
-            <HeaderCell>{t`Actions`}</HeaderCell>
-          )}
+          {isNotConstructedInventory && <HeaderCell>{t`Actions`}</HeaderCell>}
         </HeaderRow>
       }
       renderRow={(item, index) => (

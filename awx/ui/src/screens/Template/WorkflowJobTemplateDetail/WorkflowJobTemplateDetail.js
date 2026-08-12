@@ -2,10 +2,10 @@ import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
-	Button,
-	Content,
-	ContentVariants,
-	Label
+  Button,
+  Content,
+  ContentVariants,
+  Label,
 } from '@patternfly/react-core';
 
 import { WorkflowJobTemplatesAPI } from 'api';
@@ -52,14 +52,10 @@ function WorkflowJobTemplateDetail({ template }) {
   const renderOptions = (
     <Content component={ContentVariants.ul}>
       {template.allow_simultaneous && (
-        <Content component={ContentVariants.li}>
-          {t`Concurrent Jobs`}
-        </Content>
+        <Content component={ContentVariants.li}>{t`Concurrent Jobs`}</Content>
       )}
       {template.webhook_service && (
-        <Content component={ContentVariants.li}>
-          {t`Webhooks`}
-        </Content>
+        <Content component={ContentVariants.li}>{t`Webhooks`}</Content>
       )}
     </Content>
   );
@@ -106,11 +102,7 @@ function WorkflowJobTemplateDetail({ template }) {
   return (
     <CardBody>
       <DetailList gutter="sm">
-        <Detail
-          label={t`Name`}
-          value={name}
-          dataCy="jt-detail-name"
-        />
+        <Detail label={t`Name`} value={name} dataCy="jt-detail-name" />
         <Detail label={t`Description`} value={description} />
         <Detail
           value={<Sparkline jobs={recentPlaybookJobs} />}
@@ -214,7 +206,11 @@ function WorkflowJobTemplateDetail({ template }) {
               ouiaId="workflow-job-template-detail-label-chips"
             >
               {summary_fields.labels.results.map((l) => (
-                <Label variant="outline" key={l.id} data-ouia-component-id={`${l.name}-label-chip`} >
+                <Label
+                  variant="outline"
+                  key={l.id}
+                  data-ouia-component-id={`${l.name}-label-chip`}
+                >
                   {l.name}
                 </Label>
               ))}

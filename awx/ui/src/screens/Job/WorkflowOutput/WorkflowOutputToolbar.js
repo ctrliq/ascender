@@ -15,7 +15,10 @@ import StatusLabel from 'components/StatusLabel';
 import { calculateElapsed, secondsToHHMMSS } from 'util/dates';
 import JobCancelButton from 'components/JobCancelButton';
 import DeleteButton from 'components/DeleteButton';
-import { LaunchButton, WorkflowReLaunchDropDown } from 'components/LaunchButton';
+import {
+  LaunchButton,
+  WorkflowReLaunchDropDown,
+} from 'components/LaunchButton';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,

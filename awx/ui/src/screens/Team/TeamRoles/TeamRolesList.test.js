@@ -182,9 +182,7 @@ describe('<TeamRolesList />', () => {
   test('should render disassociate modal and call the api', async () => {
     TeamsAPI.readRoles.mockResolvedValue(roles);
     RolesAPI.disassociateTeamRole.mockResolvedValue({});
-    const { user } = renderWithContexts(
-      <TeamRolesList me={me} team={team} />
-    );
+    const { user } = renderWithContexts(<TeamRolesList me={me} team={team} />);
     const row = (await screen.findByText('Credential Bar')).closest('tr');
     await user.click(within(row).getByRole('button'));
 
@@ -204,9 +202,7 @@ describe('<TeamRolesList />', () => {
   test('should throw disassociation error', async () => {
     TeamsAPI.readRoles.mockResolvedValue(roles);
     RolesAPI.disassociateTeamRole.mockRejectedValue(new Error());
-    const { user } = renderWithContexts(
-      <TeamRolesList me={me} team={team} />
-    );
+    const { user } = renderWithContexts(<TeamRolesList me={me} team={team} />);
     const row = (await screen.findByText('Credential Bar')).closest('tr');
     await user.click(within(row).getByRole('button'));
 
@@ -238,8 +234,6 @@ describe('<TeamRolesList />', () => {
       },
     });
     renderWithContexts(<TeamRolesList me={me} team={team} />);
-    expect(
-      await screen.findByText('System Administrator')
-    ).toBeInTheDocument();
+    expect(await screen.findByText('System Administrator')).toBeInTheDocument();
   });
 });

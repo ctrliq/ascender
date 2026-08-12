@@ -128,10 +128,7 @@ class TestConstructedHostJobSummariesAPI:
         jt = JobTemplate.objects.create(name='test-jt', inventory=constructed_inv, project=project)
         job = Job.objects.create(inventory=constructed_inv, job_template=jt, status='successful')
 
-        JobHostSummary.objects.create(
-            job=job, host=source_host, constructed_host=constructed_host,
-            host_name='server1', ok=1
-        )
+        JobHostSummary.objects.create(job=job, host=source_host, constructed_host=constructed_host, host_name='server1', ok=1)
 
         url = reverse('api:host_job_host_summaries_list', kwargs={'pk': constructed_host.pk})
         resp = get(url, user=admin, expect=200)
@@ -190,10 +187,7 @@ class TestConstructedGroupJobSummariesAPI:
         jt = JobTemplate.objects.create(name='test-jt', inventory=constructed_inv, project=project)
         job = Job.objects.create(inventory=constructed_inv, job_template=jt, status='successful')
 
-        JobHostSummary.objects.create(
-            job=job, host=source_host, constructed_host=constructed_host,
-            host_name='server1', ok=1
-        )
+        JobHostSummary.objects.create(job=job, host=source_host, constructed_host=constructed_host, host_name='server1', ok=1)
 
         url = reverse('api:group_job_host_summaries_list', kwargs={'pk': group.pk})
         resp = get(url, user=admin, expect=200)

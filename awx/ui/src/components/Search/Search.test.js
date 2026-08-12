@@ -1,12 +1,7 @@
 import React from 'react';
 import { Toolbar, ToolbarContent } from '@patternfly/react-core';
 import { createMemoryHistory } from 'history';
-import {
-  screen,
-  within,
-  fireEvent,
-  waitFor,
-} from '@testing-library/react';
+import { screen, within, fireEvent, waitFor } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Search from './Search';
 

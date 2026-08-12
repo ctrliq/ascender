@@ -102,14 +102,8 @@ const mockUpdatedLabels = [
 // fields (no id/type/related/summary_fields/webhook_key) plus the object-valued
 // lookups the container unwraps, plus the edits made in the form.
 const mockBuildSubmitValues = () => {
-  const {
-    id,
-    type,
-    related,
-    summary_fields,
-    webhook_key,
-    ...scalarFields
-  } = mockJobTemplate;
+  const { id, type, related, summary_fields, webhook_key, ...scalarFields } =
+    mockJobTemplate;
   return {
     ...scalarFields,
     name: 'new name',
@@ -125,25 +119,27 @@ const mockBuildSubmitValues = () => {
   };
 };
 const mockFormProps = { current: undefined };
-jest.mock('../shared/JobTemplateForm', () =>
-  function MockJobTemplateForm(props) {
-    mockFormProps.current = props;
-    const { handleSubmit, handleCancel } = props;
-    return (
-      <div>
-        <button
-          type="button"
-          aria-label="Save"
-          onClick={() => handleSubmit(mockBuildSubmitValues())}
-        >
-          Save
-        </button>
-        <button type="button" aria-label="Cancel" onClick={handleCancel}>
-          Cancel
-        </button>
-      </div>
-    );
-  }
+jest.mock(
+  '../shared/JobTemplateForm',
+  () =>
+    function MockJobTemplateForm(props) {
+      mockFormProps.current = props;
+      const { handleSubmit, handleCancel } = props;
+      return (
+        <div>
+          <button
+            type="button"
+            aria-label="Save"
+            onClick={() => handleSubmit(mockBuildSubmitValues())}
+          >
+            Save
+          </button>
+          <button type="button" aria-label="Cancel" onClick={handleCancel}>
+            Cancel
+          </button>
+        </div>
+      );
+    }
 );
 
 describe('<JobTemplateEdit />', () => {
@@ -215,9 +211,7 @@ describe('<JobTemplateEdit />', () => {
       { context: { router: { history } } }
     );
     await waitFor(() =>
-      expect(
-        screen.getByRole('button', { name: 'Cancel' })
-      ).toBeInTheDocument()
+      expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument()
     );
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
     expect(history.location.pathname).toEqual(

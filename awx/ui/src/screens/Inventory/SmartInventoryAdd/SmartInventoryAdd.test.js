@@ -47,7 +47,9 @@ describe('<SmartInventoryAdd />', () => {
 
   test('initially renders successfully', () => {
     renderWithContexts(<SmartInventoryAdd />);
-    expect(screen.getByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'mock-submit' })
+    ).toBeInTheDocument();
   });
 
   test('should post to the api when submit is clicked', async () => {
@@ -56,9 +58,7 @@ describe('<SmartInventoryAdd />', () => {
     await user.click(screen.getByRole('button', { name: 'mock-submit' }));
 
     const { instance_groups, ...formRequest } = formData;
-    await waitFor(() =>
-      expect(InventoriesAPI.create).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(InventoriesAPI.create).toHaveBeenCalledTimes(1));
     expect(InventoriesAPI.create).toHaveBeenCalledWith({
       ...formRequest,
       organization: formRequest.organization.id,

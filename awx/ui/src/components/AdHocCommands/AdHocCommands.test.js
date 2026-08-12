@@ -66,7 +66,9 @@ async function runWizardToLaunch(user) {
 
   // step 2: execution environment - select EE2
   await screen.findByText('EE2');
-  await user.click(screen.getByRole('row', { name: /EE2/ }).querySelector('input'));
+  await user.click(
+    screen.getByRole('row', { name: /EE2/ }).querySelector('input')
+  );
   await waitFor(() =>
     expect(
       screen.getByRole('row', { name: /EE2/ }).querySelector('input')
@@ -233,9 +235,7 @@ describe('<AdHocCommands />', () => {
     await waitFor(() =>
       expect(screen.getByText('Failed to launch job.')).toBeInTheDocument()
     );
-    expect(
-      screen.getByRole('button', { name: 'Details' })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Details' })).toBeInTheDocument();
     await settleTooltips();
   });
 

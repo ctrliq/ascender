@@ -133,14 +133,10 @@ function WorkflowJobTemplateForm({
           required={isOrgAdmin}
           autoPopulate={isOrgAdmin}
           validate={
-            isOrgAdmin
-              ? required(t`Select a value for this field`)
-              : undefined
+            isOrgAdmin ? required(t`Select a value for this field`) : undefined
           }
         />
-        <FormGroup
-          fieldId="inventory-lookup"
-        >
+        <FormGroup fieldId="inventory-lookup">
           <InventoryLookup
             promptId="wfjt-ask-inventory-on-launch"
             promptName="ask_inventory_on_launch"

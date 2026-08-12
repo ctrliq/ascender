@@ -2,9 +2,14 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
-import { Form, FormGroup, Switch, Checkbox, FormHelperText,
-HelperText,
-HelperTextItem,
+import {
+  Form,
+  FormGroup,
+  Switch,
+  Checkbox,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 import styled from 'styled-components';
 import { required } from 'util/validators';
@@ -62,9 +67,9 @@ function AdHocDetailsStep({ moduleOptions }) {
             label={t`Module`}
             isRequired
             labelHelp={
-            <Popover
-            content={t`These are the modules that ${brandName} supports running commands against.`}
-            />
+              <Popover
+                content={t`These are the modules that ${brandName} supports running commands against.`}
+              />
             }
           >
             <AnsibleSelect

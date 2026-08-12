@@ -11,7 +11,8 @@ import {
   HelperTextItem,
   TextInput,
   InputGroup,
-  Button, InputGroupItem,
+  Button,
+  InputGroupItem,
 } from '@patternfly/react-core';
 import { useField, useFormikContext } from 'formik';
 import ContentError from 'components/ContentError';
@@ -151,7 +152,7 @@ function WebhookSubForm({ templateType }) {
             webhookServiceHelpers.setValue(val);
             webhookUrlHelpers.setValue(
               pathname.endsWith('/add')
-                ? (t`a new webhook url will be generated on save.`).toUpperCase()
+                ? t`a new webhook url will be generated on save.`.toUpperCase()
                 : `${origin}/api/v2/${templateType}s/${id}/${val}/`
             );
             if (val === webhookServiceMeta.initialValue || val === '') {
@@ -205,13 +206,16 @@ function WebhookSubForm({ templateType }) {
                 onChange={(_event, val) => webhookKeyHelpers.setValue(val)}
               />
             </InputGroupItem>
-            <InputGroupItem><Button icon={<SyncAltIcon />}
-              ouiaId="update-webhook-key-button"
-              isDisabled={isUpdateKeyDisabled}
-              variant="tertiary"
-              aria-label={t`Update webhook key`}
-              onClick={changeWebhookKey}
-             /></InputGroupItem>
+            <InputGroupItem>
+              <Button
+                icon={<SyncAltIcon />}
+                ouiaId="update-webhook-key-button"
+                isDisabled={isUpdateKeyDisabled}
+                variant="tertiary"
+                aria-label={t`Update webhook key`}
+                onClick={changeWebhookKey}
+              />
+            </InputGroupItem>
           </InputGroup>
         </FormGroup>
       </>

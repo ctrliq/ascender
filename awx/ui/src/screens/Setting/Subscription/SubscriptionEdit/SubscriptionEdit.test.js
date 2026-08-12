@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  screen,
-  waitFor,
-  within,
-  fireEvent,
-} from '@testing-library/react';
+import { screen, waitFor, within, fireEvent } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { ConfigAPI, MeAPI, SettingsAPI, RootAPI, UsersAPI } from 'api';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
@@ -318,7 +313,9 @@ describe('<SubscriptionEdit />', () => {
       );
       const selected = container.querySelector('#selected-subscription');
       expect(selected).toBeInTheDocument();
-      expect(within(selected).getByText('mock subscription 50 instances')).toBeInTheDocument();
+      expect(
+        within(selected).getByText('mock subscription 50 instances')
+      ).toBeInTheDocument();
 
       // next skips the analytics step and goes straight to eula
       fireEvent.click(container.querySelector('#subscription-wizard-next'));

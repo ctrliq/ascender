@@ -51,9 +51,7 @@ function InventoryLookup({
       const inventoryKindParams = hideAdvancedInventories
         ? { not__kind: ['smart', 'constructed', 'federated'] }
         : {};
-      const excludeParams = excludeIdsKey
-        ? { not__id__in: excludeIdsKey }
-        : {};
+      const excludeParams = excludeIdsKey ? { not__id__in: excludeIdsKey } : {};
       const [{ data }, actionsResponse] = await Promise.all([
         InventoriesAPI.read(
           mergeParams(params, {

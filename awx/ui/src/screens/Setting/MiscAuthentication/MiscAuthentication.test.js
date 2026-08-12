@@ -43,7 +43,9 @@ describe('<MiscAuthentication />', () => {
   }
 
   test('should render miscellaneous authentication details', async () => {
-    renderMiscAuthentication(['/settings/miscellaneous_authentication/details']);
+    renderMiscAuthentication([
+      '/settings/miscellaneous_authentication/details',
+    ]);
     expect(await screen.findByText('Details')).toBeInTheDocument();
   });
 
@@ -68,6 +70,8 @@ describe('<MiscAuthentication />', () => {
       config: { me: { is_superuser: false } },
     });
     expect(await screen.findByText('Details')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Save' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Save' })
+    ).not.toBeInTheDocument();
   });
 });

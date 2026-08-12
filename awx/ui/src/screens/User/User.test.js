@@ -38,7 +38,9 @@ describe('<User />', () => {
 
   test('initially renders successfully', async () => {
     renderUser('/users/1');
-    expect(await screen.findByRole('tab', { name: 'Details' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('tab', { name: 'Details' })
+    ).toBeInTheDocument();
   });
 
   test('tabs shown for users', async () => {

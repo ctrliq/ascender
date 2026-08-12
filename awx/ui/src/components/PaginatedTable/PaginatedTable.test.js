@@ -116,9 +116,7 @@ describe('<PaginatedTable />', () => {
     await user.click(
       bottomPagination(container).getByRole('button', { name: 'Select' })
     );
-    await user.click(
-      screen.getByRole('menuitem', { name: '20 per page' })
-    );
+    await user.click(screen.getByRole('menuitem', { name: '20 per page' }));
     // PF recomputes the page for the new page size; with 7 items at 20/page it
     // lands back on page 1 (the default, so it is stripped from the query) and
     // only the new page_size is pushed

@@ -2,11 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
-import {
-  Button,
-  EmptyState,
-  EmptyStateBody,
-  } from '@patternfly/react-core';
+import { Button, EmptyState, EmptyStateBody } from '@patternfly/react-core';
 import { CubesIcon } from '@patternfly/react-icons';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { UsersAPI, RolesAPI } from 'api';
@@ -121,7 +117,12 @@ function UserRolesList({ user }) {
   const isSysAdmin = roles.some((role) => role.name === 'System Administrator');
   if (isSysAdmin) {
     return (
-      <EmptyState  headingLevel="h5" icon={CubesIcon}  titleText={<>{t`System Administrator`}</>} variant="full">
+      <EmptyState
+        headingLevel="h5"
+        icon={CubesIcon}
+        titleText={<>{t`System Administrator`}</>}
+        variant="full"
+      >
         <EmptyStateBody>
           {t`System administrators have unrestricted access to all resources.`}
         </EmptyStateBody>

@@ -105,8 +105,7 @@ function Inventories() {
         [`${inventoryGroupsPath}/${nestedObject?.id}/nested_hosts`]: t`Hosts`,
         [`${inventoryGroupsPath}/${nestedObject?.id}/nested_hosts/add`]: t`Create new host`,
         [`${inventoryGroupsPath}/${nestedObject?.id}/nested_groups`]: t`Related Groups`,
-        [`${inventoryGroupsPath}/${nestedObject?.id}/nested_groups/add`]:
-          t`Create new group`,
+        [`${inventoryGroupsPath}/${nestedObject?.id}/nested_groups/add`]: t`Create new group`,
 
         [`${inventorySourcesPath}`]: t`Sources`,
         [`${inventorySourcesPath}/add`]: t`Create new source`,
@@ -116,8 +115,7 @@ function Inventories() {
         [`${inventorySourcesPath}/${nestedObject?.id}/schedules`]: t`Schedules`,
         [`${inventorySourcesPath}/${nestedObject?.id}/schedules/${schedule?.id}`]: `${schedule?.name}`,
         [`${inventorySourcesPath}/${nestedObject?.id}/schedules/add`]: t`Create New Schedule`,
-        [`${inventorySourcesPath}/${nestedObject?.id}/schedules/${schedule?.id}/details`]:
-          t`Schedule details`,
+        [`${inventorySourcesPath}/${nestedObject?.id}/schedules/${schedule?.id}/details`]: t`Schedule details`,
         [`${inventorySourcesPath}/${nestedObject?.id}/notifications`]: t`Notifications`,
       });
     },
@@ -132,10 +130,7 @@ function Inventories() {
       />
       <Routes>
         <Route path="inventory/add" element={<InventoryAdd />} />
-        <Route
-          path="smart_inventory/add"
-          element={<SmartInventoryAdd />}
-        />
+        <Route path="smart_inventory/add" element={<SmartInventoryAdd />} />
         <Route
           path="constructed_inventory/add"
           element={<ConstructedInventoryAdd />}

@@ -1,9 +1,14 @@
 import React, { useMemo } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
-import { FormGroup, InputGroup, Title, InputGroupItem, FormHelperText,
-HelperText,
-HelperTextItem,
+import {
+  FormGroup,
+  InputGroup,
+  Title,
+  InputGroupItem,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 import styled from 'styled-components';
 import {
@@ -82,26 +87,22 @@ function SecretPasswordField({
       fieldId={id}
       label={label}
       isRequired={isRequired}
-      labelHelp={
-        isEdit ? (
-          <RevertButton id={name} defaultValue="" />
-        ) : null
-      }
+      labelHelp={isEdit ? <RevertButton id={name} defaultValue="" /> : null}
     >
       <InputGroup>
-        <InputGroupItem isFill><PasswordInput
-          id={id}
-          name={name}
-          validate={validate}
-          isRequired={isRequired}
-        /></InputGroupItem>
+        <InputGroupItem isFill>
+          <PasswordInput
+            id={id}
+            name={name}
+            validate={validate}
+            isRequired={isRequired}
+          />
+        </InputGroupItem>
       </InputGroup>
       {meta.touched && meta.error && (
         <FormHelperText>
           <HelperText>
-            <HelperTextItem variant="error">
-              {meta.error}
-            </HelperTextItem>
+            <HelperTextItem variant="error">{meta.error}</HelperTextItem>
           </HelperText>
         </FormHelperText>
       )}
@@ -111,25 +112,28 @@ function SecretPasswordField({
 
 function EmailFields({ isEdit = false }) {
   const { t } = useLingui();
-  const helpText = useMemo(() => ({
-    emailRecipients: t`Use one email address per line to create a recipient list for this type of notification.`,
-    emailTimeout: t`The amount of time (in seconds) before the email
+  const helpText = useMemo(
+    () => ({
+      emailRecipients: t`Use one email address per line to create a recipient list for this type of notification.`,
+      emailTimeout: t`The amount of time (in seconds) before the email
         notification stops trying to reach the host and times out. Ranges
         from 1 to 120 seconds.`,
-    emailOptions: (
-      <>
-        {t`See Django`}{' '}
-        <a
-          href="https://docs.djangoproject.com/en/4.0/ref/settings/#std:setting-EMAIL_USE_TLS"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          {t`documentation`}
-        </a>{' '}
-        <span>{t`for more information.`}</span>
-      </>
-    ),
-  }), [t]);
+      emailOptions: (
+        <>
+          {t`See Django`}{' '}
+          <a
+            href="https://docs.djangoproject.com/en/4.0/ref/settings/#std:setting-EMAIL_USE_TLS"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t`documentation`}
+          </a>{' '}
+          <span>{t`for more information.`}</span>
+        </>
+      ),
+    }),
+    [t]
+  );
   return (
     <>
       <FormField
@@ -441,20 +445,23 @@ function RocketChatFields() {
 
 function SlackFields({ isEdit = false }) {
   const { t } = useLingui();
-  const helpText = useMemo(() => ({
-    slackChannels: (
-      <>
-        {t`One Slack channel per line. The pound symbol (#)
+  const helpText = useMemo(
+    () => ({
+      slackChannels: (
+        <>
+          {t`One Slack channel per line. The pound symbol (#)
         is required for channels. To respond to or start a thread to a specific message add the parent message Id to the channel where the parent message Id is 16 digits. A dot (.) must be manually inserted after the 10th digit.  ie:#destination-channel, 1231257890.006423. See Slack`}{' '}
-        <a href="https://api.slack.com/messaging/retrieving#individual_messages">
-          {t`documentation`}
-        </a>{' '}
-        <span>{t`for more information.`}</span>
-      </>
-    ),
-    slackColor: t`Specify a notification color. Acceptable colors are hex
+          <a href="https://api.slack.com/messaging/retrieving#individual_messages">
+            {t`documentation`}
+          </a>{' '}
+          <span>{t`for more information.`}</span>
+        </>
+      ),
+      slackColor: t`Specify a notification color. Acceptable colors are hex
         color code (example: #3af or #789abc).`,
-  }), [t]);
+    }),
+    [t]
+  );
   return (
     <>
       <ArrayTextField

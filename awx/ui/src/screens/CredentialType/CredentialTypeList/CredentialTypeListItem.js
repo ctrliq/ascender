@@ -39,13 +39,14 @@ function CredentialTypeListItem({
           visible={credentialType.summary_fields.user_capabilities.edit}
           tooltip={t`Edit credential type`}
         >
-          <Button icon={<PencilAltIcon />}
+          <Button
+            icon={<PencilAltIcon />}
             ouiaId={`${credentialType.id}-edit-button`}
             aria-label={t`Edit credential type`}
             variant="plain"
             component={Link}
             to={`/credential_types/${credentialType.id}/edit`}
-           />
+          />
         </ActionItem>
       </ActionsTd>
     </Tr>

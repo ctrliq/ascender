@@ -76,10 +76,7 @@ function ContainerGroupFormFields({ instanceGroup }) {
         tooltip={t`Maximum number of forks to allow across all jobs running concurrently on this group.\n          Zero means no limit will be enforced.`}
       />
 
-      <FormGroup
-        fieldId="container-groups-option-checkbox"
-        label={t`Options`}
-      >
+      <FormGroup fieldId="container-groups-option-checkbox" label={t`Options`}>
         <FormCheckboxLayout>
           <CheckboxField
             name="override"

@@ -2,9 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 const DetailList = ({ children, stacked, ...props }) => (
-  <dl {...props}>
-    {children}
-  </dl>
+  <dl {...props}>{children}</dl>
 );
 
 export default styled(DetailList)`
@@ -38,7 +36,6 @@ export default styled(DetailList)`
   & dd .pf-v6-c-label {
     margin-left: -6px;
   }
-
 
   & + & {
     margin-top: var(--pf-v6-global--spacer--2xl);

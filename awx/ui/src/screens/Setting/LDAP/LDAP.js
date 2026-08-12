@@ -1,9 +1,5 @@
 import React from 'react';
-import { Link,
-  Routes,
-  Route,
-  Navigate,
-  useParams } from 'react-router';
+import { Link, Routes, Route, Navigate, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
@@ -32,10 +28,7 @@ function LDAP() {
             path=":category"
             element={<CategoryRedirect baseURL={baseURL} />}
           />
-          <Route
-            path=":category/details"
-            element={<LDAPDetail />}
-          />
+          <Route path=":category/details" element={<LDAPDetail />} />
           <Route path=":category/edit" element={<LDAPEdit />} />
           <Route
             path="*"

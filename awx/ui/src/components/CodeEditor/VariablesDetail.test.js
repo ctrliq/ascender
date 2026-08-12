@@ -17,9 +17,13 @@ beforeEach(() => {
 });
 
 const yamlActive = () =>
-  screen.getByRole('button', { name: 'YAML' }).classList.contains('pf-m-primary');
+  screen
+    .getByRole('button', { name: 'YAML' })
+    .classList.contains('pf-m-primary');
 const jsonActive = () =>
-  screen.getByRole('button', { name: 'JSON' }).classList.contains('pf-m-primary');
+  screen
+    .getByRole('button', { name: 'JSON' })
+    .classList.contains('pf-m-primary');
 
 describe('<VariablesDetail>', () => {
   test('should render readonly CodeEditor in yaml mode', () => {
@@ -72,9 +76,9 @@ describe('<VariablesDetail>', () => {
       <VariablesDetail value="" label="Variables" name="test" />
     );
     expect(container.querySelectorAll('.ace_editor')).toHaveLength(1);
-    expect(
-      container.querySelector('.pf-v6-c-form__label')
-    ).toHaveTextContent('Variables');
+    expect(container.querySelector('.pf-v6-c-form__label')).toHaveTextContent(
+      'Variables'
+    );
   });
 
   test('should preserve the selected mode when the value prop changes', async () => {
@@ -84,7 +88,9 @@ describe('<VariablesDetail>', () => {
     await user.click(screen.getByRole('button', { name: 'JSON' }));
     expect(jsonActive()).toBe(true);
 
-    rerender(<VariablesDetail value="---bar: baz" label="Variables" name="test" />);
+    rerender(
+      <VariablesDetail value="---bar: baz" label="Variables" name="test" />
+    );
     // mode is preserved (still JSON) after the value prop changes
     expect(jsonActive()).toBe(true);
     // NOTE: original also asserted the recomputed CodeEditor value

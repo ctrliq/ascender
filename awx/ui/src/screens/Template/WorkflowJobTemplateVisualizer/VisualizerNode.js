@@ -33,7 +33,9 @@ const NodeContents = styled.div`
   font-size: 13px;
   padding: 0px 10px;
   background-color: ${(props) =>
-    props.$isInvalidLinkTarget ? "var(--ascender-workflow-graph-bg)" : "var(--ascender-workflow-node-bg)"};
+    props.$isInvalidLinkTarget
+      ? 'var(--ascender-workflow-graph-bg)'
+      : 'var(--ascender-workflow-node-bg)'};
   height: 100%;
   display: flex;
   justify-content: center;
@@ -258,9 +260,7 @@ function VisualizerNode({
             setHovering(false);
             dispatch({ type: 'SELECT_SOURCE_FOR_LINKING', node });
           }}
-          onMouseEnter={() =>
-            updateHelpText(t`Link to an available node`)
-          }
+          onMouseEnter={() => updateHelpText(t`Link to an available node`)}
           onMouseLeave={() => updateHelpText(null)}
         >
           <LinkIcon />
@@ -304,12 +304,12 @@ function VisualizerNode({
               style={{
                 fill:
                   hovering && addingLink && !node.isInvalidLinkTarget
-                    ? "var(--pf-t--global--color--brand--default)"
-                    : "var(--pf-t--global--border--color--default)",
+                    ? 'var(--pf-t--global--color--brand--default)'
+                    : 'var(--pf-t--global--border--color--default)',
                 stroke:
                   hovering && addingLink && !node.isInvalidLinkTarget
-                    ? "var(--pf-t--global--color--brand--default)"
-                    : "var(--pf-t--global--border--color--default)",
+                    ? 'var(--pf-t--global--color--brand--default)'
+                    : 'var(--pf-t--global--border--color--default)',
               }}
               height={wfConstants.nodeH / 4}
               rx={2}
@@ -333,11 +333,11 @@ function VisualizerNode({
         )}
         <rect
           style={{
-            fill: "var(--ascender-workflow-node-bg)",
+            fill: 'var(--ascender-workflow-node-bg)',
             stroke:
               hovering && addingLink && !node.isInvalidLinkTarget
-                ? "var(--pf-t--global--color--brand--default)"
-                : "var(--pf-t--global--border--color--default)",
+                ? 'var(--pf-t--global--color--brand--default)'
+                : 'var(--pf-t--global--border--color--default)',
           }}
           height={wfConstants.nodeH}
           rx="2"

@@ -1,17 +1,16 @@
-
 import React, { useState } from 'react';
 
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
-	Button,
-	ButtonVariant,
-	Dropdown,
-	DropdownItem,
-	DropdownList,
-	InputGroup,
-	InputGroupItem,
-	MenuToggle,
+  Button,
+  ButtonVariant,
+  Dropdown,
+  DropdownItem,
+  DropdownList,
+  InputGroup,
+  InputGroupItem,
+  MenuToggle,
 } from '@patternfly/react-core';
 import {
   SortAlphaDownIcon,
@@ -93,10 +92,7 @@ function Sort({ columns, qsConfig, onSort = null }) {
   const sortDropdownItems = columns
     .filter(({ key }) => key !== sortKey)
     .map(({ key, name }) => (
-      <DropdownItem
-        key={key}
-        ouiaId={`${name}-dropdown-item`}
-      >
+      <DropdownItem key={key} ouiaId={`${name}-dropdown-item`}>
         {name}
       </DropdownItem>
     ));
@@ -136,14 +132,16 @@ function Sort({ columns, qsConfig, onSort = null }) {
             </Dropdown>
           )) || <NoOptionDropdown>{sortedColumnName}</NoOptionDropdown>}
 
-          <InputGroupItem><Button
-            variant={ButtonVariant.control}
-            aria-label={t`Sort`}
-            onClick={handleSort}
-            ouiaId="sort-button"
-          >
-            <SortIcon />
-          </Button></InputGroupItem>
+          <InputGroupItem>
+            <Button
+              variant={ButtonVariant.control}
+              aria-label={t`Sort`}
+              onClick={handleSort}
+              ouiaId="sort-button"
+            >
+              <SortIcon />
+            </Button>
+          </InputGroupItem>
         </InputGroup>
       )}
     </>

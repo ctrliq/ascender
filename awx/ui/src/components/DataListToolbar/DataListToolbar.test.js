@@ -202,9 +202,7 @@ describe('<DataListToolbar />', () => {
       />
     );
 
-    await user.click(
-      screen.getByRole('button', { name: 'Expand all rows' })
-    );
+    await user.click(screen.getByRole('button', { name: 'Expand all rows' }));
     expect(onExpandAll).toHaveBeenCalledWith(true);
   });
 

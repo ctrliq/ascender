@@ -1,11 +1,11 @@
-
 import React from 'react';
 import { Link, Navigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 import {
   EmptyState,
-  EmptyStateBody, EmptyStateFooter,
+  EmptyStateBody,
+  EmptyStateFooter,
 } from '@patternfly/react-core';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import { useSession } from 'contexts/Session';
@@ -29,19 +29,22 @@ function ContentError({ error = null, children, isNotFound = false }) {
       {is401 ? (
         <Navigate to="/login" />
       ) : (
-        <EmptyState  headingLevel="h3" icon={ExclamationTriangleIcon}  titleText={<>{is404
-              ? t`Not Found`
-              : t`Something went wrong...`}</>} variant="full">
+        <EmptyState
+          headingLevel="h3"
+          icon={ExclamationTriangleIcon}
+          titleText={<>{is404 ? t`Not Found` : t`Something went wrong...`}</>}
+          variant="full"
+        >
           <EmptyStateBody>
             {is404
               ? t`The page you requested could not be found.`
               : t`There was an error loading this content. Please reload the page.`}{' '}
-            {children || (
-              <Link to="/home">{t`Back to Dashboard.`}</Link>
-            )}
-          </EmptyStateBody><EmptyStateFooter>
-          {error && <ErrorDetail error={error} />}
-        </EmptyStateFooter></EmptyState>
+            {children || <Link to="/home">{t`Back to Dashboard.`}</Link>}
+          </EmptyStateBody>
+          <EmptyStateFooter>
+            {error && <ErrorDetail error={error} />}
+          </EmptyStateFooter>
+        </EmptyState>
       )}
     </>
   );

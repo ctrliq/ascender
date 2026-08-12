@@ -1,10 +1,6 @@
 import React from 'react';
 import { Plural, useLingui } from '@lingui/react/macro';
-import {
-	Button,
-	Tooltip,
-	DropdownItem,
-} from '@patternfly/react-core';
+import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
 
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
@@ -42,9 +38,7 @@ function HealthCheckButton({
           isLoading={healthCheckPending}
           spinnerAriaLabel={t`Running health check`}
         >
-          {healthCheckPending
-            ? t`Running health check`
-            : t`Run health check`}
+          {healthCheckPending ? t`Running health check` : t`Run health check`}
         </DropdownItem>
       </Tooltip>
     );
@@ -60,9 +54,7 @@ function HealthCheckButton({
           isLoading={healthCheckPending}
           spinnerAriaLabel={t`Running health check`}
         >
-          {healthCheckPending
-            ? t`Running health check`
-            : t`Run health check`}
+          {healthCheckPending ? t`Running health check` : t`Run health check`}
         </Button>
       </div>
     </Tooltip>

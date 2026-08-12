@@ -45,6 +45,8 @@ describe('<OrganizationListItem />', () => {
 
   test('edit button hidden from users without edit capabilities', () => {
     renderItem(false);
-    expect(screen.queryByLabelText('Edit Organization')).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText('Edit Organization')
+    ).not.toBeInTheDocument();
   });
 });

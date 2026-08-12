@@ -23,7 +23,9 @@ function Troubleshooting() {
             path="*"
             element={
               <ContentError isNotFound>
-                <Link to={`${baseURL}/details`}>{t`View Troubleshooting settings`}</Link>
+                <Link
+                  to={`${baseURL}/details`}
+                >{t`View Troubleshooting settings`}</Link>
               </ContentError>
             }
           />

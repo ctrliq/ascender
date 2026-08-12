@@ -30,8 +30,7 @@ const credential = {
 
 // The modal is rendered in a portal; query its fields/buttons against document.
 const getInput = (id) => document.querySelector(`input#credential-${id}`);
-const getRunButton = () =>
-  screen.getByRole('button', { name: 'Run' });
+const getRunButton = () => screen.getByRole('button', { name: 'Run' });
 
 const expectedPayload = {
   inputs: {

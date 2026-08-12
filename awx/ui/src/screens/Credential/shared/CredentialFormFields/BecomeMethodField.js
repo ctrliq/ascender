@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import {
-	Button,
-	FormGroup,
-	FormHelperText,
-	HelperText,
-	HelperTextItem,
-	MenuToggle,
-	Select,
-	SelectList,
-	SelectOption,
-	TextInputGroup,
-	TextInputGroupMain,
-	TextInputGroupUtilities,
+  Button,
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  MenuToggle,
+  Select,
+  SelectList,
+  SelectOption,
+  TextInputGroup,
+  TextInputGroupMain,
+  TextInputGroupUtilities,
 } from '@patternfly/react-core';
 import { TimesIcon } from '@patternfly/react-icons';
 import Popover from 'components/Popover';
@@ -49,7 +49,8 @@ function BecomeMethodField({ fieldOptions, isRequired = false }) {
   const showCreateOption =
     filterValue.trim() &&
     !options.some(
-      (option) => option.value.toLowerCase() === filterValue.trim().toLowerCase()
+      (option) =>
+        option.value.toLowerCase() === filterValue.trim().toLowerCase()
     );
 
   return (
@@ -85,7 +86,11 @@ function BecomeMethodField({ fieldOptions, isRequired = false }) {
           >
             <TextInputGroup isPlain>
               <TextInputGroupMain
-                value={filterValue !== '' ? filterValue : (becomeMethodField.value || '')}
+                value={
+                  filterValue !== ''
+                    ? filterValue
+                    : becomeMethodField.value || ''
+                }
                 onClick={() => setIsOpen(true)}
                 onChange={(_event, val) => {
                   setFilterValue(val);
@@ -101,14 +106,15 @@ function BecomeMethodField({ fieldOptions, isRequired = false }) {
               />
               {(filterValue || becomeMethodField.value) && (
                 <TextInputGroupUtilities>
-                  <Button icon={<TimesIcon />}
+                  <Button
+                    icon={<TimesIcon />}
                     variant="plain"
                     onClick={() => {
                       helpers.setValue('');
                       setFilterValue('');
                     }}
                     aria-label={t`Clear`}
-                   />
+                  />
                 </TextInputGroupUtilities>
               )}
             </TextInputGroup>
@@ -132,18 +138,14 @@ function BecomeMethodField({ fieldOptions, isRequired = false }) {
             </SelectOption>
           )}
           {filteredOptions.length === 0 && !showCreateOption && (
-            <SelectOption isDisabled>
-              {t`No results found`}
-            </SelectOption>
+            <SelectOption isDisabled>{t`No results found`}</SelectOption>
           )}
         </SelectList>
       </Select>
       {meta.touched && meta.error && (
         <FormHelperText>
           <HelperText>
-            <HelperTextItem variant="error">
-              {meta.error}
-            </HelperTextItem>
+            <HelperTextItem variant="error">{meta.error}</HelperTextItem>
           </HelperText>
         </FormHelperText>
       )}

@@ -130,14 +130,15 @@ function ScheduleListItem({
           visible={schedule.summary_fields.user_capabilities.edit}
           tooltip={t`Edit Schedule`}
         >
-          <Button icon={<PencilAltIcon />}
+          <Button
+            icon={<PencilAltIcon />}
             ouiaId={`${schedule.id}-edit-button`}
             aria-label={t`Edit Schedule`}
             css="grid-column: 2"
             variant="plain"
             component={Link}
             to={`${scheduleBaseUrl}/edit`}
-           />
+          />
         </ActionItem>
       </ActionsTd>
     </Tr>

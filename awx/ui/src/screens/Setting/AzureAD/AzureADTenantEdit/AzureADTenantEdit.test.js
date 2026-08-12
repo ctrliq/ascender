@@ -112,9 +112,7 @@ describe('<AzureADTenantEdit />', () => {
   test('should successfully send request to api on form submission', async () => {
     const { user } = await renderEdit();
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     const callArgs = SettingsAPI.updateAll.mock.calls[0][0];
     expect(callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY).toEqual(
       'mock tenant key'
@@ -129,9 +127,9 @@ describe('<AzureADTenantEdit />', () => {
     expect(
       typeof callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_ORGANIZATION_MAP
     ).toEqual('object');
-    expect(
-      typeof callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP
-    ).toEqual('object');
+    expect(typeof callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP).toEqual(
+      'object'
+    );
   });
 
   test('should navigate to azure tenant detail on successful submission', async () => {

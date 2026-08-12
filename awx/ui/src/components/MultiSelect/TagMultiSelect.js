@@ -87,14 +87,15 @@ function TagMultiSelect({ onChange, value }) {
             </TextInputGroupMain>
             {(filterValue || selections.length > 0) && (
               <TextInputGroupUtilities>
-                <Button icon={<TimesIcon />}
+                <Button
+                  icon={<TimesIcon />}
                   variant="plain"
                   onClick={() => {
                     onChange('');
                     setFilterValue('');
                   }}
                   aria-label={t`Clear`}
-                 />
+                />
               </TextInputGroupUtilities>
             )}
           </TextInputGroup>

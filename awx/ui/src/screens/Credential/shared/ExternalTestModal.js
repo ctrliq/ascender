@@ -2,14 +2,8 @@ import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 import { Formik } from 'formik';
-import {
-	Button,
-	Form,
-	FormGroup
-} from '@patternfly/react-core';
-import {
-	Modal
-} from '@patternfly/react-core/deprecated';
+import { Button, Form, FormGroup } from '@patternfly/react-core';
+import { Modal } from '@patternfly/react-core/deprecated';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
 import AnsibleSelect from 'components/AnsibleSelect';
 import FormField from 'components/FormField';

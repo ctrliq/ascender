@@ -1,10 +1,6 @@
 import React, { useContext } from 'react';
-import {
-	Button
-} from '@patternfly/react-core';
-import {
-	Modal
-} from '@patternfly/react-core/deprecated';
+import { Button } from '@patternfly/react-core';
+import { Modal } from '@patternfly/react-core/deprecated';
 
 import { Trans, useLingui } from '@lingui/react/macro';
 import { WorkflowDispatchContext } from 'contexts/Workflow';

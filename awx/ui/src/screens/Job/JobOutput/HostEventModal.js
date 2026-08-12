@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import {
-	Tab,
-	Tabs,
-	TabTitleText
-} from '@patternfly/react-core';
-import {
-	Modal
-} from '@patternfly/react-core/deprecated';
+import { Tab, Tabs, TabTitleText } from '@patternfly/react-core';
+import { Modal } from '@patternfly/react-core/deprecated';
 import { useLingui } from '@lingui/react/macro';
 
 import { encode } from 'html-entities';
@@ -73,7 +67,11 @@ const getStdOutValue = (hostEvent) => {
 
 const defaultHostEvent = {};
 
-function HostEventModal({ onClose, hostEvent = defaultHostEvent, isOpen = false }) {
+function HostEventModal({
+  onClose,
+  hostEvent = defaultHostEvent,
+  isOpen = false,
+}) {
   const { t } = useLingui();
   const [hostStatus, setHostStatus] = useState(null);
   const [activeTabKey, setActiveTabKey] = useState(0);
@@ -114,10 +112,7 @@ function HostEventModal({ onClose, hostEvent = defaultHostEvent, isOpen = false 
             style={{ alignItems: 'center', marginTop: '20px' }}
             gutter="sm"
           >
-            <Detail
-              label={t`Host`}
-              value={hostEvent.event_data?.host}
-            />
+            <Detail label={t`Host`} value={hostEvent.event_data?.host} />
             {hostEvent.summary_fields?.host?.description ? (
               <Detail
                 label={t`Description`}
@@ -134,15 +129,9 @@ function HostEventModal({ onClose, hostEvent = defaultHostEvent, isOpen = false 
             <Detail label={t`Task`} value={hostEvent.task} />
             <Detail
               label={t`Module`}
-              value={
-                hostEvent.event_data?.task_action ||
-                t`No result found`
-              }
+              value={hostEvent.event_data?.task_action || t`No result found`}
             />
-            <Detail
-              label={t`Command`}
-              value={hostEvent.event_data?.res?.cmd}
-            />
+            <Detail label={t`Command`} value={hostEvent.event_data?.res?.cmd} />
           </DetailList>
         </Tab>
         <Tab

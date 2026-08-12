@@ -118,9 +118,7 @@ function CredentialPasswordsStep({ launchConfig }) {
           id={`launch-vault-password-${credId}`}
           key={credId}
           label={
-            credId === ''
-              ? t`Vault password`
-              : t`Vault password | ${credId}`
+            credId === '' ? t`Vault password` : t`Vault password | ${credId}`
           }
           name={`credential_passwords['vault_password${
             credId !== '' ? `.${credId}` : ''

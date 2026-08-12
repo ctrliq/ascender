@@ -177,9 +177,7 @@ describe('<UserAndTeamAccessAdd/>', () => {
       page: 1,
       page_size: 5,
     });
-    expect(
-      await screen.findByText('Job Template Foo Bar')
-    ).toBeInTheDocument();
+    expect(await screen.findByText('Job Template Foo Bar')).toBeInTheDocument();
 
     // Step 2: select the fetched resource row, advance.
     await user.click(screen.getByText('Job Template Foo Bar'));
@@ -193,7 +191,10 @@ describe('<UserAndTeamAccessAdd/>', () => {
     // associate must use the resourceId passed by the parent screen (99), not a
     // route param (empty under react-router v6).
     await waitFor(() =>
-      expect(UsersAPI.associateRole).toHaveBeenCalledWith(99, expect.any(Number))
+      expect(UsersAPI.associateRole).toHaveBeenCalledWith(
+        99,
+        expect.any(Number)
+      )
     );
   });
 
@@ -229,9 +230,7 @@ describe('<UserAndTeamAccessAdd/>', () => {
     await settleList();
 
     expect(JobTemplatesAPI.read).toHaveBeenCalled();
-    expect(
-      await screen.findByText('Job Template Foo Bar')
-    ).toBeInTheDocument();
+    expect(await screen.findByText('Job Template Foo Bar')).toBeInTheDocument();
 
     await user.click(screen.getByText('Job Template Foo Bar'));
     await user.click(footerButton('Next'));

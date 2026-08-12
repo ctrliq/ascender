@@ -15,9 +15,7 @@ jest.mock('./useThrottle', () => ({
 
 function Test({ templates }) {
   const syncedTemplates = useWsTemplates(templates);
-  return (
-    <div data-testid="templates">{JSON.stringify(syncedTemplates)}</div>
-  );
+  return <div data-testid="templates">{JSON.stringify(syncedTemplates)}</div>;
 }
 
 function getTemplates() {

@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect } from 'react';
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useParams,
-  useLocation } from 'react-router';
+  useLocation,
+} from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -92,9 +94,7 @@ function Application({ setBreadcrumb }) {
             {error.response?.status === 404 && (
               <span>
                 {t`Application not found.`}{' '}
-                <Link to="/applications">
-                  {t`View all applications.`}
-                </Link>
+                <Link to="/applications">{t`View all applications.`}</Link>
               </span>
             )}
           </ContentError>
@@ -108,10 +108,7 @@ function Application({ setBreadcrumb }) {
       <Card>
         {cardHeader}
         <Routes>
-          <Route
-            index
-            element={<Navigate to="details" replace />}
-          />
+          <Route index element={<Navigate to="details" replace />} />
           {application && (
             <>
               <Route

@@ -152,12 +152,7 @@ function TeamList() {
                 qsConfig={QS_CONFIG}
                 additionalControls={[
                   ...(canAdd
-                    ? [
-                        <ToolbarAddButton
-                          key="add"
-                          linkTo="/teams/add"
-                        />,
-                      ]
+                    ? [<ToolbarAddButton key="add" linkTo="/teams/add" />]
                     : []),
                   <ToolbarDeleteButton
                     key="delete"
@@ -179,9 +174,7 @@ function TeamList() {
               />
             )}
             emptyStateControls={
-              canAdd ? (
-                <ToolbarAddButton key="add" linkTo="/teams/add" />
-              ) : null
+              canAdd ? <ToolbarAddButton key="add" linkTo="/teams/add" /> : null
             }
           />
         </Card>

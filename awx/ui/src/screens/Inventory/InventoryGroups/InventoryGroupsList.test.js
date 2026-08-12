@@ -101,7 +101,9 @@ describe('<InventoryGroupsList />', () => {
 
   test('should fetch groups from api and render them in the list', async () => {
     renderUnder('/inventories/inventory/3/groups');
-    expect(await screen.findByRole('link', { name: 'foo' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('link', { name: 'foo' })
+    ).toBeInTheDocument();
     expect(InventoriesAPI.readGroups).toHaveBeenCalled();
     expect(screen.getByRole('link', { name: 'bar' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'baz' })).toBeInTheDocument();
@@ -116,7 +118,9 @@ describe('<InventoryGroupsList />', () => {
 
   test('should check and uncheck the row item', async () => {
     const { user } = renderUnder('/inventories/inventory/3/groups');
-    const row = (await screen.findByRole('link', { name: 'foo' })).closest('tr');
+    const row = (await screen.findByRole('link', { name: 'foo' })).closest(
+      'tr'
+    );
     const checkbox = within(row).getByRole('checkbox');
     expect(checkbox).not.toBeChecked();
     await user.click(checkbox);
@@ -198,7 +202,9 @@ describe('<InventoryGroupsList/> error handling', () => {
 
   test('should show error modal when group is not successfully deleted from api', async () => {
     const { user } = renderUnder('/inventories/inventory/3/groups');
-    const row = (await screen.findByRole('link', { name: 'foo' })).closest('tr');
+    const row = (await screen.findByRole('link', { name: 'foo' })).closest(
+      'tr'
+    );
     await user.click(within(row).getByRole('checkbox'));
 
     await user.click(screen.getByRole('button', { name: 'Delete' }));

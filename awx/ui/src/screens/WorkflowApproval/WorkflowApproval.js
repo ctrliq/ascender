@@ -3,12 +3,14 @@ import { useLingui } from '@lingui/react/macro';
 
 import { Card, PageSection } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useParams,
-  useLocation } from 'react-router';
+  useLocation,
+} from 'react-router';
 import useRequest from 'hooks/useRequest';
 import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';

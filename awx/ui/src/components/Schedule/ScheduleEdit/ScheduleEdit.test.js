@@ -167,9 +167,27 @@ describe('<ScheduleEdit />', () => {
       data: {
         count: 3,
         results: [
-          { id: 1, name: 'Credential 1', kind: 'ssh', url: '', credential_type: 1 },
-          { id: 2, name: 'Credential 2', kind: 'ssh', url: '', credential_type: 1 },
-          { id: 3, name: 'Credential 3', kind: 'ssh', url: '', credential_type: 1 },
+          {
+            id: 1,
+            name: 'Credential 1',
+            kind: 'ssh',
+            url: '',
+            credential_type: 1,
+          },
+          {
+            id: 2,
+            name: 'Credential 2',
+            kind: 'ssh',
+            url: '',
+            credential_type: 1,
+          },
+          {
+            id: 3,
+            name: 'Credential 3',
+            kind: 'ssh',
+            url: '',
+            credential_type: 1,
+          },
         ],
       },
     });

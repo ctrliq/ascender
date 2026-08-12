@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
-	Label, MenuToggle,
-	Select,
-	SelectGroup,
-	SelectList,
-	SelectOption,
-	TextInputGroup,
-	TextInputGroupMain
+  Label,
+  MenuToggle,
+  Select,
+  SelectGroup,
+  SelectList,
+  SelectOption,
+  TextInputGroup,
+  TextInputGroupMain,
 } from '@patternfly/react-core';
 
 import ChipGroup from 'components/ChipGroup';
@@ -88,9 +89,7 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
           handleFilter(v);
           return;
         }
-        const node = sortedJobs.find(
-          (n) => n.summary_fields.job.name === v
-        );
+        const node = sortedJobs.find((n) => n.summary_fields.job.name === v);
         if (node) {
           const url = `/jobs/${JOB_URL_SEGMENT_MAP[node.summary_fields.job.type]}/${node.summary_fields.job?.id}/output`;
           navigate(url);
@@ -98,9 +97,7 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
         }
       }}
       popperProps={
-        parentRef?.current
-          ? { appendTo: parentRef.current }
-          : undefined
+        parentRef?.current ? { appendTo: parentRef.current } : undefined
       }
       toggle={(toggleRef) => (
         <MenuToggle
@@ -110,7 +107,11 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
         >
           {filterBy ? (
             <ChipGroup numChips={1} totalChips={1}>
-              <Label variant="outline" key={filterBy} onClose={() => handleFilter(filterBy)}>
+              <Label
+                variant="outline"
+                key={filterBy}
+                onClose={() => handleFilter(filterBy)}
+              >
                 {statusLabels[filterBy] || filterBy}
               </Label>
             </ChipGroup>
@@ -147,10 +148,7 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
         </SelectGroup>
         <SelectGroup label={t`Workflow Nodes`} key="nodes">
           {filteredJobs?.map((node) => (
-            <SelectOption
-              key={node.id}
-              value={node.summary_fields.job.name}
-            >
+            <SelectOption key={node.id} value={node.summary_fields.job.name}>
               {stringIsUUID(node.identifier)
                 ? node.summary_fields.job.name
                 : node.identifier}

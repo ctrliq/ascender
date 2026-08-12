@@ -1,18 +1,18 @@
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
-	PageSection,
-	Card,
-	CardHeader,
-	CardBody,
-	MenuToggle,
-	Select,
-	SelectList,
-	SelectOption,
-	Toolbar,
-	ToolbarGroup,
-	ToolbarContent,
-	ToolbarItem
+  PageSection,
+  Card,
+  CardHeader,
+  CardBody,
+  MenuToggle,
+  Select,
+  SelectList,
+  SelectOption,
+  Toolbar,
+  ToolbarGroup,
+  ToolbarContent,
+  ToolbarItem,
 } from '@patternfly/react-core';
 
 import { MetricsAPI, InstancesAPI } from 'api';
@@ -80,9 +80,7 @@ function Metrics() {
 
       return {
         instances:
-          instanceNames.length > 1
-            ? [...instanceNames, t`All`]
-            : instanceNames,
+          instanceNames.length > 1 ? [...instanceNames, t`All`] : instanceNames,
         metrics: metricOptions,
       };
     }, [t]),

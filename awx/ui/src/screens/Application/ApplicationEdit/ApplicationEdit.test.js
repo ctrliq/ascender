@@ -19,35 +19,35 @@ jest.mock('react-router', () => ({
 
 // The real form is exercised in ApplicationForm.test.js; here we mock it so the
 // container's update/navigation/submit-error logic is what's tested.
-jest.mock('../shared/ApplicationForm', () => function MockApplicationForm({
-    onSubmit,
-    onCancel,
-    submitError,
-  }) {
-    return (
-      <div>
-        {submitError ? <div>FormSubmitError</div> : null}
-        <button
-          type="button"
-          onClick={() =>
-            onSubmit({
-              authorization_grant_type: 'authorization-code',
-              client_type: 'confidential',
-              description: 'bar',
-              name: 'foo',
-              organization: { id: 1 },
-              redirect_uris: 'http://www.google.com',
-            })
-          }
-        >
-          Submit
-        </button>
-        <button type="button" onClick={onCancel}>
-          Cancel
-        </button>
-      </div>
-    );
-  });
+jest.mock(
+  '../shared/ApplicationForm',
+  () =>
+    function MockApplicationForm({ onSubmit, onCancel, submitError }) {
+      return (
+        <div>
+          {submitError ? <div>FormSubmitError</div> : null}
+          <button
+            type="button"
+            onClick={() =>
+              onSubmit({
+                authorization_grant_type: 'authorization-code',
+                client_type: 'confidential',
+                description: 'bar',
+                name: 'foo',
+                organization: { id: 1 },
+                redirect_uris: 'http://www.google.com',
+              })
+            }
+          >
+            Submit
+          </button>
+          <button type="button" onClick={onCancel}>
+            Cancel
+          </button>
+        </div>
+      );
+    }
+);
 
 const authorizationOptions = [
   {

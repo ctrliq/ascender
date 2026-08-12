@@ -126,9 +126,7 @@ const deletableResults = mockResults.map((job) => ({
 
 function getRowCheckboxes() {
   const selectAll = screen.queryByRole('checkbox', { name: 'Select all' });
-  return screen
-    .getAllByRole('checkbox')
-    .filter((box) => box !== selectAll);
+  return screen.getAllByRole('checkbox').filter((box) => box !== selectAll);
 }
 
 describe('<JobList />', () => {
@@ -282,9 +280,7 @@ describe('<JobList />', () => {
     );
 
     // a re-fetch of the list is triggered after deletion
-    await waitFor(() =>
-      expect(UnifiedJobsAPI.read).toHaveBeenCalledTimes(2)
-    );
+    await waitFor(() => expect(UnifiedJobsAPI.read).toHaveBeenCalledTimes(2));
     expect(UnifiedJobsAPI.read).toHaveBeenLastCalledWith(jobListParams);
   });
 

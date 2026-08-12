@@ -88,9 +88,7 @@ describe('<UIEdit />', () => {
       )
     );
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       CUSTOM_LOGIN_INFO: 'new login info',
       CUSTOM_LOGO: '',

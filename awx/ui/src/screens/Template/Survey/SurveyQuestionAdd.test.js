@@ -49,9 +49,7 @@ describe('<SurveyQuestionAdd />', () => {
       <SurveyQuestionAdd survey={survey} updateSurvey={updateSurvey} />
     );
 
-    expect(
-      screen.getByRole('button', { name: 'Save' })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
     expect(document.querySelector('#question-name')).toBeInTheDocument();
   });
 

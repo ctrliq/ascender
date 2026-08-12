@@ -221,7 +221,10 @@ function VisualizerGraph({ readOnly }) {
             refX="10"
             viewBox="0 -5 10 10"
           >
-            <path d="M0,-5L10,0L0,5" style={{ fill: "var(--pf-t--global--border--color--default)" }} />
+            <path
+              d="M0,-5L10,0L0,5"
+              style={{ fill: 'var(--pf-t--global--border--color--default)' }}
+            />
           </marker>
         </defs>
         <rect
@@ -286,7 +289,7 @@ function VisualizerGraph({ readOnly }) {
             <PotentialLink
               id="workflow-potentialLink"
               markerEnd="url(#workflow-triangle)"
-              style={{ stroke: "var(--pf-t--global--border--color--default)" }}
+              style={{ stroke: 'var(--pf-t--global--border--color--default)' }}
               strokeDasharray="5,5"
               strokeWidth="2"
             />

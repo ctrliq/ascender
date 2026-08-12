@@ -9,12 +9,14 @@ import './border.css';
 
 import App from './App';
 
-const container = document.getElementById('app') || (() => {
-  const el = document.createElement('div');
-  el.id = 'app';
-  document.body.appendChild(el);
-  return el;
-})();
+const container =
+  document.getElementById('app') ||
+  (() => {
+    const el = document.createElement('div');
+    el.id = 'app';
+    document.body.appendChild(el);
+    return el;
+  })();
 const root = createRoot(container);
 root.render(
   <React.StrictMode>

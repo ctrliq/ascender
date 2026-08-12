@@ -1,14 +1,8 @@
 import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import {
-	Split,
-	SplitItem,
-	Button
-} from '@patternfly/react-core';
-import {
-	Modal
-} from '@patternfly/react-core/deprecated';
+import { Split, SplitItem, Button } from '@patternfly/react-core';
+import { Modal } from '@patternfly/react-core/deprecated';
 import { ExpandArrowsAltIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
 import { yamlToJson, jsonToYaml, isJsonObject, isJsonString } from 'util/yaml';
@@ -109,7 +103,12 @@ function VariablesDetail({
           />
         </EditorWrapper>
         {error && (
-          <div style={{ color: 'var(--pf-t--global--color--status--danger--default)', marginTop: '0.5rem' }}>
+          <div
+            style={{
+              color: 'var(--pf-t--global--color--status--danger--default)',
+              marginTop: '0.5rem',
+            }}
+          >
             {t`Error:`} {error.message}
           </div>
         )}
@@ -176,7 +175,10 @@ function ModeToggle({
             <label className="pf-v6-c-form__label" htmlFor={id}>
               <span
                 className="pf-v6-c-form__label-text"
-                style={{ fontWeight: 'var(--pf-t--global--font--weight--heading--bold)' }}
+                style={{
+                  fontWeight:
+                    'var(--pf-t--global--font--weight--heading--bold)',
+                }}
               >
                 {label}
               </span>
@@ -202,12 +204,13 @@ function ModeToggle({
       </SplitItem>
       {onExpand && (
         <SplitItem>
-          <Button icon={<ExpandArrowsAltIcon />}
+          <Button
+            icon={<ExpandArrowsAltIcon />}
             variant="plain"
             aria-label={t`Expand input`}
             onClick={onExpand}
             ouiaId={`${dataCy}-expand`}
-           />
+          />
         </SplitItem>
       )}
     </Split>

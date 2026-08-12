@@ -92,14 +92,18 @@ describe('HostEventModal', () => {
     renderWithContexts(
       <HostEventModal hostEvent={hostEvent} onClose={() => {}} isOpen />
     );
-    expect(screen.getByRole('tab', { name: 'Details tab' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', { name: 'Details tab' })
+    ).toBeInTheDocument();
   });
 
   test('renders successfully with partial data', () => {
     renderWithContexts(
       <HostEventModal hostEvent={partialHostEvent} onClose={() => {}} isOpen />
     );
-    expect(screen.getByRole('tab', { name: 'Details tab' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('tab', { name: 'Details tab' })
+    ).toBeInTheDocument();
   });
 
   test('should render all tabs', () => {
@@ -278,7 +282,11 @@ describe('HostEventModal', () => {
 
   test('should display Standard Out array stdout content', async () => {
     const { user } = renderWithContexts(
-      <HostEventModal hostEvent={hostEventWithArray} onClose={() => {}} isOpen />
+      <HostEventModal
+        hostEvent={hostEventWithArray}
+        onClose={() => {}}
+        isOpen
+      />
     );
     await clickTab(user, 'Output tab');
     expect(codeEditorCount()).toBeGreaterThanOrEqual(1);

@@ -80,7 +80,10 @@ describe('<HostAdd />', () => {
     const { user } = render();
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() =>
-      expect(HostsAPI.create).toHaveBeenCalledWith({ ...hostData, inventory: 1 })
+      expect(HostsAPI.create).toHaveBeenCalledWith({
+        ...hostData,
+        inventory: 1,
+      })
     );
   });
 

@@ -160,7 +160,9 @@ function LaunchButton({ resource, children }) {
       const { data: job } = await jobPromise;
       if (isMounted.current) {
         const seg = JOB_TYPE_URL_SEGMENTS[job.type];
-        navigate(seg ? `/jobs/${seg}/${job.id}/output` : `/jobs/${job.id}/output`);
+        navigate(
+          seg ? `/jobs/${seg}/${job.id}/output` : `/jobs/${job.id}/output`
+        );
       }
     } catch (launchError) {
       if (isMounted.current) setError(launchError);
@@ -217,7 +219,9 @@ function LaunchButton({ resource, children }) {
         const { data: job } = await relaunch;
         if (isMounted.current) {
           const seg = JOB_TYPE_URL_SEGMENTS[job.type];
-          navigate(seg ? `/jobs/${seg}/${job.id}/output` : `/jobs/${job.id}/output`);
+          navigate(
+            seg ? `/jobs/${seg}/${job.id}/output` : `/jobs/${job.id}/output`
+          );
         }
       } else if (isMounted.current) {
         setShowLaunchPrompt(true);

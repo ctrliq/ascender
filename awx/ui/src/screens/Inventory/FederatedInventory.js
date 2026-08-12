@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useParams,
-  useLocation } from 'react-router';
+  useLocation,
+} from 'react-router';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 
@@ -69,7 +71,11 @@ function FederatedInventory({ setBreadcrumb }) {
     { name: t`Hosts`, link: `${federatedBaseUrl}/hosts`, id: 2 },
     { name: t`Groups`, link: `${federatedBaseUrl}/groups`, id: 3 },
     { name: t`Jobs`, link: `${federatedBaseUrl}/jobs`, id: 4 },
-    { name: t`Job Templates`, link: `${federatedBaseUrl}/job_templates`, id: 5 },
+    {
+      name: t`Job Templates`,
+      link: `${federatedBaseUrl}/job_templates`,
+      id: 5,
+    },
   ];
 
   if (isLoading) {

@@ -4,7 +4,13 @@ import { useLingui } from '@lingui/react/macro';
 
 import { LabelGroup } from '@patternfly/react-core';
 
-function ChipGroup({ numChips, totalChips, ouiaId, onOverflowChipClick, ...props }) {
+function ChipGroup({
+  numChips,
+  totalChips,
+  ouiaId,
+  onOverflowChipClick,
+  ...props
+}) {
   const { t } = useLingui();
 
   const handleClick = (e) => {

@@ -76,7 +76,10 @@ describe('<NotificationTemplateDetail />', () => {
 
   test('should render Details when defaultMessages is missing', async () => {
     renderWithContexts(
-      <NotificationTemplateDetail template={mockTemplate} defaultMessages={null} />
+      <NotificationTemplateDetail
+        template={mockTemplate}
+        defaultMessages={null}
+      />
     );
     await assertCommonDetails();
   });

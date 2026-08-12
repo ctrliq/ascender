@@ -32,7 +32,9 @@ describe('<LabelSelect />', () => {
     );
 
     await waitFor(() =>
-      expect(screen.getByRole('textbox', { name: 'Select Labels' })).toBeEnabled()
+      expect(
+        screen.getByRole('textbox', { name: 'Select Labels' })
+      ).toBeEnabled()
     );
     expect(LabelsAPI.read).toHaveBeenCalledTimes(1);
 
@@ -63,7 +65,9 @@ describe('<LabelSelect />', () => {
 
     await waitFor(() => expect(LabelsAPI.read).toHaveBeenCalledTimes(2));
     await waitFor(() =>
-      expect(screen.getByRole('textbox', { name: 'Select Labels' })).toBeEnabled()
+      expect(
+        screen.getByRole('textbox', { name: 'Select Labels' })
+      ).toBeEnabled()
     );
 
     const selectOptions = await openAndGetOptions(user);
@@ -82,12 +86,16 @@ describe('<LabelSelect />', () => {
     );
 
     await waitFor(() =>
-      expect(screen.getByRole('textbox', { name: 'Select Labels' })).toBeEnabled()
+      expect(
+        screen.getByRole('textbox', { name: 'Select Labels' })
+      ).toBeEnabled()
     );
 
     const input = screen.getByRole('textbox', { name: 'Select Labels' });
     await user.type(input, 'foo');
-    const createOption = await screen.findByRole('option', { name: /Create.*foo/ });
+    const createOption = await screen.findByRole('option', {
+      name: /Create.*foo/,
+    });
     await user.click(createOption);
 
     expect(onChange).toHaveBeenCalledWith([{ id: 'foo', name: 'foo' }]);
@@ -115,7 +123,9 @@ describe('<LabelSelect />', () => {
     );
 
     await waitFor(() =>
-      expect(screen.getByRole('textbox', { name: 'Select Labels' })).toBeEnabled()
+      expect(
+        screen.getByRole('textbox', { name: 'Select Labels' })
+      ).toBeEnabled()
     );
 
     const selectOptions = await openAndGetOptions(user);

@@ -37,11 +37,35 @@ afterEach(() => {
 const credentials = {
   data: {
     results: [
-      { id: 1, kind: 'cloud', name: 'Cred 1', url: 'www.google.com', inputs: {} },
+      {
+        id: 1,
+        kind: 'cloud',
+        name: 'Cred 1',
+        url: 'www.google.com',
+        inputs: {},
+      },
       { id: 2, kind: 'ssh', name: 'Cred 2', url: 'www.google.com', inputs: {} },
-      { id: 3, kind: 'Ansible', name: 'Cred 3', url: 'www.google.com', inputs: {} },
-      { id: 4, kind: 'Machine', name: 'Cred 4', url: 'www.google.com', inputs: {} },
-      { id: 5, kind: 'Machine', name: 'Cred 5', url: 'www.google.com', inputs: {} },
+      {
+        id: 3,
+        kind: 'Ansible',
+        name: 'Cred 3',
+        url: 'www.google.com',
+        inputs: {},
+      },
+      {
+        id: 4,
+        kind: 'Machine',
+        name: 'Cred 4',
+        url: 'www.google.com',
+        inputs: {},
+      },
+      {
+        id: 5,
+        kind: 'Machine',
+        name: 'Cred 5',
+        url: 'www.google.com',
+        inputs: {},
+      },
     ],
   },
 };
@@ -165,7 +189,9 @@ function defaultFieldsVisible(container, isExceptionsVisible) {
   if (isExceptionsVisible) {
     expect(freqSelect(container, 'exception-frequency')).toBeInTheDocument();
   } else {
-    expect(freqSelect(container, 'exception-frequency')).not.toBeInTheDocument();
+    expect(
+      freqSelect(container, 'exception-frequency')
+    ).not.toBeInTheDocument();
   }
 }
 
@@ -268,7 +294,9 @@ describe('<ScheduleForm />', () => {
       // the prompt wizard opens with an Inventory step and a Preview step
       expect(await screen.findByRole('dialog')).toBeInTheDocument();
       const dialog = screen.getByRole('dialog');
-      expect(within(dialog).getAllByText('Inventory').length).toBeGreaterThan(0);
+      expect(within(dialog).getAllByText('Inventory').length).toBeGreaterThan(
+        0
+      );
       expect(within(dialog).getByText('Preview')).toBeInTheDocument();
     });
 
@@ -564,9 +592,7 @@ describe('<ScheduleForm />', () => {
 
       await user.click(screen.getByRole('button', { name: 'Save' }));
       expect(
-        await screen.findByText(
-          'Please select a day number between 1 and 31.'
-        )
+        await screen.findByText('Please select a day number between 1 and 31.')
       ).toBeInTheDocument();
     });
   });
@@ -703,9 +729,7 @@ describe('<ScheduleForm />', () => {
       expect(
         byId(container, 'schedule-run-every-frequencyOptions-hour')
       ).toHaveValue(1);
-      expect(
-        byId(container, 'end-after-frequencyOptions-hour')
-      ).toBeChecked();
+      expect(byId(container, 'end-after-frequencyOptions-hour')).toBeChecked();
       expect(
         byId(container, 'schedule-occurrences-frequencyOptions-hour')
       ).toHaveValue(10);
@@ -779,10 +803,7 @@ describe('<ScheduleForm />', () => {
         byId(container, 'schedule-run-on-the-frequencyOptions-month')
       ).toBeChecked();
       expect(
-        byId(
-          container,
-          'schedule-run-on-the-occurrence-frequencyOptions-month'
-        )
+        byId(container, 'schedule-run-on-the-occurrence-frequencyOptions-month')
       ).toHaveValue('-1');
       expect(
         byId(container, 'schedule-run-on-the-day-frequencyOptions-month')

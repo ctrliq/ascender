@@ -3,11 +3,7 @@ import { useLocation, useNavigate } from 'react-router';
 
 import { Plural, useLingui } from '@lingui/react/macro';
 
-import {
-	Card,
-	PageSection,
-	DropdownItem,
-} from '@patternfly/react-core';
+import { Card, PageSection, DropdownItem } from '@patternfly/react-core';
 
 import { InstanceGroupsAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';

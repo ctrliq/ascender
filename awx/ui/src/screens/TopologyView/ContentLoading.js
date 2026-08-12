@@ -36,7 +36,10 @@ const ContentLoading = ({ className, progress }) => {
       <Content style={{ margin: '20px' }}>
         <Content
           component={ContentVariants.small}
-          style={{ fontWeight: 'bold', color: "var(--pf-t--global--text--color--100)" }}
+          style={{
+            fontWeight: 'bold',
+            color: 'var(--pf-t--global--text--color--100)',
+          }}
         >
           {t`Please wait until the topology view is populated...`}
         </Content>

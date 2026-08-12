@@ -3,18 +3,18 @@ import React, { useState, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useLocation } from 'react-router';
 import {
-	Button,
-	ButtonVariant,
-	InputGroup,
-	TextInput,
-	ToolbarGroup,
-	ToolbarItem,
-	ToolbarFilter,
-	InputGroupItem,
-	Select,
-	SelectOption,
-	SelectList,
-	MenuToggle
+  Button,
+  ButtonVariant,
+  InputGroup,
+  TextInput,
+  ToolbarGroup,
+  ToolbarItem,
+  ToolbarFilter,
+  InputGroupItem,
+  Select,
+  SelectOption,
+  SelectList,
+  MenuToggle,
 } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
@@ -153,10 +153,11 @@ function Search({
   };
 
   const handleFilterDropdownSelect = (key, _event, actualValue) => {
-    const currentSelections = chipsByKey[key]?.chips.map((chip) => {
-      const [, ...val] = chip.key.split(':');
-      return val.join(':');
-    }) || [];
+    const currentSelections =
+      chipsByKey[key]?.chips.map((chip) => {
+        const [, ...val] = chip.key.split(':');
+        return val.join(':');
+      }) || [];
     if (currentSelections.includes(actualValue)) {
       onRemove(key, actualValue);
     } else {
@@ -243,7 +244,9 @@ function Search({
                 toggle={(toggleRef) => (
                   <MenuToggle
                     ref={toggleRef}
-                    onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
+                    onClick={() =>
+                      setIsFilterDropdownOpen(!isFilterDropdownOpen)
+                    }
                     isExpanded={isFilterDropdownOpen}
                     isDisabled={isDisabled}
                     ouiaId={`filter-by-${key}`}
@@ -254,10 +257,11 @@ function Search({
               >
                 <SelectList>
                   {options.map(([optionKey, optionLabel]) => {
-                    const currentSelections = chipsByKey[key]?.chips.map((chip) => {
-                      const [, ...val] = chip.key.split(':');
-                      return val.join(':');
-                    }) || [];
+                    const currentSelections =
+                      chipsByKey[key]?.chips.map((chip) => {
+                        const [, ...val] = chip.key.split(':');
+                        return val.join(':');
+                      }) || [];
                     return (
                       <SelectOption
                         key={optionKey}
@@ -285,7 +289,9 @@ function Search({
                 toggle={(toggleRef) => (
                   <MenuToggle
                     ref={toggleRef}
-                    onClick={() => setIsFilterDropdownOpen(!isFilterDropdownOpen)}
+                    onClick={() =>
+                      setIsFilterDropdownOpen(!isFilterDropdownOpen)
+                    }
                     isExpanded={isFilterDropdownOpen}
                     isDisabled={isDisabled}
                     ouiaId={`filter-by-${key}`}
@@ -350,41 +356,47 @@ function Search({
                   isDisabled={isDisabled}
                 />
                 <SubmitButtonWrapper $disabled={!searchValue}>
-                  <Button icon={<SearchIcon />}
+                  <Button
+                    icon={<SearchIcon />}
                     ouiaId="date-search-submit-button"
                     variant={ButtonVariant.control}
                     isDisabled={!searchValue || isDisabled}
                     aria-label={t`Search submit button`}
                     onClick={handleDateSearch}
-                   />
+                  />
                 </SubmitButtonWrapper>
               </DateInputGroup>
             )) || (
               <InputGroup>
-                <InputGroupItem isFill ><TextInput
-                  data-cy="search-text-input"
-                  type={
-                    (qsConfig.integerFields.find(
-                      (field) => field === searchKey
-                    ) &&
-                      'number') ||
-                    'search'
-                  }
-                  aria-label={t`Search text input`}
-                  value={searchValue}
-                  onChange={(_event, val) => setSearchValue(val)}
-                  onKeyDown={handleTextKeyDown}
-                  isDisabled={isDisabled}
-                /></InputGroupItem>
-                <InputGroupItem><SubmitButtonWrapper $disabled={!searchValue}>
-                  <Button icon={<SearchIcon />}
-                    ouiaId="search-submit-button"
-                    variant={ButtonVariant.control}
-                    isDisabled={!searchValue || isDisabled}
-                    aria-label={t`Search submit button`}
-                    onClick={handleSearch}
-                   />
-                </SubmitButtonWrapper></InputGroupItem>
+                <InputGroupItem isFill>
+                  <TextInput
+                    data-cy="search-text-input"
+                    type={
+                      (qsConfig.integerFields.find(
+                        (field) => field === searchKey
+                      ) &&
+                        'number') ||
+                      'search'
+                    }
+                    aria-label={t`Search text input`}
+                    value={searchValue}
+                    onChange={(_event, val) => setSearchValue(val)}
+                    onKeyDown={handleTextKeyDown}
+                    isDisabled={isDisabled}
+                  />
+                </InputGroupItem>
+                <InputGroupItem>
+                  <SubmitButtonWrapper $disabled={!searchValue}>
+                    <Button
+                      icon={<SearchIcon />}
+                      ouiaId="search-submit-button"
+                      variant={ButtonVariant.control}
+                      isDisabled={!searchValue || isDisabled}
+                      aria-label={t`Search submit button`}
+                      onClick={handleSearch}
+                    />
+                  </SubmitButtonWrapper>
+                </InputGroupItem>
               </InputGroup>
             )}
         </ToolbarFilter>
@@ -395,7 +407,9 @@ function Search({
         .filter((val) => columns.map((val2) => val2.key).indexOf(val) === -1)
         .map((leftoverKey) => (
           <ToolbarFilter
-            labels={chipsByKey[leftoverKey] ? chipsByKey[leftoverKey].chips : []}
+            labels={
+              chipsByKey[leftoverKey] ? chipsByKey[leftoverKey].chips : []
+            }
             deleteLabel={(unusedKey, chip) => {
               const [columnKey, ...value] = chip.key.split(':');
               if (columnKey === 'ansible_facts') {

@@ -135,9 +135,9 @@ describe('<InventoryList />', () => {
 
   test('should select inventory when checked', async () => {
     const { user } = renderWithContexts(<InventoryList />);
-    const row = (await screen.findByRole('link', { name: 'Inv no hosts' })).closest(
-      'tr'
-    );
+    const row = (
+      await screen.findByRole('link', { name: 'Inv no hosts' })
+    ).closest('tr');
     const checkbox = within(row).getByRole('checkbox');
     await user.click(checkbox);
     expect(checkbox).toBeChecked();
@@ -158,9 +158,9 @@ describe('<InventoryList />', () => {
 
   test('should disable delete button when item without delete capability selected', async () => {
     const { user } = renderWithContexts(<InventoryList />);
-    const row = (await screen.findByRole('link', { name: 'Smart Inv' })).closest(
-      'tr'
-    );
+    const row = (
+      await screen.findByRole('link', { name: 'Smart Inv' })
+    ).closest('tr');
     await user.click(within(row).getByRole('checkbox'));
     expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
     await settleTooltips();

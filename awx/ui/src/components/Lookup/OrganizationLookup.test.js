@@ -28,9 +28,7 @@ describe('OrganizationLookup', () => {
       </Formik>
     );
     expect(await screen.findByText('Organization')).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'Search' })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
   });
 
   test('should fetch organizations', async () => {
@@ -39,9 +37,7 @@ describe('OrganizationLookup', () => {
         <OrganizationLookup onChange={() => {}} />
       </Formik>
     );
-    await waitFor(() =>
-      expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1));
     expect(OrganizationsAPI.read).toHaveBeenCalledWith({
       order_by: 'name',
       page: 1,
@@ -88,9 +84,7 @@ describe('OrganizationLookup', () => {
         <OrganizationLookup onChange={onChange} />
       </Formik>
     );
-    await waitFor(() =>
-      expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1));
     expect(onChange).not.toHaveBeenCalled();
   });
 
@@ -110,9 +104,7 @@ describe('OrganizationLookup', () => {
         <OrganizationLookup autoPopulate onChange={onChange} />
       </Formik>
     );
-    await waitFor(() =>
-      expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1));
     expect(onChange).not.toHaveBeenCalled();
   });
 });

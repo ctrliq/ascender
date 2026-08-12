@@ -31,8 +31,12 @@ describe('Sparkline', () => {
     const link2 = screen.getByRole('link', { name: 'View job 2' });
     expect(link1).toHaveAttribute('href', '/jobs/undefined/1');
     expect(link2).toHaveAttribute('href', '/jobs/undefined/2');
-    expect(link1.querySelector('[data-job-status="successful"]')).toBeInTheDocument();
-    expect(link2.querySelector('[data-job-status="failed"]')).toBeInTheDocument();
+    expect(
+      link1.querySelector('[data-job-status="successful"]')
+    ).toBeInTheDocument();
+    expect(
+      link2.querySelector('[data-job-status="failed"]')
+    ).toBeInTheDocument();
     expect(container.querySelectorAll('a')).toHaveLength(2);
   });
 });

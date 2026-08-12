@@ -41,9 +41,10 @@ describe('PromptJobTemplateDetail', () => {
     assertDetail('Inventory', 'Demo Inventory');
     // Inventory value is a Link to the inventory details page
     const inventoryTerm = screen.getByText('Inventory');
-    expect(
-      inventoryTerm.nextElementSibling.querySelector('a')
-    ).toHaveAttribute('href', '/inventories/inventory/1/details');
+    expect(inventoryTerm.nextElementSibling.querySelector('a')).toHaveAttribute(
+      'href',
+      '/inventories/inventory/1/details'
+    );
     assertDetail('Project', 'Mock Project');
     assertDetail('Source Control Branch', 'Foo branch');
     assertDetail('Playbook', 'ping.yml');

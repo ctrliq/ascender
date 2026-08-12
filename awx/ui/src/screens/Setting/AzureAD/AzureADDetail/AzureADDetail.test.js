@@ -68,9 +68,9 @@ describe('<AzureADDetail />', () => {
       /Azure AD Tenant/,
     ];
     expectedTabs.forEach((text) => {
-      expect(
-        screen.getAllByRole('tab', { name: text }).length
-      ).toBeGreaterThan(0);
+      expect(screen.getAllByRole('tab', { name: text }).length).toBeGreaterThan(
+        0
+      );
     });
   });
 

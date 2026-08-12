@@ -90,7 +90,9 @@ describe('<InstanceEdit/>', () => {
       context: { router: { history } },
     });
 
-    expect(await screen.findByRole('button', { name: 'Save' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('button', { name: 'Save' })
+    ).toBeInTheDocument();
     expect(InstancesAPI.readDetail).toHaveBeenCalledWith(42);
   });
 

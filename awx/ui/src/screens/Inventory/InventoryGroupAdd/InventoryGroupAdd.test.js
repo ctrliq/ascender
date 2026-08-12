@@ -8,27 +8,27 @@ import InventoryGroupAdd from './InventoryGroupAdd';
 
 jest.mock('../../../api');
 
-jest.mock('../shared/InventoryGroupForm', () => ({
-  handleSubmit,
-  handleCancel,
-  error,
-}) => (
-  <div>
-    <button
-      type="button"
-      aria-label="mock-submit"
-      onClick={() =>
-        handleSubmit({
-          name: 'Bar',
-          description: 'Ansible',
-          variables: 'ying: yang',
-        })
-      }
-    />
-    <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
-    {error ? <div data-testid="mock-submit-error" /> : null}
-  </div>
-));
+jest.mock(
+  '../shared/InventoryGroupForm',
+  () =>
+    ({ handleSubmit, handleCancel, error }) => (
+      <div>
+        <button
+          type="button"
+          aria-label="mock-submit"
+          onClick={() =>
+            handleSubmit({
+              name: 'Bar',
+              description: 'Ansible',
+              variables: 'ying: yang',
+            })
+          }
+        />
+        <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
+        {error ? <div data-testid="mock-submit-error" /> : null}
+      </div>
+    )
+);
 
 function renderAdd(history) {
   return renderWithContexts(

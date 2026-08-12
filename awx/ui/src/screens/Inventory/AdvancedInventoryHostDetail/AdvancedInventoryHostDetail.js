@@ -43,15 +43,8 @@ function AdvancedInventoryHostDetail({ host }) {
             </Link>
           }
         />
-        <Detail
-          label={t`Enabled`}
-          value={enabled ? t`On` : t`Off`}
-        />
-        <UserDateDetail
-          date={created}
-          label={t`Created`}
-          user={created_by}
-        />
+        <Detail label={t`Enabled`} value={enabled ? t`On` : t`Off`} />
+        <UserDateDetail date={created} label={t`Created`} user={created_by} />
         <UserDateDetail
           date={modified}
           label={t`Last modified`}

@@ -110,7 +110,9 @@ describe('<MiscSystemDetail />', () => {
     await mountDetail(mockAllOptions.actions, {
       config: { me: { is_superuser: false } },
     });
-    expect(screen.queryByRole('link', { name: 'Edit' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'Edit' })
+    ).not.toBeInTheDocument();
   });
 
   test('should display content error when api throws error on initial render', async () => {

@@ -1,9 +1,6 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import {
-  Content,
-  ContentVariants,
-  } from '@patternfly/react-core';
+import { Content, ContentVariants } from '@patternfly/react-core';
 import { Link } from 'react-router';
 import { Config } from 'contexts/Config';
 import { toTitleCase } from 'util/strings';

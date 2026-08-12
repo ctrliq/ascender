@@ -8,8 +8,8 @@ const SelectableItem = styled.div`
   border: 1px solid;
   border-color: ${(props) =>
     props.$isSelected
-      ? "var(--pf-t--global--color--brand--default)"
-      : "var(--pf-t--global--border--color--200)"};
+      ? 'var(--pf-t--global--color--brand--default)'
+      : 'var(--pf-t--global--border--color--200)'};
   margin-right: 20px;
   display: flex;
   cursor: pointer;
@@ -19,7 +19,7 @@ const Indicator = styled.div`
   display: flex;
   flex: 0 0 5px;
   background-color: ${(props) =>
-    props.$isSelected ? "var(--pf-t--global--color--brand--default)" : null};
+    props.$isSelected ? 'var(--pf-t--global--color--brand--default)' : null};
 `;
 
 const Contents = styled.div`

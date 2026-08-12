@@ -178,9 +178,7 @@ function ProjectLookup({
       {!isValid && (
         <FormHelperText>
           <HelperText>
-            <HelperTextItem variant="error">
-              {helperTextInvalid}
-            </HelperTextItem>
+            <HelperTextItem variant="error">{helperTextInvalid}</HelperTextItem>
           </HelperText>
         </FormHelperText>
       )}

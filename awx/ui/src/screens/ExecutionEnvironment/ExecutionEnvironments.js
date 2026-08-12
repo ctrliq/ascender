@@ -36,10 +36,7 @@ function ExecutionEnvironments() {
         breadcrumbConfig={breadcrumbConfig}
       />
       <Routes>
-        <Route
-          path="add"
-          element={<ExecutionEnvironmentAdd />}
-        />
+        <Route path="add" element={<ExecutionEnvironmentAdd />} />
         {/* so the nested <ExecutionEnvironment> route tree can match the rest */}
         <Route
           path=":id/*"

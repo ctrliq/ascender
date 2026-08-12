@@ -28,11 +28,31 @@ jest.mock('@patternfly/react-core', () => {
   const strip = (props) => {
     const out = {};
     const skip = new Set([
-      'ouiaId','validated','dataLabel','isFill','isPlain','isCompact',
-      'isInline','isExpanded','isActive','isAriaDisabled','component',
-      'variant','hasNoPadding','position','appendTo','modifier',
-      'hasNoBodyWrapper','showClose','noPadding','css','bodyAriaLabel',
-      'columnModifier','isNavOpen','navAriaLabel','isOpen',
+      'ouiaId',
+      'validated',
+      'dataLabel',
+      'isFill',
+      'isPlain',
+      'isCompact',
+      'isInline',
+      'isExpanded',
+      'isActive',
+      'isAriaDisabled',
+      'component',
+      'variant',
+      'hasNoPadding',
+      'position',
+      'appendTo',
+      'modifier',
+      'hasNoBodyWrapper',
+      'showClose',
+      'noPadding',
+      'css',
+      'bodyAriaLabel',
+      'columnModifier',
+      'isNavOpen',
+      'navAriaLabel',
+      'isOpen',
     ]);
     Object.entries(props).forEach(([k, v]) => {
       if (!skip.has(k)) out[k] = v;
@@ -46,7 +66,14 @@ jest.mock('@patternfly/react-core', () => {
       return R.createElement(tag, { ...strip(rest), ref }, children);
     });
 
-  function MockWizard({ children, onStepChange, onSave, onClose, header, footer }) {
+  function MockWizard({
+    children,
+    onStepChange,
+    onSave,
+    onClose,
+    header,
+    footer,
+  }) {
     const steps = R.Children.toArray(children);
     const [idx, setIdx] = R.useState(0);
     const stepsRef = R.useRef(steps);
@@ -61,11 +88,16 @@ jest.mock('@patternfly/react-core', () => {
     const goToNextStep = R.useCallback(() => {
       setIdx((prev) => {
         const s = stepsRef.current;
-        if (prev + 1 >= s.length) { cbRef.current.onSave?.(); return prev; }
+        if (prev + 1 >= s.length) {
+          cbRef.current.onSave?.();
+          return prev;
+        }
         const ni = prev + 1;
         cbRef.current.onStepChange?.(
-          {}, { id: s[ni]?.props?.id, name: s[ni]?.props?.name },
-          { id: s[prev]?.props?.id, name: s[prev]?.props?.name }, 'next'
+          {},
+          { id: s[ni]?.props?.id, name: s[ni]?.props?.name },
+          { id: s[prev]?.props?.id, name: s[prev]?.props?.name },
+          'next'
         );
         return ni;
       });
@@ -77,34 +109,51 @@ jest.mock('@patternfly/react-core', () => {
         const s = stepsRef.current;
         const ni = prev - 1;
         cbRef.current.onStepChange?.(
-          {}, { id: s[ni]?.props?.id, name: s[ni]?.props?.name },
-          { id: s[prev]?.props?.id, name: s[prev]?.props?.name }, 'back'
+          {},
+          { id: s[ni]?.props?.id, name: s[ni]?.props?.name },
+          { id: s[prev]?.props?.id, name: s[prev]?.props?.name },
+          'back'
         );
         return ni;
       });
     }, []);
 
-    const ctx = R.useMemo(() => ({
-      activeStep: { id: curProps.id, name: curProps.name },
-      goToNextStep, goToPrevStep,
-    }), [curProps.id, curProps.name, goToNextStep, goToPrevStep]);
+    const ctx = R.useMemo(
+      () => ({
+        activeStep: { id: curProps.id, name: curProps.name },
+        goToNextStep,
+        goToPrevStep,
+      }),
+      [curProps.id, curProps.name, goToNextStep, goToPrevStep]
+    );
 
-    return R.createElement(WizCtx.Provider, { value: ctx },
+    return R.createElement(
+      WizCtx.Provider,
+      { value: ctx },
       header,
-      R.createElement('nav', null,
+      R.createElement(
+        'nav',
+        null,
         steps.map((s, i) =>
-          R.createElement('button', {
-            key: s.props?.id ?? i, id: s.props?.id,
-            type: 'button',
-            onClick: () => {
-              const p = stepsRef.current[clamped]?.props || {};
-              cbRef.current.onStepChange?.(
-                {}, { id: s.props?.id, name: s.props?.name },
-                { id: p.id, name: p.name }, 'nav'
-              );
-              setIdx(i);
+          R.createElement(
+            'button',
+            {
+              key: s.props?.id ?? i,
+              id: s.props?.id,
+              type: 'button',
+              onClick: () => {
+                const p = stepsRef.current[clamped]?.props || {};
+                cbRef.current.onStepChange?.(
+                  {},
+                  { id: s.props?.id, name: s.props?.name },
+                  { id: p.id, name: p.name },
+                  'nav'
+                );
+                setIdx(i);
+              },
             },
-          }, s.props?.name)
+            s.props?.name
+          )
         )
       ),
       R.createElement('div', null, cur),
@@ -115,22 +164,39 @@ jest.mock('@patternfly/react-core', () => {
   const exps = {
     __esModule: true,
     Button: R.forwardRef(function Btn({ children, isDisabled, ...props }, ref) {
-      return R.createElement('button', {
-        ...strip(props), ref, type: 'button', disabled: isDisabled || false,
-      }, children);
+      return R.createElement(
+        'button',
+        {
+          ...strip(props),
+          ref,
+          type: 'button',
+          disabled: isDisabled || false,
+        },
+        children
+      );
     }),
     TextInput: el('input'),
     TextArea: el('textarea'),
-    FormSelect: R.forwardRef(function FSel({ children, onChange, ...props }, ref) {
-      return R.createElement('select', {
-        ...strip(props), ref,
-        onChange: (e) => onChange?.(e, e.target.value),
-      }, children);
+    FormSelect: R.forwardRef(function FSel(
+      { children, onChange, ...props },
+      ref
+    ) {
+      return R.createElement(
+        'select',
+        {
+          ...strip(props),
+          ref,
+          onChange: (e) => onChange?.(e, e.target.value),
+        },
+        children
+      );
     }),
     FormSelectOption: ({ label, children, ...props }) =>
       R.createElement('option', strip(props), children || label),
-    Switch: (props) => R.createElement('input', { ...strip(props), type: 'checkbox' }),
-    Checkbox: (props) => R.createElement('input', { ...strip(props), type: 'checkbox' }),
+    Switch: (props) =>
+      R.createElement('input', { ...strip(props), type: 'checkbox' }),
+    Checkbox: (props) =>
+      R.createElement('input', { ...strip(props), type: 'checkbox' }),
     Form: el('div'),
     Title: el('h2'),
     Tooltip: ({ children }) => children || null,
@@ -145,8 +211,14 @@ jest.mock('@patternfly/react-core', () => {
     get(t, p) {
       if (p in t) return t[p];
       if (p === '__esModule') return true;
-      if (typeof p === 'string' && /^[A-Z]/.test(p)) { t[p] = el('div'); return t[p]; }
-      if (typeof p === 'string' && p.startsWith('use')) { t[p] = () => ({}); return t[p]; }
+      if (typeof p === 'string' && /^[A-Z]/.test(p)) {
+        t[p] = el('div');
+        return t[p];
+      }
+      if (typeof p === 'string' && p.startsWith('use')) {
+        t[p] = () => ({});
+        return t[p];
+      }
       return undefined;
     },
   });
@@ -166,10 +238,20 @@ jest.mock('@patternfly/react-table', () => {
   const R = require('react');
   const strip = (props) => {
     const out = {};
-    ['ouiaId','dataLabel','css','modifier','isStickyHeader','isCompact','variant'].forEach(
+    [
+      'ouiaId',
+      'dataLabel',
+      'css',
+      'modifier',
+      'isStickyHeader',
+      'isCompact',
+      'variant',
+    ].forEach(
       (k) => delete props[k] // eslint-disable-line no-param-reassign
     );
-    Object.entries(props).forEach(([k, v]) => { out[k] = v; });
+    Object.entries(props).forEach(([k, v]) => {
+      out[k] = v;
+    });
     return out;
   };
 
@@ -183,7 +265,9 @@ jest.mock('@patternfly/react-table', () => {
     Td: ({ select, children, ...p }) => {
       const cleaned = strip(p);
       if (select) {
-        return R.createElement('td', cleaned,
+        return R.createElement(
+          'td',
+          cleaned,
           R.createElement('input', {
             type: select.variant === 'radio' ? 'radio' : 'checkbox',
             checked: select.isSelected || false,
@@ -196,17 +280,23 @@ jest.mock('@patternfly/react-table', () => {
   };
 });
 
-jest.mock('@patternfly/react-icons', () =>
-  new Proxy({}, {
-    get(t, p) {
-      if (p === '__esModule') return true;
-      if (!(p in t) && typeof p === 'string') {
-        const R = require('react');
-        t[p] = (props) => R.createElement('span', { 'data-icon': p, ...props });
+jest.mock(
+  '@patternfly/react-icons',
+  () =>
+    new Proxy(
+      {},
+      {
+        get(t, p) {
+          if (p === '__esModule') return true;
+          if (!(p in t) && typeof p === 'string') {
+            const R = require('react');
+            t[p] = (props) =>
+              R.createElement('span', { 'data-icon': p, ...props });
+          }
+          return t[p];
+        },
       }
-      return t[p];
-    },
-  })
+    )
 );
 
 // Suppress React DOM warnings caused by mock components (unknown props,
@@ -230,10 +320,17 @@ const isReactDomNoise = (args) => {
   );
 };
 beforeAll(() => {
-  console.error = (...args) => { if (!isReactDomNoise(args)) _origErr(...args); };
-  console.warn = (...args) => { if (!isReactDomNoise(args)) _origWarn(...args); };
+  console.error = (...args) => {
+    if (!isReactDomNoise(args)) _origErr(...args);
+  };
+  console.warn = (...args) => {
+    if (!isReactDomNoise(args)) _origWarn(...args);
+  };
 });
-afterAll(() => { console.error = _origErr; console.warn = _origWarn; });
+afterAll(() => {
+  console.error = _origErr;
+  console.warn = _origWarn;
+});
 
 jest.mock('../../../../../api');
 const dispatch = jest.fn();
@@ -516,7 +613,9 @@ describe('NodeModal', () => {
     );
     clickFirstResource();
     await waitFor(() =>
-      expect(document.querySelector('td#check-action-item-1 input')).toBeChecked()
+      expect(
+        document.querySelector('td#check-action-item-1 input')
+      ).toBeChecked()
     );
     clickNext();
 
@@ -578,7 +677,9 @@ describe('NodeModal', () => {
     );
     clickFirstResource();
     await waitFor(() =>
-      expect(document.querySelector('td#check-action-item-1 input')).toBeChecked()
+      expect(
+        document.querySelector('td#check-action-item-1 input')
+      ).toBeChecked()
     );
     clickNext();
 
@@ -621,7 +722,9 @@ describe('NodeModal', () => {
     );
     clickFirstResource();
     await waitFor(() =>
-      expect(document.querySelector('td#check-action-item-1 input')).toBeChecked()
+      expect(
+        document.querySelector('td#check-action-item-1 input')
+      ).toBeChecked()
     );
     clickNext();
 
@@ -663,12 +766,12 @@ describe('NodeModal', () => {
     );
     clickFirstResource();
     await waitFor(() =>
-      expect(document.querySelector('td#check-action-item-1 input')).toBeChecked()
+      expect(
+        document.querySelector('td#check-action-item-1 input')
+      ).toBeChecked()
     );
     clickNext();
-    await waitFor(() =>
-      expect(nextButton()).not.toBeDisabled()
-    );
+    await waitFor(() => expect(nextButton()).not.toBeDisabled());
     clickNext();
 
     await waitFor(() => {
@@ -728,7 +831,10 @@ describe('NodeModal', () => {
       target: { value: 'Test Approval', name: 'approvalName' },
     });
     fireEvent.change(document.querySelector('input#approval-description'), {
-      target: { value: 'Test Approval Description', name: 'approvalDescription' },
+      target: {
+        value: 'Test Approval Description',
+        name: 'approvalDescription',
+      },
     });
     fireEvent.change(document.querySelector('input#approval-timeout-minutes'), {
       target: { value: 5, name: 'timeoutMinutes' },
@@ -743,12 +849,12 @@ describe('NodeModal', () => {
     expect(document.querySelector('input#approval-description')).toHaveValue(
       'Test Approval Description'
     );
-    expect(document.querySelector('input#approval-timeout-minutes')).toHaveValue(
-      5
-    );
-    expect(document.querySelector('input#approval-timeout-seconds')).toHaveValue(
-      30
-    );
+    expect(
+      document.querySelector('input#approval-timeout-minutes')
+    ).toHaveValue(5);
+    expect(
+      document.querySelector('input#approval-timeout-seconds')
+    ).toHaveValue(30);
 
     clickNext();
     await waitFor(() => {
@@ -841,7 +947,10 @@ describe('Edit existing node', () => {
       target: { value: 'Test Approval', name: 'approvalName' },
     });
     fireEvent.change(document.querySelector('input#approval-description'), {
-      target: { value: 'Test Approval Description', name: 'approvalDescription' },
+      target: {
+        value: 'Test Approval Description',
+        name: 'approvalDescription',
+      },
     });
     fireEvent.change(document.querySelector('input#approval-timeout-minutes'), {
       target: { value: 5, name: 'timeoutMinutes' },
@@ -856,12 +965,12 @@ describe('Edit existing node', () => {
     expect(document.querySelector('input#approval-description')).toHaveValue(
       'Test Approval Description'
     );
-    expect(document.querySelector('input#approval-timeout-minutes')).toHaveValue(
-      5
-    );
-    expect(document.querySelector('input#approval-timeout-seconds')).toHaveValue(
-      30
-    );
+    expect(
+      document.querySelector('input#approval-timeout-minutes')
+    ).toHaveValue(5);
+    expect(
+      document.querySelector('input#approval-timeout-seconds')
+    ).toHaveValue(30);
 
     clickNext();
 
@@ -938,12 +1047,12 @@ describe('Edit existing node', () => {
     );
     clickFirstResource();
     await waitFor(() =>
-      expect(document.querySelector('td#check-action-item-1 input')).toBeChecked()
+      expect(
+        document.querySelector('td#check-action-item-1 input')
+      ).toBeChecked()
     );
     clickNext();
-    await waitFor(() =>
-      expect(nextButton()).not.toBeDisabled()
-    );
+    await waitFor(() => expect(nextButton()).not.toBeDisabled());
     clickNext();
 
     await waitFor(() => {

@@ -146,20 +146,33 @@ function JobOutputSearch({
 
   return (
     <SearchToolbarWrapper>
-    <Toolbar
-      id="job_output-toolbar"
-      clearAllFilters={handleRemoveAllSearchTerms}
-      collapseListedFiltersBreakpoint="lg"
-      clearFiltersButtonText={t`Clear all filters`}
-      ouiaId="job-output-toolbar"
-    >
-      <SearchToolbarContent>
-        <ToolbarToggleGroup toggleIcon={<SearchIcon />} breakpoint="lg">
-          <ToolbarItem >
-            {isDisabled ? (
-              <Tooltip
-                content={t`Search is disabled while the job is running`}
-              >
+      <Toolbar
+        id="job_output-toolbar"
+        clearAllFilters={handleRemoveAllSearchTerms}
+        collapseListedFiltersBreakpoint="lg"
+        clearFiltersButtonText={t`Clear all filters`}
+        ouiaId="job-output-toolbar"
+      >
+        <SearchToolbarContent>
+          <ToolbarToggleGroup toggleIcon={<SearchIcon />} breakpoint="lg">
+            <ToolbarItem>
+              {isDisabled ? (
+                <Tooltip
+                  content={t`Search is disabled while the job is running`}
+                >
+                  <Search
+                    qsConfig={qsConfig}
+                    columns={columns}
+                    searchableKeys={eventSearchableKeys}
+                    relatedSearchableKeys={eventRelatedSearchableKeys}
+                    onSearch={handleSearch}
+                    onReplaceSearch={handleReplaceSearch}
+                    onShowAdvancedSearch={() => {}}
+                    onRemove={handleRemoveSearchTerm}
+                    isDisabled
+                  />
+                </Tooltip>
+              ) : (
                 <Search
                   qsConfig={qsConfig}
                   columns={columns}
@@ -169,33 +182,20 @@ function JobOutputSearch({
                   onReplaceSearch={handleReplaceSearch}
                   onShowAdvancedSearch={() => {}}
                   onRemove={handleRemoveSearchTerm}
-                  isDisabled
                 />
-              </Tooltip>
-            ) : (
-              <Search
-                qsConfig={qsConfig}
-                columns={columns}
-                searchableKeys={eventSearchableKeys}
-                relatedSearchableKeys={eventRelatedSearchableKeys}
-                onSearch={handleSearch}
-                onReplaceSearch={handleReplaceSearch}
-                onShowAdvancedSearch={() => {}}
-                onRemove={handleRemoveSearchTerm}
-              />
-            )}
-          </ToolbarItem>
-        </ToolbarToggleGroup>
-        {isJobRunning(job.status) ? (
-          <Button
-            variant={isFollowModeEnabled ? 'secondary' : 'primary'}
-            onClick={handleFollowToggle}
-          >
-            {isFollowModeEnabled ? t`Unfollow` : t`Follow`}
-          </Button>
-        ) : null}
-      </SearchToolbarContent>
-    </Toolbar>
+              )}
+            </ToolbarItem>
+          </ToolbarToggleGroup>
+          {isJobRunning(job.status) ? (
+            <Button
+              variant={isFollowModeEnabled ? 'secondary' : 'primary'}
+              onClick={handleFollowToggle}
+            >
+              {isFollowModeEnabled ? t`Unfollow` : t`Follow`}
+            </Button>
+          ) : null}
+        </SearchToolbarContent>
+      </Toolbar>
     </SearchToolbarWrapper>
   );
 }

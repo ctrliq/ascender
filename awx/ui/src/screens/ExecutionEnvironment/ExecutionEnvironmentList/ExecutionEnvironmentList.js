@@ -114,8 +114,9 @@ function ExecutionEnvironmentList() {
   };
 
   const canAdd = actions && actions.POST;
-  const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).executionEnvironment(selected[0]);
+  const deleteDetailsRequests = relatedResourceDeleteRequests(
+    t
+  ).executionEnvironment(selected[0]);
   return (
     <>
       <PageSection hasBodyWrapper={false}>
@@ -216,7 +217,10 @@ function ExecutionEnvironmentList() {
             )}
             emptyStateControls={
               canAdd && (
-                <ToolbarAddButton key="add" linkTo="/execution_environments/add" />
+                <ToolbarAddButton
+                  key="add"
+                  linkTo="/execution_environments/add"
+                />
               )
             }
           />

@@ -1,10 +1,6 @@
 import React from 'react';
-import {
-	Title
-} from '@patternfly/react-core';
-import {
-	Modal
-} from '@patternfly/react-core/deprecated';
+import { Title } from '@patternfly/react-core';
+import { Modal } from '@patternfly/react-core/deprecated';
 import {
   CheckCircleIcon,
   ExclamationCircleIcon,
@@ -57,13 +53,17 @@ function AlertModal({
     success: (
       <CheckCircleIcon
         size="xl"
-        style={{ color: 'var(--pf-t--global--color--status--success--default)' }}
+        style={{
+          color: 'var(--pf-t--global--color--status--success--default)',
+        }}
       />
     ),
     warning: (
       <ExclamationTriangleIcon
         size="xl"
-        style={{ color: 'var(--pf-t--global--color--status--warning--default)' }}
+        style={{
+          color: 'var(--pf-t--global--color--status--warning--default)',
+        }}
       />
     ),
   };

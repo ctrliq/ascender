@@ -24,8 +24,12 @@ function UserEdit({ user }) {
           await dynamicActivate(lang);
         } else {
           localStorage.removeItem('preferred_language');
-          const browserLang = (navigator.language || '').toLowerCase().split(/[_-]+/)[0];
-          await dynamicActivate(Object.keys(locales).includes(browserLang) ? browserLang : 'en');
+          const browserLang = (navigator.language || '')
+            .toLowerCase()
+            .split(/[_-]+/)[0];
+          await dynamicActivate(
+            Object.keys(locales).includes(browserLang) ? browserLang : 'en'
+          );
         }
       }
       navigate(`/users/${user.id}/details`);

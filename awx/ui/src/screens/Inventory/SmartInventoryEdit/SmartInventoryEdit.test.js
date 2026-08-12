@@ -62,7 +62,9 @@ describe('<SmartInventoryEdit />', () => {
 
   test('should fetch related instance groups on initial render', async () => {
     renderWithContexts(<SmartInventoryEdit inventory={{ ...mockSmartInv }} />);
-    expect(await screen.findByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    ).toBeInTheDocument();
     expect(InventoriesAPI.readInstanceGroups).toHaveBeenCalledTimes(1);
   });
 
@@ -70,7 +72,9 @@ describe('<SmartInventoryEdit />', () => {
     const { user } = renderWithContexts(
       <SmartInventoryEdit inventory={{ ...mockSmartInv }} />
     );
-    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     await waitFor(() => expect(InventoriesAPI.update).toHaveBeenCalledTimes(1));
     expect(InventoriesAPI.orderInstanceGroups).toHaveBeenCalledTimes(1);
@@ -84,7 +88,9 @@ describe('<SmartInventoryEdit />', () => {
       <SmartInventoryEdit inventory={{ ...mockSmartInv }} />,
       { context: { router: { history } } }
     );
-    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     await waitFor(() =>
       expect(history.location.pathname).toBe(
@@ -101,7 +107,9 @@ describe('<SmartInventoryEdit />', () => {
       <SmartInventoryEdit inventory={{ ...mockSmartInv }} />,
       { context: { router: { history } } }
     );
-    await user.click(await screen.findByRole('button', { name: 'mock-cancel' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-cancel' })
+    );
 
     expect(history.location.pathname).toEqual(
       `/inventories/smart_inventory/${mockSmartInv.id}/details`
@@ -113,7 +121,9 @@ describe('<SmartInventoryEdit />', () => {
     const { user } = renderWithContexts(
       <SmartInventoryEdit inventory={{ ...mockSmartInv }} />
     );
-    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     expect(await screen.findByTestId('mock-submit-error')).toBeInTheDocument();
   });

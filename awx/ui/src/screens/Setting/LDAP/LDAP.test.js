@@ -34,9 +34,7 @@ describe('<LDAP />', () => {
 
   test('should render ldap details', async () => {
     renderLDAP(['/settings/ldap/default/details']);
-    expect(
-      await screen.findByText('LDAP Server URI')
-    ).toBeInTheDocument();
+    expect(await screen.findByText('LDAP Server URI')).toBeInTheDocument();
   });
 
   test('should render ldap edit', async () => {

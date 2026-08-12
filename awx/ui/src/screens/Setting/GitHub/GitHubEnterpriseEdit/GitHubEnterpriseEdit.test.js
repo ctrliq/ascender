@@ -79,7 +79,9 @@ describe('<GitHubEnterpriseEdit />', () => {
     expect(screen.getByLabelText('Confirm revert all')).toBeInTheDocument();
     await user.click(screen.getByLabelText('Confirm revert all'));
     expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1);
-    expect(SettingsAPI.revertCategory).toHaveBeenCalledWith('github-enterprise');
+    expect(SettingsAPI.revertCategory).toHaveBeenCalledWith(
+      'github-enterprise'
+    );
   });
 
   test('should successfully send request to api on form submission', async () => {
@@ -89,13 +91,13 @@ describe('<GitHubEnterpriseEdit />', () => {
         container.querySelector('#SOCIAL_AUTH_GITHUB_ENTERPRISE_SECRET-field')
       ).getByRole('button', { name: 'Revert' })
     );
-    const urlInput = container.querySelector('#SOCIAL_AUTH_GITHUB_ENTERPRISE_URL');
+    const urlInput = container.querySelector(
+      '#SOCIAL_AUTH_GITHUB_ENTERPRISE_URL'
+    );
     await user.clear(urlInput);
     await user.type(urlInput, 'https://localhost');
     await user.click(container.querySelector('button[aria-label="Save"]'));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     // org/team maps start as null and are not editable in jsdom (react-ace
     // renders empty); they pass through unchanged.
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
@@ -152,8 +154,6 @@ describe('<GitHubEnterpriseEdit />', () => {
         <GitHubEnterpriseEdit />
       </SettingsProvider>
     );
-    expect(
-      await screen.findByText(/Something went wrong/)
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/Something went wrong/)).toBeInTheDocument();
   });
 });

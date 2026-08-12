@@ -51,10 +51,7 @@ const ControllerSubForm = ({ autoPopulateCredential }) => {
       <EnabledValueField />
       <OptionsField />
       <SourceVarsField
-        popoverContent={helpText.sourceVars(
-          getDocsBaseUrl(config),
-          'ascender'
-        )}
+        popoverContent={helpText.sourceVars(getDocsBaseUrl(config), 'ascender')}
       />
     </>
   );

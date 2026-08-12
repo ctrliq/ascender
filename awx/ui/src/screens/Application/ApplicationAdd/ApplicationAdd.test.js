@@ -13,35 +13,35 @@ jest.mock('../../../api/models/Organizations');
 // container's readOptions/create/navigation/submit-error logic is what's tested.
 // onSubmit receives the form values (organization as an object, per the form);
 // onCancel is wired to the container's handleCancel.
-jest.mock('../shared/ApplicationForm', () => function MockApplicationForm({
-    onSubmit,
-    onCancel,
-    submitError,
-  }) {
-    return (
-      <div>
-        {submitError ? <div>FormSubmitError</div> : null}
-        <button
-          type="button"
-          onClick={() =>
-            onSubmit({
-              authorization_grant_type: 'authorization-code',
-              client_type: 'confidential',
-              description: 'bar',
-              name: 'foo',
-              organization: { id: 1 },
-              redirect_uris: 'http://www.google.com',
-            })
-          }
-        >
-          Submit
-        </button>
-        <button type="button" onClick={onCancel}>
-          Cancel
-        </button>
-      </div>
-    );
-  });
+jest.mock(
+  '../shared/ApplicationForm',
+  () =>
+    function MockApplicationForm({ onSubmit, onCancel, submitError }) {
+      return (
+        <div>
+          {submitError ? <div>FormSubmitError</div> : null}
+          <button
+            type="button"
+            onClick={() =>
+              onSubmit({
+                authorization_grant_type: 'authorization-code',
+                client_type: 'confidential',
+                description: 'bar',
+                name: 'foo',
+                organization: { id: 1 },
+                redirect_uris: 'http://www.google.com',
+              })
+            }
+          >
+            Submit
+          </button>
+          <button type="button" onClick={onCancel}>
+            Cancel
+          </button>
+        </div>
+      );
+    }
+);
 
 const options = {
   data: {

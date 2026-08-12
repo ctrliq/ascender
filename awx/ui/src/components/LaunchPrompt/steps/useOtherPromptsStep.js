@@ -64,23 +64,25 @@ export default function useOtherPromptsStep(launchConfig, resource, labels) {
     : false;
 
   return {
-    step: !shouldShowPrompt(launchConfig) ? null : {
-      id: STEP_ID,
-      key: 5,
-      name: (
-        <StepName hasErrors={hasError} id="other-prompts-step">
-          {t`Other prompts`}
-        </StepName>
-      ),
-      component: (
-        <OtherPromptsStep
-          launchConfig={launchConfig}
-          variablesMode={variablesMode}
-          onVarModeChange={handleModeChange}
-        />
-      ),
-      enableNext: true,
-    },
+    step: !shouldShowPrompt(launchConfig)
+      ? null
+      : {
+          id: STEP_ID,
+          key: 5,
+          name: (
+            <StepName hasErrors={hasError} id="other-prompts-step">
+              {t`Other prompts`}
+            </StepName>
+          ),
+          component: (
+            <OtherPromptsStep
+              launchConfig={launchConfig}
+              variablesMode={variablesMode}
+              onVarModeChange={handleModeChange}
+            />
+          ),
+          enableNext: true,
+        },
     initialValues: getInitialValues(launchConfig, resource, labels),
     isReady: true,
     contentError: null,

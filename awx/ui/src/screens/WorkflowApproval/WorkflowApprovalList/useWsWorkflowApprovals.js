@@ -30,32 +30,29 @@ export default function useWsWorkflowApprovals(
     })();
   }, [throttledListRefresh, fetchWorkflowApprovals]);
 
-  useEffect(
-    () => {
-      if (!(lastMessage?.type === 'workflow_approval')) {
-        return;
+  useEffect(() => {
+    if (!(lastMessage?.type === 'workflow_approval')) {
+      return;
+    }
+
+    setWorkflowApprovals((currentWorkflowApprovals) => {
+      const index = currentWorkflowApprovals.findIndex(
+        (p) => p.id === lastMessage.unified_job_id
+      );
+
+      if (
+        (index > -1 &&
+          !['new', 'pending', 'waiting', 'running'].includes(
+            lastMessage.status
+          )) ||
+        (index === -1 && lastMessage.status === 'pending')
+      ) {
+        setReloadEntireList(true);
       }
 
-      setWorkflowApprovals((currentWorkflowApprovals) => {
-        const index = currentWorkflowApprovals.findIndex(
-          (p) => p.id === lastMessage.unified_job_id
-        );
-
-        if (
-          (index > -1 &&
-            !['new', 'pending', 'waiting', 'running'].includes(
-              lastMessage.status
-            )) ||
-          (index === -1 && lastMessage.status === 'pending')
-        ) {
-          setReloadEntireList(true);
-        }
-
-        return currentWorkflowApprovals;
-      });
-    },
-    [lastMessage]
-  );
+      return currentWorkflowApprovals;
+    });
+  }, [lastMessage]);
 
   return workflowApprovals;
 }

@@ -1,12 +1,14 @@
 import React, { useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useParams,
-  useLocation } from 'react-router';
+  useLocation,
+} from 'react-router';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import useRequest from 'hooks/useRequest';
@@ -125,9 +127,7 @@ function User({ setBreadcrumb, me }) {
           {user && (
             <Route
               path="tokens/*"
-              element={
-                <UserTokens user={user} setBreadcrumb={setBreadcrumb} />
-              }
+              element={<UserTokens user={user} setBreadcrumb={setBreadcrumb} />}
             />
           )}
           <Route

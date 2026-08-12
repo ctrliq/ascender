@@ -120,9 +120,9 @@ describe('<LoggingEdit />', () => {
     const { container } = await renderEdit();
     fireEvent.click(container.querySelector('#LOG_AGGREGATOR_ENABLED'));
     await waitFor(() =>
-      expect(
-        container.querySelector('#LOG_AGGREGATOR_ENABLED').checked
-      ).toBe(false)
+      expect(container.querySelector('#LOG_AGGREGATOR_ENABLED').checked).toBe(
+        false
+      )
     );
     const aggregatorGroup = getFormGroup(container, 'Logging Aggregator');
     const aggregatorTypeGroup = getFormGroup(
@@ -142,23 +142,18 @@ describe('<LoggingEdit />', () => {
     expect(
       screen.getByText('Enable/disable HTTPS certificate verification')
     ).toBeInTheDocument();
-    expect(
-      container.querySelector('#LOG_AGGREGATOR_VERIFY_CERT').checked
-    ).toBe(true);
+    expect(container.querySelector('#LOG_AGGREGATOR_VERIFY_CERT').checked).toBe(
+      true
+    );
   });
 
   test('TCP connection timeout should be required when protocol is tcp', async () => {
     const { container } = await renderEdit();
-    fireEvent.change(
-      container.querySelector('#LOG_AGGREGATOR_PROTOCOL'),
-      {
-        target: { name: 'LOG_AGGREGATOR_PROTOCOL', value: 'tcp' },
-      }
-    );
+    fireEvent.change(container.querySelector('#LOG_AGGREGATOR_PROTOCOL'), {
+      target: { name: 'LOG_AGGREGATOR_PROTOCOL', value: 'tcp' },
+    });
     await waitFor(() =>
-      expect(
-        screen.getByText('TCP Connection Timeout')
-      ).toBeInTheDocument()
+      expect(screen.getByText('TCP Connection Timeout')).toBeInTheDocument()
     );
     const tcpGroup = getFormGroup(container, 'TCP Connection Timeout');
     expect(
@@ -168,12 +163,9 @@ describe('<LoggingEdit />', () => {
 
   test('TCP connection timeout and https certificate toggle should be hidden when protocol is udp', async () => {
     const { container } = await renderEdit();
-    fireEvent.change(
-      container.querySelector('#LOG_AGGREGATOR_PROTOCOL'),
-      {
-        target: { name: 'LOG_AGGREGATOR_PROTOCOL', value: 'udp' },
-      }
-    );
+    fireEvent.change(container.querySelector('#LOG_AGGREGATOR_PROTOCOL'), {
+      target: { name: 'LOG_AGGREGATOR_PROTOCOL', value: 'udp' },
+    });
     await waitFor(() =>
       expect(
         screen.queryByText('TCP Connection Timeout')
@@ -211,9 +203,7 @@ describe('<LoggingEdit />', () => {
     await user.clear(portInput);
     await user.type(portInput, '1010');
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       ...mockSettings,
       LOG_AGGREGATOR_PORT: 1010,

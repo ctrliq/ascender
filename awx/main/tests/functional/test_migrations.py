@@ -14,6 +14,7 @@ continue to work when sqlite is the backing database (vs. the default DB of post
 
 
 @pytest.mark.django_db
+@pytest.mark.timeout(1800)  # replaying the full migration history takes well over the default timeout
 class TestMigrationSmoke:
     def test_happy_path(self, migrator):
         """

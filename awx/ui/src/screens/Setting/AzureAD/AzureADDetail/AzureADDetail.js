@@ -29,11 +29,12 @@ function AzureADDetail() {
     result: azureDetails,
   } = useRequest(
     useCallback(async () => {
-      const [{ data: azureDefault }, { data: azureTenant }] =
-        await Promise.all([
+      const [{ data: azureDefault }, { data: azureTenant }] = await Promise.all(
+        [
           SettingsAPI.readCategory('azuread-oauth2'),
           SettingsAPI.readCategory('azuread-oauth2-tenant'),
-        ]);
+        ]
+      );
       return {
         default: azureDefault,
         tenant: azureTenant,

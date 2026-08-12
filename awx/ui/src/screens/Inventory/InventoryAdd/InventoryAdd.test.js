@@ -45,7 +45,9 @@ describe('<InventoryAdd />', () => {
 
   test('Initially renders successfully', () => {
     renderWithContexts(<InventoryAdd />);
-    expect(screen.getByRole('button', { name: 'mock-submit' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'mock-submit' })
+    ).toBeInTheDocument();
   });
 
   test('handleSubmit should call the api and redirect to details page', async () => {
@@ -75,7 +77,9 @@ describe('<InventoryAdd />', () => {
       )
     );
     await waitFor(() =>
-      expect(history.location.pathname).toBe('/inventories/inventory/13/details')
+      expect(history.location.pathname).toBe(
+        '/inventories/inventory/13/details'
+      )
     );
   });
 

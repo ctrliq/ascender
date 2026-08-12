@@ -10,10 +10,7 @@ function InventoryGroupHosts({ inventoryGroup }) {
         path="add"
         element={<InventoryGroupHostAdd inventoryGroup={inventoryGroup} />}
       />
-      <Route
-        index
-        element={<InventoryGroupHostList />}
-      />
+      <Route index element={<InventoryGroupHostList />} />
     </Routes>
   );
 }

@@ -26,59 +26,71 @@ function AddResourceRole({
 }) {
   const { t } = useLingui();
 
-  const userSearchColumns = useMemo(() => [
-    {
-      name: t`Username`,
-      key: 'username__icontains',
-      isDefault: true,
-    },
-    {
-      name: t`First Name`,
-      key: 'first_name__icontains',
-    },
-    {
-      name: t`Last Name`,
-      key: 'last_name__icontains',
-    },
-  ], [t]);
+  const userSearchColumns = useMemo(
+    () => [
+      {
+        name: t`Username`,
+        key: 'username__icontains',
+        isDefault: true,
+      },
+      {
+        name: t`First Name`,
+        key: 'first_name__icontains',
+      },
+      {
+        name: t`Last Name`,
+        key: 'last_name__icontains',
+      },
+    ],
+    [t]
+  );
 
-  const userSortColumns = useMemo(() => [
-    {
-      name: t`Username`,
-      key: 'username',
-    },
-    {
-      name: t`First Name`,
-      key: 'first_name',
-    },
-    {
-      name: t`Last Name`,
-      key: 'last_name',
-    },
-  ], [t]);
+  const userSortColumns = useMemo(
+    () => [
+      {
+        name: t`Username`,
+        key: 'username',
+      },
+      {
+        name: t`First Name`,
+        key: 'first_name',
+      },
+      {
+        name: t`Last Name`,
+        key: 'last_name',
+      },
+    ],
+    [t]
+  );
 
-  const teamSearchColumns = useMemo(() => [
-    {
-      name: t`Name`,
-      key: 'name__icontains',
-      isDefault: true,
-    },
-    {
-      name: t`Created By (Username)`,
-      key: 'created_by__username',
-    },
-    {
-      name: t`Modified By (Username)`,
-      key: 'modified_by__username',
-    },
-  ], [t]);
+  const teamSearchColumns = useMemo(
+    () => [
+      {
+        name: t`Name`,
+        key: 'name__icontains',
+        isDefault: true,
+      },
+      {
+        name: t`Created By (Username)`,
+        key: 'created_by__username',
+      },
+      {
+        name: t`Modified By (Username)`,
+        key: 'modified_by__username',
+      },
+    ],
+    [t]
+  );
 
-  const teamSortColumns = useMemo(() => [
-    {
-      name: t`Name`,
-      key: 'name',
-    },
-  ], [t]);
+  const teamSortColumns = useMemo(
+    () => [
+      {
+        name: t`Name`,
+        key: 'name',
+      },
+    ],
+    [t]
+  );
   const location = useLocation();
   const navigate = useNavigate();
 

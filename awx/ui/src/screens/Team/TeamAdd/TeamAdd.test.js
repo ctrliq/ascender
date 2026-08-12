@@ -8,29 +8,31 @@ import TeamAdd from './TeamAdd';
 
 jest.mock('../../../api');
 
-jest.mock('../shared/TeamForm', () =>
-  function MockTeamForm({ handleSubmit, handleCancel, submitError }) {
-    return (
-      <div>
-        {submitError ? <div data-testid="form-submit-error" /> : null}
-        <button
-          type="button"
-          onClick={() =>
-            handleSubmit({
-              name: 'new name',
-              description: 'new description',
-              organization: { id: 1, name: 'Default' },
-            })
-          }
-        >
-          Submit
-        </button>
-        <button type="button" aria-label="Cancel" onClick={handleCancel}>
-          Cancel
-        </button>
-      </div>
-    );
-  }
+jest.mock(
+  '../shared/TeamForm',
+  () =>
+    function MockTeamForm({ handleSubmit, handleCancel, submitError }) {
+      return (
+        <div>
+          {submitError ? <div data-testid="form-submit-error" /> : null}
+          <button
+            type="button"
+            onClick={() =>
+              handleSubmit({
+                name: 'new name',
+                description: 'new description',
+                organization: { id: 1, name: 'Default' },
+              })
+            }
+          >
+            Submit
+          </button>
+          <button type="button" aria-label="Cancel" onClick={handleCancel}>
+            Cancel
+          </button>
+        </div>
+      );
+    }
 );
 
 describe('<TeamAdd />', () => {

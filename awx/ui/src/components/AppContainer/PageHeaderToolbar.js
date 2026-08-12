@@ -7,15 +7,19 @@ import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import styled from 'styled-components';
 import {
-	Dropdown,
-	DropdownItem,
-	DropdownList,
-	MenuToggle,
-	NotificationBadge,
-	NotificationBadgeVariant,
-	Tooltip
+  Dropdown,
+  DropdownItem,
+  DropdownList,
+  MenuToggle,
+  NotificationBadge,
+  NotificationBadgeVariant,
+  Tooltip,
 } from '@patternfly/react-core';
-import { PaletteIcon, QuestionCircleIcon, UserIcon } from '@patternfly/react-icons';
+import {
+  PaletteIcon,
+  QuestionCircleIcon,
+  UserIcon,
+} from '@patternfly/react-icons';
 import { WorkflowApprovalsAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
@@ -135,10 +139,7 @@ function PageHeaderToolbar({
           ))}
         </DropdownList>
       </Dropdown>
-      <Tooltip
-        position="bottom"
-        content={t`Pending Workflow Approvals`}
-      >
+      <Tooltip position="bottom" content={t`Pending Workflow Approvals`}>
         <Link to="/workflow_approvals?workflow_approvals.status=pending">
           <ToolbarNotificationBadge
             id="toolbar-workflow-approval-badge"
@@ -205,9 +206,7 @@ function PageHeaderToolbar({
             ouiaId="toolbar-user-dropdown-toggle"
           >
             <UserIcon />
-            {loggedInUser &&
-                <UserName>{loggedInUser.username}</UserName>
-            }
+            {loggedInUser && <UserName>{loggedInUser.username}</UserName>}
           </MenuToggle>
         )}
       >
@@ -215,9 +214,7 @@ function PageHeaderToolbar({
           <DropdownItem
             key="user"
             aria-label={t`User details`}
-            to={
-              loggedInUser ? `#/users/${loggedInUser.id}/details` : '#/home'
-            }
+            to={loggedInUser ? `#/users/${loggedInUser.id}/details` : '#/home'}
             ouiaId="user-dropdown-item"
           >
             {t`User Details`}

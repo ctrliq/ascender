@@ -11,6 +11,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunSQL(
-            "UPDATE conf_setting SET value='false' WHERE key='UI_NEXT'; INSERT INTO conf_setting (created, modified, key, value) SELECT NOW(), NOW(), 'UI_NEXT', 'false' WHERE NOT EXISTS (SELECT 1 FROM conf_setting WHERE key='UI_NEXT');"
+            "UPDATE conf_setting SET value='false' WHERE key='UI_NEXT'; INSERT INTO conf_setting (created, modified, key, value) SELECT CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'UI_NEXT', 'false' WHERE NOT EXISTS (SELECT 1 FROM conf_setting WHERE key='UI_NEXT');"
         )
     ]

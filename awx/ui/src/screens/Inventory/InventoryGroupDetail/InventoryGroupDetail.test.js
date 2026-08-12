@@ -94,13 +94,9 @@ describe('<InventoryGroupDetail />', () => {
           name: 'Delete All Groups and Hosts',
         })
       );
-      await user.click(
-        screen.getByRole('button', { name: 'Confirm Delete' })
-      );
+      await user.click(screen.getByRole('button', { name: 'Confirm Delete' }));
 
-      await waitFor(() =>
-        expect(GroupsAPI.destroy).toHaveBeenCalledWith(1)
-      );
+      await waitFor(() => expect(GroupsAPI.destroy).toHaveBeenCalledWith(1));
     });
   });
 

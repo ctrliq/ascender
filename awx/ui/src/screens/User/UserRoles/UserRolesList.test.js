@@ -128,10 +128,9 @@ describe('<UserRolesList />', () => {
       'href',
       '/templates/workflow_job_template/16/details'
     );
-    expect(screen.getByRole('link', { name: 'Credential Bar' })).toHaveAttribute(
-      'href',
-      '/credentials/75/details'
-    );
+    expect(
+      screen.getByRole('link', { name: 'Credential Bar' })
+    ).toHaveAttribute('href', '/credentials/75/details');
     expect(screen.getByRole('link', { name: 'Inventory Foo' })).toHaveAttribute(
       'href',
       '/inventories/inventory/76/details'
@@ -299,8 +298,6 @@ describe('<UserRolesList />', () => {
 
     renderWithContexts(<UserRolesList user={user} />);
 
-    expect(
-      await screen.findByText('System Administrator')
-    ).toBeInTheDocument();
+    expect(await screen.findByText('System Administrator')).toBeInTheDocument();
   });
 });

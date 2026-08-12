@@ -35,7 +35,9 @@ function MiscSystem() {
             path="*"
             element={
               <ContentError isNotFound>
-                <Link to={`${baseURL}/details`}>{t`View Miscellaneous System settings`}</Link>
+                <Link
+                  to={`${baseURL}/details`}
+                >{t`View Miscellaneous System settings`}</Link>
               </ContentError>
             }
           />

@@ -180,7 +180,6 @@ async function renderDetail(approval, props = {}) {
   return utils;
 }
 
-
 describe('<WorkflowApprovalDetail />', () => {
   beforeEach(() => {
     WorkflowJobsAPI.readDetail.mockResolvedValue({ data: workflowJob });

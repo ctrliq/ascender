@@ -13,7 +13,8 @@ import {
   TextArea,
   TextInput,
   Tooltip,
-  ButtonVariant, InputGroupItem,
+  ButtonVariant,
+  InputGroupItem,
 } from '@patternfly/react-core';
 import FileUploadIcon from '@patternfly/react-icons/dist/js/icons/file-upload-icon';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
@@ -68,37 +69,35 @@ const SettingGroup = ({
 }) => {
   const { t } = useLingui();
   return (
-      <FormGroup
-    fieldId={fieldId}
-    id={`${fieldId}-field`}
-    isRequired={isRequired}
-    label={label}
-    labelHelp={
- <>
-        <Popover
-          content={popoverContent}
-          ariaLabel={`${t`More information for`} ${label}`}
-        />
-        <RevertButton
-          id={fieldId}
-          defaultValue={defaultValue}
-          isDisabled={isDisabled}
-          onRevertCallback={onRevertCallback}
-        />
-      </>
-    }
-  >
-    {children}
-    {validated === 'error' && helperTextInvalid && (
-      <FormHelperText>
-        <HelperText>
-          <HelperTextItem variant="error">
-            {helperTextInvalid}
-          </HelperTextItem>
-        </HelperText>
-      </FormHelperText>
-    )}
-  </FormGroup>
+    <FormGroup
+      fieldId={fieldId}
+      id={`${fieldId}-field`}
+      isRequired={isRequired}
+      label={label}
+      labelHelp={
+        <>
+          <Popover
+            content={popoverContent}
+            ariaLabel={`${t`More information for`} ${label}`}
+          />
+          <RevertButton
+            id={fieldId}
+            defaultValue={defaultValue}
+            isDisabled={isDisabled}
+            onRevertCallback={onRevertCallback}
+          />
+        </>
+      }
+    >
+      {children}
+      {validated === 'error' && helperTextInvalid && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">{helperTextInvalid}</HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
+    </FormGroup>
   );
 };
 const BooleanField = ({
@@ -224,13 +223,15 @@ const EncryptedField = ({ name, config, isRequired = false }) => {
       validated={isValid ? 'default' : 'error'}
     >
       <InputGroup>
-        <InputGroupItem isFill><PasswordInput
-          id={name}
-          name={name}
-          label={config.label}
-          validate={validate}
-          isRequired={isRequired}
-        /></InputGroupItem>
+        <InputGroupItem isFill>
+          <PasswordInput
+            id={name}
+            name={name}
+            label={config.label}
+            validate={validate}
+            isRequired={isRequired}
+          />
+        </InputGroupItem>
       </InputGroup>
     </SettingGroup>
   ) : null;

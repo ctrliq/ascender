@@ -1,11 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
-import {
-	Card,
-	PageSection,
-	DropdownItem,
-} from '@patternfly/react-core';
+import { Card, PageSection, DropdownItem } from '@patternfly/react-core';
 
 import { InventoriesAPI } from 'api';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';

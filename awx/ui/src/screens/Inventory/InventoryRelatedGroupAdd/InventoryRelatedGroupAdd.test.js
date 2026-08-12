@@ -8,21 +8,21 @@ import InventoryRelatedGroupAdd from './InventoryRelatedGroupAdd';
 
 jest.mock('../../../api');
 
-jest.mock('../shared/InventoryGroupForm', () => ({
-  handleSubmit,
-  handleCancel,
-  error,
-}) => (
-  <div>
-    <button
-      type="button"
-      aria-label="mock-submit"
-      onClick={() => handleSubmit({ name: 'foo', description: 'bar' })}
-    />
-    <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
-    {error ? <div data-testid="mock-submit-error" /> : null}
-  </div>
-));
+jest.mock(
+  '../shared/InventoryGroupForm',
+  () =>
+    ({ handleSubmit, handleCancel, error }) => (
+      <div>
+        <button
+          type="button"
+          aria-label="mock-submit"
+          onClick={() => handleSubmit({ name: 'foo', description: 'bar' })}
+        />
+        <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
+        {error ? <div data-testid="mock-submit-error" /> : null}
+      </div>
+    )
+);
 
 function renderRelatedAdd(history) {
   return renderWithContexts(
@@ -99,9 +99,7 @@ describe('<InventoryRelatedGroupAdd/>', () => {
 
     await user.click(screen.getByRole('button', { name: 'mock-submit' }));
 
-    expect(
-      await screen.findByTestId('mock-submit-error')
-    ).toBeInTheDocument();
+    expect(await screen.findByTestId('mock-submit-error')).toBeInTheDocument();
   });
 
   test('should throw error on association of group', async () => {
@@ -127,8 +125,6 @@ describe('<InventoryRelatedGroupAdd/>', () => {
         description: 'bar',
       })
     );
-    expect(
-      await screen.findByTestId('mock-submit-error')
-    ).toBeInTheDocument();
+    expect(await screen.findByTestId('mock-submit-error')).toBeInTheDocument();
   });
 });

@@ -64,12 +64,7 @@ describe('<SurveyListItem />', () => {
 
   test('fields are rendering properly', () => {
     renderInTable(
-      <SurveyListItem
-        question={item}
-        isFirst={false}
-        isLast={false}
-        canEdit
-      />
+      <SurveyListItem question={item} isFirst={false} isLast={false} canEdit />
     );
     expect(
       screen.getByRole('checkbox', { name: 'Select all rows' })

@@ -88,15 +88,15 @@ describe('<InstanceListItem/>', () => {
       'aria-valuenow',
       '40'
     );
-    expect(container.querySelector('[data-cy="cpu-capacity"]')).toHaveTextContent(
-      'CPU 24'
-    );
-    expect(container.querySelector('[data-cy="mem-capacity"]')).toHaveTextContent(
-      'RAM 1'
-    );
-    expect(container.querySelector('[data-cy="number-forks"]')).toHaveTextContent(
-      '10 forks'
-    );
+    expect(
+      container.querySelector('[data-cy="cpu-capacity"]')
+    ).toHaveTextContent('CPU 24');
+    expect(
+      container.querySelector('[data-cy="mem-capacity"]')
+    ).toHaveTextContent('RAM 1');
+    expect(
+      container.querySelector('[data-cy="number-forks"]')
+    ).toHaveTextContent('10 forks');
   });
 
   test('moving the slider up recalculates forks and updates capacity', async () => {
@@ -171,15 +171,15 @@ describe('<InstanceListItem/>', () => {
 
   test('should render expanded row with the correct data points', () => {
     renderItem({ isExpanded: true });
-    expect(screen.getByText('Running Jobs').nextElementSibling).toHaveTextContent(
-      '0'
-    );
+    expect(
+      screen.getByText('Running Jobs').nextElementSibling
+    ).toHaveTextContent('0');
     expect(screen.getByText('Total Jobs').nextElementSibling).toHaveTextContent(
       '68'
     );
-    expect(screen.getByText('Policy Type').nextElementSibling).toHaveTextContent(
-      'Auto'
-    );
+    expect(
+      screen.getByText('Policy Type').nextElementSibling
+    ).toHaveTextContent('Auto');
     expect(
       screen.getByText('Last Health Check').parentElement
     ).toHaveTextContent('9/15/2021, 6:02:07 PM');

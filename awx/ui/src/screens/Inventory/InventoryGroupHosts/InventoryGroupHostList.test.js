@@ -131,7 +131,9 @@ describe('<InventoryGroupHostList />', () => {
     await waitFor(() =>
       expect(GroupsAPI.disassociateHost).toHaveBeenCalledTimes(3)
     );
-    await waitFor(() => expect(GroupsAPI.readAllHosts).toHaveBeenCalledTimes(2));
+    await waitFor(() =>
+      expect(GroupsAPI.readAllHosts).toHaveBeenCalledTimes(2)
+    );
   });
 
   test('should show error modal for failed disassociation', async () => {

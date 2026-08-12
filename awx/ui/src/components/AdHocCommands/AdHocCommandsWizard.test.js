@@ -281,9 +281,7 @@ describe('<AdHocCommandsWizard/>', () => {
 
     // the details nav item surfaces the error icon (StepName ExclamationCircle)
     await waitFor(() =>
-      expect(
-        document.querySelector('#details-step svg')
-      ).toBeInTheDocument()
+      expect(document.querySelector('#details-step svg')).toBeInTheDocument()
     );
   });
 

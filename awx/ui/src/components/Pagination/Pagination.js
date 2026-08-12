@@ -1,8 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import {
-	Pagination as PFPagination
-} from '@patternfly/react-core';
+import { Pagination as PFPagination } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
 const AWXPagination = styled(PFPagination)`

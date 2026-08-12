@@ -76,7 +76,9 @@ describe('<UserDetail />', () => {
         }}
       />
     );
-    expect(screen.queryByRole('link', { name: 'edit' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'edit' })
+    ).not.toBeInTheDocument();
   });
 
   test('edit button should navigate to user edit', async () => {

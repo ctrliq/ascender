@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import {
-	Divider,
-	Dropdown,
-	DropdownItem,
-	DropdownList,
-	MenuToggle
+  Divider,
+  Dropdown,
+  DropdownItem,
+  DropdownList,
+  MenuToggle,
 } from '@patternfly/react-core';
 import { RocketIcon } from '@patternfly/react-icons';
 

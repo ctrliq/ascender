@@ -44,9 +44,7 @@ describe('<MultipleChoiceField/>', () => {
 
     // Enter on the FIRST input (not the last) does NOT add a row.
     fireEvent.keyUp(screen.getByLabelText('apollo'), { key: 'Enter' });
-    await waitFor(() =>
-      expect(screen.getAllByRole('textbox')).toHaveLength(3)
-    );
+    await waitFor(() => expect(screen.getAllByRole('textbox')).toHaveLength(3));
 
     // rename the third choice (athena) to spencer
     fireEvent.change(screen.getByLabelText('athena'), {
@@ -90,9 +88,7 @@ describe('<MultipleChoiceField/>', () => {
 
     // Enter on the FIRST input (not the last) does NOT add a row.
     fireEvent.keyUp(screen.getByLabelText('alex'), { key: 'Enter' });
-    await waitFor(() =>
-      expect(screen.getAllByRole('textbox')).toHaveLength(3)
-    );
+    await waitFor(() => expect(screen.getAllByRole('textbox')).toHaveLength(3));
 
     // rename the third choice (athena) to spencer
     fireEvent.change(screen.getByLabelText('athena'), {

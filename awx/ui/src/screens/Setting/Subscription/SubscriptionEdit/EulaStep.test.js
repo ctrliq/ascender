@@ -21,8 +21,6 @@ describe('<EulaStep />', () => {
         <EulaStep />
       </Formik>
     );
-    expect(
-      screen.getByText('End User License Agreement')
-    ).toBeInTheDocument();
+    expect(screen.getByText('End User License Agreement')).toBeInTheDocument();
   });
 });

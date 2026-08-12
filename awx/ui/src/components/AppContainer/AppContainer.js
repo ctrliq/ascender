@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 
 import {
-	Button,
-	Masthead,
-	MastheadLogo,
-	MastheadContent,
-	MastheadMain,
-	MastheadToggle, MastheadBrand,
-	Nav,
-	NavList,
-	Page,
-	PageSidebar, PageSidebarBody,
-	PageToggleButton
+  Button,
+  Masthead,
+  MastheadLogo,
+  MastheadContent,
+  MastheadMain,
+  MastheadToggle,
+  MastheadBrand,
+  Nav,
+  NavList,
+  Page,
+  PageSidebar,
+  PageSidebarBody,
+  PageToggleButton,
 } from '@patternfly/react-core';
 
 import { Plural, Trans, useLingui } from '@lingui/react/macro';
@@ -54,16 +56,18 @@ function AppContainer({ navRouteConfig = [], children }) {
   }, [config.analytics_status]);
 
   const brandName = config?.license_info?.product_name;
-  const alt = brandName
-    ? t`${brandName} logo`
-    : t`brand logo`;
+  const alt = brandName ? t`${brandName} logo` : t`brand logo`;
 
   const header = (
     <Masthead>
-
-      <MastheadMain><MastheadToggle>
-        <PageToggleButton isHamburgerButton variant="plain" aria-label={t`Global navigation`} />
-      </MastheadToggle>
+      <MastheadMain>
+        <MastheadToggle>
+          <PageToggleButton
+            isHamburgerButton
+            variant="plain"
+            aria-label={t`Global navigation`}
+          />
+        </MastheadToggle>
         <StyledMastheadBrand component="a" href="/">
           <BrandLogo alt={alt} />
         </StyledMastheadBrand>
@@ -82,9 +86,11 @@ function AppContainer({ navRouteConfig = [], children }) {
   const simpleHeader = config.isLoading ? null : (
     <Masthead>
       <MastheadMain>
-        <MastheadBrand data-codemods><MastheadLogo data-codemods component="a" href="/">
-          <BrandLogo alt={alt} />
-        </MastheadLogo></MastheadBrand>
+        <MastheadBrand data-codemods>
+          <MastheadLogo data-codemods component="a" href="/">
+            <BrandLogo alt={alt} />
+          </MastheadLogo>
+        </MastheadBrand>
       </MastheadMain>
       <MastheadContent>
         <Button onClick={logout} variant="tertiary" ouiaId="logout">
@@ -95,11 +101,9 @@ function AppContainer({ navRouteConfig = [], children }) {
   );
 
   const sidebar = (
-    <PageSidebar  >
-<PageSidebarBody>
-
+    <PageSidebar>
+      <PageSidebarBody>
         <Nav
-
           aria-label={t`Navigation`}
 
           ouiaId="sidebar-navigation"
@@ -115,9 +119,8 @@ function AppContainer({ navRouteConfig = [], children }) {
             ))}
           </NavList>
         </Nav>
-
-</PageSidebarBody>
-</PageSidebar>
+      </PageSidebarBody>
+    </PageSidebar>
   );
 
   return (

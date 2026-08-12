@@ -1,11 +1,13 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useParams,
-  useLocation } from 'react-router';
+  useLocation,
+} from 'react-router';
 import { Card } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import useRequest from 'hooks/useRequest';
@@ -97,9 +99,7 @@ function InventoryHost({ setBreadcrumb, inventory }) {
           {contentError.response && contentError.response.status === 404 && (
             <span>
               {t`Host not found.`}{' '}
-              <Link to={hostListUrl}>
-                {t`View all Inventory Hosts.`}
-              </Link>
+              <Link to={hostListUrl}>{t`View all Inventory Hosts.`}</Link>
             </span>
           )}
         </ContentError>
@@ -124,23 +124,14 @@ function InventoryHost({ setBreadcrumb, inventory }) {
             index
             element={<Navigate to={`${hostBaseUrl}/details`} replace />}
           />
-          <Route
-            path="details"
-            element={<InventoryHostDetail host={host} />}
-          />
+          <Route path="details" element={<InventoryHostDetail host={host} />} />
           <Route
             path="edit"
             element={<InventoryHostEdit host={host} inventory={inventory} />}
           />
-          <Route
-            path="facts"
-            element={<InventoryHostFacts host={host} />}
-          />
+          <Route path="facts" element={<InventoryHostFacts host={host} />} />
           {/* /* so the nested <InventoryHostGroups> route tree can match */}
-          <Route
-            path="groups/*"
-            element={<InventoryHostGroups />}
-          />
+          <Route path="groups/*" element={<InventoryHostGroups />} />
           <Route
             path="jobs"
             element={<JobList defaultParams={{ job__hosts: host.id }} />}

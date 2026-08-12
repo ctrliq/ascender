@@ -15,7 +15,12 @@ describe('<SelectableCard />', () => {
 
   test('initially renders without crashing when selected', () => {
     renderWithContexts(
-      <SelectableCard label="Foo" isSelected onClick={onClick} ariaLabel="card" />
+      <SelectableCard
+        label="Foo"
+        isSelected
+        onClick={onClick}
+        ariaLabel="card"
+      />
     );
     expect(screen.getByRole('button', { name: 'card' })).toBeInTheDocument();
   });

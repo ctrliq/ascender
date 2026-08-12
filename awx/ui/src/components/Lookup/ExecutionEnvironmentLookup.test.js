@@ -117,7 +117,9 @@ describe('ExecutionEnvironmentLookup', () => {
         />
       </Formik>
     );
-    await waitFor(() => expect(ProjectsAPI.readDetail).toHaveBeenCalledWith(12));
+    await waitFor(() =>
+      expect(ProjectsAPI.readDetail).toHaveBeenCalledWith(12)
+    );
     await waitFor(() =>
       expect(ExecutionEnvironmentsAPI.read).toHaveBeenCalledWith({
         or__organization__id: 39,

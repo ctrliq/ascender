@@ -1,9 +1,5 @@
 import React, { useEffect, useCallback, useRef } from 'react';
-import { Link,
-  Routes,
-  Route,
-  Navigate,
-  useParams } from 'react-router';
+import { Link, Routes, Route, Navigate, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { CaretLeftIcon } from '@patternfly/react-icons';

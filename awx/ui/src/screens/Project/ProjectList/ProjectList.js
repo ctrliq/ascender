@@ -276,7 +276,10 @@ function ProjectList() {
             )}
             emptyStateControls={
               canAdd ? (
-                <ToolbarAddButton key="add" linkTo={`${location.pathname}/add`} />
+                <ToolbarAddButton
+                  key="add"
+                  linkTo={`${location.pathname}/add`}
+                />
               ) : null
             }
           />

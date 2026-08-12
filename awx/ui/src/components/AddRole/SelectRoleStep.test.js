@@ -40,8 +40,12 @@ describe('<SelectRoleStep />', () => {
       />
     );
     // one CheckboxCard checkbox per role
-    expect(screen.getByRole('checkbox', { name: 'Project Admin' })).toBeInTheDocument();
-    expect(screen.getByRole('checkbox', { name: 'Execute' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('checkbox', { name: 'Project Admin' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('checkbox', { name: 'Execute' })
+    ).toBeInTheDocument();
   });
 
   test('clicking role fires onRolesClick callback', async () => {

@@ -2,9 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
-import {
-	Label, Button
-} from '@patternfly/react-core';
+import { Label, Button } from '@patternfly/react-core';
 
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { RocketIcon } from '@patternfly/react-icons';
@@ -54,10 +52,7 @@ function JobListItem({
   const jobTypes = {
     project_update: t`Source Control Update`,
     inventory_update: t`Inventory Sync`,
-    job:
-      job.job_type === 'check'
-        ? t`Playbook Check`
-        : t`Playbook Run`,
+    job: job.job_type === 'check' ? t`Playbook Check` : t`Playbook Run`,
     ad_hoc_command: t`Command`,
     system_job: t`Management Job`,
     workflow_job: t`Workflow Job`,
@@ -111,12 +106,8 @@ function JobListItem({
         <Td dataLabel={t`Status`}>
           {job.status && <StatusLabel status={job.status} />}
         </Td>
-        {showTypeColumn && (
-          <Td dataLabel={t`Type`}>{jobTypes[job.type]}</Td>
-        )}
-        <Td dataLabel={t`Start Time`}>
-          {formatDateString(job.started)}
-        </Td>
+        {showTypeColumn && <Td dataLabel={t`Type`}>{jobTypes[job.type]}</Td>}
+        <Td dataLabel={t`Start Time`}>{formatDateString(job.started)}</Td>
         <Td dataLabel={t`Finish Time`}>
           {job.finished ? formatDateString(job.finished) : ''}
         </Td>
@@ -177,13 +168,14 @@ function JobListItem({
             ) && (
               <LaunchButton resource={job}>
                 {({ handleRelaunch, isLaunching }) => (
-                  <Button icon={<RocketIcon />}
+                  <Button
+                    icon={<RocketIcon />}
                     ouiaId={`${job.id}-relaunch-button`}
                     variant="plain"
                     onClick={() => handleRelaunch()}
                     aria-label={t`Relaunch`}
                     isDisabled={isLaunching}
-                   />
+                  />
                 )}
               </LaunchButton>
             )}
@@ -325,7 +317,8 @@ function JobListItem({
                       ouiaId={`job-${job.id}-label-chips`}
                     >
                       {labels.results.map((l) => (
-                        <Label variant="outline"
+                        <Label
+                          variant="outline"
                           key={l.id}
 
                           data-ouia-component-id={`label-${l.id}-chip`}
@@ -352,10 +345,7 @@ function JobListItem({
                   />
                 )}
               {job.type === 'workflow_job' && isSlicedJob && (
-                <Detail
-                  label={t`Job Slice Parent`}
-                  value={t`True`}
-                />
+                <Detail label={t`Job Slice Parent`} value={t`True`} />
               )}
             </DetailList>
           </ExpandableRowContent>

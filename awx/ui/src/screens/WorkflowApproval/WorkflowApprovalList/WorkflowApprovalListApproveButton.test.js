@@ -13,7 +13,10 @@ const workflowApproval = {
 describe('<WorkflowApprovalListApproveButton />', () => {
   test('should render button', () => {
     renderWithContexts(
-      <WorkflowApprovalListApproveButton onApprove={() => {}} selectedItems={[]} />
+      <WorkflowApprovalListApproveButton
+        onApprove={() => {}}
+        selectedItems={[]}
+      />
     );
     expect(screen.getByRole('button', { name: 'Approve' })).toBeInTheDocument();
   });

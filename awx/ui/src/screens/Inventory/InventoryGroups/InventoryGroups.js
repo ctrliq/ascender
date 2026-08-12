@@ -26,10 +26,7 @@ function InventoryGroups({ setBreadcrumb, inventory }) {
           <InventoryGroup inventory={inventory} setBreadcrumb={setBreadcrumb} />
         }
       />
-      <Route
-        index
-        element={<InventoryGroupsList inventory={inventory} />}
-      />
+      <Route index element={<InventoryGroupsList inventory={inventory} />} />
     </Routes>
   );
 }

@@ -101,7 +101,10 @@ describe('getChipsByKey', () => {
       { name: 'Name', key: 'name__icontains', isDefault: true },
       { name: 'Created', key: 'created' },
     ];
-    const queryParams = { created__gte: '2026-06-01', created__lt: '2026-06-30' };
+    const queryParams = {
+      created__gte: '2026-06-01',
+      created__lt: '2026-06-30',
+    };
     const config = {
       namespace: 'item',
       defaultParams: { page: 1, page_size: 5, order_by: 'name' },

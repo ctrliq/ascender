@@ -2,14 +2,14 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import {
-	Button,
-	MenuToggle,
-	Select,
-	SelectList,
-	SelectOption,
-	TextInputGroup,
-	TextInputGroupMain,
-	TextInputGroupUtilities,
+  Button,
+  MenuToggle,
+  Select,
+  SelectList,
+  SelectOption,
+  TextInputGroup,
+  TextInputGroupMain,
+  TextInputGroupUtilities,
 } from '@patternfly/react-core';
 import { TimesIcon } from '@patternfly/react-icons';
 import { ProjectsAPI } from 'api';
@@ -71,9 +71,7 @@ function PlaybookSelect({
 
   const showCreatableOption =
     filterValue &&
-    !options.some(
-      (opt) => opt.toLowerCase() === filterValue.toLowerCase()
-    );
+    !options.some((opt) => opt.toLowerCase() === filterValue.toLowerCase());
 
   return (
     <Select
@@ -118,14 +116,15 @@ function PlaybookSelect({
             />
             {(filterValue || selected) && (
               <TextInputGroupUtilities>
-                <Button icon={<TimesIcon />}
+                <Button
+                  icon={<TimesIcon />}
                   variant="plain"
                   onClick={() => {
                     onChange('');
                     setFilterValue('');
                   }}
                   aria-label={t`Clear`}
-                 />
+                />
               </TextInputGroupUtilities>
             )}
           </TextInputGroup>
@@ -139,9 +138,7 @@ function PlaybookSelect({
           </SelectOption>
         ))}
         {showCreatableOption && (
-          <SelectOption value={filterValue}>
-            {filterValue}
-          </SelectOption>
+          <SelectOption value={filterValue}>{filterValue}</SelectOption>
         )}
         {filteredOptions.length === 0 && !showCreatableOption && (
           <SelectOption isDisabled>{t`No results found`}</SelectOption>

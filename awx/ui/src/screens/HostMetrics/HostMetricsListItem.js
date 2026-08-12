@@ -10,10 +10,7 @@ function HostMetricsListItem({ item, isSelected, onSelect, rowIndex }) {
       id={`host_metrics-row-${item.hostname}`}
       ouiaId={`host-metrics-row-${item.hostname}`}
     >
-      <Td
-        select={{ rowIndex, isSelected, onSelect }}
-        dataLabel={t`Selected`}
-      />
+      <Td select={{ rowIndex, isSelected, onSelect }} dataLabel={t`Selected`} />
       <Td dataLabel={t`Hostname`}>{item.hostname}</Td>
       <Td dataLabel={t`First automation`}>
         {formatDateString(item.first_automation)}

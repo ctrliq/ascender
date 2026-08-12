@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 
-import {
-	Label, Button
-} from '@patternfly/react-core';
+import { Label, Button } from '@patternfly/react-core';
 
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
@@ -66,10 +64,7 @@ function JobDetail({ job, inventorySourceLabels }) {
   const jobTypes = {
     project_update: t`Source Control Update`,
     inventory_update: t`Inventory Sync`,
-    job:
-      job.job_type === 'check'
-        ? t`Playbook Check`
-        : t`Playbook Run`,
+    job: job.job_type === 'check' ? t`Playbook Check` : t`Playbook Run`,
     ad_hoc_command: t`Run Command`,
     system_job: t`Management Job`,
     workflow_job: t`Workflow Job`,
@@ -128,10 +123,7 @@ function JobDetail({ job, inventorySourceLabels }) {
           }
         />
       ) : (
-        <DeletedDetail
-          label={t`Inventory`}
-          helpText={jobHelpText.inventory}
-        />
+        <DeletedDetail label={t`Inventory`} helpText={jobHelpText.inventory} />
       );
     }
     if (job.type === 'workflow_job') {
@@ -252,17 +244,13 @@ function JobDetail({ job, inventorySourceLabels }) {
         <Detail
           dataCy="job-started-date"
           label={t`Started`}
-          value={
-            formatDateString(job.started) || t`Unknown Start Date`
-          }
+          value={formatDateString(job.started) || t`Unknown Start Date`}
         />
         {job?.finished && (
           <Detail
             dataCy="job-finished-date"
             label={t`Finished`}
-            value={
-              formatDateString(job.finished) || t`Unknown Finish Date`
-            }
+            value={formatDateString(job.finished) || t`Unknown Finish Date`}
           />
         )}
         {jobTemplate && (
@@ -445,13 +433,9 @@ function JobDetail({ job, inventorySourceLabels }) {
           <Detail
             dataCy="timeout"
             label={t`Timeout`}
-            value={
-              validateReactNode(
-                job.timeout
-                  ? t`${job.timeout} seconds`
-                  : t`No timeout specified`
-              )
-            }
+            value={validateReactNode(
+              job.timeout ? t`${job.timeout} seconds` : t`No timeout specified`
+            )}
             helpText={jobHelpText.timeout}
           />
         )}
@@ -513,7 +497,11 @@ function JobDetail({ job, inventorySourceLabels }) {
                 ouiaId="job-label-chips"
               >
                 {labels.results.map((l) => (
-                  <Label variant="outline" key={l.id} data-ouia-component-id={`job-label-${l.id}-chip`}>
+                  <Label
+                    variant="outline"
+                    key={l.id}
+                    data-ouia-component-id={`job-label-${l.id}-chip`}
+                  >
                     {l.name}
                   </Label>
                 ))}
@@ -534,7 +522,8 @@ function JobDetail({ job, inventorySourceLabels }) {
                 ouiaId="job-tag-chips"
               >
                 {job.job_tags.split(',').map((jobTag) => (
-                  <Label variant="outline"
+                  <Label
+                    variant="outline"
                     key={jobTag}
 
                     data-ouia-component-id={`job-tag-${jobTag}-chip`}
@@ -560,7 +549,8 @@ function JobDetail({ job, inventorySourceLabels }) {
                 ouiaId="job-skip-tag-chips"
               >
                 {job.skip_tags.split(',').map((skipTag) => (
-                  <Label variant="outline"
+                  <Label
+                    variant="outline"
                     key={skipTag}
 
                     data-ouia-component-id={`job-skip-tag-${skipTag}-chip`}
@@ -589,10 +579,7 @@ function JobDetail({ job, inventorySourceLabels }) {
           date={job.created}
           user={created_by}
         />
-        <UserDateDetail
-          label={t`Last Modified`}
-          date={job.modified}
-        />
+        <UserDateDetail label={t`Last Modified`} date={job.modified} />
         {job.extra_vars && (
           <VariablesDetail
             css="margin: 20px 0"

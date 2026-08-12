@@ -27,7 +27,8 @@ function ResourceAccessListItem({ accessRecord, onRoleDelete }) {
   };
 
   const renderChip = (role) => (
-    <Label variant="outline"
+    <Label
+      variant="outline"
       key={role.id}
       onClose={() => {
         onRoleDelete(role, accessRecord);

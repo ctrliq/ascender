@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import {
-	Label, FormGroup
-} from '@patternfly/react-core';
+import { Label, FormGroup } from '@patternfly/react-core';
 
 import { InstancesAPI } from 'api';
 import { getSearchableKeys } from 'components/PaginatedTable';
@@ -107,10 +105,10 @@ function PeersLookup({
         isLoading={isLoading}
         label={formLabel}
         renderItemChip={({ item, removeItem }) => (
-          <Label variant="outline"
+          <Label
+            variant="outline"
             key={item.id}
             onClose={() => removeItem(item)}
-
           >
             {item.hostname}
           </Label>

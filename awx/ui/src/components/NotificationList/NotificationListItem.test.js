@@ -57,7 +57,10 @@ describe('<NotificationListItem canToggleNotifications />', () => {
   });
 
   test('handles approvals click when toggle is on', async () => {
-    const { user } = setup({ showApprovalsToggle: true, approvalsTurnedOn: true });
+    const { user } = setup({
+      showApprovalsToggle: true,
+      approvalsTurnedOn: true,
+    });
     await user.click(
       screen.getByRole('switch', { name: 'Toggle notification approvals' })
     );

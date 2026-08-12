@@ -99,7 +99,9 @@ describe('<InventoryHostGroupsList />', () => {
 
   test('should fetch groups from api and render them in the list', async () => {
     renderList();
-    expect(await screen.findByRole('link', { name: 'foo' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('link', { name: 'foo' })
+    ).toBeInTheDocument();
     expect(HostsAPI.readAllGroups).toHaveBeenCalled();
     expect(screen.getByRole('link', { name: 'bar' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'baz' })).toBeInTheDocument();
@@ -114,7 +116,9 @@ describe('<InventoryHostGroupsList />', () => {
 
   test('should check and uncheck the row item', async () => {
     const { user } = renderList();
-    const row = (await screen.findByRole('link', { name: 'foo' })).closest('tr');
+    const row = (await screen.findByRole('link', { name: 'foo' })).closest(
+      'tr'
+    );
     const checkbox = within(row).getByRole('checkbox');
     expect(checkbox).not.toBeChecked();
     await user.click(checkbox);
@@ -164,7 +168,9 @@ describe('<InventoryHostGroupsList />', () => {
   });
 
   test('should show content error when api throws error on initial render', async () => {
-    HostsAPI.readAllGroups.mockImplementation(() => Promise.reject(new Error()));
+    HostsAPI.readAllGroups.mockImplementation(() =>
+      Promise.reject(new Error())
+    );
     renderList();
     expect(
       await screen.findByText('Something went wrong...')
@@ -188,7 +194,9 @@ describe('<InventoryHostGroupsList />', () => {
     });
     renderList();
     await screen.findByRole('link', { name: 'foo' });
-    expect(screen.queryByRole('button', { name: 'Add' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Add' })
+    ).not.toBeInTheDocument();
   });
 
   test('should show associate group modal when adding an existing group', async () => {

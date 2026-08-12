@@ -59,9 +59,9 @@ describe('<SubscriptionModal />', () => {
 
     test('should render header', async () => {
       await setup();
-      const headers = within(
-        screen.getByRole('grid')
-      ).getAllByRole('columnheader');
+      const headers = within(screen.getByRole('grid')).getAllByRole(
+        'columnheader'
+      );
       expect(headers[1]).toHaveTextContent('Name');
       expect(headers[2]).toHaveTextContent('Managed nodes');
       expect(headers[3]).toHaveTextContent('Expires');
@@ -120,7 +120,9 @@ describe('<SubscriptionModal />', () => {
 
   test('should show empty content', async () => {
     renderWithContexts(
-      <SubscriptionModal subscriptionCreds={{ username: null, password: null }} />
+      <SubscriptionModal
+        subscriptionCreds={{ username: null, password: null }}
+      />
     );
     expect(
       await screen.findByText('No subscriptions found')

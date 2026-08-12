@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import {
-	Select,
-	SelectOption,
-	SelectList,
-	MenuToggle
+  Select,
+  SelectOption,
+  SelectList,
+  MenuToggle,
 } from '@patternfly/react-core';
 
 export default function FrequencySelect({

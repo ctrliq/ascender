@@ -67,9 +67,7 @@ describe('<TroubleshootingEdit />', () => {
     const { user } = await renderEdit();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     const { ...troubleshootingRequest } = mockTroubleshootingSettings;
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith(troubleshootingRequest);
   });

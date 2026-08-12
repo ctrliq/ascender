@@ -34,11 +34,11 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
 
     const textColor =
       getComputedStyle(document.body)
-        .getPropertyValue("--pf-t--global--text--color--100")
+        .getPropertyValue('--pf-t--global--text--color--100')
         .trim() || '#151515';
     const gridColor =
       getComputedStyle(document.body)
-        .getPropertyValue("--pf-t--global--border--color--default")
+        .getPropertyValue('--pf-t--global--border--color--default')
         .trim() || '#373a41';
 
     function transition(path) {
@@ -125,7 +125,11 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
       )
       .selectAll('line')
       .attr('stroke', gridColor);
-    svg.selectAll('.y-axis .tick text').attr('x', -5).style('fill', textColor).style('font-size', '0.875rem');
+    svg
+      .selectAll('.y-axis .tick text')
+      .attr('x', -5)
+      .style('fill', textColor)
+      .style('font-size', '0.875rem');
 
     // text label for the y axis
     svg
@@ -167,7 +171,11 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
       .selectAll('line')
       .attr('stroke', gridColor);
 
-    svg.selectAll('.x-axis .tick text').attr('y', 10).style('fill', textColor).style('font-size', '0.875rem');
+    svg
+      .selectAll('.x-axis .tick text')
+      .attr('y', 10)
+      .style('fill', textColor)
+      .style('font-size', '0.875rem');
 
     // text label for the x axis
     svg

@@ -82,11 +82,11 @@ function PaginatedTable({
 
   const dataListLabel = t({
     message: `${pluralizedItemName} List`,
-    comment: 'Aria label for paginated table list'
+    comment: 'Aria label for paginated table list',
   });
   const emptyContentTitle = t({
     message: `No ${pluralizedItemName} Found`,
-    comment: 'Title when no items are found'
+    comment: 'Title when no items are found',
   });
 
   let Content;
@@ -102,7 +102,7 @@ function PaginatedTable({
           emptyContentMessage ||
           t({
             message: `Please add ${pluralizedItemName} to populate this list`,
-            comment: 'Message when list is empty'
+            comment: 'Message when list is empty',
           })
         }
       />

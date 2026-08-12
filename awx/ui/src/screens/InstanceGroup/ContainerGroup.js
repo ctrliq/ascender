@@ -1,10 +1,12 @@
 import React, { useEffect, useCallback } from 'react';
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useLocation,
-  useParams } from 'react-router';
+  useParams,
+} from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -82,9 +84,7 @@ function ContainerGroup({ setBreadcrumb }) {
               <span>
                 {t`Container group not found.`}
 
-                <Link to="/instance_groups">
-                  {t`View all instance groups`}
-                </Link>
+                <Link to="/instance_groups">{t`View all instance groups`}</Link>
               </span>
             )}
           </ContentError>

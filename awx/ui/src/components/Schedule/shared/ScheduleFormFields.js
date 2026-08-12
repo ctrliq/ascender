@@ -127,9 +127,7 @@ export default function ScheduleFormFields({
           onChange={updateFrequency(frequencyHelper.setValue)}
           value={frequency.value}
           placeholderText={
-            frequency.value.length
-              ? t`Select frequency`
-              : t`None (run once)`
+            frequency.value.length ? t`Select frequency` : t`None (run once)`
           }
           onBlur={frequencyHelper.setTouched}
         >
@@ -200,12 +198,8 @@ export default function ScheduleFormFields({
                 }
                 onBlur={exceptionFrequencyHelper.setTouched}
               >
-                <SelectClearOption value="none">
-                  {t`None`}
-                </SelectClearOption>
-                <SelectOption value="minute">
-                  {t`Minute`}
-                </SelectOption>
+                <SelectClearOption value="none">{t`None`}</SelectClearOption>
+                <SelectOption value="minute">{t`Minute`}</SelectOption>
                 <SelectOption value="hour">{t`Hour`}</SelectOption>
                 <SelectOption value="day">{t`Day`}</SelectOption>
                 <SelectOption value="week">{t`Week`}</SelectOption>

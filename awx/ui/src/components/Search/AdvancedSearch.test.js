@@ -122,11 +122,18 @@ describe('<AdvancedSearch />', () => {
     advancedSearchMock.mockClear();
     await selectFrom(user, 'Key typeahead', 'baz');
     await setValueAndSubmit(user, 'bar');
-    expect(advancedSearchMock).toHaveBeenCalledWith('baz__name__icontains', 'bar');
+    expect(advancedSearchMock).toHaveBeenCalledWith(
+      'baz__name__icontains',
+      'bar'
+    );
 
     advancedSearchMock.mockClear();
     await selectFrom(user, 'Key typeahead', 'baz');
-    await selectFrom(user, 'Related search type typeahead', /Fuzzy search on id/);
+    await selectFrom(
+      user,
+      'Related search type typeahead',
+      /Fuzzy search on id/
+    );
     await setValueAndSubmit(user, 'bar');
     expect(advancedSearchMock).toHaveBeenCalledWith('baz__search', 'bar');
   });
@@ -185,9 +192,9 @@ describe('<AdvancedSearch />', () => {
     expect(
       screen.getByRole('textbox', { name: 'Set type typeahead' })
     ).toHaveValue('');
-    expect(
-      screen.getByRole('textbox', { name: 'Key typeahead' })
-    ).toHaveValue('');
+    expect(screen.getByRole('textbox', { name: 'Key typeahead' })).toHaveValue(
+      ''
+    );
     expect(valueInput()).toBeDisabled();
   });
 

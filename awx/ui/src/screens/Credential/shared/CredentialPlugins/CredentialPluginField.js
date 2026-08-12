@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -8,7 +7,8 @@ import {
   ButtonVariant,
   FormGroup,
   InputGroup,
-  Tooltip, InputGroupItem,
+  Tooltip,
+  InputGroupItem,
   FormHelperText,
   HelperText,
   HelperTextItem,
@@ -63,18 +63,21 @@ function CredentialPluginInput(props) {
               inputField.onChange(event);
             },
           })}
-          <InputGroupItem><Tooltip
-            content={t`Populate field from an external secret management system`}
-          >
-            <Button icon={<KeyIcon />}
-              ouiaId={`credential-field-${fieldOptions.id}-external-button`}
-              id={`credential-${fieldOptions.id}-external-button`}
-              variant={ButtonVariant.control}
-              aria-label={t`Populate field from an external secret management system`}
-              onClick={() => setShowPluginWizard(true)}
-              isDisabled={isDisabled || disableFieldAndButtons}
-             />
-          </Tooltip></InputGroupItem>
+          <InputGroupItem>
+            <Tooltip
+              content={t`Populate field from an external secret management system`}
+            >
+              <Button
+                icon={<KeyIcon />}
+                ouiaId={`credential-field-${fieldOptions.id}-external-button`}
+                id={`credential-${fieldOptions.id}-external-button`}
+                variant={ButtonVariant.control}
+                aria-label={t`Populate field from an external secret management system`}
+                onClick={() => setShowPluginWizard(true)}
+                isDisabled={isDisabled || disableFieldAndButtons}
+              />
+            </Tooltip>
+          </InputGroupItem>
         </InputGroup>
       )}
       {showPluginWizard && (
@@ -150,8 +153,8 @@ function CredentialPluginField({
           isRequired={isRequired}
           label={fieldOptions.label}
           labelHelp={
-          fieldOptions.help_text && (
-          <Popover content={fieldOptions.help_text} />
+            fieldOptions.help_text && (
+              <Popover content={fieldOptions.help_text} />
             )
           }
         >
@@ -160,9 +163,7 @@ function CredentialPluginField({
           {meta.touched && meta.error && (
             <FormHelperText>
               <HelperText>
-                <HelperTextItem variant="error">
-                  {meta.error}
-                </HelperTextItem>
+                <HelperTextItem variant="error">{meta.error}</HelperTextItem>
               </HelperText>
             </FormHelperText>
           )}

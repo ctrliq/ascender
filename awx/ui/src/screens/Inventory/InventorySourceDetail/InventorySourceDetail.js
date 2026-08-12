@@ -125,9 +125,9 @@ function InventorySourceDetail({ inventorySource }) {
     }
   };
 
-  const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventorySource(
-    inventorySource.id
-  );
+  const deleteDetailsRequests = relatedResourceDeleteRequests(
+    t
+  ).inventorySource(inventorySource.id);
 
   if (isI18nLoading) {
     return <ContentLoading />;
@@ -254,9 +254,7 @@ function InventorySourceDetail({ inventorySource }) {
           <Detail
             label={t`Inventory file`}
             helpText={helpText.sourcePath}
-            value={
-              source_path === '' ? t`/ (project root)` : source_path
-            }
+            value={source_path === '' ? t`/ (project root)` : source_path}
           />
         ) : null}
         <Detail
@@ -298,11 +296,7 @@ function InventorySourceDetail({ inventorySource }) {
           isEmpty={credentials?.length === 0}
         />
         {optionsList && (
-          <Detail
-            fullWidth
-            label={t`Enabled Options`}
-            value={optionsList}
-          />
+          <Detail fullWidth label={t`Enabled Options`} value={optionsList} />
         )}
         {source_vars && (
           <VariablesDetail
@@ -314,11 +308,7 @@ function InventorySourceDetail({ inventorySource }) {
             dataCy="inventory-source-detail-variables"
           />
         )}
-        <UserDateDetail
-          date={created}
-          label={t`Created`}
-          user={created_by}
-        />
+        <UserDateDetail date={created} label={t`Created`} user={created_by} />
         <UserDateDetail
           date={modified}
           label={t`Last modified`}

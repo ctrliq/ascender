@@ -43,8 +43,7 @@ describe('<AdvancedInventoryHostListItem />', () => {
       '/inventories/smart_inventory/1/hosts/2'
     );
 
-    const inventoryCell = screen
-      .getByRole('cell', { name: 'Inv 1' });
+    const inventoryCell = screen.getByRole('cell', { name: 'Inv 1' });
     expect(
       within(inventoryCell).getByRole('link', { name: 'Inv 1' })
     ).toBeInTheDocument();

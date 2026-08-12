@@ -19,7 +19,12 @@ import OrganizationLookup from 'components/Lookup/OrganizationLookup';
 import { required } from 'util/validators';
 import { FormColumnLayout } from 'components/FormLayout';
 import { locales } from 'i18nLoader';
-import { getThemes, applyTheme, getStoredThemeId, getSavedThemeId } from 'themeRegistry';
+import {
+  getThemes,
+  applyTheme,
+  getStoredThemeId,
+  getSavedThemeId,
+} from 'themeRegistry';
 
 function UserFormFields({ user }) {
   const { t } = useLingui();
@@ -96,12 +101,7 @@ function UserFormFields({ user }) {
         name="last_name"
         type="text"
       />
-      <FormField
-        id="user-email"
-        label={t`Email`}
-        name="email"
-        type="text"
-      />
+      <FormField id="user-email" label={t`Email`} name="email" type="text" />
       <FormField
         id="user-username"
         label={t`Username`}
@@ -140,11 +140,7 @@ function UserFormFields({ user }) {
       )}
 
       {me.is_superuser && (
-        <FormGroup
-          fieldId="user-type"
-          isRequired
-          label={t`User Type`}
-        >
+        <FormGroup fieldId="user-type" isRequired label={t`User Type`}>
           <AnsibleSelect
             isValid={!userTypeMeta.touched || !userTypeMeta.error}
             id="user-type"
@@ -162,7 +158,10 @@ function UserFormFields({ user }) {
           )}
         </FormGroup>
       )}
-      <FormGroup fieldId="user-preferred-language" label={t`Preferred Language`}>
+      <FormGroup
+        fieldId="user-preferred-language"
+        label={t`Preferred Language`}
+      >
         <AnsibleSelect
           id="user-preferred-language"
           data={languageOptions}

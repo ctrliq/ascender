@@ -76,9 +76,7 @@ describe('<SurveyQuestionEdit />', () => {
     });
 
     test('should render form', () => {
-      expect(
-        screen.getByRole('button', { name: 'Save' })
-      ).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
       // form is pre-filled with the foo question
       expect(document.querySelector('#question-variable')).toHaveValue('foo');
     });

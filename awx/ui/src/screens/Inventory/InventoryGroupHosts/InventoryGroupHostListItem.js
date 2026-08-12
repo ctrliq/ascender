@@ -44,9 +44,7 @@ function InventoryGroupHostListItem({
           <b>{host.name}</b>
         </Link>
       </Td>
-      <Td dataLabel={t`host-description-${host.id}`}>
-        {host.description}
-      </Td>
+      <Td dataLabel={t`host-description-${host.id}`}>{host.description}</Td>
       <Td dataLabel={t`Activity`}>
         <Sparkline jobs={recentPlaybookJobs} />
       </Td>
@@ -63,13 +61,14 @@ function InventoryGroupHostListItem({
             visible={host.summary_fields.user_capabilities?.edit}
           >
             <Tooltip content={t`Edit Host`} position="top">
-              <Button icon={<PencilAltIcon />}
+              <Button
+                icon={<PencilAltIcon />}
                 ouiaId={`${host.id}-edit-button`}
                 aria-label={t`Edit Host`}
                 variant="plain"
                 component={Link}
                 to={`${editUrl}`}
-               />
+              />
             </Tooltip>
           </ActionItem>
         )}

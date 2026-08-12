@@ -26,10 +26,7 @@ function UserTokenListItem({ token, isSelected, onSelect, rowIndex }) {
             : t`Personal access token`}
         </Link>
       </Td>
-      <Td
-        dataLabel={t`Description`}
-        id={`token-description-${token.id}`}
-      >
+      <Td dataLabel={t`Description`} id={`token-description-${token.id}`}>
         {toTitleCase(token.description)}
       </Td>
       <Td dataLabel={t`Scope`} id={`token-scope-${token.id}`}>

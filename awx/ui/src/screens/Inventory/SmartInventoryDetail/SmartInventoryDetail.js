@@ -102,10 +102,7 @@ function SmartInventoryDetail({ inventory }) {
             isEmpty={recentJobs.length === 0}
           />
           <Detail label={t`Description`} value={description} />
-          <Detail
-            label={t`Type`}
-            value={t`Smart inventory`}
-          />
+          <Detail label={t`Type`} value={t`Smart inventory`} />
           <Detail
             label={t`Organization`}
             value={
@@ -133,11 +130,7 @@ function SmartInventoryDetail({ inventory }) {
             name="variables"
             dataCy="smart-inventory-detail-variables"
           />
-          <UserDateDetail
-            label={t`Created`}
-            date={created}
-            user={created_by}
-          />
+          <UserDateDetail label={t`Created`} date={created} user={created_by} />
           <UserDateDetail
             label={t`Last modified`}
             date={modified}

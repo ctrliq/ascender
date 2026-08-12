@@ -5,9 +5,7 @@ import WorkflowReLaunchDropDown from './WorkflowReLaunchDropDown';
 
 describe('WorkflowReLaunchDropDown', () => {
   test('renders a dropdown toggle', () => {
-    renderWithContexts(
-      <WorkflowReLaunchDropDown handleRelaunch={() => {}} />
-    );
+    renderWithContexts(<WorkflowReLaunchDropDown handleRelaunch={() => {}} />);
     expect(
       screen.getByRole('button', { name: 'relaunch workflow' })
     ).toBeInTheDocument();
@@ -36,7 +34,10 @@ describe('WorkflowReLaunchDropDown', () => {
   test('labels the option "Canceled node" when the workflow was canceled', async () => {
     const handleRelaunch = jest.fn();
     const { user } = renderWithContexts(
-      <WorkflowReLaunchDropDown handleRelaunch={handleRelaunch} status="canceled" />
+      <WorkflowReLaunchDropDown
+        handleRelaunch={handleRelaunch}
+        status="canceled"
+      />
     );
 
     await user.click(screen.getByRole('button', { name: 'relaunch workflow' }));

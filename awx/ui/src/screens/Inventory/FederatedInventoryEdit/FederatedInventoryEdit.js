@@ -19,9 +19,8 @@ function FederatedInventoryEdit({ inventory }) {
     isLoading,
   } = useRequest(
     useCallback(async () => {
-      const inputInventoriesResponse = await InventoriesAPI.readInputInventories(
-        inventory.id
-      );
+      const inputInventoriesResponse =
+        await InventoriesAPI.readInputInventories(inventory.id);
       return {
         inputInventories: inputInventoriesResponse.data.results,
       };
@@ -37,9 +36,7 @@ function FederatedInventoryEdit({ inventory }) {
   }, [fetchRelatedDetails]);
 
   const handleCancel = () => {
-    navigate(
-      `/inventories/federated_inventory/${inventory.id}/details`
-    );
+    navigate(`/inventories/federated_inventory/${inventory.id}/details`);
   };
 
   const handleSubmit = async (values) => {
@@ -62,7 +59,10 @@ function FederatedInventoryEdit({ inventory }) {
 
       /* eslint-disable no-await-in-loop, no-restricted-syntax */
       for (const inputInventory of toAssociate) {
-        await InventoriesAPI.associateInventory(inventory.id, inputInventory.id);
+        await InventoriesAPI.associateInventory(
+          inventory.id,
+          inputInventory.id
+        );
       }
       for (const inputInventory of toDisassociate) {
         await InventoriesAPI.disassociateInventory(
@@ -72,9 +72,7 @@ function FederatedInventoryEdit({ inventory }) {
       }
       /* eslint-enable no-await-in-loop, no-restricted-syntax */
 
-      navigate(
-        `/inventories/federated_inventory/${inventory.id}/details`
-      );
+      navigate(`/inventories/federated_inventory/${inventory.id}/details`);
     } catch (error) {
       setSubmitError(error);
     }

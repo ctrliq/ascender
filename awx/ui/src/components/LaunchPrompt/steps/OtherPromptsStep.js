@@ -1,9 +1,13 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
-import { Form, FormGroup, Switch, FormHelperText,
-HelperText,
-HelperTextItem,
+import {
+  Form,
+  FormGroup,
+  Switch,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 import styled from 'styled-components';
 import LabelSelect from '../../LabelSelect';
@@ -231,9 +235,7 @@ function LabelsField({ helpTextSource }) {
       {meta.error && (
         <FormHelperText>
           <HelperText>
-            <HelperTextItem variant="error">
-              {meta.error}
-            </HelperTextItem>
+            <HelperTextItem variant="error">{meta.error}</HelperTextItem>
           </HelperText>
         </FormHelperText>
       )}

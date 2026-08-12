@@ -202,10 +202,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
     const history = createMemoryHistory({
       initialEntries: ['?credentials.page=2'],
     });
-    const { user } = renderLookup(
-      {},
-      { context: { router: { history } } }
-    );
+    const { user } = renderLookup({}, { context: { router: { history } } });
     await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
 
     await user.click(screen.getByRole('button', { name: 'Search' }));

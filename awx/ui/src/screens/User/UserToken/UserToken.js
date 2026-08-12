@@ -1,11 +1,13 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useLocation,
-  useParams } from 'react-router';
+  useParams,
+} from 'react-router';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import RoutedTabs from 'components/RoutedTabs';
@@ -69,9 +71,7 @@ function UserToken({ setBreadcrumb, user }) {
             {error.response.status === 404 && (
               <span>
                 {t`Token not found.`}{' '}
-                <Link to="/users/:id/tokens">
-                  {t`View all tokens.`}
-                </Link>
+                <Link to="/users/:id/tokens">{t`View all tokens.`}</Link>
               </span>
             )}
           </ContentError>
@@ -86,19 +86,14 @@ function UserToken({ setBreadcrumb, user }) {
       <Routes>
         <Route index element={<Navigate to="details" replace />} />
         {token && (
-          <Route
-            path="details"
-            element={<UserTokenDetail token={token} />}
-          />
+          <Route path="details" element={<UserTokenDetail token={token} />} />
         )}
         <Route
           path="*"
           element={
             !isLoading ? (
               <ContentError isNotFound>
-                {id && (
-                  <Link to={`/users/${id}/tokens`}>{t`View Tokens`}</Link>
-                )}
+                {id && <Link to={`/users/${id}/tokens`}>{t`View Tokens`}</Link>}
               </ContentError>
             ) : null
           }
