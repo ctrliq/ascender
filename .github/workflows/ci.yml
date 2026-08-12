@@ -66,6 +66,14 @@ jobs:
       - name: Run smoke test
         run: ansible-playbook tools/docker-compose/ansible/smoke-test.yml -v
 
+      # The api-test job runs against SQLite, so any PostgreSQL-only SQL is
+      # unreachable there. This environment already has a real database, so the
+      # tests guarded by a vendor check get to run here instead of skipping.
+      - name: Run the PostgreSQL-backed tests
+        run: |
+          docker exec tools_postgres_1 psql -U postgres -c 'ALTER ROLE awx CREATEDB;'
+          docker exec --workdir /awx_devel tools_awx_1 make test-postgres
+
       - name: Get logs from the development environment on failure
         if: failure()
         run: docker logs tools_awx_1 || true

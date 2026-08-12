@@ -311,6 +311,15 @@ test:
 	cd awxkit && $(VENV_BASE)/awx/bin/tox -re py3
 	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
 
+## Run the tests that need a real PostgreSQL, which the SQLite suite skips.
+PG_TEST_DIRS ?= awx/main/tests/functional/commands/test_cleanup_jobs_postgres.py
+test-postgres:
+	if [ "$(VENV_BASE)" ]; then \
+		. $(VENV_BASE)/awx/bin/activate; \
+	fi; \
+	PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=awx.main.tests.settings_for_test_pg \
+		py.test -p no:cacheprovider -v $(PG_TEST_DIRS)
+
 ## Run all API unit tests without parallel execution (safer but slower).
 test-serial:
 	if [ "$(VENV_BASE)" ]; then \
