@@ -758,7 +758,7 @@ ManagedCredentialType(
                 'label': gettext_noop('Host (Authentication URL)'),
                 'type': 'string',
                 'help_text': gettext_noop(
-                    'The host to authenticate with. For example, https://openstack.business.com/v2.0/. '
+                    'The host to authenticate with. For example, https://openstack.business.com:5000/v3. '
                     'Authenticate with either a username and password or an application credential.'
                 ),
             },
