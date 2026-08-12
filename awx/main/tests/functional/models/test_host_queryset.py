@@ -211,3 +211,25 @@ class TestHostLatestSummaryQuerySet:
         assert len(with_summary) == 2
         assert len(without_summary) == 3
         assert sorted([h.name for h in with_summary]) == ['host-0', 'host-1']
+
+    def test_clone_of_evaluated_queryset_still_bulk_attaches(self):
+        """A queryset chained off an already-evaluated one re-runs its query, so
+        it has to bulk-attach again rather than inherit the "done" flag."""
+        inventory = self._create_inventory_with_hosts(5)
+        self._run_job(inventory)
+
+        qs = Host.objects.filter(inventory=inventory).with_latest_summary_id()
+        list(qs)  # evaluate, which sets the guard flag on qs
+
+        clone = qs.filter(name__startswith='host-')
+        assert clone._result_cache is None, 'the clone must re-run its own query'
+
+        hosts = list(clone)
+        assert len(hosts) == 5
+        for host in hosts:
+            assert hasattr(host, '_latest_summary_cache')
+
+        with CaptureQueriesContext(connection) as ctx:
+            for host in hosts:
+                assert host.latest_summary is not None
+        assert len(ctx.captured_queries) == 0
