@@ -101,13 +101,23 @@ TIME_ZONE = 'UTC'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-# Languages that have translation catalogs under awx/locale/<code>/. Declaring
-# this explicitly (rather than relying on Django's full global LANGUAGES list)
-# ensures LocaleMiddleware selects the exact catalog code we ship. In
-# particular Django's global list only has 'zh-hans'/'zh-hant', so without this
-# a request asking for 'zh' would resolve to 'zh-hans' (which has no catalog)
-# and fall back to English. These codes must match SUPPORTED_UI_LOCALES in
-# awx/api/serializers.py and the directory names under awx/locale/.
+# Languages LocaleMiddleware is allowed to activate: the catalog directories
+# under awx/locale/<code>/, plus 'en'. Declaring this explicitly (rather than
+# relying on Django's full global LANGUAGES list) ensures LocaleMiddleware
+# selects the exact catalog code we ship. In particular Django's global list
+# only has 'zh-hans'/'zh-hant', so without this a request asking for 'zh' would
+# resolve to 'zh-hans' (which has no catalog) and fall back to English.
+#
+# 'en' is the one entry with no catalog of its own: the UI names its English
+# bundle 'en' while the backend catalog is 'en-us', so a preferred_language of
+# 'en' has to resolve to something here. It falls through to the source strings,
+# which are already English.
+#
+# This is NOT the same list as SUPPORTED_UI_LOCALES in awx/api/serializers.py.
+# That one mirrors the bundles under awx/ui/src/locales/ and therefore contains
+# 'en' but not 'en-us'. awx/main/tests/unit/test_locales.py pins both sets
+# against the directories on disk, so adding a language means adding it to
+# whichever of the two lists actually gained a catalog.
 LANGUAGES = [
     ('en-us', 'English (US)'),
     ('en', 'English'),
