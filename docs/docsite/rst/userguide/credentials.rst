@@ -535,14 +535,62 @@ Selecting this credential type enables synchronization of cloud inventory with O
 .. |Credentials - create OpenStack credential| image:: ../common/images/credentials-create-openstack-credential.png
     :alt: Credentials - create OpenStack credential form
 
-OpenStack credentials have the following inputs that are required:   
+OpenStack credentials support two authentication methods: a username and password (Keystone
+``password`` authentication), or a Keystone application credential
+(``v3applicationcredential`` authentication). Provide one or the other, along with the
+authentication URL, which is always required.
+
+**Shared field:**
+
+- **Host (Authentication URL)**: The Keystone endpoint to authenticate with. For example,
+  ``https://openstack.business.com:5000/v3``. Always required, regardless of authentication
+  method.
+
+**Password authentication fields** (leave blank when using an application credential):
 
 - **Username**: The username to use to connect to OpenStack.
-- **Password (API Key)**: The password or API key to use to connect to OpenStack.
-- **Host (Authentication URL)**: The host to be used for authentication.
-- **Project (Tenant Name)**: The Tenant name or Tenant ID used for OpenStack. This value is usually the same as the username. 
-- **Project (Domain Name)**: Optionally provide the project name associated with your domain.
-- **Domain name**: Optionally provide the FQDN to be used to connect to OpenStack.
+- **Password (API Key)**: The password to use to connect to OpenStack. Despite the field name,
+  most modern OpenStack clouds do not issue standalone API keys that work here; a key generated
+  through Horizon under Identity is an application credential and belongs in the application
+  credential fields below.
+- **Project (Tenant Name)**: The project (tenant) to scope the authentication to. Required for
+  password authentication; Keystone v3 password tokens must be explicitly scoped to a project.
+- **Project (Domain Name)**: The domain the project belongs to. Needed on multi-domain clouds;
+  single-domain clouds usually default to ``Default``.
+- **Domain Name**: The domain to use for a domain-scoped token. Only needed for Keystone v3
+  domain-level administrative access; most inventory use cases can leave this blank.
+
+**Application credential fields** (leave the password authentication fields blank):
+
+- **Application Credential ID**: The ID of a Keystone application credential, as created in
+  Horizon under Identity → Application Credentials or with
+  ``openstack application credential create``.
+- **Application Credential Secret**: The secret issued when the application credential was
+  created.
+
+When both application credential fields are set, they are used instead of the username and
+password, and the project and domain fields are ignored. Application credentials are already
+scoped to a project and inherit the creating user's roles, so no additional scoping is needed
+or accepted; supplying project or domain scoping alongside an application credential is
+rejected by Keystone, which is why those fields are ignored in this mode.
+
+**Fields that apply to both methods:**
+
+- **Region Name**: For providers that require it (for example OVH), the region whose service
+  endpoints should be used. This selects endpoints from the service catalog and is not part of
+  authentication.
+- **Verify SSL**: Whether to validate the TLS certificate of the OpenStack endpoints.
+
+Common scenarios:
+
+- *Standard cloud, service account*: fill in Host, Username, Password, and Project. Add
+  Project (Domain Name) if your cloud has more than one domain.
+- *Rotatable credentials without sharing a user password*: create an application credential in
+  OpenStack and fill in Host, Application Credential ID, and Application Credential Secret
+  only. This is the recommended method where available, since the credential can be revoked
+  and rotated independently of the user's password.
+- A credential that provides neither a username/password pair nor an application credential
+  will be accepted when saved but will fail at job or inventory sync launch time.
 
 If you are interested in using OpenStack Cloud Credentials, refer to :ref:`ug_CloudCredentials` in this guide for more information, including a sample playbook.
 
