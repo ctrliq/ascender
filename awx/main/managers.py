@@ -37,12 +37,12 @@ class HostLatestSummaryQuerySet(models.QuerySet):
     Not streaming-safe: relies on _result_cache existing after _fetch_all().
     """
 
+    # Guards against redoing the in_bulk() when _fetch_all() runs again on an
+    # already-populated queryset. Deliberately not carried over in _clone():
+    # a clone starts with an empty _result_cache and re-runs its query, so it
+    # has to bulk-attach again. Copying the flag would leave the clone's hosts
+    # without _latest_summary_cache and silently fall back to a query per host.
     _awx_latest_summary_attached = False
-
-    def _clone(self):
-        clone = super()._clone()
-        clone._awx_latest_summary_attached = self._awx_latest_summary_attached
-        return clone
 
     def with_latest_summary_id(self):
         from awx.main.models.jobs import JobHostSummary
