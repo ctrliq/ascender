@@ -546,51 +546,47 @@ authentication URL, which is always required.
   ``https://openstack.business.com:5000/v3``. Always required, regardless of authentication
   method.
 
-**Password authentication fields** (leave blank when using an application credential):
+**Password authentication fields** (leave these blank when using an application credential):
 
 - **Username**: The username to use to connect to OpenStack.
-- **Password (API Key)**: The password to use to connect to OpenStack. Despite the field name,
-  most modern OpenStack clouds do not issue standalone API keys that work here; a key generated
-  through Horizon under Identity is an application credential and belongs in the application
-  credential fields below.
-- **Project (Tenant Name)**: The project (tenant) to scope the authentication to. Required for
-  password authentication; Keystone v3 password tokens must be explicitly scoped to a project.
-- **Project (Domain Name)**: The domain the project belongs to. Needed on multi-domain clouds;
-  single-domain clouds usually default to ``Default``.
-- **Domain Name**: The domain to use for a domain-scoped token. Only needed for Keystone v3
-  domain-level administrative access; most inventory use cases can leave this blank.
+- **Password (API Key)**: The password to use to connect to OpenStack. Application credentials,
+  including those created in Horizon under Identity → Application Credentials, belong in the
+  Application Credential fields below, not in this field.
+- **Project (Tenant Name)**: The project (tenant) to scope the authentication to. Required when
+  using password authentication.
+- **Project (Domain Name)**: The domain the project belongs to. Required on multi-domain
+  clouds. On single-domain clouds this can be left blank.
+- **Domain Name**: The domain to use for a domain-scoped token. Only needed for domain-level
+  administrative access. Leave blank for inventory use.
 
-**Application credential fields** (leave the password authentication fields blank):
+**Application credential fields** (leave these blank when using username and password):
 
-- **Application Credential ID**: The ID of a Keystone application credential, as created in
+- **Application Credential ID**: The ID of a Keystone application credential, created in
   Horizon under Identity → Application Credentials or with
   ``openstack application credential create``.
 - **Application Credential Secret**: The secret issued when the application credential was
-  created.
+  created. The secret is shown once at creation time and cannot be retrieved afterward.
 
 When both application credential fields are set, they are used instead of the username and
-password, and the project and domain fields are ignored. Application credentials are already
-scoped to a project and inherit the creating user's roles, so no additional scoping is needed
-or accepted; supplying project or domain scoping alongside an application credential is
-rejected by Keystone, which is why those fields are ignored in this mode.
+password. Application credentials are scoped to a project when they are created and inherit
+the creating user's roles. Keystone rejects additional project or domain scoping in this mode,
+so the project and domain fields are ignored.
 
 **Fields that apply to both methods:**
 
-- **Region Name**: For providers that require it (for example OVH), the region whose service
-  endpoints should be used. This selects endpoints from the service catalog and is not part of
-  authentication.
+- **Region Name**: The region whose service endpoints should be used, for providers that
+  require it (for example, OVH). Region selection is not part of authentication.
 - **Verify SSL**: Whether to validate the TLS certificate of the OpenStack endpoints.
 
 Common scenarios:
 
-- *Standard cloud, service account*: fill in Host, Username, Password, and Project. Add
-  Project (Domain Name) if your cloud has more than one domain.
-- *Rotatable credentials without sharing a user password*: create an application credential in
-  OpenStack and fill in Host, Application Credential ID, and Application Credential Secret
-  only. This is the recommended method where available, since the credential can be revoked
-  and rotated independently of the user's password.
-- A credential that provides neither a username/password pair nor an application credential
-  will be accepted when saved but will fail at job or inventory sync launch time.
+- *Username and password*: fill in Host, Username, Password, and Project. Add Project (Domain
+  Name) on clouds with more than one domain.
+- *Application credential*: fill in Host, Application Credential ID, and Application Credential
+  Secret only. Application credentials can be revoked and rotated independently of the user's
+  password.
+- A credential that provides neither a username/password pair nor an application credential is
+  accepted when saved but fails at job or inventory sync launch time.
 
 If you are interested in using OpenStack Cloud Credentials, refer to :ref:`ug_CloudCredentials` in this guide for more information, including a sample playbook.
 
