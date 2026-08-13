@@ -5,7 +5,7 @@ SHELL := bash
 DOCKER_COMPOSE ?= docker compose
 OFFICIAL ?= no
 NODE ?= node
-NPM_BIN ?= npm
+PNPM_BIN ?= pnpm
 KIND_BIN ?= $(shell which kind)
 CHROMIUM_BIN=/tmp/chrome-linux/chrome
 GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
@@ -385,13 +385,13 @@ clean-ui:
 	mkdir -p awx/ui/build/static
 
 awx/ui/node_modules:
-	NODE_OPTIONS=--max-old-space-size=6144 $(NPM_BIN) --prefix awx/ui --loglevel warn --force ci
+	NODE_OPTIONS=--max-old-space-size=6144 $(PNPM_BIN) --dir awx/ui install --frozen-lockfile
 
 $(UI_BUILD_FLAG_FILE):
 	$(MAKE) awx/ui/node_modules
 	$(PYTHON) tools/scripts/compilemessages.py
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run compile-strings
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run build
+	$(PNPM_BIN) --dir awx/ui run compile-strings
+	$(PNPM_BIN) --dir awx/ui run build
 	touch $@
 
 ui-release: $(UI_BUILD_FLAG_FILE)
@@ -408,26 +408,26 @@ ui-devel: awx/ui/node_modules
 	fi
 
 ui-devel-test: awx/ui/node_modules
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run start
+	$(PNPM_BIN) --dir awx/ui run start
 
 ui-lint:
-	$(NPM_BIN) --prefix awx/ui install
-	$(NPM_BIN) run --prefix awx/ui lint
-	$(NPM_BIN) run --prefix awx/ui prettier-check
+	$(PNPM_BIN) --dir awx/ui install --frozen-lockfile
+	$(PNPM_BIN) --dir awx/ui run lint
+	$(PNPM_BIN) --dir awx/ui run prettier-check
 
 ui-test:
-	$(NPM_BIN) --prefix awx/ui install
-	$(NPM_BIN) run --prefix awx/ui test
+	$(PNPM_BIN) --dir awx/ui install --frozen-lockfile
+	$(PNPM_BIN) --dir awx/ui run test
 
 ui-test-screens:
-	$(NPM_BIN) --prefix awx/ui install
-	$(NPM_BIN) run --prefix awx/ui pretest
-	$(NPM_BIN) run --prefix awx/ui test-screens --runInBand
+	$(PNPM_BIN) --dir awx/ui install --frozen-lockfile
+	$(PNPM_BIN) --dir awx/ui run pretest
+	$(PNPM_BIN) --dir awx/ui run test-screens --runInBand
 
 ui-test-general:
-	$(NPM_BIN) --prefix awx/ui install
-	$(NPM_BIN) run --prefix awx/ui pretest
-	$(NPM_BIN) run --prefix awx/ui/ test-general --runInBand
+	$(PNPM_BIN) --dir awx/ui install --frozen-lockfile
+	$(PNPM_BIN) --dir awx/ui run pretest
+	$(PNPM_BIN) --dir awx/ui run test-general --runInBand
 
 HEADLESS ?= no
 ifeq ($(HEADLESS), yes)
@@ -654,11 +654,11 @@ kind-dev-load: awx-kube-dev-build
 
 ## generate UI .pot file, an empty template of strings yet to be translated
 pot: $(UI_BUILD_FLAG_FILE)
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run extract-template --clean
+	$(PNPM_BIN) --dir awx/ui run extract-template --clean
 
 ## generate UI .po files for each locale (will update translated strings for `en`)
 po: $(UI_BUILD_FLAG_FILE)
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run extract-strings -- --clean
+	$(PNPM_BIN) --dir awx/ui run extract-strings -- --clean
 
 ## generate API django .pot .po
 messages:

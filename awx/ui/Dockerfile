@@ -11,9 +11,12 @@ ADD .linguirc .linguirc
 ADD jsconfig.json jsconfig.json
 ADD public public
 ADD package.json package.json
-ADD package-lock.json package-lock.json
+ADD pnpm-lock.yaml pnpm-lock.yaml
 COPY ${NPMRC_FILE} .npmrc
-RUN npm ci && npm cache clean --force
+# Installs the exact pnpm version pinned (and hash-verified) via the
+# packageManager field in package.json, rather than duplicating the version
+# in this Dockerfile where it could drift out of sync.
+RUN corepack enable && corepack install && pnpm install --frozen-lockfile
 ADD src src
 EXPOSE 3001
-CMD [ "npm", "start" ]
+CMD [ "pnpm", "start" ]
