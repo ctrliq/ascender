@@ -48,16 +48,6 @@ jobs:
 #        run: echo pypi_repo=testpypi >> $GITHUB_ENV
 #        if: ${{ github.repository_owner != 'ansible' }}
 
-#      - name: Build awxkit and upload to pypi
-#        run: |
-#          git reset --hard
-#          cd awxkit && python3 setup.py sdist bdist_wheel
-#          twine upload \
-#            -r ${{ env.pypi_repo }} \
-#            -u ${{ secrets.PYPI_USERNAME }} \
-#            -p ${{ secrets.PYPI_PASSWORD }} \
-#            dist/*
-
       - name: Log in to GHCR
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin

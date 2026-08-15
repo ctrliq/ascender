@@ -88,7 +88,7 @@ clean-languages:
 	find ./awx/locale/ -type f -regex '.*\.mo$$' -delete
 
 ## Remove temporary build files, compiled Python files.
-clean: clean-ui clean-api clean-awxkit clean-dist
+clean: clean-ui clean-api clean-dist
 	rm -rf awx/public
 	rm -rf awx/lib/site-packages
 	rm -rf awx/job_status
@@ -106,9 +106,6 @@ clean-api:
 	rm -f awx/awx_test.sqlite3*
 	rm -rf requirements/vendor
 	rm -rf awx/projects
-
-clean-awxkit:
-	rm -rf awxkit/*.egg-info awxkit/.tox awxkit/build/*
 
 ## convenience target to assert environment variables are defined
 guard-%:
@@ -270,7 +267,7 @@ reports:
 
 black: reports
 	@command -v black >/dev/null 2>&1 || { echo "could not find black on your PATH, you may need to \`pip install black\`, or set AWX_IGNORE_BLACK=1" && exit 1; }
-	@(set -o pipefail && $@ $(BLACK_ARGS) awx awxkit | tee reports/$@.report)
+	@(set -o pipefail && $@ $(BLACK_ARGS) awx | tee reports/$@.report)
 
 ../../.git/hooks/pre-commit:
 	@echo "if [ -x pre-commit.sh ]; then" > .git/hooks/pre-commit
@@ -308,7 +305,6 @@ test:
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(PYTEST_ARGS) $(TEST_DIRS)
-	cd awxkit && $(VENV_BASE)/awx/bin/tox -re py3
 	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
 
 ## Run all API unit tests without parallel execution (safer but slower).
@@ -317,7 +313,6 @@ test-serial:
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(TEST_DIRS)
-	cd awxkit && $(VENV_BASE)/awx/bin/tox -re py3
 	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
 
 ## Run tests with limited parallel workers (safer than auto).
@@ -326,7 +321,6 @@ test-safe:
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n 2 --dist=loadfile $(TEST_DIRS)
-	cd awxkit && $(VENV_BASE)/awx/bin/tox -re py3
 	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
 
 test_migrations:
