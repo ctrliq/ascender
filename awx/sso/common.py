@@ -131,6 +131,9 @@ def create_org_and_teams(org_list, team_map, adapter, can_create=True):
             #  although the rest of the login process might stack later on
             logger.error("{} adapter is attempting to create a team {} but it does not have an org".format(adapter, team_name))
 
+    if not all_orgs and not all_teams:
+        return
+
     for org_name in all_orgs:
         if org_name and org_name not in existing_orgs:
             logger.info("{} adapter is creating org {}".format(adapter, org_name))
@@ -142,13 +145,16 @@ def create_org_and_teams(org_list, team_map, adapter, can_create=True):
             # Add the org name to the existing orgs since we created it and we may need it to build the teams below
             existing_orgs[org_name] = new_org.id
 
-    # Do the same for teams
-    existing_team_names = list(Team.objects.all().values_list('name', flat=True))
+    # Do the same for teams.  A team name may legitimately exist in more than
+    # one organization, so the existence check must be scoped to the mapped
+    # organization rather than the team name alone.
+    existing_teams = set(Team.objects.filter(organization_id__in=list(existing_orgs.values())).values_list('organization_id', 'name'))
     for team_name in all_teams:
-        if team_name not in existing_team_names:
+        org_id = existing_orgs[team_map[team_name]]
+        if (org_id, team_name) not in existing_teams:
             logger.info("{} adapter is creating team {} in org {}".format(adapter, team_name, team_map[team_name]))
             try:
-                Team.objects.create(name=team_name, organization_id=existing_orgs[team_map[team_name]])
+                Team.objects.create(name=team_name, organization_id=org_id)
             except IntegrityError:
                 # If another process got here before us that is ok because we don't need the ID from this team or anything
                 pass

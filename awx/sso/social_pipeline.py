@@ -47,13 +47,7 @@ def _update_m2m_from_expression(user, opts, remove=True):
     return None
 
 
-def update_user_org_team_mappings(
-    backend,
-    details,
-    user=None,
-    *args,
-    **kwargs
-):
+def update_user_org_team_mappings(backend, details, user=None, *args, **kwargs):
     """
     Compute the desired organization/team membership state in memory and
     reconcile all memberships in bulk.
@@ -92,8 +86,7 @@ def update_user_org_team_mappings(
 
         if not organization:
             logger.error(
-                "Team named %s in social auth team map settings is "
-                "invalid due to missing organization",
+                "Team named %s in social auth team map settings is " "invalid due to missing organization",
                 team_name,
             )
             continue
@@ -142,20 +135,15 @@ def update_user_org_team_mappings(
                 )
             )
 
-            desired_org_states[organization_name][role_name] = (
-                _update_m2m_from_expression(
-                    user,
-                    opts,
-                    role_remove,
-                )
+            desired_org_states[organization_name][role_name] = _update_m2m_from_expression(
+                user,
+                opts,
+                role_remove,
             )
 
         # If no mapping actually manages this organization, don't make the
         # reconciliation query load it.
-        if all(
-            desired_org_states[organization_name][role_name] is None
-            for role_name in org_roles_and_expressions
-        ):
+        if all(desired_org_states[organization_name][role_name] is None for role_name in org_roles_and_expressions):
             del desired_org_states[organization_name]
 
     # ------------------------------------------------------------------
@@ -202,21 +190,15 @@ def update_user_org_team_mappings(
 # Kept for compatibility: a custom SOCIAL_AUTH_PIPELINE configured in
 # awx settings (e.g. NON_ROOT settings or an awx-manage shell) may still list
 # these legacy function names explicitly.
-# The default SOCIAL_AUTH_PIPELINE no longer calls these individually.
+#
+# NOTE: both wrappers delegate to the merged step.  Referencing either name
+# reconciles organization AND team memberships (and ensures mapped orgs/teams
+# exist) in one pass, so a custom pipeline listing only one of them behaves like
+# the merged step rather than the historical per-role behavior.  The merged
+# reconcile is idempotent, so a pipeline listing both simply runs it twice.
 def update_user_orgs(backend, details, user=None, *args, **kwargs):
-    return update_user_org_team_mappings(
-        backend,
-        details,
-        user=user,
-        *args,
-        **kwargs
-    )
+    return update_user_org_team_mappings(backend, details, user=user, *args, **kwargs)
+
 
 def update_user_teams(backend, details, user=None, *args, **kwargs):
-    return update_user_org_team_mappings(
-        backend,
-        details,
-        user=user,
-        *args,
-        **kwargs
-    )
+    return update_user_org_team_mappings(backend, details, user=user, *args, **kwargs)
