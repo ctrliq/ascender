@@ -269,6 +269,14 @@ class TestCommonFunctions:
         assert Organization.objects.count() == org_count
         assert Team.objects.count() == team_count
 
+    def test_create_org_and_teams_same_team_name_in_different_orgs(self, galaxy_credential):
+        # A team is only unique within its organization so the same team name has to be
+        # creatable in more than one org
+        create_org_and_teams([], {"team1": "org1"}, 'py.test')
+        create_org_and_teams([], {"team1": "org2"}, 'py.test')
+
+        assert Counter(Team.objects.filter(name="team1").values_list('organization__name', flat=True)) == Counter(["org1", "org2"])
+
     def test_get_or_create_org_with_default_galaxy_cred_add_galaxy_cred(self, galaxy_credential):
         # If this method creates the org it should get the default galaxy credential
         num_orgs = 4

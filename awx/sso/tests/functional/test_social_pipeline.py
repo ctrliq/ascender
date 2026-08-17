@@ -1,8 +1,8 @@
 import pytest
 import re
 
-from awx.sso.social_pipeline import update_user_orgs, update_user_teams
-from awx.main.models import User, Team, Organization
+from awx.sso.social_pipeline import populate_user, update_user_orgs, update_user_teams
+from awx.main.models import ActivityStream, User, Team, Organization
 
 
 @pytest.fixture
@@ -111,3 +111,50 @@ class TestSocialPipeline:
 
         assert Team.objects.get(name="Red").member_role.members.count() == 2
         assert Team.objects.get(name="Blue").member_role.members.count() == 2
+
+    def test_update_user_orgs_ignores_undefined_roles(self, org, backend, users):
+        u1, u2, u3 = users
+
+        # A map entry without an admins expression must not manage the admin role at all,
+        # even though remove_admins is set
+        del backend.setting('ORGANIZATION_MAP')['Default']['admins']
+        backend.setting('ORGANIZATION_MAP')['Default']['users'] = re.compile('.*')
+        org.admin_role.members.add(u1)
+
+        update_user_orgs(backend, None, u1)
+
+        assert list(org.admin_role.members.all()) == [u1]
+        assert list(org.member_role.members.all()) == [u1]
+
+    def test_populate_user_only_writes_when_the_membership_changes(self, users, django_assert_max_num_queries):
+        u1, u2, u3 = users
+
+        organization_map = {}
+        team_map = {}
+        for number in range(25):
+            organization_map[f"Org {number}"] = {'users': re.compile('.*'), 'admins': ''}
+            team_map[f"Team {number}"] = {'organization': f"Org {number}", 'users': re.compile('.*')}
+
+        class Backend:
+            s = {'ORGANIZATION_MAP': organization_map, 'TEAM_MAP': team_map}
+
+            def setting(self, key):
+                return self.s[key]
+
+        backend = Backend()
+
+        # The first login has to create every mapped org and team and grant the memberships
+        populate_user(backend, None, u1)
+        assert Organization.objects.count() == 25
+        assert Team.objects.count() == 25
+        granted_roles = set(u1.roles.values_list('pk', flat=True))
+        assert len(granted_roles) == 50
+
+        # A second login with an unchanged map must not write anything, and the number of
+        # queries it takes must not scale with the size of the map
+        activity_stream_entries = ActivityStream.objects.count()
+        with django_assert_max_num_queries(15):
+            populate_user(backend, None, u1)
+
+        assert set(u1.roles.values_list('pk', flat=True)) == granted_roles
+        assert ActivityStream.objects.count() == activity_stream_entries

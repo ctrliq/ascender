@@ -10,9 +10,17 @@ from awx.main.models import Organization, Team
 logger = logging.getLogger('awx.sso.common')
 
 
-def get_orgs_by_ids():
+def get_orgs_by_ids(names=None):
+    #
+    # names - an optional iterable of organization names to restrict the query to.
+    #         Adapters that only care about the orgs they have mapped should pass this
+    #         instead of reading the whole organization table on every login.
+    #
     existing_orgs = {}
-    for org_id, org_name in Organization.objects.all().values_list('id', 'name'):
+    organizations = Organization.objects.all()
+    if names is not None:
+        organizations = organizations.filter(name__in=names)
+    for org_id, org_name in organizations.values_list('id', 'name'):
         existing_orgs[org_name] = org_id
     return existing_orgs
 
@@ -113,9 +121,6 @@ def create_org_and_teams(org_list, team_map, adapter, can_create=True):
         logger.debug(f"Adapter {adapter} is not allowed to create orgs/teams")
         return
 
-    # Get all of the IDs and names of orgs in the DB and create any new org defined in LDAP that does not exist in the DB
-    existing_orgs = get_orgs_by_ids()
-
     # Parse through orgs and teams provided and create a list of unique items we care about creating
     all_orgs = list(set(org_list))
     all_teams = []
@@ -131,6 +136,9 @@ def create_org_and_teams(org_list, team_map, adapter, can_create=True):
             #  although the rest of the login process might stack later on
             logger.error("{} adapter is attempting to create a team {} but it does not have an org".format(adapter, team_name))
 
+    # Get the IDs and names of the orgs we care about and create any mapped org that does not exist in the DB
+    existing_orgs = get_orgs_by_ids(names=all_orgs)
+
     for org_name in all_orgs:
         if org_name and org_name not in existing_orgs:
             logger.info("{} adapter is creating org {}".format(adapter, org_name))
@@ -142,10 +150,10 @@ def create_org_and_teams(org_list, team_map, adapter, can_create=True):
             # Add the org name to the existing orgs since we created it and we may need it to build the teams below
             existing_orgs[org_name] = new_org.id
 
-    # Do the same for teams
-    existing_team_names = list(Team.objects.all().values_list('name', flat=True))
+    # Do the same for teams, a team is only unique within its organization so we have to match on both fields
+    existing_teams = set(Team.objects.filter(name__in=all_teams).values_list('name', 'organization__name'))
     for team_name in all_teams:
-        if team_name not in existing_team_names:
+        if (team_name, team_map[team_name]) not in existing_teams:
             logger.info("{} adapter is creating team {} in org {}".format(adapter, team_name, team_map[team_name]))
             try:
                 Team.objects.create(name=team_name, organization_id=existing_orgs[team_map[team_name]])
