@@ -88,7 +88,7 @@ This workflow will:
 
 ## Promote the draft releases
 
-### Releasing Ascender, awxkit and the ctrliq.ascender collection
+### Releasing Ascender and the ctrliq.ascender collection
 
 Once staging is complete we can complete the release of awx and the operator.
 
@@ -114,7 +114,7 @@ Once the release is published, another workflow called [Promote Release](github.
 
 ![Promote release](img/promote-release.png)
 
-This workflow will take the generated images and promote them to quay.io in addition it will also release awxkit and the ctrliq.ascender collection. The overall process will not take long.
+This workflow will take the generated images and promote them to quay.io in addition it will also release the ctrliq.ascender collection. The overall process will not take long.
 
 6. Once the workflow is finished, verify that the new image is present on the [Repository Tags](https://quay.io/repository/ansible/awx?tag=latest&tab=tags) on Quay:
 
@@ -123,14 +123,6 @@ This workflow will take the generated images and promote them to quay.io in addi
 7. Go to the ctrliq.ascender collection on [Ansible Galaxy](https://galaxy.ansible.com/ctrliq/ascender) and validate the latest version matches and was updated recently:
 
 ![Verify release ctrliq.ascender collection](img/galaxy.png)
-
-8. Go to awxkit's page on [PyPi](https://pypi.org/project/awxkit/#history) and validate the latest release is there:
-
-![Verify awxkit](img/pypi.png)
-
-9. While verifying that awxkit was published on Pypi, also validate that the latest version of the [tar](https://pypi.org/project/awxkit/#files) file is there as well.
-
-![Verify awxkit files](img/pypi_files.png)
 
 ### Releasing the AWX Operator
 
@@ -226,6 +218,4 @@ Here are the steps needed to revert an Ascender and an AWX-Operator release. Dep
 
 6. Navigate to the [Ansible Galaxy Collections](https://galaxy.ansible.com/awx/awx) website and remove the published Ascender collection with the bad tag.
 
-7. Navigate to the [PyPi](https://pypi.org/project/awxkit/#history) and delete the bad Ascender tag and release that got published.
-
-8. [Restart the Release Process](#releasing-awx-and-awx-operator)
+7. [Restart the Release Process](#releasing-awx-and-awx-operator)

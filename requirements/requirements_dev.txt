@@ -13,7 +13,7 @@ pytest-django
 pytest-mock==1.11.1
 pytest-timeout
 pytest-xdist
-tox  # for awxkit
+tox  # for the linters and docs environments in tox.ini
 logutils
 jupyter
 notebook<7.0.0
