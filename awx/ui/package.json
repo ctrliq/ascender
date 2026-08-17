@@ -5,12 +5,15 @@
   "engines": {
     "node": ">=22.22.0"
   },
+  "packageManager": "pnpm@11.21.0+sha512.521705bce689924eac72f5a3587122f362689ef6571e55ba80076fd637c11132ecffada26fad4ea79c485bfddbfd3d5a2a5b05805a77e893de71ec8a6cca3bb1",
   "dependencies": {
     "@dagrejs/dagre": "^3.0.0",
+    "@lingui/core": "^6.4.0",
     "@lingui/react": "^6.4.0",
     "@patternfly/patternfly": "^6.5.2",
     "@patternfly/react-core": "^6.5.1",
     "@patternfly/react-icons": "^6.5.1",
+    "@patternfly/react-styles": "^6.5.1",
     "@patternfly/react-table": "^6.5.1",
     "@tanstack/react-virtual": "^3.14.4",
     "ace-builds": "^1.44.0",
@@ -68,6 +71,7 @@
     "eslint-config-airbnb-extended": "^3.1.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-i18next": "^6.1.5",
+    "eslint-plugin-import-x": "^4.17.1",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-react": "7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",

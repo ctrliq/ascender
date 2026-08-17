@@ -60,6 +60,11 @@ RUN dnf -y update && dnf install -y 'dnf-command(config-manager)' && \
 
 RUN pip3.12 install -vv build
 
+{% if not headless|bool %}
+# The nodejs:22 module stream doesn't bundle corepack; install it explicitly.
+RUN npm install -g corepack@0.35.0 && corepack enable
+{% endif %}
+
 {% if image_architecture == 'ppc64le'  %}
     RUN dnf -y update && dnf install -y wget && \
     wget https://static.rust-lang.org/dist/rust-1.41.0-powerpc64le-unknown-linux-gnu.tar.gz && \
@@ -178,6 +183,8 @@ RUN dnf module reset nodejs -y && \
     unzip && \
     #npm install -g n && n 20.19.5 && npm install -g npm@10.9.3 && dnf remove -y nodejs && npm uninstall --g n && \
     npm install -g npm@10.9.3 && \
+    npm install -g corepack@0.35.0 && \
+    corepack enable && \
     dnf -y clean all
 
 RUN pip3.12 install --no-cache-dir -vv git+https://github.com/coderanger/supervisor-stdout.git@973ba19967cdaf46d9c1634d1675fc65b9574f6e && \

@@ -23,7 +23,13 @@ systemctl start docker
 `ln -s /usr/libexec/docker/cli-plugins/docker-compose /usr/bin/docker-compose`
 
 ### Now install a few dependencies for building Ascender
-`dnf install -y git make ansible-core npm`
+```
+dnf install -y git make ansible-core npm
+npm install -g corepack@0.35.0 && corepack enable
+```
+`awx/ui` is built with [pnpm](https://pnpm.io/); `corepack` reads the pinned
+version from `awx/ui/package.json`'s `packageManager` field and fetches it
+automatically the first time `pnpm` runs.
 
 ### !!!! Add your github ssh key to the box !!!!!
 ### be sure it is chmod 600
@@ -38,9 +44,9 @@ systemctl stop firewalld
 systemctl disable firewalld
 ```
 
-### NPM runs on 3001
+### The UI dev server runs on 3001
 ### API runs on 8043   so https://ip:8043/api/
-### We will now create some scripts to make starting the containers and npm easier
+### We will now create some scripts to make starting the containers and the UI dev server easier
 ```
 cat << EOF > ~/start_containers.sh
 #!/bin/bash
@@ -55,10 +61,10 @@ EOF
 cat << EOF > ~/start_npm.sh
 #!/bin/bash
 cd ascender
-#npm --prefix=awx/ui install
+#pnpm --dir awx/ui install --frozen-lockfile
 # If using openssl-3.0.7 or earlier, uncomment the next line and comment out the one after it.
-export NODE_OPTIONS=--openssl-legacy-provider; npm --prefix=awx/ui start
-#npm --prefix=awx/ui start
+export NODE_OPTIONS=--openssl-legacy-provider; pnpm --dir awx/ui run start
+#pnpm --dir awx/ui run start
 EOF
 ```
 
@@ -67,7 +73,7 @@ chmod +x ~/start_containers.sh
 chmod +x ~/start_npm.sh
 ```
 
-You will need to start the containers, and then once they are up, start npm in a new terminal window.
+You will need to start the containers, and then once they are up, start the UI dev server in a new terminal window.
 
 
 ## Default Password
@@ -105,13 +111,13 @@ When you have python packages to update due to upstream or dependency CVE remedi
 
 ## Package Update for the Ascender UI
 
-When you have npm packages to update due to upstream or dependency CVE remediation, use the following procedure:
+When you have UI packages to update due to upstream or dependency CVE remediation, use the following procedure:
 
 1. Checkout the `main` branch in your docker environment
 2. From there, create a new branch to handle the CVE changes
 3. Start the containers using `./start_containers.sh`
-4. Before starting the user interface using `./start_npm.sh`, login to the web container and goto the `awx/ui` directory and update the `package.json` file with the new package requirements
-5. Run `npm audit fix` to see if there are any other security changes to be made as a result of the updated packages.
+4. Before starting the user interface using `./start_npm.sh`, login to the web container and goto the `awx/ui` directory and update the `package.json` file with the new package requirements, then run `pnpm install` to refresh `pnpm-lock.yaml`
+5. Run `pnpm audit --fix` to see if there are any other security changes to be made as a result of the updated packages.
 6. If that runs clean, start the user interface using `./start_npm.sh`
 7. Check for startup errors and run your regressions
 8. Once changes are verified good, commit your changes to the branch you created in step 2.
