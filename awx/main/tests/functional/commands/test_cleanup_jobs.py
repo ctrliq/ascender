@@ -56,6 +56,7 @@ def test_cleanup_jobs_with_a_gap_in_the_id_range(old_jobs):
 
     skipped, deleted = _command(batch_size=1).cleanup_jobs()
 
+    assert skipped == 0
     assert deleted == expected
     assert not Job.objects.filter(pk__in=[job.pk for job in old_jobs]).exists()
 
@@ -70,6 +71,7 @@ def test_cleanup_jobs_when_the_id_span_is_a_multiple_of_the_batch_size(old_jobs)
 
     skipped, deleted = _command(batch_size=batch_size).cleanup_jobs()
 
+    assert skipped == 0
     assert deleted == expected
     assert not Job.objects.filter(pk__in=[job.pk for job in old_jobs]).exists()
 
@@ -78,5 +80,6 @@ def test_cleanup_jobs_when_the_id_span_is_a_multiple_of_the_batch_size(old_jobs)
 def test_cleanup_jobs_deletes_every_old_job(old_jobs):
     skipped, deleted = _command(batch_size=100000).cleanup_jobs()
 
+    assert skipped == 0
     assert deleted == len(old_jobs)
     assert not Job.objects.filter(pk__in=[job.pk for job in old_jobs]).exists()
