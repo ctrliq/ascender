@@ -56,6 +56,7 @@ def test_cleanup_jobs_clears_host_summary_references(inventory):
 
     skipped, deleted = _command().cleanup_jobs()
 
+    assert skipped == 0
     assert deleted == 1
     assert not Job.objects.filter(pk=job.pk).exists()
     assert JobHostSummary.objects.filter(job_id=job.pk).count() == 0
@@ -104,6 +105,7 @@ def test_pre_delete_job_host_summaries_spans_chunks(inventory):
     with mock.patch('awx.main.management.commands.cleanup_jobs.JHS_CHUNK_SIZE', 2):
         skipped, deleted = _command().cleanup_jobs()
 
+    assert skipped == 0
     assert deleted == len(jobs)
     assert JobHostSummary.objects.filter(job__in=jobs).count() == 0
     assert not Host.objects.filter(last_job_host_summary__isnull=False, inventory=inventory).exists()
