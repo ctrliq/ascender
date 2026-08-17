@@ -1942,12 +1942,16 @@ RECENT_JOBS_COUNT = 5
 
 
 def attach_recent_job_host_summaries(hosts):
-    """Load the newest RECENT_JOBS_COUNT JobHostSummary rows for each of hosts.
+    """Load the newest RECENT_JOBS_COUNT JobHostSummary rows for each host.
 
     HostSerializer.get_summary_fields() builds its recent_jobs entry by slicing
     the summaries of a single host, which costs one query per serialized host.
     A window function ranks the summaries per host inside the database, so the
     whole page is covered by one query per relation instead.
+
+    Deciding which relation a host uses reads host.inventory, so every caller
+    has to select_related it or this trades one N+1 for another. HostAccess
+    already does, which is what the host list is built from.
     """
     hosts_by_relation = {}
     for host in hosts:
