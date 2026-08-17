@@ -148,6 +148,7 @@ Resources and Access
 
 The **Resources** and **Access** menus provide you access to the various components of Ascender and allow you to configure who has permissions for those resources:
 
+- :ref:`ug_labels`
 - Templates (:ref:`ug_JobTemplates` and :ref:`ug_wf_templates`)
 - :ref:`ug_credentials`
 - :ref:`ug_projects`

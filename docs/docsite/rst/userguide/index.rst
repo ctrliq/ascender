@@ -37,6 +37,7 @@ You can find lots of Ascender discussion and get answers to questions at `Ascend
    project-sign
    inventories
    inventory_plugins_templates
+   labels
    job_templates
    job_slices
    workflows

@@ -107,6 +107,7 @@ To create a new job template:
        * Once the Job Template is saved, the labels appear in the Job Templates overview in the *Expanded* view.
        * Click the (|x|) beside a label to remove it. When a label is removed, it is no longer associated with that particular Job or Job Template, but it will remain associated with any other jobs that reference it. 
        * Jobs inherit labels from the Job Template at the time of launch. If a label is deleted from a Job Template, it is also deleted from the Job.
+       * Labels that are in use are listed in the **Labels** view, which you can use to browse the templates carrying each label. See :ref:`ug_labels`.
      - * If selected, even if a default value is supplied, you will be prompted upon launch to supply additional labels if needed. 
        * You will not be able to delete existing labels - clicking (|x-circle|) only removes the newly added labels, not existing default labels.
    * - **Variables**
