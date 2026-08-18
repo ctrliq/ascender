@@ -10,9 +10,18 @@ from awx.main.models import Organization, Team
 logger = logging.getLogger('awx.sso.common')
 
 
-def get_orgs_by_ids():
+def get_orgs_by_ids(names=None):
     existing_orgs = {}
-    for org_id, org_name in Organization.objects.all().values_list('id', 'name'):
+    if names is not None:
+        # Per-login hot path: only the orgs referenced by the configured
+        # maps are needed, and Organization.name is unique, so this hits
+        # the name index instead of scanning the whole table.
+        orgs = Organization.objects.filter(name__in=names)
+    else:
+        # Full scan, required when the caller must enumerate every org
+        # (the SAML attribute-based removal path does this).
+        orgs = Organization.objects.all()
+    for org_id, org_name in orgs.values_list('id', 'name'):
         existing_orgs[org_name] = org_id
     return existing_orgs
 
@@ -132,7 +141,7 @@ def create_org_and_teams(org_list, team_map, adapter, can_create=True):
         return
 
     # Get all of the IDs and names of orgs in the DB and create any new org defined in LDAP that does not exist in the DB
-    existing_orgs = get_orgs_by_ids()
+    existing_orgs = get_orgs_by_ids(names=all_orgs)
 
     for org_name in all_orgs:
         if org_name and org_name not in existing_orgs:

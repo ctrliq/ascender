@@ -44,6 +44,12 @@ class TestCommonFunctions:
         assert Counter(orgs_and_ids.keys()) == Counter([o1.name, o2.name, o3.name])
         assert Counter(orgs_and_ids.values()) == Counter([o1.id, o2.id, o3.id])
 
+    def test_get_orgs_by_ids_scoped_to_names(self, orgs):
+        orgs_and_ids = get_orgs_by_ids(names=['Default1'])
+        assert set(orgs_and_ids.keys()) == {'Default1'}
+        o1, _, _ = orgs
+        assert orgs_and_ids['Default1'] == o1.id
+
     def test_reconcile_users_org_team_mappings(self):
         # Create objects for us to play with
         user = User.objects.create(username='user1@foo.com', last_name='foo', first_name='bar', email='user1@foo.com', is_active=True)
