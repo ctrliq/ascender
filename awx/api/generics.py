@@ -263,7 +263,7 @@ class APIView(views.APIView):
         # `WWW-Authenticate: Basic ...`, your browser will prompt you for an
         # HTTP basic auth username+password and will store it _in the browser_
         # for subsequent requests.  Because basic auth does not require CSRF
-        # validation (because it's commonly used with e.g., tower-cli and other
+        # validation (because it's commonly used with e.g., the Ascender CLI and other
         # non-browser clients), browsers that save basic auth in this way are
         # vulnerable to cross-site request forgery:
         #

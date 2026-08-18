@@ -511,7 +511,7 @@ For transparent logins to work, you must first get IdP-initiated logins to work.
 
     The above is a sample of a typical IdP format, but may not be the correct format for your particular case. You may need to reach out to your IdP for the correct transparent redirect URL as that URL is not the same for all IdPs.
 
-3. After transparent SAML login is configured, to log in using local credentials or a different SSO, go directly to ``https://<your-awx-server>/login``.  This provides the standard Ascender login page, including SSO authentication buttons, and allows you to log in with any configured method.
+3. After transparent SAML login is configured, to log in using local credentials or a different SSO, go directly to ``https://<your-ascender-server>/login``.  This provides the standard Ascender login page, including SSO authentication buttons, and allows you to log in with any configured method.
 
 
 Enabling Logging for SAML

@@ -106,7 +106,7 @@ To view the Ansible outputs, browse to:
 
 ::
 
-   https://<awx server name>/api/v2/jobs/<job_id>/job_events/   
+   https://<ascender server name>/api/v2/jobs/<job_id>/job_events/   
 
 
 Locate and configure the Ansible configuration file

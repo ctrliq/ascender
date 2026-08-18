@@ -30,7 +30,7 @@ Using the curl tool, you can see the activity that occurs when you log into Asce
 
 .. code-block:: text
 
-	curl -k -c - https://<awx-host>/api/login/
+	curl -k -c - https://<ascender-host>/api/login/
 
 	localhost	FALSE	/	FALSE	0   csrftoken
 	AswSFn5p1qQvaX4KoRZN6A5yer0Pq0VG2cXMTzZnzuhaY0L4tiidYqwf5PXZckuj
@@ -40,11 +40,11 @@ Using the curl tool, you can see the activity that occurs when you log into Asce
 .. code-block:: text
 
 	curl -X POST -H 'Content-Type: application/x-www-form-urlencoded' \
-  	--referer https://<awx-host>/api/login/ \
+  	--referer https://<ascender-host>/api/login/ \
   	-H 'X-CSRFToken: K580zVVm0rWX8pmNylz5ygTPamgUJxifrdJY0UDtMMoOis5Q1UOxRmV9918BUBIN' \
   	--data 'username=root&password=reverse' \
   	--cookie 'csrftoken=K580zVVm0rWX8pmNylz5ygTPamgUJxifrdJY0UDtMMoOis5Q1UOxRmV9918BUBIN' \
-  	https://<awx-host>/api/login/ -k -D - -o /dev/null
+  	https://<ascender-host>/api/login/ -k -D - -o /dev/null
 
 All of this is done by the Ascender when you log in to the UI or API in the browser, and should only be used when authenticating in the browser. For programmatic integration with Ascender, see :ref:`api_oauth2_auth`.
 
@@ -90,7 +90,7 @@ Example with curl:
 .. code-block:: text
 
    # the --user flag adds this Authorization header for us
-   curl -X GET --user 'user:password' https://<awx-host>/api/v2/credentials -k -L
+   curl -X GET --user 'user:password' https://<ascender-host>/api/v2/credentials -k -L
 
 For more information about the Basic HTTP Authentication scheme, see `RFC 7617 <https://datatracker.ietf.org/doc/html/rfc7617>`_.
 
@@ -135,7 +135,7 @@ Token authentication is best used for any programmatic use of the Ascender API, 
 
 .. code-block:: text
 
-   curl -u user:password -k -X POST https://<awx-host>/api/v2/tokens/
+   curl -u user:password -k -X POST https://<ascender-host>/api/v2/tokens/
 
 
 This call will return JSON data like:
@@ -149,7 +149,7 @@ The value of the ``token`` property is what you can now use to perform a GET req
 	curl -k -X POST \
   	  -H “Content-Type: application/json”
   	  -H “Authorization: Bearer <oauth2-token-value>” \
-  	  https://<awx-host>/api/v2/hosts/ 
+  	  https://<ascender-host>/api/v2/hosts/ 
 
 Similarly, you can launch a job by making a POST to the job template that you want to launch.
 
@@ -159,13 +159,13 @@ Similarly, you can launch a job by making a POST to the job template that you wa
   	  -H "Authorization: Bearer <oauth2-token-value>" \
   	  -H "Content-Type: application/json" \
   	  --data '{"limit" : "ansible"}' \
-  	  https://<awx-host>/api/v2/job_templates/14/launch/ 
+  	  https://<ascender-host>/api/v2/job_templates/14/launch/ 
 
 
 **Python Example**
 
-`awxkit <https://pypi.org/project/awxkit/>`_ is an open source tool that makes it easy to use HTTP requests to access the Ascender API. 
-You can have awxkit acquire a PAT on your behalf by using the ``awxkit login`` command. Refer to the :ref:`api_start` for more detail.
+`Ascender Kit <https://pypi.org/project/ascender-kit/>`_ is an open source tool that makes it easy to use HTTP requests to access the Ascender API. 
+You can have it acquire a PAT on your behalf by using the ``ascender login`` command. Refer to the `Ascender Kit documentation <https://github.com/ctrliq/ascender-kit>`_ for more detail.
 
 For more information on how to use OAuth 2 in Ascender in the context of integrating external applications, see :ref:`ag_oauth2_token_auth` in the |ata|. 
 
@@ -175,15 +175,15 @@ If you need to write custom requests, you can write a Python script using `Pytho
 
 	import requests
 	oauth2_token_value = 'y1Q8ye4hPvT61aQq63Da6N1C25jiA'   # your token value from Ascender
-	url = 'https://<awx-host>/api/v2/users/'
+	url = 'https://<ascender-host>/api/v2/users/'
 	payload = {}
 	headers = {'Authorization': 'Bearer ' + oauth2_token_value,}
 
-	# makes request to awx user endpoint
+	# makes request to Ascender user endpoint
 	response = requests.request('GET', url, headers=headers, data=payload,
 	allow_redirects=False, verify=False)
 
-	# prints json returned from awx with formatting
+	# prints json returned from Ascender with formatting
 	print(json.dumps(response.json(), indent=4, sort_keys=True))
 
 
