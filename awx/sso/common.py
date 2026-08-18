@@ -113,9 +113,6 @@ def create_org_and_teams(org_list, team_map, adapter, can_create=True):
         logger.debug(f"Adapter {adapter} is not allowed to create orgs/teams")
         return
 
-    # Get all of the IDs and names of orgs in the DB and create any new org defined in LDAP that does not exist in the DB
-    existing_orgs = get_orgs_by_ids()
-
     # Parse through orgs and teams provided and create a list of unique items we care about creating
     all_orgs = list(set(org_list))
     all_teams = []
@@ -134,6 +131,9 @@ def create_org_and_teams(org_list, team_map, adapter, can_create=True):
     if not all_orgs and not all_teams:
         return
 
+    # Get all of the IDs and names of orgs in the DB and create any new org defined in LDAP that does not exist in the DB
+    existing_orgs = get_orgs_by_ids()
+
     for org_name in all_orgs:
         if org_name and org_name not in existing_orgs:
             logger.info("{} adapter is creating org {}".format(adapter, org_name))
@@ -148,7 +148,10 @@ def create_org_and_teams(org_list, team_map, adapter, can_create=True):
     # Do the same for teams.  A team name may legitimately exist in more than
     # one organization, so the existence check must be scoped to the mapped
     # organization rather than the team name alone.
-    existing_teams = set(Team.objects.filter(organization_id__in=list(existing_orgs.values())).values_list('organization_id', 'name'))
+    referenced_org_ids = {existing_orgs[team_map[team_name]] for team_name in all_teams}
+    existing_teams = set(
+        Team.objects.filter(organization_id__in=referenced_org_ids, name__in=all_teams).values_list('organization_id', 'name')
+    )
     for team_name in all_teams:
         org_id = existing_orgs[team_map[team_name]]
         if (org_id, team_name) not in existing_teams:
