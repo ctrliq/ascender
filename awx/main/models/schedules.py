@@ -163,7 +163,9 @@ class Schedule(PrimordialModel, LaunchTimeConfig):
             if 'until=' in rule.lower():
                 # if DTSTART;TZID= is used, coerce "naive" UNTIL values
                 # to the proper UTC date
-                match_until = re.match(r".*?(?P<until>UNTIL\=[0-9]+T[0-9]+)(?P<utcflag>Z?)", rule)
+                # the check that gets here lowercases the rule, and RFC 5545 field names
+                # are case insensitive, so match the field the same way
+                match_until = re.match(r".*?(?P<until>UNTIL\=[0-9]+T[0-9]+)(?P<utcflag>Z?)", rule, re.IGNORECASE)
                 if match_until is None:
                     # an UNTIL that is not a YYYYMMDDTHHMMSS datetime, the date only
                     # form for instance, is nothing that can be coerced here. Leave
@@ -188,7 +190,7 @@ class Schedule(PrimordialModel, LaunchTimeConfig):
 
                     # Make a datetime object with tzinfo=<the DTSTART timezone>
                     # localized_until = datetime.datetime(2020, 6, 1, 17, 0, tzinfo=tzfile('/usr/share/zoneinfo/America/New_York'))
-                    localized_until = make_aware(datetime.datetime.strptime(re.sub('^UNTIL=', '', naive_until), "%Y%m%dT%H%M%S"), local_tz)
+                    localized_until = make_aware(datetime.datetime.strptime(re.sub('^UNTIL=', '', naive_until, flags=re.IGNORECASE), "%Y%m%dT%H%M%S"), local_tz)
 
                     # Coerce the datetime to UTC and format it as a string w/ Zulu format
                     # utc_until = UNTIL=20200601T220000Z
