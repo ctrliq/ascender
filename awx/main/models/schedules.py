@@ -151,9 +151,11 @@ class Schedule(PrimordialModel, LaunchTimeConfig):
         #
 
         # Find the DTSTART rule or raise an error, its usually the first rule but that is not strictly enforced
-        start_date_rule = re.sub(r'^.*(DTSTART[^\s]+)\s.*$', r'\1', rrule)
-        if not start_date_rule:
+        # re.sub hands back the whole rrule when it does not match, so the DTSTART has to be searched for
+        start_date_match = re.search(r'DTSTART[^\s]+', rrule)
+        if not start_date_match:
             raise ValueError('A DTSTART field needs to be in the rrule')
+        start_date_rule = start_date_match.group(0)
 
         rules = re.split(r'\s+', rrule)
         for index in range(0, len(rules)):
@@ -162,6 +164,11 @@ class Schedule(PrimordialModel, LaunchTimeConfig):
                 # if DTSTART;TZID= is used, coerce "naive" UNTIL values
                 # to the proper UTC date
                 match_until = re.match(r".*?(?P<until>UNTIL\=[0-9]+T[0-9]+)(?P<utcflag>Z?)", rule)
+                if match_until is None:
+                    # an UNTIL that is not a YYYYMMDDTHHMMSS datetime, the date only
+                    # form for instance, is nothing that can be coerced here. Leave
+                    # the rule alone so dateutil is the one that reports it.
+                    continue
                 if not len(match_until.group('utcflag')):
                     # rule = DTSTART;TZID=America/New_York:20200601T120000 RRULE:...;UNTIL=20200601T170000
 

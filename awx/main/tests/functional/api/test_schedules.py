@@ -183,6 +183,11 @@ def test_schedule_detail_returns_disabled_when_all_schedules_are_globally_disabl
         ("DTSTART;TZID=US-Eastern:19961105T090000 RRULE:FREQ=MINUTELY;INTERVAL=10;COUNT=5", "A valid TZID must be provided"),  # noqa
         ("DTSTART:20300308T050000Z RRULE:FREQ=REGULARLY;INTERVAL=1", "rrule parsing failed validation: invalid 'FREQ': REGULARLY"),  # noqa
         ("DTSTART;TZID=America/New_York:20300308T050000Z RRULE:FREQ=DAILY;INTERVAL=1", "rrule parsing failed validation"),
+        # an UNTIL without a time is not a value coerce_naive_until can convert, dateutil says why
+        (
+            "DTSTART;TZID=America/New_York:20300601T120000 RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20300701",
+            "rrule parsing failed validation: RRULE UNTIL values must be specified in UTC",
+        ),  # noqa
     ],
 )
 def test_invalid_rrules(post, admin_user, project, inventory, rrule, error):
@@ -217,7 +222,7 @@ def test_multiple_invalid_rrules(post, admin_user, project, inventory):
             "Multiple DTSTART is not supported.",
             "INTERVAL required in rrule: RULE:FREQ=SECONDLY",
             "RRULE may not contain both COUNT and UNTIL: RULE:FREQ=MINUTELY;INTERVAL=10;COUNT=5;UNTIL=20220101",
-            "rrule parsing failed validation: 'NoneType' object has no attribute 'group'",
+            "rrule parsing failed validation: A valid TZID must be provided (e.g., America/New_York)",
         ]
     }
     assert expected_result == resp.data
