@@ -55,6 +55,10 @@ class TestSocialPipeline:
         assert org.admin_role.members.count() == 3
         assert org.member_role.members.count() == 3
 
+        # update_user_orgs manages organizations only, so the fixture's TEAM_MAP
+        # (Blue/Red) must neither be created nor reconciled.
+        assert Team.objects.count() == 0
+
         # Test remove feature enabled
         backend.setting('ORGANIZATION_MAP')['Default']['admins'] = ''
         backend.setting('ORGANIZATION_MAP')['Default']['users'] = ''
@@ -91,6 +95,14 @@ class TestSocialPipeline:
 
         assert Team.objects.get(name="Red").member_role.members.count() == 3
         assert Team.objects.get(name="Blue").member_role.members.count() == 3
+
+        # update_user_teams manages teams only: even matching org expressions
+        # must not grant (or revoke) any organization membership.
+        backend.setting('ORGANIZATION_MAP')['Default']['admins'] = re.compile('.*')
+        backend.setting('ORGANIZATION_MAP')['Default']['users'] = re.compile('.*')
+        update_user_teams(backend, None, u1)
+        assert Organization.objects.get(name="Default").admin_role.members.count() == 0
+        assert Organization.objects.get(name="Default").member_role.members.count() == 0
 
         # Test remove feature enabled
         backend.setting('TEAM_MAP')['Blue']['remove'] = True
@@ -317,3 +329,35 @@ class TestMergedPipelineStep:
         backend = FakeMergedBackend(TEAM_MAP={'Floating': {'users': 'alice'}})
         update_user_org_team_mappings(backend, None, user)
         assert Team.objects.filter(name='Floating').count() == 0
+
+    def test_update_user_orgs_does_not_touch_teams(self):
+        user = self._make_user()
+        org = Organization.objects.create(name='Default')
+        team = Team.objects.create(name='Ops', organization=org)
+        team.member_role.members.add(user)
+        backend = FakeMergedBackend(
+            ORGANIZATION_MAP={'Default': {'users': user.username}},
+            TEAM_MAP={'Ops': {'organization': 'Default', 'users': 'nobody', 'remove': True}},
+        )
+        update_user_orgs(backend, None, user)
+        # update_user_orgs manages organizations only; the team mapping (which
+        # would otherwise remove the user) must be ignored...
+        assert team.member_role.members.filter(pk=user.pk).exists()
+        # ...while the org membership is still granted by the org-only step.
+        assert org.member_role.members.filter(pk=user.pk).exists()
+
+    def test_update_user_teams_does_not_touch_orgs(self):
+        user = self._make_user()
+        org = Organization.objects.create(name='Default')
+        org.admin_role.members.add(user)
+        backend = FakeMergedBackend(
+            ORGANIZATION_MAP={'Default': {'admins': 'nobody', 'remove_admins': True}},
+            TEAM_MAP={'Ops': {'organization': 'Default', 'users': user.username}},
+        )
+        update_user_teams(backend, None, user)
+        # update_user_teams manages teams only; the org mapping (which would
+        # otherwise remove the admin) must be ignored...
+        assert org.admin_role.members.filter(pk=user.pk).exists()
+        # ...while the team membership is still granted by the team-only step.
+        team = Team.objects.get(name='Ops')
+        assert team.member_role.members.filter(pk=user.pk).exists()
