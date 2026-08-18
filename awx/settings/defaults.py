@@ -303,6 +303,12 @@ SUBSYSTEM_METRICS_TASK_MANAGER_RECORD_INTERVAL = 15
 # The maximum allowed jobs to start on a given task manager cycle
 START_TASK_LIMIT = 100
 
+# Number of seconds an outgoing notification waits on the service it posts to.
+# Without it the dispatcher worker running send_notifications is held for as
+# long as the far end keeps the connection open. Matches the default timeout of
+# the email backend.
+AWX_NOTIFICATION_REQUEST_TIMEOUT = 30
+
 # Time out task managers if they take longer than this many seconds, plus TASK_MANAGER_TIMEOUT_GRACE_PERIOD
 # We have the grace period so the task manager can bail out before the timeout.
 TASK_MANAGER_TIMEOUT = 300

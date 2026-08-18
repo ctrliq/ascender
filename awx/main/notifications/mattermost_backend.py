@@ -4,6 +4,7 @@
 import logging
 import requests
 
+from django.conf import settings
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
@@ -41,7 +42,12 @@ class MattermostBackend(AWXBaseEmailBackend, CustomNotificationBase):
 
             payload['text'] = m.subject
 
-            r = requests.post("{}".format(m.recipients()[0]), json=payload, verify=(not self.mattermost_no_verify_ssl))
+            r = requests.post(
+                "{}".format(m.recipients()[0]),
+                json=payload,
+                verify=(not self.mattermost_no_verify_ssl),
+                timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+            )
             if r.status_code >= 400:
                 logger.error(smart_str(_("Error sending notification mattermost: {}").format(r.status_code)))
                 if not self.fail_silently:

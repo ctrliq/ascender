@@ -6,6 +6,8 @@ import json
 import logging
 import requests
 
+from django.conf import settings
+
 from awx.main.notifications.base import AWXBaseEmailBackend
 from awx.main.utils import get_awx_http_client_headers
 from awx.main.notifications.custom_notification_base import CustomNotificationBase
@@ -89,6 +91,7 @@ class WebhookBackend(AWXBaseEmailBackend, CustomNotificationBase):
                     headers=headers,
                     verify=(not self.disable_ssl_verification),
                     allow_redirects=False,  # override default behaviour for redirects
+                    timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
                 )
 
                 # either success or error reached if this conditional fires
