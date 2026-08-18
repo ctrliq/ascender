@@ -535,7 +535,9 @@ def activity_stream_associate(sender, instance, **kwargs):
                 activity_entry.role.add(role)
                 activity_entry.object_relationship_type = obj_rel
                 activity_entry.save()
-            connection.on_commit(lambda: emit_activity_stream_change(activity_entry))
+            # bind the entry to the callback: the loop rebinds activity_entry, and
+            # on_commit defers every callback until the whole loop has finished
+            connection.on_commit(lambda entry=activity_entry: emit_activity_stream_change(entry))
 
 
 @receiver(current_user_getter)
