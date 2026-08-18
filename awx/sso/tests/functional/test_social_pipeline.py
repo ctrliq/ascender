@@ -204,15 +204,24 @@ class TestMergedPipelineStep:
         update_user_org_team_mappings(backend, None, user)
         assert Organization.objects.count() == 2
         assert Team.objects.count() == 1
-        assert user in Organization.objects.get(name='OrgOne').member_role
-        assert user in Organization.objects.get(name='OrgTwo').member_role
+        # The mapping only grants `users`, so assert on DIRECT member-role
+        # membership (Role.__contains__ would also match an org admin via the
+        # admin_role ancestor) and rule out an unintended admin grant.
+        org_one = Organization.objects.get(name='OrgOne')
+        org_two = Organization.objects.get(name='OrgTwo')
+        assert org_one.member_role.members.filter(pk=user.pk).exists()
+        assert org_two.member_role.members.filter(pk=user.pk).exists()
+        assert not org_one.admin_role.members.filter(pk=user.pk).exists()
+        assert not org_two.admin_role.members.filter(pk=user.pk).exists()
+        team_alpha = Team.objects.get(name='Alpha')
+        assert team_alpha.member_role.members.filter(pk=user.pk).exists()
 
     def test_alias_org_receives_membership(self):
         user = self._make_user()
         backend = FakeMergedBackend(ORGANIZATION_MAP={'Procurement': {'organization_alias': 'Acme Procurement', 'admins': 'alice'}})
         update_user_org_team_mappings(backend, None, user)
         org = Organization.objects.get(name='Acme Procurement')
-        assert user in org.admin_role
+        assert org.admin_role.members.filter(pk=user.pk).exists()
         assert not Organization.objects.filter(name='Procurement').exists()
 
     def test_unmapped_org_membership_is_untouched(self):
@@ -221,13 +230,15 @@ class TestMergedPipelineStep:
         org.admin_role.members.add(user)
         backend = FakeMergedBackend(ORGANIZATION_MAP={'Default': {'remove': True}})
         update_user_org_team_mappings(backend, None, user)
-        assert user in org.admin_role
+        assert org.admin_role.members.filter(pk=user.pk).exists()
 
     def test_boolean_true_matches_everyone(self):
         user = self._make_user()
         backend = FakeMergedBackend(ORGANIZATION_MAP={'Default': {'users': True}})
         update_user_org_team_mappings(backend, None, user)
-        assert user in Organization.objects.get(name='Default').member_role
+        default = Organization.objects.get(name='Default')
+        assert default.member_role.members.filter(pk=user.pk).exists()
+        assert not default.admin_role.members.filter(pk=user.pk).exists()
 
     def test_mismatched_expression_removes_membership(self):
         user = self._make_user()
@@ -235,7 +246,7 @@ class TestMergedPipelineStep:
         org.member_role.members.add(user)
         backend = FakeMergedBackend(ORGANIZATION_MAP={'Default': {'users': 'bob', 'remove_users': True}})
         update_user_org_team_mappings(backend, None, user)
-        assert user not in org.member_role
+        assert not org.member_role.members.filter(pk=user.pk).exists()
 
     def test_remove_disabled_leaves_membership_untouched(self):
         user = self._make_user()
@@ -243,7 +254,7 @@ class TestMergedPipelineStep:
         org.member_role.members.add(user)
         backend = FakeMergedBackend(ORGANIZATION_MAP={'Default': {'users': 'bob', 'remove_users': False}})
         update_user_org_team_mappings(backend, None, user)
-        assert user in org.member_role
+        assert org.member_role.members.filter(pk=user.pk).exists()
 
     def test_remove_applies_only_to_mismatched_role(self):
         user = self._make_user()
@@ -265,8 +276,8 @@ class TestMergedPipelineStep:
         team_two.member_role.members.add(user)
         backend = FakeMergedBackend(TEAM_MAP={'Support': {'organization': 'Org One', 'users': 'alice', 'remove': True}})
         update_user_org_team_mappings(backend, None, user)
-        assert user in team_one.member_role
-        assert user in team_two.member_role
+        assert team_one.member_role.members.filter(pk=user.pk).exists()
+        assert team_two.member_role.members.filter(pk=user.pk).exists()
 
     def test_same_named_team_elsewhere_is_created_in_mapped_org(self):
         user = self._make_user()
@@ -282,7 +293,7 @@ class TestMergedPipelineStep:
         assert Team.objects.filter(name='Support').count() == 2
         team_one = Team.objects.get(name='Support', organization=org_one)
         assert team_one.member_role.members.filter(pk=user.pk).exists()
-        assert user in team_two.member_role
+        assert team_two.member_role.members.filter(pk=user.pk).exists()
 
     def test_team_users_false_removes_membership(self):
         user = self._make_user()
