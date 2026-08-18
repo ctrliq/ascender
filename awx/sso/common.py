@@ -77,7 +77,10 @@ def reconcile_users_org_team_mappings(user, desired_org_states, desired_team_sta
                             continue
                         if role_name not in roles:
                             roles.append(role_name)
-            model_roles = Team.objects.filter(name__in=team_names).values_list('name', 'organization__name', *roles, named=True)
+            model_roles = Team.objects.filter(
+                name__in=team_names,
+                organization__name__in=desired_states.keys(),
+            ).values_list('name', 'organization__name', *roles, named=True)
 
         for row in model_roles:
             for role_name in roles:
