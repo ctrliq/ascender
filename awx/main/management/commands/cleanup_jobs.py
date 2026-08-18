@@ -143,8 +143,10 @@ class DeleteMeta:
             cursor.execute(query)
             partitions_from_db = [r[0] for r in cursor.fetchall()]
 
-        partitions_dt = [partition_name_dt(p) for p in partitions_from_db if not None]
-        partitions_dt = [p for p in partitions_dt if not None]
+        # partition_name_dt returns None for a name it cannot read a date out of,
+        # and dt_to_partition_name would fail on that below
+        partitions_dt = [partition_name_dt(p) for p in partitions_from_db]
+        partitions_dt = [p for p in partitions_dt if p is not None]
 
         # convert datetime partition back to string partition
         partitions_maybe_drop = {dt_to_partition_name(tbl_name, dt) for dt in partitions_dt}

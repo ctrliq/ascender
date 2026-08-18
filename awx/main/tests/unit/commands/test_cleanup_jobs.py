@@ -1,6 +1,11 @@
+import logging
+from datetime import timedelta
 from unittest import mock
 
-from awx.main.management.commands.cleanup_jobs import _pre_delete_job_host_summaries, JHS_CHUNK_SIZE
+from django.utils.timezone import now
+
+from awx.main.management.commands.cleanup_jobs import DeleteMeta, _pre_delete_job_host_summaries, JHS_CHUNK_SIZE
+from awx.main.models import Job
 
 
 class TestPreDeleteJobHostSummaries:
@@ -135,3 +140,34 @@ class TestDeleteMetaPreDelete:
         dm.delete_jobs()
 
         mock_pre_delete.assert_not_called()
+
+
+class TestFindPartitionsToDrop:
+    """The partition list comes back as table names that have to be read as dates."""
+
+    def _delete_meta(self, children):
+        delete_meta = DeleteMeta(logging.getLogger('awx.main.commands.cleanup_jobs'), Job, now() - timedelta(days=1), dry_run=False)
+        cursor = mock.MagicMock()
+        cursor.fetchall.return_value = [(name,) for name in children]
+        connection = mock.MagicMock()
+        connection.cursor.return_value.__enter__ = mock.Mock(return_value=cursor)
+        connection.cursor.return_value.__exit__ = mock.Mock(return_value=False)
+        return delete_meta, connection
+
+    def test_partitions_are_collected(self):
+        delete_meta, connection = self._delete_meta(['main_jobevent_20210318_09', 'main_jobevent_20210318_11'])
+
+        with mock.patch('awx.main.management.commands.cleanup_jobs.connection', connection):
+            delete_meta.find_partitions_to_drop()
+
+        assert delete_meta.parts_to_drop == {'main_jobevent_20210318_09', 'main_jobevent_20210318_11'}
+
+    def test_a_name_without_a_date_is_skipped(self):
+        """partition_name_dt returns None for those, and dropping a None makes
+        the whole cleanup run fail on dt_to_partition_name."""
+        delete_meta, connection = self._delete_meta(['main_jobevent_20210318_09', 'main_jobevent_default'])
+
+        with mock.patch('awx.main.management.commands.cleanup_jobs.connection', connection):
+            delete_meta.find_partitions_to_drop()
+
+        assert delete_meta.parts_to_drop == {'main_jobevent_20210318_09'}
