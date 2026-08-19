@@ -361,3 +361,47 @@ class TestMergedPipelineStep:
         # ...while the team membership is still granted by the team-only step.
         team = Team.objects.get(name='Ops')
         assert team.member_role.members.filter(pk=user.pk).exists()
+
+    def test_same_alias_merge_keeps_earlier_grants(self):
+        user = self._make_user()
+        backend = FakeMergedBackend(
+            ORGANIZATION_MAP={
+                'Procurement': {'organization_alias': 'Acme', 'admins': 'alice'},
+                'Sales': {'organization_alias': 'Acme'},
+            }
+        )
+        update_user_org_team_mappings(backend, None, user)
+        org = Organization.objects.get(name='Acme')
+        # A later entry that does not manage any role in the organization must
+        # not wipe the earlier entry's admin grant.
+        assert org.admin_role.members.filter(pk=user.pk).exists()
+        # The organization is referenced via alias only: the map key is not a
+        # real organization name.
+        assert not Organization.objects.filter(name='Procurement').exists()
+
+    def test_same_alias_different_roles_accumulate(self):
+        user = self._make_user()
+        backend = FakeMergedBackend(
+            ORGANIZATION_MAP={
+                'Procurement': {'organization_alias': 'Acme', 'admins': 'alice'},
+                'Sales': {'organization_alias': 'Acme', 'users': 'alice'},
+            }
+        )
+        update_user_org_team_mappings(backend, None, user)
+        org = Organization.objects.get(name='Acme')
+        assert org.admin_role.members.filter(pk=user.pk).exists()
+        assert org.member_role.members.filter(pk=user.pk).exists()
+
+    def test_same_alias_conflicting_role_last_writes(self):
+        user = self._make_user()
+        backend = FakeMergedBackend(
+            ORGANIZATION_MAP={
+                'A': {'organization_alias': 'Acme', 'admins': 'alice'},
+                'B': {'organization_alias': 'Acme', 'admins': 'bob', 'remove_admins': True},
+            }
+        )
+        update_user_org_team_mappings(backend, None, user)
+        org = Organization.objects.get(name='Acme')
+        # Both entries manage the admin role; like the historical sequential
+        # per-entry behavior, the later entry's removal wins.
+        assert not org.admin_role.members.filter(pk=user.pk).exists()
