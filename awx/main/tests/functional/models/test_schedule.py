@@ -554,3 +554,40 @@ def test_skip_sundays():
 def test_get_end_date(rrule, expected_result):
     ruleset = Schedule.rrulestr(rrule)
     assert expected_result == Schedule.get_end_date(ruleset)
+
+
+def test_date_only_until_is_left_for_dateutil_to_report():
+    """UNTIL without a time is not a value coerce_naive_until can convert.
+
+    It used to assume its own regex had matched, so the schedule endpoint
+    answered with "'NoneType' object has no attribute 'group'".
+    """
+    rrule = 'DTSTART;TZID=America/New_York:20300601T120000 RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20300701'
+
+    assert Schedule.coerce_naive_until(rrule) == rrule
+
+    with pytest.raises(ValueError) as exc:
+        Schedule.rrulestr(rrule)
+    assert 'UNTIL values must be specified in UTC' in str(exc.value)
+
+
+def test_rrule_without_a_dtstart_is_rejected():
+    """The check for this used re.sub, which hands back the whole rrule when it does not match."""
+    with pytest.raises(ValueError) as exc:
+        Schedule.coerce_naive_until('RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20300701T120000Z')
+    assert 'A DTSTART field needs to be in the rrule' in str(exc.value)
+
+
+def test_lowercase_until_is_coerced_like_the_uppercase_one():
+    """RFC 5545 field names are case insensitive.
+
+    The check that reaches the coercion lowercases the rule first, so a
+    lowercase UNTIL gets that far and has to be treated the same way.
+    """
+    upper = 'DTSTART;TZID=America/New_York:20300601T120000 RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20300701T170000'
+    lower = upper.replace('UNTIL=', 'until=')
+
+    assert Schedule.coerce_naive_until(upper).endswith('UNTIL=20300701T210000Z')
+    assert Schedule.coerce_naive_until(lower) == Schedule.coerce_naive_until(upper)
+
+    assert Schedule.rrulestr(lower)._rrule[0]._until == Schedule.rrulestr(upper)._rrule[0]._until
