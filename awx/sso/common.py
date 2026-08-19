@@ -161,9 +161,7 @@ def create_org_and_teams(org_list, team_map, adapter, can_create=True):
     # one organization, so the existence check must be scoped to the mapped
     # organization rather than the team name alone.
     referenced_org_ids = {existing_orgs[team_map[team_name]] for team_name in all_teams}
-    existing_teams = set(
-        Team.objects.filter(organization_id__in=referenced_org_ids, name__in=all_teams).values_list('organization_id', 'name')
-    )
+    existing_teams = set(Team.objects.filter(organization_id__in=referenced_org_ids, name__in=all_teams).values_list('organization_id', 'name'))
     for team_name in all_teams:
         org_id = existing_orgs[team_map[team_name]]
         if (org_id, team_name) not in existing_teams:
