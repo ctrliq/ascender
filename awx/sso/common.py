@@ -10,9 +10,18 @@ from awx.main.models import Organization, Team
 logger = logging.getLogger('awx.sso.common')
 
 
-def get_orgs_by_ids():
+def get_orgs_by_ids(names=None):
     existing_orgs = {}
-    for org_id, org_name in Organization.objects.all().values_list('id', 'name'):
+    if names is not None:
+        # Per-login hot path: only the orgs referenced by the configured
+        # maps are needed, and Organization.name is unique, so this hits
+        # the name index instead of scanning the whole table.
+        orgs = Organization.objects.filter(name__in=names)
+    else:
+        # Full scan, required when the caller must enumerate every org
+        # (the SAML attribute-based removal path does this).
+        orgs = Organization.objects.all()
+    for org_id, org_name in orgs.values_list('id', 'name'):
         existing_orgs[org_name] = org_id
     return existing_orgs
 
@@ -68,7 +77,10 @@ def reconcile_users_org_team_mappings(user, desired_org_states, desired_team_sta
                             continue
                         if role_name not in roles:
                             roles.append(role_name)
-            model_roles = Team.objects.filter(name__in=team_names).values_list('name', 'organization__name', *roles, named=True)
+            model_roles = Team.objects.filter(
+                name__in=team_names,
+                organization__name__in=desired_states.keys(),
+            ).values_list('name', 'organization__name', *roles, named=True)
 
         for row in model_roles:
             for role_name in roles:
@@ -113,9 +125,6 @@ def create_org_and_teams(org_list, team_map, adapter, can_create=True):
         logger.debug(f"Adapter {adapter} is not allowed to create orgs/teams")
         return
 
-    # Get all of the IDs and names of orgs in the DB and create any new org defined in LDAP that does not exist in the DB
-    existing_orgs = get_orgs_by_ids()
-
     # Parse through orgs and teams provided and create a list of unique items we care about creating
     all_orgs = list(set(org_list))
     all_teams = []
@@ -131,6 +140,12 @@ def create_org_and_teams(org_list, team_map, adapter, can_create=True):
             #  although the rest of the login process might stack later on
             logger.error("{} adapter is attempting to create a team {} but it does not have an org".format(adapter, team_name))
 
+    if not all_orgs and not all_teams:
+        return
+
+    # Get all of the IDs and names of orgs in the DB and create any new org defined in LDAP that does not exist in the DB
+    existing_orgs = get_orgs_by_ids(names=all_orgs)
+
     for org_name in all_orgs:
         if org_name and org_name not in existing_orgs:
             logger.info("{} adapter is creating org {}".format(adapter, org_name))
@@ -142,13 +157,17 @@ def create_org_and_teams(org_list, team_map, adapter, can_create=True):
             # Add the org name to the existing orgs since we created it and we may need it to build the teams below
             existing_orgs[org_name] = new_org.id
 
-    # Do the same for teams
-    existing_team_names = list(Team.objects.all().values_list('name', flat=True))
+    # Do the same for teams.  A team name may legitimately exist in more than
+    # one organization, so the existence check must be scoped to the mapped
+    # organization rather than the team name alone.
+    referenced_org_ids = {existing_orgs[team_map[team_name]] for team_name in all_teams}
+    existing_teams = set(Team.objects.filter(organization_id__in=referenced_org_ids, name__in=all_teams).values_list('organization_id', 'name'))
     for team_name in all_teams:
-        if team_name not in existing_team_names:
+        org_id = existing_orgs[team_map[team_name]]
+        if (org_id, team_name) not in existing_teams:
             logger.info("{} adapter is creating team {} in org {}".format(adapter, team_name, team_map[team_name]))
             try:
-                Team.objects.create(name=team_name, organization_id=existing_orgs[team_map[team_name]])
+                Team.objects.create(name=team_name, organization_id=org_id)
             except IntegrityError:
                 # If another process got here before us that is ok because we don't need the ID from this team or anything
                 pass
