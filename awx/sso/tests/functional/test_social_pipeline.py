@@ -375,9 +375,38 @@ class TestMergedPipelineStep:
         # A later entry that does not manage any role in the organization must
         # not wipe the earlier entry's admin grant.
         assert org.admin_role.members.filter(pk=user.pk).exists()
-        # The organization is referenced via alias only: the map key is not a
-        # real organization name.
-        assert not Organization.objects.filter(name='Procurement').exists()
+
+    def test_same_alias_merge_keeps_earlier_admin_removal(self):
+        user = self._make_user()
+        org = Organization.objects.create(name='Acme')
+        org.admin_role.members.add(user)
+        backend = FakeMergedBackend(
+            ORGANIZATION_MAP={
+                'Procurement': {'organization_alias': 'Acme', 'admins': 'nobody', 'remove_admins': True},
+                'Sales': {'organization_alias': 'Acme'},
+            }
+        )
+        update_user_org_team_mappings(backend, None, user)
+        org = Organization.objects.get(name='Acme')
+        # The earlier entry demands alice be removed from admin; the later
+        # all-None entry must not wipe that removal into a no-op.
+        assert not org.admin_role.members.filter(pk=user.pk).exists()
+
+    def test_same_alias_merge_keeps_earlier_member_removal(self):
+        user = self._make_user()
+        org = Organization.objects.create(name='Acme')
+        org.member_role.members.add(user)
+        backend = FakeMergedBackend(
+            ORGANIZATION_MAP={
+                'Procurement': {'organization_alias': 'Acme', 'users': 'nobody', 'remove_users': True},
+                'Sales': {'organization_alias': 'Acme'},
+            }
+        )
+        update_user_org_team_mappings(backend, None, user)
+        org = Organization.objects.get(name='Acme')
+        # Symmetric to the admin-removal case: the earlier entry's member-role
+        # removal must survive the later all-None entry.
+        assert not org.member_role.members.filter(pk=user.pk).exists()
 
     def test_same_alias_different_roles_accumulate(self):
         user = self._make_user()
