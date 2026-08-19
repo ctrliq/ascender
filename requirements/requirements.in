@@ -57,7 +57,7 @@ pyyaml>=6.0.1
 receptorctl
 social-auth-core[openidconnect]==4.5.0  # see UPGRADE BLOCKERs
 social-auth-app-django
-sqlparse>=0.5.4   # Required by django
+sqlparse>=0.6.0   # CVE-2026-59893 CVE-2026-54284 CVE-2026-71491 CVE-2026-59894; required by django
 requests>=2.33.0 # CVE-2026-25645
 slack-sdk
 tacacs-plus==1.0  # UPGRADE BLOCKER: auth does not work with later versions
