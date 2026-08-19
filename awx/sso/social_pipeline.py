@@ -54,7 +54,8 @@ def _compute_org_desired_states(org_map, user):
 
     Returns a tuple of (orgs_list, desired_org_states):
       orgs_list          - the organization names that should exist
-      desired_org_states - org name to {role_name: True/False/None}
+      desired_org_states - org name to {role_name: True/False}; only managed
+        roles are recorded (orgs with no managed role are left out)
     """
     orgs_list = []
     desired_org_states = {}
@@ -91,9 +92,8 @@ def _compute_org_desired_states(org_map, user):
             # Multiple ORGANIZATION_MAP entries may resolve to the same
             # organization via organization_alias.  Merge them instead of
             # overwriting: a None result means this entry does not manage the
-            # role, so only non-None states are recorded.  An organization with
-            # no recorded state is simply left out of the map, and the
-            # reconciler treats an absent role as "leave untouched".
+            # role, so only non-None states are recorded and organizations with
+            # no recorded state are left out of the map.
             if state is not None:
                 desired_org_states.setdefault(organization_name, {})[role_name] = state
 
