@@ -97,8 +97,11 @@ User Interface
    pair: configuration; UI
    pair: configuration; data collection
    pair: configuration; custom logo
+   pair: configuration; custom header logo
+   pair: configuration; custom browser title
    pair: configuration; custom login message
    pair: logo; custom
+   pair: browser title; custom
    pair: login message; custom
 
 .. include:: ../common/logos_branding.rst
