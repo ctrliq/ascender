@@ -361,3 +361,76 @@ class TestMergedPipelineStep:
         # ...while the team membership is still granted by the team-only step.
         team = Team.objects.get(name='Ops')
         assert team.member_role.members.filter(pk=user.pk).exists()
+
+    def test_same_alias_merge_keeps_earlier_grants(self):
+        user = self._make_user()
+        backend = FakeMergedBackend(
+            ORGANIZATION_MAP={
+                'Procurement': {'organization_alias': 'Acme', 'admins': 'alice'},
+                'Sales': {'organization_alias': 'Acme'},
+            }
+        )
+        update_user_org_team_mappings(backend, None, user)
+        org = Organization.objects.get(name='Acme')
+        # A later entry that does not manage any role in the organization must
+        # not wipe the earlier entry's admin grant.
+        assert org.admin_role.members.filter(pk=user.pk).exists()
+
+    def test_same_alias_merge_keeps_earlier_admin_removal(self):
+        user = self._make_user()
+        org = Organization.objects.create(name='Acme')
+        org.admin_role.members.add(user)
+        backend = FakeMergedBackend(
+            ORGANIZATION_MAP={
+                'Procurement': {'organization_alias': 'Acme', 'admins': 'nobody', 'remove_admins': True},
+                'Sales': {'organization_alias': 'Acme'},
+            }
+        )
+        update_user_org_team_mappings(backend, None, user)
+        org = Organization.objects.get(name='Acme')
+        # The earlier entry demands alice be removed from admin; the later
+        # all-None entry must not wipe that removal into a no-op.
+        assert not org.admin_role.members.filter(pk=user.pk).exists()
+
+    def test_same_alias_merge_keeps_earlier_member_removal(self):
+        user = self._make_user()
+        org = Organization.objects.create(name='Acme')
+        org.member_role.members.add(user)
+        backend = FakeMergedBackend(
+            ORGANIZATION_MAP={
+                'Procurement': {'organization_alias': 'Acme', 'users': 'nobody', 'remove_users': True},
+                'Sales': {'organization_alias': 'Acme'},
+            }
+        )
+        update_user_org_team_mappings(backend, None, user)
+        org = Organization.objects.get(name='Acme')
+        # Symmetric to the admin-removal case: the earlier entry's member-role
+        # removal must survive the later all-None entry.
+        assert not org.member_role.members.filter(pk=user.pk).exists()
+
+    def test_same_alias_different_roles_accumulate(self):
+        user = self._make_user()
+        backend = FakeMergedBackend(
+            ORGANIZATION_MAP={
+                'Procurement': {'organization_alias': 'Acme', 'admins': 'alice'},
+                'Sales': {'organization_alias': 'Acme', 'users': 'alice'},
+            }
+        )
+        update_user_org_team_mappings(backend, None, user)
+        org = Organization.objects.get(name='Acme')
+        assert org.admin_role.members.filter(pk=user.pk).exists()
+        assert org.member_role.members.filter(pk=user.pk).exists()
+
+    def test_same_alias_conflicting_role_last_writes(self):
+        user = self._make_user()
+        backend = FakeMergedBackend(
+            ORGANIZATION_MAP={
+                'A': {'organization_alias': 'Acme', 'admins': 'alice'},
+                'B': {'organization_alias': 'Acme', 'admins': 'bob', 'remove_admins': True},
+            }
+        )
+        update_user_org_team_mappings(backend, None, user)
+        org = Organization.objects.get(name='Acme')
+        # Both entries manage the admin role; like the historical sequential
+        # per-entry behavior, the later entry's removal wins.
+        assert not org.admin_role.members.filter(pk=user.pk).exists()
