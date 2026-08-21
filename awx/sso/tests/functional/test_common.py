@@ -44,6 +44,12 @@ class TestCommonFunctions:
         assert Counter(orgs_and_ids.keys()) == Counter([o1.name, o2.name, o3.name])
         assert Counter(orgs_and_ids.values()) == Counter([o1.id, o2.id, o3.id])
 
+    def test_get_orgs_by_ids_scoped_to_names(self, orgs):
+        orgs_and_ids = get_orgs_by_ids(names=['Default1'])
+        assert set(orgs_and_ids.keys()) == {'Default1'}
+        o1, _, _ = orgs
+        assert orgs_and_ids['Default1'] == o1.id
+
     def test_reconcile_users_org_team_mappings(self):
         # Create objects for us to play with
         user = User.objects.create(username='user1@foo.com', last_name='foo', first_name='bar', email='user1@foo.com', is_active=True)
@@ -209,6 +215,28 @@ class TestCommonFunctions:
         assert len(user.roles.all()) == 1
         assert user in team1.member_role
         assert user not in team2.member_role
+
+    def test_reconcile_team_query_scoped_to_mapped_orgs(self):
+        # Reconcile must only touch the teams in the orgs named in the desired
+        # state.  Same-named teams in other orgs (which the query previously
+        # read and no-op'd) must be left completely alone.
+        user = User.objects.create(username='user1@foo.com', last_name='foo', first_name='bar', email='user1@foo.com', is_active=True)
+        org = Organization.objects.create(name='Mapped Org')
+        team = Team.objects.create(name='Ops', organization=org)
+        team.member_role.members.add(user)
+
+        for i in range(3):
+            other_org = Organization.objects.create(name='Other Org {}'.format(i))
+            stray = Team.objects.create(name='Ops', organization=other_org)
+            stray.member_role.members.add(user)
+
+        reconcile_users_org_team_mappings(user, {}, {org.name: {'Ops': {'member_role': False}}}, 'py.test')
+
+        # The mapped org's team lost the membership...
+        assert user not in team.member_role
+        # ...while every same-named team in the non-mapped orgs kept it.
+        for stray in Team.objects.filter(name='Ops').exclude(organization=org):
+            assert user in stray.member_role
 
     @pytest.mark.parametrize(
         "org_list, team_map, can_create, org_count, team_count",

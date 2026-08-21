@@ -843,12 +843,32 @@ def test_openstack_create_fail_required_fields(post, organization, admin):
     response = post(reverse('api:credential_list'), params, admin)
     assert response.status_code == 201
 
-    # username, password, host, and project must be specified by launch time
+    # host must be specified by launch time; username/password and
+    # application credential id/secret are alternative auth inputs
     j = Job()
     j.save()
     j.credentials.add(Credential.objects.first())
     assert j.pre_start() == (False, None)
-    assert 'required fields (host, password, project, username)' in j.job_explanation
+    assert 'required fields (host)' in j.job_explanation
+
+
+@pytest.mark.django_db
+def test_openstack_create_application_credential_ok(post, organization, admin):
+    params = {
+        'credential_type': 1,
+        'inputs': {
+            'host': 'some_host',
+            'application_credential_id': 'some_app_cred_id',
+            'application_credential_secret': 'some_app_cred_secret',
+        },
+    }
+    openstack = CredentialType.defaults['openstack']()
+    openstack.save()
+    params['kind'] = 'openstack'
+    params['name'] = 'Best credential ever'
+    params['organization'] = organization.id
+    response = post(reverse('api:credential_list'), params, admin)
+    assert response.status_code == 201
 
 
 @pytest.mark.django_db

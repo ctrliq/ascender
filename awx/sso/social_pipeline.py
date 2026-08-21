@@ -5,86 +5,222 @@
 import re
 import logging
 
-from awx.sso.common import get_or_create_org_with_default_galaxy_cred
+from awx.sso.common import (
+    create_org_and_teams,
+    reconcile_users_org_team_mappings,
+)
 
 logger = logging.getLogger('awx.sso.social_pipeline')
 
 
-def _update_m2m_from_expression(user, related, expr, remove=True):
+def _update_m2m_from_expression(user, opts, remove=True):
     """
-    Helper function to update m2m relationship based on user matching one or
-    more expressions.
+    Evaluate a social-auth organization/team mapping expression.
+
+    Returns:
+        True  - user should be added
+        False - user should be removed
+        None  - membership should not be changed
     """
-    should_add = False
-    if expr is None:
-        return
-    elif not expr:
+    if opts is None:
+        return None
+
+    if not opts:
         pass
-    elif expr is True:
-        should_add = True
+    elif isinstance(opts, bool) and opts is True:
+        return True
     else:
-        if isinstance(expr, (str, type(re.compile('')))):
-            expr = [expr]
-        for ex in expr:
-            if isinstance(ex, str):
-                if user.username == ex or user.email == ex:
-                    should_add = True
-            elif isinstance(ex, type(re.compile(''))):
-                if ex.match(user.username) or ex.match(user.email):
-                    should_add = True
-    if should_add:
-        related.add(user)
-    elif remove:
-        related.remove(user)
+        if isinstance(opts, (str, re.Pattern)):
+            opts = [opts]
+
+        for expression in opts:
+            if isinstance(expression, str):
+                if user.username == expression or user.email == expression:
+                    return True
+            elif isinstance(expression, re.Pattern):
+                if expression.match(user.username) or expression.match(user.email):
+                    return True
+
+    if remove:
+        return False
+
+    return None
 
 
+def _compute_org_desired_states(org_map, user):
+    """
+    Resolve the mapped organization names (honoring organization_alias) and
+    evaluate each organization's admins/users expressions into a desired state.
+
+    Returns a tuple of (orgs_list, desired_org_states):
+      orgs_list          - the organization names that should exist
+      desired_org_states - org name to {role_name: True/False}; only managed
+        roles are recorded (orgs with no managed role are left out)
+    """
+    orgs_list = []
+    desired_org_states = {}
+
+    # Social auth currently supports organization admins and users.
+    org_roles_and_expressions = {
+        'admin_role': 'admins',
+        'member_role': 'users',
+    }
+
+    for org_name, org_opts in org_map.items():
+        organization_name = org_opts.get('organization_alias') or org_name
+
+        orgs_list.append(organization_name)
+
+        remove = bool(org_opts.get('remove', True))
+
+        for role_name, expression_name in org_roles_and_expressions.items():
+            opts = org_opts.get(expression_name, None)
+
+            role_remove = bool(
+                org_opts.get(
+                    'remove_{}'.format(expression_name),
+                    remove,
+                )
+            )
+
+            state = _update_m2m_from_expression(
+                user,
+                opts,
+                role_remove,
+            )
+
+            # Multiple ORGANIZATION_MAP entries may resolve to the same
+            # organization via organization_alias.  Merge them instead of
+            # overwriting: a None result means this entry does not manage the
+            # role, so only non-None states are recorded and organizations with
+            # no recorded state are left out of the map.
+            if state is not None:
+                desired_org_states.setdefault(organization_name, {})[role_name] = state
+
+    return orgs_list, desired_org_states
+
+
+def _compute_team_desired_states(team_map_settings, user):
+    """
+    Resolve the mapped teams (declaring the organizations they belong to) and
+    evaluate each team's users expression into a desired state.
+
+    Returns a tuple of (team_map, desired_team_states):
+      team_map            - team name to organization name
+      desired_team_states - organization name to {team name: {'member_role': True/False/None}}
+    """
+    team_map = {}
+    desired_team_states = {}
+
+    for team_name, team_opts in team_map_settings.items():
+        if 'organization' not in team_opts:
+            continue
+
+        organization = team_opts.get('organization')
+
+        if not organization:
+            logger.error(
+                "Team named %s in social auth team map settings is " "invalid due to missing organization",
+                team_name,
+            )
+            continue
+
+        team_map[team_name] = organization
+
+        users_opts = team_opts.get('users', None)
+        remove = bool(team_opts.get('remove', True))
+
+        state = _update_m2m_from_expression(
+            user,
+            users_opts,
+            remove,
+        )
+
+        if state is not None:
+            if organization not in desired_team_states:
+                desired_team_states[organization] = {}
+
+            desired_team_states[organization][team_name] = {
+                'member_role': state,
+            }
+
+    return team_map, desired_team_states
+
+
+def _update_user_memberships(backend, user, *, manage_orgs=True, manage_teams=True):
+    """
+    Compute the desired organization/team membership state in memory and
+    reconcile all memberships in bulk.
+
+    This follows the same desired-state approach used by LDAPBackend in
+    awx.sso.backends.  Which domains are managed is controlled by
+    manage_orgs/manage_teams so the merged default step and the legacy
+    per-domain entry points share one implementation.
+    """
+    org_map = backend.setting('ORGANIZATION_MAP') or {}
+    team_map_settings = backend.setting('TEAM_MAP') or {}
+
+    orgs_list = []
+    desired_org_states = {}
+    team_map = {}
+    desired_team_states = {}
+    if manage_orgs:
+        orgs_list, desired_org_states = _compute_org_desired_states(org_map, user)
+    if manage_teams:
+        team_map, desired_team_states = _compute_team_desired_states(team_map_settings, user)
+
+    # Ensure mapped organizations and teams exist.
+    create_org_and_teams(
+        orgs_list,
+        team_map,
+        'Social Auth',
+    )
+
+    # One reconciliation for all organization/team memberships.
+    reconcile_users_org_team_mappings(
+        user,
+        desired_org_states,
+        desired_team_states,
+        'Social Auth',
+    )
+
+
+def update_user_org_team_mappings(backend, details, user=None, *args, **kwargs):
+    """Reconcile organization and team memberships in one bulk step."""
+    if not user:
+        return
+
+    _update_user_memberships(backend, user)
+
+
+# Kept for compatibility: a custom SOCIAL_AUTH_PIPELINE configured in
+# awx settings (e.g. NON_ROOT settings or an awx-manage shell) may still list
+# these legacy function names explicitly.
+#
+# Both entry points retain their original per-domain behavior:
+#   update_user_orgs  -> organizations only (admin_role/member_role)
+#   update_user_teams -> teams only (member_role)
+# Referencing one does NOT manage the other domain, matching the historical
+# behavior of the pre-merge pipeline.  Each still uses the same bulk
+# create_org_and_teams + reconcile_users_org_team_mappings helpers as the
+# merged step, so custom pipelines keep the bulk-reconciliation speedup.
 def update_user_orgs(backend, details, user=None, *args, **kwargs):
     """
     Update organization memberships for the given user based on mapping rules
-    defined in settings.
+    defined in settings.  Teams are left untouched.
     """
     if not user:
         return
 
-    org_map = backend.setting('ORGANIZATION_MAP') or {}
-    for org_name, org_opts in org_map.items():
-        organization_alias = org_opts.get('organization_alias')
-        if organization_alias:
-            organization_name = organization_alias
-        else:
-            organization_name = org_name
-        org = get_or_create_org_with_default_galaxy_cred(name=organization_name)
-
-        # Update org admins from expression(s).
-        remove = bool(org_opts.get('remove', True))
-        admins_expr = org_opts.get('admins', None)
-        remove_admins = bool(org_opts.get('remove_admins', remove))
-        _update_m2m_from_expression(user, org.admin_role.members, admins_expr, remove_admins)
-
-        # Update org users from expression(s).
-        users_expr = org_opts.get('users', None)
-        remove_users = bool(org_opts.get('remove_users', remove))
-        _update_m2m_from_expression(user, org.member_role.members, users_expr, remove_users)
+    _update_user_memberships(backend, user, manage_teams=False)
 
 
 def update_user_teams(backend, details, user=None, *args, **kwargs):
     """
     Update team memberships for the given user based on mapping rules defined
-    in settings.
+    in settings.  Organization memberships are left untouched.
     """
     if not user:
         return
-    from awx.main.models import Team
 
-    team_map = backend.setting('TEAM_MAP') or {}
-    for team_name, team_opts in team_map.items():
-        # Get or create the org to update.
-        if 'organization' not in team_opts:
-            continue
-        org = get_or_create_org_with_default_galaxy_cred(name=team_opts['organization'])
-
-        # Update team members from expression(s).
-        team = Team.objects.get_or_create(name=team_name, organization=org)[0]
-        users_expr = team_opts.get('users', None)
-        remove = bool(team_opts.get('remove', True))
-        _update_m2m_from_expression(user, team.member_role.members, users_expr, remove)
+    _update_user_memberships(backend, user, manage_orgs=False)

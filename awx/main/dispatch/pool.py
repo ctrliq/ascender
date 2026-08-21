@@ -323,7 +323,7 @@ class AutoscalePool(WorkerPool):
                 # There are 1073741824 bytes in a gigabyte. Convert bytes to gigabytes by dividing by 2**30
                 total_memory_gb = convert_mem_str_to_bytes(settings_absmem) // 2**30
             else:
-                total_memory_gb = (psutil.virtual_memory().total >> 30) + 1  # noqa: round up
+                total_memory_gb = (psutil.virtual_memory().total >> 30) + 1  # round up
 
             # Get same number as max forks based on memory, this function takes memory as bytes
             self.max_workers = get_mem_effective_capacity(total_memory_gb * 2**30)

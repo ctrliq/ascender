@@ -66,6 +66,12 @@ def fake_credential_factory():
         if source == 'ascender':
             inputs.pop('oauth_token')  # mutually exclusive with user/pass
 
+        if source == 'openstack':
+            # mutually exclusive with user/pass; when both are present the
+            # injector switches to v3applicationcredential auth
+            inputs.pop('application_credential_id')
+            inputs.pop('application_credential_secret')
+
         return Credential.objects.create(credential_type=ct, inputs=inputs)
 
     return wrap

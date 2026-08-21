@@ -4,7 +4,7 @@ from unittest import mock
 import json
 
 # AWX models
-from awx.main.models import ActivityStream, Organization, JobTemplate, Credential, CredentialType, Inventory, InventorySource, Project, User
+from awx.main.models import ActivityStream, Organization, JobTemplate, Credential, CredentialType, Inventory, InventorySource, Label, Project, User
 
 # other AWX
 from awx.main.utils import model_to_dict, model_instance_diff
@@ -278,3 +278,21 @@ def test_credential_defaults_idempotency():
     CredentialType.setup_tower_managed_defaults()
     assert CredentialType.objects.get(name='CIQ Ascender Automation Platform', kind='cloud').inputs == old_inputs
     assert ActivityStream.objects.count() == prior_count
+
+
+@pytest.mark.django_db
+def test_associate_emits_every_entry(organization, job_template, django_capture_on_commit_callbacks):
+    """One m2m change can hold several objects, and each gets its own entry.
+
+    The emit is deferred to commit, so a callback that closes over the loop
+    variable rather than the entry reports the last one over and over.
+    """
+    labels = [Label.objects.create(name='label-%d' % i, organization=organization) for i in range(3)]
+
+    with mock.patch('awx.main.signals.emit_activity_stream_change') as emit:
+        with django_capture_on_commit_callbacks(execute=True):
+            job_template.labels.add(*labels)
+
+    entries = ActivityStream.objects.filter(operation='associate', object1='job_template', object2='label')
+    assert entries.count() == len(labels)
+    assert sorted(call.args[0].pk for call in emit.call_args_list) == sorted(entries.values_list('pk', flat=True))

@@ -705,7 +705,7 @@ You can find the API endpoint for fact caching at:
 
 .. code-block::
    
-   http://<awx server name>/api/v2/hosts/x/ansible_facts
+   http://<ascender server name>/api/v2/hosts/x/ansible_facts
 
 .. _ug_CloudCredentials:
 

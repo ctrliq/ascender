@@ -73,16 +73,26 @@ def vmware(cred, env, private_data_dir):
 
 
 def _openstack_data(cred):
-    openstack_auth = dict(
-        auth_url=cred.get_input('host', default=''),
-        username=cred.get_input('username', default=''),
-        password=cred.get_input('password', default=''),
-        project_name=cred.get_input('project', default=''),
-    )
-    if cred.has_input('project_domain_name'):
-        openstack_auth['project_domain_name'] = cred.get_input('project_domain_name', default='')
-    if cred.has_input('domain'):
-        openstack_auth['domain_name'] = cred.get_input('domain', default='')
+    use_app_cred = cred.has_input('application_credential_id') and cred.has_input('application_credential_secret')
+    if use_app_cred:
+        # Keystone rejects application credential auth combined with explicit
+        # user/project scoping, so only auth_url and the app cred pair are sent
+        openstack_auth = dict(
+            auth_url=cred.get_input('host', default=''),
+            application_credential_id=cred.get_input('application_credential_id', default=''),
+            application_credential_secret=cred.get_input('application_credential_secret', default=''),
+        )
+    else:
+        openstack_auth = dict(
+            auth_url=cred.get_input('host', default=''),
+            username=cred.get_input('username', default=''),
+            password=cred.get_input('password', default=''),
+            project_name=cred.get_input('project', default=''),
+        )
+        if cred.has_input('project_domain_name'):
+            openstack_auth['project_domain_name'] = cred.get_input('project_domain_name', default='')
+        if cred.has_input('domain'):
+            openstack_auth['domain_name'] = cred.get_input('domain', default='')
     verify_state = cred.get_input('verify_ssl', default=True)
 
     openstack_data = {
@@ -93,6 +103,8 @@ def _openstack_data(cred):
             },
         },
     }
+    if use_app_cred:
+        openstack_data['clouds']['devstack']['auth_type'] = 'v3applicationcredential'
 
     if cred.has_input('region'):
         openstack_data['clouds']['devstack']['region_name'] = cred.get_input('region', default='')
