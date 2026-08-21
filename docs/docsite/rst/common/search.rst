@@ -79,6 +79,29 @@ The following are a few things about searching in Ascender that you should be aw
 - Currently, the values in the Fields are direct attributes expected to be returned in a **GET** request.  Whenever you search against one of the values, Ascender essentially does an ``__icontains`` search. So, for example, ``name:localhost`` would send back ``?name__icontains=localhost``. Ascender currently performs this search for every Field value, even ``id``, which is not ideal.
 
 
+Date filtering
+~~~~~~~~~~~~~~~~
+
+.. index::
+   pair: searching; date filter
+   pair: filtering; date
+
+Two lists can filter on a date field: **Jobs**, on its **Created** and **Finished** columns, and **Activity Stream**, on **Time**. The job list is reused on the job tabs of templates, inventories, hosts, and the dashboard, so the same filters are available there.
+
+Selecting one of those columns replaces the search field's text box with a date input and an operator drop-down:
+
+.. image:: ../common/images/search-date-filter.png
+   :alt: Jobs list search toolbar with the Created column selected, showing the date operator drop-down expanded and a date input.
+
+Pick an operator and a date, then click the search button. **On or after** matches the date and everything later, sending ``<field>__gte`` to the API. **Before** matches everything strictly earlier than the date, sending ``<field>__lt``. The date box displays the date in your browser's local format, but Ascender submits it as ``YYYY-MM-DD``, so filtering the Jobs list for jobs created on or after June 1, 2026 sends ``created__gte=2026-06-01`` and the applied filter reads ``Created (created__gte)``.
+
+Date filters combine with each other and with other search terms, so applying both operators to the same column selects a range: ``created__gte=2026-06-01`` with ``created__lt=2026-07-01`` returns the jobs created during June 2026.
+
+.. note::
+
+    Date filters are evaluated in UTC, while the **Finish Time** column displays timestamps in your own time zone, so results close to a boundary can look off by a few hours. Filtering on **Finished** also excludes any job that has not finished, since those have no finish time yet.
+
+
 Sort
 ~~~~~~
 
