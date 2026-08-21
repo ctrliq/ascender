@@ -13,6 +13,7 @@ import useRequest from 'hooks/useRequest';
 import { getJobModel } from 'util/jobs';
 import WorkflowOutputNavigation from 'components/WorkflowOutputNavigation';
 import JobDetail from './JobDetail';
+import ExecutionEnvironmentBuilderBuildDetail from './ExecutionEnvironmentBuilderBuildDetail';
 import JobOutput from './JobOutput';
 import { WorkflowOutput } from './WorkflowOutput';
 import useWsJob from './useWsJob';
@@ -32,6 +33,7 @@ export const JOB_URL_SEGMENT_MAP = {
   inventory: 'inventory_update',
   command: 'ad_hoc_command',
   workflow: 'workflow_job',
+  build: 'execution_environment_builder_build',
 };
 
 function Job({ setBreadcrumb }) {
@@ -186,10 +188,14 @@ function Job({ setBreadcrumb }) {
               <Route
                 path="details"
                 element={
-                  <JobDetail
-                    job={job}
-                    inventorySourceLabels={inventorySourceChoices}
-                  />
+                  job.type === 'execution_environment_builder_build' ? (
+                    <ExecutionEnvironmentBuilderBuildDetail job={job} />
+                  ) : (
+                    <JobDetail
+                      job={job}
+                      inventorySourceLabels={inventorySourceChoices}
+                    />
+                  )
                 }
               />
             )}

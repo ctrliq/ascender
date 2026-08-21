@@ -237,6 +237,26 @@ class ProjectOptions(models.Model):
                     break
         return sorted(results, key=lambda x: smart_str(x).lower())
 
+    @property
+    def execution_environment_files(self):
+        """
+        List of ansible-builder execution environment definition files found in
+        the project. These are files named ``execution-environment.yml`` (or
+        ``.yaml``), returned as paths relative to the project root.
+        """
+        results = []
+        project_path = self.get_project_path()
+        if project_path:
+            for dirpath, dirnames, filenames in os.walk(smart_str(project_path)):
+                if skip_directory(dirpath):
+                    continue
+                for filename in filenames:
+                    if filename in ('execution-environment.yml', 'execution-environment.yaml'):
+                        full_path = os.path.join(dirpath, filename)
+                        rel_path = os.path.relpath(full_path, project_path)
+                        results.append(smart_str(rel_path))
+        return sorted(results, key=lambda x: smart_str(x).lower())
+
     def get_lock_file(self):
         """
         We want the project path in name only, we don't care if it exists or
