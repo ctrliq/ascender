@@ -158,6 +158,7 @@ function NotificationTemplateForm({
           started: { ...mergeDefaultMessages(defs.started, messages.started) },
           success: { ...mergeDefaultMessages(defs.success, messages.success) },
           error: { ...mergeDefaultMessages(defs.error, messages.error) },
+          changed: { ...mergeDefaultMessages(defs.changed, messages.changed) },
           workflow_approval: {
             approved: {
               ...mergeDefaultMessages(
@@ -257,6 +258,7 @@ function normalizeMessageFields(values, defaults) {
     started: nullIfDefault(messages.started, defs.started),
     success: nullIfDefault(messages.success, defs.success),
     error: nullIfDefault(messages.error, defs.error),
+    changed: nullIfDefault(messages.changed, defs.changed),
     workflow_approval: {
       approved: nullIfDefault(
         messages.workflow_approval.approved,

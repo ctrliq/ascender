@@ -166,7 +166,7 @@ class AdHocCommand(UnifiedJob, JobNotificationMixin):
     @property
     def notification_templates(self):
         all_orgs = {h.inventory.organization for h in self.hosts.all()}
-        active_templates = dict(error=set(), success=set(), started=set())
+        active_templates = dict(error=set(), success=set(), started=set(), changed=set())
         base_notification_templates = NotificationTemplate.objects
         for org in all_orgs:
             for templ in base_notification_templates.filter(organization_notification_templates_for_errors=org):
@@ -175,9 +175,12 @@ class AdHocCommand(UnifiedJob, JobNotificationMixin):
                 active_templates['success'].add(templ)
             for templ in base_notification_templates.filter(organization_notification_templates_for_started=org):
                 active_templates['started'].add(templ)
+            for templ in base_notification_templates.filter(organization_notification_templates_for_changed=org):
+                active_templates['changed'].add(templ)
         active_templates['error'] = list(active_templates['error'])
         active_templates['success'] = list(active_templates['success'])
         active_templates['started'] = list(active_templates['started'])
+        active_templates['changed'] = list(active_templates['changed'])
         return active_templates
 
     def get_passwords_needed_to_start(self):
@@ -251,3 +254,9 @@ class AdHocCommand(UnifiedJob, JobNotificationMixin):
 
     def get_notification_friendly_name(self):
         return "AdHoc Command"
+
+    def has_changes(self):
+        """
+        Whether the command reported a change on any host, the same way a job does.
+        """
+        return self.job_host_summaries.filter(changed__gt=0).exists()

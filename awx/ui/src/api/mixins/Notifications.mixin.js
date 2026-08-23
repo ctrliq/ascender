@@ -32,6 +32,13 @@ const NotificationsMixin = (parent) =>
       );
     }
 
+    readNotificationTemplatesChanged(id, params) {
+      return this.http.get(
+        `${this.baseUrl}${id}/notification_templates_changed/`,
+        { params }
+      );
+    }
+
     associateNotificationTemplatesStarted(resourceId, notificationId) {
       return this.http.post(
         `${this.baseUrl}${resourceId}/notification_templates_started/`,
@@ -74,6 +81,20 @@ const NotificationsMixin = (parent) =>
       );
     }
 
+    associateNotificationTemplatesChanged(resourceId, notificationId) {
+      return this.http.post(
+        `${this.baseUrl}${resourceId}/notification_templates_changed/`,
+        { id: notificationId }
+      );
+    }
+
+    disassociateNotificationTemplatesChanged(resourceId, notificationId) {
+      return this.http.post(
+        `${this.baseUrl}${resourceId}/notification_templates_changed/`,
+        { id: notificationId, disassociate: true }
+      );
+    }
+
     /**
      * This is a helper method meant to simplify setting the "on" status of
      * a related notification.
@@ -110,6 +131,13 @@ const NotificationsMixin = (parent) =>
 
       if (notificationType === 'error') {
         return this.associateNotificationTemplatesError(
+          resourceId,
+          notificationId
+        );
+      }
+
+      if (notificationType === 'changed') {
+        return this.associateNotificationTemplatesChanged(
           resourceId,
           notificationId
         );
@@ -156,6 +184,13 @@ const NotificationsMixin = (parent) =>
 
       if (notificationType === 'error') {
         return this.disassociateNotificationTemplatesError(
+          resourceId,
+          notificationId
+        );
+      }
+
+      if (notificationType === 'changed') {
+        return this.disassociateNotificationTemplatesChanged(
           resourceId,
           notificationId
         );

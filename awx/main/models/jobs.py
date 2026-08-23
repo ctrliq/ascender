@@ -328,6 +328,11 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
             "groups will be applied."
         ),
     )
+    notification_templates_changed = models.ManyToManyField(
+        "NotificationTemplate",
+        blank=True,
+        related_name='%(class)s_notification_templates_for_changed',
+    )
 
     @classmethod
     def _get_unified_job_class(cls):
@@ -618,6 +623,9 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
         success_notification_templates = list(
             base_notification_templates.filter(unifiedjobtemplate_notification_templates_for_success__in=[self, self.project])
         )
+        # Changes are reported by the job itself, so this trigger only exists on the job
+        # template and on its organization, not on the project.
+        changed_notification_templates = list(base_notification_templates.filter(jobtemplate_notification_templates_for_changed__in=[self]))
         # Get Organization NotificationTemplates
         if self.organization is not None:
             error_notification_templates = set(
@@ -629,7 +637,15 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
             success_notification_templates = set(
                 success_notification_templates + list(base_notification_templates.filter(organization_notification_templates_for_success=self.organization))
             )
-        return dict(error=list(error_notification_templates), started=list(started_notification_templates), success=list(success_notification_templates))
+            changed_notification_templates = set(
+                changed_notification_templates + list(base_notification_templates.filter(organization_notification_templates_for_changed=self.organization))
+            )
+        return dict(
+            error=list(error_notification_templates),
+            started=list(started_notification_templates),
+            success=list(success_notification_templates),
+            changed=list(changed_notification_templates),
+        )
 
     '''
     RelatedJobsMixin
@@ -928,6 +944,13 @@ class Job(UnifiedJob, JobOptions, SurveyJobMixin, JobNotificationMixin, TaskMana
 
     def get_notification_friendly_name(self):
         return "Job"
+
+    def has_changes(self):
+        """
+        Whether the run reported a change on any host. Check mode counts, which is what
+        makes this useful for a compliance playbook that is only meant to report drift.
+        """
+        return self.job_host_summaries.filter(changed__gt=0).exists()
 
     def get_hosts_for_fact_cache(self):
         """

@@ -5,7 +5,17 @@ import datetime
 import pytest
 
 # from awx.main.models import NotificationTemplates, Notifications, JobNotificationMixin
-from awx.main.models import AdHocCommand, InventoryUpdate, Job, JobNotificationMixin, NotificationTemplate, ProjectUpdate, Schedule, SystemJob, WorkflowJob
+from awx.main.models import (
+    AdHocCommand,
+    InventoryUpdate,
+    Job,
+    JobNotificationMixin,
+    NotificationTemplate,
+    ProjectUpdate,
+    Schedule,
+    SystemJob,
+    WorkflowJob,
+)
 from awx.api.serializers import UnifiedJobSerializer
 
 
@@ -181,3 +191,105 @@ class TestJobNotificationMixin(object):
 
         context_stub = JobNotificationMixin.context_stub()
         check_structure_and_completeness(TestJobNotificationMixin.CONTEXT_STRUCTURE, context_stub)
+
+
+class TestChangedNotifications(object):
+    """The changed trigger fires for a run that reported a change on any host, next to the
+    trigger for how the run ended, so a compliance playbook run in check mode reports drift
+    without having to fail to be noticed."""
+
+    def notification_template(self, name):
+        return NotificationTemplate.objects.create(
+            name=name,
+            notification_type='webhook',
+            notification_configuration=dict(url='http://localhost', username='', password='', headers={}),
+        )
+
+    def notified_templates(self, build_notification_message):
+        return set(call[0][0] for call in build_notification_message.call_args_list)
+
+    @pytest.mark.django_db
+    def test_job_without_changes(self):
+        job = Job.objects.create(name='fake-job')
+        job.job_host_summaries.create(host_name='host-a', failed=False, ok=1, changed=0, failures=0)
+
+        assert job.has_changes() is False
+
+    @pytest.mark.django_db
+    def test_job_with_changes(self):
+        job = Job.objects.create(name='fake-job')
+        job.job_host_summaries.create(host_name='host-a', failed=False, ok=1, changed=0, failures=0)
+        job.job_host_summaries.create(host_name='host-b', failed=False, ok=1, changed=2, failures=0)
+
+        assert job.has_changes() is True
+
+    @pytest.mark.django_db
+    @pytest.mark.parametrize('JobClass', [InventoryUpdate, ProjectUpdate, SystemJob, WorkflowJob])
+    def test_job_types_without_host_results_never_report_changes(self, JobClass):
+        assert JobClass.objects.create(name='fake-job').has_changes() is False
+
+    @pytest.mark.django_db
+    def test_ad_hoc_command_with_changes(self):
+        command = AdHocCommand.objects.create(name='fake-command')
+        command.job_host_summaries.create(host_name='host-a', failed=False, ok=1, changed=1, failures=0)
+
+        assert command.has_changes() is True
+
+    @pytest.mark.django_db
+    def test_changed_templates_are_notified_next_to_the_outcome(self, mocker):
+        job = Job.objects.create(name='fake-job')
+        job.job_host_summaries.create(host_name='host-a', failed=False, ok=1, changed=1, failures=0)
+        success = self.notification_template('on-success')
+        changed = self.notification_template('on-changed')
+        mocker.patch.object(Job, 'get_notification_templates', return_value={'success': [success], 'changed': [changed]})
+        build = mocker.patch.object(Job, 'build_notification_message', return_value=('msg', 'body'))
+
+        job.send_notification_templates('succeeded')
+
+        assert self.notified_templates(build) == {success, changed}
+
+    @pytest.mark.django_db
+    def test_a_job_that_changed_nothing_only_notifies_the_outcome(self, mocker):
+        job = Job.objects.create(name='fake-job')
+        job.job_host_summaries.create(host_name='host-a', failed=False, ok=1, changed=0, failures=0)
+        success = self.notification_template('on-success')
+        changed = self.notification_template('on-changed')
+        mocker.patch.object(Job, 'get_notification_templates', return_value={'success': [success], 'changed': [changed]})
+        build = mocker.patch.object(Job, 'build_notification_message', return_value=('msg', 'body'))
+
+        job.send_notification_templates('succeeded')
+
+        assert self.notified_templates(build) == {success}
+
+    @pytest.mark.django_db
+    def test_a_failed_job_that_changed_something_notifies_both(self, mocker):
+        job = Job.objects.create(name='fake-job')
+        job.job_host_summaries.create(host_name='host-a', failed=True, ok=1, changed=1, failures=1)
+        error = self.notification_template('on-error')
+        changed = self.notification_template('on-changed')
+        mocker.patch.object(Job, 'get_notification_templates', return_value={'error': [error], 'changed': [changed]})
+        build = mocker.patch.object(Job, 'build_notification_message', return_value=('msg', 'body'))
+
+        job.send_notification_templates('failed')
+
+        assert self.notified_templates(build) == {error, changed}
+
+    @pytest.mark.django_db
+    def test_the_start_of_a_job_does_not_notify_the_changed_templates(self, mocker):
+        job = Job.objects.create(name='fake-job')
+        job.job_host_summaries.create(host_name='host-a', failed=False, ok=1, changed=1, failures=0)
+        started = self.notification_template('on-started')
+        changed = self.notification_template('on-changed')
+        mocker.patch.object(Job, 'get_notification_templates', return_value={'started': [started], 'changed': [changed]})
+        build = mocker.patch.object(Job, 'build_notification_message', return_value=('msg', 'body'))
+
+        job.send_notification_templates('running')
+
+        assert self.notified_templates(build) == {started}
+
+    @pytest.mark.django_db
+    def test_an_unknown_status_is_refused(self):
+        job = Job.objects.create(name='fake-job')
+
+        with pytest.raises(ValueError):
+            job.send_notification_templates('bogus')

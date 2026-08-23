@@ -244,6 +244,7 @@ function Template({ setBreadcrumb }) {
                     id={Number(templateId)}
                     canToggleNotifications={isNotifAdmin}
                     apiModel={JobTemplatesAPI}
+                    showChangedToggle
                   />
                 }
               />

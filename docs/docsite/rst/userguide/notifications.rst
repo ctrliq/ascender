@@ -23,7 +23,7 @@ A Notification is a manifestation of the notification template; for example, whe
 At a high level, the typical flow for the notification system works as follows:
 
 - A user creates a notification template to the REST API at the ``/api/v2/notification_templates`` endpoint (either through the API or through the UI).
-- A user assigns the notification template to any of the various objects that support it (all variants of job templates as well as organizations and projects) and at the appropriate trigger level for which they want the notification (started, success, or error). For example a user may wish to assign a particular notification template to trigger when Job Template 1 fails. In which case, they will associate the notification template with the job template at ``/api/v2/job_templates/n/notification_templates_error`` API endpoint.
+- A user assigns the notification template to any of the various objects that support it (all variants of job templates as well as organizations and projects) and at the appropriate trigger level for which they want the notification (started, success, error, or, for job templates and organizations, changed). For example a user may wish to assign a particular notification template to trigger when Job Template 1 fails. In which case, they will associate the notification template with the job template at ``/api/v2/job_templates/n/notification_templates_error`` API endpoint.
 - You can set notifications on job start, not just job end. Users and teams are also able to define their own notifications that can be attached to arbitrary jobs.
 
 
@@ -535,6 +535,8 @@ For workflow templates that have approval nodes, in addition to *Start*, *Succes
    :alt: List of project notifications with approval nodes option
 
 Refer to :ref:`ug_wf_approval_nodes` for additional detail on working with these types of nodes.
+
+Job templates and organizations also offer a *Changed* trigger, which notifies when a run reported a change on any host. On an organization it covers the jobs and ad hoc commands run under it. It fires next to the trigger for how the run ended, so a job that changed something and succeeded notifies both *Success* and *Changed*. A run in check mode reports the changes it would have made, which makes this the trigger to use for a hardening or compliance playbook that runs nightly and should only be reported on when it finds drift. The API endpoint for the association is ``/api/v2/job_templates/n/notification_templates_changed`` and ``/api/v2/organizations/n/notification_templates_changed``.
 
 
 Configure the ``host`` hostname for notifications 

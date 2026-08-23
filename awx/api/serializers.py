@@ -1389,6 +1389,7 @@ class OrganizationSerializer(BaseSerializer):
             notification_templates_success=self.reverse('api:organization_notification_templates_success_list', kwargs={'pk': obj.pk}),
             notification_templates_error=self.reverse('api:organization_notification_templates_error_list', kwargs={'pk': obj.pk}),
             notification_templates_approvals=self.reverse('api:organization_notification_templates_approvals_list', kwargs={'pk': obj.pk}),
+            notification_templates_changed=self.reverse('api:organization_notification_templates_changed_list', kwargs={'pk': obj.pk}),
             object_roles=self.reverse('api:organization_object_roles_list', kwargs={'pk': obj.pk}),
             access_list=self.reverse('api:organization_access_list', kwargs={'pk': obj.pk}),
             instance_groups=self.reverse('api:organization_instance_groups_list', kwargs={'pk': obj.pk}),
@@ -3473,6 +3474,7 @@ class JobTemplateSerializer(JobTemplateMixin, UnifiedJobTemplateSerializer, JobO
             notification_templates_started=self.reverse('api:job_template_notification_templates_started_list', kwargs={'pk': obj.pk}),
             notification_templates_success=self.reverse('api:job_template_notification_templates_success_list', kwargs={'pk': obj.pk}),
             notification_templates_error=self.reverse('api:job_template_notification_templates_error_list', kwargs={'pk': obj.pk}),
+            notification_templates_changed=self.reverse('api:job_template_notification_templates_changed_list', kwargs={'pk': obj.pk}),
             access_list=self.reverse('api:job_template_access_list', kwargs={'pk': obj.pk}),
             survey_spec=self.reverse('api:job_template_survey_spec', kwargs={'pk': obj.pk}),
             labels=self.reverse('api:job_template_label_list', kwargs={'pk': obj.pk}),
@@ -5378,8 +5380,8 @@ class NotificationTemplateSerializer(BaseSerializer):
             error_list.append(_("Expected dict for 'messages' field, found {}".format(type(messages))))
         else:
             for event in messages:
-                if event not in ('started', 'success', 'error', 'workflow_approval'):
-                    error_list.append(_("Event '{}' invalid, must be one of 'started', 'success', 'error', or 'workflow_approval'").format(event))
+                if event not in ('started', 'success', 'error', 'changed', 'workflow_approval'):
+                    error_list.append(_("Event '{}' invalid, must be one of 'started', 'success', 'error', 'changed', or 'workflow_approval'").format(event))
                     continue
                 event_messages = messages[event]
                 if event_messages is None:

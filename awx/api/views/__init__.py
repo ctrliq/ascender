@@ -2708,6 +2708,10 @@ class JobTemplateNotificationTemplatesSuccessList(JobTemplateNotificationTemplat
     relationship = 'notification_templates_success'
 
 
+class JobTemplateNotificationTemplatesChangedList(JobTemplateNotificationTemplatesAnyList):
+    relationship = 'notification_templates_changed'
+
+
 class JobTemplateCredentialsList(SubListCreateAttachDetachAPIView):
     model = models.Credential
     serializer_class = serializers.CredentialSerializer
