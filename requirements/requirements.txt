@@ -287,7 +287,7 @@ propcache==0.2.1
     # via
     #   aiohttp
     #   yarl
-psutil==5.9.8
+psutil==7.2.2
     # via -r /awx_devel/requirements/requirements.in
 psycopg==3.1.18
     # via -r /awx_devel/requirements/requirements.in
