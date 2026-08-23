@@ -189,7 +189,7 @@ inflection==0.5.1
     # via
     #   django-ansible-base
     #   drf-spectacular
-irc==20.3.1
+irc==20.4.3
     # via -r /awx_devel/requirements/requirements.in
 isodate==0.6.1
     # via
