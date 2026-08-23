@@ -43,7 +43,7 @@ azure-core==1.38.0
     # via
     #   azure-identity
     #   azure-keyvault-secrets
-azure-identity==1.25.2
+azure-identity==1.25.3
     # via -r /awx_devel/requirements/requirements.in
 azure-keyvault-secrets==4.11.0
     # via -r /awx_devel/requirements/requirements.in
