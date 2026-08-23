@@ -35,7 +35,7 @@ requests==2.33.0
     # via sphinx
 roman-numerals==4.1.0
     # via sphinx
-snowballstemmer==3.0.1
+snowballstemmer==3.1.1
     # via sphinx
 sphinx
     # via
