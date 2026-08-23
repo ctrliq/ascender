@@ -18,7 +18,9 @@ LANGUAGES_WITHOUT_CATALOG = {'en'}
 
 
 def _subdirectories(path):
-    return {name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name))}
+    # __pycache__ (and any other tooling artifact) can appear next to the
+    # locale directories when the tree has been imported by python first.
+    return {name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name)) and not name.startswith(('_', '.'))}
 
 
 def test_languages_match_the_backend_catalogs():

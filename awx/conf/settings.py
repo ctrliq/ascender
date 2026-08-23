@@ -96,6 +96,7 @@ def _ctit_db_wrapper(trans_safe=False):
             logger.exception('Error modifying something related to database settings.')
     except DatabaseError as e:
         if trans_safe:
+            logger.warning('Database settings are not available, using defaults. error: %s', e)
             cause = e.__cause__
             if cause and hasattr(cause, 'sqlstate'):
                 sqlstate = cause.sqlstate
@@ -424,18 +425,22 @@ class SettingsWrapper(UserSettingsHolder):
         lock=lambda self: self.__dict__['_awx_conf_memoizedcache_lock'],
     )
     def _get_local_with_cache(self, name):
-        """Get value while accepting the in-memory cache if key is available"""
-        with _ctit_db_wrapper(trans_safe=True):
-            return self._get_local(name)
-        # If the last line did not return, that means we hit a database error
-        # in that case, we should not have a local cache value
-        # thus, return empty as a signal to use the default
-        return empty
+        """Get value while accepting the in-memory cache if key is available.
+
+        Database errors are deliberately left to propagate: cachetools does not
+        cache a call that raises, so a transient database failure is never
+        memoized. The caller falls back to the default for that read only.
+        """
+        return self._get_local(name)
 
     def __getattr__(self, name):
         value = empty
         if name in self.all_supported_settings:
-            value = self._get_local_with_cache(name)
+            # On a database error, _ctit_db_wrapper suppresses the exception
+            # and value stays empty, falling back to the default below without
+            # poisoning the memoized cache for later reads.
+            with _ctit_db_wrapper(trans_safe=True):
+                value = self._get_local_with_cache(name)
         if value is not empty:
             return value
         return self._get_default(name)
