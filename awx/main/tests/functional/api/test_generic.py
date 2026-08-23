@@ -1,10 +1,14 @@
+import threading
+
 import pytest
 
 from django.conf import settings
+from django.db import connection, transaction
 
 from awx.api.versioning import reverse
 from awx.conf import settings_registry
 from awx.conf.models import Setting
+from awx.conf.settings import _get_setting_from_db
 
 
 def assert_setting_applied(response, key, value):
@@ -20,11 +24,23 @@ def assert_setting_applied(response, key, value):
     setting = Setting.objects.filter(key=key, user__isnull=True).order_by('pk').first()
     assert setting is not None and setting.value == value, getattr(setting, 'value', '<no row in database>')
     # and the live read must serve it through the cache layers
-    cache_key = Setting.get_cache_key(key)
-    assert getattr(settings, key) == value, {
-        'memoizedcache': {k: v for k, v in settings._awx_conf_memoizedcache.items() if key in str(k)},
-        'django_cache': settings.cache.get(cache_key, default='<missing>'),
-    }
+    first_read = getattr(settings, key)
+    if first_read != value:
+        # capture everything that discriminates between a poisoned memoized
+        # entry, a stale/evicted django cache, a second DB connection that
+        # cannot see this uncommitted row, and a stray background thread
+        diagnostics = {
+            'first_read': first_read,
+            'memoizedcache': {str(k): v for k, v in settings._awx_conf_memoizedcache.items() if key in str(k)},
+            'django_cache': settings.cache.get(Setting.get_cache_key(key), default='<missing>'),
+            'get_setting_from_db': getattr(_get_setting_from_db(settings_registry, key), 'value', '<no row>'),
+            'in_atomic_block': connection.in_atomic_block,
+            'needs_rollback': transaction.get_rollback() if connection.in_atomic_block else None,
+            'threads': sorted(t.name for t in threading.enumerate()),
+        }
+        settings._awx_conf_memoizedcache.clear()
+        diagnostics['retry_after_memoized_clear'] = getattr(settings, key)
+    assert first_read == value, diagnostics
 
 
 @pytest.mark.django_db
