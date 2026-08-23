@@ -370,7 +370,7 @@ referencing==0.33.0
     # via
     #   jsonschema
     #   jsonschema-specifications
-requests==2.33.0
+requests==2.34.2
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   azure-core
