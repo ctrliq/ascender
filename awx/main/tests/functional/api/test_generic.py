@@ -1,4 +1,6 @@
 import threading
+import time
+from unittest import mock
 
 import pytest
 
@@ -7,11 +9,46 @@ from django.db import connection, transaction
 
 from awx.api.versioning import reverse
 from awx.conf import settings_registry
+import awx.conf.signals
 from awx.conf.models import Setting
-from awx.conf.settings import _get_setting_from_db
+from awx.conf.settings import SettingsWrapper, _get_setting_from_db
+
+# Settings whose reads/invalidation get traced by the settings_event_log
+# fixture, purely to diagnose a CI-only flake in test_proxy_ip_allowed.
+TRACKED_SETTINGS = ('PROXY_IP_ALLOWED_LIST', 'REMOTE_HOST_HEADERS')
 
 
-def assert_setting_applied(response, key, value):
+@pytest.fixture
+def settings_event_log():
+    """Record every computed read of the tracked settings and every settings
+    cache invalidation, with thread names and timestamps. Forensics for a
+    CI-only flake where a stale memoized value survives a PATCH; remove once
+    the root cause is fixed."""
+    log = []
+    orig_get_local = SettingsWrapper._get_local
+    orig_handle = awx.conf.signals.handle_setting_change
+
+    def recording_get_local(self, name, validate=True):
+        if name not in TRACKED_SETTINGS:
+            return orig_get_local(self, name, validate=validate)
+        try:
+            result = orig_get_local(self, name, validate=validate)
+        except BaseException as e:
+            log.append((time.monotonic(), threading.current_thread().name, '_get_local {} raised {!r}'.format(name, e)))
+            raise
+        log.append((time.monotonic(), threading.current_thread().name, '_get_local {} -> {!r}'.format(name, result)))
+        return result
+
+    def recording_handle_setting_change(key, for_delete=False):
+        log.append((time.monotonic(), threading.current_thread().name, 'handle_setting_change {} for_delete={}'.format(key, for_delete)))
+        return orig_handle(key, for_delete)
+
+    with mock.patch.object(SettingsWrapper, '_get_local', recording_get_local):
+        with mock.patch.object(awx.conf.signals, 'handle_setting_change', recording_handle_setting_change):
+            yield log
+
+
+def assert_setting_applied(response, key, value, event_log):
     """Walk the settings machinery link by link, so that when this test flakes
     in CI the failing assert names the broken link instead of the downstream
     symptom (this test has a history of hard-to-diagnose CI-only failures)."""
@@ -40,15 +77,22 @@ def assert_setting_applied(response, key, value):
         }
         settings._awx_conf_memoizedcache.clear()
         diagnostics['retry_after_memoized_clear'] = getattr(settings, key)
-    assert first_read == value, diagnostics
+        # pytest truncates long assert messages; captured stdout is shown whole
+        print('=== settings flake diagnostics ===')
+        for item, val in diagnostics.items():
+            print('{}: {!r}'.format(item, val))
+        now = time.monotonic()
+        for stamp, thread_name, event in event_log:
+            print('T-{:8.3f}s [{}] {}'.format(now - stamp, thread_name, event))
+        assert first_read == value, diagnostics
 
 
 @pytest.mark.django_db
-def test_proxy_ip_allowed(get, patch, admin):
+def test_proxy_ip_allowed(get, patch, admin, settings_event_log):
     url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'system'})
     headers = ['HTTP_X_FROM_THE_LOAD_BALANCER', 'REMOTE_ADDR', 'REMOTE_HOST']
     r = patch(url, user=admin, data={'REMOTE_HOST_HEADERS': headers}, expect=200)
-    assert_setting_applied(r, 'REMOTE_HOST_HEADERS', headers)
+    assert_setting_applied(r, 'REMOTE_HOST_HEADERS', headers, settings_event_log)
 
     class HeaderTrackingMiddleware(object):
         environ = {}
@@ -69,7 +113,7 @@ def test_proxy_ip_allowed(get, patch, admin):
     # from 8.9.10.11, the custom `HTTP_X_FROM_THE_LOAD_BALANCER` header should
     # be stripped
     r = patch(url, user=admin, data={'PROXY_IP_ALLOWED_LIST': ['10.0.1.100']}, expect=200)
-    assert_setting_applied(r, 'PROXY_IP_ALLOWED_LIST', ['10.0.1.100'])
+    assert_setting_applied(r, 'PROXY_IP_ALLOWED_LIST', ['10.0.1.100'], settings_event_log)
     middleware = HeaderTrackingMiddleware()
     get(url, user=admin, middleware=middleware, REMOTE_ADDR='8.9.10.11', HTTP_X_FROM_THE_LOAD_BALANCER='some-actual-ip')
     assert 'HTTP_X_FROM_THE_LOAD_BALANCER' not in middleware.environ
@@ -77,14 +121,14 @@ def test_proxy_ip_allowed(get, patch, admin):
     # If 8.9.10.11 is added to `PROXY_IP_ALLOWED_LIST` the
     # `HTTP_X_FROM_THE_LOAD_BALANCER` header should be passed through again
     r = patch(url, user=admin, data={'PROXY_IP_ALLOWED_LIST': ['10.0.1.100', '8.9.10.11']}, expect=200)
-    assert_setting_applied(r, 'PROXY_IP_ALLOWED_LIST', ['10.0.1.100', '8.9.10.11'])
+    assert_setting_applied(r, 'PROXY_IP_ALLOWED_LIST', ['10.0.1.100', '8.9.10.11'], settings_event_log)
     middleware = HeaderTrackingMiddleware()
     get(url, user=admin, middleware=middleware, REMOTE_ADDR='8.9.10.11', HTTP_X_FROM_THE_LOAD_BALANCER='some-actual-ip')
     assert middleware.environ['HTTP_X_FROM_THE_LOAD_BALANCER'] == 'some-actual-ip'
 
     # Allow allowed list of proxy hostnames in addition to IP addresses
     r = patch(url, user=admin, data={'PROXY_IP_ALLOWED_LIST': ['my.proxy.example.org']}, expect=200)
-    assert_setting_applied(r, 'PROXY_IP_ALLOWED_LIST', ['my.proxy.example.org'])
+    assert_setting_applied(r, 'PROXY_IP_ALLOWED_LIST', ['my.proxy.example.org'], settings_event_log)
     middleware = HeaderTrackingMiddleware()
     get(url, user=admin, middleware=middleware, REMOTE_ADDR='8.9.10.11', REMOTE_HOST='my.proxy.example.org', HTTP_X_FROM_THE_LOAD_BALANCER='some-actual-ip')
     assert middleware.environ['HTTP_X_FROM_THE_LOAD_BALANCER'] == 'some-actual-ip'
