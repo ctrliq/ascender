@@ -18,6 +18,10 @@ from awx.main.tests.factories import (
 
 from django.core.cache import cache
 from django.conf import settings
+from django.db.models.signals import post_save
+
+from awx.conf.models import Setting as ConfSetting
+from awx.conf.signals import on_post_save_setting
 
 
 def pytest_addoption(parser):
@@ -190,10 +194,6 @@ def pytest_runtest_teardown(item, nextitem):
     # (e.g. by running regenerate_secret_key, which detaches it) silently
     # breaks settings writes for every later test in this process. Fail the
     # offender here instead of letting a downstream test flake.
-    from django.db.models.signals import post_save
-    from awx.conf.models import Setting as ConfSetting
-    from awx.conf.signals import on_post_save_setting
-
     connected = any(
         receiver is on_post_save_setting or (isinstance(receiver, weakref.ReferenceType) and receiver() is on_post_save_setting)
         for lookup, receiver, is_async in post_save.receivers
