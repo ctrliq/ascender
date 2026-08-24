@@ -177,6 +177,13 @@ def pytest_runtest_teardown(item, nextitem):
     # NOTE: this should not be memcache (as it is deprecated), nor should it be Valkey.
     # This is a local test cache, so we want every test to start with an empty cache
     cache.clear()
+    # The SettingsWrapper memoized cache (5s TTL) lives on the settings object,
+    # not in the django cache. Clearing one without the other hands the next
+    # test an incoherent state: a memoized settings value with no backing cache
+    # key, which no runtime code path can produce or repair within the TTL.
+    memoized = getattr(settings, '_awx_conf_memoizedcache', None)
+    if memoized is not None:
+        memoized.clear()
 
 
 @pytest.fixture(scope='session', autouse=True)

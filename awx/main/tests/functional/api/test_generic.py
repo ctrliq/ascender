@@ -1,11 +1,14 @@
+import os
 import threading
 import time
+import weakref
 from unittest import mock
 
 import pytest
 
 from django.conf import settings
 from django.db import connection, transaction
+from django.db.models.signals import post_save
 
 from awx.api.versioning import reverse
 from awx.conf import settings_registry
@@ -16,6 +19,44 @@ from awx.conf.settings import SettingsWrapper, _get_setting_from_db
 # Settings whose reads/invalidation get traced by the settings_event_log
 # fixture, purely to diagnose a CI-only flake in test_proxy_ip_allowed.
 TRACKED_SETTINGS = ('PROXY_IP_ALLOWED_LIST', 'REMOTE_HOST_HEADERS')
+
+
+def _post_save_dispatch_state():
+    """Snapshot django's post_save dispatcher internals for the Setting sender.
+
+    A receiver connected with weak=True (the @receiver default) whose weakref
+    has died is dropped from dispatch silently — settings cache invalidation
+    would just stop, which is one theory for the test_proxy_ip_allowed flake.
+    Read-only: does not call _live_receivers, which would repair/repopulate
+    the sender cache and destroy the evidence.
+    """
+    state = {'sender_id': id(Setting), 'receivers': [], 'sender_cache': '<no entry>'}
+    try:
+        for lookup, receiver, is_async in post_save.receivers:
+            _receiverkey, senderkey = lookup
+            target, dead = receiver, False
+            if isinstance(target, weakref.ReferenceType):
+                target = target()
+                dead = target is None
+            name = '<DEAD WEAKREF>' if dead else getattr(target, '__qualname__', repr(target))
+            if senderkey == id(Setting) or dead or 'setting' in name.lower():
+                state['receivers'].append((name, 'sender=Setting' if senderkey == id(Setting) else 'sender_id={}'.format(senderkey)))
+        cached = post_save.sender_receivers_cache.get(Setting)
+        if cached is not None:
+            if isinstance(cached, list):
+                resolved = []
+                for receiver, _is_async in cached:
+                    target, dead = receiver, False
+                    if isinstance(target, weakref.ReferenceType):
+                        target = target()
+                        dead = target is None
+                    resolved.append('<DEAD WEAKREF>' if dead else getattr(target, '__qualname__', repr(target)))
+            else:
+                resolved = repr(cached)  # the NO_RECEIVERS sentinel object
+            state['sender_cache'] = resolved
+    except Exception as e:  # diagnostics must never mask the real failure
+        state['error'] = repr(e)
+    return state
 
 
 @pytest.fixture
@@ -43,9 +84,33 @@ def settings_event_log():
         log.append((time.monotonic(), threading.current_thread().name, 'handle_setting_change {} for_delete={}'.format(key, for_delete)))
         return orig_handle(key, for_delete)
 
+    # Record dispatch ENTRY, not via a connected receiver: post_save.connect()
+    # clears the dispatcher's sender cache, which would repair the very
+    # corruption (dead weakref / poisoned cache) this exists to catch.
+    orig_send = post_save.send
+
+    def recording_post_save_send(sender, **named):
+        if sender is Setting:
+            instance = named.get('instance')
+            log.append(
+                (
+                    time.monotonic(),
+                    threading.current_thread().name,
+                    'post_save.send Setting key={} created={}'.format(getattr(instance, 'key', '?'), named.get('created')),
+                )
+            )
+        return orig_send(sender, **named)
+
+    log.append((time.monotonic(), threading.current_thread().name, 'setup: post_save dispatch state {}'.format(_post_save_dispatch_state())))
     with mock.patch.object(SettingsWrapper, '_get_local', recording_get_local):
         with mock.patch.object(awx.conf.signals, 'handle_setting_change', recording_handle_setting_change):
-            yield log
+            with mock.patch.object(post_save, 'send', recording_post_save_send):
+                yield log
+    if os.environ.get('SETTINGS_FLAKE_DEBUG'):
+        now = time.monotonic()
+        print('=== settings event log (healthy-run dump) ===')
+        for stamp, thread_name, event in log:
+            print('T-{:8.3f}s [{}] {}'.format(now - stamp, thread_name, event))
 
 
 def assert_setting_applied(response, key, value, event_log):
@@ -74,6 +139,8 @@ def assert_setting_applied(response, key, value, event_log):
             'in_atomic_block': connection.in_atomic_block,
             'needs_rollback': transaction.get_rollback() if connection.in_atomic_block else None,
             'threads': sorted(t.name for t in threading.enumerate()),
+            'post_save_dispatch': _post_save_dispatch_state(),
+            'setting_rows': list(Setting.objects.values_list('pk', 'key')[:50]),
         }
         settings._awx_conf_memoizedcache.clear()
         diagnostics['retry_after_memoized_clear'] = getattr(settings, key)
