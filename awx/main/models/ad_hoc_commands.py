@@ -257,6 +257,7 @@ class AdHocCommand(UnifiedJob, JobNotificationMixin):
 
     def has_changes(self):
         """
-        Whether the command reported a change on any host, the same way a job does.
+        Whether the command reported a change on any host. An ad hoc command has no
+        JobHostSummary rows, so this reads the per host events instead.
         """
-        return self.job_host_summaries.filter(changed__gt=0).exists()
+        return self.ad_hoc_command_events.filter(changed=True).exists()

@@ -101,7 +101,8 @@ const NotificationsMixin = (parent) =>
      *
      * @param[resourceId] - id of the base resource
      * @param[notificationId] - id of the notification
-     * @param[notificationType] - the type of notification, options are "success" and "error"
+     * @param[notificationType] - the type of notification, options are "approvals",
+     *   "started", "success", "error" and "changed"
      */
     associateNotificationTemplate(
       resourceId,
@@ -154,7 +155,8 @@ const NotificationsMixin = (parent) =>
      *
      * @param[resourceId] - id of the base resource
      * @param[notificationId] - id of the notification
-     * @param[notificationType] - the type of notification, options are "success" and "error"
+     * @param[notificationType] - the type of notification, options are "approvals",
+     *   "started", "success", "error" and "changed"
      */
     disassociateNotificationTemplate(
       resourceId,

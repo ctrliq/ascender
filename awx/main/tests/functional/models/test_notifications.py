@@ -223,15 +223,24 @@ class TestChangedNotifications(object):
 
         assert job.has_changes() is True
 
-    @pytest.mark.django_db
     @pytest.mark.parametrize('JobClass', [InventoryUpdate, ProjectUpdate, SystemJob, WorkflowJob])
     def test_job_types_without_host_results_never_report_changes(self, JobClass):
-        assert JobClass.objects.create(name='fake-job').has_changes() is False
+        # these inherit JobNotificationMixin.has_changes, which answers without a query,
+        # so an unsaved instance is enough and no required relations have to be invented
+        assert JobClass().has_changes() is False
+
+    @pytest.mark.django_db
+    def test_ad_hoc_command_without_changes(self):
+        command = AdHocCommand.objects.create(name='fake-command')
+        command.ad_hoc_command_events.create(host_name='host-a', event='runner_on_ok', changed=False)
+
+        assert command.has_changes() is False
 
     @pytest.mark.django_db
     def test_ad_hoc_command_with_changes(self):
         command = AdHocCommand.objects.create(name='fake-command')
-        command.job_host_summaries.create(host_name='host-a', failed=False, ok=1, changed=1, failures=0)
+        command.ad_hoc_command_events.create(host_name='host-a', event='runner_on_ok', changed=False)
+        command.ad_hoc_command_events.create(host_name='host-b', event='runner_on_ok', changed=True)
 
         assert command.has_changes() is True
 
