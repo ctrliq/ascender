@@ -39,7 +39,7 @@
     "@babel/preset-env": "^8.0.2",
     "@babel/preset-react": "^8.0.1",
     "@babel/runtime": "^8.0.0",
-    "@lingui/babel-plugin-lingui-macro": "^6.4.0",
+    "@lingui/babel-plugin-lingui-macro": "^6.6.0",
     "@lingui/cli": "^6.4.0",
     "@lingui/conf": "^6.4.0",
     "@lingui/format-po": "^6.4.0",
