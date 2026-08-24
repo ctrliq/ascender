@@ -199,8 +199,8 @@ def pytest_runtest_teardown(item, nextitem):
     # unpacking the whole tuple
     connected = False
     for entry in post_save.receivers:
-        (_receiverkey, senderkey), receiver = entry[0], entry[1]
-        if senderkey != id(ConfSetting):
+        receiver = entry[1]
+        if entry[0][1] != id(ConfSetting):  # lookup key is (receiverkey, senderkey)
             continue
         if receiver is on_post_save_setting or (isinstance(receiver, weakref.ReferenceType) and receiver() is on_post_save_setting):
             connected = True
