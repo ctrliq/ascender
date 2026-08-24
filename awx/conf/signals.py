@@ -36,7 +36,10 @@ def handle_setting_change(key, for_delete=False):
         setting_changed.send(sender=Setting, setting=setting_key, value=getattr(settings, setting_key, None), enter=not bool(for_delete))
 
 
-@receiver(post_save, sender=Setting)
+# weak=False on these receivers: the dispatcher's default weak references are
+# dropped silently if the receiver is ever garbage collected, which would turn
+# off settings cache invalidation for the life of the process with no error.
+@receiver(post_save, sender=Setting, weak=False)
 def on_post_save_setting(sender, **kwargs):
     instance = kwargs['instance']
     # Skip for user-specific settings.
@@ -45,7 +48,7 @@ def on_post_save_setting(sender, **kwargs):
     handle_setting_change(instance.key)
 
 
-@receiver(pre_delete, sender=Setting)
+@receiver(pre_delete, sender=Setting, weak=False)
 def on_pre_delete_setting(sender, **kwargs):
     instance = kwargs['instance']
     # Skip for user-specific settings.
@@ -55,7 +58,7 @@ def on_pre_delete_setting(sender, **kwargs):
     instance._saved_key_ = instance.key
 
 
-@receiver(post_delete, sender=Setting)
+@receiver(post_delete, sender=Setting, weak=False)
 def on_post_delete_setting(sender, **kwargs):
     instance = kwargs['instance']
     key = getattr(instance, '_saved_key_', None)
@@ -63,7 +66,7 @@ def on_post_delete_setting(sender, **kwargs):
         handle_setting_change(key, True)
 
 
-@receiver(setting_changed)
+@receiver(setting_changed, weak=False)
 def disable_local_auth(**kwargs):
     if (kwargs['setting'], kwargs['value']) == ('DISABLE_LOCAL_AUTH', True):
         from django.contrib.auth.models import User

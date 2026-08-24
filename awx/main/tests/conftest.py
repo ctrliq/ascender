@@ -1,4 +1,6 @@
 # Python
+import weakref
+
 import pytest
 from unittest import mock
 from contextlib import contextmanager
@@ -16,6 +18,10 @@ from awx.main.tests.factories import (
 
 from django.core.cache import cache
 from django.conf import settings
+from django.db.models.signals import post_save
+
+from awx.conf.models import Setting as ConfSetting
+from awx.conf.signals import on_post_save_setting
 
 
 def pytest_addoption(parser):
@@ -177,6 +183,29 @@ def pytest_runtest_teardown(item, nextitem):
     # NOTE: this should not be memcache (as it is deprecated), nor should it be Valkey.
     # This is a local test cache, so we want every test to start with an empty cache
     cache.clear()
+    # The SettingsWrapper memoized cache (5s TTL) lives on the settings object,
+    # not in the django cache. Clearing one without the other hands the next
+    # test an incoherent state: a memoized settings value with no backing cache
+    # key, which no runtime code path can produce or repair within the TTL.
+    memoized = getattr(settings, '_awx_conf_memoizedcache', None)
+    if memoized is not None:
+        memoized.clear()
+    # A test that leaves the settings cache-invalidation receiver disconnected
+    # (e.g. by running regenerate_secret_key, which detaches it) silently
+    # breaks settings writes for every later test in this process. Fail the
+    # offender here instead of letting a downstream test flake.
+    # entry shape is private Django internals and has grown before (django 5.0
+    # appended is_async), so index the stable leading fields instead of
+    # unpacking the whole tuple
+    connected = False
+    for entry in post_save.receivers:
+        receiver = entry[1]
+        if entry[0][1] != id(ConfSetting):  # lookup key is (receiverkey, senderkey)
+            continue
+        if receiver is on_post_save_setting or (isinstance(receiver, weakref.ReferenceType) and receiver() is on_post_save_setting):
+            connected = True
+            break
+    assert connected, '{} left awx.conf.signals.on_post_save_setting disconnected from post_save'.format(item.nodeid)
 
 
 @pytest.fixture(scope='session', autouse=True)
