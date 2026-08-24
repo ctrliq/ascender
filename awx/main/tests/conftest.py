@@ -1,4 +1,6 @@
 # Python
+import weakref
+
 import pytest
 from unittest import mock
 from contextlib import contextmanager
@@ -184,6 +186,20 @@ def pytest_runtest_teardown(item, nextitem):
     memoized = getattr(settings, '_awx_conf_memoizedcache', None)
     if memoized is not None:
         memoized.clear()
+    # A test that leaves the settings cache-invalidation receiver disconnected
+    # (e.g. by running regenerate_secret_key, which detaches it) silently
+    # breaks settings writes for every later test in this process. Fail the
+    # offender here instead of letting a downstream test flake.
+    from django.db.models.signals import post_save
+    from awx.conf.models import Setting as ConfSetting
+    from awx.conf.signals import on_post_save_setting
+
+    connected = any(
+        receiver is on_post_save_setting or (isinstance(receiver, weakref.ReferenceType) and receiver() is on_post_save_setting)
+        for lookup, receiver, is_async in post_save.receivers
+        if lookup[1] == id(ConfSetting)
+    )
+    assert connected, '{} left awx.conf.signals.on_post_save_setting disconnected from post_save'.format(item.nodeid)
 
 
 @pytest.fixture(scope='session', autouse=True)

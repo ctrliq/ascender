@@ -84,11 +84,17 @@ class Command(BaseCommand):
     def _settings(self):
         # don't update the cache, the *actual* value isn't changing
         post_save.disconnect(on_post_save_setting, sender=Setting)
-        for setting in Setting.objects.filter().order_by('pk'):
-            if settings_registry.is_setting_encrypted(setting.key):
-                setting.value = decrypt_field(setting, 'value', secret_key=self.old_key)
-                setting.value = encrypt_field(setting, 'value', secret_key=self.new_key)
-                setting.save()
+        try:
+            for setting in Setting.objects.filter().order_by('pk'):
+                if settings_registry.is_setting_encrypted(setting.key):
+                    setting.value = decrypt_field(setting, 'value', secret_key=self.old_key)
+                    setting.value = encrypt_field(setting, 'value', secret_key=self.new_key)
+                    setting.save()
+        finally:
+            # Reconnect no matter what: leaving this disconnected disables
+            # settings cache invalidation for the rest of the process, which
+            # breaks any later code (or test) that changes a setting.
+            post_save.connect(on_post_save_setting, sender=Setting, weak=False)
 
     def _survey_passwords(self):
         for _type in (JobTemplate, WorkflowJobTemplate):
