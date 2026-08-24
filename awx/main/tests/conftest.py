@@ -194,11 +194,17 @@ def pytest_runtest_teardown(item, nextitem):
     # (e.g. by running regenerate_secret_key, which detaches it) silently
     # breaks settings writes for every later test in this process. Fail the
     # offender here instead of letting a downstream test flake.
-    connected = any(
-        receiver is on_post_save_setting or (isinstance(receiver, weakref.ReferenceType) and receiver() is on_post_save_setting)
-        for lookup, receiver, is_async in post_save.receivers
-        if lookup[1] == id(ConfSetting)
-    )
+    # entry shape is private Django internals and has grown before (django 5.0
+    # appended is_async), so index the stable leading fields instead of
+    # unpacking the whole tuple
+    connected = False
+    for entry in post_save.receivers:
+        (_receiverkey, senderkey), receiver = entry[0], entry[1]
+        if senderkey != id(ConfSetting):
+            continue
+        if receiver is on_post_save_setting or (isinstance(receiver, weakref.ReferenceType) and receiver() is on_post_save_setting):
+            connected = True
+            break
     assert connected, '{} left awx.conf.signals.on_post_save_setting disconnected from post_save'.format(item.nodeid)
 
 
