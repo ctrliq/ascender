@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  fireEvent,
   screen,
   waitFor,
   waitForElementToBeRemoved,
@@ -163,6 +164,107 @@ describe('<JobOutput />', () => {
     await waitFor(() =>
       expect(document.querySelector('.pf-v6-c-empty-state')).toBeInTheDocument()
     );
+  });
+
+  describe('follow mode', () => {
+    // Renders a running job (follow mode starts enabled → "Unfollow" button)
+    // and returns the scroll container with a scrollable geometry mocked in,
+    // scrolled to an established mid-output position.
+    async function renderFollowingJob() {
+      renderWithContexts(<JobOutput job={{ ...mockJob, status: 'running' }} />);
+      await waitForLoaded();
+      expect(
+        screen.getByRole('button', { name: 'Unfollow' })
+      ).toBeInTheDocument();
+
+      const scroller = document.querySelector('.ascender-output-scroll');
+      Object.defineProperty(scroller, 'clientHeight', {
+        configurable: true,
+        value: 200,
+      });
+      Object.defineProperty(scroller, 'scrollHeight', {
+        configurable: true,
+        value: 1000,
+      });
+      scroller.scrollTop = 500;
+      fireEvent.scroll(scroller);
+      return scroller;
+    }
+
+    test('is not disabled by a programmatic upward scroll', async () => {
+      const scroller = await renderFollowingJob();
+
+      // An upward scroll with no user gesture in progress — what the
+      // virtualizer's corrective ResizeObserver scrolls look like. Follow
+      // must survive it (this made the button flicker on live output).
+      scroller.scrollTop = 480;
+      fireEvent.scroll(scroller);
+
+      expect(
+        screen.getByRole('button', { name: 'Unfollow' })
+      ).toBeInTheDocument();
+    });
+
+    test('is disabled by scrolling up with the wheel', async () => {
+      const scroller = await renderFollowingJob();
+
+      fireEvent.wheel(scroller, { deltaY: -50 });
+
+      expect(
+        screen.getByRole('button', { name: 'Follow' })
+      ).toBeInTheDocument();
+    });
+
+    test('is disabled by an upward-scrolling key', async () => {
+      const scroller = await renderFollowingJob();
+
+      fireEvent.keyDown(scroller, { key: 'PageUp' });
+
+      expect(
+        screen.getByRole('button', { name: 'Follow' })
+      ).toBeInTheDocument();
+    });
+
+    test('is disabled by an upward scroll while the pointer is held down', async () => {
+      const scroller = await renderFollowingJob();
+
+      fireEvent.mouseDown(scroller);
+      scroller.scrollTop = 480;
+      fireEvent.scroll(scroller);
+
+      expect(
+        screen.getByRole('button', { name: 'Follow' })
+      ).toBeInTheDocument();
+    });
+
+    test('is not disabled by an upward scroll after the pointer is released', async () => {
+      const scroller = await renderFollowingJob();
+
+      fireEvent.mouseDown(scroller);
+      fireEvent.mouseUp(window);
+      scroller.scrollTop = 480;
+      fireEvent.scroll(scroller);
+
+      expect(
+        screen.getByRole('button', { name: 'Unfollow' })
+      ).toBeInTheDocument();
+    });
+
+    test('is re-enabled by scrolling to the bottom', async () => {
+      const scroller = await renderFollowingJob();
+
+      fireEvent.wheel(scroller, { deltaY: -50 });
+      expect(
+        screen.getByRole('button', { name: 'Follow' })
+      ).toBeInTheDocument();
+
+      scroller.scrollTop = 800;
+      fireEvent.scroll(scroller);
+
+      expect(
+        screen.getByRole('button', { name: 'Unfollow' })
+      ).toBeInTheDocument();
+    });
   });
 
   // computeOverscanIndices is the pure core of the selection-aware overscan
