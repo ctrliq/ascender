@@ -3,12 +3,12 @@ import sqlite3
 import sys
 import traceback
 import uuid
-from importlib.metadata import version as _get_version
 
 from django.core.cache import cache
 from django.core.cache.backends.locmem import LocMemCache
 from django.db.backends.postgresql.base import DatabaseWrapper as BaseDatabaseWrapper
 
+import awx
 from awx.main.utils import memoize
 
 __loc__ = LocMemCache(str(uuid.uuid4()), {})
@@ -70,7 +70,11 @@ class RecordedQueryLog(object):
             else:
                 progname = os.path.basename(sys.argv[0])
             filepath = os.path.join(self.dest, '{}.sqlite'.format(progname))
-            version = _get_version('awx')
+            # awx.__version__ is resolved once at import time and already falls
+            # back to the VERSION file when the package isn't pip installed;
+            # looking the distribution up again here would scan sys.path on
+            # every slow query, and raise in a plain source checkout
+            version = awx.__version__
             log = sqlite3.connect(filepath, timeout=3)
             log.execute(
                 'CREATE TABLE IF NOT EXISTS queries ('
