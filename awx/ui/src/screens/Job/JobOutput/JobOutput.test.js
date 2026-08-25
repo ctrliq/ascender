@@ -229,21 +229,23 @@ describe('<JobOutput />', () => {
         screen.getByRole('button', { name: 'Unfollow' })
       ).toBeInTheDocument();
 
-      [{ key: 'ArrowUp' }, { key: 'Home' }, { key: ' ', shiftKey: true }].forEach(
-        (keyInit) => {
-          // Re-enable follow by returning to the bottom before each key.
-          scroller.scrollTop = 800;
-          fireEvent.scroll(scroller);
-          expect(
-            screen.getByRole('button', { name: 'Unfollow' })
-          ).toBeInTheDocument();
+      [
+        { key: 'ArrowUp' },
+        { key: 'Home' },
+        { key: ' ', shiftKey: true },
+      ].forEach((keyInit) => {
+        // Re-enable follow by returning to the bottom before each key.
+        scroller.scrollTop = 800;
+        fireEvent.scroll(scroller);
+        expect(
+          screen.getByRole('button', { name: 'Unfollow' })
+        ).toBeInTheDocument();
 
-          fireEvent.keyDown(scroller, keyInit);
-          expect(
-            screen.getByRole('button', { name: 'Follow' })
-          ).toBeInTheDocument();
-        }
-      );
+        fireEvent.keyDown(scroller, keyInit);
+        expect(
+          screen.getByRole('button', { name: 'Follow' })
+        ).toBeInTheDocument();
+      });
     });
 
     test('is disabled by an upward-scrolling key after clicking the output', async () => {
