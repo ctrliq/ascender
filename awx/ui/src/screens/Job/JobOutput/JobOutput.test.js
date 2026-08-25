@@ -303,6 +303,31 @@ describe('<JobOutput />', () => {
         screen.getByRole('button', { name: 'Unfollow' })
       ).toBeInTheDocument();
     });
+
+    test('is re-enabled by reaching a fractional-pixel bottom', async () => {
+      const scroller = await renderFollowingJob();
+
+      fireEvent.wheel(scroller, { deltaY: -50 });
+      expect(
+        screen.getByRole('button', { name: 'Follow' })
+      ).toBeInTheDocument();
+
+      // Still meaningfully above the bottom: follow must stay off.
+      scroller.scrollTop = 780;
+      fireEvent.scroll(scroller);
+      expect(
+        screen.getByRole('button', { name: 'Follow' })
+      ).toBeInTheDocument();
+
+      // Browsers report fractional scrollTop against integer scrollHeight/
+      // clientHeight, so the true bottom can read as 0 < distance < 1px.
+      scroller.scrollTop = 799.5;
+      fireEvent.scroll(scroller);
+
+      expect(
+        screen.getByRole('button', { name: 'Unfollow' })
+      ).toBeInTheDocument();
+    });
   });
 
   // computeOverscanIndices is the pure core of the selection-aware overscan

@@ -1016,7 +1016,14 @@ function JobOutput({
       setIsFollowModeEnabled(false);
     }
     scrollTop.current = target.scrollTop;
-    if (target.scrollTop + target.clientHeight >= target.scrollHeight) {
+    // scrollHeight and clientHeight are rounded integers while scrollTop is
+    // fractional (the virtualizer's ResizeObserver row measurements make the
+    // content height sub-pixel), so a strict >= can miss the true bottom by
+    // under a pixel forever and never re-enable follow. Within 2px is
+    // visually at the bottom.
+    const distanceFromBottom =
+      target.scrollHeight - (target.scrollTop + target.clientHeight);
+    if (distanceFromBottom <= 2) {
       setIsFollowModeEnabled(true);
     }
   };
