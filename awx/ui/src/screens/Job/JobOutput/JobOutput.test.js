@@ -215,10 +215,48 @@ describe('<JobOutput />', () => {
       ).toBeInTheDocument();
     });
 
-    test('is disabled by an upward-scrolling key', async () => {
+    // PageUp delivered through the real click→focus path is covered by the
+    // test above; this one focuses the container directly (as a keyboard user
+    // who tabbed to it would) and sweeps the remaining key bindings.
+    test('is disabled by each upward-scrolling key, not by downward ones', async () => {
+      const scroller = await renderFollowingJob();
+      scroller.focus();
+
+      // Downward-scrolling keys must not touch follow mode.
+      fireEvent.keyDown(scroller, { key: 'ArrowDown' });
+      fireEvent.keyDown(scroller, { key: 'End' });
+      expect(
+        screen.getByRole('button', { name: 'Unfollow' })
+      ).toBeInTheDocument();
+
+      [{ key: 'ArrowUp' }, { key: 'Home' }, { key: ' ', shiftKey: true }].forEach(
+        (keyInit) => {
+          // Re-enable follow by returning to the bottom before each key.
+          scroller.scrollTop = 800;
+          fireEvent.scroll(scroller);
+          expect(
+            screen.getByRole('button', { name: 'Unfollow' })
+          ).toBeInTheDocument();
+
+          fireEvent.keyDown(scroller, keyInit);
+          expect(
+            screen.getByRole('button', { name: 'Follow' })
+          ).toBeInTheDocument();
+        }
+      );
+    });
+
+    test('is disabled by an upward-scrolling key after clicking the output', async () => {
       const scroller = await renderFollowingJob();
 
-      fireEvent.keyDown(scroller, { key: 'PageUp' });
+      // Clicking the output must focus the scroll container, so that
+      // keyboard-scroll keys target it (and not <body>, which would scroll
+      // the container in Chromium without ever reaching handleKeyDown).
+      fireEvent.mouseDown(scroller);
+      expect(scroller).toHaveFocus();
+      fireEvent.mouseUp(window);
+
+      fireEvent.keyDown(document.activeElement, { key: 'PageUp' });
 
       expect(
         screen.getByRole('button', { name: 'Follow' })

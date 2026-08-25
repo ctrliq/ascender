@@ -977,8 +977,15 @@ function JobOutput({
     }
   };
 
-  const handleMouseDown = () => {
+  const handleMouseDown = (e) => {
     isPointerDown.current = true;
+    // Focus the container (it carries tabIndex={-1}) so subsequent
+    // PageUp/Home/ArrowUp keystrokes reach handleKeyDown. Without this,
+    // clicking the output leaves focus on <body>: Chromium still scrolls the
+    // container for those keys, but the keydown never targets it, so follow
+    // mode would stay on and snap the view back on the next event batch.
+    // preventScroll keeps the focus call from scrolling the container itself.
+    e.currentTarget.focus({ preventScroll: true });
   };
 
   // A scrollbar drag can end with the pointer outside the container, so the
@@ -1118,6 +1125,11 @@ function JobOutput({
           ) : (
             <ScrollContainer
               ref={parentRef}
+              // Programmatically focusable so handleMouseDown can direct
+              // keyboard-scroll keys here (see handleMouseDown); -1 keeps it
+              // out of the tab order (browsers that support keyboard-focusable
+              // scrollers already make it tabbable natively).
+              tabIndex={-1}
               onScroll={handleScroll}
               onWheel={handleWheel}
               onKeyDown={handleKeyDown}
