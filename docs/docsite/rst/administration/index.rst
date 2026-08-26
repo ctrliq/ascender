@@ -17,6 +17,7 @@ Likewise content in this guide can be removed or replaced if it applies to funct
 
   self
   init_script
+  supported_architectures
   custom_inventory_script
   scm-inv-source
   multi-creds-assignment
