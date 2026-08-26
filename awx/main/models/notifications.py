@@ -73,7 +73,7 @@ class NotificationTemplate(CommonModelNameNotUnique):
     notification_configuration = prevent_search(models.JSONField(default=dict))
 
     def default_messages():
-        return {'started': None, 'success': None, 'error': None, 'workflow_approval': None}
+        return {'started': None, 'success': None, 'error': None, 'changed': None, 'workflow_approval': None}
 
     messages = models.JSONField(null=True, blank=True, default=default_messages, help_text=_('Optional custom messages for notification template.'))
 
