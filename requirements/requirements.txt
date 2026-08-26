@@ -277,7 +277,7 @@ pexpect==4.7.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   ansible-runner
-pkgconfig==1.5.5
+pkgconfig==1.6.0
     # via -r /awx_devel/requirements/requirements.in
 prometheus-client==0.26.0
     # via -r /awx_devel/requirements/requirements.in
