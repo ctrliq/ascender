@@ -244,7 +244,7 @@ more-itertools==10.2.0
     #   irc
     #   jaraco-functools
     #   jaraco-text
-msal==1.37.0
+msal==1.38.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   azure-identity
