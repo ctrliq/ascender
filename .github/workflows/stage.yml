@@ -70,9 +70,11 @@ jobs:
       - name: Install playbook dependencies
         run: |
           python3 -m pip install docker==6.1.3 requests==2.31.0 --force-reinstall
-          # The arm64 runner image does not ship with ansible preinstalled
+          # The arm64 runner image does not ship with ansible preinstalled.
+          # Constrained to the same tested minor series as the other CI
+          # scripts (see .github/actions/awx_devel_image/action.yml).
           if ! command -v ansible-playbook > /dev/null 2>&1; then
-            python3 -m pip install ansible-core
+            python3 -m pip install 'ansible-core~=2.21.0'
           fi
 
       - name: Set up Docker Buildx
@@ -122,11 +124,12 @@ jobs:
         run: |
           echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
+      # :latest is intentionally not tagged here; promote.yml moves it when
+      # the release is actually published.
       - name: Combine per-arch images into a multi-arch manifest
         run: |
           docker buildx imagetools create \
             -t ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }} \
-            -t ghcr.io/${{ github.repository }}:latest \
             ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }}-amd64 \
             ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }}-arm64
 
