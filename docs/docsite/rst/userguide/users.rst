@@ -43,6 +43,8 @@ Three types of Users can be assigned:
 
     The initial user (usually "admin") created by the installation process is a Superuser. One Superuser must always exist. To delete the "admin" user account, you must first create another Superuser account.
 
+When editing your own user, the form also offers a **Preferred Theme** field. See :ref:`ug_ui_main` for the available themes and how the preference is stored.
+
 3. Select **Save** when finished.
 
 Once the user is successfully created, the **User** dialog opens for that newly created User. 
