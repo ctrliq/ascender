@@ -19,7 +19,7 @@ django>=5.2.17,<6.0 # CVE-2026-15307 CVE-2026-15830; <6.0 also enforced by djang
 django-auth-ldap
 django-cors-headers
 django-extensions==4.1
-django-guid==3.5.2
+django-guid==3.6.1
 django-oauth-toolkit>=3.3.0
 django-polymorphic
 django-pglocks
