@@ -22,7 +22,6 @@ asgiref==3.11.0
     #   channels-valkey
     #   daphne
     #   django
-    #   django-ansible-base
     #   django-cors-headers
 asn1==2.7.0
     # via -r /awx_devel/requirements/requirements.in
@@ -82,7 +81,6 @@ cryptography==50.0.0
     #   -r /awx_devel/requirements/requirements.in
     #   autobahn
     #   azure-identity
-    #   django-ansible-base
     #   jwcrypto
     #   msal
     #   pyjwt
@@ -103,7 +101,6 @@ django==5.2.17
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels
-    #   django-ansible-base
     #   django-auth-ldap
     #   django-cors-headers
     #   django-crum
@@ -116,14 +113,12 @@ django==5.2.17
     #   djangorestframework
     #   drf-spectacular
     #   social-auth-app-django
-# django-ansible-base[jwt-consumer,resource-registry,rest-filters] @ git+https://github.com/ansible/django-ansible-base@devel  # git requirements installed separately
-    # via -r /awx_devel/requirements/requirements_git.txt
 django-auth-ldap==5.3.0
     # via -r /awx_devel/requirements/requirements.in
 django-cors-headers==4.9.0
     # via -r /awx_devel/requirements/requirements.in
 django-crum==0.7.9
-    # via django-ansible-base
+    # via -r /awx_devel/requirements/requirements.in
 django-extensions==4.1
     # via -r /awx_devel/requirements/requirements.in
 django-guid==3.5.2
@@ -145,7 +140,6 @@ django-valkey==0.4.0
 djangorestframework==3.15.2
     # via
     #   -r /awx_devel/requirements/requirements.in
-    #   django-ansible-base
     #   drf-spectacular
 djangorestframework-yaml==2.0.0
     # via -r /awx_devel/requirements/requirements.in
@@ -154,7 +148,7 @@ drf-spectacular==0.29.0
 durationpy==0.10
     # via kubernetes
 dynaconf==3.2.13
-    # via django-ansible-base
+    # via -r /awx_devel/requirements/requirements.in
 enum-compat==0.0.3
     # via asn1
 filelock==3.32.3
@@ -185,7 +179,7 @@ inflect==7.0.0
     # via jaraco-text
 inflection==0.5.1
     # via
-    #   django-ansible-base
+    #   -r /awx_devel/requirements/requirements.in
     #   drf-spectacular
 irc==20.4.3
     # via -r /awx_devel/requirements/requirements.in
@@ -312,7 +306,7 @@ pygithub==2.10.0
     # via -r /awx_devel/requirements/requirements.in
 pyjwt[crypto]==2.13.0
     # via
-    #   django-ansible-base
+    #   -r /awx_devel/requirements/requirements.in
     #   msal
     #   pygithub
     #   social-auth-core
@@ -372,7 +366,6 @@ requests==2.34.2
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   azure-core
-    #   django-ansible-base
     #   django-oauth-toolkit
     #   kubernetes
     #   msal
@@ -424,7 +417,6 @@ sqlparse==0.6.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   django
-    #   django-ansible-base
 tacacs-plus==1.0
     # via -r /awx_devel/requirements/requirements.in
 tempora==5.5.1
@@ -461,7 +453,6 @@ urllib3==2.7.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   botocore
-    #   django-ansible-base
     #   kubernetes
     #   pygithub
     #   requests

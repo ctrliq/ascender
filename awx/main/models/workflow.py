@@ -25,7 +25,7 @@ from awx.main.middleware import get_current_user
 from jinja2 import sandbox
 from jinja2.exceptions import TemplateSyntaxError, UndefinedError, SecurityError
 
-from ansible_base.lib.utils.models import prevent_search
+from awx.dab.lib.utils.models import prevent_search
 
 # AWX
 from awx.api.versioning import reverse

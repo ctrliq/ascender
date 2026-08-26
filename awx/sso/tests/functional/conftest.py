@@ -9,7 +9,7 @@ from django.db.models.signals import post_migrate
 
 from awx.main.utils import is_testing
 
-dab_rr_initial = importlib.import_module('ansible_base.resource_registry.migrations.0001_initial')
+dab_rr_initial = importlib.import_module('awx.dab.resource_registry.migrations.0001_initial')
 
 
 def _dab_rr_create_service_id(**kwargs):

@@ -51,7 +51,7 @@ __SWAGGER_REQUESTS__ = {}
 
 
 # HACK: the dab_resource_registry app required ServiceID in migrations which checks do not run
-dab_rr_initial = importlib.import_module('ansible_base.resource_registry.migrations.0001_initial')
+dab_rr_initial = importlib.import_module('awx.dab.resource_registry.migrations.0001_initial')
 
 
 def _dab_rr_create_service_id(**kwargs):
