@@ -125,8 +125,12 @@ function AppContainer({ navRouteConfig = [], children }) {
 
   return (
     <>
+      {/* isManagedSidebar must be set from the very first render: Page only
+          attaches its resize observer in componentDidMount when the prop is
+          already true, and isSidebarVisible is false until the config loads.
+          Without it, the mobile nav toggle never works. */}
       <Page
-        isManagedSidebar={isSidebarVisible}
+        isManagedSidebar
         masthead={isSidebarVisible ? header : simpleHeader}
         sidebar={isSidebarVisible && sidebar}
       >

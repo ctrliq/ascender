@@ -187,7 +187,10 @@ function JobOutput({
   const jobSocketCounter = useRef(0);
   const isMounted = useIsMounted();
   const scrollTop = useRef(0);
-  const scrollHeight = useRef(0);
+  // True while a pointer/touch gesture that can drag the scrollbar or pan the
+  // output is in progress — see the user-intent comment above handleScroll.
+  const isPointerDown = useRef(false);
+  const isTouchActive = useRef(false);
   const navigate = useNavigate();
   const eventByUuidRequests = useRef([]);
   const eventsProcessedDelay = useRef(250);
@@ -946,18 +949,81 @@ function JobOutput({
     setIsFollowModeEnabled(true);
   };
 
+  // Follow mode must only be disabled by a *user* upward scroll, but the
+  // scroll container also receives programmatic scrolls: scrollToEnd, and —
+  // more subtly — corrective scrolls from react-virtual, which imperatively
+  // scrolls up inside its ResizeObserver callback when a row above the
+  // viewport measures shorter than recorded. That correction lands before the
+  // inner div's height re-commits, so from inside a scroll event it is
+  // indistinguishable from the user scrolling up (scrollTop down, scrollHeight
+  // unchanged) and made the Follow button flicker on live output. So instead
+  // of inferring intent from scroll deltas alone, follow is only disabled by
+  // a real input gesture: wheel up, an upward-scrolling key, or an upward
+  // scroll while the pointer/touch is held down (scrollbar or touch drag).
+  const handleWheel = (e) => {
+    if (e.deltaY < 0) {
+      setIsFollowModeEnabled(false);
+    }
+  };
+
+  const handleKeyDown = (e) => {
+    if (
+      e.key === 'ArrowUp' ||
+      e.key === 'PageUp' ||
+      e.key === 'Home' ||
+      (e.key === ' ' && e.shiftKey)
+    ) {
+      setIsFollowModeEnabled(false);
+    }
+  };
+
+  const handleMouseDown = (e) => {
+    isPointerDown.current = true;
+    // Focus the container (it carries tabIndex={-1}) so subsequent
+    // PageUp/Home/ArrowUp keystrokes reach handleKeyDown. Without this,
+    // clicking the output leaves focus on <body>: Chromium still scrolls the
+    // container for those keys, but the keydown never targets it, so follow
+    // mode would stay on and snap the view back on the next event batch.
+    // preventScroll keeps the focus call from scrolling the container itself.
+    e.currentTarget.focus({ preventScroll: true });
+  };
+
+  // A scrollbar drag can end with the pointer outside the container, so the
+  // matching mouseup is listened for on the window.
+  useEffect(() => {
+    const handleMouseUp = () => {
+      isPointerDown.current = false;
+    };
+    window.addEventListener('mouseup', handleMouseUp);
+    return () => window.removeEventListener('mouseup', handleMouseUp);
+  }, []);
+
+  const handleTouchStart = () => {
+    isTouchActive.current = true;
+  };
+
+  const handleTouchEnd = () => {
+    isTouchActive.current = false;
+  };
+
   const handleScroll = (e) => {
     const target = e.currentTarget;
     if (
       isFollowModeEnabled &&
       scrollTop.current > target.scrollTop &&
-      scrollHeight.current === target.scrollHeight
+      (isPointerDown.current || isTouchActive.current)
     ) {
       setIsFollowModeEnabled(false);
     }
     scrollTop.current = target.scrollTop;
-    scrollHeight.current = target.scrollHeight;
-    if (target.scrollTop + target.clientHeight >= target.scrollHeight) {
+    // scrollHeight and clientHeight are rounded integers while scrollTop is
+    // fractional (the virtualizer's ResizeObserver row measurements make the
+    // content height sub-pixel), so a strict >= can miss the true bottom by
+    // under a pixel forever and never re-enable follow. Within 2px is
+    // visually at the bottom.
+    const distanceFromBottom =
+      target.scrollHeight - (target.scrollTop + target.clientHeight);
+    if (distanceFromBottom <= 2) {
       setIsFollowModeEnabled(true);
     }
   };
@@ -1066,7 +1132,18 @@ function JobOutput({
           ) : (
             <ScrollContainer
               ref={parentRef}
+              // Programmatically focusable so handleMouseDown can direct
+              // keyboard-scroll keys here (see handleMouseDown); -1 keeps it
+              // out of the tab order (browsers that support keyboard-focusable
+              // scrollers already make it tabbable natively).
+              tabIndex={-1}
               onScroll={handleScroll}
+              onWheel={handleWheel}
+              onKeyDown={handleKeyDown}
+              onMouseDown={handleMouseDown}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              onTouchCancel={handleTouchEnd}
               className="ascender-output-scroll"
             >
               {hasContentLoading ? (

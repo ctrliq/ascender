@@ -26,6 +26,11 @@ jobs:
             command: /start_tests.sh test_migrations
           - name: api-lint
             command: /var/lib/awx/venv/awx/bin/tox -e linters
+          # Advisory while the diagnostics that are already in the tree are worked
+          # through: the job reports them, it does not fail the pull request.
+          - name: api-type-check
+            command: /var/lib/awx/venv/awx/bin/tox -e typecheck
+            advisory: true
           - name: ui-lint
             command: make ui-lint
           - name: ui-test-screens
@@ -42,6 +47,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run check ${{ matrix.tests.name }}
+        continue-on-error: ${{ matrix.tests.advisory || false }}
         run: AWX_DOCKER_CMD='${{ matrix.tests.command }}' make docker-runner
 
   dev-env:

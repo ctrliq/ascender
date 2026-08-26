@@ -30,6 +30,23 @@ Across the top-right side of the interface, you can access your user profile, th
    :alt: Main screen with arrow showing where the activity stream icon resides on the Dashboard.
 
 
+Themes
+--------
+
+.. index::
+   pair: user interface; theme
+   single: dark mode
+
+Ascender ships four themes. **Default** and **Dark** are dark; **Light** and **Classic** are light. A new installation uses **Default**.
+
+Choose one from the palette icon in the top navigation bar, or from the **Preferred Theme** field on your own user's edit form. That field appears only when you are editing your own user, so you cannot set a theme on someone else's behalf.
+
+.. image:: ../common/images/ug-theme-selector.png
+   :alt: Theme drop-down open from the palette icon in the top navigation bar, listing Classic, Dark, Default, and Light with Default selected.
+
+The choice is stored in your browser rather than on your Ascender account. It applies to the browser you set it in, so signing in from another browser or machine starts from **Default** again, and anyone sharing a browser profile shares the theme.
+
+
 
 
 Views

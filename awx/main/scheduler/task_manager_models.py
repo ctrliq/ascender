@@ -305,7 +305,7 @@ class TaskManagerModels:
         # For container group jobs, additionally we must account for capacity consumed since
         # The container groups have no instances to look at to track how many jobs/forks are consumed
         if task.instance_group_id:
-            if not task.instance_group_id in self.instance_groups.pk_ig_map.keys():
+            if task.instance_group_id not in self.instance_groups.pk_ig_map.keys():
                 logger.warn(
                     f"Task {task.log_format} assigned {task.instance_group_id} but this instance group not present in map of instance groups{self.instance_groups.pk_ig_map.keys()}"
                 )

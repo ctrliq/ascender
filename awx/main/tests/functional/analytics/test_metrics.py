@@ -48,9 +48,10 @@ def test_metrics_counts(organization_factory, job_template_factory, workflow_job
 
     for gauge in gauges:
         for sample in gauge.samples:
-            # name, label, value, timestamp, exemplar
-            name, _, value, _, _ = sample
-            assert EXPECTED_VALUES[name] == value
+            # Read the fields by name: Sample grew a sixth one, native_histogram, in
+            # prometheus-client 0.21, so unpacking it as a 5-tuple ties this test to a
+            # version of the library. The metrics code itself already reads by name.
+            assert EXPECTED_VALUES[sample.name] == sample.value
 
 
 def get_metrics_view_db_only():
