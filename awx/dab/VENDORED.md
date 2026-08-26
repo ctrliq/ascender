@@ -55,6 +55,9 @@ Do not rename the labels.
 - `lib/utils/db.py` trimmed to the two functions actually imported (`ensure_transaction`,
   `migrations_are_complete`); its advisory-lock and psycopg-connection helpers were unused —
   AWX has its own in `awx.main.utils.pglock` and `awx.main.utils.db`.
+- `lib/logging/context.py` (trace_context) and `lib/logging/filters/` — nothing references
+  them; AWX's LOGGING config uses its own filter classes. (`lib/logging/__init__.py` and
+  `runtime.py` remain: thread_local and log_excess_runtime are used.)
 
 ## Local modifications
 

@@ -22,7 +22,7 @@ def get_sso_provider_server(backend_name: str, uid: str):
     # return None.
     try:
         if load_strategy is None:
-            logger.debug("Cannot get SSO backend. 'social_core' is not installed.")
+            logger.debug("Cannot get SSO backend. 'social_django' (social-auth-app-django) is not installed.")
             return (None, uid)
 
         social_strat = load_strategy()
