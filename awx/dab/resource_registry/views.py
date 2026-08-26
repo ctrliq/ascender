@@ -25,6 +25,7 @@ from awx.dab.resource_registry.serializers import BulkResourceUpdateItemSerializ
 from awx.dab.rest_filters.rest_framework.field_lookup_backend import FieldLookupBackend
 from awx.dab.rest_filters.rest_framework.order_backend import OrderByBackend
 from awx.dab.rest_filters.rest_framework.type_filter_backend import TypeFilterBackend
+
 # Inlined from ansible_base.rest_pagination.default_paginator (app not vendored)
 DEFAULT_MAX_PAGE_SIZE = 200
 

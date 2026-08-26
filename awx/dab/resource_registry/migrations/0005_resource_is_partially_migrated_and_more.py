@@ -14,11 +14,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='resource',
             name='is_partially_migrated',
-            field=models.BooleanField(default=False, help_text="This gets set to True when a resource has been copied into the resource server, but the service_id hasn't been updated yet."),
+            field=models.BooleanField(
+                default=False,
+                help_text="This gets set to True when a resource has been copied into the resource server, but the service_id hasn't been updated yet.",
+            ),
         ),
         migrations.AlterField(
             model_name='resource',
             name='service_id',
-            field=models.UUIDField(default=awx.dab.resource_registry.models.service_identifier.service_id, help_text='ID of the service responsible for managing this resource.'),
+            field=models.UUIDField(
+                default=awx.dab.resource_registry.models.service_identifier.service_id, help_text='ID of the service responsible for managing this resource.'
+            ),
         ),
     ]

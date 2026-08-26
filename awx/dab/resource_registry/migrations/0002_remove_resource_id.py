@@ -34,10 +34,7 @@ class Migration(migrations.Migration):
             name='service_id',
             field=models.CharField(max_length=38),
         ),
-        migrations.RunPython(
-            code=reset_service_id,
-            reverse_code=revert_post_migrate
-        ),
+        migrations.RunPython(code=reset_service_id, reverse_code=revert_post_migrate),
         migrations.AlterField(
             model_name='resource',
             name='service_id',

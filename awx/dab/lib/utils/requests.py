@@ -8,7 +8,7 @@ from awx.dab.lib.utils.settings import get_setting
 if TYPE_CHECKING:
     from django.http import HttpRequest
 
-logger = logging.getLogger('awx.dab.lib.uitls.requests')
+logger = logging.getLogger('awx.dab.lib.utils.requests')
 
 
 def get_remote_host(request: HttpRequest) -> Optional[str]:

@@ -29,7 +29,6 @@ django-solo
 drf-spectacular>=0.27.0
 django-split-settings==1.0.0    # We hit a strange issue where the release process errored when upgrading past 1.0.0 see UPGRADE BLOCKERS
 django-valkey
-dynaconf>=3.2.10,<4.0.0  # used by vendored awx/dab dynamic_config; 4.0 expected to have breaking changes
 djangorestframework>=3.15.2 # CVE-2024-21520
 djangorestframework-yaml
 filelock

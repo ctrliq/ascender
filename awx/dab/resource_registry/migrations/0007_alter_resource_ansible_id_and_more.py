@@ -22,12 +22,20 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='resource',
             name='content_type',
-            field=models.ForeignKey(help_text='The content type for this resource.', on_delete=django.db.models.deletion.CASCADE, related_name='resources', to='contenttypes.contenttype'),
+            field=models.ForeignKey(
+                help_text='The content type for this resource.',
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='resources',
+                to='contenttypes.contenttype',
+            ),
         ),
         migrations.AlterField(
             model_name='resource',
             name='is_partially_migrated',
-            field=models.BooleanField(default=False, help_text="A flag indicating that the resource has been copied into the resource server, but the service_id hasn't been updated yet."),
+            field=models.BooleanField(
+                default=False,
+                help_text="A flag indicating that the resource has been copied into the resource server, but the service_id hasn't been updated yet.",
+            ),
         ),
         migrations.AlterField(
             model_name='resource',
@@ -42,12 +50,19 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='resource',
             name='service_id',
-            field=models.UUIDField(default=awx.dab.resource_registry.models.service_identifier.service_id, help_text='ID of the service responsible for managing this resource.'),
+            field=models.UUIDField(
+                default=awx.dab.resource_registry.models.service_identifier.service_id, help_text='ID of the service responsible for managing this resource.'
+            ),
         ),
         migrations.AlterField(
             model_name='resourcetype',
             name='content_type',
-            field=models.OneToOneField(help_text='The content type for this resource type.', on_delete=django.db.models.deletion.CASCADE, related_name='resource_type', to='contenttypes.contenttype'),
+            field=models.OneToOneField(
+                help_text='The content type for this resource type.',
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name='resource_type',
+                to='contenttypes.contenttype',
+            ),
         ),
         migrations.AlterField(
             model_name='resourcetype',

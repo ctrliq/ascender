@@ -7,7 +7,6 @@ from django.utils.translation import gettext_lazy as _
 from awx.dab.resource_registry.constants import (
     SHARED_AAP_FLAG_RESOURCE_TYPE,
     SHARED_ORGANIZATION_RESOURCE_TYPE,
-    SHARED_ROLE_DEFINITION_RESOURCE_TYPE,
     SHARED_TEAM_RESOURCE_TYPE,
     SHARED_USER_RESOURCE_TYPE,
 )

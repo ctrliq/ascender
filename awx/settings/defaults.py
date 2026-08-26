@@ -15,12 +15,6 @@ from datetime import timedelta
 # python-ldap
 import ldap
 
-# Django
-from django.core.exceptions import ImproperlyConfigured
-
-# django-split-settings
-from split_settings.tools import include
-
 DEBUG = True
 SQL_DEBUG = DEBUG
 
@@ -423,6 +417,15 @@ MAX_PAGE_SIZE = 200
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'awx.api.pagination.Pagination',
     'PAGE_SIZE': 25,
+    # Formerly set by awx.dab's dynamic_settings include (now inlined). The generic
+    # awx.dab FieldLookupBackend is replaced by HostFieldLookupBackend, which adds
+    # the Host filter fields derived from JobHostSummary on top of it.
+    'DEFAULT_FILTER_BACKENDS': (
+        'awx.dab.rest_filters.rest_framework.type_filter_backend.TypeFilterBackend',
+        'awx.api.filters.HostFieldLookupBackend',
+        'rest_framework.filters.SearchFilter',
+        'awx.dab.rest_filters.rest_framework.order_backend.OrderByBackend',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'awx.dab.jwt_consumer.awx.auth.AwxJWTAuthentication',
         'awx.api.authentication.LoggedOAuth2Authentication',
@@ -1265,19 +1268,32 @@ ANSIBLE_BASE_TEAM_MODEL = 'main.Team'
 ANSIBLE_BASE_ORGANIZATION_MODEL = 'main.Organization'
 ANSIBLE_BASE_RESOURCE_CONFIG_MODULE = 'awx.resource_api'
 
-from awx.dab.lib import dynamic_config  # noqa: E402
+# The settings below were formerly produced by including awx.dab's dynamic_settings
+# (deleted along with awx/dab/lib/dynamic_config); they are the include's entire net
+# effect for the three installed awx.dab apps, snapshotted and inlined. DEFAULT_FILTER_BACKENDS
+# moved into the REST_FRAMEWORK definition above.
 
-settings_file = os.path.join(os.path.dirname(dynamic_config.__file__), 'dynamic_settings.py')
-include(settings_file)
-
-# dynamic_settings sets DEFAULT_FILTER_BACKENDS. Swap the generic field lookup backend for the
-# one that resolves the Host fields derived from JobHostSummary. A miss here would put the
-# derived filters back to matching nothing, which is silent, so refuse to start instead.
-generic_field_lookup_backend = 'awx.dab.rest_filters.rest_framework.field_lookup_backend.FieldLookupBackend'
-if generic_field_lookup_backend not in REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS']:
-    raise ImproperlyConfigured(
-        'Expected {} in REST_FRAMEWORK["DEFAULT_FILTER_BACKENDS"], found {}.'.format(generic_field_lookup_backend, REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS'])
-    )
-REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS'] = tuple(
-    'awx.api.filters.HostFieldLookupBackend' if backend == generic_field_lookup_backend else backend for backend in REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS']
+# Query parameters the field lookup filter backend refuses to treat as field lookups.
+ANSIBLE_BASE_REST_FILTERS_RESERVED_NAMES = (
+    'page',
+    'page_size',
+    'format',
+    'order',
+    'order_by',
+    'search',
+    'type',
+    'host_filter',
+    'count_disabled',
+    'no_truncate',
+    'limit',
+    'validate',
+    'user_ansible_id',
+    'team_ansible_id',
+    'object_ansible_id',
+    'assignment',
 )
+
+# Reverse-syncing shared resources only activates when a RESOURCE_SERVER (gateway)
+# is configured with a SECRET_KEY; without one this flag has no effect.
+RESOURCE_SERVER_SYNC_ENABLED = True
+RESOURCE_SERVICE_PATH = '/api/gateway/v1/service-index/'

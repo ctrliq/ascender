@@ -3,7 +3,6 @@ from typing import Any, Dict, List, Tuple
 from django.db import models
 
 
-
 class ResourceTypeProcessor:
     """
     This class allows services to customize how objects are serialized and

@@ -147,8 +147,6 @@ drf-spectacular==0.29.0
     # via -r /awx_devel/requirements/requirements.in
 durationpy==0.10
     # via kubernetes
-dynaconf==3.2.13
-    # via -r /awx_devel/requirements/requirements.in
 enum-compat==0.0.3
     # via asn1
 filelock==3.32.3

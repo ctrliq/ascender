@@ -27,10 +27,7 @@ class Migration(migrations.Migration):
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
             ],
         ),
-        migrations.RunPython(
-            code=create_service_id,
-            reverse_code=migrations.RunPython.noop
-        ),
+        migrations.RunPython(code=create_service_id, reverse_code=migrations.RunPython.noop),
         migrations.CreateModel(
             name='ResourceType',
             fields=[
@@ -38,8 +35,10 @@ class Migration(migrations.Migration):
                 ('externally_managed', models.BooleanField()),
                 ('migrated', models.BooleanField(default=False)),
                 ('name', models.CharField(db_index=True, editable=False, max_length=256, unique=True)),
-                ('content_type', models.OneToOneField(
-                    on_delete=django.db.models.deletion.CASCADE, related_name='resource_type', to='contenttypes.contenttype')),
+                (
+                    'content_type',
+                    models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='resource_type', to='contenttypes.contenttype'),
+                ),
             ],
         ),
         migrations.CreateModel(

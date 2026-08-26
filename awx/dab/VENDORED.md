@@ -35,8 +35,13 @@ Do not rename the labels.
   `resource_registry/shared_types.py`, and `RoleDefinitionProcessor` — DAB RBAC only.
 - `rest_filters/rest_framework/ansible_id_backend.py` — imports DAB RBAC models; unused here.
 - `lib/`: `testing/`, `redis/`, `routers/`, `serializers/`, `sessions/`, `templatetags/`,
-  `backends/`, `admin/`, `workload_identity/`, `cache/redis_cache.py`, `cache/tasks.py`,
+  `backends/`, `admin/`, `workload_identity/`, `cache/`,
   `middleware/profiling|observability|request_context` — unused by the vendored apps or awx.
+- `lib/dynamic_config/` — its `dynamic_settings.py` include used to compute a handful of
+  settings at import time; the entire net effect for the three installed apps was
+  snapshotted and inlined into `awx/settings/defaults.py` (DEFAULT_FILTER_BACKENDS,
+  ANSIBLE_BASE_REST_FILTERS_RESERVED_NAMES, RESOURCE_SERVER_SYNC_ENABLED,
+  RESOURCE_SERVICE_PATH). This also dropped the `dynaconf` dependency.
 
 ## Local modifications
 
@@ -49,7 +54,11 @@ Do not rename the labels.
   machinery behind `is_rbac_installed()`. Without the (un-vendored) `rbac` app it still
   fetches claims from the gateway on a claims-hash change and exposes them via
   `_saved_claims`, which `AwxJWTAuthentication._sync_old_rbac` uses to sync the old
-  AWX `Role` model.
+  AWX `Role` model. The names it imports from `awx.main.models.rbac`
+  (`ROLE_DEFINITION_TO_ROLE_FIELD`, `disable_rbac_sync`) only exist in upstream AWX;
+  they were added to our `rbac.py` so the sync actually works — before that the
+  ImportError fallback made JWT role sync a silent no-op. Covered by
+  `awx/main/tests/functional/test_dab_jwt_auth.py`.
 - `resource_registry/views.py` — `DEFAULT_MAX_PAGE_SIZE = 200` inlined from
   `ansible_base.rest_pagination` (app not vendored).
 
