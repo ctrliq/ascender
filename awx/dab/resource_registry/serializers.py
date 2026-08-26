@@ -93,7 +93,9 @@ class ResourceListSerializer(serializers.ModelSerializer):
 
             resource_type = ResourceType.objects.get(name=validated_data["resource_type"])
             if not resource_type.can_be_managed:
-                raise serializers.ValidationError({"resource_type": _("Resource type: %(name)s cannot be managed by Resources.") % {"name": resource_type.name}})
+                raise serializers.ValidationError(
+                    {"resource_type": _("Resource type: %(name)s cannot be managed by Resources.") % {"name": resource_type.name}}
+                )
 
             return Resource.create_resource(
                 resource_type,
