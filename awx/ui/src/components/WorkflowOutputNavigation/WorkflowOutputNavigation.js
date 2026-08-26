@@ -15,12 +15,15 @@ import {
 import ChipGroup from 'components/ChipGroup';
 import { stringIsUUID } from 'util/strings';
 
-const JOB_URL_SEGMENT_MAP = {
+// api job type -> the segment the job routes are mounted under, the inverse of
+// JOB_URL_SEGMENT_MAP in screens/Job/Job.js. A type missing here builds a url
+// with "undefined" in it, so the two maps have to be kept in step.
+const JOB_TYPE_URL_SEGMENT_MAP = {
   job: 'playbook',
   project_update: 'project',
   system_job: 'management',
-  system: 'system_job',
   inventory_update: 'inventory',
+  ad_hoc_command: 'command',
   workflow_job: 'workflow',
 };
 
@@ -29,73 +32,83 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const relevantResults = relatedJobs.filter(
-    ({ job: jobId, summary_fields }) =>
-      jobId &&
-      `${jobId}` !== id &&
-      summary_fields.job.type !== 'workflow_approval'
-  );
-
   const [isOpen, setIsOpen] = useState(false);
   const [filterBy, setFilterBy] = useState();
-  const [sortedJobs, setSortedJobs] = useState(relevantResults);
   const [inlineFilter, setInlineFilter] = useState('');
+
+  // Every node that actually ran a job, the one on screen included. Dropping the
+  // current job undercounts the workflow by one and leaves the menu with no entry
+  // for where you are. Approval nodes have no job output to navigate to.
+  const jobNodes = relatedJobs.filter(
+    ({ job: jobId, summary_fields: summaryFields }) =>
+      jobId && summaryFields?.job?.type !== 'workflow_approval'
+  );
+
+  // 1-based, and 0 when the job on screen is not one of the workflow's nodes
+  const currentPosition =
+    jobNodes.findIndex(({ job: jobId }) => `${jobId}` === id) + 1;
 
   const statusLabels = {
     Failed: t`Failed`,
     Successful: t`Successful`,
   };
 
-  const handleFilter = (v) => {
-    if (filterBy === v) {
-      setSortedJobs(relevantResults);
-      setFilterBy();
-    } else {
-      setFilterBy(v);
-      setSortedJobs(
-        relevantResults.filter(
-          (node) =>
-            node.summary_fields.job.status === v.toLowerCase() &&
-            `${node.job}` !== id
-        )
-      );
-    }
+  const handleFilter = (value) => {
+    setFilterBy((current) => (current === value ? undefined : value));
   };
 
-  const numSuccessJobs = relevantResults.filter(
+  const nodeLabel = (node) =>
+    stringIsUUID(node.identifier)
+      ? node.summary_fields.job.name
+      : node.identifier;
+
+  // Derived rather than held in state: the previous version seeded a useState
+  // from the first render's list, so after navigating within the workflow the
+  // menu still offered the jobs relative to the page you came from.
+  const statusFiltered = filterBy
+    ? jobNodes.filter(
+        (node) => node.summary_fields.job.status === filterBy.toLowerCase()
+      )
+    : jobNodes;
+
+  const visibleJobs = inlineFilter
+    ? statusFiltered.filter((node) =>
+        nodeLabel(node).toLowerCase().includes(inlineFilter.toLowerCase())
+      )
+    : statusFiltered;
+
+  const numSuccessJobs = jobNodes.filter(
     (node) => node.summary_fields.job.status === 'successful'
   ).length;
-  const numFailedJobs = relevantResults.length - numSuccessJobs;
+  const numFailedJobs = jobNodes.filter(
+    (node) => node.summary_fields.job.status === 'failed'
+  ).length;
 
-  const filteredJobs = inlineFilter
-    ? sortedJobs.filter((node) => {
-        const label = stringIsUUID(node.identifier)
-          ? node.summary_fields.job.name
-          : node.identifier;
-        return label.toLowerCase().includes(inlineFilter.toLowerCase());
-      })
-    : sortedJobs;
+  const handleSelect = (_event, value) => {
+    if (value === 'Failed' || value === 'Successful') {
+      handleFilter(value);
+      return;
+    }
+    setIsOpen(false);
+    const node = jobNodes.find((candidate) => candidate.id === value);
+    if (!node || `${node.job}` === id) {
+      return;
+    }
+    const segment = JOB_TYPE_URL_SEGMENT_MAP[node.summary_fields.job.type];
+    if (!segment) {
+      return;
+    }
+    navigate(`/jobs/${segment}/${node.summary_fields.job.id}/output`);
+  };
 
   return (
     <Select
-      key={`${id}`}
       isOpen={isOpen}
       onOpenChange={(open) => {
         setIsOpen(open);
         if (!open) setInlineFilter('');
       }}
-      onSelect={(_e, v) => {
-        if (v === 'Failed' || v === 'Successful') {
-          handleFilter(v);
-          return;
-        }
-        const node = sortedJobs.find((n) => n.summary_fields.job.name === v);
-        if (node) {
-          const url = `/jobs/${JOB_URL_SEGMENT_MAP[node.summary_fields.job.type]}/${node.summary_fields.job?.id}/output`;
-          navigate(url);
-          setIsOpen(false);
-        }
-      }}
+      onSelect={handleSelect}
       popperProps={
         parentRef?.current ? { appendTo: parentRef.current } : undefined
       }
@@ -105,19 +118,20 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
           onClick={() => setIsOpen(!isOpen)}
           isExpanded={isOpen}
         >
-          {filterBy ? (
+          {filterBy && (
             <ChipGroup numChips={1} totalChips={1}>
-              <Label
-                variant="outline"
-                key={filterBy}
-                onClose={() => handleFilter(filterBy)}
-              >
+              {/* no onClose: that renders a close <button> inside the toggle's
+                  own <button>, which is invalid and swallows the click. The
+                  filter is cleared by picking the same status again. */}
+              <Label variant="outline" key={filterBy}>
                 {statusLabels[filterBy] || filterBy}
               </Label>
             </ChipGroup>
-          ) : (
-            t`Workflow Job 1/${relevantResults.length}`
           )}
+          {!filterBy &&
+            (currentPosition > 0
+              ? t`Workflow Job ${currentPosition}/${jobNodes.length}`
+              : t`Workflow Jobs (${jobNodes.length})`)}
         </MenuToggle>
       )}
     >
@@ -147,11 +161,13 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
           </SelectOption>
         </SelectGroup>
         <SelectGroup label={t`Workflow Nodes`} key="nodes">
-          {filteredJobs?.map((node) => (
-            <SelectOption key={node.id} value={node.summary_fields.job.name}>
-              {stringIsUUID(node.identifier)
-                ? node.summary_fields.job.name
-                : node.identifier}
+          {visibleJobs?.map((node) => (
+            <SelectOption
+              key={node.id}
+              value={node.id}
+              isSelected={`${node.job}` === id}
+            >
+              {nodeLabel(node)}
             </SelectOption>
           ))}
         </SelectGroup>
