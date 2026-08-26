@@ -15,11 +15,9 @@ class LogTracebackMiddleware:
     @classmethod
     def handle_signal(cls, *args):
         for t_id, request in LogTracebackMiddleware.transactions.items():
-            logger.error(
-                f"""Received graceful timeout signal for {request.method}
+            logger.error(f"""Received graceful timeout signal for {request.method}
                 path: {request.path} while in stack: {''.join(traceback.format_stack())}
-                """
-            )
+                """)
 
     def __init__(self, get_response):
         self.get_response = get_response
@@ -29,10 +27,8 @@ class LogTracebackMiddleware:
         try:
             signal.signal(signal.SIGABRT, LogTracebackMiddleware.handle_signal)
         except ValueError:
-            logger.error(
-                f"""Configured to use {__name__}.LogTracebackMiddleware but the the application
-                is not being served in the main thread, so we will not handle SIGABRT."""
-            )
+            logger.error(f"""Configured to use {__name__}.LogTracebackMiddleware but the the application
+                is not being served in the main thread, so we will not handle SIGABRT.""")
 
     def __call__(self, request):
         t_id = str(uuid.uuid4())

@@ -338,9 +338,7 @@ class JWTCommonAuth:
         call behind resource_server_defined(); this method remains as the hook a
         future claims transport (or a test) can override.
         """
-        raise InvalidGatewayResponseException(
-            f"Cannot fetch claims for user {user_ansible_id}: the resource-server client is not included in this build"
-        )
+        raise InvalidGatewayResponseException(f"Cannot fetch claims for user {user_ansible_id}: the resource-server client is not included in this build")
 
 
 class JWTAuthentication(BaseAuthentication):

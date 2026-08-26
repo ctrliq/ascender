@@ -49,14 +49,12 @@ class SocialAuthCallbackURL(object):
         return urlparse.urljoin(settings.TOWER_URL_BASE, path)
 
 
-SOCIAL_AUTH_ORGANIZATION_MAP_HELP_TEXT = _(
-    '''\
+SOCIAL_AUTH_ORGANIZATION_MAP_HELP_TEXT = _('''\
 Mapping to organization admins/users from social auth accounts. This setting
 controls which users are placed into which organizations based on their
 username and email address. Configuration details are available in the
 documentation.\
-'''
-)
+''')
 
 # FIXME: /regex/gim (flags)
 
@@ -78,12 +76,10 @@ SOCIAL_AUTH_ORGANIZATION_MAP_PLACEHOLDER = collections.OrderedDict(
     ]
 )
 
-SOCIAL_AUTH_TEAM_MAP_HELP_TEXT = _(
-    '''\
+SOCIAL_AUTH_TEAM_MAP_HELP_TEXT = _('''\
 Mapping of team members (users) from social auth accounts. Configuration
 details are available in the documentation.\
-'''
-)
+''')
 
 SOCIAL_AUTH_TEAM_MAP_PLACEHOLDER = collections.OrderedDict(
     [

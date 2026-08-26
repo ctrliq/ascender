@@ -150,7 +150,7 @@ def classify_address(address: str) -> AddressTypeResponse:
         return response
 
     # Split into potential address and port and classify the address.
-    (split_address, _, port) = address.rpartition(":")
+    split_address, _, port = address.rpartition(":")
     response = _classify_address(split_address)
     if response.type != AddressType.UNKNOWN:
         # A known type with a port.

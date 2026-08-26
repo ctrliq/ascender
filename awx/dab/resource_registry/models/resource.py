@@ -204,7 +204,7 @@ class Resource(models.Model):
 
             content_object: "ResourceTypeProcessor" = processor(self.content_object)
             with no_reverse_sync():
-                (changed_data, _) = content_object.save(resource_data)
+                changed_data, _ = content_object.save(resource_data)
 
         return changed_data or changed_metadata
 
