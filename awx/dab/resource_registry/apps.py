@@ -34,12 +34,12 @@ def _sync_resource_types(registry, resource_type_cls, content_type_cls):
             if not resource_type_cls.objects.filter(name=resource_type).exists():
                 raise e
             rt = resource_type_cls.objects.get(name=resource_type)
-            logger.warn(f"changing content_type for '{resource_type}' from '{rt.content_type.model}' to '{content.model}'")
+            logger.warning(f"changing content_type for '{resource_type}' from '{rt.content_type.model}' to '{content.model}'")
             # Remove any stale row that already owns the target content_type,
             # otherwise the OneToOne unique constraint prevents reassignment.
             stale = resource_type_cls.objects.filter(content_type=content).exclude(pk=rt.pk)
             if stale.exists():
-                logger.warn(f"deleting stale ResourceType row(s) that own content_type '{content.model}'")
+                logger.warning(f"deleting stale ResourceType row(s) that own content_type '{content.model}'")
                 stale.delete()
             rt.content_type = content
             for k, v in defaults.items():

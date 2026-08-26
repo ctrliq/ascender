@@ -105,7 +105,10 @@ class JWTCert:
 
         if self.key is None:
             raise JWTCertException(_("Unable to determine how to handle {0} to get key").format(url_or_string))
-        elif not self.key.startswith('-----BEGIN PUBLIC KEY-----') and not self.key.endswith('-----END PUBLIC KEY-----'):
+        # Strip before checking: PEM serializations end with a trailing newline, which
+        # would otherwise make the endswith test fail for every valid key.
+        stripped_key = self.key.strip()
+        if not stripped_key.startswith('-----BEGIN PUBLIC KEY-----') or not stripped_key.endswith('-----END PUBLIC KEY-----'):
             logger.debug(self.key)
             raise JWTCertException(_("Returned key does not start and end with BEGIN/END PUBLIC KEY"))
         logger.info("Decryption key appears valid")

@@ -67,7 +67,7 @@ def validate_x_trusted_proxy_header(header_value: str, ignore_cache=False) -> bo
     try:
         signature_bytes = bytes.fromhex(signature)
     except ValueError:
-        logger.warning("Failed to validate x-trusted-proxy-header, malformed, expected signature to well-formed base64")
+        logger.warning("Failed to validate x-trusted-proxy-header, malformed, expected signature to be well-formed hex")
         return False
 
     try:

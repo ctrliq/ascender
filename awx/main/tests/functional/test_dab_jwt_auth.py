@@ -141,6 +141,16 @@ def test_jwt_wrong_audience_rejected(rsa_keypair):
 
 
 @pytest.mark.django_db
+def test_jwt_malformed_public_key_rejected(settings, rsa_keypair):
+    """A key missing its END marker is rejected up front with a clear error,
+    not deep in signature verification."""
+    settings.ANSIBLE_BASE_JWT_KEY = '-----BEGIN PUBLIC KEY-----\ngarbage'
+    token = build_token(rsa_keypair[0])
+    with pytest.raises(AuthenticationFailed, match='BEGIN/END PUBLIC KEY'):
+        authenticate(token)
+
+
+@pytest.mark.django_db
 def test_jwt_wrong_key_rejected(rsa_keypair):
     other_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     other_pem = other_key.private_bytes(
