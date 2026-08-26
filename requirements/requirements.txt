@@ -362,7 +362,7 @@ pyyaml==6.0.3
     #   drf-spectacular
     #   kubernetes
     #   receptorctl
-receptorctl==1.6.2
+receptorctl==1.6.4
     # via -r /awx_devel/requirements/requirements.in
 referencing==0.33.0
     # via
