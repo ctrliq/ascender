@@ -5,7 +5,7 @@ from rest_framework import routers
 
 from awx.dab.resource_registry import views
 
-logger = logging.getLogger('awx.dab.resource-urls')
+logger = logging.getLogger('awx.dab.resource_registry.urls')
 
 service_router = routers.SimpleRouter()
 

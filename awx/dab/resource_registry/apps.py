@@ -1,14 +1,12 @@
 import logging
 
 from django.apps import AppConfig
-from django.conf import settings
 from django.db.models import Exists, OuterRef, TextField, signals
 from django.db.models.functions import Cast
 from django.db.utils import IntegrityError
 
 import awx.dab.lib.checks  # noqa: F401 - register checks
-from awx.dab.lib.utils.db import ensure_transaction, migrations_are_complete
-from awx.dab.resource_registry.utils.settings import resource_server_defined
+from awx.dab.lib.utils.db import migrations_are_complete
 
 logger = logging.getLogger("awx.dab.resource_registry.apps")
 
@@ -136,17 +134,6 @@ def proxies_of_model(cls):
             yield sub_cls
 
 
-def _should_reverse_sync():
-    enabled = getattr(settings, "RESOURCE_SERVER_SYNC_ENABLED", False)
-    if enabled and (not resource_server_defined()):
-        logger.debug("RESOURCE_SERVER is not configured. Reverse sync will not be enabled.")
-        enabled = False
-    if enabled and resource_server_defined() and ("SECRET_KEY" not in settings.RESOURCE_SERVER or not settings.RESOURCE_SERVER["SECRET_KEY"]):
-        logger.error("RESOURCE_SERVER['SECRET_KEY'] is not configured. Reverse sync will not be enabled.")
-        enabled = False
-    return enabled
-
-
 def connect_resource_signals(sender, **kwargs):
     from awx.dab.resource_registry.signals import handlers
 
@@ -157,31 +144,6 @@ def connect_resource_signals(sender, **kwargs):
             signals.post_save.connect(handlers.update_resource, sender=cls)
             signals.post_delete.connect(handlers.remove_resource, sender=cls)
 
-            if _should_reverse_sync():
-                signals.pre_save.connect(handlers.decide_to_sync_update, sender=cls)
-                signals.post_save.connect(handlers.sync_to_resource_server_post_save, sender=cls)
-                signals.pre_delete.connect(handlers.sync_to_resource_server_pre_delete, sender=cls)
-
-                # Wrap save() in a transaction and sync to resource server
-                cls._original_save = cls.save
-
-                # Avoid late binding issues
-                def save(self, *args, _original_save=cls._original_save, **kwargs):
-                    with ensure_transaction():
-                        _original_save(self, *args, **kwargs)
-
-                cls.save = save
-
-                # Wrap delete() in a transaction and remove from resource server
-                cls._original_delete = cls.delete
-
-                # Avoid late binding issues
-                def delete(self, *args, _original_delete=cls._original_delete, **kwargs):
-                    with ensure_transaction():
-                        _original_delete(self, *args, **kwargs)
-
-                cls.delete = delete
-
 
 def disconnect_resource_signals(sender, **kwargs):
     from awx.dab.resource_registry.signals import handlers
@@ -190,18 +152,6 @@ def disconnect_resource_signals(sender, **kwargs):
         for cls in [model, *proxies_of_model(model)]:
             signals.post_save.disconnect(handlers.update_resource, sender=cls)
             signals.post_delete.disconnect(handlers.remove_resource, sender=cls)
-
-            signals.pre_save.disconnect(handlers.decide_to_sync_update, sender=cls)
-            signals.post_save.disconnect(handlers.sync_to_resource_server_post_save, sender=cls)
-            signals.pre_delete.disconnect(handlers.sync_to_resource_server_pre_delete, sender=cls)
-
-            if hasattr(cls, "_original_save"):
-                cls.save = cls._original_save
-                del cls._original_save
-
-            if hasattr(cls, "_original_delete"):
-                cls.delete = cls._original_delete
-                del cls._original_delete
 
 
 class ResourceRegistryConfig(AppConfig):

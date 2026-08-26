@@ -7,7 +7,7 @@ from rest_framework import serializers
 from awx.dab.lib.utils.response import get_relative_url
 from awx.dab.resource_registry.models import Resource, ResourceType
 
-logger = logging.getLogger('awx.dab.serializers')
+logger = logging.getLogger('awx.dab.resource_registry.serializers')
 
 
 class ResourceDataField(serializers.JSONField):

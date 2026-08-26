@@ -1,8 +1,1 @@
-"""Resource Registry package for Gateway communication.
-
-Workload identity client imports:
-    from awx.dab.resource_registry.workload_identity_client import (
-        WorkloadIdentityClient,
-        get_workload_identity_client,
-    )
-"""
+"""Registry of shared resources (organizations, users, teams) exposed via /api/v2/service-index/."""

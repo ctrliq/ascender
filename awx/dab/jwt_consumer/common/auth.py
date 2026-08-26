@@ -19,8 +19,8 @@ from awx.dab.lib.utils.apps import is_rbac_installed
 from awx.dab.lib.utils.auth import get_user_by_ansible_id
 from awx.dab.lib.utils.translations import translatableConditionally as _
 from awx.dab.resource_registry.models import Resource, ResourceType
-from awx.dab.resource_registry.rest_client import get_resource_server_client
 from awx.dab.resource_registry.signals.handlers import no_reverse_sync
+from awx.dab.resource_registry.utils.settings import resource_server_defined
 
 logger = logging.getLogger("awx.dab.jwt_consumer.common.auth")
 
@@ -296,6 +296,12 @@ class JWTCommonAuth:
         else:
             local_claims_hash = None
 
+        if not resource_server_defined():
+            # Without a RESOURCE_SERVER (gateway) there is nowhere to fetch
+            # claims from; authenticate the user but skip role processing.
+            logger.warning(f"Claims hash changed for user {user_ansible_id} but no RESOURCE_SERVER is configured; skipping role sync.")
+            return
+
         # Claims hash mismatch - fetch from gateway
         logger.info(f"Claims hash mismatch for user {user_ansible_id}. JWT: {jwt_claims_hash}, Local: {local_claims_hash}. Fetching from gateway.")
         try:
@@ -325,21 +331,16 @@ class JWTCommonAuth:
 
     def _fetch_jwt_claims_from_gateway(self, user_ansible_id: str) -> Optional[dict]:
         """
-        Fetch JWT claims from the gateway endpoint using resource server client
+        Fetch JWT claims from the gateway's jwt_claims endpoint.
+
+        The resource-server HTTP client is not vendored (see awx/dab/VENDORED.md),
+        so this build cannot fetch claims. process_rbac_permissions() guards this
+        call behind resource_server_defined(); this method remains as the hook a
+        future claims transport (or a test) can override.
         """
-        # Use the resource server client to make the request
-        client = get_resource_server_client(service_path="api/gateway/v1")
-
-        logger.debug(f"Fetching claims from gateway for user {user_ansible_id}")
-        response = client._make_request("GET", f"jwt_claims/{user_ansible_id}/")
-
-        if response.status_code == 200:
-            claims_data = response.json()
-            return claims_data
-        elif response.status_code == 423:
-            raise GatewayLockedException("Gateway is locked")
-        else:
-            raise InvalidGatewayResponseException(f"Gateway request failed with status {response.status_code}")
+        raise InvalidGatewayResponseException(
+            f"Cannot fetch claims for user {user_ansible_id}: the resource-server client is not included in this build"
+        )
 
 
 class JWTAuthentication(BaseAuthentication):

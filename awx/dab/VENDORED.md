@@ -40,8 +40,15 @@ Do not rename the labels.
 - `lib/dynamic_config/` — its `dynamic_settings.py` include used to compute a handful of
   settings at import time; the entire net effect for the three installed apps was
   snapshotted and inlined into `awx/settings/defaults.py` (DEFAULT_FILTER_BACKENDS,
-  ANSIBLE_BASE_REST_FILTERS_RESERVED_NAMES, RESOURCE_SERVER_SYNC_ENABLED,
-  RESOURCE_SERVICE_PATH). This also dropped the `dynaconf` dependency.
+  ANSIBLE_BASE_REST_FILTERS_RESERVED_NAMES). This also dropped the `dynaconf` dependency.
+- Resource-server (gateway) client machinery — we do not deploy behind a gateway:
+  `resource_registry/{resource_server,rest_client,service_client,workload_identity_client}.py`
+  and `resource_registry/utils/{sync_to_resource_server,service_backed_sso_pipeline,auth_code}.py`,
+  plus the reverse-sync signal handlers in `signals/handlers.py` and their wiring in `apps.py`.
+  The service-index API (gateway pushing resources to us) is unaffected; only the code for
+  talking *to* a resource server was removed. `jwt_consumer` now skips claims processing with
+  a warning when no RESOURCE_SERVER is configured (previously it failed authentication), and
+  `_fetch_jwt_claims_from_gateway` remains only as an overridable hook.
 
 ## Local modifications
 

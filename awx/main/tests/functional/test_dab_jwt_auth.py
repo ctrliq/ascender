@@ -47,6 +47,9 @@ def jwt_key_settings(settings, rsa_keypair):
     # django cache; clear it so tests cannot leak state into each other.
     django_cache.clear()
     settings.ANSIBLE_BASE_JWT_KEY = rsa_keypair[1]
+    # Claims processing is skipped entirely unless a resource server (gateway)
+    # is configured; tests mock the fetch itself.
+    settings.RESOURCE_SERVER = {'URL': 'https://gateway.example.com', 'SECRET_KEY': 'test-secret'}
     yield
     django_cache.clear()
 
@@ -191,6 +194,18 @@ def test_jwt_stale_roles_removed_on_new_claims(rsa_keypair, organization, team):
         user, _ = authenticate(token)
     assert user not in organization.admin_role.members.all()
     assert user in team.member_role.members.all()
+
+
+@pytest.mark.django_db
+def test_jwt_auth_without_resource_server_skips_role_sync(settings, rsa_keypair, organization):
+    """With no RESOURCE_SERVER configured there is nowhere to fetch claims
+    from: the user still authenticates, and role processing is skipped
+    instead of failing the request."""
+    settings.RESOURCE_SERVER = {}
+    token = build_token(rsa_keypair[0], username='gatewayless-user')
+    user, _ = authenticate(token)
+    assert user.username == 'gatewayless-user'
+    assert user not in organization.admin_role.members.all()
 
 
 @pytest.mark.django_db

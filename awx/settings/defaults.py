@@ -1268,10 +1268,9 @@ ANSIBLE_BASE_TEAM_MODEL = 'main.Team'
 ANSIBLE_BASE_ORGANIZATION_MODEL = 'main.Organization'
 ANSIBLE_BASE_RESOURCE_CONFIG_MODULE = 'awx.resource_api'
 
-# The settings below were formerly produced by including awx.dab's dynamic_settings
-# (deleted along with awx/dab/lib/dynamic_config); they are the include's entire net
-# effect for the three installed awx.dab apps, snapshotted and inlined. DEFAULT_FILTER_BACKENDS
-# moved into the REST_FRAMEWORK definition above.
+# The setting below was formerly produced by including awx.dab's dynamic_settings
+# (deleted along with awx/dab/lib/dynamic_config); DEFAULT_FILTER_BACKENDS, the other
+# surviving piece of that include, moved into the REST_FRAMEWORK definition above.
 
 # Query parameters the field lookup filter backend refuses to treat as field lookups.
 ANSIBLE_BASE_REST_FILTERS_RESERVED_NAMES = (
@@ -1292,8 +1291,3 @@ ANSIBLE_BASE_REST_FILTERS_RESERVED_NAMES = (
     'object_ansible_id',
     'assignment',
 )
-
-# Reverse-syncing shared resources only activates when a RESOURCE_SERVER (gateway)
-# is configured with a SECRET_KEY; without one this flag has no effect.
-RESOURCE_SERVER_SYNC_ENABLED = True
-RESOURCE_SERVICE_PATH = '/api/gateway/v1/service-index/'

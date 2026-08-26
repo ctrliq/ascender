@@ -9,7 +9,6 @@ from django.db import connection
 
 from awx.dab.resource_registry.models import Resource, init_resource_from_object
 from awx.dab.resource_registry.registry import get_registry
-from awx.dab.resource_registry.utils.sync_to_resource_server import sync_to_resource_server
 
 logger = logging.getLogger('awx.dab.resource_registry.signals.handlers')
 
@@ -49,43 +48,6 @@ def update_resource(sender, instance, created, **kwargs):
 
 
 # pre_save
-def decide_to_sync_update(sender, instance, raw, using, update_fields, **kwargs):
-    """
-    A pre_save hook that decides whether or not to reverse-sync the instance
-    based on which fields have changed.
-
-    This has to be in pre-save because we have to be able to get the original
-    instance to calculate which fields changed, if update_fields wasn't passed
-    """
-
-    if instance._state.adding:
-        # We only concern ourselves with updates
-        return
-
-    try:
-        resource = Resource.get_resource_for_object(instance)
-    except Resource.DoesNotExist:
-        # We can't sync here, but we want to log that, so let sync_to_resource_server() discard it.
-        return
-
-    fields_that_sync = resource.content_type.resource_type.serializer_class().get_fields().keys()
-
-    if update_fields is None:
-        # If we're not given a useful update_fields, manually calculate the changed fields
-        # at the cost of an extra query
-        existing_instance = sender.objects.get(pk=instance.pk)
-        changed_fields = set()
-        for field in fields_that_sync:
-            if getattr(existing_instance, field) != getattr(instance, field):
-                changed_fields.add(field)
-    else:
-        # If we're given update_fields, we can just check those
-        changed_fields = set(update_fields)
-
-    if not changed_fields.intersection(fields_that_sync):
-        instance._skip_reverse_resource_sync = True
-
-
 class _DeferResourceCleanup(threading.local):
     def __init__(self):
         self.active = False
@@ -168,17 +130,3 @@ def no_reverse_sync() -> Generator[None, None, None]:
 
 
 # post_save
-def sync_to_resource_server_post_save(sender, instance, created, update_fields, **kwargs):
-    if not reverse_sync_enabled:
-        return
-
-    action = "create" if created else "update"
-    sync_to_resource_server(instance, action)
-
-
-# pre_delete
-def sync_to_resource_server_pre_delete(sender, instance, **kwargs):
-    if not reverse_sync_enabled:
-        return
-
-    sync_to_resource_server(instance, "delete", ansible_id=instance.resource.ansible_id)
