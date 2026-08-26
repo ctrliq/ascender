@@ -31,7 +31,7 @@ pygments==2.21.0
     #   sphinx
 pyyaml==6.0.3
     # via -r requirements.in
-requests==2.33.0
+requests==2.34.2
     # via sphinx
 roman-numerals==4.1.0
     # via sphinx
