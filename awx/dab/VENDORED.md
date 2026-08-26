@@ -71,6 +71,9 @@ Do not rename the labels.
   `awx/main/tests/functional/test_dab_jwt_auth.py`.
 - `resource_registry/views.py` — `DEFAULT_MAX_PAGE_SIZE = 200` inlined from
   `ansible_base.rest_pagination` (app not vendored).
+- `lib/utils/response.py` — `CSVStreamResponse.content_type` default corrected from
+  `text/event-stream` (the SSE type; upstream copy-paste artifact) to `text/csv`.
+  Affects the `resource-types/{name}/manifest/` endpoint's Content-Type header.
 
 Remaining `awx.dab.rbac.*` / `awx.dab.oauth2_provider.*` / `awx.dab.activitystream.*`
 imports are lazy and guarded by INSTALLED_APPS checks; those apps are never installed here.

@@ -30,7 +30,8 @@ class CSVStreamResponse:
 
     lines: Sequence[Sequence[str]]  # can be a generator that yields tuple[str]
     filename: Optional[str] = None
-    content_type: str = "text/event-stream"
+    # Upstream defaulted this to "text/event-stream" (the SSE type), mislabeling CSV bodies
+    content_type: str = "text/csv"
     headers: Optional[dict] = None
 
     def stream(self):
