@@ -77,7 +77,7 @@ click==8.1.7
     # via receptorctl
 constantly==23.10.4
     # via twisted
-cryptography==50.0.0
+cryptography==50.0.1
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   autobahn
