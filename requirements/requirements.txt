@@ -396,7 +396,7 @@ semantic-version==2.10.0
     # via setuptools-rust
 service-identity==24.1.0
     # via twisted
-setuptools-rust==1.8.1
+setuptools-rust==1.13.0
     # via -r /awx_devel/requirements/requirements.in
 setuptools-scm[toml]==8.0.4
     # via -r /awx_devel/requirements/requirements.in
