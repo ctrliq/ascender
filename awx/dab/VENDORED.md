@@ -49,6 +49,9 @@ Do not rename the labels.
   talking *to* a resource server was removed. `jwt_consumer` now skips claims processing with
   a warning when no RESOURCE_SERVER is configured (previously it failed authentication), and
   `_fetch_jwt_claims_from_gateway` remains only as an overridable hook.
+- `lib/utils/db.py` trimmed to the two functions actually imported (`ensure_transaction`,
+  `migrations_are_complete`); its advisory-lock and psycopg-connection helpers were unused —
+  AWX has its own in `awx.main.utils.pglock` and `awx.main.utils.db`.
 
 ## Local modifications
 
