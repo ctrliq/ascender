@@ -232,8 +232,17 @@ class FieldLookupBackend(BaseFilterBackend):
                     if distinct:
                         needs_distinct = True
                     if '_as_txt' in new_key:
-                        fname = next(item for item in new_key.split('__') if item.endswith('_as_txt'))
-                        queryset = queryset.annotate(**{fname: Cast(fname[:-7], output_field=TextField())})
+                        # Cast the JSONField to text via an annotation. Annotations are
+                        # top-level names, so for a lookup that traverses relations
+                        # (e.g. hosts__ansible_facts_as_txt__icontains) the annotation
+                        # must cast the full related path and the lookup key must be
+                        # rewritten to start with the annotation name.
+                        parts = new_key.split('__')
+                        idx = next(i for i, item in enumerate(parts) if item.endswith('_as_txt'))
+                        source_path = '__'.join(parts[: idx + 1])[:-7]
+                        fname = '_'.join(parts[: idx + 1])
+                        queryset = queryset.annotate(**{fname: Cast(source_path, output_field=TextField())})
+                        new_key = '__'.join([fname] + parts[idx + 1 :])
                     if q_chain:
                         chain_filters.append((q_not, new_key, value))
                     elif q_or:

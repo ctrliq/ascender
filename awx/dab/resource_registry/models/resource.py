@@ -136,7 +136,7 @@ class Resource(models.Model):
         from ..signals.handlers import no_reverse_sync
 
         if not self.content_type.resource_type.can_be_managed:
-            raise ValidationError({"resource_type": _(f"Resource type: {self.content_type.resource_type.name} cannot be managed by Resources.")})
+            raise ValidationError({"resource_type": _("Resource type: %(name)s cannot be managed by Resources.") % {"name": self.content_type.resource_type.name}})
 
         with transaction.atomic():
             with no_reverse_sync():

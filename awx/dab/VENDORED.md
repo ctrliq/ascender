@@ -77,6 +77,12 @@ Do not rename the labels.
 - `lib/utils/response.py` — `CSVStreamResponse.content_type` default corrected from
   `text/event-stream` (the SSE type; upstream copy-paste artifact) to `text/csv`.
   Affects the `resource-types/{name}/manifest/` endpoint's Content-Type header.
+- `rest_filters/rest_framework/field_lookup_backend.py` — fixed JSONField-as-text
+  filtering across relations (e.g. `hosts__ansible_facts__icontains`): upstream cast
+  only the bare field name at the queryset root and left the lookup pointing at an
+  unreachable annotation, so such filters always failed with a 400. The Cast now
+  follows the full related path and the lookup is rewritten to target the top-level
+  annotation. Covered by `awx/main/tests/functional/test_dab_rest_filters.py`.
 
 Remaining `awx.dab.rbac.*` / `awx.dab.oauth2_provider.*` / `awx.dab.activitystream.*`
 imports are lazy and guarded by INSTALLED_APPS checks; those apps are never installed here.

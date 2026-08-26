@@ -73,7 +73,7 @@ class ResourceListSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         resource_type = instance.content_type.resource_type
         if not resource_type.can_be_managed:
-            raise serializers.ValidationError({"resource_type": _(f"Resource type: {resource_type.name} cannot be managed by Resources.")})
+            raise serializers.ValidationError({"resource_type": _("Resource type: %(name)s cannot be managed by Resources.") % {"name": resource_type.name}})
 
         instance.update_resource(
             validated_data.get("resource_data", {}),
@@ -93,7 +93,7 @@ class ResourceListSerializer(serializers.ModelSerializer):
 
             resource_type = ResourceType.objects.get(name=validated_data["resource_type"])
             if not resource_type.can_be_managed:
-                raise serializers.ValidationError({"resource_type": _(f"Resource type: {resource_type.name} cannot be managed by Resources.")})
+                raise serializers.ValidationError({"resource_type": _("Resource type: %(name)s cannot be managed by Resources.") % {"name": resource_type.name}})
 
             return Resource.create_resource(
                 resource_type,
@@ -104,7 +104,7 @@ class ResourceListSerializer(serializers.ModelSerializer):
             )
 
         except ResourceType.DoesNotExist:
-            raise serializers.ValidationError({"resource_type": _(f"Resource type: {validated_data['resource_type']} does not exist.")})
+            raise serializers.ValidationError({"resource_type": _("Resource type: %(name)s does not exist.") % {"name": validated_data['resource_type']}})
 
 
 class ResourceSerializer(ResourceListSerializer):

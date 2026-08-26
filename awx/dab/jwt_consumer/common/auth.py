@@ -204,7 +204,11 @@ class JWTCommonAuth:
             expired_time = expired_token.get("exp")
             now = datetime.now().timestamp()
             time_diff = int(now - expired_time)
-            self.log_and_raise(_(f"JWT expired {time_diff} seconds ago - check for clock skew. Request ID: {request_id}"), error_code=HTTP_498_INVALID_TOKEN)
+            self.log_and_raise(
+                _("JWT expired %(time_diff)s seconds ago - check for clock skew. Request ID: %(request_id)s"),
+                {"time_diff": time_diff, "request_id": request_id},
+                error_code=HTTP_498_INVALID_TOKEN,
+            )
         except jwt.exceptions.InvalidAudienceError:
             self.log_and_raise(_("JWT did not come for the correct audience"))
         except jwt.exceptions.InvalidIssuerError:
