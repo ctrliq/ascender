@@ -310,7 +310,7 @@ pydantic-core==2.16.2
     # via pydantic
 pygerduty==0.38.3
     # via -r /awx_devel/requirements/requirements.in
-pygithub==2.8.1
+pygithub==2.10.0
     # via -r /awx_devel/requirements/requirements.in
 pyjwt[crypto]==2.13.0
     # via
