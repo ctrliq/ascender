@@ -1307,7 +1307,10 @@ class OAuth2ApplicationSerializer(BaseSerializer):
         read_only_on_update_fields = ('user', 'authorization_grant_type')
         extra_kwargs = {
             'user': {'allow_null': True, 'required': False},
-            'organization': {'allow_null': False},
+            # required/default must be explicit since DRF 3.16: nullable FKs now
+            # infer required=False with default=None, which would change this
+            # endpoint's contract (OPTIONS metadata and the missing-field error code)
+            'organization': {'allow_null': False, 'required': True, 'default': serializers.empty},
             'authorization_grant_type': {'allow_null': False, 'label': _('Authorization Grant Type')},
             'client_secret': {'label': _('Client Secret')},
             'client_type': {'label': _('Client Type')},
@@ -1763,6 +1766,12 @@ class InventorySerializer(LabelsListMixin, BaseSerializerWithVariables):
             'pending_deletion',
             'prevent_instance_group_fallback',
         )
+        extra_kwargs = {
+            # required/default must be explicit since DRF 3.16: nullable FKs now
+            # infer required=False with default=None, which would change this
+            # endpoint's contract (OPTIONS metadata and the missing-field error code)
+            'organization': {'required': True, 'default': serializers.empty},
+        }
 
     def get_related(self, obj):
         res = super(InventorySerializer, self).get_related(obj)
@@ -5319,6 +5328,12 @@ class NotificationTemplateSerializer(BaseSerializer):
     class Meta:
         model = NotificationTemplate
         fields = ('*', 'organization', 'notification_type', 'notification_configuration', 'messages')
+        extra_kwargs = {
+            # required/default must be explicit since DRF 3.16: nullable FKs now
+            # infer required=False with default=None, which would change this
+            # endpoint's contract (OPTIONS metadata and the missing-field error code)
+            'organization': {'required': True, 'default': serializers.empty},
+        }
 
     type_map = {"string": (str,), "int": (int,), "bool": (bool,), "list": (list,), "password": (str,), "object": (dict, OrderedDict)}
 
