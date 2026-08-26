@@ -108,6 +108,7 @@ django==5.2.17
     #   django-extensions
     #   django-guid
     #   django-oauth-toolkit
+    #   django-pgware
     #   django-polymorphic
     #   django-solo
     #   django-valkey
@@ -126,7 +127,7 @@ django-guid==3.6.1
     # via -r /awx_devel/requirements/requirements.in
 django-oauth-toolkit==3.3.0
     # via -r /awx_devel/requirements/requirements.in
-django-pglocks==1.0.4
+django-pgware==1.0.0
     # via -r /awx_devel/requirements/requirements.in
 django-polymorphic==4.11.7
     # via -r /awx_devel/requirements/requirements.in
@@ -394,7 +395,6 @@ setuptools-scm[toml]==8.0.4
     # via -r /awx_devel/requirements/requirements.in
 six==1.16.0
     # via
-    #   django-pglocks
     #   isodate
     #   kubernetes
     #   openshift
