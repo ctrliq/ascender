@@ -29,6 +29,9 @@ Do not rename the labels.
 ## Pruned relative to upstream
 
 - `jwt_consumer/eda/`, `jwt_consumer/hub/` — consumers for services we do not run.
+- `jwt_consumer/{views,urls}.py` and `redirect.html` — the PlatformUIRedirectView that bounces
+  browsers to the AAP platform UI; its urlconf was never mounted here, and the html file was
+  not covered by MANIFEST.in anyway.
 - `resource_registry/tasks/` and `management/commands/resource_sync.py` — resource-server
   (gateway) sync; hard module-level dependency on `ansible_base.rbac`, which we do not vendor.
 - `RoleDefinitionType`, `FeatureFlagType`, `LenientPermissionSlugListField` in
