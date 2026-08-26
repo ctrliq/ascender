@@ -136,7 +136,7 @@ django-polymorphic==4.1.0
     # via -r /awx_devel/requirements/requirements.in
 django-radius==1.5.1
     # via -r /awx_devel/requirements/requirements.in
-django-solo==2.4.0
+django-solo==2.5.1
     # via -r /awx_devel/requirements/requirements.in
 django-split-settings==1.0.0
     # via -r /awx_devel/requirements/requirements.in
