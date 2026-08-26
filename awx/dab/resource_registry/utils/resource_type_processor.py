@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from django.db import models
 
@@ -33,12 +33,13 @@ class ResourceTypeProcessor:
         """
         raise NotImplementedError("Additional data is not supported by default.")
 
-    def save(self, validated_data: Dict[str, Any], is_new: bool = False, skip_keys: List[str] = []) -> Tuple[bool, models.Model]:
+    def save(self, validated_data: Dict[str, Any], is_new: bool = False, skip_keys: Optional[List[str]] = None) -> Tuple[bool, models.Model]:
         """
         This gets called when an instance of a Resource is saved and allows for
         services to customize how the resource gets saved with their local copy
         of the model.
         """
+        skip_keys = skip_keys or []
         changed = False
         for k, val in validated_data.items():
             if k in skip_keys:

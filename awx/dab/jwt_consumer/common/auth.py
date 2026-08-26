@@ -150,7 +150,8 @@ class JWTCommonAuth:
 
         logger.info(f"User {self.user.username} authenticated from JWT auth")
 
-    def log_and_raise(self, conditional_translate_object, expand_values={}, error_code=None):
+    def log_and_raise(self, conditional_translate_object, expand_values=None, error_code=None):
+        expand_values = expand_values or {}
         logger.error(conditional_translate_object.not_translated() % expand_values)
         translated_error_message = conditional_translate_object.translated() % expand_values
         if error_code == HTTP_498_INVALID_TOKEN:
@@ -227,10 +228,10 @@ class JWTCommonAuth:
 
         return validated_body
 
-    def decode_jwt_token(self, unencrypted_token, decryption_key, additional_options={}):
+    def decode_jwt_token(self, unencrypted_token, decryption_key, additional_options=None):
         local_required_field = ["sub", "user_data", "exp", "claims_hash", "version"]
         options = {"require": local_required_field}
-        options.update(additional_options)
+        options.update(additional_options or {})
         return jwt.decode(
             unencrypted_token,
             decryption_key,
