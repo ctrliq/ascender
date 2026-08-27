@@ -15,9 +15,10 @@ cryptography>=50.0.0  # CVE-2026-69247
 Cython>=3 # this is needed as a build dependency, one day we may have separated build deps; <3 cap removed once pyyaml>=6.0.1 supported Cython 3
 daphne>=4.2.2  # CVE-2026-44545 CVE-2026-44546
 distro
-django>=5.2.17,<6.0 # CVE-2026-15307 CVE-2026-15830; <6.0 also enforced by django-ansible-base (Django<6.0, djangorestframework<3.16)
+django>=5.2.17,<6.0 # CVE-2026-15307 CVE-2026-15830
 django-auth-ldap
 django-cors-headers
+django-crum  # used by vendored awx/dab (formerly a django-ansible-base dep)
 django-extensions==4.1
 django-guid==3.5.2
 django-oauth-toolkit>=3.3.0
@@ -28,11 +29,12 @@ django-solo
 drf-spectacular>=0.27.0
 django-split-settings==1.0.0    # We hit a strange issue where the release process errored when upgrading past 1.0.0 see UPGRADE BLOCKERS
 django-valkey
-djangorestframework>=3.15.2 # CVE-2024-21520
+djangorestframework>=3.17.2 # CVE-2026-73228 CVE-2026-73229
 djangorestframework-yaml
 filelock
 GitPython>=3.1.58  # GHSA-hh9p-6wh2-4mfc GHSA-9rj7-rf2p-w77r GHSA-4gmw-gg2m-w46p GHSA-hmq2-w58f-27jc GHSA-wvpp-8hx9-p66j GHSA-jm78-9fvv-mhgr
 importlib-metadata==4.6.4
+inflection  # used by vendored awx/dab (formerly a django-ansible-base dep)
 irc
 jaraco.functools>= 4
 jinja2>=3.1.6  # CVE-2025-27516
@@ -47,6 +49,7 @@ psycopg
 psutil
 pygerduty
 pygithub
+pyjwt[crypto]  # used by vendored awx/dab jwt_consumer (formerly a django-ansible-base dep)
 pyopenssl>=26.4.0  # tracks cryptography pin above (pyopenssl 26.3.0 requires cryptography>=49)
 pyparsing==2.4.6  # Upgrading to v3 of pyparsing introduce errors on smart host filtering: Expected 'or' term, found 'or'  (at char 15), (line:1, col:16)
 python-daemon>3.0.0

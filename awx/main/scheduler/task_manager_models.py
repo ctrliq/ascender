@@ -255,9 +255,9 @@ class TaskManagerInstanceGroups:
                 if ig:
                     igs.append(ig)
                 else:
-                    logger.warn(f"Unknown instance group with pk {pk} for task {task}")
+                    logger.warning(f"Unknown instance group with pk {pk} for task {task}")
         if len(igs) == 0:
-            logger.warn(f"No instance groups in cache exist, defaulting to global instance groups for task {task}")
+            logger.warning(f"No instance groups in cache exist, defaulting to global instance groups for task {task}")
             return task.global_instance_groups
         return igs
 
@@ -306,7 +306,7 @@ class TaskManagerModels:
         # The container groups have no instances to look at to track how many jobs/forks are consumed
         if task.instance_group_id:
             if task.instance_group_id not in self.instance_groups.pk_ig_map.keys():
-                logger.warn(
+                logger.warning(
                     f"Task {task.log_format} assigned {task.instance_group_id} but this instance group not present in map of instance groups{self.instance_groups.pk_ig_map.keys()}"
                 )
             else:

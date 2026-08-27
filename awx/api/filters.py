@@ -8,8 +8,8 @@ import operator
 # Django
 from django.db.models import Q
 
-# django-ansible-base
-from ansible_base.rest_filters.rest_framework.field_lookup_backend import FieldLookupBackend
+# awx.dab (vendored django-ansible-base subset)
+from awx.dab.rest_filters.rest_framework.field_lookup_backend import FieldLookupBackend
 
 __all__ = ['DERIVED_HOST_FIELDS', 'HostFieldLookupBackend']
 
