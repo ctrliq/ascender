@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Link, useParams } from 'react-router';
-import { useLingui } from '@lingui/react/macro';
+import { Plural, useLingui } from '@lingui/react/macro';
 
 import styled from 'styled-components';
 import {
@@ -52,7 +52,7 @@ function InstanceListItem({
   fetchInstances,
   rowIndex,
 }) {
-  const { t, i18n } = useLingui();
+  const { t } = useLingui();
   const config = useConfig();
   const { id } = useParams();
   const [forks, setForks] = useState(
@@ -158,9 +158,7 @@ function InstanceListItem({
             <div data-cy="cpu-capacity">{t`CPU ${instance.cpu_capacity}`}</div>
             <SliderForks data-cy="slider-forks">
               <div data-cy="number-forks">
-                {i18n._('{count, plural, one {# fork} other {# forks}}', {
-                  count: forks,
-                })}
+                <Plural value={forks} one="# fork" other="# forks" />
               </div>
               <Slider
                 areCustomStepsContinuous

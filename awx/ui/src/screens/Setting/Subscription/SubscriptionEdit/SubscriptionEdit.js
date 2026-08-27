@@ -192,7 +192,7 @@ function SubscriptionEdit() {
     {
       name: hasValidKey
         ? t`Subscription Management`
-        : `${brandName} ${t`Subscription`}`,
+        : t`${brandName} Subscription`,
       id: 'subscription-step',
       component: <SubscriptionStep />,
     },

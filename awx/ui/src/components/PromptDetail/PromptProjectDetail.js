@@ -144,7 +144,7 @@ function PromptProjectDetail({ resource }) {
       <Detail
         label={t`Cache Timeout`}
         dataCy={`${prefixCy}-cache-timeout`}
-        value={`${scm_update_cache_timeout} ${t`Seconds`}`}
+        value={t`${scm_update_cache_timeout} seconds`}
       />
       <Config>
         {({ project_base_dir }) => (

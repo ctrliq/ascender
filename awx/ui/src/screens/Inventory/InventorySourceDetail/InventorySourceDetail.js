@@ -26,14 +26,14 @@ import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDeta
 import useIsMounted from 'hooks/useIsMounted';
 import { formatDateString } from 'util/dates';
 import Popover from 'components/Popover';
-import { VERBOSITY } from 'components/VerbositySelectField';
+import { getVerbosityLabel } from 'components/VerbositySelectField';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import InventorySourceSyncButton from '../shared/InventorySourceSyncButton';
 import useWsInventorySourcesDetails from '../shared/useWsInventorySourcesDetails';
 import getHelpText from '../shared/Inventory.helptext';
 
 function InventorySourceDetail({ inventorySource }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const [isI18nLoading, setIsI18nLoading] = useState(true);
   const [deletionError, setDeletionError] = useState(false);
   const navigate = useNavigate();
@@ -98,7 +98,7 @@ function InventorySourceDetail({ inventorySource }) {
     fetchSourceChoices();
   }, [fetchSourceChoices]);
 
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const {
     created_by,
     credentials,
@@ -125,9 +125,9 @@ function InventorySourceDetail({ inventorySource }) {
     }
   };
 
-  const deleteDetailsRequests = relatedResourceDeleteRequests(
-    t
-  ).inventorySource(inventorySource.id);
+  const deleteDetailsRequests = relatedResourceDeleteRequests.inventorySource(
+    inventorySource.id
+  );
 
   if (isI18nLoading) {
     return <ContentLoading />;
@@ -260,7 +260,7 @@ function InventorySourceDetail({ inventorySource }) {
         <Detail
           label={t`Verbosity`}
           helpText={helpText.subFormVerbosityFields}
-          value={VERBOSITY(t)[verbosity]}
+          value={getVerbosityLabel(verbosity, i18n)}
         />
         <Detail
           label={t`Source Control Branch`}
@@ -269,7 +269,7 @@ function InventorySourceDetail({ inventorySource }) {
         />
         <Detail
           label={t`Cache timeout`}
-          value={`${update_cache_timeout} ${t`seconds`}`}
+          value={t`${update_cache_timeout} seconds`}
           helpText={helpText.subFormOptions.cachedTimeOut}
         />
         <Detail

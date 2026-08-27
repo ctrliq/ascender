@@ -101,7 +101,7 @@ function CredentialTypeList() {
 
   const canAdd = actions && actions.POST;
 
-  const deleteDetailsRequests = relatedResourceDeleteRequests(t).credentialType(
+  const deleteDetailsRequests = relatedResourceDeleteRequests.credentialType(
     selected[0]
   );
 

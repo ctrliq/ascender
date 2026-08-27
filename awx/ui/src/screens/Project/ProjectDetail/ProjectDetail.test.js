@@ -125,7 +125,7 @@ describe('<ProjectDetail />', () => {
     );
     assertDetail(
       'Cache Timeout',
-      `${mockProject.scm_update_cache_timeout} Seconds`
+      `${mockProject.scm_update_cache_timeout} seconds`
     );
 
     assertDetail(

@@ -50,9 +50,7 @@ describe('PromptJobTemplateDetail', () => {
     assertDetail('Playbook', 'ping.yml');
     assertDetail('Forks', '2');
     assertDetail('Limit', 'alpha:beta');
-    // Verbosity Detail renders empty under jsdom (Lingui macro returns no text),
-    // so the row is not present in the DOM — matching the original suite which
-    // skipped its text assertion.
+    assertDetail('Verbosity', '3 (Debug)');
     assertDetail('Show Changes', 'Off');
     // ' Job Slicing' label has a leading space; getByText normalizes whitespace
     expect(

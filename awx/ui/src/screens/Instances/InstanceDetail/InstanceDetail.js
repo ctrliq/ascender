@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
-import { useLingui } from '@lingui/react/macro';
+import { Plural, useLingui } from '@lingui/react/macro';
 import {
   Button,
   Progress,
@@ -62,7 +62,7 @@ function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) {
 }
 
 function InstanceDetail({ setBreadcrumb, isK8s }) {
-  const { t, i18n } = useLingui();
+  const { t } = useLingui();
   const config = useConfig();
 
   const { id } = useParams();
@@ -284,10 +284,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
                     </div>
                     <SliderForks data-cy="slider-forks">
                       <div data-cy="number-forks">
-                        {i18n._(
-                          '{count, plural, one {# fork} other {# forks}}',
-                          { count: forks }
-                        )}
+                        <Plural value={forks} one="# fork" other="# forks" />
                       </div>
                       <Slider
                         areCustomStepsContinuous

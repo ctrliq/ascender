@@ -31,8 +31,7 @@ export const UrlFormField = ({ tooltip }) => {
 };
 
 export const BranchFormField = ({ label }) => {
-  const { t } = useLingui();
-  const projectHelpStrings = getProjectHelpStrings(t);
+  const projectHelpStrings = getProjectHelpStrings();
   return (
     <FormField
       id="project-scm-branch"
@@ -73,7 +72,7 @@ export const ScmCredentialFormField = ({
 export const ScmTypeOptions = ({ scmUpdateOnLaunch, hideAllowOverride }) => {
   const { t } = useLingui();
   const { values } = useFormikContext();
-  const projectHelpStrings = getProjectHelpStrings(t);
+  const projectHelpStrings = getProjectHelpStrings();
 
   const [enableWebhooks, setEnableWebhooks] = useState(
     Boolean(values.webhook_service)

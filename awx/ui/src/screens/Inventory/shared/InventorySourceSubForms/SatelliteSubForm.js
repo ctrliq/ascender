@@ -16,7 +16,7 @@ import getHelpText from '../Inventory.helptext';
 
 const SatelliteSubForm = ({ autoPopulateCredential }) => {
   const { t } = useLingui();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [credentialField, credentialMeta, credentialHelpers] =
     useField('credential');

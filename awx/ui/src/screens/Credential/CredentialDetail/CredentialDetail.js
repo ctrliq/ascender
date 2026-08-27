@@ -188,7 +188,7 @@ function CredentialDetail({ credential }) {
   }, [fetchDetails]);
 
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).credential(credential);
+    relatedResourceDeleteRequests.credential(credential);
 
   const enabledBooleanFields = fields.filter(
     ({ id, type }) => type === 'boolean' && inputs[id]

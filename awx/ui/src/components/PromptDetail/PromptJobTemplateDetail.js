@@ -10,10 +10,10 @@ import Sparkline from '../Sparkline';
 import { Detail, DeletedDetail } from '../DetailList';
 import { VariablesDetail } from '../CodeEditor';
 import ExecutionEnvironmentDetail from '../ExecutionEnvironmentDetail';
-import { VERBOSITY } from '../VerbositySelectField';
+import { getVerbosityLabel } from '../VerbositySelectField';
 
 function PromptJobTemplateDetail({ resource }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const {
     allow_simultaneous,
     ask_inventory_on_launch,
@@ -139,7 +139,7 @@ function PromptJobTemplateDetail({ resource }) {
         value={typeof forks === 'number' ? forks.toString() : forks}
       />
       <Detail label={t`Limit`} value={limit} />
-      <Detail label={t`Verbosity`} value={VERBOSITY(t)[verbosity]} />
+      <Detail label={t`Verbosity`} value={getVerbosityLabel(verbosity, i18n)} />
       {typeof diff_mode === 'boolean' && (
         <Detail label={t`Show Changes`} value={diff_mode ? t`On` : t`Off`} />
       )}

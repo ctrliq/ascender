@@ -157,9 +157,9 @@ function InventorySourceList() {
     Object.prototype.hasOwnProperty.call(sourceChoicesOptions, 'POST');
   const listUrl = `/inventories/${inventoryType}/${id}/sources/`;
 
-  const deleteDetailsRequests = relatedResourceDeleteRequests(
-    t
-  ).inventorySource(selected[0]?.id);
+  const deleteDetailsRequests = relatedResourceDeleteRequests.inventorySource(
+    selected[0]?.id
+  );
   return (
     <>
       <PaginatedTable

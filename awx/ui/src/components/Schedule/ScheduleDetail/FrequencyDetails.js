@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Plural, SelectOrdinal, useLingui } from '@lingui/react/macro';
+import { msg } from '@lingui/core/macro';
 import { DateTime } from 'luxon';
 import { formatDateString } from 'util/dates';
 import { DetailList, Detail } from '../../DetailList';
@@ -10,6 +11,49 @@ const Label = styled.div`
   font-weight: var(--pf-v6-global--FontWeight--bold);
 `;
 
+const DAY_LABELS = {
+  sunday: msg`Sunday`,
+  monday: msg`Monday`,
+  tuesday: msg`Tuesday`,
+  wednesday: msg`Wednesday`,
+  thursday: msg`Thursday`,
+  friday: msg`Friday`,
+  saturday: msg`Saturday`,
+};
+
+// rrule weekday indexes (0 = Monday)
+const RRULE_WEEKDAY_LABELS = {
+  0: DAY_LABELS.monday,
+  1: DAY_LABELS.tuesday,
+  2: DAY_LABELS.wednesday,
+  3: DAY_LABELS.thursday,
+  4: DAY_LABELS.friday,
+  5: DAY_LABELS.saturday,
+  6: DAY_LABELS.sunday,
+};
+
+const RUN_ON_DAY_LABELS = {
+  ...DAY_LABELS,
+  day: msg`day`,
+  weekday: msg`weekday`,
+  weekendDay: msg`weekend day`,
+};
+
+const MONTH_LABELS = {
+  1: msg`January`,
+  2: msg`February`,
+  3: msg`March`,
+  4: msg`April`,
+  5: msg`May`,
+  6: msg`June`,
+  7: msg`July`,
+  8: msg`August`,
+  9: msg`September`,
+  10: msg`October`,
+  11: msg`November`,
+  12: msg`December`,
+};
+
 export default function FrequencyDetails({
   type,
   label,
@@ -17,39 +61,26 @@ export default function FrequencyDetails({
   timezone,
   isException,
 }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const getRunEveryLabel = () => {
     const { interval } = options;
     switch (type) {
       case 'minute':
-        return interval === 1 ? t`${interval} minute` : t`${interval} minutes`;
+        return <Plural value={interval} one="# minute" other="# minutes" />;
       case 'hour':
-        return interval === 1 ? t`${interval} hour` : t`${interval} hours`;
+        return <Plural value={interval} one="# hour" other="# hours" />;
       case 'day':
-        return interval === 1 ? t`${interval} day` : t`${interval} days`;
+        return <Plural value={interval} one="# day" other="# days" />;
       case 'week':
-        return interval === 1 ? t`${interval} week` : t`${interval} weeks`;
+        return <Plural value={interval} one="# week" other="# weeks" />;
       case 'month':
-        return interval === 1 ? t`${interval} month` : t`${interval} months`;
+        return <Plural value={interval} one="# month" other="# months" />;
       case 'year':
-        return interval === 1 ? t`${interval} year` : t`${interval} years`;
+        return <Plural value={interval} one="# year" other="# years" />;
       default:
         throw new Error(t`Frequency did not match an expected value`);
     }
   };
-
-  const weekdays = React.useMemo(
-    () => ({
-      0: t`Monday`,
-      1: t`Tuesday`,
-      2: t`Wednesday`,
-      3: t`Thursday`,
-      4: t`Friday`,
-      5: t`Saturday`,
-      6: t`Sunday`,
-    }),
-    [t]
-  );
 
   const prefix = isException ? `exception-${type}` : `frequency-${type}`;
 
@@ -67,7 +98,7 @@ export default function FrequencyDetails({
             label={t`On days`}
             value={options.daysOfWeek
               .sort(sortWeekday)
-              .map((d) => weekdays[d.weekday])
+              .map((d) => i18n._(RRULE_WEEKDAY_LABELS[d.weekday]))
               .join(', ')}
             dataCy={`${prefix}-days-of-week`}
           />
@@ -86,22 +117,7 @@ function sortWeekday(a, b) {
 }
 
 function RunOnDetail({ type, options, prefix }) {
-  const { t } = useLingui();
-  const weekdays = React.useMemo(
-    () => ({
-      sunday: t`Sunday`,
-      monday: t`Monday`,
-      tuesday: t`Tuesday`,
-      wednesday: t`Wednesday`,
-      thursday: t`Thursday`,
-      friday: t`Friday`,
-      saturday: t`Saturday`,
-      day: t`day`,
-      weekday: t`weekday`,
-      weekendDay: t`weekend day`,
-    }),
-    [t]
-  );
+  const { t, i18n } = useLingui();
 
   if (type === 'month') {
     if (options.runOn === 'day') {
@@ -113,7 +129,7 @@ function RunOnDetail({ type, options, prefix }) {
         />
       );
     }
-    const dayOfWeek = weekdays[options.runOnTheDay];
+    const dayOfWeek = i18n._(RUN_ON_DAY_LABELS[options.runOnTheDay]);
     return (
       <Detail
         label={t`Run on`}
@@ -136,31 +152,17 @@ function RunOnDetail({ type, options, prefix }) {
     );
   }
   if (type === 'year') {
-    const months = {
-      1: t`January`,
-      2: t`February`,
-      3: t`March`,
-      4: t`April`,
-      5: t`May`,
-      6: t`June`,
-      7: t`July`,
-      8: t`August`,
-      9: t`September`,
-      10: t`October`,
-      11: t`November`,
-      12: t`December`,
-    };
+    const month = i18n._(MONTH_LABELS[options.runOnTheMonth]);
     if (options.runOn === 'day') {
       return (
         <Detail
           label={t`Run on`}
-          value={`${months[options.runOnTheMonth]} ${options.runOnDayMonth}`}
+          value={`${month} ${options.runOnDayMonth}`}
           dataCy={`${prefix}-run-on-day`}
         />
       );
     }
-    const weekday = weekdays[options.runOnTheDay];
-    const month = months[options.runOnTheMonth];
+    const weekday = i18n._(RUN_ON_DAY_LABELS[options.runOnTheDay]);
     return (
       <Detail
         label={t`Run on`}

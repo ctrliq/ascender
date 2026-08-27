@@ -29,7 +29,7 @@ describe('PromptProjectDetail', () => {
     );
     assertDetail('Source Control Branch', 'foo');
     assertDetail('Source Control Refspec', 'refs/');
-    assertDetail('Cache Timeout', '3 Seconds');
+    assertDetail('Cache Timeout', '3 seconds');
     assertDetail('Project Base Path', 'dir/foo/bar');
     assertDetail('Playbook Directory', '_6__demo_project');
     assertDetail('Source Control Credential', 'Scm: mock scm');

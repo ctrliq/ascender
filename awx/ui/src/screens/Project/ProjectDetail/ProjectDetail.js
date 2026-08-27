@@ -77,8 +77,7 @@ function ProjectDetail({ project }) {
   const brandName = useBrandName();
 
   const { error, dismissError } = useDismissableError(deleteError);
-  const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).project(project);
+  const deleteDetailsRequests = relatedResourceDeleteRequests.project(project);
   let optionsList = '';
   if (
     scm_clean ||
@@ -266,7 +265,7 @@ function ProjectDetail({ project }) {
         )}
         <Detail
           label={t`Cache Timeout`}
-          value={`${scm_update_cache_timeout} ${t`Seconds`}`}
+          value={t`${scm_update_cache_timeout} seconds`}
         />
         {webhook_service && (
           <Detail

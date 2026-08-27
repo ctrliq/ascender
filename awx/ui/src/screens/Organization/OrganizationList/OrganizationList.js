@@ -101,7 +101,7 @@ function OrganizationsList() {
   const canAdd = actions && actions.POST;
   const { t } = useLingui();
 
-  const deleteDetailsRequests = relatedResourceDeleteRequests(t).organization(
+  const deleteDetailsRequests = relatedResourceDeleteRequests.organization(
     selected[0]
   );
 

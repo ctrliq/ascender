@@ -35,7 +35,7 @@ import getHelpText from '../Inventory.helptext';
 
 const SCMSubForm = ({ autoPopulateProject }) => {
   const { t } = useLingui();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const [isOpen, setIsOpen] = useState(false);
   const [filterValue, setFilterValue] = useState('');
   const [sourcePath, setSourcePath] = useState([]);

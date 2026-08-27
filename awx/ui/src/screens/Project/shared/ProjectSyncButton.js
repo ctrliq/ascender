@@ -13,7 +13,7 @@ import getProjectHelpStrings from './Project.helptext';
 
 function ProjectSyncButton({ projectId, lastJobStatus = null }) {
   const { t } = useLingui();
-  const projectHelpStrings = getProjectHelpStrings(t);
+  const projectHelpStrings = getProjectHelpStrings();
   const { pathname } = useLocation();
 
   const { request: handleSync, error: syncError } = useRequest(

@@ -25,7 +25,7 @@ import DeleteButton from '../../DeleteButton';
 import ErrorDetail from '../../ErrorDetail';
 import ChipGroup from '../../ChipGroup';
 import { VariablesDetail } from '../../CodeEditor';
-import { VERBOSITY } from '../../VerbositySelectField';
+import { getVerbosityLabel } from '../../VerbositySelectField';
 import getHelpText from '../../../screens/Template/shared/JobTemplate.helptext';
 
 const PromptDivider = styled(Divider)`
@@ -67,7 +67,7 @@ const FrequencyDetailsContainer = styled.div`
 `;
 
 function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const {
     id,
     created,
@@ -276,7 +276,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
   const showJobTypeDetail = ask_job_type_on_launch && job_type;
   const showSCMBranchDetail = ask_scm_branch_on_launch && scm_branch;
   const showVerbosityDetail =
-    ask_verbosity_on_launch && VERBOSITY(t)[verbosity];
+    ask_verbosity_on_launch && getVerbosityLabel(verbosity, i18n);
   const showExecutionEnvironmentDetail =
     ask_execution_environment_on_launch && execution_environment;
   const showLabelsDetail = ask_labels_on_launch && labels && labels.length > 0;
@@ -486,7 +486,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
             {ask_verbosity_on_launch && (
               <Detail
                 label={t`Verbosity`}
-                value={VERBOSITY(t)[verbosity]}
+                value={getVerbosityLabel(verbosity, i18n)}
                 dataCy="schedule-verbosity"
               />
             )}

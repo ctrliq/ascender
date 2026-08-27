@@ -27,7 +27,7 @@ import getHelpText from '../shared/Inventory.helptext';
 function InventoryDetail({ inventory }) {
   const { t } = useLingui();
   const navigate = useNavigate();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const {
     result: instanceGroups,
     isLoading,
@@ -60,7 +60,7 @@ function InventoryDetail({ inventory }) {
   const { prevent_instance_group_fallback } = inventory;
 
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).inventory(inventory);
+    relatedResourceDeleteRequests.inventory(inventory);
 
   const renderOptionsField = prevent_instance_group_fallback;
 
