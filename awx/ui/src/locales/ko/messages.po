@@ -3883,6 +3883,7 @@ msgstr "당기다"
 msgid "Environment variables or extra variables that specify the values a credential type can inject."
 msgstr "인증 정보 유형에서 삽입할 수 있는 값을 지정하는 환경 변수 또는 추가 변수입니다."
 
+#: util/getRelatedResourceDeleteDetails.js:105
 #: util/getRelatedResourceDeleteDetails.js:140
 msgid "Workflow Job Templates"
 msgstr "워크플로우 작업 템플릿"
@@ -5144,6 +5145,7 @@ msgstr "월"
 #: screens/Template/shared/JobTemplateForm.js:401
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:49
 #: util/getRelatedResourceDeleteDetails.js:91
+#: util/getRelatedResourceDeleteDetails.js:167
 msgid "Credentials"
 msgstr "인증 정보"
 
@@ -6427,7 +6429,6 @@ msgstr "세부 정보 탭"
 #: screens/Inventory/shared/InventorySourceSubForms/TerraformSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/VirtualizationSubForm.js:39
 #: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:39
-#: util/getRelatedResourceDeleteDetails.js:167
 msgid "Credential"
 msgstr "인증 정보"
 
@@ -6992,7 +6993,6 @@ msgstr "Playbook 디렉토리 선택"
 #: screens/Job/JobDetail/JobDetail.js:274
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:100
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:222
-#: util/getRelatedResourceDeleteDetails.js:105
 msgid "Workflow Job Template"
 msgstr "워크플로우 작업 템플릿"
 

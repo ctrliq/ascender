@@ -3886,6 +3886,7 @@ msgstr "سحب"
 msgid "Environment variables or extra variables that specify the values a credential type can inject."
 msgstr "متغيرات البيئة أو المتغيرات الإضافية التي تحدد القيم التي يمكن لنوع بيانات الاعتماد حقنها."
 
+#: util/getRelatedResourceDeleteDetails.js:105
 #: util/getRelatedResourceDeleteDetails.js:140
 msgid "Workflow Job Templates"
 msgstr "قوالب مهام سير العمل"
@@ -5147,6 +5148,7 @@ msgstr "شهر"
 #: screens/Template/shared/JobTemplateForm.js:401
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:49
 #: util/getRelatedResourceDeleteDetails.js:91
+#: util/getRelatedResourceDeleteDetails.js:167
 msgid "Credentials"
 msgstr "بيانات الاعتماد"
 
@@ -6430,7 +6432,6 @@ msgstr "علامة تبويب التفاصيل"
 #: screens/Inventory/shared/InventorySourceSubForms/TerraformSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/VirtualizationSubForm.js:39
 #: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:39
-#: util/getRelatedResourceDeleteDetails.js:167
 msgid "Credential"
 msgstr "بيانات الاعتماد"
 
@@ -6995,7 +6996,6 @@ msgstr "اختر دليل Playbook"
 #: screens/Job/JobDetail/JobDetail.js:274
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:100
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:222
-#: util/getRelatedResourceDeleteDetails.js:105
 msgid "Workflow Job Template"
 msgstr "قالب مهمة سير العمل"
 

@@ -3883,6 +3883,7 @@ msgstr "プル"
 msgid "Environment variables or extra variables that specify the values a credential type can inject."
 msgstr "認証情報タイプが挿入できる値を指定する環境変数または追加変数。"
 
+#: util/getRelatedResourceDeleteDetails.js:105
 #: util/getRelatedResourceDeleteDetails.js:140
 msgid "Workflow Job Templates"
 msgstr "ワークフロージョブテンプレート"
@@ -5144,6 +5145,7 @@ msgstr "月"
 #: screens/Template/shared/JobTemplateForm.js:401
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:49
 #: util/getRelatedResourceDeleteDetails.js:91
+#: util/getRelatedResourceDeleteDetails.js:167
 msgid "Credentials"
 msgstr "認証情報"
 
@@ -6427,7 +6429,6 @@ msgstr "詳細タブ"
 #: screens/Inventory/shared/InventorySourceSubForms/TerraformSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/VirtualizationSubForm.js:39
 #: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:39
-#: util/getRelatedResourceDeleteDetails.js:167
 msgid "Credential"
 msgstr "認証情報"
 
@@ -6992,7 +6993,6 @@ msgstr "Playbook ディレクトリーの選択"
 #: screens/Job/JobDetail/JobDetail.js:274
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:100
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:222
-#: util/getRelatedResourceDeleteDetails.js:105
 msgid "Workflow Job Template"
 msgstr "ワークフロージョブテンプレート"
 

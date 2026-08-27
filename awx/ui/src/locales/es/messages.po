@@ -3884,6 +3884,7 @@ msgstr "Extraer"
 msgid "Environment variables or extra variables that specify the values a credential type can inject."
 msgstr "Variables de entorno o variables extra que especifican los valores que un tipo de credencial puede inyectar."
 
+#: util/getRelatedResourceDeleteDetails.js:105
 #: util/getRelatedResourceDeleteDetails.js:140
 msgid "Workflow Job Templates"
 msgstr "Plantillas de trabajo para flujo de trabajo"
@@ -5145,6 +5146,7 @@ msgstr "Mes"
 #: screens/Template/shared/JobTemplateForm.js:401
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:49
 #: util/getRelatedResourceDeleteDetails.js:91
+#: util/getRelatedResourceDeleteDetails.js:167
 msgid "Credentials"
 msgstr "Credenciales"
 
@@ -6429,7 +6431,6 @@ msgstr "Pestaña de detalles"
 #: screens/Inventory/shared/InventorySourceSubForms/TerraformSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/VirtualizationSubForm.js:39
 #: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:39
-#: util/getRelatedResourceDeleteDetails.js:167
 msgid "Credential"
 msgstr "Credencial"
 
@@ -6994,7 +6995,6 @@ msgstr "Elegir un directorio de playbook"
 #: screens/Job/JobDetail/JobDetail.js:274
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:100
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:222
-#: util/getRelatedResourceDeleteDetails.js:105
 msgid "Workflow Job Template"
 msgstr "Plantilla de trabajo para flujo de trabajo"
 

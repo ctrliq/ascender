@@ -3883,6 +3883,7 @@ msgstr "拉取"
 msgid "Environment variables or extra variables that specify the values a credential type can inject."
 msgstr "用于指定凭证类型可注入值的环境变量或额外变量。"
 
+#: util/getRelatedResourceDeleteDetails.js:105
 #: util/getRelatedResourceDeleteDetails.js:140
 msgid "Workflow Job Templates"
 msgstr "工作流作业模板"
@@ -5144,6 +5145,7 @@ msgstr "月"
 #: screens/Template/shared/JobTemplateForm.js:401
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:49
 #: util/getRelatedResourceDeleteDetails.js:91
+#: util/getRelatedResourceDeleteDetails.js:167
 msgid "Credentials"
 msgstr "凭证"
 
@@ -6427,7 +6429,6 @@ msgstr "详情标签页"
 #: screens/Inventory/shared/InventorySourceSubForms/TerraformSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/VirtualizationSubForm.js:39
 #: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:39
-#: util/getRelatedResourceDeleteDetails.js:167
 msgid "Credential"
 msgstr "凭证"
 
@@ -6992,7 +6993,6 @@ msgstr "选择 Playbook 目录"
 #: screens/Job/JobDetail/JobDetail.js:274
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:100
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:222
-#: util/getRelatedResourceDeleteDetails.js:105
 msgid "Workflow Job Template"
 msgstr "工作流作业模板"
 

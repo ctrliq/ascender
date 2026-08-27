@@ -102,7 +102,7 @@ export const relatedResourceDeleteRequests = {
     },
     {
       request: () => WorkflowJobTemplatesAPI.read({ inventory: selected.id }),
-      label: msg`Workflow Job Template`,
+      label: msg`Workflow Job Templates`,
     },
   ],
 
@@ -164,7 +164,7 @@ export const relatedResourceDeleteRequests = {
         CredentialsAPI.read({
           organization: selected.id,
         }),
-      label: msg`Credential`,
+      label: msg`Credentials`,
     },
     {
       request: async () =>

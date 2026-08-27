@@ -3886,6 +3886,7 @@ msgstr "पुल"
 msgid "Environment variables or extra variables that specify the values a credential type can inject."
 msgstr "पर्यावरण वेरिएबल्स या अतिरिक्त वेरिएबल्स जो उन मानों को निर्दिष्ट करते हैं जो एक क्रेडेंशियल प्रकार इंजेक्ट कर सकता है।"
 
+#: util/getRelatedResourceDeleteDetails.js:105
 #: util/getRelatedResourceDeleteDetails.js:140
 msgid "Workflow Job Templates"
 msgstr "वर्कफ़्लो जॉब टेम्पलेट"
@@ -5147,6 +5148,7 @@ msgstr "माह"
 #: screens/Template/shared/JobTemplateForm.js:401
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.js:49
 #: util/getRelatedResourceDeleteDetails.js:91
+#: util/getRelatedResourceDeleteDetails.js:167
 msgid "Credentials"
 msgstr "क्रेडेंशियल"
 
@@ -6430,7 +6432,6 @@ msgstr "विवरण टैब"
 #: screens/Inventory/shared/InventorySourceSubForms/TerraformSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/VirtualizationSubForm.js:39
 #: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:39
-#: util/getRelatedResourceDeleteDetails.js:167
 msgid "Credential"
 msgstr "क्रेडेंशियल"
 
@@ -6995,7 +6996,6 @@ msgstr "एक प्लेबुक निर्देशिका चुने
 #: screens/Job/JobDetail/JobDetail.js:274
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:100
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.js:222
-#: util/getRelatedResourceDeleteDetails.js:105
 msgid "Workflow Job Template"
 msgstr "वर्कफ़्लो जॉब टेम्पलेट"
 
