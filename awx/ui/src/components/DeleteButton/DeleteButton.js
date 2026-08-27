@@ -28,10 +28,10 @@ function DeleteButton({
   deleteDetailsRequests,
   disabledTooltip,
 }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
   const [deleteMessageError, setDeleteMessageError] = useState();
-  const [deleteDetails, setDeleteDetails] = useState({});
+  const [deleteDetails, setDeleteDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const toggleModal = async (isModalOpen) => {
@@ -128,7 +128,7 @@ function DeleteButton({
         {t`Are you sure you want to delete:`}
         <br />
         <strong>{name}</strong>
-        {Object.values(deleteDetails).length > 0 && (
+        {deleteDetails && (
           <WarningMessage
             variant="warning"
             isInline
@@ -136,9 +136,9 @@ function DeleteButton({
               <div>
                 <div aria-label={deleteMessage}>{deleteMessage}</div>
                 <br />
-                {Object.entries(deleteDetails).map(([key, value]) => (
-                  <div aria-label={`${key}: ${value}`} key={key}>
-                    <Label>{key}</Label> <Badge>{value}</Badge>
+                {deleteDetails.map(({ label, count }) => (
+                  <div aria-label={`${i18n._(label)}: ${count}`} key={label.id}>
+                    <Label>{i18n._(label)}</Label> <Badge>{count}</Badge>
                   </div>
                 ))}
               </div>

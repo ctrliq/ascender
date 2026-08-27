@@ -138,7 +138,7 @@ function InstanceGroupList() {
     item.is_container_group
       ? `/instance_groups/container_group/${item.id}/details`
       : `/instance_groups/${item.id}/details`;
-  const deleteDetailsRequests = relatedResourceDeleteRequests(t).instanceGroup(
+  const deleteDetailsRequests = relatedResourceDeleteRequests.instanceGroup(
     selected[0]
   );
   return (

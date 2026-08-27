@@ -73,8 +73,7 @@ describe('<JobDetail />', () => {
     assertDetail('Project', mockJobData.summary_fields.project.name);
     assertDetail('Revision', mockJobData.scm_revision);
     assertDetail('Playbook', mockJobData.playbook);
-    // Verbosity is omitted: VERBOSITY(t)['0 (Normal)'] resolves to an empty
-    // string under the test i18n catalog, so the Detail renders nothing.
+    assertDetail('Verbosity', '0 (Normal)');
     assertDetail('Execution Node', mockJobData.execution_node);
     assertDetail(
       'Instance Group',

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLingui } from '@lingui/react/macro';
+import { Plural, useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import { Label, Content, ContentVariants } from '@patternfly/react-core';
 
@@ -8,7 +8,7 @@ import { VariablesDetail } from '../CodeEditor';
 import CredentialChip from '../CredentialChip';
 import ChipGroup from '../ChipGroup';
 import ExecutionEnvironmentDetail from '../ExecutionEnvironmentDetail';
-import { VERBOSITY } from '../VerbositySelectField';
+import { getVerbosityLabel } from '../VerbositySelectField';
 
 function PromptInventorySourceDetail({ resource }) {
   const {
@@ -25,7 +25,7 @@ function PromptInventorySourceDetail({ resource }) {
     update_on_launch,
     verbosity,
   } = resource;
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   let optionsList = '';
   if (overwrite || overwrite_vars || update_on_launch) {
     optionsList = (
@@ -90,10 +90,16 @@ function PromptInventorySourceDetail({ resource }) {
         executionEnvironment={summary_fields?.execution_environment}
       />
       <Detail label={t`Inventory File`} value={source_path} />
-      <Detail label={t`Verbosity`} value={VERBOSITY(t)[verbosity]} />
+      <Detail label={t`Verbosity`} value={getVerbosityLabel(verbosity, i18n)} />
       <Detail
         label={t`Cache Timeout`}
-        value={`${update_cache_timeout} ${t`Seconds`}`}
+        value={
+          <Plural
+            value={update_cache_timeout}
+            one="# second"
+            other="# seconds"
+          />
+        }
       />
       <Detail
         fullWidth

@@ -24,7 +24,7 @@ import DeleteButton from 'components/DeleteButton';
 import ErrorDetail from 'components/ErrorDetail';
 import { LaunchButton } from 'components/LaunchButton';
 import { VariablesDetail } from 'components/CodeEditor';
-import { VERBOSITY } from 'components/VerbositySelectField';
+import { getVerbosityLabel } from 'components/VerbositySelectField';
 import { JobTemplatesAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import useBrandName from 'hooks/useBrandName';
@@ -34,7 +34,7 @@ import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import getHelpText from '../shared/JobTemplate.helptext';
 
 function JobTemplateDetail({ template }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const helpText = getHelpText();
   const {
     ask_inventory_on_launch,
@@ -101,7 +101,7 @@ function JobTemplateDetail({ template }) {
   const { error, dismissError } = useDismissableError(deleteError);
 
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).template(template);
+    relatedResourceDeleteRequests.template(template);
   const canLaunch =
     summary_fields.user_capabilities && summary_fields.user_capabilities.start;
   const generateCallBackUrl = `${window.location.origin + url}callback/`;
@@ -255,7 +255,7 @@ function JobTemplateDetail({ template }) {
         />
         <Detail
           label={t`Verbosity`}
-          value={VERBOSITY(t)[verbosity]}
+          value={getVerbosityLabel(verbosity, i18n)}
           dataCy="jt-detail-verbosity"
           helpText={helpText.verbosity}
         />

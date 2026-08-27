@@ -14,7 +14,7 @@ import PromptProjectDetail from './PromptProjectDetail';
 import PromptInventorySourceDetail from './PromptInventorySourceDetail';
 import PromptJobTemplateDetail from './PromptJobTemplateDetail';
 import PromptWFJobTemplateDetail from './PromptWFJobTemplateDetail';
-import { VERBOSITY } from '../VerbositySelectField';
+import { getVerbosityLabel } from '../VerbositySelectField';
 
 const PromptTitle = styled(Title)`
   margin-top: var(--pf-v6-global--spacer--xl);
@@ -103,7 +103,7 @@ function PromptDetail({
   overrides = {},
   workflowNode = false,
 }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const details = omitOverrides(resource, overrides, launchConfig.defaults);
   details.type = overrides?.nodeType || details.type;
   const hasOverrides = Object.keys(overrides).length > 0;
@@ -254,7 +254,7 @@ function PromptDetail({
               launchConfig.ask_verbosity_on_launch ? (
                 <Detail
                   label={t`Verbosity`}
-                  value={VERBOSITY(t)[overrides.verbosity]}
+                  value={getVerbosityLabel(overrides.verbosity, i18n)}
                 />
               ) : null}
               {launchConfig.ask_tags_on_launch && (

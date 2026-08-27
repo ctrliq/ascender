@@ -78,7 +78,7 @@ const SettingGroup = ({
         <>
           <Popover
             content={popoverContent}
-            ariaLabel={`${t`More information for`} ${label}`}
+            ariaLabel={t`More information for ${label}`}
           />
           <RevertButton
             id={fieldId}

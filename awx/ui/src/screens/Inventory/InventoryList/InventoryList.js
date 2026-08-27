@@ -131,7 +131,7 @@ function InventoryList() {
   const hasContentLoading = isDeleteLoading || isLoading;
   const canAdd = actions && actions.POST;
 
-  const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory(
+  const deleteDetailsRequests = relatedResourceDeleteRequests.inventory(
     selected[0]
   );
 

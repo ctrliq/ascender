@@ -130,7 +130,7 @@ function PromptModalForm({
           validateStep(nextStep.id);
         }
       }}
-      title={`${t`Launch`} | ${resource.name}`}
+      title={t`Launch | ${resource.name}`}
       description={
         resource.description?.length > 512 ? (
           <ExpandableSection
