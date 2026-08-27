@@ -150,12 +150,12 @@ msgid "Maximum number of forks to allow across all jobs running concurrently on 
 msgstr "الحد الأقصى لعدد التفريعات المسموح بها عبر جميع المهام التي تعمل بشكل متزامن على هذه المجموعة.\n"
 "          يعني الصفر عدم فرض أي حد."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:335
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:341
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:89
 msgid "Failed to cancel Inventory Source Sync"
 msgstr "فشل إلغاء مزامنة مصدر المخزون"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:359
+#: screens/Project/ProjectDetail/ProjectDetail.js:365
 msgid "Delete Project"
 msgstr "حذف المشروع"
 
@@ -602,8 +602,8 @@ msgid "You cannot select multiple vault credentials with the same vault ID. Doin
 msgstr "لا يمكنك تحديد عدة بيانات اعتماد vault بنفس معرّف vault. سيؤدي ذلك تلقائيًا إلى إلغاء تحديد الآخر الذي يحمل نفس معرّف vault."
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:334
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:336
-#: screens/Project/ProjectDetail/ProjectDetail.js:348
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:342
+#: screens/Project/ProjectDetail/ProjectDetail.js:354
 msgid "Cancel Sync"
 msgstr "إلغاء المزامنة"
 
@@ -1393,7 +1393,7 @@ msgstr "نوع المهمة"
 msgid "No Hosts Matched"
 msgstr "لم يطابق أي مضيف"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:147
+#: components/PromptDetail/PromptInventorySourceDetail.js:153
 msgid "Only Group By"
 msgstr "التجميع فقط حسب"
 
@@ -1885,7 +1885,7 @@ msgstr "{automatedInstancesCount} منذ {automatedInstancesSinceDateTime}"
 msgid "No job data available"
 msgstr "لا تتوفر بيانات مهمة"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:303
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:309
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:22
 msgid "Source variables"
 msgstr "متغيرات المصدر"
@@ -2062,7 +2062,7 @@ msgstr "هذا المشروع قيد المزامنة حاليًا ولا يمك
 msgid "Administration"
 msgstr "الإدارة"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:376
+#: screens/Project/ProjectDetail/ProjectDetail.js:382
 msgid "Failed to delete project."
 msgstr "فشل حذف المشروع."
 
@@ -2865,7 +2865,7 @@ msgstr "إلغاء إزالة الرابط"
 msgid "There was an error loading this content. Please reload the page."
 msgstr "حدث خطأ أثناء تحميل هذا المحتوى. يرجى إعادة تحميل الصفحة."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:286
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:292
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:135
 msgid "Enabled Value"
 msgstr "القيمة المُفعّلة"
@@ -3178,7 +3178,7 @@ msgstr "<0>ملاحظة: قد تتم إعادة ربط المثيلات بمجم
 msgid "Timeout minutes"
 msgstr "دقائق المهلة"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:347
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:353
 msgid "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
 msgstr "مصدر المخزون هذا قيد الاستخدام حاليًا من قبل موارد أخرى تعتمد عليه. هل أنت متأكد من أنك تريد حذفه؟"
 
@@ -3220,7 +3220,7 @@ msgstr "{0, plural, one {حذف المجموعة؟} other {حذف المجموع
 msgid "Select a row to disassociate"
 msgstr "حدد صفًا لإلغاء الربط"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:128
+#: components/PromptDetail/PromptInventorySourceDetail.js:134
 msgid "Instance Filters"
 msgstr "مرشحات المثيل"
 
@@ -3334,7 +3334,7 @@ msgstr "مقارنة أقل من أو يساوي."
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:187
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:185
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.js:102
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:350
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:356
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:67
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:71
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:76
@@ -3344,7 +3344,7 @@ msgstr "مقارنة أقل من أو يساوي."
 #: screens/Job/JobDetail/JobDetail.js:656
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:470
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:170
-#: screens/Project/ProjectDetail/ProjectDetail.js:365
+#: screens/Project/ProjectDetail/ProjectDetail.js:371
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:115
 #: screens/Team/TeamDetail/TeamDetail.js:71
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:523
@@ -3488,12 +3488,12 @@ msgstr "GitHub Team"
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:157
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:43
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:78
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:311
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:317
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:133
 #: screens/Job/JobDetail/JobDetail.js:578
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:425
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:104
-#: screens/Project/ProjectDetail/ProjectDetail.js:317
+#: screens/Project/ProjectDetail/ProjectDetail.js:323
 #: screens/Team/TeamDetail/TeamDetail.js:48
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:345
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:181
@@ -3994,11 +3994,6 @@ msgstr "مصدره مشروع"
 msgid "Destination Channels"
 msgstr "قنوات الوجهة"
 
-#: components/PromptDetail/PromptProjectDetail.js:147
-#: screens/Project/ProjectDetail/ProjectDetail.js:268
-msgid "{scm_update_cache_timeout} seconds"
-msgstr "{scm_update_cache_timeout} ثوانٍ"
-
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:278
 msgid "Failed to delete workflow job template."
 msgstr "فشل حذف قالب مهمة سير العمل."
@@ -4079,7 +4074,7 @@ msgstr "حذف بيانات الاعتماد"
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:56
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:61
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:100
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:326
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:332
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:105
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:148
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:450
@@ -4087,7 +4082,7 @@ msgstr "حذف بيانات الاعتماد"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:143
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:153
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:157
-#: screens/Project/ProjectDetail/ProjectDetail.js:338
+#: screens/Project/ProjectDetail/ProjectDetail.js:344
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:108
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:112
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:145
@@ -4560,7 +4555,7 @@ msgstr "عرض تفاصيل المؤسسة"
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:204
 #: screens/Inventory/InventoryList/InventoryList.js:300
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:270
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:357
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:363
 #: screens/Inventory/InventorySources/InventorySourceList.js:240
 #: screens/Inventory/InventorySources/InventorySourceList.js:252
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:155
@@ -4572,7 +4567,7 @@ msgstr "عرض تفاصيل المؤسسة"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:173
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:179
 #: screens/Organization/OrganizationList/OrganizationList.js:195
-#: screens/Project/ProjectDetail/ProjectDetail.js:373
+#: screens/Project/ProjectDetail/ProjectDetail.js:379
 #: screens/Project/ProjectList/ProjectList.js:294
 #: screens/Project/ProjectList/ProjectList.js:306
 #: screens/Project/shared/ProjectSyncButton.js:59
@@ -4966,7 +4961,7 @@ msgstr "تحديد الميزات والوظائف على مستوى النظا�
 msgid "Run a health check on the instance"
 msgstr "تشغيل فحص صحة على المثيل"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:346
+#: screens/Project/ProjectDetail/ProjectDetail.js:352
 #: screens/Project/ProjectList/ProjectListItem.js:198
 msgid "Cancel Project Sync"
 msgstr "إلغاء مزامنة المشروع"
@@ -5218,8 +5213,8 @@ msgstr "Red Hat Satellite 6"
 msgid "Remove the current search related to ansible facts to enable another search using this key."
 msgstr "أزل البحث الحالي المتعلق بحقائق ansible لتمكين بحث آخر باستخدام هذا المفتاح."
 
-#: components/PromptDetail/PromptProjectDetail.js:152
-#: screens/Project/ProjectDetail/ProjectDetail.js:306
+#: components/PromptDetail/PromptProjectDetail.js:158
+#: screens/Project/ProjectDetail/ProjectDetail.js:312
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.js:67
 msgid "Project Base Path"
 msgstr "المسار الأساسي للمشروع"
@@ -5741,15 +5736,15 @@ msgstr "القوالب"
 msgid "Test notification"
 msgstr "إشعار الاختبار"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:164
+#: components/PromptDetail/PromptInventorySourceDetail.js:170
 #: components/PromptDetail/PromptJobTemplateDetail.js:175
 #: components/PromptDetail/PromptProjectDetail.js:139
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:91
 #: screens/Credential/CredentialDetail/CredentialDetail.js:262
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:234
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:122
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:299
-#: screens/Project/ProjectDetail/ProjectDetail.js:327
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:305
+#: screens/Project/ProjectDetail/ProjectDetail.js:333
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:357
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:193
 msgid "Enabled Options"
@@ -6374,7 +6369,7 @@ msgstr "تبديل المضيف"
 msgid "Globally available execution environment can not be reassigned to a specific Organization"
 msgstr "لا يمكن إعادة تعيين بيئة تنفيذ متاحة عالميًا إلى مؤسسة محددة"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:169
+#: components/PromptDetail/PromptInventorySourceDetail.js:175
 msgid "Source Variables"
 msgstr "متغيرات المصدر"
 
@@ -6419,11 +6414,11 @@ msgstr "علامة تبويب التفاصيل"
 
 #: components/AdHocCommands/AdHocPreviewStep.js:55
 #: components/AdHocCommands/useAdHocCredentialStep.js:25
-#: components/PromptDetail/PromptInventorySourceDetail.js:100
+#: components/PromptDetail/PromptInventorySourceDetail.js:106
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:100
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:72
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:292
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:298
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.js:39
 #: screens/Inventory/shared/InventorySourceSubForms/ControllerSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/EC2SubForm.js:38
@@ -6442,6 +6437,11 @@ msgstr "بيانات الاعتماد"
 #: components/LaunchButton/WorkflowReLaunchDropDown.js:52
 msgid "First node"
 msgstr "العقدة الأولى"
+
+#: components/PromptDetail/PromptInventorySourceDetail.js:97
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:273
+msgid "{update_cache_timeout, plural, one {# second} other {# seconds}}"
+msgstr "{update_cache_timeout, plural, one {# ثانية} other {# ثوانٍ}}"
 
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:169
 msgid "Webhook Credentials"
@@ -6464,6 +6464,11 @@ msgstr "المجموعة"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:79
 msgid "Request subscription"
 msgstr "طلب اشتراك"
+
+#: components/PromptDetail/PromptProjectDetail.js:148
+#: screens/Project/ProjectDetail/ProjectDetail.js:269
+msgid "{scm_update_cache_timeout, plural, one {# second} other {# seconds}}"
+msgstr "{scm_update_cache_timeout, plural, one {# ثانية} other {# ثوانٍ}}"
 
 #: components/Schedule/ScheduleToggle/ScheduleToggle.js:65
 msgid "Toggle schedule"
@@ -6498,9 +6503,9 @@ msgstr "عرض إعدادات المهام"
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:122
 #: screens/Instances/InstanceDetail/InstanceDetail.js:349
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:96
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:323
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:329
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:145
-#: screens/Project/ProjectDetail/ProjectDetail.js:334
+#: screens/Project/ProjectDetail/ProjectDetail.js:340
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:229
 #: screens/User/UserDetail/UserDetail.js:111
 msgid "edit"
@@ -6758,7 +6763,7 @@ msgstr "العودة إلى المضيفين"
 msgid "Context"
 msgstr "السياق"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:293
+#: screens/Project/ProjectDetail/ProjectDetail.js:299
 #: screens/Template/shared/WebhookSubForm.js:228
 msgid "Webhook Ref Filter"
 msgstr "مرشح Ref لـ Webhook"
@@ -7208,7 +7213,7 @@ msgstr "أبدًا"
 msgid "Organization Name"
 msgstr "اسم المؤسسة"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:276
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:282
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:149
 msgid "Host Filter"
 msgstr "مرشح المضيف"
@@ -7260,7 +7265,7 @@ msgstr "قائمة {pluralizedItemName}"
 msgid "Please add survey questions."
 msgstr "يرجى إضافة أسئلة الاستبيان."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:281
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:287
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:121
 msgid "Enabled Variable"
 msgstr "المتغير المُفعّل"
@@ -7459,7 +7464,7 @@ msgstr "اختر الأدوار المراد تطبيقها على الموار�
 
 #: components/PromptDetail/PromptJobTemplateDetail.js:157
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:87
-#: screens/Project/ProjectDetail/ProjectDetail.js:286
+#: screens/Project/ProjectDetail/ProjectDetail.js:292
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:311
 #: screens/Template/shared/WebhookSubForm.js:183
 #: screens/Template/shared/WebhookSubForm.js:189
@@ -7875,7 +7880,7 @@ msgstr "إضافة مجموعة مثيلات"
 msgid "Sender Email"
 msgstr "بريد المرسل الإلكتروني"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:345
+#: screens/Project/ProjectDetail/ProjectDetail.js:351
 #: screens/Project/ProjectList/ProjectListItem.js:197
 msgid "Project Sync Error"
 msgstr "خطأ في مزامنة المشروع"
@@ -8195,7 +8200,7 @@ msgstr "فشل حذف نوع بيانات اعتماد واحد أو أكثر."
 msgid "Task"
 msgstr "المهمة"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:109
+#: components/PromptDetail/PromptInventorySourceDetail.js:115
 msgid "Regions"
 msgstr "المناطق"
 
@@ -8237,7 +8242,7 @@ msgstr "معرّف لوحة المعلومات (اختياري)"
 msgid "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
 msgstr "استرجاع الحالة المُفعّلة من dict متغيرات المضيف المحدد. يمكن تحديد المتغير المُفعّل باستخدام تدوين النقطة، مثل: 'foo.bar'"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:333
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:339
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:88
 msgid "Inventory Source Sync Error"
 msgstr "خطأ في مزامنة مصدر المخزون"
@@ -8653,7 +8658,7 @@ msgstr "تخزين الحقائق: إذا تم التمكين، فسيؤدي ذ�
 msgid "Delete credential type"
 msgstr "حذف نوع بيانات الاعتماد"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:275
+#: screens/Project/ProjectDetail/ProjectDetail.js:281
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:304
 #: screens/Template/shared/WebhookSubForm.js:116
 msgid "GitHub"
@@ -8733,7 +8738,7 @@ msgstr "تمكين webhook لهذا القالب."
 msgid "On date"
 msgstr "في التاريخ"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:334
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:340
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:90
 msgid "Cancel Inventory Source Sync"
 msgstr "إلغاء مزامنة مصدر المخزون"
@@ -9015,7 +9020,7 @@ msgstr "خيارات التحديث"
 #: screens/Job/JobDetail/JobDetail.js:582
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:430
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:109
-#: screens/Project/ProjectDetail/ProjectDetail.js:322
+#: screens/Project/ProjectDetail/ProjectDetail.js:328
 #: screens/Team/TeamDetail/TeamDetail.js:49
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:350
 #: screens/User/UserDetail/UserDetail.js:103
@@ -10080,12 +10085,12 @@ msgstr "الأربعاء"
 msgid "Create new container group"
 msgstr "إنشاء مجموعة حاويات جديدة"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:277
+#: screens/Project/ProjectDetail/ProjectDetail.js:283
 #: screens/Template/shared/WebhookSubForm.js:128
 msgid "Bitbucket Data Center"
 msgstr "Bitbucket Data Center"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:361
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:367
 msgid "Failed to delete inventory source {name}."
 msgstr "فشل حذف مصدر المخزون {name}."
 
@@ -10254,12 +10259,7 @@ msgstr "تأكيد إرجاع الكل"
 msgid "If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source."
 msgstr "في حالة التحديد، ستتم إزالة جميع المتغيرات للمجموعات الفرعية والمضيفين واستبدالها بتلك الموجودة في المصدر الخارجي."
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:96
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:272
-msgid "{update_cache_timeout} seconds"
-msgstr "{update_cache_timeout} ثوانٍ"
-
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:344
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:350
 msgid "Delete inventory source"
 msgstr "حذف مصدر المخزون"
 
@@ -10324,7 +10324,7 @@ msgstr "حدد الفرق"
 msgid "Elapsed time that the job ran"
 msgstr "الوقت المنقضي لتشغيل المهمة"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:276
+#: screens/Project/ProjectDetail/ProjectDetail.js:282
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:304
 #: screens/Template/shared/WebhookSubForm.js:122
 msgid "GitLab"
@@ -10599,7 +10599,7 @@ msgid "updated"
 msgstr "تم التحديث"
 
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:314
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:320
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:135
 #: screens/Project/ProjectList/ProjectListItem.js:274
 #: screens/TopologyView/Tooltip.js:347
@@ -11381,7 +11381,7 @@ msgstr "متوافق"
 msgid "View inventory source details"
 msgstr "عرض تفاصيل مصدر المخزون"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:363
+#: screens/Project/ProjectDetail/ProjectDetail.js:369
 msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "هذا المشروع قيد الاستخدام حاليًا من قبل موارد أخرى. هل أنت متأكد من أنك تريد حذفه؟"
 
@@ -11473,7 +11473,7 @@ msgstr "مشفّر"
 msgid "Unknown Inventory"
 msgstr "مخزون غير معروف"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:347
+#: screens/Project/ProjectDetail/ProjectDetail.js:353
 #: screens/Project/ProjectList/ProjectListItem.js:200
 msgid "Failed to cancel Project Sync"
 msgstr "فشل إلغاء مزامنة المشروع"
@@ -11493,7 +11493,7 @@ msgstr "إعادة محاولة المضيف"
 
 #: components/PromptDetail/PromptJobTemplateDetail.js:154
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:83
-#: screens/Project/ProjectDetail/ProjectDetail.js:272
+#: screens/Project/ProjectDetail/ProjectDetail.js:278
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:303
 #: screens/Template/shared/WebhookSubForm.js:144
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:150
@@ -11757,8 +11757,8 @@ msgstr "اسم مستخدم أو كلمة مرور غير صالحة. يرجى �
 msgid "Peers update on {0}.  Please be sure to run the install bundle for {1} again in order to see changes take effect."
 msgstr "يتم تحديث الأقران على {0}. يرجى التأكد من تشغيل حزمة التثبيت لـ {1} مرة أخرى لرؤية التغييرات سارية المفعول."
 
-#: components/PromptDetail/PromptProjectDetail.js:159
-#: screens/Project/ProjectDetail/ProjectDetail.js:313
+#: components/PromptDetail/PromptProjectDetail.js:165
+#: screens/Project/ProjectDetail/ProjectDetail.js:319
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.js:76
 msgid "Playbook Directory"
 msgstr "دليل Playbook"

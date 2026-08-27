@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { useLingui } from '@lingui/react/macro';
+import { Plural, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import {
   Button,
@@ -265,7 +265,13 @@ function ProjectDetail({ project }) {
         )}
         <Detail
           label={t`Cache Timeout`}
-          value={t`${scm_update_cache_timeout} seconds`}
+          value={
+            <Plural
+              value={scm_update_cache_timeout}
+              one="# second"
+              other="# seconds"
+            />
+          }
         />
         {webhook_service && (
           <Detail

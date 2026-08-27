@@ -148,12 +148,12 @@ msgid "Maximum number of forks to allow across all jobs running concurrently on 
 msgstr "이 그룹에서 동시에 실행되는 모든 작업에서 허용되는 최대 포크 수입니다.\n"
 "          0은 제한이 적용되지 않음을 의미합니다."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:335
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:341
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:89
 msgid "Failed to cancel Inventory Source Sync"
 msgstr "인벤토리 소스 동기화를 취소하지 못했습니다."
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:359
+#: screens/Project/ProjectDetail/ProjectDetail.js:365
 msgid "Delete Project"
 msgstr "프로젝트 삭제"
 
@@ -600,8 +600,8 @@ msgid "You cannot select multiple vault credentials with the same vault ID. Doin
 msgstr "동일한 vault ID로 여러 인증 정보를 선택할 수 없습니다. 이렇게 하면 동일한 vault ID를 가진 다른 인증 정보가 자동으로 선택 취소됩니다."
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:334
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:336
-#: screens/Project/ProjectDetail/ProjectDetail.js:348
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:342
+#: screens/Project/ProjectDetail/ProjectDetail.js:354
 msgid "Cancel Sync"
 msgstr "동기화 취소"
 
@@ -1391,7 +1391,7 @@ msgstr "작업 유형"
 msgid "No Hosts Matched"
 msgstr "일치하는 호스트가 없음"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:147
+#: components/PromptDetail/PromptInventorySourceDetail.js:153
 msgid "Only Group By"
 msgstr "그룹 별로만"
 
@@ -1883,7 +1883,7 @@ msgstr "{automatedInstancesSinceDateTime} 이후 {automatedInstancesCount}"
 msgid "No job data available"
 msgstr "사용 가능한 작업 데이터가 없습니다."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:303
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:309
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:22
 msgid "Source variables"
 msgstr "소스 변수"
@@ -2060,7 +2060,7 @@ msgstr "이 프로젝트는 현재 동기화 중이며 동기화 프로세스가
 msgid "Administration"
 msgstr "관리"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:376
+#: screens/Project/ProjectDetail/ProjectDetail.js:382
 msgid "Failed to delete project."
 msgstr "프로젝트를 삭제하지 못했습니다."
 
@@ -2863,7 +2863,7 @@ msgstr "링크 삭제 취소"
 msgid "There was an error loading this content. Please reload the page."
 msgstr "이 콘텐츠를 로드하는 동안 오류가 발생했습니다. 페이지를 다시 로드하십시오."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:286
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:292
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:135
 msgid "Enabled Value"
 msgstr "활성화된 값"
@@ -3176,7 +3176,7 @@ msgstr "< 0 > 참고: < 1 > 정책 규칙에 의해 관리되는 경우 인스�
 msgid "Timeout minutes"
 msgstr "시간 제한 (분)"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:347
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:353
 msgid "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
 msgstr "이 인벤토리 소스는 현재 이를 사용하는 다른 리소스에서 사용되고 있습니다. 삭제하시겠습니까?"
 
@@ -3218,7 +3218,7 @@ msgstr "{0, plural, one {그룹을 삭제하시겠습니까?} other {그룹을 �
 msgid "Select a row to disassociate"
 msgstr "연결할 행을 선택"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:128
+#: components/PromptDetail/PromptInventorySourceDetail.js:134
 msgid "Instance Filters"
 msgstr "인스턴스 필터"
 
@@ -3331,7 +3331,7 @@ msgstr "비교 값보다 적거나 같습니다."
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:187
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:185
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.js:102
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:350
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:356
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:67
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:71
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:76
@@ -3341,7 +3341,7 @@ msgstr "비교 값보다 적거나 같습니다."
 #: screens/Job/JobDetail/JobDetail.js:656
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:470
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:170
-#: screens/Project/ProjectDetail/ProjectDetail.js:365
+#: screens/Project/ProjectDetail/ProjectDetail.js:371
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:115
 #: screens/Team/TeamDetail/TeamDetail.js:71
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:523
@@ -3485,12 +3485,12 @@ msgstr "GitHub 팀"
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:157
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:43
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:78
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:311
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:317
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:133
 #: screens/Job/JobDetail/JobDetail.js:578
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:425
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:104
-#: screens/Project/ProjectDetail/ProjectDetail.js:317
+#: screens/Project/ProjectDetail/ProjectDetail.js:323
 #: screens/Team/TeamDetail/TeamDetail.js:48
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:345
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:181
@@ -3991,11 +3991,6 @@ msgstr "프로젝트에서 소싱"
 msgid "Destination Channels"
 msgstr "대상 채널"
 
-#: components/PromptDetail/PromptProjectDetail.js:147
-#: screens/Project/ProjectDetail/ProjectDetail.js:268
-msgid "{scm_update_cache_timeout} seconds"
-msgstr "{scm_update_cache_timeout} 초"
-
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:278
 msgid "Failed to delete workflow job template."
 msgstr "워크플로 작업 템플릿을 삭제하지 못했습니다."
@@ -4076,7 +4071,7 @@ msgstr "인증 정보 삭제"
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:56
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:61
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:100
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:326
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:332
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:105
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:148
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:450
@@ -4084,7 +4079,7 @@ msgstr "인증 정보 삭제"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:143
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:153
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:157
-#: screens/Project/ProjectDetail/ProjectDetail.js:338
+#: screens/Project/ProjectDetail/ProjectDetail.js:344
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:108
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:112
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:145
@@ -4557,7 +4552,7 @@ msgstr "조직 세부 정보 보기"
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:204
 #: screens/Inventory/InventoryList/InventoryList.js:300
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:270
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:357
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:363
 #: screens/Inventory/InventorySources/InventorySourceList.js:240
 #: screens/Inventory/InventorySources/InventorySourceList.js:252
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:155
@@ -4569,7 +4564,7 @@ msgstr "조직 세부 정보 보기"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:173
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:179
 #: screens/Organization/OrganizationList/OrganizationList.js:195
-#: screens/Project/ProjectDetail/ProjectDetail.js:373
+#: screens/Project/ProjectDetail/ProjectDetail.js:379
 #: screens/Project/ProjectList/ProjectList.js:294
 #: screens/Project/ProjectList/ProjectList.js:306
 #: screens/Project/shared/ProjectSyncButton.js:59
@@ -4963,7 +4958,7 @@ msgstr "시스템 수준 기능 및 함수 정의"
 msgid "Run a health check on the instance"
 msgstr "인스턴스에서 상태 점검을 실행합니다."
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:346
+#: screens/Project/ProjectDetail/ProjectDetail.js:352
 #: screens/Project/ProjectList/ProjectListItem.js:198
 msgid "Cancel Project Sync"
 msgstr "프로젝트 동기화 취소"
@@ -5215,8 +5210,8 @@ msgstr "Red Hat Satellite 6"
 msgid "Remove the current search related to ansible facts to enable another search using this key."
 msgstr "이 키를 사용하여 다른 검색을 활성화하려면 ansible 팩트와 관련된 현재 검색을 제거합니다."
 
-#: components/PromptDetail/PromptProjectDetail.js:152
-#: screens/Project/ProjectDetail/ProjectDetail.js:306
+#: components/PromptDetail/PromptProjectDetail.js:158
+#: screens/Project/ProjectDetail/ProjectDetail.js:312
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.js:67
 msgid "Project Base Path"
 msgstr "프로젝트 기본 경로"
@@ -5738,15 +5733,15 @@ msgstr "템플릿"
 msgid "Test notification"
 msgstr "테스트 알림"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:164
+#: components/PromptDetail/PromptInventorySourceDetail.js:170
 #: components/PromptDetail/PromptJobTemplateDetail.js:175
 #: components/PromptDetail/PromptProjectDetail.js:139
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:91
 #: screens/Credential/CredentialDetail/CredentialDetail.js:262
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:234
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:122
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:299
-#: screens/Project/ProjectDetail/ProjectDetail.js:327
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:305
+#: screens/Project/ProjectDetail/ProjectDetail.js:333
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:357
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:193
 msgid "Enabled Options"
@@ -6371,7 +6366,7 @@ msgstr "호스트 전환"
 msgid "Globally available execution environment can not be reassigned to a specific Organization"
 msgstr "전역적으로 사용 가능한 실행 환경을 특정 조직에 다시 할당할 수 없습니다."
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:169
+#: components/PromptDetail/PromptInventorySourceDetail.js:175
 msgid "Source Variables"
 msgstr "소스 변수"
 
@@ -6416,11 +6411,11 @@ msgstr "세부 정보 탭"
 
 #: components/AdHocCommands/AdHocPreviewStep.js:55
 #: components/AdHocCommands/useAdHocCredentialStep.js:25
-#: components/PromptDetail/PromptInventorySourceDetail.js:100
+#: components/PromptDetail/PromptInventorySourceDetail.js:106
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:100
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:72
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:292
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:298
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.js:39
 #: screens/Inventory/shared/InventorySourceSubForms/ControllerSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/EC2SubForm.js:38
@@ -6439,6 +6434,11 @@ msgstr "인증 정보"
 #: components/LaunchButton/WorkflowReLaunchDropDown.js:52
 msgid "First node"
 msgstr "첫 번째 노드"
+
+#: components/PromptDetail/PromptInventorySourceDetail.js:97
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:273
+msgid "{update_cache_timeout, plural, one {# second} other {# seconds}}"
+msgstr "{update_cache_timeout, plural, one {# 초} other {# 초}}"
 
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:169
 msgid "Webhook Credentials"
@@ -6461,6 +6461,11 @@ msgstr "그룹"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:79
 msgid "Request subscription"
 msgstr "서브스크립션 요청"
+
+#: components/PromptDetail/PromptProjectDetail.js:148
+#: screens/Project/ProjectDetail/ProjectDetail.js:269
+msgid "{scm_update_cache_timeout, plural, one {# second} other {# seconds}}"
+msgstr "{scm_update_cache_timeout, plural, one {# 초} other {# 초}}"
 
 #: components/Schedule/ScheduleToggle/ScheduleToggle.js:65
 msgid "Toggle schedule"
@@ -6495,9 +6500,9 @@ msgstr "작업 설정 보기"
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:122
 #: screens/Instances/InstanceDetail/InstanceDetail.js:349
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:96
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:323
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:329
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:145
-#: screens/Project/ProjectDetail/ProjectDetail.js:334
+#: screens/Project/ProjectDetail/ProjectDetail.js:340
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:229
 #: screens/User/UserDetail/UserDetail.js:111
 msgid "edit"
@@ -6755,7 +6760,7 @@ msgstr "호스트로 돌아가기"
 msgid "Context"
 msgstr "컨텍스트"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:293
+#: screens/Project/ProjectDetail/ProjectDetail.js:299
 #: screens/Template/shared/WebhookSubForm.js:228
 msgid "Webhook Ref Filter"
 msgstr "Webhook 참조 필터"
@@ -7205,7 +7210,7 @@ msgstr "없음"
 msgid "Organization Name"
 msgstr "조직 이름"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:276
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:282
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:149
 msgid "Host Filter"
 msgstr "호스트 필터"
@@ -7257,7 +7262,7 @@ msgstr "{pluralizedItemName} 목록"
 msgid "Please add survey questions."
 msgstr "설문 조사를 추가하십시오."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:281
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:287
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:121
 msgid "Enabled Variable"
 msgstr "활성화된 변수"
@@ -7456,7 +7461,7 @@ msgstr "선택한 리소스에 적용할 역할을 선택합니다. 선택한 �
 
 #: components/PromptDetail/PromptJobTemplateDetail.js:157
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:87
-#: screens/Project/ProjectDetail/ProjectDetail.js:286
+#: screens/Project/ProjectDetail/ProjectDetail.js:292
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:311
 #: screens/Template/shared/WebhookSubForm.js:183
 #: screens/Template/shared/WebhookSubForm.js:189
@@ -7872,7 +7877,7 @@ msgstr "인스턴스 그룹 추가"
 msgid "Sender Email"
 msgstr "보낸 사람 이메일"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:345
+#: screens/Project/ProjectDetail/ProjectDetail.js:351
 #: screens/Project/ProjectList/ProjectListItem.js:197
 msgid "Project Sync Error"
 msgstr "프로젝트 동기화 오류"
@@ -8191,7 +8196,7 @@ msgstr "하나 이상의 인증 정보 유형을 삭제하지 못했습니다."
 msgid "Task"
 msgstr "작업"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:109
+#: components/PromptDetail/PromptInventorySourceDetail.js:115
 msgid "Regions"
 msgstr "리전"
 
@@ -8233,7 +8238,7 @@ msgstr "대시보드 ID (선택 사항)"
 msgid "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
 msgstr "주어진 호스트 변수 딕트에서 활성화된 상태를 검색합니다. 활성화된 변수는 점 표기법 (예: 'foo.bar') 을 사용하여 지정할 수 있습니다."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:333
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:339
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:88
 msgid "Inventory Source Sync Error"
 msgstr "인벤토리 소스 동기화 오류"
@@ -8649,7 +8654,7 @@ msgstr "팩트 스토리지: 활성화하면 수집된 팩트를 저장하여 �
 msgid "Delete credential type"
 msgstr "인증 정보 유형 삭제"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:275
+#: screens/Project/ProjectDetail/ProjectDetail.js:281
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:304
 #: screens/Template/shared/WebhookSubForm.js:116
 msgid "GitHub"
@@ -8729,7 +8734,7 @@ msgstr "이 템플릿에 대한 webhook을 활성화합니다."
 msgid "On date"
 msgstr "날짜에"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:334
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:340
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:90
 msgid "Cancel Inventory Source Sync"
 msgstr "인벤토리 소스 동기화 취소"
@@ -9011,7 +9016,7 @@ msgstr "업데이트 옵션"
 #: screens/Job/JobDetail/JobDetail.js:582
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:430
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:109
-#: screens/Project/ProjectDetail/ProjectDetail.js:322
+#: screens/Project/ProjectDetail/ProjectDetail.js:328
 #: screens/Team/TeamDetail/TeamDetail.js:49
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:350
 #: screens/User/UserDetail/UserDetail.js:103
@@ -10076,12 +10081,12 @@ msgstr "수요일"
 msgid "Create new container group"
 msgstr "새 컨테이너 그룹 만들기"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:277
+#: screens/Project/ProjectDetail/ProjectDetail.js:283
 #: screens/Template/shared/WebhookSubForm.js:128
 msgid "Bitbucket Data Center"
 msgstr "Bitbucket 데이터 센터"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:361
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:367
 msgid "Failed to delete inventory source {name}."
 msgstr "인벤토리 소스 {name} 삭제에 실패했습니다."
 
@@ -10250,12 +10255,7 @@ msgstr "모두 되돌리기 확인"
 msgid "If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source."
 msgstr "이 옵션을 선택하면 하위 그룹 및 호스트에 대한 모든 변수가 제거되고 외부 소스에 있는 변수로 대체됩니다."
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:96
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:272
-msgid "{update_cache_timeout} seconds"
-msgstr "{update_cache_timeout} 초"
-
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:344
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:350
 msgid "Delete inventory source"
 msgstr "인벤토리 소스 삭제"
 
@@ -10320,7 +10320,7 @@ msgstr "팀 선택"
 msgid "Elapsed time that the job ran"
 msgstr "작업이 실행되는 데 경과된 시간"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:276
+#: screens/Project/ProjectDetail/ProjectDetail.js:282
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:304
 #: screens/Template/shared/WebhookSubForm.js:122
 msgid "GitLab"
@@ -10595,7 +10595,7 @@ msgid "updated"
 msgstr "업데이트됨"
 
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:314
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:320
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:135
 #: screens/Project/ProjectList/ProjectListItem.js:274
 #: screens/TopologyView/Tooltip.js:347
@@ -11377,7 +11377,7 @@ msgstr "준수"
 msgid "View inventory source details"
 msgstr "인벤토리 소스 세부 정보 보기"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:363
+#: screens/Project/ProjectDetail/ProjectDetail.js:369
 msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "이 프로젝트는 현재 다른 리소스에서 사용되고 있습니다. 삭제하시겠습니까?"
 
@@ -11469,7 +11469,7 @@ msgstr "암호화"
 msgid "Unknown Inventory"
 msgstr "알 수 없는 인벤토리"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:347
+#: screens/Project/ProjectDetail/ProjectDetail.js:353
 #: screens/Project/ProjectList/ProjectListItem.js:200
 msgid "Failed to cancel Project Sync"
 msgstr "프로젝트 동기화 취소 실패"
@@ -11489,7 +11489,7 @@ msgstr "호스트 재시도"
 
 #: components/PromptDetail/PromptJobTemplateDetail.js:154
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:83
-#: screens/Project/ProjectDetail/ProjectDetail.js:272
+#: screens/Project/ProjectDetail/ProjectDetail.js:278
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:303
 #: screens/Template/shared/WebhookSubForm.js:144
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:150
@@ -11753,8 +11753,8 @@ msgstr "사용자 이름 또는 암호가 잘못되었습니다. 다시 시도�
 msgid "Peers update on {0}.  Please be sure to run the install bundle for {1} again in order to see changes take effect."
 msgstr "동료들은 {0} 에 업데이트됩니다. 변경 사항을 적용하려면 {1} 에 대한 설치 번들을 다시 실행하십시오."
 
-#: components/PromptDetail/PromptProjectDetail.js:159
-#: screens/Project/ProjectDetail/ProjectDetail.js:313
+#: components/PromptDetail/PromptProjectDetail.js:165
+#: screens/Project/ProjectDetail/ProjectDetail.js:319
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.js:76
 msgid "Playbook Directory"
 msgstr "플레이북 디렉토리"

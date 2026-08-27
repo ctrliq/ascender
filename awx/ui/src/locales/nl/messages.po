@@ -148,12 +148,12 @@ msgid "Maximum number of forks to allow across all jobs running concurrently on 
 msgstr "Maximaal aantal forks dat is toegestaan voor alle taken die gelijktijdig op deze groep worden uitgevoerd.\n"
 "          Nul betekent dat er geen limiet wordt afgedwongen."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:335
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:341
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:89
 msgid "Failed to cancel Inventory Source Sync"
 msgstr "Kan de synchronisatie van de inventarisbron niet annuleren"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:359
+#: screens/Project/ProjectDetail/ProjectDetail.js:365
 msgid "Delete Project"
 msgstr "Project verwijderen"
 
@@ -600,8 +600,8 @@ msgid "You cannot select multiple vault credentials with the same vault ID. Doin
 msgstr "U kunt niet meerdere kluisreferenties met delfde kluis-ID selecteren. Als u dat wel doet, worden de andere met delfde kluis-ID automatisch gedeselecteerd."
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:334
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:336
-#: screens/Project/ProjectDetail/ProjectDetail.js:348
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:342
+#: screens/Project/ProjectDetail/ProjectDetail.js:354
 msgid "Cancel Sync"
 msgstr "Synchronisatie annuleren"
 
@@ -1391,7 +1391,7 @@ msgstr "Soort taak"
 msgid "No Hosts Matched"
 msgstr "Geen overeenkomende hosts"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:147
+#: components/PromptDetail/PromptInventorySourceDetail.js:153
 msgid "Only Group By"
 msgstr "Alleen ordenen op"
 
@@ -1883,7 +1883,7 @@ msgstr "{automatedInstancesCount} sinds {automatedInstancesSinceDateTime}"
 msgid "No job data available"
 msgstr "Geen taakgegevens beschikbaar"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:303
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:309
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:22
 msgid "Source variables"
 msgstr "Bronvariabelen"
@@ -2060,7 +2060,7 @@ msgstr "Dit project wordt momenteel gesynchroniseerd en kan niet worden aangekli
 msgid "Administration"
 msgstr "Beheer"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:376
+#: screens/Project/ProjectDetail/ProjectDetail.js:382
 msgid "Failed to delete project."
 msgstr "Kan project niet verwijderen."
 
@@ -2863,7 +2863,7 @@ msgstr "Verwijdering van link annuleren"
 msgid "There was an error loading this content. Please reload the page."
 msgstr "Er is een fout opgetreden bij het laden van deze inhoud. Laad de pagina opnieuw."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:286
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:292
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:135
 msgid "Enabled Value"
 msgstr "Ingeschakelde waarde"
@@ -3176,7 +3176,7 @@ msgstr "<0>Opmerking: instanties kunnen opnieuw worden gekoppeld aan deze instan
 msgid "Timeout minutes"
 msgstr "Time-out minuten"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:347
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:353
 msgid "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
 msgstr "Deze inventarisbron wordt momenteel door andere bronnen gebruikt die erop vertrouwen. Weet u zeker dat u hem wilt verwijderen?"
 
@@ -3218,7 +3218,7 @@ msgstr "{0, plural, one {Groep verwijderen?} other {Groepen verwijderen?}}"
 msgid "Select a row to disassociate"
 msgstr "Rij selecteren om deze te ontkoppelen"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:128
+#: components/PromptDetail/PromptInventorySourceDetail.js:134
 msgid "Instance Filters"
 msgstr "Instantiefilters"
 
@@ -3331,7 +3331,7 @@ msgstr "Minder dan of gelijk aan vergelijking."
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:187
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:185
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.js:102
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:350
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:356
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:67
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:71
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:76
@@ -3341,7 +3341,7 @@ msgstr "Minder dan of gelijk aan vergelijking."
 #: screens/Job/JobDetail/JobDetail.js:656
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:470
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:170
-#: screens/Project/ProjectDetail/ProjectDetail.js:365
+#: screens/Project/ProjectDetail/ProjectDetail.js:371
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:115
 #: screens/Team/TeamDetail/TeamDetail.js:71
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:523
@@ -3485,12 +3485,12 @@ msgstr "GitHub-team"
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:157
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:43
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:78
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:311
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:317
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:133
 #: screens/Job/JobDetail/JobDetail.js:578
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:425
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:104
-#: screens/Project/ProjectDetail/ProjectDetail.js:317
+#: screens/Project/ProjectDetail/ProjectDetail.js:323
 #: screens/Team/TeamDetail/TeamDetail.js:48
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:345
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:181
@@ -3991,11 +3991,6 @@ msgstr "Afkomstig uit een project"
 msgid "Destination Channels"
 msgstr "Bestemmingskanalen"
 
-#: components/PromptDetail/PromptProjectDetail.js:147
-#: screens/Project/ProjectDetail/ProjectDetail.js:268
-msgid "{scm_update_cache_timeout} seconds"
-msgstr "{scm_update_cache_timeout} seconden"
-
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:278
 msgid "Failed to delete workflow job template."
 msgstr "Kan workflow-taaksjabloon niet verwijderen."
@@ -4076,7 +4071,7 @@ msgstr "Toegangsgegevens verwijderen"
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:56
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:61
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:100
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:326
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:332
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:105
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:148
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:450
@@ -4084,7 +4079,7 @@ msgstr "Toegangsgegevens verwijderen"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:143
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:153
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:157
-#: screens/Project/ProjectDetail/ProjectDetail.js:338
+#: screens/Project/ProjectDetail/ProjectDetail.js:344
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:108
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:112
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:145
@@ -4557,7 +4552,7 @@ msgstr "Organisatiedetails weergeven"
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:204
 #: screens/Inventory/InventoryList/InventoryList.js:300
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:270
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:357
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:363
 #: screens/Inventory/InventorySources/InventorySourceList.js:240
 #: screens/Inventory/InventorySources/InventorySourceList.js:252
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:155
@@ -4569,7 +4564,7 @@ msgstr "Organisatiedetails weergeven"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:173
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:179
 #: screens/Organization/OrganizationList/OrganizationList.js:195
-#: screens/Project/ProjectDetail/ProjectDetail.js:373
+#: screens/Project/ProjectDetail/ProjectDetail.js:379
 #: screens/Project/ProjectList/ProjectList.js:294
 #: screens/Project/ProjectList/ProjectList.js:306
 #: screens/Project/shared/ProjectSyncButton.js:59
@@ -4963,7 +4958,7 @@ msgstr "Kenmerken en functies op systeemniveau definiëren"
 msgid "Run a health check on the instance"
 msgstr "Een gezondheidscontrole op de instantie uitvoeren"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:346
+#: screens/Project/ProjectDetail/ProjectDetail.js:352
 #: screens/Project/ProjectList/ProjectListItem.js:198
 msgid "Cancel Project Sync"
 msgstr "Projectsynchronisatie annuleren"
@@ -5215,8 +5210,8 @@ msgstr "Red Hat Satellite 6"
 msgid "Remove the current search related to ansible facts to enable another search using this key."
 msgstr "Verwijder de huidige zoekopdracht die gerelateerd is aan ansible-feiten om een andere zoekopdracht met deze sleutel mogelijk te maken."
 
-#: components/PromptDetail/PromptProjectDetail.js:152
-#: screens/Project/ProjectDetail/ProjectDetail.js:306
+#: components/PromptDetail/PromptProjectDetail.js:158
+#: screens/Project/ProjectDetail/ProjectDetail.js:312
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.js:67
 msgid "Project Base Path"
 msgstr "Basispad project"
@@ -5738,15 +5733,15 @@ msgstr "Sjablonen"
 msgid "Test notification"
 msgstr "Testbericht"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:164
+#: components/PromptDetail/PromptInventorySourceDetail.js:170
 #: components/PromptDetail/PromptJobTemplateDetail.js:175
 #: components/PromptDetail/PromptProjectDetail.js:139
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:91
 #: screens/Credential/CredentialDetail/CredentialDetail.js:262
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:234
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:122
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:299
-#: screens/Project/ProjectDetail/ProjectDetail.js:327
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:305
+#: screens/Project/ProjectDetail/ProjectDetail.js:333
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:357
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:193
 msgid "Enabled Options"
@@ -6371,7 +6366,7 @@ msgstr "Host wisselen"
 msgid "Globally available execution environment can not be reassigned to a specific Organization"
 msgstr "Wereldwijd beschikbare uitvoeringsomgeving kan niet opnieuw worden toegewezen aan een specifieke organisatie"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:169
+#: components/PromptDetail/PromptInventorySourceDetail.js:175
 msgid "Source Variables"
 msgstr "Bronvariabelen"
 
@@ -6416,11 +6411,11 @@ msgstr "Tabblad Details"
 
 #: components/AdHocCommands/AdHocPreviewStep.js:55
 #: components/AdHocCommands/useAdHocCredentialStep.js:25
-#: components/PromptDetail/PromptInventorySourceDetail.js:100
+#: components/PromptDetail/PromptInventorySourceDetail.js:106
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:100
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:72
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:292
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:298
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.js:39
 #: screens/Inventory/shared/InventorySourceSubForms/ControllerSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/EC2SubForm.js:38
@@ -6439,6 +6434,11 @@ msgstr "Toegangsgegeven"
 #: components/LaunchButton/WorkflowReLaunchDropDown.js:52
 msgid "First node"
 msgstr "Eerste knooppunt"
+
+#: components/PromptDetail/PromptInventorySourceDetail.js:97
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:273
+msgid "{update_cache_timeout, plural, one {# second} other {# seconds}}"
+msgstr "{update_cache_timeout, plural, one {# seconde} other {# seconden}}"
 
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:169
 msgid "Webhook Credentials"
@@ -6461,6 +6461,11 @@ msgstr "Groep"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:79
 msgid "Request subscription"
 msgstr "Abonnement aanvragen"
+
+#: components/PromptDetail/PromptProjectDetail.js:148
+#: screens/Project/ProjectDetail/ProjectDetail.js:269
+msgid "{scm_update_cache_timeout, plural, one {# second} other {# seconds}}"
+msgstr "{scm_update_cache_timeout, plural, one {# seconde} other {# seconden}}"
 
 #: components/Schedule/ScheduleToggle/ScheduleToggle.js:65
 msgid "Toggle schedule"
@@ -6495,9 +6500,9 @@ msgstr "Taakinstellingen weergeven"
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:122
 #: screens/Instances/InstanceDetail/InstanceDetail.js:349
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:96
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:323
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:329
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:145
-#: screens/Project/ProjectDetail/ProjectDetail.js:334
+#: screens/Project/ProjectDetail/ProjectDetail.js:340
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:229
 #: screens/User/UserDetail/UserDetail.js:111
 msgid "edit"
@@ -6755,7 +6760,7 @@ msgstr "Terug naar hosts"
 msgid "Context"
 msgstr "Context"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:293
+#: screens/Project/ProjectDetail/ProjectDetail.js:299
 #: screens/Template/shared/WebhookSubForm.js:228
 msgid "Webhook Ref Filter"
 msgstr "Webhook-reffilter"
@@ -7205,7 +7210,7 @@ msgstr "Nooit"
 msgid "Organization Name"
 msgstr "Naam van organisatie"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:276
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:282
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:149
 msgid "Host Filter"
 msgstr "Hostfilter"
@@ -7257,7 +7262,7 @@ msgstr "{pluralizedItemName} Lijst"
 msgid "Please add survey questions."
 msgstr "Voeg vragenlijstvragen toe."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:281
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:287
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:121
 msgid "Enabled Variable"
 msgstr "Ingeschakelde variabele"
@@ -7456,7 +7461,7 @@ msgstr "Kies de rollen die op de geselecteerde bronnen moeten worden toegepast. 
 
 #: components/PromptDetail/PromptJobTemplateDetail.js:157
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:87
-#: screens/Project/ProjectDetail/ProjectDetail.js:286
+#: screens/Project/ProjectDetail/ProjectDetail.js:292
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:311
 #: screens/Template/shared/WebhookSubForm.js:183
 #: screens/Template/shared/WebhookSubForm.js:189
@@ -7872,7 +7877,7 @@ msgstr "Instantiegroep toevoegen"
 msgid "Sender Email"
 msgstr "Afzender e-mail"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:345
+#: screens/Project/ProjectDetail/ProjectDetail.js:351
 #: screens/Project/ProjectList/ProjectListItem.js:197
 msgid "Project Sync Error"
 msgstr "Fout tijdens projectsynchronisatie"
@@ -8191,7 +8196,7 @@ msgstr "Een of meer typen toegangsgegevens kunnen niet worden verwijderd."
 msgid "Task"
 msgstr "Taak"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:109
+#: components/PromptDetail/PromptInventorySourceDetail.js:115
 msgid "Regions"
 msgstr "Regio's"
 
@@ -8233,7 +8238,7 @@ msgstr "ID van het dashboard (optioneel)"
 msgid "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
 msgstr "Haal de ingeschakelde status op uit het gegeven dictaat van hostvariabelen. De ingeschakelde variabele kan worden opgegeven met behulp van puntnotatie, bijvoorbeeld: 'foo.bar'"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:333
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:339
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:88
 msgid "Inventory Source Sync Error"
 msgstr "Fout tijdens synchronisatie inventarisbronnen"
@@ -8649,7 +8654,7 @@ msgstr "Feitenopslag: indien ingeschakeld, worden de verzamelde feiten opgeslage
 msgid "Delete credential type"
 msgstr "Soort toegangsgegevens verwijderen"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:275
+#: screens/Project/ProjectDetail/ProjectDetail.js:281
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:304
 #: screens/Template/shared/WebhookSubForm.js:116
 msgid "GitHub"
@@ -8729,7 +8734,7 @@ msgstr "Webhook inschakelen voor dit sjabloon."
 msgid "On date"
 msgstr "Aan-datum"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:334
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:340
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:90
 msgid "Cancel Inventory Source Sync"
 msgstr "Synchronisatie van inventarisbron annuleren"
@@ -9011,7 +9016,7 @@ msgstr "Update-opties"
 #: screens/Job/JobDetail/JobDetail.js:582
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:430
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:109
-#: screens/Project/ProjectDetail/ProjectDetail.js:322
+#: screens/Project/ProjectDetail/ProjectDetail.js:328
 #: screens/Team/TeamDetail/TeamDetail.js:49
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:350
 #: screens/User/UserDetail/UserDetail.js:103
@@ -10076,12 +10081,12 @@ msgstr "Woensdag"
 msgid "Create new container group"
 msgstr "Nieuwe containergroep maken"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:277
+#: screens/Project/ProjectDetail/ProjectDetail.js:283
 #: screens/Template/shared/WebhookSubForm.js:128
 msgid "Bitbucket Data Center"
 msgstr "Bitbucket-datacenter"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:361
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:367
 msgid "Failed to delete inventory source {name}."
 msgstr "Kan inventarisbron {name} niet verwijderen."
 
@@ -10250,12 +10255,7 @@ msgstr "Alles terugzetten bevestigen"
 msgid "If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source."
 msgstr "Indien aangevinkt, worden alle variabelen voor onderliggende groepen en hosts verwijderd en vervangen door die in de externe bron."
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:96
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:272
-msgid "{update_cache_timeout} seconds"
-msgstr "{update_cache_timeout} seconden"
-
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:344
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:350
 msgid "Delete inventory source"
 msgstr "Inventarisbron maken"
 
@@ -10320,7 +10320,7 @@ msgstr "Teams selecteren"
 msgid "Elapsed time that the job ran"
 msgstr "Verstreken tijd in seconden dat de taak is uitgevoerd"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:276
+#: screens/Project/ProjectDetail/ProjectDetail.js:282
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:304
 #: screens/Template/shared/WebhookSubForm.js:122
 msgid "GitLab"
@@ -10595,7 +10595,7 @@ msgid "updated"
 msgstr "bijgewerkt"
 
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:314
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:320
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:135
 #: screens/Project/ProjectList/ProjectListItem.js:274
 #: screens/TopologyView/Tooltip.js:347
@@ -11377,7 +11377,7 @@ msgstr "Conform"
 msgid "View inventory source details"
 msgstr "Details inventarisbron weergeven"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:363
+#: screens/Project/ProjectDetail/ProjectDetail.js:369
 msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "Dit project wordt momenteel gebruikt door andere resources. Weet u zeker dat u het wilt verwijderen?"
 
@@ -11469,7 +11469,7 @@ msgstr "versleuteld"
 msgid "Unknown Inventory"
 msgstr "Onbekende inventaris"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:347
+#: screens/Project/ProjectDetail/ProjectDetail.js:353
 #: screens/Project/ProjectList/ProjectListItem.js:200
 msgid "Failed to cancel Project Sync"
 msgstr "Kan projectsynchronisatie niet annuleren"
@@ -11489,7 +11489,7 @@ msgstr "Host opnieuw proberen"
 
 #: components/PromptDetail/PromptJobTemplateDetail.js:154
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:83
-#: screens/Project/ProjectDetail/ProjectDetail.js:272
+#: screens/Project/ProjectDetail/ProjectDetail.js:278
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:303
 #: screens/Template/shared/WebhookSubForm.js:144
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:150
@@ -11753,8 +11753,8 @@ msgstr "Ongeldige gebruikersnaam of wachtwoord. Probeer het opnieuw."
 msgid "Peers update on {0}.  Please be sure to run the install bundle for {1} again in order to see changes take effect."
 msgstr "Peers-update op {0}. Zorg ervoor dat u de installatiebundel voor {1} opnieuw uitvoert om de wijzigingen van kracht te zien worden."
 
-#: components/PromptDetail/PromptProjectDetail.js:159
-#: screens/Project/ProjectDetail/ProjectDetail.js:313
+#: components/PromptDetail/PromptProjectDetail.js:165
+#: screens/Project/ProjectDetail/ProjectDetail.js:319
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.js:76
 msgid "Playbook Directory"
 msgstr "Draaiboekmap"

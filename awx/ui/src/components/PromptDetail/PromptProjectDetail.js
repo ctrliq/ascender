@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLingui } from '@lingui/react/macro';
+import { Plural, useLingui } from '@lingui/react/macro';
 import { Content, ContentVariants } from '@patternfly/react-core';
 import { Link } from 'react-router';
 import { Config } from 'contexts/Config';
@@ -144,7 +144,13 @@ function PromptProjectDetail({ resource }) {
       <Detail
         label={t`Cache Timeout`}
         dataCy={`${prefixCy}-cache-timeout`}
-        value={t`${scm_update_cache_timeout} seconds`}
+        value={
+          <Plural
+            value={scm_update_cache_timeout}
+            one="# second"
+            other="# seconds"
+          />
+        }
       />
       <Config>
         {({ project_base_dir }) => (

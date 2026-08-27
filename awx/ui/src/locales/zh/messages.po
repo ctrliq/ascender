@@ -148,12 +148,12 @@ msgid "Maximum number of forks to allow across all jobs running concurrently on 
 msgstr "此组上同时运行的所有作业允许的最大分叉数。\n"
 "          零意味着不会强制执行任何限制。"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:335
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:341
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:89
 msgid "Failed to cancel Inventory Source Sync"
 msgstr "取消清单源同步失败"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:359
+#: screens/Project/ProjectDetail/ProjectDetail.js:365
 msgid "Delete Project"
 msgstr "删除项目"
 
@@ -600,8 +600,8 @@ msgid "You cannot select multiple vault credentials with the same vault ID. Doin
 msgstr "您不能选择具有相同 vault ID 的多个 vault 凭证。这样做会自动取消选择具有相同的 vault ID 的另一个凭证。"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:334
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:336
-#: screens/Project/ProjectDetail/ProjectDetail.js:348
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:342
+#: screens/Project/ProjectDetail/ProjectDetail.js:354
 msgid "Cancel Sync"
 msgstr "取消同步"
 
@@ -1391,7 +1391,7 @@ msgstr "作业类型"
 msgid "No Hosts Matched"
 msgstr "未匹配主机"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:147
+#: components/PromptDetail/PromptInventorySourceDetail.js:153
 msgid "Only Group By"
 msgstr "唯一分组标准"
 
@@ -1883,7 +1883,7 @@ msgstr "{automatedInstancesCount} 自 {automatedInstancesSinceDateTime}"
 msgid "No job data available"
 msgstr "没有可用作业数据"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:303
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:309
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:22
 msgid "Source variables"
 msgstr "源变量"
@@ -2060,7 +2060,7 @@ msgstr "此项目当前正在同步，在同步过程完成之前无法单击"
 msgid "Administration"
 msgstr "管理"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:376
+#: screens/Project/ProjectDetail/ProjectDetail.js:382
 msgid "Failed to delete project."
 msgstr "删除项目失败。"
 
@@ -2863,7 +2863,7 @@ msgstr "取消链接删除"
 msgid "There was an error loading this content. Please reload the page."
 msgstr "加载此内容时出错。请重新加载页面。"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:286
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:292
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:135
 msgid "Enabled Value"
 msgstr "启用的值"
@@ -3176,7 +3176,7 @@ msgstr "< 0 >注意：如果实例由< 1 >策略规则管理，则可以将其�
 msgid "Timeout minutes"
 msgstr "超时分钟"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:347
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:353
 msgid "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
 msgstr "依赖该清单源的其他资源目前正在使用此清单源。确定要删除它吗？"
 
@@ -3218,7 +3218,7 @@ msgstr "{0, plural, one {删除组?} other {删除组?}}"
 msgid "Select a row to disassociate"
 msgstr "选择要解除关联的行"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:128
+#: components/PromptDetail/PromptInventorySourceDetail.js:134
 msgid "Instance Filters"
 msgstr "实例过滤器"
 
@@ -3331,7 +3331,7 @@ msgstr "小于或等于比较。"
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:187
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:185
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.js:102
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:350
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:356
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:67
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:71
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:76
@@ -3341,7 +3341,7 @@ msgstr "小于或等于比较。"
 #: screens/Job/JobDetail/JobDetail.js:656
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:470
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:170
-#: screens/Project/ProjectDetail/ProjectDetail.js:365
+#: screens/Project/ProjectDetail/ProjectDetail.js:371
 #: screens/Project/shared/ProjectSubForms/SharedFields.js:115
 #: screens/Team/TeamDetail/TeamDetail.js:71
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:523
@@ -3485,12 +3485,12 @@ msgstr "GitHub Team"
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:157
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:43
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:78
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:311
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:317
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:133
 #: screens/Job/JobDetail/JobDetail.js:578
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:425
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:104
-#: screens/Project/ProjectDetail/ProjectDetail.js:317
+#: screens/Project/ProjectDetail/ProjectDetail.js:323
 #: screens/Team/TeamDetail/TeamDetail.js:48
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:345
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:181
@@ -3991,11 +3991,6 @@ msgstr "来自项目的源"
 msgid "Destination Channels"
 msgstr "目标频道"
 
-#: components/PromptDetail/PromptProjectDetail.js:147
-#: screens/Project/ProjectDetail/ProjectDetail.js:268
-msgid "{scm_update_cache_timeout} seconds"
-msgstr "{scm_update_cache_timeout} 秒"
-
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:278
 msgid "Failed to delete workflow job template."
 msgstr "删除工作流任务模板失败。"
@@ -4076,7 +4071,7 @@ msgstr "删除凭证"
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:56
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:61
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:100
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:326
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:332
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:105
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:148
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:450
@@ -4084,7 +4079,7 @@ msgstr "删除凭证"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:143
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:153
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:157
-#: screens/Project/ProjectDetail/ProjectDetail.js:338
+#: screens/Project/ProjectDetail/ProjectDetail.js:344
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:108
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.js:112
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.js:145
@@ -4557,7 +4552,7 @@ msgstr "查看机构详情"
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:204
 #: screens/Inventory/InventoryList/InventoryList.js:300
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:270
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:357
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:363
 #: screens/Inventory/InventorySources/InventorySourceList.js:240
 #: screens/Inventory/InventorySources/InventorySourceList.js:252
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:155
@@ -4569,7 +4564,7 @@ msgstr "查看机构详情"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.js:173
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:179
 #: screens/Organization/OrganizationList/OrganizationList.js:195
-#: screens/Project/ProjectDetail/ProjectDetail.js:373
+#: screens/Project/ProjectDetail/ProjectDetail.js:379
 #: screens/Project/ProjectList/ProjectList.js:294
 #: screens/Project/ProjectList/ProjectList.js:306
 #: screens/Project/shared/ProjectSyncButton.js:59
@@ -4963,7 +4958,7 @@ msgstr "定义系统级的特性和功能"
 msgid "Run a health check on the instance"
 msgstr "对实例运行健康检查"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:346
+#: screens/Project/ProjectDetail/ProjectDetail.js:352
 #: screens/Project/ProjectList/ProjectListItem.js:198
 msgid "Cancel Project Sync"
 msgstr "取消项目同步"
@@ -5215,8 +5210,8 @@ msgstr "Red Hat Satellite 6"
 msgid "Remove the current search related to ansible facts to enable another search using this key."
 msgstr "删除与 ansible 事实相关的当前搜索，以启用使用此键的另一个搜索。"
 
-#: components/PromptDetail/PromptProjectDetail.js:152
-#: screens/Project/ProjectDetail/ProjectDetail.js:306
+#: components/PromptDetail/PromptProjectDetail.js:158
+#: screens/Project/ProjectDetail/ProjectDetail.js:312
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.js:67
 msgid "Project Base Path"
 msgstr "项目基本路径"
@@ -5738,15 +5733,15 @@ msgstr "模板"
 msgid "Test notification"
 msgstr "测试通知"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:164
+#: components/PromptDetail/PromptInventorySourceDetail.js:170
 #: components/PromptDetail/PromptJobTemplateDetail.js:175
 #: components/PromptDetail/PromptProjectDetail.js:139
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:91
 #: screens/Credential/CredentialDetail/CredentialDetail.js:262
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:234
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:122
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:299
-#: screens/Project/ProjectDetail/ProjectDetail.js:327
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:305
+#: screens/Project/ProjectDetail/ProjectDetail.js:333
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:357
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:193
 msgid "Enabled Options"
@@ -6371,7 +6366,7 @@ msgstr "切换主机"
 msgid "Globally available execution environment can not be reassigned to a specific Organization"
 msgstr "全局可用的执行环境无法重新分配给特定机构"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:169
+#: components/PromptDetail/PromptInventorySourceDetail.js:175
 msgid "Source Variables"
 msgstr "源变量"
 
@@ -6416,11 +6411,11 @@ msgstr "详情标签页"
 
 #: components/AdHocCommands/AdHocPreviewStep.js:55
 #: components/AdHocCommands/useAdHocCredentialStep.js:25
-#: components/PromptDetail/PromptInventorySourceDetail.js:100
+#: components/PromptDetail/PromptInventorySourceDetail.js:106
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:100
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:72
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:292
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:298
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.js:39
 #: screens/Inventory/shared/InventorySourceSubForms/ControllerSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/EC2SubForm.js:38
@@ -6439,6 +6434,11 @@ msgstr "凭证"
 #: components/LaunchButton/WorkflowReLaunchDropDown.js:52
 msgid "First node"
 msgstr "第一个节点"
+
+#: components/PromptDetail/PromptInventorySourceDetail.js:97
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:273
+msgid "{update_cache_timeout, plural, one {# second} other {# seconds}}"
+msgstr "{update_cache_timeout, plural, one {# 秒} other {# 秒}}"
 
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:169
 msgid "Webhook Credentials"
@@ -6461,6 +6461,11 @@ msgstr "组"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.js:79
 msgid "Request subscription"
 msgstr "请求订阅"
+
+#: components/PromptDetail/PromptProjectDetail.js:148
+#: screens/Project/ProjectDetail/ProjectDetail.js:269
+msgid "{scm_update_cache_timeout, plural, one {# second} other {# seconds}}"
+msgstr "{scm_update_cache_timeout, plural, one {# 秒} other {# 秒}}"
 
 #: components/Schedule/ScheduleToggle/ScheduleToggle.js:65
 msgid "Toggle schedule"
@@ -6495,9 +6500,9 @@ msgstr "查看作业设置"
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:122
 #: screens/Instances/InstanceDetail/InstanceDetail.js:349
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:96
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:323
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:329
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:145
-#: screens/Project/ProjectDetail/ProjectDetail.js:334
+#: screens/Project/ProjectDetail/ProjectDetail.js:340
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:229
 #: screens/User/UserDetail/UserDetail.js:111
 msgid "edit"
@@ -6755,7 +6760,7 @@ msgstr "返回到主机"
 msgid "Context"
 msgstr "上下文"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:293
+#: screens/Project/ProjectDetail/ProjectDetail.js:299
 #: screens/Template/shared/WebhookSubForm.js:228
 msgid "Webhook Ref Filter"
 msgstr "Webhook 引用过滤器"
@@ -7205,7 +7210,7 @@ msgstr "永不"
 msgid "Organization Name"
 msgstr "机构名称"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:276
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:282
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:149
 msgid "Host Filter"
 msgstr "主机过滤器"
@@ -7257,7 +7262,7 @@ msgstr "{pluralizedItemName} 列表"
 msgid "Please add survey questions."
 msgstr "请添加问卷调查问题。"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:281
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:287
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:121
 msgid "Enabled Variable"
 msgstr "启用的变量"
@@ -7456,7 +7461,7 @@ msgstr "选择应用到所选资源的角色。请注意，所有选择的角色
 
 #: components/PromptDetail/PromptJobTemplateDetail.js:157
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:87
-#: screens/Project/ProjectDetail/ProjectDetail.js:286
+#: screens/Project/ProjectDetail/ProjectDetail.js:292
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:311
 #: screens/Template/shared/WebhookSubForm.js:183
 #: screens/Template/shared/WebhookSubForm.js:189
@@ -7872,7 +7877,7 @@ msgstr "添加实例组"
 msgid "Sender Email"
 msgstr "发件人电子邮件"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:345
+#: screens/Project/ProjectDetail/ProjectDetail.js:351
 #: screens/Project/ProjectList/ProjectListItem.js:197
 msgid "Project Sync Error"
 msgstr "项目同步错误"
@@ -8191,7 +8196,7 @@ msgstr "删除一个或多个凭证类型失败。"
 msgid "Task"
 msgstr "任务"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:109
+#: components/PromptDetail/PromptInventorySourceDetail.js:115
 msgid "Regions"
 msgstr "区域"
 
@@ -8233,7 +8238,7 @@ msgstr "仪表盘 ID（可选）"
 msgid "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
 msgstr "从给定的主机变量字典中检索启用状态。启用的变量可以使用点符号指定，例如： 'foo.bar'"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:333
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:339
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:88
 msgid "Inventory Source Sync Error"
 msgstr "清单源同步错误"
@@ -8649,7 +8654,7 @@ msgstr "事实存储：如果启用，这将存储收集的事实，以便可以
 msgid "Delete credential type"
 msgstr "删除凭证类型"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:275
+#: screens/Project/ProjectDetail/ProjectDetail.js:281
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:304
 #: screens/Template/shared/WebhookSubForm.js:116
 msgid "GitHub"
@@ -8729,7 +8734,7 @@ msgstr "为此模板启用 webhook。"
 msgid "On date"
 msgstr "于日期"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:334
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:340
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:90
 msgid "Cancel Inventory Source Sync"
 msgstr "取消清单源同步"
@@ -9011,7 +9016,7 @@ msgstr "更新选项"
 #: screens/Job/JobDetail/JobDetail.js:582
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:430
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:109
-#: screens/Project/ProjectDetail/ProjectDetail.js:322
+#: screens/Project/ProjectDetail/ProjectDetail.js:328
 #: screens/Team/TeamDetail/TeamDetail.js:49
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:350
 #: screens/User/UserDetail/UserDetail.js:103
@@ -10076,12 +10081,12 @@ msgstr "周三"
 msgid "Create new container group"
 msgstr "创建新容器组"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:277
+#: screens/Project/ProjectDetail/ProjectDetail.js:283
 #: screens/Template/shared/WebhookSubForm.js:128
 msgid "Bitbucket Data Center"
 msgstr "Bitbucket数据中心"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:361
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:367
 msgid "Failed to delete inventory source {name}."
 msgstr "删除清单源 {name} 失败。"
 
@@ -10250,12 +10255,7 @@ msgstr "确认全部恢复"
 msgid "If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source."
 msgstr "如果选中，子组和主机的所有变量将被删除并替换为在外部源上找到的变量。"
 
-#: components/PromptDetail/PromptInventorySourceDetail.js:96
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:272
-msgid "{update_cache_timeout} seconds"
-msgstr "{update_cache_timeout} 秒"
-
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:344
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:350
 msgid "Delete inventory source"
 msgstr "删除清单源"
 
@@ -10320,7 +10320,7 @@ msgstr "选择团队"
 msgid "Elapsed time that the job ran"
 msgstr "作业运行所经过的时间"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:276
+#: screens/Project/ProjectDetail/ProjectDetail.js:282
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:304
 #: screens/Template/shared/WebhookSubForm.js:122
 msgid "GitLab"
@@ -10595,7 +10595,7 @@ msgid "updated"
 msgstr "已更新"
 
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:314
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:320
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:135
 #: screens/Project/ProjectList/ProjectListItem.js:274
 #: screens/TopologyView/Tooltip.js:347
@@ -11377,7 +11377,7 @@ msgstr "合规"
 msgid "View inventory source details"
 msgstr "查看清单源详情"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:363
+#: screens/Project/ProjectDetail/ProjectDetail.js:369
 msgid "This project is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "其他资源目前正在使用此项目。您确定要删除它吗？"
 
@@ -11469,7 +11469,7 @@ msgstr "加密"
 msgid "Unknown Inventory"
 msgstr "未知库存"
 
-#: screens/Project/ProjectDetail/ProjectDetail.js:347
+#: screens/Project/ProjectDetail/ProjectDetail.js:353
 #: screens/Project/ProjectList/ProjectListItem.js:200
 msgid "Failed to cancel Project Sync"
 msgstr "取消项目同步失败"
@@ -11489,7 +11489,7 @@ msgstr "主机重试"
 
 #: components/PromptDetail/PromptJobTemplateDetail.js:154
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:83
-#: screens/Project/ProjectDetail/ProjectDetail.js:272
+#: screens/Project/ProjectDetail/ProjectDetail.js:278
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:303
 #: screens/Template/shared/WebhookSubForm.js:144
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:150
@@ -11753,8 +11753,8 @@ msgstr "无效的用户名或密码。请重试。"
 msgid "Peers update on {0}.  Please be sure to run the install bundle for {1} again in order to see changes take effect."
 msgstr "同行在 {0} 上更新。请务必再次运行 {1} 的安装包，以便看到更改生效。"
 
-#: components/PromptDetail/PromptProjectDetail.js:159
-#: screens/Project/ProjectDetail/ProjectDetail.js:313
+#: components/PromptDetail/PromptProjectDetail.js:165
+#: screens/Project/ProjectDetail/ProjectDetail.js:319
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.js:76
 msgid "Playbook Directory"
 msgstr "Playbook 目录"

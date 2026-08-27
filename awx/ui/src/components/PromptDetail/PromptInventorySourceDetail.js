@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLingui } from '@lingui/react/macro';
+import { Plural, useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import { Label, Content, ContentVariants } from '@patternfly/react-core';
 
@@ -93,7 +93,13 @@ function PromptInventorySourceDetail({ resource }) {
       <Detail label={t`Verbosity`} value={getVerbosityLabel(verbosity, i18n)} />
       <Detail
         label={t`Cache Timeout`}
-        value={t`${update_cache_timeout} seconds`}
+        value={
+          <Plural
+            value={update_cache_timeout}
+            one="# second"
+            other="# seconds"
+          />
+        }
       />
       <Detail
         fullWidth

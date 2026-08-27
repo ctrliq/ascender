@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { useLingui } from '@lingui/react/macro';
+import { Plural, useLingui } from '@lingui/react/macro';
 import {
   Button,
   Content,
@@ -269,7 +269,13 @@ function InventorySourceDetail({ inventorySource }) {
         />
         <Detail
           label={t`Cache timeout`}
-          value={t`${update_cache_timeout} seconds`}
+          value={
+            <Plural
+              value={update_cache_timeout}
+              one="# second"
+              other="# seconds"
+            />
+          }
           helpText={helpText.subFormOptions.cachedTimeOut}
         />
         <Detail
