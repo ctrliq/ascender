@@ -1,6 +1,5 @@
 import os
 import psycopg
-import select
 
 from contextlib import contextmanager
 
@@ -8,8 +7,6 @@ from awx.settings.application_name import get_application_name
 
 from django.conf import settings
 from django.db import connection as pg_connection
-
-NOT_READY = ([], [], [])
 
 
 def get_local_queuename():
@@ -59,35 +56,23 @@ class PubSub(object):
         with self.conn.cursor() as cur:
             cur.execute('SELECT pg_notify(%s, %s);', (channel, payload))
 
-    @staticmethod
-    def current_notifies(conn):
-        """
-        Altered version of .notifies method from psycopg library
-        This removes the outer while True loop so that we only process
-        queued notifications
-        """
-        with conn.lock:
-            try:
-                ns = conn.wait(psycopg.generators.notifies(conn.pgconn))
-            except psycopg.errors._NO_TRACEBACK as ex:
-                raise ex.with_traceback(None)
-        enc = psycopg._encodings.pgconn_encoding(conn.pgconn)
-        for pgn in ns:
-            n = psycopg.connection.Notify(pgn.relname.decode(enc), pgn.extra.decode(enc), pgn.be_pid)
-            yield n
-
     def events(self, yield_timeouts=False):
         if not self.conn.autocommit:
             raise RuntimeError('Listening for events can only be done in autocommit mode')
 
         while True:
-            if select.select([self.conn], [], [], self.select_timeout) == NOT_READY:
-                if yield_timeouts:
-                    yield None
-            else:
-                notification_generator = self.current_notifies(self.conn)
-                for notification in notification_generator:
-                    yield notification
+            got_events = False
+            # notifies() first drains the connection's notification backlog
+            # (notifications psycopg consumed while other queries ran, which
+            # a socket select would never wake for), then waits up to timeout
+            # for more; stop_after=1 returns after the first new batch so
+            # select_timeout, which callers adjust in-loop, is re-read
+            # between batches
+            for notification in self.conn.notifies(timeout=self.select_timeout, stop_after=1):
+                got_events = True
+                yield notification
+            if yield_timeouts and not got_events:
+                yield None
 
     def close(self):
         self.conn.close()
