@@ -9,9 +9,9 @@ Installing without the installer
    pair: installation; Kustomize
    pair: installation; operator
 
-You can deploy the Ascender Operator and create the Ascender resource yourself, without `ascender-install <https://github.com/ctrliq/ascender-install>`_. Use this path when you manage your own cluster, deploy through GitOps tooling such as Argo CD or Flux, or run on a host the installer does not support.
+`ascender-install <https://github.com/ctrliq/ascender-install>`_ is the best way to install Ascender. It does considerably more for you than the steps below, including provisioning the cluster on K3s, so start there if you can. See :ref:`in_install`.
 
-The installer is the supported path and does more for you, including provisioning the cluster on K3s and RKE2. See :ref:`in_install`.
+This page covers deploying the operator and creating the Ascender resource by hand, for readers who manage their own cluster or deploy through GitOps tooling.
 
 The deployment is two steps: install the operator, then create an ``AWX`` resource for the operator to reconcile.
 
@@ -54,24 +54,23 @@ This creates the namespace, the ``awxs``, ``awxbackups``, ``awxrestores``, and `
 Create the administrator secret
 ================================
 
-Supply the administrator password yourself so you know what it is. The operator generates one otherwise. Save this as ``admin-secret.yml``::
+Supply the administrator password yourself so you know what it is. The operator generates one otherwise::
 
-	apiVersion: v1
-	kind: Secret
-	metadata:
-	  name: ascender-app-admin-password
-	  namespace: ascender
-	stringData:
-	  password: <password>
+	kubectl create secret generic ascender-app-admin-password -n ascender \
+	  --from-literal=password=<password>
 
-Apply it::
+The key must be ``password``. The operator looks for a secret named after the Ascender resource, so ``ascender-app-admin-password`` is found automatically for a resource named ``ascender-app``.
 
-	kubectl apply -f admin-secret.yml
+Create the TLS secret
+======================
+
+Terminate TLS at the ingress with a certificate for the hostname you will use::
+
+	kubectl create secret tls ascender-tls-secret -n ascender \
+	  --cert=ascender.crt --key=ascender.key
 
 Create the Ascender resource
 =============================
-
-The resource is ``kind: AWX``, not an Ascender-named kind. The operator keeps the upstream API group, so all three custom resources are under ``awx.ansible.com/v1beta1``.
 
 The following is a working starting point for a cluster with an ingress controller. Save it as ``ascender.yml``::
 
@@ -97,12 +96,17 @@ The following is a working starting point for a cluster with an ingress controll
 	  ingress_type: ingress
 	  ingress_path: "/"
 	  ingress_path_type: Prefix
+	  ingress_class_name: nginx
+	  ingress_tls_secret: ascender-tls-secret
 	  hostname: ascender.example.com
 	  postgres_data_volume_init: true
+	  postgres_storage_class: <storage-class>
+	  postgres_storage_requirements:
+	    requests:
+	      storage: 20Gi
 	  extra_settings:
 	  - setting: CSRF_TRUSTED_ORIGINS
 	    value:
-	      - http://ascender.example.com
 	      - https://ascender.example.com
 
 Apply it and watch the operator build the deployment::
@@ -114,19 +118,18 @@ Apply it and watch the operator build the deployment::
 
 	``postgres_data_volume_init`` sets ownership on the database volume with an init container. Many storage classes provision volumes owned by root, which the PostgreSQL container cannot write to. The operator's default commands already do the right thing, so you rarely need ``postgres_init_container_commands``. OpenShift manages volume ownership itself.
 
-Set ``CSRF_TRUSTED_ORIGINS`` to the URLs you actually reach Ascender on. Without it, signing in can fail with a CSRF error even though the pods are healthy, because the scheme Django computes behind an ingress does not always match the one the browser sent. Listing both schemes, as the installer does, covers the common cases.
+``ingress_class_name`` and ``postgres_storage_class`` both fall back to the cluster default when unset. Name them explicitly if the cluster has more than one, or no default. List what is available with ``kubectl get ingressclass`` and ``kubectl get storageclass``.
+
+The resource accepts far more than this example uses. Every field is described in the custom resource definition, which you can read from the cluster::
+
+	kubectl explain awx.spec
+	kubectl explain awx.spec.postgres_storage_class
+
+The Ascender Operator repository documents individual topics in more depth under `advanced configuration <https://github.com/ctrliq/ascender-operator/tree/devel/docs/user-guide/advanced-configuration>`_, covering things like persisting the projects directory, security contexts, node assignment, and horizontal pod autoscaling.
+
+Set ``CSRF_TRUSTED_ORIGINS`` to the URL you actually reach Ascender on, scheme included. Without it, signing in can fail with a CSRF error even though the pods are healthy, because the scheme Django computes behind an ingress does not always match the one the browser sent.
 
 Pin ``image_version``. Left unset, the operator falls back to ``latest``, so the version you get depends on when the image was last pushed.
-
-TLS
-====
-
-To terminate TLS at the ingress, create a secret holding the certificate and reference it from the resource::
-
-	kubectl create secret tls ascender-tls-secret -n ascender \
-	  --cert=ascender.crt --key=ascender.key
-
-Then add ``ingress_tls_secret: ascender-tls-secret`` to the spec, and use the ``https`` URL in ``CSRF_TRUSTED_ORIGINS``.
 
 Using an external database
 ===========================

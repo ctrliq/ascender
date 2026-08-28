@@ -3,7 +3,7 @@
 Starting, Stopping, and Restarting Ascender
 ---------------------------------------------
 
-To install Ascender: https://github.com/ctrliq/ascender-operator/tree/devel/docs/installation
+To install Ascender, see :ref:`in_start`.
 
 .. these instructions will be ported over to here in the near future (TBD)
 
@@ -11,7 +11,7 @@ To migrate from an old Ascender to a new Ascender instance: https://github.com/c
 
 .. these instructions will be ported over to here in the near future (TBD)
 
-To upgrade you Ascender instance: https://github.com/ctrliq/ascender-operator/blob/devel/docs/upgrade/upgrading.md
+To upgrade your Ascender instance, see :ref:`in_install`.
 
 .. these instructions will be ported over to here in the near future (TBD)
 

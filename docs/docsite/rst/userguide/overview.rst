@@ -69,7 +69,7 @@ Backup and Restore
 .. index::
    pair: features; backup and restore
 
-The ability to backup and restore your system(s) has been integrated into the Ascender setup playbook, making it easy for you to backup and replicate your instance as needed.
+Ascender is backed up and restored through the Ascender Operator, which captures the database, the secrets that encrypt it, and the deployment configuration. See :ref:`ag_backup_restore`.
 
 Ansible Galaxy Integration
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
