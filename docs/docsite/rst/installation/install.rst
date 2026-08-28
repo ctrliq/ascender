@@ -16,22 +16,27 @@ To evaluate Ascender on a single machine, start with :ref:`in_quick_start_k3s`.
 What the installer does
 ========================
 
-Running ``./setup.sh`` performs these steps on your behalf:
+When you run ``./setup.sh``, it:
 
 - Installs its own dependencies, including ansible-core, the required collections, and the Python Kubernetes client
-- Provisions the cluster, on K3s and RKE2 only, when ``kube_install`` is set
+- Provisions the cluster, on K3s and RKE2 only, when you set ``kube_install``
+- Stops and disables ``firewalld``, unless you set ``firewalld_disable: false``
 - Deploys the Ascender Operator with Kustomize, pinned to ``ASCENDER_OPERATOR_VERSION``
 - Creates the namespace, the administrator password secret, and any TLS, custom CA, or external database secrets your configuration calls for
 - Creates the Ascender resource that the operator reconciles into a running deployment
 
-Understanding these steps is useful even if you never run the installer, because :ref:`in_manual_install` covers doing them yourself.
+.. warning::
+
+	The installer turns off the host firewall by default. Set ``firewalld_disable: false`` to keep it running, and the installer opens ports 6443, 80, and 443 and trusts the cluster networks instead. This setting is not listed in ``default.config.yml``.
 
 Requirements
 =============
 
-The machine you run the installer from needs Rocky Linux 8 or 9 on x86_64, ``git``, and root or sudo access. The installer refuses to run on other distributions and on non-x86_64 hosts. Cloud platforms require Rocky Linux 9 and the relevant CLI tool, authenticated.
+You run the installer from a machine with ``git``, ``openssl``, and root or sudo access, on x86_64. Supported hosts are Enterprise Linux 8 or 9, meaning Rocky, RHEL, AlmaLinux, CentOS, or Fedora, and Ubuntu or Debian 24 or 26.
 
-For on-premise deployments on K3s or RKE2, this can be the same machine that runs the cluster. For EKS, GKE, and AKS, use a small administrative host.
+For EKS, GKE, and AKS you need Enterprise Linux 9 specifically, plus the relevant CLI tool authenticated. Ubuntu and Debian are not supported for those three.
+
+On K3s or RKE2 this can be the same machine that runs the cluster. For the cloud platforms, use a small administrative host.
 
 Getting started
 ================
@@ -50,15 +55,27 @@ Install with::
 Platforms
 ==========
 
-**K3s** is covered in :ref:`in_quick_start_k3s`. Set ``kube_install: true`` and the installer creates the cluster.
+Eight platforms are supported: ``k3s``, ``rke2``, ``eks``, ``gke``, ``aks``, ``dkp``, ``tkgi``, and ``ocp``.
 
-**RKE2** suits production and supports single-node and highly available clusters. The installer does not create an RKE2 cluster, so build it first and then run the installer against it.
+K3s
+----
 
-**EKS, GKE, and AKS** each require their own CLI tool, IAM or role configuration, and a DNS zone. Cloud installs require Rocky Linux 9 on the administrative host.
+Covered in :ref:`in_quick_start_k3s`. Set ``kube_install: true`` and the installer creates the cluster for you.
 
-**DKP** needs one extra setting, ``DKP_CLUSTER_NAME``, naming the cluster to deploy to or create.
+RKE2
+-----
 
-**OCP** follows the common configuration. Check ``default.config.yml`` for OpenShift-specific defaults.
+Suits production, and supports single-node and highly available clusters. The installer does not create an RKE2 cluster, so build it first and run the installer against it.
+
+EKS, GKE, and AKS
+------------------
+
+Each needs its own CLI tool authenticated, IAM or role configuration, and a DNS zone. You run these from an Enterprise Linux 9 host.
+
+DKP, TKGI, and OCP
+-------------------
+
+DKP takes one extra setting, ``DKP_CLUSTER_NAME``, naming the cluster to deploy to or create. TKGI and OpenShift follow the common configuration. Check ``default.config.yml`` for platform-specific defaults.
 
 Upgrading
 ==========
@@ -88,14 +105,39 @@ Kubernetes platform
      - Default
      - Description
    * - ``k8s_platform``
-     - ``k3s``
-     - Target platform. One of ``k3s``, ``eks``, ``aks``, ``gke``, ``rke2``, ``dkp``, ``ocp``
+     - ``eks``
+     - Target platform. One of ``k3s``, ``eks``, ``aks``, ``gke``, ``rke2``, ``dkp``, ``tkgi``, ``ocp``. Set this explicitly, as the default is not K3s
    * - ``k8s_lb_protocol``
      - ``http``
      - Load balancer protocol. Set to ``https`` to enable TLS, which requires the certificate settings below
    * - ``download_kubeconfig``
      - ``false``
      - Copy the kubeconfig from the target host to ``~/.kube/config`` on the installing machine
+
+K3s cluster
+------------
+
+These apply when the installer builds the cluster for you.
+
+.. list-table::
+   :widths: 30 20 50
+   :header-rows: 1
+
+   * - Variable
+     - Default
+     - Description
+   * - ``kube_install``
+     - ``false``
+     - Provision the cluster before deploying Ascender. K3s and RKE2 only
+   * - ``k3s_master_node_ip``
+     - ``127.0.0.1``
+     - Address of the K3s node. Set this to the machine's real address
+   * - ``use_etc_hosts``
+     - ``true``
+     - Add the Ascender hostname to ``/etc/hosts`` on the node
+   * - ``firewalld_disable``
+     - ``true``
+     - Stop and disable ``firewalld``. Set to ``false`` to keep it running with the required ports opened
 
 Ascender application
 ---------------------
@@ -224,7 +266,7 @@ To pull additional images for use as execution environments, add an ``ee_images`
 Offline installation
 ---------------------
 
-These apply to air-gapped deployments on K3s and RKE2.
+These apply to air-gapped deployments on K3s, RKE2, and DKP.
 
 .. list-table::
    :widths: 35 20 45

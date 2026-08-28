@@ -14,11 +14,15 @@ Ascender runs on Kubernetes and is managed by the `Ascender Operator <https://gi
 Most deployments should use `ascender-install <https://github.com/ctrliq/ascender-install>`_, which provisions the cluster where supported, deploys the operator, and creates the Ascender resource from a single configuration file.
 If you manage your own cluster or deploy through GitOps tooling, you can install the operator and create the Ascender resource yourself.
 
-.. toctree::
-  :maxdepth: 2
-  :numbered:
+**Join us online**
 
-  self
-  quick_start_k3s
-  install
-  manual_install
+You can find lots of Ascender discussion and get answers to questions at `Ascender Discussion Forum <https://github.com/ctrliq/ascender/discussions>`_.
+
+.. toctree::
+   :maxdepth: 2
+   :numbered:
+
+   self
+   quick_start_k3s
+   install
+   manual_install

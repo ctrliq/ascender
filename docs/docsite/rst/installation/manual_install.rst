@@ -26,7 +26,7 @@ Requirements
 Install the operator
 =====================
 
-Create a ``kustomization.yaml``, replacing ``25.5.1`` with the version you want from the `operator releases <https://github.com/ctrliq/ascender-operator/releases>`_::
+In an empty directory, create ``kustomization.yaml``, replacing ``25.5.1`` with the version you want from the `operator releases <https://github.com/ctrliq/ascender-operator/releases>`_::
 
 	apiVersion: kustomize.config.k8s.io/v1beta1
 	kind: Kustomization
@@ -47,14 +47,14 @@ Apply it::
 
 	The ``ref`` pins the manifests and the ``newTag`` pins the image, and they are separate. Setting only the ``ref`` leaves the operator running whatever image tag the manifests carry, so keep both at the same version.
 
-This creates the namespace, the ``awxs``, ``awxbackups``, and ``awxrestores`` custom resource definitions, the service account and roles, and the controller deployment. Confirm the operator is running::
+This creates the namespace, the ``awxs``, ``awxbackups``, ``awxrestores``, and ``awxmeshingresses`` custom resource definitions, the service account and roles, and the controller deployment. Confirm the operator is running::
 
 	kubectl get pods -n ascender
 
 Create the administrator secret
 ================================
 
-The operator generates most of its own secrets, but the administrator password is worth supplying so you know it::
+Supply the administrator password yourself so you know what it is. The operator generates one otherwise. Save this as ``admin-secret.yml``::
 
 	apiVersion: v1
 	kind: Secret
@@ -62,14 +62,18 @@ The operator generates most of its own secrets, but the administrator password i
 	  name: ascender-app-admin-password
 	  namespace: ascender
 	stringData:
-	  password: <change-me>
+	  password: <password>
+
+Apply it::
+
+	kubectl apply -f admin-secret.yml
 
 Create the Ascender resource
 =============================
 
 The resource is ``kind: AWX``, not an Ascender-named kind. The operator keeps the upstream API group, so all three custom resources are under ``awx.ansible.com/v1beta1``.
 
-The following is a working starting point for a cluster with an ingress controller::
+The following is a working starting point for a cluster with an ingress controller. Save it as ``ascender.yml``::
 
 	apiVersion: awx.ansible.com/v1beta1
 	kind: AWX
@@ -95,12 +99,10 @@ The following is a working starting point for a cluster with an ingress controll
 	  ingress_path_type: Prefix
 	  hostname: ascender.example.com
 	  postgres_data_volume_init: true
-	  init_postgres_extra_commands: |
-	    chown 26:0 /var/lib/pgsql/data
-	    chmod 700 /var/lib/pgsql/data
 	  extra_settings:
 	  - setting: CSRF_TRUSTED_ORIGINS
 	    value:
+	      - http://ascender.example.com
 	      - https://ascender.example.com
 
 Apply it and watch the operator build the deployment::
@@ -110,9 +112,11 @@ Apply it and watch the operator build the deployment::
 
 .. note::
 
-	``postgres_data_volume_init`` and the accompanying commands set ownership on the database volume. Many storage classes provision volumes owned by root, which the PostgreSQL container cannot write to. Omit both on OpenShift, where they are not needed and not supported.
+	``postgres_data_volume_init`` sets ownership on the database volume with an init container. Many storage classes provision volumes owned by root, which the PostgreSQL container cannot write to. The operator's default commands already do the right thing, so you rarely need ``postgres_init_container_commands``. OpenShift manages volume ownership itself.
 
-Set ``CSRF_TRUSTED_ORIGINS`` to the URL you actually reach Ascender on. Without it, signing in fails with a CSRF error even though the pods are healthy.
+Set ``CSRF_TRUSTED_ORIGINS`` to the URLs you actually reach Ascender on. Without it, signing in can fail with a CSRF error even though the pods are healthy, because the scheme Django computes behind an ingress does not always match the one the browser sent. Listing both schemes, as the installer does, covers the common cases.
+
+Pin ``image_version``. Left unset, the operator falls back to ``latest``, so the version you get depends on when the image was last pushed.
 
 TLS
 ====
@@ -144,7 +148,7 @@ By default the operator deploys and manages PostgreSQL. To point at an existing 
 	  type: unmanaged
 	type: Opaque
 
-The database must already exist. When you supply this secret, omit ``postgres_data_volume_init`` and the initialization commands, which apply only to the managed database.
+Apply it with ``kubectl apply -f postgres-secret.yml``. The database must already exist. When you supply this secret, omit ``postgres_data_volume_init`` and the initialization commands, which apply only to the managed database.
 
 Secrets the operator generates
 ===============================
@@ -165,6 +169,10 @@ Unless you supply them, the operator creates these secrets on first reconcile:
      - Connection details for the managed database
    * - ``ascender-app-broadcast-websocket``
      - Shared secret used between web pods
+   * - ``ascender-app-receptor-ca``
+     - Certificate authority for the automation mesh
+   * - ``ascender-app-receptor-work-signing``
+     - Key used to sign mesh work units
 
 .. warning::
 
@@ -179,7 +187,7 @@ The deployment is up when the task and web pods are running::
 
 If pods do not start, the operator log usually says why::
 
-	kubectl logs -n ascender deployment/ascender-operator-controller-manager
+	kubectl logs -n ascender deployment/awx-operator-controller-manager
 
 Reconcile errors also surface on the resource itself::
 
