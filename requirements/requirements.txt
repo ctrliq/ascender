@@ -143,7 +143,7 @@ djangorestframework==3.17.2
     #   drf-spectacular
 djangorestframework-yaml==2.0.0
     # via -r /awx_devel/requirements/requirements.in
-drf-spectacular==0.29.0
+drf-spectacular==0.30.0
     # via -r /awx_devel/requirements/requirements.in
 durationpy==0.10
     # via kubernetes
