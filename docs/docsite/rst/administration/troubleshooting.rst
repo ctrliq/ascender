@@ -33,7 +33,7 @@ Error logging and extra settings
 
 Ascender server errors are streamed and not logged, however you may be able to pass them in on the Ascender spec file.
 
-With ``extra_settings``, you can pass multiple custom settings via the ``awx-operator``. The parameter ``extra_settings``  will be appended to the ``/etc/tower/settings.py`` file and can be an alternative to the ``extra_volumes`` parameter.
+With ``extra_settings``, you can pass multiple custom settings via the Ascender Operator. The parameter ``extra_settings``  will be appended to the ``/etc/tower/settings.py`` file and can be an alternative to the ``extra_volumes`` parameter.
 
 +----------------+----------------+---------+
 | Name           | Description    | Default |
