@@ -42,7 +42,7 @@ jsonschema
 Markdown>=3.8.1  # CVE-2025-69534 # used for formatting API help
 msal>=1.37.0  # cryptography>=49 compatibility (msal<1.37 caps cryptography<49)
 openshift
-packaging==24.2
+packaging==26.3
 pexpect==4.7.0  # see library notes
 prometheus-client
 psycopg
