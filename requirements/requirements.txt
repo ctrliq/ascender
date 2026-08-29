@@ -158,7 +158,7 @@ frozenlist==1.4.1
     #   aiosignal
 gitdb==4.0.11
     # via gitpython
-gitpython==3.1.59
+gitpython==3.1.60
     # via -r /awx_devel/requirements/requirements.in
 hyperlink==21.0.0
     # via
