@@ -390,5 +390,5 @@ Red Hat Ansible Automation Platform
 
 	include_metadata: true
 	inventory_id: <inventory_id or url_quoted_named_url>
-	plugin: awx.awx.tower
+	plugin: awx.awx.controller
 	validate_certs: <true or false>

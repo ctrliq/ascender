@@ -4,13 +4,10 @@ For cloud inventory sources (such as ec2, gce, etc.) inventory updates changed f
 
 Regardless of whether Ansible 2.9 or later is used, Ascender should use the inventory plugin from the collection inside of the execution environment where the inventory update runs. The needed collections are in the Ascender default execution environment:
 
-https://github.com/ansible/awx-ee
-
-
+https://github.com/ctrliq/ascender-ee
 ### Switch to Ansible Inventory
 
 The CLI entry point `ansible-inventory` was introduced in Ansible 2.4. Inventory imports run this command as an intermediary between the inventory and the import's logic to save content to the database. Using `ansible-inventory` eliminates the need to maintain source-specific logic, relying on Ansible's code instead. This also enables consistent data structure output from `ansible-inventory`.
-
 
 ## Writing Your Own Inventory File
 
