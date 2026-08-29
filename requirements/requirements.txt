@@ -122,7 +122,7 @@ django-crum==0.7.9
     # via -r /awx_devel/requirements/requirements.in
 django-extensions==4.1
     # via -r /awx_devel/requirements/requirements.in
-django-guid==3.5.2
+django-guid==3.6.1
     # via -r /awx_devel/requirements/requirements.in
 django-oauth-toolkit==3.3.0
     # via -r /awx_devel/requirements/requirements.in
