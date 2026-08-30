@@ -1,0 +1,5 @@
+SHARED_USER_RESOURCE_TYPE = "shared.user"
+SHARED_ORGANIZATION_RESOURCE_TYPE = "shared.organization"
+SHARED_TEAM_RESOURCE_TYPE = "shared.team"
+SHARED_ROLE_DEFINITION_RESOURCE_TYPE = "shared.roledefinition"
+SHARED_AAP_FLAG_RESOURCE_TYPE = "shared.aapflag"

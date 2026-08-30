@@ -154,7 +154,7 @@ function RelatedTemplateList({ searchParams, resourceName = null }) {
   }
   const addButton = <ToolbarAddButton key="add" linkTo={linkTo} />;
 
-  const deleteDetailsRequests = relatedResourceDeleteRequests(t).template(
+  const deleteDetailsRequests = relatedResourceDeleteRequests.template(
     selected[0]
   );
 

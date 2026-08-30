@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { useLingui } from '@lingui/react/macro';
+import { Plural, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import {
   Button,
@@ -77,8 +77,7 @@ function ProjectDetail({ project }) {
   const brandName = useBrandName();
 
   const { error, dismissError } = useDismissableError(deleteError);
-  const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).project(project);
+  const deleteDetailsRequests = relatedResourceDeleteRequests.project(project);
   let optionsList = '';
   if (
     scm_clean ||
@@ -266,7 +265,13 @@ function ProjectDetail({ project }) {
         )}
         <Detail
           label={t`Cache Timeout`}
-          value={`${scm_update_cache_timeout} ${t`Seconds`}`}
+          value={
+            <Plural
+              value={scm_update_cache_timeout}
+              one="# second"
+              other="# seconds"
+            />
+          }
         />
         {webhook_service && (
           <Detail

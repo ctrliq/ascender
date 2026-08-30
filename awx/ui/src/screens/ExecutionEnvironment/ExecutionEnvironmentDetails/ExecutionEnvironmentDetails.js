@@ -41,7 +41,7 @@ function ExecutionEnvironmentDetails({ executionEnvironment }) {
 
   const { error, dismissError } = useDismissableError(deleteError);
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).executionEnvironment(executionEnvironment);
+    relatedResourceDeleteRequests.executionEnvironment(executionEnvironment);
   return (
     <CardBody>
       <DetailList>

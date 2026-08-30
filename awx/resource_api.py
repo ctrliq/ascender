@@ -1,5 +1,5 @@
-from ansible_base.resource_registry.registry import ParentResource, ResourceConfig, ServiceAPIConfig, SharedResource
-from ansible_base.resource_registry.shared_types import OrganizationType, TeamType, UserType
+from awx.dab.resource_registry.registry import ParentResource, ResourceConfig, ServiceAPIConfig, SharedResource
+from awx.dab.resource_registry.shared_types import OrganizationType, TeamType, UserType
 
 from awx.main import models
 

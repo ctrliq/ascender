@@ -28,7 +28,10 @@ describe('<ToolbarDeleteButton />', () => {
   beforeEach(() => {
     deleteDetailsRequests = [
       {
-        label: 'Workflow Job Template Node',
+        label: {
+          id: 'Workflow Job Template Node',
+          message: 'Workflow Job Template Node',
+        },
         request: CredentialsAPI.read.mockResolvedValue({ data: { count: 1 } }),
       },
     ];
@@ -110,7 +113,10 @@ describe('<ToolbarDeleteButton />', () => {
   test('should disable confirm delete button', async () => {
     const request = [
       {
-        label: 'Workflow Job Template Node',
+        label: {
+          id: 'Workflow Job Template Node',
+          message: 'Workflow Job Template Node',
+        },
         request: CredentialsAPI.read.mockResolvedValue({ data: { count: 3 } }),
       },
     ];
@@ -146,7 +152,10 @@ describe('<ToolbarDeleteButton />', () => {
   test('should open delete error modal', async () => {
     const request = [
       {
-        label: 'Workflow Job Template Node',
+        label: {
+          id: 'Workflow Job Template Node',
+          message: 'Workflow Job Template Node',
+        },
         request: CredentialsAPI.read.mockRejectedValue(
           new Error({
             response: {

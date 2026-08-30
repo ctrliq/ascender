@@ -67,9 +67,8 @@ describe('<OrganizationDetail />', () => {
   });
 
   test('should build the proper number of delete detail requests', () => {
-    const deleteDetailsRequests = relatedResourceDeleteRequests(
-      (str) => str
-    ).organization(mockOrganization);
+    const deleteDetailsRequests =
+      relatedResourceDeleteRequests.organization(mockOrganization);
     expect(deleteDetailsRequests).toHaveLength(7);
   });
 

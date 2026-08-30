@@ -3,7 +3,7 @@ import { useLingui } from '@lingui/react/macro';
 import { Tooltip } from '@patternfly/react-core';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
-import { VERBOSITY } from '../VerbositySelectField';
+import { getVerbosityLabel } from '../VerbositySelectField';
 import { toTitleCase } from '../../util/strings';
 import { VariablesDetail } from '../CodeEditor';
 import { jsonToYaml } from '../../util/yaml';
@@ -22,7 +22,7 @@ const ErrorMessageWrapper = styled.div`
   margin-bottom: 10px;
 `;
 function AdHocPreviewStep({ hasErrors, values }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const { credential, execution_environment, extra_vars, verbosity } = values;
 
   const items = Object.entries(values);
@@ -61,7 +61,10 @@ function AdHocPreviewStep({ hasErrors, values }) {
           />
         )}
         {verbosity && (
-          <Detail label={t`Verbosity`} value={VERBOSITY(t)[values.verbosity]} />
+          <Detail
+            label={t`Verbosity`}
+            value={getVerbosityLabel(values.verbosity, i18n)}
+          />
         )}
         {extra_vars && (
           <VariablesDetail

@@ -58,7 +58,7 @@ function FederatedInventoryDetail({ inventory }) {
   const { error, dismissError } = useDismissableError(deleteError);
 
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).inventory(inventory);
+    relatedResourceDeleteRequests.inventory(inventory);
 
   if (isLoading) {
     return <ContentLoading />;

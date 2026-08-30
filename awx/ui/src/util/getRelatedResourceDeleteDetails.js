@@ -15,69 +15,70 @@ import {
   OrganizationsAPI,
   InstanceGroupsAPI,
 } from 'api';
-import { t } from '@lingui/core/macro';
+import { msg } from '@lingui/core/macro';
 
+// Resolves each request and returns the labels as lingui message
+// descriptors, paired with their counts; translate with i18n._(label)
+// at render time. `results` is false when nothing has a count > 0.
 export async function getRelatedResourceDeleteCounts(requests) {
-  const results = {};
+  let results = [];
   let error = null;
-  let hasCount = false;
 
   try {
-    await Promise.all(
-      requests.map(async ({ request, label }) => {
+    const counts = await Promise.all(
+      requests.map(async ({ request }) => {
         const {
           data: { count },
         } = await request();
-
-        if (count > 0) {
-          results[label] = count;
-          hasCount = true;
-        }
+        return count;
       })
     );
+    results = requests
+      .map(({ label }, index) => ({ label, count: counts[index] }))
+      .filter(({ count }) => count > 0);
   } catch (err) {
     error = err;
   }
 
   return {
-    results: hasCount && results,
+    results: results.length > 0 && results,
     error,
   };
 }
 
-export const relatedResourceDeleteRequests = () => ({
+export const relatedResourceDeleteRequests = {
   credential: (selected) => [
     {
       request: () =>
         JobTemplatesAPI.read({
           credentials: selected.id,
         }),
-      label: t`Job Templates`,
+      label: msg`Job Templates`,
     },
     {
       request: () => ProjectsAPI.read({ credentials: selected.id }),
-      label: t`Projects`,
+      label: msg`Projects`,
     },
     {
       request: () =>
         InventorySourcesAPI.read({
           credentials__id: selected.id,
         }),
-      label: t`Inventory Sources`,
+      label: msg`Inventory Sources`,
     },
     {
       request: () =>
         CredentialInputSourcesAPI.read({
           source_credential: selected.id,
         }),
-      label: t`Credential Input Sources`,
+      label: msg`Credential Input Sources`,
     },
     {
       request: () =>
         ExecutionEnvironmentsAPI.read({
           credential: selected.id,
         }),
-      label: t`Execution Environments`,
+      label: msg`Execution Environments`,
     },
   ],
 
@@ -87,7 +88,7 @@ export const relatedResourceDeleteRequests = () => ({
         CredentialsAPI.read({
           credential_type__id: selected.id,
         }),
-      label: t`Credentials`,
+      label: msg`Credentials`,
     },
   ],
 
@@ -97,11 +98,11 @@ export const relatedResourceDeleteRequests = () => ({
         JobTemplatesAPI.read({
           inventory: selected.id,
         }),
-      label: t`Job Templates`,
+      label: msg`Job Templates`,
     },
     {
       request: () => WorkflowJobTemplatesAPI.read({ inventory: selected.id }),
-      label: t`Workflow Job Template`,
+      label: msg`Workflow Job Templates`,
     },
   ],
 
@@ -111,15 +112,15 @@ export const relatedResourceDeleteRequests = () => ({
         WorkflowJobTemplateNodesAPI.read({
           unified_job_template: inventorySourceId,
         }),
-      label: t`Workflow Job Template Nodes`,
+      label: msg`Workflow Job Template Nodes`,
     },
     {
       request: async () => InventorySourcesAPI.readGroups(inventorySourceId),
-      label: t`Groups`,
+      label: msg`Groups`,
     },
     {
       request: async () => InventorySourcesAPI.readHosts(inventorySourceId),
-      label: t`Hosts`,
+      label: msg`Hosts`,
     },
   ],
 
@@ -129,21 +130,21 @@ export const relatedResourceDeleteRequests = () => ({
         JobTemplatesAPI.read({
           project: selected.id,
         }),
-      label: t`Job Templates`,
+      label: msg`Job Templates`,
     },
     {
       request: () =>
         WorkflowJobTemplateNodesAPI.read({
           unified_job_template: selected.id,
         }),
-      label: t`Workflow Job Templates`,
+      label: msg`Workflow Job Templates`,
     },
     {
       request: () =>
         InventorySourcesAPI.read({
           source_project: selected.id,
         }),
-      label: t`Inventory Sources`,
+      label: msg`Inventory Sources`,
     },
   ],
 
@@ -153,7 +154,7 @@ export const relatedResourceDeleteRequests = () => ({
         WorkflowJobTemplateNodesAPI.read({
           unified_job_template: selected.id,
         }),
-      label: [t`Workflow Job Template Nodes`],
+      label: msg`Workflow Job Template Nodes`,
     },
   ],
 
@@ -163,49 +164,49 @@ export const relatedResourceDeleteRequests = () => ({
         CredentialsAPI.read({
           organization: selected.id,
         }),
-      label: t`Credential`,
+      label: msg`Credentials`,
     },
     {
       request: async () =>
         TeamsAPI.read({
           organization: selected.id,
         }),
-      label: t`Teams`,
+      label: msg`Teams`,
     },
     {
       request: async () =>
         NotificationTemplatesAPI.read({
           organization: selected.id,
         }),
-      label: t`Notification Templates`,
+      label: msg`Notification Templates`,
     },
     {
       request: () =>
         ExecutionEnvironmentsAPI.read({
           organization: selected.id,
         }),
-      label: t`Execution Environments`,
+      label: msg`Execution Environments`,
     },
     {
       request: async () =>
         ProjectsAPI.read({
           organization: selected.id,
         }),
-      label: [t`Projects`],
+      label: msg`Projects`,
     },
     {
       request: () =>
         InventoriesAPI.read({
           organization: selected.id,
         }),
-      label: t`Inventories`,
+      label: msg`Inventories`,
     },
     {
       request: () =>
         ApplicationsAPI.read({
           organization: selected.id,
         }),
-      label: t`Applications`,
+      label: msg`Applications`,
     },
   ],
   executionEnvironment: (selected) => [
@@ -214,21 +215,21 @@ export const relatedResourceDeleteRequests = () => ({
         UnifiedJobTemplatesAPI.read({
           execution_environment: selected.id,
         }),
-      label: [t`Templates`],
+      label: msg`Templates`,
     },
     {
       request: async () =>
         ProjectsAPI.read({
           default_environment: selected.id,
         }),
-      label: [t`Projects`],
+      label: msg`Projects`,
     },
     {
       request: async () =>
         OrganizationsAPI.read({
           default_environment: selected.id,
         }),
-      label: [t`Organizations`],
+      label: msg`Organizations`,
     },
     {
       request: async () => {
@@ -256,29 +257,29 @@ export const relatedResourceDeleteRequests = () => ({
           throw new Error(err);
         }
       },
-      label: [t`Workflow Job Template Nodes`],
+      label: msg`Workflow Job Template Nodes`,
     },
   ],
   instanceGroup: (selected) => [
     {
       request: () => OrganizationsAPI.read({ instance_groups: selected.id }),
-      label: t`Organizations`,
+      label: msg`Organizations`,
     },
     {
       request: () => InventoriesAPI.read({ instance_groups: selected.id }),
-      label: t`Inventories`,
+      label: msg`Inventories`,
     },
     {
       request: () =>
         UnifiedJobTemplatesAPI.read({ instance_groups: selected.id }),
-      label: t`Templates`,
+      label: msg`Templates`,
     },
   ],
 
   instance: (selected) => [
     {
       request: () => InstanceGroupsAPI.read({ instances: selected.id }),
-      label: t`Instance Groups`,
+      label: msg`Instance Groups`,
     },
   ],
-});
+};

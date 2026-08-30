@@ -6,7 +6,7 @@ from django.conf import settings
 from django.urls import path
 from django.urls import re_path, include
 
-from ansible_base.resource_registry.urls import urlpatterns as resource_api_urls
+from awx.dab.resource_registry.urls import urlpatterns as resource_api_urls
 
 from awx.main.views import handle_400, handle_403, handle_404, handle_500, handle_csp_violation, handle_login_redirect
 

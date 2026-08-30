@@ -6,7 +6,7 @@ from django.urls import path
 
 from channels.routing import ProtocolTypeRouter, URLRouter
 
-from ansible_base.lib.channels.middleware import DrfAuthMiddlewareStack
+from awx.dab.lib.channels.middleware import DrfAuthMiddlewareStack
 
 from . import consumers
 

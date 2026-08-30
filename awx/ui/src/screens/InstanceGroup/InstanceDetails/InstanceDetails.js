@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useNavigate, useParams } from 'react-router';
-import { Trans, useLingui } from '@lingui/react/macro';
+import { Plural, Trans, useLingui } from '@lingui/react/macro';
 
 import {
   Button,
@@ -64,7 +64,7 @@ function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) {
 }
 
 function InstanceDetails({ setBreadcrumb, instanceGroup }) {
-  const { t, i18n } = useLingui();
+  const { t } = useLingui();
   const config = useConfig();
   const { id, instanceId } = useParams();
   const navigate = useNavigate();
@@ -255,9 +255,7 @@ function InstanceDetails({ setBreadcrumb, instanceGroup }) {
                 </div>
                 <SliderForks data-cy="slider-forks">
                   <div data-cy="number-forks">
-                    {i18n._('{count, plural, one {# fork} other {# forks}}', {
-                      count: forks,
-                    })}
+                    <Plural value={forks} one="# fork" other="# forks" />
                   </div>
                   <Slider
                     areCustomStepsContinuous

@@ -69,7 +69,7 @@ function JobStatusLabel({ job }) {
 function ConstructedInventoryDetail({ inventory }) {
   const { t } = useLingui();
   const navigate = useNavigate();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
 
   const {
     result: { instanceGroups, inputInventories, inventorySource, actions },
@@ -130,7 +130,7 @@ function ConstructedInventoryDetail({ inventory }) {
   const { error, dismissError } = useDismissableError(deleteError);
 
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).inventory(inventory);
+    relatedResourceDeleteRequests.inventory(inventory);
 
   if (isLoading) {
     return <ContentLoading />;

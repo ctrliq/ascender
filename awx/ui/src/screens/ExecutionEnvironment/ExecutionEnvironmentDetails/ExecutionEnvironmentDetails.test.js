@@ -16,10 +16,10 @@ jest.mock('../../../api');
 // request list so it skips that fetch (which hits several auto-mocked APIs)
 // and opens the confirm modal directly.
 jest.mock('util/getRelatedResourceDeleteDetails', () => ({
-  relatedResourceDeleteRequests: () => ({ executionEnvironment: () => [] }),
+  relatedResourceDeleteRequests: { executionEnvironment: () => [] },
   getRelatedResourceDeleteCounts: jest
     .fn()
-    .mockResolvedValue({ results: {}, error: null }),
+    .mockResolvedValue({ results: false, error: null }),
 }));
 
 const executionEnvironment = {

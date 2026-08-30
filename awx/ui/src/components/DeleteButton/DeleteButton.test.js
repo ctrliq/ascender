@@ -19,7 +19,7 @@ describe('<DeleteButton />', () => {
         name="Foo"
         deleteDetailsRequests={[
           {
-            label: 'job',
+            label: { id: 'job', message: 'job' },
             request: CredentialsAPI.read.mockResolvedValue({
               data: { count: 1 },
             }),
@@ -42,7 +42,7 @@ describe('<DeleteButton />', () => {
         itemsToDelete="foo"
         deleteDetailsRequests={[
           {
-            label: 'job',
+            label: { id: 'job', message: 'job' },
             request: CredentialsAPI.read.mockResolvedValue({
               data: { count: 1 },
             }),
@@ -66,7 +66,7 @@ describe('<DeleteButton />', () => {
         itemsToDelete="foo"
         deleteDetailsRequests={[
           {
-            label: 'job',
+            label: { id: 'job', message: 'job' },
             request: CredentialsAPI.read.mockRejectedValue(
               Object.assign(new Error('An error occurred'), {
                 response: {

@@ -97,7 +97,7 @@ function WorkflowJobTemplateDetail({ template }) {
   }));
 
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).template(template);
+    relatedResourceDeleteRequests.template(template);
 
   return (
     <CardBody>

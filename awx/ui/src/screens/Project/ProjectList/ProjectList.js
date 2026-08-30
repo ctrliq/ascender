@@ -145,7 +145,7 @@ function ProjectList() {
   const hasContentLoading = isDeleteLoading || isLoading;
   const canAdd = actions && actions.POST;
 
-  const deleteDetailsRequests = relatedResourceDeleteRequests(t).project(
+  const deleteDetailsRequests = relatedResourceDeleteRequests.project(
     selected[0]
   );
 

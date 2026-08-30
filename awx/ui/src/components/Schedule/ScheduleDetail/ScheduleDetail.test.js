@@ -220,14 +220,7 @@ describe('<ScheduleDetail />', () => {
     expect(screen.getByText('Inventory')).toBeInTheDocument();
     assertDetail('Source Control Branch', 'foo/branch');
     assertDetail('Limit', 'localhost');
-    // The Verbosity detail's value comes from VERBOSITY(t)[verbosity], whose
-    // Lingui macro resolves to an empty string under the test i18n setup, so
-    // the Detail renders null (no DOM node) even though ask_verbosity_on_launch
-    // is true. RTL can only see the (absent) DOM, so we assert the
-    // empty-value behavior here. See VerbositySelectField VERBOSITY().
-    expect(
-      document.querySelector('#schedule-verbosity')
-    ).not.toBeInTheDocument();
+    assertDetail('Verbosity', '1 (Verbose)');
     expect(screen.getByText('Show Changes')).toBeInTheDocument();
     expect(screen.getByText('Credentials')).toBeInTheDocument();
     expect(screen.getByText('Job Tags')).toBeInTheDocument();

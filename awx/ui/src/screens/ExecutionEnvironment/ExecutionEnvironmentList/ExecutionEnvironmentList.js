@@ -114,9 +114,8 @@ function ExecutionEnvironmentList() {
   };
 
   const canAdd = actions && actions.POST;
-  const deleteDetailsRequests = relatedResourceDeleteRequests(
-    t
-  ).executionEnvironment(selected[0]);
+  const deleteDetailsRequests =
+    relatedResourceDeleteRequests.executionEnvironment(selected[0]);
   return (
     <>
       <PageSection hasBodyWrapper={false}>

@@ -30,9 +30,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import StaticHTMLRenderer
 from rest_framework.negotiation import DefaultContentNegotiation
 
-from ansible_base.rest_filters.rest_framework.field_lookup_backend import FieldLookupBackend
-from ansible_base.lib.utils.models import get_all_field_names
-from ansible_base.lib.utils.requests import get_remote_host
+from awx.dab.rest_filters.rest_framework.field_lookup_backend import FieldLookupBackend
+from awx.dab.lib.utils.models import get_all_field_names
+from awx.dab.lib.utils.requests import get_remote_host
 
 # AWX
 from awx.main.models import UnifiedJob, UnifiedJobTemplate, User, Role, Credential, WorkflowJobTemplateNode, WorkflowApprovalTemplate

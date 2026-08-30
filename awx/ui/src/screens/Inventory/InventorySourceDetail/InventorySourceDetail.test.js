@@ -87,9 +87,7 @@ describe('InventorySourceDetail', () => {
     assertDetail('Project', 'Mock Project');
     assertDetail('Inventory file', 'foo');
     assertDetail('Cache timeout', '2 seconds');
-    // Verbosity's value is t`2 (More Verbose)`, which is absent from the test
-    // i18n catalog and renders empty, so the Detail returns null (no label).
-    expect(screen.queryByText('Verbosity')).not.toBeInTheDocument();
+    assertDetail('Verbosity', '2 (More Verbose)');
 
     assertDetail(
       'Execution Environment',
