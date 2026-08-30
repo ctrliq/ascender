@@ -877,7 +877,7 @@ msgstr "ホストが利用可能で、実行中のジョブに含める必要が
 "    示します。外部インベントリーの一部であるホストの場合、これは\n"
 "    インベントリー同期プロセスによってリセットされることがあります。"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:149
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:177
 msgid "Workflow Nodes"
 msgstr "ワークフローノード"
 
@@ -1326,7 +1326,7 @@ msgstr "工場出荷時のデフォルトに戻します。"
 msgid "Prompt for job slice count on launch."
 msgstr "起動時にジョブスライス数を要求します。"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:135
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:163
 msgid "Filter by failed jobs"
 msgstr "失敗したジョブによるフィルター"
 
@@ -1482,7 +1482,7 @@ msgstr "メタデータ"
 msgid "Enable privilege escalation"
 msgstr "権限昇格の有効化"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:128
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:156
 msgid "Filter..."
 msgstr "フィルター..."
 
@@ -1859,8 +1859,8 @@ msgstr "サブスクリプションマニュフェスト"
 #: components/JobList/JobList.js:243
 #: components/StatusLabel/StatusLabel.js:43
 #: components/Workflow/WorkflowNodeHelp.js:103
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:45
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:139
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:66
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:167
 #: screens/Job/JobOutput/shared/HostStatusBar.js:47
 #: screens/Job/JobOutput/shared/OutputToolbar.js:155
 msgid "Failed"
@@ -5818,7 +5818,7 @@ msgstr "スキップタグ"
 msgid "Edit Host"
 msgstr "ホストの編集"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:142
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:170
 msgid "Filter by successful jobs"
 msgstr "成功ジョブによるフィルター"
 
@@ -5834,7 +5834,7 @@ msgstr "ワークフローがキャンセルされました "
 msgid "Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "ジョブ実行で使用するブランチ。空欄の場合はプロジェクトのデフォルトが使用されます。プロジェクトの allow_override フィールドが true に設定されている場合にのみ許可されます。"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:133
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:161
 msgid "Workflow Statuses"
 msgstr "ワークフローのステータス"
 
@@ -6002,11 +6002,6 @@ msgstr "webhook リクエストを受け入れるサービス。"
 #: components/Schedule/shared/ScheduleFormFields.js:49
 msgid "Warning: {selectedValue} is a link to {0} and will be saved as that."
 msgstr "警告: {selectedValue} は {0} へのリンクであり、そのように保存されます。"
-
-#. placeholder {0}: relevantResults.length
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:119
-msgid "Workflow Job 1/{0}"
-msgstr "ワークフロージョブ 1/{0}"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:77
 msgid "{interval, plural, one {# month} other {# months}}"
@@ -7758,8 +7753,8 @@ msgstr "未更新"
 #: components/JobList/JobList.js:242
 #: components/StatusLabel/StatusLabel.js:41
 #: components/Workflow/WorkflowNodeHelp.js:100
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:46
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:146
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:67
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:174
 msgid "Successful"
 msgstr "成功"
 
@@ -8199,6 +8194,10 @@ msgstr "タスク"
 #: components/PromptDetail/PromptInventorySourceDetail.js:115
 msgid "Regions"
 msgstr "リージョン"
+
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:148
+msgid "Workflow Jobs ({total})"
+msgstr ""
 
 #: components/Search/AdvancedSearch.js:315
 msgid "Set type disabled for related search field fuzzy searches"
@@ -11290,6 +11289,10 @@ msgstr "自動化コントローラーバージョン"
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:81
 msgid "Access Token Expiration"
 msgstr "アクセストークンの有効期限"
+
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:147
+msgid "Workflow Job {currentPosition}/{total}"
+msgstr ""
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:69
 msgid "{interval, plural, one {# minute} other {# minutes}}"

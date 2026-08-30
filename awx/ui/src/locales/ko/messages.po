@@ -877,7 +877,7 @@ msgstr "호스트를 사용할 수 있고 실행 중인 작업에 포함되어�
 "    여부를 나타냅니다. 외부 인벤토리에 속한 호스트의 경우, 인벤토리\n"
 "    동기화 프로세스에 의해 재설정될 수 있습니다."
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:149
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:177
 msgid "Workflow Nodes"
 msgstr "워크플로 노드"
 
@@ -1326,7 +1326,7 @@ msgstr "팩토리 기본 설정으로 되돌립니다."
 msgid "Prompt for job slice count on launch."
 msgstr "시작 시 작업 슬라이스 수를 입력하라는 메시지를 표시합니다."
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:135
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:163
 msgid "Filter by failed jobs"
 msgstr "실패한 작업으로 필터링"
 
@@ -1482,7 +1482,7 @@ msgstr "메타데이터"
 msgid "Enable privilege escalation"
 msgstr "권한 에스컬레이션 활성화"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:128
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:156
 msgid "Filter..."
 msgstr "필터..."
 
@@ -1859,8 +1859,8 @@ msgstr "서브스크립션 매니페스트"
 #: components/JobList/JobList.js:243
 #: components/StatusLabel/StatusLabel.js:43
 #: components/Workflow/WorkflowNodeHelp.js:103
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:45
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:139
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:66
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:167
 #: screens/Job/JobOutput/shared/HostStatusBar.js:47
 #: screens/Job/JobOutput/shared/OutputToolbar.js:155
 msgid "Failed"
@@ -5818,7 +5818,7 @@ msgstr "태그 건너뛰기"
 msgid "Edit Host"
 msgstr "호스트 편집"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:142
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:170
 msgid "Filter by successful jobs"
 msgstr "성공한 작업으로 필터링"
 
@@ -5834,7 +5834,7 @@ msgstr "워크플로우가 취소되었습니다 "
 msgid "Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "작업 실행에 사용할 브랜치입니다. 비어 있으면 프로젝트 기본값이 사용됩니다. 프로젝트의 allow_override 필드가 true로 설정된 경우에만 허용됩니다."
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:133
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:161
 msgid "Workflow Statuses"
 msgstr "워크플로우 상태"
 
@@ -6002,11 +6002,6 @@ msgstr "webhook 요청을 수락할 서비스입니다."
 #: components/Schedule/shared/ScheduleFormFields.js:49
 msgid "Warning: {selectedValue} is a link to {0} and will be saved as that."
 msgstr "경고: {selectedValue}은(는) {0}에 대한 링크이며 해당 링크로 저장됩니다."
-
-#. placeholder {0}: relevantResults.length
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:119
-msgid "Workflow Job 1/{0}"
-msgstr "워크플로 작업 1/{0}"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:77
 msgid "{interval, plural, one {# month} other {# months}}"
@@ -7758,8 +7753,8 @@ msgstr "업데이트되지 않음"
 #: components/JobList/JobList.js:242
 #: components/StatusLabel/StatusLabel.js:41
 #: components/Workflow/WorkflowNodeHelp.js:100
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:46
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:146
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:67
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:174
 msgid "Successful"
 msgstr "성공"
 
@@ -8199,6 +8194,10 @@ msgstr "작업"
 #: components/PromptDetail/PromptInventorySourceDetail.js:115
 msgid "Regions"
 msgstr "리전"
+
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:148
+msgid "Workflow Jobs ({total})"
+msgstr ""
 
 #: components/Search/AdvancedSearch.js:315
 msgid "Set type disabled for related search field fuzzy searches"
@@ -11290,6 +11289,10 @@ msgstr "Automation Controller 버전"
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:81
 msgid "Access Token Expiration"
 msgstr "액세스 토큰 만료"
+
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:147
+msgid "Workflow Job {currentPosition}/{total}"
+msgstr ""
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:69
 msgid "{interval, plural, one {# minute} other {# minutes}}"

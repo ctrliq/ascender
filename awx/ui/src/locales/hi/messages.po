@@ -879,7 +879,7 @@ msgstr "इंगित करता है कि क्या कोई हो
 "    जॉब्स में शामिल किया जाना चाहिए। बाहरी इन्वेंटरी का हिस्सा होने वाले होस्ट्स के लिए, इसे\n"
 "    इन्वेंटरी सिंक प्रक्रिया द्वारा रीसेट किया जा सकता है।"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:149
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:177
 msgid "Workflow Nodes"
 msgstr "वर्कफ़्लो नोड्स"
 
@@ -1328,7 +1328,7 @@ msgstr "फ़ैक्टरी डिफ़ॉल्ट पर वापस �
 msgid "Prompt for job slice count on launch."
 msgstr "लॉन्च पर जॉब स्लाइस संख्या के लिए संकेत दें।"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:135
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:163
 msgid "Filter by failed jobs"
 msgstr "विफल जॉब्स द्वारा फ़िल्टर करें"
 
@@ -1484,7 +1484,7 @@ msgstr "मेटाडेटा"
 msgid "Enable privilege escalation"
 msgstr "विशेषाधिकार वृद्धि सक्षम करें"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:128
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:156
 msgid "Filter..."
 msgstr "फ़िल्टर..."
 
@@ -1861,8 +1861,8 @@ msgstr "सदस्यता मैनिफ़ेस्ट"
 #: components/JobList/JobList.js:243
 #: components/StatusLabel/StatusLabel.js:43
 #: components/Workflow/WorkflowNodeHelp.js:103
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:45
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:139
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:66
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:167
 #: screens/Job/JobOutput/shared/HostStatusBar.js:47
 #: screens/Job/JobOutput/shared/OutputToolbar.js:155
 msgid "Failed"
@@ -5821,7 +5821,7 @@ msgstr "टैग छोड़ें"
 msgid "Edit Host"
 msgstr "होस्ट संपादित करें"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:142
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:170
 msgid "Filter by successful jobs"
 msgstr "सफल जॉब्स द्वारा फ़िल्टर करें"
 
@@ -5837,7 +5837,7 @@ msgstr "वर्कफ़्लो रद्द किया गया "
 msgid "Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "जॉब रन में उपयोग करने के लिए ब्रांच। रिक्त होने पर प्रोजेक्ट डिफ़ॉल्ट का उपयोग किया जाता है। केवल तभी अनुमति है जब प्रोजेक्ट का allow_override फ़ील्ड true पर सेट हो।"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:133
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:161
 msgid "Workflow Statuses"
 msgstr "वर्कफ़्लो स्थितियां"
 
@@ -6005,11 +6005,6 @@ msgstr "वह सेवा जिससे वेबहुक अनुरो�
 #: components/Schedule/shared/ScheduleFormFields.js:49
 msgid "Warning: {selectedValue} is a link to {0} and will be saved as that."
 msgstr "चेतावनी: {selectedValue} {0} का एक लिंक है और उसी रूप में सहेजा जाएगा।"
-
-#. placeholder {0}: relevantResults.length
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:119
-msgid "Workflow Job 1/{0}"
-msgstr "वर्कफ़्लो जॉब 1/{0}"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:77
 msgid "{interval, plural, one {# month} other {# months}}"
@@ -7761,8 +7756,8 @@ msgstr "कभी अपडेट नहीं किया गया"
 #: components/JobList/JobList.js:242
 #: components/StatusLabel/StatusLabel.js:41
 #: components/Workflow/WorkflowNodeHelp.js:100
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:46
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:146
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:67
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:174
 msgid "Successful"
 msgstr "सफल"
 
@@ -8203,6 +8198,10 @@ msgstr "कार्य"
 #: components/PromptDetail/PromptInventorySourceDetail.js:115
 msgid "Regions"
 msgstr "क्षेत्र"
+
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:148
+msgid "Workflow Jobs ({total})"
+msgstr ""
 
 #: components/Search/AdvancedSearch.js:315
 msgid "Set type disabled for related search field fuzzy searches"
@@ -11294,6 +11293,10 @@ msgstr "Automation controller संस्करण"
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:81
 msgid "Access Token Expiration"
 msgstr "एक्सेस टोकन समाप्ति"
+
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:147
+msgid "Workflow Job {currentPosition}/{total}"
+msgstr ""
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:69
 msgid "{interval, plural, one {# minute} other {# minutes}}"

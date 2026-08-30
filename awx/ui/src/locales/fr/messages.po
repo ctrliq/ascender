@@ -877,7 +877,7 @@ msgstr "Indique si un hôte est disponible et doit être inclus dans l'exécutio
 "    jobs.  Pour les hôtes qui font partie d'un inventaire externe, ceci peut être\n"
 "    réinitialisé par le processus de synchronisation de l'inventaire."
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:149
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:177
 msgid "Workflow Nodes"
 msgstr "Nœuds de flux de travail"
 
@@ -1326,7 +1326,7 @@ msgstr "Revenir à la valeur usine par défaut."
 msgid "Prompt for job slice count on launch."
 msgstr "Demander le nombre de tranches de tâche au lancement."
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:135
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:163
 msgid "Filter by failed jobs"
 msgstr "Filtrer par travaux échoués"
 
@@ -1482,7 +1482,7 @@ msgstr "Métadonnées"
 msgid "Enable privilege escalation"
 msgstr "Activer l’élévation des privilèges"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:128
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:156
 msgid "Filter..."
 msgstr "Filtrer..."
 
@@ -1859,8 +1859,8 @@ msgstr "Manifeste de souscription"
 #: components/JobList/JobList.js:243
 #: components/StatusLabel/StatusLabel.js:43
 #: components/Workflow/WorkflowNodeHelp.js:103
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:45
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:139
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:66
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:167
 #: screens/Job/JobOutput/shared/HostStatusBar.js:47
 #: screens/Job/JobOutput/shared/OutputToolbar.js:155
 msgid "Failed"
@@ -5818,7 +5818,7 @@ msgstr "Balises de sauts"
 msgid "Edit Host"
 msgstr "Modifier l’hôte"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:142
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:170
 msgid "Filter by successful jobs"
 msgstr "Filtrer par tâches ayant réussi"
 
@@ -5834,7 +5834,7 @@ msgstr "Flux de travail annulé "
 msgid "Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "Branche à utiliser lors de l'exécution du job. La valeur par défaut du projet est utilisée si vide. Autorisé uniquement si le champ allow_override du projet est défini sur true."
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:133
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:161
 msgid "Workflow Statuses"
 msgstr "Statuts du flux de travail"
 
@@ -6002,11 +6002,6 @@ msgstr "Service à partir duquel les requêtes de webhook seront acceptées."
 #: components/Schedule/shared/ScheduleFormFields.js:49
 msgid "Warning: {selectedValue} is a link to {0} and will be saved as that."
 msgstr "Avertissement : {selectedValue} est un lien vers {0} et sera enregistré en tant que tel."
-
-#. placeholder {0}: relevantResults.length
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:119
-msgid "Workflow Job 1/{0}"
-msgstr "Job de flux de travail 1/{0}"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:77
 msgid "{interval, plural, one {# month} other {# months}}"
@@ -7758,8 +7753,8 @@ msgstr "Jamais mis à jour"
 #: components/JobList/JobList.js:242
 #: components/StatusLabel/StatusLabel.js:41
 #: components/Workflow/WorkflowNodeHelp.js:100
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:46
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:146
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:67
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:174
 msgid "Successful"
 msgstr "Réussi"
 
@@ -8199,6 +8194,10 @@ msgstr "Tâche"
 #: components/PromptDetail/PromptInventorySourceDetail.js:115
 msgid "Regions"
 msgstr "Régions"
+
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:148
+msgid "Workflow Jobs ({total})"
+msgstr ""
 
 #: components/Search/AdvancedSearch.js:315
 msgid "Set type disabled for related search field fuzzy searches"
@@ -11290,6 +11289,10 @@ msgstr "Version de contrôleur d’Automation"
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:81
 msgid "Access Token Expiration"
 msgstr "Expiration du jeton d'accès"
+
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:147
+msgid "Workflow Job {currentPosition}/{total}"
+msgstr ""
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:69
 msgid "{interval, plural, one {# minute} other {# minutes}}"
