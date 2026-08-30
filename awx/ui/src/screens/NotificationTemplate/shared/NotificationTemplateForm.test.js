@@ -66,6 +66,7 @@ const defaults = {
   started: messageDef,
   success: messageDef,
   error: messageDef,
+  changed: messageDef,
   workflow_approval: {
     approved: messageDef,
     denied: messageDef,

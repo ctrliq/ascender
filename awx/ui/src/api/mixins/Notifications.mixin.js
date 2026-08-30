@@ -32,6 +32,13 @@ const NotificationsMixin = (parent) =>
       );
     }
 
+    readNotificationTemplatesChanged(id, params) {
+      return this.http.get(
+        `${this.baseUrl}${id}/notification_templates_changed/`,
+        { params }
+      );
+    }
+
     associateNotificationTemplatesStarted(resourceId, notificationId) {
       return this.http.post(
         `${this.baseUrl}${resourceId}/notification_templates_started/`,
@@ -74,13 +81,28 @@ const NotificationsMixin = (parent) =>
       );
     }
 
+    associateNotificationTemplatesChanged(resourceId, notificationId) {
+      return this.http.post(
+        `${this.baseUrl}${resourceId}/notification_templates_changed/`,
+        { id: notificationId }
+      );
+    }
+
+    disassociateNotificationTemplatesChanged(resourceId, notificationId) {
+      return this.http.post(
+        `${this.baseUrl}${resourceId}/notification_templates_changed/`,
+        { id: notificationId, disassociate: true }
+      );
+    }
+
     /**
      * This is a helper method meant to simplify setting the "on" status of
      * a related notification.
      *
      * @param[resourceId] - id of the base resource
      * @param[notificationId] - id of the notification
-     * @param[notificationType] - the type of notification, options are "success" and "error"
+     * @param[notificationType] - the type of notification, options are "approvals",
+     *   "started", "success", "error" and "changed"
      */
     associateNotificationTemplate(
       resourceId,
@@ -115,6 +137,13 @@ const NotificationsMixin = (parent) =>
         );
       }
 
+      if (notificationType === 'changed') {
+        return this.associateNotificationTemplatesChanged(
+          resourceId,
+          notificationId
+        );
+      }
+
       throw new Error(
         `Unsupported notificationType for association: ${notificationType}`
       );
@@ -126,7 +155,8 @@ const NotificationsMixin = (parent) =>
      *
      * @param[resourceId] - id of the base resource
      * @param[notificationId] - id of the notification
-     * @param[notificationType] - the type of notification, options are "success" and "error"
+     * @param[notificationType] - the type of notification, options are "approvals",
+     *   "started", "success", "error" and "changed"
      */
     disassociateNotificationTemplate(
       resourceId,
@@ -156,6 +186,13 @@ const NotificationsMixin = (parent) =>
 
       if (notificationType === 'error') {
         return this.disassociateNotificationTemplatesError(
+          resourceId,
+          notificationId
+        );
+      }
+
+      if (notificationType === 'changed') {
+        return this.disassociateNotificationTemplatesChanged(
           resourceId,
           notificationId
         );

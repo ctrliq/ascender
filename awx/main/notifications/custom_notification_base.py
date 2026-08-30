@@ -7,6 +7,11 @@ class CustomNotificationBase(object):
     DEFAULT_MSG = "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}"
     DEFAULT_BODY = "{{ job_friendly_name }} #{{ job.id }} had status {{ job.status }}, view details at {{ url }}\n\n{{ job_metadata }}"
 
+    DEFAULT_CHANGED_MSG = "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' reported changes: {{ url }}"
+    DEFAULT_CHANGED_BODY = (
+        "{{ job_friendly_name }} #{{ job.id }} reported changes and had status {{ job.status }}, view details at {{ url }}\n\n{{ job_metadata }}"
+    )
+
     DEFAULT_APPROVAL_RUNNING_MSG = 'The approval node "{{ approval_node_name }}" needs review. This node can be viewed at: {{ workflow_url }}'
     DEFAULT_APPROVAL_RUNNING_BODY = (
         'The approval node "{{ approval_node_name }}" needs review. This approval node can be viewed at: {{ workflow_url }}'
@@ -27,6 +32,7 @@ class CustomNotificationBase(object):
         "started": {"message": DEFAULT_MSG, "body": None},
         "success": {"message": DEFAULT_MSG, "body": None},
         "error": {"message": DEFAULT_MSG, "body": None},
+        "changed": {"message": DEFAULT_CHANGED_MSG, "body": None},
         "workflow_approval": {
             "running": {"message": DEFAULT_APPROVAL_RUNNING_MSG, "body": None},
             "approved": {"message": DEFAULT_APPROVAL_APPROVED_MSG, "body": None},

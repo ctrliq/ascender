@@ -73,7 +73,7 @@ class NotificationTemplate(CommonModelNameNotUnique):
     notification_configuration = prevent_search(models.JSONField(default=dict))
 
     def default_messages():
-        return {'started': None, 'success': None, 'error': None, 'workflow_approval': None}
+        return {'started': None, 'success': None, 'error': None, 'changed': None, 'workflow_approval': None}
 
     messages = models.JSONField(null=True, blank=True, default=default_messages, help_text=_('Optional custom messages for notification template.'))
 
@@ -244,7 +244,7 @@ class Notification(CreatedModifiedModel):
 
 
 class JobNotificationMixin(object):
-    STATUS_TO_TEMPLATE_TYPE = {'succeeded': 'success', 'running': 'started', 'failed': 'error'}
+    STATUS_TO_TEMPLATE_TYPE = {'succeeded': 'success', 'running': 'started', 'failed': 'error', 'changed': 'changed'}
     # Maximum number of host names exposed in the notification context to keep
     # payloads bounded for jobs run against very large inventories.
     HOST_LIST_MAX = 1000
@@ -462,6 +462,13 @@ class JobNotificationMixin(object):
     def get_notification_friendly_name(self):
         raise RuntimeError("Define me")
 
+    def has_changes(self):
+        """
+        Whether the run reported a change. Only job types that record per host results can
+        answer this, so everything else never triggers the changed notifications.
+        """
+        return False
+
     def notification_data(self):
         raise RuntimeError("Define me")
 
@@ -520,8 +527,8 @@ class JobNotificationMixin(object):
     def send_notification_templates(self, status):
         from awx.main.tasks.system import send_notifications  # avoid circular import
 
-        if status not in ['running', 'succeeded', 'failed']:
-            raise ValueError(_("status must be either running, succeeded or failed"))
+        if status not in ['running', 'succeeded', 'failed', 'changed']:
+            raise ValueError(_("status must be either running, succeeded, failed or changed"))
         try:
             notification_templates = self.get_notification_templates()
         except Exception:
@@ -530,6 +537,12 @@ class JobNotificationMixin(object):
 
         if not notification_templates:
             return
+
+        # A run that changed something notifies the templates set up for changes on top of
+        # the ones for how it ended, so that a playbook run in check mode that reports drift
+        # is notified even though it succeeded.
+        if status in ('succeeded', 'failed') and notification_templates.get('changed') and self.has_changes():
+            self.send_notification_templates('changed')
 
         for nt in set(notification_templates.get(self.STATUS_TO_TEMPLATE_TYPE[status], [])):
             msg, body = self.build_notification_message(nt, status)

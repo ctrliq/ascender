@@ -219,6 +219,7 @@ function Organization({ setBreadcrumb, me }) {
                   canToggleNotifications={canToggleNotifications}
                   apiModel={OrganizationsAPI}
                   showApprovalsToggle
+                  showChangedToggle
                 />
               }
             />

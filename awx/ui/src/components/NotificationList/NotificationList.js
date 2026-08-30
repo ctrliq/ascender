@@ -26,6 +26,7 @@ function NotificationList({
   id,
 
   showApprovalsToggle = false,
+  showChangedToggle = false,
 }) {
   const { t } = useLingui();
   const location = useLocation();
@@ -38,6 +39,7 @@ function NotificationList({
       notifications,
       itemCount,
       approvalsTemplateIds,
+      changedTemplateIds,
       startedTemplateIds,
       successTemplateIds,
       errorTemplateIds,
@@ -106,12 +108,21 @@ function NotificationList({
         rtnObj.approvalsTemplateIds = [];
       }
 
+      if (showChangedToggle) {
+        const { data: changedTemplates } =
+          await apiModel.readNotificationTemplatesChanged(id, idMatchParams);
+        rtnObj.changedTemplateIds = changedTemplates.results.map((ch) => ch.id);
+      } else {
+        rtnObj.changedTemplateIds = [];
+      }
+
       return rtnObj;
-    }, [apiModel, id, location, showApprovalsToggle]),
+    }, [apiModel, id, location, showApprovalsToggle, showChangedToggle]),
     {
       notifications: [],
       itemCount: 0,
       approvalsTemplateIds: [],
+      changedTemplateIds: [],
       startedTemplateIds: [],
       successTemplateIds: [],
       errorTemplateIds: [],
@@ -231,11 +242,13 @@ function NotificationList({
             }
             toggleNotification={handleNotificationToggle}
             approvalsTurnedOn={approvalsTemplateIds.includes(notification.id)}
+            changedTurnedOn={changedTemplateIds.includes(notification.id)}
             errorTurnedOn={errorTemplateIds.includes(notification.id)}
             startedTurnedOn={startedTemplateIds.includes(notification.id)}
             successTurnedOn={successTemplateIds.includes(notification.id)}
             typeLabels={typeLabels}
             showApprovalsToggle={showApprovalsToggle}
+            showChangedToggle={showChangedToggle}
             rowIndex={index}
           />
         )}

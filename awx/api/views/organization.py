@@ -196,6 +196,10 @@ class OrganizationNotificationTemplatesApprovalList(OrganizationNotificationTemp
     relationship = 'notification_templates_approvals'
 
 
+class OrganizationNotificationTemplatesChangedList(OrganizationNotificationTemplatesAnyList):
+    relationship = 'notification_templates_changed'
+
+
 class OrganizationInstanceGroupsList(OrganizationInstanceGroupMembershipMixin, SubListAttachDetachAPIView):
     model = InstanceGroup
     serializer_class = InstanceGroupSerializer
