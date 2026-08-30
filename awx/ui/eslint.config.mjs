@@ -26,6 +26,9 @@ export default defineConfig([
       'config/**',
       'scripts/**',
       'eslint.config.mjs',
+      // the end-to-end suite is a separate Node package with its own
+      // dependencies and its own lint expectations, not React source
+      'e2e/**',
     ],
   },
   // Airbnb (flat re-implementation): base + react, with their plugin registrations

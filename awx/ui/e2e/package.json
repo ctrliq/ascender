@@ -1,0 +1,14 @@
+{
+  "name": "ascender-ui-e2e",
+  "version": "0.0.0",
+  "private": true,
+  "description": "End-to-end browser tests for the Ascender UI",
+  "scripts": {
+    "seed": "node seed.js",
+    "test": "playwright test",
+    "test:headed": "playwright test --headed"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.62.1"
+  }
+}

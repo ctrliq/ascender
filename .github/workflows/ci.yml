@@ -83,3 +83,72 @@ jobs:
       - name: Get logs from the development environment on failure
         if: failure()
         run: docker logs tools_awx_1 || true
+
+  e2e:
+    name: ui-e2e
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      packages: read
+      contents: read
+    steps:
+      - name: Checkout ascender
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      # build-ui, unlike the dev-env job, because these tests drive the built UI
+      # the way a user meets it rather than a development server
+      - name: Start the development environment with the UI built
+        uses: ./.github/actions/run_awx_devel
+        with:
+          build-ui: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      # The UI is built after the web process is already serving, and Django
+      # caches the index template that names the bundle. Without this the tests
+      # run against whatever was in the image, not against this pull request.
+      - name: Serve the UI that was just built
+        run: |
+          docker exec tools_awx_1 \
+            supervisorctl -c /etc/supervisord.conf restart tower-processes:awx-uwsgi
+          SECONDS=0
+          while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' -k https://localhost:8043/api/v2/ping/)" != "200" ]]; do
+            if [[ $SECONDS -gt 180 ]]; then echo "the API did not come back after the restart"; exit 1; fi
+            sleep 5
+          done
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+        with:
+          node-version: '22'
+
+      - name: Install the end-to-end dependencies
+        working-directory: awx/ui/e2e
+        run: npm ci
+
+      - name: Install the browser
+        working-directory: awx/ui/e2e
+        run: npx playwright install --with-deps chromium
+
+      # run_awx_devel sets the admin password to this
+      - name: Run the end-to-end tests
+        working-directory: awx/ui/e2e
+        env:
+          ASCENDER_URL: https://localhost:8043
+          ASCENDER_USERNAME: admin
+          ASCENDER_PASSWORD: password
+        run: npm test
+
+      - name: Upload the report on failure
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7.0.1
+        with:
+          name: playwright-report
+          path: |
+            awx/ui/e2e/playwright-report
+            awx/ui/e2e/test-results
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Get logs from the development environment on failure
+        if: failure()
+        run: docker logs tools_awx_1 || true
