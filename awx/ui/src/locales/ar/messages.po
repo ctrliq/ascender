@@ -879,7 +879,7 @@ msgstr "يشير إلى ما إذا كان المضيف متاحًا ويجب ت
 "    قيد التشغيل. بالنسبة للمضيفين الذين هم جزء من مخزون خارجي، قد تتم\n"
 "    إعادة تعيين ذلك بواسطة عملية مزامنة المخزون."
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:149
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:177
 msgid "Workflow Nodes"
 msgstr "عقد سير العمل"
 
@@ -1328,7 +1328,7 @@ msgstr "الرجوع إلى إعدادات المصنع الافتراضية."
 msgid "Prompt for job slice count on launch."
 msgstr "المطالبة بعدد شرائح المهمة عند الإطلاق."
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:135
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:163
 msgid "Filter by failed jobs"
 msgstr "التصفية حسب المهام الفاشلة"
 
@@ -1484,7 +1484,7 @@ msgstr "البيانات الوصفية"
 msgid "Enable privilege escalation"
 msgstr "تمكين تصعيد الامتيازات"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:128
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:156
 msgid "Filter..."
 msgstr "تصفية..."
 
@@ -1861,8 +1861,8 @@ msgstr "بيان الاشتراك"
 #: components/JobList/JobList.js:243
 #: components/StatusLabel/StatusLabel.js:43
 #: components/Workflow/WorkflowNodeHelp.js:103
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:45
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:139
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:66
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:167
 #: screens/Job/JobOutput/shared/HostStatusBar.js:47
 #: screens/Job/JobOutput/shared/OutputToolbar.js:155
 msgid "Failed"
@@ -5821,7 +5821,7 @@ msgstr "تخطي الوسوم"
 msgid "Edit Host"
 msgstr "تحرير المضيف"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:142
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:170
 msgid "Filter by successful jobs"
 msgstr "التصفية حسب المهام الناجحة"
 
@@ -5837,7 +5837,7 @@ msgstr "تم إلغاء سير العمل "
 msgid "Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "الفرع المراد استخدامه في تشغيل المهمة. يتم استخدام القيمة الافتراضية للمشروع إذا كان فارغًا. مسموح به فقط إذا تم تعيين حقل allow_override الخاص بالمشروع على true."
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:133
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:161
 msgid "Workflow Statuses"
 msgstr "حالات سير العمل"
 
@@ -6005,11 +6005,6 @@ msgstr "الخدمة التي سيتم قبول طلبات Webhook منها."
 #: components/Schedule/shared/ScheduleFormFields.js:49
 msgid "Warning: {selectedValue} is a link to {0} and will be saved as that."
 msgstr "تحذير: {selectedValue} هو رابط إلى {0} وسيتم حفظه على هذا النحو."
-
-#. placeholder {0}: relevantResults.length
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:119
-msgid "Workflow Job 1/{0}"
-msgstr "مهمة سير العمل 1/{0}"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:77
 msgid "{interval, plural, one {# month} other {# months}}"
@@ -7761,8 +7756,8 @@ msgstr "لم يتم التحديث أبدًا"
 #: components/JobList/JobList.js:242
 #: components/StatusLabel/StatusLabel.js:41
 #: components/Workflow/WorkflowNodeHelp.js:100
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:46
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:146
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:67
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:174
 msgid "Successful"
 msgstr "ناجح"
 
@@ -8203,6 +8198,10 @@ msgstr "المهمة"
 #: components/PromptDetail/PromptInventorySourceDetail.js:115
 msgid "Regions"
 msgstr "المناطق"
+
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:148
+msgid "Workflow Jobs ({total})"
+msgstr ""
 
 #: components/Search/AdvancedSearch.js:315
 msgid "Set type disabled for related search field fuzzy searches"
@@ -11294,6 +11293,10 @@ msgstr "إصدار Automation controller"
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:81
 msgid "Access Token Expiration"
 msgstr "انتهاء صلاحية رمز الوصول"
+
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:147
+msgid "Workflow Job {currentPosition}/{total}"
+msgstr ""
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:69
 msgid "{interval, plural, one {# minute} other {# minutes}}"

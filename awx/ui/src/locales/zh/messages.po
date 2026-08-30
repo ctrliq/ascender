@@ -877,7 +877,7 @@ msgstr "指示主机是否可用以及是否应包含在运行中的\n"
 "    作业中。对于属于外部清单的主机，这可能会被\n"
 "    清单同步过程重置。"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:149
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:177
 msgid "Workflow Nodes"
 msgstr "工作流节点"
 
@@ -1326,7 +1326,7 @@ msgstr "恢复到工厂默认值。"
 msgid "Prompt for job slice count on launch."
 msgstr "启动时提示输入作业切片数。"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:135
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:163
 msgid "Filter by failed jobs"
 msgstr "根据失败的作业过滤"
 
@@ -1482,7 +1482,7 @@ msgstr "元数据"
 msgid "Enable privilege escalation"
 msgstr "启用权限升级"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:128
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:156
 msgid "Filter..."
 msgstr "过滤..."
 
@@ -1859,8 +1859,8 @@ msgstr "订阅清单"
 #: components/JobList/JobList.js:243
 #: components/StatusLabel/StatusLabel.js:43
 #: components/Workflow/WorkflowNodeHelp.js:103
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:45
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:139
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:66
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:167
 #: screens/Job/JobOutput/shared/HostStatusBar.js:47
 #: screens/Job/JobOutput/shared/OutputToolbar.js:155
 msgid "Failed"
@@ -5818,7 +5818,7 @@ msgstr "跳过标签"
 msgid "Edit Host"
 msgstr "编辑主机"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:142
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:170
 msgid "Filter by successful jobs"
 msgstr "根据成功的作业过滤"
 
@@ -5834,7 +5834,7 @@ msgstr "工作流已取消 "
 msgid "Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "任务运行中要使用的分支。如果为空，则使用项目默认值。仅当项目的 allow_override 字段设置为 true 时才允许。"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:133
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:161
 msgid "Workflow Statuses"
 msgstr "工作流状态"
 
@@ -6002,11 +6002,6 @@ msgstr "将接受 webhook 请求的来源服务。"
 #: components/Schedule/shared/ScheduleFormFields.js:49
 msgid "Warning: {selectedValue} is a link to {0} and will be saved as that."
 msgstr "警告：{selectedValue} 是指向 {0} 的链接，并将保存为该链接。"
-
-#. placeholder {0}: relevantResults.length
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:119
-msgid "Workflow Job 1/{0}"
-msgstr "工作流作业 1/{0}"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:77
 msgid "{interval, plural, one {# month} other {# months}}"
@@ -7758,8 +7753,8 @@ msgstr "永不更新"
 #: components/JobList/JobList.js:242
 #: components/StatusLabel/StatusLabel.js:41
 #: components/Workflow/WorkflowNodeHelp.js:100
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:46
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:146
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:67
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:174
 msgid "Successful"
 msgstr "成功"
 
@@ -8199,6 +8194,10 @@ msgstr "任务"
 #: components/PromptDetail/PromptInventorySourceDetail.js:115
 msgid "Regions"
 msgstr "区域"
+
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:148
+msgid "Workflow Jobs ({total})"
+msgstr ""
 
 #: components/Search/AdvancedSearch.js:315
 msgid "Set type disabled for related search field fuzzy searches"
@@ -11290,6 +11289,10 @@ msgstr "Automation Controller 版本"
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:81
 msgid "Access Token Expiration"
 msgstr "访问令牌过期"
+
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:147
+msgid "Workflow Job {currentPosition}/{total}"
+msgstr ""
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:69
 msgid "{interval, plural, one {# minute} other {# minutes}}"

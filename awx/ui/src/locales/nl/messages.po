@@ -877,7 +877,7 @@ msgstr "Geeft aan of een host beschikbaar is en moet worden opgenomen in actieve
 "    taken.  Voor hosts die deel uitmaken van een externe inventaris, kan dit worden\n"
 "    gereset door het inventarissynchronisatieproces."
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:149
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:177
 msgid "Workflow Nodes"
 msgstr "Werkstroomknooppunten"
 
@@ -1326,7 +1326,7 @@ msgstr "Terugzetten op fabrieksinstellingen."
 msgid "Prompt for job slice count on launch."
 msgstr "Vraag om aantal taaksegmenten bij opstarten."
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:135
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:163
 msgid "Filter by failed jobs"
 msgstr "Filteren op mislukte opdrachten"
 
@@ -1482,7 +1482,7 @@ msgstr "Metadata"
 msgid "Enable privilege escalation"
 msgstr "Verhoging van rechten inschakelen"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:128
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:156
 msgid "Filter..."
 msgstr "Filteren..."
 
@@ -1859,8 +1859,8 @@ msgstr "Abonnementsmanifest"
 #: components/JobList/JobList.js:243
 #: components/StatusLabel/StatusLabel.js:43
 #: components/Workflow/WorkflowNodeHelp.js:103
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:45
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:139
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:66
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:167
 #: screens/Job/JobOutput/shared/HostStatusBar.js:47
 #: screens/Job/JobOutput/shared/OutputToolbar.js:155
 msgid "Failed"
@@ -5818,7 +5818,7 @@ msgstr "Tags overslaan"
 msgid "Edit Host"
 msgstr "Host bewerken"
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:142
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:170
 msgid "Filter by successful jobs"
 msgstr "Recente succesvolle taken"
 
@@ -5834,7 +5834,7 @@ msgstr "Werkstroom geannuleerd "
 msgid "Branch to use in job run. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "Branch die in de taakuitvoering moet worden gebruikt. De projectstandaard wordt gebruikt indien leeg. Alleen toegestaan als het veld allow_override van het project is ingesteld op true."
 
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:133
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:161
 msgid "Workflow Statuses"
 msgstr "Werkstroomstatussen"
 
@@ -6002,11 +6002,6 @@ msgstr "Service waarvan webhook-verzoeken worden geaccepteerd."
 #: components/Schedule/shared/ScheduleFormFields.js:49
 msgid "Warning: {selectedValue} is a link to {0} and will be saved as that."
 msgstr "Waarschuwing: {selectedValue} is een link naar {0} en wordt als zodanig opgeslagen."
-
-#. placeholder {0}: relevantResults.length
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:119
-msgid "Workflow Job 1/{0}"
-msgstr "Workflowtaak 1/{0}"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:77
 msgid "{interval, plural, one {# month} other {# months}}"
@@ -7758,8 +7753,8 @@ msgstr "Nooit bijgewerkt"
 #: components/JobList/JobList.js:242
 #: components/StatusLabel/StatusLabel.js:41
 #: components/Workflow/WorkflowNodeHelp.js:100
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:46
-#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:146
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:67
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:174
 msgid "Successful"
 msgstr "Geslaagd"
 
@@ -8199,6 +8194,10 @@ msgstr "Taak"
 #: components/PromptDetail/PromptInventorySourceDetail.js:115
 msgid "Regions"
 msgstr "Regio's"
+
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:148
+msgid "Workflow Jobs ({total})"
+msgstr ""
 
 #: components/Search/AdvancedSearch.js:315
 msgid "Set type disabled for related search field fuzzy searches"
@@ -11290,6 +11289,10 @@ msgstr "Versie automatiseringscontroller"
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.js:81
 msgid "Access Token Expiration"
 msgstr "Toegangstoken vervallen"
+
+#: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:147
+msgid "Workflow Job {currentPosition}/{total}"
+msgstr ""
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:69
 msgid "{interval, plural, one {# minute} other {# minutes}}"
