@@ -28,7 +28,12 @@ const relatedJobs = [
     job: 103,
     identifier: 'e0c4a1e6-6f4a-4b1e-8f3a-000000000003',
     summary_fields: {
-      job: { id: 103, name: 'Red hat', type: 'project_update', status: 'successful' },
+      job: {
+        id: 103,
+        name: 'Red hat',
+        type: 'project_update',
+        status: 'successful',
+      },
     },
   },
   {
@@ -36,7 +41,12 @@ const relatedJobs = [
     job: null,
     identifier: 'approve-me',
     summary_fields: {
-      job: { id: 104, name: 'Approval', type: 'workflow_approval', status: 'successful' },
+      job: {
+        id: 104,
+        name: 'Approval',
+        type: 'workflow_approval',
+        status: 'successful',
+      },
     },
   },
 ];
@@ -128,14 +138,12 @@ describe('<WorkflowOutputNavigation />', () => {
     const { user } = renderAt(102);
     await user.click(screen.getByRole('button'));
     await waitFor(() => screen.getByText('second-node'));
-    expect(screen.getByText('second-node').closest('[role="option"]')).toHaveAttribute(
-      'aria-selected',
-      'true'
-    );
-    expect(screen.getByText('Ansible').closest('[role="option"]')).toHaveAttribute(
-      'aria-selected',
-      'false'
-    );
+    expect(
+      screen.getByText('second-node').closest('[role="option"]')
+    ).toHaveAttribute('aria-selected', 'true');
+    expect(
+      screen.getByText('Ansible').closest('[role="option"]')
+    ).toHaveAttribute('aria-selected', 'false');
   });
 
   test('counts failed and successful jobs from the whole workflow', async () => {
@@ -143,9 +151,13 @@ describe('<WorkflowOutputNavigation />', () => {
     await user.click(screen.getByRole('button'));
     // two successful job nodes and one failed; the approval node counts for neither
     await waitFor(() =>
-      expect(screen.getByRole('option', { name: /Successful/ })).toHaveTextContent('(2)')
+      expect(
+        screen.getByRole('option', { name: /Successful/ })
+      ).toHaveTextContent('(2)')
     );
-    expect(screen.getByRole('option', { name: /Failed/ })).toHaveTextContent('(1)');
+    expect(screen.getByRole('option', { name: /Failed/ })).toHaveTextContent(
+      '(1)'
+    );
   });
 
   test('filters the list down to the chosen status', async () => {
@@ -172,9 +184,26 @@ describe('<WorkflowOutputNavigation />', () => {
     const { user } = renderAt(101);
     await user.click(screen.getByRole('button'));
     await user.click(screen.getByRole('option', { name: /Failed/ }));
-    await waitFor(() => expect(screen.queryByText('Ansible')).not.toBeInTheDocument());
+    await waitFor(() =>
+      expect(screen.queryByText('Ansible')).not.toBeInTheDocument()
+    );
     await user.click(screen.getByRole('option', { name: /Failed/ }));
     await waitFor(() => screen.getByText('Ansible'));
+  });
+
+  test('keeps a width floor on the toggle once a status filter is on', async () => {
+    const { user } = renderAt(101);
+    const toggle = screen.getByRole('button');
+    expect(window.getComputedStyle(toggle).minWidth).toBe('220px');
+
+    // the toggle swaps the position text for a much shorter chip here, and the
+    // menu takes its minimum width from the toggle, so the floor has to survive
+    await user.click(toggle);
+    await user.click(screen.getByRole('option', { name: /Failed/ }));
+    await waitFor(() => expect(screen.getByText('Failed')).toBeInTheDocument());
+    expect(window.getComputedStyle(screen.getByRole('button')).minWidth).toBe(
+      '220px'
+    );
   });
 
   test('does not build a url for a job type it has no route for', async () => {
@@ -189,7 +218,12 @@ describe('<WorkflowOutputNavigation />', () => {
         job: 199,
         identifier: 'mystery-node',
         summary_fields: {
-          job: { id: 199, name: 'Mystery', type: 'not_a_job_type', status: 'successful' },
+          job: {
+            id: 199,
+            name: 'Mystery',
+            type: 'not_a_job_type',
+            status: 'successful',
+          },
         },
       },
     ];
@@ -197,7 +231,9 @@ describe('<WorkflowOutputNavigation />', () => {
       <Routes>
         <Route
           path="/jobs/:typeSegment/:id/output"
-          element={<WorkflowOutputNavigation relatedJobs={oddJobs} parentRef={ref} />}
+          element={
+            <WorkflowOutputNavigation relatedJobs={oddJobs} parentRef={ref} />
+          }
         />
       </Routes>,
       { context: { router: { history } } }

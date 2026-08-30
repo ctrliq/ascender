@@ -11,6 +11,7 @@ import {
   TextInputGroup,
   TextInputGroupMain,
 } from '@patternfly/react-core';
+import styled from 'styled-components';
 
 import ChipGroup from 'components/ChipGroup';
 import { stringIsUUID } from 'util/strings';
@@ -26,6 +27,16 @@ const JOB_TYPE_URL_SEGMENT_MAP = {
   ad_hoc_command: 'command',
   workflow_job: 'workflow',
 };
+
+// The menu takes its minimum width from the toggle, and the toggle is only as
+// wide as what it holds: picking a status swaps "Workflow Job 3/12" for a single
+// short chip, which collapsed the toggle and the menu with it, down to the width
+// of the filter input and truncating the node names. A floor keeps both usable,
+// and leaves room for the longer translations of the position text.
+const WorkflowMenuToggle = styled(MenuToggle)`
+  min-width: 220px;
+`;
+WorkflowMenuToggle.displayName = 'WorkflowMenuToggle';
 
 function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
   const { t } = useLingui();
@@ -47,6 +58,9 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
   // 1-based, and 0 when the job on screen is not one of the workflow's nodes
   const currentPosition =
     jobNodes.findIndex(({ job: jobId }) => `${jobId}` === id) + 1;
+  // named so the extracted message reads {currentPosition}/{total} rather than
+  // leaving translators with a positional {0}
+  const total = jobNodes.length;
 
   const statusLabels = {
     Failed: t`Failed`,
@@ -113,7 +127,7 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
         parentRef?.current ? { appendTo: parentRef.current } : undefined
       }
       toggle={(toggleRef) => (
-        <MenuToggle
+        <WorkflowMenuToggle
           ref={toggleRef}
           onClick={() => setIsOpen(!isOpen)}
           isExpanded={isOpen}
@@ -130,9 +144,9 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
           )}
           {!filterBy &&
             (currentPosition > 0
-              ? t`Workflow Job ${currentPosition}/${jobNodes.length}`
-              : t`Workflow Jobs (${jobNodes.length})`)}
-        </MenuToggle>
+              ? t`Workflow Job ${currentPosition}/${total}`
+              : t`Workflow Jobs (${total})`)}
+        </WorkflowMenuToggle>
       )}
     >
       <TextInputGroup>
