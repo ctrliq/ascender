@@ -37,10 +37,10 @@ def test_metrics_declare_each_metric_once(monkeypatch):
     )
     output = subsystem_metrics.metrics(fake_request())
 
-    help_lines = [line for line in output.splitlines() if line.startswith('# HELP')]
-    type_lines = [line for line in output.splitlines() if line.startswith('# TYPE')]
-    assert len(help_lines) == len(set(help_lines)), 'duplicate HELP lines in metrics output'
-    assert len(type_lines) == len(set(type_lines)), 'duplicate TYPE lines in metrics output'
+    help_names = [line.split()[2] for line in output.splitlines() if line.startswith('# HELP')]
+    type_names = [line.split()[2] for line in output.splitlines() if line.startswith('# TYPE')]
+    assert len(help_names) == len(set(help_names)), 'metric declared by more than one HELP line'
+    assert len(type_names) == len(set(type_names)), 'metric declared by more than one TYPE line'
 
     # output must parse as valid prometheus text format, with the shared
     # operational metrics keeping their per-namespace samples
