@@ -63,7 +63,7 @@
     "css-minimizer-webpack-plugin": "^8.0.0",
     "dotenv": "^17.4.2",
     "dotenv-expand": "^1000.0.0",
-    "eslint": "^9.39.4",
+    "eslint": "^10.9.1",
     "eslint-config-airbnb-extended": "^3.1.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-i18next": "^6.1.5",
