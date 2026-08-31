@@ -6117,10 +6117,6 @@ msgstr "팀 삭제"
 msgid "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
 msgstr "이 작업 템플릿을 시작할 때 사용할 실행 환경입니다. 확인된 실행 환경은 이 작업 템플릿에 다른 실행 환경을 명시적으로 할당하여 재정의할 수 있습니다."
 
-#: screens/Inventory/shared/Inventory.helptext.js:78
-msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is saved as the \"plugin\" key in the source variables."
-msgstr "vCenter에서 동기화하는 데 사용되는 인벤토리 플러그인을 제공하는 Ansible 컬렉션을 선택합니다. community.vmware 컬렉션은 더 이상 사용되지 않으며 새로운 vmware.vmware 컬렉션으로 대체되었습니다. 선택 사항은 소스 변수의 \"plugin\" 키로 저장됩니다."
-
 #: components/JobList/JobList.js:215
 msgid "Label Name"
 msgstr "레이블 이름"
@@ -9376,6 +9372,10 @@ msgstr "저장"
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:181
 msgid "Click to create a new link to this node."
 msgstr "이 노드에 대한 새 링크를 생성하려면 클릭합니다."
+
+#: screens/Inventory/shared/Inventory.helptext.js:78
+msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is applied via the \"plugin\" key in the source variables; when the key is absent, the default collection is used."
+msgstr "vCenter에서 동기화하는 데 사용되는 인벤토리 플러그인을 제공하는 Ansible 컬렉션을 선택합니다. community.vmware 컬렉션은 더 이상 사용되지 않으며 새로운 vmware.vmware 컬렉션으로 대체되었습니다. 선택 사항은 소스 변수의 \"plugin\" 키를 통해 적용됩니다. 키가 없으면 기본 컬렉션이 사용됩니다."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:167
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:136

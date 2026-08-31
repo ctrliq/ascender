@@ -257,6 +257,8 @@ class TestInventorySourceInjectors:
             ('vmware.vmware.vms', 'vmware.vmware.vms'),
             ('evil.hacker.plugin', 'community.vmware.vmware_vm_inventory'),
             ('', 'community.vmware.vmware_vm_inventory'),
+            (['vmware.vmware.vms'], 'community.vmware.vmware_vm_inventory'),  # unhashable values must not crash
+            ({'name': 'vmware.vmware.vms'}, 'community.vmware.vmware_vm_inventory'),
         ],
     )
     def test_vmware_alternate_plugin_selection(self, user_plugin, expected):

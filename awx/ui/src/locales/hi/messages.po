@@ -6120,10 +6120,6 @@ msgstr "टीम हटाएं"
 msgid "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
 msgstr "इस जॉब टेम्पलेट को लॉन्च करते समय उपयोग किया जाने वाला निष्पादन वातावरण। हल किए गए निष्पादन वातावरण को इस जॉब टेम्पलेट को स्पष्ट रूप से एक अलग वातावरण असाइन करके ओवरराइड किया जा सकता है।"
 
-#: screens/Inventory/shared/Inventory.helptext.js:78
-msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is saved as the \"plugin\" key in the source variables."
-msgstr "vCenter से समन्वयित करने के लिए उपयोग किए जाने वाले इन्वेंटरी प्लगइन प्रदान करने वाले Ansible कलेक्शन का चयन करें। community.vmware कलेक्शन नए vmware.vmware कलेक्शन के पक्ष में बहिष्कृत है। चयन स्रोत वेरिएबल्स में \"plugin\" कुंजी के रूप में सहेजा जाता है।"
-
 #: components/JobList/JobList.js:215
 msgid "Label Name"
 msgstr "लेबल नाम"
@@ -9380,6 +9376,10 @@ msgstr "सहेजें"
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:181
 msgid "Click to create a new link to this node."
 msgstr "इस नोड से नया लिंक बनाने के लिए क्लिक करें।"
+
+#: screens/Inventory/shared/Inventory.helptext.js:78
+msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is applied via the \"plugin\" key in the source variables; when the key is absent, the default collection is used."
+msgstr "vCenter से समन्वयित करने के लिए उपयोग किए जाने वाले इन्वेंटरी प्लगइन प्रदान करने वाले Ansible कलेक्शन का चयन करें। community.vmware कलेक्शन नए vmware.vmware कलेक्शन के पक्ष में बहिष्कृत है। चयन स्रोत वेरिएबल्स में \"plugin\" कुंजी के माध्यम से लागू किया जाता है; कुंजी अनुपस्थित होने पर, डिफ़ॉल्ट कलेक्शन का उपयोग किया जाता है।"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:167
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:136

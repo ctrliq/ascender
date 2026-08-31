@@ -75,7 +75,7 @@ function useInventoryHelpTextStrings() {
       );
     },
     subFormVerbosityFields: t`Control the level of output Ansible will produce for inventory source update jobs.`,
-    vmwarePlugin: t`Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is saved as the "plugin" key in the source variables.`,
+    vmwarePlugin: t`Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is applied via the "plugin" key in the source variables; when the key is absent, the default collection is used.`,
     subFormOptions: {
       overwrite: (
         <>

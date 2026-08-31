@@ -6117,10 +6117,6 @@ msgstr "删除团队"
 msgid "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
 msgstr "启动此任务模板时将使用的执行环境。可以通过为此任务模板显式分配不同的执行环境来覆盖解析的执行环境。"
 
-#: screens/Inventory/shared/Inventory.helptext.js:78
-msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is saved as the \"plugin\" key in the source variables."
-msgstr "选择提供用于从 vCenter 同步的清单插件的 Ansible 集合。community.vmware 集合已弃用，由更新的 vmware.vmware 集合取代。所选内容将保存为源变量中的 \"plugin\" 键。"
-
 #: components/JobList/JobList.js:215
 msgid "Label Name"
 msgstr "标签名称"
@@ -9376,6 +9372,10 @@ msgstr "保存"
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:181
 msgid "Click to create a new link to this node."
 msgstr "点击以创建到此节点的新链接。"
+
+#: screens/Inventory/shared/Inventory.helptext.js:78
+msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is applied via the \"plugin\" key in the source variables; when the key is absent, the default collection is used."
+msgstr "选择提供用于从 vCenter 同步的清单插件的 Ansible 集合。community.vmware 集合已弃用，由更新的 vmware.vmware 集合取代。所选内容通过源变量中的 \"plugin\" 键应用；如果没有该键，则使用默认集合。"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:167
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:136

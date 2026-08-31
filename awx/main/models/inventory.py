@@ -1488,14 +1488,24 @@ class PluginFileInjector(object):
         """
         return '{0}.yml'.format(self.plugin_name)
 
+    def get_alternate_plugin(self, source_vars):
+        """The user-selected alternate plugin from the `plugin:` key of
+        source_vars, or None to use the default. Values of any other type or
+        FQCN are ignored (and overridden), same as before alternates existed.
+        """
+        plugin = source_vars.get('plugin')
+        if isinstance(plugin, str) and plugin in self.alternate_plugins:
+            return plugin
+        return None
+
     def get_filename(self, inventory_update):
         """Inventory filename for the plugin that will actually parse it.
         The auto plugin loads whatever the file's `plugin:` key names, and that
         plugin's verify_file() generally demands this exact file naming, so a
         user-selected alternate plugin must also change the filename.
         """
-        plugin = inventory_update.source_vars_dict.get('plugin')
-        if plugin in self.alternate_plugins:
+        plugin = self.get_alternate_plugin(inventory_update.source_vars_dict)
+        if plugin is not None:
             return '{0}.yml'.format(plugin.rsplit('.', 1)[-1])
         return self.filename
 
@@ -1510,7 +1520,7 @@ class PluginFileInjector(object):
         Note that a plugin value of '' should still be overridden.
         '''
         if self.plugin_name is not None:
-            if source_vars.get('plugin') in self.alternate_plugins:
+            if self.get_alternate_plugin(source_vars) is not None:
                 pass  # user selected an alternate supported plugin, keep it
             elif hasattr(self, 'downstream_namespace') and server_product_name() != 'AWX':
                 source_vars['plugin'] = f'{self.downstream_namespace}.{self.downstream_collection}.{self.plugin_name}'

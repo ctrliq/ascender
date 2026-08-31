@@ -6120,10 +6120,6 @@ msgstr "حذف الفريق"
 msgid "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
 msgstr "بيئة التنفيذ التي سيتم استخدامها عند تشغيل قالب المهمة هذا. يمكن تجاوز بيئة التنفيذ التي تم حلها عن طريق تعيين بيئة مختلفة بشكل صريح لقالب المهمة هذا."
 
-#: screens/Inventory/shared/Inventory.helptext.js:78
-msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is saved as the \"plugin\" key in the source variables."
-msgstr "حدد مجموعة Ansible التي توفر ملحق المخزون المستخدم للمزامنة من vCenter. المجموعة community.vmware مهملة لصالح المجموعة الأحدث vmware.vmware. يتم حفظ الاختيار كمفتاح \"plugin\" في متغيرات المصدر."
-
 #: components/JobList/JobList.js:215
 msgid "Label Name"
 msgstr "اسم التسمية"
@@ -9380,6 +9376,10 @@ msgstr "حفظ"
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:181
 msgid "Click to create a new link to this node."
 msgstr "انقر لإنشاء رابط جديد لهذه العقدة."
+
+#: screens/Inventory/shared/Inventory.helptext.js:78
+msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is applied via the \"plugin\" key in the source variables; when the key is absent, the default collection is used."
+msgstr "حدد مجموعة Ansible التي توفر ملحق المخزون المستخدم للمزامنة من vCenter. المجموعة community.vmware مهملة لصالح المجموعة الأحدث vmware.vmware. يتم تطبيق الاختيار عبر مفتاح \"plugin\" في متغيرات المصدر؛ وعند غياب المفتاح، تُستخدم المجموعة الافتراضية."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:167
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:136

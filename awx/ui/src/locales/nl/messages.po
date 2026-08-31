@@ -6117,10 +6117,6 @@ msgstr "Team verwijderen"
 msgid "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
 msgstr "De uitvoeringsomgeving die wordt gebruikt bij het starten van dit taaksjabloon. De opgeloste uitvoeringsomgeving kan worden overschreven door er expliciet een andere toe te wijzen aan dit taaksjabloon."
 
-#: screens/Inventory/shared/Inventory.helptext.js:78
-msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is saved as the \"plugin\" key in the source variables."
-msgstr "Selecteer de Ansible-collectie die de inventarisplugin levert die wordt gebruikt om te synchroniseren vanuit vCenter. De collectie community.vmware is afgeschaft ten gunste van de nieuwere collectie vmware.vmware. De selectie wordt opgeslagen als de sleutel \"plugin\" in de bronvariabelen."
-
 #: components/JobList/JobList.js:215
 msgid "Label Name"
 msgstr "Labelnaam"
@@ -9376,6 +9372,10 @@ msgstr "Opslaan"
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:181
 msgid "Click to create a new link to this node."
 msgstr "Klik om een nieuwe link naar dit knooppunt te maken."
+
+#: screens/Inventory/shared/Inventory.helptext.js:78
+msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is applied via the \"plugin\" key in the source variables; when the key is absent, the default collection is used."
+msgstr "Selecteer de Ansible-collectie die de inventarisplugin levert die wordt gebruikt om te synchroniseren vanuit vCenter. De collectie community.vmware is afgeschaft ten gunste van de nieuwere collectie vmware.vmware. De selectie wordt toegepast via de sleutel \"plugin\" in de bronvariabelen; als de sleutel ontbreekt, wordt de standaardcollectie gebruikt."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:167
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:136

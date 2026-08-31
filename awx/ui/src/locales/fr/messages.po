@@ -6117,10 +6117,6 @@ msgstr "Supprimer l’équipe"
 msgid "The execution environment that will be used when launching this job template. The resolved execution environment can be overridden by explicitly assigning a different one to this job template."
 msgstr "L'environnement d'exécution qui sera utilisé lors du lancement de ce modèle de job. L'environnement d'exécution résolu peut être remplacé en en attribuant explicitement un autre à ce modèle de job."
 
-#: screens/Inventory/shared/Inventory.helptext.js:78
-msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is saved as the \"plugin\" key in the source variables."
-msgstr "Sélectionnez la collection Ansible fournissant le plugin d'inventaire utilisé pour la synchronisation depuis vCenter. La collection community.vmware est obsolète au profit de la collection plus récente vmware.vmware. La sélection est enregistrée sous la clé \"plugin\" dans les variables sources."
-
 #: components/JobList/JobList.js:215
 msgid "Label Name"
 msgstr "Nom du label"
@@ -9376,6 +9372,10 @@ msgstr "Enregistrer"
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:181
 msgid "Click to create a new link to this node."
 msgstr "Cliquez pour créer un nouveau lien vers ce nœud."
+
+#: screens/Inventory/shared/Inventory.helptext.js:78
+msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is applied via the \"plugin\" key in the source variables; when the key is absent, the default collection is used."
+msgstr "Sélectionnez la collection Ansible fournissant le plugin d'inventaire utilisé pour la synchronisation depuis vCenter. La collection community.vmware est obsolète au profit de la collection plus récente vmware.vmware. La sélection est appliquée via la clé \"plugin\" dans les variables sources ; lorsque la clé est absente, la collection par défaut est utilisée."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:167
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:136
