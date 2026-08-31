@@ -63,7 +63,9 @@ describe('<JobsEdit />', () => {
       screen.getByRole('button', { name: 'Revert all to default' })
     );
     expect(await screen.findByText('Revert settings')).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Confirm revert all' }));
+    await user.click(
+      screen.getByRole('button', { name: 'Confirm revert all' })
+    );
     await waitFor(() =>
       expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
     );
@@ -74,9 +76,7 @@ describe('<JobsEdit />', () => {
     const { user } = await mountEdit();
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     const {
       EVENT_STDOUT_MAX_BYTES_DISPLAY,
       STDOUT_MAX_BYTES_DISPLAY,
@@ -125,8 +125,6 @@ describe('<JobsEdit />', () => {
     delete mockOptions.PUT.AWX_ISOLATION_BASE_PATH;
     const { user } = await mountEdit(mockOptions);
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
   });
 });

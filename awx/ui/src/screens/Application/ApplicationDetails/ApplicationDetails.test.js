@@ -135,7 +135,9 @@ describe('<ApplicationDetails/>', () => {
       await screen.findByRole('button', { name: 'Confirm Delete' })
     );
 
-    await waitFor(() => expect(ApplicationsAPI.destroy).toHaveBeenCalledTimes(1));
+    await waitFor(() =>
+      expect(ApplicationsAPI.destroy).toHaveBeenCalledTimes(1)
+    );
     expect(ApplicationsAPI.destroy).toHaveBeenCalledWith(10);
     expect(history.location.pathname).toBe('/applications');
   });

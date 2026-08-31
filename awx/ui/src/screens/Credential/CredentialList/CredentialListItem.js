@@ -64,14 +64,15 @@ function CredentialListItem({
       </Td>
       <ActionsTd dataLabel={t`Actions`}>
         <ActionItem visible={canEdit} tooltip={t`Edit Credential`}>
-          <Button icon={<PencilAltIcon />}
+          <Button
+            icon={<PencilAltIcon />}
             ouiaId={`${credential.id}-edit-button`}
             isDisabled={isDisabled}
             aria-label={t`Edit Credential`}
             variant="plain"
             component={Link}
             to={`/credentials/${credential.id}/edit`}
-           />
+          />
         </ActionItem>
         <ActionItem
           tooltip={t`Copy Credential`}

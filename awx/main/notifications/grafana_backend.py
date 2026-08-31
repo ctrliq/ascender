@@ -7,6 +7,7 @@ import logging
 import requests
 import dateutil.parser as dp
 
+from django.conf import settings
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
@@ -14,6 +15,7 @@ from awx.main.notifications.base import AWXBaseEmailBackend
 from awx.main.notifications.custom_notification_base import CustomNotificationBase
 
 DEFAULT_MSG = CustomNotificationBase.DEFAULT_MSG
+DEFAULT_CHANGED_MSG = CustomNotificationBase.DEFAULT_CHANGED_MSG
 
 DEFAULT_APPROVAL_RUNNING_MSG = CustomNotificationBase.DEFAULT_APPROVAL_RUNNING_MSG
 DEFAULT_APPROVAL_RUNNING_BODY = CustomNotificationBase.DEFAULT_APPROVAL_RUNNING_BODY
@@ -40,6 +42,7 @@ class GrafanaBackend(AWXBaseEmailBackend, CustomNotificationBase):
         "started": {"body": DEFAULT_BODY, "message": DEFAULT_MSG},
         "success": {"body": DEFAULT_BODY, "message": DEFAULT_MSG},
         "error": {"body": DEFAULT_BODY, "message": DEFAULT_MSG},
+        "changed": {"body": DEFAULT_BODY, "message": DEFAULT_CHANGED_MSG},
         "workflow_approval": {
             "running": {"message": DEFAULT_APPROVAL_RUNNING_MSG, "body": DEFAULT_APPROVAL_RUNNING_BODY},
             "approved": {"message": DEFAULT_APPROVAL_APPROVED_MSG, "body": DEFAULT_APPROVAL_APPROVED_BODY},
@@ -97,7 +100,11 @@ class GrafanaBackend(AWXBaseEmailBackend, CustomNotificationBase):
             grafana_headers['Authorization'] = "Bearer {}".format(self.grafana_key)
             grafana_headers['Content-Type'] = "application/json"
             r = requests.post(
-                "{}/api/annotations".format(m.recipients()[0]), json=grafana_data, headers=grafana_headers, verify=(not self.grafana_no_verify_ssl)
+                "{}/api/annotations".format(m.recipients()[0]),
+                json=grafana_data,
+                headers=grafana_headers,
+                verify=(not self.grafana_no_verify_ssl),
+                timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
             )
             if r.status_code >= 400:
                 logger.error(smart_str(_("Error sending notification grafana: {}").format(r.status_code)))

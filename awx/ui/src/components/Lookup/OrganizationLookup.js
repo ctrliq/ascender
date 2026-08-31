@@ -97,11 +97,7 @@ function OrganizationLookup({
   }, [fetchOrganizations]);
 
   return (
-    <FormGroup
-      fieldId={id}
-      isRequired={required}
-      label={t`Organization`}
-    >
+    <FormGroup fieldId={id} isRequired={required} label={t`Organization`}>
       <Lookup
         isDisabled={isDisabled}
         id={id}

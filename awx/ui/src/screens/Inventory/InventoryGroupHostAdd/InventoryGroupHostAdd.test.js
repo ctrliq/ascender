@@ -8,21 +8,21 @@ import mockHost from '../shared/data.host.json';
 
 jest.mock('../../../api');
 
-jest.mock('components/HostForm', () => ({
-  handleSubmit,
-  handleCancel,
-  submitError,
-}) => (
-  <div>
-    <button
-      type="button"
-      aria-label="mock-submit"
-      onClick={() => handleSubmit(mockHost)}
-    />
-    <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
-    {submitError ? <div data-testid="mock-submit-error" /> : null}
-  </div>
-));
+jest.mock(
+  'components/HostForm',
+  () =>
+    ({ handleSubmit, handleCancel, submitError }) => (
+      <div>
+        <button
+          type="button"
+          aria-label="mock-submit"
+          onClick={() => handleSubmit(mockHost)}
+        />
+        <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
+        {submitError ? <div data-testid="mock-submit-error" /> : null}
+      </div>
+    )
+);
 
 function renderHostAdd(history) {
   return renderWithContexts(
@@ -94,8 +94,6 @@ describe('<InventoryGroupHostAdd />', () => {
 
     await user.click(screen.getByRole('button', { name: 'mock-submit' }));
 
-    expect(
-      await screen.findByTestId('mock-submit-error')
-    ).toBeInTheDocument();
+    expect(await screen.findByTestId('mock-submit-error')).toBeInTheDocument();
   });
 });

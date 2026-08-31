@@ -42,12 +42,13 @@ function InventoryHostGroupItem({
           visible={group.summary_fields.user_capabilities.edit}
           tooltip={t`Edit group`}
         >
-          <Button icon={<PencilAltIcon />}
+          <Button
+            icon={<PencilAltIcon />}
             ouiaId={`${group.id}-edit-button`}
             variant="plain"
             component={Link}
             to={editUrl}
-           />
+          />
         </ActionItem>
       </ActionsTd>
     </Tr>

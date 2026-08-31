@@ -8,6 +8,7 @@
     "started": null,
     "success": null,
     "error": null,
+    "changed": null,
     "workflow_approval": null
   },
   "email": {
@@ -22,6 +23,10 @@
     "error": {
       "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}",
       "body": "{{ job_friendly_name }} #{{ job.id }} had status {{ job.status }}, view details at {{ url }}\n\n{{ job_metadata }}"
+    },
+    "changed": {
+      "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' reported changes: {{ url }}",
+      "body": "{{ job_friendly_name }} #{{ job.id }} reported changes and had status {{ job.status }}, view details at {{ url }}\n\n{{ job_metadata }}"
     },
     "workflow_approval": {
       "running": {
@@ -53,6 +58,10 @@
     },
     "error": {
       "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}",
+      "body": null
+    },
+    "changed": {
+      "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' reported changes: {{ url }}",
       "body": null
     },
     "workflow_approval": {
@@ -87,6 +96,10 @@
       "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}",
       "body": null
     },
+    "changed": {
+      "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' reported changes: {{ url }}",
+      "body": null
+    },
     "workflow_approval": {
       "running": {
         "message": "The approval node \"{{ approval_node_name }}\" needs review. This node can be viewed at: {{ workflow_url }}",
@@ -117,6 +130,10 @@
     },
     "error": {
       "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}",
+      "body": "{{ job_metadata }}"
+    },
+    "changed": {
+      "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' reported changes: {{ url }}",
       "body": "{{ job_metadata }}"
     },
     "workflow_approval": {
@@ -151,6 +168,10 @@
       "body": "{{ job_metadata }}",
       "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}"
     },
+    "changed": {
+      "body": "{{ job_metadata }}",
+      "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' reported changes: {{ url }}"
+    },
     "workflow_approval": {
       "running": {
         "message": "The approval node \"{{ approval_node_name }}\" needs review. This node can be viewed at: {{ workflow_url }}",
@@ -178,6 +199,9 @@
       "body": "{{ job_metadata }}"
     },
     "error": {
+      "body": "{{ job_metadata }}"
+    },
+    "changed": {
       "body": "{{ job_metadata }}"
     },
     "workflow_approval": {
@@ -216,6 +240,10 @@
       "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}",
       "body": null
     },
+    "changed": {
+      "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' reported changes: {{ url }}",
+      "body": null
+    },
     "workflow_approval": {
       "running": {
         "message": "The approval node \"{{ approval_node_name }}\" needs review. This node can be viewed at: {{ workflow_url }}",
@@ -248,6 +276,10 @@
       "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}",
       "body": null
     },
+    "changed": {
+      "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' reported changes: {{ url }}",
+      "body": null
+    },
     "workflow_approval": {
       "running": {
         "message": "The approval node \"{{ approval_node_name }}\" needs review. This node can be viewed at: {{ workflow_url }}",
@@ -278,6 +310,10 @@
     },
     "error": {
       "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' {{ job.status }}: {{ url }}",
+      "body": null
+    },
+    "changed": {
+      "message": "{{ job_friendly_name }} #{{ job.id }} '{{ job.name }}' reported changes: {{ url }}",
       "body": null
     },
     "workflow_approval": {

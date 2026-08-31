@@ -199,7 +199,9 @@ describe('NodeTypeStep', () => {
 
     expect(getNodeTypeSelect()).toHaveValue('workflow_approval_template');
     const nameInput = document.querySelector('input#approval-name');
-    const descriptionInput = document.querySelector('input#approval-description');
+    const descriptionInput = document.querySelector(
+      'input#approval-description'
+    );
     const minutesInput = screen.getByLabelText('Timeout minutes');
     const secondsInput = screen.getByLabelText('Timeout seconds');
     expect(nameInput).toBeInTheDocument();

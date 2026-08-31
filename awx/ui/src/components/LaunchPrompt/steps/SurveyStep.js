@@ -2,21 +2,21 @@ import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import {
-	Button,
-	Form,
-	FormGroup,
-	FormHelperText,
-	HelperText,
-	HelperTextItem,
-	Label,
-	LabelGroup,
-	MenuToggle,
-	Select,
-	SelectList,
-	SelectOption,
-	TextInputGroup,
-	TextInputGroupMain,
-	TextInputGroupUtilities,
+  Button,
+  Form,
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  Label,
+  LabelGroup,
+  MenuToggle,
+  Select,
+  SelectList,
+  SelectOption,
+  TextInputGroup,
+  TextInputGroupMain,
+  TextInputGroupUtilities,
 } from '@patternfly/react-core';
 import { TimesIcon } from '@patternfly/react-icons';
 import {
@@ -168,7 +168,8 @@ function MultipleChoiceField({ question }) {
               />
               {(filterValue || field.value) && (
                 <TextInputGroupUtilities>
-                  <Button icon={<TimesIcon />}
+                  <Button
+                    icon={<TimesIcon />}
                     variant="plain"
                     onClick={() => {
                       helpers.setTouched(true);
@@ -176,7 +177,7 @@ function MultipleChoiceField({ question }) {
                       setFilterValue('');
                     }}
                     aria-label={t`Clear`}
-                   />
+                  />
                 </TextInputGroupUtilities>
               )}
             </TextInputGroup>
@@ -198,9 +199,7 @@ function MultipleChoiceField({ question }) {
       {!isValid && (
         <FormHelperText>
           <HelperText>
-            <HelperTextItem variant="error">
-              {meta.error}
-            </HelperTextItem>
+            <HelperTextItem variant="error">{meta.error}</HelperTextItem>
           </HelperText>
         </FormHelperText>
       )}
@@ -274,9 +273,7 @@ function MultiSelectField({ question }) {
                   setIsOpen(true);
                 }}
                 autoComplete="off"
-                placeholder={
-                  !field.value?.length ? t`Select option(s)` : ''
-                }
+                placeholder={!field.value?.length ? t`Select option(s)` : ''}
               >
                 {field.value?.length > 0 && (
                   <LabelGroup>
@@ -298,7 +295,8 @@ function MultiSelectField({ question }) {
               </TextInputGroupMain>
               {(filterValue || field.value?.length > 0) && (
                 <TextInputGroupUtilities>
-                  <Button icon={<TimesIcon />}
+                  <Button
+                    icon={<TimesIcon />}
                     variant="plain"
                     onClick={() => {
                       helpers.setTouched(true);
@@ -306,7 +304,7 @@ function MultiSelectField({ question }) {
                       setFilterValue('');
                     }}
                     aria-label={t`Clear`}
-                   />
+                  />
                 </TextInputGroupUtilities>
               )}
             </TextInputGroup>

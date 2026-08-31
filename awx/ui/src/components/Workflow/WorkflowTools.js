@@ -86,20 +86,22 @@ function WorkflowTools({
           content={t`Fit the graph to the available screen size`}
           position="bottom"
         >
-          <Button icon={<DesktopIcon />}
+          <Button
+            icon={<DesktopIcon />}
             ouiaId="visualizer-zoom-to-fit-button"
             variant="tertiary"
             css="margin-right: 30px;"
             onClick={() => onFitGraph()}
-           />
+          />
         </Tooltip>
         <Tooltip content={t`Zoom Out`} position="bottom">
-          <Button icon={<MinusIcon />}
+          <Button
+            icon={<MinusIcon />}
             ouiaId="visualizer-zoom-out-button"
             variant="tertiary"
             css="margin-right: 10px;"
             onClick={() => zoomOut()}
-           />
+          />
         </Tooltip>
         <input
           id="zoom-slider"
@@ -113,57 +115,63 @@ function WorkflowTools({
           value={zoomPercentage}
         />
         <Tooltip content={t`Zoom In`} position="bottom">
-          <Button icon={<PlusIcon />}
+          <Button
+            icon={<PlusIcon />}
             ouiaId="visualizer-zoom-in-button"
             variant="tertiary"
             css="margin: 0px 25px 0px 10px;"
             onClick={() => zoomIn()}
-           />
+          />
         </Tooltip>
         <Pan>
           <Tooltip content={t`Pan Left`} position="left">
-            <Button icon={<CaretLeftIcon />}
+            <Button
+              icon={<CaretLeftIcon />}
               ouiaId="visualizer-pan-left-button"
               variant="tertiary"
               css="margin-right: 10px;"
               onClick={() => onPan('left')}
-             />
+            />
           </Tooltip>
           <PanCenter>
             <Tooltip content={t`Pan Up`} position="top">
-              <Button icon={<CaretUpIcon />}
+              <Button
+                icon={<CaretUpIcon />}
                 ouiaId="visualizer-pan-up-button"
                 variant="tertiary"
                 css="margin-bottom: 10px;"
                 onClick={() => onPan('up')}
-               />
+              />
             </Tooltip>
             <Tooltip
               content={t`Set zoom to 100% and center graph`}
               position="top"
             >
-              <Button icon={<HomeIcon />}
+              <Button
+                icon={<HomeIcon />}
                 ouiaId="visualizer-pan-middle-button"
                 variant="tertiary"
                 onClick={() => onPanToMiddle()}
-               />
+              />
             </Tooltip>
             <Tooltip content={t`Pan Down`} position="bottom">
-              <Button icon={<CaretDownIcon />}
+              <Button
+                icon={<CaretDownIcon />}
                 ouiaId="visualizer-pan-down-button"
                 variant="tertiary"
                 css="margin-top: 10px;"
                 onClick={() => onPan('down')}
-               />
+              />
             </Tooltip>
           </PanCenter>
           <Tooltip content={t`Pan Right`} position="right">
-            <Button icon={<CaretRightIcon />}
+            <Button
+              icon={<CaretRightIcon />}
               ouiaId="visualizer-pan-right-button"
               variant="tertiary"
               css="margin-left: 10px;"
               onClick={() => onPan('right')}
-             />
+            />
           </Tooltip>
         </Pan>
       </Tools>

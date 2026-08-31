@@ -22,7 +22,10 @@ const mockSettings = {
     'https://towerhost/sso/complete/google-oauth2/',
   SOCIAL_AUTH_GOOGLE_OAUTH2_KEY: 'mock key',
   SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET: '$encrypted$',
-  SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS: ['example.com', 'example_2.com'],
+  SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS: [
+    'example.com',
+    'example_2.com',
+  ],
   SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS: {},
   SOCIAL_AUTH_GOOGLE_OAUTH2_ORGANIZATION_MAP: { Default: {} },
   SOCIAL_AUTH_GOOGLE_OAUTH2_TEAM_MAP: {},
@@ -78,7 +81,9 @@ describe('<GoogleOAuth2Detail />', () => {
 
   test('should hide edit button from non-superusers', async () => {
     await mountDetail({ config: { me: { is_superuser: false } } });
-    expect(screen.queryByRole('link', { name: 'Edit' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'Edit' })
+    ).not.toBeInTheDocument();
   });
 
   test('should display content error when api throws error on initial render', async () => {

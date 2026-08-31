@@ -117,15 +117,11 @@ function AzureADTenantEdit() {
               <FormColumnLayout>
                 <InputField
                   name="SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY"
-                  config={
-                    azureTenant.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY
-                  }
+                  config={azureTenant.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY}
                 />
                 <EncryptedField
                   name="SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET"
-                  config={
-                    azureTenant.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET
-                  }
+                  config={azureTenant.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET}
                 />
                 <InputField
                   name="SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID"

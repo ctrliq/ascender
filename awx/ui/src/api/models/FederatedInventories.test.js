@@ -42,6 +42,8 @@ describe('FederatedInventoriesAPI', () => {
         federatedInventoryId,
         'POST'
       )
-    ).rejects.toThrow('You have insufficient access to this Federated Inventory.');
+    ).rejects.toThrow(
+      'You have insufficient access to this Federated Inventory.'
+    );
   });
 });

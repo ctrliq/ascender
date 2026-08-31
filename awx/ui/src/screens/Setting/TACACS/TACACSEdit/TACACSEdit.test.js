@@ -96,9 +96,7 @@ describe('<TACACSEdit />', () => {
       )
     );
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       TACACSPLUS_HOST: 'new_host',
       TACACSPLUS_PORT: 999,

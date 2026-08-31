@@ -64,9 +64,7 @@ describe('<DisassociateButton />', () => {
 
       await user.click(screen.getByRole('button', { name: 'Disassociate' }));
       const dialog = await screen.findByRole('dialog');
-      await user.click(
-        within(dialog).getByRole('button', { name: 'Cancel' })
-      );
+      await user.click(within(dialog).getByRole('button', { name: 'Cancel' }));
       await waitFor(() => {
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
       });
@@ -110,7 +108,9 @@ describe('<DisassociateButton />', () => {
           ]}
         />
       );
-      expect(screen.getByRole('button', { name: 'Disassociate' })).toBeDisabled();
+      expect(
+        screen.getByRole('button', { name: 'Disassociate' })
+      ).toBeDisabled();
     });
 
     test('should disable button for control instance', () => {
@@ -122,7 +122,9 @@ describe('<DisassociateButton />', () => {
           ]}
         />
       );
-      expect(screen.getByRole('button', { name: 'Disassociate' })).toBeDisabled();
+      expect(
+        screen.getByRole('button', { name: 'Disassociate' })
+      ).toBeDisabled();
     });
 
     test('should disable button for a hybrid instance inside a protected instance group', () => {
@@ -135,7 +137,9 @@ describe('<DisassociateButton />', () => {
           ]}
         />
       );
-      expect(screen.getByRole('button', { name: 'Disassociate' })).toBeDisabled();
+      expect(
+        screen.getByRole('button', { name: 'Disassociate' })
+      ).toBeDisabled();
     });
   });
 });

@@ -121,7 +121,9 @@ describe('<ProjectList />', () => {
   test('should load and render projects', async () => {
     renderWithContexts(<ProjectList />);
 
-    expect(await screen.findByRole('link', { name: 'Project 1' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('link', { name: 'Project 1' })
+    ).toBeInTheDocument();
     mockProjects.forEach((p) =>
       expect(screen.getByRole('link', { name: p.name })).toBeInTheDocument()
     );

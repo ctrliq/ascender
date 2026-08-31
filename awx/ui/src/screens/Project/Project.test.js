@@ -64,8 +64,9 @@ describe('<Project />', () => {
     renderProject();
     await screen.findByRole('tab', { name: 'Details' });
 
-    expect(await screen.findByRole('tab', { name: 'Notifications' }))
-      .toBeInTheDocument();
+    expect(
+      await screen.findByRole('tab', { name: 'Notifications' })
+    ).toBeInTheDocument();
     await waitFor(() => expect(screen.getAllByRole('tab')).toHaveLength(6));
   });
 

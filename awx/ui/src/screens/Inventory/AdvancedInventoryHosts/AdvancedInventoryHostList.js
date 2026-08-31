@@ -65,7 +65,8 @@ function AdvancedInventoryHostList({ inventory }) {
     constructed: 'constructed_inventory',
     federated: 'federated_inventory',
   };
-  const inventoryType = kindToInventoryType[inventory.kind] || 'smart_inventory';
+  const inventoryType =
+    kindToInventoryType[inventory.kind] || 'smart_inventory';
   return (
     <PaginatedTable
       contentError={contentError}

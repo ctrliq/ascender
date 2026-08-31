@@ -3,13 +3,11 @@ import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { Routes, Route } from 'react-router';
 import {
-	Alert,
-	ClipboardCopy,
-	ClipboardCopyVariant
+  Alert,
+  ClipboardCopy,
+  ClipboardCopyVariant,
 } from '@patternfly/react-core';
-import {
-	Modal
-} from '@patternfly/react-core/deprecated';
+import { Modal } from '@patternfly/react-core/deprecated';
 import { formatDateString } from 'util/dates';
 import { Detail, DetailList } from 'components/DetailList';
 import UserTokenAdd from '../UserTokenAdd';

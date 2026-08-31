@@ -1,0 +1,31 @@
+---
+# Modifications Copyright (c) 2026 Ctrl IQ, Inc.
+#
+# Builds the dev-mode ascender_devel image on pushes to main, writing its
+# layers to the GitHub Actions cache (type=gha). Pull request CI jobs restore
+# from this cache, so their image builds take seconds instead of ~20 minutes.
+# This is unrelated to devel_images.yml, which publishes production-style
+# images to ghcr.io for kubernetes-type testing.
+name: Seed CI Devel Image Cache
+env:
+  LC_ALL: "C.UTF-8" # prevent ERROR: Ansible could not initialize the preferred locale: unsupported locale setting
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+  seed-image-cache:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - name: Checkout ascender
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Build devel image, writing the layer cache
+        uses: ./.github/actions/awx_devel_image
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}

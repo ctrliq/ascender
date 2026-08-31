@@ -173,14 +173,15 @@ function LookupTypeInput({
             />
             {(filterValue || value) && (
               <TextInputGroupUtilities>
-                <Button icon={<TimesIcon />}
+                <Button
+                  icon={<TimesIcon />}
                   variant="plain"
                   onClick={() => {
                     setValue(null);
                     setFilterValue('');
                   }}
                   aria-label={t`Clear`}
-                 />
+                />
               </TextInputGroupUtilities>
             )}
           </TextInputGroup>

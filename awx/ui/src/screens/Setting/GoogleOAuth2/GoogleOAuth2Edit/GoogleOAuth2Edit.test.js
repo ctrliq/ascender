@@ -14,7 +14,10 @@ const mockSettings = {
     'https://towerhost/sso/complete/google-oauth2/',
   SOCIAL_AUTH_GOOGLE_OAUTH2_KEY: 'mock key',
   SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET: '$encrypted$',
-  SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS: ['example.com', 'example_2.com'],
+  SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_DOMAINS: [
+    'example.com',
+    'example_2.com',
+  ],
   SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS: {},
   SOCIAL_AUTH_GOOGLE_OAUTH2_ORGANIZATION_MAP: { Default: {} },
   SOCIAL_AUTH_GOOGLE_OAUTH2_TEAM_MAP: {},
@@ -40,7 +43,9 @@ describe('<GoogleOAuth2Edit />', () => {
     // The production read mutates the shared OPTIONS objects (sets .value), so
     // deep-clone to keep tests isolated.
     const result = renderWithContexts(
-      <SettingsProvider value={JSON.parse(JSON.stringify(mockAllOptions.actions))}>
+      <SettingsProvider
+        value={JSON.parse(JSON.stringify(mockAllOptions.actions))}
+      >
         <GoogleOAuth2Edit />
       </SettingsProvider>,
       { context: { router: { history } } }
@@ -64,9 +69,15 @@ describe('<GoogleOAuth2Edit />', () => {
     // (where applicable) its input by id.
     expect(screen.getByText('Google OAuth2 Key')).toBeInTheDocument();
     expect(screen.getByText('Google OAuth2 Secret')).toBeInTheDocument();
-    expect(screen.getByText('Google OAuth2 Allowed Domains')).toBeInTheDocument();
-    expect(screen.getByText('Google OAuth2 Extra Arguments')).toBeInTheDocument();
-    expect(screen.getByText('Google OAuth2 Organization Map')).toBeInTheDocument();
+    expect(
+      screen.getByText('Google OAuth2 Allowed Domains')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Google OAuth2 Extra Arguments')
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText('Google OAuth2 Organization Map')
+    ).toBeInTheDocument();
     expect(screen.getByText('Google OAuth2 Team Map')).toBeInTheDocument();
   });
 
@@ -78,7 +89,9 @@ describe('<GoogleOAuth2Edit />', () => {
       screen.getByRole('button', { name: 'Revert all to default' })
     );
     expect(await screen.findByText('Revert settings')).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Confirm revert all' }));
+    await user.click(
+      screen.getByRole('button', { name: 'Confirm revert all' })
+    );
     await waitFor(() =>
       expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
     );
@@ -121,14 +134,18 @@ describe('<GoogleOAuth2Edit />', () => {
     const { user } = await mountEdit();
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() =>
-      expect(history.location.pathname).toEqual('/settings/google_oauth2/details')
+      expect(history.location.pathname).toEqual(
+        '/settings/google_oauth2/details'
+      )
     );
   });
 
   test('should navigate to Google OAuth 2.0 detail when cancel is clicked', async () => {
     const { user } = await mountEdit();
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
-    expect(history.location.pathname).toEqual('/settings/google_oauth2/details');
+    expect(history.location.pathname).toEqual(
+      '/settings/google_oauth2/details'
+    );
   });
 
   test('should display error message on unsuccessful submission', async () => {

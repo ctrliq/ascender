@@ -1,11 +1,7 @@
 # Modifications Copyright (c) 2024 Ctrl IQ, Inc.
 
-from pathlib import Path
-
-from django.http import FileResponse, Http404
 from django.urls import path
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import View
 from django.views.generic.base import TemplateView
 
 
@@ -27,22 +23,9 @@ class MigrationsNotran(TemplateView):
         return context
 
 
-class ServiceWorkerView(View):
-    def get(self, request, *args, **kwargs):
-        service_worker_path = Path(__file__).resolve().parent / 'build' / 'service-worker.js'
-        if not service_worker_path.is_file():
-            raise Http404()
-
-        response = FileResponse(service_worker_path.open('rb'), content_type='application/javascript')
-        response['Service-Worker-Allowed'] = '/'
-        response['Cache-Control'] = 'no-cache'
-        return response
-
-
 app_name = 'ui'
 
 urlpatterns = [
-    path('service-worker.js', ServiceWorkerView.as_view(), name='service-worker'),
     path('', IndexView.as_view(), name='index'),
     path('migrations_notran/', MigrationsNotran.as_view(), name='migrations_notran'),
 ]

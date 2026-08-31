@@ -1106,7 +1106,7 @@ OpenStack
 
 1. To configure an OpenStack-sourced inventory, select **OpenStack** from the Source field.
 
-2. The Create Source window expands with the required **Credential** field. Choose from an existing OpenStack Credential. For more information, refer to :ref:`ug_credentials`.
+2. The Create Source window expands with the required **Credential** field. Choose from an existing OpenStack Credential. The credential may use either username/password or Keystone application credential authentication; both work with this source type. For more information, refer to :ref:`ug_credentials`.
 
 3. You can optionally specify the verbosity, host filter, enabled variable/value, and update options as described in the main procedure for :ref:`adding a source <ug_add_inv_common_fields>`.
 

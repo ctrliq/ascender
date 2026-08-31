@@ -45,9 +45,7 @@ function ScheduleToggle({ schedule, onToggle, className, isDisabled }) {
     <>
       <Tooltip
         content={
-          schedule.enabled
-            ? t`Schedule is active`
-            : t`Schedule is inactive`
+          schedule.enabled ? t`Schedule is active` : t`Schedule is inactive`
         }
         position="top"
       >

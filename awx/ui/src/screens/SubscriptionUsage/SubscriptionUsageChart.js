@@ -1,18 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
-	Card,
-	CardHeader,
-	CardBody,
-	CardTitle,
-	Flex,
-	FlexItem,
-	MenuToggle,
-	PageSection,
-	Select,
-	SelectList,
-	SelectOption,
-
+  Card,
+  CardHeader,
+  CardBody,
+  CardTitle,
+  Flex,
+  FlexItem,
+  MenuToggle,
+  PageSection,
+  Select,
+  SelectList,
+  SelectOption,
   Content,
 } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
@@ -122,9 +121,7 @@ function SubscriptionUsageChart() {
     <Card>
       <Flex style={{ justifyContent: 'space-between' }}>
         <FlexItem>
-          <ChartCardTitle>
-            {t`Subscription Compliance`}
-          </ChartCardTitle>
+          <ChartCardTitle>{t`Subscription Compliance`}</ChartCardTitle>
         </FlexItem>
         <FlexItem>
           <CardText component="small">
@@ -159,12 +156,8 @@ function SubscriptionUsageChart() {
             )}
           >
             <SelectList>
-              <SelectOption value="year">
-                {t`Past year`}
-              </SelectOption>
-              <SelectOption value="two_years">
-                {t`Past two years`}
-              </SelectOption>
+              <SelectOption value="year">{t`Past year`}</SelectOption>
+              <SelectOption value="two_years">{t`Past two years`}</SelectOption>
               <SelectOption value="three_years">
                 {t`Past three years`}
               </SelectOption>

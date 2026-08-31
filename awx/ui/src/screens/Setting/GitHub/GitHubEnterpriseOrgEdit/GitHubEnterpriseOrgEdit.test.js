@@ -107,9 +107,7 @@ describe('<GitHubEnterpriseOrgEdit />', () => {
     await user.clear(urlInput);
     await user.type(urlInput, 'https://localhost');
     await user.click(container.querySelector('button[aria-label="Save"]'));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     // org/team maps start as null and are not editable in jsdom (react-ace
     // renders empty); they pass through unchanged.
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
@@ -167,8 +165,6 @@ describe('<GitHubEnterpriseOrgEdit />', () => {
         <GitHubEnterpriseOrgEdit />
       </SettingsProvider>
     );
-    expect(
-      await screen.findByText(/Something went wrong/)
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/Something went wrong/)).toBeInTheDocument();
   });
 });

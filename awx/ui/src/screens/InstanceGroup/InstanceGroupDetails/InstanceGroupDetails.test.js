@@ -108,6 +108,8 @@ describe('<InstanceGroupDetails/>', () => {
     });
     renderWithContexts(<InstanceGroupDetails instanceGroup={instanceGroup} />);
 
-    expect(screen.queryByRole('link', { name: 'Edit' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'Edit' })
+    ).not.toBeInTheDocument();
   });
 });

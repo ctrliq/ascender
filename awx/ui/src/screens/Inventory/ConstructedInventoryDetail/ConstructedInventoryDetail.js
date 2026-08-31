@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect } from 'react';
-import { Link, useNavigate  } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 import {
-	Button,
-	Label,
-	LabelGroup,
-	Content,
-	ContentVariants,
-	Tooltip
+  Button,
+  Label,
+  LabelGroup,
+  Content,
+  ContentVariants,
+  Tooltip,
 } from '@patternfly/react-core';
 
 import { InventoriesAPI, ConstructedInventoriesAPI } from 'api';
@@ -69,7 +69,7 @@ function JobStatusLabel({ job }) {
 function ConstructedInventoryDetail({ inventory }) {
   const { t } = useLingui();
   const navigate = useNavigate();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
 
   const {
     result: { instanceGroups, inputInventories, inventorySource, actions },
@@ -130,7 +130,7 @@ function ConstructedInventoryDetail({ inventory }) {
   const { error, dismissError } = useDismissableError(deleteError);
 
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).inventory(inventory);
+    relatedResourceDeleteRequests.inventory(inventory);
 
   if (isLoading) {
     return <ContentLoading />;
@@ -259,7 +259,7 @@ function ConstructedInventoryDetail({ inventory }) {
               totalChips={inventory.summary_fields.labels?.results?.length}
             >
               {inventory.summary_fields.labels?.results?.map((l) => (
-                <Label variant="outline" key={l.id} >
+                <Label variant="outline" key={l.id}>
                   {l.name}
                 </Label>
               ))}

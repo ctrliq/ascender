@@ -3,10 +3,10 @@ import { Link, useNavigate } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 import {
-	Label, Button,
-	Content,
-	ContentVariants,
-
+  Label,
+  Button,
+  Content,
+  ContentVariants,
 } from '@patternfly/react-core';
 
 import AlertModal from 'components/AlertModal';
@@ -27,7 +27,7 @@ import getHelpText from '../shared/Inventory.helptext';
 function InventoryDetail({ inventory }) {
   const { t } = useLingui();
   const navigate = useNavigate();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const {
     result: instanceGroups,
     isLoading,
@@ -60,7 +60,7 @@ function InventoryDetail({ inventory }) {
   const { prevent_instance_group_fallback } = inventory;
 
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).inventory(inventory);
+    relatedResourceDeleteRequests.inventory(inventory);
 
   const renderOptionsField = prevent_instance_group_fallback;
 
@@ -90,10 +90,7 @@ function InventoryDetail({ inventory }) {
           value={inventory.name}
           dataCy="inventory-detail-name"
         />
-        <Detail
-          label={t`Description`}
-          value={inventory.description}
-        />
+        <Detail label={t`Description`} value={inventory.description} />
         <Detail label={t`Type`} value={t`Inventory`} />
         <Detail
           label={t`Organization`}
@@ -103,10 +100,7 @@ function InventoryDetail({ inventory }) {
             </Link>
           }
         />
-        <Detail
-          label={t`Total hosts`}
-          value={inventory.total_hosts}
-        />
+        <Detail label={t`Total hosts`} value={inventory.total_hosts} />
         {instanceGroups && (
           <Detail
             fullWidth
@@ -142,7 +136,7 @@ function InventoryDetail({ inventory }) {
                 totalChips={inventory.summary_fields.labels?.results?.length}
               >
                 {inventory.summary_fields.labels?.results?.map((l) => (
-                  <Label variant="outline" key={l.id} >
+                  <Label variant="outline" key={l.id}>
                     {l.name}
                   </Label>
                 ))}

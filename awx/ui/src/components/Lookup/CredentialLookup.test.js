@@ -41,19 +41,25 @@ describe('CredentialLookup', () => {
   test('should render successfully', async () => {
     renderWithContexts(
       <Formik>
-        <CredentialLookup credentialTypeId={1} label="Foo" onChange={() => {}} />
+        <CredentialLookup
+          credentialTypeId={1}
+          label="Foo"
+          onChange={() => {}}
+        />
       </Formik>
     );
     expect(await screen.findByText('Foo')).toBeInTheDocument();
-    expect(
-      screen.getByRole('button', { name: 'Search' })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
   });
 
   test('should fetch credentials', async () => {
     renderWithContexts(
       <Formik>
-        <CredentialLookup credentialTypeId={1} label="Foo" onChange={() => {}} />
+        <CredentialLookup
+          credentialTypeId={1}
+          label="Foo"
+          onChange={() => {}}
+        />
       </Formik>
     );
     await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
@@ -68,7 +74,11 @@ describe('CredentialLookup', () => {
   test('should display label', async () => {
     renderWithContexts(
       <Formik>
-        <CredentialLookup credentialTypeId={1} label="Foo" onChange={() => {}} />
+        <CredentialLookup
+          credentialTypeId={1}
+          label="Foo"
+          onChange={() => {}}
+        />
       </Formik>
     );
     expect(await screen.findByText('Foo')).toBeInTheDocument();
@@ -84,7 +94,11 @@ describe('CredentialLookup', () => {
     const onChange = jest.fn();
     renderWithContexts(
       <Formik>
-        <CredentialLookup credentialTypeId={1} label="Foo" onChange={onChange} />
+        <CredentialLookup
+          credentialTypeId={1}
+          label="Foo"
+          onChange={onChange}
+        />
       </Formik>
     );
     await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));

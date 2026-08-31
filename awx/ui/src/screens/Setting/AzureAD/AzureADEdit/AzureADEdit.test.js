@@ -53,9 +53,7 @@ describe('<AzureADEdit />', () => {
 
   test('initially renders without crashing', async () => {
     await renderEdit();
-    expect(
-      screen.getByRole('button', { name: 'Save' })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
   });
 
   test('should successfully send default values to api on form revert all', async () => {
@@ -78,9 +76,7 @@ describe('<AzureADEdit />', () => {
   test('should successfully send request to api on form submission', async () => {
     const { user } = await renderEdit();
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       SOCIAL_AUTH_AZUREAD_OAUTH2_KEY: 'mock key',
       SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET: '$encrypted$',

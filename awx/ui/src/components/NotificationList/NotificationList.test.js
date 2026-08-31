@@ -66,7 +66,11 @@ describe('<NotificationList />', () => {
     });
 
     ({ container, user } = renderWithContexts(
-      <NotificationList id={1} canToggleNotifications apiModel={JobTemplatesAPI} />
+      <NotificationList
+        id={1}
+        canToggleNotifications
+        apiModel={JobTemplatesAPI}
+      />
     ));
 
     await waitFor(() =>
@@ -191,5 +195,83 @@ describe('<NotificationList />', () => {
     // includes the expandable ErrorDetail ("Details" toggle)
     const errorDialog = await screen.findByRole('dialog', { name: /Error!/ });
     expect(within(errorDialog).getByText('Details')).toBeInTheDocument();
+  });
+});
+
+describe('<NotificationList showChangedToggle />', () => {
+  let container;
+  let user;
+  const data = {
+    count: 1,
+    results: [
+      {
+        id: 1,
+        name: 'Notification one',
+        url: '/api/v2/notification_templates/1/',
+        notification_type: 'email',
+      },
+    ],
+  };
+
+  const toggle = (id) => container.querySelector(`#${id}`);
+
+  beforeEach(async () => {
+    NotificationTemplatesAPI.readOptions.mockReturnValue({
+      data: {
+        actions: {
+          GET: {
+            notification_type: {
+              choices: [['email', 'Email']],
+            },
+          },
+        },
+      },
+    });
+
+    NotificationTemplatesAPI.read.mockReturnValue({ data });
+
+    JobTemplatesAPI.readNotificationTemplatesSuccess.mockReturnValue({
+      data: { results: [] },
+    });
+
+    JobTemplatesAPI.readNotificationTemplatesError.mockReturnValue({
+      data: { results: [] },
+    });
+
+    JobTemplatesAPI.readNotificationTemplatesStarted.mockReturnValue({
+      data: { results: [] },
+    });
+
+    JobTemplatesAPI.readNotificationTemplatesChanged.mockReturnValue({
+      data: { results: [{ id: 1 }] },
+    });
+
+    ({ container, user } = renderWithContexts(
+      <NotificationList
+        id={1}
+        canToggleNotifications
+        apiModel={JobTemplatesAPI}
+        showChangedToggle
+      />
+    ));
+
+    await waitFor(() =>
+      expect(toggle('notification-1-changed-toggle')).toBeInTheDocument()
+    );
+  });
+
+  test('should show the changed toggle as configured', () => {
+    expect(JobTemplatesAPI.readNotificationTemplatesChanged).toHaveBeenCalled();
+    expect(toggle('notification-1-changed-toggle')).toBeChecked();
+  });
+
+  test('should disable changed notification', async () => {
+    await user.click(toggle('notification-1-changed-toggle'));
+    expect(
+      JobTemplatesAPI.disassociateNotificationTemplate
+    ).toHaveBeenCalledWith(1, 1, 'changed');
+    await waitFor(() =>
+      expect(toggle('notification-1-changed-toggle')).not.toBeChecked()
+    );
   });
 });

@@ -70,8 +70,7 @@ function renderUnder(url = '/inventories/inventory/1/hosts') {
   );
 }
 
-const toggleFor = (hostId) =>
-  document.getElementById(`host-${hostId}-toggle`);
+const toggleFor = (hostId) => document.getElementById(`host-${hostId}-toggle`);
 
 describe('<InventoryHostList />', () => {
   beforeEach(() => {
@@ -137,8 +136,9 @@ describe('<InventoryHostList />', () => {
     const { user } = renderUnder();
     await screen.findByRole('link', { name: 'Host 1' });
     const selectAll = screen.getByRole('checkbox', { name: 'Select all' });
-    const rowCheckboxes = screen
-      .getAllByRole('checkbox', { name: /select row/i });
+    const rowCheckboxes = screen.getAllByRole('checkbox', {
+      name: /select row/i,
+    });
     expect(rowCheckboxes).toHaveLength(3);
     await user.click(selectAll);
     rowCheckboxes.forEach((box) => expect(box).toBeChecked());

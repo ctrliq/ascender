@@ -40,6 +40,7 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
       resetFields('messages.started', defs.started);
       resetFields('messages.success', defs.success);
       resetFields('messages.error', defs.error);
+      resetFields('messages.changed', defs.changed);
       resetFields(
         'messages.workflow_approval.approved',
         defs.workflow_approval.approved
@@ -73,7 +74,8 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
       </div>
       {useCustomField.value && (
         <SubFormLayout>
-          <Content component="p"
+          <Content
+            component="p"
             className="pf-v6-c-content"
             css="margin-bottom: var(--pf-v6-c-content--MarginBottom)"
           >
@@ -157,6 +159,24 @@ function CustomMessagesSubForm({ defaultMessages, type }) {
                 id="error-body"
                 name="messages.error.body"
                 label={t`Error message body`}
+                mode="jinja2"
+                rows={6}
+              />
+            )}
+            {showMessages && (
+              <CodeEditorField
+                id="changed-message"
+                name="messages.changed.message"
+                label={t`Changed message`}
+                mode="jinja2"
+                rows={2}
+              />
+            )}
+            {showBodies && (
+              <CodeEditorField
+                id="changed-body"
+                name="messages.changed.body"
+                label={t`Changed message body`}
                 mode="jinja2"
                 rows={6}
               />

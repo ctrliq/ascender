@@ -163,3 +163,57 @@ def test_post_wfj_notification(get, post, admin, workflow_job, notification):
     response = get(url, admin)
     assert response.status_code == 200
     assert len(response.data['results']) == 1
+
+
+@pytest.mark.django_db
+def test_get_jt_changed_notification(get, admin, job_template):
+    url = reverse('api:job_template_notification_templates_changed_list', kwargs={'pk': job_template.pk})
+    response = get(url, admin)
+    assert response.status_code == 200
+    assert len(response.data['results']) == 0
+
+
+@pytest.mark.django_db
+def test_post_jt_changed_notification(get, post, admin, notification_template, job_template):
+    url = reverse('api:job_template_notification_templates_changed_list', kwargs={'pk': job_template.pk})
+    response = post(url, dict(id=notification_template.id, associate=True), admin)
+    assert response.status_code == 204
+    response = get(url, admin)
+    assert response.status_code == 200
+    assert len(response.data['results']) == 1
+
+
+@pytest.mark.django_db
+def test_get_org_changed_notification(get, admin, organization):
+    url = reverse('api:organization_notification_templates_changed_list', kwargs={'pk': organization.pk})
+    response = get(url, admin)
+    assert response.status_code == 200
+    assert len(response.data['results']) == 0
+
+
+@pytest.mark.django_db
+def test_post_org_changed_notification(get, post, admin, notification_template, organization):
+    url = reverse('api:organization_notification_templates_changed_list', kwargs={'pk': organization.pk})
+    response = post(url, dict(id=notification_template.id, associate=True), admin)
+    assert response.status_code == 204
+    response = get(url, admin)
+    assert response.status_code == 200
+    assert len(response.data['results']) == 1
+
+
+@pytest.mark.django_db
+def test_jt_notification_templates_include_the_changed_trigger(job_template, organization, notification_template):
+    job_template.organization = organization
+    job_template.save()
+    job_template.notification_templates_changed.add(notification_template)
+
+    assert job_template.notification_templates['changed'] == [notification_template]
+
+
+@pytest.mark.django_db
+def test_org_changed_notification_templates_reach_its_job_templates(job_template, organization, notification_template):
+    job_template.organization = organization
+    job_template.save()
+    organization.notification_templates_changed.add(notification_template)
+
+    assert job_template.notification_templates['changed'] == [notification_template]

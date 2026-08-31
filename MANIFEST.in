@@ -1,4 +1,5 @@
 recursive-include awx *.py
+recursive-include awx/dab *.md
 recursive-include awx *.po
 recursive-include awx *.mo
 recursive-include awx/static *

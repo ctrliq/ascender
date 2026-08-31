@@ -2,10 +2,7 @@ import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import styled from 'styled-components';
-import {
-	Label, Divider,
-	Title
-} from '@patternfly/react-core';
+import { Label, Divider, Title } from '@patternfly/react-core';
 
 import { toTitleCase } from 'util/strings';
 import InstanceGroupLabels from 'components/InstanceGroupLabels';
@@ -17,7 +14,7 @@ import PromptProjectDetail from './PromptProjectDetail';
 import PromptInventorySourceDetail from './PromptInventorySourceDetail';
 import PromptJobTemplateDetail from './PromptJobTemplateDetail';
 import PromptWFJobTemplateDetail from './PromptWFJobTemplateDetail';
-import { VERBOSITY } from '../VerbositySelectField';
+import { getVerbosityLabel } from '../VerbositySelectField';
 
 const PromptTitle = styled(Title)`
   margin-top: var(--pf-v6-global--spacer--xl);
@@ -106,7 +103,7 @@ function PromptDetail({
   overrides = {},
   workflowNode = false,
 }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const details = omitOverrides(resource, overrides, launchConfig.defaults);
   details.type = overrides?.nodeType || details.type;
   const hasOverrides = Object.keys(overrides).length > 0;
@@ -133,11 +130,7 @@ function PromptDetail({
           <Detail
             label={t`Convergence`}
             dataCy="prompt-detail-convergence"
-            value={
-              workflowNode?.all_parents_must_converge
-                ? t`All`
-                : t`Any`
-            }
+            value={workflowNode?.all_parents_must_converge ? t`All` : t`Any`}
           />
         )}
         {workflowNode &&
@@ -194,9 +187,7 @@ function PromptDetail({
         hasPromptData(launchConfig) &&
         hasOverrides && (
           <>
-            <PromptTitle headingLevel="h2">
-              {t`Prompted Values`}
-            </PromptTitle>
+            <PromptTitle headingLevel="h2">{t`Prompted Values`}</PromptTitle>
             <PromptDivider />
             <PromptDetailList aria-label={t`Prompt Overrides`}>
               {launchConfig.ask_job_type_on_launch && (
@@ -263,7 +254,7 @@ function PromptDetail({
               launchConfig.ask_verbosity_on_launch ? (
                 <Detail
                   label={t`Verbosity`}
-                  value={VERBOSITY(t)[overrides.verbosity]}
+                  value={getVerbosityLabel(overrides.verbosity, i18n)}
                 />
               ) : null}
               {launchConfig.ask_tags_on_launch && (
@@ -287,7 +278,8 @@ function PromptDetail({
                         overrides.job_tags !== '' &&
                         overrides.job_tags.length > 0 &&
                         overrides.job_tags.split(',').map((jobTag) => (
-                          <Label variant="outline"
+                          <Label
+                            variant="outline"
                             key={jobTag}
 
                             data-ouia-component-id={`job-tag-${jobTag}-chip`}
@@ -320,7 +312,8 @@ function PromptDetail({
                         overrides.skip_tags !== '' &&
                         overrides.skip_tags.length > 0 &&
                         overrides.skip_tags.split(',').map((skipTag) => (
-                          <Label variant="outline"
+                          <Label
+                            variant="outline"
                             key={skipTag}
 
                             data-ouia-component-id={`skip-tag-${skipTag}-chip`}
@@ -343,10 +336,10 @@ function PromptDetail({
                       ouiaId="prompt-label-chips"
                     >
                       {overrides.labels.map((label) => (
-                        <Label variant="outline"
+                        <Label
+                          variant="outline"
                           key={label.id}
                           data-ouia-component-id={`label-${label.id}-chip`}
-
                         >
                           {label.name}
                         </Label>
@@ -374,11 +367,7 @@ function PromptDetail({
               {launchConfig.ask_diff_mode_on_launch && (
                 <Detail
                   label={t`Show Changes`}
-                  value={
-                    overrides.diff_mode === true
-                      ? t`On`
-                      : t`Off`
-                  }
+                  value={overrides.diff_mode === true ? t`On` : t`Off`}
                 />
               )}
               {(launchConfig.survey_enabled ||

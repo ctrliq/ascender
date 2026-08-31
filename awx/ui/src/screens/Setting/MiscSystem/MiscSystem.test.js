@@ -18,9 +18,14 @@ function mountAt(path, config) {
     context.config = config;
   }
   return renderWithContexts(
-    <SettingsProvider value={JSON.parse(JSON.stringify(mockAllOptions.actions))}>
+    <SettingsProvider
+      value={JSON.parse(JSON.stringify(mockAllOptions.actions))}
+    >
       <Routes>
-        <Route path="/settings/miscellaneous_system/*" element={<MiscSystem />} />
+        <Route
+          path="/settings/miscellaneous_system/*"
+          element={<MiscSystem />}
+        />
       </Routes>
     </SettingsProvider>,
     { context }

@@ -51,11 +51,15 @@ __SWAGGER_REQUESTS__ = {}
 
 
 # HACK: the dab_resource_registry app required ServiceID in migrations which checks do not run
-dab_rr_initial = importlib.import_module('ansible_base.resource_registry.migrations.0001_initial')
+dab_rr_initial = importlib.import_module('awx.dab.resource_registry.migrations.0001_initial')
+
+
+def _dab_rr_create_service_id(**kwargs):
+    dab_rr_initial.create_service_id(apps, None)
 
 
 if is_testing():
-    post_migrate.connect(lambda **kwargs: dab_rr_initial.create_service_id(apps, None))
+    post_migrate.connect(_dab_rr_create_service_id, weak=False, dispatch_uid='dab-rr-create-service-id')
 
 
 @pytest.fixture(scope="session")

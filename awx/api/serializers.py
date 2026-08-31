@@ -26,6 +26,7 @@ from django.contrib.auth.password_validation import validate_password as django_
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ObjectDoesNotExist, ValidationError as DjangoValidationError
 from django.db import models
+from django.db.models.functions import RowNumber
 from django.utils.translation import gettext_lazy as _
 from django.utils.encoding import force_str
 from django.utils.text import capfirst
@@ -43,7 +44,7 @@ from rest_framework.utils.serializer_helpers import ReturnList
 # Django-Polymorphic
 from polymorphic.models import PolymorphicModel
 
-from ansible_base.lib.utils.models import get_type_for_model
+from awx.dab.lib.utils.models import get_type_for_model
 
 # AWX
 from awx.main.access import get_user_capabilities
@@ -1306,7 +1307,10 @@ class OAuth2ApplicationSerializer(BaseSerializer):
         read_only_on_update_fields = ('user', 'authorization_grant_type')
         extra_kwargs = {
             'user': {'allow_null': True, 'required': False},
-            'organization': {'allow_null': False},
+            # required/default must be explicit since DRF 3.16: nullable FKs now
+            # infer required=False with default=None, which would change this
+            # endpoint's contract (OPTIONS metadata and the missing-field error code)
+            'organization': {'allow_null': False, 'required': True, 'default': serializers.empty},
             'authorization_grant_type': {'allow_null': False, 'label': _('Authorization Grant Type')},
             'client_secret': {'label': _('Client Secret')},
             'client_type': {'label': _('Client Type')},
@@ -1388,6 +1392,7 @@ class OrganizationSerializer(BaseSerializer):
             notification_templates_success=self.reverse('api:organization_notification_templates_success_list', kwargs={'pk': obj.pk}),
             notification_templates_error=self.reverse('api:organization_notification_templates_error_list', kwargs={'pk': obj.pk}),
             notification_templates_approvals=self.reverse('api:organization_notification_templates_approvals_list', kwargs={'pk': obj.pk}),
+            notification_templates_changed=self.reverse('api:organization_notification_templates_changed_list', kwargs={'pk': obj.pk}),
             object_roles=self.reverse('api:organization_object_roles_list', kwargs={'pk': obj.pk}),
             access_list=self.reverse('api:organization_access_list', kwargs={'pk': obj.pk}),
             instance_groups=self.reverse('api:organization_instance_groups_list', kwargs={'pk': obj.pk}),
@@ -1762,6 +1767,12 @@ class InventorySerializer(LabelsListMixin, BaseSerializerWithVariables):
             'pending_deletion',
             'prevent_instance_group_fallback',
         )
+        extra_kwargs = {
+            # required/default must be explicit since DRF 3.16: nullable FKs now
+            # infer required=False with default=None, which would change this
+            # endpoint's contract (OPTIONS metadata and the missing-field error code)
+            'organization': {'required': True, 'default': serializers.empty},
+        }
 
     def get_related(self, obj):
         res = super(InventorySerializer, self).get_related(obj)
@@ -1937,6 +1948,60 @@ class InventoryScriptSerializer(InventorySerializer):
         fields = ()
 
 
+RECENT_JOBS_COUNT = 5
+
+
+def attach_recent_job_host_summaries(hosts):
+    """Load the newest RECENT_JOBS_COUNT JobHostSummary rows for each host.
+
+    HostSerializer.get_summary_fields() builds its recent_jobs entry by slicing
+    the summaries of a single host, which costs one query per serialized host.
+    A window function ranks the summaries per host inside the database, so the
+    whole page is covered by one query per relation instead.
+
+    Deciding which relation a host uses reads host.inventory, so every caller
+    has to select_related it or this trades one N+1 for another. HostAccess
+    already does, which is what the host list is built from.
+    """
+    hosts_by_relation = {}
+    for host in hosts:
+        host._recent_job_host_summaries = []
+        # constructed inventories track their runs through a separate FK
+        relation = 'constructed_host' if host.inventory.kind == 'constructed' else 'host'
+        hosts_by_relation.setdefault(relation, {})[host.pk] = host
+
+    for relation, hosts_by_id in hosts_by_relation.items():
+        rank = models.Window(
+            expression=RowNumber(),
+            partition_by=[models.F('{}_id'.format(relation))],
+            order_by=models.F('created').desc(),
+        )
+        summaries = (
+            JobHostSummary.objects.filter(**{'{}_id__in'.format(relation): list(hosts_by_id)})
+            .annotate(_recent_rank=rank)
+            .filter(_recent_rank__lte=RECENT_JOBS_COUNT)
+            .select_related('job__job_template')
+            .defer('job__extra_vars', 'job__artifacts')
+        )
+        for summary in summaries:
+            hosts_by_id[getattr(summary, '{}_id'.format(relation))]._recent_job_host_summaries.append(summary)
+
+    # the window orders rows within each partition, but the outer query is free
+    # to return them in any order, so put each host's list back in -created order
+    for host in hosts:
+        host._recent_job_host_summaries.sort(key=lambda summary: summary.created, reverse=True)
+
+
+class HostListSerializer(serializers.ListSerializer):
+    """Bulk-loads the per-host data that get_summary_fields() would otherwise
+    fetch one host at a time."""
+
+    def to_representation(self, data):
+        hosts = list(data.all() if isinstance(data, models.Manager) else data)
+        attach_recent_job_host_summaries(hosts)
+        return super().to_representation(hosts)
+
+
 class HostSerializer(BaseSerializerWithVariables):
     show_capabilities = ['edit', 'delete']
     capabilities_prefetch = ['inventory.admin']
@@ -1946,6 +2011,7 @@ class HostSerializer(BaseSerializerWithVariables):
 
     class Meta:
         model = Host
+        list_serializer_class = HostListSerializer
         fields = (
             '*',
             'inventory',
@@ -2025,10 +2091,17 @@ class HostSerializer(BaseSerializerWithVariables):
             group_list = [{'id': g.id, 'name': g.name} for g in obj.groups.all().order_by('id')[:5]]
         group_cnt = obj.groups.count()
         d.setdefault('groups', {'count': group_cnt, 'results': group_list})
-        if obj.inventory.kind == 'constructed':
-            summaries_qs = obj.constructed_host_summaries
+        if hasattr(obj, '_recent_job_host_summaries'):
+            # bulk-loaded for the whole page by HostListSerializer
+            recent_summaries = obj._recent_job_host_summaries
         else:
-            summaries_qs = obj.job_host_summaries
+            if obj.inventory.kind == 'constructed':
+                summaries_qs = obj.constructed_host_summaries
+            else:
+                summaries_qs = obj.job_host_summaries
+            recent_summaries = (
+                summaries_qs.select_related('job__job_template').order_by('-created').defer('job__extra_vars', 'job__artifacts')[:RECENT_JOBS_COUNT]
+            )
         d.setdefault(
             'recent_jobs',
             [
@@ -2039,7 +2112,7 @@ class HostSerializer(BaseSerializerWithVariables):
                     'status': j.job.status,
                     'finished': j.job.finished,
                 }
-                for j in summaries_qs.select_related('job__job_template').order_by('-created').defer('job__extra_vars', 'job__artifacts')[:5]
+                for j in recent_summaries
             ],
         )
         return d
@@ -3410,6 +3483,7 @@ class JobTemplateSerializer(JobTemplateMixin, UnifiedJobTemplateSerializer, JobO
             notification_templates_started=self.reverse('api:job_template_notification_templates_started_list', kwargs={'pk': obj.pk}),
             notification_templates_success=self.reverse('api:job_template_notification_templates_success_list', kwargs={'pk': obj.pk}),
             notification_templates_error=self.reverse('api:job_template_notification_templates_error_list', kwargs={'pk': obj.pk}),
+            notification_templates_changed=self.reverse('api:job_template_notification_templates_changed_list', kwargs={'pk': obj.pk}),
             access_list=self.reverse('api:job_template_access_list', kwargs={'pk': obj.pk}),
             survey_spec=self.reverse('api:job_template_survey_spec', kwargs={'pk': obj.pk}),
             labels=self.reverse('api:job_template_label_list', kwargs={'pk': obj.pk}),
@@ -5256,6 +5330,12 @@ class NotificationTemplateSerializer(BaseSerializer):
     class Meta:
         model = NotificationTemplate
         fields = ('*', 'organization', 'notification_type', 'notification_configuration', 'messages')
+        extra_kwargs = {
+            # required/default must be explicit since DRF 3.16: nullable FKs now
+            # infer required=False with default=None, which would change this
+            # endpoint's contract (OPTIONS metadata and the missing-field error code)
+            'organization': {'required': True, 'default': serializers.empty},
+        }
 
     type_map = {"string": (str,), "int": (int,), "bool": (bool,), "list": (list,), "password": (str,), "object": (dict, OrderedDict)}
 
@@ -5315,8 +5395,8 @@ class NotificationTemplateSerializer(BaseSerializer):
             error_list.append(_("Expected dict for 'messages' field, found {}".format(type(messages))))
         else:
             for event in messages:
-                if event not in ('started', 'success', 'error', 'workflow_approval'):
-                    error_list.append(_("Event '{}' invalid, must be one of 'started', 'success', 'error', or 'workflow_approval'").format(event))
+                if event not in ('started', 'success', 'error', 'changed', 'workflow_approval'):
+                    error_list.append(_("Event '{}' invalid, must be one of 'started', 'success', 'error', 'changed', or 'workflow_approval'").format(event))
                     continue
                 event_messages = messages[event]
                 if event_messages is None:

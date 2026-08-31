@@ -1,0 +1,93 @@
+---
+# Modifications Copyright (c) 2026 Ctrl IQ, Inc.
+name: Run Ascender docker-compose
+description: Runs the Ascender development environment with `make docker-compose`
+inputs:
+  github-token:
+    description: GitHub Token to pass to awx_devel_image
+    required: true
+  build-ui:
+    description: Should the UI be built?
+    required: false
+    default: 'false'
+runs:
+  using: composite
+  steps:
+    - name: Disable the host AppArmor profile for rsyslogd
+      shell: bash
+      # Ubuntu runners ship an AppArmor profile for /usr/sbin/rsyslogd, and
+      # AppArmor confines by binary path even inside containers — so rsyslogd
+      # in the dev environment gets EACCES reading its own config despite
+      # correct file permissions. Same fix as upstream AWX CI.
+      run: |
+        if [ -f /etc/apparmor.d/usr.sbin.rsyslogd ]; then
+          sudo ln -sf /etc/apparmor.d/usr.sbin.rsyslogd /etc/apparmor.d/disable/
+          sudo apparmor_parser -R /etc/apparmor.d/usr.sbin.rsyslogd
+        fi
+
+    - name: Build ascender_devel image for the development environment
+      uses: ./.github/actions/awx_devel_image
+      with:
+        github-token: ${{ inputs.github-token }}
+
+    - name: Upgrade ansible-core
+      shell: bash
+      # Constrained to the tested minor series so new upstream releases can't
+      # change CI behavior mid-flight; bump deliberately after validating.
+      run: python3 -m pip install --upgrade 'ansible-core~=2.21.0'
+
+    - name: Install system deps
+      shell: bash
+      # Refresh the package index first: GitHub-hosted runners ship with apt
+      # lists frozen at image-build time, and installs can 404 once mirrors
+      # rotate package versions.
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y gettext
+
+    - name: Start the development environment
+      shell: bash
+      run: |
+        DEV_DOCKER_OWNER=${{ github.repository_owner }} \
+        COMPOSE_TAG=${{ github.base_ref || 'main' }} \
+        COMPOSE_UP_OPTS="-d" \
+        make docker-compose
+
+    - name: Dump container diagnostics
+      shell: bash
+      run: |
+        echo "--- image ---"
+        docker inspect tools_awx_1 --format 'image={{.Config.Image}} ({{.Image}}) user={{.Config.User}}'
+        echo "--- runtime user and rsyslog permissions ---"
+        docker exec tools_awx_1 bash -c 'id; ls -land /var/lib/awx /var/lib/awx/rsyslog; ls -lan /var/lib/awx/rsyslog/'
+
+    - name: Wait for the development environment and set the admin password
+      shell: bash
+      run: |
+        SECONDS=0
+        while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' -k https://localhost:8043/api/v2/ping/)" != "200" ]]; do
+          if [[ $SECONDS -gt 600 ]]; then
+            echo "Timing out, the API never came up"
+            docker ps -a
+            docker logs tools_awx_1 || true
+            echo "--- rsyslog diagnostics ---"
+            docker exec tools_awx_1 bash -c 'id; ls -lan /var/lib/awx/rsyslog/; ps aux' || true
+            exit 1
+          fi
+          echo "Waiting for the API..."
+          sleep 5
+        done
+        echo "The API is up, updating the password..."
+        docker exec -i tools_awx_1 sh <<-EOSH
+          awx-manage update_password --username=admin --password=password
+        EOSH
+
+    - name: Build UI
+      # This must be a string comparison in composite actions:
+      # https://github.com/actions/runner/issues/2238
+      if: ${{ inputs.build-ui == 'true' }}
+      shell: bash
+      run: |
+        docker exec -i tools_awx_1 sh <<-EOSH
+          make ui-devel
+        EOSH

@@ -174,7 +174,9 @@ describe('Visualizer', () => {
     await waitFor(() =>
       expect(container.querySelector('g#node-1')).toBeInTheDocument()
     );
-    expect(screen.queryByText('Something went wrong...')).not.toBeInTheDocument();
+    expect(
+      screen.queryByText('Something went wrong...')
+    ).not.toBeInTheDocument();
     // WorkflowStartNode -> g#node-1, 4 VisualizerNodes -> g#node-2..5
     expect(container.querySelectorAll('g[id^="node-"]')).toHaveLength(5);
     // 5 VisualizerLinks -> g#link-*
@@ -186,9 +188,7 @@ describe('Visualizer', () => {
     await waitFor(() =>
       expect(container.querySelector('g#node-1')).toBeInTheDocument()
     );
-    expect(
-      screen.queryByText('Remove All Nodes')
-    ).not.toBeInTheDocument();
+    expect(screen.queryByText('Remove All Nodes')).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Delete all nodes' }));
     expect(screen.getByText('Remove All Nodes')).toBeInTheDocument();
     // PF Modal portals into document.body, outside the render container
@@ -221,9 +221,7 @@ describe('Visualizer', () => {
     fireEvent.change(document.querySelector('#link-select'), {
       target: { value: 'success' },
     });
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Save link changes' })
-    );
+    fireEvent.click(screen.getByRole('button', { name: 'Save link changes' }));
     expect(screen.queryByText('Edit Link')).not.toBeInTheDocument();
     fireEvent.click(container.querySelector('button#visualizer-save'));
     await waitFor(() =>
@@ -286,7 +284,9 @@ describe('Visualizer', () => {
     WorkflowJobTemplatesAPI.createNode.mockRejectedValue(new Error());
     const { container } = renderVisualizer();
     await waitFor(() =>
-      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+      expect(
+        container.querySelector('button#visualizer-save')
+      ).toBeInTheDocument()
     );
     expect(
       screen.queryByText('Error saving the workflow!')
@@ -337,7 +337,9 @@ describe('Visualizer', () => {
     WorkflowJobTemplateNodesAPI.update.mockRejectedValue(new Error());
     const { container } = renderVisualizer();
     await waitFor(() =>
-      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+      expect(
+        container.querySelector('button#visualizer-save')
+      ).toBeInTheDocument()
     );
     expect(
       screen.queryByText('Error saving the workflow!')
@@ -392,7 +394,9 @@ describe('Visualizer', () => {
     );
     const { container } = renderVisualizer();
     await waitFor(() =>
-      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+      expect(
+        container.querySelector('button#visualizer-save')
+      ).toBeInTheDocument()
     );
     expect(
       screen.queryByText('Error saving the workflow!')
@@ -463,7 +467,9 @@ describe('Visualizer', () => {
     WorkflowApprovalTemplatesAPI.update.mockRejectedValue(new Error());
     const { container } = renderVisualizer();
     await waitFor(() =>
-      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+      expect(
+        container.querySelector('button#visualizer-save')
+      ).toBeInTheDocument()
     );
     expect(
       screen.queryByText('Error saving the workflow!')
@@ -562,7 +568,9 @@ describe('Visualizer', () => {
     );
     const { container } = renderVisualizer();
     await waitFor(() =>
-      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+      expect(
+        container.querySelector('button#visualizer-save')
+      ).toBeInTheDocument()
     );
     expect(
       screen.queryByText('Error saving the workflow!')
@@ -663,7 +671,9 @@ describe('Visualizer', () => {
     );
     const { container } = renderVisualizer();
     await waitFor(() =>
-      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+      expect(
+        container.querySelector('button#visualizer-save')
+      ).toBeInTheDocument()
     );
     expect(
       screen.queryByText('Error saving the workflow!')
@@ -749,7 +759,9 @@ describe('Visualizer', () => {
     );
     const { container } = renderVisualizer();
     await waitFor(() =>
-      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+      expect(
+        container.querySelector('button#visualizer-save')
+      ).toBeInTheDocument()
     );
     expect(
       screen.queryByText('Error saving the workflow!')
@@ -836,7 +848,9 @@ describe('Visualizer', () => {
     );
     const { container } = renderVisualizer();
     await waitFor(() =>
-      expect(container.querySelector('button#visualizer-save')).toBeInTheDocument()
+      expect(
+        container.querySelector('button#visualizer-save')
+      ).toBeInTheDocument()
     );
     expect(
       screen.queryByText('Error saving the workflow!')

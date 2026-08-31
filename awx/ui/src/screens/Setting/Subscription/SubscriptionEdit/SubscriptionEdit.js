@@ -1,14 +1,14 @@
 import React, { useCallback, useEffect } from 'react';
-import { Link, useMatch, useNavigate  } from 'react-router';
+import { Link, useMatch, useNavigate } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Formik, useFormikContext } from 'formik';
 import {
-	Alert,
-	AlertGroup,
-	Button,
-	Form,
-	WizardFooterWrapper,
-	useWizardContext,
+  Alert,
+  AlertGroup,
+  Button,
+  Form,
+  WizardFooterWrapper,
+  useWizardContext,
 } from '@patternfly/react-core';
 import Wizard from 'components/Wizard';
 import { ConfigAPI, SettingsAPI, RootAPI } from 'api';
@@ -88,7 +88,10 @@ function SubscriptionEdit() {
   const navigate = useNavigate();
   const { request: updateConfig, license_info } = useConfig();
   const hasValidKey = Boolean(license_info?.valid_key);
-  const subscriptionMgmtRoute = useMatch({ path: '/subscription_management', end: false });
+  const subscriptionMgmtRoute = useMatch({
+    path: '/subscription_management',
+    end: false,
+  });
 
   const {
     isLoading: isContentLoading,
@@ -189,7 +192,7 @@ function SubscriptionEdit() {
     {
       name: hasValidKey
         ? t`Subscription Management`
-        : `${brandName} ${t`Subscription`}`,
+        : t`${brandName} Subscription`,
       id: 'subscription-step',
       component: <SubscriptionStep />,
     },

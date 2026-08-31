@@ -3,9 +3,7 @@ import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router';
-import {
-  PencilAltIcon,
-} from '@patternfly/react-icons';
+import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 
 function OrganizationListItem({
@@ -47,13 +45,14 @@ function OrganizationListItem({
           visible={organization.summary_fields.user_capabilities.edit}
           tooltip={t`Edit Organization`}
         >
-          <Button icon={<PencilAltIcon />}
+          <Button
+            icon={<PencilAltIcon />}
             ouiaId={`${organization.id}-edit-button`}
             aria-label={t`Edit Organization`}
             variant="plain"
             component={Link}
             to={`/organizations/${organization.id}/edit`}
-           />
+          />
         </ActionItem>
       </ActionsTd>
     </Tr>

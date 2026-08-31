@@ -90,7 +90,10 @@ describe('<InventoryDetail />', () => {
     assertDetail('Name', mockInventory.name);
     assertDetail('Type', 'Inventory');
     assertDetail('Total hosts', String(mockInventory.total_hosts));
-    assertDetail('Organization', mockInventory.summary_fields.organization.name);
+    assertDetail(
+      'Organization',
+      mockInventory.summary_fields.organization.name
+    );
 
     const orgLink = screen.getByRole('link', { name: 'The Organization' });
     expect(orgLink).toHaveAttribute('href', '/organizations/1/details');

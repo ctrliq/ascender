@@ -1,9 +1,12 @@
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
-import { Form, FormGroup, FormHelperText,
-HelperText,
-HelperTextItem,
+import {
+  Form,
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 
 import AnsibleSelect from 'components/AnsibleSelect';
@@ -62,11 +65,7 @@ function NotificationTemplateFormFields({ defaultMessages, template }) {
         autoPopulate={!template?.id}
         validate={required(t`Select a value for this field`)}
       />
-      <FormGroup
-        fieldId="notification-type"
-        isRequired
-        label={t`Type`}
-      >
+      <FormGroup fieldId="notification-type" isRequired label={t`Type`}>
         <AnsibleSelect
           {...typeField}
           id="notification-type"
@@ -92,15 +91,16 @@ function NotificationTemplateFormFields({ defaultMessages, template }) {
         {typeMeta.touched && typeMeta.error && (
           <FormHelperText>
             <HelperText>
-              <HelperTextItem variant="error">
-                {typeMeta.error}
-              </HelperTextItem>
+              <HelperTextItem variant="error">{typeMeta.error}</HelperTextItem>
             </HelperText>
           </FormHelperText>
         )}
       </FormGroup>
       {typeField.value && (
-        <TypeInputsSubForm type={typeField.value} isEdit={Boolean(template?.id)} />
+        <TypeInputsSubForm
+          type={typeField.value}
+          isEdit={Boolean(template?.id)}
+        />
       )}
       <CustomMessagesSubForm
         defaultMessages={defaultMessages}
@@ -158,6 +158,7 @@ function NotificationTemplateForm({
           started: { ...mergeDefaultMessages(defs.started, messages.started) },
           success: { ...mergeDefaultMessages(defs.success, messages.success) },
           error: { ...mergeDefaultMessages(defs.error, messages.error) },
+          changed: { ...mergeDefaultMessages(defs.changed, messages.changed) },
           workflow_approval: {
             approved: {
               ...mergeDefaultMessages(
@@ -257,6 +258,7 @@ function normalizeMessageFields(values, defaults) {
     started: nullIfDefault(messages.started, defs.started),
     success: nullIfDefault(messages.success, defs.success),
     error: nullIfDefault(messages.error, defs.error),
+    changed: nullIfDefault(messages.changed, defs.changed),
     workflow_approval: {
       approved: nullIfDefault(
         messages.workflow_approval.approved,

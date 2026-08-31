@@ -121,9 +121,9 @@ describe('<TemplateList />', () => {
     await screen.findByRole('link', { name: 'Job Template 1' });
     expect(UnifiedJobTemplatesAPI.read).toHaveBeenCalled();
     // five name links, one per TemplateListItem
-    expect(
-      screen.getAllByRole('link', { name: /Job Template/ })
-    ).toHaveLength(5);
+    expect(screen.getAllByRole('link', { name: /Job Template/ })).toHaveLength(
+      5
+    );
   });
 
   test('handleSelect is called when a template list item is selected', async () => {
@@ -176,9 +176,7 @@ describe('<TemplateList />', () => {
     const { user } = renderWithContexts(<TemplateList />);
     await screen.findByRole('link', { name: 'Job Template 2' });
 
-    await user.click(
-      within(getRow('Job Template 2')).getByRole('checkbox')
-    );
+    await user.click(within(getRow('Job Template 2')).getByRole('checkbox'));
     await user.click(
       within(getRow('Workflow Job Template 1')).getByRole('checkbox')
     );
@@ -209,9 +207,7 @@ describe('<TemplateList />', () => {
     const { user } = renderWithContexts(<TemplateList />);
     await screen.findByRole('link', { name: 'Job Template 2' });
 
-    await user.click(
-      within(getRow('Job Template 2')).getByRole('checkbox')
-    );
+    await user.click(within(getRow('Job Template 2')).getByRole('checkbox'));
 
     await user.click(screen.getByRole('button', { name: 'Delete' }));
     await user.click(

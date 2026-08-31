@@ -135,14 +135,15 @@ function InventoryListItem({
             visible={inventory.summary_fields.user_capabilities.edit}
             tooltip={t`Edit Inventory`}
           >
-            <Button icon={<PencilAltIcon />}
+            <Button
+              icon={<PencilAltIcon />}
               ouiaId={`${inventory.id}-edit-button`}
               isDisabled={isCopying}
               aria-label={t`Edit Inventory`}
               variant="plain"
               component={Link}
               to={`${getInventoryPath(inventory)}/edit`}
-             />
+            />
           </ActionItem>
           <ActionItem
             visible={inventory.summary_fields.user_capabilities.copy}

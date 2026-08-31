@@ -20,20 +20,26 @@ const mockInstanceGroupCreateData = {
 
 // Mock the shared form so the test drives ContainerGroupAdd's own submit/cancel
 // handlers directly. The form itself is covered by ContainerGroupForm.test.js.
-jest.mock('../shared/ContainerGroupForm', () => ({ onSubmit, onCancel, submitError }) => (
-  <div>
-    {submitError && <div>FormSubmitError</div>}
-    <button
-      type="button"
-      onClick={() => onSubmit({ ...mockInstanceGroupCreateData, override: true })}
-    >
-      mock submit
-    </button>
-    <button type="button" aria-label="Cancel" onClick={onCancel}>
-      Cancel
-    </button>
-  </div>
-));
+jest.mock(
+  '../shared/ContainerGroupForm',
+  () =>
+    ({ onSubmit, onCancel, submitError }) => (
+      <div>
+        {submitError && <div>FormSubmitError</div>}
+        <button
+          type="button"
+          onClick={() =>
+            onSubmit({ ...mockInstanceGroupCreateData, override: true })
+          }
+        >
+          mock submit
+        </button>
+        <button type="button" aria-label="Cancel" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    )
+);
 
 const initialPodSpec = {
   default: {
@@ -86,7 +92,9 @@ describe('<ContainerGroupAdd/>', () => {
     const { user } = renderWithContexts(<ContainerGroupAdd />, {
       context: { router: { history } },
     });
-    await user.click(await screen.findByRole('button', { name: 'mock submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock submit' })
+    );
     await waitFor(() =>
       expect(InstanceGroupsAPI.create).toHaveBeenCalledWith({
         ...mockInstanceGroupCreateData,

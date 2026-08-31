@@ -40,11 +40,7 @@ function InventoryGroupDetail({ inventoryGroup }) {
           name="variables"
           dataCy="inventory-group-detail-variables"
         />
-        <UserDateDetail
-          label={t`Created`}
-          date={created}
-          user={created_by}
-        />
+        <UserDateDetail label={t`Created`} date={created} user={created_by} />
         <UserDateDetail
           label={t`Last Modified`}
           date={modified}
@@ -59,9 +55,7 @@ function InventoryGroupDetail({ inventoryGroup }) {
               variant="primary"
               aria-label={t`Edit`}
               onClick={() =>
-                navigate(
-                  `/inventories/inventory/${id}/groups/${groupId}/edit`
-                )
+                navigate(`/inventories/inventory/${id}/groups/${groupId}/edit`)
               }
             >
               {t`Edit`}

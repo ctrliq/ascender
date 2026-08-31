@@ -30,7 +30,10 @@ describe('<AdHocCredentialStep />', () => {
   test('should mount properly', async () => {
     renderWithContexts(
       <Formik>
-        <AdHocCredentialStep credentialTypeId={1} onEnableLaunch={onEnableLaunch} />
+        <AdHocCredentialStep
+          credentialTypeId={1}
+          onEnableLaunch={onEnableLaunch}
+        />
       </Formik>
     );
     // OptionsList renders the fetched credential rows once loading resolves
@@ -40,7 +43,10 @@ describe('<AdHocCredentialStep />', () => {
   test('should call api', async () => {
     renderWithContexts(
       <Formik>
-        <AdHocCredentialStep credentialTypeId={1} onEnableLaunch={onEnableLaunch} />
+        <AdHocCredentialStep
+          credentialTypeId={1}
+          onEnableLaunch={onEnableLaunch}
+        />
       </Formik>
     );
     await waitFor(() => expect(screen.getByText('Cred 1')).toBeInTheDocument());

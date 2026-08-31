@@ -100,21 +100,23 @@ const mockSubmitValues = {
   webhook_service: '',
 };
 const mockFormProps = { current: undefined };
-jest.mock('../shared/JobTemplateForm', () =>
-  function MockJobTemplateForm(props) {
-    mockFormProps.current = props;
-    const { handleSubmit, handleCancel } = props;
-    return (
-      <div>
-        <button type="button" onClick={() => handleSubmit(mockSubmitValues)}>
-          Submit
-        </button>
-        <button type="button" aria-label="Cancel" onClick={handleCancel}>
-          Cancel
-        </button>
-      </div>
-    );
-  }
+jest.mock(
+  '../shared/JobTemplateForm',
+  () =>
+    function MockJobTemplateForm(props) {
+      mockFormProps.current = props;
+      const { handleSubmit, handleCancel } = props;
+      return (
+        <div>
+          <button type="button" onClick={() => handleSubmit(mockSubmitValues)}>
+            Submit
+          </button>
+          <button type="button" aria-label="Cancel" onClick={handleCancel}>
+            Cancel
+          </button>
+        </div>
+      );
+    }
 );
 
 describe('<JobTemplateAdd />', () => {

@@ -6,7 +6,12 @@ import useWsInventories from './useWsInventories';
 
 // Render the hook's synced result as JSON so tests can read it from the DOM
 // (RTL 12 has no renderHook, and the hook returns plain data).
-function Test({ inventories, fetchInventories, fetchInventoriesById, qsConfig }) {
+function Test({
+  inventories,
+  fetchInventories,
+  fetchInventoriesById,
+  qsConfig,
+}) {
   const syncedInventories = useWsInventories(
     inventories,
     fetchInventories,
@@ -155,9 +160,7 @@ describe('useWsInventories hook', () => {
       );
     });
 
-    await waitFor(() =>
-      expect(fetchInventoriesById).toHaveBeenCalledWith([1])
-    );
+    await waitFor(() => expect(fetchInventoriesById).toHaveBeenCalledWith([1]));
   });
 
   test('should update inventory pending_deletion', async () => {
@@ -190,9 +193,7 @@ describe('useWsInventories hook', () => {
       );
     });
 
-    await waitFor(() =>
-      expect(getResult()[0].pending_deletion).toEqual(true)
-    );
+    await waitFor(() => expect(getResult()[0].pending_deletion).toEqual(true));
   });
 
   test('should refetch inventories after an inventory is deleted', async () => {

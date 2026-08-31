@@ -42,7 +42,7 @@ function CredentialTypeDetails({ credentialType }) {
     useCallback(async () => {
       const { results: deleteDetails, error } =
         await getRelatedResourceDeleteCounts(
-          relatedResourceDeleteRequests(t).credentialType(credentialType)
+          relatedResourceDeleteRequests.credentialType(credentialType)
         );
       if (error) {
         throw new Error(error);
@@ -51,7 +51,7 @@ function CredentialTypeDetails({ credentialType }) {
         return { isDeleteDisabled: true };
       }
       return { isDeleteDisabled: false };
-    }, [credentialType, t]),
+    }, [credentialType]),
     { isDeleteDisabled: false }
   );
 

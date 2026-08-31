@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import {
-	Button,
-	Content,
-	ContentVariants,
-	Label
+  Button,
+  Content,
+  ContentVariants,
+  Label,
 } from '@patternfly/react-core';
 
 import { useLingui } from '@lingui/react/macro';
@@ -24,7 +24,7 @@ import DeleteButton from 'components/DeleteButton';
 import ErrorDetail from 'components/ErrorDetail';
 import { LaunchButton } from 'components/LaunchButton';
 import { VariablesDetail } from 'components/CodeEditor';
-import { VERBOSITY } from 'components/VerbositySelectField';
+import { getVerbosityLabel } from 'components/VerbositySelectField';
 import { JobTemplatesAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import useBrandName from 'hooks/useBrandName';
@@ -34,7 +34,7 @@ import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import getHelpText from '../shared/JobTemplate.helptext';
 
 function JobTemplateDetail({ template }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const helpText = getHelpText();
   const {
     ask_inventory_on_launch,
@@ -101,7 +101,7 @@ function JobTemplateDetail({ template }) {
   const { error, dismissError } = useDismissableError(deleteError);
 
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).template(template);
+    relatedResourceDeleteRequests.template(template);
   const canLaunch =
     summary_fields.user_capabilities && summary_fields.user_capabilities.start;
   const generateCallBackUrl = `${window.location.origin + url}callback/`;
@@ -126,19 +126,13 @@ function JobTemplateDetail({ template }) {
         </Content>
       )}
       {allow_simultaneous && (
-        <Content component={ContentVariants.li}>
-          {t`Concurrent Jobs`}
-        </Content>
+        <Content component={ContentVariants.li}>{t`Concurrent Jobs`}</Content>
       )}
       {use_fact_cache && (
-        <Content component={ContentVariants.li}>
-          {t`Fact Storage`}
-        </Content>
+        <Content component={ContentVariants.li}>{t`Fact Storage`}</Content>
       )}
       {webhook_service && (
-        <Content component={ContentVariants.li}>
-          {t`Webhooks`}
-        </Content>
+        <Content component={ContentVariants.li}>{t`Webhooks`}</Content>
       )}
       {prevent_instance_group_fallback && (
         <Content component={ContentVariants.li}>
@@ -175,11 +169,7 @@ function JobTemplateDetail({ template }) {
   return (
     <CardBody>
       <DetailList gutter="sm">
-        <Detail
-          label={t`Name`}
-          value={name}
-          dataCy="jt-detail-name"
-        />
+        <Detail label={t`Name`} value={name} dataCy="jt-detail-name" />
         <Detail
           label={t`Description`}
           value={description}
@@ -218,10 +208,7 @@ function JobTemplateDetail({ template }) {
           />
         ) : (
           !ask_inventory_on_launch && (
-            <DeletedDetail
-              label={t`Inventory`}
-              dataCy="jt-detail-inventory"
-            />
+            <DeletedDetail label={t`Inventory`} dataCy="jt-detail-inventory" />
           )
         )}
         {summary_fields.project ? (
@@ -268,7 +255,7 @@ function JobTemplateDetail({ template }) {
         />
         <Detail
           label={t`Verbosity`}
-          value={VERBOSITY(t)[verbosity]}
+          value={getVerbosityLabel(verbosity, i18n)}
           dataCy="jt-detail-verbosity"
           helpText={helpText.verbosity}
         />
@@ -314,11 +301,7 @@ function JobTemplateDetail({ template }) {
         {webhook_service && (
           <Detail
             label={t`Webhook Service`}
-            value={
-              webhook_service === 'github'
-                ? t`GitHub`
-                : t`GitLab`
-            }
+            value={webhook_service === 'github' ? t`GitHub` : t`GitLab`}
             dataCy="jt-detail-webhook-service"
             helpText={helpText.webhookService}
           />
@@ -417,7 +400,11 @@ function JobTemplateDetail({ template }) {
                 ouiaId="label-chips"
               >
                 {summary_fields.labels.results.map((l) => (
-                  <Label variant="outline" key={l.id} data-ouia-component-id={`label-${l.id}-chip`} >
+                  <Label
+                    variant="outline"
+                    key={l.id}
+                    data-ouia-component-id={`label-${l.id}-chip`}
+                  >
                     {l.name}
                   </Label>
                 ))}
@@ -447,10 +434,10 @@ function JobTemplateDetail({ template }) {
                 ouiaId="job-tag-chips"
               >
                 {job_tags.split(',').map((jobTag) => (
-                  <Label variant="outline"
+                  <Label
+                    variant="outline"
                     key={jobTag}
                     data-ouia-component-id={`job-tag-${jobTag}-chip`}
-
                   >
                     {jobTag}
                   </Label>
@@ -473,10 +460,10 @@ function JobTemplateDetail({ template }) {
                 ouiaId="skip-tag-chips"
               >
                 {skip_tags.split(',').map((skipTag) => (
-                  <Label variant="outline"
+                  <Label
+                    variant="outline"
                     key={skipTag}
                     data-ouia-component-id={`skip-tag-${skipTag}-chip`}
-
                   >
                     {skipTag}
                   </Label>

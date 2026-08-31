@@ -1,9 +1,5 @@
-
 import React, { useState } from 'react';
-import {
-	Dropdown,
-	DropdownList
-} from '@patternfly/react-core';
+import { Dropdown, DropdownList } from '@patternfly/react-core';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 import { ToolbarAddButton } from '../PaginatedTable';
 

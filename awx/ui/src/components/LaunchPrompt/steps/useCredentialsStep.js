@@ -20,22 +20,24 @@ export default function useCredentialsStep(
       ? false
       : meta.error;
   return {
-    step: !launchConfig.ask_credential_on_launch ? null : {
-      id: STEP_ID,
-      key: 4,
-      name: (
-        <StepName hasErrors={formError} id="credentials-step">
-          {t`Credentials`}
-        </StepName>
-      ),
-      component: (
-        <CredentialsStep
-          allowCredentialsWithPasswords={allowCredentialsWithPasswords}
-          defaultCredentials={resourceDefaultCredentials}
-        />
-      ),
-      enableNext: true,
-    },
+    step: !launchConfig.ask_credential_on_launch
+      ? null
+      : {
+          id: STEP_ID,
+          key: 4,
+          name: (
+            <StepName hasErrors={formError} id="credentials-step">
+              {t`Credentials`}
+            </StepName>
+          ),
+          component: (
+            <CredentialsStep
+              allowCredentialsWithPasswords={allowCredentialsWithPasswords}
+              defaultCredentials={resourceDefaultCredentials}
+            />
+          ),
+          enableNext: true,
+        },
     initialValues: getInitialValues(launchConfig, resourceDefaultCredentials),
     isReady: true,
     contentError: null,

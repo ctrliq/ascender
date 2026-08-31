@@ -41,17 +41,16 @@ describe('PromptJobTemplateDetail', () => {
     assertDetail('Inventory', 'Demo Inventory');
     // Inventory value is a Link to the inventory details page
     const inventoryTerm = screen.getByText('Inventory');
-    expect(
-      inventoryTerm.nextElementSibling.querySelector('a')
-    ).toHaveAttribute('href', '/inventories/inventory/1/details');
+    expect(inventoryTerm.nextElementSibling.querySelector('a')).toHaveAttribute(
+      'href',
+      '/inventories/inventory/1/details'
+    );
     assertDetail('Project', 'Mock Project');
     assertDetail('Source Control Branch', 'Foo branch');
     assertDetail('Playbook', 'ping.yml');
     assertDetail('Forks', '2');
     assertDetail('Limit', 'alpha:beta');
-    // Verbosity Detail renders empty under jsdom (Lingui macro returns no text),
-    // so the row is not present in the DOM — matching the original suite which
-    // skipped its text assertion.
+    assertDetail('Verbosity', '3 (Debug)');
     assertDetail('Show Changes', 'Off');
     // ' Job Slicing' label has a leading space; getByText normalizes whitespace
     expect(

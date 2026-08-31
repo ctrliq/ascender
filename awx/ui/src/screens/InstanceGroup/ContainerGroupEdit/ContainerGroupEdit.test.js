@@ -16,20 +16,26 @@ const mockUpdatedInstanceGroup = {
 
 // Mock the shared form so the test drives ContainerGroupEdit's own submit/cancel
 // handlers directly. The form itself is covered by ContainerGroupForm.test.js.
-jest.mock('../shared/ContainerGroupForm', () => ({ onSubmit, onCancel, submitError }) => (
-  <div>
-    {submitError && <div>FormSubmitError</div>}
-    <button
-      type="button"
-      onClick={() => onSubmit({ ...mockUpdatedInstanceGroup, override: false })}
-    >
-      mock submit
-    </button>
-    <button type="button" aria-label="Cancel" onClick={onCancel}>
-      Cancel
-    </button>
-  </div>
-));
+jest.mock(
+  '../shared/ContainerGroupForm',
+  () =>
+    ({ onSubmit, onCancel, submitError }) => (
+      <div>
+        {submitError && <div>FormSubmitError</div>}
+        <button
+          type="button"
+          onClick={() =>
+            onSubmit({ ...mockUpdatedInstanceGroup, override: false })
+          }
+        >
+          mock submit
+        </button>
+        <button type="button" aria-label="Cancel" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    )
+);
 
 const instanceGroup = {
   id: 123,
@@ -152,7 +158,9 @@ describe('<ContainerGroupEdit/>', () => {
       <ContainerGroupEdit instanceGroup={instanceGroup} />,
       { context: { router: { history } } }
     );
-    await user.click(await screen.findByRole('button', { name: 'mock submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock submit' })
+    );
     await waitFor(() =>
       expect(InstanceGroupsAPI.update).toHaveBeenCalledWith(123, {
         ...mockUpdatedInstanceGroup,

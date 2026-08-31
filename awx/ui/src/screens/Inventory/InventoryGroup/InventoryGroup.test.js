@@ -55,7 +55,9 @@ describe('<InventoryGroup />', () => {
 
   test('renders successfully', async () => {
     renderAt('/inventories/inventory/1/groups/1/details');
-    expect(await screen.findByRole('tab', { name: 'Details' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('tab', { name: 'Details' })
+    ).toBeInTheDocument();
   });
 
   test('expect all tabs to exist, including Back to Groups', async () => {

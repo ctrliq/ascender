@@ -148,7 +148,9 @@ describe('UsersList with full permissions', () => {
 
   test('Users are retrieved from the api and the components finishes loading', () => {
     expect(UsersAPI.read).toHaveBeenCalled();
-    expect(screen.getAllByRole('link', { name: /admin|systemauditor|nobody/ })).toHaveLength(3);
+    expect(
+      screen.getAllByRole('link', { name: /admin|systemauditor|nobody/ })
+    ).toHaveLength(3);
   });
 
   test('should show add button', () => {

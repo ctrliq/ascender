@@ -3,16 +3,14 @@ import { useLocation, useNavigate } from 'react-router';
 import { useField } from 'formik';
 import { SearchIcon } from '@patternfly/react-icons';
 import {
-	Label, Button,
-	ButtonVariant,
-	InputGroup,
-	TextInput,
-	InputGroupItem
+  Label,
+  Button,
+  ButtonVariant,
+  InputGroup,
+  TextInput,
+  InputGroupItem,
 } from '@patternfly/react-core';
-import {
-
-	Modal
-} from '@patternfly/react-core/deprecated';
+import { Modal } from '@patternfly/react-core/deprecated';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import useDebounce from 'hooks/useDebounce';
@@ -25,7 +23,7 @@ const ChipHolder = styled.div`
   display: flex;
   align-items: center;
   background-color: ${(props) =>
-    props.$isDisabled ? "var(--pf-t--global--text--color--disabled)" : null};
+    props.$isDisabled ? 'var(--pf-t--global--text--color--disabled)' : null};
 `;
 function Lookup({
   id = 'lookup-search',
@@ -38,7 +36,7 @@ function Lookup({
   required = false,
   qsConfig,
   renderItemChip = ({ item, removeItem }) => (
-    <Label variant="outline" key={item.id} onClose={() => removeItem(item)} >
+    <Label variant="outline" key={item.id} onClose={() => removeItem(item)}>
       {item.name}
     </Label>
   ),
@@ -138,43 +136,53 @@ function Lookup({
   return (
     <>
       <InputGroup onBlur={onBlur}>
-        <InputGroupItem><Button icon={<SearchIcon />}
-          aria-label={t`Search`}
-          id={`${id}-open`}
-          ouiaId={`${id}-open`}
-          onClick={onClick}
-          variant={ButtonVariant.control}
-          isDisabled={isLoading || isDisabled}
-         /></InputGroupItem>
-        {multiple ? (
-          <InputGroupItem isFill><ChipHolder $isDisabled={isDisabled} className="pf-v6-c-form-control">
-            <ChipGroup
-              numChips={5}
-              totalChips={items.length}
-              ouiaId={`${id}-chips`}
-            >
-              {items.map((item) =>
-                renderItemChip({
-                  item,
-                  removeItem,
-                  canDelete,
-                })
-              )}
-            </ChipGroup>
-          </ChipHolder></InputGroupItem>
-        ) : (
-          <InputGroupItem isFill><TextInput
-            id={id}
-            ouiaId={`${id}-input`}
-            value={typedText}
-            onChange={(_event, inputValue) => {
-              setTypedText(inputValue);
-              if (value?.name !== inputValue) {
-                debounceRequest(inputValue);
-              }
-            }}
+        <InputGroupItem>
+          <Button
+            icon={<SearchIcon />}
+            aria-label={t`Search`}
+            id={`${id}-open`}
+            ouiaId={`${id}-open`}
+            onClick={onClick}
+            variant={ButtonVariant.control}
             isDisabled={isLoading || isDisabled}
-          /></InputGroupItem>
+          />
+        </InputGroupItem>
+        {multiple ? (
+          <InputGroupItem isFill>
+            <ChipHolder
+              $isDisabled={isDisabled}
+              className="pf-v6-c-form-control"
+            >
+              <ChipGroup
+                numChips={5}
+                totalChips={items.length}
+                ouiaId={`${id}-chips`}
+              >
+                {items.map((item) =>
+                  renderItemChip({
+                    item,
+                    removeItem,
+                    canDelete,
+                  })
+                )}
+              </ChipGroup>
+            </ChipHolder>
+          </InputGroupItem>
+        ) : (
+          <InputGroupItem isFill>
+            <TextInput
+              id={id}
+              ouiaId={`${id}-input`}
+              value={typedText}
+              onChange={(_event, inputValue) => {
+                setTypedText(inputValue);
+                if (value?.name !== inputValue) {
+                  debounceRequest(inputValue);
+                }
+              }}
+              isDisabled={isLoading || isDisabled}
+            />
+          </InputGroupItem>
         )}
       </InputGroup>
 

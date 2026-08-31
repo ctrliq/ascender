@@ -29,6 +29,56 @@ logger = logging.getLogger('awx.main.models.rbac')
 ROLE_SINGLETON_SYSTEM_ADMINISTRATOR = 'system_administrator'
 ROLE_SINGLETON_SYSTEM_AUDITOR = 'system_auditor'
 
+# Maps gateway/DAB RoleDefinition names, as they appear in JWT claims, to the
+# role field holding that permission on the target model. Consumed by
+# awx.dab.jwt_consumer.awx.auth.AwxJWTAuthentication to sync Role.members from
+# the claims a gateway provides. The names are upstream AAP's managed role
+# definitions; the field names are ours.
+ROLE_DEFINITION_TO_ROLE_FIELD = {
+    'Organization Admin': 'admin_role',
+    'Organization Member': 'member_role',
+    'Organization Audit': 'auditor_role',
+    'Organization Execute': 'execute_role',
+    'Organization Approval': 'approval_role',
+    'Organization Project Admin': 'project_admin_role',
+    'Organization Inventory Admin': 'inventory_admin_role',
+    'Organization Credential Admin': 'credential_admin_role',
+    'Organization JobTemplate Admin': 'job_template_admin_role',
+    'Organization WorkflowJobTemplate Admin': 'workflow_admin_role',
+    'Organization NotificationTemplate Admin': 'notification_admin_role',
+    'Organization ExecutionEnvironment Admin': 'execution_environment_admin_role',
+    'Team Admin': 'admin_role',
+    'Team Member': 'member_role',
+    'Project Admin': 'admin_role',
+    'Project Use': 'use_role',
+    'Project Update': 'update_role',
+    'Inventory Admin': 'admin_role',
+    'Inventory Use': 'use_role',
+    'Inventory Adhoc': 'adhoc_role',
+    'Inventory Update': 'update_role',
+    'JobTemplate Admin': 'admin_role',
+    'JobTemplate Execute': 'execute_role',
+    'WorkflowJobTemplate Admin': 'admin_role',
+    'WorkflowJobTemplate Execute': 'execute_role',
+    'WorkflowJobTemplate Approve': 'approval_role',
+    'Credential Admin': 'admin_role',
+    'Credential Use': 'use_role',
+    'InstanceGroup Admin': 'admin_role',
+    'InstanceGroup Use': 'use_role',
+}
+
+
+@contextlib.contextmanager
+def disable_rbac_sync():
+    """Compatibility shim for awx.dab.jwt_consumer.awx.auth.
+
+    Upstream AWX uses this to suppress its old-Role -> DAB RBAC sync signals
+    while JWT claims are applied. This codebase has no such sync, so there is
+    nothing to disable.
+    """
+    yield
+
+
 role_names = {
     'system_administrator': _('System Administrator'),
     'system_auditor': _('System Auditor'),

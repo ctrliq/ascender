@@ -65,7 +65,9 @@ describe('<OrganizationExecEnvList/>', () => {
     OrganizationsAPI.readExecutionEnvironments.mockResolvedValue(
       executionEnvironments
     );
-    OrganizationsAPI.readExecutionEnvironmentsOptions.mockResolvedValue(options);
+    OrganizationsAPI.readExecutionEnvironmentsOptions.mockResolvedValue(
+      options
+    );
   });
 
   afterEach(() => {

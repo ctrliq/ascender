@@ -85,7 +85,8 @@ const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
         {streamType !== 'none' && (
           <div>
             <Tooltip content={t`View activity stream`} position="top">
-              <Button icon={<HistoryIcon />}
+              <Button
+                icon={<HistoryIcon />}
                 ouiaId="activity-stream-button"
                 aria-label={t`View activity stream`}
                 variant="plain"
@@ -93,7 +94,7 @@ const ScreenHeader = ({ breadcrumbConfig, streamType }) => {
                 to={`/activity_stream${
                   streamType ? `?type=${streamType}` : ''
                 }`}
-               />
+              />
             </Tooltip>
           </div>
         )}

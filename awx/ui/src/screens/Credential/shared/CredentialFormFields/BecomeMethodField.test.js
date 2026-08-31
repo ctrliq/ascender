@@ -19,9 +19,7 @@ describe('<BecomeMethodField>', () => {
         <BecomeMethodField fieldOptions={fieldOptions} isRequired />
       </Formik>
     );
-    expect(
-      screen.getByText('Privilege Escalation Method')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Privilege Escalation Method')).toBeInTheDocument();
   });
 
   test('should open privilege escalation properly', async () => {

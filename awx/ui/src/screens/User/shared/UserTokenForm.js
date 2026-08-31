@@ -37,10 +37,7 @@ function UserTokenFormFields() {
 
   return (
     <>
-      <FormGroup
-        fieldId="application-lookup"
-        name="application"
-      >
+      <FormGroup fieldId="application-lookup" name="application">
         <ApplicationLookup
           value={applicationField.value}
           onChange={handleApplicationUpdate}
@@ -91,9 +88,7 @@ function UserTokenFormFields() {
         {scopeMeta.error && (
           <FormHelperText>
             <HelperText>
-              <HelperTextItem variant="error">
-                {scopeMeta.error}
-              </HelperTextItem>
+              <HelperTextItem variant="error">{scopeMeta.error}</HelperTextItem>
             </HelperText>
           </FormHelperText>
         )}

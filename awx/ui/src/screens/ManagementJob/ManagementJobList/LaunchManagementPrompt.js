@@ -30,12 +30,13 @@ function LaunchManagementPrompt({
   return (
     <>
       <Tooltip content={t`Launch management job`} position="left">
-        <Button icon={<RocketIcon />}
+        <Button
+          icon={<RocketIcon />}
           aria-label={t`Launch management job`}
           variant="plain"
           onClick={onClick}
           isDisabled={isLoading}
-         />
+        />
       </Tooltip>
       <AlertModal
         isOpen={isOpen}
@@ -69,7 +70,9 @@ function LaunchManagementPrompt({
         <TextInput
           value={dataRetention}
           type="number"
-          onChange={(_event, value) => setDataRetention(clamp(value, 0, MAX_RETENTION))}
+          onChange={(_event, value) =>
+            setDataRetention(clamp(value, 0, MAX_RETENTION))
+          }
           aria-label={t`Data retention period`}
         />
       </AlertModal>

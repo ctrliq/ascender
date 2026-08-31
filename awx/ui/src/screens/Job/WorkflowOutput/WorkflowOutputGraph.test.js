@@ -196,15 +196,15 @@ describe('WorkflowOutputGraph', () => {
     ).not.toBeInTheDocument();
 
     fireEvent.mouseEnter(container.querySelector('g#node-2'));
-    expect(container.querySelector('#workflow-node-help-alias')).toHaveTextContent(
-      'Node identifier'
-    );
-    expect(container.querySelector('#workflow-node-help-name')).toHaveTextContent(
-      'Foo JT'
-    );
-    expect(container.querySelector('#workflow-node-help-type')).toHaveTextContent(
-      'Job Template'
-    );
+    expect(
+      container.querySelector('#workflow-node-help-alias')
+    ).toHaveTextContent('Node identifier');
+    expect(
+      container.querySelector('#workflow-node-help-name')
+    ).toHaveTextContent('Foo JT');
+    expect(
+      container.querySelector('#workflow-node-help-type')
+    ).toHaveTextContent('Job Template');
     expect(
       container.querySelector('#workflow-node-help-status')
     ).toHaveTextContent('Successful');
@@ -218,9 +218,9 @@ describe('WorkflowOutputGraph', () => {
     ).not.toBeInTheDocument();
 
     fireEvent.mouseEnter(container.querySelector('g#link-2-3'));
-    expect(container.querySelector('#workflow-link-help-type')).toHaveTextContent(
-      'Always'
-    );
+    expect(
+      container.querySelector('#workflow-link-help-type')
+    ).toHaveTextContent('Always');
 
     fireEvent.mouseLeave(container.querySelector('g#link-2-3'));
     expect(

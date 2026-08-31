@@ -181,7 +181,11 @@ function Tooltip({
         <Content>
           <Text
             component={ContentVariants.small}
-            style={{ fontWeight: 'bold', color: "var(--pf-t--global--text--color--100)", marginTop: 0 }}
+            style={{
+              fontWeight: 'bold',
+              color: 'var(--pf-t--global--text--color--100)',
+              marginTop: 0,
+            }}
           >
             {t`Details`}
           </Text>
@@ -207,7 +211,10 @@ function Tooltip({
           <Content>
             <Text
               component={ContentVariants.small}
-              style={{ fontWeight: 'bold', color: "var(--pf-t--global--text--color--100)" }}
+              style={{
+                fontWeight: 'bold',
+                color: 'var(--pf-t--global--text--color--100)',
+              }}
             >
               {t`Details`}
             </Text>
@@ -230,17 +237,13 @@ function Tooltip({
                 </DescriptionListDescription>
               </DescriptionListGroup>
               <DescriptionListGroup>
-                <DescriptionListTerm>
-                  {t`Instance status`}
-                </DescriptionListTerm>
+                <DescriptionListTerm>{t`Instance status`}</DescriptionListTerm>
                 <DescriptionListDescription dataCy="node-state">
                   <StatusLabel status={instanceDetail.node_state} />
                 </DescriptionListDescription>
               </DescriptionListGroup>
               <DescriptionListGroup>
-                <DescriptionListTerm>
-                  {t`Instance type`}
-                </DescriptionListTerm>
+                <DescriptionListTerm>{t`Instance type`}</DescriptionListTerm>
                 <DescriptionListDescription dataCy="node-type">
                   {instanceDetail.node_type}
                 </DescriptionListDescription>
@@ -251,7 +254,8 @@ function Tooltip({
                     {t`Download bundle`}
                   </DescriptionListTerm>
                   <DescriptionListDescription>
-                    <PFButton icon={<DownloadIcon />}
+                    <PFButton
+                      icon={<DownloadIcon />}
                       dataCy="install-bundle-download-button"
                       aria-label={t`Download Bundle`}
                       component="a"
@@ -260,15 +264,13 @@ function Tooltip({
                       target="_blank"
                       variant="secondary"
                       rel="noopener noreferrer"
-                     />
+                    />
                   </DescriptionListDescription>
                 </DescriptionListGroup>
               )}
               {instanceDetail.ip_address && (
                 <DescriptionListGroup>
-                  <DescriptionListTerm>
-                    {t`IP address`}
-                  </DescriptionListTerm>
+                  <DescriptionListTerm>{t`IP address`}</DescriptionListTerm>
                   <DescriptionListDescription>
                     {instanceDetail.ip_address}
                   </DescriptionListDescription>
@@ -287,9 +289,7 @@ function Tooltip({
               {instanceDetail.node_type !== 'hop' && (
                 <>
                   <DescriptionListGroup>
-                    <DescriptionListTerm>
-                      {t`Forks`}
-                    </DescriptionListTerm>
+                    <DescriptionListTerm>{t`Forks`}</DescriptionListTerm>
                     <DescriptionListDescription>
                       <SliderHolder data-cy="slider-holder">
                         <div data-cy="cpu-capacity">
@@ -309,7 +309,9 @@ function Tooltip({
                             min={0}
                             step={0.1}
                             value={instanceDetail.capacity_adjustment}
-                            onChange={(_event, value) => handleChangeValue(value)}
+                            onChange={(_event, value) =>
+                              handleChangeValue(value)
+                            }
                             isDisabled={
                               !me?.is_superuser || !instanceDetail.enabled
                             }
@@ -323,9 +325,7 @@ function Tooltip({
                     </DescriptionListDescription>
                   </DescriptionListGroup>
                   <DescriptionListGroup>
-                    <DescriptionListTerm>
-                      {t`Capacity`}
-                    </DescriptionListTerm>
+                    <DescriptionListTerm>{t`Capacity`}</DescriptionListTerm>
                     <DescriptionListDescription dataCy="used-capacity">
                       {usedCapacity(instanceDetail, t)}
                     </DescriptionListDescription>
@@ -344,17 +344,13 @@ function Tooltip({
               )}
 
               <DescriptionListGroup>
-                <DescriptionListTerm>
-                  {t`Last modified`}
-                </DescriptionListTerm>
+                <DescriptionListTerm>{t`Last modified`}</DescriptionListTerm>
                 <DescriptionListDescription dataCy="last-modified">
                   {formatDateString(instanceDetail.modified)}
                 </DescriptionListDescription>
               </DescriptionListGroup>
               <DescriptionListGroup>
-                <DescriptionListTerm>
-                  {t`Last seen`}
-                </DescriptionListTerm>
+                <DescriptionListTerm>{t`Last seen`}</DescriptionListTerm>
                 <DescriptionListDescription dataCy="last-seen">
                   {instanceDetail.last_seen
                     ? formatDateString(instanceDetail.last_seen)

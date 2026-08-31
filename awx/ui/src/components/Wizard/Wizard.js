@@ -1,13 +1,10 @@
 import React, { useCallback } from 'react';
 import {
-	Wizard as PFWizard,
-	WizardStep,
-	WizardHeader
+  Wizard as PFWizard,
+  WizardStep,
+  WizardHeader,
 } from '@patternfly/react-core';
-import {
-	Modal,
-	ModalVariant
-} from '@patternfly/react-core/deprecated';
+import { Modal, ModalVariant } from '@patternfly/react-core/deprecated';
 import styled from 'styled-components';
 
 /**

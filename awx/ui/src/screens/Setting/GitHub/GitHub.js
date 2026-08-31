@@ -1,9 +1,5 @@
 import React from 'react';
-import { Link,
-  Routes,
-  Route,
-  Navigate,
-  useParams } from 'react-router';
+import { Link, Routes, Route, Navigate, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { PageSection, Card } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
@@ -37,20 +33,11 @@ function GitHub() {
             path=":category"
             element={<CategoryRedirect baseURL={baseURL} />}
           />
-          <Route
-            path=":category/details"
-            element={<GitHubDetail />}
-          />
+          <Route path=":category/details" element={<GitHubDetail />} />
           <Route path="default/edit" element={<GitHubEdit />} />
-          <Route
-            path="organization/edit"
-            element={<GitHubOrgEdit />}
-          />
+          <Route path="organization/edit" element={<GitHubOrgEdit />} />
           <Route path="team/edit" element={<GitHubTeamEdit />} />
-          <Route
-            path="enterprise/edit"
-            element={<GitHubEnterpriseEdit />}
-          />
+          <Route path="enterprise/edit" element={<GitHubEnterpriseEdit />} />
           <Route
             path="enterprise_organization/edit"
             element={<GitHubEnterpriseOrgEdit />}

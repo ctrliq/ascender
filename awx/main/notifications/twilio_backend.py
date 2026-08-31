@@ -39,7 +39,7 @@ class TwilioBackend(AWXBaseEmailBackend, CustomNotificationBase):
             logger.error(smart_str(_("Exception connecting to Twilio: {}").format(e)))
 
         for m in messages:
-            failed = False
+            failure = None
             for dest in m.to:
                 try:
                     logger.debug(smart_str(_("FROM: {} / TO: {}").format(m.from_email, dest)))
@@ -47,7 +47,10 @@ class TwilioBackend(AWXBaseEmailBackend, CustomNotificationBase):
                     sent_messages += 1
                 except Exception as e:
                     logger.error(smart_str(_("Exception sending messages: {}").format(e)))
-                    failed = True
-            if not self.fail_silently and failed:
-                raise
+                    if failure is None:
+                        failure = e
+            # a bare raise here would be outside the handler that caught this,
+            # so the exception has to be kept to report what actually failed
+            if not self.fail_silently and failure is not None:
+                raise failure
         return sent_messages

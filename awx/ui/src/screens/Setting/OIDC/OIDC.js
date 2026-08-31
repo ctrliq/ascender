@@ -23,9 +23,7 @@ function OIDC() {
             path="*"
             element={
               <ContentError isNotFound>
-                <Link to={`${baseURL}/details`}>
-                  {t`View OIDC settings`}
-                </Link>
+                <Link to={`${baseURL}/details`}>{t`View OIDC settings`}</Link>
               </ContentError>
             }
           />

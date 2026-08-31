@@ -82,13 +82,20 @@ export const ConfigProvider = ({ children }) => {
           role_level: 'execution_environment_admin_role',
         }),
       ]);
-      if (me?.preferred_language && Object.keys(locales).includes(me.preferred_language)) {
+      if (
+        me?.preferred_language &&
+        Object.keys(locales).includes(me.preferred_language)
+      ) {
         localStorage.setItem('preferred_language', me.preferred_language);
         await dynamicActivate(me.preferred_language);
       } else {
         localStorage.removeItem('preferred_language');
-        const browserLang = (navigator.language || '').toLowerCase().split(/[_-]+/)[0];
-        await dynamicActivate(Object.keys(locales).includes(browserLang) ? browserLang : 'en');
+        const browserLang = (navigator.language || '')
+          .toLowerCase()
+          .split(/[_-]+/)[0];
+        await dynamicActivate(
+          Object.keys(locales).includes(browserLang) ? browserLang : 'en'
+        );
       }
       return {
         ...data,
@@ -99,7 +106,8 @@ export const ConfigProvider = ({ children }) => {
         systemConfig,
         uiConfig,
         custom_logo: uiConfig.CUSTOM_LOGO || rootData.custom_logo,
-        custom_header_logo: uiConfig.CUSTOM_HEADER_LOGO || rootData.custom_header_logo,
+        custom_header_logo:
+          uiConfig.CUSTOM_HEADER_LOGO || rootData.custom_header_logo,
         custom_title: uiConfig.CUSTOM_TITLE || rootData.custom_title,
       };
     }, []),
@@ -163,6 +171,9 @@ export const useUserProfile = () => {
 
 export const useAuthorizedPath = () => {
   const config = useConfig();
-  const subscriptionMgmtRoute = useMatch({ path: '/subscription_management', end: false });
+  const subscriptionMgmtRoute = useMatch({
+    path: '/subscription_management',
+    end: false,
+  });
   return !!config.license_info?.valid_key && !subscriptionMgmtRoute;
 };

@@ -45,7 +45,8 @@ function SubscriptionStep() {
   );
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const [manifest, manifestMeta, manifestHelpers] = useField('manifest_file');
-  const [manifestFilename, , manifestFilenameHelpers] = useField('manifest_filename');
+  const [manifestFilename, , manifestFilenameHelpers] =
+    useField('manifest_filename');
   const [subscription, , subscriptionHelpers] = useField('subscription');
   const [username] = useField('username');
   const [password] = useField('password');
@@ -80,9 +81,7 @@ function SubscriptionStep() {
           <Divider />
         </>
       )}
-      <p>
-        {t`Select your Ansible Automation Platform subscription to use.`}
-      </p>
+      <p>{t`Select your Ansible Automation Platform subscription to use.`}</p>
       <ToggleGroup>
         <ToggleGroupItem
           text={t`Subscription manifest`}
@@ -256,12 +255,13 @@ function SubscriptionStep() {
                   trigger="mouseenter focus click"
                   content={t`Clear subscription`}
                 >
-                  <Button icon={<TimesIcon />}
+                  <Button
+                    icon={<TimesIcon />}
                     onClick={() => subscriptionHelpers.setValue(null)}
                     variant="plain"
                     aria-label={t`Clear subscription selection`}
                     ouiaId="clear-subscription-selection"
-                   />
+                  />
                 </Tooltip>
               </FlexItem>
             </Flex>

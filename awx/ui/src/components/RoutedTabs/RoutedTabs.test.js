@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -61,6 +60,56 @@ describe('<RoutedTabs />', () => {
     expect(screen.getByRole('tab', { name: 'Access' })).toHaveAttribute(
       'aria-selected',
       'true'
+    );
+  });
+});
+
+describe('<RoutedTabs /> with a tab that hosts a control', () => {
+  // The workflow job selector is registered as a tab with no link, so that it
+  // sits in the tab bar. Clicks on the control inside it bubble to the tab.
+  const controlTabs = [
+    { name: 'Details', link: '/jobs/playbook/953/details', id: 0 },
+    { name: 'Output', link: '/jobs/playbook/953/output', id: 1 },
+    {
+      // a plain element, not a <button>: the real selector nests a button inside
+      // the tab's own button, which React rightly complains about, and the
+      // console guard in setupTests turns that complaint into a failure
+      name: <span data-testid="wf-control">Workflow Job 2/4</span>,
+      link: undefined,
+      id: 2,
+      hasstyle: 'margin-left: auto',
+    },
+  ];
+
+  function renderControlTabs() {
+    const history = createMemoryHistory({
+      initialEntries: ['/jobs/playbook/953/output'],
+    });
+    const utils = renderWithContexts(
+      <Routes>
+        <Route
+          path="/jobs/:typeSegment/:id/*"
+          element={<RoutedTabs tabsArray={controlTabs} />}
+        />
+      </Routes>,
+      { context: { router: { history } } }
+    );
+    return { ...utils, history };
+  }
+
+  test('a click inside a link-less tab does not navigate', async () => {
+    const { user, history } = renderControlTabs();
+    await user.click(screen.getByText('Workflow Job 2/4'));
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/jobs/playbook/953/output')
+    );
+  });
+
+  test('tabs that do have a link still navigate', async () => {
+    const { user, history } = renderControlTabs();
+    await user.click(screen.getByText('Details'));
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/jobs/playbook/953/details')
     );
   });
 });

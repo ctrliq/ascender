@@ -1,12 +1,6 @@
 import React, { useContext, useState } from 'react';
-import {
-	Button,
-	FormGroup,
-	TextInput
-} from '@patternfly/react-core';
-import {
-	Modal
-} from '@patternfly/react-core/deprecated';
+import { Button, FormGroup, TextInput } from '@patternfly/react-core';
+import { Modal } from '@patternfly/react-core/deprecated';
 
 import { useLingui } from '@lingui/react/macro';
 

@@ -15,10 +15,12 @@ function NotificationListItem({
   startedTurnedOn = false,
   successTurnedOn = false,
   errorTurnedOn = false,
+  changedTurnedOn = false,
   toggleNotification,
 
   typeLabels,
   showApprovalsToggle = false,
+  showChangedToggle = false,
 }) {
   const { t } = useLingui();
   return (
@@ -31,12 +33,10 @@ function NotificationListItem({
           <b>{notification.name}</b>
         </Link>
       </Td>
-      <Td dataLabel={t`Type`}>
-        {typeLabels[notification.notification_type]}
-      </Td>
+      <Td dataLabel={t`Type`}>{typeLabels[notification.notification_type]}</Td>
       <ActionsTd
         dataLabel={t`Options`}
-        gridColumns="120px 120px 120px 120px"
+        gridColumns="120px 120px 120px 120px 120px"
       >
         <ActionItem visible={showApprovalsToggle}>
           <Switch
@@ -96,6 +96,20 @@ function NotificationListItem({
               toggleNotification(notification.id, errorTurnedOn, 'error')
             }
             aria-label={t`Toggle notification failure`}
+          />
+        </ActionItem>
+        <ActionItem visible={showChangedToggle}>
+          <Switch
+            id={`notification-${notification.id}-changed-toggle`}
+            ouiaId={`notification-${notification.id}-changed-toggle`}
+            label={t`Changed`}
+
+            isChecked={changedTurnedOn}
+            isDisabled={!canToggleNotifications}
+            onChange={() =>
+              toggleNotification(notification.id, changedTurnedOn, 'changed')
+            }
+            aria-label={t`Toggle notification changed`}
           />
         </ActionItem>
       </ActionsTd>

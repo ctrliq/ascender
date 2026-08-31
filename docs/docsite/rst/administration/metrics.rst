@@ -17,7 +17,7 @@ To set up and use Prometheus, you will need to install Prometheus on a virtual m
 
 .. _`Prometheus documentation`: https://prometheus.io/docs/introduction/first_steps/
 
-1. In the Prometheus config file (typically ``prometheus.yml``), specify a ``<token_value>``, a valid user/password for an Ascender user you have created, and a ``<awx_host>``. 
+1. In the Prometheus config file (typically ``prometheus.yml``), specify a ``<token_value>``, a valid user/password for an Ascender user you have created, and a ``<ascender_host>``. 
 
     .. note:: Alternatively, you can provide an OAuth2 token (which can be generated at ``/api/v2/users/N/personal_tokens/``). By default, the config assumes a user with username=admin and password=password.
 
@@ -39,7 +39,7 @@ To set up and use Prometheus, you will need to install Prometheus on a virtual m
         #   password: password
         static_configs:
             - targets: 
-                - <awx_host>
+                - <ascender_host>
 
  For help configuring other aspects of Prometheus, such as alerts and service discovery configurations, refer to the `Prometheus configuration docs`_.
 

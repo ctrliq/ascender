@@ -26,7 +26,12 @@ const credentialType = {
   inputs: JSON.stringify({
     fields: [
       { id: 'username', type: 'string', label: 'Jenkins username' },
-      { id: 'password', type: 'string', label: 'Jenkins password', secret: true },
+      {
+        id: 'password',
+        type: 'string',
+        label: 'Jenkins password',
+        secret: true,
+      },
     ],
     required: ['username', 'password'],
   }),

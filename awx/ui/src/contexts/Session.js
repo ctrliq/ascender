@@ -6,11 +6,7 @@ import React, {
   useCallback,
   useMemo,
 } from 'react';
-import {
-  Navigate,
-  useLocation,
-  useNavigationType,
-} from 'react-router';
+import { Navigate, useLocation, useNavigationType } from 'react-router';
 import { DateTime } from 'luxon';
 import { RootAPI, MeAPI } from 'api';
 import { isAuthenticated } from 'util/auth';

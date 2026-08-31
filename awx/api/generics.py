@@ -30,9 +30,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import StaticHTMLRenderer
 from rest_framework.negotiation import DefaultContentNegotiation
 
-from ansible_base.rest_filters.rest_framework.field_lookup_backend import FieldLookupBackend
-from ansible_base.lib.utils.models import get_all_field_names
-from ansible_base.lib.utils.requests import get_remote_host
+from awx.dab.rest_filters.rest_framework.field_lookup_backend import FieldLookupBackend
+from awx.dab.lib.utils.models import get_all_field_names
+from awx.dab.lib.utils.requests import get_remote_host
 
 # AWX
 from awx.main.models import UnifiedJob, UnifiedJobTemplate, User, Role, Credential, WorkflowJobTemplateNode, WorkflowApprovalTemplate
@@ -263,7 +263,7 @@ class APIView(views.APIView):
         # `WWW-Authenticate: Basic ...`, your browser will prompt you for an
         # HTTP basic auth username+password and will store it _in the browser_
         # for subsequent requests.  Because basic auth does not require CSRF
-        # validation (because it's commonly used with e.g., tower-cli and other
+        # validation (because it's commonly used with e.g., the Ascender CLI and other
         # non-browser clients), browsers that save basic auth in this way are
         # vulnerable to cross-site request forgery:
         #

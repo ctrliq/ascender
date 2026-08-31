@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useLocation,
-  useParams } from 'react-router';
+  useParams,
+} from 'react-router';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card, PageSection } from '@patternfly/react-core';
 import ContentError from 'components/ContentError';
@@ -95,9 +97,7 @@ function Inventory({ setBreadcrumb }) {
             {contentError.response?.status === 404 && (
               <span>
                 {t`Inventory not found.`}{' '}
-                <Link to="/inventories">
-                  {t`View all Inventories.`}
-                </Link>
+                <Link to="/inventories">{t`View all Inventories.`}</Link>
               </span>
             )}
           </ContentError>

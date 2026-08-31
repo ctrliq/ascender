@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { useLingui } from '@lingui/react/macro';
+import { Plural, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import {
   Button,
@@ -77,7 +77,7 @@ function ProjectDetail({ project }) {
   const brandName = useBrandName();
 
   const { error, dismissError } = useDismissableError(deleteError);
-  const deleteDetailsRequests = relatedResourceDeleteRequests(t).project(project);
+  const deleteDetailsRequests = relatedResourceDeleteRequests.project(project);
   let optionsList = '';
   if (
     scm_clean ||
@@ -172,11 +172,7 @@ function ProjectDetail({ project }) {
             )
           }
         />
-        <Detail
-          label={t`Name`}
-          value={name}
-          dataCy="project-detail-name"
-        />
+        <Detail label={t`Name`} value={name} dataCy="project-detail-name" />
         <Detail label={t`Description`} value={description} />
         {summary_fields.organization && (
           <Detail
@@ -192,9 +188,7 @@ function ProjectDetail({ project }) {
         )}
         <Detail
           label={t`Source Control Type`}
-          value={
-            scm_type === '' ? t`Manual` : toTitleCase(project.scm_type)
-          }
+          value={scm_type === '' ? t`Manual` : toTitleCase(project.scm_type)}
         />
         <Detail
           label={t`Source Control Revision`}
@@ -271,7 +265,13 @@ function ProjectDetail({ project }) {
         )}
         <Detail
           label={t`Cache Timeout`}
-          value={`${scm_update_cache_timeout} ${t`Seconds`}`}
+          value={
+            <Plural
+              value={scm_update_cache_timeout}
+              one="# second"
+              other="# seconds"
+            />
+          }
         />
         {webhook_service && (
           <Detail
@@ -330,11 +330,7 @@ function ProjectDetail({ project }) {
           user={summary_fields.modified_by}
         />
         {optionsList && (
-          <Detail
-            fullWidth
-            label={t`Enabled Options`}
-            value={optionsList}
-          />
+          <Detail fullWidth label={t`Enabled Options`} value={optionsList} />
         )}
       </DetailList>
       <CardActionsRow>

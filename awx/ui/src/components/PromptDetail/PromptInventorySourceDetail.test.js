@@ -28,7 +28,7 @@ describe('PromptInventorySourceDetail', () => {
     expect(screen.getByText('Demo Inventory')).toBeInTheDocument();
     expect(screen.getByText('scm')).toBeInTheDocument();
     expect(screen.getByText('Mock Project')).toBeInTheDocument();
-    expect(screen.getByText('2 Seconds')).toBeInTheDocument();
+    expect(screen.getByText('2 seconds')).toBeInTheDocument();
     assertDetail('Inventory File', 'foo');
 
     // Regions chips

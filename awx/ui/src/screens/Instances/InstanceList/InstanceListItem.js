@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router';
-import { useLingui } from '@lingui/react/macro';
+import { Plural, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import {
   Progress,
@@ -51,7 +51,7 @@ function InstanceListItem({
   fetchInstances,
   rowIndex,
 }) {
-  const { t, i18n } = useLingui();
+  const { t } = useLingui();
   const config = useConfig();
   const [forks, setForks] = useState(
     computeForks(
@@ -173,7 +173,7 @@ function InstanceListItem({
                 </div>
                 <SliderForks data-cy="slider-forks">
                   <div data-cy="number-forks">
-                    {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })}
+                    <Plural value={forks} one="# fork" other="# forks" />
                   </div>
                   <Slider
                     areCustomStepsContinuous
@@ -236,11 +236,7 @@ function InstanceListItem({
                 <Detail
                   data-cy="policy-type"
                   label={t`Policy Type`}
-                  value={
-                    instance.managed_by_policy
-                      ? t`Auto`
-                      : t`Manual`
-                  }
+                  value={instance.managed_by_policy ? t`Auto` : t`Manual`}
                 />
                 <Detail
                   data-cy="last-health-check"

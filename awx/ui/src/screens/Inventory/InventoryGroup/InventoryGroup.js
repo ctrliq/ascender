@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useLocation,
-  useParams } from 'react-router';
+  useParams,
+} from 'react-router';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';
@@ -132,10 +134,7 @@ function InventoryGroup({ setBreadcrumb, inventory }) {
         )}
         {/* /* so the nested <InventoryRelatedGroups> route tree can match */}
         {inventoryGroup && (
-          <Route
-            path="nested_groups/*"
-            element={<InventoryRelatedGroups />}
-          />
+          <Route path="nested_groups/*" element={<InventoryRelatedGroups />} />
         )}
         <Route
           path="*"

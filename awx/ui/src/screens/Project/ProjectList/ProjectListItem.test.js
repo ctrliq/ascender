@@ -141,9 +141,7 @@ describe('<ProjectsListItem />', () => {
 
     await user.click(screen.getByRole('button', { name: 'Copy' }));
     expect(await screen.findByText('Error!')).toBeInTheDocument();
-    expect(
-      screen.getByText('Failed to copy project.')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Failed to copy project.')).toBeInTheDocument();
   });
 
   test('should not render copy button', () => {

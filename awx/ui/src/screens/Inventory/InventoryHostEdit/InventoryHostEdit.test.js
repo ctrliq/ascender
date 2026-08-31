@@ -17,22 +17,17 @@ const updatedHostData = {
 jest.mock(
   'components/HostForm',
   () =>
-    ({ handleSubmit, handleCancel, submitError }) =>
-      (
-        <div>
-          <button
-            type="button"
-            aria-label="mock-submit"
-            onClick={() => handleSubmit(updatedHostData)}
-          />
-          <button
-            type="button"
-            aria-label="mock-cancel"
-            onClick={handleCancel}
-          />
-          {submitError ? <div aria-label="mock-submit-error" /> : null}
-        </div>
-      )
+    ({ handleSubmit, handleCancel, submitError }) => (
+      <div>
+        <button
+          type="button"
+          aria-label="mock-submit"
+          onClick={() => handleSubmit(updatedHostData)}
+        />
+        <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
+        {submitError ? <div aria-label="mock-submit-error" /> : null}
+      </div>
+    )
 );
 
 describe('<InventoryHostEdit />', () => {
@@ -76,7 +71,9 @@ describe('<InventoryHostEdit />', () => {
         '/inventories/inventory/123/hosts/2/details'
       )
     );
-    expect(screen.queryByLabelText('mock-submit-error')).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText('mock-submit-error')
+    ).not.toBeInTheDocument();
   });
 
   test('failed form submission should show an error message', async () => {
@@ -88,6 +85,8 @@ describe('<InventoryHostEdit />', () => {
       <InventoryHostEdit host={mockHost} inventory={{ id: 123 }} />
     );
     await user.click(screen.getByRole('button', { name: 'mock-submit' }));
-    expect(await screen.findByLabelText('mock-submit-error')).toBeInTheDocument();
+    expect(
+      await screen.findByLabelText('mock-submit-error')
+    ).toBeInTheDocument();
   });
 });

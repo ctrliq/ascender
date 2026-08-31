@@ -15,12 +15,6 @@ from datetime import timedelta
 # python-ldap
 import ldap
 
-# Django
-from django.core.exceptions import ImproperlyConfigured
-
-# django-split-settings
-from split_settings.tools import include
-
 DEBUG = True
 SQL_DEBUG = DEBUG
 
@@ -44,6 +38,11 @@ DATABASES = {
     }
 }
 
+# Optional manual override for statement_timeout (ms) on web worker DB
+# connections.  When running under uwsgi, the timeout is auto-derived from
+# the harakiri value.  Set this for non-uwsgi deployments or to override.
+DATABASE_STATEMENT_TIMEOUT = None
+
 # Special database overrides for dispatcher connections listening to pg_notify
 LISTENER_DATABASES = {
     'default': {
@@ -64,6 +63,14 @@ LISTENER_DATABASES = {
 IS_K8S = False
 
 AWX_CONTAINER_GROUP_K8S_API_TIMEOUT = 10
+# Whether container group Kubernetes API calls should be routed through the
+# HTTP_PROXY/HTTPS_PROXY environment variables of the task container. The Python
+# Kubernetes client started honouring those on its own in 34.1, but this traffic
+# has never been proxied by AWX, and a TLS-terminating proxy breaks certificate
+# verification against the cluster CA (the client verifies against the cluster
+# credential's CA data or the service account CA, never the system trust store).
+# Leave disabled unless the cluster API really is only reachable through a proxy.
+AWX_CONTAINER_GROUP_K8S_API_USE_PROXY = False
 AWX_CONTAINER_GROUP_DEFAULT_NAMESPACE = os.getenv('MY_POD_NAMESPACE', 'default')
 AWX_CONTAINER_GROUP_DEFAULT_JOB_LABEL = os.getenv('AWX_CONTAINER_GROUP_DEFAULT_JOB_LABEL', 'ansible_job')
 # Timeout when waiting for pod to enter running state. If the pod is still in pending state , it will be terminated. Valid time units are "s", "m", "h". Example : "5m" , "10s".
@@ -88,13 +95,23 @@ TIME_ZONE = 'UTC'
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
-# Languages that have translation catalogs under awx/locale/<code>/. Declaring
-# this explicitly (rather than relying on Django's full global LANGUAGES list)
-# ensures LocaleMiddleware selects the exact catalog code we ship. In
-# particular Django's global list only has 'zh-hans'/'zh-hant', so without this
-# a request asking for 'zh' would resolve to 'zh-hans' (which has no catalog)
-# and fall back to English. These codes must match SUPPORTED_UI_LOCALES in
-# awx/api/serializers.py and the directory names under awx/locale/.
+# Languages LocaleMiddleware is allowed to activate: the catalog directories
+# under awx/locale/<code>/, plus 'en'. Declaring this explicitly (rather than
+# relying on Django's full global LANGUAGES list) ensures LocaleMiddleware
+# selects the exact catalog code we ship. In particular Django's global list
+# only has 'zh-hans'/'zh-hant', so without this a request asking for 'zh' would
+# resolve to 'zh-hans' (which has no catalog) and fall back to English.
+#
+# 'en' is the one entry with no catalog of its own: the UI names its English
+# bundle 'en' while the backend catalog is 'en-us', so a preferred_language of
+# 'en' has to resolve to something here. It falls through to the source strings,
+# which are already English.
+#
+# This is NOT the same list as SUPPORTED_UI_LOCALES in awx/api/serializers.py.
+# That one mirrors the bundles under awx/ui/src/locales/ and therefore contains
+# 'en' but not 'en-us'. awx/main/tests/unit/test_locales.py pins both sets
+# against the directories on disk, so adding a language means adding it to
+# whichever of the two lists actually gained a catalog.
 LANGUAGES = [
     ('en-us', 'English (US)'),
     ('en', 'English'),
@@ -280,6 +297,12 @@ SUBSYSTEM_METRICS_TASK_MANAGER_RECORD_INTERVAL = 15
 # The maximum allowed jobs to start on a given task manager cycle
 START_TASK_LIMIT = 100
 
+# Number of seconds an outgoing notification waits on the service it posts to.
+# Without it the dispatcher worker running send_notifications is held for as
+# long as the far end keeps the connection open. Matches the default timeout of
+# the email backend.
+AWX_NOTIFICATION_REQUEST_TIMEOUT = 30
+
 # Time out task managers if they take longer than this many seconds, plus TASK_MANAGER_TIMEOUT_GRACE_PERIOD
 # We have the grace period so the task manager can bail out before the timeout.
 TASK_MANAGER_TIMEOUT = 300
@@ -382,9 +405,9 @@ INSTALLED_APPS = [
     'awx.ui',
     'awx.sso',
     'solo',
-    'ansible_base.rest_filters',
-    'ansible_base.jwt_consumer',
-    'ansible_base.resource_registry',
+    'awx.dab.rest_filters',
+    'awx.dab.jwt_consumer',
+    'awx.dab.resource_registry',
 ]
 
 
@@ -394,8 +417,17 @@ MAX_PAGE_SIZE = 200
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'awx.api.pagination.Pagination',
     'PAGE_SIZE': 25,
+    # Formerly set by awx.dab's dynamic_settings include (now inlined). The generic
+    # awx.dab FieldLookupBackend is replaced by HostFieldLookupBackend, which adds
+    # the Host filter fields derived from JobHostSummary on top of it.
+    'DEFAULT_FILTER_BACKENDS': (
+        'awx.dab.rest_filters.rest_framework.type_filter_backend.TypeFilterBackend',
+        'awx.api.filters.HostFieldLookupBackend',
+        'rest_framework.filters.SearchFilter',
+        'awx.dab.rest_filters.rest_framework.order_backend.OrderByBackend',
+    ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'ansible_base.jwt_consumer.awx.auth.AwxJWTAuthentication',
+        'awx.dab.jwt_consumer.awx.auth.AwxJWTAuthentication',
         'awx.api.authentication.LoggedOAuth2Authentication',
         'awx.api.authentication.SessionAuthentication',
         'awx.api.authentication.LoggedBasicAuthentication',
@@ -597,7 +629,7 @@ _SOCIAL_AUTH_PIPELINE_BASE = (
     'social_core.pipeline.user.user_details',
     'awx.sso.social_base_pipeline.prevent_inactive_login',
 )
-SOCIAL_AUTH_PIPELINE = _SOCIAL_AUTH_PIPELINE_BASE + ('awx.sso.social_pipeline.update_user_orgs', 'awx.sso.social_pipeline.update_user_teams')
+SOCIAL_AUTH_PIPELINE = _SOCIAL_AUTH_PIPELINE_BASE + ('awx.sso.social_pipeline.update_user_org_team_mappings',)
 SOCIAL_AUTH_SAML_PIPELINE = _SOCIAL_AUTH_PIPELINE_BASE + ('awx.sso.saml_pipeline.populate_user', 'awx.sso.saml_pipeline.update_user_flags')
 SAML_AUTO_CREATE_OBJECTS = True
 
@@ -1105,6 +1137,7 @@ RECEPTOR_LOG_LEVEL = 'info'
 
 MIDDLEWARE = [
     'django_guid.middleware.guid_middleware',
+    'awx.dab.lib.middleware.logging.log_request.LogTracebackMiddleware',
     'awx.main.middleware.SettingsCacheMiddleware',
     'awx.main.middleware.TimingMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -1230,24 +1263,31 @@ METRICS_SUBSYSTEM_CONFIG = {
 }
 
 
-# django-ansible-base
+# awx.dab (vendored django-ansible-base subset, see awx/dab/VENDORED.md)
 ANSIBLE_BASE_TEAM_MODEL = 'main.Team'
 ANSIBLE_BASE_ORGANIZATION_MODEL = 'main.Organization'
 ANSIBLE_BASE_RESOURCE_CONFIG_MODULE = 'awx.resource_api'
 
-from ansible_base.lib import dynamic_config  # noqa: E402
+# The setting below was formerly produced by including awx.dab's dynamic_settings
+# (deleted along with awx/dab/lib/dynamic_config); DEFAULT_FILTER_BACKENDS, the other
+# surviving piece of that include, moved into the REST_FRAMEWORK definition above.
 
-settings_file = os.path.join(os.path.dirname(dynamic_config.__file__), 'dynamic_settings.py')
-include(settings_file)
-
-# dynamic_settings sets DEFAULT_FILTER_BACKENDS. Swap the generic field lookup backend for the
-# one that resolves the Host fields derived from JobHostSummary. A miss here would put the
-# derived filters back to matching nothing, which is silent, so refuse to start instead.
-generic_field_lookup_backend = 'ansible_base.rest_filters.rest_framework.field_lookup_backend.FieldLookupBackend'
-if generic_field_lookup_backend not in REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS']:
-    raise ImproperlyConfigured(
-        'Expected {} in REST_FRAMEWORK["DEFAULT_FILTER_BACKENDS"], found {}.'.format(generic_field_lookup_backend, REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS'])
-    )
-REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS'] = tuple(
-    'awx.api.filters.HostFieldLookupBackend' if backend == generic_field_lookup_backend else backend for backend in REST_FRAMEWORK['DEFAULT_FILTER_BACKENDS']
+# Query parameters the field lookup filter backend refuses to treat as field lookups.
+ANSIBLE_BASE_REST_FILTERS_RESERVED_NAMES = (
+    'page',
+    'page_size',
+    'format',
+    'order',
+    'order_by',
+    'search',
+    'type',
+    'host_filter',
+    'count_disabled',
+    'no_truncate',
+    'limit',
+    'validate',
+    'user_ansible_id',
+    'team_ansible_id',
+    'object_ansible_id',
+    'assignment',
 )

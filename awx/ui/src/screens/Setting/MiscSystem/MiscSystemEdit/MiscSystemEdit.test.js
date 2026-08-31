@@ -58,7 +58,9 @@ describe('<MiscSystemEdit />', () => {
     // The production read mutates the shared OPTIONS objects (sets .value), so
     // deep-clone to keep tests isolated.
     const result = renderWithContexts(
-      <SettingsProvider value={JSON.parse(JSON.stringify(mockAllOptions.actions))}>
+      <SettingsProvider
+        value={JSON.parse(JSON.stringify(mockAllOptions.actions))}
+      >
         <MiscSystemEdit />
       </SettingsProvider>,
       { context: { router: { history } } }
@@ -129,7 +131,9 @@ describe('<MiscSystemEdit />', () => {
       screen.getByRole('button', { name: 'Revert all to default' })
     );
     expect(await screen.findByText('Revert settings')).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Confirm revert all' }));
+    await user.click(
+      screen.getByRole('button', { name: 'Confirm revert all' })
+    );
     await waitFor(() =>
       expect(SettingsAPI.revertCategory).toHaveBeenCalledTimes(1)
     );

@@ -118,8 +118,12 @@ describe('<InventorySourceList />', () => {
   });
 
   test('source data should render properly', async () => {
-    expect(screen.getByRole('link', { name: 'Source Foo' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Source Bar' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Source Foo' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('link', { name: 'Source Bar' })
+    ).toBeInTheDocument();
   });
 
   test('add button is not disabled and delete button is disabled', async () => {

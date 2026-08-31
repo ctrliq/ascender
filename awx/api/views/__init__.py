@@ -120,7 +120,7 @@ from awx.api.views.mixin import (
     NoTruncateMixin,
     UnifiedJobIncludeMixin,
 )
-from awx.api.pagination import UnifiedJobEventPagination, UnifiedJobPagination
+from awx.api.pagination import ActivityStreamPagination, UnifiedJobEventPagination, UnifiedJobPagination
 from awx.main.utils import set_environ
 
 logger = logging.getLogger('awx.api.views')
@@ -2708,6 +2708,10 @@ class JobTemplateNotificationTemplatesSuccessList(JobTemplateNotificationTemplat
     relationship = 'notification_templates_success'
 
 
+class JobTemplateNotificationTemplatesChangedList(JobTemplateNotificationTemplatesAnyList):
+    relationship = 'notification_templates_changed'
+
+
 class JobTemplateCredentialsList(SubListCreateAttachDetachAPIView):
     model = models.Credential
     serializer_class = serializers.CredentialSerializer
@@ -4534,6 +4538,7 @@ class ActivityStreamList(SimpleListAPIView):
     model = models.ActivityStream
     serializer_class = serializers.ActivityStreamSerializer
     search_fields = ('changes',)
+    pagination_class = ActivityStreamPagination
 
 
 class ActivityStreamDetail(RetrieveAPIView):

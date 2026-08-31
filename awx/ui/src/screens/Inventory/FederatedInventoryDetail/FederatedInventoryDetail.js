@@ -1,12 +1,8 @@
 import React, { useCallback, useEffect } from 'react';
-import { Link, useNavigate  } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
-import {
-	Button,
-	Label,
-	LabelGroup
-} from '@patternfly/react-core';
+import { Button, Label, LabelGroup } from '@patternfly/react-core';
 
 import { InventoriesAPI, FederatedInventoriesAPI } from 'api';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
@@ -62,7 +58,7 @@ function FederatedInventoryDetail({ inventory }) {
   const { error, dismissError } = useDismissableError(deleteError);
 
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).inventory(inventory);
+    relatedResourceDeleteRequests.inventory(inventory);
 
   if (isLoading) {
     return <ContentLoading />;
@@ -124,7 +120,7 @@ function FederatedInventoryDetail({ inventory }) {
               totalChips={inventory.summary_fields.labels?.results?.length}
             >
               {inventory.summary_fields.labels?.results?.map((l) => (
-                <Label variant="outline" key={l.id} >
+                <Label variant="outline" key={l.id}>
                   {l.name}
                 </Label>
               ))}

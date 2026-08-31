@@ -134,9 +134,7 @@ describe('<InstanceGroupList />', () => {
     );
 
     expect(
-      await screen.findByText(
-        'Failed to delete one or more instance groups.'
-      )
+      await screen.findByText('Failed to delete one or more instance groups.')
     ).toBeInTheDocument();
   });
 

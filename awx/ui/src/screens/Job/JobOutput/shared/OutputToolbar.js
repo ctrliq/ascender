@@ -206,13 +206,14 @@ const OutputToolbar = ({
           ) : (
             <LaunchButton resource={job}>
               {({ handleRelaunch, isLaunching }) => (
-                <Button icon={<RocketIcon />}
+                <Button
+                  icon={<RocketIcon />}
                   ouiaId="job-output-relaunch-button"
                   variant="plain"
                   onClick={() => handleRelaunch()}
                   aria-label={t`Relaunch`}
                   isDisabled={isLaunching}
-                 />
+                />
               )}
             </LaunchButton>
           )}
@@ -228,9 +229,7 @@ const OutputToolbar = ({
               variant="plain"
               aria-label={t`Copy Output`}
               onClick={async () => {
-                const res = await fetch(
-                  `${job.related.stdout}?format=txt`
-                );
+                const res = await fetch(`${job.related.stdout}?format=txt`);
                 const text = await res.text();
                 await navigator.clipboard.writeText(text);
                 setCopyTooltip(t`Copied`);
@@ -242,11 +241,12 @@ const OutputToolbar = ({
       {job.related?.stdout && (
         <Tooltip content={t`Download Output`}>
           <a href={`${job.related.stdout}?format=txt_download`}>
-            <Button icon={<DownloadIcon />}
+            <Button
+              icon={<DownloadIcon />}
               ouiaId="job-output-download-button"
               variant="plain"
               aria-label={t`Download Output`}
-             />
+            />
           </a>
         </Tooltip>
       )}

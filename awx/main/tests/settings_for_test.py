@@ -10,7 +10,16 @@ SETTINGS_MODULE = 'awx.settings.development'
 # Use SQLite for unit tests instead of PostgreSQL.  If the lines below are
 # commented out, Django will create the test_awx-dev database in PostgreSQL to
 # run unit tests.
-CACHES = {'default': {'BACKEND': 'django.core.cache.backends.locmem.LocMemCache', 'LOCATION': 'unique-{}'.format(str(uuid.uuid4()))}}
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-{}'.format(str(uuid.uuid4())),
+        # The awx.conf settings machinery alone keeps ~300 keys cached; the
+        # default MAX_ENTRIES of 300 makes LocMemCache cull arbitrary keys
+        # (settings included) mid-test.
+        'OPTIONS': {'MAX_ENTRIES': 10000},
+    }
+}
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

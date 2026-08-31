@@ -188,17 +188,17 @@ describe('VisualizerGraph', () => {
 
     // WorkflowNodeHelp renders the alias/name/type for node 2
     expect(screen.getByText('Node Alias')).toBeInTheDocument();
-    expect(container.querySelector('#workflow-node-help-alias')).toHaveTextContent(
-      'node 2'
-    );
+    expect(
+      container.querySelector('#workflow-node-help-alias')
+    ).toHaveTextContent('node 2');
     expect(screen.getByText('Resource Name')).toBeInTheDocument();
-    expect(container.querySelector('#workflow-node-help-name')).toHaveTextContent(
-      'Foo JT'
-    );
+    expect(
+      container.querySelector('#workflow-node-help-name')
+    ).toHaveTextContent('Foo JT');
     expect(screen.getByText('Type')).toBeInTheDocument();
-    expect(container.querySelector('#workflow-node-help-type')).toHaveTextContent(
-      'Job Template'
-    );
+    expect(
+      container.querySelector('#workflow-node-help-type')
+    ).toHaveTextContent('Job Template');
 
     fireEvent.mouseLeave(node2ForeignObject);
     expect(
@@ -214,9 +214,9 @@ describe('VisualizerGraph', () => {
 
     // WorkflowLinkHelp renders the "Run" type for the always link 2-3
     expect(screen.getByText('Run')).toBeInTheDocument();
-    expect(container.querySelector('#workflow-link-help-type')).toHaveTextContent(
-      'Always'
-    );
+    expect(
+      container.querySelector('#workflow-link-help-type')
+    ).toHaveTextContent('Always');
 
     fireEvent.mouseLeave(linkOverlay);
     expect(

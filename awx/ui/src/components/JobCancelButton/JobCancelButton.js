@@ -48,14 +48,15 @@ function JobCancelButton({
       <Tooltip content={renderTooltip()}>
         <div>
           {showIconButton ? (
-            <Button icon={<MinusCircleIcon />}
+            <Button
+              icon={<MinusCircleIcon />}
               isDisabled={isDisabled || isAlreadyCancelled}
               aria-label={title}
               ouiaId="cancel-job-button"
               onClick={() => setIsOpen(true)}
               variant="plain"
               style={style}
-             />
+            />
           ) : (
             <Button
               isDisabled={isDisabled || isAlreadyCancelled}
@@ -100,8 +101,7 @@ function JobCancelButton({
             </Button>,
           ]}
         >
-          {cancelationMessage ??
-            t`Are you sure you want to cancel this job?`}
+          {cancelationMessage ?? t`Are you sure you want to cancel this job?`}
         </AlertModal>
       )}
       {error && !isAlreadyCancelled && (

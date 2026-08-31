@@ -13,7 +13,7 @@ from rest_framework.utils.urls import replace_query_param
 from rest_framework.settings import api_settings
 from django.utils.translation import gettext_lazy as _
 
-from awx.main.models import UnifiedJob
+from awx.main.models import ActivityStream, UnifiedJob
 
 
 class DisabledPaginator(DjangoPaginator):
@@ -30,12 +30,25 @@ class UnifiedJobPaginator(DjangoPaginator):
     """Use unfiltered table count for unified job pagination.
 
     The RBAC-filtered COUNT query is prohibitively slow on large unified job
-    tables; an approximate over-count is harmless for pagination UI.
+    tables; an unfiltered count is acceptable for pagination UI.
     """
 
     @cached_property
     def count(self):
         return UnifiedJob.objects.count()
+
+
+class ActivityStreamPaginator(DjangoPaginator):
+    """Use unfiltered table count for activity stream pagination (AAP-83773).
+
+    The RBAC-filtered COUNT query takes ~36 min on large tables due to the
+    pk__in subquery shape from AAP-81860.  An unfiltered count is acceptable
+    for pagination UI -- an approximate over-count is harmless.
+    """
+
+    @cached_property
+    def count(self):
+        return ActivityStream.objects.count()
 
 
 class Pagination(pagination.PageNumberPagination):
@@ -88,6 +101,29 @@ class Pagination(pagination.PageNumberPagination):
 
 class UnifiedJobPagination(Pagination):
     django_paginator_class = UnifiedJobPaginator
+
+
+class ActivityStreamPagination(Pagination):
+    """Fast unfiltered count for the default listing only.
+
+    A search or field filter must report the count of the filtered queryset —
+    otherwise clients paginate against the full table count and render phantom
+    empty pages.  Those requests fall back to the normal (slow) count.
+    """
+
+    django_paginator_class = ActivityStreamPaginator
+
+    # Query params that do not narrow the result set; any other param means
+    # the client is filtering and the count must match the filtered queryset.
+    NON_FILTER_PARAMS = frozenset(('page', 'page_size', 'format', 'order', 'order_by', 'count_disabled', 'no_truncate'))
+
+    def paginate_queryset(self, queryset, request, **kwargs):
+        if any(param not in self.NON_FILTER_PARAMS for param in request.query_params):
+            self.django_paginator_class = DjangoPaginator
+        try:
+            return super().paginate_queryset(queryset, request, **kwargs)
+        finally:
+            self.django_paginator_class = ActivityStreamPaginator
 
 
 class LimitPagination(pagination.BasePagination):

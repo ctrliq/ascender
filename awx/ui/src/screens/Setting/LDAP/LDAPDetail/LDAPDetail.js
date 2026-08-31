@@ -28,7 +28,8 @@ function LDAPDetail() {
   const { t } = useLingui();
   const { me } = useConfig();
   const { GET: options } = useSettings();
-  const category = useMatch('/settings/ldap/:category/details')?.params?.category;
+  const category = useMatch('/settings/ldap/:category/details')?.params
+    ?.category;
 
   const {
     isLoading,

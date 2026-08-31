@@ -43,7 +43,13 @@ describe('<InventoryHost />', () => {
   test('should render expected tabs', async () => {
     renderUnder('/inventories/inventory/3/hosts/2/details');
     await screen.findByRole('tab', { name: 'Details' });
-    const expectedTabs = ['Back to Hosts', 'Details', 'Facts', 'Groups', 'Jobs'];
+    const expectedTabs = [
+      'Back to Hosts',
+      'Details',
+      'Facts',
+      'Groups',
+      'Jobs',
+    ];
     expectedTabs.forEach((name) =>
       expect(screen.getByRole('tab', { name })).toBeInTheDocument()
     );

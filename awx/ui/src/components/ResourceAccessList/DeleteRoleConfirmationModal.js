@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
@@ -12,9 +11,8 @@ function DeleteRoleConfirmationModal({
   onConfirm,
 }) {
   const { t } = useLingui();
-  const sourceOfRole = () =>
-    typeof role.team_id !== 'undefined' ? t`Team` : t`User`;
-  const title = t`Remove ${sourceOfRole()} Access`;
+  const isTeamRole = typeof role.team_id !== 'undefined';
+  const title = isTeamRole ? t`Remove Team Access` : t`Remove User Access`;
   return (
     <AlertModal
       variant="danger"
@@ -41,7 +39,7 @@ function DeleteRoleConfirmationModal({
         </Button>,
       ]}
     >
-      {sourceOfRole() === 'Team' ? (
+      {isTeamRole ? (
         <>
           {t`Are you sure you want to remove ${role.name} access from ${role.team_name}?  Doing so affects all members of the team.`}
           <br />

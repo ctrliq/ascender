@@ -1,10 +1,12 @@
 import React, { useEffect, useCallback } from 'react';
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useLocation,
-  useParams } from 'react-router';
+  useParams,
+} from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';

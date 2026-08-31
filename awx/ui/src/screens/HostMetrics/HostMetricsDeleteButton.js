@@ -19,13 +19,16 @@ const Label = styled.span`
 
 function HostMetricsDeleteButton({
   itemsToDelete,
-  pluralizedItemName = 'Items',
+  pluralizedItemName = null,
   onDelete,
   deleteDetailsRequests,
   warningMessage = null,
   deleteMessage,
 }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
+  if (!pluralizedItemName) {
+    pluralizedItemName = t`Items`;
+  }
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteDetails, setDeleteDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -87,10 +90,10 @@ function HostMetricsDeleteButton({
           </div>
         ))}
         {deleteDetails &&
-          Object.entries(deleteDetails).map(([key, value]) => (
-            <div key={key} aria-label={`${key}: ${value}`}>
-              <Label>{key}</Label>
-              <Badge>{value}</Badge>
+          deleteDetails.map(({ label, count }) => (
+            <div key={label.id} aria-label={`${i18n._(label)}: ${count}`}>
+              <Label>{i18n._(label)}</Label>
+              <Badge>{count}</Badge>
             </div>
           ))}
       </div>

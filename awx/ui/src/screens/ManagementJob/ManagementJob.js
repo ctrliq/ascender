@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link,
+import {
+  Link,
   Routes,
   Route,
   Navigate,
   useLocation,
-  useParams } from 'react-router';
+  useParams,
+} from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 import { CaretLeftIcon } from '@patternfly/react-icons';
@@ -129,9 +131,7 @@ function ManagementJob({ setBreadcrumb }) {
             {error?.response?.status === 404 && (
               <span>
                 {t`Management job not found.`}
-                <Link to={basePath}>
-                  {t`View all management jobs`}
-                </Link>
+                <Link to={basePath}>{t`View all management jobs`}</Link>
               </span>
             )}
           </ContentError>

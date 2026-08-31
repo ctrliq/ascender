@@ -1,0 +1,42 @@
+---
+# Security updates arrive without this file; what it adds is version updates.
+#
+# Only the two ecosystems that are safe to bump on their own are listed. The
+# Python requirements are not: requirements/requirements.txt is compiled by
+# requirements/updater.sh, which also comments out the entries installed from
+# requirements_git.txt, and Dependabot compiles it its own way. Docker is not
+# either: both Dockerfiles track a floating major (rockylinux:9, node:22-alpine)
+# so there is nothing to bump until that major changes, and the image the
+# product ships from is generated out of a Jinja template.
+#
+# No groups: key on purpose, so every dependency comes as its own pull request.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    # every uses: is pinned to a SHA, and Dependabot keeps the version comment
+    # next to it in step. Composite actions are only picked up per directory.
+    directories:
+      - "/"
+      - "/.github/actions/awx_devel_image"
+      - "/.github/actions/run_awx_devel"
+    schedule:
+      interval: weekly
+      day: monday
+    commit-message:
+      prefix: "ci"
+    labels:
+      - dependencies
+      - build
+
+  - package-ecosystem: npm
+    directory: /awx/ui
+    schedule:
+      interval: weekly
+      day: monday
+    # capped so the first weeks stay reviewable
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "build"
+    labels:
+      - dependencies
+      - javascript

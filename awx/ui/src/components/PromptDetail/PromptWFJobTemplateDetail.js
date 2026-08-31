@@ -1,11 +1,7 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
-import {
-	Label, Content,
-	ContentVariants,
-
-} from '@patternfly/react-core';
+import { Label, Content, ContentVariants } from '@patternfly/react-core';
 
 import { toTitleCase } from 'util/strings';
 import CredentialChip from '../CredentialChip';
@@ -32,14 +28,10 @@ function PromptWFJobTemplateDetail({ resource }) {
     optionsList = (
       <Content component={ContentVariants.ul}>
         {allow_simultaneous && (
-          <Content component={ContentVariants.li}>
-            {t`Concurrent Jobs`}
-          </Content>
+          <Content component={ContentVariants.li}>{t`Concurrent Jobs`}</Content>
         )}
         {webhook_service && (
-          <Content component={ContentVariants.li}>
-            {t`Webhooks`}
-          </Content>
+          <Content component={ContentVariants.li}>{t`Webhooks`}</Content>
         )}
       </Content>
     );
@@ -88,10 +80,7 @@ function PromptWFJobTemplateDetail({ resource }) {
       )}
       <Detail label={t`Source Control Branch`} value={scm_branch} />
       <Detail label={t`Limit`} value={limit} />
-      <Detail
-        label={t`Webhook Service`}
-        value={toTitleCase(webhook_service)}
-      />
+      <Detail label={t`Webhook Service`} value={toTitleCase(webhook_service)} />
       <Detail label={t`Webhook Key`} value={webhook_key} />
       {related?.webhook_receiver && (
         <Detail
@@ -99,9 +88,7 @@ function PromptWFJobTemplateDetail({ resource }) {
           value={`${window.location.origin}${related.webhook_receiver}`}
         />
       )}
-      {optionsList && (
-        <Detail label={t`Enabled Options`} value={optionsList} />
-      )}
+      {optionsList && <Detail label={t`Enabled Options`} value={optionsList} />}
       {summary_fields?.webhook_credential && (
         <Detail
           fullWidth
@@ -126,7 +113,7 @@ function PromptWFJobTemplateDetail({ resource }) {
               ouiaId="prompt-wf-jt-label-chips"
             >
               {summary_fields.labels.results.map((label) => (
-                <Label variant="outline" key={label.id} >
+                <Label variant="outline" key={label.id}>
                   {label.name}
                 </Label>
               ))}

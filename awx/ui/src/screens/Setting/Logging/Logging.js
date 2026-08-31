@@ -34,7 +34,9 @@ function Logging() {
             path="*"
             element={
               <ContentError isNotFound>
-                <Link to={`${baseURL}/details`}>{t`View Logging settings`}</Link>
+                <Link
+                  to={`${baseURL}/details`}
+                >{t`View Logging settings`}</Link>
               </ContentError>
             }
           />

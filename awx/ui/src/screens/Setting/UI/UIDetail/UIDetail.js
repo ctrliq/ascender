@@ -47,7 +47,7 @@ function UIDetail() {
         'CUSTOM_LOGIN_INFO',
         'CUSTOM_TITLE',
         'CUSTOM_LOGO',
-        'CUSTOM_HEADER_LOGO',
+        'CUSTOM_HEADER_LOGO'
       );
 
       return uiData;

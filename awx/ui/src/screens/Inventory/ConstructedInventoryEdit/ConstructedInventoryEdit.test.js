@@ -53,14 +53,16 @@ jest.mock(
 
 describe('<ConstructedInventoryEdit />', () => {
   beforeEach(() => {
-    ConstructedInventoriesAPI.readConstructedInventoryOptions.mockResolvedValue({
-      limit: { label: 'Limit', help_text: '' },
-      update_cache_timeout: {
-        label: 'Update cache timeout',
-        help_text: 'help',
-      },
-      verbosity: { label: 'Verbosity', help_text: '' },
-    });
+    ConstructedInventoriesAPI.readConstructedInventoryOptions.mockResolvedValue(
+      {
+        limit: { label: 'Limit', help_text: '' },
+        update_cache_timeout: {
+          label: 'Update cache timeout',
+          help_text: 'help',
+        },
+        verbosity: { label: 'Verbosity', help_text: '' },
+      }
+    );
     InventoriesAPI.readInstanceGroups.mockResolvedValue({
       data: { results: associatedInstanceGroups },
     });
@@ -85,7 +87,9 @@ describe('<ConstructedInventoryEdit />', () => {
       <ConstructedInventoryEdit inventory={mockInv} />,
       { context: { router: { history } } }
     );
-    await user.click(await screen.findByRole('button', { name: 'mock-cancel' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-cancel' })
+    );
 
     expect(history.location.pathname).toEqual(
       '/inventories/constructed_inventory/7/details'
@@ -100,7 +104,9 @@ describe('<ConstructedInventoryEdit />', () => {
       <ConstructedInventoryEdit inventory={mockInv} />,
       { context: { router: { history } } }
     );
-    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     await waitFor(() =>
       expect(history.location.pathname).toBe(
@@ -113,7 +119,9 @@ describe('<ConstructedInventoryEdit />', () => {
     const { user } = renderWithContexts(
       <ConstructedInventoryEdit inventory={mockInv} />
     );
-    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     await waitFor(() =>
       expect(ConstructedInventoriesAPI.update).toHaveBeenCalledTimes(1)
@@ -123,8 +131,16 @@ describe('<ConstructedInventoryEdit />', () => {
       expect(InventoriesAPI.disassociateInventory).toHaveBeenCalledTimes(1)
     );
     expect(InventoriesAPI.associateInventory).toHaveBeenCalledTimes(2);
-    expect(InventoriesAPI.associateInventory).toHaveBeenNthCalledWith(1, 7, 123);
-    expect(InventoriesAPI.associateInventory).toHaveBeenNthCalledWith(2, 7, 456);
+    expect(InventoriesAPI.associateInventory).toHaveBeenNthCalledWith(
+      1,
+      7,
+      123
+    );
+    expect(InventoriesAPI.associateInventory).toHaveBeenNthCalledWith(
+      2,
+      7,
+      456
+    );
   });
 
   test('should throw content error', async () => {
@@ -152,7 +168,9 @@ describe('<ConstructedInventoryEdit />', () => {
     const { user } = renderWithContexts(
       <ConstructedInventoryEdit inventory={mockInv} />
     );
-    await user.click(await screen.findByRole('button', { name: 'mock-submit' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'mock-submit' })
+    );
 
     expect(await screen.findByTestId('mock-submit-error')).toBeInTheDocument();
   });

@@ -31,15 +31,17 @@ function PasswordField({
       labelHelp={helperText && <Popover content={helperText} />}
     >
       <InputGroup>
-        <InputGroupItem isFill><PasswordInput
-          id={id}
-          name={name}
-          label={label}
-          validate={validate}
-          isRequired={isRequired}
-          helperText={helperText}
-          {...rest}
-        /></InputGroupItem>
+        <InputGroupItem isFill>
+          <PasswordInput
+            id={id}
+            name={name}
+            label={label}
+            validate={validate}
+            isRequired={isRequired}
+            helperText={helperText}
+            {...rest}
+          />
+        </InputGroupItem>
       </InputGroup>
       {!isValid && (
         <FormHelperText>

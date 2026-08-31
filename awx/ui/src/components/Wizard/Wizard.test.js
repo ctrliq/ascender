@@ -15,8 +15,6 @@ describe('Wizard', () => {
     // that also read "Step 1"; the content paragraph is the unique <p>.
     expect(screen.getByText('Step 1', { selector: 'p' })).toBeInTheDocument();
     // The step's nav button is present and active.
-    expect(
-      screen.getByRole('button', { name: 'Step 1' })
-    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Step 1' })).toBeInTheDocument();
   });
 });

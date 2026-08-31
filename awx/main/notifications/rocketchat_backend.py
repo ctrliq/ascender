@@ -5,6 +5,7 @@ import logging
 import requests
 import json
 
+from django.conf import settings
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
@@ -39,7 +40,11 @@ class RocketChatBackend(AWXBaseEmailBackend, CustomNotificationBase):
                     payload[optval] = optvalue.strip()
 
             r = requests.post(
-                "{}".format(m.recipients()[0]), data=json.dumps(payload), headers=get_awx_http_client_headers(), verify=(not self.rocketchat_no_verify_ssl)
+                "{}".format(m.recipients()[0]),
+                data=json.dumps(payload),
+                headers=get_awx_http_client_headers(),
+                verify=(not self.rocketchat_no_verify_ssl),
+                timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
             )
 
             if r.status_code >= 400:

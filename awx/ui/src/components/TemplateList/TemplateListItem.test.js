@@ -375,9 +375,10 @@ describe('<TemplateListItem />', () => {
 
     // Organization Link in the expanded section (the Detail renders in the
     // expanded body).
-    expect(
-      screen.getByRole('link', { name: "Mike's Org" })
-    ).toHaveAttribute('href', '/organizations/1/details');
+    expect(screen.getByRole('link', { name: "Mike's Org" })).toHaveAttribute(
+      'href',
+      '/organizations/1/details'
+    );
 
     // Credentials chips
     const credentials = screen.getByText('Credentials').nextElementSibling;

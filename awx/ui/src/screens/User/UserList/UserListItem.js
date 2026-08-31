@@ -38,36 +38,35 @@ function UserListItem({ user, isSelected, onSelect, detailUrl, rowIndex }) {
         </Link>
         {ldapUser && (
           <span css="margin-left: 12px">
-            <Label aria-label={t`ldap user`}>
-              {t`LDAP`}
-            </Label>
+            <Label aria-label={t`ldap user`}>{t`LDAP`}</Label>
           </span>
         )}
         {socialAuthUser && (
           <span css="margin-left: 12px">
-            <Label aria-label={t`social login`}>
-              {t`SOCIAL`}
-            </Label>
+            <Label aria-label={t`social login`}>{t`SOCIAL`}</Label>
           </span>
         )}
       </TdBreakWord>
       <Td dataLabel={t`First Name`}>{user.first_name}</Td>
       <Td dataLabel={t`Last Name`}>{user.last_name}</Td>
       <Td dataLabel={t`Email`}>{user.email}</Td>
-      <Td dataLabel={t`Organization`}>{user.summary_fields?.organization?.name || '—'}</Td>
+      <Td dataLabel={t`Organization`}>
+        {user.summary_fields?.organization?.name || '—'}
+      </Td>
       <Td dataLabel={t`Role`}>{user_type}</Td>
       <ActionsTd dataLabel={t`Actions`}>
         <ActionItem
           visible={user.summary_fields.user_capabilities.edit}
           tooltip={t`Edit User`}
         >
-          <Button icon={<PencilAltIcon />}
+          <Button
+            icon={<PencilAltIcon />}
             ouiaId={`${user.id}-edit-button`}
             aria-label={t`Edit User`}
             variant="plain"
             component={Link}
             to={`/users/${user.id}/edit`}
-           />
+          />
         </ActionItem>
       </ActionsTd>
     </Tr>

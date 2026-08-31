@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
-import { useLingui } from '@lingui/react/macro';
+import { Plural, useLingui } from '@lingui/react/macro';
 import {
   Button,
   Progress,
@@ -62,7 +62,7 @@ function computeForks(memCapacity, cpuCapacity, selectedCapacityAdjustment) {
 }
 
 function InstanceDetail({ setBreadcrumb, isK8s }) {
-  const { t, i18n } = useLingui();
+  const { t } = useLingui();
   const config = useConfig();
 
   const { id } = useParams();
@@ -208,16 +208,14 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
           />
           <Detail label={t`Node Type`} value={instance.node_type} />
           <Detail label={t`Host`} value={instance.ip_address} />
-          <Detail
-            label={t`Listener Port`}
-            value={instance.listener_port}
-          />
+          <Detail label={t`Listener Port`} value={instance.listener_port} />
           {!isManaged && instance.related?.install_bundle && (
             <Detail
               label={t`Install Bundle`}
               value={
                 <Tooltip content={t`Click to download bundle`}>
-                  <Button icon={<DownloadIcon />}
+                  <Button
+                    icon={<DownloadIcon />}
                     component="a"
                     size="sm"
                     href={`${instance.related?.install_bundle}`}
@@ -225,7 +223,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
                     variant="secondary"
                     dataCy="install-bundle-download-button"
                     rel="noopener noreferrer"
-                   />
+                  />
                 </Tooltip>
               }
             />
@@ -233,31 +231,17 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
           {(isExecutionNode || isHopNode) && (
             <Detail
               label={t`Peers from control nodes`}
-              value={
-                instance.peers_from_control_nodes
-                  ? t`On`
-                  : t`Off`
-              }
+              value={instance.peers_from_control_nodes ? t`On` : t`Off`}
             />
           )}
           {!isHopNode && (
             <>
               <Detail
                 label={t`Policy Type`}
-                value={
-                  instance.managed_by_policy
-                    ? t`Auto`
-                    : t`Manual`
-                }
+                value={instance.managed_by_policy ? t`Auto` : t`Manual`}
               />
-              <Detail
-                label={t`Running Jobs`}
-                value={instance.jobs_running}
-              />
-              <Detail
-                label={t`Total Jobs`}
-                value={instance.jobs_total}
-              />
+              <Detail label={t`Running Jobs`} value={instance.jobs_running} />
+              <Detail label={t`Total Jobs`} value={instance.jobs_total} />
               {instanceGroups && (
                 <Detail
                   fullWidth
@@ -300,7 +284,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }) {
                     </div>
                     <SliderForks data-cy="slider-forks">
                       <div data-cy="number-forks">
-                        {i18n._('{count, plural, one {# fork} other {# forks}}', { count: forks })}
+                        <Plural value={forks} one="# fork" other="# forks" />
                       </div>
                       <Slider
                         areCustomStepsContinuous

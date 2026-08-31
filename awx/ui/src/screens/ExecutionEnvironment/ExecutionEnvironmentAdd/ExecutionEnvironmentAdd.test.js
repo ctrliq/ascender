@@ -10,36 +10,38 @@ jest.mock('../../../api');
 
 // The form has its own suite; stub it so we can drive the container's
 // submit/cancel/error handling and observe the query-param prefill it passes.
-jest.mock('../shared/ExecutionEnvironmentForm', () =>
-  function MockExecutionEnvironmentForm({
-    onSubmit,
-    onCancel,
-    submitError,
-    executionEnvironment,
-  }) {
-    return (
-      <div>
-        {submitError ? <div data-testid="form-submit-error" /> : null}
-        <div data-testid="prefill-image">{executionEnvironment?.image}</div>
-        <button
-          type="button"
-          onClick={() =>
-            onSubmit({
-              name: 'Test EE',
-              image: 'https://registry.com/image/container',
-              credential: { id: 4 },
-              organization: { id: 9 },
-            })
-          }
-        >
-          Submit
-        </button>
-        <button type="button" aria-label="Cancel" onClick={onCancel}>
-          Cancel
-        </button>
-      </div>
-    );
-  }
+jest.mock(
+  '../shared/ExecutionEnvironmentForm',
+  () =>
+    function MockExecutionEnvironmentForm({
+      onSubmit,
+      onCancel,
+      submitError,
+      executionEnvironment,
+    }) {
+      return (
+        <div>
+          {submitError ? <div data-testid="form-submit-error" /> : null}
+          <div data-testid="prefill-image">{executionEnvironment?.image}</div>
+          <button
+            type="button"
+            onClick={() =>
+              onSubmit({
+                name: 'Test EE',
+                image: 'https://registry.com/image/container',
+                credential: { id: 4 },
+                organization: { id: 9 },
+              })
+            }
+          >
+            Submit
+          </button>
+          <button type="button" aria-label="Cancel" onClick={onCancel}>
+            Cancel
+          </button>
+        </div>
+      );
+    }
 );
 
 describe('<ExecutionEnvironmentAdd/>', () => {
@@ -91,9 +93,7 @@ describe('<ExecutionEnvironmentAdd/>', () => {
   });
 
   test('prefills the image from the query params', () => {
-    renderAdd(
-      '/execution_environments/add?image=https://myhub.io/repo:2.0'
-    );
+    renderAdd('/execution_environments/add?image=https://myhub.io/repo:2.0');
     expect(screen.getByTestId('prefill-image')).toHaveTextContent(
       'https://myhub.io/repo:2.0'
     );

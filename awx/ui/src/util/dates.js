@@ -1,4 +1,3 @@
-
 import { t } from '@lingui/react/macro';
 import { RRule } from 'rrule';
 import { DateTime, Duration } from 'luxon';

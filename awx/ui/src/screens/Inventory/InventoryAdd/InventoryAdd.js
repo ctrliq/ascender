@@ -40,9 +40,7 @@ function InventoryAdd() {
         await InventoriesAPI.associateInstanceGroup(inventoryId, group.id);
       }
       /* eslint-enable no-await-in-loop, no-restricted-syntax */
-      const url = location.pathname.startsWith(
-        '/inventories/smart_inventory'
-      )
+      const url = location.pathname.startsWith('/inventories/smart_inventory')
         ? `/inventories/smart_inventory/${inventoryId}/details`
         : `/inventories/inventory/${inventoryId}/details`;
 

@@ -132,12 +132,7 @@ function ApplicationsList() {
                 qsConfig={QS_CONFIG}
                 additionalControls={[
                   ...(canAdd
-                    ? [
-                        <ToolbarAddButton
-                          key="add"
-                          linkTo={`${listUrl}/add`}
-                        />,
-                      ]
+                    ? [<ToolbarAddButton key="add" linkTo={`${listUrl}/add`} />]
                     : []),
                   <ToolbarDeleteButton
                     key="delete"
@@ -170,9 +165,7 @@ function ApplicationsList() {
               />
             )}
             emptyStateControls={
-              canAdd && (
-                <ToolbarAddButton key="add" linkTo={`${listUrl}/add`} />
-              )
+              canAdd && <ToolbarAddButton key="add" linkTo={`${listUrl}/add`} />
             }
           />
         </Card>

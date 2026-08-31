@@ -18,7 +18,7 @@ import getHelpText from '../Inventory.helptext';
 
 const ControllerSubForm = ({ autoPopulateCredential }) => {
   const { t } = useLingui();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const { setFieldValue, setFieldTouched } = useFormikContext();
   const [credentialField, credentialMeta, credentialHelpers] =
     useField('credential');
@@ -51,10 +51,7 @@ const ControllerSubForm = ({ autoPopulateCredential }) => {
       <EnabledValueField />
       <OptionsField />
       <SourceVarsField
-        popoverContent={helpText.sourceVars(
-          getDocsBaseUrl(config),
-          'ascender'
-        )}
+        popoverContent={helpText.sourceVars(getDocsBaseUrl(config), 'ascender')}
       />
     </>
   );

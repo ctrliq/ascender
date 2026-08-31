@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
-	Button,
-	ButtonVariant,
-	Divider,
-	InputGroup,
-	TextInput,
-	Tooltip,
-	InputGroupItem,
-	Select,
-	SelectOption,
-	SelectList,
-	SelectGroup,
-	MenuToggle,
-	TextInputGroup,
-	TextInputGroupMain,
-	TextInputGroupUtilities
+  Button,
+  ButtonVariant,
+  Divider,
+  InputGroup,
+  TextInput,
+  Tooltip,
+  InputGroupItem,
+  Select,
+  SelectOption,
+  SelectList,
+  SelectGroup,
+  MenuToggle,
+  TextInputGroup,
+  TextInputGroupMain,
+  TextInputGroupUtilities,
 } from '@patternfly/react-core';
-import { SearchIcon, QuestionCircleIcon, TimesIcon } from '@patternfly/react-icons';
+import {
+  SearchIcon,
+  QuestionCircleIcon,
+  TimesIcon,
+} from '@patternfly/react-icons';
 import styled from 'styled-components';
 import { useLocation } from 'react-router';
 import { useConfig } from 'contexts/Config';
@@ -210,14 +214,15 @@ function AdvancedSearch({
             />
             {(prefixFilterValue || prefixSelection) && (
               <TextInputGroupUtilities>
-                <Button icon={<TimesIcon />}
+                <Button
+                  icon={<TimesIcon />}
                   variant="plain"
                   onClick={() => {
                     setPrefixSelection(null);
                     setPrefixFilterValue('');
                   }}
                   aria-label={t`Clear`}
-                 />
+                />
               </TextInputGroupUtilities>
             )}
           </TextInputGroup>
@@ -281,9 +286,7 @@ function AdvancedSearch({
             type="search"
             aria-label={t`Advanced search value input`}
             isDisabled={!keySelection || isTextInputDisabled}
-            value={
-              (!keySelection && t`First, select a key`) || searchValue
-            }
+            value={(!keySelection && t`First, select a key`) || searchValue}
             onChange={(_event, val) => setSearchValue(val)}
             onKeyDown={handleAdvancedTextKeyDown}
           />
@@ -297,9 +300,7 @@ function AdvancedSearch({
         type="search"
         aria-label={t`Advanced search value input`}
         isDisabled={!keySelection}
-        value={
-          (!keySelection && t`First, select a key`) || searchValue
-        }
+        value={(!keySelection && t`First, select a key`) || searchValue}
         onChange={(_event, val) => setSearchValue(val)}
         onKeyDown={handleAdvancedTextKeyDown}
         placeholder={placeholderText}
@@ -374,14 +375,15 @@ function AdvancedSearch({
               />
               {(keyFilterValue || keySelection) && (
                 <TextInputGroupUtilities>
-                  <Button icon={<TimesIcon />}
+                  <Button
+                    icon={<TimesIcon />}
                     variant="plain"
                     onClick={() => {
                       setKeySelection(null);
                       setKeyFilterValue('');
                     }}
                     aria-label={t`Clear`}
-                   />
+                  />
                 </TextInputGroupUtilities>
               )}
             </TextInputGroup>
@@ -405,9 +407,7 @@ function AdvancedSearch({
                 </SelectGroup>
               )}
               {filteredDirectKeys.length > 0 &&
-                filteredRelatedKeys.length > 0 && (
-                  <Divider key="divider" />
-                )}
+                filteredRelatedKeys.length > 0 && <Divider key="divider" />}
               {filteredRelatedKeys.length > 0 && (
                 <SelectGroup key="related keys" label={t`Related Keys`}>
                   {filteredRelatedKeys.map((opt) => (
@@ -433,28 +433,29 @@ function AdvancedSearch({
 
       <InputGroup>
         {renderTextInput()}
-        <InputGroupItem><SubmitButtonWrapper $disabled={!searchValue}>
-          <Button icon={<SearchIcon />}
-            ouiaId="advanced-search-text-input"
-            variant={ButtonVariant.control}
-            isDisabled={!searchValue}
-            aria-label={t`Search submit button`}
-            onClick={handleAdvancedSearch}
-           />
-        </SubmitButtonWrapper></InputGroupItem>
+        <InputGroupItem>
+          <SubmitButtonWrapper $disabled={!searchValue}>
+            <Button
+              icon={<SearchIcon />}
+              ouiaId="advanced-search-text-input"
+              variant={ButtonVariant.control}
+              isDisabled={!searchValue}
+              aria-label={t`Search submit button`}
+              onClick={handleAdvancedSearch}
+            />
+          </SubmitButtonWrapper>
+        </InputGroupItem>
       </InputGroup>
-      <Tooltip
-        content={t`Advanced search documentation`}
-        position="bottom"
-      >
-        <Button icon={<QuestionCircleIcon />}
+      <Tooltip content={t`Advanced search documentation`} position="bottom">
+        <Button
+          icon={<QuestionCircleIcon />}
           ouiaId="search-docs-button"
           component="a"
           variant="plain"
           target="_blank"
           href={`${getDocsBaseUrl(config)}/userguide/search_sort.html`}
           rel="noopener noreferrer"
-         />
+        />
       </Tooltip>
     </AdvancedGroup>
   );

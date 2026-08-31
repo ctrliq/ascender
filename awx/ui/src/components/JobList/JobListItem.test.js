@@ -142,7 +142,12 @@ describe('<JobListItem />', () => {
 
   test('should show type column when showTypeColumn is true', () => {
     const { container: c } = renderItem(
-      <JobListItem job={mockJob} showTypeColumn isSelected onSelect={() => {}} />
+      <JobListItem
+        job={mockJob}
+        showTypeColumn
+        isSelected
+        onSelect={() => {}}
+      />
     );
     expect(c.querySelector('td[data-label="Type"]')).toBeInTheDocument();
   });
@@ -184,7 +189,12 @@ describe('<JobListItem />', () => {
 
   test('should display missing resource for completed jobs and missing EE', () => {
     const { container: c } = renderItem(
-      <JobListItem job={mockJob} showTypeColumn isSelected onSelect={() => {}} />
+      <JobListItem
+        job={mockJob}
+        showTypeColumn
+        isSelected
+        onSelect={() => {}}
+      />
     );
     assertDetail(within(c), 'Execution Environment', 'Missing resource');
   });

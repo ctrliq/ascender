@@ -21,7 +21,9 @@ describe('UnsavedChangesModal', () => {
   });
 
   test('Exit Without Saving button dispatches as expected', () => {
-    fireEvent.click(document.querySelector('button#confirm-exit-without-saving'));
+    fireEvent.click(
+      document.querySelector('button#confirm-exit-without-saving')
+    );
     expect(onExit).toHaveBeenCalled();
   });
 

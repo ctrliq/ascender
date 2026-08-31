@@ -76,9 +76,7 @@ describe('<InstanceGroups />', () => {
 
   test('renders the instance group detail subtree at /instance_groups/:id', async () => {
     renderAt('/instance_groups/5/details');
-    expect(
-      await screen.findByText('InstanceGroup detail')
-    ).toBeInTheDocument();
+    expect(await screen.findByText('InstanceGroup detail')).toBeInTheDocument();
     expect(screen.queryByText('InstanceGroupList')).not.toBeInTheDocument();
   });
 

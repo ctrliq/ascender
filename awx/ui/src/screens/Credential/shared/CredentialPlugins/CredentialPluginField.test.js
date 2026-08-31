@@ -59,9 +59,7 @@ describe('<CredentialPluginField />', () => {
         })
       ).not.toBeInTheDocument();
 
-      await user.click(
-        screen.getByRole('button', { name: pluginButtonName })
-      );
+      await user.click(screen.getByRole('button', { name: pluginButtonName }));
       expect(
         await screen.findByRole('dialog', {
           name: 'External Secret Management System',

@@ -20,9 +20,7 @@ jest.mock('react-router', () => ({
 function computeForks(memCapacity, cpuCapacity, adjustment) {
   const minCapacity = Math.min(memCapacity, cpuCapacity);
   const maxCapacity = Math.max(memCapacity, cpuCapacity);
-  return Math.floor(
-    minCapacity + (maxCapacity - minCapacity) * adjustment
-  );
+  return Math.floor(minCapacity + (maxCapacity - minCapacity) * adjustment);
 }
 
 describe('<InstanceDetail/>', () => {
@@ -131,20 +129,24 @@ describe('<InstanceDetail/>', () => {
     slider.focus();
     await user.keyboard('{Home}{ArrowLeft}');
     await waitFor(() => {
-      const adj = Math.round(Number(slider.getAttribute('aria-valuenow')) * 100) / 100;
+      const adj =
+        Math.round(Number(slider.getAttribute('aria-valuenow')) * 100) / 100;
       const expected = computeForks(38, 32, adj);
-      expect(container.querySelector('[data-cy="number-forks"]')).toHaveTextContent(
-        String(expected)
-      );
+      expect(
+        container.querySelector('[data-cy="number-forks"]')
+      ).toHaveTextContent(String(expected));
     });
 
-    await user.keyboard('{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}');
+    await user.keyboard(
+      '{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}{ArrowRight}'
+    );
     await waitFor(() => {
-      const adj = Math.round(Number(slider.getAttribute('aria-valuenow')) * 100) / 100;
+      const adj =
+        Math.round(Number(slider.getAttribute('aria-valuenow')) * 100) / 100;
       const expected = computeForks(38, 32, adj);
-      expect(container.querySelector('[data-cy="number-forks"]')).toHaveTextContent(
-        String(expected)
-      );
+      expect(
+        container.querySelector('[data-cy="number-forks"]')
+      ).toHaveTextContent(String(expected));
     });
   });
 

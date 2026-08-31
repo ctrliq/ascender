@@ -46,7 +46,7 @@ RECEPTOR_IMAGE ?= quay.io/ansible/receptor:devel
 SRC_ONLY_PKGS ?= cffi,pycparser,psycopg,twilio
 # These should be upgraded in the AWX and Ansible venv before attempting
 # to install the actual requirements
-VENV_BOOTSTRAP ?= pip==26.1.2 setuptools==83.0.0 setuptools_scm[toml]==9.2.2 wheel==0.46.2
+VENV_BOOTSTRAP ?= pip==26.2.1 setuptools==84.0.0 setuptools_scm[toml]==9.2.2 wheel==0.48.0
 
 NAME ?= awx
 
@@ -88,7 +88,7 @@ clean-languages:
 	find ./awx/locale/ -type f -regex '.*\.mo$$' -delete
 
 ## Remove temporary build files, compiled Python files.
-clean: clean-ui clean-api clean-awxkit clean-dist
+clean: clean-ui clean-api clean-dist
 	rm -rf awx/public
 	rm -rf awx/lib/site-packages
 	rm -rf awx/job_status
@@ -106,9 +106,6 @@ clean-api:
 	rm -f awx/awx_test.sqlite3*
 	rm -rf requirements/vendor
 	rm -rf awx/projects
-
-clean-awxkit:
-	rm -rf awxkit/*.egg-info awxkit/.tox awxkit/build/*
 
 ## convenience target to assert environment variables are defined
 guard-%:
@@ -270,7 +267,7 @@ reports:
 
 black: reports
 	@command -v black >/dev/null 2>&1 || { echo "could not find black on your PATH, you may need to \`pip install black\`, or set AWX_IGNORE_BLACK=1" && exit 1; }
-	@(set -o pipefail && $@ $(BLACK_ARGS) awx awxkit | tee reports/$@.report)
+	@(set -o pipefail && $@ $(BLACK_ARGS) awx | tee reports/$@.report)
 
 ../../.git/hooks/pre-commit:
 	@echo "if [ -x pre-commit.sh ]; then" > .git/hooks/pre-commit
@@ -308,8 +305,16 @@ test:
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(PYTEST_ARGS) $(TEST_DIRS)
-	cd awxkit && $(VENV_BASE)/awx/bin/tox -re py3
 	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
+
+## Run the tests that need a real PostgreSQL, which the SQLite suite skips.
+PG_TEST_DIRS ?= awx/main/tests/functional/commands/test_cleanup_jobs_postgres.py
+test-postgres:
+	if [ "$(VENV_BASE)" ]; then \
+		. $(VENV_BASE)/awx/bin/activate; \
+	fi; \
+	PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=awx.main.tests.settings_for_test_pg \
+		py.test -p no:cacheprovider -v $(PG_TEST_DIRS)
 
 ## Run all API unit tests without parallel execution (safer but slower).
 test-serial:
@@ -317,7 +322,6 @@ test-serial:
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(TEST_DIRS)
-	cd awxkit && $(VENV_BASE)/awx/bin/tox -re py3
 	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
 
 ## Run tests with limited parallel workers (safer than auto).
@@ -326,7 +330,6 @@ test-safe:
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n 2 --dist=loadfile $(TEST_DIRS)
-	cd awxkit && $(VENV_BASE)/awx/bin/tox -re py3
 	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
 
 test_migrations:
@@ -337,7 +340,7 @@ test_migrations:
 
 ## Runs AWX_DOCKER_CMD inside a new docker container.
 docker-runner:
-	docker run -u $(shell id -u) --rm -v $(shell pwd):/ascender_devel/:Z --workdir=/ascender_devel $(DEVEL_IMAGE_NAME) $(AWX_DOCKER_CMD)
+	docker run -u $(shell id -u) --rm -v $(shell pwd):/awx_devel/:Z --workdir=/awx_devel $(DEVEL_IMAGE_NAME) $(AWX_DOCKER_CMD)
 
 test_unit:
 	@if [ "$(VENV_BASE)" ]; then \

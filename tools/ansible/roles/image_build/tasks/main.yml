@@ -28,7 +28,7 @@
     command_to_run: >-
       docker buildx build
       -t {{ _image_ref }}:{{ awx_image_tag }}
-      {{ ('-t ' + _image_ref + ':latest') if (push | default(false) | bool) else '' }}
+      {{ ('-t ' + _image_ref + ':latest') if ((push | default(false) | bool) and (tag_latest | default(true) | bool)) else '' }}
       -f {{ dockerfile_name }}
       --build-arg VERSION={{ awx_version }}
       --build-arg SETUPTOOLS_SCM_PRETEND_VERSION={{ awx_version }}

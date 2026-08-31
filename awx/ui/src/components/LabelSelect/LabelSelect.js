@@ -127,9 +127,7 @@ function LabelSelect({
                 setIsExpanded(true);
               }}
               autoComplete="off"
-              placeholder={
-                selections.length === 0 ? placeholder : ''
-              }
+              placeholder={selections.length === 0 ? placeholder : ''}
               aria-label={t`Select Labels`}
             >
               {selections.length > 0 && (
@@ -153,16 +151,15 @@ function LabelSelect({
             </TextInputGroupMain>
             {(filterValue || selections.length > 0) && (
               <TextInputGroupUtilities>
-                <Button icon={<TimesIcon />}
+                <Button
+                  icon={<TimesIcon />}
                   variant="plain"
                   onClick={() => {
-                    onChange(
-                      selections.filter((label) => label.isReadOnly)
-                    );
+                    onChange(selections.filter((label) => label.isReadOnly));
                     setFilterValue('');
                   }}
                   aria-label={t`Clear`}
-                 />
+                />
               </TextInputGroupUtilities>
             )}
           </TextInputGroup>

@@ -66,9 +66,7 @@ describe('<ExecutionEnvironmentTemplateList/>', () => {
     expect(await screen.findByText('Foo')).toBeInTheDocument();
     expect(screen.getByText('Bar')).toBeInTheDocument();
     expect(screen.getByText('Fuzz')).toBeInTheDocument();
-    expect(
-      ExecutionEnvironmentsAPI.readUnifiedJobTemplates
-    ).toHaveBeenCalled();
+    expect(ExecutionEnvironmentsAPI.readUnifiedJobTemplates).toHaveBeenCalled();
     expect(
       ExecutionEnvironmentsAPI.readUnifiedJobTemplateOptions
     ).toHaveBeenCalled();

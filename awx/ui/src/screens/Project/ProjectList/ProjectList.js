@@ -145,7 +145,7 @@ function ProjectList() {
   const hasContentLoading = isDeleteLoading || isLoading;
   const canAdd = actions && actions.POST;
 
-  const deleteDetailsRequests = relatedResourceDeleteRequests(t).project(
+  const deleteDetailsRequests = relatedResourceDeleteRequests.project(
     selected[0]
   );
 
@@ -276,7 +276,10 @@ function ProjectList() {
             )}
             emptyStateControls={
               canAdd ? (
-                <ToolbarAddButton key="add" linkTo={`${location.pathname}/add`} />
+                <ToolbarAddButton
+                  key="add"
+                  linkTo={`${location.pathname}/add`}
+                />
               ) : null
             }
           />

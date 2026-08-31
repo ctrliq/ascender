@@ -6,11 +6,11 @@ import {
   relatedResourceDeleteRequests,
 } from 'util/getRelatedResourceDeleteDetails';
 import {
-	Button,
-	Tooltip,
-	Alert,
-	Badge,
-	DropdownItem,
+  Button,
+  Tooltip,
+  Alert,
+  Badge,
+  DropdownItem,
 } from '@patternfly/react-core';
 
 import AlertModal from 'components/AlertModal';
@@ -28,7 +28,7 @@ const Label = styled.span`
 `;
 
 function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
   const [removeMessageError, setRemoveMessageError] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -43,7 +43,7 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
     setIsLoading(true);
     if (isOpen && itemsToRemove.length > 0) {
       const { results, error } = await getRelatedResourceDeleteCounts(
-        relatedResourceDeleteRequests(t).instance(itemsToRemove[0])
+        relatedResourceDeleteRequests.instance(itemsToRemove[0])
       );
 
       if (error) {
@@ -91,10 +91,10 @@ function RemoveInstanceButton({ itemsToRemove, onRemove, isK8s }) {
         other="Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?"
       />
       {removeDetails &&
-        Object.entries(removeDetails).map(([key, value]) => (
-          <div key={key} aria-label={`${key}: ${value}`}>
-            <Label>{key}</Label>
-            <Badge>{value}</Badge>
+        removeDetails.map(({ label, count }) => (
+          <div key={label.id} aria-label={`${i18n._(label)}: ${count}`}>
+            <Label>{i18n._(label)}</Label>
+            <Badge>{count}</Badge>
           </div>
         ))}
     </div>

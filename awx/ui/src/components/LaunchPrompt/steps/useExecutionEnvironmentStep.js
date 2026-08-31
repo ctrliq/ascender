@@ -8,16 +8,18 @@ const STEP_ID = 'executionEnvironment';
 export default function useExecutionEnvironmentStep(launchConfig, resource) {
   const { t } = useLingui();
   return {
-    step: !launchConfig.ask_execution_environment_on_launch ? null : {
-      id: STEP_ID,
-      name: (
-        <StepName id="execution-environment-step">
-          {t`Execution Environment`}
-        </StepName>
-      ),
-      component: <ExecutionEnvironmentStep />,
-      enableNext: true,
-    },
+    step: !launchConfig.ask_execution_environment_on_launch
+      ? null
+      : {
+          id: STEP_ID,
+          name: (
+            <StepName id="execution-environment-step">
+              {t`Execution Environment`}
+            </StepName>
+          ),
+          component: <ExecutionEnvironmentStep />,
+          enableNext: true,
+        },
     initialValues: getInitialValues(launchConfig, resource),
     isReady: true,
     contentError: null,

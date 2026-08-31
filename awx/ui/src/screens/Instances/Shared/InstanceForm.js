@@ -1,9 +1,13 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField } from 'formik';
-import { Form, FormGroup, CardBody, FormHelperText,
-HelperText,
-HelperTextItem,
+import {
+  Form,
+  FormGroup,
+  CardBody,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 import { FormColumnLayout } from 'components/FormLayout';
 import FormField, {
@@ -88,10 +92,7 @@ function InstanceFormFields({ isEdit }) {
           </FormHelperText>
         )}
       </FormGroup>
-      <FormGroup
-        fieldId="instance-option-checkboxes"
-        label={t`Options`}
-      >
+      <FormGroup fieldId="instance-option-checkboxes" label={t`Options`}>
         <CheckboxField
           id="enabled"
           name="enabled"

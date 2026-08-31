@@ -220,9 +220,7 @@ function WorkflowApprovalsList() {
               <HeaderRow qsConfig={QS_CONFIG}>
                 <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
                 <HeaderCell>{t`Workflow Job`}</HeaderCell>
-                <HeaderCell sortKey="started">
-                  {t`Started`}
-                </HeaderCell>
+                <HeaderCell sortKey="started">{t`Started`}</HeaderCell>
                 <HeaderCell>{t`Status`}</HeaderCell>
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>

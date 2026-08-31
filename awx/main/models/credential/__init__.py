@@ -751,28 +751,41 @@ ManagedCredentialType(
     managed=True,
     inputs={
         'fields': [
-            {'id': 'username', 'label': gettext_noop('Username'), 'type': 'string'},
+            # Form renders three fields per row, in order. Rows are grouped by
+            # auth mode: shared + password identity / password scoping / application credential.
+            {
+                'id': 'host',
+                'label': gettext_noop('Host (Authentication URL)'),
+                'type': 'string',
+                'help_text': gettext_noop(
+                    'The host to authenticate with. For example, https://openstack.business.com:5000/v3. '
+                    'Authenticate with either a username and password or an application credential.'
+                ),
+            },
+            {
+                'id': 'username',
+                'label': gettext_noop('Username'),
+                'type': 'string',
+                'help_text': gettext_noop('Required for password authentication. Leave blank when using an application credential.'),
+            },
             {
                 'id': 'password',
                 'label': gettext_noop('Password (API Key)'),
                 'type': 'string',
                 'secret': True,
-            },
-            {
-                'id': 'host',
-                'label': gettext_noop('Host (Authentication URL)'),
-                'type': 'string',
-                'help_text': gettext_noop('The host to authenticate with.  For example, https://openstack.business.com/v2.0/'),
+                'help_text': gettext_noop('Required for password authentication. Leave blank when using an application credential.'),
             },
             {
                 'id': 'project',
                 'label': gettext_noop('Project (Tenant Name)'),
                 'type': 'string',
+                'help_text': gettext_noop('Password authentication only. Ignored when using an application credential.'),
             },
             {
                 'id': 'project_domain_name',
                 'label': gettext_noop('Project (Domain Name)'),
                 'type': 'string',
+                'help_text': gettext_noop('Password authentication only. Ignored when using an application credential.'),
             },
             {
                 'id': 'domain',
@@ -781,9 +794,26 @@ ManagedCredentialType(
                 'help_text': gettext_noop(
                     'OpenStack domains define administrative boundaries. '
                     'It is only needed for Keystone v3 authentication '
-                    'URLs. Refer to the documentation for '
-                    'common scenarios.'
+                    'URLs. Password authentication only; ignored when '
+                    'using an application credential.'
                 ),
+            },
+            {
+                'id': 'application_credential_id',
+                'label': gettext_noop('Application Credential ID'),
+                'type': 'string',
+                'help_text': gettext_noop(
+                    'ID of a Keystone application credential. When this and the '
+                    'application credential secret are set, they are used instead '
+                    'of username/password, and the project and domain fields are ignored.'
+                ),
+            },
+            {
+                'id': 'application_credential_secret',
+                'label': gettext_noop('Application Credential Secret'),
+                'type': 'string',
+                'secret': True,
+                'help_text': gettext_noop('Secret of a Keystone application credential.'),
             },
             {
                 'id': 'region',
@@ -798,7 +828,7 @@ ManagedCredentialType(
                 'default': True,
             },
         ],
-        'required': ['username', 'password', 'host', 'project'],
+        'required': ['host'],
     },
 )
 

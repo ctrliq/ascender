@@ -122,9 +122,7 @@ describe('<SAMLEdit />', () => {
       )
     );
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       SAML_AUTO_CREATE_OBJECTS: true,
       SOCIAL_AUTH_SAML_ENABLED_IDPS: {},

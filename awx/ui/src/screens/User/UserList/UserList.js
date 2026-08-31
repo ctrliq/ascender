@@ -139,12 +139,7 @@ function UserList() {
                 qsConfig={QS_CONFIG}
                 additionalControls={[
                   ...(canAdd
-                    ? [
-                        <ToolbarAddButton
-                          key="add"
-                          linkTo="/users/add"
-                        />,
-                      ]
+                    ? [<ToolbarAddButton key="add" linkTo="/users/add" />]
                     : []),
                   <ToolbarDeleteButton
                     key="delete"
@@ -157,15 +152,9 @@ function UserList() {
             )}
             headerRow={
               <HeaderRow qsConfig={QS_CONFIG}>
-                <HeaderCell sortKey="username">
-                  {t`Username`}
-                </HeaderCell>
-                <HeaderCell sortKey="first_name">
-                  {t`First Name`}
-                </HeaderCell>
-                <HeaderCell sortKey="last_name">
-                  {t`Last Name`}
-                </HeaderCell>
+                <HeaderCell sortKey="username">{t`Username`}</HeaderCell>
+                <HeaderCell sortKey="first_name">{t`First Name`}</HeaderCell>
+                <HeaderCell sortKey="last_name">{t`Last Name`}</HeaderCell>
                 <HeaderCell>{t`Email`}</HeaderCell>
                 <HeaderCell>{t`Organization`}</HeaderCell>
                 <HeaderCell>{t`Role`}</HeaderCell>
@@ -183,9 +172,7 @@ function UserList() {
               />
             )}
             emptyStateControls={
-              canAdd ? (
-                <ToolbarAddButton key="add" linkTo="/users/add" />
-              ) : null
+              canAdd ? <ToolbarAddButton key="add" linkTo="/users/add" /> : null
             }
           />
         </Card>

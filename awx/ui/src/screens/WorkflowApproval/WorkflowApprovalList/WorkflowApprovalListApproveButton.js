@@ -1,11 +1,7 @@
 import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import {
-	Button,
-	Tooltip,
-	DropdownItem,
-} from '@patternfly/react-core';
+import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
 
 import { KebabifiedContext } from 'contexts/Kebabified';
 
@@ -38,7 +34,6 @@ function WorkflowApprovalListApproveButton({ onApprove, selectedItems = [] }) {
     selectedItems.length === 0 || selectedItems.some(cannotApprove);
 
   return (
-
     <>
       {isKebabified ? (
         <DropdownItem

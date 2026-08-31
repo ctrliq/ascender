@@ -13,7 +13,10 @@ const makeRole = (overrides = {}) => ({
     resource_id: 15,
     resource_type: 'job_template',
     resource_type_display_name: 'Job Template',
-    user_capabilities: { unattach: true, ...(overrides.user_capabilities || {}) },
+    user_capabilities: {
+      unattach: true,
+      ...(overrides.user_capabilities || {}),
+    },
   },
 });
 

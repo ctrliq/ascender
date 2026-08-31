@@ -13,7 +13,7 @@ import getHelpText from '../Inventory.helptext';
 
 export const SourceVarsField = ({ popoverContent }) => {
   const { t } = useLingui();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   return (
     <FormFullWidthLayout>
       <VariablesField
@@ -33,7 +33,7 @@ export const SourceVarsField = ({ popoverContent }) => {
 
 export const VerbosityField = () => {
   const { t } = useLingui();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const [field, , helpers] = useField('verbosity');
   const options = [
     { value: '0', key: '0', label: t`0 (Warning)` },
@@ -59,7 +59,7 @@ export const VerbosityField = () => {
 
 export const OptionsField = () => {
   const { t } = useLingui();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const [updateOnLaunchField] = useField('update_on_launch');
   const [, , updateCacheTimeoutHelper] = useField('update_cache_timeout');
   const [projectField] = useField('source_project');
@@ -73,10 +73,7 @@ export const OptionsField = () => {
   return (
     <>
       <FormFullWidthLayout>
-        <FormGroup
-          fieldId="option-checkboxes"
-          label={t`Update options`}
-        >
+        <FormGroup fieldId="option-checkboxes" label={t`Update options`}>
           <FormCheckboxLayout>
             <CheckboxField
               id="overwrite"
@@ -117,7 +114,7 @@ export const OptionsField = () => {
 
 export const EnabledVarField = () => {
   const { t } = useLingui();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   return (
     <FormField
       id="inventory-enabled-var"
@@ -131,7 +128,7 @@ export const EnabledVarField = () => {
 
 export const EnabledValueField = () => {
   const { t } = useLingui();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   return (
     <FormField
       id="inventory-enabled-value"
@@ -145,7 +142,7 @@ export const EnabledValueField = () => {
 
 export const HostFilterField = () => {
   const { t } = useLingui();
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   return (
     <FormField
       id="host-filter"

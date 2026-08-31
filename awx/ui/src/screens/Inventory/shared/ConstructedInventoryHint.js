@@ -15,14 +15,7 @@ import {
   Panel,
   CardBody,
 } from '@patternfly/react-core';
-import {
-  Table,
-  Thead,
-  Tr,
-  Th,
-  Tbody,
-  Td,
-} from '@patternfly/react-table';
+import { Table, Thead, Tr, Th, Tbody, Td } from '@patternfly/react-table';
 import { ExternalLinkAltIcon } from '@patternfly/react-icons';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
@@ -74,8 +67,14 @@ function ConstructedInventoryHint() {
           <Tr ouiaId="plugin-row">
             <Td dataLabel={t`name`}>
               <code>plugin</code>
-              <p style={{ color: "var(--pf-t--global--color--brand--default)" }}>{t`string`}</p>
-              <p style={{ color: "var(--pf-t--global--color--status--danger--default)" }}>{t`required`}</p>
+              <p
+                style={{ color: 'var(--pf-t--global--color--brand--default)' }}
+              >{t`string`}</p>
+              <p
+                style={{
+                  color: 'var(--pf-t--global--color--status--danger--default)',
+                }}
+              >{t`required`}</p>
             </Td>
             <Td dataLabel={t`description`}>
               {t`Token that ensures this is a source file
@@ -85,7 +84,9 @@ function ConstructedInventoryHint() {
           <Tr key="strict">
             <Td dataLabel={t`name`}>
               <code>strict</code>
-              <p style={{ color: "var(--pf-t--global--color--brand--default)" }}>{t`boolean`}</p>
+              <p
+                style={{ color: 'var(--pf-t--global--color--brand--default)' }}
+              >{t`boolean`}</p>
             </Td>
             <Td dataLabel={t`description`}>
               {t`If yes make invalid entries a fatal error, otherwise skip and
@@ -99,7 +100,9 @@ function ConstructedInventoryHint() {
           <Tr key="groups">
             <Td dataLabel={t`name`}>
               <code>groups</code>
-              <p style={{ color: "var(--pf-t--global--color--brand--default)" }}>{t`dictionary`}</p>
+              <p
+                style={{ color: 'var(--pf-t--global--color--brand--default)' }}
+              >{t`dictionary`}</p>
             </Td>
             <Td dataLabel={t`description`}>
               {t`Add hosts to group based on Jinja2 conditionals.`}
@@ -108,7 +111,9 @@ function ConstructedInventoryHint() {
           <Tr key="compose">
             <Td dataLabel={t`name`}>
               <code>compose</code>
-              <p style={{ color: "var(--pf-t--global--color--brand--default)" }}>{t`dictionary`}</p>
+              <p
+                style={{ color: 'var(--pf-t--global--color--brand--default)' }}
+              >{t`dictionary`}</p>
             </Td>
             <Td dataLabel={t`description`}>
               {t`Create vars from jinja2 expressions. This can be useful
@@ -168,15 +173,8 @@ groups:
         />
       }
     >
-      <FormGroup
-        label={t`Limit`}
-        fieldId="intersection-example-limit"
-      >
-        <ClipboardCopy
-          isReadOnly
-          hoverTip={t`Copy`}
-          clickTip={t`Copied`}
-        >
+      <FormGroup label={t`Limit`} fieldId="intersection-example-limit">
+        <ClipboardCopy isReadOnly hoverTip={t`Copy`} clickTip={t`Copied`}>
           {limitToIntersectionLimit}
         </ClipboardCopy>
       </FormGroup>
@@ -262,15 +260,8 @@ function FilterOnNestedGroupExample() {
           </CodeBlockCode>
         </CodeBlock>
       </FormGroup>
-      <FormGroup
-        label={t`Limit`}
-        fieldId="nested-groups-example-limit"
-      >
-        <ClipboardCopy
-          isReadOnly
-          hoverTip={t`Copy`}
-          clickTip={t`Copied`}
-        >
+      <FormGroup label={t`Limit`} fieldId="nested-groups-example-limit">
+        <ClipboardCopy isReadOnly hoverTip={t`Copy`} clickTip={t`Copied`}>
           {nestedGroupsInventoryLimit}
         </ClipboardCopy>
       </FormGroup>
@@ -341,18 +332,11 @@ groups:
       }
     >
       <FormGroup label={t`Limit`} fieldId="processor-example-limit">
-        <ClipboardCopy
-          isReadOnly
-          hoverTip={t`Copy`}
-          clickTip={t`Copied`}
-        >
+        <ClipboardCopy isReadOnly hoverTip={t`Copy`} clickTip={t`Copied`}>
           {hostsByProcessorLimit}
         </ClipboardCopy>
       </FormGroup>
-      <FormGroup
-        label={t`Source vars`}
-        fieldId="processor-example-source-vars"
-      >
+      <FormGroup label={t`Source vars`} fieldId="processor-example-source-vars">
         <CodeBlock
           actions={
             <CodeBlockAction>

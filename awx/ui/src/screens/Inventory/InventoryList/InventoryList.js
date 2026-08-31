@@ -1,11 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
-import {
-	Card,
-	PageSection,
-	DropdownItem,
-} from '@patternfly/react-core';
+import { Card, PageSection, DropdownItem } from '@patternfly/react-core';
 
 import { InventoriesAPI } from 'api';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
@@ -135,7 +131,7 @@ function InventoryList() {
   const hasContentLoading = isDeleteLoading || isLoading;
   const canAdd = actions && actions.POST;
 
-  const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventory(
+  const deleteDetailsRequests = relatedResourceDeleteRequests.inventory(
     selected[0]
   );
 

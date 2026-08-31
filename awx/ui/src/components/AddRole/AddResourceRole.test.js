@@ -104,7 +104,9 @@ describe('<AddResourceRole />', () => {
     await user.click(getPrimaryButton());
 
     // Step 3 - check the Admin role
-    const adminCheckbox = await screen.findByRole('checkbox', { name: 'Admin' });
+    const adminCheckbox = await screen.findByRole('checkbox', {
+      name: 'Admin',
+    });
     await user.click(adminCheckbox);
     expect(adminCheckbox).toBeChecked();
 
@@ -151,7 +153,9 @@ describe('<AddResourceRole />', () => {
     await user.click(getPrimaryButton());
 
     // Step 3
-    const adminCheckbox = await screen.findByRole('checkbox', { name: 'Admin' });
+    const adminCheckbox = await screen.findByRole('checkbox', {
+      name: 'Admin',
+    });
     await user.click(adminCheckbox);
     expect(adminCheckbox).toBeChecked();
 
@@ -226,7 +230,9 @@ describe('<AddResourceRole />', () => {
     await user.click(getPrimaryButton());
 
     // Step 3 - check Admin
-    const adminCheckbox = await screen.findByRole('checkbox', { name: 'Admin' });
+    const adminCheckbox = await screen.findByRole('checkbox', {
+      name: 'Admin',
+    });
     await user.click(adminCheckbox);
     expect(adminCheckbox).toBeChecked();
 
@@ -309,7 +315,9 @@ describe('<AddResourceRole />', () => {
     await user.click(screen.getByRole('button', { name: 'Next' }));
 
     // Step 3 - primary button is Save
-    const adminCheckbox = await screen.findByRole('checkbox', { name: 'Admin' });
+    const adminCheckbox = await screen.findByRole('checkbox', {
+      name: 'Admin',
+    });
     await user.click(adminCheckbox);
     expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
 

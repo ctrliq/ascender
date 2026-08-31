@@ -67,7 +67,7 @@ function OrganizationDetail({ organization }) {
   const { error, dismissError } = useDismissableError(deleteError);
 
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).organization(organization);
+    relatedResourceDeleteRequests.organization(organization);
 
   if (hasContentLoading) {
     return <ContentLoading />;

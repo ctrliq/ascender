@@ -1,11 +1,7 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
-import {
-	Label, Content,
-	ContentVariants,
-
-} from '@patternfly/react-core';
+import { Label, Content, ContentVariants } from '@patternfly/react-core';
 
 import { toTitleCase } from 'util/strings';
 import CredentialChip from '../CredentialChip';
@@ -14,10 +10,10 @@ import Sparkline from '../Sparkline';
 import { Detail, DeletedDetail } from '../DetailList';
 import { VariablesDetail } from '../CodeEditor';
 import ExecutionEnvironmentDetail from '../ExecutionEnvironmentDetail';
-import { VERBOSITY } from '../VerbositySelectField';
+import { getVerbosityLabel } from '../VerbositySelectField';
 
 function PromptJobTemplateDetail({ resource }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const {
     allow_simultaneous,
     ask_inventory_on_launch,
@@ -63,19 +59,13 @@ function PromptJobTemplateDetail({ resource }) {
           </Content>
         )}
         {allow_simultaneous && (
-          <Content component={ContentVariants.li}>
-            {t`Concurrent Jobs`}
-          </Content>
+          <Content component={ContentVariants.li}>{t`Concurrent Jobs`}</Content>
         )}
         {use_fact_cache && (
-          <Content component={ContentVariants.li}>
-            {t`Fact Storage`}
-          </Content>
+          <Content component={ContentVariants.li}>{t`Fact Storage`}</Content>
         )}
         {webhook_service && (
-          <Content component={ContentVariants.li}>
-            {t`Webhooks`}
-          </Content>
+          <Content component={ContentVariants.li}>{t`Webhooks`}</Content>
         )}
       </Content>
     );
@@ -125,9 +115,7 @@ function PromptJobTemplateDetail({ resource }) {
           }
         />
       ) : (
-        !ask_inventory_on_launch && (
-          <DeletedDetail label={t`Inventory`} />
-        )
+        !ask_inventory_on_launch && <DeletedDetail label={t`Inventory`} />
       )}
       {summary_fields?.project ? (
         <Detail
@@ -151,15 +139,9 @@ function PromptJobTemplateDetail({ resource }) {
         value={typeof forks === 'number' ? forks.toString() : forks}
       />
       <Detail label={t`Limit`} value={limit} />
-      <Detail
-        label={t`Verbosity`}
-        value={VERBOSITY(t)[verbosity]}
-      />
+      <Detail label={t`Verbosity`} value={getVerbosityLabel(verbosity, i18n)} />
       {typeof diff_mode === 'boolean' && (
-        <Detail
-          label={t`Show Changes`}
-          value={diff_mode ? t`On` : t`Off`}
-        />
+        <Detail label={t`Show Changes`} value={diff_mode ? t`On` : t`Off`} />
       )}
       <Detail label={t` Job Slicing`} value={job_slice_count} />
       <Detail label={t`Host Config Key`} value={host_config_key} />
@@ -169,10 +151,7 @@ function PromptJobTemplateDetail({ resource }) {
           value={`${window.location.origin}${related.callback}`}
         />
       )}
-      <Detail
-        label={t`Webhook Service`}
-        value={toTitleCase(webhook_service)}
-      />
+      <Detail label={t`Webhook Service`} value={toTitleCase(webhook_service)} />
       {related?.webhook_receiver && (
         <Detail
           label={t`Webhook URL`}
@@ -193,9 +172,7 @@ function PromptJobTemplateDetail({ resource }) {
           }
         />
       )}
-      {optionsList && (
-        <Detail label={t`Enabled Options`} value={optionsList} />
-      )}
+      {optionsList && <Detail label={t`Enabled Options`} value={optionsList} />}
       {summary_fields?.credentials && (
         <Detail
           fullWidth
@@ -225,7 +202,7 @@ function PromptJobTemplateDetail({ resource }) {
               ouiaId="prompt-jt-label-chips"
             >
               {summary_fields.labels.results.map((label) => (
-                <Label variant="outline" key={label.id} >
+                <Label variant="outline" key={label.id}>
                   {label.name}
                 </Label>
               ))}
@@ -244,7 +221,7 @@ function PromptJobTemplateDetail({ resource }) {
             ouiaId="prompt-jt-instance-group-chips"
           >
             {instance_groups?.map((ig) => (
-              <Label variant="outline" key={ig.id} >
+              <Label variant="outline" key={ig.id}>
                 {ig.name}
               </Label>
             ))}
@@ -263,7 +240,7 @@ function PromptJobTemplateDetail({ resource }) {
               ouiaId="prompt-jt-job-tag-chips"
             >
               {job_tags.split(',').map((jobTag) => (
-                <Label variant="outline" key={jobTag} >
+                <Label variant="outline" key={jobTag}>
                   {jobTag}
                 </Label>
               ))}
@@ -283,7 +260,7 @@ function PromptJobTemplateDetail({ resource }) {
               ouiaId="prompt-jt-skip-tag-chips"
             >
               {skip_tags.split(',').map((skipTag) => (
-                <Label variant="outline" key={skipTag} >
+                <Label variant="outline" key={skipTag}>
                   {skipTag}
                 </Label>
               ))}

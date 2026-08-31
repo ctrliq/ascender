@@ -35,11 +35,11 @@ function UsageChart({ id, data, height, pageContext }) {
 
     const gridColor =
       getComputedStyle(document.documentElement)
-        .getPropertyValue("--pf-t--global--border--color--default")
+        .getPropertyValue('--pf-t--global--border--color--default')
         .trim() || '#d7d7d7';
     const textColor =
       getComputedStyle(document.documentElement)
-        .getPropertyValue("--pf-t--global--text--color--100")
+        .getPropertyValue('--pf-t--global--text--color--100')
         .trim() || '#151515';
 
     function transition(path) {
@@ -272,10 +272,7 @@ function UsageChart({ id, data, height, pageContext }) {
       .on('mouseout', handleMouseOut);
 
     // Create legend
-    const legend_keys = [
-      t`Subscriptions consumed`,
-      t`Subscription capacity`,
-    ];
+    const legend_keys = [t`Subscriptions consumed`, t`Subscription capacity`];
     let totalWidth = width / 2 - 175;
 
     const lineLegend = svg

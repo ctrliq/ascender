@@ -12,7 +12,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const InterpolateHtmlPlugin = require('react-dev-utils/InterpolateHtmlPlugin');
-const { InjectManifestPlugin } = require('inject-manifest-plugin');
 const ModuleScopePlugin = require('react-dev-utils/ModuleScopePlugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const ESLintPlugin = require('eslint-webpack-plugin');
@@ -56,9 +55,6 @@ const imageInlineSizeLimit = parseInt(
 
 // Check if TypeScript is setup
 const useTypeScript = fs.existsSync(paths.appTsConfig);
-
-// Get the path to the uncompiled service worker (if it exists).
-const swSrc = paths.swSrc;
 
 // style files regexes
 const cssRegex = /\.css$/;
@@ -393,7 +389,7 @@ module.exports = function (webpackEnv) {
             // Process any JS outside of the app with Babel.
             // Unlike the application JS, we only compile the standard ES features.
             {
-              test: /\.(js|mjs)$/,
+              test: /\.(js|mjs|cjs)$/,
               exclude: /@babel(?:\/|\\{1,2})runtime/,
               loader: require.resolve('babel-loader'),
               options: {
@@ -517,7 +513,7 @@ module.exports = function (webpackEnv) {
               // its runtime that would otherwise be processed through "file" loader.
               // Also exclude `html` and `json` extensions so they get processed
               // by webpacks internal loaders.
-              exclude: [/^$/, /\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+              exclude: [/^$/, /\.(js|mjs|cjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
               type: 'asset/resource',
             },
             // ** STOP ** Are you adding a new loader?
@@ -535,7 +531,6 @@ module.exports = function (webpackEnv) {
           {
             inject: true,
             template: paths.appHtml,
-            excludeChunks: ['service-worker'],
           },
           isEnvProduction
             ? {
@@ -605,11 +600,6 @@ module.exports = function (webpackEnv) {
         publicPath: paths.publicUrlOrPath,
         generate: (seed, files, entrypoints) => {
           const manifestFiles = files.reduce((manifest, file) => {
-            // Exclude the hashed service-worker chunk — it gets moved to the
-            // build root by InjectManifestPlugin, so the static/js/ path is wrong.
-            if (/service-worker\.[a-f0-9]+\.js/.test(file.name)) {
-              return manifest;
-            }
             manifest[file.name] = file.path;
             return manifest;
           }, seed);
@@ -632,15 +622,6 @@ module.exports = function (webpackEnv) {
         resourceRegExp: /^\.\/locale$/,
         contextRegExp: /moment$/,
       }),
-      // Generate a service worker script that will precache, and keep up to date,
-      // the HTML & assets that are part of the webpack build.
-      isEnvProduction &&
-        fs.existsSync(swSrc) &&
-        new InjectManifestPlugin({
-          file: `./${path.relative(paths.appPath, swSrc)}`,
-          exclude: ['**/*.map', 'asset-manifest.json', '**/LICENSE*'],
-          removeHash: true,
-        }),
       // Redirect PatternFly React Core asset requests to PatternFly assets
       new webpack.NormalModuleReplacementPlugin(
         /^\.\/assets\/(fonts|pficon)\/.*\.(woff2?|ttf|eot)$/,

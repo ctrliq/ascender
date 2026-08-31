@@ -87,8 +87,7 @@ describe('PromptDetail', () => {
       assertDetail('Inventory', 'Demo Inventory');
       assertDetail('Source Control Branch', 'Foo branch');
       assertDetail('Limit', 'localhost');
-      // Verbosity Detail renders empty under jsdom (Lingui macro yields no text),
-      // so the row is absent — original suite skipped its text assertion too.
+      assertDetail('Verbosity', '3 (Debug)');
       assertDetail('Show Changes', 'Off');
       assertDetail('Timeout', '1 min 40 sec');
       assertDetail('Forks', '1');
@@ -193,7 +192,7 @@ describe('PromptDetail', () => {
       assertDetail('Inventory', 'Override inventory');
       assertDetail('Source Control Branch', 'Bar branch');
       assertDetail('Limit', 'otherlimit');
-      // Verbosity Detail renders empty under jsdom (see note above)
+      assertDetail('Verbosity', '0 (Normal)');
       assertDetail('Show Changes', 'On');
       assertDetail('Timeout', '2 min 40 sec');
       assertDetail('Forks', '2');

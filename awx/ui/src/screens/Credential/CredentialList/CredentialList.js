@@ -121,7 +121,7 @@ function CredentialList() {
 
   const canAdd =
     actions && Object.prototype.hasOwnProperty.call(actions, 'POST');
-  const deleteDetailsRequests = relatedResourceDeleteRequests(t).credential(
+  const deleteDetailsRequests = relatedResourceDeleteRequests.credential(
     selected[0]
   );
   return (

@@ -100,3 +100,9 @@ from .application_name import set_application_name
 set_application_name(DATABASES, CLUSTER_HOST_ID)  # NOQA
 
 del set_application_name
+
+from .statement_timeout import set_statement_timeout
+
+set_statement_timeout(DATABASES, DATABASE_STATEMENT_TIMEOUT)  # NOQA
+
+del set_statement_timeout

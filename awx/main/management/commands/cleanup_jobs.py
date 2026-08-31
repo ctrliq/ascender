@@ -50,6 +50,41 @@ def dt_to_partition_name(tbl_name, dt):
     return f"{tbl_name}_{dt.strftime('%Y%m%d_%H')}"
 
 
+JHS_CHUNK_SIZE = 1000
+
+
+def _pre_delete_job_host_summaries(job_pks, logger=None):
+    """Pre-delete JobHostSummary rows and clear Host FK references in batches.
+
+    Django's cascade collector materializes all JHS IDs into a single
+    UPDATE ... IN (...) to SET_NULL on Host.last_job_host_summary.
+    With many jobs x hosts this exceeds PostgreSQL's 1GB alloc limit.
+    Doing it in chunks with raw SQL avoids that.
+    """
+    if not job_pks:
+        return
+
+    # ANY(%s) is PostgreSQL-specific; AWX only supports PostgreSQL
+    with connection.cursor() as cursor:
+        for i in range(0, len(job_pks), JHS_CHUNK_SIZE):
+            chunk = list(job_pks[i : i + JHS_CHUNK_SIZE])
+
+            cursor.execute(
+                "UPDATE main_host SET last_job_host_summary_id = NULL"
+                " WHERE last_job_host_summary_id IN"
+                " (SELECT id FROM main_jobhostsummary WHERE job_id = ANY(%s))",
+                [chunk],
+            )
+
+            cursor.execute(
+                "DELETE FROM main_jobhostsummary WHERE job_id = ANY(%s)",
+                [chunk],
+            )
+
+            if logger:
+                logger.debug("Pre-deleted JobHostSummary chunk %d-%d of %d job PKs", i, i + len(chunk), len(job_pks))
+
+
 class DeleteMeta:
     def __init__(self, logger, job_class, cutoff, dry_run):
         self.logger = logger
@@ -92,6 +127,8 @@ class DeleteMeta:
 
     def delete_jobs(self):
         if not self.dry_run:
+            if self.job_class is Job:
+                _pre_delete_job_host_summaries(self.jobs_pk_list, self.logger)
             self.job_class.objects.filter(pk__in=self.jobs_pk_list).delete()
 
     def find_partitions_to_drop(self):
@@ -106,8 +143,10 @@ class DeleteMeta:
             cursor.execute(query)
             partitions_from_db = [r[0] for r in cursor.fetchall()]
 
-        partitions_dt = [partition_name_dt(p) for p in partitions_from_db if not None]
-        partitions_dt = [p for p in partitions_dt if not None]
+        # partition_name_dt returns None for a name it cannot read a date out of,
+        # and dt_to_partition_name would fail on that below
+        partitions_dt = [partition_name_dt(p) for p in partitions_from_db]
+        partitions_dt = [p for p in partitions_dt if p is not None]
 
         # convert datetime partition back to string partition
         partitions_maybe_drop = {dt_to_partition_name(tbl_name, dt) for dt in partitions_dt}
@@ -266,10 +305,14 @@ class Command(BaseCommand):
         if info['min'] is not None:
             for start in range(info['min'], info['max'] + 1, self.batch_size):
                 qs_batch = qs.filter(id__gte=start, id__lte=start + self.batch_size)
-                pk_list = qs_batch.values_list('id', flat=True)
+                pk_list = list(qs_batch.values_list('id', flat=True))
 
+                _pre_delete_job_host_summaries(pk_list, self.logger)
                 _, results = qs_batch.delete()
-                deleted += results['main.Job']
+                # a window can hold no deletable Job at all: Job shares the
+                # UnifiedJob id sequence with the other job types, and windows
+                # overlap on their boundary id. Django reports {} for those.
+                deleted += results.get('main.Job', 0)
                 # Avoid dropping the job event table in case we have interacted with it already
                 self._delete_unpartitioned_events(Job, pk_list)
 

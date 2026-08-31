@@ -25,7 +25,9 @@ describe('PageHeaderToolbar', () => {
     // help dropdown toggle (aria-label Info) and user dropdown toggle. Wait
     // for the on-mount approvals request to settle so its setState lands inside
     // act before asserting.
-    expect(await screen.findByRole('button', { name: 'Info' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('button', { name: 'Info' })
+    ).toBeInTheDocument();
     expect(
       container.querySelector(
         'a[href="/workflow_approvals?workflow_approvals.status=pending"]'
@@ -36,9 +38,7 @@ describe('PageHeaderToolbar', () => {
         '[data-ouia-component-id="toolbar-user-dropdown-toggle"]'
       )
     ).toBeInTheDocument();
-    await waitFor(() =>
-      expect(WorkflowApprovalsAPI.read).toHaveBeenCalled()
-    );
+    await waitFor(() => expect(WorkflowApprovalsAPI.read).toHaveBeenCalled());
   });
 
   test('dropdowns have expected items and callbacks', async () => {
@@ -94,9 +94,7 @@ describe('PageHeaderToolbar', () => {
     );
 
     await waitFor(() => {
-      const badge = container.querySelector(
-        '#toolbar-workflow-approval-badge'
-      );
+      const badge = container.querySelector('#toolbar-workflow-approval-badge');
       expect(within(badge).getByText('20')).toBeInTheDocument();
     });
   });

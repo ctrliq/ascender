@@ -19,7 +19,12 @@ const makeCredentialType = (overrides = {}) => ({
   inputs: {
     fields: [
       { id: 'username', type: 'string', label: 'Jenkins username' },
-      { id: 'password', type: 'string', label: 'Jenkins password', secret: true },
+      {
+        id: 'password',
+        type: 'string',
+        label: 'Jenkins password',
+        secret: true,
+      },
     ],
     required: ['username', 'password'],
   },
@@ -49,9 +54,7 @@ describe('<CredentialTypeDetails/>', () => {
     renderWithContexts(
       <CredentialTypeDetails credentialType={makeCredentialType()} />
     );
-    await waitFor(() =>
-      expect(screen.getByText('Name')).toBeInTheDocument()
-    );
+    await waitFor(() => expect(screen.getByText('Name')).toBeInTheDocument());
     assertDetail('Name', 'Foo');
     assertDetail('Description', 'Bar');
     expect(screen.getByText('Created')).toBeInTheDocument();
@@ -106,9 +109,7 @@ describe('<CredentialTypeDetails/>', () => {
         })}
       />
     );
-    await waitFor(() =>
-      expect(screen.getByText('Name')).toBeInTheDocument()
-    );
+    await waitFor(() => expect(screen.getByText('Name')).toBeInTheDocument());
     expect(
       screen.queryByRole('button', { name: 'Delete' })
     ).not.toBeInTheDocument();
@@ -124,9 +125,7 @@ describe('<CredentialTypeDetails/>', () => {
         })}
       />
     );
-    await waitFor(() =>
-      expect(screen.getByText('Name')).toBeInTheDocument()
-    );
+    await waitFor(() => expect(screen.getByText('Name')).toBeInTheDocument());
     expect(screen.queryByLabelText('edit')).not.toBeInTheDocument();
   });
 });

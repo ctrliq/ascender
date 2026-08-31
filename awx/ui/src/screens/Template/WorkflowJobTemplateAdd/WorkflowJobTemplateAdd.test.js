@@ -42,26 +42,28 @@ const submittedValues = {
 // The form is exercised on its own in WorkflowJobTemplateForm.test.js; here we
 // only care about the container's submit/cancel/error handling, so stub the form
 // with controls that invoke its props.
-jest.mock('../shared/WorkflowJobTemplateForm', () =>
-  function MockWorkflowJobTemplateForm({
-    handleSubmit,
-    handleCancel,
-    submitError,
-  }) {
-    return (
-      <div>
-        {submitError ? (
-          <div data-testid="form-submit-error">{submitError.message}</div>
-        ) : null}
-        <button type="button" onClick={() => handleSubmit(submittedValues)}>
-          Submit
-        </button>
-        <button type="button" aria-label="Cancel" onClick={handleCancel}>
-          Cancel
-        </button>
-      </div>
-    );
-  }
+jest.mock(
+  '../shared/WorkflowJobTemplateForm',
+  () =>
+    function MockWorkflowJobTemplateForm({
+      handleSubmit,
+      handleCancel,
+      submitError,
+    }) {
+      return (
+        <div>
+          {submitError ? (
+            <div data-testid="form-submit-error">{submitError.message}</div>
+          ) : null}
+          <button type="button" onClick={() => handleSubmit(submittedValues)}>
+            Submit
+          </button>
+          <button type="button" aria-label="Cancel" onClick={handleCancel}>
+            Cancel
+          </button>
+        </div>
+      );
+    }
 );
 
 describe('<WorkflowJobTemplateAdd/>', () => {

@@ -169,5 +169,3 @@ def test_federated_inventory_rejects_root_group_create(post, admin_user, organiz
         expect=400,
     )
     assert resp.status_code == 400
-
-

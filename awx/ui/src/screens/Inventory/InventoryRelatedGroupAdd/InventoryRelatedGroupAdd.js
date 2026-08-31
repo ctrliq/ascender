@@ -21,9 +21,7 @@ function InventoryRelatedGroupAdd() {
   };
 
   const handleCancel = () => {
-    navigate(
-      `/inventories/inventory/${id}/groups/${groupId}/nested_groups`
-    );
+    navigate(`/inventories/inventory/${id}/groups/${groupId}/nested_groups`);
   };
   return (
     <InventoryGroupForm

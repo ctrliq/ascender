@@ -92,7 +92,9 @@ describe('<CredentialList />', () => {
       await screen.findByRole('button', { name: 'confirm delete' })
     );
 
-    await waitFor(() => expect(CredentialsAPI.destroy).toHaveBeenCalledTimes(1));
+    await waitFor(() =>
+      expect(CredentialsAPI.destroy).toHaveBeenCalledTimes(1)
+    );
   });
 
   test('should show error modal when credential is not successfully deleted from api', async () => {

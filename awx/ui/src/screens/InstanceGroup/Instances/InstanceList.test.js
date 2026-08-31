@@ -177,7 +177,9 @@ describe('<InstanceList/>', () => {
     const { user } = setup();
     await screen.findByRole('link', { name: 'awx' });
 
-    const healthCheck = screen.getByRole('button', { name: 'Run health check' });
+    const healthCheck = screen.getByRole('button', {
+      name: 'Run health check',
+    });
     expect(healthCheck).toBeDisabled();
 
     await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
@@ -204,7 +206,9 @@ describe('<InstanceList/>', () => {
     await screen.findByRole('link', { name: 'awx' });
 
     await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
-    const healthCheck = screen.getByRole('button', { name: 'Run health check' });
+    const healthCheck = screen.getByRole('button', {
+      name: 'Run health check',
+    });
     await waitFor(() => expect(healthCheck).toBeEnabled());
 
     await user.click(healthCheck);

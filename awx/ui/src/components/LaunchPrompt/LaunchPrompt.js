@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-	ExpandableSection
-} from '@patternfly/react-core';
+import { ExpandableSection } from '@patternfly/react-core';
 import Wizard from 'components/Wizard';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useFormikContext } from 'formik';
@@ -132,14 +130,12 @@ function PromptModalForm({
           validateStep(nextStep.id);
         }
       }}
-      title={`${t`Launch`} | ${resource.name}`}
+      title={t`Launch | ${resource.name}`}
       description={
         resource.description?.length > 512 ? (
           <ExpandableSection
             toggleText={
-              showDescription
-                ? t`Hide description`
-                : t`Show description`
+              showDescription ? t`Hide description` : t`Show description`
             }
             onToggle={(_event, isExpanded) => {
               setShowDescription(isExpanded);

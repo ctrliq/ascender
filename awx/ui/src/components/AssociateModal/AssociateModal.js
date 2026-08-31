@@ -3,12 +3,8 @@ import { useLocation, useNavigate } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 
-import {
-	Button
-} from '@patternfly/react-core';
-import {
-	Modal
-} from '@patternfly/react-core/deprecated';
+import { Button } from '@patternfly/react-core';
+import { Modal } from '@patternfly/react-core/deprecated';
 import { getSearchableKeys } from 'components/PaginatedTable';
 import useRequest from 'hooks/useRequest';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -51,10 +47,7 @@ function AssociateModal({
     isLoading,
   } = useRequest(
     useCallback(async () => {
-      const params = parseQueryString(
-        QS_CONFIG(displayKey),
-        location.search
-      );
+      const params = parseQueryString(QS_CONFIG(displayKey), location.search);
       const [
         {
           data: { count, results },

@@ -23,7 +23,9 @@ function UI() {
             path="*"
             element={
               <ContentError isNotFound>
-                <Link to={`${baseURL}/details`}>{t`View User Interface settings`}</Link>
+                <Link
+                  to={`${baseURL}/details`}
+                >{t`View User Interface settings`}</Link>
               </ContentError>
             }
           />

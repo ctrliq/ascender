@@ -3,10 +3,7 @@ import { Button, ClipboardCopy, Tooltip } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
-import {
-  PencilAltIcon,
-  UndoIcon,
-} from '@patternfly/react-icons';
+import { PencilAltIcon, UndoIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import { formatDateString, timeOfDay } from 'util/dates';
@@ -118,11 +115,12 @@ function ProjectListItem({
           {t`Refresh for revision`}
         </Label>
         <Tooltip content={t`Refresh project revision`}>
-          <Button icon={<UndoIcon />}
+          <Button
+            icon={<UndoIcon />}
             ouiaId={`project-refresh-revision-${project.id}`}
             variant="plain"
             onClick={() => onRefreshRow(project.id)}
-           />
+          />
         </Tooltip>
       </>
     );
@@ -186,9 +184,7 @@ function ProjectListItem({
           )}
         </Td>
         <Td dataLabel={t`Type`}>
-          {project.scm_type === ''
-            ? t`Manual`
-            : toTitleCase(project.scm_type)}
+          {project.scm_type === '' ? t`Manual` : toTitleCase(project.scm_type)}
         </Td>
         <Td dataLabel={t`Revision`}>{renderRevision()}</Td>
         <ActionsTd dataLabel={t`Actions`}>
@@ -219,14 +215,15 @@ function ProjectListItem({
             visible={project.summary_fields.user_capabilities.edit}
             tooltip={t`Edit Project`}
           >
-            <Button icon={<PencilAltIcon />}
+            <Button
+              icon={<PencilAltIcon />}
               ouiaId={`${project.id}-edit-button`}
               isDisabled={isDisabled}
               aria-label={t`Edit Project`}
               variant="plain"
               component={Link}
               to={`/projects/${project.id}/edit`}
-             />
+            />
           </ActionItem>
           <ActionItem
             tooltip={t`Copy Project`}

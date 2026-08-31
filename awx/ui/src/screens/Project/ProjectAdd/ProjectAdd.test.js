@@ -64,9 +64,7 @@ jest.mock('../shared/ProjectForm', () => ({
         { type: 'button', 'aria-label': 'Cancel', onClick: handleCancel },
         'cancel'
       ),
-      submitError
-        ? ReactLib.createElement('div', null, 'submit-error')
-        : null
+      submitError ? ReactLib.createElement('div', null, 'submit-error') : null
     );
   },
 }));

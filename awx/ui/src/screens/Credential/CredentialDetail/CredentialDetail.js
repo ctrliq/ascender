@@ -2,11 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import {
-  Button,
-  Content,
-  ContentVariants,
-  } from '@patternfly/react-core';
+import { Button, Content, ContentVariants } from '@patternfly/react-core';
 import AlertModal from 'components/AlertModal';
 import { CardBody, CardActionsRow } from 'components/Card';
 import ContentError from 'components/ContentError';
@@ -192,7 +188,7 @@ function CredentialDetail({ credential }) {
   }, [fetchDetails]);
 
   const deleteDetailsRequests =
-    relatedResourceDeleteRequests(t).credential(credential);
+    relatedResourceDeleteRequests.credential(credential);
 
   const enabledBooleanFields = fields.filter(
     ({ id, type }) => type === 'boolean' && inputs[id]

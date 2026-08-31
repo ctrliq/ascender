@@ -3,6 +3,7 @@ awx_image: ansible/awx
 awx_image_tag: "{{ awx_docker_version }}"
 dockerfile_name: 'Dockerfile'
 headless: no
+tag_latest: yes
 build_platforms: "linux/amd64,linux/arm64"
 build_cache_from: ""
 build_cache_to: ""

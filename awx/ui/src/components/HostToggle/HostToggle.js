@@ -16,8 +16,7 @@ function HostToggle({
 }) {
   const { t } = useLingui();
   if (!tooltip) {
-    tooltip =
-      t`Indicates if a host is available and should be included in running
+    tooltip = t`Indicates if a host is available and should be included in running
     jobs.  For hosts that are part of an external inventory, this may be
     reset by the inventory sync process.`;
   }

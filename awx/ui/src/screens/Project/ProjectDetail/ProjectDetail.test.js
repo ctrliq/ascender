@@ -125,7 +125,7 @@ describe('<ProjectDetail />', () => {
     );
     assertDetail(
       'Cache Timeout',
-      `${mockProject.scm_update_cache_timeout} Seconds`
+      `${mockProject.scm_update_cache_timeout} seconds`
     );
 
     assertDetail(
@@ -209,7 +209,9 @@ describe('<ProjectDetail />', () => {
       },
     });
     await screen.findByText('Name');
-    expect(screen.queryByRole('link', { name: 'edit' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'edit' })
+    ).not.toBeInTheDocument();
     expect(
       screen.queryByRole('button', { name: 'Sync Project' })
     ).not.toBeInTheDocument();

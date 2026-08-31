@@ -1,0 +1,8 @@
+node_modules/
+# written by the global setup on every run
+fixtures.json
+# playwright output
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/

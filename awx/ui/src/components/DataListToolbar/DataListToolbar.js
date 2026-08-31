@@ -2,17 +2,17 @@ import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import {
-	Button,
-	Checkbox,
-	Dropdown,
-	DropdownList,
-	MenuToggle,
-	Toolbar,
-	ToolbarContent as PFToolbarContent,
-	ToolbarGroup,
-	ToolbarItem,
-	ToolbarToggleGroup,
-	Tooltip
+  Button,
+  Checkbox,
+  Dropdown,
+  DropdownList,
+  MenuToggle,
+  Toolbar,
+  ToolbarContent as PFToolbarContent,
+  ToolbarGroup,
+  ToolbarItem,
+  ToolbarToggleGroup,
+  Tooltip,
 } from '@patternfly/react-core';
 import {
   AngleDownIcon,
@@ -82,8 +82,7 @@ function DataListToolbar({
 
   const viewportWidth =
     window.innerWidth || document.documentElement.clientWidth;
-  const dropdownPosition =
-    viewportWidth >= 992 ? 'right' : 'left';
+  const dropdownPosition = viewportWidth >= 992 ? 'right' : 'left';
 
   const onShowAdvancedSearch = (shown) => {
     setIsAdvancedSearchShown(shown);
@@ -119,18 +118,21 @@ function DataListToolbar({
         {onExpandAll && (
           <ToolbarGroup>
             <ToolbarItem>
-              <Button icon={isAllExpanded ? (
-                  <AngleDownIcon aria-label={t`Is expanded`} />
-                ) : (
-                  <AngleRightIcon aria-label={t`Is not expanded`} />
-                )}
+              <Button
+                icon={
+                  isAllExpanded ? (
+                    <AngleDownIcon aria-label={t`Is expanded`} />
+                  ) : (
+                    <AngleRightIcon aria-label={t`Is not expanded`} />
+                  )
+                }
                 onClick={() => {
                   onExpandAll(!isAllExpanded);
                 }}
                 aria-label={t`Expand all rows`}
                 ouiaId="expand-all-rows"
                 variant="plain"
-               />
+              />
             </ToolbarItem>
           </ToolbarGroup>
         )}
@@ -225,7 +227,9 @@ function DataListToolbar({
           </ToolbarGroup>
         )}
         {!isAdvancedSearchShown && pagination && itemCount > 0 && (
-          <ToolbarItem variant="pagination" style={{ alignSelf: 'center' }}>{pagination}</ToolbarItem>
+          <ToolbarItem variant="pagination" style={{ alignSelf: 'center' }}>
+            {pagination}
+          </ToolbarItem>
         )}
       </ToolbarContent>
     </Toolbar>

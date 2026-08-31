@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { useLingui } from '@lingui/react/macro';
+import { Plural, useLingui } from '@lingui/react/macro';
 import {
   Button,
   Content,
@@ -26,14 +26,14 @@ import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDeta
 import useIsMounted from 'hooks/useIsMounted';
 import { formatDateString } from 'util/dates';
 import Popover from 'components/Popover';
-import { VERBOSITY } from 'components/VerbositySelectField';
+import { getVerbosityLabel } from 'components/VerbositySelectField';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import InventorySourceSyncButton from '../shared/InventorySourceSyncButton';
 import useWsInventorySourcesDetails from '../shared/useWsInventorySourcesDetails';
 import getHelpText from '../shared/Inventory.helptext';
 
 function InventorySourceDetail({ inventorySource }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const [isI18nLoading, setIsI18nLoading] = useState(true);
   const [deletionError, setDeletionError] = useState(false);
   const navigate = useNavigate();
@@ -98,7 +98,7 @@ function InventorySourceDetail({ inventorySource }) {
     fetchSourceChoices();
   }, [fetchSourceChoices]);
 
-  const helpText = getHelpText(t);
+  const helpText = getHelpText();
   const {
     created_by,
     credentials,
@@ -125,7 +125,7 @@ function InventorySourceDetail({ inventorySource }) {
     }
   };
 
-  const deleteDetailsRequests = relatedResourceDeleteRequests(t).inventorySource(
+  const deleteDetailsRequests = relatedResourceDeleteRequests.inventorySource(
     inventorySource.id
   );
 
@@ -254,15 +254,13 @@ function InventorySourceDetail({ inventorySource }) {
           <Detail
             label={t`Inventory file`}
             helpText={helpText.sourcePath}
-            value={
-              source_path === '' ? t`/ (project root)` : source_path
-            }
+            value={source_path === '' ? t`/ (project root)` : source_path}
           />
         ) : null}
         <Detail
           label={t`Verbosity`}
           helpText={helpText.subFormVerbosityFields}
-          value={VERBOSITY(t)[verbosity]}
+          value={getVerbosityLabel(verbosity, i18n)}
         />
         <Detail
           label={t`Source Control Branch`}
@@ -271,7 +269,13 @@ function InventorySourceDetail({ inventorySource }) {
         />
         <Detail
           label={t`Cache timeout`}
-          value={`${update_cache_timeout} ${t`seconds`}`}
+          value={
+            <Plural
+              value={update_cache_timeout}
+              one="# second"
+              other="# seconds"
+            />
+          }
           helpText={helpText.subFormOptions.cachedTimeOut}
         />
         <Detail
@@ -298,11 +302,7 @@ function InventorySourceDetail({ inventorySource }) {
           isEmpty={credentials?.length === 0}
         />
         {optionsList && (
-          <Detail
-            fullWidth
-            label={t`Enabled Options`}
-            value={optionsList}
-          />
+          <Detail fullWidth label={t`Enabled Options`} value={optionsList} />
         )}
         {source_vars && (
           <VariablesDetail
@@ -314,11 +314,7 @@ function InventorySourceDetail({ inventorySource }) {
             dataCy="inventory-source-detail-variables"
           />
         )}
-        <UserDateDetail
-          date={created}
-          label={t`Created`}
-          user={created_by}
-        />
+        <UserDateDetail date={created} label={t`Created`} user={created_by} />
         <UserDateDetail
           date={modified}
           label={t`Last modified`}

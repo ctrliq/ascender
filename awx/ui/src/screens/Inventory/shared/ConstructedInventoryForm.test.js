@@ -1,10 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import {
-  InstanceGroupsAPI,
-  InventoriesAPI,
-  OrganizationsAPI,
-} from 'api';
+import { InstanceGroupsAPI, InventoriesAPI, OrganizationsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryForm from './ConstructedInventoryForm';
 

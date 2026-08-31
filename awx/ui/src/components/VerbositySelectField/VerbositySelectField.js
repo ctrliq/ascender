@@ -1,32 +1,32 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
+import { msg } from '@lingui/core/macro';
 import { useField } from 'formik';
 import { FormGroup } from '@patternfly/react-core';
 import Popover from 'components/Popover';
 import AnsibleSelect from 'components/AnsibleSelect';
 import FieldWithPrompt from 'components/FieldWithPrompt';
 
-function VerbositySelectField({
-  fieldId,
-  promptId,
-  promptName,
-  tooltip,
-}) {
-  const { t } = useLingui();
+export const VERBOSITY = {
+  0: msg`0 (Normal)`,
+  1: msg`1 (Verbose)`,
+  2: msg`2 (More Verbose)`,
+  3: msg`3 (Debug)`,
+  4: msg`4 (Connection Debug)`,
+  5: msg`5 (WinRM Debug)`,
+};
 
-  const getVerbosityOptions = () => ({
-    0: t`0 (Normal)`,
-    1: t`1 (Verbose)`,
-    2: t`2 (More Verbose)`,
-    3: t`3 (Debug)`,
-    4: t`4 (Connection Debug)`,
-    5: t`5 (WinRM Debug)`,
-  });
+export function getVerbosityLabel(verbosity, i18n) {
+  return VERBOSITY[verbosity] ? i18n._(VERBOSITY[verbosity]) : undefined;
+}
 
-  const VERBOSE_OPTIONS = Object.entries(getVerbosityOptions()).map(([k, v]) => ({
-    key: `${k}`,
-    value: `${k}`,
-    label: v,
+function VerbositySelectField({ fieldId, promptId, promptName, tooltip }) {
+  const { t, i18n } = useLingui();
+
+  const VERBOSE_OPTIONS = Object.entries(VERBOSITY).map(([k, descriptor]) => ({
+    key: k,
+    value: k,
+    label: i18n._(descriptor),
   }));
   const [verbosityField, , verbosityHelpers] = useField('verbosity');
   return promptId ? (
@@ -53,17 +53,6 @@ function VerbositySelectField({
       />
     </FormGroup>
   );
-}
-
-export function VERBOSITY(t) {
-  return {
-    0: t ? t`0 (Normal)` : '0 (Normal)',
-    1: t ? t`1 (Verbose)` : '1 (Verbose)',
-    2: t ? t`2 (More Verbose)` : '2 (More Verbose)',
-    3: t ? t`3 (Debug)` : '3 (Debug)',
-    4: t ? t`4 (Connection Debug)` : '4 (Connection Debug)',
-    5: t ? t`5 (WinRM Debug)` : '5 (WinRM Debug)',
-  };
 }
 
 export default VerbositySelectField;

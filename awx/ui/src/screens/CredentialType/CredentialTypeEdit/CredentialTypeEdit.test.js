@@ -17,7 +17,12 @@ const credentialTypeData = {
   inputs: JSON.stringify({
     fields: [
       { id: 'username', type: 'string', label: 'Jenkins username' },
-      { id: 'password', type: 'string', label: 'Jenkins password', secret: true },
+      {
+        id: 'password',
+        type: 'string',
+        label: 'Jenkins password',
+        secret: true,
+      },
     ],
     required: ['username', 'password'],
   }),
@@ -45,20 +50,22 @@ const mockUpdateData = {
 
 // The form has its own suite; stub it so we can drive the container's
 // submit/cancel/error handling directly.
-jest.mock('../shared/CredentialTypeForm', () =>
-  function MockCredentialTypeForm({ onSubmit, onCancel, submitError }) {
-    return (
-      <div>
-        {submitError ? <div data-testid="form-submit-error" /> : null}
-        <button type="button" onClick={() => onSubmit(mockUpdateData)}>
-          Submit
-        </button>
-        <button type="button" aria-label="Cancel" onClick={onCancel}>
-          Cancel
-        </button>
-      </div>
-    );
-  }
+jest.mock(
+  '../shared/CredentialTypeForm',
+  () =>
+    function MockCredentialTypeForm({ onSubmit, onCancel, submitError }) {
+      return (
+        <div>
+          {submitError ? <div data-testid="form-submit-error" /> : null}
+          <button type="button" onClick={() => onSubmit(mockUpdateData)}>
+            Submit
+          </button>
+          <button type="button" aria-label="Cancel" onClick={onCancel}>
+            Cancel
+          </button>
+        </div>
+      );
+    }
 );
 
 describe('<CredentialTypeEdit>', () => {

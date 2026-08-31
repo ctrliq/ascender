@@ -143,8 +143,6 @@ describe('JobTemplatesList', () => {
       />
     );
 
-    expect(
-      await screen.findByText(/Something went wrong/)
-    ).toBeInTheDocument();
+    expect(await screen.findByText(/Something went wrong/)).toBeInTheDocument();
   });
 });

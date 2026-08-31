@@ -279,7 +279,7 @@ Updated Ascender to use the following inventory plugins from upstream collection
 - theforeman.foreman.foreman
 - openstack.cloud.openstack
 - ovirt.ovirt.ovirt
-- awx.awx.tower
+- awx.awx.controller
 
 
 Secret Management System

@@ -30,9 +30,7 @@ function ApplicationTokenListItem({
         </Link>
       </Td>
       <Td dataLabel={t`Scope`}>{toTitleCase(token.scope)}</Td>
-      <Td dataLabel={t`Expires`}>
-        {formatDateString(token.expires)}
-      </Td>
+      <Td dataLabel={t`Expires`}>{formatDateString(token.expires)}</Td>
     </Tr>
   );
 }

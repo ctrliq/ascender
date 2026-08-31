@@ -258,8 +258,6 @@ describe('<WorkflowJobTemplateForm/>', () => {
     const inventoryFormGroup = screen
       .getByText('Inventory')
       .closest('.pf-v6-c-form__group');
-    expect(
-      within(inventoryFormGroup).queryByText('*')
-    ).not.toBeInTheDocument();
+    expect(within(inventoryFormGroup).queryByText('*')).not.toBeInTheDocument();
   });
 });

@@ -19,9 +19,7 @@ const surveyData = {
 describe('<SurveyList />', () => {
   test('expect component to mount successfully', async () => {
     renderWithContexts(<SurveyList survey={surveyData} />);
-    await waitFor(() =>
-      expect(screen.getByText('Foo')).toBeInTheDocument()
-    );
+    await waitFor(() => expect(screen.getByText('Foo')).toBeInTheDocument());
   });
 
   test('should toggle survey', async () => {
@@ -111,9 +109,7 @@ describe('<SurveyList />', () => {
       <SurveyList survey={surveyData} deleteSurvey={deleteSurvey} />
     );
 
-    expect(
-      screen.getByRole('checkbox', { name: 'Select all' })
-    ).toBeDisabled();
+    expect(screen.getByRole('checkbox', { name: 'Select all' })).toBeDisabled();
     expect(
       screen.getByRole('switch', { name: 'Survey Toggle' })
     ).toBeDisabled();

@@ -105,9 +105,7 @@ describe('<MiscAuthenticationEdit />', () => {
   test('save button should call updateAll', async () => {
     const { user } = await renderEdit();
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
     const { AUTHENTICATION_BACKENDS, ...rest } = authenticationData;
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith(rest);
   });
@@ -132,9 +130,7 @@ describe('<MiscAuthenticationEdit />', () => {
   test('should successfully send request to api on form submission', async () => {
     const { user } = await renderEdit();
     await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1)
-    );
+    await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
   });
 
   test('should navigate to miscellaneous detail on successful submission', async () => {

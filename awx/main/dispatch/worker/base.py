@@ -83,7 +83,7 @@ class AWXConsumerBase(object):
                 for worker in self.pool.workers:
                     task = worker.current_task
                     if task and task['uuid'] in task_ids:
-                        logger.warn(f'Sending SIGTERM to task id={task["uuid"]}, task={task.get("task")}, args={task.get("args")}')
+                        logger.warning(f'Sending SIGTERM to task id={task["uuid"]}, task={task.get("task")}, args={task.get("args")}')
                         os.kill(worker.pid, signal.SIGTERM)
                         msg.append(task['uuid'])
                 if task_ids and not msg:

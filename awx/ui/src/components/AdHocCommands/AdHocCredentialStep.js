@@ -3,9 +3,13 @@ import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { useField } from 'formik';
-import { Form, FormGroup, Alert, FormHelperText,
-HelperText,
-HelperTextItem,
+import {
+  Form,
+  FormGroup,
+  Alert,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 import { CredentialsAPI } from 'api';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
@@ -102,9 +106,9 @@ function AdHocCredentialStep({ credentialTypeId }) {
           aria-label={t`Machine Credential`}
           isRequired
           labelHelp={
-          <Popover
-          content={t`Select the credential you want to use when accessing the remote hosts to run the command. Choose the credential containing the username and SSH key or password that Ansible will need to log into the remote hosts.`}
-          />
+            <Popover
+              content={t`Select the credential you want to use when accessing the remote hosts to run the command. Choose the credential containing the username and SSH key or password that Ansible will need to log into the remote hosts.`}
+            />
           }
         >
           <OptionsList
@@ -148,9 +152,7 @@ function AdHocCredentialStep({ credentialTypeId }) {
           {meta.touched && meta.error && (
             <FormHelperText>
               <HelperText>
-                <HelperTextItem variant="error">
-                  {meta.error}
-                </HelperTextItem>
+                <HelperTextItem variant="error">{meta.error}</HelperTextItem>
               </HelperText>
             </FormHelperText>
           )}

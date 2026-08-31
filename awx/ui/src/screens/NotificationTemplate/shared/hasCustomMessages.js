@@ -7,6 +7,7 @@ export default function hasCustomMessages(messages, defaults) {
     isCustomized(messages.started, defaults.started) ||
     isCustomized(messages.success, defaults.success) ||
     isCustomized(messages.error, defaults.error) ||
+    isCustomized(messages.changed, defaults.changed) ||
     isCustomized(
       messages.workflow_approval?.approved,
       defaults.workflow_approval.approved

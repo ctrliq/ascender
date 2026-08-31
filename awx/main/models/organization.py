@@ -43,6 +43,7 @@ class Organization(CommonModel, NotificationFieldsModel, ResourceMixin, RelatedJ
         help_text=_('Maximum number of hosts allowed to be managed by this organization.'),
     )
     notification_templates_approvals = models.ManyToManyField("NotificationTemplate", blank=True, related_name='%(class)s_notification_templates_for_approvals')
+    notification_templates_changed = models.ManyToManyField("NotificationTemplate", blank=True, related_name='%(class)s_notification_templates_for_changed')
     default_environment = models.ForeignKey(
         'ExecutionEnvironment',
         null=True,

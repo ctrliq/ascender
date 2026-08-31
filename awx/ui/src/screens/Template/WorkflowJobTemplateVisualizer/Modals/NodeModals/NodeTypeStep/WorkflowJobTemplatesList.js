@@ -18,7 +18,10 @@ const QS_CONFIG = getQSConfig('workflow-job-templates', {
   order_by: 'name',
 });
 
-function WorkflowJobTemplatesList({ nodeResource = null, onUpdateNodeResource }) {
+function WorkflowJobTemplatesList({
+  nodeResource = null,
+  onUpdateNodeResource,
+}) {
   const location = useLocation();
   const { t } = useLingui();
 

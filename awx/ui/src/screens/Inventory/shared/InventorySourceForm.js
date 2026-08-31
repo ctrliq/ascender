@@ -1,9 +1,13 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
-import { Form, FormGroup, Title, FormHelperText,
-HelperText,
-HelperTextItem,
+import {
+  Form,
+  FormGroup,
+  Title,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
 } from '@patternfly/react-core';
 import { InventorySourcesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
@@ -155,11 +159,7 @@ const InventorySourceFormFields = ({
         tooltip={t`Select the Instance Groups this inventory source sync should run on. If unset, the sync runs on the instance groups of the inventory or its organization.`}
         fieldName="instanceGroups"
       />
-      <FormGroup
-        fieldId="source"
-        isRequired
-        label={t`Source`}
-      >
+      <FormGroup fieldId="source" isRequired label={t`Source`}>
         <AnsibleSelect
           {...sourceField}
           id="source"

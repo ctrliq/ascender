@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
-	Alert,
-	Badge,
-	Button,
-	Tooltip,
-	DropdownItem,
+  Alert,
+  Badge,
+  Button,
+  Tooltip,
+  DropdownItem,
 } from '@patternfly/react-core';
 
 import { useLingui } from '@lingui/react/macro';
@@ -27,7 +27,7 @@ const Label = styled.span`
 
 function ToolbarDeleteButton({
   itemsToDelete,
-  pluralizedItemName = 'Items',
+  pluralizedItemName = null,
   errorMessage,
   onDelete,
   deleteDetailsRequests,
@@ -35,7 +35,10 @@ function ToolbarDeleteButton({
   deleteMessage,
   cannotDelete = (item) => !item.summary_fields.user_capabilities.delete,
 }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
+  if (!pluralizedItemName) {
+    pluralizedItemName = t`Items`;
+  }
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [deleteDetails, setDeleteDetails] = useState(null);
@@ -128,10 +131,10 @@ function ToolbarDeleteButton({
           </div>
         ))}
         {deleteDetails &&
-          Object.entries(deleteDetails).map(([key, value]) => (
-            <div key={key} aria-label={`${key}: ${value}`}>
-              <Label>{key}</Label>
-              <Badge>{value}</Badge>
+          deleteDetails.map(({ label, count }) => (
+            <div key={label.id} aria-label={`${i18n._(label)}: ${count}`}>
+              <Label>{i18n._(label)}</Label>
+              <Badge>{count}</Badge>
             </div>
           ))}
       </div>
@@ -223,7 +226,9 @@ function ToolbarDeleteButton({
             </Button>,
           ]}
         >
-          <div style={{ marginBottom: '0.75rem' }}>{t`This action will delete the following:`}</div>
+          <div
+            style={{ marginBottom: '0.75rem' }}
+          >{t`This action will delete the following:`}</div>
           {itemsToDelete.map((item) => (
             <span key={item.id} id={`item-to-be-deleted-${item.id}`}>
               <strong>{item.name || item.username || item.image}</strong>

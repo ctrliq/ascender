@@ -45,13 +45,14 @@ function InventoryRelatedGroupListItem({
             tooltip={t`Edit Group`}
             visible={group.summary_fields.user_capabilities?.edit}
           >
-            <Button icon={<PencilAltIcon />}
+            <Button
+              icon={<PencilAltIcon />}
               ouiaId={`${group.id}-edit-button`}
               aria-label={t`Edit Group`}
               variant="plain"
               component={Link}
               to={`${editUrl}`}
-             />
+            />
           </ActionItem>
         </ActionsTd>
       )}

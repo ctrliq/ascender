@@ -116,7 +116,9 @@ describe('<HostGroupsList />', () => {
 
   test('initially renders successfully', async () => {
     renderList();
-    expect(await screen.findByRole('link', { name: 'foo' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('link', { name: 'foo' })
+    ).toBeInTheDocument();
   });
 
   test('should fetch groups from api and render them in the list', async () => {
@@ -177,7 +179,9 @@ describe('<HostGroupsList />', () => {
     });
     renderList();
     await screen.findByText('foo');
-    expect(screen.queryByRole('button', { name: 'Add' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Add' })
+    ).not.toBeInTheDocument();
   });
 
   test('should show associate group modal when adding an existing group', async () => {
@@ -203,7 +207,9 @@ describe('<HostGroupsList />', () => {
     InventoriesAPI.readGroups.mockResolvedValue({
       data: {
         count: 1,
-        results: [{ id: 123, name: 'associate me', url: '/api/v2/groups/123/' }],
+        results: [
+          { id: 123, name: 'associate me', url: '/api/v2/groups/123/' },
+        ],
       },
     });
     InventoriesAPI.readGroupsOptions.mockResolvedValue({

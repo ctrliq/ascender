@@ -58,7 +58,9 @@ function renderAt(path) {
 
 describe('<Credential />', () => {
   beforeEach(() => {
-    CredentialsAPI.readDetail.mockResolvedValue({ data: mockMachineCredential });
+    CredentialsAPI.readDetail.mockResolvedValue({
+      data: mockMachineCredential,
+    });
   });
 
   afterEach(() => {
@@ -123,7 +125,9 @@ describe('<Credential />', () => {
     err.response = { status: 404 };
     CredentialsAPI.readDetail.mockRejectedValue(err);
     renderAt('/credentials/2/details');
-    expect(await screen.findByText('Credential not found.')).toBeInTheDocument();
+    expect(
+      await screen.findByText('Credential not found.')
+    ).toBeInTheDocument();
     expect(screen.queryByText('CredentialDetail')).not.toBeInTheDocument();
   });
 });

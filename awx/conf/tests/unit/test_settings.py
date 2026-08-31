@@ -13,7 +13,7 @@ from unittest import mock
 from django.conf import LazySettings
 from django.core.cache.backends.locmem import LocMemCache
 from django.core.exceptions import ImproperlyConfigured
-from django.db.utils import Error as DBError
+from django.db.utils import Error as DBError, OperationalError
 from django.utils.translation import gettext_lazy as _
 import pytest
 
@@ -347,3 +347,29 @@ def test_getattr_with_database_error(settings):
     with mock.patch('django.db.backends.base.base.BaseDatabaseWrapper.ensure_connection') as mock_ensure:
         mock_ensure.side_effect = DBError('for test')
         assert settings.AWX_VAR == []
+
+
+def test_database_error_is_not_memoized(settings, mocker):
+    """
+    A transient database error during a read must degrade only that single
+    read: the next read re-queries the database and returns its value.
+    This is regression testing for a bug where the error fallback was stored
+    in the memoized TTL cache, serving defaults for up to SETTING_MEMORY_TTL
+    seconds after a single transient failure.
+
+    Unlike test_getattr_with_database_error above, the setting here is not
+    marked defined_in_file, so reads genuinely reach the database.
+    """
+    settings.registry.register('AWX_VAR', field_class=fields.StringListField, default=[], category=_('System'), category_slug='system')
+    settings._awx_conf_memoizedcache.clear()
+
+    with mock.patch('django.db.backends.base.base.BaseDatabaseWrapper.ensure_connection') as mock_ensure:
+        mock_ensure.side_effect = OperationalError('database is locked')
+        assert getattr(settings, 'AWX_VAR', 'unavailable') == 'unavailable'
+        assert mock_ensure.called  # the read really hit the database layer
+
+    # The database is back; the failed lookup must not have been memoized.
+    setting_from_db = mocker.Mock(key='AWX_VAR', value=['from-db'])
+    mocks = mocker.Mock(**{'order_by.return_value': mocker.Mock(**{'__iter__': lambda self: iter([setting_from_db]), 'first.return_value': setting_from_db})})
+    with mocker.patch('awx.conf.models.Setting.objects.filter', return_value=mocks):
+        assert settings.AWX_VAR == ['from-db']

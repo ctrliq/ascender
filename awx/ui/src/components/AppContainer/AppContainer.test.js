@@ -2,7 +2,10 @@ import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { MeAPI, RootAPI } from 'api';
 import { useAuthorizedPath } from 'contexts/Config';
-import { renderWithContexts, settleTooltips } from '../../../testUtils/rtlContexts';
+import {
+  renderWithContexts,
+  settleTooltips,
+} from '../../../testUtils/rtlContexts';
 import AppContainer from './AppContainer';
 
 jest.mock('../../api');
@@ -80,7 +83,9 @@ describe('<AppContainer />', () => {
 
     // sidebar groups (NavExpandableGroup, 2 expandable groups) and route links
     expect(
-      container.querySelectorAll('[data-ouia-component-type="PF6/NavExpandable"]')
+      container.querySelectorAll(
+        '[data-ouia-component-type="PF6/NavExpandable"]'
+      )
     ).toHaveLength(2);
     expect(screen.getByText('Group One')).toBeInTheDocument();
     expect(screen.getByText('Group Two')).toBeInTheDocument();
@@ -162,7 +167,9 @@ describe('<AppContainer />', () => {
     );
 
     // close the about modal
-    await user.click(within(dialog).getByRole('button', { name: 'Close Dialog' }));
+    await user.click(
+      within(dialog).getByRole('button', { name: 'Close Dialog' })
+    );
     await waitFor(() =>
       expect(screen.queryByRole('dialog')).not.toBeInTheDocument()
     );

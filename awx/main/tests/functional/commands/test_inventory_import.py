@@ -472,23 +472,16 @@ class TestRelinkOrphanedJobHostSummaries:
         jt = JobTemplate.objects.create(name='test-jt', inventory=constructed_inv, project=project)
 
         source_host = Host.objects.create(name='server1', inventory=source_inv)
-        constructed_host = Host.objects.create(
-            name='server1', inventory=constructed_inv, instance_id=str(source_host.pk)
-        )
+        constructed_host = Host.objects.create(name='server1', inventory=constructed_inv, instance_id=str(source_host.pk))
 
         job = Job.objects.create(inventory=constructed_inv, job_template=jt, status='successful')
-        JobHostSummary.objects.create(
-            job=job, host=source_host, constructed_host=constructed_host,
-            host_name='server1', ok=1
-        )
+        JobHostSummary.objects.create(job=job, host=source_host, constructed_host=constructed_host, host_name='server1', ok=1)
 
         old_constructed_pk = constructed_host.pk
         constructed_host.delete()
 
         # Recreate constructed host (simulates constructed inventory re-sync)
-        new_constructed_host = Host.objects.create(
-            name='server1', inventory=constructed_inv, instance_id=str(source_host.pk)
-        )
+        Host.objects.create(name='server1', inventory=constructed_inv, instance_id=str(source_host.pk))
 
         inv_src = InventorySource.objects.create(inventory=constructed_inv, source='constructed')
         data = {

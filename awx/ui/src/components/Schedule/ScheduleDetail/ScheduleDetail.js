@@ -2,11 +2,7 @@ import React, { useCallback, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
-import {
-	Label, Divider,
-	Title,
-	Button
-} from '@patternfly/react-core';
+import { Label, Divider, Title, Button } from '@patternfly/react-core';
 
 import { formatDateString } from 'util/dates';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
@@ -29,7 +25,7 @@ import DeleteButton from '../../DeleteButton';
 import ErrorDetail from '../../ErrorDetail';
 import ChipGroup from '../../ChipGroup';
 import { VariablesDetail } from '../../CodeEditor';
-import { VERBOSITY } from '../../VerbositySelectField';
+import { getVerbosityLabel } from '../../VerbositySelectField';
 import getHelpText from '../../../screens/Template/shared/JobTemplate.helptext';
 
 const PromptDivider = styled(Divider)`
@@ -71,7 +67,7 @@ const FrequencyDetailsContainer = styled.div`
 `;
 
 function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
-  const { t } = useLingui();
+  const { t, i18n } = useLingui();
   const {
     id,
     created,
@@ -280,7 +276,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
   const showJobTypeDetail = ask_job_type_on_launch && job_type;
   const showSCMBranchDetail = ask_scm_branch_on_launch && scm_branch;
   const showVerbosityDetail =
-    ask_verbosity_on_launch && VERBOSITY(t)[verbosity];
+    ask_verbosity_on_launch && getVerbosityLabel(verbosity, i18n);
   const showExecutionEnvironmentDetail =
     ask_execution_environment_on_launch && execution_environment;
   const showLabelsDetail = ask_labels_on_launch && labels && labels.length > 0;
@@ -352,10 +348,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
           value={formatDateString(next_run, timezone)}
           dataCy="schedule-next-run"
         />
-        <Detail
-          label={t`Last Run`}
-          value={formatDateString(dtend, timezone)}
-        />
+        <Detail label={t`Last Run`} value={formatDateString(dtend, timezone)} />
         <Detail
           label={t`Local Time Zone`}
           value={timezone}
@@ -432,9 +425,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
       </DetailList>
       {showPromptedFields && (
         <>
-          <PromptTitle headingLevel="h2">
-            {t`Prompted Values`}
-          </PromptTitle>
+          <PromptTitle headingLevel="h2">{t`Prompted Values`}</PromptTitle>
           <PromptDivider />
           <PromptDetailList>
             {ask_job_type_on_launch && (
@@ -489,19 +480,13 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
               />
             )}
             {ask_limit_on_launch && (
-              <Detail
-                label={t`Limit`}
-                value={limit}
-                dataCy="schedule-limit"
-              />
+              <Detail label={t`Limit`} value={limit} dataCy="schedule-limit" />
             )}
-            {ask_forks_on_launch && (
-              <Detail label={t`Forks`} value={forks} />
-            )}
+            {ask_forks_on_launch && <Detail label={t`Forks`} value={forks} />}
             {ask_verbosity_on_launch && (
               <Detail
                 label={t`Verbosity`}
-                value={VERBOSITY(t)[verbosity]}
+                value={getVerbosityLabel(verbosity, i18n)}
                 dataCy="schedule-verbosity"
               />
             )}
@@ -516,10 +501,7 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
               />
             )}
             {ask_job_slice_count_on_launch && (
-              <Detail
-                label={t`Job Slicing`}
-                value={job_slice_count}
-              />
+              <Detail label={t`Job Slicing`} value={job_slice_count} />
             )}
             {showInstanceGroupsDetail && (
               <Detail
@@ -565,7 +547,11 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
                     ouiaId="schedule-label-chips"
                   >
                     {labels.map((l) => (
-                      <Label variant="outline" key={l.id} data-ouia-component-id={`label-${l.id}-chip`} >
+                      <Label
+                        variant="outline"
+                        key={l.id}
+                        data-ouia-component-id={`label-${l.id}-chip`}
+                      >
                         {l.name}
                       </Label>
                     ))}
@@ -585,7 +571,8 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
                     ouiaId="schedule-job-tag-chips"
                   >
                     {job_tags.split(',').map((jobTag) => (
-                      <Label variant="outline"
+                      <Label
+                        variant="outline"
                         key={jobTag}
 
                         data-ouia-component-id={`job-tag-${jobTag}-chip`}
@@ -609,7 +596,8 @@ function ScheduleDetail({ hasDaysToKeepField, schedule, surveyConfig }) {
                     ouiaId="schedule-skip-tag-chips"
                   >
                     {skip_tags.split(',').map((skipTag) => (
-                      <Label variant="outline"
+                      <Label
+                        variant="outline"
                         key={skipTag}
 
                         data-ouia-component-id={`skip-tag-${skipTag}-chip`}
