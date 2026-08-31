@@ -5,6 +5,12 @@ Ascender helps teams manage complex multi-tier deployments by adding control, kn
 
 .. toctree::
    :maxdepth: 2
+   :caption: Install
+
+   installation/index
+
+.. toctree::
+   :maxdepth: 2
    :caption: Get started
 
    quickstart/index

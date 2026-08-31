@@ -206,7 +206,7 @@ Capacity planning for Operator based Deployments
 .. index::
    pair: Operator; deployment
 
-For Operator based deployments, refer to `Ansible AWX Operator documentation <https://ansible.readthedocs.io/projects/awx-operator>`_.
+For Operator based deployments, refer to `Ascender Operator documentation <https://github.com/ctrliq/ascender-operator>`_.
 
 
 Monitoring Ascender
