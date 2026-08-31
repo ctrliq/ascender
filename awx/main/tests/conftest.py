@@ -36,7 +36,7 @@ def django_db_setup(django_db_setup, django_db_blocker):
     # these rows, saving any registered model (Organization, User, Team, ...)
     # raises ContentType.resource_type.RelatedObjectDoesNotExist. Run the
     # initialization explicitly after the test database is created.
-    from ansible_base.resource_registry.apps import initialize_resources
+    from awx.dab.resource_registry.apps import initialize_resources
 
     with django_db_blocker.unblock():
         initialize_resources(None)
