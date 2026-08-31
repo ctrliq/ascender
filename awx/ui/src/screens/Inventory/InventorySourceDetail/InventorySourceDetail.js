@@ -31,6 +31,7 @@ import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import InventorySourceSyncButton from '../shared/InventorySourceSyncButton';
 import useWsInventorySourcesDetails from '../shared/useWsInventorySourcesDetails';
 import getHelpText from '../shared/Inventory.helptext';
+import { getVmwarePlugin } from '../shared/utils';
 
 function InventorySourceDetail({ inventorySource }) {
   const { t, i18n } = useLingui();
@@ -255,6 +256,13 @@ function InventorySourceDetail({ inventorySource }) {
             label={t`Inventory file`}
             helpText={helpText.sourcePath}
             value={source_path === '' ? t`/ (project root)` : source_path}
+          />
+        ) : null}
+        {source === 'vmware' ? (
+          <Detail
+            label={t`Collection`}
+            helpText={helpText.vmwarePlugin}
+            value={getVmwarePlugin(source_vars).split('.', 2).join('.')}
           />
         ) : null}
         <Detail

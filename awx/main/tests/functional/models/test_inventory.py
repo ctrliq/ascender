@@ -241,13 +241,36 @@ class TestInventorySourceInjectors:
             # ('rhv', 'ovirt.ovirt.ovirt'),
             ('satellite6', 'theforeman.foreman.foreman'),
             # ('insights', 'redhatinsights.insights.insights'),
-            ('ascender', 'awx.awx.controller'),
+            ('ascender', 'ctrliq.ascender.controller'),
             ('terraform', 'cloud.terraform.terraform_state'),
         ],
     )
     def test_plugin_proper_names(self, source, proper_name):
         injector = InventorySource.injectors[source]()
         assert injector.get_proper_name() == proper_name
+
+    @pytest.mark.parametrize(
+        'user_plugin,expected',
+        [
+            (None, 'community.vmware.vmware_vm_inventory'),
+            ('community.vmware.vmware_vm_inventory', 'community.vmware.vmware_vm_inventory'),
+            ('vmware.vmware.vms', 'vmware.vmware.vms'),
+            ('evil.hacker.plugin', 'community.vmware.vmware_vm_inventory'),
+            ('', 'community.vmware.vmware_vm_inventory'),
+        ],
+    )
+    def test_vmware_alternate_plugin_selection(self, user_plugin, expected):
+        """The vmware source lets the user pick the plugin from the deprecated
+        community.vmware collection or its vmware.vmware replacement via the
+        `plugin` key of source_vars; anything else is overridden with the default.
+        """
+        injector = InventorySource.injectors['vmware']()
+        source_vars = {} if user_plugin is None else {'plugin': user_plugin}
+        inventory_update = mock.Mock(source_vars_dict=source_vars)
+        assert injector.inventory_as_dict(inventory_update, '/tmp/private_data')['plugin'] == expected
+        # the auto plugin hands the file to the plugin named inside it, whose
+        # verify_file() only accepts files named after that plugin
+        assert injector.get_filename(inventory_update) == '{0}.yml'.format(expected.rsplit('.', 1)[-1])
 
 
 @pytest.mark.django_db
