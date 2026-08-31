@@ -65,7 +65,10 @@ function Job({ setBreadcrumb }) {
         const {
           data: { results },
         } = await getJobModel('workflow_job').readNodes(
-          jobDetailData.summary_fields.source_workflow_job.id
+          jobDetailData.summary_fields.source_workflow_job.id,
+          // without this the API returns its default page of 25, which
+          // truncates the workflow navigation menu; 200 is MAX_PAGE_SIZE
+          { page_size: 200 }
         );
         relatedJobData = results;
       }
