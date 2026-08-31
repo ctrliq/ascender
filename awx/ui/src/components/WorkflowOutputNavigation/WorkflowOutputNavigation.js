@@ -71,10 +71,21 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
     setFilterBy((current) => (current === value ? undefined : value));
   };
 
-  const nodeLabel = (node) =>
-    stringIsUUID(node.identifier)
-      ? node.summary_fields.job.name
-      : node.identifier;
+  const nodeLabel = (node) => {
+    if (stringIsUUID(node.identifier)) {
+      return node.summary_fields.job.name;
+    }
+    if (node.identifier) {
+      return node.identifier;
+    }
+    // Sliced-job and federated-inventory workflows create their nodes directly
+    // rather than copying them from a template node, so identifier is blank,
+    // and every slice's job carries the same name as the template. Label these
+    // by position, in the words the toggle uses for the job on screen.
+    // eslint-disable-next-line no-shadow -- reusing the name reuses the msgid
+    const currentPosition = jobNodes.indexOf(node) + 1;
+    return t`Workflow Job ${currentPosition}/${total}`;
+  };
 
   // Derived rather than held in state: the previous version seeded a useState
   // from the first render's list, so after navigating within the workflow the
