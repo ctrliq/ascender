@@ -21,7 +21,7 @@ To restart an Ascender instance, you must first kill the container and restart i
 .. these instructions will need to be fleshed out (TBD)
 
 
-To uninstall you Ascender instance: https://github.com/ctrliq/ascender-operator/blob/devel/docs/uninstall/uninstall.md
+To uninstall your Ascender instance: https://github.com/ctrliq/ascender-operator/blob/devel/docs/uninstall/uninstall.md
 
 .. these instructions will be ported over to here in the near future (TBD)
 
