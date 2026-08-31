@@ -57,7 +57,7 @@ msgid "TACACS+"
 msgstr "TACACS+"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:637
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:232
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:251
 msgid "Workflow timed out message body"
 msgstr "ワークフローのタイムアウトメッセージのボディー"
 
@@ -115,6 +115,10 @@ msgstr "このコマンドを内部で実行する実行環境を選択します
 msgid "Add a new node between these two nodes"
 msgstr "これら 2 つのノードの間に新しいノードを追加します"
 
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:170
+msgid "Changed message"
+msgstr "変更メッセージ"
+
 #: screens/Job/JobOutput/JobOutputSearch.js:120
 msgid "Host Polling"
 msgstr "ホストのポーリング"
@@ -148,7 +152,7 @@ msgid "Maximum number of forks to allow across all jobs running concurrently on 
 msgstr "このグループで同時に実行されるすべてのジョブ全体で許可するフォークの最大数。\n"
 "          ゼロは制限が適用されないことを意味します。"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:341
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:349
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:89
 msgid "Failed to cancel Inventory Source Sync"
 msgstr "インベントリーソースの同期の取り消しに失敗しました。"
@@ -332,8 +336,8 @@ msgstr "チェックアウトするブランチ。ブランチに加えて、タ
 #: components/JobList/JobList.js:265
 #: components/JobList/JobListItem.js:109
 #: components/Lookup/ProjectLookup.js:134
-#: components/NotificationList/NotificationList.js:219
-#: components/NotificationList/NotificationListItem.js:34
+#: components/NotificationList/NotificationList.js:230
+#: components/NotificationList/NotificationListItem.js:36
 #: components/PromptDetail/PromptDetail.js:125
 #: components/RelatedTemplateList/RelatedTemplateList.js:200
 #: components/TemplateList/TemplateList.js:219
@@ -433,7 +437,7 @@ msgstr "クリックしてジョブの詳細を表示"
 msgid "Sync Project"
 msgstr "プロジェクトの同期"
 
-#: components/NotificationList/NotificationList.js:194
+#: components/NotificationList/NotificationList.js:205
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:135
 msgid "Grafana"
 msgstr "Grafana"
@@ -513,7 +517,7 @@ msgstr "イベント"
 msgid "Repeat Frequency"
 msgstr "繰り返しの頻度"
 
-#: screens/Inventory/shared/Inventory.helptext.js:171
+#: screens/Inventory/shared/Inventory.helptext.js:172
 msgid "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 msgstr "構築されたインベントリプラグインを構成するために使用される変数。このプラグインの設定方法の詳細については、"
 
@@ -575,8 +579,8 @@ msgstr "コンテナーグループ"
 msgid "{0, plural, one {You cannot cancel the following job because it is not running:} other {You cannot cancel the following jobs because they are not running:}}"
 msgstr "{0, plural, one {You cannot cancel the following job because it is not running:} other {You cannot cancel the following jobs because they are not running:}}"
 
-#: components/NotificationList/NotificationList.js:220
-#: components/NotificationList/NotificationListItem.js:35
+#: components/NotificationList/NotificationList.js:231
+#: components/NotificationList/NotificationListItem.js:38
 #: screens/Credential/shared/TypeInputsSubForm.js:46
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:79
 #: screens/Instances/Shared/InstanceForm.js:95
@@ -600,7 +604,7 @@ msgid "You cannot select multiple vault credentials with the same vault ID. Doin
 msgstr "同じ Vault ID を持つ複数の Vault 認証情報を選択することはできません。これを行うと、同じ Vault ID を持つもう一方の選択が自動的に解除されます。"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:334
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:342
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:350
 #: screens/Project/ProjectDetail/ProjectDetail.js:354
 msgid "Cancel Sync"
 msgstr "同期の取り消し"
@@ -713,8 +717,8 @@ msgstr "統計"
 msgid "Create new credential Type"
 msgstr "新規認証情報タイプの作成"
 
-#: screens/Inventory/shared/Inventory.helptext.js:103
-#: screens/Inventory/shared/Inventory.helptext.js:118
+#: screens/Inventory/shared/Inventory.helptext.js:104
+#: screens/Inventory/shared/Inventory.helptext.js:119
 msgid "If you want the Inventory Source to update on launch, click on Update on Launch, and also go to "
 msgstr "インベントリーソースを起動時に更新する場合は、「起動時に更新」をクリックし、次の場所にも移動します: "
 
@@ -732,7 +736,7 @@ msgid "Start Time"
 msgstr "開始時刻"
 
 #: screens/Inventory/shared/Inventory.helptext.js:48
-#: screens/Inventory/shared/Inventory.helptext.js:184
+#: screens/Inventory/shared/Inventory.helptext.js:185
 msgid "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."
 msgstr "変数は JSON または YAML 構文にする必要があります。ラジオボタンを使用してこの構文を切り替えます。"
 
@@ -748,7 +752,7 @@ msgstr "ファイルの相違点"
 msgid "Relaunch from canceled node"
 msgstr "キャンセルされたノードから再起動"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:271
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:279
 msgid "Cache timeout"
 msgstr "キャッシュタイムアウト"
 
@@ -828,7 +832,7 @@ msgstr "出現回数を入力してください。"
 msgid "Fuzzy search on name field."
 msgstr "名前フィールドのあいまい検索。"
 
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:106
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:107
 msgid "Ansible Controller Documentation."
 msgstr "Ansible コントローラーのドキュメント。"
 
@@ -836,7 +840,7 @@ msgstr "Ansible コントローラーのドキュメント。"
 msgid "The Instance Groups to which this instance belongs."
 msgstr "このインスタンスが属するインスタンスグループ。"
 
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:97
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:98
 msgid "You may apply a number of possible variables in the\n"
 "                message. For more information, refer to the"
 msgstr "メッセージには複数の変数を適用できます。\n"
@@ -885,7 +889,7 @@ msgstr "ワークフローノード"
 msgid "Overwrite"
 msgstr "上書き"
 
-#: components/NotificationList/NotificationList.js:195
+#: components/NotificationList/NotificationList.js:206
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:136
 msgid "Hipchat"
 msgstr "Hipchat"
@@ -920,7 +924,7 @@ msgstr "ソースコントロールのブランチ"
 msgid "Tabs"
 msgstr "タブ"
 
-#: screens/Template/Template.js:273
+#: screens/Template/Template.js:274
 #: screens/Template/WorkflowJobTemplate.js:286
 msgid "View Template Details"
 msgstr "テンプレートの詳細の表示"
@@ -966,7 +970,7 @@ msgstr "{interval, plural, one {# 年} other {# 年}}"
 msgid "Inventory Source Sync"
 msgstr "インベントリーソース同期"
 
-#: screens/Inventory/shared/Inventory.helptext.js:146
+#: screens/Inventory/shared/Inventory.helptext.js:147
 msgid "Inventory Plugins"
 msgstr "インベントリプラグイン"
 
@@ -1036,7 +1040,7 @@ msgstr "1 (情報)"
 msgid "Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance."
 msgstr "インスタンスを有効または無効に設定します。無効にした場合には、ジョブはこのインスタンスに割り当てられません。"
 
-#: screens/Inventory/shared/Inventory.helptext.js:105
+#: screens/Inventory/shared/Inventory.helptext.js:106
 msgid "and click on Update Revision on Launch."
 msgstr "[起動時にリビジョンを更新]をクリックします。"
 
@@ -1525,8 +1529,8 @@ msgstr "1 つ以上のジョブを削除できませんでした。"
 msgid "Run Command"
 msgstr "コマンドの実行"
 
-#: screens/Inventory/shared/Inventory.helptext.js:156
-#: screens/Inventory/shared/Inventory.helptext.js:179
+#: screens/Inventory/shared/Inventory.helptext.js:157
+#: screens/Inventory/shared/Inventory.helptext.js:180
 msgid "plugin configuration guide."
 msgstr "プラグイン設定ガイドを参照してください。"
 
@@ -1637,9 +1641,9 @@ msgstr "新規フェデレーションインベントリーの作成"
 #: components/Lookup/OrganizationLookup.js:141
 #: components/Lookup/ProjectLookup.js:129
 #: components/Lookup/ProjectLookup.js:159
-#: components/NotificationList/NotificationList.js:181
-#: components/NotificationList/NotificationList.js:218
-#: components/NotificationList/NotificationListItem.js:29
+#: components/NotificationList/NotificationList.js:192
+#: components/NotificationList/NotificationList.js:229
+#: components/NotificationList/NotificationListItem.js:31
 #: components/OptionsList/OptionsList.js:48
 #: components/PaginatedTable/PaginatedTable.js:76
 #: components/PromptDetail/PromptDetail.js:115
@@ -1753,14 +1757,14 @@ msgstr "新規フェデレーションインベントリーの作成"
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:182
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:197
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:238
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:204
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:205
 #: screens/Inventory/InventorySources/InventorySourceList.js:212
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:60
 #: screens/Inventory/shared/ConstructedInventoryForm.js:66
 #: screens/Inventory/shared/FederatedInventoryForm.js:56
 #: screens/Inventory/shared/InventoryForm.js:50
 #: screens/Inventory/shared/InventoryGroupForm.js:33
-#: screens/Inventory/shared/InventorySourceForm.js:133
+#: screens/Inventory/shared/InventorySourceForm.js:139
 #: screens/Inventory/shared/SmartInventoryForm.js:46
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:98
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.js:91
@@ -1883,7 +1887,7 @@ msgstr "{automatedInstancesSinceDateTime} 以来 {automatedInstancesCount}"
 msgid "No job data available"
 msgstr "利用可能なジョブデータがありません"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:309
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:317
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:22
 msgid "Source variables"
 msgstr "ソース変数"
@@ -2020,7 +2024,7 @@ msgid "Confirm"
 msgstr "確認"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:526
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:142
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:143
 msgid "Success message body"
 msgstr "成功メッセージボディー"
 
@@ -2295,7 +2299,7 @@ msgstr "失敗したホスト"
 msgid "This execution environment is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "この実行環境は、現在他のリソースで使用されています。削除してもよろしいですか?"
 
-#: components/NotificationList/NotificationList.js:196
+#: components/NotificationList/NotificationList.js:207
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:137
 msgid "IRC"
 msgstr "IRC"
@@ -2499,7 +2503,7 @@ msgstr "外部ログの有効化"
 
 #: components/Sparkline/Sparkline.js:30
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:51
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:181
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:182
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:31
 #: screens/Project/ProjectDetail/ProjectDetail.js:134
 #: screens/Project/ProjectList/ProjectListItem.js:56
@@ -2539,7 +2543,7 @@ msgstr "システムトラッキングファクトを個別に有効化"
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "ノードの作成時または編集時に、パスワードの入力を求める認証情報を持つジョブテンプレートを選択できない"
 
-#: screens/Inventory/shared/Inventory.helptext.js:193
+#: screens/Inventory/shared/Inventory.helptext.js:194
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "有効化されると、インベントリーは、関連付けられたジョブテンプレートを実行する優先インスタンスグループのリストに、組織インスタンスグループを追加することを阻止します。注記: この設定が有効で空のリストを指定した場合、グローバルインスタンスグループが適用されます。"
 
@@ -2676,7 +2680,7 @@ msgstr "1 つ以上のホストの関連付けを解除できませんでした�
 
 #: components/Sparkline/Sparkline.js:27
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:48
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:178
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:179
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:28
 #: screens/Project/ProjectDetail/ProjectDetail.js:131
 #: screens/Project/ProjectList/ProjectListItem.js:53
@@ -2763,7 +2767,7 @@ msgstr "項目 OK"
 msgid "Icon URL"
 msgstr "アイコン URL"
 
-#: screens/Inventory/shared/InventorySourceForm.js:159
+#: screens/Inventory/shared/InventorySourceForm.js:165
 msgid "Select the Instance Groups this inventory source sync should run on. If unset, the sync runs on the instance groups of the inventory or its organization."
 msgstr "このインベントリーソースの同期を実行するインスタンスグループを選択します。未設定の場合、同期はインベントリーまたはその組織のインスタンスグループで実行されます。"
 
@@ -2772,7 +2776,7 @@ msgid "Select the port that Receptor will listen on for incoming connections, e.
 msgstr "Receptorが着信接続をリッスンするポートを選択します（例： 27199 ）。"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:517
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:133
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:134
 msgid "Success message"
 msgstr "成功メッセージ"
 
@@ -2829,7 +2833,7 @@ msgstr "HTTP メソッド"
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "この組織内のジョブに使用される実行環境。プロジェクト、ジョブテンプレート、またはワークフローのレベルで実行環境が明示的に割り当てられていない場合のフォールバックとして使用されます。"
 
-#: components/NotificationList/NotificationList.js:190
+#: components/NotificationList/NotificationList.js:201
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:131
 msgid "Notification type"
 msgstr "通知タイプ"
@@ -2863,7 +2867,7 @@ msgstr "リンク削除の取り消し"
 msgid "There was an error loading this content. Please reload the page."
 msgstr "このコンテンツの読み込み中にエラーが発生しました。ページを再読み込みしてください。"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:292
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:300
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:135
 msgid "Enabled Value"
 msgstr "有効な値"
@@ -3176,7 +3180,7 @@ msgstr "< 0 >注：インスタンスは、< 1 >ポリシールールによっ�
 msgid "Timeout minutes"
 msgstr "タイムアウト (分)"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:353
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:361
 msgid "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
 msgstr "このインベントリーソースは、現在それに依存している他のリソースで使用されています。削除してもよろしいですか?"
 
@@ -3331,7 +3335,7 @@ msgstr "Less than or equal to の比較条件"
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:187
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:185
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.js:102
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:356
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:364
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:67
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:71
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:76
@@ -3354,6 +3358,7 @@ msgstr "Less than or equal to の比較条件"
 msgid "Delete"
 msgstr "削除"
 
+#: components/NotificationList/NotificationListItem.js:105
 #: components/StatusLabel/StatusLabel.js:53
 #: screens/Job/JobOutput/shared/HostStatusBar.js:43
 msgid "Changed"
@@ -3485,7 +3490,7 @@ msgstr "GitHub チーム"
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:157
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:43
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:78
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:317
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:325
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:133
 #: screens/Job/JobDetail/JobDetail.js:578
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:425
@@ -3859,7 +3864,7 @@ msgstr "デフォルトの実行環境"
 #: components/PromptDetail/PromptJobTemplateDetail.js:122
 #: components/PromptDetail/PromptJobTemplateDetail.js:130
 #: components/TemplateList/TemplateListItem.js:263
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:245
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:246
 #: screens/Job/JobDetail/JobDetail.js:180
 #: screens/Job/JobDetail/JobDetail.js:214
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:216
@@ -3980,7 +3985,7 @@ msgstr "トポロジービュー"
 msgid "Syncing"
 msgstr "同期"
 
-#: screens/Inventory/shared/InventorySourceForm.js:192
+#: screens/Inventory/shared/InventorySourceForm.js:198
 msgid "Source details"
 msgstr "ソース詳細"
 
@@ -4072,7 +4077,7 @@ msgstr "認証情報の削除"
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:56
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:61
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:100
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:332
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:340
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:105
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:148
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:450
@@ -4154,7 +4159,7 @@ msgstr "タイムアウトが指定されていません"
 msgid "On Timeout"
 msgstr "タイムアウト時"
 
-#: screens/Inventory/shared/Inventory.helptext.js:196
+#: screens/Inventory/shared/Inventory.helptext.js:197
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
 msgstr "インスタンスグループフォールバックの防止: 有効にすると、インベントリーは、関連付けられたジョブテンプレートを実行する優先インスタンスグループのリストに組織インスタンスグループを追加することを防ぎます。"
 
@@ -4496,7 +4501,7 @@ msgstr "コンテンツの読み込みが進行中"
 msgid "Mon"
 msgstr "月"
 
-#: screens/Organization/Organization.js:239
+#: screens/Organization/Organization.js:240
 msgid "View Organization Details"
 msgstr "組織の詳細の表示"
 
@@ -4509,7 +4514,7 @@ msgstr "組織の詳細の表示"
 #: components/JobList/JobList.js:345
 #: components/LaunchButton/LaunchButton.js:248
 #: components/LaunchPrompt/LaunchPrompt.js:99
-#: components/NotificationList/NotificationList.js:246
+#: components/NotificationList/NotificationList.js:259
 #: components/PaginatedTable/ToolbarDeleteButton.js:148
 #: components/RelatedTemplateList/RelatedTemplateList.js:254
 #: components/ResourceAccessList/ResourceAccessList.js:249
@@ -4553,7 +4558,7 @@ msgstr "組織の詳細の表示"
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:204
 #: screens/Inventory/InventoryList/InventoryList.js:300
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:270
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:363
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:371
 #: screens/Inventory/InventorySources/InventorySourceList.js:240
 #: screens/Inventory/InventorySources/InventorySourceList.js:252
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:155
@@ -4705,11 +4710,11 @@ msgid "Notification Templates"
 msgstr "通知テンプレート"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:508
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:124
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:125
 msgid "Start message body"
 msgstr "開始メッセージのボディー"
 
-#: screens/Inventory/shared/Inventory.helptext.js:128
+#: screens/Inventory/shared/Inventory.helptext.js:129
 msgid "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "在庫同期に使用するブランチ。空白の場合はプロジェクトのデフォルトが使用されます。プロジェクトのALLOW_OVERRIDEフィールドがTRUEに設定されている場合にのみ許可されます。"
 
@@ -4818,7 +4823,7 @@ msgid "Failed to delete one or more user tokens."
 msgstr "1 つ以上のユーザートークンを削除できませんでした。"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:553
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:169
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:188
 msgid "Workflow approved message"
 msgstr "ワークフロー承認メッセージ"
 
@@ -4999,12 +5004,12 @@ msgstr "タイムアウト時"
 msgid "Create New Team"
 msgstr "新規チームの作成"
 
-#: screens/Inventory/shared/Inventory.helptext.js:148
+#: screens/Inventory/shared/Inventory.helptext.js:149
 msgid "in the documentation and the"
 msgstr "ドキュメンテーションと"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:152
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:206
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:207
 #: screens/Project/ProjectDetail/ProjectDetail.js:160
 msgid "Last Job Status"
 msgstr "最終ジョブステータス"
@@ -5336,7 +5341,7 @@ msgid "Preferred Theme"
 msgstr "優先テーマ"
 
 #: screens/Instances/Shared/InstanceForm.js:31
-#: screens/Inventory/shared/InventorySourceForm.js:92
+#: screens/Inventory/shared/InventorySourceForm.js:98
 #: screens/Project/shared/ProjectForm.js:121
 msgid "Set a value for this field"
 msgstr "このフィールドに値を設定します"
@@ -5469,7 +5474,7 @@ msgid "Download Bundle"
 msgstr "バンドルのダウンロード"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:577
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:187
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:206
 msgid "Workflow denied message"
 msgstr "ワークフロー拒否メッセージ"
 
@@ -5522,7 +5527,7 @@ msgstr "ノードタイプ"
 msgid "View Credential Details"
 msgstr "認証情報の詳細の表示"
 
-#: components/NotificationList/NotificationList.js:177
+#: components/NotificationList/NotificationList.js:188
 #: routeConfig.js:140
 #: screens/Inventory/Inventories.js:119
 #: screens/Inventory/InventorySource/InventorySource.js:101
@@ -5742,7 +5747,7 @@ msgstr "テスト通知"
 #: screens/Credential/CredentialDetail/CredentialDetail.js:262
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:234
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:122
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:305
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:313
 #: screens/Project/ProjectDetail/ProjectDetail.js:333
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:357
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:193
@@ -5791,7 +5796,7 @@ msgstr "ソースコントロールのブランチ"
 #: screens/Instances/InstanceDetail/InstanceDetail.js:248
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:225
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:107
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:239
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:240
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:116
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:418
 #: util/getRelatedResourceDeleteDetails.js:282
@@ -6121,7 +6126,7 @@ msgid "View YAML examples at"
 msgstr "次の場所でYAMLの例を表示します"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:35
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:142
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:143
 msgid "Overwrite local groups and hosts from remote inventory source"
 msgstr "リモートインベントリーソースからのローカルグループおよびホストを上書きする"
 
@@ -6130,7 +6135,7 @@ msgid "Resource deleted"
 msgstr "リソースが削除されました"
 
 #: screens/Inventory/shared/Inventory.helptext.js:54
-#: screens/Inventory/shared/Inventory.helptext.js:187
+#: screens/Inventory/shared/Inventory.helptext.js:188
 msgid "YAML:"
 msgstr "YAML:"
 
@@ -6217,7 +6222,7 @@ msgid "Initiated By"
 msgstr "開始ユーザー:"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:499
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:115
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:116
 msgid "Start message"
 msgstr "開始メッセージ"
 
@@ -6281,7 +6286,7 @@ msgstr "インスタンスの切り替え"
 msgid "Back to Inventories"
 msgstr "インベントリーに戻る"
 
-#: screens/Inventory/shared/Inventory.helptext.js:113
+#: screens/Inventory/shared/Inventory.helptext.js:114
 msgid "After every project update where the SCM revision changes, refresh the inventory from the selected source before executing job tasks. This is intended for static content, like the Ansible inventory .ini file format."
 msgstr "SCMリビジョンが変更されるプロジェクトの更新のたびに、ジョブタスクを実行する前に、選択したソースからインベントリを更新します。これは、Ansibleインベントリ.iniファイル形式などの静的コンテンツを対象としています。"
 
@@ -6375,7 +6380,7 @@ msgstr "インスタンス"
 msgid "Including File"
 msgstr "組み込みファイル"
 
-#: screens/Inventory/shared/Inventory.helptext.js:81
+#: screens/Inventory/shared/Inventory.helptext.js:82
 msgid "If checked, any hosts and groups that were previously present on the external source but are now removed will be removed from the inventory. Hosts and groups that were not managed by the inventory source will be promoted to the next manually created group or if there is no manually created group to promote them into, they will be left in the \"all\" default group for the inventory."
 msgstr "チェックを入れると、以前は外部ソースに存在していたが現在削除されているホストとグループがインベントリーから削除されます。インベントリーソースによって管理されていなかったホストとグループは、次の手動で作成されたグループに昇格されます。昇格先の手動で作成されたグループがない場合は、インベントリーのデフォルトの「all」グループに残されます。"
 
@@ -6412,7 +6417,7 @@ msgstr "詳細タブ"
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:100
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:72
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:298
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:306
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.js:39
 #: screens/Inventory/shared/InventorySourceSubForms/ControllerSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/EC2SubForm.js:38
@@ -6423,7 +6428,7 @@ msgstr "詳細タブ"
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:117
 #: screens/Inventory/shared/InventorySourceSubForms/TerraformSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/VirtualizationSubForm.js:39
-#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:39
+#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:44
 msgid "Credential"
 msgstr "認証情報"
 
@@ -6432,7 +6437,7 @@ msgid "First node"
 msgstr "最初のノード"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:97
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:273
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:281
 msgid "{update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{update_cache_timeout, plural, one {# 秒} other {# 秒}}"
 
@@ -6496,7 +6501,7 @@ msgstr "ジョブ設定の表示"
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:122
 #: screens/Instances/InstanceDetail/InstanceDetail.js:349
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:96
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:329
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:337
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:145
 #: screens/Project/ProjectDetail/ProjectDetail.js:340
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:229
@@ -6550,7 +6555,7 @@ msgstr "標準ユーザー"
 msgid "host-name-{0}"
 msgstr "host-name-{0}"
 
-#: components/NotificationList/NotificationList.js:198
+#: components/NotificationList/NotificationList.js:209
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:139
 msgid "Pagerduty"
 msgstr "Pagerduty"
@@ -6609,7 +6614,7 @@ msgstr "新しいインスタンスがオンラインになったときにこの
 msgid "Launch | {0}"
 msgstr "起動 | {0}"
 
-#: components/NotificationList/NotificationListItem.js:79
+#: components/NotificationList/NotificationListItem.js:84
 msgid "Toggle notification success"
 msgstr "通知成功の切り替え"
 
@@ -6702,7 +6707,7 @@ msgstr "同時実行ジョブの有効化"
 msgid "Smart Inventory"
 msgstr "スマートインベントリー"
 
-#: components/NotificationList/NotificationList.js:200
+#: components/NotificationList/NotificationList.js:211
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:141
 msgid "Slack"
 msgstr "Slack"
@@ -6738,7 +6743,7 @@ msgstr "追加"
 msgid "System administrators have unrestricted access to all resources."
 msgstr "システム管理者は、すべてのリソースに無制限にアクセスできます。"
 
-#: components/NotificationList/NotificationListItem.js:86
+#: components/NotificationList/NotificationListItem.js:91
 msgid "Failure"
 msgstr "失敗"
 
@@ -6883,7 +6888,7 @@ msgstr "フォロー"
 #: components/Lookup/MultiCredentialsLookup.js:205
 #: components/Lookup/OrganizationLookup.js:135
 #: components/Lookup/ProjectLookup.js:149
-#: components/NotificationList/NotificationList.js:210
+#: components/NotificationList/NotificationList.js:221
 #: components/RelatedTemplateList/RelatedTemplateList.js:183
 #: components/Schedule/ScheduleList/ScheduleList.js:205
 #: components/TemplateList/TemplateList.js:235
@@ -7095,7 +7100,7 @@ msgstr "このフィールドは数値で、{min} より大きい値である必
 msgid "All"
 msgstr "すべて"
 
-#: screens/Inventory/shared/Inventory.helptext.js:177
+#: screens/Inventory/shared/Inventory.helptext.js:178
 msgid "constructed inventory"
 msgstr "建設されたインベントリ"
 
@@ -7109,7 +7114,7 @@ msgid "Confirm Delete"
 msgstr "削除の確認"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:625
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:223
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:242
 msgid "Workflow timed out message"
 msgstr "ワークフローのタイムアウトメッセージ"
 
@@ -7205,7 +7210,7 @@ msgstr "なし"
 msgid "Organization Name"
 msgstr "組織名"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:282
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:290
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:149
 msgid "Host Filter"
 msgstr "ホストフィルター"
@@ -7257,7 +7262,7 @@ msgstr "{pluralizedItemName} 一覧"
 msgid "Please add survey questions."
 msgstr "Survey の質問を追加してください。"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:287
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:295
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:121
 msgid "Enabled Variable"
 msgstr "有効な変数"
@@ -7369,7 +7374,7 @@ msgstr "同期"
 #: components/Lookup/ApplicationLookup.js:128
 #: components/Lookup/HostFilterLookup.js:439
 #: components/Lookup/HostListItem.js:10
-#: components/NotificationList/NotificationList.js:186
+#: components/NotificationList/NotificationList.js:197
 #: components/PromptDetail/PromptDetail.js:120
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:337
 #: components/Schedule/ScheduleList/ScheduleList.js:197
@@ -7404,13 +7409,13 @@ msgstr "同期"
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:125
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:141
 #: screens/Inventory/InventoryList/InventoryList.js:215
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:221
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:222
 #: screens/Inventory/shared/ConstructedInventoryForm.js:74
 #: screens/Inventory/shared/ConstructedInventoryHint.js:63
 #: screens/Inventory/shared/FederatedInventoryForm.js:64
 #: screens/Inventory/shared/InventoryForm.js:58
 #: screens/Inventory/shared/InventoryGroupForm.js:41
-#: screens/Inventory/shared/InventorySourceForm.js:141
+#: screens/Inventory/shared/InventorySourceForm.js:147
 #: screens/Inventory/shared/SmartInventoryForm.js:54
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:104
 #: screens/Job/JobOutput/HostEventModal.js:118
@@ -7555,7 +7560,7 @@ msgstr "GitHub Enterprise でサインイン"
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:130
 #: screens/Inventory/shared/InventorySourceSubForms/TerraformSubForm.js:46
 #: screens/Inventory/shared/InventorySourceSubForms/VirtualizationSubForm.js:47
-#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:47
+#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:52
 #: screens/Inventory/shared/SmartInventoryForm.js:66
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.js:29
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.js:66
@@ -7588,7 +7593,7 @@ msgstr "SAML {samlIDP} でサインイン"
 msgid "Browse"
 msgstr "参照"
 
-#: components/NotificationList/NotificationList.js:193
+#: components/NotificationList/NotificationList.js:204
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:134
 #: screens/User/shared/UserForm.js:104
 #: screens/User/UserDetail/UserDetail.js:71
@@ -8011,7 +8016,7 @@ msgid "Sat"
 msgstr "土"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:46
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:176
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:177
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:26
 #: screens/Project/ProjectDetail/ProjectDetail.js:129
 #: screens/Project/ProjectList/ProjectListItem.js:51
@@ -8048,7 +8053,7 @@ msgid "Specify HTTP Headers in JSON format. Refer to\n"
 msgstr "HTTP ヘッダーを JSON 形式で指定します。構文の例については、\n"
 "      Ansible Controller のドキュメントを参照してください。"
 
-#: components/NotificationList/NotificationList.js:199
+#: components/NotificationList/NotificationList.js:210
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:140
 msgid "Rocket.Chat"
 msgstr "Rocket.Chat"
@@ -8106,7 +8111,7 @@ msgstr "ズームを 100% に設定し、グラフを中央に配置"
 msgid "Revert all to default"
 msgstr "すべてをデフォルトに戻す"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:255
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:256
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:135
 msgid "Inventory file"
 msgstr "インベントリーファイル"
@@ -8183,6 +8188,11 @@ msgstr "インスタンスグループのフォールバックを防止する"
 msgid "Maximum number of forks to allow across all jobs running concurrently on this group. Zero means no limit will be enforced."
 msgstr "このグループで同時に実行されているすべてのジョブで許可するフォークの最大数。ゼロは制限が適用されないことを意味します。"
 
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:263
+#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:56
+msgid "Collection"
+msgstr "コレクション"
+
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:207
 msgid "Failed to delete one or more credential types."
 msgstr "1 つ以上の認証情報タイプを削除できませんでした。"
@@ -8197,7 +8207,7 @@ msgstr "リージョン"
 
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:148
 msgid "Workflow Jobs ({total})"
-msgstr ""
+msgstr "ワークフロージョブ ({total})"
 
 #: components/Search/AdvancedSearch.js:315
 msgid "Set type disabled for related search field fuzzy searches"
@@ -8233,11 +8243,11 @@ msgstr "残りのホストがありません"
 msgid "ID of the dashboard (optional)"
 msgstr "ダッシュボード ID (オプション)"
 
-#: screens/Inventory/shared/Inventory.helptext.js:127
+#: screens/Inventory/shared/Inventory.helptext.js:128
 msgid "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
 msgstr "指定されたホスト変数のdictから有効な状態を取得します。有効な変数は、ドット表記を使用して指定できます。例： 'foo.bar'"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:339
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:347
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:88
 msgid "Inventory Source Sync Error"
 msgstr "インベントリーソース同期エラー"
@@ -8264,14 +8274,14 @@ msgstr ""
 #: components/VerbositySelectField/VerbositySelectField.js:35
 #: components/VerbositySelectField/VerbositySelectField.js:45
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:217
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:261
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:269
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:47
 #: screens/Job/JobDetail/JobDetail.js:369
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:257
 msgid "Verbosity"
 msgstr "詳細"
 
-#: components/NotificationList/NotificationList.js:197
+#: components/NotificationList/NotificationList.js:208
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:138
 msgid "Mattermost"
 msgstr "Mattermost"
@@ -8498,6 +8508,10 @@ msgstr "ワークフローの承認に戻る"
 msgid "Enter injectors using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax."
 msgstr "JSON または YAML 構文のいずれかを使用してインジェクターを入力します。構文のサンプルについては Ansible Controller ドキュメントを参照してください。"
 
+#: components/NotificationList/NotificationListItem.js:112
+msgid "Toggle notification changed"
+msgstr "通知変更の切り替え"
+
 #: components/Workflow/WorkflowLegend.js:122
 #: screens/Job/JobOutput/JobOutputSearch.js:140
 msgid "Warning"
@@ -8566,7 +8580,7 @@ msgid "Prompt for instance groups on launch."
 msgstr "起動時にインスタンスグループを要求します。"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:613
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:214
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:233
 msgid "Workflow pending message body"
 msgstr "ワークフロー保留メッセージのボディー"
 
@@ -8608,7 +8622,7 @@ msgstr "IRC ニック"
 msgid "Expires on"
 msgstr "有効期限:"
 
-#: screens/Inventory/shared/Inventory.helptext.js:98
+#: screens/Inventory/shared/Inventory.helptext.js:99
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "このインベントリを使用してジョブを実行するたびに、ジョブタスクを実行する前に、選択したソースからインベントリを更新します。"
 
@@ -8733,7 +8747,7 @@ msgstr "このテンプレートの webhook を有効にします。"
 msgid "On date"
 msgstr "指定日"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:340
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:348
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:90
 msgid "Cancel Inventory Source Sync"
 msgstr "インベントリーソース同期の取り消し"
@@ -8810,7 +8824,7 @@ msgid "Greater than comparison."
 msgstr "Greater than の比較条件"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:40
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:148
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:149
 msgid "Overwrite local variables from remote inventory source"
 msgstr "リモートインベントリーソースのローカル変数を上書きする"
 
@@ -8882,7 +8896,7 @@ msgstr "1 人以上のユーザーを削除できませんでした。"
 msgid "On Success"
 msgstr "成功時"
 
-#: screens/Inventory/shared/Inventory.helptext.js:192
+#: screens/Inventory/shared/Inventory.helptext.js:193
 msgid "The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input."
 msgstr "このソースによって同期されるインベントリファイル。ドロップダウンから選択するか、入力内にファイルを入力します。"
 
@@ -8947,7 +8961,7 @@ msgstr "設定されていません"
 msgid "Workflow Job"
 msgstr "ワークフロージョブ"
 
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:82
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:83
 msgid "Use custom messages to change the content of\n"
 "                notifications sent when a job starts, succeeds, or fails. Use\n"
 "                curly braces to access information about the job:"
@@ -9151,7 +9165,7 @@ msgid "Go to previous page"
 msgstr "前のページに移動"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:565
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:178
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:197
 msgid "Workflow approved message body"
 msgstr "ワークフロー承認メッセージのボディー"
 
@@ -9168,7 +9182,7 @@ msgid "required"
 msgstr "必須"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:589
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:196
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:215
 msgid "Workflow denied message body"
 msgstr "ワークフロー拒否メッセージのボディー"
 
@@ -9270,7 +9284,7 @@ msgstr "docs.ansible.com"
 msgid "Edit Schedule"
 msgstr "スケジュールの編集"
 
-#: components/NotificationList/NotificationList.js:250
+#: components/NotificationList/NotificationList.js:263
 msgid "Failed to toggle notification."
 msgstr "通知の切り替えに失敗しました。"
 
@@ -9358,6 +9372,10 @@ msgstr "保存"
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:181
 msgid "Click to create a new link to this node."
 msgstr "クリックして、このノードへの新しいリンクを作成します。"
+
+#: screens/Inventory/shared/Inventory.helptext.js:78
+msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is applied via the \"plugin\" key in the source variables; when the key is absent, the default collection is used."
+msgstr "vCenter からの同期に使用するインベントリープラグインを提供する Ansible コレクションを選択します。community.vmware コレクションは非推奨となり、新しい vmware.vmware コレクションが推奨されます。選択内容はソース変数の \"plugin\" キーを介して適用されます。キーがない場合は、デフォルトのコレクションが使用されます。"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:167
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:136
@@ -9476,7 +9494,7 @@ msgid "Deprovisioning"
 msgstr "プロビジョニング解除"
 
 #: components/DetailList/LaunchedByDetail.js:27
-#: components/NotificationList/NotificationList.js:202
+#: components/NotificationList/NotificationList.js:213
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:143
 msgid "Webhook"
 msgstr "Webhook"
@@ -9517,7 +9535,7 @@ msgstr "認証情報を削除できませんでした。"
 msgid "Private key passphrase"
 msgstr "秘密鍵のパスフレーズ"
 
-#: components/NotificationList/NotificationListItem.js:58
+#: components/NotificationList/NotificationListItem.js:63
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerStartScreen.js:47
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerStartScreen.js:53
 msgid "Start"
@@ -9537,7 +9555,7 @@ msgstr "インベントリーを選択する必要があります"
 #: components/PromptDetail/PromptProjectDetail.js:100
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:81
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:477
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:266
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:274
 #: screens/Job/JobDetail/JobDetail.js:345
 #: screens/Project/ProjectDetail/ProjectDetail.js:229
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:234
@@ -9591,7 +9609,7 @@ msgstr "Red Hat Insights"
 msgid "View GitHub Settings"
 msgstr "GitHub 設定の表示"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:257
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:258
 msgid "/ (project root)"
 msgstr "/ (プロジェクト root)"
 
@@ -9620,7 +9638,7 @@ msgstr "Playbook の実行中に使用する並列または同時プロセスの
 msgid "View all Workflow Approvals."
 msgstr "すべてのワークフロー承認を表示します。"
 
-#: screens/Inventory/shared/Inventory.helptext.js:92
+#: screens/Inventory/shared/Inventory.helptext.js:93
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "チェックされていない場合、ローカル変数と外部ソースで見つかったものを組み合わせてマージが実行されます。"
 
@@ -9714,7 +9732,7 @@ msgstr "ツールの切り替え"
 #: screens/Inventory/InventoryList/InventoryList.js:211
 #: screens/Inventory/InventoryList/InventoryList.js:241
 #: screens/Inventory/InventoryList/InventoryListItem.js:121
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:225
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:226
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:107
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:153
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:163
@@ -9765,7 +9783,7 @@ msgid "Test External Credential"
 msgstr "外部認証情報のテスト"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:601
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:205
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:224
 msgid "Workflow pending message"
 msgstr "ワークフロー保留メッセージ"
 
@@ -9948,7 +9966,7 @@ msgstr "ナビゲーション"
 msgid "If enabled, control nodes will peer to this instance automatically. If disabled, instance will be connected only to associated peers."
 msgstr "有効にすると、コントロールノードはこのインスタンスを自動的にピアリングします。無効にすると、インスタンスは関連付けられたピアにのみ接続されます。"
 
-#: screens/Inventory/shared/Inventory.helptext.js:120
+#: screens/Inventory/shared/Inventory.helptext.js:121
 msgid "and click on Update Revision on Launch"
 msgstr "そして、起動時のリビジョン更新をクリックします"
 
@@ -9966,6 +9984,10 @@ msgstr "実行環境を編集する前にプロジェクトを選択してくだ
 #: screens/Template/Survey/SurveyReorderModal.js:263
 msgid "Order"
 msgstr "順序"
+
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:179
+msgid "Changed message body"
+msgstr "変更メッセージボディー"
 
 #: components/Schedule/Schedule.js:65
 msgid "Back to Schedules"
@@ -10085,7 +10107,7 @@ msgstr "新規コンテナーグループの作成"
 msgid "Bitbucket Data Center"
 msgstr "Bitbucketデータセンター"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:367
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:375
 msgid "Failed to delete inventory source {name}."
 msgstr "インベントリーソース {name} を削除できませんでした。"
 
@@ -10151,7 +10173,7 @@ msgstr "詳細の編集"
 msgid "Deleted"
 msgstr "削除済み"
 
-#: screens/Inventory/shared/Inventory.helptext.js:129
+#: screens/Inventory/shared/Inventory.helptext.js:130
 msgid "This field is ignored unless an Enabled Variable is set. If the enabled variable matches this value, the host will be enabled on import."
 msgstr "有効な変数が設定されていない限り、このフィールドは無視されます。有効な変数がこの値と一致すると、インポート時にこのホストが有効になります。"
 
@@ -10250,11 +10272,11 @@ msgstr "モジュール"
 msgid "Confirm revert all"
 msgstr "すべて元に戻すことを確認"
 
-#: screens/Inventory/shared/Inventory.helptext.js:89
+#: screens/Inventory/shared/Inventory.helptext.js:90
 msgid "If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source."
 msgstr "チェックすると、子グループとホストのすべての変数が削除され、外部ソースで見つかったものに置き換えられます。"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:350
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:358
 msgid "Delete inventory source"
 msgstr "インベントリーソースの削除"
 
@@ -10325,7 +10347,7 @@ msgstr "ジョブ実行の経過時間"
 msgid "GitLab"
 msgstr "GitLab"
 
-#: components/NotificationList/NotificationListItem.js:93
+#: components/NotificationList/NotificationListItem.js:98
 msgid "Toggle notification failure"
 msgstr "通知失敗の切り替え"
 
@@ -10426,8 +10448,8 @@ msgstr "このフィールドは {0} 文字以上でなければなりません"
 
 #: components/JobList/JobListItem.js:197
 #: components/PromptDetail/PromptInventorySourceDetail.js:78
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:222
-#: screens/Inventory/shared/InventorySourceForm.js:162
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:223
+#: screens/Inventory/shared/InventorySourceForm.js:168
 #: screens/Job/JobDetail/JobDetail.js:180
 #: screens/Job/JobDetail/JobDetail.js:332
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:93
@@ -10511,7 +10533,7 @@ msgstr "キー選択"
 msgid "Pass extra command line changes. There are two ansible command line parameters: "
 msgstr "追加のコマンドライン変更を渡します。2 つの ansible コマンドラインパラメーターがあります: "
 
-#: screens/Inventory/shared/Inventory.helptext.js:84
+#: screens/Inventory/shared/Inventory.helptext.js:85
 msgid "When not checked, local child hosts and groups not found on the external source will remain untouched by the inventory update process."
 msgstr "チェックされていない場合、外部ソースに見つからないローカルの子ホストとグループは、インベントリの更新プロセスで変更されません。"
 
@@ -10554,7 +10576,7 @@ msgid "Specify a notification color. Acceptable colors are hex\n"
 msgstr "通知の色を指定します。使用できる色は 16 進数の\n"
 "        カラーコードです (例: #3af または #789abc)。"
 
-#: components/NotificationList/NotificationList.js:201
+#: components/NotificationList/NotificationList.js:212
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:142
 msgid "Twilio"
 msgstr "Twilio"
@@ -10594,7 +10616,7 @@ msgid "updated"
 msgstr "更新"
 
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:320
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:328
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:135
 #: screens/Project/ProjectList/ProjectListItem.js:274
 #: screens/TopologyView/Tooltip.js:347
@@ -10795,7 +10817,7 @@ msgid "Successful jobs"
 msgstr "成功ジョブ"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:535
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:151
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:152
 msgid "Error message"
 msgstr "エラーメッセージ"
 
@@ -10924,7 +10946,7 @@ msgstr "不明なプロジェクト"
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "複数の親がある場合にこのノードを実行するための前提条件。参照:"
 
-#: screens/Inventory/shared/Inventory.helptext.js:140
+#: screens/Inventory/shared/Inventory.helptext.js:141
 msgid "Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see"
 msgstr "インベントリソースを構成するために使用される変数。このプラグインの設定方法の詳細については、"
 
@@ -10934,7 +10956,7 @@ msgstr "Google Compute Engine"
 
 #: components/Sparkline/Sparkline.js:34
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:55
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:185
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:186
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:35
 #: screens/Project/ProjectDetail/ProjectDetail.js:138
 #: screens/Project/ProjectList/ProjectListItem.js:60
@@ -10956,7 +10978,7 @@ msgstr "すべてのジョブタイプ"
 msgid "GitHub Enterprise Organization"
 msgstr "GitHub Enterprise 組織"
 
-#: screens/Inventory/shared/InventorySourceForm.js:170
+#: screens/Inventory/shared/InventorySourceForm.js:176
 msgid "Choose a source"
 msgstr "ソースの選択"
 
@@ -10990,7 +11012,7 @@ msgstr "簡易キー選択"
 msgid "You have automated against more hosts than your subscription allows."
 msgstr "サブスクリプションで許可されているよりも多くのホストに対して自動化しました。"
 
-#: screens/Inventory/shared/Inventory.helptext.js:130
+#: screens/Inventory/shared/Inventory.helptext.js:131
 msgid "Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied."
 msgstr "一致するホスト名のみがインポートされる正規表現。このフィルターは、インベントリープラグインフィルターが適用された後、後処理ステップとして適用されます。"
 
@@ -11116,7 +11138,7 @@ msgstr "LDAP"
 msgid "Workflow Template"
 msgstr "ワークフローテンプレート"
 
-#: components/NotificationList/NotificationListItem.js:40
+#: components/NotificationList/NotificationListItem.js:45
 #: components/Workflow/WorkflowLegend.js:118
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:76
 msgid "Approval"
@@ -11278,7 +11300,7 @@ msgstr "プロビジョニング失敗"
 msgid "Whether the approval node is automatically approved or denied when the timeout expires."
 msgstr "承認ノードがタイムアウトの期限切れ時に自動的に承認されるか拒否されるか。"
 
-#: screens/Inventory/shared/Inventory.helptext.js:125
+#: screens/Inventory/shared/Inventory.helptext.js:126
 msgid "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
 msgstr "インベントリの同期が最新であると見なす時間（秒単位）。ジョブの実行とコールバック中、タスクシステムは最新の同期のタイムスタンプを評価します。キャッシュタイムアウトよりも古い場合、現在のものとは見なされず、新しいインベントリ同期が実行されます。"
 
@@ -11292,7 +11314,7 @@ msgstr "アクセストークンの有効期限"
 
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:147
 msgid "Workflow Job {currentPosition}/{total}"
-msgstr ""
+msgstr "ワークフロージョブ {currentPosition}/{total}"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:69
 msgid "{interval, plural, one {# minute} other {# minutes}}"
@@ -11436,7 +11458,7 @@ msgstr "Insights システム ID"
 msgid "Authorization Code Expiration"
 msgstr "認証コードの有効期限"
 
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:69
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:70
 msgid "Customize messages…"
 msgstr "メッセージのカスタマイズ…"
 
@@ -11662,7 +11684,7 @@ msgid "{interval, plural, one {# week} other {# weeks}}"
 msgstr "{interval, plural, one {# 週間} other {# 週間}}"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:544
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:160
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:161
 msgid "Error message body"
 msgstr "エラーメッセージボディー"
 
@@ -11705,7 +11727,7 @@ msgstr "管理ノード"
 #: components/Lookup/MultiCredentialsLookup.js:201
 #: components/Lookup/OrganizationLookup.js:131
 #: components/Lookup/ProjectLookup.js:153
-#: components/NotificationList/NotificationList.js:206
+#: components/NotificationList/NotificationList.js:217
 #: components/RelatedTemplateList/RelatedTemplateList.js:179
 #: components/Schedule/ScheduleList/ScheduleList.js:201
 #: components/TemplateList/TemplateList.js:231
@@ -11821,7 +11843,7 @@ msgstr "トークンの削除中にエラーが発生しました"
 msgid "Select period"
 msgstr "期間の選択"
 
-#: components/NotificationList/NotificationListItem.js:65
+#: components/NotificationList/NotificationListItem.js:70
 msgid "Toggle notification start"
 msgstr "通知開始の切り替え"
 
@@ -11869,7 +11891,7 @@ msgid "This field must be a number and have a value between {min} and {max}"
 msgstr "このフィールドは数値で、{min} から {max} までの値である必要があります"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:45
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:154
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:155
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:93
 msgid "Update on launch"
 msgstr "起動時の更新"
@@ -11886,7 +11908,7 @@ msgstr "Jinja 2の条件に基づいてホストをグループに追加しま�
 msgid "Copy Template"
 msgstr "テンプレートのコピー"
 
-#: components/NotificationList/NotificationListItem.js:51
+#: components/NotificationList/NotificationListItem.js:56
 msgid "Toggle notification approvals"
 msgstr "通知承認の切り替え"
 
@@ -11914,7 +11936,7 @@ msgstr "過去1年以内"
 msgid "Week"
 msgstr "週"
 
-#: components/NotificationList/NotificationListItem.js:72
+#: components/NotificationList/NotificationListItem.js:77
 #: components/StatusLabel/StatusLabel.js:39
 msgid "Success"
 msgstr "成功"

@@ -18,6 +18,7 @@ const initialValues = {
   update_cache_timeout: 0,
   update_on_launch: true,
   verbosity: 1,
+  vmware_plugin: 'community.vmware.vmware_vm_inventory',
 };
 
 const mockSourceOptions = {
@@ -49,6 +50,9 @@ describe('<VMwareSubForm />', () => {
     const { getByText } = renderForm();
     await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalled());
     expect(getByText('Credential')).toBeInTheDocument();
+    expect(getByText('Collection')).toBeInTheDocument();
+    expect(getByText('community.vmware')).toBeInTheDocument();
+    expect(getByText('vmware.vmware')).toBeInTheDocument();
     expect(getByText('Verbosity')).toBeInTheDocument();
     expect(getByText('Update options')).toBeInTheDocument();
     expect(getByText('Cache timeout (seconds)')).toBeInTheDocument();
