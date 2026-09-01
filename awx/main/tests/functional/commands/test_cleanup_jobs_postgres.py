@@ -39,18 +39,14 @@ def _old_job_with_hosts(inventory, name, host_count):
     hosts = []
     for i in range(host_count):
         host = Host.objects.create(name='%s-host-%d' % (name, i), inventory=inventory)
-        summary = JobHostSummary.objects.create(job=job, host=host, host_name=host.name)
-        host.last_job_host_summary = summary
-        host.last_job = job
-        host.save()
+        JobHostSummary.objects.create(job=job, host=host, host_name=host.name)
         hosts.append(host)
     return job, hosts
 
 
 @pytest.mark.django_db
-def test_cleanup_jobs_clears_host_summary_references(inventory):
-    """The raw UPDATE has to null Host.last_job_host_summary before the DELETE,
-    otherwise the foreign key blocks it."""
+def test_cleanup_jobs_deletes_host_summaries(inventory):
+    """The raw DELETE has to remove the summary rows before the job goes."""
     job, hosts = _old_job_with_hosts(inventory, 'pg-clears', 3)
     assert JobHostSummary.objects.filter(job=job).count() == 3
 
@@ -62,7 +58,7 @@ def test_cleanup_jobs_clears_host_summary_references(inventory):
     assert JobHostSummary.objects.filter(job_id=job.pk).count() == 0
     for host in hosts:
         host.refresh_from_db()
-        assert host.last_job_host_summary_id is None
+        assert host.latest_summary is None
 
 
 @pytest.mark.django_db
@@ -81,15 +77,13 @@ def test_cleanup_jobs_leaves_recent_jobs_and_their_summaries(inventory):
     recent = Job.objects.create(name='pg-recent', inventory=inventory, status='successful')
     host = Host.objects.create(name='pg-recent-host', inventory=inventory)
     summary = JobHostSummary.objects.create(job=recent, host=host, host_name=host.name)
-    host.last_job_host_summary = summary
-    host.save()
 
     _command().cleanup_jobs()
 
     assert Job.objects.filter(pk=recent.pk).exists()
     assert JobHostSummary.objects.filter(pk=summary.pk).exists()
     host.refresh_from_db()
-    assert host.last_job_host_summary_id == summary.pk
+    assert host.latest_summary.pk == summary.pk
 
 
 @pytest.mark.django_db
@@ -108,4 +102,3 @@ def test_pre_delete_job_host_summaries_spans_chunks(inventory):
     assert skipped == 0
     assert deleted == len(jobs)
     assert JobHostSummary.objects.filter(job__in=jobs).count() == 0
-    assert not Host.objects.filter(last_job_host_summary__isnull=False, inventory=inventory).exists()

@@ -45,8 +45,8 @@ def hosts_without_latest_summary(missing):
 class HostFieldLookupBackend(FieldLookupBackend):
     """
     Resolves Host.last_job and Host.last_job_host_summary against the newest
-    JobHostSummary for each host. The columns of the same name are denormalized
-    caches that are no longer written, so a plain lookup matches nothing.
+    JobHostSummary for each host. These are serializer-derived fields with no
+    backing column on Host, so a plain lookup would be rejected as unknown.
     """
 
     def value_to_python(self, model, lookup, value):
