@@ -8,7 +8,7 @@ const updateStorage = debounce((key, val) => {
   window.dispatchEvent(new Event('storage'));
 }, 500);
 
-function getCookie(name) {
+export function getCookie(name) {
   const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`));
   return match ? decodeURIComponent(match[1]) : null;
 }
