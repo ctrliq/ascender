@@ -77,6 +77,7 @@ class TestPreDeleteJobHostSummaries:
 
             logger.debug.assert_called_once()
 
+
 class TestDeleteMetaPreDelete:
     """Verify DeleteMeta.delete_jobs() calls _pre_delete_job_host_summaries correctly."""
 
