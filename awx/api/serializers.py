@@ -179,8 +179,8 @@ SUMMARIZABLE_FK_FIELDS = {
     'workflow_approval': DEFAULT_SUMMARY_FIELDS + ('timeout', 'status'),
     'schedule': DEFAULT_SUMMARY_FIELDS + ('next_run',),
     'unified_job_template': DEFAULT_SUMMARY_FIELDS + ('unified_job_type',),
-    # last_job and last_job_host_summary are derived from JobHostSummary in HostSerializer,
-    # not from the stale FK fields on Host.
+    'last_job': DEFAULT_SUMMARY_FIELDS + ('finished', 'status', 'failed', 'license_error', 'canceled_on'),
+    'last_job_host_summary': DEFAULT_SUMMARY_FIELDS + ('failed',),
     'last_update': DEFAULT_SUMMARY_FIELDS + ('status', 'failed', 'license_error'),
     'current_update': DEFAULT_SUMMARY_FIELDS + ('status', 'failed', 'license_error'),
     'current_job': DEFAULT_SUMMARY_FIELDS + ('status', 'failed', 'license_error'),
@@ -436,6 +436,10 @@ class BaseSerializer(serializers.ModelSerializer, metaclass=BaseSerializerMetacl
                 if fk == 'job' and isinstance(obj, UnifiedJob):
                     continue
                 if fk == 'project' and (isinstance(obj, InventorySource) or isinstance(obj, Project)):
+                    continue
+                # Host's last_job/last_job_host_summary FKs are stale; HostSerializer
+                # derives them from JobHostSummary instead.
+                if fk in ('last_job', 'last_job_host_summary') and isinstance(obj, Host):
                     continue
 
                 try:
