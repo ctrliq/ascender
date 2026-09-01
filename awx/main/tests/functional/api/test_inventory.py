@@ -8,7 +8,7 @@ from django.utils.timezone import now
 
 from awx.api.versioning import reverse
 
-from awx.main.models import InventorySource, Inventory, ActivityStream
+from awx.main.models import InventorySource, Inventory, ActivityStream, Host, Job
 
 
 @pytest.fixture
@@ -25,6 +25,11 @@ def factory_scm_inventory(inventory, project):
             return inventory.inventory_sources.create(source_project=project, overwrite_vars=True, source='scm', **kwargs)
 
     return fn
+
+
+@pytest.fixture
+def inventory_running_job(inventory, project):
+    return Job.objects.create(name='running-job', inventory=inventory, project=project, status='running')
 
 
 @pytest.mark.django_db
@@ -173,6 +178,59 @@ def test_async_inventory_deletion_deletes_related_jt(delete, get, job_template, 
     resp = get(reverse('api:job_template_detail', kwargs={'pk': job_template.id}), admin)
     jdata = json.loads(resp.content)
     assert jdata['inventory'] is None
+
+
+@pytest.mark.django_db
+def test_host_deletion_blocked_by_running_job(delete, inventory, host, admin, inventory_running_job):
+    resp = delete(reverse('api:host_detail', kwargs={'pk': host.pk}), admin, expect=409)
+    assert resp.data['error'] == 'Resource is being used by running jobs.'
+    assert resp.data['active_jobs'] == [{'id': inventory_running_job.pk, 'type': 'job'}]
+    assert Host.objects.filter(pk=host.pk).exists()
+
+
+@pytest.mark.django_db
+def test_host_deletion_allowed_while_in_use(delete, inventory, host, admin, inventory_running_job):
+    inventory.allow_deletes_while_in_use = True
+    inventory.save(update_fields=['allow_deletes_while_in_use'])
+
+    delete(reverse('api:host_detail', kwargs={'pk': host.pk}), admin, expect=204)
+    assert not Host.objects.filter(pk=host.pk).exists()
+
+
+@pytest.mark.django_db
+def test_host_deletion_allowed_while_events_are_processed(delete, inventory, host, admin, inventory_running_job):
+    """Recently finished jobs also block deletion until their events are saved."""
+    inventory_running_job.status = 'successful'
+    inventory_running_job.emitted_events = 1
+    inventory_running_job.finished = now()
+    inventory_running_job.save(update_fields=['status', 'emitted_events', 'finished'])
+
+    delete(reverse('api:host_detail', kwargs={'pk': host.pk}), admin, expect=403)
+
+    inventory.allow_deletes_while_in_use = True
+    inventory.save(update_fields=['allow_deletes_while_in_use'])
+    delete(reverse('api:host_detail', kwargs={'pk': host.pk}), admin, expect=204)
+
+
+@pytest.mark.django_db
+def test_inventory_deletion_still_blocked_while_in_use(delete, inventory, admin, inventory_running_job):
+    """The flag covers hosts of the inventory, not the inventory itself."""
+    inventory.allow_deletes_while_in_use = True
+    inventory.save(update_fields=['allow_deletes_while_in_use'])
+
+    delete(reverse('api:inventory_detail', kwargs={'pk': inventory.pk}), admin, expect=409)
+    inventory.refresh_from_db()
+    assert inventory.pending_deletion is False
+
+
+@pytest.mark.django_db
+def test_allow_deletes_while_in_use_is_editable(get, patch, inventory, admin):
+    resp = get(reverse('api:inventory_detail', kwargs={'pk': inventory.pk}), admin, expect=200)
+    assert resp.data['allow_deletes_while_in_use'] is False
+
+    patch(reverse('api:inventory_detail', kwargs={'pk': inventory.pk}), {'allow_deletes_while_in_use': True}, admin, expect=200)
+    inventory.refresh_from_db()
+    assert inventory.allow_deletes_while_in_use is True
 
 
 @pytest.mark.parametrize('order_by', ('extra_vars', '-extra_vars', 'extra_vars,pk', '-extra_vars,pk'))

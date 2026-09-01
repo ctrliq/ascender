@@ -99,6 +99,12 @@ function InventoryFormFields({ inventory }) {
               label={t`Prevent Instance Group Fallback`}
               tooltip={helpText.preventInstanceGroupFallback}
             />
+            <CheckboxField
+              id="option-allow-deletes-while-in-use"
+              name="allow_deletes_while_in_use"
+              label={t`Allow Deletes While In Use`}
+              tooltip={helpText.allowDeletesWhileInUse}
+            />
           </FormCheckboxLayout>
         </FormGroup>
         <VariablesField
@@ -131,6 +137,7 @@ function InventoryForm({
     labels: inventory?.summary_fields?.labels?.results || [],
     prevent_instance_group_fallback:
       inventory.prevent_instance_group_fallback || false,
+    allow_deletes_while_in_use: inventory.allow_deletes_while_in_use || false,
   };
   return (
     <Formik

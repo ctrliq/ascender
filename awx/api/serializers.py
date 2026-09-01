@@ -1766,6 +1766,7 @@ class InventorySerializer(LabelsListMixin, BaseSerializerWithVariables):
             'inventory_sources_with_failures',
             'pending_deletion',
             'prevent_instance_group_fallback',
+            'allow_deletes_while_in_use',
         )
         extra_kwargs = {
             # required/default must be explicit since DRF 3.16: nullable FKs now
