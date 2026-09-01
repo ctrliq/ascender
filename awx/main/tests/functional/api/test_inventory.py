@@ -4,6 +4,7 @@ import json
 from unittest import mock
 
 from django.core.exceptions import ValidationError
+from django.utils.timezone import now
 
 from awx.api.versioning import reverse
 
@@ -257,6 +258,26 @@ def test_create_inventory_smart_inventory_sources(post, get, inventory, admin_us
 
     assert getattr(smart_inventory, 'kind') == 'smart'
     assert jdata['count'] == 0
+
+
+@pytest.mark.django_db
+def test_inventory_source_summary_fields_include_last_job(get, inventory_source, admin_user):
+    """The UI's source list Status column reads summary_fields.last_job; it must
+    survive perf changes to host summaries (see SUMMARIZABLE_FK_FIELDS)."""
+    update = inventory_source.create_unified_job()
+    update.status = 'successful'
+    update.finished = now()
+    update.save()
+
+    url = reverse('api:inventory_inventory_sources_list', kwargs={'pk': inventory_source.inventory.pk})
+    resp = get(url, admin_user, expect=200)
+    source_data = resp.data['results'][0]
+
+    assert 'last_job' in source_data['summary_fields']
+    last_job = source_data['summary_fields']['last_job']
+    assert last_job['id'] == update.id
+    assert last_job['status'] == 'successful'
+    assert last_job['finished'] == update.finished
 
 
 @pytest.mark.django_db

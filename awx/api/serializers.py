@@ -179,8 +179,8 @@ SUMMARIZABLE_FK_FIELDS = {
     'workflow_approval': DEFAULT_SUMMARY_FIELDS + ('timeout', 'status'),
     'schedule': DEFAULT_SUMMARY_FIELDS + ('next_run',),
     'unified_job_template': DEFAULT_SUMMARY_FIELDS + ('unified_job_type',),
-    # last_job and last_job_host_summary are derived from JobHostSummary in HostSerializer,
-    # not from the stale FK fields on Host.
+    'last_job': DEFAULT_SUMMARY_FIELDS + ('finished', 'status', 'failed', 'license_error', 'canceled_on'),
+    'last_job_host_summary': DEFAULT_SUMMARY_FIELDS + ('failed',),
     'last_update': DEFAULT_SUMMARY_FIELDS + ('status', 'failed', 'license_error'),
     'current_update': DEFAULT_SUMMARY_FIELDS + ('status', 'failed', 'license_error'),
     'current_job': DEFAULT_SUMMARY_FIELDS + ('status', 'failed', 'license_error'),
@@ -2008,6 +2008,8 @@ class HostSerializer(BaseSerializerWithVariables):
 
     has_active_failures = serializers.SerializerMethodField()
     has_inventory_sources = serializers.SerializerMethodField()
+    last_job = serializers.SerializerMethodField()
+    last_job_host_summary = serializers.SerializerMethodField()
 
     class Meta:
         model = Host
@@ -2024,7 +2026,7 @@ class HostSerializer(BaseSerializerWithVariables):
             'last_job_host_summary',
             'ansible_facts_modified',
         )
-        read_only_fields = ('last_job', 'last_job_host_summary', 'ansible_facts_modified')
+        read_only_fields = ('ansible_facts_modified',)
 
     def build_relational_field(self, field_name, relation_info):
         field_class, field_kwargs = super(HostSerializer, self).build_relational_field(field_name, relation_info)
@@ -2166,12 +2168,15 @@ class HostSerializer(BaseSerializerWithVariables):
             return ret
         if 'inventory' in ret and not obj.inventory:
             ret['inventory'] = None
-        last_summary = obj.latest_summary
-        if 'last_job' in ret:
-            ret['last_job'] = last_summary.job_id if last_summary else None
-        if 'last_job_host_summary' in ret:
-            ret['last_job_host_summary'] = last_summary.pk if last_summary else None
         return ret
+
+    def get_last_job(self, obj):
+        last_summary = obj.latest_summary
+        return last_summary.job_id if last_summary else None
+
+    def get_last_job_host_summary(self, obj):
+        last_summary = obj.latest_summary
+        return last_summary.pk if last_summary else None
 
     def get_has_active_failures(self, obj):
         last_summary = obj.latest_summary
