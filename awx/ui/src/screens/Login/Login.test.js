@@ -396,6 +396,42 @@ describe('<Login />', () => {
     ).toHaveLength(0);
   });
 
+  test('social auth button starts login with a POSTed form', async () => {
+    AuthAPI.read.mockResolvedValue({
+      data: {
+        'azuread-oauth2': {
+          login_url: '/sso/login/azuread-oauth2/',
+          complete_url: 'https://localhost:8043/sso/complete/azuread-oauth2/',
+        },
+      },
+    });
+    document.cookie = 'csrftoken=TESTTOKEN';
+    const submit = jest
+      .spyOn(HTMLFormElement.prototype, 'submit')
+      .mockImplementation(() => {});
+
+    const { container } = renderWithContexts(
+      <AWXLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    const button = await waitFor(() =>
+      container.querySelector('[data-cy="social-auth-azure"]')
+    );
+    button.click();
+
+    const form = document.querySelector(
+      'form[action="/sso/login/azuread-oauth2/"]'
+    );
+    expect(form).not.toBeNull();
+    expect(form.method).toEqual('post');
+    expect(
+      form.querySelector('input[name="csrfmiddlewaretoken"]').value
+    ).toEqual('TESTTOKEN');
+    expect(submit).toHaveBeenCalled();
+    submit.mockRestore();
+    form.remove();
+  });
+
   test('SAML auth buttons shown', async () => {
     AuthAPI.read.mockResolvedValue({
       data: {
