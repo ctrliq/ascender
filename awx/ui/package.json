@@ -99,7 +99,7 @@
     "terser-webpack-plugin": "^5.6.1",
     "typescript": "^6.0.3",
     "webpack": "^5.108.1",
-    "webpack-dev-server": "^5.2.6",
+    "webpack-dev-server": "^6.0.0",
     "webpack-manifest-plugin": "^6.0.1"
   },
   "overrides": {
