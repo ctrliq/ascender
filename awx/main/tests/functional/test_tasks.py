@@ -5,8 +5,8 @@ import tempfile
 import shutil
 
 from awx.main.tasks.jobs import RunJob
-from awx.main.tasks.system import execution_node_health_check, _cleanup_images_and_files
-from awx.main.models import Instance, Job
+from awx.main.tasks.system import execution_node_health_check, _batched_delete_inventory, _cleanup_images_and_files
+from awx.main.models import Host, Instance, Inventory, Job
 
 
 @pytest.fixture
@@ -73,3 +73,36 @@ def test_does_not_run_reaped_job(mocker, mock_me):
     job.refresh_from_db()
     assert job.status == 'failed'
     mock_run.assert_not_called()
+
+
+@pytest.mark.django_db
+class TestBatchedDeleteInventory:
+    def test_deletes_every_host_and_the_inventory(self, organization):
+        inventory = Inventory.objects.create(name='batched', organization=organization)
+        for i in range(7):
+            Host.objects.create(name='host-{}'.format(i), inventory=inventory)
+        inventory_id = inventory.id
+
+        _batched_delete_inventory(inventory, batch_size=2)
+
+        assert not Inventory.objects.filter(id=inventory_id).exists()
+        assert not Host.objects.filter(inventory_id=inventory_id).exists()
+
+    def test_leaves_hosts_of_other_inventories_alone(self, organization):
+        doomed = Inventory.objects.create(name='doomed', organization=organization)
+        kept = Inventory.objects.create(name='kept', organization=organization)
+        Host.objects.create(name='doomed-host', inventory=doomed)
+        Host.objects.create(name='kept-host', inventory=kept)
+
+        _batched_delete_inventory(doomed, batch_size=1)
+
+        assert Inventory.objects.filter(id=kept.id).exists()
+        assert [h.name for h in Host.objects.filter(inventory_id=kept.id)] == ['kept-host']
+
+    def test_empty_inventory_is_deleted(self, organization):
+        inventory = Inventory.objects.create(name='empty', organization=organization)
+        inventory_id = inventory.id
+
+        _batched_delete_inventory(inventory)
+
+        assert not Inventory.objects.filter(id=inventory_id).exists()
