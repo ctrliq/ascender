@@ -14,6 +14,7 @@ from awx.main.models.workflow import (
     WorkflowJobTemplateNodeConditionLink,
 )
 from awx.main.models.credential import Credential
+from awx.main.models.label import Label
 from awx.main.scheduler import TaskManager, WorkflowManager, DependencyManager
 
 # Django
@@ -50,6 +51,29 @@ def test_node_accepts_prompted_fields(inventory, project, workflow_job_template,
     job_template = JobTemplate.objects.create(inventory=inventory, project=project, playbook='helloworld.yml', ask_limit_on_launch=True)
     url = reverse('api:workflow_job_template_workflow_nodes_list', kwargs={'pk': workflow_job_template.pk})
     post(url, {'unified_job_template': job_template.pk, 'limit': 'webservers'}, user=admin_user, expect=201)
+
+
+@pytest.mark.django_db
+def test_node_patch_with_unprompted_labels(inventory, project, organization, workflow_job_template, patch, admin_user):
+    """Patching one prompt field must not re-validate labels the request never sent."""
+    jt = JobTemplate.objects.create(
+        inventory=inventory,
+        project=project,
+        playbook='helloworld.yml',
+        ask_variables_on_launch=True,
+        ask_labels_on_launch=False,
+    )
+    label = Label.objects.create(name='node-label', organization=organization)
+    node = WorkflowJobTemplateNode.objects.create(
+        workflow_job_template=workflow_job_template,
+        unified_job_template=jt,
+        extra_data={'foo': 'bar'},
+    )
+    node.labels.add(label)
+
+    url = reverse('api:workflow_job_template_node_detail', kwargs={'pk': node.pk})
+    r = patch(url, {'extra_data': {'foo': 'edited'}}, user=admin_user, expect=200)
+    assert r.data['extra_data'] == {'foo': 'edited'}
 
 
 @pytest.mark.django_db

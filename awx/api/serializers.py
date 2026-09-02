@@ -4325,9 +4325,27 @@ class LaunchConfigurationBaseSerializer(BaseSerializer):
                             attrs['extra_data'][key] = db_extra_data[key]
 
         # Build unsaved version of this config, use it to detect prompts errors
+        # Capture the keys before _build_mock_obj pops the pseudo fields from attrs
+        incoming_attr_keys = set(attrs.keys())
         mock_obj = self._build_mock_obj(attrs)
-        if set(list(ujt.get_ask_mapping().keys()) + ['extra_data']) & set(attrs.keys()):
-            accepted, rejected, errors = ujt._accept_or_ignore_job_kwargs(_exclude_errors=self.exclude_errors, **mock_obj.prompts_dict())
+        requested_prompt_fields = incoming_attr_keys & set(ujt.get_ask_mapping().keys())
+        if 'extra_data' in incoming_attr_keys:
+            requested_prompt_fields.add('extra_vars')
+            requested_prompt_fields.add('survey_passwords')
+
+        # prompts_dict() reads the persisted many to many state, labels, credentials and
+        # instance groups, off the instance pk. Re-validate the whole prompt state only when
+        # the caller is switching the underlying template, otherwise restrict validation to
+        # the fields the request actually provided.
+        if 'unified_job_template' in attrs:
+            prompts_to_validate = mock_obj.prompts_dict()
+        elif requested_prompt_fields:
+            prompts_to_validate = {k: v for k, v in mock_obj.prompts_dict().items() if k in requested_prompt_fields}
+        else:
+            prompts_to_validate = None
+
+        if prompts_to_validate is not None:
+            accepted, rejected, errors = ujt._accept_or_ignore_job_kwargs(_exclude_errors=self.exclude_errors, **prompts_to_validate)
         else:
             # Only perform validation of prompts if prompts fields are provided
             errors = {}
