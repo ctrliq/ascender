@@ -504,7 +504,11 @@ def inspect_established_receptor_connections(mesh_status):
 
 
 def inspect_execution_and_hop_nodes(instance_list):
-    with advisory_lock('inspect_execution_and_hop_nodes_lock', wait=False):
+    with advisory_lock('inspect_execution_and_hop_nodes_lock', wait=False) as acquired:
+        if not acquired:
+            logger.debug("Not running inspect_execution_and_hop_nodes, another instance holds lock")
+            return
+
         node_lookup = {inst.hostname: inst for inst in instance_list}
         ctl = get_receptor_ctl()
         mesh_status = ctl.simple_command('status')
