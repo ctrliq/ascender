@@ -164,4 +164,58 @@ describe('WorkflowOutput', () => {
       ).toBeInTheDocument()
     );
   });
+
+  test('a recovery refetch is skipped once the component is unmounted', async () => {
+    jest.useFakeTimers();
+    try {
+      const { container, unmount } = renderWithContexts(
+        <svg>
+          <WorkflowOutput job={job} />
+        </svg>
+      );
+      await waitFor(() =>
+        expect(container.querySelector('#workflow-g')).toBeInTheDocument()
+      );
+      // Loading armed the 500 ms and 2500 ms recovery timers. Once the
+      // component is gone they must not reach the API, whatever it would
+      // answer: there is nothing left to refresh, and a rejection here used
+      // to escape as an unhandled one into whichever test ran next.
+      unmount();
+      WorkflowJobsAPI.readNodes.mockClear();
+      WorkflowJobsAPI.readNodes.mockRejectedValue(new Error('stale timer'));
+
+      await jest.advanceTimersByTimeAsync(3000);
+
+      expect(WorkflowJobsAPI.readNodes).not.toHaveBeenCalled();
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  test('a failed recovery refetch leaves the graph in place', async () => {
+    jest.useFakeTimers();
+    try {
+      const { container } = renderWithContexts(
+        <svg>
+          <WorkflowOutput job={job} />
+        </svg>
+      );
+      await waitFor(() =>
+        expect(container.querySelector('#workflow-g')).toBeInTheDocument()
+      );
+      WorkflowJobsAPI.readNodes.mockRejectedValue(new Error('recovery failed'));
+
+      await jest.advanceTimersByTimeAsync(3000);
+
+      // The refetches ran and failed; the graph is untouched and no error
+      // state replaced it.
+      expect(WorkflowJobsAPI.readNodes.mock.calls.length).toBeGreaterThan(1);
+      expect(container.querySelector('#workflow-g')).toBeInTheDocument();
+      expect(
+        container.querySelector('.pf-v6-c-empty-state')
+      ).not.toBeInTheDocument();
+    } finally {
+      jest.useRealTimers();
+    }
+  });
 });

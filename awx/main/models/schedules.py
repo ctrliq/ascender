@@ -311,7 +311,8 @@ class Schedule(PrimordialModel, LaunchTimeConfig):
     def save(self, *args, **kwargs):
         self.rrule = Schedule.coerce_naive_until(self.rrule)
         changed = self.update_computed_fields_no_save()
-        if changed and 'update_fields' in kwargs:
+        # An explicit update_fields=None is a full save, the same as leaving it out
+        if changed and kwargs.get('update_fields') is not None:
             for field_name in ['next_run', 'dtstart', 'dtend']:
                 if field_name not in kwargs['update_fields']:
                     kwargs['update_fields'].append(field_name)

@@ -40,7 +40,20 @@ export default function useWsWorkflowOutput(workflowJobId, initialNodes) {
   });
 
   const refreshNodeObjects = useCallback(async () => {
-    const updatedNodeObjects = await fetchWorkflowNodes(workflowJobId);
+    // A recovery timer or a late message can land after the component is
+    // gone. There is nothing to refresh then, and no reason to call the API.
+    if (!isMounted.current) {
+      return;
+    }
+    let updatedNodeObjects;
+    try {
+      updatedNodeObjects = await fetchWorkflowNodes(workflowJobId);
+    } catch {
+      // The refetch is a best-effort catch-up: the graph keeps what it has,
+      // and the next message or timer brings it up to date. A failure must
+      // not escape as an unhandled rejection.
+      return;
+    }
     if (!isMounted.current) {
       return;
     }
@@ -83,7 +96,7 @@ export default function useWsWorkflowOutput(workflowJobId, initialNodes) {
   // happened while the graph was still loading.  The timers are intentionally
   // NOT cleaned up on effect re-run so they survive React strict-mode's
   // unmount/remount cycle; refreshNodeObjects is safe to call after unmount
-  // (it checks isMounted).
+  // (it checks isMounted before fetching, and again before setting state).
   useEffect(() => {
     if (hasInitializedRef.current) return;
     if (!initialNodes || initialNodes.length <= 1) return;
