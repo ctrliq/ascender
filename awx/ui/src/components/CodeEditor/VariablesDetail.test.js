@@ -81,6 +81,16 @@ describe('<VariablesDetail>', () => {
     );
   });
 
+  test('offers no expand button: the editor grows with its content', () => {
+    renderWithContexts(
+      <VariablesDetail value="---\nfoo: bar" label="Variables" name="test" />
+    );
+    expect(
+      screen.queryByRole('button', { name: 'Expand input' })
+    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
   test('should preserve the selected mode when the value prop changes', async () => {
     const { user, rerender } = renderWithContexts(
       <VariablesDetail value="---foo: bar" label="Variables" name="test" />

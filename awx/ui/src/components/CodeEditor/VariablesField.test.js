@@ -199,25 +199,18 @@ describe('VariablesField', () => {
     expect(isPrimary(yamlBtn())).toBe(false);
   });
 
-  it('should open modal when expanded', async () => {
-    const { user, container } = renderWithContexts(
+  it('offers no expand button: the editor grows with its content', () => {
+    renderWithContexts(
       <Formik initialValues={{ variables: '---' }} onSubmit={jest.fn()}>
         {() => (
           <VariablesField id="the-field" name="variables" label="Variables" />
         )}
       </Formik>
     );
-    // modal closed -> only the inline editor is present
-    expect(container.querySelectorAll('.ace_editor')).toHaveLength(1);
+    expect(
+      screen.queryByRole('button', { name: 'Expand input' })
+    ).not.toBeInTheDocument();
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-
-    await user.click(screen.getByRole('button', { name: 'Expand input' }));
-
-    // modal open -> dialog rendered with its own editor
-    expect(screen.getByRole('dialog')).toBeInTheDocument();
-    await waitFor(() =>
-      expect(document.querySelectorAll('.ace_editor')).toHaveLength(2)
-    );
   });
 
   // NOTE: original "should format JSON for code editor" asserted the CodeEditor
