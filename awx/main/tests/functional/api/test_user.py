@@ -44,6 +44,19 @@ def test_creating_user_retains_session(post, admin):
 
 
 @pytest.mark.django_db
+def test_blank_password_is_accepted_and_leaves_the_password_alone(patch, admin, alice):
+    '''
+    '' is the field's own default and _update_password reads it as no change,
+    so sending it explicitly has to be accepted rather than rejected as blank.
+    '''
+    original = User.objects.get(pk=alice.pk).password
+
+    patch(reverse('api:user_detail', kwargs={'pk': alice.pk}), {'password': ''}, admin, expect=200)
+
+    assert User.objects.get(pk=alice.pk).password == original
+
+
+@pytest.mark.django_db
 def test_updating_own_password_refreshes_session(patch, admin):
     '''
     Updating your own password should refresh the session id.
