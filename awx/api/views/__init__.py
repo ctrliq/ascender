@@ -1686,6 +1686,19 @@ class HostDetail(RelatedJobsPreventDeleteMixin, RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         return super().get_queryset().with_latest_summary_id()
 
+    def check_related_active_jobs(self, obj):
+        if obj.inventory.allow_deletes_while_in_use:
+            active_jobs = obj.get_active_jobs()
+            if active_jobs:
+                logger.info(
+                    'Deleting host %d while inventory %d is used by active jobs %s, allowed by allow_deletes_while_in_use',
+                    obj.pk,
+                    obj.inventory_id,
+                    [job['id'] for job in active_jobs],
+                )
+            return
+        return super().check_related_active_jobs(obj)
+
     def delete(self, request, *args, **kwargs):
         if self.get_object().inventory.pending_deletion:
             return Response({"error": _("The inventory for this host is already being deleted.")}, status=status.HTTP_400_BAD_REQUEST)
