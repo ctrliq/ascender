@@ -41,15 +41,21 @@ from awx.main.models.events import (  # noqa
     JobEvent,
     ProjectUpdateEvent,
     SystemJobEvent,
+    ExecutionEnvironmentBuilderBuildEvent,
     UnpartitionedAdHocCommandEvent,
     UnpartitionedInventoryUpdateEvent,
     UnpartitionedJobEvent,
     UnpartitionedProjectUpdateEvent,
     UnpartitionedSystemJobEvent,
+    UnpartitionedExecutionEnvironmentBuilderBuildEvent,
 )
 from awx.main.models.ad_hoc_commands import AdHocCommand  # noqa
 from awx.main.models.schedules import Schedule  # noqa
 from awx.main.models.execution_environments import ExecutionEnvironment  # noqa
+from awx.main.models.execution_environment_builders import ExecutionEnvironmentBuilder  # noqa
+from awx.main.models.execution_environment_builder_builds import (  # noqa
+    ExecutionEnvironmentBuilderBuild,
+)
 from awx.main.models.activity_stream import ActivityStream  # noqa
 from awx.main.models.ha import (  # noqa
     Instance,
@@ -268,6 +274,7 @@ activity_stream_registrar.connect(Team)
 activity_stream_registrar.connect(Project)
 # activity_stream_registrar.connect(ProjectUpdate)
 activity_stream_registrar.connect(ExecutionEnvironment)
+activity_stream_registrar.connect(ExecutionEnvironmentBuilder)
 activity_stream_registrar.connect(JobTemplate)
 activity_stream_registrar.connect(Job)
 activity_stream_registrar.connect(AdHocCommand)
