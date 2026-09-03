@@ -68,7 +68,7 @@ class RecordedQueryLog(object):
                     progname = match
                     break
             else:
-                progname = os.path.basename(sys.argv[0])
+                progname = 'unknown'
             filepath = os.path.join(self.dest, '{}.sqlite'.format(progname))
             # awx.__version__ is resolved once at import time and already falls
             # back to the VERSION file when the package isn't pip installed;
