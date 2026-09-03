@@ -13,7 +13,7 @@ from rest_framework.utils.urls import replace_query_param
 from rest_framework.settings import api_settings
 from django.utils.translation import gettext_lazy as _
 
-from awx.main.models import ActivityStream
+from awx.main.models import ActivityStream, UnifiedJob
 
 
 class DisabledPaginator(DjangoPaginator):
@@ -24,6 +24,21 @@ class DisabledPaginator(DjangoPaginator):
     @property
     def count(self):
         return 200
+
+
+class UnifiedJobPaginator(DjangoPaginator):
+    """Use an RBAC-unfiltered count for unified job pagination.
+
+    The RBAC-filtered COUNT query is prohibitively slow on large unified job
+    tables; an unfiltered count is acceptable for pagination UI.  Workflow
+    approvals are excluded because UnifiedJobAccess.get_queryset hides them
+    from every request (superusers included) — counting rows the endpoint can
+    never return would inflate the page count.
+    """
+
+    @cached_property
+    def count(self):
+        return UnifiedJob.objects.filter(workflowapproval__isnull=True).count()
 
 
 class ActivityStreamPaginator(DjangoPaginator):
@@ -87,7 +102,7 @@ class Pagination(pagination.PageNumberPagination):
         return super(Pagination, self).get_paginated_response(data)
 
 
-class ActivityStreamPagination(Pagination):
+class UnfilteredCountPagination(Pagination):
     """Fast unfiltered count for the default listing only.
 
     A search or field filter must report the count of the filtered queryset —
@@ -95,19 +110,26 @@ class ActivityStreamPagination(Pagination):
     empty pages.  Those requests fall back to the normal (slow) count.
     """
 
-    django_paginator_class = ActivityStreamPaginator
-
     # Query params that do not narrow the result set; any other param means
     # the client is filtering and the count must match the filtered queryset.
     NON_FILTER_PARAMS = frozenset(('page', 'page_size', 'format', 'order', 'order_by', 'count_disabled', 'no_truncate'))
 
     def paginate_queryset(self, queryset, request, **kwargs):
+        unfiltered_paginator = self.django_paginator_class
         if any(param not in self.NON_FILTER_PARAMS for param in request.query_params):
             self.django_paginator_class = DjangoPaginator
         try:
             return super().paginate_queryset(queryset, request, **kwargs)
         finally:
-            self.django_paginator_class = ActivityStreamPaginator
+            self.django_paginator_class = unfiltered_paginator
+
+
+class UnifiedJobPagination(UnfilteredCountPagination):
+    django_paginator_class = UnifiedJobPaginator
+
+
+class ActivityStreamPagination(UnfilteredCountPagination):
+    django_paginator_class = ActivityStreamPaginator
 
 
 class LimitPagination(pagination.BasePagination):
