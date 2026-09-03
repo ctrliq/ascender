@@ -85,19 +85,26 @@ const OutputWrapper = styled.div`
 // react-virtualized's AutoSizer + Grid. It must have a real height; the parent
 // OutputWrapper is `flex: 1 1 auto` inside the flex-column CardBody, so this
 // fills the remaining space and owns the scrollbar.
+//
+// Its height must not depend on its content. react-virtual observes both this
+// element and every rendered row with a ResizeObserver, and a row measurement
+// changes the total size of the rows. With a content-sized flex basis that
+// change resized the container too, in the same frame, which the browser
+// reports as "ResizeObserver loop completed with undelivered notifications":
+// the row observations are delivered, the container's cannot be. A zero flex
+// basis makes the height the free space of the column and nothing else. The
+// gutter strip is painted here as a background so it runs to the bottom when
+// the output is shorter than the container.
 const ScrollContainer = styled.div`
-  flex: 1 1 auto;
+  flex: 1 1 0%;
   min-height: 0;
   overflow: auto;
   position: relative;
-  background-color: var(--ascender-output-bg, #fff);
-`;
-
-const OutputFooter = styled.div`
-  background-color: var(--ascender-gutter-bg, #e8e8e8);
-  border-right: none;
-  width: 85px;
-  flex: 1;
+  background: linear-gradient(
+    to right,
+    var(--ascender-gutter-bg, #e8e8e8) 85px,
+    var(--ascender-output-bg, #fff) 85px
+  );
 `;
 
 export const MAX_SELECTION_OVERSCAN = 500;
@@ -142,37 +149,6 @@ export function computeOverscanIndices(
       Math.min(cellCount - 1, clampedEnd)
     ),
   };
-}
-
-// react-virtual's measureElement uses a ResizeObserver to dynamically size rows.
-// On varied-height output a measure can shift layout within the same frame, so
-// the browser emits the benign notice "ResizeObserver loop completed with
-// undelivered notifications". It has no functional impact, but CRA's dev error
-// overlay treats that window 'error' as fatal and blocks the whole UI.
-//
-// We must NOT fix this by deferring the observer callback (e.g. to
-// requestAnimationFrame): react-virtual needs to apply the measured height in
-// the same commit, and on a live job the component re-renders continuously as
-// events stream in. A deferred measurement means each streaming render paints
-// rows at their stale 25px estimate before the next frame corrects them, so the
-// rows visibly overlap / garble / drop. Instead, leave the ResizeObserver
-// callback synchronous and just swallow the benign loop notice at the window
-// 'error' level before CRA's overlay sees it. Installed at module load (capture
-// phase) so it runs before the overlay's own handler.
-if (typeof window !== 'undefined' && !window.__ascResizeObserverErrorSilenced) {
-  const isResizeObserverLoopError = (message) =>
-    typeof message === 'string' && message.includes('ResizeObserver loop');
-  window.addEventListener(
-    'error',
-    (event) => {
-      if (isResizeObserverLoopError(event.message)) {
-        event.stopImmediatePropagation();
-        event.preventDefault();
-      }
-    },
-    true
-  );
-  window.__ascResizeObserverErrorSilenced = true;
 }
 
 function JobOutput({
@@ -1187,7 +1163,6 @@ function JobOutput({
               )}
             </ScrollContainer>
           )}
-          <OutputFooter />
         </OutputWrapper>
       </CardBody>
       {showCancelModal && isJobRunning(job.status) && (

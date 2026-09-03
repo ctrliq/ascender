@@ -6,7 +6,15 @@
 // but the dead click was a real-browser problem: the click bubbled out of the
 // selector into the tab that hosts it, and jsdom does not reproduce that.
 const { test, expect } = require('@playwright/test');
-const { fixtures, login, route, watchConsole, workflowToggle, menuItem } = require('./helpers');
+const {
+  fixtures,
+  login,
+  route,
+  watchConsole,
+  watchLayoutLoops,
+  workflowToggle,
+  menuItem,
+} = require('./helpers');
 
 test.describe('workflow job selector', () => {
   test.beforeEach(async ({ page }) => {
@@ -90,5 +98,32 @@ test.describe('workflow job selector', () => {
     for (const node of nodes) {
       await expect(menuItem(page, node.identifier)).toBeVisible();
     }
+  });
+});
+
+test.describe('job output layout', () => {
+  // The rows are measured with a ResizeObserver, and the scroll container used
+  // to take its height from the rows, so the first measurements resized it in
+  // the same frame and the browser reported an undelivered-notifications loop.
+  // The dev server's error overlay turned that into a full-screen error on
+  // every job output page. jsdom has no layout, so only a browser can see it.
+  test('measures its rows without a ResizeObserver loop', async ({ page }) => {
+    const loops = await watchLayoutLoops(page);
+    await login(page);
+    const { nodes } = fixtures();
+    await page.goto(route(`/jobs/management/${nodes[0].jobId}/output`), {
+      waitUntil: 'domcontentloaded',
+    });
+    const scroller = page.locator('.ascender-output-scroll');
+    await expect(scroller.locator('[data-index]').first()).toBeVisible();
+    await scroller.evaluate((el) => {
+      el.scrollTop = el.scrollHeight;
+    });
+    await scroller.evaluate((el) => {
+      el.scrollTop = 0;
+    });
+    // the notice is reported on the frame after the measurements land
+    await page.waitForTimeout(1000);
+    await loops.expectQuiet();
   });
 });
