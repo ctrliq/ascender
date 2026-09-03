@@ -27,15 +27,18 @@ class DisabledPaginator(DjangoPaginator):
 
 
 class UnifiedJobPaginator(DjangoPaginator):
-    """Use unfiltered table count for unified job pagination.
+    """Use an RBAC-unfiltered count for unified job pagination.
 
     The RBAC-filtered COUNT query is prohibitively slow on large unified job
-    tables; an unfiltered count is acceptable for pagination UI.
+    tables; an unfiltered count is acceptable for pagination UI.  Workflow
+    approvals are excluded because UnifiedJobAccess.get_queryset hides them
+    from every request (superusers included) — counting rows the endpoint can
+    never return would inflate the page count.
     """
 
     @cached_property
     def count(self):
-        return UnifiedJob.objects.count()
+        return UnifiedJob.objects.filter(workflowapproval__isnull=True).count()
 
 
 class ActivityStreamPaginator(DjangoPaginator):

@@ -12,6 +12,7 @@ from awx.main.models import (
     Organization,
     Project,
     UnifiedJob,
+    WorkflowApproval,
 )
 
 
@@ -189,20 +190,26 @@ def test_unified_job_list_rando_sees_nothing(rando, get):
 def test_unified_job_list_pagination_uses_unfiltered_count(rando, get):
     """The pagination count should reflect total unified job rows, not
     the RBAC-filtered subset.  The RBAC-filtered COUNT is catastrophically
-    slow on large tables with pk__in UNION subqueries."""
+    slow on large tables with pk__in UNION subqueries.
+
+    Workflow approvals are the exception: UnifiedJobAccess.get_queryset
+    hides them from every request (superusers included), so counting them
+    would inflate the page count with rows the endpoint can never return."""
     org = Organization.objects.create(name='uj-count-org')
     inventory = org.inventories.create(name='uj-count-inv')
     project = Project.objects.create(name='uj-count-project', organization=org)
     jt = JobTemplate.objects.create(name='uj-count-jt', project=project, inventory=inventory, organization=org)
     jt.create_unified_job()
+    WorkflowApproval.objects.create(name='uj-count-wfa')
 
-    total_jobs = UnifiedJob.objects.count()
-    assert total_jobs > 0
+    visible_jobs = UnifiedJob.objects.filter(workflowapproval__isnull=True).count()
+    assert visible_jobs > 0
+    assert UnifiedJob.objects.count() == visible_jobs + 1
 
     response = get(reverse('api:unified_job_list'), rando)
     assert response.status_code == 200
     assert len(response.data['results']) == 0
-    assert response.data['count'] == total_jobs
+    assert response.data['count'] == visible_jobs
 
 
 @pytest.mark.django_db

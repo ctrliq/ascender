@@ -6,20 +6,21 @@ from awx.api.pagination import ActivityStreamPaginator, ActivityStreamPagination
 
 
 class TestUnifiedJobPaginator:
-    def test_count_uses_unfiltered_table_count(self):
+    def test_count_uses_rbac_unfiltered_count_excluding_workflow_approvals(self):
         with patch('awx.api.pagination.UnifiedJob') as mock_uj:
-            mock_uj.objects.count.return_value = 42000
+            mock_uj.objects.filter.return_value.count.return_value = 42000
             paginator = UnifiedJobPaginator(object_list=[], per_page=25)
             assert paginator.count == 42000
-            mock_uj.objects.count.assert_called_once()
+            mock_uj.objects.filter.assert_called_once_with(workflowapproval__isnull=True)
+            mock_uj.objects.filter.return_value.count.assert_called_once()
 
     def test_count_is_cached(self):
         with patch('awx.api.pagination.UnifiedJob') as mock_uj:
-            mock_uj.objects.count.return_value = 500
+            mock_uj.objects.filter.return_value.count.return_value = 500
             paginator = UnifiedJobPaginator(object_list=[], per_page=25)
             _ = paginator.count
             _ = paginator.count
-            mock_uj.objects.count.assert_called_once()
+            mock_uj.objects.filter.return_value.count.assert_called_once()
 
 
 class TestUnifiedJobPagination:
