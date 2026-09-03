@@ -874,16 +874,6 @@ register(
 )
 
 register(
-    'UI_NEXT',
-    field_class=fields.BooleanField,
-    default=False,
-    label=_('Enable Preview of New User Interface'),
-    help_text=_('Enable preview of new user interface.'),
-    category=_('System'),
-    category_slug='system',
-)
-
-register(
     'SUBSCRIPTION_USAGE_MODEL',
     field_class=fields.ChoiceField,
     choices=[

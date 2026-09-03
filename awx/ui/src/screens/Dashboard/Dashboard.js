@@ -4,19 +4,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { Trans, useLingui } from '@lingui/react/macro';
+import { useLingui } from '@lingui/react/macro';
 import {
-  Banner,
   Card,
   PageSection,
   Tabs,
   Tab,
   TabTitleText,
 } from '@patternfly/react-core';
-import { InfoCircleIcon } from '@patternfly/react-icons';
 
-import { useConfig } from 'contexts/Config';
-import useBrandName from 'hooks/useBrandName';
 import useRequest from 'hooks/useRequest';
 import useTitle from 'hooks/useTitle';
 import { DashboardAPI } from 'api';
@@ -50,8 +46,6 @@ const MainPageSection = styled(PageSection)`
 function Dashboard() {
   const { t } = useLingui();
   useTitle(t`Dashboard`);
-  const config = useConfig();
-  const brandName = useBrandName();
   const [activeTabId, setActiveTabId] = useState(0);
 
   const {
@@ -81,16 +75,6 @@ function Dashboard() {
   }
   return (
     <>
-      {config?.ui_next && (
-        <Banner color="blue">
-          <Trans>
-            <p>
-              <InfoCircleIcon /> A tech preview of the new {brandName} user
-              interface can be found <a href="/ui_next">here</a>.
-            </p>
-          </Trans>
-        </Banner>
-      )}
       <ScreenHeader
         streamType="all"
         breadcrumbConfig={{ '/home': t`Dashboard` }}
