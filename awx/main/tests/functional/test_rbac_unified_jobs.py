@@ -203,3 +203,32 @@ def test_unified_job_list_pagination_uses_unfiltered_count(rando, get):
     assert response.status_code == 200
     assert len(response.data['results']) == 0
     assert response.data['count'] == total_jobs
+
+
+@pytest.mark.django_db
+def test_unified_job_list_filtered_count_is_accurate(admin_user, get):
+    """A search or field filter must report the filtered count, not the
+    unfiltered table count — otherwise clients paginate against the full
+    table and render phantom empty pages (and next links)."""
+    org = Organization.objects.create(name='uj-filter-org')
+    inventory = org.inventories.create(name='uj-filter-inv')
+    project = Project.objects.create(name='uj-filter-project', organization=org)
+    jt = JobTemplate.objects.create(name='uj-filter-jt', project=project, inventory=inventory, organization=org)
+    for _ in range(3):
+        jt.create_unified_job()
+
+    assert UnifiedJob.objects.count() >= 3
+
+    url = reverse('api:unified_job_list') + '?name__icontains=zzz-no-match&page_size=2'
+    response = get(url, admin_user)
+    assert response.status_code == 200
+    assert response.data['count'] == 0
+    assert response.data['results'] == []
+    assert response.data['next'] is None
+
+    url = reverse('api:unified_job_list') + '?name__icontains=uj-filter-jt&page_size=2'
+    response = get(url, admin_user)
+    assert response.status_code == 200
+    assert response.data['count'] == 3
+    assert len(response.data['results']) == 2
+    assert response.data['next'] is not None

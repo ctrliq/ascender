@@ -65,6 +65,54 @@ class TestUnifiedJobPagination:
         assert captured_class['during'] is DisabledPaginator
         assert pagination.django_paginator_class is UnifiedJobPaginator
 
+    def test_filter_param_falls_back_to_accurate_count(self):
+        pagination = UnifiedJobPagination()
+        request = MagicMock()
+        request.query_params = {'name__icontains': 'deploy'}
+        captured_class = {}
+
+        def capture_paginator_class(self_inner, queryset, request, **kwargs):
+            captured_class['during'] = pagination.django_paginator_class
+            return []
+
+        with patch('rest_framework.pagination.PageNumberPagination.paginate_queryset', capture_paginator_class):
+            pagination.paginate_queryset(MagicMock(), request)
+
+        assert captured_class['during'] is DjangoPaginator
+        assert pagination.django_paginator_class is UnifiedJobPaginator
+
+    def test_search_param_falls_back_to_accurate_count(self):
+        pagination = UnifiedJobPagination()
+        request = MagicMock()
+        request.query_params = {'search': 'foo'}
+        captured_class = {}
+
+        def capture_paginator_class(self_inner, queryset, request, **kwargs):
+            captured_class['during'] = pagination.django_paginator_class
+            return []
+
+        with patch('rest_framework.pagination.PageNumberPagination.paginate_queryset', capture_paginator_class):
+            pagination.paginate_queryset(MagicMock(), request)
+
+        assert captured_class['during'] is DjangoPaginator
+        assert pagination.django_paginator_class is UnifiedJobPaginator
+
+    def test_non_filter_params_keep_fast_count(self):
+        pagination = UnifiedJobPagination()
+        request = MagicMock()
+        request.query_params = {'page': '2', 'page_size': '10', 'order_by': '-finished'}
+        captured_class = {}
+
+        def capture_paginator_class(self_inner, queryset, request, **kwargs):
+            captured_class['during'] = pagination.django_paginator_class
+            return []
+
+        with patch('rest_framework.pagination.PageNumberPagination.paginate_queryset', capture_paginator_class):
+            pagination.paginate_queryset(MagicMock(), request)
+
+        assert captured_class['during'] is UnifiedJobPaginator
+        assert pagination.django_paginator_class is UnifiedJobPaginator
+
 
 class TestActivityStreamPaginator:
     def test_count_uses_unfiltered_table_count(self):

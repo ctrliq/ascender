@@ -99,11 +99,7 @@ class Pagination(pagination.PageNumberPagination):
         return super(Pagination, self).get_paginated_response(data)
 
 
-class UnifiedJobPagination(Pagination):
-    django_paginator_class = UnifiedJobPaginator
-
-
-class ActivityStreamPagination(Pagination):
+class UnfilteredCountPagination(Pagination):
     """Fast unfiltered count for the default listing only.
 
     A search or field filter must report the count of the filtered queryset —
@@ -111,19 +107,26 @@ class ActivityStreamPagination(Pagination):
     empty pages.  Those requests fall back to the normal (slow) count.
     """
 
-    django_paginator_class = ActivityStreamPaginator
-
     # Query params that do not narrow the result set; any other param means
     # the client is filtering and the count must match the filtered queryset.
     NON_FILTER_PARAMS = frozenset(('page', 'page_size', 'format', 'order', 'order_by', 'count_disabled', 'no_truncate'))
 
     def paginate_queryset(self, queryset, request, **kwargs):
+        unfiltered_paginator = self.django_paginator_class
         if any(param not in self.NON_FILTER_PARAMS for param in request.query_params):
             self.django_paginator_class = DjangoPaginator
         try:
             return super().paginate_queryset(queryset, request, **kwargs)
         finally:
-            self.django_paginator_class = ActivityStreamPaginator
+            self.django_paginator_class = unfiltered_paginator
+
+
+class UnifiedJobPagination(UnfilteredCountPagination):
+    django_paginator_class = UnifiedJobPaginator
+
+
+class ActivityStreamPagination(UnfilteredCountPagination):
+    django_paginator_class = ActivityStreamPaginator
 
 
 class LimitPagination(pagination.BasePagination):
