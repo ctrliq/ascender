@@ -110,8 +110,10 @@ class ActivityStream(models.Model):
                 'first_name': smart_str(self.actor.first_name),
                 'last_name': smart_str(self.actor.last_name),
             }
-            if 'update_fields' in kwargs and 'deleted_actor' not in kwargs['update_fields']:
-                kwargs['update_fields'].append('deleted_actor')
+            # An explicit update_fields=None is a full save, the same as leaving it out
+            update_fields = kwargs.get('update_fields')
+            if update_fields is not None and 'deleted_actor' not in update_fields:
+                update_fields.append('deleted_actor')
 
         hostname_char_limit = self._meta.get_field('action_node').max_length
         self.action_node = settings.CLUSTER_HOST_ID[:hostname_char_limit]
