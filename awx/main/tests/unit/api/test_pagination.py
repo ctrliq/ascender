@@ -57,6 +57,7 @@ class TestUnifiedJobPagination:
 
         def capture_paginator_class(self_inner, queryset, request, **kwargs):
             captured_class['during'] = pagination.django_paginator_class
+            return []
 
         with patch('rest_framework.pagination.PageNumberPagination.paginate_queryset', capture_paginator_class):
             pagination.paginate_queryset(MagicMock(), request)

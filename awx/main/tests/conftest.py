@@ -28,21 +28,6 @@ def pytest_addoption(parser):
     parser.addoption("--genschema", action="store_true", default=False, help="execute schema validator")
 
 
-@pytest.fixture(scope='session')
-def django_db_setup(django_db_setup, django_db_blocker):
-    # django-ansible-base's resource registry populates ResourceType rows in a
-    # post_migrate handler, but DAB devel skips it when the migration plan is
-    # empty — which is always the case under pytest --nomigrations. Without
-    # these rows, saving any registered model (Organization, User, Team, ...)
-    # raises ContentType.resource_type.RelatedObjectDoesNotExist. Run the
-    # initialization explicitly after the test database is created.
-    from awx.dab.resource_registry.apps import initialize_resources
-
-    with django_db_blocker.unblock():
-        initialize_resources(None)
-    yield
-
-
 def pytest_configure(config):
     import sys
 
