@@ -202,12 +202,17 @@ def apply_cluster_membership_policies():
         # Process policy instance list first, these will represent manually managed memberships
         instance_hostnames_map = {inst.hostname: inst for inst in all_instances}
         for ig in all_groups:
+            # control nodes never belong to an execution group, and execution nodes never to the control plane
+            exclude_type = 'execution' if ig.name == settings.DEFAULT_CONTROL_PLANE_QUEUE_NAME else 'control'
             group_actual = Group(obj=ig, instances=[], prior_instances=[instance.pk for instance in ig.instances.all()])  # obtained in prefetch
             for hostname in ig.policy_instance_list:
                 if hostname not in instance_hostnames_map:
                     logger.info("Unknown instance {} in {} policy list".format(hostname, ig.name))
                     continue
                 inst = instance_hostnames_map[hostname]
+                if inst.node_type == exclude_type:
+                    logger.info("Instance {} is excluded in {} policy list".format(hostname, ig.name))
+                    continue
                 group_actual.instances.append(inst.id)
                 # NOTE: arguable behavior: policy-list-group is not added to
                 # instance's group count for consideration in minimum-policy rules
@@ -504,7 +509,11 @@ def inspect_established_receptor_connections(mesh_status):
 
 
 def inspect_execution_and_hop_nodes(instance_list):
-    with advisory_lock('inspect_execution_and_hop_nodes_lock', wait=False):
+    with advisory_lock('inspect_execution_and_hop_nodes_lock', wait=False) as acquired:
+        if not acquired:
+            logger.debug("Not running inspect_execution_and_hop_nodes, another instance holds lock")
+            return
+
         node_lookup = {inst.hostname: inst for inst in instance_list}
         ctl = get_receptor_ctl()
         mesh_status = ctl.simple_command('status')
@@ -850,6 +859,33 @@ def update_host_smart_inventory_memberships():
         smart_inventory.update_computed_fields()
 
 
+def _batched_delete_inventory(inventory, batch_size=500):
+    """Delete the hosts of an inventory in batches, then the inventory itself.
+
+    A host carries its ansible facts, so loading thousands of them in one cascade
+    can exhaust the memory of the dispatcher process. Deleting in batches keeps the
+    working set bounded.
+
+    Safe to retry after a crash: inventory.pending_deletion is already set by the
+    caller, and each batch is its own transaction.
+    """
+    from awx.main.models.inventory import Host
+
+    total_deleted = 0
+    while True:
+        pks = list(Host.objects.filter(inventory_id=inventory.id).values_list('pk', flat=True)[:batch_size])
+        if not pks:
+            break
+        with transaction.atomic():
+            deleted_count, _ = Host.objects.filter(pk__in=pks).delete()
+            total_deleted += deleted_count
+        logger.debug('Batch-deleted %d hosts from inventory %d (%d total so far)', len(pks), inventory.id, total_deleted)
+
+    inv_id = inventory.id
+    inventory.delete()
+    logger.info('Batched deletion of inventory %d complete (%d hosts removed)', inv_id, total_deleted)
+
+
 @task(queue=get_task_queuename)
 def delete_inventory(inventory_id, user_id, retries=5):
     # Delete inventory as user
@@ -862,11 +898,11 @@ def delete_inventory(inventory_id, user_id, retries=5):
             user = None
     with ignore_inventory_computed_fields(), ignore_inventory_group_removal(), impersonate(user):
         try:
-            Inventory.objects.get(id=inventory_id).delete()
+            _batched_delete_inventory(Inventory.objects.get(id=inventory_id))
             emit_channel_notification('inventories-status_changed', {'group_name': 'inventories', 'inventory_id': inventory_id, 'status': 'deleted'})
             logger.debug('Deleted inventory {} as user {}.'.format(inventory_id, user_id))
         except Inventory.DoesNotExist:
-            logger.exception("Delete Inventory failed due to missing inventory: " + str(inventory_id))
+            logger.warning("Delete Inventory failed due to missing inventory: " + str(inventory_id))
             return
         except DatabaseError:
             logger.exception('Database error deleting inventory {}, but will retry.'.format(inventory_id))

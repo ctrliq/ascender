@@ -57,7 +57,7 @@ msgid "TACACS+"
 msgstr "TACACS+"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:637
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:232
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:251
 msgid "Workflow timed out message body"
 msgstr "Workflow Berichtbody voor time-out"
 
@@ -115,6 +115,10 @@ msgstr "Selecteer de uitvoeromgeving waarbinnen u deze opdracht wilt uitvoeren."
 msgid "Add a new node between these two nodes"
 msgstr "Nieuw knooppunt toevoegen tussen deze twee knooppunten"
 
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:170
+msgid "Changed message"
+msgstr "Wijzigingsbericht"
+
 #: screens/Job/JobOutput/JobOutputSearch.js:120
 msgid "Host Polling"
 msgstr "Hostpolling"
@@ -148,7 +152,7 @@ msgid "Maximum number of forks to allow across all jobs running concurrently on 
 msgstr "Maximaal aantal forks dat is toegestaan voor alle taken die gelijktijdig op deze groep worden uitgevoerd.\n"
 "          Nul betekent dat er geen limiet wordt afgedwongen."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:341
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:349
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:89
 msgid "Failed to cancel Inventory Source Sync"
 msgstr "Kan de synchronisatie van de inventarisbron niet annuleren"
@@ -332,8 +336,8 @@ msgstr "Uit te checken branch. Naast branches kunt u tags, commit-hashes en will
 #: components/JobList/JobList.js:265
 #: components/JobList/JobListItem.js:109
 #: components/Lookup/ProjectLookup.js:134
-#: components/NotificationList/NotificationList.js:219
-#: components/NotificationList/NotificationListItem.js:34
+#: components/NotificationList/NotificationList.js:230
+#: components/NotificationList/NotificationListItem.js:36
 #: components/PromptDetail/PromptDetail.js:125
 #: components/RelatedTemplateList/RelatedTemplateList.js:200
 #: components/TemplateList/TemplateList.js:219
@@ -433,7 +437,7 @@ msgstr "Klik om de taakdetails weer te geven"
 msgid "Sync Project"
 msgstr "Project synchroniseren"
 
-#: components/NotificationList/NotificationList.js:194
+#: components/NotificationList/NotificationList.js:205
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:135
 msgid "Grafana"
 msgstr "Grafana"
@@ -513,7 +517,7 @@ msgstr "Gebeurtenis"
 msgid "Repeat Frequency"
 msgstr "Frequentie herhalen"
 
-#: screens/Inventory/shared/Inventory.helptext.js:171
+#: screens/Inventory/shared/Inventory.helptext.js:172
 msgid "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 msgstr "Variabelen die worden gebruikt om de geconstrueerde voorraadplug-in te configureren. Zie voor een gedetailleerde beschrijving van het configureren van deze plug-in"
 
@@ -575,8 +579,8 @@ msgstr "Containergroep"
 msgid "{0, plural, one {You cannot cancel the following job because it is not running:} other {You cannot cancel the following jobs because they are not running:}}"
 msgstr "{0, plural, one {You cannot cancel the following job because it is not running:} other {You cannot cancel the following jobs because they are not running:}}"
 
-#: components/NotificationList/NotificationList.js:220
-#: components/NotificationList/NotificationListItem.js:35
+#: components/NotificationList/NotificationList.js:231
+#: components/NotificationList/NotificationListItem.js:38
 #: screens/Credential/shared/TypeInputsSubForm.js:46
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:79
 #: screens/Instances/Shared/InstanceForm.js:95
@@ -600,7 +604,7 @@ msgid "You cannot select multiple vault credentials with the same vault ID. Doin
 msgstr "U kunt niet meerdere kluisreferenties met delfde kluis-ID selecteren. Als u dat wel doet, worden de andere met delfde kluis-ID automatisch gedeselecteerd."
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:334
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:342
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:350
 #: screens/Project/ProjectDetail/ProjectDetail.js:354
 msgid "Cancel Sync"
 msgstr "Synchronisatie annuleren"
@@ -713,8 +717,8 @@ msgstr "Metrics"
 msgid "Create new credential Type"
 msgstr "Nieuw type toegangsgegevens maken"
 
-#: screens/Inventory/shared/Inventory.helptext.js:103
-#: screens/Inventory/shared/Inventory.helptext.js:118
+#: screens/Inventory/shared/Inventory.helptext.js:104
+#: screens/Inventory/shared/Inventory.helptext.js:119
 msgid "If you want the Inventory Source to update on launch, click on Update on Launch, and also go to "
 msgstr "Als u wilt dat de inventarisbron bij het starten wordt bijgewerkt, klikt u op Bijwerken bij starten en gaat u ook naar "
 
@@ -732,7 +736,7 @@ msgid "Start Time"
 msgstr "Starttijd"
 
 #: screens/Inventory/shared/Inventory.helptext.js:48
-#: screens/Inventory/shared/Inventory.helptext.js:184
+#: screens/Inventory/shared/Inventory.helptext.js:185
 msgid "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."
 msgstr "Voer variabelen in met JSON- of YAML-syntaxis. Gebruik de radioknop om tussen de twee te wisselen."
 
@@ -748,7 +752,7 @@ msgstr "Bestandsverschil"
 msgid "Relaunch from canceled node"
 msgstr "Opnieuw starten vanaf geannuleerd knooppunt"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:271
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:279
 msgid "Cache timeout"
 msgstr "Cache time-out"
 
@@ -828,7 +832,7 @@ msgstr "Voer een aantal voorvallen in."
 msgid "Fuzzy search on name field."
 msgstr "Fuzzy search op naamveld."
 
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:106
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:107
 msgid "Ansible Controller Documentation."
 msgstr "Ansible Controller Documentatie."
 
@@ -836,7 +840,7 @@ msgstr "Ansible Controller Documentatie."
 msgid "The Instance Groups to which this instance belongs."
 msgstr "De Instance Groups waartoe deze instantie behoort."
 
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:97
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:98
 msgid "You may apply a number of possible variables in the\n"
 "                message. For more information, refer to the"
 msgstr "U kunt een aantal mogelijke variabelen toepassen in het\n"
@@ -885,7 +889,7 @@ msgstr "Werkstroomknooppunten"
 msgid "Overwrite"
 msgstr "Overschrijven"
 
-#: components/NotificationList/NotificationList.js:195
+#: components/NotificationList/NotificationList.js:206
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:136
 msgid "Hipchat"
 msgstr "Hipchat"
@@ -920,7 +924,7 @@ msgstr "Vertakking broncontrole"
 msgid "Tabs"
 msgstr "Tabbladen"
 
-#: screens/Template/Template.js:273
+#: screens/Template/Template.js:274
 #: screens/Template/WorkflowJobTemplate.js:286
 msgid "View Template Details"
 msgstr "Sjabloondetails weergeven"
@@ -966,7 +970,7 @@ msgstr "{interval, plural, one {# jaar} other {# jaar}}"
 msgid "Inventory Source Sync"
 msgstr "Synchronisatie inventarisbronnen"
 
-#: screens/Inventory/shared/Inventory.helptext.js:146
+#: screens/Inventory/shared/Inventory.helptext.js:147
 msgid "Inventory Plugins"
 msgstr "Voorraadplugins"
 
@@ -1036,7 +1040,7 @@ msgstr "1 (Info)"
 msgid "Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance."
 msgstr "Zet de instantie aan of uit. Indien uitgeschakeld, zullen er geen taken aan deze instantie worden toegewezen."
 
-#: screens/Inventory/shared/Inventory.helptext.js:105
+#: screens/Inventory/shared/Inventory.helptext.js:106
 msgid "and click on Update Revision on Launch."
 msgstr "en klik op Update Revision on Launch."
 
@@ -1525,8 +1529,8 @@ msgstr "Een of meer taken kunnen niet worden verwijderd."
 msgid "Run Command"
 msgstr "Opdracht uitvoeren"
 
-#: screens/Inventory/shared/Inventory.helptext.js:156
-#: screens/Inventory/shared/Inventory.helptext.js:179
+#: screens/Inventory/shared/Inventory.helptext.js:157
+#: screens/Inventory/shared/Inventory.helptext.js:180
 msgid "plugin configuration guide."
 msgstr "plugin configuratiegids."
 
@@ -1637,9 +1641,9 @@ msgstr "Nieuwe gefedereerde inventaris maken"
 #: components/Lookup/OrganizationLookup.js:141
 #: components/Lookup/ProjectLookup.js:129
 #: components/Lookup/ProjectLookup.js:159
-#: components/NotificationList/NotificationList.js:181
-#: components/NotificationList/NotificationList.js:218
-#: components/NotificationList/NotificationListItem.js:29
+#: components/NotificationList/NotificationList.js:192
+#: components/NotificationList/NotificationList.js:229
+#: components/NotificationList/NotificationListItem.js:31
 #: components/OptionsList/OptionsList.js:48
 #: components/PaginatedTable/PaginatedTable.js:76
 #: components/PromptDetail/PromptDetail.js:115
@@ -1753,14 +1757,14 @@ msgstr "Nieuwe gefedereerde inventaris maken"
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:182
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:197
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:238
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:204
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:205
 #: screens/Inventory/InventorySources/InventorySourceList.js:212
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:60
 #: screens/Inventory/shared/ConstructedInventoryForm.js:66
 #: screens/Inventory/shared/FederatedInventoryForm.js:56
 #: screens/Inventory/shared/InventoryForm.js:50
 #: screens/Inventory/shared/InventoryGroupForm.js:33
-#: screens/Inventory/shared/InventorySourceForm.js:133
+#: screens/Inventory/shared/InventorySourceForm.js:139
 #: screens/Inventory/shared/SmartInventoryForm.js:46
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:98
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.js:91
@@ -1883,7 +1887,7 @@ msgstr "{automatedInstancesCount} sinds {automatedInstancesSinceDateTime}"
 msgid "No job data available"
 msgstr "Geen taakgegevens beschikbaar"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:309
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:317
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:22
 msgid "Source variables"
 msgstr "Bronvariabelen"
@@ -2020,7 +2024,7 @@ msgid "Confirm"
 msgstr "Bevestigen"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:526
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:142
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:143
 msgid "Success message body"
 msgstr "Body succesbericht"
 
@@ -2295,7 +2299,7 @@ msgstr "Mislukte hosts"
 msgid "This execution environment is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "Deze uitvoeringsomgeving wordt momenteel gebruikt door andere bronnen. Weet u zeker dat u deze wilt verwijderen?"
 
-#: components/NotificationList/NotificationList.js:196
+#: components/NotificationList/NotificationList.js:207
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:137
 msgid "IRC"
 msgstr "IRC"
@@ -2499,7 +2503,7 @@ msgstr "Externe logboekregistratie inschakelen"
 
 #: components/Sparkline/Sparkline.js:30
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:51
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:181
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:182
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:31
 #: screens/Project/ProjectDetail/ProjectDetail.js:134
 #: screens/Project/ProjectList/ProjectListItem.js:56
@@ -2539,7 +2543,7 @@ msgstr "Logboeksysteem dat feiten individueel bijhoudt inschakelen"
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "Taaksjablonen met toegangsgegevens die om een wachtwoord vragen, kunnen niet worden geselecteerd tijdens het maken of bewerken van knooppunten"
 
-#: screens/Inventory/shared/Inventory.helptext.js:193
+#: screens/Inventory/shared/Inventory.helptext.js:194
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "Indien ingeschakeld, voorkomt deze inventaris dat instantiegroepen voor een organisatie worden toegevoegd aan de lijst met voorkeursinstantiegroepen om gekoppelde taaksjablonen op uit te voeren. Opmerking: als deze instelling is ingeschakeld en u een lege lijst hebt opgegeven, worden de globale instantiegroepen toegepast."
 
@@ -2676,7 +2680,7 @@ msgstr "Een of meer hosts kunnen niet worden losgekoppeld."
 
 #: components/Sparkline/Sparkline.js:27
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:48
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:178
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:179
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:28
 #: screens/Project/ProjectDetail/ProjectDetail.js:131
 #: screens/Project/ProjectList/ProjectListItem.js:53
@@ -2763,7 +2767,7 @@ msgstr "Item OK"
 msgid "Icon URL"
 msgstr "Icoon-URL"
 
-#: screens/Inventory/shared/InventorySourceForm.js:159
+#: screens/Inventory/shared/InventorySourceForm.js:165
 msgid "Select the Instance Groups this inventory source sync should run on. If unset, the sync runs on the instance groups of the inventory or its organization."
 msgstr "Selecteer de instantiegroepen waarop de synchronisatie van deze inventarisbron moet worden uitgevoerd. Indien niet ingesteld, wordt de synchronisatie uitgevoerd op de instantiegroepen van de inventaris of de bijbehorende organisatie."
 
@@ -2772,7 +2776,7 @@ msgid "Select the port that Receptor will listen on for incoming connections, e.
 msgstr "Selecteer de poort waarop Receptor zal luisteren voor inkomende verbindingen, bijv. 27199."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:517
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:133
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:134
 msgid "Success message"
 msgstr "Succesbericht"
 
@@ -2829,7 +2833,7 @@ msgstr "HTTP-methode"
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "De uitvoeringsomgeving die wordt gebruikt voor taken binnen deze organisatie. Deze wordt gebruikt als terugvaloptie wanneer er niet expliciet een uitvoeringsomgeving is toegewezen op project-, taaksjabloon- of workflowniveau."
 
-#: components/NotificationList/NotificationList.js:190
+#: components/NotificationList/NotificationList.js:201
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:131
 msgid "Notification type"
 msgstr "Berichttype"
@@ -2863,7 +2867,7 @@ msgstr "Verwijdering van link annuleren"
 msgid "There was an error loading this content. Please reload the page."
 msgstr "Er is een fout opgetreden bij het laden van deze inhoud. Laad de pagina opnieuw."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:292
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:300
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:135
 msgid "Enabled Value"
 msgstr "Ingeschakelde waarde"
@@ -3176,7 +3180,7 @@ msgstr "<0>Opmerking: instanties kunnen opnieuw worden gekoppeld aan deze instan
 msgid "Timeout minutes"
 msgstr "Time-out minuten"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:353
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:361
 msgid "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
 msgstr "Deze inventarisbron wordt momenteel door andere bronnen gebruikt die erop vertrouwen. Weet u zeker dat u hem wilt verwijderen?"
 
@@ -3331,7 +3335,7 @@ msgstr "Minder dan of gelijk aan vergelijking."
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:187
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:185
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.js:102
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:356
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:364
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:67
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:71
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:76
@@ -3354,6 +3358,7 @@ msgstr "Minder dan of gelijk aan vergelijking."
 msgid "Delete"
 msgstr "Verwijderen"
 
+#: components/NotificationList/NotificationListItem.js:105
 #: components/StatusLabel/StatusLabel.js:53
 #: screens/Job/JobOutput/shared/HostStatusBar.js:43
 msgid "Changed"
@@ -3485,7 +3490,7 @@ msgstr "GitHub-team"
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:157
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:43
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:78
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:317
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:325
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:133
 #: screens/Job/JobDetail/JobDetail.js:578
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:425
@@ -3859,7 +3864,7 @@ msgstr "Standaarduitvoeringsomgeving"
 #: components/PromptDetail/PromptJobTemplateDetail.js:122
 #: components/PromptDetail/PromptJobTemplateDetail.js:130
 #: components/TemplateList/TemplateListItem.js:263
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:245
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:246
 #: screens/Job/JobDetail/JobDetail.js:180
 #: screens/Job/JobDetail/JobDetail.js:214
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:216
@@ -3980,7 +3985,7 @@ msgstr "Topologie-weergave"
 msgid "Syncing"
 msgstr "Synchroniseren"
 
-#: screens/Inventory/shared/InventorySourceForm.js:192
+#: screens/Inventory/shared/InventorySourceForm.js:198
 msgid "Source details"
 msgstr "Broninformatie"
 
@@ -4072,7 +4077,7 @@ msgstr "Toegangsgegevens verwijderen"
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:56
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:61
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:100
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:332
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:340
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:105
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:148
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:450
@@ -4154,7 +4159,7 @@ msgstr "Geen time-out gespecificeerd"
 msgid "On Timeout"
 msgstr "Bij time-out"
 
-#: screens/Inventory/shared/Inventory.helptext.js:196
+#: screens/Inventory/shared/Inventory.helptext.js:197
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
 msgstr "Instance Group Fallback voorkomen: Indien ingeschakeld, zal de inventaris voorkomen dat instantiegroepen van organisaties worden toegevoegd aan de lijst van voorkeursinstantiegroepen om geassocieerde taaksjablonen op uit te voeren."
 
@@ -4496,7 +4501,7 @@ msgstr "bezig-met-content-laden"
 msgid "Mon"
 msgstr "Ma"
 
-#: screens/Organization/Organization.js:239
+#: screens/Organization/Organization.js:240
 msgid "View Organization Details"
 msgstr "Organisatiedetails weergeven"
 
@@ -4509,7 +4514,7 @@ msgstr "Organisatiedetails weergeven"
 #: components/JobList/JobList.js:345
 #: components/LaunchButton/LaunchButton.js:248
 #: components/LaunchPrompt/LaunchPrompt.js:99
-#: components/NotificationList/NotificationList.js:246
+#: components/NotificationList/NotificationList.js:259
 #: components/PaginatedTable/ToolbarDeleteButton.js:148
 #: components/RelatedTemplateList/RelatedTemplateList.js:254
 #: components/ResourceAccessList/ResourceAccessList.js:249
@@ -4553,7 +4558,7 @@ msgstr "Organisatiedetails weergeven"
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:204
 #: screens/Inventory/InventoryList/InventoryList.js:300
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:270
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:363
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:371
 #: screens/Inventory/InventorySources/InventorySourceList.js:240
 #: screens/Inventory/InventorySources/InventorySourceList.js:252
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:155
@@ -4705,11 +4710,11 @@ msgid "Notification Templates"
 msgstr "Berichtsjablonen"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:508
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:124
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:125
 msgid "Start message body"
 msgstr "Body startbericht"
 
-#: screens/Inventory/shared/Inventory.helptext.js:128
+#: screens/Inventory/shared/Inventory.helptext.js:129
 msgid "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "Filiaal om te gebruiken bij voorraadsynchronisatie. Projectstandaard gebruikt indien leeg. Alleen toegestaan als het veld project allow_override is ingesteld op true."
 
@@ -4818,7 +4823,7 @@ msgid "Failed to delete one or more user tokens."
 msgstr "Een of meer gebruikerstokens kunnen niet worden verwijderd."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:553
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:169
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:188
 msgid "Workflow approved message"
 msgstr "Workflow goedgekeurd bericht"
 
@@ -4999,12 +5004,12 @@ msgstr "Bij time-out"
 msgid "Create New Team"
 msgstr "Nieuw team maken"
 
-#: screens/Inventory/shared/Inventory.helptext.js:148
+#: screens/Inventory/shared/Inventory.helptext.js:149
 msgid "in the documentation and the"
 msgstr "in de documentatie en de"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:152
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:206
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:207
 #: screens/Project/ProjectDetail/ProjectDetail.js:160
 msgid "Last Job Status"
 msgstr "Laatste taakstatus"
@@ -5336,7 +5341,7 @@ msgid "Preferred Theme"
 msgstr "Voorkeursthema"
 
 #: screens/Instances/Shared/InstanceForm.js:31
-#: screens/Inventory/shared/InventorySourceForm.js:92
+#: screens/Inventory/shared/InventorySourceForm.js:98
 #: screens/Project/shared/ProjectForm.js:121
 msgid "Set a value for this field"
 msgstr "Waarde instellen voor dit veld"
@@ -5469,7 +5474,7 @@ msgid "Download Bundle"
 msgstr "Download Bundel"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:577
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:187
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:206
 msgid "Workflow denied message"
 msgstr "Workflow geweigerd bericht"
 
@@ -5522,7 +5527,7 @@ msgstr "Type knooppunt"
 msgid "View Credential Details"
 msgstr "Details toegangsgegevens weergeven"
 
-#: components/NotificationList/NotificationList.js:177
+#: components/NotificationList/NotificationList.js:188
 #: routeConfig.js:140
 #: screens/Inventory/Inventories.js:119
 #: screens/Inventory/InventorySource/InventorySource.js:101
@@ -5742,7 +5747,7 @@ msgstr "Testbericht"
 #: screens/Credential/CredentialDetail/CredentialDetail.js:262
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:234
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:122
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:305
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:313
 #: screens/Project/ProjectDetail/ProjectDetail.js:333
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:357
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:193
@@ -5791,7 +5796,7 @@ msgstr "Broncontrolevertakking"
 #: screens/Instances/InstanceDetail/InstanceDetail.js:248
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:225
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:107
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:239
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:240
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:116
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:418
 #: util/getRelatedResourceDeleteDetails.js:282
@@ -6121,7 +6126,7 @@ msgid "View YAML examples at"
 msgstr "Bekijk YAML-voorbeelden op"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:35
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:142
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:143
 msgid "Overwrite local groups and hosts from remote inventory source"
 msgstr "Lokale groepen en hosts overschrijven op grond van externe inventarisbron"
 
@@ -6130,7 +6135,7 @@ msgid "Resource deleted"
 msgstr "Bron verwijderd"
 
 #: screens/Inventory/shared/Inventory.helptext.js:54
-#: screens/Inventory/shared/Inventory.helptext.js:187
+#: screens/Inventory/shared/Inventory.helptext.js:188
 msgid "YAML:"
 msgstr "YAML:"
 
@@ -6217,7 +6222,7 @@ msgid "Initiated By"
 msgstr "Gestart door"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:499
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:115
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:116
 msgid "Start message"
 msgstr "Startbericht"
 
@@ -6281,7 +6286,7 @@ msgstr "Instantie wisselen"
 msgid "Back to Inventories"
 msgstr "Terug naar inventarissen"
 
-#: screens/Inventory/shared/Inventory.helptext.js:113
+#: screens/Inventory/shared/Inventory.helptext.js:114
 msgid "After every project update where the SCM revision changes, refresh the inventory from the selected source before executing job tasks. This is intended for static content, like the Ansible inventory .ini file format."
 msgstr "Na elke projectupdate waarbij de SCM-revisie verandert, vernieuwt u de inventaris van de geselecteerde bron voordat u projecttaken uitvoert. Dit is bedoeld voor statische content, zoals het Ansible inventory .ini bestandsformaat."
 
@@ -6375,7 +6380,7 @@ msgstr "Instantie"
 msgid "Including File"
 msgstr "Inclusief bestand"
 
-#: screens/Inventory/shared/Inventory.helptext.js:81
+#: screens/Inventory/shared/Inventory.helptext.js:82
 msgid "If checked, any hosts and groups that were previously present on the external source but are now removed will be removed from the inventory. Hosts and groups that were not managed by the inventory source will be promoted to the next manually created group or if there is no manually created group to promote them into, they will be left in the \"all\" default group for the inventory."
 msgstr "Indien aangevinkt, worden alle hosts en groepen die eerder aanwezig waren op de externe bron maar nu zijn verwijderd, uit de inventaris verwijderd. Hosts en groepen die niet door de inventarisbron werden beheerd, worden gepromoveerd naar de volgende handmatig gemaakte groep, of als er geen handmatig gemaakte groep is om ze naartoe te promoveren, blijven ze in de standaardgroep \"all\" voor de inventaris."
 
@@ -6412,7 +6417,7 @@ msgstr "Tabblad Details"
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:100
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:72
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:298
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:306
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.js:39
 #: screens/Inventory/shared/InventorySourceSubForms/ControllerSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/EC2SubForm.js:38
@@ -6423,7 +6428,7 @@ msgstr "Tabblad Details"
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:117
 #: screens/Inventory/shared/InventorySourceSubForms/TerraformSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/VirtualizationSubForm.js:39
-#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:39
+#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:44
 msgid "Credential"
 msgstr "Toegangsgegeven"
 
@@ -6432,7 +6437,7 @@ msgid "First node"
 msgstr "Eerste knooppunt"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:97
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:273
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:281
 msgid "{update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{update_cache_timeout, plural, one {# seconde} other {# seconden}}"
 
@@ -6496,7 +6501,7 @@ msgstr "Taakinstellingen weergeven"
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:122
 #: screens/Instances/InstanceDetail/InstanceDetail.js:349
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:96
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:329
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:337
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:145
 #: screens/Project/ProjectDetail/ProjectDetail.js:340
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:229
@@ -6550,7 +6555,7 @@ msgstr "Normale gebruiker"
 msgid "host-name-{0}"
 msgstr "Hostnaam-{0}"
 
-#: components/NotificationList/NotificationList.js:198
+#: components/NotificationList/NotificationList.js:209
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:139
 msgid "Pagerduty"
 msgstr "Pagerduty"
@@ -6609,7 +6614,7 @@ msgstr "Minimaal aantal instanties dat automatisch aan deze groep wordt toegewez
 msgid "Launch | {0}"
 msgstr "Starten | {0}"
 
-#: components/NotificationList/NotificationListItem.js:79
+#: components/NotificationList/NotificationListItem.js:84
 msgid "Toggle notification success"
 msgstr "Berichtsucces wisselen"
 
@@ -6702,7 +6707,7 @@ msgstr "Gelijktijdige taken inschakelen"
 msgid "Smart Inventory"
 msgstr "Smart-inventaris"
 
-#: components/NotificationList/NotificationList.js:200
+#: components/NotificationList/NotificationList.js:211
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:141
 msgid "Slack"
 msgstr "Slack"
@@ -6738,7 +6743,7 @@ msgstr "Toevoegen"
 msgid "System administrators have unrestricted access to all resources."
 msgstr "Systeembeheerders hebben onbeperkte toegang tot alle bronnen."
 
-#: components/NotificationList/NotificationListItem.js:86
+#: components/NotificationList/NotificationListItem.js:91
 msgid "Failure"
 msgstr "Mislukking"
 
@@ -6883,7 +6888,7 @@ msgstr "Volgen"
 #: components/Lookup/MultiCredentialsLookup.js:205
 #: components/Lookup/OrganizationLookup.js:135
 #: components/Lookup/ProjectLookup.js:149
-#: components/NotificationList/NotificationList.js:210
+#: components/NotificationList/NotificationList.js:221
 #: components/RelatedTemplateList/RelatedTemplateList.js:183
 #: components/Schedule/ScheduleList/ScheduleList.js:205
 #: components/TemplateList/TemplateList.js:235
@@ -7095,7 +7100,7 @@ msgstr "Dit veld moet een getal zijn en een waarde groter dan {min} hebben"
 msgid "All"
 msgstr "Alle"
 
-#: screens/Inventory/shared/Inventory.helptext.js:177
+#: screens/Inventory/shared/Inventory.helptext.js:178
 msgid "constructed inventory"
 msgstr "geconstrueerde inventaris"
 
@@ -7109,7 +7114,7 @@ msgid "Confirm Delete"
 msgstr "Verwijderen bevestigen"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:625
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:223
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:242
 msgid "Workflow timed out message"
 msgstr "Workflow Time-outbericht"
 
@@ -7205,7 +7210,7 @@ msgstr "Nooit"
 msgid "Organization Name"
 msgstr "Naam van organisatie"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:282
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:290
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:149
 msgid "Host Filter"
 msgstr "Hostfilter"
@@ -7257,7 +7262,7 @@ msgstr "{pluralizedItemName} Lijst"
 msgid "Please add survey questions."
 msgstr "Voeg vragenlijstvragen toe."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:287
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:295
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:121
 msgid "Enabled Variable"
 msgstr "Ingeschakelde variabele"
@@ -7369,7 +7374,7 @@ msgstr "Synchroniseren"
 #: components/Lookup/ApplicationLookup.js:128
 #: components/Lookup/HostFilterLookup.js:439
 #: components/Lookup/HostListItem.js:10
-#: components/NotificationList/NotificationList.js:186
+#: components/NotificationList/NotificationList.js:197
 #: components/PromptDetail/PromptDetail.js:120
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:337
 #: components/Schedule/ScheduleList/ScheduleList.js:197
@@ -7404,13 +7409,13 @@ msgstr "Synchroniseren"
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:125
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:141
 #: screens/Inventory/InventoryList/InventoryList.js:215
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:221
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:222
 #: screens/Inventory/shared/ConstructedInventoryForm.js:74
 #: screens/Inventory/shared/ConstructedInventoryHint.js:63
 #: screens/Inventory/shared/FederatedInventoryForm.js:64
 #: screens/Inventory/shared/InventoryForm.js:58
 #: screens/Inventory/shared/InventoryGroupForm.js:41
-#: screens/Inventory/shared/InventorySourceForm.js:141
+#: screens/Inventory/shared/InventorySourceForm.js:147
 #: screens/Inventory/shared/SmartInventoryForm.js:54
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:104
 #: screens/Job/JobOutput/HostEventModal.js:118
@@ -7555,7 +7560,7 @@ msgstr "Aanmelden met GitHub Enterprise"
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:130
 #: screens/Inventory/shared/InventorySourceSubForms/TerraformSubForm.js:46
 #: screens/Inventory/shared/InventorySourceSubForms/VirtualizationSubForm.js:47
-#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:47
+#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:52
 #: screens/Inventory/shared/SmartInventoryForm.js:66
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.js:29
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.js:66
@@ -7588,7 +7593,7 @@ msgstr "Aanmelden met SAML {samlIDP}"
 msgid "Browse"
 msgstr "Bladeren"
 
-#: components/NotificationList/NotificationList.js:193
+#: components/NotificationList/NotificationList.js:204
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:134
 #: screens/User/shared/UserForm.js:104
 #: screens/User/UserDetail/UserDetail.js:71
@@ -8011,7 +8016,7 @@ msgid "Sat"
 msgstr "Zat"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:46
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:176
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:177
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:26
 #: screens/Project/ProjectDetail/ProjectDetail.js:129
 #: screens/Project/ProjectList/ProjectListItem.js:51
@@ -8048,7 +8053,7 @@ msgid "Specify HTTP Headers in JSON format. Refer to\n"
 msgstr "Geef HTTP-headers op in JSON-indeling. Raadpleeg\n"
 "      de Ansible Controller-documentatie voor voorbeeldsyntaxis."
 
-#: components/NotificationList/NotificationList.js:199
+#: components/NotificationList/NotificationList.js:210
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:140
 msgid "Rocket.Chat"
 msgstr "Rocket.Chat"
@@ -8106,7 +8111,7 @@ msgstr "Zoom instellen op 100% en grafiek centreren"
 msgid "Revert all to default"
 msgstr "Alles terugzetten naar standaardinstellingen"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:255
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:256
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:135
 msgid "Inventory file"
 msgstr "Inventarisbestand"
@@ -8183,6 +8188,11 @@ msgstr "Instance Group Fallback voorkomen"
 msgid "Maximum number of forks to allow across all jobs running concurrently on this group. Zero means no limit will be enforced."
 msgstr "Maximaal aantal vorken om toe te staan voor alle taken die tegelijkertijd op deze groep worden uitgevoerd. Nul betekent dat er geen limiet wordt afgedwongen."
 
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:263
+#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:56
+msgid "Collection"
+msgstr "Collectie"
+
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:207
 msgid "Failed to delete one or more credential types."
 msgstr "Een of meer typen toegangsgegevens kunnen niet worden verwijderd."
@@ -8197,7 +8207,7 @@ msgstr "Regio's"
 
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:148
 msgid "Workflow Jobs ({total})"
-msgstr ""
+msgstr "Workflowtaken ({total})"
 
 #: components/Search/AdvancedSearch.js:315
 msgid "Set type disabled for related search field fuzzy searches"
@@ -8233,11 +8243,11 @@ msgstr "Geen resterende hosts"
 msgid "ID of the dashboard (optional)"
 msgstr "ID van het dashboard (optioneel)"
 
-#: screens/Inventory/shared/Inventory.helptext.js:127
+#: screens/Inventory/shared/Inventory.helptext.js:128
 msgid "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
 msgstr "Haal de ingeschakelde status op uit het gegeven dictaat van hostvariabelen. De ingeschakelde variabele kan worden opgegeven met behulp van puntnotatie, bijvoorbeeld: 'foo.bar'"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:339
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:347
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:88
 msgid "Inventory Source Sync Error"
 msgstr "Fout tijdens synchronisatie inventarisbronnen"
@@ -8264,14 +8274,14 @@ msgstr ""
 #: components/VerbositySelectField/VerbositySelectField.js:35
 #: components/VerbositySelectField/VerbositySelectField.js:45
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:217
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:261
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:269
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:47
 #: screens/Job/JobDetail/JobDetail.js:369
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:257
 msgid "Verbosity"
 msgstr "Verbositeit"
 
-#: components/NotificationList/NotificationList.js:197
+#: components/NotificationList/NotificationList.js:208
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:138
 msgid "Mattermost"
 msgstr "Mattermost"
@@ -8498,6 +8508,10 @@ msgstr "Terug naar workflowgoedkeuringen"
 msgid "Enter injectors using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax."
 msgstr "Geef injectoren op met JSON- of YAML-syntaxis. Raadpleeg de documentatie voor Ansible Tower voor voorbeeldsyntaxis."
 
+#: components/NotificationList/NotificationListItem.js:112
+msgid "Toggle notification changed"
+msgstr "Berichtwijziging wisselen"
+
 #: components/Workflow/WorkflowLegend.js:122
 #: screens/Job/JobOutput/JobOutputSearch.js:140
 msgid "Warning"
@@ -8566,7 +8580,7 @@ msgid "Prompt for instance groups on launch."
 msgstr "Vraag om instantiegroepen bij opstarten."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:613
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:214
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:233
 msgid "Workflow pending message body"
 msgstr "Workflow Berichtenbody in behandeling"
 
@@ -8608,7 +8622,7 @@ msgstr "IRC-bijnaam"
 msgid "Expires on"
 msgstr "Verloopt op"
 
-#: screens/Inventory/shared/Inventory.helptext.js:98
+#: screens/Inventory/shared/Inventory.helptext.js:99
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "Elke keer dat een taak wordt uitgevoerd met behulp van deze inventaris, vernieuwt u de inventaris van de geselecteerde bron voordat u projecttaken uitvoert."
 
@@ -8733,7 +8747,7 @@ msgstr "Webhook inschakelen voor dit sjabloon."
 msgid "On date"
 msgstr "Aan-datum"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:340
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:348
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:90
 msgid "Cancel Inventory Source Sync"
 msgstr "Synchronisatie van inventarisbron annuleren"
@@ -8810,7 +8824,7 @@ msgid "Greater than comparison."
 msgstr "Groter dan vergelijking."
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:40
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:148
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:149
 msgid "Overwrite local variables from remote inventory source"
 msgstr "Lokale variabelen overschrijven op grond van externe inventarisbron"
 
@@ -8882,7 +8896,7 @@ msgstr "Een of meer gebruikers kunnen niet worden verwijderd."
 msgid "On Success"
 msgstr "Bij slagen"
 
-#: screens/Inventory/shared/Inventory.helptext.js:192
+#: screens/Inventory/shared/Inventory.helptext.js:193
 msgid "The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input."
 msgstr "Het inventarisbestand dat door deze bron moet worden gesynchroniseerd. U kunt kiezen uit de vervolgkeuzelijst of een bestand invoeren binnen de invoer."
 
@@ -8947,7 +8961,7 @@ msgstr "Niet geconfigureerd"
 msgid "Workflow Job"
 msgstr "Workflowtaak"
 
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:82
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:83
 msgid "Use custom messages to change the content of\n"
 "                notifications sent when a job starts, succeeds, or fails. Use\n"
 "                curly braces to access information about the job:"
@@ -9151,7 +9165,7 @@ msgid "Go to previous page"
 msgstr "Ga naar de vorige pagina"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:565
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:178
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:197
 msgid "Workflow approved message body"
 msgstr "Workflow goedgekeurde berichtbody"
 
@@ -9168,7 +9182,7 @@ msgid "required"
 msgstr "verplicht"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:589
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:196
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:215
 msgid "Workflow denied message body"
 msgstr "Workflow geweigerde berichtbody"
 
@@ -9270,7 +9284,7 @@ msgstr "docs.ansible.com"
 msgid "Edit Schedule"
 msgstr "Schema bewerken"
 
-#: components/NotificationList/NotificationList.js:250
+#: components/NotificationList/NotificationList.js:263
 msgid "Failed to toggle notification."
 msgstr "Kan niet van bericht wisselen."
 
@@ -9358,6 +9372,10 @@ msgstr "Opslaan"
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:181
 msgid "Click to create a new link to this node."
 msgstr "Klik om een nieuwe link naar dit knooppunt te maken."
+
+#: screens/Inventory/shared/Inventory.helptext.js:78
+msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is applied via the \"plugin\" key in the source variables; when the key is absent, the default collection is used."
+msgstr "Selecteer de Ansible-collectie die de inventarisplugin levert die wordt gebruikt om te synchroniseren vanuit vCenter. De collectie community.vmware is afgeschaft ten gunste van de nieuwere collectie vmware.vmware. De selectie wordt toegepast via de sleutel \"plugin\" in de bronvariabelen; als de sleutel ontbreekt, wordt de standaardcollectie gebruikt."
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:167
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:136
@@ -9476,7 +9494,7 @@ msgid "Deprovisioning"
 msgstr "Deprovisionering"
 
 #: components/DetailList/LaunchedByDetail.js:27
-#: components/NotificationList/NotificationList.js:202
+#: components/NotificationList/NotificationList.js:213
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:143
 msgid "Webhook"
 msgstr "Webhook"
@@ -9517,7 +9535,7 @@ msgstr "Kan toegangsgegevens niet verwijderen."
 msgid "Private key passphrase"
 msgstr "Privésleutel wachtwoordzin"
 
-#: components/NotificationList/NotificationListItem.js:58
+#: components/NotificationList/NotificationListItem.js:63
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerStartScreen.js:47
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerStartScreen.js:53
 msgid "Start"
@@ -9537,7 +9555,7 @@ msgstr "Er moet een inventaris worden gekozen"
 #: components/PromptDetail/PromptProjectDetail.js:100
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:81
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:477
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:266
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:274
 #: screens/Job/JobDetail/JobDetail.js:345
 #: screens/Project/ProjectDetail/ProjectDetail.js:229
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:234
@@ -9591,7 +9609,7 @@ msgstr "Red Hat Insights"
 msgid "View GitHub Settings"
 msgstr "GitHub-instellingen weergeven"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:257
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:258
 msgid "/ (project root)"
 msgstr "/ (projectroot)"
 
@@ -9620,7 +9638,7 @@ msgstr "Het aantal parallelle of gelijktijdige processen dat gebruikt wordt bij 
 msgid "View all Workflow Approvals."
 msgstr "Geef alle workflowgoedkeuringen weer."
 
-#: screens/Inventory/shared/Inventory.helptext.js:92
+#: screens/Inventory/shared/Inventory.helptext.js:93
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "Indien niet aangevinkt, wordt een samenvoeging uitgevoerd, waarbij lokale variabelen worden gecombineerd met die op de externe bron."
 
@@ -9714,7 +9732,7 @@ msgstr "Gereedschap wisselen"
 #: screens/Inventory/InventoryList/InventoryList.js:211
 #: screens/Inventory/InventoryList/InventoryList.js:241
 #: screens/Inventory/InventoryList/InventoryListItem.js:121
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:225
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:226
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:107
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:153
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:163
@@ -9765,7 +9783,7 @@ msgid "Test External Credential"
 msgstr "Externe inloggegevens testen"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:601
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:205
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:224
 msgid "Workflow pending message"
 msgstr "Bericht Workflow in behandeling"
 
@@ -9948,7 +9966,7 @@ msgstr "Navigatie"
 msgid "If enabled, control nodes will peer to this instance automatically. If disabled, instance will be connected only to associated peers."
 msgstr "Indien ingeschakeld, zullen besturingsknooppunten automatisch naar dit exemplaar turen. Indien uitgeschakeld, wordt het exemplaar alleen verbonden met geassocieerde collega's."
 
-#: screens/Inventory/shared/Inventory.helptext.js:120
+#: screens/Inventory/shared/Inventory.helptext.js:121
 msgid "and click on Update Revision on Launch"
 msgstr "en klik op Herziening updaten bij opstarten"
 
@@ -9966,6 +9984,10 @@ msgstr "Selecteer een project voordat u de uitvoeringsomgeving bewerkt."
 #: screens/Template/Survey/SurveyReorderModal.js:263
 msgid "Order"
 msgstr "Bestellen"
+
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:179
+msgid "Changed message body"
+msgstr "Body wijzigingsbericht"
 
 #: components/Schedule/Schedule.js:65
 msgid "Back to Schedules"
@@ -10085,7 +10107,7 @@ msgstr "Nieuwe containergroep maken"
 msgid "Bitbucket Data Center"
 msgstr "Bitbucket-datacenter"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:367
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:375
 msgid "Failed to delete inventory source {name}."
 msgstr "Kan inventarisbron {name} niet verwijderen."
 
@@ -10151,7 +10173,7 @@ msgstr "Details bewerken"
 msgid "Deleted"
 msgstr "Verwijderd"
 
-#: screens/Inventory/shared/Inventory.helptext.js:129
+#: screens/Inventory/shared/Inventory.helptext.js:130
 msgid "This field is ignored unless an Enabled Variable is set. If the enabled variable matches this value, the host will be enabled on import."
 msgstr "Dit veld wordt genegeerd, tenzij er een Ingeschakelde variabele is ingesteld. Als de ingeschakelde variabele overeenkomt met deze waarde, wordt de host bij het importeren ingeschakeld."
 
@@ -10250,11 +10272,11 @@ msgstr "Module"
 msgid "Confirm revert all"
 msgstr "Alles terugzetten bevestigen"
 
-#: screens/Inventory/shared/Inventory.helptext.js:89
+#: screens/Inventory/shared/Inventory.helptext.js:90
 msgid "If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source."
 msgstr "Indien aangevinkt, worden alle variabelen voor onderliggende groepen en hosts verwijderd en vervangen door die in de externe bron."
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:350
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:358
 msgid "Delete inventory source"
 msgstr "Inventarisbron maken"
 
@@ -10325,7 +10347,7 @@ msgstr "Verstreken tijd in seconden dat de taak is uitgevoerd"
 msgid "GitLab"
 msgstr "GitLab"
 
-#: components/NotificationList/NotificationListItem.js:93
+#: components/NotificationList/NotificationListItem.js:98
 msgid "Toggle notification failure"
 msgstr "Berichtstoring wisselen"
 
@@ -10426,8 +10448,8 @@ msgstr "Dit veld moet minimaal {0} tekens bevatten"
 
 #: components/JobList/JobListItem.js:197
 #: components/PromptDetail/PromptInventorySourceDetail.js:78
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:222
-#: screens/Inventory/shared/InventorySourceForm.js:162
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:223
+#: screens/Inventory/shared/InventorySourceForm.js:168
 #: screens/Job/JobDetail/JobDetail.js:180
 #: screens/Job/JobDetail/JobDetail.js:332
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:93
@@ -10511,7 +10533,7 @@ msgstr "Sleutel selecteren"
 msgid "Pass extra command line changes. There are two ansible command line parameters: "
 msgstr "Geef extra opdrachtregelwijzigingen door. Er zijn twee ansible-opdrachtregelparameters: "
 
-#: screens/Inventory/shared/Inventory.helptext.js:84
+#: screens/Inventory/shared/Inventory.helptext.js:85
 msgid "When not checked, local child hosts and groups not found on the external source will remain untouched by the inventory update process."
 msgstr "Als dit niet is aangevinkt, blijven lokale kinderhosts en groepen die niet op de externe bron worden gevonden, onaangetast door het proces voor het bijwerken van de inventaris."
 
@@ -10554,7 +10576,7 @@ msgid "Specify a notification color. Acceptable colors are hex\n"
 msgstr "Geef een meldingskleur op. Aanvaardbare kleuren zijn hexadecimale\n"
 "        kleurcodes (voorbeeld: #3af of #789abc)."
 
-#: components/NotificationList/NotificationList.js:201
+#: components/NotificationList/NotificationList.js:212
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:142
 msgid "Twilio"
 msgstr "Twilio"
@@ -10594,7 +10616,7 @@ msgid "updated"
 msgstr "bijgewerkt"
 
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:320
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:328
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:135
 #: screens/Project/ProjectList/ProjectListItem.js:274
 #: screens/TopologyView/Tooltip.js:347
@@ -10795,7 +10817,7 @@ msgid "Successful jobs"
 msgstr "Succesvolle taken"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:535
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:151
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:152
 msgid "Error message"
 msgstr "Foutbericht"
 
@@ -10924,7 +10946,7 @@ msgstr "Onbekend project"
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "Voorwaarden voor het uitvoeren van dit knooppunt wanneer er meerdere bovenliggende elementen zijn. Raadpleeg de"
 
-#: screens/Inventory/shared/Inventory.helptext.js:140
+#: screens/Inventory/shared/Inventory.helptext.js:141
 msgid "Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see"
 msgstr "Variabelen die worden gebruikt om de voorraadbron te configureren. Zie voor een gedetailleerde beschrijving van het configureren van deze plug-in"
 
@@ -10934,7 +10956,7 @@ msgstr "Google Compute Engine"
 
 #: components/Sparkline/Sparkline.js:34
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:55
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:185
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:186
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:35
 #: screens/Project/ProjectDetail/ProjectDetail.js:138
 #: screens/Project/ProjectList/ProjectListItem.js:60
@@ -10956,7 +10978,7 @@ msgstr "Alle taaktypen"
 msgid "GitHub Enterprise Organization"
 msgstr "GitHub Enterprise-organisatie"
 
-#: screens/Inventory/shared/InventorySourceForm.js:170
+#: screens/Inventory/shared/InventorySourceForm.js:176
 msgid "Choose a source"
 msgstr "Kies een bron"
 
@@ -10990,7 +11012,7 @@ msgstr "Eenvoudige sleutel selecteren"
 msgid "You have automated against more hosts than your subscription allows."
 msgstr "Je hebt tegen meer hosts geautomatiseerd dan je abonnement toelaat."
 
-#: screens/Inventory/shared/Inventory.helptext.js:130
+#: screens/Inventory/shared/Inventory.helptext.js:131
 msgid "Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied."
 msgstr "Reguliere expressie waarbij alleen overeenkomende hostnamen worden geïmporteerd. Het filter wordt toegepast als een nabewerkingsstap nadat eventuele filters voor inventarisplugins zijn toegepast."
 
@@ -11116,7 +11138,7 @@ msgstr "LDAP"
 msgid "Workflow Template"
 msgstr "Workflowsjabloon"
 
-#: components/NotificationList/NotificationListItem.js:40
+#: components/NotificationList/NotificationListItem.js:45
 #: components/Workflow/WorkflowLegend.js:118
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:76
 msgid "Approval"
@@ -11278,7 +11300,7 @@ msgstr "Bevoorrading mislukt"
 msgid "Whether the approval node is automatically approved or denied when the timeout expires."
 msgstr "Of het goedkeuringsknooppunt automatisch wordt goedgekeurd of geweigerd wanneer de time-out verloopt."
 
-#: screens/Inventory/shared/Inventory.helptext.js:125
+#: screens/Inventory/shared/Inventory.helptext.js:126
 msgid "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
 msgstr "Tijd in seconden om een voorraadsynchronisatie als actueel te beschouwen. Tijdens taakruns en callbacks evalueert het taaksysteem de tijdstempel van de nieuwste synchronisatie. Als het ouder is dan Cache Timeout, wordt het niet als actueel beschouwd en wordt een nieuwe voorraadsynchronisatie uitgevoerd."
 
@@ -11292,7 +11314,7 @@ msgstr "Toegangstoken vervallen"
 
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:147
 msgid "Workflow Job {currentPosition}/{total}"
-msgstr ""
+msgstr "Workflowtaak {currentPosition}/{total}"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:69
 msgid "{interval, plural, one {# minute} other {# minutes}}"
@@ -11436,7 +11458,7 @@ msgstr "Systeem-ID Insights"
 msgid "Authorization Code Expiration"
 msgstr "Machtigingscode vervallen"
 
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:69
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:70
 msgid "Customize messages…"
 msgstr "Berichten aanpassen..."
 
@@ -11662,7 +11684,7 @@ msgid "{interval, plural, one {# week} other {# weeks}}"
 msgstr "{interval, plural, one {# week} other {# weken}}"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:544
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:160
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:161
 msgid "Error message body"
 msgstr "Foutbericht body"
 
@@ -11705,7 +11727,7 @@ msgstr "Beheerde knooppunten"
 #: components/Lookup/MultiCredentialsLookup.js:201
 #: components/Lookup/OrganizationLookup.js:131
 #: components/Lookup/ProjectLookup.js:153
-#: components/NotificationList/NotificationList.js:206
+#: components/NotificationList/NotificationList.js:217
 #: components/RelatedTemplateList/RelatedTemplateList.js:179
 #: components/Schedule/ScheduleList/ScheduleList.js:201
 #: components/TemplateList/TemplateList.js:231
@@ -11821,7 +11843,7 @@ msgstr "Fout bij het verwijderen van tokens"
 msgid "Select period"
 msgstr "Periode selecteren"
 
-#: components/NotificationList/NotificationListItem.js:65
+#: components/NotificationList/NotificationListItem.js:70
 msgid "Toggle notification start"
 msgstr "Berichtstart wisselen"
 
@@ -11869,7 +11891,7 @@ msgid "This field must be a number and have a value between {min} and {max}"
 msgstr "Dit veld moet een getal zijn en een waarde tussen {min} en {max} hebben"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:45
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:154
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:155
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:93
 msgid "Update on launch"
 msgstr "Update bij opstarten"
@@ -11886,7 +11908,7 @@ msgstr "Hosts toevoegen aan groep op basis van Jinja2-voorwaarden."
 msgid "Copy Template"
 msgstr "Sjabloon kopiëren"
 
-#: components/NotificationList/NotificationListItem.js:51
+#: components/NotificationList/NotificationListItem.js:56
 msgid "Toggle notification approvals"
 msgstr "Berichtgoedkeuringen wisselen"
 
@@ -11914,7 +11936,7 @@ msgstr "L'année passée"
 msgid "Week"
 msgstr "Week"
 
-#: components/NotificationList/NotificationListItem.js:72
+#: components/NotificationList/NotificationListItem.js:77
 #: components/StatusLabel/StatusLabel.js:39
 msgid "Success"
 msgstr "Geslaagd"

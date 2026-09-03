@@ -149,7 +149,7 @@ Below are sample values used to configure each node in a mesh ingress topology:
      - [hop node]  
     
 
-In order to create a mesh ingress for Ascender, see the `Mesh Ingress <https://ansible.readthedocs.io/projects/awx-operator/en/latest/user-guide/advanced-configuration/mesh-ingress.html>`_ chapter of the AWX Operator Documentation for information on setting up this type of topology. The last step is to create a remote execution node and add the execution node to an instance group in order for it to be used in your job execution. Whatever execution environment image used to run a playbook needs to be accessible for your remote execution node. Everything you are using in your playbook also needs to be accessible from this remote execution node.
+In order to create a mesh ingress for Ascender, see the `Mesh Ingress <https://github.com/ctrliq/ascender-operator/blob/devel/docs/user-guide/advanced-configuration/mesh-ingress.md>`_ chapter of the Ascender Operator documentation for information on setting up this type of topology. The last step is to create a remote execution node and add the execution node to an instance group in order for it to be used in your job execution. Whatever execution environment image used to run a playbook needs to be accessible for your remote execution node. Everything you are using in your playbook also needs to be accessible from this remote execution node.
 
 .. image:: ../common/images/instances-job-template-using-remote-execution-ig.png
     :alt: Job template using the instance group with the execution node to run jobs.
@@ -334,13 +334,13 @@ The example health check shows the status updates with an error on node 'one':
 Using a custom Receptor CA
 ---------------------------
 
-Refer to the AWX Operator Documentation, `Custom Receptor CA <https://ansible.readthedocs.io/projects/awx-operator/en/latest/user-guide/advanced-configuration/custom-receptor-certs.html>`_ for detail.
+Refer to the Ascender Operator documentation, `Custom Receptor CA <https://github.com/ctrliq/ascender-operator/blob/devel/docs/user-guide/advanced-configuration/custom-receptor-certs.md>`_ for detail.
 
 
 Using a private image for the default EE
 ------------------------------------------
 
-Refer to the AWX Operator Documentation on `Default execution environments from private registries <https://ansible.readthedocs.io/projects/awx-operator/en/latest/user-guide/advanced-configuration/default-execution-environments-from-private-registries.html>`_ for detail.
+Refer to the Ascender Operator documentation on `Default execution environments from private registries <https://github.com/ctrliq/ascender-operator/blob/devel/docs/user-guide/advanced-configuration/default-execution-environments-from-private-registries.md>`_ for detail.
 
 
 Troubleshooting

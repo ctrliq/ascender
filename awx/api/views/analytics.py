@@ -9,7 +9,7 @@ from django.utils import translation
 from awx.api.generics import APIView, Response
 from awx.api.permissions import AnalyticsPermission
 from awx.api.versioning import reverse
-from awx.main.utils import get_awx_version
+from awx.main.utils import get_awx_version, set_environ
 from rest_framework import status
 
 from collections import OrderedDict
@@ -191,16 +191,19 @@ class AnalyticsGenericView(APIView):
             if method not in ["GET", "POST", "OPTIONS"]:
                 return self._error_response(ERROR_UNSUPPORTED_METHOD, method, remote=False, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
             else:
-                response = requests.request(
-                    method,
-                    url,
-                    auth=(rh_user, rh_password),
-                    verify=settings.INSIGHTS_CERT_PATH,
-                    params=request.query_params,
-                    headers=headers,
-                    json=request.data,
-                    timeout=(31, 31),
-                )
+                # AWX_TASK_ENV carries the configured proxy settings, which requests reads
+                # from the process environment. The web worker does not have them otherwise.
+                with set_environ(**settings.AWX_TASK_ENV):
+                    response = requests.request(
+                        method,
+                        url,
+                        auth=(rh_user, rh_password),
+                        verify=settings.INSIGHTS_CERT_PATH,
+                        params=request.query_params,
+                        headers=headers,
+                        json=request.data,
+                        timeout=(31, 31),
+                    )
             #
             # Missing or wrong user/pass
             #

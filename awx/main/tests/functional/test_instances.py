@@ -288,6 +288,31 @@ def test_control_plane_policy_exception(controlplane_instance_group):
 
 
 @pytest.mark.django_db
+def test_policy_instance_list_controlplane_excludes_execution_node(controlplane_instance_group):
+    exec_inst = Instance.objects.create(hostname='exec-1', node_type='execution')
+    control_inst = Instance.objects.create(hostname='control-1', node_type='control')
+    controlplane_instance_group.policy_instance_list = [exec_inst.hostname, control_inst.hostname]
+    controlplane_instance_group.save()
+    apply_cluster_membership_policies()
+    members = [inst.hostname for inst in controlplane_instance_group.instances.all()]
+    assert 'exec-1' not in members
+    assert 'control-1' in members
+
+
+@pytest.mark.django_db
+def test_policy_instance_list_execution_group_excludes_control_node():
+    ig = InstanceGroup.objects.create(name='bar')
+    exec_inst = Instance.objects.create(hostname='exec-1', node_type='execution')
+    control_inst = Instance.objects.create(hostname='control-1', node_type='control')
+    ig.policy_instance_list = [exec_inst.hostname, control_inst.hostname]
+    ig.save()
+    apply_cluster_membership_policies()
+    members = [inst.hostname for inst in ig.instances.all()]
+    assert 'control-1' not in members
+    assert 'exec-1' in members
+
+
+@pytest.mark.django_db
 def test_normal_instance_group_policy_exception():
     ig = InstanceGroup.objects.create(name='bar', policy_instance_percentage=100, policy_instance_minimum=2)
     Instance.objects.create(hostname='foo-1', node_type='control')

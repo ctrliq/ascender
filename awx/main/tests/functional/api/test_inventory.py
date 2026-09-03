@@ -4,10 +4,11 @@ import json
 from unittest import mock
 
 from django.core.exceptions import ValidationError
+from django.utils.timezone import now
 
 from awx.api.versioning import reverse
 
-from awx.main.models import InventorySource, Inventory, ActivityStream
+from awx.main.models import InventorySource, Inventory, ActivityStream, Host, Job
 
 
 @pytest.fixture
@@ -24,6 +25,11 @@ def factory_scm_inventory(inventory, project):
             return inventory.inventory_sources.create(source_project=project, overwrite_vars=True, source='scm', **kwargs)
 
     return fn
+
+
+@pytest.fixture
+def inventory_running_job(inventory, project):
+    return Job.objects.create(name='running-job', inventory=inventory, project=project, status='running')
 
 
 @pytest.mark.django_db
@@ -174,6 +180,59 @@ def test_async_inventory_deletion_deletes_related_jt(delete, get, job_template, 
     assert jdata['inventory'] is None
 
 
+@pytest.mark.django_db
+def test_host_deletion_blocked_by_running_job(delete, inventory, host, admin, inventory_running_job):
+    resp = delete(reverse('api:host_detail', kwargs={'pk': host.pk}), admin, expect=409)
+    assert resp.data['error'] == 'Resource is being used by running jobs.'
+    assert resp.data['active_jobs'] == [{'id': inventory_running_job.pk, 'type': 'job'}]
+    assert Host.objects.filter(pk=host.pk).exists()
+
+
+@pytest.mark.django_db
+def test_host_deletion_allowed_while_in_use(delete, inventory, host, admin, inventory_running_job):
+    inventory.allow_deletes_while_in_use = True
+    inventory.save(update_fields=['allow_deletes_while_in_use'])
+
+    delete(reverse('api:host_detail', kwargs={'pk': host.pk}), admin, expect=204)
+    assert not Host.objects.filter(pk=host.pk).exists()
+
+
+@pytest.mark.django_db
+def test_host_deletion_allowed_while_events_are_processed(delete, inventory, host, admin, inventory_running_job):
+    """Recently finished jobs also block deletion until their events are saved."""
+    inventory_running_job.status = 'successful'
+    inventory_running_job.emitted_events = 1
+    inventory_running_job.finished = now()
+    inventory_running_job.save(update_fields=['status', 'emitted_events', 'finished'])
+
+    delete(reverse('api:host_detail', kwargs={'pk': host.pk}), admin, expect=403)
+
+    inventory.allow_deletes_while_in_use = True
+    inventory.save(update_fields=['allow_deletes_while_in_use'])
+    delete(reverse('api:host_detail', kwargs={'pk': host.pk}), admin, expect=204)
+
+
+@pytest.mark.django_db
+def test_inventory_deletion_still_blocked_while_in_use(delete, inventory, admin, inventory_running_job):
+    """The flag covers hosts of the inventory, not the inventory itself."""
+    inventory.allow_deletes_while_in_use = True
+    inventory.save(update_fields=['allow_deletes_while_in_use'])
+
+    delete(reverse('api:inventory_detail', kwargs={'pk': inventory.pk}), admin, expect=409)
+    inventory.refresh_from_db()
+    assert inventory.pending_deletion is False
+
+
+@pytest.mark.django_db
+def test_allow_deletes_while_in_use_is_editable(get, patch, inventory, admin):
+    resp = get(reverse('api:inventory_detail', kwargs={'pk': inventory.pk}), admin, expect=200)
+    assert resp.data['allow_deletes_while_in_use'] is False
+
+    patch(reverse('api:inventory_detail', kwargs={'pk': inventory.pk}), {'allow_deletes_while_in_use': True}, admin, expect=200)
+    inventory.refresh_from_db()
+    assert inventory.allow_deletes_while_in_use is True
+
+
 @pytest.mark.parametrize('order_by', ('extra_vars', '-extra_vars', 'extra_vars,pk', '-extra_vars,pk'))
 @pytest.mark.django_db
 def test_list_cannot_order_by_unsearchable_field(get, organization, alice, order_by):
@@ -257,6 +316,26 @@ def test_create_inventory_smart_inventory_sources(post, get, inventory, admin_us
 
     assert getattr(smart_inventory, 'kind') == 'smart'
     assert jdata['count'] == 0
+
+
+@pytest.mark.django_db
+def test_inventory_source_summary_fields_include_last_job(get, inventory_source, admin_user):
+    """The UI's source list Status column reads summary_fields.last_job; it must
+    survive perf changes to host summaries (see SUMMARIZABLE_FK_FIELDS)."""
+    update = inventory_source.create_unified_job()
+    update.status = 'successful'
+    update.finished = now()
+    update.save()
+
+    url = reverse('api:inventory_inventory_sources_list', kwargs={'pk': inventory_source.inventory.pk})
+    resp = get(url, admin_user, expect=200)
+    source_data = resp.data['results'][0]
+
+    assert 'last_job' in source_data['summary_fields']
+    last_job = source_data['summary_fields']['last_job']
+    assert last_job['id'] == update.id
+    assert last_job['status'] == 'successful'
+    assert last_job['finished'] == update.finished
 
 
 @pytest.mark.django_db

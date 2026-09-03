@@ -56,11 +56,15 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
   );
 
   // 1-based, and 0 when the job on screen is not one of the workflow's nodes
-  const currentPosition =
+  const viewedPosition =
     jobNodes.findIndex(({ job: jobId }) => `${jobId}` === id) + 1;
-  // named so the extracted message reads {currentPosition}/{total} rather than
-  // leaving translators with a positional {0}
   const total = jobNodes.length;
+
+  // the parameter and total are named so the extracted message reads
+  // {currentPosition}/{total} rather than leaving translators with a
+  // positional {0}
+  const positionLabel = (currentPosition) =>
+    t`Workflow Job ${currentPosition}/${total}`;
 
   const statusLabels = {
     Failed: t`Failed`,
@@ -71,10 +75,21 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
     setFilterBy((current) => (current === value ? undefined : value));
   };
 
-  const nodeLabel = (node) =>
-    stringIsUUID(node.identifier)
-      ? node.summary_fields.job.name
-      : node.identifier;
+  const nodeLabel = (node) => {
+    if (stringIsUUID(node.identifier)) {
+      return node.summary_fields.job.name;
+    }
+    if (node.identifier) {
+      return node.identifier;
+    }
+    // Sliced-job and federated-inventory workflows create their nodes directly
+    // rather than copying them from a template node, so identifier is blank,
+    // and every slice's job carries the same name as the template. Label these
+    // by position, in the words the toggle uses for the job on screen.
+    return positionLabel(
+      jobNodes.findIndex((candidate) => candidate.id === node.id) + 1
+    );
+  };
 
   // Derived rather than held in state: the previous version seeded a useState
   // from the first render's list, so after navigating within the workflow the
@@ -143,8 +158,8 @@ function WorkflowOutputNavigation({ relatedJobs, parentRef }) {
             </ChipGroup>
           )}
           {!filterBy &&
-            (currentPosition > 0
-              ? t`Workflow Job ${currentPosition}/${total}`
+            (viewedPosition > 0
+              ? positionLabel(viewedPosition)
               : t`Workflow Jobs (${total})`)}
         </WorkflowMenuToggle>
       )}

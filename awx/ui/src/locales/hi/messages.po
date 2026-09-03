@@ -59,7 +59,7 @@ msgid "TACACS+"
 msgstr "TACACS+"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:637
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:232
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:251
 msgid "Workflow timed out message body"
 msgstr "वर्कफ़्लो टाइम आउट संदेश मुख्य भाग"
 
@@ -117,6 +117,10 @@ msgstr "वह निष्पादन वातावरण चुनें �
 msgid "Add a new node between these two nodes"
 msgstr "इन दो नोड्स के बीच एक नया नोड जोड़ें"
 
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:170
+msgid "Changed message"
+msgstr "परिवर्तन संदेश"
+
 #: screens/Job/JobOutput/JobOutputSearch.js:120
 msgid "Host Polling"
 msgstr "होस्ट पोलिंग"
@@ -150,7 +154,7 @@ msgid "Maximum number of forks to allow across all jobs running concurrently on 
 msgstr "इस समूह पर एक साथ चल रहे सभी जॉब्स में अनुमत फ़ोर्क्स की अधिकतम संख्या।\n"
 "          शून्य का अर्थ है कोई सीमा लागू नहीं की जाएगी।"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:341
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:349
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:89
 msgid "Failed to cancel Inventory Source Sync"
 msgstr "इन्वेंटरी स्रोत सिंक रद्द करने में विफल"
@@ -334,8 +338,8 @@ msgstr "चेकआउट करने के लिए ब्रांच। �
 #: components/JobList/JobList.js:265
 #: components/JobList/JobListItem.js:109
 #: components/Lookup/ProjectLookup.js:134
-#: components/NotificationList/NotificationList.js:219
-#: components/NotificationList/NotificationListItem.js:34
+#: components/NotificationList/NotificationList.js:230
+#: components/NotificationList/NotificationListItem.js:36
 #: components/PromptDetail/PromptDetail.js:125
 #: components/RelatedTemplateList/RelatedTemplateList.js:200
 #: components/TemplateList/TemplateList.js:219
@@ -435,7 +439,7 @@ msgstr "जॉब विवरण देखने के लिए क्लि�
 msgid "Sync Project"
 msgstr "प्रोजेक्ट सिंक करें"
 
-#: components/NotificationList/NotificationList.js:194
+#: components/NotificationList/NotificationList.js:205
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:135
 msgid "Grafana"
 msgstr "Grafana"
@@ -515,7 +519,7 @@ msgstr "इवेंट"
 msgid "Repeat Frequency"
 msgstr "पुनरावृत्ति आवृत्ति"
 
-#: screens/Inventory/shared/Inventory.helptext.js:171
+#: screens/Inventory/shared/Inventory.helptext.js:172
 msgid "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 msgstr "निर्मित इन्वेंटरी प्लगइन को कॉन्फ़िगर करने के लिए उपयोग किए जाने वाले वेरिएबल्स। इस प्लगइन को कॉन्फ़िगर करने के तरीके के विस्तृत विवरण के लिए, देखें"
 
@@ -577,8 +581,8 @@ msgstr "कंटेनर समूह"
 msgid "{0, plural, one {You cannot cancel the following job because it is not running:} other {You cannot cancel the following jobs because they are not running:}}"
 msgstr "{0, plural, one {आप निम्न जॉब को रद्द नहीं कर सकते क्योंकि यह नहीं चल रही है:} other {आप निम्न जॉब्स को रद्द नहीं कर सकते क्योंकि वे नहीं चल रही हैं:}}"
 
-#: components/NotificationList/NotificationList.js:220
-#: components/NotificationList/NotificationListItem.js:35
+#: components/NotificationList/NotificationList.js:231
+#: components/NotificationList/NotificationListItem.js:38
 #: screens/Credential/shared/TypeInputsSubForm.js:46
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:79
 #: screens/Instances/Shared/InstanceForm.js:95
@@ -602,7 +606,7 @@ msgid "You cannot select multiple vault credentials with the same vault ID. Doin
 msgstr "आप समान वॉल्ट ID के साथ एकाधिक वॉल्ट क्रेडेंशियल्स नहीं चुन सकते। ऐसा करने पर समान वॉल्ट ID वाला दूसरा स्वचालित रूप से अचयनित हो जाएगा।"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:334
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:342
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:350
 #: screens/Project/ProjectDetail/ProjectDetail.js:354
 msgid "Cancel Sync"
 msgstr "सिंक रद्द करें"
@@ -715,8 +719,8 @@ msgstr "होस्ट मेट्रिक्स"
 msgid "Create new credential Type"
 msgstr "नया क्रेडेंशियल प्रकार बनाएं"
 
-#: screens/Inventory/shared/Inventory.helptext.js:103
-#: screens/Inventory/shared/Inventory.helptext.js:118
+#: screens/Inventory/shared/Inventory.helptext.js:104
+#: screens/Inventory/shared/Inventory.helptext.js:119
 msgid "If you want the Inventory Source to update on launch, click on Update on Launch, and also go to "
 msgstr "यदि आप चाहते हैं कि इन्वेंटरी स्रोत लॉन्च पर अपडेट हो, तो लॉन्च पर अपडेट करें पर क्लिक करें, और इस पर भी जाएं "
 
@@ -734,7 +738,7 @@ msgid "Start Time"
 msgstr "प्रारंभ समय"
 
 #: screens/Inventory/shared/Inventory.helptext.js:48
-#: screens/Inventory/shared/Inventory.helptext.js:184
+#: screens/Inventory/shared/Inventory.helptext.js:185
 msgid "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."
 msgstr "वेरिएबल्स JSON या YAML सिंटैक्स में होने चाहिए। दोनों के बीच टॉगल करने के लिए रेडियो बटन का उपयोग करें।"
 
@@ -750,7 +754,7 @@ msgstr "फ़ाइल अंतर"
 msgid "Relaunch from canceled node"
 msgstr "रद्द किए गए नोड से पुनः लॉन्च करें"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:271
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:279
 msgid "Cache timeout"
 msgstr "कैश टाइमआउट"
 
@@ -830,7 +834,7 @@ msgstr "कृपया घटनाओं की संख्या दर्�
 msgid "Fuzzy search on name field."
 msgstr "नाम फ़ील्ड पर फ़ज़ी खोज।"
 
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:106
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:107
 msgid "Ansible Controller Documentation."
 msgstr "Ansible Controller दस्तावेज़ीकरण।"
 
@@ -838,7 +842,7 @@ msgstr "Ansible Controller दस्तावेज़ीकरण।"
 msgid "The Instance Groups to which this instance belongs."
 msgstr "वे इंस्टेंस समूह जिनसे यह इंस्टेंस संबंधित है।"
 
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:97
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:98
 msgid "You may apply a number of possible variables in the\n"
 "                message. For more information, refer to the"
 msgstr "आप संदेश में कई संभावित वेरिएबल्स लागू कर सकते हैं।\n"
@@ -887,7 +891,7 @@ msgstr "वर्कफ़्लो नोड्स"
 msgid "Overwrite"
 msgstr "अधिलेखित करें"
 
-#: components/NotificationList/NotificationList.js:195
+#: components/NotificationList/NotificationList.js:206
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:136
 msgid "Hipchat"
 msgstr "Hipchat"
@@ -922,7 +926,7 @@ msgstr "सोर्स कंट्रोल ब्रांच"
 msgid "Tabs"
 msgstr "टैब"
 
-#: screens/Template/Template.js:273
+#: screens/Template/Template.js:274
 #: screens/Template/WorkflowJobTemplate.js:286
 msgid "View Template Details"
 msgstr "टेम्पलेट विवरण देखें"
@@ -968,7 +972,7 @@ msgstr "{interval, plural, one {# वर्ष} other {# वर्ष}}"
 msgid "Inventory Source Sync"
 msgstr "इन्वेंटरी स्रोत सिंक"
 
-#: screens/Inventory/shared/Inventory.helptext.js:146
+#: screens/Inventory/shared/Inventory.helptext.js:147
 msgid "Inventory Plugins"
 msgstr "इन्वेंटरी प्लगइन्स"
 
@@ -1038,7 +1042,7 @@ msgstr "1 (जानकारी)"
 msgid "Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance."
 msgstr "इंस्टेंस को सक्षम या अक्षम सेट करें। यदि अक्षम है, तो इस इंस्टेंस को जॉब्स असाइन नहीं की जाएंगी।"
 
-#: screens/Inventory/shared/Inventory.helptext.js:105
+#: screens/Inventory/shared/Inventory.helptext.js:106
 msgid "and click on Update Revision on Launch."
 msgstr "और लॉन्च पर रिवीज़न अपडेट करें पर क्लिक करें।"
 
@@ -1527,8 +1531,8 @@ msgstr "एक या अधिक जॉब्स हटाने में व
 msgid "Run Command"
 msgstr "कमांड चलाएं"
 
-#: screens/Inventory/shared/Inventory.helptext.js:156
-#: screens/Inventory/shared/Inventory.helptext.js:179
+#: screens/Inventory/shared/Inventory.helptext.js:157
+#: screens/Inventory/shared/Inventory.helptext.js:180
 msgid "plugin configuration guide."
 msgstr "प्लगइन कॉन्फ़िगरेशन गाइड।"
 
@@ -1639,9 +1643,9 @@ msgstr "नई फ़ेडरेटेड इन्वेंटरी बना
 #: components/Lookup/OrganizationLookup.js:141
 #: components/Lookup/ProjectLookup.js:129
 #: components/Lookup/ProjectLookup.js:159
-#: components/NotificationList/NotificationList.js:181
-#: components/NotificationList/NotificationList.js:218
-#: components/NotificationList/NotificationListItem.js:29
+#: components/NotificationList/NotificationList.js:192
+#: components/NotificationList/NotificationList.js:229
+#: components/NotificationList/NotificationListItem.js:31
 #: components/OptionsList/OptionsList.js:48
 #: components/PaginatedTable/PaginatedTable.js:76
 #: components/PromptDetail/PromptDetail.js:115
@@ -1755,14 +1759,14 @@ msgstr "नई फ़ेडरेटेड इन्वेंटरी बना
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:182
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:197
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:238
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:204
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:205
 #: screens/Inventory/InventorySources/InventorySourceList.js:212
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:60
 #: screens/Inventory/shared/ConstructedInventoryForm.js:66
 #: screens/Inventory/shared/FederatedInventoryForm.js:56
 #: screens/Inventory/shared/InventoryForm.js:50
 #: screens/Inventory/shared/InventoryGroupForm.js:33
-#: screens/Inventory/shared/InventorySourceForm.js:133
+#: screens/Inventory/shared/InventorySourceForm.js:139
 #: screens/Inventory/shared/SmartInventoryForm.js:46
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:98
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.js:91
@@ -1885,7 +1889,7 @@ msgstr "{automatedInstancesSinceDateTime} से {automatedInstancesCount}"
 msgid "No job data available"
 msgstr "कोई जॉब डेटा उपलब्ध नहीं"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:309
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:317
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:22
 msgid "Source variables"
 msgstr "स्रोत वेरिएबल्स"
@@ -2022,7 +2026,7 @@ msgid "Confirm"
 msgstr "पुष्टि करें"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:526
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:142
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:143
 msgid "Success message body"
 msgstr "सफलता संदेश मुख्य भाग"
 
@@ -2297,7 +2301,7 @@ msgstr "विफल होस्ट्स"
 msgid "This execution environment is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "यह निष्पादन वातावरण वर्तमान में अन्य संसाधनों द्वारा उपयोग किया जा रहा है। क्या आप वाकई इसे हटाना चाहते हैं?"
 
-#: components/NotificationList/NotificationList.js:196
+#: components/NotificationList/NotificationList.js:207
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:137
 msgid "IRC"
 msgstr "IRC"
@@ -2501,7 +2505,7 @@ msgstr "बाहरी लॉगिंग सक्षम करें"
 
 #: components/Sparkline/Sparkline.js:30
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:51
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:181
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:182
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:31
 #: screens/Project/ProjectDetail/ProjectDetail.js:134
 #: screens/Project/ProjectList/ProjectListItem.js:56
@@ -2541,7 +2545,7 @@ msgstr "लॉग सिस्टम को फ़ैक्ट्स को व�
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "पासवर्ड के लिए संकेत देने वाले क्रेडेंशियल्स वाले जॉब टेम्पलेट नोड्स बनाते या संपादित करते समय नहीं चुने जा सकते"
 
-#: screens/Inventory/shared/Inventory.helptext.js:193
+#: screens/Inventory/shared/Inventory.helptext.js:194
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "यदि सक्षम है, तो इन्वेंटरी संबद्ध जॉब टेम्पलेट चलाने के लिए पसंदीदा इंस्टेंस समूहों की सूची में किसी भी संगठन इंस्टेंस समूह को जोड़ने से रोकेगी। नोट: यदि यह सेटिंग सक्षम है और आपने एक खाली सूची प्रदान की है, तो वैश्विक इंस्टेंस समूह लागू किए जाएंगे।"
 
@@ -2678,7 +2682,7 @@ msgstr "एक या अधिक होस्ट्स को अलग कर
 
 #: components/Sparkline/Sparkline.js:27
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:48
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:178
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:179
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:28
 #: screens/Project/ProjectDetail/ProjectDetail.js:131
 #: screens/Project/ProjectList/ProjectListItem.js:53
@@ -2765,7 +2769,7 @@ msgstr "आइटम ठीक है"
 msgid "Icon URL"
 msgstr "आइकन URL"
 
-#: screens/Inventory/shared/InventorySourceForm.js:159
+#: screens/Inventory/shared/InventorySourceForm.js:165
 msgid "Select the Instance Groups this inventory source sync should run on. If unset, the sync runs on the instance groups of the inventory or its organization."
 msgstr "उन इंस्टेंस समूहों का चयन करें जिन पर इस इन्वेंटरी स्रोत का समन्वयन चलना चाहिए। यदि सेट नहीं किया गया है, तो समन्वयन इन्वेंटरी या उसके संगठन के इंस्टेंस समूहों पर चलता है।"
 
@@ -2774,7 +2778,7 @@ msgid "Select the port that Receptor will listen on for incoming connections, e.
 msgstr "वह पोर्ट चुनें जिस पर Receptor आने वाले कनेक्शन के लिए सुनेगा, उदा. 27199।"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:517
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:133
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:134
 msgid "Success message"
 msgstr "सफलता संदेश"
 
@@ -2831,7 +2835,7 @@ msgstr "HTTP विधि"
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "इस संगठन के भीतर कार्यों के लिए उपयोग किया जाने वाला निष्पादन वातावरण। इसका उपयोग तब फ़ॉलबैक के रूप में किया जाएगा जब प्रोजेक्ट, कार्य टेम्पलेट या वर्कफ़्लो स्तर पर कोई निष्पादन वातावरण स्पष्ट रूप से असाइन नहीं किया गया हो।"
 
-#: components/NotificationList/NotificationList.js:190
+#: components/NotificationList/NotificationList.js:201
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:131
 msgid "Notification type"
 msgstr "सूचना प्रकार"
@@ -2865,7 +2869,7 @@ msgstr "लिंक हटाना रद्द करें"
 msgid "There was an error loading this content. Please reload the page."
 msgstr "इस सामग्री को लोड करने में त्रुटि हुई। कृपया पृष्ठ पुनः लोड करें।"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:292
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:300
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:135
 msgid "Enabled Value"
 msgstr "सक्षम मान"
@@ -3178,7 +3182,7 @@ msgstr "<0>नोट: यदि इंस्टेंस <1>नीति नि�
 msgid "Timeout minutes"
 msgstr "टाइमआउट मिनट"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:353
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:361
 msgid "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
 msgstr "यह इन्वेंटरी स्रोत वर्तमान में अन्य संसाधनों द्वारा उपयोग किया जा रहा है जो इस पर निर्भर हैं। क्या आप वाकई इसे हटाना चाहते हैं?"
 
@@ -3334,7 +3338,7 @@ msgstr "इससे कम या बराबर तुलना।"
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.js:187
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:185
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.js:102
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:356
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:364
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:67
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:71
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:76
@@ -3357,6 +3361,7 @@ msgstr "इससे कम या बराबर तुलना।"
 msgid "Delete"
 msgstr "हटाएं"
 
+#: components/NotificationList/NotificationListItem.js:105
 #: components/StatusLabel/StatusLabel.js:53
 #: screens/Job/JobOutput/shared/HostStatusBar.js:43
 msgid "Changed"
@@ -3488,7 +3493,7 @@ msgstr "GitHub Team"
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:157
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:43
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:78
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:317
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:325
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:133
 #: screens/Job/JobDetail/JobDetail.js:578
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:425
@@ -3862,7 +3867,7 @@ msgstr "डिफ़ॉल्ट निष्पादन वातावरण"
 #: components/PromptDetail/PromptJobTemplateDetail.js:122
 #: components/PromptDetail/PromptJobTemplateDetail.js:130
 #: components/TemplateList/TemplateListItem.js:263
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:245
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:246
 #: screens/Job/JobDetail/JobDetail.js:180
 #: screens/Job/JobDetail/JobDetail.js:214
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:216
@@ -3983,7 +3988,7 @@ msgstr "टोपोलॉजी दृश्य"
 msgid "Syncing"
 msgstr "सिंक हो रहा है"
 
-#: screens/Inventory/shared/InventorySourceForm.js:192
+#: screens/Inventory/shared/InventorySourceForm.js:198
 msgid "Source details"
 msgstr "स्रोत विवरण"
 
@@ -4075,7 +4080,7 @@ msgstr "क्रेडेंशियल हटाएं"
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:56
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.js:61
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:100
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:332
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:340
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:105
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:148
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:450
@@ -4157,7 +4162,7 @@ msgstr "कोई टाइमआउट निर्दिष्ट नहीं
 msgid "On Timeout"
 msgstr "टाइमआउट पर"
 
-#: screens/Inventory/shared/Inventory.helptext.js:196
+#: screens/Inventory/shared/Inventory.helptext.js:197
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
 msgstr "इंस्टेंस समूह फ़ॉलबैक रोकें: यदि सक्षम है, तो इन्वेंटरी संबद्ध जॉब टेम्पलेट चलाने के लिए पसंदीदा इंस्टेंस समूहों की सूची में किसी भी संगठन इंस्टेंस समूह को जोड़ने से रोकेगी।"
 
@@ -4499,7 +4504,7 @@ msgstr "सामग्री-लोडिंग-प्रगति-पर"
 msgid "Mon"
 msgstr "सोम"
 
-#: screens/Organization/Organization.js:239
+#: screens/Organization/Organization.js:240
 msgid "View Organization Details"
 msgstr "संगठन विवरण देखें"
 
@@ -4512,7 +4517,7 @@ msgstr "संगठन विवरण देखें"
 #: components/JobList/JobList.js:345
 #: components/LaunchButton/LaunchButton.js:248
 #: components/LaunchPrompt/LaunchPrompt.js:99
-#: components/NotificationList/NotificationList.js:246
+#: components/NotificationList/NotificationList.js:259
 #: components/PaginatedTable/ToolbarDeleteButton.js:148
 #: components/RelatedTemplateList/RelatedTemplateList.js:254
 #: components/ResourceAccessList/ResourceAccessList.js:249
@@ -4556,7 +4561,7 @@ msgstr "संगठन विवरण देखें"
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:204
 #: screens/Inventory/InventoryList/InventoryList.js:300
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.js:270
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:363
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:371
 #: screens/Inventory/InventorySources/InventorySourceList.js:240
 #: screens/Inventory/InventorySources/InventorySourceList.js:252
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.js:155
@@ -4708,11 +4713,11 @@ msgid "Notification Templates"
 msgstr "सूचना टेम्पलेट"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:508
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:124
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:125
 msgid "Start message body"
 msgstr "प्रारंभ संदेश मुख्य भाग"
 
-#: screens/Inventory/shared/Inventory.helptext.js:128
+#: screens/Inventory/shared/Inventory.helptext.js:129
 msgid "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "इन्वेंटरी सिंक पर उपयोग करने के लिए ब्रांच। रिक्त होने पर प्रोजेक्ट डिफ़ॉल्ट उपयोग किया जाता है। केवल तभी अनुमति है जब प्रोजेक्ट allow_override फ़ील्ड true पर सेट हो।"
 
@@ -4821,7 +4826,7 @@ msgid "Failed to delete one or more user tokens."
 msgstr "एक या अधिक उपयोगकर्ता टोकन हटाने में विफल।"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:553
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:169
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:188
 msgid "Workflow approved message"
 msgstr "वर्कफ़्लो अनुमोदित संदेश"
 
@@ -5002,12 +5007,12 @@ msgstr "टाइमआउट पर"
 msgid "Create New Team"
 msgstr "नई टीम बनाएं"
 
-#: screens/Inventory/shared/Inventory.helptext.js:148
+#: screens/Inventory/shared/Inventory.helptext.js:149
 msgid "in the documentation and the"
 msgstr "दस्तावेज़ीकरण में और"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:152
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:206
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:207
 #: screens/Project/ProjectDetail/ProjectDetail.js:160
 msgid "Last Job Status"
 msgstr "अंतिम जॉब स्थिति"
@@ -5339,7 +5344,7 @@ msgid "Preferred Theme"
 msgstr "पसंदीदा थीम"
 
 #: screens/Instances/Shared/InstanceForm.js:31
-#: screens/Inventory/shared/InventorySourceForm.js:92
+#: screens/Inventory/shared/InventorySourceForm.js:98
 #: screens/Project/shared/ProjectForm.js:121
 msgid "Set a value for this field"
 msgstr "इस फ़ील्ड के लिए एक मान सेट करें"
@@ -5472,7 +5477,7 @@ msgid "Download Bundle"
 msgstr "बंडल डाउनलोड करें"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:577
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:187
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:206
 msgid "Workflow denied message"
 msgstr "वर्कफ़्लो अस्वीकृत संदेश"
 
@@ -5525,7 +5530,7 @@ msgstr "नोड प्रकार"
 msgid "View Credential Details"
 msgstr "क्रेडेंशियल विवरण देखें"
 
-#: components/NotificationList/NotificationList.js:177
+#: components/NotificationList/NotificationList.js:188
 #: routeConfig.js:140
 #: screens/Inventory/Inventories.js:119
 #: screens/Inventory/InventorySource/InventorySource.js:101
@@ -5745,7 +5750,7 @@ msgstr "परीक्षण सूचना"
 #: screens/Credential/CredentialDetail/CredentialDetail.js:262
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:234
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:122
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:305
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:313
 #: screens/Project/ProjectDetail/ProjectDetail.js:333
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:357
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.js:193
@@ -5794,7 +5799,7 @@ msgstr "सोर्स कंट्रोल ब्रांच"
 #: screens/Instances/InstanceDetail/InstanceDetail.js:248
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:225
 #: screens/Inventory/InventoryDetail/InventoryDetail.js:107
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:239
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:240
 #: screens/Organization/OrganizationDetail/OrganizationDetail.js:116
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:418
 #: util/getRelatedResourceDeleteDetails.js:282
@@ -6124,7 +6129,7 @@ msgid "View YAML examples at"
 msgstr "YAML उदाहरण यहां देखें"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:35
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:142
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:143
 msgid "Overwrite local groups and hosts from remote inventory source"
 msgstr "रिमोट इन्वेंटरी स्रोत से स्थानीय समूहों और होस्ट्स को अधिलेखित करें"
 
@@ -6133,7 +6138,7 @@ msgid "Resource deleted"
 msgstr "संसाधन हटाया गया"
 
 #: screens/Inventory/shared/Inventory.helptext.js:54
-#: screens/Inventory/shared/Inventory.helptext.js:187
+#: screens/Inventory/shared/Inventory.helptext.js:188
 msgid "YAML:"
 msgstr "YAML:"
 
@@ -6220,7 +6225,7 @@ msgid "Initiated By"
 msgstr "द्वारा आरंभ किया गया"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:499
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:115
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:116
 msgid "Start message"
 msgstr "प्रारंभ संदेश"
 
@@ -6284,7 +6289,7 @@ msgstr "इंस्टेंस टॉगल करें"
 msgid "Back to Inventories"
 msgstr "इन्वेंटरी पर वापस"
 
-#: screens/Inventory/shared/Inventory.helptext.js:113
+#: screens/Inventory/shared/Inventory.helptext.js:114
 msgid "After every project update where the SCM revision changes, refresh the inventory from the selected source before executing job tasks. This is intended for static content, like the Ansible inventory .ini file format."
 msgstr "प्रत्येक प्रोजेक्ट अपडेट के बाद जहां SCM रिवीज़न बदलता है, जॉब कार्य निष्पादित करने से पहले चयनित स्रोत से इन्वेंटरी रीफ़्रेश करें। यह स्थिर सामग्री के लिए है, जैसे Ansible इन्वेंटरी .ini फ़ाइल प्रारूप।"
 
@@ -6378,7 +6383,7 @@ msgstr "इंस्टेंस"
 msgid "Including File"
 msgstr "फ़ाइल सहित"
 
-#: screens/Inventory/shared/Inventory.helptext.js:81
+#: screens/Inventory/shared/Inventory.helptext.js:82
 msgid "If checked, any hosts and groups that were previously present on the external source but are now removed will be removed from the inventory. Hosts and groups that were not managed by the inventory source will be promoted to the next manually created group or if there is no manually created group to promote them into, they will be left in the \"all\" default group for the inventory."
 msgstr "यदि चेक किया गया है, तो कोई भी होस्ट और समूह जो पहले बाहरी स्रोत पर मौजूद थे लेकिन अब हटा दिए गए हैं, इन्वेंटरी से हटा दिए जाएंगे। जो होस्ट और समूह इन्वेंटरी स्रोत द्वारा प्रबंधित नहीं थे, उन्हें अगले मैन्युअल रूप से बनाए गए समूह में प्रोत्साहित किया जाएगा या यदि उन्हें प्रोत्साहित करने के लिए कोई मैन्युअल रूप से बनाया गया समूह नहीं है, तो उन्हें इन्वेंटरी के लिए \"all\" डिफ़ॉल्ट समूह में छोड़ दिया जाएगा।"
 
@@ -6415,7 +6420,7 @@ msgstr "विवरण टैब"
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.js:100
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.js:72
 #: screens/InstanceGroup/shared/ContainerGroupForm.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:298
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:306
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.js:39
 #: screens/Inventory/shared/InventorySourceSubForms/ControllerSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/EC2SubForm.js:38
@@ -6426,7 +6431,7 @@ msgstr "विवरण टैब"
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:117
 #: screens/Inventory/shared/InventorySourceSubForms/TerraformSubForm.js:38
 #: screens/Inventory/shared/InventorySourceSubForms/VirtualizationSubForm.js:39
-#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:39
+#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:44
 msgid "Credential"
 msgstr "क्रेडेंशियल"
 
@@ -6435,7 +6440,7 @@ msgid "First node"
 msgstr "पहला नोड"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:97
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:273
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:281
 msgid "{update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{update_cache_timeout, plural, one {# सेकंड} other {# सेकंड}}"
 
@@ -6499,7 +6504,7 @@ msgstr "जॉब्स सेटिंग्स देखें"
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.js:122
 #: screens/Instances/InstanceDetail/InstanceDetail.js:349
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.js:96
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:329
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:337
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:145
 #: screens/Project/ProjectDetail/ProjectDetail.js:340
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.js:229
@@ -6553,7 +6558,7 @@ msgstr "सामान्य उपयोगकर्ता"
 msgid "host-name-{0}"
 msgstr "host-name-{0}"
 
-#: components/NotificationList/NotificationList.js:198
+#: components/NotificationList/NotificationList.js:209
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:139
 msgid "Pagerduty"
 msgstr "Pagerduty"
@@ -6612,7 +6617,7 @@ msgstr "नए इंस्टेंस ऑनलाइन आने पर इ�
 msgid "Launch | {0}"
 msgstr "लॉन्च करें | {0}"
 
-#: components/NotificationList/NotificationListItem.js:79
+#: components/NotificationList/NotificationListItem.js:84
 msgid "Toggle notification success"
 msgstr "सूचना सफलता टॉगल करें"
 
@@ -6705,7 +6710,7 @@ msgstr "समवर्ती जॉब्स सक्षम करें"
 msgid "Smart Inventory"
 msgstr "स्मार्ट इन्वेंटरी"
 
-#: components/NotificationList/NotificationList.js:200
+#: components/NotificationList/NotificationList.js:211
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:141
 msgid "Slack"
 msgstr "Slack"
@@ -6741,7 +6746,7 @@ msgstr "जोड़ें"
 msgid "System administrators have unrestricted access to all resources."
 msgstr "सिस्टम प्रशासकों की सभी संसाधनों तक अप्रतिबंधित पहुंच होती है।"
 
-#: components/NotificationList/NotificationListItem.js:86
+#: components/NotificationList/NotificationListItem.js:91
 msgid "Failure"
 msgstr "विफलता"
 
@@ -6886,7 +6891,7 @@ msgstr "अनुसरण करें"
 #: components/Lookup/MultiCredentialsLookup.js:205
 #: components/Lookup/OrganizationLookup.js:135
 #: components/Lookup/ProjectLookup.js:149
-#: components/NotificationList/NotificationList.js:210
+#: components/NotificationList/NotificationList.js:221
 #: components/RelatedTemplateList/RelatedTemplateList.js:183
 #: components/Schedule/ScheduleList/ScheduleList.js:205
 #: components/TemplateList/TemplateList.js:235
@@ -7098,7 +7103,7 @@ msgstr "इस फ़ील्ड में एक संख्या होन�
 msgid "All"
 msgstr "सभी"
 
-#: screens/Inventory/shared/Inventory.helptext.js:177
+#: screens/Inventory/shared/Inventory.helptext.js:178
 msgid "constructed inventory"
 msgstr "निर्मित इन्वेंटरी"
 
@@ -7112,7 +7117,7 @@ msgid "Confirm Delete"
 msgstr "हटाने की पुष्टि करें"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:625
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:223
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:242
 msgid "Workflow timed out message"
 msgstr "वर्कफ़्लो टाइम आउट संदेश"
 
@@ -7208,7 +7213,7 @@ msgstr "कभी नहीं"
 msgid "Organization Name"
 msgstr "संगठन नाम"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:282
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:290
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:149
 msgid "Host Filter"
 msgstr "होस्ट फ़िल्टर"
@@ -7260,7 +7265,7 @@ msgstr "{pluralizedItemName} सूची"
 msgid "Please add survey questions."
 msgstr "कृपया सर्वेक्षण प्रश्न जोड़ें।"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:287
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:295
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:121
 msgid "Enabled Variable"
 msgstr "सक्षम वेरिएबल"
@@ -7372,7 +7377,7 @@ msgstr "सिंक करें"
 #: components/Lookup/ApplicationLookup.js:128
 #: components/Lookup/HostFilterLookup.js:439
 #: components/Lookup/HostListItem.js:10
-#: components/NotificationList/NotificationList.js:186
+#: components/NotificationList/NotificationList.js:197
 #: components/PromptDetail/PromptDetail.js:120
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:337
 #: components/Schedule/ScheduleList/ScheduleList.js:197
@@ -7407,13 +7412,13 @@ msgstr "सिंक करें"
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:125
 #: screens/Inventory/InventoryHosts/InventoryHostList.js:141
 #: screens/Inventory/InventoryList/InventoryList.js:215
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:221
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:222
 #: screens/Inventory/shared/ConstructedInventoryForm.js:74
 #: screens/Inventory/shared/ConstructedInventoryHint.js:63
 #: screens/Inventory/shared/FederatedInventoryForm.js:64
 #: screens/Inventory/shared/InventoryForm.js:58
 #: screens/Inventory/shared/InventoryGroupForm.js:41
-#: screens/Inventory/shared/InventorySourceForm.js:141
+#: screens/Inventory/shared/InventorySourceForm.js:147
 #: screens/Inventory/shared/SmartInventoryForm.js:54
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:104
 #: screens/Job/JobOutput/HostEventModal.js:118
@@ -7558,7 +7563,7 @@ msgstr "GitHub Enterprise से साइन इन करें"
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:130
 #: screens/Inventory/shared/InventorySourceSubForms/TerraformSubForm.js:46
 #: screens/Inventory/shared/InventorySourceSubForms/VirtualizationSubForm.js:47
-#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:47
+#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:52
 #: screens/Inventory/shared/SmartInventoryForm.js:66
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.js:29
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.js:66
@@ -7591,7 +7596,7 @@ msgstr "SAML {samlIDP} से साइन इन करें"
 msgid "Browse"
 msgstr "ब्राउज़ करें"
 
-#: components/NotificationList/NotificationList.js:193
+#: components/NotificationList/NotificationList.js:204
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:134
 #: screens/User/shared/UserForm.js:104
 #: screens/User/UserDetail/UserDetail.js:71
@@ -8014,7 +8019,7 @@ msgid "Sat"
 msgstr "शनि"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:46
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:176
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:177
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:26
 #: screens/Project/ProjectDetail/ProjectDetail.js:129
 #: screens/Project/ProjectList/ProjectListItem.js:51
@@ -8051,7 +8056,7 @@ msgid "Specify HTTP Headers in JSON format. Refer to\n"
 msgstr "JSON प्रारूप में HTTP हेडर निर्दिष्ट करें। उदाहरण सिंटैक्स के लिए\n"
 "      Ansible Controller दस्तावेज़ीकरण देखें।"
 
-#: components/NotificationList/NotificationList.js:199
+#: components/NotificationList/NotificationList.js:210
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:140
 msgid "Rocket.Chat"
 msgstr "Rocket.Chat"
@@ -8110,7 +8115,7 @@ msgstr "ज़ूम को 100% पर सेट करें और ग्र�
 msgid "Revert all to default"
 msgstr "सभी को डिफ़ॉल्ट पर वापस लौटाएं"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:255
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:256
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.js:135
 msgid "Inventory file"
 msgstr "इन्वेंटरी फ़ाइल"
@@ -8187,6 +8192,11 @@ msgstr "इंस्टेंस समूह फ़ॉलबैक रोके
 msgid "Maximum number of forks to allow across all jobs running concurrently on this group. Zero means no limit will be enforced."
 msgstr "इस समूह पर एक साथ चल रहे सभी जॉब्स में अनुमत फ़ोर्क्स की अधिकतम संख्या। शून्य का अर्थ है कोई सीमा लागू नहीं की जाएगी।"
 
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:263
+#: screens/Inventory/shared/InventorySourceSubForms/VMwareSubForm.js:56
+msgid "Collection"
+msgstr "कलेक्शन"
+
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.js:207
 msgid "Failed to delete one or more credential types."
 msgstr "एक या अधिक क्रेडेंशियल प्रकार हटाने में विफल।"
@@ -8201,7 +8211,7 @@ msgstr "क्षेत्र"
 
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:148
 msgid "Workflow Jobs ({total})"
-msgstr ""
+msgstr "वर्कफ़्लो जॉब्स ({total})"
 
 #: components/Search/AdvancedSearch.js:315
 msgid "Set type disabled for related search field fuzzy searches"
@@ -8237,11 +8247,11 @@ msgstr "कोई होस्ट शेष नहीं"
 msgid "ID of the dashboard (optional)"
 msgstr "डैशबोर्ड की ID (वैकल्पिक)"
 
-#: screens/Inventory/shared/Inventory.helptext.js:127
+#: screens/Inventory/shared/Inventory.helptext.js:128
 msgid "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
 msgstr "होस्ट वेरिएबल्स के दिए गए dict से सक्षम स्थिति प्राप्त करें। सक्षम वेरिएबल को डॉट नोटेशन का उपयोग करके निर्दिष्ट किया जा सकता है, उदा: 'foo.bar'"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:339
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:347
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:88
 msgid "Inventory Source Sync Error"
 msgstr "इन्वेंटरी स्रोत सिंक त्रुटि"
@@ -8268,14 +8278,14 @@ msgstr ""
 #: components/VerbositySelectField/VerbositySelectField.js:35
 #: components/VerbositySelectField/VerbositySelectField.js:45
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:217
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:261
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:269
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:47
 #: screens/Job/JobDetail/JobDetail.js:369
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:257
 msgid "Verbosity"
 msgstr "वर्बोसिटी"
 
-#: components/NotificationList/NotificationList.js:197
+#: components/NotificationList/NotificationList.js:208
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:138
 msgid "Mattermost"
 msgstr "Mattermost"
@@ -8502,6 +8512,10 @@ msgstr "वर्कफ़्लो अनुमोदन पर वापस"
 msgid "Enter injectors using either JSON or YAML syntax. Refer to the Ansible Controller documentation for example syntax."
 msgstr "JSON या YAML सिंटैक्स का उपयोग करके इंजेक्टर दर्ज करें। उदाहरण सिंटैक्स के लिए Ansible Controller दस्तावेज़ीकरण देखें।"
 
+#: components/NotificationList/NotificationListItem.js:112
+msgid "Toggle notification changed"
+msgstr "सूचना परिवर्तन टॉगल करें"
+
 #: components/Workflow/WorkflowLegend.js:122
 #: screens/Job/JobOutput/JobOutputSearch.js:140
 msgid "Warning"
@@ -8570,7 +8584,7 @@ msgid "Prompt for instance groups on launch."
 msgstr "लॉन्च पर इंस्टेंस समूहों के लिए संकेत दें।"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:613
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:214
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:233
 msgid "Workflow pending message body"
 msgstr "वर्कफ़्लो लंबित संदेश मुख्य भाग"
 
@@ -8612,7 +8626,7 @@ msgstr "IRC निक"
 msgid "Expires on"
 msgstr "इस पर समाप्त होता है"
 
-#: screens/Inventory/shared/Inventory.helptext.js:98
+#: screens/Inventory/shared/Inventory.helptext.js:99
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "हर बार जब इस इन्वेंटरी का उपयोग करके कोई जॉब चलती है, तो जॉब कार्य निष्पादित करने से पहले चयनित स्रोत से इन्वेंटरी रीफ़्रेश करें।"
 
@@ -8737,7 +8751,7 @@ msgstr "इस टेम्पलेट के लिए वेबहुक स�
 msgid "On date"
 msgstr "इस तिथि पर"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:340
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:348
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:90
 msgid "Cancel Inventory Source Sync"
 msgstr "इन्वेंटरी स्रोत सिंक रद्द करें"
@@ -8814,7 +8828,7 @@ msgid "Greater than comparison."
 msgstr "इससे बड़ा तुलना।"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:40
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:148
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:149
 msgid "Overwrite local variables from remote inventory source"
 msgstr "रिमोट इन्वेंटरी स्रोत से स्थानीय वेरिएबल्स अधिलेखित करें"
 
@@ -8886,7 +8900,7 @@ msgstr "एक या अधिक उपयोगकर्ता हटान�
 msgid "On Success"
 msgstr "सफलता पर"
 
-#: screens/Inventory/shared/Inventory.helptext.js:192
+#: screens/Inventory/shared/Inventory.helptext.js:193
 msgid "The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input."
 msgstr "इस स्रोत द्वारा सिंक की जाने वाली इन्वेंटरी फ़ाइल। आप ड्रॉपडाउन से चुन सकते हैं या इनपुट के भीतर एक फ़ाइल दर्ज कर सकते हैं।"
 
@@ -8951,7 +8965,7 @@ msgstr "कॉन्फ़िगर नहीं किया गया"
 msgid "Workflow Job"
 msgstr "वर्कफ़्लो जॉब"
 
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:82
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:83
 msgid "Use custom messages to change the content of\n"
 "                notifications sent when a job starts, succeeds, or fails. Use\n"
 "                curly braces to access information about the job:"
@@ -9155,7 +9169,7 @@ msgid "Go to previous page"
 msgstr "पिछले पृष्ठ पर जाएं"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:565
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:178
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:197
 msgid "Workflow approved message body"
 msgstr "वर्कफ़्लो अनुमोदित संदेश मुख्य भाग"
 
@@ -9172,7 +9186,7 @@ msgid "required"
 msgstr "आवश्यक"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:589
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:196
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:215
 msgid "Workflow denied message body"
 msgstr "वर्कफ़्लो अस्वीकृत संदेश मुख्य भाग"
 
@@ -9274,7 +9288,7 @@ msgstr "docs.ansible.com"
 msgid "Edit Schedule"
 msgstr "शेड्यूल संपादित करें"
 
-#: components/NotificationList/NotificationList.js:250
+#: components/NotificationList/NotificationList.js:263
 msgid "Failed to toggle notification."
 msgstr "सूचना टॉगल करने में विफल।"
 
@@ -9362,6 +9376,10 @@ msgstr "सहेजें"
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.js:181
 msgid "Click to create a new link to this node."
 msgstr "इस नोड से नया लिंक बनाने के लिए क्लिक करें।"
+
+#: screens/Inventory/shared/Inventory.helptext.js:78
+msgid "Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is applied via the \"plugin\" key in the source variables; when the key is absent, the default collection is used."
+msgstr "vCenter से समन्वयित करने के लिए उपयोग किए जाने वाले इन्वेंटरी प्लगइन प्रदान करने वाले Ansible कलेक्शन का चयन करें। community.vmware कलेक्शन नए vmware.vmware कलेक्शन के पक्ष में बहिष्कृत है। चयन स्रोत वेरिएबल्स में \"plugin\" कुंजी के माध्यम से लागू किया जाता है; कुंजी अनुपस्थित होने पर, डिफ़ॉल्ट कलेक्शन का उपयोग किया जाता है।"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.js:167
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.js:136
@@ -9480,7 +9498,7 @@ msgid "Deprovisioning"
 msgstr "डीप्रोविज़निंग"
 
 #: components/DetailList/LaunchedByDetail.js:27
-#: components/NotificationList/NotificationList.js:202
+#: components/NotificationList/NotificationList.js:213
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:143
 msgid "Webhook"
 msgstr "वेबहुक"
@@ -9521,7 +9539,7 @@ msgstr "क्रेडेंशियल हटाने में विफल
 msgid "Private key passphrase"
 msgstr "निजी कुंजी पासफ़्रेज़"
 
-#: components/NotificationList/NotificationListItem.js:58
+#: components/NotificationList/NotificationListItem.js:63
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerStartScreen.js:47
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerStartScreen.js:53
 msgid "Start"
@@ -9541,7 +9559,7 @@ msgstr "एक इन्वेंटरी चुनी जानी चाह�
 #: components/PromptDetail/PromptProjectDetail.js:100
 #: components/PromptDetail/PromptWFJobTemplateDetail.js:81
 #: components/Schedule/ScheduleDetail/ScheduleDetail.js:477
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:266
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:274
 #: screens/Job/JobDetail/JobDetail.js:345
 #: screens/Project/ProjectDetail/ProjectDetail.js:229
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.js:234
@@ -9595,7 +9613,7 @@ msgstr "Red Hat Insights"
 msgid "View GitHub Settings"
 msgstr "GitHub सेटिंग्स देखें"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:257
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:258
 msgid "/ (project root)"
 msgstr "/ (प्रोजेक्ट रूट)"
 
@@ -9624,7 +9642,7 @@ msgstr "प्लेबुक निष्पादित करते समय
 msgid "View all Workflow Approvals."
 msgstr "सभी वर्कफ़्लो अनुमोदन देखें।"
 
-#: screens/Inventory/shared/Inventory.helptext.js:92
+#: screens/Inventory/shared/Inventory.helptext.js:93
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "जब चेक नहीं किया जाता है, तो एक मर्ज किया जाएगा, स्थानीय वेरिएबल्स को बाहरी स्रोत पर पाए गए वेरिएबल्स के साथ संयोजित किया जाएगा।"
 
@@ -9718,7 +9736,7 @@ msgstr "टूल टॉगल करें"
 #: screens/Inventory/InventoryList/InventoryList.js:211
 #: screens/Inventory/InventoryList/InventoryList.js:241
 #: screens/Inventory/InventoryList/InventoryListItem.js:121
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:225
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:226
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:107
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:153
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:163
@@ -9769,7 +9787,7 @@ msgid "Test External Credential"
 msgstr "बाहरी क्रेडेंशियल का परीक्षण करें"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:601
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:205
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:224
 msgid "Workflow pending message"
 msgstr "वर्कफ़्लो लंबित संदेश"
 
@@ -9952,7 +9970,7 @@ msgstr "नेविगेशन"
 msgid "If enabled, control nodes will peer to this instance automatically. If disabled, instance will be connected only to associated peers."
 msgstr "यदि सक्षम है, तो नियंत्रण नोड्स स्वचालित रूप से इस इंस्टेंस से पीयर करेंगे। यदि अक्षम है, तो इंस्टेंस केवल संबद्ध पीयर से कनेक्ट होगा।"
 
-#: screens/Inventory/shared/Inventory.helptext.js:120
+#: screens/Inventory/shared/Inventory.helptext.js:121
 msgid "and click on Update Revision on Launch"
 msgstr "और लॉन्च पर रिवीज़न अपडेट करें पर क्लिक करें"
 
@@ -9970,6 +9988,10 @@ msgstr "निष्पादन वातावरण संपादित क
 #: screens/Template/Survey/SurveyReorderModal.js:263
 msgid "Order"
 msgstr "क्रम"
+
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:179
+msgid "Changed message body"
+msgstr "परिवर्तन संदेश मुख्य भाग"
 
 #: components/Schedule/Schedule.js:65
 msgid "Back to Schedules"
@@ -10089,7 +10111,7 @@ msgstr "नया कंटेनर समूह बनाएं"
 msgid "Bitbucket Data Center"
 msgstr "Bitbucket Data Center"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:367
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:375
 msgid "Failed to delete inventory source {name}."
 msgstr "इन्वेंटरी स्रोत {name} हटाने में विफल।"
 
@@ -10155,7 +10177,7 @@ msgstr "विवरण संपादित करें"
 msgid "Deleted"
 msgstr "हटाया गया"
 
-#: screens/Inventory/shared/Inventory.helptext.js:129
+#: screens/Inventory/shared/Inventory.helptext.js:130
 msgid "This field is ignored unless an Enabled Variable is set. If the enabled variable matches this value, the host will be enabled on import."
 msgstr "यह फ़ील्ड तब तक अनदेखा किया जाता है जब तक कि एक सक्षम वेरिएबल सेट न हो। यदि सक्षम वेरिएबल इस मान से मेल खाता है, तो आयात पर होस्ट सक्षम हो जाएगा।"
 
@@ -10254,11 +10276,11 @@ msgstr "मॉड्यूल"
 msgid "Confirm revert all"
 msgstr "सभी वापस लौटाने की पुष्टि करें"
 
-#: screens/Inventory/shared/Inventory.helptext.js:89
+#: screens/Inventory/shared/Inventory.helptext.js:90
 msgid "If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source."
 msgstr "यदि चेक किया गया है, तो चाइल्ड समूहों और होस्ट्स के सभी वेरिएबल्स हटा दिए जाएंगे और बाहरी स्रोत पर पाए गए वेरिएबल्स से बदल दिए जाएंगे।"
 
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:350
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:358
 msgid "Delete inventory source"
 msgstr "इन्वेंटरी स्रोत हटाएं"
 
@@ -10329,7 +10351,7 @@ msgstr "जॉब के चलने का बीता हुआ समय"
 msgid "GitLab"
 msgstr "GitLab"
 
-#: components/NotificationList/NotificationListItem.js:93
+#: components/NotificationList/NotificationListItem.js:98
 msgid "Toggle notification failure"
 msgstr "सूचना विफलता टॉगल करें"
 
@@ -10430,8 +10452,8 @@ msgstr "इस फ़ील्ड में कम से कम {0} वर्�
 
 #: components/JobList/JobListItem.js:197
 #: components/PromptDetail/PromptInventorySourceDetail.js:78
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:222
-#: screens/Inventory/shared/InventorySourceForm.js:162
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:223
+#: screens/Inventory/shared/InventorySourceForm.js:168
 #: screens/Job/JobDetail/JobDetail.js:180
 #: screens/Job/JobDetail/JobDetail.js:332
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.js:93
@@ -10515,7 +10537,7 @@ msgstr "कुंजी चयन"
 msgid "Pass extra command line changes. There are two ansible command line parameters: "
 msgstr "अतिरिक्त कमांड लाइन परिवर्तन पास करें। दो ansible कमांड लाइन पैरामीटर हैं: "
 
-#: screens/Inventory/shared/Inventory.helptext.js:84
+#: screens/Inventory/shared/Inventory.helptext.js:85
 msgid "When not checked, local child hosts and groups not found on the external source will remain untouched by the inventory update process."
 msgstr "जब चेक नहीं किया जाता है, तो बाहरी स्रोत पर न मिलने वाले स्थानीय चाइल्ड होस्ट्स और समूह इन्वेंटरी अपडेट प्रक्रिया द्वारा अछूते रहेंगे।"
 
@@ -10558,7 +10580,7 @@ msgid "Specify a notification color. Acceptable colors are hex\n"
 msgstr "एक सूचना रंग निर्दिष्ट करें। स्वीकार्य रंग हेक्स\n"
 "        रंग कोड हैं (उदाहरण: #3af या #789abc)।"
 
-#: components/NotificationList/NotificationList.js:201
+#: components/NotificationList/NotificationList.js:212
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.js:142
 msgid "Twilio"
 msgstr "Twilio"
@@ -10598,7 +10620,7 @@ msgid "updated"
 msgstr "अपडेट किया गया"
 
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.js:50
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:320
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:328
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.js:135
 #: screens/Project/ProjectList/ProjectListItem.js:274
 #: screens/TopologyView/Tooltip.js:347
@@ -10799,7 +10821,7 @@ msgid "Successful jobs"
 msgstr "सफल जॉब्स"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:535
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:151
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:152
 msgid "Error message"
 msgstr "त्रुटि संदेश"
 
@@ -10928,7 +10950,7 @@ msgstr "अज्ञात प्रोजेक्ट"
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "एकाधिक मूल होने पर इस नोड को चलाने के लिए पूर्व शर्तें। देखें"
 
-#: screens/Inventory/shared/Inventory.helptext.js:140
+#: screens/Inventory/shared/Inventory.helptext.js:141
 msgid "Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see"
 msgstr "इन्वेंटरी स्रोत को कॉन्फ़िगर करने के लिए उपयोग किए जाने वाले वेरिएबल्स। इस प्लगइन को कॉन्फ़िगर करने के तरीके के विस्तृत विवरण के लिए, देखें"
 
@@ -10938,7 +10960,7 @@ msgstr "Google Compute Engine"
 
 #: components/Sparkline/Sparkline.js:34
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.js:55
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:185
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:186
 #: screens/Inventory/InventorySources/InventorySourceListItem.js:35
 #: screens/Project/ProjectDetail/ProjectDetail.js:138
 #: screens/Project/ProjectList/ProjectListItem.js:60
@@ -10960,7 +10982,7 @@ msgstr "सभी जॉब प्रकार"
 msgid "GitHub Enterprise Organization"
 msgstr "GitHub Enterprise Organization"
 
-#: screens/Inventory/shared/InventorySourceForm.js:170
+#: screens/Inventory/shared/InventorySourceForm.js:176
 msgid "Choose a source"
 msgstr "एक स्रोत चुनें"
 
@@ -10994,7 +11016,7 @@ msgstr "सरल कुंजी चयन"
 msgid "You have automated against more hosts than your subscription allows."
 msgstr "आपने अपनी सदस्यता की अनुमति से अधिक होस्ट्स के विरुद्ध स्वचालन किया है।"
 
-#: screens/Inventory/shared/Inventory.helptext.js:130
+#: screens/Inventory/shared/Inventory.helptext.js:131
 msgid "Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied."
 msgstr "नियमित एक्सप्रेशन जहां केवल मेल खाते होस्ट नाम आयात किए जाएंगे। फ़िल्टर किसी भी इन्वेंटरी प्लगइन फ़िल्टर लागू होने के बाद पोस्ट-प्रोसेसिंग चरण के रूप में लागू किया जाता है।"
 
@@ -11120,7 +11142,7 @@ msgstr "LDAP"
 msgid "Workflow Template"
 msgstr "वर्कफ़्लो टेम्पलेट"
 
-#: components/NotificationList/NotificationListItem.js:40
+#: components/NotificationList/NotificationListItem.js:45
 #: components/Workflow/WorkflowLegend.js:118
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.js:76
 msgid "Approval"
@@ -11282,7 +11304,7 @@ msgstr "प्रोविज़निंग विफल"
 msgid "Whether the approval node is automatically approved or denied when the timeout expires."
 msgstr "टाइमआउट समाप्त होने पर अनुमोदन नोड स्वचालित रूप से अनुमोदित या अस्वीकृत होता है या नहीं।"
 
-#: screens/Inventory/shared/Inventory.helptext.js:125
+#: screens/Inventory/shared/Inventory.helptext.js:126
 msgid "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
 msgstr "किसी इन्वेंटरी सिंक को वर्तमान मानने के लिए सेकंड में समय। जॉब रन और कॉलबैक के दौरान कार्य सिस्टम नवीनतम सिंक के टाइमस्टैम्प का मूल्यांकन करेगा। यदि यह कैश टाइमआउट से पुराना है, तो इसे वर्तमान नहीं माना जाता है, और एक नया इन्वेंटरी सिंक किया जाएगा।"
 
@@ -11296,7 +11318,7 @@ msgstr "एक्सेस टोकन समाप्ति"
 
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.js:147
 msgid "Workflow Job {currentPosition}/{total}"
-msgstr ""
+msgstr "वर्कफ़्लो जॉब {currentPosition}/{total}"
 
 #: components/Schedule/ScheduleDetail/FrequencyDetails.js:69
 msgid "{interval, plural, one {# minute} other {# minutes}}"
@@ -11440,7 +11462,7 @@ msgstr "Insights सिस्टम ID"
 msgid "Authorization Code Expiration"
 msgstr "प्राधिकरण कोड समाप्ति"
 
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:69
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:70
 msgid "Customize messages…"
 msgstr "संदेश अनुकूलित करें…"
 
@@ -11666,7 +11688,7 @@ msgid "{interval, plural, one {# week} other {# weeks}}"
 msgstr "{interval, plural, one {# सप्ताह} other {# सप्ताह}}"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.js:544
-#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:160
+#: screens/NotificationTemplate/shared/CustomMessagesSubForm.js:161
 msgid "Error message body"
 msgstr "त्रुटि संदेश मुख्य भाग"
 
@@ -11709,7 +11731,7 @@ msgstr "प्रबंधित नोड्स"
 #: components/Lookup/MultiCredentialsLookup.js:201
 #: components/Lookup/OrganizationLookup.js:131
 #: components/Lookup/ProjectLookup.js:153
-#: components/NotificationList/NotificationList.js:206
+#: components/NotificationList/NotificationList.js:217
 #: components/RelatedTemplateList/RelatedTemplateList.js:179
 #: components/Schedule/ScheduleList/ScheduleList.js:201
 #: components/TemplateList/TemplateList.js:231
@@ -11825,7 +11847,7 @@ msgstr "टोकन हटाने में त्रुटि"
 msgid "Select period"
 msgstr "अवधि चुनें"
 
-#: components/NotificationList/NotificationListItem.js:65
+#: components/NotificationList/NotificationListItem.js:70
 msgid "Toggle notification start"
 msgstr "सूचना प्रारंभ टॉगल करें"
 
@@ -11873,7 +11895,7 @@ msgid "This field must be a number and have a value between {min} and {max}"
 msgstr "इस फ़ील्ड में एक संख्या होनी चाहिए और इसका मान {min} और {max} के बीच होना चाहिए"
 
 #: components/PromptDetail/PromptInventorySourceDetail.js:45
-#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:154
+#: screens/Inventory/InventorySourceDetail/InventorySourceDetail.js:155
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.js:93
 msgid "Update on launch"
 msgstr "लॉन्च पर अपडेट करें"
@@ -11890,7 +11912,7 @@ msgstr "Jinja2 शर्तों के आधार पर समूह मे
 msgid "Copy Template"
 msgstr "टेम्पलेट कॉपी करें"
 
-#: components/NotificationList/NotificationListItem.js:51
+#: components/NotificationList/NotificationListItem.js:56
 msgid "Toggle notification approvals"
 msgstr "सूचना अनुमोदन टॉगल करें"
 
@@ -11918,7 +11940,7 @@ msgstr "पिछला वर्ष"
 msgid "Week"
 msgstr "सप्ताह"
 
-#: components/NotificationList/NotificationListItem.js:72
+#: components/NotificationList/NotificationListItem.js:77
 #: components/StatusLabel/StatusLabel.js:39
 msgid "Success"
 msgstr "सफलता"

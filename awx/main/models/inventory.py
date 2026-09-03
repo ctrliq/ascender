@@ -78,7 +78,7 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
     an inventory source contains lists and hosts.
     """
 
-    FIELDS_TO_PRESERVE_AT_COPY = ['hosts', 'groups', 'instance_groups', 'prevent_instance_group_fallback']
+    FIELDS_TO_PRESERVE_AT_COPY = ['hosts', 'groups', 'instance_groups', 'prevent_instance_group_fallback', 'allow_deletes_while_in_use']
     KIND_CHOICES = [
         ('', _('Hosts have a direct link to this inventory.')),
         ('smart', _('Hosts for inventory generated using the host_filter property.')),
@@ -208,6 +208,13 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
             "associated job templates on."
             "If this setting is enabled and you provided an empty list, the global instance "
             "groups will be applied."
+        ),
+    )
+    allow_deletes_while_in_use = models.BooleanField(
+        default=False,
+        help_text=_(
+            'If enabled, hosts can be deleted from this inventory while jobs are running against it. '
+            'By default those deletions are rejected until the running jobs finish.'
         ),
     )
 
@@ -561,23 +568,6 @@ class Host(CommonModelNameNotUnique, RelatedJobsMixin):
             default='',
             help_text=_('Host variables in JSON or YAML format.'),
         )
-    )
-    last_job = models.ForeignKey(
-        'Job',
-        related_name='hosts_as_last_job+',
-        null=True,
-        default=None,
-        editable=False,
-        on_delete=models.SET_NULL,
-    )
-    last_job_host_summary = models.ForeignKey(
-        'JobHostSummary',
-        related_name='hosts_as_last_job_summary+',
-        blank=True,
-        null=True,
-        default=None,
-        editable=False,
-        on_delete=models.SET_NULL,
     )
     inventory_sources = models.ManyToManyField(
         'InventorySource',
@@ -1179,7 +1169,7 @@ class InventorySource(UnifiedJobTemplate, InventorySourceOptions, RelatedJobsMix
 
         # If update_fields has been specified, add our field names to it,
         # if it hasn't been specified, then we're just doing a normal save.
-        update_fields = kwargs.get('update_fields', [])
+        update_fields = kwargs.get('update_fields') or []
         is_new_instance = not bool(self.pk)
 
         # Set name automatically. Include PK (or placeholder) to make sure the names are always unique.
@@ -1471,6 +1461,8 @@ class PluginFileInjector(object):
     collection = None
     collection_migration = '2.9'  # Starting with this version, we use collections
     use_fqcn = False  # plugin: name versus plugin: namespace.collection.name
+    # other plugin FQCNs the user may select via `plugin:` in source_vars in place of the default
+    alternate_plugins = frozenset()
 
     # TODO: delete this method and update unit tests
     @classmethod
@@ -1486,6 +1478,27 @@ class PluginFileInjector(object):
         """
         return '{0}.yml'.format(self.plugin_name)
 
+    def get_alternate_plugin(self, source_vars):
+        """The user-selected alternate plugin from the `plugin:` key of
+        source_vars, or None to use the default. Values of any other type or
+        FQCN are ignored (and overridden), same as before alternates existed.
+        """
+        plugin = source_vars.get('plugin')
+        if isinstance(plugin, str) and plugin in self.alternate_plugins:
+            return plugin
+        return None
+
+    def get_filename(self, inventory_update):
+        """Inventory filename for the plugin that will actually parse it.
+        The auto plugin loads whatever the file's `plugin:` key names, and that
+        plugin's verify_file() generally demands this exact file naming, so a
+        user-selected alternate plugin must also change the filename.
+        """
+        plugin = self.get_alternate_plugin(inventory_update.source_vars_dict)
+        if plugin is not None:
+            return '{0}.yml'.format(plugin.rsplit('.', 1)[-1])
+        return self.filename
+
     def inventory_contents(self, inventory_update, private_data_dir):
         """Returns a string that is the content for the inventory file for the inventory plugin"""
         return yaml.safe_dump(self.inventory_as_dict(inventory_update, private_data_dir), default_flow_style=False, width=1000)
@@ -1497,7 +1510,9 @@ class PluginFileInjector(object):
         Note that a plugin value of '' should still be overridden.
         '''
         if self.plugin_name is not None:
-            if hasattr(self, 'downstream_namespace') and server_product_name() != 'AWX':
+            if self.get_alternate_plugin(source_vars) is not None:
+                pass  # user selected an alternate supported plugin, keep it
+            elif hasattr(self, 'downstream_namespace') and server_product_name() != 'AWX':
                 source_vars['plugin'] = f'{self.downstream_namespace}.{self.downstream_collection}.{self.plugin_name}'
             elif self.use_fqcn:
                 source_vars['plugin'] = f'{self.namespace}.{self.collection}.{self.plugin_name}'
@@ -1599,6 +1614,9 @@ class vmware(PluginFileInjector):
     base_injector = 'managed'
     namespace = 'community'
     collection = 'vmware'
+    use_fqcn = True
+    # community.vmware is deprecated; users may opt into its replacement
+    alternate_plugins = frozenset({'vmware.vmware.vms'})
 
 
 class openstack(PluginFileInjector):
@@ -1679,10 +1697,10 @@ class terraform(PluginFileInjector):
 class ascender(PluginFileInjector):
     plugin_name = 'controller'  # TODO: relying on routing for now, update after EEs pick up revised collection
     base_injector = 'template'
-    namespace = 'awx'
-    collection = 'awx'
-    downstream_namespace = 'ansible'
-    downstream_collection = 'controller'
+    namespace = 'ctrliq'
+    collection = 'ascender'
+    # downstream_namespace = 'ansible'
+    # downstream_collection = 'controller'
     use_fqcn = True
 
 

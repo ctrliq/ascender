@@ -1632,9 +1632,10 @@ class RunInventoryUpdate(SourceControlMixin, BaseTask):
 
         if injector is not None:
             content = injector.inventory_contents(inventory_update, private_data_dir)
-            # must be a statically named file
-            self.write_private_data_file(private_data_dir, injector.filename, content, sub_dir='inventory', file_permissions=0o700)
-            rel_path = os.path.join('inventory', injector.filename)
+            # the file must bear the exact name the selected plugin's verify_file() demands
+            inventory_filename = injector.get_filename(inventory_update)
+            self.write_private_data_file(private_data_dir, inventory_filename, content, sub_dir='inventory', file_permissions=0o700)
+            rel_path = os.path.join('inventory', inventory_filename)
         elif src == 'scm':
             rel_path = os.path.join('project', inventory_update.source_path)
 

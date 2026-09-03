@@ -405,7 +405,7 @@ class JobTemplate(UnifiedJobTemplate, JobOptions, SurveyJobTemplateMixin, Resour
             return actual_slice_count
 
     def save(self, *args, **kwargs):
-        update_fields = kwargs.get('update_fields', [])
+        update_fields = kwargs.get('update_fields') or []
         # if project is deleted for some reason, then keep the old organization
         # to retain ownership for organization admins
         if self.project and self.project.organization_id != self.organization_id:
@@ -1237,22 +1237,6 @@ class JobHostSummary(CreatedModifiedModel):
             self.skipped,
         )
 
-    @classmethod
-    def latest_for_host(cls, host_id):
-        """Return the most recent JobHostSummary for a given host, or None."""
-        return cls.objects.filter(host_id=host_id).order_by('-id').first()
-
-    @classmethod
-    def latest_job_for_host(cls, host_id):
-        """Return the Job from the most recent JobHostSummary for a host, or None."""
-        summary = cls.latest_for_host(host_id)
-        if summary:
-            try:
-                return summary.job
-            except cls.job.field.related_model.DoesNotExist:
-                return None
-        return None
-
     def get_absolute_url(self, request=None):
         return reverse('api:job_host_summary_detail', kwargs={'pk': self.pk}, request=request)
 
@@ -1261,7 +1245,7 @@ class JobHostSummary(CreatedModifiedModel):
         # if it hasn't been specified, then we're just doing a normal save.
         if self.host is not None:
             self.host_name = self.host.name
-        update_fields = kwargs.get('update_fields', [])
+        update_fields = kwargs.get('update_fields') or []
         self.failed = bool(self.dark or self.failures)
         update_fields.append('failed')
         super(JobHostSummary, self).save(*args, **kwargs)

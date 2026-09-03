@@ -69,8 +69,11 @@ class BaseM:
         value = conn.hget(root_key, self.field)
         return self.decode_value(value)
 
-    def to_prometheus(self, instance_data, namespace=None):
-        output_text = f"# HELP {self.field} {self.help_text}\n# TYPE {self.field} gauge\n"
+    def prometheus_header(self):
+        return f"# HELP {self.field} {self.help_text}\n# TYPE {self.field} gauge\n"
+
+    def to_prometheus(self, instance_data, namespace=None, include_header=True):
+        output_text = self.prometheus_header() if include_header else ''
         for instance in instance_data:
             if self.field in instance_data[instance]:
                 # Build label string
@@ -171,8 +174,11 @@ class HistogramM(BaseM):
         self.sum.store_value(conn)
         self.inf.store_value(conn)
 
-    def to_prometheus(self, instance_data, namespace=None):
-        output_text = f"# HELP {self.field} {self.help_text}\n# TYPE {self.field} histogram\n"
+    def prometheus_header(self):
+        return f"# HELP {self.field} {self.help_text}\n# TYPE {self.field} histogram\n"
+
+    def to_prometheus(self, instance_data, namespace=None, include_header=True):
+        output_text = self.prometheus_header() if include_header else ''
         for instance in instance_data:
             # Build label string
             node_label = f'node="{instance}"'
@@ -193,6 +199,10 @@ class Metrics(MetricsNamespace):
         IntM('subsystem_metrics_pipe_execute_calls', 'Number of calls to pipe_execute'),
         FloatM('subsystem_metrics_send_metrics_seconds', 'Time spent sending metrics to other nodes'),
     ]
+    # _METRICSLIST fields exist in every namespace; their samples carry a
+    # subsystem label and must be grouped across namespaces so each metric is
+    # only declared once in the combined prometheus output (see metrics())
+    OPERATIONAL_FIELDS = frozenset(m.field for m in _METRICSLIST)
 
     def __init__(self, namespace, auto_pipe_execute=False, instance_name=None, metrics_have_changed=True, **kwargs):
         MetricsNamespace.__init__(self, namespace)
@@ -348,7 +358,7 @@ class Metrics(MetricsNamespace):
                     instance_data[instance] = json.loads(instance_data_from_valkey.decode('UTF-8'))
         return instance_data
 
-    def generate_metrics(self, request):
+    def generate_metrics(self, request, shared_samples=None):
         # takes the api request, filters, and generates prometheus data
         # if additional filtering is added, update metrics_view.md
         instance_data = self.load_other_metrics(request)
@@ -357,13 +367,16 @@ class Metrics(MetricsNamespace):
         if instance_data:
             for field in self.METRICS:
                 if len(metrics_filter) == 0 or field in metrics_filter:
-                    # Add subsystem label only for operational metrics
-                    namespace = (
-                        self._namespace
-                        if field in ['subsystem_metrics_pipe_execute_seconds', 'subsystem_metrics_pipe_execute_calls', 'subsystem_metrics_send_metrics_seconds']
-                        else None
-                    )
-                    output_text += self.METRICS[field].to_prometheus(instance_data, namespace)
+                    metric = self.METRICS[field]
+                    if field in self.OPERATIONAL_FIELDS:
+                        # Add subsystem label only for operational metrics
+                        samples = metric.to_prometheus(instance_data, namespace=self._namespace, include_header=False)
+                        if shared_samples is None:
+                            output_text += metric.prometheus_header() + samples
+                        else:
+                            shared_samples.setdefault(field, [metric.prometheus_header()]).append(samples)
+                    else:
+                        output_text += metric.to_prometheus(instance_data)
         return output_text
 
 
@@ -425,8 +438,14 @@ class CallbackReceiverMetrics(Metrics):
 
 def metrics(request):
     output_text = ''
+    # the operational metrics exist in every namespace; collect their samples
+    # here so each is emitted as a single group with one HELP/TYPE header, as
+    # the prometheus exposition format requires
+    shared_samples = {}
     for m in [DispatcherMetrics(), CallbackReceiverMetrics()]:
-        output_text += m.generate_metrics(request)
+        output_text += m.generate_metrics(request, shared_samples=shared_samples)
+    for parts in shared_samples.values():
+        output_text += ''.join(parts)
     return output_text
 
 

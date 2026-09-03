@@ -75,6 +75,7 @@ function useInventoryHelpTextStrings() {
       );
     },
     subFormVerbosityFields: t`Control the level of output Ansible will produce for inventory source update jobs.`,
+    vmwarePlugin: t`Select the Ansible collection providing the inventory plugin used to sync from vCenter. The community.vmware collection is deprecated in favor of the newer vmware.vmware collection. The selection is applied via the "plugin" key in the source variables; when the key is absent, the default collection is used.`,
     subFormOptions: {
       overwrite: (
         <>
@@ -191,10 +192,16 @@ function useInventoryHelpTextStrings() {
     },
     sourcePath: t`The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input.`,
     preventInstanceGroupFallback: t`If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied.`,
+    allowDeletesWhileInUse: t`If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish.`,
     enabledOptions: (
-      <p>
-        {t`Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on.`}
-      </p>
+      <>
+        <p>
+          {t`Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on.`}
+        </p>
+        <p>
+          {t`Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it.`}
+        </p>
+      </>
     ),
   };
 }

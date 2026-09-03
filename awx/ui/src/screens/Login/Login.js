@@ -29,6 +29,7 @@ import {
 } from '@patternfly/react-icons';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { AuthAPI, RootAPI, MeAPI } from 'api';
+import { getCookie } from 'api/Base';
 import { useSession } from 'contexts/Session';
 import { applyTheme, getSavedThemeId, clearSessionTheme } from 'themeRegistry';
 import LoadingSpinner from 'components/LoadingSpinner';
@@ -170,6 +171,22 @@ function AWXLogin({ alt, isAuthenticated }) {
 
   const setSessionRedirect = () => {
     window.sessionStorage.setItem(SESSION_REDIRECT_URL, authRedirectTo);
+  };
+
+  // social-auth-app-django 6.x only accepts POST on the login-initiation
+  // view, so navigate there with a CSRF-carrying form rather than a link.
+  const startSocialLogin = (loginUrl) => {
+    setSessionRedirect();
+    const form = document.createElement('form');
+    form.method = 'post';
+    form.action = loginUrl;
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = 'csrfmiddlewaretoken';
+    input.value = getCookie('csrftoken') ?? '';
+    form.appendChild(input);
+    document.body.appendChild(form);
+    form.submit();
   };
 
   const socialAuthProviders = {
@@ -318,11 +335,11 @@ function AWXLogin({ alt, isAuthenticated }) {
                 key={authKey}
                 data-cy={dataCy}
                 variant="secondary"
-                component="a"
-                href={socialAuthOptions[authKey].login_url}
                 isBlock
                 icon={<Icon />}
-                onClick={setSessionRedirect}
+                onClick={() =>
+                  startSocialLogin(socialAuthOptions[authKey].login_url)
+                }
               >
                 {label}
               </Button>

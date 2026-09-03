@@ -37,38 +37,31 @@ Secret handling for operational use
 
 Ascender contains the following secrets used operationally:
 
--  ``/etc/awx/SECRET_KEY``
+-  ``<deployment>-secret-key``
 
    -  A secret key used for encrypting automation secrets in the
-      database (see below). If the ``SECRET_KEY`` changes or is unknown,
+      database (see below). If the secret key changes or is unknown,
       no encrypted fields in the database will be accessible.
 
--  ``/etc/awx/awx.{cert,key}``
+-  The ingress TLS secret
 
-   -  SSL certificate and key for the Ascender web service. A
-      self-signed cert/key is installed by default; the customer can
-      provide a locally appropriate certificate and key.
+   -  SSL certificate and key for the Ascender web service, supplied
+      when the deployment is created.
 
--  Database password in ``/etc/awx/conf.d/postgres.py`` and message bus
-   password in ``/etc/awx/conf.d/channels.py``
+-  ``<deployment>-postgres-configuration``
 
-   -  Passwords for connecting to Ascender component services
+   -  Host, database name, and password for connecting to PostgreSQL
 
-These secrets are all stored unencrypted on the Ascender server, as they are all needed to be read by the Ascender service at startup
-in an automated fashion. All secrets are protected by Unix permissions, and restricted to root and the Ascender service user awx.
+These are Kubernetes secrets in the namespace Ascender is deployed to, readable by the Ascender service account so the service can read them at startup. Restrict who can read secrets in that namespace to control access to them.
 
-If hiding of these secrets is required, the files that these secrets are read from are interpreted Python. These files can be adjusted to retrieve these secrets via some other mechanism anytime a service restarts.
+List them with ``kubectl get secrets -n <namespace>``.
 
 .. note::
 
     If the secrets system is down, Ascender will be unable to get the information and may fail in a way that would be recoverable once the service is restored. Using some redundancy on that system is highly recommended.
 
 
-If, for any reason you believe the ``SECRET_KEY`` Ascender generated for you has been compromised and needs to be regenerated, you can run a tool from the installer that behaves much like Ascender backup and restore tool.
-
-To generate a new secret key, run ``setup.sh -k`` using the inventory from your install.
-
-A backup copy of the prior key is saved in ``/etc/awx/``.
+If you believe the secret key has been compromised, replacing it is not a routine operation. Everything already encrypted with it, meaning every stored credential, becomes unreadable the moment it changes. Plan to re-enter those credentials, and keep a copy of the old secret alongside a database backup taken before the change. See :ref:`ag_backup_restore`.
 
 
 Secret handling for automation use

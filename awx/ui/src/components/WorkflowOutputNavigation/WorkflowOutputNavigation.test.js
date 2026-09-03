@@ -51,7 +51,29 @@ const relatedJobs = [
   },
 ];
 
-function renderAt(jobId) {
+// sliced jobs (and federated inventories) build their workflow nodes directly
+// rather than from a template node: identifier comes back blank, and every
+// slice's job wears the template's name
+const slicedJobs = [
+  {
+    id: 30,
+    job: 301,
+    identifier: '',
+    summary_fields: {
+      job: { id: 301, name: 'Sliced JT', type: 'job', status: 'successful' },
+    },
+  },
+  {
+    id: 31,
+    job: 302,
+    identifier: '',
+    summary_fields: {
+      job: { id: 302, name: 'Sliced JT', type: 'job', status: 'failed' },
+    },
+  },
+];
+
+function renderAt(jobId, jobs = relatedJobs) {
   const history = createMemoryHistory({
     initialEntries: [`/jobs/playbook/${jobId}/output`],
   });
@@ -61,7 +83,7 @@ function renderAt(jobId) {
       <Route
         path="/jobs/:typeSegment/:id/output"
         element={
-          <WorkflowOutputNavigation relatedJobs={relatedJobs} parentRef={ref} />
+          <WorkflowOutputNavigation relatedJobs={jobs} parentRef={ref} />
         }
       />
     </Routes>,
@@ -242,5 +264,39 @@ describe('<WorkflowOutputNavigation />', () => {
     await user.click(screen.getByText('mystery-node'));
     // no route for that type, so it stays put rather than going to /jobs/undefined/199
     expect(history.location.pathname).toBe('/jobs/playbook/101/output');
+  });
+
+  test('labels nodes with a blank identifier by their position', async () => {
+    const { user } = renderAt(301, slicedJobs);
+    await user.click(screen.getByRole('button'));
+    // the entry for the job on screen reads the same as the toggle, so it
+    // appears twice; the other slice appears once, in the menu
+    await waitFor(() =>
+      expect(screen.getAllByText('Workflow Job 1/2')).toHaveLength(2)
+    );
+    expect(screen.getByText('Workflow Job 2/2')).toBeInTheDocument();
+  });
+
+  test('navigates to a slice picked by its position', async () => {
+    const { user, history } = renderAt(301, slicedJobs);
+    await user.click(screen.getByRole('button'));
+    await waitFor(() => screen.getByText('Workflow Job 2/2'));
+    await user.click(screen.getByText('Workflow Job 2/2'));
+    await waitFor(() =>
+      expect(history.location.pathname).toBe('/jobs/playbook/302/output')
+    );
+  });
+
+  test('keeps positional labels stable under a status filter', async () => {
+    const { user } = renderAt(301, slicedJobs);
+    await user.click(screen.getByRole('button'));
+    await user.click(screen.getByRole('option', { name: /Failed/ }));
+    // only the failed slice survives, still wearing its original position
+    await waitFor(() =>
+      expect(screen.getByText('Workflow Job 2/2')).toBeInTheDocument()
+    );
+    expect(
+      screen.queryByRole('option', { name: 'Workflow Job 1/2' })
+    ).not.toBeInTheDocument();
   });
 });

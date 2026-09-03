@@ -171,7 +171,7 @@ SUMMARIZABLE_FK_FIELDS = {
     'project_update': DEFAULT_SUMMARY_FIELDS + ('status', 'failed'),
     'credential': DEFAULT_SUMMARY_FIELDS + ('kind', 'cloud', 'kubernetes', 'credential_type_id'),
     'signature_validation_credential': DEFAULT_SUMMARY_FIELDS + ('kind', 'credential_type_id'),
-    'job': DEFAULT_SUMMARY_FIELDS + ('status', 'failed', 'elapsed', 'type', 'canceled_on'),
+    'job': DEFAULT_SUMMARY_FIELDS + ('status', 'failed', 'started', 'elapsed', 'type', 'canceled_on'),
     'job_template': DEFAULT_SUMMARY_FIELDS,
     'workflow_job_template': DEFAULT_SUMMARY_FIELDS,
     'workflow_job': DEFAULT_SUMMARY_FIELDS,
@@ -179,8 +179,8 @@ SUMMARIZABLE_FK_FIELDS = {
     'workflow_approval': DEFAULT_SUMMARY_FIELDS + ('timeout', 'status'),
     'schedule': DEFAULT_SUMMARY_FIELDS + ('next_run',),
     'unified_job_template': DEFAULT_SUMMARY_FIELDS + ('unified_job_type',),
-    # last_job and last_job_host_summary are derived from JobHostSummary in HostSerializer,
-    # not from the stale FK fields on Host.
+    'last_job': DEFAULT_SUMMARY_FIELDS + ('finished', 'status', 'failed', 'license_error', 'canceled_on'),
+    'last_job_host_summary': DEFAULT_SUMMARY_FIELDS + ('failed',),
     'last_update': DEFAULT_SUMMARY_FIELDS + ('status', 'failed', 'license_error'),
     'current_update': DEFAULT_SUMMARY_FIELDS + ('status', 'failed', 'license_error'),
     'current_job': DEFAULT_SUMMARY_FIELDS + ('status', 'failed', 'license_error'),
@@ -984,7 +984,7 @@ SUPPORTED_UI_LOCALES = frozenset(['', 'ar', 'en', 'es', 'fr', 'hi', 'ja', 'ko', 
 
 
 class UserSerializer(BaseSerializer):
-    password = serializers.CharField(required=False, default='', help_text=_('Field used to change the password.'))
+    password = serializers.CharField(required=False, default='', allow_blank=True, help_text=_('Field used to change the password.'))
     ldap_dn = serializers.CharField(source='profile.ldap_dn', read_only=True)
     preferred_language = serializers.CharField(required=False, allow_blank=True, default='')
     external_account = serializers.SerializerMethodField(help_text=_('Set if the account is managed by an external service'))
@@ -1766,6 +1766,7 @@ class InventorySerializer(LabelsListMixin, BaseSerializerWithVariables):
             'inventory_sources_with_failures',
             'pending_deletion',
             'prevent_instance_group_fallback',
+            'allow_deletes_while_in_use',
         )
         extra_kwargs = {
             # required/default must be explicit since DRF 3.16: nullable FKs now
@@ -2008,6 +2009,8 @@ class HostSerializer(BaseSerializerWithVariables):
 
     has_active_failures = serializers.SerializerMethodField()
     has_inventory_sources = serializers.SerializerMethodField()
+    last_job = serializers.SerializerMethodField()
+    last_job_host_summary = serializers.SerializerMethodField()
 
     class Meta:
         model = Host
@@ -2024,7 +2027,7 @@ class HostSerializer(BaseSerializerWithVariables):
             'last_job_host_summary',
             'ansible_facts_modified',
         )
-        read_only_fields = ('last_job', 'last_job_host_summary', 'ansible_facts_modified')
+        read_only_fields = ('ansible_facts_modified',)
 
     def build_relational_field(self, field_name, relation_info):
         field_class, field_kwargs = super(HostSerializer, self).build_relational_field(field_name, relation_info)
@@ -2166,12 +2169,15 @@ class HostSerializer(BaseSerializerWithVariables):
             return ret
         if 'inventory' in ret and not obj.inventory:
             ret['inventory'] = None
-        last_summary = obj.latest_summary
-        if 'last_job' in ret:
-            ret['last_job'] = last_summary.job_id if last_summary else None
-        if 'last_job_host_summary' in ret:
-            ret['last_job_host_summary'] = last_summary.pk if last_summary else None
         return ret
+
+    def get_last_job(self, obj):
+        last_summary = obj.latest_summary
+        return last_summary.job_id if last_summary else None
+
+    def get_last_job_host_summary(self, obj):
+        last_summary = obj.latest_summary
+        return last_summary.pk if last_summary else None
 
     def get_has_active_failures(self, obj):
         last_summary = obj.latest_summary
@@ -4325,9 +4331,27 @@ class LaunchConfigurationBaseSerializer(BaseSerializer):
                             attrs['extra_data'][key] = db_extra_data[key]
 
         # Build unsaved version of this config, use it to detect prompts errors
+        # Capture the keys before _build_mock_obj pops the pseudo fields from attrs
+        incoming_attr_keys = set(attrs.keys())
         mock_obj = self._build_mock_obj(attrs)
-        if set(list(ujt.get_ask_mapping().keys()) + ['extra_data']) & set(attrs.keys()):
-            accepted, rejected, errors = ujt._accept_or_ignore_job_kwargs(_exclude_errors=self.exclude_errors, **mock_obj.prompts_dict())
+        requested_prompt_fields = incoming_attr_keys & set(ujt.get_ask_mapping().keys())
+        if 'extra_data' in incoming_attr_keys:
+            requested_prompt_fields.add('extra_vars')
+            requested_prompt_fields.add('survey_passwords')
+
+        # prompts_dict() reads the persisted many to many state, labels, credentials and
+        # instance groups, off the instance pk. Re-validate the whole prompt state only when
+        # the caller is switching the underlying template, otherwise restrict validation to
+        # the fields the request actually provided.
+        if 'unified_job_template' in attrs:
+            prompts_to_validate = mock_obj.prompts_dict()
+        elif requested_prompt_fields:
+            prompts_to_validate = {k: v for k, v in mock_obj.prompts_dict().items() if k in requested_prompt_fields}
+        else:
+            prompts_to_validate = None
+
+        if prompts_to_validate is not None:
+            accepted, rejected, errors = ujt._accept_or_ignore_job_kwargs(_exclude_errors=self.exclude_errors, **prompts_to_validate)
         else:
             # Only perform validation of prompts if prompts fields are provided
             errors = {}

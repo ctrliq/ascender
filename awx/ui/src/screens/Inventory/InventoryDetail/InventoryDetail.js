@@ -57,18 +57,25 @@ function InventoryDetail({ inventory }) {
   const { organization, user_capabilities: userCapabilities } =
     inventory.summary_fields;
 
-  const { prevent_instance_group_fallback } = inventory;
+  const { prevent_instance_group_fallback, allow_deletes_while_in_use } =
+    inventory;
 
   const deleteDetailsRequests =
     relatedResourceDeleteRequests.inventory(inventory);
 
-  const renderOptionsField = prevent_instance_group_fallback;
+  const renderOptionsField =
+    prevent_instance_group_fallback || allow_deletes_while_in_use;
 
   const renderOptions = (
     <Content component={ContentVariants.ul}>
       {prevent_instance_group_fallback && (
         <Content component={ContentVariants.li}>
           {t`Prevent Instance Group Fallback`}
+        </Content>
+      )}
+      {allow_deletes_while_in_use && (
+        <Content component={ContentVariants.li}>
+          {t`Allow Deletes While In Use`}
         </Content>
       )}
     </Content>

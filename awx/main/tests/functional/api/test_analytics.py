@@ -1,3 +1,6 @@
+import os
+from unittest import mock
+
 import pytest
 import requests
 from awx.api.views.analytics import AnalyticsGenericView, MissingSettings, AUTOMATION_ANALYTICS_API_URL_PATH
@@ -84,3 +87,29 @@ class TestAnalyticsGenericView:
                     AnalyticsGenericView._get_setting(setting_name, False, None)
             else:
                 assert AnalyticsGenericView._get_setting(setting_name, False, None) == setting_value
+
+    @pytest.mark.django_db
+    def test__send_to_analytics_applies_task_env(self):
+        """The proxy settings live in AWX_TASK_ENV, and requests reads them from the
+        process environment, so they have to be applied around the outbound call."""
+        seen = {}
+
+        def fake_request(*args, **kwargs):
+            seen['https_proxy'] = os.environ.get('https_proxy')
+            return mock.Mock(status_code=200, text='', json=mock.Mock(return_value={}))
+
+        view = AnalyticsGenericView()
+        request = mock.Mock(path='/api/v2/analytics/report/test/', query_params={}, data={})
+
+        with override_settings(
+            INSIGHTS_TRACKING_STATE=True,
+            REDHAT_USERNAME='user',
+            REDHAT_PASSWORD='pass',
+            AUTOMATION_ANALYTICS_URL='https://example.invalid',
+            AWX_TASK_ENV={'https_proxy': 'http://proxy.example.invalid:3128'},
+        ):
+            with mock.patch.object(requests, 'request', side_effect=fake_request):
+                view._send_to_analytics(request, 'GET')
+
+        assert seen['https_proxy'] == 'http://proxy.example.invalid:3128'
+        assert 'https_proxy' not in os.environ

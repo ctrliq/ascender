@@ -1313,7 +1313,7 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
             self.save(update_fields=['context_message'])
 
     def save(self, *args, **kwargs):
-        update_fields = list(kwargs.get('update_fields', []))
+        update_fields = list(kwargs.get('update_fields') or [])
         if self.timeout != 0 and ((not self.pk) or (not update_fields) or ('timeout' in update_fields)):
             if not self.created:  # on creation, created will be set by parent class, so we fudge it here
                 created = now()

@@ -36,6 +36,11 @@ import {
   VMwareSubForm,
   VirtualizationSubForm,
 } from './InventorySourceSubForms';
+import {
+  VMWARE_DEFAULT_PLUGIN,
+  getVmwarePlugin,
+  mergeVmwarePlugin,
+} from './utils';
 
 const buildSourceChoiceOptions = (options) => {
   const sourceChoices = options.actions.GET.source.choices.map(
@@ -61,6 +66,7 @@ const getSourceDefaults = (sourceType) => {
     enabled_var: '',
     enabled_value: '',
     host_filter: '',
+    vmware_plugin: VMWARE_DEFAULT_PLUGIN,
   };
 
   const sourceSpecificDefaults = {
@@ -307,6 +313,10 @@ const InventorySourceForm = ({
     host_filter: source?.host_filter || '',
     execution_environment:
       source?.summary_fields?.execution_environment || null,
+    vmware_plugin:
+      source?.source === 'vmware'
+        ? getVmwarePlugin(source?.source_vars)
+        : VMWARE_DEFAULT_PLUGIN,
   };
 
   const {
@@ -338,7 +348,14 @@ const InventorySourceForm = ({
     <Formik
       initialValues={initialValues}
       onSubmit={(values) => {
-        onSubmit(values);
+        const { vmware_plugin, ...submitValues } = values;
+        if (submitValues.source === 'vmware') {
+          submitValues.source_vars = mergeVmwarePlugin(
+            submitValues.source_vars,
+            vmware_plugin
+          );
+        }
+        onSubmit(submitValues);
       }}
     >
       {(formik) => (

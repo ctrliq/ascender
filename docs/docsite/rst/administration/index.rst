@@ -31,6 +31,7 @@ Likewise content in this guide can be removed or replaced if it applies to funct
   metrics
   performance
   secret_handling
+  backup_restore
   security_best_practices
   awx-manage
   configure_ascender

@@ -6,11 +6,13 @@ from django.forms.models import model_to_dict
 from rest_framework.exceptions import ParseError
 
 from awx.main.access import BaseAccess, check_superuser, JobTemplateAccess, WorkflowJobTemplateAccess, SystemJobTemplateAccess, vars_are_encrypted
+from awx.main.fields import AskForField
 
 from awx.main.models import (
     Credential,
     CredentialType,
     Inventory,
+    JobTemplate,
     Project,
     Role,
     Organization,
@@ -158,6 +160,28 @@ def test_jt_existing_values_are_nonsensitive(job_template_with_ids, user_unit):
     access = JobTemplateAccess(user_unit)
 
     assert access.changes_are_non_sensitive(job_template_with_ids, data)
+
+
+@pytest.mark.parametrize('field_name', [f.name for f in JobTemplate._meta.get_fields() if isinstance(f, AskForField)])
+def test_jt_ask_fields_are_nonsensitive(job_template_with_ids, user_unit, field_name):
+    """Toggling any ask_*_on_launch field is a non-sensitive change, so a job template
+    admin without use_role on the project or inventory can still flip it."""
+    access = JobTemplateAccess(user_unit)
+    assert access.changes_are_non_sensitive(job_template_with_ids, {field_name: True})
+
+
+@pytest.mark.parametrize(
+    'field_name, new_value, expected',
+    [
+        ('inventory', 11, True),  # matches the current inventory_id
+        ('inventory', 12, False),  # a different id
+        ('execution_environment', '', True),  # '' equated to None
+        ('execution_environment', 5, False),  # neither None nor equal
+    ],
+)
+def test_fk_value_unchanged(job_template_with_ids, user_unit, field_name, new_value, expected):
+    access = JobTemplateAccess(user_unit)
+    assert access._fk_value_unchanged(job_template_with_ids, field_name, new_value) is expected
 
 
 def test_change_jt_sensitive_data(job_template_with_ids, mocker, user_unit):
