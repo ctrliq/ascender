@@ -2170,6 +2170,109 @@ def test_sync_and_copy_canceled_during_lock_upgrade(get_sync_needs, sync_without
     sync_without_lock.assert_not_called()
 
 
+def _make_sync_and_copy_task(lock_fd=7):
+    """RunJob wired up for sync_and_copy tests, with acquire_lock faked to set lock_fd."""
+    task = jobs.RunJob()
+    task.instance = mock.Mock()
+    task.instance.id = 1
+    task.update_model = mock.Mock(return_value=task.instance)
+
+    def fake_acquire(project, unified_job_id=None, exclusive=True):
+        task.lock_fd = lock_fd
+        return True
+
+    return task, fake_acquire
+
+
+@mock.patch('fcntl.lockf')
+@mock.patch('awx.main.tasks.jobs.BaseTask.release_lock')
+@mock.patch('awx.main.tasks.jobs.SourceControlMixin.sync_and_copy_without_lock')
+@mock.patch('awx.main.tasks.jobs.SourceControlMixin.get_sync_needs', side_effect=[['update_git'], []])
+def test_sync_and_copy_downgrades_lock_when_sync_done_elsewhere(get_sync_needs, sync_without_lock, release_lock, fcntl_lockf, mock_me):
+    """If the re-check under LOCK_EX finds the sync already done by another process,
+    the lock is downgraded in place to LOCK_SH so concurrent copies are not serialized."""
+    project = mock.Mock()
+    project.pk = 1
+    project.get_reason_if_failed.return_value = None
+    project.scm_type = 'git'
+    project.scm_branch = 'main'
+
+    task, fake_acquire = _make_sync_and_copy_task(lock_fd=7)
+    with mock.patch('awx.main.tasks.jobs.BaseTask.acquire_lock', side_effect=fake_acquire):
+        task.sync_and_copy(project, '/fake/private_data_dir')
+
+    fcntl_lockf.assert_called_once_with(7, fcntl.LOCK_SH)
+    sync_without_lock.assert_called_once()
+
+
+@mock.patch('fcntl.lockf')
+@mock.patch('awx.main.tasks.jobs.BaseTask.release_lock')
+@mock.patch('awx.main.tasks.jobs.SourceControlMixin.sync_and_copy_without_lock')
+@mock.patch('awx.main.tasks.jobs.SourceControlMixin.get_sync_needs', side_effect=[['update_git'], ['update_git']])
+def test_sync_and_copy_no_downgrade_when_sync_still_needed(get_sync_needs, sync_without_lock, release_lock, fcntl_lockf, mock_me):
+    """If the re-check under LOCK_EX still reports a needed sync, the exclusive lock is kept."""
+    project = mock.Mock()
+    project.pk = 1
+    project.get_reason_if_failed.return_value = None
+    project.scm_type = 'git'
+    project.scm_branch = 'main'
+
+    task, fake_acquire = _make_sync_and_copy_task(lock_fd=7)
+    with mock.patch('awx.main.tasks.jobs.BaseTask.acquire_lock', side_effect=fake_acquire):
+        task.sync_and_copy(project, '/fake/private_data_dir')
+
+    fcntl_lockf.assert_not_called()
+    sync_without_lock.assert_called_once()
+
+
+@mock.patch('os.close')
+@mock.patch('fcntl.lockf')
+def test_release_lock_clears_fd_on_error(fcntl_lockf, os_close, mock_me):
+    """A failed unlock closes the fd and clears lock_fd, so a later release_lock
+    (e.g. from a finally clause) is a no-op instead of acting on a stale descriptor."""
+    err = IOError()
+    err.errno = 5
+    err.strerror = 'dummy message'
+    fcntl_lockf.side_effect = err
+
+    task = jobs.RunProjectUpdate()
+    task.lock_fd = 3
+    project = mock.Mock()
+    project.get_lock_file.return_value = '/tmp/test.lock'
+
+    with pytest.raises(IOError):
+        task.release_lock(project)
+    os_close.assert_called_once_with(3)
+    assert task.lock_fd is None
+
+    # second call must be a no-op, not EBADF on the closed fd
+    fcntl_lockf.reset_mock()
+    task.release_lock(project)
+    fcntl_lockf.assert_not_called()
+
+
+@mock.patch('os.open')
+@mock.patch('os.close')
+@mock.patch('fcntl.lockf')
+def test_acquire_lock_clears_fd_on_error(fcntl_lockf, os_close, os_open, mock_me):
+    """A non-retryable lockf failure closes the fd and clears lock_fd, so a later
+    release_lock (e.g. from a finally clause) does not act on a stale descriptor."""
+    err = IOError()
+    err.errno = 5
+    err.strerror = 'dummy message'
+
+    instance = mock.Mock()
+    instance.get_lock_file.return_value = '/tmp/test.lock'
+    os_open.return_value = 3
+    fcntl_lockf.side_effect = err
+
+    task = jobs.RunProjectUpdate()
+    with pytest.raises(IOError):
+        task.acquire_lock(instance)
+    os_close.assert_called_once_with(3)
+    assert task.lock_fd is None
+
+
 def test_project_update_post_run_hook_skips_release_when_no_lock(mock_me):
     """post_run_hook does not call release_lock when lock_fd is None (lock was never acquired)."""
     task = jobs.RunProjectUpdate()

@@ -375,6 +375,9 @@ class BaseTask(object):
         except IOError as e:
             logger.error("I/O error({0}) while trying to release lock file [{1}]: {2}".format(e.errno, project.get_lock_file(), e.strerror))
             os.close(self.lock_fd)
+            # closing the fd released any lock; clear it so a later release_lock
+            # (e.g. from a finally clause) doesn't act on a stale descriptor
+            self.lock_fd = None
             raise
 
         os.close(self.lock_fd)
@@ -416,6 +419,9 @@ class BaseTask(object):
             except IOError as e:
                 if e.errno not in (errno.EAGAIN, errno.EACCES):
                     os.close(self.lock_fd)
+                    # closing the fd released any lock; clear it so a later release_lock
+                    # (e.g. from a finally clause) doesn't act on a stale descriptor
+                    self.lock_fd = None
                     logger.error("I/O error({0}) while trying to acquire lock on file [{1}]: {2}".format(e.errno, lock_path, e.strerror))
                     raise
                 else:
@@ -829,6 +835,14 @@ class SourceControlMixin(BaseTask):
                     raise RuntimeError(f'Could not acquire lock for project {project.id}, job was interrupted')
                 if project.pk:
                     project.refresh_from_db()
+                if not self.get_sync_needs(project, scm_branch=scm_branch):
+                    # Another process synced the project while we waited for LOCK_EX,
+                    # so only the copy remains. Downgrade back to shared in place —
+                    # converting an fcntl lock EX->SH on the same fd is atomic and
+                    # cannot block — so concurrent copy-only jobs are not re-serialized
+                    # behind this one's copy.
+                    logger.debug(f'Project synced by another process while {self.instance.id} waited, downgrading to shared lock')
+                    fcntl.lockf(self.lock_fd, fcntl.LOCK_SH)
 
             failed_reason = project.get_reason_if_failed()
             if failed_reason:
