@@ -217,7 +217,7 @@ jsonschema==4.26.0
     #   drf-spectacular
 jsonschema-specifications==2023.12.1
     # via jsonschema
-jwcrypto==1.5.7
+jwcrypto==1.6.0
     # via django-oauth-toolkit
 kubernetes==36.0.2
     # via openshift
