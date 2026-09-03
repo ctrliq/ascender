@@ -1,9 +1,5 @@
 import React from 'react';
-import {
-  Tab as PFTab,
-  Tabs as PFTabs,
-  TabTitleText,
-} from '@patternfly/react-core';
+import { Tab, Tabs as PFTabs, TabTitleText } from '@patternfly/react-core';
 import { useLocation, useNavigate } from 'react-router';
 import styled from 'styled-components';
 import { getPersistentFilters } from 'components/PersistentFilters';
@@ -14,20 +10,40 @@ const Tabs = styled(PFTabs)`
   }
 `;
 
-const Tab = styled(PFTab)`
-  ${(props) => props.hasstyle && `${props.hasstyle}`}
+// A tab bar can carry a control beside its tabs, the workflow job selector
+// being the one that does. It used to be registered as a link-less tab, which
+// put the selector's <button> inside the tab's own <button>: invalid HTML that
+// React reported on every job page inside a workflow. The control now renders
+// as a sibling of the tab list. This wrapper is the positioned ancestor, so
+// the bottom border PatternFly draws with ::before spans the control as well.
+const TabBar = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  & > .pf-v6-c-tabs {
+    position: static;
+    flex-grow: 1;
+  }
+`;
+
+const TabBarControl = styled.div`
+  margin-inline-start: auto;
+  padding-inline-end: var(--pf-t--global--spacer--md);
 `;
 
 function RoutedTabs({ tabsArray }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const tabs = tabsArray.filter((tab) => tab.link);
+  const controls = tabsArray.filter((tab) => !tab.link);
 
   const getActiveTabId = () => {
-    const match = tabsArray.find((tab) => tab.link === location.pathname);
+    const match = tabs.find((tab) => tab.link === location.pathname);
     if (match) {
       return match.id;
     }
-    const subpathMatch = tabsArray.find((tab) =>
+    const subpathMatch = tabs.find((tab) =>
       location.pathname.startsWith(tab.link)
     );
     if (subpathMatch) {
@@ -37,13 +53,8 @@ function RoutedTabs({ tabsArray }) {
   };
 
   const handleTabSelect = (event, eventKey) => {
-    const match = tabsArray.find((tab) => tab.id === eventKey);
-    // A tab can exist only to host a control in the tab bar, the workflow job
-    // selector being the one that does, and carries no link. Clicks inside such
-    // a control bubble up to the tab, so treating this as tab navigation would
-    // call navigate(undefined), land back on the current url, and undo whatever
-    // the control itself just did.
-    if (!match || !match.link) {
+    const match = tabs.find((tab) => tab.id === eventKey);
+    if (!match) {
       return;
     }
     event.preventDefault();
@@ -52,27 +63,37 @@ function RoutedTabs({ tabsArray }) {
       : match.link;
     navigate(link);
   };
-  return (
+
+  const tabList = (
     <Tabs
       activeKey={getActiveTabId()}
       onSelect={handleTabSelect}
       ouiaId="routed-tabs"
     >
-      {tabsArray.map((tab) => (
+      {tabs.map((tab) => (
         <Tab
           aria-label={typeof tab.name === 'string' ? tab.name : null}
           eventKey={tab.id}
           key={tab.id}
-          // a tab that hosts a control has no link to point at, and passing the
-          // `false` this used to produce is not a valid href value
-          href={!tab.hasstyle && tab.link ? `#${tab.link}` : undefined}
+          href={`#${tab.link}`}
           title={<TabTitleText>{tab.name}</TabTitleText>}
           aria-controls=""
           ouiaId={`${tab.name}-tab`}
-          hasstyle={tab.hasstyle}
         />
       ))}
     </Tabs>
+  );
+
+  if (controls.length === 0) {
+    return tabList;
+  }
+  return (
+    <TabBar>
+      {tabList}
+      {controls.map((control) => (
+        <TabBarControl key={control.id}>{control.name}</TabBarControl>
+      ))}
+    </TabBar>
   );
 }
 

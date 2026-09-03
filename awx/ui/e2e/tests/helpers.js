@@ -30,11 +30,6 @@ async function login(page) {
 // Console errors the application already emits. Anything not matched here fails
 // the spec that saw it, so a new one has to be either fixed or added knowingly.
 const ALLOWED_CONSOLE_ERRORS = [
-  // The workflow job selector is hosted inside a tab, and a tab is a <button>.
-  // Tracked as the follow-up noted in the pull request that fixed #742: moving
-  // the control out of the tab list removes this.
-  /cannot be a descendant of/i,
-  /cannot contain a nested/i,
   // websocket chatter when a job finishes while a page is open
   /websocket/i,
 ];
