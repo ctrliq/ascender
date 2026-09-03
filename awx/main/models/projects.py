@@ -702,6 +702,7 @@ class ProjectUpdate(UnifiedJob, ProjectOptions, JobNotificationMixin, TaskManage
             job_tags.remove('delete')
             self.job_tags = ','.join(job_tags)
             added_update_fields.append('job_tags')
-        if 'update_fields' in kwargs:
+        # An explicit update_fields=None is a full save, the same as leaving it out
+        if kwargs.get('update_fields') is not None:
             kwargs['update_fields'].extend(added_update_fields)
         return super(ProjectUpdate, self).save(*args, **kwargs)
