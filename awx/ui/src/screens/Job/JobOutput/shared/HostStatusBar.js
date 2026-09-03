@@ -11,9 +11,11 @@ const BarWrapper = styled.div.attrs({ className: 'host-status-bar' })`
   width: 100%;
 `;
 
+// Both props are transient: as plain props they would be forwarded to the div
+// and land in the DOM as attributes, count an unknown one.
 const BarSegment = styled.div`
-  background-color: ${(props) => props.color || 'inherit'};
-  flex-grow: ${(props) => props.count || 0};
+  background-color: ${(props) => props.$color || 'inherit'};
+  flex-grow: ${(props) => props.$count || 0};
 `;
 BarSegment.displayName = 'BarSegment';
 
@@ -64,7 +66,7 @@ const HostStatusBar = ({ counts = {} }) => {
           </TooltipContent>
         }
       >
-        <BarSegment key={key} color={hostStatus[key].color} count={count} />
+        <BarSegment key={key} $color={hostStatus[key].color} $count={count} />
       </Tooltip>
     );
   });
@@ -75,7 +77,7 @@ const HostStatusBar = ({ counts = {} }) => {
         <Tooltip
           content={t`Host status information for this job is unavailable.`}
         >
-          <BarSegment count={1} />
+          <BarSegment $count={1} />
         </Tooltip>
       </BarWrapper>
     );
