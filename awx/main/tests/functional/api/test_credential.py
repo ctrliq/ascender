@@ -32,7 +32,7 @@ def test_idempotent_credential_type_setup():
 @pytest.mark.django_db
 def test_create_user_credential_via_credentials_list(post, get, alice, credentialtype_ssh):
     params = {
-        'credential_type': 1,
+        'credential_type': credentialtype_ssh.id,
         'inputs': {'username': 'someusername'},
         'user': alice.id,
         'name': 'Some name',
@@ -47,7 +47,7 @@ def test_create_user_credential_via_credentials_list(post, get, alice, credentia
 
 @pytest.mark.django_db
 def test_credential_validation_error_with_bad_user(post, admin, credentialtype_ssh):
-    params = {'credential_type': 1, 'inputs': {'username': 'someusername'}, 'user': 'asdf', 'name': 'Some name'}
+    params = {'credential_type': credentialtype_ssh.id, 'inputs': {'username': 'someusername'}, 'user': 'asdf', 'name': 'Some name'}
     response = post(reverse('api:credential_list'), params, admin)
     assert response.status_code == 400
     assert response.data['user'][0] == 'Incorrect type. Expected pk value, received str.'
@@ -83,7 +83,7 @@ def test_credential_validation_error_with_multiple_owner_fields(post, admin, ali
 @pytest.mark.django_db
 def test_create_user_credential_via_user_credentials_list(post, get, alice, credentialtype_ssh):
     params = {
-        'credential_type': 1,
+        'credential_type': credentialtype_ssh.id,
         'inputs': {'username': 'someusername'},
         'user': alice.id,
         'name': 'Some name',
@@ -130,7 +130,7 @@ def test_create_user_credential_via_user_credentials_list_xfail(post, alice, bob
 @pytest.mark.django_db
 def test_create_team_credential(post, get, team, organization, org_admin, team_member, credentialtype_ssh):
     params = {
-        'credential_type': 1,
+        'credential_type': credentialtype_ssh.id,
         'inputs': {'username': 'someusername'},
         'team': team.id,
         'name': 'Some name',
@@ -149,7 +149,7 @@ def test_create_team_credential(post, get, team, organization, org_admin, team_m
 @pytest.mark.django_db
 def test_create_team_credential_via_team_credentials_list(post, get, team, org_admin, team_member, credentialtype_ssh):
     params = {
-        'credential_type': 1,
+        'credential_type': credentialtype_ssh.id,
         'inputs': {'username': 'someusername'},
         'team': team.id,
         'name': 'Some name',
@@ -314,7 +314,7 @@ def test_sa_grant_private_credential_to_team_through_team_roles(post, credential
 @pytest.mark.django_db
 def test_create_org_credential_as_not_admin(post, organization, org_member, credentialtype_ssh):
     params = {
-        'credential_type': 1,
+        'credential_type': credentialtype_ssh.id,
         'inputs': {'username': 'someusername'},
         'name': 'Some name',
         'organization': organization.id,
@@ -326,7 +326,7 @@ def test_create_org_credential_as_not_admin(post, organization, org_member, cred
 @pytest.mark.django_db
 def test_create_org_credential_as_admin(post, organization, org_admin, credentialtype_ssh):
     params = {
-        'credential_type': 1,
+        'credential_type': credentialtype_ssh.id,
         'inputs': {'username': 'someusername'},
         'name': 'Some name',
         'organization': organization.id,
@@ -338,7 +338,7 @@ def test_create_org_credential_as_admin(post, organization, org_admin, credentia
 @pytest.mark.django_db
 def test_credential_detail(post, get, organization, org_admin, credentialtype_ssh):
     params = {
-        'credential_type': 1,
+        'credential_type': credentialtype_ssh.id,
         'inputs': {'username': 'someusername'},
         'name': 'Some name',
         'organization': organization.id,
@@ -356,7 +356,7 @@ def test_credential_detail(post, get, organization, org_admin, credentialtype_ss
 @pytest.mark.django_db
 def test_list_created_org_credentials(post, get, organization, org_admin, org_member, credentialtype_ssh):
     params = {
-        'credential_type': 1,
+        'credential_type': credentialtype_ssh.id,
         'inputs': {'username': 'someusername'},
         'name': 'Some name',
         'organization': organization.id,
@@ -446,8 +446,10 @@ def test_field_dependencies(get, post, organization, admin, kind, extraneous):
 #
 @pytest.mark.django_db
 def test_scm_create_ok(post, organization, admin):
+    scm = CredentialType.defaults['scm']()
+    scm.save()
     params = {
-        'credential_type': 1,
+        'credential_type': scm.id,
         'name': 'Best credential ever',
         'inputs': {
             'username': 'some_username',
@@ -456,8 +458,6 @@ def test_scm_create_ok(post, organization, admin):
             'ssh_key_unlock': 'some_key_unlock',
         },
     }
-    scm = CredentialType.defaults['scm']()
-    scm.save()
     params['organization'] = organization.id
     response = post(reverse('api:credential_list'), params, admin)
     assert response.status_code == 201
@@ -472,15 +472,15 @@ def test_scm_create_ok(post, organization, admin):
 
 @pytest.mark.django_db
 def test_ssh_create_ok(post, organization, admin):
+    ssh = CredentialType.defaults['ssh']()
+    ssh.save()
     params = {
-        'credential_type': 1,
+        'credential_type': ssh.id,
         'name': 'Best credential ever',
         'inputs': {
             'password': 'secret',
         },
     }
-    ssh = CredentialType.defaults['ssh']()
-    ssh.save()
     params['organization'] = organization.id
     response = post(reverse('api:credential_list'), params, admin)
     assert response.status_code == 201
@@ -496,15 +496,15 @@ def test_ssh_create_ok(post, organization, admin):
 #
 @pytest.mark.django_db
 def test_vault_create_ok(post, organization, admin):
+    vault = CredentialType.defaults['vault']()
+    vault.save()
     params = {
-        'credential_type': 1,
+        'credential_type': vault.id,
         'name': 'Best credential ever',
         'inputs': {
             'vault_password': 'some_password',
         },
     }
-    vault = CredentialType.defaults['vault']()
-    vault.save()
     params['organization'] = organization.id
     response = post(reverse('api:credential_list'), params, admin)
     assert response.status_code == 201
@@ -580,8 +580,10 @@ def test_patch_without_vault_id_valid(post, patch, organization, admin):
 #
 @pytest.mark.django_db
 def test_net_create_ok(post, organization, admin):
+    net = CredentialType.defaults['net']()
+    net.save()
     params = {
-        'credential_type': 1,
+        'credential_type': net.id,
         'name': 'Best credential ever',
         'inputs': {
             'username': 'some_username',
@@ -592,8 +594,6 @@ def test_net_create_ok(post, organization, admin):
             'authorize_password': 'some_authorize_password',
         },
     }
-    net = CredentialType.defaults['net']()
-    net.save()
     params['organization'] = organization.id
     response = post(reverse('api:credential_list'), params, admin)
     assert response.status_code == 201
@@ -613,8 +613,10 @@ def test_net_create_ok(post, organization, admin):
 #
 @pytest.mark.django_db
 def test_gce_create_ok(post, organization, admin):
+    gce = CredentialType.defaults['gce']()
+    gce.save()
     params = {
-        'credential_type': 1,
+        'credential_type': gce.id,
         'name': 'Best credential ever',
         'inputs': {
             'username': 'some_username',
@@ -622,8 +624,6 @@ def test_gce_create_ok(post, organization, admin):
             'ssh_key_data': EXAMPLE_PRIVATE_KEY,
         },
     }
-    gce = CredentialType.defaults['gce']()
-    gce.save()
     params['organization'] = organization.id
     response = post(reverse('api:credential_list'), params, admin)
     assert response.status_code == 201
@@ -640,8 +640,10 @@ def test_gce_create_ok(post, organization, admin):
 #
 @pytest.mark.django_db
 def test_azure_rm_create_ok(post, organization, admin):
+    azure_rm = CredentialType.defaults['azure_rm']()
+    azure_rm.save()
     params = {
-        'credential_type': 1,
+        'credential_type': azure_rm.id,
         'name': 'Best credential ever',
         'inputs': {
             'subscription': 'some_subscription',
@@ -652,8 +654,6 @@ def test_azure_rm_create_ok(post, organization, admin):
             'tenant': 'some_tenant',
         },
     }
-    azure_rm = CredentialType.defaults['azure_rm']()
-    azure_rm.save()
     params['organization'] = organization.id
     response = post(reverse('api:credential_list'), params, admin)
     assert response.status_code == 201
@@ -673,8 +673,10 @@ def test_azure_rm_create_ok(post, organization, admin):
 #
 @pytest.mark.django_db
 def test_satellite6_create_ok(post, organization, admin):
+    sat6 = CredentialType.defaults['satellite6']()
+    sat6.save()
     params = {
-        'credential_type': 1,
+        'credential_type': sat6.id,
         'name': 'Best credential ever',
         'inputs': {
             'host': 'some_host',
@@ -682,8 +684,6 @@ def test_satellite6_create_ok(post, organization, admin):
             'password': 'some_password',
         },
     }
-    sat6 = CredentialType.defaults['satellite6']()
-    sat6.save()
     params['organization'] = organization.id
     response = post(reverse('api:credential_list'), params, admin)
     assert response.status_code == 201
@@ -705,13 +705,13 @@ def test_satellite6_create_ok(post, organization, admin):
 #
 @pytest.mark.django_db
 def test_aws_create_ok(post, organization, admin):
+    aws = CredentialType.defaults['aws']()
+    aws.save()
     params = {
-        'credential_type': 1,
+        'credential_type': aws.id,
         'name': 'Best credential ever',
         'inputs': {'username': 'some_username', 'password': 'some_password', 'security_token': 'abc123'},
     }
-    aws = CredentialType.defaults['aws']()
-    aws.save()
     params['organization'] = organization.id
     response = post(reverse('api:credential_list'), params, admin)
     assert response.status_code == 201
@@ -725,9 +725,9 @@ def test_aws_create_ok(post, organization, admin):
 
 @pytest.mark.django_db
 def test_aws_create_fail_required_fields(post, organization, admin):
-    params = {'credential_type': 1, 'name': 'Best credential ever', 'inputs': {}}
     aws = CredentialType.defaults['aws']()
     aws.save()
+    params = {'credential_type': aws.id, 'name': 'Best credential ever', 'inputs': {}}
     params['organization'] = organization.id
     response = post(reverse('api:credential_list'), params, admin)
     assert response.status_code == 201
@@ -746,9 +746,13 @@ def test_aws_create_fail_required_fields(post, organization, admin):
 #
 @pytest.mark.django_db
 def test_vmware_create_ok(post, organization, admin):
-    params = {'credential_type': 1, 'name': 'Best credential ever', 'inputs': {'host': 'some_host', 'username': 'some_username', 'password': 'some_password'}}
     vmware = CredentialType.defaults['vmware']()
     vmware.save()
+    params = {
+        'credential_type': vmware.id,
+        'name': 'Best credential ever',
+        'inputs': {'host': 'some_host', 'username': 'some_username', 'password': 'some_password'},
+    }
     params['organization'] = organization.id
     response = post(reverse('api:credential_list'), params, admin)
     assert response.status_code == 201
@@ -762,9 +766,9 @@ def test_vmware_create_ok(post, organization, admin):
 
 @pytest.mark.django_db
 def test_vmware_create_fail_required_fields(post, organization, admin):
-    params = {'credential_type': 1, 'name': 'Best credential ever', 'inputs': {}}
     vmware = CredentialType.defaults['vmware']()
     vmware.save()
+    params = {'credential_type': vmware.id, 'name': 'Best credential ever', 'inputs': {}}
     params['organization'] = organization.id
     response = post(reverse('api:credential_list'), params, admin)
     assert response.status_code == 201
@@ -783,8 +787,10 @@ def test_vmware_create_fail_required_fields(post, organization, admin):
 #
 @pytest.mark.django_db
 def test_openstack_create_ok(post, organization, admin):
+    openstack = CredentialType.defaults['openstack']()
+    openstack.save()
     params = {
-        'credential_type': 1,
+        'credential_type': openstack.id,
         'inputs': {
             'username': 'some_user',
             'password': 'some_password',
@@ -792,8 +798,6 @@ def test_openstack_create_ok(post, organization, admin):
             'host': 'some_host',
         },
     }
-    openstack = CredentialType.defaults['openstack']()
-    openstack.save()
     params['kind'] = 'openstack'
     params['name'] = 'Best credential ever'
     params['organization'] = organization.id
@@ -834,7 +838,7 @@ def test_openstack_create_fail_required_fields(post, organization, admin):
     openstack = CredentialType.defaults['openstack']()
     openstack.save()
     params = {
-        'credential_type': 1,
+        'credential_type': openstack.id,
         'inputs': {},
         'kind': 'openstack',
         'name': 'Best credential ever',
@@ -854,16 +858,16 @@ def test_openstack_create_fail_required_fields(post, organization, admin):
 
 @pytest.mark.django_db
 def test_openstack_create_application_credential_ok(post, organization, admin):
+    openstack = CredentialType.defaults['openstack']()
+    openstack.save()
     params = {
-        'credential_type': 1,
+        'credential_type': openstack.id,
         'inputs': {
             'host': 'some_host',
             'application_credential_id': 'some_app_cred_id',
             'application_credential_secret': 'some_app_cred_secret',
         },
     }
-    openstack = CredentialType.defaults['openstack']()
-    openstack.save()
     params['kind'] = 'openstack'
     params['name'] = 'Best credential ever'
     params['organization'] = organization.id
@@ -875,7 +879,7 @@ def test_openstack_create_application_credential_ok(post, organization, admin):
 def test_field_removal(put, organization, admin, credentialtype_ssh):
     params = {
         'name': 'Best credential ever',
-        'credential_type': 1,
+        'credential_type': credentialtype_ssh.id,
         'inputs': {
             'username': 'joe',
             'password': '',
@@ -1026,7 +1030,7 @@ def test_secret_fields_cannot_be_special_encrypted_variable(post, organization, 
 def test_ssh_unlock_needed(put, organization, admin, credentialtype_ssh):
     params = {
         'name': 'Best credential ever',
-        'credential_type': 1,
+        'credential_type': credentialtype_ssh.id,
         'inputs': {
             'username': 'joe',
             'ssh_key_data': '$encrypted$',
@@ -1050,7 +1054,7 @@ def test_ssh_unlock_needed(put, organization, admin, credentialtype_ssh):
 def test_ssh_unlock_not_needed(put, organization, admin, credentialtype_ssh):
     params = {
         'name': 'Best credential ever',
-        'credential_type': 1,
+        'credential_type': credentialtype_ssh.id,
         'inputs': {
             'username': 'joe',
             'ssh_key_data': '$encrypted$',
@@ -1078,7 +1082,7 @@ def test_ssh_unlock_not_needed(put, organization, admin, credentialtype_ssh):
 def test_ssh_unlock_with_prior_value(put, organization, admin, credentialtype_ssh):
     params = {
         'name': 'Best credential ever',
-        'credential_type': 1,
+        'credential_type': credentialtype_ssh.id,
         'inputs': {
             'username': 'joe',
             'ssh_key_data': '$encrypted$',
@@ -1105,7 +1109,7 @@ def test_ssh_unlock_with_prior_value(put, organization, admin, credentialtype_ss
 def test_ssh_bad_key_unlock_not_checked(put, organization, admin, credentialtype_ssh):
     params = {
         'name': 'Best credential ever',
-        'credential_type': 1,
+        'credential_type': credentialtype_ssh.id,
         'inputs': {
             'username': 'oscar',
             'ssh_key_data': 'invalid-key',
@@ -1139,7 +1143,7 @@ def test_ssh_bad_key_unlock_not_checked(put, organization, admin, credentialtype
 @pytest.mark.django_db
 def test_secret_encryption_on_create(get, post, organization, admin, credentialtype_ssh):
     params = {
-        'credential_type': 1,
+        'credential_type': credentialtype_ssh.id,
         'inputs': {
             'username': 'joe',
             'password': 'secret',
@@ -1170,7 +1174,7 @@ def test_secret_encryption_on_update(get, post, patch, organization, admin, cred
         {
             'name': 'Best credential ever',
             'organization': organization.id,
-            'credential_type': 1,
+            'credential_type': credentialtype_ssh.id,
             'inputs': {
                 'username': 'joe',
             },
@@ -1179,7 +1183,7 @@ def test_secret_encryption_on_update(get, post, patch, organization, admin, cred
     )
     assert response.status_code == 201
 
-    response = patch(reverse('api:credential_detail', kwargs={'pk': 1}), params, admin)
+    response = patch(reverse('api:credential_detail', kwargs={'pk': response.data['id']}), params, admin)
     assert response.status_code == 200
 
     response = get(reverse('api:credential_list'), admin)
@@ -1245,7 +1249,7 @@ def test_custom_credential_type_create(get, post, organization, admin):
 
 @pytest.mark.django_db
 def test_create_credential_missing_user_team_org_xfail(post, admin, credentialtype_ssh):
-    params = {'name': 'Some name', 'credential_type': 1, 'inputs': {'username': 'someusername'}}
+    params = {'name': 'Some name', 'credential_type': credentialtype_ssh.id, 'inputs': {'username': 'someusername'}}
     # Must specify one of user, team, or organization
     response = post(reverse('api:credential_list'), params, admin)
     assert response.status_code == 400

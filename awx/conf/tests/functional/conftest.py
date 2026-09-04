@@ -2,6 +2,7 @@ import urllib.parse
 
 import pytest
 
+from django.db import transaction
 from django.urls import resolve
 from django.contrib.auth.models import User
 
@@ -35,7 +36,11 @@ def api_request(admin):
         request = getattr(APIRequestFactory(), verb)(url, data=data, format='json')
         if user:
             force_authenticate(request, user=user)
-        response = view(request, *view_args, **view_kwargs)
+        # Mirror ATOMIC_REQUESTS, which production runs with: calling the view
+        # directly bypasses Django's handler, so without this a request whose
+        # statement fails leaves the whole test's transaction aborted.
+        with transaction.atomic():
+            response = view(request, *view_args, **view_kwargs)
         response.render()
         return response
 

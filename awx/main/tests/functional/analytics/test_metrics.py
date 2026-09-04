@@ -51,6 +51,10 @@ def test_metrics_counts(organization_factory, job_template_factory, workflow_job
             # Read the fields by name: Sample grew a sixth one, native_histogram, in
             # prometheus-client 0.21, so unpacking it as a 5-tuple ties this test to a
             # version of the library. The metrics code itself already reads by name.
+            if sample.name == 'awx_database_connections_total':
+                # Environmental: depends on what else holds a connection.
+                assert sample.value >= 1
+                continue
             assert EXPECTED_VALUES[sample.name] == sample.value
 
 

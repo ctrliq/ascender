@@ -16,6 +16,25 @@ jobs:
     permissions:
       packages: read
       contents: read
+    # The API suite runs on PostgreSQL, which is what Ascender is deployed
+    # against; it used to run on SQLite, which left the partitioned event
+    # tables, the COPY that assembles job stdout and every query-count
+    # assertion untested. The service is shared by the whole matrix, which
+    # costs nothing for the jobs that do not open a connection.
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: awx
+          POSTGRES_PASSWORD: awxpass
+          POSTGRES_DB: awx
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     strategy:
       fail-fast: false
       matrix:
@@ -48,6 +67,16 @@ jobs:
 
       - name: Run check ${{ matrix.tests.name }}
         continue-on-error: ${{ matrix.tests.advisory || false }}
+        # Host networking so the throwaway container reaches the service that
+        # the runner published on localhost.
+        env:
+          DOCKER_RUNNER_OPTS: >-
+            --network host
+            -e AWX_TEST_DATABASE_HOST=127.0.0.1
+            -e AWX_TEST_DATABASE_PORT=5432
+            -e AWX_TEST_DATABASE_NAME=awx
+            -e AWX_TEST_DATABASE_USER=awx
+            -e AWX_TEST_DATABASE_PASSWORD=awxpass
         run: AWX_DOCKER_CMD='${{ matrix.tests.command }}' make docker-runner
 
   dev-env:
@@ -71,14 +100,6 @@ jobs:
 
       - name: Run smoke test
         run: ansible-playbook tools/docker-compose/ansible/smoke-test.yml -v
-
-      # The api-test job runs against SQLite, so any PostgreSQL-only SQL is
-      # unreachable there. This environment already has a real database, so the
-      # tests guarded by a vendor check get to run here instead of skipping.
-      - name: Run the PostgreSQL-backed tests
-        run: |
-          docker exec tools_postgres_1 psql -U postgres -c 'ALTER ROLE awx CREATEDB;'
-          docker exec --workdir /awx_devel tools_awx_1 make test-postgres
 
       - name: Get logs from the development environment on failure
         if: failure()

@@ -6,7 +6,11 @@ from awx.main.analytics import collectors
 
 @pytest.mark.django_db
 def test_empty():
-    assert collectors.counts(None) == {
+    counts = collectors.counts(None)
+    # The live connection count depends on what else holds a connection to this
+    # test database, so assert it is present rather than pinning a value.
+    assert counts.pop("database_connections") >= 1
+    assert counts == {
         "active_user_sessions": 0,
         "active_anonymous_sessions": 0,
         "active_sessions": 0,
@@ -26,7 +30,6 @@ def test_empty():
         "workflow_job_template": 0,
         "unified_job": 0,
         "pending_jobs": 0,
-        "database_connections": 1,
     }
 
 
