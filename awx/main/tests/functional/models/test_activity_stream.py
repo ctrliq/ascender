@@ -14,7 +14,7 @@ from awx.main.signals import model_serializer_mapping
 # Django
 from django.contrib.auth.models import AnonymousUser
 
-# AWX middleware for thread-local request/user
+# AWX current-request/user tracking (in-tree django-crum replacement)
 from awx.main.middleware import impersonate
 
 

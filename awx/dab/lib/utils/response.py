@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Optional, Sequence
 from urllib.parse import urlparse
 
-from crum import get_current_request
+from awx.main.request_context import get_current_request  # Ascender: in-tree replacement for django-crum
 from django.http import StreamingHttpResponse
 from django.urls import reverse as django_reverse
 from rest_framework.reverse import reverse as drf_reverse

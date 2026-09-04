@@ -236,9 +236,9 @@ class Rollback(Exception):
     pass
 
 
-# Normally the modified_by field is populated by the crum library automatically,
-# but since this is ran outside the request-response cycle that won't work.
-# It is disaled here.
+# Normally the modified_by field is populated automatically from the current
+# request (awx.main.request_context), but since this runs outside the
+# request-response cycle that won't work. It is disabled here.
 def mock_save(self, *args, **kwargs):
     return super(PrimordialModel, self).save(*args, **kwargs)
 

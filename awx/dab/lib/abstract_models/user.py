@@ -13,7 +13,7 @@ class AbstractDABUser(AbstractUser):
     # validate_email / _validate_email_change implementation) AND
     # your service has code paths — such as SSO/authentication
     # pipelines — that perform legitimate ORM-level email updates
-    # where no requesting user is present in CRUM, which would
+    # where no requesting user is present in request_context, which would
     # conflict with the signal.  When True the signal is not
     # connected and all email-change authorization is the
     # serializer's responsibility.

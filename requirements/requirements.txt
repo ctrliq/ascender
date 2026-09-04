@@ -104,7 +104,6 @@ django==5.2.17
     #   channels
     #   django-auth-ldap
     #   django-cors-headers
-    #   django-crum
     #   django-extensions
     #   django-guid
     #   django-oauth-toolkit
@@ -118,8 +117,6 @@ django==5.2.17
 django-auth-ldap==5.3.0
     # via -r /awx_devel/requirements/requirements.in
 django-cors-headers==4.9.0
-    # via -r /awx_devel/requirements/requirements.in
-django-crum==0.7.9
     # via -r /awx_devel/requirements/requirements.in
 django-extensions==4.1
     # via -r /awx_devel/requirements/requirements.in
@@ -143,8 +140,6 @@ djangorestframework==3.17.2
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   drf-spectacular
-djangorestframework-yaml==2.0.0
-    # via -r /awx_devel/requirements/requirements.in
 drf-spectacular==0.30.0
     # via -r /awx_devel/requirements/requirements.in
 durationpy==0.10
@@ -352,7 +347,6 @@ pyyaml==6.0.3
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   ansible-runner
-    #   djangorestframework-yaml
     #   drf-spectacular
     #   kubernetes
     #   receptorctl

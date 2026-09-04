@@ -18,7 +18,6 @@ distro
 django>=5.2.17,<6.0 # CVE-2026-15307 CVE-2026-15830
 django-auth-ldap
 django-cors-headers
-django-crum  # used by vendored awx/dab (formerly a django-ansible-base dep)
 django-extensions==4.1
 django-guid==3.6.1
 django-oauth-toolkit>=3.3.0
@@ -30,7 +29,6 @@ drf-spectacular>=0.27.0
 django-split-settings==1.0.0    # We hit a strange issue where the release process errored when upgrading past 1.0.0 see UPGRADE BLOCKERS
 django-valkey
 djangorestframework>=3.17.2 # CVE-2026-73228 CVE-2026-73229
-djangorestframework-yaml
 filelock
 GitPython>=3.1.58  # GHSA-hh9p-6wh2-4mfc GHSA-9rj7-rf2p-w77r GHSA-4gmw-gg2m-w46p GHSA-hmq2-w58f-27jc GHSA-wvpp-8hx9-p66j GHSA-jm78-9fvv-mhgr
 importlib-metadata==9.0.0
