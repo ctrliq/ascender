@@ -15,10 +15,13 @@ LOCAL_SETTINGS = (
 
 
 def test_postprocess_auth_basic_enabled():
-    locals().update({'__file__': __file__})
+    # An explicit dict rather than locals(): since PEP 667 (Python 3.13) locals()
+    # inside a function returns an independent snapshot, so updating it no longer
+    # reaches the frame and include() would not see __file__.
+    scope = {'__file__': __file__}
 
-    include('../../../settings/defaults.py', scope=locals())
-    assert 'awx.api.authentication.LoggedBasicAuthentication' in locals()['REST_FRAMEWORK']['DEFAULT_AUTHENTICATION_CLASSES']
+    include('../../../settings/defaults.py', scope=scope)
+    assert 'awx.api.authentication.LoggedBasicAuthentication' in scope['REST_FRAMEWORK']['DEFAULT_AUTHENTICATION_CLASSES']
 
 
 def test_default_settings():

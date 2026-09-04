@@ -9,8 +9,7 @@ from datetime import datetime, timezone
 from uuid import uuid4
 
 import collections
-from multiprocessing import Process
-from multiprocessing import Queue as MPQueue
+from multiprocessing import get_context
 from queue import Full as QueueFull, Empty as QueueEmpty
 
 from django.conf import settings
@@ -29,6 +28,12 @@ if 'run_callback_receiver' in sys.argv:
     logger = logging.getLogger('awx.main.commands.run_callback_receiver')
 else:
     logger = logging.getLogger('awx.main.dispatch')
+
+# Workers inherit the loaded Django app registry from the parent process, which only
+# the fork start method provides. Python 3.14 changed the Linux default to forkserver,
+# where the child re-imports and raises AppRegistryNotReady, so the context is pinned
+# here rather than left to the platform default.
+_mp_ctx = get_context('fork')
 
 
 class NoOpResultQueue(object):
@@ -71,9 +76,9 @@ class PoolWorker(object):
         self.messages_sent = 0
         self.messages_finished = 0
         self.managed_tasks = collections.OrderedDict()
-        self.finished = MPQueue(queue_size) if self.track_managed_tasks else NoOpResultQueue()
-        self.queue = MPQueue(queue_size)
-        self.process = Process(target=target, args=(self.queue, self.finished) + args)
+        self.finished = _mp_ctx.Queue(queue_size) if self.track_managed_tasks else NoOpResultQueue()
+        self.queue = _mp_ctx.Queue(queue_size)
+        self.process = _mp_ctx.Process(target=target, args=(self.queue, self.finished) + args)
         self.process.daemon = True
 
     def start(self):
