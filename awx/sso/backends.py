@@ -281,17 +281,32 @@ class TowerSAMLIdentityProvider(BaseSAMLIdentityProvider):
             return uid
         return uid[0]
 
-    def get_attr(self, attributes, conf_key, default_attribute):
+    def get_attr(self, attributes, conf_key, default_attributes=(), **kwargs):
         """
-        Get the attribute 'default_attribute' out of the attributes,
-        unless self.conf[conf_key] overrides the default by specifying
-        another attribute to use.
+        Get the attribute named by self.conf[conf_key] out of the attributes.
+        When conf_key is not configured, fall back to the first of
+        default_attributes present in attributes, matching upstream behavior.
+
+        social-auth-core 5.0 changed the third argument from a single attribute
+        name to a tuple of candidate names, and added a keyword-only
+        validate_defaults. Accept both shapes so this keeps working across the
+        4.x and 5.x call conventions.
         """
-        key = self.conf.get(conf_key, default_attribute)
-        value = attributes[key] if key in attributes else None
+        if conf_key in self.conf:
+            key = self.conf[conf_key]
+            # An explicit None means "ignore this attribute" upstream.
+            if key is None:
+                return None
+        else:
+            candidates = default_attributes
+            if isinstance(candidates, str):
+                candidates = (candidates,)
+            key = next((c for c in (candidates or ()) if c in attributes), None)
+
+        value = attributes.get(key) if key is not None else None
         # In certain implementations (like https://pagure.io/ipsilon) this value is a string, not a list
         if isinstance(value, (list, tuple)):
-            value = value[0]
+            value = value[0] if value else None
         if conf_key in ('attr_first_name', 'attr_last_name', 'attr_username', 'attr_email') and value is None:
             logger.warning(
                 "Could not map user detail '%s' from SAML attribute '%s'; update SOCIAL_AUTH_SAML_ENABLED_IDPS['%s']['%s'] with the correct SAML attribute.",
@@ -310,7 +325,7 @@ class SAMLAuth(BaseSAMLAuth):
 
     def get_idp(self, idp_name):
         idp_config = self.setting('ENABLED_IDPS')[idp_name]
-        return TowerSAMLIdentityProvider(idp_name, **idp_config)
+        return TowerSAMLIdentityProvider(self, idp_name, **idp_config)
 
     def authenticate(self, request, *args, **kwargs):
         if not all(
