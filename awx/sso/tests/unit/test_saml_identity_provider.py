@@ -172,11 +172,24 @@ def test_get_attr_blank_and_list_attribute_values(raw, expected):
     assert _idp(attr_email='email').get_attr({'email': raw}, 'attr_email', ()) == expected
 
 
-def test_get_attr_warns_when_a_detail_cannot_be_mapped(quiet_logger):
+def _warning_for(quiet_logger, conf_key):
+    return next(call for call in quiet_logger.warning.call_args_list if call.args[4] == conf_key)
+
+
+def test_get_attr_warns_when_a_configured_attribute_is_missing(quiet_logger):
     """The warning is the operator's only signal that a mapping is wrong."""
     _idp(attr_email='not_sent_by_idp').get_user_details(ATTRIBUTES)
 
-    assert any(call.args[4] == 'attr_email' for call in quiet_logger.warning.call_args_list)
+    assert _warning_for(quiet_logger, 'attr_email').args[2] == 'not_sent_by_idp'
+
+
+def test_get_attr_warning_names_the_candidates_tried_when_none_match(quiet_logger):
+    """Unconfigured and unmatched must not log the literal 'None' as the attribute."""
+    _idp().get_user_details({OID_USERID: ['jamie']})
+
+    logged = _warning_for(quiet_logger, 'attr_email').args[2]
+    assert logged != 'None' and logged is not None
+    assert OID_MAIL in logged and 'email' in logged
 
 
 def test_get_user_permanent_id_prefers_the_oid():

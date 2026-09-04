@@ -291,6 +291,7 @@ class TowerSAMLIdentityProvider(BaseSAMLIdentityProvider):
         warning and returns None rather than raising AuthMissingParameter, and
         validate_defaults is accepted but not honored, for the same reason.
         """
+        candidates = ()
         if conf_key in self.conf:
             key = self.conf[conf_key]
             # An explicit None means "ignore this attribute" upstream.
@@ -315,7 +316,9 @@ class TowerSAMLIdentityProvider(BaseSAMLIdentityProvider):
             logger.warning(
                 "Could not map user detail '%s' from SAML attribute '%s'; update SOCIAL_AUTH_SAML_ENABLED_IDPS['%s']['%s'] with the correct SAML attribute.",
                 conf_key[5:],
-                key,
+                # With no configured name and no candidate present, name every
+                # candidate tried rather than logging the literal 'None'.
+                key if key is not None else ', '.join(candidates),
                 self.name,
                 conf_key,
             )
