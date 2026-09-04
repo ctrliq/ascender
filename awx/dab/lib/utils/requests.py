@@ -71,7 +71,7 @@ def get_remote_hosts(request: HttpRequest, get_first_only: bool = False) -> list
 def is_proxied_request(request: Optional[HttpRequest] = None) -> bool:
     "Return true if request claims to be from a proxy and the header validates as such."
     if request is None:
-        from crum import get_current_request
+        from awx.main.request_context import get_current_request  # Ascender: in-tree replacement for django-crum
 
         request = get_current_request()
     if request is None:
