@@ -108,7 +108,7 @@ class TestJobNotificationMixin(object):
 
     @pytest.mark.django_db
     @pytest.mark.parametrize('JobClass', [AdHocCommand, InventoryUpdate, Job, ProjectUpdate, SystemJob, WorkflowJob])
-    def test_context(self, JobClass, sqlite_copy, project, inventory_source):
+    def test_context(self, JobClass, project, inventory_source):
         """The Jinja context defines all of the fields that can be used by a template. Ensure that the context generated
         for each job type has the expected structure."""
         kwargs = {}

@@ -85,9 +85,12 @@ class TestEvents:
 
         self._create_job_event(ok=dict((hostname, len(hostname)) for hostname in self.hostnames))
 
+        # The surviving hosts' ids are whatever the database allocated, so derive
+        # them rather than assuming a sequence that restarts at 1.
+        surviving_ids = sorted(self.inventory.hosts.values_list('id', flat=True))
         ids = sorted([s.host_id or -1 for s in self.job.job_host_summaries.order_by('id').all()])
         names = sorted([s.host_name for s in self.job.job_host_summaries.all()])
-        assert ids == [-1, -1, -1, -1, -1, 6, 7, 8, 9, 10]
+        assert ids == [-1, -1, -1, -1, -1] + surviving_ids
         assert names == ['Host 0', 'Host 1', 'Host 2', 'Host 3', 'Host 4', 'Host 5', 'Host 6', 'Host 7', 'Host 8', 'Host 9']
 
     def test_host_summary_generation_with_limit(self):
@@ -136,8 +139,10 @@ class TestEvents:
 
         self._create_job_event(ok=dict((hostname, len(hostname)) for hostname in self.hostnames))
 
-        # Soft delete 6 host metrics
-        for hm in HostMetric.objects.filter(id__in=[1, 3, 5, 7, 9, 11]):
+        # Soft delete 6 host metrics: every other one by position, since the ids
+        # the database allocates are not guaranteed to start at 1.
+        every_other = list(HostMetric.objects.order_by('id').values_list('id', flat=True))[::2]
+        for hm in HostMetric.objects.filter(id__in=every_other):
             hm.soft_delete()
 
         assert len(HostMetric.objects.filter(Q(deleted=False) & Q(deleted_counter=0) & Q(last_deleted__isnull=True))) == 6

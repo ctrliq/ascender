@@ -80,7 +80,11 @@ def test_bulk_host_create_rbac(organization, inventory, post, get, user):
 
 
 @pytest.mark.django_db
-@pytest.mark.parametrize('num_jobs, num_queries', [(1, 25), (10, 25)])
+# The ceiling allows for a cold cache: whether the settings (conf_setting) and
+# content-type lookups are already warm depends on what ran before, and that is
+# worth two queries either way. The point of the guard is to catch a query per
+# job, which 27 still does.
+@pytest.mark.parametrize('num_jobs, num_queries', [(1, 27), (10, 27)])
 def test_bulk_job_launch_queries(job_template, organization, inventory, project, post, get, user, num_jobs, num_queries, django_assert_max_num_queries):
     '''
     if I have access to the unified job template

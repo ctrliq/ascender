@@ -1,18 +1,18 @@
 from django.db import connection
 from django.db.models.signals import post_migrate
 from django.apps import apps
-from django.conf import settings
 from unittest import mock
 
 import contextlib
 
 
 def app_post_migration(sender, app_config, **kwargs):
-    # our usage of pytest.django+sqlite doesn't actually run real migrations,
-    # so we've got to make sure the deprecated
-    # `main_unifiedjob.result_stdout_text` column actually exists
+    # pytest-django runs with --nomigrations, so the schema is built from the
+    # models and anything a migration added outside them is absent. Introspection
+    # goes through connection.introspection rather than sqlite_master, which the
+    # suite needs now that it runs on PostgreSQL.
     cur = connection.cursor()
-    cols = cur.execute('SELECT sql FROM sqlite_master WHERE tbl_name="main_unifiedjob";').fetchone()[0]
+    cols = [c.name for c in connection.introspection.get_table_description(cur, 'main_unifiedjob')]
     if 'result_stdout_text' not in cols:
         cur.execute('ALTER TABLE main_unifiedjob ADD COLUMN result_stdout_text TEXT')
 
@@ -20,9 +20,9 @@ def app_post_migration(sender, app_config, **kwargs):
     # these tables represent old job event tables that were renamed / preserved during a
     # migration which introduces partitioned event tables
     # https://github.com/ansible/awx/issues/9039
+    existing_tables = set(connection.introspection.table_names(cur))
     for tblname in ('main_jobevent', 'main_inventoryupdateevent', 'main_projectupdateevent', 'main_adhoccommandevent', 'main_systemjobevent'):
-        table_entries = cur.execute(f'SELECT count(*) from sqlite_master WHERE tbl_name="_unpartitioned_{tblname}";').fetchone()[0]
-        if table_entries > 0:
+        if f'_unpartitioned_{tblname}' in existing_tables:
             continue
         if tblname == 'main_adhoccommandevent':
             unique_columns = """host_name character varying(1024) NOT NULL,
@@ -74,8 +74,9 @@ def app_post_migration(sender, app_config, **kwargs):
         """)
 
 
-if settings.DATABASES['default']['ENGINE'] == 'django.db.backends.sqlite3':
-    post_migrate.connect(app_post_migration, sender=apps.get_app_config('main'))
+# Connected for every backend: the hook is idempotent, skipping whatever already
+# exists, so it is a no-op against a schema built by real migrations.
+post_migrate.connect(app_post_migration, sender=apps.get_app_config('main'))
 
 
 @contextlib.contextmanager
