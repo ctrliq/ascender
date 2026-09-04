@@ -56,6 +56,14 @@ class YAMLParser(parsers.BaseParser):
 
         try:
             data = smart_str(stream.read(), encoding=encoding)
-            return yaml.safe_load(data)
+            if not data:
+                return {}
+            obj = yaml.safe_load(data)
         except (ValueError, yaml.YAMLError) as exc:
             raise ParseError(_('YAML parse error - %s') % smart_str(exc))
+        # Match the JSONParser contract above: only a mapping (or null, which
+        # field validation rejects with a clear message) may pass, so a
+        # top-level list or scalar cannot be stored as variables.
+        if not isinstance(obj, dict) and obj is not None:
+            raise ParseError(_('YAML parse error - not a YAML mapping'))
+        return obj
