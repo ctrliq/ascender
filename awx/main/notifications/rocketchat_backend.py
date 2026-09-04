@@ -22,7 +22,10 @@ class RocketChatBackend(AWXBaseEmailBackend, CustomNotificationBase):
     sender_parameter = None
 
     def __init__(self, rocketchat_no_verify_ssl=False, rocketchat_username=None, rocketchat_icon_url=None, fail_silently=False, **kwargs):
-        super(RocketChatBackend, self).__init__(fail_silently=fail_silently)
+        # Django 6.1 deprecated BaseEmailBackend.fail_silently: a subclass that
+        # supports it owns the attribute instead of passing it up.
+        super(RocketChatBackend, self).__init__()
+        self.fail_silently = fail_silently
         self.rocketchat_no_verify_ssl = rocketchat_no_verify_ssl
         self.rocketchat_username = rocketchat_username
         self.rocketchat_icon_url = rocketchat_icon_url

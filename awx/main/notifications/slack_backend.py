@@ -21,7 +21,10 @@ class SlackBackend(AWXBaseEmailBackend, CustomNotificationBase):
     sender_parameter = None
 
     def __init__(self, token, hex_color="", fail_silently=False, **kwargs):
-        super(SlackBackend, self).__init__(fail_silently=fail_silently)
+        # Django 6.1 deprecated BaseEmailBackend.fail_silently: a subclass that
+        # supports it owns the attribute instead of passing it up.
+        super(SlackBackend, self).__init__()
+        self.fail_silently = fail_silently
         self.token = token
         self.color = None
         if hex_color.startswith("#") and (len(hex_color) == 4 or len(hex_color) == 7):

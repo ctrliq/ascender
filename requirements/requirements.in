@@ -15,7 +15,7 @@ cryptography>=50.0.0  # CVE-2026-69247
 Cython>=3 # this is needed as a build dependency, one day we may have separated build deps; <3 cap removed once pyyaml>=6.0.1 supported Cython 3
 daphne>=4.2.2  # CVE-2026-44545 CVE-2026-44546
 distro
-django>=5.2.17,<6.0 # CVE-2026-15307 CVE-2026-15830
+django>=6.1.1 # floor was 5.2.17 for CVE-2026-15307 CVE-2026-15830, both long fixed by 6.1
 django-auth-ldap
 django-cors-headers
 django-guid==3.6.1
