@@ -100,7 +100,7 @@ definition, namely reverse relationships and fields inherited from super classes
 script `tools/scripts/list_fields.py` is available to inspect a model and list details of all its
 available fields:
 ```
-# In shell_plus
+# In awx-manage shell
 >>> from list_fields import pretty_print_model_fields
 >>> pretty_print_model_fields(JobTemplate)
 ```

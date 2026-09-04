@@ -44,7 +44,11 @@ from django.db import connection
 from django.db.models.sql import InsertQuery
 from django.utils.timezone import now
 
-db = json.loads(subprocess.check_output(['awx-manage', 'print_settings', 'DATABASES', '--format', 'json']))
+db = json.loads(
+    subprocess.check_output(
+        ['awx-manage', 'shell', '-c', 'import json; from django.conf import settings; print(json.dumps({"DATABASES": settings.DATABASES}))']
+    )
+)
 name = db['DATABASES']['default']['NAME']
 user = db['DATABASES']['default']['USER']
 pw = db['DATABASES']['default']['PASSWORD']

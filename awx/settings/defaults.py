@@ -394,7 +394,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'oauth2_provider',
     'rest_framework',
-    'django_extensions',
     'polymorphic',
     'social_django',
     'django_guid',
