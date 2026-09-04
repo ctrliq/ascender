@@ -228,11 +228,13 @@ receiver:
 nginx:
 	nginx -g "daemon off;"
 
+## Start a Jupyter notebook server in the dev environment (requires a manual
+## `pip install notebook`; run `import django; django.setup()` in the first cell).
 jupyter:
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	$(MANAGEMENT_COMMAND) shell_plus --notebook
+	DJANGO_SETTINGS_MODULE=awx.settings.development $(PYTHON) -m notebook --NotebookApp.token= --ip 0.0.0.0 --port 9888 --allow-root --no-browser
 
 ## Start the rsyslog configurer process in background in development environment.
 run-rsyslog-configurer:
