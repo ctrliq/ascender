@@ -1,6 +1,12 @@
 # Copyright (c) 2015 Ansible, Inc.
 # All Rights Reserved.
 
+# Python
+import decimal
+import types
+
+import yaml
+
 from django.utils.safestring import SafeText
 from prometheus_client.parser import text_string_to_metric_families
 
@@ -23,6 +29,38 @@ class SurrogateEncoder(encoders.JSONEncoder):
 
 class DefaultJSONRenderer(renderers.JSONRenderer):
     encoder_class = SurrogateEncoder
+
+
+class YAMLSafeDumper(yaml.SafeDumper):
+    """
+    SafeDumper extended to represent the types found in DRF response data.
+    Multi-representers cover any dict/list/str subclass (ReturnDict,
+    ReturnList, Hyperlink, ErrorDetail, ...) as its base type; Decimals are
+    emitted as strings to avoid precision loss.
+    """
+
+
+YAMLSafeDumper.add_multi_representer(dict, yaml.SafeDumper.represent_dict)
+YAMLSafeDumper.add_multi_representer(list, yaml.SafeDumper.represent_list)
+YAMLSafeDumper.add_multi_representer(str, yaml.SafeDumper.represent_str)
+YAMLSafeDumper.add_representer(types.GeneratorType, yaml.SafeDumper.represent_list)
+YAMLSafeDumper.add_representer(decimal.Decimal, lambda dumper, value: dumper.represent_scalar('tag:yaml.org,2002:str', str(value)))
+
+
+class YAMLRenderer(renderers.BaseRenderer):
+    """
+    Renders native Python objects as YAML. In-tree replacement for the
+    abandoned djangorestframework-yaml package.
+    """
+
+    media_type = 'application/yaml'
+    format = 'yaml'
+    charset = 'utf-8'
+
+    def render(self, data, accepted_media_type=None, renderer_context=None):
+        if data is None:
+            return ''
+        return yaml.dump(data, stream=None, encoding=self.charset, Dumper=YAMLSafeDumper, allow_unicode=True, default_flow_style=False)
 
 
 class BrowsableAPIRenderer(renderers.BrowsableAPIRenderer):
