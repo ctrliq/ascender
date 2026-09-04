@@ -268,6 +268,18 @@ class TestIntegration:
         assert get_current_request() is None
         assert get_current_user() is None
 
+    def test_request_cycle_nested_in_impersonation_scope(self, mock_request, mock_user):
+        # A request cycle running inside an impersonate() scope (e.g. a test
+        # driving the full middleware stack) must not clobber that scope once
+        # the request ends -- only leaks from within the request are discarded.
+        middleware = ThreadLocalMiddleware(lambda request: HttpResponse())
+
+        with impersonate(mock_user):
+            middleware(mock_request)
+            assert get_current_user() is mock_user
+
+        assert get_current_user() is None
+
     def test_context_survives_thread_hop_via_asgiref(self, mock_request, mock_user):
         # sync_to_async(thread_sensitive=False) runs the body in a worker
         # thread; contextvars must propagate (thread-locals would not).

@@ -85,15 +85,19 @@ def set_current_request(request):
     end_request_context() takes to restore the previous state. Only
     middleware (or code emulating a request cycle) should call this.
     """
-    return _current_request.set(request)
+    # Snapshotting the impersonation var by re-setting its current value
+    # yields a token whose reset restores an impersonation scope the request
+    # was nested inside, while discarding any set() leaked within the request.
+    return (_current_request.set(request), _impersonated_user.set(_impersonated_user.get()))
 
 
 def end_request_context(token):
     """
-    Undo set_current_request() and clear any impersonation state that leaked
-    out of the request without going through the impersonate() context
-    manager, so nothing bleeds into the next request served by this thread.
+    Undo set_current_request(): restore the previous request binding and
+    impersonation state. Impersonation that leaked out of the request without
+    going through the impersonate() context manager is discarded, so nothing
+    bleeds into the next request served by this thread.
     """
-    _current_request.reset(token)
-    if _impersonated_user.get() is not _NOT_IMPERSONATING:
-        _impersonated_user.set(_NOT_IMPERSONATING)
+    request_token, impersonation_token = token
+    _current_request.reset(request_token)
+    _impersonated_user.reset(impersonation_token)
