@@ -44,9 +44,9 @@ from rest_framework.settings import api_settings
 from rest_framework.views import exception_handler, get_view_name
 from rest_framework import status
 
-# Django REST Framework YAML
-from rest_framework_yaml.parsers import YAMLParser
-from rest_framework_yaml.renderers import YAMLRenderer
+# AWX YAML parser/renderer (in-tree replacement for djangorestframework-yaml)
+from awx.api.parsers import YAMLParser
+from awx.api.renderers import YAMLRenderer
 
 # Python Social Auth
 from social_core.backends.utils import load_backends
