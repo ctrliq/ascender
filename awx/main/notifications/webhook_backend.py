@@ -49,7 +49,10 @@ class WebhookBackend(AWXBaseEmailBackend, CustomNotificationBase):
         self.headers = headers
         self.username = username
         self.password = password
-        super(WebhookBackend, self).__init__(fail_silently=fail_silently)
+        # Django 6.1 deprecated BaseEmailBackend.fail_silently: a subclass that
+        # supports it owns the attribute instead of passing it up.
+        super(WebhookBackend, self).__init__()
+        self.fail_silently = fail_silently
 
     def format_body(self, body):
         # expect body to be a string representing a dict

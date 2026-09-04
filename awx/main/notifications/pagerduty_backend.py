@@ -54,7 +54,10 @@ class PagerDutyBackend(AWXBaseEmailBackend, CustomNotificationBase):
     }
 
     def __init__(self, subdomain, token, fail_silently=False, **kwargs):
-        super(PagerDutyBackend, self).__init__(fail_silently=fail_silently)
+        # Django 6.1 deprecated BaseEmailBackend.fail_silently: a subclass that
+        # supports it owns the attribute instead of passing it up.
+        super(PagerDutyBackend, self).__init__()
+        self.fail_silently = fail_silently
         self.subdomain = subdomain
         self.token = token
 

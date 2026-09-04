@@ -29,7 +29,10 @@ class IrcBackend(AWXBaseEmailBackend, CustomNotificationBase):
     sender_parameter = None
 
     def __init__(self, server, port, nickname, password, use_ssl, fail_silently=False, **kwargs):
-        super(IrcBackend, self).__init__(fail_silently=fail_silently)
+        # Django 6.1 deprecated BaseEmailBackend.fail_silently: a subclass that
+        # supports it owns the attribute instead of passing it up.
+        super(IrcBackend, self).__init__()
+        self.fail_silently = fail_silently
         self.server = server
         self.port = port
         self.nickname = nickname

@@ -54,7 +54,10 @@ class GrafanaBackend(AWXBaseEmailBackend, CustomNotificationBase):
     def __init__(
         self, grafana_key, dashboardId=None, panelId=None, annotation_tags=None, grafana_no_verify_ssl=False, isRegion=True, fail_silently=False, **kwargs
     ):
-        super(GrafanaBackend, self).__init__(fail_silently=fail_silently)
+        # Django 6.1 deprecated BaseEmailBackend.fail_silently: a subclass that
+        # supports it owns the attribute instead of passing it up.
+        super(GrafanaBackend, self).__init__()
+        self.fail_silently = fail_silently
         self.grafana_key = grafana_key
         self.dashboardId = int(dashboardId) if dashboardId != '' else None
         self.panelId = int(panelId) if panelId != '' else None

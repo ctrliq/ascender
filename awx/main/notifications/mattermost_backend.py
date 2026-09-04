@@ -22,7 +22,10 @@ class MattermostBackend(AWXBaseEmailBackend, CustomNotificationBase):
     def __init__(
         self, mattermost_no_verify_ssl=False, mattermost_channel=None, mattermost_username=None, mattermost_icon_url=None, fail_silently=False, **kwargs
     ):
-        super(MattermostBackend, self).__init__(fail_silently=fail_silently)
+        # Django 6.1 deprecated BaseEmailBackend.fail_silently: a subclass that
+        # supports it owns the attribute instead of passing it up.
+        super(MattermostBackend, self).__init__()
+        self.fail_silently = fail_silently
         self.mattermost_channel = mattermost_channel
         self.mattermost_username = mattermost_username
         self.mattermost_icon_url = mattermost_icon_url
