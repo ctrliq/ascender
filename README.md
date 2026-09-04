@@ -2,14 +2,14 @@
 
 [![CI](https://github.com/ctrliq/ascender/actions/workflows/ci.yml/badge.svg)](https://github.com/ctrliq/ascender/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](./LICENSE)
-[![Python](https://img.shields.io/badge/python-3.12-blue.svg)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/python-3.14-blue.svg)](https://www.python.org/)
 
 Ascender provides a web-based user interface, REST API, and task engine built on top of [Ansible](https://github.com/ansible/ansible). It is the automation platform at the centre of this project, based on the upstream [AWX](https://github.com/ansible/awx) project and maintained by Ctrl IQ.
 
 ## Requirements
 
 - Docker with Compose, for the development environment
-- Python 3.12, matching what the container images build against
+- Python 3.14, matching what the container images build against
 - A Kubernetes cluster for production, which the installer can provision for you
 
 ## Installation

@@ -20,7 +20,7 @@ Supporting containers also running:
 - `tools_valkey_1` – Valkey (Redis-compatible) cache
 
 Runtime versions (inside container):
-- **Python** 3.12.12
+- **Python** 3.14.7
 - **Django** 5.2.14
 - **psycopg** 3.1.18
 - **black** 26.5.1 | **flake8** 7.3.0 | **yamllint** 1.38.0

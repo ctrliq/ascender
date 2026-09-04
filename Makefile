@@ -1,6 +1,6 @@
 # Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 
-PYTHON := $(notdir $(shell for i in python3.12 python3; do command -v $$i; done|sed 1q))
+PYTHON := $(notdir $(shell for i in python3.14 python3; do command -v $$i; done|sed 1q))
 SHELL := bash
 DOCKER_COMPOSE ?= docker compose
 OFFICIAL ?= no
