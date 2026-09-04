@@ -282,8 +282,9 @@ class TowerSAMLIdentityProvider(BaseSAMLIdentityProvider):
 
         social-auth-core 5.0 changed the third argument from a single attribute
         name to a tuple of candidate names, and added a keyword-only
-        validate_defaults. Accept both shapes so this keeps working across the
-        4.x and 5.x call conventions.
+        validate_defaults. This override tracks the 5.x contract; a bare string
+        is still accepted defensively, but the module as a whole requires 5.x
+        (see get_idp, which passes the backend that 5.x __init__ requires).
 
         Two deliberate divergences from upstream 5.x, both preserving existing
         Ascender behavior: a configured attribute the IdP did not send logs a
