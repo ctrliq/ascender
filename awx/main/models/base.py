@@ -7,8 +7,8 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now
 
-# AWX middleware for thread-local request/user
-from awx.main.middleware import get_current_user
+# AWX current-request/user tracking (in-tree django-crum replacement)
+from awx.main.request_context import get_current_user
 
 # AWX
 from awx.main.utils import encrypt_field, parse_yaml_or_json
