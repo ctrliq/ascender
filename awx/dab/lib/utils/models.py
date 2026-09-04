@@ -7,7 +7,7 @@ from dataclasses import asdict, dataclass
 from itertools import chain
 from typing import TYPE_CHECKING, Optional
 
-from crum import get_current_user
+from awx.main.request_context import get_current_user  # Ascender: in-tree replacement for django-crum
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models

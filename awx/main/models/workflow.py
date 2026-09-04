@@ -19,8 +19,8 @@ from django.utils.timezone import now, timedelta
 
 # from django import settings as tower_settings
 
-# AWX middleware for thread-local request/user
-from awx.main.middleware import get_current_user
+# AWX current-request/user tracking (in-tree django-crum replacement)
+from awx.main.request_context import get_current_user
 
 from jinja2 import sandbox
 from jinja2.exceptions import TemplateSyntaxError, UndefinedError, SecurityError
