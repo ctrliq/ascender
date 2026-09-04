@@ -137,10 +137,13 @@ def underscore_to_camelcase(s):
 @functools.cache
 def is_testing(argv=None):
     '''Return True if running django or py.test unit tests.'''
-    if os.environ.get('DJANGO_SETTINGS_MODULE') == 'awx.main.tests.settings_for_test':
+    # Prefix match, not equality: xdist workers are separate processes whose argv
+    # is not the pytest entry point, so the settings module is the only signal that
+    # reaches them, and variants of it must match too.
+    if (os.environ.get('DJANGO_SETTINGS_MODULE') or '').startswith('awx.main.tests.settings_for_test'):
         return True
     argv = sys.argv if argv is None else argv
-    if len(argv) >= 1 and ('py.test' in argv[0] or 'py/test.py' in argv[0]):
+    if len(argv) >= 1 and ('py.test' in argv[0] or 'pytest' in argv[0] or 'py/test.py' in argv[0]):
         return True
     elif len(argv) >= 2 and argv[1] == 'test':
         return True

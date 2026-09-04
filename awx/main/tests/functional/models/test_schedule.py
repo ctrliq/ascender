@@ -393,7 +393,8 @@ def test_duplicate_name_within_template(job_template):
     with pytest.raises(IntegrityError) as ierror:
         s2.save()
 
-    assert str(ierror.value) == "UNIQUE constraint failed: main_schedule.unified_job_template_id, main_schedule.name"
+    # The wording is backend-specific; assert on the constraint that fired.
+    assert 'main_schedule_unified_job_template_id_name' in str(ierror.value)
 
 
 # Test until with multiple entries (should only return the first)

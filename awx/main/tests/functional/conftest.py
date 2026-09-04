@@ -12,8 +12,8 @@ from django.apps import apps
 from django.core.handlers.exception import response_for_exception
 from django.contrib.auth.models import User
 from django.core.serializers.json import DjangoJSONEncoder
-from django.db.backends.sqlite3.base import SQLiteCursorWrapper
 
+from django.db import transaction
 from django.db.models.signals import post_migrate
 
 # AWX
@@ -34,13 +34,6 @@ from awx.main.models.organization import (
 )
 from awx.main.models.rbac import Role
 from awx.main.models.notifications import NotificationTemplate, Notification
-from awx.main.models.events import (
-    JobEvent,
-    AdHocCommandEvent,
-    ProjectUpdateEvent,
-    InventoryUpdateEvent,
-    SystemJobEvent,
-)
 from awx.main.models.workflow import WorkflowJobTemplate
 from awx.main.models.ad_hoc_commands import AdHocCommand
 from awx.main.models.oauth import OAuth2Application as Application
@@ -611,7 +604,14 @@ def _request(verb):
             force_authenticate(request, user=user)
 
         if not request_error:
-            response = view(request, *view_args, **view_kwargs)
+            # Production runs with ATOMIC_REQUESTS, so every request is its own
+            # atomic block. Calling the view directly bypasses Django's handler,
+            # so wrap it here: inside a test's transaction this is a savepoint,
+            # and a request whose statement fails rolls back to it instead of
+            # leaving the whole test's transaction aborted, which is what
+            # production does and what the next request in the test expects.
+            with transaction.atomic():
+                response = view(request, *view_args, **view_kwargs)
         else:
             response = response_for_exception(request, request_error)
         if middleware:
@@ -788,43 +788,6 @@ def get_db_prep_save(self, value, connection, **kwargs):
 @pytest.fixture
 def oauth_application(admin):
     return Application.objects.create(name='test app', user=admin, client_type='confidential', authorization_grant_type='password')
-
-
-class MockCopy:
-    events = []
-    index = -1
-
-    def __init__(self):
-        self.events = []
-        for cls in (JobEvent, AdHocCommandEvent, ProjectUpdateEvent, InventoryUpdateEvent, SystemJobEvent):
-            events = list(cls.objects.order_by('start_line').values_list('stdout', flat=True))
-            if events:
-                self.events = events
-                break
-
-    def read(self):
-        self.index = self.index + 1
-        if self.index < len(self.events):
-            return memoryview(self.events[self.index].encode())
-
-        return None
-
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        pass
-
-
-@pytest.fixture
-def sqlite_copy(request, mocker):
-    # copy is postgres-specific, and SQLite doesn't support it; mock its
-    # behavior to test that it writes a file that contains stdout from events
-
-    def write_stdout(self, sql, params=None):
-        return MockCopy()
-
-    mocker.patch.object(SQLiteCursorWrapper, 'copy', write_stdout, create=True)
 
 
 @pytest.fixture

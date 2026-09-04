@@ -309,15 +309,6 @@ test:
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(PYTEST_ARGS) $(TEST_DIRS)
 	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
 
-## Run the tests that need a real PostgreSQL, which the SQLite suite skips.
-PG_TEST_DIRS ?= awx/main/tests/functional/commands/test_cleanup_jobs_postgres.py
-test-postgres:
-	if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
-	fi; \
-	PYTHONDONTWRITEBYTECODE=1 DJANGO_SETTINGS_MODULE=awx.main.tests.settings_for_test_pg \
-		py.test -p no:cacheprovider -v $(PG_TEST_DIRS)
-
 ## Run all API unit tests without parallel execution (safer but slower).
 test-serial:
 	if [ "$(VENV_BASE)" ]; then \
@@ -341,8 +332,13 @@ test_migrations:
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider --migrations -m migration_test $(PYTEST_ARGS) $(TEST_DIRS)
 
 ## Runs AWX_DOCKER_CMD inside a new docker container.
+# Extra docker flags for the throwaway container. CI sets this to reach the
+# PostgreSQL service the suite now needs, e.g.
+#   DOCKER_RUNNER_OPTS='--network host -e AWX_TEST_DATABASE_HOST=127.0.0.1'
+DOCKER_RUNNER_OPTS ?=
+
 docker-runner:
-	docker run -u $(shell id -u) --rm -v $(shell pwd):/awx_devel/:Z --workdir=/awx_devel $(DEVEL_IMAGE_NAME) $(AWX_DOCKER_CMD)
+	docker run -u $(shell id -u) --rm -v $(shell pwd):/awx_devel/:Z --workdir=/awx_devel $(DOCKER_RUNNER_OPTS) $(DEVEL_IMAGE_NAME) $(AWX_DOCKER_CMD)
 
 test_unit:
 	@if [ "$(VENV_BASE)" ]; then \

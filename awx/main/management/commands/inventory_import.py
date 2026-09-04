@@ -876,11 +876,13 @@ class Command(BaseCommand):
         elif not inventory_name and not inventory_id:
             raise CommandError('--inventory-name or --inventory-id is required')
 
+        # Validated before taking the advisory lock: rejecting the arguments does
+        # not need a database round trip, and on PostgreSQL the lock is a real one.
+        raw_source = options.get('source', None)
+        if not raw_source:
+            raise CommandError('--source is required')
+
         with advisory_lock('inventory_{}_import'.format(inventory_id)):
-            # Obtain rest of the options needed to run update
-            raw_source = options.get('source', None)
-            if not raw_source:
-                raise CommandError('--source is required')
             verbosity = int(options.get('verbosity', 1))
             self.set_logging_level(verbosity)
 
