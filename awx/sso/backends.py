@@ -29,7 +29,6 @@ from radiusauth.backends import RADIUSBackend as BaseRADIUSBackend
 import tacacs_plus
 
 # social
-from social_core.backends.saml import OID_USERID
 from social_core.backends.saml import SAMLAuth as BaseSAMLAuth
 from social_core.backends.saml import SAMLIdentityProvider as BaseSAMLIdentityProvider
 
@@ -275,13 +274,7 @@ class TowerSAMLIdentityProvider(BaseSAMLIdentityProvider):
     Custom Identity Provider to make attributes to what we expect.
     """
 
-    def get_user_permanent_id(self, attributes):
-        uid = attributes[self.conf.get('attr_user_permanent_id', OID_USERID)]
-        if isinstance(uid, str):
-            return uid
-        return uid[0]
-
-    def get_attr(self, attributes, conf_key, default_attributes=(), **kwargs):
+    def get_attr(self, attributes, conf_key, default_attributes=(), *, validate_defaults=False):
         """
         Get the attribute named by self.conf[conf_key] out of the attributes.
         When conf_key is not configured, fall back to the first of
@@ -291,6 +284,11 @@ class TowerSAMLIdentityProvider(BaseSAMLIdentityProvider):
         name to a tuple of candidate names, and added a keyword-only
         validate_defaults. Accept both shapes so this keeps working across the
         4.x and 5.x call conventions.
+
+        Two deliberate divergences from upstream 5.x, both preserving existing
+        Ascender behavior: a configured attribute the IdP did not send logs a
+        warning and returns None rather than raising AuthMissingParameter, and
+        validate_defaults is accepted but not honored, for the same reason.
         """
         if conf_key in self.conf:
             key = self.conf[conf_key]
@@ -307,6 +305,11 @@ class TowerSAMLIdentityProvider(BaseSAMLIdentityProvider):
         # In certain implementations (like https://pagure.io/ipsilon) this value is a string, not a list
         if isinstance(value, (list, tuple)):
             value = value[0] if value else None
+        # An attribute that is present but blank is a mapping failure, not a value.
+        # Treat it as absent so it warns here and is skipped by the user_details
+        # pipeline step rather than overwriting existing user data with a blank.
+        if isinstance(value, str) and not value.strip():
+            value = None
         if conf_key in ('attr_first_name', 'attr_last_name', 'attr_username', 'attr_email') and value is None:
             logger.warning(
                 "Could not map user detail '%s' from SAML attribute '%s'; update SOCIAL_AUTH_SAML_ENABLED_IDPS['%s']['%s'] with the correct SAML attribute.",
