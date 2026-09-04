@@ -12,7 +12,7 @@ To encrypt secret fields, Ascender uses AES in CBC mode with a 256-bit key for e
 If necessary, credentials and encrypted settings can be extracted using the Ascender shell:
 
 ```python
-$ awx-manage shell_plus
+$ awx-manage shell
 >>> from awx.main.utils import decrypt_field
 >>> print(decrypt_field(Credential.objects.get(name="my private key"), "ssh_key_data")) # Example for a credential
 >>> print(decrypt_field(Setting.objects.get(key='SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET'), 'value')) # Example for a setting
@@ -20,5 +20,5 @@ $ awx-manage shell_plus
 
 If you are running a kubernetes based deployment, you can execute awx-manage like this:
 ```bash
-$ kubectl exec --stdin --tty [instance name]-task-[...] -c [instance name]-task -- awx-manage shell_plus
+$ kubectl exec --stdin --tty [instance name]-task-[...] -c [instance name]-task -- awx-manage shell
 ```
