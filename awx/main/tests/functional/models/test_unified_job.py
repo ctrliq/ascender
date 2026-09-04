@@ -1,7 +1,7 @@
 import itertools
 import pytest
 
-# AWX middleware for thread-local request/user
+# AWX current-request/user tracking (in-tree django-crum replacement)
 from awx.main.middleware import impersonate
 
 # Django

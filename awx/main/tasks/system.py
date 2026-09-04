@@ -26,7 +26,7 @@ from django.utils.translation import gettext_noop
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-# AWX middleware for thread-local request/user
+# AWX current-request/user tracking (in-tree django-crum replacement)
 from awx.main.request_context import impersonate
 
 # Runner
