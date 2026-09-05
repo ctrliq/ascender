@@ -18,6 +18,21 @@ describe('<HostStatusBar />', () => {
     expect(wrapper.querySelectorAll(':scope > div > div')).toHaveLength(5);
   });
 
+  test('segments keep their styling props out of the DOM', () => {
+    // color and count drive the CSS only; as plain props styled-components
+    // forwarded them to the div, and count is not an HTML attribute
+    const { container } = renderWithContexts(
+      <HostStatusBar counts={mockCounts} />
+    );
+    const segments =
+      container.firstChild.querySelectorAll(':scope > div > div');
+    expect(segments).toHaveLength(5);
+    segments.forEach((segment) => {
+      expect(segment).not.toHaveAttribute('count');
+      expect(segment).not.toHaveAttribute('color');
+    });
+  });
+
   test('tooltips should display host status and count', async () => {
     const { user, container } = renderWithContexts(
       <HostStatusBar counts={mockCounts} />

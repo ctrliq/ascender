@@ -18,8 +18,10 @@ const GridDL = styled.dl`
   }
 `;
 
+// $hasJob is transient: a plain prop would be forwarded to the <p> and land in
+// the DOM as an unknown attribute.
 const ResourceDeleted = styled.p`
-  margin-bottom: ${(props) => (props.job ? '10px' : '0px')};
+  margin-bottom: ${(props) => (props.$hasJob ? '10px' : '0px')};
 `;
 
 const StyledExclamationTriangleIcon = styled(ExclamationTriangleIcon)`
@@ -131,7 +133,7 @@ function WorkflowNodeHelp({ node }) {
   return (
     <>
       {!unifiedJobTemplate && (!job || job.type !== 'workflow_approval') && (
-        <ResourceDeleted job={job}>
+        <ResourceDeleted $hasJob={Boolean(job)}>
           <StyledExclamationTriangleIcon />
           <Trans>
             The resource associated with this node has been deleted.

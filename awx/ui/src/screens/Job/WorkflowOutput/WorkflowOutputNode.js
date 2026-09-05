@@ -10,8 +10,10 @@ import { secondsToHHMMSS } from 'util/dates';
 import { stringIsUUID } from 'util/strings';
 import { constants as wfConstants } from 'components/Workflow/WorkflowUtils';
 
+// $hasJob is transient: the job object itself used to be forwarded to the <g>
+// and land in the DOM as an attribute.
 const NodeG = styled.g`
-  cursor: ${(props) => (props.job ? 'pointer' : 'default')};
+  cursor: ${(props) => (props.$hasJob ? 'pointer' : 'default')};
 `;
 
 const JobTopLine = styled.div`
@@ -144,7 +146,7 @@ function WorkflowOutputNode({ mouseEnter, mouseLeave, node }) {
       transform={`translate(${nodePositions[node.id].x},${
         nodePositions[node.id].y - nodePositions[1].y
       })`}
-      job={job}
+      $hasJob={Boolean(job)}
       onClick={handleNodeClick}
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}

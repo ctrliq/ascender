@@ -91,6 +91,13 @@ describe('WorkflowOutputNode', () => {
     expect(container.querySelector('#node-2')).toBeInTheDocument();
   });
 
+  test('keeps the job object off the node group in the DOM', () => {
+    // the job only decides the cursor; as a plain prop styled-components
+    // forwarded the whole object to the <g> as an attribute
+    const { container } = renderNode(nodeWithJT);
+    expect(container.querySelector('#node-2')).not.toHaveAttribute('job');
+  });
+
   test('node contents displayed correctly when Job and Job Template exist', () => {
     const { container } = renderNode(nodeWithJT);
     expect(container.querySelector('#node-2')).toHaveTextContent(
