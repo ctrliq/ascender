@@ -47,6 +47,12 @@ def mock_access():
         try:
             mock_instance = mock.MagicMock(__name__='foobar')
             MockAccess = mock.MagicMock(return_value=mock_instance)
+            # Real access classes carry tuples here, and optimize_queryset guards
+            # on them being non-empty. A bare MagicMock attribute is truthy but
+            # unpacks to nothing, which makes that guard pass and then calls
+            # select_related() with no arguments.
+            MockAccess.select_related = ()
+            MockAccess.prefetch_related = ()
             the_patch = mock.patch.dict('awx.main.access.access_registry', {TowerClass: MockAccess}, clear=False)
             the_patch.__enter__()
             yield mock_instance

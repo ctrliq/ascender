@@ -124,8 +124,18 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         self.queries_log = RecordedQueryLog(self.queries_log, self)
 
     @property
-    @memoize(ttl=1, cache=__loc__)
     def force_debug_cursor(self):
+        # Django's test helpers (assertNumQueries, CaptureQueriesContext) turn
+        # query recording on by assigning to this attribute. The setter below
+        # keeps that assignment, so honour it before consulting the profiling
+        # flag; without this, recording could never be switched on by a caller
+        # and every assertNumQueries would observe zero queries.
+        if getattr(self, '_force_debug_cursor', False):
+            return True
+        return self._profiling_enabled()
+
+    @memoize(ttl=1, cache=__loc__)
+    def _profiling_enabled(self):
         # in Django's base DB implementation, `self.force_debug_cursor` is just
         # a simple boolean, and this value is used to signal to Django that it
         # should record queries into `self.queries_log` as they're executed (this
@@ -151,4 +161,4 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
     @force_debug_cursor.setter
     def force_debug_cursor(self, v):
-        return
+        self._force_debug_cursor = v

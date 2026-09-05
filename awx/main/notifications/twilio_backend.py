@@ -25,7 +25,10 @@ class TwilioBackend(AWXBaseEmailBackend, CustomNotificationBase):
     sender_parameter = "from_number"
 
     def __init__(self, account_sid, account_token, fail_silently=False, **kwargs):
-        super(TwilioBackend, self).__init__(fail_silently=fail_silently)
+        # Django 6.1 deprecated BaseEmailBackend.fail_silently: a subclass that
+        # supports it owns the attribute instead of passing it up.
+        super(TwilioBackend, self).__init__()
+        self.fail_silently = fail_silently
         self.account_sid = account_sid
         self.account_token = account_token
 

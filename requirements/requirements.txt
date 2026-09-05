@@ -98,7 +98,7 @@ defusedxml==0.7.1
     #   social-auth-core
 distro==1.9.0
     # via -r /awx_devel/requirements/requirements.in
-django==5.2.17
+django==6.1.1
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   channels
@@ -133,7 +133,7 @@ django-split-settings==1.0.0
     # via -r /awx_devel/requirements/requirements.in
 django-valkey==0.4.0
     # via -r /awx_devel/requirements/requirements.in
-djangorestframework==3.17.2
+djangorestframework==3.18.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   drf-spectacular
@@ -288,9 +288,9 @@ pyasn1-modules==0.4.2
     #   service-identity
 pycparser==2.21
     # via cffi
-pydantic==2.6.1
+pydantic==2.13.5
     # via inflect
-pydantic-core==2.16.2
+pydantic-core==2.46.5
     # via pydantic
 pygerduty==0.38.3
     # via -r /awx_devel/requirements/requirements.in
@@ -421,23 +421,22 @@ twisted[tls]==26.4.0
     #   daphne
 txaio==23.1.1
     # via autobahn
-typing-extensions==4.12.2
+typing-extensions==4.16.0
     # via
-    #   aiohttp
-    #   aiosignal
     #   azure-core
     #   azure-identity
     #   azure-keyvault-secrets
     #   django-polymorphic
     #   inflect
     #   jwcrypto
-    #   psycopg
     #   pydantic
     #   pydantic-core
     #   pygithub
-    #   pyopenssl
     #   setuptools-scm
     #   twisted
+    #   typing-inspection
+typing-inspection==0.4.4
+    # via pydantic
 uritemplate==4.2.0
     # via drf-spectacular
 urllib3==2.7.0
@@ -464,7 +463,7 @@ yarl==1.18.3
     # via aiohttp
 zipp==3.23.0
     # via importlib-metadata
-zope-interface==7.0.3
+zope-interface==8.6
     # via twisted
 
 # The following packages are considered to be unsafe in a requirements file:
@@ -478,4 +477,3 @@ setuptools==84.0.0
     #   incremental
     #   setuptools-rust
     #   setuptools-scm
-    #   zope-interface

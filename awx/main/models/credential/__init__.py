@@ -370,8 +370,10 @@ class CredentialType(CommonModelNameNotUnique):
     )
 
     @classmethod
-    def from_db(cls, db, field_names, values):
-        instance = super(CredentialType, cls).from_db(db, field_names, values)
+    def from_db(cls, db, field_names, values, *, fetch_mode=None):
+        # fetch_mode has to be forwarded: Django 6.1 records it on the instance
+        # state, and an override that drops it opts the model out of fetch modes.
+        instance = super(CredentialType, cls).from_db(db, field_names, values, fetch_mode=fetch_mode)
         if instance.managed and instance.namespace:
             native = ManagedCredentialType.registry[instance.namespace]
             instance.inputs = native.inputs

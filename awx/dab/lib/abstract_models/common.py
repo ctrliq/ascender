@@ -195,10 +195,12 @@ class AbstractCommonModel(models.Model):
         return super().save(*args, **kwargs)
 
     @classmethod
-    def from_db(self, db, field_names, values):
+    # Ascender: fetch_mode added for Django 6.1, which records it on the instance
+    # state; an override that drops it opts the model out of fetch modes.
+    def from_db(self, db, field_names, values, *, fetch_mode=None):
         from cryptography.fernet import InvalidToken
 
-        instance = super().from_db(db, field_names, values)
+        instance = super().from_db(db, field_names, values, fetch_mode=fetch_mode)
 
         for field in self.encrypted_fields:
             field_value = getattr(instance, field, None)

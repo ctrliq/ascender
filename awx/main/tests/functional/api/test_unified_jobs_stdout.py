@@ -57,11 +57,11 @@ def _mk_inventory_update(created=None):
         [_mk_inventory_update, InventoryUpdateEvent, 'inventory_update', 'api:inventory_update_stdout'],
     ],
 )
-def test_text_stdout(sqlite_copy, Parent, Child, relation, view, get, admin):
+def test_text_stdout(Parent, Child, relation, view, get, admin):
     job = Parent()
     job.save()
     for i in range(3):
-        Child(**{relation: job, 'stdout': 'Testing {}\n'.format(i), 'start_line': i}).save()
+        Child(**{relation: job, 'stdout': 'Testing {}'.format(i), 'start_line': i, 'job_created': job.created}).save()
     url = reverse(view, kwargs={'pk': job.pk}) + '?format=txt'
 
     response = get(url, user=admin, expect=200)
@@ -79,11 +79,11 @@ def test_text_stdout(sqlite_copy, Parent, Child, relation, view, get, admin):
     ],
 )
 @pytest.mark.parametrize('download', [True, False])
-def test_ansi_stdout_filtering(sqlite_copy, Parent, Child, relation, view, download, get, admin):
+def test_ansi_stdout_filtering(Parent, Child, relation, view, download, get, admin):
     job = Parent()
     job.save()
     for i in range(3):
-        Child(**{relation: job, 'stdout': '\x1b[0;36mTesting {}\x1b[0m\n'.format(i), 'start_line': i}).save()
+        Child(**{relation: job, 'stdout': '\x1b[0;36mTesting {}\x1b[0m'.format(i), 'start_line': i, 'job_created': job.created}).save()
     url = reverse(view, kwargs={'pk': job.pk})
 
     # ansi codes in ?format=txt should get filtered
@@ -111,11 +111,11 @@ def test_ansi_stdout_filtering(sqlite_copy, Parent, Child, relation, view, downl
         [_mk_inventory_update, InventoryUpdateEvent, 'inventory_update', 'api:inventory_update_stdout'],
     ],
 )
-def test_colorized_html_stdout(sqlite_copy, Parent, Child, relation, view, get, admin):
+def test_colorized_html_stdout(Parent, Child, relation, view, get, admin):
     job = Parent()
     job.save()
     for i in range(3):
-        Child(**{relation: job, 'stdout': '\x1b[0;36mTesting {}\x1b[0m\n'.format(i), 'start_line': i}).save()
+        Child(**{relation: job, 'stdout': '\x1b[0;36mTesting {}\x1b[0m'.format(i), 'start_line': i, 'job_created': job.created}).save()
     url = reverse(view, kwargs={'pk': job.pk}) + '?format=html'
 
     response = get(url, user=admin, expect=200)
@@ -134,11 +134,11 @@ def test_colorized_html_stdout(sqlite_copy, Parent, Child, relation, view, get, 
         [_mk_inventory_update, InventoryUpdateEvent, 'inventory_update', 'api:inventory_update_stdout'],
     ],
 )
-def test_stdout_line_range(sqlite_copy, Parent, Child, relation, view, get, admin):
+def test_stdout_line_range(Parent, Child, relation, view, get, admin):
     job = Parent()
     job.save()
     for i in range(20):
-        Child(**{relation: job, 'stdout': 'Testing {}\n'.format(i), 'start_line': i}).save()
+        Child(**{relation: job, 'stdout': 'Testing {}'.format(i), 'start_line': i, 'job_created': job.created}).save()
     url = reverse(view, kwargs={'pk': job.pk}) + '?format=html&start_line=5&end_line=10'
 
     response = get(url, user=admin, expect=200)
@@ -146,19 +146,19 @@ def test_stdout_line_range(sqlite_copy, Parent, Child, relation, view, get, admi
 
 
 @pytest.mark.django_db
-def test_text_stdout_from_system_job_events(sqlite_copy, get, admin):
+def test_text_stdout_from_system_job_events(get, admin):
     created = tz_now()
     job = SystemJob(created=created)
     job.save()
     for i in range(3):
-        SystemJobEvent(system_job=job, stdout='Testing {}\n'.format(i), start_line=i, job_created=created).save()
+        SystemJobEvent(system_job=job, stdout='Testing {}'.format(i), start_line=i, job_created=created).save()
     url = reverse('api:system_job_detail', kwargs={'pk': job.pk})
     response = get(url, user=admin, expect=200)
     assert smart_str(response.data['result_stdout']).splitlines() == ['Testing %d' % i for i in range(3)]
 
 
 @pytest.mark.django_db
-def test_text_stdout_with_max_stdout(sqlite_copy, get, admin):
+def test_text_stdout_with_max_stdout(get, admin):
     created = tz_now()
     job = SystemJob(created=created)
     job.save()
@@ -185,7 +185,7 @@ def test_text_stdout_with_max_stdout(sqlite_copy, get, admin):
 )
 @pytest.mark.parametrize('fmt', ['txt', 'ansi'])
 @mock.patch('awx.main.redact.UriCleaner.SENSITIVE_URI_PATTERN', mock.Mock(**{'search.return_value': None}))  # really slow for large strings
-def test_max_bytes_display(sqlite_copy, Parent, Child, relation, view, fmt, get, admin):
+def test_max_bytes_display(Parent, Child, relation, view, fmt, get, admin):
     created = tz_now()
     job = Parent(created=created)
     job.save()
@@ -201,7 +201,8 @@ def test_max_bytes_display(sqlite_copy, Parent, Child, relation, view, fmt, get,
     )
 
     response = get(url + '?format={}_download'.format(fmt), user=admin, expect=200)
-    assert smart_str(response.content) == large_stdout
+    # COPY terminates every row, so the assembled download ends with a newline
+    assert smart_str(response.content) == large_stdout + '\n'
 
 
 @pytest.mark.django_db
@@ -255,11 +256,11 @@ def test_legacy_result_stdout_with_max_bytes(Cls, view, fmt, get, admin):
     ],
 )
 @pytest.mark.parametrize('fmt', ['txt', 'ansi', 'txt_download', 'ansi_download'])
-def test_text_with_unicode_stdout(sqlite_copy, Parent, Child, relation, view, get, admin, fmt):
+def test_text_with_unicode_stdout(Parent, Child, relation, view, get, admin, fmt):
     job = Parent()
     job.save()
     for i in range(3):
-        Child(**{relation: job, 'stdout': u'オ{}\n'.format(i), 'start_line': i}).save()
+        Child(**{relation: job, 'stdout': u'オ{}'.format(i), 'start_line': i, 'job_created': job.created}).save()
     url = reverse(view, kwargs={'pk': job.pk}) + '?format=' + fmt
 
     response = get(url, user=admin, expect=200)
@@ -267,12 +268,12 @@ def test_text_with_unicode_stdout(sqlite_copy, Parent, Child, relation, view, ge
 
 
 @pytest.mark.django_db
-def test_unicode_with_base64_ansi(sqlite_copy, get, admin):
+def test_unicode_with_base64_ansi(get, admin):
     created = tz_now()
     job = Job(created=created)
     job.save()
     for i in range(3):
-        JobEvent(job=job, stdout='オ{}\n'.format(i), start_line=i, job_created=created).save()
+        JobEvent(job=job, stdout='オ{}'.format(i), start_line=i, job_created=created).save()
     url = reverse('api:job_stdout', kwargs={'pk': job.pk}) + '?format=json&content_encoding=base64'
 
     response = get(url, user=admin, expect=200)
