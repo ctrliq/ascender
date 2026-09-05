@@ -123,7 +123,6 @@ Migration files live in `awx/main/migrations/` (218 existing files).
 | `awx/settings/` | Settings modules: `defaults.py`, `development.py`, `production.py` |
 | `awx/sso/` | SSO/LDAP/SAML backends + tests |
 | `awx/ui/` | UI / React frontend (npm) |
-| `awx/ui_next/` | New UI (not currently used, built separately via `make ui-next`) |
 | `requirements/` | Pinned deps: `requirements.txt`, `requirements_dev.txt`, `requirements_git.txt` |
 | `tools/` | Docker Compose, Ansible build playbooks, dev scripts |
 | `docs/` | Project documentation |

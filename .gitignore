@@ -164,8 +164,6 @@ use_dev_supervisor.txt
 /Dockerfile.dev
 /Dockerfile.kube-dev
 
-awx/ui_next/src
-awx/ui_next/build
 
 # Docs build stuff
 docs/docsite/build/
