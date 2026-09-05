@@ -82,6 +82,14 @@ module.exports = function (proxy, allowedHost, proxyOptions = {}) {
       overlay: {
         errors: true,
         warnings: false,
+        // The browser reports "ResizeObserver loop completed with undelivered
+        // notifications" when an observed element resizes during another
+        // element's measurement delivery — benign, and unavoidable while
+        // react-virtual's dev build flushes row measurements synchronously on
+        // a streaming job. Keep it out of the full-screen overlay; it still
+        // reaches the console and window 'error' listeners.
+        runtimeErrors: (error) =>
+          !/ResizeObserver loop/.test((error && error.message) || ''),
       },
     },
     devMiddleware: {
