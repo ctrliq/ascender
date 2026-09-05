@@ -4,7 +4,7 @@ from datetime import datetime
 from typing import Optional
 
 import jwt
-from crum import impersonate
+from awx.main.request_context import impersonate  # Ascender: in-tree replacement for django-crum
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.utils import IntegrityError

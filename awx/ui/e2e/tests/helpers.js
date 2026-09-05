@@ -30,11 +30,6 @@ async function login(page) {
 // Console errors the application already emits. Anything not matched here fails
 // the spec that saw it, so a new one has to be either fixed or added knowingly.
 const ALLOWED_CONSOLE_ERRORS = [
-  // The workflow job selector is hosted inside a tab, and a tab is a <button>.
-  // Tracked as the follow-up noted in the pull request that fixed #742: moving
-  // the control out of the tab list removes this.
-  /cannot be a descendant of/i,
-  /cannot contain a nested/i,
   // websocket chatter when a job finishes while a page is open
   /websocket/i,
 ];
@@ -57,6 +52,33 @@ function watchConsole(page) {
   };
 }
 
+// The job output measures its rows with a ResizeObserver, and a measurement
+// that resizes the scroll container in the same frame makes the browser report
+// "ResizeObserver loop completed with undelivered notifications" on window. It
+// is neither a console message nor a thrown exception, so watchConsole and
+// Playwright's pageerror both miss it; only an error listener installed before
+// the app loads sees it. Call this before the first navigation.
+async function watchLayoutLoops(page) {
+  await page.addInitScript(() => {
+    window.__ascenderLayoutLoops = [];
+    window.addEventListener(
+      'error',
+      (event) => {
+        if (/ResizeObserver loop/.test(event.message || '')) {
+          window.__ascenderLayoutLoops.push(event.message);
+        }
+      },
+      true
+    );
+  });
+  return {
+    async expectQuiet() {
+      const seen = await page.evaluate(() => window.__ascenderLayoutLoops);
+      expect(seen, `layout loops reported:\n${seen.join('\n')}`).toEqual([]);
+    },
+  };
+}
+
 // The tab bar hosts the workflow job selector, whose toggle shows either the
 // position within the workflow or, once a status filter is on, that status.
 const workflowToggle = (page) =>
@@ -73,6 +95,7 @@ module.exports = {
   route,
   login,
   watchConsole,
+  watchLayoutLoops,
   workflowToggle,
   menuItem,
   USERNAME,

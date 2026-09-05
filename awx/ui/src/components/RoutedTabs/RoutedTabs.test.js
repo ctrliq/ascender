@@ -64,20 +64,22 @@ describe('<RoutedTabs />', () => {
   });
 });
 
-describe('<RoutedTabs /> with a tab that hosts a control', () => {
-  // The workflow job selector is registered as a tab with no link, so that it
-  // sits in the tab bar. Clicks on the control inside it bubble to the tab.
+describe('<RoutedTabs /> with a control beside the tabs', () => {
+  // The workflow job selector is registered as an entry with no link, so that
+  // it sits in the tab bar. It has to render beside the tab list rather than
+  // inside a tab: a tab is a <button>, and so is the selector's own toggle,
+  // which is why the control here is a real button.
   const controlTabs = [
     { name: 'Details', link: '/jobs/playbook/953/details', id: 0 },
     { name: 'Output', link: '/jobs/playbook/953/output', id: 1 },
     {
-      // a plain element, not a <button>: the real selector nests a button inside
-      // the tab's own button, which React rightly complains about, and the
-      // console guard in setupTests turns that complaint into a failure
-      name: <span data-testid="wf-control">Workflow Job 2/4</span>,
+      name: (
+        <button type="button" data-testid="wf-control">
+          Workflow Job 2/4
+        </button>
+      ),
       link: undefined,
       id: 2,
-      hasstyle: 'margin-left: auto',
     },
   ];
 
@@ -97,9 +99,17 @@ describe('<RoutedTabs /> with a tab that hosts a control', () => {
     return { ...utils, history };
   }
 
-  test('a click inside a link-less tab does not navigate', async () => {
+  test('renders the control outside the tab list', () => {
+    renderControlTabs();
+    expect(screen.getAllByRole('tab')).toHaveLength(2);
+    const control = screen.getByTestId('wf-control');
+    expect(control).toBeInTheDocument();
+    expect(control.closest('[role="tab"]')).toBeNull();
+  });
+
+  test('a click on the control does not navigate', async () => {
     const { user, history } = renderControlTabs();
-    await user.click(screen.getByText('Workflow Job 2/4'));
+    await user.click(screen.getByTestId('wf-control'));
     await waitFor(() =>
       expect(history.location.pathname).toBe('/jobs/playbook/953/output')
     );

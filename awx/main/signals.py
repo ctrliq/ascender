@@ -23,8 +23,8 @@ from django.contrib.auth import SESSION_KEY
 from django.contrib.sessions.models import Session
 from django.utils import timezone
 
-# AWX middleware for thread-local request/user
-from awx.main.middleware import get_current_request, get_current_user, current_user_getter
+# AWX current-request/user tracking (in-tree django-crum replacement)
+from awx.main.request_context import get_current_user
 
 # AWX
 from awx.main.models import (
@@ -533,18 +533,6 @@ def activity_stream_associate(sender, instance, **kwargs):
             # bind the entry to the callback: the loop rebinds activity_entry, and
             # on_commit defers every callback until the whole loop has finished
             connection.on_commit(lambda entry=activity_entry: emit_activity_stream_change(entry))
-
-
-@receiver(current_user_getter)
-def get_current_user_from_drf_request(sender, **kwargs):
-    """
-    Provider a signal handler to return the current user from the current
-    request when using Django REST Framework. Requires that the APIView set
-    drf_request on the underlying Django Request object.
-    """
-    request = get_current_request()
-    drf_request_user = getattr(request, 'drf_request_user', False)
-    return (drf_request_user, 0)
 
 
 @receiver(pre_delete, sender=Organization)

@@ -142,7 +142,6 @@ function Job({ setBreadcrumb }) {
       ),
       link: undefined,
       id: 2,
-      hasstyle: 'margin-left: auto',
     });
   }
 
