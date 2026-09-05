@@ -95,6 +95,11 @@ const OutputWrapper = styled.div`
 // basis makes the height the free space of the column and nothing else. The
 // gutter strip is painted here as a background so it runs to the bottom when
 // the output is shorter than the container.
+// One source of truth for the gutter width: the ScrollContainer paints it as a
+// background so it reaches the bottom of a short output, and the virtualized
+// content draws its own strip over the rows. The two have to agree.
+const GUTTER_WIDTH = 85;
+
 const ScrollContainer = styled.div`
   flex: 1 1 0%;
   min-height: 0;
@@ -102,8 +107,8 @@ const ScrollContainer = styled.div`
   position: relative;
   background: linear-gradient(
     to right,
-    var(--ascender-gutter-bg, #e8e8e8) 85px,
-    var(--ascender-output-bg, #fff) 85px
+    var(--ascender-gutter-bg, #e8e8e8) ${GUTTER_WIDTH}px,
+    var(--ascender-output-bg, #fff) ${GUTTER_WIDTH}px
   );
 `;
 
@@ -1138,7 +1143,7 @@ function JobOutput({
                       top: 0,
                       left: 0,
                       bottom: 0,
-                      width: 85,
+                      width: GUTTER_WIDTH,
                       backgroundColor: 'var(--ascender-gutter-bg, #e8e8e8)',
                       zIndex: 0,
                     }}
