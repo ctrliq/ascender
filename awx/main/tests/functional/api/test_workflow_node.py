@@ -98,6 +98,43 @@ def test_node_max_retries_rejects_out_of_range_values(inventory, project, workfl
 
 
 @pytest.mark.django_db
+def test_node_max_retries_settable_without_template(workflow_job_template, post, admin_user):
+    # max_retries belongs to the node, not to the template, so a POST that does not
+    # name a template yet has no reason to drop it
+    url = reverse('api:workflow_job_template_workflow_nodes_list', kwargs={'pk': workflow_job_template.pk})
+    r = post(url, {'identifier': 'no-template', 'max_retries': 3}, user=admin_user, expect=201)
+    node = WorkflowJobTemplateNode.objects.get(pk=r.data['id'])
+    assert node.max_retries == 3
+
+
+@pytest.mark.django_db
+def test_node_prompts_still_dropped_without_template(workflow_job_template, post, admin_user):
+    # prompts cannot be validated with no template to check them against, so they
+    # are still discarded even though the node fields are kept now
+    url = reverse('api:workflow_job_template_workflow_nodes_list', kwargs={'pk': workflow_job_template.pk})
+    r = post(url, {'identifier': 'no-template', 'max_retries': 3, 'limit': 'webservers'}, user=admin_user, expect=201)
+    node = WorkflowJobTemplateNode.objects.get(pk=r.data['id'])
+    assert node.max_retries == 3
+    assert node.limit is None
+
+
+@pytest.mark.django_db
+def test_node_max_retries_survives_a_later_template_attach(workflow_job_template, job_template, post, patch, admin_user):
+    # the two pass flow: create the node first, wire the template in afterwards.
+    # the value sent on the first call has to still be there at the end
+    url = reverse('api:workflow_job_template_workflow_nodes_list', kwargs={'pk': workflow_job_template.pk})
+    r = post(url, {'identifier': 'no-template', 'max_retries': 2}, user=admin_user, expect=201)
+    node = WorkflowJobTemplateNode.objects.get(pk=r.data['id'])
+
+    node_url = reverse('api:workflow_job_template_node_detail', kwargs={'pk': node.pk})
+    patch(node_url, {'unified_job_template': job_template.pk}, user=admin_user, expect=200)
+
+    node.refresh_from_db()
+    assert node.unified_job_template_id == job_template.pk
+    assert node.max_retries == 2
+
+
+@pytest.mark.django_db
 def test_superseded_retry_attempt_protected_while_workflow_runs(delete, admin_user, inventory, project, workflow_job_template):
     # a job superseded by an automatic retry loses its unified_job_node link,
     # but must stay undeletable while its workflow is still running

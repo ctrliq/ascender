@@ -4288,8 +4288,11 @@ class LaunchConfigurationBaseSerializer(BaseSerializer):
         elif self.instance:
             ujt = self.instance.unified_job_template
         if ujt is None:
+            # Without a template we cannot validate any of the prompted fields, so only
+            # the node's own fields are kept. Anything added to the node itself belongs
+            # on this list, prompts do not.
             ret = {}
-            for fd in ('workflow_job_template', 'identifier', 'all_parents_must_converge'):
+            for fd in ('workflow_job_template', 'identifier', 'all_parents_must_converge', 'max_retries'):
                 if fd in attrs:
                     ret[fd] = attrs[fd]
             return ret
