@@ -586,7 +586,6 @@ function JobDetail({ job, inventorySourceLabels }) {
             id="job-variables"
             readOnly
             value={job.extra_vars}
-            rows={4}
             label={t`Variables`}
             name="extra_vars"
             dataCy="job-detail-extra-variables"
@@ -599,7 +598,6 @@ function JobDetail({ job, inventorySourceLabels }) {
             id="job-artifacts"
             readOnly
             value={JSON.stringify(job.artifacts)}
-            rows={4}
             label={t`Artifacts`}
             name="artifacts"
             dataCy="job-detail-artifacts"

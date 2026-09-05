@@ -328,7 +328,6 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
             id="wa-detail-extra-vars"
             label={t`Variables`}
             name="extra_vars"
-            rows={5}
             value={workflowJob.extra_vars}
           />
         ) : null}

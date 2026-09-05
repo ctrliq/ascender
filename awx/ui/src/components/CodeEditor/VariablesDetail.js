@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { Split, SplitItem, Button } from '@patternfly/react-core';
-import { Modal } from '@patternfly/react-core/deprecated';
-import { ExpandArrowsAltIcon } from '@patternfly/react-icons';
+import { Split, SplitItem } from '@patternfly/react-core';
 import styled from 'styled-components';
 import { yamlToJson, jsonToYaml, isJsonObject, isJsonString } from 'util/yaml';
 import MultiButtonToggle from '../MultiButtonToggle';
@@ -36,8 +34,8 @@ function VariablesDetail({
   helpText = '',
   value,
   label,
-  rows = null,
-  fullHeight,
+  rows = 'auto',
+  minRows = 4,
   name,
 }) {
   const { t } = useLingui();
@@ -45,7 +43,6 @@ function VariablesDetail({
   const [mode, setMode] = useState(
     isJsonObject(value) || isJsonString(value) ? JSON_MODE : YAML_MODE
   );
-  const [isExpanded, setIsExpanded] = useState(false);
 
   let currentValue = value;
   let error;
@@ -77,96 +74,42 @@ function VariablesDetail({
   const valueCy = dataCy ? `${dataCy}-value` : null;
 
   return (
-    <>
-      <VariablesWrapper>
-        <VariablesLabel data-cy={labelCy} id={dataCy}>
-          <ModeToggle
-            id={`${dataCy}-preview`}
-            label={label}
-            helpText={helpText}
-            dataCy={dataCy}
-            mode={mode}
-            setMode={setMode}
-            currentValue={currentValue}
-            onExpand={() => setIsExpanded(true)}
-            name={name}
-          />
-        </VariablesLabel>
-        <EditorWrapper data-cy={valueCy}>
-          <CodeEditor
-            id={`${dataCy}-preview`}
-            mode={mode}
-            value={currentValue}
-            readOnly
-            rows={rows}
-            fullHeight={fullHeight}
-          />
-        </EditorWrapper>
-        {error && (
-          <div
-            style={{
-              color: 'var(--pf-t--global--color--status--danger--default)',
-              marginTop: '0.5rem',
-            }}
-          >
-            {t`Error:`} {error.message}
-          </div>
-        )}
-      </VariablesWrapper>
-      <Modal
-        variant="xlarge"
-        title={label}
-        ouiaId={`${dataCy}-modal`}
-        isOpen={isExpanded}
-        onClose={() => setIsExpanded(false)}
-        actions={[
-          <Button
-            aria-label={t`Done`}
-            key="select"
-            variant="primary"
-            onClick={() => setIsExpanded(false)}
-            ouiaId={`${dataCy}-unexpand`}
-          >
-            {t`Done`}
-          </Button>,
-        ]}
-      >
-        <div className="pf-v6-c-form">
-          <ModeToggle
-            id={`${dataCy}-preview-expanded`}
-            label={label}
-            helpText={helpText}
-            dataCy={dataCy}
-            mode={mode}
-            setMode={setMode}
-            currentValue={currentValue}
-            name={name}
-          />
-          <CodeEditor
-            id={`${dataCy}-preview-expanded`}
-            mode={mode}
-            value={currentValue}
-            readOnly
-            rows={rows}
-            fullHeight
-            css="margin-top: 10px"
-          />
+    <VariablesWrapper>
+      <VariablesLabel data-cy={labelCy} id={dataCy}>
+        <ModeToggle
+          id={`${dataCy}-preview`}
+          label={label}
+          helpText={helpText}
+          dataCy={dataCy}
+          mode={mode}
+          setMode={setMode}
+          name={name}
+        />
+      </VariablesLabel>
+      <EditorWrapper data-cy={valueCy}>
+        <CodeEditor
+          id={`${dataCy}-preview`}
+          mode={mode}
+          value={currentValue}
+          readOnly
+          rows={rows}
+          minRows={minRows}
+        />
+      </EditorWrapper>
+      {error && (
+        <div
+          style={{
+            color: 'var(--pf-t--global--color--status--danger--default)',
+            marginTop: '0.5rem',
+          }}
+        >
+          {t`Error:`} {error.message}
         </div>
-      </Modal>
-    </>
+      )}
+    </VariablesWrapper>
   );
 }
-function ModeToggle({
-  id,
-  label,
-  helpText,
-  dataCy,
-  mode,
-  setMode,
-  onExpand,
-  name,
-}) {
-  const { t } = useLingui();
+function ModeToggle({ id, label, helpText, dataCy, mode, setMode, name }) {
   return (
     <Split hasGutter>
       <SplitItem isFilled>
@@ -202,17 +145,6 @@ function ModeToggle({
           </SplitItem>
         </Split>
       </SplitItem>
-      {onExpand && (
-        <SplitItem>
-          <Button
-            icon={<ExpandArrowsAltIcon />}
-            variant="plain"
-            aria-label={t`Expand input`}
-            onClick={onExpand}
-            ouiaId={`${dataCy}-expand`}
-          />
-        </SplitItem>
-      )}
     </Split>
   );
 }

@@ -223,7 +223,6 @@ function WorkflowJobTemplateDetail({ template }) {
           helpText={helpText.variables}
           label={t`Variables`}
           value={extra_vars}
-          rows={4}
           name="extra_vars"
         />
       </DetailList>

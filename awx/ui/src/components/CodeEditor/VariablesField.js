@@ -3,9 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import styled from 'styled-components';
-import { Split, SplitItem, Button } from '@patternfly/react-core';
-import { Modal } from '@patternfly/react-core/deprecated';
-import { ExpandArrowsAltIcon } from '@patternfly/react-icons';
+import { Split, SplitItem } from '@patternfly/react-core';
 import {
   yamlToJson,
   jsonToYaml,
@@ -43,7 +41,6 @@ function VariablesField({
   isRequired = false,
   validators = defaultValidators,
 }) {
-  const { t } = useLingui();
   // track focus manually, because the Code Editor library doesn't wire
   // into Formik completely
   const [shouldValidate, setShouldValidate] = useState(false);
@@ -88,7 +85,6 @@ function VariablesField({
     mode === YAML_MODE ? field.value : null
   );
   const [isJsonEdited, setIsJsonEdited] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleModeChange = (newMode) => {
     if (newMode === YAML_MODE && !isJsonEdited && lastYamlValue !== null) {
@@ -130,47 +126,12 @@ function VariablesField({
         readOnly={readOnly}
         promptId={promptId}
         tooltip={tooltip}
-        onExpand={() => setIsExpanded(true)}
         mode={mode}
         setMode={handleModeChange}
         setShouldValidate={setShouldValidate}
         handleChange={handleChange}
         isRequired={isRequired}
       />
-      <Modal
-        variant="xlarge"
-        title={label}
-        ouiaId={`${id}-modal`}
-        isOpen={isExpanded}
-        onClose={() => setIsExpanded(false)}
-        actions={[
-          <Button
-            aria-label={t`Done`}
-            key="select"
-            variant="primary"
-            onClick={() => setIsExpanded(false)}
-            ouiaId={`${id}-variables-unexpand`}
-          >
-            {t`Done`}
-          </Button>,
-        ]}
-      >
-        <div className="pf-v6-c-form">
-          <VariablesFieldInternals
-            id={`${id}-expanded`}
-            name={name}
-            label={label}
-            readOnly={readOnly}
-            promptId={promptId}
-            tooltip={tooltip}
-            fullHeight
-            mode={mode}
-            setMode={handleModeChange}
-            setShouldValidate={setShouldValidate}
-            handleChange={handleChange}
-          />
-        </div>
-      </Modal>
       {meta.error ? (
         <div
           className="pf-v6-c-form__helper-text pf-m-error"
@@ -193,10 +154,8 @@ function VariablesFieldInternals({
   readOnly,
   promptId,
   tooltip,
-  fullHeight,
   mode,
   setMode,
-  onExpand,
   setShouldValidate,
   handleChange,
   isRequired,
@@ -253,15 +212,6 @@ function VariablesFieldInternals({
             name="ask_variables_on_launch"
           />
         )}
-        {onExpand && (
-          <Button
-            icon={<ExpandArrowsAltIcon />}
-            variant="plain"
-            aria-label={t`Expand input`}
-            onClick={onExpand}
-            ouiaId={`${id}-expand`}
-          />
-        )}
       </FieldHeader>
       <CodeEditor
         id={id}
@@ -269,7 +219,8 @@ function VariablesFieldInternals({
         readOnly={readOnly}
         {...field}
         onChange={handleChange}
-        fullHeight={fullHeight}
+        rows="auto"
+        minRows={4}
         onFocus={() => setShouldValidate(false)}
         onBlur={() => setShouldValidate(true)}
         hasErrors={!!meta.error}

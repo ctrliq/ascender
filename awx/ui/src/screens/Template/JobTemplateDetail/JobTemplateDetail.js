@@ -475,7 +475,6 @@ function JobTemplateDetail({ template }) {
         )}
         <VariablesDetail
           value={extra_vars}
-          rows={4}
           label={t`Variables`}
           dataCy={`jt-detail-${template.id}`}
           name="extra_vars"
