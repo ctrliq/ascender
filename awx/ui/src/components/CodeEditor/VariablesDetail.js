@@ -83,7 +83,6 @@ function VariablesDetail({
           dataCy={dataCy}
           mode={mode}
           setMode={setMode}
-          currentValue={currentValue}
           name={name}
         />
       </VariablesLabel>
