@@ -194,15 +194,15 @@ class AbstractCommonModel(models.Model):
 
         return super().save(*args, **kwargs)
 
-    @classmethod
     # Ascender: fetch_mode added for Django 6.1, which records it on the instance
     # state; an override that drops it opts the model out of fetch modes.
-    def from_db(self, db, field_names, values, *, fetch_mode=None):
+    @classmethod
+    def from_db(cls, db, field_names, values, *, fetch_mode=None):
         from cryptography.fernet import InvalidToken
 
         instance = super().from_db(db, field_names, values, fetch_mode=fetch_mode)
 
-        for field in self.encrypted_fields:
+        for field in cls.encrypted_fields:
             field_value = getattr(instance, field, None)
             try:
                 setattr(instance, field, ansible_encryption.decrypt_string(field_value))
@@ -212,7 +212,7 @@ class AbstractCommonModel(models.Model):
                     "Restore the original SECRET_KEY that encrypted this database, then restart. "
                     "Re-raising to prevent the model from loading with corrupted data.",
                     field,
-                    self.__name__,
+                    cls.__name__,
                     getattr(instance, 'pk', None),
                 )
                 raise
