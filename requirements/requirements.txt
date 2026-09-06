@@ -117,7 +117,7 @@ django-cors-headers==4.9.0
     # via -r /awx_devel/requirements/requirements.in
 django-guid==3.6.1
     # via -r /awx_devel/requirements/requirements.in
-django-oauth-toolkit==3.3.0
+django-oauth-toolkit==3.4.1
     # via -r /awx_devel/requirements/requirements.in
 django-pgware==1.0.0
     # via -r /awx_devel/requirements/requirements.in
@@ -443,6 +443,7 @@ urllib3==2.7.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   botocore
+    #   django-oauth-toolkit
     #   kubernetes
     #   pygithub
     #   requests
