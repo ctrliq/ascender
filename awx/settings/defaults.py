@@ -26,15 +26,22 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # existing models.
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
+# A real deployment always overrides this from /etc/tower/conf.d/database.py,
+# and the development environment and the test settings both supply their own.
+# What is left here is the fallback for a process started with no settings files
+# at all, and it is PostgreSQL because nothing supports SQLite any more: the
+# suite moved to PostgreSQL, and Django 6.1 requires SQLite 3.37 while the
+# Rocky 9 base image ships 3.34, so the old SQLite fallback could not open a
+# connection even to fail usefully.
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'awx.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('AWX_DATABASE_NAME', 'awx'),
+        'USER': os.getenv('AWX_DATABASE_USER', 'awx'),
+        'PASSWORD': os.getenv('AWX_DATABASE_PASSWORD', 'awxpass'),
+        'HOST': os.getenv('AWX_DATABASE_HOST', '127.0.0.1'),
+        'PORT': os.getenv('AWX_DATABASE_PORT', '5432'),
         'ATOMIC_REQUESTS': True,
-        'TEST': {
-            # Test database cannot be :memory: for inventory tests.
-            'NAME': os.path.join(BASE_DIR, 'awx_test.sqlite3')
-        },
     }
 }
 
