@@ -25,6 +25,19 @@ DEFAULT_APPROVAL_DENIED_BODY = CustomNotificationBase.DEFAULT_APPROVAL_DENIED_BO
 
 
 class CustomEmailBackend(EmailBackend, CustomNotificationBase):
+    # Django 6.1 deprecated constructing this backend directly, so every send
+    # raises RemovedInDjango70Warning ("Use mail.mailers instead"). The warning
+    # is not silenced, because it is telling the truth: this breaks in 7.0.
+    #
+    # It is not fixable here. MAILERS is a static settings dict keyed by alias,
+    # while a notification template carries its own host, port and credentials,
+    # decrypted per send in NotificationTemplate.send, so there is no alias to
+    # point at. Django offers no runtime registration to bridge that, and
+    # get_connection is deprecated on the same timer.
+    #
+    # Passing alias=None would suppress the warning, since the check is only
+    # "alias" not in kwargs, but that hides the problem rather than solving it
+    # and would break anyway once 7.0 drops the deprecated branch.
     init_parameters = {
         "host": {"label": "Host", "type": "string"},
         "port": {"label": "Port", "type": "int"},

@@ -33,14 +33,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # suite moved to PostgreSQL, and Django 6.1 requires SQLite 3.37 while the
 # Rocky 9 base image ships 3.34, so the old SQLite fallback could not open a
 # connection even to fail usefully.
+#
+# Deliberately plain values rather than an environment lookup. The tree already
+# carries DATABASE_* for the compose environment and AWX_TEST_DATABASE_* for the
+# test settings, and a third scheme here would earn nothing: anything that needs
+# to point somewhere else is supplying a settings file anyway.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('AWX_DATABASE_NAME', 'awx'),
-        'USER': os.getenv('AWX_DATABASE_USER', 'awx'),
-        'PASSWORD': os.getenv('AWX_DATABASE_PASSWORD', 'awxpass'),
-        'HOST': os.getenv('AWX_DATABASE_HOST', '127.0.0.1'),
-        'PORT': os.getenv('AWX_DATABASE_PORT', '5432'),
+        'NAME': 'awx',
+        'USER': 'awx',
+        'PASSWORD': 'awxpass',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
         'ATOMIC_REQUESTS': True,
     }
 }

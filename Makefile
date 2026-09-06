@@ -103,7 +103,6 @@ clean-api:
 	rm -rf .tox
 	find . -type f -regex ".*\.py[co]$$" -delete
 	find . -depth -type d -name "__pycache__" -delete
-	rm -f awx/awx_test.sqlite3*
 	rm -rf requirements/vendor
 	rm -rf awx/projects
 

@@ -16,7 +16,7 @@ docker exec tools_awx_1 bash -c "cd /awx_devel && <command>"
 ```
 
 Supporting containers also running:
-- `tools_postgres_1` – PostgreSQL database (used by the running app; tests use SQLite)
+- `tools_postgres_1` – PostgreSQL database (used by the running app and by the test suite)
 - `tools_valkey_1` – Valkey (Redis-compatible) cache
 
 Runtime versions (inside container):
@@ -57,7 +57,7 @@ docker exec tools_awx_1 bash -c "cd /awx_devel && yamllint -s ."
 
 ## Running Tests
 
-Tests use SQLite (not PostgreSQL) and in-memory channel layer — no database setup needed. Settings: `awx.main.tests.settings_for_test` (configured in `pytest.ini`). Default pytest flags: `--reuse-db --nomigrations --tb=native --timeout=300`.
+Tests run against PostgreSQL, the same backend Ascender deploys on, with an in-memory channel layer. Settings: `awx.main.tests.settings_for_test` (configured in `pytest.ini`). Default pytest flags: `--reuse-db --nomigrations --tb=native --timeout=300`.
 
 ### Unit tests (~15 seconds, run frequently)
 ```bash
@@ -119,7 +119,7 @@ Migration files live in `awx/main/migrations/` (218 existing files).
 | `awx/main/migrations/` | 218 Django migrations |
 | `awx/main/tests/unit/` | Fast isolated unit tests (~1139 tests) |
 | `awx/main/tests/functional/` | Django TestClient-based API tests (~1987 tests) |
-| `awx/main/tests/settings_for_test.py` | Test settings (SQLite, in-memory cache) |
+| `awx/main/tests/settings_for_test.py` | Test settings (PostgreSQL, in-memory cache) |
 | `awx/settings/` | Settings modules: `defaults.py`, `development.py`, `production.py` |
 | `awx/sso/` | SSO/LDAP/SAML backends + tests |
 | `awx/ui/` | UI / React frontend (npm) |
