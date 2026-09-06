@@ -26,7 +26,10 @@ from django.core.exceptions import ImproperlyConfigured
 from radiusauth.backends import RADIUSBackend as BaseRADIUSBackend
 
 # tacacs+ auth
-import tacacs_plus
+# tacacs_plus 2.x ships an empty top-level __init__.py, so both names are
+# imported from the modules that define them rather than off the package.
+from tacacs_plus.client import TACACSClient
+from tacacs_plus.flags import TAC_PLUS_AUTHEN_TYPES
 
 # social
 from social_core.backends.saml import SAMLAuth as BaseSAMLAuth
@@ -223,7 +226,7 @@ class TACACSPlusBackend(object):
             return None
         try:
             # Upstream TACACS+ client does not accept non-string, so convert if needed.
-            tacacs_client = tacacs_plus.TACACSClient(
+            tacacs_client = TACACSClient(
                 django_settings.TACACSPLUS_HOST,
                 django_settings.TACACSPLUS_PORT,
                 django_settings.TACACSPLUS_SECRET,
@@ -232,11 +235,11 @@ class TACACSPlusBackend(object):
 
             # Validate auth protocol before dictionary lookup
             auth_protocol = django_settings.TACACSPLUS_AUTH_PROTOCOL
-            if auth_protocol not in tacacs_plus.TAC_PLUS_AUTHEN_TYPES:
-                logger.error(f"Invalid TACACSPLUS_AUTH_PROTOCOL: {auth_protocol}. Valid options: {list(tacacs_plus.TAC_PLUS_AUTHEN_TYPES.keys())}")
+            if auth_protocol not in TAC_PLUS_AUTHEN_TYPES:
+                logger.error(f"Invalid TACACSPLUS_AUTH_PROTOCOL: {auth_protocol}. Valid options: {list(TAC_PLUS_AUTHEN_TYPES.keys())}")
                 return None
 
-            auth_kwargs = {'authen_type': tacacs_plus.TAC_PLUS_AUTHEN_TYPES[auth_protocol]}
+            auth_kwargs = {'authen_type': TAC_PLUS_AUTHEN_TYPES[auth_protocol]}
             if django_settings.TACACSPLUS_REM_ADDR:
                 client_ip = self._get_client_ip(request)
                 if client_ip:
