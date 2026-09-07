@@ -222,7 +222,7 @@ markdown==3.10.3
     # via -r /awx_devel/requirements/requirements.in
 markdown-it-py==4.2.0
     # via rich
-markupsafe==2.1.5
+markupsafe==3.0.3
     # via jinja2
 mdurl==0.1.2
     # via markdown-it-py
