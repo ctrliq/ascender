@@ -131,7 +131,7 @@ django-solo==2.5.1
     # via -r /awx_devel/requirements/requirements.in
 django-split-settings==1.0.0
     # via -r /awx_devel/requirements/requirements.in
-django-valkey==0.4.0
+django-valkey==0.4.1
     # via -r /awx_devel/requirements/requirements.in
 djangorestframework==3.18.0
     # via
