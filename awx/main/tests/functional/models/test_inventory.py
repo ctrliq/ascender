@@ -305,6 +305,29 @@ def setup_ec2_gce(organization):
 
 
 @pytest.fixture
+def setup_cross_org_hosts(organizations):
+    """One host name present in two organizations, plus hosts unique to the first.
+
+    Both halves of HostManager.get_queryset that this exercises are PostgreSQL
+    shaped: the organization filter, and the distinct('name') that collapses
+    duplicates. The suite ran on SQLite until recently, where DISTINCT ON does
+    not exist, which is why these cases went untested for so long.
+    """
+    org_a, org_b = organizations(2)
+
+    inv_a = Inventory.objects.create(name='inv_in_a', organization=org_a)
+    inv_a.hosts.create(name='shared_name')
+    inv_a.hosts.create(name='web_1')
+    inv_a.hosts.create(name='web_2')
+
+    inv_b = Inventory.objects.create(name='inv_in_b', organization=org_b)
+    inv_b.hosts.create(name='shared_name')
+    inv_b.hosts.create(name='web_3')
+
+    return org_a, org_b
+
+
+@pytest.fixture
 def setup_inventory_groups(inventory, group_factory):
     groupA = group_factory('test_groupA')
     groupB = group_factory('test_groupB')
@@ -355,7 +378,40 @@ class TestHostManager:
         """
         assert list(SmartFilter.query_from_string('name=single_host or name__startswith=single_')) == [Host.objects.get(name='single_host')]
 
-    # Things we can not easily test due to SQLite backend:
-    # 2 organizations with host of same name only has 1 entry in smart inventory
-    # smart inventory in 1 organization does not include host from another
-    # smart inventory correctly returns hosts in filter in same organization
+    def test_smart_inventory_collapses_a_name_shared_across_organizations(self, setup_cross_org_hosts):
+        """A smart inventory with no organization sees every match, so the two
+        hosts that share a name have to collapse into one entry. That collapsing
+        is the distinct('name') the manager ends on."""
+        Inventory.objects.create(name='smart_everywhere', kind='smart', organization=None, host_filter='name=shared_name')
+        smart = Inventory.objects.get(name='smart_everywhere')
+
+        assert Host.objects.filter(name='shared_name').count() == 2
+        assert [host.name for host in smart.hosts.all()] == ['shared_name']
+
+    def test_smart_inventory_excludes_hosts_from_another_organization(self, setup_cross_org_hosts):
+        """The same filter, scoped to one organization, must not reach the copy
+        of the name that lives in the other one."""
+        org_a, _ = setup_cross_org_hosts
+        Inventory.objects.create(name='smart_in_a', kind='smart', organization=org_a, host_filter='name=shared_name')
+        Inventory.objects.create(name='smart_reaching_out', kind='smart', organization=org_a, host_filter='name=web_3')
+
+        # The shared name resolves to this organization's copy of it.
+        hosts = list(Inventory.objects.get(name='smart_in_a').hosts.all())
+        assert len(hosts) == 1
+        assert hosts[0].inventory.organization == org_a
+
+        # A name that exists only in the other organization is not reachable at
+        # all. Asserted separately because the shared name alone cannot catch a
+        # missing organization filter: distinct('name') would collapse the two
+        # copies into one either way.
+        assert list(Inventory.objects.get(name='smart_reaching_out').hosts.all()) == []
+        assert Host.objects.filter(name='web_3').count() == 1
+
+    def test_smart_inventory_returns_the_hosts_its_filter_matches(self, setup_cross_org_hosts):
+        """The positive case: every host the filter matches inside the
+        organization, and nothing the filter does not."""
+        org_a, _ = setup_cross_org_hosts
+        Inventory.objects.create(name='smart_web', kind='smart', organization=org_a, host_filter='name__startswith=web')
+        smart = Inventory.objects.get(name='smart_web')
+
+        assert [host.name for host in smart.hosts.all()] == ['web_1', 'web_2']
