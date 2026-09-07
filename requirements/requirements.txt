@@ -401,7 +401,7 @@ six==1.16.0
     #   tacacs-plus
 slack-sdk==3.44.1
     # via -r /awx_devel/requirements/requirements.in
-smmap==5.0.1
+smmap==5.0.3
     # via gitdb
 social-auth-app-django==6.0.1
     # via -r /awx_devel/requirements/requirements.in
