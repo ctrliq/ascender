@@ -147,10 +147,15 @@ def test_really_old_dtstart(job_template, freq, delta):
     first_event = sched.rrulestr(sched.rrule)[0]
     assert last_week == first_event.date()
 
-    # the next few scheduled events should be the next minute/hour incremented
-    next_five_events = list(sched.rrulestr(sched.rrule).xafter(now(), count=5))
+    # the next few scheduled events should be the next minute/hour incremented.
+    # Seed xafter() and check the result against the same instant: calling now()
+    # twice lets the clock cross a minute boundary between them, and since the
+    # events are minute aligned the first one then compares as not after the
+    # second now(). It fails by milliseconds, and only under load.
+    reference = now()
+    next_five_events = list(sched.rrulestr(sched.rrule).xafter(reference, count=5))
 
-    assert next_five_events[0] > now()
+    assert next_five_events[0] > reference
     last = None
     for event in next_five_events:
         if last:
