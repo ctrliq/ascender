@@ -309,7 +309,7 @@ pyopenssl==26.4.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   twisted
-pyparsing==2.4.6
+pyparsing==3.3.2
     # via -r /awx_devel/requirements/requirements.in
 pyrad==2.4
     # via django-radius
