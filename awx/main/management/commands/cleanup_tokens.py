@@ -3,7 +3,7 @@ from django.core import management
 from django.core.management.base import BaseCommand
 
 from awx.main.models import OAuth2AccessToken
-from oauth2_provider.models import RefreshToken
+from awx.main.models.oauth import OAuth2RefreshToken
 
 
 class Command(BaseCommand):
@@ -20,7 +20,7 @@ class Command(BaseCommand):
         self.verbosity = int(options.get('verbosity', 1))
         self.init_logging()
         total_accesstokens = OAuth2AccessToken.objects.all().count()
-        total_refreshtokens = RefreshToken.objects.all().count()
+        total_refreshtokens = OAuth2RefreshToken.objects.all().count()
         management.call_command('cleartokens')
         self.logger.info("Expired OAuth 2 Access Tokens deleted: {}".format(total_accesstokens - OAuth2AccessToken.objects.all().count()))
-        self.logger.info("Expired OAuth 2 Refresh Tokens deleted: {}".format(total_refreshtokens - RefreshToken.objects.all().count()))
+        self.logger.info("Expired OAuth 2 Refresh Tokens deleted: {}".format(total_refreshtokens - OAuth2RefreshToken.objects.all().count()))

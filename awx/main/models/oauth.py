@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 
 # Django OAuth Toolkit
-from oauth2_provider.models import AbstractApplication, AbstractAccessToken
+from oauth2_provider.models import AbstractApplication, AbstractAccessToken, AbstractRefreshToken, AbstractIDToken
 from oauth2_provider.generators import generate_client_secret
 from oauthlib import oauth2
 
@@ -19,7 +19,7 @@ from awx.main.fields import OAuth2ClientSecretField
 
 DATA_URI_RE = re.compile(r'.*')  # FIXME
 
-__all__ = ['OAuth2AccessToken', 'OAuth2Application']
+__all__ = ['OAuth2AccessToken', 'OAuth2Application', 'OAuth2RefreshToken', 'OAuth2IDToken']
 
 
 logger = logging.getLogger('awx.main.models.oauth')
@@ -137,3 +137,36 @@ class OAuth2AccessToken(AbstractAccessToken):
         if not self.pk:
             self.validate_external_users()
         super(OAuth2AccessToken, self).save(*args, **kwargs)
+
+
+class OAuth2RefreshToken(AbstractRefreshToken):
+    """Refresh token, held in the main app alongside the access token.
+
+    django-oauth-toolkit points AccessToken.source_refresh_token at the refresh
+    token model and RefreshToken.access_token back at the access token model, so
+    the two reference each other. Leaving one of them in the oauth2_provider app
+    makes that pair a circular foreign key spanning two apps, which is what
+    oauth2_provider.W011 warns about. Nothing is added to the upstream fields
+    here: the model exists so that both ends of the cycle live in one app.
+    """
+
+    class Meta(AbstractRefreshToken.Meta):
+        app_label = 'main'
+        verbose_name = _('refresh token')
+        ordering = ('id',)
+
+
+class OAuth2IDToken(AbstractIDToken):
+    """OpenID Connect ID token, moved for the same reason as the refresh token.
+
+    AccessToken.id_token points here, so keeping it in oauth2_provider would
+    leave the access token holding a foreign key into another app. Ascender does
+    not issue ID tokens today, so this table is expected to stay empty, but the
+    model has to be swapped for the access token's own fields to resolve within
+    the main app.
+    """
+
+    class Meta(AbstractIDToken.Meta):
+        app_label = 'main'
+        verbose_name = _('ID token')
+        ordering = ('id',)

@@ -78,13 +78,13 @@ from awx.main.models import (
     Notification,
     NotificationTemplate,
     OAuth2AccessToken,
+    OAuth2RefreshToken,
     OAuth2Application,
     Organization,
     Project,
     ProjectUpdate,
     ProjectUpdateEvent,
     ReceptorAddress,
-    RefreshToken,
     Role,
     Schedule,
     SystemJob,
@@ -1250,7 +1250,7 @@ class UserAuthorizedTokenSerializer(BaseOAuth2TokenSerializer):
         obj = super(UserAuthorizedTokenSerializer, self).create(validated_data)
         obj.save()
         if obj.application:
-            RefreshToken.objects.create(user=current_user, token=generate_token(), application=obj.application, access_token=obj)
+            OAuth2RefreshToken.objects.create(user=current_user, token=generate_token(), application=obj.application, access_token=obj)
         return obj
 
 
@@ -1264,7 +1264,7 @@ class OAuth2TokenSerializer(BaseOAuth2TokenSerializer):
             obj.user = obj.application.user
         obj.save()
         if obj.application:
-            RefreshToken.objects.create(user=current_user, token=generate_token(), application=obj.application, access_token=obj)
+            OAuth2RefreshToken.objects.create(user=current_user, token=generate_token(), application=obj.application, access_token=obj)
         return obj
 
 

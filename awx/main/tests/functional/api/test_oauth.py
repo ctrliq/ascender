@@ -14,7 +14,7 @@ from awx.api.versioning import reverse, drf_reverse
 from awx.main.models.oauth import OAuth2Application as Application, OAuth2AccessToken as AccessToken
 from awx.main.tests.functional import immediate_on_commit
 from awx.sso.models import UserEnterpriseAuth
-from oauth2_provider.models import RefreshToken
+from awx.main.models.oauth import OAuth2RefreshToken
 
 
 @pytest.mark.django_db
@@ -195,7 +195,7 @@ def test_oauth_token_create(oauth_application, get, post, admin):
     assert 'modified' in response.data and response.data['modified'] is not None
     assert 'updated' not in response.data
     token = AccessToken.objects.get(token=response.data['token'])
-    refresh_token = RefreshToken.objects.get(token=response.data['refresh_token'])
+    refresh_token = OAuth2RefreshToken.objects.get(token=response.data['refresh_token'])
     assert token.application == oauth_application
     assert refresh_token.application == oauth_application
     assert token.user == admin
@@ -233,7 +233,7 @@ def test_oauth_token_delete(oauth_application, post, delete, get, admin):
     token = AccessToken.objects.get(token=response.data['token'])
     delete(reverse('api:o_auth2_token_detail', kwargs={'pk': token.pk}), admin, expect=204)
     assert AccessToken.objects.count() == 0
-    assert RefreshToken.objects.count() == 1
+    assert OAuth2RefreshToken.objects.count() == 1
     response = get(reverse('api:o_auth2_application_token_list', kwargs={'pk': oauth_application.pk}), admin, expect=200)
     assert response.data['count'] == 0
     response = get(reverse('api:o_auth2_application_detail', kwargs={'pk': oauth_application.pk}), admin, expect=200)
@@ -245,7 +245,7 @@ def test_oauth_application_delete(oauth_application, post, delete, admin):
     post(reverse('api:o_auth2_application_token_list', kwargs={'pk': oauth_application.pk}), {'scope': 'read'}, admin, expect=201)
     delete(reverse('api:o_auth2_application_detail', kwargs={'pk': oauth_application.pk}), admin, expect=204)
     assert Application.objects.filter(client_id=oauth_application.client_id).count() == 0
-    assert RefreshToken.objects.filter(application=oauth_application).count() == 0
+    assert OAuth2RefreshToken.objects.filter(application=oauth_application).count() == 0
     assert AccessToken.objects.filter(application=oauth_application).count() == 0
 
 
@@ -262,9 +262,9 @@ def test_oauth_list_user_tokens(oauth_application, post, get, admin, alice):
 def test_refresh_accesstoken(oauth_application, post, get, delete, admin):
     response = post(reverse('api:o_auth2_application_token_list', kwargs={'pk': oauth_application.pk}), {'scope': 'read'}, admin, expect=201)
     assert AccessToken.objects.count() == 1
-    assert RefreshToken.objects.count() == 1
+    assert OAuth2RefreshToken.objects.count() == 1
     token = AccessToken.objects.get(token=response.data['token'])
-    refresh_token = RefreshToken.objects.get(token=response.data['refresh_token'])
+    refresh_token = OAuth2RefreshToken.objects.get(token=response.data['refresh_token'])
 
     refresh_url = drf_reverse('api:oauth_authorization_root_view') + 'token/'
     response = post(
@@ -273,17 +273,17 @@ def test_refresh_accesstoken(oauth_application, post, get, delete, admin):
         content_type='application/x-www-form-urlencoded',
         HTTP_AUTHORIZATION='Basic ' + smart_str(base64.b64encode(smart_bytes(':'.join([oauth_application.client_id, oauth_application.client_secret])))),
     )
-    assert RefreshToken.objects.filter(token=refresh_token.token).exists()
-    original_refresh_token = RefreshToken.objects.get(token=refresh_token.token)
+    assert OAuth2RefreshToken.objects.filter(token=refresh_token.token).exists()
+    original_refresh_token = OAuth2RefreshToken.objects.get(token=refresh_token.token)
     assert token not in AccessToken.objects.all()
     assert AccessToken.objects.count() == 1
-    # the same RefreshToken remains but is marked revoked
-    assert RefreshToken.objects.count() == 2
+    # the same OAuth2RefreshToken remains but is marked revoked
+    assert OAuth2RefreshToken.objects.count() == 2
     new_token = json.loads(response._container[0])['access_token']
     new_refresh_token = json.loads(response._container[0])['refresh_token']
     assert AccessToken.objects.filter(token=new_token).count() == 1
-    # checks that RefreshTokens are rotated (new RefreshToken issued)
-    assert RefreshToken.objects.filter(token=new_refresh_token).count() == 1
+    # checks that RefreshTokens are rotated (new OAuth2RefreshToken issued)
+    assert OAuth2RefreshToken.objects.filter(token=new_refresh_token).count() == 1
     assert original_refresh_token.revoked  # is not None
 
 
@@ -291,15 +291,15 @@ def test_refresh_accesstoken(oauth_application, post, get, delete, admin):
 def test_refresh_token_expiration_is_respected(oauth_application, post, get, delete, admin):
     response = post(reverse('api:o_auth2_application_token_list', kwargs={'pk': oauth_application.pk}), {'scope': 'read'}, admin, expect=201)
     assert AccessToken.objects.count() == 1
-    assert RefreshToken.objects.count() == 1
-    refresh_token = RefreshToken.objects.get(token=response.data['refresh_token'])
+    assert OAuth2RefreshToken.objects.count() == 1
+    refresh_token = OAuth2RefreshToken.objects.get(token=response.data['refresh_token'])
     refresh_url = drf_reverse('api:oauth_authorization_root_view') + 'token/'
     short_lived = {'ACCESS_TOKEN_EXPIRE_SECONDS': 1, 'AUTHORIZATION_CODE_EXPIRE_SECONDS': 1, 'REFRESH_TOKEN_EXPIRE_SECONDS': 1}
     # Age the token instead of waiting out its lifetime. TokenView checks
     # created + REFRESH_TOKEN_EXPIRE_SECONDS < now(), so sleeping exactly the
     # lifetime left the result resting on how long the request itself took.
     # An UPDATE rather than save(), because created is auto_now_add.
-    RefreshToken.objects.filter(pk=refresh_token.pk).update(created=now() - timedelta(seconds=60))
+    OAuth2RefreshToken.objects.filter(pk=refresh_token.pk).update(created=now() - timedelta(seconds=60))
     with override_settings(OAUTH2_PROVIDER=short_lived):
         response = post(
             refresh_url,
@@ -309,40 +309,40 @@ def test_refresh_token_expiration_is_respected(oauth_application, post, get, del
         )
     assert response.status_code == 403
     assert b'The refresh token has expired.' in response.content
-    assert RefreshToken.objects.filter(token=refresh_token.token).exists()
+    assert OAuth2RefreshToken.objects.filter(token=refresh_token.token).exists()
     assert AccessToken.objects.count() == 1
-    assert RefreshToken.objects.count() == 1
+    assert OAuth2RefreshToken.objects.count() == 1
 
 
 @pytest.mark.django_db
 def test_revoke_access_then_refreshtoken(oauth_application, post, get, delete, admin):
     response = post(reverse('api:o_auth2_application_token_list', kwargs={'pk': oauth_application.pk}), {'scope': 'read'}, admin, expect=201)
     token = AccessToken.objects.get(token=response.data['token'])
-    refresh_token = RefreshToken.objects.get(token=response.data['refresh_token'])
+    refresh_token = OAuth2RefreshToken.objects.get(token=response.data['refresh_token'])
     assert AccessToken.objects.count() == 1
-    assert RefreshToken.objects.count() == 1
+    assert OAuth2RefreshToken.objects.count() == 1
 
     token.revoke()
     assert AccessToken.objects.count() == 0
-    assert RefreshToken.objects.count() == 1
+    assert OAuth2RefreshToken.objects.count() == 1
     assert not refresh_token.revoked
 
     refresh_token.revoke()
     assert AccessToken.objects.count() == 0
-    assert RefreshToken.objects.count() == 1
+    assert OAuth2RefreshToken.objects.count() == 1
 
 
 @pytest.mark.django_db
 def test_revoke_refreshtoken(oauth_application, post, get, delete, admin):
     response = post(reverse('api:o_auth2_application_token_list', kwargs={'pk': oauth_application.pk}), {'scope': 'read'}, admin, expect=201)
-    refresh_token = RefreshToken.objects.get(token=response.data['refresh_token'])
+    refresh_token = OAuth2RefreshToken.objects.get(token=response.data['refresh_token'])
     assert AccessToken.objects.count() == 1
-    assert RefreshToken.objects.count() == 1
+    assert OAuth2RefreshToken.objects.count() == 1
 
     refresh_token.revoke()
     assert AccessToken.objects.count() == 0
-    # the same RefreshToken is recycled
-    new_refresh_token = RefreshToken.objects.all().first()
+    # the same OAuth2RefreshToken is recycled
+    new_refresh_token = OAuth2RefreshToken.objects.all().first()
     assert refresh_token == new_refresh_token
     assert new_refresh_token.revoked
 
@@ -352,7 +352,7 @@ def test_rotated_refresh_token_cannot_be_reused(oauth_application, post, admin):
     """A refresh grant rotates: the superseded token is kept with a revoked
     timestamp rather than deleted, so presenting it again has to be refused."""
     response = post(reverse('api:o_auth2_application_token_list', kwargs={'pk': oauth_application.pk}), {'scope': 'read'}, admin, expect=201)
-    refresh_token = RefreshToken.objects.get(token=response.data['refresh_token'])
+    refresh_token = OAuth2RefreshToken.objects.get(token=response.data['refresh_token'])
     refresh_url = drf_reverse('api:oauth_authorization_root_view') + 'token/'
     auth = 'Basic ' + smart_str(base64.b64encode(smart_bytes(':'.join([oauth_application.client_id, oauth_application.client_secret]))))
 
@@ -363,7 +363,7 @@ def test_rotated_refresh_token_cannot_be_reused(oauth_application, post, admin):
         HTTP_AUTHORIZATION=auth,
     )
     assert first.status_code == 200
-    superseded = RefreshToken.objects.get(token=refresh_token.token)
+    superseded = OAuth2RefreshToken.objects.get(token=refresh_token.token)
     assert superseded.revoked is not None
     assert AccessToken.objects.count() == 1
 
@@ -385,7 +385,7 @@ def test_token_values_are_not_rendered_by_str(oauth_application, post, admin):
     on the old behaviour, and this keeps it that way."""
     response = post(reverse('api:o_auth2_application_token_list', kwargs={'pk': oauth_application.pk}), {'scope': 'read'}, admin, expect=201)
     access_token = AccessToken.objects.get(token=response.data['token'])
-    refresh_token = RefreshToken.objects.get(token=response.data['refresh_token'])
+    refresh_token = OAuth2RefreshToken.objects.get(token=response.data['refresh_token'])
 
     for obj in (access_token, refresh_token):
         assert obj.token not in str(obj)
