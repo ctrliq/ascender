@@ -1,7 +1,5 @@
 from django.db import migrations, models, connection
 
-from ._sqlite_helper import dbawaremigrations
-
 
 def migrate_event_data(apps, schema_editor):
     # see: https://github.com/ansible/awx/issues/9039
@@ -61,10 +59,6 @@ def migrate_event_data(apps, schema_editor):
         cursor.execute('DROP INDEX IF EXISTS main_jobevent_job_id_idx')
 
 
-def migrate_event_data_sqlite(apps, schema_editor):
-    return None
-
-
 class FakeAddField(migrations.AddField):
     def database_forwards(self, *args):
         # this is intentionally left blank, because we're
@@ -78,7 +72,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        dbawaremigrations.RunPython(migrate_event_data, sqlite_code=migrate_event_data_sqlite),
+        migrations.RunPython(migrate_event_data),
         FakeAddField(
             model_name='jobevent',
             name='job_created',
@@ -237,7 +231,7 @@ class Migration(migrations.Migration):
                 db_index=False, editable=False, on_delete=models.deletion.DO_NOTHING, related_name='system_job_events', to='main.SystemJob'
             ),
         ),
-        dbawaremigrations.AlterIndexTogether(
+        migrations.AlterIndexTogether(
             name='adhoccommandevent',
             index_together={
                 ('ad_hoc_command', 'job_created', 'event'),
@@ -245,11 +239,11 @@ class Migration(migrations.Migration):
                 ('ad_hoc_command', 'job_created', 'uuid'),
             },
         ),
-        dbawaremigrations.AlterIndexTogether(
+        migrations.AlterIndexTogether(
             name='inventoryupdateevent',
             index_together={('inventory_update', 'job_created', 'counter'), ('inventory_update', 'job_created', 'uuid')},
         ),
-        dbawaremigrations.AlterIndexTogether(
+        migrations.AlterIndexTogether(
             name='jobevent',
             index_together={
                 ('job', 'job_created', 'counter'),
@@ -258,7 +252,7 @@ class Migration(migrations.Migration):
                 ('job', 'job_created', 'parent_uuid'),
             },
         ),
-        dbawaremigrations.AlterIndexTogether(
+        migrations.AlterIndexTogether(
             name='projectupdateevent',
             index_together={
                 ('project_update', 'job_created', 'uuid'),
@@ -266,7 +260,7 @@ class Migration(migrations.Migration):
                 ('project_update', 'job_created', 'counter'),
             },
         ),
-        dbawaremigrations.AlterIndexTogether(
+        migrations.AlterIndexTogether(
             name='systemjobevent',
             index_together={('system_job', 'job_created', 'uuid'), ('system_job', 'job_created', 'counter')},
         ),

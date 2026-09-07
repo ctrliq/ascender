@@ -13,9 +13,6 @@ def set_statement_timeout(DATABASES, DATABASE_STATEMENT_TIMEOUT=None):
     if not DATABASES or 'default' not in DATABASES:
         return
 
-    if 'sqlite3' in DATABASES['default']['ENGINE']:
-        return
-
     timeout_ms = None
     try:
         import uwsgi

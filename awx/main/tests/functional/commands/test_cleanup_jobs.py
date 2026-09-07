@@ -14,9 +14,9 @@ from awx.main.models import Job
 def no_postgres_only_sql():
     """cleanup_jobs reaches PostgreSQL-only SQL on either side of the batch
     loop: _pre_delete_job_host_summaries uses ANY(%s), and
-    has_unpartitioned_table reads pg_tables. The test database is SQLite, so
-    stub both out and let the batch loop itself run. The raw statements are
-    covered in awx/main/tests/unit/commands/test_cleanup_jobs.py."""
+    has_unpartitioned_table reads pg_tables. Stub both out and let the batch
+    loop itself run: the raw statements are covered against a real database in
+    test_cleanup_jobs_postgres.py."""
     with mock.patch('awx.main.management.commands.cleanup_jobs._pre_delete_job_host_summaries'):
         with mock.patch.object(Command, 'has_unpartitioned_table', return_value=False):
             yield

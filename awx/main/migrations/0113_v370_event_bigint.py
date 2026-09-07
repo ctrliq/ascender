@@ -2,8 +2,6 @@
 
 from django.db import migrations, models, connection
 
-from ._sqlite_helper import dbawaremigrations
-
 
 def migrate_event_data(apps, schema_editor):
     # see: https://github.com/ansible/awx/issues/6010
@@ -26,11 +24,6 @@ def migrate_event_data(apps, schema_editor):
             cursor.execute(f'ALTER TABLE {tblname} ALTER COLUMN id TYPE bigint USING id::bigint;')
 
 
-def migrate_event_data_sqlite(apps, schema_editor):
-    # TODO: cmeyers fill this in
-    return
-
-
 class FakeAlterField(migrations.AlterField):
     def database_forwards(self, *args):
         # this is intentionally left blank, because we're
@@ -44,7 +37,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        dbawaremigrations.RunPython(migrate_event_data, sqlite_code=migrate_event_data_sqlite),
+        migrations.RunPython(migrate_event_data),
         FakeAlterField(
             model_name='adhoccommandevent',
             name='id',

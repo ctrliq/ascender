@@ -4,7 +4,6 @@ from unittest import mock
 from awx.settings.statement_timeout import set_statement_timeout
 
 PG_ENGINE = "django.db.backends.postgresql"
-SQLITE_ENGINE = "django.db.backends.sqlite3"
 
 
 def _make_databases(engine=PG_ENGINE, existing_options=None):
@@ -81,11 +80,6 @@ class TestSetStatementTimeout:
             # margin = min(5, max(1, int(30*0.1))) = 3 → timeout = 27s
             set_statement_timeout(databases)
         assert _options(databases) == "-c statement_timeout=27000"
-
-    def test_skips_sqlite(self):
-        databases = _make_databases(engine=SQLITE_ENGINE)
-        set_statement_timeout(databases, 60000)
-        assert _options(databases) is None
 
     def test_skips_empty_databases(self):
         databases = {}

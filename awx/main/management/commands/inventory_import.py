@@ -791,7 +791,7 @@ class Command(BaseCommand):
         merging as appropriate.
         """
         # FIXME: Attribute changes to superuser?
-        # Perform __in queries in batches (mainly for unit tests using SQLite).
+        # Perform __in queries in batches rather than one unbounded IN list.
         self._batch_size = 500
         self._build_db_instance_id_map()
         self._build_mem_instance_id_map()
