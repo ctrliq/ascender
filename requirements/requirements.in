@@ -18,7 +18,7 @@ distro
 django>=6.1.1 # floor was 5.2.17 for CVE-2026-15307 CVE-2026-15830, both long fixed by 6.1
 django-auth-ldap
 django-cors-headers
-django-guid==3.6.1
+django-guid>=3.6.1
 django-oauth-toolkit>=3.3.0
 django-polymorphic
 django-pgware
