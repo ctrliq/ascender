@@ -72,7 +72,7 @@ channels==4.3.2
     #   channels-valkey
 channels-valkey==0.3.0
     # via -r /awx_devel/requirements/requirements.in
-charset-normalizer==3.3.2
+charset-normalizer==3.5.1
     # via requests
 click==8.3.3
     # via receptorctl
