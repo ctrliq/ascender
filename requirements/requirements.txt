@@ -409,7 +409,7 @@ sqlparse==0.6.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   django
-tacacs-plus==1.0
+tacacs-plus==2.6
     # via -r /awx_devel/requirements/requirements.in
 tempora==5.5.1
     # via
