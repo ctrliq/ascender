@@ -171,7 +171,7 @@ inflection==0.5.1
     #   drf-spectacular
 irc==20.5.0
     # via -r /awx_devel/requirements/requirements.in
-isodate==0.6.1
+isodate==0.7.2
     # via
     #   azure-keyvault-secrets
     #   python3-saml
@@ -389,7 +389,6 @@ shellingham==1.5.4
     # via typer
 six==1.16.0
     # via
-    #   isodate
     #   kubernetes
     #   openshift
     #   pygerduty
