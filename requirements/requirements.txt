@@ -291,7 +291,7 @@ pyasn1-modules==0.4.2
     # via
     #   python-ldap
     #   service-identity
-pycparser==2.21
+pycparser==3.0
     # via cffi
 pygerduty==0.38.3
     # via -r /awx_devel/requirements/requirements.in
