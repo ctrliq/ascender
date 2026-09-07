@@ -258,6 +258,7 @@ packaging==26.3
     #   ansible-runner
     #   django-guid
     #   setuptools-scm
+    #   vcs-versioning
     #   wheel
 pexpect==4.7.0
     # via
@@ -382,7 +383,7 @@ service-identity==24.1.0
     # via twisted
 setuptools-rust==1.13.0
     # via -r /awx_devel/requirements/requirements.in
-setuptools-scm[toml]==8.0.4
+setuptools-scm[toml]==10.2.3
     # via -r /awx_devel/requirements/requirements.in
 shellingham==1.5.4
     # via typer
@@ -435,7 +436,6 @@ typing-extensions==4.16.0
     #   django-polymorphic
     #   jwcrypto
     #   pygithub
-    #   setuptools-scm
     #   twisted
 uritemplate==4.2.0
     # via drf-spectacular
@@ -453,6 +453,8 @@ valkey[libvalkey]==6.1.1
     #   -r /awx_devel/requirements/requirements.in
     #   channels-valkey
     #   django-valkey
+vcs-versioning==2.3.4
+    # via setuptools-scm
 websocket-client==1.7.0
     # via kubernetes
 wheel==0.48.0
