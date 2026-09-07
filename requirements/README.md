@@ -114,5 +114,34 @@ If modifying this library make sure testing with the offline build is performed 
 
 ### pexpect
 
-Version 4.8 makes us a little bit nervous with changes to `searchwindowsize` https://github.com/pexpect/pexpect/pull/579/files
-Pin to `pexpect==4.7.x` until we have more time to move to `4.8` and test.
+Pinned to 4.7.0. pexpect/pexpect#579, released in 4.8, reworked how
+`searchwindowsize` is applied, and the new behaviour interacts badly with the
+way ansible-runner calls `expect()`.
+
+`ansible_runner/runner.py` matches password prompts with a hardcoded window:
+
+```python
+result_id = child.expect(password_patterns, timeout=self.config.pexpect_timeout, searchwindowsize=100)
+```
+
+On 4.7 the search covered the new data plus the preceding window, so in
+practice a whole chunk was searched. From 4.8 the window is honoured strictly,
+and a match that spans more than 100 characters is never found. Measured with
+that same call, matching `Enter passphrase for .*:` against prompts of
+different lengths:
+
+| prompt | 4.7.0 | 4.9.0 |
+| ------ | ----- | ----- |
+| 30 characters | matched | matched |
+| 71 characters | matched | matched |
+| 115 characters | matched | missed |
+
+AWX's prompts include `Enter passphrase for .*:\s*?$` and
+`Bad passphrase, try again for .*:\s*?$`, and what they match grows with the
+key path, `<artifact_dir>/ssh_key_data`. The realistic worst case is roughly 85
+characters, so it fits, but only by about 15, and `AWX_ISOLATION_BASE_PATH` is
+an admin setting that can make the path longer. A prompt that misses does not
+error: the job waits for `pexpect_timeout` with no passphrase supplied.
+
+AWX cannot widen the window, since ansible-runner hardcodes it. Lifting this
+pin means changing that call upstream first, to pass a larger value or `None`.
