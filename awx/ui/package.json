@@ -43,7 +43,6 @@
     "@lingui/cli": "^6.6.0",
     "@lingui/conf": "^6.6.0",
     "@lingui/format-po": "^6.6.0",
-    "@lingui/loader": "^6.6.0",
     "@nteract/mockument": "^1.0.4",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.6.2",
     "@testing-library/dom": "^10.4.1",
