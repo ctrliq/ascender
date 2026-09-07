@@ -178,7 +178,7 @@ isodate==0.7.2
     #   python3-saml
 jaraco-collections==5.0.0
     # via irc
-jaraco-context==4.3.0
+jaraco-context==6.1.2
     # via jaraco-text
 jaraco-functools==4.1.0
     # via
