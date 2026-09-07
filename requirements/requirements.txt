@@ -186,7 +186,7 @@ jaraco-functools==4.1.0
     #   irc
     #   jaraco-text
     #   tempora
-jaraco-logging==3.3.0
+jaraco-logging==3.4.0
     # via irc
 jaraco-stream==3.0.3
     # via irc
