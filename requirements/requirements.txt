@@ -10,8 +10,8 @@ aiohttp-retry==2.8.3
     # via twilio
 aiosignal==1.4.0
     # via aiohttp
-annotated-types==0.6.0
-    # via pydantic
+annotated-doc==0.0.5
+    # via typer
 # ansible-runner @ git+https://github.com/ansible/ansible-runner.git@devel  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
 asciichartpy==1.5.25
@@ -35,8 +35,6 @@ attrs==23.2.0
     #   twisted
 autobahn==24.4.2
     # via daphne
-autocommand==2.2.2
-    # via jaraco-text
 automat==24.8.1
     # via twisted
 azure-core==1.38.0
@@ -167,13 +165,11 @@ importlib-metadata==9.0.0
     # via -r /awx_devel/requirements/requirements.in
 incremental==24.7.2
     # via twisted
-inflect==7.0.0
-    # via jaraco-text
 inflection==0.5.1
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   drf-spectacular
-irc==20.4.3
+irc==20.5.0
     # via -r /awx_devel/requirements/requirements.in
 isodate==0.6.1
     # via
@@ -193,7 +189,7 @@ jaraco-logging==3.3.0
     # via irc
 jaraco-stream==3.0.3
     # via irc
-jaraco-text==3.12.0
+jaraco-text==4.3.0
     # via
     #   irc
     #   jaraco-collections
@@ -223,8 +219,12 @@ lxml==6.1.0
     #   xmlsec
 markdown==3.10.3
     # via -r /awx_devel/requirements/requirements.in
+markdown-it-py==4.2.0
+    # via rich
 markupsafe==2.1.5
     # via jinja2
+mdurl==0.1.2
+    # via markdown-it-py
 more-itertools==10.2.0
     # via
     #   irc
@@ -288,14 +288,12 @@ pyasn1-modules==0.4.2
     #   service-identity
 pycparser==2.21
     # via cffi
-pydantic==2.13.5
-    # via inflect
-pydantic-core==2.46.5
-    # via pydantic
 pygerduty==0.38.3
     # via -r /awx_devel/requirements/requirements.in
 pygithub==2.10.0
     # via -r /awx_devel/requirements/requirements.in
+pygments==2.21.0
+    # via rich
 pyjwt[crypto]==2.13.0
     # via
     #   -r /awx_devel/requirements/requirements.in
@@ -370,6 +368,8 @@ requests-oauthlib==2.0.0
     # via
     #   kubernetes
     #   social-auth-core
+rich==15.0.0
+    # via typer
 rpds-py==2026.6.3
     # via
     #   jsonschema
@@ -384,6 +384,8 @@ setuptools-rust==1.13.0
     # via -r /awx_devel/requirements/requirements.in
 setuptools-scm[toml]==8.0.4
     # via -r /awx_devel/requirements/requirements.in
+shellingham==1.5.4
+    # via typer
 six==1.16.0
     # via
     #   isodate
@@ -421,22 +423,20 @@ twisted[tls]==26.4.0
     #   daphne
 txaio==23.1.1
     # via autobahn
+typer==0.27.2
+    # via typer-slim
+typer-slim==0.24.0
+    # via jaraco-text
 typing-extensions==4.16.0
     # via
     #   azure-core
     #   azure-identity
     #   azure-keyvault-secrets
     #   django-polymorphic
-    #   inflect
     #   jwcrypto
-    #   pydantic
-    #   pydantic-core
     #   pygithub
     #   setuptools-scm
     #   twisted
-    #   typing-inspection
-typing-inspection==0.4.4
-    # via pydantic
 uritemplate==4.2.0
     # via drf-spectacular
 urllib3==2.7.0
