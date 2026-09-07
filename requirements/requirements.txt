@@ -352,7 +352,7 @@ pyyaml==6.0.3
     #   receptorctl
 receptorctl==1.6.8
     # via -r /awx_devel/requirements/requirements.in
-referencing==0.33.0
+referencing==0.37.0
     # via
     #   jsonschema
     #   jsonschema-specifications
