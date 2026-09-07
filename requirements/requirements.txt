@@ -164,7 +164,7 @@ idna==3.19
     #   requests
     #   twisted
     #   yarl
-incremental==24.7.2
+incremental==24.11.0
     # via twisted
 inflection==0.5.1
     # via
@@ -260,6 +260,7 @@ packaging==26.3
     #   -r /awx_devel/requirements/requirements.in
     #   ansible-runner
     #   django-guid
+    #   incremental
     #   setuptools-scm
     #   vcs-versioning
     #   wheel
@@ -479,6 +480,5 @@ setuptools==84.0.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   asciichartpy
-    #   incremental
     #   setuptools-rust
     #   setuptools-scm
