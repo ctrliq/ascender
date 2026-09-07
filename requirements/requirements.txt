@@ -37,7 +37,7 @@ autobahn==24.4.2
     # via daphne
 automat==24.8.1
     # via twisted
-azure-core==1.38.0
+azure-core==1.41.0
     # via
     #   azure-identity
     #   azure-keyvault-secrets
