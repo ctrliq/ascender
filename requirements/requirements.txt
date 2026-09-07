@@ -61,7 +61,7 @@ cbor2==6.1.4
     #   -r /awx_devel/requirements/requirements_git.txt
     #   kubernetes
     #   requests
-cffi==2.0.0
+cffi==2.1.1
     # via
     #   autobahn
     #   cryptography
