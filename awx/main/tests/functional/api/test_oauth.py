@@ -1,11 +1,12 @@
 import base64
 import json
-import time
+from datetime import timedelta
 
 import pytest
 
 from django.db import connection
 from django.test.utils import override_settings
+from django.utils.timezone import now
 from django.utils.encoding import smart_str, smart_bytes
 
 from awx.main.utils.encryption import decrypt_value, get_encryption_key
@@ -294,7 +295,11 @@ def test_refresh_token_expiration_is_respected(oauth_application, post, get, del
     refresh_token = RefreshToken.objects.get(token=response.data['refresh_token'])
     refresh_url = drf_reverse('api:oauth_authorization_root_view') + 'token/'
     short_lived = {'ACCESS_TOKEN_EXPIRE_SECONDS': 1, 'AUTHORIZATION_CODE_EXPIRE_SECONDS': 1, 'REFRESH_TOKEN_EXPIRE_SECONDS': 1}
-    time.sleep(1)
+    # Age the token instead of waiting out its lifetime. TokenView checks
+    # created + REFRESH_TOKEN_EXPIRE_SECONDS < now(), so sleeping exactly the
+    # lifetime left the result resting on how long the request itself took.
+    # An UPDATE rather than save(), because created is auto_now_add.
+    RefreshToken.objects.filter(pk=refresh_token.pk).update(created=now() - timedelta(seconds=60))
     with override_settings(OAUTH2_PROVIDER=short_lived):
         response = post(
             refresh_url,
