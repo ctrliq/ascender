@@ -188,7 +188,7 @@ jaraco-functools==4.1.0
     #   tempora
 jaraco-logging==3.3.0
     # via irc
-jaraco-stream==3.0.3
+jaraco-stream==3.0.4
     # via irc
 jaraco-text==4.3.0
     # via
@@ -230,6 +230,7 @@ more-itertools==10.2.0
     # via
     #   irc
     #   jaraco-functools
+    #   jaraco-stream
     #   jaraco-text
 msal==1.38.0
     # via
