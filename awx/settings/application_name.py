@@ -29,7 +29,5 @@ def set_application_name(DATABASES, CLUSTER_HOST_ID, function=''):
     if not DATABASES or 'default' not in DATABASES:
         return
 
-    if 'sqlite3' in DATABASES['default']['ENGINE']:
-        return
     options_dict = DATABASES['default'].setdefault('OPTIONS', dict())
     options_dict['application_name'] = get_application_name(CLUSTER_HOST_ID, function)

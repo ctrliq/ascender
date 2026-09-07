@@ -3,8 +3,6 @@
 import awx.main.models.notifications
 from django.db import migrations, models
 
-from ._sqlite_helper import dbawaremigrations
-
 
 class Migration(migrations.Migration):
     dependencies = [
@@ -106,12 +104,11 @@ class Migration(migrations.Migration):
             name='deleted_actor',
             field=models.JSONField(null=True),
         ),
-        dbawaremigrations.RunSQL(
+        migrations.RunSQL(
             """
             ALTER TABLE main_activitystream RENAME setting TO setting_old;
             ALTER TABLE main_activitystream ALTER COLUMN setting_old DROP NOT NULL;
             """,
-            sqlite_sql="ALTER TABLE main_activitystream RENAME setting TO setting_old",
             state_operations=[
                 migrations.RemoveField(
                     model_name='activitystream',
@@ -124,12 +121,11 @@ class Migration(migrations.Migration):
             name='setting',
             field=models.JSONField(blank=True, default=dict),
         ),
-        dbawaremigrations.RunSQL(
+        migrations.RunSQL(
             """
             ALTER TABLE main_job RENAME survey_passwords TO survey_passwords_old;
             ALTER TABLE main_job ALTER COLUMN survey_passwords_old DROP NOT NULL;
             """,
-            sqlite_sql="ALTER TABLE main_job RENAME survey_passwords TO survey_passwords_old",
             state_operations=[
                 migrations.RemoveField(
                     model_name='job',
@@ -142,12 +138,11 @@ class Migration(migrations.Migration):
             name='survey_passwords',
             field=models.JSONField(blank=True, default=dict, editable=False),
         ),
-        dbawaremigrations.RunSQL(
+        migrations.RunSQL(
             """
             ALTER TABLE main_joblaunchconfig RENAME char_prompts TO char_prompts_old;
             ALTER TABLE main_joblaunchconfig ALTER COLUMN char_prompts_old DROP NOT NULL;
             """,
-            sqlite_sql="ALTER TABLE main_joblaunchconfig RENAME char_prompts TO char_prompts_old",
             state_operations=[
                 migrations.RemoveField(
                     model_name='joblaunchconfig',
@@ -160,12 +155,11 @@ class Migration(migrations.Migration):
             name='char_prompts',
             field=models.JSONField(blank=True, default=dict),
         ),
-        dbawaremigrations.RunSQL(
+        migrations.RunSQL(
             """
             ALTER TABLE main_joblaunchconfig RENAME survey_passwords TO survey_passwords_old;
             ALTER TABLE main_joblaunchconfig ALTER COLUMN survey_passwords_old DROP NOT NULL;
             """,
-            sqlite_sql="ALTER TABLE main_joblaunchconfig RENAME survey_passwords TO survey_passwords_old;",
             state_operations=[
                 migrations.RemoveField(
                     model_name='joblaunchconfig',
@@ -178,12 +172,11 @@ class Migration(migrations.Migration):
             name='survey_passwords',
             field=models.JSONField(blank=True, default=dict, editable=False),
         ),
-        dbawaremigrations.RunSQL(
+        migrations.RunSQL(
             """
             ALTER TABLE main_notification RENAME body TO body_old;
             ALTER TABLE main_notification ALTER COLUMN body_old DROP NOT NULL;
             """,
-            sqlite_sql="ALTER TABLE main_notification RENAME body TO body_old",
             state_operations=[
                 migrations.RemoveField(
                     model_name='notification',
@@ -196,12 +189,11 @@ class Migration(migrations.Migration):
             name='body',
             field=models.JSONField(blank=True, default=dict),
         ),
-        dbawaremigrations.RunSQL(
+        migrations.RunSQL(
             """
             ALTER TABLE main_unifiedjob RENAME job_env TO job_env_old;
             ALTER TABLE main_unifiedjob ALTER COLUMN job_env_old DROP NOT NULL;
             """,
-            sqlite_sql="ALTER TABLE main_unifiedjob RENAME job_env TO job_env_old",
             state_operations=[
                 migrations.RemoveField(
                     model_name='unifiedjob',
@@ -214,12 +206,11 @@ class Migration(migrations.Migration):
             name='job_env',
             field=models.JSONField(blank=True, default=dict, editable=False),
         ),
-        dbawaremigrations.RunSQL(
+        migrations.RunSQL(
             """
             ALTER TABLE main_workflowjob RENAME char_prompts TO char_prompts_old;
             ALTER TABLE main_workflowjob ALTER COLUMN char_prompts_old DROP NOT NULL;
             """,
-            sqlite_sql="ALTER TABLE main_workflowjob RENAME char_prompts TO char_prompts_old",
             state_operations=[
                 migrations.RemoveField(
                     model_name='workflowjob',
@@ -232,12 +223,11 @@ class Migration(migrations.Migration):
             name='char_prompts',
             field=models.JSONField(blank=True, default=dict),
         ),
-        dbawaremigrations.RunSQL(
+        migrations.RunSQL(
             """
             ALTER TABLE main_workflowjob RENAME survey_passwords TO survey_passwords_old;
             ALTER TABLE main_workflowjob ALTER COLUMN survey_passwords_old DROP NOT NULL;
             """,
-            sqlite_sql="ALTER TABLE main_workflowjob RENAME survey_passwords TO survey_passwords_old",
             state_operations=[
                 migrations.RemoveField(
                     model_name='workflowjob',
@@ -250,12 +240,11 @@ class Migration(migrations.Migration):
             name='survey_passwords',
             field=models.JSONField(blank=True, default=dict, editable=False),
         ),
-        dbawaremigrations.RunSQL(
+        migrations.RunSQL(
             """
             ALTER TABLE main_workflowjobnode RENAME char_prompts TO char_prompts_old;
             ALTER TABLE main_workflowjobnode ALTER COLUMN char_prompts_old DROP NOT NULL;
             """,
-            sqlite_sql="ALTER TABLE main_workflowjobnode RENAME char_prompts TO char_prompts_old",
             state_operations=[
                 migrations.RemoveField(
                     model_name='workflowjobnode',
@@ -268,12 +257,11 @@ class Migration(migrations.Migration):
             name='char_prompts',
             field=models.JSONField(blank=True, default=dict),
         ),
-        dbawaremigrations.RunSQL(
+        migrations.RunSQL(
             """
             ALTER TABLE main_workflowjobnode RENAME survey_passwords TO survey_passwords_old;
             ALTER TABLE main_workflowjobnode ALTER COLUMN survey_passwords_old DROP NOT NULL;
             """,
-            sqlite_sql="ALTER TABLE main_workflowjobnode RENAME survey_passwords TO survey_passwords_old",
             state_operations=[
                 migrations.RemoveField(
                     model_name='workflowjobnode',

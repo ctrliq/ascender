@@ -25,19 +25,26 @@ DEFAULT_APPROVAL_DENIED_BODY = CustomNotificationBase.DEFAULT_APPROVAL_DENIED_BO
 
 
 class CustomEmailBackend(EmailBackend, CustomNotificationBase):
-    # Django 6.1 deprecated constructing this backend directly, so every send
-    # raises RemovedInDjango70Warning ("Use mail.mailers instead"). The warning
-    # is not silenced, because it is telling the truth: this breaks in 7.0.
+    # Django's SMTP backend has two constructors behind one signature. Without
+    # an alias it takes the deprecated path, filling anything not passed from
+    # the EMAIL_* settings and raising RemovedInDjango70Warning; 7.0 deletes
+    # that path. With an alias it takes the values it is given and nothing else.
     #
-    # It is not fixable here. MAILERS is a static settings dict keyed by alias,
-    # while a notification template carries its own host, port and credentials,
-    # decrypted per send in NotificationTemplate.send, so there is no alias to
-    # point at. Django offers no runtime registration to bridge that, and
-    # get_connection is deprecated on the same timer.
+    # The second is what a notification template has always wanted. The
+    # serializer requires every init_parameter that has no default, so host,
+    # port, username, password, use_tls and use_ssl are always present and the
+    # EMAIL_* fallback was never reached. Passing an alias moves us onto the
+    # supported branch and keeps the behaviour we already had.
     #
-    # Passing alias=None would suppress the warning, since the check is only
-    # "alias" not in kwargs, but that hides the problem rather than solving it
-    # and would break anyway once 7.0 drops the deprecated branch.
+    # The alias is only a label here. Django uses it to name the mailer in
+    # error messages and never resolves it against MAILERS for a backend built
+    # directly, which is what NotificationTemplate.send does with configuration
+    # decrypted per send.
+    MAILER_ALIAS = 'ascender-notification'
+
+    def __init__(self, **kwargs):
+        super().__init__(alias=self.MAILER_ALIAS, **kwargs)
+
     init_parameters = {
         "host": {"label": "Host", "type": "string"},
         "port": {"label": "Port", "type": "int"},

@@ -500,7 +500,7 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
         super(Inventory, self).save(*args, **kwargs)
         # An explicit update_fields=None is a full save, the same as leaving it out
         update_fields = kwargs.get('update_fields')
-        if self.kind == 'smart' and (update_fields is None or 'host_filter' in update_fields) and connection.vendor != 'sqlite':
+        if self.kind == 'smart' and (update_fields is None or 'host_filter' in update_fields):
             # Minimal update of host_count for smart inventory host filter changes
             self.update_computed_fields()
         self._enforce_constructed_source()

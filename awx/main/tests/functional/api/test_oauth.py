@@ -1,11 +1,12 @@
 import base64
 import json
-import time
+from datetime import timedelta
 
 import pytest
 
 from django.db import connection
 from django.test.utils import override_settings
+from django.utils.timezone import now
 from django.utils.encoding import smart_str, smart_bytes
 
 from awx.main.utils.encryption import decrypt_value, get_encryption_key
@@ -272,8 +273,8 @@ def test_refresh_accesstoken(oauth_application, post, get, delete, admin):
         content_type='application/x-www-form-urlencoded',
         HTTP_AUTHORIZATION='Basic ' + smart_str(base64.b64encode(smart_bytes(':'.join([oauth_application.client_id, oauth_application.client_secret])))),
     )
-    assert RefreshToken.objects.filter(token=refresh_token).exists()
-    original_refresh_token = RefreshToken.objects.get(token=refresh_token)
+    assert RefreshToken.objects.filter(token=refresh_token.token).exists()
+    original_refresh_token = RefreshToken.objects.get(token=refresh_token.token)
     assert token not in AccessToken.objects.all()
     assert AccessToken.objects.count() == 1
     # the same RefreshToken remains but is marked revoked
@@ -294,7 +295,11 @@ def test_refresh_token_expiration_is_respected(oauth_application, post, get, del
     refresh_token = RefreshToken.objects.get(token=response.data['refresh_token'])
     refresh_url = drf_reverse('api:oauth_authorization_root_view') + 'token/'
     short_lived = {'ACCESS_TOKEN_EXPIRE_SECONDS': 1, 'AUTHORIZATION_CODE_EXPIRE_SECONDS': 1, 'REFRESH_TOKEN_EXPIRE_SECONDS': 1}
-    time.sleep(1)
+    # Age the token instead of waiting out its lifetime. TokenView checks
+    # created + REFRESH_TOKEN_EXPIRE_SECONDS < now(), so sleeping exactly the
+    # lifetime left the result resting on how long the request itself took.
+    # An UPDATE rather than save(), because created is auto_now_add.
+    RefreshToken.objects.filter(pk=refresh_token.pk).update(created=now() - timedelta(seconds=60))
     with override_settings(OAUTH2_PROVIDER=short_lived):
         response = post(
             refresh_url,
@@ -304,7 +309,7 @@ def test_refresh_token_expiration_is_respected(oauth_application, post, get, del
         )
     assert response.status_code == 403
     assert b'The refresh token has expired.' in response.content
-    assert RefreshToken.objects.filter(token=refresh_token).exists()
+    assert RefreshToken.objects.filter(token=refresh_token.token).exists()
     assert AccessToken.objects.count() == 1
     assert RefreshToken.objects.count() == 1
 
@@ -340,3 +345,48 @@ def test_revoke_refreshtoken(oauth_application, post, get, delete, admin):
     new_refresh_token = RefreshToken.objects.all().first()
     assert refresh_token == new_refresh_token
     assert new_refresh_token.revoked
+
+
+@pytest.mark.django_db
+def test_rotated_refresh_token_cannot_be_reused(oauth_application, post, admin):
+    """A refresh grant rotates: the superseded token is kept with a revoked
+    timestamp rather than deleted, so presenting it again has to be refused."""
+    response = post(reverse('api:o_auth2_application_token_list', kwargs={'pk': oauth_application.pk}), {'scope': 'read'}, admin, expect=201)
+    refresh_token = RefreshToken.objects.get(token=response.data['refresh_token'])
+    refresh_url = drf_reverse('api:oauth_authorization_root_view') + 'token/'
+    auth = 'Basic ' + smart_str(base64.b64encode(smart_bytes(':'.join([oauth_application.client_id, oauth_application.client_secret]))))
+
+    first = post(
+        refresh_url,
+        data='grant_type=refresh_token&refresh_token=' + refresh_token.token,
+        content_type='application/x-www-form-urlencoded',
+        HTTP_AUTHORIZATION=auth,
+    )
+    assert first.status_code == 200
+    superseded = RefreshToken.objects.get(token=refresh_token.token)
+    assert superseded.revoked is not None
+    assert AccessToken.objects.count() == 1
+
+    replay = post(
+        refresh_url,
+        data='grant_type=refresh_token&refresh_token=' + refresh_token.token,
+        content_type='application/x-www-form-urlencoded',
+        HTTP_AUTHORIZATION=auth,
+    )
+    assert replay.status_code == 400
+    assert json.loads(replay.content)['error'] == 'invalid_grant'
+    assert AccessToken.objects.count() == 1
+
+
+@pytest.mark.django_db
+def test_token_values_are_not_rendered_by_str(oauth_application, post, admin):
+    """django-oauth-toolkit 3.4 stopped putting the secret in __str__, which
+    reaches admin breadcrumbs, tracebacks and log output. Nothing in awx relies
+    on the old behaviour, and this keeps it that way."""
+    response = post(reverse('api:o_auth2_application_token_list', kwargs={'pk': oauth_application.pk}), {'scope': 'read'}, admin, expect=201)
+    access_token = AccessToken.objects.get(token=response.data['token'])
+    refresh_token = RefreshToken.objects.get(token=response.data['refresh_token'])
+
+    for obj in (access_token, refresh_token):
+        assert obj.token not in str(obj)
+        assert obj.token not in repr(obj)

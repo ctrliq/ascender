@@ -350,13 +350,13 @@ class Role(models.Model):
             'roles_table': Role._meta.db_table,
         }
 
-        # SQLlite has a 1M sql statement limit.. since the django sqllite
-        # driver isn't letting us pass in the ids through the preferred
-        # parameter binding system, this function exists to obey this.
-        # est max 12 bytes per number, used up to 2 times in a query,
-        # minus 4k of padding for the other parts of the query, leads us
-        # to the magic number of 41496, or 40000 for a nice round number
-        def split_ids_for_sqlite(role_ids):
+        # The queries below interpolate the ids into the statement text rather
+        # than binding them, so an unbounded IN list means an unbounded
+        # statement: bad for the parser and the planner whatever the backend.
+        # The batch size is inherited from the SQLite era, where a 1M statement
+        # limit made it mandatory, and is kept because nothing wants a single
+        # IN list of every role id either.
+        def split_ids(role_ids):
             for i in range(0, len(role_ids), 40000):
                 yield role_ids[i : i + 40000]
 
@@ -368,7 +368,7 @@ class Role(models.Model):
 
                 delete_ct = 0
                 if len(removals) > 0:
-                    for ids in split_ids_for_sqlite(removals):
+                    for ids in split_ids(removals):
                         sql_params['ids'] = ','.join(str(x) for x in ids)
                         cursor.execute('''
                             DELETE FROM %(ancestors_table)s
@@ -388,7 +388,7 @@ class Role(models.Model):
 
                 insert_ct = 0
                 if len(additions) > 0:
-                    for ids in split_ids_for_sqlite(additions):
+                    for ids in split_ids(additions):
                         sql_params['ids'] = ','.join(str(x) for x in ids)
                         cursor.execute('''
                             INSERT INTO %(ancestors_table)s (descendent_id, ancestor_id, role_field, content_type_id, object_id)
@@ -427,7 +427,7 @@ class Role(models.Model):
                     break
 
                 new_additions = set()
-                for ids in split_ids_for_sqlite(additions):
+                for ids in split_ids(additions):
                     sql_params['ids'] = ','.join(str(x) for x in ids)
                     # get all children for the roles we're operating on
                     cursor.execute('SELECT DISTINCT from_role_id FROM %(parents_table)s WHERE to_role_id IN (%(ids)s)' % sql_params)
@@ -435,7 +435,7 @@ class Role(models.Model):
                 additions = list(new_additions)
 
                 new_removals = set()
-                for ids in split_ids_for_sqlite(removals):
+                for ids in split_ids(removals):
                     sql_params['ids'] = ','.join(str(x) for x in ids)
                     # get all children for the roles we're operating on
                     cursor.execute('SELECT DISTINCT from_role_id FROM %(parents_table)s WHERE to_role_id IN (%(ids)s)' % sql_params)
