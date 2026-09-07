@@ -137,7 +137,7 @@ djangorestframework==3.18.0
     #   drf-spectacular
 drf-spectacular==0.30.0
     # via -r /awx_devel/requirements/requirements.in
-durationpy==0.10
+durationpy==0.11
     # via kubernetes
 enum-compat==0.0.3
     # via asn1
