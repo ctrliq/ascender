@@ -3,7 +3,7 @@ from functools import reduce
 
 from django.core.exceptions import FieldDoesNotExist
 from pyparsing import (
-    infixNotation,
+    infix_notation,
     opAssoc,
     Optional,
     Literal,
@@ -349,15 +349,20 @@ class SmartFilter(object):
 
         unicode_spaces = list(set(str(c) for c in filter_string if c.isspace()))
         unicode_spaces_other = unicode_spaces + [u'(', u')', u'=', u'"']
-        atom = CharsNotIn(unicode_spaces_other)
+        # CharsNotIn does not skip leading whitespace of its own accord. On
+        # pyparsing 2 that did not matter, because the surrounding And still
+        # consumed the gap before the next term; on 3 it does, so every
+        # multi-term filter failed with Expected ')', found 'and'. Asking the
+        # atom to ignore whitespace restores the 2.x behaviour.
+        atom = CharsNotIn(unicode_spaces_other).ignore_whitespace()
         atom_inside_quotes = CharsNotIn(u'"')
         atom_quoted = Literal('"') + Optional(atom_inside_quotes) + Literal('"')
         EQUAL = Literal('=')
 
         grammar = (atom_quoted | atom) + EQUAL + Optional((atom_quoted | atom))
-        grammar.setParseAction(cls.BoolOperand)
+        grammar.set_parse_action(cls.BoolOperand)
 
-        boolExpr = infixNotation(
+        boolExpr = infix_notation(
             grammar,
             [
                 ("and", 2, opAssoc.LEFT, cls.BoolAnd),
@@ -366,7 +371,7 @@ class SmartFilter(object):
         )
 
         try:
-            res = boolExpr.parseString('(' + filter_string + ')')
+            res = boolExpr.parse_string('(' + filter_string + ')')
         except (ParseException, FieldDoesNotExist):
             raise RuntimeError(u"Invalid query %s" % filter_string_raw)
 
