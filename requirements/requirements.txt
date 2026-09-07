@@ -16,7 +16,7 @@ annotated-doc==0.0.5
     # via -r /awx_devel/requirements/requirements_git.txt
 asciichartpy==1.5.25
     # via -r /awx_devel/requirements/requirements.in
-asgiref==3.11.0
+asgiref==3.12.1
     # via
     #   channels
     #   channels-valkey
