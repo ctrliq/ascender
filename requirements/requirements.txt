@@ -460,7 +460,7 @@ valkey[libvalkey]==6.1.1
     #   django-valkey
 vcs-versioning==2.3.4
     # via setuptools-scm
-websocket-client==1.7.0
+websocket-client==1.9.2
     # via kubernetes
 wheel==0.48.0
     # via -r /awx_devel/requirements/requirements.in
