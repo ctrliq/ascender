@@ -12,7 +12,6 @@ logger = logging.getLogger('awx.dab.lib.utils.views.base_view')
 
 
 class AnsibleBaseView(APIView):
-
     ordering = ['pk']
 
     # pulp openapi generator compatibility

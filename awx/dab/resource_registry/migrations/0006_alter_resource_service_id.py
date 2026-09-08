@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('dab_resource_registry', '0005_resource_is_partially_migrated_and_more'),
     ]

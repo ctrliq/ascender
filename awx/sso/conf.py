@@ -1229,9 +1229,7 @@ register(
     read_only=True,
     default=SocialAuthCallbackURL('azuread-tenant-oauth2'),
     label=_('Azure AD Tenant OAuth2 Callback URL'),
-    help_text=_(
-        'Provide this URL as the callback URL for your application as part ' 'of your registration process. Refer to the documentation for more detail.'
-    ),
+    help_text=_('Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail.'),
     category=_('Azure AD Tenant OAuth2'),
     category_slug='azuread-oauth2-tenant',
     depends_on=['TOWER_URL_BASE'],
@@ -1568,7 +1566,7 @@ register(
     allow_null=True,
     default=None,
     label=_('SAML IDP to extra_data attribute mapping'),
-    help_text=_('A list of tuples that maps IDP attributes to extra_attributes.' ' Each attribute will be a list of values, even if only 1 value.'),
+    help_text=_('A list of tuples that maps IDP attributes to extra_attributes. Each attribute will be a list of values, even if only 1 value.'),
     category=_('SAML'),
     category_slug='saml',
     placeholder=[('attribute_name', 'extra_data_name_for_attribute'), ('department', 'department'), ('manager_full_name', 'manager_full_name')],

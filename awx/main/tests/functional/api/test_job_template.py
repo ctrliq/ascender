@@ -155,7 +155,7 @@ def test_invalid_json_body(patch, job_template_factory, alice, json_body):
     objs = job_template_factory('jt', organization='org1')
     objs.job_template.admin_role.members.add(alice)
     resp = patch(reverse('api:job_template_detail', kwargs={'pk': objs.job_template.id}), json_body, alice, expect=400)
-    assert resp.data['detail'] == (u'JSON parse error - not a JSON object')
+    assert resp.data['detail'] == ('JSON parse error - not a JSON object')
 
 
 @pytest.mark.django_db

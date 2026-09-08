@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('main', '0198_oauth2accesstoken_token_checksum_and_more'),
     ]

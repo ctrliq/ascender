@@ -239,7 +239,7 @@ class Schedule(PrimordialModel, LaunchTimeConfig):
         return x
 
     def __str__(self):
-        return u'%s_t%s_%s_%s' % (self.name, self.unified_job_template.id, self.id, self.next_run)
+        return '%s_t%s_%s_%s' % (self.name, self.unified_job_template.id, self.id, self.next_run)
 
     def get_absolute_url(self, request=None):
         return reverse('api:schedule_detail', kwargs={'pk': self.pk}, request=request)

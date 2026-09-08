@@ -37,7 +37,7 @@ class CompleteView(BaseRedirectView):
     def dispatch(self, request, *args, **kwargs):
         response = super(CompleteView, self).dispatch(request, *args, **kwargs)
         if self.request.user and self.request.user.is_authenticated:
-            logger.info(smart_str(u"User {} logged in".format(self.request.user.username)))
+            logger.info(smart_str("User {} logged in".format(self.request.user.username)))
             response.set_cookie(
                 'userLoggedIn', 'true', secure=getattr(settings, 'SESSION_COOKIE_SECURE', False), samesite=getattr(settings, 'USER_COOKIE_SAMESITE', 'Lax')
             )

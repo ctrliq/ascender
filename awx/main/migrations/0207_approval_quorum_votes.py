@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('main', '0206_jobhostsummary_main_jobhostsumm_host_id_desc'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),

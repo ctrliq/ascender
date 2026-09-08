@@ -314,13 +314,13 @@ class TestSAMLAttrMaps:
     )
     def test__update_user_orgs_by_saml_attr(self, backend, setting, expected_state, expected_orgs_to_create, kwargs_member_of_mods):
         kwargs = {
-            'username': u'cmeyers@redhat.com',
+            'username': 'cmeyers@redhat.com',
             'uid': 'idp:cmeyers@redhat.com',
-            'request': {u'SAMLResponse': [], u'RelayState': [u'idp']},
+            'request': {'SAMLResponse': [], 'RelayState': ['idp']},
             'is_new': False,
             'response': {
                 'session_index': '_0728f0e0-b766-0135-75fa-02842b07c044',
-                'idp_name': u'idp',
+                'idp_name': 'idp',
                 'attributes': {
                     'memberOf': ['Default1', 'Default2'],
                     'admins': ['Default3'],
@@ -471,13 +471,13 @@ class TestSAMLAttrMaps:
     )
     def test__update_user_teams_by_saml_attr(self, setting, expected_team_state, expected_teams_to_create, kwargs_group_override):
         kwargs = {
-            'username': u'cmeyers@redhat.com',
+            'username': 'cmeyers@redhat.com',
             'uid': 'idp:cmeyers@redhat.com',
-            'request': {u'SAMLResponse': [], u'RelayState': [u'idp']},
+            'request': {'SAMLResponse': [], 'RelayState': ['idp']},
             'is_new': False,
             'response': {
                 'session_index': '_0728f0e0-b766-0135-75fa-02842b07c044',
-                'idp_name': u'idp',
+                'idp_name': 'idp',
                 'attributes': {
                     'memberOf': ['Default1', 'Default2'],
                     'admins': ['Default3'],
@@ -677,11 +677,11 @@ def test__update_user_orgs_org_map_and_saml_attr():
     kwargs = {
         'username': 'foobar',
         'uid': 'idp:cmeyers@redhat.com',
-        'request': {u'SAMLResponse': [], u'RelayState': [u'idp']},
+        'request': {'SAMLResponse': [], 'RelayState': ['idp']},
         'is_new': False,
         'response': {
             'session_index': '_0728f0e0-b766-0135-75fa-02842b07c044',
-            'idp_name': u'idp',
+            'idp_name': 'idp',
             'attributes': {
                 'admins': ['Default1'],
             },

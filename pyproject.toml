@@ -42,17 +42,19 @@ include-package-data = true
 # metadata, only the running application.
 [tool.setuptools_scm]
 
-[tool.black]
-line-length = 160
-fast = true
-skip-string-normalization = true
-
 [tool.ruff]
 # Ported from the [flake8] block in tox.ini rather than adopted from upstream
 # AWX, whose Ruff config selects 12 rules where ours selects 48. Copying theirs
 # would have dropped 36 checks silently.
 line-length = 160
 exclude = [".git", "__pycache__", ".tox", "awx/ui/node_modules", "env"]
+
+# target-version is left unset on purpose, which means ruff's default of py39.
+# It is not only a lint setting, the formatter reads it too: at py314 it rewrites
+# 31 files from except (A, B): to the PEP 758 except A, B:, which is a syntax
+# error on anything older. Ruff infers the target from requires-python when that
+# is present, so if [project] ever gains one, pin target-version here in the same
+# change rather than letting the formatting follow it.
 
 [tool.ruff.format]
 # The two settings black was configured with: line-length above, and preserving

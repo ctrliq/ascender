@@ -1036,7 +1036,7 @@ ManagedCredentialType(
                 'label': gettext_noop('Username'),
                 'type': 'string',
                 'help_text': gettext_noop(
-                    'CIQ Ascender Automation Platform username id to authenticate as.' 'This should not be set if an OAuth token is being used.'
+                    'CIQ Ascender Automation Platform username id to authenticate as. This should not be set if an OAuth token is being used.'
                 ),
             },
             {
@@ -1050,7 +1050,7 @@ ManagedCredentialType(
                 'label': gettext_noop('OAuth Token'),
                 'type': 'string',
                 'secret': True,
-                'help_text': gettext_noop('An OAuth token to use to authenticate with.' 'This should not be set if username/password are being used.'),
+                'help_text': gettext_noop('An OAuth token to use to authenticate with. This should not be set if username/password are being used.'),
             },
             {'id': 'verify_ssl', 'label': gettext_noop('Verify SSL'), 'type': 'boolean', 'secret': False},
         ],

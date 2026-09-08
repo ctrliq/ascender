@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('main', '0192_alter_instance_peers_alter_job_hosts_and_more'),
     ]

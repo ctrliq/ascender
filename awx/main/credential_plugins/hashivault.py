@@ -47,8 +47,7 @@ base_inputs = {
             'type': 'string',
             'multiline': True,
             'help_text': _(
-                'The PEM-encoded client certificate used for TLS client authentication.'
-                ' This should include the certificate and any intermediate certififcates.'
+                'The PEM-encoded client certificate used for TLS client authentication. This should include the certificate and any intermediate certififcates.'
             ),
         },
         {

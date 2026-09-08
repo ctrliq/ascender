@@ -48,7 +48,7 @@ class Control(object):
 
     @classmethod
     def generate_reply_queue_name(cls):
-        return f"reply_to_{str(uuid.uuid4()).replace('-','_')}"
+        return f"reply_to_{str(uuid.uuid4()).replace('-', '_')}"
 
     def control_with_reply(self, command, timeout=5, extra_data=None):
         logger.warning('checking {} {} for {}'.format(self.service, command, self.queuename))

@@ -266,9 +266,18 @@ run-ws-heartbeat:
 reports:
 	mkdir -p $@
 
-black: reports
-	@command -v black >/dev/null 2>&1 || { echo "could not find black on your PATH, you may need to \`pip install black\`, or set AWX_IGNORE_BLACK=1" && exit 1; }
-	@(set -o pipefail && $@ $(BLACK_ARGS) awx | tee reports/$@.report)
+## Format the Python source in place. Set RUFF_FORMAT_ARGS=--check to report instead.
+format: reports
+	@command -v ruff >/dev/null 2>&1 || { echo "could not find ruff on your PATH, you may need to \`pip install ruff\`, or set AWX_IGNORE_RUFF=1" && exit 1; }
+	@(set -o pipefail && ruff format $(RUFF_FORMAT_ARGS) awx | tee reports/format.report)
+
+## Legacy alias for format, so `make black` keeps working in existing habits and scripts.
+black: format
+
+## Lint the Python source against the rules selected in pyproject.toml.
+lint:
+	@command -v ruff >/dev/null 2>&1 || { echo "could not find ruff on your PATH, you may need to \`pip install ruff\`" && exit 1; }
+	ruff check awx
 
 ../../.git/hooks/pre-commit:
 	@echo "if [ -x pre-commit.sh ]; then" > .git/hooks/pre-commit
@@ -287,11 +296,11 @@ genschema-yaml: awx-link reports
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
 	$(MANAGEMENT_COMMAND) spectacular --format openapi --file schema.yaml
-check: black
+check: format
 
 api-lint:
-	BLACK_ARGS="--check" $(MAKE) black
-	flake8 awx
+	RUFF_FORMAT_ARGS="--check" $(MAKE) format
+	$(MAKE) lint
 	yamllint -s .
 
 ## Run egg_info_dev to generate awx.egg-info for development.

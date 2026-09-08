@@ -2,7 +2,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("dab_resource_registry", "0007_alter_resource_ansible_id_and_more"),
     ]

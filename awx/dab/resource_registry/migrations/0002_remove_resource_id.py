@@ -18,7 +18,6 @@ def revert_post_migrate(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('dab_resource_registry', '0001_initial'),
     ]
