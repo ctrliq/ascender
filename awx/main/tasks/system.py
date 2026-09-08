@@ -68,7 +68,7 @@ from rest_framework.exceptions import PermissionDenied
 
 logger = logging.getLogger('awx.main.tasks.system')
 
-OPENSSH_KEY_ERROR = u'''\
+OPENSSH_KEY_ERROR = '''\
 It looks like you're trying to use a private key in OpenSSH format, which \
 isn't supported by the installed version of OpenSSH on this instance. \
 Try upgrading OpenSSH or providing your private key in an different format. \
@@ -771,8 +771,10 @@ def awx_periodic_scheduler():
                 continue
             if not can_start:
                 new_unified_job.status = 'failed'
-                new_unified_job.job_explanation = gettext_noop("Scheduled job could not start because it \
-                    was not in the right state or required manual credentials")
+                new_unified_job.job_explanation = gettext_noop(
+                    "Scheduled job could not start because it \
+                    was not in the right state or required manual credentials"
+                )
                 new_unified_job.save(update_fields=['status', 'job_explanation'])
                 new_unified_job.websocket_emit_status("failed")
             emit_channel_notification('schedules-changed', dict(id=schedule.id, group_name="schedules"))

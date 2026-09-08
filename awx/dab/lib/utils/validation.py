@@ -262,4 +262,4 @@ def to_python_boolean(value, allow_none=False):
     elif allow_none and (value is None or value.lower() in ('none', 'null')):
         return None
     else:
-        raise ValueError(_(u'Unable to convert "%s" to boolean') % value)
+        raise ValueError(_('Unable to convert "%s" to boolean') % value)

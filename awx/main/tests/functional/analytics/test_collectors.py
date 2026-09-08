@@ -97,6 +97,6 @@ def test_copy_tables_workflow_job_node_query(workflow_job):
                     # COPY renders an aggregated array as {a,b}, so strip the braces
                     raw = line[index].strip("{}")
                     related_nodes = [int(e) for e in raw.split(",")] if raw else []
-                    assert related_nodes == list(
-                        getattr(ordered_nodes[i], relationship).all().order_by("id").values_list("id", flat=True)
-                    ), f"(right side) workflow_nodes.order_by('id')[{i}].{relationship}.all()"
+                    assert related_nodes == list(getattr(ordered_nodes[i], relationship).all().order_by("id").values_list("id", flat=True)), (
+                        f"(right side) workflow_nodes.order_by('id')[{i}].{relationship}.all()"
+                    )

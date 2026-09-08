@@ -5,7 +5,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('dab_resource_registry', '0004_remove_resourcetype_migrated'),
     ]

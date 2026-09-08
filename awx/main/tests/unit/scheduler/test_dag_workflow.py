@@ -493,8 +493,7 @@ class TestIsWorkflowDone:
             True,
             smart_str(
                 _(
-                    "No error handling path for workflow job node(s) [({},{})]. Workflow job node(s)"
-                    " missing unified job template and error handling path []."
+                    "No error handling path for workflow job node(s) [({},{})]. Workflow job node(s) missing unified job template and error handling path []."
                 ).format(nodes[2].id, nodes[2].job.status)
             ),
         )
@@ -508,9 +507,9 @@ class TestIsWorkflowDone:
         assert g.has_workflow_failed() == (
             True,
             smart_str(
-                _(
-                    "No error handling path for workflow job node(s) []. Workflow job node(s) missing" " unified job template and error handling path [{}]."
-                ).format(nodes[2].id)
+                _("No error handling path for workflow job node(s) []. Workflow job node(s) missing unified job template and error handling path [{}].").format(
+                    nodes[2].id
+                )
             ),
         )
 
@@ -524,9 +523,9 @@ class TestIsWorkflowDone:
         assert g.has_workflow_failed() == (
             True,
             smart_str(
-                _(
-                    "No error handling path for workflow job node(s) []. Workflow job node(s) missing" " unified job template and error handling path [{}]."
-                ).format(nodes[0].id)
+                _("No error handling path for workflow job node(s) []. Workflow job node(s) missing unified job template and error handling path [{}].").format(
+                    nodes[0].id
+                )
             ),
         )
 
@@ -537,8 +536,7 @@ class TestIsWorkflowDone:
             True,
             smart_str(
                 _(
-                    "No error handling path for workflow job node(s) [({},{})]. Workflow job node(s)"
-                    " missing unified job template and error handling path []."
+                    "No error handling path for workflow job node(s) [({},{})]. Workflow job node(s) missing unified job template and error handling path []."
                 ).format(nodes[0].id, nodes[0].job.status)
             ),
         )
@@ -550,8 +548,7 @@ class TestIsWorkflowDone:
             True,
             smart_str(
                 _(
-                    "No error handling path for workflow job node(s) [({},{})]. Workflow job node(s)"
-                    " missing unified job template and error handling path []."
+                    "No error handling path for workflow job node(s) [({},{})]. Workflow job node(s) missing unified job template and error handling path []."
                 ).format(nodes[0].id, nodes[0].job.status)
             ),
         )

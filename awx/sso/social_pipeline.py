@@ -120,7 +120,7 @@ def _compute_team_desired_states(team_map_settings, user):
 
         if not organization:
             logger.error(
-                "Team named %s in social auth team map settings is " "invalid due to missing organization",
+                "Team named %s in social auth team map settings is invalid due to missing organization",
                 team_name,
             )
             continue

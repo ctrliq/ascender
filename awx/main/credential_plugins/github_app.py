@@ -128,9 +128,7 @@ def extract_github_app_install_token(
         ) from pygithub_catchall_exc
     except BadAttributeException as github_broken_exc:
         raise RuntimeError(
-            f'Broken GitHub @ {github_api_url!s} with '
-            f'{app_install_context!s}. It is a bug, please report it to the '
-            f'developers.\n\n{github_broken_exc!s}',
+            f'Broken GitHub @ {github_api_url!s} with {app_install_context!s}. It is a bug, please report it to the developers.\n\n{github_broken_exc!s}',
         ) from github_broken_exc
 
 

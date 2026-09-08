@@ -13,7 +13,6 @@ def create_service_id(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [

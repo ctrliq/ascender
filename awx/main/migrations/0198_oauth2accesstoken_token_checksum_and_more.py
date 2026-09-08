@@ -15,7 +15,6 @@ def compute_token_checksums(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('main', '0197_add_federated_inventory_kind'),
     ]

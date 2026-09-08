@@ -4,7 +4,6 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('dab_resource_registry', '0003_alter_resource_object_id'),
     ]

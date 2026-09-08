@@ -32,7 +32,6 @@ def cleanup_dab_rbac_leftovers(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ('main', '0208_alter_job_skip_tags_alter_jobtemplate_skip_tags'),
     ]

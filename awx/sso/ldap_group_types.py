@@ -32,12 +32,12 @@ class PosixUIDGroupType(LDAPGroupType):
 
             if 'gidNumber' in ldap_user.attrs:
                 user_gid = ldap_user.attrs['gidNumber'][0]
-                filterstr = u'(|(gidNumber=%s)(memberUid=%s))' % (
+                filterstr = '(|(gidNumber=%s)(memberUid=%s))' % (
                     self.ldap.filter.escape_filter_chars(user_gid),
                     self.ldap.filter.escape_filter_chars(user_uid),
                 )
             else:
-                filterstr = u'(memberUid=%s)' % (self.ldap.filter.escape_filter_chars(user_uid),)
+                filterstr = '(memberUid=%s)' % (self.ldap.filter.escape_filter_chars(user_uid),)
 
             search = group_search.search_with_additional_term_string(filterstr)
             search.attrlist = [str(self.name_attr)]
