@@ -274,6 +274,11 @@ format: reports
 ## Legacy alias for format, so `make black` keeps working in existing habits and scripts.
 black: format
 
+## Lint the Python source against the rules selected in pyproject.toml.
+lint:
+	@command -v ruff >/dev/null 2>&1 || { echo "could not find ruff on your PATH, you may need to \`pip install ruff\`" && exit 1; }
+	ruff check awx
+
 ../../.git/hooks/pre-commit:
 	@echo "if [ -x pre-commit.sh ]; then" > .git/hooks/pre-commit
 	@echo "    ./pre-commit.sh;" >> .git/hooks/pre-commit
@@ -295,7 +300,7 @@ check: format
 
 api-lint:
 	RUFF_FORMAT_ARGS="--check" $(MAKE) format
-	flake8 awx
+	$(MAKE) lint
 	yamllint -s .
 
 ## Run egg_info_dev to generate awx.egg-info for development.

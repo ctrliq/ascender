@@ -23,27 +23,27 @@ Runtime versions (inside container):
 - **Python** 3.14.7
 - **Django** 5.2.14
 - **psycopg** 3.1.18
-- **black** 26.5.1 | **flake8** 7.3.0 | **yamllint** 1.38.0
+- **ruff** 0.16.6 | **yamllint** 1.38.0
 
 ---
 
 ## Linting
 
-### Black (code formatting)
-Config in `pyproject.toml`: `line-length = 160`, `skip-string-normalization = true`. Always auto-format new Python code before committing:
+### Ruff (formatting)
+Config in `pyproject.toml` under `[tool.ruff]` and `[tool.ruff.format]`: `line-length = 160`, `quote-style = "preserve"`. Ruff replaced black here, and `make black` is still an alias for `make format`. Always auto-format new Python code before committing:
 
 ```bash
 # Check (CI-style):
-docker exec tools_awx_1 bash -c "cd /awx_devel && black --check awx"
+docker exec tools_awx_1 bash -c "cd /awx_devel && ruff format --check awx"
 # Auto-fix:
-docker exec tools_awx_1 bash -c "cd /awx_devel && black awx"
+docker exec tools_awx_1 bash -c "cd /awx_devel && ruff format awx"
 ```
 
-### Flake8
-Config in `tox.ini` (section `[flake8]`). Checks only: `F401,F402,F821,F823,F841,F811,E265,E266,F541,W605,E722,F822,F523,W291,F405`. Excludes `awx/ui/node_modules`, `env`.
+### Ruff (linting)
+Config in `pyproject.toml` under `[tool.ruff.lint]`. Selects 48 rules explicitly rather than by class, ported from the `[flake8]` block this replaced: the `E7xx` statement checks, `F4xx` through `F9xx`, and `W2xx`/`W3xx`/`W605`. `preview = true` is required because `E265`, `E266` and `W391` are still preview rules and are silently inert without it. Excludes `awx/ui/node_modules`, `env`.
 
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && flake8 awx"
+docker exec tools_awx_1 bash -c "cd /awx_devel && ruff check awx"
 ```
 
 ### Yamllint
@@ -130,8 +130,8 @@ Migration files live in `awx/main/migrations/` (218 existing files).
 ### Key configuration files
 | File | Purpose |
 |---|---|
-| `pyproject.toml` | Build system, package metadata and entry points, black config |
-| `tox.ini` | flake8 config + tox testenv definitions |
+| `pyproject.toml` | Build system, package metadata and entry points, ruff config |
+| `tox.ini` | tox testenv definitions |
 | `.yamllint` | yamllint rules |
 | `pytest.ini` | pytest settings and markers |
 | `Makefile` | All build/test/lint targets |
@@ -152,7 +152,7 @@ CI uses `ansible-playbook tools/ansible/build.yml` to build images. No automated
 
 ## Pre-commit Hook
 
-`pre-commit.sh` runs `black --check` on all staged Python files. Set up with:
+`pre-commit.sh` runs `ruff format --check` on all staged Python files. Set `AWX_IGNORE_RUFF=1` to skip it. Set up with:
 ```bash
 make .git/hooks/pre-commit
 ```

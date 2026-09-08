@@ -26,7 +26,6 @@ backports.tempfile  # support in unit tests for py32+ tempfile.TemporaryDirector
 https://github.com/artefactual-labs/mockldap/archive/61b362ef6a45911e2ec33923da3af17d51157dac.tar.gz#egg=mockldap
 gprof2dot
 atomicwrites>=1.4.1
-flake8
 yamllint
 pip>=26.2.1 # PEP 660 – Editable installs for pyproject.toml based builds (wheel based)
 
