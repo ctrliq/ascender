@@ -11,11 +11,13 @@ const escapeRegExp = (text) => text.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
 // kept watched to support absolute imports.
 // https://github.com/facebook/create-react-app/issues/1065
 function ignoredFiles(appSrc) {
+  // No `g` flag: chokidar reuses this RegExp with .test() across many paths,
+  // and a global regex carries lastIndex between calls, so matches would
+  // alternate.
   return new RegExp(
     `^(?!${escapeRegExp(
       path.normalize(appSrc + '/').replace(/[\\]+/g, '/')
-    )}).+/node_modules/`,
-    'g'
+    )}).+/node_modules/`
   );
 }
 

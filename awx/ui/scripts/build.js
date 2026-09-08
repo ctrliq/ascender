@@ -47,11 +47,13 @@ const config = configFactory('production');
 
 // We require that you explicitly set browsers and do not fall back to
 // browserslist defaults.
-checkBrowsers(paths.appPath);
-
-// First, read the current file sizes in build directory.
-// This lets us display how much they changed later.
-Promise.resolve(measureFileSizesBeforeBuild(paths.appBuild))
+Promise.resolve()
+  .then(() => checkBrowsers(paths.appPath))
+  .then(() => {
+    // First, read the current file sizes in build directory.
+    // This lets us display how much they changed later.
+    return measureFileSizesBeforeBuild(paths.appBuild);
+  })
   .then(previousFileSizes => {
     // Remove all content but keep the directory so that
     // if you're in it, you don't end up in Trash

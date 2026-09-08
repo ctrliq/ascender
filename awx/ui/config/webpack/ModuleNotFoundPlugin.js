@@ -49,7 +49,7 @@ class ModuleNotFoundPlugin {
     const file = this.getRelativePath(origin.resource);
     let details = _details.split('\n');
 
-    const request = /resolve '(.*?)' in '(.*?)'/.exec(details);
+    const request = /resolve '(.*?)' in '(.*?)'/.exec(_details);
     if (request) {
       const isModule = details[1] && details[1].includes('module');
       const isFile = details[1] && details[1].includes('file');

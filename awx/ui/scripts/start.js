@@ -55,20 +55,20 @@ if (process.env.HOST) {
   console.log();
 }
 
-// BROWSER=none disables opening a browser; any other value names the app to
-// open the URL with, as understood by webpack-dev-server's `open` option.
+// Builds webpack-dev-server's `open` option from the BROWSER environment
+// variable: "none" disables opening a browser, unset opens the URL in the
+// default browser, and anything else names the app to open it with
+// (BROWSER_ARGS supplies extra whitespace-separated arguments).
 function getOpenOption(url) {
   const browser = process.env.BROWSER;
-  if (browser && browser.toLowerCase() === 'none') {
+  if (!browser) {
+    return url;
+  }
+  if (browser.toLowerCase() === 'none') {
     return false;
   }
-  const args = process.env.BROWSER_ARGS
-    ? process.env.BROWSER_ARGS.split(' ')
-    : [];
-  return {
-    target: url,
-    app: browser ? { name: browser, arguments: args } : undefined,
-  };
+  const args = (process.env.BROWSER_ARGS || '').split(/\s+/).filter(Boolean);
+  return { target: url, app: { name: browser, arguments: args } };
 }
 
 async function main() {
