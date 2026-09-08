@@ -1,5 +1,10 @@
 [build-system]
-requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+# Pinned rather than floored, and pinned to the same versions the Makefile
+# bootstraps into the venv and requirements.in installs, which requirements
+# README.md asks for under UPGRADE BLOCKERs. A floor is also too low now that
+# the metadata below is PEP 621: setuptools grew full support for [project] in
+# 61, so a build resolving anything older would ignore or reject it.
+requires = ["setuptools==84.0.0", "setuptools_scm[toml]==10.2.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
