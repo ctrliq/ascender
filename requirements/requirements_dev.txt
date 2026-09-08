@@ -16,7 +16,7 @@ pytest-xdist
 tox  # for the linters and docs environments in tox.ini
 logutils
 jupyter
-notebook<7.0.0
+notebook>=7
 # matplotlib - Caused issues when bumping to setuptools 58
 backports.tempfile  # support in unit tests for py32+ tempfile.TemporaryDirectory
 # artefactual-labs fork pinned to a commit (py3 fixes; the PyPI release is
