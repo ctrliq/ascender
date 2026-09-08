@@ -612,7 +612,8 @@ html.pf-v6-theme-dark[data-theme="default"] {
 
   & .pf-v6-c-wizard .pf-v6-c-wizard__nav-link.pf-m-current {
     --pf-v6-c-wizard__nav-link--m-current--BackgroundColor: #12a66f;
-    --pf-v6-c-wizard__nav-link--m-current--Color: #fff;
+    --pf-v6-c-wizard__nav-link--m-current--Color: #22262f;
+    --pf-v6-c-wizard__nav-link--Color: #22262f;
   }
 
   & .pf-v6-c-form__group.pf-m-action {

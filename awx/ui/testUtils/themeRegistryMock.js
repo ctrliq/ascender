@@ -9,6 +9,14 @@
 const fs = require('fs');
 const path = require('path');
 
+// The custom theme lives in its own module precisely because it needs no
+// bundler, so the mock uses the real implementation rather than a copy.
+const {
+  getCustomTheme,
+  setCustomTheme,
+  CUSTOM_THEME_ID,
+} = require('../src/customTheme');
+
 const themesDir = path.resolve(__dirname, '../src/themes');
 
 function loadThemes() {
@@ -33,7 +41,8 @@ let themes = null;
 
 function getThemes() {
   if (!themes) themes = loadThemes();
-  return themes;
+  const custom = getCustomTheme();
+  return custom ? [...themes, custom] : themes;
 }
 
 function getStoredThemeId() {
@@ -94,6 +103,8 @@ function getActiveThemeId() {
 
 module.exports = {
   getThemes,
+  setCustomTheme,
+  CUSTOM_THEME_ID,
   getStoredThemeId,
   getSavedThemeId,
   applyTheme,

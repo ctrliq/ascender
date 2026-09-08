@@ -5,7 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 # AWX
 from awx.main.models.oauth import OAuth2AccessToken
-from oauth2_provider.models import RefreshToken
+from awx.main.models.oauth import OAuth2RefreshToken
 
 
 def revoke_tokens(token_list):
@@ -26,7 +26,7 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         if not options['user']:
             if options['all']:
-                revoke_tokens(RefreshToken.objects.filter(revoked=None))
+                revoke_tokens(OAuth2RefreshToken.objects.filter(revoked=None))
             revoke_tokens(OAuth2AccessToken.objects.all())
         else:
             try:
@@ -34,5 +34,5 @@ class Command(BaseCommand):
             except ObjectDoesNotExist:
                 raise CommandError('A user with that username does not exist.')
             if options['all']:
-                revoke_tokens(RefreshToken.objects.filter(revoked=None).filter(user=user))
+                revoke_tokens(OAuth2RefreshToken.objects.filter(revoked=None).filter(user=user))
             revoke_tokens(user.main_oauth2accesstoken.filter(user=user))

@@ -1,9 +1,45 @@
 [build-system]
-requires = ["setuptools>=45", "setuptools_scm[toml]>=6.2"]
+# Pinned rather than floored, and pinned to the same versions the Makefile
+# bootstraps into the venv and requirements.in installs, which requirements
+# README.md asks for under UPGRADE BLOCKERs. A floor is also too low now that
+# the metadata below is PEP 621: setuptools grew full support for [project] in
+# 61, so a build resolving anything older would ignore or reject it.
+requires = ["setuptools==84.0.0", "setuptools_scm[toml]==10.2.3"]
 build-backend = "setuptools.build_meta"
 
-# Do not uncomment the line below. We need to be able to override the version via a file, and this
-# causes the "version" key in setup.cfg to be ignored.
+[project]
+name = "awx"
+# Two entries rather than one: a combined { name, email } renders as a single
+# "Author-email: Red Hat <info@ansible.com>" header, where setup.cfg produced
+# separate Author and Author-email fields. This keeps the metadata identical.
+authors = [{ name = "Red Hat" }, { email = "info@ansible.com" }]
+# Supplied by setuptools_scm, see the note on [tool.setuptools_scm] below.
+dynamic = ["version"]
+
+[project.scripts]
+awx-manage = "awx:manage"
+
+[project.entry-points."awx.credential_plugins"]
+conjur = "awx.main.credential_plugins.conjur:conjur_plugin"
+hashivault_kv = "awx.main.credential_plugins.hashivault:hashivault_kv_plugin"
+hashivault_ssh = "awx.main.credential_plugins.hashivault:hashivault_ssh_plugin"
+azure_kv = "awx.main.credential_plugins.azure_kv:azure_keyvault_plugin"
+aim = "awx.main.credential_plugins.aim:aim_plugin"
+centrify_vault_kv = "awx.main.credential_plugins.centrify_vault:centrify_plugin"
+thycotic_dsv = "awx.main.credential_plugins.dsv:dsv_plugin"
+thycotic_tss = "awx.main.credential_plugins.tss:tss_plugin"
+aws_secretsmanager_credential = "awx.main.credential_plugins.aws_secretsmanager:aws_secretmanager_plugin"
+github_app_lookup = "awx.main.credential_plugins.github_app:github_app_plugin"
+
+[tool.setuptools]
+packages = ["awx"]
+zip-safe = false
+include-package-data = true
+
+# Active on purpose: the built version comes from git describe by way of
+# setuptools_scm. Note that this takes precedence over the project version, so
+# the VERSION file that awx.get_version() reads does not reach the built
+# metadata, only the running application.
 [tool.setuptools_scm]
 
 [tool.black]
