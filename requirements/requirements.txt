@@ -391,7 +391,7 @@ setuptools-scm[toml]==10.2.3
     # via -r /awx_devel/requirements/requirements.in
 shellingham==1.5.4
     # via typer
-six==1.16.0
+six==1.17.0
     # via
     #   kubernetes
     #   openshift
