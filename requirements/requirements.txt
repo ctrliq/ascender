@@ -176,11 +176,15 @@ isodate==0.7.2
     # via
     #   azure-keyvault-secrets
     #   python3-saml
-jaraco-collections==5.0.0
-    # via irc
+jaraco-collections==5.2.1
+    # via
+    #   irc
+    #   tempora
 jaraco-context==6.1.2
-    # via jaraco-text
-jaraco-functools==4.1.0
+    # via
+    #   jaraco-text
+    #   tempora
+jaraco-functools==4.6.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   irc
@@ -269,6 +273,8 @@ pexpect==4.7.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   ansible-runner
+pip==26.2.1
+    # via -r /awx_devel/requirements/requirements.in
 pkgconfig==1.6.0
     # via -r /awx_devel/requirements/requirements.in
 prometheus-client==0.26.0
@@ -287,11 +293,8 @@ pyasn1==0.6.4
     # via
     #   pyasn1-modules
     #   python-ldap
-    #   service-identity
 pyasn1-modules==0.4.2
-    # via
-    #   python-ldap
-    #   service-identity
+    # via python-ldap
 pycparser==3.0
     # via cffi
 pygerduty==0.38.3
@@ -326,6 +329,7 @@ python-dateutil==2.9.0.post0
     #   botocore
     #   kubernetes
     #   receptorctl
+    #   tempora
 python-dsv-sdk==1.0.4
     # via -r /awx_devel/requirements/requirements.in
 python-ldap==3.4.7
@@ -341,9 +345,7 @@ python3-openid==3.2.0
 # python3-saml @ git+https://github.com/SAML-Toolkits/python3-saml.git@52d2ac8da3f35262755f6e1c32ba7c62a6011fe1  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
 pytz==2026.3.post1
-    # via
-    #   irc
-    #   tempora
+    # via irc
 pyyaml==6.0.3
     # via
     #   -r /awx_devel/requirements/requirements.in
@@ -384,8 +386,14 @@ s3transfer==0.19.2
     # via boto3
 semantic-version==2.10.0
     # via setuptools-rust
-service-identity==24.1.0
+service-identity==26.1.0
     # via twisted
+setuptools==84.0.0
+    # via
+    #   -r /awx_devel/requirements/requirements.in
+    #   asciichartpy
+    #   setuptools-rust
+    #   setuptools-scm
 setuptools-rust==1.13.0
     # via -r /awx_devel/requirements/requirements.in
 setuptools-scm[toml]==10.2.3
@@ -415,7 +423,7 @@ sqlparse==0.6.0
     #   django
 tacacs-plus==2.6
     # via -r /awx_devel/requirements/requirements.in
-tempora==5.5.1
+tempora==5.12.0
     # via
     #   irc
     #   jaraco-logging
@@ -439,6 +447,7 @@ typing-extensions==4.16.0
     #   django-polymorphic
     #   jwcrypto
     #   pygithub
+    #   tempora
     #   twisted
 ujson==6.0.0
     # via autobahn
@@ -471,13 +480,3 @@ yarl==1.24.5
     # via aiohttp
 zope-interface==8.6
     # via twisted
-
-# The following packages are considered to be unsafe in a requirements file:
-pip==26.2.1
-    # via -r /awx_devel/requirements/requirements.in
-setuptools==84.0.0
-    # via
-    #   -r /awx_devel/requirements/requirements.in
-    #   asciichartpy
-    #   setuptools-rust
-    #   setuptools-scm
