@@ -214,7 +214,7 @@ libvalkey==4.1.0
     # via valkey
 lockfile==0.12.2
     # via python-daemon
-lxml==6.1.0
+lxml==6.1.3
     # via
     #   python3-saml
     #   xmlsec
