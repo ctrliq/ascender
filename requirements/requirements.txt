@@ -210,7 +210,7 @@ jwcrypto==1.6.0
     # via django-oauth-toolkit
 kubernetes==36.0.3
     # via openshift
-libvalkey==4.0.1
+libvalkey==4.1.0
     # via valkey
 lockfile==0.12.2
     # via python-daemon
