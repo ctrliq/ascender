@@ -314,7 +314,7 @@ pyopenssl==26.4.0
     #   twisted
 pyparsing==3.3.2
     # via -r /awx_devel/requirements/requirements.in
-pyrad==2.4
+pyrad==2.5.4
     # via django-radius
 python-daemon==3.1.2
     # via
@@ -396,7 +396,6 @@ six==1.16.0
     #   kubernetes
     #   openshift
     #   pygerduty
-    #   pyrad
     #   python-dateutil
     #   tacacs-plus
 slack-sdk==3.44.1
