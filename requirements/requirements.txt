@@ -176,11 +176,15 @@ isodate==0.7.2
     # via
     #   azure-keyvault-secrets
     #   python3-saml
-jaraco-collections==5.0.0
-    # via irc
+jaraco-collections==5.2.1
+    # via
+    #   irc
+    #   tempora
 jaraco-context==6.1.2
-    # via jaraco-text
-jaraco-functools==4.1.0
+    # via
+    #   jaraco-text
+    #   tempora
+jaraco-functools==4.6.0
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   irc
@@ -323,6 +327,7 @@ python-dateutil==2.9.0.post0
     #   botocore
     #   kubernetes
     #   receptorctl
+    #   tempora
 python-dsv-sdk==1.0.4
     # via -r /awx_devel/requirements/requirements.in
 python-ldap==3.4.7
@@ -338,9 +343,7 @@ python3-openid==3.2.0
 # python3-saml @ git+https://github.com/SAML-Toolkits/python3-saml.git@52d2ac8da3f35262755f6e1c32ba7c62a6011fe1  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
 pytz==2026.3.post1
-    # via
-    #   irc
-    #   tempora
+    # via irc
 pyyaml==6.0.3
     # via
     #   -r /awx_devel/requirements/requirements.in
@@ -412,7 +415,7 @@ sqlparse==0.6.0
     #   django
 tacacs-plus==2.6
     # via -r /awx_devel/requirements/requirements.in
-tempora==5.5.1
+tempora==5.12.0
     # via
     #   irc
     #   jaraco-logging
@@ -436,6 +439,7 @@ typing-extensions==4.16.0
     #   django-polymorphic
     #   jwcrypto
     #   pygithub
+    #   tempora
     #   twisted
 ujson==6.0.0
     # via autobahn
