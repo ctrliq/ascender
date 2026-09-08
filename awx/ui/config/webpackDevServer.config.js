@@ -1,22 +1,52 @@
 'use strict';
 
 const fs = require('fs');
-const evalSourceMapMiddleware = require('react-dev-utils/evalSourceMapMiddleware');
-const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
-const ignoredFiles = require('react-dev-utils/ignoredFiles');
-const redirectServedPath = require('react-dev-utils/redirectServedPathMiddleware');
+const path = require('path');
 const paths = require('./paths');
 const getHttpsConfig = require('./getHttpsConfig');
+
+const escapeRegExp = (text) => text.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
+
+// Matches every node_modules directory except the one under src/, which is
+// kept watched to support absolute imports.
+// https://github.com/facebook/create-react-app/issues/1065
+function ignoredFiles(appSrc) {
+  return new RegExp(
+    `^(?!${escapeRegExp(
+      path.normalize(appSrc + '/').replace(/[\\]+/g, '/')
+    )}).+/node_modules/`,
+    'g'
+  );
+}
+
+// Redirects requests outside the served path (PUBLIC_URL / homepage) into it.
+function redirectServedPath(servedPath) {
+  // remove end slash so user can land on `/test` instead of `/test/`
+  servedPath = servedPath.slice(0, -1);
+  return function redirectServedPathMiddleware(req, res, next) {
+    if (
+      servedPath === '' ||
+      req.url === servedPath ||
+      req.url.startsWith(servedPath)
+    ) {
+      next();
+    } else {
+      const newPath = path.posix.join(
+        servedPath,
+        req.path !== '/' ? req.path : ''
+      );
+      res.redirect(newPath);
+    }
+  };
+}
 
 const host = process.env.HOST || '0.0.0.0';
 const sockHost = process.env.WDS_SOCKET_HOST;
 const sockPath = process.env.WDS_SOCKET_PATH; // default: '/ws'
 const sockPort = process.env.WDS_SOCKET_PORT;
 
-module.exports = function (proxy, allowedHost, proxyOptions = {}) {
+module.exports = function (proxyOptions = {}) {
   const { createProxyMiddleware } = proxyOptions;
-  const disableFirewall =
-    !proxy || process.env.DANGEROUSLY_DISABLE_HOST_CHECK === 'true';
   return {
     // WebpackDevServer 2.4.3 introduced a security fix that prevents remote
     // websites from potentially accessing local content through DNS rebinding:
@@ -26,17 +56,10 @@ module.exports = function (proxy, allowedHost, proxyOptions = {}) {
     // environment or subdomains in development significantly more complicated:
     // https://github.com/facebook/create-react-app/issues/2271
     // https://github.com/facebook/create-react-app/issues/2233
-    // While we're investigating better solutions, for now we will take a
-    // compromise. Since our WDS configuration only serves files in the `public`
-    // folder we won't consider accessing them a vulnerability. However, if you
-    // use the `proxy` feature, it gets more dangerous because it can expose
-    // remote code execution vulnerabilities in backends like Django and Rails.
-    // So we will disable the host check normally, but enable it if you have
-    // specified the `proxy` setting. Finally, we let you override it if you
-    // really know what you're doing with a special environment variable.
-    // Note: ["localhost", ".localhost"] will support subdomains - but we might
-    // want to allow setting the allowedHosts manually for more complex setups
-    allowedHosts: disableFirewall ? 'all' : [allowedHost],
+    // Since this configuration only serves files in the `public` folder and
+    // the API proxy in src/setupProxy.js is explicitly opted into, the host
+    // check is disabled, as it always has been for this project.
+    allowedHosts: 'all',
     headers: {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': '*',
@@ -110,14 +133,7 @@ module.exports = function (proxy, allowedHost, proxyOptions = {}) {
       disableDotRule: true,
       index: paths.publicUrlOrPath,
     },
-    // `proxy` is run between `before` and `after` `webpack-dev-server` hooks
-    proxy,
     setupMiddlewares(middlewares, devServer) {
-      // Keep `evalSourceMapMiddleware`
-      // middlewares before `redirectServedPath` otherwise will not have any effect
-      // This lets us fetch source contents from webpack for the error overlay
-      devServer.app.use(evalSourceMapMiddleware(devServer));
-
       if (fs.existsSync(paths.proxySetup)) {
         // This registers user provided middleware for proxy reasons
         require(paths.proxySetup)(devServer.app, createProxyMiddleware);
@@ -125,13 +141,6 @@ module.exports = function (proxy, allowedHost, proxyOptions = {}) {
 
       // Redirect to `PUBLIC_URL` or `homepage` from `package.json` if url not match
       devServer.app.use(redirectServedPath(paths.publicUrlOrPath));
-
-      // This service worker file is effectively a 'no-op' that will reset any
-      // previous service worker registered for the same host:port combination.
-      // We do this in development to avoid hitting the production cache if
-      // it used the same host and port.
-      // https://github.com/facebook/create-react-app/issues/2272#issuecomment-302832432
-      devServer.app.use(noopServiceWorkerMiddleware(paths.publicUrlOrPath));
 
       return middlewares;
     },

@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const paths = require('./paths');
-const chalk = require('react-dev-utils/chalk');
+const colors = require('./devUtils/colors');
 const resolve = require('resolve');
 
 /**
@@ -42,9 +42,10 @@ function getAdditionalModulePaths(options = {}) {
 
   // Otherwise, throw an error.
   throw new Error(
-    chalk.red.bold(
-      "Your project's `baseUrl` can only be set to `src` or `node_modules`." +
-        ' Create React App does not support other values at this time.'
+    colors.red(
+      colors.bold(
+        "Your project's `baseUrl` can only be set to `src` or `node_modules`."
+      )
     )
   );
 }
