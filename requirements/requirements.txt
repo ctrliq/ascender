@@ -466,7 +466,7 @@ wheel==0.48.0
     # via -r /awx_devel/requirements/requirements.in
 xmlsec==1.3.17
     # via python3-saml
-yarl==1.18.3
+yarl==1.24.5
     # via aiohttp
 zope-interface==8.6
     # via twisted
