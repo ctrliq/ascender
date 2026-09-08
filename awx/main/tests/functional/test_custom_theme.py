@@ -15,10 +15,15 @@ def custom_theme_field():
         pytest.param('@font-face { src: url(../../public/static/fonts/Inter.woff2) format("woff2"); }', id='relative_url'),
         pytest.param('a { background: url(data:image/png;base64,iVBORw0KGgo=); }', id='data_uri'),
         pytest.param('', id='empty_clears_the_theme'),
+        pytest.param('/* Name: Solarized */ html[data-theme="custom"] { --x: 1; }', id='comments_are_fine_on_their_own'),
     ],
 )
 def test_accepts_a_self_contained_stylesheet(custom_theme_field, css):
-    """Anything that stays inside the deployment is allowed through untouched."""
+    """Anything that stays inside the deployment is allowed through untouched.
+
+    Untouched matters: comments are stripped for the checks, but the value is
+    stored exactly as the administrator wrote it.
+    """
     assert custom_theme_field.to_internal_value(css) == css
 
 
@@ -32,6 +37,11 @@ def test_accepts_a_self_contained_stylesheet(custom_theme_field, css):
         pytest.param('a { background: url(//example.invalid/x.png); }', 'may not reference remote URLs', id='protocol_relative_url'),
         pytest.param("a { background: url('https://example.invalid/x.png'); }", 'may not reference remote URLs', id='quoted_remote_url'),
         pytest.param('a { background: url( "https://example.invalid/x.png" ); }', 'may not reference remote URLs', id='spaced_remote_url'),
+        # A CSS parser treats a comment as whitespace, so these reach the network
+        # exactly as the plain forms do. Matching the raw text would miss them.
+        pytest.param('a { background: url(/*x*/https://example.invalid/x.png); }', 'may not reference remote URLs', id='comment_inside_url'),
+        pytest.param('a { background: url( /* c */ //example.invalid/x.png); }', 'may not reference remote URLs', id='comment_before_protocol_relative'),
+        pytest.param('/*c*/@import "other.css";', 'may not use @import', id='comment_before_at_import'),
     ],
 )
 def test_rejects_anything_that_reaches_the_network(custom_theme_field, css, expected):

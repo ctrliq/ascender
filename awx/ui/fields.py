@@ -71,6 +71,14 @@ class CustomThemeField(fields.CharField):
     # the settings table.
     MAX_LENGTH = 5 * 1024 * 1024
 
+    # Comments are stripped before the two checks below run. A CSS parser treats
+    # a comment as whitespace inside url(), so url(/*x*/https://host/a.png)
+    # fetches from that host exactly as the plain form does, and matching the raw
+    # text would miss it. The same goes for a comment sitting in front of an
+    # at-rule. Note that a comment cannot split the at-keyword itself:
+    # @/*x*/import is not an import at all, since an at-keyword is @ followed
+    # immediately by an identifier, so nothing needs to catch that form.
+    COMMENT_RE = re.compile(r'/\*.*?\*/', re.DOTALL)
     IMPORT_RE = re.compile(r'@import\b', re.IGNORECASE)
     REMOTE_URL_RE = re.compile(r'url\(\s*[\'"]?\s*(?:https?:)?//', re.IGNORECASE)
 
@@ -86,8 +94,10 @@ class CustomThemeField(fields.CharField):
             return data
         if len(data.encode('utf-8')) > self.MAX_LENGTH:
             self.fail('too_long', limit=self.MAX_LENGTH)
-        if self.IMPORT_RE.search(data):
+        without_comments = self.COMMENT_RE.sub(' ', data)
+        if self.IMPORT_RE.search(without_comments):
             self.fail('import_not_allowed')
-        if self.REMOTE_URL_RE.search(data):
+        if self.REMOTE_URL_RE.search(without_comments):
             self.fail('remote_url_not_allowed')
+        # The value is stored as written. Only the checks see the stripped copy.
         return data
