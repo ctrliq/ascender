@@ -1,6 +1,6 @@
 # Dependency Management
 
-The `requirements.txt` file is generated from `requirements.in` and `requirements_git.txt`, using `pip-tools` and `pip-compile`.
+The `requirements.txt` file is generated from `requirements.in` and `requirements_git.txt`, using `uv pip compile`.
 
 ## How To Use
 
@@ -25,7 +25,7 @@ can be removed, because `*.txt` files are upgraded to latest.
 
 ### Upgrading Dependencies
 
-You can upgrade (`pip-compile --upgrade`) the dependencies by running
+You can upgrade (`uv pip compile --upgrade`) the dependencies by running
 
 `./updater.sh upgrade`.
 
