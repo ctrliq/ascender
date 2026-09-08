@@ -130,11 +130,10 @@ Migration files live in `awx/main/migrations/` (218 existing files).
 ### Key configuration files
 | File | Purpose |
 |---|---|
-| `pyproject.toml` | Build system + black config |
+| `pyproject.toml` | Build system, package metadata and entry points, black config |
 | `tox.ini` | flake8 config + tox testenv definitions |
 | `.yamllint` | yamllint rules |
 | `pytest.ini` | pytest settings and markers |
-| `setup.cfg` | Python package metadata and entry points |
 | `Makefile` | All build/test/lint targets |
 
 ---
