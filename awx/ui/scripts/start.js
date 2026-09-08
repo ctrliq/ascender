@@ -14,7 +14,6 @@ process.on('unhandledRejection', (err) => {
 // Ensure environment variables are read.
 require('../config/env');
 
-const fs = require('fs');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const colors = require('../config/devUtils/colors');
