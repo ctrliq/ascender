@@ -1104,7 +1104,13 @@ COLOR_LOGS = False
 
 # https://github.com/django-polymorphic/django-polymorphic/issues/195
 # FIXME: Disabling models.E006 warning until we can renamed Project and InventorySource
-SILENCED_SYSTEM_CHECKS = ['models.E006']
+#
+# oauth2_provider.W011 (added in django-oauth-toolkit 3.4.1) warns that the swapped
+# AccessToken model ('main.OAuth2AccessToken') and the stock RefreshToken model live
+# in different apps. That split is intentional and predates the check; the cross-app
+# migration dependencies it worries about are already declared by hand in the main
+# app's migrations (see the swappable_dependency entries), so the warning is noise.
+SILENCED_SYSTEM_CHECKS = ['models.E006', 'oauth2_provider.W011']
 
 # Use middleware to get request statistics
 AWX_REQUEST_PROFILE = False
