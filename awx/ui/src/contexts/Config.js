@@ -14,6 +14,7 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import { dynamicActivate, locales } from 'i18nLoader';
+import { setCustomTheme, applyTheme, getSavedThemeId } from 'themeRegistry';
 import { useSession } from './Session';
 
 export const ConfigContext = React.createContext({});
@@ -60,6 +61,21 @@ export const ConfigProvider = ({ children }) => {
       } catch (e) {
         uiConfig = {};
       }
+
+      // The themes that ship with the product are bundled at build time, so an
+      // administrator's own stylesheet can only arrive here, once the settings
+      // have loaded. Install it and then re-apply the saved choice.
+      //
+      // The saved id is read from localStorage rather than through
+      // getStoredThemeId, which prefers sessionStorage. App.js applies the
+      // stored theme before these settings exist, so a saved custom theme is
+      // unknown at that point and applyTheme falls back to the default, writing
+      // "default" into sessionStorage as it goes. Reading the session value back
+      // here would return that fallback and the custom theme would never appear.
+      // localStorage still holds the real preference, because that early call
+      // does not persist.
+      setCustomTheme(uiConfig.CUSTOM_THEME, uiConfig.CUSTOM_THEME_NAME);
+      applyTheme(getSavedThemeId());
 
       const [
         {
@@ -109,6 +125,8 @@ export const ConfigProvider = ({ children }) => {
         custom_header_logo:
           uiConfig.CUSTOM_HEADER_LOGO || rootData.custom_header_logo,
         custom_title: uiConfig.CUSTOM_TITLE || rootData.custom_title,
+        custom_theme: uiConfig.CUSTOM_THEME,
+        custom_theme_name: uiConfig.CUSTOM_THEME_NAME,
       };
     }, []),
     {

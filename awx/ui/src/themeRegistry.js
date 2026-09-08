@@ -1,3 +1,7 @@
+import { getCustomTheme, setCustomTheme, CUSTOM_THEME_ID } from './customTheme';
+
+export { setCustomTheme, CUSTOM_THEME_ID };
+
 const cssContext = require.context('./themes/', false, /^\.\/[^_].*\.css$/);
 cssContext.keys().forEach((key) => cssContext(key));
 
@@ -10,14 +14,18 @@ const metaContext = require.context(
 let themes = null;
 
 export function getThemes() {
-  if (themes) return themes;
-  themes = metaContext.keys().map((key) => {
-    const id = key.replace('./', '').replace('.css', '');
-    const meta = metaContext(key).default;
-    return { id, name: meta.name || id, dark: meta.dark };
-  });
-  themes.sort((a, b) => a.name.localeCompare(b.name));
-  return themes;
+  if (!themes) {
+    themes = metaContext.keys().map((key) => {
+      const id = key.replace('./', '').replace('.css', '');
+      const meta = metaContext(key).default;
+      return { id, name: meta.name || id, dark: meta.dark };
+    });
+    themes.sort((a, b) => a.name.localeCompare(b.name));
+  }
+  // Appended rather than sorted in: an administrator's own theme is easier to
+  // find at the end of the list than filed alphabetically among the shipped ones.
+  const custom = getCustomTheme();
+  return custom ? [...themes, custom] : themes;
 }
 
 export function getStoredThemeId() {

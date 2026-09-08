@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 # AWX
 from awx.conf import register, fields
-from awx.ui.fields import PendoTrackingStateField, CustomLogoField  # noqa
+from awx.ui.fields import PendoTrackingStateField, CustomLogoField, CustomThemeField  # noqa
 
 register(
     'PENDO_TRACKING_STATE',
@@ -73,6 +73,35 @@ register(
         'with a transparent background. GIF, PNG and JPEG formats are supported.'
     ),
     placeholder='data:image/gif;base64,R0lGODlhAQABAIABAP///wAAACwAAAAAAQABAAACAkQBADs=',
+    category=_('UI'),
+    category_slug='ui',
+)
+
+register(
+    'CUSTOM_THEME',
+    field_class=CustomThemeField,
+    allow_blank=True,
+    default='',
+    label=_('Custom Theme'),
+    help_text=_(
+        'The contents of a CSS file, offered in the theme list alongside the '
+        'themes that ship with the product. Scope the rules to '
+        'html[data-theme="custom"], the way the shipped themes scope theirs, '
+        'and add html.pf-v6-theme-dark[data-theme="custom"] for a dark theme. '
+        '@import and remote URLs are rejected: use a relative path or a data: '
+        'URI for fonts and images.'
+    ),
+    category=_('UI'),
+    category_slug='ui',
+)
+
+register(
+    'CUSTOM_THEME_NAME',
+    field_class=fields.CharField,
+    allow_blank=True,
+    default='',
+    label=_('Custom Theme Name'),
+    help_text=_('Name shown for the custom theme in the theme list. Defaults to Custom when left blank.'),
     category=_('UI'),
     category_slug='ui',
 )
