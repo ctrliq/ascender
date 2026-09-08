@@ -16,7 +16,6 @@ EXPECTED_VALUES = {
     'awx_job_templates_total': 1.0,
     'awx_workflow_job_templates_total': 1.0,
     'awx_hosts_total': 1.0,
-    'awx_hosts_total': 1.0,
     'awx_schedules_total': 1.0,
     'awx_sessions_total': 0.0,
     'awx_status_total': 0.0,

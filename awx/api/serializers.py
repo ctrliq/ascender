@@ -5543,7 +5543,7 @@ class NotificationTemplateSerializer(BaseSerializer):
             field_val = attrs['notification_configuration'][field]
             field_type = params['type']
             expected_types = self.type_map[field_type]
-            if not type(field_val) in expected_types:
+            if type(field_val) not in expected_types:
                 incorrect_type_fields.append((field, field_type))
                 continue
             if field_type == "list" and len(field_val) < 1:

@@ -93,9 +93,9 @@ def test_copy_tables_workflow_job_node_query(workflow_job):
             assert ids == [node.id for node in ordered_nodes]
 
             for index, relationship in zip([7, 8, 9], ["success_nodes", "failure_nodes", "always_nodes"]):
-                for i, l in enumerate(lines):
+                for i, line in enumerate(lines):
                     # COPY renders an aggregated array as {a,b}, so strip the braces
-                    raw = l[index].strip("{}")
+                    raw = line[index].strip("{}")
                     related_nodes = [int(e) for e in raw.split(",")] if raw else []
                     assert related_nodes == list(
                         getattr(ordered_nodes[i], relationship).all().order_by("id").values_list("id", flat=True)

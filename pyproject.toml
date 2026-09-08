@@ -46,3 +46,36 @@ include-package-data = true
 line-length = 160
 fast = true
 skip-string-normalization = true
+
+[tool.ruff]
+# Ported from the [flake8] block in tox.ini rather than adopted from upstream
+# AWX, whose Ruff config selects 12 rules where ours selects 48. Copying theirs
+# would have dropped 36 checks silently.
+line-length = 160
+exclude = [".git", "__pycache__", ".tox", "awx/ui/node_modules", "env"]
+
+[tool.ruff.format]
+# The two settings black was configured with: line-length above, and preserving
+# quotes rather than normalising them, which is skip-string-normalization.
+quote-style = "preserve"
+
+[tool.ruff.lint]
+# E265, E266 and W391 are preview rules in Ruff 0.16. Without this they are
+# accepted and then silently do nothing, which ruff reports as "Selection
+# `E265` has no effect because preview is not enabled". Since the selection
+# below is explicit, preview does not pull in anything unasked for: it only
+# makes those three run. Drop this once they are stabilised.
+preview = true
+
+# The same 48 rules tox.ini selects, and for the same reason: black owns the
+# formatting and most of pycodestyle would fight it, so what is listed is the
+# checks that catch a mistake rather than a style preference. Kept in the same
+# order as the flake8 block so the two can be compared line by line.
+select = [
+    "E265", "E266", "E703", "E713", "E714", "E722", "E741", "E742", "E743",
+    "F401", "F402", "F405", "F501", "F502", "F503", "F504", "F505", "F506",
+    "F507", "F508", "F509", "F521", "F522", "F523", "F524", "F525", "F541",
+    "F601", "F602", "F631", "F632", "F633", "F634", "F702", "F706", "F707",
+    "F811", "F821", "F822", "F823", "F841", "F842", "F901",
+    "W291", "W292", "W293", "W391", "W605",
+]

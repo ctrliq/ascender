@@ -3904,12 +3904,12 @@ class JobJobEventsChildrenSummary(APIView):
 
         prev_non_meta_event = events[0]
         for i, e in enumerate(events):
-            if not e['event'] in JobJobEventsChildrenSummary.meta_events:
+            if e['event'] not in JobJobEventsChildrenSummary.meta_events:
                 prev_non_meta_event = e
             if not e['uuid']:
                 continue
 
-            if not e['event'] in JobJobEventsChildrenSummary.meta_events:
+            if e['event'] not in JobJobEventsChildrenSummary.meta_events:
                 level = models.JobEvent.LEVEL_FOR_EVENT[e['event']]
                 level_current_uuid[level] = e['uuid']
                 # if setting level 1, for example, set levels 2 and 3 back to None
