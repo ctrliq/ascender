@@ -7,7 +7,8 @@ import uuid
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import oauth2_provider
+import oauth2_provider.generators
+import oauth2_provider.models
 import re
 
 

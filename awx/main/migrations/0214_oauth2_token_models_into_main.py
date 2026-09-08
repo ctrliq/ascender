@@ -1,5 +1,3 @@
-import hashlib
-
 from django.db import migrations
 
 
@@ -70,27 +68,33 @@ def create_tables_and_move_rows(apps, schema_editor):
                 continue
             defaults[field.column] = field.get_default()
 
-        columns = ', '.join('"%s"' % name for name in shared + sorted(defaults))
-        placeholders = ', '.join(['%s'] * len(defaults))
-        select = ', '.join('"%s"' % name for name in shared)
-        if placeholders:
-            select = f'{select}, {placeholders}'
+        # token_checksum is the exception to filling from a default. It is a
+        # sha256 of the raw token and the unique key is (token_checksum,
+        # revoked), so a shared default collides as soon as two rows carry the
+        # same revoked timestamp, which is exactly what DOT's revoke_family()
+        # produces: it stamps a whole family in one update. So it is computed in
+        # the INSERT itself rather than backfilled afterwards, leaving no window
+        # where two rows hold the same placeholder. sha256() is core PostgreSQL,
+        # available since 11, so this needs no pgcrypto, and it agrees with
+        # hashlib.sha256 and with DOT's own backfill.
+        computed = {}
+        if 'token_checksum' in defaults and 'token' in shared:
+            del defaults['token_checksum']
+            computed['token_checksum'] = """encode(sha256(convert_to("token", 'UTF8')), 'hex')"""
+
+        insert_columns = shared + sorted(defaults) + sorted(computed)
+        columns = ', '.join('"%s"' % name for name in insert_columns)
+        select_parts = ['"%s"' % name for name in shared]
+        select_parts += ['%s'] * len(defaults)
+        select_parts += [computed[name] for name in sorted(computed)]
         params = [defaults[name] for name in sorted(defaults)]
 
         with connection.cursor() as cursor:
-            cursor.execute(f'INSERT INTO "{new_table}" ({columns}) SELECT {select} FROM "{old_table}"', params)  # noqa: S608
+            cursor.execute(
+                f'INSERT INTO "{new_table}" ({columns}) SELECT {", ".join(select_parts)} FROM "{old_table}"',  # noqa: S608
+                params,
+            )
             cursor.execute(f"""SELECT setval(pg_get_serial_sequence('"{new_table}"', 'id'), COALESCE((SELECT MAX(id) FROM "{new_table}"), 1))""")
-
-            # token_checksum has no meaningful default: it is a sha256 of the raw
-            # token, and the unique constraint is on (token_checksum, revoked), so
-            # every row filled from the default would collide. Compute it the way
-            # DOT's own backfill and RefreshToken.token_checksum do. pgcrypto is
-            # not guaranteed to be installed, so this is done in Python.
-            if 'token_checksum' in defaults:
-                cursor.execute(f'SELECT id, token FROM "{new_table}"')  # noqa: S608
-                for row_id, token in cursor.fetchall():
-                    checksum = hashlib.sha256((token or '').encode('utf-8')).hexdigest()
-                    cursor.execute(f'UPDATE "{new_table}" SET token_checksum = %s WHERE id = %s', [checksum, row_id])  # noqa: S608
 
 
 def repoint_access_token_foreign_keys(apps, schema_editor):
