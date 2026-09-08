@@ -287,11 +287,8 @@ pyasn1==0.6.4
     # via
     #   pyasn1-modules
     #   python-ldap
-    #   service-identity
 pyasn1-modules==0.4.2
-    # via
-    #   python-ldap
-    #   service-identity
+    # via python-ldap
 pycparser==3.0
     # via cffi
 pygerduty==0.38.3
@@ -384,7 +381,7 @@ s3transfer==0.19.2
     # via boto3
 semantic-version==2.10.0
     # via setuptools-rust
-service-identity==24.1.0
+service-identity==26.1.0
     # via twisted
 setuptools-rust==1.13.0
     # via -r /awx_devel/requirements/requirements.in
