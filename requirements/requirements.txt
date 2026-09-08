@@ -339,7 +339,7 @@ python3-openid==3.2.0
     # via social-auth-core
 # python3-saml @ git+https://github.com/SAML-Toolkits/python3-saml.git@52d2ac8da3f35262755f6e1c32ba7c62a6011fe1  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
-pytz==2024.1
+pytz==2026.3.post1
     # via
     #   irc
     #   tempora
