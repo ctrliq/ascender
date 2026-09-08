@@ -15,7 +15,7 @@ docutils==0.22.4
     #   sphinx-rtd-theme
 idna==3.19
     # via requests
-imagesize==2.0.0
+imagesize==2.0.1
     # via sphinx
 jinja2==3.1.6
     # via
@@ -37,7 +37,7 @@ roman-numerals==4.1.0
     # via sphinx
 snowballstemmer==3.1.1
     # via sphinx
-sphinx
+sphinx==9.1.0
     # via
     #   -r requirements.in
     #   sphinx-ansible-theme

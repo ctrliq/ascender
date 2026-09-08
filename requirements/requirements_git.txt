@@ -1,6 +1,6 @@
 # Git-based requirements - installed separately from requirements.txt
 #
-# IMPORTANT: Use PEP 440 format that matches pip-compile's normalized output:
+# IMPORTANT: Use PEP 440 format that matches the compiler's normalized output:
 #   name @ git+https://github.com/org/repo.git@branch
 #
 # Format rules:
