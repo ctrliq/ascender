@@ -4,7 +4,6 @@ from __future__ import unicode_literals
 from django.db import migrations, models
 import awx.main.models.notifications
 import django.db.models.deletion
-import awx.main.models.workflow
 import awx.main.fields
 
 from . import _squashed
