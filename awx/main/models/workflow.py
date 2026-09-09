@@ -5,6 +5,9 @@
 import json
 import logging
 import multiprocessing
+import os
+import signal
+import time
 from uuid import uuid4
 from copy import copy
 from urllib.parse import urljoin
@@ -1206,6 +1209,25 @@ def _render_context_template(conn, template_str, variables):
         conn.send(('error', '{}: {}'.format(type(e).__name__, e)[:1024]))
 
 
+def _reap_render_child(pid, grace=1.0):
+    """Wait briefly for the forked render child to exit, then kill it."""
+    deadline = time.monotonic() + grace
+    while True:
+        try:
+            if os.waitpid(pid, os.WNOHANG)[0] == pid:
+                return
+        except ChildProcessError:
+            return
+        if time.monotonic() >= deadline:
+            break
+        time.sleep(0.02)
+    try:
+        os.kill(pid, signal.SIGKILL)
+        os.waitpid(pid, 0)
+    except (ChildProcessError, ProcessLookupError):
+        pass
+
+
 class WorkflowApproval(UnifiedJob, JobNotificationMixin):
     class Meta:
         app_label = 'main'
@@ -1283,11 +1305,22 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
         if not template_str:
             return
         rendered = None
-        ctx = multiprocessing.get_context('fork')
-        parent_conn, child_conn = ctx.Pipe(duplex=False)
-        worker = ctx.Process(target=_render_context_template, args=(child_conn, template_str, dict(ancestor_artifacts or {})))
+        # The task manager runs inside a dispatcher pool worker, which is a daemonic
+        # multiprocessing.Process. multiprocessing refuses to start children from one
+        # ("daemonic processes are not allowed to have children"), so fork directly;
+        # the Pipe is only used for its picklable Connection objects.
+        parent_conn, child_conn = multiprocessing.get_context('fork').Pipe(duplex=False)
+        pid = None
         try:
-            worker.start()
+            pid = os.fork()
+            if pid == 0:
+                # Child: render, report back, and _exit so the parent's atexit
+                # handlers and inherited database connection are left untouched.
+                try:
+                    parent_conn.close()
+                    _render_context_template(child_conn, template_str, dict(ancestor_artifacts or {}))
+                finally:
+                    os._exit(0)
             child_conn.close()
             if parent_conn.poll(CONTEXT_TEMPLATE_TIMEOUT):
                 status, payload = parent_conn.recv()
@@ -1303,11 +1336,8 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
             logger.exception('Unexpected error rendering context_template for approval %s', self.pk)
         finally:
             parent_conn.close()
-            if worker.pid is not None:
-                worker.join(1)
-                if worker.is_alive():
-                    worker.kill()
-                    worker.join()
+            if pid:
+                _reap_render_child(pid)
         if rendered and rendered.strip():
             self.context_message = rendered
             self.save(update_fields=['context_message'])
