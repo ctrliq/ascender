@@ -1336,6 +1336,7 @@ class WorkflowApproval(UnifiedJob, JobNotificationMixin):
             logger.exception('Unexpected error rendering context_template for approval %s', self.pk)
         finally:
             parent_conn.close()
+            child_conn.close()  # normally closed right after the fork; also covers fork() itself failing
             if pid:
                 _reap_render_child(pid)
         if rendered and rendered.strip():
