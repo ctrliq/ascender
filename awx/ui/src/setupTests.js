@@ -1,7 +1,14 @@
 import '@testing-library/jest-dom/vitest';
+import { configure } from '@testing-library/dom';
 import React from 'react';
 // apply polyfills for jsdom
 import '@nteract/mockument';
+
+// findBy* and waitFor have their own timeout, separate from vitest's, and its
+// one second default is not enough once the vm pool has every core rendering a
+// different file's component tree. A query that will never match still fails,
+// it just takes longer to say so.
+configure({ asyncUtilTimeout: 5000 });
 
 // @testing-library/dom decides whether timers are faked by looking for a global
 // `jest` object, and only then checks setTimeout for sinon's clock. Under Vitest

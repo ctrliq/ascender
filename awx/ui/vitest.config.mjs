@@ -60,7 +60,11 @@ export default defineConfig({
     // locally if your checkout is not bind mounted.
     // jest's resetMocks, and the timeout setupTests.js used to set by hand.
     mockReset: true,
+    // Both, because Vitest has two timeouts where jest had one, and a hook that
+    // renders a whole form can outrun the 10s hookTimeout default while every
+    // other worker in the vm pool is doing the same thing.
     testTimeout: 120000,
+    hookTimeout: 120000,
     coverage: {
       include: ['src/**/*.{js,jsx}', 'testUtils/**/*.{js,jsx}'],
       exclude: ['src/locales/**', '**/index.js'],
