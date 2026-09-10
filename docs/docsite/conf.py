@@ -35,8 +35,15 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinx.ext.ifconfig',
     'sphinx_ansible_theme',
+    'sphinx_copybutton',
     'swagger',
 ]
+
+# '# ' is deliberately not a prompt: it is a YAML comment throughout these docs,
+# and stripping it would uncomment config such as the basic_auth block in metrics.rst.
+copybutton_prompt_text = r'\$ '
+copybutton_prompt_is_regexp = True
+copybutton_line_continuation_character = '\\'
 
 html_theme = 'sphinx_ascender_theme'
 html_theme_path = ["."]

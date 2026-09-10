@@ -933,13 +933,13 @@ Just as you can pass ``extra_vars`` in a regular Job Template, you can also pass
   '{"extra_vars": {"variable1":"value1","variable2":"value2",...}}'
 
 
-You can also pass extra variables to the Job Template call using ``curl``, such as is shown in the following example::
+You can also pass extra variables to the Job Template call using ``curl``, such as is shown in the following example:
 
 .. code-block:: bash
 
-   root@localhost:~$ curl -f -H 'Content-Type: application/json' -XPOST \
-                     -d '{"host_config_key": "redhat", "extra_vars": "{\"foo\": \"bar\"}"}' \
-                     https://<ASCENDER_SERVER_NAME>/api/v2/job_templates/7/callback
+   $ curl -f -H 'Content-Type: application/json' -XPOST \
+       -d '{"host_config_key": "redhat", "extra_vars": "{\"foo\": \"bar\"}"}' \
+       https://<ASCENDER_SERVER_NAME>/api/v2/job_templates/7/callback
 
 For more information, refer to :ref:`Launching Jobs with Curl<launch_jobs_curl>`.
 

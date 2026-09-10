@@ -41,9 +41,12 @@ sphinx==9.1.0
     # via
     #   -r requirements.in
     #   sphinx-ansible-theme
+    #   sphinx-copybutton
     #   sphinx-rtd-theme
     #   sphinxcontrib-jquery
 sphinx-ansible-theme==0.10.4
+    # via -r requirements.in
+sphinx-copybutton==0.5.2
     # via -r requirements.in
 sphinx-rtd-theme==3.1.0
     # via sphinx-ansible-theme
