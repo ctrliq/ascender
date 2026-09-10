@@ -271,6 +271,8 @@ To use the lookup for project syncs, link it to the **Password** field of a Sour
    :width: 1400px
    :alt: Example Source Control credential with its password linked to a GitHub App lookup
 
+Installation access tokens authenticate over HTTPS, so the project's **Source Control URL** must use the HTTPS form of the repository, such as ``https://github.com/your-org/your-repo.git``. This lookup does not apply to projects that clone over SSH. Those projects continue to use a Source Control credential with an **SCM Private Key** and an SSH-form URL such as ``git@github.com:your-org/your-repo.git``.
+
 Installation access tokens expire one hour after they are issued. Ascender resolves linked input fields each time the credential is used, so a new token is generated for every project sync and no rotation is required.
 
 .. _ug_credentials_hashivault:
