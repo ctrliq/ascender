@@ -7,11 +7,11 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceListItem from './InstanceListItem';
 
-jest.mock('../../../api');
-jest.mock('../../../hooks/useDebounce');
+vi.mock('../../../api');
+vi.mock('../../../hooks/useDebounce');
 
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({
     id: 1,
   }),
@@ -98,7 +98,7 @@ describe('<InstanceListItem/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should mount successfully', () => {
@@ -159,7 +159,7 @@ describe('<InstanceListItem/>', () => {
   });
 
   test('should render checkbox wired to onSelect', async () => {
-    const onSelect = jest.fn();
+    const onSelect = vi.fn();
     const { user } = renderItem({ onSelect, rowIndex: 0 });
 
     // The row's select-cell checkbox (distinct from the instance toggle).

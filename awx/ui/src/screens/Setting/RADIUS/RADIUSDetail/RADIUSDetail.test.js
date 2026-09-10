@@ -9,7 +9,7 @@ import {
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import RADIUSDetail from './RADIUSDetail';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<RADIUSDetail />', () => {
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe('<RADIUSDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderDetail(context) {

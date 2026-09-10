@@ -13,12 +13,12 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentList from './ExecutionEnvironmentList';
 
-jest.mock('../../../api/models/ExecutionEnvironments');
-jest.mock('../../../api/models/UnifiedJobTemplates');
-jest.mock('../../../api/models/Projects');
-jest.mock('../../../api/models/Organizations');
-jest.mock('../../../api/models/InventorySources');
-jest.mock('../../../api/models/WorkflowJobTemplateNodes');
+vi.mock('../../../api/models/ExecutionEnvironments');
+vi.mock('../../../api/models/UnifiedJobTemplates');
+vi.mock('../../../api/models/Projects');
+vi.mock('../../../api/models/Organizations');
+vi.mock('../../../api/models/InventorySources');
+vi.mock('../../../api/models/WorkflowJobTemplateNodes');
 
 const executionEnvironments = {
   data: {
@@ -62,7 +62,7 @@ describe('<ExecutionEnvironmentList/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should fetch data and render 2 rows', async () => {

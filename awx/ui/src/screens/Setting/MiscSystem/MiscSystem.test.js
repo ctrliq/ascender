@@ -9,7 +9,7 @@ import mockAllOptions from '../shared/data.allSettingOptions.json';
 import mockAllSettings from '../shared/data.allSettings.json';
 import MiscSystem from './MiscSystem';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 function mountAt(path, config) {
   const history = createMemoryHistory({ initialEntries: [path] });
@@ -41,7 +41,7 @@ describe('<MiscSystem />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render miscellaneous system details', async () => {

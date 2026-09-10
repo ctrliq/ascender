@@ -6,29 +6,27 @@ import { GroupsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroupAdd from './InventoryGroupAdd';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
-jest.mock(
-  '../shared/InventoryGroupForm',
-  () =>
-    ({ handleSubmit, handleCancel, error }) => (
-      <div>
-        <button
-          type="button"
-          aria-label="mock-submit"
-          onClick={() =>
-            handleSubmit({
-              name: 'Bar',
-              description: 'Ansible',
-              variables: 'ying: yang',
-            })
-          }
-        />
-        <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
-        {error ? <div data-testid="mock-submit-error" /> : null}
-      </div>
-    )
-);
+vi.mock('../shared/InventoryGroupForm', () => ({
+  default: ({ handleSubmit, handleCancel, error }) => (
+    <div>
+      <button
+        type="button"
+        aria-label="mock-submit"
+        onClick={() =>
+          handleSubmit({
+            name: 'Bar',
+            description: 'Ansible',
+            variables: 'ying: yang',
+          })
+        }
+      />
+      <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
+      {error ? <div data-testid="mock-submit-error" /> : null}
+    </div>
+  ),
+}));
 
 function renderAdd(history) {
   return renderWithContexts(
@@ -45,7 +43,7 @@ function renderAdd(history) {
 
 describe('<InventoryGroupAdd />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('InventoryGroupAdd renders successfully', () => {

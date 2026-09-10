@@ -6,23 +6,21 @@ import { GroupsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryRelatedGroupAdd from './InventoryRelatedGroupAdd';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
-jest.mock(
-  '../shared/InventoryGroupForm',
-  () =>
-    ({ handleSubmit, handleCancel, error }) => (
-      <div>
-        <button
-          type="button"
-          aria-label="mock-submit"
-          onClick={() => handleSubmit({ name: 'foo', description: 'bar' })}
-        />
-        <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
-        {error ? <div data-testid="mock-submit-error" /> : null}
-      </div>
-    )
-);
+vi.mock('../shared/InventoryGroupForm', () => ({
+  default: ({ handleSubmit, handleCancel, error }) => (
+    <div>
+      <button
+        type="button"
+        aria-label="mock-submit"
+        onClick={() => handleSubmit({ name: 'foo', description: 'bar' })}
+      />
+      <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
+      {error ? <div data-testid="mock-submit-error" /> : null}
+    </div>
+  ),
+}));
 
 function renderRelatedAdd(history) {
   return renderWithContexts(
@@ -41,7 +39,7 @@ const url = '/inventories/inventory/1/groups/2/nested_groups/add';
 
 describe('<InventoryRelatedGroupAdd/>', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render properly', () => {

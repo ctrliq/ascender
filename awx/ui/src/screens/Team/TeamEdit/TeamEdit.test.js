@@ -6,7 +6,7 @@ import { TeamsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import TeamEdit from './TeamEdit';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const updatedTeamData = {
   name: 'new name',
@@ -14,32 +14,30 @@ const updatedTeamData = {
   organization: { id: 2, name: 'Other Org' },
 };
 
-jest.mock(
-  '../shared/TeamForm',
-  () =>
-    function MockTeamForm({ handleSubmit, handleCancel, submitError }) {
-      return (
-        <div>
-          {submitError ? <div data-testid="form-submit-error" /> : null}
-          <button
-            type="button"
-            onClick={() =>
-              handleSubmit({
-                name: 'new name',
-                description: 'new description',
-                organization: { id: 2, name: 'Other Org' },
-              })
-            }
-          >
-            Submit
-          </button>
-          <button type="button" aria-label="Cancel" onClick={handleCancel}>
-            Cancel
-          </button>
-        </div>
-      );
-    }
-);
+vi.mock('../shared/TeamForm', () => ({
+  default: function MockTeamForm({ handleSubmit, handleCancel, submitError }) {
+    return (
+      <div>
+        {submitError ? <div data-testid="form-submit-error" /> : null}
+        <button
+          type="button"
+          onClick={() =>
+            handleSubmit({
+              name: 'new name',
+              description: 'new description',
+              organization: { id: 2, name: 'Other Org' },
+            })
+          }
+        >
+          Submit
+        </button>
+        <button type="button" aria-label="Cancel" onClick={handleCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  },
+}));
 
 const mockData = {
   name: 'Foo',
@@ -59,7 +57,7 @@ describe('<TeamEdit />', () => {
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('handleSubmit calls api update and navigates to the details page', async () => {

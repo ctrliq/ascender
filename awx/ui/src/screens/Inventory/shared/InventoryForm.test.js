@@ -5,7 +5,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InventoryForm from './InventoryForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const inventory = {
   id: 1,
@@ -55,8 +55,8 @@ const instanceGroups = [
 ];
 
 async function renderForm(props = {}) {
-  const onCancel = jest.fn();
-  const onSubmit = jest.fn();
+  const onCancel = vi.fn();
+  const onSubmit = vi.fn();
   const result = renderWithContexts(
     <InventoryForm
       onCancel={onCancel}
@@ -96,7 +96,7 @@ describe('<InventoryForm />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should display form fields properly', async () => {

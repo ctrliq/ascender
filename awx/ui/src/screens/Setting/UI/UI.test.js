@@ -8,7 +8,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import UI from './UI';
 
-jest.mock('../../../api/models/Settings');
+vi.mock('../../../api/models/Settings');
 
 describe('<UI />', () => {
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe('<UI />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderUI(initialEntries) {

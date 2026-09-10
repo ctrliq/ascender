@@ -28,6 +28,7 @@ import Metrics from 'screens/Metrics';
 import SubscriptionEdit from 'screens/Setting/Subscription/SubscriptionEdit';
 import { dynamicActivate, locales } from './i18nLoader';
 import getRouteConfig from './routeConfig';
+import { getStoredThemeId, applyTheme } from './themeRegistry';
 import { SESSION_REDIRECT_URL } from './constants';
 
 function ErrorFallback({ error }) {
@@ -157,7 +158,6 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useLayoutEffect(() => {
-    const { getStoredThemeId, applyTheme } = require('./themeRegistry');
     applyTheme(getStoredThemeId());
   }, []);
   const navigate = useNavigate();

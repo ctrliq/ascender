@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import UserOrganizationList from './UserOrganizationList';
 
-jest.mock('../../../api/models/Users');
+vi.mock('../../../api/models/Users');
 
 describe('<UserOrganizationlist />', () => {
   let history;
@@ -51,7 +51,7 @@ describe('<UserOrganizationlist />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('successfully mounts', async () => {

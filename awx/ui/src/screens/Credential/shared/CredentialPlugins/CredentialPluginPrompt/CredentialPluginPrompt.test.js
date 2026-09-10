@@ -7,7 +7,7 @@ import azureVaultCredential from '../../data.azureVaultCredential.json';
 import hashiCorpCredential from '../../data.hashiCorpCredential.json';
 import CredentialPluginPrompt from './CredentialPluginPrompt';
 
-jest.mock('../../../../../api');
+vi.mock('../../../../../api');
 
 const mockCredentialResults = {
   data: {
@@ -75,13 +75,13 @@ describe('<CredentialPluginPrompt />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Plugin not configured', () => {
     function renderPrompt() {
-      const onClose = jest.fn();
-      const onSubmit = jest.fn();
+      const onClose = vi.fn();
+      const onSubmit = vi.fn();
       const result = renderWithContexts(
         <CredentialPluginPrompt onClose={onClose} onSubmit={onSubmit} />
       );
@@ -153,7 +153,7 @@ describe('<CredentialPluginPrompt />', () => {
       // React's controlled/uncontrolled warning. Filter just that message so the
       // setupTests console-error trap doesn't fail this otherwise-correct test.
       const trappedError = console.error;
-      const consoleError = jest
+      const consoleError = vi
         .spyOn(console, 'error')
         .mockImplementation((...args) => {
           if (
@@ -187,8 +187,8 @@ describe('<CredentialPluginPrompt />', () => {
 
   describe('Plugin already configured', () => {
     function renderPrompt() {
-      const onClose = jest.fn();
-      const onSubmit = jest.fn();
+      const onClose = vi.fn();
+      const onSubmit = vi.fn();
       const result = renderWithContexts(
         <CredentialPluginPrompt
           onClose={onClose}

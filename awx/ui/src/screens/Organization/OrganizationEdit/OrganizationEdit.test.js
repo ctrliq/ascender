@@ -5,12 +5,12 @@ import { OrganizationsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import OrganizationEdit from './OrganizationEdit';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // Drive only OrganizationEdit's handleSubmit/handleCancel; the form's own
 // fields are covered by OrganizationForm's suite.
 let formProps;
-jest.mock('../shared/OrganizationForm', () => {
+vi.mock('../shared/OrganizationForm', () => {
   const MockOrganizationForm = (props) => {
     formProps = props;
     return (
@@ -28,7 +28,7 @@ jest.mock('../shared/OrganizationForm', () => {
       </div>
     );
   };
-  return MockOrganizationForm;
+  return { default: MockOrganizationForm };
 });
 
 describe('<OrganizationEdit />', () => {
@@ -50,7 +50,7 @@ describe('<OrganizationEdit />', () => {
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     formProps = undefined;
   });
 

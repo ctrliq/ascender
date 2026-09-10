@@ -71,7 +71,7 @@ describe('<DisassociateButton />', () => {
     });
 
     test('confirm button should call onDisassociate and close the modal', async () => {
-      const handleDisassociate = jest.fn();
+      const handleDisassociate = vi.fn();
       const { user } = renderWithContexts(
         <DisassociateButton
           onDisassociate={handleDisassociate}

@@ -7,10 +7,10 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockHost from '../shared/data.host.json';
 import AdvancedInventoryHosts from './AdvancedInventoryHosts';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // Mock the leaf list so we only assert routing/dispatch here.
-jest.mock('./AdvancedInventoryHostList', () => {
+vi.mock('./AdvancedInventoryHostList', () => {
   const AdvancedInventoryHostList = () => (
     <div aria-label="mock-advanced-host-list" />
   );
@@ -33,7 +33,7 @@ function renderUnder(initialEntry, props) {
 
 describe('<AdvancedInventoryHosts />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render smart inventory host list', () => {

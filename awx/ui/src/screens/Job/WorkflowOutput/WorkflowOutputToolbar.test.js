@@ -7,7 +7,7 @@ import {
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowOutputToolbar from './WorkflowOutputToolbar';
 
-const dispatch = jest.fn();
+const dispatch = vi.fn();
 const job = {
   id: 1,
   name: 'Workflow Job',
@@ -50,7 +50,7 @@ const byOuia = (id) =>
 const nodes = [{ id: 1 }, { id: 2 }, { id: 3, isDeleted: true }];
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('WorkflowOutputToolbar', () => {
@@ -131,12 +131,12 @@ describe('WorkflowOutputToolbar', () => {
 
   describe('elapsed timer', () => {
     beforeEach(() => {
-      jest.useFakeTimers('modern');
-      jest.setSystemTime(new Date('2021-09-01T12:30:45.000Z'));
+      vi.useFakeTimers('modern');
+      vi.setSystemTime(new Date('2021-09-01T12:30:45.000Z'));
     });
 
     afterEach(() => {
-      jest.useRealTimers();
+      vi.useRealTimers();
     });
 
     const elapsedText = () =>
@@ -150,7 +150,7 @@ describe('WorkflowOutputToolbar', () => {
       });
       expect(elapsedText()).toBe('00:00:05');
       act(() => {
-        jest.advanceTimersByTime(2000);
+        vi.advanceTimersByTime(2000);
       });
       expect(elapsedText()).toBe('00:00:07');
     });
@@ -176,7 +176,7 @@ describe('WorkflowOutputToolbar', () => {
       });
       expect(elapsedText()).toBe('01:01:01');
       act(() => {
-        jest.advanceTimersByTime(2000);
+        vi.advanceTimersByTime(2000);
       });
       expect(elapsedText()).toBe('01:01:01');
     });

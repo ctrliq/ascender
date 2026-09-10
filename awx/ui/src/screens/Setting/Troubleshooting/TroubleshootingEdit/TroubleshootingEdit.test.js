@@ -8,7 +8,7 @@ import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import mockTroubleshootingSettings from './data.defaultTroubleshootingSettings.json';
 import TroubleshootingEdit from './TroubleshootingEdit';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<TroubleshootingEdit />', () => {
   let history;
@@ -22,7 +22,7 @@ describe('<TroubleshootingEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderEdit() {

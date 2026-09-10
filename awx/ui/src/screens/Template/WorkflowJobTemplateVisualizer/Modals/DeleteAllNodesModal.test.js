@@ -4,7 +4,7 @@ import { WorkflowDispatchContext } from 'contexts/Workflow';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import DeleteAllNodesModal from './DeleteAllNodesModal';
 
-const dispatch = jest.fn();
+const dispatch = vi.fn();
 
 describe('DeleteAllNodesModal', () => {
   beforeEach(() => {

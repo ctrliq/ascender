@@ -10,8 +10,8 @@ import VariablesField from './VariablesField';
 // editor's value drivable, so the onChange -> Formik path is observable (the
 // real react-ace editor does not surface its value/edits to the DOM under
 // jsdom).
-jest.mock('./CodeEditor', () => {
-  const ReactMock = require('react');
+vi.mock('./CodeEditor', async () => {
+  const ReactMock = await vi.importActual('react');
   return {
     __esModule: true,
     default: ({ value, onChange, readOnly }) =>
@@ -42,7 +42,7 @@ jest.mock('./CodeEditor', () => {
 // driving ace's onChange) have no DOM equivalent and are noted in place.
 
 beforeEach(() => {
-  document.body.createTextRange = jest.fn();
+  document.body.createTextRange = vi.fn();
 });
 
 const yamlBtn = () => screen.getByRole('button', { name: 'YAML' });
@@ -153,7 +153,7 @@ describe('VariablesField', () => {
   });
 
   it('should submit value through Formik', async () => {
-    const handleSubmit = jest.fn();
+    const handleSubmit = vi.fn();
     const { user } = renderWithContexts(
       <Formik
         initialValues={{ variables: '---\nfoo: bar\n' }}
@@ -185,7 +185,7 @@ describe('VariablesField', () => {
     renderWithContexts(
       <Formik
         initialValues={{ variables: '{"foo": "bar"}' }}
-        onSubmit={jest.fn()}
+        onSubmit={vi.fn()}
       >
         {() => (
           <VariablesField id="the-field" name="variables" label="Variables" />
@@ -201,7 +201,7 @@ describe('VariablesField', () => {
 
   it('offers no expand button: the editor grows with its content', () => {
     renderWithContexts(
-      <Formik initialValues={{ variables: '---' }} onSubmit={jest.fn()}>
+      <Formik initialValues={{ variables: '---' }} onSubmit={vi.fn()}>
         {() => (
           <VariablesField id="the-field" name="variables" label="Variables" />
         )}

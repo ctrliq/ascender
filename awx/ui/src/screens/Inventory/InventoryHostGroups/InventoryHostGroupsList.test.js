@@ -9,7 +9,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import InventoryHostGroupsList from './InventoryHostGroupsList';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockGroups = [
   {
@@ -94,7 +94,7 @@ describe('<InventoryHostGroupsList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should fetch groups from api and render them in the list', async () => {

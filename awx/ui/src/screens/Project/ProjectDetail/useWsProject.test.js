@@ -1,11 +1,11 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import WS from 'jest-websocket-mock';
+import WS from 'vitest-websocket-mock';
 import { ProjectsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import useWsProject from './useWsProject';
 
-jest.mock('../../../api/models/Projects');
+vi.mock('../../../api/models/Projects');
 
 function Test({ project }) {
   const synced = useWsProject(project);
@@ -41,7 +41,7 @@ describe('useWsProject', () => {
 
   afterEach(() => {
     global.console.debug = debug;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     WS.clean();
   });
 

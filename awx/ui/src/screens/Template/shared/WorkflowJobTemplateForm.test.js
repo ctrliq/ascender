@@ -16,19 +16,19 @@ import {
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowJobTemplateForm from './WorkflowJobTemplateForm';
 
-jest.mock('../../../api/models/ExecutionEnvironments');
-jest.mock('../../../api/models/WorkflowJobTemplates');
-jest.mock('../../../api/models/Labels');
-jest.mock('../../../api/models/Organizations');
-jest.mock('../../../api/models/Inventories');
-jest.mock('../../../api/models/Projects');
-jest.mock('../../../api/models/CredentialTypes');
-jest.mock('../../../api/models/Credentials');
+vi.mock('../../../api/models/ExecutionEnvironments');
+vi.mock('../../../api/models/WorkflowJobTemplates');
+vi.mock('../../../api/models/Labels');
+vi.mock('../../../api/models/Organizations');
+vi.mock('../../../api/models/Inventories');
+vi.mock('../../../api/models/Projects');
+vi.mock('../../../api/models/CredentialTypes');
+vi.mock('../../../api/models/Credentials');
 
 describe('<WorkflowJobTemplateForm/>', () => {
   let history;
-  const handleSubmit = jest.fn();
-  const handleCancel = jest.fn();
+  const handleSubmit = vi.fn();
+  const handleCancel = vi.fn();
   let consoleError;
   const mockTemplate = {
     id: 6,
@@ -81,7 +81,7 @@ describe('<WorkflowJobTemplateForm/>', () => {
     // warnings under the partial API mocks; silence console.error so they
     // don't fail the run.
     consoleError = global.console.error;
-    global.console.error = jest.fn();
+    global.console.error = vi.fn();
     WorkflowJobTemplatesAPI.updateWebhookKey.mockResolvedValue({
       data: { webhook_key: 'sdafdghjkl2345678ionbvcxz' },
     });
@@ -144,7 +144,7 @@ describe('<WorkflowJobTemplateForm/>', () => {
 
   afterEach(() => {
     global.console.error = consoleError;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders successfully', () => {

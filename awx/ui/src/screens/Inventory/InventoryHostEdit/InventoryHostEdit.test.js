@@ -6,7 +6,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostEdit from './InventoryHostEdit';
 import mockHost from '../shared/data.host.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const updatedHostData = {
   name: 'new name',
@@ -14,25 +14,23 @@ const updatedHostData = {
   variables: '---\nfoo: bar',
 };
 
-jest.mock(
-  'components/HostForm',
-  () =>
-    ({ handleSubmit, handleCancel, submitError }) => (
-      <div>
-        <button
-          type="button"
-          aria-label="mock-submit"
-          onClick={() => handleSubmit(updatedHostData)}
-        />
-        <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
-        {submitError ? <div aria-label="mock-submit-error" /> : null}
-      </div>
-    )
-);
+vi.mock('components/HostForm', () => ({
+  default: ({ handleSubmit, handleCancel, submitError }) => (
+    <div>
+      <button
+        type="button"
+        aria-label="mock-submit"
+        onClick={() => handleSubmit(updatedHostData)}
+      />
+      <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
+      {submitError ? <div aria-label="mock-submit-error" /> : null}
+    </div>
+  ),
+}));
 
 describe('<InventoryHostEdit />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('handleSubmit should call api update', async () => {

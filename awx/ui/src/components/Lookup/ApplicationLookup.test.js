@@ -5,7 +5,7 @@ import { ApplicationsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ApplicationLookup from './ApplicationLookup';
 
-jest.mock('../../api');
+vi.mock('../../api');
 const application = {
   id: 1,
   name: 'app',
@@ -38,7 +38,7 @@ describe('ApplicationLookup', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render successfully', async () => {

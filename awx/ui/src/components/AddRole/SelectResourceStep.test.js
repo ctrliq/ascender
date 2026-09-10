@@ -20,14 +20,14 @@ describe('<SelectResourceStep />', () => {
   ];
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('initially renders without crashing', async () => {
-    const fetchItems = jest.fn().mockResolvedValue({
+    const fetchItems = vi.fn().mockResolvedValue({
       data: { count: 0, results: [] },
     });
-    const fetchOptions = jest.fn().mockResolvedValue({
+    const fetchOptions = vi.fn().mockResolvedValue({
       data: { actions: { GET: {}, POST: {} }, related_search_fields: [] },
     });
     renderWithContexts(
@@ -44,7 +44,7 @@ describe('<SelectResourceStep />', () => {
   });
 
   test('fetches resources on mount and adds items to list', async () => {
-    const handleSearch = jest.fn().mockResolvedValue({
+    const handleSearch = vi.fn().mockResolvedValue({
       data: {
         count: 2,
         results: [
@@ -53,7 +53,7 @@ describe('<SelectResourceStep />', () => {
         ],
       },
     });
-    const options = jest.fn().mockResolvedValue({
+    const options = vi.fn().mockResolvedValue({
       data: {
         actions: { GET: {}, POST: {} },
         related_search_fields: [],
@@ -82,7 +82,7 @@ describe('<SelectResourceStep />', () => {
   });
 
   test('clicking on row fires callback with correct params', async () => {
-    const handleRowClick = jest.fn();
+    const handleRowClick = vi.fn();
     const data = {
       count: 2,
       results: [
@@ -90,7 +90,7 @@ describe('<SelectResourceStep />', () => {
         { id: 2, username: 'bar', url: 'item/2' },
       ],
     };
-    const options = jest.fn().mockResolvedValue({
+    const options = vi.fn().mockResolvedValue({
       data: {
         actions: { GET: {}, POST: {} },
         related_search_fields: [],

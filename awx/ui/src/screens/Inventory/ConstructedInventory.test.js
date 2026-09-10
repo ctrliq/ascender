@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockInventory from './shared/data.inventory.json';
 import ConstructedInventory from './ConstructedInventory';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 // ConstructedInventory reads the id from useParams, so mount it under its v6
 // parent route at a concrete URL rather than mocking the router.
@@ -26,7 +26,7 @@ function renderAt(initialEntry) {
 
 describe('<ConstructedInventory />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render expected tabs', async () => {

@@ -7,7 +7,7 @@ import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import english from '../../../../src/locales/en/messages';
 
-jest.mock('api');
+vi.mock('api');
 
 const instances = [
   {
@@ -62,7 +62,7 @@ describe('<RemoveInstanceButtton />', () => {
       data: { results: [{ id: 1 }], count: 1 },
     });
     const user = userEvent.setup();
-    const onRemove = jest.fn();
+    const onRemove = vi.fn();
     render(
       <I18nProvider i18n={i18n}>
         <RemoveInstanceButton
@@ -93,7 +93,7 @@ describe('<RemoveInstanceButtton />', () => {
         <RemoveInstanceButton
           isK8s={true}
           itemsToRemove={[instances[1]]}
-          onRemove={jest.fn()}
+          onRemove={vi.fn()}
         />
       </I18nProvider>
     );
@@ -119,7 +119,7 @@ describe('<RemoveInstanceButtton />', () => {
       })
     );
     const user = userEvent.setup();
-    const onRemove = jest.fn();
+    const onRemove = vi.fn();
     render(
       <I18nProvider i18n={i18n}>
         <RemoveInstanceButton

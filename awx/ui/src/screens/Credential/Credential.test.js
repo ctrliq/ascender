@@ -8,33 +8,33 @@ import mockMachineCredential from './shared/data.machineCredential.json';
 import mockCyberArkCredential from './shared/data.cyberArkCredential.json';
 import Credential from './Credential';
 
-jest.mock('../../api/models/Credentials');
+vi.mock('../../api/models/Credentials');
 
 // Markers for the routed tab panels, so assertions are about which branch of
 // the nested v6 <Routes> tree resolves.
-jest.mock('./CredentialDetail', () => {
-  const ReactLib = require('react');
+vi.mock('./CredentialDetail', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'CredentialDetail'),
   };
 });
-jest.mock('./CredentialEdit', () => {
-  const ReactLib = require('react');
+vi.mock('./CredentialEdit', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'CredentialEdit'),
   };
 });
-jest.mock('components/RelatedTemplateList', () => {
-  const ReactLib = require('react');
+vi.mock('components/RelatedTemplateList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'RelatedTemplateList'),
   };
 });
-jest.mock('components/ResourceAccessList', () => {
-  const ReactLib = require('react');
+vi.mock('components/ResourceAccessList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     ResourceAccessList: () =>
       ReactLib.createElement('div', null, 'ResourceAccessList'),
@@ -64,7 +64,7 @@ describe('<Credential />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('fetches the credential detail', async () => {

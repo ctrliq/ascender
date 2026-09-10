@@ -5,19 +5,19 @@ import { Routes, Route } from 'react-router';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import WorkflowApprovals from './WorkflowApprovals';
 
-jest.mock('../../api/models/WorkflowApprovals');
+vi.mock('../../api/models/WorkflowApprovals');
 
 // Replace the routed children with markers so the assertions are purely about
 // which branch of the v6 <Routes> tree resolves for a given URL.
-jest.mock('./WorkflowApprovalList', () => {
-  const ReactLib = require('react');
+vi.mock('./WorkflowApprovalList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'WorkflowApprovalList'),
   };
 });
-jest.mock('./WorkflowApproval', () => {
-  const ReactLib = require('react');
+vi.mock('./WorkflowApproval', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>

@@ -11,23 +11,23 @@ import {
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleAdd from './ScheduleAdd';
 
-jest.mock('../../../api/models/Credentials');
-jest.mock('../../../api/models/CredentialTypes');
-jest.mock('../../../api/models/Schedules');
-jest.mock('../../../api/models/JobTemplates');
-jest.mock('../../../api/models/Inventories');
+vi.mock('../../../api/models/Credentials');
+vi.mock('../../../api/models/CredentialTypes');
+vi.mock('../../../api/models/Schedules');
+vi.mock('../../../api/models/JobTemplates');
+vi.mock('../../../api/models/Inventories');
 
 // The multi-section/prompt-wizard form is exercised by ScheduleForm's own
 // suite. Here we mock it so we can drive ScheduleAdd's handleSubmit directly
 // (the original suite invoked the Formik onSubmit, which simply forwards the
 // form values + launchConfig/surveyConfig to that handleSubmit).
 let formProps;
-jest.mock('../shared/ScheduleForm', () => {
+vi.mock('../shared/ScheduleForm', () => {
   const MockScheduleForm = (props) => {
     formProps = props;
     return <div data-testid="schedule-form" />;
   };
-  return MockScheduleForm;
+  return { default: MockScheduleForm };
 });
 
 const launchConfig = {

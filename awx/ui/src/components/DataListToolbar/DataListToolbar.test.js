@@ -12,14 +12,14 @@ describe('<DataListToolbar />', () => {
     integerFields: ['page', 'page_size'],
   };
 
-  const onSearch = jest.fn();
-  const onReplaceSearch = jest.fn();
-  const onSort = jest.fn();
-  const onSelectAll = jest.fn();
-  const onExpandAll = jest.fn();
+  const onSearch = vi.fn();
+  const onReplaceSearch = vi.fn();
+  const onSort = vi.fn();
+  const onSelectAll = vi.fn();
+  const onExpandAll = vi.fn();
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('it triggers the expected callbacks', async () => {

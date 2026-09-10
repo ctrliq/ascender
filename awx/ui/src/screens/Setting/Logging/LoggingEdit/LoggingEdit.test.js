@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import LoggingEdit from './LoggingEdit';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 const mockSettings = {
   LOG_AGGREGATOR_HOST: 'https://logstash',
@@ -48,7 +48,7 @@ describe('<LoggingEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderEdit() {

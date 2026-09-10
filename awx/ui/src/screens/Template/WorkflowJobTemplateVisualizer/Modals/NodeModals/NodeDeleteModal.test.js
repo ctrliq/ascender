@@ -7,11 +7,11 @@ import {
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import NodeDeleteModal from './NodeDeleteModal';
 
-const dispatch = jest.fn();
+const dispatch = vi.fn();
 
 describe('NodeDeleteModal', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Node with unified job template', () => {

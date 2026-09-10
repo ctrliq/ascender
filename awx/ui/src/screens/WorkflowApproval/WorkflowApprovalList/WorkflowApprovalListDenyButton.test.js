@@ -19,7 +19,7 @@ describe('<WorkflowApprovalListDenyButton />', () => {
   });
 
   test('should invoke onDeny prop', async () => {
-    const onDeny = jest.fn();
+    const onDeny = vi.fn();
     const { user } = renderWithContexts(
       <WorkflowApprovalListDenyButton
         onDeny={onDeny}

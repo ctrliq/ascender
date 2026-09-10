@@ -6,48 +6,46 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ApplicationEdit from './ApplicationEdit';
 
-jest.mock('../../../api/models/Applications');
-jest.mock('../../../api/models/Organizations');
+vi.mock('../../../api/models/Applications');
+vi.mock('../../../api/models/Organizations');
 
 // The component reads useParams from react-router-dom (the route
 // tree is v6); mock it there, keeping useNavigate real so the cancel/submit
 // navigation assertions still exercise history.
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({ id: 1 }),
 }));
 
 // The real form is exercised in ApplicationForm.test.js; here we mock it so the
 // container's update/navigation/submit-error logic is what's tested.
-jest.mock(
-  '../shared/ApplicationForm',
-  () =>
-    function MockApplicationForm({ onSubmit, onCancel, submitError }) {
-      return (
-        <div>
-          {submitError ? <div>FormSubmitError</div> : null}
-          <button
-            type="button"
-            onClick={() =>
-              onSubmit({
-                authorization_grant_type: 'authorization-code',
-                client_type: 'confidential',
-                description: 'bar',
-                name: 'foo',
-                organization: { id: 1 },
-                redirect_uris: 'http://www.google.com',
-              })
-            }
-          >
-            Submit
-          </button>
-          <button type="button" onClick={onCancel}>
-            Cancel
-          </button>
-        </div>
-      );
-    }
-);
+vi.mock('../shared/ApplicationForm', () => ({
+  default: function MockApplicationForm({ onSubmit, onCancel, submitError }) {
+    return (
+      <div>
+        {submitError ? <div>FormSubmitError</div> : null}
+        <button
+          type="button"
+          onClick={() =>
+            onSubmit({
+              authorization_grant_type: 'authorization-code',
+              client_type: 'confidential',
+              description: 'bar',
+              name: 'foo',
+              organization: { id: 1 },
+              redirect_uris: 'http://www.google.com',
+            })
+          }
+        >
+          Submit
+        </button>
+        <button type="button" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  },
+}));
 
 const authorizationOptions = [
   {
@@ -94,7 +92,7 @@ function renderEdit(options) {
 }
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('<ApplicationEdit/>', () => {

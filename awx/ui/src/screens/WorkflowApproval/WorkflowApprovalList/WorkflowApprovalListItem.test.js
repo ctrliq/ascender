@@ -6,7 +6,7 @@ import mockWorkflowApprovals from '../data.workflowApprovals.json';
 
 const workflowApproval = mockWorkflowApprovals.results[0];
 
-jest.mock('../../../api/models/WorkflowApprovals');
+vi.mock('../../../api/models/WorkflowApprovals');
 
 function renderItem(approval) {
   return renderWithContexts(

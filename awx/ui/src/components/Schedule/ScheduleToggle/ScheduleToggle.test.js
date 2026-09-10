@@ -4,7 +4,7 @@ import { SchedulesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleToggle from './ScheduleToggle';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockSchedule = {
   url: '/api/v2/schedules/1',
@@ -31,7 +31,7 @@ const mockSchedule = {
 describe('<ScheduleToggle>', () => {
   test('should toggle off', async () => {
     SchedulesAPI.update.mockResolvedValue({});
-    const onToggle = jest.fn();
+    const onToggle = vi.fn();
     const { user } = renderWithContexts(
       <ScheduleToggle schedule={mockSchedule} onToggle={onToggle} />
     );
@@ -49,7 +49,7 @@ describe('<ScheduleToggle>', () => {
 
   test('should toggle on', async () => {
     SchedulesAPI.update.mockResolvedValue({});
-    const onToggle = jest.fn();
+    const onToggle = vi.fn();
     const { user } = renderWithContexts(
       <ScheduleToggle
         schedule={{

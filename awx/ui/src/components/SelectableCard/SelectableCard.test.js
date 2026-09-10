@@ -4,7 +4,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import SelectableCard from './SelectableCard';
 
 describe('<SelectableCard />', () => {
-  const onClick = jest.fn();
+  const onClick = vi.fn();
 
   test('initially renders without crashing when not selected', () => {
     renderWithContexts(

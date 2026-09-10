@@ -6,11 +6,11 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceAdd from './InstanceAdd';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // Replace the shared form with a lightweight stub that exposes the container's
 // handleSubmit / handleCancel handlers through real buttons.
-jest.mock('../Shared/InstanceForm', () => {
+vi.mock('../Shared/InstanceForm', () => {
   const MockForm = ({ handleSubmit, handleCancel }) => (
     <div>
       <button
@@ -25,7 +25,7 @@ jest.mock('../Shared/InstanceForm', () => {
       </button>
     </div>
   );
-  return MockForm;
+  return { default: MockForm };
 });
 
 describe('<InstanceAdd />', () => {
@@ -37,7 +37,7 @@ describe('<InstanceAdd />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Initially renders successfully', () => {

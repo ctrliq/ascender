@@ -5,7 +5,7 @@ import { CredentialsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import CredentialLookup, { _CredentialLookup } from './CredentialLookup';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('CredentialLookup', () => {
   beforeEach(() => {
@@ -35,7 +35,7 @@ describe('CredentialLookup', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render successfully', async () => {
@@ -91,7 +91,7 @@ describe('CredentialLookup', () => {
         count: 1,
       },
     });
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     renderWithContexts(
       <Formik>
         <CredentialLookup
@@ -115,7 +115,7 @@ describe('CredentialLookup', () => {
         count: 2,
       },
     });
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     renderWithContexts(
       <Formik>
         <CredentialLookup
@@ -143,7 +143,7 @@ describe('CredentialLookup auto select', () => {
     CredentialsAPI.readOptions.mockResolvedValue({
       data: { actions: { GET: {} }, related_search_fields: [] },
     });
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     renderWithContexts(
       <Formik>
         <CredentialLookup

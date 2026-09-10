@@ -5,7 +5,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import HostMetrics from './HostMetrics';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const mockHostMetrics = [
   {
@@ -31,7 +31,7 @@ describe('<HostMetrics />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {

@@ -21,8 +21,8 @@ describe('WorkflowTools', () => {
     ).toBeInTheDocument();
   });
   test('clicking zoom/pan buttons passes callback correct values', async () => {
-    const pan = jest.fn();
-    const zoomChange = jest.fn();
+    const pan = vi.fn();
+    const zoomChange = vi.fn();
     const { container, user } = renderWithContexts(
       <WorkflowTools
         onClose={() => {}}

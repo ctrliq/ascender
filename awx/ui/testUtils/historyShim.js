@@ -1,7 +1,7 @@
-const { UNSAFE_createMemoryHistory } = require('react-router');
+import { UNSAFE_createMemoryHistory } from 'react-router';
 
-function createMemoryHistory(opts) {
+export function createMemoryHistory(opts) {
   return UNSAFE_createMemoryHistory({ v5Compat: true, ...opts });
 }
 
-module.exports = { createMemoryHistory };
+export default { createMemoryHistory };

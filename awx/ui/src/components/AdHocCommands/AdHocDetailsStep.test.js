@@ -5,8 +5,8 @@ import { RootAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import DetailsStep from './AdHocDetailsStep';
 
-jest.mock('../../api/models/Credentials');
-jest.mock('../../api/models/Root');
+vi.mock('../../api/models/Credentials');
+vi.mock('../../api/models/Root');
 
 const verbosityOptions = [
   { key: -1, value: '', label: '', isDisabled: false },
@@ -17,7 +17,7 @@ const moduleOptions = [
   ['command', 'command'],
   ['shell', 'shell'],
 ];
-const onLimitChange = jest.fn();
+const onLimitChange = vi.fn();
 const initialValues = {
   limit: ['Inventory 1', 'inventory 2'],
   credential: [],

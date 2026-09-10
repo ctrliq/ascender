@@ -12,7 +12,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import InventoryDetail from './InventoryDetail';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockInventory = {
   id: 1,
@@ -74,7 +74,7 @@ describe('<InventoryDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render details', async () => {

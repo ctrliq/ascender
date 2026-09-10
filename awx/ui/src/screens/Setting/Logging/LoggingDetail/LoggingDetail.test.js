@@ -10,7 +10,7 @@ import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import mockLogSettings from '../../shared/data.logSettings.json';
 import LoggingDetail from './LoggingDetail';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<LoggingDetail />', () => {
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('<LoggingDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderDetail(context) {

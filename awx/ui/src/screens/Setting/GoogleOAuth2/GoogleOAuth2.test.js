@@ -8,7 +8,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import GoogleOAuth2 from './GoogleOAuth2';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockSettings = {
   SOCIAL_AUTH_GOOGLE_OAUTH2_CALLBACK_URL:
@@ -44,7 +44,7 @@ describe('<GoogleOAuth2 />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render Google OAuth 2.0 details', async () => {

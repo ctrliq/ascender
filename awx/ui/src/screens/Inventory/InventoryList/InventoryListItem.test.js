@@ -4,7 +4,7 @@ import { InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryListItem from './InventoryListItem';
 
-jest.mock('../../../api/models/Inventories');
+vi.mock('../../../api/models/Inventories');
 
 const baseInventory = {
   id: 1,
@@ -45,7 +45,7 @@ function renderItem(inventory) {
 
 describe('<InventoryListItem />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', () => {

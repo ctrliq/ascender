@@ -5,13 +5,13 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationForm from './OrganizationForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // The lookups have their own modal-driven suites; here we stub them so the
 // form's wiring (chips from value, onChange -> onSubmit args) can be driven
 // deterministically.
-jest.mock('components/Lookup', () => {
-  const actual = jest.requireActual('components/Lookup');
+vi.mock('components/Lookup', async () => {
+  const actual = await vi.importActual('components/Lookup');
   return {
     ...actual,
     InstanceGroupsLookup: ({ value, onChange }) => (
@@ -53,15 +53,17 @@ jest.mock('components/Lookup', () => {
   };
 });
 
-jest.mock('components/Lookup/CredentialLookup', () => ({ value }) => (
-  <div data-testid="credential-lookup">
-    {(Array.isArray(value) ? value : [value].filter(Boolean)).map((cred) => (
-      <span key={cred.id} data-testid="galaxy-credential-chip">
-        {cred.name}
-      </span>
-    ))}
-  </div>
-));
+vi.mock('components/Lookup/CredentialLookup', () => ({
+  default: ({ value }) => (
+    <div data-testid="credential-lookup">
+      {(Array.isArray(value) ? value : [value].filter(Boolean)).map((cred) => (
+        <span key={cred.id} data-testid="galaxy-credential-chip">
+          {cred.name}
+        </span>
+      ))}
+    </div>
+  ),
+}));
 
 describe('<OrganizationForm />', () => {
   const mockData = {
@@ -91,14 +93,14 @@ describe('<OrganizationForm />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render default galaxy credential when passed', async () => {
     renderWithContexts(
       <OrganizationForm
-        onSubmit={jest.fn()}
-        onCancel={jest.fn()}
+        onSubmit={vi.fn()}
+        onCancel={vi.fn()}
         defaultGalaxyCredential={{
           id: 2,
           type: 'credential',
@@ -117,8 +119,8 @@ describe('<OrganizationForm />', () => {
     renderWithContexts(
       <OrganizationForm
         organization={mockData}
-        onSubmit={jest.fn()}
-        onCancel={jest.fn()}
+        onSubmit={vi.fn()}
+        onCancel={vi.fn()}
       />
     );
     await screen.findByTestId('instance-groups-lookup');
@@ -129,8 +131,8 @@ describe('<OrganizationForm />', () => {
     renderWithContexts(
       <OrganizationForm
         organization={mockData}
-        onSubmit={jest.fn()}
-        onCancel={jest.fn()}
+        onSubmit={vi.fn()}
+        onCancel={vi.fn()}
       />
     );
     await screen.findByTestId('instance-groups-lookup');
@@ -145,8 +147,8 @@ describe('<OrganizationForm />', () => {
     const { user } = renderWithContexts(
       <OrganizationForm
         organization={mockData}
-        onSubmit={jest.fn()}
-        onCancel={jest.fn()}
+        onSubmit={vi.fn()}
+        onCancel={vi.fn()}
       />
     );
     await screen.findByTestId('instance-groups-lookup');
@@ -166,12 +168,12 @@ describe('<OrganizationForm />', () => {
         results: mockExecutionEnvironment,
       },
     });
-    const onSubmit = jest.fn();
+    const onSubmit = vi.fn();
     const { user, container } = renderWithContexts(
       <OrganizationForm
         organization={mockData}
         onSubmit={onSubmit}
-        onCancel={jest.fn()}
+        onCancel={vi.fn()}
       />
     );
     await screen.findByTestId('instance-groups-lookup');
@@ -211,7 +213,7 @@ describe('<OrganizationForm />', () => {
       max_hosts: 1,
       default_environment: null,
     };
-    const onSubmit = jest.fn();
+    const onSubmit = vi.fn();
     OrganizationsAPI.update.mockResolvedValue(1);
     OrganizationsAPI.associateInstanceGroup.mockResolvedValue('done');
     OrganizationsAPI.disassociateInstanceGroup.mockResolvedValue('done');
@@ -219,7 +221,7 @@ describe('<OrganizationForm />', () => {
       <OrganizationForm
         organization={mockData}
         onSubmit={onSubmit}
-        onCancel={jest.fn()}
+        onCancel={vi.fn()}
       />
     );
     await screen.findByTestId('instance-groups-lookup');
@@ -242,7 +244,7 @@ describe('<OrganizationForm />', () => {
   });
 
   test('onSubmit does not get called if max_hosts value is out of range', async () => {
-    const onSubmit = jest.fn();
+    const onSubmit = vi.fn();
     // mount with negative value
     const mockDataNegative = JSON.parse(JSON.stringify(mockData));
     mockDataNegative.max_hosts = -5;
@@ -250,7 +252,7 @@ describe('<OrganizationForm />', () => {
       <OrganizationForm
         organization={mockDataNegative}
         onSubmit={onSubmit}
-        onCancel={jest.fn()}
+        onCancel={vi.fn()}
       />
     );
     await screen.findByTestId('instance-groups-lookup');
@@ -265,7 +267,7 @@ describe('<OrganizationForm />', () => {
       <OrganizationForm
         organization={mockDataOutOfRange}
         onSubmit={onSubmit}
-        onCancel={jest.fn()}
+        onCancel={vi.fn()}
       />
     );
     await screen.findByTestId('instance-groups-lookup');
@@ -274,7 +276,7 @@ describe('<OrganizationForm />', () => {
   });
 
   test('onSubmit is called and max_hosts value defaults to 0 if input is not a number', async () => {
-    const onSubmit = jest.fn();
+    const onSubmit = vi.fn();
     // mount with String value (default to zero)
     const mockDataString = JSON.parse(JSON.stringify(mockData));
     mockDataString.max_hosts = 'Bee';
@@ -282,7 +284,7 @@ describe('<OrganizationForm />', () => {
       <OrganizationForm
         organization={mockDataString}
         onSubmit={onSubmit}
-        onCancel={jest.fn()}
+        onCancel={vi.fn()}
       />
     );
     await screen.findByTestId('instance-groups-lookup');
@@ -304,11 +306,11 @@ describe('<OrganizationForm />', () => {
   });
 
   test('calls "onCancel" when Cancel button is clicked', async () => {
-    const onCancel = jest.fn();
+    const onCancel = vi.fn();
     const { user } = renderWithContexts(
       <OrganizationForm
         organization={mockData}
-        onSubmit={jest.fn()}
+        onSubmit={vi.fn()}
         onCancel={onCancel}
       />
     );

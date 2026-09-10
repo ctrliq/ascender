@@ -53,7 +53,7 @@ describe('<SelectedList />', () => {
   });
 
   test('Clicking remove on chip calls onRemove callback prop with correct params', async () => {
-    const onRemove = jest.fn();
+    const onRemove = vi.fn();
     const mockSelected = [
       {
         id: 1,

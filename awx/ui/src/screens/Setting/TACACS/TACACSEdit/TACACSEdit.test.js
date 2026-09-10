@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import TACACSEdit from './TACACSEdit';
 
-jest.mock('../../../../api/');
+vi.mock('../../../../api/');
 
 describe('<TACACSEdit />', () => {
   let history;
@@ -28,7 +28,7 @@ describe('<TACACSEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderEdit() {

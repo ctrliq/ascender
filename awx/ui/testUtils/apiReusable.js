@@ -5,12 +5,12 @@ export function describeNotificationMixin (Model, name) {
     let mockHttp;
     let ModelAPI;
     beforeEach(() => {
-      mockHttp = ({ post: jest.fn(() => Promise.resolve()) });
+      mockHttp = ({ post: vi.fn(() => Promise.resolve()) });
       ModelAPI = new Model(mockHttp);
     })
 
     afterEach(() => {
-      jest.resetAllMocks();
+      vi.resetAllMocks();
     });
 
     const parameters = ['success', 'error'];

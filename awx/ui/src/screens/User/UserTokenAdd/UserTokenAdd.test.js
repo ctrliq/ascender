@@ -5,9 +5,9 @@ import { UsersAPI, TokensAPI, ApplicationsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserTokenAdd from './UserTokenAdd';
 
-jest.mock('../../../api');
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('../../../api');
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({ id: 1 }),
 }));
 
@@ -15,7 +15,7 @@ describe('<UserTokenAdd />', () => {
   let onSuccessfulAdd;
 
   beforeEach(() => {
-    onSuccessfulAdd = jest.fn();
+    onSuccessfulAdd = vi.fn();
     ApplicationsAPI.read.mockResolvedValue({
       data: {
         count: 1,
@@ -32,7 +32,7 @@ describe('<UserTokenAdd />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function selectApplication(user) {

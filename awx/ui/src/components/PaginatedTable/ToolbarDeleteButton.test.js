@@ -5,7 +5,7 @@ import { CredentialsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ToolbarDeleteButton from './ToolbarDeleteButton';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const itemA = {
   id: 1,
@@ -38,7 +38,7 @@ describe('<ToolbarDeleteButton />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render button', () => {
@@ -189,7 +189,7 @@ describe('<ToolbarDeleteButton />', () => {
   });
 
   test('should invoke onDelete prop', async () => {
-    const onDelete = jest.fn();
+    const onDelete = vi.fn();
     const { user } = renderWithContexts(
       <ToolbarDeleteButton onDelete={onDelete} itemsToDelete={[itemA]} />
     );

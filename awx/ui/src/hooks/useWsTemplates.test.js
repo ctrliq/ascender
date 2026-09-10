@@ -1,16 +1,16 @@
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
-import WS from 'jest-websocket-mock';
+import WS from 'vitest-websocket-mock';
 import { renderWithContexts } from '../../testUtils/rtlContexts';
 import useWsTemplates from './useWsTemplates';
 
 /*
-  Jest mock timers don’t play well with jest-websocket-mock,
+  Mock timers don’t play well with vitest-websocket-mock,
   so we'll stub out throttling to resolve immediately
 */
-jest.mock('./useThrottle', () => ({
+vi.mock('./useThrottle', () => ({
   __esModule: true,
-  default: jest.fn((val) => val),
+  default: vi.fn((val) => val),
 }));
 
 function Test({ templates }) {

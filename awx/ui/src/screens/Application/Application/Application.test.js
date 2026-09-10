@@ -6,26 +6,26 @@ import { ApplicationsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import Application from './Application';
 
-jest.mock('../../../api/models/Applications');
+vi.mock('../../../api/models/Applications');
 
 // Markers for the routed tab panels, so assertions are about which branch of
 // the nested v6 <Routes> tree resolves.
-jest.mock('../ApplicationDetails', () => {
-  const ReactLib = require('react');
+vi.mock('../ApplicationDetails', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'ApplicationDetails'),
   };
 });
-jest.mock('../ApplicationEdit', () => {
-  const ReactLib = require('react');
+vi.mock('../ApplicationEdit', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'ApplicationEdit'),
   };
 });
-jest.mock('../ApplicationTokens', () => {
-  const ReactLib = require('react');
+vi.mock('../ApplicationTokens', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'ApplicationTokens'),
@@ -85,7 +85,7 @@ describe('<Application />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('fetches the application detail and options', async () => {

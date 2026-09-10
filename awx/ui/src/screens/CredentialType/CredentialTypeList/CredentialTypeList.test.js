@@ -6,8 +6,8 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import CredentialTypeList from './CredentialTypeList';
 
-jest.mock('../../../api/models/CredentialTypes');
-jest.mock('../../../api/models/Credentials');
+vi.mock('../../../api/models/CredentialTypes');
+vi.mock('../../../api/models/Credentials');
 
 const credentialTypes = {
   data: {
@@ -41,7 +41,7 @@ describe('<CredentialTypeList>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should fetch data and render 2 rows', async () => {

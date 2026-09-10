@@ -4,7 +4,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceForm from './InstanceForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<InstanceForm />', () => {
   test('should display form fields properly', () => {
@@ -39,7 +39,7 @@ describe('<InstanceForm />', () => {
   });
 
   test('should call handleCancel when Cancel button is clicked', async () => {
-    const handleCancel = jest.fn();
+    const handleCancel = vi.fn();
     const { user } = renderWithContexts(
       <InstanceForm
         handleCancel={handleCancel}
@@ -54,7 +54,7 @@ describe('<InstanceForm />', () => {
   });
 
   test('should call handleSubmit when Save button is clicked', async () => {
-    const handleSubmit = jest.fn();
+    const handleSubmit = vi.fn();
     const { user, container } = renderWithContexts(
       <InstanceForm
         handleCancel={() => {}}

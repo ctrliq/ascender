@@ -31,7 +31,7 @@ describe('<AnsibleSelect />', () => {
   });
 
   test('calls "onChange" on dropdown select change', async () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { user } = renderWithContexts(
       <AnsibleSelect
         id="bar"

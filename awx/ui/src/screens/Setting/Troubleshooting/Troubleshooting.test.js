@@ -10,7 +10,7 @@ import mockAllOptions from '../shared/data.allSettingOptions.json';
 import mockTroubleshootingSettings from './TroubleshootingEdit/data.defaultTroubleshootingSettings.json';
 import Troubleshooting from './Troubleshooting';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<Troubleshooting />', () => {
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('<Troubleshooting />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderTroubleshooting(initialEntries) {

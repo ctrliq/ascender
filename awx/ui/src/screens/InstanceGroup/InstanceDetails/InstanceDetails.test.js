@@ -9,12 +9,12 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import InstanceDetails from './InstanceDetails';
 
-jest.mock('../../../api');
-jest.mock('../../../hooks/useDebounce');
+vi.mock('../../../api');
+vi.mock('../../../hooks/useDebounce');
 // The component reads useParams from react-router-dom (the route
 // tree is v6); mock it there, keeping the rest of the module real.
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({
     id: 2,
     instanceId: 1,
@@ -103,7 +103,7 @@ function instanceDetail(overrides = {}) {
 }
 
 function setMe(me) {
-  jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({ me }));
+  vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({ me }));
 }
 
 function renderDetails() {
@@ -134,7 +134,7 @@ describe('<InstanceDetails/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render proper data', async () => {

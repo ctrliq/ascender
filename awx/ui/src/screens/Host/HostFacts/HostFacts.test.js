@@ -6,9 +6,9 @@ import HostFacts from './HostFacts';
 import mockHost from '../data.host.json';
 import mockHostFacts from '../data.hostFacts.json';
 
-jest.mock('../../../api/models/Hosts');
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('../../../api/models/Hosts');
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({
     id: 1,
     hostId: 1,
@@ -17,7 +17,7 @@ jest.mock('react-router', () => ({
 
 describe('<HostFacts />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {

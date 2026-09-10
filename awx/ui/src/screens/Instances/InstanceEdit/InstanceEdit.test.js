@@ -7,12 +7,12 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceEdit from './InstanceEdit';
 
-jest.mock('../../../api');
-jest.mock('../../../hooks/useDebounce');
+vi.mock('../../../api');
+vi.mock('../../../hooks/useDebounce');
 // The component reads useParams from react-router-dom (the route
 // tree is v6); mock it there, keeping the rest of the module real.
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({
     id: 42,
   }),
@@ -25,7 +25,7 @@ const updatedInstance = {
 
 // Stub the shared form: it surfaces the container's handleSubmit/handleCancel
 // through real buttons and renders the submit error so we can assert on it.
-jest.mock('../Shared/InstanceForm', () => {
+vi.mock('../Shared/InstanceForm', () => {
   const MockForm = ({ handleSubmit, handleCancel, submitError }) => (
     <div>
       <button
@@ -41,7 +41,7 @@ jest.mock('../Shared/InstanceForm', () => {
       {submitError ? <div data-testid="form-submit-error">error</div> : null}
     </div>
   );
-  return MockForm;
+  return { default: MockForm };
 });
 
 const instanceData = {
@@ -82,7 +82,7 @@ describe('<InstanceEdit/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully and fetches detail', async () => {

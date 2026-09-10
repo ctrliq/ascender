@@ -9,7 +9,7 @@ import {
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import TACACSDetail from './TACACSDetail';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<TACACSDetail />', () => {
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('<TACACSDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderDetail(context) {

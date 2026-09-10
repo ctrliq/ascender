@@ -4,24 +4,24 @@ import { screen, waitFor, act } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import NotificationTemplateForm from './NotificationTemplateForm';
 
-jest.mock('../../../api/models/NotificationTemplates');
-jest.mock('../../../api/models/Organizations');
+vi.mock('../../../api/models/NotificationTemplates');
+vi.mock('../../../api/models/Organizations');
 
 // react-ace (CodeEditor) does not expose its value as queryable text in jsdom,
 // so render the editor value as plain text to allow content assertions. The
 // custom-message fields use CodeEditorField, which is rendered from its formik
 // field value.
-jest.mock('components/CodeEditor', () => {
-  const ReactLib = require('react');
+vi.mock('components/CodeEditor', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
-    ...jest.requireActual('components/CodeEditor'),
+    ...(await vi.importActual('components/CodeEditor')),
     default: ({ value }) => ReactLib.createElement('div', null, value),
   };
 });
-jest.mock('components/CodeEditor/CodeEditorField', () => {
-  const ReactLib = require('react');
-  const { useField } = require('formik');
+vi.mock('components/CodeEditor/CodeEditorField', async () => {
+  const ReactLib = await vi.importActual('react');
+  const { useField } = await vi.importActual('formik');
   return {
     __esModule: true,
     default: ({ name }) => {
@@ -165,8 +165,8 @@ const renderForm = (props = {}) =>
       template={template}
       defaultMessages={defaultMessages}
       detailUrl="/notification_templates/3/detail"
-      onSubmit={jest.fn()}
-      onCancel={jest.fn()}
+      onSubmit={vi.fn()}
+      onCancel={vi.fn()}
       {...props}
     />
   );
@@ -209,7 +209,7 @@ describe('<NotificationTemplateForm />', () => {
   });
 
   test('should submit the assembled values', async () => {
-    const onSubmit = jest.fn();
+    const onSubmit = vi.fn();
     const { user } = renderForm({
       template: {
         ...template,
@@ -237,7 +237,7 @@ describe('<NotificationTemplateForm />', () => {
   });
 
   test('should clear the email password when reverted', async () => {
-    const onSubmit = jest.fn();
+    const onSubmit = vi.fn();
     const { container, user } = renderForm({
       template: emailTemplate,
       onSubmit,
@@ -264,7 +264,7 @@ describe('<NotificationTemplateForm />', () => {
   test.each(secretTemplates)(
     'should clear the $type secret when reverted',
     async ({ template: secretTemplate, fieldName }) => {
-      const onSubmit = jest.fn();
+      const onSubmit = vi.fn();
       const { container, user } = renderForm({
         template: secretTemplate,
         defaultMessages: allDefaultMessages,

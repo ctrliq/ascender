@@ -15,7 +15,7 @@ import {
 
 import InstanceGroupDetails from './InstanceGroupDetails';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // Build fresh objects per test so capability mutations don't leak between tests.
 function buildInstanceGroup(overrides = {}) {
@@ -52,7 +52,7 @@ describe('<InstanceGroupDetails/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render details properly', () => {

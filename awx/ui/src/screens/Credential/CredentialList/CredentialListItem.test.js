@@ -5,7 +5,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import { CredentialListItem } from '.';
 import { mockCredentials } from '../shared';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 function renderItem(credential) {
   return renderWithContexts(
@@ -26,7 +26,7 @@ function renderItem(credential) {
 
 describe('<CredentialListItem />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('edit button shown to users with edit capabilities', () => {

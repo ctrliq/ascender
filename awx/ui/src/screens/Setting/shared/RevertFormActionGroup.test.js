@@ -20,9 +20,9 @@ describe('RevertFormActionGroup', () => {
   });
 
   test('should call the expected handlers on click', async () => {
-    const onSubmit = jest.fn();
-    const onCancel = jest.fn();
-    const onRevert = jest.fn();
+    const onSubmit = vi.fn();
+    const onCancel = vi.fn();
+    const onRevert = vi.fn();
     const { user } = renderWithContexts(
       <RevertFormActionGroup
         onSubmit={onSubmit}

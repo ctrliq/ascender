@@ -5,12 +5,12 @@ import { Routes, Route } from 'react-router';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AllSchedules from './AllSchedules';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
-// resetMocks strips jest.fn implementations between tests, so capture the
+// resetMocks strips vi.fn implementations between tests, so capture the
 // props with a plain function instead of asserting on mock.calls.
 let mockScreenHeaderProps;
-jest.mock('components/ScreenHeader', () => ({
+vi.mock('components/ScreenHeader', () => ({
   __esModule: true,
   default: (props) => {
     mockScreenHeaderProps = props;
@@ -20,8 +20,8 @@ jest.mock('components/ScreenHeader', () => ({
 
 // Marker for the routed list so the assertion is about which branch of the
 // v6 <Routes> tree resolves.
-jest.mock('components/Schedule', () => {
-  const ReactLib = require('react');
+vi.mock('components/Schedule', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     ScheduleList: () => ReactLib.createElement('div', null, 'ScheduleList'),

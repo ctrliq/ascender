@@ -4,7 +4,7 @@ import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 import { SystemJobTemplatesAPI } from '../../../../../../api';
 import SystemJobTemplatesList from './SystemJobTemplatesList';
 
-jest.mock('../../../../../../api/models/SystemJobTemplates');
+vi.mock('../../../../../../api/models/SystemJobTemplates');
 
 const nodeResource = {
   id: 1,
@@ -34,11 +34,11 @@ const nodeResource = {
   execution_environment: null,
   job_type: 'cleanup_jobs',
 };
-const onUpdateNodeResource = jest.fn();
+const onUpdateNodeResource = vi.fn();
 
 describe('SystemJobTemplatesList', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Row selected when nodeResource id matches row id and clicking new row makes expected callback', async () => {

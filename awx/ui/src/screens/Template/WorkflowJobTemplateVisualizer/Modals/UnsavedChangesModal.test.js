@@ -4,9 +4,9 @@ import { WorkflowDispatchContext } from 'contexts/Workflow';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import UnsavedChangesModal from './UnsavedChangesModal';
 
-const dispatch = jest.fn();
-const onSaveAndExit = jest.fn();
-const onExit = jest.fn();
+const dispatch = vi.fn();
+const onSaveAndExit = vi.fn();
+const onExit = vi.fn();
 
 describe('UnsavedChangesModal', () => {
   beforeEach(() => {

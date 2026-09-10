@@ -13,8 +13,8 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import ProjectDetail from './ProjectDetail';
 
-jest.mock('../../../api');
-jest.mock('hooks/useBrandName', () => ({
+vi.mock('../../../api');
+vi.mock('hooks/useBrandName', () => ({
   __esModule: true,
   default: () => ({
     current: 'AWX',
@@ -102,7 +102,7 @@ describe('<ProjectDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render Details', () => {

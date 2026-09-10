@@ -6,7 +6,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import NotificationTemplateList from './NotificationTemplateList';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockTemplates = {
   data: {
@@ -56,7 +56,7 @@ describe('<NotificationTemplateList />', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should load notifications', async () => {
@@ -116,7 +116,7 @@ describe('<NotificationTemplateList />', () => {
   });
 
   test('should show a toast after a test notification resolves', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     NotificationTemplatesAPI.test.mockResolvedValue({
       data: { notification: 9182 },
     });
@@ -141,12 +141,12 @@ describe('<NotificationTemplateList />', () => {
     // runAllTimersAsync flushes the microtask queue between timers, so the
     // test() -> setTimeout(poll) -> readDetail() -> onAddToast chain resolves.
     await act(async () => {
-      await jest.runAllTimersAsync();
+      await vi.runAllTimersAsync();
     });
 
     // the toast carries the notification template name as its title
     expect(NotificationsAPI.readDetail).toHaveBeenCalledWith(9182);
     expect(screen.getByText('foobar')).toBeInTheDocument();
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 });

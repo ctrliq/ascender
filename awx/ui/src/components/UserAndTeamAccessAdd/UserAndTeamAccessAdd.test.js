@@ -5,10 +5,10 @@ import { UsersAPI, JobTemplatesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import UserAndTeamAccessAdd from './UserAndTeamAccessAdd';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
-const onError = jest.fn();
-const onClose = jest.fn();
+const onError = vi.fn();
+const onClose = vi.fn();
 
 const resources = {
   data: {
@@ -79,7 +79,7 @@ async function settleList() {
     await Promise.resolve();
   });
   await act(async () => {
-    jest.advanceTimersByTime(1200);
+    vi.advanceTimersByTime(1200);
   });
   await act(async () => {
     await Promise.resolve();
@@ -88,12 +88,12 @@ async function settleList() {
 
 describe('<UserAndTeamAccessAdd/>', () => {
   beforeEach(() => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
   });
 
   afterEach(() => {
-    jest.useRealTimers();
-    jest.resetAllMocks();
+    vi.useRealTimers();
+    vi.resetAllMocks();
   });
 
   function setup() {
@@ -110,7 +110,7 @@ describe('<UserAndTeamAccessAdd/>', () => {
     // a userEvent bound to the fake timers so its internal delays advance
     return {
       ...utils,
-      user: userEvent.setup({ advanceTimers: jest.advanceTimersByTime }),
+      user: userEvent.setup({ advanceTimers: vi.advanceTimersByTime }),
     };
   }
 

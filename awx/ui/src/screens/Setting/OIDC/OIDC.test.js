@@ -8,7 +8,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import OIDC from './OIDC';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<OIDC />', () => {
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe('<OIDC />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderOIDC(initialEntries) {

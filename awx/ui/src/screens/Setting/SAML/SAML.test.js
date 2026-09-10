@@ -8,7 +8,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import SAML from './SAML';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<SAML />', () => {
   beforeEach(() => {
@@ -37,7 +37,7 @@ describe('<SAML />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderSAML(initialEntries) {

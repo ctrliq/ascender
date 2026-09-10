@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import MultiButtonToggle from './MultiButtonToggle';
 
 describe('<MultiButtonToggle />', () => {
-  const onChange = jest.fn();
+  const onChange = vi.fn();
 
   const renderToggle = (value = 'yaml') =>
     render(
@@ -20,7 +20,7 @@ describe('<MultiButtonToggle />', () => {
     );
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should render buttons successfully', () => {

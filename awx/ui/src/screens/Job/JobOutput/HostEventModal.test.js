@@ -230,7 +230,7 @@ describe('HostEventModal', () => {
   });
 
   test('should pass onClose to Modal', async () => {
-    const onClose = jest.fn();
+    const onClose = vi.fn();
     const { user } = renderWithContexts(
       <HostEventModal hostEvent={hostEvent} onClose={onClose} isOpen />
     );

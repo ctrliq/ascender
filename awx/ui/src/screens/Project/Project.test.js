@@ -8,7 +8,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockDetails from './data.project.json';
 import Project from './Project';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const mockMe = {
   is_super_user: true,
@@ -43,12 +43,12 @@ function renderProject(initialEntry = '/projects/1/details') {
 
 describe('<Project />', () => {
   beforeEach(() => {
-    OrganizationsAPI.read = jest.fn();
-    ProjectsAPI.readDetail = jest.fn();
+    OrganizationsAPI.read = vi.fn();
+    ProjectsAPI.readDetail = vi.fn();
     ProjectsAPI.readDetail.mockResolvedValue({ data: mockDetails });
     OrganizationsAPI.read.mockImplementation(getOrganizations);
     // the resolved detail route mounts components that read the brand name
-    RootAPI.readAssetVariables = jest
+    RootAPI.readAssetVariables = vi
       .fn()
       .mockResolvedValue({ data: { BRAND_NAME: 'AWX' } });
   });

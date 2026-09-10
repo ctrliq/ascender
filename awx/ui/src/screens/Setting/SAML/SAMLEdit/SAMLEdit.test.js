@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import SAMLEdit from './SAMLEdit';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<SAMLEdit />', () => {
   let history;
@@ -45,7 +45,7 @@ describe('<SAMLEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderEdit() {

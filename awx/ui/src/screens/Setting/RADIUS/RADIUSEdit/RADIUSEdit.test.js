@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import RADIUSEdit from './RADIUSEdit';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<RADIUSEdit />', () => {
   let history;
@@ -25,7 +25,7 @@ describe('<RADIUSEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderEdit() {

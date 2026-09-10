@@ -21,15 +21,15 @@ import mockJobEventsData from './data.job_events.json';
 // setupTests' console-error trap with no settle-able tooltip. None of these
 // tests assert tooltip content, so render the Tooltip as a passthrough (no
 // timers) to keep the delete-flow assertions intact.
-jest.mock('@patternfly/react-core', () => {
-  const actual = jest.requireActual('@patternfly/react-core');
+vi.mock('@patternfly/react-core', async () => {
+  const actual = await vi.importActual('@patternfly/react-core');
   return {
     ...actual,
     Tooltip: ({ children }) => children,
   };
 });
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const applyJobEventMock = (mockJobEvents) => {
   const mockReadEvents = async (jobId, params) => {
@@ -44,13 +44,13 @@ const applyJobEventMock = (mockJobEvents) => {
       },
     };
   };
-  JobsAPI.readEvents = jest.fn().mockImplementation(mockReadEvents);
-  JobsAPI.readChildrenSummary = jest.fn().mockResolvedValue({
+  JobsAPI.readEvents = vi.fn().mockImplementation(mockReadEvents);
+  JobsAPI.readChildrenSummary = vi.fn().mockResolvedValue({
     data: {
       1: [0, 100],
     },
   });
-  JobsAPI.destroy = jest.fn().mockResolvedValue({});
+  JobsAPI.destroy = vi.fn().mockResolvedValue({});
 };
 
 // Wait until JobOutput's initial events load settles (the output area's
@@ -85,7 +85,7 @@ describe('<JobOutput />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should make expected api call for delete', async () => {

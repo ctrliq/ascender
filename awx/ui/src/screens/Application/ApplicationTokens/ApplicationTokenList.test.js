@@ -7,8 +7,8 @@ import { ApplicationsAPI, TokensAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ApplicationTokenList from './ApplicationTokenList';
 
-jest.mock('../../../api/models/Applications');
-jest.mock('../../../api/models/Tokens');
+vi.mock('../../../api/models/Applications');
+vi.mock('../../../api/models/Tokens');
 
 const tokens = {
   data: {
@@ -94,7 +94,7 @@ describe('<ApplicationTokenList/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should have data fetched and render 2 rows', async () => {

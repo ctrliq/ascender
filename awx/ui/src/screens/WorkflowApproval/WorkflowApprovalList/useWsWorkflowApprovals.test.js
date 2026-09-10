@@ -1,6 +1,6 @@
 import React from 'react';
 import { act } from '@testing-library/react';
-import WS from 'jest-websocket-mock';
+import WS from 'vitest-websocket-mock';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import useWsWorkflowApprovals from './useWsWorkflowApprovals';
 
@@ -14,19 +14,22 @@ function Test({ workflowApprovals, fetchWorkflowApprovals }) {
   );
 }
 
+/*
+Mock timers don’t play well with vitest-websocket-mock, so we stub out
+throttling to resolve immediately. Declared at the top level because vitest
+hoists module mocks, and it rejects one written inside a block on the grounds
+that its apparent position would misrepresent when it runs.
+*/
+vi.mock('../../../hooks/useThrottle', () => ({
+  __esModule: true,
+  default: vi.fn((val) => val),
+}));
+
 describe('useWsWorkflowApprovals hook', () => {
   let debug;
   beforeEach(() => {
     debug = global.console.debug; // eslint-disable-line prefer-destructuring
     global.console.debug = () => {};
-    /*
-    Jest mock timers don’t play well with jest-websocket-mock,
-    so we'll stub out throttling to resolve immediately
-    */
-    jest.mock('../../../hooks/useThrottle', () => ({
-      __esModule: true,
-      default: jest.fn((val) => val),
-    }));
   });
 
   afterEach(() => {
@@ -78,7 +81,7 @@ describe('useWsWorkflowApprovals hook', () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
     const workflowApprovals = [{ id: 1, status: 'successful' }];
-    const fetchWorkflowApprovals = jest.fn(() => []);
+    const fetchWorkflowApprovals = vi.fn(() => []);
     await act(async () => {
       renderWithContexts(
         <Test
@@ -106,7 +109,7 @@ describe('useWsWorkflowApprovals hook', () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
     const workflowApprovals = [{ id: 1, status: 'pending' }];
-    const fetchWorkflowApprovals = jest.fn(() => []);
+    const fetchWorkflowApprovals = vi.fn(() => []);
     await act(async () => {
       renderWithContexts(
         <Test
@@ -134,7 +137,7 @@ describe('useWsWorkflowApprovals hook', () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
     const workflowApprovals = [{ id: 1, status: 'successful' }];
-    const fetchWorkflowApprovals = jest.fn(() => []);
+    const fetchWorkflowApprovals = vi.fn(() => []);
     await act(async () => {
       renderWithContexts(
         <Test

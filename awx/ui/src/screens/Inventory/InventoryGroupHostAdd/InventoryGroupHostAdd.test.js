@@ -6,23 +6,21 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroupHostAdd from './InventoryGroupHostAdd';
 import mockHost from '../shared/data.host.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
-jest.mock(
-  'components/HostForm',
-  () =>
-    ({ handleSubmit, handleCancel, submitError }) => (
-      <div>
-        <button
-          type="button"
-          aria-label="mock-submit"
-          onClick={() => handleSubmit(mockHost)}
-        />
-        <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
-        {submitError ? <div data-testid="mock-submit-error" /> : null}
-      </div>
-    )
-);
+vi.mock('components/HostForm', () => ({
+  default: ({ handleSubmit, handleCancel, submitError }) => (
+    <div>
+      <button
+        type="button"
+        aria-label="mock-submit"
+        onClick={() => handleSubmit(mockHost)}
+      />
+      <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
+      {submitError ? <div data-testid="mock-submit-error" /> : null}
+    </div>
+  ),
+}));
 
 function renderHostAdd(history) {
   return renderWithContexts(
@@ -41,7 +39,7 @@ describe('<InventoryGroupHostAdd />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('handleSubmit should post to api', async () => {

@@ -4,7 +4,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceGroupForm from './InstanceGroupForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const instanceGroup = {
   id: 7,
@@ -44,12 +44,12 @@ describe('<InstanceGroupForm/>', () => {
   let onSubmit;
 
   beforeEach(() => {
-    onCancel = jest.fn();
-    onSubmit = jest.fn();
+    onCancel = vi.fn();
+    onSubmit = vi.fn();
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function setup() {

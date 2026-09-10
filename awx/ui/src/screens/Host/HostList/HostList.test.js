@@ -9,7 +9,7 @@ import {
 
 import HostList from './HostList';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockHosts = [
   {
@@ -111,7 +111,7 @@ describe('<HostList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {
@@ -162,7 +162,7 @@ describe('<HostList />', () => {
   });
 
   test('api is called to delete hosts for each selected host.', async () => {
-    HostsAPI.destroy = jest.fn().mockResolvedValue({});
+    HostsAPI.destroy = vi.fn().mockResolvedValue({});
     const { user } = renderWithContexts(<HostList />);
     await screen.findByRole('link', { name: 'Host 1' });
 

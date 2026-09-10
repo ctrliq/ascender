@@ -5,7 +5,7 @@ import { LabelsAPI, InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryEdit from './InventoryEdit';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockInventory = {
   id: 1,
@@ -62,29 +62,27 @@ const submitInstanceGroups = [
 ];
 const submitLabels = [{ name: 'label' }, { name: 'Major', id: 2 }];
 
-jest.mock(
-  '../shared/InventoryForm',
-  () =>
-    ({ onSubmit, onCancel, submitError }) => (
-      <div>
-        <button
-          type="button"
-          aria-label="mock-submit"
-          onClick={() =>
-            onSubmit({
-              name: 'Foo',
-              id: 13,
-              organization: { id: 1 },
-              instanceGroups: submitInstanceGroups,
-              labels: submitLabels,
-            })
-          }
-        />
-        <button type="button" aria-label="mock-cancel" onClick={onCancel} />
-        {submitError ? <div data-testid="mock-submit-error" /> : null}
-      </div>
-    )
-);
+vi.mock('../shared/InventoryForm', () => ({
+  default: ({ onSubmit, onCancel, submitError }) => (
+    <div>
+      <button
+        type="button"
+        aria-label="mock-submit"
+        onClick={() =>
+          onSubmit({
+            name: 'Foo',
+            id: 13,
+            organization: { id: 1 },
+            instanceGroups: submitInstanceGroups,
+            labels: submitLabels,
+          })
+        }
+      />
+      <button type="button" aria-label="mock-cancel" onClick={onCancel} />
+      {submitError ? <div data-testid="mock-submit-error" /> : null}
+    </div>
+  ),
+}));
 
 describe('<InventoryEdit />', () => {
   beforeEach(() => {
@@ -104,7 +102,7 @@ describe('<InventoryEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {

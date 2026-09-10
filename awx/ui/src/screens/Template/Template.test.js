@@ -8,8 +8,8 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Template from './Template';
 import mockJobTemplateData from './shared/data.job_template.json';
 
-jest.mock('../../api/models/JobTemplates');
-jest.mock('../../api/models/Organizations');
+vi.mock('../../api/models/JobTemplates');
+vi.mock('../../api/models/Organizations');
 
 const mockMe = {
   is_super_user: true,
@@ -73,7 +73,7 @@ describe('<Template />', () => {
     });
   });
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {

@@ -5,7 +5,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import RelatedTemplateList from './RelatedTemplateList';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const mockTemplates = [
   {
@@ -70,7 +70,7 @@ describe('<RelatedTemplateList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     global.console.debug = debug;
   });
 

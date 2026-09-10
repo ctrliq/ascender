@@ -6,20 +6,20 @@ import { NotificationTemplatesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import NotificationTemplate from './NotificationTemplate';
 
-jest.mock('../../api/models/NotificationTemplates');
+vi.mock('../../api/models/NotificationTemplates');
 
 // Markers for the routed tab panels, so assertions are about which branch of
 // the nested v6 <Routes> tree resolves.
-jest.mock('./NotificationTemplateDetail', () => {
-  const ReactLib = require('react');
+vi.mock('./NotificationTemplateDetail', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>
       ReactLib.createElement('div', null, 'NotificationTemplateDetail'),
   };
 });
-jest.mock('./NotificationTemplateEdit', () => {
-  const ReactLib = require('react');
+vi.mock('./NotificationTemplateEdit', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>
@@ -57,7 +57,7 @@ describe('<NotificationTemplate />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('fetches the template detail and options', async () => {

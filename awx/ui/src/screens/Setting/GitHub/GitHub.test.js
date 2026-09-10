@@ -8,7 +8,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import GitHub from './GitHub';
 
-jest.mock('../../../api/models/Settings');
+vi.mock('../../../api/models/Settings');
 
 async function setup(initialEntry) {
   const history = createMemoryHistory({ initialEntries: [initialEntry] });
@@ -98,7 +98,7 @@ describe('<GitHub />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render github default details', async () => {

@@ -4,11 +4,11 @@ import { CredentialsAPI, ExecutionEnvironmentsAPI, RootAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AdHocCommandsWizard from './AdHocCommandsWizard';
 
-jest.mock('../../api/models/CredentialTypes');
-jest.mock('../../api/models/Inventories');
-jest.mock('../../api/models/Credentials');
-jest.mock('../../api/models/ExecutionEnvironments');
-jest.mock('../../api/models/Root');
+vi.mock('../../api/models/CredentialTypes');
+vi.mock('../../api/models/Inventories');
+vi.mock('../../api/models/Credentials');
+vi.mock('../../api/models/ExecutionEnvironments');
+vi.mock('../../api/models/Root');
 
 const moduleOptions = [
   ['command', 'command'],
@@ -49,7 +49,7 @@ const nextButton = () => screen.getByRole('button', { name: 'Next' });
 const launchButton = () => screen.getByRole('button', { name: 'Launch' });
 
 describe('<AdHocCommandsWizard/>', () => {
-  const onLaunch = jest.fn();
+  const onLaunch = vi.fn();
   beforeEach(() => {
     RootAPI.readAssetVariables.mockResolvedValue({
       data: {
@@ -58,7 +58,7 @@ describe('<AdHocCommandsWizard/>', () => {
     });
   });
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should mount properly', async () => {

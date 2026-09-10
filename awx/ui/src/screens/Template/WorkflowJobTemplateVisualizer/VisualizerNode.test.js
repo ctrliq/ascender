@@ -8,8 +8,8 @@ import { JobTemplatesAPI, WorkflowJobTemplateNodesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import VisualizerNode from './VisualizerNode';
 
-jest.mock('../../../api/models/JobTemplates');
-jest.mock('../../../api/models/WorkflowJobTemplateNodes');
+vi.mock('../../../api/models/JobTemplates');
+vi.mock('../../../api/models/WorkflowJobTemplateNodes');
 
 WorkflowJobTemplateNodesAPI.readCredentials.mockResolvedValue({
   data: {
@@ -46,9 +46,9 @@ const mockedContext = {
   nodes: [nodeWithJT],
 };
 
-const dispatch = jest.fn();
-const updateHelpText = jest.fn();
-const updateNodeHelp = jest.fn();
+const dispatch = vi.fn();
+const updateHelpText = vi.fn();
+const updateNodeHelp = vi.fn();
 
 // The NodeG container <g id="node-{id}"> drives hover/leave.
 const nodeG = (id = 2) => document.querySelector(`#node-${id}`);
@@ -84,7 +84,7 @@ describe('VisualizerNode', () => {
       );
     });
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     test('Displays unified job template name inside node', () => {
@@ -233,7 +233,7 @@ describe('VisualizerNode', () => {
       );
     });
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     test('Displays correct help text when hovering over node while adding link', () => {
@@ -423,7 +423,7 @@ describe('VisualizerNode', () => {
       );
     });
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     test('Attempts to fetch full unified job template on view', async () => {

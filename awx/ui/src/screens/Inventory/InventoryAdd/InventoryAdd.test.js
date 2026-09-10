@@ -5,7 +5,7 @@ import { LabelsAPI, InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryAdd from './InventoryAdd';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const submitValues = {
   name: 'new Foo',
@@ -17,21 +17,19 @@ const submitValues = {
   labels: [{ name: 'label' }],
 };
 
-jest.mock(
-  '../shared/InventoryForm',
-  () =>
-    ({ onSubmit, onCancel, submitError }) => (
-      <div>
-        <button
-          type="button"
-          aria-label="mock-submit"
-          onClick={() => onSubmit(submitValues)}
-        />
-        <button type="button" aria-label="mock-cancel" onClick={onCancel} />
-        {submitError ? <div data-testid="mock-submit-error" /> : null}
-      </div>
-    )
-);
+vi.mock('../shared/InventoryForm', () => ({
+  default: ({ onSubmit, onCancel, submitError }) => (
+    <div>
+      <button
+        type="button"
+        aria-label="mock-submit"
+        onClick={() => onSubmit(submitValues)}
+      />
+      <button type="button" aria-label="mock-cancel" onClick={onCancel} />
+      {submitError ? <div data-testid="mock-submit-error" /> : null}
+    </div>
+  ),
+}));
 
 describe('<InventoryAdd />', () => {
   beforeEach(() => {
@@ -40,7 +38,7 @@ describe('<InventoryAdd />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Initially renders successfully', () => {

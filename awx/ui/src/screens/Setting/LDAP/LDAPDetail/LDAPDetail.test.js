@@ -11,7 +11,7 @@ import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import mockLDAP from '../../shared/data.ldapSettings.json';
 import LDAPDetail from './LDAPDetail';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<LDAPDetail />', () => {
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('<LDAPDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderDetail(category = 'default', context = {}) {

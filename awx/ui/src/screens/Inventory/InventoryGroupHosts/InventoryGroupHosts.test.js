@@ -5,8 +5,8 @@ import { Routes, Route } from 'react-router';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroupHosts from './InventoryGroupHosts';
 
-jest.mock('../../../api');
-jest.mock('./InventoryGroupHostList', () => {
+vi.mock('../../../api');
+vi.mock('./InventoryGroupHostList', () => {
   const InventoryGroupHostList = () => (
     <div aria-label="mock-group-host-list" />
   );

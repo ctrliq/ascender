@@ -7,7 +7,7 @@ import english from '../../../locales/en/messages';
 import ConstructedInventorySyncButton from './ConstructedInventorySyncButton';
 import '@testing-library/jest-dom';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const inventory = { id: 100, name: 'Constructed Inventory' };
 

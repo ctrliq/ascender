@@ -1,5 +1,5 @@
 import getRouteConfig from './routeConfig';
-jest.mock('util/webWorker', () => jest.fn());
+vi.mock('util/webWorker', () => ({ default: vi.fn() }));
 
 const userProfile = {
   isSuperUser: false,

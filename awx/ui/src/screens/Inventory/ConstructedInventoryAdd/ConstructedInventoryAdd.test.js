@@ -5,7 +5,7 @@ import { ConstructedInventoriesAPI, InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryAdd from './ConstructedInventoryAdd';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const formData = {
   name: 'Mock',
@@ -17,23 +17,25 @@ const formData = {
   instanceGroups: [],
 };
 
-jest.mock(
-  '../shared/ConstructedInventoryForm',
-  () =>
-    function ConstructedInventoryForm({ onSubmit, onCancel, submitError }) {
-      return (
-        <div>
-          <button
-            type="button"
-            aria-label="mock-submit"
-            onClick={() => onSubmit(formData)}
-          />
-          <button type="button" aria-label="mock-cancel" onClick={onCancel} />
-          {submitError ? <div data-testid="mock-submit-error" /> : null}
-        </div>
-      );
-    }
-);
+vi.mock('../shared/ConstructedInventoryForm', () => ({
+  default: function ConstructedInventoryForm({
+    onSubmit,
+    onCancel,
+    submitError,
+  }) {
+    return (
+      <div>
+        <button
+          type="button"
+          aria-label="mock-submit"
+          onClick={() => onSubmit(formData)}
+        />
+        <button type="button" aria-label="mock-cancel" onClick={onCancel} />
+        {submitError ? <div data-testid="mock-submit-error" /> : null}
+      </div>
+    );
+  },
+}));
 
 describe('<ConstructedInventoryAdd />', () => {
   beforeEach(() => {
@@ -58,7 +60,7 @@ describe('<ConstructedInventoryAdd />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should navigate to inventories list on cancel', async () => {

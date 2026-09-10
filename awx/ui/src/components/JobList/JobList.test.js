@@ -16,7 +16,7 @@ import {
 } from '../../../testUtils/rtlContexts';
 import JobList from './JobList';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const mockResults = [
   {
@@ -165,7 +165,7 @@ describe('<JobList />', () => {
 
   afterEach(() => {
     global.console.debug = debug;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {
@@ -210,12 +210,12 @@ describe('<JobList />', () => {
     UnifiedJobsAPI.read.mockResolvedValue({
       data: { count: 6, results: deletableResults },
     });
-    AdHocCommandsAPI.destroy = jest.fn().mockResolvedValue({});
-    InventoryUpdatesAPI.destroy = jest.fn().mockResolvedValue({});
-    JobsAPI.destroy = jest.fn().mockResolvedValue({});
-    ProjectUpdatesAPI.destroy = jest.fn().mockResolvedValue({});
-    SystemJobsAPI.destroy = jest.fn().mockResolvedValue({});
-    WorkflowJobsAPI.destroy = jest.fn().mockResolvedValue({});
+    AdHocCommandsAPI.destroy = vi.fn().mockResolvedValue({});
+    InventoryUpdatesAPI.destroy = vi.fn().mockResolvedValue({});
+    JobsAPI.destroy = vi.fn().mockResolvedValue({});
+    ProjectUpdatesAPI.destroy = vi.fn().mockResolvedValue({});
+    SystemJobsAPI.destroy = vi.fn().mockResolvedValue({});
+    WorkflowJobsAPI.destroy = vi.fn().mockResolvedValue({});
 
     const { user } = renderWithContexts(<JobList />);
     await screen.findByRole('link', { name: '1 — job 1' });
@@ -260,7 +260,7 @@ describe('<JobList />', () => {
         ],
       },
     });
-    ProjectUpdatesAPI.destroy = jest.fn().mockResolvedValue({});
+    ProjectUpdatesAPI.destroy = vi.fn().mockResolvedValue({});
     const jobListParams = {
       order_by: '-finished',
       not__launch_type: 'sync',
@@ -387,12 +387,12 @@ describe('<JobList />', () => {
         })),
       },
     });
-    AdHocCommandsAPI.cancel = jest.fn().mockResolvedValue({});
-    InventoryUpdatesAPI.cancel = jest.fn().mockResolvedValue({});
-    JobsAPI.cancel = jest.fn().mockResolvedValue({});
-    ProjectUpdatesAPI.cancel = jest.fn().mockResolvedValue({});
-    SystemJobsAPI.cancel = jest.fn().mockResolvedValue({});
-    WorkflowJobsAPI.cancel = jest.fn().mockResolvedValue({});
+    AdHocCommandsAPI.cancel = vi.fn().mockResolvedValue({});
+    InventoryUpdatesAPI.cancel = vi.fn().mockResolvedValue({});
+    JobsAPI.cancel = vi.fn().mockResolvedValue({});
+    ProjectUpdatesAPI.cancel = vi.fn().mockResolvedValue({});
+    SystemJobsAPI.cancel = vi.fn().mockResolvedValue({});
+    WorkflowJobsAPI.cancel = vi.fn().mockResolvedValue({});
 
     const { user } = renderWithContexts(<JobList />);
     await screen.findByRole('link', { name: '1 — job 1' });

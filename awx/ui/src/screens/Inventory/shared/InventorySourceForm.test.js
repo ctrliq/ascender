@@ -9,7 +9,7 @@ import {
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventorySourceForm from './InventorySourceForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // Source choices returned by InventorySourcesAPI.readOptions on mount. The
 // component filters out the 'file' choice and renders the rest as the Source
@@ -58,7 +58,7 @@ describe('<InventorySourceForm />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should initially display primary form fields', async () => {
@@ -91,7 +91,7 @@ describe('<InventorySourceForm />', () => {
   });
 
   test('should show field error when form is invalid', async () => {
-    const onSubmit = jest.fn();
+    const onSubmit = vi.fn();
     const { user, container } = renderWithContexts(
       <InventorySourceForm onCancel={() => {}} onSubmit={onSubmit} />
     );
@@ -115,7 +115,7 @@ describe('<InventorySourceForm />', () => {
   });
 
   test('should call onSubmit when Save button is clicked', async () => {
-    const onSubmit = jest.fn();
+    const onSubmit = vi.fn();
     const { user, container } = renderWithContexts(
       <InventorySourceForm onCancel={() => {}} onSubmit={onSubmit} />
     );
@@ -133,7 +133,7 @@ describe('<InventorySourceForm />', () => {
   });
 
   test('calls "onCancel" when Cancel button is clicked', async () => {
-    const onCancel = jest.fn();
+    const onCancel = vi.fn();
     const { user } = renderWithContexts(
       <InventorySourceForm onCancel={onCancel} onSubmit={() => {}} />
     );
@@ -145,7 +145,7 @@ describe('<InventorySourceForm />', () => {
   });
 
   test('should display ContentError on throw', async () => {
-    InventorySourcesAPI.readOptions = jest.fn();
+    InventorySourcesAPI.readOptions = vi.fn();
     InventorySourcesAPI.readOptions.mockRejectedValueOnce(new Error());
     renderWithContexts(
       <InventorySourceForm onCancel={() => {}} onSubmit={() => {}} />

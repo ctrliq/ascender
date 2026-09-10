@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import WS from 'jest-websocket-mock';
+import WS from 'vitest-websocket-mock';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import useWsProjects from './useWsProjects';
 

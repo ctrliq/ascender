@@ -9,7 +9,7 @@ import {
 import UserDetail from './UserDetail';
 import mockDetails from '../data.user.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<UserDetail />', () => {
   test('initially renders successfully', () => {

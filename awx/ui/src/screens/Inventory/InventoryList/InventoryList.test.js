@@ -8,9 +8,9 @@ import {
 
 import InventoryList from './InventoryList';
 
-jest.mock('../../../api/models/Inventories');
-jest.mock('../../../api/models/JobTemplates');
-jest.mock('../../../api/models/WorkflowJobTemplates');
+vi.mock('../../../api/models/Inventories');
+vi.mock('../../../api/models/JobTemplates');
+vi.mock('../../../api/models/WorkflowJobTemplates');
 
 const mockInventories = [
   {
@@ -118,7 +118,7 @@ describe('<InventoryList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     global.console.debug = debug;
   });
 

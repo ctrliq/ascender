@@ -7,40 +7,40 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockHost from './data.host.json';
 import Host from './Host';
 
-jest.mock('../../api/models/Hosts');
+vi.mock('../../api/models/Hosts');
 
 // Markers for the routed tab panels, so assertions are about which branch of
 // the nested v6 <Routes> tree resolves.
-jest.mock('./HostDetail', () => {
-  const ReactLib = require('react');
+vi.mock('./HostDetail', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'HostDetail'),
   };
 });
-jest.mock('./HostEdit', () => {
-  const ReactLib = require('react');
+vi.mock('./HostEdit', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'HostEdit'),
   };
 });
-jest.mock('./HostFacts', () => {
-  const ReactLib = require('react');
+vi.mock('./HostFacts', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'HostFacts'),
   };
 });
-jest.mock('./HostGroups', () => {
-  const ReactLib = require('react');
+vi.mock('./HostGroups', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'HostGroups subtree'),
   };
 });
-jest.mock('components/JobList', () => {
-  const ReactLib = require('react');
+vi.mock('components/JobList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'JobList'),
@@ -65,7 +65,7 @@ describe('<Host />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('fetches the host detail', async () => {

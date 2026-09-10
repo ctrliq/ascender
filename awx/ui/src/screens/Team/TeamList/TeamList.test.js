@@ -5,7 +5,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import TeamList from './TeamList';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockAPITeamList = {
   data: {
@@ -34,7 +34,7 @@ const mockAPITeamList = {
 };
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('<TeamList /> with full permissions', () => {

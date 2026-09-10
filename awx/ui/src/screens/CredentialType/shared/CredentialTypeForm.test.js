@@ -5,7 +5,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import CredentialTypeForm from './CredentialTypeForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const credentialType = {
   id: 28,
@@ -48,8 +48,8 @@ describe('<CredentialTypeForm/>', () => {
   let onSubmit;
 
   const renderForm = () => {
-    onCancel = jest.fn();
-    onSubmit = jest.fn();
+    onCancel = vi.fn();
+    onSubmit = vi.fn();
     return renderWithContexts(
       <CredentialTypeForm
         onCancel={onCancel}
@@ -60,7 +60,7 @@ describe('<CredentialTypeForm/>', () => {
   };
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should display form fields properly', () => {

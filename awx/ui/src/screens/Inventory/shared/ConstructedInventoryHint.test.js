@@ -7,8 +7,8 @@ import '@testing-library/jest-dom';
 import { settleTooltips } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryHint from './ConstructedInventoryHint';
 
-jest.mock('../../../api');
-jest.mock('contexts/Config', () => ({
+vi.mock('../../../api');
+vi.mock('contexts/Config', () => ({
   useConfig: () => ({
     custom_base_path: '',
     version: '1.0.0',
@@ -54,7 +54,7 @@ describe('<ConstructedInventoryHint />', () => {
         writeText: () => {},
       },
     });
-    jest.spyOn(navigator.clipboard, 'writeText');
+    vi.spyOn(navigator.clipboard, 'writeText');
 
     render(
       <I18nProvider i18n={i18n}>

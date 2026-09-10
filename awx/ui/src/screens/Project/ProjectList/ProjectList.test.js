@@ -9,7 +9,7 @@ import {
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ProjectList from './ProjectList';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockProjects = [
   {
@@ -115,7 +115,7 @@ describe('<ProjectList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should load and render projects', async () => {

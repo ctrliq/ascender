@@ -9,11 +9,11 @@ import HostDetail from './HostDetail';
 
 import mockHost from '../data.host.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<HostDetail />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('User has edit permissions', () => {

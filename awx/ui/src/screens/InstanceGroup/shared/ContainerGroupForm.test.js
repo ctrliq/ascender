@@ -5,7 +5,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ContainerGroupForm from './ContainerGroupForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const instanceGroup = {
   id: 7,
@@ -75,8 +75,8 @@ describe('<ContainerGroupForm/>', () => {
   let onSubmit;
 
   beforeEach(() => {
-    onCancel = jest.fn();
-    onSubmit = jest.fn();
+    onCancel = vi.fn();
+    onSubmit = vi.fn();
     CredentialsAPI.read.mockResolvedValue({
       data: { count: 0, results: [] },
     });
@@ -86,7 +86,7 @@ describe('<ContainerGroupForm/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function setup() {

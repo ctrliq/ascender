@@ -13,7 +13,7 @@ import {
 import InventorySourceDetail from './InventorySourceDetail';
 import mockInvSource from '../shared/data.inventory_source.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('InventorySourceDetail', () => {
   beforeEach(() => {
@@ -48,7 +48,7 @@ describe('InventorySourceDetail', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render cancel button while job is running', async () => {

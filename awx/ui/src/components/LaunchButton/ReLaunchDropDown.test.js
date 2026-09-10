@@ -13,7 +13,7 @@ describe('ReLaunchDropDown', () => {
   });
 
   test('dropdown have expected items and callbacks', async () => {
-    const handleRelaunch = jest.fn();
+    const handleRelaunch = vi.fn();
     const { user } = renderWithContexts(
       <ReLaunchDropDown handleRelaunch={handleRelaunch} />
     );
@@ -38,7 +38,7 @@ describe('ReLaunchDropDown', () => {
   });
 
   test('dropdown isPrimary have expected items and callbacks', async () => {
-    const handleRelaunch = jest.fn();
+    const handleRelaunch = vi.fn();
     const { user } = renderWithContexts(
       <ReLaunchDropDown isPrimary handleRelaunch={handleRelaunch} />
     );

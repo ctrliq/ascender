@@ -8,7 +8,7 @@ import AdvancedInventoryHostList from './AdvancedInventoryHostList';
 import mockInventory from '../shared/data.inventory.json';
 import mockHosts from '../shared/data.hosts.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const clonedInventory = {
   ...mockInventory,
@@ -56,7 +56,7 @@ describe('<AdvancedInventoryHostList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should fetch hosts from api and render them in the list', async () => {

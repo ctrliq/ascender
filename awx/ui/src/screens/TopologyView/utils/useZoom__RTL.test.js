@@ -16,7 +16,7 @@ function renderWithI18n(component) {
 }
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 describe('useZoom', () => {
   test('hook returns a set of zoom functions', async () => {
@@ -36,12 +36,12 @@ describe('useZoom', () => {
   });
   test('user can zoom in', async () => {
     const hook = useZoom('.parent', '.child');
-    jest.spyOn(hook, 'zoomIn').mockReturnValueOnce(jest.fn());
+    vi.spyOn(hook, 'zoomIn').mockReturnValueOnce(vi.fn());
     renderWithI18n(
       <>
         <Header
           title={`Topology View`}
-          handleSwitchToggle={jest.fn()}
+          handleSwitchToggle={vi.fn()}
           toggleState={true}
           zoomIn={hook.zoomIn}
           zoomOut={hook.zoomOut}
@@ -63,12 +63,12 @@ describe('useZoom', () => {
   });
   test('user can zoom out', async () => {
     const hook = useZoom('.parent', '.child');
-    jest.spyOn(hook, 'zoomOut').mockReturnValueOnce(jest.fn());
+    vi.spyOn(hook, 'zoomOut').mockReturnValueOnce(vi.fn());
     renderWithI18n(
       <>
         <Header
           title={`Topology View`}
-          handleSwitchToggle={jest.fn()}
+          handleSwitchToggle={vi.fn()}
           toggleState={true}
           zoomIn={hook.zoomIn}
           zoomOut={hook.zoomOut}
@@ -90,12 +90,12 @@ describe('useZoom', () => {
   });
   test('user can zoom fit', async () => {
     const hook = useZoom('.parent', '.child');
-    jest.spyOn(hook, 'zoomFit').mockReturnValueOnce(jest.fn());
+    vi.spyOn(hook, 'zoomFit').mockReturnValueOnce(vi.fn());
     renderWithI18n(
       <>
         <Header
           title={`Topology View`}
-          handleSwitchToggle={jest.fn()}
+          handleSwitchToggle={vi.fn()}
           toggleState={true}
           zoomIn={hook.zoomIn}
           zoomOut={hook.zoomOut}
@@ -117,12 +117,12 @@ describe('useZoom', () => {
   });
   test('user can reset zoom', async () => {
     const hook = useZoom('.parent', '.child');
-    jest.spyOn(hook, 'resetZoom').mockReturnValueOnce(jest.fn());
+    vi.spyOn(hook, 'resetZoom').mockReturnValueOnce(vi.fn());
     renderWithI18n(
       <>
         <Header
           title={`Topology View`}
-          handleSwitchToggle={jest.fn()}
+          handleSwitchToggle={vi.fn()}
           toggleState={true}
           zoomIn={hook.zoomIn}
           zoomOut={hook.zoomOut}

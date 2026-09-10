@@ -1,37 +1,40 @@
 /*
- * Jest mock for src/themeRegistry.js.
+ * Stand-in for src/themeRegistry.js under the test runner.
  *
  * The real module uses webpack's `require.context` (including an inline-loader
  * form `!!../config/themeMetaLoader.js!./themes/`) to discover theme CSS files
- * at build time. Neither feature exists under Jest, so this mock reproduces the
- * same public API by reading the theme files from disk directly.
+ * at build time. Neither feature exists outside webpack, so this mock reproduces
+ * the same public API by reading the theme files from disk directly.
  */
-const fs = require('fs');
-const path = require('path');
-
 // The custom theme lives in its own module precisely because it needs no
 // bundler, so the mock uses the real implementation rather than a copy.
-const {
+import {
   getCustomTheme,
   setCustomTheme,
   CUSTOM_THEME_ID,
-} = require('../src/customTheme');
+} from '../src/customTheme';
 
-const themesDir = path.resolve(__dirname, '../src/themes');
+// import.meta.glob is Vite's answer to require.context, so the discovery this
+// mock stands in for is the same shape as the real thing rather than a
+// filesystem walk. Reading the files directly is not an option here: under the
+// test runner import.meta.url is an http URL, not a file one.
+const themeSources = import.meta.glob('../src/themes/*.css', {
+  eager: true,
+  query: '?raw',
+  import: 'default',
+});
 
 function loadThemes() {
-  const files = fs
-    .readdirSync(themesDir)
-    .filter((file) => file.endsWith('.css') && !file.startsWith('_'));
-
-  const loaded = files.map((file) => {
-    const id = file.replace(/\.css$/, '');
-    const source = fs.readFileSync(path.join(themesDir, file), 'utf8');
-    const nameMatch = source.match(/\/\*\s*Name:\s*(.+?)\s*\*\//);
-    const name = nameMatch ? nameMatch[1].trim() : id;
-    const dark = /html\.pf-v6-theme-dark\[data-theme/.test(source);
-    return { id, name, dark };
-  });
+  const loaded = Object.entries(themeSources)
+    .map(([filePath, source]) => [filePath.split('/').pop(), source])
+    .filter(([file]) => !file.startsWith('_'))
+    .map(([file, source]) => {
+      const id = file.replace(/\.css$/, '');
+      const nameMatch = source.match(/\/\*\s*Name:\s*(.+?)\s*\*\//);
+      const name = nameMatch ? nameMatch[1].trim() : id;
+      const dark = /html\.pf-v6-theme-dark\[data-theme/.test(source);
+      return { id, name, dark };
+    });
 
   loaded.sort((a, b) => a.name.localeCompare(b.name));
   return loaded;
@@ -101,7 +104,7 @@ function getActiveThemeId() {
   return activeThemeId;
 }
 
-module.exports = {
+export {
   getThemes,
   setCustomTheme,
   CUSTOM_THEME_ID,

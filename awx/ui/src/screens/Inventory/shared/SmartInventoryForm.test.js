@@ -5,7 +5,7 @@ import { InventoriesAPI, OrganizationsAPI, InstanceGroupsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SmartInventoryForm from './SmartInventoryForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // Inventory with an organization already set via summary_fields, so that
 // SmartInventoryForm's initialValues seed `organization` with a value. This
@@ -18,11 +18,11 @@ const inventoryWithOrg = {
 };
 
 describe('<SmartInventoryForm />', () => {
-  const onSubmit = jest.fn();
-  const onCancel = jest.fn();
+  const onSubmit = vi.fn();
+  const onCancel = vi.fn();
 
   beforeEach(() => {
-    // NOTE: jest auto-mock shares prototype methods across API instances, so
+    // NOTE: the auto-mock shares prototype methods across API instances, so
     // InventoriesAPI/OrganizationsAPI/InstanceGroupsAPI all reference the SAME
     // readOptions mock fn (and the same read mock fn). A single resolved value
     // must therefore satisfy every caller: the form needs actions.POST, while
@@ -40,7 +40,7 @@ describe('<SmartInventoryForm />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   // The form renders once with Save disabled (options not yet loaded), then

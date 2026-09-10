@@ -5,26 +5,26 @@ import { Routes, Route } from 'react-router';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Jobs from './Jobs';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 // Replace the routed children with markers so the assertions are purely about
 // which branch of the v6 <Routes> tree resolves for a given URL.
-jest.mock('components/JobList', () => {
-  const ReactLib = require('react');
+vi.mock('components/JobList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'JobList'),
   };
 });
-jest.mock('./Job', () => {
-  const ReactLib = require('react');
+vi.mock('./Job', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'Job detail'),
   };
 });
-jest.mock('./JobTypeRedirect', () => {
-  const ReactLib = require('react');
+vi.mock('./JobTypeRedirect', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     // Mirror the real component's default of view='output' so the bare

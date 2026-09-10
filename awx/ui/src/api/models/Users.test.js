@@ -7,12 +7,12 @@ describe('UsersAPI', () => {
   let mockHttp;
   beforeEach(() => {
     const createPromise = () => Promise.resolve();
-    mockHttp = { post: jest.fn(createPromise) };
+    mockHttp = { post: vi.fn(createPromise) };
     UsersAPI = new Users(mockHttp);
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('associate role calls post with expected params', async () => {

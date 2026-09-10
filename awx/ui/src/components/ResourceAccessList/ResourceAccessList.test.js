@@ -14,7 +14,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import ResourceAccessList from './ResourceAccessList';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('<ResourceAccessList />', () => {
   const organization = {
@@ -317,7 +317,7 @@ describe('<ResourceAccessList />', () => {
   });
 
   beforeEach(() => {
-    jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
+    vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { id: 2 },
     }));
     useUserProfile.mockImplementation(() => ({
@@ -361,7 +361,7 @@ describe('<ResourceAccessList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should fetch and display access records on mount', async () => {

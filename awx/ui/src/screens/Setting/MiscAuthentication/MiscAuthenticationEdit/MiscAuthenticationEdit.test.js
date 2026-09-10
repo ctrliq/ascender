@@ -11,7 +11,7 @@ import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import mockAllSettings from '../../shared/data.allSettings.json';
 import MiscAuthenticationEdit from './MiscAuthenticationEdit';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 const authenticationData = {
   SESSION_COOKIE_AGE: 1800,
@@ -51,7 +51,7 @@ describe('<MiscAuthenticationEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderEdit() {

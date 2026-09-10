@@ -5,7 +5,7 @@ import ToolbarSyncSourceButton from './ToolbarSyncSourceButton';
 
 describe('<ToolbarSyncSourceButton />', () => {
   test('should render button and invoke onClick', async () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { user } = renderWithContexts(
       <ToolbarSyncSourceButton onClick={onClick} />
     );

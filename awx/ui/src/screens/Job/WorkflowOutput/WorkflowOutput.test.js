@@ -4,7 +4,7 @@ import { WorkflowJobsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowOutput from './WorkflowOutput';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const job = {
   id: 1,
@@ -113,7 +113,7 @@ describe('WorkflowOutput', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     delete window.SVGElement.prototype.getBBox;
     delete window.SVGElement.prototype.getBoundingClientRect;
     delete window.SVGElement.prototype.height;
@@ -166,7 +166,7 @@ describe('WorkflowOutput', () => {
   });
 
   test('a recovery refetch is skipped once the component is unmounted', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     try {
       const { container, unmount } = renderWithContexts(
         <svg>
@@ -184,16 +184,16 @@ describe('WorkflowOutput', () => {
       WorkflowJobsAPI.readNodes.mockClear();
       WorkflowJobsAPI.readNodes.mockRejectedValue(new Error('stale timer'));
 
-      await jest.advanceTimersByTimeAsync(3000);
+      await vi.advanceTimersByTimeAsync(3000);
 
       expect(WorkflowJobsAPI.readNodes).not.toHaveBeenCalled();
     } finally {
-      jest.useRealTimers();
+      vi.useRealTimers();
     }
   });
 
   test('a failed recovery refetch leaves the graph in place', async () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     try {
       const { container } = renderWithContexts(
         <svg>
@@ -205,7 +205,7 @@ describe('WorkflowOutput', () => {
       );
       WorkflowJobsAPI.readNodes.mockRejectedValue(new Error('recovery failed'));
 
-      await jest.advanceTimersByTimeAsync(3000);
+      await vi.advanceTimersByTimeAsync(3000);
 
       // The refetches ran and failed; the graph is untouched and no error
       // state replaced it.
@@ -215,7 +215,7 @@ describe('WorkflowOutput', () => {
         container.querySelector('.pf-v6-c-empty-state')
       ).not.toBeInTheDocument();
     } finally {
-      jest.useRealTimers();
+      vi.useRealTimers();
     }
   });
 });

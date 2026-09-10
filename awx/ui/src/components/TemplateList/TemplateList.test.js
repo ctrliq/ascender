@@ -12,7 +12,7 @@ import {
 
 import TemplateList from './TemplateList';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const mockTemplates = [
   {
@@ -102,7 +102,7 @@ describe('<TemplateList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     global.console.debug = debug;
   });
 

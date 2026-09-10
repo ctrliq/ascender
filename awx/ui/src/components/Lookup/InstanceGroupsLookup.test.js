@@ -5,7 +5,7 @@ import { InstanceGroupsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import InstanceGroupsLookup from './InstanceGroupsLookup';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const mockedInstanceGroups = {
   count: 1,
@@ -66,7 +66,7 @@ describe('InstanceGroupsLookup', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render successfully', async () => {

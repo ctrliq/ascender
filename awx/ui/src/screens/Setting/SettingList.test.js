@@ -3,8 +3,8 @@ import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import SettingList from './SettingList';
 
-jest.mock('../../api');
-jest.mock('hooks/useBrandName', () => ({
+vi.mock('../../api');
+vi.mock('hooks/useBrandName', () => ({
   __esModule: true,
   default: () => ({
     current: 'AWX',

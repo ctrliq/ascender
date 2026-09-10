@@ -4,13 +4,13 @@ import { InventorySourcesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventorySourceSyncButton from './InventorySourceSyncButton';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const source = { id: 1, name: 'Foo', source: 'Source Bar' };
 
 describe('<InventorySourceSyncButton />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render start sync button', () => {

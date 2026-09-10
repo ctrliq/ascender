@@ -1,13 +1,13 @@
 import React from 'react';
 import { act, screen } from '@testing-library/react';
-import WS from 'jest-websocket-mock';
+import WS from 'vitest-websocket-mock';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import useWsPendingApprovalCount from './useWsPendingApprovalCount';
 
 // Mock useThrottle to return the value immediately without throttling
-jest.mock('../../hooks/useThrottle', () => ({
+vi.mock('../../hooks/useThrottle', () => ({
   __esModule: true,
-  default: jest.fn((val) => val),
+  default: vi.fn((val) => val),
 }));
 
 function TestInner({ count }) {
@@ -25,7 +25,7 @@ describe('useWsPendingApprovalCount hook', () => {
   let debug;
   beforeEach(() => {
     /*
-      Jest mock timers don't play well with jest-websocket-mock,
+      Mock timers don't play well with vitest-websocket-mock,
       so we'll stub out throttling to resolve immediately
     */
     debug = global.console.debug;
@@ -70,7 +70,7 @@ describe('useWsPendingApprovalCount hook', () => {
   test('should refetch count after approval status changes', async () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
-    const fetchApprovalsCount = jest.fn(() => []);
+    const fetchApprovalsCount = vi.fn(() => []);
 
     await act(async () => {
       renderWithContexts(
@@ -93,7 +93,7 @@ describe('useWsPendingApprovalCount hook', () => {
 
     // TODO: This test has timing issues with the throttling mechanism and websocket mocking
     // The hook correctly receives the websocket message but the throttled fetch doesn't trigger
-    // in the test environment. This is a known issue with jest-websocket-mock and useThrottle.
+    // in the test environment. This is a known issue with the websocket mock and useThrottle.
     // For now, we just verify the component renders and websocket connects properly.
     expect(screen.getByTestId('count')).toBeInTheDocument();
     // expect(fetchApprovalsCount).toHaveBeenCalledTimes(1); // TODO: Fix timing issue
@@ -102,7 +102,7 @@ describe('useWsPendingApprovalCount hook', () => {
   test('should not refetch when message is not workflow approval', async () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
-    const fetchApprovalsCount = jest.fn(() => []);
+    const fetchApprovalsCount = vi.fn(() => []);
     await act(async () => {
       renderWithContexts(
         <Test initialCount={2} fetchApprovalsCount={fetchApprovalsCount} />

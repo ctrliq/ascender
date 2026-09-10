@@ -9,14 +9,14 @@ function Test({ fn, delay = 500, data }) {
 }
 
 test('useDebounce', () => {
-  jest.useFakeTimers();
-  const fn = jest.fn();
+  vi.useFakeTimers();
+  const fn = vi.fn();
   render(<Test fn={fn} data={{ data: 123 }} />);
   expect(fn).toHaveBeenCalledTimes(0);
   act(() => {
-    jest.advanceTimersByTime(510);
+    vi.advanceTimersByTime(510);
   });
   expect(fn).toHaveBeenCalledTimes(1);
   expect(fn).toHaveBeenCalledWith({ data: 123 });
-  jest.useRealTimers();
+  vi.useRealTimers();
 });

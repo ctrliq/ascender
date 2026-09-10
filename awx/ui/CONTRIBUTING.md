@@ -103,7 +103,7 @@ class Organizations extends InstanceGroupsMixin(NotificationsMixin(Base)) {
 export default Organizations;
 ```
 
-**Testing** - The easiest way to mock the api module in tests is to use jest's [automatic mock](https://jestjs.io/docs/en/es6-class-mocks#automatic-mock). This syntax will replace the class with a mock constructor and mock out all methods to return undefined by default. If necessary, you can still override these mocks for specific tests. See the example below.
+**Testing** - The easiest way to mock the api module in tests is to use Vitest's [automatic mock](https://vitest.dev/api/vi#vi-mock). This syntax will replace the class with a mock constructor and mock out all methods to return undefined by default. If necessary, you can still override these mocks for specific tests. See the example below.
 
 Example of mocking a specific method for every test in a suite:
 
@@ -111,9 +111,9 @@ Example of mocking a specific method for every test in a suite:
 import { OrganizationsAPI } from '../../../../src/api';
 
 // Mocks out all available methods.  Comparable to:
-// OrganizationsAPI.readAccessList = jest.fn();
+// OrganizationsAPI.readAccessList = vi.fn();
 // but for every available method
-jest.mock('../../../../src/api');
+vi.mock('../../../../src/api');
 
 // Return a specific mock value for the readAccessList method
 beforeEach(() => {
@@ -122,7 +122,7 @@ beforeEach(() => {
 
 // Reset mocks
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 ...

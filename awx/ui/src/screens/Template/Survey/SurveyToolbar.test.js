@@ -3,17 +3,17 @@ import { screen, fireEvent } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SurveyToolbar from './SurveyToolbar';
 
-jest.mock('../../../api/models/JobTemplates');
+vi.mock('../../../api/models/JobTemplates');
 
 describe('<SurveyToolbar />', () => {
   test('delete Button is disabled', () => {
     renderWithContexts(
       <SurveyToolbar
         isDeleteDisabled
-        onSelectAll={jest.fn()}
+        onSelectAll={vi.fn()}
         isAllSelected
-        onToggleDeleteModal={jest.fn()}
-        onToggleSurvey={jest.fn()}
+        onToggleDeleteModal={vi.fn()}
+        onToggleSurvey={vi.fn()}
         canEdit={false}
       />
     );
@@ -32,11 +32,11 @@ describe('<SurveyToolbar />', () => {
     renderWithContexts(
       <SurveyToolbar
         isDeleteDisabled={false}
-        onSelectAll={jest.fn()}
+        onSelectAll={vi.fn()}
         isAllSelected
-        onToggleDeleteModal={jest.fn()}
-        onToggleSurvey={jest.fn()}
-        onOpenOrderModal={jest.fn()}
+        onToggleDeleteModal={vi.fn()}
+        onToggleSurvey={vi.fn()}
+        onOpenOrderModal={vi.fn()}
         canEdit
       />
     );
@@ -58,10 +58,10 @@ describe('<SurveyToolbar />', () => {
       <SurveyToolbar
         surveyEnabled={false}
         isDeleteDisabled={false}
-        onSelectAll={jest.fn()}
+        onSelectAll={vi.fn()}
         isAllSelected
-        onToggleDelete={jest.fn()}
-        onToggleSurvey={jest.fn()}
+        onToggleDelete={vi.fn()}
+        onToggleSurvey={vi.fn()}
       />
     );
 
@@ -75,10 +75,10 @@ describe('<SurveyToolbar />', () => {
       <SurveyToolbar
         surveyEnabled
         isDeleteDisabled={false}
-        onSelectAll={jest.fn()}
+        onSelectAll={vi.fn()}
         isAllSelected
-        onToggleDelete={jest.fn()}
-        onToggleSurvey={jest.fn()}
+        onToggleDelete={vi.fn()}
+        onToggleSurvey={vi.fn()}
       />
     );
 
@@ -92,10 +92,10 @@ describe('<SurveyToolbar />', () => {
       <SurveyToolbar
         surveyEnabled
         isDeleteDisabled={false}
-        onSelectAll={jest.fn()}
+        onSelectAll={vi.fn()}
         isAllSelected
-        onToggleDelete={jest.fn()}
-        onToggleSurvey={jest.fn()}
+        onToggleDelete={vi.fn()}
+        onToggleSurvey={vi.fn()}
         canEdit={false}
       />
     );
@@ -119,10 +119,10 @@ describe('<SurveyToolbar />', () => {
   });
 
   test('clicking buttons fires handlers', () => {
-    const onToggleDeleteModal = jest.fn();
-    const onOpenOrderModal = jest.fn();
-    const onToggleSurvey = jest.fn();
-    const onSelectAll = jest.fn();
+    const onToggleDeleteModal = vi.fn();
+    const onOpenOrderModal = vi.fn();
+    const onToggleSurvey = vi.fn();
+    const onSelectAll = vi.fn();
     renderWithContexts(
       <SurveyToolbar
         surveyEnabled={false}

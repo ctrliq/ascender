@@ -8,7 +8,7 @@ import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import mockAllSettings from '../../shared/data.allSettings.json';
 import MiscSystemEdit from './MiscSystemEdit';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 const mockExecutionEnvironment = [
   {
@@ -48,7 +48,7 @@ describe('<MiscSystemEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function mountEdit() {

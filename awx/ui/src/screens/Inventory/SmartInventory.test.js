@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockSmartInventory from './shared/data.smart_inventory.json';
 import SmartInventory from './SmartInventory';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 // SmartInventory uses relative routes and reads the id from useParams, so mount
 // it under its v6 parent route at a concrete URL.
@@ -26,7 +26,7 @@ function renderAt(initialEntry) {
 
 describe('<SmartInventory />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render expected tabs', async () => {

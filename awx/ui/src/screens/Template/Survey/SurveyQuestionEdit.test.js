@@ -71,7 +71,7 @@ describe('<SurveyQuestionEdit />', () => {
           '/templates/job_templates/1/survey/edit?question_variable=foo',
         ],
       });
-      updateSurvey = jest.fn();
+      updateSurvey = vi.fn();
       renderEdit(survey, history, updateSurvey);
     });
 
@@ -100,7 +100,7 @@ describe('<SurveyQuestionEdit />', () => {
 
     test('should set formError', async () => {
       const realConsoleError = global.console.error;
-      global.console.error = jest.fn();
+      global.console.error = vi.fn();
       const err = new Error('oops');
       updateSurvey.mockImplementation(() => {
         throw err;
@@ -114,7 +114,7 @@ describe('<SurveyQuestionEdit />', () => {
 
     test('should generate error for duplicate variable names', async () => {
       const realConsoleError = global.console.error;
-      global.console.error = jest.fn();
+      global.console.error = vi.fn();
 
       editAndSubmit('bar');
 
@@ -133,7 +133,7 @@ describe('<SurveyQuestionEdit />', () => {
       history = createMemoryHistory({
         initialEntries: ['/templates/job_templates/1/survey/edit'],
       });
-      updateSurvey = jest.fn();
+      updateSurvey = vi.fn();
       renderEdit(survey, history, updateSurvey);
 
       await waitFor(() =>
@@ -165,7 +165,7 @@ describe('<SurveyQuestionEdit />', () => {
         '/templates/job_templates/1/survey/edit?question_variable=foo',
       ],
     });
-    updateSurvey = jest.fn();
+    updateSurvey = vi.fn();
     renderEdit(mcSurvey, history, updateSurvey);
 
     const inputs = document.querySelectorAll(
@@ -198,7 +198,7 @@ describe('<SurveyQuestionEdit />', () => {
         '/templates/job_templates/1/survey/edit?question_variable=foo',
       ],
     });
-    updateSurvey = jest.fn();
+    updateSurvey = vi.fn();
     renderEdit(mcSurvey, history, updateSurvey);
 
     const inputs = document.querySelectorAll(
@@ -231,7 +231,7 @@ describe('<SurveyQuestionEdit />', () => {
         '/templates/job_templates/1/survey/edit?question_variable=foo',
       ],
     });
-    updateSurvey = jest.fn();
+    updateSurvey = vi.fn();
     renderEdit(msSurvey, history, updateSurvey);
 
     const inputs = document.querySelectorAll(
@@ -264,7 +264,7 @@ describe('<SurveyQuestionEdit />', () => {
         '/templates/job_templates/1/survey/edit?question_variable=foo',
       ],
     });
-    updateSurvey = jest.fn();
+    updateSurvey = vi.fn();
     renderEdit(msSurvey, history, updateSurvey);
 
     const inputs = document.querySelectorAll(

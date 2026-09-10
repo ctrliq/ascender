@@ -7,7 +7,7 @@ import {
 } from '../../../testUtils/rtlContexts';
 import ActivityStreamDetailButton from './ActivityStreamDetailButton';
 
-jest.mock('../../api/models/ActivityStream');
+vi.mock('../../api/models/ActivityStream');
 
 describe('<ActivityStreamDetailButton />', () => {
   test('initially renders successfully', () => {

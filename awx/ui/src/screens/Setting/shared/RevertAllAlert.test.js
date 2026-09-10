@@ -14,7 +14,7 @@ describe('RevertAllAlert', () => {
   });
 
   test('calls onRevertAll when confirm is clicked', async () => {
-    const onRevertAll = jest.fn();
+    const onRevertAll = vi.fn();
     const { user } = renderWithContexts(
       <RevertAllAlert onClose={() => {}} onRevertAll={onRevertAll} />
     );
@@ -23,7 +23,7 @@ describe('RevertAllAlert', () => {
   });
 
   test('calls onClose when cancel is clicked', async () => {
-    const onClose = jest.fn();
+    const onClose = vi.fn();
     const { user } = renderWithContexts(
       <RevertAllAlert onClose={onClose} onRevertAll={() => {}} />
     );

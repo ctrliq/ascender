@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import GoogleOAuth2Edit from './GoogleOAuth2Edit';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 const mockSettings = {
   SOCIAL_AUTH_GOOGLE_OAUTH2_CALLBACK_URL:
@@ -33,7 +33,7 @@ describe('<GoogleOAuth2Edit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function mountEdit() {

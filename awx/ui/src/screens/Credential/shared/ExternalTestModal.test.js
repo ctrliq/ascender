@@ -5,8 +5,8 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ExternalTestModal from './ExternalTestModal';
 import credentialTypesArr from './data.credentialTypes.json';
 
-jest.mock('../../../api/models/Credentials');
-jest.mock('../../../api/models/CredentialTypes');
+vi.mock('../../../api/models/Credentials');
+vi.mock('../../../api/models/CredentialTypes');
 
 const credentialType = credentialTypesArr.find(
   (credType) => credType.namespace === 'hashivault_kv'
@@ -58,7 +58,7 @@ async function fillAndRun(user) {
 
 describe('<ExternalTestModal />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should display metadata fields correctly', () => {
@@ -66,7 +66,7 @@ describe('<ExternalTestModal />', () => {
       <ExternalTestModal
         credentialType={credentialType}
         credentialFormValues={credentialFormValues}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
       />
     );
     expect(getInput('secret_backend')).toBeInTheDocument();
@@ -82,7 +82,7 @@ describe('<ExternalTestModal />', () => {
         credential={credential}
         credentialType={credentialType}
         credentialFormValues={credentialFormValues}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
       />
     );
     await fillAndRun(user);
@@ -97,7 +97,7 @@ describe('<ExternalTestModal />', () => {
       <ExternalTestModal
         credentialType={credentialType}
         credentialFormValues={credentialFormValues}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
       />
     );
     await fillAndRun(user);
@@ -113,7 +113,7 @@ describe('<ExternalTestModal />', () => {
       <ExternalTestModal
         credentialType={credentialType}
         credentialFormValues={credentialFormValues}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
       />
     );
     await fillAndRun(user);
@@ -136,7 +136,7 @@ describe('<ExternalTestModal />', () => {
       <ExternalTestModal
         credentialType={credentialType}
         credentialFormValues={credentialFormValues}
-        onClose={jest.fn()}
+        onClose={vi.fn()}
       />
     );
     await fillAndRun(user);

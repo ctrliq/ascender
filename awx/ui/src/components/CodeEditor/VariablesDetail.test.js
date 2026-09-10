@@ -13,7 +13,7 @@ import VariablesDetail from './VariablesDetail';
 // button is primary, and value-content checks are noted as unobservable.
 
 beforeEach(() => {
-  document.body.createTextRange = jest.fn();
+  document.body.createTextRange = vi.fn();
 });
 
 const yamlActive = () =>

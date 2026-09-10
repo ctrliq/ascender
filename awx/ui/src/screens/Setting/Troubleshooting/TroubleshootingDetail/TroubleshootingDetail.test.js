@@ -10,7 +10,7 @@ import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import mockJobSettings from '../../shared/data.jobSettings.json';
 import TroubleshootingDetail from './TroubleshootingDetail';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<TroubleshootingDetail />', () => {
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('<TroubleshootingDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderDetail(context) {

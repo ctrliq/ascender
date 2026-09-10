@@ -6,15 +6,17 @@ import {
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import NodeAddModal from './NodeAddModal';
 
-const dispatch = jest.fn();
+const dispatch = vi.fn();
 
 // Capture the onSave prop NodeAddModal hands to NodeModal so the test can
 // invoke it directly. The real NodeModal wizard is not exercised here.
 let capturedOnSave;
-jest.mock('./NodeModal', () => (props) => {
-  capturedOnSave = props.onSave;
-  return null;
-});
+vi.mock('./NodeModal', () => ({
+  default: (props) => {
+    capturedOnSave = props.onSave;
+    return null;
+  },
+}));
 
 const nodeResource = {
   id: 448,

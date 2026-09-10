@@ -7,20 +7,22 @@ import { useUserProfile } from 'contexts/Config';
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import NodeEditModal from './NodeEditModal';
 
-const dispatch = jest.fn();
+const dispatch = vi.fn();
 
-jest.mock('../../../../../api/models/InventorySources');
-jest.mock('../../../../../api/models/JobTemplates');
-jest.mock('../../../../../api/models/Projects');
-jest.mock('../../../../../api/models/WorkflowJobTemplates');
+vi.mock('../../../../../api/models/InventorySources');
+vi.mock('../../../../../api/models/JobTemplates');
+vi.mock('../../../../../api/models/Projects');
+vi.mock('../../../../../api/models/WorkflowJobTemplates');
 
 // Capture the onSave prop NodeEditModal hands to NodeModal so the test can
 // invoke it directly. The real NodeModal wizard is not exercised here.
 let capturedOnSave;
-jest.mock('./NodeModal', () => (props) => {
-  capturedOnSave = props.onSave;
-  return null;
-});
+vi.mock('./NodeModal', () => ({
+  default: (props) => {
+    capturedOnSave = props.onSave;
+    return null;
+  },
+}));
 
 const values = {
   inventory: undefined,

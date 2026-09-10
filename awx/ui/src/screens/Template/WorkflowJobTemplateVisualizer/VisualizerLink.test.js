@@ -41,9 +41,9 @@ const mockedContext = {
   },
 };
 
-const dispatch = jest.fn();
-const updateHelpText = jest.fn();
-const updateLinkHelp = jest.fn();
+const dispatch = vi.fn();
+const updateHelpText = vi.fn();
+const updateLinkHelp = vi.fn();
 
 // The component-under-test is the root <g id="link-2-3"> element; hovering it
 // reveals the WorkflowActionTooltip, whose action items render with data-cy
@@ -67,7 +67,7 @@ const renderLink = () =>
 describe('VisualizerLink', () => {
   let container;
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     ({ container } = renderLink());
   });
 

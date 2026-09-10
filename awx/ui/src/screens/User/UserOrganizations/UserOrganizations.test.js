@@ -4,8 +4,8 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import UserOrganizations from './UserOrganizations';
 
-jest.mock('./UserOrganizationList', () => {
-  const React = require('react');
+vi.mock('./UserOrganizationList', async () => {
+  const React = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => React.createElement('div', null, 'UserOrganizationList'),

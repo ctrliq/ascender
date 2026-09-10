@@ -13,8 +13,8 @@ const fieldOptions = {
   secret: true,
 };
 
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useLocation: () => ({
     pathname: '/credentials/3/edit',
   }),

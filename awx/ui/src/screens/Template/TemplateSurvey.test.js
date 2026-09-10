@@ -9,8 +9,8 @@ import TemplateSurvey from './TemplateSurvey';
 import mockJobTemplateData from './shared/data.job_template.json';
 import mockWorkflowJobTemplateData from './shared/data.workflow_job_template.json';
 
-jest.mock('../../api/models/JobTemplates');
-jest.mock('../../api/models/WorkflowJobTemplates');
+vi.mock('../../api/models/JobTemplates');
+vi.mock('../../api/models/WorkflowJobTemplates');
 
 const surveyData = {
   name: 'Survey',
@@ -42,7 +42,7 @@ describe('<TemplateSurvey />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should fetch survey from API', async () => {

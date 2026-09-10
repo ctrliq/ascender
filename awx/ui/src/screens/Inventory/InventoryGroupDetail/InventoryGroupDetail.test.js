@@ -9,7 +9,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import InventoryGroupDetail from './InventoryGroupDetail';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const inventoryGroup = {
   name: 'Foo',
@@ -53,7 +53,7 @@ function renderAt(initialEntry, group = inventoryGroup) {
 
 describe('<InventoryGroupDetail />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('User has full permissions', () => {

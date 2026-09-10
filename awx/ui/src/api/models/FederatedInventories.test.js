@@ -16,13 +16,13 @@ describe('FederatedInventoriesAPI', () => {
         },
       });
     mockHttp = {
-      options: jest.fn(optionsPromise),
+      options: vi.fn(optionsPromise),
     };
     FederatedInventoriesAPI = new FederatedInventories(mockHttp);
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('readFederatedInventoryOptions calls OPTIONS on the correct URL', async () => {

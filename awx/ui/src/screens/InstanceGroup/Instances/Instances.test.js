@@ -7,15 +7,15 @@ import Instances from './Instances';
 
 // Markers for the routed panels, so assertions are about which branch of the
 // nested v6 <Routes> tree resolves.
-jest.mock('./InstanceList', () => {
-  const ReactLib = require('react');
+vi.mock('./InstanceList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'InstanceList'),
   };
 });
-jest.mock('../InstanceDetails', () => {
-  const ReactLib = require('react');
+vi.mock('../InstanceDetails', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'InstanceDetails'),

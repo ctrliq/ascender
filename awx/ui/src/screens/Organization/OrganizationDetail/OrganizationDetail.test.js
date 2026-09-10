@@ -12,7 +12,7 @@ import {
 
 import OrganizationDetail from './OrganizationDetail';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<OrganizationDetail />', () => {
   const mockOrganization = {
@@ -52,7 +52,7 @@ describe('<OrganizationDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {

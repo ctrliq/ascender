@@ -5,7 +5,7 @@ import { JobTemplatesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import JobTemplateAdd from './JobTemplateAdd';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const jobTemplateData = {
   allow_callbacks: false,
@@ -51,7 +51,7 @@ const jobTemplateData = {
 // into the JobTemplatesAPI.create payload, so stub the form with controls that
 // invoke its props. The submit button passes a values object that mirrors what
 // the real form produces. (Names referenced inside the mock factory are mock-
-// prefixed so jest's out-of-scope guard allows them.)
+// prefixed so the out-of-scope guard allows them.)
 const mockSubmitValues = {
   allow_callbacks: false,
   allow_simultaneous: false,
@@ -100,28 +100,26 @@ const mockSubmitValues = {
   webhook_service: '',
 };
 const mockFormProps = { current: undefined };
-jest.mock(
-  '../shared/JobTemplateForm',
-  () =>
-    function MockJobTemplateForm(props) {
-      mockFormProps.current = props;
-      const { handleSubmit, handleCancel } = props;
-      return (
-        <div>
-          <button type="button" onClick={() => handleSubmit(mockSubmitValues)}>
-            Submit
-          </button>
-          <button type="button" aria-label="Cancel" onClick={handleCancel}>
-            Cancel
-          </button>
-        </div>
-      );
-    }
-);
+vi.mock('../shared/JobTemplateForm', () => ({
+  default: function MockJobTemplateForm(props) {
+    mockFormProps.current = props;
+    const { handleSubmit, handleCancel } = props;
+    return (
+      <div>
+        <button type="button" onClick={() => handleSubmit(mockSubmitValues)}>
+          Submit
+        </button>
+        <button type="button" aria-label="Cancel" onClick={handleCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  },
+}));
 
 describe('<JobTemplateAdd />', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
     mockFormProps.current = undefined;
   });
 

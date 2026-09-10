@@ -6,20 +6,20 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import Applications from './Applications';
 
-jest.mock('../../api/models/Applications');
-jest.mock('../../api/models/Organizations');
+vi.mock('../../api/models/Applications');
+vi.mock('../../api/models/Organizations');
 
 // Replace the routed children with markers so the assertions are purely about
 // which branch of the v6 <Routes> tree resolves for a given URL.
-jest.mock('./ApplicationsList', () => {
-  const ReactLib = require('react');
+vi.mock('./ApplicationsList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'ApplicationsList'),
   };
 });
-jest.mock('./ApplicationAdd', () => {
-  const ReactLib = require('react');
+vi.mock('./ApplicationAdd', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: ({ onSuccessfulAdd }) =>
@@ -38,8 +38,8 @@ jest.mock('./ApplicationAdd', () => {
       ),
   };
 });
-jest.mock('./Application', () => {
-  const ReactLib = require('react');
+vi.mock('./Application', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'Application detail'),

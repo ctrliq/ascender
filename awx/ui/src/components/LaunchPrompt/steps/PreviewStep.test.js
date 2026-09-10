@@ -7,13 +7,15 @@ import PreviewStep from './PreviewStep';
 // PromptDetail is a large read-only detail renderer; this suite only cares
 // about the resource/overrides PreviewStep computes and forwards, so mock it
 // and surface the props it receives into the DOM for assertion.
-jest.mock('../../PromptDetail', () => ({ resource, overrides }) => (
-  <div
-    data-testid="prompt-detail"
-    data-resource={JSON.stringify(resource)}
-    data-overrides={JSON.stringify(overrides)}
-  />
-));
+vi.mock('../../PromptDetail', () => ({
+  default: ({ resource, overrides }) => (
+    <div
+      data-testid="prompt-detail"
+      data-resource={JSON.stringify(resource)}
+      data-overrides={JSON.stringify(overrides)}
+    />
+  ),
+}));
 
 const resource = {
   id: 1,

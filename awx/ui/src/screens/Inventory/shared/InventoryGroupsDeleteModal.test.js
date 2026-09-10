@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InventoryGroupsDeleteModal from './InventoryGroupsDeleteModal';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 function renderModal() {
   const history = createMemoryHistory({
@@ -35,7 +35,7 @@ function renderModal() {
 
 describe('<InventoryGroupsDeleteModal />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should open the confirmation modal', async () => {

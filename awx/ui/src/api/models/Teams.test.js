@@ -9,13 +9,13 @@ describe('TeamsAPI', () => {
 
   beforeEach(() => {
     const createPromise = () => Promise.resolve();
-    mockHttp = { post: jest.fn(createPromise) };
+    mockHttp = { post: vi.fn(createPromise) };
 
     TeamsAPI = new Teams(mockHttp);
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('associate role calls post with expected params', async () => {

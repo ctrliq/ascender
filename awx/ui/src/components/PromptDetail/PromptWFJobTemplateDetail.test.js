@@ -9,8 +9,8 @@ import mockData from './data.workflow_template.json';
 
 // Render the (otherwise Ace-backed) CodeEditor as plain text so VariablesDetail's
 // computed value is assertable under jsdom.
-jest.mock('components/CodeEditor/CodeEditor', () => {
-  const ReactMock = require('react');
+vi.mock('components/CodeEditor/CodeEditor', async () => {
+  const ReactMock = await vi.importActual('react');
   return {
     __esModule: true,
     default: ({ value }) =>

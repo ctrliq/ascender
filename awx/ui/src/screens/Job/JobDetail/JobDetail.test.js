@@ -9,15 +9,15 @@ import {
 import JobDetail from './JobDetail';
 import mockJobData from '../shared/data.job.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // The OutputToolbar-style action buttons here are tooltip-free, but the
 // CredentialChip/labels and AlertModal still pull in PF Tooltips; rendering
 // Tooltip as a passthrough avoids stray entry-timer state updates after the
 // tree unmounts (jsdom measures tooltips at 0 size). No test asserts tooltip
 // content.
-jest.mock('@patternfly/react-core', () => {
-  const actual = jest.requireActual('@patternfly/react-core');
+vi.mock('@patternfly/react-core', async () => {
+  const actual = await vi.importActual('@patternfly/react-core');
   return {
     ...actual,
     Tooltip: ({ children }) => children,
@@ -30,7 +30,7 @@ const detailValue = (label) => screen.getByText(label).nextElementSibling;
 
 describe('<JobDetail />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should display details', () => {

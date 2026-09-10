@@ -4,18 +4,18 @@ import { InventorySourcesAPI } from 'api';
 import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 import InventorySourcesList from './InventorySourcesList';
 
-jest.mock('../../../../../../api/models/InventorySources');
+vi.mock('../../../../../../api/models/InventorySources');
 
 const nodeResource = {
   id: 1,
   name: 'Test Inventory Source',
   unified_job_type: 'workflow_approval',
 };
-const onUpdateNodeResource = jest.fn();
+const onUpdateNodeResource = vi.fn();
 
 describe('InventorySourcesList', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Row selected when nodeResource id matches row id and clicking new row makes expected callback', async () => {

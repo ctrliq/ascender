@@ -8,12 +8,12 @@ import AWXLogin from './Login';
 
 import { SESSION_USER_ID } from '../../constants';
 
-jest.mock('../../api/models/Auth.js');
-jest.mock('../../api/models/Root.js');
-jest.mock('../../api/models/Me.js');
+vi.mock('../../api/models/Auth.js');
+vi.mock('../../api/models/Root.js');
+vi.mock('../../api/models/Me.js');
 
-jest.mock('util/auth', () => ({
-  getCurrentUserId: jest.fn(),
+vi.mock('util/auth', () => ({
+  getCurrentUserId: vi.fn(),
 }));
 
 RootAPI.readAssetVariables.mockResolvedValue({
@@ -43,6 +43,8 @@ async function waitForLoginForm(container) {
 }
 
 describe('<Login />', () => {
+  let realLocalStorage;
+
   beforeEach(() => {
     RootAPI.readAssetVariables.mockResolvedValue({
       data: {
@@ -60,17 +62,28 @@ describe('<Login />', () => {
         custom_logo: 'data:image/jpeg;base64,abc123',
       },
     });
+    realLocalStorage = window.localStorage;
     Object.defineProperty(window, 'localStorage', {
       value: {
-        getItem: jest.fn(() => '42'),
-        setItem: jest.fn(() => null),
+        getItem: vi.fn(() => '42'),
+        setItem: vi.fn(() => null),
       },
       writable: true,
     });
   });
 
+  // Put the real one back. The test runner shares one jsdom between the files
+  // in a worker, so a window property left replaced here is still replaced for
+  // every file that follows.
   afterEach(() => {
-    jest.clearAllMocks();
+    Object.defineProperty(window, 'localStorage', {
+      value: realLocalStorage,
+      writable: true,
+    });
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   test('initially renders without crashing', async () => {
@@ -406,7 +419,7 @@ describe('<Login />', () => {
       },
     });
     document.cookie = 'csrftoken=TESTTOKEN';
-    const submit = jest
+    const submit = vi
       .spyOn(HTMLFormElement.prototype, 'submit')
       .mockImplementation(() => {});
 

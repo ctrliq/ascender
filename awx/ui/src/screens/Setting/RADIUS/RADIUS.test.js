@@ -8,7 +8,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import RADIUS from './RADIUS';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<RADIUS />', () => {
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe('<RADIUS />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderRADIUS(initialEntries) {

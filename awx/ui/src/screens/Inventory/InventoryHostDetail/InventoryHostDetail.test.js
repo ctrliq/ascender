@@ -9,11 +9,11 @@ import {
 import InventoryHostDetail from './InventoryHostDetail';
 import mockHost from '../shared/data.host.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<InventoryHostDetail />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('User has edit permissions', () => {

@@ -6,7 +6,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostAdd from './InventoryHostAdd';
 import mockHost from '../shared/data.host.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const submitValues = {
   name: 'new name',
@@ -14,21 +14,19 @@ const submitValues = {
   variables: '---\nfoo: bar',
 };
 
-jest.mock(
-  'components/HostForm',
-  () =>
-    ({ handleSubmit, handleCancel, submitError }) => (
-      <div>
-        <button
-          type="button"
-          aria-label="mock-submit"
-          onClick={() => handleSubmit(submitValues)}
-        />
-        <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
-        {submitError ? <div aria-label="mock-submit-error" /> : null}
-      </div>
-    )
-);
+vi.mock('components/HostForm', () => ({
+  default: ({ handleSubmit, handleCancel, submitError }) => (
+    <div>
+      <button
+        type="button"
+        aria-label="mock-submit"
+        onClick={() => handleSubmit(submitValues)}
+      />
+      <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
+      {submitError ? <div aria-label="mock-submit-error" /> : null}
+    </div>
+  ),
+}));
 
 describe('<InventoryHostAdd />', () => {
   beforeEach(() => {
@@ -36,7 +34,7 @@ describe('<InventoryHostAdd />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('handleSubmit should post to api', async () => {

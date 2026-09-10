@@ -9,7 +9,7 @@ import {
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import SAMLDetail from './SAMLDetail';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<SAMLDetail />', () => {
   beforeEach(() => {
@@ -38,7 +38,7 @@ describe('<SAMLDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderDetail(context) {

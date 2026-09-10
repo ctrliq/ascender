@@ -6,7 +6,7 @@ import { GroupsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroup from './InventoryGroup';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const groupData = {
   data: {
@@ -50,7 +50,7 @@ describe('<InventoryGroup />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders successfully', async () => {
@@ -98,7 +98,7 @@ describe('constructed inventory', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Constructed Inventory expect all tabs to exist, including Back to Groups', async () => {

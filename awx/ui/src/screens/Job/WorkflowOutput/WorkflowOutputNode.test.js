@@ -201,8 +201,8 @@ describe('WorkflowOutputNode', () => {
   });
 
   test('running node shows a live elapsed time', () => {
-    jest.useFakeTimers('modern');
-    jest.setSystemTime(new Date('2021-09-01T12:00:10.000Z'));
+    vi.useFakeTimers('modern');
+    vi.setSystemTime(new Date('2021-09-01T12:00:10.000Z'));
     const runningNode = {
       id: 2,
       originalNodeObject: {
@@ -219,7 +219,7 @@ describe('WorkflowOutputNode', () => {
     };
     const { container } = renderNode(runningNode);
     expect(container.querySelector('#node-2')).toHaveTextContent('00:00:10');
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test('canceled node has an orange frame matching the canceled icon', () => {

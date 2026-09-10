@@ -1,16 +1,16 @@
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
-import WS from 'jest-websocket-mock';
+import WS from 'vitest-websocket-mock';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import useWsInventorySources from './useWsInventorySources';
 
 /*
-  Jest mock timers don’t play well with jest-websocket-mock,
+  Mock timers don’t play well with vitest-websocket-mock,
   so we'll stub out throttling to resolve immediately
 */
-jest.mock('../../../hooks/useThrottle', () => ({
+vi.mock('../../../hooks/useThrottle', () => ({
   __esModule: true,
-  default: jest.fn((val) => val),
+  default: vi.fn((val) => val),
 }));
 
 // Render the hook's synced result as JSON so tests can read it from the DOM

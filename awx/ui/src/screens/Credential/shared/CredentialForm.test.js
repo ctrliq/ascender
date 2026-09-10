@@ -10,7 +10,7 @@ import towerCredential from './data.towerCredential.json';
 import credentialTypesArr from './data.credentialTypes.json';
 import CredentialForm from './CredentialForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // jsdom's File does not implement Blob.text(); the GceFileUploadField reads the
 // uploaded file via `await value.text()`. Build a File whose text() resolves to
@@ -99,7 +99,7 @@ async function renderForm(props) {
 }
 
 describe('<CredentialForm />', () => {
-  const onCancel = jest.fn();
+  const onCancel = vi.fn();
 
   beforeEach(() => {
     OrganizationsAPI.read.mockResolvedValue({
@@ -111,7 +111,7 @@ describe('<CredentialForm />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Add', () => {

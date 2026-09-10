@@ -6,26 +6,26 @@ import { InstanceGroupsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ContainerGroup from './ContainerGroup';
 
-jest.mock('../../api/models/InstanceGroups');
+vi.mock('../../api/models/InstanceGroups');
 
 // Markers for the routed tab panels, so assertions are about which branch of
 // the nested v6 <Routes> tree resolves.
-jest.mock('./ContainerGroupDetails', () => {
-  const ReactLib = require('react');
+vi.mock('./ContainerGroupDetails', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'ContainerGroupDetails'),
   };
 });
-jest.mock('./ContainerGroupEdit', () => {
-  const ReactLib = require('react');
+vi.mock('./ContainerGroupEdit', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'ContainerGroupEdit'),
   };
 });
-jest.mock('components/JobList', () => {
-  const ReactLib = require('react');
+vi.mock('components/JobList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'JobList'),
@@ -61,7 +61,7 @@ describe('<ContainerGroup />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('fetches the container group detail', async () => {

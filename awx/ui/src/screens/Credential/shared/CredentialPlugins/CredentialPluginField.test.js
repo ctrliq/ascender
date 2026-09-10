@@ -11,7 +11,7 @@ const fieldOptions = {
   type: 'string',
 };
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 const pluginButtonName =
   'Populate field from an external secret management system';

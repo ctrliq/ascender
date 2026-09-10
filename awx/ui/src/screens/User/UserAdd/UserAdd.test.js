@@ -5,7 +5,7 @@ import { OrganizationsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserAdd from './UserAdd';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<UserAdd />', () => {
   beforeEach(() => {

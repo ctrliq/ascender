@@ -6,15 +6,15 @@ describe('RootAPI', () => {
   beforeEach(() => {
     const createPromise = () => Promise.resolve();
     mockHttp = {
-      get: jest.fn(createPromise),
-      post: jest.fn(createPromise),
+      get: vi.fn(createPromise),
+      post: vi.fn(createPromise),
     };
 
     RootAPI = new Root(mockHttp);
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('login calls get and post with expected content headers', async () => {

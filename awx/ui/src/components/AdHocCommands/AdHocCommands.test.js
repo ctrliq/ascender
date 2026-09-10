@@ -13,14 +13,14 @@ import {
 } from '../../../testUtils/rtlContexts';
 import AdHocCommands from './AdHocCommands';
 
-jest.mock('../../api/models/CredentialTypes');
-jest.mock('../../api/models/Inventories');
-jest.mock('../../api/models/Credentials');
-jest.mock('../../api/models/ExecutionEnvironments');
-jest.mock('../../api/models/Root');
+vi.mock('../../api/models/CredentialTypes');
+vi.mock('../../api/models/Inventories');
+vi.mock('../../api/models/Credentials');
+vi.mock('../../api/models/ExecutionEnvironments');
+vi.mock('../../api/models/Root');
 
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({
     id: 1,
   }),
@@ -45,7 +45,7 @@ function renderAdHoc(props = {}) {
     <AdHocCommands
       adHocItems={adHocItems}
       hasListItems
-      onLaunchLoading={() => jest.fn()}
+      onLaunchLoading={() => vi.fn()}
       moduleOptions={[
         ['command', 'command'],
         ['foo', 'foo'],
@@ -120,7 +120,7 @@ describe('<AdHocCommands />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('mounts successfully', async () => {

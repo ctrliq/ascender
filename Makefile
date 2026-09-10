@@ -431,12 +431,12 @@ ui-test:
 ui-test-screens:
 	$(NPM_BIN) --prefix awx/ui install
 	$(NPM_BIN) run --prefix awx/ui pretest
-	$(NPM_BIN) run --prefix awx/ui test-screens --runInBand
+	$(NPM_BIN) run --prefix awx/ui test-screens
 
 ui-test-general:
 	$(NPM_BIN) --prefix awx/ui install
 	$(NPM_BIN) run --prefix awx/ui pretest
-	$(NPM_BIN) run --prefix awx/ui/ test-general --runInBand
+	$(NPM_BIN) run --prefix awx/ui/ test-general
 
 HEADLESS ?= no
 ifeq ($(HEADLESS), yes)

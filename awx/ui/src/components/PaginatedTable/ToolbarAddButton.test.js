@@ -5,7 +5,7 @@ import ToolbarAddButton from './ToolbarAddButton';
 
 describe('<ToolbarAddButton />', () => {
   test('should render button', async () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { user } = renderWithContexts(<ToolbarAddButton onClick={onClick} />);
     const button = screen.getByRole('button', { name: 'Add' });
     expect(button).toBeInTheDocument();
@@ -21,7 +21,7 @@ describe('<ToolbarAddButton />', () => {
   });
 
   test('should render toggle button with toggle icon', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     renderWithContexts(
       <ToolbarAddButton showToggleIndicator onClick={onClick} />
     );

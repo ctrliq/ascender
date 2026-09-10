@@ -4,7 +4,7 @@ import { LabelsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import LabelSelect from './LabelSelect';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const options = [
   { id: 1, name: 'one' },
@@ -20,7 +20,7 @@ async function openAndGetOptions(user) {
 
 describe('<LabelSelect />', () => {
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should fetch labels', async () => {
@@ -75,7 +75,7 @@ describe('<LabelSelect />', () => {
   });
 
   test('Generate a label', async () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     LabelsAPI.read.mockResolvedValue({
       data: {
         results: options,
@@ -102,7 +102,7 @@ describe('<LabelSelect />', () => {
   });
 
   test('should handle read-only labels', async () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     LabelsAPI.read.mockResolvedValue({
       data: {
         results: [

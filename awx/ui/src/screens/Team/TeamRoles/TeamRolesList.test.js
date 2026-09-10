@@ -4,9 +4,9 @@ import { TeamsAPI, RolesAPI, UsersAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import TeamRolesList from './TeamRolesList';
 
-jest.mock('../../../api/models/Teams');
-jest.mock('../../../api/models/Roles');
-jest.mock('../../../api/models/Users');
+vi.mock('../../../api/models/Teams');
+vi.mock('../../../api/models/Roles');
+vi.mock('../../../api/models/Users');
 
 const me = { id: 1 };
 
@@ -108,7 +108,7 @@ describe('<TeamRolesList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render properly', async () => {

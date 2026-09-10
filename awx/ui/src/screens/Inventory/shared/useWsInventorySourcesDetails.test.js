@@ -1,11 +1,11 @@
 import React from 'react';
 import { act, waitFor } from '@testing-library/react';
-import WS from 'jest-websocket-mock';
+import WS from 'vitest-websocket-mock';
 import { InventorySourcesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import useWsInventorySourceDetails from './useWsInventorySourcesDetails';
 
-jest.mock('../../../api/models/InventorySources');
+vi.mock('../../../api/models/InventorySources');
 
 function Test({ inventorySource }) {
   const synced = useWsInventorySourceDetails(inventorySource);
@@ -127,6 +127,6 @@ describe('useWsInventorySourceDetails', () => {
       expect(InventorySourcesAPI.readDetail).toHaveBeenCalledTimes(1)
     );
 
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 });

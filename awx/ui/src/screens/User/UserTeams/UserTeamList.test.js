@@ -10,9 +10,9 @@ import {
 
 import UserTeamList from './UserTeamList';
 
-jest.mock('../../../api');
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('../../../api');
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({
     id: 1,
     userId: 2,
@@ -115,7 +115,7 @@ describe('<UserTeamList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should load and render teams', async () => {

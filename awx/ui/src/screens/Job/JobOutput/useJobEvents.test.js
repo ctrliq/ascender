@@ -191,12 +191,12 @@ describe('useJobEvents', () => {
 
   beforeEach(() => {
     callbacks = {
-      fetchEventByUuid: jest.fn(),
-      fetchChildrenSummary: jest.fn(),
-      setForceFlatMode: jest.fn(),
-      setJobTreeReady: jest.fn(),
+      fetchEventByUuid: vi.fn(),
+      fetchChildrenSummary: vi.fn(),
+      setForceFlatMode: vi.fn(),
+      setJobTreeReady: vi.fn(),
     };
-    enqueueAction = jest.fn();
+    enqueueAction = vi.fn();
     reducer = jobEventsReducer(callbacks, false, enqueueAction);
     emptyState = {
       tree: [],
@@ -211,7 +211,7 @@ describe('useJobEvents', () => {
   });
 
   afterAll(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   describe('addEvents', () => {
@@ -1209,7 +1209,7 @@ describe('useJobEvents', () => {
     });
 
     test('should get node after gap in loaded children', async () => {
-      const fetchChildrenSummary = jest.fn();
+      const fetchChildrenSummary = vi.fn();
       fetchChildrenSummary.mockResolvedValue({
         data: {
           children_summary: {

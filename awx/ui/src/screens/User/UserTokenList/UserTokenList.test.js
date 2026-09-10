@@ -7,11 +7,11 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import UserTokenList from './UserTokenList';
 
-jest.mock('../../../api/models/Users');
-jest.mock('../../../api/models/Tokens');
+vi.mock('../../../api/models/Users');
+vi.mock('../../../api/models/Tokens');
 
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useLocation: () => ({
     search: '',
   }),

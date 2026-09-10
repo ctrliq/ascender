@@ -5,7 +5,7 @@ import { InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryStep from './InventoryStep';
 
-jest.mock('../../../api/models/Inventories');
+vi.mock('../../../api/models/Inventories');
 
 const inventories = [
   { id: 1, name: 'inv one', url: '/inventories/1' },
@@ -33,7 +33,7 @@ describe('InventoryStep', () => {
     });
   });
 
-  afterEach(() => jest.clearAllMocks());
+  afterEach(() => vi.clearAllMocks());
 
   test('should load inventories', async () => {
     renderWithContexts(

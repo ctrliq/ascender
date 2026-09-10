@@ -8,7 +8,7 @@ import {
 
 import UsersList from './UserList';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockUsers = [
   {
@@ -119,14 +119,14 @@ const mockUsers = [
 ];
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('UsersList with full permissions', () => {
   let user;
 
   beforeEach(async () => {
-    UsersAPI.destroy = jest.fn();
+    UsersAPI.destroy = vi.fn();
     UsersAPI.read.mockResolvedValue({
       data: {
         count: mockUsers.length,

@@ -5,7 +5,7 @@ import { Routes, Route } from 'react-router';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHosts from './InventoryHosts';
 
-jest.mock('./InventoryHostList', () => {
+vi.mock('./InventoryHostList', () => {
   const InventoryHostList = () => <div aria-label="mock-inventory-host-list" />;
   return { __esModule: true, default: InventoryHostList };
 });

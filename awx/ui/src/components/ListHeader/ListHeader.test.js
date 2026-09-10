@@ -35,7 +35,7 @@ describe('ListHeader', () => {
       initialEntries: ['/organizations/1/teams'],
     });
     const { container } = renderWithContexts(
-      <ListHeader itemCount={50} renderToolbar={jest.fn()} {...baseProps} />,
+      <ListHeader itemCount={50} renderToolbar={vi.fn()} {...baseProps} />,
       { context: { router: { history } } }
     );
     expect(container).toBeInTheDocument();

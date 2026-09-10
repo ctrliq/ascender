@@ -6,7 +6,7 @@ import { createMemoryHistory } from 'history';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryDetail from './ConstructedInventoryDetail';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockInventory = {
   id: 1,
@@ -166,7 +166,7 @@ describe('<ConstructedInventoryDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render details', async () => {

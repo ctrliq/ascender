@@ -14,10 +14,10 @@ import {
 
 import InventorySourceList from './InventorySourceList';
 
-jest.mock('../../../api/models/InventorySources');
-jest.mock('../../../api/models/Inventories');
-jest.mock('../../../api/models/InventoryUpdates');
-jest.mock('../../../api/models/WorkflowJobTemplateNodes');
+vi.mock('../../../api/models/InventorySources');
+vi.mock('../../../api/models/Inventories');
+vi.mock('../../../api/models/InventoryUpdates');
+vi.mock('../../../api/models/WorkflowJobTemplateNodes');
 
 const sources = {
   data: {
@@ -104,7 +104,7 @@ describe('<InventorySourceList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     global.console.debug = debug;
   });
 
@@ -195,7 +195,7 @@ describe('<InventorySourceList /> error handling', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     global.console.debug = debug;
   });
 
@@ -231,7 +231,7 @@ describe('<InventorySourceList /> RBAC testing', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     global.console.debug = debug;
   });
 

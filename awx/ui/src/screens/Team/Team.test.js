@@ -6,33 +6,33 @@ import { TeamsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Team from './Team';
 
-jest.mock('../../api/models/Teams');
+vi.mock('../../api/models/Teams');
 
 // Markers for the routed tab panels, so assertions are about which branch of
 // the nested v6 <Routes> tree resolves.
-jest.mock('./TeamDetail', () => {
-  const ReactLib = require('react');
+vi.mock('./TeamDetail', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'TeamDetail'),
   };
 });
-jest.mock('./TeamEdit', () => {
-  const ReactLib = require('react');
+vi.mock('./TeamEdit', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'TeamEdit'),
   };
 });
-jest.mock('./TeamRoles', () => {
-  const ReactLib = require('react');
+vi.mock('./TeamRoles', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'TeamRoles'),
   };
 });
-jest.mock('components/ResourceAccessList', () => {
-  const ReactLib = require('react');
+vi.mock('components/ResourceAccessList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     ResourceAccessList: () =>
       ReactLib.createElement('div', null, 'ResourceAccessList'),
@@ -66,7 +66,7 @@ describe('<Team />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('fetches the team detail', async () => {

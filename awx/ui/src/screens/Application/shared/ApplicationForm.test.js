@@ -4,7 +4,7 @@ import { OrganizationsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ApplicationForm from './ApplicationForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const authorizationOptions = [
   {
@@ -48,7 +48,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('<ApplicationForm/>', () => {
@@ -101,7 +101,7 @@ describe('<ApplicationForm/>', () => {
   });
 
   test('should call onCancel', async () => {
-    const onCancel = jest.fn();
+    const onCancel = vi.fn();
     const { user } = renderForm({ onCancel });
     await screen.findByText('Organization');
 
@@ -110,7 +110,7 @@ describe('<ApplicationForm/>', () => {
   });
 
   test('should call onSubmit', async () => {
-    const onSubmit = jest.fn();
+    const onSubmit = vi.fn();
     const { container, user } = renderForm({ onSubmit });
     await screen.findByText('Organization');
 

@@ -12,7 +12,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import WorkflowJobTemplate from './WorkflowJobTemplate';
 import mockWorkflowJobTemplateData from './shared/data.workflow_job_template.json';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const mockMe = {
   is_super_user: true,
@@ -61,7 +61,7 @@ describe('<WorkflowJobTemplate />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {

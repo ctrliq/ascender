@@ -9,7 +9,7 @@ import {
 import AdvancedInventoryHostDetail from './AdvancedInventoryHostDetail';
 import mockHost from '../shared/data.host.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 function renderAt(host) {
   const history = createMemoryHistory({

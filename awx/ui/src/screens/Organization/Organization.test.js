@@ -7,48 +7,48 @@ import mockOrganization from 'util/data.organization.json';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Organization from './Organization';
 
-jest.mock('../../api/models/Organizations');
+vi.mock('../../api/models/Organizations');
 
 // Markers for the routed tab panels, so assertions are about which branch of
 // the nested v6 <Routes> tree resolves.
-jest.mock('./OrganizationDetail', () => {
-  const ReactLib = require('react');
+vi.mock('./OrganizationDetail', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'OrganizationDetail'),
   };
 });
-jest.mock('./OrganizationEdit', () => {
-  const ReactLib = require('react');
+vi.mock('./OrganizationEdit', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'OrganizationEdit'),
   };
 });
-jest.mock('./OrganizationTeams', () => {
-  const ReactLib = require('react');
+vi.mock('./OrganizationTeams', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'OrganizationTeams'),
   };
 });
-jest.mock('./OrganizationExecEnvList', () => {
-  const ReactLib = require('react');
+vi.mock('./OrganizationExecEnvList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>
       ReactLib.createElement('div', null, 'OrganizationExecEnvList'),
   };
 });
-jest.mock('components/ResourceAccessList', () => {
-  const ReactLib = require('react');
+vi.mock('components/ResourceAccessList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     ResourceAccessList: () =>
       ReactLib.createElement('div', null, 'ResourceAccessList'),
   };
 });
-jest.mock('components/NotificationList/NotificationList', () => {
-  const ReactLib = require('react');
+vi.mock('components/NotificationList/NotificationList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'NotificationList'),
@@ -83,7 +83,7 @@ describe('<Organization />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('fetches the organization detail', async () => {

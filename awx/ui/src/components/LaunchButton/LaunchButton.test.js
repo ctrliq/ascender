@@ -13,7 +13,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import LaunchButton from './LaunchButton';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('LaunchButton', () => {
   // The render-prop children expose a plain button; give it an accessible name
@@ -61,7 +61,7 @@ describe('LaunchButton', () => {
     });
   });
 
-  afterEach(() => jest.clearAllMocks());
+  afterEach(() => vi.clearAllMocks());
 
   test('renders the expected content', () => {
     renderWithContexts(

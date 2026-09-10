@@ -4,14 +4,14 @@ import { WorkflowApprovalsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import PageHeaderToolbar from './PageHeaderToolbar';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('PageHeaderToolbar', () => {
-  const onAboutClick = jest.fn();
-  const onLogoutClick = jest.fn();
+  const onAboutClick = vi.fn();
+  const onLogoutClick = vi.fn();
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('expected content is rendered on initialization', async () => {

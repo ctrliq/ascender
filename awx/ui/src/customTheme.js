@@ -6,7 +6,8 @@
  * the browser the stylesheet at runtime. That is what this module does.
  *
  * It is deliberately separate from themeRegistry, which cannot be imported under
- * Jest because it discovers the shipped themes with webpack's require.context.
+ * the test runner because it discovers the shipped themes with webpack's
+ * require.context.
  * Nothing here needs the bundler, so it stays testable.
  */
 

@@ -5,7 +5,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserForm from './UserForm';
 import mockData from '../data.user.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<UserForm />', () => {
   beforeEach(() => {
@@ -29,12 +29,12 @@ describe('<UserForm />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {
     renderWithContexts(
-      <UserForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
+      <UserForm handleSubmit={vi.fn()} handleCancel={vi.fn()} />
     );
 
     expect(
@@ -44,7 +44,7 @@ describe('<UserForm />', () => {
 
   test('add form displays all form fields', async () => {
     renderWithContexts(
-      <UserForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
+      <UserForm handleSubmit={vi.fn()} handleCancel={vi.fn()} />
     );
     await screen.findByRole('button', { name: 'Save' });
 
@@ -66,11 +66,7 @@ describe('<UserForm />', () => {
 
   test('edit form hides org field', async () => {
     renderWithContexts(
-      <UserForm
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
-        user={mockData}
-      />
+      <UserForm handleSubmit={vi.fn()} handleCancel={vi.fn()} user={mockData} />
     );
     await screen.findByRole('button', { name: 'Save' });
 
@@ -79,7 +75,7 @@ describe('<UserForm />', () => {
 
   test('inputs should update form value on change', async () => {
     const { user } = renderWithContexts(
-      <UserForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
+      <UserForm handleSubmit={vi.fn()} handleCancel={vi.fn()} />
     );
     await screen.findByRole('button', { name: 'Save' });
 
@@ -92,7 +88,7 @@ describe('<UserForm />', () => {
 
   test('fields required on add', async () => {
     renderWithContexts(
-      <UserForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
+      <UserForm handleSubmit={vi.fn()} handleCancel={vi.fn()} />
     );
     await screen.findByRole('button', { name: 'Save' });
 
@@ -105,8 +101,8 @@ describe('<UserForm />', () => {
     renderWithContexts(
       <UserForm
         user={{ ...mockData, external_account: '', auth: [] }}
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
       />
     );
     await screen.findByRole('button', { name: 'Save' });
@@ -118,8 +114,8 @@ describe('<UserForm />', () => {
     renderWithContexts(
       <UserForm
         user={{ ...mockData, external_account: '', auth: [] }}
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
       />
     );
     await screen.findByRole('button', { name: 'Save' });
@@ -130,11 +126,7 @@ describe('<UserForm />', () => {
 
   test('username should not be required for external accounts', async () => {
     renderWithContexts(
-      <UserForm
-        user={mockData}
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
-      />
+      <UserForm user={mockData} handleSubmit={vi.fn()} handleCancel={vi.fn()} />
     );
     await screen.findByRole('button', { name: 'Save' });
 
@@ -150,8 +142,8 @@ describe('<UserForm />', () => {
           ...mockData,
           ldap_dn: 'uid=binduser,cn=users,cn=accounts,dc=lan,dc=example,dc=com',
         }}
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
       />
     );
     await screen.findByRole('button', { name: 'Save' });
@@ -163,11 +155,7 @@ describe('<UserForm />', () => {
 
   test('password fields are not displayed for social/ldap login', async () => {
     renderWithContexts(
-      <UserForm
-        user={mockData}
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
-      />
+      <UserForm user={mockData} handleSubmit={vi.fn()} handleCancel={vi.fn()} />
     );
     await screen.findByRole('button', { name: 'Save' });
 
@@ -178,12 +166,12 @@ describe('<UserForm />', () => {
   });
 
   test('should call handleSubmit when Submit button is clicked', async () => {
-    const handleSubmit = jest.fn();
+    const handleSubmit = vi.fn();
     const { user } = renderWithContexts(
       <UserForm
         user={mockData}
         handleSubmit={handleSubmit}
-        handleCancel={jest.fn()}
+        handleCancel={vi.fn()}
       />
     );
     await screen.findByRole('button', { name: 'Save' });
@@ -195,11 +183,11 @@ describe('<UserForm />', () => {
   });
 
   test('should call handleCancel when Cancel button is clicked', async () => {
-    const handleCancel = jest.fn();
+    const handleCancel = vi.fn();
     const { user } = renderWithContexts(
       <UserForm
         user={mockData}
-        handleSubmit={jest.fn()}
+        handleSubmit={vi.fn()}
         handleCancel={handleCancel}
       />
     );
@@ -215,8 +203,8 @@ describe('<UserForm />', () => {
     renderWithContexts(
       <UserForm
         user={mockData}
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
       />,
       {
         context: {

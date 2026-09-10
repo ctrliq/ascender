@@ -7,8 +7,8 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import ProjectsListItem from './ProjectListItem';
 
-jest.mock('../../../api/models/Projects');
-jest.mock('hooks/useBrandName', () => ({
+vi.mock('../../../api/models/Projects');
+vi.mock('hooks/useBrandName', () => ({
   __esModule: true,
   default: () => ({
     current: 'AWX',
@@ -258,5 +258,5 @@ describe('<ProjectsListItem />', () => {
 });
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });

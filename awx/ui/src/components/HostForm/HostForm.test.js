@@ -4,7 +4,7 @@ import { InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import HostForm from './HostForm';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const mockData = {
   id: 1,
@@ -21,8 +21,8 @@ const mockData = {
 };
 
 describe('<HostForm />', () => {
-  const handleSubmit = jest.fn();
-  const handleCancel = jest.fn();
+  const handleSubmit = vi.fn();
+  const handleCancel = vi.fn();
 
   beforeEach(() => {
     // the host already has a summary_fields.inventory, so the lookup does not
@@ -36,7 +36,7 @@ describe('<HostForm />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('changing inputs should update form values', async () => {
@@ -95,8 +95,8 @@ describe('<HostForm />', () => {
     renderWithContexts(
       <HostForm
         host={mockData}
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
         isInventoryVisible={false}
       />
     );
@@ -113,8 +113,8 @@ describe('<HostForm />', () => {
     renderWithContexts(
       <HostForm
         host={mockData}
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
         disableInventoryLookup
       />
     );

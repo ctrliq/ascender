@@ -4,7 +4,7 @@ import { WorkflowDispatchContext } from 'contexts/Workflow';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import VisualizerStartScreen from './VisualizerStartScreen';
 
-const dispatch = jest.fn();
+const dispatch = vi.fn();
 
 describe('VisualizerStartScreen', () => {
   test('dispatches properly when start button clicked', () => {
