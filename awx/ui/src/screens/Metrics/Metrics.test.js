@@ -5,8 +5,8 @@ import { MetricsAPI, InstancesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Metrics from './Metrics';
 
-jest.mock('../../api/models/Instances');
-jest.mock('../../api/models/Metrics');
+vi.mock('../../api/models/Instances');
+vi.mock('../../api/models/Metrics');
 
 describe('<Metrics/>', () => {
   let user;
@@ -45,7 +45,7 @@ describe('<Metrics/>', () => {
     await waitFor(() => expect(InstancesAPI.read).toHaveBeenCalled());
   });
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should mount properly', async () => {

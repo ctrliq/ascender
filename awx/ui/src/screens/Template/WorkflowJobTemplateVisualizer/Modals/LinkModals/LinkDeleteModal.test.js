@@ -7,7 +7,7 @@ import {
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import LinkDeleteModal from './LinkDeleteModal';
 
-const dispatch = jest.fn();
+const dispatch = vi.fn();
 
 const workflowContext = {
   linkToDelete: {
@@ -23,7 +23,7 @@ const workflowContext = {
 
 describe('LinkDeleteModal', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   beforeEach(() => {

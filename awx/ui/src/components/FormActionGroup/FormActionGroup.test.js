@@ -6,8 +6,8 @@ import FormActionGroup from './FormActionGroup';
 
 describe('FormActionGroup', () => {
   test('should render save and cancel buttons and invoke their handlers', async () => {
-    const onSubmit = jest.fn();
-    const onCancel = jest.fn();
+    const onSubmit = vi.fn();
+    const onCancel = vi.fn();
     const { user } = renderWithContexts(
       <FormActionGroup onSubmit={onSubmit} onCancel={onCancel} />
     );

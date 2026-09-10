@@ -4,18 +4,18 @@ import { WorkflowJobTemplatesAPI } from 'api';
 import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 import WorkflowJobTemplatesList from './WorkflowJobTemplatesList';
 
-jest.mock('../../../../../../api/models/WorkflowJobTemplates');
+vi.mock('../../../../../../api/models/WorkflowJobTemplates');
 
 const nodeResource = {
   id: 1,
   name: 'Test Workflow Job Template',
   unified_job_type: 'workflow_job',
 };
-const onUpdateNodeResource = jest.fn();
+const onUpdateNodeResource = vi.fn();
 
 describe('WorkflowJobTemplatesList', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Row selected when nodeResource id matches row id and clicking new row makes expected callback', async () => {

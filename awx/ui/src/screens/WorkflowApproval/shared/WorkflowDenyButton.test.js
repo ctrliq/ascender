@@ -5,20 +5,20 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowDenyButton from './WorkflowDenyButton';
 import mockData from '../data.workflowApprovals.json';
 
-jest.mock('api');
+vi.mock('api');
 
 const mockApprovalList = mockData.results;
 
 describe('<WorkflowDenyButton/>', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially render successfully', () => {
     renderWithContexts(
       <WorkflowDenyButton
         workflowApproval={mockApprovalList[0]}
-        onHandleToast={jest.fn()}
+        onHandleToast={vi.fn()}
       />
     );
     expect(screen.getByRole('button', { name: 'Deny' })).toBeEnabled();
@@ -28,7 +28,7 @@ describe('<WorkflowDenyButton/>', () => {
     renderWithContexts(
       <WorkflowDenyButton
         workflowApproval={mockApprovalList[2]}
-        onHandleToast={jest.fn()}
+        onHandleToast={vi.fn()}
       />
     );
     expect(
@@ -42,7 +42,7 @@ describe('<WorkflowDenyButton/>', () => {
     const { user } = renderWithContexts(
       <WorkflowDenyButton
         workflowApproval={mockApprovalList[0]}
-        onHandleToast={jest.fn()}
+        onHandleToast={vi.fn()}
       />
     );
     await user.click(screen.getByRole('button', { name: 'Deny' }));
@@ -67,7 +67,7 @@ describe('<WorkflowDenyButton/>', () => {
     const { user } = renderWithContexts(
       <WorkflowDenyButton
         workflowApproval={mockApprovalList[0]}
-        onHandleToast={jest.fn()}
+        onHandleToast={vi.fn()}
       />
     );
     await user.click(screen.getByRole('button', { name: 'Deny' }));

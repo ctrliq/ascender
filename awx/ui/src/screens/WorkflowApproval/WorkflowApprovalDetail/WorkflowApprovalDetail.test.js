@@ -11,16 +11,16 @@ import mockWorkflowApprovals from '../data.workflowApprovals.json';
 
 const workflowApproval = mockWorkflowApprovals.results[0];
 
-jest.mock('../../../api');
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('../../../api');
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({
     id: 218,
   }),
 }));
 
-jest.mock('@lingui/react/macro', () => ({
-  ...jest.requireActual('@lingui/react/macro'),
+vi.mock('@lingui/react/macro', async () => ({
+  ...(await vi.importActual('@lingui/react/macro')),
   useLingui: () => ({
     t: (template, values) => {
       // Handle template literals properly
@@ -38,8 +38,8 @@ jest.mock('@lingui/react/macro', () => ({
 
 // react-ace does not render its value into the DOM under jsdom, so surface the
 // value VariablesDetail receives as plain text to keep the original assertion.
-jest.mock('components/CodeEditor', () => ({
-  ...jest.requireActual('components/CodeEditor'),
+vi.mock('components/CodeEditor', async () => ({
+  ...(await vi.importActual('components/CodeEditor')),
   VariablesDetail: ({ label, value }) => (
     <div>
       <div>{label}</div>
@@ -48,23 +48,27 @@ jest.mock('components/CodeEditor', () => ({
   ),
 }));
 
-jest.mock('../shared/WorkflowApprovalUtils', () => ({
-  ...jest.requireActual('../shared/WorkflowApprovalUtils'),
-  getDetailPendingLabel: (workflowApproval) => {
-    if (!workflowApproval.approval_expiration) {
-      return 'Never';
-    }
-    return jest
-      .requireActual('util/dates')
-      .formatDateString(workflowApproval.approval_expiration);
-  },
-  getStatus: (workflowApproval) => {
-    if (workflowApproval.status === 'successful') {
-      return 'approved';
-    }
-    return workflowApproval.status;
-  },
-}));
+vi.mock('../shared/WorkflowApprovalUtils', async () => {
+  const actual = await vi.importActual('../shared/WorkflowApprovalUtils');
+  // Resolved here rather than inside the callback: importActual is async, and
+  // the callback this stands in for is called synchronously during render.
+  const dates = await vi.importActual('util/dates');
+  return {
+    ...actual,
+    getDetailPendingLabel: (workflowApproval) => {
+      if (!workflowApproval.approval_expiration) {
+        return 'Never';
+      }
+      return dates.formatDateString(workflowApproval.approval_expiration);
+    },
+    getStatus: (workflowApproval) => {
+      if (workflowApproval.status === 'successful') {
+        return 'approved';
+      }
+      return workflowApproval.status;
+    },
+  };
+});
 
 const workflowJob = {
   id: 111,
@@ -189,7 +193,7 @@ describe('<WorkflowApprovalDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render Details', async () => {
@@ -381,7 +385,7 @@ describe('<WorkflowApprovalDetail />', () => {
       Promise.reject(new Error())
     );
     const { user } = await renderDetail(workflowApproval, {
-      fetchWorkflowApproval: jest.fn(),
+      fetchWorkflowApproval: vi.fn(),
     });
     await user.click(screen.getByRole('button', { name: 'Approve' }));
     expect(WorkflowApprovalsAPI.approve).toHaveBeenCalledTimes(1);
@@ -398,7 +402,7 @@ describe('<WorkflowApprovalDetail />', () => {
       Promise.reject(new Error())
     );
     const { user } = await renderDetail(workflowApproval, {
-      fetchWorkflowApproval: jest.fn(),
+      fetchWorkflowApproval: vi.fn(),
     });
     await user.click(screen.getByRole('button', { name: 'Deny' }));
     expect(WorkflowApprovalsAPI.deny).toHaveBeenCalledTimes(1);

@@ -5,7 +5,7 @@ import { ProjectsAPI, CredentialsAPI } from 'api';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import SCMSubForm from './SCMSubForm';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 const initialValues = {
   credential: null,
@@ -46,7 +46,7 @@ describe('<SCMSubForm />', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderForm(values = initialValues) {

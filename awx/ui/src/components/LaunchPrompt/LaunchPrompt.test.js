@@ -11,12 +11,12 @@ import {
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import LaunchPrompt from './LaunchPrompt';
 
-jest.mock('../../api/models/Inventories');
-jest.mock('../../api/models/ExecutionEnvironments');
-jest.mock('../../api/models/CredentialTypes');
-jest.mock('../../api/models/Credentials');
-jest.mock('../../api/models/JobTemplates');
-jest.mock('../../api/models/InstanceGroups');
+vi.mock('../../api/models/Inventories');
+vi.mock('../../api/models/ExecutionEnvironments');
+vi.mock('../../api/models/CredentialTypes');
+vi.mock('../../api/models/Credentials');
+vi.mock('../../api/models/JobTemplates');
+vi.mock('../../api/models/InstanceGroups');
 
 let config;
 const resource = {
@@ -192,7 +192,7 @@ describe('LaunchPrompt', () => {
     };
   });
 
-  afterEach(() => jest.clearAllMocks());
+  afterEach(() => vi.clearAllMocks());
 
   test('should render Wizard with all steps', async () => {
     renderWithContexts(

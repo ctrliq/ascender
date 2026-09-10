@@ -8,7 +8,7 @@ import {
 import { CredentialList } from '.';
 import { mockCredentials } from '../shared';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<CredentialList />', () => {
   beforeEach(async () => {
@@ -24,7 +24,7 @@ describe('<CredentialList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should fetch credentials from api and render them in the list', async () => {
@@ -80,7 +80,7 @@ describe('<CredentialList />', () => {
   });
 
   test('should call api delete credentials for each selected credential', async () => {
-    CredentialsAPI.destroy = jest.fn().mockResolvedValue({});
+    CredentialsAPI.destroy = vi.fn().mockResolvedValue({});
     const { user } = renderWithContexts(<CredentialList />);
     await screen.findByRole('link', { name: 'Baz' });
 
@@ -98,7 +98,7 @@ describe('<CredentialList />', () => {
   });
 
   test('should show error modal when credential is not successfully deleted from api', async () => {
-    CredentialsAPI.destroy = jest.fn().mockRejectedValueOnce(new Error());
+    CredentialsAPI.destroy = vi.fn().mockRejectedValueOnce(new Error());
     const { user } = renderWithContexts(<CredentialList />);
     await screen.findByRole('link', { name: 'Foo' });
 

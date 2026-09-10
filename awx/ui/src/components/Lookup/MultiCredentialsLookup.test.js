@@ -6,7 +6,7 @@ import { CredentialsAPI, CredentialTypesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import MultiCredentialsLookup from './MultiCredentialsLookup';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
   const credentials = [
@@ -131,11 +131,11 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should load credential types', async () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     renderLookup({ onChange });
     await waitFor(() =>
       expect(CredentialTypesAPI.loadAllTypes).toHaveBeenCalled()
@@ -144,7 +144,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
   });
 
   test('onChange is called when you click to remove a credential from input', async () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { user } = renderLookup({ onChange });
     await waitFor(() =>
       expect(CredentialTypesAPI.loadAllTypes).toHaveBeenCalled()
@@ -229,7 +229,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
   });
 
   test('should only add 1 credential per credential type except vault(see below)', async () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { user } = renderLookup({ onChange });
     await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
 
@@ -290,7 +290,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
   });
 
   test('should allow multiple vault credentials with no vault id', async () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     CredentialsAPI.read.mockResolvedValue({
       data: {
         results: [
@@ -354,7 +354,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
   });
 
   test('should allow multiple vault credentials with different vault ids', async () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     CredentialsAPI.read.mockResolvedValue({
       data: {
         results: [
@@ -420,7 +420,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
   });
 
   test('should not select multiple vault credentials with same vault id', async () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     CredentialsAPI.read.mockResolvedValue({
       data: {
         results: [

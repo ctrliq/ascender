@@ -6,7 +6,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationTeamList from './OrganizationTeamList';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const listData = {
   data: {
@@ -61,7 +61,7 @@ describe('<OrganizationTeamList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should load teams on mount with expected query params', async () => {

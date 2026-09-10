@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor, fireEvent } from '@testing-library/react';
+import { screen, waitFor, fireEvent, act } from '@testing-library/react';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
@@ -20,8 +20,8 @@ import NodeModal from './NodeModal';
 // save payloads), not PF component rendering, so lightweight stubs suffice.
 // ---------------------------------------------------------------------------
 
-jest.mock('@patternfly/react-core', () => {
-  const R = require('react');
+vi.mock('@patternfly/react-core', async () => {
+  const R = await vi.importActual('react');
   const WizCtx = R.createContext({});
 
   // Helper: strip PF-only props so React doesn't warn about unknown DOM attrs.
@@ -224,8 +224,8 @@ jest.mock('@patternfly/react-core', () => {
   });
 });
 
-jest.mock('@patternfly/react-core/deprecated', () => {
-  const R = require('react');
+vi.mock('@patternfly/react-core/deprecated', async () => {
+  const R = await vi.importActual('react');
   return {
     __esModule: true,
     Modal: ({ children, isOpen }) =>
@@ -234,8 +234,8 @@ jest.mock('@patternfly/react-core/deprecated', () => {
   };
 });
 
-jest.mock('@patternfly/react-table', () => {
-  const R = require('react');
+vi.mock('@patternfly/react-table', async () => {
+  const R = await vi.importActual('react');
   const strip = (props) => {
     const out = {};
     [
@@ -280,24 +280,26 @@ jest.mock('@patternfly/react-table', () => {
   };
 });
 
-jest.mock(
-  '@patternfly/react-icons',
-  () =>
-    new Proxy(
-      {},
-      {
-        get(t, p) {
-          if (p === '__esModule') return true;
-          if (!(p in t) && typeof p === 'string') {
-            const R = require('react');
-            t[p] = (props) =>
-              R.createElement('span', { 'data-icon': p, ...props });
-          }
-          return t[p];
-        },
-      }
-    )
-);
+vi.mock('@patternfly/react-icons', async () => {
+  const R = await vi.importActual('react');
+  return new Proxy(
+    {},
+    {
+      get(t, p) {
+        if (p === '__esModule') return true;
+        // The factory is async, so its result gets awaited. Handing back a
+        // function for `then` would make this namespace look like a thenable
+        // and the await would never settle.
+        if (p === 'then') return undefined;
+        if (!(p in t) && typeof p === 'string') {
+          t[p] = (props) =>
+            R.createElement('span', { 'data-icon': p, ...props });
+        }
+        return t[p];
+      },
+    }
+  );
+});
 
 // Suppress React DOM warnings caused by mock components (unknown props,
 // nesting mismatches).  Real errors still propagate to setupTests.js.
@@ -332,9 +334,9 @@ afterAll(() => {
   console.warn = _origWarn;
 });
 
-jest.mock('../../../../../api');
-const dispatch = jest.fn();
-const onSave = jest.fn();
+vi.mock('../../../../../api');
+const dispatch = vi.fn();
+const onSave = vi.fn();
 
 // The PF Wizard renders into a body portal; these helpers query the live DOM
 // (screen/document) directly.
@@ -356,10 +358,16 @@ const clickLinkTypeCard = (label) => {
   fireEvent.click(card);
 };
 
-const waitForWizard = () =>
-  waitFor(() =>
+const waitForWizard = async () => {
+  await waitFor(() =>
     expect(document.querySelector('button#next-node-modal')).toBeInTheDocument()
   );
+  // The button existing is not the same as the wizard having settled. Without
+  // this the first interaction of a test can land on a render that is then
+  // replaced, and be silently lost, which shows up as the click that picked a
+  // link type never having happened.
+  await act(async () => {});
+};
 
 const jtLaunchConfig = {
   can_start_without_user_input: false,
@@ -440,14 +448,14 @@ describe('NodeModal', () => {
       isNotificationAdmin: false,
       isExecEnvAdmin: false,
     }));
-    JobTemplatesAPI.read = jest.fn();
+    JobTemplatesAPI.read = vi.fn();
     JobTemplatesAPI.read.mockResolvedValue({
       data: {
         count: 1,
         results: [mockJobTemplate],
       },
     });
-    JobTemplatesAPI.readOptions = jest.fn();
+    JobTemplatesAPI.readOptions = vi.fn();
     JobTemplatesAPI.readOptions.mockResolvedValue({
       data: {
         actions: {
@@ -457,15 +465,15 @@ describe('NodeModal', () => {
         related_search_fields: [],
       },
     });
-    JobTemplatesAPI.readLaunch = jest.fn();
+    JobTemplatesAPI.readLaunch = vi.fn();
     JobTemplatesAPI.readLaunch.mockResolvedValue({ data: jtLaunchConfig });
-    JobTemplatesAPI.readCredentials = jest.fn();
+    JobTemplatesAPI.readCredentials = vi.fn();
     JobTemplatesAPI.readCredentials.mockResolvedValue({
       data: {
         results: [],
       },
     });
-    JobTemplatesAPI.readSurvey = jest.fn();
+    JobTemplatesAPI.readSurvey = vi.fn();
     JobTemplatesAPI.readSurvey.mockResolvedValue({
       data: {
         name: '',
@@ -483,7 +491,7 @@ describe('NodeModal', () => {
         variable: 'bar',
       },
     });
-    ProjectsAPI.read = jest.fn();
+    ProjectsAPI.read = vi.fn();
     ProjectsAPI.read.mockResolvedValue({
       data: {
         count: 1,
@@ -497,7 +505,7 @@ describe('NodeModal', () => {
         ],
       },
     });
-    ProjectsAPI.readOptions = jest.fn();
+    ProjectsAPI.readOptions = vi.fn();
     ProjectsAPI.readOptions.mockResolvedValue({
       data: {
         actions: {
@@ -507,7 +515,7 @@ describe('NodeModal', () => {
         related_search_fields: [],
       },
     });
-    InventorySourcesAPI.read = jest.fn();
+    InventorySourcesAPI.read = vi.fn();
     InventorySourcesAPI.read.mockResolvedValue({
       data: {
         count: 1,
@@ -521,7 +529,7 @@ describe('NodeModal', () => {
         ],
       },
     });
-    InventorySourcesAPI.readOptions = jest.fn();
+    InventorySourcesAPI.readOptions = vi.fn();
     InventorySourcesAPI.readOptions.mockResolvedValue({
       data: {
         actions: {
@@ -600,7 +608,7 @@ describe('NodeModal', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Can successfully create a new job template node', async () => {
@@ -827,6 +835,12 @@ describe('NodeModal', () => {
       expect(document.querySelector('input#approval-name')).toBeInTheDocument()
     );
 
+    // The input existing does not mean the step has settled: the approval form
+    // is still mounting, and a change fired now lands on a render that is
+    // about to be replaced, so the value is lost. The fields set after this
+    // one all stick, which is what gives it away. Flush the pending effects
+    // first and the wait the test was relying on becomes explicit.
+    await act(async () => {});
     fireEvent.change(document.querySelector('input#approval-name'), {
       target: { value: 'Test Approval', name: 'approvalName' },
     });
@@ -904,7 +918,7 @@ describe('Edit existing node', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Can successfully change project sync node to workflow approval node', async () => {
@@ -943,6 +957,12 @@ describe('Edit existing node', () => {
       expect(document.querySelector('input#approval-name')).toBeInTheDocument()
     );
 
+    // The input existing does not mean the step has settled: the approval form
+    // is still mounting, and a change fired now lands on a render that is
+    // about to be replaced, so the value is lost. The fields set after this
+    // one all stick, which is what gives it away. Flush the pending effects
+    // first and the wait the test was relying on becomes explicit.
+    await act(async () => {});
     fireEvent.change(document.querySelector('input#approval-name'), {
       target: { value: 'Test Approval', name: 'approvalName' },
     });

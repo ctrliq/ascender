@@ -4,7 +4,7 @@ import { UsersAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserEdit from './UserEdit';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<UserEdit />', () => {
   const mockData = {

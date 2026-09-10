@@ -6,20 +6,20 @@ import CodeEditor from './CodeEditor';
 // CodeEditor pulls in ace-builds mode/theme files for their side effects; those
 // expect the global `ace` that the real react-ace sets up on import. Since we
 // mock react-ace below, neutralize those side-effect imports so they don't throw.
-jest.mock('ace-builds/src-noconflict/mode-json', () => ({}));
-jest.mock('ace-builds/src-noconflict/mode-javascript', () => ({}));
-jest.mock('ace-builds/src-noconflict/mode-yaml', () => ({}));
-jest.mock('ace-builds/src-noconflict/mode-django', () => ({}));
-jest.mock('ace-builds/src-noconflict/theme-twilight', () => ({}));
-jest.mock('ace-builds/src-noconflict/ext-searchbox', () => ({}));
+vi.mock('ace-builds/src-noconflict/mode-json', () => ({}));
+vi.mock('ace-builds/src-noconflict/mode-javascript', () => ({}));
+vi.mock('ace-builds/src-noconflict/mode-yaml', () => ({}));
+vi.mock('ace-builds/src-noconflict/mode-django', () => ({}));
+vi.mock('ace-builds/src-noconflict/theme-twilight', () => ({}));
+vi.mock('ace-builds/src-noconflict/ext-searchbox', () => ({}));
 
 // Mock react-ace so the controlled props CodeEditor passes through
 // (mode/value/setOptions/onChange) are observable. Under jsdom the real
 // react-ace keeps its value in an internal model that never reaches the DOM and
 // editing it fires no onChange, so we render those props onto a textarea and
 // forward edits to onChange instead.
-jest.mock('react-ace', () => {
-  const ReactMock = require('react');
+vi.mock('react-ace', async () => {
+  const ReactMock = await vi.importActual('react');
   // class component so CodeEditor's ref (editor.current.refEditor) resolves
   class AceMock extends ReactMock.Component {
     render() {
@@ -59,7 +59,7 @@ jest.mock('react-ace', () => {
 
 describe('CodeEditor', () => {
   it('should render the ace editor in the requested mode with the given value', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     renderWithContexts(
       <CodeEditor
         id="code"
@@ -78,7 +78,7 @@ describe('CodeEditor', () => {
   });
 
   it('should render in read only mode', () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     renderWithContexts(
       <CodeEditor
         id="code"
@@ -93,9 +93,9 @@ describe('CodeEditor', () => {
   });
 
   it('should trigger the onChange prop (debounced) on edit', () => {
-    jest.useFakeTimers();
+    vi.useFakeTimers();
     try {
-      const onChange = jest.fn();
+      const onChange = vi.fn();
       renderWithContexts(
         <CodeEditor id="code" value={'---'} onChange={onChange} mode="yaml" />
       );
@@ -104,11 +104,11 @@ describe('CodeEditor', () => {
       });
       // CodeEditor wraps onChange in debounce(onChange, 250)
       act(() => {
-        jest.advanceTimersByTime(300);
+        vi.advanceTimersByTime(300);
       });
       expect(onChange).toHaveBeenCalledWith('---\nfoo: bar');
     } finally {
-      jest.useRealTimers();
+      vi.useRealTimers();
     }
   });
 

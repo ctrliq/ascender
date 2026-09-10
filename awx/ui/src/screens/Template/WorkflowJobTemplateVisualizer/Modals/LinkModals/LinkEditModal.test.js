@@ -7,7 +7,7 @@ import {
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import LinkEditModal from './LinkEditModal';
 
-const dispatch = jest.fn();
+const dispatch = vi.fn();
 
 const workflowContext = {
   linkToEdit: {

@@ -6,19 +6,19 @@ import { CredentialTypesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import CredentialType from './CredentialType';
 
-jest.mock('../../api/models/CredentialTypes');
+vi.mock('../../api/models/CredentialTypes');
 
 // Markers for the routed tab panels, so assertions are about which branch of
 // the nested v6 <Routes> tree resolves.
-jest.mock('./CredentialTypeDetails', () => {
-  const ReactLib = require('react');
+vi.mock('./CredentialTypeDetails', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'CredentialTypeDetails'),
   };
 });
-jest.mock('./CredentialTypeEdit', () => {
-  const ReactLib = require('react');
+vi.mock('./CredentialTypeEdit', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'CredentialTypeEdit'),
@@ -52,7 +52,7 @@ describe('<CredentialType />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('fetches the credential type detail', async () => {

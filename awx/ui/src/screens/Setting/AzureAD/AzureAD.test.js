@@ -8,7 +8,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import AzureAD from './AzureAD';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<AzureAD />', () => {
   beforeEach(() => {
@@ -29,7 +29,7 @@ describe('<AzureAD />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderAzure(initialEntries) {

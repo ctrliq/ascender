@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import AzureADEdit from './AzureADEdit';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<AzureADEdit />', () => {
   let history;
@@ -32,7 +32,7 @@ describe('<AzureADEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderEdit() {

@@ -4,18 +4,18 @@ import { JobTemplatesAPI } from 'api';
 import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 import JobTemplatesList from './JobTemplatesList';
 
-jest.mock('../../../../../../api/models/JobTemplates');
+vi.mock('../../../../../../api/models/JobTemplates');
 
 const nodeResource = {
   id: 1,
   name: 'Test Job Template',
   unified_job_type: 'job',
 };
-const onUpdateNodeResource = jest.fn();
+const onUpdateNodeResource = vi.fn();
 
 describe('JobTemplatesList', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Row selected when nodeResource id matches row id and clicking new row makes expected callback', async () => {

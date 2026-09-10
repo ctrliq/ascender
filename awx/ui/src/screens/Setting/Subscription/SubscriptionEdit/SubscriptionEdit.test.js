@@ -5,7 +5,7 @@ import { ConfigAPI, MeAPI, SettingsAPI, RootAPI, UsersAPI } from 'api';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import SubscriptionEdit from './SubscriptionEdit';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 const mockConfig = {
   me: {
@@ -43,7 +43,7 @@ const emptyConfig = {
   license_info: {
     valid_key: false,
   },
-  request: jest.fn(),
+  request: vi.fn(),
 };
 
 async function waitForLoaded() {
@@ -58,7 +58,7 @@ describe('<SubscriptionEdit />', () => {
     let container;
 
     async function renderFresh() {
-      jest.resetAllMocks();
+      vi.resetAllMocks();
       RootAPI.readAssetVariables = async () => ({
         data: {
           BRAND_NAME: 'Mock',
@@ -147,8 +147,12 @@ describe('<SubscriptionEdit />', () => {
       fireEvent.click(container.querySelector('#subscription-wizard-next'));
       expect(await screen.findByText('User analytics')).toBeInTheDocument();
       expect(screen.getByText('Automation Analytics')).toBeInTheDocument();
-      // manifest + insights enabled -> credential fields are shown
-      expect(container.querySelector('#username-field')).toBeInTheDocument();
+      // manifest + insights enabled -> credential fields are shown. The step
+      // heading arrives before they do, so this waits rather than assuming the
+      // whole step rendered in one go.
+      await waitFor(() =>
+        expect(container.querySelector('#username-field')).toBeInTheDocument()
+      );
       expect(container.querySelector('#password-field')).toBeInTheDocument();
 
       // deselecting both analytics checkboxes hides the credential fields
@@ -189,7 +193,7 @@ describe('<SubscriptionEdit />', () => {
     let container;
 
     async function renderEdit() {
-      jest.resetAllMocks();
+      vi.resetAllMocks();
       RootAPI.readAssetVariables = async () => ({
         data: { BRAND_NAME: 'Mock', PENDO_API_KEY: '' },
       });
@@ -219,7 +223,7 @@ describe('<SubscriptionEdit />', () => {
           config: {
             ...mockConfig,
             license_info: { valid_key: true },
-            request: jest.fn(),
+            request: vi.fn(),
           },
           router: { history },
         },
@@ -352,8 +356,8 @@ describe('<SubscriptionEdit />', () => {
   });
 
   test('shows a content error when asset variables fail to load', async () => {
-    jest.resetAllMocks();
-    RootAPI.readAssetVariables = jest.fn().mockRejectedValueOnce(new Error());
+    vi.resetAllMocks();
+    RootAPI.readAssetVariables = vi.fn().mockRejectedValueOnce(new Error());
     renderWithContexts(<SubscriptionEdit />, {
       context: { config: emptyConfig },
     });

@@ -7,24 +7,24 @@ import NotificationTemplates from './NotificationTemplates';
 
 // Replace the routed children with markers so the assertions are purely about
 // which branch of the v6 <Routes> tree resolves for a given URL.
-jest.mock('./NotificationTemplateList', () => {
-  const ReactLib = require('react');
+vi.mock('./NotificationTemplateList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>
       ReactLib.createElement('div', null, 'NotificationTemplateList'),
   };
 });
-jest.mock('./NotificationTemplateAdd', () => {
-  const ReactLib = require('react');
+vi.mock('./NotificationTemplateAdd', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>
       ReactLib.createElement('div', null, 'NotificationTemplateAdd'),
   };
 });
-jest.mock('./NotificationTemplate', () => {
-  const ReactLib = require('react');
+vi.mock('./NotificationTemplate', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>

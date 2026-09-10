@@ -6,8 +6,8 @@ import { TeamsAPI, UsersAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AddResourceRole from './AddResourceRole';
 
-jest.mock('../../api/models/Teams');
-jest.mock('../../api/models/Users');
+vi.mock('../../api/models/Teams');
+vi.mock('../../api/models/Users');
 
 // TODO: Once error handling is functional in
 // this component write tests for it
@@ -61,7 +61,7 @@ describe('<AddResourceRole />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders without crashing', () => {
@@ -120,7 +120,7 @@ describe('<AddResourceRole />', () => {
   });
 
   test('should call on error properly', async () => {
-    const onError = jest.fn();
+    const onError = vi.fn();
     UsersAPI.associateRole.mockRejectedValue(
       new Error({
         response: {

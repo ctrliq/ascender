@@ -5,12 +5,12 @@ import { Routes, Route } from 'react-router';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Users from './Users';
 
-jest.mock('../../api/models/Users');
+vi.mock('../../api/models/Users');
 
-// resetMocks: true strips jest.fn implementations between tests, so capture
+// resetMocks: true strips vi.fn implementations between tests, so capture
 // the props with a plain function instead of asserting on mock.calls.
 let mockScreenHeaderProps;
-jest.mock('components/ScreenHeader/ScreenHeader', () => ({
+vi.mock('components/ScreenHeader/ScreenHeader', () => ({
   __esModule: true,
   default: (props) => {
     mockScreenHeaderProps = props;
@@ -20,22 +20,22 @@ jest.mock('components/ScreenHeader/ScreenHeader', () => ({
 
 // Replace the routed children with markers so the assertions are purely about
 // which branch of the v6 <Routes> tree resolves for a given URL.
-jest.mock('./UserList/UserList', () => {
-  const ReactLib = require('react');
+vi.mock('./UserList/UserList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'UsersList'),
   };
 });
-jest.mock('./UserAdd/UserAdd', () => {
-  const ReactLib = require('react');
+vi.mock('./UserAdd/UserAdd', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'UserAdd'),
   };
 });
-jest.mock('./User', () => {
-  const ReactLib = require('react');
+vi.mock('./User', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'User detail'),

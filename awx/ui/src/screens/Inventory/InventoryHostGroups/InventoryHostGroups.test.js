@@ -6,7 +6,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostGroups from './InventoryHostGroups';
 
 // stub the leaf list so the index route renders without hitting the API
-jest.mock('./InventoryHostGroupsList', () => {
+vi.mock('./InventoryHostGroupsList', () => {
   const InventoryHostGroupsList = () => <div data-testid="host-groups-list" />;
   return { __esModule: true, default: InventoryHostGroupsList };
 });

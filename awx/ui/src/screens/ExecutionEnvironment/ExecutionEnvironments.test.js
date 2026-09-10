@@ -6,28 +6,28 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import ExecutionEnvironments from './ExecutionEnvironments';
 
-jest.mock('../../api/models/ExecutionEnvironments');
+vi.mock('../../api/models/ExecutionEnvironments');
 
 // Replace the routed children with markers so the assertions are purely about
 // which branch of the v6 <Routes> tree resolves for a given URL.
-jest.mock('./ExecutionEnvironmentList', () => {
-  const ReactLib = require('react');
+vi.mock('./ExecutionEnvironmentList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>
       ReactLib.createElement('div', null, 'ExecutionEnvironmentList'),
   };
 });
-jest.mock('./ExecutionEnvironmentAdd', () => {
-  const ReactLib = require('react');
+vi.mock('./ExecutionEnvironmentAdd', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>
       ReactLib.createElement('div', null, 'ExecutionEnvironmentAdd'),
   };
 });
-jest.mock('./ExecutionEnvironment', () => {
-  const ReactLib = require('react');
+vi.mock('./ExecutionEnvironment', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>

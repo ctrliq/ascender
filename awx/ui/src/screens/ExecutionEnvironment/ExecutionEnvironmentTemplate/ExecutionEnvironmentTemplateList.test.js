@@ -6,7 +6,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentTemplateList from './ExecutionEnvironmentTemplateList';
 
-jest.mock('../../../api/');
+vi.mock('../../../api/');
 
 const templates = {
   data: {
@@ -58,7 +58,7 @@ describe('<ExecutionEnvironmentTemplateList/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should fetch data and render 3 rows', async () => {

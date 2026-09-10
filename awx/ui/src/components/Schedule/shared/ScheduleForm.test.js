@@ -7,9 +7,9 @@ import { SchedulesAPI, JobTemplatesAPI, InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleForm from './ScheduleForm';
 
-jest.mock('../../../api/models/Schedules');
-jest.mock('../../../api/models/JobTemplates');
-jest.mock('../../../api/models/Inventories');
+vi.mock('../../../api/models/Schedules');
+vi.mock('../../../api/models/JobTemplates');
+vi.mock('../../../api/models/Inventories');
 
 // PF DatePicker/Select wrap their menus in Popovers/Poppers that can schedule a
 // state update after the tree unmounts under jsdom. That benign warning is
@@ -18,7 +18,7 @@ jest.mock('../../../api/models/Inventories');
 const realConsoleError = console.error;
 // resetMocks wipes the spy before each test, so (re)install it per test.
 beforeEach(() => {
-  jest.spyOn(console, 'error').mockImplementation((...args) => {
+  vi.spyOn(console, 'error').mockImplementation((...args) => {
     if (
       typeof args[0] === 'string' &&
       args[0].includes(
@@ -211,8 +211,8 @@ describe('<ScheduleForm />', () => {
       SchedulesAPI.readZoneInfo.mockRejectedValue(new Error());
       renderWithContexts(
         <ScheduleForm
-          handleSubmit={jest.fn()}
-          handleCancel={jest.fn()}
+          handleSubmit={vi.fn()}
+          handleCancel={vi.fn()}
           launchConfig={fullLaunchConfig}
           resource={{
             id: 23,
@@ -230,7 +230,7 @@ describe('<ScheduleForm />', () => {
 
   describe('Cancel', () => {
     test('should make the appropriate callback', async () => {
-      const handleCancel = jest.fn();
+      const handleCancel = vi.fn();
       JobTemplatesAPI.readLaunch.mockResolvedValue(launchData);
       SchedulesAPI.readCredentials.mockResolvedValue(credentials);
       SchedulesAPI.readZoneInfo.mockResolvedValue({
@@ -238,7 +238,7 @@ describe('<ScheduleForm />', () => {
       });
       const { user, container } = renderWithContexts(
         <ScheduleForm
-          handleSubmit={jest.fn()}
+          handleSubmit={vi.fn()}
           handleCancel={handleCancel}
           launchConfig={fullLaunchConfig}
           resource={{
@@ -268,8 +268,8 @@ describe('<ScheduleForm />', () => {
     function renderPrompt(resource, surveyConfig) {
       return renderWithContexts(
         <ScheduleForm
-          handleSubmit={jest.fn()}
-          handleCancel={jest.fn()}
+          handleSubmit={vi.fn()}
+          handleCancel={vi.fn()}
           resource={resource}
           launchConfig={promptLaunchConfig}
           surveyConfig={surveyConfig}
@@ -401,8 +401,8 @@ describe('<ScheduleForm />', () => {
       });
       ({ container, user } = renderWithContexts(
         <ScheduleForm
-          handleSubmit={jest.fn()}
-          handleCancel={jest.fn()}
+          handleSubmit={vi.fn()}
+          handleCancel={vi.fn()}
           resource={{
             id: 23,
             type: 'job_template',
@@ -614,8 +614,8 @@ describe('<ScheduleForm />', () => {
     function renderEdit(schedule, extraLaunch, resource) {
       return renderWithContexts(
         <ScheduleForm
-          handleSubmit={jest.fn()}
-          handleCancel={jest.fn()}
+          handleSubmit={vi.fn()}
+          handleCancel={vi.fn()}
           schedule={schedule}
           launchConfig={{ inventory_needed_to_start: false, ...extraLaunch }}
           resource={
@@ -664,8 +664,8 @@ describe('<ScheduleForm />', () => {
     test('should render prompt button with enabled save button for project', async () => {
       const { container } = renderWithContexts(
         <ScheduleForm
-          handleSubmit={jest.fn()}
-          handleCancel={jest.fn()}
+          handleSubmit={vi.fn()}
+          handleCancel={vi.fn()}
           resource={{
             id: 23,
             type: 'project',

@@ -4,7 +4,7 @@ import { ConfigAPI } from 'api';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import SubscriptionModal from './SubscriptionModal';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 const mockSubscriptions = [
   {
@@ -35,15 +35,15 @@ async function waitForLoaded() {
 
 describe('<SubscriptionModal />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('with subscriptions', () => {
-    const onConfirm = jest.fn();
-    const onClose = jest.fn();
+    const onConfirm = vi.fn();
+    const onClose = vi.fn();
 
     async function setup() {
-      ConfigAPI.readSubscriptions = jest.fn().mockResolvedValue({
+      ConfigAPI.readSubscriptions = vi.fn().mockResolvedValue({
         data: mockSubscriptions.map((s) => ({ ...s })),
       });
       const utils = renderWithContexts(
@@ -100,7 +100,7 @@ describe('<SubscriptionModal />', () => {
     });
 
     test('should auto-select current selected subscription', async () => {
-      ConfigAPI.readSubscriptions = jest.fn().mockResolvedValue({
+      ConfigAPI.readSubscriptions = vi.fn().mockResolvedValue({
         data: mockSubscriptions.map((s) => ({ ...s })),
       });
       renderWithContexts(
@@ -130,7 +130,7 @@ describe('<SubscriptionModal />', () => {
   });
 
   test('should display error detail message', async () => {
-    ConfigAPI.readSubscriptions = jest.fn().mockRejectedValueOnce(new Error());
+    ConfigAPI.readSubscriptions = vi.fn().mockRejectedValueOnce(new Error());
     renderWithContexts(
       <SubscriptionModal
         subscriptionCreds={{ username: 'admin', password: '$encrypted' }}

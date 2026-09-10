@@ -4,8 +4,8 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import Sort from './Sort';
 
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useLocation: () => ({
     pathname: '/organizations',
   }),
@@ -26,7 +26,7 @@ describe('<Sort />', () => {
       },
     ];
 
-    const onSort = jest.fn();
+    const onSort = vi.fn();
 
     const { user } = renderWithContexts(
       <Sort qsConfig={qsConfig} columns={columns} onSort={onSort} />
@@ -51,7 +51,7 @@ describe('<Sort />', () => {
       { name: 'Bakery', key: 'bakery' },
     ];
 
-    const onSort = jest.fn();
+    const onSort = vi.fn();
 
     const { user } = renderWithContexts(
       <Sort qsConfig={qsConfig} columns={columns} onSort={onSort} />
@@ -73,7 +73,7 @@ describe('<Sort />', () => {
       { name: 'Bakery', key: 'bakery' },
     ];
 
-    const onSort = jest.fn();
+    const onSort = vi.fn();
 
     const { user } = renderWithContexts(
       <Sort qsConfig={qsConfig} columns={columns} onSort={onSort} />
@@ -95,7 +95,7 @@ describe('<Sort />', () => {
       { name: 'Bakery', key: 'bakery' },
     ];
 
-    const onSort = jest.fn();
+    const onSort = vi.fn();
 
     const { user } = renderWithContexts(
       <Sort qsConfig={qsConfig} columns={columns} onSort={onSort} />
@@ -128,7 +128,7 @@ describe('<Sort />', () => {
       <Sort
         qsConfig={qsConfigNumDown}
         columns={numericColumns}
-        onSort={jest.fn()}
+        onSort={vi.fn()}
       />
     );
 
@@ -149,7 +149,7 @@ describe('<Sort />', () => {
       <Sort
         qsConfig={qsConfigNumUp}
         columns={numericColumns}
-        onSort={jest.fn()}
+        onSort={vi.fn()}
       />
     );
 
@@ -170,7 +170,7 @@ describe('<Sort />', () => {
       <Sort
         qsConfig={qsConfigAlphaDown}
         columns={alphaColumns}
-        onSort={jest.fn()}
+        onSort={vi.fn()}
       />
     );
 
@@ -191,7 +191,7 @@ describe('<Sort />', () => {
       <Sort
         qsConfig={qsConfigAlphaDown}
         columns={alphaColumns}
-        onSort={jest.fn()}
+        onSort={vi.fn()}
       />
     );
 

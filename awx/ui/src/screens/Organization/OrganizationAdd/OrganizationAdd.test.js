@@ -5,13 +5,13 @@ import { CredentialsAPI, OrganizationsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import OrganizationAdd from './OrganizationAdd';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // The shared OrganizationForm carries galaxy-credential and instance-group
 // lookups that are exercised by OrganizationForm's own suite; here we only
 // need to drive its onSubmit/onCancel callbacks, so capture the latest props.
 let formProps;
-jest.mock('../shared/OrganizationForm', () => {
+vi.mock('../shared/OrganizationForm', () => {
   const MockOrganizationForm = (props) => {
     formProps = props;
     return (
@@ -29,7 +29,7 @@ jest.mock('../shared/OrganizationForm', () => {
       </div>
     );
   };
-  return MockOrganizationForm;
+  return { default: MockOrganizationForm };
 });
 
 describe('<OrganizationAdd />', () => {
@@ -51,7 +51,7 @@ describe('<OrganizationAdd />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     formProps = undefined;
   });
 

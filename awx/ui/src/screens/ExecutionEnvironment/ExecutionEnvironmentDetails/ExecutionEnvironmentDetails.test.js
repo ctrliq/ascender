@@ -10,14 +10,14 @@ import {
 
 import ExecutionEnvironmentDetails from './ExecutionEnvironmentDetails';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // The DeleteButton fetches related-resource counts on click; return an empty
 // request list so it skips that fetch (which hits several auto-mocked APIs)
 // and opens the confirm modal directly.
-jest.mock('util/getRelatedResourceDeleteDetails', () => ({
+vi.mock('util/getRelatedResourceDeleteDetails', () => ({
   relatedResourceDeleteRequests: { executionEnvironment: () => [] },
-  getRelatedResourceDeleteCounts: jest
+  getRelatedResourceDeleteCounts: vi
     .fn()
     .mockResolvedValue({ results: false, error: null }),
 }));
@@ -52,7 +52,7 @@ const executionEnvironment = {
 
 describe('<ExecutionEnvironmentDetails/>', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render details properly', async () => {

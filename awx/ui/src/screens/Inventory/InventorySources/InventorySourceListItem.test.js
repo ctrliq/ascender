@@ -41,7 +41,7 @@ function renderItem(props) {
 
 describe('<InventorySourceListItem />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should mount properly', () => {

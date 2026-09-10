@@ -9,11 +9,11 @@ import { InstanceGroupsAPI, InstancesAPI, SettingsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InstanceList from './InstanceList';
 
-jest.mock('../../../api/models/InstanceGroups');
-jest.mock('../../../api/models/Instances');
-jest.mock('../../../api/models/Settings');
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('../../../api/models/InstanceGroups');
+vi.mock('../../../api/models/Instances');
+vi.mock('../../../api/models/Settings');
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({
     id: 1,
   }),
@@ -114,7 +114,7 @@ describe('<InstanceList />, React testing library tests', () => {
   const options = { data: { actions: { POST: true } } };
 
   const customRender = (ui, isK8s = true) => {
-    jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
+    vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { is_superuser: true },
     }));
     InstancesAPI.read.mockResolvedValue({

@@ -9,7 +9,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import ApplicationDetails from './ApplicationDetails';
 
-jest.mock('../../../api/models/Applications');
+vi.mock('../../../api/models/Applications');
 
 const authorizationOptions = [
   {
@@ -93,7 +93,7 @@ function renderDetails(application, options) {
 }
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('<ApplicationDetails/>', () => {

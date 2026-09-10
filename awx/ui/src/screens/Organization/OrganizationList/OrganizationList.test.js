@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationsList from './OrganizationList';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockOrganizations = {
   data: {
@@ -79,7 +79,7 @@ describe('<OrganizationsList />', () => {
     });
   });
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Items are rendered after loading', async () => {

@@ -7,13 +7,13 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceListItem from './InstanceListItem';
 
-jest.mock('../../../api');
-jest.mock('../../../hooks/useDebounce');
+vi.mock('../../../api');
+vi.mock('../../../hooks/useDebounce');
 
 // The component reads useParams from react-router-dom (the route
 // tree is v6); mock it there, keeping the rest of the module real.
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({
     id: 1,
   }),
@@ -73,7 +73,7 @@ describe('<InstanceListItem/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render the proper data instance', () => {
@@ -138,7 +138,7 @@ describe('<InstanceListItem/>', () => {
   });
 
   test('should render checkbox wired to onSelect', async () => {
-    const onSelect = jest.fn();
+    const onSelect = vi.fn();
     const { user } = renderItem({ onSelect });
     const row = screen.getByRole('link', { name: 'awx' }).closest('tr');
     // The first checkbox in the row is the row-select; the toggle is named.

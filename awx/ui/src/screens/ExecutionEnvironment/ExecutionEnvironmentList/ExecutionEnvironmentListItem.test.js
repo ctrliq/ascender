@@ -6,7 +6,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentListItem from './ExecutionEnvironmentListItem';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const executionEnvironment = {
   name: 'Foo',
@@ -29,8 +29,8 @@ const renderItem = (props = {}) =>
           detailUrl="execution_environments/1/details"
           isSelected={false}
           onSelect={() => {}}
-          onCopy={jest.fn()}
-          fetchExecutionEnvironments={jest.fn().mockResolvedValue()}
+          onCopy={vi.fn()}
+          fetchExecutionEnvironments={vi.fn().mockResolvedValue()}
           rowIndex={0}
           {...props}
         />
@@ -40,7 +40,7 @@ const renderItem = (props = {}) =>
 
 describe('<ExecutionEnvironmentListItem/>', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should mount successfully', () => {

@@ -5,26 +5,26 @@ import { Routes, Route } from 'react-router';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Organizations from './Organizations';
 
-jest.mock('../../api/models/Organizations');
+vi.mock('../../api/models/Organizations');
 
 // Replace the routed children with markers so the assertions are purely about
 // which branch of the v6 <Routes> tree resolves for a given URL.
-jest.mock('./OrganizationList/OrganizationList', () => {
-  const ReactLib = require('react');
+vi.mock('./OrganizationList/OrganizationList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'OrganizationList'),
   };
 });
-jest.mock('./OrganizationAdd/OrganizationAdd', () => {
-  const ReactLib = require('react');
+vi.mock('./OrganizationAdd/OrganizationAdd', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'OrganizationAdd'),
   };
 });
-jest.mock('./Organization', () => {
-  const ReactLib = require('react');
+vi.mock('./Organization', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'Organization detail'),

@@ -16,13 +16,13 @@ describe('ConstructedInventoriesAPI', () => {
         },
       });
     mockHttp = {
-      options: jest.fn(optionsPromise),
+      options: vi.fn(optionsPromise),
     };
     ConstructedInventoriesAPI = new ConstructedInventories(mockHttp);
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('readConstructedInventoryOptions calls options with the expected params', async () => {

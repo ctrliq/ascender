@@ -6,33 +6,33 @@ import { InstanceGroupsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import InstanceGroup from './InstanceGroup';
 
-jest.mock('../../api/models/InstanceGroups');
+vi.mock('../../api/models/InstanceGroups');
 
 // Markers for the routed tab panels, so assertions are about which branch of
 // the nested v6 <Routes> tree resolves.
-jest.mock('./InstanceGroupDetails', () => {
-  const ReactLib = require('react');
+vi.mock('./InstanceGroupDetails', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'InstanceGroupDetails'),
   };
 });
-jest.mock('./InstanceGroupEdit', () => {
-  const ReactLib = require('react');
+vi.mock('./InstanceGroupEdit', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'InstanceGroupEdit'),
   };
 });
-jest.mock('./Instances/Instances', () => {
-  const ReactLib = require('react');
+vi.mock('./Instances/Instances', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'Instances subtree'),
   };
 });
-jest.mock('components/JobList', () => {
-  const ReactLib = require('react');
+vi.mock('components/JobList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'JobList'),
@@ -66,7 +66,7 @@ describe('<InstanceGroup />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('fetches the instance group detail', async () => {

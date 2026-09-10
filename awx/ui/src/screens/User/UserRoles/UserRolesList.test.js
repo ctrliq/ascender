@@ -4,7 +4,7 @@ import { UsersAPI, RolesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserRolesList from './UserRolesList';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const user = {
   id: 18,
@@ -101,7 +101,7 @@ describe('<UserRolesList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render properly', async () => {

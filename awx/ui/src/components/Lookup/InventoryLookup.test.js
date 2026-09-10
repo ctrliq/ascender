@@ -5,7 +5,7 @@ import { InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import InventoryLookup from './InventoryLookup';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const mockedInventories = {
   data: {
@@ -29,7 +29,7 @@ describe('InventoryLookup', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render successfully and fetch data', async () => {

@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import GitHubTeamEdit from './GitHubTeamEdit';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<GitHubTeamEdit />', () => {
   let history;
@@ -29,7 +29,7 @@ describe('<GitHubTeamEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function setup() {

@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockAllOptions from './shared/data.allSettingOptions.json';
 import Settings from './Settings';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('<Settings />', () => {
   beforeEach(() => {
@@ -22,7 +22,7 @@ describe('<Settings />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should redirect users without system admin or auditor permissions', async () => {

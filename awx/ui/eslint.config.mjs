@@ -14,7 +14,7 @@ import globals from 'globals';
 export default defineConfig([
   {
     ignores: [
-      'jest.*.js',
+      'vitest.config.mjs',
       'webpack.*.js',
       'etc/**',
       'coverage/**',
@@ -59,7 +59,7 @@ export default defineConfig([
       globals: {
         ...globals.browser,
         ...globals.node,
-        ...globals.jest,
+        ...globals.vitest,
       },
     },
     settings: {

@@ -10,11 +10,11 @@ import {
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import JobCancelButton from './JobCancelButton';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('<JobCancelButton/>', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render properly', () => {

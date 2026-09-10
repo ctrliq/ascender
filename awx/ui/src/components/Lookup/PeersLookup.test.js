@@ -5,7 +5,7 @@ import { InstancesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import PeersLookup from './PeersLookup';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const mockedInstances = {
   count: 1,
@@ -81,7 +81,7 @@ describe('PeersLookup', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render successfully without instance_details (for new added instance)', async () => {

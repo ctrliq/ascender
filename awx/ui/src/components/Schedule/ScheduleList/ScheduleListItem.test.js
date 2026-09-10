@@ -44,7 +44,7 @@ const mockSchedule = {
   until: '',
 };
 
-const onSelect = jest.fn();
+const onSelect = vi.fn();
 
 function renderItem(props) {
   return renderWithContexts(

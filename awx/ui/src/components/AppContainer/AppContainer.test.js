@@ -8,11 +8,11 @@ import {
 } from '../../../testUtils/rtlContexts';
 import AppContainer from './AppContainer';
 
-jest.mock('../../api');
-jest.mock('../../util/bootstrapPendo');
+vi.mock('../../api');
+vi.mock('../../util/bootstrapPendo');
 
 global.pendo = {
-  initialize: jest.fn(),
+  initialize: vi.fn(),
 };
 
 describe('<AppContainer />', () => {
@@ -30,8 +30,8 @@ describe('<AppContainer />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
-    jest.restoreAllMocks();
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('expected content is rendered', async () => {
@@ -177,7 +177,7 @@ describe('<AppContainer />', () => {
   });
 
   test('logout makes expected call to api client', async () => {
-    const logout = jest.fn();
+    const logout = vi.fn();
     const { user } = renderWithContexts(<AppContainer />, {
       context: {
         session: {

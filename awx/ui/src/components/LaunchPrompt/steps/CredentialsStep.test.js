@@ -6,8 +6,8 @@ import { CredentialsAPI, CredentialTypesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import CredentialsStep from './CredentialsStep';
 
-jest.mock('../../../api/models/CredentialTypes');
-jest.mock('../../../api/models/Credentials');
+vi.mock('../../../api/models/CredentialTypes');
+vi.mock('../../../api/models/Credentials');
 
 const types = [
   { id: 1, kind: 'ssh', name: 'SSH', url: '/api/v2/credential_types/1/' },
@@ -131,7 +131,7 @@ describe('CredentialsStep', () => {
     });
   });
 
-  afterEach(() => jest.clearAllMocks());
+  afterEach(() => vi.clearAllMocks());
 
   test('should load credentials', async () => {
     renderWithContexts(

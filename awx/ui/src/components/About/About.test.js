@@ -3,14 +3,14 @@ import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import About from './About';
 
-jest.mock('../../hooks/useBrandName', () => ({
+vi.mock('../../hooks/useBrandName', () => ({
   __esModule: true,
   default: () => 'AWX',
 }));
 
 describe('<About />', () => {
   test('should render AboutModal with product name and version', () => {
-    const onClose = jest.fn();
+    const onClose = vi.fn();
     renderWithContexts(<About isOpen onClose={onClose} version="1.2.3" />);
 
     // AboutModal renders into a body portal; the product name surfaces as the
@@ -25,7 +25,7 @@ describe('<About />', () => {
   });
 
   test('should not render when isOpen is false', () => {
-    const onClose = jest.fn();
+    const onClose = vi.fn();
     renderWithContexts(<About onClose={onClose} version="1.2.3" />);
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });

@@ -9,7 +9,7 @@ import {
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import UIDetail from './UIDetail';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<UIDetail />', () => {
   beforeEach(() => {
@@ -23,7 +23,7 @@ describe('<UIDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderDetail(context) {

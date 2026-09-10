@@ -18,7 +18,7 @@ function DeleteTest({ makeRequest, args = {} }) {
 describe('useRequest hooks', () => {
   describe('useRequest', () => {
     test('should return initial value as result', () => {
-      const makeRequest = jest.fn();
+      const makeRequest = vi.fn();
       makeRequest.mockResolvedValue({ data: 'foo' });
       render(
         <Test
@@ -35,7 +35,7 @@ describe('useRequest hooks', () => {
     });
 
     test('should return result', async () => {
-      const makeRequest = jest.fn();
+      const makeRequest = vi.fn();
       makeRequest.mockResolvedValue({ data: 'foo' });
       render(<Test makeRequest={makeRequest} />);
 
@@ -46,7 +46,7 @@ describe('useRequest hooks', () => {
     });
 
     test('should set isLoading flag', async () => {
-      const makeRequest = jest.fn();
+      const makeRequest = vi.fn();
       let resolve;
       const promise = new Promise((r) => {
         resolve = r;
@@ -70,7 +70,7 @@ describe('useRequest hooks', () => {
     });
 
     test('should invoke request function', async () => {
-      const makeRequest = jest.fn();
+      const makeRequest = vi.fn();
       makeRequest.mockResolvedValue({ data: 'foo' });
       render(<Test makeRequest={makeRequest} />);
 
@@ -123,7 +123,7 @@ describe('useRequest hooks', () => {
     });
 
     test('should not update state after unmount', async () => {
-      const makeRequest = jest.fn();
+      const makeRequest = vi.fn();
       let resolve;
       const promise = new Promise((r) => {
         resolve = r;
@@ -144,7 +144,7 @@ describe('useRequest hooks', () => {
 
   describe('useDeleteItems', () => {
     test('should invoke delete function', async () => {
-      const makeRequest = jest.fn();
+      const makeRequest = vi.fn();
       makeRequest.mockResolvedValue({ data: 'foo' });
       renderWithContexts(
         <DeleteTest

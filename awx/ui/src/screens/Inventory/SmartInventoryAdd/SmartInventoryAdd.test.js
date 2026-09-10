@@ -5,7 +5,7 @@ import { InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SmartInventoryAdd from './SmartInventoryAdd';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const formData = {
   name: 'Mock',
@@ -17,23 +17,21 @@ const formData = {
   instance_groups: [{ id: 2 }],
 };
 
-jest.mock(
-  '../shared/SmartInventoryForm',
-  () =>
-    function SmartInventoryForm({ onSubmit, onCancel, submitError }) {
-      return (
-        <div>
-          <button
-            type="button"
-            aria-label="mock-submit"
-            onClick={() => onSubmit(formData)}
-          />
-          <button type="button" aria-label="mock-cancel" onClick={onCancel} />
-          {submitError ? <div data-testid="mock-submit-error" /> : null}
-        </div>
-      );
-    }
-);
+vi.mock('../shared/SmartInventoryForm', () => ({
+  default: function SmartInventoryForm({ onSubmit, onCancel, submitError }) {
+    return (
+      <div>
+        <button
+          type="button"
+          aria-label="mock-submit"
+          onClick={() => onSubmit(formData)}
+        />
+        <button type="button" aria-label="mock-cancel" onClick={onCancel} />
+        {submitError ? <div data-testid="mock-submit-error" /> : null}
+      </div>
+    );
+  },
+}));
 
 describe('<SmartInventoryAdd />', () => {
   beforeEach(() => {
@@ -42,7 +40,7 @@ describe('<SmartInventoryAdd />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', () => {

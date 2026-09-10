@@ -6,7 +6,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationExecEnvList from './OrganizationExecEnvList';
 
-jest.mock('../../../api/');
+vi.mock('../../../api/');
 
 const executionEnvironments = {
   data: {
@@ -71,7 +71,7 @@ describe('<OrganizationExecEnvList/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should have data fetched and render 3 rows', async () => {

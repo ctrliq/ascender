@@ -5,7 +5,7 @@ import { OrganizationsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import OrganizationLookup, { _OrganizationLookup } from './OrganizationLookup';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('OrganizationLookup', () => {
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe('OrganizationLookup', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render successfully', async () => {
@@ -62,7 +62,7 @@ describe('OrganizationLookup', () => {
         count: 1,
       },
     });
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     renderWithContexts(
       <Formik>
         <OrganizationLookup autoPopulate onChange={onChange} />
@@ -78,7 +78,7 @@ describe('OrganizationLookup', () => {
         count: 1,
       },
     });
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     renderWithContexts(
       <Formik>
         <OrganizationLookup onChange={onChange} />
@@ -98,7 +98,7 @@ describe('OrganizationLookup', () => {
         count: 2,
       },
     });
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     renderWithContexts(
       <Formik>
         <OrganizationLookup autoPopulate onChange={onChange} />

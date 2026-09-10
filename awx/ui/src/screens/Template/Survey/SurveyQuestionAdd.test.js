@@ -41,7 +41,7 @@ describe('<SurveyQuestionAdd />', () => {
   let updateSurvey;
 
   beforeEach(() => {
-    updateSurvey = jest.fn();
+    updateSurvey = vi.fn();
   });
 
   test('should render form', () => {
@@ -77,7 +77,7 @@ describe('<SurveyQuestionAdd />', () => {
 
   test('should set formError', async () => {
     const realConsoleError = global.console.error;
-    global.console.error = jest.fn();
+    global.console.error = vi.fn();
     const err = new Error('oops');
     updateSurvey.mockImplementation(() => {
       throw err;
@@ -95,7 +95,7 @@ describe('<SurveyQuestionAdd />', () => {
 
   test('should generate error for duplicate variable names', async () => {
     const realConsoleError = global.console.error;
-    global.console.error = jest.fn();
+    global.console.error = vi.fn();
     renderWithContexts(
       <SurveyQuestionAdd survey={survey} updateSurvey={updateSurvey} />
     );

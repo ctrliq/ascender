@@ -14,15 +14,15 @@ import {
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import JobTemplateForm from './JobTemplateForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // The Inventory / Project / Credential lookups talk to the API and render
 // large search modals; rather than drive their onChange handlers through
 // those modals, we stand them in with lightweight mocks that surface the
 // current value in the DOM and expose buttons to trigger onChange with the
 // same payloads the test uses.
-jest.mock('components/Lookup', () => {
-  const actual = jest.requireActual('components/Lookup');
+vi.mock('components/Lookup', async () => {
+  const actual = await vi.importActual('components/Lookup');
   return {
     ...actual,
     InventoryLookup: ({ value, onChange }) => (
@@ -149,7 +149,7 @@ describe('<JobTemplateForm />', () => {
     // warnings under the partial API mocks; suppress console.error so these
     // don't fail the run.
     consoleError = global.console.error;
-    global.console.error = jest.fn();
+    global.console.error = vi.fn();
     RootAPI.readAssetVariables.mockResolvedValue({
       data: {
         BRAND_NAME: 'AWX',
@@ -186,15 +186,15 @@ describe('<JobTemplateForm />', () => {
 
   afterEach(() => {
     global.console.error = consoleError;
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should render LabelsSelect', async () => {
     renderWithContexts(
       <JobTemplateForm
         template={mockData}
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
       />
     );
 
@@ -214,8 +214,8 @@ describe('<JobTemplateForm />', () => {
     renderWithContexts(
       <JobTemplateForm
         template={mockData}
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
       />
     );
     await screen.findByRole('button', { name: 'Save' });
@@ -235,8 +235,8 @@ describe('<JobTemplateForm />', () => {
     renderWithContexts(
       <JobTemplateForm
         template={mockData}
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
       />
     );
     await screen.findByRole('button', { name: 'Save' });
@@ -299,8 +299,8 @@ describe('<JobTemplateForm />', () => {
     renderWithContexts(
       <JobTemplateForm
         template={mockData}
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
       />
     );
     await screen.findByRole('button', { name: 'Save' });
@@ -338,8 +338,8 @@ describe('<JobTemplateForm />', () => {
           element={
             <JobTemplateForm
               template={mockData}
-              handleSubmit={jest.fn()}
-              handleCancel={jest.fn()}
+              handleSubmit={vi.fn()}
+              handleCancel={vi.fn()}
             />
           }
         />
@@ -392,8 +392,8 @@ describe('<JobTemplateForm />', () => {
                 webhook_service: 'github',
                 related: { webhook_receiver: '' },
               }}
-              handleSubmit={jest.fn()}
-              handleCancel={jest.fn()}
+              handleSubmit={vi.fn()}
+              handleCancel={vi.fn()}
             />
           }
         />
@@ -413,12 +413,12 @@ describe('<JobTemplateForm />', () => {
   });
 
   test('should call handleSubmit when Submit button is clicked', async () => {
-    const handleSubmit = jest.fn();
+    const handleSubmit = vi.fn();
     renderWithContexts(
       <JobTemplateForm
         template={mockData}
         handleSubmit={handleSubmit}
-        handleCancel={jest.fn()}
+        handleCancel={vi.fn()}
       />
     );
     await screen.findByRole('button', { name: 'Save' });
@@ -429,11 +429,11 @@ describe('<JobTemplateForm />', () => {
   });
 
   test('should call handleCancel when Cancel button is clicked', async () => {
-    const handleCancel = jest.fn();
+    const handleCancel = vi.fn();
     renderWithContexts(
       <JobTemplateForm
         template={mockData}
-        handleSubmit={jest.fn()}
+        handleSubmit={vi.fn()}
         handleCancel={handleCancel}
       />
     );

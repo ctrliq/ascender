@@ -8,22 +8,22 @@ import CredentialTypes from './CredentialTypes';
 
 // Replace the routed children with markers so the assertions are purely about
 // which branch of the v6 <Routes> tree resolves for a given URL.
-jest.mock('./CredentialTypeList', () => {
-  const ReactLib = require('react');
+vi.mock('./CredentialTypeList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'CredentialTypeList'),
   };
 });
-jest.mock('./CredentialTypeAdd', () => {
-  const ReactLib = require('react');
+vi.mock('./CredentialTypeAdd', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'CredentialTypeAdd'),
   };
 });
-jest.mock('./CredentialType', () => {
-  const ReactLib = require('react');
+vi.mock('./CredentialType', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'CredentialType detail'),

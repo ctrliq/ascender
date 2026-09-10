@@ -4,7 +4,7 @@ import { InstancesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import InstanceToggle from './InstanceToggle';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const mockInstance = {
   id: 1,
@@ -37,11 +37,11 @@ const mockInstance = {
 const getToggle = () => screen.getByRole('switch', { name: 'Toggle instance' });
 
 describe('<InstanceToggle>', () => {
-  const onToggle = jest.fn();
-  const fetchInstances = jest.fn();
+  const onToggle = vi.fn();
+  const fetchInstances = vi.fn();
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should show toggle off', async () => {

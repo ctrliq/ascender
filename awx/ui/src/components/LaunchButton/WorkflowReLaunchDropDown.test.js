@@ -12,7 +12,7 @@ describe('WorkflowReLaunchDropDown', () => {
   });
 
   test('offers "First Node" and "Failed node" with the right relaunch params', async () => {
-    const handleRelaunch = jest.fn();
+    const handleRelaunch = vi.fn();
     const { user } = renderWithContexts(
       <WorkflowReLaunchDropDown handleRelaunch={handleRelaunch} />
     );
@@ -32,7 +32,7 @@ describe('WorkflowReLaunchDropDown', () => {
   });
 
   test('labels the option "Canceled node" when the workflow was canceled', async () => {
-    const handleRelaunch = jest.fn();
+    const handleRelaunch = vi.fn();
     const { user } = renderWithContexts(
       <WorkflowReLaunchDropDown
         handleRelaunch={handleRelaunch}

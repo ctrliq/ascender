@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import UIEdit from './UIEdit';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<UIEdit />', () => {
   let history;
@@ -27,7 +27,7 @@ describe('<UIEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderEdit() {

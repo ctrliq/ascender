@@ -14,8 +14,8 @@ describe('<InventoryGroupForm />', () => {
   test('should render values for the fields that have them', () => {
     renderWithContexts(
       <InventoryGroupForm
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
         group={group}
       />
     );
@@ -27,8 +27,8 @@ describe('<InventoryGroupForm />', () => {
   test('should throw error properly', () => {
     renderWithContexts(
       <InventoryGroupForm
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
         group={group}
         error={{
           response: {

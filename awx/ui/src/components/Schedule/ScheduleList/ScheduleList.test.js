@@ -5,13 +5,13 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleList from './ScheduleList';
 import mockSchedules from '../data.schedules.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 let loadSchedules;
 let loadScheduleOptions;
 
 function setupMocks() {
-  SchedulesAPI.destroy = jest.fn();
+  SchedulesAPI.destroy = vi.fn();
   SchedulesAPI.update.mockResolvedValue({
     data: mockSchedules.results[0],
   });
@@ -19,8 +19,8 @@ function setupMocks() {
   SchedulesAPI.readOptions.mockResolvedValue({
     data: { actions: { GET: {}, POST: {} } },
   });
-  loadSchedules = jest.fn().mockResolvedValue({ data: mockSchedules });
-  loadScheduleOptions = jest.fn().mockResolvedValue({
+  loadSchedules = vi.fn().mockResolvedValue({ data: mockSchedules });
+  loadScheduleOptions = vi.fn().mockResolvedValue({
     data: { actions: { GET: {}, POST: {} } },
   });
 }

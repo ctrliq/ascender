@@ -9,7 +9,7 @@ import mockAllOptions from '../shared/data.allSettingOptions.json';
 import mockJobSettings from '../shared/data.jobSettings.json';
 import Jobs from './Jobs';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 function mountAt(path) {
   const history = createMemoryHistory({ initialEntries: [path] });
@@ -31,7 +31,7 @@ describe('<Jobs />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render jobs details', async () => {
@@ -47,7 +47,7 @@ describe('<Jobs />', () => {
     // absent from the mock OPTIONS data; suppress it so the console trap
     // doesn't fail this render-only assertion.
     const originalError = console.error;
-    console.error = jest.fn();
+    console.error = vi.fn();
     try {
       mountAt('/settings/jobs/edit');
       expect(

@@ -9,7 +9,7 @@ function getLabelGroup() {
 
 describe('<TagMultiSelect />', () => {
   it('should render Select with a chip per value', () => {
-    renderWithContexts(<TagMultiSelect value="foo,bar" onChange={jest.fn()} />);
+    renderWithContexts(<TagMultiSelect value="foo,bar" onChange={vi.fn()} />);
     const chips = within(getLabelGroup()).getAllByRole('listitem');
     expect(chips).toHaveLength(2);
     expect(chips[0]).toHaveTextContent('foo');
@@ -18,7 +18,7 @@ describe('<TagMultiSelect />', () => {
 
   it('should not treat empty string as an option', async () => {
     const { user } = renderWithContexts(
-      <TagMultiSelect value="" onChange={jest.fn()} />
+      <TagMultiSelect value="" onChange={vi.fn()} />
     );
     expect(
       screen.queryByRole('list', { name: 'Label group category' })
@@ -32,7 +32,7 @@ describe('<TagMultiSelect />', () => {
   });
 
   it('should trigger onChange when an existing option is selected', async () => {
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     const { user } = renderWithContexts(
       <TagMultiSelect value="foo,bar" onChange={onChange} />
     );

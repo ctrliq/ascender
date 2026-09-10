@@ -11,8 +11,8 @@ const activeStep = {
   id: 1,
 };
 const buttonText = 'Next';
-const onClick = jest.fn();
-const onNext = jest.fn();
+const onClick = vi.fn();
+const onNext = vi.fn();
 const triggerNext = 0;
 
 describe('NodeNextButton', () => {

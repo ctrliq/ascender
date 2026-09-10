@@ -8,7 +8,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import TACACS from './TACACS';
 
-jest.mock('../../../api/models/Settings');
+vi.mock('../../../api/models/Settings');
 
 describe('<TACACS />', () => {
   beforeEach(() => {
@@ -25,7 +25,7 @@ describe('<TACACS />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderTACACS(initialEntries) {

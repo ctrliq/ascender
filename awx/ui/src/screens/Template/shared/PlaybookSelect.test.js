@@ -16,7 +16,7 @@ const renderWithI18n = (component) => {
   return render(<I18nProvider i18n={i18n}>{component}</I18nProvider>);
 };
 
-jest.mock('api');
+vi.mock('api');
 
 describe('<PlaybookSelect />', () => {
   beforeEach(() => {
@@ -26,7 +26,7 @@ describe('<PlaybookSelect />', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('should reload playbooks when project value changes', async () => {
@@ -61,7 +61,7 @@ describe('<PlaybookSelect />', () => {
   });
 
   test('should trigger the onChange callback for the option selected from the list', async () => {
-    const mockCallback = jest.fn();
+    const mockCallback = vi.fn();
 
     renderWithI18n(
       <PlaybookSelect
@@ -87,7 +87,7 @@ describe('<PlaybookSelect />', () => {
   });
 
   test('should allow entering playbook file name manually', async () => {
-    const mockCallback = jest.fn();
+    const mockCallback = vi.fn();
 
     renderWithI18n(
       <PlaybookSelect

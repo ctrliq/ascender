@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockDetails from './data.user.json';
 import User from './User';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 // Mount under the same /users/:id/* route that Users.js gives it, so the
 // nested v6 <Routes> resolve and useParams sees the id.

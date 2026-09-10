@@ -10,8 +10,8 @@ function mockFetchResponse(overrides = {}) {
     ok: overrides.ok !== undefined ? overrides.ok : true,
     status: overrides.status || 200,
     headers,
-    json: jest.fn(() => Promise.resolve(JSON.parse(text))),
-    text: jest.fn(() => Promise.resolve(text)),
+    json: vi.fn(() => Promise.resolve(JSON.parse(text))),
+    text: vi.fn(() => Promise.resolve(text)),
   };
 }
 
@@ -24,18 +24,18 @@ describe('Base', () => {
   beforeEach(() => {
     const createPromise = () => Promise.resolve();
     mockHttp = {
-      delete: jest.fn(createPromise),
-      get: jest.fn(createPromise),
-      options: jest.fn(createPromise),
-      patch: jest.fn(createPromise),
-      post: jest.fn(createPromise),
-      put: jest.fn(createPromise),
+      delete: vi.fn(createPromise),
+      get: vi.fn(createPromise),
+      options: vi.fn(createPromise),
+      patch: vi.fn(createPromise),
+      post: vi.fn(createPromise),
+      put: vi.fn(createPromise),
     };
     BaseAPI = new Base(mockHttp, mockBaseURL);
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('create calls http method with expected data', async () => {
@@ -125,7 +125,7 @@ describe('defaultHttp (fetch-based client)', () => {
   let api;
 
   beforeEach(() => {
-    global.fetch = jest.fn(() =>
+    global.fetch = vi.fn(() =>
       Promise.resolve(
         mockFetchResponse({
           headers: { 'content-type': 'application/json' },
@@ -139,7 +139,7 @@ describe('defaultHttp (fetch-based client)', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
     document.cookie = 'csrftoken=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
   });
 

@@ -9,7 +9,7 @@ function LineChart({ data, helpText }) {
     const margin = 80;
     const getWidth = () => {
       let width;
-      // This is in an a try/catch due to an error from jest.
+      // This is in an a try/catch due to an error from the test runner.
       // Even though the d3.select returns a valid selector with
       // style function, it says it is null in the test
       try {

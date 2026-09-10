@@ -5,11 +5,11 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import Job from './Job';
 
-jest.mock('../../api');
+vi.mock('../../api');
 // Job reads useParams from react-router-dom (the route tree is v6);
 // mock it there, keeping the rest of the module real.
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({
     id: 1,
     typeSegment: 'project',

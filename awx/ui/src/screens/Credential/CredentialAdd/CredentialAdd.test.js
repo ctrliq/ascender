@@ -9,18 +9,20 @@ import {
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import CredentialAdd from './CredentialAdd';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // Drive the container directly through the shared CredentialForm's props.
 let formProps;
-jest.mock('../shared/CredentialForm', () => (props) => {
-  formProps = props;
-  return (
-    <button type="button" onClick={() => props.onCancel()}>
-      mock-credential-form
-    </button>
-  );
-});
+vi.mock('../shared/CredentialForm', () => ({
+  default: (props) => {
+    formProps = props;
+    return (
+      <button type="button" onClick={() => props.onCancel()}>
+        mock-credential-form
+      </button>
+    );
+  },
+}));
 
 const mockCredentialTypeResults = {
   data: {
@@ -87,7 +89,7 @@ const mockCredentialTypeResults = {
 
 describe('<CredentialAdd />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     formProps = undefined;
   });
 
@@ -97,7 +99,7 @@ describe('<CredentialAdd />', () => {
 
     beforeEach(async () => {
       CredentialTypesAPI.read.mockResolvedValue(mockCredentialTypeResults);
-      // NOTE: jest auto-mocks all `*API.create` to the SAME shared fn (they
+      // NOTE: automocking points all `*API.create` to the SAME shared fn (they
       // share a prototype via the Base class), so we only set the resolved
       // value once; both CredentialsAPI.create and
       // CredentialInputSourcesAPI.create return { data: { id: 13 } }.

@@ -5,7 +5,7 @@ import { InstanceGroupsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InstanceGroupsStep from './InstanceGroupsStep';
 
-jest.mock('../../../api/models/InstanceGroups');
+vi.mock('../../../api/models/InstanceGroups');
 
 const instance_groups = [
   { id: 1, name: 'ig one', url: '/instance_groups/1' },
@@ -33,7 +33,7 @@ describe('InstanceGroupsStep', () => {
     });
   });
 
-  afterEach(() => jest.clearAllMocks());
+  afterEach(() => vi.clearAllMocks());
 
   test('should load instance groups', async () => {
     renderWithContexts(

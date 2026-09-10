@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllSettings from '../shared/data.allSettings.json';
 import Subscription from './Subscription';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 SettingsAPI.readCategory.mockResolvedValue({
   data: mockAllSettings,
 });
@@ -20,7 +20,7 @@ RootAPI.readAssetVariables.mockResolvedValue({
 
 describe('<Subscription />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should redirect to subscription details', async () => {

@@ -8,7 +8,7 @@ import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import mockJobSettings from '../../shared/data.jobSettings.json';
 import JobsEdit from './JobsEdit';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<JobsEdit />', () => {
   let history;
@@ -22,7 +22,7 @@ describe('<JobsEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function mountEdit(options = mockAllOptions.actions) {
@@ -33,7 +33,7 @@ describe('<JobsEdit />', () => {
     // ENABLE_ANSIBLE_29), so the production form logs a PropTypes warning on
     // mount; suppress it so the setupTests console trap doesn't fail the test.
     const originalError = console.error;
-    console.error = jest.fn();
+    console.error = vi.fn();
     try {
       const result = renderWithContexts(
         <SettingsProvider value={options}>

@@ -5,7 +5,7 @@ import { ApplicationsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ApplicationsList from './ApplicationsList';
 
-jest.mock('../../../api/models/Applications');
+vi.mock('../../../api/models/Applications');
 
 // fresh data per test because one test mutates user_capabilities.edit
 function buildApplications() {
@@ -41,7 +41,7 @@ function buildApplications() {
 const options = { data: { actions: { POST: true } } };
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('<ApplicationsList/>', () => {

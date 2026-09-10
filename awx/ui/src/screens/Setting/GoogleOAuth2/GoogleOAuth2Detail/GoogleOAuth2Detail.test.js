@@ -9,7 +9,7 @@ import {
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import GoogleOAuth2Detail from './GoogleOAuth2Detail';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 // CodeEditor (react-ace) renders empty under jsdom, so for variable details we
 // assert the surrounding label is present rather than the editor contents.
@@ -37,7 +37,7 @@ describe('<GoogleOAuth2Detail />', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function mountDetail(context) {

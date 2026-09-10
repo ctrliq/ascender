@@ -7,9 +7,9 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockInventorySource from '../shared/data.inventory_source.json';
 import InventorySource from './InventorySource';
 
-jest.mock('../../../api/models/Inventories');
-jest.mock('../../../api/models/Organizations');
-jest.mock('../../../api/models/InventorySources');
+vi.mock('../../../api/models/Inventories');
+vi.mock('../../../api/models/Organizations');
+vi.mock('../../../api/models/InventorySources');
 
 const mockInventory = {
   id: 2,
@@ -50,7 +50,7 @@ describe('<InventorySource />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render expected tabs', async () => {

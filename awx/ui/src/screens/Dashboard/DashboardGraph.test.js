@@ -6,13 +6,15 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import DashboardGraph from './DashboardGraph';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 // LineChart renders via d3, which relies on SVGPathElement.getTotalLength —
 // not implemented by jsdom — so the real chart throws while drawing. The chart
 // itself isn't under test here (the filter controls and the data request are),
 // so stub it out and keep the assertions on the surrounding UI + API calls.
-jest.mock('./shared/LineChart', () => () => <div data-testid="line-chart" />);
+vi.mock('./shared/LineChart', () => ({
+  default: () => <div data-testid="line-chart" />,
+}));
 
 function getToggle(label) {
   return screen.getByRole('button', { name: label });
@@ -41,7 +43,7 @@ describe('<DashboardGraph/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders month-based/all job type chart by default', async () => {

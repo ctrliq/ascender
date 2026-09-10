@@ -16,7 +16,7 @@ import {
 import CredentialDetail from './CredentialDetail';
 import { mockCredentials, mockCredentialType } from '../shared';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockCredential = mockCredentials.results[0];
 
@@ -61,7 +61,7 @@ describe('<CredentialDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderDetail(credential = mockCredential) {
@@ -129,7 +129,7 @@ describe('<CredentialDetail />', () => {
   });
 
   test('handleDelete should call api', async () => {
-    CredentialsAPI.destroy = jest.fn().mockResolvedValue({});
+    CredentialsAPI.destroy = vi.fn().mockResolvedValue({});
     const { user } = await renderDetail();
 
     await user.click(screen.getByRole('button', { name: 'Delete' }));
@@ -143,7 +143,7 @@ describe('<CredentialDetail />', () => {
   });
 
   test('should show error modal when credential is not successfully deleted from api', async () => {
-    CredentialsAPI.destroy = jest.fn().mockRejectedValueOnce(new Error());
+    CredentialsAPI.destroy = vi.fn().mockRejectedValueOnce(new Error());
     const { user } = await renderDetail();
 
     await user.click(screen.getByRole('button', { name: 'Delete' }));

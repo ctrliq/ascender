@@ -34,11 +34,11 @@ describe('<NotificationListItem canToggleNotifications />', () => {
   }
 
   beforeEach(() => {
-    toggleNotification = jest.fn();
+    toggleNotification = vi.fn();
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully and displays correct label', () => {

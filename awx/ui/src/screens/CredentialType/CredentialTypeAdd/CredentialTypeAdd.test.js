@@ -6,7 +6,7 @@ import { CredentialTypesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import CredentialTypeAdd from './CredentialTypeAdd';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockCredentialTypeData = {
   name: 'Foo',
@@ -35,26 +35,25 @@ const mockCredentialTypeData = {
 // The form is exercised on its own in CredentialTypeForm.test.js; here we only
 // care about the container's submit/cancel/error handling, so stub the form
 // with controls that invoke its props.
-jest.mock(
-  '../shared/CredentialTypeForm',
-  () =>
-    function MockCredentialTypeForm({ onSubmit, onCancel, submitError }) {
-      return (
-        <div>
-          {submitError ? <div data-testid="form-submit-error" /> : null}
-          <button
-            type="button"
-            onClick={() => onSubmit(mockCredentialTypeData)}
-          >
-            Submit
-          </button>
-          <button type="button" aria-label="Cancel" onClick={onCancel}>
-            Cancel
-          </button>
-        </div>
-      );
-    }
-);
+vi.mock('../shared/CredentialTypeForm', () => ({
+  default: function MockCredentialTypeForm({
+    onSubmit,
+    onCancel,
+    submitError,
+  }) {
+    return (
+      <div>
+        {submitError ? <div data-testid="form-submit-error" /> : null}
+        <button type="button" onClick={() => onSubmit(mockCredentialTypeData)}>
+          Submit
+        </button>
+        <button type="button" aria-label="Cancel" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  },
+}));
 
 describe('<CredentialTypeAdd/>', () => {
   let history;
@@ -67,7 +66,7 @@ describe('<CredentialTypeAdd/>', () => {
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('handleSubmit should call the api and redirect to details page', async () => {

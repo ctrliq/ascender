@@ -32,7 +32,7 @@ describe('<DraggableSelectedList />', () => {
   });
 
   test('should call onRemove callback prop on remove button click', async () => {
-    const onRemove = jest.fn();
+    const onRemove = vi.fn();
     const mockSelected = [
       {
         id: 1,

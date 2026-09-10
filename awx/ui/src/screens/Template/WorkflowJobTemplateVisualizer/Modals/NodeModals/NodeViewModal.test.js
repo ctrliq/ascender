@@ -8,7 +8,7 @@ import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import NodeViewModal from './NodeViewModal';
 
-jest.mock('../../../../../api');
+vi.mock('../../../../../api');
 
 // The modal renders into a body portal and finishes loading once the launch /
 // related-data requests resolve; wait for the spinner (role progressbar) to go
@@ -22,7 +22,7 @@ describe('NodeViewModal', () => {
   let dispatch;
 
   beforeEach(() => {
-    dispatch = jest.fn();
+    dispatch = vi.fn();
     WorkflowJobTemplatesAPI.readLaunch.mockResolvedValue({});
     WorkflowJobTemplatesAPI.readDetail.mockResolvedValue({
       data: {
@@ -67,7 +67,7 @@ describe('NodeViewModal', () => {
     };
 
     afterAll(() => {
-      jest.resetAllMocks();
+      vi.resetAllMocks();
     });
 
     const renderModal = () =>
@@ -154,7 +154,7 @@ describe('NodeViewModal', () => {
       expect(JobTemplatesAPI.readWebhookKey).not.toHaveBeenCalledWith();
       expect(JobTemplatesAPI.readLaunch).toHaveBeenCalledWith(1);
       expect(JobTemplatesAPI.readInstanceGroups).toHaveBeenCalledTimes(1);
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     test('should show content error when read call unsuccessful', async () => {
@@ -170,7 +170,7 @@ describe('NodeViewModal', () => {
       expect(
         await screen.findByText('Something went wrong...')
       ).toBeInTheDocument();
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     test('edit button should be shown when readOnly prop is false', async () => {
@@ -185,7 +185,7 @@ describe('NodeViewModal', () => {
       expect(
         document.querySelector('button#node-view-edit-button')
       ).toBeInTheDocument();
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     test('edit button should be hidden when readOnly prop is true', async () => {
@@ -200,7 +200,7 @@ describe('NodeViewModal', () => {
       expect(
         document.querySelector('button#node-view-edit-button')
       ).not.toBeInTheDocument();
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
   });
 
@@ -230,7 +230,7 @@ describe('NodeViewModal', () => {
       expect(WorkflowJobTemplatesAPI.readLaunch).not.toHaveBeenCalled();
       expect(JobTemplatesAPI.readLaunch).not.toHaveBeenCalled();
       expect(JobTemplatesAPI.readInstanceGroups).not.toHaveBeenCalled();
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
   });
 
@@ -260,7 +260,7 @@ describe('NodeViewModal', () => {
       expect(WorkflowJobTemplatesAPI.readLaunch).not.toHaveBeenCalled();
       expect(JobTemplatesAPI.readLaunch).not.toHaveBeenCalled();
       expect(JobTemplatesAPI.readInstanceGroups).not.toHaveBeenCalled();
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
   });
 
@@ -290,7 +290,7 @@ describe('NodeViewModal', () => {
       expect(WorkflowJobTemplatesAPI.readLaunch).not.toHaveBeenCalled();
       expect(JobTemplatesAPI.readLaunch).not.toHaveBeenCalled();
       expect(JobTemplatesAPI.readInstanceGroups).not.toHaveBeenCalled();
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
   });
 
@@ -320,7 +320,7 @@ describe('NodeViewModal', () => {
       expect(
         document.querySelector('[data-cy="prompt-detail-convergence-value"]')
       ).toHaveTextContent('Any');
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
   });
 });

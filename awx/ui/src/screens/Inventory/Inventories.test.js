@@ -8,14 +8,14 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import Inventories from './Inventories';
 
-jest.mock('../../api');
+vi.mock('../../api');
 // stub the list so the /inventories route renders without hitting the API
-jest.mock('./InventoryList', () => ({
+vi.mock('./InventoryList', () => ({
   __esModule: true,
   InventoryList: () => null,
 }));
 // stub the detail so this suite asserts route resolution, not detail rendering
-jest.mock('./InventoryDetail', () => {
+vi.mock('./InventoryDetail', () => {
   const InventoryDetail = () => <div data-testid="inventory-detail" />;
   return { __esModule: true, default: InventoryDetail };
 });

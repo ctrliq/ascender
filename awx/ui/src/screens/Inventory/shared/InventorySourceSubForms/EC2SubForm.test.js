@@ -5,7 +5,7 @@ import { CredentialsAPI } from 'api';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import EC2SubForm from './EC2SubForm';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 const initialValues = {
   credential: null,
@@ -34,7 +34,7 @@ describe('<EC2SubForm />', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderForm() {

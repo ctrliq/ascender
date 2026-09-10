@@ -8,7 +8,7 @@ import {
 import SmartInventoryDetail from './SmartInventoryDetail';
 import mockSmartInventory from '../shared/data.smart_inventory.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<SmartInventoryDetail />', () => {
   describe('User has edit permissions', () => {
@@ -33,7 +33,7 @@ describe('<SmartInventoryDetail />', () => {
     });
 
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     test('should render Details', async () => {
@@ -147,7 +147,7 @@ describe('<SmartInventoryDetail />', () => {
 
   describe('User has read-only permissions', () => {
     afterEach(() => {
-      jest.clearAllMocks();
+      vi.clearAllMocks();
     });
 
     test('should hide edit button for users without edit permission', async () => {

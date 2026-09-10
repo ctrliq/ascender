@@ -15,7 +15,7 @@ import {
 
 import ContainerGroupDetails from './ContainerGroupDetails';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 function buildInstanceGroup(overrides = {}) {
   const { summary_fields: summaryOverrides, ...rest } = overrides;
@@ -77,7 +77,7 @@ describe('<ContainerGroupDetails/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render details properly', () => {

@@ -6,7 +6,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockHost from '../data.host.json';
 import HostEdit from './HostEdit';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const updatedHostData = {
   name: 'new name',
@@ -17,8 +17,8 @@ const updatedHostData = {
 // Mock the shared HostForm: a Save button invokes handleSubmit with the
 // provided test payload, a Cancel button invokes handleCancel, and the
 // submitError prop renders so the error branch can be asserted.
-jest.mock('components/HostForm', () => {
-  const ReactLib = require('react');
+vi.mock('components/HostForm', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: ({ handleSubmit, handleCancel, submitError }) =>
@@ -55,7 +55,7 @@ describe('<HostEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function render() {

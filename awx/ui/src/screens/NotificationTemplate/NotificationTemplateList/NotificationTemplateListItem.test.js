@@ -6,8 +6,8 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import NotificationTemplateListItem from './NotificationTemplateListItem';
 
-jest.mock('../../../api/models/NotificationTemplates');
-jest.mock('../../../api/models/Notifications');
+vi.mock('../../../api/models/NotificationTemplates');
+vi.mock('../../../api/models/Notifications');
 
 const template = {
   id: 3,
@@ -26,8 +26,8 @@ const renderItem = (props = {}) =>
       <tbody>
         <NotificationTemplateListItem
           template={template}
-          onAddToast={jest.fn()}
-          fetchTemplates={jest.fn().mockResolvedValue()}
+          onAddToast={vi.fn()}
+          fetchTemplates={vi.fn().mockResolvedValue()}
           detailUrl="/notification_templates/3/detail"
           {...props}
         />
@@ -37,7 +37,7 @@ const renderItem = (props = {}) =>
 
 describe('<NotificationTemplateListItem />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render template row', () => {

@@ -160,7 +160,7 @@ describe('OtherPromptsStep', () => {
       <Formik initialValues={{ extra_vars: '{}' }}>
         <OtherPromptsStep
           variablesMode="javascript"
-          onVarModeChange={jest.fn()}
+          onVarModeChange={vi.fn()}
           launchConfig={{
             ask_variables_on_launch: true,
             ...jobTemplateData,

@@ -5,8 +5,8 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ProjectSyncButton from './ProjectSyncButton';
 
-jest.mock('../../../api');
-jest.mock('hooks/useBrandName', () => ({
+vi.mock('../../../api');
+vi.mock('hooks/useBrandName', () => ({
   __esModule: true,
   default: () => ({
     current: 'AWX',

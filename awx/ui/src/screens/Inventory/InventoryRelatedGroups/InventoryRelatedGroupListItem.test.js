@@ -6,7 +6,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryRelatedGroupListItem from './InventoryRelatedGroupListItem';
 import mockRelatedGroups from '../shared/data.relatedGroups.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockGroup = mockRelatedGroups.results[0];
 

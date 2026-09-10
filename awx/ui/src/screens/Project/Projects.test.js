@@ -6,8 +6,8 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import { _Projects as Projects } from './Projects';
 
 // stub the list so the /projects route resolves without hitting the API
-jest.mock('./ProjectList/ProjectList', () => {
-  const ReactLib = require('react');
+vi.mock('./ProjectList/ProjectList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'ProjectsList'),

@@ -6,12 +6,12 @@ import { InstancesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InstanceDetail from './InstanceDetail';
 
-jest.mock('../../../api');
-jest.mock('../../../hooks/useDebounce');
+vi.mock('../../../api');
+vi.mock('../../../hooks/useDebounce');
 // The component reads useParams from react-router-dom (the route
 // tree is v6); mock it there, keeping the rest of the module real.
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({
     id: 1,
   }),
@@ -86,11 +86,11 @@ describe('<InstanceDetail/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Should render proper data', async () => {
-    jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
+    vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { is_superuser: true },
     }));
     const { container } = renderWithContexts(
@@ -108,7 +108,7 @@ describe('<InstanceDetail/>', () => {
   });
 
   test('should calculate number of forks when slide changes', async () => {
-    jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
+    vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { is_superuser: true },
     }));
     const { user, container } = renderWithContexts(
@@ -151,7 +151,7 @@ describe('<InstanceDetail/>', () => {
   });
 
   test('buttons should be disabled', async () => {
-    jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
+    vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { is_system_auditor: true },
     }));
     const { container } = renderWithContexts(
@@ -167,7 +167,7 @@ describe('<InstanceDetail/>', () => {
   });
 
   test('should display instance toggle', async () => {
-    jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
+    vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { is_system_auditor: true },
     }));
     renderWithContexts(<InstanceDetail setBreadcrumb={() => {}} />);
@@ -192,7 +192,7 @@ describe('<InstanceDetail/>', () => {
         },
       })
     );
-    jest.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
+    vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
       me: { is_superuser: true },
     }));
     const { user, container } = renderWithContexts(

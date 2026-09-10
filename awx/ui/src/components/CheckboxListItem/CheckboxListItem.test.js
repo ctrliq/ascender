@@ -30,8 +30,8 @@ describe('CheckboxListItem', () => {
   });
 
   test('clicking an unselected row calls onSelect with the item id', async () => {
-    const onSelect = jest.fn();
-    const onDeselect = jest.fn();
+    const onSelect = vi.fn();
+    const onDeselect = vi.fn();
     renderWithContexts(
       <table>
         <tbody>
@@ -52,8 +52,8 @@ describe('CheckboxListItem', () => {
   });
 
   test('clicking a selected row calls onDeselect with the item id', async () => {
-    const onSelect = jest.fn();
-    const onDeselect = jest.fn();
+    const onSelect = vi.fn();
+    const onDeselect = vi.fn();
     renderWithContexts(
       <table>
         <tbody>

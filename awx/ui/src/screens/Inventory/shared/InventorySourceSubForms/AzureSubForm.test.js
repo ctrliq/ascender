@@ -5,7 +5,7 @@ import { CredentialsAPI } from 'api';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import AzureSubForm from './AzureSubForm';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 const initialValues = {
   credential: null,
@@ -34,7 +34,7 @@ describe('<AzureSubForm />', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderForm() {

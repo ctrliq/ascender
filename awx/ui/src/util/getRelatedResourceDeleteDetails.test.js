@@ -16,18 +16,18 @@ import {
 } from './getRelatedResourceDeleteDetails';
 import en from '../locales/en/messages';
 
-jest.mock('../api/models/Credentials');
-jest.mock('../api/models/Inventories');
-jest.mock('../api/models/InventorySources');
-jest.mock('../api/models/JobTemplates');
-jest.mock('../api/models/Projects');
-jest.mock('../api/models/WorkflowJobTemplates');
-jest.mock('../api/models/WorkflowJobTemplateNodes');
-jest.mock('../api/models/CredentialInputSources');
-jest.mock('../api/models/ExecutionEnvironments');
-jest.mock('../api/models/Applications');
-jest.mock('../api/models/NotificationTemplates');
-jest.mock('../api/models/Teams');
+vi.mock('../api/models/Credentials');
+vi.mock('../api/models/Inventories');
+vi.mock('../api/models/InventorySources');
+vi.mock('../api/models/JobTemplates');
+vi.mock('../api/models/Projects');
+vi.mock('../api/models/WorkflowJobTemplates');
+vi.mock('../api/models/WorkflowJobTemplateNodes');
+vi.mock('../api/models/CredentialInputSources');
+vi.mock('../api/models/ExecutionEnvironments');
+vi.mock('../api/models/Applications');
+vi.mock('../api/models/NotificationTemplates');
+vi.mock('../api/models/Teams');
 
 describe('delete details', () => {
   beforeAll(() => {
@@ -36,7 +36,7 @@ describe('delete details', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should call api for credentials list', () => {

@@ -89,7 +89,7 @@ describe('<JobListCancelButton />', () => {
   });
 
   test('modal functions as expected', async () => {
-    const onCancel = jest.fn();
+    const onCancel = vi.fn();
     const { user } = renderWithContexts(
       <JobListCancelButton
         jobsToCancel={[

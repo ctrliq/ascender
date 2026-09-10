@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import CopyButton from './CopyButton';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('<CopyButton/>', () => {
   test('should mount properly', () => {
@@ -19,7 +19,7 @@ describe('<CopyButton/>', () => {
   });
 
   test('should call copyItem on button click', async () => {
-    const copyItem = jest.fn();
+    const copyItem = vi.fn();
     const { user } = renderWithContexts(
       <CopyButton
         onCopyStart={() => {}}

@@ -9,7 +9,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import InventoryGroupsList from './InventoryGroupsList';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 function renderUnder(url) {
   const history = createMemoryHistory({ initialEntries: [url] });
@@ -96,7 +96,7 @@ describe('<InventoryGroupsList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should fetch groups from api and render them in the list', async () => {
@@ -177,7 +177,7 @@ describe('<InventoryGroupsList/> error handling', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should show content error when api throws error on initial render', async () => {
@@ -226,7 +226,7 @@ describe('Constructed Inventory group', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should not show add or delete buttons but still show ad hoc commands', async () => {

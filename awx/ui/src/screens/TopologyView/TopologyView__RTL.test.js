@@ -5,13 +5,13 @@ import '@testing-library/jest-dom';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import TopologyView from './TopologyView';
 
-jest.mock('../../api');
-jest.mock('util/webWorker', () => {
+vi.mock('../../api');
+vi.mock('util/webWorker', () => {
   return {
     __esModule: true,
     default: () => {
       return {
-        postMessage: jest.fn().mockReturnValueOnce({
+        postMessage: vi.fn().mockReturnValueOnce({
           data: {
             type: 'end',
             links: [],
@@ -44,9 +44,9 @@ jest.mock('util/webWorker', () => {
         onmessage: function handleWorkerEvent(event) {
           switch (event.data.type) {
             case 'tick':
-              return jest.fn(event.data);
+              return vi.fn(event.data);
             case 'end':
-              return jest.fn(event.data);
+              return vi.fn(event.data);
             default:
               return false;
           }
@@ -56,7 +56,7 @@ jest.mock('util/webWorker', () => {
   };
 });
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 describe('<TopologyView />', () => {
   test('should render properly', async () => {

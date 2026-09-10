@@ -22,7 +22,7 @@ function renderSearch(props, options) {
       <ToolbarContent>
         <Search
           qsConfig={QS_CONFIG}
-          onShowAdvancedSearch={jest.fn()}
+          onShowAdvancedSearch={vi.fn()}
           {...props}
         />
       </ToolbarContent>
@@ -43,7 +43,7 @@ async function selectKey(user, name) {
 describe('<Search />', () => {
   test('it triggers the expected callbacks', async () => {
     const columns = [{ name: 'Name', key: 'name__icontains', isDefault: true }];
-    const onSearch = jest.fn();
+    const onSearch = vi.fn();
     const { user } = renderSearch({ columns, onSearch });
 
     await user.type(
@@ -63,7 +63,7 @@ describe('<Search />', () => {
       { name: 'Name', key: 'name__icontains', isDefault: true },
       { name: 'Description', key: 'description__icontains' },
     ];
-    const onSearch = jest.fn();
+    const onSearch = vi.fn();
     const { user } = renderSearch({ columns, onSearch });
 
     await selectKey(user, 'Description');
@@ -85,10 +85,10 @@ describe('<Search />', () => {
       { name: 'Description', key: 'description__icontains' },
       { name: 'Advanced', key: 'advanced' },
     ];
-    const onShowAdvancedSearch = jest.fn();
+    const onShowAdvancedSearch = vi.fn();
     const { user } = renderSearch({
       columns,
-      onSearch: jest.fn(),
+      onSearch: vi.fn(),
       onShowAdvancedSearch,
     });
 
@@ -104,7 +104,7 @@ describe('<Search />', () => {
 
   test('attempt to search with empty string', async () => {
     const columns = [{ name: 'Name', key: 'name__icontains', isDefault: true }];
-    const onSearch = jest.fn();
+    const onSearch = vi.fn();
     const { user } = renderSearch({ columns, onSearch });
 
     // submit button is disabled while the value is empty; clicking it is a no-op
@@ -117,7 +117,7 @@ describe('<Search />', () => {
 
   test('search with a valid string', async () => {
     const columns = [{ name: 'Name', key: 'name__icontains', isDefault: true }];
-    const onSearch = jest.fn();
+    const onSearch = vi.fn();
     const { user } = renderSearch({ columns, onSearch });
 
     await user.type(
@@ -174,7 +174,7 @@ describe('<Search />', () => {
     const history = createMemoryHistory({
       initialEntries: [`/organizations/1/teams${query}`],
     });
-    const onRemove = jest.fn();
+    const onRemove = vi.fn();
     const { user } = renderSearch(
       { qsConfig: qsConfigNew, columns, onRemove },
       { context: { router: { history } } }
@@ -204,7 +204,7 @@ describe('<Search />', () => {
     const history = createMemoryHistory({
       initialEntries: [`/organizations/1/teams${query}`],
     });
-    const onRemove = jest.fn();
+    const onRemove = vi.fn();
     const { user } = renderSearch(
       { qsConfig: qsConfigNew, columns, onRemove },
       { context: { router: { history } } }
@@ -250,7 +250,7 @@ describe('<Search />', () => {
     }
 
     test('renders date input and operator select for a date column', async () => {
-      const { user } = renderDateSearch(jest.fn());
+      const { user } = renderDateSearch(vi.fn());
       await selectKey(user, 'Created');
 
       const dateInput = screen.getByLabelText('Date search input');
@@ -262,7 +262,7 @@ describe('<Search />', () => {
     });
 
     test('searching submits the column key with the default operator', async () => {
-      const onSearch = jest.fn();
+      const onSearch = vi.fn();
       const { user } = renderDateSearch(onSearch);
       await selectKey(user, 'Created');
 
@@ -278,7 +278,7 @@ describe('<Search />', () => {
     });
 
     test('switching the operator changes the submitted parameter', async () => {
-      const onSearch = jest.fn();
+      const onSearch = vi.fn();
       const { user } = renderDateSearch(onSearch);
       await selectKey(user, 'Created');
 
@@ -300,7 +300,7 @@ describe('<Search />', () => {
     });
 
     test('a value typed for a text column does not leak into a date search', async () => {
-      const onSearch = jest.fn();
+      const onSearch = vi.fn();
       const { user } = renderDateSearch(onSearch);
 
       await user.type(
@@ -316,7 +316,7 @@ describe('<Search />', () => {
     });
 
     test('Enter in the date input submits the search', async () => {
-      const onSearch = jest.fn();
+      const onSearch = vi.fn();
       const { user } = renderDateSearch(onSearch);
       await selectKey(user, 'Created');
 
@@ -328,7 +328,7 @@ describe('<Search />', () => {
     });
 
     test('operator dropdown does not stay open across column switches', async () => {
-      const { user } = renderDateSearch(jest.fn());
+      const { user } = renderDateSearch(vi.fn());
       await selectKey(user, 'Created');
 
       const operatorToggle = screen.getByRole('button', {
@@ -350,7 +350,7 @@ describe('<Search />', () => {
     });
 
     test('non-date columns keep the plain text input', () => {
-      renderDateSearch(jest.fn());
+      renderDateSearch(vi.fn());
       expect(
         screen.queryByLabelText('Date search input')
       ).not.toBeInTheDocument();

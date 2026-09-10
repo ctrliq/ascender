@@ -6,9 +6,9 @@ import { InstanceGroupsAPI, CredentialsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ContainerGroupEdit from './ContainerGroupEdit';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
-// Prefixed `mock` so the jest.mock factory below may reference it.
+// Prefixed `mock` so the vi.mock factory below may reference it.
 const mockUpdatedInstanceGroup = {
   name: 'Bar',
   credential: { id: 12, name: 'CGX' },
@@ -16,26 +16,24 @@ const mockUpdatedInstanceGroup = {
 
 // Mock the shared form so the test drives ContainerGroupEdit's own submit/cancel
 // handlers directly. The form itself is covered by ContainerGroupForm.test.js.
-jest.mock(
-  '../shared/ContainerGroupForm',
-  () =>
-    ({ onSubmit, onCancel, submitError }) => (
-      <div>
-        {submitError && <div>FormSubmitError</div>}
-        <button
-          type="button"
-          onClick={() =>
-            onSubmit({ ...mockUpdatedInstanceGroup, override: false })
-          }
-        >
-          mock submit
-        </button>
-        <button type="button" aria-label="Cancel" onClick={onCancel}>
-          Cancel
-        </button>
-      </div>
-    )
-);
+vi.mock('../shared/ContainerGroupForm', () => ({
+  default: ({ onSubmit, onCancel, submitError }) => (
+    <div>
+      {submitError && <div>FormSubmitError</div>}
+      <button
+        type="button"
+        onClick={() =>
+          onSubmit({ ...mockUpdatedInstanceGroup, override: false })
+        }
+      >
+        mock submit
+      </button>
+      <button type="button" aria-label="Cancel" onClick={onCancel}>
+        Cancel
+      </button>
+    </div>
+  ),
+}));
 
 const instanceGroup = {
   id: 123,
@@ -128,7 +126,7 @@ describe('<ContainerGroupEdit/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('called InstanceGroupsAPI.readInstanceGroupOptions', async () => {

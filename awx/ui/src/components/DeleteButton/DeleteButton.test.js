@@ -4,7 +4,7 @@ import { CredentialsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import DeleteButton from './DeleteButton';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('<DeleteButton />', () => {
   test('should render button', () => {
@@ -35,7 +35,7 @@ describe('<DeleteButton />', () => {
   });
 
   test('should invoke onConfirm prop', async () => {
-    const onConfirm = jest.fn();
+    const onConfirm = vi.fn();
     const { user } = renderWithContexts(
       <DeleteButton
         onConfirm={onConfirm}
@@ -59,7 +59,7 @@ describe('<DeleteButton />', () => {
   });
 
   test('should show delete details error', async () => {
-    const onConfirm = jest.fn();
+    const onConfirm = vi.fn();
     const { user } = renderWithContexts(
       <DeleteButton
         onConfirm={onConfirm}

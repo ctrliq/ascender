@@ -5,7 +5,7 @@ import { HostsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostItem from './InventoryHostItem';
 
-jest.mock('api');
+vi.mock('api');
 
 const mockHost = {
   id: 1,
@@ -70,7 +70,7 @@ function renderItem(props) {
 
 describe('<InventoryHostItem />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should display expected details', () => {

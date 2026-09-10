@@ -6,9 +6,9 @@ import { InstanceGroupsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InstanceGroupAdd from './InstanceGroupAdd';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
-// Prefixed `mock` so the jest.mock factory below may reference it (jest allows
+// Prefixed `mock` so the vi.mock factory below may reference it (vitest allows
 // out-of-scope refs only when the name begins with "mock").
 const mockInstanceGroupData = {
   id: 42,
@@ -45,21 +45,19 @@ const mockInstanceGroupData = {
 
 // Mock the shared form so the test drives InstanceGroupAdd's own submit/cancel
 // handlers directly. The form itself is covered by InstanceGroupForm.test.js.
-jest.mock(
-  '../shared/InstanceGroupForm',
-  () =>
-    ({ onSubmit, onCancel, submitError }) => (
-      <div>
-        {submitError && <div>FormSubmitError</div>}
-        <button type="button" onClick={() => onSubmit(mockInstanceGroupData)}>
-          mock submit
-        </button>
-        <button type="button" aria-label="Cancel" onClick={onCancel}>
-          Cancel
-        </button>
-      </div>
-    )
-);
+vi.mock('../shared/InstanceGroupForm', () => ({
+  default: ({ onSubmit, onCancel, submitError }) => (
+    <div>
+      {submitError && <div>FormSubmitError</div>}
+      <button type="button" onClick={() => onSubmit(mockInstanceGroupData)}>
+        mock submit
+      </button>
+      <button type="button" aria-label="Cancel" onClick={onCancel}>
+        Cancel
+      </button>
+    </div>
+  ),
+}));
 
 describe('<InstanceGroupAdd/>', () => {
   let history;
@@ -76,7 +74,7 @@ describe('<InstanceGroupAdd/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('handleSubmit should call the api and redirect to details page', async () => {

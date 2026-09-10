@@ -9,7 +9,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import WebhookSubForm from './WebhookSubForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<WebhookSubForm />', () => {
   let history;
@@ -53,7 +53,7 @@ describe('<WebhookSubForm />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render initial values properly', async () => {

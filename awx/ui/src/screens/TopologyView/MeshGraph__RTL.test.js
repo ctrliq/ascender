@@ -4,12 +4,12 @@ import '@testing-library/jest-dom';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import MeshGraph from './MeshGraph';
 
-jest.mock('util/webWorker', () => {
+vi.mock('util/webWorker', () => {
   return {
     __esModule: true,
     default: () => {
       return {
-        postMessage: jest.fn().mockReturnValueOnce({
+        postMessage: vi.fn().mockReturnValueOnce({
           data: {
             type: 'end',
             links: [],
@@ -39,13 +39,13 @@ jest.mock('util/webWorker', () => {
             ],
           },
         }),
-        onmessage: jest.fn(),
+        onmessage: vi.fn(),
       };
     },
   };
 });
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 describe('<MeshGraph />', () => {
   test('renders correctly', async () => {
@@ -68,8 +68,8 @@ describe('<MeshGraph />', () => {
         links: [],
       },
     };
-    const mockZoomFn = jest.fn();
-    const mockSetZoomCtrFn = jest.fn();
+    const mockZoomFn = vi.fn();
+    const mockSetZoomCtrFn = vi.fn();
     renderWithContexts(
       <MeshGraph
         data={mockData}

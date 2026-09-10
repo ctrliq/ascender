@@ -11,11 +11,11 @@ import {
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import CredentialEdit from './CredentialEdit';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 // The component reads useParams from react-router-dom (the route
 // tree is v6); mock it there, keeping the rest of the module real.
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({
     id: 3,
   }),
@@ -23,14 +23,16 @@ jest.mock('react-router', () => ({
 
 // Drive the container directly through the shared CredentialForm's props.
 let formProps;
-jest.mock('../shared/CredentialForm', () => (props) => {
-  formProps = props;
-  return (
-    <button type="button" onClick={() => props.onCancel()}>
-      mock-credential-form
-    </button>
-  );
-});
+vi.mock('../shared/CredentialForm', () => ({
+  default: (props) => {
+    formProps = props;
+    return (
+      <button type="button" onClick={() => props.onCancel()}>
+        mock-credential-form
+      </button>
+    );
+  },
+}));
 
 const mockCredential = {
   id: 3,
@@ -187,7 +189,7 @@ const mockInputSources = {
 
 describe('<CredentialEdit />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     formProps = undefined;
   });
 

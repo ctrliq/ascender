@@ -9,7 +9,7 @@ import {
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import MiscSystemDetail from './MiscSystemDetail';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 // CodeEditor (react-ace) renders empty under jsdom, so for variable details we
 // assert the surrounding label is present rather than the editor contents.
@@ -48,7 +48,7 @@ describe('<MiscSystemDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function mountDetail(

@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
-import WS from 'jest-websocket-mock';
+import WS from 'vitest-websocket-mock';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import useWsInventories from './useWsInventories';
 
@@ -36,17 +36,20 @@ const subscribeMessage = JSON.stringify({
   },
 });
 
+/*
+Mock timers don’t play well with vitest-websocket-mock, so we stub out
+throttling to resolve immediately. Declared at the top level because vitest
+hoists module mocks, and it rejects one written inside a block on the grounds
+that its apparent position would misrepresent when it runs.
+*/
+vi.mock('../../../hooks/useThrottle', () => ({
+  __esModule: true,
+  default: vi.fn((val) => val),
+}));
+
 describe('useWsInventories hook', () => {
   let debug;
   beforeEach(() => {
-    /*
-      Jest mock timers don’t play well with jest-websocket-mock,
-      so we'll stub out throttling to resolve immediately
-    */
-    jest.mock('../../../hooks/useThrottle', () => ({
-      __esModule: true,
-      default: jest.fn((val) => val),
-    }));
     debug = global.console.debug;
     global.console.debug = () => {};
   });
@@ -54,12 +57,12 @@ describe('useWsInventories hook', () => {
   afterEach(() => {
     global.console.debug = debug;
     WS.clean();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should return inventories list', () => {
-    const fetchInventories = jest.fn(() => []);
-    const fetchInventoriesById = jest.fn(() => []);
+    const fetchInventories = vi.fn(() => []);
+    const fetchInventoriesById = vi.fn(() => []);
     const inventories = [{ id: 1 }];
     renderWithContexts(
       <Test
@@ -76,8 +79,8 @@ describe('useWsInventories hook', () => {
   test('should establish websocket connection', async () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
-    const fetchInventories = jest.fn(() => []);
-    const fetchInventoriesById = jest.fn(() => []);
+    const fetchInventories = vi.fn(() => []);
+    const fetchInventoriesById = vi.fn(() => []);
 
     const inventories = [{ id: 1 }];
     await act(async () => {
@@ -98,8 +101,8 @@ describe('useWsInventories hook', () => {
   test('should update inventory sync status', async () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
-    const fetchInventories = jest.fn(() => []);
-    const fetchInventoriesById = jest.fn(() => []);
+    const fetchInventories = vi.fn(() => []);
+    const fetchInventoriesById = vi.fn(() => []);
 
     const inventories = [{ id: 1 }];
     await act(async () => {
@@ -134,8 +137,8 @@ describe('useWsInventories hook', () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
     const inventories = [{ id: 1 }];
-    const fetchInventories = jest.fn(() => []);
-    const fetchInventoriesById = jest.fn(() =>
+    const fetchInventories = vi.fn(() => []);
+    const fetchInventoriesById = vi.fn(() =>
       Promise.resolve([{ id: 1, updated: true }])
     );
     await act(async () => {
@@ -166,8 +169,8 @@ describe('useWsInventories hook', () => {
   test('should update inventory pending_deletion', async () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
-    const fetchInventories = jest.fn(() => []);
-    const fetchInventoriesById = jest.fn(() => []);
+    const fetchInventories = vi.fn(() => []);
+    const fetchInventoriesById = vi.fn(() => []);
 
     const inventories = [{ id: 1, pending_deletion: false }];
     await act(async () => {
@@ -200,8 +203,8 @@ describe('useWsInventories hook', () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
     const inventories = [{ id: 1 }, { id: 2 }];
-    const fetchInventories = jest.fn(() => []);
-    const fetchInventoriesById = jest.fn(() => []);
+    const fetchInventories = vi.fn(() => []);
+    const fetchInventoriesById = vi.fn(() => []);
     await act(async () => {
       renderWithContexts(
         <Test

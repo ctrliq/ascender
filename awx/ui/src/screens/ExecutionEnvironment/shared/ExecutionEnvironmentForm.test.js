@@ -6,7 +6,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentForm from './ExecutionEnvironmentForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockMe = { is_superuser: true, is_super_auditor: false };
 
@@ -62,8 +62,8 @@ const containerRegistryCredentialResolve = {
 const renderForm = async (props = {}) => {
   ExecutionEnvironmentsAPI.readOptions.mockResolvedValue(mockOptions);
   CredentialTypesAPI.read.mockResolvedValue(containerRegistryCredentialResolve);
-  const onCancel = jest.fn();
-  const onSubmit = jest.fn();
+  const onCancel = vi.fn();
+  const onSubmit = vi.fn();
   const result = renderWithContexts(
     <ExecutionEnvironmentForm
       onCancel={onCancel}
@@ -80,7 +80,7 @@ const renderForm = async (props = {}) => {
 
 describe('<ExecutionEnvironmentForm/>', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should display the form fields', async () => {

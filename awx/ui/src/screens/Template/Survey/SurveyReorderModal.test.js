@@ -115,8 +115,8 @@ describe('<SurveyReorderModal />', () => {
   });
 
   test('Save and Cancel buttons wire up their callbacks', () => {
-    const onSave = jest.fn();
-    const onCloseOrderModal = jest.fn();
+    const onSave = vi.fn();
+    const onCloseOrderModal = vi.fn();
     renderWithContexts(
       <SurveyReorderModal
         questions={questions}
@@ -138,7 +138,7 @@ describe('<SurveyReorderModal />', () => {
   });
 
   test('reorders questions via drag and drop', () => {
-    const onSave = jest.fn();
+    const onSave = vi.fn();
     renderWithContexts(
       <SurveyReorderModal
         questions={questions}

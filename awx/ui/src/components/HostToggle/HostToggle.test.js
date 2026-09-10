@@ -4,7 +4,7 @@ import { HostsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import HostToggle from './HostToggle';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const mockHost = {
   id: 1,
@@ -30,11 +30,11 @@ const getToggle = () => screen.getByRole('switch', { name: 'Toggle host' });
 
 describe('<HostToggle>', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should toggle off', async () => {
-    const onToggle = jest.fn();
+    const onToggle = vi.fn();
     const { user } = renderWithContexts(
       <HostToggle host={mockHost} onToggle={onToggle} />
     );
@@ -49,7 +49,7 @@ describe('<HostToggle>', () => {
   });
 
   test('should toggle on', async () => {
-    const onToggle = jest.fn();
+    const onToggle = vi.fn();
     const { user } = renderWithContexts(
       <HostToggle
         host={{

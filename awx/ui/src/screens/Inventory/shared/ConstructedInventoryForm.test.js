@@ -4,7 +4,7 @@ import { InstanceGroupsAPI, InventoriesAPI, OrganizationsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryForm from './ConstructedInventoryForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const options = {
   limit: {
@@ -22,8 +22,8 @@ const options = {
 };
 
 describe('<ConstructedInventoryForm />', () => {
-  const onSubmit = jest.fn();
-  const onCancel = jest.fn();
+  const onSubmit = vi.fn();
+  const onCancel = vi.fn();
 
   beforeEach(() => {
     // The OrganizationLookup / InstanceGroupsLookup / InventoryLookup all call
@@ -50,7 +50,7 @@ describe('<ConstructedInventoryForm />', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   function renderForm() {

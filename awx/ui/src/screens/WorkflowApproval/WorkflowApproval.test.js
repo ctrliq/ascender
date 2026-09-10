@@ -7,12 +7,12 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockWorkflowApprovals from './data.workflowApprovals.json';
 import WorkflowApproval from './WorkflowApproval';
 
-jest.mock('../../api/models/WorkflowApprovals');
+vi.mock('../../api/models/WorkflowApprovals');
 
 // Marker for the routed detail panel, so assertions are about which branch of
 // the nested v6 <Routes> tree resolves.
-jest.mock('./WorkflowApprovalDetail', () => {
-  const ReactLib = require('react');
+vi.mock('./WorkflowApprovalDetail', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>
@@ -43,7 +43,7 @@ describe('<WorkflowApproval />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('fetches the workflow approval detail', async () => {

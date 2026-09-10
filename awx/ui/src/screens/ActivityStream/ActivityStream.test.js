@@ -4,7 +4,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import ActivityStream from './ActivityStream';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('<ActivityStream />', () => {
   test('initially renders without crashing', async () => {

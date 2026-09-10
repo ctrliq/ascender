@@ -8,7 +8,7 @@ import {
 import NotificationTemplateDetail from './NotificationTemplateDetail';
 import defaultMessages from '../shared/notification-template-default-messages.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockTemplate = {
   id: 1,
@@ -52,7 +52,7 @@ const mockTemplate = {
 
 describe('<NotificationTemplateDetail />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const assertCommonDetails = async () => {

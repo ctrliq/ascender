@@ -14,7 +14,7 @@ import DateTimePicker from './DateTimePicker';
 const realConsoleError = console.error;
 // resetMocks wipes the spy before each test, so (re)install it per test.
 beforeEach(() => {
-  jest.spyOn(console, 'error').mockImplementation((...args) => {
+  vi.spyOn(console, 'error').mockImplementation((...args) => {
     if (
       typeof args[0] === 'string' &&
       args[0].includes(

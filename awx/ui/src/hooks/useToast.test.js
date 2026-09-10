@@ -77,7 +77,7 @@ describe('Toast', () => {
   });
 
   test('should call removeToast', () => {
-    const removeToast = jest.fn();
+    const removeToast = vi.fn();
     const toast = {
       title: 'Inventory saved',
       variant: AlertVariant.success,

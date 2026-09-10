@@ -9,7 +9,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import HostGroupsList from './HostGroupsList';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const host = {
   summary_fields: {
@@ -111,7 +111,7 @@ describe('<HostGroupsList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {

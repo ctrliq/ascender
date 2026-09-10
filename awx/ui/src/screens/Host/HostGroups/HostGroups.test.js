@@ -5,8 +5,8 @@ import { Routes, Route } from 'react-router';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import HostGroups from './HostGroups';
 
-jest.mock('./HostGroupsList', () => {
-  const ReactLib = require('react');
+vi.mock('./HostGroupsList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'HostGroupsList'),

@@ -9,9 +9,9 @@ import {
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import AzureADDetail from './AzureADDetail';
 
-jest.mock('../../../../api');
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('../../../../api');
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useMatch: () => ({
     params: { category: 'default' },
   }),
@@ -37,7 +37,7 @@ describe('<AzureADDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderDetail(context) {

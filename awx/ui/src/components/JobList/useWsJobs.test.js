@@ -1,10 +1,10 @@
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
-import WS from 'jest-websocket-mock';
+import WS from 'vitest-websocket-mock';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import useWsJobs from './useWsJobs';
 
-// NOTE: this suite runs against the real useThrottle. A previous jest.mock of
+// NOTE: this suite runs against the real useThrottle. A previous vi.mock of
 // '../../hooks/useThrottle' lived inside beforeEach, where it is not hoisted and
 // therefore never took effect; making it effective (module scope) changes the
 // throttle timing and breaks these websocket assertions, so the ineffective
@@ -35,7 +35,7 @@ describe('useWsJobs hook', () => {
 
   afterEach(() => {
     global.console.debug = debug;
-    jest.clearAllMocks();
+    vi.clearAllMocks();
 
     if (mockServer) {
       mockServer.close();
@@ -117,7 +117,7 @@ describe('useWsJobs hook', () => {
     global.document.cookie = 'csrftoken=abc123';
     mockServer = new WS('ws://localhost/websocket/');
     const jobs = [{ id: 1 }];
-    const fetch = jest.fn(() => []);
+    const fetch = vi.fn(() => []);
     await act(async () => {
       renderWithContexts(<Test jobs={jobs} fetch={fetch} />);
     });

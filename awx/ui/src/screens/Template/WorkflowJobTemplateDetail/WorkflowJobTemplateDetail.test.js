@@ -8,7 +8,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import WorkflowJobTemplateDetail from './WorkflowJobTemplateDetail';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // Detail renders <div><dt>label</dt><dd>value</dd></div>; return the dd cell for
 // a given Detail label so tests can assert on its contents.
@@ -57,7 +57,7 @@ describe('<WorkflowJobTemplateDetail/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const renderDetail = (tmpl = template) =>

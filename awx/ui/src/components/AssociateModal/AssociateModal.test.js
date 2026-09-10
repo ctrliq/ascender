@@ -4,7 +4,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AssociateModal from './AssociateModal';
 import mockHosts from './data.hosts.json';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('<AssociateModal />', () => {
   let onClose;
@@ -13,10 +13,10 @@ describe('<AssociateModal />', () => {
   let optionsRequest;
 
   beforeEach(() => {
-    onClose = jest.fn();
-    onAssociate = jest.fn().mockResolvedValue();
-    fetchRequest = jest.fn().mockReturnValue({ data: { ...mockHosts } });
-    optionsRequest = jest.fn().mockResolvedValue({
+    onClose = vi.fn();
+    onAssociate = vi.fn().mockResolvedValue();
+    fetchRequest = vi.fn().mockReturnValue({ data: { ...mockHosts } });
+    optionsRequest = vi.fn().mockResolvedValue({
       data: {
         actions: {
           GET: {},
@@ -28,7 +28,7 @@ describe('<AssociateModal />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function setup() {

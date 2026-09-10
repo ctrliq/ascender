@@ -9,7 +9,7 @@ import mockAllOptions from '../shared/data.allSettingOptions.json';
 import mockAllSettings from '../shared/data.allSettings.json';
 import MiscAuthentication from './MiscAuthentication';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<MiscAuthentication />', () => {
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe('<MiscAuthentication />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderMiscAuthentication(initialEntries, context) {

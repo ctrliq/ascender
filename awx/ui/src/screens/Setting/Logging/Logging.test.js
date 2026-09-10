@@ -8,7 +8,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllOptions from '../shared/data.allSettingOptions.json';
 import Logging from './Logging';
 
-jest.mock('../../../api/models/Settings');
+vi.mock('../../../api/models/Settings');
 
 describe('<Logging />', () => {
   beforeEach(() => {
@@ -43,7 +43,7 @@ describe('<Logging />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderLogging(initialEntries, context) {

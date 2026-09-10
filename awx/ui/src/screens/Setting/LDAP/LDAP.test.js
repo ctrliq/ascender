@@ -9,7 +9,7 @@ import mockAllOptions from '../shared/data.allSettingOptions.json';
 import mockLDAP from '../shared/data.ldapSettings.json';
 import LDAP from './LDAP';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<LDAP />', () => {
   beforeEach(() => {
@@ -17,7 +17,7 @@ describe('<LDAP />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderLDAP(initialEntries) {

@@ -7,17 +7,17 @@ import * as auth from 'util/auth';
 import { renderWithContexts } from '../testUtils/rtlContexts';
 import App, { ProtectedRoute } from './App';
 
-jest.mock('./api');
-jest.mock('util/webWorker', () => jest.fn());
+vi.mock('./api');
+vi.mock('util/webWorker', () => ({ default: vi.fn() }));
 
 // Keep the real `locales` map (App.js validates the active language against it)
 // but hold i18n activation pending so App stays on its top-level loading shell.
 // This mirrors the original shallow render — it asserts App mounts without
 // driving the deep provider tree, whose ConfigProvider/SessionProvider are
 // globally mocked in setupTests and warn when mounted without a `value` prop.
-jest.mock('./i18nLoader', () => ({
-  ...jest.requireActual('./i18nLoader'),
-  // plain function, not jest.fn — resetMocks would strip a jest.fn's impl and
+vi.mock('./i18nLoader', async () => ({
+  ...(await vi.importActual('./i18nLoader')),
+  // plain function, not vi.fn — resetMocks would strip a vi.fn's impl and
   // make App.js's `dynamicActivate(...).then(...)` throw on undefined.
   dynamicActivate: () => new Promise(() => {}),
 }));
@@ -32,22 +32,22 @@ describe('<App />', () => {
   });
 
   afterEach(() => {
-    // restoreAllMocks (not clearAllMocks) so jest.spyOn spies are actually
+    // restoreAllMocks (not clearAllMocks) so vi.spyOn spies are actually
     // restored — with resetMocks:true a leftover spy leaks into later tests
     // (or partial reruns) as a reset spy that returns undefined.
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('renders ok', async () => {
     const contextValues = {
-      setAuthRedirectTo: jest.fn(),
+      setAuthRedirectTo: vi.fn(),
       isSessionExpired: false,
       isUserBeingLoggedOut: false,
       loginRedirectOverride: null,
     };
-    jest
-      .spyOn(SessionContext, 'useSession')
-      .mockImplementation(() => contextValues);
+    vi.spyOn(SessionContext, 'useSession').mockImplementation(
+      () => contextValues
+    );
 
     // The default export self-mounts the real HashRouter, which logs React
     // Router v6 future-flag warnings ("v7_startTransition" / "v7_relativeSplatPath")
@@ -55,7 +55,7 @@ describe('<App />', () => {
     // them through without tripping the setupTests console-warn trap, while any
     // other warning still surfaces.
     const realWarn = global.console.warn;
-    jest.spyOn(global.console, 'warn').mockImplementation((...args) => {
+    vi.spyOn(global.console, 'warn').mockImplementation((...args) => {
       if (
         typeof args[0] === 'string' &&
         args[0].includes('React Router Future Flag Warning')
@@ -73,21 +73,21 @@ describe('<App />', () => {
   });
 
   test('redirect to login override', async () => {
-    const replaceSpy = jest
+    const replaceSpy = vi
       .spyOn(navigation, 'default')
       .mockImplementation(() => {});
 
     expect(replaceSpy).not.toHaveBeenCalled();
 
     const contextValues = {
-      setAuthRedirectTo: jest.fn(),
+      setAuthRedirectTo: vi.fn(),
       isSessionExpired: false,
       isUserBeingLoggedOut: false,
       loginRedirectOverride: '/sso/test',
     };
-    jest
-      .spyOn(SessionContext, 'useSession')
-      .mockImplementation(() => contextValues);
+    vi.spyOn(SessionContext, 'useSession').mockImplementation(
+      () => contextValues
+    );
 
     renderWithContexts(
       <ProtectedRoute>
@@ -99,13 +99,13 @@ describe('<App />', () => {
   });
 
   test('renders children when authenticated', async () => {
-    jest.spyOn(SessionContext, 'useSession').mockImplementation(() => ({
-      setAuthRedirectTo: jest.fn(),
+    vi.spyOn(SessionContext, 'useSession').mockImplementation(() => ({
+      setAuthRedirectTo: vi.fn(),
       isSessionExpired: false,
       isUserBeingLoggedOut: false,
       loginRedirectOverride: null,
     }));
-    jest.spyOn(auth, 'isAuthenticated').mockReturnValue(true);
+    vi.spyOn(auth, 'isAuthenticated').mockReturnValue(true);
 
     renderWithContexts(
       <ProtectedRoute>

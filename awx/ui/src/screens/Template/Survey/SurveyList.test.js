@@ -5,7 +5,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SurveyList from './SurveyList';
 import mockJobTemplateData from '../shared/data.job_template.json';
 
-jest.mock('../../../api/models/JobTemplates');
+vi.mock('../../../api/models/JobTemplates');
 
 const surveyData = {
   name: 'Survey',
@@ -23,7 +23,7 @@ describe('<SurveyList />', () => {
   });
 
   test('should toggle survey', async () => {
-    const toggleSurvey = jest.fn();
+    const toggleSurvey = vi.fn();
     JobTemplatesAPI.update.mockResolvedValue();
     renderWithContexts(
       <SurveyList
@@ -41,7 +41,7 @@ describe('<SurveyList />', () => {
   });
 
   test('should select all and delete', async () => {
-    const deleteSurvey = jest.fn();
+    const deleteSurvey = vi.fn();
     renderWithContexts(
       <SurveyList survey={surveyData} deleteSurvey={deleteSurvey} canEdit />
     );
@@ -104,7 +104,7 @@ describe('<SurveyList />', () => {
   });
 
   test('user without edit/delete permission cannot delete', async () => {
-    const deleteSurvey = jest.fn();
+    const deleteSurvey = vi.fn();
     renderWithContexts(
       <SurveyList survey={surveyData} deleteSurvey={deleteSurvey} />
     );

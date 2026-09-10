@@ -8,8 +8,8 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ManagementJobs from './ManagementJobs';
 
 // stub the list so the /management_jobs route resolves without hitting the API
-jest.mock('./ManagementJobList', () => {
-  const ReactLib = require('react');
+vi.mock('./ManagementJobList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'ManagementJobList'),

@@ -4,7 +4,7 @@ import { NotificationTemplatesAPI, JobTemplatesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import NotificationList from './NotificationList';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('<NotificationList />', () => {
   let container;

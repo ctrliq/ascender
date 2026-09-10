@@ -5,7 +5,7 @@ import { JobTemplatesAPI, ProjectsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import JobTemplateEdit from './JobTemplateEdit';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockJobTemplate = {
   allow_callbacks: false,
@@ -91,7 +91,7 @@ const mockJobTemplate = {
 // the container's submit/cancel + value-transformation logic directly. The
 // Save button mirrors a post-edit form state: changed name/job_type, inventory,
 // cleared execution environment, and a new set of labels. (Names are mock-
-// prefixed so jest's out-of-scope guard allows them inside the mock factory.)
+// prefixed so the out-of-scope guard allows them inside the mock factory.)
 const mockUpdatedLabels = [
   { id: 3, name: 'Foo' },
   { id: 4, name: 'Bar' },
@@ -119,28 +119,26 @@ const mockBuildSubmitValues = () => {
   };
 };
 const mockFormProps = { current: undefined };
-jest.mock(
-  '../shared/JobTemplateForm',
-  () =>
-    function MockJobTemplateForm(props) {
-      mockFormProps.current = props;
-      const { handleSubmit, handleCancel } = props;
-      return (
-        <div>
-          <button
-            type="button"
-            aria-label="Save"
-            onClick={() => handleSubmit(mockBuildSubmitValues())}
-          >
-            Save
-          </button>
-          <button type="button" aria-label="Cancel" onClick={handleCancel}>
-            Cancel
-          </button>
-        </div>
-      );
-    }
-);
+vi.mock('../shared/JobTemplateForm', () => ({
+  default: function MockJobTemplateForm(props) {
+    mockFormProps.current = props;
+    const { handleSubmit, handleCancel } = props;
+    return (
+      <div>
+        <button
+          type="button"
+          aria-label="Save"
+          onClick={() => handleSubmit(mockBuildSubmitValues())}
+        >
+          Save
+        </button>
+        <button type="button" aria-label="Cancel" onClick={handleCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  },
+}));
 
 describe('<JobTemplateEdit />', () => {
   beforeEach(() => {
@@ -148,7 +146,7 @@ describe('<JobTemplateEdit />', () => {
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
     mockFormProps.current = undefined;
   });
 
@@ -170,7 +168,7 @@ describe('<JobTemplateEdit />', () => {
     JobTemplatesAPI.associateCredentials.mockResolvedValue({});
 
     const { user } = renderWithContexts(
-      <JobTemplateEdit template={mockJobTemplate} reloadTemplate={jest.fn()} />
+      <JobTemplateEdit template={mockJobTemplate} reloadTemplate={vi.fn()} />
     );
     await waitFor(() =>
       expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument()

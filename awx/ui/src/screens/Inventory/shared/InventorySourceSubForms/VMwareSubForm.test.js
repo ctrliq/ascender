@@ -5,7 +5,7 @@ import { CredentialsAPI } from 'api';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import VMwareSubForm from './VMwareSubForm';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 const initialValues = {
   credential: null,
@@ -35,7 +35,7 @@ describe('<VMwareSubForm />', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderForm() {

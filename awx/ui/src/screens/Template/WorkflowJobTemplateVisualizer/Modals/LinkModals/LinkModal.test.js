@@ -7,12 +7,12 @@ import {
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import LinkModal from './LinkModal';
 
-const dispatch = jest.fn();
-const onConfirm = jest.fn();
+const dispatch = vi.fn();
+const onConfirm = vi.fn();
 
 describe('LinkModal', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Adding new link', () => {

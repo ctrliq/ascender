@@ -4,11 +4,11 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ExpandCollapse from './ExpandCollapse';
 
 describe('<ExpandCollapse />', () => {
-  const onCompact = jest.fn();
-  const onExpand = jest.fn();
+  const onCompact = vi.fn();
+  const onExpand = vi.fn();
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders without crashing', () => {

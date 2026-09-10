@@ -6,28 +6,28 @@ import { ExecutionEnvironmentsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ExecutionEnvironment from './ExecutionEnvironment';
 
-jest.mock('../../api/models/ExecutionEnvironments');
+vi.mock('../../api/models/ExecutionEnvironments');
 
 // Markers for the routed tab panels, so assertions are about which branch of
 // the nested v6 <Routes> tree resolves.
-jest.mock('./ExecutionEnvironmentDetails', () => {
-  const ReactLib = require('react');
+vi.mock('./ExecutionEnvironmentDetails', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>
       ReactLib.createElement('div', null, 'ExecutionEnvironmentDetails'),
   };
 });
-jest.mock('./ExecutionEnvironmentEdit', () => {
-  const ReactLib = require('react');
+vi.mock('./ExecutionEnvironmentEdit', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>
       ReactLib.createElement('div', null, 'ExecutionEnvironmentEdit'),
   };
 });
-jest.mock('./ExecutionEnvironmentTemplate', () => {
-  const ReactLib = require('react');
+vi.mock('./ExecutionEnvironmentTemplate', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>
@@ -66,7 +66,7 @@ describe('<ExecutionEnvironment />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('fetches the execution environment detail', async () => {

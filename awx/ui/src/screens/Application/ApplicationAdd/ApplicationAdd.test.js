@@ -6,42 +6,40 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ApplicationAdd from './ApplicationAdd';
 
-jest.mock('../../../api/models/Applications');
-jest.mock('../../../api/models/Organizations');
+vi.mock('../../../api/models/Applications');
+vi.mock('../../../api/models/Organizations');
 
 // The real form is exercised in ApplicationForm.test.js; here we mock it so the
 // container's readOptions/create/navigation/submit-error logic is what's tested.
 // onSubmit receives the form values (organization as an object, per the form);
 // onCancel is wired to the container's handleCancel.
-jest.mock(
-  '../shared/ApplicationForm',
-  () =>
-    function MockApplicationForm({ onSubmit, onCancel, submitError }) {
-      return (
-        <div>
-          {submitError ? <div>FormSubmitError</div> : null}
-          <button
-            type="button"
-            onClick={() =>
-              onSubmit({
-                authorization_grant_type: 'authorization-code',
-                client_type: 'confidential',
-                description: 'bar',
-                name: 'foo',
-                organization: { id: 1 },
-                redirect_uris: 'http://www.google.com',
-              })
-            }
-          >
-            Submit
-          </button>
-          <button type="button" onClick={onCancel}>
-            Cancel
-          </button>
-        </div>
-      );
-    }
-);
+vi.mock('../shared/ApplicationForm', () => ({
+  default: function MockApplicationForm({ onSubmit, onCancel, submitError }) {
+    return (
+      <div>
+        {submitError ? <div>FormSubmitError</div> : null}
+        <button
+          type="button"
+          onClick={() =>
+            onSubmit({
+              authorization_grant_type: 'authorization-code',
+              client_type: 'confidential',
+              description: 'bar',
+              name: 'foo',
+              organization: { id: 1 },
+              redirect_uris: 'http://www.google.com',
+            })
+          }
+        >
+          Submit
+        </button>
+        <button type="button" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  },
+}));
 
 const options = {
   data: {
@@ -65,11 +63,11 @@ const options = {
 };
 
 afterEach(() => {
-  jest.clearAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('<ApplicationAdd/>', () => {
-  const onSuccessfulAdd = jest.fn();
+  const onSuccessfulAdd = vi.fn();
 
   test('should render properly and read options', async () => {
     ApplicationsAPI.readOptions.mockResolvedValue(options);

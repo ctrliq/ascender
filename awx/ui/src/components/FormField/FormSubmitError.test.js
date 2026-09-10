@@ -39,7 +39,7 @@ describe('<FormSubmitError>', () => {
   test('should display error message if field errors not provided', async () => {
     const realConsole = global.console;
     global.console = {
-      error: jest.fn(),
+      error: vi.fn(),
     };
     const error = {
       message: 'There was an error',

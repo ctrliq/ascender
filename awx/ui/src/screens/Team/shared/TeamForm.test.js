@@ -5,7 +5,7 @@ import { OrganizationsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import TeamForm from './TeamForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const meConfig = { me: { is_superuser: false } };
 const mockData = {
@@ -27,15 +27,15 @@ describe('<TeamForm />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const renderForm = (props = {}) =>
     renderWithContexts(
       <TeamForm
         team={mockData}
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
         me={meConfig.me}
         {...props}
       />
@@ -56,7 +56,7 @@ describe('<TeamForm />', () => {
   });
 
   test('should call handleSubmit when Submit button is clicked', async () => {
-    const handleSubmit = jest.fn();
+    const handleSubmit = vi.fn();
     const { user } = renderForm({ handleSubmit });
     expect(handleSubmit).not.toHaveBeenCalled();
     await user.click(screen.getByRole('button', { name: 'Save' }));
@@ -64,7 +64,7 @@ describe('<TeamForm />', () => {
   });
 
   test('calls handleCancel when Cancel button is clicked', async () => {
-    const handleCancel = jest.fn();
+    const handleCancel = vi.fn();
     const { user } = renderForm({ handleCancel });
     expect(handleCancel).not.toHaveBeenCalled();
     await user.click(screen.getByRole('button', { name: 'Cancel' }));

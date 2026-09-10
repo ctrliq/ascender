@@ -59,7 +59,7 @@ describe('<JobEvent />', () => {
       <JobEvent
         lineTextHtml={mockOnPlayStartLineTextHtml}
         event={mockOnPlayStartEvent}
-        measure={jest.fn()}
+        measure={vi.fn()}
       />
     );
     expect(c1.innerHTML).toContain('18:11:22');
@@ -68,7 +68,7 @@ describe('<JobEvent />', () => {
       <JobEvent
         lineTextHtml={mockSingleDigitTimestampEventLineTextHtml}
         event={singleDigitTimestampEvent}
-        measure={jest.fn()}
+        measure={vi.fn()}
       />
     );
     expect(c2.innerHTML).toContain('08:01:02');
@@ -79,7 +79,7 @@ describe('<JobEvent />', () => {
       <JobEvent
         lineTextHtml={mockAnsiLineTextHtml}
         event={mockRunnerOnOkEvent}
-        measure={jest.fn()}
+        measure={vi.fn()}
       />
     );
     expect(container.innerHTML).toContain(
@@ -94,7 +94,7 @@ describe('<JobEvent />', () => {
       <JobEvent
         lineTextHtml={[]}
         event={missingStdoutEvent}
-        measure={jest.fn()}
+        measure={vi.fn()}
       />
     );
     expect(lineTextNodes(container)).toHaveLength(0);
@@ -118,17 +118,17 @@ describe('<JobEvent />', () => {
       container.querySelector('[type="job_event_line_text"]')?.parentElement;
 
     test('click fires onJobEventClick when no text is selected', async () => {
-      window.getSelection = jest.fn().mockReturnValue({
+      window.getSelection = vi.fn().mockReturnValue({
         toString: () => '',
       });
-      const onJobEventClick = jest.fn();
+      const onJobEventClick = vi.fn();
       const { user, container } = renderWithContexts(
         <JobEvent
           lineTextHtml={mockAnsiLineTextHtml}
           event={mockRunnerOnOkEvent}
           isClickable
           onJobEventClick={onJobEventClick}
-          measure={jest.fn()}
+          measure={vi.fn()}
         />
       );
       await user.click(clickableLine(container));
@@ -136,17 +136,17 @@ describe('<JobEvent />', () => {
     });
 
     test('click is suppressed when text is selected', async () => {
-      window.getSelection = jest.fn().mockReturnValue({
+      window.getSelection = vi.fn().mockReturnValue({
         toString: () => 'selected text',
       });
-      const onJobEventClick = jest.fn();
+      const onJobEventClick = vi.fn();
       const { user, container } = renderWithContexts(
         <JobEvent
           lineTextHtml={mockAnsiLineTextHtml}
           event={mockRunnerOnOkEvent}
           isClickable
           onJobEventClick={onJobEventClick}
-          measure={jest.fn()}
+          measure={vi.fn()}
         />
       );
       await user.click(clickableLine(container));
@@ -154,14 +154,14 @@ describe('<JobEvent />', () => {
     });
 
     test('no click handler when isClickable is false', () => {
-      const onJobEventClick = jest.fn();
+      const onJobEventClick = vi.fn();
       const { container } = renderWithContexts(
         <JobEvent
           lineTextHtml={mockAnsiLineTextHtml}
           event={mockRunnerOnOkEvent}
           isClickable={false}
           onJobEventClick={onJobEventClick}
-          measure={jest.fn()}
+          measure={vi.fn()}
         />
       );
       // With isClickable false, JobEventLine receives no onClick handler.

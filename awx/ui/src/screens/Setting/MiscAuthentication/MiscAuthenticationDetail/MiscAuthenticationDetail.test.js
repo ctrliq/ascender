@@ -9,11 +9,11 @@ import {
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import MiscAuthenticationDetail from './MiscAuthenticationDetail';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<MiscAuthenticationDetail />', () => {
   beforeEach(() => {
-    SettingsAPI.readCategory = jest.fn();
+    SettingsAPI.readCategory = vi.fn();
     SettingsAPI.readCategory.mockResolvedValue({
       data: {
         SESSION_COOKIE_AGE: 1800,
@@ -40,7 +40,7 @@ describe('<MiscAuthenticationDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderDetail(context) {

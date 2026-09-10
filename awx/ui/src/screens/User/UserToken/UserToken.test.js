@@ -4,10 +4,10 @@ import { TokensAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserToken from './UserToken';
 
-jest.mock('../../../api/models/Tokens');
+vi.mock('../../../api/models/Tokens');
 
-jest.mock('react-router', () => ({
-  ...jest.requireActual('react-router'),
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
   useParams: () => ({
     id: 1,
     tokenId: 2,
@@ -59,7 +59,7 @@ describe('<UserToken/>', () => {
   });
 
   test('should render token tabs', async () => {
-    renderWithContexts(<UserToken setBreadcrumb={jest.fn()} user={user} />);
+    renderWithContexts(<UserToken setBreadcrumb={vi.fn()} user={user} />);
 
     expect(
       await screen.findByRole('tab', { name: 'Details' })
@@ -67,7 +67,7 @@ describe('<UserToken/>', () => {
   });
 
   test('should call api for token details', async () => {
-    renderWithContexts(<UserToken setBreadcrumb={jest.fn()} user={user} />);
+    renderWithContexts(<UserToken setBreadcrumb={vi.fn()} user={user} />);
 
     await screen.findByRole('tab', { name: 'Details' });
     expect(TokensAPI.readDetail).toHaveBeenCalledWith(2);

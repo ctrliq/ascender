@@ -11,7 +11,7 @@ import {
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import GitHubDetail from './GitHubDetail';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 const mockDefault = {
   data: {
@@ -121,7 +121,7 @@ async function setup(category, context) {
 
 describe('<GitHubDetail />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Default', () => {

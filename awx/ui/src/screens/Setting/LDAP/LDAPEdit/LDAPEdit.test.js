@@ -9,7 +9,7 @@ import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import mockLDAP from '../../shared/data.ldapSettings.json';
 import LDAPEdit from './LDAPEdit';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<LDAPEdit />', () => {
   let history;
@@ -20,7 +20,7 @@ describe('<LDAPEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderEdit(category = 'default') {

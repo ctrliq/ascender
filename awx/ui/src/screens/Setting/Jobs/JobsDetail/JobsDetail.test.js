@@ -10,7 +10,7 @@ import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import mockJobSettings from '../../shared/data.jobSettings.json';
 import JobsDetail from './JobsDetail';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 // CodeEditor (react-ace) renders empty under jsdom, so for variable details we
 // assert the surrounding label is present rather than the editor contents.
@@ -26,7 +26,7 @@ describe('<JobsDetail />', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function mountDetail(context) {

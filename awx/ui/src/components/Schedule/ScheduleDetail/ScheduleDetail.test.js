@@ -9,7 +9,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import ScheduleDetail from './ScheduleDetail';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const allPrompts = {
   data: {

@@ -5,7 +5,7 @@ import { CredentialsAPI } from 'api';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import OpenStackSubForm from './OpenStackSubForm';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 const initialValues = {
   credential: null,
@@ -28,7 +28,7 @@ describe('<OpenStackSubForm />', () => {
   });
 
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   function renderForm() {

@@ -10,12 +10,14 @@ import {
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Dashboard from './Dashboard';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 // DashboardGraph's LineChart draws with d3, which needs
 // SVGPathElement.getTotalLength (absent in jsdom). The chart isn't what these
 // tests cover, so stub it and assert on the dashboard's tabs/counts + requests.
-jest.mock('./shared/LineChart', () => () => <div data-testid="line-chart" />);
+vi.mock('./shared/LineChart', () => ({
+  default: () => <div data-testid="line-chart" />,
+}));
 
 describe('<Dashboard />', () => {
   let graphRequest;
@@ -57,7 +59,7 @@ describe('<Dashboard />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders without crashing', async () => {

@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentEdit from './ExecutionEnvironmentEdit';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const executionEnvironmentData = {
   id: 42,
@@ -23,26 +23,28 @@ const updateExecutionEnvironmentData = {
   description: 'Updated new description',
 };
 
-jest.mock(
-  '../shared/ExecutionEnvironmentForm',
-  () =>
-    function MockExecutionEnvironmentForm({ onSubmit, onCancel, submitError }) {
-      return (
-        <div>
-          {submitError ? <div data-testid="form-submit-error" /> : null}
-          <button
-            type="button"
-            onClick={() => onSubmit(updateExecutionEnvironmentData)}
-          >
-            Submit
-          </button>
-          <button type="button" aria-label="Cancel" onClick={onCancel}>
-            Cancel
-          </button>
-        </div>
-      );
-    }
-);
+vi.mock('../shared/ExecutionEnvironmentForm', () => ({
+  default: function MockExecutionEnvironmentForm({
+    onSubmit,
+    onCancel,
+    submitError,
+  }) {
+    return (
+      <div>
+        {submitError ? <div data-testid="form-submit-error" /> : null}
+        <button
+          type="button"
+          onClick={() => onSubmit(updateExecutionEnvironmentData)}
+        >
+          Submit
+        </button>
+        <button type="button" aria-label="Cancel" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  },
+}));
 
 describe('<ExecutionEnvironmentEdit/>', () => {
   let history;
@@ -58,7 +60,7 @@ describe('<ExecutionEnvironmentEdit/>', () => {
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('handleSubmit should call the api and redirect to details page', async () => {

@@ -2,9 +2,9 @@
 
 Browser tests for the Ascender UI, driven by [Playwright](https://playwright.dev).
 
-These cover what the jest suite in `awx/ui/src` cannot. That suite runs in jsdom,
+These cover what the Vitest suite in `awx/ui/src` cannot. That suite runs in jsdom,
 which does not faithfully reproduce event bubbling through the DOM, focus, or
-anything rendered through a portal. #742 is the worked example: a jest test for
+anything rendered through a portal. #742 is the worked example: a unit test for
 "picking a job navigates" passed against code where the click did nothing in
 every real browser.
 

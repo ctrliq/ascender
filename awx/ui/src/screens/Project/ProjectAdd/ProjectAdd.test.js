@@ -5,7 +5,7 @@ import { ProjectsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ProjectAdd from './ProjectAdd';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const projectData = {
   name: 'foo',
@@ -26,52 +26,54 @@ const projectData = {
 
 // Mock the shared ProjectForm so the container's submit/cancel branches can be
 // driven directly. The buttons call the container's real handleSubmit/handleCancel.
-jest.mock('../shared/ProjectForm', () => ({
-  __esModule: true,
-  default: ({ handleSubmit, handleCancel, submitError }) => {
-    const ReactLib = require('react');
-    // mirror projectData; jest.mock factories cannot close over outer vars
-    const values = {
-      name: 'foo',
-      description: 'bar',
-      scm_type: 'git',
-      scm_url: 'https://foo.bar',
-      scm_clean: true,
-      scm_track_submodules: false,
-      credential: 100,
-      signature_validation_credential: 200,
-      local_path: '',
-      organization: { id: 2, name: 'Bar' },
-      scm_update_on_launch: true,
-      scm_update_cache_timeout: 3,
-      allow_override: false,
-      default_environment: { id: 1, name: 'Foo' },
-    };
-    return ReactLib.createElement(
-      'div',
-      null,
-      ReactLib.createElement(
-        'button',
-        {
-          type: 'button',
-          'aria-label': 'mock-submit',
-          onClick: () => handleSubmit({ ...values }),
-        },
-        'submit'
-      ),
-      ReactLib.createElement(
-        'button',
-        { type: 'button', 'aria-label': 'Cancel', onClick: handleCancel },
-        'cancel'
-      ),
-      submitError ? ReactLib.createElement('div', null, 'submit-error') : null
-    );
-  },
-}));
+vi.mock('../shared/ProjectForm', async () => {
+  const ReactLib = await vi.importActual('react');
+  return {
+    __esModule: true,
+    default: ({ handleSubmit, handleCancel, submitError }) => {
+      // mirror projectData; vi.mock factories cannot close over outer vars
+      const values = {
+        name: 'foo',
+        description: 'bar',
+        scm_type: 'git',
+        scm_url: 'https://foo.bar',
+        scm_clean: true,
+        scm_track_submodules: false,
+        credential: 100,
+        signature_validation_credential: 200,
+        local_path: '',
+        organization: { id: 2, name: 'Bar' },
+        scm_update_on_launch: true,
+        scm_update_cache_timeout: 3,
+        allow_override: false,
+        default_environment: { id: 1, name: 'Foo' },
+      };
+      return ReactLib.createElement(
+        'div',
+        null,
+        ReactLib.createElement(
+          'button',
+          {
+            type: 'button',
+            'aria-label': 'mock-submit',
+            onClick: () => handleSubmit({ ...values }),
+          },
+          'submit'
+        ),
+        ReactLib.createElement(
+          'button',
+          { type: 'button', 'aria-label': 'Cancel', onClick: handleCancel },
+          'cancel'
+        ),
+        submitError ? ReactLib.createElement('div', null, 'submit-error') : null
+      );
+    },
+  };
+});
 
 describe('<ProjectAdd />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('handleSubmit should post to the api', async () => {

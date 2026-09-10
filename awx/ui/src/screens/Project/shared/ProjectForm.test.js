@@ -4,7 +4,7 @@ import { CredentialTypesAPI, ProjectsAPI, RootAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ProjectForm from './ProjectForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<ProjectForm />', () => {
   const mockData = {
@@ -98,12 +98,12 @@ describe('<ProjectForm />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('new form displays primary form fields', async () => {
     renderWithContexts(
-      <ProjectForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
+      <ProjectForm handleSubmit={vi.fn()} handleCancel={vi.fn()} />
     );
     expect(await screen.findByText('Name')).toBeInTheDocument();
     expect(screen.getByText('Description')).toBeInTheDocument();
@@ -115,7 +115,7 @@ describe('<ProjectForm />', () => {
 
   test('should display scm subform when scm type select has a value', async () => {
     const { user } = renderWithContexts(
-      <ProjectForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
+      <ProjectForm handleSubmit={vi.fn()} handleCancel={vi.fn()} />
     );
     await screen.findByText('Source Control Type');
 
@@ -142,8 +142,8 @@ describe('<ProjectForm />', () => {
     // organization lookup prefilled from summary_fields.
     renderWithContexts(
       <ProjectForm
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
         project={{ ...mockData }}
       />
     );
@@ -158,8 +158,8 @@ describe('<ProjectForm />', () => {
   test('git project with a webhook service mounts with the webhook subform open', async () => {
     renderWithContexts(
       <ProjectForm
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
         project={{
           ...mockData,
           webhook_service: 'github',
@@ -183,8 +183,8 @@ describe('<ProjectForm />', () => {
   test('checking Enable Webhook reveals the webhook subform', async () => {
     const { user } = renderWithContexts(
       <ProjectForm
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
         project={{ ...mockData }}
       />
     );
@@ -208,8 +208,8 @@ describe('<ProjectForm />', () => {
     };
     renderWithContexts(
       <ProjectForm
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
         project={{ scm_type: '', local_path: '/_foo__bar' }}
       />,
       { context: { config } }
@@ -225,8 +225,8 @@ describe('<ProjectForm />', () => {
     };
     const { container } = renderWithContexts(
       <ProjectForm
-        handleSubmit={jest.fn()}
-        handleCancel={jest.fn()}
+        handleSubmit={vi.fn()}
+        handleCancel={vi.fn()}
         project={{ scm_type: '', local_path: '' }}
       />,
       { context: { config } }
@@ -242,12 +242,12 @@ describe('<ProjectForm />', () => {
   });
 
   test('should call handleSubmit when Save button is clicked', async () => {
-    const handleSubmit = jest.fn();
+    const handleSubmit = vi.fn();
     const { user } = renderWithContexts(
       <ProjectForm
         project={mockData}
         handleSubmit={handleSubmit}
-        handleCancel={jest.fn()}
+        handleCancel={vi.fn()}
       />
     );
     await screen.findByText('Source Control Type');
@@ -258,11 +258,11 @@ describe('<ProjectForm />', () => {
   });
 
   test('should call handleCancel when Cancel button is clicked', async () => {
-    const handleCancel = jest.fn();
+    const handleCancel = vi.fn();
     const { user } = renderWithContexts(
       <ProjectForm
         project={mockData}
-        handleSubmit={jest.fn()}
+        handleSubmit={vi.fn()}
         handleCancel={handleCancel}
       />
     );
@@ -278,7 +278,7 @@ describe('<ProjectForm />', () => {
       Promise.reject(new Error())
     );
     renderWithContexts(
-      <ProjectForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
+      <ProjectForm handleSubmit={vi.fn()} handleCancel={vi.fn()} />
     );
     expect(
       await screen.findByText('Something went wrong...')

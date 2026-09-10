@@ -6,26 +6,26 @@ import { SettingsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Instance from './Instance';
 
-jest.mock('../../api/models/Settings');
+vi.mock('../../api/models/Settings');
 
 // Markers for the routed tab panels, so assertions are about which branch of
 // the nested v6 <Routes> tree resolves.
-jest.mock('./InstanceDetail', () => {
-  const ReactLib = require('react');
+vi.mock('./InstanceDetail', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'InstanceDetail'),
   };
 });
-jest.mock('./InstancePeers', () => {
-  const ReactLib = require('react');
+vi.mock('./InstancePeers', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'InstancePeerList'),
   };
 });
-jest.mock('./InstanceListenerAddressList', () => {
-  const ReactLib = require('react');
+vi.mock('./InstanceListenerAddressList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () =>
@@ -54,7 +54,7 @@ describe('<Instance />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders the detail panel at /details', async () => {

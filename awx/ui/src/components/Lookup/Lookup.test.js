@@ -38,7 +38,7 @@ describe('<Lookup />', () => {
   }
 
   beforeEach(() => {
-    onChange = jest.fn();
+    onChange = vi.fn();
     lastRenderProps = null;
   });
 

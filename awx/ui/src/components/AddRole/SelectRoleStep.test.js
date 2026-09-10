@@ -49,7 +49,7 @@ describe('<SelectRoleStep />', () => {
   });
 
   test('clicking role fires onRolesClick callback', async () => {
-    const onRolesClick = jest.fn();
+    const onRolesClick = vi.fn();
     const { user } = renderWithContexts(
       <SelectRoleStep
         onRolesClick={onRolesClick}

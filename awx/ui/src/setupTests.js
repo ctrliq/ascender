@@ -1,12 +1,16 @@
-import '@testing-library/jest-dom';
+import '@testing-library/jest-dom/vitest';
 import React from 'react';
-
-require('core-js/actual');
-
-jest.setTimeout(120000);
-
 // apply polyfills for jsdom
-require('@nteract/mockument');
+import '@nteract/mockument';
+
+// @testing-library/dom decides whether timers are faked by looking for a global
+// `jest` object, and only then checks setTimeout for sinon's clock. Under Vitest
+// there is no such global, so waitFor concludes the timers are real and polls on
+// a clock that nothing advances, which hangs every fake-timer test until the
+// suite timeout rather than failing. The one method it calls is enough.
+globalThis.jest = {
+  advanceTimersByTime: (ms) => vi.advanceTimersByTime(ms),
+};
 
 // mockument replaces document.createRange with a stub that lacks cloneRange,
 // selectNodeContents and the rest of the Range API, which breaks
@@ -36,9 +40,9 @@ global.console = {
   ...console,
   // this ensures that debug messages don't get logged out to the console
   // while tests are running i.e. websocket connect/disconnect
-  debug: jest.fn(),
+  debug: vi.fn(),
   // fail tests that log errors.
-  // adapted from https://github.com/facebook/jest/issues/6121#issuecomment-708330601
+  // adapted from https://github.com/jestjs/jest/issues/6121#issuecomment-708330601
   error: (...args) => {
     if (!networkRequestUrl) {
       hasConsoleError = true;
@@ -77,15 +81,34 @@ const fetchSafeguard = (url) => {
   });
 };
 
-global.fetch = jest.fn(fetchSafeguard);
+global.fetch = vi.fn(fetchSafeguard);
 
-// Re-apply fetch implementation before each test since resetMocks: true
-// clears jest.fn implementations between tests.
+// Re-apply fetch implementation before each test since mockReset clears
+// vi.fn implementations between tests.
 beforeEach(() => {
   global.fetch.mockImplementation(fetchSafeguard);
 });
 
-jest.mock('hooks/useTitle');
+vi.mock('hooks/useTitle');
+
+// The VM pool reuses one jsdom per worker, so anything written to a browser
+// global outlives the file that wrote it. A fresh environment per file used to
+// hide that. The URL matters most: a test that navigates would otherwise decide
+// where the next file's router starts, which is why the redirect tests were the
+// ones failing, and a different one each run.
+afterEach(() => {
+  window.history.replaceState(null, '', '/');
+  // Optional calls, not defensiveness for its own sake: a test may have
+  // replaced window.localStorage with a mock that has no clear().
+  window.localStorage?.clear?.();
+  window.sessionStorage?.clear?.();
+  document.cookie.split(';').forEach((entry) => {
+    const name = entry.split('=')[0].trim();
+    if (name) {
+      document.cookie = `${name}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
+    }
+  });
+});
 
 afterEach(() => {
   if (networkRequestUrl) {
@@ -111,19 +134,19 @@ afterEach(() => {
 global.__webpack_nonce__ = null;
 
 const MockConfigContext = React.createContext({});
-jest.doMock('./contexts/Config', () => ({
+vi.doMock('./contexts/Config', () => ({
   __esModule: true,
   ConfigContext: MockConfigContext,
   ConfigProvider: MockConfigContext.Provider,
   Config: MockConfigContext.Consumer,
   useConfig: () => React.useContext(MockConfigContext),
-  useAuthorizedPath: jest.fn(),
-  useUserProfile: jest.fn(),
+  useAuthorizedPath: vi.fn(),
+  useUserProfile: vi.fn(),
 }));
 
 // ?
 const MockSessionContext = React.createContext({});
-jest.doMock('./contexts/Session', () => ({
+vi.doMock('./contexts/Session', () => ({
   __esModule: true,
   SessionContext: MockSessionContext,
   SessionProvider: MockSessionContext.Provider,

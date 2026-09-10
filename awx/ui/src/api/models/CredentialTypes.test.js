@@ -13,7 +13,7 @@ describe('CredentialTypesAPI', () => {
           results: typesData,
         },
       });
-    const mockHttp = { get: jest.fn(getPromise) };
+    const mockHttp = { get: vi.fn(getPromise) };
     const CredentialTypesAPI = new CredentialTypes(mockHttp);
 
     const types = await CredentialTypesAPI.loadAllTypes();
@@ -34,7 +34,7 @@ describe('CredentialTypesAPI', () => {
           next: 2,
         },
       });
-    const mockHttp = { get: jest.fn(getPromise) };
+    const mockHttp = { get: vi.fn(getPromise) };
     const CredentialTypesAPI = new CredentialTypes(mockHttp);
 
     const types = await CredentialTypesAPI.loadAllTypes();
@@ -58,7 +58,7 @@ describe('CredentialTypesAPI', () => {
           results: typesData,
         },
       });
-    const mockHttp = { get: jest.fn(getPromise) };
+    const mockHttp = { get: vi.fn(getPromise) };
     const CredentialTypesAPI = new CredentialTypes(mockHttp);
 
     const types = await CredentialTypesAPI.loadAllTypes(['machine']);

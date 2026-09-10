@@ -7,13 +7,13 @@ describe('OrganizationsAPI', () => {
   let OrganizationsAPI;
   beforeEach(() => {
     const createPromise = () => Promise.resolve();
-    mockHttp = { get: jest.fn(createPromise) };
+    mockHttp = { get: vi.fn(createPromise) };
 
     OrganizationsAPI = new Organizations(mockHttp);
   });
 
   afterEach(() => {
-    jest.resetAllMocks();
+    vi.resetAllMocks();
   });
 
   test('read access list calls get with expected params', async () => {

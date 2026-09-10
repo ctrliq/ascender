@@ -6,11 +6,11 @@ import InventoryHostFacts from './InventoryHostFacts';
 import mockHost from '../shared/data.host.json';
 import mockHostFacts from '../shared/data.hostFacts.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 describe('<InventoryHostFacts />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {

@@ -6,7 +6,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroupHostListItem from './InventoryGroupHostListItem';
 import mockHosts from '../shared/data.hosts.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockHost = mockHosts.results[0];
 

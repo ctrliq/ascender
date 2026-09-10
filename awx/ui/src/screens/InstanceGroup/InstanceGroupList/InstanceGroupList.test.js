@@ -11,7 +11,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceGroupList from './InstanceGroupList';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const instanceGroups = {
   data: {
@@ -65,7 +65,7 @@ describe('<InstanceGroupList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should have data fetched and render all rows', async () => {

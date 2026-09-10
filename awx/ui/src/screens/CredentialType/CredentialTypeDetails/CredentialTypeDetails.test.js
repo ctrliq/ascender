@@ -10,7 +10,7 @@ import {
 
 import CredentialTypeDetails from './CredentialTypeDetails';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const makeCredentialType = (overrides = {}) => ({
   name: 'Foo',
@@ -47,7 +47,7 @@ const makeCredentialType = (overrides = {}) => ({
 
 describe('<CredentialTypeDetails/>', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render details properly', async () => {

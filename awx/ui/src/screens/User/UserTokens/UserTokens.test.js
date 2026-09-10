@@ -6,9 +6,9 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import UserTokens from './UserTokens';
 
-jest.mock('../../../api');
-jest.mock('../UserTokenAdd', () => {
-  const React = require('react');
+vi.mock('../../../api');
+vi.mock('../UserTokenAdd', async () => {
+  const React = await vi.importActual('react');
   return {
     __esModule: true,
     default: ({ onSuccessfulAdd }) =>

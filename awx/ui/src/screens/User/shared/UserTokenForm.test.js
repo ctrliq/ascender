@@ -4,7 +4,7 @@ import { ApplicationsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserTokenForm from './UserTokenForm';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 const applications = {
   data: {
     count: 2,
@@ -26,12 +26,12 @@ const applications = {
 };
 describe('<UserTokenForm />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {
     renderWithContexts(
-      <UserTokenForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
+      <UserTokenForm handleSubmit={vi.fn()} handleCancel={vi.fn()} />
     );
 
     expect(
@@ -41,7 +41,7 @@ describe('<UserTokenForm />', () => {
 
   test('add form displays all form fields', async () => {
     renderWithContexts(
-      <UserTokenForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
+      <UserTokenForm handleSubmit={vi.fn()} handleCancel={vi.fn()} />
     );
     expect(await screen.findByText('Application')).toBeInTheDocument();
     expect(screen.getByLabelText('Description')).toBeInTheDocument();
@@ -51,7 +51,7 @@ describe('<UserTokenForm />', () => {
   test('inputs should update form value on change', async () => {
     ApplicationsAPI.read.mockResolvedValue(applications);
     const { user } = renderWithContexts(
-      <UserTokenForm handleSubmit={jest.fn()} handleCancel={jest.fn()} />
+      <UserTokenForm handleSubmit={vi.fn()} handleCancel={vi.fn()} />
     );
     await user.click(await screen.findByRole('button', { name: 'Search' }));
     await user.click(await screen.findByText('app'));
@@ -67,9 +67,9 @@ describe('<UserTokenForm />', () => {
 
   test('should call handleSubmit when Submit button is clicked', async () => {
     ApplicationsAPI.read.mockResolvedValue(applications);
-    const handleSubmit = jest.fn();
+    const handleSubmit = vi.fn();
     const { user } = renderWithContexts(
-      <UserTokenForm handleSubmit={handleSubmit} handleCancel={jest.fn()} />
+      <UserTokenForm handleSubmit={handleSubmit} handleCancel={vi.fn()} />
     );
 
     await user.selectOptions(
@@ -82,9 +82,9 @@ describe('<UserTokenForm />', () => {
   });
 
   test('should call handleCancel when Cancel button is clicked', async () => {
-    const handleCancel = jest.fn();
+    const handleCancel = vi.fn();
     const { user } = renderWithContexts(
-      <UserTokenForm handleSubmit={jest.fn()} handleCancel={handleCancel} />
+      <UserTokenForm handleSubmit={vi.fn()} handleCancel={handleCancel} />
     );
     expect(handleCancel).not.toHaveBeenCalled();
     await user.click(await screen.findByRole('button', { name: 'Cancel' }));
@@ -92,9 +92,9 @@ describe('<UserTokenForm />', () => {
   });
   test('should throw error on submit without scope value', async () => {
     ApplicationsAPI.read.mockResolvedValue(applications);
-    const handleSubmit = jest.fn();
+    const handleSubmit = vi.fn();
     const { user } = renderWithContexts(
-      <UserTokenForm handleSubmit={handleSubmit} handleCancel={jest.fn()} />
+      <UserTokenForm handleSubmit={handleSubmit} handleCancel={vi.fn()} />
     );
 
     await user.click(await screen.findByRole('button', { name: 'Save' }));

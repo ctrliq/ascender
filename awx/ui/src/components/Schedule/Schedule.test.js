@@ -6,9 +6,9 @@ import { JobTemplatesAPI, SchedulesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Schedule from './Schedule';
 
-jest.mock('../../api/models/JobTemplates');
-jest.mock('../../api/models/Schedules');
-jest.mock('../../api/models/WorkflowJobTemplates');
+vi.mock('../../api/models/JobTemplates');
+vi.mock('../../api/models/Schedules');
+vi.mock('../../api/models/WorkflowJobTemplates');
 
 const unifiedJobTemplate = { id: 1, name: 'Mock JT' };
 

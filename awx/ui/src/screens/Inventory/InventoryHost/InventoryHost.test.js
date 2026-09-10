@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockHost from '../shared/data.host.json';
 import InventoryHost from './InventoryHost';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockInventory = {
   id: 3,
@@ -37,7 +37,7 @@ describe('<InventoryHost />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render expected tabs', async () => {

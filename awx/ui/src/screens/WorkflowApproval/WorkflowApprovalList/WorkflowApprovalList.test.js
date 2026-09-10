@@ -8,7 +8,7 @@ import {
 import WorkflowApprovalList from './WorkflowApprovalList';
 import mockWorkflowApprovals from '../data.workflowApprovals.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // Row id=221 ("220 - approval copy") is failed + deletable: the only row used
 // in the delete tests below.
@@ -41,7 +41,7 @@ describe('<WorkflowApprovalList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should load and render workflow approvals', async () => {

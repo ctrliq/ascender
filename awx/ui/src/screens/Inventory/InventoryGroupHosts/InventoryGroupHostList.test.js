@@ -10,9 +10,9 @@ import {
 import InventoryGroupHostList from './InventoryGroupHostList';
 import mockHosts from '../shared/data.hosts.json';
 
-jest.mock('../../../api/models/Groups');
-jest.mock('../../../api/models/Inventories');
-jest.mock('../../../api/models/CredentialTypes');
+vi.mock('../../../api/models/Groups');
+vi.mock('../../../api/models/Inventories');
+vi.mock('../../../api/models/CredentialTypes');
 
 function renderUnder(url) {
   const history = createMemoryHistory({ initialEntries: [url] });
@@ -55,7 +55,7 @@ describe('<InventoryGroupHostList />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should fetch inventory group hosts from api and render them in the list', async () => {
@@ -253,7 +253,7 @@ describe('<InventoryGroupHostList> for constructed inventories', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Should not show associate, or disassociate button', async () => {

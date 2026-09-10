@@ -5,10 +5,10 @@ import { CredentialsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AdHocCredentialStep from './AdHocCredentialStep';
 
-jest.mock('../../api/models/Credentials');
+vi.mock('../../api/models/Credentials');
 
 describe('<AdHocCredentialStep />', () => {
-  const onEnableLaunch = jest.fn();
+  const onEnableLaunch = vi.fn();
   beforeEach(async () => {
     CredentialsAPI.read.mockResolvedValue({
       data: {
@@ -24,7 +24,7 @@ describe('<AdHocCredentialStep />', () => {
     });
   });
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should mount properly', async () => {

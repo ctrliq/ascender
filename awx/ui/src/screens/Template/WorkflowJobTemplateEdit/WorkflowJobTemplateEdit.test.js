@@ -12,12 +12,12 @@ import useDebounce from 'hooks/useDebounce';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowJobTemplateEdit from './WorkflowJobTemplateEdit';
 
-jest.mock('../../../hooks/useDebounce');
-jest.mock('../../../api/models/WorkflowJobTemplates');
-jest.mock('../../../api/models/Organizations');
-jest.mock('../../../api/models/Labels');
-jest.mock('../../../api/models/Users');
-jest.mock('../../../api/models/Inventories');
+vi.mock('../../../hooks/useDebounce');
+vi.mock('../../../api/models/WorkflowJobTemplates');
+vi.mock('../../../api/models/Organizations');
+vi.mock('../../../api/models/Labels');
+vi.mock('../../../api/models/Users');
+vi.mock('../../../api/models/Inventories');
 
 const mockTemplate = {
   id: 6,
@@ -73,14 +73,14 @@ const submittedValues = {
 // The form is exercised on its own in WorkflowJobTemplateForm.test.js; here we
 // only care about the container's submit/cancel/error handling, so stub the form
 // with controls that invoke its props. The values it submits are configurable
-// per test via setSubmitValues (mock-prefixed so the jest factory may close
+// per test via setSubmitValues (mock-prefixed so the vi.mock factory may close
 // over it).
 const mockFormState = { submitValues: null };
 const setSubmitValues = (values) => {
   mockFormState.submitValues = values;
 };
 
-jest.mock('../shared', () => ({
+vi.mock('../shared', () => ({
   WorkflowJobTemplateForm: function MockWorkflowJobTemplateForm({
     handleSubmit,
     handleCancel,
@@ -142,7 +142,7 @@ describe('<WorkflowJobTemplateEdit/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const renderEdit = async (template = mockTemplate) => {

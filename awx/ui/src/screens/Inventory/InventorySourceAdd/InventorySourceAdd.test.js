@@ -5,7 +5,7 @@ import { InventorySourcesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventorySourceAdd from './InventorySourceAdd';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const invSourceData = {
   credential: { id: 222 },
@@ -29,25 +29,23 @@ const mockInventory = {
   organization: 2,
 };
 
-jest.mock(
-  '../shared/InventorySourceForm',
-  () =>
-    ({ onSubmit, onCancel, submitError }) => (
-      <div>
-        <button
-          type="button"
-          aria-label="mock-submit"
-          onClick={() => onSubmit(invSourceData)}
-        />
-        <button type="button" aria-label="mock-cancel" onClick={onCancel} />
-        {submitError ? <div data-testid="mock-submit-error" /> : null}
-      </div>
-    )
-);
+vi.mock('../shared/InventorySourceForm', () => ({
+  default: ({ onSubmit, onCancel, submitError }) => (
+    <div>
+      <button
+        type="button"
+        aria-label="mock-submit"
+        onClick={() => onSubmit(invSourceData)}
+      />
+      <button type="button" aria-label="mock-cancel" onClick={onCancel} />
+      {submitError ? <div data-testid="mock-submit-error" /> : null}
+    </div>
+  ),
+}));
 
 describe('<InventorySourceAdd />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('initially renders successfully', async () => {

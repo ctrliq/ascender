@@ -30,7 +30,7 @@ describe('<AdvancedSearch />', () => {
   test('Remove duplicates from searchableKeys/relatedSearchableKeys list', async () => {
     const { user } = renderWithContexts(
       <AdvancedSearch
-        onSearch={jest.fn()}
+        onSearch={vi.fn()}
         searchableKeys={[
           { key: 'foo', type: 'string' },
           { key: 'bar', type: 'string' },
@@ -45,7 +45,7 @@ describe('<AdvancedSearch />', () => {
   });
 
   test("Don't call onSearch unless a search value is set", async () => {
-    const advancedSearchMock = jest.fn();
+    const advancedSearchMock = vi.fn();
     const { user } = renderWithContexts(
       <AdvancedSearch
         onSearch={advancedSearchMock}
@@ -68,7 +68,7 @@ describe('<AdvancedSearch />', () => {
   test('Disable searchValue input until a key is set', async () => {
     const { user } = renderWithContexts(
       <AdvancedSearch
-        onSearch={jest.fn()}
+        onSearch={vi.fn()}
         searchableKeys={[{ key: 'foo', type: 'string' }]}
         relatedSearchableKeys={[]}
       />
@@ -79,7 +79,7 @@ describe('<AdvancedSearch />', () => {
   });
 
   test('Strip and__ set type from key', async () => {
-    const advancedSearchMock = jest.fn();
+    const advancedSearchMock = vi.fn();
     const { user } = renderWithContexts(
       <AdvancedSearch
         onSearch={advancedSearchMock}
@@ -99,7 +99,7 @@ describe('<AdvancedSearch />', () => {
   });
 
   test('Add __search lookup to key when applicable', async () => {
-    const advancedSearchMock = jest.fn();
+    const advancedSearchMock = vi.fn();
     const { user } = renderWithContexts(
       <AdvancedSearch
         onSearch={advancedSearchMock}
@@ -139,7 +139,7 @@ describe('<AdvancedSearch />', () => {
   });
 
   test('Key should be properly constructed from three typeaheads', async () => {
-    const advancedSearchMock = jest.fn();
+    const advancedSearchMock = vi.fn();
     const { user } = renderWithContexts(
       <AdvancedSearch
         onSearch={advancedSearchMock}
@@ -155,7 +155,7 @@ describe('<AdvancedSearch />', () => {
   });
 
   test('searchValue should clear after onSearch is called', async () => {
-    const advancedSearchMock = jest.fn();
+    const advancedSearchMock = vi.fn();
     const { user } = renderWithContexts(
       <AdvancedSearch
         onSearch={advancedSearchMock}
@@ -172,7 +172,7 @@ describe('<AdvancedSearch />', () => {
   });
 
   test('typeahead onClear should remove key components', async () => {
-    const advancedSearchMock = jest.fn();
+    const advancedSearchMock = vi.fn();
     const { user } = renderWithContexts(
       <AdvancedSearch
         onSearch={advancedSearchMock}
@@ -201,7 +201,7 @@ describe('<AdvancedSearch />', () => {
   test('Remove not operator from set type', async () => {
     const { user } = renderWithContexts(
       <AdvancedSearch
-        onSearch={jest.fn()}
+        onSearch={vi.fn()}
         searchableKeys={[
           { key: 'foo', type: 'string' },
           { key: 'bar', type: 'string' },
@@ -225,7 +225,7 @@ describe('<AdvancedSearch />', () => {
   test('Remove search option from related search type', async () => {
     const { user } = renderWithContexts(
       <AdvancedSearch
-        onSearch={jest.fn()}
+        onSearch={vi.fn()}
         searchableKeys={[
           { key: 'foo', type: 'string' },
           { key: 'bar', type: 'string' },

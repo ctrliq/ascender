@@ -8,7 +8,7 @@ import {
 import JobTemplateDetail from './JobTemplateDetail';
 import mockTemplate from '../shared/data.job_template.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockInstanceGroups = {
   count: 5,
@@ -39,7 +39,7 @@ describe('<JobTemplateDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   const renderDefault = async () => {

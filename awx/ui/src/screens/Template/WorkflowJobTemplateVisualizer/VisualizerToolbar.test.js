@@ -7,9 +7,9 @@ import {
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import VisualizerToolbar from './VisualizerToolbar';
 
-const close = jest.fn();
-const dispatch = jest.fn();
-const save = jest.fn();
+const close = vi.fn();
+const dispatch = vi.fn();
+const save = vi.fn();
 const template = {
   id: 1,
   name: 'Test JT',

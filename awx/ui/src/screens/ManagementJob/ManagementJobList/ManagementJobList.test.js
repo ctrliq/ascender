@@ -6,7 +6,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ManagementJobList from './ManagementJobList';
 
-jest.mock('../../../api/models/SystemJobTemplates');
+vi.mock('../../../api/models/SystemJobTemplates');
 
 const managementJobs = {
   data: {
@@ -53,7 +53,7 @@ describe('<ManagementJobList/>', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should mount successfully', async () => {

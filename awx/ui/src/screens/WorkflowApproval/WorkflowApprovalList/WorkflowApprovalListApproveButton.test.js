@@ -22,7 +22,7 @@ describe('<WorkflowApprovalListApproveButton />', () => {
   });
 
   test('should invoke onApprove prop', async () => {
-    const onApprove = jest.fn();
+    const onApprove = vi.fn();
     const { user } = renderWithContexts(
       <WorkflowApprovalListApproveButton
         onApprove={onApprove}

@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import CredentialTypeEdit from './CredentialTypeEdit';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const credentialTypeData = {
   id: 42,
@@ -50,23 +50,25 @@ const mockUpdateData = {
 
 // The form has its own suite; stub it so we can drive the container's
 // submit/cancel/error handling directly.
-jest.mock(
-  '../shared/CredentialTypeForm',
-  () =>
-    function MockCredentialTypeForm({ onSubmit, onCancel, submitError }) {
-      return (
-        <div>
-          {submitError ? <div data-testid="form-submit-error" /> : null}
-          <button type="button" onClick={() => onSubmit(mockUpdateData)}>
-            Submit
-          </button>
-          <button type="button" aria-label="Cancel" onClick={onCancel}>
-            Cancel
-          </button>
-        </div>
-      );
-    }
-);
+vi.mock('../shared/CredentialTypeForm', () => ({
+  default: function MockCredentialTypeForm({
+    onSubmit,
+    onCancel,
+    submitError,
+  }) {
+    return (
+      <div>
+        {submitError ? <div data-testid="form-submit-error" /> : null}
+        <button type="button" onClick={() => onSubmit(mockUpdateData)}>
+          Submit
+        </button>
+        <button type="button" aria-label="Cancel" onClick={onCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  },
+}));
 
 describe('<CredentialTypeEdit>', () => {
   let history;
@@ -80,7 +82,7 @@ describe('<CredentialTypeEdit>', () => {
   };
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('handleSubmit should call the api and redirect to details page', async () => {

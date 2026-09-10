@@ -5,7 +5,7 @@ import { ProjectsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ProjectLookup from './ProjectLookup';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 describe('<ProjectLookup />', () => {
   beforeEach(() => {
@@ -18,7 +18,7 @@ describe('<ProjectLookup />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should auto-select project when only one available and autoPopulate prop is true', async () => {
@@ -29,7 +29,7 @@ describe('<ProjectLookup />', () => {
         count: 1,
       },
     });
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     renderWithContexts(
       <Formik>
         <ProjectLookup autoPopulate onChange={onChange} />
@@ -45,7 +45,7 @@ describe('<ProjectLookup />', () => {
         count: 1,
       },
     });
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     renderWithContexts(
       <Formik>
         <ProjectLookup onChange={onChange} />
@@ -65,7 +65,7 @@ describe('<ProjectLookup />', () => {
         count: 2,
       },
     });
-    const onChange = jest.fn();
+    const onChange = vi.fn();
     renderWithContexts(
       <Formik>
         <ProjectLookup autoPopulate onChange={onChange} />

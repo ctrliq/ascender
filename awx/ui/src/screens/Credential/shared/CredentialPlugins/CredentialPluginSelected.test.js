@@ -5,8 +5,8 @@ import selectedCredential from '../data.cyberArkCredential.json';
 import CredentialPluginSelected from './CredentialPluginSelected';
 
 function setup() {
-  const onClearPlugin = jest.fn();
-  const onEditPlugin = jest.fn();
+  const onClearPlugin = vi.fn();
+  const onEditPlugin = vi.fn();
   const { user, container } = renderWithContexts(
     <CredentialPluginSelected
       credential={selectedCredential}

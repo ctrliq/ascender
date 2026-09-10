@@ -5,7 +5,7 @@ import SmartInventoryButton from './SmartInventoryButton';
 
 describe('<SmartInventoryButton />', () => {
   test('should render button', async () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
     const { user } = renderWithContexts(
       <SmartInventoryButton onClick={onClick} />
     );

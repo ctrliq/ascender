@@ -4,18 +4,18 @@ import { ProjectsAPI } from 'api';
 import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 import ProjectsList from './ProjectsList';
 
-jest.mock('../../../../../../api/models/Projects');
+vi.mock('../../../../../../api/models/Projects');
 
 const nodeResource = {
   id: 1,
   name: 'Test Project',
   unified_job_type: 'project_update',
 };
-const onUpdateNodeResource = jest.fn();
+const onUpdateNodeResource = vi.fn();
 
 describe('ProjectsList', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('Row selected when nodeResource id matches row id and clicking new row makes expected callback', async () => {

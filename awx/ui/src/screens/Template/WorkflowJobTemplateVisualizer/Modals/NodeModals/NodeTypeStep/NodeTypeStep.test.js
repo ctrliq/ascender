@@ -12,10 +12,10 @@ import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 
 import NodeTypeStep from './NodeTypeStep';
 
-jest.mock('../../../../../../api/models/InventorySources');
-jest.mock('../../../../../../api/models/JobTemplates');
-jest.mock('../../../../../../api/models/Projects');
-jest.mock('../../../../../../api/models/WorkflowJobTemplates');
+vi.mock('../../../../../../api/models/InventorySources');
+vi.mock('../../../../../../api/models/JobTemplates');
+vi.mock('../../../../../../api/models/Projects');
+vi.mock('../../../../../../api/models/WorkflowJobTemplates');
 
 // AnsibleSelect renders <select aria-label="Select Input">.
 function getNodeTypeSelect() {
@@ -32,7 +32,7 @@ describe('NodeTypeStep', () => {
       isExecEnvAdmin: false,
     }));
   });
-  // jest is configured with resetMocks:true (package.json), which clears mock
+  // vitest is configured with mockReset (vitest.config.mjs), which clears mock
   // implementations before every test. When these were set in
   // beforeAll and the test only asserted that the right list component mounted
   // (never its rows), the reset went unnoticed. Here we assert rows render, so the
@@ -128,7 +128,7 @@ describe('NodeTypeStep', () => {
     });
   });
   afterAll(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('It shows the job template list by default', async () => {

@@ -5,40 +5,40 @@ import { Routes, Route } from 'react-router';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import InstanceGroups from './InstanceGroups';
 
-jest.mock('../../api/models/InstanceGroups');
+vi.mock('../../api/models/InstanceGroups');
 
 // Replace the routed children with markers so the assertions are purely about
 // which branch of the v6 <Routes> tree resolves for a given URL.
-jest.mock('./InstanceGroupList', () => {
-  const ReactLib = require('react');
+vi.mock('./InstanceGroupList', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'InstanceGroupList'),
   };
 });
-jest.mock('./InstanceGroupAdd', () => {
-  const ReactLib = require('react');
+vi.mock('./InstanceGroupAdd', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'InstanceGroupAdd'),
   };
 });
-jest.mock('./ContainerGroupAdd', () => {
-  const ReactLib = require('react');
+vi.mock('./ContainerGroupAdd', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'ContainerGroupAdd'),
   };
 });
-jest.mock('./InstanceGroup', () => {
-  const ReactLib = require('react');
+vi.mock('./InstanceGroup', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'InstanceGroup detail'),
   };
 });
-jest.mock('./ContainerGroup', () => {
-  const ReactLib = require('react');
+vi.mock('./ContainerGroup', async () => {
+  const ReactLib = await vi.importActual('react');
   return {
     __esModule: true,
     default: () => ReactLib.createElement('div', null, 'ContainerGroup detail'),

@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ActivityStreamListItem from './ActivityStreamListItem';
 
-jest.mock('../../api/models/ActivityStream');
+vi.mock('../../api/models/ActivityStream');
 
 describe('<ActivityStreamListItem />', () => {
   test('initially renders successfully', () => {

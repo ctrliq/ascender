@@ -6,7 +6,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SmartInventoryEdit from './SmartInventoryEdit';
 import mockSmartInventory from '../shared/data.smart_inventory.json';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const mockSmartInv = {
   ...mockSmartInventory,
@@ -15,31 +15,29 @@ const mockSmartInv = {
   },
 };
 
-jest.mock(
-  '../shared/SmartInventoryForm',
-  () =>
-    function SmartInventoryForm({ onSubmit, onCancel, submitError }) {
-      const mockSubmitValues = {
-        name: 'Mock Smart',
-        organization: { id: 1 },
-        instance_groups: [
-          { id: 10, name: 'instance-group-10' },
-          { id: 30, name: 'instance-group-30' },
-        ],
-      };
-      return (
-        <div>
-          <button
-            type="button"
-            aria-label="mock-submit"
-            onClick={() => onSubmit(mockSubmitValues)}
-          />
-          <button type="button" aria-label="mock-cancel" onClick={onCancel} />
-          {submitError ? <div data-testid="mock-submit-error" /> : null}
-        </div>
-      );
-    }
-);
+vi.mock('../shared/SmartInventoryForm', () => ({
+  default: function SmartInventoryForm({ onSubmit, onCancel, submitError }) {
+    const mockSubmitValues = {
+      name: 'Mock Smart',
+      organization: { id: 1 },
+      instance_groups: [
+        { id: 10, name: 'instance-group-10' },
+        { id: 30, name: 'instance-group-30' },
+      ],
+    };
+    return (
+      <div>
+        <button
+          type="button"
+          aria-label="mock-submit"
+          onClick={() => onSubmit(mockSubmitValues)}
+        />
+        <button type="button" aria-label="mock-cancel" onClick={onCancel} />
+        {submitError ? <div data-testid="mock-submit-error" /> : null}
+      </div>
+    );
+  },
+}));
 
 describe('<SmartInventoryEdit />', () => {
   beforeEach(() => {
@@ -57,7 +55,7 @@ describe('<SmartInventoryEdit />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should fetch related instance groups on initial render', async () => {

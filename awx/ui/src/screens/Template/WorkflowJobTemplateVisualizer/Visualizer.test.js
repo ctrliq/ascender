@@ -10,13 +10,13 @@ import workflowReducer from 'components/Workflow/workflowReducer';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import Visualizer from './Visualizer';
 
-jest.mock('../../../components/Workflow/workflowReducer');
+vi.mock('../../../components/Workflow/workflowReducer');
 
-const realWorkflowReducer = jest.requireActual(
-  '../../../components/Workflow/workflowReducer'
+const realWorkflowReducer = (
+  await vi.importActual('../../../components/Workflow/workflowReducer')
 ).default;
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const startNode = {
   id: 1,
@@ -164,8 +164,8 @@ describe('Visualizer', () => {
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
-    jest.resetModules();
+    vi.clearAllMocks();
+    vi.resetModules();
     workflowReducer.mockImplementation(realWorkflowReducer);
   });
 

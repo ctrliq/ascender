@@ -5,7 +5,7 @@ import { ExecutionEnvironmentsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AdHocExecutionEnvironmentStep from './AdHocExecutionEnvironmentStep';
 
-jest.mock('../../api/models/ExecutionEnvironments');
+vi.mock('../../api/models/ExecutionEnvironments');
 
 describe('<AdHocExecutionEnvironmentStep />', () => {
   beforeEach(async () => {
@@ -24,7 +24,7 @@ describe('<AdHocExecutionEnvironmentStep />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should mount properly', async () => {

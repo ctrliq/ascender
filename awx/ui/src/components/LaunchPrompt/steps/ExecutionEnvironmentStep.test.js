@@ -5,7 +5,7 @@ import { ExecutionEnvironmentsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ExecutionEnvironmentStep from './ExecutionEnvironmentStep';
 
-jest.mock('../../../api/models/ExecutionEnvironments');
+vi.mock('../../../api/models/ExecutionEnvironments');
 
 const execution_environments = [
   { id: 1, name: 'ee one', url: '/execution_environments/1' },
@@ -33,7 +33,7 @@ describe('ExecutionEnvironmentStep', () => {
     });
   });
 
-  afterEach(() => jest.clearAllMocks());
+  afterEach(() => vi.clearAllMocks());
 
   test('should load execution environments', async () => {
     renderWithContexts(

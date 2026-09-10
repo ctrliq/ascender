@@ -9,7 +9,7 @@ import {
 import mockAllOptions from '../../shared/data.allSettingOptions.json';
 import OIDCDetail from './OIDCDetail';
 
-jest.mock('../../../../api');
+vi.mock('../../../../api');
 
 describe('<OIDCDetail />', () => {
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe('<OIDCDetail />', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   async function renderDetail(context) {

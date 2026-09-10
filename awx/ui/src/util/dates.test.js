@@ -47,12 +47,12 @@ describe('secondsToDays', () => {
 
 describe('calculateElapsed', () => {
   beforeEach(() => {
-    jest.useFakeTimers('modern');
-    jest.setSystemTime(new Date('2021-09-01T12:30:45.000Z'));
+    vi.useFakeTimers('modern');
+    vi.setSystemTime(new Date('2021-09-01T12:30:45.000Z'));
   });
 
   afterEach(() => {
-    jest.useRealTimers();
+    vi.useRealTimers();
   });
 
   test('should return zero when not started', () => {

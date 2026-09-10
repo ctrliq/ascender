@@ -7,7 +7,7 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockJobTemplateData from './data.job_template.json';
 import TemplateListItem from './TemplateListItem';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 function renderItem(ui, options) {
   return renderWithContexts(
@@ -285,7 +285,7 @@ describe('<TemplateListItem />', () => {
     );
     await user.click(screen.getByRole('button', { name: 'Copy' }));
     await waitFor(() => expect(JobTemplatesAPI.copy).toHaveBeenCalled());
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render proper alert modal on copy error', async () => {
@@ -302,7 +302,7 @@ describe('<TemplateListItem />', () => {
     );
     await user.click(screen.getByRole('button', { name: 'Copy' }));
     expect(await screen.findByText('Error!')).toBeInTheDocument();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should not render copy button', () => {

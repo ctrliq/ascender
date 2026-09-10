@@ -8,7 +8,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import TeamDetail from './TeamDetail';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 const makeTeam = ({ summary_fields, ...overrides } = {}) => ({
   name: 'Foo',
@@ -25,7 +25,7 @@ const makeTeam = ({ summary_fields, ...overrides } = {}) => ({
 
 describe('<TeamDetail />', () => {
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render the details', async () => {

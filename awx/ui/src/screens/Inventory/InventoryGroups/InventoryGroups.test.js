@@ -5,14 +5,14 @@ import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroups from './InventoryGroups';
 
-jest.mock('../../../api');
+vi.mock('../../../api');
 
 // stub the leaf screens so route resolution can be asserted without the API
-jest.mock('./InventoryGroupsList', () => {
+vi.mock('./InventoryGroupsList', () => {
   const InventoryGroupsList = () => <div data-testid="groups-list" />;
   return { __esModule: true, default: InventoryGroupsList };
 });
-jest.mock('../InventoryGroupAdd/InventoryGroupAdd', () => {
+vi.mock('../InventoryGroupAdd/InventoryGroupAdd', () => {
   const InventoryGroupsAdd = () => <div data-testid="groups-add" />;
   return { __esModule: true, default: InventoryGroupsAdd };
 });

@@ -5,7 +5,7 @@ import { ExecutionEnvironmentsAPI, ProjectsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ExecutionEnvironmentLookup from './ExecutionEnvironmentLookup';
 
-jest.mock('../../api');
+vi.mock('../../api');
 
 const mockedExecutionEnvironments = {
   count: 1,
@@ -41,7 +41,7 @@ describe('ExecutionEnvironmentLookup', () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   test('should render successfully', async () => {
