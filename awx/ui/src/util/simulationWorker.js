@@ -1,9 +1,15 @@
 /* eslint-disable no-undef */
-importScripts('d3-collection.v1.min.js');
-importScripts('d3-dispatch.v1.min.js');
-importScripts('d3-quadtree.v1.min.js');
-importScripts('d3-timer.v1.min.js');
-importScripts('d3-force.v1.min.js');
+
+// Absolute rather than relative to this file. These five live in
+// public/static/js and are served at /static/js by the dev server and by
+// Django alike. Relative paths only worked because the bundler used to emit
+// this worker into that same directory, which is not where it is served from
+// during development.
+importScripts('/static/js/d3-collection.v1.min.js');
+importScripts('/static/js/d3-dispatch.v1.min.js');
+importScripts('/static/js/d3-quadtree.v1.min.js');
+importScripts('/static/js/d3-timer.v1.min.js');
+importScripts('/static/js/d3-force.v1.min.js');
 
 onmessage = function calculateLayout({ data: { nodes, links } }) {
   const simulation = d3

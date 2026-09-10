@@ -97,6 +97,10 @@ vi.mock('hooks/useTitle');
 // where the next file's router starts, which is why the redirect tests were the
 // ones failing, and a different one each run.
 afterEach(() => {
+  // Fake timers are per environment, and the environment outlives the file,
+  // so a file that installs them and does not put them back changes how every
+  // later file in that worker behaves.
+  vi.useRealTimers();
   window.history.replaceState(null, '', '/');
   // Optional calls, not defensiveness for its own sake: a test may have
   // replaced window.localStorage with a mock that has no clear().
@@ -127,11 +131,6 @@ afterEach(() => {
     throw new Error('Warning logged to console');
   }
 });
-
-// This global variable is part of our Content Security Policy framework
-// and so this mock ensures that we don't encounter a reference error
-// when running the tests
-global.__webpack_nonce__ = null;
 
 const MockConfigContext = React.createContext({});
 vi.doMock('./contexts/Config', () => ({

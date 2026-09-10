@@ -14,7 +14,7 @@ import {
   getRelatedResourceDeleteCounts,
   relatedResourceDeleteRequests,
 } from './getRelatedResourceDeleteDetails';
-import en from '../locales/en/messages';
+import { messages as enMessages } from '../locales/en/messages.mjs';
 
 vi.mock('../api/models/Credentials');
 vi.mock('../api/models/Inventories');
@@ -31,7 +31,7 @@ vi.mock('../api/models/Teams');
 
 describe('delete details', () => {
   beforeAll(() => {
-    i18n.load({ en });
+    i18n.load({ en: enMessages });
     i18n.activate('en');
   });
 

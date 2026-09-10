@@ -5,10 +5,9 @@
  * build time, so the only way to add one without rebuilding the image is to hand
  * the browser the stylesheet at runtime. That is what this module does.
  *
- * It is deliberately separate from themeRegistry, which cannot be imported under
- * the test runner because it discovers the shipped themes with webpack's
- * require.context.
- * Nothing here needs the bundler, so it stays testable.
+ * It is deliberately separate from themeRegistry, which discovers the shipped
+ * themes at build time. Nothing here is bundler specific, so a custom theme can
+ * be reasoned about and tested on its own.
  */
 
 export const CUSTOM_THEME_ID = 'custom';

@@ -9,7 +9,11 @@ module.exports = defineConfig({
       exclude: ['**/node_modules/**'],
     },
   ],
-  compileNamespace: 'cjs',
+  // ES modules rather than the module.exports the ejected build wanted. The
+  // production bundler converted that for us, so it only showed up on the dev
+  // server, where the catalogue is served as written and the browser has no
+  // `module` to assign to.
+  compileNamespace: 'es',
   fallbackLocales: { default: 'en' },
   locales: ['en', 'es', 'fr', 'hi', 'ko', 'nl', 'zh', 'ja', 'ar'],
   orderBy: 'messageId',

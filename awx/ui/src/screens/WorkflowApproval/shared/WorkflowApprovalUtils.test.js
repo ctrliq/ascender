@@ -12,7 +12,7 @@ import mockWorkflowApprovals from '../data.workflowApprovals.json';
 const workflowApproval = mockWorkflowApprovals.results[0];
 
 async function activate() {
-  const { messages } = await import(`../../../locales/${'en'}/messages.js`);
+  const { messages } = await import(`../../../locales/${'en'}/messages.mjs`);
   i18n.load('en', messages);
   i18n.activate('en');
 }

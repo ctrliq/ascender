@@ -2,23 +2,34 @@ import { getCustomTheme, setCustomTheme, CUSTOM_THEME_ID } from './customTheme';
 
 export { setCustomTheme, CUSTOM_THEME_ID };
 
-const cssContext = require.context('./themes/', false, /^\.\/[^_].*\.css$/);
-cssContext.keys().forEach((key) => cssContext(key));
+// Pulled in for their side effect, which is that the stylesheets end up in the
+// build. import.meta.glob is what replaced require.context here, and it is
+// understood by the test runner as well, so this module no longer needs to be
+// stood in for when the suite runs.
+import.meta.glob('./themes/[!_]*.css', { eager: true });
 
-const metaContext = require.context(
-  '!!../config/themeMetaLoader.js!./themes/',
-  false,
-  /^\.\/[^_].*\.css$/
-);
+// The same files again as text, to read the metadata out of them. This is what
+// config/themeMetaLoader.js, a webpack loader, used to do at build time: take
+// the name from a /* Name: ... */ comment and decide whether a theme is dark by
+// looking for the PatternFly dark selector.
+const themeSources = import.meta.glob('./themes/[!_]*.css', {
+  eager: true,
+  query: '?raw',
+  import: 'default',
+});
 
 let themes = null;
 
 export function getThemes() {
   if (!themes) {
-    themes = metaContext.keys().map((key) => {
-      const id = key.replace('./', '').replace('.css', '');
-      const meta = metaContext(key).default;
-      return { id, name: meta.name || id, dark: meta.dark };
+    themes = Object.entries(themeSources).map(([path, source]) => {
+      const id = path
+        .split('/')
+        .pop()
+        .replace(/\.css$/, '');
+      const nameMatch = source.match(/\/\*\s*Name:\s*(.+?)\s*\*\//);
+      const dark = /html\.pf-v6-theme-dark\[data-theme/.test(source);
+      return { id, name: nameMatch ? nameMatch[1].trim() : id, dark };
     });
     themes.sort((a, b) => a.name.localeCompare(b.name));
   }
