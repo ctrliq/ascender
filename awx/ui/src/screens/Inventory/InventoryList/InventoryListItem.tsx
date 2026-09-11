@@ -17,7 +17,8 @@ export interface InventoryListItemProps {
   inventory: AnyInventory;
   rowIndex: number;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   onCopy: (id: number) => void;
   fetchInventories: Untyped;
   [key: string]: unknown;

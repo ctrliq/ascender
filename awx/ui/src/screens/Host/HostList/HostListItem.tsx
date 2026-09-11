@@ -1,4 +1,4 @@
-import type { Host, Untyped } from 'types/api';
+import type { Host } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -14,7 +14,8 @@ import Sparkline from 'components/Sparkline';
 export interface HostListItemProps {
   host: Host;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   detailUrl: string;
   rowIndex: number;
   [key: string]: unknown;

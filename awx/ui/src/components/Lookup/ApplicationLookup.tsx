@@ -1,5 +1,6 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
+import type { FieldValidator } from 'formik';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { FormGroup } from '@patternfly/react-core';
@@ -19,11 +20,12 @@ const QS_CONFIG = getQSConfig('applications', {
 });
 
 export interface ApplicationLookupProps {
-  onChange: (...args: Untyped[]) => void;
-  value?: Untyped;
+  /** Declared method style so a caller may name its own row type. */
+  onChange(value: SummaryFieldRef | null): void;
+  value?: SummaryFieldRef | null;
   label: React.ReactNode;
   fieldName?: string;
-  validate?: (value: Untyped) => string | undefined;
+  validate?: FieldValidator;
   [key: string]: unknown;
 }
 
@@ -81,7 +83,7 @@ function ApplicationLookup({
         const {
           data: { results: nameMatchResults, count: nameMatchCount },
         } = await ApplicationsAPI.read({ name });
-        onChange(nameMatchCount ? nameMatchResults[0] : null);
+        onChange(nameMatchCount ? (nameMatchResults[0] ?? null) : null);
       } catch {
         onChange(null);
       }

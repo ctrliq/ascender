@@ -1,4 +1,4 @@
-import type { User, Untyped } from 'types/api';
+import type { User } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -11,7 +11,8 @@ import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 export interface UserListItemProps {
   user: User;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   detailUrl: string;
   rowIndex: number;
   [key: string]: unknown;

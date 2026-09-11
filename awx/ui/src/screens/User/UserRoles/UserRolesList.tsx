@@ -1,4 +1,4 @@
-import type { User, Untyped } from 'types/api';
+import type { Role, User } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -36,7 +36,9 @@ export interface UserRolesListProps {
 function UserRolesList({ user }: UserRolesListProps) {
   const { t } = useLingui();
   const { search } = useLocation();
-  const [roleToDisassociate, setRoleToDisassociate] = useState<Untyped>(null);
+  const [roleToDisassociate, setRoleToDisassociate] = useState<Role | null>(
+    null
+  );
   const [showAddModal, setShowAddModal] = useState(false);
   const [associateError, setAssociateError] = useState<unknown>(null);
 
@@ -94,7 +96,10 @@ function UserRolesList({ user }: UserRolesListProps) {
   } = useDeleteItems(
     useCallback(async () => {
       setRoleToDisassociate(null);
-      await RolesAPI.disassociateUserRole(roleToDisassociate.id, user.id);
+      await RolesAPI.disassociateUserRole(
+        roleToDisassociate?.id as number,
+        user.id
+      );
     }, [roleToDisassociate, user.id]),
     { qsConfig: QS_CONFIG, fetchItems: fetchRoles }
   );
@@ -102,7 +107,7 @@ function UserRolesList({ user }: UserRolesListProps) {
   const canAdd =
     actions && Object.prototype.hasOwnProperty.call(actions, 'POST');
 
-  const detailUrl = (role: Untyped) => {
+  const detailUrl = (role: Role) => {
     const { resource_id, resource_type } = role.summary_fields;
 
     if (!role || !resource_type) {
@@ -117,9 +122,7 @@ function UserRolesList({ user }: UserRolesListProps) {
     }
     return `/${resource_type}s/${resource_id}/details`;
   };
-  const isSysAdmin = roles.some(
-    (role: Untyped) => role.name === 'System Administrator'
-  );
+  const isSysAdmin = roles.some((role) => role.name === 'System Administrator');
   if (isSysAdmin) {
     return (
       <EmptyState
@@ -159,7 +162,7 @@ function UserRolesList({ user }: UserRolesListProps) {
             <HeaderCell>{t`Role`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(role: Untyped, index: number) => (
+        renderRow={(role: Role, index: number) => (
           <UserRolesListItem
             key={role.id}
             value={role.name}

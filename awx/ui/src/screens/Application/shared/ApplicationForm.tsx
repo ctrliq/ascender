@@ -36,7 +36,8 @@ function ApplicationFormFields({
   const { t } = useLingui();
   const applicationHelpTextStrings = getApplicationHelpTextStrings();
   const { pathname } = useLocation();
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
   const [organizationField, organizationMeta, organizationHelpers] =
     useField('organization');
   const [

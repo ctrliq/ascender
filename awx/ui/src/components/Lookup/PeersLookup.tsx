@@ -1,5 +1,6 @@
-import type { Untyped } from 'types/api';
+import type { Instance, SearchColumn, SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
+import type { FieldValidator } from 'formik';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Label, FormGroup } from '@patternfly/react-core';
@@ -26,22 +27,24 @@ const defaultInstanceDetails = {};
 
 export interface PeersLookupProps {
   id?: string;
-  value: Untyped;
-  onChange: (...args: Untyped[]) => void;
+  value: SummaryFieldRef[];
+  /** Declared method style so a caller may name its own row type. */
+  onChange(value: SummaryFieldRef[]): void;
   tooltip?: React.ReactNode;
   className?: string;
   required?: boolean;
   fieldName?: string;
   multiple?: boolean;
-  validate?: (value: Untyped) => string | undefined;
-  columns?: Untyped;
+  validate?: FieldValidator;
+  columns?: SearchColumn[];
   isPromptableField?: boolean;
-  promptId?: number | string;
+  promptId?: string;
   promptName?: string;
-  formLabel?: Untyped;
+  formLabel?: string;
   typePeers?: boolean;
   /** The instance being peered, whose own id and peers are excluded. */
-  instance_details?: Untyped;
+  /** The instance being edited, which is left out of its own peer list. */
+  instance_details?: Partial<Instance>;
   [key: string]: unknown;
 }
 
@@ -79,7 +82,7 @@ function PeersLookup({
         if (instance_details) {
           if (instance_details.id) {
             peersFilter.not__id = instance_details.id;
-            peersFilter.not__hostname = instance_details.peers;
+            peersFilter.not__hostname = instance_details.peers ?? [];
           }
         }
       }
@@ -182,7 +185,7 @@ function PeersLookup({
     <FieldWithPrompt
       fieldId={id}
       label={formLabel}
-      promptId={promptId as string | number}
+      promptId={promptId as string}
       promptName={promptName as string}
       tooltip={tooltip}
     >

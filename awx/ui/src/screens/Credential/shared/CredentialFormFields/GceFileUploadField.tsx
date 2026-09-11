@@ -13,7 +13,7 @@ import {
 
 function GceFileUploadField() {
   const { t } = useLingui();
-  const { setFieldValue } = useFormikContext<Untyped>();
+  const { setFieldValue } = useFormikContext<Record<string, unknown>>();
   const [fileError, setFileError] = useState<string | null>(null);
   const [filename, setFilename] = useState('');
   const [fileValue, setFileValue] = useState('');

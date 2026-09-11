@@ -31,7 +31,8 @@ export interface TemplateListItemProps {
   onExpand: (...args: Untyped[]) => void;
   template: JobTemplate;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   onCopy: (id: number) => void;
   detailUrl: React.ReactNode;
   fetchTemplates: (...args: Untyped[]) => unknown;

@@ -1,4 +1,4 @@
-import type { Schedule, SummaryFieldRef, Untyped } from 'types/api';
+import type { Schedule, SummaryFieldRef } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -24,7 +24,8 @@ const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
 export interface ScheduleListItemProps {
   rowIndex: number;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   schedule: Schedule;
   isMissingInventory: boolean;
   isMissingSurvey: boolean;

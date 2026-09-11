@@ -18,7 +18,8 @@ import getHelpText from '../Inventory.helptext';
 const EC2SubForm = () => {
   const { t } = useLingui();
   const helpText = getHelpText();
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
   const [credentialField, credentialMeta] = useField('credential');
   const config = useConfig();
   const handleCredentialUpdate = useCallback(

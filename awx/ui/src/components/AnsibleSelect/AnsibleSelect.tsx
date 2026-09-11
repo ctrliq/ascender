@@ -8,7 +8,12 @@ export interface AnsibleSelectProps {
   id: Untyped;
   data?: Untyped[];
   isValid?: boolean;
-  onBlur?: (event?: Untyped) => void;
+  /**
+   * Declared method style on purpose: the handler is formik's own, which takes
+   * an event or a field name, and it is handed straight to whichever
+   * PatternFly input the field renders, which names its own event type.
+   */
+  onBlur?(event?: React.SyntheticEvent): void;
   value: Untyped;
   className?: string;
   isDisabled?: boolean;

@@ -1,3 +1,4 @@
+import type { Host } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -11,10 +12,11 @@ describe('HostListItem', () => {
     description: 'Buzz',
     summary_fields: {
       inventory: {
+        id: 2,
         name: 'Bar',
       },
     },
-  };
+  } as Host;
   test('initially renders successfully', () => {
     renderWithContexts(
       <table>

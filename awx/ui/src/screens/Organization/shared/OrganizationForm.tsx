@@ -33,7 +33,7 @@ function OrganizationFormFields({
   const { t } = useLingui();
   const { license_info = {}, me = {} } = useConfig();
 
-  const { setFieldValue } = useFormikContext<Untyped>();
+  const { setFieldValue } = useFormikContext<Record<string, unknown>>();
 
   const [
     galaxyCredentialsField,

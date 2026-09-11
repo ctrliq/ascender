@@ -1,5 +1,6 @@
-import type { Project, Untyped } from 'types/api';
+import type { Project, SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
+import type { FieldValidator } from 'formik';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -33,18 +34,24 @@ export interface ExecutionEnvironmentLookupProps {
   helperTextInvalid?: React.ReactNode;
   isDisabled?: boolean;
   isValid?: boolean;
-  onBlur?: (event?: Untyped) => void;
-  onChange: (...args: Untyped[]) => void;
+  /**
+   * Declared method style on purpose: the handler is formik's own, which takes
+   * an event or a field name, and it is handed straight to whichever
+   * PatternFly input the field renders, which names its own event type.
+   */
+  onBlur?(event?: React.SyntheticEvent): void;
+  /** Declared method style so a caller may name its own row type. */
+  onChange(value: SummaryFieldRef | null): void;
   organizationId?: number | string;
-  popoverContent?: Untyped;
+  popoverContent?: React.ReactNode;
   projectId?: number | string;
   tooltip?: React.ReactNode;
-  validate?: (value: Untyped) => string | undefined;
-  value?: Untyped;
+  validate?: FieldValidator;
+  value?: SummaryFieldRef | null;
   fieldName?: string;
   overrideLabel?: boolean;
   isPromptableField?: boolean;
-  promptId?: number | string;
+  promptId?: string;
   promptName?: string;
   [key: string]: unknown;
 }
@@ -169,7 +176,7 @@ function ExecutionEnvironmentLookup({
         const {
           data: { results: nameMatchResults, count: nameMatchCount },
         } = await ExecutionEnvironmentsAPI.read({ name });
-        onChange(nameMatchCount ? nameMatchResults[0] : null);
+        onChange(nameMatchCount ? (nameMatchResults[0] ?? null) : null);
       } catch {
         onChange(null);
       }
@@ -248,7 +255,7 @@ function ExecutionEnvironmentLookup({
     <FieldWithPrompt
       fieldId={id}
       label={renderLabel()}
-      promptId={promptId as string | number}
+      promptId={promptId as string}
       promptName={promptName as string}
       tooltip={popoverContent}
     >

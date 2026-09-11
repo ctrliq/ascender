@@ -37,7 +37,7 @@ export function getVerbosityLabel(
 
 export interface VerbositySelectFieldProps {
   fieldId: string;
-  promptId?: number | string;
+  promptId?: string;
   promptName?: string;
   tooltip: React.ReactNode;
   [key: string]: unknown;

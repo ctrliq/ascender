@@ -1,7 +1,7 @@
-import type { Untyped } from 'types/api';
 import React, { useReducer, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useField } from 'formik';
+import type { FieldValidator } from 'formik';
 import { SearchIcon } from '@patternfly/react-icons';
 import {
   Label,
@@ -31,10 +31,20 @@ const ChipHolder = styled.div<{ $isDisabled?: boolean }>`
 export interface LookupProps {
   id?: string;
   header?: React.ReactNode;
-  onChange: (...args: Untyped[]) => void;
-  onBlur?: (event?: Untyped) => void;
+  /**
+   * Sets the field: one item, the list of them where the lookup takes more
+   * than one, or null. Declared method style so a lookup that names its own
+   * kind of row can hand its handler straight through.
+   */
+  onChange(value: LookupItem | LookupItem[] | null): void;
+  /**
+   * Declared method style on purpose: the handler is formik's own, which takes
+   * an event or a field name, and it is handed straight to whichever
+   * PatternFly input the field renders, which names its own event type.
+   */
+  onBlur?(event?: React.SyntheticEvent): void;
   isLoading?: boolean;
-  value?: Untyped;
+  value?: LookupItem | LookupItem[] | null;
   multiple?: boolean;
   required?: boolean;
   qsConfig: QSConfig;
@@ -53,11 +63,13 @@ export interface LookupProps {
     canDelete: boolean;
   }) => React.ReactNode;
   isDisabled?: boolean;
-  onDebounce?: (...args: Untyped[]) => void;
+  /** Looks up what the user typed, a moment after they stop typing. */
+  onDebounce?: (name: string) => void;
   fieldName: string;
-  validate?: (value: Untyped) => string | undefined;
+  validate?: FieldValidator;
   modalDescription?: React.ReactNode;
-  onUpdate?: (...args: Untyped[]) => void;
+  /** Re-reads the list behind the modal, which is done as it opens. */
+  onUpdate?: () => void;
   [key: string]: unknown;
 }
 
@@ -99,9 +111,16 @@ function Lookup({
     },
   });
 
+  // The field holds one item or a list of them, and the two are read apart
+  // here: the text input and the chip list each want one of the two.
+  const singleValue = Array.isArray(value) ? null : (value ?? null);
+  const listValue: LookupItem[] = Array.isArray(value) ? value : [];
+  const chipped: LookupItem[] = singleValue ? [singleValue] : [];
+  const items: LookupItem[] = multiple ? listValue : chipped;
+
   const [state, dispatch] = useReducer(
     reducer,
-    { value, multiple, required },
+    { value: value ?? null, multiple, required },
     initReducer
   );
 
@@ -110,12 +129,9 @@ function Lookup({
   }, [multiple]);
 
   useEffect(() => {
-    dispatch({ type: 'SET_VALUE', value });
-    if (value?.name) {
-      setTypedText(value.name);
-    } else {
-      setTypedText('');
-    }
+    dispatch({ type: 'SET_VALUE', value: value ?? null });
+    const name = Array.isArray(value) ? null : value?.name;
+    setTypedText(typeof name === 'string' ? name : '');
   }, [value, multiple]);
 
   useEffect(() => {
@@ -164,13 +180,7 @@ function Lookup({
 
   const { isModalOpen, selectedItems } = state;
   const canDelete =
-    (!required || (multiple && value.length > 1)) && !isDisabled;
-  let items = [];
-  if (multiple) {
-    items = value;
-  } else if (value) {
-    items.push(value);
-  }
+    (!required || (multiple && items.length > 1)) && !isDisabled;
 
   return (
     <>
@@ -215,7 +225,7 @@ function Lookup({
               value={typedText}
               onChange={(_event, inputValue) => {
                 setTypedText(inputValue);
-                if (value?.name !== inputValue) {
+                if (singleValue?.name !== inputValue) {
                   debounceRequest(inputValue);
                 }
               }}

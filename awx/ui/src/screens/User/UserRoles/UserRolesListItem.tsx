@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Role } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Label } from '@patternfly/react-core';
@@ -6,9 +6,10 @@ import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router';
 
 export interface UserRolesListItemProps {
-  role: Untyped;
+  role: Role;
   detailUrl?: string | null;
-  onSelect: (item?: Untyped) => void;
+  /** Takes the role off the user, which the list confirms before it does. */
+  onSelect: (role: Role) => void;
   [key: string]: unknown;
 }
 

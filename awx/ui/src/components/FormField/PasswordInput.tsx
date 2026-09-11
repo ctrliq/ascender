@@ -1,8 +1,8 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
+import type { FieldValidator } from 'formik';
 import {
   Button,
   ButtonVariant,
@@ -14,9 +14,9 @@ import type { TextInputProps } from '@patternfly/react-core';
 
 export interface PasswordInputProps {
   autocomplete?: string;
-  id: Untyped;
+  id: string;
   name: string;
-  validate?: (value: Untyped) => string | undefined;
+  validate?: FieldValidator;
   isFieldGroupValid?: boolean;
   isRequired?: boolean;
   isDisabled?: boolean;

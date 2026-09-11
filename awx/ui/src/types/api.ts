@@ -320,7 +320,17 @@ export type CredentialType = Omit<
   injectors?: Record<string, unknown>;
 };
 export type InventorySource = WithNested<Schemas['InventorySource']>;
-export type Instance = WithNested<Schemas['Instance']>;
+/**
+ * An instance in the mesh. `health_check_pending` is a SerializerMethodField,
+ * which the schema can only describe as a string: it is a flag, and the lists
+ * poll while it is set.
+ */
+export type Instance = Omit<
+  WithNested<Schemas['Instance']>,
+  'health_check_pending'
+> & {
+  health_check_pending?: boolean;
+};
 /**
  * A notification template. `messages` and `notification_configuration` are
  * JSONFields, which the schema can only describe as unknown: the first holds
@@ -422,7 +432,20 @@ export type InventoryUpdate = WithNested<Schemas['InventoryUpdateDetail']>;
 export type Notification = WithNested<Schemas['Notification']>;
 export type ProjectUpdate = WithNested<Schemas['ProjectUpdateDetail']>;
 export type ReceptorAddress = WithNested<Schemas['ReceptorAddress']>;
-export type Role = WithNested<Schemas['Role']>;
+/**
+ * A role, as the screens that grant and take them away list it.
+ *
+ * Its summary_fields name the object the role is on, which no other
+ * serializer carries, so they are declared here rather than on SummaryFields.
+ */
+export type Role = Omit<WithNested<Schemas['Role']>, 'summary_fields'> & {
+  summary_fields: SummaryFields & {
+    resource_name?: string;
+    resource_id?: number;
+    resource_type?: string;
+    resource_type_display_name?: string;
+  };
+};
 /** One user or team on a resource's access list, with the roles it holds. */
 export type AccessListEntry = WithNested<Schemas['ResourceAccessListElement']>;
 export type SystemJob = WithNested<Schemas['SystemJob']>;

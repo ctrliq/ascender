@@ -1,5 +1,6 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
+import type { FieldValidator } from 'formik';
 import { useLocation } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { FormGroup } from '@patternfly/react-core';
@@ -22,15 +23,16 @@ const QS_CONFIG = getQSConfig('instance-groups', {
 
 export interface InstanceGroupsLookupProps {
   id?: string;
-  value: Untyped;
-  onChange: (...args: Untyped[]) => void;
+  value: SummaryFieldRef[];
+  /** Declared method style so a caller may name its own row type. */
+  onChange(value: SummaryFieldRef[]): void;
   tooltip?: React.ReactNode;
   className?: string;
   required?: boolean;
   fieldName?: string;
-  validate?: (value: Untyped) => string | undefined;
+  validate?: FieldValidator;
   isPromptableField?: boolean;
-  promptId?: number | string;
+  promptId?: string;
   promptName?: string;
   [key: string]: unknown;
 }
@@ -88,7 +90,7 @@ function InstanceGroupsLookup({
       <Lookup
         id="org-instance-groups"
         header={t`Instance Groups`}
-        value={value as LookupItem[]}
+        value={value}
         onChange={onChange}
         onUpdate={fetchInstanceGroups}
         fieldName={fieldName}
@@ -162,7 +164,7 @@ function InstanceGroupsLookup({
     <FieldWithPrompt
       fieldId={id}
       label={t`Instance Groups`}
-      promptId={promptId as string | number}
+      promptId={promptId as string}
       promptName={promptName as string}
       tooltip={tooltip}
     >

@@ -1,5 +1,6 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
+import type { FieldValidator } from 'formik';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -30,14 +31,20 @@ export interface ProjectLookupProps {
   helperTextInvalid?: string;
   autoPopulate?: boolean;
   isValid?: boolean;
-  onChange: (...args: Untyped[]) => void;
+  /** Declared method style so a caller may name its own row type. */
+  onChange(value: SummaryFieldRef | null): void;
   required?: boolean;
   /** Rendered in a popover beside the label, so markup is fine. */
   tooltip?: React.ReactNode;
-  value?: Untyped;
-  onBlur?: (event?: Untyped) => void;
+  value?: SummaryFieldRef | null;
+  /**
+   * Declared method style on purpose: the handler is formik's own, which takes
+   * an event or a field name, and it is handed straight to whichever
+   * PatternFly input the field renders, which names its own event type.
+   */
+  onBlur?(event?: React.SyntheticEvent): void;
   isOverrideDisabled?: boolean;
-  validate?: (value: Untyped) => string | undefined;
+  validate?: FieldValidator;
   fieldName?: string;
   [key: string]: unknown;
 }
@@ -105,7 +112,7 @@ function ProjectLookup({
         const {
           data: { results: nameMatchResults, count: nameMatchCount },
         } = await ProjectsAPI.read({ name });
-        onChange(nameMatchCount ? nameMatchResults[0] : null);
+        onChange(nameMatchCount ? (nameMatchResults[0] ?? null) : null);
       } catch {
         onChange(null);
       }

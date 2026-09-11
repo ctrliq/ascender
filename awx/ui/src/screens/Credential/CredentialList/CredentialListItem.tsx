@@ -16,7 +16,8 @@ export interface CredentialListItemProps {
   credential: Credential;
   detailUrl: string;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   onCopy: (id: number) => void;
   fetchCredentials: Untyped;
   rowIndex: number;

@@ -175,7 +175,7 @@ export interface VariablesFieldInternalsProps {
   name: string;
   label: React.ReactNode;
   readOnly: boolean;
-  promptId?: number | string | null;
+  promptId?: string | null;
   tooltip: React.ReactNode;
   mode: Untyped;
   setMode: Untyped;

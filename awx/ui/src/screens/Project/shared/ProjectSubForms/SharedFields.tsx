@@ -49,7 +49,8 @@ export const ScmCredentialFormField = ({
   onCredentialSelection,
 }: Untyped) => {
   const { t } = useLingui();
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
 
   const onCredentialChange = useCallback(
     (value: Untyped) => {

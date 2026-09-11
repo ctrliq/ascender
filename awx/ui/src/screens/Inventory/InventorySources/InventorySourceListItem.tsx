@@ -16,7 +16,8 @@ import InventorySourceSyncButton from '../shared/InventorySourceSyncButton';
 export interface InventorySourceListItemProps {
   source: Untyped;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   detailUrl: string;
   label: React.ReactNode;
   rowIndex: number;

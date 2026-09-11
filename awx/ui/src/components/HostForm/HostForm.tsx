@@ -25,7 +25,8 @@ export interface InventoryLookupFieldProps {
 
 const InventoryLookupField = ({ isDisabled }: InventoryLookupFieldProps) => {
   const { t } = useLingui();
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
   const [inventoryField, inventoryMeta, inventoryHelpers] =
     useField('inventory');
 

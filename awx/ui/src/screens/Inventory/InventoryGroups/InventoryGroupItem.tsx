@@ -12,7 +12,8 @@ import { ActionsTd, ActionItem } from 'components/PaginatedTable';
 export interface InventoryGroupItemProps {
   group: Untyped;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   rowIndex: number;
   [key: string]: unknown;
 }

@@ -1,4 +1,4 @@
-import type { CredentialType, Untyped } from 'types/api';
+import type { CredentialType } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
@@ -11,7 +11,8 @@ export interface CredentialTypeListItemProps {
   credentialType: CredentialType;
   detailUrl: string;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   rowIndex: number;
   [key: string]: unknown;
 }

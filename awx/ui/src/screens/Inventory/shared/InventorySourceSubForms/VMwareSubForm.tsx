@@ -28,7 +28,8 @@ export interface VMwareSubFormProps {
 const VMwareSubForm = ({ autoPopulateCredential }: VMwareSubFormProps) => {
   const { t } = useLingui();
   const helpText = getHelpText();
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
   const [credentialField, credentialMeta, credentialHelpers] =
     useField('credential');
   const [pluginField, , pluginHelpers] = useField('vmware_plugin');

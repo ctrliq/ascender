@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -24,6 +23,7 @@ import { getQSConfig, mergeParams, parseQueryString } from 'util/qs';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
+import type { Host } from 'types/api';
 import ChipGroup from '../ChipGroup';
 import Popover from '../Popover';
 import DataListToolbar from '../DataListToolbar';
@@ -96,11 +96,17 @@ const QS_CONFIG = getQSConfig(
 );
 
 export interface HostFilterLookupProps {
-  helperTextInvalid: Untyped;
+  helperTextInvalid: React.ReactNode;
   isValid?: boolean;
   isDisabled: boolean;
-  onBlur?: (event?: Untyped) => void;
-  onChange?: (...args: Untyped[]) => void;
+  /**
+   * Declared method style on purpose: the handler is formik's own, which takes
+   * an event or a field name, and it is handed straight to whichever
+   * PatternFly input the field renders, which names its own event type.
+   */
+  onBlur?(event?: React.SyntheticEvent): void;
+  /** Sets the field to the host filter the modal's search built. */
+  onChange?: (hostFilter: string) => void;
   organizationId?: number | string;
   value?: string;
   enableNegativeFiltering?: boolean;
@@ -122,7 +128,7 @@ function HostFilterLookup({
   const { t } = useLingui();
   const navigate = useNavigate();
   const location = useLocation();
-  const [chips, setChips] = useState<Untyped>({});
+  const [chips, setChips] = useState<Record<string, SearchChipGroup>>({});
   const [queryString, setQueryString] = useState('');
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const [isAnsibleFactsSelected, setIsAnsibleFactsSelected] = useState(false);
@@ -167,7 +173,7 @@ function HostFilterLookup({
   const searchColumns = buildSearchColumns();
   const config = useConfig();
 
-  const parseRelatedSearchFields = (searchFields: Untyped) => {
+  const parseRelatedSearchFields = (searchFields: string) => {
     if (searchFields.indexOf('__search') !== -1) {
       return searchFields.slice(0, -8);
     }
@@ -248,9 +254,11 @@ function HostFilterLookup({
     );
   };
 
-  const removeHostFilter = (filter: Untyped) => {
+  // The host filter search is stored under ansible_facts, which is the key the
+  // chips are built from, rather than under the host_filter the api takes.
+  const removeHostFilter = (filter: HostSearchParams) => {
     if ('host_filter' in filter) {
-      filter.ansible_facts = filter.host_filter.substring(
+      filter.ansible_facts = String(filter.host_filter).substring(
         'ansible_facts__'.length
       );
       delete filter.host_filter;
@@ -340,7 +348,7 @@ function HostFilterLookup({
               totalChips={chips[key]?.chips?.length || 0}
               ouiaId="host-filter-search-chips"
             >
-              {chips[key]?.chips?.map((chip: Untyped) => (
+              {chips[key]?.chips?.map((chip) => (
                 <Label variant="outline" key={chip.key}>
                   {chip.node}
                 </Label>
@@ -350,20 +358,20 @@ function HostFilterLookup({
           {/* Parse advanced search chips */}
           {Object.keys(chips).length > 0 &&
             Object.keys(chips)
-              .filter((val) => chips[val].chips.length > 0)
+              .filter((val) => (chips[val]?.chips.length ?? 0) > 0)
               .filter(
                 (val) =>
                   searchColumns.map((val2) => val2.key).indexOf(val) === -1
               )
               .map((leftoverKey) => (
                 <ChipGroup
-                  categoryName={chips[leftoverKey].key}
-                  key={chips[leftoverKey].key}
+                  categoryName={chips[leftoverKey]?.key}
+                  key={chips[leftoverKey]?.key}
                   numChips={5}
                   totalChips={chips[leftoverKey]?.chips?.length || 0}
                   ouiaId="host-filter-advanced-search-chips"
                 >
-                  {chips[leftoverKey]?.chips?.map((chip: Untyped) => (
+                  {chips[leftoverKey]?.chips?.map((chip) => (
                     <Label variant="outline" key={chip.key}>
                       {chip.node}
                     </Label>
@@ -460,7 +468,7 @@ function HostFilterLookup({
                 <HeaderCell>{t`Inventory`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(item: Untyped) => (
+            renderRow={(item: Host) => (
               <HostListItem key={item.id} item={item} />
             )}
             renderToolbar={(props) => (

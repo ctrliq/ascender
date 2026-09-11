@@ -35,7 +35,8 @@ function ConstructedInventoryFormFields({
 }: ConstructedInventoryFormFieldsProps) {
   const { t } = useLingui();
   const helpText = getInventoryHelpTextStrings();
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
   const constructedPluginValidator = {
     plugin: required(t`The plugin parameter is required.`),
   };

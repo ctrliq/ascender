@@ -1,4 +1,4 @@
-import type { OAuth2Token, Untyped } from 'types/api';
+import type { OAuth2Token } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
@@ -10,7 +10,8 @@ import { toTitleCase } from 'util/strings';
 export interface ApplicationTokenListItemProps {
   token: OAuth2Token;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   detailUrl: string;
   rowIndex: number;
   [key: string]: unknown;

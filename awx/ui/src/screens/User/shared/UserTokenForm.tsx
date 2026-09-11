@@ -21,7 +21,8 @@ import userHelpTextStrings from './User.helptext';
 function UserTokenFormFields() {
   const { t } = useLingui();
   const helptext = userHelpTextStrings();
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
   const [applicationField, applicationMeta] = useField('application');
 
   const [scopeField, scopeMeta, scopeHelpers] = useField({

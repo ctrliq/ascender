@@ -31,7 +31,8 @@ function InventoryFormFields({ inventory }: InventoryFormFieldsProps) {
   const { t } = useLingui();
   const helpText = useHelpText();
   const [contentError, setContentError] = useState<unknown>(false);
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
   const [organizationField, organizationMeta, organizationHelpers] =
     useField('organization');
   const [instanceGroupsField, , instanceGroupsHelpers] =

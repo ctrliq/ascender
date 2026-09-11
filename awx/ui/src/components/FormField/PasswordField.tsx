@@ -1,6 +1,6 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useField } from 'formik';
+import type { FieldValidator } from 'formik';
 import {
   FormGroup,
   FormHelperText,
@@ -13,12 +13,12 @@ import Popover from '../Popover';
 import PasswordInput from './PasswordInput';
 
 export interface PasswordFieldProps {
-  id: Untyped;
+  id: string;
   name: string;
   label: React.ReactNode;
-  validate?: (value: Untyped) => string | undefined;
+  validate?: FieldValidator;
   isRequired?: boolean;
-  helperText?: Untyped;
+  helperText?: React.ReactNode;
   [key: string]: unknown;
 }
 

@@ -34,7 +34,8 @@ export interface UserFormFieldsProps {
 
 function UserFormFields({ user }: UserFormFieldsProps) {
   const { t } = useLingui();
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
   const { me = {} } = useConfig();
   const ldapUser = user.ldap_dn;
   const socialAuthUser = (user.auth?.length ?? 0) > 0;

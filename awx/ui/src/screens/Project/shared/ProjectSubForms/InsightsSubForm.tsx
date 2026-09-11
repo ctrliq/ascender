@@ -21,7 +21,8 @@ const InsightsSubForm = ({
   autoPopulateCredential,
 }: InsightsSubFormProps) => {
   const { t } = useLingui();
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
   const [, credMeta, credHelpers] = useField('credential');
 
   const onCredentialChange = useCallback(

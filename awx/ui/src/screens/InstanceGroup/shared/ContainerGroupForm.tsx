@@ -30,7 +30,8 @@ function ContainerGroupFormFields({
   instanceGroup,
 }: ContainerGroupFormFieldsProps) {
   const { t } = useLingui();
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
   const [credentialField, credentialMeta, credentialHelpers] =
     useField('credential');
 

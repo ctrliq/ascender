@@ -1,4 +1,4 @@
-import type { Team, Untyped } from 'types/api';
+import type { Team } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -7,7 +7,8 @@ import { Tr, Td } from '@patternfly/react-table';
 export interface UserTeamListItemProps {
   team: Team;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   rowIndex: number;
   [key: string]: unknown;
 }

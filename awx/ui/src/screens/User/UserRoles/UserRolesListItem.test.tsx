@@ -1,14 +1,17 @@
+import type { Role } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserRolesListItem from './UserRolesListItem';
 
 describe('<UserRolesListItem/>', () => {
-  const role = {
+  const role: Role = {
     id: 1,
     name: 'Admin',
+    description: 'Can manage all aspects of the job template',
     type: 'role',
     url: '/api/v2/roles/257/',
+    related: {},
     summary_fields: {
       resource_name: 'template delete project',
       resource_id: 15,
@@ -66,7 +69,7 @@ describe('<UserRolesListItem/>', () => {
   });
 
   test('should render read only chip', () => {
-    role.summary_fields.user_capabilities.unattach = false;
+    role.summary_fields.user_capabilities = { unattach: false };
     renderWithContexts(
       <table>
         <tbody>

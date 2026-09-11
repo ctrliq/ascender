@@ -9,7 +9,8 @@ import { Detail, DetailList } from 'components/DetailList';
 export interface InstancePeerListItemProps {
   peerInstance: Untyped;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   isExpanded: boolean;
   onExpand: (...args: Untyped[]) => void;
   rowIndex: number;

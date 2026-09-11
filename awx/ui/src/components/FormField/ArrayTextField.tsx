@@ -1,6 +1,6 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useField } from 'formik';
+import type { FieldValidator } from 'formik';
 import {
   FormGroup,
   FormHelperText,
@@ -11,15 +11,19 @@ import {
 import Popover from '../Popover';
 
 export interface ArrayTextFieldProps {
-  id: Untyped;
+  id: string;
   helperText?: string;
   name: string;
   label: React.ReactNode;
   tooltip?: React.ReactNode;
   tooltipMaxWidth?: string;
-  validate?: (value: Untyped) => string | undefined;
+  validate?: FieldValidator;
   isRequired?: boolean;
-  type: Untyped;
+  /**
+   * Always textarea, and taken off here rather than spread, since the field
+   * renders a TextArea and a type attribute on one means nothing.
+   */
+  type: string;
   [key: string]: unknown;
 }
 

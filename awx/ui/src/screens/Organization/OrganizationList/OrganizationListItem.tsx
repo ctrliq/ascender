@@ -1,4 +1,4 @@
-import type { Organization, Untyped } from 'types/api';
+import type { Organization } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
@@ -10,7 +10,8 @@ import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 export interface OrganizationListItemProps {
   organization: Organization;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   rowIndex: number;
   detailUrl: string;
   [key: string]: unknown;

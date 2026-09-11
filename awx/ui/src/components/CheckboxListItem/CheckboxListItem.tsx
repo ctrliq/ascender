@@ -1,4 +1,4 @@
-import type { SearchColumn, Untyped } from 'types/api';
+import type { SearchColumn, SelectableOption } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Td, Tr } from '@patternfly/react-table';
@@ -10,12 +10,12 @@ export interface CheckboxListItemProps {
   itemId: number | string;
   label: React.ReactNode;
   name: string;
-  onDeselect: (...args: Untyped[]) => void;
+  onDeselect: (itemId: number | string) => void;
   rowIndex: number;
-  onSelect: (item?: Untyped) => void;
+  onSelect: (itemId: number | string) => void;
   /** One column per field to show beside the checkbox, keyed into `item`. */
   columns?: SearchColumn[];
-  item?: Untyped;
+  item?: SelectableOption;
   /** Elements rendered in the row's actions cell; each carries its own id. */
   rowActions?: React.ReactElement<{ id: string }>[];
   [key: string]: unknown;
@@ -69,7 +69,7 @@ const CheckboxListItem = ({
             dataLabel={col.key}
             key={col.key}
           >
-            {item?.[col.key]}
+            {String(item?.[col.key] ?? '')}
           </Td>
         ))
       ) : (

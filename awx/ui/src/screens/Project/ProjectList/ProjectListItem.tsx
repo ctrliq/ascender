@@ -27,7 +27,8 @@ export interface ProjectListItemProps {
   onExpand: (...args: Untyped[]) => void;
   project: Project;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   onCopy: (id: number) => void;
   detailUrl: string;
   fetchProjects: Untyped;

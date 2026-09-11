@@ -1,6 +1,6 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useField } from 'formik';
+import type { FieldValidator } from 'formik';
 import {
   FormGroup,
   FormHelperText,
@@ -13,7 +13,7 @@ import type { TextInputProps } from '@patternfly/react-core';
 import Popover from '../Popover';
 
 export interface FormFieldProps {
-  id: Untyped;
+  id: string;
   helperText?: string;
   name: string;
   label: React.ReactNode;
@@ -23,7 +23,7 @@ export interface FormFieldProps {
    * Runs against the field's value; formik takes what it returns as the
    * error. Callers pass null to say a field has no validation right now.
    */
-  validate?: ((...args: Untyped[]) => void) | null;
+  validate?: FieldValidator | null;
   isRequired?: boolean;
   isReadOnly?: boolean;
   /** A TextInput type, or 'textarea' to render a TextArea instead. */

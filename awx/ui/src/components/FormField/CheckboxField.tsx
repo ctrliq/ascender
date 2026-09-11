@@ -1,16 +1,16 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useField } from 'formik';
+import type { FieldValidator } from 'formik';
 import { Checkbox } from '@patternfly/react-core';
 import Popover from '../Popover';
 
 export interface CheckboxFieldProps {
-  id: Untyped;
+  id: string;
   name: string;
   label: React.ReactNode;
   /** Rendered in a popover beside the label, so markup is fine. */
   tooltip?: React.ReactNode;
-  validate?: (value: Untyped) => string | undefined;
+  validate?: FieldValidator;
   isDisabled?: boolean;
   [key: string]: unknown;
 }

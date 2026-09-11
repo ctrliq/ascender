@@ -1,4 +1,4 @@
-import type { OAuth2Application, Untyped } from 'types/api';
+import type { OAuth2Application } from 'types/api';
 import React from 'react';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -11,7 +11,8 @@ import { formatDateString } from 'util/dates';
 export interface ApplicationListItemProps {
   application: OAuth2Application;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   detailUrl: string;
   rowIndex: number;
   [key: string]: unknown;

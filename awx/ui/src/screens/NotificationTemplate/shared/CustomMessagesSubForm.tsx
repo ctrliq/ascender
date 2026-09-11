@@ -23,7 +23,7 @@ function CustomMessagesSubForm({
   const showMessages = type !== 'webhook';
   const showBodies = ['email', 'pagerduty', 'webhook'].includes(type);
 
-  const { setFieldValue } = useFormikContext<Untyped>();
+  const { setFieldValue } = useFormikContext<Record<string, unknown>>();
   const config = useConfig();
   const prevTypeRef = useRef(type);
   useEffect(

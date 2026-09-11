@@ -1,5 +1,6 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
+import type { FieldValidator } from 'formik';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -28,14 +29,20 @@ export interface OrganizationLookupProps {
   id?: string;
   helperTextInvalid?: string;
   isValid?: boolean;
-  onBlur?: (event?: Untyped) => void;
-  onChange: (...args: Untyped[]) => void;
+  /**
+   * Declared method style on purpose: the handler is formik's own, which takes
+   * an event or a field name, and it is handed straight to whichever
+   * PatternFly input the field renders, which names its own event type.
+   */
+  onBlur?(event?: React.SyntheticEvent): void;
+  /** Declared method style so a caller may name its own row type. */
+  onChange(value: SummaryFieldRef | null): void;
   required?: boolean;
-  value?: Untyped;
+  value?: SummaryFieldRef | null;
   autoPopulate?: boolean;
   isDisabled?: boolean;
-  helperText?: Untyped;
-  validate?: (value: Untyped) => string | undefined;
+  helperText?: React.ReactNode;
+  validate?: FieldValidator;
   fieldName?: string;
   [key: string]: unknown;
 }
@@ -102,7 +109,7 @@ function OrganizationLookup({
         const {
           data: { results: nameMatchResults, count: nameMatchCount },
         } = await OrganizationsAPI.read({ name });
-        onChange(nameMatchCount ? nameMatchResults[0] : null);
+        onChange(nameMatchCount ? (nameMatchResults[0] ?? null) : null);
       } catch {
         onChange(null);
       }

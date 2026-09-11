@@ -45,7 +45,8 @@ const SCMSubForm = ({ autoPopulateProject }: SCMSubFormProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [filterValue, setFilterValue] = useState('');
   const [sourcePath, setSourcePath] = useState<string[]>([]);
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
   const [credentialField] = useField('credential');
 
   const [projectField, projectMeta, projectHelpers] =

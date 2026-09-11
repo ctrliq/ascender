@@ -1,5 +1,6 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
+import type { FieldValidator } from 'formik';
 import { useLocation } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
@@ -31,21 +32,27 @@ export interface CredentialLookupProps {
   autoPopulate?: boolean;
   credentialTypeId?: number | string | null;
   credentialTypeKind?: string;
-  credentialTypeNamespace?: Untyped;
+  credentialTypeNamespace?: string;
   fieldName?: string;
   helperTextInvalid?: string;
   isDisabled?: boolean;
   isSelectedDraggable?: boolean;
   isValid?: boolean;
   label: React.ReactNode;
-  modalDescription?: Untyped;
+  modalDescription?: React.ReactNode;
   multiple?: boolean;
-  onBlur?: (event?: Untyped) => void;
-  onChange: (...args: Untyped[]) => void;
+  /**
+   * Declared method style on purpose: the handler is formik's own, which takes
+   * an event or a field name, and it is handed straight to whichever
+   * PatternFly input the field renders, which names its own event type.
+   */
+  onBlur?(event?: React.SyntheticEvent): void;
+  /** Declared method style so a caller may name its own row type. */
+  onChange(value: SummaryFieldRef | null): void;
   required?: boolean;
   tooltip?: React.ReactNode;
-  validate?: (value: Untyped) => string | undefined;
-  value?: Untyped;
+  validate?: FieldValidator;
+  value?: SummaryFieldRef | null;
   [key: string]: unknown;
 }
 
@@ -164,7 +171,7 @@ function CredentialLookup({
           ...typeKindParams,
           ...typeNamespaceParams,
         });
-        onChange(nameMatchCount ? nameMatchResults[0] : null);
+        onChange(nameMatchCount ? (nameMatchResults[0] ?? null) : null);
       } catch {
         onChange(null);
       }
@@ -186,7 +193,7 @@ function CredentialLookup({
       <Lookup
         id="credential"
         header={label}
-        value={value as LookupItem[]}
+        value={value}
         onBlur={onBlur}
         onChange={onChange}
         onUpdate={fetchCredentials}

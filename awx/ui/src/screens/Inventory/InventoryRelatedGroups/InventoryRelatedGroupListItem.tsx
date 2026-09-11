@@ -16,7 +16,8 @@ export interface InventoryRelatedGroupListItemProps {
   group: Untyped;
   rowIndex: number;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   [key: string]: unknown;
 }
 

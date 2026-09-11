@@ -1,6 +1,7 @@
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { useField } from 'formik';
+import type { FieldValidator } from 'formik';
 import {
   FormGroup,
   FormHelperText,
@@ -16,7 +17,7 @@ export interface CodeEditorFieldProps {
   label: React.ReactNode;
   tooltip?: React.ReactNode;
   helperText?: string;
-  validate?: (value: Untyped) => string | undefined;
+  validate?: FieldValidator;
   isRequired?: boolean;
   mode: Untyped;
   rows?: number;

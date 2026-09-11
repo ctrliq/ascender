@@ -48,7 +48,8 @@ export interface InstanceListItemProps {
   isExpanded?: boolean;
   onExpand?: (...args: Untyped[]) => void;
   isSelected?: boolean;
-  onSelect: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect: () => void;
   fetchInstances: Untyped;
   rowIndex: number;
   [key: string]: unknown;

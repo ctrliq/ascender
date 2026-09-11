@@ -20,7 +20,7 @@ export interface FieldWithPromptProps {
   fieldId: string;
   isRequired?: boolean;
   label: React.ReactNode;
-  promptId: number | string;
+  promptId: string;
   promptName: string;
   tooltip?: React.ReactNode;
   isDisabled?: boolean;

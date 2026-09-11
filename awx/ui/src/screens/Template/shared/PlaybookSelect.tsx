@@ -22,7 +22,12 @@ export interface PlaybookSelectProps {
   projectId?: Untyped;
   isValid: boolean;
   selected?: Untyped;
-  onBlur?: (event?: Untyped) => void;
+  /**
+   * Declared method style on purpose: the handler is formik's own, which takes
+   * an event or a field name, and it is handed straight to whichever
+   * PatternFly input the field renders, which names its own event type.
+   */
+  onBlur?(event?: React.SyntheticEvent): void;
   onError: (error: unknown) => void;
   onChange?: (...args: Untyped[]) => void;
   [key: string]: unknown;

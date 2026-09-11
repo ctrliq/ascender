@@ -17,7 +17,8 @@ export interface TeamFormFieldsProps {
 
 function TeamFormFields({ team }: TeamFormFieldsProps) {
   const { t } = useLingui();
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
   const [orgField, orgMeta, orgHelpers] = useField('organization');
 
   const handleOrganizationUpdate = useCallback(

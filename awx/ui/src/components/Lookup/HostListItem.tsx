@@ -1,10 +1,10 @@
-import type { Untyped } from 'types/api';
+import type { Host } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Td, Tr } from '@patternfly/react-table';
 
 export interface HostListItemProps {
-  item: Untyped;
+  item: Host;
   [key: string]: unknown;
 }
 
@@ -14,7 +14,7 @@ function HostListItem({ item }: HostListItemProps) {
     <Tr ouiaId={`host-list-item-${item.id}`}>
       <Td dataLabel={t`Name`}>{item.name}</Td>
       <Td dataLabel={t`Description`}>{item.description}</Td>
-      <Td dataLabel={t`Inventory`}>{item.summary_fields.inventory.name}</Td>
+      <Td dataLabel={t`Inventory`}>{item.summary_fields.inventory?.name}</Td>
     </Tr>
   );
 }

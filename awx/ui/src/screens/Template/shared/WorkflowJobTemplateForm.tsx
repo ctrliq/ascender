@@ -60,7 +60,8 @@ function WorkflowJobTemplateForm({
 }: WorkflowJobTemplateFormProps) {
   const { t } = useLingui();
   const helpText = getHelpText();
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
   const [enableWebhooks, setEnableWebhooks] = useState(
     Boolean(template.webhook_service)
   );

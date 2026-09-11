@@ -1,3 +1,4 @@
+import type { SummaryFieldRef } from 'types/api';
 import { useCallback, useRef } from 'react';
 
 /**
@@ -9,14 +10,15 @@ import { useCallback, useRef } from 'react';
  */
 
 export default function useAutoPopulateLookup(
-  populateLookupField: (value: unknown) => void
+  populateLookupField: (value: SummaryFieldRef) => void
 ) {
   const isFirst = useRef(true);
 
   return useCallback(
-    (results: { id: number }[]) => {
-      if (isFirst.current && results.length === 1) {
-        populateLookupField(results[0]);
+    (results: SummaryFieldRef[]) => {
+      const only = results[0];
+      if (isFirst.current && results.length === 1 && only) {
+        populateLookupField(only);
       }
 
       isFirst.current = false;

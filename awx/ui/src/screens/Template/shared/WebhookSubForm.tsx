@@ -40,7 +40,7 @@ export interface WebhookSubFormProps {
 
 function WebhookSubForm({ templateType }: WebhookSubFormProps) {
   const { t } = useLingui();
-  const { setFieldValue } = useFormikContext<Untyped>();
+  const { setFieldValue } = useFormikContext<Record<string, unknown>>();
   const { id } = useParams() as { id: string };
   const { pathname } = useLocation();
   const { origin } = document.location;

@@ -47,7 +47,8 @@ function ExecutionEnvironmentFormFields({
 
   const isGloballyAvailable = useRef(!organizationField.value);
 
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
 
   const onCredentialChange = useCallback(
     (value: Untyped) => {
