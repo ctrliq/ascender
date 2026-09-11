@@ -47,7 +47,7 @@ const TimeoutLabel = styled.p`
 `;
 
 export interface NodeTypeStepProps {
-  isIdentifierRequired: boolean;
+  isIdentifierRequired?: boolean;
   [key: string]: unknown;
 }
 

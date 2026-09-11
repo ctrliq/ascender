@@ -18,8 +18,8 @@ export const srcAliases = [
     find: /^(api|components|contexts|hooks|screens|types|util)(\/|$)/,
     replacement: `${srcPath}/$1$2`,
   },
-  { find: /^i18nLoader$/, replacement: `${srcPath}/i18nLoader.js` },
-  { find: /^themeRegistry$/, replacement: `${srcPath}/themeRegistry.js` },
+  { find: /^i18nLoader$/, replacement: `${srcPath}/i18nLoader.ts` },
+  { find: /^themeRegistry$/, replacement: `${srcPath}/themeRegistry.ts` },
 ];
 
 export default srcAliases;

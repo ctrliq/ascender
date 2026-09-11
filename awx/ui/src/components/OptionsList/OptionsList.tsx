@@ -18,7 +18,7 @@ export interface OptionsListProps {
   contentError?: Untyped;
   deselectItem: Untyped;
   displayKey?: Untyped;
-  header: Untyped;
+  header?: Untyped;
   isLoading?: boolean;
   isSelectedDraggable?: boolean;
   multiple?: boolean;
@@ -27,10 +27,10 @@ export interface OptionsListProps {
   options: Untyped;
   qsConfig: Untyped;
   readOnly?: Untyped;
-  relatedSearchableKeys: Untyped;
+  relatedSearchableKeys?: Untyped;
   renderItemChip?: Untyped;
   searchColumns?: SearchColumn[];
-  searchableKeys: Untyped;
+  searchableKeys?: Untyped;
   selectItem: Untyped;
   sortColumns?: SortColumn[];
   sortSelectedItems?: Untyped;

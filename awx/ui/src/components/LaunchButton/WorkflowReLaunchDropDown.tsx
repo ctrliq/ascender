@@ -14,10 +14,10 @@ import { RocketIcon } from '@patternfly/react-icons';
 export interface WorkflowReLaunchDropDownProps {
   isPrimary?: boolean;
   handleRelaunch: (...args: Untyped[]) => void;
-  isLaunching: boolean;
+  isLaunching?: boolean;
   id?: string;
-  ouiaId: string;
-  status: unknown;
+  ouiaId?: string;
+  status?: unknown;
   [key: string]: unknown;
 }
 

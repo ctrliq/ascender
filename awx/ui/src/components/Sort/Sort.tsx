@@ -58,7 +58,7 @@ function Sort({ columns, qsConfig, onSort }: SortProps) {
     sortOrder = 'ascending';
   }
 
-  if (qsConfig.integerFields.find((field: unknown) => field === sortKey)) {
+  if (qsConfig.integerFields?.find((field: unknown) => field === sortKey)) {
     isNumeric = true;
   } else {
     isNumeric = false;
@@ -75,7 +75,7 @@ function Sort({ columns, qsConfig, onSort }: SortProps) {
     const [match] = columns.filter(({ name }) => name === innerText);
     const { key } = match as SortColumn;
     sortKey = key;
-    if (qsConfig.integerFields.find((field: unknown) => field === key)) {
+    if (qsConfig.integerFields?.find((field: unknown) => field === key)) {
       isNumeric = true;
     } else {
       isNumeric = false;

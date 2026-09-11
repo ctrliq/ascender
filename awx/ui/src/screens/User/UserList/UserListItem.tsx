@@ -13,7 +13,7 @@ export interface UserListItemProps {
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
   detailUrl: Untyped;
-  rowIndex: Untyped;
+  rowIndex?: Untyped;
   [key: string]: unknown;
 }
 

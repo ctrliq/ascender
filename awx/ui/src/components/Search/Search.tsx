@@ -408,7 +408,7 @@ function Search({
                   <TextInput
                     data-cy="search-text-input"
                     type={
-                      (qsConfig.integerFields.find(
+                      (qsConfig.integerFields?.find(
                         (field: unknown) => field === searchKey
                       ) &&
                         'number') ||

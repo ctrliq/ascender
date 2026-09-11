@@ -35,9 +35,9 @@ export interface PeersLookupProps {
   multiple?: boolean;
   validate?: (...args: Untyped[]) => void;
   columns?: Untyped;
-  isPromptableField: boolean;
-  promptId: number | string;
-  promptName: Untyped;
+  isPromptableField?: boolean;
+  promptId?: number | string;
+  promptName?: Untyped;
   formLabel?: Untyped;
   typePeers?: boolean;
   /** The instance being peered, whose own id and peers are excluded. */
@@ -182,7 +182,7 @@ function PeersLookup({
     <FieldWithPrompt
       fieldId={id}
       label={formLabel}
-      promptId={promptId}
+      promptId={promptId as string | number}
       promptName={promptName}
       tooltip={tooltip}
     >

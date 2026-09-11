@@ -15,7 +15,7 @@ export default defineConfig({
     alias: [
       {
         find: /^history$/,
-        replacement: resolvePath('./testUtils/historyShim.js'),
+        replacement: resolvePath('./testUtils/historyShim.ts'),
       },
       ...srcAliases,
     ],

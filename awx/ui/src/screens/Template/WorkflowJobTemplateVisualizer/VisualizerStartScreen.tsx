@@ -32,7 +32,7 @@ const StartPanelWrapper = styled.div`
 `;
 
 export interface VisualizerStartScreenProps {
-  readOnly: Untyped;
+  readOnly?: Untyped;
   [key: string]: unknown;
 }
 

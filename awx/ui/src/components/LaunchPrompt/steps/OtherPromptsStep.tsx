@@ -34,8 +34,8 @@ const FieldHeader = styled.div`
 
 export interface OtherPromptsStepProps {
   launchConfig: LaunchConfig;
-  variablesMode: Untyped;
-  onVarModeChange: (...args: Untyped[]) => void;
+  variablesMode?: Untyped;
+  onVarModeChange?: (...args: Untyped[]) => void;
   [key: string]: unknown;
 }
 

@@ -14,13 +14,13 @@ import SurveyToolbar from './SurveyToolbar';
 import SurveyReorderModal from './SurveyReorderModal';
 
 export interface SurveyListProps {
-  isLoading: boolean;
-  survey: Untyped;
-  surveyEnabled: Untyped;
-  toggleSurvey: Untyped;
+  isLoading?: boolean;
+  survey?: Untyped;
+  surveyEnabled?: Untyped;
+  toggleSurvey?: Untyped;
   updateSurvey: Untyped;
   deleteSurvey: Untyped;
-  canEdit: boolean;
+  canEdit?: boolean;
   [key: string]: unknown;
 }
 

@@ -20,8 +20,8 @@ const Label = styled.span`
 `;
 export interface DeleteButtonProps {
   onConfirm: (...args: Untyped[]) => void;
-  modalTitle: Untyped;
-  name: React.ReactNode;
+  modalTitle?: Untyped;
+  name?: React.ReactNode;
   variant?: Untyped;
   children?: React.ReactNode;
   isDisabled?: boolean;

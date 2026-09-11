@@ -20,7 +20,7 @@ import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import getNodeType from '../../shared/WorkflowJobTemplateVisualizerUtils';
 
 export interface NodeViewModalProps {
-  readOnly: Untyped;
+  readOnly?: Untyped;
   [key: string]: unknown;
 }
 

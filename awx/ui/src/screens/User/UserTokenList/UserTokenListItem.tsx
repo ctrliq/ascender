@@ -8,15 +8,15 @@ import { formatDateString } from 'util/dates';
 
 export interface UserTokenListItemProps {
   token: Untyped;
-  isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  isSelected?: boolean;
+  onSelect?: (...args: Untyped[]) => void;
   rowIndex: Untyped;
   [key: string]: unknown;
 }
 
 function UserTokenListItem({
   token,
-  isSelected,
+  isSelected = false,
   onSelect,
   rowIndex,
 }: UserTokenListItemProps) {

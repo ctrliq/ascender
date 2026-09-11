@@ -17,7 +17,7 @@ import { CardBody } from '../../Card';
 import type { ScheduleFormValues } from '../shared/types';
 
 export interface ScheduleEditProps {
-  hasDaysToKeepField: boolean;
+  hasDaysToKeepField?: boolean;
   schedule: Schedule;
   resource: Untyped;
   launchConfig: Untyped;

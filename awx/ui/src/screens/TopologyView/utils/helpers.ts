@@ -70,7 +70,7 @@ export function renderLabelIcons(nodeState: Untyped) {
   }
   return false;
 }
-export function renderIconPosition(nodeState: Untyped, bbox: Untyped) {
+export function renderIconPosition(nodeState: Untyped, bbox?: Untyped) {
   if (nodeState) {
     const iconPositionMapper = {
       ready: `translate(${bbox.x - 4.5}, ${bbox.y - 4.5}), scale(0.02)`,

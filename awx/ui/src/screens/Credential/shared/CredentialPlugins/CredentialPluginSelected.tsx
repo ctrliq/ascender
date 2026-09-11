@@ -25,7 +25,7 @@ export interface CredentialPluginSelectedProps {
   credential: Untyped;
   onEditPlugin?: (...args: Untyped[]) => void;
   onClearPlugin?: (...args: Untyped[]) => void;
-  fieldId: string;
+  fieldId?: string;
   [key: string]: unknown;
 }
 

@@ -159,9 +159,9 @@ export function computeOverscanIndices(
 
 export interface JobOutputProps {
   job: Untyped;
-  eventRelatedSearchableKeys: Untyped;
-  eventSearchableKeys: Untyped;
-  onJobRefresh: (...args: Untyped[]) => void;
+  eventRelatedSearchableKeys?: Untyped;
+  eventSearchableKeys?: Untyped;
+  onJobRefresh?: (...args: Untyped[]) => void;
   [key: string]: unknown;
 }
 

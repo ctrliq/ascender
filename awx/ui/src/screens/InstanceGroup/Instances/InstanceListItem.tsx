@@ -46,20 +46,20 @@ const SliderForks = styled.div`
 
 export interface InstanceListItemProps {
   instance: Untyped;
-  isExpanded: boolean;
-  onExpand: (...args: Untyped[]) => void;
-  isSelected: boolean;
+  isExpanded?: boolean;
+  onExpand?: (...args: Untyped[]) => void;
+  isSelected?: boolean;
   onSelect: (...args: Untyped[]) => void;
   fetchInstances: Untyped;
-  rowIndex: Untyped;
+  rowIndex?: Untyped;
   [key: string]: unknown;
 }
 
 function InstanceListItem({
   instance,
-  isExpanded,
+  isExpanded = false,
   onExpand,
-  isSelected,
+  isSelected = false,
   onSelect,
   fetchInstances,
   rowIndex,

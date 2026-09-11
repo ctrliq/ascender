@@ -23,8 +23,8 @@ export interface ScheduleAddProps {
   apiModel: SchedulesApiModel;
   launchConfig: Untyped;
   surveyConfig: Untyped;
-  hasDaysToKeepField: boolean;
-  resourceDefaultCredentials: Untyped;
+  hasDaysToKeepField?: boolean;
+  resourceDefaultCredentials?: Untyped;
   [key: string]: unknown;
 }
 

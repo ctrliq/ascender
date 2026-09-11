@@ -25,16 +25,16 @@ const SwitchWrapper = styled(ToolbarItem)`
 `;
 
 export interface SurveyToolbarProps {
-  canEdit: boolean;
+  canEdit?: boolean;
   isAllSelected: boolean;
   onSelectAll: (...args: Untyped[]) => void;
-  surveyEnabled: Untyped;
+  surveyEnabled?: Untyped;
   onToggleSurvey: (...args: Untyped[]) => void;
   isDeleteDisabled: boolean;
   onToggleDeleteModal: (...args: Untyped[]) => void;
   /** Absent when there is nothing to reorder, which the toolbar checks. */
   onOpenOrderModal?: (...args: Untyped[]) => void;
-  emptyList: Untyped;
+  emptyList?: Untyped;
   [key: string]: unknown;
 }
 

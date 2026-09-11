@@ -26,7 +26,7 @@ export interface HeaderProps {
   zoomOut: Untyped;
   resetZoom: Untyped;
   zoomFit: Untyped;
-  refresh: Untyped;
+  refresh?: Untyped;
   showZoomControls: boolean;
   [key: string]: unknown;
 }

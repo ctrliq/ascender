@@ -21,8 +21,8 @@ const noop = () => {};
 export interface PlaybookSelectProps {
   projectId?: Untyped;
   isValid: boolean;
-  selected: Untyped;
-  onBlur: (...args: Untyped[]) => void;
+  selected?: Untyped;
+  onBlur?: (...args: Untyped[]) => void;
   onError: (...args: Untyped[]) => void;
   onChange?: (...args: Untyped[]) => void;
   [key: string]: unknown;

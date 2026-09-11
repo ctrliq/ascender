@@ -1,0 +1,161 @@
+import type { Untyped } from 'types/api';
+import React from 'react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { I18nProvider } from '@lingui/react';
+import { i18n } from '@lingui/core';
+import useZoom from './useZoom';
+import Header from '../Header';
+
+// Initialize i18n for tests
+i18n.load('en', {});
+i18n.activate('en');
+
+// Helper function to render components with I18n context
+function renderWithI18n(component: Untyped) {
+  return render(<I18nProvider i18n={i18n}>{component}</I18nProvider>);
+}
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
+describe('useZoom', () => {
+  test('hook returns a set of zoom functions', async () => {
+    render(
+      <svg className="parent" width="700" height="500">
+        <g className="child"></g>
+      </svg>
+    );
+    const hook = useZoom('.parent', '.child') as Exclude<
+      ReturnType<typeof useZoom>,
+      false
+    >;
+    expect(hook).toMatchObject({
+      zoom: expect.any(Function),
+      zoomFit: expect.any(Function),
+      zoomIn: expect.any(Function),
+      zoomOut: expect.any(Function),
+      resetZoom: expect.any(Function),
+    });
+  });
+  test('user can zoom in', async () => {
+    const hook = useZoom('.parent', '.child') as Exclude<
+      ReturnType<typeof useZoom>,
+      false
+    >;
+    vi.spyOn(hook, 'zoomIn').mockImplementationOnce(vi.fn());
+    renderWithI18n(
+      <>
+        <Header
+          title={`Topology View`}
+          handleSwitchToggle={vi.fn()}
+          toggleState={true}
+          zoomIn={hook.zoomIn}
+          zoomOut={hook.zoomOut}
+          zoomFit={hook.zoomFit}
+          resetZoom={hook.resetZoom}
+          showZoomControls={true}
+        />
+        <svg className="parent" width="700" height="500">
+          <g className="child"></g>
+        </svg>
+      </>
+    );
+    await waitFor(() => screen.getByRole('heading', { level: 2 }));
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
+      'Topology View'
+    );
+    fireEvent.click(screen.getByLabelText(/zoom in/i));
+    expect(hook.zoomIn).toHaveBeenCalledTimes(1);
+  });
+  test('user can zoom out', async () => {
+    const hook = useZoom('.parent', '.child') as Exclude<
+      ReturnType<typeof useZoom>,
+      false
+    >;
+    vi.spyOn(hook, 'zoomOut').mockImplementationOnce(vi.fn());
+    renderWithI18n(
+      <>
+        <Header
+          title={`Topology View`}
+          handleSwitchToggle={vi.fn()}
+          toggleState={true}
+          zoomIn={hook.zoomIn}
+          zoomOut={hook.zoomOut}
+          zoomFit={hook.zoomFit}
+          resetZoom={hook.resetZoom}
+          showZoomControls={true}
+        />
+        <svg className="parent" width="700" height="500">
+          <g className="child"></g>
+        </svg>
+      </>
+    );
+    await waitFor(() => screen.getByRole('heading', { level: 2 }));
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
+      'Topology View'
+    );
+    fireEvent.click(screen.getByLabelText(/zoom out/i));
+    expect(hook.zoomOut).toHaveBeenCalledTimes(1);
+  });
+  test('user can zoom fit', async () => {
+    const hook = useZoom('.parent', '.child') as Exclude<
+      ReturnType<typeof useZoom>,
+      false
+    >;
+    vi.spyOn(hook, 'zoomFit').mockImplementationOnce(vi.fn());
+    renderWithI18n(
+      <>
+        <Header
+          title={`Topology View`}
+          handleSwitchToggle={vi.fn()}
+          toggleState={true}
+          zoomIn={hook.zoomIn}
+          zoomOut={hook.zoomOut}
+          zoomFit={hook.zoomFit}
+          resetZoom={hook.resetZoom}
+          showZoomControls={true}
+        />
+        <svg className="parent" width="700" height="500">
+          <g className="child"></g>
+        </svg>
+      </>
+    );
+    await waitFor(() => screen.getByRole('heading', { level: 2 }));
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
+      'Topology View'
+    );
+    fireEvent.click(screen.getByLabelText(/fit to screen/i));
+    expect(hook.zoomFit).toHaveBeenCalledTimes(1);
+  });
+  test('user can reset zoom', async () => {
+    const hook = useZoom('.parent', '.child') as Exclude<
+      ReturnType<typeof useZoom>,
+      false
+    >;
+    vi.spyOn(hook, 'resetZoom').mockImplementationOnce(vi.fn());
+    renderWithI18n(
+      <>
+        <Header
+          title={`Topology View`}
+          handleSwitchToggle={vi.fn()}
+          toggleState={true}
+          zoomIn={hook.zoomIn}
+          zoomOut={hook.zoomOut}
+          zoomFit={hook.zoomFit}
+          resetZoom={hook.resetZoom}
+          showZoomControls={true}
+        />
+        <svg className="parent" width="700" height="500">
+          <g className="child"></g>
+        </svg>
+      </>
+    );
+    await waitFor(() => screen.getByRole('heading', { level: 2 }));
+    expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
+      'Topology View'
+    );
+    fireEvent.click(screen.getByLabelText(/reset zoom/i));
+    expect(hook.resetZoom).toHaveBeenCalledTimes(1);
+  });
+});

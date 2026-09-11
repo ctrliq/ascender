@@ -189,7 +189,7 @@ export interface LaunchPromptProps {
   resource?: Untyped;
   /** The labels the resource already carries, which seed the labels field. */
   labels?: LabelInput[];
-  surveyConfig: SurveyConfig | null;
+  surveyConfig?: SurveyConfig | null;
   resourceDefaultCredentials?: Untyped[];
 }
 

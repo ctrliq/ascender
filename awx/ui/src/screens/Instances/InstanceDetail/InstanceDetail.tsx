@@ -68,7 +68,7 @@ function computeForks(
 
 export interface InstanceDetailProps {
   setBreadcrumb: Untyped;
-  isK8s: boolean;
+  isK8s?: boolean;
   [key: string]: unknown;
 }
 

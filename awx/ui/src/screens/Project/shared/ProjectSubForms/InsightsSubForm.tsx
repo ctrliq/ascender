@@ -10,7 +10,7 @@ export interface InsightsSubFormProps {
   credential: Untyped;
   onCredentialSelection: (...args: Untyped[]) => void;
   scmUpdateOnLaunch: Untyped;
-  autoPopulateCredential: Untyped;
+  autoPopulateCredential?: Untyped;
   [key: string]: unknown;
 }
 

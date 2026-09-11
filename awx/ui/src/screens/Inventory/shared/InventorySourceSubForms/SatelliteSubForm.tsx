@@ -16,7 +16,7 @@ import {
 import getHelpText from '../Inventory.helptext';
 
 export interface SatelliteSubFormProps {
-  autoPopulateCredential: Untyped;
+  autoPopulateCredential?: Untyped;
   [key: string]: unknown;
 }
 

@@ -40,11 +40,11 @@ const StatusDetailValue = styled.div`
 
 export interface JobDetailProps {
   job: Untyped;
-  inventorySourceLabels: Untyped[];
+  inventorySourceLabels?: Untyped[];
   [key: string]: unknown;
 }
 
-function JobDetail({ job, inventorySourceLabels }: JobDetailProps) {
+function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
   const { t, i18n } = useLingui();
   const jobHelpText = getJobHelpText();
   const { me } = useConfig();

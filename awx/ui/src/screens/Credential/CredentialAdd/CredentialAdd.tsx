@@ -28,7 +28,7 @@ const fetchCredentialTypes = async (pageNo = 1, credentialTypes = []) => {
 };
 
 export interface CredentialAddProps {
-  me: Untyped;
+  me?: Untyped;
   [key: string]: unknown;
 }
 

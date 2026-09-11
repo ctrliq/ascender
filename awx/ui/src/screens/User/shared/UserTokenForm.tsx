@@ -102,7 +102,7 @@ function UserTokenFormFields() {
 export interface UserTokenFormProps {
   handleCancel: (...args: Untyped[]) => void;
   handleSubmit: (...args: Untyped[]) => void;
-  submitError: Untyped;
+  submitError?: Untyped;
   token?: Untyped;
   [key: string]: unknown;
 }

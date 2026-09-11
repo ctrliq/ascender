@@ -31,8 +31,8 @@ const CheckIcon = styled(PFCheckIcon)`
 `;
 
 export interface MultipleChoiceFieldProps {
-  label: React.ReactNode;
-  tooltip: React.ReactNode;
+  label?: React.ReactNode;
+  tooltip?: React.ReactNode;
   [key: string]: unknown;
 }
 

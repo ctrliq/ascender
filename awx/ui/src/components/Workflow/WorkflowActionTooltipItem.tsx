@@ -23,7 +23,7 @@ const TooltipItem = styled.div`
 `;
 
 export interface WorkflowActionTooltipItemProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   id: Untyped;
   onClick?: (...args: Untyped[]) => void;
   onMouseEnter?: (...args: Untyped[]) => void;

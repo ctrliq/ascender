@@ -4,7 +4,7 @@ import { Tooltip } from '@patternfly/react-core';
 
 export interface ActionItemProps {
   tooltip?: Untyped;
-  visible: unknown;
+  visible?: unknown;
   children: React.ReactNode;
   [key: string]: unknown;
 }

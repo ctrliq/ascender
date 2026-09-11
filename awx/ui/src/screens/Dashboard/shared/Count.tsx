@@ -38,8 +38,8 @@ export interface CountProps {
   /** Styles the count as a failure figure rather than a total. */
   failed?: boolean;
   link: Untyped;
-  data: Untyped;
-  label: React.ReactNode;
+  data?: Untyped;
+  label?: React.ReactNode;
   [key: string]: unknown;
 }
 

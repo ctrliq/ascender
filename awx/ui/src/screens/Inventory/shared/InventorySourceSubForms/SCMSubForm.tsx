@@ -35,7 +35,7 @@ import {
 import getHelpText from '../Inventory.helptext';
 
 export interface SCMSubFormProps {
-  autoPopulateProject: Untyped;
+  autoPopulateProject?: Untyped;
   [key: string]: unknown;
 }
 

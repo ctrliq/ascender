@@ -28,7 +28,7 @@ const ErrorMessageWrapper = styled.div`
 export interface PreviewStepProps {
   resource: Untyped;
   launchConfig: LaunchConfig;
-  surveyConfig: SurveyConfig;
+  surveyConfig?: SurveyConfig;
   formErrors?: boolean;
   [key: string]: unknown;
 }

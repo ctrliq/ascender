@@ -29,7 +29,7 @@ const QS_CONFIG = getQSConfig('credentials', {
 
 export interface CredentialLookupProps {
   autoPopulate?: boolean;
-  credentialTypeId?: string;
+  credentialTypeId?: number | string;
   credentialTypeKind?: string;
   credentialTypeNamespace?: Untyped;
   fieldName?: string;

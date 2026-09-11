@@ -20,8 +20,8 @@ const TokenAlert = styled(Alert)`
 `;
 
 export interface UserTokensProps {
-  setBreadcrumb: Untyped;
-  user: Untyped;
+  setBreadcrumb?: Untyped;
+  user?: Untyped;
   [key: string]: unknown;
 }
 

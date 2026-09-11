@@ -18,7 +18,7 @@ import {
 import getHelpText from '../Inventory.helptext';
 
 export interface ControllerSubFormProps {
-  autoPopulateCredential: Untyped;
+  autoPopulateCredential?: Untyped;
   [key: string]: unknown;
 }
 

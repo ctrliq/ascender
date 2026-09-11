@@ -14,16 +14,16 @@ const HIDDEN_PASSWORD_PROMPTS = [
 ];
 
 export interface JobEventProps {
-  style: Untyped;
+  style?: Untyped;
   lineTextHtml: Untyped[];
-  isClickable: boolean;
+  isClickable?: boolean;
   onJobEventClick: (...args: Untyped[]) => void;
   event: Untyped;
   measure: Untyped;
-  isCollapsed: boolean;
-  onToggleCollapsed: (...args: Untyped[]) => void;
-  hasChildren: boolean;
-  jobStatus: Untyped;
+  isCollapsed?: boolean;
+  onToggleCollapsed?: (...args: Untyped[]) => void;
+  hasChildren?: boolean;
+  jobStatus?: Untyped;
   ref?: Untyped;
   [key: string]: unknown;
 }
@@ -35,7 +35,7 @@ function JobEvent({
   onJobEventClick,
   event,
   measure,
-  isCollapsed,
+  isCollapsed = false,
   onToggleCollapsed,
   hasChildren,
   jobStatus,

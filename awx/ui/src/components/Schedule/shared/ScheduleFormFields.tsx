@@ -30,7 +30,7 @@ const SelectClearOption = styled(SelectOption)`
 `;
 
 export interface ScheduleFormFieldsProps {
-  hasDaysToKeepField: boolean;
+  hasDaysToKeepField?: boolean;
   zoneOptions: Untyped;
   zoneLinks: Untyped;
   [key: string]: unknown;

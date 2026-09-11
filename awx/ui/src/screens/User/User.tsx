@@ -25,7 +25,7 @@ import UserRolesList from './UserRoles/UserRolesList';
 
 export interface UserProps {
   setBreadcrumb: Untyped;
-  me: Untyped;
+  me?: Untyped;
   [key: string]: unknown;
 }
 

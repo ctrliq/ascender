@@ -1,4 +1,5 @@
 import type { Untyped } from 'types/api';
+import type { NodePositions } from './WorkflowUtils';
 
 /** Which nodes each node is reached from, keyed by node id. */
 export type LinkParentMapping = Record<number, number[]>;
@@ -122,7 +123,7 @@ export interface WorkflowState {
   linkToEdit: WorkflowLink | null;
   links: WorkflowLink[];
   nextNodeId: number;
-  nodePositions: Record<string, { x: number; y: number }> | null;
+  nodePositions: NodePositions | null;
   nodes: WorkflowNode[];
   nodeToDelete: WorkflowNode | null;
   nodeToEdit: WorkflowNode | null;
@@ -172,7 +173,7 @@ export type WorkflowAction =
   | { type: 'SET_NODES'; value: WorkflowNode[] }
   | {
       type: 'SET_NODE_POSITIONS';
-      value: Record<string, { x: number; y: number }> | null;
+      value: NodePositions | null;
     }
   | { type: 'SET_NODE_TO_DELETE'; value: WorkflowNode | null }
   | { type: 'SET_NODE_TO_EDIT'; value: WorkflowNode | null }

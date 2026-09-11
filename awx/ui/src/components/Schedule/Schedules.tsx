@@ -14,7 +14,7 @@ export interface SchedulesProps {
   /** Absent for a resource that cannot be prompted, a management job say. */
   launchConfig?: Untyped;
   surveyConfig?: Untyped;
-  resource: Untyped;
+  resource?: Untyped;
   resourceDefaultCredentials?: Untyped;
   [key: string]: unknown;
 }

@@ -73,9 +73,9 @@ const FrequencyDetailsContainer = styled.div`
 `;
 
 export interface ScheduleDetailProps {
-  hasDaysToKeepField: boolean;
+  hasDaysToKeepField?: boolean;
   schedule: Schedule;
-  surveyConfig: SurveyConfig;
+  surveyConfig?: SurveyConfig;
   [key: string]: unknown;
 }
 
@@ -255,7 +255,7 @@ function ScheduleDetail({
   const hasMissingSurveyValue = () => {
     let missingValues = false;
     if (survey_enabled) {
-      (surveyConfig.spec ?? []).forEach((question: SurveyQuestion) => {
+      (surveyConfig?.spec ?? []).forEach((question: SurveyQuestion) => {
         const hasDefaultValue = Boolean(question.default);
         if (question.required && !hasDefaultValue) {
           const extraData = (schedule?.extra_data ?? {}) as Record<

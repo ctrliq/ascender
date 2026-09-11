@@ -5,7 +5,7 @@ import InventoryGroupHostAdd from '../InventoryGroupHostAdd';
 import InventoryGroupHostList from './InventoryGroupHostList';
 
 export interface InventoryGroupHostsProps {
-  inventoryGroup: Untyped;
+  inventoryGroup?: Untyped;
   [key: string]: unknown;
 }
 

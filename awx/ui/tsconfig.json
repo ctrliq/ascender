@@ -32,7 +32,7 @@
     // Written relative to this file rather than under a baseUrl, which
     // TypeScript 6 deprecates and 7 removes.
     "paths": {
-      "api": ["./src/api/index.js"],
+      "api": ["./src/api/index.ts"],
       "api/*": ["./src/api/*"],
       "components/*": ["./src/components/*"],
       "contexts/*": ["./src/contexts/*"],
@@ -41,10 +41,13 @@
       "types/api": ["./src/types/api.ts"],
       "types/*": ["./src/types/*"],
       "util/*": ["./src/util/*"],
-      "i18nLoader": ["./src/i18nLoader.js"],
-      "themeRegistry": ["./src/themeRegistry.js"]
+      "i18nLoader": ["./src/i18nLoader.ts"],
+      "themeRegistry": ["./src/themeRegistry.ts"],
+      // The tests reach for history v5 by name; the runner points that at a
+      // shim over react-router's own, and this points the checker at the same.
+      "history": ["./testUtils/historyShim.ts"]
     }
   },
-  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "include": ["src/**/*.ts", "src/**/*.tsx", "testUtils/**/*.ts", "testUtils/**/*.tsx"],
   "exclude": ["node_modules", "build", "e2e"]
 }

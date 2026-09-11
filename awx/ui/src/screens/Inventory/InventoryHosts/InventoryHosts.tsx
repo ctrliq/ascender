@@ -7,8 +7,8 @@ import InventoryHostAdd from '../InventoryHostAdd';
 import InventoryHostList from './InventoryHostList';
 
 export interface InventoryHostsProps {
-  setBreadcrumb: Untyped;
-  inventory: Untyped;
+  setBreadcrumb?: Untyped;
+  inventory?: Untyped;
   [key: string]: unknown;
 }
 

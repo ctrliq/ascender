@@ -23,18 +23,18 @@ const SurveyActionsTd = styled(ActionsTd)`
 `;
 
 export interface SurveyListItemProps {
-  canEdit: boolean;
+  canEdit?: boolean;
   question: Untyped;
-  isChecked: boolean;
-  onSelect: (...args: Untyped[]) => void;
-  rowIndex: Untyped;
+  isChecked?: boolean;
+  onSelect?: (...args: Untyped[]) => void;
+  rowIndex?: Untyped;
   [key: string]: unknown;
 }
 
 function SurveyListItem({
   canEdit,
   question,
-  isChecked,
+  isChecked = false,
   onSelect,
   rowIndex,
 }: SurveyListItemProps) {

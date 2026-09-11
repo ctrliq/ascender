@@ -7,8 +7,8 @@ import InventorySourceAdd from '../InventorySourceAdd';
 import InventorySourceList from './InventorySourceList';
 
 export interface InventorySourcesProps {
-  inventory: Untyped;
-  setBreadcrumb: Untyped;
+  inventory?: Untyped;
+  setBreadcrumb?: Untyped;
   [key: string]: unknown;
 }
 

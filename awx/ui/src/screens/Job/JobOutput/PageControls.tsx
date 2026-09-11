@@ -33,14 +33,14 @@ const ExpandCollapseWrapper = styled.div`
 `;
 
 export interface PageControlsProps {
-  onScrollFirst: (...args: Untyped[]) => void;
-  onScrollLast: (...args: Untyped[]) => void;
-  onScrollNext: (...args: Untyped[]) => void;
-  onScrollPrevious: (...args: Untyped[]) => void;
-  toggleExpandCollapseAll: Untyped;
-  isAllCollapsed: boolean;
-  isFlatMode: boolean;
-  isTemplateJob: boolean;
+  onScrollFirst?: (...args: Untyped[]) => void;
+  onScrollLast?: (...args: Untyped[]) => void;
+  onScrollNext?: (...args: Untyped[]) => void;
+  onScrollPrevious?: (...args: Untyped[]) => void;
+  toggleExpandCollapseAll?: Untyped;
+  isAllCollapsed?: boolean;
+  isFlatMode?: boolean;
+  isTemplateJob?: boolean;
   [key: string]: unknown;
 }
 

@@ -22,10 +22,10 @@ import ScheduleEdit from './ScheduleEdit';
 export interface ScheduleProps {
   setBreadcrumb: (...args: Untyped[]) => unknown;
   resource: Untyped;
-  launchConfig: Untyped;
-  surveyConfig: Untyped;
-  hasDaysToKeepField: boolean;
-  resourceDefaultCredentials: Untyped;
+  launchConfig?: Untyped;
+  surveyConfig?: Untyped;
+  hasDaysToKeepField?: boolean;
+  resourceDefaultCredentials?: Untyped;
   [key: string]: unknown;
 }
 

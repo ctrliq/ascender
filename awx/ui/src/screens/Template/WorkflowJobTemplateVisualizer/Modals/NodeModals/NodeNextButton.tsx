@@ -8,7 +8,7 @@ export interface NodeNextButtonProps {
   onClick: (...args: Untyped[]) => void;
   onNext: (...args: Untyped[]) => void;
   triggerNext: Untyped;
-  isDisabled: boolean;
+  isDisabled?: boolean;
   [key: string]: unknown;
 }
 

@@ -18,7 +18,7 @@ import {
 import getHelpText from '../Inventory.helptext';
 
 export interface InsightsSubFormProps {
-  autoPopulateCredential: Untyped;
+  autoPopulateCredential?: Untyped;
   [key: string]: unknown;
 }
 

@@ -19,7 +19,7 @@ export interface CredentialListItemProps {
   onSelect: (...args: Untyped[]) => void;
   onCopy: (...args: Untyped[]) => void;
   fetchCredentials: Untyped;
-  rowIndex: Untyped;
+  rowIndex?: Untyped;
   [key: string]: unknown;
 }
 

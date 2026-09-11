@@ -36,15 +36,15 @@ const NUM_DAYS_PER_FREQUENCY: Partial<Record<ScheduleFrequency, number>> = {
 const defaultSchedule: Schedule = {} as Schedule;
 
 export interface ScheduleFormProps {
-  hasDaysToKeepField: boolean;
+  hasDaysToKeepField?: boolean;
   handleCancel: (...args: Untyped[]) => void;
   handleSubmit: (...args: Untyped[]) => void;
   schedule?: Schedule;
   submitError?: Untyped;
   resource: Untyped;
   launchConfig: Untyped;
-  surveyConfig: Untyped;
-  resourceDefaultCredentials: Untyped;
+  surveyConfig?: Untyped;
+  resourceDefaultCredentials?: Untyped;
   [key: string]: unknown;
 }
 
@@ -173,7 +173,7 @@ function ScheduleForm({
   const hasMissingSurveyValue = useCallback(() => {
     let missingValues = false;
     if (launchConfig?.survey_enabled) {
-      surveyConfig.spec.forEach((question: Untyped) => {
+      surveyConfig?.spec?.forEach((question: Untyped) => {
         const hasDefaultValue = Boolean(question.default);
         const hasSchedule = Object.keys(schedule).length;
         const isRequired = question.required;

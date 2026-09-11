@@ -11,7 +11,7 @@ import { SurveyList, SurveyQuestionAdd, SurveyQuestionEdit } from './Survey';
 
 export interface TemplateSurveyProps {
   template: Untyped;
-  canEdit: boolean;
+  canEdit?: boolean;
   [key: string]: unknown;
 }
 

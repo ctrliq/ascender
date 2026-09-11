@@ -5,7 +5,7 @@ import { ToolbarAddButton } from '../PaginatedTable';
 
 export interface AddDropDownButtonProps {
   dropdownItems: React.ReactNode;
-  ouiaId: string;
+  ouiaId?: string;
   [key: string]: unknown;
 }
 

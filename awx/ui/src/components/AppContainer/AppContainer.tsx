@@ -40,7 +40,7 @@ const StyledMastheadBrand = styled(MastheadBrand)`
 
 export interface AppContainerProps {
   navRouteConfig?: unknown[];
-  children: React.ReactNode;
+  children?: React.ReactNode;
   [key: string]: unknown;
 }
 

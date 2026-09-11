@@ -11,7 +11,7 @@ export interface OrganizationListItemProps {
   organization: Untyped;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
-  rowIndex: Untyped;
+  rowIndex?: Untyped;
   detailUrl: Untyped;
   [key: string]: unknown;
 }

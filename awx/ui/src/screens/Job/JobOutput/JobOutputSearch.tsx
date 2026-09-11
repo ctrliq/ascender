@@ -37,10 +37,10 @@ const SearchToolbarContent = styled(ToolbarContent)`
 export interface JobOutputSearchProps {
   qsConfig: QSConfig;
   job: Untyped;
-  eventRelatedSearchableKeys: Untyped;
-  eventSearchableKeys: Untyped;
+  eventRelatedSearchableKeys?: Untyped;
+  eventSearchableKeys?: Untyped;
   scrollToEnd: Untyped;
-  isFollowModeEnabled: boolean;
+  isFollowModeEnabled?: boolean;
   setIsFollowModeEnabled: Untyped;
   [key: string]: unknown;
 }

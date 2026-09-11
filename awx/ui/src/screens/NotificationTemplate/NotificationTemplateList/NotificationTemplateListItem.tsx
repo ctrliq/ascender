@@ -23,9 +23,9 @@ export interface NotificationTemplateListItemProps {
   template: Untyped;
   detailUrl: Untyped;
   fetchTemplates: Untyped;
-  isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
-  rowIndex: Untyped;
+  isSelected?: boolean;
+  onSelect?: (...args: Untyped[]) => void;
+  rowIndex?: Untyped;
   [key: string]: unknown;
 }
 
@@ -34,7 +34,7 @@ function NotificationTemplateListItem({
   template,
   detailUrl,
   fetchTemplates,
-  isSelected,
+  isSelected = false,
   onSelect,
   rowIndex,
 }: NotificationTemplateListItemProps) {

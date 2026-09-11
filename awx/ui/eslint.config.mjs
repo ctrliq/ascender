@@ -119,6 +119,9 @@ const sharedRules = {
         },
       ],
       camelcase: 'off',
+      // history is supplied by an alias in the test config, over
+      // react-router's own, and the resolver here does not read that.
+      'import-x/no-unresolved': ['error', { ignore: ['^history$'] }],
       // Imports are written without an extension throughout, and which
       // extension a module has is exactly what this migration keeps changing.
       // Requiring one would mean editing every importer each time a module is
@@ -208,7 +211,9 @@ export default defineConfig([
       'node_modules/**',
       'dist/**',
       'images/**',
-      '**/*test*.js',
+      // The test files have always been outside linting; the conversion
+      // changed their extension, not that decision.
+      '**/*test*.{js,jsx,ts,tsx}',
       'config/**',
       'scripts/**',
       'eslint.config.mjs',

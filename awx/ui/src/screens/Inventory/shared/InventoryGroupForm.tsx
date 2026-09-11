@@ -13,7 +13,7 @@ import { required } from 'util/validators';
 import { FormColumnLayout, FormFullWidthLayout } from 'components/FormLayout';
 
 export interface InventoryGroupFormProps {
-  error: Untyped;
+  error?: Untyped;
   group?: Untyped;
   handleSubmit: (...args: Untyped[]) => void;
   handleCancel: (...args: Untyped[]) => void;

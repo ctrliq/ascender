@@ -11,7 +11,7 @@ export interface ScheduleToggleProps {
   schedule: Schedule;
   onToggle?: (...args: Untyped[]) => void;
   className?: string;
-  isDisabled: boolean;
+  isDisabled?: boolean;
   [key: string]: unknown;
 }
 
