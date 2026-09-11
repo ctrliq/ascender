@@ -1,5 +1,5 @@
 import type { CurrentUser } from 'contexts/Config';
-import type { CredentialType, Untyped } from 'types/api';
+import type { CredentialField, CredentialType } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { PageSection, Card } from '@patternfly/react-core';
@@ -13,6 +13,11 @@ import {
 } from 'api';
 import useRequest from 'hooks/useRequest';
 import CredentialForm from '../shared/CredentialForm';
+import type {
+  CredentialFormValues,
+  CredentialPluginInput,
+  CredentialTypesById,
+} from '../shared/CredentialForm';
 
 const fetchCredentialTypes = async (
   pageNo = 1,
@@ -45,19 +50,23 @@ function CredentialAdd({ me }: CredentialAddProps) {
     result: credentialId,
   } = useRequest(
     useCallback(
-      async (values: Untyped, credentialTypesMap: Untyped) => {
-        const { inputs: credentialTypeInputs } =
-          credentialTypesMap[values.credential_type];
+      async (
+        values: CredentialFormValues,
+        credentialTypesMap: CredentialTypesById
+      ) => {
+        const credentialTypeInputs =
+          credentialTypesMap[values.credential_type ?? '']?.inputs;
 
         const { inputs, organization, passwordPrompts, ...remainingValues } =
           values;
 
-        const nonPluginInputs: Record<string, Untyped> = {};
-        const pluginInputs: Record<string, Untyped> = {};
-        const possibleFields = credentialTypeInputs.fields || [];
+        const nonPluginInputs: Record<string, unknown> = {};
+        const pluginInputs: Record<string, CredentialPluginInput> = {};
+        const possibleFields: CredentialField[] =
+          credentialTypeInputs?.fields ?? [];
 
-        possibleFields.forEach((field: Untyped) => {
-          const input = inputs[field.id];
+        possibleFields.forEach((field) => {
+          const input = inputs[field.id] as CredentialPluginInput | undefined;
           if (input?.credential && input?.inputs) {
             pluginInputs[field.id] = input;
           } else if (passwordPrompts[field.id]) {
@@ -67,7 +76,10 @@ function CredentialAdd({ me }: CredentialAddProps) {
           }
         });
 
-        const modifiedData = { inputs: nonPluginInputs, ...remainingValues };
+        const modifiedData: Record<string, unknown> = {
+          inputs: nonPluginInputs,
+          ...remainingValues,
+        };
         // can send only one of org, user, team
         if (organization?.id) {
           modifiedData.organization = organization.id;
@@ -79,7 +91,7 @@ function CredentialAdd({ me }: CredentialAddProps) {
         } = await CredentialsAPI.create(modifiedData);
 
         await Promise.all(
-          Object.entries<Untyped>(pluginInputs).map(([key, value]) =>
+          Object.entries(pluginInputs).map(([key, value]) =>
             CredentialInputSourcesAPI.create({
               input_field_name: key,
               metadata: value.inputs,
@@ -112,10 +124,7 @@ function CredentialAdd({ me }: CredentialAddProps) {
     useCallback(async () => {
       const credTypes = await fetchCredentialTypes();
       const creds = credTypes.reduce(
-        (
-          credentialTypesMap: Record<string, Untyped>,
-          credentialType: Untyped
-        ) => {
+        (credentialTypesMap: CredentialTypesById, credentialType) => {
           credentialTypesMap[credentialType.id] = credentialType;
           return credentialTypesMap;
         },
@@ -133,7 +142,7 @@ function CredentialAdd({ me }: CredentialAddProps) {
     navigate('/credentials');
   };
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: CredentialFormValues) => {
     await submitRequest(values, result);
   };
 

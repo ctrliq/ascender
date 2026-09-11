@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -8,10 +7,18 @@ import {
   AlertGroup,
 } from '@patternfly/react-core';
 
+/**
+ * What a failed test answers with: the api's error for the inputs, which is
+ * either a plain message or an HTTP status and a json body on the next line.
+ */
+export interface CredentialTestError {
+  response?: { data?: { inputs?: string } };
+}
+
 export interface CredentialPluginTestAlertProps {
-  credentialName: Untyped;
-  successResponse?: Untyped;
-  errorResponse?: Untyped;
+  credentialName: React.ReactNode;
+  successResponse?: unknown;
+  errorResponse?: CredentialTestError | null;
   [key: string]: unknown;
 }
 
@@ -27,22 +34,24 @@ function CredentialPluginTestAlert({
   );
   useEffect(() => {
     if (errorResponse) {
-      if (errorResponse?.response?.data?.inputs) {
-        if (errorResponse.response.data.inputs.startsWith('HTTP')) {
-          const [errorCode, errorStr] =
-            errorResponse.response.data.inputs.split('\n');
+      const inputsError = errorResponse?.response?.data?.inputs;
+      if (inputsError) {
+        if (inputsError.startsWith('HTTP')) {
+          const [errorCode, errorStr] = inputsError.split('\n');
           try {
-            const errorJSON = JSON.parse(errorStr);
+            const errorJSON = JSON.parse(errorStr ?? '') as {
+              errors?: string[];
+            };
             setTestMessage(
               `${errorCode}${
-                errorJSON?.errors[0] ? `: ${errorJSON.errors[0]}` : ''
+                errorJSON?.errors?.[0] ? `: ${errorJSON.errors[0]}` : ''
               }`
             );
           } catch {
-            setTestMessage(errorResponse.response.data.inputs);
+            setTestMessage(inputsError);
           }
         } else {
-          setTestMessage(errorResponse.response.data.inputs);
+          setTestMessage(inputsError);
         }
       } else {
         setTestMessage(

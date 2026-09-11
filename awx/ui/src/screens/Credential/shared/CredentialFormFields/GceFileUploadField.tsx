@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -18,7 +17,7 @@ function GceFileUploadField() {
   const [filename, setFilename] = useState('');
   const [fileValue, setFileValue] = useState('');
 
-  const populateFields = (jsonStr: Untyped) => {
+  const populateFields = (jsonStr: string) => {
     try {
       const json = JSON.parse(jsonStr);
       setFieldValue('inputs.username', json.client_email || '');

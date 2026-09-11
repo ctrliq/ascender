@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { CredentialField } from 'types/api';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -22,7 +22,7 @@ import Popover from 'components/Popover';
 import { CredentialPluginPrompt } from './CredentialPluginPrompt';
 import CredentialPluginSelected from './CredentialPluginSelected';
 
-function CredentialPluginInput(props: Untyped) {
+function CredentialPluginInput(props: CredentialPluginFieldProps) {
   const { children, isDisabled, isRequired, validated, fieldOptions } = props;
   const [showPluginWizard, setShowPluginWizard] = useState(false);
   const [inputField, meta, helpers] = useField(`inputs.${fieldOptions.id}`);
@@ -55,15 +55,16 @@ function CredentialPluginInput(props: Untyped) {
         />
       ) : (
         <InputGroup>
-          {React.cloneElement(children, {
-            ...inputField,
-            isRequired,
-            validated: validated ? 'default' : 'error',
-            isDisabled: disableFieldAndButtons,
-            onChange: (event) => {
-              inputField.onChange(event);
-            },
-          })}
+          {children &&
+            React.cloneElement(children, {
+              ...inputField,
+              isRequired,
+              validated: validated ?? 'default',
+              isDisabled: disableFieldAndButtons,
+              onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+                inputField.onChange(event);
+              },
+            })}
           <InputGroupItem>
             <Tooltip
               content={t`Populate field from an external secret management system`}
@@ -87,7 +88,7 @@ function CredentialPluginInput(props: Untyped) {
             typeof inputField.value === 'object' ? inputField.value : {}
           }
           onClose={() => handlePluginWizardClose()}
-          onSubmit={(val: Untyped) => {
+          onSubmit={(val) => {
             val.touched = true;
             helpers.setValue(val);
             setShowPluginWizard(false);
@@ -101,8 +102,16 @@ function CredentialPluginInput(props: Untyped) {
 export interface CredentialPluginFieldProps {
   isDisabled?: boolean;
   isRequired?: boolean;
+  /** The input itself, which the field clones to hand it formik's own props. */
+  children?: React.ReactElement<Record<string, unknown>>;
+  /**
+   * Whether the field's value passes validation, which is what the input is
+   * rendered with. It was re-derived from itself below, so a value the form
+   * had already rejected still rendered as valid.
+   */
+  validated?: 'default' | 'error';
   /** The credential type's field definition, as its inputs describe it. */
-  fieldOptions: Untyped;
+  fieldOptions: CredentialField;
   [key: string]: unknown;
 }
 
@@ -162,9 +171,9 @@ function CredentialPluginField({
           isRequired={isRequired}
           label={fieldOptions.label}
           labelHelp={
-            fieldOptions.help_text && (
+            fieldOptions.help_text ? (
               <Popover content={fieldOptions.help_text} />
-            )
+            ) : undefined
           }
         >
           <CredentialPluginInput {...props} />

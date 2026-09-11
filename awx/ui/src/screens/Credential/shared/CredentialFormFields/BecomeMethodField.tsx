@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { CredentialField } from 'types/api';
 import React, { useState } from 'react';
 import { useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -20,7 +20,7 @@ import { TimesIcon } from '@patternfly/react-icons';
 import Popover from 'components/Popover';
 
 export interface BecomeMethodFieldProps {
-  fieldOptions: Untyped;
+  fieldOptions: CredentialField;
   isRequired?: boolean;
   [key: string]: unknown;
 }
@@ -68,7 +68,9 @@ function BecomeMethodField({
       fieldId={`credential-${fieldOptions.id}`}
       label={fieldOptions.label}
       labelHelp={
-        fieldOptions.help_text && <Popover content={fieldOptions.help_text} />
+        fieldOptions.help_text ? (
+          <Popover content={fieldOptions.help_text} />
+        ) : undefined
       }
       isRequired={isRequired}
     >

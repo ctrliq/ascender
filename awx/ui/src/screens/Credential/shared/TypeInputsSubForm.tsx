@@ -1,4 +1,4 @@
-import type { CredentialType, Untyped } from 'types/api';
+import type { CredentialType } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { FormGroup, Title } from '@patternfly/react-core';
@@ -19,11 +19,10 @@ export interface TypeInputsSubFormProps {
 function TypeInputsSubForm({ credentialType }: TypeInputsSubFormProps) {
   const { t } = useLingui();
   const stringFields = credentialType.inputs?.fields?.filter(
-    (fieldOptions: Untyped) =>
-      fieldOptions.type === 'string' || fieldOptions.choices
+    (fieldOptions) => fieldOptions.type === 'string' || fieldOptions.choices
   );
   const booleanFields = credentialType.inputs?.fields?.filter(
-    (fieldOptions: Untyped) => fieldOptions.type === 'boolean'
+    (fieldOptions) => fieldOptions.type === 'boolean'
   );
   return (
     <SubFormLayout>
@@ -32,7 +31,7 @@ function TypeInputsSubForm({ credentialType }: TypeInputsSubFormProps) {
       </Title>
       <FormColumnLayout>
         {credentialType.namespace === 'gce' && <GceFileUploadField />}
-        {stringFields?.map((fieldOptions: Untyped) =>
+        {stringFields?.map((fieldOptions) =>
           fieldOptions.multiline ? (
             <FormFullWidthLayout key={fieldOptions.id}>
               <CredentialField
@@ -52,7 +51,7 @@ function TypeInputsSubForm({ credentialType }: TypeInputsSubFormProps) {
           <FormFullWidthLayout>
             <FormGroup fieldId="credential-checkboxes" label={t`Options`}>
               <FormCheckboxLayout>
-                {booleanFields?.map((fieldOptions: Untyped) => (
+                {booleanFields?.map((fieldOptions) => (
                   <CheckboxField
                     id={`credential-${fieldOptions.id}`}
                     key={fieldOptions.id}

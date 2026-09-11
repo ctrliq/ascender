@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { BreadcrumbResource } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Routes, Route } from 'react-router';
 
@@ -18,7 +18,7 @@ function Credentials() {
   });
 
   const buildBreadcrumbConfig = useCallback(
-    (credential: Untyped) => {
+    (credential?: BreadcrumbResource) => {
       if (!credential) {
         return;
       }

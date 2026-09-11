@@ -1,8 +1,8 @@
 import type { QSParams } from 'util/qs';
 import type {
   AccessListEntry,
-  ApiEntity,
   Credential,
+  CredentialInputSource,
   OptionsResponse,
   Paginated,
 } from '../../types/api';
@@ -39,11 +39,11 @@ class Credentials extends Base<Credential> {
     let requestCounter = 0;
     const fetchInputSources = async (
       pageNo = 1,
-      inputSources: ApiEntity[] = []
+      inputSources: CredentialInputSource[] = []
     ) => {
       try {
         requestCounter++;
-        const { data } = await this.http.get<Paginated<ApiEntity>>(
+        const { data } = await this.http.get<Paginated<CredentialInputSource>>(
           `${this.baseUrl}${id}/input_sources/`,
           {
             params: {

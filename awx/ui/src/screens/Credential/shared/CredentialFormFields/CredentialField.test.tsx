@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { CredentialType } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { Formik } from 'formik';
@@ -6,7 +6,9 @@ import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import credentialTypes from '../data.credentialTypes.json';
 import CredentialField from './CredentialField';
 
-const credentialType = credentialTypes.find((type) => type.id === 5);
+const credentialType = credentialTypes.find(
+  (type) => type.id === 5
+) as unknown as CredentialType;
 const fieldOptions = {
   id: 'password',
   label: 'Secret Key',
@@ -22,7 +24,7 @@ vi.mock('react-router', async () => ({
 }));
 
 function renderField(
-  initialInputs: Untyped,
+  initialInputs: Record<string, unknown>,
   type = credentialType,
   options = fieldOptions
 ) {
@@ -106,7 +108,9 @@ describe('<CredentialField />', () => {
   });
 
   test('Should check to see if the ability to edit vault ID is disabled after creation.', () => {
-    const vaultCredential = credentialTypes.find((type) => type.id === 3);
+    const vaultCredential = credentialTypes.find(
+      (type) => type.id === 3
+    ) as unknown as CredentialType;
     const vaultFieldOptions = {
       id: 'vault_id',
       label: 'Vault Identifier',

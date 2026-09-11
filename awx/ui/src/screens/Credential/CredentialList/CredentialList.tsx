@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Credential } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -84,7 +84,7 @@ function CredentialList() {
     setSelected,
     selectAll,
     clearSelected,
-  } = useSelected<Untyped>(credentials);
+  } = useSelected<Credential>(credentials);
 
   const {
     isLoading: isDeleteLoading,
@@ -109,7 +109,7 @@ function CredentialList() {
   };
 
   const handleCopy = useCallback(
-    (newCredentialId: Untyped) => {
+    (newCredentialId: number) => {
       addToast({
         id: newCredentialId,
         title: t`Credential copied successfully`,
@@ -122,8 +122,10 @@ function CredentialList() {
 
   const canAdd =
     actions && Object.prototype.hasOwnProperty.call(actions, 'POST');
+  // Built on every render; the requests only run once a row has been picked,
+  // which is what the delete button waits for.
   const deleteDetailsRequests = relatedResourceDeleteRequests.credential(
-    selected[0]
+    selected[0] as Credential
   );
   return (
     <>
@@ -168,7 +170,7 @@ function CredentialList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(item: Untyped, index: number) => (
+            renderRow={(item: Credential, index: number) => (
               <CredentialListItem
                 key={item.id}
                 credential={item}

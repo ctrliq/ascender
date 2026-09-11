@@ -1,4 +1,4 @@
-import type { CredentialType, Credential, Untyped } from 'types/api';
+import type { CredentialType, Credential } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -13,11 +13,14 @@ import Popover from 'components/Popover';
 import { required } from 'util/validators';
 import useRequest from 'hooks/useRequest';
 import { CredentialPluginTestAlert } from './CredentialPlugins';
+import type { CredentialTestError } from './CredentialPlugins/CredentialPluginTestAlert';
+import type { CredentialFormValues } from './CredentialForm';
 
 export interface ExternalTestModalProps {
   credential?: Credential | null;
   credentialType: CredentialType;
-  credentialFormValues: Untyped;
+  /** What the credential form holds, which the test is run against. */
+  credentialFormValues: CredentialFormValues;
   onClose: () => void;
   [key: string]: unknown;
 }
@@ -35,10 +38,10 @@ function ExternalTestModal({
     request: testPluginMetadata,
   } = useRequest(
     useCallback(
-      async (values: Untyped) => {
+      async (values: Record<string, unknown>) => {
         const payload = {
           inputs: credentialType.inputs?.fields?.reduce(
-            (filteredInputs: Untyped, field: Untyped) => {
+            (filteredInputs: Record<string, unknown>, field) => {
               filteredInputs[field.id] = credentialFormValues.inputs[field.id];
               return filteredInputs;
             },
@@ -62,7 +65,7 @@ function ExternalTestModal({
     null
   );
 
-  const handleTest = async (values: Untyped) => {
+  const handleTest = async (values: Record<string, unknown>) => {
     await testPluginMetadata(values);
   };
 
@@ -70,7 +73,7 @@ function ExternalTestModal({
     <>
       <Formik
         initialValues={(credentialType.inputs?.metadata ?? []).reduce(
-          (initialValues: Untyped, field: Untyped) => {
+          (initialValues: Record<string, unknown>, field) => {
             if (field.type === 'string' && field.choices) {
               initialValues[field.id] = field.default || field.choices[0];
             } else {
@@ -111,59 +114,58 @@ function ExternalTestModal({
           >
             <Form autoComplete="off">
               <FormFullWidthLayout>
-                {(credentialType.inputs?.metadata ?? []).map(
-                  (field: Untyped) => {
-                    const isRequired =
-                      credentialType.inputs?.required?.includes(field.id);
-                    if (field.type === 'string') {
-                      if (field.choices) {
-                        return (
-                          <FormGroup
-                            key={field.id}
-                            fieldId={`credential-${field.id}`}
-                            label={field.label}
-                            labelHelp={
-                              field.help_text && (
-                                <Popover content={field.help_text} />
-                              )
-                            }
-                            isRequired={isRequired}
-                          >
-                            <AnsibleSelect
-                              name={field.id}
-                              value={field.default}
-                              id={`credential-${field.id}`}
-                              data={field.choices.map((choice: Untyped) => ({
-                                value: choice,
-                                key: choice,
-                                label: choice,
-                              }))}
-                              onChange={(event, value) => {
-                                setFieldValue(field.id, value);
-                              }}
-                              validate={isRequired ? required(null) : null}
-                            />
-                          </FormGroup>
-                        );
-                      }
-
+                {(credentialType.inputs?.metadata ?? []).map((field) => {
+                  const isRequired = credentialType.inputs?.required?.includes(
+                    field.id
+                  );
+                  if (field.type === 'string') {
+                    if (field.choices) {
                       return (
-                        <FormField
+                        <FormGroup
                           key={field.id}
-                          id={`credential-${field.id}`}
+                          fieldId={`credential-${field.id}`}
                           label={field.label}
-                          tooltip={field.help_text}
-                          name={field.id}
-                          type={field.multiline ? 'textarea' : 'text'}
+                          labelHelp={
+                            field.help_text ? (
+                              <Popover content={field.help_text} />
+                            ) : undefined
+                          }
                           isRequired={isRequired}
-                          validate={isRequired ? required(null) : null}
-                        />
+                        >
+                          <AnsibleSelect
+                            name={field.id}
+                            value={field.default}
+                            id={`credential-${field.id}`}
+                            data={(field.choices ?? []).map((choice) => ({
+                              value: choice,
+                              key: choice,
+                              label: choice,
+                            }))}
+                            onChange={(event, value) => {
+                              setFieldValue(field.id, value);
+                            }}
+                            validate={isRequired ? required(null) : null}
+                          />
+                        </FormGroup>
                       );
                     }
 
-                    return null;
+                    return (
+                      <FormField
+                        key={field.id}
+                        id={`credential-${field.id}`}
+                        label={field.label}
+                        tooltip={field.help_text}
+                        name={field.id}
+                        type={field.multiline ? 'textarea' : 'text'}
+                        isRequired={isRequired}
+                        validate={isRequired ? required(null) : null}
+                      />
+                    );
                   }
-                )}
+
+                  return null;
+                })}
               </FormFullWidthLayout>
             </Form>
           </Modal>
@@ -172,7 +174,7 @@ function ExternalTestModal({
       <CredentialPluginTestAlert
         credentialName={credentialFormValues.name}
         successResponse={testPluginSuccess}
-        errorResponse={testPluginError}
+        errorResponse={testPluginError as CredentialTestError}
       />
     </>
   );

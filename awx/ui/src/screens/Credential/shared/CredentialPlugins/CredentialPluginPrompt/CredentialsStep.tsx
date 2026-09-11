@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Credential } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -72,13 +72,13 @@ function CredentialsStep() {
           <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
         </HeaderRow>
       }
-      renderRow={(credential: Untyped, index: number) => (
+      renderRow={(credential: Credential, index: number) => (
         <CheckboxListItem
           rowIndex={index}
           isSelected={selectedCredential?.value?.id === credential.id}
           itemId={credential.id}
           key={credential.id}
-          name={credential.name}
+          name={credential.name ?? ''}
           label={credential.name}
           onSelect={() => selectedCredentialHelper.setValue(credential)}
           onDeselect={() => selectedCredentialHelper.setValue(null)}

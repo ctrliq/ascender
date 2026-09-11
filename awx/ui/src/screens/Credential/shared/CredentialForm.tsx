@@ -70,6 +70,19 @@ export interface CredentialFormValues {
   [key: string]: unknown;
 }
 
+/**
+ * An input the form has sourced from an external credential: which credential
+ * supplies it, and the metadata that credential is looked up by.
+ *
+ * `touched` is the form's own: an existing input source is only re-sent where
+ * the user has changed it.
+ */
+export interface CredentialPluginInput {
+  credential: SummaryFieldRef;
+  inputs: Record<string, unknown>;
+  touched?: boolean;
+}
+
 /** The credential types the form offers, keyed by each one's id. */
 export type CredentialTypesById = Record<number | string, CredentialType>;
 

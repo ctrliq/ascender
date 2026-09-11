@@ -1,4 +1,8 @@
-import type { Credential, Untyped } from 'types/api';
+import type {
+  Credential,
+  CredentialField,
+  CredentialInputSource,
+} from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { CardBody } from 'components/Card';
@@ -14,6 +18,11 @@ import ContentLoading from 'components/ContentLoading';
 import useRequest from 'hooks/useRequest';
 import { useConfig } from 'contexts/Config';
 import CredentialForm from '../shared/CredentialForm';
+import type {
+  CredentialFormValues,
+  CredentialPluginInput,
+  CredentialTypesById,
+} from '../shared/CredentialForm';
 
 export interface CredentialEditProps {
   credential: Credential;
@@ -33,22 +42,23 @@ function CredentialEdit({ credential }: CredentialEditProps) {
   } = useRequest(
     useCallback(
       async (
-        values: Untyped,
-        credentialTypesMap: Untyped,
-        inputSourceMap: Untyped
+        values: CredentialFormValues,
+        credentialTypesMap: CredentialTypesById,
+        inputSourceMap: Record<string, CredentialInputSource>
       ) => {
-        const { inputs: credentialTypeInputs } =
-          credentialTypesMap[values.credential_type];
+        const credentialTypeInputs =
+          credentialTypesMap[values.credential_type ?? '']?.inputs;
 
         const { inputs, organization, passwordPrompts, ...remainingValues } =
           values;
 
-        const nonPluginInputs: Record<string, Untyped> = {};
-        const pluginInputs: Record<string, Untyped> = {};
-        const possibleFields = credentialTypeInputs.fields || [];
+        const nonPluginInputs: Record<string, unknown> = {};
+        const pluginInputs: Record<string, CredentialPluginInput> = {};
+        const possibleFields: CredentialField[] =
+          credentialTypeInputs?.fields ?? [];
 
-        possibleFields.forEach((field: Untyped) => {
-          const input = inputs[field.id];
+        possibleFields.forEach((field) => {
+          const input = inputs[field.id] as CredentialPluginInput | undefined;
           if (input?.credential && input?.inputs) {
             pluginInputs[field.id] = input;
           } else if (passwordPrompts[field.id]) {
@@ -59,40 +69,41 @@ function CredentialEdit({ credential }: CredentialEditProps) {
         });
 
         const createAndUpdateInputSources = () =>
-          Object.entries(pluginInputs).map(
-            ([fieldName, fieldValue]: Untyped[]) => {
-              if (!inputSourceMap[fieldName]) {
-                return CredentialInputSourcesAPI.create({
-                  input_field_name: fieldName,
-                  metadata: fieldValue.inputs,
-                  source_credential: fieldValue.credential.id,
-                  target_credential: credId,
-                });
-              }
-              if (fieldValue.touched) {
-                return CredentialInputSourcesAPI.update(
-                  inputSourceMap[fieldName].id,
-                  {
-                    metadata: fieldValue.inputs,
-                    source_credential: fieldValue.credential.id,
-                  }
-                );
-              }
-
-              return null;
+          Object.entries(pluginInputs).map(([fieldName, fieldValue]) => {
+            const existing = inputSourceMap[fieldName];
+            if (!existing) {
+              return CredentialInputSourcesAPI.create({
+                input_field_name: fieldName,
+                metadata: fieldValue.inputs,
+                source_credential: fieldValue.credential.id,
+                target_credential: credId,
+              });
             }
-          );
+            if (fieldValue.touched) {
+              return CredentialInputSourcesAPI.update(existing.id, {
+                metadata: fieldValue.inputs,
+                source_credential: fieldValue.credential.id,
+              });
+            }
+
+            return null;
+          });
 
         const destroyInputSources = () =>
-          Object.values<Untyped>(inputSourceMap).map((inputSource) => {
+          Object.values(inputSourceMap).map((inputSource) => {
             const { id, input_field_name } = inputSource;
-            if (!inputs[input_field_name]?.credential) {
+            const input = inputs[input_field_name as string] as
+              CredentialPluginInput | undefined;
+            if (!input?.credential) {
               return CredentialInputSourcesAPI.destroy(id);
             }
             return null;
           });
 
-        const modifiedData = { inputs: nonPluginInputs, ...remainingValues };
+        const modifiedData: Record<string, unknown> = {
+          inputs: nonPluginInputs,
+          ...remainingValues,
+        };
         // can send only one of org, user, team
         if (organization?.id) {
           modifiedData.organization = organization.id;
@@ -104,7 +115,7 @@ function CredentialEdit({ credential }: CredentialEditProps) {
         }
 
         if (credential.kind === 'vault' && !credential.inputs?.vault_id) {
-          delete modifiedData.inputs.vault_id;
+          delete nonPluginInputs.vault_id;
         }
 
         const [{ data }] = await Promise.all([
@@ -166,15 +177,18 @@ function CredentialEdit({ credential }: CredentialEditProps) {
         credTypes.concat([...additionalCredTypes]);
       }
       const creds = credTypes.reduce(
-        (credentialTypesMap: Untyped, credentialType: Untyped) => {
+        (credentialTypesMap: CredentialTypesById, credentialType) => {
           credentialTypesMap[credentialType.id] = credentialType;
           return credentialTypesMap;
         },
         {}
       );
       const inputSources = results.reduce(
-        (inputSourcesMap: Record<string, Untyped>, inputSource: Untyped) => {
-          inputSourcesMap[inputSource.input_field_name] = inputSource;
+        (
+          inputSourcesMap: Record<string, CredentialInputSource>,
+          inputSource
+        ) => {
+          inputSourcesMap[inputSource.input_field_name as string] = inputSource;
           return inputSourcesMap;
         },
         {}
@@ -193,7 +207,7 @@ function CredentialEdit({ credential }: CredentialEditProps) {
     navigate(`${url}`);
   };
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: CredentialFormValues) => {
     await submitRequest(values, credentialTypes, loadedInputSources);
   };
 

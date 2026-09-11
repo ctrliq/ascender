@@ -1,4 +1,4 @@
-import type { Credential, Untyped } from 'types/api';
+import type { Credential } from 'types/api';
 import React, { useState, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -19,7 +19,7 @@ export interface CredentialListItemProps {
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;
   onCopy: (id: number) => void;
-  fetchCredentials: Untyped;
+  fetchCredentials: () => void;
   rowIndex: number;
   [key: string]: unknown;
 }

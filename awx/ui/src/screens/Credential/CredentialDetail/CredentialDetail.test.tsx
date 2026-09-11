@@ -53,7 +53,7 @@ describe('<CredentialDetail />', () => {
       data: {
         results: [mockInputSource],
       },
-    });
+    } as unknown as ResponseOf<typeof CredentialsAPI.readInputSources>);
     // related-resource delete-count lookups made by DeleteButton
     const emptyRead = { data: { count: 0, results: [] } };
     vi.mocked(JobTemplatesAPI.read).mockResolvedValue(

@@ -22,6 +22,7 @@ const credentialFormValues = {
     token: '$encrypted$',
     url: 'http://hashivault:8200',
   },
+  passwordPrompts: {},
 };
 
 const credential = {

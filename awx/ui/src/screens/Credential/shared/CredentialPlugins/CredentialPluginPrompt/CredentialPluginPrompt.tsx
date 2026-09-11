@@ -1,4 +1,5 @@
-import type { Untyped } from 'types/api';
+import type { Credential } from 'types/api';
+import type { FieldInputProps } from 'formik';
 import React, { useCallback } from 'react';
 import { Formik, useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -14,12 +15,32 @@ import useRequest from 'hooks/useRequest';
 import CredentialsStep from './CredentialsStep';
 import MetadataStep from './MetadataStep';
 import { CredentialPluginTestAlert } from '..';
+import type { CredentialTestError } from '../CredentialPluginTestAlert';
+
+/** One step of the plugin wizard, in the shape PatternFly's Wizard takes. */
+export interface PluginWizardStep {
+  id: number;
+  name: React.ReactNode;
+  key: string;
+  component: React.ReactNode;
+  enableNext?: boolean;
+  canJumpTo?: boolean;
+}
+
+/** What the plugin wizard collects: the credential, and its lookup metadata. */
+export interface CredentialPluginValues {
+  credential: Credential | null;
+  inputs: Record<string, unknown>;
+  touched?: boolean;
+}
 
 export interface CredentialPluginFooterProps {
-  selectedCredential: Untyped;
-  testPluginMetadata: Untyped;
+  /** The formik field holding the credential the wizard has picked. */
+  selectedCredential: FieldInputProps<Credential | null>;
+  /** Runs the test against the metadata the second step collected. */
+  testPluginMetadata: () => void;
   onClose: () => void;
-  steps: Untyped;
+  steps: PluginWizardStep[];
   [key: string]: unknown;
 }
 
@@ -31,7 +52,7 @@ function CredentialPluginFooter({
 }: CredentialPluginFooterProps) {
   const { t } = useLingui();
   const { activeStep, goToNextStep, goToPrevStep } = useWizardContext();
-  const originalStep = steps.find((s: Untyped) => s.id === activeStep?.id);
+  const originalStep = steps.find((s) => s.id === activeStep?.id);
   const isMetadataStep = originalStep?.key === 'metadata';
 
   return (
@@ -83,10 +104,19 @@ function CredentialPluginFooter({
   );
 }
 
-function CredentialPluginWizard({ handleSubmit, onClose }: Untyped) {
+export interface CredentialPluginWizardProps {
+  /** Formik's own submit, which the wizard's save button calls. */
+  handleSubmit: () => void;
+  onClose: () => void;
+}
+
+function CredentialPluginWizard({
+  handleSubmit,
+  onClose,
+}: CredentialPluginWizardProps) {
   const { t } = useLingui();
-  const [selectedCredential] = useField('credential');
-  const [inputValues] = useField('inputs');
+  const [selectedCredential] = useField<Credential | null>('credential');
+  const [inputValues] = useField<Record<string, unknown>>('inputs');
 
   const {
     result: testPluginSuccess,
@@ -95,7 +125,7 @@ function CredentialPluginWizard({ handleSubmit, onClose }: Untyped) {
   } = useRequest(
     useCallback(
       async () =>
-        CredentialsAPI.test(selectedCredential.value.id, {
+        CredentialsAPI.test(selectedCredential.value?.id as number, {
           metadata: inputValues.value,
         }),
       [selectedCredential, inputValues]
@@ -139,20 +169,27 @@ function CredentialPluginWizard({ handleSubmit, onClose }: Untyped) {
       />
       {selectedCredential.value && (
         <CredentialPluginTestAlert
-          credentialName={selectedCredential.value.name}
+          credentialName={selectedCredential.value?.name}
           successResponse={testPluginSuccess}
-          errorResponse={testPluginError}
+          errorResponse={testPluginError as CredentialTestError}
         />
       )}
     </>
   );
 }
 
+export interface CredentialPluginPromptProps {
+  onClose: () => void;
+  onSubmit: (values: CredentialPluginValues) => void;
+  /** What the field already holds, where it is already sourced from a plugin. */
+  initialValues?: Partial<CredentialPluginValues>;
+}
+
 function CredentialPluginPrompt({
   onClose,
   onSubmit,
   initialValues = {},
-}: Untyped) {
+}: CredentialPluginPromptProps) {
   return (
     <Formik
       initialValues={{

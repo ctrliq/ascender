@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 
 import { useField, useFormikContext } from 'formik';
@@ -12,9 +11,10 @@ import { FormFullWidthLayout } from 'components/FormLayout';
 import Popover from 'components/Popover';
 import useRequest from 'hooks/useRequest';
 import { required } from 'util/validators';
+import type { CredentialPluginValues } from './CredentialPluginPrompt';
 
 function MetadataStep() {
-  const form = useFormikContext<Untyped>();
+  const form = useFormikContext<CredentialPluginValues>();
   const [selectedCredential] = useField('credential');
   const [inputValues] = useField('inputs');
 
@@ -67,7 +67,7 @@ function MetadataStep() {
       {fields.length > 0 && (
         <Form autoComplete="off">
           <FormFullWidthLayout>
-            {fields.map((field: Untyped) => {
+            {fields.map((field) => {
               if (field.type === 'string') {
                 if (field.choices) {
                   return (
@@ -75,16 +75,18 @@ function MetadataStep() {
                       key={field.id}
                       fieldId={`credential-${field.id}`}
                       label={field.label}
-                      isRequired={field.required}
+                      isRequired={Boolean(field.required)}
                       labelHelp={
-                        field.help_text && <Popover content={field.help_text} />
+                        field.help_text ? (
+                          <Popover content={field.help_text} />
+                        ) : undefined
                       }
                     >
                       <AnsibleSelect
                         name={`inputs.${field.id}`}
                         value={form.values.inputs[field.id]}
                         id={`credential-${field.id}`}
-                        data={field.choices.map((choice: Untyped) => ({
+                        data={(field.choices ?? []).map((choice) => ({
                           value: choice,
                           key: choice,
                           label: choice,
@@ -106,7 +108,7 @@ function MetadataStep() {
                     tooltip={field.help_text}
                     name={`inputs.${field.id}`}
                     type={field.multiline ? 'textarea' : 'text'}
-                    isRequired={field.required}
+                    isRequired={Boolean(field.required)}
                     validate={field.required ? required(null) : null}
                   />
                 );

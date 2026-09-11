@@ -1,4 +1,9 @@
-import type { Credential, Untyped } from 'types/api';
+import type {
+  Credential,
+  CredentialField,
+  CredentialInputSource,
+  SummaryFieldRef,
+} from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -71,13 +76,12 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
       return {
         fields: credentialTypeInputs?.fields || [],
         managedByTower: managed,
-        inputSources: loadedInputSources.reduce<Record<string, Untyped>>(
-          (inputSourcesMap, inputSource: Untyped) => {
-            inputSourcesMap[inputSource.input_field_name] = inputSource;
-            return inputSourcesMap;
-          },
-          {}
-        ),
+        inputSources: loadedInputSources.reduce<
+          Record<string, CredentialInputSource>
+        >((inputSourcesMap, inputSource) => {
+          inputSourcesMap[inputSource.input_field_name as string] = inputSource;
+          return inputSourcesMap;
+        }, {}),
       };
     }, [credentialId, credential_type?.id]),
     {
@@ -106,7 +110,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
     type,
     ask_at_runtime,
     help_text = '',
-  }: Untyped) => {
+  }: CredentialField) => {
     if (inputSources[id]) {
       return (
         <React.Fragment key={id}>
@@ -123,7 +127,10 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
                 ouiaId={`credential-${id}-chips`}
               >
                 <CredentialChip
-                  credential={inputSources[id].summary_fields.source_credential}
+                  credential={
+                    inputSources[id]?.summary_fields
+                      .source_credential as SummaryFieldRef
+                  }
                   ouiaId={`credential-${id}-chip`}
                   isReadOnly
                 />
@@ -197,7 +204,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
     relatedResourceDeleteRequests.credential(credential);
 
   const enabledBooleanFields = fields.filter(
-    ({ id, type }: Untyped) => type === 'boolean' && inputs[id]
+    ({ id, type }) => type === 'boolean' && inputs[id]
   );
 
   if (hasContentLoading) {
@@ -250,7 +257,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
           }
         />
 
-        {fields.map((field: Untyped) => renderDetail(field))}
+        {fields.map((field) => renderDetail(field))}
 
         <UserDateDetail
           id="credential-created-detail"
@@ -268,7 +275,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
           label={t`Enabled Options`}
           value={
             <Content component={ContentVariants.ul}>
-              {enabledBooleanFields.map(({ id, label }: Untyped) => (
+              {enabledBooleanFields.map(({ id, label }) => (
                 <Content key={id} component={ContentVariants.li}>
                   {label}
                 </Content>

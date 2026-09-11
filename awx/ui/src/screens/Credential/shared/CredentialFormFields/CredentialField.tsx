@@ -1,4 +1,7 @@
-import type { Untyped } from 'types/api';
+import type {
+  CredentialField as CredentialTypeField,
+  CredentialType,
+} from 'types/api';
 import React, { useState } from 'react';
 import { useLocation } from 'react-router';
 import { useField, useFormikContext } from 'formik';
@@ -21,6 +24,7 @@ import { PficonHistoryIcon } from '@patternfly/react-icons';
 import { PasswordInput } from 'components/FormField';
 import AnsibleSelect from 'components/AnsibleSelect';
 import { required } from 'util/validators';
+import type { CredentialFormValues } from '../CredentialForm';
 import { CredentialPluginField } from '../CredentialPlugins';
 import BecomeMethodField from './BecomeMethodField';
 
@@ -29,7 +33,7 @@ const FileUpload = styled(PFFileUpload)`
 `;
 
 export interface CredentialInputProps {
-  fieldOptions: Untyped;
+  fieldOptions: CredentialTypeField;
   isFieldGroupValid: boolean;
   credentialKind?: string;
   isVaultIdDisabled: boolean;
@@ -91,13 +95,13 @@ function CredentialInput({
       filenamePlaceholder: t`Drag a file here or browse to upload`,
       browseButtonText: t`Browse…`,
       clearButtonText: t`Clear`,
-      onFileInputChange: (_event: Untyped, file: Untyped) => {
+      onFileInputChange: (_event: unknown, file: File) => {
         setFileName(file.name);
       },
-      onDataChange: (_event: Untyped, data: Untyped) => {
+      onDataChange: (_event: unknown, data: string) => {
         helpers.setValue(data);
       },
-      onTextChange: (_event: Untyped, text: Untyped) => {
+      onTextChange: (_event: unknown, text: string) => {
         helpers.setValue(text);
       },
       onClearClick: () => {
@@ -156,8 +160,17 @@ function CredentialInput({
   );
 }
 
-function CredentialField({ credentialType, fieldOptions }: Untyped) {
-  const { values: formikValues } = useFormikContext<Untyped>();
+export interface CredentialFieldProps {
+  credentialType?: CredentialType;
+  fieldOptions: CredentialTypeField;
+  [key: string]: unknown;
+}
+
+function CredentialField({
+  credentialType,
+  fieldOptions,
+}: CredentialFieldProps) {
+  const { values: formikValues } = useFormikContext<CredentialFormValues>();
   const location = useLocation();
   const { t } = useLingui();
   const requiredFields = credentialType?.inputs?.required || [];
@@ -177,10 +190,10 @@ function CredentialField({ credentialType, fieldOptions }: Untyped) {
   });
   const isValid =
     !(meta.touched && meta.error) ||
-    formikValues.passwordPrompts[fieldOptions.id];
+    Boolean(formikValues.passwordPrompts[fieldOptions.id]);
 
   if (fieldOptions.choices) {
-    const selectOptions = fieldOptions.choices.map((choice: Untyped) => ({
+    const selectOptions = (fieldOptions.choices ?? []).map((choice) => ({
       value: choice,
       key: choice,
       label: choice,
@@ -209,7 +222,7 @@ function CredentialField({ credentialType, fieldOptions }: Untyped) {
       </FormGroup>
     );
   }
-  if (credentialType.kind === 'ssh' && fieldOptions.id === 'become_method') {
+  if (credentialType?.kind === 'ssh' && fieldOptions.id === 'become_method') {
     return (
       <BecomeMethodField fieldOptions={fieldOptions} isRequired={isRequired} />
     );
@@ -217,7 +230,7 @@ function CredentialField({ credentialType, fieldOptions }: Untyped) {
 
   let disabled = false;
   if (
-    credentialType.kind === 'vault' &&
+    credentialType?.kind === 'vault' &&
     location.pathname.endsWith('edit') &&
     fieldOptions.id === 'vault_id'
   ) {

@@ -1,4 +1,4 @@
-import type { Credential, Untyped } from 'types/api';
+import type { Credential } from 'types/api';
 import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
@@ -23,8 +23,8 @@ const PluginHelpText = styled.p`
 
 export interface CredentialPluginSelectedProps {
   credential: Credential;
-  onEditPlugin?: (...args: Untyped[]) => void;
-  onClearPlugin?: (...args: Untyped[]) => void;
+  onEditPlugin?: () => void;
+  onClearPlugin?: () => void;
   fieldId?: string;
   [key: string]: unknown;
 }
