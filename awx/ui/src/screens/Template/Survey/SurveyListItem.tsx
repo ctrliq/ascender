@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SurveyQuestion } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { Label, Tooltip, Button } from '@patternfly/react-core';
@@ -24,9 +24,10 @@ const SurveyActionsTd = styled(ActionsTd)`
 
 export interface SurveyListItemProps {
   canEdit?: boolean;
-  question: Untyped;
+  question: SurveyQuestion;
   isChecked?: boolean;
-  onSelect?: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect?: () => void;
   rowIndex: number;
   [key: string]: unknown;
 }
@@ -39,6 +40,10 @@ function SurveyListItem({
   rowIndex,
 }: SurveyListItemProps) {
   const { t } = useLingui();
+  // The answer a question defaults to is whatever its own type holds; the
+  // multiselect one is newline separated text, which is shown as chips.
+  const defaultAnswer = String(question.default ?? '');
+
   return (
     <Tr ouiaId={`survey-row-${question.variable}`}>
       <Td
@@ -82,17 +87,16 @@ function SurveyListItem({
           <span>{t`encrypted`.toUpperCase()}</span>
         )}
         {[question.type].includes('multiselect') &&
-          question.default.length > 0 && (
+          defaultAnswer.length > 0 && (
             <ChipGroup
               numChips={5}
-              totalChips={question.default.split('\n').length}
+              totalChips={defaultAnswer.split('\n').length}
               ouiaId="multiselect-default-chips"
             >
-              {question.default.split('\n').map((chip: Untyped) => (
+              {defaultAnswer.split('\n').map((chip) => (
                 <Label
                   variant="outline"
                   key={chip}
-
                   data-ouia-component-id={`multiselect-default-${chip}-chip`}
                 >
                   {chip}
@@ -102,7 +106,7 @@ function SurveyListItem({
           )}
         {![question.type].includes('password') &&
           ![question.type].includes('multiselect') && (
-            <span>{question.default}</span>
+            <span>{defaultAnswer}</span>
           )}
       </Td>
       <SurveyActionsTd dataLabel={t`Actions`}>

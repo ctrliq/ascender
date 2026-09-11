@@ -1,4 +1,5 @@
-import type { Untyped, UnifiedJob } from 'types/api';
+import type { UnifiedJob } from 'types/api';
+import type { WebsocketMessage } from 'hooks/useWebsocket';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import useWebsocket from 'hooks/useWebsocket';
@@ -20,13 +21,13 @@ import sortJobs from './sortJobs';
  *   The same jobs, with their statuses updated as messages arrive.
  */
 export default function useWsJobs(
-  initialJobs: Untyped[],
-  fetchJobsById: (ids: (number | string)[]) => Promise<Untyped[]>,
+  initialJobs: UnifiedJob[],
+  fetchJobsById: (ids: (number | string)[]) => Promise<UnifiedJob[]>,
   qsConfig: QSConfig
 ) {
   const location = useLocation();
-  const [jobs, setJobs] = useState<Untyped[]>(initialJobs);
-  const [jobsToFetch, setJobsToFetch] = useState<Untyped[]>([]);
+  const [jobs, setJobs] = useState<UnifiedJob[]>(initialJobs);
+  const [jobsToFetch, setJobsToFetch] = useState<number[]>([]);
   const throttledJobsToFetch = useThrottle(jobsToFetch, 5000);
   const lastMessage = useWebsocket({
     jobs: ['status_changed'],
@@ -38,7 +39,7 @@ export default function useWsJobs(
     setJobs(initialJobs);
   }, [initialJobs]);
 
-  const enqueueJobId = (id: number | string) => {
+  const enqueueJobId = (id: number) => {
     if (!jobsToFetch.includes(id)) {
       setJobsToFetch((ids) => ids.concat(id));
     }
@@ -51,7 +52,7 @@ export default function useWsJobs(
       setJobsToFetch([]);
       const newJobs = await fetchJobsById(throttledJobsToFetch);
       const deduplicated = newJobs.filter(
-        (job: UnifiedJob) => !jobs.find((j: Untyped) => j.id === job.id)
+        (job) => !jobs.find((j) => j.id === job.id)
       );
       if (deduplicated.length) {
         const params = parseQueryString(qsConfig, location.search);
@@ -66,7 +67,7 @@ export default function useWsJobs(
     }
     const params = parseQueryString(qsConfig, location.search);
     const jobId = lastMessage.unified_job_id as number;
-    const index = jobs.findIndex((j: Untyped) => j.id === jobId);
+    const index = jobs.findIndex((j) => j.id === jobId);
 
     if (index > -1) {
       setJobs(sortJobs(updateJob(jobs, index, lastMessage), params));
@@ -78,11 +79,16 @@ export default function useWsJobs(
   return jobs;
 }
 
-function updateJob(jobs: Untyped, index: number, message: Untyped) {
-  const job = {
-    ...jobs[index],
-    status: message.status,
-    finished: message.finished,
+/** The row the socket's message describes, with what it reports put on it. */
+function updateJob(
+  jobs: UnifiedJob[],
+  index: number,
+  message: WebsocketMessage
+): UnifiedJob[] {
+  const job: UnifiedJob = {
+    ...(jobs[index] as UnifiedJob),
+    status: message.status as UnifiedJob['status'],
+    finished: message.finished ?? null,
   };
   return [...jobs.slice(0, index), job, ...jobs.slice(index + 1)];
 }

@@ -80,7 +80,7 @@ describe('<JobCancelButton/>', () => {
     );
     const { user } = renderWithContexts(
       <JobCancelButton
-        job={{ id: 'a', type: 'project_update' }}
+        job={{ id: 1, type: 'project_update' }}
         errorTitle="Error"
         title="Title"
         showIconButton

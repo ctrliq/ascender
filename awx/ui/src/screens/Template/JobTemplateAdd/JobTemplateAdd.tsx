@@ -1,10 +1,11 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef, SummaryFields } from 'types/api';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import { JobTemplatesAPI, OrganizationsAPI } from 'api';
 import JobTemplateForm from '../shared/JobTemplateForm';
+import type { JobTemplateFormValues } from '../shared/JobTemplateForm';
 
 function JobTemplateAdd() {
   const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
@@ -42,7 +43,7 @@ function JobTemplateAdd() {
     };
   }
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: JobTemplateFormValues) => {
     const {
       labels,
       instanceGroups,
@@ -57,7 +58,7 @@ function JobTemplateAdd() {
     } = values;
 
     setFormSubmitError(null);
-    remainingValues.project = project.id;
+    remainingValues.project = project?.id;
     remainingValues.webhook_credential = webhook_credential?.id;
     if (webhook_key) {
       remainingValues.webhook_key = webhook_key;
@@ -73,10 +74,11 @@ function JobTemplateAdd() {
       await Promise.all([
         submitLabels(
           id,
-          values.project.summary_fields?.organization.id,
+          (project?.summary_fields as SummaryFields | undefined)?.organization
+            ?.id,
           labels
         ),
-        submitInstanceGroups(id, instanceGroups),
+        submitInstanceGroups(id, instanceGroups as SummaryFieldRef[]),
         submitCredentials(id, credentials),
       ]);
       navigate(`/templates/${type}/${id}/details`);
@@ -86,9 +88,9 @@ function JobTemplateAdd() {
   };
 
   async function submitLabels(
-    templateId: Untyped,
-    orgId: Untyped,
-    labels = []
+    templateId: number,
+    orgId?: number | null,
+    labels: SummaryFieldRef[] = []
   ) {
     if (!orgId) {
       // eslint-disable-next-line no-useless-catch
@@ -102,15 +104,15 @@ function JobTemplateAdd() {
       }
     }
     const associationPromises = labels.map((label) =>
-      JobTemplatesAPI.associateLabel(templateId, label, orgId)
+      JobTemplatesAPI.associateLabel(templateId, label, orgId ?? null)
     );
 
     return Promise.all([...associationPromises]);
   }
 
   async function submitInstanceGroups(
-    templateId: Untyped,
-    addedGroups: Untyped[] = []
+    templateId: number,
+    addedGroups: SummaryFieldRef[] = []
   ) {
     /* eslint-disable no-await-in-loop, no-restricted-syntax */
     // Resolve Promises sequentially to maintain order and avoid race condition
@@ -120,7 +122,10 @@ function JobTemplateAdd() {
     /* eslint-enable no-await-in-loop, no-restricted-syntax */
   }
 
-  function submitCredentials(templateId: Untyped, credentials: Untyped[] = []) {
+  function submitCredentials(
+    templateId: number,
+    credentials: SummaryFieldRef[] = []
+  ) {
     const associateCredentials = credentials.map((cred) =>
       JobTemplatesAPI.associateCredentials(templateId, cred.id)
     );

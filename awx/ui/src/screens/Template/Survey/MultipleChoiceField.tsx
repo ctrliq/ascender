@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -14,6 +13,7 @@ import {
 import PFCheckIcon from '@patternfly/react-icons/dist/js/icons/check-icon';
 import styled from 'styled-components';
 import Popover from 'components/Popover';
+import type { SurveyChoice } from './SurveyQuestionForm';
 
 const InputGroup = styled(PFInputGroup)`
   padding-bottom: 5px;
@@ -38,9 +38,9 @@ export interface MultipleChoiceFieldProps {
 
 function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
   const { t } = useLingui();
-  const validate = (value: Untyped) => {
+  const validate = (value: SurveyChoice[]) => {
     let message;
-    const hasValue = value.find(({ choice }: Untyped) =>
+    const hasValue = value.find(({ choice }) =>
       choice.trim().length > 0 ? choice : undefined
     );
     if (!hasValue) {
@@ -71,7 +71,7 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
       labelHelp={<Popover content={tooltip} />}
     >
       {formattedChoicesField.value.map(
-        ({ choice, isDefault, id }: Untyped, i: Untyped) => (
+        ({ choice, isDefault, id }: SurveyChoice, i: number) => (
           <InputGroup key={id}>
             <TextInput
               data-cy={choice ? `${choice}-input` : 'new-choice-input'}
@@ -97,7 +97,7 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
                   formattedChoicesField.value.length > 1
                 ) {
                   const removeEmptyField = formattedChoicesField.value.filter(
-                    (c: Untyped, index: number) => index !== i
+                    (c: SurveyChoice, index: number) => index !== i
                   );
 
                   formattedChoicesHelpers.setValue(removeEmptyField);
@@ -106,7 +106,7 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
               value={choice}
               onChange={(_event, value) => {
                 const newValues = formattedChoicesField.value.map(
-                  (choiceField: Untyped, index: number) =>
+                  (choiceField: SurveyChoice, index: number) =>
                     i === index
                       ? { choice: value, isDefault: false, id: choiceField.id }
                       : choiceField
@@ -121,7 +121,7 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
               isDisabled={!choice.trim()}
               onClick={() => {
                 const newValues = formattedChoicesField.value.map(
-                  (choiceField: Untyped, index: number) =>
+                  (choiceField: SurveyChoice, index: number) =>
                     i === index
                       ? {
                           choice: choiceField.choice,
@@ -131,7 +131,7 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
                       : choiceField
                 );
                 const singleSelectValues = formattedChoicesField.value.map(
-                  (choiceField: Untyped, index: number) =>
+                  (choiceField: SurveyChoice, index: number) =>
                     i === index
                       ? {
                           choice: choiceField.choice,

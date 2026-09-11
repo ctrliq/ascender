@@ -1,5 +1,5 @@
 import type { SearchableKey } from 'components/PaginatedTable';
-import type { SearchColumn, Untyped } from 'types/api';
+import type { SearchColumn } from 'types/api';
 import type { ToolbarLabel } from '@patternfly/react-core';
 import React, { useState, useEffect } from 'react';
 
@@ -21,10 +21,11 @@ import {
 } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
-import type { QSConfig } from 'util/qs';
+import type { QSConfig, QSParamValue } from 'util/qs';
 import { parseQueryString } from 'util/qs';
 import AdvancedSearch from './AdvancedSearch';
 import getChipsByKey from './getChipsByKey';
+import type { SearchChipGroup } from './getChipsByKey';
 
 const SubmitButtonWrapper = styled.div<{ $disabled?: boolean }>`
   ${(props) => (props.$disabled ? 'cursor: not-allowed;' : '')}
@@ -53,15 +54,16 @@ const NoOptionDropdown = styled.div`
 
 export interface SearchProps {
   columns: SearchColumn[];
-  onSearch?: (...args: Untyped[]) => void;
-  onReplaceSearch?: (key: string, value: Untyped) => void;
-  onRemove?: (key: string, value: Untyped) => void;
+  onSearch?: (key: string, value: QSParamValue) => void;
+  onReplaceSearch?: (key: string, value: QSParamValue) => void;
+  onRemove?: (key: string, value: QSParamValue) => void;
   qsConfig: QSConfig;
   searchableKeys?: SearchableKey[];
   relatedSearchableKeys: string[];
   onShowAdvancedSearch?: (shown: boolean) => void;
   isDisabled?: boolean;
-  maxSelectHeight?: Untyped;
+  /** A css height, which the filter dropdowns scroll beyond. */
+  maxSelectHeight?: string;
   enableNegativeFiltering?: boolean;
   enableRelatedFuzzyFiltering?: boolean;
   handleIsAnsibleFactsSelected?: (isSelected: boolean) => void;
@@ -115,13 +117,18 @@ function Search({
   }
 
   const searchChips = getChipsByKey(params, columns, qsConfig);
-  const [chipsByKey, setChipsByKey] = useState(
-    JSON.parse(JSON.stringify(searchChips))
+  // Deep copied so the effect below can empty each group's chips without
+  // touching the ones getChipsByKey just built.
+  const [chipsByKey, setChipsByKey] = useState<Record<string, SearchChipGroup>>(
+    JSON.parse(JSON.stringify(searchChips)) as Record<string, SearchChipGroup>
   );
 
   useEffect(() => {
     Object.keys(chipsByKey).forEach((el) => {
-      chipsByKey[el].chips = [];
+      const group = chipsByKey[el];
+      if (group) {
+        group.chips = [];
+      }
     });
     setChipsByKey({ ...chipsByKey, ...searchChips });
   }, [location.search]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -144,7 +151,7 @@ function Search({
     e.preventDefault();
 
     if (searchValue) {
-      onSearch?.(searchKey, searchValue);
+      onSearch?.(searchKey as string, searchValue);
       setSearchValue('');
     }
   };
@@ -178,10 +185,10 @@ function Search({
   const handleFilterDropdownSelect = (
     key: string,
     _event: unknown,
-    actualValue: unknown
+    actualValue: string
   ) => {
     const currentSelections =
-      chipsByKey[key]?.chips.map((chip: Untyped) => {
+      chipsByKey[key]?.chips.map((chip) => {
         const [, ...val] = chip.key.split(':');
         return val.join(':');
       }) || [];
@@ -287,7 +294,7 @@ function Search({
                 <SelectList>
                   {options.map(([optionKey, optionLabel]) => {
                     const currentSelections =
-                      chipsByKey[key]?.chips.map((chip: Untyped) => {
+                      chipsByKey[key]?.chips.map((chip) => {
                         const [, ...val] = chip.key.split(':');
                         return val.join(':');
                       }) || [];
@@ -326,7 +333,10 @@ function Search({
                     ouiaId={`filter-by-${key}`}
                     style={{ maxHeight: maxSelectHeight }}
                   >
-                    {chipsByKey[key].chips[0]?.label || t`Filter By ${name}`}
+                    {/* The chip's node is its text; it was read as a
+                        label, which no chip has, so the toggle never showed
+                        what the filter was set to. */}
+                    {chipsByKey[key]?.chips[0]?.node || t`Filter By ${name}`}
                   </MenuToggle>
                 )}
               >

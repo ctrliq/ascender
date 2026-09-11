@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SurveyQuestion } from 'types/api';
 import React from 'react';
 import { Formik, useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -33,7 +33,7 @@ function AnswerTypeField() {
   const [choicesField, choicesMeta, choicesHelpers] =
     useField('formattedChoices');
 
-  const singleDefault = choicesField.value.map((c: Untyped, i: Untyped) =>
+  const singleDefault = choicesField.value.map((c: SurveyChoice, i: number) =>
     i === 0
       ? { choice: c.choice, isDefault: true, id: c.id }
       : { choice: c.choice, isDefault: false, id: c.id }
@@ -98,9 +98,39 @@ function AnswerTypeField() {
   );
 }
 
+/**
+ * One choice of a multiple choice question, as the form holds it: the answer
+ * itself, whether it is one of the defaults, and the row's own key.
+ */
+export interface SurveyChoice {
+  choice: string;
+  isDefault: boolean;
+  id: number;
+}
+
+/**
+ * What the survey question form holds. It is the question the api takes, with
+ * the choices kept as rows the form can tick and reorder, which the add and
+ * edit screens fold back into choices and default before they save.
+ */
+export interface SurveyQuestionFormValues {
+  question_name: string;
+  question_description: string;
+  required: boolean;
+  type: string;
+  variable: string;
+  min?: number | null;
+  max?: number | null;
+  default?: unknown;
+  choices?: string[] | string;
+  formattedChoices?: SurveyChoice[];
+  new_question: boolean;
+  [key: string]: unknown;
+}
+
 export interface SurveyQuestionFormProps {
-  question?: Untyped;
-  handleSubmit: (values: Untyped, ...rest: Untyped[]) => void;
+  question?: SurveyQuestion | null;
+  handleSubmit: (values: SurveyQuestionFormValues) => void;
   handleCancel: () => void;
   submitError?: unknown;
   [key: string]: unknown;
@@ -117,10 +147,10 @@ function SurveyQuestionForm({
 
   // The two branches build different subsets of the same form, so the
   // shape is whichever one the question type calls for.
-  let initialValues: Record<string, Untyped> = {
+  let initialValues: SurveyQuestionFormValues = {
     question_name: question?.question_name || '',
     question_description: question?.question_description || '',
-    required: question ? question?.required : true,
+    required: question ? Boolean(question.required) : true,
     type: question?.type || 'text',
     variable: question?.variable || '',
     min: question?.min || 0,
@@ -131,13 +161,15 @@ function SurveyQuestionForm({
     new_question: !question,
   };
   if (question?.type === 'multiselect' || question?.type === 'multiplechoice') {
+    // Both come back as newline separated text, and both were arrays in an
+    // older serializer, which is what the form still reads them as.
     const choices = Array.isArray(question.choices)
       ? question.choices
-      : question.choices.split('\n');
+      : String(question.choices ?? '').split('\n');
     const defaults = Array.isArray(question.default)
-      ? question.default
-      : question.default.split('\n');
-    const formattedChoices = choices.map((c: Untyped, i: Untyped) => {
+      ? (question.default as string[])
+      : String(question.default ?? '').split('\n');
+    const formattedChoices = choices.map((c: string, i: number) => {
       if (defaults.includes(c)) {
         return { choice: c, isDefault: true, id: i };
       }
@@ -148,7 +180,7 @@ function SurveyQuestionForm({
     initialValues = {
       question_name: question?.question_name || '',
       question_description: question?.question_description || '',
-      required: question ? question?.required : true,
+      required: question ? Boolean(question.required) : true,
       type: question?.type || 'text',
       variable: question?.variable || '',
       min: question?.min || 0,
@@ -238,7 +270,7 @@ function SurveyQuestionForm({
                 name="default"
                 validate={
                   {
-                    text: maxLength(formik.values.max),
+                    text: maxLength(formik.values.max ?? 0),
                     integer: integer(),
                     float: numberValidator(),
                   }[formik.values.type as 'text' | 'integer' | 'float']

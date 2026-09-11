@@ -1,6 +1,6 @@
-import type { QSConfig } from 'util/qs';
+import type { QSConfig, QSParamValue } from 'util/qs';
 import type { SearchableKey } from 'components/PaginatedTable';
-import type { SearchColumn, Untyped } from 'types/api';
+import type { SearchColumn, SortColumn } from 'types/api';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
@@ -52,22 +52,23 @@ const ToolbarContent = styled(PFToolbarContent)`
 
 export interface DataListToolbarProps {
   isAllExpanded?: boolean;
-  onExpandAll?: (...args: Untyped[]) => void;
+  /** Opens every row's drawer, or closes them all. */
+  onExpandAll?: (isExpanded: boolean) => void;
   itemCount?: number;
-  clearAllFilters?: Untyped;
+  clearAllFilters?: () => void;
   searchColumns?: SearchColumn[];
   searchableKeys?: SearchableKey[];
   relatedSearchableKeys?: string[];
-  sortColumns?: Untyped;
+  sortColumns?: SortColumn[];
   isAllSelected?: boolean;
   onSelectAll?: (isSelected: boolean) => void;
   isCompact?: boolean;
   onSort?: (key?: string, order?: string) => void;
-  onSearch?: (...args: Untyped[]) => void;
-  onReplaceSearch?: (key: string, value: Untyped) => void;
-  onRemove?: (key: string, value: Untyped) => void;
-  onCompact?: (...args: Untyped[]) => void;
-  onExpand?: (...args: Untyped[]) => void;
+  onSearch?: (key: string, value: QSParamValue) => void;
+  onReplaceSearch?: (key: string, value: QSParamValue) => void;
+  onRemove?: (key: string, value: QSParamValue) => void;
+  onCompact?: () => void;
+  onExpand?: () => void;
   /**
    * The controls that sit above the list. Callers build these as guarded
    * expressions, so an entry is false wherever a list does not offer that

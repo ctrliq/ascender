@@ -1,13 +1,15 @@
-import type { Untyped } from 'types/api';
+import type { SurveyConfig, SurveyQuestion } from 'types/api';
 import React, { useState } from 'react';
 import { useLocation, useNavigate, Navigate } from 'react-router';
 import ContentLoading from 'components/ContentLoading';
 import { CardBody } from 'components/Card';
 import SurveyQuestionForm from './SurveyQuestionForm';
+import type { SurveyQuestionFormValues } from './SurveyQuestionForm';
 
 export interface SurveyQuestionEditProps {
-  survey: Untyped;
-  updateSurvey: Untyped;
+  survey?: SurveyConfig | null;
+  /** Saves the whole spec, which is how one question is added or changed. */
+  updateSurvey: (questions: SurveyQuestion[]) => void;
   [key: string]: unknown;
 }
 
@@ -28,9 +30,7 @@ export default function SurveyQuestionEdit({
     return <ContentLoading />;
   }
 
-  const question = survey.spec.find(
-    (q: Untyped) => q.variable === questionVariable
-  );
+  const question = survey.spec?.find((q) => q.variable === questionVariable);
 
   if (!question) {
     return <Navigate to={surveyUrl} />;
@@ -40,12 +40,12 @@ export default function SurveyQuestionEdit({
     navigate(surveyUrl);
   };
 
-  const handleSubmit = async (formData: Untyped) => {
+  const handleSubmit = async (formData: SurveyQuestionFormValues) => {
     const submittedData = { ...formData };
     try {
       if (
         submittedData.variable !== question.variable &&
-        survey.spec.find((q: Untyped) => q.variable === submittedData.variable)
+        survey.spec?.find((q) => q.variable === submittedData.variable)
       ) {
         setFormError(
           new Error(
@@ -54,8 +54,8 @@ export default function SurveyQuestionEdit({
         );
         return;
       }
-      const questionIndex = survey.spec.findIndex(
-        (q: Untyped) => q.variable === questionVariable
+      const questionIndex = (survey.spec ?? []).findIndex(
+        (q) => q.variable === questionVariable
       );
       if (questionIndex === -1) {
         throw new Error('Question not found in spec');
@@ -64,28 +64,28 @@ export default function SurveyQuestionEdit({
         submittedData.type === 'multiselect' ||
         submittedData.type === 'multiplechoice'
       ) {
-        const choices: Untyped[] = [];
+        const choices: string[] = [];
         let defaultAnswers = '';
-        submittedData.formattedChoices.forEach(
-          ({ choice, isDefault }: Untyped, i: Untyped) => {
-            choices.push(choice);
-            if (isDefault) {
-              defaultAnswers =
-                i === submittedData.formattedChoices.length - 1
-                  ? defaultAnswers.concat(`${choice}`)
-                  : defaultAnswers.concat(`${choice}\n`);
-            }
+        const formattedChoices = submittedData.formattedChoices ?? [];
+        formattedChoices.forEach(({ choice, isDefault }, i) => {
+          choices.push(choice);
+          if (isDefault) {
+            defaultAnswers =
+              i === formattedChoices.length - 1
+                ? defaultAnswers.concat(`${choice}`)
+                : defaultAnswers.concat(`${choice}\n`);
           }
-        );
+        });
         submittedData.default = defaultAnswers.trim();
         submittedData.choices = choices;
       }
       delete submittedData.formattedChoices;
 
+      const spec = survey.spec ?? [];
       await updateSurvey([
-        ...survey.spec.slice(0, questionIndex),
+        ...spec.slice(0, questionIndex),
         submittedData,
-        ...survey.spec.slice(questionIndex + 1),
+        ...spec.slice(questionIndex + 1),
       ]);
       navigateToList();
     } catch (err) {

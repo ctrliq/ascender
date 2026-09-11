@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -33,8 +32,8 @@ const ToolbarItem = styled(PFToolbarItem)`
 // with ExpandingContainer
 export interface ExpandCollapseProps {
   isCompact?: boolean;
-  onCompact: (...args: Untyped[]) => void;
-  onExpand: (...args: Untyped[]) => void;
+  onCompact: () => void;
+  onExpand: () => void;
   [key: string]: unknown;
 }
 

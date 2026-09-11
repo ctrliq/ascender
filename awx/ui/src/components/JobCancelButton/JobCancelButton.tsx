@@ -1,4 +1,4 @@
-import type { Untyped, DetailedError } from 'types/api';
+import type { AnyJob, DetailedError } from 'types/api';
 import React, { useCallback, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { MinusCircleIcon } from '@patternfly/react-icons';
@@ -9,17 +9,18 @@ import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
 
 export interface JobCancelButtonProps {
-  errorTitle?: Untyped;
+  errorTitle?: React.ReactNode;
   title: string;
-  showIconButton?: Untyped;
-  errorMessage?: Untyped;
-  buttonText?: Untyped;
-  style?: Untyped;
-  job?: Untyped;
+  showIconButton?: boolean;
+  errorMessage?: React.ReactNode;
+  buttonText?: React.ReactNode;
+  style?: React.CSSProperties;
+  job?: Partial<AnyJob>;
   isDisabled?: boolean;
   tooltip?: React.ReactNode;
-  cancelationMessage?: Untyped;
-  onCancelWorkflow?: (...args: Untyped[]) => void;
+  cancelationMessage?: React.ReactNode;
+  /** Told after a workflow's cancel, so the visualiser can re-read it. */
+  onCancelWorkflow?: () => void;
   [key: string]: unknown;
 }
 
@@ -41,7 +42,7 @@ function JobCancelButton({
   const { error: cancelError, request: cancelJob } = useRequest(
     useCallback(async () => {
       setIsOpen(false);
-      await getJobModel(job.type).cancel(job.id);
+      await getJobModel(job.type).cancel(job.id as number);
 
       if (onCancelWorkflow) {
         onCancelWorkflow();
@@ -126,7 +127,7 @@ function JobCancelButton({
           variant="danger"
           onClose={dismissCancelError}
           title={errorTitle}
-          label={errorTitle}
+          label={String(errorTitle ?? '')}
         >
           {errorMessage}
           <ErrorDetail error={error} />

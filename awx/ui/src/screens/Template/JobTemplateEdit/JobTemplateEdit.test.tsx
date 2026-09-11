@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { JobTemplate, Untyped } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
@@ -87,7 +87,7 @@ const mockJobTemplate = {
     webhook_receiver: '/api/v2/workflow_job_templates/57/gitlab/',
   },
   execution_environment: 1,
-};
+} as unknown as JobTemplate;
 
 // The form has its own suite (JobTemplateForm.test.js); stub it so we can drive
 // the container's submit/cancel + value-transformation logic directly. The

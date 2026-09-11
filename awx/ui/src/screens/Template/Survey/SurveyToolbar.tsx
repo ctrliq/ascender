@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -28,13 +27,13 @@ export interface SurveyToolbarProps {
   canEdit?: boolean;
   isAllSelected: boolean;
   onSelectAll: (isSelected: boolean) => void;
-  surveyEnabled?: Untyped;
+  surveyEnabled?: boolean;
   onToggleSurvey: (isEnabled: boolean) => void;
   isDeleteDisabled: boolean;
   onToggleDeleteModal: (isOpen: boolean) => void;
   /** Absent when there is nothing to reorder, which the toolbar checks. */
-  onOpenOrderModal?: (...args: Untyped[]) => void;
-  emptyList?: Untyped;
+  onOpenOrderModal?: () => void;
+  emptyList?: boolean;
   [key: string]: unknown;
 }
 

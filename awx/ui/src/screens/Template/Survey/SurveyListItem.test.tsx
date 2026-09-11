@@ -88,6 +88,7 @@ describe('<SurveyListItem />', () => {
   test('required item has required asterisk', () => {
     const newItem = {
       question_name: 'Foo',
+      variable: 'foo',
       default: 'Bar',
       type: 'text',
       id: 1,
@@ -124,6 +125,7 @@ describe('<SurveyListItem />', () => {
   test('multiselect default renders read-only chips', () => {
     const newItem = {
       question_name: 'Foo',
+      variable: 'foo',
       default: 'a\nd\nb\ne\nf\ng\nh\ni\nk',
       type: 'multiselect',
       id: 1,
@@ -158,6 +160,7 @@ describe('<SurveyListItem />', () => {
   test('password default renders ENCRYPTED', () => {
     const newItem = {
       question_name: 'Foo',
+      variable: 'foo',
       default: '$encrypted$',
       type: 'password',
       id: 1,

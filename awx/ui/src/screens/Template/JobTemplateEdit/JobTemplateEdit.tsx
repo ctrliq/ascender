@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { DetailedError, JobTemplate, SummaryFieldRef } from 'types/api';
 /* eslint react/no-unused-state: 0 */
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate, Navigate } from 'react-router';
@@ -9,10 +9,12 @@ import useRequest from 'hooks/useRequest';
 import ContentLoading from 'components/ContentLoading';
 import { CardBody } from 'components/Card';
 import JobTemplateForm from '../shared/JobTemplateForm';
+import type { JobTemplateFormValues } from '../shared/JobTemplateForm';
 
 export interface JobTemplateEditProps {
-  template: Untyped;
-  reloadTemplate: Untyped;
+  template: JobTemplate;
+  /** Re-reads the template after a save, which the detail screen shows. */
+  reloadTemplate: () => void;
   [key: string]: unknown;
 }
 
@@ -26,7 +28,7 @@ function JobTemplateEdit({ template, reloadTemplate }: JobTemplateEditProps) {
 
   const { request: fetchProject, error: fetchProjectError } = useRequest(
     useCallback(async () => {
-      await ProjectsAPI.readDetail(template.project);
+      await ProjectsAPI.readDetail(template.project as number);
     }, [template.project])
   );
 
@@ -42,7 +44,7 @@ function JobTemplateEdit({ template, reloadTemplate }: JobTemplateEditProps) {
     }
   }, [fetchProjectError]);
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: JobTemplateFormValues) => {
     const {
       labels,
       instanceGroups,
@@ -59,7 +61,7 @@ function JobTemplateEdit({ template, reloadTemplate }: JobTemplateEditProps) {
 
     setFormSubmitError(null);
     setIsLoading(true);
-    remainingValues.project = project.id;
+    remainingValues.project = project?.id;
     remainingValues.webhook_credential = webhook_credential?.id || null;
     if (webhook_key) {
       remainingValues.webhook_key = webhook_key;
@@ -69,12 +71,12 @@ function JobTemplateEdit({ template, reloadTemplate }: JobTemplateEditProps) {
     try {
       await JobTemplatesAPI.update(template.id, remainingValues);
       await Promise.all([
-        submitLabels(template?.organization, labels),
-        submitCredentials(credentials),
+        submitLabels(template?.organization, labels ?? []),
+        submitCredentials(credentials ?? []),
         JobTemplatesAPI.orderInstanceGroups(
           template.id,
-          instanceGroups,
-          initialInstanceGroups
+          (instanceGroups ?? []) as SummaryFieldRef[],
+          (initialInstanceGroups ?? []) as SummaryFieldRef[]
         ),
       ]);
       reloadTemplate();
@@ -86,9 +88,12 @@ function JobTemplateEdit({ template, reloadTemplate }: JobTemplateEditProps) {
     }
   };
 
-  const submitLabels = async (orgId: Untyped, labels = []) => {
+  const submitLabels = async (
+    orgId?: number | null,
+    labels: SummaryFieldRef[] = []
+  ) => {
     const { added, removed } = getAddedAndRemoved(
-      template.summary_fields.labels.results,
+      template.summary_fields.labels?.results ?? [],
       labels
     );
 
@@ -96,7 +101,7 @@ function JobTemplateEdit({ template, reloadTemplate }: JobTemplateEditProps) {
       JobTemplatesAPI.disassociateLabel(template.id, label)
     );
     const associationPromises = added.map((label) =>
-      JobTemplatesAPI.associateLabel(template.id, label, orgId)
+      JobTemplatesAPI.associateLabel(template.id, label, orgId ?? null)
     );
 
     const results = await Promise.all([
@@ -106,7 +111,7 @@ function JobTemplateEdit({ template, reloadTemplate }: JobTemplateEditProps) {
     return results;
   };
 
-  const submitCredentials = async (newCredentials: Untyped) => {
+  const submitCredentials = async (newCredentials: SummaryFieldRef[]) => {
     const { added, removed } = getAddedAndRemoved(
       template.summary_fields.credentials,
       newCredentials
