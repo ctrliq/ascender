@@ -1,22 +1,39 @@
-import type { Untyped } from 'types/api';
+import type { Mock } from 'vitest';
 import React from 'react';
 import { render, act } from '@testing-library/react';
-import type { JobEventCallbacks } from './useJobEvents';
+import type {
+  JobEventCallbacks,
+  JobEventsState,
+  JobEventsAction,
+} from './useJobEvents';
 import useJobEvents, {
   jobEventsReducer,
   ADD_EVENTS,
   TOGGLE_NODE_COLLAPSED,
 } from './useJobEvents';
 
+/** The imperative api the hook hands back. */
+type HookApi = ReturnType<typeof useJobEvents>;
+
+/** The hook's callbacks, each one a spy the tests can program. */
+type MockedCallbacks = {
+  [K in keyof JobEventCallbacks]: Mock<JobEventCallbacks[K]>;
+};
+
 // The hook returns an imperative API; capture the latest value on every render
 // so tests can call it directly (RTL 12 has no renderHook).
-const hookRef: { current: Untyped } = { current: null };
+const hookRef: { current: HookApi | null } = { current: null };
 
 // The wrapper below reads the hook api off the props this is given, so it
 // takes them and renders none of them onto the dom.
-function Child(_props: Untyped) {
+function Child(_props: Partial<HookApi> & { id: string }) {
   return <div />;
 }
+interface HookTestProps extends Partial<JobEventCallbacks> {
+  jobId?: number;
+  isFlatMode?: boolean;
+}
+
 function HookTest({
   // RTL mounts and runs effects (the hook's
   // fetch queue). The default callbacks return never-settling promises so the
@@ -30,14 +47,14 @@ function HookTest({
   setJobTreeReady = () => {},
   jobId = 1,
   isFlatMode = false,
-}) {
+}: HookTestProps) {
   const hookFuncs = useJobEvents(
     {
       fetchEventByUuid,
       fetchChildrenSummary,
       setForceFlatMode,
       setJobTreeReady,
-    } as JobEventCallbacks,
+    },
     jobId,
     isFlatMode
   );
@@ -48,30 +65,37 @@ function HookTest({
 // State-mutating API methods dispatch into the hook's reducer, so they must run
 // inside act(). Getters are pure reads and stay raw.
 const MUTATORS = ['addEvents', 'toggleNodeIsCollapsed'];
-function makeWrapper(wrapMutators: Untyped) {
-  const propFn = (name: Untyped) => {
+function makeWrapper(wrapMutators: boolean) {
+  // The wrapper reaches into the api by name, which no signature covers; the
+  // cast is what gives each call site back the method's own types.
+  const propFn = <K extends keyof HookApi>(name: K): HookApi[K] => {
+    const call = (...args: unknown[]) =>
+      (hookRef.current?.[name] as (...callArgs: unknown[]) => unknown)(...args);
     if (wrapMutators && MUTATORS.includes(name)) {
-      return (...args: Untyped[]) => {
+      return ((...args: unknown[]) => {
         let result;
         act(() => {
-          result = hookRef.current[name](...args);
+          result = call(...args);
         });
         return result;
-      };
+      }) as HookApi[K];
     }
-    return (...args: Untyped[]) => hookRef.current[name](...args);
+    return call as HookApi[K];
   };
   // One element is rendered, so the selector picks nothing out.
-  return { find: (_selector: Untyped) => ({ prop: propFn }), update: () => {} };
+  return { find: (_selector: string) => ({ prop: propFn }), update: () => {} };
 }
+
+type Wrapper = ReturnType<typeof makeWrapper>;
+
 // Sync tests: mutators are auto-wrapped in act().
-function mountSync(element: Untyped) {
+function mountSync(element: React.ReactElement): Wrapper {
   render(element);
   return makeWrapper(true);
 }
 // Async tests: the test body already wraps calls in `await act(async () => ...)`,
 // so mutators stay raw to avoid nested act().
-function mountAsync(element: Untyped) {
+function mountAsync(element: React.ReactElement): Wrapper {
   render(element);
   return makeWrapper(false);
 }
@@ -151,15 +175,15 @@ const eventsList = [
   },
 ];
 const basicEvents = {
-  1: eventsList[0],
-  2: eventsList[1],
-  3: eventsList[2],
-  4: eventsList[3],
-  5: eventsList[4],
-  6: eventsList[5],
-  7: eventsList[6],
-  8: eventsList[7],
-  9: eventsList[8],
+  1: eventsList[0]!,
+  2: eventsList[1]!,
+  3: eventsList[2]!,
+  4: eventsList[3]!,
+  5: eventsList[4]!,
+  6: eventsList[5]!,
+  7: eventsList[6]!,
+  8: eventsList[7]!,
+  9: eventsList[8]!,
 };
 const basicTree = [
   {
@@ -189,10 +213,13 @@ const basicTree = [
 ];
 
 describe('useJobEvents', () => {
-  let callbacks: Untyped;
-  let reducer: Untyped;
-  let emptyState: Untyped;
-  let enqueueAction: Untyped;
+  let callbacks: MockedCallbacks;
+  let reducer: (
+    state: JobEventsState,
+    action: JobEventsAction
+  ) => JobEventsState;
+  let emptyState: JobEventsState;
+  let enqueueAction: (action: JobEventsAction) => void;
 
   beforeEach(() => {
     callbacks = {
@@ -210,7 +237,6 @@ describe('useJobEvents', () => {
       eventsWithoutParents: {},
       childrenSummary: {},
       metaEventParentUuid: {},
-      eventGaps: [],
       isAllCollapsed: false,
     };
   });
@@ -278,15 +304,15 @@ describe('useJobEvents', () => {
       });
 
       expect(events).toEqual({
-        1: eventsList[0],
-        2: eventsList[1],
-        3: eventsList[2],
-        4: eventsList[3],
-        5: eventsList[4],
-        6: eventsList[5],
-        7: eventsList[6],
-        8: eventsList[7],
-        9: eventsList[8],
+        1: eventsList[0]!,
+        2: eventsList[1]!,
+        3: eventsList[2]!,
+        4: eventsList[3]!,
+        5: eventsList[4]!,
+        6: eventsList[5]!,
+        7: eventsList[6]!,
+        8: eventsList[7]!,
+        9: eventsList[8]!,
         10: newEvents[0],
         11: newEvents[1],
         12: newEvents[2],
@@ -329,15 +355,15 @@ describe('useJobEvents', () => {
     test('should not mutate original state', () => {
       const state = reducer(emptyState, {
         type: ADD_EVENTS,
-        events: [eventsList[0], eventsList[1]],
+        events: [eventsList[0]!, eventsList[1]!],
       });
-      (window as Untyped).debug = true;
+      (window as Window & { debug?: boolean }).debug = true;
       reducer(state, {
         type: ADD_EVENTS,
-        events: [eventsList[2], eventsList[5]],
+        events: [eventsList[2]!, eventsList[5]!],
       });
 
-      expect(state.events).toEqual({ 1: eventsList[0], 2: eventsList[1] });
+      expect(state.events).toEqual({ 1: eventsList[0]!, 2: eventsList[1]! });
       expect(state.tree).toEqual([
         {
           eventIndex: 1,
@@ -380,15 +406,15 @@ describe('useJobEvents', () => {
       });
 
       expect(events).toEqual({
-        1: eventsList[0],
-        2: eventsList[1],
-        3: eventsList[2],
-        4: eventsList[3],
-        5: eventsList[4],
-        6: eventsList[5],
-        7: eventsList[6],
-        8: eventsList[7],
-        9: eventsList[8],
+        1: eventsList[0]!,
+        2: eventsList[1]!,
+        3: eventsList[2]!,
+        4: eventsList[3]!,
+        5: eventsList[4]!,
+        6: eventsList[5]!,
+        7: eventsList[6]!,
+        8: eventsList[7]!,
+        9: eventsList[8]!,
         10: newNode,
       });
       expect(tree).toEqual([
@@ -423,12 +449,13 @@ describe('useJobEvents', () => {
     test('should fetch parent for events with missing parent', async () => {
       callbacks.fetchEventByUuid.mockResolvedValue({
         counter: 10,
+        uuid: 'abc-010',
       });
       const state = reducer(
         {
           ...emptyState,
           childrenSummary: {
-            10: [9, 2],
+            10: { rowNumber: 9, numChildren: 2 },
           },
         },
         {
@@ -455,12 +482,13 @@ describe('useJobEvents', () => {
     test('should batch parent fetches by uuid', () => {
       callbacks.fetchEventByUuid.mockResolvedValue({
         counter: 10,
+        uuid: 'abc-010',
       });
       const state = reducer(
         {
           ...emptyState,
           childrenSummary: {
-            10: [9, 2],
+            10: { rowNumber: 9, numChildren: 2 },
           },
         },
         {
@@ -496,12 +524,13 @@ describe('useJobEvents', () => {
     test('should fetch multiple parent fetches by uuid', () => {
       callbacks.fetchEventByUuid.mockResolvedValue({
         counter: 10,
+        uuid: 'abc-010',
       });
       const state = reducer(
         {
           ...emptyState,
           childrenSummary: {
-            10: [9, 1],
+            10: { rowNumber: 9, numChildren: 1 },
           },
         },
         {
@@ -538,12 +567,13 @@ describe('useJobEvents', () => {
     test('should set eventsWithoutParents while fetching parent events', () => {
       callbacks.fetchEventByUuid.mockResolvedValue({
         counter: 10,
+        uuid: 'abc-010',
       });
       const state = reducer(
         {
           ...emptyState,
           childrenSummary: {
-            10: [9, 2],
+            10: { rowNumber: 9, numChildren: 2 },
           },
         },
         {
@@ -625,9 +655,11 @@ describe('useJobEvents', () => {
     test('should fetch parent of parent and compile them together', () => {
       callbacks.fetchEventByUuid.mockResolvedValueOnce({
         counter: 2,
+        uuid: 'abc-002',
       });
       callbacks.fetchEventByUuid.mockResolvedValueOnce({
         counter: 1,
+        uuid: 'abc-001',
       });
       const event3 = {
         id: 103,
@@ -641,8 +673,8 @@ describe('useJobEvents', () => {
         {
           ...emptyState,
           childrenSummary: {
-            1: [0, 3],
-            2: [1, 2],
+            1: { rowNumber: 0, numChildren: 3 },
+            2: { rowNumber: 1, numChildren: 2 },
           },
         },
         {
@@ -740,20 +772,20 @@ describe('useJobEvents', () => {
       ];
       const state = reducer(emptyState, {
         type: ADD_EVENTS,
-        events: [events[0]],
+        events: [events[0]!],
       });
       const state2 = reducer(state, {
         type: ADD_EVENTS,
-        events: [events[2]],
+        events: [events[2]!],
       });
       const state3 = reducer(state2, {
         type: ADD_EVENTS,
-        events: [events[1]],
+        events: [events[1]!],
       });
 
-      expect(state3.tree[0].eventIndex).toEqual(1);
-      expect(state3.tree[1].eventIndex).toEqual(2);
-      expect(state3.tree[2].eventIndex).toEqual(3);
+      expect(state3.tree[0]!.eventIndex).toEqual(1);
+      expect(state3.tree[1]!.eventIndex).toEqual(2);
+      expect(state3.tree[2]!.eventIndex).toEqual(3);
     });
 
     test('should add child nodes in middle of array', () => {
@@ -763,7 +795,7 @@ describe('useJobEvents', () => {
       });
       const state2 = reducer(state, {
         type: ADD_EVENTS,
-        events: [eventsList[3]],
+        events: [eventsList[3]!],
       });
 
       expect(state2.tree).toEqual([
@@ -847,6 +879,7 @@ describe('useJobEvents', () => {
         events: [
           {
             counter: 4,
+            uuid: 'abc-004b',
             rowNumber: 3,
             parent_uuid: '',
           },
@@ -873,7 +906,7 @@ describe('useJobEvents', () => {
   });
 
   describe('getNodeByUuid', () => {
-    let wrapper: Untyped;
+    let wrapper: Wrapper;
     beforeEach(() => {
       wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
@@ -881,23 +914,23 @@ describe('useJobEvents', () => {
 
     test('should get a root node', () => {
       const node = wrapper.find('#test').prop('getNodeByUuid')('abc-001');
-      expect(node.eventIndex).toEqual(1);
-      expect(node.isCollapsed).toEqual(false);
-      expect(node.children).toHaveLength(2);
+      expect(node!.eventIndex).toEqual(1);
+      expect(node!.isCollapsed).toEqual(false);
+      expect(node!.children).toHaveLength(2);
     });
 
     test('should get 2nd level node', () => {
       const node = wrapper.find('#test').prop('getNodeByUuid')('abc-002');
-      expect(node.eventIndex).toEqual(2);
-      expect(node.isCollapsed).toEqual(false);
-      expect(node.children).toHaveLength(3);
+      expect(node!.eventIndex).toEqual(2);
+      expect(node!.isCollapsed).toEqual(false);
+      expect(node!.children).toHaveLength(3);
     });
 
     test('should get 3rd level node', () => {
       const node = wrapper.find('#test').prop('getNodeByUuid')('abc-008');
-      expect(node.eventIndex).toEqual(8);
-      expect(node.isCollapsed).toEqual(false);
-      expect(node.children).toHaveLength(0);
+      expect(node!.eventIndex).toEqual(8);
+      expect(node!.isCollapsed).toEqual(false);
+      expect(node!.children).toHaveLength(0);
     });
 
     test('should return null if node not found', () => {
@@ -935,7 +968,7 @@ describe('useJobEvents', () => {
           ...state,
           tree: [
             {
-              ...state.tree[0],
+              ...state.tree[0]!,
               isCollapsed: true,
             },
           ],
@@ -951,7 +984,7 @@ describe('useJobEvents', () => {
   });
 
   describe('getNodeForRow', () => {
-    let wrapper: Untyped;
+    let wrapper: Wrapper;
     beforeEach(() => {
       wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
@@ -960,33 +993,33 @@ describe('useJobEvents', () => {
     test('should get root node', () => {
       const node = wrapper.find('#test').prop('getNodeForRow')(0);
 
-      expect(node.eventIndex).toEqual(1);
-      expect(node.isCollapsed).toEqual(false);
-      expect(node.children).toHaveLength(2);
+      expect(node!.eventIndex).toEqual(1);
+      expect(node!.isCollapsed).toEqual(false);
+      expect(node!.children).toHaveLength(2);
     });
 
     test('should get 2nd level node', () => {
       const node = wrapper.find('#test').prop('getNodeForRow')(1);
 
-      expect(node.eventIndex).toEqual(2);
-      expect(node.isCollapsed).toEqual(false);
-      expect(node.children).toHaveLength(3);
+      expect(node!.eventIndex).toEqual(2);
+      expect(node!.isCollapsed).toEqual(false);
+      expect(node!.children).toHaveLength(3);
     });
 
     test('should get 3rd level node', () => {
       const node = wrapper.find('#test').prop('getNodeForRow')(7);
 
-      expect(node.eventIndex).toEqual(8);
-      expect(node.isCollapsed).toEqual(false);
-      expect(node.children).toHaveLength(0);
+      expect(node!.eventIndex).toEqual(8);
+      expect(node!.isCollapsed).toEqual(false);
+      expect(node!.children).toHaveLength(0);
     });
 
     test('should get last child node', () => {
       const node = wrapper.find('#test').prop('getNodeForRow')(4);
 
-      expect(node.eventIndex).toEqual(5);
-      expect(node.isCollapsed).toEqual(false);
-      expect(node.children).toHaveLength(0);
+      expect(node!.eventIndex).toEqual(5);
+      expect(node!.isCollapsed).toEqual(false);
+      expect(node!.children).toHaveLength(0);
     });
 
     test('should get a second root-level node', () => {
@@ -1027,20 +1060,20 @@ describe('useJobEvents', () => {
 
       const node = wrapper.find('#test').prop('getNodeForRow')(1);
 
-      expect(node.eventIndex).toEqual(2);
-      expect(node.isCollapsed).toBe(true);
+      expect(node!.eventIndex).toEqual(2);
+      expect(node!.isCollapsed).toBe(true);
     });
 
     test('should skip nodes with collapsed parent', () => {
       wrapper.find('#test').prop('toggleNodeIsCollapsed')('abc-002');
 
       const node = wrapper.find('#test').prop('getNodeForRow')(2);
-      expect(node.eventIndex).toEqual(6);
-      expect(node.isCollapsed).toBe(false);
+      expect(node!.eventIndex).toEqual(6);
+      expect(node!.isCollapsed).toBe(false);
 
       const node2 = wrapper.find('#test').prop('getNodeForRow')(4);
-      expect(node2.eventIndex).toEqual(8);
-      expect(node2.isCollapsed).toBe(false);
+      expect(node2!.eventIndex).toEqual(8);
+      expect(node2!.isCollapsed).toBe(false);
     });
 
     test('should skip deeply-nested collapsed nodes', () => {
@@ -1125,8 +1158,8 @@ describe('useJobEvents', () => {
       wrapper.update();
 
       const node = wrapper.find('#test').prop('getNodeForRow')(5);
-      expect(node.eventIndex).toEqual(8);
-      expect(node.isCollapsed).toBe(false);
+      expect(node!.eventIndex).toEqual(8);
+      expect(node!.isCollapsed).toBe(false);
     });
 
     test('should skip full sub-tree of collapsed node', () => {
@@ -1209,8 +1242,8 @@ describe('useJobEvents', () => {
       wrapper.find('#test').prop('toggleNodeIsCollapsed')('abc-002');
 
       const node = wrapper.find('#test').prop('getNodeForRow')(3);
-      expect(node.eventIndex).toEqual(9);
-      expect(node.isCollapsed).toBe(false);
+      expect(node!.eventIndex).toEqual(9);
+      expect(node!.isCollapsed).toBe(false);
     });
 
     test('should get node after gap in loaded children', async () => {
@@ -1292,7 +1325,7 @@ describe('useJobEvents', () => {
   });
 
   describe('getNumCollapsedEvents', () => {
-    let wrapper: Untyped;
+    let wrapper: Wrapper;
     beforeEach(() => {
       wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
@@ -1307,15 +1340,15 @@ describe('useJobEvents', () => {
   });
 
   describe('getEventforRow', () => {
-    let wrapper: Untyped;
+    let wrapper: Wrapper;
     beforeEach(() => {
       wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
     });
 
     test('should get event & node', () => {
-      const { event, node } = wrapper.find('#test').prop('getEventForRow')(5);
-      expect(event).toEqual(eventsList[5]);
+      const { event, node } = wrapper.find('#test').prop('getEventForRow')(5)!;
+      expect(event).toEqual(eventsList[5]!);
       expect(node).toEqual({
         eventIndex: 6,
         isCollapsed: false,
@@ -1329,7 +1362,7 @@ describe('useJobEvents', () => {
   });
 
   describe('getEvent', () => {
-    let wrapper: Untyped;
+    let wrapper: Wrapper;
     beforeEach(() => {
       wrapper = mountSync(<HookTest />);
       wrapper.find('#test').prop('addEvents')(eventsList);
@@ -1337,7 +1370,7 @@ describe('useJobEvents', () => {
 
     test('should get event object', () => {
       const event = wrapper.find('#test').prop('getEvent')(7);
-      expect(event).toEqual(eventsList[6]);
+      expect(event).toEqual(eventsList[6]!);
     });
   });
 
@@ -1385,9 +1418,12 @@ describe('useJobEvents', () => {
     test('should return estimated counter when node is non-loaded child', async () => {
       callbacks.fetchChildrenSummary.mockResolvedValue({
         data: {
-          1: { rowNumber: 0, numChildren: 28 },
-          2: { rowNumber: 1, numChildren: 3 },
-          6: { rowNumber: 5, numChidren: 23 },
+          children_summary: {
+            1: { rowNumber: 0, numChildren: 28 },
+            2: { rowNumber: 1, numChildren: 3 },
+            6: { rowNumber: 5, numChildren: 23 },
+          },
+          meta_event_nested_uuid: {},
         },
       });
       const wrapper = mountAsync(<HookTest {...callbacks} />);
@@ -1434,11 +1470,11 @@ describe('useJobEvents', () => {
       const wrapper = mountAsync(<HookTest {...callbacks} />);
       await act(async () => {
         wrapper.find('#test').prop('addEvents')([
-          eventsList[0],
-          eventsList[1],
-          eventsList[2],
-          eventsList[3],
-          eventsList[4],
+          eventsList[0]!,
+          eventsList[1]!,
+          eventsList[2]!,
+          eventsList[3]!,
+          eventsList[4]!,
           {
             id: 169,
             counter: 69,
@@ -1468,7 +1504,7 @@ describe('useJobEvents', () => {
       const wrapper = mountAsync(<HookTest {...callbacks} />);
       await act(async () => {
         wrapper.find('#test').prop('addEvents')([
-          eventsList[0],
+          eventsList[0]!,
           {
             id: 102,
             counter: 2,
@@ -1529,7 +1565,7 @@ describe('useJobEvents', () => {
       const wrapper = mountAsync(<HookTest {...callbacks} />);
       await act(async () => {
         wrapper.find('#test').prop('addEvents')([
-          eventsList[0],
+          eventsList[0]!,
           {
             id: 120,
             counter: 20,
@@ -1574,7 +1610,7 @@ describe('useJobEvents', () => {
       const wrapper = mountAsync(<HookTest {...callbacks} />);
       await act(async () => {
         wrapper.find('#test').prop('addEvents')([
-          eventsList[0],
+          eventsList[0]!,
           {
             id: 109,
             counter: 9,

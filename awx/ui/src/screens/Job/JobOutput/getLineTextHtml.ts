@@ -1,7 +1,13 @@
-import type { Untyped } from 'types/api';
 import Ansi from 'ansi-to-html';
 import hasAnsi from 'has-ansi';
 import { encode } from 'html-entities';
+import type { JobEvent } from './useJobEvents';
+
+/** One rendered line of an event's stdout, as the output list draws it. */
+export interface LineTextHtml {
+  lineNumber: number;
+  html: string;
+}
 
 const EVENT_START_TASK = 'playbook_on_task_start';
 const EVENT_START_PLAY = 'playbook_on_play_start';
@@ -30,7 +36,7 @@ const ansi = new Ansi({
   },
 });
 
-function getTimestamp({ created }: Untyped) {
+function getTimestamp(created: string) {
   const date = new Date(created);
 
   const dateHours = date.getHours();
@@ -44,7 +50,7 @@ function getTimestamp({ created }: Untyped) {
   return `${stampHours}:${stampMinutes}:${stampSeconds}`;
 }
 
-function createStyleAttrHash(styleAttr: Untyped) {
+function createStyleAttrHash(styleAttr: string) {
   let hash = 0;
   for (let i = 0; i < styleAttr.length; i++) {
     hash = (hash << 5) - hash; // eslint-disable-line no-bitwise
@@ -56,12 +62,12 @@ function createStyleAttrHash(styleAttr: Untyped) {
 
 const styleAttrPattern = new RegExp('style="[^"]*"', 'g');
 
-function replaceStyleAttrs(html: Untyped) {
-  const allStyleAttrs: Untyped[] = [...new Set(html.match(styleAttrPattern))];
-  const cssMap: Record<string, Untyped> = {};
+function replaceStyleAttrs(html: string) {
+  const allStyleAttrs = [...new Set(html.match(styleAttrPattern) ?? [])];
+  const cssMap: Record<string, string> = {};
   let result = html;
   for (let i = 0; i < allStyleAttrs.length; i++) {
-    const styleAttr = allStyleAttrs[i];
+    const styleAttr = allStyleAttrs[i] as string;
     const cssClassName = `output-${createStyleAttrHash(styleAttr)}`;
 
     cssMap[cssClassName] = styleAttr.replace('style="', '').slice(0, -1);
@@ -73,12 +79,12 @@ function replaceStyleAttrs(html: Untyped) {
 export default function getLineTextHtml({
   created,
   event,
-  start_line: startLine,
+  start_line: startLine = 0,
   stdout,
-}: Untyped) {
-  const sanitized = encode(stdout);
-  let lineCssMap: Record<string, Untyped> = {};
-  const lineTextHtml: Untyped[] = [];
+}: JobEvent) {
+  const sanitized = encode(stdout ?? '');
+  let lineCssMap: Record<string, string> = {};
+  const lineTextHtml: LineTextHtml[] = [];
 
   sanitized.split('\r\n').forEach((lineText, index) => {
     let html;
@@ -90,8 +96,8 @@ export default function getLineTextHtml({
       html = lineText;
     }
 
-    if (index === 1 && TIME_EVENTS.includes(event)) {
-      const time = getTimestamp({ created });
+    if (index === 1 && created && TIME_EVENTS.includes(event ?? '')) {
+      const time = getTimestamp(created);
       html += `<span class="time">${time}</span>`;
     }
 

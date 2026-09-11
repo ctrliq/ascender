@@ -1,5 +1,5 @@
 import type { QSConfig } from 'util/qs';
-import type { Untyped } from 'types/api';
+import type { UserEvent } from '@testing-library/user-event';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -18,7 +18,7 @@ const qsConfig = {
   integerFields: ['page', 'page_size'],
 } as unknown as QSConfig;
 
-async function getColumnNames(user: Untyped) {
+async function getColumnNames(user: UserEvent) {
   const toggle = screen.getByRole('button', { name: 'Simple key select' });
   const selected = toggle.textContent;
   await user.click(toggle);
@@ -41,6 +41,7 @@ describe('JobOutputSearch', () => {
         scrollToEnd={() => {}}
         setIsFollowModeEnabled={() => {}}
         job={{
+          id: 1,
           status: 'successful',
           type: 'project',
         }}
@@ -75,6 +76,7 @@ describe('JobOutputSearch', () => {
         scrollToEnd={() => {}}
         setIsFollowModeEnabled={() => {}}
         job={{
+          id: 1,
           status: 'successful',
           type: 'system_job',
         }}
@@ -98,6 +100,7 @@ describe('JobOutputSearch', () => {
         scrollToEnd={() => {}}
         setIsFollowModeEnabled={() => {}}
         job={{
+          id: 1,
           status: 'successful',
           type: 'inventory_update',
         }}

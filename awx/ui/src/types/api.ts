@@ -140,13 +140,43 @@ export interface Paginated<T> {
   results: T[];
 }
 
-export type Job = WithNested<Schemas['JobDetail']>;
+/**
+ * A playbook job, as its own detail endpoint returns it.
+ *
+ * playbook_counts and host_status_counts are SerializerMethodFields, so the
+ * schema types both as a bare string; each is an object of counts.
+ */
+export type Job = Omit<
+  WithNested<Schemas['JobDetail']>,
+  'playbook_counts' | 'host_status_counts'
+> & {
+  playbook_counts?: { play_count?: number; task_count?: number };
+  host_status_counts?: Record<string, number>;
+};
 export type JobTemplate = WithNested<Schemas['JobTemplate']>;
 /** webhook_key comes from the template's own endpoint, not the serializer. */
 export type WorkflowJobTemplate = WithNested<Schemas['WorkflowJobTemplate']> & {
   webhook_key?: string;
 };
 export type Inventory = WithNested<Schemas['Inventory']>;
+
+/**
+ * A template of any kind, as the screens that list them all together see it.
+ *
+ * Job templates, workflow job templates, projects, inventory sources and
+ * approval templates all appear as unified job templates, and each has its own
+ * serializer. The schema describes only what they share; the rest is optional
+ * here because which fields a template has depends on its `type`.
+ */
+export type AnyUnifiedJobTemplate = WithNested<Schemas['UnifiedJobTemplate']> &
+  Partial<
+    Omit<JobTemplate, 'id' | 'type' | 'summary_fields' | 'related'> &
+      Omit<WorkflowJobTemplate, 'id' | 'type' | 'summary_fields' | 'related'> &
+      Omit<Project, 'id' | 'type' | 'summary_fields' | 'related'>
+  > & {
+    /** Approval nodes carry a timeout rather than a template to run. */
+    timeout?: number;
+  };
 
 /**
  * A row of /api/v2/unified_jobs/, which lists every kind of job together.
@@ -173,6 +203,18 @@ export type UnifiedJob = WithNested<Schemas['UnifiedJobList']> & {
   credential?: number | null;
   canceled_on?: string | null;
 };
+
+/**
+ * A job of any type, as the screens shared by all of them see it.
+ *
+ * The output and detail screens are reached for jobs, project updates,
+ * inventory updates, ad hoc commands, system jobs and workflow jobs alike,
+ * and each has its own detail serializer. Every one of them carries an id and
+ * a type; the rest is optional here because which fields a job has depends on
+ * which kind of job it is, and the screens branch on `type` to find out.
+ */
+export type AnyJob = Pick<UnifiedJob, 'id' | 'type'> &
+  Partial<Job & UnifiedJob>;
 export type Host = WithNested<Schemas['Host']>;
 /**
  * `webhook_key` is not on the project serializer: the form fetches it from

@@ -1,7 +1,10 @@
+import type { AnyJob } from 'types/api';
 import getEventRequestParams, { range } from './getEventRequestParams';
 
 describe('getEventRequestParams', () => {
-  const job = {
+  const job: AnyJob = {
+    id: 1,
+    type: 'job',
     status: 'successful',
   };
 

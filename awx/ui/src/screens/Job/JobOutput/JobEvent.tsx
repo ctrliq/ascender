@@ -1,5 +1,6 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
+import type { LineTextHtml } from './getLineTextHtml';
+import type { JobEvent as OutputEvent } from './useJobEvents';
 import {
   JobEventLine,
   JobEventLineToggle,
@@ -14,17 +15,18 @@ const HIDDEN_PASSWORD_PROMPTS = [
 ];
 
 export interface JobEventProps {
-  style?: Untyped;
-  lineTextHtml: Untyped[];
+  style?: React.CSSProperties;
+  lineTextHtml: LineTextHtml[];
   isClickable?: boolean;
-  onJobEventClick: (...args: Untyped[]) => void;
-  event: Untyped;
-  measure: Untyped;
+  onJobEventClick: () => void;
+  event: OutputEvent;
+  /** Tells the virtualizer to re-measure this row once it has rendered. */
+  measure: () => void;
   isCollapsed?: boolean;
   onToggleCollapsed?: () => void;
   hasChildren?: boolean;
-  jobStatus?: Untyped;
-  ref?: Untyped;
+  jobStatus?: string;
+  ref?: React.Ref<HTMLDivElement>;
   [key: string]: unknown;
 }
 

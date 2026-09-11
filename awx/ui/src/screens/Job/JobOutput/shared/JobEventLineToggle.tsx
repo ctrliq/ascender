@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
@@ -26,7 +25,7 @@ const Button = styled.button`
 export interface JobEventLineToggleProps {
   canToggle?: boolean;
   isCollapsed?: boolean;
-  onToggle?: (result: Untyped) => void;
+  onToggle?: () => void;
   [key: string]: unknown;
 }
 

@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { AnyJob, Paginated } from 'types/api';
 import React from 'react';
 import {
   fireEvent,
@@ -14,6 +14,7 @@ import JobOutput, {
   computeOverscanIndices,
   MAX_SELECTION_OVERSCAN,
 } from './JobOutput';
+import type { JobEvent } from './useJobEvents';
 import mockJobData from '../shared/data.job.json';
 import mockJobEventsData from './data.job_events.json';
 
@@ -29,14 +30,17 @@ vi.mock('@patternfly/react-core', async () => {
   );
   return {
     ...actual,
-    Tooltip: ({ children }: Untyped) => children,
+    Tooltip: ({ children }: { children: React.ReactNode }) => children,
   };
 });
 
 vi.mock('../../../api');
 
-const applyJobEventMock = (mockJobEvents: Untyped) => {
-  const mockReadEvents = async (jobId: Untyped, params: Untyped) => {
+const applyJobEventMock = (mockJobEvents: Paginated<JobEvent>) => {
+  const mockReadEvents = async (
+    jobId: number | string,
+    params: { order_by?: string }
+  ) => {
     const [...results] = mockJobEvents.results;
     if (params.order_by && params.order_by.includes('-')) {
       results.reverse();
@@ -48,13 +52,13 @@ const applyJobEventMock = (mockJobEvents: Untyped) => {
       },
     };
   };
-  (JobsAPI as Untyped).readEvents = vi.fn().mockImplementation(mockReadEvents);
-  (JobsAPI as Untyped).readChildrenSummary = vi.fn().mockResolvedValue({
+  JobsAPI.readEvents = vi.fn().mockImplementation(mockReadEvents);
+  JobsAPI.readChildrenSummary = vi.fn().mockResolvedValue({
     data: {
       1: [0, 100],
     },
   });
-  (JobsAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
+  JobsAPI.destroy = vi.fn().mockResolvedValue({});
 };
 
 // Wait until JobOutput's initial events load settles (the output area's
@@ -74,7 +78,7 @@ async function waitForLoaded() {
 }
 
 describe('<JobOutput />', () => {
-  const mockJob = mockJobData;
+  const mockJob = mockJobData as unknown as AnyJob;
 
   beforeEach(() => {
     applyJobEventMock(mockJobEventsData);
@@ -162,7 +166,7 @@ describe('<JobOutput />', () => {
         previous: null,
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<Paginated<JobEvent>>);
     renderWithContexts(<JobOutput job={{ ...mockJob, status: 'failed' }} />);
     // EmptyOutput renders a PF empty state once the (empty) load settles.
     await waitFor(() =>
@@ -183,7 +187,7 @@ describe('<JobOutput />', () => {
 
       const scroller = document.querySelector(
         '.ascender-output-scroll'
-      ) as Untyped;
+      ) as HTMLElement;
       Object.defineProperty(scroller, 'clientHeight', {
         configurable: true,
         value: 200,

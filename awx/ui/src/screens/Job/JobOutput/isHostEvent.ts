@@ -1,14 +1,14 @@
-import type { Untyped } from 'types/api';
+import type { JobEvent } from './useJobEvents';
 
-export default function isHostEvent(jobEvent: Untyped) {
-  const { event, event_data, host, type } = jobEvent;
+export default function isHostEvent(jobEvent: JobEvent) {
+  const { event, event_data: eventData, host, type } = jobEvent;
   let isHost;
-  if (typeof host === 'number' || (event_data && event_data.res)) {
+  if (typeof host === 'number' || (eventData && eventData.res)) {
     isHost = true;
   } else if (
     type === 'project_update_event' &&
     event !== 'runner_on_skipped' &&
-    event_data.host
+    eventData?.host
   ) {
     isHost = true;
   } else {

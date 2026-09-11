@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { AnyJob } from 'types/api';
 import React, { useEffect } from 'react';
 import { Link, useParams } from 'react-router';
 import {
@@ -18,7 +18,7 @@ export interface EmptyOutputProps {
   hasQueryParams: boolean;
   isJobRunning: boolean;
   onUnmount: () => void;
-  job: Untyped;
+  job: AnyJob;
   [key: string]: unknown;
 }
 

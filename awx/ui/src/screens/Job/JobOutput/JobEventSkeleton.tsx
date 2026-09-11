@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect } from 'react';
 import {
   JobEventLine,
@@ -8,7 +7,7 @@ import {
 } from './shared';
 
 export interface JobEventSkeletonContentProps {
-  contentLength: Untyped;
+  contentLength: number;
   [key: string]: unknown;
 }
 
@@ -22,13 +21,24 @@ function JobEventSkeletonContent({
   );
 }
 
+export interface JobEventSkeletonProps {
+  /** The row this skeleton stands in for, which is also its key. */
+  counter: number;
+  contentLength: number;
+  style?: React.CSSProperties;
+  /** Tells the virtualizer to re-measure this row once it has rendered. */
+  measure: () => void;
+  ref?: React.Ref<HTMLDivElement>;
+  [key: string]: unknown;
+}
+
 function JobEventSkeleton({
   counter,
   contentLength,
   style,
   measure,
   ref,
-}: Untyped) {
+}: JobEventSkeletonProps) {
   useEffect(() => {
     measure();
   }, [measure]);

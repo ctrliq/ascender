@@ -1,7 +1,6 @@
-import type { Untyped } from 'types/api';
 import styled from 'styled-components';
 
-export default styled.div<{ $isClickable?: Untyped; isFirst?: Untyped }>`
+export default styled.div<{ $isClickable?: boolean; isFirst?: boolean }>`
   display: flex;
 
   &:hover {

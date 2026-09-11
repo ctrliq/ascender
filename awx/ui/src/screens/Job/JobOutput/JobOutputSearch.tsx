@@ -1,5 +1,6 @@
-import type { SearchColumn, Untyped } from 'types/api';
-import type { QSConfig } from 'util/qs';
+import type { AnyJob, SearchColumn } from 'types/api';
+import type { SearchableKey } from 'components/PaginatedTable';
+import type { QSConfig, QSParamValue } from 'util/qs';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import styled from 'styled-components';
@@ -36,19 +37,19 @@ const SearchToolbarContent = styled(ToolbarContent)`
 
 export interface JobOutputSearchProps {
   qsConfig: QSConfig;
-  job: Untyped;
-  eventRelatedSearchableKeys?: Untyped;
-  eventSearchableKeys?: Untyped;
-  scrollToEnd: Untyped;
+  job: AnyJob;
+  eventRelatedSearchableKeys?: string[];
+  eventSearchableKeys?: SearchableKey[];
+  scrollToEnd: () => void;
   isFollowModeEnabled?: boolean;
-  setIsFollowModeEnabled: Untyped;
+  setIsFollowModeEnabled: (isEnabled: boolean) => void;
   [key: string]: unknown;
 }
 
 function JobOutputSearch({
   qsConfig,
   job,
-  eventRelatedSearchableKeys,
+  eventRelatedSearchableKeys = [],
   eventSearchableKeys,
   scrollToEnd,
   isFollowModeEnabled,
@@ -58,7 +59,7 @@ function JobOutputSearch({
   const location = useLocation();
   const navigate = useNavigate();
 
-  const handleSearch = (key: Untyped, value: Untyped) => {
+  const handleSearch = (key: string, value: QSParamValue) => {
     const params = parseQueryString(qsConfig, location.search);
     const qs = updateQueryString(
       qsConfig,
@@ -68,14 +69,14 @@ function JobOutputSearch({
     pushHistoryState(qs);
   };
 
-  const handleReplaceSearch = (key: Untyped, value: Untyped) => {
+  const handleReplaceSearch = (key: string, value: QSParamValue) => {
     const qs = updateQueryString(qsConfig, location.search, {
       [key]: value,
     });
     pushHistoryState(qs);
   };
 
-  const handleRemoveSearchTerm = (key: Untyped, value: Untyped) => {
+  const handleRemoveSearchTerm = (key: string, value: QSParamValue) => {
     const oldParams = parseQueryString(qsConfig, location.search);
     const updatedParams = removeParams(qsConfig, oldParams, {
       [key]: value,
@@ -93,7 +94,7 @@ function JobOutputSearch({
     pushHistoryState(qs);
   };
 
-  const pushHistoryState = (qs: Untyped) => {
+  const pushHistoryState = (qs: string) => {
     const { pathname } = location;
     navigate(qs ? `${pathname}?${qs}` : pathname);
   };

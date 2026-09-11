@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -37,7 +36,7 @@ export interface PageControlsProps {
   onScrollLast?: () => void;
   onScrollNext?: () => void;
   onScrollPrevious?: () => void;
-  toggleExpandCollapseAll?: Untyped;
+  toggleExpandCollapseAll?: () => void;
   isAllCollapsed?: boolean;
   isFlatMode?: boolean;
   isTemplateJob?: boolean;

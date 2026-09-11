@@ -1,8 +1,26 @@
-import type { Untyped } from 'types/api';
+import type { JobEvent } from './useJobEvents';
+
+/**
+ * What the job websocket pushes down. Two groups share the one socket: the
+ * jobs group, which reports a job's status, and the per type events group,
+ * whose messages are job events with the group name added.
+ */
+export type JobSocketMessage = JobEvent & {
+  group_name?: string;
+  unified_job_id?: number;
+  final_counter?: number;
+  status?: string;
+};
+
+/** The job the socket subscribes for: its type names the events group. */
+export interface JobSocketTarget {
+  type?: string | null;
+  id?: number;
+}
 
 export default function connectJobSocket(
-  { type, id }: Untyped,
-  onMessage: Untyped
+  { type, id }: JobSocketTarget,
+  onMessage: (message: JobSocketMessage) => void
 ) {
   const ws = new WebSocket(
     `${window.location.protocol === 'http:' ? 'ws:' : 'wss:'}//${
@@ -26,7 +44,7 @@ export default function connectJobSocket(
   };
 
   ws.onmessage = (e) => {
-    onMessage(JSON.parse(e.data));
+    onMessage(JSON.parse(e.data as string) as JobSocketMessage);
   };
 
   ws.onclose = (e) => {
@@ -48,7 +66,7 @@ export default function connectJobSocket(
   return ws; // Return the ws instance so the caller can manage it
 }
 
-export function closeWebSocket(ws: Untyped) {
+export function closeWebSocket(ws: WebSocket | null) {
   if (ws) {
     ws.close();
   }

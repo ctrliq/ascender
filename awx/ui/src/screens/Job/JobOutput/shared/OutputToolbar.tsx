@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { AnyJob } from 'types/api';
 import React, { useEffect, useState, useRef } from 'react';
 import styled from 'styled-components';
 import { calculateElapsed, secondsToHHMMSS } from 'util/dates';
@@ -73,10 +73,10 @@ const OUTPUT_NO_COUNT_JOB_TYPES = [
 ];
 
 export interface OutputToolbarProps {
-  job: Untyped;
+  job: AnyJob;
   onDelete: () => void;
   isDeleteDisabled?: boolean;
-  jobStatus: Untyped;
+  jobStatus: string;
   [key: string]: unknown;
 }
 
@@ -91,15 +91,13 @@ const OutputToolbar = ({
   const [copyTooltip, setCopyTooltip] = useState<string | null>(null);
   const hideCounts = OUTPUT_NO_COUNT_JOB_TYPES.includes(job.type);
 
-  const playCount = job?.playbook_counts?.play_count;
-  const taskCount = job?.playbook_counts?.task_count;
-  const darkCount = job?.host_status_counts?.dark;
-  const failureCount = job?.host_status_counts?.failures;
-  const totalHostCount = job?.host_status_counts
-    ? Object.keys(job.host_status_counts || {}).reduce(
-        (sum, key) => sum + job.host_status_counts[key],
-        0
-      )
+  const playCount = job?.playbook_counts?.play_count ?? 0;
+  const taskCount = job?.playbook_counts?.task_count ?? 0;
+  const hostStatusCounts = job?.host_status_counts;
+  const darkCount = hostStatusCounts?.dark ?? 0;
+  const failureCount = hostStatusCounts?.failures ?? 0;
+  const totalHostCount = hostStatusCounts
+    ? Object.values(hostStatusCounts).reduce((sum, count) => sum + count, 0)
     : 0;
   const { me } = useConfig();
 
@@ -107,7 +105,7 @@ const OutputToolbar = ({
 
   useEffect(() => {
     isMounted.current = true;
-    let secTimer: Untyped;
+    let secTimer: ReturnType<typeof setInterval>;
     if (job.finished) {
       return () => {
         isMounted.current = false;
@@ -177,7 +175,7 @@ const OutputToolbar = ({
         <Tooltip content={t`Elapsed time that the job ran`}>
           <ElapsedBadge isRead>
             {job.finished && job.elapsed != null
-              ? secondsToHHMMSS(job.elapsed)
+              ? secondsToHHMMSS(Number(job.elapsed))
               : activeJobElapsedTime}
           </ElapsedBadge>
         </Tooltip>
@@ -194,7 +192,7 @@ const OutputToolbar = ({
             showIconButton
           />
         )}
-      {job.summary_fields.user_capabilities?.start && (
+      {job.summary_fields?.user_capabilities?.start && (
         <Tooltip
           content={
             job.status === 'failed' && job.type === 'job'
@@ -238,7 +236,7 @@ const OutputToolbar = ({
               variant="plain"
               aria-label={t`Copy Output`}
               onClick={async () => {
-                const res = await fetch(`${job.related.stdout}?format=txt`);
+                const res = await fetch(`${job.related?.stdout}?format=txt`);
                 const text = await res.text();
                 await navigator.clipboard.writeText(text);
                 setCopyTooltip(t`Copied`);
@@ -259,7 +257,7 @@ const OutputToolbar = ({
           </a>
         </Tooltip>
       )}
-      {job.summary_fields.user_capabilities.delete &&
+      {job.summary_fields?.user_capabilities?.delete &&
         ['new', 'successful', 'failed', 'error', 'canceled'].includes(
           jobStatus
         ) && (

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -14,7 +13,7 @@ const BarWrapper = styled.div.attrs({ className: 'host-status-bar' })`
 
 // Both props are transient: as plain props they would be forwarded to the div
 // and land in the DOM as attributes, count an unknown one.
-const BarSegment = styled.div<{ $color?: Untyped; $count?: Untyped }>`
+const BarSegment = styled.div<{ $color?: string; $count?: number }>`
   background-color: ${(props) => props.$color || 'inherit'};
   flex-grow: ${(props) => props.$count || 0};
 `;
@@ -30,7 +29,8 @@ const TooltipContent = styled.div`
 `;
 
 export interface HostStatusBarProps {
-  counts?: Untyped;
+  /** How many hosts ended in each state, as the job's summary reports. */
+  counts?: Record<string, number>;
   [key: string]: unknown;
 }
 
@@ -61,7 +61,7 @@ const HostStatusBar = ({ counts = {} }: HostStatusBarProps) => {
   };
 
   const barSegments = Object.keys(hostStatus).map((key) => {
-    const count = counts[key] || 0;
+    const count = counts[key] ?? 0;
     return (
       <Tooltip
         key={key}

@@ -1,4 +1,6 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { AnyJob, DetailedError, Job, Paginated } from 'types/api';
+import type { ApiResponse } from 'api/Base';
+import type { SearchableKey } from 'components/PaginatedTable';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -28,10 +30,13 @@ import EmptyOutput from './EmptyOutput';
 import { HostStatusBar, OutputToolbar } from './shared';
 import getLineTextHtml from './getLineTextHtml';
 import connectJobSocket, { closeWebSocket } from './connectJobSocket';
+import type { JobSocketMessage } from './connectJobSocket';
 import getEventRequestParams from './getEventRequestParams';
 import isHostEvent from './isHostEvent';
 import { prependTraceback } from './loadJobEvents';
 import useJobEvents from './useJobEvents';
+import type { JobEvent as OutputEvent, JobEventNode } from './useJobEvents';
+import type { LineTextHtml } from './getLineTextHtml';
 
 const QS_CONFIG = getQSConfig('job_output', {
   order_by: 'counter',
@@ -64,7 +69,7 @@ const OutputHeader = styled.div`
   }
 `;
 
-const OutputWrapper = styled.div<{ $cssMap?: Untyped }>`
+const OutputWrapper = styled.div<{ $cssMap: Record<string, string> }>`
   background-color: var(--ascender-output-bg, #fff);
   display: flex;
   flex-direction: column;
@@ -115,9 +120,23 @@ const ScrollContainer = styled.div`
 
 export const MAX_SELECTION_OVERSCAN = 500;
 
+/** The window of rows the virtualizer asks about, before any overscan. */
+export interface OverscanRange {
+  cellCount: number;
+  overscanCellsCount: number;
+  startIndex: number;
+  stopIndex: number;
+}
+
+/** The rows a text selection spans, which have to stay mounted to hold it. */
+export interface SelectedRowRange {
+  start: number;
+  end: number;
+}
+
 export function computeOverscanIndices(
-  { cellCount, overscanCellsCount, startIndex, stopIndex }: Untyped,
-  selectedRowRange: Untyped
+  { cellCount, overscanCellsCount, startIndex, stopIndex }: OverscanRange,
+  selectedRowRange: SelectedRowRange | null
 ) {
   const defaultStart = Math.max(0, startIndex - overscanCellsCount);
   const defaultStop = Math.min(cellCount - 1, stopIndex + overscanCellsCount);
@@ -158,10 +177,10 @@ export function computeOverscanIndices(
 }
 
 export interface JobOutputProps {
-  job: Untyped;
-  eventRelatedSearchableKeys?: Untyped;
-  eventSearchableKeys?: Untyped;
-  onJobRefresh?: (...args: Untyped[]) => void;
+  job: AnyJob;
+  eventRelatedSearchableKeys?: string[];
+  eventSearchableKeys?: SearchableKey[];
+  onJobRefresh?: () => void;
   [key: string]: unknown;
 }
 
@@ -173,7 +192,7 @@ function JobOutput({
 }: JobOutputProps) {
   const { t } = useLingui();
   const location = useLocation();
-  const parentRef = useRef<Untyped>(null);
+  const parentRef = useRef<HTMLDivElement>(null);
   const jobSocketCounter = useRef(0);
   const isMounted = useIsMounted();
   const scrollTop = useRef(0);
@@ -182,13 +201,15 @@ function JobOutput({
   const isPointerDown = useRef(false);
   const isTouchActive = useRef(false);
   const navigate = useNavigate();
-  const eventByUuidRequests = useRef<Untyped[]>([]);
+  const eventByUuidRequests = useRef<
+    Record<string, Promise<ApiResponse<Paginated<OutputEvent>>> | null>
+  >({});
   const eventsProcessedDelay = useRef(250);
-  const outputRef = useRef<Untyped>(null);
+  const outputRef = useRef<HTMLDivElement>(null);
   const totalRowsRef = useRef(0);
-  const scrollToEndTimeout = useRef<Untyped>(null);
+  const scrollToEndTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const fetchEventByUuid = async (uuid: Untyped) => {
+  const fetchEventByUuid = async (uuid: string) => {
     let promise = eventByUuidRequests.current[uuid];
     if (!promise) {
       promise = getJobModel(job.type).readEvents(job.id, { uuid });
@@ -206,7 +227,7 @@ function JobOutput({
   const isFlatMode =
     isJobRunning(jobStatus) || location.search.length > 1 || job.type !== 'job';
   const [isTreeReady, setIsTreeReady] = useState(false);
-  const [onReadyEvents, setOnReadyEvents] = useState<Untyped[]>([]);
+  const [onReadyEvents, setOnReadyEvents] = useState<OutputEvent[]>([]);
 
   const {
     addEvents,
@@ -229,13 +250,13 @@ function JobOutput({
     job.id,
     isFlatMode || forceFlatMode
   );
-  const [wsEvents, setWsEvents] = useState<Untyped[]>([]);
+  const [wsEvents, setWsEvents] = useState<OutputEvent[]>([]);
   const [cssMap, setCssMap] = useState<Record<string, string>>({});
   const [remoteRowCount, setRemoteRowCount] = useState(0);
   const [contentError, setContentError] = useState<unknown>(null);
-  const [currentlyLoading, setCurrentlyLoading] = useState<Untyped[]>([]);
+  const [currentlyLoading, setCurrentlyLoading] = useState<number[]>([]);
   const [hasContentLoading, setHasContentLoading] = useState(true);
-  const [hostEvent, setHostEvent] = useState<Untyped>({});
+  const [hostEvent, setHostEvent] = useState<OutputEvent | null>(null);
   const [isHostModalOpen, setIsHostModalOpen] = useState(false);
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [highestLoadedCounter, setHighestLoadedCounter] = useState(0);
@@ -245,7 +266,8 @@ function JobOutput({
   const [isMonitoringWebsocket, setIsMonitoringWebsocket] = useState(false);
   const [lastScrollPosition, setLastScrollPosition] = useState(0);
   const [showEventsRefresh, setShowEventsRefresh] = useState(false);
-  const [selectedRowRange, setSelectedRowRange] = useState<Untyped>(null);
+  const [selectedRowRange, setSelectedRowRange] =
+    useState<SelectedRowRange | null>(null);
 
   const totalNonCollapsedRows = Math.max(
     remoteRowCount - getNumCollapsedEvents(),
@@ -259,7 +281,12 @@ function JobOutput({
   // browser selection is not collapsed by unmounting). Wired through the
   // preserved computeOverscanIndices pure function.
   const rangeExtractor = useCallback(
-    (range: Untyped) => {
+    (range: {
+      count: number;
+      overscan: number;
+      startIndex: number;
+      endIndex: number;
+    }) => {
       const { overscanStartIndex, overscanStopIndex } = computeOverscanIndices(
         {
           cellCount: range.count,
@@ -419,12 +446,12 @@ function JobOutput({
       }
       return;
     }
-    let batchTimeout: Untyped;
-    let batchedEvents: Untyped[] = [];
+    let batchTimeout: ReturnType<typeof setTimeout>;
+    let batchedEvents: OutputEvent[] = [];
     const addBatchedEvents = () => {
-      let min: Untyped;
-      let max: Untyped;
-      let newCssMap: Untyped;
+      let min = 0;
+      let max = 0;
+      let newCssMap: Record<string, string> = {};
       batchedEvents.forEach((event) => {
         if (!min || event.counter < min) {
           min = event.counter;
@@ -439,7 +466,7 @@ function JobOutput({
         };
       });
       setWsEvents((oldWsEvents) => {
-        const newEvents: Untyped[] = [];
+        const newEvents: OutputEvent[] = [];
         batchedEvents.forEach((event) => {
           if (!oldWsEvents.find((e) => e.id === event.id)) {
             newEvents.push(event);
@@ -452,7 +479,7 @@ function JobOutput({
         }
         return updated.sort((a, b) => a.counter - b.counter);
       });
-      setCssMap((prevCssMap: Untyped) => ({
+      setCssMap((prevCssMap) => ({
         ...prevCssMap,
         ...newCssMap,
       }));
@@ -465,7 +492,7 @@ function JobOutput({
     // The socket has to be held on to: closeWebSocket takes the instance,
     // and the cleanup below used to call it with nothing, so the connection
     // outlived the screen.
-    const jobSocket = connectJobSocket(job, (data: Untyped) => {
+    const jobSocket = connectJobSocket(job, (data: JobSocketMessage) => {
       if (data.group_name === `${job.type}_events`) {
         batchedEvents.push(data);
         clearTimeout(batchTimeout as ReturnType<typeof setTimeout>);
@@ -480,7 +507,7 @@ function JobOutput({
           jobSocketCounter.current = data.final_counter;
         }
         if (data.status) {
-          setJobStatus(data.status);
+          setJobStatus(data.status as typeof jobStatus);
         }
       }
     });
@@ -556,7 +583,7 @@ function JobOutput({
   // virtualized render range to cover those rows so they are not
   // unmounted (which would collapse the browser selection).
   useEffect(() => {
-    let rafId: Untyped = null;
+    let rafId: number | null = null;
     const handleSelectionChange = () => {
       if (rafId) return;
       rafId = requestAnimationFrame(() => {
@@ -603,7 +630,7 @@ function JobOutput({
           count - 1,
           (bottomItem ? bottomItem.index : count - 1) + 1
         );
-        setSelectedRowRange((prev: Untyped) => {
+        setSelectedRowRange((prev) => {
           if (prev && prev.start === startIdx && prev.end === endIdx) {
             return prev;
           }
@@ -630,7 +657,7 @@ function JobOutput({
     }
   };
 
-  const loadJobEvents = async (firstWsCounter = null) => {
+  const loadJobEvents = async (firstWsCounter: number | null = null) => {
     const [params, loadRange] = getEventRequestParams(job, 50, [1, 50]);
 
     if (isMounted.current) {
@@ -660,10 +687,13 @@ function JobOutput({
       if (!isMounted.current) {
         return;
       }
-      let newCssMap: Untyped;
+      let newCssMap: Record<string, string> = {};
       let rowNumber = 0;
-      const { events, countOffset } = prependTraceback(job, fetchedEvents);
-      events.forEach((event: Untyped) => {
+      const { events, countOffset } = prependTraceback(
+        job as Job,
+        fetchedEvents
+      );
+      events.forEach((event) => {
         event.rowNumber = rowNumber;
         rowNumber++;
         const { lineCssMap } = getLineTextHtml(event);
@@ -672,7 +702,7 @@ function JobOutput({
           ...lineCssMap,
         };
       });
-      setCssMap((prevCssMap: Untyped) => ({
+      setCssMap((prevCssMap) => ({
         ...prevCssMap,
         ...newCssMap,
       }));
@@ -696,7 +726,7 @@ function JobOutput({
     }
   };
 
-  const isRowLoaded = ({ index }: Untyped) => {
+  const isRowLoaded = ({ index }: { index: number }) => {
     let counter;
     try {
       counter = getCounterForRow(index);
@@ -704,16 +734,16 @@ function JobOutput({
       console.error(e); // eslint-disable-line no-console
       return false;
     }
-    if (getEvent(counter as number)) {
+    if (counter !== undefined && getEvent(counter)) {
       return true;
     }
     if (index >= remoteRowCount && index < remoteRowCount + wsEvents.length) {
       return true;
     }
-    return currentlyLoading.includes(counter);
+    return counter !== undefined && currentlyLoading.includes(counter);
   };
 
-  const handleHostEventClick = (hostEventToOpen: Untyped) => {
+  const handleHostEventClick = (hostEventToOpen: OutputEvent) => {
     setHostEvent(hostEventToOpen);
     setIsHostModalOpen(true);
   };
@@ -723,12 +753,12 @@ function JobOutput({
   };
 
   const renderRow = (index: number) => {
-    let event;
-    let node: Untyped;
+    let event: OutputEvent | null = null;
+    let node: JobEventNode | null = null;
     try {
-      const eventForRow: Untyped = getEventForRow(index) || {};
-      event = eventForRow.event;
-      node = eventForRow.node;
+      const eventForRow = getEventForRow(index);
+      event = eventForRow?.event ?? null;
+      node = eventForRow?.node ?? null;
     } catch (e) {
       event = null;
     }
@@ -737,14 +767,14 @@ function JobOutput({
       index >= remoteRowCount &&
       index < remoteRowCount + wsEvents.length
     ) {
-      event = wsEvents[index - remoteRowCount];
+      event = wsEvents[index - remoteRowCount] ?? null;
       node = {
-        eventIndex: event?.counter,
+        eventIndex: event?.counter ?? 0,
         isCollapsed: false,
         children: [],
       };
     }
-    let actualLineTextHtml = [];
+    let actualLineTextHtml: LineTextHtml[] = [];
     if (event) {
       const { lineTextHtml } = getLineTextHtml(event);
       actualLineTextHtml = lineTextHtml;
@@ -763,8 +793,8 @@ function JobOutput({
         index={index}
         event={event}
         measure={remeasure}
-        isCollapsed={node.isCollapsed}
-        hasChildren={node.children.length}
+        isCollapsed={node?.isCollapsed ?? false}
+        hasChildren={(node?.children.length ?? 0) > 0}
         onToggleCollapsed={() => {
           toggleNodeIsCollapsed(event.uuid);
         }}
@@ -781,7 +811,13 @@ function JobOutput({
     );
   };
 
-  const loadMoreRows = async ({ startIndex, stopIndex }: Untyped) => {
+  const loadMoreRows = async ({
+    startIndex,
+    stopIndex,
+  }: {
+    startIndex: number;
+    stopIndex: number;
+  }) => {
     if (!isMounted.current) {
       return;
     }
@@ -795,7 +831,7 @@ function JobOutput({
       );
     }
 
-    let range = [startIndex, stopIndex];
+    let range: [number, number] = [startIndex, stopIndex];
     if (!isFlatMode) {
       const diff = stopIndex - startIndex;
       // The tree answers with the counter of the row asked for, or its best
@@ -835,9 +871,9 @@ function JobOutput({
     const events = response.data.results;
     const firstIndex = (params.page - 1) * params.page_size;
 
-    let newCssMap: Untyped;
+    let newCssMap: Record<string, string> = {};
     let rowNumber = firstIndex;
-    events.forEach((event: Untyped) => {
+    events.forEach((event: OutputEvent) => {
       event.rowNumber = rowNumber;
       rowNumber++;
       const { lineCssMap } = getLineTextHtml(event);
@@ -846,7 +882,7 @@ function JobOutput({
         ...lineCssMap,
       };
     });
-    setCssMap((prevCssMap: Untyped) => ({
+    setCssMap((prevCssMap) => ({
       ...prevCssMap,
       ...newCssMap,
     }));
@@ -871,11 +907,9 @@ function JobOutput({
   const virtualItems = rowVirtualizer.getVirtualItems();
   // Rendered range as primitives — depending on the getVirtualItems() array ref
   // would re-run this effect every render and churn loads endlessly.
-  const renderedStart = virtualItems.length
-    ? (virtualItems[0] as Untyped).index
-    : 0;
+  const renderedStart = virtualItems.length ? (virtualItems[0]?.index ?? 0) : 0;
   const renderedStop = virtualItems.length
-    ? (virtualItems[virtualItems.length - 1] as Untyped).index
+    ? (virtualItems[virtualItems.length - 1]?.index ?? 0)
     : 0;
   // Dedupe: don't re-request the same unloaded boundary while it is in flight.
   const lastLoadStartRef = useRef(-1);
@@ -957,13 +991,13 @@ function JobOutput({
   // of inferring intent from scroll deltas alone, follow is only disabled by
   // a real input gesture: wheel up, an upward-scrolling key, or an upward
   // scroll while the pointer/touch is held down (scrollbar or touch drag).
-  const handleWheel = (e: Untyped) => {
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     if (e.deltaY < 0) {
       setIsFollowModeEnabled(false);
     }
   };
 
-  const handleKeyDown = (e: Untyped) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (
       e.key === 'ArrowUp' ||
       e.key === 'PageUp' ||
@@ -974,7 +1008,7 @@ function JobOutput({
     }
   };
 
-  const handleMouseDown = (e: Untyped) => {
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
     isPointerDown.current = true;
     // Focus the container (it carries tabIndex={-1}) so subsequent
     // PageUp/Home/ArrowUp keystrokes reach handleKeyDown. Without this,
@@ -1003,7 +1037,7 @@ function JobOutput({
     isTouchActive.current = false;
   };
 
-  const handleScroll = (e: Untyped) => {
+  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const target = e.currentTarget;
     if (
       isFollowModeEnabled &&
@@ -1051,7 +1085,7 @@ function JobOutput({
           <HostEventModal
             onClose={handleHostModalClose}
             isOpen={isHostModalOpen}
-            hostEvent={hostEvent}
+            hostEvent={hostEvent ?? undefined}
           />
         )}
         <OutputHeader>
@@ -1067,7 +1101,9 @@ function JobOutput({
             isDeleteDisabled={isDeleting}
           />
         </OutputHeader>
-        <HostStatusBar counts={job.host_status_counts || {}} />
+        <HostStatusBar
+          counts={(job.host_status_counts as Record<string, number>) || {}}
+        />
         <JobOutputSearch
           qsConfig={QS_CONFIG}
           job={job}

@@ -1,11 +1,9 @@
-import type { Untyped } from 'types/api';
-
 export default function getRowRangePageSize(
-  startIndex: Untyped,
-  stopIndex: Untyped
+  startIndex: number,
+  stopIndex: number
 ) {
-  let page: Untyped;
-  let pageSize: Untyped;
+  let page = 1;
+  let pageSize = 1;
 
   if (startIndex === stopIndex) {
     page = startIndex;

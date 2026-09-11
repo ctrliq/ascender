@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useState } from 'react';
 import { Tab, Tabs, TabTitleText } from '@patternfly/react-core';
 import { Modal } from '@patternfly/react-core/deprecated';
@@ -10,8 +9,38 @@ import StatusLabel from '../../../components/StatusLabel';
 import { DetailList, Detail } from '../../../components/DetailList';
 import ContentEmpty from '../../../components/ContentEmpty';
 import CodeEditor from '../../../components/CodeEditor';
+import type { JobEvent } from './useJobEvents';
 
-const processEventStatus = (event: Untyped) => {
+/**
+ * What a module returned on one host, as ansible reports it.
+ *
+ * The shape is the module's own, so only the keys this modal reads are named.
+ */
+interface HostEventResult {
+  cmd?: string | string[];
+  stdout?: string | string[];
+  stderr?: string | string[];
+  /** The debug module nests its output one level deeper. */
+  result?: { stdout?: string };
+  /** The yum module answers with one entry per package. */
+  results?: string[];
+  [key: string]: unknown;
+}
+
+/** A host event's event_data, as far as this modal reads it. */
+interface HostEventData {
+  host?: string;
+  task_action?: string;
+  res?: HostEventResult;
+  [key: string]: unknown;
+}
+
+/** One host event, with its event_data narrowed to what the modal shows. */
+export type HostEvent = JobEvent & {
+  event_data?: HostEventData | null;
+};
+
+const processEventStatus = (event: HostEvent) => {
   let status = null;
   if (event.event === 'runner_on_unreachable') {
     status = 'unreachable';
@@ -37,7 +66,7 @@ const processEventStatus = (event: Untyped) => {
   return status;
 };
 
-const processCodeEditorValue = (value: Untyped) => {
+const processCodeEditorValue = (value: unknown) => {
   let codeEditorValue;
   if (!value) {
     codeEditorValue = '';
@@ -51,7 +80,7 @@ const processCodeEditorValue = (value: Untyped) => {
   return codeEditorValue;
 };
 
-const getStdOutValue = (hostEvent: Untyped) => {
+const getStdOutValue = (hostEvent: HostEvent) => {
   const taskAction = hostEvent?.event_data?.task_action;
   const res = hostEvent?.event_data?.res;
 
@@ -66,11 +95,11 @@ const getStdOutValue = (hostEvent: Untyped) => {
   return stdOut;
 };
 
-const defaultHostEvent = {};
+const defaultHostEvent: HostEvent = { counter: 0, uuid: '' };
 
 export interface HostEventModalProps {
   onClose: () => void;
-  hostEvent?: Untyped;
+  hostEvent?: HostEvent;
   isOpen?: boolean;
   [key: string]: unknown;
 }
@@ -81,19 +110,25 @@ function HostEventModal({
   isOpen = false,
 }: HostEventModalProps) {
   const { t } = useLingui();
-  const [hostStatus, setHostStatus] = useState<Untyped>(null);
+  const [hostStatus, setHostStatus] = useState<string | null>(null);
   const [activeTabKey, setActiveTabKey] = useState(0);
   useEffect(() => {
     setHostStatus(processEventStatus(hostEvent));
   }, [setHostStatus, hostEvent]);
 
-  const handleTabClick = (event: Untyped, tabIndex: Untyped) => {
-    setActiveTabKey(tabIndex);
+  const handleTabClick = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    tabIndex: string | number
+  ) => {
+    setActiveTabKey(Number(tabIndex));
   };
 
   const jsonObj = processCodeEditorValue(hostEvent?.event_data?.res);
   const stdErr = hostEvent?.event_data?.res?.stderr;
   const stdOut = getStdOutValue(hostEvent);
+  const hostDescription = (
+    hostEvent.summary_fields as { host?: { description?: string } } | undefined
+  )?.host?.description;
 
   return (
     <Modal
@@ -121,11 +156,8 @@ function HostEventModal({
             gutter="sm"
           >
             <Detail label={t`Host`} value={hostEvent.event_data?.host} />
-            {hostEvent.summary_fields?.host?.description ? (
-              <Detail
-                label={t`Description`}
-                value={hostEvent.summary_fields?.host?.description}
-              />
+            {hostDescription ? (
+              <Detail label={t`Description`} value={hostDescription} />
             ) : null}
             {hostStatus ? (
               <Detail

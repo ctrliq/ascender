@@ -1,6 +1,7 @@
-import type { Untyped, Job, UnifiedJob } from 'types/api';
+import type { Job, UnifiedJob } from 'types/api';
 import { getJobModel } from 'util/jobs';
 import type { QSParams } from 'util/qs';
+import type { JobEvent } from './useJobEvents';
 
 export async function fetchCount(job: UnifiedJob, params: QSParams) {
   const {
@@ -13,7 +14,7 @@ export async function fetchCount(job: UnifiedJob, params: QSParams) {
   return lastEvents.length >= 1 ? lastEvents[0].counter : 0;
 }
 
-export function prependTraceback(job: Job, events: Untyped) {
+export function prependTraceback(job: Job, events: JobEvent[]) {
   let countOffset = 0;
   if (!job?.result_traceback) {
     return {
@@ -22,24 +23,24 @@ export function prependTraceback(job: Job, events: Untyped) {
     };
   }
 
-  const tracebackEvent = {
+  const tracebackEvent: JobEvent = {
     counter: 1,
+    uuid: '',
     created: null,
     event: null,
     type: null,
     stdout: job?.result_traceback,
     start_line: 0,
   };
-  const firstIndex = events.findIndex(
-    (jobEvent: Untyped) => jobEvent.counter === 1
-  );
-  if (firstIndex > -1) {
-    if (!events[firstIndex].stdout) {
-      events[firstIndex].isTracebackOnly = true;
+  const firstIndex = events.findIndex((jobEvent) => jobEvent.counter === 1);
+  const firstEvent = events[firstIndex];
+  if (firstEvent) {
+    if (!firstEvent.stdout) {
+      firstEvent.isTracebackOnly = true;
     }
-    const stdoutLines = events[firstIndex].stdout?.split('\r\n') || [];
-    stdoutLines[0] = tracebackEvent.stdout;
-    events[firstIndex].stdout = stdoutLines.join('\r\n');
+    const stdoutLines = firstEvent.stdout?.split('\r\n') || [];
+    stdoutLines[0] = tracebackEvent.stdout as string;
+    firstEvent.stdout = stdoutLines.join('\r\n');
   } else {
     countOffset += 1;
     events.unshift(tracebackEvent);

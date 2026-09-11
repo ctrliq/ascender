@@ -15,6 +15,29 @@ export interface JobEvent {
   parent_uuid?: string;
   /** Which row of the output list this event draws on, once assigned. */
   rowNumber?: number;
+  id?: number;
+  /** Which serializer produced it: job_event, project_update_event, ... */
+  type?: string | null;
+  /** Null on the synthesised event a failed job's traceback is put on. */
+  created?: string | null;
+  /** The ansible callback that fired, such as playbook_on_task_start. */
+  event?: string | null;
+  event_data?: Record<string, unknown> | null;
+  event_level?: number;
+  failed?: boolean;
+  changed?: boolean;
+  host?: number | null;
+  host_name?: string | null;
+  play?: string | null;
+  task?: string | null;
+  playbook?: string | null;
+  role?: string | null;
+  stdout?: string | null;
+  start_line?: number;
+  end_line?: number;
+  verbosity?: number;
+  /** Set when the traceback is all the row has to show. */
+  isTracebackOnly?: boolean;
   [key: string]: unknown;
 }
 
@@ -82,7 +105,8 @@ export type JobEventsAction =
 
 /** What the output screen gives the tree so it can fill its own gaps. */
 export interface JobEventCallbacks {
-  fetchEventByUuid: (uuid: string) => Promise<JobEvent>;
+  /** Answers null when the job has no event with that uuid. */
+  fetchEventByUuid: (uuid: string) => Promise<JobEvent | null>;
   /**
    * Asks the job how many rows sit under each parent event, and whether it
    * has a tree at all: an old job, or one still being processed, has none.
@@ -266,6 +290,9 @@ export function jobEventsReducer(
 
     Object.keys(parentsToFetch).forEach(async (uuid) => {
       const parent = await callbacks.fetchEventByUuid(uuid);
+      if (!parent) {
+        return;
+      }
 
       if (!state.childrenSummary || !state.childrenSummary[parent.counter]) {
         // eslint-disable-next-line no-console

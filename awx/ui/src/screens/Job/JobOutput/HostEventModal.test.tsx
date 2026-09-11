@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { UserEvent } from '@testing-library/user-event';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import {
@@ -6,8 +6,11 @@ import {
   assertDetail,
 } from '../../../../testUtils/rtlContexts';
 import HostEventModal from './HostEventModal';
+import type { HostEvent } from './HostEventModal';
 
-const hostEvent = {
+const hostEvent: HostEvent = {
+  counter: 5,
+  uuid: 'abc123-runner-on-ok',
   changed: true,
   event: 'runner_on_ok',
   event_data: {
@@ -72,7 +75,7 @@ const hostEventWithArray = {
   event_data: {
     ...hostEvent.event_data,
     res: {
-      ...hostEvent.event_data.res,
+      ...hostEvent.event_data?.res,
       stdout: [
         '              total        used        free      shared  buff/cache   available\nMem:           7973        3005         960          30        4007        4582\nSwap:          1023           0        1023',
       ],
@@ -85,7 +88,7 @@ const codeEditorCount = () =>
   document.querySelectorAll('.ace_editor, .pf-v6-c-form-control').length;
 
 // PF Tabs render each tab title as a button[role="tab"] with the given label.
-async function clickTab(user: Untyped, label: Untyped) {
+async function clickTab(user: UserEvent, label: string) {
   await user.click(screen.getByRole('tab', { name: label }));
 }
 

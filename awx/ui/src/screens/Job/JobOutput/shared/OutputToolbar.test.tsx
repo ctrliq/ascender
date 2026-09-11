@@ -1,15 +1,18 @@
+import type { AnyJob } from 'types/api';
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import { OutputToolbar } from '.';
 import mockJobData from '../../shared/data.job.json';
 
+const mockJob = mockJobData as unknown as AnyJob;
+
 describe('<OutputToolbar />', () => {
   test('initially renders without crashing', () => {
     renderWithContexts(
       <OutputToolbar
         job={{
-          ...mockJobData,
+          ...mockJob,
           host_status_counts: {
             dark: 1,
             failures: 2,
@@ -25,7 +28,7 @@ describe('<OutputToolbar />', () => {
   test('should hide badge counts based on job type', () => {
     renderWithContexts(
       <OutputToolbar
-        job={{ ...mockJobData, type: 'system_job' }}
+        job={{ ...mockJob, type: 'system_job' }}
         jobStatus="successful"
         onDelete={() => {}}
       />
@@ -46,7 +49,7 @@ describe('<OutputToolbar />', () => {
     renderWithContexts(
       <OutputToolbar
         job={{
-          ...mockJobData,
+          ...mockJob,
           host_status_counts: {},
           playbook_counts: {},
         }}
@@ -70,8 +73,8 @@ describe('<OutputToolbar />', () => {
     renderWithContexts(
       <OutputToolbar
         job={{
-          ...mockJobData,
-          elapsed: 274265,
+          ...mockJob,
+          elapsed: '274265.000',
         }}
         jobStatus="successful"
         onDelete={() => {}}
@@ -86,7 +89,7 @@ describe('<OutputToolbar />', () => {
     const { unmount } = renderWithContexts(
       <OutputToolbar
         job={{
-          ...mockJobData,
+          ...mockJob,
           host_status_counts: { dark: 1, failures: 2 },
         }}
         jobStatus="successful"
@@ -101,7 +104,7 @@ describe('<OutputToolbar />', () => {
     renderWithContexts(
       <OutputToolbar
         job={{
-          ...mockJobData,
+          ...mockJob,
           summary_fields: {
             user_capabilities: {
               start: false,
@@ -121,7 +124,7 @@ describe('<OutputToolbar />', () => {
     const { unmount } = renderWithContexts(
       <OutputToolbar
         job={{
-          ...mockJobData,
+          ...mockJob,
           host_status_counts: { dark: 1, failures: 2 },
         }}
         jobStatus="successful"
@@ -134,7 +137,7 @@ describe('<OutputToolbar />', () => {
     renderWithContexts(
       <OutputToolbar
         job={{
-          ...mockJobData,
+          ...mockJob,
           summary_fields: {
             user_capabilities: {
               delete: false,

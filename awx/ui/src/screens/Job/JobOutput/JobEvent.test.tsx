@@ -1,9 +1,10 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import JobEvent from './JobEvent';
+import type { JobEvent as OutputEvent } from './useJobEvents';
 
-const mockOnPlayStartEvent = {
+const mockOnPlayStartEvent: OutputEvent = {
+  uuid: 'c7a1b4ee-play-start',
   created: '2019-07-11T18:11:22.005319Z',
   event: 'playbook_on_play_start',
   counter: 2,
@@ -12,7 +13,8 @@ const mockOnPlayStartEvent = {
   stdout:
     '\r\nPLAY [add hosts to inventory] **************************************************',
 };
-const mockRunnerOnOkEvent = {
+const mockRunnerOnOkEvent: OutputEvent = {
+  uuid: 'c7a1b4ee-runner-on-ok',
   created: '2019-07-11T18:09:22.906001Z',
   event: 'runner_on_ok',
   counter: 5,
@@ -51,7 +53,7 @@ const mockOnPlayStartLineTextHtml = [
 
 // JobEventLineText renders the html via dangerouslySetInnerHTML; in jsdom that
 // lands in the line-text element. type="job_event_line_text" identifies them.
-const lineTextNodes = (container: Untyped) =>
+const lineTextNodes = (container: HTMLElement) =>
   container.querySelectorAll('[type="job_event_line_text"]');
 
 describe('<JobEvent />', () => {
@@ -92,8 +94,8 @@ describe('<JobEvent />', () => {
   });
 
   test("events without stdout aren't rendered", () => {
-    const missingStdoutEvent = { ...mockOnPlayStartEvent };
-    delete (missingStdoutEvent as Untyped).stdout;
+    const missingStdoutEvent: OutputEvent = { ...mockOnPlayStartEvent };
+    delete missingStdoutEvent.stdout;
     const { container } = renderWithContexts(
       <JobEvent
         onJobEventClick={() => {}}
@@ -106,7 +108,7 @@ describe('<JobEvent />', () => {
   });
 
   describe('click handling with text selection', () => {
-    let originalGetSelection: Untyped;
+    let originalGetSelection: typeof window.getSelection;
 
     beforeEach(() => {
       originalGetSelection = window.getSelection;
@@ -118,9 +120,10 @@ describe('<JobEvent />', () => {
 
     // JobEventLine sets onClick only when isClickable; the clickable element is
     // the line wrapper that contains the line-text node.
-    const clickableLine = (container: Untyped) =>
-      lineTextNodes(container)[0]?.closest('[class]')?.parentElement ||
-      container.querySelector('[type="job_event_line_text"]')?.parentElement;
+    const clickableLine = (container: HTMLElement) =>
+      (lineTextNodes(container)[0]?.closest('[class]')?.parentElement ||
+        container.querySelector('[type="job_event_line_text"]')
+          ?.parentElement) as HTMLElement;
 
     test('click fires onJobEventClick when no text is selected', async () => {
       window.getSelection = vi.fn().mockReturnValue({
