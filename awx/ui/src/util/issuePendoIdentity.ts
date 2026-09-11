@@ -2,7 +2,7 @@ import { RootAPI, UsersAPI } from 'api';
 import bootstrapPendo from './bootstrapPendo';
 
 /** The parts of /api/v2/config/ this reads, plus whatever else it carries. */
-interface PendoConfig {
+export interface PendoConfig {
   version: string;
   trial?: boolean;
   license_type?: string;

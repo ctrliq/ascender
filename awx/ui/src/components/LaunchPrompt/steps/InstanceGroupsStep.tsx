@@ -11,6 +11,7 @@ import useSelected from 'hooks/useSelected';
 import OptionsList from '../../OptionsList';
 import ContentLoading from '../../ContentLoading';
 import ContentError from '../../ContentError';
+import type { LookupItem } from '../../Lookup/shared/reducer';
 
 const QS_CONFIG = getQSConfig('instance-groups', {
   page: 1,
@@ -21,7 +22,10 @@ const QS_CONFIG = getQSConfig('instance-groups', {
 function InstanceGroupsStep() {
   const { t } = useLingui();
   const [field, , helpers] = useField('instance_groups');
-  const { selected, handleSelect, setSelected } = useSelected([], field.value);
+  const { selected, handleSelect, setSelected } = useSelected<LookupItem>(
+    [],
+    field.value
+  );
 
   const location = useLocation();
 
@@ -100,7 +104,7 @@ function InstanceGroupsStep() {
         qsConfig={QS_CONFIG}
         selectItem={handleSelect}
         deselectItem={handleSelect}
-        sortSelectedItems={(selectedItems: unknown) =>
+        sortSelectedItems={(selectedItems: LookupItem[]) =>
           setSelected(selectedItems)
         }
         isSelectedDraggable

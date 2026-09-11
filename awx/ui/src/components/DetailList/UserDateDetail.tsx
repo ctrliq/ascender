@@ -22,8 +22,8 @@ export interface UserDateDetailProps {
 }
 
 function UserDateDetail({ label, date, user = null }: UserDateDetailProps) {
-  const dateStr = formatDateString(date);
-  const username = user ? user.username : '';
+  const dateStr = formatDateString(date as string);
+  const username = user ? (user.username as string) : '';
   return (
     <Detail
       label={label}

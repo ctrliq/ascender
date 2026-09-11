@@ -34,13 +34,16 @@ const colors = {
 };
 
 export interface StatusIconProps {
-  status: Untyped;
+  /** The job or instance status, which keys both maps below. */
+  status: string;
   [key: string]: unknown;
 }
 
 function StatusIcon({ status, ...props }: StatusIconProps) {
-  const color = colors[status] || '--pf-v6-chart-global--Fill--Color--500';
-  const Icon = icons[status];
+  const color =
+    colors[status as keyof typeof colors] ||
+    '--pf-v6-chart-global--Fill--Color--500';
+  const Icon = icons[status as keyof typeof icons];
   return (
     <div {...props} data-job-status={status} aria-label={status}>
       {Icon ? (

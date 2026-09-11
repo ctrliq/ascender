@@ -4,9 +4,10 @@ import { useFormikContext } from 'formik';
 import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocPreviewStep from './AdHocPreviewStep';
 import type { AdHocValues } from './types';
+import type { AdHocStep } from './types';
 
 const STEP_ID = 'preview';
-export default function useAdHocPreviewStep(hasErrors: boolean) {
+export default function useAdHocPreviewStep(hasErrors: boolean): AdHocStep {
   const { t } = useLingui();
   const { values } = useFormikContext<AdHocValues>();
 
@@ -23,7 +24,9 @@ export default function useAdHocPreviewStep(hasErrors: boolean) {
       enableNext: !hasErrors,
       nextButtonText: t`Launch`,
     },
-    hasErrors: false,
+    // hasError, not hasErrors: that is the key useAdHocLaunchSteps reads
+    // across the steps, and this one alone called it hasErrors.
+    hasError: false,
     validate: () => {},
     setTouched: () => {},
   };

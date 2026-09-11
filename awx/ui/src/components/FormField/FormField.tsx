@@ -10,6 +10,7 @@ import {
   TextArea,
 } from '@patternfly/react-core';
 import Popover from '../Popover';
+import type { TextInputProps } from '@patternfly/react-core';
 
 export interface FormFieldProps {
   id: Untyped;
@@ -21,7 +22,8 @@ export interface FormFieldProps {
   validate?: (...args: Untyped[]) => void;
   isRequired?: boolean;
   isReadOnly?: boolean;
-  type?: string;
+  /** A TextInput type, or 'textarea' to render a TextArea instead. */
+  type?: TextInputProps['type'] | 'textarea';
   [key: string]: unknown;
 }
 
@@ -89,7 +91,7 @@ function FormField({
             {...(isReadOnly ? { readOnlyVariant: 'default' } : {})}
             {...rest}
             {...field}
-            type={type}
+            type={type as TextInputProps['type']}
             onChange={(event) => {
               field.onChange(event);
             }}

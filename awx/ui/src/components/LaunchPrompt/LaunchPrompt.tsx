@@ -13,13 +13,14 @@ import ContentError from '../ContentError';
 import useLaunchSteps from './useLaunchSteps';
 import type { LaunchPromptValues, LaunchConfig, SurveyConfig } from './types';
 import AlertModal from '../AlertModal';
+import type { LabelInput } from 'util/labels';
 
 export interface PromptModalFormProps {
   launchConfig: LaunchConfig;
   onCancel: (...args: Untyped[]) => void;
   onSubmit: (...args: Untyped[]) => void;
   resource: Untyped;
-  labels: Label[];
+  labels: LabelInput[];
   surveyConfig: SurveyConfig;
   instanceGroups: InstanceGroup[];
   resourceDefaultCredentials: Untyped;
@@ -179,6 +180,19 @@ function PromptModalForm({
   );
 }
 
+export interface LaunchPromptProps {
+  /** Null until the launch endpoint has been read, which is what gates the
+   * prompt being shown at all. */
+  launchConfig: LaunchConfig | null;
+  onCancel: () => void;
+  onLaunch: (values: LaunchPromptValues) => void;
+  resource?: Untyped;
+  /** The labels the resource already carries, which seed the labels field. */
+  labels?: LabelInput[];
+  surveyConfig: SurveyConfig | null;
+  resourceDefaultCredentials?: Untyped[];
+}
+
 function LaunchPrompt({
   launchConfig,
   onCancel,
@@ -187,14 +201,15 @@ function LaunchPrompt({
   labels = [],
   surveyConfig,
   resourceDefaultCredentials = [],
-}) {
+}: LaunchPromptProps) {
   return (
     <Formik initialValues={{}} onSubmit={(values) => onLaunch(values)}>
+      {/* Both are read before the prompt is opened, which is what gates it. */}
       <PromptModalForm
         onSubmit={(values) => onLaunch(values)}
         onCancel={onCancel}
-        launchConfig={launchConfig}
-        surveyConfig={surveyConfig}
+        launchConfig={launchConfig as LaunchConfig}
+        surveyConfig={surveyConfig as SurveyConfig}
         resource={resource}
         labels={labels}
         resourceDefaultCredentials={resourceDefaultCredentials}

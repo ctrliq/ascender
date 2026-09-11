@@ -27,6 +27,7 @@ import useRequest, { useDeleteItems } from 'hooks/useRequest';
 import { TemplateListItem } from 'components/TemplateList';
 import useToast, { AlertVariant } from 'hooks/useToast';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
+import type { QSParams } from 'util/qs';
 
 const QS_CONFIG = getQSConfig('template', {
   page: 1,
@@ -41,8 +42,10 @@ const resources = {
 };
 
 export interface RelatedTemplateListProps {
-  searchParams: unknown;
-  resourceName?: unknown;
+  /** Narrows the list to the templates related to one resource. */
+  searchParams: QSParams;
+  /** The resource's name, or its [name, kind] pair for a credential. */
+  resourceName?: string | [string, string] | null;
   [key: string]: unknown;
 }
 
@@ -125,7 +128,7 @@ function RelatedTemplateList({
   );
 
   const handleCopy = useCallback(
-    (newTemplateId: unknown) => {
+    (newTemplateId: number | string) => {
       addToast({
         id: newTemplateId,
         title: t`Template copied successfully`,
@@ -146,10 +149,13 @@ function RelatedTemplateList({
 
   let linkTo = '';
   if (resourceName) {
-    const queryString = {
-      resource_id: id,
-      resource_name: resourceName,
-      resource_type: resources[location.pathname.split('/')[1]],
+    const queryString: QSParams = {
+      resource_id: id ?? null,
+      resource_name: resourceName as string,
+      resource_type:
+        resources[
+          location.pathname.split('/')[1] as keyof typeof resources
+        ] ?? null,
       resource_kind: null,
     };
     if (Array.isArray(resourceName)) {

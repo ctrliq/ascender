@@ -42,8 +42,8 @@ function WorkflowStartNode({
   showActionTooltip,
 }: WorkflowStartNodeProps) {
   const { t } = useLingui();
-  const ref = useRef(null);
-  const startNodeRef = useRef(null);
+  const ref = useRef<SVGGraphicsElement>(null);
+  const startNodeRef = useRef<HTMLDivElement>(null);
   const [hovering, setHovering] = useState(false);
   const dispatch = useContext(WorkflowDispatchContext) as React.Dispatch<WorkflowAction>;
   const { addingLink, nodePositions } = useContext(WorkflowStateContext) as WorkflowState;
@@ -53,7 +53,9 @@ function WorkflowStartNode({
   }
 
   const handleNodeMouseEnter = () => {
-    ref.current.parentNode.appendChild(ref.current);
+    if (ref.current) {
+      ref.current.parentNode?.appendChild(ref.current);
+    }
     setHovering(true);
   };
 
@@ -72,7 +74,9 @@ function WorkflowStartNode({
         y="10"
         style={{ overflow: 'visible' }}
       >
-        <StartDiv ref={startNodeRef}>{t`START`}</StartDiv>
+        <StartDiv ref={startNodeRef as React.Ref<HTMLDivElement>}>
+          {t`START`}
+        </StartDiv>
       </StartForeignObject>
       {showActionTooltip && hovering && (
         <WorkflowActionTooltip
@@ -91,8 +95,8 @@ function WorkflowStartNode({
               <PlusIcon />
             </WorkflowActionTooltipItem>,
           ]}
-          pointX={startNodeRef.current.offsetWidth}
-          pointY={startNodeRef.current.offsetHeight / 2 + 10}
+          pointX={startNodeRef.current?.offsetWidth}
+          pointY={(startNodeRef.current?.offsetHeight ?? 0) / 2 + 10}
         />
       )}
     </StartG>

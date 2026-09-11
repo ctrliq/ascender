@@ -9,7 +9,7 @@ import AlertModal from '../AlertModal';
 
 function cannotCancelBecausePermissions(job: Untyped) {
   return (
-    !job.summary_fields.user_capabilities.start && isJobRunning(job.status)
+    !job.summary_fields.user_capabilities?.start && isJobRunning(job.status)
   );
 }
 
@@ -33,8 +33,8 @@ function JobListCancelButton({
   const numJobsToCancel = jobsToCancel.length;
 
   const handleCancelJob = () => {
-    onCancel();
-    toggleModal();
+    onCancel(jobsToCancel);
+    setIsModalOpen(false);
   };
 
   const toggleModal = () => {

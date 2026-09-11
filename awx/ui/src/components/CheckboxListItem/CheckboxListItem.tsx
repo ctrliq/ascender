@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SearchColumn, Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Td, Tr } from '@patternfly/react-table';
@@ -13,9 +13,11 @@ export interface CheckboxListItemProps {
   onDeselect: (...args: Untyped[]) => void;
   rowIndex: number;
   onSelect: (...args: Untyped[]) => void;
-  columns: unknown[];
-  item: Untyped;
-  rowActions: unknown[];
+  /** One column per field to show beside the checkbox, keyed into `item`. */
+  columns?: SearchColumn[];
+  item?: Untyped;
+  /** Elements rendered in the row's actions cell; each carries its own id. */
+  rowActions?: React.ReactElement<{ id: string }>[];
   [key: string]: unknown;
 }
 
@@ -59,7 +61,7 @@ const CheckboxListItem = ({
         dataLabel={t`Selected`}
       />
 
-      {columns?.length > 0 ? (
+      {columns && columns.length > 0 ? (
         columns.map((col) => (
           <Td
             aria-label={col.name}
@@ -67,14 +69,14 @@ const CheckboxListItem = ({
             dataLabel={col.key}
             key={col.key}
           >
-            {item[col.key]}
+            {item?.[col.key]}
           </Td>
         ))
       ) : (
         <Td
-          aria-labelledby={itemId}
+          aria-labelledby={String(itemId)}
           data-cy={`item-${itemId}`}
-          dataLabel={label}
+          dataLabel={String(label)}
         >
           <b>{label}</b>
         </Td>

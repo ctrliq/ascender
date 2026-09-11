@@ -10,6 +10,7 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import { EyeIcon, EyeSlashIcon } from '@patternfly/react-icons';
+import type { TextInputProps } from '@patternfly/react-core';
 
 export interface PasswordInputProps {
   autocomplete?: string;
@@ -64,7 +65,7 @@ function PasswordInput({
         isDisabled={isDisabled}
         isRequired={isRequired}
         validated={isValid || isFieldGroupValid ? 'default' : 'error'}
-        type={inputType}
+        type={inputType as TextInputProps['type']}
         onChange={(event) => {
           field.onChange(event);
         }}

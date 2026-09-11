@@ -31,9 +31,11 @@ import PaginatedTable, {
 } from '../PaginatedTable';
 import AddDropDownButton from '../AddDropDownButton';
 import TemplateListItem from './TemplateListItem';
+import type { QSParams } from 'util/qs';
 
 export interface TemplateListProps {
-  defaultParams: unknown;
+  /** Narrows the list, merged into the query string's defaults. */
+  defaultParams?: QSParams;
   [key: string]: unknown;
 }
 
@@ -140,7 +142,7 @@ function TemplateList({ defaultParams }: TemplateListProps) {
   );
 
   const handleCopy = useCallback(
-    (newTemplateId: unknown) => {
+    (newTemplateId: number | string) => {
       addToast({
         id: newTemplateId,
         title: t`Template copied successfully`,

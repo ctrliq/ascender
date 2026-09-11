@@ -17,19 +17,20 @@ import { TimesIcon } from '@patternfly/react-icons';
 import { arrayToString, stringToArray } from 'util/strings';
 
 export interface TagMultiSelectProps {
-  onChange: (...args: Untyped[]) => void;
-  value: unknown;
+  onChange: (value: string) => void;
+  /** The tags as the form holds them: a comma separated string. */
+  value?: string;
   [key: string]: unknown;
 }
 
 function TagMultiSelect({ onChange, value }: TagMultiSelectProps) {
   const { t } = useLingui();
-  const selections = stringToArray(value);
+  const selections = stringToArray(value ?? '');
   const [options, setOptions] = useState(selections);
   const [isExpanded, setIsExpanded] = useState(false);
   const [filterValue, setFilterValue] = useState('');
 
-  const onSelect = (_event: unknown, item: Record<string, unknown>) => {
+  const onSelect = (_event: unknown, item: string) => {
     let newValue;
     if (selections.includes(item)) {
       newValue = selections.filter((i) => i !== item);

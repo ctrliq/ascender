@@ -31,6 +31,7 @@ import {
 import FormField from '../../FormField';
 import Popover from '../../Popover';
 import type { SurveyConfig, SurveyQuestion } from '../types';
+import type { TextInputProps } from '@patternfly/react-core';
 
 export interface SurveyStepProps {
   surveyConfig: SurveyConfig;
@@ -77,7 +78,7 @@ function TextField({ question }: { question: SurveyQuestion }) {
       tooltip={question.question_description}
       isRequired={question.required}
       validate={combine(validators)}
-      type={question.type}
+      type={question.type as TextInputProps['type']}
       minLength={question.min}
       maxLength={question.max}
     />

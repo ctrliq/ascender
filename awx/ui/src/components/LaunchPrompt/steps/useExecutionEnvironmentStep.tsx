@@ -1,14 +1,16 @@
+import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import ExecutionEnvironmentStep from './ExecutionEnvironmentStep';
 import StepName from './StepName';
 import type { LaunchConfig, LaunchStep } from '../types';
+import type { LaunchPromptValues } from '../types';
 
 const STEP_ID = 'executionEnvironment';
 
 export default function useExecutionEnvironmentStep(
   launchConfig: LaunchConfig,
-  resource: Record<string, unknown>
+  resource: Untyped
 ): LaunchStep {
   const { t } = useLingui();
   return {
@@ -43,14 +45,15 @@ export default function useExecutionEnvironmentStep(
 
 function getInitialValues(
   launchConfig: LaunchConfig,
-  resource: Record<string, unknown>
-) {
+  resource: Untyped
+): LaunchPromptValues {
   if (!launchConfig.ask_execution_environment_on_launch) {
     return {};
   }
 
-  return {
+  const initialValues: LaunchPromptValues = {
     execution_environment:
       resource?.summary_fields?.execution_environment || null,
   };
+  return initialValues;
 }

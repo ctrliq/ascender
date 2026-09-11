@@ -121,7 +121,7 @@ function ProjectLookup({
       fieldId="project"
       isRequired={required}
       label={t`Project`}
-      labelHelp={tooltip && <Popover content={tooltip} />}
+      labelHelp={tooltip ? <Popover content={tooltip} /> : undefined}
     >
       <Lookup
         id="project"

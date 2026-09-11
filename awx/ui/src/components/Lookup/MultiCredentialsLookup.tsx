@@ -61,7 +61,7 @@ function MultiCredentialsLookup({
       const types = await CredentialTypesAPI.loadAllTypes();
       const match = types.find((type) => type.kind === 'ssh') || types[0];
       if (isMounted.current) {
-        setSelectedType(match);
+        setSelectedType(match ?? null);
       }
       return types;
       /* eslint-disable-next-line react-hooks/exhaustive-deps */
@@ -136,7 +136,15 @@ function MultiCredentialsLookup({
     }
   }, [typesError, credentialsError, onError]);
 
-  const renderChip = ({ item, removeItem, canDelete }) => (
+  const renderChip = ({
+    item,
+    removeItem,
+    canDelete,
+  }: {
+    item: Untyped;
+    removeItem: (item: Untyped) => void;
+    canDelete: boolean;
+  }) => (
     <CredentialChip
       key={item.id}
       onClick={() => removeItem(item)}
@@ -195,7 +203,9 @@ function MultiCredentialsLookup({
                     { replace: true }
                   );
                   setSelectedType(
-                    credentialTypes.find((o) => o.id === parseInt(id, 10))
+                    credentialTypes.find(
+                      (o: Untyped) => o.id === parseInt(String(id), 10)
+                    ) ?? null
                   );
                 }}
               />
@@ -237,10 +247,10 @@ function MultiCredentialsLookup({
             selectItem={(item: LookupItem) => {
               const hasSameVaultID = (val: Untyped) =>
                 val?.inputs?.vault_id !== undefined &&
-                val?.inputs?.vault_id === item?.inputs?.vault_id;
+                val?.inputs?.vault_id === (item as Untyped)?.inputs?.vault_id;
               const hasSameCredentialType = (val: Untyped) =>
-                val.credential_type === item.credential_type;
-              const selectedItems = state.selectedItems.filter((i: number) =>
+                val.credential_type === (item as Untyped).credential_type;
+              const selectedItems = state.selectedItems.filter((i: Untyped) =>
                 isVault ? !hasSameVaultID(i) : !hasSameCredentialType(i)
               );
               selectedItems.push(item);

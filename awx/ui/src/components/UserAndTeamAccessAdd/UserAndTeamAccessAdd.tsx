@@ -1,4 +1,4 @@
-import type { RolesApiModel, Untyped } from 'types/api';
+import type { RolesApiModel, SummaryFieldRef, Untyped } from 'types/api';
 import React, { useState, useCallback, useMemo } from 'react';
 import { useParams, useMatch } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -58,13 +58,13 @@ function UserAndTeamAccessAdd({
     selected: resourcesSelected,
     handleSelect: handleResourceSelect,
     clearSelected: clearResourcesSelected,
-  } = useSelected([]);
+  } = useSelected<Untyped>([]);
 
   const {
     selected: rolesSelected,
     handleSelect: handleRoleSelect,
     clearSelected: clearRolesSelected,
-  } = useSelected([]);
+  } = useSelected<Untyped>([]);
 
   const resourceAccessConfig = useMemo(
     () => [
@@ -306,11 +306,17 @@ function UserAndTeamAccessAdd({
   const { request: handleWizardSave, error: saveError } = useRequest(
     useCallback(async () => {
       const roleRequests: Promise<unknown>[] = [];
-      const resourceRolesTypes = resourcesSelected.flatMap((resource) =>
-        Object.values(resource.summary_fields.object_roles)
+      const resourceRolesTypes = resourcesSelected.flatMap(
+        (resource: Untyped) =>
+          Object.values(
+            resource.summary_fields.object_roles as Record<
+              string,
+              SummaryFieldRef
+            >
+          )
       );
 
-      rolesSelected.map((role) =>
+      rolesSelected.map((role: Untyped) =>
         resourceRolesTypes.forEach((rolename) => {
           if (rolename.name === role.name) {
             roleRequests.push(
@@ -328,8 +334,7 @@ function UserAndTeamAccessAdd({
       apiModel,
       associationId,
       resourcesSelected,
-    ]),
-    {}
+    ])
   );
 
   // Object roles can be user only, so we remove them when

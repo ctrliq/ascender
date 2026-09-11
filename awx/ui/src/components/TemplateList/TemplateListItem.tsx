@@ -89,19 +89,19 @@ function TemplateListItem({
     (!summaryFields.project ||
       (!summaryFields.inventory && !askInventoryOnLaunch));
 
-  const inventoryValue = (kind: unknown, id: number | string) => {
+  const inventoryValue = (kind: string | undefined, id: number | string) => {
     const inventorykind = kind === 'smart' ? 'smart_inventory' : 'inventory';
 
     return askInventoryOnLaunch ? (
       <>
         <Link to={`/inventories/${inventorykind}/${id}/details`}>
-          {summaryFields.inventory.name}
+          {summaryFields.inventory?.name}
         </Link>
         <span> {t`(Prompt on launch)`}</span>
       </>
     ) : (
       <Link to={`/inventories/${inventorykind}/${id}/details`}>
-        {summaryFields.inventory.name}
+        {summaryFields.inventory?.name}
       </Link>
     );
   };
@@ -111,7 +111,7 @@ function TemplateListItem({
     : null;
   if (mostRecentJob) {
     lastRun = mostRecentJob.finished
-      ? formatDateString(mostRecentJob.finished)
+      ? (formatDateString(mostRecentJob.finished) as string)
       : t`Running`;
   }
 
@@ -184,7 +184,7 @@ function TemplateListItem({
             />
           </ActionItem>
           <ActionItem
-            visible={template.summary_fields.user_capabilities.start}
+            visible={template.summary_fields.user_capabilities?.start}
             tooltip={t`Launch Template`}
           >
             <LaunchButton resource={template}>
@@ -202,7 +202,7 @@ function TemplateListItem({
             </LaunchButton>
           </ActionItem>
           <ActionItem
-            visible={template.summary_fields.user_capabilities.edit}
+            visible={template.summary_fields.user_capabilities?.edit}
             tooltip={t`Edit Template`}
           >
             <Button
@@ -218,7 +218,7 @@ function TemplateListItem({
           </ActionItem>
           <ActionItem
             tooltip={t`Copy Template`}
-            visible={template.summary_fields.user_capabilities.copy}
+            visible={template.summary_fields.user_capabilities?.copy}
           >
             <CopyButton
               id={`template-action-copy-${template.id}`}

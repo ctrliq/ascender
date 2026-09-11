@@ -16,6 +16,7 @@ import { VariablesField } from '../CodeEditor';
 import { InventoryLookup } from '../Lookup';
 import { FormColumnLayout, FormFullWidthLayout } from '../FormLayout';
 import Popover from '../Popover';
+import type { Untyped } from 'types/api';
 
 export interface InventoryLookupFieldProps {
   isDisabled: boolean;
@@ -24,7 +25,7 @@ export interface InventoryLookupFieldProps {
 
 const InventoryLookupField = ({ isDisabled }: InventoryLookupFieldProps) => {
   const { t } = useLingui();
-  const { setFieldValue, setFieldTouched } = useFormikContext();
+  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
   const [inventoryField, inventoryMeta, inventoryHelpers] =
     useField('inventory');
 
@@ -40,7 +41,7 @@ const InventoryLookupField = ({ isDisabled }: InventoryLookupFieldProps) => {
     <InventoryLookup
       fieldId="inventory-lookup"
       value={inventoryField.value}
-      onBlur={() => inventoryHelpers.setTouched()}
+      onBlur={() => inventoryHelpers.setTouched(true)}
       tooltip={t`Select the inventory that this host will belong to.`}
       isValid={!inventoryMeta.touched || !inventoryMeta.error}
       helperTextInvalid={inventoryMeta.error}
@@ -86,6 +87,15 @@ const InventoryLookupField = ({ isDisabled }: InventoryLookupFieldProps) => {
   );
 };
 
+export interface HostFormProps {
+  handleCancel: () => void;
+  handleSubmit: (values: Untyped) => void;
+  host?: Untyped;
+  isInventoryVisible?: boolean;
+  submitError?: unknown;
+  disableInventoryLookup?: boolean;
+}
+
 const HostForm = ({
   handleCancel,
   handleSubmit,
@@ -101,7 +111,7 @@ const HostForm = ({
   isInventoryVisible = true,
   submitError = null,
   disableInventoryLookup = false,
-}) => {
+}: HostFormProps) => {
   const { t } = useLingui();
   return (
     <Formik
@@ -140,7 +150,7 @@ const HostForm = ({
                 label={t`Variables`}
               />
             </FormFullWidthLayout>
-            {submitError && <FormSubmitError error={submitError} />}
+            {Boolean(submitError) && <FormSubmitError error={submitError} />}
             <FormActionGroup
               onCancel={handleCancel}
               onSubmit={formik.handleSubmit}

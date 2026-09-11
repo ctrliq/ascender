@@ -14,6 +14,7 @@ import Lookup from './Lookup';
 import LookupErrorMessage from './shared/LookupErrorMessage';
 import FieldWithPrompt from '../FieldWithPrompt';
 import type { LookupItem } from './shared/reducer';
+import type { QSParams } from 'util/qs';
 
 const QS_CONFIG = getQSConfig('instances', {
   page: 1,
@@ -39,7 +40,8 @@ export interface PeersLookupProps {
   promptName: Untyped;
   formLabel?: Untyped;
   typePeers?: boolean;
-  instance_details?: Record<string, unknown>;
+  /** The instance being peered, whose own id and peers are excluded. */
+  instance_details?: Untyped;
   [key: string]: unknown;
 }
 
@@ -71,7 +73,7 @@ function PeersLookup({
   } = useRequest(
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
-      const peersFilter = {};
+      const peersFilter: QSParams = {};
       if (typePeers) {
         peersFilter.not__node_type = ['control', 'hybrid'];
         if (instance_details) {
@@ -132,7 +134,7 @@ function PeersLookup({
             key={item.id}
             onClose={() => removeItem(item)}
           >
-            {item.hostname}
+            {item.hostname as React.ReactNode}
           </Label>
         )}
         renderOptionsList={({ state, dispatch, canDelete }) => (
@@ -190,7 +192,7 @@ function PeersLookup({
     <FormGroup
       className={className}
       label={formLabel}
-      labelHelp={tooltip && <Popover content={tooltip} />}
+      labelHelp={tooltip ? <Popover content={tooltip} /> : undefined}
       fieldId={id}
     >
       {renderLookup()}

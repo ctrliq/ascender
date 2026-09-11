@@ -17,6 +17,7 @@ import { useLingui } from '@lingui/react/macro';
 import { LabelsAPI } from 'api';
 import useIsMounted from 'hooks/useIsMounted';
 import { useSyncedSelectValue } from '../MultiSelect';
+import type { SelectOptionValue } from '../MultiSelect/useSyncedSelectValue';
 
 async function loadLabelOptions(
   setLabels: Untyped,
@@ -51,9 +52,10 @@ async function loadLabelOptions(
 }
 
 export interface LabelSelectProps {
-  value: unknown;
+  /** The labels currently on the resource, as the form holds them. */
+  value: SelectOptionValue[];
   placeholder?: string;
-  onChange: (...args: Untyped[]) => void;
+  onChange: (next: SelectOptionValue[]) => void;
   onError: (...args: Untyped[]) => void;
   createText: React.ReactNode;
   [key: string]: unknown;
@@ -89,28 +91,31 @@ function LabelSelect({
 
   const filteredOptions = filterValue
     ? options.filter((o) =>
-        o.name.toLowerCase().includes(filterValue.toLowerCase())
+        (o.name ?? '').toLowerCase().includes(filterValue.toLowerCase())
       )
     : options;
 
   const hasExactMatch = options.some(
-    (o) => o.name.toLowerCase() === filterValue.toLowerCase()
+    (o) => (o.name ?? '').toLowerCase() === filterValue.toLowerCase()
   );
 
-  const handleSelect = (_event: unknown, selectedValue: unknown) => {
+  const handleSelect = (
+    _event?: React.MouseEvent,
+    selectedValue?: unknown
+  ) => {
     const selectedOption =
       options.find((o) => String(o.id) === String(selectedValue)) ||
       selections.find((o) => String(o.id) === String(selectedValue));
 
     if (selectedOption) {
-      onSelect(_event, selectedOption);
+      onSelect(_event ?? null, selectedOption);
     } else if (typeof selectedValue === 'string') {
       const trimmed = selectedValue.trim();
       if (trimmed && !options.find((o) => o.name === trimmed)) {
         setOptions(options.concat({ name: trimmed, id: trimmed }));
       }
       const newItem = { id: trimmed, name: trimmed };
-      onSelect(_event, newItem);
+      onSelect(_event ?? null, newItem);
     }
     setFilterValue('');
   };

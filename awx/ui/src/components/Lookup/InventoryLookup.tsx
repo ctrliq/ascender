@@ -11,6 +11,7 @@ import OptionsList from '../OptionsList';
 import LookupErrorMessage from './shared/LookupErrorMessage';
 import FieldWithPrompt from '../FieldWithPrompt';
 import type { LookupItem } from './shared/reducer';
+import type { QSParams } from 'util/qs';
 
 const QS_CONFIG = getQSConfig('inventory', {
   page: 1,
@@ -69,10 +70,12 @@ function InventoryLookup({
   } = useRequest(
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
-      const inventoryKindParams = hideAdvancedInventories
+      const inventoryKindParams: QSParams = hideAdvancedInventories
         ? { not__kind: ['smart', 'constructed', 'federated'] }
         : {};
-      const excludeParams = excludeIdsKey ? { not__id__in: excludeIdsKey } : {};
+      const excludeParams: QSParams = excludeIdsKey
+        ? { not__id__in: excludeIdsKey }
+        : {};
       const [{ data }, actionsResponse] = await Promise.all([
         InventoriesAPI.read(
           mergeParams(params, {
@@ -154,7 +157,7 @@ function InventoryLookup({
       <Lookup
         id="inventory-lookup"
         header={t`Inventory`}
-        value={value}
+        value={value as LookupItem[]}
         onChange={onChange}
         onUpdate={fetchInventories}
         onBlur={onBlur}
@@ -214,7 +217,7 @@ function InventoryLookup({
       <Lookup
         id="inventory-lookup"
         header={t`Inventory`}
-        value={value}
+        value={value as LookupItem[]}
         onChange={onChange}
         onDebounce={checkInventoryName}
         fieldName={fieldName}
@@ -264,7 +267,7 @@ function InventoryLookup({
             deselectItem={(item: LookupItem) =>
               dispatch({ type: 'DESELECT_ITEM', item })
             }
-            sortSelectedItems={(selectedItems: unknown) =>
+            sortSelectedItems={(selectedItems: LookupItem[]) =>
               dispatch({ type: 'SET_SELECTED_ITEMS', selectedItems })
             }
             isSelectedDraggable

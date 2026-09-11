@@ -19,6 +19,7 @@ import Lookup from './Lookup';
 import LookupErrorMessage from './shared/LookupErrorMessage';
 import FieldWithPrompt from '../FieldWithPrompt';
 import type { LookupItem } from './shared/reducer';
+import type { QSParams } from 'util/qs';
 
 const QS_CONFIG = getQSConfig('execution_environments', {
   page: 1,
@@ -112,13 +113,13 @@ function ExecutionEnvironmentLookup({
         };
       }
       const params = parseQueryString(QS_CONFIG, location.search);
-      const globallyAvailableParams = globallyAvailable
+      const globallyAvailableParams: QSParams = globallyAvailable
         ? { or__organization__isnull: 'True' }
         : {};
-      const organizationIdParams = organizationId
+      const organizationIdParams: QSParams = organizationId
         ? { or__organization__id: organizationId }
         : {};
-      const projectIdParams =
+      const projectIdParams: QSParams =
         projectId && project?.organization
           ? {
               or__organization__id: project.organization,
@@ -259,7 +260,7 @@ function ExecutionEnvironmentLookup({
     <FormGroup
       fieldId={id}
       label={renderLabel()}
-      labelHelp={popoverContent && <Popover content={popoverContent} />}
+      labelHelp={popoverContent ? <Popover content={popoverContent} /> : undefined}
     >
       {tooltip && isDisabled ? (
         <Tooltip content={tooltip}>{renderLookup()}</Tooltip>

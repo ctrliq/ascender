@@ -17,12 +17,26 @@ export const VERBOSITY = {
   5: msg`5 (WinRM Debug)`,
 };
 
-export function getVerbosityLabel(verbosity: unknown, i18n: Untyped) {
-  return VERBOSITY[verbosity] ? i18n._(VERBOSITY[verbosity]) : undefined;
+/**
+ * The label for one of the six verbosity levels, translated.
+ *
+ * Args:
+ *   verbosity: the level the job or template is set to, 0 through 5.
+ *   i18n: the lingui instance the caller already has.
+ *
+ * Returns:
+ *   The level's label, or undefined for a level outside the six.
+ */
+export function getVerbosityLabel(
+  verbosity: number | undefined,
+  i18n: Untyped
+) {
+  const key = verbosity as keyof typeof VERBOSITY;
+  return VERBOSITY[key] ? i18n._(VERBOSITY[key]) : undefined;
 }
 
 export interface VerbositySelectFieldProps {
-  fieldId: number | string;
+  fieldId: string;
   promptId?: number | string;
   promptName?: Untyped;
   tooltip: Untyped;

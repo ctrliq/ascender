@@ -3,9 +3,11 @@ import { useFormikContext } from 'formik';
 import { Alert } from '@patternfly/react-core';
 import { FormFullWidthLayout } from '../FormLayout';
 import sortErrorMessages from './sortErrorMessages';
+import type { FormikErrors } from 'formik';
 
 export interface FormSubmitErrorProps {
-  error: Error | null;
+  /** Whatever the submit caught, which is unknown to TypeScript. */
+  error?: unknown;
   [key: string]: unknown;
 }
 
@@ -13,7 +15,7 @@ function FormSubmitError({ error }: FormSubmitErrorProps) {
   const [errorMessage, setErrorMessage] = useState<string | string[] | null>(
     null
   );
-  const { values, setErrors } = useFormikContext();
+  const { values, setErrors } = useFormikContext<Record<string, unknown>>();
 
   useEffect(() => {
     const { formError, fieldErrors } = sortErrorMessages(error, values);
@@ -21,7 +23,7 @@ function FormSubmitError({ error }: FormSubmitErrorProps) {
       setErrorMessage(formError);
     }
     if (fieldErrors) {
-      setErrors(fieldErrors);
+      setErrors(fieldErrors as FormikErrors<Record<string, unknown>>);
     }
   }, [error, setErrors, values]);
 
@@ -37,7 +39,7 @@ function FormSubmitError({ error }: FormSubmitErrorProps) {
         ouiaId="form-submit-error-alert"
         title={
           Array.isArray(errorMessage)
-            ? errorMessage.map((msg: unknown) => <div key={msg}>{msg}</div>)
+            ? errorMessage.map((msg: string) => <div key={msg}>{msg}</div>)
             : errorMessage
         }
       />

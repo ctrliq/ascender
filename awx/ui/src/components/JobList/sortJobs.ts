@@ -1,4 +1,5 @@
 import type { Untyped } from 'types/api';
+import type { QSParams } from 'util/qs';
 
 const sortFns = {
   finished: byFinished,
@@ -9,10 +10,23 @@ const sortFns = {
   started: byStarted,
 };
 
-export default function sortJobs(jobs: Untyped, params: unknown) {
-  const { order_by = '-finished', page_size = 20 } = params;
+/**
+ * Orders a page of jobs the way the list's query string asks for.
+ *
+ * Args:
+ *   jobs: the jobs currently on the page, which the websocket has updated.
+ *   params: the list's query string, already parsed.
+ *
+ * Returns:
+ *   The jobs in order, cut back to one page.
+ */
+export default function sortJobs(jobs: Untyped[], params: QSParams) {
+  const { order_by = '-finished', page_size = 20 } = params as {
+    order_by?: string;
+    page_size?: number;
+  };
   const key = order_by.replace('-', '');
-  const fn = sortFns[key];
+  const fn = sortFns[key as keyof typeof sortFns];
   if (!fn) {
     return jobs.slice(0, page_size);
   }

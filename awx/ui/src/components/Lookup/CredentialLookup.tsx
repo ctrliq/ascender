@@ -19,6 +19,7 @@ import Lookup from './Lookup';
 import OptionsList from '../OptionsList';
 import LookupErrorMessage from './shared/LookupErrorMessage';
 import type { LookupItem } from './shared/reducer';
+import type { QSParams } from 'util/qs';
 
 const QS_CONFIG = getQSConfig('credentials', {
   page: 1,
@@ -78,13 +79,13 @@ function CredentialLookup({
   } = useRequest(
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
-      const typeIdParams = credentialTypeId
+      const typeIdParams: QSParams = credentialTypeId
         ? { credential_type: credentialTypeId }
         : {};
-      const typeKindParams = credentialTypeKind
+      const typeKindParams: QSParams = credentialTypeKind
         ? { credential_type__kind: credentialTypeKind }
         : {};
-      const typeNamespaceParams = credentialTypeNamespace
+      const typeNamespaceParams: QSParams = credentialTypeNamespace
         ? { credential_type__namespace: credentialTypeNamespace }
         : {};
 
@@ -145,13 +146,13 @@ function CredentialLookup({
       }
 
       try {
-        const typeIdParams = credentialTypeId
+        const typeIdParams: QSParams = credentialTypeId
           ? { credential_type: credentialTypeId }
           : {};
-        const typeKindParams = credentialTypeKind
+        const typeKindParams: QSParams = credentialTypeKind
           ? { credential_type__kind: credentialTypeKind }
           : {};
-        const typeNamespaceParams = credentialTypeNamespace
+        const typeNamespaceParams: QSParams = credentialTypeNamespace
           ? { credential_type__namespace: credentialTypeNamespace }
           : {};
 
@@ -180,12 +181,12 @@ function CredentialLookup({
       fieldId="credential"
       isRequired={required}
       label={label}
-      labelHelp={tooltip && <Popover content={tooltip} />}
+      labelHelp={tooltip ? <Popover content={tooltip} /> : undefined}
     >
       <Lookup
         id="credential"
         header={label}
-        value={value}
+        value={value as LookupItem[]}
         onBlur={onBlur}
         onChange={onChange}
         onUpdate={fetchCredentials}
@@ -239,7 +240,7 @@ function CredentialLookup({
             deselectItem={(item: LookupItem) =>
               dispatch({ type: 'DESELECT_ITEM', item })
             }
-            sortSelectedItems={(selectedItems: unknown) =>
+            sortSelectedItems={(selectedItems: LookupItem[]) =>
               dispatch({ type: 'SET_SELECTED_ITEMS', selectedItems })
             }
             multiple={multiple}

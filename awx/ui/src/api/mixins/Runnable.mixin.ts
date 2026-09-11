@@ -11,7 +11,7 @@ const Runnable = <T extends BaseConstructor>(parent: T) =>
       return this.http.post(endpoint);
     }
 
-    launchUpdate(id: number | string, data: unknown) {
+    launchUpdate(id: number | string, data?: unknown) {
       const endpoint = `${this.baseUrl}${id}/update/`;
 
       return this.http.post(endpoint, data);
@@ -41,7 +41,7 @@ const Runnable = <T extends BaseConstructor>(parent: T) =>
       return this.http.get(endpoint);
     }
 
-    relaunch(id: number | string, data: unknown) {
+    relaunch(id: number | string, data?: unknown) {
       const endpoint = `${this.baseUrl}${id}/relaunch/`;
 
       return this.http.post(endpoint, data);

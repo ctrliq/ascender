@@ -2,11 +2,12 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocExecutionEnvironmentStep from './AdHocExecutionEnvironmentStep';
+import type { AdHocStep } from './types';
 
 const STEP_ID = 'executionEnvironment';
 export default function useAdHocExecutionEnvironmentStep(
-  organizationId: unknown
-) {
+  organizationId: number | string | null
+): AdHocStep {
   const { t } = useLingui();
   return {
     step: {

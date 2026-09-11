@@ -23,7 +23,7 @@ function ChipGroup({
   const { t } = useLingui();
 
   const handleClick = (e: React.SyntheticEvent) => {
-    if (onOverflowChipClick && e.target.closest('.pf-m-overflow')) {
+    if (onOverflowChipClick && (e.target as HTMLElement).closest('.pf-m-overflow')) {
       onOverflowChipClick();
     }
   };

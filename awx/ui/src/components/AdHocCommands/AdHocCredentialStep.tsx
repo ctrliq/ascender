@@ -34,7 +34,7 @@ const QS_CONFIG = getQSConfig('credentials', {
 });
 
 export interface AdHocCredentialStepProps {
-  credentialTypeId: number | string;
+  credentialTypeId: number | string | null;
   [key: string]: unknown;
 }
 

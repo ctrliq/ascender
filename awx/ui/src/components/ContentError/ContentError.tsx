@@ -32,7 +32,7 @@ function ContentError({
   const response = (error as DetailedError | null)?.response;
 
   if (response && response.status === 401) {
-    if (!response.headers['session-timeout']) {
+    if (!response.headers?.['session-timeout']) {
       logout();
       return null;
     }
@@ -54,10 +54,12 @@ function ContentError({
             {is404
               ? t`The page you requested could not be found.`
               : t`There was an error loading this content. Please reload the page.`}{' '}
-            {children || <Link to="/home">{t`Back to Dashboard.`}</Link>}
+            {(children as React.ReactNode) || (
+              <Link to="/home">{t`Back to Dashboard.`}</Link>
+            )}
           </EmptyStateBody>
           <EmptyStateFooter>
-            {error && <ErrorDetail error={error} />}
+            {Boolean(error) && <ErrorDetail error={error} />}
           </EmptyStateFooter>
         </EmptyState>
       )}

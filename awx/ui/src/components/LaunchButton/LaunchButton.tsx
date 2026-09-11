@@ -155,7 +155,7 @@ function LaunchButton({ resource, children }: LaunchButtonProps) {
     }
     setIsLaunching(true);
     try {
-      let jobPromise;
+      let jobPromise: Promise<Untyped> | undefined;
 
       if (resource.type === 'job_template') {
         jobPromise = JobTemplatesAPI.launch(resource.id, params || {});
@@ -193,8 +193,8 @@ function LaunchButton({ resource, children }: LaunchButtonProps) {
   };
 
   const handleRelaunch = async (params: Untyped) => {
-    let readRelaunch;
-    let relaunch;
+    let readRelaunch: Promise<Untyped> | undefined;
+    let relaunch: Promise<Untyped> | undefined;
 
     if (isLaunching) {
       showToast();

@@ -1,4 +1,4 @@
-import type { AccessApiModel, Untyped } from 'types/api';
+import type { AccessApiModel, SearchColumn, SummaryFieldRef, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -80,7 +80,7 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
       // We will need to combine the role ids of all the different level
       // of resource level roles.
 
-      let orgRoles;
+      let orgRoles: [string, string][] = [];
       if (location.pathname.includes('/organizations')) {
         const [
           {
@@ -94,15 +94,25 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
           RolesAPI.read({ singleton_name: 'system_auditor' }),
         ]);
 
-        orgRoles = Object.entries(resource.summary_fields.object_roles).map(
-          ([key, value]) => {
+        const objectRoles = resource.summary_fields.object_roles as Record<
+          string,
+          SummaryFieldRef
+        >;
+        orgRoles = Object.entries(objectRoles).map(
+          ([key, value]): [string, string] => {
             if (key === 'admin_role') {
-              return [`${value.id}, ${systemAdmin[0].id}`, value.name];
+              return [
+                `${value.id}, ${systemAdmin[0].id}`,
+                value.name as string,
+              ];
             }
             if (key === 'auditor_role') {
-              return [`${value.id}, ${systemAuditor[0].id}`, value.name];
+              return [
+                `${value.id}, ${systemAuditor[0].id}`,
+                value.name as string,
+              ];
             }
-            return [`${value.id}`, value.name];
+            return [`${value.id}`, value.name as string];
           }
         );
       }
@@ -121,6 +131,7 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
       itemCount: 0,
       relatedSearchableKeys: [],
       searchableKeys: [],
+      organizationRoles: [],
     }
   );
 
@@ -147,7 +158,7 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
     }
   );
 
-  const toolbarSearchColumns = [
+  const toolbarSearchColumns: SearchColumn[] = [
     {
       name: t`Username`,
       key: 'username__icontains',
@@ -163,7 +174,7 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
     },
   ];
 
-  if (organizationRoles?.length > 0) {
+  if (organizationRoles && organizationRoles.length > 0) {
     toolbarSearchColumns.push({
       name: t`Roles`,
       key: `or__roles__in`,

@@ -54,7 +54,7 @@ function SelectableCard({
       onClick={onClick}
       onKeyPress={onClick}
       role="button"
-      tabIndex="0"
+      tabIndex={0}
       data-cy={dataCy}
       $isSelected={isSelected}
       aria-label={ariaLabel}

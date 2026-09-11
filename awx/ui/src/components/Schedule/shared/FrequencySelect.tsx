@@ -6,6 +6,8 @@ import {
   SelectList,
   MenuToggle,
 } from '@patternfly/react-core';
+import type { SelectOptionProps } from '@patternfly/react-core';
+import type { ScheduleFrequency } from './types';
 
 export interface FrequencySelectProps {
   id: string;
@@ -28,23 +30,23 @@ export default function FrequencySelect({
   const [isOpen, setIsOpen] = useState(false);
 
   const onSelectHandler = (
-    event: React.SyntheticEvent,
-    selectedValue: unknown
+    event?: React.MouseEvent,
+    selectedValue?: unknown
   ) => {
     if (selectedValue === 'none') {
       onChange([]);
       setIsOpen(false);
       return;
     }
-    const index = value.indexOf(selectedValue);
+    const index = value.indexOf(selectedValue as ScheduleFrequency);
     if (index === -1) {
-      onChange(value.concat(selectedValue));
+      onChange(value.concat(selectedValue as ScheduleFrequency));
     } else {
       onChange(value.slice(0, index).concat(value.slice(index + 1)));
     }
   };
 
-  const handleOpenChange = (val: unknown) => {
+  const handleOpenChange = (val: boolean) => {
     if (!val) {
       onBlur();
     }
@@ -69,13 +71,15 @@ export default function FrequencySelect({
     >
       <SelectList>
         {React.Children.map(children, (child) => {
-          if (!child) return null;
+          if (!React.isValidElement<SelectOptionProps>(child)) {
+            return null;
+          }
           if (child.props.value === 'none') {
             return React.cloneElement(child);
           }
           return React.cloneElement(child, {
             hasCheckbox: true,
-            isSelected: value.includes(child.props.value),
+            isSelected: value.includes(child.props.value as ScheduleFrequency),
           });
         })}
       </SelectList>

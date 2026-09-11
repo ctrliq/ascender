@@ -10,8 +10,8 @@ export default function getErrorMessage(response: Untyped) {
   if (response.data.detail) {
     return response.data.detail;
   }
-  return Object.values(response.data).reduce(
-    (acc, currentValue) => acc.concat(currentValue),
-    []
+  return Object.values(response.data as Record<string, unknown>).reduce(
+    (acc: unknown[], currentValue) => acc.concat(currentValue as unknown[]),
+    [] as unknown[]
   );
 }

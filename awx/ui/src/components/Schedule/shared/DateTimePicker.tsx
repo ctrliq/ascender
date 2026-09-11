@@ -13,6 +13,7 @@ import {
 } from '@patternfly/react-core';
 import styled from 'styled-components';
 import { required, validateTime, combine } from 'util/validators';
+import type { Untyped } from 'types/api';
 
 const DateTimeGroup = styled.span`
   display: flex;
@@ -33,16 +34,16 @@ function DateTimePicker({
   const { t } = useLingui();
   const [dateField, dateMeta, dateHelpers] = useField({
     name: dateFieldName,
-    validate: combine([required(null), isValidDate]),
+    validate: combine<string>([required(null), isValidDate as Untyped]),
   });
   const [timeField, timeMeta, timeHelpers] = useField({
     name: timeFieldName,
     validate: combine([required(null), validateTime()]),
   });
 
-  const onDateChange = (_: unknown, dateString: unknown, date: unknown) => {
-    dateHelpers.setTouched();
-    if (isValidDate(date) && dateString === yyyyMMddFormat(date)) {
+  const onDateChange = (_: unknown, dateString: string, date?: Date) => {
+    dateHelpers.setTouched(true);
+    if (date && isValidDate(date) && dateString === yyyyMMddFormat(date)) {
       dateHelpers.setValue(dateString);
     }
   };

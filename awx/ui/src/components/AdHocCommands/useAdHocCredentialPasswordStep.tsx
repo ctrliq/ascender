@@ -5,6 +5,7 @@ import StepName from '../LaunchPrompt/steps/StepName';
 import CredentialPasswordsStep from '../LaunchPrompt/steps/CredentialPasswordsStep';
 import type { AdHocValues } from './types';
 import type { VisitedSteps } from '../LaunchPrompt/types';
+import type { AdHocStep } from './types';
 
 const STEP_ID = 'credentialPasswords';
 
@@ -13,7 +14,7 @@ const isValueMissing = (val: unknown) => !val || val === '';
 export default function useCredentialPasswordsStep(
   showStep: boolean,
   visitedSteps: VisitedSteps
-) {
+): AdHocStep {
   const { t } = useLingui();
   const { values, setFieldError } = useFormikContext<AdHocValues>();
   const hasError = Boolean(
@@ -62,7 +63,7 @@ export default function useCredentialPasswordsStep(
           value === 'ASK' &&
           isValueMissing(
             key === 'password'
-              ? values.credential_passwords.ssh_password
+              ? (values.credential_passwords ?? {}).ssh_password
               : (values.credential_passwords ?? {})[key]
           )
         ) {

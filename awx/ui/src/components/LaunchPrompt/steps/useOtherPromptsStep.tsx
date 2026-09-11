@@ -153,7 +153,7 @@ function getInitialValues(
     initialValues.skip_tags = resource?.skip_tags || '';
   }
   if (launchConfig.ask_variables_on_launch) {
-    initialValues.extra_vars = getVariablesData(resource);
+    initialValues.extra_vars = getVariablesData(resource) as string;
   }
   if (launchConfig.ask_scm_branch_on_launch) {
     initialValues.scm_branch = resource?.scm_branch || '';

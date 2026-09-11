@@ -7,6 +7,7 @@ import { getJobModel } from 'util/jobs';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
+import type { DetailedError } from 'types/api';
 
 export interface JobCancelButtonProps {
   errorTitle: Untyped;
@@ -15,7 +16,7 @@ export interface JobCancelButtonProps {
   errorMessage: Untyped;
   buttonText?: Untyped;
   style?: Untyped;
-  job?: Job;
+  job?: Untyped;
   isDisabled?: boolean;
   tooltip?: Untyped;
   cancelationMessage?: Untyped;
@@ -47,12 +48,12 @@ function JobCancelButton({
         onCancelWorkflow();
       }
     }, [job.id, job.type, onCancelWorkflow]),
-    {}
   );
   const { error, dismissError: dismissCancelError } =
     useDismissableError(cancelError);
 
-  const isAlreadyCancelled = cancelError?.response?.status === 405;
+  const isAlreadyCancelled =
+    (cancelError as DetailedError)?.response?.status === 405;
   const renderTooltip = () => {
     if (tooltip) {
       return tooltip;

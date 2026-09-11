@@ -119,7 +119,7 @@ function WorkflowTools({
           max="200"
           min="10"
           onChange={(event) =>
-            onZoomChange(parseInt(event.target.value, 10) / 100)
+            onZoomChange(parseInt((event.target as HTMLInputElement).value, 10) / 100)
           }
           step="10"
           type="range"

@@ -32,15 +32,15 @@ function DraggableSelectedList({
 }: DraggableSelectedListProps) {
   const { t } = useLingui();
 
-  const removeItem = (item: Record<string, unknown>) => {
-    onRemove(selected.find((i) => i.name === item));
+  const removeItem = (name: string) => {
+    onRemove(selected.find((i: Untyped) => i.name === name));
   };
 
   if (selected.length <= 0) {
     return null;
   }
 
-  const orderedList = selected.map((item) => item?.name);
+  const orderedList: string[] = selected.map((item: Untyped) => item?.name);
 
   return (
     <DataList aria-label={t`Selected items list.`} data-cy="draggable-list">
@@ -52,11 +52,17 @@ function DraggableSelectedList({
               <DataListItemCells
                 dataListCells={[
                   <DataListCell key={label}>
-                    <span id={rowPosition}>{`${rowPosition}. ${label}`}</span>
+                    <span id={`draggable-item-${rowPosition}`}>
+                      {`${rowPosition}. ${label}`}
+                    </span>
                   </DataListCell>,
                 ]}
               />
-              <RemoveActionSection aria-label={t`Actions`} id={rowPosition}>
+              <RemoveActionSection
+                aria-label={t`Actions`}
+                id={`draggable-item-actions-${rowPosition}`}
+                aria-labelledby={`draggable-item-${rowPosition}`}
+              >
                 <Button
                   icon={<TimesIcon />}
                   onClick={() => removeItem(label)}

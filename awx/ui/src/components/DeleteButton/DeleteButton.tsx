@@ -8,6 +8,7 @@ import { Button, Badge, Alert, Tooltip } from '@patternfly/react-core';
 import { getRelatedResourceDeleteCounts } from 'util/getRelatedResourceDeleteDetails';
 import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
+import type { DeleteCount } from 'util/getRelatedResourceDeleteDetails';
 
 const WarningMessage = styled(Alert)`
   margin-top: 10px;
@@ -45,7 +46,7 @@ function DeleteButton({
 }: DeleteButtonProps) {
   const { t, i18n } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
-  const [deleteMessageError, setDeleteMessageError] = useState();
+  const [deleteMessageError, setDeleteMessageError] = useState<unknown>();
   const [deleteDetails, setDeleteDetails] = useState<
     DeleteCount[] | false | null
   >(null);
@@ -64,7 +65,7 @@ function DeleteButton({
       }
     }
     setIsLoading(false);
-    setIsOpen(isModalOpen);
+    setIsOpen(Boolean(isModalOpen));
   };
 
   if (deleteMessageError) {
@@ -74,7 +75,7 @@ function DeleteButton({
         title={t`Error!`}
         onClose={() => {
           toggleModal(false);
-          setDeleteMessageError();
+          setDeleteMessageError(undefined);
         }}
       >
         <ErrorDetail error={deleteMessageError} />

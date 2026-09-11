@@ -13,7 +13,8 @@ const SmallButton = styled(Button)`
 SmallButton.displayName = 'SmallButton';
 
 export interface MultiButtonToggleProps {
-  buttons: unknown[];
+  /** The choices, as [value, label] pairs. */
+  buttons: [Untyped, string][];
   value: unknown;
   onChange: (...args: Untyped[]) => void;
   name: React.ReactNode;
@@ -35,7 +36,7 @@ function MultiButtonToggle({
   return (
     <ButtonGroup>
       {buttons &&
-        buttons.map(([buttonValue, buttonLabel]) => (
+        buttons.map(([buttonValue, buttonLabel]: [Untyped, string]) => (
           <SmallButton
             aria-label={buttonLabel}
             ouiaId={`${name}-${buttonLabel}-button`}

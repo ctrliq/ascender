@@ -14,7 +14,7 @@ export interface LaunchedByDetailProps {
 
 export default function LaunchedByDetail({
   job,
-  dataCy = null,
+  dataCy,
 }: LaunchedByDetailProps) {
   const { t } = useLingui();
 
@@ -43,12 +43,12 @@ export default function LaunchedByDetail({
             `/templates/workflow_job_template/${workflowJT.id}/details`);
         break;
       case 'scheduled':
-        value = schedule.name;
+        value = schedule?.name;
         link = getScheduleUrl(job);
         break;
       case 'manual':
-        link = `/users/${createdBy.id}/details`;
-        value = createdBy.username;
+        link = `/users/${createdBy?.id}/details`;
+        value = createdBy?.username;
         break;
       default:
         link = createdBy && `/users/${createdBy.id}/details`;

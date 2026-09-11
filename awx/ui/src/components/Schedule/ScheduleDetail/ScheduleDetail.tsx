@@ -29,6 +29,8 @@ import { VariablesDetail } from '../../CodeEditor';
 import { getVerbosityLabel } from '../../VerbositySelectField';
 import getHelpText from '../../../screens/Template/shared/JobTemplate.helptext';
 import type { FrequencyOptionsMap, ScheduleFrequency } from '../shared/types';
+import type { SurveyConfig } from 'components/LaunchPrompt/types';
+import type { SurveyQuestion } from 'components/LaunchPrompt/types';
 
 const PromptDivider = styled(Divider)`
   margin-top: var(--pf-v6-global--spacer--lg);
@@ -71,7 +73,7 @@ const FrequencyDetailsContainer = styled.div`
 export interface ScheduleDetailProps {
   hasDaysToKeepField: boolean;
   schedule: Schedule;
-  surveyConfig: Record<string, unknown>;
+  surveyConfig: SurveyConfig;
   [key: string]: unknown;
 }
 
@@ -251,20 +253,24 @@ function ScheduleDetail({
   const hasMissingSurveyValue = () => {
     let missingValues = false;
     if (survey_enabled) {
-      surveyConfig.spec.forEach((question: Untyped) => {
+      (surveyConfig.spec ?? []).forEach((question: SurveyQuestion) => {
         const hasDefaultValue = Boolean(question.default);
         if (question.required && !hasDefaultValue) {
-          const extraDataKeys = Object.keys(schedule?.extra_data);
+          const extraData = (schedule?.extra_data ?? {}) as Record<
+            string,
+            unknown
+          >;
+          const extraDataKeys = Object.keys(extraData);
 
           const hasMatchingKey = extraDataKeys.includes(question.variable);
-          Object.values(schedule?.extra_data).forEach((value) => {
+          Object.values(extraData).forEach((value) => {
             if (!value || !hasMatchingKey) {
               missingValues = true;
             } else {
               missingValues = false;
             }
           });
-          if (!Object.values(schedule.extra_data).length) {
+          if (!Object.values(extraData).length) {
             missingValues = true;
           }
         }
@@ -282,7 +288,8 @@ function ScheduleDetail({
   const showVariablesDetail =
     (ask_variables_on_launch || survey_enabled) &&
     ((typeof extra_data === 'string' && extra_data !== '') ||
-      (typeof extra_data === 'object' && Object.keys(extra_data).length > 0));
+      (typeof extra_data === 'object' &&
+        Object.keys(extra_data as object).length > 0));
   const showTagsDetail = ask_tags_on_launch && job_tags && job_tags.length > 0;
   const showSkipTagsDetail =
     ask_skip_tags_on_launch && skip_tags && skip_tags.length > 0;
@@ -292,7 +299,7 @@ function ScheduleDetail({
   const showJobTypeDetail = ask_job_type_on_launch && job_type;
   const showSCMBranchDetail = ask_scm_branch_on_launch && scm_branch;
   const showVerbosityDetail =
-    ask_verbosity_on_launch && getVerbosityLabel(verbosity, i18n);
+    ask_verbosity_on_launch && getVerbosityLabel(verbosity as number, i18n);
   const showExecutionEnvironmentDetail =
     ask_execution_environment_on_launch && execution_environment;
   const showLabelsDetail = ask_labels_on_launch && labels && labels.length > 0;
@@ -502,7 +509,7 @@ function ScheduleDetail({
             {ask_verbosity_on_launch && (
               <Detail
                 label={t`Verbosity`}
-                value={getVerbosityLabel(verbosity, i18n)}
+                value={getVerbosityLabel(verbosity as number, i18n)}
                 dataCy="schedule-verbosity"
               />
             )}

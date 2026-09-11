@@ -3,6 +3,7 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Label, Tooltip } from '@patternfly/react-core';
 import icons from '../StatusIcon/icons';
+import type { LabelProps } from '@patternfly/react-core';
 
 const colors = {
   approved: 'green',
@@ -33,7 +34,8 @@ const colors = {
 };
 
 export interface StatusLabelProps {
-  status: unknown;
+  /** The job status, which keys the colour and label maps below. */
+  status?: string;
   tooltipContent?: Untyped;
   children?: React.ReactNode;
   [key: string]: unknown;
@@ -72,14 +74,15 @@ export default function StatusLabel({
     'provision-fail': t`Provisioning fail`,
     'deprovision-fail': t`Deprovisioning fail`,
   };
-  const label = upperCaseStatus[status] || status;
-  const color = colors[status] || 'grey';
-  const Icon = icons[status];
+  const label =
+    upperCaseStatus[status as keyof typeof upperCaseStatus] || status;
+  const color = colors[status as keyof typeof colors] || 'grey';
+  const Icon = icons[status as keyof typeof icons];
 
   const renderLabel = () => (
     <Label
       variant="filled"
-      color={color}
+      color={color as LabelProps['color']}
       icon={Icon ? <Icon /> : null}
       className="ascender-status-label"
     >

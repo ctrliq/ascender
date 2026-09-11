@@ -30,3 +30,35 @@ export interface AdHocItem {
   name: string;
   [key: string]: unknown;
 }
+
+/**
+ * What each of the ad hoc wizard's use*Step hooks returns.
+ *
+ * The same arrangement as the launch prompt's LaunchStep: the wizard collects
+ * these into one array and reads across it, so they have to agree on the
+ * shape. The ad hoc steps take no launch configuration, so there is nothing
+ * for them to contribute as initial values.
+ */
+export interface AdHocStep {
+  step: {
+    id: string;
+    key?: number;
+    name: React.ReactNode;
+    component: React.ReactNode;
+    enableNext?: boolean;
+    nextButtonText?: React.ReactNode;
+    /** Passed through to the wizard's sidebar entry for this step. */
+    stepNavItemProps?: Record<string, unknown>;
+  } | null;
+  isReady?: boolean;
+  contentError?: unknown;
+  hasError?: boolean;
+  setTouched: (
+    setFieldTouched: (
+      field: string,
+      touched?: boolean,
+      shouldValidate?: boolean
+    ) => void
+  ) => void;
+  validate: () => void;
+}

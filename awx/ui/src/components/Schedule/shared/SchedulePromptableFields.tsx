@@ -16,15 +16,17 @@ import ContentError from '../../ContentError';
 import ContentLoading from '../../ContentLoading';
 import useSchedulePromptSteps from './useSchedulePromptSteps';
 import type { ScheduleFormValues } from './types';
+import type { SurveyConfig } from 'components/LaunchPrompt/types';
+import type { LaunchConfig } from 'components/LaunchPrompt/types';
 
 export interface SchedulePromptableFieldsProps {
   schedule: Schedule;
-  surveyConfig: unknown;
-  launchConfig: unknown;
+  surveyConfig: SurveyConfig;
+  launchConfig: LaunchConfig;
   onCloseWizard: (...args: Untyped[]) => void;
   onSave: (...args: Untyped[]) => void;
   credentials: Credential[];
-  resource: Record<string, unknown>;
+  resource: Untyped;
   resourceDefaultCredentials: unknown;
   labels: Label[];
   instanceGroups: InstanceGroup[];
@@ -130,7 +132,7 @@ function SchedulePromptableFields({
             }}
             isExpanded={showDescription}
           >
-            {resource.description}
+            {resource.description as React.ReactNode}
           </ExpandableSection>
         ) : (
           resource.description

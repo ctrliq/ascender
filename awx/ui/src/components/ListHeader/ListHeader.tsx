@@ -11,6 +11,9 @@ import {
   updateQueryString,
 } from 'util/qs';
 import DataListToolbar from '../DataListToolbar';
+import type { DataListToolbarProps } from '../DataListToolbar/DataListToolbar';
+import type { SearchColumn, SortColumn } from 'types/api';
+import type { QSConfig, QSParamValue } from 'util/qs';
 
 const EmptyStateControlsWrapper = styled.div`
   display: flex;
@@ -24,15 +27,16 @@ const EmptyStateControlsWrapper = styled.div`
   }
 `;
 export interface ListHeaderProps {
-  emptyStateControls: Untyped;
-  itemCount: Untyped;
-  pagination: Untyped;
-  qsConfig: Untyped;
-  relatedSearchableKeys?: Untyped[];
-  renderToolbar?: (...args: Untyped[]) => void;
-  searchColumns: Untyped;
+  emptyStateControls?: React.ReactNode;
+  itemCount?: number;
+  pagination?: React.ReactNode;
+  qsConfig: QSConfig;
+  relatedSearchableKeys?: string[];
+  /** Lets a list render a toolbar of its own in place of the default one. */
+  renderToolbar?: (props: DataListToolbarProps) => React.ReactNode;
+  searchColumns?: SearchColumn[];
   searchableKeys?: Untyped[];
-  sortColumns?: Untyped;
+  sortColumns?: SortColumn[];
   [key: string]: unknown;
 }
 
@@ -42,7 +46,7 @@ function ListHeader({
   pagination,
   qsConfig,
   relatedSearchableKeys = [],
-  renderToolbar = (toolbarProps: unknown) => (
+  renderToolbar = (toolbarProps: DataListToolbarProps) => (
     <DataListToolbar {...toolbarProps} />
   ),
   searchColumns,
@@ -53,7 +57,7 @@ function ListHeader({
   const [isFilterCleared, setIsFilterCleared] = useState(false);
   const navigate = useNavigate();
 
-  const handleSearch = (key: string, value: unknown) => {
+  const handleSearch = (key: string, value: QSParamValue) => {
     const params = parseQueryString(qsConfig, search);
     const qs = updateQueryString(qsConfig, search, {
       ...mergeParams(params, { [key]: value }),
@@ -62,14 +66,14 @@ function ListHeader({
     pushHistoryState(qs);
   };
 
-  const handleReplaceSearch = (key: string, value: unknown) => {
+  const handleReplaceSearch = (key: string, value: QSParamValue) => {
     const qs = updateQueryString(qsConfig, search, {
       [key]: value,
     });
     pushHistoryState(qs);
   };
 
-  const handleRemove = (key: string, value: unknown) => {
+  const handleRemove = (key: string, value: QSParamValue) => {
     const oldParams = parseQueryString(qsConfig, search);
     const updatedParams = removeParams(qsConfig, oldParams, {
       [key]: value,

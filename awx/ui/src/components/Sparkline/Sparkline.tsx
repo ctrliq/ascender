@@ -49,7 +49,7 @@ const Sparkline = ({ jobs = [] }: SparklineProps) => {
         aria-label={t`View job ${job.id}`}
         to={`/jobs/${JOB_TYPE_URL_SEGMENTS[job.type as string]}/${job.id}`}
       >
-        <StatusIcon status={job.status} />
+        <StatusIcon status={job.status as string} />
       </Link>
     </Tooltip>
   ));

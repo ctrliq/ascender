@@ -37,7 +37,7 @@ export default function ActionsTd({
   gridColumns: _gridColumns,
   ...props
 }: ActionsTdProps) {
-  const numActions = children.length || 1;
+  const numActions = React.Children.count(children) || 1;
   const width = numActions * 40;
   return (
     <ActionsCell $width={width} {...props}>

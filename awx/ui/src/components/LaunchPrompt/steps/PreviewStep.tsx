@@ -29,7 +29,7 @@ export interface PreviewStepProps {
   resource: Untyped;
   launchConfig: LaunchConfig;
   surveyConfig: SurveyConfig;
-  formErrors: unknown;
+  formErrors?: boolean;
   [key: string]: unknown;
 }
 
@@ -49,8 +49,11 @@ function PreviewStep({
 
   if (launchConfig.ask_variables_on_launch || launchConfig.survey_enabled) {
     try {
-      const initialExtraVars =
-        launchConfig.ask_variables_on_launch && (overrides.extra_vars || '---');
+      // Empty string when the launch config does not prompt for variables,
+      // which is what mergeExtraVars treats as no overrides.
+      const initialExtraVars: string = launchConfig.ask_variables_on_launch
+        ? ((overrides.extra_vars as string) || '---')
+        : '';
       if (surveyConfig?.spec) {
         const passwordFields = surveyConfig.spec
           .filter((q: Untyped) => q.type === 'password')

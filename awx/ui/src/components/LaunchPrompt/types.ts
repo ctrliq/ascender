@@ -1,4 +1,5 @@
-import type { InstanceGroup, Label, Untyped } from 'types/api';
+import type { InstanceGroup, Untyped } from 'types/api';
+import type { LabelInput } from 'util/labels';
 
 /**
  * The values the launch prompt wizard collects, shared by the wizard itself and
@@ -23,7 +24,11 @@ export interface LaunchPromptValues {
   job_slice_count?: number;
   job_tags?: string;
   job_type?: string;
-  labels?: Label[];
+  /**
+   * The labels the form holds: existing ones carry their numeric id, and one
+   * the user typed carries only a name until it is created on save.
+   */
+  labels?: LabelInput[];
   limit?: string;
   scm_branch?: string;
   skip_tags?: string;

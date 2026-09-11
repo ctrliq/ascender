@@ -39,7 +39,7 @@ function PasswordField({
       fieldId={id}
       isRequired={isRequired}
       label={label}
-      labelHelp={helperText && <Popover content={helperText} />}
+      labelHelp={helperText ? <Popover content={helperText} /> : undefined}
     >
       <InputGroup>
         <InputGroupItem isFill>

@@ -27,7 +27,7 @@ export default function useCredentialsStep(
           id: STEP_ID,
           key: 4,
           name: (
-            <StepName hasErrors={formError} id="credentials-step">
+            <StepName hasErrors={Boolean(formError)} id="credentials-step">
               {t`Credentials`}
             </StepName>
           ),
@@ -42,7 +42,7 @@ export default function useCredentialsStep(
     initialValues: getInitialValues(launchConfig, resourceDefaultCredentials),
     isReady: true,
     contentError: null,
-    hasError: launchConfig.ask_credential_on_launch && formError,
+    hasError: Boolean(launchConfig.ask_credential_on_launch && formError),
     setTouched: (
       setFieldTouched: (
         field: string,

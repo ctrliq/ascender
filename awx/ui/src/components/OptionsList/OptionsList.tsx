@@ -115,7 +115,7 @@ function OptionsList({
         hasContentLoading={isLoading}
         headerRow={buildHeaderRow}
         onRowClick={selectItem}
-        renderRow={(item: Record<string, unknown>, index: number) => (
+        renderRow={(item: Untyped, index: number) => (
           <CheckboxListItem
             key={item.id}
             rowIndex={index}
@@ -124,7 +124,7 @@ function OptionsList({
             label={item[displayKey]}
             columns={columns}
             item={item}
-            isSelected={value.some((i: number) => i.id === item.id)}
+            isSelected={value.some((i: Untyped) => i.id === item.id)}
             onSelect={() => selectItem(item)}
             onDeselect={() => deselectItem(item)}
             isRadio={!multiple}

@@ -22,7 +22,12 @@ export interface SelectedListProps {
   onRemove?: (...args: Untyped[]) => void;
   displayKey?: string;
   isReadOnly?: boolean;
-  renderItemChip?: unknown;
+  /** Lets a caller render its own chip per item, a credential chip say. */
+  renderItemChip?: (props: {
+    item: Untyped;
+    removeItem: () => void;
+    canDelete: boolean;
+  }) => React.ReactNode;
   [key: string]: unknown;
 }
 
@@ -36,7 +41,14 @@ function SelectedList({
 }: SelectedListProps) {
   const renderChip =
     renderItemChip ||
-    (({ item, removeItem }) => (
+    (({
+      item,
+      removeItem,
+    }: {
+      item: Untyped;
+      removeItem: () => void;
+      canDelete: boolean;
+    }) => (
       <Label variant="outline" key={item.id} onClose={removeItem}>
         {item[displayKey]}
       </Label>

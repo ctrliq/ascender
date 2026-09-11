@@ -88,7 +88,7 @@ function InstanceGroupsLookup({
       <Lookup
         id="org-instance-groups"
         header={t`Instance Groups`}
-        value={value}
+        value={value as LookupItem[]}
         onChange={onChange}
         onUpdate={fetchInstanceGroups}
         fieldName={fieldName}
@@ -144,7 +144,7 @@ function InstanceGroupsLookup({
             deselectItem={(item: LookupItem) =>
               dispatch({ type: 'DESELECT_ITEM', item })
             }
-            sortSelectedItems={(selectedItems: unknown) =>
+            sortSelectedItems={(selectedItems: LookupItem[]) =>
               dispatch({ type: 'SET_SELECTED_ITEMS', selectedItems })
             }
             isSelectedDraggable
@@ -169,7 +169,7 @@ function InstanceGroupsLookup({
     <FormGroup
       className={className}
       label={t`Instance Groups`}
-      labelHelp={tooltip && <Popover content={tooltip} />}
+      labelHelp={tooltip ? <Popover content={tooltip} /> : undefined}
       fieldId={id}
     >
       {renderLookup()}

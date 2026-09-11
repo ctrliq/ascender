@@ -21,7 +21,7 @@ function DetailBadge({
   label,
   helpText,
   content,
-  dataCy = null,
+  dataCy,
 }: DetailBadgeProps) {
   return (
     <Detail

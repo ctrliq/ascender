@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SearchColumn, Untyped } from 'types/api';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
@@ -49,11 +49,11 @@ const ToolbarContent = styled(PFToolbarContent)`
 `;
 
 export interface DataListToolbarProps {
-  isAllExpanded: boolean;
-  onExpandAll: (...args: Untyped[]) => void;
+  isAllExpanded?: boolean;
+  onExpandAll?: (...args: Untyped[]) => void;
   itemCount?: number;
   clearAllFilters?: Untyped;
-  searchColumns: unknown;
+  searchColumns?: SearchColumn[];
   searchableKeys?: unknown[];
   relatedSearchableKeys?: unknown[];
   sortColumns?: Untyped;
@@ -66,12 +66,12 @@ export interface DataListToolbarProps {
   onRemove: (...args: Untyped[]) => void;
   onCompact?: (...args: Untyped[]) => void;
   onExpand?: (...args: Untyped[]) => void;
-  additionalControls?: unknown[];
+  additionalControls?: React.ReactElement[];
   qsConfig: Untyped;
   pagination: React.ReactNode;
   enableNegativeFiltering?: boolean;
   enableRelatedFuzzyFiltering?: boolean;
-  handleIsAnsibleFactsSelected: (...args: Untyped[]) => void;
+  handleIsAnsibleFactsSelected?: (...args: Untyped[]) => void;
   isFilterCleared: boolean;
   advancedSearchDisabled?: boolean;
   [key: string]: unknown;
@@ -114,7 +114,7 @@ function DataListToolbar({
     window.innerWidth || document.documentElement.clientWidth;
   const dropdownPosition = viewportWidth >= 992 ? 'right' : 'left';
 
-  const onShowAdvancedSearch = (shown: unknown) => {
+  const onShowAdvancedSearch = (shown: boolean) => {
     setIsAdvancedSearchShown(shown);
     setIsKebabOpen(false);
   };
@@ -132,7 +132,7 @@ function DataListToolbar({
     }),
     [setIsKebabModalOpen]
   );
-  const columns = [...searchColumns];
+  const columns: SearchColumn[] = [...(searchColumns ?? [])];
   if (!advancedSearchDisabled) {
     columns.push({ name: t`Advanced`, key: 'advanced' });
   }
@@ -195,7 +195,7 @@ function DataListToolbar({
               enableNegativeFiltering={enableNegativeFiltering}
               enableRelatedFuzzyFiltering={enableRelatedFuzzyFiltering}
               handleIsAnsibleFactsSelected={handleIsAnsibleFactsSelected}
-              isFilterCleared={isFilterCleared}
+              isFilterCleared={Boolean(isFilterCleared)}
             />
           </ToolbarItem>
           {sortColumns && (

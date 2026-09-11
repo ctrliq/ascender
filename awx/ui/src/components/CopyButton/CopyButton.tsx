@@ -9,7 +9,8 @@ import ErrorDetail from '../ErrorDetail';
 
 export interface CopyButtonProps {
   id: string;
-  copyItem: unknown;
+  /** Posts the copy and resolves with whatever the API returns. */
+  copyItem: () => Promise<unknown>;
   isDisabled?: boolean;
   onCopyStart: (...args: Untyped[]) => void;
   onCopyFinish: (...args: Untyped[]) => void;

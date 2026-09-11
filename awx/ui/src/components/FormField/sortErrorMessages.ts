@@ -1,6 +1,19 @@
 import type { Untyped } from 'types/api';
 
-export default function sortErrorMessages(error: Untyped, formValues = {}) {
+/**
+ * Splits an API validation error into the form's own message and each field's.
+ *
+ * Args:
+ *   error: whatever the request threw, with the response attached.
+ *   formValues: the form's current values, which say which keys are fields.
+ *
+ * Returns:
+ *   The message for the form as a whole, and one per field that has one.
+ */
+export default function sortErrorMessages(
+  error: Untyped,
+  formValues: Record<string, unknown> = {}
+) {
   if (!error) {
     return {};
   }
@@ -28,7 +41,7 @@ export default function sortErrorMessages(error: Untyped, formValues = {}) {
 
 // Recursively traverse field errors object and build up field/form errors
 function parseFieldErrors(obj: Untyped, formValues: Untyped) {
-  let fieldErrors = {};
+  let fieldErrors: Record<string, unknown> = {};
   let formErrors: string[] = [];
   Object.keys(obj).forEach((key) => {
     const value = obj[key];

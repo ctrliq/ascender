@@ -27,7 +27,7 @@ function CheckboxField({
   return (
     <Checkbox
       isDisabled={isDisabled}
-      aria-label={label}
+      aria-label={String(label)}
       ouiaId={id}
       label={
         <span>

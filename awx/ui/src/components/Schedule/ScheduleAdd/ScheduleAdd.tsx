@@ -138,7 +138,7 @@ function ScheduleAdd({
           }
         }
 
-        labelsPromises = labels.map((label: unknown) =>
+        labelsPromises = labels.map((label: Untyped) =>
           SchedulesAPI.associateLabel(scheduleId, label, organizationId)
         );
       }

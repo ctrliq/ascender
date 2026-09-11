@@ -69,10 +69,10 @@ function ScheduleToggle({
           id={`schedule-${schedule.id}-toggle`}
           label={t`On`}
 
-          isChecked={isEnabled}
+          isChecked={Boolean(isEnabled)}
           isDisabled={
             isLoading ||
-            !schedule.summary_fields.user_capabilities.edit ||
+            !schedule.summary_fields.user_capabilities?.edit ||
             isDisabled
           }
           onChange={toggleSchedule}

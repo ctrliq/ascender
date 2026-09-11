@@ -18,7 +18,7 @@ const StyledCheckboxField = styled(CheckboxField)`
 
 export interface FieldWithPromptProps {
   children: React.ReactNode;
-  fieldId: number | string;
+  fieldId: string;
   isRequired?: boolean;
   label: React.ReactNode;
   promptId: number | string;

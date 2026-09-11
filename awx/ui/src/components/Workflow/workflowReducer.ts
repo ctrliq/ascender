@@ -1,3 +1,5 @@
+import type { Untyped } from 'types/api';
+
 /** Which nodes each node is reached from, keyed by node id. */
 export type LinkParentMapping = Record<number, number[]>;
 

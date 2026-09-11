@@ -65,13 +65,13 @@ export default function useWsJobs(
       return;
     }
     const params = parseQueryString(qsConfig, location.search);
-    const jobId = lastMessage.unified_job_id;
+    const jobId = lastMessage.unified_job_id as number;
     const index = jobs.findIndex((j: Untyped) => j.id === jobId);
 
     if (index > -1) {
       setJobs(sortJobs(updateJob(jobs, index, lastMessage), params));
     } else {
-      enqueueJobId(lastMessage.unified_job_id);
+      enqueueJobId(jobId);
     }
   }, [lastMessage]); // eslint-disable-line react-hooks/exhaustive-deps
 

@@ -79,13 +79,13 @@ function ErrorDetail({ error = null }: { error?: unknown }) {
     <>
       <CardBody>
         <strong>
-          {error.name}: {error.message}
+          {(error as Error).name}: {(error as Error).message}
         </strong>
       </CardBody>
       <CardBody
         style={{ fontFamily: 'var(--pf-t--global--font--family--mono)' }}
       >
-        {error.stack}
+        {(error as Error).stack}
       </CardBody>
     </>
   );

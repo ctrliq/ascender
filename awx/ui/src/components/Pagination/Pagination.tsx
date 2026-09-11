@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Pagination as PFPagination } from '@patternfly/react-core';
+import type { PaginationProps } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
 const AWXPagination = styled(PFPagination)`
@@ -14,7 +15,11 @@ const AWXPagination = styled(PFPagination)`
     `}
 `;
 
-export default (props: unknown) => {
+/**
+ * PatternFly's Pagination with the translated labels every list uses, and the
+ * per page menu hidden when a list offers no sizes to choose from.
+ */
+export default function Pagination(props: PaginationProps) {
   const { t } = useLingui();
   return (
     <AWXPagination
@@ -38,4 +43,4 @@ export default (props: unknown) => {
       {...props}
     />
   );
-};
+}

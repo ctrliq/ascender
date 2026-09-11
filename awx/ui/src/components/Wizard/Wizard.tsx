@@ -60,7 +60,7 @@ export interface WizardWrapperProps {
   footer?: React.ReactNode | WizardFooterOverrides;
   backButtonText?: React.ReactNode;
   cancelButtonText?: React.ReactNode;
-  nextButtonText: React.ReactNode;
+  nextButtonText?: React.ReactNode;
   height?: number | string;
   style?: React.CSSProperties;
   className?: string;
@@ -135,7 +135,7 @@ function WizardWrapper({
       header={
         title ? (
           <WizardHeader
-            title={title}
+            title={String(title)}
             description={description}
             onClose={onClose}
             closeButtonAriaLabel="Close"
@@ -195,7 +195,7 @@ function WizardWrapper({
         showClose={false}
         hasNoBodyWrapper
         onClose={onClose}
-        aria-label={title || 'Wizard'}
+        aria-label={String(title || 'Wizard')}
       >
         {wizardContent}
       </Modal>

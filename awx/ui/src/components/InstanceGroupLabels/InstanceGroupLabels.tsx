@@ -3,9 +3,11 @@ import React from 'react';
 
 import { Label, LabelGroup } from '@patternfly/react-core';
 import { Link } from 'react-router';
+import type { Untyped } from 'types/api';
 
 export interface InstanceGroupLabelsProps {
-  labels: ApiLabel[];
+  /** Instance groups, not labels: each is drawn as a PatternFly label. */
+  labels: Untyped[];
   isLinkable?: boolean;
   [key: string]: unknown;
 }

@@ -57,7 +57,8 @@ export interface PageHeaderToolbarProps {
   isAboutDisabled?: boolean;
   onAboutClick: (...args: Untyped[]) => void;
   onLogoutClick: (...args: Untyped[]) => void;
-  loggedInUser: Record<string, unknown>;
+  /** The signed in user, from the config; absent until it has been read. */
+  loggedInUser?: { username?: string; id?: number; [key: string]: unknown };
   [key: string]: unknown;
 }
 
@@ -74,7 +75,9 @@ function PageHeaderToolbar({
   const [currentThemeId, setCurrentThemeId] = useState(getStoredThemeId);
 
   useEffect(() => {
-    const handler = (e: React.SyntheticEvent) => setCurrentThemeId(e.detail);
+    // A CustomEvent the theme switcher dispatches, carrying the new theme id.
+    const handler = (e: Event) =>
+      setCurrentThemeId((e as CustomEvent<string>).detail);
     window.addEventListener('themechange', handler);
     return () => window.removeEventListener('themechange', handler);
   }, []);
@@ -152,7 +155,7 @@ function PageHeaderToolbar({
         <Link to="/workflow_approvals?workflow_approvals.status=pending">
           <ToolbarNotificationBadge
             id="toolbar-workflow-approval-badge"
-            count={pendingApprovalsCount}
+            count={pendingApprovalsCount as number}
             variant={
               pendingApprovalsCount === 0
                 ? NotificationBadgeVariant.read

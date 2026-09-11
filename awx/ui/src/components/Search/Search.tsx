@@ -53,17 +53,17 @@ const NoOptionDropdown = styled.div`
 export interface SearchProps {
   columns: SearchColumn[];
   onSearch?: (...args: Untyped[]) => void;
-  onReplaceSearch: (...args: Untyped[]) => void;
+  onReplaceSearch?: (...args: Untyped[]) => void;
   onRemove?: (...args: Untyped[]) => void;
   qsConfig: QSConfig;
   searchableKeys?: unknown[];
   relatedSearchableKeys: Untyped;
-  onShowAdvancedSearch: (...args: Untyped[]) => void;
+  onShowAdvancedSearch?: (shown: boolean) => void;
   isDisabled?: boolean;
   maxSelectHeight?: Untyped;
   enableNegativeFiltering?: boolean;
   enableRelatedFuzzyFiltering?: boolean;
-  handleIsAnsibleFactsSelected: (...args: Untyped[]) => void;
+  handleIsAnsibleFactsSelected?: (...args: Untyped[]) => void;
   isFilterCleared: boolean;
   [key: string]: unknown;
 }
@@ -130,7 +130,7 @@ function Search({
     const { key: actualSearchKey } = columns.find(
       ({ name }) => name === selectedName
     ) as SearchColumn;
-    onShowAdvancedSearch(actualSearchKey === 'advanced');
+    onShowAdvancedSearch?.(actualSearchKey === 'advanced');
     setIsFilterDropdownOpen(false);
     setIsDateOperatorOpen(false);
     setSearchKey(actualSearchKey);
@@ -311,7 +311,7 @@ function Search({
                 isOpen={isFilterDropdownOpen}
                 onOpenChange={setIsFilterDropdownOpen}
                 onSelect={(_event, selection) => {
-                  onReplaceSearch(key, selection);
+                  onReplaceSearch?.(key, selection);
                   setIsFilterDropdownOpen(false);
                 }}
                 toggle={(toggleRef) => (

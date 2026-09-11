@@ -1,7 +1,7 @@
-// The d3 globals below arrive through importScripts at runtime, so there is
-// nothing for the compiler to resolve them to. Declaring the two names the
-// file uses keeps it checked rather than exempted.
-declare const d3: {
+// The d3 the worker uses arrives through importScripts at runtime, from the
+// standalone d3-collection build rather than from the package @types/d3
+// describes, so it is named separately here rather than declared as a global.
+type WorkerD3 = {
   forceSimulation: (nodes: unknown[]) => any;
   forceManyBody: (n?: number) => any;
   forceLink: (links: unknown[]) => any;
@@ -25,14 +25,14 @@ importScripts('/static/js/d3-force.v1.min.js');
 onmessage = function calculateLayout({ data: { nodes, links } }) {
   const simulation = d3
     .forceSimulation(nodes)
-    .force('charge', d3.forceManyBody(15).strength(-50))
+    .force('charge', (self as unknown as { d3: WorkerD3 }).d3.forceManyBody(15).strength(-50))
     .force(
       'link',
-      d3.forceLink(links).id((d: { hostname: string }) => d.hostname)
+      (self as unknown as { d3: WorkerD3 }).d3.forceLink(links).id((d: { hostname: string }) => d.hostname)
     )
-    .force('collide', d3.forceCollide(62))
-    .force('forceX', d3.forceX(0))
-    .force('forceY', d3.forceY(0))
+    .force('collide', (self as unknown as { d3: WorkerD3 }).d3.forceCollide(62))
+    .force('forceX', (self as unknown as { d3: WorkerD3 }).d3.forceX(0))
+    .force('forceY', (self as unknown as { d3: WorkerD3 }).d3.forceY(0))
     .stop();
 
   for (

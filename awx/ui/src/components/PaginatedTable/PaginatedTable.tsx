@@ -35,7 +35,7 @@ export interface PaginatedTableProps {
   toolbarRelatedSearchableKeys?: Untyped[];
   pluralizedItemName?: Untyped;
   showPageSizeOptions?: boolean;
-  renderToolbar?: (...args: Untyped[]) => void;
+  renderToolbar?: (props: DataListToolbarProps) => React.ReactNode;
   emptyContentMessage?: Untyped;
   clearSelected?: Untyped;
   ouiaId?: Untyped;
@@ -75,11 +75,14 @@ function PaginatedTable({
     clearSelected();
   }, [location.search, clearSelected]);
 
-  const pushHistoryState = (qs: unknown) => {
+  const pushHistoryState = (qs: string) => {
     navigate(qs ? `${pathname}?${qs}` : pathname);
   };
 
-  const handleSetPage = (event: React.SyntheticEvent, pageNumber: unknown) => {
+  const handleSetPage = (
+    event: React.MouseEvent | React.KeyboardEvent | MouseEvent,
+    pageNumber: number
+  ) => {
     const qs = updateQueryString(qsConfig, search, {
       page: pageNumber,
     });
@@ -87,9 +90,9 @@ function PaginatedTable({
   };
 
   const handleSetPageSize = (
-    event: React.SyntheticEvent,
-    pageSize: unknown,
-    page: unknown
+    event: React.MouseEvent | React.KeyboardEvent | MouseEvent,
+    pageSize: number,
+    page: number
   ) => {
     const qs = updateQueryString(qsConfig, search, {
       page_size: pageSize,
@@ -157,8 +160,8 @@ function PaginatedTable({
       isCompact
       dropDirection="down"
       itemCount={itemCount}
-      page={queryParams.page || 1}
-      perPage={queryParams.page_size}
+      page={Number(queryParams.page) || 1}
+      perPage={Number(queryParams.page_size)}
       perPageOptions={
         showPageSizeOptions
           ? [
@@ -192,8 +195,8 @@ function PaginatedTable({
         <Pagination
           variant="bottom"
           itemCount={itemCount}
-          page={queryParams.page || 1}
-          perPage={queryParams.page_size}
+          page={Number(queryParams.page) || 1}
+          perPage={Number(queryParams.page_size)}
           perPageOptions={
             showPageSizeOptions
               ? [

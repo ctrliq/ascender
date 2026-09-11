@@ -1,9 +1,10 @@
+import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Td, Tr } from '@patternfly/react-table';
 
 export interface HostListItemProps {
-  item: Record<string, unknown>;
+  item: Untyped;
   [key: string]: unknown;
 }
 

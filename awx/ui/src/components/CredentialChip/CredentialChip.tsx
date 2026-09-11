@@ -33,12 +33,13 @@ function CredentialChip({
   } else if (credential.kind === 'aws' || credential.kind === 'ssh') {
     type = credential.kind.toUpperCase();
   } else {
-    type = toTitleCase(credential.kind);
+    type = toTitleCase(credential.kind as string);
   }
 
   const buildCredentialName = () => {
-    if (credential.kind === 'vault' && credential.inputs?.vault_id) {
-      return `${credential.name} | ${credential.inputs.vault_id}`;
+    const inputs = credential.inputs as { vault_id?: string } | undefined;
+    if (credential.kind === 'vault' && inputs?.vault_id) {
+      return `${credential.name} | ${inputs.vault_id}`;
     }
     return `${credential.name}`;
   };

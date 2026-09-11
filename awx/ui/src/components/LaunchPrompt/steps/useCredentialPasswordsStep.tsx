@@ -146,7 +146,7 @@ export default function useCredentialPasswordsStep(
 function getInitialValues(
   launchConfig: LaunchConfig,
   selectedCredentials: Untyped[] = []
-): LaunchStep {
+) {
   const initialValues: { credential_passwords: Record<string, string> } = {
     credential_passwords: {},
   };

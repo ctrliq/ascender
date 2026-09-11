@@ -20,7 +20,9 @@ function HealthCheckAlert({ onSetHealthCheckAlert }: HealthCheckAlertProps) {
   const { t } = useLingui();
   return (
     <Alert
-      variant="default"
+      // PatternFly 5's "default" became "custom" in 6; "info" would make it
+      // blue where this alert has always been neutral.
+      variant="custom"
       actionClose={
         <AlertActionCloseButton onClose={() => onSetHealthCheckAlert(false)} />
       }

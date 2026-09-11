@@ -130,9 +130,11 @@ function SelectResourceStep({
             ))}
           </HeaderRow>
         }
-        renderRow={(item: Record<string, unknown>, index: number) => (
+        renderRow={(item: Untyped, index: number) => (
           <CheckboxListItem
-            isSelected={selectedResourceRows.some((i) => i.id === item.id)}
+            isSelected={selectedResourceRows.some(
+              (i: Untyped) => i.id === item.id
+            )}
             itemId={item.id}
             item={item}
             rowIndex={index}

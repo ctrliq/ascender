@@ -33,7 +33,7 @@ export default function UnsupportedRRuleAlert({
       />
       <RulesTitle>{t`Schedule Rules`}:</RulesTitle>
       <pre style={{ fontFamily: 'var(--pf-t--global--font--family--mono)' }}>
-        {schedule.rrule.split(' ').join('\n')}
+        {schedule.rrule?.split(' ').join('\n')}
       </pre>
     </AlertWrapper>
   );

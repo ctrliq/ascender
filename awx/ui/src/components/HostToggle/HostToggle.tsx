@@ -72,11 +72,11 @@ function HostToggle({
           id={`host-${host.id}-toggle`}
           label={t`On`}
 
-          isChecked={isEnabled}
+          isChecked={Boolean(isEnabled)}
           isDisabled={
             isLoading ||
             isDisabled ||
-            !host.summary_fields.user_capabilities.edit
+            !host.summary_fields.user_capabilities?.edit
           }
           onChange={toggleHost}
           ouiaId={`host-${host.id}-toggle`}

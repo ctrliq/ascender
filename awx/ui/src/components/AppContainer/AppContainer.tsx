@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React, { useState, useEffect } from 'react';
 
 import {
@@ -28,6 +29,7 @@ import BrandLogo from './BrandLogo';
 import NavExpandableGroup from './NavExpandableGroup';
 import PageHeaderToolbar from './PageHeaderToolbar';
 import AlertModal from '../AlertModal';
+import type { PendoConfig } from 'util/issuePendoIdentity';
 
 const StyledMastheadBrand = styled(MastheadBrand)`
   color: inherit;
@@ -56,7 +58,9 @@ function AppContainer({ navRouteConfig = [], children }: AppContainerProps) {
 
   useEffect(() => {
     if ('analytics_status' in config) {
-      issuePendoIdentity(config);
+      // The guard above is what says the config has been read; PendoConfig
+      // names the fields pendo is given out of it.
+      issuePendoIdentity(config as unknown as PendoConfig);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config.analytics_status]);
@@ -74,13 +78,13 @@ function AppContainer({ navRouteConfig = [], children }: AppContainerProps) {
             aria-label={t`Global navigation`}
           />
         </MastheadToggle>
-        <StyledMastheadBrand component="a" href="/">
+        <StyledMastheadBrand href="/">
           <BrandLogo alt={alt} />
         </StyledMastheadBrand>
       </MastheadMain>
       <MastheadContent>
         <PageHeaderToolbar
-          loggedInUser={config?.me}
+          loggedInUser={config?.me as Record<string, unknown>}
           isAboutDisabled={!config?.version}
           onAboutClick={handleAboutModalOpen}
           onLogoutClick={logout}
@@ -115,7 +119,7 @@ function AppContainer({ navRouteConfig = [], children }: AppContainerProps) {
           ouiaId="sidebar-navigation"
         >
           <NavList>
-            {navRouteConfig.map(({ groupId, groupTitle, routes }) => (
+            {navRouteConfig.map(({ groupId, groupTitle, routes }: Untyped) => (
               <NavExpandableGroup
                 key={groupId}
                 groupId={groupId}
@@ -175,7 +179,7 @@ function AppContainer({ navRouteConfig = [], children }: AppContainerProps) {
         ]}
       >
         <Plural
-          value={sessionCountdown}
+          value={sessionCountdown ?? 0}
           one="You will be logged out in # second due to inactivity"
           other="You will be logged out in # seconds due to inactivity"
         />

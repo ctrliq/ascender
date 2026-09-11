@@ -21,7 +21,7 @@ const QS_CONFIG = getQSConfig('execution_environments', {
   order_by: 'name',
 });
 export interface AdHocExecutionEnvironmentStepProps {
-  organizationId: number | string;
+  organizationId: number | string | null;
   [key: string]: unknown;
 }
 

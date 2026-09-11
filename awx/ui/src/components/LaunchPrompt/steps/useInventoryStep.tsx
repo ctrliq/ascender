@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
@@ -6,6 +7,7 @@ import { Alert } from '@patternfly/react-core';
 import InventoryStep from './InventoryStep';
 import StepName from './StepName';
 import type { LaunchConfig, LaunchStep, VisitedSteps } from '../types';
+import type { LaunchPromptValues } from '../types';
 
 const InventoryAlert = styled(Alert)`
   margin-bottom: 16px;
@@ -15,7 +17,7 @@ const STEP_ID = 'inventory';
 
 export default function useInventoryStep(
   launchConfig: LaunchConfig,
-  resource: Record<string, unknown>,
+  resource: Untyped,
   visitedSteps: VisitedSteps
 ): LaunchStep {
   const { t } = useLingui();
@@ -76,13 +78,14 @@ export default function useInventoryStep(
 
 function getInitialValues(
   launchConfig: LaunchConfig,
-  resource: Record<string, unknown>
-) {
+  resource: Untyped
+): LaunchPromptValues {
   if (!launchConfig.ask_inventory_on_launch) {
     return {};
   }
 
-  return {
+  const initialValues: LaunchPromptValues = {
     inventory: resource?.summary_fields?.inventory || null,
   };
+  return initialValues;
 }

@@ -12,7 +12,7 @@ export interface ToolbarSyncSourceButtonProps {
 }
 
 function ToolbarSyncSourceButton({
-  onClick = null,
+  onClick,
 }: ToolbarSyncSourceButtonProps) {
   const { t } = useLingui();
   const { isKebabified } = useKebabifiedMenu();

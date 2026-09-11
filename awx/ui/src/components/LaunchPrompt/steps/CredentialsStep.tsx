@@ -16,6 +16,7 @@ import CredentialChip from '../../CredentialChip';
 import ContentError from '../../ContentError';
 import credentialsValidator from './credentialsValidator';
 import type { LookupItem } from 'components/Lookup/shared/reducer';
+import type { QSConfig } from 'util/qs';
 
 const CredentialErrorAlert = styled(Alert)`
   margin-bottom: 20px;
@@ -28,7 +29,7 @@ const QS_CONFIG = getQSConfig('credential', {
 });
 
 export interface CredentialsStepProps {
-  allowCredentialsWithPasswords: unknown;
+  allowCredentialsWithPasswords: boolean;
   defaultCredentials?: unknown[];
   [key: string]: unknown;
 }
@@ -122,8 +123,9 @@ function CredentialsStep({
       const loadedTypes = await CredentialTypesAPI.loadAllTypes();
       if (loadedTypes.length) {
         const match =
-          loadedTypes.find((type) => type.kind === 'ssh') || loadedTypes[0];
-        setSelectedType(match);
+          loadedTypes.find((type: Untyped) => type.kind === 'ssh') ||
+          loadedTypes[0];
+        setSelectedType(match ?? null);
       }
       return loadedTypes;
     }, []),
@@ -180,7 +182,7 @@ function CredentialsStep({
     /* eslint-disable-next-line react-hooks/exhaustive-deps */
   }, []);
 
-  const removeAllSearchTerms = (qsConfig: unknown) => {
+  const removeAllSearchTerms = (qsConfig: QSConfig) => {
     const oldParams = parseQueryString(qsConfig, location.search);
     Object.keys(oldParams).forEach((key) => {
       oldParams[key] = null;
@@ -195,7 +197,7 @@ function CredentialsStep({
     pushHistoryState(qs);
   };
 
-  const pushHistoryState = (qs: unknown) => {
+  const pushHistoryState = (qs: string) => {
     const { pathname } = location;
     navigate(qs ? `${pathname}?${qs}` : pathname);
   };
@@ -210,7 +212,15 @@ function CredentialsStep({
 
   const isVault = selectedType?.kind === 'vault';
 
-  const renderChip = ({ item, removeItem, canDelete }) => (
+  const renderChip = ({
+    item,
+    removeItem,
+    canDelete,
+  }: {
+    item: Untyped;
+    removeItem: (item: Untyped) => void;
+    canDelete: boolean;
+  }) => (
     <CredentialChip
       id={`credential-chip-${item.id}`}
       key={item.id}
@@ -245,7 +255,10 @@ function CredentialsStep({
             onChange={(e: React.SyntheticEvent, id: number | string) => {
               // Reset query params when the category of credentials is changed
               removeAllSearchTerms(QS_CONFIG);
-              setSelectedType(types.find((o) => o.id === parseInt(id, 10)));
+              setSelectedType(
+                types.find((o: Untyped) => o.id === parseInt(String(id), 10)) ??
+                  null
+              );
             }}
           />
         </ToolbarItem>
@@ -286,17 +299,17 @@ function CredentialsStep({
         selectItem={(item: LookupItem) => {
           const hasSameVaultID = (val: Untyped) =>
             val?.inputs?.vault_id !== undefined &&
-            val?.inputs?.vault_id === item?.inputs?.vault_id;
+            val?.inputs?.vault_id === (item as Untyped)?.inputs?.vault_id;
           const hasSameCredentialType = (val: Untyped) =>
-            val.credential_type === item.credential_type;
-          const newItems = field.value.filter((i: number) =>
+            val.credential_type === (item as Untyped).credential_type;
+          const newItems = field.value.filter((i: Untyped) =>
             isVault ? !hasSameVaultID(i) : !hasSameCredentialType(i)
           );
           newItems.push(item);
           helpers.setValue(newItems);
         }}
         deselectItem={(item: LookupItem) => {
-          helpers.setValue(field.value.filter((i: number) => i.id !== item.id));
+          helpers.setValue(field.value.filter((i: Untyped) => i.id !== item.id));
         }}
         renderItemChip={renderChip}
       />

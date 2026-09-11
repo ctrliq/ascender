@@ -3,12 +3,14 @@ import { useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocCredentialStep from './AdHocCredentialStep';
+import type { AdHocStep } from './types';
+import type { VisitedSteps } from '../LaunchPrompt/types';
 
 const STEP_ID = 'credentials';
 export default function useAdHocExecutionEnvironmentStep(
-  visited: unknown,
-  credentialTypeId: unknown
-) {
+  visited: VisitedSteps,
+  credentialTypeId: number | string | null
+): AdHocStep {
   const { t } = useLingui();
   const [field, meta, helpers] = useField('credentials');
   const hasError =

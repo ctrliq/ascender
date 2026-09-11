@@ -9,21 +9,25 @@ import useInstanceGroupsStep from '../../LaunchPrompt/steps/useInstanceGroupsSte
 import useOtherPromptsStep from '../../LaunchPrompt/steps/useOtherPromptsStep';
 import useSurveyStep from '../../LaunchPrompt/steps/useSurveyStep';
 import usePreviewStep from '../../LaunchPrompt/steps/usePreviewStep';
+import type { ScheduleFormValues } from './types';
+import type { LaunchConfig, SurveyConfig } from '../../LaunchPrompt/types';
 
 export default function useSchedulePromptSteps(
-  surveyConfig: Record<string, unknown>,
-  launchConfig: Record<string, unknown>,
-  schedule: unknown,
-  resource: Record<string, unknown>,
+  surveyConfig: SurveyConfig,
+  launchConfig: LaunchConfig,
+  schedule: Untyped,
+  resource: Untyped,
   scheduleCredentials: Untyped,
   resourceDefaultCredentials: Untyped,
-  labels: unknown,
-  instanceGroups: unknown
+  labels: Untyped,
+  instanceGroups: Untyped
 ) {
   const { t } = useLingui();
-  const sourceOfValues =
+  // A schedule being edited supplies the values; a new one takes them from the
+  // template it is being created on.
+  const sourceOfValues: Untyped =
     (Object.keys(schedule).length > 0 && schedule) || resource;
-  const { resetForm, values } = useFormikContext();
+  const { resetForm, values } = useFormikContext<ScheduleFormValues>();
   const [visited, setVisited] = useState<Untyped>({});
 
   const steps = [
@@ -57,9 +61,9 @@ export default function useSchedulePromptSteps(
 
   useEffect(() => {
     if (launchConfig && surveyConfig && isReady) {
-      let initialValues = {};
+      let initialValues: Record<string, Untyped> = {};
       initialValues = steps.reduce(
-        (acc, cur) => ({
+        (acc: Record<string, Untyped>, cur) => ({
           ...acc,
           ...cur.initialValues,
         }),
@@ -93,7 +97,7 @@ export default function useSchedulePromptSteps(
         };
 
         if (resourceDefaultCredentials) {
-          resourceDefaultCredentials.forEach((defaultCred: unknown) => {
+          resourceDefaultCredentials.forEach((defaultCred: Untyped) => {
             if (!credentialHasOverride(defaultCred)) {
               defaultCredsWithoutOverrides.push(defaultCred);
             }
@@ -121,12 +125,12 @@ export default function useSchedulePromptSteps(
 
   return {
     isReady,
-    validateStep: (stepId: unknown) => {
-      steps.find((s) => s?.step?.id === stepId).validate();
+    validateStep: (stepId: string) => {
+      steps.find((s) => s?.step?.id === stepId)?.validate();
     },
     steps: pfSteps,
     visitStep: (
-      prevStepId: unknown,
+      prevStepId: string,
       setFieldTouched: (
         field: string,
         touched?: boolean,
@@ -137,7 +141,9 @@ export default function useSchedulePromptSteps(
         ...visited,
         [prevStepId]: true,
       });
-      steps.find((s) => s?.step?.id === prevStepId).setTouched(setFieldTouched);
+      steps
+        .find((s) => s?.step?.id === prevStepId)
+        ?.setTouched(setFieldTouched);
     },
     visitAllSteps: (
       setFieldTouched: (

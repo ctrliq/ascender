@@ -1,10 +1,9 @@
+import type { Untyped } from 'types/api';
 import { useState, useEffect } from 'react';
 import useWebsocket from './useWebsocket';
 
-export default function useWsTemplates(
-  initialTemplates: Record<string, unknown>[]
-) {
-  const [templates, setTemplates] = useState(initialTemplates);
+export default function useWsTemplates(initialTemplates: Untyped[]) {
+  const [templates, setTemplates] = useState<Untyped[]>(initialTemplates);
   const lastMessage = useWebsocket({
     jobs: ['status_changed'],
     control: ['limit_reached_1'],

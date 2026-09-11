@@ -137,25 +137,27 @@ function validateSurveyField(question: Untyped, value: Untyped) {
 function checkForError(
   launchConfig: LaunchConfig,
   surveyConfig: SurveyConfig,
-  values: Record<string, unknown>
+  values: LaunchPromptValues
 ) {
   let hasError = false;
   if (launchConfig.survey_enabled && surveyConfig.spec) {
     surveyConfig.spec.forEach((question: SurveyQuestion) => {
       const value = values[`survey_${question.variable}`] as Untyped;
-      const isTextField = ['text', 'textarea'].includes(question.type);
-      const isNumeric = ['integer', 'float'].includes(question.type);
+      const isTextField = ['text', 'textarea'].includes(question.type ?? '');
+      const isNumeric = ['integer', 'float'].includes(question.type ?? '');
       if (isTextField && (value || value === 0)) {
         if (
-          (question.min && value.length < question.min) ||
-          (question.max && value.length > question.max)
+          (question.min !== undefined && value.length < question.min) ||
+          (question.max !== undefined && value.length > question.max)
         ) {
           hasError = true;
         }
       }
       if (isNumeric) {
         if (
-          (value < question.min || value > question.max || value === '') &&
+          (value < (question.min as number) ||
+            value > (question.max as number) ||
+            value === '') &&
           question.required
         ) {
           hasError = true;

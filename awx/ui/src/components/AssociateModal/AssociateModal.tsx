@@ -11,6 +11,7 @@ import useRequest from 'hooks/useRequest';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useSelected from 'hooks/useSelected';
 import OptionsList from '../OptionsList';
+import type { QSParams } from 'util/qs';
 
 const QS_CONFIG = (order_by = 'name') =>
   getQSConfig('associate', {
@@ -25,8 +26,10 @@ export interface AssociateModalProps {
   title: Untyped;
   onClose: (...args: Untyped[]) => void;
   onAssociate: (...args: Untyped[]) => void;
-  fetchRequest: (...args: Untyped[]) => unknown;
-  optionsRequest: (...args: Untyped[]) => unknown;
+  /** Reads the page of candidates the modal lists. */
+  fetchRequest: (params: QSParams) => Promise<Untyped>;
+  /** Reads that list's options, for the searchable keys. */
+  optionsRequest: () => Promise<Untyped>;
   isModalOpen?: boolean;
   displayKey?: Untyped;
   ouiaId: string;

@@ -30,7 +30,7 @@ function AnsibleSelect({
 }: AnsibleSelectProps) {
   const { t } = useLingui();
   const onSelectChange = (val: unknown, event: React.SyntheticEvent) => {
-    event.target.name = name;
+    (event.target as HTMLInputElement).name = name;
     onChange(event, val);
   };
 

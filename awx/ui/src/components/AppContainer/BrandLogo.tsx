@@ -26,7 +26,7 @@ export interface BrandLogoProps {
 
 const BrandLogo = ({ alt }: BrandLogoProps) => {
   const { custom_header_logo } = useConfig();
-  const src = custom_header_logo || defaultSrc;
+  const src = (custom_header_logo as string) || defaultSrc;
   return <BrandImg src={src} alt={alt} />;
 };
 

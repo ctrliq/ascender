@@ -21,11 +21,12 @@ const PopoverButton = styled.button`
 `;
 
 export interface PopoverProps {
-  ariaLabel?: unknown;
+  ariaLabel?: string;
   content?: Untyped;
   header?: Untyped;
   id?: string;
-  maxWidth?: Untyped;
+  /** A css length, capping how wide the popover grows. */
+  maxWidth?: string;
   ouiaId?: string;
   [key: string]: unknown;
 }

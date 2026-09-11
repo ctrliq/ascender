@@ -5,12 +5,13 @@ import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocDetailsStep from './AdHocDetailsStep';
 import type { AdHocValues } from './types';
 import type { VisitedSteps } from '../LaunchPrompt/types';
+import type { AdHocStep } from './types';
 
 const STEP_ID = 'details';
 export default function useAdHocDetailsStep(
   visited: VisitedSteps,
   moduleOptions: [string, string][]
-) {
+): AdHocStep {
   const { t } = useLingui();
   const { values, touched, setFieldError } = useFormikContext<AdHocValues>();
 

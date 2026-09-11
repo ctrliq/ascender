@@ -181,7 +181,7 @@ function HostFilterLookup({
     isLoading,
   } = useRequest(
     useCallback(
-      async (orgId) => {
+      async (orgId: number | string) => {
         const params = parseQueryString(QS_CONFIG, location.search);
         const [{ data }, { data: actions }] = await Promise.all([
           HostsAPI.read(
@@ -225,7 +225,7 @@ function HostFilterLookup({
     setChips(buildChips(modifiedFilters));
   }, [value]);
 
-  function qsToHostFilter(qs: unknown) {
+  function qsToHostFilter(qs: string) {
     const searchParams = toSearchParams(qs);
     const withoutNamespace = removeNamespacedKeys(QS_CONFIG, searchParams);
     const withoutDefaultParams = removeDefaultParams(
@@ -460,7 +460,7 @@ function HostFilterLookup({
                 <HeaderCell>{t`Inventory`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(item: Record<string, unknown>) => (
+            renderRow={(item: Untyped) => (
               <HostListItem key={item.id} item={item} />
             )}
             renderToolbar={(props) => (

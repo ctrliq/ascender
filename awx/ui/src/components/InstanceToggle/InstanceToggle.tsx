@@ -12,7 +12,7 @@ import AlertModal from '../AlertModal';
 export interface InstanceToggleProps {
   className: string;
   fetchInstances: (...args: Untyped[]) => unknown;
-  instance: Record<string, unknown>;
+  instance: Untyped;
   onToggle: (...args: Untyped[]) => void;
   [key: string]: unknown;
 }
@@ -69,7 +69,7 @@ function InstanceToggle({
           id={`host-${instance.id}-toggle`}
           label={t`Enabled`}
 
-          isChecked={isEnabled}
+          isChecked={Boolean(isEnabled)}
           isDisabled={isLoading || !me?.is_superuser}
           onChange={toggleInstance}
           ouiaId={`host-${instance.id}-toggle`}

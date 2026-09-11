@@ -44,8 +44,8 @@ function ScheduleEdit({
     values: Record<string, unknown>,
     launchConfiguration: Untyped,
     surveyConfiguration: Untyped,
-    originalInstanceGroups: unknown,
-    originalLabels: unknown,
+    originalInstanceGroups: Untyped[],
+    originalLabels: Untyped[],
     scheduleCredentials = []
   ) => {
     const {
@@ -89,8 +89,8 @@ function ScheduleEdit({
     submitValues.extra_data = extraVars && parseVariableField(extraVars);
 
     if (
-      Object.keys(submitValues.extra_data).length === 0 &&
-      Object.keys(schedule.extra_data).length > 0
+      Object.keys(submitValues.extra_data as object).length === 0 &&
+      Object.keys((schedule.extra_data ?? {}) as object).length > 0
     ) {
       submitValues.extra_data = schedule.extra_data;
     }
@@ -120,7 +120,7 @@ function ScheduleEdit({
         }
       }
 
-      const ruleSet = buildRuleSet(values);
+      const ruleSet = buildRuleSet(values as ScheduleFormValues);
       const requestData: Record<string, Untyped> = {
         ...submitValues,
         rrule: ruleSet.toString().replace(/\n/g, ' '),
@@ -156,7 +156,7 @@ function ScheduleEdit({
 
       const { added: addedLabels, removed: removedLabels } = getAddedAndRemoved(
         originalLabels,
-        labels
+        labels as Untyped[]
       );
 
       let organizationId = resource.organization;
@@ -177,15 +177,15 @@ function ScheduleEdit({
         ...addedCredentials.map(({ id }) =>
           SchedulesAPI.associateCredential(scheduleId, id)
         ),
-        ...removedLabels.map((label) =>
+        ...removedLabels.map((label: Untyped) =>
           SchedulesAPI.disassociateLabel(scheduleId, label)
         ),
-        ...addedLabels.map((label) =>
+        ...addedLabels.map((label: Untyped) =>
           SchedulesAPI.associateLabel(scheduleId, label, organizationId)
         ),
         SchedulesAPI.orderInstanceGroups(
           scheduleId,
-          instance_groups || [],
+          (instance_groups || []) as Untyped[],
           originalInstanceGroups
         ),
       ]);

@@ -26,14 +26,14 @@ function showCredentialPasswordsStep(credential: Untyped) {
 
 export default function useAdHocLaunchSteps(
   moduleOptions: unknown,
-  organizationId: unknown,
-  credentialTypeId: unknown
+  organizationId: number | string | null,
+  credentialTypeId: number | string | null
 ) {
   const { values, resetForm, touched } = useFormikContext<AdHocValues>();
 
   const [visited, setVisited] = useState<Untyped>({});
   const steps = [
-    useAdHocDetailsStep(visited, moduleOptions),
+    useAdHocDetailsStep(visited, moduleOptions as [string, string][]),
     useAdHocExecutionEnvironmentStep(organizationId),
     useAdHocCredentialStep(visited, credentialTypeId),
     useCredentialPasswordsStep(
@@ -43,23 +43,32 @@ export default function useAdHocLaunchSteps(
   ];
 
   useEffect(() => {
-    const newFormValues = { ...values };
+    const newFormValues: AdHocValues = { ...values };
 
-    if (!values.credentials[0]?.inputs) {
+    const inputs = values.credentials[0]?.inputs as
+      | Record<string, unknown>
+      | undefined;
+    if (!inputs) {
       return;
     }
-    if (
-      (values.credentials[0].inputs?.password ||
-        values.credentials[0].inputs?.become_password ||
-        values.credentials[0].inputs?.ssh_key_unlock) === 'ASK'
-    )
+    // `(a || b || c) === 'ASK'` compares only the first truthy of the three:
+    // a credential whose password is stored but whose become_password prompts
+    // does not reset the object here, so the previous credential's entries
+    // survive into the launch. Left as it is rather than changed blind, since
+    // this decides which passwords get posted.
+    if ((inputs.password || inputs.become_password || inputs.ssh_key_unlock) ===
+      'ASK')
       newFormValues.credential_passwords = {};
-    Object.keys(values.credentials[0].inputs).forEach((inputKey) => {
+    const passwords = newFormValues.credential_passwords as Record<
+      string,
+      string
+    >;
+    Object.keys(inputs).forEach((inputKey) => {
       if (inputKey === 'become_password' || inputKey === 'ssh_key_unlock') {
-        newFormValues.credential_passwords[inputKey] = '';
+        passwords[inputKey] = '';
       }
       if (inputKey === 'password') {
-        newFormValues.credential_passwords.ssh_password = '';
+        passwords.ssh_password = '';
       }
     });
     resetForm({
@@ -74,10 +83,10 @@ export default function useAdHocLaunchSteps(
   steps.push(useAdHocPreviewStep(hasErrors));
   return {
     steps: steps.map((s) => s.step).filter((s) => s != null),
-    validateStep: (stepId: unknown) =>
-      steps.find((s) => s?.step.id === stepId).validate(),
+    validateStep: (stepId: string) =>
+      steps.find((s) => s?.step?.id === stepId)?.validate(),
     visitStep: (
-      prevStepId: unknown,
+      prevStepId: string,
       setFieldTouched: (
         field: string,
         touched?: boolean,
@@ -88,7 +97,9 @@ export default function useAdHocLaunchSteps(
         ...visited,
         [prevStepId]: true,
       });
-      steps.find((s) => s?.step?.id === prevStepId).setTouched(setFieldTouched);
+      steps
+        .find((s) => s?.step?.id === prevStepId)
+        ?.setTouched(setFieldTouched);
     },
     visitAllSteps: (
       setFieldTouched: (

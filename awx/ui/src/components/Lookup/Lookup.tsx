@@ -30,7 +30,7 @@ const ChipHolder = styled.div<{ $isDisabled?: boolean }>`
 `;
 export interface LookupProps {
   id?: string;
-  header?: Untyped;
+  header?: React.ReactNode;
   onChange: (...args: Untyped[]) => void;
   onBlur?: (...args: Untyped[]) => void;
   isLoading?: boolean;
@@ -56,7 +56,7 @@ export interface LookupProps {
   onDebounce?: (...args: Untyped[]) => void;
   fieldName: Untyped;
   validate?: (...args: Untyped[]) => void;
-  modalDescription?: string;
+  modalDescription?: React.ReactNode;
   onUpdate?: (...args: Untyped[]) => void;
   [key: string]: unknown;
 }
