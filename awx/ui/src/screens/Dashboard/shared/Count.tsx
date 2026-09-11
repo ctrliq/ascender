@@ -37,7 +37,7 @@ const CountLink = styled(Link)`
 export interface CountProps {
   /** Styles the count as a failure figure rather than a total. */
   failed?: boolean;
-  link: Untyped;
+  link: string;
   data?: Untyped;
   label?: React.ReactNode;
   [key: string]: unknown;

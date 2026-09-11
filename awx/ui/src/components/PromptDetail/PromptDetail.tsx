@@ -1,3 +1,4 @@
+import type { LaunchConfig } from 'components/LaunchPrompt/types';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
@@ -101,7 +102,7 @@ function omitOverrides(
 
 export interface PromptDetailProps {
   resource: Untyped;
-  launchConfig?: Untyped;
+  launchConfig?: LaunchConfig;
   overrides?: Untyped;
   /**
    * The workflow node this prompt belongs to, when the prompt is shown from

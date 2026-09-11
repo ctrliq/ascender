@@ -1,3 +1,4 @@
+import type { SurveyConfig, LaunchConfig  } from 'components/LaunchPrompt/types';
 import type { Schedule, Untyped } from 'types/api';
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { DateTime } from 'luxon';
@@ -42,8 +43,8 @@ export interface ScheduleFormProps {
   schedule?: Schedule;
   submitError?: unknown;
   resource: Untyped;
-  launchConfig: Untyped;
-  surveyConfig?: Untyped;
+  launchConfig?: LaunchConfig;
+  surveyConfig?: SurveyConfig;
   resourceDefaultCredentials?: Untyped;
   [key: string]: unknown;
 }
@@ -304,7 +305,7 @@ function ScheduleForm({
       launchConfig.ask_instance_groups_on_launch ||
       launchConfig.survey_enabled ||
       launchConfig.inventory_needed_to_start ||
-      launchConfig.variables_needed_to_start?.length > 0)
+      (launchConfig.variables_needed_to_start?.length ?? 0) > 0)
   ) {
     showPromptButton = true;
   }

@@ -1,3 +1,4 @@
+import type { SurveyConfig, LaunchConfig  } from 'components/LaunchPrompt/types';
 import type { DetailedError, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
@@ -22,8 +23,8 @@ import ScheduleEdit from './ScheduleEdit';
 export interface ScheduleProps {
   setBreadcrumb: (...args: Untyped[]) => void;
   resource: Untyped;
-  launchConfig?: Untyped;
-  surveyConfig?: Untyped;
+  launchConfig?: LaunchConfig;
+  surveyConfig?: SurveyConfig;
   hasDaysToKeepField?: boolean;
   resourceDefaultCredentials?: Untyped;
   [key: string]: unknown;

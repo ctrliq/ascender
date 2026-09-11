@@ -1,3 +1,4 @@
+import type { QSConfig } from 'util/qs';
 import type { SearchableKey } from 'components/PaginatedTable';
 import type { SearchColumn, SortColumn, Untyped } from 'types/api';
 import React from 'react';
@@ -26,7 +27,7 @@ export interface OptionsListProps {
   name?: unknown;
   optionCount: Untyped;
   options: Untyped;
-  qsConfig: Untyped;
+  qsConfig: QSConfig;
   readOnly?: boolean;
   relatedSearchableKeys?: Untyped;
   renderItemChip?: Untyped;

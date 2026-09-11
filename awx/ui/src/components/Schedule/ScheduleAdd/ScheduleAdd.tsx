@@ -21,8 +21,8 @@ import type { ScheduleFormValues } from '../shared/types';
 export interface ScheduleAddProps {
   resource: Untyped;
   apiModel: SchedulesApiModel;
-  launchConfig: Untyped;
-  surveyConfig: Untyped;
+  launchConfig?: LaunchConfig;
+  surveyConfig?: SurveyConfig;
   hasDaysToKeepField?: boolean;
   resourceDefaultCredentials?: Untyped;
   [key: string]: unknown;

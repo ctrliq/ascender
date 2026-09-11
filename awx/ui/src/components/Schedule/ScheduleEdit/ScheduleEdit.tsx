@@ -1,3 +1,4 @@
+import type { SurveyConfig, LaunchConfig , SurveyQuestion  } from 'components/LaunchPrompt/types';
 import type { Schedule, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
@@ -9,7 +10,6 @@ import { parseVariableField } from 'util/yaml';
 import mergeExtraVars from 'util/prompt/mergeExtraVars';
 import getSurveyValues from 'util/prompt/getSurveyValues';
 import createNewLabels from 'util/labels';
-import type { SurveyQuestion } from 'components/LaunchPrompt/types';
 import type { LabelInput } from 'util/labels';
 import ScheduleForm from '../shared/ScheduleForm';
 import buildRuleSet from '../shared/buildRuleSet';
@@ -20,8 +20,8 @@ export interface ScheduleEditProps {
   hasDaysToKeepField?: boolean;
   schedule: Schedule;
   resource: Untyped;
-  launchConfig: Untyped;
-  surveyConfig: Untyped;
+  launchConfig?: LaunchConfig;
+  surveyConfig?: SurveyConfig;
   resourceDefaultCredentials: Untyped;
   [key: string]: unknown;
 }

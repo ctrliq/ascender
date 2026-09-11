@@ -20,8 +20,8 @@ import type { ScheduleFormValues } from './types';
 
 export interface SchedulePromptableFieldsProps {
   schedule: Schedule;
-  surveyConfig: SurveyConfig;
-  launchConfig: LaunchConfig;
+  surveyConfig?: SurveyConfig;
+  launchConfig?: LaunchConfig;
   onCloseWizard: (...args: Untyped[]) => void;
   onSave: (...args: Untyped[]) => void;
   credentials: Credential[];
@@ -54,8 +54,10 @@ function SchedulePromptableFields({
     contentError,
     isReady,
   } = useSchedulePromptSteps(
-    surveyConfig,
-    launchConfig,
+    // The wizard only opens for a resource that prompts, which is what having
+    // these means.
+    surveyConfig as SurveyConfig,
+    launchConfig as LaunchConfig,
     schedule,
     resource,
     credentials,

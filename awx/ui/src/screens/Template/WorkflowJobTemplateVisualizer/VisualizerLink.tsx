@@ -1,8 +1,7 @@
-import type { NodePositions } from 'components/Workflow/WorkflowUtils';
-import type {
+import type { WorkflowLink,
   WorkflowAction,
-  WorkflowState,
-} from 'components/Workflow/workflowReducer';
+  WorkflowState } from 'components/Workflow/workflowReducer';
+import type { NodePositions } from 'components/Workflow/WorkflowUtils';
 import type { Untyped } from 'types/api';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
@@ -28,7 +27,7 @@ const LinkG = styled.g<{ $ignorePointerEvents?: Untyped }>`
 `;
 
 export interface VisualizerLinkProps {
-  link: Untyped;
+  link: WorkflowLink;
   updateLinkHelp: Untyped;
   readOnly: boolean;
   updateHelpText: Untyped;

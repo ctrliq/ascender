@@ -21,7 +21,7 @@ import CredentialLookup from 'components/Lookup/CredentialLookup';
 export interface OrganizationFormFieldsProps {
   instanceGroups: Untyped;
   setInstanceGroups: Untyped;
-  organizationId: Untyped;
+  organizationId: number | string;
   [key: string]: unknown;
 }
 

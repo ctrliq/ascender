@@ -1,6 +1,7 @@
 //
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
+import type { QSConfig } from 'util/qs';
 import type { Untyped } from 'types/api';
 import React, { useEffect } from 'react';
 import { Table, Tbody } from '@patternfly/react-table';
@@ -27,7 +28,7 @@ export interface PaginatedTableProps {
   emptyStateControls?: Untyped;
   items: Untyped;
   itemCount: Untyped;
-  qsConfig: Untyped;
+  qsConfig: QSConfig;
   headerRow?: Untyped;
   renderRow: Untyped;
   toolbarSearchColumns?: Untyped[];

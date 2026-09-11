@@ -91,7 +91,7 @@ const getSourceDefaults = (sourceType: Untyped) => {
 export interface InventorySourceFormFieldsProps {
   source: Untyped;
   sourceOptions: Untyped;
-  organizationId: Untyped;
+  organizationId: number | string;
   [key: string]: unknown;
 }
 

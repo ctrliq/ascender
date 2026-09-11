@@ -11,7 +11,7 @@ import { ActionsTd, ActionItem } from 'components/PaginatedTable';
 
 export interface HostGroupItemProps {
   group: Untyped;
-  inventoryId: Untyped;
+  inventoryId: number | string;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
   rowIndex: number;

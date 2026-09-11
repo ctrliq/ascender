@@ -1,3 +1,4 @@
+import type { SurveyConfig, LaunchConfig  } from 'components/LaunchPrompt/types';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
@@ -12,8 +13,8 @@ export interface SchedulesProps {
   loadSchedules: Untyped;
   setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   /** Absent for a resource that cannot be prompted, a management job say. */
-  launchConfig?: Untyped;
-  surveyConfig?: Untyped;
+  launchConfig?: LaunchConfig;
+  surveyConfig?: SurveyConfig;
   resource?: Untyped;
   resourceDefaultCredentials?: Untyped;
   [key: string]: unknown;

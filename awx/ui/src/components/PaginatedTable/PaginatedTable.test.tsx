@@ -17,6 +17,7 @@ const qsConfig = {
   namespace: 'item',
   defaultParams: { page: 1, page_size: 5, order_by: 'name' },
   integerFields: ['page', 'page_size'],
+  dateFields: [],
 };
 
 // the bottom Pagination is rendered with ouiaId="bottom-pagination"; scope

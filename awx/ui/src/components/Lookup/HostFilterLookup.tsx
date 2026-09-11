@@ -101,7 +101,7 @@ export interface HostFilterLookupProps {
   isDisabled: boolean;
   onBlur?: (event?: Untyped) => void;
   onChange?: (...args: Untyped[]) => void;
-  organizationId?: Untyped;
+  organizationId?: number | string;
   value?: string;
   enableNegativeFiltering?: boolean;
   enableRelatedFuzzyFiltering?: boolean;
@@ -213,7 +213,7 @@ function HostFilterLookup({
   useEffect(() => {
     if (isModalOpen && organizationId) {
       dismissError();
-      fetchHosts(organizationId);
+      fetchHosts(organizationId as number | string);
     }
   }, [fetchHosts, organizationId, isModalOpen]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -302,7 +302,7 @@ function HostFilterLookup({
       },
       { replace: true }
     );
-    fetchHosts(organizationId);
+    fetchHosts(organizationId as number | string);
     toggleModal();
   };
 

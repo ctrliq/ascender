@@ -1,3 +1,4 @@
+import type { QSConfig } from 'util/qs';
 import type { SearchableKey } from 'components/PaginatedTable';
 import type { SearchColumn, Untyped } from 'types/api';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -73,7 +74,7 @@ export interface DataListToolbarProps {
    * control at all.
    */
   additionalControls?: React.ReactNode[];
-  qsConfig: Untyped;
+  qsConfig: QSConfig;
   pagination?: React.ReactNode;
   enableNegativeFiltering?: boolean;
   enableRelatedFuzzyFiltering?: boolean;

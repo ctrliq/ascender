@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button, Tooltip } from '@patternfly/react-core';
@@ -8,7 +7,7 @@ import ErrorDetail from 'components/ErrorDetail/ErrorDetail';
 import { InventoriesAPI } from 'api';
 
 export interface ConstructedInventorySyncButtonProps {
-  inventoryId: Untyped;
+  inventoryId: number | string;
   [key: string]: unknown;
 }
 
