@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useLocation } from 'react-router';
@@ -74,7 +73,7 @@ function ApplicationsList() {
   }, [fetchApplications]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(applications);
+    useSelected(applications);
 
   const {
     isLoading: deleteLoading,
@@ -154,7 +153,7 @@ function ApplicationsList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(application: Untyped, index: number) => (
+            renderRow={(application, index) => (
               <ApplicationListItem
                 key={application.id}
                 value={application.name}

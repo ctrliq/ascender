@@ -1,4 +1,4 @@
-import type { AnyInventory, Untyped } from 'types/api';
+import type { AnyInventory } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -8,6 +8,7 @@ import ContentLoading from 'components/ContentLoading';
 import ContentError from 'components/ContentError';
 import useRequest from 'hooks/useRequest';
 import FederatedInventoryForm from '../shared/FederatedInventoryForm';
+import type { FederatedInventoryFormValues } from '../shared/FederatedInventoryForm';
 
 export interface FederatedInventoryEditProps {
   inventory: AnyInventory;
@@ -45,7 +46,7 @@ function FederatedInventoryEdit({ inventory }: FederatedInventoryEditProps) {
     navigate(`/inventories/federated_inventory/${inventory.id}/details`);
   };
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: FederatedInventoryFormValues) => {
     try {
       await FederatedInventoriesAPI.update(inventory.id, {
         name: values.name,
@@ -53,18 +54,14 @@ function FederatedInventoryEdit({ inventory }: FederatedInventoryEditProps) {
         organization: values.organization?.id,
       });
 
-      const currentInputInventoryIds = inputInventories.map(
-        (i: Untyped) => i.id
-      );
-      const newInputInventoryIds = values.inputInventories.map(
-        (i: Untyped) => i.id
-      );
+      const currentInputInventoryIds = inputInventories.map((i) => i.id);
+      const newInputInventoryIds = values.inputInventories.map((i) => i.id);
 
       const toAssociate = values.inputInventories.filter(
-        (i: Untyped) => !currentInputInventoryIds.includes(i.id)
+        (i) => !currentInputInventoryIds.includes(i.id)
       );
       const toDisassociate = inputInventories.filter(
-        (i: Untyped) => !newInputInventoryIds.includes(i.id)
+        (i) => !newInputInventoryIds.includes(i.id)
       );
 
       /* eslint-disable no-await-in-loop, no-restricted-syntax */

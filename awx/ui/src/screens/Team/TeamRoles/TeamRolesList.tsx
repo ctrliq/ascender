@@ -187,7 +187,7 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
             <HeaderCell sortKey="id">{t`Role`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(role: Untyped, index: number) => (
+        renderRow={(role, index) => (
           <TeamRoleListItem
             key={role.id}
             role={role}

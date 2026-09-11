@@ -95,7 +95,7 @@ function InventoryHostGroupsList() {
   }, [fetchGroups]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(groups);
+    useSelected(groups);
 
   const {
     isLoading: isDisassociateLoading,
@@ -190,11 +190,11 @@ function InventoryHostGroupsList() {
             <HeaderCell>{t`Actions`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(item: Untyped, index: number) => (
+        renderRow={(item, index) => (
           <InventoryHostGroupItem
             key={item.id}
             group={item}
-            inventoryId={item.summary_fields.inventory.id}
+            inventoryId={item.summary_fields.inventory?.id}
             isSelected={selected.some((row) => row.id === item.id)}
             onSelect={() => handleSelect(item)}
             rowIndex={index}

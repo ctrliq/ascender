@@ -77,7 +77,7 @@ function ExecutionEnvironmentList() {
   }, [fetchExecutionEnvironments]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(executionEnvironments);
+    useSelected(executionEnvironments);
 
   const {
     isLoading: deleteLoading,
@@ -201,7 +201,7 @@ function ExecutionEnvironmentList() {
                 ]}
               />
             )}
-            renderRow={(executionEnvironment: Untyped, index: number) => (
+            renderRow={(executionEnvironment, index) => (
               <ExecutionEnvironmentsListItem
                 key={executionEnvironment.id}
                 rowIndex={index}

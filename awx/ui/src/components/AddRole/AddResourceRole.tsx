@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ApiEntity, Untyped } from 'types/api';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -109,12 +109,12 @@ function AddResourceRole({
     selected: resourcesSelected,
     handleSelect: handleResourceSelect,
     clearSelected: clearResources,
-  } = useSelected<Untyped>([]);
+  } = useSelected<ApiEntity>([]);
   const {
     selected: rolesSelected,
     handleSelect: handleRoleSelect,
     clearSelected: clearRoles,
-  } = useSelected<Untyped>([]);
+  } = useSelected<ApiEntity>([]);
 
   const [resourceType, setResourceType] = useState<string | null>(null);
   const [currentStepId, setCurrentStepId] = useState(1);
@@ -148,25 +148,19 @@ function AddResourceRole({
     try {
       const roleRequests: Promise<unknown>[] = [];
 
-      for (let i = 0; i < resourcesSelected.length; i++) {
-        for (let j = 0; j < rolesSelected.length; j++) {
+      resourcesSelected.forEach((resource) => {
+        rolesSelected.forEach((role) => {
           if (resourceType === 'users') {
             roleRequests.push(
-              UsersAPI.associateRole(
-                resourcesSelected[i].id,
-                rolesSelected[j].id
-              )
+              UsersAPI.associateRole(resource.id as number, role.id as number)
             );
           } else if (resourceType === 'teams') {
             roleRequests.push(
-              TeamsAPI.associateRole(
-                resourcesSelected[i].id,
-                rolesSelected[j].id
-              )
+              TeamsAPI.associateRole(resource.id as number, role.id as number)
             );
           }
-        }
-      }
+        });
+      });
 
       await Promise.all(roleRequests);
       onSave();

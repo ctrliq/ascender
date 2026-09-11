@@ -91,7 +91,7 @@ function InventoryGroupHostList() {
   );
 
   const { selected, isAllSelected, handleSelect, setSelected } =
-    useSelected<Untyped>(hosts);
+    useSelected(hosts);
 
   useEffect(() => {
     fetchHosts();
@@ -267,7 +267,7 @@ function InventoryGroupHostList() {
             ]}
           />
         )}
-        renderRow={(host: Untyped, index: number) => (
+        renderRow={(host, index) => (
           <InventoryGroupHostListItem
             key={host.id}
             rowIndex={index}

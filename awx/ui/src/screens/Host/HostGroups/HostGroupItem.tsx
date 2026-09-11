@@ -11,7 +11,7 @@ import { ActionsTd, ActionItem } from 'components/PaginatedTable';
 
 export interface HostGroupItemProps {
   group: Untyped;
-  inventoryId: number | string;
+  inventoryId?: number | string;
   isSelected: boolean;
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;

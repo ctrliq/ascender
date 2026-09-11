@@ -1,4 +1,4 @@
-import type { ExecutionEnvironment, Untyped } from 'types/api';
+import type { ExecutionEnvironment } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -124,7 +124,7 @@ function ExecutionEnvironmentTemplateList({
             <HeaderCell>{t`Type`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(template: Untyped) => (
+        renderRow={(template) => (
           <ExecutionEnvironmentTemplateListItem
             key={template.id}
             template={template}

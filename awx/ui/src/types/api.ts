@@ -83,6 +83,8 @@ export interface SummaryFields {
   source_workflow_job?: SummaryFieldRef;
   source_project?: SummaryFieldRef;
   source_credential?: SummaryFieldRef;
+  /** The custom script an inventory source runs, where it still has one. */
+  source_script?: SummaryFieldRef;
   inventory_source?: SummaryFieldRef;
   credential_type?: SummaryFieldRef;
   application?: SummaryFieldRef;

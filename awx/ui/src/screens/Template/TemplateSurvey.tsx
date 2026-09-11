@@ -1,4 +1,4 @@
-import type { SurveyConfig, Untyped } from 'types/api';
+import type { SurveyConfig, SurveyQuestion, Untyped } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -49,7 +49,7 @@ function TemplateSurvey({ template, canEdit }: TemplateSurveyProps) {
     isLoading: updateLoading,
   } = useRequest(
     useCallback(
-      async (updatedSurvey: Untyped) => {
+      async (updatedSurvey: SurveyConfig | null) => {
         if (templateType === 'workflow_job_template') {
           await WorkflowJobTemplatesAPI.updateSurvey(templateId, updatedSurvey);
         } else {
@@ -60,7 +60,7 @@ function TemplateSurvey({ template, canEdit }: TemplateSurveyProps) {
       [templateId, setSurvey, templateType]
     )
   );
-  const updateSurveySpec = (spec: Untyped) => {
+  const updateSurveySpec = (spec: SurveyQuestion[]) => {
     updateSurvey({
       name: survey?.name || '',
       description: survey?.description || '',

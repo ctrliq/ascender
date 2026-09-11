@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
@@ -52,7 +51,7 @@ function HostMetrics() {
   }, [readHostMetrics]);
 
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
-    useSelected<Untyped>(results);
+    useSelected(results);
 
   return (
     <>
@@ -65,7 +64,7 @@ function HostMetrics() {
             items={results}
             itemCount={count}
             pluralizedItemName={t`Host Metrics`}
-            renderRow={(item: Untyped, index: number) => (
+            renderRow={(item, index) => (
               <HostMetricsListItem
                 key={item.id}
                 item={item}

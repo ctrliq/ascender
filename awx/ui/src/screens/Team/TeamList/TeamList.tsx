@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 
@@ -74,7 +73,7 @@ function TeamList() {
   }, [fetchTeams]);
 
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
-    useSelected<Untyped>(teams);
+    useSelected(teams);
 
   const {
     isLoading: isDeleteLoading,
@@ -164,7 +163,7 @@ function TeamList() {
                 ]}
               />
             )}
-            renderRow={(team: Untyped, index: number) => (
+            renderRow={(team, index) => (
               <TeamListItem
                 key={team.id}
                 team={team}

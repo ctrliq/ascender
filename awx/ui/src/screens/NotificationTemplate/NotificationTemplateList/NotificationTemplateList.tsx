@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
 
@@ -77,7 +76,7 @@ function NotificationTemplatesList() {
   }, [fetchTemplates]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(templates);
+    useSelected(templates);
 
   const {
     isLoading: isDeleteLoading,
@@ -185,7 +184,7 @@ function NotificationTemplatesList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(template: Untyped, index: number) => (
+            renderRow={(template, index) => (
               <NotificationTemplateListItem
                 onAddToast={(notification) => {
                   if (notification.status === 'pending') {

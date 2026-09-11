@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -82,7 +81,7 @@ function UserOrganizationList() {
           <HeaderCell>{t`Description`}</HeaderCell>
         </HeaderRow>
       }
-      renderRow={(organization: Untyped, index: number) => (
+      renderRow={(organization, index) => (
         <UserOrganizationListItem
           key={organization.id}
           value={organization.name}

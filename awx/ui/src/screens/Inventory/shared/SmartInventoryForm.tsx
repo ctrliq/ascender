@@ -1,4 +1,4 @@
-import type { Inventory, Untyped } from 'types/api';
+import type { Inventory, SummaryFieldRef } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLocation } from 'react-router';
@@ -41,7 +41,7 @@ const SmartInventoryFormFields = ({
     validate: required(null),
   });
   const handleOrganizationUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('organization', value);
       setFieldTouched('organization', true, false);
     },
@@ -106,11 +106,28 @@ const SmartInventoryFormFields = ({
   );
 };
 
+/**
+ * What the smart inventory form holds.
+ *
+ * The host filter is the query the inventory selects its hosts with, which the
+ * form keeps as the api reports it and the add and edit screens trim before
+ * they send it.
+ */
+export interface SmartInventoryFormValues {
+  description: string;
+  host_filter?: string | null;
+  instance_groups: SummaryFieldRef[];
+  kind: string;
+  name: string;
+  organization?: SummaryFieldRef | null;
+  variables: string;
+}
+
 export interface SmartInventoryFormProps {
   inventory?: Partial<Inventory>;
-  instanceGroups?: Untyped[];
-  onSubmit: (values: Untyped) => void;
-  onCancel: (value?: Untyped) => void;
+  instanceGroups?: SummaryFieldRef[];
+  onSubmit: (values: SmartInventoryFormValues) => void;
+  onCancel: () => void;
   submitError?: unknown;
   [key: string]: unknown;
 }
@@ -126,7 +143,7 @@ function SmartInventoryForm({
   const queryParams = new URLSearchParams(search);
   const hostFilterFromParams = queryParams.get('host_filter');
 
-  function addHostFilter(string: Untyped) {
+  function addHostFilter(string?: string | null) {
     if (!string) return null;
     if (string.includes('ansible_facts') && !string.includes('host_filter')) {
       return string.replace('ansible_facts', 'host_filter=ansible_facts');

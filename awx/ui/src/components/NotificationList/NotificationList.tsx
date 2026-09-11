@@ -268,7 +268,7 @@ function NotificationList({
             <HeaderCell>{t`Options`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(notification: Untyped, index: number) => (
+        renderRow={(notification, index) => (
           <NotificationListItem
             key={notification.id}
             notification={notification}

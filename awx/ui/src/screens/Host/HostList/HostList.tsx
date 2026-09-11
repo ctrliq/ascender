@@ -101,7 +101,7 @@ function HostList() {
   }, [fetchHosts]);
 
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
-    useSelected<Untyped>(hosts);
+    useSelected(hosts);
 
   const {
     isLoading: isDeleteLoading,
@@ -210,7 +210,7 @@ function HostList() {
               ]}
             />
           )}
-          renderRow={(host: Untyped, index: number) => (
+          renderRow={(host, index) => (
             <HostListItem
               key={host.id}
               host={host}

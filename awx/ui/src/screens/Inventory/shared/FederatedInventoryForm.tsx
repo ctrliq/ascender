@@ -1,4 +1,4 @@
-import type { Inventory, Untyped } from 'types/api';
+import type { AnyInventory, Inventory, SummaryFieldRef } from 'types/api';
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -18,7 +18,7 @@ import OrganizationLookup from 'components/Lookup/OrganizationLookup';
 import Popover from 'components/Popover';
 
 export interface FederatedInventoryFormFieldsProps {
-  inventory?: Inventory;
+  inventory?: Partial<Inventory>;
   [key: string]: unknown;
 }
 
@@ -43,7 +43,7 @@ function FederatedInventoryFormFields({
     });
 
   const handleOrganizationUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('organization', value);
       setFieldTouched('organization', true, false);
     },
@@ -51,7 +51,7 @@ function FederatedInventoryFormFields({
   );
 
   const handleInputInventoriesUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('inputInventories', value);
       setFieldTouched('inputInventories', true, false);
     },
@@ -121,13 +121,34 @@ function FederatedInventoryFormFields({
   );
 }
 
+/**
+ * What the federated inventory form holds: its own fields, and the
+ * inventories it federates, which are associated one by one on save.
+ */
+export interface FederatedInventoryFormValues {
+  kind: string;
+  description: string;
+  inputInventories: AnyInventory[];
+  name: string;
+  organization?: SummaryFieldRef | null;
+}
+
+export interface FederatedInventoryFormProps {
+  federatedInventory?: Partial<Inventory>;
+  /** The inventories it already federates, which seed the lookup. */
+  inputInventories?: AnyInventory[];
+  onCancel: () => void;
+  onSubmit: (values: FederatedInventoryFormValues) => void;
+  submitError?: unknown;
+}
+
 function FederatedInventoryForm({
   federatedInventory,
   inputInventories,
   onCancel,
   onSubmit,
   submitError = null,
-}: Untyped) {
+}: FederatedInventoryFormProps) {
   const initialValues = {
     kind: 'federated',
     description: federatedInventory?.description || '',

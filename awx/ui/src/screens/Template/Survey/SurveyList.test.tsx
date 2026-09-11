@@ -24,6 +24,7 @@ describe('<SurveyList />', () => {
       <SurveyList
         deleteSurvey={() => {}}
         updateSurvey={() => {}}
+        toggleSurvey={() => {}}
         survey={surveyData}
       />
     );
@@ -57,6 +58,7 @@ describe('<SurveyList />', () => {
     renderWithContexts(
       <SurveyList
         updateSurvey={() => {}}
+        toggleSurvey={() => {}}
         survey={surveyData}
         deleteSurvey={deleteSurvey}
         canEdit
@@ -90,6 +92,7 @@ describe('<SurveyList />', () => {
       <SurveyList
         deleteSurvey={() => {}}
         updateSurvey={() => {}}
+        toggleSurvey={() => {}}
         survey={surveyData}
         canEdit
       />
@@ -104,6 +107,7 @@ describe('<SurveyList />', () => {
       <SurveyList
         deleteSurvey={() => {}}
         updateSurvey={() => {}}
+        toggleSurvey={() => {}}
         survey={surveyData}
         canEdit
       />
@@ -122,6 +126,7 @@ describe('<SurveyList />', () => {
       <SurveyList
         deleteSurvey={() => {}}
         updateSurvey={() => {}}
+        toggleSurvey={() => {}}
         survey={surveyData}
         canEdit
       />
@@ -146,6 +151,7 @@ describe('<SurveyList />', () => {
     renderWithContexts(
       <SurveyList
         updateSurvey={() => {}}
+        toggleSurvey={() => {}}
         survey={surveyData}
         deleteSurvey={deleteSurvey}
       />
@@ -174,6 +180,7 @@ describe('Survey with no questions', () => {
       <SurveyList
         deleteSurvey={() => {}}
         updateSurvey={() => {}}
+        toggleSurvey={() => {}}
         template={mockJobTemplateData}
       />
     );

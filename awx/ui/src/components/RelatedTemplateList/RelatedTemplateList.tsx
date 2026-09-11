@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -244,7 +243,7 @@ function RelatedTemplateList({
               ]}
             />
           )}
-          renderRow={(template: Untyped, index: number) => (
+          renderRow={(template, index) => (
             <TemplateListItem
               key={template.id}
               value={template.name}

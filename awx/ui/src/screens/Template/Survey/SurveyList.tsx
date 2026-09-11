@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SurveyConfig, SurveyQuestion } from 'types/api';
 import React, { useState } from 'react';
 
 import { Button } from '@patternfly/react-core';
@@ -9,17 +9,19 @@ import ContentLoading from 'components/ContentLoading';
 import { useLingui } from '@lingui/react/macro';
 
 import useSelected from 'hooks/useSelected';
+import type { Selectable } from 'hooks/useSelected';
 import SurveyListItem from './SurveyListItem';
 import SurveyToolbar from './SurveyToolbar';
 import SurveyReorderModal from './SurveyReorderModal';
 
 export interface SurveyListProps {
   isLoading?: boolean;
-  survey?: Untyped;
-  surveyEnabled?: Untyped;
-  toggleSurvey?: Untyped;
-  updateSurvey: Untyped;
-  deleteSurvey: Untyped;
+  survey?: SurveyConfig | null;
+  surveyEnabled?: boolean;
+  toggleSurvey: () => void;
+  /** Saves the questions that are left, which is how one is deleted. */
+  updateSurvey: (questions: SurveyQuestion[]) => void;
+  deleteSurvey: () => void;
   canEdit?: boolean;
   [key: string]: unknown;
 }
@@ -38,10 +40,12 @@ function SurveyList({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
 
+  // A survey question has no id: it is keyed by its variable, which is what
+  // handleSelect below compares, so the hook only holds the selection here.
   const { selected, isAllSelected, setSelected, selectAll, clearSelected } =
-    useSelected<Untyped>(questions);
+    useSelected<SurveyQuestion & Selectable>(questions);
 
-  const handleSelect = (item: Untyped) => {
+  const handleSelect = (item: SurveyQuestion) => {
     if (selected.some((q) => q.variable === item.variable)) {
       setSelected(selected.filter((q) => q.variable !== item.variable));
     } else {
@@ -53,9 +57,7 @@ function SurveyList({
     if (isAllSelected) {
       await deleteSurvey();
     } else {
-      await updateSurvey(
-        questions.filter((q: Untyped) => !selected.includes(q))
-      );
+      await updateSurvey(questions.filter((q) => !selected.includes(q)));
     }
     setIsDeleteModalOpen(false);
     clearSelected();
@@ -121,7 +123,7 @@ function SurveyList({
             </Tr>
           </Thead>
           <Tbody>
-            {questions?.map((question: Untyped, index: number) => (
+            {questions?.map((question, index) => (
               <SurveyListItem
                 key={question.variable}
                 isLast={index === questions.length - 1}

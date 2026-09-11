@@ -27,7 +27,8 @@ export interface AdHocValues {
 /** What AdHocCommandsWizard is handed about the hosts or groups selected. */
 export interface AdHocItem {
   id: number;
-  name?: string;
+  /** Null on a serializer that allows a blank name, which is why not string. */
+  name?: string | null;
   [key: string]: unknown;
 }
 

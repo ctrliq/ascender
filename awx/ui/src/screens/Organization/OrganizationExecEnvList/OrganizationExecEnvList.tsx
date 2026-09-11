@@ -1,4 +1,4 @@
-import type { Organization, Untyped } from 'types/api';
+import type { Organization } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -115,7 +115,7 @@ function OrganizationExecEnvList({
             <HeaderCell sortKey="image">{t`Image`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(executionEnvironment: Untyped, index: number) => (
+        renderRow={(executionEnvironment, index) => (
           <OrganizationExecEnvListItem
             key={executionEnvironment.id}
             executionEnvironment={executionEnvironment}

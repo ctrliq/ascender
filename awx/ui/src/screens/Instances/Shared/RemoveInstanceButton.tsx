@@ -58,7 +58,7 @@ function RemoveInstanceButton({
     setIsLoading(true);
     if (isOpen && itemsToRemove.length > 0) {
       const { results, error } = await getRelatedResourceDeleteCounts(
-        relatedResourceDeleteRequests.instance(itemsToRemove[0] as Instance)
+        relatedResourceDeleteRequests.instance(itemsToRemove[0])
       );
 
       if (error) {

@@ -87,7 +87,7 @@ function InventoryGroupsList() {
   }, [fetchData]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(groups);
+    useSelected(groups);
 
   const renderTooltip = () => {
     const itemsUnableToDelete = selected
@@ -151,7 +151,7 @@ function InventoryGroupsList() {
           {isNotConstructedInventory && <HeaderCell>{t`Actions`}</HeaderCell>}
         </HeaderRow>
       }
-      renderRow={(item: Untyped, index: number) => (
+      renderRow={(item, index) => (
         <InventoryGroupItem
           key={item.id}
           group={item}

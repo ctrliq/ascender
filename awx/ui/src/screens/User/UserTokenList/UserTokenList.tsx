@@ -71,7 +71,7 @@ function UserTokenList() {
   }, [fetchTokens]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(tokens);
+    useSelected(tokens);
 
   const {
     isLoading: isDeleteLoading,
@@ -193,7 +193,7 @@ function UserTokenList() {
             <HeaderCell sortKey="expires">{t`Expires`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(token: Untyped, index: number) => (
+        renderRow={(token, index) => (
           <UserTokensListItem
             key={token.id}
             token={token}

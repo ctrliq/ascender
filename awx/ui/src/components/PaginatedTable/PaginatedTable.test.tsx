@@ -42,7 +42,7 @@ describe('<PaginatedTable />', () => {
           order_by: 'name',
         }}
         qsConfig={qsConfig}
-        renderRow={(item: Untyped) => (
+        renderRow={(item) => (
           <tr key={item.id}>
             <td>{item.name}</td>
           </tr>

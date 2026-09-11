@@ -1,4 +1,4 @@
-import type { AnyInventory, Untyped } from 'types/api';
+import type { AnyInventory, SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import useRequest from 'hooks/useRequest';
@@ -7,6 +7,7 @@ import { CardBody } from 'components/Card';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import SmartInventoryForm from '../shared/SmartInventoryForm';
+import type { SmartInventoryFormValues } from '../shared/SmartInventoryForm';
 import parseHostFilter from '../shared/utils';
 
 export interface SmartInventoryEditProps {
@@ -43,10 +44,12 @@ function SmartInventoryEdit({ inventory }: SmartInventoryEditProps) {
     result: submitResult,
   } = useRequest(
     useCallback(
+      // The body the api takes rather than what the form holds: the
+      // organization is sent as the id the lookup picked.
       async (
-        values: Untyped,
-        groupsToAssociate: Untyped,
-        groupsToDisassociate: Untyped
+        values: Record<string, unknown>,
+        groupsToAssociate: SummaryFieldRef[],
+        groupsToDisassociate: SummaryFieldRef[]
       ) => {
         const { data } = await InventoriesAPI.update(inventory.id, values);
         await InventoriesAPI.orderInstanceGroups(
@@ -71,7 +74,7 @@ function SmartInventoryEdit({ inventory }: SmartInventoryEditProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [submitResult, detailsUrl]);
 
-  const handleSubmit = async (form: Untyped) => {
+  const handleSubmit = async (form: SmartInventoryFormValues) => {
     const modifiedForm = parseHostFilter(form);
     const { instance_groups, organization, ...remainingForm } = modifiedForm;
 
@@ -80,7 +83,7 @@ function SmartInventoryEdit({ inventory }: SmartInventoryEditProps) {
         organization: organization?.id,
         ...remainingForm,
       },
-      instance_groups,
+      instance_groups ?? [],
       initialInstanceGroups
     );
   };

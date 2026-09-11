@@ -1,4 +1,4 @@
-import type { InventorySource, Untyped } from 'types/api';
+import type { InventorySource } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -83,9 +83,7 @@ function InventorySourceList() {
 
   const canSyncSources =
     sources.length > 0 &&
-    sources.every(
-      (source: Untyped) => source.summary_fields.user_capabilities.start
-    );
+    sources.every((source) => source.summary_fields.user_capabilities?.start);
   const {
     isLoading: isSyncAllLoading,
     error: syncAllError,
@@ -103,7 +101,7 @@ function InventorySourceList() {
   }, [fetchSources]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(sources);
+    useSelected(sources);
 
   const {
     isLoading: isDeleteLoading,
@@ -128,7 +126,7 @@ function InventorySourceList() {
   );
   const { error: syncError, dismissError } = useDismissableError(syncAllError);
 
-  const deleteRelatedInventoryResources = (resourceId: Untyped) => [
+  const deleteRelatedInventoryResources = (resourceId: number) => [
     InventorySourcesAPI.destroyHosts(resourceId),
     InventorySourcesAPI.destroyGroups(resourceId),
   ];

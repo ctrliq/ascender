@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -6,6 +6,7 @@ import { CardBody } from 'components/Card';
 import useRequest from 'hooks/useRequest';
 import { InventoriesAPI } from 'api';
 import SmartInventoryForm from '../shared/SmartInventoryForm';
+import type { SmartInventoryFormValues } from '../shared/SmartInventoryForm';
 import parseHostFilter from '../shared/utils';
 
 function SmartInventoryAdd() {
@@ -16,22 +17,30 @@ function SmartInventoryAdd() {
     request: submitRequest,
     result: inventoryId,
   } = useRequest(
-    useCallback(async (values: Untyped, groupsToAssociate: Untyped) => {
-      const {
-        data: { id: invId },
-      } = await InventoriesAPI.create(values);
+    // The body the api takes rather than what the form holds: the
+    // organization is sent as the id the lookup picked.
+    useCallback(
+      async (
+        values: Record<string, unknown>,
+        groupsToAssociate: SummaryFieldRef[]
+      ) => {
+        const {
+          data: { id: invId },
+        } = await InventoriesAPI.create(values);
 
-      /* eslint-disable no-await-in-loop, no-restricted-syntax */
-      // Resolve Promises sequentially to maintain order and avoid race condition
-      for (const group of groupsToAssociate) {
-        await InventoriesAPI.associateInstanceGroup(invId, group.id);
-      }
-      /* eslint-enable no-await-in-loop, no-restricted-syntax */
-      return invId;
-    }, [])
+        /* eslint-disable no-await-in-loop, no-restricted-syntax */
+        // Resolve Promises sequentially to maintain order and avoid race condition
+        for (const group of groupsToAssociate) {
+          await InventoriesAPI.associateInstanceGroup(invId, group.id);
+        }
+        /* eslint-enable no-await-in-loop, no-restricted-syntax */
+        return invId;
+      },
+      []
+    )
   );
 
-  const handleSubmit = async (form: Untyped) => {
+  const handleSubmit = async (form: SmartInventoryFormValues) => {
     const modifiedForm = parseHostFilter(form);
 
     const { instance_groups, organization, ...remainingForm } = modifiedForm;
@@ -41,7 +50,7 @@ function SmartInventoryAdd() {
         organization: organization?.id,
         ...remainingForm,
       },
-      instance_groups
+      instance_groups ?? []
     );
   };
 

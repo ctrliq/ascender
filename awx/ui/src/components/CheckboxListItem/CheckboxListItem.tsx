@@ -9,7 +9,8 @@ export interface CheckboxListItemProps {
   isSelected?: boolean;
   itemId: number | string;
   label: React.ReactNode;
-  name: string;
+  /** Null on a serializer that allows a blank name, which is why not string. */
+  name: string | null;
   onDeselect: (itemId: number | string) => void;
   rowIndex: number;
   onSelect: (itemId: number | string) => void;
@@ -57,7 +58,7 @@ const CheckboxListItem = ({
           isSelected,
           variant: isRadio ? 'radio' : 'checkbox',
         }}
-        name={name}
+        name={name ?? undefined}
         dataLabel={t`Selected`}
       />
 

@@ -1,4 +1,4 @@
-import type { AnyInventory, Untyped } from 'types/api';
+import type { AnyInventory, SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Card } from '@patternfly/react-core';
@@ -6,6 +6,7 @@ import { InventorySourcesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import { CardBody } from 'components/Card';
 import InventorySourceForm from '../shared/InventorySourceForm';
+import type { InventorySourceFormValues } from '../shared/InventorySourceForm';
 
 export interface InventorySourceAddProps {
   inventory: AnyInventory;
@@ -17,16 +18,26 @@ function InventorySourceAdd({ inventory }: InventorySourceAddProps) {
   const { id, organization } = inventory;
 
   const { error, request, result } = useRequest(
-    useCallback(async ({ instanceGroups, ...values }: Untyped) => {
-      const { data } = await InventorySourcesAPI.create(values);
-      /* eslint-disable no-await-in-loop, no-restricted-syntax */
-      // Resolve Promises sequentially to maintain order and avoid race condition
-      for (const group of instanceGroups || []) {
-        await InventorySourcesAPI.associateInstanceGroup(data.id, group.id);
-      }
-      /* eslint-enable no-await-in-loop, no-restricted-syntax */
-      return data;
-    }, [])
+    useCallback(
+      // The body the api takes rather than what the form holds: the
+      // lookups are sent as the ids they picked.
+      async ({
+        instanceGroups,
+        ...values
+      }: Record<string, unknown> & {
+        instanceGroups?: SummaryFieldRef[];
+      }) => {
+        const { data } = await InventorySourcesAPI.create(values);
+        /* eslint-disable no-await-in-loop, no-restricted-syntax */
+        // Resolve Promises sequentially to maintain order and avoid race condition
+        for (const group of instanceGroups || []) {
+          await InventorySourcesAPI.associateInstanceGroup(data.id, group.id);
+        }
+        /* eslint-enable no-await-in-loop, no-restricted-syntax */
+        return data;
+      },
+      []
+    )
   );
 
   useEffect(() => {
@@ -39,7 +50,7 @@ function InventorySourceAdd({ inventory }: InventorySourceAddProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result]);
 
-  const handleSubmit = async (form: Untyped) => {
+  const handleSubmit = async (form: InventorySourceFormValues) => {
     const {
       credential,
       source_path,
@@ -50,12 +61,12 @@ function InventorySourceAdd({ inventory }: InventorySourceAddProps) {
       ...remainingForm
     } = form;
 
-    const sourcePath: Record<string, Untyped> = {};
-    const sourceProject: Record<string, Untyped> = {};
+    const sourcePath: Record<string, unknown> = {};
+    const sourceProject: Record<string, unknown> = {};
     if (form.source === 'scm') {
       sourcePath.source_path =
         source_path === '/ (project root)' ? '' : source_path;
-      sourceProject.source_project = source_project.id;
+      sourceProject.source_project = source_project?.id;
     }
 
     await request({

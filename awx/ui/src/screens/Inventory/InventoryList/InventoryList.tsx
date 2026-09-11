@@ -94,7 +94,7 @@ function InventoryList() {
   );
 
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
-    useSelected<Untyped>(inventories);
+    useSelected(inventories);
 
   const {
     isLoading: isDeleteLoading,
@@ -275,7 +275,7 @@ function InventoryList() {
                 ]}
               />
             )}
-            renderRow={(inventory: Untyped, index: number) => (
+            renderRow={(inventory, index) => (
               <InventoryListItem
                 key={inventory.id}
                 value={inventory.name}

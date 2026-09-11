@@ -85,7 +85,7 @@ function UserTeamList() {
   }, [fetchTeams]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(teams);
+    useSelected(teams);
 
   const disassociateUserRoles = (team: Untyped) => [
     UsersAPI.disassociateRole(
@@ -182,7 +182,7 @@ function UserTeamList() {
             <HeaderCell>{t`Description`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(team: Untyped, index: number) => (
+        renderRow={(team, index) => (
           <UserTeamListItem
             key={team.id}
             value={team.name}

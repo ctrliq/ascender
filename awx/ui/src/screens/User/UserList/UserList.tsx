@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 
@@ -72,7 +71,7 @@ function UserList() {
   }, [fetchUsers]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(users);
+    useSelected(users);
 
   const {
     isLoading: isDeleteLoading,
@@ -162,7 +161,7 @@ function UserList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(user: Untyped, index: number) => (
+            renderRow={(user, index) => (
               <UserListItem
                 key={user.id}
                 user={user}

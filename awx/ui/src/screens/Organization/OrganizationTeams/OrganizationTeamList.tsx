@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -91,7 +90,7 @@ function OrganizationTeamList({ id }: OrganizationTeamListProps) {
           <HeaderCell>{t`Actions`}</HeaderCell>
         </HeaderRow>
       }
-      renderRow={(item: Untyped) => (
+      renderRow={(item) => (
         <OrganizationTeamListItem
           key={item.id}
           value={item.name}

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -75,7 +74,7 @@ function CredentialTypeList() {
   }, [fetchCredentialTypes]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(credentialTypes);
+    useSelected(credentialTypes);
 
   const {
     isLoading: deleteLoading,
@@ -177,7 +176,7 @@ function CredentialTypeList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(credentialType: Untyped, index: number) => (
+            renderRow={(credentialType, index) => (
               <CredentialTypeListItem
                 key={credentialType.id}
                 value={credentialType.name}

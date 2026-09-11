@@ -66,7 +66,7 @@ function ApplicationTokenList() {
   }, [fetchTokens]);
 
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
-    useSelected<Untyped>(tokens);
+    useSelected(tokens);
   const {
     isLoading: deleteLoading,
     deletionError,
@@ -126,7 +126,7 @@ function ApplicationTokenList() {
             ]}
           />
         )}
-        renderRow={(token: Untyped) => (
+        renderRow={(token) => (
           <ApplicationTokenListItem
             key={token.id}
             token={token}

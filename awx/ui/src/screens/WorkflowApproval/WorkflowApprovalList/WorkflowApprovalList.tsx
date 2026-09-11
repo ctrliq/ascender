@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -76,7 +75,7 @@ function WorkflowApprovalsList() {
   );
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(workflowApprovals);
+    useSelected(workflowApprovals);
 
   const {
     isLoading: isDeleteLoading,
@@ -86,7 +85,9 @@ function WorkflowApprovalsList() {
   } = useDeleteItems(
     useCallback(
       async () =>
-        Promise.all(selected.map(({ id }) => WorkflowApprovalsAPI.destroy(id))),
+        Promise.all(
+          selected.map(({ id }) => WorkflowApprovalsAPI.destroy(id as number))
+        ),
       [selected]
     ),
     {
@@ -108,7 +109,9 @@ function WorkflowApprovalsList() {
   } = useRequest(
     useCallback(
       async () =>
-        Promise.all(selected.map(({ id }) => WorkflowApprovalsAPI.approve(id))),
+        Promise.all(
+          selected.map(({ id }) => WorkflowApprovalsAPI.approve(id as number))
+        ),
       [selected]
     )
   );
@@ -125,7 +128,9 @@ function WorkflowApprovalsList() {
   } = useRequest(
     useCallback(
       async () =>
-        Promise.all(selected.map(({ id }) => WorkflowApprovalsAPI.deny(id))),
+        Promise.all(
+          selected.map(({ id }) => WorkflowApprovalsAPI.deny(id as number))
+        ),
       [selected]
     )
   );
@@ -214,7 +219,7 @@ function WorkflowApprovalsList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(workflowApproval: Untyped, index: number) => (
+            renderRow={(workflowApproval, index) => (
               <WorkflowApprovalListItem
                 key={workflowApproval.id}
                 workflowApproval={workflowApproval}

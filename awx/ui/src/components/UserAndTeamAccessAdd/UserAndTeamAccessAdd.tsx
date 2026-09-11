@@ -1,4 +1,9 @@
-import type { RolesApiModel, SummaryFieldRef, Untyped } from 'types/api';
+import type {
+  ApiEntity,
+  RolesApiModel,
+  SummaryFieldRef,
+  Untyped,
+} from 'types/api';
 import React, { useState, useCallback, useMemo } from 'react';
 import { useParams, useMatch } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -58,13 +63,13 @@ function UserAndTeamAccessAdd({
     selected: resourcesSelected,
     handleSelect: handleResourceSelect,
     clearSelected: clearResourcesSelected,
-  } = useSelected<Untyped>([]);
+  } = useSelected<ApiEntity>([]);
 
   const {
     selected: rolesSelected,
     handleSelect: handleRoleSelect,
     clearSelected: clearRolesSelected,
-  } = useSelected<Untyped>([]);
+  } = useSelected<ApiEntity>([]);
 
   const resourceAccessConfig = useMemo(
     () => [
@@ -338,7 +343,7 @@ function UserAndTeamAccessAdd({
   };
   if (teamsRouteMatch && resourcesSelected[0]?.type === 'organization') {
     Object.keys(selectableRoles).forEach((key) => {
-      if (selectableRoles[key].user_only) {
+      if (selectableRoles[key]?.user_only) {
         delete selectableRoles[key];
       }
     });

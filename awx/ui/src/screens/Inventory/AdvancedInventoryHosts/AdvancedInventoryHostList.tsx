@@ -1,4 +1,4 @@
-import type { AnyInventory, Untyped } from 'types/api';
+import type { AnyInventory } from 'types/api';
 import React, { useEffect, useCallback, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -64,7 +64,7 @@ function AdvancedInventoryHostList({
   );
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(hosts);
+    useSelected(hosts);
 
   useEffect(() => {
     fetchHosts();
@@ -127,7 +127,7 @@ function AdvancedInventoryHostList({
           <HeaderCell>{t`Inventory`}</HeaderCell>
         </HeaderRow>
       }
-      renderRow={(host: Untyped, index: number) => (
+      renderRow={(host, index) => (
         <AdvancedInventoryHostListItem
           key={host.id}
           host={host}

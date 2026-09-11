@@ -1,7 +1,12 @@
-import type { Untyped } from 'types/api';
+import type { AnyInventory } from 'types/api';
 import { isJsonString, jsonToYaml, parseVariableField } from 'util/yaml';
+import type { SmartInventoryFormValues } from './SmartInventoryForm';
 
-const parseHostFilter = (value: Untyped) => {
+/**
+ * A smart inventory's host filter as the form holds it: the api reports it as
+ * a query string, and the field takes the filter on its own.
+ */
+const parseHostFilter = (value: Partial<SmartInventoryFormValues>) => {
   if (value.host_filter && value.host_filter.includes('host_filter=')) {
     return {
       ...value,
@@ -12,7 +17,9 @@ const parseHostFilter = (value: Untyped) => {
 };
 export default parseHostFilter;
 
-export function getInventoryPath(inventory: Untyped) {
+export function getInventoryPath(
+  inventory?: Pick<AnyInventory, 'id' | 'kind'> | null
+) {
   if (!inventory) return '/inventories';
   const url = {
     '': `/inventories/inventory/${inventory.id}`,
@@ -40,7 +47,7 @@ export const VMWARE_PLUGIN_OPTIONS = [
   },
 ];
 
-export function getVmwarePlugin(sourceVars: Untyped) {
+export function getVmwarePlugin(sourceVars?: string | null) {
   let plugin;
   try {
     ({ plugin } = parseVariableField(sourceVars || '---'));
@@ -52,7 +59,7 @@ export function getVmwarePlugin(sourceVars: Untyped) {
     : VMWARE_DEFAULT_PLUGIN;
 }
 
-export function mergeVmwarePlugin(sourceVars: Untyped, plugin: Untyped) {
+export function mergeVmwarePlugin(sourceVars: string, plugin: unknown) {
   let parsed;
   try {
     parsed = parseVariableField(sourceVars || '---');

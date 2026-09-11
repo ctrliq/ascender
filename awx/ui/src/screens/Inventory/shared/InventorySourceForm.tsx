@@ -1,4 +1,8 @@
-import type { Untyped } from 'types/api';
+import type {
+  InventorySource,
+  OptionsResponse,
+  SummaryFieldRef,
+} from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
@@ -43,14 +47,14 @@ import {
   mergeVmwarePlugin,
 } from './utils';
 
-const buildSourceChoiceOptions = (options: Untyped) => {
-  const sourceChoices = options.actions.GET.source.choices.map(
-    ([choice, label]: Untyped[]) => ({ label, key: choice, value: choice })
+const buildSourceChoiceOptions = (options: OptionsResponse) => {
+  const sourceChoices = (options.actions.GET?.source?.choices ?? []).map(
+    ([choice, label]) => ({ label, key: choice, value: choice })
   );
-  return sourceChoices.filter(({ key }: Untyped) => key !== 'file');
+  return sourceChoices.filter(({ key }) => key !== 'file');
 };
 
-const getSourceDefaults = (sourceType: Untyped) => {
+const getSourceDefaults = (sourceType: string) => {
   const baseDefaults = {
     credential: null,
     overwrite: false,
@@ -89,9 +93,9 @@ const getSourceDefaults = (sourceType: Untyped) => {
 };
 
 export interface InventorySourceFormFieldsProps {
-  source: Untyped;
-  sourceOptions: Untyped;
-  organizationId: number | string;
+  source?: Partial<InventorySource>;
+  sourceOptions: OptionsResponse;
+  organizationId?: number | string | null;
   [key: string]: unknown;
 }
 
@@ -102,7 +106,7 @@ const InventorySourceFormFields = ({
 }: InventorySourceFormFieldsProps) => {
   const { t } = useLingui();
   const { values, initialValues, resetForm, setFieldTouched, setFieldValue } =
-    useFormikContext<Untyped>();
+    useFormikContext<InventorySourceFormValues>();
   const [sourceField, sourceMeta] = useField({
     name: 'source',
     validate: required(t`Set a value for this field`),
@@ -115,7 +119,7 @@ const InventorySourceFormFields = ({
   const [instanceGroupsField, , instanceGroupsHelpers] =
     useField('instanceGroups');
 
-  const resetSubFormFields = (sourceType: Untyped) => {
+  const resetSubFormFields = (sourceType: string) => {
     if (sourceType === initialValues.source) {
       resetForm({
         values: {
@@ -135,7 +139,7 @@ const InventorySourceFormFields = ({
   };
 
   const handleExecutionEnvironmentUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('execution_environment', value);
       setFieldTouched('execution_environment', true, false);
     },
@@ -167,7 +171,7 @@ const InventorySourceFormFields = ({
         value={executionEnvironmentField.value}
         onChange={handleExecutionEnvironmentUpdate}
         globallyAvailable
-        organizationId={organizationId}
+        organizationId={organizationId ?? undefined}
       />
       <InstanceGroupsLookup
         value={instanceGroupsField.value}
@@ -225,10 +229,13 @@ const InventorySourceFormFields = ({
                     }
                   />
                 ),
+                // insights and rhv below are source types the platform no
+                // longer offers, so neither sub form is reachable; the source
+                // a saved inventory carries cannot be either of them.
                 insights: (
                   <InsightsSubForm
                     autoPopulateCredential={
-                      !source?.id || source?.source !== 'insights'
+                      !source?.id || (source?.source as string) !== 'insights'
                     }
                   />
                 ),
@@ -242,7 +249,7 @@ const InventorySourceFormFields = ({
                 rhv: (
                   <VirtualizationSubForm
                     autoPopulateCredential={
-                      !source?.id || source?.source !== 'rhv'
+                      !source?.id || (source?.source as string) !== 'rhv'
                     }
                   />
                 ),
@@ -303,6 +310,46 @@ const InventorySourceFormFields = ({
   );
 };
 
+/**
+ * What the inventory source form holds.
+ *
+ * Every source type adds its own fields under source_vars, and the vmware
+ * plugin is the form's own: it is merged into source_vars on save, which is
+ * why it is not sent as a field of its own.
+ */
+export interface InventorySourceFormValues {
+  credential?: SummaryFieldRef | null;
+  instanceGroups: SummaryFieldRef[];
+  description: string;
+  name: string;
+  overwrite: boolean;
+  overwrite_vars: boolean;
+  source: string;
+  source_path: string;
+  source_project?: SummaryFieldRef | null;
+  source_script?: SummaryFieldRef | null;
+  source_vars: string;
+  scm_branch: string;
+  update_cache_timeout: number;
+  update_on_launch: boolean;
+  verbosity: number;
+  enabled_var: string;
+  enabled_value: string;
+  host_filter: string;
+  execution_environment?: SummaryFieldRef | null;
+  vmware_plugin?: unknown;
+  [key: string]: unknown;
+}
+
+export interface InventorySourceFormProps {
+  onCancel: () => void;
+  onSubmit: (values: InventorySourceFormValues) => void;
+  source?: Partial<InventorySource>;
+  instanceGroups?: SummaryFieldRef[];
+  submitError?: unknown;
+  organizationId?: number | string | null;
+}
+
 const InventorySourceForm = ({
   onCancel,
   onSubmit,
@@ -310,7 +357,7 @@ const InventorySourceForm = ({
   instanceGroups = [],
   submitError = null,
   organizationId,
-}: Untyped) => {
+}: InventorySourceFormProps) => {
   const initialValues = {
     credential: source?.summary_fields?.credential || null,
     instanceGroups: instanceGroups || [],
@@ -364,9 +411,9 @@ const InventorySourceForm = ({
   }
 
   return (
-    <Formik
+    <Formik<InventorySourceFormValues>
       initialValues={initialValues}
-      onSubmit={(values: Untyped) => {
+      onSubmit={(values) => {
         const { vmware_plugin, ...submitValues } = values;
         if (submitValues.source === 'vmware') {
           submitValues.source_vars = mergeVmwarePlugin(
@@ -384,7 +431,7 @@ const InventorySourceForm = ({
               formik={formik}
               source={source}
               sourceOptions={sourceOptions}
-              organizationId={organizationId}
+              organizationId={organizationId ?? undefined}
             />
             {Boolean(submitError) && <FormSubmitError error={submitError} />}
             <FormActionGroup

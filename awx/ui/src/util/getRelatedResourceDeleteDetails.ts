@@ -22,10 +22,11 @@ import type { ApiEntity, Paginated } from '../types/api';
 /**
  * A row these checks run for. It has come back from the API already, so it
  * carries an id, which is all any of the requests below read off it.
+ *
+ * Undefined where a list has nothing selected: every list builds its requests
+ * on each render, and they are only run once the user has picked a row.
  */
-interface DeletableEntity {
-  id: number;
-}
+type DeletableEntity = { id: number } | undefined;
 
 /** One related-resource count to look up before a delete is allowed. */
 export interface DeleteRequest {
@@ -79,32 +80,32 @@ export const relatedResourceDeleteRequests = {
     {
       request: () =>
         JobTemplatesAPI.read({
-          credentials: selected.id,
+          credentials: selected?.id ?? null,
         }),
       label: msg`Job Templates`,
     },
     {
-      request: () => ProjectsAPI.read({ credentials: selected.id }),
+      request: () => ProjectsAPI.read({ credentials: selected?.id ?? null }),
       label: msg`Projects`,
     },
     {
       request: () =>
         InventorySourcesAPI.read({
-          credentials__id: selected.id,
+          credentials__id: selected?.id ?? null,
         }),
       label: msg`Inventory Sources`,
     },
     {
       request: () =>
         CredentialInputSourcesAPI.read({
-          source_credential: selected.id,
+          source_credential: selected?.id ?? null,
         }),
       label: msg`Credential Input Sources`,
     },
     {
       request: () =>
         ExecutionEnvironmentsAPI.read({
-          credential: selected.id,
+          credential: selected?.id ?? null,
         }),
       label: msg`Execution Environments`,
     },
@@ -114,7 +115,7 @@ export const relatedResourceDeleteRequests = {
     {
       request: async () =>
         CredentialsAPI.read({
-          credential_type__id: selected.id,
+          credential_type__id: selected?.id ?? null,
         }),
       label: msg`Credentials`,
     },
@@ -124,30 +125,33 @@ export const relatedResourceDeleteRequests = {
     {
       request: async () =>
         JobTemplatesAPI.read({
-          inventory: selected.id,
+          inventory: selected?.id ?? null,
         }),
       label: msg`Job Templates`,
     },
     {
-      request: () => WorkflowJobTemplatesAPI.read({ inventory: selected.id }),
+      request: () =>
+        WorkflowJobTemplatesAPI.read({ inventory: selected?.id ?? null }),
       label: msg`Workflow Job Templates`,
     },
   ],
 
-  inventorySource: (inventorySourceId: number | string) => [
+  inventorySource: (inventorySourceId?: number | string) => [
     {
       request: async () =>
         WorkflowJobTemplateNodesAPI.read({
-          unified_job_template: inventorySourceId,
+          unified_job_template: inventorySourceId ?? null,
         }),
       label: msg`Workflow Job Template Nodes`,
     },
     {
-      request: async () => InventorySourcesAPI.readGroups(inventorySourceId),
+      request: async () =>
+        InventorySourcesAPI.readGroups(inventorySourceId ?? ''),
       label: msg`Groups`,
     },
     {
-      request: async () => InventorySourcesAPI.readHosts(inventorySourceId),
+      request: async () =>
+        InventorySourcesAPI.readHosts(inventorySourceId ?? ''),
       label: msg`Hosts`,
     },
   ],
@@ -156,21 +160,21 @@ export const relatedResourceDeleteRequests = {
     {
       request: () =>
         JobTemplatesAPI.read({
-          project: selected.id,
+          project: selected?.id ?? null,
         }),
       label: msg`Job Templates`,
     },
     {
       request: () =>
         WorkflowJobTemplateNodesAPI.read({
-          unified_job_template: selected.id,
+          unified_job_template: selected?.id ?? null,
         }),
       label: msg`Workflow Job Templates`,
     },
     {
       request: () =>
         InventorySourcesAPI.read({
-          source_project: selected.id,
+          source_project: selected?.id ?? null,
         }),
       label: msg`Inventory Sources`,
     },
@@ -180,7 +184,7 @@ export const relatedResourceDeleteRequests = {
     {
       request: async () =>
         WorkflowJobTemplateNodesAPI.read({
-          unified_job_template: selected.id,
+          unified_job_template: selected?.id ?? null,
         }),
       label: msg`Workflow Job Template Nodes`,
     },
@@ -190,49 +194,49 @@ export const relatedResourceDeleteRequests = {
     {
       request: async () =>
         CredentialsAPI.read({
-          organization: selected.id,
+          organization: selected?.id ?? null,
         }),
       label: msg`Credentials`,
     },
     {
       request: async () =>
         TeamsAPI.read({
-          organization: selected.id,
+          organization: selected?.id ?? null,
         }),
       label: msg`Teams`,
     },
     {
       request: async () =>
         NotificationTemplatesAPI.read({
-          organization: selected.id,
+          organization: selected?.id ?? null,
         }),
       label: msg`Notification Templates`,
     },
     {
       request: () =>
         ExecutionEnvironmentsAPI.read({
-          organization: selected.id,
+          organization: selected?.id ?? null,
         }),
       label: msg`Execution Environments`,
     },
     {
       request: async () =>
         ProjectsAPI.read({
-          organization: selected.id,
+          organization: selected?.id ?? null,
         }),
       label: msg`Projects`,
     },
     {
       request: () =>
         InventoriesAPI.read({
-          organization: selected.id,
+          organization: selected?.id ?? null,
         }),
       label: msg`Inventories`,
     },
     {
       request: () =>
         ApplicationsAPI.read({
-          organization: selected.id,
+          organization: selected?.id ?? null,
         }),
       label: msg`Applications`,
     },
@@ -241,21 +245,21 @@ export const relatedResourceDeleteRequests = {
     {
       request: async () =>
         UnifiedJobTemplatesAPI.read({
-          execution_environment: selected.id,
+          execution_environment: selected?.id ?? null,
         }),
       label: msg`Templates`,
     },
     {
       request: async () =>
         ProjectsAPI.read({
-          default_environment: selected.id,
+          default_environment: selected?.id ?? null,
         }),
       label: msg`Projects`,
     },
     {
       request: async () =>
         OrganizationsAPI.read({
-          default_environment: selected.id,
+          default_environment: selected?.id ?? null,
         }),
       label: msg`Organizations`,
     },
@@ -267,7 +271,7 @@ export const relatedResourceDeleteRequests = {
         const {
           data: { results },
         } = await InventorySourcesAPI.read<Paginated<ApiEntity>>({
-          execution_environment: selected.id,
+          execution_environment: selected?.id ?? null,
         });
 
         const responses = await Promise.all(
@@ -289,23 +293,26 @@ export const relatedResourceDeleteRequests = {
   ],
   instanceGroup: (selected: DeletableEntity) => [
     {
-      request: () => OrganizationsAPI.read({ instance_groups: selected.id }),
+      request: () =>
+        OrganizationsAPI.read({ instance_groups: selected?.id ?? null }),
       label: msg`Organizations`,
     },
     {
-      request: () => InventoriesAPI.read({ instance_groups: selected.id }),
+      request: () =>
+        InventoriesAPI.read({ instance_groups: selected?.id ?? null }),
       label: msg`Inventories`,
     },
     {
       request: () =>
-        UnifiedJobTemplatesAPI.read({ instance_groups: selected.id }),
+        UnifiedJobTemplatesAPI.read({ instance_groups: selected?.id ?? null }),
       label: msg`Templates`,
     },
   ],
 
   instance: (selected: DeletableEntity) => [
     {
-      request: () => InstanceGroupsAPI.read({ instances: selected.id }),
+      request: () =>
+        InstanceGroupsAPI.read({ instances: selected?.id ?? null }),
       label: msg`Instance Groups`,
     },
   ],

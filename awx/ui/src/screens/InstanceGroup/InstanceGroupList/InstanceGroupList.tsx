@@ -141,10 +141,8 @@ function InstanceGroupList() {
     item.is_container_group
       ? `/instance_groups/container_group/${item.id}/details`
       : `/instance_groups/${item.id}/details`;
-  // Built on every render; the requests only run once a row has been picked,
-  // which is what the delete button waits for.
   const deleteDetailsRequests = relatedResourceDeleteRequests.instanceGroup(
-    selected[0] as InstanceGroup
+    selected[0]
   );
   return (
     <>

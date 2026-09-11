@@ -224,7 +224,7 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
             <HeaderCell>{t`Roles`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(accessRecord: Untyped, index: number) => (
+        renderRow={(accessRecord, index) => (
           <ResourceAccessListItem
             key={accessRecord.id}
             accessRecord={accessRecord}

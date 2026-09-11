@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -74,7 +73,7 @@ function OrganizationsList() {
   }, [fetchOrganizations]);
 
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
-    useSelected<Untyped>(organizations);
+    useSelected(organizations);
 
   const {
     isLoading: isDeleteLoading,
@@ -174,7 +173,7 @@ function OrganizationsList() {
                 ]}
               />
             )}
-            renderRow={(o: Untyped, index: number) => (
+            renderRow={(o, index) => (
               <OrganizationListItem
                 key={o.id}
                 organization={o}

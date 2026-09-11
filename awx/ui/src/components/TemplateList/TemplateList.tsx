@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 /*
   Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 */
@@ -286,7 +285,7 @@ function TemplateList({ defaultParams }: TemplateListProps) {
               ]}
             />
           )}
-          renderRow={(template: Untyped, index: number) => (
+          renderRow={(template, index) => (
             <TemplateListItem
               key={template.id}
               value={template.name}

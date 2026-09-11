@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useState, useCallback } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -81,7 +80,7 @@ function InventoryHostList() {
   }, [fetchData]);
 
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
-    useSelected<Untyped>(hosts);
+    useSelected(hosts);
 
   const {
     isLoading: isDeleteLoading,
@@ -178,7 +177,7 @@ function InventoryHostList() {
             ]}
           />
         )}
-        renderRow={(host: Untyped, index: number) => (
+        renderRow={(host, index) => (
           <InventoryHostItem
             key={host.id}
             host={host}

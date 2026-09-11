@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { DetailedError, SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -56,7 +56,7 @@ const SCMSubForm = ({ autoPopulateProject }: SCMSubFormProps) => {
     validate: required(t`Select a value for this field`),
   });
   const { error: sourcePathError, request: fetchSourcePath } = useRequest(
-    useCallback(async (projectId: Untyped) => {
+    useCallback(async (projectId: number) => {
       const { data } = await ProjectsAPI.readInventories(projectId);
       setSourcePath([...data, '/ (project root)']);
     }, []),
@@ -72,7 +72,7 @@ const SCMSubForm = ({ autoPopulateProject }: SCMSubFormProps) => {
   }, [fetchSourcePath, projectMeta.initialValue]);
 
   const handleProjectUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('source_project', value);
       setFieldTouched('source_project', true, false);
       setFieldValue('scm_branch', '', false);
@@ -87,7 +87,7 @@ const SCMSubForm = ({ autoPopulateProject }: SCMSubFormProps) => {
     [fetchSourcePath, setFieldValue, setFieldTouched, sourcePathField.value]
   );
   const handleCredentialUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('credential', value);
       setFieldTouched('credential', true, false);
     },
@@ -98,14 +98,14 @@ const SCMSubForm = ({ autoPopulateProject }: SCMSubFormProps) => {
     (!sourcePathMeta.error || !sourcePathMeta.touched) &&
     !(sourcePathError as DetailedError | null)?.message;
 
-  const filteredPaths = sourcePath.filter((path: Untyped) =>
+  const filteredPaths = sourcePath.filter((path) =>
     path.toLowerCase().includes(filterValue.toLowerCase())
   );
 
   const showCreateOption =
     filterValue.trim() &&
     !sourcePath.some(
-      (path: Untyped) => path.toLowerCase() === filterValue.trim().toLowerCase()
+      (path) => path.toLowerCase() === filterValue.trim().toLowerCase()
     );
 
   return (
@@ -204,7 +204,7 @@ const SCMSubForm = ({ autoPopulateProject }: SCMSubFormProps) => {
           )}
         >
           <SelectList>
-            {filteredPaths.map((path: Untyped) => (
+            {filteredPaths.map((path) => (
               <SelectOption key={path} id={path} value={path}>
                 {path}
               </SelectOption>
@@ -214,7 +214,7 @@ const SCMSubForm = ({ autoPopulateProject }: SCMSubFormProps) => {
                 value={filterValue.trim()}
                 onClick={() => {
                   const trimmed = filterValue.trim();
-                  setSourcePath((prev: Untyped) => [...prev, trimmed]);
+                  setSourcePath((prev) => [...prev, trimmed]);
                 }}
               >
                 {t`Set source path to`} &quot;{filterValue.trim()}&quot;

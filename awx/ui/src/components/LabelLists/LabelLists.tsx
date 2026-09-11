@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { Card } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
@@ -69,7 +68,7 @@ function LabelLists() {
             <HeaderCell>{t`Organization`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(label: Untyped) => (
+        renderRow={(label) => (
           <LabelListItem key={label.id} label={label} searchOrg />
         )}
       />

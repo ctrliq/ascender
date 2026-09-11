@@ -121,7 +121,7 @@ function InventoryRelatedGroupList() {
   );
 
   const { selected, isAllSelected, handleSelect, setSelected } =
-    useSelected<Untyped>(groups);
+    useSelected(groups);
 
   const disassociateGroups = useCallback(async () => {
     try {
@@ -247,7 +247,7 @@ function InventoryRelatedGroupList() {
             {isNotConstructedInventory && <HeaderCell>{t`Actions`}</HeaderCell>}
           </HeaderRow>
         }
-        renderRow={(group: Untyped, index: number) => (
+        renderRow={(group, index) => (
           <InventoryGroupRelatedGroupListItem
             key={group.id}
             rowIndex={index}

@@ -15,9 +15,9 @@ import { DetailList, Detail } from '../DetailList';
  */
 export interface AccessRecord {
   id: number;
-  username?: string;
-  first_name?: string;
-  last_name?: string;
+  username?: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
   summary_fields?: {
     direct_access?: { role: Untyped }[];
     indirect_access?: { role: Untyped }[];

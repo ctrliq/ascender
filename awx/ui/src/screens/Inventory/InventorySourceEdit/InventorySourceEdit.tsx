@@ -1,4 +1,4 @@
-import type { AnyInventory, Untyped } from 'types/api';
+import type { AnyInventory, InventorySource, SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Card } from '@patternfly/react-core';
@@ -8,9 +8,10 @@ import ContentLoading from 'components/ContentLoading';
 import useRequest from 'hooks/useRequest';
 import { InventorySourcesAPI } from 'api';
 import InventorySourceForm from '../shared/InventorySourceForm';
+import type { InventorySourceFormValues } from '../shared/InventorySourceForm';
 
 export interface InventorySourceEditProps {
-  source: Untyped;
+  source: InventorySource;
   inventory: AnyInventory;
   [key: string]: unknown;
 }
@@ -39,11 +40,18 @@ function InventorySourceEdit({ source, inventory }: InventorySourceEditProps) {
 
   const { error, request, result } = useRequest(
     useCallback(
-      async ({ instanceGroups, ...values }: Untyped) => {
+      // The body the api takes rather than what the form holds: the
+      // lookups are sent as the ids they picked.
+      async ({
+        instanceGroups,
+        ...values
+      }: Record<string, unknown> & {
+        instanceGroups?: SummaryFieldRef[];
+      }) => {
         const { data } = await InventorySourcesAPI.replace(source.id, values);
         await InventorySourcesAPI.orderInstanceGroups(
           source.id,
-          instanceGroups,
+          instanceGroups ?? [],
           associatedInstanceGroups
         );
         return data;
@@ -61,7 +69,7 @@ function InventorySourceEdit({ source, inventory }: InventorySourceEditProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result, detailsUrl]);
 
-  const handleSubmit = async (form: Untyped) => {
+  const handleSubmit = async (form: InventorySourceFormValues) => {
     const {
       credential,
       source_path,
@@ -72,12 +80,12 @@ function InventorySourceEdit({ source, inventory }: InventorySourceEditProps) {
       ...remainingForm
     } = form;
 
-    const sourcePath: Record<string, Untyped> = {};
-    const sourceProject: Record<string, Untyped> = {};
+    const sourcePath: Record<string, unknown> = {};
+    const sourceProject: Record<string, unknown> = {};
     if (form.source === 'scm') {
       sourcePath.source_path =
         source_path === '/ (project root)' ? '' : source_path;
-      sourceProject.source_project = source_project.id;
+      sourceProject.source_project = source_project?.id;
     }
 
     await request({

@@ -1,4 +1,4 @@
-import type { Untyped, Inventory } from 'types/api';
+import type { InventorySource, Untyped, Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -22,7 +22,7 @@ const mockInvSrc = {
   update_cache_timeout: 0,
   update_on_launch: false,
   verbosity: 1,
-};
+} as unknown as InventorySource;
 
 const mockInventory = {
   id: 1,

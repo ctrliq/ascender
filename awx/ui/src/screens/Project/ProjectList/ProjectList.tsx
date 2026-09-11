@@ -106,7 +106,7 @@ function ProjectList() {
     setSelected,
     selectAll,
     clearSelected,
-  } = useSelected<Untyped>(projects);
+  } = useSelected(projects);
 
   const { expanded, isAllExpanded, handleExpand, expandAll } =
     useExpanded(projects);
@@ -262,7 +262,7 @@ function ProjectList() {
                 ]}
               />
             )}
-            renderRow={(project: Untyped, index: number) => (
+            renderRow={(project, index) => (
               <ProjectListItem
                 isExpanded={expanded.some((row) => row.id === project.id)}
                 onExpand={() => handleExpand(project)}

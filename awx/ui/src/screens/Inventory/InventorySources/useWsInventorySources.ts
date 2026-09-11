@@ -1,8 +1,11 @@
-import type { Untyped } from 'types/api';
+import type { InventorySource } from 'types/api';
 import { useState, useEffect } from 'react';
 import useWebsocket from 'hooks/useWebsocket';
+import type { WebsocketMessage } from 'hooks/useWebsocket';
 
-export default function useWsInventorySources(initialSources: Untyped) {
+export default function useWsInventorySources(
+  initialSources: InventorySource[]
+) {
   const [sources, setSources] = useState(initialSources);
   const lastMessage = useWebsocket({
     jobs: ['status_changed'],
@@ -19,8 +22,8 @@ export default function useWsInventorySources(initialSources: Untyped) {
     }
 
     const sourceId = lastMessage.inventory_source_id;
-    setSources((currentSources: Untyped) => {
-      const index = currentSources.findIndex((s: Untyped) => s.id === sourceId);
+    setSources((currentSources) => {
+      const index = currentSources.findIndex((s) => s.id === sourceId);
       if (index > -1) {
         return updateSource(currentSources, index, lastMessage);
       }
@@ -31,15 +34,21 @@ export default function useWsInventorySources(initialSources: Untyped) {
   return sources;
 }
 
-function updateSource(sources: Untyped, index: number, message: Untyped) {
-  const source = {
-    ...sources[index],
-    status: message.status,
-    last_updated: message.finished,
+/** The row the socket's message describes, with what it reports put on it. */
+function updateSource(
+  sources: InventorySource[],
+  index: number,
+  message: WebsocketMessage
+): InventorySource[] {
+  const current = sources[index] as InventorySource;
+  const source: InventorySource = {
+    ...current,
+    status: message.status as InventorySource['status'],
+    last_updated: message.finished ?? '',
     summary_fields: {
-      ...sources[index].summary_fields,
+      ...current.summary_fields,
       current_job: {
-        id: message.unified_job_id,
+        id: message.unified_job_id as number,
         status: message.status,
         finished: message.finished,
       },

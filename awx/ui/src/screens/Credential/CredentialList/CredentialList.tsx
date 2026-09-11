@@ -122,10 +122,8 @@ function CredentialList() {
 
   const canAdd =
     actions && Object.prototype.hasOwnProperty.call(actions, 'POST');
-  // Built on every render; the requests only run once a row has been picked,
-  // which is what the delete button waits for.
   const deleteDetailsRequests = relatedResourceDeleteRequests.credential(
-    selected[0] as Credential
+    selected[0]
   );
   return (
     <>
