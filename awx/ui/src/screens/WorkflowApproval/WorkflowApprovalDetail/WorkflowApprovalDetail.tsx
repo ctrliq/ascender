@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link, useParams, useNavigate } from 'react-router';
@@ -44,9 +45,15 @@ const WFDetailList = styled(DetailList)`
   padding: 0px var(--pf-v6-global--spacer--lg);
 `;
 
-function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
+export interface WorkflowApprovalDetailProps {
+  workflowApproval: Untyped;
+  fetchWorkflowApproval: Untyped;
+  [key: string]: unknown;
+}
+
+function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }: WorkflowApprovalDetailProps) {
   const { t } = useLingui();
-  const { id: workflowApprovalId } = useParams();
+  const { id: workflowApprovalId } = useParams() as { id: string };
   const navigate = useNavigate();
   const { addToast, Toast, toastProps } = useToast();
 
@@ -103,7 +110,7 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
   }, [fetchVotes]);
 
   const handleToast = useCallback(
-    (id, title) => {
+    (id: Untyped, title: Untyped) => {
       addToast({
         id,
         title,
@@ -191,7 +198,7 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
           <Detail
             fullWidth
             label={t`Votes`}
-            value={votes.map((vote) => (
+            value={votes.map((vote: Untyped) => (
               <div key={vote.id}>
                 {vote.summary_fields?.user?.username || vote.user_name}{' '}
                 {vote.vote === 'approve' ? t`approved` : t`denied`}{' '}
@@ -313,7 +320,7 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }) {
               totalChips={workflowJob.summary_fields.labels.results.length}
               ouiaId="wa-detail-label-chips"
             >
-              {workflowJob.summary_fields.labels.results.map((label) => (
+              {workflowJob.summary_fields.labels.results.map((label: Untyped) => (
                 <Label variant="outline" key={label.id}>
                   {label.name}
                 </Label>

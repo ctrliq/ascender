@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -79,13 +80,13 @@ const SliderForks = styled.div`
   text-align: center;
 `;
 
-const buildLinkURL = (inst) =>
+const buildLinkURL = (inst: Untyped) =>
   inst.is_container_group
     ? '/instance_groups/container_group/'
     : '/instance_groups/';
 
-function renderInstanceGroups(instanceGroups) {
-  return instanceGroups.map((ig) => (
+function renderInstanceGroups(instanceGroups: Untyped) {
+  return instanceGroups.map((ig: Untyped) => (
     <React.Fragment key={ig.id}>
       <Label
         color="blue"
@@ -106,7 +107,7 @@ function renderInstanceGroups(instanceGroups) {
   ));
 }
 
-function usedCapacity(instance, t) {
+function usedCapacity(instance: Untyped, t: Untyped) {
   if (instance.enabled) {
     return (
       <Progress
@@ -120,6 +121,17 @@ function usedCapacity(instance, t) {
   return <Unavailable>{t`Unavailable`}</Unavailable>;
 }
 
+export interface TooltipProps {
+  fetchInstance: Untyped;
+  isNodeSelected: boolean;
+  renderNodeIcon: Untyped;
+  instanceDetail: Untyped;
+  instanceGroups: Untyped[];
+  isLoading: boolean;
+  redirectToDetailsPage: Untyped;
+  [key: string]: unknown;
+}
+
 function Tooltip({
   fetchInstance,
   isNodeSelected,
@@ -128,7 +140,7 @@ function Tooltip({
   instanceGroups,
   isLoading,
   redirectToDetailsPage,
-}) {
+}: TooltipProps) {
   const { me = {} } = useConfig();
   const { t } = useLingui();
 
@@ -154,7 +166,7 @@ function Tooltip({
   const { error: updateError, dismissError: dismissUpdateError } =
     useDismissableError(updateInstanceError);
 
-  const handleChangeValue = (value) => {
+  const handleChangeValue = (value: Untyped) => {
     const roundedValue = Math.round(value * 100) / 100;
     setForks(
       computeForks(

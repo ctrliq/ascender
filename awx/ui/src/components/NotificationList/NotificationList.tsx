@@ -24,7 +24,7 @@ const QS_CONFIG = getQSConfig('notification', {
 export interface NotificationListProps {
   apiModel: NotificationsApiModel;
   canToggleNotifications: boolean;
-  id: string;
+  id: number | string;
   showApprovalsToggle?: boolean;
   showChangedToggle?: boolean;
   [key: string]: unknown;

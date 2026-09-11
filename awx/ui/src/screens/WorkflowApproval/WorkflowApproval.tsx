@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -17,9 +18,14 @@ import ContentError from 'components/ContentError';
 import { WorkflowApprovalsAPI } from 'api';
 import WorkflowApprovalDetail from './WorkflowApprovalDetail';
 
-function WorkflowApproval({ setBreadcrumb }) {
+export interface WorkflowApprovalProps {
+  setBreadcrumb: Untyped;
+  [key: string]: unknown;
+}
+
+function WorkflowApproval({ setBreadcrumb }: WorkflowApprovalProps) {
   const { t } = useLingui();
-  const { id: workflowApprovalId } = useParams();
+  const { id: workflowApprovalId } = useParams() as { id: string };
   const location = useLocation();
   const {
     result: { workflowApproval },

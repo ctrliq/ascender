@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import useToast, { AlertVariant } from 'hooks/useToast';
@@ -15,13 +16,22 @@ import {
 import WorkflowApprovalButton from '../shared/WorkflowApprovalButton';
 import WorkflowDenyButton from '../shared/WorkflowDenyButton';
 
+export interface WorkflowApprovalListItemProps {
+  workflowApproval: Untyped;
+  isSelected: boolean;
+  onSelect: (...args: Untyped[]) => void;
+  detailUrl: Untyped;
+  rowIndex: Untyped;
+  [key: string]: unknown;
+}
+
 function WorkflowApprovalListItem({
   workflowApproval,
   isSelected,
   onSelect,
   detailUrl,
   rowIndex,
-}) {
+}: WorkflowApprovalListItemProps) {
   const { t } = useLingui();
   const { addToast } = useToast();
   const hasBeenActedOn =
@@ -32,7 +42,7 @@ function WorkflowApprovalListItem({
   const workflowJob = workflowApproval?.summary_fields?.source_workflow_job;
   const status = getStatus(workflowApproval);
   // Toast handler for approve/deny actions (PatternFly style)
-  const handleToast = (id, message) => {
+  const handleToast = (id: Untyped, message: Untyped) => {
     addToast({
       id,
       title: message,

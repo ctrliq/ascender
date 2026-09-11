@@ -1,7 +1,8 @@
+import type { Untyped } from 'types/api';
 import { t } from '@lingui/core/macro';
 import { formatDateString } from 'util/dates';
 
-export function getTooltip(workflowApproval) {
+export function getTooltip(workflowApproval: Untyped) {
   if (workflowApproval.status === 'successful') {
     if (workflowApproval.summary_fields?.approved_or_denied_by?.username) {
       return t`Approved by ${
@@ -25,7 +26,7 @@ export function getTooltip(workflowApproval) {
   return '';
 }
 
-export function getStatus(workflowApproval) {
+export function getStatus(workflowApproval: Untyped) {
   if (workflowApproval.timed_out) {
     return 'timedOut';
   }
@@ -42,7 +43,7 @@ export function getStatus(workflowApproval) {
   return workflowApproval.status;
 }
 
-export function getPendingLabel(workflowApproval) {
+export function getPendingLabel(workflowApproval: Untyped) {
   if (!workflowApproval.approval_expiration) {
     return t`Never expires`;
   }
@@ -52,7 +53,7 @@ export function getPendingLabel(workflowApproval) {
   )}`;
 }
 
-export function getDetailPendingLabel(workflowApproval) {
+export function getDetailPendingLabel(workflowApproval: Untyped) {
   if (!workflowApproval.approval_expiration) {
     return t`Never`;
   }

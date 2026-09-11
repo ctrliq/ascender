@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import * as d3 from 'd3';
 import { truncateString } from '../../../util/strings';
 
@@ -9,36 +10,36 @@ import {
   ICONS,
 } from '../constants';
 
-export function getWidth(selector) {
+export function getWidth(selector: Untyped) {
   return selector ? d3.select(selector).node().clientWidth : 700;
 }
 
-export function getHeight(selector) {
+export function getHeight(selector: Untyped) {
   return selector ? d3.select(selector).node().clientHeight : 600;
 }
 
-export function renderStateColor(nodeState) {
+export function renderStateColor(nodeState: Untyped) {
   return NODE_STATE_COLOR_KEY[nodeState] ? NODE_STATE_COLOR_KEY[nodeState] : '';
 }
 
-export function renderLinkStatusColor(linkState) {
+export function renderLinkStatusColor(linkState: Untyped) {
   return LINK_STATE_COLOR_KEY[linkState]
     ? LINK_STATE_COLOR_KEY[linkState]
     : '#ccc';
 }
 
-export function renderLabelText(nodeState, name) {
+export function renderLabelText(nodeState: Untyped, name: Untyped) {
   if (typeof nodeState === 'string' && typeof name === 'string') {
     return `${truncateString(name, LABEL_TEXT_MAX_LENGTH)}`;
   }
   return ``;
 }
 
-export function renderNodeType(nodeType) {
+export function renderNodeType(nodeType: Untyped) {
   return NODE_TYPE_SYMBOL_KEY[nodeType] ? NODE_TYPE_SYMBOL_KEY[nodeType] : ``;
 }
 
-export function renderNodeIcon(selectedNode) {
+export function renderNodeIcon(selectedNode: Untyped) {
   if (selectedNode) {
     const { node_type: nodeType } = selectedNode;
     return NODE_TYPE_SYMBOL_KEY[nodeType] ? NODE_TYPE_SYMBOL_KEY[nodeType] : ``;
@@ -46,7 +47,7 @@ export function renderNodeIcon(selectedNode) {
   return false;
 }
 
-export function renderLabelIcons(nodeState) {
+export function renderLabelIcons(nodeState: Untyped) {
   if (nodeState) {
     const nodeLabelIconMapper = {
       ready: 'checkmark',
@@ -63,7 +64,7 @@ export function renderLabelIcons(nodeState) {
   }
   return false;
 }
-export function renderIconPosition(nodeState, bbox) {
+export function renderIconPosition(nodeState: Untyped, bbox: Untyped) {
   if (nodeState) {
     const iconPositionMapper = {
       ready: `translate(${bbox.x - 4.5}, ${bbox.y - 4.5}), scale(0.02)`,
@@ -83,7 +84,7 @@ export function renderIconPosition(nodeState, bbox) {
   return false;
 }
 
-export function redirectToDetailsPage(selectedNode, navigate) {
+export function redirectToDetailsPage(selectedNode: Untyped, navigate: Untyped) {
   if (selectedNode && navigate) {
     const { id: nodeId } = selectedNode;
     const constructedURL = `/instances/${nodeId}/details`;
@@ -92,7 +93,7 @@ export function redirectToDetailsPage(selectedNode, navigate) {
   return false;
 }
 
-export function renderLinkState(linkState) {
+export function renderLinkState(linkState: Untyped) {
   const linkPattern = {
     established: null,
     adding: 3,
@@ -101,13 +102,13 @@ export function renderLinkState(linkState) {
   return linkPattern[linkState] ? linkPattern[linkState] : null;
 }
 // DEBUG TOOLS
-export function getRandomInt(min, max) {
+export function getRandomInt(min: Untyped, max: Untyped) {
   min = Math.ceil(min);
   max = Math.floor(max);
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-const generateRandomLinks = (n, r) => {
+const generateRandomLinks = (n: Untyped, r: Untyped) => {
   const links = [];
   function getRandomLinkState() {
     return ['established', 'adding', 'removing'][getRandomInt(0, 3)];
@@ -126,7 +127,7 @@ const generateRandomLinks = (n, r) => {
   return { nodes: n, links };
 };
 
-export const generateRandomNodes = (n) => {
+export const generateRandomNodes = (n: Untyped) => {
   const nodes = [];
   function getRandomType() {
     return ['hybrid', 'execution', 'control', 'hop'][getRandomInt(0, 3)];

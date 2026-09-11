@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -17,6 +18,19 @@ import {
   RedoAltIcon,
 } from '@patternfly/react-icons';
 
+export interface HeaderProps {
+  title: React.ReactNode;
+  handleSwitchToggle: (...args: Untyped[]) => void;
+  toggleState: Untyped;
+  zoomIn: Untyped;
+  zoomOut: Untyped;
+  resetZoom: Untyped;
+  zoomFit: Untyped;
+  refresh: Untyped;
+  showZoomControls: boolean;
+  [key: string]: unknown;
+}
+
 const Header = ({
   title,
   handleSwitchToggle,
@@ -27,7 +41,7 @@ const Header = ({
   zoomFit,
   refresh,
   showZoomControls,
-}) => {
+}: HeaderProps) => {
   const { t } = useLingui();
   return (
     <PageSection hasBodyWrapper={false}>

@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -12,6 +13,18 @@ import ErrorDetail from 'components/ErrorDetail';
 import { ActionsTd, ActionItem } from 'components/PaginatedTable';
 import LaunchManagementPrompt from './LaunchManagementPrompt';
 
+export interface ManagementJobListItemProps {
+  onLaunchError: (error: unknown) => void;
+  /** True for the cleanup jobs, which ask how many days to keep. */
+  isPrompted?: boolean;
+  isSuperUser?: boolean;
+  id: number;
+  jobType?: string;
+  name?: string;
+  description?: string;
+  [key: string]: unknown;
+}
+
 function ManagementJobListItem({
   onLaunchError,
   isPrompted,
@@ -20,7 +33,7 @@ function ManagementJobListItem({
   jobType,
   name,
   description,
-}) {
+}: ManagementJobListItemProps) {
   const { t } = useLingui();
   const detailsUrl = `/management_jobs/${id}`;
 
@@ -30,11 +43,11 @@ function ManagementJobListItem({
   const [isManagementPromptOpen, setIsManagementPromptOpen] = useState(false);
   const [isManagementPromptLoading, setIsManagementPromptLoading] =
     useState(false);
-  const [managementPromptError, setManagementPromptError] = useState(null);
+  const [managementPromptError, setManagementPromptError] = useState<unknown>(null);
   const handleManagementPromptClick = () => setIsManagementPromptOpen(true);
   const handleManagementPromptClose = () => setIsManagementPromptOpen(false);
 
-  const handleManagementPromptConfirm = async (days) => {
+  const handleManagementPromptConfirm = async (days: Untyped) => {
     setIsManagementPromptLoading(true);
     try {
       const { data } = await SystemJobTemplatesAPI.launch(id, {
@@ -51,7 +64,7 @@ function ManagementJobListItem({
   const handleLaunch = async () => {
     setIsLaunchLoading(true);
     try {
-      const { data } = await SystemJobTemplatesAPI.launch(id);
+      const { data } = await SystemJobTemplatesAPI.launch(id, {});
       navigate(`/jobs/management/${data.id}/output`);
     } catch (error) {
       onLaunchError(error);

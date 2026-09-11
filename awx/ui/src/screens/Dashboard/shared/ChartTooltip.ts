@@ -1,8 +1,30 @@
+import type { Untyped } from 'types/api';
 import * as d3 from 'd3';
 import { i18n } from '@lingui/core';
 
 class Tooltip {
-  constructor(opts) {
+  boundingBox: Untyped;
+  boxWidth: Untyped;
+  circleGreen: Untyped;
+  circleRed: Untyped;
+  colors: Untyped;
+  date: Untyped;
+  failText: Untyped;
+  failTextWidth: Untyped;
+  failed: Untyped;
+  icon: Untyped;
+  jobs: Untyped;
+  jobsWidth: Untyped;
+  label: Untyped;
+  successText: Untyped;
+  successTextWidth: Untyped;
+  successful: Untyped;
+  svg: Untyped;
+  textWidthThreshold: Untyped;
+  toolTipBase: Untyped;
+  toolTipPoint: Untyped;
+
+  constructor(opts: Untyped) {
     this.label = opts.label;
     this.svg = opts.svg;
     this.colors = opts.colors;
@@ -106,7 +128,7 @@ class Tooltip {
       .text(i18n._('Never'));
   }
 
-  handleMouseOver = (event, data) => {
+  handleMouseOver = (event: Untyped, data: Untyped) => {
     let success = 0;
     let fail = 0;
     let total = 0;

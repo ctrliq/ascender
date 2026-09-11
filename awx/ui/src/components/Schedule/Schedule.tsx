@@ -38,7 +38,7 @@ function Schedule({
   resourceDefaultCredentials,
 }: ScheduleProps) {
   const { t } = useLingui();
-  const { scheduleId } = useParams();
+  const { scheduleId } = useParams() as { scheduleId: string };
 
   const { pathname } = useLocation();
 

@@ -65,7 +65,7 @@ function WorkflowOutputNavigation({
   parentRef,
 }: WorkflowOutputNavigationProps) {
   const { t } = useLingui();
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
   const navigate = useNavigate();
 
   const [isOpen, setIsOpen] = useState(false);

@@ -32,7 +32,7 @@ function AdHocCommands({
 }: AdHocCommandsProps) {
   const { t } = useLingui();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
 
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);

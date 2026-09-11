@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import * as d3 from 'd3';
 import { getWidth, getHeight } from './helpers';
 
@@ -19,7 +20,7 @@ import { getWidth, getHeight } from './helpers';
  * }
  */
 
-export default function useZoom(parentSelector, childSelector) {
+export default function useZoom(parentSelector: Untyped, childSelector: Untyped) {
   if (typeof parentSelector !== 'string' && typeof childSelector !== 'string') {
     return false;
   }

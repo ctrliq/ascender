@@ -11,10 +11,11 @@ export interface SchedulesProps {
   loadScheduleOptions: Untyped;
   loadSchedules: Untyped;
   setBreadcrumb: Untyped;
-  launchConfig: Untyped;
-  surveyConfig: Untyped;
+  /** Absent for a resource that cannot be prompted, a management job say. */
+  launchConfig?: Untyped;
+  surveyConfig?: Untyped;
   resource: Untyped;
-  resourceDefaultCredentials: Untyped;
+  resourceDefaultCredentials?: Untyped;
   [key: string]: unknown;
 }
 

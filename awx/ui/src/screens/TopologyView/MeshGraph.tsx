@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -42,13 +43,22 @@ const Loader = styled(ContentLoading)`
   width: 100%;
   background: var(--pf-v6-global--BackgroundColor--100);
 `;
+export interface MeshGraphProps {
+  data: Untyped;
+  showLegend: boolean;
+  zoom: Untyped;
+  setShowZoomControls: Untyped;
+  storedNodes: Untyped;
+  [key: string]: unknown;
+}
+
 function MeshGraph({
   data,
   showLegend,
   zoom,
   setShowZoomControls,
   storedNodes,
-}) {
+}: MeshGraphProps) {
   const { t } = useLingui();
   const [isNodeSelected, setIsNodeSelected] = useState(false);
   const [selectedNode, setSelectedNode] = useState(null);
@@ -86,7 +96,7 @@ function MeshGraph({
     }
   }, [selectedNode, fetchDetails]);
 
-  function updateNodeSVG(nodes) {
+  function updateNodeSVG(nodes: Untyped) {
     if (nodes) {
       d3.selectAll('[class*="id-"]')
         .data(nodes)
@@ -109,7 +119,7 @@ function MeshGraph({
   // update mesh when user toggles enabled/disabled slider
   useEffect(() => {
     if (instance?.id) {
-      const updatedNodes = storedNodes.current.map((n) =>
+      const updatedNodes = storedNodes.current.map((n: Untyped) =>
         n.id === instance.id ? { ...n, enabled: instance.enabled } : n
       );
       storedNodes.current = updatedNodes;
@@ -163,12 +173,12 @@ function MeshGraph({
       }
     };
 
-    function ticked({ progress }) {
+    function ticked({ progress }: Untyped) {
       const calculatedPercent = Math.round(progress * 100);
       setSimulationProgress(calculatedPercent);
     }
 
-    function ended({ nodes, links }) {
+    function ended({ nodes, links }: Untyped) {
       // Remove loading screen
       d3.select('.simulation-loader').style('visibility', 'hidden');
       setShowZoomControls(true);
@@ -330,15 +340,15 @@ function MeshGraph({
       });
       svg.call(zoom);
 
-      function highlightSiblings(n) {
+      function highlightSiblings(n: Untyped) {
         svg
           .select(`circle.id-${n.id}`)
           .attr('fill', DEFAULT_NODE_HIGHLIGHT_COLOR);
         const immediate = links.filter(
-          (l) =>
+          (l: Untyped) =>
             n.hostname === l.source.hostname || n.hostname === l.target.hostname
         );
-        immediate.forEach((s) => {
+        immediate.forEach((s: Untyped) => {
           svg
             .selectAll(`.link-${s.index}`)
             .style('stroke', '#0066CC')
@@ -347,13 +357,13 @@ function MeshGraph({
         });
       }
 
-      function deselectSiblings(n) {
+      function deselectSiblings(n: Untyped) {
         svg.select(`circle.id-${n.id}`).attr('fill', DEFAULT_NODE_COLOR);
         const immediate = links.filter(
-          (l) =>
+          (l: Untyped) =>
             n.hostname === l.source.hostname || n.hostname === l.target.hostname
         );
-        immediate.forEach((s) => {
+        immediate.forEach((s: Untyped) => {
           svg
             .selectAll(`.link-${s.index}`)
             .style('stroke', (d) => renderLinkStatusColor(d.link_state))
@@ -370,7 +380,7 @@ function MeshGraph({
         });
       }
 
-      function highlightSelected(n) {
+      function highlightSelected(n: Untyped) {
         if (svg.select(`circle.id-${n.id}`).attr('stroke-width') !== null) {
           // toggle rings
           svg

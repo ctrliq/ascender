@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button, TextInput, Tooltip } from '@patternfly/react-core';
@@ -7,7 +8,7 @@ import AlertModal from 'components/AlertModal';
 
 const MAX_RETENTION = 99999;
 
-const clamp = (val, min, max) => {
+const clamp = (val: Untyped, min: Untyped, max: Untyped) => {
   if (val < min) {
     return min;
   }
@@ -17,6 +18,17 @@ const clamp = (val, min, max) => {
   return val;
 };
 
+export interface LaunchManagementPromptProps {
+  isOpen?: boolean;
+  isLoading?: boolean;
+  onClick: () => void;
+  onClose: () => void;
+  onConfirm: (days: number) => void;
+  /** How many days of records the job keeps, seeding the input. */
+  defaultDays?: number;
+  [key: string]: unknown;
+}
+
 function LaunchManagementPrompt({
   isOpen,
   isLoading,
@@ -24,7 +36,7 @@ function LaunchManagementPrompt({
   onClose,
   onConfirm,
   defaultDays,
-}) {
+}: LaunchManagementPromptProps) {
   const { t } = useLingui();
   const [dataRetention, setDataRetention] = useState(defaultDays);
   return (
@@ -51,7 +63,7 @@ function LaunchManagementPrompt({
             variant="primary"
             isDisabled={isLoading}
             aria-label={t`Launch`}
-            onClick={() => onConfirm(dataRetention)}
+            onClick={() => onConfirm(dataRetention as number)}
           >
             {t`Launch`}
           </Button>,

@@ -10,10 +10,10 @@ import ErrorDetail from '../ErrorDetail';
 import type { DetailedError } from 'types/api';
 
 export interface JobCancelButtonProps {
-  errorTitle: Untyped;
+  errorTitle?: Untyped;
   title: Untyped;
-  showIconButton: Untyped;
-  errorMessage: Untyped;
+  showIconButton?: Untyped;
+  errorMessage?: Untyped;
   buttonText?: Untyped;
   style?: Untyped;
   job?: Untyped;

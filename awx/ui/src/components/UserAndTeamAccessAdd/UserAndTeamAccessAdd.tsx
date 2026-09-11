@@ -48,7 +48,7 @@ function UserAndTeamAccessAdd({
   const [selectedResourceType, setSelectedResourceType] =
     useState<Untyped>(null);
   const [stepIdReached, setStepIdReached] = useState(1);
-  const { id: routeId } = useParams();
+  const { id: routeId } = useParams() as { id: string };
   // The caller passes the resource id explicitly (works whether the parent
   // screen uses react-router v5 or v6); fall back to the v5 route param.
   const associationId = resourceId ?? routeId;

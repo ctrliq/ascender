@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router';
@@ -33,7 +34,15 @@ const CountLink = styled(Link)`
   }
 `;
 
-function Count({ failed, link, data, label }) {
+export interface CountProps {
+  failed: Untyped;
+  link: Untyped;
+  data: Untyped;
+  label: React.ReactNode;
+  [key: string]: unknown;
+}
+
+function Count({ failed, link, data, label }: CountProps) {
   return (
     <CountLink to={link}>
       <CountCard isClickable>

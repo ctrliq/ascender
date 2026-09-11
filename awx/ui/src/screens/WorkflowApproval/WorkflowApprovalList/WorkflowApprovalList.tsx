@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -49,7 +50,7 @@ function WorkflowApprovalsList() {
         count: response.data.count,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
-        ).map((val) => val.slice(0, -8)),
+        ).map((val: Untyped) => val.slice(0, -8)),
 
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
@@ -68,7 +69,7 @@ function WorkflowApprovalsList() {
   }, [fetchWorkflowApprovals]);
 
   const fetchWorkflowApprovalsById = useCallback(
-    async (ids) => {
+    async (ids: Untyped) => {
       const params = { ...parseQueryString(QS_CONFIG, location.search) };
       params.id__in = ids.join(',');
       const { data } = await WorkflowApprovalsAPI.read(params);
@@ -225,7 +226,7 @@ function WorkflowApprovalsList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(workflowApproval, index) => (
+            renderRow={(workflowApproval: Untyped, index: Untyped) => (
               <WorkflowApprovalListItem
                 key={workflowApproval.id}
                 workflowApproval={workflowApproval}

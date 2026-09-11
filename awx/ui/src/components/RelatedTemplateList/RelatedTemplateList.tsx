@@ -54,7 +54,7 @@ function RelatedTemplateList({
   resourceName = null,
 }: RelatedTemplateListProps) {
   const { t } = useLingui();
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
   const location = useLocation();
   const { addToast, Toast, toastProps } = useToast();
 

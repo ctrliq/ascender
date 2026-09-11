@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
@@ -8,11 +9,18 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 
+export interface WorkflowApprovalButtonProps {
+  isDetailView?: boolean;
+  workflowApproval: Untyped;
+  onHandleToast: (...args: Untyped[]) => void;
+  [key: string]: unknown;
+}
+
 function WorkflowApprovalButton({
   isDetailView,
   workflowApproval,
   onHandleToast,
-}) {
+}: WorkflowApprovalButtonProps) {
   const { t } = useLingui();
   const { id } = workflowApproval;
   const hasBeenActedOn =

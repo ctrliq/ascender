@@ -1,10 +1,32 @@
+import type { Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import * as d3 from 'd3';
 import { useLingui } from '@lingui/react/macro';
 import { PageContextConsumer } from '@patternfly/react-core';
 import ChartTooltip from './ChartTooltip';
 
-function LineChart({ id, data, height, pageContext, jobStatus }) {
+export interface LineChartProps {
+  id: string;
+  data: Untyped;
+  height: Untyped;
+  pageContext: Untyped;
+  jobStatus: Untyped;
+  [key: string]: unknown;
+}
+
+/**
+ * One point on the dashboard's job chart: how many jobs ran and how many of
+ * them failed, on one day.
+ */
+interface ChartPoint {
+  /** The day, as the time scale plots it. */
+  DATE: Date;
+  RAN: number;
+  FAIL: number;
+  TOTAL: number;
+}
+
+function LineChart({ id, data, height, pageContext, jobStatus }: LineChartProps) {
   const { isNavOpen } = pageContext;
   const { t } = useLingui();
 
@@ -41,21 +63,25 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
         .getPropertyValue('--pf-t--global--border--color--default')
         .trim() || '#373a41';
 
-    function transition(path) {
+    function transition(path: Untyped) {
       path.transition().duration(1000).attrTween('stroke-dasharray', tweenDash);
     }
 
-    function tweenDash(...params) {
+    // d3 calls this with (datum, index, nodes); only the last two are used.
+    function tweenDash(...params: Untyped[]) {
       const l = params[2][params[1]].getTotalLength();
       const i = d3.interpolateString(`0,${l}`, `${l},${l}`);
-      return (val) => i(val);
+      return (val: Untyped) => i(val);
     }
 
     const x = d3.scaleTime().rangeRound([0, width]);
     const y = d3.scaleLinear().range([height, 0]);
 
     // [success, fail, total]
-    const colors = d3.scaleOrdinal(['#079455', '#912018', '#4e5ba6']);
+    // d3 keys an ordinal scale by string; this chart passes the series
+    // number, which the scale stringifies on the way in.
+    const palette = d3.scaleOrdinal(['#079455', '#912018', '#4e5ba6']);
+    const colors = (series: number) => palette(String(series));
     const svg = d3
       .select(`#${id}`)
       .append('svg')
@@ -76,7 +102,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
     const parseTime = d3.timeParse('%Y-%m-%d');
 
     const formattedData = data.reduce(
-      (formatted, { created, successful, failed }) => {
+      (formatted: Untyped, { created, successful, failed }: Untyped) => {
         const DATE = parseTime(created) || new Date();
         const RAN = +successful || 0;
         const FAIL = +failed || 0;
@@ -86,24 +112,26 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
       []
     );
     // Scale the range of the data
-    const largestY = formattedData.reduce((a_max, b) => {
+    const largestY = formattedData.reduce((a_max: Untyped, b: Untyped) => {
       const b_max = Math.max(b.RAN > b.FAIL ? b.RAN : b.FAIL);
       return a_max > b_max ? a_max : b_max;
     }, 0);
-    x.domain(d3.extent(formattedData, (d) => d.DATE));
+    x.domain(
+      d3.extent(formattedData, (d: ChartPoint) => d.DATE) as [Date, Date]
+    );
     y.domain([
       0,
       largestY > 4 ? largestY + Math.max(largestY / 10, 1) : 5,
     ]).nice();
 
     const successLine = d3
-      .line()
+      .line<ChartPoint>()
       .curve(d3.curveMonotoneX)
       .x((d) => x(d.DATE))
       .y((d) => y(d.RAN));
 
     const failLine = d3
-      .line()
+      .line<ChartPoint>()
       .defined((d) => typeof d.FAIL === 'number')
       .curve(d3.curveMonotoneX)
       .x((d) => x(d.DATE))
@@ -148,11 +176,11 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
     const maxTicks = Math.round(
       formattedData.length / (formattedData.length / 2)
     );
-    ticks = formattedData.map((d) => d.DATE);
+    ticks = formattedData.map((d: Untyped) => d.DATE);
     if (formattedData.length === 31) {
       ticks = formattedData
-        .map((d, i) => (i % maxTicks === 0 ? d.DATE : undefined))
-        .filter((item) => item);
+        .map((d: Untyped, i: Untyped) => (i % maxTicks === 0 ? d.DATE : undefined))
+        .filter((item: Untyped) => item);
     }
 
     svg.select('.domain').attr('stroke', gridColor);
@@ -166,7 +194,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
           .axisBottom(x)
           .tickValues(ticks)
           .tickSize(-height)
-          .tickFormat(d3.timeFormat('%-m/%-d')) // "1/19"
+          .tickFormat(d3.timeFormat('%-m/%-d') as Untyped) // "1/19"
       ) // "Jan-01"
       .selectAll('line')
       .attr('stroke', gridColor);
@@ -196,12 +224,12 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
       .style('stroke-dasharray', '3, 3')
       .style('opacity', '0');
 
-    const handleMouseOver = (event, d) => {
+    const handleMouseOver = (event: Untyped, d: Untyped) => {
       tooltip.handleMouseOver(event, d);
       // show vertical line
       vertical.transition().style('opacity', '1');
     };
-    const handleMouseMove = function mouseMove(event) {
+    const handleMouseMove = function mouseMove(event: Untyped) {
       const [pointerX] = d3.pointer(event);
       vertical.attr('d', () => `M${pointerX},${height} ${pointerX},${0}`);
     };
@@ -231,7 +259,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
 
       svg
         .selectAll('dot')
-        .data(formattedData)
+        .data<ChartPoint>(formattedData)
         .enter()
         .append('circle')
         .attr('r', 3)
@@ -261,7 +289,7 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
 
       svg
         .selectAll('dot')
-        .data(formattedData)
+        .data<ChartPoint>(formattedData)
         .enter()
         .append('circle')
         .attr('r', 3)
@@ -295,8 +323,8 @@ function LineChart({ id, data, height, pageContext, jobStatus }) {
   return <div id={id} style={{ marginTop: '3rem' }} />;
 }
 
-const withPageContext = (Component) =>
-  function contextComponent(props) {
+const withPageContext = (Component: Untyped) =>
+  function contextComponent(props: Untyped) {
     return (
       <PageContextConsumer>
         {(pageContext) => <Component {...props} pageContext={pageContext} />}

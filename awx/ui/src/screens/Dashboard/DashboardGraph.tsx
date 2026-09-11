@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -70,13 +71,13 @@ function DashboardGraph() {
         job_type: jobTypeSelection,
       });
       const newData = {};
-      data.jobs.successful.forEach(([dateSecs, count]) => {
+      data.jobs.successful.forEach(([dateSecs, count]: Untyped[]) => {
         if (!newData[dateSecs]) {
           newData[dateSecs] = {};
         }
         newData[dateSecs].successful = count;
       });
-      data.jobs.failed.forEach(([dateSecs, count]) => {
+      data.jobs.failed.forEach(([dateSecs, count]: Untyped[]) => {
         if (!newData[dateSecs]) {
           newData[dateSecs] = {};
         }

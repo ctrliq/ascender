@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Routes, Route } from 'react-router';
@@ -14,7 +15,7 @@ function ManagementJobs() {
   });
 
   const buildBreadcrumbConfig = useCallback(
-    ({ id, name }, nested) => {
+    ({ id, name }: Untyped, nested: Untyped) => {
       if (!id) return;
 
       setBreadcrumbConfig({
@@ -44,7 +45,9 @@ function ManagementJobs() {
           index
           element={
             <PersistentFilters pageKey="managementJobs">
-              <ManagementJobList setBreadcrumb={buildBreadcrumbConfig} />
+              {/* ManagementJobList takes no props: it reads nothing from
+                  the breadcrumb, and has not since the initial import. */}
+              <ManagementJobList />
             </PersistentFilters>
           }
         />

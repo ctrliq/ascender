@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -22,7 +23,13 @@ const TopologyIcon = styled(PFTopologyIcon)`
   fill: var(--pf-v6-global--Color--200);
 `;
 
-const ContentLoading = ({ className, progress }) => {
+export interface ContentLoadingProps {
+  className: string;
+  progress: Untyped;
+  [key: string]: unknown;
+}
+
+const ContentLoading = ({ className, progress }: ContentLoadingProps) => {
   const { t } = useLingui();
   return (
     <EmptyState variant="full" className={className} data-cy={className}>

@@ -1,10 +1,11 @@
+import type { Untyped } from 'types/api';
 import { useState, useEffect } from 'react';
 import useWebsocket from 'hooks/useWebsocket';
 import useThrottle from 'hooks/useThrottle';
 
 export default function useWsWorkflowApprovals(
-  initialWorkflowApprovals,
-  fetchWorkflowApprovals
+  initialWorkflowApprovals: Untyped,
+  fetchWorkflowApprovals: Untyped
 ) {
   const [workflowApprovals, setWorkflowApprovals] = useState(
     initialWorkflowApprovals
@@ -35,9 +36,9 @@ export default function useWsWorkflowApprovals(
       return;
     }
 
-    setWorkflowApprovals((currentWorkflowApprovals) => {
+    setWorkflowApprovals((currentWorkflowApprovals: Untyped) => {
       const index = currentWorkflowApprovals.findIndex(
-        (p) => p.id === lastMessage.unified_job_id
+        (p: Untyped) => p.id === lastMessage.unified_job_id
       );
 
       if (

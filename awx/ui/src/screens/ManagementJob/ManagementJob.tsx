@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Link,
@@ -20,12 +21,19 @@ import RoutedTabs from 'components/RoutedTabs';
 import { Schedules } from 'components/Schedule';
 import { useConfig } from 'contexts/Config';
 import useRequest from 'hooks/useRequest';
+import type { RoutedTab } from 'components/RoutedTabs/RoutedTabs';
+import type { DetailedError } from 'types/api';
 
-function ManagementJob({ setBreadcrumb }) {
+export interface ManagementJobProps {
+  setBreadcrumb: (...args: Untyped[]) => void;
+  [key: string]: unknown;
+}
+
+function ManagementJob({ setBreadcrumb }: ManagementJobProps) {
   const { t } = useLingui();
   const basePath = '/management_jobs';
 
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
   const { pathname } = useLocation();
   const detailUrl = `${basePath}/${id}`;
   const { me } = useConfig();
@@ -36,7 +44,7 @@ function ManagementJob({ setBreadcrumb }) {
     useCallback(
       () =>
         Promise.all([
-          SystemJobTemplatesAPI.readDetail(id),
+          SystemJobTemplatesAPI.readDetail(id as string),
           OrganizationsAPI.read({
             page_size: 1,
             role_level: 'notification_admin_role',
@@ -68,12 +76,12 @@ function ManagementJob({ setBreadcrumb }) {
   }, [result, setBreadcrumb]);
 
   const createSchedule = useCallback(
-    (data) =>
+    (data: Untyped) =>
       SystemJobTemplatesAPI.createSchedule(result?.systemJobTemplate.id, data),
     [result]
   );
   const loadSchedules = useCallback(
-    (params) =>
+    (params: Untyped) =>
       SystemJobTemplatesAPI.readSchedules(result?.systemJobTemplate.id, params),
     [result]
   );
@@ -88,7 +96,7 @@ function ManagementJob({ setBreadcrumb }) {
     (isNotificationAdmin || me?.is_system_auditor);
   const shouldShowSchedules = !!result?.systemJobTemplate?.id;
 
-  const tabsArray = [
+  const tabsArray: RoutedTab[] = [
     {
       id: 99,
       link: basePath,
@@ -118,7 +126,7 @@ function ManagementJob({ setBreadcrumb }) {
     });
   }
 
-  let Tabs = <RoutedTabs tabsArray={tabsArray} />;
+  let Tabs: React.ReactNode = <RoutedTabs tabsArray={tabsArray} />;
   if (pathname.includes('edit') || pathname.includes('schedules/')) {
     Tabs = null;
   }
@@ -128,7 +136,7 @@ function ManagementJob({ setBreadcrumb }) {
       <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={error}>
-            {error?.response?.status === 404 && (
+            {(error as DetailedError)?.response?.status === 404 && (
               <span>
                 {t`Management job not found.`}
                 <Link to={basePath}>{t`View all management jobs`}</Link>
