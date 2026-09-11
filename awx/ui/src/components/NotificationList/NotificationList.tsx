@@ -1,5 +1,6 @@
 import type { SearchableKey } from 'components/PaginatedTable';
 import type { NotificationsApiModel, Untyped } from 'types/api';
+import type { QSParams } from 'util/qs';
 import React, { useEffect, useCallback, useState } from 'react';
 import { useLocation } from 'react-router';
 
@@ -85,9 +86,9 @@ function NotificationList({
         {}
       );
 
-      const idMatchParams =
+      const idMatchParams: QSParams =
         notificationsResults.length > 0
-          ? { id__in: notificationsResults.map((n: Untyped) => n.id).join(',') }
+          ? { id__in: notificationsResults.map((n) => n.id).join(',') }
           : {};
 
       const [
@@ -128,26 +129,24 @@ function NotificationList({
         typeLabels: labels,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
 
-      if (showApprovalsToggle) {
+      if (showApprovalsToggle && apiModel.readNotificationTemplatesApprovals) {
         const { data: approvalsTemplates } =
           await apiModel.readNotificationTemplatesApprovals(id, idMatchParams);
         rtnObj.approvalsTemplateIds = approvalsTemplates.results.map(
-          (st: Untyped) => st.id
+          (st) => st.id
         );
       } else {
         rtnObj.approvalsTemplateIds = [];
       }
 
-      if (showChangedToggle) {
+      if (showChangedToggle && apiModel.readNotificationTemplatesChanged) {
         const { data: changedTemplates } =
           await apiModel.readNotificationTemplatesChanged(id, idMatchParams);
-        rtnObj.changedTemplateIds = changedTemplates.results.map(
-          (ch: Untyped) => ch.id
-        );
+        rtnObj.changedTemplateIds = changedTemplates.results.map((ch) => ch.id);
       } else {
         rtnObj.changedTemplateIds = [];
       }

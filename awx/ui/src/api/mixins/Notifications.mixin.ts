@@ -1,5 +1,9 @@
 import type { QSParams } from 'util/qs';
-import type { OptionsResponse } from '../../types/api';
+import type {
+  NotificationTemplate,
+  OptionsResponse,
+  Paginated,
+} from '../../types/api';
 import type { BaseConstructor } from '../Base';
 
 const NotificationsMixin = <T extends BaseConstructor>(parent: T) =>
@@ -18,28 +22,28 @@ const NotificationsMixin = <T extends BaseConstructor>(parent: T) =>
     }
 
     readNotificationTemplatesStarted(id: number | string, params?: QSParams) {
-      return this.http.get(
+      return this.http.get<Paginated<NotificationTemplate>>(
         `${this.baseUrl}${id}/notification_templates_started/`,
         { params }
       );
     }
 
     readNotificationTemplatesSuccess(id: number | string, params?: QSParams) {
-      return this.http.get(
+      return this.http.get<Paginated<NotificationTemplate>>(
         `${this.baseUrl}${id}/notification_templates_success/`,
         { params }
       );
     }
 
     readNotificationTemplatesError(id: number | string, params?: QSParams) {
-      return this.http.get(
+      return this.http.get<Paginated<NotificationTemplate>>(
         `${this.baseUrl}${id}/notification_templates_error/`,
         { params }
       );
     }
 
     readNotificationTemplatesChanged(id: number | string, params?: QSParams) {
-      return this.http.get(
+      return this.http.get<Paginated<NotificationTemplate>>(
         `${this.baseUrl}${id}/notification_templates_changed/`,
         { params }
       );

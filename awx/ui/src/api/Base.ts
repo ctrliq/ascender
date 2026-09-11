@@ -7,15 +7,12 @@
 import { encodeQueryString } from 'util/qs';
 import type { QSParams } from 'util/qs';
 import debounce from 'util/debounce';
-import type { OptionsResponse, Paginated } from '../types/api';
+import type { ApiResponse, OptionsResponse, Paginated } from '../types/api';
 import { SESSION_TIMEOUT_KEY } from '../constants';
 
-/** A single API response, in the shape every caller destructures. */
-export interface ApiResponse<T = unknown> {
-  data: T;
-  status: number;
-  headers: Record<string, string>;
-}
+// Declared with the api types, and re-exported here because every caller
+// reaches it through the transport rather than through the type module.
+export type { ApiResponse };
 
 /** An error thrown by a failed request, carrying the response with it. */
 export interface ApiError extends Error {

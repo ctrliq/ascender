@@ -17,6 +17,7 @@
  * types and keeps only the aliases. Until then the shapes below are declared
  * here, and they are the only hand-maintained API types in the tree.
  */
+import type { QSParams } from 'util/qs';
 import type { components } from './api.generated';
 
 type Schemas = components['schemas'];
@@ -133,6 +134,13 @@ type WithNested<T> = Omit<T, 'summary_fields' | 'related'> & {
 };
 
 /** A list endpoint's envelope. */
+/** A single API response, in the shape every caller destructures. */
+export interface ApiResponse<T = unknown> {
+  data: T;
+  status: number;
+  headers: Record<string, string>;
+}
+
 export interface Paginated<T> {
   count: number;
   next: string | null;
@@ -395,7 +403,13 @@ export type AnyInventory = Pick<
   Inventory,
   'id' | 'type' | 'summary_fields' | 'related'
 > &
-  Partial<Inventory & ConstructedInventory & FederatedInventory>;
+  Partial<Inventory & ConstructedInventory & FederatedInventory> & {
+    /**
+     * Set by the list's websocket hook while one of the inventory's sources
+     * is syncing, which the api has no field for.
+     */
+    isSourceSyncRunning?: boolean;
+  };
 export type CredentialInputSource = WithNested<
   Schemas['CredentialInputSource']
 >;
@@ -765,29 +779,59 @@ export interface SortColumn {
  * TypeError at runtime.
  */
 export interface NotificationsApiModel {
-  readNotificationTemplatesStarted: Untyped;
-  readNotificationTemplatesSuccess: Untyped;
-  readNotificationTemplatesError: Untyped;
-  readNotificationTemplatesApprovals?: Untyped;
-  readNotificationTemplatesChanged?: Untyped;
-  associateNotificationTemplate: Untyped;
-  disassociateNotificationTemplate: Untyped;
+  readNotificationTemplatesStarted: ReadNotifications;
+  readNotificationTemplatesSuccess: ReadNotifications;
+  readNotificationTemplatesError: ReadNotifications;
+  readNotificationTemplatesApprovals?: ReadNotifications;
+  readNotificationTemplatesChanged?: ReadNotifications;
+  /**
+   * Which of the five lists a template is put on is decided by the last
+   * argument, which names the state it should notify on: approvals, started,
+   * success, error or changed.
+   */
+  associateNotificationTemplate: (
+    resourceId: number | string,
+    notificationId: number | string,
+    notificationType: string
+  ) => Promise<unknown>;
+  disassociateNotificationTemplate: (
+    resourceId: number | string,
+    notificationId: number | string,
+    notificationType: string
+  ) => Promise<unknown>;
 }
+
+/** One of a resource's five notification lists. */
+export type ReadNotifications = (
+  id: number | string,
+  params?: QSParams
+) => Promise<ApiResponse<Paginated<NotificationTemplate>>>;
 
 /** The access list methods the Access tab is handed. */
 export interface AccessApiModel {
-  readAccessList: Untyped;
-  readAccessOptions: Untyped;
+  readAccessList: (
+    id: number | string,
+    params?: QSParams
+  ) => Promise<ApiResponse<Paginated<AccessListEntry>>>;
+  readAccessOptions: (
+    id: number | string
+  ) => Promise<ApiResponse<OptionsResponse>>;
 }
 
 /** The role association the Add Access wizard is handed. */
 export interface RolesApiModel {
-  associateRole: Untyped;
+  associateRole: (
+    resourceId: number | string,
+    roleId: number | string
+  ) => Promise<unknown>;
 }
 
 /** The schedule creation the Add Schedule form is handed. */
 export interface SchedulesApiModel {
-  createSchedule: Untyped;
+  createSchedule: (
+    id: number | string,
+    data?: unknown
+  ) => Promise<ApiResponse<Schedule>>;
 }
 
 /**

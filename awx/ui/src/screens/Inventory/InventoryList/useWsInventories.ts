@@ -1,4 +1,5 @@
-import type { Untyped } from 'types/api';
+import type { AnyInventory } from 'types/api';
+import type { QSConfig } from 'util/qs';
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { parseQueryString, updateQueryString } from 'util/qs';
@@ -6,15 +7,16 @@ import useWebsocket from 'hooks/useWebsocket';
 import useThrottle from 'hooks/useThrottle';
 
 export default function useWsInventories(
-  initialInventories: Untyped,
-  fetchInventories: Untyped,
-  fetchInventoriesById: Untyped,
-  qsConfig: Untyped
+  initialInventories: AnyInventory[],
+  fetchInventories: () => void,
+  /** Re-reads the rows the socket says have changed, in one request. */
+  fetchInventoriesById: (ids: number[]) => Promise<AnyInventory[]>,
+  qsConfig: QSConfig
 ) {
   const location = useLocation();
   const navigate = useNavigate();
   const [inventories, setInventories] = useState(initialInventories);
-  const [inventoriesToFetch, setInventoriesToFetch] = useState<Untyped[]>([]);
+  const [inventoriesToFetch, setInventoriesToFetch] = useState<number[]>([]);
   const throttledInventoriesToFetch = useThrottle(inventoriesToFetch, 5000);
   const lastMessage = useWebsocket({
     inventories: ['status_changed'],
@@ -26,7 +28,7 @@ export default function useWsInventories(
     setInventories(initialInventories);
   }, [initialInventories]);
 
-  const enqueueId = (id: Untyped) => {
+  const enqueueId = (id: number) => {
     if (!inventoriesToFetch.includes(id)) {
       setInventoriesToFetch((ids) => ids.concat(id));
     }
@@ -42,10 +44,8 @@ export default function useWsInventories(
           throttledInventoriesToFetch
         );
         const updated = [...inventories];
-        newInventories.forEach((inventory: Untyped) => {
-          const index = inventories.findIndex(
-            (i: Untyped) => i.id === inventory.id
-          );
+        newInventories.forEach((inventory) => {
+          const index = inventories.findIndex((i) => i.id === inventory.id);
           if (index === -1) {
             return;
           }
@@ -68,7 +68,7 @@ export default function useWsInventories(
         return;
       }
       const index = inventories.findIndex(
-        (p: Untyped) => p.id === lastMessage.inventory_id
+        (p) => p.id === lastMessage.inventory_id
       );
       if (index === -1) {
         return;
@@ -76,8 +76,13 @@ export default function useWsInventories(
 
       const params = parseQueryString(qsConfig, location.search);
 
-      const inventory = inventories[index];
-      const updatedInventory = {
+      const inventory = inventories[index] as AnyInventory;
+      // pending_deletion is readonly on the model, so the row the list swaps
+      // in is built with it rather than having it written on afterwards.
+      const isPendingDeletion =
+        lastMessage.group_name === 'inventories' &&
+        (lastMessage.status as string) === 'pending_deletion';
+      const updatedInventory: AnyInventory = {
         ...inventory,
       };
 
@@ -113,20 +118,15 @@ export default function useWsInventories(
         return;
       }
 
-      if (
-        lastMessage.group_name === 'inventories' &&
-        (lastMessage.status as string) === 'pending_deletion'
-      ) {
-        updatedInventory.pending_deletion = true;
-      }
-
-      if (lastMessage.group_name !== 'inventories') {
-        updatedInventory.isSourceSyncRunning = true;
-      }
-
       setInventories([
         ...inventories.slice(0, index),
-        updatedInventory,
+        {
+          ...updatedInventory,
+          ...(isPendingDeletion ? { pending_deletion: true } : {}),
+          ...(lastMessage.group_name !== 'inventories'
+            ? { isSourceSyncRunning: true }
+            : {}),
+        },
         ...inventories.slice(index + 1),
       ]);
     },

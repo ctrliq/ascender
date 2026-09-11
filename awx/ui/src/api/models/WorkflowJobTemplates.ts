@@ -2,6 +2,7 @@ import type { QSParams } from 'util/qs';
 import type {
   AccessListEntry,
   LaunchConfig,
+  NotificationTemplate,
   OptionsResponse,
   Paginated,
   SurveyConfig,
@@ -128,7 +129,7 @@ class WorkflowJobTemplates extends SchedulesMixin(
   }
 
   readNotificationTemplatesApprovals(id: number | string, params?: QSParams) {
-    return this.http.get(
+    return this.http.get<Paginated<NotificationTemplate>>(
       `${this.baseUrl}${id}/notification_templates_approvals/`,
       {
         params,

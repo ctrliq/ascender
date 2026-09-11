@@ -3,6 +3,7 @@ import type {
   AccessListEntry,
   Credential,
   ExecutionEnvironment,
+  NotificationTemplate,
   OptionsResponse,
   Organization,
   Paginated,
@@ -94,7 +95,7 @@ class Organizations extends InstanceGroupsMixin(NotificationsMixin(Base)) {
   }
 
   readNotificationTemplatesApprovals(id: number | string, params?: QSParams) {
-    return this.http.get(
+    return this.http.get<Paginated<NotificationTemplate>>(
       `${this.baseUrl}${id}/notification_templates_approvals/`,
       { params }
     );

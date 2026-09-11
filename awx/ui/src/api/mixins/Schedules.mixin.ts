@@ -5,7 +5,7 @@ import type { BaseConstructor } from '../Base';
 const SchedulesMixin = <T extends BaseConstructor>(parent: T) =>
   class extends parent {
     createSchedule(id: number | string, data: unknown) {
-      return this.http.post(`${this.baseUrl}${id}/schedules/`, data);
+      return this.http.post<Schedule>(`${this.baseUrl}${id}/schedules/`, data);
     }
 
     readSchedules(id: number | string, params?: QSParams) {

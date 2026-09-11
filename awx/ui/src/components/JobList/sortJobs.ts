@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { UnifiedJob } from 'types/api';
 import type { QSParams } from 'util/qs';
 
 const sortFns = {
@@ -20,7 +20,7 @@ const sortFns = {
  * Returns:
  *   The jobs in order, cut back to one page.
  */
-export default function sortJobs(jobs: Untyped[], params: QSParams) {
+export default function sortJobs(jobs: UnifiedJob[], params: QSParams) {
   const { order_by = '-finished', page_size = 20 } = params as {
     order_by?: string;
     page_size?: number;
@@ -35,49 +35,59 @@ export default function sortJobs(jobs: Untyped[], params: QSParams) {
   return sorted.slice(0, page_size);
 }
 
-function reverse(fn: Untyped) {
-  return (a: Untyped, b: Untyped) => fn(a, b) * -1;
+/** One comparison between two jobs, in the shape Array.sort takes. */
+type JobComparator = (a: UnifiedJob, b: UnifiedJob) => number;
+
+function reverse(fn: JobComparator): JobComparator {
+  return (a, b) => fn(a, b) * -1;
 }
 
-function byFinished(a: Untyped, b: Untyped) {
+function byFinished(a: UnifiedJob, b: UnifiedJob) {
   if (!a.finished) {
     return 1;
   }
   if (!b.finished) {
     return -1;
   }
-  return sort(new Date(a.finished), new Date(b.finished));
+  return sort(new Date(a.finished as string), new Date(b.finished as string));
 }
 
-function byStarted(a: Untyped, b: Untyped) {
+function byStarted(a: UnifiedJob, b: UnifiedJob) {
   if (!a.started) {
     return 1;
   }
   if (!b.started) {
     return -1;
   }
-  return sort(new Date(a.started), new Date(b.started));
+  return sort(new Date(a.started as string), new Date(b.started as string));
 }
 
-function byId(a: Untyped, b: Untyped) {
+function byId(a: UnifiedJob, b: UnifiedJob) {
   return sort(a.id, b.id);
 }
 
-function byName(a: Untyped, b: Untyped) {
+function byName(a: UnifiedJob, b: UnifiedJob) {
   return sort(a.name, b.name);
 }
 
-function byCreatedBy(a: Untyped, b: Untyped) {
+function byCreatedBy(a: UnifiedJob, b: UnifiedJob) {
   const nameA = a.summary_fields?.created_by?.id;
   const nameB = b.summary_fields?.created_by?.id;
   return sort(nameA, nameB) * -1;
 }
 
-function byProject(a: Untyped, b: Untyped) {
+function byProject(a: UnifiedJob, b: UnifiedJob) {
   return sort(a.unified_job_template, b.unified_job_template);
 }
 
-function sort(a: Untyped, b: Untyped) {
+/**
+ * Orders two of whatever a comparison above pulled off the jobs, which is a
+ * date, a number or a name, with anything missing sorted to the end.
+ */
+function sort(
+  a?: Date | number | string | null,
+  b?: Date | number | string | null
+) {
   if (!a) {
     return -1;
   }

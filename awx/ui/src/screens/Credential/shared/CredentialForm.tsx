@@ -1,4 +1,9 @@
-import type { Untyped } from 'types/api';
+import type {
+  Credential,
+  CredentialInputSource,
+  CredentialType,
+  SummaryFieldRef,
+} from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { Formik, useField, useFormikContext } from 'formik';
@@ -49,9 +54,41 @@ const StyledSelect = styled(Select)`
   }
 `;
 
+/**
+ * What the credential form holds. `inputs` is keyed by whichever fields the
+ * chosen credential type declares, and passwordPrompts by the ones of those
+ * that are set to ask on launch, so both are left open.
+ */
+export interface CredentialFormValues {
+  name?: string;
+  description?: string;
+  organization?: SummaryFieldRef | null;
+  credential_type?: number | string;
+  inputs: Record<string, unknown>;
+  passwordPrompts: Record<string, boolean>;
+  isOrgLookupDisabled?: boolean;
+  [key: string]: unknown;
+}
+
+/** The credential types the form offers, keyed by each one's id. */
+export type CredentialTypesById = Record<number | string, CredentialType>;
+
+export interface CredentialFormProps {
+  credential?: Partial<Credential>;
+  credentialTypes: CredentialTypesById;
+  /** The external credentials some inputs are sourced from, by field name. */
+  inputSources?: Record<string, CredentialInputSource>;
+  onSubmit: (values: CredentialFormValues) => void;
+  onCancel: () => void;
+  submitError?: unknown;
+  isOrgLookupDisabled?: boolean;
+  [key: string]: unknown;
+}
+
 export interface CredentialFormFieldsProps {
-  initialTypeId: Untyped;
-  credentialTypes: Untyped;
+  /** The type the credential already has, absent on the add form. */
+  initialTypeId?: number;
+  credentialTypes: CredentialTypesById;
   [key: string]: unknown;
 }
 
@@ -62,7 +99,7 @@ function CredentialFormFields({
   const { t } = useLingui();
   const { pathname } = useLocation();
   const { setFieldValue, initialValues, setFieldTouched } =
-    useFormikContext<Untyped>();
+    useFormikContext<CredentialFormValues>();
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [filterValue, setFilterValue] = useState('');
   const [credTypeField, credTypeMeta, credTypeHelpers] = useField({
@@ -74,26 +111,20 @@ function CredentialFormFields({
 
   const [orgField, orgMeta, orgHelpers] = useField('organization');
 
-  const credentialTypeOptions = Object.keys(credentialTypes)
-    .map((key) => ({
-      value: credentialTypes[key].id,
-      key: credentialTypes[key].id,
-      label: credentialTypes[key].name,
+  const credentialTypeOptions = Object.values(credentialTypes)
+    .map((type) => ({
+      value: type.id,
+      key: type.id,
+      label: type.name ?? '',
     }))
     .sort((a, b) => (a.label.toLowerCase() > b.label.toLowerCase() ? 1 : -1));
 
   const resetSubFormFields = useCallback(
-    (newCredentialTypeId: Untyped) => {
-      const fields = credentialTypes[newCredentialTypeId].inputs.fields || [];
+    (newCredentialTypeId: number | string) => {
+      const fields = credentialTypes[newCredentialTypeId]?.inputs?.fields || [];
       fields.forEach(
-        ({
-          ask_at_runtime,
-          type,
-          id,
-          choices,
-          default: defaultValue,
-        }: Untyped) => {
-          if (parseInt(newCredentialTypeId, 10) === initialTypeId) {
+        ({ ask_at_runtime, type, id, choices, default: defaultValue }) => {
+          if (parseInt(String(newCredentialTypeId), 10) === initialTypeId) {
             setFieldValue(`inputs.${id}`, initialValues.inputs[id]);
             if (ask_at_runtime) {
               setFieldValue(
@@ -142,7 +173,7 @@ function CredentialFormFields({
   }, [resetSubFormFields, credentialTypeId]);
 
   const handleOrganizationUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('organization', value);
       setFieldTouched('organization', true, false);
     },
@@ -293,7 +324,6 @@ function CredentialFormFields({
         )}
       </FormGroup>
       {credentialTypeId !== undefined &&
-        credentialTypeId !== '' &&
         credentialTypes[credentialTypeId]?.inputs?.fields && (
           <TypeInputsSubForm
             credentialType={credentialTypes[credentialTypeId]}
@@ -312,34 +342,28 @@ function CredentialForm({
   submitError = null,
   isOrgLookupDisabled,
   ...rest
-}: Untyped) {
+}: CredentialFormProps) {
   const initialTypeId = credential?.credential_type;
   const { t } = useLingui();
 
   const [showExternalTestModal, setShowExternalTestModal] = useState(false);
   // Assembled from whichever fields the chosen credential type declares,
   // so its shape is not known until one is chosen.
-  const initialValues: Untyped = {
+  const initialValues: CredentialFormValues = {
     name: credential.name || '',
     description: credential.description || '',
     organization: credential?.summary_fields?.organization || null,
-    credential_type: credentialTypes[initialTypeId]?.id || '',
+    credential_type: credentialTypes[initialTypeId ?? '']?.id || '',
     inputs: { ...credential?.inputs },
     passwordPrompts: {},
     isOrgLookupDisabled: isOrgLookupDisabled || false,
   };
 
-  Object.values(credentialTypes).forEach((credentialType: Untyped) => {
+  Object.values(credentialTypes).forEach((credentialType) => {
     if (!credential.id || credential.credential_type === credentialType.id) {
-      const fields = credentialType.inputs.fields || [];
+      const fields = credentialType.inputs?.fields || [];
       fields.forEach(
-        ({
-          ask_at_runtime,
-          type,
-          id,
-          choices,
-          default: defaultValue,
-        }: Untyped) => {
+        ({ ask_at_runtime, type, id, choices, default: defaultValue }) => {
           if (credential?.inputs && id in credential.inputs) {
             if (ask_at_runtime) {
               initialValues.passwordPrompts[id] =
@@ -374,9 +398,9 @@ function CredentialForm({
     }
   });
 
-  Object.values(inputSources).forEach((inputSource: Untyped) => {
-    initialValues.inputs[inputSource.input_field_name] = {
-      credential: inputSource.summary_fields.source_credential,
+  Object.values(inputSources).forEach((inputSource) => {
+    initialValues.inputs[inputSource.input_field_name as string] = {
+      credential: inputSource.summary_fields?.source_credential,
       inputs: inputSource.metadata,
     };
   });
@@ -390,7 +414,7 @@ function CredentialForm({
         // If it's the name, replace it with the id before making the request.
         actualValues.credential_type =
           Object.keys(credentialTypes).find(
-            (key) => credentialTypes[key].name === credential_type
+            (key) => credentialTypes[key]?.name === credential_type
           ) || credential_type;
         onSubmit(actualValues);
       }}
@@ -453,8 +477,12 @@ function CredentialForm({
           </Form>
           {showExternalTestModal && (
             <ExternalTestModal
-              credential={credential}
-              credentialType={credentialTypes[formik.values.credential_type]}
+              credential={credential as Credential}
+              credentialType={
+                credentialTypes[
+                  formik.values.credential_type ?? ''
+                ] as CredentialType
+              }
               credentialFormValues={formik.values}
               onClose={() => setShowExternalTestModal(false)}
             />

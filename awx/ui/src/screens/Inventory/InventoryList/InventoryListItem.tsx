@@ -1,4 +1,4 @@
-import type { Inventory, Untyped } from 'types/api';
+import type { AnyInventory, Untyped } from 'types/api';
 import React, { useState, useCallback } from 'react';
 
 import { Button, Label } from '@patternfly/react-core';
@@ -14,8 +14,7 @@ import StatusLabel from 'components/StatusLabel';
 import { getInventoryPath } from '../shared/utils';
 
 export interface InventoryListItemProps {
-  /** The websocket hook adds isSourceSyncRunning; the API does not send it. */
-  inventory: Inventory & { isSourceSyncRunning?: boolean };
+  inventory: AnyInventory;
   rowIndex: number;
   isSelected: boolean;
   onSelect: (item?: Untyped) => void;
@@ -62,20 +61,20 @@ function InventoryListItem({
     federated: t`Federated Inventory`,
   };
 
+  const failedSources = inventory.inventory_sources_with_failures ?? 0;
   let syncStatus = 'disabled';
   if (inventory.isSourceSyncRunning) {
     syncStatus = 'syncing';
   } else if (inventory.has_inventory_sources) {
-    syncStatus =
-      inventory.inventory_sources_with_failures > 0 ? 'error' : 'success';
+    syncStatus = failedSources > 0 ? 'error' : 'success';
   }
 
   let tooltipContent: React.ReactNode = '';
   if (inventory.has_inventory_sources) {
-    if (inventory.inventory_sources_with_failures > 0) {
+    if (failedSources > 0) {
       tooltipContent = (
         <Plural
-          value={inventory.inventory_sources_with_failures}
+          value={failedSources}
           one="# source with sync failures."
           other="# sources with sync failures."
         />
