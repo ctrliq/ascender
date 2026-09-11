@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, UnifiedJob } from 'types/api';
 import { useState, useEffect } from 'react';
 import useWebsocket from 'hooks/useWebsocket';
 import { getJobModel } from 'util/jobs';
@@ -62,7 +62,7 @@ export default function useWsJob(initialJob: Untyped) {
   return job;
 }
 
-function updateJob(job: Untyped, message: Untyped) {
+function updateJob(job: UnifiedJob, message: Untyped) {
   return {
     ...job,
     finished: message.finished,

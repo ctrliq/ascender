@@ -22,6 +22,7 @@ import { ResourceAccessList } from 'components/ResourceAccessList';
 import { Schedules } from 'components/Schedule';
 import RelatedTemplateList from 'components/RelatedTemplateList';
 import { OrganizationsAPI, ProjectsAPI } from 'api';
+import type { QSParams } from 'util/qs';
 import ProjectDetail from './ProjectDetail';
 import ProjectEdit from './ProjectEdit';
 
@@ -89,7 +90,7 @@ function Project({ setBreadcrumb }: ProjectProps) {
   );
 
   const loadSchedules = useCallback(
-    (params: Untyped) => ProjectsAPI.readSchedules(project.id, params),
+    (params: QSParams) => ProjectsAPI.readSchedules(project.id, params),
     [project]
   );
 

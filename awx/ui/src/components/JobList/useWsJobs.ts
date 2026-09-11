@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, UnifiedJob } from 'types/api';
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import useWebsocket from 'hooks/useWebsocket';
@@ -51,7 +51,7 @@ export default function useWsJobs(
       setJobsToFetch([]);
       const newJobs = await fetchJobsById(throttledJobsToFetch);
       const deduplicated = newJobs.filter(
-        (job: Untyped) => !jobs.find((j: Untyped) => j.id === job.id)
+        (job: UnifiedJob) => !jobs.find((j: Untyped) => j.id === job.id)
       );
       if (deduplicated.length) {
         const params = parseQueryString(qsConfig, location.search);

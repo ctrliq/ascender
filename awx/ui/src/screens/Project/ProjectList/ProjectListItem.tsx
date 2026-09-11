@@ -1,4 +1,4 @@
-import type { Project, Untyped } from 'types/api';
+import type { SummaryFieldRef, Project, Untyped } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Button, ClipboardCopy, Tooltip } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
@@ -61,14 +61,16 @@ function ProjectListItem({
     await fetchProjects();
   }, [project.id, project.name, fetchProjects, onCopy]);
 
-  const generateLastJobTooltip = (job: Untyped) => (
+  const generateLastJobTooltip = (
+    job: SummaryFieldRef & { status?: string; finished?: string | null }
+  ) => (
     <>
       <div>{t`MOST RECENT SYNC`}</div>
       <div>
         {t`JOB ID:`} {job.id}
       </div>
       <div>
-        {t`STATUS:`} {job.status.toUpperCase()}
+        {t`STATUS:`} {job.status?.toUpperCase()}
       </div>
       {job.finished && (
         <div>

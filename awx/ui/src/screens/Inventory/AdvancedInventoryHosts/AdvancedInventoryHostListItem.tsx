@@ -1,4 +1,4 @@
-import type { Host, Untyped } from 'types/api';
+import type { Host, Untyped, RecentJob } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -29,7 +29,7 @@ function AdvancedInventoryHostListItem({
   inventoryType,
 }: AdvancedInventoryHostListItemProps) {
   const { t } = useLingui();
-  const recentPlaybookJobs = recent_jobs?.map((job: Untyped) => ({
+  const recentPlaybookJobs = recent_jobs?.map((job: RecentJob) => ({
     ...job,
     type: 'job',
   }));

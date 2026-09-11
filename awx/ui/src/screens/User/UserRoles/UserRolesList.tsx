@@ -159,7 +159,7 @@ function UserRolesList({ user }: UserRolesListProps) {
             <HeaderCell>{t`Role`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(role: Untyped, index: Untyped) => (
+        renderRow={(role: Untyped, index: number) => (
           <UserRolesListItem
             key={role.id}
             value={role.name}

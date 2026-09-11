@@ -12,7 +12,7 @@ function isEqual(array1: Untyped, array2: Untyped) {
   return (
     array1.length === array2.length &&
     array1.every(
-      (element: Untyped, index: Untyped) => element.id === array2[index].id
+      (element: Untyped, index: number) => element.id === array2[index].id
     )
   );
 }

@@ -1,5 +1,6 @@
 import type { Untyped } from 'types/api';
 import { useState, useEffect, useReducer } from 'react';
+import type { WorkflowNode } from '../../../components/Workflow/workflowReducer';
 
 const initialState = {
   // array of root level nodes (no parent_uuid)
@@ -85,19 +86,19 @@ export default function useJobEvents(
       dispatch({ type: TOGGLE_NODE_COLLAPSED, uuid, isCollapsed }),
     toggleCollapseAll: (isCollapsed: Untyped) =>
       dispatch({ type: TOGGLE_COLLAPSE_ALL, isCollapsed }),
-    getEventForRow: (rowIndex: Untyped) => getEventForRow(state, rowIndex),
-    getNodeForRow: (rowIndex: Untyped) => getNodeForRow(state, rowIndex),
+    getEventForRow: (rowIndex: number) => getEventForRow(state, rowIndex),
+    getNodeForRow: (rowIndex: number) => getNodeForRow(state, rowIndex),
     getTotalNumChildren: (uuid: Untyped) => {
       const node = getNodeByUuid(state, uuid);
       return getTotalNumChildren(node, state.childrenSummary);
     },
     getNumCollapsedEvents: () =>
       state.tree.reduce(
-        (sum: Untyped, node: Untyped) =>
+        (sum: Untyped, node: WorkflowNode) =>
           sum + getNumCollapsedChildren(node, state.childrenSummary),
         0
       ),
-    getCounterForRow: (rowIndex: Untyped) => getCounterForRow(state, rowIndex),
+    getCounterForRow: (rowIndex: number) => getCounterForRow(state, rowIndex),
     getEvent: (eventIndex: Untyped) => getEvent(state, eventIndex),
     clearLoadedEvents: () => dispatch({ type: CLEAR_EVENTS }),
     rebuildEventsTree: () => dispatch({ type: REBUILD_TREE }),
@@ -197,7 +198,7 @@ export function jobEventsReducer(
       children: [],
     };
     const index = state.tree.findIndex(
-      (node: Untyped) => node.eventIndex > eventIndex
+      (node: WorkflowNode) => node.eventIndex > eventIndex
     );
     const updatedTree = [...state.tree];
     if (index === -1) {
@@ -231,18 +232,26 @@ export function jobEventsReducer(
       children: [],
     };
     const index = parent.children.findIndex(
-      (node: Untyped) => node.eventIndex >= eventIndex
+      (node: WorkflowNode) => node.eventIndex >= eventIndex
     );
     if (index === -1) {
-      state = updateNodeByUuid(state, event.parent_uuid, (node: Untyped) => {
-        node.children.push(newNode);
-        return node;
-      });
+      state = updateNodeByUuid(
+        state,
+        event.parent_uuid,
+        (node: WorkflowNode) => {
+          node.children.push(newNode);
+          return node;
+        }
+      );
     } else {
-      state = updateNodeByUuid(state, event.parent_uuid, (node: Untyped) => {
-        node.children.splice(index, 0, newNode);
-        return node;
-      });
+      state = updateNodeByUuid(
+        state,
+        event.parent_uuid,
+        (node: WorkflowNode) => {
+          node.children.splice(index, 0, newNode);
+          return node;
+        }
+      );
     }
     state = _gatherEventsForNewParent(
       {
@@ -302,7 +311,7 @@ export function jobEventsReducer(
   }
 }
 
-function getEventForRow(state: Untyped, rowIndex: Untyped) {
+function getEventForRow(state: Untyped, rowIndex: number) {
   const { node } = _getNodeForRow(state, rowIndex, state.tree);
   if (node) {
     return {
@@ -417,7 +426,7 @@ function _getLastDescendantNode(nodes: Untyped) {
   return lastDescendant;
 }
 
-function getTotalNumChildren(node: Untyped, childrenSummary: Untyped) {
+function getTotalNumChildren(node: WorkflowNode, childrenSummary: Untyped) {
   if (childrenSummary[node.eventIndex]) {
     return childrenSummary[node.eventIndex].numChildren;
   }
@@ -429,7 +438,7 @@ function getTotalNumChildren(node: Untyped, childrenSummary: Untyped) {
   return estimatedNumChildren;
 }
 
-function getNumCollapsedChildren(node: Untyped, childrenSummary: Untyped) {
+function getNumCollapsedChildren(node: WorkflowNode, childrenSummary: Untyped) {
   if (node.isCollapsed) {
     return getTotalNumChildren(node, childrenSummary);
   }
@@ -442,7 +451,7 @@ function getNumCollapsedChildren(node: Untyped, childrenSummary: Untyped) {
 
 function toggleNodeIsCollapsed(state: Untyped, eventUuid: Untyped) {
   return {
-    ...updateNodeByUuid(state, eventUuid, (node: Untyped) => ({
+    ...updateNodeByUuid(state, eventUuid, (node: WorkflowNode) => ({
       ...node,
       isCollapsed: !node.isCollapsed,
     })),
@@ -451,7 +460,7 @@ function toggleNodeIsCollapsed(state: Untyped, eventUuid: Untyped) {
 }
 
 function toggleCollapseAll(state: Untyped, isAllCollapsed: Untyped) {
-  const newTree = state.tree.map((node: Untyped) =>
+  const newTree = state.tree.map((node: WorkflowNode) =>
     _toggleNestedNodes(state.events, node, isAllCollapsed)
   );
   return { ...state, tree: newTree, isAllCollapsed };
@@ -498,7 +507,7 @@ function _updateNodeByIndex(
   update: Untyped
 ): Untyped {
   const nextIndex = nodeArray.findIndex(
-    (node: Untyped) => node.eventIndex > target
+    (node: WorkflowNode) => node.eventIndex > target
   );
   const targetIndex = nextIndex === -1 ? nodeArray.length - 1 : nextIndex - 1;
   let updatedNode;
@@ -533,11 +542,11 @@ function getNodeByUuid(state: Untyped, uuid: Untyped) {
   return _getNodeByIndex(state.tree, index);
 }
 
-function _getNodeByIndex(arr: Untyped, index: Untyped) {
+function _getNodeByIndex(arr: Untyped, index: number) {
   if (!arr.length) {
     return null;
   }
-  const i = arr.findIndex((node: Untyped) => node.eventIndex >= index);
+  const i = arr.findIndex((node: WorkflowNode) => node.eventIndex >= index);
   if (i === -1) {
     return _getNodeByIndex(arr[arr.length - 1].children, index);
   }

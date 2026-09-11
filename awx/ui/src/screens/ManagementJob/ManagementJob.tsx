@@ -22,6 +22,7 @@ import { Schedules } from 'components/Schedule';
 import { useConfig } from 'contexts/Config';
 import useRequest from 'hooks/useRequest';
 import type { RoutedTab } from 'components/RoutedTabs/RoutedTabs';
+import type { QSParams } from 'util/qs';
 
 export interface ManagementJobProps {
   setBreadcrumb: (...args: Untyped[]) => void;
@@ -80,7 +81,7 @@ function ManagementJob({ setBreadcrumb }: ManagementJobProps) {
     [result]
   );
   const loadSchedules = useCallback(
-    (params: Untyped) =>
+    (params: QSParams) =>
       SystemJobTemplatesAPI.readSchedules(result?.systemJobTemplate.id, params),
     [result]
   );

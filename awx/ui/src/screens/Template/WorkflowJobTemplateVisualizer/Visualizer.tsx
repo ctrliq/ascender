@@ -38,6 +38,7 @@ import {
 import VisualizerGraph from './VisualizerGraph';
 import VisualizerStartScreen from './VisualizerStartScreen';
 import VisualizerToolbar from './VisualizerToolbar';
+import type { WorkflowNode } from '../../../components/Workflow/workflowReducer';
 
 const CenteredContent = styled.div`
   align-items: center;
@@ -53,9 +54,9 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const replaceIdentifier = (node: Untyped) => {
+const replaceIdentifier = (node: WorkflowNode) => {
   if (
-    stringIsUUID(node.originalNodeObject.identifier) &&
+    stringIsUUID(node.originalNodeObject?.identifier) &&
     typeof node.identifier === 'string' &&
     node.identifier !== ''
   ) {
@@ -63,8 +64,8 @@ const replaceIdentifier = (node: Untyped) => {
   }
 
   if (
-    !stringIsUUID(node.originalNodeObject.identifier) &&
-    node.originalNodeObject.identifier !== node.identifier
+    !stringIsUUID(node.originalNodeObject?.identifier) &&
+    node.originalNodeObject?.identifier !== node.identifier
   ) {
     return true;
   }

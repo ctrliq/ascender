@@ -1,4 +1,7 @@
-import type { WorkflowState } from 'components/Workflow/workflowReducer';
+import type {
+  WorkflowState,
+  WorkflowNode,
+} from 'components/Workflow/workflowReducer';
 import type { Untyped } from 'types/api';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
@@ -132,7 +135,7 @@ function WorkflowOutputGraph() {
     }
   }, [zoomRef]);
 
-  const focusOnNode = (node: Untyped) => {
+  const focusOnNode = (node: WorkflowNode) => {
     // Only reachable once the graph has laid itself out, which is what fills
     // in the positions and what renders the node this is called from.
     const positions = nodePositions as Record<string, { x: number; y: number }>;
@@ -260,7 +263,7 @@ function WorkflowOutputGraph() {
               return null;
             }),
             <WorkflowStartNode key="start" showActionTooltip={false} />,
-            nodes.map((node: Untyped) => {
+            nodes.map((node: WorkflowNode) => {
               if (node.id > 1 && nodePositions[node.id]) {
                 return (
                   <WorkflowOutputNode

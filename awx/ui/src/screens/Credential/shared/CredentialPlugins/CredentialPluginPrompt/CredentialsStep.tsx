@@ -72,7 +72,7 @@ function CredentialsStep() {
           <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
         </HeaderRow>
       }
-      renderRow={(credential: Untyped, index: Untyped) => (
+      renderRow={(credential: Untyped, index: number) => (
         <CheckboxListItem
           rowIndex={index}
           isSelected={selectedCredential?.value?.id === credential.id}

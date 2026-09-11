@@ -164,7 +164,7 @@ function TeamList() {
                 ]}
               />
             )}
-            renderRow={(team: Untyped, index: Untyped) => (
+            renderRow={(team: Untyped, index: number) => (
               <TeamListItem
                 key={team.id}
                 team={team}

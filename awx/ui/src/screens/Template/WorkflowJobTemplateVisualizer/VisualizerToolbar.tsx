@@ -1,6 +1,7 @@
 import type {
   WorkflowAction,
   WorkflowState,
+  WorkflowNode,
 } from 'components/Workflow/workflowReducer';
 import type { Untyped } from 'types/api';
 import React, { useContext } from 'react';
@@ -78,7 +79,8 @@ function VisualizerToolbar({
   const config = useConfig();
 
   const totalNodes =
-    nodes.reduce((n: Untyped, node: Untyped) => n + !node.isDeleted, 0) - 1;
+    nodes.reduce((n: Untyped, node: WorkflowNode) => n + !node.isDeleted, 0) -
+    1;
 
   return (
     <div id="visualizer-toolbar">

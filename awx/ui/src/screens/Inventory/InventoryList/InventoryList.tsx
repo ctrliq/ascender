@@ -275,7 +275,7 @@ function InventoryList() {
                 ]}
               />
             )}
-            renderRow={(inventory: Untyped, index: Untyped) => (
+            renderRow={(inventory: Untyped, index: number) => (
               <InventoryListItem
                 key={inventory.id}
                 value={inventory.name}

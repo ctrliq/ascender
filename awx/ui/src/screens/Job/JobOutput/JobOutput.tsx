@@ -308,7 +308,7 @@ function JobOutput({
   // (garbled / overlapping / missing rows).
   const remeasure = useCallback(() => {}, []);
 
-  const scrollToRow = (rowIndex: Untyped) => {
+  const scrollToRow = (rowIndex: number) => {
     setLastScrollPosition(rowIndex);
     // Read the row count from the ref so this works correctly even when invoked
     // from a memoized callback (scrollToEnd) that captured an earlier render.
@@ -722,7 +722,7 @@ function JobOutput({
     setIsHostModalOpen(false);
   };
 
-  const renderRow = (index: Untyped) => {
+  const renderRow = (index: number) => {
     let event;
     let node: Untyped;
     try {

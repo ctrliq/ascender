@@ -168,7 +168,7 @@ function CredentialList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(item: Untyped, index: Untyped) => (
+            renderRow={(item: Untyped, index: number) => (
               <CredentialListItem
                 key={item.id}
                 credential={item}

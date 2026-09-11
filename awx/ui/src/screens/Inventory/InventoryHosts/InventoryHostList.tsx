@@ -180,7 +180,7 @@ function InventoryHostList() {
             ]}
           />
         )}
-        renderRow={(host: Untyped, index: Untyped) => (
+        renderRow={(host: Untyped, index: number) => (
           <InventoryHostItem
             key={host.id}
             host={host}

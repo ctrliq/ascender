@@ -212,7 +212,7 @@ function HostList() {
               ]}
             />
           )}
-          renderRow={(host: Untyped, index: Untyped) => (
+          renderRow={(host: Untyped, index: number) => (
             <HostListItem
               key={host.id}
               host={host}

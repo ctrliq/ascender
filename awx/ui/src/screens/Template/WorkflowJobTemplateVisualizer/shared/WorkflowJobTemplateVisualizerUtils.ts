@@ -6,10 +6,13 @@ import {
   SystemJobTemplatesAPI,
   WorkflowJobTemplatesAPI,
 } from 'api';
+import type { WorkflowNode } from '../../../../components/Workflow/workflowReducer';
 
 // A tuple rather than an array, so a caller destructuring it gets the name
 // and the model rather than a union of the two.
-export default function getNodeType(node: Untyped): [string | null, Untyped] {
+export default function getNodeType(
+  node: WorkflowNode
+): [string | null, Untyped] {
   const ujtType = node?.type || node?.unified_job_type;
   switch (ujtType) {
     case 'job_template':

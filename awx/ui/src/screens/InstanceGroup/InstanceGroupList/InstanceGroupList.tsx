@@ -201,7 +201,7 @@ function InstanceGroupList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(instanceGroup: Untyped, index: Untyped) => (
+            renderRow={(instanceGroup: Untyped, index: number) => (
               <InstanceGroupListItem
                 key={instanceGroup.id}
                 value={instanceGroup.name}

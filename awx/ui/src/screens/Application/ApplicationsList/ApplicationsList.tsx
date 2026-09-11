@@ -154,7 +154,7 @@ function ApplicationsList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(application: Untyped, index: Untyped) => (
+            renderRow={(application: Untyped, index: number) => (
               <ApplicationListItem
                 key={application.id}
                 value={application.name}

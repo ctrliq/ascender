@@ -214,7 +214,7 @@ function WorkflowApprovalsList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(workflowApproval: Untyped, index: Untyped) => (
+            renderRow={(workflowApproval: Untyped, index: number) => (
               <WorkflowApprovalListItem
                 key={workflowApproval.id}
                 workflowApproval={workflowApproval}

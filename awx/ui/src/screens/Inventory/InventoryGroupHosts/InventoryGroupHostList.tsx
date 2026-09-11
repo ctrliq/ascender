@@ -24,6 +24,7 @@ import AssociateModal from 'components/AssociateModal';
 import DisassociateButton from 'components/DisassociateButton';
 import AdHocCommands from 'components/AdHocCommands/AdHocCommands';
 import AddDropDownButton from 'components/AddDropDownButton';
+import type { QSParams } from 'util/qs';
 import InventoryGroupHostListItem from './InventoryGroupHostListItem';
 
 const QS_CONFIG = getQSConfig('host', {
@@ -121,7 +122,7 @@ function InventoryGroupHostList() {
   };
 
   const fetchHostsToAssociate = useCallback(
-    (params: Untyped) =>
+    (params: QSParams) =>
       InventoriesAPI.readHosts(
         inventoryId,
         mergeParams(params, { not__groups: groupId })
@@ -266,7 +267,7 @@ function InventoryGroupHostList() {
             ]}
           />
         )}
-        renderRow={(host: Untyped, index: Untyped) => (
+        renderRow={(host: Untyped, index: number) => (
           <InventoryGroupHostListItem
             key={host.id}
             rowIndex={index}

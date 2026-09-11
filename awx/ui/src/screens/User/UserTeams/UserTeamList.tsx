@@ -21,6 +21,7 @@ import useSelected from 'hooks/useSelected';
 import { TeamsAPI, UsersAPI } from 'api';
 import { getQSConfig, mergeParams, parseQueryString } from 'util/qs';
 
+import type { QSParams } from 'util/qs';
 import UserTeamListItem from './UserTeamListItem';
 
 const QS_CONFIG = getQSConfig('teams', {
@@ -149,7 +150,7 @@ function UserTeamList() {
     userOptions && Object.prototype.hasOwnProperty.call(userOptions, 'POST');
 
   const fetchTeamsToAssociate = useCallback(
-    (params: Untyped) =>
+    (params: QSParams) =>
       TeamsAPI.read(
         mergeParams(params, {
           not__member_role__members__id: userId,
@@ -181,7 +182,7 @@ function UserTeamList() {
             <HeaderCell>{t`Description`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(team: Untyped, index: Untyped) => (
+        renderRow={(team: Untyped, index: number) => (
           <UserTeamListItem
             key={team.id}
             value={team.name}

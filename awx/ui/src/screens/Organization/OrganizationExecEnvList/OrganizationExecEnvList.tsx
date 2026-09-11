@@ -115,7 +115,7 @@ function OrganizationExecEnvList({
             <HeaderCell sortKey="image">{t`Image`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(executionEnvironment: Untyped, index: Untyped) => (
+        renderRow={(executionEnvironment: Untyped, index: number) => (
           <OrganizationExecEnvListItem
             key={executionEnvironment.id}
             executionEnvironment={executionEnvironment}

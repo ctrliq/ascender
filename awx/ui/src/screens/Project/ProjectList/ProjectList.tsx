@@ -260,7 +260,7 @@ function ProjectList() {
                 ]}
               />
             )}
-            renderRow={(project: Untyped, index: Untyped) => (
+            renderRow={(project: Untyped, index: number) => (
               <ProjectListItem
                 isExpanded={expanded.some((row) => row.id === project.id)}
                 onExpand={() => handleExpand(project)}

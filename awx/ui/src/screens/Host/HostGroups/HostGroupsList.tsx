@@ -21,6 +21,7 @@ import PaginatedTable, {
 import AssociateModal from 'components/AssociateModal';
 import DisassociateButton from 'components/DisassociateButton';
 import DataListToolbar from 'components/DataListToolbar';
+import type { QSParams } from 'util/qs';
 import HostGroupItem from './HostGroupItem';
 
 const QS_CONFIG = getQSConfig('group', {
@@ -118,7 +119,7 @@ function HostGroupsList({ host }: HostGroupsListProps) {
   };
 
   const fetchGroupsToAssociate = useCallback(
-    (params: Untyped) =>
+    (params: QSParams) =>
       InventoriesAPI.readGroups(
         invId,
         mergeParams(params, { not__hosts: hostId })
@@ -186,7 +187,7 @@ function HostGroupsList({ host }: HostGroupsListProps) {
             <HeaderCell>{t`Actions`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(item: Untyped, index: Untyped) => (
+        renderRow={(item: Untyped, index: number) => (
           <HostGroupItem
             key={item.id}
             group={item}

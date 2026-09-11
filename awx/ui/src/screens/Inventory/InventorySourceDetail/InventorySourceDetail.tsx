@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, UnifiedJob } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -183,7 +183,7 @@ function InventorySourceDetail({
     return <ContentError error={error} />;
   }
 
-  const generateLastJobTooltip = (job: Untyped) => (
+  const generateLastJobTooltip = (job: UnifiedJob) => (
     <>
       <div>{t`MOST RECENT SYNC`}</div>
       <div>

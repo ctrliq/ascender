@@ -20,6 +20,7 @@ import DataListToolbar from 'components/DataListToolbar';
 import { InstancesAPI, ReceptorAPI } from 'api';
 import useExpanded from 'hooks/useExpanded';
 import useSelected from 'hooks/useSelected';
+import type { QSParams } from 'util/qs';
 import InstancePeerListItem from './InstancePeerListItem';
 
 const QS_CONFIG = getQSConfig('peer', {
@@ -116,7 +117,7 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
     useSelected(peers);
 
   const fetchPeersToAssociate = useCallback(
-    async (params: Untyped) => {
+    async (params: QSParams) => {
       const address_list = [];
 
       // do not show this instance or instances that are already peered
@@ -291,7 +292,7 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
             ]}
           />
         )}
-        renderRow={(peer: Untyped, index: Untyped) => (
+        renderRow={(peer: Untyped, index: number) => (
           <InstancePeerListItem
             isSelected={selected.some((row) => row.id === peer.id)}
             onSelect={() => handleSelect(peer)}

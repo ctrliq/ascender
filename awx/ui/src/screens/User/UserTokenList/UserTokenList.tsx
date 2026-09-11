@@ -193,7 +193,7 @@ function UserTokenList() {
             <HeaderCell sortKey="expires">{t`Expires`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(token: Untyped, index: Untyped) => (
+        renderRow={(token: Untyped, index: number) => (
           <UserTokensListItem
             key={token.id}
             token={token}

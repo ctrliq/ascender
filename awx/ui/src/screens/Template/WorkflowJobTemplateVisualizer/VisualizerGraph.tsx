@@ -72,7 +72,7 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
     WorkflowDispatchContext
   ) as React.Dispatch<WorkflowAction>;
 
-  const drawPotentialLinkToNode = (node: Untyped) => {
+  const drawPotentialLinkToNode = (node: WorkflowNode) => {
     if (node.id !== addLinkSourceNode.id) {
       const sourceNodeX = (
         nodePositions[addLinkSourceNode.id] as NodePositions[number]
@@ -294,7 +294,7 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
               }
               return null;
             }),
-            nodes.map((node: Untyped) => {
+            nodes.map((node: WorkflowNode) => {
               if (node.id > 1 && nodePositions[node.id] && !node.isDeleted) {
                 return (
                   <VisualizerNode

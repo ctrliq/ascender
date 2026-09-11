@@ -97,7 +97,7 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
                   formattedChoicesField.value.length > 1
                 ) {
                   const removeEmptyField = formattedChoicesField.value.filter(
-                    (c: Untyped, index: Untyped) => index !== i
+                    (c: Untyped, index: number) => index !== i
                   );
 
                   formattedChoicesHelpers.setValue(removeEmptyField);
@@ -106,7 +106,7 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
               value={choice}
               onChange={(_event, value) => {
                 const newValues = formattedChoicesField.value.map(
-                  (choiceField: Untyped, index: Untyped) =>
+                  (choiceField: Untyped, index: number) =>
                     i === index
                       ? { choice: value, isDefault: false, id: choiceField.id }
                       : choiceField
@@ -121,7 +121,7 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
               isDisabled={!choice.trim()}
               onClick={() => {
                 const newValues = formattedChoicesField.value.map(
-                  (choiceField: Untyped, index: Untyped) =>
+                  (choiceField: Untyped, index: number) =>
                     i === index
                       ? {
                           choice: choiceField.choice,
@@ -131,7 +131,7 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
                       : choiceField
                 );
                 const singleSelectValues = formattedChoicesField.value.map(
-                  (choiceField: Untyped, index: Untyped) =>
+                  (choiceField: Untyped, index: number) =>
                     i === index
                       ? {
                           choice: choiceField.choice,

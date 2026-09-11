@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { Routes, Route, Navigate } from 'react-router';
 import { PageSection, Card } from '@patternfly/react-core';
@@ -7,6 +6,7 @@ import { useLingui } from '@lingui/react/macro';
 import ScreenHeader from 'components/ScreenHeader';
 import { ScheduleList } from 'components/Schedule';
 import { SchedulesAPI } from 'api';
+import type { QSParams } from 'util/qs';
 
 function AllSchedules() {
   const { t } = useLingui();
@@ -14,7 +14,7 @@ function AllSchedules() {
   const loadScheduleOptions = useCallback(() => SchedulesAPI.readOptions(), []);
 
   const loadSchedules = useCallback(
-    (params: Untyped) => SchedulesAPI.read(params),
+    (params: QSParams) => SchedulesAPI.read(params),
     []
   );
 

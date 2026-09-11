@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, UnifiedJob } from 'types/api';
 import React, { useContext, useEffect, useState } from 'react';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
@@ -7,13 +7,13 @@ import { KebabifiedContext } from 'contexts/Kebabified';
 import { isJobRunning } from 'util/jobs';
 import AlertModal from '../AlertModal';
 
-function cannotCancelBecausePermissions(job: Untyped) {
+function cannotCancelBecausePermissions(job: UnifiedJob) {
   return (
     !job.summary_fields.user_capabilities?.start && isJobRunning(job.status)
   );
 }
 
-function cannotCancelBecauseNotRunning(job: Untyped) {
+function cannotCancelBecauseNotRunning(job: UnifiedJob) {
   return !isJobRunning(job.status);
 }
 

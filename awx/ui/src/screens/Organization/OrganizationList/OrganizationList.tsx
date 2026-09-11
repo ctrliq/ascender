@@ -174,7 +174,7 @@ function OrganizationsList() {
                 ]}
               />
             )}
-            renderRow={(o: Untyped, index: Untyped) => (
+            renderRow={(o: Untyped, index: number) => (
               <OrganizationListItem
                 key={o.id}
                 organization={o}

@@ -65,7 +65,7 @@ function HostMetrics() {
             items={results}
             itemCount={count}
             pluralizedItemName={t`Host Metrics`}
-            renderRow={(item: Untyped, index: Untyped) => (
+            renderRow={(item: Untyped, index: number) => (
               <HostMetricsListItem
                 key={item.id}
                 item={item}

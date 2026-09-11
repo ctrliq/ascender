@@ -22,6 +22,7 @@ import NotificationList from 'components/NotificationList';
 import { Schedules } from 'components/Schedule';
 import { ResourceAccessList } from 'components/ResourceAccessList';
 import { JobTemplatesAPI, OrganizationsAPI } from 'api';
+import type { QSParams } from 'util/qs';
 import JobTemplateDetail from './JobTemplateDetail';
 import JobTemplateEdit from './JobTemplateEdit';
 import TemplateSurvey from './TemplateSurvey';
@@ -124,7 +125,7 @@ function Template({ setBreadcrumb }: TemplateProps) {
   );
 
   const loadSchedules = useCallback(
-    (params: Untyped) => JobTemplatesAPI.readSchedules(templateId, params),
+    (params: QSParams) => JobTemplatesAPI.readSchedules(templateId, params),
     [templateId]
   );
 

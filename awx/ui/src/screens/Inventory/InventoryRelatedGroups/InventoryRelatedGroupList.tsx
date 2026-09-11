@@ -22,6 +22,7 @@ import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import AssociateModal from 'components/AssociateModal';
 import DisassociateButton from 'components/DisassociateButton';
+import type { QSParams } from 'util/qs';
 import InventoryGroupRelatedGroupListItem from './InventoryRelatedGroupListItem';
 
 const QS_CONFIG = getQSConfig('group', {
@@ -95,7 +96,7 @@ function InventoryRelatedGroupList() {
   }, [fetchRelated]);
 
   const fetchGroupsToAssociate = useCallback(
-    (params: Untyped) =>
+    (params: QSParams) =>
       GroupsAPI.readPotentialGroups(
         groupId,
         mergeParams(params, { not__id: groupId, not__parents: groupId })
@@ -246,7 +247,7 @@ function InventoryRelatedGroupList() {
             {isNotConstructedInventory && <HeaderCell>{t`Actions`}</HeaderCell>}
           </HeaderRow>
         }
-        renderRow={(group: Untyped, index: Untyped) => (
+        renderRow={(group: Untyped, index: number) => (
           <InventoryGroupRelatedGroupListItem
             key={group.id}
             rowIndex={index}

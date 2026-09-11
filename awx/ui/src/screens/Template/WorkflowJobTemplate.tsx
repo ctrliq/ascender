@@ -25,6 +25,7 @@ import { Schedules } from 'components/Schedule';
 import { ResourceAccessList } from 'components/ResourceAccessList';
 import { WorkflowJobTemplatesAPI, OrganizationsAPI } from 'api';
 import ContentLoading from 'components/ContentLoading';
+import type { QSParams } from 'util/qs';
 import WorkflowJobTemplateDetail from './WorkflowJobTemplateDetail';
 import WorkflowJobTemplateEdit from './WorkflowJobTemplateEdit';
 import TemplateSurvey from './TemplateSurvey';
@@ -104,7 +105,7 @@ function WorkflowJobTemplate({ setBreadcrumb }: WorkflowJobTemplateProps) {
   );
 
   const loadSchedules = useCallback(
-    (params: Untyped) =>
+    (params: QSParams) =>
       WorkflowJobTemplatesAPI.readSchedules(templateId, params),
     [templateId]
   );

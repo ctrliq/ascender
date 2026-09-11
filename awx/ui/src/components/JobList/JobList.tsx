@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, UnifiedJob } from 'types/api';
 import React, { useEffect, useCallback, useRef } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui, Plural } from '@lingui/react/macro';
@@ -321,7 +321,7 @@ function JobList({
               ]}
             />
           )}
-          renderRow={(job: Untyped, index: number) => (
+          renderRow={(job: UnifiedJob, index: number) => (
             <JobListItem
               key={job.id}
               inventorySourceLabels={inventorySourceChoices}

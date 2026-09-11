@@ -1,4 +1,4 @@
-import type { RecentJob, Untyped } from 'types/api';
+import type { RecentJob } from 'types/api';
 import React from 'react';
 
 import { Link as _Link } from 'react-router';
@@ -27,13 +27,13 @@ export interface SparklineProps {
 
 const Sparkline = ({ jobs = [] }: SparklineProps) => {
   const { t } = useLingui();
-  const generateTooltip = (job: Untyped) => (
+  const generateTooltip = (job: RecentJob) => (
     <>
       <div>
         {t`JOB ID:`} {job.id}
       </div>
       <div>
-        {t`STATUS:`} {job.status.toUpperCase()}
+        {t`STATUS:`} {job.status?.toUpperCase()}
       </div>
       {job.finished && (
         <div>

@@ -212,13 +212,11 @@ const ChoiceField = ({ name, config, isRequired = false }: Untyped) => {
         id={name}
         {...field}
         data={[
-          ...config.choices.map(
-            ([value, label]: Untyped[], index: Untyped) => ({
-              label,
-              value: value ?? '',
-              key: value ?? index,
-            })
-          ),
+          ...config.choices.map(([value, label]: Untyped[], index: number) => ({
+            label,
+            value: value ?? '',
+            key: value ?? index,
+          })),
         ]}
       />
     </SettingGroup>

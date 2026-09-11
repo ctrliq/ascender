@@ -145,7 +145,7 @@ function InstanceListenerAddressList({
             additionalControls={[]}
           />
         )}
-        renderRow={(listenerAddress: Untyped, index: Untyped) => (
+        renderRow={(listenerAddress: Untyped, index: number) => (
           <InstanceListenerAddressListItem
             isSelected={selected.some((row) => row.id === listenerAddress.id)}
             onSelect={() => handleSelect(listenerAddress)}

@@ -127,7 +127,7 @@ function AdvancedInventoryHostList({
           <HeaderCell>{t`Inventory`}</HeaderCell>
         </HeaderRow>
       }
-      renderRow={(host: Untyped, index: Untyped) => (
+      renderRow={(host: Untyped, index: number) => (
         <AdvancedInventoryHostListItem
           key={host.id}
           host={host}

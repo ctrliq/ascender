@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, UnifiedJob } from 'types/api';
 import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -99,10 +99,12 @@ function WorkflowJobTemplateDetail({
   };
 
   const canLaunch = summary_fields?.user_capabilities?.start;
-  const recentPlaybookJobs = summary_fields.recent_jobs.map((job: Untyped) => ({
-    ...job,
-    type: 'workflow_job',
-  }));
+  const recentPlaybookJobs = summary_fields.recent_jobs.map(
+    (job: UnifiedJob) => ({
+      ...job,
+      type: 'workflow_job',
+    })
+  );
 
   const deleteDetailsRequests =
     relatedResourceDeleteRequests.template(template);

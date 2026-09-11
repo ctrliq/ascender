@@ -26,6 +26,7 @@ import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
 import HealthCheckButton from 'components/HealthCheckButton/HealthCheckButton';
 import HealthCheckAlert from 'components/HealthCheckAlert';
+import type { QSParams } from 'util/qs';
 import InstanceListItem from './InstanceListItem';
 
 const QS_CONFIG = getQSConfig('instance', {
@@ -193,7 +194,7 @@ function InstanceList({ instanceGroup }: InstanceListProps) {
     actions && Object.prototype.hasOwnProperty.call(actions, 'POST');
 
   const fetchInstancesToAssociate = useCallback(
-    (params: Untyped) =>
+    (params: QSParams) =>
       InstancesAPI.read(
         mergeParams(params, {
           ...{ not__rampart_groups__id: instanceGroupId },
@@ -337,7 +338,7 @@ function InstanceList({ instanceGroup }: InstanceListProps) {
             <HeaderCell>{t`Actions`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(instance: Untyped, index: Untyped) => (
+        renderRow={(instance: Untyped, index: number) => (
           <InstanceListItem
             isExpanded={expanded.some((row) => row.id === instance.id)}
             onExpand={() => handleExpand(instance)}

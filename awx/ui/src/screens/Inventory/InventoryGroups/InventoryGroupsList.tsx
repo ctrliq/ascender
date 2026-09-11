@@ -151,7 +151,7 @@ function InventoryGroupsList() {
           {isNotConstructedInventory && <HeaderCell>{t`Actions`}</HeaderCell>}
         </HeaderRow>
       }
-      renderRow={(item: Untyped, index: Untyped) => (
+      renderRow={(item: Untyped, index: number) => (
         <InventoryGroupItem
           key={item.id}
           group={item}

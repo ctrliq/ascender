@@ -162,7 +162,7 @@ function UserList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(user: Untyped, index: Untyped) => (
+            renderRow={(user: Untyped, index: number) => (
               <UserListItem
                 key={user.id}
                 user={user}

@@ -31,7 +31,7 @@ export default function useWsInventorySources(initialSources: Untyped) {
   return sources;
 }
 
-function updateSource(sources: Untyped, index: Untyped, message: Untyped) {
+function updateSource(sources: Untyped, index: number, message: Untyped) {
   const source = {
     ...sources[index],
     status: message.status,

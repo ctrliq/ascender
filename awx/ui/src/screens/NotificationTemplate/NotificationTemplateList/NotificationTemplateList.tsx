@@ -185,7 +185,7 @@ function NotificationTemplatesList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(template: Untyped, index: Untyped) => (
+            renderRow={(template: Untyped, index: number) => (
               <NotificationTemplateListItem
                 onAddToast={(notification) => {
                   if (notification.status === 'pending') {

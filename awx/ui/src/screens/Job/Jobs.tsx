@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, UnifiedJob } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Routes, Route, Navigate, useParams } from 'react-router';
 
@@ -38,7 +38,7 @@ function Jobs() {
   });
 
   const buildBreadcrumbConfig = useCallback(
-    (job: Untyped) => {
+    (job: UnifiedJob) => {
       if (!job) {
         return;
       }

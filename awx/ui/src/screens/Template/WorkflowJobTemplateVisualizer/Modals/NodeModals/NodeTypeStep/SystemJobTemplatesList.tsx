@@ -84,7 +84,7 @@ function SystemJobTemplatesList({
           <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
         </HeaderRow>
       }
-      renderRow={(item: Untyped, index: Untyped) => (
+      renderRow={(item: Untyped, index: number) => (
         <CheckboxListItem
           rowIndex={index}
           isSelected={!!(nodeResource && nodeResource.id === item.id)}

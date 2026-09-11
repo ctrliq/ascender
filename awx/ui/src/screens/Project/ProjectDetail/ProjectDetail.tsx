@@ -1,4 +1,4 @@
-import type { Project, Untyped } from 'types/api';
+import type { Project, UnifiedJob } from 'types/api';
 import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -130,7 +130,7 @@ function ProjectDetail({ project }: ProjectDetailProps) {
       </Content>
     );
   }
-  const generateLastJobTooltip = (job: Untyped) => (
+  const generateLastJobTooltip = (job: UnifiedJob) => (
     <>
       <div>{t`MOST RECENT SYNC`}</div>
       <div>

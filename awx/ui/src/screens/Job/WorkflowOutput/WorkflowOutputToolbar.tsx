@@ -1,6 +1,7 @@
 import type {
   WorkflowAction,
   WorkflowState,
+  WorkflowNode,
 } from 'components/Workflow/workflowReducer';
 import type { Untyped } from 'types/api';
 import React, { useContext } from 'react';
@@ -139,7 +140,8 @@ function WorkflowOutputToolbar({
   }, [job.started, job.finished]);
 
   const totalNodes =
-    nodes.reduce((n: Untyped, node: Untyped) => n + !node.isDeleted, 0) - 1;
+    nodes.reduce((n: Untyped, node: WorkflowNode) => n + !node.isDeleted, 0) -
+    1;
   // a workflow that did not fully succeed (failed / errored / canceled) has
   // re-runnable nodes, so it gets the relaunch-from-failed dropdown
   const canRelaunchFromFailed = ['failed', 'error', 'canceled'].includes(

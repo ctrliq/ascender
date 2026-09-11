@@ -2,6 +2,7 @@ import type { Untyped } from 'types/api';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import useWebsocket from 'hooks/useWebsocket';
 import { WorkflowJobsAPI } from 'api';
+import type { WorkflowNode } from '../../../components/Workflow/workflowReducer';
 
 const fetchWorkflowNodes = async (jobId: Untyped, pageNo = 1, nodes = []) => {
   const { data } = await WorkflowJobsAPI.readNodes(jobId, {
@@ -64,16 +65,17 @@ export default function useWsWorkflowOutput(
     }
     const updatedNodeObjectsMap = updatedNodeObjects.reduce<
       Record<string, Untyped>
-    >((map, node: Untyped) => {
+    >((map, node: WorkflowNode) => {
       map[node.id] = node;
       return map;
     }, {});
     setNodes((prevNodes: Untyped) =>
-      (prevNodes || []).map((node: Untyped) => {
+      (prevNodes || []).map((node: WorkflowNode) => {
         if (node.id === 1) {
           return { ...node };
         }
-        const refreshed = updatedNodeObjectsMap[node.originalNodeObject?.id];
+        const refreshed =
+          updatedNodeObjectsMap[node.originalNodeObject?.id as number];
         if (!refreshed) {
           return node;
         }
@@ -147,7 +149,7 @@ export default function useWsWorkflowOutput(
               return prevNodes;
             }
             const index = prevNodes.findIndex(
-              (node: Untyped) =>
+              (node: WorkflowNode) =>
                 node?.originalNodeObject?.id === lastMessage.workflow_node_id
             );
             return index > -1
@@ -163,7 +165,7 @@ export default function useWsWorkflowOutput(
   return nodes;
 }
 
-function updateNode(nodes: Untyped, index: Untyped, message: Untyped) {
+function updateNode(nodes: Untyped, index: number, message: Untyped) {
   const node = {
     ...nodes[index],
     originalNodeObject: {

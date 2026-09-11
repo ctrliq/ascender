@@ -177,7 +177,7 @@ function CredentialTypeList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(credentialType: Untyped, index: Untyped) => (
+            renderRow={(credentialType: Untyped, index: number) => (
               <CredentialTypeListItem
                 key={credentialType.id}
                 value={credentialType.name}

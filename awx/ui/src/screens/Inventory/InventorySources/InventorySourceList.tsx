@@ -221,7 +221,7 @@ function InventorySourceList() {
             <HeaderCell>{t`Actions`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(inventorySource: Untyped, index: Untyped) => {
+        renderRow={(inventorySource: Untyped, index: number) => {
           const label = sourceChoices.find(
             ([scMatch]: Untyped[]) => inventorySource.source === scMatch
           );

@@ -121,7 +121,7 @@ function SurveyList({
             </Tr>
           </Thead>
           <Tbody>
-            {questions?.map((question: Untyped, index: Untyped) => (
+            {questions?.map((question: Untyped, index: number) => (
               <SurveyListItem
                 key={question.variable}
                 isLast={index === questions.length - 1}

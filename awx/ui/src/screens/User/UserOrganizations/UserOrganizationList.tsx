@@ -82,7 +82,7 @@ function UserOrganizationList() {
           <HeaderCell>{t`Description`}</HeaderCell>
         </HeaderRow>
       }
-      renderRow={(organization: Untyped, index: Untyped) => (
+      renderRow={(organization: Untyped, index: number) => (
         <UserOrganizationListItem
           key={organization.id}
           value={organization.name}

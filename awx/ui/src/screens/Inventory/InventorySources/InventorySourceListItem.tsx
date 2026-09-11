@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, UnifiedJob } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -32,7 +32,7 @@ function InventorySourceListItem({
   rowIndex,
 }: InventorySourceListItemProps) {
   const { t } = useLingui();
-  const generateLastJobTooltip = (job: Untyped) => (
+  const generateLastJobTooltip = (job: UnifiedJob) => (
     <>
       <div>{t`MOST RECENT SYNC`}</div>
       <div>

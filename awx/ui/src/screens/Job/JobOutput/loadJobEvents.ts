@@ -1,7 +1,8 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, Job, UnifiedJob } from 'types/api';
 import { getJobModel } from 'util/jobs';
+import type { QSParams } from 'util/qs';
 
-export async function fetchCount(job: Untyped, params: Untyped) {
+export async function fetchCount(job: UnifiedJob, params: QSParams) {
   const {
     data: { results: lastEvents = [] },
   } = await getJobModel(job.type).readEvents(job.id, {
@@ -12,7 +13,7 @@ export async function fetchCount(job: Untyped, params: Untyped) {
   return lastEvents.length >= 1 ? lastEvents[0].counter : 0;
 }
 
-export function prependTraceback(job: Untyped, events: Untyped) {
+export function prependTraceback(job: Job, events: Untyped) {
   let countOffset = 0;
   if (!job?.result_traceback) {
     return {

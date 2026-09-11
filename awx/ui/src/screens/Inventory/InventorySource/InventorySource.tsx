@@ -20,6 +20,7 @@ import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import RoutedTabs from 'components/RoutedTabs';
 import NotificationList from 'components/NotificationList/NotificationList';
+import type { QSParams } from 'util/qs';
 import InventorySourceDetail from '../InventorySourceDetail';
 import InventorySourceEdit from '../InventorySourceEdit';
 
@@ -78,7 +79,7 @@ function InventorySource({
   }, [inventory, source, setBreadcrumb]);
 
   const loadSchedules = useCallback(
-    (params: Untyped) =>
+    (params: QSParams) =>
       InventorySourcesAPI.readSchedules(source?.id as number, params),
     [source]
   );

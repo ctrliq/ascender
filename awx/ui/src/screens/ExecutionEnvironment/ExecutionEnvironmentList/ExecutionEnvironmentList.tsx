@@ -201,7 +201,7 @@ function ExecutionEnvironmentList() {
                 ]}
               />
             )}
-            renderRow={(executionEnvironment: Untyped, index: Untyped) => (
+            renderRow={(executionEnvironment: Untyped, index: number) => (
               <ExecutionEnvironmentsListItem
                 key={executionEnvironment.id}
                 rowIndex={index}

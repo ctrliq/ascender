@@ -238,7 +238,7 @@ function InstanceList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(instance: Untyped, index: Untyped) => (
+            renderRow={(instance: Untyped, index: number) => (
               <InstanceListItem
                 isExpanded={expanded.some((row) => row.id === instance.id)}
                 onExpand={() => handleExpand(instance)}
