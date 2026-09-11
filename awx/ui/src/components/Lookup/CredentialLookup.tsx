@@ -29,7 +29,7 @@ const QS_CONFIG = getQSConfig('credentials', {
 
 export interface CredentialLookupProps {
   autoPopulate?: boolean;
-  credentialTypeId?: number | string;
+  credentialTypeId?: number | string | null;
   credentialTypeKind?: string;
   credentialTypeNamespace?: Untyped;
   fieldName?: string;
@@ -110,7 +110,7 @@ function CredentialLookup({
       // credential type name is handled by the credential_type__search column
       // below, which queries the credential types over REST rather than the
       // hardcoded kind enum.
-      if (actionsResponse.data.actions?.GET.type) {
+      if (actionsResponse.data.actions?.GET?.type) {
         searchKeys.push({ key: 'credential_type__kind', type: 'string' });
       }
 

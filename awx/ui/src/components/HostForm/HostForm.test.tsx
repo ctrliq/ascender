@@ -1,8 +1,7 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import HostForm from './HostForm';
 
@@ -31,10 +30,10 @@ describe('<HostForm />', () => {
     // auto-populate; mock defensively so any stray read resolves quietly
     vi.mocked(InventoriesAPI.read).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
     vi.mocked(InventoriesAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} }, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
   });
 
   afterEach(() => {

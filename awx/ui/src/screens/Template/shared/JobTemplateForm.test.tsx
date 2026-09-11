@@ -1,5 +1,4 @@
 import type { JobTemplate, Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
@@ -13,6 +12,7 @@ import {
   InventoriesAPI,
   RootAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import JobTemplateForm from './JobTemplateForm';
 
@@ -161,34 +161,34 @@ describe('<JobTemplateForm />', () => {
       data: {
         BRAND_NAME: 'AWX',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
     vi.mocked(LabelsAPI.read).mockResolvedValue({
       data: mockData.summary_fields.labels,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof LabelsAPI.read>);
     vi.mocked(CredentialTypesAPI.loadAllTypes).mockResolvedValue([]);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: { results: mockCredentials },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(JobTemplatesAPI.readInstanceGroups).mockResolvedValue({
       data: { results: mockInstanceGroups },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readInstanceGroups>);
     vi.mocked(JobTemplatesAPI.updateWebhookKey).mockResolvedValue({
       data: { webhook_key: 'webhook key' },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.updateWebhookKey>);
     vi.mocked(ProjectsAPI.readDetail).mockResolvedValue({
       name: 'foo',
       id: 1,
       allow_override: false,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readDetail>);
     vi.mocked(ProjectsAPI.readPlaybooks).mockResolvedValue({
       data: ['debug.yml'],
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readPlaybooks>);
     vi.mocked(InventoriesAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
     vi.mocked(ProjectsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readOptions>);
   });
 
   afterEach(() => {

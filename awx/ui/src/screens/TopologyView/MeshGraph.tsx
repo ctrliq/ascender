@@ -9,6 +9,7 @@ import { InstancesAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
+import type { Instance, InstanceGroup, Paginated } from 'types/api';
 import type { MeshData, MeshLink, MeshNode } from './constants';
 import Legend from './Legend';
 import Tooltip from './Tooltip';
@@ -71,7 +72,7 @@ function MeshGraph({
   const navigate = useNavigate();
 
   const {
-    result: { instance = {}, instanceGroups },
+    result: { instance, instanceGroups },
     error: fetchError,
     isLoading,
     request: fetchDetails,
@@ -79,7 +80,10 @@ function MeshGraph({
     useCallback(async () => {
       // Only the effect below calls this, and only once a node is selected.
       if (!selectedNode) {
-        return { instance: null, instanceGroups: null };
+        return {
+          instance: {} as Partial<Instance>,
+          instanceGroups: null as Paginated<InstanceGroup> | null,
+        };
       }
       const { data: instanceData } = await InstancesAPI.readDetail(
         selectedNode.id
@@ -92,7 +96,7 @@ function MeshGraph({
         instanceGroups: instanceGroupsData,
       };
     }, [selectedNode]),
-    { instance: null, instanceGroups: null }
+    { instance: {}, instanceGroups: null }
   );
   const { error: fetchInstanceError, dismissError } =
     useDismissableError(fetchError);
@@ -126,11 +130,11 @@ function MeshGraph({
   // update mesh when user toggles enabled/disabled slider
   useEffect(() => {
     if (instance?.id) {
-      const updatedNodes = (storedNodes.current ?? []).map((n: MeshNode) =>
-        n.id === instance.id ? { ...n, enabled: instance.enabled } : n
+      const updatedNodes = (storedNodes.current ?? []).map((n) =>
+        n.id === instance.id ? { ...n, enabled: Boolean(instance.enabled) } : n
       );
       storedNodes.current = updatedNodes;
-      updateNodeSVG(storedNodes.current);
+      updateNodeSVG(updatedNodes);
     }
   }, [instance]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -441,7 +445,7 @@ function MeshGraph({
         />
       )}
       <Loader className="simulation-loader" progress={simulationProgress} />
-      {fetchInstanceError && (
+      {Boolean(fetchInstanceError) && (
         <AlertModal
           variant="error"
           title={t`Error!`}

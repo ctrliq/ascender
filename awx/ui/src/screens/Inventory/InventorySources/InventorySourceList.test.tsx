@@ -9,6 +9,7 @@ import {
   InventorySourcesAPI,
   WorkflowJobTemplateNodesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -84,16 +85,16 @@ describe('<InventorySourceList />', () => {
     );
     vi.mocked(InventoriesAPI.updateSources).mockResolvedValue({
       data: [{ inventory_source: 1 }],
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.updateSources>);
     vi.mocked(InventorySourcesAPI.readGroups).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readGroups>);
     vi.mocked(InventorySourcesAPI.readHosts).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readHosts>);
     vi.mocked(WorkflowJobTemplateNodesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplateNodesAPI.read>);
     vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -108,7 +109,7 @@ describe('<InventorySourceList />', () => {
           POST: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
     ({ user } = renderList());
     await screen.findByRole('link', { name: 'Source Foo' });
   });
@@ -270,7 +271,7 @@ describe('<InventorySourceList /> RBAC testing', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
 
     renderList('/inventories/inventory/2/sources');
     await screen.findByRole('link', { name: 'Source Foo' });
@@ -302,7 +303,7 @@ describe('<InventorySourceList /> RBAC testing', () => {
           POST: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
 
     renderList('/inventories/inventory/2/sources');
     await screen.findByRole('link', { name: 'Source Foo' });

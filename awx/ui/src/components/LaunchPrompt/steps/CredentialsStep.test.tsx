@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { createMemoryHistory } from 'history';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import CredentialsStep from './CredentialsStep';
 
@@ -82,6 +82,7 @@ const credentials = [
     },
     summary_fields: {
       credential_type: {
+        id: 1,
         name: 'Vault',
       },
     },
@@ -97,6 +98,7 @@ const credentials = [
     },
     summary_fields: {
       credential_type: {
+        id: 1,
         name: 'Vault',
       },
     },
@@ -115,13 +117,15 @@ async function findCategorySelect(container: Untyped) {
 
 describe('CredentialsStep', () => {
   beforeEach(() => {
-    vi.mocked(CredentialTypesAPI.loadAllTypes).mockResolvedValue(types);
+    vi.mocked(CredentialTypesAPI.loadAllTypes).mockResolvedValue(
+      types as unknown as ResponseOf<typeof CredentialTypesAPI.loadAllTypes>
+    );
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: {
         results: credentials,
         count: 5,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -130,7 +134,7 @@ describe('CredentialsStep', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
   });
 
   afterEach(() => vi.clearAllMocks());
@@ -251,6 +255,7 @@ describe('CredentialsStep', () => {
         inputs: {},
         summary_fields: {
           credential_type: {
+            id: 1,
             name: 'Machine',
           },
         },
@@ -300,6 +305,7 @@ describe('CredentialsStep', () => {
         },
         summary_fields: {
           credential_type: {
+            id: 1,
             name: 'Vault',
           },
         },
@@ -315,6 +321,7 @@ describe('CredentialsStep', () => {
         },
         summary_fields: {
           credential_type: {
+            id: 1,
             name: 'Vault',
           },
         },

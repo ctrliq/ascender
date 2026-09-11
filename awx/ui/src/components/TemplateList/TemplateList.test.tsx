@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
@@ -6,7 +5,9 @@ import {
   JobTemplatesAPI,
   UnifiedJobTemplatesAPI,
   WorkflowJobTemplatesAPI,
+  WorkflowJobTemplateNodesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -83,24 +84,29 @@ function getRow(name: Untyped) {
 describe('<TemplateList />', () => {
   let debug: Untyped;
   beforeEach(() => {
+    // Deleting one row first counts what depends on it, through one read
+    // per related endpoint. Nothing here depends on the row being deleted.
+    vi.mocked(WorkflowJobTemplateNodesAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof WorkflowJobTemplateNodesAPI.read>);
     vi.mocked(UnifiedJobTemplatesAPI.read).mockResolvedValue({
       data: {
         count: mockTemplates.length,
         results: mockTemplates,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UnifiedJobTemplatesAPI.read>);
 
     vi.mocked(UnifiedJobTemplatesAPI.readOptions).mockResolvedValue({
       data: {
         actions: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UnifiedJobTemplatesAPI.readOptions>);
     vi.mocked(JobTemplatesAPI.readOptions).mockResolvedValue({
       data: { actions: {} },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readOptions>);
     vi.mocked(WorkflowJobTemplatesAPI.readOptions).mockResolvedValue({
       data: { actions: {} },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readOptions>);
     debug = global.console.debug;
     global.console.debug = () => {};
   });
@@ -176,10 +182,10 @@ describe('<TemplateList />', () => {
 
   test('api is called to delete templates for each selected template.', async () => {
     vi.mocked(JobTemplatesAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof JobTemplatesAPI.destroy>
     );
     vi.mocked(WorkflowJobTemplatesAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.destroy>
     );
     const { user } = renderWithContexts(<TemplateList />);
     await screen.findByRole('link', { name: 'Job Template 2' });
@@ -241,7 +247,7 @@ describe('<TemplateList />', () => {
     vi.mocked(JobTemplatesAPI.copy).mockResolvedValue({
       status: 201,
       data: { id: 6 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.copy>);
     const { user } = renderWithContexts(<TemplateList />);
     await screen.findByRole('link', { name: 'Job Template 1' });
 

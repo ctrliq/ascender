@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, OAuth2Application } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { ApplicationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ApplicationEdit from './ApplicationEdit';
@@ -119,7 +119,7 @@ describe('<ApplicationEdit/>', () => {
     });
     vi.mocked(ApplicationsAPI.update).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ApplicationsAPI.update>);
     const { user } = renderEdit({ context: { router: { history } } });
 
     await user.click(screen.getByRole('button', { name: 'Submit' }));

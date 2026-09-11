@@ -1,4 +1,5 @@
 import type { QSParams } from 'util/qs';
+import type { OptionsResponse, Paginated, Schedule } from '../../types/api';
 import type { BaseConstructor } from '../Base';
 
 const SchedulesMixin = <T extends BaseConstructor>(parent: T) =>
@@ -8,11 +9,16 @@ const SchedulesMixin = <T extends BaseConstructor>(parent: T) =>
     }
 
     readSchedules(id: number | string, params?: QSParams) {
-      return this.http.get(`${this.baseUrl}${id}/schedules/`, { params });
+      return this.http.get<Paginated<Schedule>>(
+        `${this.baseUrl}${id}/schedules/`,
+        { params }
+      );
     }
 
     readScheduleOptions(id: number | string) {
-      return this.http.options(`${this.baseUrl}${id}/schedules/`);
+      return this.http.options<OptionsResponse>(
+        `${this.baseUrl}${id}/schedules/`
+      );
     }
   };
 

@@ -43,23 +43,25 @@ function CredentialPasswordsStep({
   } else if (credentials) {
     credentials.forEach((credential: Untyped) => {
       if (!credential.inputs) {
-        const launchConfigCredential = launchConfig.defaults.credentials.find(
-          (defaultCred: Untyped) => defaultCred.id === credential.id
-        );
+        const launchConfigCredential = (
+          launchConfig.defaults?.credentials ?? []
+        ).find((defaultCred: Untyped) => defaultCred.id === credential.id);
 
-        if (launchConfigCredential?.passwords_needed.length > 0) {
+        if (launchConfigCredential?.passwords_needed?.length) {
           if (
-            launchConfigCredential.passwords_needed.includes('ssh_password')
+            launchConfigCredential?.passwords_needed?.includes('ssh_password')
           ) {
             showcredentialPasswordSsh = true;
           }
           if (
-            launchConfigCredential.passwords_needed.includes('become_password')
+            launchConfigCredential?.passwords_needed?.includes(
+              'become_password'
+            )
           ) {
             showcredentialPasswordPrivilegeEscalation = true;
           }
           if (
-            launchConfigCredential.passwords_needed.includes('ssh_key_unlock')
+            launchConfigCredential?.passwords_needed?.includes('ssh_key_unlock')
           ) {
             showcredentialPasswordPrivateKeyPassphrase = true;
           }

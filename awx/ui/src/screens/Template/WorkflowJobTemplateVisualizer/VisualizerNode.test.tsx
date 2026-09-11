@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
@@ -7,6 +6,7 @@ import {
   WorkflowStateContext,
 } from 'contexts/Workflow';
 import { JobTemplatesAPI, WorkflowJobTemplateNodesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import VisualizerNode from './VisualizerNode';
 import type {
@@ -21,7 +21,7 @@ vi.mocked(WorkflowJobTemplateNodesAPI.readCredentials).mockResolvedValue({
   data: {
     results: [],
   },
-} as unknown as ApiResponse<Untyped>);
+} as unknown as ResponseOf<typeof WorkflowJobTemplateNodesAPI.readCredentials>);
 
 const nodeWithJT = {
   id: 2,
@@ -472,7 +472,7 @@ describe('VisualizerNode', () => {
           id: 7,
           name: 'Example',
         },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof JobTemplatesAPI.readDetail>);
       fireEvent.mouseEnter(nodeG()!);
       fireEvent.click(tooltipItem('node-details')!);
       await waitFor(() =>
@@ -488,7 +488,7 @@ describe('VisualizerNode', () => {
           id: 7,
           name: 'Example',
         },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof JobTemplatesAPI.readDetail>);
       vi.mocked(
         WorkflowJobTemplateNodesAPI.readCredentials
       ).mockRejectedValueOnce(

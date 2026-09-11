@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -6,8 +5,9 @@ import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import { Routes, Route } from 'react-router';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import mockLDAP from '../../shared/data.ldapSettings.json';
 import LDAPEdit from './LDAPEdit';
 
@@ -18,11 +18,11 @@ describe('<LDAPEdit />', () => {
 
   beforeEach(() => {
     vi.mocked(SettingsAPI.updateAll).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.updateAll>
     );
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: mockLDAP,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -34,7 +34,7 @@ describe('<LDAPEdit />', () => {
       initialEntries: [`/settings/ldap/${category}/edit`],
     });
     const result = renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <Routes>
           <Route path="/settings/ldap/:category/edit" element={<LDAPEdit />} />
           <Route

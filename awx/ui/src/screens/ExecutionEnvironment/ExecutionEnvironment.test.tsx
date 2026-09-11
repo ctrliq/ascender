@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { ExecutionEnvironmentsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ExecutionEnvironment from './ExecutionEnvironment';
 
@@ -64,7 +64,7 @@ describe('<ExecutionEnvironment />', () => {
   beforeEach(() => {
     vi.mocked(ExecutionEnvironmentsAPI.readDetail).mockResolvedValue({
       data: executionEnvironment,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readDetail>);
   });
 
   afterEach(() => {

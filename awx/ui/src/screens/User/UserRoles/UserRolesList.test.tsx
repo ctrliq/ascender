@@ -1,8 +1,9 @@
-import type { Untyped, User } from 'types/api';
+import type { User } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
 import { UsersAPI, RolesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserRolesList from './UserRolesList';
 
@@ -99,7 +100,7 @@ describe('<UserRolesList />', () => {
         actions: { GET: {}, POST: {} },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -153,7 +154,7 @@ describe('<UserRolesList />', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readRoleOptions>);
 
     vi.mocked(UsersAPI.readRoles).mockResolvedValue({
       data: {
@@ -191,7 +192,7 @@ describe('<UserRolesList />', () => {
         ],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readRoles>);
     renderWithContexts(
       <UserRolesList
         user={
@@ -308,7 +309,7 @@ describe('<UserRolesList />', () => {
         ],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readRoles>);
 
     renderWithContexts(<UserRolesList user={user} />);
 

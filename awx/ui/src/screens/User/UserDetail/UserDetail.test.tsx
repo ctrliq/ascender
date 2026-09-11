@@ -1,9 +1,9 @@
-import type { Untyped, User } from 'types/api';
-import type { ApiResponse } from 'api/Base';
+import type { User } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { UsersAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -105,7 +105,7 @@ describe('<UserDetail />', () => {
 
   test('expected api call is made for delete', async () => {
     vi.mocked(UsersAPI.destroy).mockResolvedValueOnce(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof UsersAPI.destroy>
     );
     const { user } = renderWithContexts(
       <UserDetail user={mockDetails as unknown as User} />

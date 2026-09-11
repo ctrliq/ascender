@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { OptionsField, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -26,7 +26,7 @@ function MiscAuthenticationEdit() {
   const { t } = useLingui();
   const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
-  const { PUT: options } = useSettings();
+  const { PUT: options = {} } = useSettings();
 
   const {
     isLoading,
@@ -70,10 +70,16 @@ function MiscAuthenticationEdit() {
         ...pluckedAuthenticationData,
       };
 
-      const { OAUTH2_PROVIDER: OAUTH2_PROVIDER_OPTIONS, ...restOptions } =
-        options;
+      const { OAUTH2_PROVIDER: oauthOptions, ...restOptions } = options;
+      // OAUTH2_PROVIDER is one nested setting holding the three expirations,
+      // which the form shows as three fields of the type its child declares.
+      const OAUTH2_PROVIDER_OPTIONS = {
+        ...oauthOptions,
+        default: (oauthOptions?.default ?? {}) as Record<string, number>,
+        child: (oauthOptions?.child ?? {}) as { type?: string },
+      };
 
-      const authenticationOptions = {
+      const authenticationOptions: Record<string, OptionsField> = {
         ...restOptions,
         ACCESS_TOKEN_EXPIRE_SECONDS: {
           ...OAUTH2_PROVIDER_OPTIONS,
@@ -96,14 +102,13 @@ function MiscAuthenticationEdit() {
         },
       };
 
-      const mergedData: Record<string, Untyped> = {};
+      const mergedData: Record<string, OptionsField> = {};
 
-      Object.keys(authenticationData).forEach((key) => {
+      Object.entries(authenticationData).forEach(([key, value]) => {
         if (!authenticationOptions[key]) {
           return;
         }
-        mergedData[key] = authenticationOptions[key];
-        mergedData[key].value = authenticationData[key];
+        mergedData[key] = { ...authenticationOptions[key], value };
       });
 
       return mergedData;

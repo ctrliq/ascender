@@ -25,15 +25,13 @@ function MetadataStep() {
     request: fetchMetadataOptions,
   } = useRequest(
     useCallback(async () => {
-      const {
-        data: {
-          inputs: { required: requiredFields, metadata },
-        },
-      } = await CredentialTypesAPI.readDetail(
+      const { data: credentialType } = await CredentialTypesAPI.readDetail(
         selectedCredential.value.credential_type ||
           selectedCredential.value.credential_type_id
       );
-      metadata.forEach((field: Untyped) => {
+      const requiredFields = credentialType.inputs?.required ?? [];
+      const metadata = credentialType.inputs?.metadata ?? [];
+      metadata.forEach((field) => {
         if (inputValues.value[field.id]) {
           form.initialValues.inputs[field.id] = inputValues.value[field.id];
         } else if (field.type === 'string' && field.choices) {

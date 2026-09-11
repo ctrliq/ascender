@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { CredentialsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockMachineCredential from './shared/data.machineCredential.json';
 import mockCyberArkCredential from './shared/data.cyberArkCredential.json';
@@ -62,7 +62,7 @@ describe('<Credential />', () => {
   beforeEach(() => {
     vi.mocked(CredentialsAPI.readDetail).mockResolvedValue({
       data: mockMachineCredential,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readDetail>);
   });
 
   afterEach(() => {
@@ -108,7 +108,7 @@ describe('<Credential />', () => {
   test('hides the Job Templates tab for a registry credential', async () => {
     vi.mocked(CredentialsAPI.readDetail).mockResolvedValue({
       data: { ...mockCyberArkCredential, kind: 'registry' },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readDetail>);
     renderAt('/credentials/2/details');
     expect(await screen.findByText('CredentialDetail')).toBeInTheDocument();
     expect(screen.queryByText('Job Templates')).not.toBeInTheDocument();

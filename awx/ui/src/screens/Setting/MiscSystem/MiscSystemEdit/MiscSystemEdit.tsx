@@ -29,7 +29,7 @@ import { pluck, formatJson } from '../../shared/settingUtils';
 function MiscSystemEdit() {
   const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
-  const { PUT: options } = useSettings();
+  const { PUT: options = {} } = useSettings();
 
   const {
     isLoading,
@@ -57,8 +57,7 @@ function MiscSystemEdit() {
         if (!options[key]) {
           return;
         }
-        mergedData[key] = options[key];
-        mergedData[key].value = systemData[key];
+        mergedData[key] = { ...options[key], value: systemData[key] };
       });
       return mergedData;
     }, [options]),

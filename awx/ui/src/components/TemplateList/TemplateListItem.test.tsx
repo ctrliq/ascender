@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, JobTemplate } from 'types/api';
 import React from 'react';
 
 import { createMemoryHistory } from 'history';
 import { screen, waitFor, within } from '@testing-library/react';
 import { JobTemplatesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockJobTemplateData from './data.job_template.json';
 import TemplateListItem from './TemplateListItem';
@@ -318,7 +318,7 @@ describe('<TemplateListItem />', () => {
 
   test('should call api to copy template', async () => {
     vi.mocked(JobTemplatesAPI.copy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof JobTemplatesAPI.copy>
     );
 
     const { user } = renderItem(

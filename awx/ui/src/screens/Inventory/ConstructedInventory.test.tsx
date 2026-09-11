@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { screen, within } from '@testing-library/react';
 import { ConstructedInventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockInventory from './shared/data.inventory.json';
 import ConstructedInventory from './ConstructedInventory';
@@ -34,7 +34,7 @@ describe('<ConstructedInventory />', () => {
   test('should render expected tabs', async () => {
     vi.mocked(ConstructedInventoriesAPI.readDetail).mockResolvedValue({
       data: { ...mockInventory, kind: 'constructed' },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ConstructedInventoriesAPI.readDetail>);
     const expectedTabs = [
       'Back to Inventories',
       'Details',
@@ -56,7 +56,7 @@ describe('<ConstructedInventory />', () => {
   test('should show content error when user attempts to navigate to erroneous route', async () => {
     vi.mocked(ConstructedInventoriesAPI.readDetail).mockResolvedValue({
       data: { ...mockInventory, kind: 'constructed' },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ConstructedInventoriesAPI.readDetail>);
     renderAt('/inventories/constructed_inventory/1/foobar');
     expect(await screen.findByText('Not Found')).toBeInTheDocument();
   });

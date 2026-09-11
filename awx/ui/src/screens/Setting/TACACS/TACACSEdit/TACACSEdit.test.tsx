@@ -1,12 +1,12 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import TACACSEdit from './TACACSEdit';
 
 vi.mock('../../../../api/');
@@ -16,10 +16,10 @@ describe('<TACACSEdit />', () => {
 
   beforeEach(() => {
     vi.mocked(SettingsAPI.revertCategory).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.revertCategory>
     );
     vi.mocked(SettingsAPI.updateAll).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.updateAll>
     );
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: {
@@ -30,7 +30,7 @@ describe('<TACACSEdit />', () => {
         TACACSPLUS_AUTH_PROTOCOL: 'ascii',
         TACACSPLUS_REM_ADDR: false,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -42,7 +42,7 @@ describe('<TACACSEdit />', () => {
       initialEntries: ['/settings/tacacs/edit'],
     });
     const result = renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <TACACSEdit />
       </SettingsProvider>,
       { context: { router: { history } } }

@@ -131,8 +131,8 @@ function Template({ setBreadcrumb }: TemplateProps) {
 
   const canSeeNotificationsTab = me?.is_system_auditor || isNotifAdmin;
   const canAddAndEditSurvey =
-    template?.summary_fields?.user_capabilities.edit ||
-    template?.summary_fields?.user_capabilities.delete;
+    template?.summary_fields?.user_capabilities?.edit ||
+    template?.summary_fields?.user_capabilities?.delete;
 
   const tabsArray: Omit<RoutedTab, 'id'>[] = [
     {

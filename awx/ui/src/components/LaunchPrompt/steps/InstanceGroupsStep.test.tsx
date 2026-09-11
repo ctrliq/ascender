@@ -1,9 +1,8 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { InstanceGroupsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InstanceGroupsStep from './InstanceGroupsStep';
 
@@ -22,7 +21,7 @@ describe('InstanceGroupsStep', () => {
         results: instance_groups,
         count: 3,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.read>);
 
     vi.mocked(InstanceGroupsAPI.readOptions).mockResolvedValue({
       data: {
@@ -32,7 +31,7 @@ describe('InstanceGroupsStep', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readOptions>);
   });
 
   afterEach(() => vi.clearAllMocks());

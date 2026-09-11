@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { act, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { CredentialsAPI, OrganizationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import OrganizationAdd from './OrganizationAdd';
 
@@ -49,7 +49,7 @@ describe('<OrganizationAdd />', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
   });
 
   afterEach(() => {
@@ -66,7 +66,7 @@ describe('<OrganizationAdd />', () => {
     };
     vi.mocked(OrganizationsAPI.create).mockResolvedValueOnce({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.create>);
     renderWithContexts(<OrganizationAdd />);
     await screen.findByTestId('organization-form');
 
@@ -108,7 +108,7 @@ describe('<OrganizationAdd />', () => {
         },
         ...orgData,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.create>);
     renderWithContexts(<OrganizationAdd />, {
       context: { router: { history } },
     });
@@ -141,7 +141,7 @@ describe('<OrganizationAdd />', () => {
         },
         ...orgData,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.create>);
     renderWithContexts(<OrganizationAdd />);
     await screen.findByTestId('organization-form');
 
@@ -170,7 +170,7 @@ describe('<OrganizationAdd />', () => {
         },
         ...orgData,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.create>);
     renderWithContexts(<OrganizationAdd />);
     await screen.findByTestId('organization-form');
 

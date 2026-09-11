@@ -1,8 +1,9 @@
 import type { QSParams } from 'util/qs';
+import type { Group, Host, OptionsResponse, Paginated } from '../../types/api';
 import Base from '../Base';
 import type { Http } from '../Base';
 
-class Hosts extends Base {
+class Hosts extends Base<Host> {
   constructor(http?: Http) {
     super(http);
     this.baseUrl = 'api/v2/hosts/';
@@ -15,19 +16,25 @@ class Hosts extends Base {
   }
 
   readFacts(id: number | string) {
-    return this.http.get(`${this.baseUrl}${id}/ansible_facts/`);
+    return this.http.get<Record<string, unknown>>(
+      `${this.baseUrl}${id}/ansible_facts/`
+    );
   }
 
   readAllGroups(id: number | string, params?: QSParams) {
-    return this.http.get(`${this.baseUrl}${id}/all_groups/`, { params });
+    return this.http.get<Paginated<Group>>(`${this.baseUrl}${id}/all_groups/`, {
+      params,
+    });
   }
 
   readGroups(id: number | string, params?: QSParams) {
-    return this.http.get(`${this.baseUrl}${id}/groups/`, { params });
+    return this.http.get<Paginated<Group>>(`${this.baseUrl}${id}/groups/`, {
+      params,
+    });
   }
 
   readGroupsOptions(id: number | string) {
-    return this.http.options(`${this.baseUrl}${id}/groups/`);
+    return this.http.options<OptionsResponse>(`${this.baseUrl}${id}/groups/`);
   }
 
   associateGroup(id: number | string, groupId: number | string) {

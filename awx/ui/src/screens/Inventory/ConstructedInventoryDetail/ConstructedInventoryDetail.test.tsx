@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { InventoriesAPI, ConstructedInventoriesAPI } from 'api';
@@ -7,6 +6,7 @@ import '@testing-library/jest-dom';
 import { createMemoryHistory } from 'history';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryDetail from './ConstructedInventoryDetail';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 
 vi.mock('../../../api');
 
@@ -80,7 +80,7 @@ describe('<ConstructedInventoryDetail />', () => {
   beforeEach(() => {
     vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
       data: { results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
     vi.mocked(InventoriesAPI.readInputInventories).mockResolvedValue({
       data: {
         results: [
@@ -94,7 +94,7 @@ describe('<ConstructedInventoryDetail />', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInputInventories>);
     vi.mocked(InventoriesAPI.readSources).mockResolvedValue({
       data: {
         results: [
@@ -115,7 +115,7 @@ describe('<ConstructedInventoryDetail />', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readSources>);
     vi.mocked(ConstructedInventoriesAPI.readOptions).mockResolvedValue({
       data: {
         related: {},
@@ -164,7 +164,7 @@ describe('<ConstructedInventoryDetail />', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ConstructedInventoriesAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -215,7 +215,7 @@ describe('<ConstructedInventoryDetail />', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readSources>);
     renderComponent();
     await waitForElementToBeRemoved(() => screen.getByRole('progressbar'));
     expect(

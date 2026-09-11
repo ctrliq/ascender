@@ -24,16 +24,10 @@ function ApplicationAdd({ onSuccessfulAdd }: ApplicationAddProps) {
     result: { authorizationOptions, clientTypeOptions },
   } = useRequest(
     useCallback(async () => {
-      const {
-        data: {
-          actions: {
-            GET: {
-              authorization_grant_type: { choices: authChoices },
-              client_type: { choices: clientChoices },
-            },
-          },
-        },
-      } = await ApplicationsAPI.readOptions();
+      const { data: options } = await ApplicationsAPI.readOptions();
+      const authChoices =
+        options.actions.GET?.authorization_grant_type?.choices ?? [];
+      const clientChoices = options.actions.GET?.client_type?.choices ?? [];
 
       const authorization = authChoices.map((choice: Untyped) => ({
         value: choice[0],

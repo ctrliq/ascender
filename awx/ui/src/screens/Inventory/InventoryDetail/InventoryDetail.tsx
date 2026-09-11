@@ -1,4 +1,4 @@
-import type { Inventory, Untyped } from 'types/api';
+import type { AnyInventory, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 
@@ -26,7 +26,7 @@ import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import getHelpText from '../shared/Inventory.helptext';
 
 export interface InventoryDetailProps {
-  inventory: Inventory;
+  inventory: AnyInventory;
   [key: string]: unknown;
 }
 

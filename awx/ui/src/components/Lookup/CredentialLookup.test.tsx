@@ -1,9 +1,8 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { CredentialsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import CredentialLookup from './CredentialLookup';
 
@@ -22,7 +21,7 @@ describe('CredentialLookup', () => {
         ],
         count: 5,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -33,7 +32,7 @@ describe('CredentialLookup', () => {
         },
         related_search_fields: ['credential_type__search'],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -92,7 +91,7 @@ describe('CredentialLookup', () => {
         results: [{ id: 1, name: 'Cred 1', url: 'www.google.com' }],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>
@@ -116,7 +115,7 @@ describe('CredentialLookup', () => {
         ],
         count: 2,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>
@@ -141,10 +140,10 @@ describe('CredentialLookup auto select', () => {
         results: [cred],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} }, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
     const onChange = vi.fn();
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>

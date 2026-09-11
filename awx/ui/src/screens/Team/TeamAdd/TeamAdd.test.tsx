@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
 
 import { TeamsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import TeamAdd from './TeamAdd';
 
@@ -56,7 +56,7 @@ describe('<TeamAdd />', () => {
   test('handleSubmit posts to the api and redirects', async () => {
     vi.mocked(TeamsAPI.create).mockResolvedValue({
       data: { id: 5 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TeamsAPI.create>);
     const { user } = renderAdd();
     await user.click(screen.getByRole('button', { name: 'Submit' }));
     await waitFor(() =>

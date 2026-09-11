@@ -1,8 +1,8 @@
-import type { Untyped, Host } from 'types/api';
-import type { ApiResponse } from 'api/Base';
+import type { Host } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { HostsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import HostFacts from './HostFacts';
 import mockHost from '../data.host.json';
@@ -25,7 +25,7 @@ describe('<HostFacts />', () => {
   test('initially renders successfully', async () => {
     vi.mocked(HostsAPI.readFacts).mockResolvedValue({
       data: mockHostFacts,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof HostsAPI.readFacts>);
     renderWithContexts(<HostFacts host={mockHost as unknown as Host} />);
     // react-ace renders empty under jsdom, so assert the Facts detail label
     // rather than the JSON body

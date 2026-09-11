@@ -1,5 +1,19 @@
-import type { WorkflowState } from 'components/Workflow/workflowReducer';
-import type { Untyped } from 'types/api';
+import type {
+  NodeTemplate,
+  WorkflowNode,
+  WorkflowState,
+} from 'components/Workflow/workflowReducer';
+import type {
+  LaunchConfig,
+  LaunchCredential,
+  SummaryFieldRef,
+  SurveyConfig,
+  SurveyQuestion,
+} from 'types/api';
+import type {
+  LaunchStepDefinition,
+  SetFieldTouched,
+} from 'components/LaunchPrompt/types';
 import { useContext, useState, useEffect, useRef } from 'react';
 import { useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -17,7 +31,23 @@ import useNodeTypeStep from './NodeTypeStep/useNodeTypeStep';
 import useDaysToKeepStep from './useDaysToKeepStep';
 import useRunTypeStep from './useRunTypeStep';
 
-function showPreviewStep(nodeType: Untyped, launchConfig: Untyped) {
+/**
+ * What the node modal's form holds.
+ *
+ * The prompt steps each add their own fields to it, named after what the
+ * template asks for, so the rest is left open.
+ */
+export interface NodeModalValues {
+  nodeType?: string;
+  nodeResource?: NodeTemplate | null;
+  identifier?: string;
+  convergence?: string;
+  maxRetries?: number;
+  linkType?: string;
+  [key: string]: unknown;
+}
+
+function showPreviewStep(nodeType: string, launchConfig: LaunchConfig) {
   if (
     !['workflow_job_template', 'job_template'].includes(nodeType) ||
     Object.keys(launchConfig).length === 0
@@ -43,17 +73,17 @@ function showPreviewStep(nodeType: Untyped, launchConfig: Untyped) {
 }
 
 const getNodeToEditDefaultValues = (
-  launchConfig: Untyped,
-  surveyConfig: Untyped,
-  nodeToEdit: Untyped,
-  resourceDefaultCredentials: Untyped
+  launchConfig: LaunchConfig,
+  surveyConfig: SurveyConfig,
+  nodeToEdit: WorkflowNode,
+  resourceDefaultCredentials: LaunchCredential[] | null
 ) => {
   let identifier = '';
   if (
     Object.prototype.hasOwnProperty.call(nodeToEdit, 'identifier') &&
     nodeToEdit.identifier !== null
   ) {
-    ({ identifier } = nodeToEdit);
+    identifier = nodeToEdit.identifier ?? '';
   } else if (
     Object.prototype.hasOwnProperty.call(
       nodeToEdit?.originalNodeObject,
@@ -61,7 +91,7 @@ const getNodeToEditDefaultValues = (
     ) &&
     !stringIsUUID(nodeToEdit?.originalNodeObject?.identifier)
   ) {
-    identifier = nodeToEdit?.originalNodeObject?.identifier;
+    identifier = nodeToEdit?.originalNodeObject?.identifier ?? '';
   }
 
   const getConvergence = () => {
@@ -92,7 +122,7 @@ const getNodeToEditDefaultValues = (
   };
 
   // Built up per node type below, so its shape is not known until then.
-  const initialValues: Record<string, Untyped> = {
+  const initialValues: Record<string, unknown> = {
     nodeResource: nodeToEdit?.fullUnifiedJobTemplate || null,
     nodeType: nodeToEdit?.fullUnifiedJobTemplate?.type || 'job_template',
     convergence: getConvergence(),
@@ -128,7 +158,7 @@ const getNodeToEditDefaultValues = (
       )
     ) {
       initialValues.daysToKeep = parseInt(
-        nodeToEdit.promptValues.extra_data.days,
+        String(nodeToEdit.promptValues.extra_data.days),
         10
       );
     } else if (
@@ -139,7 +169,10 @@ const getNodeToEditDefaultValues = (
       )
     ) {
       initialValues.daysToKeep = parseInt(
-        nodeToEdit.originalNodeObject.extra_data.days,
+        String(
+          (nodeToEdit.originalNodeObject.extra_data as Record<string, unknown>)
+            .days
+        ),
         10
       );
     }
@@ -181,21 +214,21 @@ const getNodeToEditDefaultValues = (
     if (nodeToEdit?.promptValues?.credentials) {
       initialValues.credentials = nodeToEdit?.promptValues?.credentials;
     } else if (nodeToEdit?.originalNodeCredentials) {
-      const defaultCredsWithoutOverrides: Untyped[] = [];
+      const defaultCredsWithoutOverrides: LaunchCredential[] = [];
 
-      const credentialHasOverride = (templateDefaultCred: Untyped) => {
+      const credentialHasOverride = (templateDefaultCred: LaunchCredential) => {
         let hasOverride = false;
-        nodeToEdit.originalNodeCredentials.forEach(
-          (nodeCredential: Untyped) => {
+        (nodeToEdit.originalNodeCredentials ?? []).forEach(
+          (nodeCredential: LaunchCredential) => {
             if (
               templateDefaultCred.credential_type ===
               nodeCredential.credential_type
             ) {
               if (
                 (!templateDefaultCred.vault_id &&
-                  !nodeCredential.inputs.vault_id) ||
+                  !nodeCredential.inputs?.vault_id) ||
                 (templateDefaultCred.vault_id &&
-                  nodeCredential.inputs.vault_id &&
+                  nodeCredential.inputs?.vault_id &&
                   templateDefaultCred.vault_id ===
                     nodeCredential.inputs.vault_id)
               ) {
@@ -209,16 +242,16 @@ const getNodeToEditDefaultValues = (
       };
 
       if (resourceDefaultCredentials) {
-        resourceDefaultCredentials.forEach((defaultCred: Untyped) => {
+        resourceDefaultCredentials.forEach((defaultCred) => {
           if (!credentialHasOverride(defaultCred)) {
             defaultCredsWithoutOverrides.push(defaultCred);
           }
         });
       }
 
-      initialValues.credentials = nodeToEdit.originalNodeCredentials.concat(
-        defaultCredsWithoutOverrides
-      );
+      initialValues.credentials = (
+        nodeToEdit.originalNodeCredentials ?? []
+      ).concat(defaultCredsWithoutOverrides);
     } else {
       initialValues.credentials = [];
     }
@@ -265,9 +298,11 @@ const getNodeToEditDefaultValues = (
   }
 
   if (launchConfig.ask_variables_on_launch) {
-    const newExtraData = { ...sourceOfValues.extra_data };
+    const newExtraData = {
+      ...((sourceOfValues?.extra_data as Record<string, unknown>) ?? {}),
+    };
     if (launchConfig.survey_enabled && surveyConfig.spec) {
-      surveyConfig.spec.forEach((question: Untyped) => {
+      (surveyConfig.spec ?? []).forEach((question) => {
         if (
           Object.prototype.hasOwnProperty.call(newExtraData, question.variable)
         ) {
@@ -279,11 +314,11 @@ const getNodeToEditDefaultValues = (
   }
 
   if (surveyConfig?.spec) {
-    surveyConfig.spec.forEach((question: Untyped) => {
+    (surveyConfig.spec ?? []).forEach((question: SurveyQuestion) => {
       if (question.type === 'multiselect') {
         initialValues[
           `survey_${question.variable}` as keyof typeof initialValues
-        ] = question.default.split('\n');
+        ] = String(question.default ?? '').split('\n');
       } else {
         initialValues[
           `survey_${question.variable}` as keyof typeof initialValues
@@ -311,13 +346,13 @@ const getNodeToEditDefaultValues = (
 };
 
 export default function useWorkflowNodeSteps(
-  launchConfig: Untyped,
-  surveyConfig: Untyped,
-  resource: Untyped,
-  askLinkType: Untyped,
-  resourceDefaultCredentials: Untyped,
-  labels: Untyped,
-  instanceGroups: Untyped
+  launchConfig: LaunchConfig,
+  surveyConfig: SurveyConfig,
+  resource: NodeTemplate | null,
+  askLinkType: boolean,
+  resourceDefaultCredentials: LaunchCredential[] | null,
+  labels: SummaryFieldRef[],
+  instanceGroups: SummaryFieldRef[]
 ) {
   const { t } = useLingui();
   const { nodeToEdit } = useContext(WorkflowStateContext) as WorkflowState;
@@ -325,7 +360,7 @@ export default function useWorkflowNodeSteps(
     resetForm,
     values: formikValues,
     errors: formikErrors,
-  } = useFormikContext<Untyped>();
+  } = useFormikContext<NodeModalValues>();
   const [visited, setVisited] = useState({});
   // The reset below runs when the launch config arrives, and the values it
   // carries over have to be the ones on screen by then rather than the ones
@@ -355,11 +390,13 @@ export default function useWorkflowNodeSteps(
       resource,
       surveyConfig,
       hasErrors,
-      showPreviewStep(formikValues.nodeType, launchConfig)
+      Boolean(showPreviewStep(formikValues.nodeType ?? '', launchConfig))
     )
   );
 
-  const pfSteps: Untyped[] = steps.map((s) => s.step).filter((s) => s != null);
+  const pfSteps: LaunchStepDefinition[] = steps
+    .map((s) => s.step)
+    .filter((s) => s != null);
 
   // The footer Next button honors enableNext, but the wizard nav would still
   // let the user jump ahead; disable nav items beyond the first blocked step.
@@ -378,7 +415,8 @@ export default function useWorkflowNodeSteps(
     if (launchConfig && surveyConfig && isReady) {
       const { values: currentValues, errors: currentErrors } =
         latestForm.current;
-      let initialValues: Record<string, Untyped> = {};
+
+      let initialValues: Record<string, unknown> = {};
       if (
         nodeToEdit &&
         nodeToEdit?.fullUnifiedJobTemplate &&
@@ -412,7 +450,7 @@ export default function useWorkflowNodeSteps(
 
       if (
         !launchConfig?.ask_credential_on_launch &&
-        launchConfig?.passwords_needed_to_start?.length > 0
+        launchConfig?.passwords_needed_to_start?.length
       ) {
         errors.nodeResource = t`Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes`;
       }
@@ -439,10 +477,10 @@ export default function useWorkflowNodeSteps(
 
   return {
     steps: pfSteps,
-    validateStep: (stepId: Untyped) => {
+    validateStep: (stepId: string) => {
       steps?.find((s) => s?.step?.id === stepId)?.validate();
     },
-    visitStep: (prevStepId: Untyped, setFieldTouched: Untyped) => {
+    visitStep: (prevStepId: string, setFieldTouched: SetFieldTouched) => {
       setVisited({
         ...visited,
         [prevStepId]: true,
@@ -451,7 +489,7 @@ export default function useWorkflowNodeSteps(
         ?.find((s) => s?.step?.id === prevStepId)
         ?.setTouched(setFieldTouched);
     },
-    visitAllSteps: (setFieldTouched: Untyped) => {
+    visitAllSteps: (setFieldTouched: SetFieldTouched) => {
       setVisited({
         inventory: true,
         credentials: true,

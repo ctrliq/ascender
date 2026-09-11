@@ -10,7 +10,7 @@ import {
   renderWithContexts,
   assertDetail,
 } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import GitHubDetail from './GitHubDetail';
 
 vi.mock('../../../../api');
@@ -119,7 +119,7 @@ async function setup(category: Untyped, context?: Untyped) {
       <Route
         path="/settings/github/:category/details"
         element={
-          <SettingsProvider value={mockAllOptions.actions}>
+          <SettingsProvider value={settingOptions}>
             <GitHubDetail />
           </SettingsProvider>
         }
@@ -333,7 +333,7 @@ describe('<GitHubDetail />', () => {
           <Route
             path="/settings/github/:category/details"
             element={
-              <SettingsProvider value={mockAllOptions.actions}>
+              <SettingsProvider value={settingOptions}>
                 <GitHubDetail />
               </SettingsProvider>
             }

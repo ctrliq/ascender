@@ -32,7 +32,7 @@ function InventorySourceSyncButton({
 
       return status;
     }, [source.id]),
-    {}
+    null
   );
 
   const { error: startError, dismissError: dismissStartError } =

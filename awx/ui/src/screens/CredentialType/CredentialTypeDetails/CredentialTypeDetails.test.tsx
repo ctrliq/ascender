@@ -1,10 +1,10 @@
 import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 
 import { CredentialTypesAPI, CredentialsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -68,7 +68,7 @@ describe('<CredentialTypeDetails/>', () => {
   test('should disable delete and show proper tooltip when in use', async () => {
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: { count: 15 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     renderWithContexts(
       <CredentialTypeDetails credentialType={makeCredentialType()} />
     );

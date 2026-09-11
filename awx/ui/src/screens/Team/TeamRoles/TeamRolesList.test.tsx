@@ -1,8 +1,9 @@
-import type { Untyped, Team } from 'types/api';
+import type { Team } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { TeamsAPI, RolesAPI, UsersAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import TeamRolesList from './TeamRolesList';
 
@@ -102,10 +103,10 @@ describe('<TeamRolesList />', () => {
   beforeEach(() => {
     vi.mocked(UsersAPI.readAdminOfOrganizations).mockResolvedValue({
       data: { count: 1, results: [{ id: 1, name: 'Foo Org' }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readAdminOfOrganizations>);
     vi.mocked(TeamsAPI.readRoleOptions).mockResolvedValue({
       data: { actions: { GET: {} }, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TeamsAPI.readRoleOptions>);
   });
 
   afterEach(() => {
@@ -154,7 +155,7 @@ describe('<TeamRolesList />', () => {
   test('should not render add button when user cannot edit team and is not an admin of the org', async () => {
     vi.mocked(UsersAPI.readAdminOfOrganizations).mockResolvedValueOnce({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readAdminOfOrganizations>);
     vi.mocked(TeamsAPI.readRoles).mockResolvedValue({
       data: {
         results: [
@@ -175,7 +176,7 @@ describe('<TeamRolesList />', () => {
         ],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TeamsAPI.readRoles>);
     renderWithContexts(<TeamRolesList me={me} team={team} />);
     await screen.findByText('template delete project');
     expect(
@@ -188,7 +189,7 @@ describe('<TeamRolesList />', () => {
       roles as unknown as ApiResponse<any>
     );
     vi.mocked(RolesAPI.disassociateTeamRole).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof RolesAPI.disassociateTeamRole>
     );
     const { user } = renderWithContexts(<TeamRolesList me={me} team={team} />);
     const row = (await screen.findByText('Credential Bar')).closest('tr');
@@ -242,7 +243,7 @@ describe('<TeamRolesList />', () => {
         ],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TeamsAPI.readRoles>);
     renderWithContexts(<TeamRolesList me={me} team={team} />);
     expect(await screen.findByText('System Administrator')).toBeInTheDocument();
   });

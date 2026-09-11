@@ -1,8 +1,7 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { InstanceGroupsAPI, InventoriesAPI, OrganizationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryForm from './ConstructedInventoryForm';
 
@@ -33,22 +32,22 @@ describe('<ConstructedInventoryForm />', () => {
     // crash while destructuring response.data, so provide empty result sets.
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     vi.mocked(OrganizationsAPI.readOptions).mockResolvedValue({
       data: { actions: {}, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readOptions>);
     vi.mocked(InstanceGroupsAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.read>);
     vi.mocked(InstanceGroupsAPI.readOptions).mockResolvedValue({
       data: { actions: {}, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readOptions>);
     vi.mocked(InventoriesAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
     vi.mocked(InventoriesAPI.readOptions).mockResolvedValue({
       data: { actions: {}, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
   });
 
   afterEach(() => {

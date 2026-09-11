@@ -1,9 +1,9 @@
-import type { Untyped, ExecutionEnvironment } from 'types/api';
+import type { ExecutionEnvironment } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 
 import { ExecutionEnvironmentsAPI } from 'api';
-import type { ApiResponse } from 'api/Base';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentTemplateList from './ExecutionEnvironmentTemplateList';
@@ -56,10 +56,18 @@ describe('<ExecutionEnvironmentTemplateList/>', () => {
   beforeEach(() => {
     vi.mocked(
       ExecutionEnvironmentsAPI.readUnifiedJobTemplates
-    ).mockResolvedValue(templates as unknown as ApiResponse<Untyped>);
+    ).mockResolvedValue(
+      templates as unknown as ResponseOf<
+        typeof ExecutionEnvironmentsAPI.readUnifiedJobTemplates
+      >
+    );
     vi.mocked(
       ExecutionEnvironmentsAPI.readUnifiedJobTemplateOptions
-    ).mockResolvedValue(options as unknown as ApiResponse<Untyped>);
+    ).mockResolvedValue(
+      options as unknown as ResponseOf<
+        typeof ExecutionEnvironmentsAPI.readUnifiedJobTemplateOptions
+      >
+    );
   });
 
   afterEach(() => {

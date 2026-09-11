@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { OrganizationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserAdd from './UserAdd';
 
@@ -17,7 +17,7 @@ describe('<UserAdd />', () => {
         count: 1,
         results: [{ id: 1, name: 'Default' }],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
   });
 
   async function fillRequiredFields(user: Untyped) {
@@ -33,7 +33,7 @@ describe('<UserAdd />', () => {
   test('handleSubmit should post to api', async () => {
     vi.mocked(OrganizationsAPI.createUser).mockResolvedValueOnce({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.createUser>);
     const { user } = renderWithContexts(<UserAdd />);
     await screen.findByRole('textbox', { name: 'Username' });
 
@@ -71,7 +71,7 @@ describe('<UserAdd />', () => {
     const history = createMemoryHistory({});
     vi.mocked(OrganizationsAPI.createUser).mockResolvedValueOnce({
       data: { id: 5 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.createUser>);
     const { user } = renderWithContexts(<UserAdd />, {
       context: { router: { history } },
     });

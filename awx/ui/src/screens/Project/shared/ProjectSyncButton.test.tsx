@@ -1,8 +1,7 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { ProjectsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ProjectSyncButton from './ProjectSyncButton';
@@ -35,7 +34,7 @@ describe('ProjectSyncButton', () => {
       data: {
         id: 9000,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.sync>);
     const { user } = renderWithContexts(
       <ProjectSyncButton projectId={1}>{children}</ProjectSyncButton>
     );

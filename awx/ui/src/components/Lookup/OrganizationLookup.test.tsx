@@ -1,9 +1,8 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { OrganizationsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import OrganizationLookup from './OrganizationLookup';
 
@@ -13,10 +12,10 @@ describe('OrganizationLookup', () => {
   beforeEach(() => {
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     vi.mocked(OrganizationsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} }, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -63,7 +62,7 @@ describe('OrganizationLookup', () => {
         results: [org],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>
@@ -79,7 +78,7 @@ describe('OrganizationLookup', () => {
         results: [{ id: 1, name: 'org', url: '/api/v2/organizations/1/' }],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>
@@ -99,7 +98,7 @@ describe('OrganizationLookup', () => {
         ],
         count: 2,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>

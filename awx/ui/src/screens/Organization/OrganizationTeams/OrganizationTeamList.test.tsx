@@ -1,9 +1,9 @@
-import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen } from '@testing-library/react';
 
 import { OrganizationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationTeamList from './OrganizationTeamList';
@@ -61,7 +61,7 @@ describe('<OrganizationTeamList />', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readTeamsOptions>);
   });
 
   afterEach(() => {

@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { screen, within } from '@testing-library/react';
 import { InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockInventory from './shared/data.inventory.json';
 import Inventory from './Inventory';
@@ -30,7 +30,7 @@ describe('<Inventory />', () => {
   beforeEach(() => {
     vi.mocked(InventoriesAPI.readDetail).mockResolvedValue({
       data: mockInventory,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readDetail>);
   });
 
   afterEach(() => {

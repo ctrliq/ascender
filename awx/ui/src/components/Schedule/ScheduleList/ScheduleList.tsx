@@ -37,7 +37,7 @@ export interface ScheduleListProps {
   hideAddButton?: boolean;
   resource?: Untyped;
   launchConfig?: LaunchConfig;
-  surveyConfig?: SurveyConfig;
+  surveyConfig?: SurveyConfig | null;
   [key: string]: unknown;
 }
 

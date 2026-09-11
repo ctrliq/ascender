@@ -20,7 +20,7 @@ import type { ScheduleFormValues } from './types';
 
 export interface SchedulePromptableFieldsProps {
   schedule: Schedule;
-  surveyConfig?: SurveyConfig;
+  surveyConfig?: SurveyConfig | null;
   launchConfig?: LaunchConfig;
   onCloseWizard: (...args: Untyped[]) => void;
   onSave: (values?: Untyped, config?: Untyped) => void;

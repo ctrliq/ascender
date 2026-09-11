@@ -1,12 +1,12 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import OIDCEdit from './OIDCEdit';
 
 vi.mock('../../../../api');
@@ -16,10 +16,10 @@ describe('<OIDCEdit />', () => {
 
   beforeEach(() => {
     vi.mocked(SettingsAPI.revertCategory).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.revertCategory>
     );
     vi.mocked(SettingsAPI.updateAll).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.updateAll>
     );
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: {
@@ -28,7 +28,7 @@ describe('<OIDCEdit />', () => {
         SOCIAL_AUTH_OIDC_OIDC_ENDPOINT: 'https://example.com',
         SOCIAL_AUTH_OIDC_VERIFY_SSL: true,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -40,7 +40,7 @@ describe('<OIDCEdit />', () => {
       initialEntries: ['/settings/oidc/edit'],
     });
     const result = renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <OIDCEdit />
       </SettingsProvider>,
       { context: { router: { history } } }

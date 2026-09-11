@@ -1,4 +1,4 @@
-import type { Untyped, InstanceGroup } from 'types/api';
+import type { InstanceGroup } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { Routes, Route } from 'react-router';
@@ -6,6 +6,7 @@ import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import { InstancesAPI, InstanceGroupsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -139,7 +140,7 @@ describe('<InstanceList/>', () => {
         count: instances.length,
         results: instances,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readInstances>);
     vi.mocked(InstanceGroupsAPI.readInstanceOptions).mockResolvedValue(
       options as unknown as ApiResponse<any>
     );
@@ -163,10 +164,10 @@ describe('<InstanceList/>', () => {
   test('should show associate modal when adding an existing instance', async () => {
     vi.mocked(InstancesAPI.read).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.read>);
     vi.mocked(InstancesAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} }, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.readOptions>);
     const { user } = setup();
     await screen.findByRole('link', { name: 'awx' });
 
@@ -185,7 +186,7 @@ describe('<InstanceList/>', () => {
   test('should run health check on selected execution instances', async () => {
     vi.mocked(InstancesAPI.healthCheck).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.healthCheck>);
     const { user } = setup();
     await screen.findByRole('link', { name: 'awx' });
 

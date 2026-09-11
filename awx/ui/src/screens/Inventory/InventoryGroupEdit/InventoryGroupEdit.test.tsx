@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, Group } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { GroupsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroupEdit from './InventoryGroupEdit';
 
@@ -53,7 +53,7 @@ describe('<InventoryGroupEdit />', () => {
         description: 'Bar',
         variables: 'bizz: buzz',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof GroupsAPI.readDetail>);
   });
 
   afterEach(() => {
@@ -88,7 +88,7 @@ describe('<InventoryGroupEdit />', () => {
   test('handleSubmit should call api', async () => {
     vi.mocked(GroupsAPI.update).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof GroupsAPI.update>);
     const history = createMemoryHistory({
       initialEntries: ['/inventories/inventory/1/groups/2/edit'],
     });

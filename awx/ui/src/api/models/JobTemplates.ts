@@ -1,4 +1,15 @@
 import type { QSParams } from 'util/qs';
+import type {
+  AccessListEntry,
+  Credential,
+  JobTemplate,
+  LaunchConfig,
+  OptionsResponse,
+  Paginated,
+  Schedule,
+  SurveyConfig,
+  WebhookKey,
+} from '../../types/api';
 import Base from '../Base';
 import NotificationsMixin from '../mixins/Notifications.mixin';
 import InstanceGroupsMixin from '../mixins/InstanceGroups.mixin';
@@ -24,22 +35,47 @@ class JobTemplates extends SchedulesMixin(
     this.readWebhookKey = this.readWebhookKey.bind(this);
   }
 
+  // Reached through a mixin, which cannot carry the resource type along, so
+  // the calls that answer with a job template say so here.
+  read<T = Paginated<JobTemplate>>(params?: QSParams) {
+    return super.read<T>(params);
+  }
+
+  readDetail<T = JobTemplate>(id: number | string) {
+    return super.readDetail<T>(id);
+  }
+
+  create<T = JobTemplate>(data?: unknown) {
+    return super.create<T>(data);
+  }
+
+  update<T = JobTemplate>(id: number | string, data?: unknown) {
+    return super.update<T>(id, data);
+  }
+
+  copy<T = JobTemplate>(id: number | string, data?: unknown) {
+    return super.copy<T>(id, data);
+  }
+
   launch(id: number | string, data: unknown) {
     return this.http.post(`${this.baseUrl}${id}/launch/`, data);
   }
 
   readTemplateOptions(id: number | string) {
-    return this.http.options(`${this.baseUrl}${id}/`);
+    return this.http.options<OptionsResponse>(`${this.baseUrl}${id}/`);
   }
 
   readLaunch(id: number | string) {
-    return this.http.get(`${this.baseUrl}${id}/launch/`);
+    return this.http.get<LaunchConfig>(`${this.baseUrl}${id}/launch/`);
   }
 
   readCredentials(id: number | string, params?: QSParams) {
-    return this.http.get(`${this.baseUrl}${id}/credentials/`, {
-      params,
-    });
+    return this.http.get<Paginated<Credential>>(
+      `${this.baseUrl}${id}/credentials/`,
+      {
+        params,
+      }
+    );
   }
 
   associateCredentials(id: number | string, credentialId: number | string) {
@@ -56,23 +92,31 @@ class JobTemplates extends SchedulesMixin(
   }
 
   readAccessList(id: number | string, params?: QSParams) {
-    return this.http.get(`${this.baseUrl}${id}/access_list/`, {
-      params,
-    });
+    return this.http.get<Paginated<AccessListEntry>>(
+      `${this.baseUrl}${id}/access_list/`,
+      {
+        params,
+      }
+    );
   }
 
   readAccessOptions(id: number | string) {
-    return this.http.options(`${this.baseUrl}${id}/access_list/`);
+    return this.http.options<OptionsResponse>(
+      `${this.baseUrl}${id}/access_list/`
+    );
   }
 
   readScheduleList(id: number | string, params?: QSParams) {
-    return this.http.get(`${this.baseUrl}${id}/schedules/`, {
-      params,
-    });
+    return this.http.get<Paginated<Schedule>>(
+      `${this.baseUrl}${id}/schedules/`,
+      {
+        params,
+      }
+    );
   }
 
   readSurvey(id: number | string) {
-    return this.http.get(`${this.baseUrl}${id}/survey_spec/`);
+    return this.http.get<SurveyConfig>(`${this.baseUrl}${id}/survey_spec/`);
   }
 
   updateSurvey(id: number | string, survey: unknown) {
@@ -84,11 +128,11 @@ class JobTemplates extends SchedulesMixin(
   }
 
   readWebhookKey(id: number | string) {
-    return this.http.get(`${this.baseUrl}${id}/webhook_key/`);
+    return this.http.get<WebhookKey>(`${this.baseUrl}${id}/webhook_key/`);
   }
 
   updateWebhookKey(id: number | string) {
-    return this.http.post(`${this.baseUrl}${id}/webhook_key/`);
+    return this.http.post<WebhookKey>(`${this.baseUrl}${id}/webhook_key/`);
   }
 }
 

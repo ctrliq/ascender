@@ -1,8 +1,8 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { NotificationTemplatesAPI, JobTemplatesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import NotificationList from './NotificationList';
 
@@ -51,29 +51,35 @@ describe('<NotificationList />', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.readOptions>);
 
     vi.mocked(NotificationTemplatesAPI.read).mockResolvedValue({
       data,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.read>);
 
     vi.mocked(
       JobTemplatesAPI.readNotificationTemplatesSuccess
     ).mockResolvedValue({
       data: { results: [{ id: 1 }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<
+      typeof JobTemplatesAPI.readNotificationTemplatesSuccess
+    >);
 
     vi.mocked(JobTemplatesAPI.readNotificationTemplatesError).mockResolvedValue(
       {
         data: { results: [{ id: 2 }] },
-      } as unknown as ApiResponse<Untyped>
+      } as unknown as ResponseOf<
+        typeof JobTemplatesAPI.readNotificationTemplatesError
+      >
     );
 
     vi.mocked(
       JobTemplatesAPI.readNotificationTemplatesStarted
     ).mockResolvedValue({
       data: { results: [{ id: 3 }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<
+      typeof JobTemplatesAPI.readNotificationTemplatesStarted
+    >);
 
     ({ container, user } = renderWithContexts(
       <NotificationList
@@ -236,35 +242,43 @@ describe('<NotificationList showChangedToggle />', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.readOptions>);
 
     vi.mocked(NotificationTemplatesAPI.read).mockResolvedValue({
       data,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.read>);
 
     vi.mocked(
       JobTemplatesAPI.readNotificationTemplatesSuccess
     ).mockResolvedValue({
       data: { results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<
+      typeof JobTemplatesAPI.readNotificationTemplatesSuccess
+    >);
 
     vi.mocked(JobTemplatesAPI.readNotificationTemplatesError).mockResolvedValue(
       {
         data: { results: [] },
-      } as unknown as ApiResponse<Untyped>
+      } as unknown as ResponseOf<
+        typeof JobTemplatesAPI.readNotificationTemplatesError
+      >
     );
 
     vi.mocked(
       JobTemplatesAPI.readNotificationTemplatesStarted
     ).mockResolvedValue({
       data: { results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<
+      typeof JobTemplatesAPI.readNotificationTemplatesStarted
+    >);
 
     vi.mocked(
       JobTemplatesAPI.readNotificationTemplatesChanged
     ).mockResolvedValue({
       data: { results: [{ id: 1 }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<
+      typeof JobTemplatesAPI.readNotificationTemplatesChanged
+    >);
 
     ({ container, user } = renderWithContexts(
       <NotificationList

@@ -4,6 +4,7 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { ApplicationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ApplicationAdd from './ApplicationAdd';
@@ -97,7 +98,7 @@ describe('<ApplicationAdd/>', () => {
     );
     vi.mocked(ApplicationsAPI.create).mockResolvedValue({
       data: { id: 8 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ApplicationsAPI.create>);
 
     const { user } = renderWithContexts(
       <ApplicationAdd onSuccessfulAdd={onSuccessfulAdd} />,

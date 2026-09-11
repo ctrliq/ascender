@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -6,9 +5,10 @@ import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 import { SettingsAPI } from 'api';
 import { SettingsProvider } from 'contexts/Settings';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockJobSettings from '../shared/data.jobSettings.json';
-import mockAllOptions from '../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../testUtils/settingOptions';
 import mockTroubleshootingSettings from './TroubleshootingEdit/data.defaultTroubleshootingSettings.json';
 import Troubleshooting from './Troubleshooting';
 
@@ -18,7 +18,7 @@ describe('<Troubleshooting />', () => {
   beforeEach(() => {
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: mockJobSettings,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -28,7 +28,7 @@ describe('<Troubleshooting />', () => {
   function renderTroubleshooting(initialEntries: Untyped) {
     const history = createMemoryHistory({ initialEntries });
     return renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <Routes>
           <Route
             path="/settings/troubleshooting/*"
@@ -48,7 +48,7 @@ describe('<Troubleshooting />', () => {
   test('should render troubleshooting edit', async () => {
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: mockTroubleshootingSettings,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     renderTroubleshooting(['/settings/troubleshooting/edit']);
     expect(
       await screen.findByRole('button', { name: 'Save' })

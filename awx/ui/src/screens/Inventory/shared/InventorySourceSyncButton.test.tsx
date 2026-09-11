@@ -1,8 +1,7 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { InventorySourcesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventorySourceSyncButton from './InventorySourceSyncButton';
 
@@ -28,7 +27,7 @@ describe('<InventorySourceSyncButton />', () => {
   test('should start sync properly', async () => {
     vi.mocked(InventorySourcesAPI.createSyncStart).mockResolvedValue({
       data: { status: 'pending' },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.createSyncStart>);
     const { user } = renderWithContexts(
       <InventorySourceSyncButton source={source} />
     );

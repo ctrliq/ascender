@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import { InstanceGroupsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InstanceGroupAdd from './InstanceGroupAdd';
 
@@ -72,7 +72,7 @@ describe('<InstanceGroupAdd/>', () => {
       data: {
         id: 42,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.create>);
   });
 
   afterEach(() => {

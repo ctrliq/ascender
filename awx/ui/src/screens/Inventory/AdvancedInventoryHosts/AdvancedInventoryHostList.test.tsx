@@ -1,10 +1,10 @@
-import type { Untyped, Inventory } from 'types/api';
-import type { ApiResponse } from 'api/Base';
+import type { Inventory } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import AdvancedInventoryHostList from './AdvancedInventoryHostList';
 import mockInventory from '../shared/data.inventory.json';
@@ -45,7 +45,7 @@ describe('<AdvancedInventoryHostList />', () => {
   beforeEach(() => {
     vi.mocked(InventoriesAPI.readHosts).mockResolvedValue({
       data: mockHosts,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readHosts>);
     vi.mocked(InventoriesAPI.readAdHocOptions).mockResolvedValue({
       data: {
         actions: {
@@ -60,7 +60,7 @@ describe('<AdvancedInventoryHostList />', () => {
           POST: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readAdHocOptions>);
   });
 
   afterEach(() => {

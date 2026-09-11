@@ -5,6 +5,7 @@ import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { HostsAPI, InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -101,7 +102,7 @@ describe('<HostGroupsList />', () => {
         count: mockGroups.length,
         results: mockGroups,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof HostsAPI.readAllGroups>);
     vi.mocked(HostsAPI.readGroupsOptions).mockResolvedValue({
       data: {
         actions: {
@@ -109,7 +110,7 @@ describe('<HostGroupsList />', () => {
           POST: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof HostsAPI.readGroupsOptions>);
   });
 
   afterEach(() => {
@@ -178,7 +179,7 @@ describe('<HostGroupsList />', () => {
           GET: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof HostsAPI.readGroupsOptions>);
     renderList();
     await screen.findByText('foo');
     expect(
@@ -189,10 +190,10 @@ describe('<HostGroupsList />', () => {
   test('should show associate group modal when adding an existing group', async () => {
     vi.mocked(InventoriesAPI.readGroups).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readGroups>);
     vi.mocked(InventoriesAPI.readGroupsOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} }, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readGroupsOptions>);
     const { user } = renderList();
     await screen.findByRole('link', { name: 'foo' });
 
@@ -215,7 +216,7 @@ describe('<HostGroupsList />', () => {
           { id: 123, name: 'associate me', url: '/api/v2/groups/123/' },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readGroups>);
     vi.mocked(InventoriesAPI.readGroupsOptions).mockResolvedValue({
       data: {
         actions: {
@@ -224,7 +225,7 @@ describe('<HostGroupsList />', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readGroupsOptions>);
     const { user } = renderList();
     await screen.findByRole('link', { name: 'foo' });
 

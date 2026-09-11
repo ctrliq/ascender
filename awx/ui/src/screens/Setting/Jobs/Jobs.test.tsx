@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -6,8 +5,9 @@ import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
-import mockAllOptions from '../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../testUtils/settingOptions';
 import mockJobSettings from '../shared/data.jobSettings.json';
 import Jobs from './Jobs';
 
@@ -16,7 +16,7 @@ vi.mock('../../../api');
 function mountAt(path: Untyped) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
-    <SettingsProvider value={mockAllOptions.actions}>
+    <SettingsProvider value={settingOptions}>
       <Routes>
         <Route path="/settings/jobs/*" element={<Jobs />} />
       </Routes>
@@ -29,7 +29,7 @@ describe('<Jobs />', () => {
   beforeEach(() => {
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: mockJobSettings,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {

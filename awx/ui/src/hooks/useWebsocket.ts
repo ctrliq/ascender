@@ -3,13 +3,31 @@ import { useState, useEffect, useRef } from 'react';
 /** The group subscription the API expects on connect. */
 export type SubscribeGroups = Record<string, string[]>;
 
+/**
+ * One message off the socket, as the screens that watch it read them.
+ *
+ * Which fields a message carries depends on its group and on what changed, so
+ * they are all optional; the index signature keeps the rest reachable.
+ */
+export interface WebsocketMessage {
+  group_name?: string;
+  type?: string;
+  status?: string;
+  finished?: string | null;
+  unified_job_id?: number;
+  unified_job_template_id?: number;
+  project_id?: number;
+  inventory_id?: number;
+  inventory_source_id?: number;
+  workflow_job_id?: number;
+  workflow_node_id?: number;
+  [key: string]: unknown;
+}
+
 export default function useWebsocket(
   subscribeGroups: SubscribeGroups
-): Record<string, unknown> | null {
-  const [lastMessage, setLastMessage] = useState<Record<
-    string,
-    unknown
-  > | null>(null);
+): WebsocketMessage | null {
+  const [lastMessage, setLastMessage] = useState<WebsocketMessage | null>(null);
   const ws = useRef<WebSocket | null>(null);
 
   useEffect(() => {

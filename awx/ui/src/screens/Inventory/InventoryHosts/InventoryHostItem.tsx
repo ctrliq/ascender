@@ -1,4 +1,4 @@
-import type { Host, Untyped } from 'types/api';
+import type { Host, SummaryFieldRef, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
@@ -49,7 +49,9 @@ function InventoryHostItem({
     request: fetchRelatedGroups,
     result: relatedGroups,
   } = useRequest(
-    useCallback(async (hostId: Untyped) => {
+    // The summary the row was listed with holds only the first few groups;
+    // the overflow chip reads the rest.
+    useCallback(async (hostId: number): Promise<SummaryFieldRef[]> => {
       const { data } = await HostsAPI.readGroups(hostId);
       return data.results;
     }, []),
@@ -58,8 +60,8 @@ function InventoryHostItem({
 
   const { error: dismissableError, dismissError } = useDismissableError(error);
 
-  const handleOverflowChipClick = (hostId: Untyped) => {
-    if (relatedGroups.length === initialGroups.count) {
+  const handleOverflowChipClick = (hostId: number) => {
+    if (relatedGroups?.length === initialGroups.count) {
       return;
     }
     fetchRelatedGroups(hostId);
@@ -105,7 +107,7 @@ function InventoryHostItem({
             ouiaId="host-related-groups-chips"
             onOverflowChipClick={() => handleOverflowChipClick(host.id)}
           >
-            {relatedGroups.map((group: Untyped) => (
+            {(relatedGroups ?? []).map((group) => (
               <Label variant="outline" key={group.name}>
                 {group.name}
               </Label>

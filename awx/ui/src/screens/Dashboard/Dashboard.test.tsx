@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -9,6 +8,7 @@ import {
   JobTemplatesAPI,
   WorkflowJobTemplatesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Dashboard from './Dashboard';
 
@@ -26,13 +26,13 @@ describe('<Dashboard />', () => {
 
   beforeEach(() => {
     vi.mocked(DashboardAPI.read).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof DashboardAPI.read>
     );
     vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
       data: {
         BRAND_NAME: 'AWX',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
     graphRequest = DashboardAPI.readJobGraph;
     graphRequest.mockResolvedValue({
       data: {
@@ -50,16 +50,16 @@ describe('<Dashboard />', () => {
     });
     vi.mocked(UnifiedJobTemplatesAPI.read).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UnifiedJobTemplatesAPI.read>);
     vi.mocked(UnifiedJobTemplatesAPI.readOptions).mockResolvedValue({
       data: { actions: {}, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UnifiedJobTemplatesAPI.readOptions>);
     vi.mocked(JobTemplatesAPI.readOptions).mockResolvedValue({
       data: { actions: {} },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readOptions>);
     vi.mocked(WorkflowJobTemplatesAPI.readOptions).mockResolvedValue({
       data: { actions: {} },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readOptions>);
   });
 
   afterEach(() => {

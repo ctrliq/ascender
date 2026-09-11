@@ -1,7 +1,8 @@
+import type { FederatedInventory } from '../../types/api';
 import Base from '../Base';
 import type { Http } from '../Base';
 
-class FederatedInventories extends Base {
+class FederatedInventories extends Base<FederatedInventory> {
   constructor(http?: Http) {
     super(http);
     this.baseUrl = 'api/v2/federated_inventories/';

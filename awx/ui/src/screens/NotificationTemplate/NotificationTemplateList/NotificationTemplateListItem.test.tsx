@@ -1,9 +1,8 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 
 import { NotificationTemplatesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import NotificationTemplateListItem from './NotificationTemplateListItem';
@@ -53,7 +52,7 @@ describe('<NotificationTemplateListItem />', () => {
   test('should send test notification', async () => {
     vi.mocked(NotificationTemplatesAPI.test).mockResolvedValue({
       data: { notification: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.test>);
     const { user } = renderItem();
     await user.click(screen.getByRole('button', { name: 'Test Notification' }));
     await waitFor(() =>
@@ -65,7 +64,7 @@ describe('<NotificationTemplateListItem />', () => {
   test('should call api to copy template', async () => {
     vi.mocked(NotificationTemplatesAPI.copy).mockResolvedValue({
       name: 'Foo',
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.copy>);
     const { user } = renderItem();
     await user.click(screen.getByRole('button', { name: 'Copy' }));
     await waitFor(() =>

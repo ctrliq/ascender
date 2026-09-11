@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { NodeTemplate, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
@@ -11,7 +11,7 @@ const STEP_ID = 'other';
 export const YAML_MODE = 'yaml';
 export const JSON_MODE = 'javascript';
 
-const getVariablesData = (resource: Record<string, unknown>) => {
+const getVariablesData = (resource: NodeTemplate | null) => {
   if (resource?.extra_data) {
     return jsonToYaml(JSON.stringify(resource.extra_data));
   }
@@ -38,7 +38,7 @@ const FIELD_NAMES = [
 
 export default function useOtherPromptsStep(
   launchConfig: LaunchConfig,
-  resource: Record<string, unknown>,
+  resource: NodeTemplate | null,
   labels: unknown
 ): LaunchStep {
   const { t } = useLingui();

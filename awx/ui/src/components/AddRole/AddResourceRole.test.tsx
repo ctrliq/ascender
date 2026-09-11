@@ -1,10 +1,9 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import { TeamsAPI, UsersAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AddResourceRole from './AddResourceRole';
 
@@ -44,10 +43,10 @@ describe('<AddResourceRole />', () => {
           { id: 3, username: 'baz', url: '' },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.read>);
     vi.mocked(UsersAPI.readOptions).mockResolvedValue({
       data: { related: {}, actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readOptions>);
     vi.mocked(TeamsAPI.read).mockResolvedValue({
       data: {
         count: 2,
@@ -56,10 +55,10 @@ describe('<AddResourceRole />', () => {
           { id: 2, name: 'Team bar', url: '' },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TeamsAPI.read>);
     vi.mocked(TeamsAPI.readOptions).mockResolvedValue({
       data: { related: {}, actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TeamsAPI.readOptions>);
   });
 
   afterEach(() => {

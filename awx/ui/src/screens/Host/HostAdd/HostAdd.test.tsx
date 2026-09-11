@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { HostsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import HostAdd from './HostAdd';
 
@@ -66,7 +66,7 @@ describe('<HostAdd />', () => {
         ...hostData,
         id: 5,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof HostsAPI.create>);
   });
 
   afterEach(() => {

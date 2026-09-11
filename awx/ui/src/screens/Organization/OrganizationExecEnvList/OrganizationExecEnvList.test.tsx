@@ -1,9 +1,9 @@
-import type { Untyped, Organization } from 'types/api';
+import type { Organization } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 
 import { OrganizationsAPI } from 'api';
-import type { ApiResponse } from 'api/Base';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationExecEnvList from './OrganizationExecEnvList';
@@ -65,11 +65,17 @@ const options = { data: { actions: { POST: {}, GET: {} } } };
 describe('<OrganizationExecEnvList/>', () => {
   beforeEach(() => {
     vi.mocked(OrganizationsAPI.readExecutionEnvironments).mockResolvedValue(
-      executionEnvironments as unknown as ApiResponse<Untyped>
+      executionEnvironments as unknown as ResponseOf<
+        typeof OrganizationsAPI.readExecutionEnvironments
+      >
     );
     vi.mocked(
       OrganizationsAPI.readExecutionEnvironmentsOptions
-    ).mockResolvedValue(options as unknown as ApiResponse<Untyped>);
+    ).mockResolvedValue(
+      options as unknown as ResponseOf<
+        typeof OrganizationsAPI.readExecutionEnvironmentsOptions
+      >
+    );
   });
 
   afterEach(() => {

@@ -48,7 +48,7 @@ function ConstructedInventory({ setBreadcrumb }: ConstructedInventoryProps) {
       const { data } = await ConstructedInventoriesAPI.readDetail(id);
       return data;
     }, [id]),
-    { inventory: null, isLoading: true }
+    { isLoading: true }
   );
 
   useEffect(() => {

@@ -1,7 +1,6 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
+import type { ResponseOf } from '../../../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 import { SystemJobTemplatesAPI } from '../../../../../../api';
 import SystemJobTemplatesList from './SystemJobTemplatesList';
@@ -96,7 +95,7 @@ describe('SystemJobTemplatesList', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SystemJobTemplatesAPI.read>);
     vi.mocked(SystemJobTemplatesAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -105,7 +104,7 @@ describe('SystemJobTemplatesList', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SystemJobTemplatesAPI.readOptions>);
     renderWithContexts(
       <SystemJobTemplatesList
         nodeResource={nodeResource}

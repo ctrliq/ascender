@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
@@ -7,6 +6,7 @@ import {
   WorkflowStateContext,
 } from 'contexts/Workflow';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
+import type { ResponseOf } from '../../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import NodeViewModal from './NodeViewModal';
 import type { WorkflowState } from '../../../../../components/Workflow/workflowReducer';
@@ -27,7 +27,7 @@ describe('NodeViewModal', () => {
   beforeEach(() => {
     dispatch = vi.fn();
     vi.mocked(WorkflowJobTemplatesAPI.readLaunch).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readLaunch>
     );
     vi.mocked(WorkflowJobTemplatesAPI.readDetail).mockResolvedValue({
       data: {
@@ -37,27 +37,27 @@ describe('NodeViewModal', () => {
           webhook_receiver: '/api/v2/job_templates/7/gitlab/',
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readDetail>);
     vi.mocked(WorkflowJobTemplatesAPI.readWebhookKey).mockResolvedValue({
       data: {
         webhook_key: 'Pim3mRXT0',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readWebhookKey>);
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>
     );
     vi.mocked(JobTemplatesAPI.readInstanceGroups).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof JobTemplatesAPI.readInstanceGroups>
     );
     vi.mocked(JobTemplatesAPI.readWebhookKey).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof JobTemplatesAPI.readWebhookKey>
     );
     vi.mocked(JobTemplatesAPI.readDetail).mockResolvedValue({
       data: {
         id: 1,
         type: 'job_template',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readDetail>);
   });
 
   describe('Workflow job template node', () => {

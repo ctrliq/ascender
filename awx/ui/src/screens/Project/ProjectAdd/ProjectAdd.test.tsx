@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { ProjectsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ProjectAdd from './ProjectAdd';
 
@@ -81,7 +81,7 @@ describe('<ProjectAdd />', () => {
   test('handleSubmit should post to the api', async () => {
     vi.mocked(ProjectsAPI.create).mockResolvedValueOnce({
       data: { ...projectData, id: 5 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.create>);
     const { user } = renderWithContexts(<ProjectAdd />);
 
     await user.click(screen.getByRole('button', { name: 'mock-submit' }));
@@ -99,7 +99,7 @@ describe('<ProjectAdd />', () => {
     const history = createMemoryHistory();
     vi.mocked(ProjectsAPI.create).mockResolvedValueOnce({
       data: { ...projectData, id: 5 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.create>);
     const { user } = renderWithContexts(<ProjectAdd />, {
       context: { router: { history } },
     });

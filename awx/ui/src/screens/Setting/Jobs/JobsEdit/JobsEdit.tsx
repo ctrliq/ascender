@@ -27,7 +27,7 @@ function JobsEdit() {
   const { t } = useLingui();
   const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
-  const { PUT: options } = useSettings();
+  const { PUT: options = {} } = useSettings();
 
   const {
     isLoading,
@@ -47,8 +47,7 @@ function JobsEdit() {
         if (!options[key]) {
           return;
         }
-        mergedData[key] = options[key];
-        mergedData[key].value = jobsData[key];
+        mergedData[key] = { ...options[key], value: jobsData[key] };
       });
 
       return mergedData;

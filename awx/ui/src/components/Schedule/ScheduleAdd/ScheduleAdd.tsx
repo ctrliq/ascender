@@ -22,7 +22,7 @@ export interface ScheduleAddProps {
   resource: Untyped;
   apiModel: SchedulesApiModel;
   launchConfig?: LaunchConfig;
-  surveyConfig?: SurveyConfig;
+  surveyConfig?: SurveyConfig | null;
   hasDaysToKeepField?: boolean;
   resourceDefaultCredentials?: Untyped;
   [key: string]: unknown;
@@ -132,7 +132,7 @@ function ScheduleAdd({
             const {
               data: { results },
             } = await OrganizationsAPI.read();
-            organizationId = results[0].id;
+            organizationId = results[0]?.id;
           } catch (err) {
             throw err;
           }

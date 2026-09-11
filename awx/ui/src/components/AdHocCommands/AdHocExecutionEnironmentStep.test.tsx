@@ -1,9 +1,8 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { ExecutionEnvironmentsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AdHocExecutionEnvironmentStep from './AdHocExecutionEnvironmentStep';
 
@@ -19,10 +18,10 @@ describe('<AdHocExecutionEnvironmentStep />', () => {
         ],
         count: 2,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
   });
 
   afterEach(() => {

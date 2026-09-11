@@ -9,6 +9,7 @@ import {
   LabelsAPI,
   UsersAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowJobTemplateAdd from './WorkflowJobTemplateAdd';
 
@@ -72,10 +73,10 @@ describe('<WorkflowJobTemplateAdd/>', () => {
   beforeEach(() => {
     vi.mocked(WorkflowJobTemplatesAPI.create).mockResolvedValue({
       data: { id: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.create>);
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: { results: [{ id: 1 }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     vi.mocked(LabelsAPI.read).mockResolvedValue({
       data: {
         results: [
@@ -84,10 +85,10 @@ describe('<WorkflowJobTemplateAdd/>', () => {
           { name: 'Label 3', id: 3 },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof LabelsAPI.read>);
     vi.mocked(UsersAPI.readAdminOfOrganizations).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readAdminOfOrganizations>);
   });
 
   afterEach(() => {

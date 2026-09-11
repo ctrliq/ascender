@@ -1,9 +1,11 @@
 import type { ApiResponse } from 'api/Base';
-import type { Organization, Paginated, WorkflowJobTemplate } from 'types/api';
 import type {
-  ApiWorkflowNode,
-  WorkflowState,
-} from 'components/Workflow/workflowReducer';
+  Organization,
+  Paginated,
+  WorkflowJobTemplate,
+  WorkflowJobTemplateNode,
+} from 'types/api';
+import type { WorkflowState } from 'components/Workflow/workflowReducer';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import {
@@ -142,7 +144,7 @@ describe('Visualizer', () => {
         count: mockWorkflowNodes.length,
         results: mockWorkflowNodes,
       },
-    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
+    } as unknown as ApiResponse<Paginated<WorkflowJobTemplateNode>>);
     (window.SVGElement.prototype as unknown as SvgGeometryStubs).height = {
       baseVal: {
         value: 100,
@@ -259,7 +261,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
+    } as unknown as ApiResponse<Paginated<WorkflowJobTemplateNode>>);
     const { container } = renderVisualizer();
     await waitFor(() =>
       expect(
@@ -299,7 +301,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
+    } as unknown as ApiResponse<Paginated<WorkflowJobTemplateNode>>);
     vi.mocked(WorkflowJobTemplatesAPI.createNode).mockRejectedValue(
       new Error()
     );
@@ -357,7 +359,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
+    } as unknown as ApiResponse<Paginated<WorkflowJobTemplateNode>>);
     vi.mocked(WorkflowJobTemplateNodesAPI.update).mockRejectedValue(
       new Error()
     );
@@ -409,12 +411,12 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
+    } as unknown as ApiResponse<Paginated<WorkflowJobTemplateNode>>);
     vi.mocked(WorkflowJobTemplatesAPI.createNode).mockResolvedValue({
       data: {
         id: 9001,
       },
-    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
+    } as unknown as ApiResponse<WorkflowJobTemplateNode>);
     vi.mocked(
       WorkflowJobTemplateNodesAPI.createApprovalTemplate
     ).mockRejectedValue(new Error());
@@ -481,7 +483,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
+    } as unknown as ApiResponse<Paginated<WorkflowJobTemplateNode>>);
     vi.mocked(WorkflowJobTemplateNodesAPI.update).mockResolvedValue({
       data: {
         id: 9000,
@@ -492,7 +494,7 @@ describe('Visualizer', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
+    } as unknown as ApiResponse<Paginated<WorkflowJobTemplateNode>>);
     vi.mocked(WorkflowApprovalTemplatesAPI.update).mockRejectedValue(
       new Error()
     );
@@ -593,7 +595,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
+    } as unknown as ApiResponse<Paginated<WorkflowJobTemplateNode>>);
     vi.mocked(
       WorkflowJobTemplateNodesAPI.disassociateFailuresNode
     ).mockRejectedValue(new Error());
@@ -695,7 +697,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
+    } as unknown as ApiResponse<Paginated<WorkflowJobTemplateNode>>);
     vi.mocked(
       WorkflowJobTemplateNodesAPI.disassociateFailuresNode
     ).mockResolvedValue(undefined as unknown as ApiResponse<any>);
@@ -785,7 +787,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
+    } as unknown as ApiResponse<Paginated<WorkflowJobTemplateNode>>);
     vi.mocked(WorkflowJobTemplateNodesAPI.update).mockResolvedValue(
       undefined as unknown as ApiResponse<unknown>
     );
@@ -875,7 +877,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
+    } as unknown as ApiResponse<Paginated<WorkflowJobTemplateNode>>);
     vi.mocked(WorkflowJobTemplateNodesAPI.update).mockResolvedValue(
       undefined as unknown as ApiResponse<unknown>
     );

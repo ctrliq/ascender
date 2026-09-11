@@ -4,6 +4,7 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { ConstructedInventoriesAPI, InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryEdit from './ConstructedInventoryEdit';
 
@@ -69,13 +70,13 @@ describe('<ConstructedInventoryEdit />', () => {
     });
     vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
       data: { results: associatedInstanceGroups },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
     vi.mocked(InventoriesAPI.readInputInventories).mockResolvedValue({
       data: { results: [{ id: 456, name: 'input_inventory_456' }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInputInventories>);
     vi.mocked(ConstructedInventoriesAPI.update).mockResolvedValue({
       data: { id: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ConstructedInventoriesAPI.update>);
     vi.mocked(InventoriesAPI.orderInstanceGroups).mockResolvedValue(undefined);
     vi.mocked(InventoriesAPI.disassociateInventory).mockResolvedValue(
       undefined as unknown as ApiResponse<any>

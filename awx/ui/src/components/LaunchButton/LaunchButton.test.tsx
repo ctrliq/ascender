@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
@@ -11,6 +10,7 @@ import {
   WorkflowJobsAPI,
   WorkflowJobTemplatesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import LaunchButton from './LaunchButton';
@@ -54,13 +54,13 @@ describe('LaunchButton', () => {
         survey_enabled: false,
         variables_needed_to_start: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>);
     vi.mocked(JobTemplatesAPI.readCredentials).mockResolvedValue({
       data: {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readCredentials>);
   });
 
   afterEach(() => vi.clearAllMocks());
@@ -81,7 +81,7 @@ describe('LaunchButton', () => {
       data: {
         id: 9000,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.launch>);
     const { user } = renderWithContexts(
       <LaunchButton resource={resource}>{launchButton}</LaunchButton>,
       {
@@ -105,7 +105,7 @@ describe('LaunchButton', () => {
       data: {
         can_start_without_user_input: true,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readLaunch>);
     const history = createMemoryHistory({
       initialEntries: ['/jobs/9000'],
     });
@@ -113,7 +113,7 @@ describe('LaunchButton', () => {
       data: {
         id: 9000,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.launch>);
     const { user } = renderWithContexts(
       <LaunchButton
         resource={{
@@ -144,7 +144,7 @@ describe('LaunchButton', () => {
       data: {
         can_start_without_user_input: true,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobsAPI.readRelaunch>);
     const history = createMemoryHistory({
       initialEntries: ['/jobs/9000'],
     });
@@ -152,7 +152,7 @@ describe('LaunchButton', () => {
       data: {
         id: 9000,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobsAPI.relaunch>);
     const { user } = renderWithContexts(
       <LaunchButton
         resource={{
@@ -181,7 +181,7 @@ describe('LaunchButton', () => {
       data: {
         can_start_without_user_input: true,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobsAPI.readRelaunch>);
     const history = createMemoryHistory({
       initialEntries: ['/jobs/9000'],
     });
@@ -189,7 +189,7 @@ describe('LaunchButton', () => {
       data: {
         id: 9000,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobsAPI.relaunch>);
     const { user } = renderWithContexts(
       <LaunchButton
         resource={{
@@ -220,7 +220,7 @@ describe('LaunchButton', () => {
       data: {
         can_start_without_user_input: true,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readLaunchUpdate>);
     const history = createMemoryHistory({
       initialEntries: ['/jobs/9000'],
     });
@@ -228,7 +228,7 @@ describe('LaunchButton', () => {
       data: {
         id: 9000,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.launchUpdate>);
     const { user } = renderWithContexts(
       <LaunchButton
         resource={{
@@ -260,7 +260,7 @@ describe('LaunchButton', () => {
       data: {
         can_start_without_user_input: true,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readLaunchUpdate>);
     const history = createMemoryHistory({
       initialEntries: ['/jobs/9000'],
     });
@@ -268,7 +268,7 @@ describe('LaunchButton', () => {
       data: {
         id: 9000,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.launchUpdate>);
     const { user } = renderWithContexts(
       <LaunchButton
         resource={{

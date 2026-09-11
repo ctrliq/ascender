@@ -1,8 +1,8 @@
-import type { Untyped, Inventory } from 'types/api';
-import type { ApiResponse } from 'api/Base';
+import type { Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { InventoriesAPI, UnifiedJobsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -26,12 +26,12 @@ describe('<SmartInventoryDetail />', () => {
             },
           ],
         },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
       vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
         data: {
           results: [{ id: 1, name: 'mock instance group' }],
         },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
     });
 
     afterEach(() => {
@@ -88,7 +88,7 @@ describe('<SmartInventoryDetail />', () => {
 
     test('expected api call is made for delete', async () => {
       vi.mocked(InventoriesAPI.destroy).mockResolvedValueOnce(
-        {} as unknown as ApiResponse<Untyped>
+        {} as unknown as ResponseOf<typeof InventoriesAPI.destroy>
       );
       const { user } = renderWithContexts(
         <SmartInventoryDetail
@@ -135,7 +135,7 @@ describe('<SmartInventoryDetail />', () => {
       // Detail renders nothing (isEmpty), so the label is absent.
       vi.mocked(UnifiedJobsAPI.read).mockResolvedValue({
         data: { results: [] },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
 
       renderWithContexts(
         <SmartInventoryDetail
@@ -152,7 +152,7 @@ describe('<SmartInventoryDetail />', () => {
         data: {
           results: [],
         },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
 
       renderWithContexts(
         <SmartInventoryDetail
@@ -173,10 +173,10 @@ describe('<SmartInventoryDetail />', () => {
     test('should hide edit button for users without edit permission', async () => {
       vi.mocked(UnifiedJobsAPI.read).mockResolvedValue({
         data: { results: [] },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
       vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
         data: { results: [] },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
       const readOnlySmartInv = {
         ...mockSmartInventory,
         summary_fields: {
@@ -206,7 +206,7 @@ describe('<SmartInventoryDetail />', () => {
       );
       vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
         data: { results: [] },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
 
       renderWithContexts(
         <SmartInventoryDetail

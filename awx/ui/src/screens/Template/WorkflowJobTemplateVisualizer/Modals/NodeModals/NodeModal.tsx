@@ -2,7 +2,7 @@ import type {
   WorkflowAction,
   WorkflowState,
 } from 'components/Workflow/workflowReducer';
-import type { Untyped } from 'types/api';
+import type { Credential, Untyped } from 'types/api';
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
@@ -334,14 +334,16 @@ const NodeModalInner = ({ title, ...rest }: NodeModalInnerProps) => {
       if (launch.survey_enabled) {
         const { data } = launch?.workflow_job_template_data
           ? await WorkflowJobTemplatesAPI.readSurvey(
-              launch?.workflow_job_template_data?.id
+              launch.workflow_job_template_data.id as number
             )
-          : await JobTemplatesAPI.readSurvey(launch?.job_template_data?.id);
+          : await JobTemplatesAPI.readSurvey(
+              launch?.job_template_data?.id as number
+            );
 
         survey = data;
       }
 
-      let defaultCredentials = [];
+      let defaultCredentials: Credential[] = [];
 
       if (launch.ask_credential_on_launch) {
         const {

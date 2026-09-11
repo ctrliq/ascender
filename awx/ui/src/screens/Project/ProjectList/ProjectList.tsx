@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Project, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -43,9 +43,11 @@ function ProjectList() {
     error: fetchUpdatedProjectError,
     result: updatedProject,
   } = useRequest(
-    useCallback(async (projectId: Untyped) => {
+    // The websocket names a project whose status changed, and the list swaps
+    // in the detail it reads back for it.
+    useCallback(async (projectId: number): Promise<Project | null> => {
       if (!projectId) {
-        return {};
+        return null;
       }
       const { data } = await ProjectsAPI.readDetail(projectId);
       return data;
@@ -152,7 +154,7 @@ function ProjectList() {
 
   useEffect(() => {
     if (updatedProject) {
-      const updatedProjects = projects.map((project: Untyped) =>
+      const updatedProjects = projects.map((project) =>
         project.id === updatedProject.id ? updatedProject : project
       );
       setProjects({

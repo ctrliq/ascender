@@ -1,9 +1,8 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { ExecutionEnvironmentsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ExecutionEnvironmentStep from './ExecutionEnvironmentStep';
 
@@ -22,7 +21,7 @@ describe('ExecutionEnvironmentStep', () => {
         results: execution_environments,
         count: 3,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
 
     vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
       data: {
@@ -32,7 +31,7 @@ describe('ExecutionEnvironmentStep', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
   });
 
   afterEach(() => vi.clearAllMocks());

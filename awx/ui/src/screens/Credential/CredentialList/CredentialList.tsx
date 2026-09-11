@@ -51,7 +51,7 @@ function CredentialList() {
         CredentialsAPI.readOptions(),
       ]);
       const searchKeys = getSearchableKeys(credActions.data.actions?.GET);
-      if (credActions.data.actions?.GET.type) {
+      if (credActions.data.actions?.GET?.type) {
         searchKeys.push({ key: 'credential_type__kind', type: 'string' });
       }
       return {

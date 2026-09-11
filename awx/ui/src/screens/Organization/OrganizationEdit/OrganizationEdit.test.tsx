@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, Organization } from 'types/api';
 import React from 'react';
 import { act, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { OrganizationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import OrganizationEdit from './OrganizationEdit';
 
@@ -121,7 +121,9 @@ describe('<OrganizationEdit />', () => {
       data: {
         results: mockInstanceGroups,
       },
-    } as unknown as ApiResponse<Untyped>) as unknown as ApiResponse<Untyped>;
+    } as unknown as ResponseOf<
+      typeof OrganizationsAPI.readInstanceGroups
+    >) as unknown as ResponseOf<typeof OrganizationsAPI.readInstanceGroups>;
     const history = createMemoryHistory({});
     const { user } = renderWithContexts(
       <OrganizationEdit organization={mockData as unknown as Organization} />,

@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -6,8 +5,9 @@ import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
-import mockAllOptions from '../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../testUtils/settingOptions';
 import RADIUS from './RADIUS';
 
 vi.mock('../../../api');
@@ -20,7 +20,7 @@ describe('<RADIUS />', () => {
         RADIUS_PORT: 1812,
         RADIUS_SECRET: '$encrypted$',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -30,7 +30,7 @@ describe('<RADIUS />', () => {
   function renderRADIUS(initialEntries: Untyped) {
     const history = createMemoryHistory({ initialEntries });
     return renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <Routes>
           <Route path="/settings/radius/*" element={<RADIUS />} />
         </Routes>

@@ -1,8 +1,7 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { OrganizationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserForm from './UserForm';
 import mockData from '../data.user.json';
@@ -21,13 +20,13 @@ describe('<UserForm />', () => {
           { id: 2, name: 'other org', url: '/api/v2/organizations/2/' },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     vi.mocked(OrganizationsAPI.readOptions).mockResolvedValue({
       data: {
         actions: { GET: {}, POST: {} },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readOptions>);
   });
 
   afterEach(() => {

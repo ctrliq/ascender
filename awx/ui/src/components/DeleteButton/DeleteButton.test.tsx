@@ -1,8 +1,7 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { CredentialsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import DeleteButton from './DeleteButton';
 
@@ -24,7 +23,7 @@ describe('<DeleteButton />', () => {
             label: { id: 'job', message: 'job' },
             request: vi.mocked(CredentialsAPI.read).mockResolvedValue({
               data: { count: 1 },
-            } as unknown as ApiResponse<Untyped>),
+            } as unknown as ResponseOf<typeof CredentialsAPI.read>),
           },
         ]}
         deleteMessage="Delete this?"
@@ -47,7 +46,7 @@ describe('<DeleteButton />', () => {
             label: { id: 'job', message: 'job' },
             request: vi.mocked(CredentialsAPI.read).mockResolvedValue({
               data: { count: 1 },
-            } as unknown as ApiResponse<Untyped>),
+            } as unknown as ResponseOf<typeof CredentialsAPI.read>),
           },
         ]}
         deleteMessage="Delete this?"

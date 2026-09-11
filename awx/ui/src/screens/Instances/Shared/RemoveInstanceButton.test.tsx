@@ -1,11 +1,10 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { within, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { InstanceGroupsAPI } from 'api';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import RemoveInstanceButton from './RemoveInstanceButton';
 import { messages as englishMessages } from '../../../locales/en/messages';
 
@@ -62,7 +61,7 @@ describe('<RemoveInstanceButtton />', () => {
   test('Should open modal and deprovision node', async () => {
     vi.mocked(InstanceGroupsAPI.read).mockResolvedValue({
       data: { results: [{ id: 1 }], count: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.read>);
     const user = userEvent.setup();
     const onRemove = vi.fn();
     render(

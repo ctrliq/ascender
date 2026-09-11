@@ -1,12 +1,12 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import AzureADTenantEdit from './AzureADTenantEdit';
 
 vi.mock('../../../../api');
@@ -17,7 +17,7 @@ describe('<AzureADTenantEdit />', () => {
 
   beforeEach(() => {
     tenantSettings = {
-      ...mockAllOptions.actions,
+      ...settingOptions,
       SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY: {
         label: 'Azure AD Tenant OAuth2 Key',
         help_text: 'The OAuth2 key',
@@ -51,10 +51,10 @@ describe('<AzureADTenantEdit />', () => {
     };
 
     vi.mocked(SettingsAPI.revertCategory).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.revertCategory>
     );
     vi.mocked(SettingsAPI.updateAll).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.updateAll>
     );
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: {
@@ -68,7 +68,7 @@ describe('<AzureADTenantEdit />', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {

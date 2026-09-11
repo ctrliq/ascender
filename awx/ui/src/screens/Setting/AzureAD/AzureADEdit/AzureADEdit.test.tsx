@@ -1,12 +1,12 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import AzureADEdit from './AzureADEdit';
 
 vi.mock('../../../../api');
@@ -16,10 +16,10 @@ describe('<AzureADEdit />', () => {
 
   beforeEach(() => {
     vi.mocked(SettingsAPI.revertCategory).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.revertCategory>
     );
     vi.mocked(SettingsAPI.updateAll).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.updateAll>
     );
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: {
@@ -34,7 +34,7 @@ describe('<AzureADEdit />', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -46,7 +46,7 @@ describe('<AzureADEdit />', () => {
       initialEntries: ['/settings/azure/default/edit'],
     });
     const result = renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <AzureADEdit />
       </SettingsProvider>,
       { context: { router: { history } } }

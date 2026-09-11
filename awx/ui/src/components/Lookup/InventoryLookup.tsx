@@ -104,11 +104,11 @@ function InventoryLookup({
             ) {
               return false;
             }
-            return actionsResponse.data.actions?.GET[key].filterable;
+            return actionsResponse.data.actions?.GET?.[key]?.filterable;
           })
           .map((key) => ({
             key,
-            type: actionsResponse.data.actions?.GET[key].type,
+            type: actionsResponse.data.actions?.GET?.[key]?.type,
           })),
       };
       // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -276,7 +276,7 @@ function InstanceDetails({
                     max={1}
                     min={0}
                     step={0.1}
-                    value={instance.capacity_adjustment}
+                    value={Number(instance.capacity_adjustment)}
                     onChange={(_event, value) => handleChangeValue(value)}
                     isDisabled={!config?.me?.is_superuser || !instance.enabled}
                     data-cy="slider"
@@ -294,7 +294,9 @@ function InstanceDetails({
               instance.enabled ? (
                 <Progress
                   title={t`Used capacity`}
-                  value={Math.round(100 - instance.percent_capacity_remaining)}
+                  value={Math.round(
+                    100 - Number(instance.percent_capacity_remaining)
+                  )}
                   measureLocation={ProgressMeasureLocation.top}
                   size={ProgressSize.sm}
                   aria-label={t`Used capacity`}
@@ -321,12 +323,13 @@ function InstanceDetails({
             <Tooltip content={t`Run a health check on the instance`}>
               <Button
                 isDisabled={
-                  !config?.me?.is_superuser || instance.health_check_pending
+                  !config?.me?.is_superuser ||
+                  Boolean(instance.health_check_pending)
                 }
                 variant="primary"
                 ouiaId="health-check-button"
                 onClick={fetchHealthCheck}
-                isLoading={instance.health_check_pending}
+                isLoading={Boolean(instance.health_check_pending)}
                 spinnerAriaLabel={t`Running health check`}
               >
                 {instance.health_check_pending

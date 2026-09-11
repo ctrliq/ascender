@@ -72,32 +72,22 @@ function JobList({
     useCallback(
       async () => {
         const params = parseQueryString(qsConfig, location.search);
-        const [
-          response,
-          actionsResponse,
-          {
-            data: {
-              actions: {
-                GET: {
-                  source: { choices },
-                },
-              },
-            },
-          },
-        ] = await Promise.all([
-          UnifiedJobsAPI.read({ ...params }),
-          UnifiedJobsAPI.readOptions(),
-          InventorySourcesAPI.readOptions(),
-        ]);
+        const [response, actionsResponse, { data: inventorySourceOptions }] =
+          await Promise.all([
+            UnifiedJobsAPI.read({ ...params }),
+            UnifiedJobsAPI.readOptions(),
+            InventorySourcesAPI.readOptions(),
+          ]);
 
         return {
           results: response.data.results,
           count: response.data.count,
-          inventorySourceChoices: choices,
+          inventorySourceChoices:
+            inventorySourceOptions.actions.GET?.source?.choices ?? [],
           relatedSearchableKeys: (
-            actionsResponse?.data?.related_search_fields || []
-          ).map((val: Untyped) => val.slice(0, -8)),
-          searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
+            actionsResponse.data.related_search_fields || []
+          ).map((val) => val.slice(0, -8)),
+          searchableKeys: getSearchableKeys(actionsResponse.data.actions.GET),
         };
       },
       [location] // eslint-disable-line react-hooks/exhaustive-deps

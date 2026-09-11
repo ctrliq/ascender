@@ -1,6 +1,4 @@
-import type { ApiResponse } from 'api/Base';
 import type { DeleteCount } from 'util/getRelatedResourceDeleteDetails';
-import type { Untyped } from 'types/api';
 import {
   InventoriesAPI,
   InventorySourcesAPI,
@@ -13,6 +11,7 @@ import {
   CredentialInputSourcesAPI,
 } from 'api';
 import { i18n } from '@lingui/core';
+import type { ResponseOf } from '../../testUtils/responseOf';
 import {
   getRelatedResourceDeleteCounts,
   relatedResourceDeleteRequests,
@@ -97,7 +96,7 @@ describe('delete details', () => {
   test('should call api for inventory source list', async () => {
     vi.mocked(InventoriesAPI.updateSources).mockResolvedValue({
       data: [{ inventory_source: 2 }],
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.updateSources>);
     await getRelatedResourceDeleteCounts(
       relatedResourceDeleteRequests.inventorySource(1)
     );
@@ -134,19 +133,19 @@ describe('delete details', () => {
   test('should return proper results', async () => {
     vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
       data: { count: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
     vi.mocked(InventorySourcesAPI.read).mockResolvedValue({
       data: { count: 10 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.read>);
     vi.mocked(CredentialInputSourcesAPI.read).mockResolvedValue({
       data: { count: 20 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialInputSourcesAPI.read>);
     vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
       data: { count: 30 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     vi.mocked(ProjectsAPI.read).mockResolvedValue({
       data: { count: 2 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
 
     const { results } = await getRelatedResourceDeleteCounts(
       relatedResourceDeleteRequests.credential({ id: 1 })

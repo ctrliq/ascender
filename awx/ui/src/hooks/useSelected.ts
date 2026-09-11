@@ -14,7 +14,8 @@ import { useState, useCallback } from 'react';
 
 /** The only thing a selectable row needs, so the only thing this requires. */
 interface Selectable {
-  id: number | string;
+  /** Optional because a row is only selectable once the api has given it one. */
+  id?: number | string;
 }
 
 export default function useSelected<T extends Selectable>(

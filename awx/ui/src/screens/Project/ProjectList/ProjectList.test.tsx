@@ -1,13 +1,13 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import {
   ProjectsAPI,
   JobTemplatesAPI,
-  WorkflowJobTemplatesAPI,
   InventorySourcesAPI,
+  WorkflowJobTemplateNodesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ProjectList from './ProjectList';
 
@@ -95,21 +95,32 @@ function getRowCheckbox(name: Untyped) {
 
 describe('<ProjectList />', () => {
   beforeEach(() => {
+    // Deleting one row first counts what depends on it, through one read
+    // per related endpoint. Nothing here depends on the row being deleted.
+    vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
+    vi.mocked(WorkflowJobTemplateNodesAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof WorkflowJobTemplateNodesAPI.read>);
+    vi.mocked(InventorySourcesAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.read>);
     vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
-    vi.mocked(WorkflowJobTemplatesAPI.read).mockResolvedValue({
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
+    vi.mocked(WorkflowJobTemplateNodesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplateNodesAPI.read>);
     vi.mocked(InventorySourcesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.read>);
     vi.mocked(ProjectsAPI.read).mockResolvedValue({
       data: {
         count: mockProjects.length,
         results: mockProjects,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
 
     vi.mocked(ProjectsAPI.readOptions).mockResolvedValue({
       data: {
@@ -119,7 +130,7 @@ describe('<ProjectList />', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -172,7 +183,7 @@ describe('<ProjectList />', () => {
 
   test('should call delete api and query related-resource delete details', async () => {
     vi.mocked(ProjectsAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof ProjectsAPI.destroy>
     );
     const { user } = renderWithContexts(<ProjectList />);
     await screen.findByRole('link', { name: 'Project 1' });
@@ -190,7 +201,7 @@ describe('<ProjectList />', () => {
 
   test('single-project delete confirmation fires the 3 related-resource requests', async () => {
     vi.mocked(ProjectsAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof ProjectsAPI.destroy>
     );
     const { user } = renderWithContexts(<ProjectList />);
     await screen.findByRole('link', { name: 'Project 1' });
@@ -203,7 +214,7 @@ describe('<ProjectList />', () => {
     await screen.findByRole('button', { name: 'confirm delete' });
     await waitFor(() => {
       expect(JobTemplatesAPI.read).toHaveBeenCalled();
-      expect(WorkflowJobTemplatesAPI.read).toHaveBeenCalled();
+      expect(WorkflowJobTemplateNodesAPI.read).toHaveBeenCalled();
       expect(InventorySourcesAPI.read).toHaveBeenCalled();
     });
   });
@@ -248,7 +259,7 @@ describe('<ProjectList />', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readOptions>);
     renderWithContexts(<ProjectList />);
     await screen.findByRole('link', { name: 'Project 1' });
 

@@ -1,10 +1,10 @@
 import type { Mock } from 'vitest';
 import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { MeAPI, RootAPI } from 'api';
 import { useAuthorizedPath } from 'contexts/Config';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -34,10 +34,10 @@ describe('<AppContainer />', () => {
         BRAND_NAME: 'AWX',
         PENDO_API_KEY: 'some-pendo-key',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
     vi.mocked(MeAPI.read).mockResolvedValue({
       data: { results: [{}] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof MeAPI.read>);
     vi.mocked(useAuthorizedPath).mockImplementation(() => true);
   });
 
@@ -120,7 +120,7 @@ describe('<AppContainer />', () => {
         BRAND_NAME: 'AWX',
         PENDO_API_KEY: '',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
     renderWithContexts(<AppContainer />, {
       context: {
         config: {

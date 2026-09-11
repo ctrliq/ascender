@@ -1,14 +1,14 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
 } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import RADIUSDetail from './RADIUSDetail';
 
 vi.mock('../../../../api');
@@ -21,7 +21,7 @@ describe('<RADIUSDetail />', () => {
         RADIUS_PORT: 1812,
         RADIUS_SECRET: '$encrypted$',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -30,7 +30,7 @@ describe('<RADIUSDetail />', () => {
 
   async function renderDetail(context?: Untyped) {
     const result = renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <RADIUSDetail />
       </SettingsProvider>,
       context

@@ -21,7 +21,7 @@ import {
 function TroubleshootingEdit() {
   const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
-  const { PUT: options } = useSettings();
+  const { PUT: options = {} } = useSettings();
 
   const {
     isLoading,
@@ -37,8 +37,7 @@ function TroubleshootingEdit() {
         if (!options[key]) {
           return;
         }
-        mergedData[key] = options[key];
-        mergedData[key].value = debugData[key];
+        mergedData[key] = { ...options[key], value: debugData[key] };
       });
 
       return mergedData;

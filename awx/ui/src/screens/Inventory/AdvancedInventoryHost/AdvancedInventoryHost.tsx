@@ -1,4 +1,4 @@
-import type { SetBreadcrumb, Host, Inventory } from 'types/api';
+import type { AnyInventory, Host, SetBreadcrumb } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -12,7 +12,7 @@ import { InventoriesAPI } from 'api';
 import AdvancedInventoryHostDetail from '../AdvancedInventoryHostDetail';
 
 export interface AdvancedInventoryHostProps {
-  inventory: Inventory;
+  inventory: AnyInventory;
   setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }

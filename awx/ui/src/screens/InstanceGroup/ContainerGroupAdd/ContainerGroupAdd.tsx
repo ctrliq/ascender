@@ -58,7 +58,7 @@ function ContainerGroupAdd() {
   } = useRequest(
     useCallback(async () => {
       const { data } = await InstanceGroupsAPI.readOptions();
-      return data.actions.POST.pod_spec_override.default;
+      return data.actions.POST?.pod_spec_override?.default;
     }, []),
     {
       initialPodSpec: {},

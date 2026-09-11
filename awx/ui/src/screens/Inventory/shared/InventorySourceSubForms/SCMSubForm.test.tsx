@@ -1,9 +1,9 @@
 import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { Formik } from 'formik';
 import { screen, waitFor } from '@testing-library/react';
 import { ProjectsAPI, CredentialsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import SCMSubForm from './SCMSubForm';
 
@@ -26,10 +26,10 @@ describe('<SCMSubForm />', () => {
   beforeEach(() => {
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(ProjectsAPI.readInventories).mockResolvedValue({
       data: ['foo', 'bar'],
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readInventories>);
     vi.mocked(ProjectsAPI.read).mockResolvedValue({
       data: {
         count: 2,
@@ -44,7 +44,7 @@ describe('<SCMSubForm />', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
   });
 
   afterAll(() => {

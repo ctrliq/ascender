@@ -1,9 +1,9 @@
-import type { Untyped, ExecutionEnvironment } from 'types/api';
-import type { ApiResponse } from 'api/Base';
+import type { ExecutionEnvironment } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 
 import { ExecutionEnvironmentsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentListItem from './ExecutionEnvironmentListItem';
@@ -66,7 +66,7 @@ describe('<ExecutionEnvironmentListItem/>', () => {
     vi.mocked(ExecutionEnvironmentsAPI.copy).mockResolvedValue({
       status: 201,
       data: { id: 2 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.copy>);
     const { user } = renderItem();
     await user.click(screen.getByRole('button', { name: 'Copy' }));
     await waitFor(() =>

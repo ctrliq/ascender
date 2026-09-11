@@ -1,4 +1,4 @@
-import type { Inventory, Untyped } from 'types/api';
+import type { AnyInventory, Untyped } from 'types/api';
 import React, { useCallback, useState } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
@@ -23,7 +23,7 @@ import { useLingui } from '@lingui/react/macro';
 import useHelpText from './Inventory.helptext';
 
 export interface InventoryFormFieldsProps {
-  inventory: Inventory;
+  inventory: AnyInventory;
   [key: string]: unknown;
 }
 

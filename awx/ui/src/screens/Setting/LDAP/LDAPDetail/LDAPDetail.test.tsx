@@ -1,15 +1,14 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
 } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import mockLDAP from '../../shared/data.ldapSettings.json';
 import LDAPDetail from './LDAPDetail';
 
@@ -19,7 +18,7 @@ describe('<LDAPDetail />', () => {
   beforeEach(() => {
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: mockLDAP,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -31,7 +30,7 @@ describe('<LDAPDetail />', () => {
       initialEntries: [`/settings/ldap/${category}/details`],
     });
     const result = renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <LDAPDetail />
       </SettingsProvider>,
       { context: { ...context, router: { history } } }

@@ -1,11 +1,11 @@
 import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { OrganizationsAPI, ProjectsAPI, RootAPI } from 'api';
 import mockOrganization from 'util/data.organization.json';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockDetails from './data.project.json';
 import Project from './Project';
@@ -49,7 +49,7 @@ describe('<Project />', () => {
     (ProjectsAPI as Untyped).readDetail = vi.fn();
     vi.mocked(ProjectsAPI.readDetail).mockResolvedValue({
       data: mockDetails,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readDetail>);
     vi.mocked(OrganizationsAPI.read).mockImplementation(
       getOrganizations as unknown as typeof OrganizationsAPI.read
     );

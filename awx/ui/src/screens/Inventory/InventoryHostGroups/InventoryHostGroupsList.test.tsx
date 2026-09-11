@@ -1,10 +1,10 @@
-import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor, within } from '@testing-library/react';
 import { HostsAPI, InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -69,7 +69,7 @@ describe('<InventoryHostGroupsList />', () => {
         count: mockGroups.length,
         results: mockGroups,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof HostsAPI.readAllGroups>);
     vi.mocked(HostsAPI.readGroupsOptions).mockResolvedValue({
       data: {
         actions: {
@@ -77,7 +77,7 @@ describe('<InventoryHostGroupsList />', () => {
           POST: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof HostsAPI.readGroupsOptions>);
     vi.mocked(InventoriesAPI.readAdHocOptions).mockResolvedValue({
       data: {
         actions: {
@@ -92,7 +92,7 @@ describe('<InventoryHostGroupsList />', () => {
           POST: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readAdHocOptions>);
   });
 
   afterEach(() => {
@@ -161,7 +161,7 @@ describe('<InventoryHostGroupsList />', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readAdHocOptions>);
     renderList();
     await screen.findByRole('link', { name: 'foo' });
     expect(
@@ -193,7 +193,7 @@ describe('<InventoryHostGroupsList />', () => {
           GET: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof HostsAPI.readGroupsOptions>);
     renderList();
     await screen.findByRole('link', { name: 'foo' });
     expect(
@@ -207,13 +207,13 @@ describe('<InventoryHostGroupsList />', () => {
         count: 1,
         results: [{ id: 123, name: 'associable', url: '/api/v2/groups/123/' }],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readGroups>);
     vi.mocked(InventoriesAPI.readGroupsOptions).mockResolvedValue({
       data: {
         actions: { GET: {}, POST: {} },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readGroupsOptions>);
     const { user } = renderList();
     await user.click(await screen.findByRole('button', { name: 'Add' }));
     const modal = await screen.findByRole('dialog');
@@ -234,13 +234,13 @@ describe('<InventoryHostGroupsList />', () => {
         count: 1,
         results: [{ id: 123, name: 'foo', url: '/api/v2/groups/123/' }],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readGroups>);
     vi.mocked(InventoriesAPI.readGroupsOptions).mockResolvedValue({
       data: {
         actions: { GET: {}, POST: {} },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readGroupsOptions>);
     const { user } = renderList();
     await user.click(await screen.findByRole('button', { name: 'Add' }));
     const modal = await screen.findByRole('dialog');

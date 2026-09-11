@@ -25,28 +25,37 @@ export interface UseRequest<T, Args extends unknown[]> {
   setValue: React.Dispatch<React.SetStateAction<T>>;
 }
 
+/**
+ * What a caller may hand in as the result before the first request lands.
+ *
+ * It stands in for a payload the screen does not have yet, so a field it will
+ * be given may be null or missing here, which is what a screen means when it
+ * starts a detail off as null and renders nothing until the read returns.
+ * isLoading alongside it is how a caller says the screen starts out loading,
+ * which the state below reads back off it.
+ */
+export type InitialResult<T> = T extends readonly unknown[]
+  ? T | null
+  : T extends object
+    ? | ({ [K in keyof T]?: InitialResult<T[K]> } & { isLoading?: boolean })
+      | null
+    : T | null;
+
 // Two signatures rather than one: with an initial value the result is never
 // undefined, and every caller that destructures it straight away relies on
 // that. Without one it starts undefined and callers have to say so.
 export default function useRequest<T, Args extends unknown[] = unknown[]>(
   makeRequest: (...args: Args) => Promise<T>,
-  // isLoading alongside the initial result is how a caller says the screen
-  // starts out loading, which the state below reads back off it. Only where
-  // the result is an object, since that is the only place to put it.
-  initialValue: [T] extends [void]
-    ? unknown
-    : T extends object
-      ? T & { isLoading?: boolean }
-      : T
+  initialValue: [T] extends [void] ? unknown : InitialResult<T>
 ): UseRequest<T, Args>;
 export default function useRequest<T, Args extends unknown[] = unknown[]>(
   makeRequest: (...args: Args) => Promise<T>
 ): UseRequest<T | undefined, Args>;
 export default function useRequest<T, Args extends unknown[] = unknown[]>(
   makeRequest: (...args: Args) => Promise<T>,
-  initialValue?: T
+  initialValue?: InitialResult<T>
 ): UseRequest<T | undefined, Args> {
-  const [result, setResult] = useState<T | undefined>(initialValue);
+  const [result, setResult] = useState<T | undefined>(initialValue as T);
   const [error, setError] = useState<unknown>(null);
   const [isLoading, setIsLoading] = useState<boolean>(
     (initialValue as { isLoading?: boolean } | undefined)?.isLoading || false
@@ -69,7 +78,7 @@ export default function useRequest<T, Args extends unknown[] = unknown[]>(
         } catch (err) {
           if (isMounted.current) {
             setError(err);
-            setResult(initialValue);
+            setResult(initialValue as T);
           }
         } finally {
           if (isMounted.current) {

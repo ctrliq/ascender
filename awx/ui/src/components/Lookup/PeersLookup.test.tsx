@@ -1,9 +1,8 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { InstancesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import PeersLookup from './PeersLookup';
 
@@ -73,13 +72,13 @@ describe('PeersLookup', () => {
   beforeEach(() => {
     vi.mocked(InstancesAPI.read).mockResolvedValue({
       data: mockedInstances,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.read>);
     vi.mocked(InstancesAPI.readOptions).mockResolvedValue({
       data: {
         actions: { GET: {}, POST: {} },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.readOptions>);
   });
 
   afterEach(() => {

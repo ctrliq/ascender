@@ -6,6 +6,7 @@ import { DateTime } from 'luxon';
 
 import { dateToInputDateTime } from 'util/dates';
 import { SchedulesAPI, JobTemplatesAPI, InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleForm from './ScheduleForm';
 
@@ -249,7 +250,7 @@ describe('<ScheduleForm />', () => {
       );
       vi.mocked(SchedulesAPI.readZoneInfo).mockResolvedValue({
         data: { zones: ['UTC', 'America/New_York'], links: {} },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof SchedulesAPI.readZoneInfo>);
       const { user, container } = renderWithContexts(
         <ScheduleForm
           handleSubmit={vi.fn()}
@@ -276,7 +277,7 @@ describe('<ScheduleForm />', () => {
     beforeEach(() => {
       vi.mocked(SchedulesAPI.readZoneInfo).mockResolvedValue({
         data: { zones: ['UTC', 'America/New_York'], links: {} },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof SchedulesAPI.readZoneInfo>);
     });
 
     function renderPrompt(resource: Untyped, surveyConfig: Untyped) {
@@ -341,13 +342,13 @@ describe('<ScheduleForm />', () => {
             { name: 'Bar', id: 2, url: '' },
           ],
         },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof InventoriesAPI.read>);
       vi.mocked(InventoriesAPI.readOptions).mockResolvedValue({
         data: {
           related_search_fields: [],
           actions: { GET: { filterable: true } },
         },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
 
       const { user, container } = renderPrompt(
         {
@@ -412,7 +413,7 @@ describe('<ScheduleForm />', () => {
     beforeEach(async () => {
       vi.mocked(SchedulesAPI.readZoneInfo).mockResolvedValue({
         data: { zones: ['UTC', 'America/New_York'], links: {} },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof SchedulesAPI.readZoneInfo>);
       ({ container, user } = renderWithContexts(
         <ScheduleForm
           handleSubmit={vi.fn()}
@@ -615,7 +616,7 @@ describe('<ScheduleForm />', () => {
     beforeEach(() => {
       vi.mocked(SchedulesAPI.readZoneInfo).mockResolvedValue({
         data: { zones: ['UTC', 'America/New_York'], links: {} },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof SchedulesAPI.readZoneInfo>);
       vi.mocked(SchedulesAPI.readCredentials).mockResolvedValue(
         credentials as unknown as ApiResponse<any>
       );
@@ -624,7 +625,7 @@ describe('<ScheduleForm />', () => {
       });
       vi.mocked(SchedulesAPI.readInstanceGroups).mockResolvedValue({
         data: { count: 0, results: [] },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof SchedulesAPI.readInstanceGroups>);
     });
 
     function renderEdit(

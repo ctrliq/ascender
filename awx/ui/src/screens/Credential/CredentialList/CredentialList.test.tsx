@@ -1,8 +1,15 @@
 import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
-import { CredentialsAPI } from 'api';
+import {
+  CredentialsAPI,
+  JobTemplatesAPI,
+  ProjectsAPI,
+  InventorySourcesAPI,
+  CredentialInputSourcesAPI,
+  ExecutionEnvironmentsAPI,
+} from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -14,9 +21,26 @@ vi.mock('../../../api');
 
 describe('<CredentialList />', () => {
   beforeEach(async () => {
+    // Deleting one row first counts what depends on it, through one read
+    // per related endpoint. Nothing here depends on the row being deleted.
+    vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
+    vi.mocked(ProjectsAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
+    vi.mocked(InventorySourcesAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.read>);
+    vi.mocked(CredentialInputSourcesAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof CredentialInputSourcesAPI.read>);
+    vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: mockCredentials,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -24,7 +48,7 @@ describe('<CredentialList />', () => {
           POST: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
   });
 
   afterEach(() => {

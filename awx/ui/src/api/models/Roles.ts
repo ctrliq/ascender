@@ -1,7 +1,8 @@
+import type { Role } from '../../types/api';
 import Base from '../Base';
 import type { Http } from '../Base';
 
-class Roles extends Base {
+class Roles extends Base<Role> {
   constructor(http?: Http) {
     super(http);
     this.baseUrl = 'api/v2/roles/';

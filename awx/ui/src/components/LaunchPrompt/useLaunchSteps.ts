@@ -26,11 +26,11 @@ function showCredentialPasswordsStep(
 
   credentials.forEach((credential: Untyped) => {
     if (!credential.inputs) {
-      const launchConfigCredential = launchConfig.defaults.credentials.find(
-        (defaultCred: Untyped) => defaultCred.id === credential.id
-      );
+      const launchConfigCredential = (
+        launchConfig.defaults?.credentials ?? []
+      ).find((defaultCred: Untyped) => defaultCred.id === credential.id);
 
-      if (launchConfigCredential?.passwords_needed.length > 0) {
+      if (launchConfigCredential?.passwords_needed?.length) {
         credentialPasswordStepRequired = true;
       }
     } else if (

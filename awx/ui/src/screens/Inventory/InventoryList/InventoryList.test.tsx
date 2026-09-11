@@ -1,8 +1,8 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { InventoriesAPI, JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -103,7 +103,7 @@ describe('<InventoryList />', () => {
         count: mockInventories.length,
         results: mockInventories,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
 
     vi.mocked(InventoriesAPI.readOptions).mockResolvedValue({
       data: {
@@ -112,13 +112,13 @@ describe('<InventoryList />', () => {
           POST: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
     vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
     vi.mocked(WorkflowJobTemplatesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.read>);
     debug = global.console.debug;
     global.console.debug = () => {};
   });
@@ -174,7 +174,7 @@ describe('<InventoryList />', () => {
 
   test('should call delete api', async () => {
     vi.mocked(InventoriesAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof InventoriesAPI.destroy>
     );
     const { user } = renderWithContexts(<InventoryList />);
     const row = (
@@ -223,7 +223,7 @@ describe('<InventoryList />', () => {
           GET: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
     renderWithContexts(<InventoryList />);
     await screen.findByRole('link', { name: 'Inv no hosts' });
     expect(

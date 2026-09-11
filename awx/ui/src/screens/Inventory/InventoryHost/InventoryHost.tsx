@@ -1,7 +1,7 @@
 import type {
-  SetBreadcrumb,
-  Inventory,
+  AnyInventory,
   DetailedError,
+  SetBreadcrumb,
   Untyped,
 } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
@@ -30,7 +30,7 @@ import InventoryHostGroups from '../InventoryHostGroups';
 
 export interface InventoryHostProps {
   setBreadcrumb: SetBreadcrumb;
-  inventory: Inventory;
+  inventory: AnyInventory;
   [key: string]: unknown;
 }
 

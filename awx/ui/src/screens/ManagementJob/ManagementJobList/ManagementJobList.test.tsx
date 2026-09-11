@@ -1,9 +1,9 @@
-import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 
 import { SystemJobTemplatesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ManagementJobList from './ManagementJobList';
@@ -111,7 +111,7 @@ describe('<ManagementJobList/>', () => {
     );
     vi.mocked(SystemJobTemplatesAPI.readOptions).mockResolvedValue({
       data: { actions: { POST: false } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SystemJobTemplatesAPI.readOptions>);
     renderWithContexts(<ManagementJobList />);
     await screen.findByText('Cleanup Activity Stream');
     await waitFor(() =>

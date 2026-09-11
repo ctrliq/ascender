@@ -1,10 +1,9 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
 import { InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InventoryGroupsDeleteModal from './InventoryGroupsDeleteModal';
@@ -63,7 +62,7 @@ describe('<InventoryGroupsDeleteModal />', () => {
 
   test('should delete properly', async () => {
     vi.mocked(InventoriesAPI.promoteGroup).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof InventoriesAPI.promoteGroup>
     );
     const { user } = renderModal();
     await user.click(screen.getByRole('button', { name: 'Delete' }));

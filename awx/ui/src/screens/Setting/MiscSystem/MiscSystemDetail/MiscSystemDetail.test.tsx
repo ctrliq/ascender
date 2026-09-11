@@ -1,14 +1,14 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI, ExecutionEnvironmentsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
 } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import MiscSystemDetail from './MiscSystemDetail';
 
 vi.mock('../../../../api');
@@ -40,7 +40,7 @@ describe('<MiscSystemDetail />', () => {
   beforeEach(() => {
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: freshSystemData(),
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     vi.mocked(ExecutionEnvironmentsAPI.readDetail).mockResolvedValue({
       data: {
         id: 1,
@@ -48,7 +48,7 @@ describe('<MiscSystemDetail />', () => {
         image: 'quay.io/ansible/awx-ee',
         pull: 'missing',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readDetail>);
   });
 
   afterEach(() => {
@@ -56,7 +56,7 @@ describe('<MiscSystemDetail />', () => {
   });
 
   async function mountDetail(
-    options: Untyped = mockAllOptions.actions,
+    options: Untyped = settingOptions,
     context: Untyped = undefined
   ) {
     renderWithContexts(
@@ -102,16 +102,16 @@ describe('<MiscSystemDetail />', () => {
   test('should render execution environment as not configured', async () => {
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: { ...freshSystemData(), DEFAULT_EXECUTION_ENVIRONMENT: null },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     await mountDetail({
-      ...mockAllOptions.actions,
+      ...settingOptions,
       DEFAULT_EXECUTION_ENVIRONMENT: null,
     });
     assertDetail('Global default execution environment', 'Not configured');
   });
 
   test('should hide edit button from non-superusers', async () => {
-    await mountDetail(mockAllOptions.actions, {
+    await mountDetail(settingOptions, {
       config: { me: { is_superuser: false } },
     });
     expect(

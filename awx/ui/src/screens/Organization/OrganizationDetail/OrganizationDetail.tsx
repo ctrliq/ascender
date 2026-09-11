@@ -1,4 +1,4 @@
-import type { Organization, Untyped } from 'types/api';
+import type { InstanceGroup, Organization, Untyped } from 'types/api';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -37,7 +37,7 @@ function OrganizationDetail({ organization }: OrganizationDetailProps) {
   } = organization;
   const [contentError, setContentError] = useState<unknown>(null);
   const [hasContentLoading, setHasContentLoading] = useState(true);
-  const [instanceGroups, setInstanceGroups] = useState([]);
+  const [instanceGroups, setInstanceGroups] = useState<InstanceGroup[]>([]);
   const navigate = useNavigate();
   const { license_info = {} } = useConfig();
   const { t } = useLingui();

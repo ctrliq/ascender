@@ -44,7 +44,7 @@ export interface ScheduleFormProps {
   submitError?: unknown;
   resource: Untyped;
   launchConfig?: LaunchConfig;
-  surveyConfig?: SurveyConfig;
+  surveyConfig?: SurveyConfig | null;
   resourceDefaultCredentials?: Untyped;
   [key: string]: unknown;
 }
@@ -260,8 +260,8 @@ function ScheduleForm({
       }
 
       return launchConfig?.defaults?.credentials
-        ? launchConfig.defaults.credentials.filter(
-            (credential: Untyped) => credential?.passwords_needed.length > 0
+        ? (launchConfig.defaults?.credentials ?? []).filter(
+            (credential: Untyped) => credential?.passwords_needed?.length
           ).length > 0
         : false;
     }

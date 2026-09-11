@@ -1,8 +1,8 @@
 import type { Credential, Untyped, CredentialType } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ExternalTestModal from './ExternalTestModal';
 import credentialTypesArr from './data.credentialTypes.json';
@@ -112,7 +112,7 @@ describe('<ExternalTestModal />', () => {
 
   test('should display the alert after a successful test', async () => {
     vi.mocked(CredentialTypesAPI.test).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof CredentialTypesAPI.test>
     );
     const { user } = renderWithContexts(
       <ExternalTestModal

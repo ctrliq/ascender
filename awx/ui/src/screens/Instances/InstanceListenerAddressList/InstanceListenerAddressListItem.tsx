@@ -1,12 +1,12 @@
-import type { Untyped } from 'types/api';
+import type { ReceptorAddress } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
 
 export interface InstanceListenerAddressListItemProps {
-  peerListenerAddress: Untyped;
+  peerListenerAddress: ReceptorAddress;
   isSelected: boolean;
-  onSelect: (item?: Untyped) => void;
+  onSelect: () => void;
   rowIndex: number;
   [key: string]: unknown;
 }
@@ -46,7 +46,7 @@ function InstanceListenerAddressListItem({
       </Td>
 
       <Td id={labelId} dataLabel={t`Canonical`}>
-        {peerListenerAddress.canonical.toString()}
+        {String(peerListenerAddress.canonical)}
       </Td>
     </Tr>
   );

@@ -1,4 +1,4 @@
-import type { Inventory } from 'types/api';
+import type { AnyInventory } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 
@@ -20,7 +20,7 @@ import Sparkline from 'components/Sparkline';
 import InstanceGroupLabels from 'components/InstanceGroupLabels';
 
 export interface SmartInventoryDetailProps {
-  inventory: Inventory;
+  inventory: AnyInventory;
   [key: string]: unknown;
 }
 

@@ -1,14 +1,14 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
 } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import OIDCDetail from './OIDCDetail';
 
 vi.mock('../../../../api');
@@ -22,7 +22,7 @@ describe('<OIDCDetail />', () => {
         SOCIAL_AUTH_OIDC_OIDC_ENDPOINT: 'https://example.com',
         SOCIAL_AUTH_OIDC_VERIFY_SSL: true,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -31,7 +31,7 @@ describe('<OIDCDetail />', () => {
 
   async function renderDetail(context?: Untyped) {
     const result = renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <OIDCDetail />
       </SettingsProvider>,
       context

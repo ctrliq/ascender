@@ -1,14 +1,14 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
 } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import UIDetail from './UIDetail';
 
 vi.mock('../../../../api');
@@ -21,7 +21,7 @@ describe('<UIDetail />', () => {
         CUSTOM_LOGO: 'data:image/png',
         PENDO_TRACKING_STATE: 'off',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -30,7 +30,7 @@ describe('<UIDetail />', () => {
 
   async function renderDetail(context?: Untyped) {
     const result = renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <UIDetail />
       </SettingsProvider>,
       context

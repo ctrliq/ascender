@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 
 import { CredentialsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ToolbarDeleteButton from './ToolbarDeleteButton';
 
@@ -36,7 +36,7 @@ describe('<ToolbarDeleteButton />', () => {
         },
         request: vi.mocked(CredentialsAPI.read).mockResolvedValue({
           data: { count: 1 },
-        } as unknown as ApiResponse<Untyped>),
+        } as unknown as ResponseOf<typeof CredentialsAPI.read>),
       },
     ];
   });
@@ -123,7 +123,7 @@ describe('<ToolbarDeleteButton />', () => {
         },
         request: vi.mocked(CredentialsAPI.read).mockResolvedValue({
           data: { count: 3 },
-        } as unknown as ApiResponse<Untyped>),
+        } as unknown as ResponseOf<typeof CredentialsAPI.read>),
       },
     ];
     const { user } = renderWithContexts(

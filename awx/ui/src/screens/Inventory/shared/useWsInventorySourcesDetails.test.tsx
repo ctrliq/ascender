@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { act, waitFor } from '@testing-library/react';
 import WS from 'vitest-websocket-mock';
 import { InventorySourcesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import useWsInventorySourceDetails from './useWsInventorySourcesDetails';
 
@@ -110,7 +110,7 @@ describe('useWsInventorySourceDetails', () => {
     expect(InventorySourcesAPI.readDetail).toHaveBeenCalledTimes(0);
     vi.mocked(InventorySourcesAPI.readDetail).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readDetail>);
     // an inventory_update message in a terminal status triggers a detail refetch
     await act(async () => {
       mockServer.send(

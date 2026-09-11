@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -10,6 +9,7 @@ import {
   CredentialTypesAPI,
   JobTemplatesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import LaunchPrompt from './LaunchPrompt';
 
@@ -67,10 +67,10 @@ describe('LaunchPrompt', () => {
         results: [{ id: 1, name: 'foo', url: '/inventories/1' }],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: { results: [{ id: 1 }], count: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialTypesAPI.loadAllTypes).mockResolvedValue([
       { id: 1, name: 'Machine', kind: 'ssh' },
     ] as unknown as Awaited<
@@ -82,7 +82,7 @@ describe('LaunchPrompt', () => {
         description: '',
         spec: [{ type: 'text', variable: 'foo' }],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readSurvey>);
     vi.mocked(JobTemplatesAPI.readCredentials).mockResolvedValue({
       data: {
         results: [
@@ -96,7 +96,7 @@ describe('LaunchPrompt', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readCredentials>);
     vi.mocked(InstanceGroupsAPI.read).mockResolvedValue({
       data: {
         results: [
@@ -133,7 +133,7 @@ describe('LaunchPrompt', () => {
         ],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.read>);
     vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
       data: {
         results: [
@@ -169,7 +169,7 @@ describe('LaunchPrompt', () => {
         ],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
 
     config = {
       can_start_without_user_input: false,

@@ -1,8 +1,8 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { LabelsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import LabelSelect from './LabelSelect';
 
@@ -28,7 +28,7 @@ describe('<LabelSelect />', () => {
   test('should fetch labels', async () => {
     vi.mocked(LabelsAPI.read).mockResolvedValue({
       data: { results: options },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof LabelsAPI.read>);
     const { user } = renderWithContexts(
       <LabelSelect value={[]} onError={() => {}} onChange={() => {}} />
     );
@@ -52,7 +52,7 @@ describe('<LabelSelect />', () => {
         results: options,
         next: '/foo?page=2',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof LabelsAPI.read>);
     vi.mocked(LabelsAPI.read).mockResolvedValueOnce({
       data: {
         results: [
@@ -60,7 +60,7 @@ describe('<LabelSelect />', () => {
           { id: 4, name: 'four' },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof LabelsAPI.read>);
     const { user } = renderWithContexts(
       <LabelSelect value={[]} onError={() => {}} onChange={() => {}} />
     );
@@ -82,7 +82,7 @@ describe('<LabelSelect />', () => {
       data: {
         results: options,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof LabelsAPI.read>);
     const { user } = renderWithContexts(
       <LabelSelect value={[]} onError={() => {}} onChange={onChange} />
     );
@@ -112,7 +112,7 @@ describe('<LabelSelect />', () => {
           { id: 2, name: 'not read only' },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof LabelsAPI.read>);
     const { user } = renderWithContexts(
       <LabelSelect
         value={[

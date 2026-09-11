@@ -1,5 +1,3 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { RootAPI } from 'api';
@@ -7,6 +5,7 @@ import * as SessionContext from 'contexts/Session';
 import * as navigation from 'util/navigation';
 import * as auth from 'util/auth';
 import type { SessionValue } from 'contexts/Session';
+import type { ResponseOf } from '../testUtils/responseOf';
 import { renderWithContexts } from '../testUtils/rtlContexts';
 import App, { ProtectedRoute } from './App';
 
@@ -31,7 +30,7 @@ describe('<App />', () => {
       data: {
         BRAND_NAME: 'AWX',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
   });
 
   afterEach(() => {

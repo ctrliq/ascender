@@ -10,6 +10,7 @@ import userEvent from '@testing-library/user-event';
 import { InstanceGroupsAPI, InstancesAPI, SettingsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InstanceList from './InstanceList';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 
 vi.mock('../../../api/models/InstanceGroups');
 vi.mock('../../../api/models/Instances');
@@ -124,17 +125,17 @@ describe('<InstanceList />, React testing library tests', () => {
         count: instances.length,
         results: instances,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.read>);
     vi.mocked(InstancesAPI.readOptions).mockResolvedValue(
       options as unknown as ApiResponse<unknown>
     );
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: { IS_K8S: isK8s },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
 
     vi.mocked(InstanceGroupsAPI.read).mockResolvedValue({
       data: { results: [{ id: 1 }], count: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.read>);
 
     const history = createMemoryHistory({
       initialEntries: ['/instances'],

@@ -11,6 +11,7 @@ import {
   InventorySourcesAPI,
   ExecutionEnvironmentsAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -47,7 +48,7 @@ describe('<CredentialDetail />', () => {
   beforeEach(() => {
     vi.mocked(CredentialTypesAPI.readDetail).mockResolvedValue({
       data: mockCredentialType,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialTypesAPI.readDetail>);
     vi.mocked(CredentialsAPI.readInputSources).mockResolvedValue({
       data: {
         results: [mockInputSource],

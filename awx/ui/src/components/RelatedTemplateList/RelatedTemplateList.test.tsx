@@ -1,8 +1,8 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
-import { JobTemplatesAPI } from 'api';
+import { JobTemplatesAPI, WorkflowJobTemplateNodesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import RelatedTemplateList from './RelatedTemplateList';
@@ -55,18 +55,23 @@ function rowCheckbox(name: Untyped) {
 describe('<RelatedTemplateList />', () => {
   let debug: Untyped;
   beforeEach(() => {
+    // Deleting one row first counts what depends on it, through one read
+    // per related endpoint. Nothing here depends on the row being deleted.
+    vi.mocked(WorkflowJobTemplateNodesAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof WorkflowJobTemplateNodesAPI.read>);
     vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
       data: {
         count: mockTemplates.length,
         results: mockTemplates,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
 
     vi.mocked(JobTemplatesAPI.readOptions).mockResolvedValue({
       data: {
         actions: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readOptions>);
     debug = global.console.debug;
     global.console.debug = () => {};
   });
@@ -139,7 +144,7 @@ describe('<RelatedTemplateList />', () => {
 
   test('api is called to delete templates for each selected template.', async () => {
     vi.mocked(JobTemplatesAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof JobTemplatesAPI.destroy>
     );
     const { user } = renderWithContexts(
       <RelatedTemplateList searchParams={{ credentials__id: 1 }} />
@@ -176,7 +181,7 @@ describe('<RelatedTemplateList />', () => {
 
   test('should properly copy template', async () => {
     vi.mocked(JobTemplatesAPI.copy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof JobTemplatesAPI.copy>
     );
     const { user } = renderWithContexts(
       <RelatedTemplateList searchParams={{ credentials__id: 1 }} />

@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
 import { JobTemplatesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import JobTemplateAdd from './JobTemplateAdd';
 
@@ -137,7 +137,7 @@ describe('<JobTemplateAdd />', () => {
         type: 'job_template',
         ...jobTemplateData,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.create>);
     const { user } = renderWithContexts(<JobTemplateAdd />);
     await user.click(screen.getByRole('button', { name: 'Submit' }));
     await waitFor(() =>
@@ -163,7 +163,7 @@ describe('<JobTemplateAdd />', () => {
         type: 'job_template',
         ...jobTemplateData,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.create>);
     const { user } = renderWithContexts(<JobTemplateAdd />, {
       context: { router: { history } },
     });

@@ -1,8 +1,7 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { ProjectsAPI } from 'api';
+import type { ResponseOf } from '../../../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 import ProjectsList from './ProjectsList';
 
@@ -39,7 +38,7 @@ describe('ProjectsList', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     vi.mocked(ProjectsAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -48,7 +47,7 @@ describe('ProjectsList', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readOptions>);
     renderWithContexts(
       <ProjectsList
         nodeResource={nodeResource}

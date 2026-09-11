@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import useDebounce from 'hooks/useDebounce';
 import { InstancesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceEdit from './InstanceEdit';
@@ -81,10 +81,10 @@ describe('<InstanceEdit/>', () => {
     history = createMemoryHistory();
     vi.mocked(InstancesAPI.readDetail).mockResolvedValue({
       data: instanceData,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.readDetail>);
     vi.mocked(InstancesAPI.readPeers).mockResolvedValue({
       data: instanceDataWithPeers,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.readPeers>);
   });
 
   afterEach(() => {
@@ -104,7 +104,7 @@ describe('<InstanceEdit/>', () => {
 
   test('handleSubmit should call the api and redirect to details page', async () => {
     vi.mocked(InstancesAPI.update).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof InstancesAPI.update>
     );
     const { user } = renderWithContexts(
       <InstanceEdit setBreadcrumb={() => {}} />,
@@ -138,7 +138,7 @@ describe('<InstanceEdit/>', () => {
 
   test('successful submission should not show an error message', async () => {
     vi.mocked(InstancesAPI.update).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof InstancesAPI.update>
     );
     const { user } = renderWithContexts(
       <InstanceEdit setBreadcrumb={() => {}} />,

@@ -3,6 +3,7 @@ import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { OrganizationsAPI, ExecutionEnvironmentsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationForm from './OrganizationForm';
@@ -94,7 +95,7 @@ describe('<OrganizationForm />', () => {
       data: {
         results: mockInstanceGroups,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readInstanceGroups>);
   });
 
   afterEach(() => {
@@ -148,7 +149,7 @@ describe('<OrganizationForm />', () => {
   test('Instance group is rendered when added', async () => {
     vi.mocked(OrganizationsAPI.readInstanceGroups).mockResolvedValue({
       data: { results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readInstanceGroups>);
     const { user } = renderWithContexts(
       <OrganizationForm
         organization={mockData}
@@ -172,7 +173,7 @@ describe('<OrganizationForm />', () => {
       data: {
         results: mockExecutionEnvironment,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     const onSubmit = vi.fn();
     const { user, container } = renderWithContexts(
       <OrganizationForm
@@ -210,7 +211,7 @@ describe('<OrganizationForm />', () => {
   test('onSubmit associates and disassociates instance groups', async () => {
     vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
       data: { results: mockExecutionEnvironment },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     const mockDataForm = {
       name: 'Foo',
       description: 'Bar',

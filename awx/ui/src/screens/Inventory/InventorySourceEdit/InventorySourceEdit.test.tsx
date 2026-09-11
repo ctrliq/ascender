@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { InventorySourcesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventorySourceEdit from './InventorySourceEdit';
 
@@ -50,7 +50,7 @@ describe('<InventorySourceEdit />', () => {
   beforeEach(() => {
     vi.mocked(InventorySourcesAPI.readInstanceGroups).mockResolvedValue({
       data: { results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readInstanceGroups>);
   });
 
   afterEach(() => {
@@ -69,7 +69,7 @@ describe('<InventorySourceEdit />', () => {
   test('handleSubmit should call api update', async () => {
     vi.mocked(InventorySourcesAPI.replace).mockResolvedValue({
       data: { id: 23 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.replace>);
     const { user } = renderWithContexts(
       <InventorySourceEdit inventory={mockInventory} source={mockInvSrc} />
     );
@@ -109,7 +109,7 @@ describe('<InventorySourceEdit />', () => {
     const history = createMemoryHistory({});
     vi.mocked(InventorySourcesAPI.replace).mockResolvedValue({
       data: { id: 23 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.replace>);
     const { user } = renderWithContexts(
       <InventorySourceEdit inventory={mockInventory} source={mockInvSrc} />,
       { context: { router: { history } } }

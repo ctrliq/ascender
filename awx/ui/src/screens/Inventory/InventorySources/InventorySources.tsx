@@ -1,4 +1,4 @@
-import type { SetBreadcrumb, Inventory } from 'types/api';
+import type { AnyInventory, SetBreadcrumb } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { Config } from 'contexts/Config';
@@ -7,7 +7,7 @@ import InventorySourceAdd from '../InventorySourceAdd';
 import InventorySourceList from './InventorySourceList';
 
 export interface InventorySourcesProps {
-  inventory: Inventory;
+  inventory: AnyInventory;
   setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }

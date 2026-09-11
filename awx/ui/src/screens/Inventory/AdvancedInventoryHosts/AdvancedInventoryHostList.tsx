@@ -1,4 +1,4 @@
-import type { Inventory, Untyped } from 'types/api';
+import type { AnyInventory, Untyped } from 'types/api';
 import React, { useEffect, useCallback, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -22,7 +22,7 @@ const QS_CONFIG = getQSConfig('host', {
 });
 
 export interface AdvancedInventoryHostListProps {
-  inventory: Inventory;
+  inventory: AnyInventory;
   [key: string]: unknown;
 }
 
@@ -53,7 +53,7 @@ function AdvancedInventoryHostList({
       return {
         hosts: results,
         count: hostCount,
-        moduleOptions: adHocOptions.data.actions.GET.module_name.choices,
+        moduleOptions: adHocOptions.data.actions.GET?.module_name?.choices,
       };
     }, [location.search, inventory.id]),
     {

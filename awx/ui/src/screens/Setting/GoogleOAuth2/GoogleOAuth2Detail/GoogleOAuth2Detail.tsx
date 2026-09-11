@@ -16,7 +16,7 @@ import { SettingDetail } from '../../shared';
 
 function GoogleOAuth2Detail() {
   const { me } = useConfig();
-  const { GET: options } = useSettings();
+  const { GET: options = {} } = useSettings();
   const { t } = useLingui();
 
   const {
@@ -59,7 +59,7 @@ function GoogleOAuth2Detail() {
       <RoutedTabs tabsArray={tabsArray} />
       <CardBody>
         {isLoading && <ContentLoading />}
-        {!isLoading && error && <ContentError error={error} />}
+        {!isLoading && Boolean(error) && <ContentError error={error} />}
         {!isLoading && googleOAuth2 && (
           <DetailList>
             {Object.keys(googleOAuth2).map((key) => {

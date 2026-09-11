@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, InstanceGroup } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import { InstanceGroupsAPI, CredentialsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ContainerGroupEdit from './ContainerGroupEdit';
 
@@ -111,12 +111,14 @@ describe('<ContainerGroupEdit/>', () => {
     history = createMemoryHistory({ initialEntries: ['/instance_groups'] });
     vi.mocked(InstanceGroupsAPI.update).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.update>);
     vi.mocked(InstanceGroupsAPI.readInstanceGroupOptions).mockResolvedValue({
       data: {
         actions: { PUT: { pod_spec_override: { default: initialPodSpec } } },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<
+      typeof InstanceGroupsAPI.readInstanceGroupOptions
+    >);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: {
         results: [
@@ -126,7 +128,7 @@ describe('<ContainerGroupEdit/>', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
   });
 
   afterEach(() => {

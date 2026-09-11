@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, Host, Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { HostsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostEdit from './InventoryHostEdit';
 import mockHost from '../shared/data.host.json';
@@ -37,7 +37,7 @@ describe('<InventoryHostEdit />', () => {
 
   test('handleSubmit should call api update', async () => {
     vi.mocked(HostsAPI.update).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof HostsAPI.update>
     );
     const { user } = renderWithContexts(
       <InventoryHostEdit
@@ -68,7 +68,7 @@ describe('<InventoryHostEdit />', () => {
 
   test('should navigate to inventory host detail after successful submission', async () => {
     vi.mocked(HostsAPI.update).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof HostsAPI.update>
     );
     const history = createMemoryHistory();
     const { user } = renderWithContexts(

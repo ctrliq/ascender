@@ -18,7 +18,7 @@ import { SettingDetail } from '../../shared';
 function UIDetail() {
   const { t } = useLingui();
   const { me } = useConfig();
-  const { GET: options } = useSettings();
+  const { GET: options = {} } = useSettings();
   const { state: locationState } = useLocation();
   const hardReload = locationState?.hardReload;
 
@@ -91,7 +91,7 @@ function UIDetail() {
       <RoutedTabs tabsArray={tabsArray} />
       <CardBody>
         {isLoading && <ContentLoading />}
-        {!isLoading && error && <ContentError error={error} />}
+        {!isLoading && Boolean(error) && <ContentError error={error} />}
         {!isLoading && ui && (
           <DetailList>
             {Object.keys(ui).map((key) => {

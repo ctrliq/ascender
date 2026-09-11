@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
@@ -6,6 +5,7 @@ import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 
 import { ApplicationsAPI, TokensAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ApplicationTokenList from './ApplicationTokenList';
 
@@ -92,7 +92,7 @@ describe('<ApplicationTokenList/>', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ApplicationsAPI.readTokenOptions>);
   });
 
   afterEach(() => {
@@ -146,7 +146,7 @@ describe('<ApplicationTokenList/>', () => {
       tokens as unknown as ApiResponse<any>
     );
     vi.mocked(TokensAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof TokensAPI.destroy>
     );
 
     const { user } = renderWithContexts(<ApplicationTokenList />);

@@ -1,10 +1,13 @@
 import type {
-  AnyUnifiedJobTemplate,
   Label,
+  NodeTemplate,
   SummaryFieldRef,
   UnifiedJob,
+  WorkflowJobTemplateNode,
 } from 'types/api';
 import type { NodePositions } from './WorkflowUtils';
+
+export type { NodeTemplate };
 
 /**
  * The prompt overrides a node carries into its run.
@@ -12,21 +15,6 @@ import type { NodePositions } from './WorkflowUtils';
  * Which of them a node has is decided by what its template asks for, so every
  * field is optional, and the index signature keeps the rest reachable.
  */
-/**
- * The template a node runs, as far as the visualizer has it.
- *
- * The related endpoints the node view modal reads are attached here too, since
- * it puts what it fetched back onto the node.
- */
-export type NodeTemplate = Partial<AnyUnifiedJobTemplate> & {
-  instance_groups?: SummaryFieldRef[];
-  unified_job_type?: string;
-  /** An approval node's own settings, which no other node type has. */
-  context_template?: string;
-  required_approvals?: number;
-  on_timeout?: string;
-};
-
 export interface PromptValues {
   credentials?: SummaryFieldRef[];
   /** What the node modal added to and removed from the template's defaults. */
@@ -106,23 +94,18 @@ export type WorkflowStateWith<K extends keyof WorkflowState> = WorkflowState & {
  * is handed. It is a different shape from the chart node above: the reducer
  * builds the latter out of the former.
  */
-export interface ApiWorkflowNode {
+export interface ApiWorkflowNode extends Partial<
+  Omit<WorkflowJobTemplateNode, 'summary_fields' | 'all_parents_must_converge'>
+> {
   id: number;
-  /** A name for the node, which is a uuid until someone gives it one. */
-  identifier?: string | null;
-  unified_job_template?: number | null;
-  all_parents_must_converge?: boolean;
+  /**
+   * Every node the api sends lists what it leads to, empty where it leads
+   * nowhere, which is what the reducer walks to build the chart's links.
+   */
   success_nodes: number[];
   failure_nodes: number[];
   always_nodes: number[];
-  condition_nodes?: number[];
-  condition_edges?: {
-    id: number;
-    trigger?: unknown;
-    artifact_key?: unknown;
-    operator?: unknown;
-    expected_value?: unknown;
-  }[];
+  all_parents_must_converge?: boolean | null;
   summary_fields?: {
     unified_job_template?: NodeTemplate;
     inventory?: SummaryFieldRef;

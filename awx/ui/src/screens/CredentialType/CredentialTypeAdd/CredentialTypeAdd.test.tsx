@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
 
 import { CredentialTypesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import CredentialTypeAdd from './CredentialTypeAdd';
 
@@ -74,7 +74,7 @@ describe('<CredentialTypeAdd/>', () => {
   test('handleSubmit should call the api and redirect to details page', async () => {
     vi.mocked(CredentialTypesAPI.create).mockResolvedValue({
       data: { id: 42 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialTypesAPI.create>);
     const { user } = renderAdd();
     await user.click(screen.getByRole('button', { name: 'Submit' }));
     await waitFor(() =>

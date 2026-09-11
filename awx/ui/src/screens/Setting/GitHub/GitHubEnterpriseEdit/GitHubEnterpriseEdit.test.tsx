@@ -1,12 +1,12 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import GitHubEnterpriseEdit from './GitHubEnterpriseEdit';
 
 vi.mock('../../../../api');
@@ -16,10 +16,10 @@ describe('<GitHubEnterpriseEdit />', () => {
 
   beforeEach(() => {
     vi.mocked(SettingsAPI.revertCategory).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.revertCategory>
     );
     vi.mocked(SettingsAPI.updateAll).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.updateAll>
     );
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: {
@@ -32,7 +32,7 @@ describe('<GitHubEnterpriseEdit />', () => {
         SOCIAL_AUTH_GITHUB_ENTERPRISE_ORGANIZATION_MAP: null,
         SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_MAP: null,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -44,7 +44,7 @@ describe('<GitHubEnterpriseEdit />', () => {
       initialEntries: ['/settings/github/enterprise/edit'],
     });
     const utils = renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <GitHubEnterpriseEdit />
       </SettingsProvider>,
       { context: { router: { history } } }
@@ -158,7 +158,7 @@ describe('<GitHubEnterpriseEdit />', () => {
       Promise.reject(new Error())
     );
     renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <GitHubEnterpriseEdit />
       </SettingsProvider>
     );

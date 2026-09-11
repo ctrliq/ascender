@@ -1,10 +1,14 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, WorkflowJobTemplateNode } from 'types/api';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import useWebsocket from 'hooks/useWebsocket';
 import { WorkflowJobsAPI } from 'api';
 import type { WorkflowNode } from '../../../components/Workflow/workflowReducer';
 
-const fetchWorkflowNodes = async (jobId: Untyped, pageNo = 1, nodes = []) => {
+const fetchWorkflowNodes = async (
+  jobId: number,
+  pageNo = 1,
+  nodes: WorkflowJobTemplateNode[] = []
+): Promise<WorkflowJobTemplateNode[]> => {
   const { data } = await WorkflowJobsAPI.readNodes(jobId, {
     page_size: 200,
     page: pageNo,
@@ -64,9 +68,9 @@ export default function useWsWorkflowOutput(
       return;
     }
     const updatedNodeObjectsMap = updatedNodeObjects.reduce<
-      Record<string, Untyped>
-    >((map, node: WorkflowNode) => {
-      map[node.id] = node;
+      Record<number, WorkflowJobTemplateNode>
+    >((map, node) => {
+      map[node.id as number] = node;
       return map;
     }, {});
     setNodes((prevNodes: Untyped) =>

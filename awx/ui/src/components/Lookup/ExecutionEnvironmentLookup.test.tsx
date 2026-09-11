@@ -1,9 +1,8 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { ExecutionEnvironmentsAPI, ProjectsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ExecutionEnvironmentLookup from './ExecutionEnvironmentLookup';
 
@@ -32,16 +31,16 @@ describe('ExecutionEnvironmentLookup', () => {
   beforeEach(() => {
     vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
       data: mockedExecutionEnvironments,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
       data: {
         actions: { GET: {}, POST: {} },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
     vi.mocked(ProjectsAPI.readDetail).mockResolvedValue({
       data: { organization: 39 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readDetail>);
   });
 
   afterEach(() => {

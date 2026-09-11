@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InventorySource, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -54,19 +54,19 @@ function InventorySourceList() {
   } = useRequest(
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, search);
-      const results = await Promise.all([
+      const [sources, options] = await Promise.all([
         InventoriesAPI.readSources(id, params),
         InventorySourcesAPI.readOptions(),
       ]);
       return {
-        result: results[0].data.results,
-        sourceCount: results[0].data.count,
-        sourceChoices: results[1].data.actions.GET.source.choices,
-        sourceChoicesOptions: results[1].data.actions,
-        searchableKeys: getSearchableKeys(results[1].data.actions?.GET),
-        relatedSearchableKeys: (
-          results[1]?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        result: sources.data.results,
+        sourceCount: sources.data.count,
+        sourceChoices: options.data.actions.GET?.source?.choices ?? [],
+        sourceChoicesOptions: options.data.actions,
+        searchableKeys: getSearchableKeys(options.data.actions.GET),
+        relatedSearchableKeys: (options.data.related_search_fields || []).map(
+          (val) => val.slice(0, -8)
+        ),
       };
     }, [id, search]),
     {
@@ -221,16 +221,16 @@ function InventorySourceList() {
             <HeaderCell>{t`Actions`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(inventorySource: Untyped, index: number) => {
+        renderRow={(inventorySource: InventorySource, index: number) => {
           const label = sourceChoices.find(
-            ([scMatch]: Untyped[]) => inventorySource.source === scMatch
+            ([scMatch]) => inventorySource.source === scMatch
           );
           return (
             <InventorySourceListItem
               key={inventorySource.id}
               source={inventorySource}
               onSelect={() => handleSelect(inventorySource)}
-              label={label[1]}
+              label={label?.[1]}
               detailUrl={`${listUrl}${inventorySource.id}`}
               isSelected={selected.some((row) => row.id === inventorySource.id)}
               rowIndex={index}

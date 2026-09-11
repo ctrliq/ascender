@@ -48,7 +48,7 @@ function FederatedInventory({ setBreadcrumb }: FederatedInventoryProps) {
       const { data } = await FederatedInventoriesAPI.readDetail(id);
       return data;
     }, [id]),
-    { inventory: null, isLoading: true }
+    { isLoading: true }
   );
 
   useEffect(() => {

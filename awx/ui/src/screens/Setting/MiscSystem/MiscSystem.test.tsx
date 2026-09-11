@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -6,8 +5,9 @@ import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI, ExecutionEnvironmentsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
-import mockAllOptions from '../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../testUtils/settingOptions';
 import mockAllSettings from '../shared/data.allSettings.json';
 import MiscSystem from './MiscSystem';
 
@@ -20,9 +20,7 @@ function mountAt(path: Untyped, config?: Untyped) {
     context.config = config;
   }
   return renderWithContexts(
-    <SettingsProvider
-      value={JSON.parse(JSON.stringify(mockAllOptions.actions))}
-    >
+    <SettingsProvider value={JSON.parse(JSON.stringify(settingOptions))}>
       <Routes>
         <Route
           path="/settings/miscellaneous_system/*"
@@ -38,10 +36,10 @@ describe('<MiscSystem />', () => {
   beforeEach(() => {
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: mockAllSettings,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
   });
 
   afterEach(() => {

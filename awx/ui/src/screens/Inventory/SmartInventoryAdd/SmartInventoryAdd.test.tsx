@@ -4,6 +4,7 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SmartInventoryAdd from './SmartInventoryAdd';
 
@@ -43,7 +44,7 @@ describe('<SmartInventoryAdd />', () => {
   beforeEach(() => {
     vi.mocked(InventoriesAPI.create).mockResolvedValue({
       data: { id: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.create>);
     vi.mocked(InventoriesAPI.associateInstanceGroup).mockResolvedValue(
       undefined as unknown as ApiResponse<any>
     );

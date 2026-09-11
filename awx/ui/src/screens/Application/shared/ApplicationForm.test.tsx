@@ -1,8 +1,8 @@
 import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { OrganizationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ApplicationForm from './ApplicationForm';
 
@@ -43,10 +43,10 @@ beforeEach(() => {
   // a single org so OrganizationLookup auto-populates the required field
   vi.mocked(OrganizationsAPI.read).mockResolvedValue({
     data: { results: [{ id: 1, name: 'Default' }], count: 1 },
-  } as unknown as ApiResponse<Untyped>);
+  } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
   vi.mocked(OrganizationsAPI.readOptions).mockResolvedValue({
     data: { actions: { GET: {} }, related_search_fields: [] },
-  } as unknown as ApiResponse<Untyped>);
+  } as unknown as ResponseOf<typeof OrganizationsAPI.readOptions>);
 });
 
 afterEach(() => {

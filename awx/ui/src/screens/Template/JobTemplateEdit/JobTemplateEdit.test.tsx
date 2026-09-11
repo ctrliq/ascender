@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
 import { JobTemplatesAPI, ProjectsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import JobTemplateEdit from './JobTemplateEdit';
 
@@ -146,7 +146,7 @@ describe('<JobTemplateEdit />', () => {
   beforeEach(() => {
     vi.mocked(ProjectsAPI.readDetail).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readDetail>);
   });
 
   afterEach(() => {
@@ -168,21 +168,23 @@ describe('<JobTemplateEdit />', () => {
   test('handleSubmit should call api update', async () => {
     vi.mocked(JobTemplatesAPI.update).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.update>);
     vi.mocked(JobTemplatesAPI.orderInstanceGroups).mockResolvedValue(
       {} as unknown as void
     );
     vi.mocked(JobTemplatesAPI.disassociateLabel).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof JobTemplatesAPI.disassociateLabel>
     );
     vi.mocked(JobTemplatesAPI.associateLabel).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof JobTemplatesAPI.associateLabel>
     );
     vi.mocked(JobTemplatesAPI.disassociateCredentials).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<
+        typeof JobTemplatesAPI.disassociateCredentials
+      >
     );
     vi.mocked(JobTemplatesAPI.associateCredentials).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof JobTemplatesAPI.associateCredentials>
     );
 
     const { user } = renderWithContexts(

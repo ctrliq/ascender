@@ -1,8 +1,7 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { WorkflowJobTemplatesAPI } from 'api';
+import type { ResponseOf } from '../../../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 import WorkflowJobTemplatesList from './WorkflowJobTemplatesList';
 
@@ -39,7 +38,7 @@ describe('WorkflowJobTemplatesList', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.read>);
     vi.mocked(WorkflowJobTemplatesAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -48,7 +47,7 @@ describe('WorkflowJobTemplatesList', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readOptions>);
     renderWithContexts(
       <WorkflowJobTemplatesList
         nodeResource={nodeResource}

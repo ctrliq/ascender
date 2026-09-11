@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { WorkflowApprovalsAPI, WorkflowJobsAPI } from 'api';
 import { formatDateString } from 'util/dates';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -201,10 +201,10 @@ describe('<WorkflowApprovalDetail />', () => {
   beforeEach(() => {
     vi.mocked(WorkflowJobsAPI.readDetail).mockResolvedValue({
       data: workflowJob,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobsAPI.readDetail>);
     vi.mocked(WorkflowApprovalsAPI.readVotes).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowApprovalsAPI.readVotes>);
   });
 
   afterEach(() => {
@@ -276,7 +276,7 @@ describe('<WorkflowApprovalDetail />', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowApprovalsAPI.readVotes>);
     await renderDetail({
       ...workflowApproval,
       required_approvals: 2,
@@ -388,7 +388,7 @@ describe('<WorkflowApprovalDetail />', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobsAPI.readDetail>);
 
     await renderDetail(workflowApproval);
     // when there are no labels the Detail is empty and not rendered

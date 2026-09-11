@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, Schedule } from 'types/api';
 import React from 'react';
 import { act, waitFor } from '@testing-library/react';
@@ -9,6 +8,7 @@ import {
   CredentialsAPI,
   CredentialTypesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleEdit from './ScheduleEdit';
 
@@ -140,7 +140,7 @@ describe('<ScheduleEdit />', () => {
     formProps = undefined;
     vi.mocked(SchedulesAPI.readZoneInfo).mockResolvedValue({
       data: [{ name: 'America/New_York' }],
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.readZoneInfo>);
     vi.mocked(SchedulesAPI.readCredentials).mockResolvedValue({
       data: {
         results: [
@@ -161,10 +161,10 @@ describe('<ScheduleEdit />', () => {
         ],
         count: 2,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
     vi.mocked(CredentialTypesAPI.loadAllTypes).mockResolvedValue([
       { id: 1, name: 'ssh', kind: 'ssh' },
-    ]);
+    ] as unknown as ResponseOf<typeof CredentialTypesAPI.loadAllTypes>);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: {
         count: 3,
@@ -192,21 +192,21 @@ describe('<ScheduleEdit />', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: {
         related_search_fields: [],
         actions: { GET: { filterabled: true } },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
     vi.mocked(SchedulesAPI.update).mockResolvedValue({
       data: { id: 27 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.update>);
     vi.mocked(SchedulesAPI.associateCredential).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SchedulesAPI.associateCredential>
     );
     vi.mocked(SchedulesAPI.disassociateCredential).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SchedulesAPI.disassociateCredential>
     );
     vi.mocked(SchedulesAPI.orderInstanceGroups).mockResolvedValue(
       {} as unknown as void
@@ -494,13 +494,13 @@ describe('<ScheduleEdit />', () => {
           { name: 'Bar', id: 2, url: '' },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
     vi.mocked(InventoriesAPI.readOptions).mockResolvedValue({
       data: {
         related_search_fields: [],
         actions: { GET: { filterable: true } },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
 
     renderEdit();
     await waitFor(() => expect(formProps).toBeDefined());

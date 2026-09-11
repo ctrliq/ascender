@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, ExecutionEnvironment } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
 
 import { ExecutionEnvironmentsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentEdit from './ExecutionEnvironmentEdit';
@@ -67,7 +67,7 @@ describe('<ExecutionEnvironmentEdit/>', () => {
 
   test('handleSubmit should call the api and redirect to details page', async () => {
     vi.mocked(ExecutionEnvironmentsAPI.update).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.update>
     );
     const { user } = renderEdit();
     await user.click(screen.getByRole('button', { name: 'Submit' }));

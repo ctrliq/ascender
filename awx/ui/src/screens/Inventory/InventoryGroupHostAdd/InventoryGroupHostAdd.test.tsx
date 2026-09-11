@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, Group } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { GroupsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroupHostAdd from './InventoryGroupHostAdd';
 import mockHost from '../shared/data.host.json';
@@ -39,7 +39,7 @@ describe('<InventoryGroupHostAdd />', () => {
       data: {
         ...mockHost,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof GroupsAPI.createHost>);
   });
 
   afterEach(() => {

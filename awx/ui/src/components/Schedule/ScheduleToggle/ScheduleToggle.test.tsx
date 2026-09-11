@@ -1,8 +1,8 @@
-import type { Untyped, Schedule } from 'types/api';
-import type { ApiResponse } from 'api/Base';
+import type { Schedule } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { SchedulesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleToggle from './ScheduleToggle';
 
@@ -33,7 +33,7 @@ const mockSchedule = {
 describe('<ScheduleToggle>', () => {
   test('should toggle off', async () => {
     vi.mocked(SchedulesAPI.update).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SchedulesAPI.update>
     );
     const onToggle = vi.fn();
     const { user } = renderWithContexts(
@@ -53,7 +53,7 @@ describe('<ScheduleToggle>', () => {
 
   test('should toggle on', async () => {
     vi.mocked(SchedulesAPI.update).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SchedulesAPI.update>
     );
     const onToggle = vi.fn();
     const { user } = renderWithContexts(

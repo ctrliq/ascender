@@ -1,10 +1,13 @@
 import type { QSParams } from 'util/qs';
+import type { OptionsResponse } from '../../types/api';
 import type { BaseConstructor } from '../Base';
 
 const NotificationsMixin = <T extends BaseConstructor>(parent: T) =>
   class extends parent {
     readOptionsNotificationTemplates(id: number | string) {
-      return this.http.options(`${this.baseUrl}${id}/notification_templates/`);
+      return this.http.options<OptionsResponse>(
+        `${this.baseUrl}${id}/notification_templates/`
+      );
     }
 
     readNotificationTemplates(id: number | string, params?: QSParams) {

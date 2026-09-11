@@ -1,4 +1,4 @@
-import type { ApiEntity, Untyped } from 'types/api';
+import type { CredentialType, LaunchCredential } from 'types/api';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -30,7 +30,7 @@ const QS_CONFIG = getQSConfig('credential', {
 
 export interface CredentialsStepProps {
   allowCredentialsWithPasswords: boolean;
-  defaultCredentials?: unknown[];
+  defaultCredentials?: LaunchCredential[] | null;
   [key: string]: unknown;
 }
 
@@ -44,18 +44,18 @@ function CredentialsStep({
 
   // Create a wrapper for the validator that handles translation properly
   const validateCredentials = useCallback(
-    (val: Untyped) => {
+    (val: LaunchCredential[]) => {
       const createTranslatedValidator = (
         allowPasswordCredentials: unknown,
-        selectedCredentials: Untyped,
-        defaultCreds: Untyped
+        selectedCredentials: LaunchCredential[],
+        defaultCreds: LaunchCredential[]
       ) => {
         if (defaultCreds.length > 0 && selectedCredentials) {
-          const missingCredentialTypes: Untyped[] = [];
-          defaultCreds.forEach((defaultCredential: Untyped) => {
+          const missingCredentialTypes: string[] = [];
+          defaultCreds.forEach((defaultCredential) => {
             if (
               !selectedCredentials.find(
-                (selectedCredential: Untyped) =>
+                (selectedCredential) =>
                   (selectedCredential?.credential_type ===
                     defaultCredential?.credential_type &&
                     !selectedCredential.inputs?.vault_id &&
@@ -65,10 +65,12 @@ function CredentialsStep({
                       defaultCredential.inputs?.vault_id)
               )
             ) {
+              const typeName =
+                defaultCredential.summary_fields?.credential_type?.name ?? '';
               missingCredentialTypes.push(
                 defaultCredential.inputs?.vault_id
-                  ? `${defaultCredential.summary_fields.credential_type.name} | ${defaultCredential.inputs.vault_id}`
-                  : defaultCredential.summary_fields.credential_type.name
+                  ? `${typeName} | ${defaultCredential.inputs.vault_id}`
+                  : typeName
               );
             }
           });
@@ -79,16 +81,18 @@ function CredentialsStep({
         }
 
         if (!allowPasswordCredentials && selectedCredentials) {
-          const credentialsThatPrompt: Untyped[] = [];
-          selectedCredentials.forEach((selectedCredential: Untyped) => {
-            const credentialPromptsForPassword = (credential: Untyped) =>
+          const credentialsThatPrompt: string[] = [];
+          selectedCredentials.forEach((selectedCredential) => {
+            const credentialPromptsForPassword = (
+              credential: LaunchCredential
+            ) =>
               credential?.inputs?.password === 'ASK' ||
               credential?.inputs?.ssh_key_unlock === 'ASK' ||
               credential?.inputs?.become_password === 'ASK' ||
               credential?.inputs?.vault_password === 'ASK';
 
             if (credentialPromptsForPassword(selectedCredential)) {
-              credentialsThatPrompt.push(selectedCredential.name);
+              credentialsThatPrompt.push(selectedCredential.name ?? '');
             }
           });
           if (credentialsThatPrompt.length > 0) {
@@ -112,7 +116,7 @@ function CredentialsStep({
     name: 'credentials',
     validate: validateCredentials,
   });
-  const [selectedType, setSelectedType] = useState<ApiEntity | null>(null);
+  const [selectedType, setSelectedType] = useState<CredentialType | null>(null);
   const {
     result: types,
     error: typesError,
@@ -123,8 +127,7 @@ function CredentialsStep({
       const loadedTypes = await CredentialTypesAPI.loadAllTypes();
       if (loadedTypes.length) {
         const match =
-          loadedTypes.find((type: Untyped) => type.kind === 'ssh') ||
-          loadedTypes[0];
+          loadedTypes.find((type) => type.kind === 'ssh') || loadedTypes[0];
         setSelectedType(match ?? null);
       }
       return loadedTypes;
@@ -159,7 +162,7 @@ function CredentialsStep({
         count: data.count,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
     }, [selectedType, location.search]),
@@ -217,8 +220,8 @@ function CredentialsStep({
     removeItem,
     canDelete,
   }: {
-    item: Untyped;
-    removeItem: (item: Untyped) => void;
+    item: LaunchCredential;
+    removeItem: (item: LaunchCredential) => void;
     canDelete: boolean;
   }) => (
     <CredentialChip
@@ -256,8 +259,7 @@ function CredentialsStep({
               // Reset query params when the category of credentials is changed
               removeAllSearchTerms(QS_CONFIG);
               setSelectedType(
-                types.find((o: Untyped) => o.id === parseInt(String(id), 10)) ??
-                  null
+                types.find((o) => o.id === parseInt(String(id), 10)) ?? null
               );
             }}
           />
@@ -297,20 +299,21 @@ function CredentialsStep({
         qsConfig={QS_CONFIG}
         readOnly={false}
         selectItem={(item: LookupItem) => {
-          const hasSameVaultID = (val: Untyped) =>
+          const chosen = item as unknown as LaunchCredential;
+          const hasSameVaultID = (val: LaunchCredential) =>
             val?.inputs?.vault_id !== undefined &&
-            val?.inputs?.vault_id === (item as Untyped)?.inputs?.vault_id;
-          const hasSameCredentialType = (val: Untyped) =>
-            val.credential_type === (item as Untyped).credential_type;
-          const newItems = field.value.filter((i: Untyped) =>
+            val?.inputs?.vault_id === chosen?.inputs?.vault_id;
+          const hasSameCredentialType = (val: LaunchCredential) =>
+            val.credential_type === chosen.credential_type;
+          const newItems = (field.value as LaunchCredential[]).filter((i) =>
             isVault ? !hasSameVaultID(i) : !hasSameCredentialType(i)
           );
-          newItems.push(item);
+          newItems.push(chosen);
           helpers.setValue(newItems);
         }}
         deselectItem={(item: LookupItem) => {
           helpers.setValue(
-            field.value.filter((i: Untyped) => i.id !== item.id)
+            (field.value as LaunchCredential[]).filter((i) => i.id !== item.id)
           );
         }}
         renderItemChip={renderChip}

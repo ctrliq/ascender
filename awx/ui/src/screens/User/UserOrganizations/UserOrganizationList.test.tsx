@@ -1,10 +1,9 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { UsersAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import UserOrganizationList from './UserOrganizationList';
@@ -30,10 +29,10 @@ describe('<UserOrganizationlist />', () => {
         ],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readOrganizations>);
     vi.mocked(UsersAPI.readOrganizationOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readOrganizationOptions>);
     renderWithContexts(
       <Routes>
         <Route

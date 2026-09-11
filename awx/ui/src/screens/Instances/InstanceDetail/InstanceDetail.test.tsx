@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import * as ConfigContext from 'contexts/Config';
 import useDebounce from 'hooks/useDebounce';
 import { InstancesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InstanceDetail from './InstanceDetail';
 
@@ -64,7 +64,7 @@ describe('<InstanceDetail/>', () => {
         node_state: 'ready',
         health_check_pending: false,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.readDetail>);
     vi.mocked(InstancesAPI.readInstanceGroup).mockResolvedValue({
       data: {
         results: [
@@ -74,7 +74,7 @@ describe('<InstanceDetail/>', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.readInstanceGroup>);
     vi.mocked(InstancesAPI.readHealthCheckDetail).mockResolvedValue({
       data: {
         uuid: '00000000-0000-0000-0000-000000000000',
@@ -88,7 +88,7 @@ describe('<InstanceDetail/>', () => {
         mem_capacity: 38,
         capacity: 38,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.readHealthCheckDetail>);
   });
 
   afterEach(() => {

@@ -1,10 +1,19 @@
-import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 
-import { OrganizationsAPI, CredentialsAPI } from 'api';
+import {
+  OrganizationsAPI,
+  CredentialsAPI,
+  TeamsAPI,
+  NotificationTemplatesAPI,
+  ExecutionEnvironmentsAPI,
+  ProjectsAPI,
+  InventoriesAPI,
+  ApplicationsAPI,
+} from 'api';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationsList from './OrganizationList';
@@ -69,9 +78,29 @@ const mockOrganizations = {
 
 describe('<OrganizationsList />', () => {
   beforeEach(() => {
+    // Deleting one row first counts what depends on it, through one read
+    // per related endpoint. Nothing here depends on the row being deleted.
+    vi.mocked(TeamsAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof TeamsAPI.read>);
+    vi.mocked(NotificationTemplatesAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.read>);
+    vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
+    vi.mocked(ProjectsAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
+    vi.mocked(InventoriesAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
+    vi.mocked(ApplicationsAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof ApplicationsAPI.read>);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(OrganizationsAPI.read).mockResolvedValue(
       mockOrganizations as unknown as ApiResponse<unknown>
     );
@@ -82,7 +111,7 @@ describe('<OrganizationsList />', () => {
           POST: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readOptions>);
   });
   afterEach(() => {
     vi.clearAllMocks();
@@ -138,7 +167,7 @@ describe('<OrganizationsList />', () => {
 
   test('Expected api calls are made for multi-delete', async () => {
     vi.mocked(OrganizationsAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof OrganizationsAPI.destroy>
     );
     const { user } = renderWithContexts(<OrganizationsList />);
     await screen.findByRole('link', { name: 'Organization 0' });
@@ -200,7 +229,7 @@ describe('<OrganizationsList />', () => {
           GET: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readOptions>);
     renderWithContexts(<OrganizationsList />);
     await screen.findByRole('link', { name: 'Organization 0' });
     expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();

@@ -75,7 +75,7 @@ const FrequencyDetailsContainer = styled.div`
 export interface ScheduleDetailProps {
   hasDaysToKeepField?: boolean;
   schedule: Schedule;
-  surveyConfig?: SurveyConfig;
+  surveyConfig?: SurveyConfig | null;
   [key: string]: unknown;
 }
 

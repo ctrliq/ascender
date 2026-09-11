@@ -1,10 +1,9 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { JobTemplatesAPI, SchedulesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Schedule from './Schedule';
 
@@ -50,15 +49,15 @@ beforeEach(() => {
       name: 'Mock JT Schedule',
       next_run: '2020-02-20T05:00:00Z',
     },
-  } as unknown as ApiResponse<Untyped>);
+  } as unknown as ResponseOf<typeof SchedulesAPI.readDetail>);
 
   vi.mocked(SchedulesAPI.createPreview).mockResolvedValue({
     data: { local: [], utc: [] },
-  } as unknown as ApiResponse<Untyped>);
+  } as unknown as ResponseOf<typeof SchedulesAPI.createPreview>);
 
   vi.mocked(SchedulesAPI.readCredentials).mockResolvedValue({
     data: { count: 0, results: [] },
-  } as unknown as ApiResponse<Untyped>);
+  } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
 
   vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue({
     data: {
@@ -74,7 +73,7 @@ beforeEach(() => {
       ask_verbosity_on_launch: false,
       survey_enabled: false,
     },
-  } as unknown as ApiResponse<Untyped>);
+  } as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>);
 });
 
 function renderSchedule() {

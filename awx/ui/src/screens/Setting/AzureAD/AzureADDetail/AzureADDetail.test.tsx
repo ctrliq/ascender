@@ -1,14 +1,14 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
 } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import AzureADDetail from './AzureADDetail';
 
 vi.mock('../../../../api');
@@ -35,7 +35,7 @@ describe('<AzureADDetail />', () => {
     };
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: mockData,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -44,7 +44,7 @@ describe('<AzureADDetail />', () => {
 
   async function renderDetail(context?: Untyped) {
     const result = renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <AzureADDetail />
       </SettingsProvider>,
       context

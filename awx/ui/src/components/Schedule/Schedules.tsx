@@ -14,7 +14,7 @@ export interface SchedulesProps {
   setBreadcrumb: SetBreadcrumb;
   /** Absent for a resource that cannot be prompted, a management job say. */
   launchConfig?: LaunchConfig;
-  surveyConfig?: SurveyConfig;
+  surveyConfig?: SurveyConfig | null;
   resource?: Untyped;
   resourceDefaultCredentials?: Untyped;
   [key: string]: unknown;

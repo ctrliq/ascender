@@ -1,14 +1,14 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
 } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import SAMLDetail from './SAMLDetail';
 
 vi.mock('../../../../api');
@@ -36,7 +36,7 @@ describe('<SAMLDetail />', () => {
         SOCIAL_AUTH_SAML_USER_FLAGS_BY_ATTR: {},
         SAML_AUTO_CREATE_OBJECTS: false,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -45,7 +45,7 @@ describe('<SAMLDetail />', () => {
 
   async function renderDetail(context?: Untyped) {
     const result = renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <SAMLDetail />
       </SettingsProvider>,
       context

@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, InstanceGroup } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import { InstanceGroupsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceGroupEdit from './InstanceGroupEdit';
@@ -73,7 +73,7 @@ describe('<InstanceGroupEdit>', () => {
     history = createMemoryHistory();
     vi.mocked(InstanceGroupsAPI.update).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.update>);
   });
 
   afterEach(() => {

@@ -3,6 +3,7 @@ import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { SchedulesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleList from './ScheduleList';
 import mockSchedules from '../data.schedules.json';
@@ -16,13 +17,13 @@ function setupMocks() {
   (SchedulesAPI as Untyped).destroy = vi.fn();
   vi.mocked(SchedulesAPI.update).mockResolvedValue({
     data: mockSchedules.results[0],
-  } as unknown as ApiResponse<Untyped>);
+  } as unknown as ResponseOf<typeof SchedulesAPI.update>);
   vi.mocked(SchedulesAPI.read).mockResolvedValue({
     data: mockSchedules,
   } as unknown as ApiResponse<unknown>);
   vi.mocked(SchedulesAPI.readOptions).mockResolvedValue({
     data: { actions: { GET: {}, POST: {} } },
-  } as unknown as ApiResponse<Untyped>);
+  } as unknown as ResponseOf<typeof SchedulesAPI.readOptions>);
   loadSchedules = vi.fn().mockResolvedValue({ data: mockSchedules });
   loadScheduleOptions = vi.fn().mockResolvedValue({
     data: { actions: { GET: {}, POST: {} } },
@@ -113,7 +114,7 @@ describe('ScheduleList', () => {
 
     test('should call api delete schedules for each selected schedule', async () => {
       vi.mocked(SchedulesAPI.destroy).mockResolvedValue(
-        {} as unknown as ApiResponse<Untyped>
+        {} as unknown as ResponseOf<typeof SchedulesAPI.destroy>
       );
       const { user } = renderList();
       await screen.findByRole('link', { name: 'Mock System Job Schedule' });

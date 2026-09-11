@@ -1,9 +1,9 @@
-import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 
 import { CredentialTypesAPI, CredentialsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import CredentialTypeList from './CredentialTypeList';
@@ -39,7 +39,7 @@ describe('<CredentialTypeList>', () => {
   beforeEach(() => {
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialTypesAPI.read).mockResolvedValue(
       credentialTypes as unknown as ApiResponse<unknown>
     );
@@ -80,7 +80,7 @@ describe('<CredentialTypeList>', () => {
   test('should not render add button when POST is not allowed', async () => {
     vi.mocked(CredentialTypesAPI.readOptions).mockResolvedValue({
       data: { actions: { POST: false } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialTypesAPI.readOptions>);
     renderWithContexts(<CredentialTypeList />);
     await screen.findByText('Foo');
     expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();

@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { CredentialTypesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import CredentialType from './CredentialType';
 
@@ -52,7 +52,7 @@ describe('<CredentialType />', () => {
   beforeEach(() => {
     vi.mocked(CredentialTypesAPI.readDetail).mockResolvedValue({
       data: credentialType,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialTypesAPI.readDetail>);
   });
 
   afterEach(() => {

@@ -8,6 +8,7 @@ import {
   CredentialInputSourcesAPI,
   CredentialTypesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import CredentialAdd from './CredentialAdd';
 
@@ -109,7 +110,7 @@ describe('<CredentialAdd />', () => {
       // CredentialInputSourcesAPI.create return { data: { id: 13 } }.
       vi.mocked(CredentialsAPI.create).mockResolvedValue({
         data: { id: 13 },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof CredentialsAPI.create>);
       history = createMemoryHistory({ initialEntries: ['/credentials'] });
       ({ user } = renderWithContexts(<CredentialAdd />, {
         context: { router: { history } },

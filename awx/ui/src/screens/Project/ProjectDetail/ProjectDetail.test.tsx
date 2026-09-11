@@ -1,14 +1,14 @@
 import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import {
   ProjectsAPI,
   JobTemplatesAPI,
-  WorkflowJobTemplatesAPI,
   InventorySourcesAPI,
+  WorkflowJobTemplateNodesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -100,16 +100,21 @@ function renderDetail(
 
 describe('<ProjectDetail />', () => {
   beforeEach(() => {
+    // Deleting one row first counts what depends on it, through one read
+    // per related endpoint. Nothing here depends on the row being deleted.
+    vi.mocked(WorkflowJobTemplateNodesAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof WorkflowJobTemplateNodesAPI.read>);
     // DeleteButton queries related resources when opening its confirm modal
     vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
-    vi.mocked(WorkflowJobTemplatesAPI.read).mockResolvedValue({
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
+    vi.mocked(WorkflowJobTemplateNodesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplateNodesAPI.read>);
     vi.mocked(InventorySourcesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.read>);
   });
 
   afterEach(() => {
@@ -179,22 +184,23 @@ describe('<ProjectDetail />', () => {
   test('delete confirmation fires the 3 related-resource requests', async () => {
     vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
-    vi.mocked(WorkflowJobTemplatesAPI.read).mockResolvedValue({
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
+    vi.mocked(WorkflowJobTemplateNodesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplateNodesAPI.read>);
     vi.mocked(InventorySourcesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.read>);
     const { user } = renderDetail();
 
     await user.click(screen.getByRole('button', { name: 'Delete' }));
 
     // opening the delete confirmation queries the related resources that
-    // could block deletion (JobTemplates, WorkflowJobTemplates, InventorySources)
+    // could block deletion: the job templates and the inventory sources that
+    // use this project, and the workflow nodes that run it
     await waitFor(() => {
       expect(JobTemplatesAPI.read).toHaveBeenCalled();
-      expect(WorkflowJobTemplatesAPI.read).toHaveBeenCalled();
+      expect(WorkflowJobTemplateNodesAPI.read).toHaveBeenCalled();
       expect(InventorySourcesAPI.read).toHaveBeenCalled();
     });
   });
@@ -243,10 +249,10 @@ describe('<ProjectDetail />', () => {
   test('sync button should call api to sync project', async () => {
     vi.mocked(ProjectsAPI.readSync).mockResolvedValue({
       data: { can_update: true },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readSync>);
     vi.mocked(ProjectsAPI.sync).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.sync>);
     const { user } = renderDetail();
 
     await user.click(screen.getByRole('button', { name: 'Sync Project' }));
@@ -255,7 +261,7 @@ describe('<ProjectDetail />', () => {
 
   test('expected api calls are made for delete', async () => {
     vi.mocked(ProjectsAPI.destroy).mockResolvedValueOnce(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof ProjectsAPI.destroy>
     );
     const { user } = renderDetail();
 

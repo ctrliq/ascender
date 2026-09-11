@@ -96,7 +96,7 @@ function JobTemplateAdd() {
         const {
           data: { results },
         } = await OrganizationsAPI.read();
-        orgId = results[0].id;
+        orgId = results[0]?.id;
       } catch (err) {
         throw err;
       }

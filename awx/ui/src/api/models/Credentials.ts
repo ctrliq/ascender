@@ -1,9 +1,15 @@
 import type { QSParams } from 'util/qs';
-import type { ApiEntity, Paginated } from '../../types/api';
+import type {
+  AccessListEntry,
+  ApiEntity,
+  Credential,
+  OptionsResponse,
+  Paginated,
+} from '../../types/api';
 import Base from '../Base';
 import type { Http } from '../Base';
 
-class Credentials extends Base {
+class Credentials extends Base<Credential> {
   constructor(http?: Http) {
     super(http);
     this.baseUrl = 'api/v2/credentials/';
@@ -14,13 +20,18 @@ class Credentials extends Base {
   }
 
   readAccessList(id: number | string, params?: QSParams) {
-    return this.http.get(`${this.baseUrl}${id}/access_list/`, {
-      params,
-    });
+    return this.http.get<Paginated<AccessListEntry>>(
+      `${this.baseUrl}${id}/access_list/`,
+      {
+        params,
+      }
+    );
   }
 
   readAccessOptions(id: number | string) {
-    return this.http.options(`${this.baseUrl}${id}/access_list/`);
+    return this.http.options<OptionsResponse>(
+      `${this.baseUrl}${id}/access_list/`
+    );
   }
 
   readInputSources(id: number | string) {

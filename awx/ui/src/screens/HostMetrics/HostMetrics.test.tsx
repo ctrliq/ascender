@@ -1,8 +1,7 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { HostMetricsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import HostMetrics from './HostMetrics';
@@ -29,7 +28,7 @@ describe('<HostMetrics />', () => {
         count: mockHostMetrics.length,
         results: mockHostMetrics,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof HostMetricsAPI.read>);
   });
 
   afterEach(() => {

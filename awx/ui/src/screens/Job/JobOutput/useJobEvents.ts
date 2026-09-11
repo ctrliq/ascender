@@ -1,45 +1,14 @@
 import { useState, useEffect, useReducer } from 'react';
+import type {
+  ChildrenSummary,
+  ChildrenSummaryEntry,
+  JobEventRecord,
+} from 'types/api';
 
-/**
- * One line of a job's output, as the events endpoint returns it.
- *
- * The events differ by job type and by what the playbook did, so only the
- * fields the tree is built out of are named; the rest arrive alongside them.
- */
-export interface JobEvent {
-  /** The event's position in the job's output, which indexes it here. */
-  counter: number;
-  /** Every event the api sends carries one; the tree indexes them by it. */
-  uuid: string;
-  /** Absent on a root level event, which is what puts it at the root. */
-  parent_uuid?: string;
-  /** Which row of the output list this event draws on, once assigned. */
-  rowNumber?: number;
-  id?: number;
-  /** Which serializer produced it: job_event, project_update_event, ... */
-  type?: string | null;
-  /** Null on the synthesised event a failed job's traceback is put on. */
-  created?: string | null;
-  /** The ansible callback that fired, such as playbook_on_task_start. */
-  event?: string | null;
-  event_data?: Record<string, unknown> | null;
-  event_level?: number;
-  failed?: boolean;
-  changed?: boolean;
-  host?: number | null;
-  host_name?: string | null;
-  play?: string | null;
-  task?: string | null;
-  playbook?: string | null;
-  role?: string | null;
-  stdout?: string | null;
-  start_line?: number;
-  end_line?: number;
-  verbosity?: number;
-  /** Set when the traceback is all the row has to show. */
-  isTracebackOnly?: boolean;
-  [key: string]: unknown;
-}
+export type { ChildrenSummary, ChildrenSummaryEntry };
+
+/** One line of a job's output. Named JobEventRecord where it is declared. */
+export type JobEvent = JobEventRecord;
 
 /** One event in the collapsible output tree, with the events nested under it. */
 export interface JobEventNode {
@@ -57,12 +26,6 @@ interface RowLookup {
   expectedCounter?: number;
 }
 
-/** How many rows an event has under it, as the job's summary reports. */
-export interface ChildrenSummaryEntry {
-  rowNumber: number;
-  numChildren: number;
-}
-
 /** The output tree, as the reducer holds it between renders. */
 export interface JobEventsState {
   /** The root level events, in counter order. */
@@ -77,17 +40,6 @@ export interface JobEventsState {
   /** The parent a meta event belongs under, by the event's counter. */
   metaEventParentUuid: Record<number, string>;
   isAllCollapsed: boolean;
-}
-
-/** What the children summary endpoint answers with for a job. */
-export interface ChildrenSummary {
-  /** How many rows sit under each parent event, by the parent's counter. */
-  children_summary?: Record<number, ChildrenSummaryEntry>;
-  /** The parent a meta event belongs under, by the event's counter. */
-  meta_event_nested_uuid?: Record<number, string>;
-  /** False while the job is still being processed, when there is no tree. */
-  event_processing_finished?: boolean;
-  is_tree?: boolean;
 }
 
 /** Something that changes the output tree. */

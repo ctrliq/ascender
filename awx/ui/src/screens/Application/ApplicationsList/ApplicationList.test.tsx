@@ -1,9 +1,9 @@
-import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 
 import { ApplicationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ApplicationsList from './ApplicationsList';
 
@@ -49,7 +49,7 @@ afterEach(() => {
 describe('<ApplicationsList/>', () => {
   test('should have data fetched and render 2 rows', async () => {
     vi.mocked(ApplicationsAPI.read).mockResolvedValue(
-      buildApplications() as unknown as ApiResponse<Untyped>
+      buildApplications() as unknown as ResponseOf<typeof ApplicationsAPI.read>
     );
     vi.mocked(ApplicationsAPI.readOptions).mockResolvedValue(
       options as unknown as ApiResponse<unknown>
@@ -67,13 +67,13 @@ describe('<ApplicationsList/>', () => {
 
   test('should delete item successfully', async () => {
     vi.mocked(ApplicationsAPI.read).mockResolvedValue(
-      buildApplications() as unknown as ApiResponse<Untyped>
+      buildApplications() as unknown as ResponseOf<typeof ApplicationsAPI.read>
     );
     vi.mocked(ApplicationsAPI.readOptions).mockResolvedValue(
       options as unknown as ApiResponse<unknown>
     );
     vi.mocked(ApplicationsAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof ApplicationsAPI.destroy>
     );
 
     const { user } = renderWithContexts(<ApplicationsList />);
@@ -119,7 +119,7 @@ describe('<ApplicationsList/>', () => {
 
   test('should render deletion error modal', async () => {
     vi.mocked(ApplicationsAPI.read).mockResolvedValue(
-      buildApplications() as unknown as ApiResponse<Untyped>
+      buildApplications() as unknown as ResponseOf<typeof ApplicationsAPI.read>
     );
     vi.mocked(ApplicationsAPI.readOptions).mockResolvedValue(
       options as unknown as ApiResponse<unknown>
@@ -154,11 +154,11 @@ describe('<ApplicationsList/>', () => {
 
   test('should not render add button', async () => {
     vi.mocked(ApplicationsAPI.read).mockResolvedValue(
-      buildApplications() as unknown as ApiResponse<Untyped>
+      buildApplications() as unknown as ResponseOf<typeof ApplicationsAPI.read>
     );
     vi.mocked(ApplicationsAPI.readOptions).mockResolvedValue({
       data: { actions: { POST: false } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ApplicationsAPI.readOptions>);
 
     renderWithContexts(<ApplicationsList />);
     await screen.findByRole('link', { name: 'Foo' });
@@ -174,7 +174,7 @@ describe('<ApplicationsList/>', () => {
     );
     vi.mocked(ApplicationsAPI.readOptions).mockResolvedValue({
       data: { actions: { POST: false } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ApplicationsAPI.readOptions>);
 
     renderWithContexts(<ApplicationsList />);
     await screen.findByRole('link', { name: 'Foo' });

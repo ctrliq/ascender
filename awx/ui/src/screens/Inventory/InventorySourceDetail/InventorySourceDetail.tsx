@@ -57,7 +57,7 @@ function InventorySourceDetail({
     useCallback(async () => {
       const { data } = await InventorySourcesAPI.readOptions();
       return Object.fromEntries(
-        data.actions.GET.source.choices.map(([key, val]: Untyped[]) => [
+        (data.actions.GET?.source?.choices ?? []).map(([key, val]) => [
           key,
           val,
         ])

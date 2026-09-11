@@ -78,13 +78,12 @@ export default function useCredentialPasswordsStep(
       } else if (values.credentials) {
         values.credentials.forEach((credential: Untyped) => {
           if (!credential.inputs) {
-            const launchConfigCredential =
-              launchConfig.defaults.credentials.find(
-                (defaultCred: Untyped) => defaultCred.id === credential.id
-              );
+            const launchConfigCredential = (
+              launchConfig.defaults?.credentials ?? []
+            ).find((defaultCred: Untyped) => defaultCred.id === credential.id);
 
-            if (launchConfigCredential?.passwords_needed.length > 0) {
-              launchConfigCredential.passwords_needed.forEach(
+            if (launchConfigCredential?.passwords_needed?.length) {
+              launchConfigCredential?.passwords_needed?.forEach(
                 (password: string) => {
                   if (isValueMissing(credentialPasswords[password])) {
                     setPasswordFieldError(
@@ -167,14 +166,16 @@ function getInitialValues(
 
   selectedCredentials.forEach((credential: Untyped) => {
     if (!credential.inputs) {
-      const launchConfigCredential = launchConfig.defaults.credentials.find(
-        (defaultCred: Untyped) => defaultCred.id === credential.id
-      );
+      const launchConfigCredential = (
+        launchConfig.defaults?.credentials ?? []
+      ).find((defaultCred: Untyped) => defaultCred.id === credential.id);
 
-      if (launchConfigCredential?.passwords_needed.length > 0) {
-        launchConfigCredential.passwords_needed.forEach((password: string) => {
-          initialValues.credential_passwords[password] = '';
-        });
+      if (launchConfigCredential?.passwords_needed?.length) {
+        launchConfigCredential?.passwords_needed?.forEach(
+          (password: string) => {
+            initialValues.credential_passwords[password] = '';
+          }
+        );
       }
     } else {
       if (credential?.inputs?.password === 'ASK') {
@@ -220,12 +221,12 @@ function checkForError(launchConfig: LaunchConfig, values: LaunchPromptValues) {
   } else if (values.credentials) {
     values.credentials.forEach((credential: Untyped) => {
       if (!credential.inputs) {
-        const launchConfigCredential = launchConfig.defaults.credentials.find(
-          (defaultCred: Untyped) => defaultCred.id === credential.id
-        );
+        const launchConfigCredential = (
+          launchConfig.defaults?.credentials ?? []
+        ).find((defaultCred: Untyped) => defaultCred.id === credential.id);
 
-        if (launchConfigCredential?.passwords_needed.length > 0) {
-          launchConfigCredential.passwords_needed.forEach(
+        if (launchConfigCredential?.passwords_needed?.length) {
+          launchConfigCredential?.passwords_needed?.forEach(
             (password: string) => {
               if (isValueMissing(credentialPasswords[password])) {
                 hasError = true;

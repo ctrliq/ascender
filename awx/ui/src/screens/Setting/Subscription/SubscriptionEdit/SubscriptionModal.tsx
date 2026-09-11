@@ -53,7 +53,7 @@ function SubscriptionModal({
       // because it is possible to have multiple
       // subscriptions with the same pool_id
       let repeatId = 1;
-      data.forEach((i: Untyped) => {
+      data.forEach((i) => {
         i.id = repeatId++;
       });
 

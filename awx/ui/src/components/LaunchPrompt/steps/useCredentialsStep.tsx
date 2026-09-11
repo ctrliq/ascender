@@ -1,3 +1,4 @@
+import type { LaunchCredential, NodeTemplate } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
@@ -10,8 +11,8 @@ const STEP_ID = 'credentials';
 
 export default function useCredentialsStep(
   launchConfig: LaunchConfig,
-  resource: Record<string, unknown>,
-  resourceDefaultCredentials = [],
+  resource: NodeTemplate | null,
+  resourceDefaultCredentials: LaunchCredential[] | null = [],
   allowCredentialsWithPasswords = false
 ): LaunchStep {
   const { t } = useLingui();
@@ -58,7 +59,7 @@ export default function useCredentialsStep(
           allowCredentialsWithPasswords,
           field.value,
           t,
-          resourceDefaultCredentials
+          resourceDefaultCredentials ?? []
         )
       );
     },

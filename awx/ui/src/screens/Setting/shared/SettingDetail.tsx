@@ -1,24 +1,42 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import { Detail } from 'components/DetailList';
 import CodeDetail from 'components/DetailList/CodeDetail';
 
-function sortObj(obj: Untyped) {
+function sortObj(obj: unknown): unknown {
   if (typeof obj !== 'object' || Array.isArray(obj) || obj === null) {
     return obj;
   }
-  const sorted: Record<string, Untyped> = {};
-  Object.keys(obj)
+  const entries = obj as Record<string, unknown>;
+  const sorted: Record<string, unknown> = {};
+  Object.keys(entries)
     .sort()
     .forEach((key) => {
-      sorted[key] = sortObj(obj[key]);
+      sorted[key] = sortObj(entries[key]);
     });
   return sorted;
 }
 
-export default ({ helpText, id, label, type, unit = '', value }: Untyped) => {
+/** One setting, drawn the way its declared type says it should be. */
+export interface SettingDetailProps {
+  helpText?: React.ReactNode;
+  id?: string;
+  label?: React.ReactNode;
+  /** The field's type, as the category's OPTIONS response declares it. */
+  type?: string;
+  unit?: string;
+  value?: unknown;
+}
+
+export default ({
+  helpText,
+  id,
+  label,
+  type,
+  unit = '',
+  value,
+}: SettingDetailProps) => {
   const { t } = useLingui();
   const dataType = value === '$encrypted$' ? 'encrypted' : type;
   let detail = null;
@@ -56,7 +74,7 @@ export default ({ helpText, id, label, type, unit = '', value }: Untyped) => {
           label={label}
           mode="javascript"
           rows={4}
-          value={value}
+          value={String(value ?? '')}
         />
       );
       break;
@@ -72,7 +90,12 @@ export default ({ helpText, id, label, type, unit = '', value }: Untyped) => {
             !value ? (
               t`Not configured`
             ) : (
-              <img src={value} alt={label} height="40" width="40" />
+              <img
+                src={String(value)}
+                alt={String(label ?? '')}
+                height="40"
+                width="40"
+              />
             )
           }
         />
@@ -111,7 +134,7 @@ export default ({ helpText, id, label, type, unit = '', value }: Untyped) => {
           helpText={helpText}
           isNotConfigured={!value}
           label={label}
-          value={!value ? t`Not configured` : value}
+          value={!value ? t`Not configured` : String(value)}
         />
       );
       break;

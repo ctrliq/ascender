@@ -1,3 +1,10 @@
+import type { QSParams } from 'util/qs';
+import type {
+  Credential,
+  Paginated,
+  WorkflowApprovalTemplate,
+  WorkflowJobTemplateNode,
+} from '../../types/api';
 import Base from '../Base';
 import InstanceGroupsMixin from '../mixins/InstanceGroups.mixin';
 import LabelsMixin from '../mixins/Labels.mixin';
@@ -9,8 +16,30 @@ class WorkflowJobTemplateNodes extends LabelsMixin(InstanceGroupsMixin(Base)) {
     this.baseUrl = 'api/v2/workflow_job_template_nodes/';
   }
 
+  // Reached through a mixin, which cannot carry the resource type along, so
+  // the calls that answer with a workflow job template node say so here.
+  read<T = Paginated<WorkflowJobTemplateNode>>(params?: QSParams) {
+    return super.read<T>(params);
+  }
+
+  readDetail<T = WorkflowJobTemplateNode>(id: number | string) {
+    return super.readDetail<T>(id);
+  }
+
+  create<T = WorkflowJobTemplateNode>(data?: unknown) {
+    return super.create<T>(data);
+  }
+
+  update<T = WorkflowJobTemplateNode>(id: number | string, data?: unknown) {
+    return super.update<T>(id, data);
+  }
+
+  copy<T = WorkflowJobTemplateNode>(id: number | string, data?: unknown) {
+    return super.copy<T>(id, data);
+  }
+
   createApprovalTemplate(id: number | string, data: unknown) {
-    return this.http.post(
+    return this.http.post<WorkflowApprovalTemplate>(
       `${this.baseUrl}${id}/create_approval_template/`,
       data
     );
@@ -82,7 +111,9 @@ class WorkflowJobTemplateNodes extends LabelsMixin(InstanceGroupsMixin(Base)) {
   }
 
   readCredentials(id: number | string) {
-    return this.http.get(`${this.baseUrl}${id}/credentials/`);
+    return this.http.get<Paginated<Credential>>(
+      `${this.baseUrl}${id}/credentials/`
+    );
   }
 
   associateCredentials(id: number | string, credentialId: number | string) {

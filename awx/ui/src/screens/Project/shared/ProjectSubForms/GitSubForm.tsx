@@ -1,4 +1,4 @@
-import type { Credential, Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import FormField from 'components/FormField';
@@ -12,11 +12,12 @@ import {
   ScmTypeOptions,
 } from './SharedFields';
 import getProjectHelpStrings from '../Project.helptext';
+import type { ProjectCredentialField } from '../ProjectForm';
 
 export interface GitSubFormProps {
-  credential: Credential;
-  onCredentialSelection: (kind: string, value: Untyped) => void;
-  scmUpdateOnLaunch: boolean;
+  credential: ProjectCredentialField;
+  onCredentialSelection: (kind: string, value: SummaryFieldRef | null) => void;
+  scmUpdateOnLaunch?: boolean;
   [key: string]: unknown;
 }
 

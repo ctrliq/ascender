@@ -1,3 +1,5 @@
+import type { MeshLinkRecord, MeshNodeRecord } from 'api/models/Mesh';
+
 export const SELECTOR = '#chart';
 export const PARENTSELECTOR = '.mesh-svg';
 export const CHILDSELECTOR = '.mesh';
@@ -53,22 +55,21 @@ export const ICONS = {
 };
 
 /** One instance in the mesh, as the topology endpoint returns it. */
-export interface MeshNode {
-  id: number;
-  hostname: string;
-  node_type: keyof typeof NODE_TYPE_SYMBOL_KEY | string;
-  node_state: keyof typeof NODE_STATE_COLOR_KEY | string;
-  enabled?: boolean;
+export interface MeshNode extends MeshNodeRecord {
   /** Where the force layout put the node, once it has settled. */
   x?: number;
   y?: number;
 }
 
-/** One peering between two instances, as the layout resolves it. */
-export interface MeshLink {
+/**
+ * One peering, as the layout resolves it.
+ *
+ * The endpoint names the two ends by hostname; the force layout replaces each
+ * with the node it found, which is what the graph draws between.
+ */
+export interface MeshLink extends Omit<MeshLinkRecord, 'source' | 'target'> {
   source: MeshNode;
   target: MeshNode;
-  link_state: keyof typeof LINK_STATE_COLOR_KEY | string;
   /** The link's position in the list, which the force layout writes back. */
   index?: number;
 }

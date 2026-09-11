@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent, act } from '@testing-library/react';
@@ -13,6 +12,7 @@ import {
   ProjectsAPI,
   WorkflowJobTemplatesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import NodeModal from './NodeModal';
 import type { WorkflowState } from '../../../../../components/Workflow/workflowReducer';
@@ -465,7 +465,7 @@ describe('NodeModal', () => {
         count: 1,
         results: [mockJobTemplate],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
     (JobTemplatesAPI as Untyped).readOptions = vi.fn();
     vi.mocked(JobTemplatesAPI.readOptions).mockResolvedValue({
       data: {
@@ -475,17 +475,17 @@ describe('NodeModal', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readOptions>);
     (JobTemplatesAPI as Untyped).readLaunch = vi.fn();
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue({
       data: jtLaunchConfig,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>);
     (JobTemplatesAPI as Untyped).readCredentials = vi.fn();
     vi.mocked(JobTemplatesAPI.readCredentials).mockResolvedValue({
       data: {
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readCredentials>);
     (JobTemplatesAPI as Untyped).readSurvey = vi.fn();
     vi.mocked(JobTemplatesAPI.readSurvey).mockResolvedValue({
       data: {
@@ -503,7 +503,7 @@ describe('NodeModal', () => {
         type: 'text',
         variable: 'bar',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readSurvey>);
     (ProjectsAPI as Untyped).read = vi.fn();
     vi.mocked(ProjectsAPI.read).mockResolvedValue({
       data: {
@@ -517,7 +517,7 @@ describe('NodeModal', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     (ProjectsAPI as Untyped).readOptions = vi.fn();
     vi.mocked(ProjectsAPI.readOptions).mockResolvedValue({
       data: {
@@ -527,7 +527,7 @@ describe('NodeModal', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readOptions>);
     (InventorySourcesAPI as Untyped).read = vi.fn();
     vi.mocked(InventorySourcesAPI.read).mockResolvedValue({
       data: {
@@ -541,7 +541,7 @@ describe('NodeModal', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.read>);
     (InventorySourcesAPI as Untyped).readOptions = vi.fn();
     vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
       data: {
@@ -551,7 +551,7 @@ describe('NodeModal', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
     (WorkflowJobTemplatesAPI as Untyped).read = async () => ({
       data: {
         count: 1,

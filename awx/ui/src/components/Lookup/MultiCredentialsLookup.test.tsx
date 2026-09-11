@@ -1,10 +1,9 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { Formik } from 'formik';
 import { createMemoryHistory } from 'history';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import MultiCredentialsLookup from './MultiCredentialsLookup';
 
@@ -62,7 +61,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
       },
       { id: 500, kind: 'vault', namespace: 'buzz', name: 'Vault' },
       { id: 600, kind: 'machine', namespace: 'fuzz', name: 'Machine' },
-    ]);
+    ] as unknown as ResponseOf<typeof CredentialTypesAPI.loadAllTypes>);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: {
         results: [
@@ -120,7 +119,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
         ],
         count: 7,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -129,7 +128,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -196,7 +195,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
         ],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     await user.selectOptions(within(dialog).getByRole('combobox'), '500');
 
     expect(await within(dialog).findByText('New Cred')).toBeInTheDocument();
@@ -310,7 +309,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
         ],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     const { user } = renderLookup({ onChange });
     await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
 
@@ -377,7 +376,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
         ],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     const { user } = renderLookup({ onChange });
     await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
 
@@ -445,7 +444,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
         ],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     const { user } = renderLookup({ onChange });
     await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
 

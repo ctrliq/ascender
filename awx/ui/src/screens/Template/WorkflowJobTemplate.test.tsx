@@ -1,5 +1,4 @@
 import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -9,6 +8,7 @@ import {
   OrganizationsAPI,
   NotificationTemplatesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import WorkflowJobTemplate from './WorkflowJobTemplate';
@@ -44,12 +44,14 @@ describe('<WorkflowJobTemplate />', () => {
   beforeEach(() => {
     vi.mocked(WorkflowJobTemplatesAPI.readDetail).mockResolvedValue({
       data: { ...mockWorkflowJobTemplateData, survey_enabled: false },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readDetail>);
     vi.mocked(
       WorkflowJobTemplatesAPI.readWorkflowJobTemplateOptions
     ).mockResolvedValue({
       data: { actions: { PUT: true } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<
+      typeof WorkflowJobTemplatesAPI.readWorkflowJobTemplateOptions
+    >);
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: {
         count: 1,
@@ -57,13 +59,13 @@ describe('<WorkflowJobTemplate />', () => {
         previous: null,
         results: [{ id: 1 }],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     vi.mocked(WorkflowJobTemplatesAPI.readLaunch).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readLaunch>);
     vi.mocked(WorkflowJobTemplatesAPI.readWebhookKey).mockResolvedValue({
       data: { webhook_key: 'key' },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readWebhookKey>);
   });
 
   afterEach(() => {
@@ -96,7 +98,7 @@ describe('<WorkflowJobTemplate />', () => {
   test('notifications tab hidden with reduced permissions', async () => {
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: { count: 0, next: null, previous: null, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     renderWFJT();
     await waitFor(() => expect(screen.getAllByRole('tab')).toHaveLength(7));
     expect(
@@ -121,7 +123,9 @@ describe('<WorkflowJobTemplate />', () => {
       WorkflowJobTemplatesAPI.readWorkflowJobTemplateOptions
     ).mockResolvedValueOnce({
       data: { actions: {} },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<
+      typeof WorkflowJobTemplatesAPI.readWorkflowJobTemplateOptions
+    >);
     renderWFJT('/templates/workflow_job_template/1/foobar');
     await waitFor(() =>
       expect(WorkflowJobTemplatesAPI.readDetail).toHaveBeenCalled()
@@ -134,29 +138,37 @@ describe('<WorkflowJobTemplate />', () => {
       WorkflowJobTemplatesAPI.readNotificationTemplatesSuccess
     ).mockResolvedValue({
       data: { results: [{ id: 1 }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<
+      typeof WorkflowJobTemplatesAPI.readNotificationTemplatesSuccess
+    >);
     vi.mocked(
       WorkflowJobTemplatesAPI.readNotificationTemplatesError
     ).mockResolvedValue({
       data: { results: [{ id: 2 }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<
+      typeof WorkflowJobTemplatesAPI.readNotificationTemplatesError
+    >);
     vi.mocked(
       WorkflowJobTemplatesAPI.readNotificationTemplatesStarted
     ).mockResolvedValue({
       data: { results: [{ id: 3 }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<
+      typeof WorkflowJobTemplatesAPI.readNotificationTemplatesStarted
+    >);
     vi.mocked(
       WorkflowJobTemplatesAPI.readNotificationTemplatesApprovals
     ).mockResolvedValue({
       data: { results: [{ id: 4 }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<
+      typeof WorkflowJobTemplatesAPI.readNotificationTemplatesApprovals
+    >);
     vi.mocked(NotificationTemplatesAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
           GET: { notification_type: { choices: [['email', 'Email']] } },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.readOptions>);
     vi.mocked(NotificationTemplatesAPI.read).mockResolvedValue({
       data: {
         count: 2,
@@ -169,7 +181,7 @@ describe('<WorkflowJobTemplate />', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.read>);
     renderWFJT('/templates/workflow_job_template/1/notifications', {
       is_system_auditor: true,
     });

@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
@@ -6,8 +5,9 @@ import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
-import mockAllOptions from '../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../testUtils/settingOptions';
 import GoogleOAuth2 from './GoogleOAuth2';
 
 vi.mock('../../../api');
@@ -29,9 +29,7 @@ const mockSettings = {
 function mountAt(path: Untyped) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
-    <SettingsProvider
-      value={JSON.parse(JSON.stringify(mockAllOptions.actions))}
-    >
+    <SettingsProvider value={JSON.parse(JSON.stringify(settingOptions))}>
       <Routes>
         <Route path="/settings/google_oauth2/*" element={<GoogleOAuth2 />} />
       </Routes>
@@ -44,7 +42,7 @@ describe('<GoogleOAuth2 />', () => {
   beforeEach(() => {
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: mockSettings,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {

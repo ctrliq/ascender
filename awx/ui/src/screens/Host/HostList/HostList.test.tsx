@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { HostsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -99,7 +99,7 @@ describe('<HostList />', () => {
         count: mockHosts.length,
         results: mockHosts,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof HostsAPI.read>);
 
     vi.mocked(HostsAPI.readOptions).mockResolvedValue({
       data: {
@@ -109,7 +109,7 @@ describe('<HostList />', () => {
         },
         related_search_fields: ['first_key__search', 'ansible_facts'],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof HostsAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -226,7 +226,7 @@ describe('<HostList />', () => {
           GET: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof HostsAPI.readOptions>);
     renderWithContexts(<HostList />);
     await screen.findByRole('link', { name: 'Host 1' });
 

@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
@@ -7,6 +6,7 @@ import { createMemoryHistory } from 'history';
 
 import { Formik } from 'formik';
 import { CredentialsAPI, CredentialTypesAPI, ProjectsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import WebhookSubForm from './WebhookSubForm';
@@ -55,7 +55,7 @@ describe('<WebhookSubForm />', () => {
     });
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: { results: [{ id: 12, name: 'Github credential' }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
   });
 
   afterEach(() => {
@@ -82,7 +82,7 @@ describe('<WebhookSubForm />', () => {
   test('should make other credential type available', async () => {
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: { results: [{ id: 13, name: 'GitLab credential' }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     renderForm(initialValues, 'job_template', 'templates/job_template/51/edit');
 
     const serviceSelect = await screen.findByLabelText('Select Input');
@@ -148,16 +148,16 @@ describe('<WebhookSubForm />', () => {
   test('should render credential lookup when the credential type resolves', async () => {
     vi.mocked(CredentialTypesAPI.read).mockResolvedValue({
       data: { results: [{ id: 9, name: 'GitHub Personal Access Token' }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialTypesAPI.read>);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: { results: [{ id: 12, name: 'Github credential' }], count: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: {
         actions: { GET: {}, POST: {} },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
     renderForm(initialValues, 'job_template', 'templates/job_template/51/edit');
 
     // CredentialLookup renders a FormGroup labeled "Webhook Credential"
@@ -172,7 +172,7 @@ describe('<WebhookSubForm />', () => {
   test('should warn instead of failing silently when no credential type is found', async () => {
     vi.mocked(CredentialTypesAPI.read).mockResolvedValue({
       data: { results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialTypesAPI.read>);
     renderForm(initialValues, 'job_template', 'templates/job_template/51/edit');
 
     // warning Alert is shown, credential lookup is not
@@ -239,7 +239,7 @@ describe('<WebhookSubForm />', () => {
     test('should rotate the webhook key through the projects API', async () => {
       vi.mocked(ProjectsAPI.updateWebhookKey).mockResolvedValue({
         data: { webhook_key: 'brandnewkey123' },
-      } as unknown as ApiResponse<Untyped>);
+      } as unknown as ResponseOf<typeof ProjectsAPI.updateWebhookKey>);
       renderProjectForm(projectInitialValues);
 
       fireEvent.click(

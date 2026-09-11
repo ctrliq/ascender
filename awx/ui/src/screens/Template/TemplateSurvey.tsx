@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SurveyConfig, Untyped } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -29,7 +29,8 @@ function TemplateSurvey({ template, canEdit }: TemplateSurveyProps) {
     error: loadingError,
     setValue: setSurvey,
   } = useRequest(
-    useCallback(async () => {
+    // Null once the survey is deleted, which is what the empty state shows.
+    useCallback(async (): Promise<SurveyConfig | null> => {
       const { data } =
         templateType === 'workflow_job_template'
           ? await WorkflowJobTemplatesAPI.readSurvey(templateId)

@@ -1,8 +1,8 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UsersAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -134,7 +134,7 @@ describe('UsersList with full permissions', () => {
         count: mockUsers.length,
         results: mockUsers,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.read>);
     vi.mocked(UsersAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -142,7 +142,7 @@ describe('UsersList with full permissions', () => {
           POST: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readOptions>);
 
     ({ user } = renderWithContexts(<UsersList />));
     await screen.findByRole('link', { name: 'admin' });
@@ -201,7 +201,7 @@ describe('UsersList with full permissions', () => {
 
   test('should call api delete users for each selected user', async () => {
     vi.mocked(UsersAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof UsersAPI.destroy>
     );
     const row = screen.getByRole('link', { name: 'admin' }).closest('tr');
     await user.click(within(row!).getByRole('checkbox'));
@@ -242,14 +242,14 @@ describe('UsersList without full permissions', () => {
         count: mockUsers.length,
         results: mockUsers,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.read>);
     vi.mocked(UsersAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
           GET: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readOptions>);
 
     renderWithContexts(<UsersList />);
     await screen.findByRole('link', { name: 'admin' });
@@ -263,7 +263,7 @@ describe('read call unsuccessful', () => {
     vi.mocked(UsersAPI.read).mockRejectedValue(new Error());
     vi.mocked(UsersAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readOptions>);
 
     renderWithContexts(<UsersList />);
 

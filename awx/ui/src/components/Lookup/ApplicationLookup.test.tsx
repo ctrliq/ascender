@@ -1,9 +1,9 @@
-import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { ApplicationsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ApplicationLookup from './ApplicationLookup';
 
@@ -38,7 +38,7 @@ describe('ApplicationLookup', () => {
     );
     vi.mocked(ApplicationsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} }, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ApplicationsAPI.readOptions>);
   });
 
   afterEach(() => {

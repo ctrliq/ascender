@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, Instance } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 
 import { InstancesAPI } from 'api';
 import useDebounce from 'hooks/useDebounce';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceListItem from './InstanceListItem';
@@ -105,7 +105,7 @@ describe('<InstanceListItem/>', () => {
   test('moving the slider up recalculates forks and updates capacity', async () => {
     vi.mocked(InstancesAPI.update).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.update>);
     const { container, user } = renderItem();
     const forks = () =>
       container.querySelector('[data-cy="number-forks"]')!.textContent;
@@ -127,7 +127,7 @@ describe('<InstanceListItem/>', () => {
   test('moving the slider down recalculates forks', async () => {
     vi.mocked(InstancesAPI.update).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.update>);
     const { container, user } = renderItem();
     const forks = () =>
       container.querySelector('[data-cy="number-forks"]')!.textContent;

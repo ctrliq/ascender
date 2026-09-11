@@ -1,7 +1,9 @@
 //
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
-import type { Project, Untyped } from 'types/api';
+import type { FormikContextType } from 'formik';
+import type { OptionsField, Project, SummaryFieldRef } from 'types/api';
+
 /* eslint no-nested-ternary: 0 */
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
@@ -35,7 +37,24 @@ import {
   ManualSubForm,
 } from './ProjectSubForms';
 
-const fetchCredentials = async (credential: Untyped) => {
+/**
+ * What the project form holds. Every field maps to one the project has, so
+ * the rest is left open for the scm subforms, which each add their own.
+ */
+export interface ProjectFormValues {
+  name?: string;
+  description?: string;
+  scm_type?: string;
+  scm_update_on_launch?: boolean;
+  local_path?: string;
+  organization?: SummaryFieldRef | null;
+  default_environment?: SummaryFieldRef | null;
+  signature_validation_credential?: SummaryFieldRef | null;
+  credential?: SummaryFieldRef | null;
+  [key: string]: unknown;
+}
+
+const fetchCredentials = async (credential?: SummaryFieldRef) => {
   const [
     {
       data: {
@@ -58,19 +77,22 @@ const fetchCredentials = async (credential: Untyped) => {
     CredentialTypesAPI.read({ kind: 'cryptography' }),
   ]);
 
+  const scmTypeId = scmCredentialType?.id;
+  const cryptographyTypeId = cryptographyCredentialType?.id;
+
   if (!credential) {
     return {
-      scm: { typeId: scmCredentialType.id },
+      scm: { typeId: scmTypeId },
       // insights: { typeId: insightsCredentialType.id },
-      cryptography: { typeId: cryptographyCredentialType.id },
+      cryptography: { typeId: cryptographyTypeId },
     };
   }
 
   const { credential_type_id } = credential;
   return {
     scm: {
-      typeId: scmCredentialType.id,
-      value: credential_type_id === scmCredentialType.id ? credential : null,
+      typeId: scmTypeId,
+      value: credential_type_id === scmTypeId ? credential : null,
     },
     // insights: {
     //   typeId: insightsCredentialType.id,
@@ -78,27 +100,47 @@ const fetchCredentials = async (credential: Untyped) => {
     //     credential_type_id === insightsCredentialType.id ? credential : null,
     // },
     cryptography: {
-      typeId: cryptographyCredentialType.id,
-      value:
-        credential_type_id === cryptographyCredentialType.id
-          ? credential
-          : null,
+      typeId: cryptographyTypeId,
+      value: credential_type_id === cryptographyTypeId ? credential : null,
     },
   };
 };
 
+/**
+ * The credential the form holds for one kind, and the type it has to be.
+ *
+ * typeId comes from the credential types endpoint and decides which lookup
+ * the field opens; value is what the user has chosen, null until they do.
+ */
+export interface ProjectCredentialField {
+  typeId?: number | null;
+  value?: SummaryFieldRef | null;
+}
+
+/** The credentials a project form holds, by the kind each field is for. */
+export interface ProjectCredentials {
+  /** The credential the source control url is reached with. */
+  scm: ProjectCredentialField;
+  /** The key the project's content signature is validated against. */
+  cryptography: ProjectCredentialField;
+  [key: string]: ProjectCredentialField;
+}
+
+/** The scm subform's fields, which are swapped out when the type changes. */
+export type ScmSubFormState = Record<string, string | number | boolean | null>;
+
 export interface ProjectFormFieldsProps {
   project: Partial<Project>;
-  project_base_dir: Untyped;
-  project_local_paths: Untyped;
-  formik: Untyped;
-  setCredentials: Untyped;
-  setSignatureValidationCredentials: Untyped;
-  credentials: Untyped;
-  signatureValidationCredentials: Untyped;
-  scmTypeOptions: [string, string][] | null;
-  setScmSubFormState: Untyped;
-  scmSubFormState: Untyped;
+  project_base_dir?: string;
+  project_local_paths?: string[];
+  formik: FormikContextType<ProjectFormValues>;
+  setCredentials: (credentials: ProjectCredentials) => void;
+  setSignatureValidationCredentials: (credentials: ProjectCredentials) => void;
+  credentials: ProjectCredentials;
+  signatureValidationCredentials: ProjectCredentials;
+  scmTypeOptions: OptionsField['choices'] | null;
+  setScmSubFormState: (state: ScmSubFormState) => void;
+  scmSubFormState: ScmSubFormState;
   [key: string]: unknown;
 }
 
@@ -130,7 +172,8 @@ function ProjectFormFields({
     allow_override: false,
     scm_update_cache_timeout: 0,
   };
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<ProjectFormValues>();
 
   const [scmTypeField, scmTypeMeta, scmTypeHelpers] = useField({
     name: 'scm_type',
@@ -146,11 +189,11 @@ function ProjectFormFields({
   ] = useField('default_environment');
 
   /* Save current scm subform field values to state */
-  const saveSubFormState = (form: Untyped) => {
-    const currentScmFormFields: Record<string, Untyped> = { ...scmFormFields };
+  const saveSubFormState = (form: FormikContextType<ProjectFormValues>) => {
+    const currentScmFormFields: ScmSubFormState = { ...scmFormFields };
 
     Object.keys(currentScmFormFields).forEach((label) => {
-      currentScmFormFields[label] = form.values[label];
+      currentScmFormFields[label] = form.values[label] as string;
     });
 
     setScmSubFormState(currentScmFormFields);
@@ -162,7 +205,10 @@ function ProjectFormFields({
    * If scm type is === the initial scm type value,
    * reset scm subform field values to scmSubFormState.
    */
-  const resetScmTypeFields = (value: Untyped, form: Untyped) => {
+  const resetScmTypeFields = (
+    value: string,
+    form: FormikContextType<ProjectFormValues>
+  ) => {
     if (form.values.scm_type === form.initialValues.scm_type) {
       saveSubFormState(formik);
     }
@@ -181,7 +227,7 @@ function ProjectFormFields({
   };
 
   const handleCredentialSelection = useCallback(
-    (type: Untyped, value: Untyped) => {
+    (type: string, value: SummaryFieldRef | null) => {
       setCredentials({
         ...credentials,
         [type]: {
@@ -194,7 +240,7 @@ function ProjectFormFields({
   );
 
   const handleSignatureValidationCredentialSelection = useCallback(
-    (type: Untyped, value: Untyped) => {
+    (type: string, value: SummaryFieldRef | null) => {
       setSignatureValidationCredentials({
         ...signatureValidationCredentials,
         [type]: {
@@ -207,7 +253,7 @@ function ProjectFormFields({
   );
 
   const handleSignatureValidationCredentialChange = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       handleSignatureValidationCredentialSelection('cryptography', value);
       setFieldValue('signature_validation_credential', value);
       setFieldTouched('signature_validation_credential', true, false);
@@ -220,7 +266,7 @@ function ProjectFormFields({
   );
 
   const handleOrganizationUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('organization', value);
       setFieldTouched('organization', true, false);
     },
@@ -228,7 +274,7 @@ function ProjectFormFields({
   );
 
   const handleExecutionEnvironmentUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('default_environment', value);
       setFieldTouched('default_environment', true, false);
     },
@@ -375,7 +421,7 @@ export interface ProjectFormProps {
   project?: Partial<Project>;
   submitError?: unknown;
   handleCancel: () => void;
-  handleSubmit: (values: Untyped) => void;
+  handleSubmit: (values: ProjectFormValues) => void;
   [key: string]: unknown;
 }
 
@@ -389,7 +435,7 @@ function ProjectForm({
   const { project_base_dir, project_local_paths } = useConfig();
   const [contentError, setContentError] = useState<unknown>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [scmSubFormState, setScmSubFormState] = useState<Untyped>({
+  const [scmSubFormState, setScmSubFormState] = useState<ScmSubFormState>({
     scm_url: '',
     scm_branch: '',
     scm_refspec: '',
@@ -403,15 +449,15 @@ function ProjectForm({
     scm_update_cache_timeout: 0,
   });
   const [scmTypeOptions, setScmTypeOptions] = useState<
-    [string, string][] | null
+    OptionsField['choices'] | null
   >(null);
-  const [credentials, setCredentials] = useState<Untyped>({
+  const [credentials, setCredentials] = useState<ProjectCredentials>({
     scm: { typeId: null, value: null },
     // insights: { typeId: null, value: null },
     cryptography: { typeId: null, value: null },
   });
   const [signatureValidationCredentials, setSignatureValidationCredentials] =
-    useState<Untyped>({
+    useState<ProjectCredentials>({
       scm: { typeId: null, value: null },
       // insights: { typeId: null, value: null },
       cryptography: { typeId: null, value: null },
@@ -424,15 +470,8 @@ function ProjectForm({
         const signatureValidationCredentialResponse = fetchCredentials(
           summary_fields.signature_validation_credential
         );
-        const {
-          data: {
-            actions: {
-              GET: {
-                scm_type: { choices },
-              },
-            },
-          },
-        } = await ProjectsAPI.readOptions();
+        const { data: options } = await ProjectsAPI.readOptions();
+        const choices = options.actions.GET?.scm_type?.choices ?? [];
 
         setCredentials(await credentialResponse);
         setSignatureValidationCredentials(
@@ -461,13 +500,13 @@ function ProjectForm({
   }
 
   return (
-    <Formik
+    <Formik<ProjectFormValues>
       initialValues={{
         allow_override: project.allow_override || false,
         base_dir: project_base_dir || '',
-        credential: project.credential || '',
+        credential: project.summary_fields?.credential || null,
         description: project.description || '',
-        local_path: project.local_path || '',
+        local_path: project.local_path ?? '',
         name: project.name || '',
         organization: project.summary_fields?.organization || null,
         scm_branch: project.scm_branch || '',
@@ -475,17 +514,14 @@ function ProjectForm({
         scm_delete_on_update: project.scm_delete_on_update || false,
         scm_track_submodules: project.scm_track_submodules || false,
         scm_refspec: project.scm_refspec || '',
-        scm_type:
-          project.scm_type === ''
-            ? 'manual'
-            : project.scm_type === undefined
-              ? ''
-              : project.scm_type,
+        // A project with a blank type is a manual one, which the form names;
+        // a project the form has not been given yet has no type at all.
+        scm_type: project.scm_type === '' ? 'manual' : (project.scm_type ?? ''),
         scm_update_cache_timeout: project.scm_update_cache_timeout || 0,
         scm_update_on_launch: project.scm_update_on_launch || false,
         scm_url: project.scm_url || '',
         signature_validation_credential:
-          project.signature_validation_credential || '',
+          project.summary_fields?.signature_validation_credential || null,
         default_environment:
           project.summary_fields?.default_environment || null,
         webhook_service: project.webhook_service || '',

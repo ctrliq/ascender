@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Project, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -77,17 +77,16 @@ function ExecutionEnvironmentLookup({
     isLoading: isProjectLoading,
     result: project,
   } = useRequest(
-    useCallback(async () => {
+    // Without a project there is none to read, and the detail is partial
+    // until the read lands.
+    useCallback(async (): Promise<Partial<Project>> => {
       if (!projectId) {
         return {};
       }
       const { data } = await ProjectsAPI.readDetail(projectId);
       return data;
     }, [projectId]),
-    {
-      project: null,
-      isLoading: true,
-    }
+    { isLoading: true }
   );
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import type { WorkflowApproval, Untyped } from 'types/api';
+import type { WorkflowApproval, WorkflowJob, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link, useParams, useNavigate } from 'react-router';
@@ -85,15 +85,15 @@ function WorkflowApprovalDetail({
     request: fetchWorkflowJob,
     result: workflowJob,
   } = useRequest(
-    useCallback(async () => {
-      if (!sourceWorkflowJob?.id) return {};
-      const { data } = await WorkflowJobsAPI.readDetail(sourceWorkflowJob?.id);
+    // An approval that is not reached from a workflow job has none to read,
+    // and the detail is partial until the read lands.
+    useCallback(async (): Promise<Partial<WorkflowJob>> => {
+      const sourceId = sourceWorkflowJob?.id;
+      if (!sourceId) return {};
+      const { data } = await WorkflowJobsAPI.readDetail(sourceId);
       return data;
     }, [sourceWorkflowJob?.id]),
-    {
-      workflowJob: null,
-      isLoading: true,
-    }
+    { isLoading: true }
   );
 
   useEffect(() => {
@@ -320,10 +320,10 @@ function WorkflowApprovalDetail({
           value={
             <ChipGroup
               numChips={5}
-              totalChips={workflowJob.summary_fields.labels.results.length}
+              totalChips={workflowJob.summary_fields?.labels?.results.length}
               ouiaId="wa-detail-label-chips"
             >
-              {workflowJob.summary_fields.labels.results.map(
+              {workflowJob.summary_fields?.labels?.results.map(
                 (label: Untyped) => (
                   <Label variant="outline" key={label.id}>
                     {label.name}

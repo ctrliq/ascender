@@ -18,7 +18,7 @@ import { SettingDetail } from '../../shared';
 
 function JobsDetail() {
   const { me } = useConfig();
-  const { GET: options } = useSettings();
+  const { GET: options = {} } = useSettings();
   const { t } = useLingui();
 
   const {
@@ -38,8 +38,7 @@ function JobsDetail() {
 
       const mergedData: Record<string, Untyped> = {};
       Object.keys(jobsData).forEach((key) => {
-        mergedData[key] = options[key];
-        mergedData[key].value = jobsData[key];
+        mergedData[key] = { ...options[key], value: jobsData[key] };
       });
 
       return sortNestedDetails(mergedData);

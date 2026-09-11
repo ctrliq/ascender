@@ -1,4 +1,9 @@
-import type { SetBreadcrumb, DetailedError, Untyped } from 'types/api';
+import type {
+  DetailedError,
+  SetBreadcrumb,
+  SummaryFieldRef,
+  Untyped,
+} from 'types/api';
 import React, { useEffect, useCallback, useRef } from 'react';
 import { Link, Routes, Route, Navigate, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -76,7 +81,7 @@ function Job({ setBreadcrumb }: JobProps) {
         const {
           data: { results },
         } = await getJobModel('workflow_job').readNodes(
-          jobDetailData.summary_fields.source_workflow_job.id,
+          jobDetailData.summary_fields.source_workflow_job?.id as number,
           // without this the API returns its default page of 25, which
           // truncates the workflow navigation menu; 200 is MAX_PAGE_SIZE
           { page_size: 200 }
@@ -92,7 +97,7 @@ function Job({ setBreadcrumb }: JobProps) {
           data: { results },
         } = await getJobModel(type).readCredentials(jobDetailData.id);
 
-        jobDetailData.summary_fields.credentials = results;
+        jobDetailData.summary_fields.credentials = results as SummaryFieldRef[];
       }
 
       setBreadcrumb(jobDetailData);

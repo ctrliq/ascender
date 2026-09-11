@@ -1,5 +1,4 @@
-import type { Untyped, Inventory } from 'types/api';
-import type { ApiResponse } from 'api/Base';
+import type { Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import {
@@ -8,6 +7,7 @@ import {
   JobTemplatesAPI,
   WorkflowJobTemplatesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -70,13 +70,13 @@ describe('<InventoryDetail />', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialTypesAPI.read>);
     vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
     vi.mocked(WorkflowJobTemplatesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.read>);
   });
 
   afterEach(() => {
@@ -88,7 +88,7 @@ describe('<InventoryDetail />', () => {
       data: {
         results: associatedInstanceGroups,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
 
     renderWithContexts(<InventoryDetail inventory={mockInventory} />);
 
@@ -114,7 +114,7 @@ describe('<InventoryDetail />', () => {
       data: {
         results: associatedInstanceGroups,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
 
     renderWithContexts(<InventoryDetail inventory={mockInventory} />);
 
@@ -129,7 +129,7 @@ describe('<InventoryDetail />', () => {
       data: {
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
 
     renderWithContexts(<InventoryDetail inventory={mockInventory} />);
 
@@ -145,7 +145,7 @@ describe('<InventoryDetail />', () => {
   test('should show edit and delete buttons for users with permissions', async () => {
     vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
       data: { results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
 
     renderWithContexts(<InventoryDetail inventory={mockInventory} />);
 
@@ -160,9 +160,9 @@ describe('<InventoryDetail />', () => {
   test('expected api call is made for delete', async () => {
     vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
       data: { results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
     vi.mocked(InventoriesAPI.destroy).mockResolvedValueOnce(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof InventoriesAPI.destroy>
     );
 
     const { user } = renderWithContexts(
@@ -182,7 +182,7 @@ describe('<InventoryDetail />', () => {
   test('Error dialog shown for failed deletion', async () => {
     vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
       data: { results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
     vi.mocked(InventoriesAPI.destroy).mockRejectedValueOnce(new Error());
 
     const { user } = renderWithContexts(

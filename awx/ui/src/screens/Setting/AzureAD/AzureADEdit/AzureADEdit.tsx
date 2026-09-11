@@ -23,7 +23,7 @@ import { formatJson } from '../../shared/settingUtils';
 function AzureADEdit() {
   const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
-  const { PUT: options } = useSettings();
+  const { PUT: options = {} } = useSettings();
 
   const {
     isLoading,
@@ -38,8 +38,7 @@ function AzureADEdit() {
         if (!options[key]) {
           return;
         }
-        mergedData[key] = options[key];
-        mergedData[key].value = data[key];
+        mergedData[key] = { ...options[key], value: data[key] };
       });
       return mergedData;
     }, [options]),

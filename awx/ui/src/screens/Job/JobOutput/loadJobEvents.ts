@@ -11,7 +11,7 @@ export async function fetchCount(job: UnifiedJob, params: QSParams) {
     order_by: '-counter',
     limit: 1,
   });
-  return lastEvents.length >= 1 ? lastEvents[0].counter : 0;
+  return lastEvents[0]?.counter ?? 0;
 }
 
 export function prependTraceback(job: Job, events: JobEvent[]) {

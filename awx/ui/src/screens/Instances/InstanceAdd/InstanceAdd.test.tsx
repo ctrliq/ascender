@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { InstancesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceAdd from './InstanceAdd';
@@ -37,7 +37,7 @@ describe('<InstanceAdd />', () => {
     history = createMemoryHistory({ initialEntries: ['/instances'] });
     vi.mocked(InstancesAPI.create).mockResolvedValue({
       data: { id: 13 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.create>);
   });
 
   afterEach(() => {

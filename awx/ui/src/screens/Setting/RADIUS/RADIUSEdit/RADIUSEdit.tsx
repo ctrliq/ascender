@@ -18,7 +18,7 @@ import { RevertAllAlert, RevertFormActionGroup } from '../../shared';
 function RADIUSEdit() {
   const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
-  const { PUT: options } = useSettings();
+  const { PUT: options = {} } = useSettings();
 
   const {
     isLoading,
@@ -30,8 +30,7 @@ function RADIUSEdit() {
       const { data } = await SettingsAPI.readCategory('radius');
       const mergedData: Record<string, Untyped> = {};
       Object.keys(data).forEach((key) => {
-        mergedData[key] = options[key];
-        mergedData[key].value = data[key];
+        mergedData[key] = { ...options[key], value: data[key] };
       });
       return mergedData;
     }, [options]),

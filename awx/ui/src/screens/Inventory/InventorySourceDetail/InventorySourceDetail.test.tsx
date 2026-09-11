@@ -1,5 +1,3 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
@@ -8,6 +6,7 @@ import {
   InventoriesAPI,
   WorkflowJobTemplateNodesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -21,16 +20,16 @@ describe('InventorySourceDetail', () => {
   beforeEach(() => {
     vi.mocked(InventoriesAPI.updateSources).mockResolvedValue({
       data: [{ inventory_source: 1 }],
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.updateSources>);
     vi.mocked(WorkflowJobTemplateNodesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplateNodesAPI.read>);
     vi.mocked(InventorySourcesAPI.readGroups).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readGroups>);
     vi.mocked(InventorySourcesAPI.readHosts).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readHosts>);
     vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -52,7 +51,7 @@ describe('InventorySourceDetail', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -160,13 +159,13 @@ describe('InventorySourceDetail', () => {
 
   test('expected api call is made for delete', async () => {
     vi.mocked(InventorySourcesAPI.destroy).mockResolvedValueOnce(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof InventorySourcesAPI.destroy>
     );
     vi.mocked(InventorySourcesAPI.destroyHosts).mockResolvedValueOnce(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof InventorySourcesAPI.destroyHosts>
     );
     vi.mocked(InventorySourcesAPI.destroyGroups).mockResolvedValueOnce(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof InventorySourcesAPI.destroyGroups>
     );
     const history = createMemoryHistory({
       initialEntries: ['/inventories/inventory/2/sources/123/details'],

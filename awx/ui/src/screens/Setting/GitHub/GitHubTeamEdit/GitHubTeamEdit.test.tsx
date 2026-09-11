@@ -1,12 +1,12 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import GitHubTeamEdit from './GitHubTeamEdit';
 
 vi.mock('../../../../api');
@@ -16,10 +16,10 @@ describe('<GitHubTeamEdit />', () => {
 
   beforeEach(() => {
     vi.mocked(SettingsAPI.revertCategory).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.revertCategory>
     );
     vi.mocked(SettingsAPI.updateAll).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.updateAll>
     );
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: {
@@ -31,7 +31,7 @@ describe('<GitHubTeamEdit />', () => {
         SOCIAL_AUTH_GITHUB_TEAM_ORGANIZATION_MAP: {},
         SOCIAL_AUTH_GITHUB_TEAM_TEAM_MAP: {},
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -43,7 +43,7 @@ describe('<GitHubTeamEdit />', () => {
       initialEntries: ['/settings/github/team/edit'],
     });
     const utils = renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <GitHubTeamEdit />
       </SettingsProvider>,
       { context: { router: { history } } }
@@ -141,7 +141,7 @@ describe('<GitHubTeamEdit />', () => {
       Promise.reject(new Error())
     );
     renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <GitHubTeamEdit />
       </SettingsProvider>
     );

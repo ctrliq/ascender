@@ -5,6 +5,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { SchedulesAPI, JobTemplatesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -147,13 +148,13 @@ describe('<ScheduleDetail />', () => {
   beforeEach(() => {
     vi.mocked(SchedulesAPI.createPreview).mockResolvedValue({
       data: { local: [], utc: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.createPreview>);
   });
 
   test('details should render with the proper values without prompts', async () => {
     vi.mocked(SchedulesAPI.readCredentials).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
       noPrompts as unknown as ApiResponse<any>
     );
@@ -198,10 +199,10 @@ describe('<ScheduleDetail />', () => {
           { id: 2, name: 'Cred 2' },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
     vi.mocked(SchedulesAPI.readInstanceGroups).mockResolvedValue({
       data: { count: 1, results: [{ id: 1, name: 'IG 1' }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.readInstanceGroups>);
     vi.mocked(SchedulesAPI.readAllLabels).mockResolvedValue({
       data: { results: [{ id: 1, name: 'Label 1' } as unknown as Label] },
     });
@@ -243,10 +244,10 @@ describe('<ScheduleDetail />', () => {
   test('prompt values section should be hidden if no overrides are present on the schedule but ask_ options are all true', async () => {
     vi.mocked(SchedulesAPI.readCredentials).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
     vi.mocked(SchedulesAPI.readInstanceGroups).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.readInstanceGroups>);
     vi.mocked(SchedulesAPI.readAllLabels).mockResolvedValue({
       data: { results: [] },
     });
@@ -272,7 +273,7 @@ describe('<ScheduleDetail />', () => {
   test('prompt values section should be hidden if overrides are present on the schedule but ask_ options are all false', async () => {
     vi.mocked(SchedulesAPI.readCredentials).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
       noPrompts as unknown as ApiResponse<any>
     );
@@ -302,7 +303,7 @@ describe('<ScheduleDetail />', () => {
   test('should show edit button for users with edit permission', async () => {
     vi.mocked(SchedulesAPI.readCredentials).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
       noPrompts as unknown as ApiResponse<any>
     );
@@ -319,7 +320,7 @@ describe('<ScheduleDetail />', () => {
     vi.mocked(SchedulesAPI.destroy).mockRejectedValueOnce(new Error());
     vi.mocked(SchedulesAPI.readCredentials).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
       noPrompts as unknown as ApiResponse<any>
     );
@@ -342,10 +343,10 @@ describe('<ScheduleDetail />', () => {
   test('should have disabled toggle', async () => {
     vi.mocked(SchedulesAPI.readCredentials).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
     vi.mocked(SchedulesAPI.readInstanceGroups).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.readInstanceGroups>);
     vi.mocked(SchedulesAPI.readAllLabels).mockResolvedValue({
       data: { results: [] },
     });
@@ -370,7 +371,7 @@ describe('<ScheduleDetail />', () => {
     };
     vi.mocked(SchedulesAPI.readCredentials).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
       noPrompts as unknown as ApiResponse<any>
     );

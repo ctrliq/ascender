@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, Project } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { ProjectsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ProjectEdit from './ProjectEdit';
 
@@ -116,7 +116,7 @@ describe('<ProjectEdit />', () => {
   test('handleSubmit should call api update', async () => {
     vi.mocked(ProjectsAPI.update).mockResolvedValueOnce({
       data: { ...projectData },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.update>);
     const { user } = renderWithContexts(<ProjectEdit project={projectData} />);
 
     await user.click(screen.getByRole('button', { name: 'mock-submit' }));

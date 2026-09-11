@@ -31,7 +31,7 @@ function filterByPrefix(data: Untyped, prefix: Untyped) {
 function LDAPDetail() {
   const { t } = useLingui();
   const { me } = useConfig();
-  const { GET: options } = useSettings();
+  const { GET: options = {} } = useSettings();
   const category = useMatch('/settings/ldap/:category/details')?.params
     ?.category as string;
 
@@ -49,8 +49,7 @@ function LDAPDetail() {
         if (key.includes('_CONNECTION_OPTIONS')) {
           return;
         }
-        mergedData[key] = options[key];
-        mergedData[key].value = data[key];
+        mergedData[key] = { ...options[key], value: data[key] };
       });
 
       const ldap1 = filterByPrefix(mergedData, 'AUTH_LDAP_1_');
@@ -144,7 +143,7 @@ function LDAPDetail() {
       <CardBody>
         <>
           {isLoading && <ContentLoading />}
-          {!isLoading && error && <ContentError error={error} />}
+          {!isLoading && Boolean(error) && <ContentError error={error} />}
           {!isLoading && !Object.values(LDAPDetails)?.includes(null) && (
             <DetailList>
               {LDAPDetails[category].map(([key, detail]: Untyped[]) => (

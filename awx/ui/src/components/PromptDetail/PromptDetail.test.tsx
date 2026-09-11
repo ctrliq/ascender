@@ -62,7 +62,7 @@ const mockPromptLaunch = {
       },
     ],
     scm_branch: 'Foo branch',
-    execution_environment: 1,
+    execution_environment: { id: 1, name: 'Default EE' },
     forks: 1,
     job_slice_count: 1,
     timeout: 100,

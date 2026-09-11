@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -6,8 +5,9 @@ import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
-import mockAllOptions from '../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../testUtils/settingOptions';
 import TACACS from './TACACS';
 
 vi.mock('../../../api/models/Settings');
@@ -23,7 +23,7 @@ describe('<TACACS />', () => {
         TACACSPLUS_AUTH_PROTOCOL: 'ascii',
         TACACSPLUS_REM_ADDR: false,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -33,7 +33,7 @@ describe('<TACACS />', () => {
   function renderTACACS(initialEntries: Untyped) {
     const history = createMemoryHistory({ initialEntries });
     return renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <Routes>
           <Route path="/settings/tacacs/*" element={<TACACS />} />
         </Routes>

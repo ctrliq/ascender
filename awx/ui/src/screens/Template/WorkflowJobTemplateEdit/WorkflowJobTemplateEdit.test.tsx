@@ -11,6 +11,7 @@ import {
   InventoriesAPI,
 } from 'api';
 import useDebounce from 'hooks/useDebounce';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowJobTemplateEdit from './WorkflowJobTemplateEdit';
 
@@ -120,25 +121,25 @@ describe('<WorkflowJobTemplateEdit/>', () => {
           { name: 'Label 3', id: 3 },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof LabelsAPI.read>);
 
     vi.mocked(InventoriesAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
     vi.mocked(InventoriesAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
 
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: { results: [{ id: 1, name: 'Default' }], count: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     vi.mocked(OrganizationsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readOptions>);
 
     vi.mocked(UsersAPI.readAdminOfOrganizations).mockResolvedValue({
       data: { count: 1, results: [{ id: 1, name: 'Default' }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readAdminOfOrganizations>);
 
     vi.mocked(useDebounce).mockImplementation((fn: Untyped) => fn);
   });

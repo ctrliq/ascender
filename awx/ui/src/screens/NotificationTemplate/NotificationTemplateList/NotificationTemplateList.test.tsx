@@ -1,9 +1,9 @@
-import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, fireEvent, act } from '@testing-library/react';
 
 import { NotificationsAPI, NotificationTemplatesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import NotificationTemplateList from './NotificationTemplateList';
@@ -56,7 +56,7 @@ describe('<NotificationTemplateList />', () => {
     );
     vi.mocked(NotificationTemplatesAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -115,7 +115,7 @@ describe('<NotificationTemplateList />', () => {
   test('should hide the add button without POST capability', async () => {
     vi.mocked(NotificationTemplatesAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.readOptions>);
     renderWithContexts(<NotificationTemplateList />);
     await screen.findByText('Boston');
     expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
@@ -125,7 +125,7 @@ describe('<NotificationTemplateList />', () => {
     vi.useFakeTimers();
     vi.mocked(NotificationTemplatesAPI.test).mockResolvedValue({
       data: { notification: 9182 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.test>);
     vi.mocked(NotificationsAPI.readDetail).mockResolvedValue({
       data: {
         id: 9182,
@@ -133,7 +133,7 @@ describe('<NotificationTemplateList />', () => {
         error: 'There was an error with the notification',
         summary_fields: { notification_template: { name: 'foobar' } },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof NotificationsAPI.readDetail>);
 
     renderWithContexts(<NotificationTemplateList />);
     // wait for the list rows/actions to render before interacting

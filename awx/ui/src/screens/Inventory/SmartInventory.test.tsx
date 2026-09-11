@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { screen, within } from '@testing-library/react';
 import { InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockSmartInventory from './shared/data.smart_inventory.json';
 import SmartInventory from './SmartInventory';
@@ -34,7 +34,7 @@ describe('<SmartInventory />', () => {
   test('should render expected tabs', async () => {
     vi.mocked(InventoriesAPI.readDetail).mockResolvedValue({
       data: mockSmartInventory,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readDetail>);
     const expectedTabs = [
       'Back to Inventories',
       'Details',
@@ -65,7 +65,7 @@ describe('<SmartInventory />', () => {
   test('should show content error when user attempts to navigate to erroneous route', async () => {
     vi.mocked(InventoriesAPI.readDetail).mockResolvedValue({
       data: mockSmartInventory,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readDetail>);
     renderAt('/inventories/smart_inventory/1/foobar');
     expect(await screen.findByText('Not Found')).toBeInTheDocument();
   });

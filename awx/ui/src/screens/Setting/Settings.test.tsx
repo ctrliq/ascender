@@ -1,12 +1,13 @@
-import type { Untyped } from 'types/api';
+import type { OptionsResponse } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { SettingsAPI, RootAPI } from 'api';
+import type { AssetVariables } from 'api/models/Root';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
-import mockAllOptions from './shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../testUtils/settingOptions';
 import Settings from './Settings';
 
 vi.mock('../../api');
@@ -17,10 +18,10 @@ describe('<Settings />', () => {
       data: {
         BRAND_NAME: 'AWX',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<AssetVariables>);
     vi.mocked(SettingsAPI.readAllOptions).mockResolvedValue({
-      data: mockAllOptions,
-    } as unknown as ApiResponse<Untyped>);
+      data: { actions: settingOptions },
+    } as unknown as ApiResponse<OptionsResponse>);
   });
 
   afterEach(() => {

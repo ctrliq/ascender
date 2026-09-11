@@ -6,6 +6,7 @@ import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import TemplateSurvey from './TemplateSurvey';
 import mockJobTemplateData from './shared/data.job_template.json';
@@ -40,7 +41,7 @@ describe('<TemplateSurvey />', () => {
   beforeEach(() => {
     vi.mocked(JobTemplatesAPI.readSurvey).mockResolvedValue({
       data: surveyData,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readSurvey>);
   });
 
   afterEach(() => {
@@ -89,7 +90,7 @@ describe('<TemplateSurvey />', () => {
     };
     vi.mocked(JobTemplatesAPI.readSurvey).mockResolvedValue({
       data: twoQuestionSurvey,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readSurvey>);
     vi.mocked(JobTemplatesAPI.updateSurvey).mockResolvedValue(
       undefined as unknown as ApiResponse<any>
     );
@@ -143,7 +144,7 @@ describe('<TemplateSurvey />', () => {
   test('should toggle wfjt survey on', async () => {
     vi.mocked(WorkflowJobTemplatesAPI.readSurvey).mockResolvedValueOnce({
       data: surveyData,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readSurvey>);
     renderSurvey(
       '/templates/workflow_job_template/15/survey',
       <TemplateSurvey template={mockWorkflowJobTemplateData} canEdit />
@@ -163,7 +164,7 @@ describe('<TemplateSurvey />', () => {
   test('should successfully delete jt survey', async () => {
     vi.mocked(JobTemplatesAPI.readSurvey).mockResolvedValueOnce({
       data: surveyData,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readSurvey>);
     renderSurvey(
       '/templates/job_template/7/survey',
       <TemplateSurvey template={mockJobTemplateData} canEdit />
@@ -185,7 +186,7 @@ describe('<TemplateSurvey />', () => {
   test('should successfully delete wfjt survey', async () => {
     vi.mocked(WorkflowJobTemplatesAPI.readSurvey).mockResolvedValueOnce({
       data: surveyData,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readSurvey>);
     renderSurvey(
       '/templates/workflow_job_template/15/survey',
       <TemplateSurvey template={mockWorkflowJobTemplateData} canEdit />

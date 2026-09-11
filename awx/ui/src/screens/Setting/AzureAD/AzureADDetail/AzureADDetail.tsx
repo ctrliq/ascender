@@ -17,7 +17,7 @@ import { SettingDetail } from '../../shared';
 function AzureADDetail() {
   const { t } = useLingui();
   const { me } = useConfig();
-  const { GET: options } = useSettings();
+  const { GET: options = {} } = useSettings();
 
   const baseURL = '/settings/azure';
   const category = useMatch(`${baseURL}/:category/details`)?.params
@@ -84,7 +84,7 @@ function AzureADDetail() {
       <CardBody>
         {isLoading && <ContentLoading />}
         {!isLoading && Boolean(error) && <ContentError error={error} />}
-        {!isLoading && !Object.values(azureDetails)?.includes(null) && (
+        {!isLoading && Object.values(azureDetails).every(Boolean) && (
           <DetailList>
             {Object.keys(
               azureDetails[category as keyof typeof azureDetails]

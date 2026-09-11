@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
@@ -9,6 +8,7 @@ import {
   ExecutionEnvironmentsAPI,
   RootAPI,
 } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -104,10 +104,10 @@ describe('<AdHocCommands />', () => {
       data: {
         BRAND_NAME: 'AWX',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
     vi.mocked(CredentialTypesAPI.read).mockResolvedValue({
       data: { count: 1, results: [{ id: 1, name: 'cred' }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialTypesAPI.read>);
     vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
       data: {
         results: [
@@ -116,10 +116,10 @@ describe('<AdHocCommands />', () => {
         ],
         count: 2,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -137,10 +137,10 @@ describe('<AdHocCommands />', () => {
   test('should open the wizard', async () => {
     vi.mocked(InventoriesAPI.readDetail).mockResolvedValue({
       data: { organization: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readDetail>);
     vi.mocked(CredentialTypesAPI.read).mockResolvedValue({
       data: { results: [{ id: 1 }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialTypesAPI.read>);
     const { user } = renderAdHoc();
     const runButton = await screen.findByRole('button', {
       name: 'Run Command',
@@ -156,19 +156,19 @@ describe('<AdHocCommands />', () => {
   test('should submit properly', async () => {
     vi.mocked(InventoriesAPI.launchAdHocCommands).mockResolvedValue({
       data: { id: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.launchAdHocCommands>);
     vi.mocked(InventoriesAPI.readDetail).mockResolvedValue({
       data: { organization: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readDetail>);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: {
         results: credentials,
         count: 5,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
     const { user } = renderAdHoc();
     const runButton = await screen.findByRole('button', {
       name: 'Run Command',
@@ -217,16 +217,16 @@ describe('<AdHocCommands />', () => {
     );
     vi.mocked(InventoriesAPI.readDetail).mockResolvedValue({
       data: { organization: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readDetail>);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: {
         results: credentials,
         count: 5,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
     const { user } = renderAdHoc();
     const runButton = await screen.findByRole('button', {
       name: 'Run Command',
@@ -249,7 +249,7 @@ describe('<AdHocCommands />', () => {
   test('should disable run command button due to lack of list items', async () => {
     vi.mocked(InventoriesAPI.readHosts).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readHosts>);
     renderAdHoc({ hasListItems: false });
     const runButton = await screen.findByRole('button', {
       name: 'Run Command',

@@ -1,8 +1,8 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { OrganizationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import machineCredential from './data.machineCredential.json';
 import gceCredential from './data.gceCredential.json';
@@ -106,10 +106,10 @@ describe('<CredentialForm />', () => {
   beforeEach(() => {
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     vi.mocked(OrganizationsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} }, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readOptions>);
   });
 
   afterEach(() => {

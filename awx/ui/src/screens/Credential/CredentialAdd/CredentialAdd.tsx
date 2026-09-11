@@ -1,5 +1,5 @@
 import type { CurrentUser } from 'contexts/Config';
-import type { Untyped } from 'types/api';
+import type { CredentialType, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { PageSection, Card } from '@patternfly/react-core';
@@ -14,7 +14,10 @@ import {
 import useRequest from 'hooks/useRequest';
 import CredentialForm from '../shared/CredentialForm';
 
-const fetchCredentialTypes = async (pageNo = 1, credentialTypes = []) => {
+const fetchCredentialTypes = async (
+  pageNo = 1,
+  credentialTypes: CredentialType[] = []
+): Promise<CredentialType[]> => {
   const { data } = await CredentialTypesAPI.read({
     page_size: 200,
     page: pageNo,

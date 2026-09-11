@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Instance from './Instance';
 
@@ -54,7 +54,7 @@ describe('<Instance />', () => {
   beforeEach(() => {
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: { IS_K8S: false },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -77,7 +77,7 @@ describe('<Instance />', () => {
   test('renders the peers tab only on K8s', async () => {
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: { IS_K8S: true },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     renderAt('/instances/1/peers');
     expect(await screen.findByText('InstancePeerList')).toBeInTheDocument();
   });
@@ -85,7 +85,7 @@ describe('<Instance />', () => {
   test('renders the listener addresses panel on K8s', async () => {
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: { IS_K8S: true },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     renderAt('/instances/1/listener_addresses');
     expect(
       await screen.findByText('InstanceListenerAddressList')

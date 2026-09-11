@@ -3,6 +3,7 @@ import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UsersAPI, TokensAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -145,7 +146,7 @@ describe('<UserTokenList />', () => {
     );
     vi.mocked(UsersAPI.readTokenOptions).mockResolvedValue({
       data: { related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readTokenOptions>);
 
     ({ user } = renderWithContexts(<UserTokenList />));
     await screen.findByText('Fgds');
@@ -165,7 +166,7 @@ describe('<UserTokenList />', () => {
 
   test('should select and then delete item properly', async () => {
     vi.mocked(TokensAPI.destroy).mockResolvedValueOnce(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof TokensAPI.destroy>
     );
 
     expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();

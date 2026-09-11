@@ -1,8 +1,7 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { InventorySourcesAPI } from 'api';
+import type { ResponseOf } from '../../../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 import InventorySourcesList from './InventorySourcesList';
 
@@ -39,7 +38,7 @@ describe('InventorySourcesList', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.read>);
     vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -48,7 +47,7 @@ describe('InventorySourcesList', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
     renderWithContexts(
       <InventorySourcesList
         nodeResource={nodeResource}

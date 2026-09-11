@@ -50,7 +50,7 @@ export interface AWXLoginProps {
 
 function AWXLogin({ alt, isAuthenticated }: AWXLoginProps) {
   const { t } = useLingui();
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState<number | null>(null);
   const { authRedirectTo, isSessionExpired, isRedirectLinkReceived } =
     useSession();
   const isNewUser = useRef(true);
@@ -127,7 +127,7 @@ function AWXLogin({ alt, isAuthenticated }: AWXLoginProps) {
     useCallback(async () => {
       if (isAuthenticated(document.cookie)) {
         const { data } = await MeAPI.read();
-        const newUserId = data.results[0].id;
+        const newUserId = data.results[0]?.id;
         const cacheKey = `isNewUser-${newUserId}`;
         const cached = window.sessionStorage.getItem(cacheKey);
         if (cached !== null) {
@@ -138,11 +138,11 @@ function AWXLogin({ alt, isAuthenticated }: AWXLoginProps) {
           );
           isNewUser.current =
             previousUserId === null ||
-            newUserId.toString() !== previousUserId.toString();
+            newUserId?.toString() !== previousUserId.toString();
           window.sessionStorage.setItem(cacheKey, String(isNewUser.current));
         }
         window.localStorage.setItem(SESSION_USER_ID, JSON.stringify(newUserId));
-        setUserId(newUserId);
+        setUserId(newUserId ?? null);
       }
     }, [isAuthenticated])
   );
@@ -172,7 +172,7 @@ function AWXLogin({ alt, isAuthenticated }: AWXLoginProps) {
     <LoginFooter
       data-cy="login-footer"
       dangerouslySetInnerHTML={{
-        __html: DOMPurify.sanitize(loginInfo),
+        __html: DOMPurify.sanitize(loginInfo ?? ''),
       }}
     />
   );
@@ -268,7 +268,7 @@ function AWXLogin({ alt, isAuthenticated }: AWXLoginProps) {
       if (!provider) {
         return null;
       }
-      const { label } = socialAuthOptions[authKey];
+      const label = socialAuthOptions[authKey]?.label;
       return {
         authKey,
         ...provider,
@@ -351,7 +351,7 @@ function AWXLogin({ alt, isAuthenticated }: AWXLoginProps) {
                 isBlock
                 icon={<Icon />}
                 onClick={() =>
-                  startSocialLogin(socialAuthOptions[authKey].login_url)
+                  startSocialLogin(socialAuthOptions[authKey]?.login_url)
                 }
               >
                 {label}

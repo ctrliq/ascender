@@ -107,13 +107,13 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
           ([key, value]): [string, string] => {
             if (key === 'admin_role') {
               return [
-                `${value.id}, ${systemAdmin[0].id}`,
+                `${value.id}, ${systemAdmin[0]?.id}`,
                 value.name as string,
               ];
             }
             if (key === 'auditor_role') {
               return [
-                `${value.id}, ${systemAuditor[0].id}`,
+                `${value.id}, ${systemAuditor[0]?.id}`,
                 value.name as string,
               ];
             }

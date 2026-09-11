@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
@@ -11,6 +10,7 @@ import {
   ProjectsAPI,
   UnifiedJobTemplatesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentList from './ExecutionEnvironmentList';
@@ -60,19 +60,19 @@ describe('<ExecutionEnvironmentList/>', () => {
     );
     vi.mocked(InventorySourcesAPI.read).mockResolvedValue({
       data: { results: [{ id: 10000000 }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.read>);
     vi.mocked(WorkflowJobTemplateNodesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplateNodesAPI.read>);
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     vi.mocked(UnifiedJobTemplatesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UnifiedJobTemplatesAPI.read>);
     vi.mocked(ProjectsAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
   });
 
   afterEach(() => {
@@ -128,7 +128,7 @@ describe('<ExecutionEnvironmentList/>', () => {
   test('should not render the add button when POST is not allowed', async () => {
     vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
       data: { actions: { POST: false } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
     renderWithContexts(<ExecutionEnvironmentList />);
     await screen.findByText('Foo');
     expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();

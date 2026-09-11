@@ -21,21 +21,9 @@ import useRequest from 'hooks/useRequest';
 import ContentEmpty from 'components/ContentEmpty';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
 import ContentError from 'components/ContentError';
+import type { Metric, MetricSample } from 'api/models/Metrics';
 import type { MetricSeries } from './LineChart';
 import LineChart from './LineChart';
-
-/** One sample of a metric, as the API's json rendering of prometheus gives it. */
-interface PrometheusSample {
-  /** Which instance the sample was taken on, among other labels. */
-  labels: { node?: string; [key: string]: string | undefined };
-  value: number;
-}
-
-/** One metric, with a sample per instance reporting it. */
-interface PrometheusMetric {
-  help?: string;
-  samples: PrometheusSample[];
-}
 
 let count = [0];
 
@@ -121,9 +109,9 @@ function Metrics() {
       });
 
       const rendered = renderedData;
-      const instanceData: PrometheusMetric[] = Object.values(data);
-      instanceData.forEach((value: PrometheusMetric) => {
-        value.samples.forEach((sample: PrometheusSample) => {
+      const instanceData: Metric[] = Object.values(data);
+      instanceData.forEach((value: Metric) => {
+        value.samples.forEach((sample: MetricSample) => {
           instances.forEach((i) => {
             if (i === sample.labels.node) {
               const renderedIndex = renderedData.findIndex(
@@ -160,7 +148,7 @@ function Metrics() {
       }
 
       setRenderedData(countRestrictedData);
-      return data[metric as string].help_text;
+      return data[metric as string]?.help_text ?? '';
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [instance, metric, instances]),

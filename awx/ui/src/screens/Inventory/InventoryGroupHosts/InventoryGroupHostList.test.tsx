@@ -5,6 +5,7 @@ import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { GroupsAPI, InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -51,10 +52,10 @@ describe('<InventoryGroupHostList />', () => {
   beforeEach(() => {
     vi.mocked(GroupsAPI.readAllHosts).mockResolvedValue({
       data: { ...mockHosts },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof GroupsAPI.readAllHosts>);
     vi.mocked(InventoriesAPI.readHostsOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readHostsOptions>);
     vi.mocked(InventoriesAPI.readAdHocOptions).mockResolvedValue(
       adHocOptions as unknown as ApiResponse<any>
     );
@@ -111,7 +112,7 @@ describe('<InventoryGroupHostList />', () => {
   test('should hide add dropdown without POST permission', async () => {
     vi.mocked(InventoriesAPI.readHostsOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readHostsOptions>);
     renderUnder(url);
     await screen.findAllByRole('link', { name: /dummy/ });
     expect(
@@ -124,7 +125,7 @@ describe('<InventoryGroupHostList />', () => {
 
   test('expected api calls are made for multi-delete', async () => {
     vi.mocked(GroupsAPI.disassociateHost).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof GroupsAPI.disassociateHost>
     );
     const { user } = renderUnder(url);
     await screen.findAllByRole('link', { name: /dummy/ });
@@ -167,7 +168,7 @@ describe('<InventoryGroupHostList />', () => {
   test('should show associate host modal when adding an existing host', async () => {
     vi.mocked(InventoriesAPI.readHosts).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readHosts>);
     const { user } = renderUnder(url);
     await screen.findAllByRole('link', { name: /dummy/ });
     await user.click(screen.getByRole('button', { name: 'Add' }));
@@ -184,14 +185,14 @@ describe('<InventoryGroupHostList />', () => {
 
   test('should make expected api request when associating hosts', async () => {
     vi.mocked(GroupsAPI.associateHost).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof GroupsAPI.associateHost>
     );
     vi.mocked(InventoriesAPI.readHosts).mockResolvedValue({
       data: {
         count: 1,
         results: [{ id: 123, name: 'foo', url: '/api/v2/hosts/123/' }],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readHosts>);
     const { user } = renderUnder(url);
     await screen.findAllByRole('link', { name: /dummy/ });
     await user.click(screen.getByRole('button', { name: 'Add' }));
@@ -244,7 +245,7 @@ describe('<InventoryGroupHostList />', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readAdHocOptions>);
     renderUnder(url);
     await screen.findAllByRole('link', { name: /dummy/ });
     expect(
@@ -257,10 +258,10 @@ describe('<InventoryGroupHostList> for constructed inventories', () => {
   beforeEach(() => {
     vi.mocked(GroupsAPI.readAllHosts).mockResolvedValue({
       data: { ...mockHosts },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof GroupsAPI.readAllHosts>);
     vi.mocked(InventoriesAPI.readHostsOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readHostsOptions>);
     vi.mocked(InventoriesAPI.readAdHocOptions).mockResolvedValue(
       adHocOptions as unknown as ApiResponse<any>
     );

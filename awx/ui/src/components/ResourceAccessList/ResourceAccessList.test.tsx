@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
@@ -12,6 +11,7 @@ import {
 } from 'api';
 import { useUserProfile } from 'contexts/Config';
 import * as ConfigContext from 'contexts/Config';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import ResourceAccessList from './ResourceAccessList';
@@ -340,15 +340,15 @@ describe('<ResourceAccessList />', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readAccessOptions>);
     vi.mocked(OrganizationsAPI.readAdmins).mockResolvedValue({
       data: { count: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readAdmins>);
     vi.mocked(TeamsAPI.disassociateRole).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof TeamsAPI.disassociateRole>
     );
     vi.mocked(UsersAPI.disassociateRole).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof UsersAPI.disassociateRole>
     );
     vi.mocked(RolesAPI.read).mockResolvedValue({
       data: {
@@ -357,10 +357,10 @@ describe('<ResourceAccessList />', () => {
           { id: 14, name: 'System Auditor' },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof RolesAPI.read>);
     vi.mocked(CredentialsAPI.readAccessList).mockResolvedValue({
       data: credentialAccessList,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readAccessList>);
     vi.mocked(CredentialsAPI.readAccessOptions).mockResolvedValue({
       data: {
         actions: {
@@ -369,7 +369,7 @@ describe('<ResourceAccessList />', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readAccessOptions>);
   });
 
   afterEach(() => {

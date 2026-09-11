@@ -1,8 +1,7 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { WorkflowApprovalsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -29,7 +28,7 @@ describe('<WorkflowApprovalList />', () => {
         count: mockWorkflowApprovals.results.length,
         results: mockWorkflowApprovals.results,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowApprovalsAPI.read>);
 
     vi.mocked(WorkflowApprovalsAPI.readOptions).mockResolvedValue({
       data: {
@@ -39,7 +38,7 @@ describe('<WorkflowApprovalList />', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowApprovalsAPI.readOptions>);
   });
 
   afterEach(() => {

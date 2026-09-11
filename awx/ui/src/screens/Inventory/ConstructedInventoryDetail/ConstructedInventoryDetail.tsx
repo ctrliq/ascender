@@ -100,7 +100,7 @@ function ConstructedInventoryDetail({ inventory }: Untyped) {
         instanceGroups: instanceGroupsResponse.data.results,
         inputInventories: inputInventoriesResponse.data.results,
         inventorySource: inventorySourceResponse.data.results[0],
-        actions: optionsResponse.data.actions.GET,
+        actions: optionsResponse.data.actions.GET ?? {},
       };
     }, [inventory.id]),
     {
@@ -175,7 +175,7 @@ function ConstructedInventoryDetail({ inventory }: Untyped) {
         <Detail
           label={t`Limit`}
           value={inventory.limit}
-          helpText={actions.limit.help_text}
+          helpText={actions.limit?.help_text}
           dataCy="constructed-inventory-limit"
         />
         <Detail
@@ -192,37 +192,37 @@ function ConstructedInventoryDetail({ inventory }: Untyped) {
         <Detail
           label={t`Total groups`}
           value={wsInventory.total_groups}
-          helpText={actions.total_groups.help_text}
+          helpText={actions.total_groups?.help_text}
           dataCy="constructed-inventory-total-groups"
         />
         <Detail
           label={t`Total hosts`}
           value={wsInventory.total_hosts}
-          helpText={actions.total_hosts.help_text}
+          helpText={actions.total_hosts?.help_text}
           dataCy="constructed-inventory-total-hosts"
         />
         <Detail
           label={t`Total inventory sources`}
           value={wsInventory.total_inventory_sources}
-          helpText={actions.total_inventory_sources.help_text}
+          helpText={actions.total_inventory_sources?.help_text}
           dataCy="constructed-inventory-sources"
         />
         <Detail
           label={t`Update cache timeout`}
           value={inventory.update_cache_timeout}
-          helpText={actions.update_cache_timeout.help_text}
+          helpText={actions.update_cache_timeout?.help_text}
           dataCy="constructed-inventory-cache-timeout"
         />
         <Detail
           label={t`Inventory sources with failures`}
           value={wsInventory.inventory_sources_with_failures}
-          helpText={actions.inventory_sources_with_failures.help_text}
+          helpText={actions.inventory_sources_with_failures?.help_text}
           dataCy="constructed-inventory-sources-with-failures"
         />
         <Detail
           label={t`Verbosity`}
           value={inventory.verbosity}
-          helpText={actions.verbosity.help_text}
+          helpText={actions.verbosity?.help_text}
           dataCy="constructed-inventory-verbosity"
         />
         {instanceGroups && (

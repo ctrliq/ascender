@@ -1,8 +1,8 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { CredentialsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import { CredentialListItem } from '.';
 import { mockCredentials } from '../shared';
@@ -50,7 +50,7 @@ describe('<CredentialListItem />', () => {
     vi.mocked(CredentialsAPI.copy).mockResolvedValue({
       status: 201,
       data: { id: 2 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.copy>);
     const { user } = renderItem(mockCredentials.results[0]);
 
     await user.click(screen.getByRole('button', { name: 'Copy' }));

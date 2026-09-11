@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
@@ -6,8 +5,9 @@ import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsAPI } from 'api';
 import { SettingsProvider } from 'contexts/Settings';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
-import mockAllOptions from '../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../testUtils/settingOptions';
 import GitHub from './GitHub';
 
 vi.mock('../../../api/models/Settings');
@@ -15,7 +15,7 @@ vi.mock('../../../api/models/Settings');
 async function setup(initialEntry: Untyped) {
   const history = createMemoryHistory({ initialEntries: [initialEntry] });
   const utils = renderWithContexts(
-    <SettingsProvider value={mockAllOptions.actions}>
+    <SettingsProvider value={settingOptions}>
       <Routes>
         <Route path="/settings/github/*" element={<GitHub />} />
       </Routes>
@@ -36,7 +36,7 @@ describe('<GitHub />', () => {
         SOCIAL_AUTH_GITHUB_ORGANIZATION_MAP: null,
         SOCIAL_AUTH_GITHUB_TEAM_MAP: null,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     vi.mocked(SettingsAPI.readCategory).mockResolvedValueOnce({
       data: {
         SOCIAL_AUTH_GITHUB_ORG_CALLBACK_URL:
@@ -47,7 +47,7 @@ describe('<GitHub />', () => {
         SOCIAL_AUTH_GITHUB_ORG_ORGANIZATION_MAP: null,
         SOCIAL_AUTH_GITHUB_ORG_TEAM_MAP: null,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     vi.mocked(SettingsAPI.readCategory).mockResolvedValueOnce({
       data: {
         SOCIAL_AUTH_GITHUB_TEAM_CALLBACK_URL:
@@ -58,7 +58,7 @@ describe('<GitHub />', () => {
         SOCIAL_AUTH_GITHUB_TEAM_ORGANIZATION_MAP: {},
         SOCIAL_AUTH_GITHUB_TEAM_TEAM_MAP: {},
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     vi.mocked(SettingsAPI.readCategory).mockResolvedValueOnce({
       data: {
         SOCIAL_AUTH_GITHUB_ENTERPRISE_CALLBACK_URL:
@@ -70,7 +70,7 @@ describe('<GitHub />', () => {
         SOCIAL_AUTH_GITHUB_ENTERPRISE_ORGANIZATION_MAP: {},
         SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_MAP: {},
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     vi.mocked(SettingsAPI.readCategory).mockResolvedValueOnce({
       data: {
         SOCIAL_AUTH_GITHUB_ENTERPRISE_ORG_CALLBACK_URL:
@@ -83,7 +83,7 @@ describe('<GitHub />', () => {
         SOCIAL_AUTH_GITHUB_ENTERPRISE_ORG_ORGANIZATION_MAP: {},
         SOCIAL_AUTH_GITHUB_ENTERPRISE_ORG_TEAM_MAP: {},
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     vi.mocked(SettingsAPI.readCategory).mockResolvedValueOnce({
       data: {
         SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_CALLBACK_URL:
@@ -96,7 +96,7 @@ describe('<GitHub />', () => {
         SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_ORGANIZATION_MAP: {},
         SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_TEAM_MAP: {},
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {

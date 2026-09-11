@@ -42,17 +42,20 @@ function Instance({ setBreadcrumb }: InstanceProps) {
   ];
 
   const {
-    result: isK8s,
+    result: { isK8s },
     error,
     isLoading,
     request,
   } = useRequest(
+    // The result is an object rather than the flag itself so that the initial
+    // value has somewhere to carry isLoading, which is what holds the screen
+    // on its spinner until the setting has been read.
     useCallback(async () => {
       if (!canReadSettings) {
-        return false;
+        return { isK8s: false };
       }
       const { data } = await SettingsAPI.readCategory('system');
-      return data?.IS_K8S ?? false;
+      return { isK8s: Boolean(data?.IS_K8S) };
     }, [canReadSettings]),
     { isK8s: false, isLoading: true }
   );

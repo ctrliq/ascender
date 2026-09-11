@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { InventorySourcesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventorySourceAdd from './InventorySourceAdd';
 
@@ -74,7 +74,7 @@ describe('<InventorySourceAdd />', () => {
   test('should post to the api when submit is clicked', async () => {
     vi.mocked(InventorySourcesAPI.create).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.create>);
     const { user } = renderWithContexts(
       <InventorySourceAdd inventory={mockInventory} />
     );
@@ -107,7 +107,7 @@ describe('<InventorySourceAdd />', () => {
   test('should associate instance groups after creation', async () => {
     vi.mocked(InventorySourcesAPI.create).mockResolvedValue({
       data: { id: 55 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.create>);
     const { user } = renderWithContexts(
       <InventorySourceAdd inventory={mockInventory} />
     );
@@ -136,7 +136,7 @@ describe('<InventorySourceAdd />', () => {
     const history = createMemoryHistory({});
     vi.mocked(InventorySourcesAPI.create).mockResolvedValue({
       data: { id: 123, inventory: 111 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.create>);
     const { user } = renderWithContexts(
       <InventorySourceAdd inventory={mockInventory} />,
       { context: { router: { history } } }

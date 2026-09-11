@@ -1,5 +1,16 @@
-import type { InstanceGroup, Untyped } from 'types/api';
+import type {
+  InstanceGroup,
+  LaunchConfig,
+  SurveyConfig,
+  SurveyQuestion,
+  Untyped,
+} from 'types/api';
+
 import type { LabelInput } from 'util/labels';
+
+// The launch configuration and the survey are api responses, so they are
+// declared with the rest of them; every step reaches them through here.
+export type { LaunchConfig, SurveyConfig, SurveyQuestion };
 
 /**
  * The values the launch prompt wizard collects, shared by the wizard itself and
@@ -38,64 +49,6 @@ export interface LaunchPromptValues {
 }
 
 /**
- * What /api/v2/job_templates/N/launch/ returns on a GET, which is what decides
- * which steps the wizard shows and which values it is allowed to post.
- *
- * Every ask_*_on_launch flag turns one prompt on. `defaults` carries the values
- * the template already has, which seed the corresponding fields.
- */
-export interface LaunchConfig {
-  ask_credential_on_launch?: boolean;
-  ask_diff_mode_on_launch?: boolean;
-  ask_execution_environment_on_launch?: boolean;
-  ask_forks_on_launch?: boolean;
-  ask_instance_groups_on_launch?: boolean;
-  ask_inventory_on_launch?: boolean;
-  ask_job_slice_count_on_launch?: boolean;
-  ask_job_type_on_launch?: boolean;
-  ask_labels_on_launch?: boolean;
-  ask_limit_on_launch?: boolean;
-  ask_scm_branch_on_launch?: boolean;
-  ask_skip_tags_on_launch?: boolean;
-  ask_tags_on_launch?: boolean;
-  ask_timeout_on_launch?: boolean;
-  ask_variables_on_launch?: boolean;
-  ask_verbosity_on_launch?: boolean;
-  can_start_without_user_input?: boolean;
-  defaults?: Untyped;
-  inventory_needed_to_start?: boolean;
-  job_template_data?: Untyped;
-  /** Names of the credential passwords the launch cannot proceed without. */
-  passwords_needed_to_start?: string[];
-  survey_enabled?: boolean;
-  variables_needed_to_start?: string[];
-  [key: string]: unknown;
-}
-
-/** One question out of a template's survey, as the survey endpoint returns it. */
-export interface SurveyQuestion {
-  variable: string;
-  question_name?: string;
-  question_description?: string;
-  type?: string;
-  required?: boolean;
-  default?: unknown;
-  choices?: string[] | string;
-  min?: number;
-  max?: number;
-  new_question?: boolean;
-  [key: string]: unknown;
-}
-
-/** A template's survey, as /survey_spec/ returns it. */
-export interface SurveyConfig {
-  spec?: SurveyQuestion[];
-  name?: string;
-  description?: string;
-  [key: string]: unknown;
-}
-
-/**
  * Which steps of the wizard the user has already been on, keyed by step id.
  * A step only reports its errors once it has been visited.
  */
@@ -110,6 +63,8 @@ export interface LaunchStepDefinition {
   component: React.ReactNode;
   enableNext?: boolean;
   nextButtonText?: React.ReactNode;
+  /** False where an earlier step is blocked, so the nav cannot skip ahead. */
+  canJumpTo?: boolean;
 }
 
 /**
@@ -131,15 +86,16 @@ export interface LaunchStep {
   hasError?: boolean;
   /** The survey step alone passes its spec back, for the preview step. */
   surveyConfig?: SurveyConfig | null;
-  setTouched: (
-    setFieldTouched: (
-      field: string,
-      touched?: boolean,
-      shouldValidate?: boolean
-    ) => void
-  ) => void;
+  setTouched: (setFieldTouched: SetFieldTouched) => void;
   validate: () => void;
 }
+
+/** Formik's own setFieldTouched, which each step is handed to mark its own. */
+export type SetFieldTouched = (
+  field: string,
+  touched?: boolean,
+  shouldValidate?: boolean
+) => void;
 
 /**
  * The tooltip text a prompt field shows, keyed by field name.

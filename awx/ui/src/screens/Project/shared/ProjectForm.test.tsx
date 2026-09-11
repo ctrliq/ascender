@@ -3,6 +3,7 @@ import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { CredentialTypesAPI, ProjectsAPI, RootAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ProjectForm from './ProjectForm';
 
@@ -90,7 +91,7 @@ describe('<ProjectForm />', () => {
       data: {
         BRAND_NAME: 'AWX',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
     vi.mocked(ProjectsAPI.readOptions).mockResolvedValue(
       projectOptionsResolve as unknown as ApiResponse<unknown>
     );

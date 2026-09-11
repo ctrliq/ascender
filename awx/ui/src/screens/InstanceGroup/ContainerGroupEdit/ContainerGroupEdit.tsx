@@ -30,7 +30,7 @@ function ContainerGroupEdit({ instanceGroup }: ContainerGroupEditProps) {
       const { data } = await InstanceGroupsAPI.readInstanceGroupOptions(
         instanceGroup.id
       );
-      return data.actions.PUT.pod_spec_override.default;
+      return data.actions.PUT?.pod_spec_override?.default;
     }, [instanceGroup.id]),
     {
       initialPodSpec: {},

@@ -1,4 +1,4 @@
-import type { SetBreadcrumb, Untyped } from 'types/api';
+import type { ReceptorAddress, SetBreadcrumb } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { CardBody } from 'components/Card';
@@ -22,6 +22,17 @@ import useExpanded from 'hooks/useExpanded';
 import useSelected from 'hooks/useSelected';
 import type { QSParams } from 'util/qs';
 import InstancePeerListItem from './InstancePeerListItem';
+
+/**
+ * A receptor address with the instance it belongs to named beside it.
+ *
+ * The addresses endpoint gives only the instance's id, so the list looks each
+ * one up and copies the two fields it shows onto the address.
+ */
+type PeerAddress = ReceptorAddress & {
+  hostname?: string | null;
+  node_type?: string | null;
+};
 
 const QS_CONFIG = getQSConfig('peer', {
   page: 1,
@@ -68,33 +79,32 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
         InstancesAPI.read(),
       ]);
 
-      const address_list = [];
+      const address_list: PeerAddress[] = [];
 
-      for (let q = 0; q < results.length; q++) {
-        const receptor = results[q];
-        if (receptor.managed === true) continue;
-        const host = instances.data.results.filter(
-          (obj: Untyped) => obj.id === receptor.instance
-        )[0];
-        const copy = receptor;
-        copy.hostname = host.hostname;
-        copy.node_type = host.node_type;
-        address_list.push(copy);
-      }
+      results.forEach((receptor) => {
+        const host = instances.data.results.find(
+          (obj) => obj.id === receptor.instance
+        );
+        address_list.push({
+          ...receptor,
+          hostname: host?.hostname,
+          node_type: host?.node_type,
+        });
+      });
 
       return {
         instance: detail,
         peers: address_list,
         count: address_list.length,
-        relatedSearchableKeys: (actions?.data?.related_search_fields || []).map(
-          (val: Untyped) => val.slice(0, -8)
+        relatedSearchableKeys: (actions.data.related_search_fields || []).map(
+          (val) => val.slice(0, -8)
         ),
-        searchableKeys: getSearchableKeys(actions.data.actions?.GET),
+        searchableKeys: getSearchableKeys(actions.data.actions.GET),
       };
     }, [id, location]),
     {
       instance: {},
-      peers: [],
+      peers: [] as PeerAddress[],
       count: 0,
       relatedSearchableKeys: [],
       searchableKeys: [],
@@ -118,17 +128,16 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
 
   const fetchPeersToAssociate = useCallback(
     async (params: QSParams) => {
-      const address_list = [];
+      const address_list: PeerAddress[] = [];
 
       // do not show this instance or instances that are already peered
       // to this instance (reverse_peers)
-      const not_instances = instance.reverse_peers;
-      not_instances.push(instance.id);
+      const not_instances = [...(instance.reverse_peers ?? []), instance.id];
 
       params.not__instance = not_instances;
       params.is_internal = false;
       // do not show the current peers
-      if (instance.peers.length > 0) {
+      if (instance.peers?.length) {
         params.not__id__in = instance.peers.join(',');
       }
 
@@ -136,24 +145,21 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
 
       // retrieve the instances that are associated with those receptor addresses
       const instance_ids = receptoraddresses.data.results.map(
-        (obj: Untyped) => obj.instance
+        (obj) => obj.instance
       );
       const instance_ids_str = instance_ids.join(',');
       const instances = await InstancesAPI.read({ id__in: instance_ids_str });
 
-      for (let q = 0; q < receptoraddresses.data.results.length; q++) {
-        const receptor = receptoraddresses.data.results[q];
-
-        const host = instances.data.results.filter(
-          (obj: Untyped) => obj.id === receptor.instance
-        )[0];
-
-        const copy = receptor;
-        copy.hostname = host.hostname;
-        copy.node_type = host.node_type;
-        copy.canonical = copy.canonical.toString();
-        address_list.push(copy);
-      }
+      receptoraddresses.data.results.forEach((receptor) => {
+        const host = instances.data.results.find(
+          (obj) => obj.id === receptor.instance
+        );
+        address_list.push({
+          ...receptor,
+          hostname: host?.hostname,
+          node_type: host?.node_type,
+        });
+      });
 
       receptoraddresses.data.results = address_list;
 
@@ -168,17 +174,17 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
     error: associateError,
   } = useRequest(
     useCallback(
-      async (instancesPeerToAssociate: Untyped) => {
-        const selected_peers = instancesPeerToAssociate.map(
-          (obj: Untyped) => obj.id
-        );
+      async (instancesPeerToAssociate: PeerAddress[]) => {
+        const selected_peers = instancesPeerToAssociate.map((obj) => obj.id);
 
-        const new_peers = [...new Set([...instance.peers, ...selected_peers])];
+        const new_peers = [
+          ...new Set([...(instance.peers ?? []), ...selected_peers]),
+        ];
         await InstancesAPI.update(instance.id, { peers: new_peers });
 
         fetchPeers();
         addToast({
-          id: instancesPeerToAssociate,
+          id: instance.id,
           title: t`Peers update on ${instance.hostname}.  Please be sure to run the install bundle for ${instance.hostname} again in order to see changes take effect.`,
           variant: AlertVariant.success,
           hasTimeout: true,
@@ -194,15 +200,10 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
     error: disassociateError,
   } = useRequest(
     useCallback(async () => {
-      let new_peers = instance.peers;
-
       const selected_ids = selected.map((obj) => obj.id);
-
-      for (let i = 0; i < selected_ids.length; i++) {
-        new_peers = new_peers.filter(
-          (s_id: Untyped) => s_id !== selected_ids[i]
-        );
-      }
+      const new_peers = (instance.peers ?? []).filter(
+        (s_id) => !selected_ids.includes(s_id)
+      );
       await InstancesAPI.update(instance.id, { peers: new_peers });
 
       fetchPeers();
@@ -292,7 +293,7 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
             ]}
           />
         )}
-        renderRow={(peer: Untyped, index: number) => (
+        renderRow={(peer: PeerAddress, index: number) => (
           <InstancePeerListItem
             isSelected={selected.some((row) => row.id === peer.id)}
             onSelect={() => handleSelect(peer)}

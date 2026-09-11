@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { InventoriesAPI, OrganizationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockInventorySource from '../shared/data.inventory_source.json';
 import InventorySource from './InventorySource';
@@ -48,7 +48,7 @@ describe('<InventorySource />', () => {
     });
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: { results: [{ id: 1, name: 'isNotifAdmin' }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
   });
 
   afterEach(() => {
@@ -95,7 +95,7 @@ describe('<InventorySource />', () => {
   test('should not render notifications tab', async () => {
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: { results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     renderInventorySource('/inventories/inventory/2/sources/123/details');
     await screen.findByRole('tab', { name: 'Details' });
     expect(screen.queryByText('Notifications')).not.toBeInTheDocument();

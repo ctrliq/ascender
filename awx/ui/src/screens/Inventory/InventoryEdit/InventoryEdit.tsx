@@ -1,4 +1,4 @@
-import type { Inventory, Untyped } from 'types/api';
+import type { AnyInventory, Untyped } from 'types/api';
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -10,7 +10,7 @@ import useIsMounted from 'hooks/useIsMounted';
 import InventoryForm from '../shared/InventoryForm';
 
 export interface InventoryEditProps {
-  inventory: Inventory;
+  inventory: AnyInventory;
   [key: string]: unknown;
 }
 

@@ -1,9 +1,8 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { ProjectsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import ProjectLookup from './ProjectLookup';
 
@@ -16,7 +15,7 @@ describe('<ProjectLookup />', () => {
         actions: { GET: {} },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -30,7 +29,7 @@ describe('<ProjectLookup />', () => {
         results: [project],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>
@@ -46,7 +45,7 @@ describe('<ProjectLookup />', () => {
         results: [{ id: 1, name: 'Test', url: '/api/v2/projects/1/' }],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>
@@ -66,7 +65,7 @@ describe('<ProjectLookup />', () => {
         ],
         count: 2,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>
@@ -83,7 +82,7 @@ describe('<ProjectLookup />', () => {
         results: [{ id: 1, name: 'Test', url: '/api/v2/projects/1/' }],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>
         <ProjectLookup isOverrideDisabled onChange={() => {}} />
@@ -98,7 +97,7 @@ describe('<ProjectLookup />', () => {
   test('project lookup should be disabled', async () => {
     vi.mocked(ProjectsAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>
         <ProjectLookup onChange={() => {}} />
@@ -113,7 +112,7 @@ describe('<ProjectLookup />', () => {
   test('should not show helper text when valid', async () => {
     vi.mocked(ProjectsAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>
         <ProjectLookup
@@ -130,7 +129,7 @@ describe('<ProjectLookup />', () => {
   test('should show helper text when invalid', async () => {
     vi.mocked(ProjectsAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>
         <ProjectLookup

@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 import { screen, within } from '@testing-library/react';
 import { InventoriesAPI, GroupsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -66,7 +66,7 @@ function mockSuccessfulApis() {
       count: mockGroups.length,
       results: mockGroups,
     },
-  } as unknown as ApiResponse<Untyped>);
+  } as unknown as ResponseOf<typeof InventoriesAPI.readGroups>);
   vi.mocked(InventoriesAPI.readGroupsOptions).mockResolvedValue({
     data: {
       actions: {
@@ -74,7 +74,7 @@ function mockSuccessfulApis() {
         POST: {},
       },
     },
-  } as unknown as ApiResponse<Untyped>);
+  } as unknown as ResponseOf<typeof InventoriesAPI.readGroupsOptions>);
   vi.mocked(InventoriesAPI.readAdHocOptions).mockResolvedValue({
     data: {
       actions: {
@@ -89,7 +89,7 @@ function mockSuccessfulApis() {
         POST: {},
       },
     },
-  } as unknown as ApiResponse<Untyped>);
+  } as unknown as ResponseOf<typeof InventoriesAPI.readAdHocOptions>);
 }
 
 describe('<InventoryGroupsList />', () => {
@@ -163,7 +163,7 @@ describe('<InventoryGroupsList />', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readAdHocOptions>);
     renderUnder('/inventories/inventory/3/groups');
     await screen.findByRole('link', { name: 'foo' });
     expect(

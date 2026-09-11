@@ -77,17 +77,25 @@ function ManagementJob({ setBreadcrumb }: ManagementJobProps) {
 
   const createSchedule = useCallback(
     (data: Untyped) =>
-      SystemJobTemplatesAPI.createSchedule(result?.systemJobTemplate.id, data),
+      SystemJobTemplatesAPI.createSchedule(
+        result?.systemJobTemplate.id as number,
+        data
+      ),
     [result]
   );
   const loadSchedules = useCallback(
     (params: QSParams) =>
-      SystemJobTemplatesAPI.readSchedules(result?.systemJobTemplate.id, params),
+      SystemJobTemplatesAPI.readSchedules(
+        result?.systemJobTemplate.id as number,
+        params
+      ),
     [result]
   );
   const loadScheduleOptions = useCallback(
     () =>
-      SystemJobTemplatesAPI.readScheduleOptions(result?.systemJobTemplate.id),
+      SystemJobTemplatesAPI.readScheduleOptions(
+        result?.systemJobTemplate.id as number
+      ),
     [result]
   );
 

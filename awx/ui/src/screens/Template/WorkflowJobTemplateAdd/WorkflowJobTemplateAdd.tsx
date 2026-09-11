@@ -62,7 +62,7 @@ function WorkflowJobTemplateAdd() {
         const {
           data: { results },
         } = await OrganizationsAPI.read();
-        organizationId = results[0].id;
+        organizationId = results[0]?.id;
       } catch (err) {
         throw err;
       }

@@ -1,4 +1,4 @@
-import type { Inventory, Host, Untyped } from 'types/api';
+import type { AnyInventory, Host, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CardBody } from 'components/Card';
@@ -8,7 +8,7 @@ import { HostsAPI } from 'api';
 
 export interface InventoryHostEditProps {
   host: Host;
-  inventory: Inventory;
+  inventory: AnyInventory;
   [key: string]: unknown;
 }
 

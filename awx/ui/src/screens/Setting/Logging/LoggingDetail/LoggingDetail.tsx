@@ -19,7 +19,7 @@ import { sortNestedDetails, pluck } from '../../shared/settingUtils';
 
 function LoggingDetail() {
   const { me } = useConfig();
-  const { GET: options } = useSettings();
+  const { GET: options = {} } = useSettings();
   const { t } = useLingui();
 
   const {
@@ -50,8 +50,7 @@ function LoggingDetail() {
 
       const mergedData: Record<string, Untyped> = {};
       Object.keys(loggingData).forEach((key) => {
-        mergedData[key] = options[key];
-        mergedData[key].value = loggingData[key];
+        mergedData[key] = { ...options[key], value: loggingData[key] };
       });
 
       return sortNestedDetails(mergedData);

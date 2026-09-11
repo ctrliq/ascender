@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { NodeTemplate, Untyped } from 'types/api';
 import React from 'react';
 import { t } from '@lingui/core/macro';
 import { useFormikContext } from 'formik';
@@ -18,7 +18,7 @@ const STEP_ID = 'survey';
 export default function useSurveyStep(
   launchConfig: LaunchConfig,
   surveyConfig: SurveyConfig,
-  resource: Record<string, unknown>,
+  resource: NodeTemplate | null,
   visitedSteps: VisitedSteps
 ): LaunchStep {
   const { setFieldError, values } = useFormikContext<LaunchPromptValues>();

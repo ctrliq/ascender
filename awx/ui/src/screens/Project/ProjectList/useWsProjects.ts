@@ -1,8 +1,8 @@
-import type { Untyped } from 'types/api';
+import type { Project } from 'types/api';
 import { useState, useEffect } from 'react';
 import useWebsocket from 'hooks/useWebsocket';
 
-export default function useWsProjects(initialProjects: Untyped) {
+export default function useWsProjects(initialProjects: Project[]) {
   const [projects, setProjects] = useState(initialProjects);
   const lastMessage = useWebsocket({
     jobs: ['status_changed'],
@@ -17,29 +17,27 @@ export default function useWsProjects(initialProjects: Untyped) {
     if (!lastMessage?.unified_job_id || lastMessage.type !== 'project_update') {
       return;
     }
-    const index = projects.findIndex(
-      (p: Untyped) => p.id === lastMessage.project_id
-    );
+    const index = projects.findIndex((p) => p.id === lastMessage.project_id);
     if (index === -1) {
       return;
     }
 
-    const project = projects[index];
-    const updatedProject = {
+    const project = projects[index] as Project;
+    const updatedProject: Project = {
       ...project,
       summary_fields: {
         ...project.summary_fields,
         current_job: {
-          id: lastMessage.unified_job_id,
+          id: lastMessage.unified_job_id as number,
           status: lastMessage.status,
           finished: lastMessage.finished,
         },
       },
+      // A finished sync leaves the revision the list holds stale, and blanking
+      // it is what makes the row show the new one on the next read. Every
+      // reader tests it for truth, so the empty string reads the same as null.
+      ...(lastMessage.finished ? { scm_revision: '' } : {}),
     };
-
-    if (lastMessage.finished) {
-      updatedProject.scm_revision = null;
-    }
 
     setProjects([
       ...projects.slice(0, index),

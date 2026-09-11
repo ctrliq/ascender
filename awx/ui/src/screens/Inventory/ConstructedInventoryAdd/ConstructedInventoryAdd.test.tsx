@@ -4,6 +4,7 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { ConstructedInventoriesAPI, InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryAdd from './ConstructedInventoryAdd';
 
@@ -55,10 +56,10 @@ describe('<ConstructedInventoryAdd />', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ConstructedInventoriesAPI.readOptions>);
     vi.mocked(ConstructedInventoriesAPI.create).mockResolvedValue({
       data: { id: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ConstructedInventoriesAPI.create>);
     vi.mocked(InventoriesAPI.associateInventory).mockResolvedValue(
       undefined as unknown as ApiResponse<any>
     );

@@ -327,7 +327,7 @@ function Visualizer({ template }: VisualizerProps) {
         } = await OrganizationsAPI.read({ page_size: 1, page: 1 });
         dispatch({
           type: 'SET_DEFAULT_ORGANIZATION',
-          value: results[0]?.id,
+          value: results[0]?.id ?? null,
         });
 
         const workflowNodes = await fetchWorkflowNodes(template.id);

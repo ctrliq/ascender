@@ -27,7 +27,7 @@ import {
 function MiscSystemDetail() {
   const { t } = useLingui();
   const { me } = useConfig();
-  const { GET: options } = useSettings();
+  const { GET: options = {} } = useSettings();
 
   const {
     isLoading,
@@ -41,7 +41,7 @@ function MiscSystemDetail() {
         const {
           data: { name },
         } = await ExecutionEnvironmentsAPI.readDetail(
-          data.DEFAULT_EXECUTION_ENVIRONMENT
+          data.DEFAULT_EXECUTION_ENVIRONMENT as number
         );
         data.DEFAULT_EXECUTION_ENVIRONMENT = name;
       }

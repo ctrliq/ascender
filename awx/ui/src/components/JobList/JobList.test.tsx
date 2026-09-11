@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
@@ -12,6 +11,7 @@ import {
   WorkflowJobsAPI,
   InventorySourcesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -136,7 +136,7 @@ describe('<JobList />', () => {
   beforeEach(() => {
     vi.mocked(UnifiedJobsAPI.read).mockResolvedValue({
       data: { count: 3, results: mockResults },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
 
     vi.mocked(UnifiedJobsAPI.readOptions).mockResolvedValue({
       data: {
@@ -146,7 +146,7 @@ describe('<JobList />', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UnifiedJobsAPI.readOptions>);
     vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -160,7 +160,7 @@ describe('<JobList />', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
     debug = global.console.debug;
     global.console.debug = () => {};
   });
@@ -213,7 +213,7 @@ describe('<JobList />', () => {
   test('should send all corresponding delete API requests', async () => {
     vi.mocked(UnifiedJobsAPI.read).mockResolvedValue({
       data: { count: 6, results: deletableResults },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
     (AdHocCommandsAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
     (InventoryUpdatesAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
     (JobsAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
@@ -263,7 +263,7 @@ describe('<JobList />', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
     (ProjectUpdatesAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
     const jobListParams = {
       order_by: '-finished',
@@ -327,7 +327,7 @@ describe('<JobList />', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
 
     const { user } = renderWithContexts(<JobList />);
     await screen.findByRole('link', { name: '1 — job 1' });
@@ -341,7 +341,7 @@ describe('<JobList />', () => {
   test('error is shown when job not successfully deleted from api', async () => {
     vi.mocked(UnifiedJobsAPI.read).mockResolvedValue({
       data: { count: 6, results: deletableResults },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
     vi.mocked(JobsAPI.destroy).mockImplementation(() => {
       throw Object.assign(new Error('An error occurred'), {
         response: {
@@ -392,7 +392,7 @@ describe('<JobList />', () => {
           },
         })),
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
     (AdHocCommandsAPI as Untyped).cancel = vi.fn().mockResolvedValue({});
     (InventoryUpdatesAPI as Untyped).cancel = vi.fn().mockResolvedValue({});
     (JobsAPI as Untyped).cancel = vi.fn().mockResolvedValue({});

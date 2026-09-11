@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, WorkflowJobTemplateNode } from 'types/api';
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -37,7 +37,11 @@ const Wrapper = styled.div`
   position: relative;
 `;
 
-const fetchWorkflowNodes = async (jobId: Untyped, pageNo = 1, nodes = []) => {
+const fetchWorkflowNodes = async (
+  jobId: number,
+  pageNo = 1,
+  nodes: WorkflowJobTemplateNode[] = []
+): Promise<WorkflowJobTemplateNode[]> => {
   const { data } = await WorkflowJobsAPI.readNodes(jobId, {
     page_size: 200,
     page: pageNo,

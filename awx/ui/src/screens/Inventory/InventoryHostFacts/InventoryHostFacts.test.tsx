@@ -1,8 +1,8 @@
-import type { Untyped, Host } from 'types/api';
-import type { ApiResponse } from 'api/Base';
+import type { Host } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { HostsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostFacts from './InventoryHostFacts';
 import mockHost from '../shared/data.host.json';
@@ -18,7 +18,7 @@ describe('<InventoryHostFacts />', () => {
   test('initially renders successfully', async () => {
     vi.mocked(HostsAPI.readFacts).mockResolvedValue({
       data: mockHostFacts,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof HostsAPI.readFacts>);
     renderWithContexts(
       <InventoryHostFacts host={mockHost as unknown as Host} />
     );

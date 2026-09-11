@@ -75,14 +75,15 @@ function NotificationList({
         NotificationTemplatesAPI.readOptions(),
       ]);
 
-      const labels =
-        actionsResponse.data.actions.GET.notification_type.choices.reduce(
-          (map: Record<string, string>, notifType: Untyped) => ({
-            ...map,
-            [notifType[0]]: notifType[1],
-          }),
-          {}
-        );
+      const labels = (
+        actionsResponse.data.actions.GET?.notification_type?.choices ?? []
+      ).reduce(
+        (map: Record<string, string>, notifType: Untyped) => ({
+          ...map,
+          [notifType[0]]: notifType[1],
+        }),
+        {}
+      );
 
       const idMatchParams =
         notificationsResults.length > 0

@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -6,8 +5,9 @@ import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 import { SettingsAPI } from 'api';
 import { SettingsProvider } from 'contexts/Settings';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
-import mockAllOptions from '../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../testUtils/settingOptions';
 import SAML from './SAML';
 
 vi.mock('../../../api');
@@ -35,7 +35,7 @@ describe('<SAML />', () => {
         SOCIAL_AUTH_SAML_USER_FLAGS_BY_ATTR: {},
         SAML_AUTO_CREATE_OBJECTS: false,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -45,7 +45,7 @@ describe('<SAML />', () => {
   function renderSAML(initialEntries: Untyped) {
     const history = createMemoryHistory({ initialEntries });
     return renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <Routes>
           <Route path="/settings/saml/*" element={<SAML />} />
         </Routes>

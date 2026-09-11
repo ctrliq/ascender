@@ -41,21 +41,20 @@ function Application({ setBreadcrumb }: ApplicationProps) {
         ApplicationsAPI.readDetail(id),
         ApplicationsAPI.readOptions(),
       ]);
-      const authorization =
-        options.data.actions.GET.authorization_grant_type.choices.map(
-          (choice: Untyped) => ({
-            value: choice[0],
-            label: choice[1],
-            key: choice[0],
-          })
-        );
-      const clientType = options.data.actions.GET.client_type.choices.map(
-        (choice: Untyped) => ({
-          value: choice[0],
-          label: choice[1],
-          key: choice[0],
-        })
-      );
+      const authorization = (
+        options.data.actions.GET?.authorization_grant_type?.choices ?? []
+      ).map((choice: Untyped) => ({
+        value: choice[0],
+        label: choice[1],
+        key: choice[0],
+      }));
+      const clientType = (
+        options.data.actions.GET?.client_type?.choices ?? []
+      ).map((choice: Untyped) => ({
+        value: choice[0],
+        label: choice[1],
+        key: choice[0],
+      }));
       setBreadcrumb(detail.data);
 
       return {

@@ -1,8 +1,14 @@
 import type { QSParams } from 'util/qs';
+import type {
+  Instance,
+  InstanceGroup,
+  Paginated,
+  ReceptorAddress,
+} from '../../types/api';
 import Base from '../Base';
 import type { Http } from '../Base';
 
-class Instances extends Base {
+class Instances extends Base<Instance> {
   constructor(http?: Http) {
     super(http);
     this.baseUrl = 'api/v2/instances/';
@@ -19,19 +25,28 @@ class Instances extends Base {
   }
 
   readHealthCheckDetail(instanceId: number | string) {
-    return this.http.get(`${this.baseUrl}${instanceId}/health_check/`);
+    return this.http.get<Instance>(
+      `${this.baseUrl}${instanceId}/health_check/`
+    );
   }
 
   readPeers(instanceId: number | string, params?: QSParams) {
-    return this.http.get(`${this.baseUrl}${instanceId}/peers/`, { params });
+    return this.http.get<Paginated<ReceptorAddress>>(
+      `${this.baseUrl}${instanceId}/peers/`,
+      { params }
+    );
   }
 
   readInstanceGroup(instanceId: number | string) {
-    return this.http.get(`${this.baseUrl}${instanceId}/instance_groups/`);
+    return this.http.get<Paginated<InstanceGroup>>(
+      `${this.baseUrl}${instanceId}/instance_groups/`
+    );
   }
 
   readReceptorAddresses(instanceId: number | string) {
-    return this.http.get(`${this.baseUrl}${instanceId}/receptor_addresses/`);
+    return this.http.get<Paginated<ReceptorAddress>>(
+      `${this.baseUrl}${instanceId}/receptor_addresses/`
+    );
   }
 
   updateReceptorAddresses(instanceId: number | string, data: unknown) {

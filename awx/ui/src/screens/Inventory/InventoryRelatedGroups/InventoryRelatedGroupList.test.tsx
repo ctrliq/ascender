@@ -5,6 +5,7 @@ import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { GroupsAPI, InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -85,7 +86,7 @@ describe('<InventoryRelatedGroupList />', () => {
   beforeEach(() => {
     vi.mocked(GroupsAPI.readChildren).mockResolvedValue({
       data: { ...mockRelatedGroups },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof GroupsAPI.readChildren>);
     vi.mocked(InventoriesAPI.readGroupsOptions).mockResolvedValue(
       groupsOptions as unknown as ApiResponse<any>
     );
@@ -156,7 +157,7 @@ describe('<InventoryRelatedGroupList />', () => {
         actions: { GET: {} },
         related_search_fields: groupsOptions.data.related_search_fields,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readGroupsOptions>);
     renderUnder(url);
     await screen.findAllByRole('link', { name: /Inventory 0/ });
     expect(
@@ -167,9 +168,9 @@ describe('<InventoryRelatedGroupList />', () => {
   test('should associate existing group', async () => {
     vi.mocked(GroupsAPI.readPotentialGroups).mockResolvedValue({
       data: { count: mockGroups.length, results: mockGroups },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof GroupsAPI.readPotentialGroups>);
     vi.mocked(GroupsAPI.associateChildGroup).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof GroupsAPI.associateChildGroup>
     );
     const { user } = renderUnder(url);
     await screen.findAllByRole('link', { name: /Inventory 0/ });
@@ -209,7 +210,7 @@ describe('<InventoryRelatedGroupList />', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readAdHocOptions>);
     renderUnder(url);
     await screen.findAllByRole('link', { name: /Inventory 0/ });
     expect(
@@ -222,7 +223,7 @@ describe('<InventoryRelatedGroupList> for constructed inventories', () => {
   beforeEach(() => {
     vi.mocked(GroupsAPI.readChildren).mockResolvedValue({
       data: { ...mockRelatedGroups },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof GroupsAPI.readChildren>);
     vi.mocked(InventoriesAPI.readGroupsOptions).mockResolvedValue(
       groupsOptions as unknown as ApiResponse<any>
     );

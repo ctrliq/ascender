@@ -17,8 +17,17 @@ import { SettingDetail } from '../../shared';
 function SAMLDetail() {
   const { t } = useLingui();
   const { me } = useConfig();
-  const { GET: options } = useSettings();
-  options.SOCIAL_AUTH_SAML_SP_PUBLIC_CERT.type = 'certificate';
+  const { GET: allOptions = {} } = useSettings();
+  // The certificate is declared as a plain string, which would render it as
+  // one long line; the detail draws it as a certificate instead. Overridden on
+  // a copy, since the options block is shared with every other settings screen.
+  const options: typeof allOptions = {
+    ...allOptions,
+    SOCIAL_AUTH_SAML_SP_PUBLIC_CERT: {
+      ...allOptions.SOCIAL_AUTH_SAML_SP_PUBLIC_CERT,
+      type: 'certificate',
+    },
+  };
 
   const {
     isLoading,
@@ -60,7 +69,7 @@ function SAMLDetail() {
       <RoutedTabs tabsArray={tabsArray} />
       <CardBody>
         {isLoading && <ContentLoading />}
-        {!isLoading && error && <ContentError error={error} />}
+        {!isLoading && Boolean(error) && <ContentError error={error} />}
         {!isLoading && saml && (
           <DetailList>
             {Object.keys(saml).map((key) => {

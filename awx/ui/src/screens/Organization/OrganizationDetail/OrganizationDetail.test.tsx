@@ -1,12 +1,22 @@
-import type { Untyped, Organization } from 'types/api';
+import type { Organization } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 
-import { OrganizationsAPI, CredentialsAPI } from 'api';
+import {
+  OrganizationsAPI,
+  CredentialsAPI,
+  TeamsAPI,
+  NotificationTemplatesAPI,
+  ExecutionEnvironmentsAPI,
+  ProjectsAPI,
+  InventoriesAPI,
+  ApplicationsAPI,
+} from 'api';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -48,9 +58,29 @@ describe('<OrganizationDetail />', () => {
   };
 
   beforeEach(() => {
+    // Deleting one row first counts what depends on it, through one read
+    // per related endpoint. Nothing here depends on the row being deleted.
+    vi.mocked(TeamsAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof TeamsAPI.read>);
+    vi.mocked(NotificationTemplatesAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof NotificationTemplatesAPI.read>);
+    vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
+    vi.mocked(ProjectsAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
+    vi.mocked(InventoriesAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
+    vi.mocked(ApplicationsAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof ApplicationsAPI.read>);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
 
     vi.mocked(OrganizationsAPI.readInstanceGroups).mockResolvedValue(
       mockInstanceGroups as unknown as ApiResponse<any>
@@ -162,9 +192,9 @@ describe('<OrganizationDetail />', () => {
   test('expected api calls are made for delete', async () => {
     vi.mocked(OrganizationsAPI.readInstanceGroups).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readInstanceGroups>);
     vi.mocked(OrganizationsAPI.destroy).mockResolvedValueOnce(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof OrganizationsAPI.destroy>
     );
 
     const { user } = renderWithContexts(
@@ -227,7 +257,7 @@ describe('<OrganizationDetail />', () => {
       data: {
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readInstanceGroups>);
 
     renderWithContexts(
       <OrganizationDetail
@@ -242,7 +272,7 @@ describe('<OrganizationDetail />', () => {
   test('should not load galaxy credentials', async () => {
     vi.mocked(OrganizationsAPI.readInstanceGroups).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readInstanceGroups>);
 
     renderWithContexts(
       <OrganizationDetail

@@ -1,8 +1,15 @@
 import type { QSParams } from 'util/qs';
+import type {
+  AccessListEntry,
+  OptionsResponse,
+  Paginated,
+  Role,
+  Team,
+} from '../../types/api';
 import Base from '../Base';
 import type { Http } from '../Base';
 
-class Teams extends Base {
+class Teams extends Base<Team> {
   constructor(http?: Http) {
     super(http);
     this.baseUrl = 'api/v2/teams/';
@@ -22,27 +29,36 @@ class Teams extends Base {
   }
 
   readRoles(teamId: number | string, params?: QSParams) {
-    return this.http.get(`${this.baseUrl}${teamId}/roles/`, {
+    return this.http.get<Paginated<Role>>(`${this.baseUrl}${teamId}/roles/`, {
       params,
     });
   }
 
   readRoleOptions(teamId: number | string) {
-    return this.http.options(`${this.baseUrl}${teamId}/roles/`);
+    return this.http.options<OptionsResponse>(
+      `${this.baseUrl}${teamId}/roles/`
+    );
   }
 
   readAccessList(teamId: number | string, params?: QSParams) {
-    return this.http.get(`${this.baseUrl}${teamId}/access_list/`, {
-      params,
-    });
+    return this.http.get<Paginated<AccessListEntry>>(
+      `${this.baseUrl}${teamId}/access_list/`,
+      {
+        params,
+      }
+    );
   }
 
   readAccessOptions(id: number | string) {
-    return this.http.options(`${this.baseUrl}${id}/access_list/`);
+    return this.http.options<OptionsResponse>(
+      `${this.baseUrl}${id}/access_list/`
+    );
   }
 
   readUsersAccessOptions(teamId: number | string) {
-    return this.http.options(`${this.baseUrl}${teamId}/users/`);
+    return this.http.options<OptionsResponse>(
+      `${this.baseUrl}${teamId}/users/`
+    );
   }
 }
 

@@ -19,7 +19,7 @@ export interface DisassociableItem {
   name?: string | null;
   hostname?: string | null;
   /** Instances only: a control node cannot be disassociated. */
-  node_type?: string;
+  node_type?: string | null;
   summary_fields?: SummaryFields;
   [key: string]: unknown;
 }

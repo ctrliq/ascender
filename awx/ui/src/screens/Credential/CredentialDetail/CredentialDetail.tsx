@@ -69,7 +69,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
         CredentialsAPI.readInputSources(credentialId),
       ]);
       return {
-        fields: credentialTypeInputs.fields || [],
+        fields: credentialTypeInputs?.fields || [],
         managedByTower: managed,
         inputSources: loadedInputSources.reduce<Record<string, Untyped>>(
           (inputSourcesMap, inputSource: Untyped) => {

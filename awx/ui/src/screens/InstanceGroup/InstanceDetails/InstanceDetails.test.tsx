@@ -5,6 +5,7 @@ import { screen, waitFor } from '@testing-library/react';
 import * as ConfigContext from 'contexts/Config';
 import useDebounce from 'hooks/useDebounce';
 import { InstancesAPI, InstanceGroupsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -121,7 +122,7 @@ describe('<InstanceDetails/>', () => {
       associatedInstances as unknown as ApiResponse<any>
     );
     vi.mocked(InstancesAPI.readDetail).mockResolvedValue(
-      instanceDetail() as unknown as ApiResponse<Untyped>
+      instanceDetail() as unknown as ResponseOf<typeof InstancesAPI.readDetail>
     );
     vi.mocked(InstancesAPI.readHealthCheckDetail).mockResolvedValue({
       data: {
@@ -136,7 +137,7 @@ describe('<InstanceDetails/>', () => {
         mem_capacity: 38,
         capacity: 38,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.readHealthCheckDetail>);
   });
 
   afterEach(() => {
@@ -162,7 +163,7 @@ describe('<InstanceDetails/>', () => {
     setMe({ is_superuser: true });
     vi.mocked(InstancesAPI.update).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.update>);
     const { container, user } = renderDetails();
     await screen.findByRole('button', { name: 'Run health check' });
 
@@ -206,7 +207,7 @@ describe('<InstanceDetails/>', () => {
     setMe({ is_superuser: true });
     vi.mocked(InstanceGroupsAPI.readInstances).mockResolvedValue({
       data: { results: [{ id: 3 }, { id: 3 }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readInstances>);
     renderDetails();
 
     expect(
@@ -243,7 +244,7 @@ describe('<InstanceDetails/>', () => {
       vi.mocked(InstancesAPI.readDetail).mockResolvedValue(
         instanceDetail({
           node_type: nodeType,
-        }) as unknown as ApiResponse<Untyped>
+        }) as unknown as ResponseOf<typeof InstancesAPI.readDetail>
       );
       renderDetails();
       // The toggle always renders once details load; use it as a ready signal.
@@ -258,7 +259,7 @@ describe('<InstanceDetails/>', () => {
   test('should call disassociate', async () => {
     setMe({ is_superuser: true });
     vi.mocked(InstanceGroupsAPI.disassociateInstance).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof InstanceGroupsAPI.disassociateInstance>
     );
     const { user } = renderDetails();
     await screen.findByRole('button', { name: 'Disassociate' });

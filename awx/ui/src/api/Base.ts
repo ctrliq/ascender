@@ -7,11 +7,11 @@
 import { encodeQueryString } from 'util/qs';
 import type { QSParams } from 'util/qs';
 import debounce from 'util/debounce';
-import type { Untyped } from '../types/api';
+import type { OptionsResponse, Paginated } from '../types/api';
 import { SESSION_TIMEOUT_KEY } from '../constants';
 
 /** A single API response, in the shape every caller destructures. */
-export interface ApiResponse<T = Untyped> {
+export interface ApiResponse<T = unknown> {
   data: T;
   status: number;
   headers: Record<string, string>;
@@ -30,45 +30,36 @@ export interface RequestConfig extends Partial<Omit<RequestInit, 'headers'>> {
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS';
 
-/*
- * The default response type is Untyped rather than unknown, which is a
- * migration decision worth stating. unknown is the honest default and would
- * force all 300 or so call sites to declare what their endpoint returns before
- * anything compiles. Untyped says the same thing, that the response has not
- * been described yet, while letting the tree build, and every one of them is
- * greppable. A call that names its type, read<Paginated<Job>>(), still gets it.
- */
-
 /**
  * The transport every model talks through. Declared as an interface because
  * the test suite substitutes its own, and typing it is what makes a mock that
  * does not match the real client a build error rather than a runtime surprise.
  */
 export interface Http {
-  get<T = Untyped>(
+  get<T = unknown>(
     url: string,
     config?: RequestConfig
   ): Promise<ApiResponse<T>>;
-  post<T = Untyped>(
-    url: string,
-    data?: unknown,
-    config?: RequestConfig
-  ): Promise<ApiResponse<T>>;
-  put<T = Untyped>(
+  post<T = unknown>(
     url: string,
     data?: unknown,
     config?: RequestConfig
   ): Promise<ApiResponse<T>>;
-  patch<T = Untyped>(
+  put<T = unknown>(
     url: string,
     data?: unknown,
     config?: RequestConfig
   ): Promise<ApiResponse<T>>;
-  delete<T = Untyped>(
+  patch<T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: RequestConfig
+  ): Promise<ApiResponse<T>>;
+  delete<T = unknown>(
     url: string,
     config?: RequestConfig
   ): Promise<ApiResponse<T>>;
-  options<T = Untyped>(
+  options<T = unknown>(
     url: string,
     config?: RequestConfig
   ): Promise<ApiResponse<T>>;
@@ -146,7 +137,7 @@ function buildUrl(url: string, params?: QSParams): string {
   return `${url}${separator}${qs}`;
 }
 
-function makeRequest<T = Untyped>(
+function makeRequest<T = unknown>(
   method: HttpMethod,
   url: string,
   dataOrConfig?: unknown,
@@ -222,7 +213,16 @@ const defaultHttp: Http = {
   options: (url, config) => makeRequest('OPTIONS', url, config),
 };
 
-class Base {
+/**
+ * The endpoints every model gets for free, over whichever resource it serves.
+ *
+ * The resource is the type parameter, so `Base<Team>` answers a page of teams
+ * from read() and one team from readDetail(). A subclass reached through a
+ * mixin cannot pass it along, so those models override the calls they use
+ * instead. Every method still takes its own type argument, for the endpoints
+ * that answer with something other than the resource.
+ */
+class Base<TModel = unknown> {
   http: Http;
 
   baseUrl: string;
@@ -234,37 +234,37 @@ class Base {
     this.baseUrl = baseURL;
   }
 
-  create<T = Untyped>(data?: unknown) {
+  create<T = TModel>(data?: unknown) {
     return this.http.post<T>(this.baseUrl, data);
   }
 
-  destroy<T = Untyped>(id: number | string) {
+  destroy<T = void>(id: number | string) {
     return this.http.delete<T>(`${this.baseUrl}${id}/`);
   }
 
-  read<T = Untyped>(params?: QSParams) {
+  read<T = Paginated<TModel>>(params?: QSParams) {
     return this.http.get<T>(this.baseUrl, {
       params,
     });
   }
 
-  readDetail<T = Untyped>(id: number | string) {
+  readDetail<T = TModel>(id: number | string) {
     return this.http.get<T>(`${this.baseUrl}${id}/`);
   }
 
-  readOptions<T = Untyped>() {
+  readOptions<T = OptionsResponse>() {
     return this.http.options<T>(this.baseUrl);
   }
 
-  replace<T = Untyped>(id: number | string, data?: unknown) {
+  replace<T = TModel>(id: number | string, data?: unknown) {
     return this.http.put<T>(`${this.baseUrl}${id}/`, data);
   }
 
-  update<T = Untyped>(id: number | string, data?: unknown) {
+  update<T = TModel>(id: number | string, data?: unknown) {
     return this.http.patch<T>(`${this.baseUrl}${id}/`, data);
   }
 
-  copy<T = Untyped>(id: number | string, data?: unknown) {
+  copy<T = TModel>(id: number | string, data?: unknown) {
     return this.http.post<T>(`${this.baseUrl}${id}/copy/`, data);
   }
 }

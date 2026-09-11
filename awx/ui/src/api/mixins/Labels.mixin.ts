@@ -5,7 +5,7 @@ import type { Label, Paginated } from '../../types/api';
 const LabelsMixin = <T extends BaseConstructor>(parent: T) =>
   class extends parent {
     readLabels(id: number | string, params?: QSParams) {
-      return this.http.get(`${this.baseUrl}${id}/labels/`, {
+      return this.http.get<Paginated<Label>>(`${this.baseUrl}${id}/labels/`, {
         params,
       });
     }

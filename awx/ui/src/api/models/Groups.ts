@@ -1,8 +1,9 @@
 import type { QSParams } from 'util/qs';
+import type { Group, Host, Paginated } from '../../types/api';
 import Base from '../Base';
 import type { Http } from '../Base';
 
-class Groups extends Base {
+class Groups extends Base<Group> {
   constructor(http?: Http) {
     super(http);
     this.baseUrl = 'api/v2/groups/';
@@ -20,11 +21,11 @@ class Groups extends Base {
   }
 
   createHost(id: number | string, data: unknown) {
-    return this.http.post(`${this.baseUrl}${id}/hosts/`, data);
+    return this.http.post<Host>(`${this.baseUrl}${id}/hosts/`, data);
   }
 
   readAllHosts(id: number | string, params?: QSParams) {
-    return this.http.get(`${this.baseUrl}${id}/all_hosts/`, {
+    return this.http.get<Paginated<Host>>(`${this.baseUrl}${id}/all_hosts/`, {
       params,
     });
   }
@@ -37,7 +38,9 @@ class Groups extends Base {
   }
 
   readChildren(id: number | string, params?: QSParams) {
-    return this.http.get(`${this.baseUrl}${id}/children/`, { params });
+    return this.http.get<Paginated<Group>>(`${this.baseUrl}${id}/children/`, {
+      params,
+    });
   }
 
   associateChildGroup(id: number | string, childId: number | string) {
@@ -52,9 +55,12 @@ class Groups extends Base {
   }
 
   readPotentialGroups(id: number | string, params?: QSParams) {
-    return this.http.get(`${this.baseUrl}${id}/potential_children/`, {
-      params,
-    });
+    return this.http.get<Paginated<Group>>(
+      `${this.baseUrl}${id}/potential_children/`,
+      {
+        params,
+      }
+    );
   }
 }
 

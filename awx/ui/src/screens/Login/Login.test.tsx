@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { AuthAPI, RootAPI, MeAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import AWXLogin from './Login';
@@ -22,11 +22,11 @@ vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
   data: {
     BRAND_NAME: 'AWX',
   },
-} as unknown as ApiResponse<Untyped>);
+} as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
 
 vi.mocked(AuthAPI.read).mockResolvedValue({
   data: {},
-} as unknown as ApiResponse<Untyped>);
+} as unknown as ResponseOf<typeof AuthAPI.read>);
 
 function getUsernameInput(container: Untyped) {
   return container.querySelector('#pf-login-username-id');
@@ -52,18 +52,18 @@ describe('<Login />', () => {
       data: {
         BRAND_NAME: 'AWX',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
 
     vi.mocked(AuthAPI.read).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof AuthAPI.read>);
     vi.mocked(RootAPI.read).mockResolvedValue({
       data: {
         custom_login_info:
           '<div id="custom-button" onmouseover="alert()">TEST</div>',
         custom_logo: 'data:image/jpeg;base64,abc123',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof RootAPI.read>);
     realLocalStorage = window.localStorage;
     Object.defineProperty(window, 'localStorage', {
       value: {
@@ -123,7 +123,7 @@ describe('<Login />', () => {
   test('default logo renders Brand component with correct src and alt', async () => {
     vi.mocked(RootAPI.read).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof RootAPI.read>);
     const { container } = renderWithContexts(
       <AWXLogin isAuthenticated={() => false} />
     );
@@ -256,7 +256,7 @@ describe('<Login />', () => {
   test('render Redirect to / when already authenticated as a new user', async () => {
     vi.mocked(MeAPI.read).mockResolvedValue({
       data: { results: [{ id: 1 }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof MeAPI.read>);
     const history = createMemoryHistory({
       initialEntries: ['/login'],
     });
@@ -289,7 +289,7 @@ describe('<Login />', () => {
   test('render redirect to authRedirectTo when authenticated as a previous user', async () => {
     vi.mocked(MeAPI.read).mockResolvedValue({
       data: { results: [{ id: 42 }] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof MeAPI.read>);
     const history = createMemoryHistory({
       initialEntries: ['/login'],
     });
@@ -335,7 +335,7 @@ describe('<Login />', () => {
           complete_url: 'https://localhost:8043/sso/complete/github-team/',
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof AuthAPI.read>);
 
     const { container } = renderWithContexts(
       <AWXLogin isAuthenticated={() => false} />
@@ -365,7 +365,7 @@ describe('<Login />', () => {
           complete_url: 'https://localhost:8043/sso/complete/google-oauth2/',
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof AuthAPI.read>);
 
     const { container } = renderWithContexts(
       <AWXLogin isAuthenticated={() => false} />
@@ -395,7 +395,7 @@ describe('<Login />', () => {
           complete_url: 'https://localhost:8043/sso/complete/azuread-oauth2/',
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof AuthAPI.read>);
 
     const { container } = renderWithContexts(
       <AWXLogin isAuthenticated={() => false} />
@@ -425,7 +425,7 @@ describe('<Login />', () => {
           complete_url: 'https://localhost:8043/sso/complete/azuread-oauth2/',
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof AuthAPI.read>);
     document.cookie = 'csrftoken=TESTTOKEN';
     const submit = vi
       .spyOn(HTMLFormElement.prototype, 'submit')
@@ -472,7 +472,7 @@ describe('<Login />', () => {
           metadata_url: '/sso/metadata/saml/',
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof AuthAPI.read>);
 
     const { container } = renderWithContexts(
       <AWXLogin isAuthenticated={() => false} />
@@ -504,7 +504,7 @@ describe('<Login />', () => {
           label: 'Entra ID',
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof AuthAPI.read>);
 
     const { container } = renderWithContexts(
       <AWXLogin isAuthenticated={() => false} />
@@ -534,7 +534,7 @@ describe('<Login />', () => {
           metadata_url: '/sso/metadata/saml/',
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof AuthAPI.read>);
 
     const { container } = renderWithContexts(
       <AWXLogin isAuthenticated={() => false} />

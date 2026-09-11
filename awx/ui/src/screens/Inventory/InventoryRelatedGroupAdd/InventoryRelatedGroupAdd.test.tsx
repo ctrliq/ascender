@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { GroupsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryRelatedGroupAdd from './InventoryRelatedGroupAdd';
 
@@ -55,7 +55,7 @@ describe('<InventoryRelatedGroupAdd/>', () => {
   test('should call api with proper data', async () => {
     vi.mocked(GroupsAPI.create).mockResolvedValue({
       data: { id: 3 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof GroupsAPI.create>);
     const history = createMemoryHistory({ initialEntries: [url] });
     const { user } = renderRelatedAdd(history);
 
@@ -107,7 +107,7 @@ describe('<InventoryRelatedGroupAdd/>', () => {
   test('should throw error on association of group', async () => {
     vi.mocked(GroupsAPI.create).mockResolvedValue({
       data: { id: 3 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof GroupsAPI.create>);
     vi.mocked(GroupsAPI.associateChildGroup).mockRejectedValue({
       response: {
         config: {

@@ -1,11 +1,11 @@
-import type { SetBreadcrumb, Inventory } from 'types/api';
+import type { AnyInventory, SetBreadcrumb } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import AdvancedInventoryHostList from './AdvancedInventoryHostList';
 import AdvancedInventoryHost from '../AdvancedInventoryHost';
 
 export interface AdvancedInventoryHostsProps {
-  inventory: Inventory;
+  inventory: AnyInventory;
   setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }

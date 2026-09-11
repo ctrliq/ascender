@@ -159,7 +159,7 @@ function Credential({ setBreadcrumb }: CredentialProps) {
               element={
                 <RelatedTemplateList
                   searchParams={{ credentials__id: credential.id }}
-                  resourceName={[credential.name, credential.kind]}
+                  resourceName={[credential.name ?? '', credential.kind]}
                 />
               }
             />

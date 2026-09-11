@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { act, waitFor } from '@testing-library/react';
@@ -10,6 +9,7 @@ import {
   JobTemplatesAPI,
   InventoriesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleAdd from './ScheduleAdd';
 
@@ -108,13 +108,13 @@ describe('<ScheduleAdd />', () => {
     formProps = undefined;
     vi.mocked(SchedulesAPI.readZoneInfo).mockResolvedValue({
       data: [{ name: 'America/New_York' }],
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SchedulesAPI.readZoneInfo>);
     vi.mocked(JobTemplatesAPI.createSchedule).mockResolvedValue({
       data: { id: 3 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.createSchedule>);
     vi.mocked(CredentialTypesAPI.loadAllTypes).mockResolvedValue([
       { id: 1, name: 'ssh', kind: 'ssh' },
-    ]);
+    ] as unknown as ResponseOf<typeof CredentialTypesAPI.loadAllTypes>);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: {
         count: 1,
@@ -122,13 +122,13 @@ describe('<ScheduleAdd />', () => {
           { id: 10, name: 'cred 1', kind: 'ssh', url: '', credential_type: 1 },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: {
         related_search_fields: [],
         actions: { GET: { filterabled: true } },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
   });
 
   test('Successfully creates a schedule with repeat frequency: None (run once)', async () => {
@@ -412,15 +412,15 @@ describe('<ScheduleAdd />', () => {
           { name: 'Bar', id: 2, url: '' },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
     vi.mocked(InventoriesAPI.readOptions).mockResolvedValue({
       data: {
         related_search_fields: [],
         actions: { GET: { filterable: true } },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
     vi.mocked(SchedulesAPI.associateCredential).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SchedulesAPI.associateCredential>
     );
 
     renderAdd();

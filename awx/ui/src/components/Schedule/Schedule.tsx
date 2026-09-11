@@ -24,7 +24,7 @@ export interface ScheduleProps {
   setBreadcrumb: (...args: Untyped[]) => void;
   resource: Untyped;
   launchConfig?: LaunchConfig;
-  surveyConfig?: SurveyConfig;
+  surveyConfig?: SurveyConfig | null;
   hasDaysToKeepField?: boolean;
   resourceDefaultCredentials?: Untyped;
   [key: string]: unknown;

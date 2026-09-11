@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import { InstanceGroupsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ContainerGroupAdd from './ContainerGroupAdd';
 
@@ -75,13 +75,13 @@ describe('<ContainerGroupAdd/>', () => {
       data: {
         id: 123,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.create>);
 
     vi.mocked(InstanceGroupsAPI.readOptions).mockResolvedValue({
       data: {
         actions: { POST: { pod_spec_override: { default: initialPodSpec } } },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readOptions>);
   });
 
   afterEach(() => {

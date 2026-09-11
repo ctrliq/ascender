@@ -1,12 +1,12 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import mockJobSettings from '../../shared/data.jobSettings.json';
 import JobsEdit from './JobsEdit';
 
@@ -17,21 +17,21 @@ describe('<JobsEdit />', () => {
 
   beforeEach(() => {
     vi.mocked(SettingsAPI.revertCategory).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.revertCategory>
     );
     vi.mocked(SettingsAPI.updateAll).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.updateAll>
     );
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: mockJobSettings,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  async function mountEdit(options = mockAllOptions.actions) {
+  async function mountEdit(options = settingOptions) {
     history = createMemoryHistory({
       initialEntries: ['/settings/jobs/edit'],
     });
@@ -125,8 +125,8 @@ describe('<JobsEdit />', () => {
 
   test('Form input fields that are invisible (due to being set manually via a settings file) should not prevent submitting the form', async () => {
     const mockOptions = {
-      GET: { ...mockAllOptions.actions.GET },
-      PUT: { ...mockAllOptions.actions.PUT },
+      GET: { ...settingOptions.GET },
+      PUT: { ...settingOptions.PUT },
     };
     // If AWX_ISOLATION_BASE_PATH has been set in a settings file it will be
     // absent in the PUT options

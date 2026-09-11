@@ -49,8 +49,8 @@ export interface RecentJob {
 /** A nested reference to another object, as the API inlines them. */
 export interface SummaryFieldRef {
   id: number;
-  name?: string;
-  description?: string;
+  name?: string | null;
+  description?: string | null;
   [key: string]: unknown;
 }
 
@@ -153,7 +153,10 @@ export type Job = Omit<
   playbook_counts?: { play_count?: number; task_count?: number };
   host_status_counts?: Record<string, number>;
 };
-export type JobTemplate = WithNested<Schemas['JobTemplate']>;
+/** webhook_key comes from the template's own endpoint, not the serializer. */
+export type JobTemplate = WithNested<Schemas['JobTemplate']> & {
+  webhook_key?: string;
+};
 /** webhook_key comes from the template's own endpoint, not the serializer. */
 export type WorkflowJobTemplate = WithNested<Schemas['WorkflowJobTemplate']> & {
   webhook_key?: string;
@@ -168,12 +171,23 @@ export type Inventory = WithNested<Schemas['Inventory']>;
  * serializer. The schema describes only what they share; the rest is optional
  * here because which fields a template has depends on its `type`.
  */
-export type AnyUnifiedJobTemplate = WithNested<Schemas['UnifiedJobTemplate']> &
+export type AnyUnifiedJobTemplate = Omit<
+  WithNested<Schemas['UnifiedJobTemplate']>,
+  'status'
+> &
   Partial<
-    Omit<JobTemplate, 'id' | 'type' | 'summary_fields' | 'related'> &
-      Omit<WorkflowJobTemplate, 'id' | 'type' | 'summary_fields' | 'related'> &
-      Omit<Project, 'id' | 'type' | 'summary_fields' | 'related'>
+    Omit<JobTemplate, 'id' | 'type' | 'summary_fields' | 'related' | 'status'> &
+      Omit<
+        WorkflowJobTemplate,
+        'id' | 'type' | 'summary_fields' | 'related' | 'status'
+      > &
+      Omit<Project, 'id' | 'type' | 'summary_fields' | 'related' | 'status'>
   > & {
+    /**
+     * The status is wider than a job template's: a project or an inventory
+     * source reports never updated, none, ok, missing or updating as well.
+     */
+    status?: string;
     /** Approval nodes carry a timeout rather than a template to run. */
     timeout?: number;
   };
@@ -260,15 +274,35 @@ export type Group = WithNested<Schemas['Group']>;
  * as `unknown`: inputs declares the fields a credential of this type asks for,
  * injectors what they become when a job runs.
  */
+/**
+ * One field a credential type asks for, as its inputs declare it.
+ *
+ * A field's shape follows what it holds, so only the keys the credential forms
+ * read are named here and the rest are left reachable.
+ */
+export interface CredentialField {
+  id: string;
+  label?: string;
+  type?: string;
+  help_text?: string;
+  format?: string;
+  secret?: boolean;
+  multiline?: boolean;
+  ask_at_runtime?: boolean;
+  choices?: string[];
+  default?: unknown;
+  [key: string]: unknown;
+}
+
 export type CredentialType = Omit<
   WithNested<Schemas['CredentialType']>,
   'inputs' | 'injectors'
 > & {
   inputs?: {
-    fields?: Untyped[];
+    fields?: CredentialField[];
     required?: string[];
     /** The fields an external credential type asks for when it is tested. */
-    metadata?: Untyped[];
+    metadata?: CredentialField[];
   };
   injectors?: Record<string, unknown>;
 };
@@ -289,6 +323,312 @@ export type WorkflowApproval = Omit<
 };
 export type OAuth2Application = WithNested<Schemas['OAuth2Application']>;
 export type OAuth2Token = WithNested<Schemas['OAuth2Token']>;
+export type ActivityStreamEntry = WithNested<Schemas['ActivityStream']>;
+/**
+ * One line of a job's output, as the events endpoint returns it.
+ *
+ * The events differ by job type and by what the playbook did, so only the
+ * fields the tree is built out of are named; the rest arrive alongside them.
+ */
+export interface JobEventRecord {
+  /** The event's position in the job's output, which indexes it here. */
+  counter: number;
+  /** Every event the api sends carries one; the tree indexes them by it. */
+  uuid: string;
+  /** Absent on a root level event, which is what puts it at the root. */
+  parent_uuid?: string;
+  /** Which row of the output list this event draws on, once assigned. */
+  rowNumber?: number;
+  id?: number;
+  /** Which serializer produced it: job_event, project_update_event, ... */
+  type?: string | null;
+  /** Null on the synthesised event a failed job's traceback is put on. */
+  created?: string | null;
+  /** The ansible callback that fired, such as playbook_on_task_start. */
+  event?: string | null;
+  event_data?: Record<string, unknown> | null;
+  event_level?: number;
+  failed?: boolean;
+  changed?: boolean;
+  host?: number | null;
+  host_name?: string | null;
+  play?: string | null;
+  task?: string | null;
+  playbook?: string | null;
+  role?: string | null;
+  stdout?: string | null;
+  start_line?: number;
+  end_line?: number;
+  verbosity?: number;
+  /** Set when the traceback is all the row has to show. */
+  isTracebackOnly?: boolean;
+  [key: string]: unknown;
+}
+
+export type AdHocCommand = WithNested<Schemas['AdHocCommandDetail']>;
+export type ConstructedInventory = WithNested<Schemas['ConstructedInventory']>;
+
+/**
+ * An inventory of any kind, as the screens shared by all of them see it.
+ *
+ * Constructed and federated inventories each have their own serializer, with a
+ * few fields the plain one does not carry and without a few it does, so what
+ * every kind has is required here and the rest is optional.
+ */
+export type AnyInventory = Pick<
+  Inventory,
+  'id' | 'type' | 'summary_fields' | 'related'
+> &
+  Partial<Inventory & ConstructedInventory & FederatedInventory>;
+export type CredentialInputSource = WithNested<
+  Schemas['CredentialInputSource']
+>;
+export type FederatedInventory = WithNested<Schemas['FederatedInventory']>;
+export type HostMetric = WithNested<Schemas['HostMetric']>;
+export type HostMetricSummaryMonthly = WithNested<
+  Schemas['HostMetricSummaryMonthly']
+>;
+export type InventoryUpdate = WithNested<Schemas['InventoryUpdateDetail']>;
+export type Notification = WithNested<Schemas['Notification']>;
+export type ProjectUpdate = WithNested<Schemas['ProjectUpdateDetail']>;
+export type ReceptorAddress = WithNested<Schemas['ReceptorAddress']>;
+export type Role = WithNested<Schemas['Role']>;
+/** One user or team on a resource's access list, with the roles it holds. */
+export type AccessListEntry = WithNested<Schemas['ResourceAccessListElement']>;
+export type SystemJob = WithNested<Schemas['SystemJob']>;
+export type SystemJobTemplate = WithNested<Schemas['SystemJobTemplate']>;
+export type UnifiedJobTemplateEntry = WithNested<Schemas['UnifiedJobTemplate']>;
+export type WorkflowApprovalTemplate = WithNested<
+  Schemas['WorkflowApprovalTemplate']
+>;
+/** One approval or denial of a workflow approval, by the user who cast it. */
+export type WorkflowApprovalVote = WithNested<Schemas['WorkflowApprovalVote']>;
+export type WorkflowJob = WithNested<Schemas['WorkflowJob']>;
+/**
+ * One node of a workflow, as its endpoint returns it.
+ *
+ * condition_edges is a SerializerMethodField, so the schema can only describe
+ * it as a string; it lists the conditional links out of this node, each one
+ * naming the node it leads to.
+ */
+export type WorkflowJobTemplateNode = Omit<
+  WithNested<Schemas['WorkflowJobTemplateNode']>,
+  'condition_edges'
+> & {
+  condition_edges?: {
+    id: number;
+    trigger?: unknown;
+    artifact_key?: unknown;
+    operator?: unknown;
+    expected_value?: unknown;
+  }[];
+};
+
+/**
+ * One field, as an OPTIONS response describes it.
+ *
+ * Which keys a field carries depends on what kind of field it is, so only the
+ * ones the screens read are named and the index signature keeps the rest.
+ */
+export interface OptionsField {
+  type?: string;
+  label?: string;
+  help_text?: string;
+  /** What the value is measured in, which a detail shows beside it. */
+  unit?: string;
+  filterable?: boolean;
+  required?: boolean;
+  /** Each entry is a value and the label to show for it. */
+  choices?: [string | number | null, string][];
+  [key: string]: unknown;
+}
+
+/**
+ * The api's OPTIONS response, which says what a list can do and be filtered by.
+ *
+ * `actions` carries one block per method the caller is allowed: GET describes
+ * every field the list returns, POST every field it accepts. Both are optional
+ * because a caller only gets the block for a method it may use, and because a
+ * screen holds an empty one until its own options request lands.
+ */
+export interface OptionsResponse {
+  actions: {
+    GET?: Record<string, OptionsField>;
+    POST?: Record<string, OptionsField>;
+    [method: string]: Record<string, OptionsField> | undefined;
+  };
+  related_search_fields?: string[];
+  [key: string]: unknown;
+}
+
+/** Which template a launch is for, as its own launch endpoint names it. */
+export interface LaunchTemplateData {
+  id?: number;
+  name?: string;
+  description?: string;
+}
+
+/** What a launch default names: an id and a name, either of them absent. */
+export interface LaunchRef {
+  id?: number | null;
+  name?: string | null;
+}
+
+/**
+ * One credential a template would run with, as the launch endpoint lists it.
+ *
+ * passwords_needed names the prompts this credential brings with it: a machine
+ * credential whose password is set to ask adds ssh_password, and so on.
+ */
+export interface LaunchCredential extends SummaryFieldRef {
+  credential_type?: number;
+  passwords_needed?: string[];
+  inputs?: Record<string, unknown>;
+  vault_id?: string | null;
+  /**
+   * Present where the credential came from a list rather than from a launch
+   * default, which carries only the id, name, type and passwords needed.
+   */
+  summary_fields?: SummaryFields;
+}
+
+/**
+ * What a template would run with if the prompt changed nothing.
+ *
+ * Which of these it carries follows which prompts the template turns on, so
+ * they are all optional, and the index signature keeps the rest reachable.
+ */
+export interface LaunchDefaults {
+  credentials?: LaunchCredential[];
+  labels?: SummaryFieldRef[];
+  instance_groups?: SummaryFieldRef[];
+  /**
+   * Both come back as an object naming the thing, with a null id and name
+   * where the template has none, and an empty one for the environment.
+   */
+  inventory?: LaunchRef;
+  execution_environment?: LaunchRef;
+  extra_vars?: string;
+  [key: string]: unknown;
+}
+
+/**
+ * What /api/v2/job_templates/N/launch/ returns on a GET, which is what decides
+ * which steps the wizard shows and which values it is allowed to post.
+ *
+ * Every ask_*_on_launch flag turns one prompt on. `defaults` carries the values
+ * the template already has, which seed the corresponding fields.
+ */
+export interface LaunchConfig {
+  ask_credential_on_launch?: boolean;
+  ask_diff_mode_on_launch?: boolean;
+  ask_execution_environment_on_launch?: boolean;
+  ask_forks_on_launch?: boolean;
+  ask_instance_groups_on_launch?: boolean;
+  ask_inventory_on_launch?: boolean;
+  ask_job_slice_count_on_launch?: boolean;
+  ask_job_type_on_launch?: boolean;
+  ask_labels_on_launch?: boolean;
+  ask_limit_on_launch?: boolean;
+  ask_scm_branch_on_launch?: boolean;
+  ask_skip_tags_on_launch?: boolean;
+  ask_tags_on_launch?: boolean;
+  ask_timeout_on_launch?: boolean;
+  ask_variables_on_launch?: boolean;
+  ask_verbosity_on_launch?: boolean;
+  can_start_without_user_input?: boolean;
+  /** The values the template already has, which seed the prompt's fields. */
+  defaults?: LaunchDefaults;
+  inventory_needed_to_start?: boolean;
+  /** The template's own id, name and description, for the preview step. */
+  job_template_data?: LaunchTemplateData;
+  /** The same, where the launch is a workflow job template's. */
+  workflow_job_template_data?: LaunchTemplateData;
+  /** Names of the credential passwords the launch cannot proceed without. */
+  passwords_needed_to_start?: string[];
+  survey_enabled?: boolean;
+  variables_needed_to_start?: string[];
+  [key: string]: unknown;
+}
+
+/** One question out of a template's survey, as the survey endpoint returns it. */
+export interface SurveyQuestion {
+  variable: string;
+  question_name?: string;
+  question_description?: string;
+  type?: string;
+  required?: boolean;
+  default?: unknown;
+  choices?: string[] | string;
+  min?: number;
+  max?: number;
+  new_question?: boolean;
+  [key: string]: unknown;
+}
+
+/** A template's survey, as /survey_spec/ returns it. */
+export interface SurveyConfig {
+  spec?: SurveyQuestion[];
+  name?: string;
+  description?: string;
+  [key: string]: unknown;
+}
+
+/** The key a template's webhook is signed with, from its own endpoint. */
+export interface WebhookKey {
+  webhook_key: string;
+}
+
+/** When a rule would next fire, which the schedule form previews. */
+export interface SchedulePreview {
+  local: string[];
+  utc: string[];
+}
+
+/**
+ * The timezones a schedule may be set in.
+ *
+ * `zones` is every IANA name the server knows; `links` maps each deprecated
+ * alias onto the name it now goes by, which the form shows instead.
+ */
+export interface TimeZones {
+  zones: string[];
+  links: Record<string, string>;
+}
+
+/** How many rows an event has under it, as the job's summary reports. */
+export interface ChildrenSummaryEntry {
+  rowNumber: number;
+  numChildren: number;
+}
+
+/** What the children summary endpoint answers with for a job. */
+export interface ChildrenSummary {
+  /** How many rows sit under each parent event, by the parent's counter. */
+  children_summary?: Record<number, ChildrenSummaryEntry>;
+  /** The parent a meta event belongs under, by the event's counter. */
+  meta_event_nested_uuid?: Record<number, string>;
+  /** False while the job is still being processed, when there is no tree. */
+  event_processing_finished?: boolean;
+  is_tree?: boolean;
+}
+
+/**
+ * The template a node runs, as far as the visualizer has it.
+ *
+ * The related endpoints the node view modal reads are attached here too, since
+ * it puts what it fetched back onto the node.
+ */
+export type NodeTemplate = Partial<AnyUnifiedJobTemplate> & {
+  instance_groups?: SummaryFieldRef[];
+  unified_job_type?: string;
+  /** A system job node's own prompt values, which is where days_to_keep sits. */
+  extra_data?: Record<string, unknown>;
+  /** An approval node's own settings, which no other node type has. */
+  context_template?: string;
+  required_approvals?: number;
+  on_timeout?: string;
+};
 
 /** The job types, which decide which model and which url a job uses. */
 export type JobType =

@@ -306,7 +306,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
                         max={1}
                         min={0}
                         step={0.1}
-                        value={instance.capacity_adjustment}
+                        value={Number(instance.capacity_adjustment)}
                         onChange={(_event, value) => handleChangeValue(value)}
                         isDisabled={
                           !config?.me?.is_superuser ||
@@ -330,7 +330,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
                     <Progress
                       title={t`Used capacity`}
                       value={Math.round(
-                        100 - instance.percent_capacity_remaining
+                        100 - Number(instance.percent_capacity_remaining)
                       )}
                       measureLocation={ProgressMeasureLocation.top}
                       size={ProgressSize.sm}
@@ -380,13 +380,13 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
               <Button
                 isDisabled={
                   !config?.me?.is_superuser ||
-                  instance.health_check_pending ||
-                  instance.managed
+                  Boolean(instance.health_check_pending) ||
+                  Boolean(instance.managed)
                 }
                 variant="primary"
                 ouiaId="health-check-button"
                 onClick={fetchHealthCheck}
-                isLoading={instance.health_check_pending}
+                isLoading={Boolean(instance.health_check_pending)}
                 spinnerAriaLabel={t`Running health check`}
               >
                 {instance.health_check_pending

@@ -1,5 +1,3 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { Formik } from 'formik';
@@ -10,6 +8,7 @@ import {
   WorkflowJobTemplatesAPI,
 } from 'api';
 import { useUserProfile } from 'contexts/Config';
+import type { ResponseOf } from '../../../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../../../testUtils/rtlContexts';
 
 import NodeTypeStep from './NodeTypeStep';
@@ -52,7 +51,7 @@ describe('NodeTypeStep', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
     vi.mocked(JobTemplatesAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -61,7 +60,7 @@ describe('NodeTypeStep', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readOptions>);
     vi.mocked(ProjectsAPI.read).mockResolvedValue({
       data: {
         count: 1,
@@ -74,7 +73,7 @@ describe('NodeTypeStep', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     vi.mocked(ProjectsAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -83,7 +82,7 @@ describe('NodeTypeStep', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readOptions>);
     vi.mocked(InventorySourcesAPI.read).mockResolvedValue({
       data: {
         count: 1,
@@ -96,7 +95,7 @@ describe('NodeTypeStep', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.read>);
     vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -105,7 +104,7 @@ describe('NodeTypeStep', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
     vi.mocked(WorkflowJobTemplatesAPI.read).mockResolvedValue({
       data: {
         count: 1,
@@ -118,7 +117,7 @@ describe('NodeTypeStep', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.read>);
     vi.mocked(WorkflowJobTemplatesAPI.readOptions).mockResolvedValue({
       data: {
         actions: {
@@ -127,7 +126,7 @@ describe('NodeTypeStep', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readOptions>);
   });
   afterAll(() => {
     vi.clearAllMocks();

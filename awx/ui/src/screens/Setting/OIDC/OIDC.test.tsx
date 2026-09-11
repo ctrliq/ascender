@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -6,8 +5,9 @@ import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
-import mockAllOptions from '../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../testUtils/settingOptions';
 import OIDC from './OIDC';
 
 vi.mock('../../../api');
@@ -21,7 +21,7 @@ describe('<OIDC />', () => {
         SOCIAL_AUTH_OIDC_OIDC_ENDPOINT: 'https://example.com',
         SOCIAL_AUTH_OIDC_VERIFY_SSL: true,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
 
   afterEach(() => {
@@ -31,7 +31,7 @@ describe('<OIDC />', () => {
   function renderOIDC(initialEntries: Untyped) {
     const history = createMemoryHistory({ initialEntries });
     return renderWithContexts(
-      <SettingsProvider value={mockAllOptions.actions}>
+      <SettingsProvider value={settingOptions}>
         <Routes>
           <Route path="/settings/oidc/*" element={<OIDC />} />
         </Routes>

@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { InventoriesAPI, HostsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -79,13 +79,13 @@ describe('<InventoryHostList />', () => {
   beforeEach(() => {
     vi.mocked(InventoriesAPI.readHosts).mockResolvedValue({
       data: { count: mockHosts.length, results: mockHosts },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readHosts>);
     vi.mocked(InventoriesAPI.readHostsOptions).mockResolvedValue({
       data: {
         actions: { GET: {}, POST: {} },
         related_search_fields: ['first_key__search', 'ansible_facts'],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readHostsOptions>);
     vi.mocked(InventoriesAPI.readAdHocOptions).mockResolvedValue({
       data: {
         actions: {
@@ -100,7 +100,7 @@ describe('<InventoryHostList />', () => {
           POST: {},
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readAdHocOptions>);
   });
 
   afterEach(() => {
@@ -152,7 +152,7 @@ describe('<InventoryHostList />', () => {
   test('should call api if host toggle is clicked', async () => {
     vi.mocked(HostsAPI.update).mockResolvedValueOnce({
       data: { ...mockHosts[1], enabled: false },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof HostsAPI.update>);
     const { user } = renderUnder();
     await screen.findByRole('link', { name: 'Host 1' });
     const toggle = toggleFor(2);
@@ -186,7 +186,7 @@ describe('<InventoryHostList />', () => {
 
   test('should call api delete hosts for each selected host', async () => {
     vi.mocked(HostsAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof HostsAPI.destroy>
     );
     const { user } = renderUnder();
     await screen.findByRole('link', { name: 'Host 1' });
@@ -234,7 +234,7 @@ describe('<InventoryHostList />', () => {
   test('should hide Add button for users without ability to POST', async () => {
     vi.mocked(InventoriesAPI.readHostsOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readHostsOptions>);
     renderUnder();
     await screen.findByRole('link', { name: 'Host 1' });
     expect(screen.queryByRole('link', { name: 'Add' })).not.toBeInTheDocument();
@@ -262,7 +262,7 @@ describe('<InventoryHostList />', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readAdHocOptions>);
     renderUnder();
     await screen.findByRole('link', { name: 'Host 1' });
     expect(

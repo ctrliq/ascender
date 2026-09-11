@@ -1,10 +1,9 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
 import { InventoriesAPI, OrganizationsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
@@ -46,10 +45,10 @@ describe('<Inventories />', () => {
         kind: '',
         summary_fields: { user_capabilities: {} },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readDetail>);
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     const history = createMemoryHistory({
       initialEntries: ['/inventories/inventory/1/details'],
     });

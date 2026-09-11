@@ -1,8 +1,8 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { TeamsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import TeamList from './TeamList';
@@ -45,10 +45,10 @@ describe('<TeamList /> with full permissions', () => {
   beforeEach(async () => {
     vi.mocked(TeamsAPI.read).mockResolvedValue({
       data: mockAPITeamList.data,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TeamsAPI.read>);
     vi.mocked(TeamsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TeamsAPI.readOptions>);
 
     ({ user } = renderWithContexts(<TeamList />));
     await screen.findByRole('link', { name: 'Team 0' });
@@ -82,7 +82,7 @@ describe('<TeamList /> with full permissions', () => {
 
   test('should call delete api', async () => {
     vi.mocked(TeamsAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof TeamsAPI.destroy>
     );
     await user.click(
       within(
@@ -103,7 +103,7 @@ describe('<TeamList /> with full permissions', () => {
 
   test('should re-fetch teams after team(s) have been deleted', async () => {
     vi.mocked(TeamsAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof TeamsAPI.destroy>
     );
     expect(TeamsAPI.read).toHaveBeenCalledTimes(1);
     await user.click(
@@ -141,10 +141,10 @@ describe('<TeamList /> without full permissions', () => {
   test('Add button hidden for users without ability to POST', async () => {
     vi.mocked(TeamsAPI.read).mockResolvedValue({
       data: mockAPITeamList.data,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TeamsAPI.read>);
     vi.mocked(TeamsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TeamsAPI.readOptions>);
 
     renderWithContexts(<TeamList />);
     await screen.findByRole('link', { name: 'Team 0' });

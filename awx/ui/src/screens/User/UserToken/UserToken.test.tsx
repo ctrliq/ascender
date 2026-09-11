@@ -1,8 +1,8 @@
-import type { Untyped, User } from 'types/api';
-import type { ApiResponse } from 'api/Base';
+import type { User } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { TokensAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserToken from './UserToken';
 
@@ -57,7 +57,7 @@ describe('<UserToken/>', () => {
         description: 'cdfsg',
         scope: 'read',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TokensAPI.readDetail>);
   });
 
   test('should render token tabs', async () => {

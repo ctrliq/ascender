@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SmartInventoryEdit from './SmartInventoryEdit';
 import mockSmartInventory from '../shared/data.smart_inventory.json';
@@ -49,7 +49,7 @@ describe('<SmartInventoryEdit />', () => {
   beforeEach(() => {
     vi.mocked(InventoriesAPI.update).mockResolvedValue({
       data: mockSmartInv,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.update>);
     vi.mocked(InventoriesAPI.orderInstanceGroups).mockResolvedValue(undefined);
     vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
       data: {
@@ -59,7 +59,7 @@ describe('<SmartInventoryEdit />', () => {
           { id: 20, name: 'instance-group-20' },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
   });
 
   afterEach(() => {

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
@@ -9,6 +8,7 @@ import {
   InventoriesAPI,
   UnifiedJobTemplatesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceGroupList from './InstanceGroupList';
@@ -61,13 +61,13 @@ describe('<InstanceGroupList />', () => {
   beforeEach(() => {
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     vi.mocked(InventoriesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
     vi.mocked(UnifiedJobTemplatesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UnifiedJobTemplatesAPI.read>);
     vi.mocked(InstanceGroupsAPI.read).mockResolvedValue(
       instanceGroups as unknown as ApiResponse<unknown>
     );
@@ -95,7 +95,7 @@ describe('<InstanceGroupList />', () => {
 
   test('should delete item successfully', async () => {
     vi.mocked(InstanceGroupsAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof InstanceGroupsAPI.destroy>
     );
     const { user } = renderWithContexts(<InstanceGroupList />);
     await screen.findByRole('link', { name: 'Foo' });
@@ -155,7 +155,7 @@ describe('<InstanceGroupList />', () => {
   test('should not render add button', async () => {
     vi.mocked(InstanceGroupsAPI.readOptions).mockResolvedValue({
       data: { actions: { POST: false } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readOptions>);
     renderWithContexts(<InstanceGroupList />);
     await screen.findByRole('link', { name: 'Foo' });
 

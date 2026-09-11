@@ -1,8 +1,8 @@
-import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { JobTemplatesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SurveyList from './SurveyList';
 import mockJobTemplateData from '../shared/data.job_template.json';
@@ -168,7 +168,7 @@ describe('<SurveyList />', () => {
 describe('Survey with no questions', () => {
   test('Survey with no questions renders empty state', async () => {
     vi.mocked(JobTemplatesAPI.readSurvey).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof JobTemplatesAPI.readSurvey>
     );
     renderWithContexts(
       <SurveyList

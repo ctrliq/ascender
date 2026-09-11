@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InstanceGroup, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Trans, useLingui } from '@lingui/react/macro';
@@ -147,8 +147,10 @@ function OrganizationForm({
 }: Untyped) {
   const [contentError, setContentError] = useState<unknown>(null);
   const [hasContentLoading, setHasContentLoading] = useState(true);
-  const [initialInstanceGroups, setInitialInstanceGroups] = useState([]);
-  const [instanceGroups, setInstanceGroups] = useState([]);
+  const [initialInstanceGroups, setInitialInstanceGroups] = useState<
+    InstanceGroup[]
+  >([]);
+  const [instanceGroups, setInstanceGroups] = useState<InstanceGroup[]>([]);
 
   const handleCancel = () => {
     onCancel();

@@ -1,12 +1,12 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within, act } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI, ExecutionEnvironmentsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
-import mockAllOptions from '../../shared/data.allSettingOptions.json';
+import { settingOptions } from '../../../../../testUtils/settingOptions';
 import mockAllSettings from '../../shared/data.allSettings.json';
 import MiscSystemEdit from './MiscSystemEdit';
 
@@ -39,20 +39,20 @@ describe('<MiscSystemEdit />', () => {
 
   beforeEach(() => {
     vi.mocked(SettingsAPI.revertCategory).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.revertCategory>
     );
     vi.mocked(SettingsAPI.updateAll).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof SettingsAPI.updateAll>
     );
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: mockAllSettings,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
       data: { results: mockExecutionEnvironment, count: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} }, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -66,9 +66,7 @@ describe('<MiscSystemEdit />', () => {
     // The production read mutates the shared OPTIONS objects (sets .value), so
     // deep-clone to keep tests isolated.
     const result = renderWithContexts(
-      <SettingsProvider
-        value={JSON.parse(JSON.stringify(mockAllOptions.actions))}
-      >
+      <SettingsProvider value={JSON.parse(JSON.stringify(settingOptions))}>
         <MiscSystemEdit />
       </SettingsProvider>,
       { context: { router: { history } } }

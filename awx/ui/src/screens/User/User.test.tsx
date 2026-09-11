@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { UsersAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockDetails from './data.user.json';
 import User from './User';
@@ -34,10 +34,10 @@ describe('<User />', () => {
   beforeEach(() => {
     vi.mocked(UsersAPI.readDetail).mockResolvedValue({
       data: mockDetails,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readDetail>);
     vi.mocked(UsersAPI.read).mockResolvedValue({
       data: { count: 1, results: [mockDetails] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.read>);
   });
 
   test('initially renders successfully', async () => {

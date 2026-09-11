@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { UsersAPI, TokensAPI, ApplicationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserTokenAdd from './UserTokenAdd';
 
@@ -30,7 +30,7 @@ describe('<UserTokenAdd />', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ApplicationsAPI.read>);
   });
 
   afterEach(() => {
@@ -46,7 +46,7 @@ describe('<UserTokenAdd />', () => {
   test('handleSubmit should post to api', async () => {
     vi.mocked(UsersAPI.createToken).mockResolvedValueOnce({
       data: { id: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.createToken>);
     const { user } = renderWithContexts(
       <UserTokenAdd onSuccessfulAdd={onSuccessfulAdd} />
     );
@@ -89,7 +89,7 @@ describe('<UserTokenAdd />', () => {
     };
     vi.mocked(UsersAPI.createToken).mockResolvedValueOnce({
       data: rtnData,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.createToken>);
     const { user } = renderWithContexts(
       <UserTokenAdd onSuccessfulAdd={onSuccessfulAdd} />,
       {
@@ -117,7 +117,7 @@ describe('<UserTokenAdd />', () => {
     };
     vi.mocked(TokensAPI.create).mockResolvedValueOnce({
       data: rtnData,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TokensAPI.create>);
     const { user } = renderWithContexts(
       <UserTokenAdd onSuccessfulAdd={onSuccessfulAdd} />,
       {

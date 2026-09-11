@@ -1,8 +1,8 @@
-import type { Untyped, OAuth2Token } from 'types/api';
-import type { ApiResponse } from 'api/Base';
+import type { OAuth2Token } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { TokensAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -57,7 +57,7 @@ describe('<UserTokenDetail/>', () => {
 
   test('should delete token properly', async () => {
     vi.mocked(TokensAPI.destroy).mockResolvedValueOnce(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof TokensAPI.destroy>
     );
     const { user } = renderWithContexts(
       <UserTokenDetail token={token as unknown as OAuth2Token} />

@@ -1,10 +1,9 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsAPI, RootAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockAllSettings from '../shared/data.allSettings.json';
 import Subscription from './Subscription';
@@ -12,13 +11,13 @@ import Subscription from './Subscription';
 vi.mock('../../../api');
 vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
   data: mockAllSettings,
-} as unknown as ApiResponse<Untyped>);
+} as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
 vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
   data: {
     BRAND_NAME: 'AWX',
     PENDO_API_KEY: '',
   },
-} as unknown as ApiResponse<Untyped>);
+} as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
 
 describe('<Subscription />', () => {
   afterEach(() => {

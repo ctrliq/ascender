@@ -1,9 +1,8 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryStep from './InventoryStep';
 
@@ -22,7 +21,7 @@ describe('InventoryStep', () => {
         results: inventories,
         count: 3,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
 
     vi.mocked(InventoriesAPI.readOptions).mockResolvedValue({
       data: {
@@ -32,7 +31,7 @@ describe('InventoryStep', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
   });
 
   afterEach(() => vi.clearAllMocks());

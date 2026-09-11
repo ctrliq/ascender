@@ -1,8 +1,8 @@
-import type { Untyped, Host } from 'types/api';
-import type { ApiResponse } from 'api/Base';
+import type { Host } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { HostsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -38,7 +38,7 @@ describe('<HostDetail />', () => {
 
     test('expected api call is made for delete', async () => {
       vi.mocked(HostsAPI.destroy).mockResolvedValueOnce(
-        {} as unknown as ApiResponse<Untyped>
+        {} as unknown as ResponseOf<typeof HostsAPI.destroy>
       );
       const { user } = renderWithContexts(
         <HostDetail host={mockHost as unknown as Host} />

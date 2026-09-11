@@ -1,4 +1,4 @@
-import type { ApiEntity, Untyped } from 'types/api';
+import type { CredentialType, Untyped } from 'types/api';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -48,7 +48,7 @@ function MultiCredentialsLookup({
   const location = useLocation();
   const navigate = useNavigate();
   const { t } = useLingui();
-  const [selectedType, setSelectedType] = useState<ApiEntity | null>(null);
+  const [selectedType, setSelectedType] = useState<CredentialType | null>(null);
   const isMounted = useIsMounted();
 
   const {

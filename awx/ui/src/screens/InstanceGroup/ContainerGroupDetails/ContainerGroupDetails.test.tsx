@@ -1,5 +1,4 @@
 import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -10,6 +9,7 @@ import {
   InventoriesAPI,
   UnifiedJobTemplatesAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -75,13 +75,13 @@ describe('<ContainerGroupDetails/>', () => {
   beforeEach(() => {
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     vi.mocked(InventoriesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
     vi.mocked(UnifiedJobTemplatesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UnifiedJobTemplatesAPI.read>);
   });
 
   afterEach(() => {
@@ -109,7 +109,7 @@ describe('<ContainerGroupDetails/>', () => {
       initialEntries: ['/instance_groups/container_group/42/details'],
     });
     vi.mocked(InstanceGroupsAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof InstanceGroupsAPI.destroy>
     );
     const { user } = renderWithContexts(
       <ContainerGroupDetails instanceGroup={buildInstanceGroup()} />,

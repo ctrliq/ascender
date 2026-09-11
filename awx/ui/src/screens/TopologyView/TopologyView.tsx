@@ -9,11 +9,12 @@ import Header from './Header';
 import MeshGraph from './MeshGraph';
 import useZoom from './utils/useZoom';
 import { CHILDSELECTOR, PARENTSELECTOR } from './constants';
+import type { MeshData, MeshNode } from './constants';
 
 function TopologyView() {
   const { t } = useLingui();
   useTitle(t`Topology View`);
-  const storedNodes = useRef(null);
+  const storedNodes = useRef<MeshNode[] | null>(null);
   const [showLegend, setShowLegend] = useState(true);
   const [showZoomControls, setShowZoomControls] = useState(false);
   const {
@@ -23,7 +24,7 @@ function TopologyView() {
     request: fetchMeshVisualizer,
   } = useRequest(
     useCallback(async () => {
-      const { data } = await MeshAPI.read();
+      const { data } = await MeshAPI.read<MeshData>();
       storedNodes.current = data.nodes;
       return {
         meshData: data,

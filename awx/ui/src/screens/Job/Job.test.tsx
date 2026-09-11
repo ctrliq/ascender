@@ -1,8 +1,7 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { waitFor, waitForElementToBeRemoved } from '@testing-library/react';
 import { ProjectUpdatesAPI, WorkflowJobsAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import Job from './Job';
@@ -37,13 +36,13 @@ describe('<Job />', () => {
         related: { source_workflow_job: '/api/v2/workflow_jobs/99/' },
         summary_fields: { source_workflow_job: { id: 99 } },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectUpdatesAPI.readDetail>);
     vi.mocked(ProjectUpdatesAPI.readEventOptions).mockResolvedValue({
       data: {},
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectUpdatesAPI.readEventOptions>);
     vi.mocked(WorkflowJobsAPI.readNodes).mockResolvedValue({
       data: { results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobsAPI.readNodes>);
 
     renderWithContexts(<Job setBreadcrumb={() => {}} />);
 

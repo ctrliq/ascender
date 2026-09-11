@@ -1,8 +1,8 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { CredentialsAPI, ExecutionEnvironmentsAPI, RootAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AdHocCommandsWizard from './AdHocCommandsWizard';
 import type { AdHocItem } from './types';
@@ -58,7 +58,7 @@ describe('<AdHocCommandsWizard/>', () => {
       data: {
         BRAND_NAME: 'AWX',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
   });
   afterEach(() => {
     vi.clearAllMocks();
@@ -73,16 +73,16 @@ describe('<AdHocCommandsWizard/>', () => {
   test('launch button should be disabled', async () => {
     vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
     const { user } = renderWizard(onLaunch);
     await waitFor(() =>
       expect(document.querySelector('#module_name')).toBeInTheDocument()
@@ -114,10 +114,10 @@ describe('<AdHocCommandsWizard/>', () => {
         ],
         count: 2,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: {
         results: [
@@ -126,10 +126,10 @@ describe('<AdHocCommandsWizard/>', () => {
         ],
         count: 2,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
     const { user } = renderWizard(onLaunch);
     await fillDetails(user);
     expect(nextButton()).toBeEnabled();
@@ -182,10 +182,10 @@ describe('<AdHocCommandsWizard/>', () => {
         ],
         count: 2,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: {
         results: [
@@ -199,10 +199,10 @@ describe('<AdHocCommandsWizard/>', () => {
         ],
         count: 2,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
     const { user } = renderWizard(onLaunch);
     await fillDetails(user);
     expect(nextButton()).toBeEnabled();
@@ -268,10 +268,10 @@ describe('<AdHocCommandsWizard/>', () => {
   test('should show error in navigation bar', async () => {
     vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
     const { user } = renderWizard(onLaunch);
     await waitFor(() =>
       expect(document.querySelector('#module_name')).toBeInTheDocument()
@@ -297,10 +297,10 @@ describe('<AdHocCommandsWizard/>', () => {
         results: [{ id: 1, name: 'EE 1', url: '' }],
         count: 1,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
     vi.mocked(CredentialsAPI.read).mockRejectedValue(
       Object.assign(new Error('An error occurred'), {
         response: {
@@ -315,7 +315,7 @@ describe('<AdHocCommandsWizard/>', () => {
     );
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
     const { user } = renderWizard(onLaunch);
     await fillDetails(user);
     expect(nextButton()).toBeEnabled();

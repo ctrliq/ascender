@@ -17,7 +17,7 @@ import { SettingDetail } from '../../shared';
 function OIDCDetail() {
   const { t } = useLingui();
   const { me } = useConfig();
-  const { GET: options } = useSettings();
+  const { GET: options = {} } = useSettings();
 
   const {
     isLoading,
@@ -59,7 +59,7 @@ function OIDCDetail() {
       <RoutedTabs tabsArray={tabsArray} />
       <CardBody>
         {isLoading && <ContentLoading />}
-        {!isLoading && error && <ContentError error={error} />}
+        {!isLoading && Boolean(error) && <ContentError error={error} />}
         {!isLoading && OIDC && (
           <DetailList>
             {Object.keys(OIDC).map((key) => {

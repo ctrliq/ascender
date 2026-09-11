@@ -23,7 +23,7 @@ import { RevertAllAlert, RevertFormActionGroup } from '../../shared';
 function UIEdit() {
   const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
-  const { PUT: options } = useSettings();
+  const { PUT: options = {} } = useSettings();
   const { license_info } = useConfig();
 
   const {

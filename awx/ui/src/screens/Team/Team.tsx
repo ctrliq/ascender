@@ -1,4 +1,8 @@
-import type { SetBreadcrumb, DetailedError } from 'types/api';
+import type {
+  SetBreadcrumb,
+  DetailedError,
+  Team as TeamModel,
+} from 'types/api';
 import React, { useState, useEffect } from 'react';
 
 import {
@@ -28,7 +32,7 @@ export interface TeamProps {
 
 function Team({ setBreadcrumb }: TeamProps) {
   const { t } = useLingui();
-  const [team, setTeam] = useState(null);
+  const [team, setTeam] = useState<TeamModel | null>(null);
   const [contentError, setContentError] = useState<unknown>(null);
   const [hasContentLoading, setHasContentLoading] = useState(true);
   const location = useLocation();

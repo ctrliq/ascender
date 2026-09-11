@@ -1,5 +1,4 @@
 import type { WorkflowJobTemplate, Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
@@ -14,6 +13,7 @@ import {
   ExecutionEnvironmentsAPI,
   CredentialsAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowJobTemplateForm from './WorkflowJobTemplateForm';
@@ -86,7 +86,9 @@ describe('<WorkflowJobTemplateForm/>', () => {
     global.console.error = vi.fn();
     vi.mocked(WorkflowJobTemplatesAPI.updateWebhookKey).mockResolvedValue({
       data: { webhook_key: 'sdafdghjkl2345678ionbvcxz' },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<
+      typeof WorkflowJobTemplatesAPI.updateWebhookKey
+    >);
     vi.mocked(LabelsAPI.read).mockResolvedValue({
       data: {
         results: [
@@ -96,7 +98,7 @@ describe('<WorkflowJobTemplateForm/>', () => {
         ],
         count: 3,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof LabelsAPI.read>);
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       data: {
         results: [
@@ -105,7 +107,7 @@ describe('<WorkflowJobTemplateForm/>', () => {
         ],
         count: 2,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     vi.mocked(InventoriesAPI.read).mockResolvedValue({
       data: {
         results: [
@@ -114,28 +116,28 @@ describe('<WorkflowJobTemplateForm/>', () => {
         ],
         count: 2,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
     vi.mocked(CredentialTypesAPI.read).mockResolvedValue({
       data: { results: [{ id: 1 }], count: 1 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialTypesAPI.read>);
     vi.mocked(InventoriesAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
     vi.mocked(ProjectsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readOptions>);
     vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: { results: [], count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(CredentialsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {}, POST: {} } },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
 
     history = createMemoryHistory({
       initialEntries: ['/templates/workflow_job_template/6/edit'],

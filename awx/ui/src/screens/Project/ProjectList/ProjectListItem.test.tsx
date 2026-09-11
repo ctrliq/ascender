@@ -39,6 +39,8 @@ const baseProject = {
   type: 'project',
   scm_type: 'git',
   scm_revision: '7788f7erga0jijodfgsjisiodf98sdga9hg9a98gaf',
+  modified: '2019-10-10T01:15:07.126487Z',
+  last_job_run: '2019-10-10T01:15:32.428068Z',
   summary_fields: {
     last_job: {
       id: 9000,

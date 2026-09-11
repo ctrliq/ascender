@@ -21,7 +21,7 @@ function NotificationTemplateAdd() {
   } = useRequest(
     useCallback(async () => {
       const { data } = await NotificationTemplatesAPI.readOptions();
-      return data.actions.POST.messages;
+      return data.actions.POST?.messages;
     }, [])
   );
 

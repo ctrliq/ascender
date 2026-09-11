@@ -3,6 +3,7 @@ import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
+import type { ResponseOf } from '../../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import selectedCredential from '../../data.cyberArkCredential.json';
 import azureVaultCredential from '../../data.azureVaultCredential.json';
@@ -72,7 +73,7 @@ const getInput = (id: Untyped) =>
 describe('<CredentialPluginPrompt />', () => {
   beforeEach(() => {
     vi.mocked(CredentialsAPI.test).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof CredentialsAPI.test>
     );
     vi.mocked(CredentialsAPI.read).mockResolvedValue(
       mockCredentialResults as unknown as ApiResponse<unknown>

@@ -3,6 +3,7 @@ import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { JobTemplatesAPI, WorkflowJobTemplateNodesAPI, RootAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -36,12 +37,12 @@ describe('<JobTemplateDetail />', () => {
     );
     vi.mocked(WorkflowJobTemplateNodesAPI.read).mockResolvedValue({
       data: { count: 0 },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobTemplateNodesAPI.read>);
     vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
       data: {
         BRAND_NAME: 'AWX',
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
   });
 
   afterEach(() => {
@@ -157,7 +158,7 @@ describe('<JobTemplateDetail />', () => {
 
   test('expected api calls are made for delete', async () => {
     vi.mocked(JobTemplatesAPI.destroy).mockResolvedValueOnce(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof JobTemplatesAPI.destroy>
     );
     const { user } = await renderDefault();
     await user.click(screen.getByRole('button', { name: 'Delete' }));
@@ -245,7 +246,7 @@ describe('<JobTemplateDetail />', () => {
       data: {
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readInstanceGroups>);
     await renderDefault();
     // an isEmpty Detail renders nothing, so the Instance Groups row is absent
     expect(getDetailValueByCy('jt-detail-instance-groups')).toBeNull();

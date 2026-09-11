@@ -1,4 +1,5 @@
 import type { QSParams } from 'util/qs';
+import type { InstanceGroup, Paginated } from '../../types/api';
 import type { BaseConstructor } from '../Base';
 
 function isEqual(
@@ -14,9 +15,12 @@ function isEqual(
 const InstanceGroupsMixin = <T extends BaseConstructor>(parent: T) =>
   class extends parent {
     readInstanceGroups(resourceId: number | string, params?: QSParams) {
-      return this.http.get(`${this.baseUrl}${resourceId}/instance_groups/`, {
-        params,
-      });
+      return this.http.get<Paginated<InstanceGroup>>(
+        `${this.baseUrl}${resourceId}/instance_groups/`,
+        {
+          params,
+        }
+      );
     }
 
     associateInstanceGroup(

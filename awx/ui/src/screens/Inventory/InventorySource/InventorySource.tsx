@@ -1,4 +1,4 @@
-import type { SetBreadcrumb, Inventory, Untyped } from 'types/api';
+import type { AnyInventory, SetBreadcrumb, Untyped } from 'types/api';
 import type { CurrentUser } from 'contexts/Config';
 import React, { useEffect, useCallback } from 'react';
 
@@ -25,7 +25,7 @@ import InventorySourceDetail from '../InventorySourceDetail';
 import InventorySourceEdit from '../InventorySourceEdit';
 
 export interface InventorySourceProps {
-  inventory: Inventory;
+  inventory: AnyInventory;
   setBreadcrumb: SetBreadcrumb;
   me: CurrentUser;
   [key: string]: unknown;

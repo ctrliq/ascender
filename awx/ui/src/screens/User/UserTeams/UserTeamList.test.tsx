@@ -5,6 +5,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import { UsersAPI, TeamsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   settleTooltips,
@@ -101,7 +102,7 @@ describe('<UserTeamList />', () => {
         count: mockAPIUserTeamList.length,
         results: mockAPIUserTeamList,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readTeams>);
 
     vi.mocked(UsersAPI.readTeamsOptions).mockResolvedValue(
       options as unknown as ApiResponse<any>
@@ -137,7 +138,7 @@ describe('<UserTeamList />', () => {
   test('should show associate team modal when adding an existing team', async () => {
     vi.mocked(TeamsAPI.read).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TeamsAPI.read>);
     await user.click(screen.getByRole('button', { name: 'Associate' }));
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Close' }));
@@ -190,7 +191,7 @@ describe('<UserTeamList />', () => {
   test('should make expected api request when associating teams', async () => {
     vi.mocked(UsersAPI.associateRole).mockResolvedValue({
       id: 2,
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.associateRole>);
     vi.mocked(UsersAPI.readTeamsOptions).mockResolvedValue({
       data: {
         actions: {
@@ -199,7 +200,7 @@ describe('<UserTeamList />', () => {
         },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof UsersAPI.readTeamsOptions>);
     vi.mocked(TeamsAPI.read).mockResolvedValue({
       data: {
         count: 1,
@@ -228,7 +229,7 @@ describe('<UserTeamList />', () => {
           },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TeamsAPI.read>);
     await user.click(screen.getByRole('button', { name: 'Associate' }));
     await user.click(await screen.findByText('Baz'));
     await user.click(screen.getByRole('button', { name: 'Save' }));

@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { JobsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import {
   renderWithContexts,
   assertDetail,
@@ -270,7 +270,7 @@ describe('<JobDetail />', () => {
 
   test('should properly delete job', async () => {
     vi.mocked(JobsAPI.destroy).mockResolvedValue(
-      {} as unknown as ApiResponse<Untyped>
+      {} as unknown as ResponseOf<typeof JobsAPI.destroy>
     );
     const { user } = renderWithContexts(<JobDetail job={mockJobData} />);
     await user.click(screen.getByRole('button', { name: 'Delete' }));

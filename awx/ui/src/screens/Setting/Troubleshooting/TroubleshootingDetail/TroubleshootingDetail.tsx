@@ -19,7 +19,7 @@ import { SettingDetail } from '../../shared';
 function TroubleshootingDetail() {
   const { t } = useLingui();
   const { me } = useConfig();
-  const { GET: options } = useSettings();
+  const { GET: options = {} } = useSettings();
 
   const {
     isLoading,
@@ -34,8 +34,7 @@ function TroubleshootingDetail() {
 
       const mergedData: Record<string, Untyped> = {};
       Object.keys(debugData).forEach((key) => {
-        mergedData[key] = options[key];
-        mergedData[key].value = debugData[key];
+        mergedData[key] = { ...options[key], value: debugData[key] };
       });
 
       return sortNestedDetails(mergedData);

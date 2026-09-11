@@ -1,4 +1,4 @@
-import type { SetBreadcrumb, Untyped } from 'types/api';
+import type { ReceptorAddress, SetBreadcrumb } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { CardBody } from 'components/Card';
@@ -59,25 +59,18 @@ function InstanceListenerAddressList({
         InstancesAPI.readOptions(),
       ]);
 
-      const listenerAddress_list = [];
-
-      for (let q = 0; q < results.length; q++) {
-        const receptor = results[q];
-        if (receptor.managed === true) continue;
-        if (id.toString() === receptor.instance.toString()) {
-          receptor.name = detail.hostname;
-          listenerAddress_list.push(receptor);
-        }
-      }
+      const listenerAddress_list = results.filter(
+        (receptor) => id.toString() === receptor.instance.toString()
+      );
 
       return {
         instance: detail,
         listenerAddresses: listenerAddress_list,
         count: listenerAddress_list.length,
-        relatedSearchableKeys: (actions?.data?.related_search_fields || []).map(
-          (val: Untyped) => val.slice(0, -8)
+        relatedSearchableKeys: (actions.data.related_search_fields || []).map(
+          (val) => val.slice(0, -8)
         ),
-        searchableKeys: getSearchableKeys(actions.data.actions?.GET),
+        searchableKeys: getSearchableKeys(actions.data.actions.GET),
       };
     }, [id]),
     {
@@ -145,7 +138,7 @@ function InstanceListenerAddressList({
             additionalControls={[]}
           />
         )}
-        renderRow={(listenerAddress: Untyped, index: number) => (
+        renderRow={(listenerAddress: ReceptorAddress, index: number) => (
           <InstanceListenerAddressListItem
             isSelected={selected.some((row) => row.id === listenerAddress.id)}
             onSelect={() => handleSelect(listenerAddress)}

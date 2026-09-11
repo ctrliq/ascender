@@ -1,9 +1,8 @@
-import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { Formik } from 'formik';
 import { waitFor } from '@testing-library/react';
 import { CredentialsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import EC2SubForm from './EC2SubForm';
 
@@ -26,7 +25,7 @@ describe('<EC2SubForm />', () => {
   beforeEach(() => {
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
   });
 
   afterAll(() => {

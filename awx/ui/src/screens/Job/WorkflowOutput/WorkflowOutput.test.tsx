@@ -1,8 +1,8 @@
 import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { waitFor } from '@testing-library/react';
 import { WorkflowJobsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowOutput from './WorkflowOutput';
 
@@ -84,7 +84,7 @@ describe('WorkflowOutput', () => {
         count: mockWorkflowJobNodes.length,
         results: mockWorkflowJobNodes,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof WorkflowJobsAPI.readNodes>);
     (window.SVGElement.prototype as Untyped).height = {
       baseVal: {
         value: 100,

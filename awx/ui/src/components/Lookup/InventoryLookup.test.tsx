@@ -1,9 +1,9 @@
-import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { InventoriesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import InventoryLookup from './InventoryLookup';
 
@@ -29,7 +29,7 @@ describe('InventoryLookup', () => {
         actions: { GET: {}, POST: {} },
         related_search_fields: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
   });
 
   afterEach(() => {
@@ -72,7 +72,7 @@ describe('InventoryLookup', () => {
   test('inventory lookup should be enabled', async () => {
     vi.mocked(InventoriesAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} }, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>
         <InventoryLookup onChange={() => {}} />
@@ -85,7 +85,7 @@ describe('InventoryLookup', () => {
   test('inventory lookup should be disabled', async () => {
     vi.mocked(InventoriesAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} }, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
     renderWithContexts(
       <Formik initialValues={{}} onSubmit={() => {}}>
         <InventoryLookup isDisabled onChange={() => {}} />

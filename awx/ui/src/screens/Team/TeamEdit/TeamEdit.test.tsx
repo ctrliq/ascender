@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped, Team } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
 
 import { TeamsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import TeamEdit from './TeamEdit';
 
@@ -69,7 +69,7 @@ describe('<TeamEdit />', () => {
   test('handleSubmit calls api update and navigates to the details page', async () => {
     vi.mocked(TeamsAPI.update).mockResolvedValue({
       data: { ...mockData },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof TeamsAPI.update>);
     const { user } = renderEdit();
     await user.click(screen.getByRole('button', { name: 'Submit' }));
     await waitFor(() =>

@@ -1,9 +1,9 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 
 import { MetricsAPI, InstancesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Metrics from './Metrics';
 
@@ -28,7 +28,7 @@ describe('<Metrics/>', () => {
           { hostname: 'receptor', node_type: 'execution' },
         ],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof InstancesAPI.read>);
     vi.mocked(MetricsAPI.read).mockResolvedValue({
       data: {
         metric1: {
@@ -40,7 +40,7 @@ describe('<Metrics/>', () => {
           samples: [{ labels: { node: 'metric 2' }, value: 10 }],
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof MetricsAPI.read>);
     ({ user } = renderWithContexts(<Metrics />));
     // wait for the initial instances/metrics fetch to settle
     await waitFor(() => expect(InstancesAPI.read).toHaveBeenCalled());

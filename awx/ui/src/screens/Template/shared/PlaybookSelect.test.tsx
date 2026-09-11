@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
@@ -8,6 +7,7 @@ import { i18n } from '@lingui/core';
 import { ProjectsAPI } from 'api';
 import { messages as englishMessages } from '../../../locales/en/messages';
 import PlaybookSelect from './PlaybookSelect';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 
 // Setup i18n for tests
 i18n.load({ en: englishMessages });
@@ -23,7 +23,7 @@ describe('<PlaybookSelect />', () => {
   beforeEach(() => {
     vi.mocked(ProjectsAPI.readPlaybooks).mockResolvedValue({
       data: ['debug.yml', 'test.yml'],
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readPlaybooks>);
   });
 
   afterEach(() => {

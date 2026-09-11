@@ -25,7 +25,7 @@ export interface ScheduleEditProps {
   schedule: Schedule;
   resource: Untyped;
   launchConfig?: LaunchConfig;
-  surveyConfig?: SurveyConfig;
+  surveyConfig?: SurveyConfig | null;
   resourceDefaultCredentials: Untyped;
   [key: string]: unknown;
 }
@@ -170,7 +170,7 @@ function ScheduleEdit({
           const {
             data: { results },
           } = await OrganizationsAPI.read();
-          organizationId = results[0].id;
+          organizationId = results[0]?.id;
         }
       }
 

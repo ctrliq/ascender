@@ -1,5 +1,4 @@
 import type { Untyped } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import {
@@ -8,6 +7,7 @@ import {
   CredentialsAPI,
   ExecutionEnvironmentsAPI,
 } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventorySourceForm from './InventorySourceForm';
 
@@ -44,20 +44,22 @@ describe('<InventorySourceForm />', () => {
   beforeEach(() => {
     vi.mocked(CredentialsAPI.read).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     vi.mocked(ProjectsAPI.readInventories).mockResolvedValue({
       data: ['foo', 'bar'],
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ProjectsAPI.readInventories>);
     (InventorySourcesAPI as Untyped).readOptions = async () =>
-      readOptionsResult as unknown as ApiResponse<Untyped>;
+      readOptionsResult as unknown as ResponseOf<
+        typeof ProjectsAPI.readInventories
+      >;
     // The ExecutionEnvironmentLookup rendered by the form fetches EEs on mount;
     // mock its API calls so loading settles without console errors.
     vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
       data: { count: 0, results: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
     vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
       data: { actions: { GET: {} }, related_search_fields: [] },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
   });
 
   afterEach(() => {

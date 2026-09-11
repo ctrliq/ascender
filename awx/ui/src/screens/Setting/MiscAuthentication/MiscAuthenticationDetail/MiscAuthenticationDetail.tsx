@@ -17,7 +17,7 @@ import { SettingDetail } from '../../shared';
 function MiscAuthenticationDetail() {
   const { t } = useLingui();
   const { me } = useConfig();
-  const { GET: options } = useSettings();
+  const { GET: options = {} } = useSettings();
 
   const {
     isLoading,
@@ -59,7 +59,7 @@ function MiscAuthenticationDetail() {
       <RoutedTabs tabsArray={tabsArray} />
       <CardBody>
         {isLoading && <ContentLoading />}
-        {!isLoading && error && <ContentError error={error} />}
+        {!isLoading && Boolean(error) && <ContentError error={error} />}
         {!isLoading && authentication && (
           <DetailList>
             {Object.keys(authentication).map((key) => {
