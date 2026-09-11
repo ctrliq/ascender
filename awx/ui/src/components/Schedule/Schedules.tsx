@@ -1,5 +1,5 @@
+import type { SetBreadcrumb, Untyped } from 'types/api';
 import type { SurveyConfig, LaunchConfig } from 'components/LaunchPrompt/types';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 
@@ -11,7 +11,7 @@ export interface SchedulesProps {
   apiModel: Untyped;
   loadScheduleOptions: Untyped;
   loadSchedules: Untyped;
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   /** Absent for a resource that cannot be prompted, a management job say. */
   launchConfig?: LaunchConfig;
   surveyConfig?: SurveyConfig;

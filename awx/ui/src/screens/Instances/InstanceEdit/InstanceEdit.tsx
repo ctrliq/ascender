@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { SetBreadcrumb, DetailedError, Untyped } from 'types/api';
 import React, { useState, useCallback, useEffect } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -12,7 +12,7 @@ import { InstancesAPI } from 'api';
 import InstanceForm from '../Shared/InstanceForm';
 
 export interface InstanceEditProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }
 

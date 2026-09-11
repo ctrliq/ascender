@@ -1,4 +1,10 @@
-import type { Inventory as InventoryModel, Schedule, Untyped } from 'types/api';
+import type {
+  BreadcrumbResource,
+  SetBreadcrumb,
+  Inventory as InventoryModel,
+  Schedule,
+  Untyped,
+} from 'types/api';
 import React, { useState, useCallback, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -22,11 +28,7 @@ import { getInventoryPath } from './shared/utils';
 // inventoryType is a real route param that the nested group/host screens read
 // via useParams; this picks the right detail screen for the kind.
 export interface InventoryTypeRouterProps {
-  setBreadcrumb: (
-    resource?: Untyped,
-    nested?: Untyped,
-    schedule?: Untyped
-  ) => void;
+  setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }
 
@@ -68,12 +70,12 @@ function Inventories() {
 
   const setBreadcrumbConfig = useCallback(
     (
-      passedInventory: Untyped,
-      passedNestedObject: Untyped,
-      passedSchedule: Untyped
+      passedInventory?: BreadcrumbResource,
+      passedNestedObject?: BreadcrumbResource,
+      passedSchedule?: BreadcrumbResource
     ) => {
       if (passedInventory && passedInventory.name !== inventory?.name) {
-        setInventory(passedInventory);
+        setInventory(passedInventory as InventoryModel);
       }
       if (
         passedNestedObject &&
@@ -82,7 +84,7 @@ function Inventories() {
         setNestedGroup(passedNestedObject);
       }
       if (passedSchedule && passedSchedule.name !== schedule?.name) {
-        setSchedule(passedSchedule);
+        setSchedule(passedSchedule as Schedule);
       }
       if (!inventory) {
         return;

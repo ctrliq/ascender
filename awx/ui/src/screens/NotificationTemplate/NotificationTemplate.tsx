@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { SetBreadcrumb, DetailedError } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -20,7 +20,7 @@ import NotificationTemplateDetail from './NotificationTemplateDetail';
 import NotificationTemplateEdit from './NotificationTemplateEdit';
 
 export interface NotificationTemplateProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }
 

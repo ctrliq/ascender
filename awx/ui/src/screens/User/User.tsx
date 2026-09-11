@@ -1,5 +1,5 @@
+import type { SetBreadcrumb, DetailedError } from 'types/api';
 import type { CurrentUser } from 'contexts/Config';
-import type { DetailedError, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -25,7 +25,7 @@ import UserTokens from './UserTokens';
 import UserRolesList from './UserRoles/UserRolesList';
 
 export interface UserProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   me?: CurrentUser;
   [key: string]: unknown;
 }

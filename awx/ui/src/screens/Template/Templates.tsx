@@ -1,4 +1,4 @@
-import type { Schedule, Untyped } from 'types/api';
+import type { BreadcrumbResource, Schedule, Untyped } from 'types/api';
 import React, { useState, useCallback, useRef } from 'react';
 
 import { Routes, Route } from 'react-router';
@@ -28,12 +28,15 @@ function Templates() {
   const [template, setTemplate] = useState<Untyped>();
 
   const setBreadcrumbConfig = useCallback(
-    (passedTemplate: Untyped, passedSchedule: Untyped) => {
+    (
+      passedTemplate?: BreadcrumbResource,
+      passedSchedule?: BreadcrumbResource
+    ) => {
       if (passedTemplate && passedTemplate.name !== template?.name) {
         setTemplate(passedTemplate);
       }
       if (passedSchedule && passedSchedule.name !== schedule?.name) {
-        setSchedule(passedSchedule);
+        setSchedule(passedSchedule as Schedule);
       }
       if (!template) return;
       const templatePath = `/templates/${template.type}/${template.id}`;

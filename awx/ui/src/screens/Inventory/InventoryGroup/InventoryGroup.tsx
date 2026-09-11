@@ -1,4 +1,4 @@
-import type { Inventory, Untyped } from 'types/api';
+import type { SetBreadcrumb, Inventory, Untyped } from 'types/api';
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -20,7 +20,7 @@ import InventoryGroupHosts from '../InventoryGroupHosts';
 import InventoryRelatedGroups from '../InventoryRelatedGroups';
 
 export interface InventoryGroupProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   inventory: Inventory;
   [key: string]: unknown;
 }

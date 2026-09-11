@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { SetBreadcrumb, DetailedError, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import {
   Link,
@@ -22,7 +22,7 @@ import ApplicationDetails from '../ApplicationDetails';
 import ApplicationTokens from '../ApplicationTokens';
 
 export interface ApplicationProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }
 

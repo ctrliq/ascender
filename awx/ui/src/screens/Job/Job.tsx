@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { SetBreadcrumb, DetailedError, Untyped } from 'types/api';
 import React, { useEffect, useCallback, useRef } from 'react';
 import { Link, Routes, Route, Navigate, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -37,7 +37,7 @@ export const JOB_URL_SEGMENT_MAP = {
 };
 
 export interface JobProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }
 

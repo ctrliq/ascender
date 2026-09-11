@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { SetBreadcrumb, DetailedError } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -38,7 +38,7 @@ const unacceptableCredentialTypes = [
 ];
 
 export interface CredentialProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }
 

@@ -1,7 +1,7 @@
 import type {
+  SetBreadcrumb,
   Inventory as InventoryModel,
   DetailedError,
-  Untyped,
 } from 'types/api';
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
@@ -31,7 +31,7 @@ import InventorySources from './InventorySources';
 import { getInventoryPath } from './shared/utils';
 
 export interface InventoryProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }
 

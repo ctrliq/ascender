@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Instance } from 'types/api';
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -21,17 +21,31 @@ import useRequest from 'hooks/useRequest';
 import ContentEmpty from 'components/ContentEmpty';
 import ScreenHeader from 'components/ScreenHeader/ScreenHeader';
 import ContentError from 'components/ContentError';
+import type { MetricSeries } from './LineChart';
 import LineChart from './LineChart';
+
+/** One sample of a metric, as the API's json rendering of prometheus gives it. */
+interface PrometheusSample {
+  /** Which instance the sample was taken on, among other labels. */
+  labels: { node?: string; [key: string]: string | undefined };
+  value: number;
+}
+
+/** One metric, with a sample per instance reporting it. */
+interface PrometheusMetric {
+  help?: string;
+  samples: PrometheusSample[];
+}
 
 let count = [0];
 
 function useInterval(
-  callback: Untyped,
-  delay: Untyped,
-  instance: Untyped,
-  metric: Untyped
+  callback: () => void,
+  delay: number,
+  instance: string | null,
+  metric: string | null
 ) {
-  const savedCallback = useRef<Untyped>(undefined);
+  const savedCallback = useRef<() => void>(undefined);
   useEffect(() => {
     savedCallback.current = callback;
   }, [callback]);
@@ -39,7 +53,7 @@ function useInterval(
     function tick() {
       count.push(count.length);
       if (instance && metric) {
-        savedCallback.current();
+        savedCallback.current?.();
       }
     }
 
@@ -53,10 +67,10 @@ function useInterval(
 function Metrics() {
   const { t } = useLingui();
   const [instanceIsOpen, setInstanceIsOpen] = useState(false);
-  const [instance, setInstance] = useState<Untyped>(null);
-  const [metric, setMetric] = useState<Untyped>(null);
+  const [instance, setInstance] = useState<string | null>(null);
+  const [metric, setMetric] = useState<string | null>(null);
   const [metricIsOpen, setMetricIsOpen] = useState(false);
-  const [renderedData, setRenderedData] = useState<Untyped[]>([]);
+  const [renderedData, setRenderedData] = useState<MetricSeries[]>([]);
   const {
     result: { instances, metrics },
     error: fetchInitialError,
@@ -78,9 +92,9 @@ function Metrics() {
 
       const metricOptions = Object.keys(mets);
       const instanceNames: string[] = [];
-      results.forEach((result: Untyped) => {
+      results.forEach((result: Instance) => {
         if (result.node_type !== 'execution') {
-          instanceNames.push(result.hostname);
+          instanceNames.push(result.hostname as string);
         }
       });
 
@@ -107,9 +121,9 @@ function Metrics() {
       });
 
       const rendered = renderedData;
-      const instanceData = Object.values(data);
-      instanceData.forEach((value: Untyped) => {
-        value.samples.forEach((sample: Untyped) => {
+      const instanceData: PrometheusMetric[] = Object.values(data);
+      instanceData.forEach((value: PrometheusMetric) => {
+        value.samples.forEach((sample: PrometheusSample) => {
           instances.forEach((i) => {
             if (i === sample.labels.node) {
               const renderedIndex = renderedData.findIndex(
@@ -126,16 +140,10 @@ function Metrics() {
                     },
                   ],
                 });
-              } else if (
-                rendered[renderedIndex].values?.length === 0 ||
-                !rendered[renderedIndex].values
-              ) {
-                rendered[renderedIndex].values = [
-                  { y: sample.value, x: count.length - 1 },
-                ];
               } else {
-                rendered[renderedIndex].values = [
-                  ...rendered[renderedIndex].values,
+                const series = rendered[renderedIndex] as MetricSeries;
+                series.values = [
+                  ...(series.values ?? []),
                   { y: sample.value, x: count.length - 1 },
                 ];
               }
@@ -152,7 +160,7 @@ function Metrics() {
       }
 
       setRenderedData(countRestrictedData);
-      return data[metric].help_text;
+      return data[metric as string].help_text;
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [instance, metric, instances]),
@@ -260,11 +268,7 @@ function Metrics() {
           <CardBody>
             {instance && metric ? (
               Object.keys(renderedData).length > 0 && (
-                <LineChart
-                  data={renderedData}
-                  count={count}
-                  helpText={helpText}
-                />
+                <LineChart data={renderedData} helpText={helpText} />
               )
             ) : (
               <ContentEmpty

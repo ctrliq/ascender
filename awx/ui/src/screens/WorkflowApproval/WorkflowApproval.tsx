@@ -1,4 +1,4 @@
-import type { Untyped, DetailedError } from 'types/api';
+import type { SetBreadcrumb, DetailedError } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -19,7 +19,7 @@ import { WorkflowApprovalsAPI } from 'api';
 import WorkflowApprovalDetail from './WorkflowApprovalDetail';
 
 export interface WorkflowApprovalProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }
 

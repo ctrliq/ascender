@@ -1,6 +1,6 @@
 import type { WorkflowState } from 'components/Workflow/workflowReducer';
 import type { Untyped } from 'types/api';
-import { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect, useRef } from 'react';
 import { useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import useInventoryStep from 'components/LaunchPrompt/steps/useInventoryStep';
@@ -327,6 +327,13 @@ export default function useWorkflowNodeSteps(
     errors: formikErrors,
   } = useFormikContext<Untyped>();
   const [visited, setVisited] = useState({});
+  // The reset below runs when the launch config arrives, and the values it
+  // carries over have to be the ones on screen by then rather than the ones
+  // that effect last closed over. Its dependency list deliberately leaves the
+  // form out, so a resource chosen while the config was still in flight was
+  // being reset away again.
+  const latestForm = useRef({ values: formikValues, errors: formikErrors });
+  latestForm.current = { values: formikValues, errors: formikErrors };
 
   const steps = [
     useRunTypeStep(askLinkType),
@@ -369,11 +376,14 @@ export default function useWorkflowNodeSteps(
 
   useEffect(() => {
     if (launchConfig && surveyConfig && isReady) {
+      const { values: currentValues, errors: currentErrors } =
+        latestForm.current;
       let initialValues: Record<string, Untyped> = {};
       if (
         nodeToEdit &&
         nodeToEdit?.fullUnifiedJobTemplate &&
-        nodeToEdit?.fullUnifiedJobTemplate?.id === formikValues.nodeResource?.id
+        nodeToEdit?.fullUnifiedJobTemplate?.id ===
+          currentValues.nodeResource?.id
       ) {
         initialValues = getNodeToEditDefaultValues(
           launchConfig,
@@ -389,14 +399,14 @@ export default function useWorkflowNodeSteps(
           }),
           {}
         );
-        initialValues.identifier = formikValues.identifier;
-        initialValues.convergence = formikValues.convergence;
-        initialValues.maxRetries = formikValues.maxRetries;
+        initialValues.identifier = currentValues.identifier;
+        initialValues.convergence = currentValues.convergence;
+        initialValues.maxRetries = currentValues.maxRetries;
       }
 
-      const errors = formikErrors.nodeResource
+      const errors = currentErrors.nodeResource
         ? {
-            nodeResource: formikErrors.nodeResource,
+            nodeResource: currentErrors.nodeResource,
           }
         : {};
 
@@ -411,13 +421,13 @@ export default function useWorkflowNodeSteps(
         errors,
         values: {
           ...initialValues,
-          nodeResource: formikValues.nodeResource,
-          nodeType: formikValues.nodeType,
-          linkType: formikValues.linkType,
-          linkConditionTrigger: formikValues.linkConditionTrigger,
-          linkConditionArtifactKey: formikValues.linkConditionArtifactKey,
-          linkConditionOperator: formikValues.linkConditionOperator,
-          linkConditionExpectedValue: formikValues.linkConditionExpectedValue,
+          nodeResource: currentValues.nodeResource,
+          nodeType: currentValues.nodeType,
+          linkType: currentValues.linkType,
+          linkConditionTrigger: currentValues.linkConditionTrigger,
+          linkConditionArtifactKey: currentValues.linkConditionArtifactKey,
+          linkConditionOperator: currentValues.linkConditionOperator,
+          linkConditionExpectedValue: currentValues.linkConditionExpectedValue,
           verbosity: initialValues?.verbosity?.toString(),
         },
       });

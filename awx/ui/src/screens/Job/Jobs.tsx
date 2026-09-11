@@ -1,4 +1,4 @@
-import type { Untyped, UnifiedJob } from 'types/api';
+import type { BreadcrumbResource, Untyped } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Routes, Route, Navigate, useParams } from 'react-router';
 
@@ -38,12 +38,12 @@ function Jobs() {
   });
 
   const buildBreadcrumbConfig = useCallback(
-    (job: UnifiedJob) => {
+    (job?: BreadcrumbResource) => {
       if (!job) {
         return;
       }
 
-      const typeSegment = JOB_TYPE_URL_SEGMENTS[job.type];
+      const typeSegment = JOB_TYPE_URL_SEGMENTS[job.type as string];
       setBreadcrumbConfig({
         '/jobs': t`Jobs`,
         [`/jobs/${typeSegment}/${job.id}`]: `${job.id} - ${job.name}`,

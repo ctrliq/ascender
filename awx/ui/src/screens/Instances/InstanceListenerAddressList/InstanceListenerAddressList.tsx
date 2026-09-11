@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SetBreadcrumb, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { CardBody } from 'components/Card';
@@ -24,7 +24,7 @@ const QS_CONFIG = getQSConfig('peer', {
 });
 
 export interface InstanceListenerAddressListProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }
 

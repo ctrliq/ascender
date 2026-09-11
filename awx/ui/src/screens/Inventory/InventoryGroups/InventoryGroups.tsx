@@ -1,4 +1,4 @@
-import type { Inventory, Untyped } from 'types/api';
+import type { SetBreadcrumb, Inventory } from 'types/api';
 import React from 'react';
 
 import { Routes, Route } from 'react-router';
@@ -9,7 +9,7 @@ import InventoryGroup from '../InventoryGroup/InventoryGroup';
 import InventoryGroupsList from './InventoryGroupsList';
 
 export interface InventoryGroupsProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   inventory: Inventory;
   [key: string]: unknown;
 }

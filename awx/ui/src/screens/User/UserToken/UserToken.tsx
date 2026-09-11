@@ -1,4 +1,4 @@
-import type { User, DetailedError, Untyped } from 'types/api';
+import type { SetBreadcrumb, User, DetailedError } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -18,7 +18,7 @@ import useRequest from 'hooks/useRequest';
 import UserTokenDetail from '../UserTokenDetail';
 
 export interface UserTokenProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   user: User;
   [key: string]: unknown;
 }

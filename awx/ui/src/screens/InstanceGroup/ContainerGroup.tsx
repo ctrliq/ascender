@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { SetBreadcrumb, DetailedError } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import {
   Link,
@@ -24,7 +24,7 @@ import ContainerGroupDetails from './ContainerGroupDetails';
 import ContainerGroupEdit from './ContainerGroupEdit';
 
 export interface ContainerGroupProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }
 

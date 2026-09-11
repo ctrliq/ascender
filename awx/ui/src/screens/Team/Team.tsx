@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { SetBreadcrumb, DetailedError } from 'types/api';
 import React, { useState, useEffect } from 'react';
 
 import {
@@ -22,7 +22,7 @@ import TeamEdit from './TeamEdit';
 import TeamRolesList from './TeamRoles';
 
 export interface TeamProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }
 

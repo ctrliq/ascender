@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SetBreadcrumb } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -16,7 +16,7 @@ import InstancePeerList from './InstancePeers';
 import InstanceListenerAddressList from './InstanceListenerAddressList';
 
 export interface InstanceProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }
 

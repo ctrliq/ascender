@@ -1,12 +1,24 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import * as d3 from 'd3';
 
+/** One reading of a metric on one instance, as the chart plots it. */
+export interface MetricPoint {
+  /** How many readings ago this one was taken. */
+  x: number;
+  y: number;
+}
+
+/** One instance's readings of the metric being shown. */
+export interface MetricSeries {
+  /** The instance's host name, which the legend labels the line with. */
+  name: string;
+  values: MetricPoint[];
+}
+
 export interface LineChartProps {
-  data: Untyped[];
+  data: MetricSeries[];
   helpText: string;
-  [key: string]: unknown;
 }
 
 function LineChart({ data, helpText }: LineChartProps) {
@@ -35,10 +47,10 @@ function LineChart({ data, helpText }: LineChartProps) {
     const circleRadiusHover = 8;
 
     /* Scale */
-    let smallestY: Untyped;
-    let largestY: Untyped;
+    let smallestY: number | undefined;
+    let largestY: number | undefined;
     data.map((line) =>
-      line.values.forEach((value: Untyped) => {
+      line.values.forEach((value: MetricPoint) => {
         if (smallestY === undefined) {
           smallestY = value.y;
         }
@@ -54,12 +66,15 @@ function LineChart({ data, helpText }: LineChartProps) {
       })
     );
 
-    const firstValues: Untyped[] = data[0]?.values ?? [];
+    const firstValues: MetricPoint[] = data[0]?.values ?? [];
     const xScale = d3
       .scaleLinear()
       .domain(
-        (d3.max(firstValues, (d: Untyped) => d.x) ?? 0) > 49
-          ? (d3.extent(firstValues, (d: Untyped) => d.x) as [number, number])
+        (d3.max(firstValues, (d: MetricPoint) => d.x) ?? 0) > 49
+          ? (d3.extent(firstValues, (d: MetricPoint) => d.x) as [
+              number,
+              number,
+            ])
           : [0, 50]
       )
       .range([0, width - margin]);
@@ -73,7 +88,7 @@ function LineChart({ data, helpText }: LineChartProps) {
     /* Add SVG */
     d3.selectAll(`#chart > *`).remove();
 
-    const renderTooltip = (d: Untyped) => {
+    const renderTooltip = (d: MetricPoint) => {
       d3.selectAll(`.tooltip > *`).remove();
 
       d3.select('#chart')
@@ -82,9 +97,9 @@ function LineChart({ data, helpText }: LineChartProps) {
         .attr('stroke', 'black')
         .attr('fill', 'white')
         .style('padding-left', '50px');
-      const tooltip: Record<string, Untyped> = {};
+      const tooltip: Record<string, number> = {};
       data.map((datum) => {
-        datum.values.forEach((value: Untyped) => {
+        datum.values.forEach((value: MetricPoint) => {
           if (d.x === value.x) {
             tooltip[datum.name] = value.y;
           }
@@ -129,8 +144,9 @@ function LineChart({ data, helpText }: LineChartProps) {
 
     // The key function is where this draws a legend row per series, so it
     // returns nothing and d3's own typing for it does not apply.
-    legendContainer.data(data, ((d: Untyped, i: number) => {
-      if (d?.name) {
+    legendContainer.data(data, ((d: unknown, i: number) => {
+      const series = d as MetricSeries;
+      if (series?.name) {
         const legendItemContainer = legendContainer
           .append('div')
           .style('display', 'flex')
@@ -149,9 +165,9 @@ function LineChart({ data, helpText }: LineChartProps) {
         legendItemContainer
           .append('text')
           .style('padding-left', '20px')
-          .text(d.name);
+          .text(series.name);
       }
-    }) as Untyped);
+    }) as unknown as d3.ValueFn<d3.BaseType, unknown, string>);
 
     // Add help text to top of chart
 
@@ -172,7 +188,7 @@ function LineChart({ data, helpText }: LineChartProps) {
 
     /* Add line into SVG */
     const line = d3
-      .line<Untyped>()
+      .line<MetricPoint>()
       .curve(d3.curveMonotoneX)
       .x((d) => xScale(d.x))
       .y((d) => yScale(d.y));
@@ -188,7 +204,7 @@ function LineChart({ data, helpText }: LineChartProps) {
       .append('path')
       .attr('class', 'line')
       .style('fill', 'none')
-      .attr('d', (d: Untyped) => line(d.values))
+      .attr('d', (d: MetricSeries) => line(d.values))
       .style('stroke', (d, i) => color(i))
       .style('stroke-width', '3px');
 
@@ -200,7 +216,7 @@ function LineChart({ data, helpText }: LineChartProps) {
       .append('g')
       .style('fill', (d, i) => color(i))
       .selectAll('circle')
-      .data((d: Untyped) => d.values)
+      .data((d: MetricSeries) => d.values)
       .enter()
       .append('g')
       .attr('class', 'circle')
@@ -213,8 +229,8 @@ function LineChart({ data, helpText }: LineChartProps) {
         removeTooltip();
       })
       .append('circle')
-      .attr('cx', (d: Untyped) => xScale(d.x))
-      .attr('cy', (d: Untyped) => yScale(d.y))
+      .attr('cx', (d: MetricPoint) => xScale(d.x))
+      .attr('cy', (d: MetricPoint) => yScale(d.y))
       .attr('r', circleRadius)
       // Regular functions, because d3 binds the hovered element to `this` and
       // an arrow would take the enclosing scope's instead.

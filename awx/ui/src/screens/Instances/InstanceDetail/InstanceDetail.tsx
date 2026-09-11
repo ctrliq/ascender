@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SetBreadcrumb, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -67,7 +67,7 @@ function computeForks(
 }
 
 export interface InstanceDetailProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   isK8s?: boolean;
   [key: string]: unknown;
 }

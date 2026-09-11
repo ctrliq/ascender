@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { SetBreadcrumb, DetailedError } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -25,7 +25,7 @@ import HostEdit from './HostEdit';
 import HostGroups from './HostGroups';
 
 export interface HostProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }
 

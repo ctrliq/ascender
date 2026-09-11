@@ -284,6 +284,30 @@ export interface ApiEntity {
 }
 
 /**
+ * An object a screen hands up so the breadcrumb trail can name it.
+ *
+ * Only the name is read, and every model the screens resolve carries one, so
+ * this stays structural rather than naming the dozen types that satisfy it.
+ */
+export interface BreadcrumbResource {
+  id?: number;
+  name?: string | null;
+  /** The object's kind, which the screens key their url segment off. */
+  type?: string;
+}
+
+/**
+ * Sets the breadcrumb trail for the screen below from what it has resolved:
+ * the resource itself, the object nested under it, and the schedule under
+ * that where a screen goes three deep.
+ */
+export type SetBreadcrumb = (
+  resource?: BreadcrumbResource,
+  nested?: BreadcrumbResource,
+  schedule?: BreadcrumbResource
+) => void;
+
+/**
  * A value this migration has not typed yet.
  *
  * Deliberately an alias rather than a bare `any`, so what remains is greppable

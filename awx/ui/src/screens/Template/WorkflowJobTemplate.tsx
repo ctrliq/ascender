@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { SetBreadcrumb, DetailedError } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -32,7 +32,7 @@ import TemplateSurvey from './TemplateSurvey';
 import { Visualizer } from './WorkflowJobTemplateVisualizer';
 
 export interface WorkflowJobTemplateProps {
-  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  setBreadcrumb: SetBreadcrumb;
   [key: string]: unknown;
 }
 
