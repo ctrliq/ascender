@@ -1,4 +1,4 @@
-import type { Job, UnifiedJob } from '../types/api';
+import type { AnyJob } from '../types/api';
 
 /**
  * The details url for the schedule that launched a job, which differs per job
@@ -7,9 +7,7 @@ import type { Job, UnifiedJob } from '../types/api';
  * Returns undefined for a type with no schedule route, and for an inventory
  * update with no inventory, which is what the switch below always did.
  */
-export default function getScheduleUrl(
-  job: Job | UnifiedJob
-): string | undefined {
+export default function getScheduleUrl(job: AnyJob): string | undefined {
   const templateId = job.summary_fields?.unified_job_template?.id;
   const scheduleId = job.summary_fields?.schedule?.id;
   const inventoryId = job.summary_fields?.inventory?.id ?? null;

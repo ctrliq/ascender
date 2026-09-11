@@ -67,6 +67,8 @@ export interface SummaryFields {
   organization?: SummaryFieldRef;
   inventory?: SummaryFieldRef & { kind?: string };
   project?: SummaryFieldRef & { status?: string };
+  /** The update that fetched the project, on the job that waited for it. */
+  project_update?: SummaryFieldRef & { status?: string };
   job_template?: SummaryFieldRef;
   workflow_job_template?: SummaryFieldRef;
   unified_job_template?: SummaryFieldRef & { unified_job_type?: string };
@@ -81,11 +83,13 @@ export interface SummaryFields {
   resolved_environment?: SummaryFieldRef & { image?: string };
   labels?: { results: (SummaryFieldRef & { name: string })[]; count?: number };
   source_workflow_job?: SummaryFieldRef;
-  source_project?: SummaryFieldRef;
+  /** Inventory updates: the project the source is fetched from. */
+  source_project?: SummaryFieldRef & { status?: string };
   source_credential?: SummaryFieldRef;
   /** The custom script an inventory source runs, where it still has one. */
   source_script?: SummaryFieldRef;
-  inventory_source?: SummaryFieldRef;
+  /** Inventory updates: the source itself, on the job that ran it. */
+  inventory_source?: SummaryFieldRef & { source?: string };
   credential_type?: SummaryFieldRef;
   application?: SummaryFieldRef;
   host?: SummaryFieldRef;
@@ -238,7 +242,16 @@ export type UnifiedJob = WithNested<Schemas['UnifiedJobList']> & {
  * which kind of job it is, and the screens branch on `type` to find out.
  */
 export type AnyJob = Pick<UnifiedJob, 'id' | 'type'> &
-  Partial<Omit<Job, keyof UnifiedJob> & UnifiedJob>;
+  Partial<Omit<Job, keyof UnifiedJob> & UnifiedJob> & {
+    /** Inventory updates: the project update that fetched the source. */
+    source_project_update?: number | null;
+    /** Project updates: which kind of source control the project uses. */
+    scm_type?: string | null;
+    /** Ad hoc commands: what was run, against what, and how. */
+    module_name?: string | null;
+    module_args?: string | null;
+    become_enabled?: boolean | null;
+  };
 export type Host = WithNested<Schemas['Host']>;
 /**
  * `webhook_key` is not on the project serializer: the form fetches it from

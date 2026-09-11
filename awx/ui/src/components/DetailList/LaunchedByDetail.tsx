@@ -1,4 +1,4 @@
-import type { Job, UnifiedJob } from 'types/api';
+import type { AnyJob, SummaryFields } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -6,8 +6,8 @@ import getScheduleUrl from 'util/getScheduleUrl';
 import Detail from './Detail';
 
 export interface LaunchedByDetailProps {
-  /** Either the detail serializer or a row of the unified job list. */
-  job: Job | UnifiedJob;
+  /** A job of any kind: what it reports here is the same for all of them. */
+  job: AnyJob & { summary_fields: SummaryFields };
   dataCy?: string;
   [key: string]: unknown;
 }

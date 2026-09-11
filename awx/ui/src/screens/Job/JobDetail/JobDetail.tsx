@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { AnyJob, SummaryFieldRef, SummaryFields } from 'types/api';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 
@@ -39,8 +39,10 @@ const StatusDetailValue = styled.div`
 `;
 
 export interface JobDetailProps {
-  job: Untyped;
-  inventorySourceLabels?: Untyped[];
+  /** A job the api has already answered with, so its summary is there. */
+  job: AnyJob & { summary_fields: SummaryFields };
+  /** The source types the api offers, as value and label pairs. */
+  inventorySourceLabels?: [string | number | null, string][];
   [key: string]: unknown;
 }
 
@@ -94,11 +96,11 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
     }
   };
 
-  const buildInstanceGroupLink = (item: Untyped) => (
+  const buildInstanceGroupLink = (item: SummaryFieldRef) => (
     <Link to={`/instance_groups/${item.id}`}>{item.name}</Link>
   );
 
-  const buildContainerGroupLink = (item: Untyped) => (
+  const buildContainerGroupLink = (item: SummaryFieldRef) => (
     <Link to={`/instance_groups/container_group/${item.id}`}>{item.name}</Link>
   );
 
@@ -178,7 +180,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
 
       let projectName = '';
       if (project?.name || source_project?.name) {
-        projectName = project ? project.name : source_project.name;
+        projectName = (project ? project.name : source_project?.name) ?? '';
       }
       return project || inventory_source ? (
         <>
@@ -207,7 +209,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
                     status={
                       projectUpdate
                         ? projectUpdate.status
-                        : source_project.status
+                        : source_project?.status
                     }
                   />
                 </Link>
@@ -327,7 +329,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
               label={t`Inventory Source`}
               value={
                 <Link
-                  to={`/inventories/inventory/${inventory.id}/sources/${inventory_source.id}`}
+                  to={`/inventories/inventory/${inventory?.id}/sources/${inventory_source.id}`}
                 >
                   {inventory_source.name}
                 </Link>
@@ -405,7 +407,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
             value={buildInstanceGroupLink(instanceGroup)}
           />
         )}
-        {instanceGroup && instanceGroup?.is_container_group && (
+        {instanceGroup && Boolean(instanceGroup.is_container_group) && (
           <Detail
             dataCy="job-container-group"
             label={t`Container Group`}
@@ -478,7 +480,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
                 totalChips={credentials.length}
                 ouiaId="job-credential-chips"
               >
-                {credentials.map((c: Untyped) => (
+                {credentials.map((c) => (
                   <CredentialChip
                     key={c.id}
                     credential={c}
@@ -488,10 +490,10 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
                 ))}
               </ChipGroup>
             }
-            isEmpty={credentials.length === 0}
+            isEmpty={credentials?.length === 0}
           />
         )}
-        {labels && labels.count > 0 && (
+        {labels && (labels.count ?? 0) > 0 && (
           <Detail
             dataCy="job-labels"
             fullWidth
@@ -503,7 +505,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
                 totalChips={labels.results.length}
                 ouiaId="job-label-chips"
               >
-                {labels.results.map((l: Untyped) => (
+                {labels.results.map((l) => (
                   <Label
                     variant="outline"
                     key={l.id}
@@ -528,7 +530,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
                 totalChips={job.job_tags.split(',').length}
                 ouiaId="job-tag-chips"
               >
-                {job.job_tags.split(',').map((jobTag: Untyped) => (
+                {job.job_tags.split(',').map((jobTag) => (
                   <Label
                     variant="outline"
                     key={jobTag}
@@ -555,7 +557,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
                 totalChips={job.skip_tags.split(',').length}
                 ouiaId="job-skip-tag-chips"
               >
-                {job.skip_tags.split(',').map((skipTag: Untyped) => (
+                {job.skip_tags.split(',').map((skipTag) => (
                   <Label
                     variant="outline"
                     key={skipTag}
@@ -613,7 +615,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
       </DetailList>
       <CardActionsRow>
         {job.type !== 'system_job' &&
-          job.summary_fields.user_capabilities.start &&
+          job.summary_fields.user_capabilities?.start &&
           (job.status === 'failed' && job.type === 'job' ? (
             <LaunchButton resource={job}>
               {({ handleRelaunch, isLaunching }) => (
@@ -677,8 +679,12 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
 }
 export default JobDetail;
 
-function validateReactNode(value: Untyped) {
+/**
+ * A detail's value as something React can render: the api reports some of a
+ * job's own fields as objects, which would throw where a string is expected.
+ */
+function validateReactNode(value: unknown): React.ReactNode {
   if (value === null || value === undefined) return 'Unknown';
   if (typeof value === 'object') return JSON.stringify(value);
-  return value;
+  return value as React.ReactNode;
 }

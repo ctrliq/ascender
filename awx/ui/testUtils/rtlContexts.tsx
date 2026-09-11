@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 /*
  * React Testing Library test harness for mounting components with app context.
  *
@@ -13,11 +12,13 @@ import type { Untyped } from 'types/api';
  */
 import React from 'react';
 import { act, render, screen } from '@testing-library/react';
+import type { RenderOptions } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Router } from 'react-router';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import { createMemoryHistory } from './historyShim';
+import type { TestHistory } from './historyShim';
 import { messages as englishMessages } from '../src/locales/en/messages';
 import { SessionProvider } from '../src/contexts/Session';
 import { ConfigProvider } from '../src/contexts/Config';
@@ -25,7 +26,10 @@ import { ConfigProvider } from '../src/contexts/Config';
 // setupTests replaces both context modules with plain providers, so in a test
 // these take the value the harness hands them. Their real counterparts do not,
 // which is what the assertions here say.
-type ValueProvider = React.FC<{ value: Untyped; children: React.ReactNode }>;
+type ValueProvider = React.FC<{
+  value: unknown;
+  children: React.ReactNode;
+}>;
 const MockableSessionProvider = SessionProvider as unknown as ValueProvider;
 const MockableConfigProvider = ConfigProvider as unknown as ValueProvider;
 
@@ -52,18 +56,32 @@ const defaultContexts = {
   },
 };
 
-function applyDefaultContexts(context: Untyped) {
+/** The contexts a test may override, each merged onto the defaults above. */
+export interface TestContexts {
+  config?: Record<string, unknown>;
+  router?: { history?: TestHistory };
+  session?: Record<string, unknown>;
+}
+
+/** The three of them once the test's own have been merged onto the defaults. */
+interface ResolvedContexts {
+  config: Record<string, unknown>;
+  router: { history?: TestHistory };
+  session: Record<string, unknown>;
+}
+
+function applyDefaultContexts(context?: TestContexts): ResolvedContexts {
   if (!context) {
-    return defaultContexts;
+    return defaultContexts as ResolvedContexts;
   }
-  const newContext: Record<string, Untyped> = {};
+  const newContext: Record<string, Record<string, unknown>> = {};
   Object.keys(defaultContexts).forEach((key) => {
     newContext[key] = {
       ...defaultContexts[key as keyof typeof defaultContexts],
-      ...context[key],
+      ...context[key as keyof TestContexts],
     };
   });
-  return newContext;
+  return newContext as unknown as ResolvedContexts;
 }
 
 // react-router v6's low-level <Router> is controlled: it takes the current
@@ -71,7 +89,13 @@ function applyDefaultContexts(context: Untyped) {
 // to the (history v5) history so location changes re-render — the v6 equivalent
 // of react-router-dom's unstable_HistoryRouter, inlined to avoid the unstable
 // API and any history-version coupling.
-function HistoryRouter({ history, children }: Untyped) {
+function HistoryRouter({
+  history,
+  children,
+}: {
+  history: TestHistory;
+  children: React.ReactNode;
+}) {
   const [state, setState] = React.useState({
     action: history.action,
     location: history.location,
@@ -88,12 +112,23 @@ function HistoryRouter({ history, children }: Untyped) {
   );
 }
 
-export function renderWithContexts(ui: Untyped, options: Untyped = {}) {
+/** What renderWithContexts takes beyond the contexts: testing library's own. */
+export interface RenderWithContextsOptions extends Omit<
+  RenderOptions,
+  'wrapper'
+> {
+  context?: TestContexts;
+}
+
+export function renderWithContexts(
+  ui: React.ReactElement,
+  options: RenderWithContextsOptions = {}
+) {
   const { context: userContext, ...renderOptions } = options;
   const { config, router, session } = applyDefaultContexts(userContext);
   const history = router.history || createMemoryHistory({});
 
-  function Wrapper({ children }: Untyped) {
+  function Wrapper({ children }: { children?: React.ReactNode }) {
     return (
       <I18nProvider i18n={i18n}>
         <MockableSessionProvider value={session}>
@@ -143,7 +178,7 @@ export async function settleTooltips() {
  * Assert a <Detail label={...} value={...} /> rendered the expected pair.
  * Detail renders <div><dt>label</dt><dd>value</dd></div> (components/DetailList).
  */
-export function assertDetail(label: Untyped, value: Untyped) {
+export function assertDetail(label: string, value?: string | null) {
   const term = screen.getByText(label);
-  expect(term.nextElementSibling).toHaveTextContent(value);
+  expect(term.nextElementSibling).toHaveTextContent(value as string);
 }

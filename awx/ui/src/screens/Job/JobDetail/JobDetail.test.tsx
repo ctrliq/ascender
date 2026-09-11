@@ -9,7 +9,8 @@ import {
   assertDetail,
 } from '../../../../testUtils/rtlContexts';
 import JobDetail from './JobDetail';
-import mockJobData from '../shared/data.job.json';
+import type { JobDetailProps } from './JobDetail';
+import mockJobDataJson from '../shared/data.job.json';
 
 vi.mock('../../../api');
 
@@ -32,6 +33,9 @@ vi.mock('@patternfly/react-core', async () => {
 // to the value cell of a given label.
 const detailValue = (label: Untyped) =>
   screen.getByText(label).nextElementSibling;
+
+/** The fixture as the detail takes it: a job of some kind with its summary. */
+const mockJobData = mockJobDataJson as unknown as JobDetailProps['job'];
 
 describe('<JobDetail />', () => {
   afterEach(() => {
@@ -70,26 +74,29 @@ describe('<JobDetail />', () => {
     );
     assertDetail('Started', '8/8/2019, 7:24:18 PM');
     assertDetail('Finished', '8/8/2019, 7:24:50 PM');
-    assertDetail('Job Template', mockJobData.summary_fields.job_template.name);
+    assertDetail('Job Template', mockJobData.summary_fields.job_template?.name);
     assertDetail('Source Workflow Job', '1234 - Test Source Workflow');
     assertDetail('Job Type', 'Playbook Run');
-    assertDetail('Launched By', mockJobData.summary_fields.created_by.username);
-    assertDetail('Inventory', mockJobData.summary_fields.inventory.name);
-    assertDetail('Project', mockJobData.summary_fields.project.name);
+    assertDetail(
+      'Launched By',
+      mockJobData.summary_fields.created_by?.username
+    );
+    assertDetail('Inventory', mockJobData.summary_fields.inventory?.name);
+    assertDetail('Project', mockJobData.summary_fields.project?.name);
     assertDetail('Revision', mockJobData.scm_revision);
     assertDetail('Playbook', mockJobData.playbook);
     assertDetail('Verbosity', '0 (Normal)');
     assertDetail('Execution Node', mockJobData.execution_node);
     assertDetail(
       'Instance Group',
-      mockJobData.summary_fields.instance_group.name
+      mockJobData.summary_fields.instance_group?.name
     );
     assertDetail('Credentials', 'SSH: Demo Credential');
     assertDetail('Machine Credential', 'SSH: Machine cred');
     assertDetail('Source Control Branch', 'main');
     assertDetail(
       'Execution Environment',
-      mockJobData.summary_fields.execution_environment.name
+      mockJobData.summary_fields.execution_environment?.name
     );
     assertDetail('Job Slice', '0/1');
     assertDetail('Forks', '42');
@@ -116,8 +123,8 @@ describe('<JobDetail />', () => {
       ...mockJobData,
       summary_fields: {
         ...mockJobData.summary_fields,
-        project: null,
-        inventory: null,
+        project: undefined,
+        inventory: undefined,
       },
       project: null,
       inventory: null,
@@ -339,7 +346,7 @@ describe('<JobDetail />', () => {
       <JobDetail
         job={{
           ...mockJobData,
-          status: 'success',
+          status: 'successful',
           type: 'project_update',
         }}
       />,
@@ -504,7 +511,7 @@ describe('<JobDetail />', () => {
       webhook_service: '',
       webhook_credential: null,
       webhook_guid: '',
-    };
+    } as unknown as JobDetailProps['job'];
     renderWithContexts(<JobDetail job={workFlowJob} />);
     expect(detailValue('Status')).toHaveTextContent('Successful');
     assertDetail('Started', '7/6/2021, 7:40:17 PM');
@@ -521,7 +528,7 @@ describe('<JobDetail />', () => {
         job={{
           ...mockJobData,
           summary_fields: {
-            inventory_source: {},
+            inventory_source: { id: 1 },
             user_capabilities: {},
             inventory: { id: 1 },
           },
