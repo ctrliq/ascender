@@ -34,11 +34,9 @@ describe('<ToolbarDeleteButton />', () => {
           id: 'Workflow Job Template Node',
           message: 'Workflow Job Template Node',
         },
-        request: vi
-          .mocked(CredentialsAPI.read)
-          .mockResolvedValue({
-            data: { count: 1 },
-          } as unknown as ApiResponse<Untyped>),
+        request: vi.mocked(CredentialsAPI.read).mockResolvedValue({
+          data: { count: 1 },
+        } as unknown as ApiResponse<Untyped>),
       },
     ];
   });
@@ -123,11 +121,9 @@ describe('<ToolbarDeleteButton />', () => {
           id: 'Workflow Job Template Node',
           message: 'Workflow Job Template Node',
         },
-        request: vi
-          .mocked(CredentialsAPI.read)
-          .mockResolvedValue({
-            data: { count: 3 },
-          } as unknown as ApiResponse<Untyped>),
+        request: vi.mocked(CredentialsAPI.read).mockResolvedValue({
+          data: { count: 3 },
+        } as unknown as ApiResponse<Untyped>),
       },
     ];
     const { user } = renderWithContexts(

@@ -16,12 +16,9 @@
     // from imports, which is how the 553 test files are written.
     "types": ["vitest/globals", "vite/client"],
 
-    // The whole approach in one flag. JavaScript and TypeScript compile side
-    // by side, so a file becomes typed when someone touches it rather than in
-    // a conversion pass. checkJs stays off: turning it on would report on
-    // 1,627 untyped files at once, which is the opposite of incremental.
-    "allowJs": true,
-    "checkJs": false,
+    // src and testUtils hold no JavaScript any more, so nothing outside the
+    // build configuration is exempt from the checker.
+    "allowJs": false,
 
     "strict": true,
     "noUncheckedIndexedAccess": true,

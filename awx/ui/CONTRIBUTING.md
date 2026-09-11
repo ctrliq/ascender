@@ -25,7 +25,7 @@ Have questions about this document or anything not covered here? Feel free to re
       - [Naming components that use the context api](#naming-components-that-use-the-context-api)
     - [Class constructors vs Class properties](#class-constructors-vs-class-properties)
     - [Binding](#binding)
-    - [Typechecking with PropTypes](#typechecking-with-proptypes)
+    - [Typechecking with TypeScript](#typechecking-with-typescript)
     - [Custom Hooks](#custom-hooks)
     - [Naming Functions](#naming-functions)
     - [Default State Initialization](#default-state-initialization)
@@ -170,24 +170,20 @@ Inside these folders, the internal structure is:
 
 In the root of `/src`, there are a few files which are used to initialize the react app. These are
 
-- **index.js**
+- **index.tsx**
   - Connects react app to root dom node.
-  - Sets up root route structure, navigation grouping and login modal
-  - Calls base context providers
-  - Imports .scss styles.
-- **app.js**
-  - Sets standard page layout, about modal, and root dialog modal.
-- **RootProvider.js**
-  - Sets up all context providers.
-  - Initializes i18n and router
+  - Imports the PatternFly base stylesheet and the content security policy.
+- **App.tsx**
+  - Sets up the router, the context providers and i18n.
+  - Sets root route structure, navigation grouping and the login route.
 
 ### Naming files
 
-Ideally, files should be named the same as the component they export, and tests with `.test` appended. In other words, `<FooBar>` would be defined in `FooBar.js`, and its tests would be defined in `FooBar.test.js`.
+Ideally, files should be named the same as the component they export, and tests with `.test` appended. In other words, `<FooBar>` would be defined in `FooBar.tsx`, and its tests would be defined in `FooBar.test.tsx`.
 
 #### Naming components that use the context api
 
-**File naming** - Since contexts export both consumer and provider (and potentially in withContext function form), the file can be simplified to be named after the consumer export. In other words, the file containing the `Network` context components would be named `Network.js`.
+**File naming** - Since contexts export both consumer and provider (and potentially in withContext function form), the file can be simplified to be named after the consumer export. In other words, the file containing the `Network` context components would be named `Network.tsx`.
 
 **Component naming and conventions** - In order to provide a consistent interface with react-router and [lingui](https://lingui.js.org/), as well as make their usage easier and less verbose, context components follow these conventions:
 
@@ -239,24 +235,39 @@ It is good practice to bind our class methods within our class constructor metho
 2. [Performance advantages](https://stackoverflow.com/a/44844916).
 3. Ease of testing.
 
-### Typechecking with PropTypes
+### Typechecking with TypeScript
 
-Shared components should have their prop values typechecked. This will help catch bugs when components get refactored/renamed.
+`src` and `testUtils` are TypeScript, checked under `strict` with
+`noUncheckedIndexedAccess`. `npm run type-check` runs the checker, and CI runs it
+as its own job, so a type error fails the pull request the way a lint error does.
 
-```javascript
-About.propTypes = {
-  ansible_version: PropTypes.string,
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func.isRequired,
-  version: PropTypes.string,
-};
+A component declares its props as an exported interface named after it, and a
+prop is optional when the component copes without it: when it gives the prop a
+default, guards every read of it, or hands it to a child that declares it
+optional. A prop the component calls or dereferences on its own stays required,
+and the caller passes it.
 
-About.defaultProps = {
-  ansible_version: null,
-  isOpen: false,
-  version: null,
-};
+```typescript
+export interface AboutProps {
+  ansibleVersion?: string;
+  isOpen?: boolean;
+  onClose: () => void;
+  version?: string;
+}
+
+function About({ ansibleVersion, isOpen = false, onClose, version }: AboutProps) {
 ```
+
+`Untyped` is the migration marker, exported from `types/api`. It is `any` with a
+name, so a value that has not been described yet is greppable rather than
+invisible, and narrowing one is a self-contained change. Reach for it where the
+shape genuinely is not known yet; do not use it to silence a checker that is
+right.
+
+The API types in `src/types/api.generated.ts` come from the platform's own
+OpenAPI schema, via `npm run generate-api-types`. Prefer them over describing a
+response by hand, and give a partial fixture in a test an explicit cast rather
+than loosening the type the application uses.
 
 ### Custom Hooks
 
@@ -303,7 +314,7 @@ this.state = {
 
 ### Testing components that use contexts
 
-We have several React contexts that wrap much of the app, including those from react-router, lingui, and some of our own. When testing a component that depends on one or more of these, use the `renderWithContexts()` helper function found in `testUtils/rtlContexts.js`. It wraps the component tree with the necessary context providers and basic stub data, then returns [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)'s `render` result plus a `history` object and a configured `user` (from `@testing-library/user-event`).
+We have several React contexts that wrap much of the app, including those from react-router, lingui, and some of our own. When testing a component that depends on one or more of these, use the `renderWithContexts()` helper function found in `testUtils/rtlContexts.tsx`. It wraps the component tree with the necessary context providers and basic stub data, then returns [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)'s `render` result plus a `history` object and a configured `user` (from `@testing-library/user-event`).
 
 If you want to stub the value of a context, or assert actions taken on it, you can customize a context's value by passing a `context` object as the second parameter. For example, this provides a custom value for the `Config` context:
 
@@ -349,7 +360,7 @@ You can learn more about the ways lingui and its React helpers at [this link](ht
 1. Make sure that the languages you intend to translate are set correctly in the `.linguirc` configuration file.
 2. `npm run extract-strings` to create .po files for each language specified. The .po files will be placed in src/locales. When updating strings that are used by `<Plural>` or `plural()` you will need to run this command to get the strings to render properly. This command will create `.po` files for each of the supported languages that will need to be committed with your PR.
 3. Open up the .po file for the language you want to test and add some translations. In production we would pass this .po file off to the translation team.
-4. Once you've edited your .po file (or we've gotten a .po file back from the translation team) run `npm run compile-strings`. This command takes the .po files and turns them into a minified JSON object and can be seen in the `messages.js` file in each locale directory. These files get loaded at the App root level (see: App.js).
+4. Once you've edited your .po file (or we've gotten a .po file back from the translation team) run `npm run compile-strings`. This command takes the .po files and turns them into a minified JSON object and can be seen in the `messages.mjs` file in each locale directory. These files get loaded at the App root level (see: App.tsx).
 5. Change the language in your browser and reload the page. You should see your specified translations in place of English strings.
 
 ### Marking an issue to be translated

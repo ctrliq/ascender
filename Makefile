@@ -440,6 +440,10 @@ ui-lint:
 	$(NPM_BIN) run --prefix awx/ui lint
 	$(NPM_BIN) run --prefix awx/ui prettier-check
 
+ui-type-check:
+	$(NPM_BIN) --prefix awx/ui install
+	$(NPM_BIN) run --prefix awx/ui type-check
+
 ui-test:
 	$(NPM_BIN) --prefix awx/ui install
 	$(NPM_BIN) run --prefix awx/ui test

@@ -72,8 +72,8 @@ export default defineConfig({
     testTimeout: 120000,
     hookTimeout: 120000,
     coverage: {
-      include: ['src/**/*.{js,jsx}', 'testUtils/**/*.{js,jsx}'],
-      exclude: ['src/locales/**', '**/index.js'],
+      include: ['src/**/*.{ts,tsx}', 'testUtils/**/*.{ts,tsx}'],
+      exclude: ['src/locales/**', '**/index.ts'],
     },
   },
 });
