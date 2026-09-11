@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Form } from '@patternfly/react-core';
@@ -19,7 +18,7 @@ function CredentialPasswordsStep({
     values: { credentials },
   } = useFormikContext<LaunchPromptValues>();
 
-  const vaultsThatPrompt: Untyped[] = [];
+  const vaultsThatPrompt: string[] = [];
   let showcredentialPasswordSsh = false;
   let showcredentialPasswordPrivilegeEscalation = false;
   let showcredentialPasswordPrivateKeyPassphrase = false;
@@ -28,7 +27,7 @@ function CredentialPasswordsStep({
     !launchConfig.ask_credential_on_launch &&
     launchConfig.passwords_needed_to_start
   ) {
-    launchConfig.passwords_needed_to_start.forEach((password: Untyped) => {
+    launchConfig.passwords_needed_to_start.forEach((password) => {
       if (password === 'ssh_password') {
         showcredentialPasswordSsh = true;
       } else if (password === 'become_password') {
@@ -41,11 +40,11 @@ function CredentialPasswordsStep({
       }
     });
   } else if (credentials) {
-    credentials.forEach((credential: Untyped) => {
+    credentials.forEach((credential) => {
       if (!credential.inputs) {
         const launchConfigCredential = (
           launchConfig.defaults?.credentials ?? []
-        ).find((defaultCred: Untyped) => defaultCred.id === credential.id);
+        ).find((defaultCred) => defaultCred.id === credential.id);
 
         if (launchConfigCredential?.passwords_needed?.length) {
           if (
@@ -67,12 +66,10 @@ function CredentialPasswordsStep({
           }
 
           const vaultPasswordIds = launchConfigCredential.passwords_needed
-            .filter((passwordNeeded: Untyped) =>
+            .filter((passwordNeeded) =>
               passwordNeeded.startsWith('vault_password')
             )
-            .map(
-              (vaultPassword: Untyped) => vaultPassword.split(/\.(.+)/)[1] || ''
-            );
+            .map((vaultPassword) => vaultPassword.split(/\.(.+)/)[1] || '');
 
           vaultsThatPrompt.push(...vaultPasswordIds);
         }
@@ -90,7 +87,7 @@ function CredentialPasswordsStep({
         }
 
         if (credential?.inputs?.vault_password === 'ASK') {
-          vaultsThatPrompt.push(credential.inputs.vault_id);
+          vaultsThatPrompt.push(String(credential.inputs.vault_id ?? ''));
         }
       }
     });

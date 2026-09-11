@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { LaunchableResource } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import PreviewStep from './PreviewStep';
@@ -9,7 +9,7 @@ const STEP_ID = 'preview';
 
 export default function usePreviewStep(
   launchConfig: LaunchConfig,
-  resource: Untyped,
+  resource: LaunchableResource | null,
   surveyConfig: SurveyConfig,
   hasErrors: boolean,
   showStep: boolean,

@@ -2,6 +2,7 @@ import type { QSParams } from 'util/qs';
 import type {
   AccessListEntry,
   Credential,
+  Job,
   JobTemplate,
   LaunchConfig,
   OptionsResponse,
@@ -58,7 +59,7 @@ class JobTemplates extends SchedulesMixin(
   }
 
   launch(id: number | string, data: unknown) {
-    return this.http.post(`${this.baseUrl}${id}/launch/`, data);
+    return this.http.post<Job>(`${this.baseUrl}${id}/launch/`, data);
   }
 
   readTemplateOptions(id: number | string) {

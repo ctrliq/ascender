@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { LaunchableResource } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
@@ -21,7 +21,7 @@ const STEP_ID = 'inventory';
 
 export default function useInventoryStep(
   launchConfig: LaunchConfig,
-  resource: Untyped,
+  resource: LaunchableResource | null,
   visitedSteps: VisitedSteps
 ): LaunchStep {
   const { t } = useLingui();
@@ -46,12 +46,12 @@ export default function useInventoryStep(
           component: (
             <InventoryStep
               warningMessage={
-                resource.type === 'workflow_job_template' ? (
+                resource?.type === 'workflow_job_template' ? (
                   <InventoryAlert
                     ouiaId="InventoryStep-alert"
                     variant="warning"
                     isInline
-                    title={t`This inventory is applied to all workflow nodes within this workflow (${resource.name}) that prompt for an inventory.`}
+                    title={t`This inventory is applied to all workflow nodes within this workflow (${resource?.name ?? ''}) that prompt for an inventory.`}
                   />
                 ) : null
               }
@@ -73,7 +73,7 @@ export default function useInventoryStep(
       setFieldTouched('inventory', true, false);
     },
     validate: () => {
-      if (meta.touched && !meta.value && resource.type === 'job_template') {
+      if (meta.touched && !meta.value && resource?.type === 'job_template') {
         helpers.setError(t`An inventory must be selected`);
       }
     },
@@ -82,7 +82,7 @@ export default function useInventoryStep(
 
 function getInitialValues(
   launchConfig: LaunchConfig,
-  resource: Untyped
+  resource: LaunchableResource | null
 ): LaunchPromptValues {
   if (!launchConfig.ask_inventory_on_launch) {
     return {};

@@ -78,7 +78,7 @@ function ProjectLookup({
         projects: data.results,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
         canEdit:
           Boolean(actionsResponse.data.actions.POST) || isOverrideDisabled,

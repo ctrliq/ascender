@@ -210,13 +210,13 @@ export type AnyUnifiedJobTemplate = Omit<
  */
 export type UnifiedJob = WithNested<Schemas['UnifiedJobList']> & {
   /** Jobs: whether this is the parent of a set of job slices. */
-  is_sliced_job?: boolean;
-  job_type?: string;
+  is_sliced_job?: boolean | null;
+  job_type?: string | null;
   /** Inventory updates: which inventory source plugin ran. */
-  source?: string;
+  source?: string | null;
   /** Project updates: the branch that was checked out. */
-  scm_branch?: string;
-  scm_revision?: string;
+  scm_branch?: string | null;
+  scm_revision?: string | null;
   job_slice_number?: number;
   job_slice_count?: number;
   inventory?: number | null;
@@ -236,7 +236,7 @@ export type UnifiedJob = WithNested<Schemas['UnifiedJobList']> & {
  * which kind of job it is, and the screens branch on `type` to find out.
  */
 export type AnyJob = Pick<UnifiedJob, 'id' | 'type'> &
-  Partial<Job & UnifiedJob>;
+  Partial<Omit<Job, keyof UnifiedJob> & UnifiedJob>;
 export type Host = WithNested<Schemas['Host']>;
 /**
  * `webhook_key` is not on the project serializer: the form fetches it from
@@ -581,6 +581,18 @@ export interface LaunchConfig {
   [key: string]: unknown;
 }
 
+/**
+ * What a relaunch endpoint answers on a GET.
+ *
+ * It is a launch configuration like any other, which is what the prompt takes,
+ * and carries two more things: how many hosts a job could be retried against,
+ * and whether a project or an inventory source can be updated at all.
+ */
+export type RelaunchConfig = LaunchConfig & {
+  retry_counts?: Record<string, number>;
+  can_update?: boolean;
+};
+
 /** One question out of a template's survey, as the survey endpoint returns it. */
 export interface SurveyQuestion {
   variable: string;
@@ -660,6 +672,46 @@ export type NodeTemplate = Partial<AnyUnifiedJobTemplate> & {
   required_approvals?: number;
   on_timeout?: string;
 };
+
+/**
+ * What a launch or a relaunch is started from.
+ *
+ * The launch button is reached for a template, which it launches, for a job
+ * that has already run, which it relaunches, and for a workflow node, which
+ * carries its own prompt values, so which fields the resource has follows
+ * which of those it is and every one of them is optional here. Named are the
+ * ones the launch path itself reads; the rest stay reachable through the index
+ * signature, because what the preview step renders is the whole object.
+ */
+export interface LaunchableResource {
+  id?: number;
+  type?: string;
+  name?: string | null;
+  description?: string | null;
+  organization?: number | null;
+  /** The variables the prompt seeds its editor with, before any override. */
+  extra_vars?: string | null;
+  /** A workflow node's own prompt values, which the survey step reads. */
+  extra_data?: Record<string, unknown>;
+  job_type?: string | null;
+  limit?: string | null;
+  verbosity?: number | null;
+  job_tags?: string | null;
+  skip_tags?: string | null;
+  scm_branch?: string | null;
+  diff_mode?: boolean | null;
+  forks?: number | null;
+  job_slice_count?: number | null;
+  timeout?: number | null;
+  /**
+   * An inventory update relaunches its source rather than itself, and a
+   * project update its project, so both are named on the job.
+   */
+  inventory_source?: number | null;
+  project?: number | null;
+  summary_fields?: SummaryFields;
+  [key: string]: unknown;
+}
 
 /** The job types, which decide which model and which url a job uses. */
 export type JobType =

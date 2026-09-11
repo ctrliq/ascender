@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { LaunchableResource } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
@@ -26,7 +26,7 @@ const ErrorMessageWrapper = styled.div`
 `;
 
 export interface PreviewStepProps {
-  resource: Untyped;
+  resource: LaunchableResource | null;
   launchConfig: LaunchConfig;
   surveyConfig?: SurveyConfig | null;
   formErrors?: boolean;
@@ -56,8 +56,8 @@ function PreviewStep({
         : '';
       if (surveyConfig?.spec) {
         const passwordFields = surveyConfig.spec
-          .filter((q: Untyped) => q.type === 'password')
-          .map((q: Untyped) => q.variable);
+          .filter((q) => q.type === 'password')
+          .map((q) => q.variable);
         const masked = maskPasswords(surveyValues, passwordFields);
         overrides.extra_vars = yaml.dump(
           mergeExtraVars(initialExtraVars, masked)
@@ -85,7 +85,7 @@ function PreviewStep({
         </ErrorMessageWrapper>
       )}
       <PromptDetail
-        resource={resource}
+        resource={resource ?? {}}
         launchConfig={launchConfig}
         overrides={overrides}
       />

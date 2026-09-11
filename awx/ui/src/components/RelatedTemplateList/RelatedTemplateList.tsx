@@ -82,7 +82,7 @@ function RelatedTemplateList({
         actions: actionsResponse.data.actions,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
     }, [location]), // eslint-disable-line react-hooks/exhaustive-deps

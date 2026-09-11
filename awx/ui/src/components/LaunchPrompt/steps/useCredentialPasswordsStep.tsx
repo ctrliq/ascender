@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { LaunchCredential } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useFormikContext } from 'formik';
@@ -18,7 +18,7 @@ const isValueMissing = (val: unknown) => !val || val === '';
 export default function useCredentialPasswordsStep(
   launchConfig: LaunchConfig,
 
-  showStep: unknown,
+  showStep: boolean,
   visitedSteps: VisitedSteps
 ): LaunchStep {
   const { t } = useLingui();
@@ -76,11 +76,11 @@ export default function useCredentialPasswordsStep(
           }
         });
       } else if (values.credentials) {
-        values.credentials.forEach((credential: Untyped) => {
+        values.credentials.forEach((credential) => {
           if (!credential.inputs) {
             const launchConfigCredential = (
               launchConfig.defaults?.credentials ?? []
-            ).find((defaultCred: Untyped) => defaultCred.id === credential.id);
+            ).find((defaultCred) => defaultCred.id === credential.id);
 
             if (launchConfigCredential?.passwords_needed?.length) {
               launchConfigCredential?.passwords_needed?.forEach(
@@ -144,7 +144,7 @@ export default function useCredentialPasswordsStep(
 
 function getInitialValues(
   launchConfig: LaunchConfig,
-  selectedCredentials: Untyped[] = []
+  selectedCredentials: LaunchCredential[] = []
 ) {
   const initialValues: { credential_passwords: Record<string, string> } = {
     credential_passwords: {},
@@ -164,11 +164,11 @@ function getInitialValues(
     return initialValues;
   }
 
-  selectedCredentials.forEach((credential: Untyped) => {
+  selectedCredentials.forEach((credential) => {
     if (!credential.inputs) {
       const launchConfigCredential = (
         launchConfig.defaults?.credentials ?? []
-      ).find((defaultCred: Untyped) => defaultCred.id === credential.id);
+      ).find((defaultCred) => defaultCred.id === credential.id);
 
       if (launchConfigCredential?.passwords_needed?.length) {
         launchConfigCredential?.passwords_needed?.forEach(
@@ -219,11 +219,11 @@ function checkForError(launchConfig: LaunchConfig, values: LaunchPromptValues) {
       }
     });
   } else if (values.credentials) {
-    values.credentials.forEach((credential: Untyped) => {
+    values.credentials.forEach((credential) => {
       if (!credential.inputs) {
         const launchConfigCredential = (
           launchConfig.defaults?.credentials ?? []
-        ).find((defaultCred: Untyped) => defaultCred.id === credential.id);
+        ).find((defaultCred) => defaultCred.id === credential.id);
 
         if (launchConfigCredential?.passwords_needed?.length) {
           launchConfigCredential?.passwords_needed?.forEach(

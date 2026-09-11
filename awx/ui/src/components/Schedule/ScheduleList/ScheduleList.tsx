@@ -78,7 +78,7 @@ function ScheduleList({
         actions: scheduleActions.data.actions,
         relatedSearchableKeys: (
           scheduleActions?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val: string) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(scheduleActions.data.actions?.GET),
       };
     }, [location.search, loadSchedules, loadScheduleOptions]),

@@ -1,4 +1,4 @@
-import type { NodeTemplate } from 'types/api';
+import type { LaunchableResource } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import InstanceGroupsStep from './InstanceGroupsStep';
@@ -9,7 +9,7 @@ const STEP_ID = 'instanceGroups';
 
 export default function useInstanceGroupsStep(
   launchConfig: LaunchConfig,
-  resource: NodeTemplate | null,
+  resource: LaunchableResource | null,
   instanceGroups: unknown
 ): LaunchStep {
   const { t } = useLingui();

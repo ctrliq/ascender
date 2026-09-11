@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -13,12 +12,19 @@ import {
 } from 'api';
 import useToast, { AlertVariant } from 'hooks/useToast';
 import type { LaunchConfig, SurveyConfig } from 'components/LaunchPrompt/types';
+import type {
+  AnyJob,
+  ApiResponse,
+  LaunchableResource,
+  LaunchCredential,
+} from 'types/api';
+import type { LabelInput } from 'util/labels';
 import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
 import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
 import LaunchPrompt from '../LaunchPrompt';
 
-function canLaunchWithoutPrompt(launchData: Untyped) {
+function canLaunchWithoutPrompt(launchData: LaunchConfig) {
   return (
     launchData.can_start_without_user_input &&
     !launchData.ask_inventory_on_launch &&
@@ -39,6 +45,17 @@ function canLaunchWithoutPrompt(launchData: Untyped) {
   );
 }
 
+/**
+ * What a launch or a relaunch posts.
+ *
+ * The named keys are the ones this component reads on its way through; the
+ * rest are whatever the prompt collected, which the api endpoint decides.
+ */
+export interface LaunchParams {
+  credential_passwords?: Record<string, string>;
+  [key: string]: unknown;
+}
+
 /** What LaunchButton hands whatever renders the button itself. */
 export interface LaunchButtonRenderProps {
   /** Launches the resource, prompting first when it asks for anything. */
@@ -49,7 +66,11 @@ export interface LaunchButtonRenderProps {
 }
 
 export interface LaunchButtonProps {
-  resource: Untyped;
+  /**
+   * Always a real resource here: the button is rendered from a row or from a
+   * detail screen, where a prompt's own resource may still be empty.
+   */
+  resource: LaunchableResource & { id: number };
   /**
    * A render prop rather than an element, because the caller decides what the
    * button looks like: a toolbar button, a kebab item, or an icon in a row.
@@ -64,9 +85,11 @@ function LaunchButton({ resource, children }: LaunchButtonProps) {
   const [showLaunchPrompt, setShowLaunchPrompt] = useState(false);
   const [launchConfig, setLaunchConfig] = useState<LaunchConfig | null>(null);
   const [surveyConfig, setSurveyConfig] = useState<SurveyConfig | null>(null);
-  const [labels, setLabels] = useState<Untyped[]>([]);
+  const [labels, setLabels] = useState<LabelInput[]>([]);
   const [isLaunching, setIsLaunching] = useState(false);
-  const [resourceCredentials, setResourceCredentials] = useState<Untyped[]>([]);
+  const [resourceCredentials, setResourceCredentials] = useState<
+    LaunchCredential[]
+  >([]);
   const [error, setError] = useState<unknown>(null);
   const { addToast, Toast, toastProps } = useToast();
 
@@ -121,8 +144,11 @@ function LaunchButton({ resource, children }: LaunchButtonProps) {
           data: { results },
         } = await readLabels;
 
+        // The schema has a label's name nullable; the labels field takes a
+        // string, and a label the api sent always has one.
         const allLabels = results.map((label) => ({
           ...label,
+          name: label.name ?? '',
           isReadOnly: true,
         }));
 
@@ -148,14 +174,14 @@ function LaunchButton({ resource, children }: LaunchButtonProps) {
     }
   };
 
-  const launchWithParams = async (params: Untyped) => {
+  const launchWithParams = async (params: LaunchParams) => {
     if (isLaunching) {
       showToast();
       return;
     }
     setIsLaunching(true);
     try {
-      let jobPromise: Promise<Untyped> | undefined;
+      let jobPromise: Promise<ApiResponse<AnyJob>> | undefined;
 
       if (resource.type === 'job_template') {
         jobPromise = JobTemplatesAPI.launch(resource.id, params || {});
@@ -166,18 +192,21 @@ function LaunchButton({ resource, children }: LaunchButtonProps) {
       } else if (resource.type === 'workflow_job') {
         jobPromise = WorkflowJobsAPI.relaunch(resource.id, params || {});
       } else if (resource.type === 'ad_hoc_command') {
-        if (params?.credential_passwords) {
-          // The api expects the passwords at the top level of the object instead of nested
-          // in credential_passwords like the other relaunch endpoints
-          Object.keys(params.credential_passwords).forEach((key) => {
-            params[key] = params.credential_passwords[key];
-          });
-
-          delete params.credential_passwords;
-        }
-        jobPromise = AdHocCommandsAPI.relaunch(resource.id, params || {});
+        // The api expects the passwords at the top level of the object instead of nested
+        // in credential_passwords like the other relaunch endpoints
+        const { credential_passwords: credentialPasswords, ...rest } =
+          params || {};
+        jobPromise = AdHocCommandsAPI.relaunch(resource.id, {
+          ...rest,
+          ...credentialPasswords,
+        });
       }
 
+      // Every type the button is rendered for is launched above; the guard is
+      // what says so, since the branches are the only thing that assigns it.
+      if (!jobPromise) {
+        return;
+      }
       const { data: job } = await jobPromise;
       if (isMounted.current) {
         const seg = JOB_TYPE_URL_SEGMENTS[job.type];
@@ -192,21 +221,21 @@ function LaunchButton({ resource, children }: LaunchButtonProps) {
     }
   };
 
-  const handleRelaunch = async (params: Untyped) => {
-    let readRelaunch: Promise<Untyped> | undefined;
-    let relaunch: Promise<Untyped> | undefined;
+  const handleRelaunch = async (params?: LaunchParams) => {
+    let readRelaunch: Promise<ApiResponse<LaunchConfig>> | undefined;
+    let relaunch: Promise<ApiResponse<AnyJob>> | undefined;
 
     if (isLaunching) {
       showToast();
       return;
     }
     setIsLaunching(true);
-    if (resource.type === 'inventory_update') {
+    if (resource.type === 'inventory_update' && resource.inventory_source) {
       // We'll need to handle the scenario where the src no longer exists
       readRelaunch = InventorySourcesAPI.readLaunchUpdate(
         resource.inventory_source
       );
-    } else if (resource.type === 'project_update') {
+    } else if (resource.type === 'project_update' && resource.project) {
       // We'll need to handle the scenario where the project no longer exists
       readRelaunch = ProjectsAPI.readLaunchUpdate(resource.project);
     } else if (resource.type === 'workflow_job') {
@@ -218,17 +247,21 @@ function LaunchButton({ resource, children }: LaunchButtonProps) {
     }
 
     try {
+      // As above: every type the relaunch button is rendered for is read here.
+      if (!readRelaunch) {
+        return;
+      }
       const { data: relaunchConfig } = await readRelaunch;
       if (isMounted.current) setLaunchConfig(relaunchConfig);
       if (
         !relaunchConfig.passwords_needed_to_start ||
         relaunchConfig.passwords_needed_to_start.length === 0
       ) {
-        if (resource.type === 'inventory_update') {
+        if (resource.type === 'inventory_update' && resource.inventory_source) {
           relaunch = InventorySourcesAPI.launchUpdate(
             resource.inventory_source
           );
-        } else if (resource.type === 'project_update') {
+        } else if (resource.type === 'project_update' && resource.project) {
           relaunch = ProjectsAPI.launchUpdate(resource.project);
         } else if (resource.type === 'workflow_job') {
           relaunch = WorkflowJobsAPI.relaunch(resource.id, params || {});
@@ -236,6 +269,9 @@ function LaunchButton({ resource, children }: LaunchButtonProps) {
           relaunch = AdHocCommandsAPI.relaunch(resource.id);
         } else if (resource.type === 'job') {
           relaunch = JobsAPI.relaunch(resource.id, params || {});
+        }
+        if (!relaunch) {
+          return;
         }
         const { data: job } = await relaunch;
         if (isMounted.current) {

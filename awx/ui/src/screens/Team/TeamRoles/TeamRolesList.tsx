@@ -74,7 +74,7 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
         isAdminOfOrg: orgAdminCount > 0,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
     }, [me.id, team.id, team.organization, search]),

@@ -1,4 +1,4 @@
-import type { NodeTemplate, Untyped } from 'types/api';
+import type { LaunchableResource } from 'types/api';
 import React from 'react';
 import { t } from '@lingui/core/macro';
 import { useFormikContext } from 'formik';
@@ -15,10 +15,20 @@ import type {
 
 const STEP_ID = 'survey';
 
+/**
+ * How long an answer is, for the questions that are bounded by it.
+ *
+ * Text questions answer with a string and multiselect ones with an array;
+ * anything else has no length, and NaN compares false against every bound the
+ * way reading .length off a number used to give undefined.
+ */
+const answerLength = (value: unknown): number =>
+  typeof value === 'string' || Array.isArray(value) ? value.length : NaN;
+
 export default function useSurveyStep(
   launchConfig: LaunchConfig,
   surveyConfig: SurveyConfig,
-  resource: NodeTemplate | null,
+  resource: LaunchableResource | null,
   visitedSteps: VisitedSteps
 ): LaunchStep {
   const { setFieldError, values } = useFormikContext<LaunchPromptValues>();
@@ -77,7 +87,7 @@ export default function useSurveyStep(
 function getInitialValues(
   launchConfig: LaunchConfig,
   surveyConfig: SurveyConfig,
-  resource: Untyped
+  resource: LaunchableResource | null
 ): Record<string, unknown> {
   if (!launchConfig.survey_enabled || !surveyConfig) {
     return {};
@@ -112,20 +122,23 @@ function getInitialValues(
   return values;
 }
 
-function validateSurveyField(question: Untyped, value: Untyped) {
-  const isTextField = ['text', 'textarea'].includes(question.type);
-  const isNumeric = ['integer', 'float'].includes(question.type);
+function validateSurveyField(question: SurveyQuestion, value: unknown) {
+  const isTextField = ['text', 'textarea'].includes(question.type ?? '');
+  const isNumeric = ['integer', 'float'].includes(question.type ?? '');
   if (isTextField && (value || value === 0)) {
-    if (question.min && value.length < question.min) {
+    if (question.min && answerLength(value) < question.min) {
       return t`This field must be at least ${question.min} characters`;
     }
-    if (question.max && value.length > question.max) {
+    if (question.max && answerLength(value) > question.max) {
       return t`This field must not exceed ${question.max} characters`;
     }
   }
   if (isNumeric && (value || value === 0)) {
-    if (value < question.min || value > question.max) {
-      return t`This field must be a number and have a value between ${question.min} and ${question.max}`;
+    if (
+      Number(value) < Number(question.min) ||
+      Number(value) > Number(question.max)
+    ) {
+      return t`This field must be a number and have a value between ${question.min ?? ''} and ${question.max ?? ''}`;
     }
   }
   if (question.required && !value && value !== 0) {
@@ -142,28 +155,32 @@ function checkForError(
   let hasError = false;
   if (launchConfig.survey_enabled && surveyConfig.spec) {
     surveyConfig.spec.forEach((question: SurveyQuestion) => {
-      const value = values[`survey_${question.variable}`] as Untyped;
+      const value = values[`survey_${question.variable}`];
       const isTextField = ['text', 'textarea'].includes(question.type ?? '');
       const isNumeric = ['integer', 'float'].includes(question.type ?? '');
       if (isTextField && (value || value === 0)) {
         if (
-          (question.min != null && value.length < question.min) ||
-          (question.max != null && value.length > question.max)
+          (question.min != null && answerLength(value) < question.min) ||
+          (question.max != null && answerLength(value) > question.max)
         ) {
           hasError = true;
         }
       }
       if (isNumeric) {
         if (
-          (value < (question.min as number) ||
-            value > (question.max as number) ||
+          (Number(value) < Number(question.min) ||
+            Number(value) > Number(question.max) ||
             value === '') &&
           question.required
         ) {
           hasError = true;
         }
       }
-      if (question.required && (!value || value.length === 0) && !isNumeric) {
+      if (
+        question.required &&
+        (!value || answerLength(value) === 0) &&
+        !isNumeric
+      ) {
         hasError = true;
       }
     });

@@ -79,7 +79,7 @@ function AssociateModal({
         itemCount: count,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val: string) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
     }, [fetchRequest, optionsRequest, location.search, displayKey]),

@@ -67,7 +67,7 @@ function InventoryGroupsList() {
         actions: groupOptions.data.actions,
         relatedSearchableKeys: (
           groupOptions?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(groupOptions.data.actions?.GET),
       };
     }, [inventoryId, location]),

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
@@ -117,7 +116,7 @@ function MultipleChoiceField({ question }: { question: SurveyQuestion }) {
   const id = `survey-question-${question.variable}`;
   const isValid = !(meta.touched && meta.error);
 
-  let options: Untyped[] = [];
+  let options: string[] = [];
 
   if (typeof question.choices === 'string') {
     options = question.choices.split('\n');
@@ -126,7 +125,7 @@ function MultipleChoiceField({ question }: { question: SurveyQuestion }) {
   }
 
   const filteredOptions = filterValue
-    ? options.filter((opt: Untyped) =>
+    ? options.filter((opt) =>
         opt.toLowerCase().includes(filterValue.toLowerCase())
       )
     : options;
@@ -194,7 +193,7 @@ function MultipleChoiceField({ question }: { question: SurveyQuestion }) {
       >
         <SelectList>
           {filteredOptions.length > 0 ? (
-            filteredOptions.map((opt: Untyped) => (
+            filteredOptions.map((opt) => (
               <SelectOption key={opt} value={opt}>
                 {opt}
               </SelectOption>
@@ -227,7 +226,7 @@ function MultiSelectField({ question }: { question: SurveyQuestion }) {
   const hasActualValue = !question.required || meta.value?.length > 0;
   const isValid = !meta.touched || (!meta.error && hasActualValue);
 
-  let options: Untyped[] = [];
+  let options: string[] = [];
 
   if (typeof question.choices === 'string') {
     options = question.choices.split('\n');
@@ -236,7 +235,7 @@ function MultiSelectField({ question }: { question: SurveyQuestion }) {
   }
 
   const filteredOptions = filterValue
-    ? options.filter((opt: Untyped) =>
+    ? options.filter((opt) =>
         opt.toLowerCase().includes(filterValue.toLowerCase())
       )
     : options;
@@ -321,7 +320,7 @@ function MultiSelectField({ question }: { question: SurveyQuestion }) {
       >
         <SelectList>
           {filteredOptions.length > 0 ? (
-            filteredOptions.map((opt: Untyped) => (
+            filteredOptions.map((opt) => (
               <SelectOption
                 key={opt}
                 value={opt}

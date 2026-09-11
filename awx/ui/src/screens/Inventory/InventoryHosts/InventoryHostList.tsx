@@ -61,9 +61,7 @@ function InventoryHostList() {
         actions: hostOptions.data.actions,
         relatedSearchableKeys: (
           hostOptions?.data?.related_search_fields || []
-        ).map((val: Untyped) =>
-          val.endsWith('search') ? val.slice(0, -8) : val
-        ),
+        ).map((val) => (val.endsWith('search') ? val.slice(0, -8) : val)),
         searchableKeys: getSearchableKeys(hostOptions.data.actions?.GET),
       };
     }, [id, search]),

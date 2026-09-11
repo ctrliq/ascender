@@ -72,7 +72,7 @@ function InventoryRelatedGroupList() {
         groups: response.data.results,
         itemCount: response.data.count,
         relatedSearchableKeys: (actions?.data?.related_search_fields || []).map(
-          (val: Untyped) => val.slice(0, -8)
+          (val) => val.slice(0, -8)
         ),
         searchableKeys: getSearchableKeys(actions.data.actions?.GET),
         canAdd:

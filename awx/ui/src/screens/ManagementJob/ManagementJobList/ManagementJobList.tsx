@@ -31,7 +31,7 @@ const buildSearchKeys = (options: Untyped) => {
 
   const relatedSearchableKeys = (
     options?.data?.related_search_fields || []
-  ).map((val: Untyped) => val.slice(0, -8));
+  ).map((val: string) => val.slice(0, -8));
 
   return { searchableKeys, relatedSearchableKeys };
 };

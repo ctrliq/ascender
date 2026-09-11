@@ -1,7 +1,7 @@
-import type { Untyped } from 'types/api';
+import type { LaunchCredential } from 'types/api';
 import type { Translate } from 'types/lingui';
 
-const credentialPromptsForPassword = (credential: Untyped) =>
+const credentialPromptsForPassword = (credential: LaunchCredential) =>
   credential?.inputs?.password === 'ASK' ||
   credential?.inputs?.ssh_key_unlock === 'ASK' ||
   credential?.inputs?.become_password === 'ASK' ||
@@ -9,16 +9,16 @@ const credentialPromptsForPassword = (credential: Untyped) =>
 
 export default function credentialsValidator(
   allowCredentialsWithPasswords: boolean,
-  selectedCredentials: Untyped,
+  selectedCredentials: LaunchCredential[] | undefined,
   t: Translate,
-  defaultCredentials: Untyped[] = []
+  defaultCredentials: LaunchCredential[] = []
 ) {
   if (defaultCredentials.length > 0 && selectedCredentials) {
-    const missingCredentialTypes: Untyped[] = [];
-    defaultCredentials.forEach((defaultCredential: Untyped) => {
+    const missingCredentialTypes: string[] = [];
+    defaultCredentials.forEach((defaultCredential) => {
       if (
         !selectedCredentials.find(
-          (selectedCredential: Untyped) =>
+          (selectedCredential) =>
             (selectedCredential?.credential_type ===
               defaultCredential?.credential_type &&
               !selectedCredential.inputs?.vault_id &&
@@ -28,10 +28,12 @@ export default function credentialsValidator(
                 defaultCredential.inputs?.vault_id)
         )
       ) {
+        const typeName =
+          defaultCredential.summary_fields?.credential_type?.name ?? '';
         missingCredentialTypes.push(
           defaultCredential.inputs?.vault_id
-            ? `${defaultCredential.summary_fields.credential_type.name} | ${defaultCredential.inputs.vault_id}`
-            : defaultCredential.summary_fields.credential_type.name
+            ? `${typeName} | ${defaultCredential.inputs.vault_id}`
+            : typeName
         );
       }
     });
@@ -44,10 +46,10 @@ export default function credentialsValidator(
   }
 
   if (!allowCredentialsWithPasswords && selectedCredentials) {
-    const credentialsThatPrompt: Untyped[] = [];
-    selectedCredentials.forEach((selectedCredential: Untyped) => {
+    const credentialsThatPrompt: string[] = [];
+    selectedCredentials.forEach((selectedCredential) => {
       if (credentialPromptsForPassword(selectedCredential)) {
-        credentialsThatPrompt.push(selectedCredential.name);
+        credentialsThatPrompt.push(selectedCredential.name ?? '');
       }
     });
     if (credentialsThatPrompt.length > 0) {

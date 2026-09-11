@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
@@ -34,7 +33,7 @@ const FieldHeader = styled.div`
 
 export interface OtherPromptsStepProps {
   launchConfig: LaunchConfig;
-  variablesMode?: Untyped;
+  variablesMode?: string;
   onVarModeChange?: (mode: string) => void;
   [key: string]: unknown;
 }
@@ -45,8 +44,9 @@ function OtherPromptsStep({
   onVarModeChange,
 }: OtherPromptsStepProps) {
   const { t } = useLingui();
-  // The two modules export different keys, which is what HelpTextSource is
-  // open for; a field reads the one it needs and the other form never renders.
+  // The two modules export different keys, which is why every one of them is
+  // optional; a field reads the one it needs and renders only where the launch
+  // configuration asked for it.
   const helpTextSource: HelpTextSource = launchConfig.job_template_data
     ? jobHelpText()
     : workflowHelpText();

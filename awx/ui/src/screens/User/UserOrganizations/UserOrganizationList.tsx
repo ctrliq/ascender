@@ -45,7 +45,7 @@ function UserOrganizationList() {
       return {
         searchableKeys: getSearchableKeys(actions.data.actions?.GET),
         relatedSearchableKeys: (actions?.data?.related_search_fields || []).map(
-          (val: Untyped) => val.slice(0, -8)
+          (val) => val.slice(0, -8)
         ),
         organizations: results,
         count: orgCount,

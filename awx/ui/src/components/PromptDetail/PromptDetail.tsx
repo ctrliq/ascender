@@ -1,5 +1,14 @@
-import type { LaunchConfig } from 'components/LaunchPrompt/types';
-import type { Untyped } from 'types/api';
+import type {
+  LaunchConfig,
+  LaunchPromptValues,
+} from 'components/LaunchPrompt/types';
+import type {
+  InventorySource,
+  LaunchableResource,
+  LaunchDefaults,
+  Project,
+  SummaryFields,
+} from 'types/api';
 import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
@@ -15,7 +24,9 @@ import { VariablesDetail } from '../CodeEditor';
 import PromptProjectDetail from './PromptProjectDetail';
 import PromptInventorySourceDetail from './PromptInventorySourceDetail';
 import PromptJobTemplateDetail from './PromptJobTemplateDetail';
+import type { PromptJobTemplate } from './PromptJobTemplateDetail';
 import PromptWFJobTemplateDetail from './PromptWFJobTemplateDetail';
+import type { PromptWorkflowJobTemplate } from './PromptWFJobTemplateDetail';
 import { getVerbosityLabel } from '../VerbositySelectField';
 
 const PromptTitle = styled(Title)`
@@ -49,7 +60,44 @@ function formatTimeout(timeout: number | string | null | undefined) {
   );
 }
 
-function buildResourceLink(resource: Untyped) {
+/**
+ * The values a prompt overrode, which are shown under Prompted Values and
+ * taken off the resource above so nothing is listed twice.
+ *
+ * nodeType is not a prompt value: the visualiser passes the node's own type
+ * alongside them, which wins over the type the resource carries.
+ */
+export type PromptOverrides = LaunchPromptValues & { nodeType?: string };
+
+/**
+ * What the detail reads off the workflow node a prompt belongs to. The
+ * visualiser hands it the node carrying the convergence and the retry count it
+ * is about to save, rather than the ones the api still has.
+ */
+export interface PromptWorkflowNode {
+  all_parents_must_converge?: boolean | null;
+  max_retries?: number;
+  [key: string]: unknown;
+}
+
+/**
+ * The resource with the prompted keys taken off it, which is what the detail
+ * renders. Deleting keys leaves nothing a model type describes, so only what
+ * this screen itself reads is named and each sub-detail is handed the fields
+ * its own type names; every one of them renders an absent field empty.
+ */
+export interface PromptedResource {
+  type?: string;
+  unified_job_type?: string;
+  description?: string | null;
+  timeout?: number | string | null;
+  created?: string;
+  modified?: string;
+  summary_fields?: SummaryFields;
+  [key: string]: unknown;
+}
+
+function buildResourceLink(resource: LaunchableResource) {
   const link: Record<string, string> = {
     job_template: `/templates/job_template/${resource.id}/details`,
     project: `/projects/${resource.id}/details`,
@@ -57,11 +105,11 @@ function buildResourceLink(resource: Untyped) {
     workflow_job_template: `/templates/workflow_job_template/${resource.id}/details`,
   };
 
-  const to = link[resource?.type];
+  const to = link[resource.type ?? ''];
   return to ? <Link to={to}>{resource.name}</Link> : resource.name;
 }
 
-function hasPromptData(launchData: Untyped) {
+function hasPromptData(launchData: LaunchConfig) {
   return (
     launchData.survey_enabled ||
     launchData.ask_credential_on_launch ||
@@ -84,31 +132,33 @@ function hasPromptData(launchData: Untyped) {
 }
 
 function omitOverrides(
-  resource: Untyped,
-  overrides: Untyped,
-  defaultConfig: Untyped
-) {
-  const clonedResource: Untyped = {
+  resource: LaunchableResource,
+  overrides: PromptOverrides,
+  defaultConfig: LaunchDefaults = {}
+): PromptedResource {
+  const clonedResource: PromptedResource = {
     ...resource,
     summary_fields: { ...resource.summary_fields },
     ...defaultConfig,
   };
   Object.keys(overrides).forEach((keyToOmit) => {
     delete clonedResource[keyToOmit];
-    delete clonedResource?.summary_fields[keyToOmit];
+    delete (clonedResource.summary_fields as Record<string, unknown>)[
+      keyToOmit
+    ];
   });
   return clonedResource;
 }
 
 export interface PromptDetailProps {
-  resource: Untyped;
+  resource: LaunchableResource;
   launchConfig?: LaunchConfig;
-  overrides?: Untyped;
+  overrides?: PromptOverrides;
   /**
    * The workflow node this prompt belongs to, when the prompt is shown from
    * the visualiser rather than from a launch. False when it is not.
    */
-  workflowNode?: Untyped;
+  workflowNode?: PromptWorkflowNode | false;
   [key: string]: unknown;
 }
 
@@ -163,16 +213,18 @@ function PromptDetail({
           value={formatTimeout(details?.timeout)}
         />
         {details?.type === 'project' && (
-          <PromptProjectDetail resource={details} />
+          <PromptProjectDetail resource={details as Project} />
         )}
         {details?.type === 'inventory_source' && (
-          <PromptInventorySourceDetail resource={details} />
+          <PromptInventorySourceDetail resource={details as InventorySource} />
         )}
         {details?.type === 'job_template' && (
-          <PromptJobTemplateDetail resource={details} />
+          <PromptJobTemplateDetail resource={details as PromptJobTemplate} />
         )}
         {details?.type === 'workflow_job_template' && (
-          <PromptWFJobTemplateDetail resource={details} />
+          <PromptWFJobTemplateDetail
+            resource={details as PromptWorkflowJobTemplate}
+          />
         )}
         {details?.created && (
           <UserDateDetail
@@ -219,10 +271,10 @@ function PromptDetail({
                   value={
                     <ChipGroup
                       numChips={5}
-                      totalChips={overrides.credentials.length}
+                      totalChips={(overrides.credentials ?? []).length}
                       ouiaId="prompt-credential-chips"
                     >
-                      {overrides.credentials.map((cred: Untyped) => (
+                      {(overrides.credentials ?? []).map((cred) => (
                         <CredentialChip
                           key={cred.id}
                           credential={cred}
@@ -252,7 +304,9 @@ function PromptDetail({
                   label={t`Instance Groups`}
                   rows={4}
                   value={
-                    <InstanceGroupLabels labels={overrides.instance_groups} />
+                    <InstanceGroupLabels
+                      labels={overrides.instance_groups ?? []}
+                    />
                   }
                 />
               )}
@@ -349,10 +403,10 @@ function PromptDetail({
                   value={
                     <ChipGroup
                       numChips={5}
-                      totalChips={overrides.labels.length}
+                      totalChips={(overrides.labels ?? []).length}
                       ouiaId="prompt-label-chips"
                     >
-                      {overrides.labels.map((label: Untyped) => (
+                      {(overrides.labels ?? []).map((label) => (
                         <Label
                           variant="outline"
                           key={label.id}
@@ -363,7 +417,7 @@ function PromptDetail({
                       ))}
                     </ChipGroup>
                   }
-                  isEmpty={overrides.labels.length === 0}
+                  isEmpty={(overrides.labels ?? []).length === 0}
                 />
               )}
               {launchConfig.ask_forks_on_launch && (

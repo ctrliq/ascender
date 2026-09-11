@@ -113,7 +113,7 @@ function Job({ setBreadcrumb }: JobProps) {
         relatedJobs: relatedJobData,
         eventRelatedSearchableKeys: (
           eventOptions?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val: string) => val.slice(0, -8)),
         eventSearchableKeys: getSearchableKeys(eventOptions?.actions?.GET),
       };
     }, [id, type, setBreadcrumb]),

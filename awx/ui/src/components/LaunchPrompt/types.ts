@@ -1,9 +1,9 @@
 import type {
-  InstanceGroup,
   LaunchConfig,
+  LaunchCredential,
+  SummaryFieldRef,
   SurveyConfig,
   SurveyQuestion,
-  Untyped,
 } from 'types/api';
 
 import type { LabelInput } from 'util/labels';
@@ -26,12 +26,12 @@ export type { LaunchConfig, SurveyConfig, SurveyQuestion };
  */
 export interface LaunchPromptValues {
   credential_passwords?: Record<string, string>;
-  credentials?: Untyped[];
-  execution_environment?: { id: number } | null;
+  credentials?: LaunchCredential[];
+  execution_environment?: SummaryFieldRef | null;
   extra_vars?: string;
   forks?: number;
-  instance_groups?: InstanceGroup[];
-  inventory?: { id: number } | null;
+  instance_groups?: SummaryFieldRef[];
+  inventory?: SummaryFieldRef | null;
   job_slice_count?: number;
   job_tags?: string;
   job_type?: string;
@@ -40,7 +40,7 @@ export interface LaunchPromptValues {
    * the user typed carries only a name until it is created on save.
    */
   labels?: LabelInput[];
-  limit?: string;
+  limit?: string | null;
   scm_branch?: string;
   skip_tags?: string;
   timeout?: number;
@@ -98,12 +98,23 @@ export type SetFieldTouched = (
 ) => void;
 
 /**
- * The tooltip text a prompt field shows, keyed by field name.
+ * The tooltips the other prompts step shows, keyed by field.
  *
- * Each screen has its own help text module and they export different keys: a
- * job template's has playbook and forks, a workflow's does not. The values are
- * mostly rendered text, and a few are functions that take the field's current
- * value. Those modules are still JavaScript, so this stays open until they
- * convert and can be described properly.
+ * It reads them out of one of two help text modules, a job's or a workflow
+ * job template's, and they export different keys: the workflow's has no job
+ * type, forks, verbosity, job slicing or timeout, because a workflow prompts
+ * for none of them. Every key is therefore optional, and a field only renders
+ * where the launch configuration asked for it.
  */
-export type HelpTextSource = Record<string, Untyped>;
+export interface HelpTextSource {
+  jobType?: React.ReactNode;
+  sourceControlBranch?: React.ReactNode;
+  labels?: React.ReactNode;
+  forks?: React.ReactNode;
+  limit?: React.ReactNode;
+  verbosity?: React.ReactNode;
+  jobSlicing?: React.ReactNode;
+  timeout?: React.ReactNode;
+  jobTags?: React.ReactNode;
+  skipTags?: React.ReactNode;
+}

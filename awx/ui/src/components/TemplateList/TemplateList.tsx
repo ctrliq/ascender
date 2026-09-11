@@ -87,7 +87,7 @@ function TemplateList({ defaultParams }: TemplateListProps) {
         wfjtActions: responses[2].data.actions,
         relatedSearchableKeys: (
           responses[3]?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(responses[3].data.actions?.GET),
       };
     }, [location]), // eslint-disable-line react-hooks/exhaustive-deps

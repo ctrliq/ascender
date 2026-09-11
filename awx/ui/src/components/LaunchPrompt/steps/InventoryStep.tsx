@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -52,7 +51,7 @@ function InventoryStep({ warningMessage = null }: InventoryStepProps) {
         count: data.count,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
     }, [location]),

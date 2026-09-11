@@ -58,7 +58,7 @@ function OrganizationExecEnvList({
         actions: responseActions.data.actions,
         relatedSearchableKeys: (
           responseActions?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(responseActions.data.actions?.GET),
       };
     }, [location, id]),

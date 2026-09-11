@@ -1,6 +1,11 @@
-import type { Untyped } from 'types/api';
+import type {
+  InstanceGroup,
+  LaunchableResource,
+  LaunchCredential,
+} from 'types/api';
 import { useState, useEffect } from 'react';
 import { useFormikContext } from 'formik';
+import type { LabelInput } from 'util/labels';
 import useInventoryStep from './steps/useInventoryStep';
 import useCredentialsStep from './steps/useCredentialsStep';
 import useCredentialPasswordsStep from './steps/useCredentialPasswordsStep';
@@ -13,7 +18,7 @@ import type { LaunchConfig, LaunchPromptValues, SurveyConfig } from './types';
 
 function showCredentialPasswordsStep(
   launchConfig: LaunchConfig,
-  credentials: Untyped[] = []
+  credentials: LaunchCredential[] = []
 ) {
   if (
     !launchConfig?.ask_credential_on_launch &&
@@ -24,11 +29,11 @@ function showCredentialPasswordsStep(
 
   let credentialPasswordStepRequired = false;
 
-  credentials.forEach((credential: Untyped) => {
+  credentials.forEach((credential) => {
     if (!credential.inputs) {
       const launchConfigCredential = (
         launchConfig.defaults?.credentials ?? []
-      ).find((defaultCred: Untyped) => defaultCred.id === credential.id);
+      ).find((defaultCred) => defaultCred.id === credential.id);
 
       if (launchConfigCredential?.passwords_needed?.length) {
         credentialPasswordStepRequired = true;
@@ -49,10 +54,10 @@ function showCredentialPasswordsStep(
 export default function useLaunchSteps(
   launchConfig: LaunchConfig,
   surveyConfig: SurveyConfig,
-  resource: Untyped,
-  labels: Untyped,
-  instanceGroups: Untyped,
-  resourceDefaultCredentials: Untyped
+  resource: LaunchableResource,
+  labels: LabelInput[],
+  instanceGroups: InstanceGroup[],
+  resourceDefaultCredentials: LaunchCredential[]
 ) {
   const [visited, setVisited] = useState<Record<string, boolean>>({});
   const [isReady, setIsReady] = useState(false);

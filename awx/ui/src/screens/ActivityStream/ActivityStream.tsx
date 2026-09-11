@@ -82,7 +82,7 @@ function ActivityStream() {
           count: response.data.count,
           relatedSearchableKeys: (
             actionsResponse?.data?.related_search_fields || []
-          ).map((val: Untyped) => val.slice(0, -8)),
+          ).map((val) => val.slice(0, -8)),
           searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
         };
       },

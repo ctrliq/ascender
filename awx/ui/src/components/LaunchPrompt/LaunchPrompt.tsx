@@ -1,4 +1,8 @@
-import type { InstanceGroup, Untyped } from 'types/api';
+import type {
+  InstanceGroup,
+  LaunchableResource,
+  LaunchCredential,
+} from 'types/api';
 import React, { useState } from 'react';
 import { ExpandableSection } from '@patternfly/react-core';
 import Wizard from 'components/Wizard';
@@ -17,13 +21,13 @@ import AlertModal from '../AlertModal';
 
 export interface PromptModalFormProps {
   launchConfig: LaunchConfig;
-  onCancel: (value?: Untyped) => void;
-  onSubmit: (values: Untyped) => void;
-  resource: Untyped;
+  onCancel: () => void;
+  onSubmit: (values: Record<string, unknown>) => void;
+  resource: LaunchableResource;
   labels: LabelInput[];
   surveyConfig: SurveyConfig;
   instanceGroups: InstanceGroup[];
-  resourceDefaultCredentials: Untyped;
+  resourceDefaultCredentials: LaunchCredential[];
   [key: string]: unknown;
 }
 
@@ -68,7 +72,7 @@ function PromptModalForm({
     setValue('inventory_id', values.inventory?.id);
     setValue(
       'credentials',
-      values.credentials?.map((c: Untyped) => c.id)
+      values.credentials?.map((c) => c.id)
     );
     setValue('job_type', values.job_type);
     setValue('limit', values.limit);
@@ -76,7 +80,7 @@ function PromptModalForm({
     setValue('skip_tags', values.skip_tags);
     const extraVars = launchConfig.ask_variables_on_launch
       ? values.extra_vars || '---'
-      : resource.extra_vars;
+      : (resource.extra_vars ?? undefined);
     setValue('extra_vars', mergeExtraVars(extraVars, surveyValues));
     setValue('scm_branch', values.scm_branch);
     setValue('verbosity', values.verbosity);
@@ -87,7 +91,7 @@ function PromptModalForm({
 
     if (launchConfig.ask_instance_groups_on_launch) {
       const instanceGroupIds: number[] = [];
-      values.instance_groups?.forEach((instance_group: InstanceGroup) => {
+      values.instance_groups?.forEach((instance_group) => {
         instanceGroupIds.push(instance_group.id);
       });
       setValue('instance_groups', instanceGroupIds);
@@ -147,7 +151,7 @@ function PromptModalForm({
       }}
       title={t`Launch | ${resource.name}`}
       description={
-        resource.description?.length > 512 ? (
+        (resource.description?.length ?? 0) > 512 ? (
           <ExpandableSection
             toggleText={
               showDescription ? t`Hide description` : t`Show description`
@@ -186,11 +190,11 @@ export interface LaunchPromptProps {
   launchConfig: LaunchConfig | null;
   onCancel: () => void;
   onLaunch: (values: LaunchPromptValues) => void;
-  resource?: Untyped;
+  resource?: LaunchableResource;
   /** The labels the resource already carries, which seed the labels field. */
   labels?: LabelInput[];
   surveyConfig?: SurveyConfig | null;
-  resourceDefaultCredentials?: Untyped[];
+  resourceDefaultCredentials?: LaunchCredential[];
 }
 
 function LaunchPrompt({

@@ -7,6 +7,7 @@ import type {
   Paginated,
   SurveyConfig,
   WebhookKey,
+  WorkflowJob,
   WorkflowJobTemplate,
   WorkflowJobTemplateNode,
 } from '../../types/api';
@@ -85,7 +86,7 @@ class WorkflowJobTemplates extends SchedulesMixin(
   }
 
   launch(id: number | string, data: unknown) {
-    return this.http.post(`${this.baseUrl}${id}/launch/`, data);
+    return this.http.post<WorkflowJob>(`${this.baseUrl}${id}/launch/`, data);
   }
 
   readLaunch(id: number | string) {

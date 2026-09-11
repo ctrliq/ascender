@@ -3,6 +3,7 @@ import type {
   JobEventRecord,
   OptionsResponse,
   Paginated,
+  RelaunchConfig,
   UnifiedJob,
 } from '../../types/api';
 import type { BaseConstructor } from '../Base';
@@ -26,7 +27,7 @@ const Runnable = <T extends BaseConstructor>(parent: T) =>
     readLaunchUpdate(id: number | string) {
       const endpoint = `${this.baseUrl}${id}/update/`;
 
-      return this.http.get<{ can_update: boolean }>(endpoint);
+      return this.http.get<RelaunchConfig>(endpoint);
     }
 
     readEvents(id: number | string, params: QSParams = {}) {
@@ -44,7 +45,7 @@ const Runnable = <T extends BaseConstructor>(parent: T) =>
     readRelaunch(id: number | string) {
       const endpoint = `${this.baseUrl}${id}/relaunch/`;
 
-      return this.http.get<{ retry_counts?: Record<string, number> }>(endpoint);
+      return this.http.get<RelaunchConfig>(endpoint);
     }
 
     relaunch(id: number | string, data?: unknown) {

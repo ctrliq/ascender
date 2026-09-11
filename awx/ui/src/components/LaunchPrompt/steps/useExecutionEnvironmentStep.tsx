@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { LaunchableResource } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import ExecutionEnvironmentStep from './ExecutionEnvironmentStep';
@@ -9,7 +9,7 @@ const STEP_ID = 'executionEnvironment';
 
 export default function useExecutionEnvironmentStep(
   launchConfig: LaunchConfig,
-  resource: Untyped
+  resource: LaunchableResource | null
 ): LaunchStep {
   const { t } = useLingui();
   return {
@@ -44,7 +44,7 @@ export default function useExecutionEnvironmentStep(
 
 function getInitialValues(
   launchConfig: LaunchConfig,
-  resource: Untyped
+  resource: LaunchableResource | null
 ): LaunchPromptValues {
   if (!launchConfig.ask_execution_environment_on_launch) {
     return {};

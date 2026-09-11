@@ -83,9 +83,7 @@ function HostList() {
         actions: results[1].data.actions,
         relatedSearchableKeys: (
           results[1]?.data?.related_search_fields || []
-        ).map((val: Untyped) =>
-          val.endsWith('search') ? val.slice(0, -8) : val
-        ),
+        ).map((val) => (val.endsWith('search') ? val.slice(0, -8) : val)),
         searchableKeys: getSearchableKeys(results[1].data.actions?.GET),
       };
     }, [location]),

@@ -1,10 +1,14 @@
 import { LabelsAPI, OrganizationsAPI } from '../api';
 import type { Label, Organization, Paginated } from '../types/api';
 
-/** A label as a form supplies it: existing ones carry a numeric id, new ones do not. */
+/**
+ * A label as a form supplies it: existing ones carry a numeric id, new ones do
+ * not. The name follows the serializer, which has it nullable, because the
+ * forms are seeded straight from what a resource already carries.
+ */
 export interface LabelInput {
   id?: number | string;
-  name: string;
+  name?: string | null;
 }
 
 async function createNewLabels(

@@ -75,7 +75,7 @@ function InventoryHostGroupsList() {
         actions: hostGroupOptions.data.actions,
         relatedSearchableKeys: (
           hostGroupOptions?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(hostGroupOptions.data.actions?.GET),
       };
     }, [hostId, search]), // eslint-disable-line react-hooks/exhaustive-deps

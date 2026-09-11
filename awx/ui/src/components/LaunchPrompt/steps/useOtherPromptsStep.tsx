@@ -1,8 +1,9 @@
-import type { NodeTemplate, Untyped } from 'types/api';
+import type { LaunchableResource } from 'types/api';
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { jsonToYaml, yamlToJson } from 'util/yaml';
+import type { LabelInput } from 'util/labels';
 import OtherPromptsStep from './OtherPromptsStep';
 import StepName from './StepName';
 import type { LaunchConfig, LaunchPromptValues, LaunchStep } from '../types';
@@ -11,7 +12,7 @@ const STEP_ID = 'other';
 export const YAML_MODE = 'yaml';
 export const JSON_MODE = 'javascript';
 
-const getVariablesData = (resource: NodeTemplate | null) => {
+const getVariablesData = (resource: LaunchableResource | null) => {
   if (resource?.extra_data) {
     return jsonToYaml(JSON.stringify(resource.extra_data));
   }
@@ -38,15 +39,15 @@ const FIELD_NAMES = [
 
 export default function useOtherPromptsStep(
   launchConfig: LaunchConfig,
-  resource: NodeTemplate | null,
-  labels: unknown
+  resource: LaunchableResource | null,
+  labels: LabelInput[]
 ): LaunchStep {
   const { t } = useLingui();
   const [variablesField] = useField('extra_vars');
-  const [variablesMode, setVariablesMode] = useState<string | null>(null);
+  const [variablesMode, setVariablesMode] = useState<string | undefined>();
   const [isTouched, setIsTouched] = useState(false);
 
-  const handleModeChange = (mode: string | null) => {
+  const handleModeChange = (mode: string) => {
     setVariablesMode(mode);
   };
 
@@ -128,8 +129,8 @@ function shouldShowPrompt(launchConfig: LaunchConfig) {
 
 function getInitialValues(
   launchConfig: LaunchConfig,
-  resource: Untyped,
-  labels: Untyped
+  resource: LaunchableResource | null,
+  labels: LabelInput[]
 ): LaunchPromptValues {
   const initialValues: LaunchPromptValues = {};
 

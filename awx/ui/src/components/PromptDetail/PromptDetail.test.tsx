@@ -146,6 +146,7 @@ describe('PromptDetail', () => {
     const overrides = {
       extra_vars: '---one: two\nbar: baz',
       inventory: {
+        id: 7,
         name: 'Override inventory',
       },
       credentials: mockPromptLaunch.defaults.credentials,
