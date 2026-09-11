@@ -33,7 +33,8 @@ const Label = styled.span`
 /** An item a list's toolbar can delete, with what the button reads off it. */
 export interface DeletableItem {
   id: number;
-  name?: string;
+  /** Null on a serializer that allows a blank name, which is why not string. */
+  name?: string | null;
   type?: string;
   summary_fields?: SummaryFields;
   [key: string]: unknown;

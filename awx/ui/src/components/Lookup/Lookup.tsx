@@ -17,6 +17,8 @@ import styled from 'styled-components';
 import useDebounce from 'hooks/useDebounce';
 import ChipGroup from '../ChipGroup';
 import reducer, { initReducer } from './shared/reducer';
+import type { LookupAction, LookupItem, LookupState } from './shared/reducer';
+import type { QSConfig } from 'util/qs';
 
 const ChipHolder = styled.div<{ $isDisabled?: boolean }>`
   --pf-v6-c-form-control--Height: auto;
@@ -35,9 +37,21 @@ export interface LookupProps {
   value?: Untyped;
   multiple?: boolean;
   required?: boolean;
-  qsConfig: Untyped;
-  renderItemChip?: (...args: Untyped[]) => void;
-  renderOptionsList: Untyped;
+  qsConfig: QSConfig;
+  renderItemChip?: (props: {
+    item: LookupItem;
+    removeItem: (item: LookupItem) => void;
+    canDelete: boolean;
+  }) => React.ReactNode;
+  /**
+   * Renders the modal's body, which is a different list per lookup. It is
+   * given the reducer so a list can tick and untick its own rows.
+   */
+  renderOptionsList: (props: {
+    state: LookupState;
+    dispatch: React.Dispatch<LookupAction>;
+    canDelete: boolean;
+  }) => React.ReactNode;
   isDisabled?: boolean;
   onDebounce?: (...args: Untyped[]) => void;
   fieldName: Untyped;
@@ -59,7 +73,7 @@ function Lookup({
   qsConfig,
   renderItemChip = ({ item, removeItem }) => (
     <Label variant="outline" key={item.id} onClose={() => removeItem(item)}>
-      {item.name}
+      {item.name as React.ReactNode}
     </Label>
   ),
   renderOptionsList,
@@ -106,7 +120,9 @@ function Lookup({
 
   useEffect(() => {
     if (!multiple) {
-      setTypedText(state.selectedItems[0] ? state.selectedItems[0].name : '');
+      setTypedText(
+        state.selectedItems[0] ? (state.selectedItems[0].name as string) : ''
+      );
     }
   }, [state.selectedItems, multiple]);
 
@@ -133,8 +149,8 @@ function Lookup({
     dispatch({ type: 'CLOSE_MODAL' });
   };
 
-  const removeItem = (item: Record<string, unknown>) =>
-    onChange(value.filter((i: number) => i.id !== item.id));
+  const removeItem = (item: LookupItem) =>
+    onChange((value as LookupItem[]).filter((i) => i.id !== item.id));
 
   const closeModal = () => {
     clearQSParams();
@@ -181,8 +197,8 @@ function Lookup({
                 totalChips={items.length}
                 ouiaId={`${id}-chips`}
               >
-                {items.map((item) =>
-                  renderItemChip({
+                {items.map((item: LookupItem) =>
+                  renderItemChip?.({
                     item,
                     removeItem,
                     canDelete,

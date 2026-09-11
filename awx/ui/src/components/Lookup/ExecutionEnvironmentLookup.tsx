@@ -18,6 +18,7 @@ import OptionsList from '../OptionsList';
 import Lookup from './Lookup';
 import LookupErrorMessage from './shared/LookupErrorMessage';
 import FieldWithPrompt from '../FieldWithPrompt';
+import type { LookupItem } from './shared/reducer';
 
 const QS_CONFIG = getQSConfig('execution_environments', {
   page: 1,
@@ -158,7 +159,7 @@ function ExecutionEnvironmentLookup({
   );
 
   const checkExecutionEnvironmentName = useCallback(
-    async (name: unknown) => {
+    async (name: string) => {
       if (!name) {
         onChange(null);
         return;
@@ -220,10 +221,10 @@ function ExecutionEnvironmentLookup({
             name="executionEnvironments"
             qsConfig={QS_CONFIG}
             readOnly={!canDelete}
-            selectItem={(item: Record<string, unknown>) =>
+            selectItem={(item: LookupItem) =>
               dispatch({ type: 'SELECT_ITEM', item })
             }
-            deselectItem={(item: Record<string, unknown>) =>
+            deselectItem={(item: LookupItem) =>
               dispatch({ type: 'DESELECT_ITEM', item })
             }
           />

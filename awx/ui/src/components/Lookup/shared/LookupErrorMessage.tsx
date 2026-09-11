@@ -2,7 +2,8 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 export interface LookupErrorMessageProps {
-  error: Error | null;
+  /** Whatever the lookup's request caught, which is unknown to TypeScript. */
+  error?: unknown;
   [key: string]: unknown;
 }
 
@@ -14,7 +15,7 @@ function LookupErrorMessage({ error }: LookupErrorMessageProps) {
 
   return (
     <div className="pf-v6-c-form__helper-text pf-m-error" aria-live="polite">
-      {error.message || t`An error occurred`}
+      {(error as Error).message || t`An error occurred`}
     </div>
   );
 }

@@ -41,7 +41,8 @@ const TooltipActions = styled.div`
 `;
 
 export interface WorkflowActionTooltipProps {
-  actions: React.ReactNode;
+  /** One element per action; the tooltip sizes itself from how many. */
+  actions: React.ReactNode[];
   pointX: Untyped;
   pointY: unknown;
   [key: string]: unknown;

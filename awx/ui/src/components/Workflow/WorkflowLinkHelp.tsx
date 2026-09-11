@@ -2,6 +2,7 @@ import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
+import type { WorkflowLink } from './workflowReducer';
 
 const GridDL = styled.dl`
   column-gap: 15px;
@@ -17,7 +18,7 @@ const GridDL = styled.dl`
 `;
 
 export interface WorkflowLinkHelpProps {
-  link: Record<string, unknown>;
+  link: WorkflowLink;
   [key: string]: unknown;
 }
 

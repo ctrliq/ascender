@@ -15,6 +15,7 @@ import ContentLoading from '../../ContentLoading';
 import CredentialChip from '../../CredentialChip';
 import ContentError from '../../ContentError';
 import credentialsValidator from './credentialsValidator';
+import type { LookupItem } from 'components/Lookup/shared/reducer';
 
 const CredentialErrorAlert = styled(Alert)`
   margin-bottom: 20px;
@@ -282,7 +283,7 @@ function CredentialsStep({
         name="credentials"
         qsConfig={QS_CONFIG}
         readOnly={false}
-        selectItem={(item: Record<string, unknown>) => {
+        selectItem={(item: LookupItem) => {
           const hasSameVaultID = (val: Untyped) =>
             val?.inputs?.vault_id !== undefined &&
             val?.inputs?.vault_id === item?.inputs?.vault_id;
@@ -294,7 +295,7 @@ function CredentialsStep({
           newItems.push(item);
           helpers.setValue(newItems);
         }}
-        deselectItem={(item: Record<string, unknown>) => {
+        deselectItem={(item: LookupItem) => {
           helpers.setValue(field.value.filter((i: number) => i.id !== item.id));
         }}
         renderItemChip={renderChip}

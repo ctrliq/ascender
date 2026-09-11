@@ -16,8 +16,8 @@ const ModalNote = styled.div`
 /** An item the list can disassociate, with what the button reads off it. */
 export interface DisassociableItem {
   id: number;
-  name?: string;
-  hostname?: string;
+  name?: string | null;
+  hostname?: string | null;
   /** Instances only: a control node cannot be disassociated. */
   node_type?: string;
   summary_fields?: SummaryFields;

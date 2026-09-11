@@ -76,7 +76,7 @@ function NotificationList({
 
       const labels =
         actionsResponse.data.actions.GET.notification_type.choices.reduce(
-          (map: unknown, notifType: Untyped) => ({
+          (map: Record<string, string>, notifType: Untyped) => ({
             ...map,
             [notifType[0]]: notifType[1],
           }),
@@ -98,8 +98,23 @@ function NotificationList({
         apiModel.readNotificationTemplatesError(id, idMatchParams),
       ]);
 
-      const rtnObj = {
+      // Both of the approvals/changed keys are filled in below, whichever
+      // branch runs, so they are declared here rather than added later.
+      const rtnObj: {
+        notifications: Untyped[];
+        itemCount: number;
+        startedTemplateIds: number[];
+        successTemplateIds: number[];
+        errorTemplateIds: number[];
+        approvalsTemplateIds: number[];
+        changedTemplateIds: number[];
+        typeLabels: Record<string, string>;
+        relatedSearchableKeys: string[];
+        searchableKeys: Untyped[];
+      } = {
         notifications: notificationsResults,
+        approvalsTemplateIds: [],
+        changedTemplateIds: [],
         itemCount: notificationsCount,
         startedTemplateIds: startedTemplates.results.map(
           (st: Untyped) => st.id
@@ -107,9 +122,7 @@ function NotificationList({
         successTemplateIds: successTemplates.results.map(
           (su: Untyped) => su.id
         ),
-        errorTemplateIds: errorTemplates.results.map(
-          (e: React.SyntheticEvent) => e.id
-        ),
+        errorTemplateIds: errorTemplates.results.map((e: Untyped) => e.id),
         typeLabels: labels,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
@@ -158,9 +171,11 @@ function NotificationList({
   }, [fetchNotifications]);
 
   const handleNotificationToggle = async (
-    notificationId: unknown,
-    isCurrentlyOn: unknown,
-    status: unknown
+    notificationId: number,
+    isCurrentlyOn: boolean,
+    // One of the five notification kinds; the key it toggles is
+    // `<status>TemplateIds` in the result above.
+    status: 'started' | 'success' | 'error' | 'approvals' | 'changed'
   ) => {
     setLoadingToggleIds(loadingToggleIds.concat([notificationId]));
     try {
@@ -172,9 +187,7 @@ function NotificationList({
         );
         setValue({
           ...fetchNotificationsResults,
-          [`${status}TemplateIds`]: fetchNotificationsResults[
-            `${status}TemplateIds`
-          ].filter((i: number) => i !== notificationId),
+          [`${status}TemplateIds`]: fetchNotificationsResults[`${status}TemplateIds` as const].filter((i: number) => i !== notificationId),
         });
       } else {
         await apiModel.associateNotificationTemplate(
@@ -185,7 +198,7 @@ function NotificationList({
         setValue({
           ...fetchNotificationsResults,
           [`${status}TemplateIds`]:
-            fetchNotificationsResults[`${status}TemplateIds`].concat(
+            fetchNotificationsResults[`${status}TemplateIds` as const].concat(
               notificationId
             ),
         });

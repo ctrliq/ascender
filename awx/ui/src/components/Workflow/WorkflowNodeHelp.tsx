@@ -1,9 +1,11 @@
+import type { Untyped } from 'types/api';
 import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import { secondsToHHMMSS } from 'util/dates';
 import { stringIsUUID } from 'util/strings';
+import type { WorkflowNode } from './workflowReducer';
 
 const GridDL = styled.dl`
   column-gap: 15px;
@@ -32,7 +34,7 @@ const StyledExclamationTriangleIcon = styled(ExclamationTriangleIcon)`
 `;
 
 export interface WorkflowNodeHelpProps {
-  node: Record<string, unknown>;
+  node: WorkflowNode;
   [key: string]: unknown;
 }
 
@@ -43,12 +45,12 @@ function WorkflowNodeHelp({ node }: WorkflowNodeHelpProps) {
   const unifiedJobTemplate =
     node?.fullUnifiedJobTemplate ||
     node?.originalNodeObject?.summary_fields?.unified_job_template;
-  let identifier = null;
+  let identifier: Untyped = null;
   if (node?.identifier) {
     ({ identifier } = node);
   } else if (
     node?.originalNodeObject?.identifier &&
-    !stringIsUUID(node.originalNodeObject.identifier)
+    !stringIsUUID(node.originalNodeObject.identifier as string)
   ) {
     ({
       originalNodeObject: { identifier },

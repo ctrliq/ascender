@@ -17,6 +17,7 @@ import OptionsList from '../OptionsList';
 import Popover from '../Popover';
 import Lookup from './Lookup';
 import LookupErrorMessage from './shared/LookupErrorMessage';
+import type { LookupItem } from './shared/reducer';
 
 const QS_CONFIG = getQSConfig('project', {
   page: 1,
@@ -93,7 +94,7 @@ function ProjectLookup({
   );
 
   const checkProjectName = useCallback(
-    async (name: unknown) => {
+    async (name: string) => {
       if (!name) {
         onChange(null);
         return;
@@ -185,10 +186,10 @@ function ProjectLookup({
             name="project"
             qsConfig={QS_CONFIG}
             readOnly={!canDelete}
-            selectItem={(item: Record<string, unknown>) =>
+            selectItem={(item: LookupItem) =>
               dispatch({ type: 'SELECT_ITEM', item })
             }
-            deselectItem={(item: Record<string, unknown>) =>
+            deselectItem={(item: LookupItem) =>
               dispatch({ type: 'DESELECT_ITEM', item })
             }
           />

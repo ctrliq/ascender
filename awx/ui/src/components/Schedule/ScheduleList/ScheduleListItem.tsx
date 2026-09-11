@@ -108,7 +108,7 @@ function ScheduleListItem({
           <span>
             <Tooltip
               content={[isMissingInventory, isMissingSurvey].map((message) =>
-                message ? <div key={message}>{message}</div> : null
+                message ? <div key={String(message)}>{message}</div> : null
               )}
               position="right"
             >
@@ -126,7 +126,7 @@ function ScheduleListItem({
         </Link>
       </TdBreakWord>
       <Td dataLabel={t`Resource type`}>
-        {jobTypeLabels[template.unified_job_type]}
+        {jobTypeLabels[template.unified_job_type as keyof typeof jobTypeLabels]}
       </Td>
       <Td dataLabel={t`Next Run`}>
         {schedule.next_run && (
@@ -141,7 +141,7 @@ function ScheduleListItem({
       <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
         <ScheduleToggle schedule={schedule} isDisabled={isDisabled} />
         <ActionItem
-          visible={schedule.summary_fields.user_capabilities.edit}
+          visible={schedule.summary_fields.user_capabilities?.edit}
           tooltip={t`Edit Schedule`}
         >
           <Button

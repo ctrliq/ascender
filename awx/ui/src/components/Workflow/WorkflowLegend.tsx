@@ -8,6 +8,7 @@ import {
   TimesIcon,
 } from '@patternfly/react-icons';
 import { WorkflowDispatchContext } from 'contexts/Workflow';
+import type { WorkflowAction } from './workflowReducer';
 
 const Wrapper = styled.div`
   background-color: var(--ascender-workflow-node-bg);
@@ -82,7 +83,7 @@ const Close = styled(TimesIcon)`
 `;
 
 function WorkflowLegend() {
-  const dispatch = useContext(WorkflowDispatchContext);
+  const dispatch = useContext(WorkflowDispatchContext) as React.Dispatch<WorkflowAction>;
   const { t } = useLingui();
   return (
     <Wrapper>

@@ -1,6 +1,8 @@
+import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 import { PauseIcon } from '@patternfly/react-icons';
+import type { WorkflowNode } from './workflowReducer';
 
 const NodeTypeLetter = styled.div`
   background-color: #393f43;
@@ -18,32 +20,29 @@ const CenteredPauseIcon = styled(PauseIcon)`
 `;
 
 export interface WorkflowNodeTypeLetterProps {
-  node: Record<string, unknown>;
+  node: WorkflowNode;
   [key: string]: unknown;
 }
 
 function WorkflowNodeTypeLetter({ node }: WorkflowNodeTypeLetterProps) {
-  if (
-    !node?.fullUnifiedJobTemplate &&
-    !node?.originalNodeObject?.summary_fields?.unified_job_template
-  ) {
-    return null;
-  }
-
   const unifiedJobTemplate =
     node?.fullUnifiedJobTemplate ||
     node?.originalNodeObject?.summary_fields?.unified_job_template;
+
+  if (!unifiedJobTemplate) {
+    return null;
+  }
 
   let nodeTypeLetter;
   if (
     unifiedJobTemplate.type ||
     unifiedJobTemplate.unified_job_type ||
-    node?.job?.type
+    (node?.job as Untyped)?.type
   ) {
     const ujtType =
       unifiedJobTemplate.type ||
       unifiedJobTemplate.unified_job_type ||
-      node.job.type;
+      (node.job as Untyped).type;
     switch (ujtType) {
       case 'job_template':
       case 'job':

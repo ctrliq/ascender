@@ -43,7 +43,7 @@ const FocusWrapper = styled.div`
   }
 `;
 
-const AceEditor = styled(ReactAce)`
+const AceEditor = styled(ReactAce)<{ hasErrors?: boolean }>`
   font-family: var(--pf-t--global--font--family--mono, monospace);
   /* The height, ours or ace's, is the content: lines plus the scroll margins.
      Content-box keeps the border from eating into the bottom margin, and the
@@ -90,7 +90,7 @@ const AceEditor = styled(ReactAce)`
     }`}
 
   ${(props) =>
-    props.setOptions.readOnly &&
+    props.setOptions?.readOnly &&
     `
     && .ace_cursor {
       opacity: 0;
@@ -154,11 +154,12 @@ function CodeEditor({
     );
   }
 
-  const wrapper = useRef(null);
-  const editor = useRef(null);
+  const wrapper = useRef<HTMLDivElement>(null);
+  const editor = useRef<ReactAce>(null);
 
   useEffect(() => {
-    const editorInput = editor.current.refEditor?.querySelector('textarea');
+    const editorInput =
+      editor.current?.refEditor?.querySelector('textarea');
     if (!editorInput) {
       return;
     }
@@ -168,9 +169,10 @@ function CodeEditor({
     editorInput.id = id;
   }, [readOnly, id]);
 
-  const listen = useCallback((event: React.KeyboardEvent) => {
+  const listen = useCallback((event: KeyboardEvent) => {
     if (wrapper.current === document.activeElement && event.key === 'Enter') {
-      const editorInput = editor.current.refEditor?.querySelector('textarea');
+      const editorInput =
+      editor.current?.refEditor?.querySelector('textarea');
       if (!editorInput) {
         return;
       }
@@ -182,6 +184,9 @@ function CodeEditor({
 
   useEffect(() => {
     const wrapperEl = wrapper.current;
+    if (!wrapperEl) {
+      return undefined;
+    }
     wrapperEl.addEventListener('keydown', listen);
 
     return () => {
@@ -208,7 +213,7 @@ function CodeEditor({
     <>
       <FocusWrapper ref={wrapper} tabIndex={readOnly ? -1 : 0}>
         <AceEditor
-          mode={aceModes[mode] || 'text'}
+          mode={aceModes[mode as keyof typeof aceModes] || 'text'}
           className={`pf-v6-c-form-control ${className}`}
           theme="twilight"
           onChange={debounce(onChange, 250)}
@@ -240,14 +245,14 @@ function CodeEditor({
               name: 'escape',
               bindKey: { win: 'Esc', mac: 'Esc' },
               exec: () => {
-                wrapper.current.focus();
+                wrapper.current?.focus();
               },
             },
             {
               name: 'tab escape',
               bindKey: { win: 'Shift-Tab', mac: 'Shift-Tab' },
               exec: () => {
-                wrapper.current.focus();
+                wrapper.current?.focus();
               },
             },
           ]}

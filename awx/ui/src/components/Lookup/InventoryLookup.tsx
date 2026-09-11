@@ -10,6 +10,7 @@ import Lookup from './Lookup';
 import OptionsList from '../OptionsList';
 import LookupErrorMessage from './shared/LookupErrorMessage';
 import FieldWithPrompt from '../FieldWithPrompt';
+import type { LookupItem } from './shared/reducer';
 
 const QS_CONFIG = getQSConfig('inventory', {
   page: 1,
@@ -118,7 +119,7 @@ function InventoryLookup({
   );
 
   const checkInventoryName = useCallback(
-    async (name: unknown) => {
+    async (name: string) => {
       if (!name) {
         onChange(null);
         return;
@@ -197,10 +198,10 @@ function InventoryLookup({
             name="inventory"
             qsConfig={QS_CONFIG}
             readOnly={!canDelete}
-            selectItem={(item: Record<string, unknown>) =>
+            selectItem={(item: LookupItem) =>
               dispatch({ type: 'SELECT_ITEM', item })
             }
-            deselectItem={(item: Record<string, unknown>) =>
+            deselectItem={(item: LookupItem) =>
               dispatch({ type: 'DESELECT_ITEM', item })
             }
           />
@@ -257,10 +258,10 @@ function InventoryLookup({
             name="inventory"
             qsConfig={QS_CONFIG}
             readOnly={!canDelete}
-            selectItem={(item: Record<string, unknown>) =>
+            selectItem={(item: LookupItem) =>
               dispatch({ type: 'SELECT_ITEM', item })
             }
-            deselectItem={(item: Record<string, unknown>) =>
+            deselectItem={(item: LookupItem) =>
               dispatch({ type: 'DESELECT_ITEM', item })
             }
             sortSelectedItems={(selectedItems: unknown) =>

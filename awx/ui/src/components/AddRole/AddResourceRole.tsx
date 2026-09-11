@@ -109,12 +109,12 @@ function AddResourceRole({
     selected: resourcesSelected,
     handleSelect: handleResourceSelect,
     clearSelected: clearResources,
-  } = useSelected([]);
+  } = useSelected<Untyped>([]);
   const {
     selected: rolesSelected,
     handleSelect: handleRoleSelect,
     clearSelected: clearRoles,
-  } = useSelected([]);
+  } = useSelected<Untyped>([]);
 
   const [resourceType, setResourceType] = useState<string | null>(null);
   const [currentStepId, setCurrentStepId] = useState(1);
@@ -129,7 +129,7 @@ function AddResourceRole({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStepId, location.pathname, maxEnabledStep]);
 
-  const handleResourceTypeSelect = (type: unknown) => {
+  const handleResourceTypeSelect = (type: string) => {
     setResourceType(type);
     clearResources();
     clearRoles();
@@ -146,7 +146,7 @@ function AddResourceRole({
 
   const handleWizardSave = async () => {
     try {
-      const roleRequests = [];
+      const roleRequests: Promise<unknown>[] = [];
 
       for (let i = 0; i < resourcesSelected.length; i++) {
         for (let j = 0; j < rolesSelected.length; j++) {
@@ -299,7 +299,7 @@ function AddResourceRole({
       onGoToStep={(step) => handleWizardGoToStep(step)}
       steps={steps}
       title={wizardTitle}
-      nextButtonText={currentStep.nextButtonText || undefined}
+      nextButtonText={currentStep?.nextButtonText || undefined}
       backButtonText={t`Back`}
       cancelButtonText={t`Cancel`}
     />

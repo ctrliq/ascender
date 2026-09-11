@@ -9,8 +9,12 @@ export type LinkParentMapping = Record<number, number[]>;
  */
 export interface WorkflowNode {
   id: number;
-  originalNodeObject?: Record<string, unknown>;
-  fullUnifiedJobTemplate?: Record<string, unknown>;
+  originalNodeObject?: ApiWorkflowNode;
+  /**
+   * The template this node runs, which the visualiser attaches. Its shape
+   * differs per node type, an approval template least like the rest.
+   */
+  fullUnifiedJobTemplate?: Untyped;
   isInvalidLinkTarget?: boolean;
   isDeleted?: boolean;
   isEdited?: boolean;
@@ -46,6 +50,9 @@ export interface ApiWorkflowNode {
       string,
       unknown
     >;
+    /** The run this node produced, once the workflow has been launched. */
+    job?: Untyped;
+    [key: string]: unknown;
   };
   workflowMakerNodeId?: number;
   [key: string]: unknown;
@@ -72,7 +79,11 @@ export interface NewWorkflowNode extends EditedWorkflowNode {
 
 /** What REFRESH_NODE carries: the fields a re-read of the node can replace. */
 export interface RefreshedWorkflowNode {
-  fullUnifiedJobTemplate?: Record<string, unknown>;
+  /**
+   * The template this node runs, which the visualiser attaches. Its shape
+   * differs per node type, an approval template least like the rest.
+   */
+  fullUnifiedJobTemplate?: Untyped;
   originalNodeCredentials?: unknown;
 }
 

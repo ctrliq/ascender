@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { DetailedError, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -51,7 +51,7 @@ function Schedule({
     result: schedule,
   } = useRequest(
     useCallback(async () => {
-      const { data } = await SchedulesAPI.readDetail(scheduleId);
+      const { data } = await SchedulesAPI.readDetail(scheduleId as string);
 
       return data;
     }, [scheduleId]),
@@ -89,7 +89,7 @@ function Schedule({
   if (!isLoading && error) {
     return (
       <ContentError isNotFound error={error}>
-        {error.response && error.response.status === 404 && (
+        {(error as DetailedError).response?.status === 404 && (
           <span>
             {t`Schedule not found.`}{' '}
             <Link to={`${pathRoot}schedules`}>{t`View Schedules`}</Link>

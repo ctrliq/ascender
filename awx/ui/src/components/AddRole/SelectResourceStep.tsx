@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SortColumn, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -123,7 +123,7 @@ function SelectResourceStep({
         toolbarRelatedSearchableKeys={relatedSearchableKeys}
         headerRow={
           <HeaderRow qsConfig={QS_Config(sortColumns)}>
-            {sortColumns.map(({ name, key }) => (
+            {sortColumns.map(({ name, key }: SortColumn) => (
               <HeaderCell sortKey={key} key={key}>
                 {name}
               </HeaderCell>

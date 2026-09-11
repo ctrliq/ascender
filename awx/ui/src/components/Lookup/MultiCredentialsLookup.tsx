@@ -12,6 +12,7 @@ import AnsibleSelect from '../AnsibleSelect';
 import CredentialChip from '../CredentialChip';
 import OptionsList from '../OptionsList';
 import Lookup from './Lookup';
+import type { LookupItem } from './shared/reducer';
 
 const QS_CONFIG = getQSConfig('credentials', {
   page: 1,
@@ -233,7 +234,7 @@ function MultiCredentialsLookup({
             name="credentials"
             qsConfig={QS_CONFIG}
             readOnly={!canDelete}
-            selectItem={(item: Record<string, unknown>) => {
+            selectItem={(item: LookupItem) => {
               const hasSameVaultID = (val: Untyped) =>
                 val?.inputs?.vault_id !== undefined &&
                 val?.inputs?.vault_id === item?.inputs?.vault_id;
@@ -248,7 +249,7 @@ function MultiCredentialsLookup({
                 selectedItems,
               });
             }}
-            deselectItem={(item: Record<string, unknown>) =>
+            deselectItem={(item: LookupItem) =>
               dispatch({ type: 'DESELECT_ITEM', item })
             }
             renderItemChip={renderChip}

@@ -1,9 +1,40 @@
 import type { Untyped } from 'types/api';
 
+/** An item a lookup can select, which is any object the API gives an id. */
+export interface LookupItem {
+  id: number | string;
+  [key: string]: unknown;
+}
+
+/**
+ * What a lookup holds while its modal is open.
+ *
+ * `value` is the field's committed value, `selectedItems` what the modal has
+ * ticked but not yet saved: closing the modal without saving discards the
+ * latter and reopening seeds it from the former again.
+ */
+export interface LookupState {
+  value: LookupItem | LookupItem[] | null;
+  selectedItems: LookupItem[];
+  multiple: boolean;
+  required: boolean;
+  isModalOpen: boolean;
+}
+
+/** Everything the lookup's modal dispatches. */
+export type LookupAction =
+  | { type: 'SELECT_ITEM'; item: LookupItem }
+  | { type: 'DESELECT_ITEM'; item: LookupItem }
+  | { type: 'TOGGLE_MODAL' }
+  | { type: 'CLOSE_MODAL' }
+  | { type: 'SET_MULTIPLE'; value: boolean }
+  | { type: 'SET_VALUE'; value: LookupItem | LookupItem[] | null }
+  | { type: 'SET_SELECTED_ITEMS'; selectedItems: LookupItem[] };
+
 export default function reducer(
-  state: Record<string, unknown>,
-  action: Untyped
-) {
+  state: LookupState,
+  action: LookupAction
+): LookupState {
   switch (action.type) {
     case 'SELECT_ITEM':
       return selectItem(state, action.item);
@@ -20,14 +51,15 @@ export default function reducer(
     case 'SET_SELECTED_ITEMS':
       return { ...state, selectedItems: action.selectedItems };
     default:
-      throw new Error(`Unrecognized action type: ${action.type}`);
+      // The union above covers every case, so this is only reachable from a
+      // dispatch the type checker did not see, such as one out of a .js file.
+      throw new Error(
+        `Unrecognized action type: ${(action as LookupAction).type}`
+      );
   }
 }
 
-function selectItem(
-  state: Record<string, unknown>,
-  item: Record<string, unknown>
-) {
+function selectItem(state: LookupState, item: LookupItem): LookupState {
   const { selectedItems, multiple } = state;
   if (!multiple) {
     return {
@@ -35,7 +67,7 @@ function selectItem(
       selectedItems: [item],
     };
   }
-  const index = selectedItems.findIndex((i: number) => i.id === item.id);
+  const index = selectedItems.findIndex((i) => i.id === item.id);
   if (index > -1) {
     return state;
   }
@@ -45,26 +77,23 @@ function selectItem(
   };
 }
 
-function deselectItem(
-  state: Record<string, unknown>,
-  item: Record<string, unknown>
-) {
+function deselectItem(state: LookupState, item: LookupItem): LookupState {
   return {
     ...state,
-    selectedItems: state.selectedItems.filter((i: number) => i.id !== item.id),
+    selectedItems: state.selectedItems.filter((i) => i.id !== item.id),
   };
 }
 
-function toggleModal(state: Record<string, unknown>) {
+function toggleModal(state: LookupState): LookupState {
   const { isModalOpen, value, multiple } = state;
   if (isModalOpen) {
     return closeModal(state);
   }
-  let selectedItems: Untyped[] = [];
+  let selectedItems: LookupItem[] = [];
   if (multiple) {
-    selectedItems = [...value];
+    selectedItems = [...((value ?? []) as LookupItem[])];
   } else if (value) {
-    selectedItems.push(value);
+    selectedItems.push(value as LookupItem);
   }
   return {
     ...state,
@@ -73,7 +102,7 @@ function toggleModal(state: Record<string, unknown>) {
   };
 }
 
-function closeModal(state: Record<string, unknown>) {
+function closeModal(state: LookupState): LookupState {
   return {
     ...state,
     isModalOpen: false,
@@ -81,7 +110,8 @@ function closeModal(state: Record<string, unknown>) {
 }
 
 export interface InitReducerProps {
-  value: Untyped;
+  /** The field's current value: an array when multiple is set, or one item. */
+  value: LookupItem | LookupItem[] | null;
   multiple?: boolean;
   required?: boolean;
   [key: string]: unknown;
@@ -91,11 +121,13 @@ export function initReducer({
   value,
   multiple = false,
   required = false,
-}: InitReducerProps) {
+}: InitReducerProps): LookupState {
   assertCorrectValueType(value, multiple);
-  let selectedItems = [];
+  let selectedItems: LookupItem[] = [];
   if (value) {
-    selectedItems = multiple ? [...value] : [value];
+    selectedItems = multiple
+      ? [...(value as LookupItem[])]
+      : [value as LookupItem];
   }
   return {
     selectedItems,
@@ -106,7 +138,7 @@ export function initReducer({
   };
 }
 
-function assertCorrectValueType(value: unknown, multiple: unknown) {
+function assertCorrectValueType(value: unknown, multiple: boolean) {
   if (!multiple && Array.isArray(value)) {
     throw new Error(
       'Lookup value must not be an array unless `multiple` is set'

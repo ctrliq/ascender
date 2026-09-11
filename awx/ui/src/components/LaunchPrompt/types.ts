@@ -124,6 +124,8 @@ export interface LaunchStep {
   isReady: boolean;
   contentError?: unknown;
   hasError?: boolean;
+  /** The survey step alone passes its spec back, for the preview step. */
+  surveyConfig?: SurveyConfig | null;
   setTouched: (
     setFieldTouched: (
       field: string,

@@ -15,6 +15,7 @@ import AlertModal from '../../AlertModal';
 import ContentError from '../../ContentError';
 import ContentLoading from '../../ContentLoading';
 import useSchedulePromptSteps from './useSchedulePromptSteps';
+import type { ScheduleFormValues } from './types';
 
 export interface SchedulePromptableFieldsProps {
   schedule: Schedule;
@@ -43,7 +44,7 @@ function SchedulePromptableFields({
   instanceGroups,
 }: SchedulePromptableFieldsProps) {
   const { setFieldTouched, values, initialValues, resetForm } =
-    useFormikContext();
+    useFormikContext<ScheduleFormValues>();
   const {
     steps,
     visitStep,

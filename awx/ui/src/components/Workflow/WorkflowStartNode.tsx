@@ -9,6 +9,7 @@ import {
 } from 'contexts/Workflow';
 import WorkflowActionTooltip from './WorkflowActionTooltip';
 import WorkflowActionTooltipItem from './WorkflowActionTooltipItem';
+import type { WorkflowAction, WorkflowState } from './workflowReducer';
 
 const StartG = styled.g<{ $ignorePointerEvents?: boolean }>`
   pointer-events: ${(props) => (props.$ignorePointerEvents ? 'none' : 'auto')};
@@ -44,8 +45,8 @@ function WorkflowStartNode({
   const ref = useRef(null);
   const startNodeRef = useRef(null);
   const [hovering, setHovering] = useState(false);
-  const dispatch = useContext(WorkflowDispatchContext);
-  const { addingLink, nodePositions } = useContext(WorkflowStateContext);
+  const dispatch = useContext(WorkflowDispatchContext) as React.Dispatch<WorkflowAction>;
+  const { addingLink, nodePositions } = useContext(WorkflowStateContext) as WorkflowState;
 
   if (!nodePositions || !nodePositions[1]) {
     return null;

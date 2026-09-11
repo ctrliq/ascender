@@ -18,6 +18,7 @@ import Popover from '../Popover';
 import Lookup from './Lookup';
 import OptionsList from '../OptionsList';
 import LookupErrorMessage from './shared/LookupErrorMessage';
+import type { LookupItem } from './shared/reducer';
 
 const QS_CONFIG = getQSConfig('credentials', {
   page: 1,
@@ -137,7 +138,7 @@ function CredentialLookup({
   );
 
   const checkCredentialName = useCallback(
-    async (name: unknown) => {
+    async (name: string) => {
       if (!name) {
         onChange(null);
         return;
@@ -232,10 +233,10 @@ function CredentialLookup({
             relatedSearchableKeys={relatedSearchableKeys}
             readOnly={!canDelete}
             name="credential"
-            selectItem={(item: Record<string, unknown>) =>
+            selectItem={(item: LookupItem) =>
               dispatch({ type: 'SELECT_ITEM', item })
             }
-            deselectItem={(item: Record<string, unknown>) =>
+            deselectItem={(item: LookupItem) =>
               dispatch({ type: 'DESELECT_ITEM', item })
             }
             sortSelectedItems={(selectedItems: unknown) =>

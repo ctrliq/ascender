@@ -8,9 +8,17 @@ import { Switch } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { ActionsTd, ActionItem } from '../PaginatedTable';
 
+/** A notification template as its list row reads it. */
+export interface NotificationTemplate {
+  id: number;
+  name?: string;
+  notification_type?: string;
+  [key: string]: unknown;
+}
+
 export interface NotificationListItemProps {
   canToggleNotifications: boolean;
-  notification: Record<string, unknown>;
+  notification: NotificationTemplate;
   detailUrl: React.ReactNode;
   approvalsTurnedOn?: boolean;
   startedTurnedOn?: boolean;
@@ -18,7 +26,8 @@ export interface NotificationListItemProps {
   errorTurnedOn?: boolean;
   changedTurnedOn?: boolean;
   toggleNotification: (...args: Untyped[]) => unknown;
-  typeLabels: Untyped;
+  /** Human readable names for each notification type, keyed by its value. */
+  typeLabels: Record<string, string>;
   showApprovalsToggle?: boolean;
   showChangedToggle?: boolean;
   [key: string]: unknown;
@@ -50,7 +59,9 @@ function NotificationListItem({
           <b>{notification.name}</b>
         </Link>
       </Td>
-      <Td dataLabel={t`Type`}>{typeLabels[notification.notification_type]}</Td>
+      <Td dataLabel={t`Type`}>
+        {typeLabels[notification.notification_type as string]}
+      </Td>
       <ActionsTd
         dataLabel={t`Options`}
         gridColumns="120px 120px 120px 120px 120px"

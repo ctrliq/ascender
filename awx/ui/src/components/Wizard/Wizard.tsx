@@ -49,21 +49,21 @@ interface WizardFooterOverrides {
 
 export interface WizardWrapperProps {
   steps?: LegacyWizardStep[];
-  onSave: (...args: Untyped[]) => void;
-  onClose: (...args: Untyped[]) => void;
-  onNext: (...args: Untyped[]) => void;
-  onBack: (...args: Untyped[]) => void;
-  onGoToStep: (...args: Untyped[]) => void;
-  title: Untyped;
-  description: Untyped;
-  isOpen: boolean;
+  onSave?: (...args: Untyped[]) => void;
+  onClose?: (...args: Untyped[]) => void;
+  onNext?: (...args: Untyped[]) => void;
+  onBack?: (...args: Untyped[]) => void;
+  onGoToStep?: (...args: Untyped[]) => void;
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  isOpen?: boolean;
   footer?: React.ReactNode | WizardFooterOverrides;
   backButtonText?: React.ReactNode;
   cancelButtonText?: React.ReactNode;
   nextButtonText: React.ReactNode;
-  height: Untyped;
-  style: Untyped;
-  className: string;
+  height?: number | string;
+  style?: React.CSSProperties;
+  className?: string;
   [key: string]: unknown;
 }
 

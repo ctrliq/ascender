@@ -78,9 +78,11 @@ function ScheduleAdd({
         surveyValues[q.variable] = q.default;
       });
     }
-    const initialExtraVars =
-      launchConfiguration?.ask_variables_on_launch &&
-      (values.extra_vars || '---');
+    // Empty string when the launch config does not prompt for variables,
+    // which is what mergeExtraVars treats as no overrides.
+    const initialExtraVars = launchConfiguration?.ask_variables_on_launch
+      ? ((values.extra_vars as string) || '---')
+      : '';
     if (surveyConfiguration?.spec) {
       extraVars = yaml.dump(mergeExtraVars(initialExtraVars, surveyValues));
     } else {

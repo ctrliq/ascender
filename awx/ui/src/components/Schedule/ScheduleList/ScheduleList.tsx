@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Schedule, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -17,6 +17,8 @@ import PaginatedTable, {
 } from '../../PaginatedTable';
 import DataListToolbar from '../../DataListToolbar';
 import ScheduleListItem from './ScheduleListItem';
+import type { QSParams } from 'util/qs';
+import type { LaunchConfig, SurveyConfig, SurveyQuestion } from 'components/LaunchPrompt/types';
 
 const QS_CONFIG = getQSConfig('schedule', {
   page: 1,
@@ -25,12 +27,13 @@ const QS_CONFIG = getQSConfig('schedule', {
 });
 
 export interface ScheduleListProps {
-  loadSchedules: (...args: Untyped[]) => unknown;
-  loadScheduleOptions: (...args: Untyped[]) => unknown;
+  /** Reads the schedules of whichever resource this list belongs to. */
+  loadSchedules: (params: QSParams) => Promise<Untyped>;
+  loadScheduleOptions: () => Promise<Untyped>;
   hideAddButton?: boolean;
   resource: Untyped;
-  launchConfig: Record<string, unknown>;
-  surveyConfig: Record<string, unknown>;
+  launchConfig: LaunchConfig;
+  surveyConfig: SurveyConfig;
   [key: string]: unknown;
 }
 
@@ -66,7 +69,7 @@ function ScheduleList({
         scheduleActions,
       ] = await Promise.all([loadSchedules(params), loadScheduleOptions()]);
       return {
-        schedules: results,
+        schedules: results as Schedule[],
         itemCount: count,
         actions: scheduleActions.data.actions,
         relatedSearchableKeys: (
@@ -135,13 +138,17 @@ function ScheduleList({
   const hasMissingSurveyValue = (schedule: Untyped) => {
     let missingValues;
     if (launchConfig.survey_enabled) {
-      surveyConfig.spec.forEach((question: Untyped) => {
+      surveyConfig.spec?.forEach((question: SurveyQuestion) => {
         const hasDefaultValue = Boolean(question.default);
         if (question.required && !hasDefaultValue) {
-          const extraDataKeys = Object.keys(schedule?.extra_data);
+          const extraData = (schedule?.extra_data ?? {}) as Record<
+            string,
+            unknown
+          >;
+          const extraDataKeys = Object.keys(extraData);
 
           const hasMatchingKey = extraDataKeys.includes(question.variable);
-          Object.values(schedule?.extra_data).forEach((value) => {
+          Object.values(extraData).forEach((value) => {
             if (!value || !hasMatchingKey) {
               missingValues = true;
             } else {
@@ -186,15 +193,19 @@ function ScheduleList({
             <HeaderCell>{t`Actions`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(item: Record<string, unknown>, index: number) => (
+        renderRow={(item: Schedule, index: number) => (
           <ScheduleListItem
             isSelected={selected.some((row) => row.id === item.id)}
             key={item.id}
             onSelect={() => handleSelect(item)}
             schedule={item}
             rowIndex={index}
-            isMissingInventory={isTemplate && missingRequiredInventory(item)}
-            isMissingSurvey={isTemplate && hasMissingSurveyValue(item)}
+            isMissingInventory={Boolean(
+              isTemplate && missingRequiredInventory(item)
+            )}
+            isMissingSurvey={Boolean(
+              isTemplate && hasMissingSurveyValue(item)
+            )}
           />
         )}
         clearSelected={clearSelected}

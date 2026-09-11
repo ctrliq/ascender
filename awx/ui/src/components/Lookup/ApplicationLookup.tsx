@@ -10,6 +10,7 @@ import useRequest from 'hooks/useRequest';
 import Lookup from './Lookup';
 import OptionsList from '../OptionsList';
 import LookupErrorMessage from './shared/LookupErrorMessage';
+import type { LookupItem } from './shared/reducer';
 
 const QS_CONFIG = getQSConfig('applications', {
   page: 1,
@@ -70,7 +71,7 @@ function ApplicationLookup({
   );
 
   const checkApplicationName = useCallback(
-    async (name: unknown) => {
+    async (name: string) => {
       if (!name) {
         onChange(null);
         return;
@@ -143,10 +144,10 @@ function ApplicationLookup({
             relatedSearchableKeys={relatedSearchableKeys}
             readOnly={!canDelete}
             name="application"
-            selectItem={(item: Record<string, unknown>) =>
+            selectItem={(item: LookupItem) =>
               dispatch({ type: 'SELECT_ITEM', item })
             }
-            deselectItem={(item: Record<string, unknown>) =>
+            deselectItem={(item: LookupItem) =>
               dispatch({ type: 'DESELECT_ITEM', item })
             }
           />

@@ -15,6 +15,7 @@ import {
   TimesIcon,
 } from '@patternfly/react-icons';
 import { WorkflowDispatchContext } from 'contexts/Workflow';
+import type { WorkflowAction } from './workflowReducer';
 
 const Wrapper = styled.div`
   background-color: var(--ascender-workflow-node-bg);
@@ -68,7 +69,7 @@ function WorkflowTools({
   zoomPercentage,
 }: WorkflowToolsProps) {
   const { t } = useLingui();
-  const dispatch = useContext(WorkflowDispatchContext);
+  const dispatch = useContext(WorkflowDispatchContext) as React.Dispatch<WorkflowAction>;
   const zoomIn = () => {
     const newScale =
       Math.ceil((zoomPercentage + 10) / 10) * 10 < 200

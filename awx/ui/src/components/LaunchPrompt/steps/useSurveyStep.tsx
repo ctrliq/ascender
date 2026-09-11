@@ -9,6 +9,7 @@ import type {
   LaunchPromptValues,
   LaunchStep,
   SurveyConfig,
+  SurveyQuestion,
   VisitedSteps,
 } from '../types';
 
@@ -53,13 +54,13 @@ export default function useSurveyStep(
       if (!surveyConfig?.spec) {
         return;
       }
-      surveyConfig.spec.forEach((question: Untyped) => {
+      surveyConfig.spec.forEach((question: SurveyQuestion) => {
         setFieldTouched(`survey_${question.variable}`, true, false);
       });
     },
     validate: () => {
       if (launchConfig.survey_enabled && surveyConfig.spec) {
-        surveyConfig.spec.forEach((question: Untyped) => {
+        surveyConfig.spec.forEach((question: SurveyQuestion) => {
           const errMessage = validateSurveyField(
             question,
             values[`survey_${question.variable}`]
@@ -76,32 +77,34 @@ export default function useSurveyStep(
 function getInitialValues(
   launchConfig: LaunchConfig,
   surveyConfig: SurveyConfig,
-  resource: Record<string, unknown>
-) {
+  resource: Untyped
+): Record<string, unknown> {
   if (!launchConfig.survey_enabled || !surveyConfig) {
     return {};
   }
 
-  const values = {};
+  const values: Record<string, unknown> = {};
   if (surveyConfig?.spec) {
-    surveyConfig.spec.forEach((question: Untyped) => {
+    surveyConfig.spec.forEach((question: SurveyQuestion) => {
       if (question.type === 'multiselect') {
         values[`survey_${question.variable}`] = question.default
-          ? question.default.split('\n')
+          ? (question.default as string).split('\n')
           : [];
       } else {
         values[`survey_${question.variable}`] = question.default ?? '';
       }
       if (resource?.extra_data) {
-        Object.entries(resource.extra_data).forEach(([key, value]) => {
-          if (key === question.variable) {
-            if (question.type === 'multiselect') {
-              values[`survey_${question.variable}`] = value;
-            } else {
-              values[`survey_${question.variable}`] = value;
+        Object.entries(resource.extra_data as Record<string, unknown>).forEach(
+          ([key, value]) => {
+            if (key === question.variable) {
+              if (question.type === 'multiselect') {
+                values[`survey_${question.variable}`] = value;
+              } else {
+                values[`survey_${question.variable}`] = value;
+              }
             }
           }
-        });
+        );
       }
     });
   }
@@ -138,8 +141,8 @@ function checkForError(
 ) {
   let hasError = false;
   if (launchConfig.survey_enabled && surveyConfig.spec) {
-    surveyConfig.spec.forEach((question: Untyped) => {
-      const value = values[`survey_${question.variable}`];
+    surveyConfig.spec.forEach((question: SurveyQuestion) => {
+      const value = values[`survey_${question.variable}`] as Untyped;
       const isTextField = ['text', 'textarea'].includes(question.type);
       const isNumeric = ['integer', 'float'].includes(question.type);
       if (isTextField && (value || value === 0)) {
