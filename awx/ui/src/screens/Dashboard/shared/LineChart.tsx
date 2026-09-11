@@ -4,26 +4,24 @@ import * as d3 from 'd3';
 import { useLingui } from '@lingui/react/macro';
 import { PageContextConsumer } from '@patternfly/react-core';
 import ChartTooltip from './ChartTooltip';
+import type { ChartPoint } from './ChartTooltip';
+
+/** One day of the dashboard's job graph, as DashboardGraph assembles it. */
+export interface JobGraphDay {
+  /** The day, as an ISO date. */
+  created: string;
+  successful?: number;
+  failed?: number;
+}
 
 export interface LineChartProps {
   id: string;
-  data: Untyped;
-  height: Untyped;
-  pageContext: Untyped;
-  jobStatus: Untyped;
-  [key: string]: unknown;
-}
-
-/**
- * One point on the dashboard's job chart: how many jobs ran and how many of
- * them failed, on one day.
- */
-interface ChartPoint {
-  /** The day, as the time scale plots it. */
-  DATE: Date;
-  RAN: number;
-  FAIL: number;
-  TOTAL: number;
+  data: JobGraphDay[];
+  height: number;
+  /** PatternFly's page context, which says whether the nav is open. */
+  pageContext: { isNavOpen?: boolean };
+  /** Which series the graph is showing: all, successful or failed. */
+  jobStatus: string;
 }
 
 function LineChart({
@@ -108,17 +106,20 @@ function LineChart({
     const parseTime = d3.timeParse('%Y-%m-%d');
 
     const formattedData = data.reduce(
-      (formatted: Untyped, { created, successful, failed }: Untyped) => {
+      (
+        formatted: ChartPoint[],
+        { created, successful, failed }: JobGraphDay
+      ) => {
         const DATE = parseTime(created) || new Date();
-        const RAN = +successful || 0;
-        const FAIL = +failed || 0;
-        const TOTAL = +successful + failed || 0;
+        const RAN = Number(successful) || 0;
+        const FAIL = Number(failed) || 0;
+        const TOTAL = RAN + FAIL;
         return formatted.concat({ DATE, RAN, FAIL, TOTAL });
       },
       []
     );
     // Scale the range of the data
-    const largestY = formattedData.reduce((a_max: Untyped, b: Untyped) => {
+    const largestY = formattedData.reduce((a_max: number, b: ChartPoint) => {
       const b_max = Math.max(b.RAN > b.FAIL ? b.RAN : b.FAIL);
       return a_max > b_max ? a_max : b_max;
     }, 0);
@@ -133,15 +134,15 @@ function LineChart({
     const successLine = d3
       .line<ChartPoint>()
       .curve(d3.curveMonotoneX)
-      .x((d: Untyped) => x(d.DATE))
-      .y((d: Untyped) => y(d.RAN));
+      .x((d: ChartPoint) => x(d.DATE))
+      .y((d: ChartPoint) => y(d.RAN));
 
     const failLine = d3
       .line<ChartPoint>()
-      .defined((d: Untyped) => typeof d.FAIL === 'number')
+      .defined((d: ChartPoint) => typeof d.FAIL === 'number')
       .curve(d3.curveMonotoneX)
-      .x((d: Untyped) => x(d.DATE))
-      .y((d: Untyped) => y(d.FAIL));
+      .x((d: ChartPoint) => x(d.DATE))
+      .y((d: ChartPoint) => y(d.FAIL));
     // Add the Y Axis
     svg
       .append('g')
@@ -182,13 +183,13 @@ function LineChart({
     const maxTicks = Math.round(
       formattedData.length / (formattedData.length / 2)
     );
-    ticks = formattedData.map((d: Untyped) => d.DATE);
+    ticks = formattedData.map((d: ChartPoint) => d.DATE);
     if (formattedData.length === 31) {
       ticks = formattedData
-        .map((d: Untyped, i: Untyped) =>
+        .map((d: ChartPoint, i: number) =>
           i % maxTicks === 0 ? d.DATE : undefined
         )
-        .filter((item: Untyped) => item);
+        .filter((item): item is Date => Boolean(item));
     }
 
     svg.select('.domain').attr('stroke', gridColor);
@@ -232,12 +233,12 @@ function LineChart({
       .style('stroke-dasharray', '3, 3')
       .style('opacity', '0');
 
-    const handleMouseOver = (event: Untyped, d: Untyped) => {
+    const handleMouseOver = (event: MouseEvent, d: ChartPoint) => {
       tooltip.handleMouseOver(event, d);
       // show vertical line
       vertical.transition().style('opacity', '1');
     };
-    const handleMouseMove = function mouseMove(event: Untyped) {
+    const handleMouseMove = function mouseMove(event: MouseEvent) {
       const [pointerX] = d3.pointer(event);
       vertical.attr('d', () => `M${pointerX},${height} ${pointerX},${0}`);
     };
@@ -273,10 +274,10 @@ function LineChart({
         .attr('r', 3)
         .style('stroke', () => colors(1))
         .style('fill', () => colors(1))
-        .attr('cx', (d: Untyped) => x(d.DATE))
-        .attr('cy', (d: Untyped) => y(d.RAN))
-        .attr('id', (d: Untyped) => `success-dot-${dateFormat(d.DATE)}`)
-        .on('mouseover', (event: Untyped, d: Untyped) =>
+        .attr('cx', (d: ChartPoint) => x(d.DATE))
+        .attr('cy', (d: ChartPoint) => y(d.RAN))
+        .attr('id', (d: ChartPoint) => `success-dot-${dateFormat(d.DATE)}`)
+        .on('mouseover', (event: MouseEvent, d: ChartPoint) =>
           handleMouseOver(event, d)
         )
         .on('mousemove', handleMouseMove)
@@ -305,9 +306,9 @@ function LineChart({
         .attr('r', 3)
         .style('stroke', () => colors(0))
         .style('fill', () => colors(0))
-        .attr('cx', (d: Untyped) => x(d.DATE))
-        .attr('cy', (d: Untyped) => y(d.FAIL))
-        .attr('id', (d: Untyped) => `fail-dot-${dateFormat(d.DATE)}`)
+        .attr('cx', (d: ChartPoint) => x(d.DATE))
+        .attr('cy', (d: ChartPoint) => y(d.FAIL))
+        .attr('id', (d: ChartPoint) => `fail-dot-${dateFormat(d.DATE)}`)
         .on('mouseover', handleMouseOver)
         .on('mousemove', handleMouseMove)
         .on('mouseout', handleMouseOut);
@@ -333,11 +334,15 @@ function LineChart({
   return <div id={id} style={{ marginTop: '3rem' }} />;
 }
 
-const withPageContext = (Component: Untyped) =>
-  function contextComponent(props: Untyped) {
+// PatternFly's page context says whether the nav is open, which changes the
+// width the chart has to draw in.
+const withPageContext = (Component: React.ComponentType<LineChartProps>) =>
+  function contextComponent(props: Omit<LineChartProps, 'pageContext'>) {
     return (
       <PageContextConsumer>
-        {(pageContext) => <Component {...props} pageContext={pageContext} />}
+        {(pageContext: Untyped) => (
+          <Component {...props} pageContext={pageContext} />
+        )}
       </PageContextConsumer>
     );
   };

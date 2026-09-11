@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -17,6 +16,7 @@ import {
 import useRequest from 'hooks/useRequest';
 import { DashboardAPI } from 'api';
 import ContentLoading from 'components/ContentLoading';
+import type { JobGraphDay } from './shared/LineChart';
 import LineChart from './shared/LineChart';
 
 const GraphCardHeader = styled(CardHeader)`
@@ -71,27 +71,25 @@ function DashboardGraph() {
         job_type: jobTypeSelection,
       });
       // One entry per day, keyed by the epoch seconds the API returns.
-      const newData: Record<string, Untyped> = {};
-      data.jobs.successful.forEach(([dateSecs, count]: Untyped[]) => {
+      const newData: Record<string, JobGraphDay> = {};
+      data.jobs.successful.forEach(([dateSecs, count]: [number, number]) => {
         if (!newData[dateSecs]) {
-          newData[dateSecs] = {};
+          newData[dateSecs] = { created: '' };
         }
         newData[dateSecs].successful = count;
       });
-      data.jobs.failed.forEach(([dateSecs, count]: Untyped[]) => {
+      data.jobs.failed.forEach(([dateSecs, count]: [number, number]) => {
         if (!newData[dateSecs]) {
-          newData[dateSecs] = {};
+          newData[dateSecs] = { created: '' };
         }
         newData[dateSecs].failed = count;
       });
-      const jobData = Object.keys(newData).map((dateSecs) => {
+      return Object.entries(newData).map(([dateSecs, day]) => {
         const [created] = new Date(Number(dateSecs) * 1000)
           .toISOString()
           .split('T');
-        newData[dateSecs].created = created;
-        return newData[dateSecs];
+        return { ...day, created: created as string };
       });
-      return jobData;
     }, [periodSelection, jobTypeSelection]),
     []
   );

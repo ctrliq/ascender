@@ -2,29 +2,54 @@ import type { Untyped } from 'types/api';
 import * as d3 from 'd3';
 import { i18n } from '@lingui/core';
 
-class Tooltip {
-  boundingBox: Untyped;
-  boxWidth: Untyped;
-  circleGreen: Untyped;
-  circleRed: Untyped;
-  colors: Untyped;
-  date: Untyped;
-  failText: Untyped;
-  failTextWidth: Untyped;
-  failed: Untyped;
-  icon: Untyped;
-  jobs: Untyped;
-  jobsWidth: Untyped;
-  label: Untyped;
-  successText: Untyped;
-  successTextWidth: Untyped;
-  successful: Untyped;
-  svg: Untyped;
-  textWidthThreshold: Untyped;
-  toolTipBase: Untyped;
-  toolTipPoint: Untyped;
+/**
+ * One point on the dashboard's job chart: how many jobs ran and how many of
+ * them failed, on one day. The chart plots these and hands one to the tooltip.
+ */
+export interface ChartPoint {
+  /** The day, as the time scale plots it. */
+  DATE: Date;
+  RAN: number;
+  FAIL: number;
+  TOTAL: number;
+}
 
-  constructor(opts: Untyped) {
+/** One of the shapes or labels this tooltip appends, as d3 hands it back. */
+type Appended = d3.Selection<Untyped, unknown, HTMLElement, unknown>;
+
+/** What the chart tells the tooltip about itself when it builds one. */
+export interface TooltipOptions {
+  /** The selector of the chart's container, which the tooltip draws into. */
+  svg: string;
+  /** The series colours, keyed the way the chart keys them. */
+  colors: (series: number) => string;
+  label: string;
+}
+
+class Tooltip {
+  // draw() builds every one of these, and the constructor calls it.
+  boundingBox!: Appended;
+  boxWidth!: number;
+  circleGreen!: Appended;
+  circleRed!: Appended;
+  colors: (series: number) => string;
+  date!: Appended;
+  failText!: Appended;
+  failTextWidth!: number;
+  failed!: Appended;
+  icon!: Appended;
+  jobs!: Appended;
+  jobsWidth!: number;
+  label: string;
+  successText!: Appended;
+  successTextWidth!: number;
+  successful!: Appended;
+  svg: string;
+  textWidthThreshold!: number;
+  toolTipBase!: Appended;
+  toolTipPoint!: Appended;
+
+  constructor(opts: TooltipOptions) {
     this.label = opts.label;
     this.svg = opts.svg;
     this.colors = opts.colors;
@@ -128,7 +153,7 @@ class Tooltip {
       .text(i18n._('Never'));
   }
 
-  handleMouseOver = (event: Untyped, data: Untyped) => {
+  handleMouseOver = (event: MouseEvent, data?: ChartPoint) => {
     let success = 0;
     let fail = 0;
     let total = 0;
@@ -150,14 +175,7 @@ class Tooltip {
       success = data.RAN || 0;
       fail = data.FAIL || 0;
       total = data.TOTAL || 0;
-      this.date.text(formatTooltipDate(data.DATE || null));
-    }
-
-    if (data) {
-      success = data.RAN || 0;
-      fail = data.FAIL || 0;
-      total = data.TOTAL || 0;
-      this.date.text(formatTooltipDate(data.DATE || null));
+      this.date.text(formatTooltipDate(data.DATE));
     }
 
     this.jobs.text(`${total} ${this.label}`);

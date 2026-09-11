@@ -5,11 +5,14 @@ import { PageContextConsumer } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
 import UsageChartTooltip from './UsageChartTooltip';
+import type { SubscriptionUsageMonth, UsagePoint } from './UsageChartTooltip';
 
 export interface UsageChartProps {
   id: string;
-  data: Untyped;
-  height: Untyped;
+  /** One row per month of the subscription usage the API reports. */
+  data?: SubscriptionUsageMonth[];
+  height: number;
+  /** PatternFly's page context, which says whether the nav is open. */
   pageContext: Untyped;
   [key: string]: unknown;
 }
@@ -88,12 +91,12 @@ function UsageChart({ id, data, height, pageContext }: UsageChartProps) {
 
     const parseTime = d3.timeParse('%Y-%m-%d');
 
-    const formattedData = data?.reduce(
+    const formattedData = (data ?? []).reduce(
       (
-        formatted: Untyped,
-        { date, license_consumed, license_capacity }: Untyped
+        formatted: UsagePoint[],
+        { date, license_consumed, license_capacity }: SubscriptionUsageMonth
       ) => {
-        const MONTH = parseTime(date);
+        const MONTH = parseTime(date) || new Date();
         const CONSUMED = +license_consumed;
         const CAPACITY = +license_capacity;
         return formatted.concat({ MONTH, CONSUMED, CAPACITY });
@@ -102,15 +105,12 @@ function UsageChart({ id, data, height, pageContext }: UsageChartProps) {
     );
 
     // Scale the range of the data
-    const largestY = formattedData?.reduce((a_max: Untyped, b: Untyped) => {
+    const largestY = formattedData.reduce((a_max: number, b: UsagePoint) => {
       const b_max = Math.max(b.CONSUMED > b.CAPACITY ? b.CONSUMED : b.CAPACITY);
       return a_max > b_max ? a_max : b_max;
     }, 0);
     x.domain(
-      d3.extent(formattedData, (d: Untyped) => d.MONTH) as unknown as [
-        Date,
-        Date,
-      ]
+      d3.extent(formattedData, (d: UsagePoint) => d.MONTH) as [Date, Date]
     );
     y.domain([
       0,
@@ -118,13 +118,13 @@ function UsageChart({ id, data, height, pageContext }: UsageChartProps) {
     ]).nice();
 
     const capacityLine = d3
-      .line<Untyped>()
+      .line<UsagePoint>()
       .curve(d3.curveMonotoneX)
       .x((d) => x(d.MONTH))
       .y((d) => y(d.CAPACITY));
 
     const consumedLine = d3
-      .line<Untyped>()
+      .line<UsagePoint>()
       .curve(d3.curveMonotoneX)
       .x((d) => x(d.MONTH))
       .y((d) => y(d.CONSUMED));
@@ -168,13 +168,13 @@ function UsageChart({ id, data, height, pageContext }: UsageChartProps) {
     const maxTicks = Math.round(
       formattedData.length / (formattedData.length / 2)
     );
-    ticks = formattedData.map((d: Untyped) => d.MONTH);
+    ticks = formattedData.map((d: UsagePoint) => d.MONTH);
     if (formattedData.length === 13) {
       ticks = formattedData
-        .map((d: Untyped, i: Untyped) =>
+        .map((d: UsagePoint, i: number) =>
           i % maxTicks === 0 ? d.MONTH : undefined
         )
-        .filter((item: Untyped) => item);
+        .filter((item): item is Date => Boolean(item));
     }
 
     svg.select('.domain').attr('stroke', gridColor);
@@ -218,12 +218,12 @@ function UsageChart({ id, data, height, pageContext }: UsageChartProps) {
       .style('stroke-dasharray', '3, 3')
       .style('opacity', '0');
 
-    const handleMouseOver = (event: Untyped, d: Untyped) => {
+    const handleMouseOver = (event: MouseEvent, d: UsagePoint) => {
       tooltip.handleMouseOver(event, d);
       // show vertical line
       vertical.transition().style('opacity', '1');
     };
-    const handleMouseMove = function mouseMove(event: Untyped) {
+    const handleMouseMove = function mouseMove(event: MouseEvent) {
       const [pointerX] = d3.pointer(event);
       vertical.attr('d', () => `M${pointerX},${height} ${pointerX},${0}`);
     };
@@ -258,9 +258,9 @@ function UsageChart({ id, data, height, pageContext }: UsageChartProps) {
       .attr('r', 3)
       .style('stroke', () => colors(1))
       .style('fill', () => colors(1))
-      .attr('cx', (d: Untyped) => x(d.MONTH))
-      .attr('cy', (d: Untyped) => y(d.CONSUMED))
-      .attr('id', (d: Untyped) => `consumed-dot-${dateFormat(d.MONTH)}`)
+      .attr('cx', (d: UsagePoint) => x(d.MONTH))
+      .attr('cy', (d: UsagePoint) => y(d.CONSUMED))
+      .attr('id', (d: UsagePoint) => `consumed-dot-${dateFormat(d.MONTH)}`)
       .on('mouseover', (event, d) => handleMouseOver(event, d))
       .on('mousemove', handleMouseMove)
       .on('mouseout', handleMouseOut);
@@ -286,9 +286,9 @@ function UsageChart({ id, data, height, pageContext }: UsageChartProps) {
       .attr('r', 3)
       .style('stroke', () => colors(0))
       .style('fill', () => colors(0))
-      .attr('cx', (d: Untyped) => x(d.MONTH))
-      .attr('cy', (d: Untyped) => y(d.CAPACITY))
-      .attr('id', (d: Untyped) => `capacity-dot-${dateFormat(d.MONTH)}`)
+      .attr('cx', (d: UsagePoint) => x(d.MONTH))
+      .attr('cy', (d: UsagePoint) => y(d.CAPACITY))
+      .attr('id', (d: UsagePoint) => `capacity-dot-${dateFormat(d.MONTH)}`)
       .on('mouseover', handleMouseOver)
       .on('mousemove', handleMouseMove)
       .on('mouseout', handleMouseOut);

@@ -1,34 +1,67 @@
 import type { Untyped } from 'types/api';
 import * as d3 from 'd3';
 
-class UsageChartTooltip {
-  boundingBox: Untyped;
-  boxWidth: Untyped;
-  capacity: Untyped;
-  capacityText: Untyped;
-  capacityTextWidth: Untyped;
-  circleBlue: Untyped;
-  circleRed: Untyped;
-  colors: Untyped;
-  consumed: Untyped;
-  consumedText: Untyped;
-  consumedTextWidth: Untyped;
-  date: Untyped;
-  i18n: Untyped;
-  icon: Untyped;
-  jobsWidth: Untyped;
-  label: Untyped;
-  svg: Untyped;
-  t: Untyped;
-  textWidthThreshold: Untyped;
-  toolTipBase: Untyped;
-  toolTipPoint: Untyped;
+/** One month of the subscription usage the API reports. */
+export interface SubscriptionUsageMonth {
+  /** The first of the month, as an ISO date. */
+  date: string;
+  license_consumed: number;
+  license_capacity: number;
+}
 
-  constructor(opts: Untyped) {
+/**
+ * One month on the subscription usage chart: how many hosts the subscription
+ * allows and how many were counted against it.
+ */
+export interface UsagePoint {
+  /** The month, as the time scale plots it. */
+  MONTH: Date;
+  CONSUMED: number;
+  CAPACITY: number;
+}
+
+/** One of the shapes or labels this tooltip appends, as d3 hands it back. */
+type Appended = d3.Selection<Untyped, unknown, HTMLElement, unknown>;
+
+/** What the chart tells the tooltip about itself when it builds one. */
+export interface UsageTooltipOptions {
+  /** The selector of the chart's container, which the tooltip draws into. */
+  svg: string;
+  /** The series colours, keyed the way the chart keys them. */
+  colors: (series: number) => string;
+  label: string;
+  /** lingui's t, which the labels below are translated through. */
+  t: Untyped;
+}
+
+class UsageChartTooltip {
+  // draw() builds every one of these, and the constructor calls it.
+  boundingBox!: Appended;
+  boxWidth!: number;
+  capacity!: Appended;
+  capacityText!: Appended;
+  capacityTextWidth!: number;
+  circleBlue!: Appended;
+  circleRed!: Appended;
+  colors: (series: number) => string;
+  consumed!: Appended;
+  consumedText!: Appended;
+  consumedTextWidth!: number;
+  date!: Appended;
+  icon!: Appended;
+  jobsWidth!: number;
+  label: string;
+  svg: string;
+  t: Untyped;
+  textWidthThreshold!: number;
+  toolTipBase!: Appended;
+  toolTipPoint!: Appended;
+
+  constructor(opts: UsageTooltipOptions) {
     this.label = opts.label;
     this.svg = opts.svg;
     this.colors = opts.colors;
-    this.i18n = opts.i18n;
+    this.t = opts.t;
 
     this.draw();
   }
@@ -119,7 +152,7 @@ class UsageChartTooltip {
       .attr('font-size', 12);
   }
 
-  handleMouseOver = (event: Untyped, data: Untyped) => {
+  handleMouseOver = (event: MouseEvent, data?: UsagePoint) => {
     let consumed = 0;
     let capacity = 0;
     const [x, y] = d3.pointer(event);
@@ -139,7 +172,7 @@ class UsageChartTooltip {
     if (data) {
       consumed = data.CONSUMED || 0;
       capacity = data.CAPACITY || 0;
-      this.date.text(formatTooltipDate(data.MONTH || null));
+      this.date.text(formatTooltipDate(data.MONTH));
     }
 
     this.capacity.text(`${capacity}`);
