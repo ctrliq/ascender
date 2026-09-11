@@ -33,7 +33,7 @@ export interface PeersLookupProps {
   required?: boolean;
   fieldName?: string;
   multiple?: boolean;
-  validate?: (...args: Untyped[]) => void;
+  validate?: (value: Untyped) => string | undefined;
   columns?: Untyped;
   isPromptableField?: boolean;
   promptId?: number | string;

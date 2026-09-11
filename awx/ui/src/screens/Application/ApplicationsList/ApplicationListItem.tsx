@@ -11,7 +11,7 @@ import { formatDateString } from 'util/dates';
 export interface ApplicationListItemProps {
   application: OAuth2Application;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   detailUrl: string;
   rowIndex: number;
   [key: string]: unknown;

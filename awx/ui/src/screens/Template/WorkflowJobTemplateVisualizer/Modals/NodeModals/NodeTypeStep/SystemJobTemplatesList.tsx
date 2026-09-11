@@ -21,7 +21,7 @@ const QS_CONFIG = getQSConfig('system-job-templates', {
 
 export interface SystemJobTemplatesListProps {
   nodeResource?: Untyped;
-  onUpdateNodeResource: (...args: Untyped[]) => void;
+  onUpdateNodeResource: (resource: Untyped | null) => void;
   [key: string]: unknown;
 }
 

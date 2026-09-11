@@ -7,7 +7,7 @@ import { useLingui } from '@lingui/react/macro';
 export interface HostMetricsListItemProps {
   item: Untyped;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   rowIndex: number;
   [key: string]: unknown;
 }

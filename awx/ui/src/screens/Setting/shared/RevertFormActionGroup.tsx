@@ -6,9 +6,9 @@ import { FormFullWidthLayout } from 'components/FormLayout';
 
 export interface RevertFormActionGroupProps {
   children?: React.ReactNode;
-  onCancel: (...args: Untyped[]) => void;
+  onCancel: (value?: Untyped) => void;
   onRevert: (...args: Untyped[]) => void;
-  onSubmit: (...args: Untyped[]) => void;
+  onSubmit: (values: Untyped) => void;
   [key: string]: unknown;
 }
 

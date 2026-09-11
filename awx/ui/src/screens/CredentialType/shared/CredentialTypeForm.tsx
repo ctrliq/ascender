@@ -53,8 +53,8 @@ function CredentialTypeFormFields() {
 
 export interface CredentialTypeFormProps {
   credentialType?: Partial<CredentialType>;
-  onSubmit: (...args: Untyped[]) => void;
-  onCancel: (...args: Untyped[]) => void;
+  onSubmit: (values: Untyped) => void;
+  onCancel: (value?: Untyped) => void;
   submitError?: unknown;
   [key: string]: unknown;
 }

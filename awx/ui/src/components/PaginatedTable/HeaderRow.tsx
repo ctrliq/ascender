@@ -8,7 +8,7 @@ import type {
 } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import type { QSConfig } from 'util/qs';
+import type { QSConfig, QSParamValue } from 'util/qs';
 import { parseQueryString, updateQueryString } from 'util/qs';
 
 const Th = styled(PFTh)<{ $alignRight?: boolean }>`
@@ -37,9 +37,9 @@ export default function HeaderRow({
 
   const params = parseQueryString(qsConfig, location.search);
 
-  const onSort = (key: string, order: unknown) => {
+  const onSort = (key?: string, order?: string) => {
     const qs = updateQueryString(qsConfig, location.search, {
-      order_by: order === 'asc' ? key : `-${key}`,
+      order_by: (order === 'asc' ? key : `-${key}`) as QSParamValue,
       page: null,
     });
     navigate(qs ? `${location.pathname}?${qs}` : location.pathname);
@@ -84,7 +84,7 @@ export default function HeaderRow({
  */
 export interface HeaderCellProps {
   sortKey?: string;
-  onSort?: (key: string, order: string) => void;
+  onSort?: (key?: string, order?: string) => void;
   /**
    * PatternFly declares the sorted column as a numeric index; these tables key
    * it by the column's sort key instead, which is what the query string holds,

@@ -62,10 +62,10 @@ export interface DataListToolbarProps {
   isAllSelected?: boolean;
   onSelectAll?: (isSelected: boolean) => void;
   isCompact?: boolean;
-  onSort?: (...args: Untyped[]) => void;
+  onSort?: (key?: string, order?: string) => void;
   onSearch?: (...args: Untyped[]) => void;
-  onReplaceSearch?: (...args: Untyped[]) => void;
-  onRemove?: (...args: Untyped[]) => void;
+  onReplaceSearch?: (key: string, value: Untyped) => void;
+  onRemove?: (key: string, value: Untyped) => void;
   onCompact?: (...args: Untyped[]) => void;
   onExpand?: (...args: Untyped[]) => void;
   /**
@@ -78,7 +78,7 @@ export interface DataListToolbarProps {
   pagination?: React.ReactNode;
   enableNegativeFiltering?: boolean;
   enableRelatedFuzzyFiltering?: boolean;
-  handleIsAnsibleFactsSelected?: (...args: Untyped[]) => void;
+  handleIsAnsibleFactsSelected?: (isSelected: boolean) => void;
   isFilterCleared?: boolean;
   advancedSearchDisabled?: boolean;
   [key: string]: unknown;

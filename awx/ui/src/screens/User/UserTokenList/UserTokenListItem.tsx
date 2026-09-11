@@ -9,7 +9,7 @@ import { formatDateString } from 'util/dates';
 export interface UserTokenListItemProps {
   token: OAuth2Token;
   isSelected?: boolean;
-  onSelect?: (...args: Untyped[]) => void;
+  onSelect?: (item?: Untyped) => void;
   rowIndex: number;
   [key: string]: unknown;
 }

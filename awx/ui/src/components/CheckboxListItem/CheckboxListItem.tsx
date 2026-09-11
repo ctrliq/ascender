@@ -12,7 +12,7 @@ export interface CheckboxListItemProps {
   name: string;
   onDeselect: (...args: Untyped[]) => void;
   rowIndex: number;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   /** One column per field to show beside the checkbox, keyed into `item`. */
   columns?: SearchColumn[];
   item?: Untyped;

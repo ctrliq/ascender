@@ -48,7 +48,7 @@ export interface InstanceListItemProps {
   isExpanded?: boolean;
   onExpand?: (...args: Untyped[]) => void;
   isSelected?: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   fetchInstances: Untyped;
   rowIndex: number;
   [key: string]: unknown;

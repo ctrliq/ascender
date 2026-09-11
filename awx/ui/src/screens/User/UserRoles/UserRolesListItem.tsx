@@ -8,7 +8,7 @@ import { Link } from 'react-router';
 export interface UserRolesListItemProps {
   role: Untyped;
   detailUrl?: string | null;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   [key: string]: unknown;
 }
 

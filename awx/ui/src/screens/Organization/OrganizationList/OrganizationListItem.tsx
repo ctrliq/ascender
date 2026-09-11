@@ -10,7 +10,7 @@ import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 export interface OrganizationListItemProps {
   organization: Organization;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   rowIndex: number;
   detailUrl: string;
   [key: string]: unknown;

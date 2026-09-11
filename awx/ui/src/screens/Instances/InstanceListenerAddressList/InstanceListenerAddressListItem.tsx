@@ -6,7 +6,7 @@ import { Tr, Td } from '@patternfly/react-table';
 export interface InstanceListenerAddressListItemProps {
   peerListenerAddress: Untyped;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   rowIndex: number;
   [key: string]: unknown;
 }

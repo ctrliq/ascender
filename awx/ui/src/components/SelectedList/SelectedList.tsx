@@ -26,7 +26,7 @@ export interface SelectedItemChip {
 export interface SelectedListProps {
   label?: React.ReactNode;
   selected: unknown[];
-  onRemove?: (...args: Untyped[]) => void;
+  onRemove?: (item?: Untyped) => void;
   displayKey?: string;
   isReadOnly?: boolean;
   /** Lets a caller render its own chip per item, a credential chip say. */

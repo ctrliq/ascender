@@ -28,7 +28,7 @@ export interface InstanceGroupsLookupProps {
   className?: string;
   required?: boolean;
   fieldName?: string;
-  validate?: (...args: Untyped[]) => void;
+  validate?: (value: Untyped) => string | undefined;
   isPromptableField?: boolean;
   promptId?: number | string;
   promptName?: string;

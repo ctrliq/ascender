@@ -16,7 +16,7 @@ export interface CredentialListItemProps {
   credential: Credential;
   detailUrl: string;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   onCopy: (id: number) => void;
   fetchCredentials: Untyped;
   rowIndex: number;

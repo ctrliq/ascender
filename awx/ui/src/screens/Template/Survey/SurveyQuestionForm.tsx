@@ -100,7 +100,7 @@ function AnswerTypeField() {
 
 export interface SurveyQuestionFormProps {
   question?: Untyped;
-  handleSubmit: (...args: Untyped[]) => void;
+  handleSubmit: (values: Untyped, ...rest: Untyped[]) => void;
   handleCancel: () => void;
   submitError?: unknown;
   [key: string]: unknown;

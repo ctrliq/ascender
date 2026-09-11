@@ -8,8 +8,8 @@ import AlertModal from '../AlertModal';
 export interface DeleteRoleConfirmationModalProps {
   role: Record<string, unknown>;
   username?: React.ReactNode;
-  onCancel: (...args: Untyped[]) => void;
-  onConfirm: (...args: Untyped[]) => void;
+  onCancel: (value?: Untyped) => void;
+  onConfirm: (value?: Untyped) => void;
   [key: string]: unknown;
 }
 

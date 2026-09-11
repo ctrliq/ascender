@@ -15,7 +15,7 @@ import { FormColumnLayout, FormFullWidthLayout } from 'components/FormLayout';
 export interface InventoryGroupFormProps {
   error?: unknown;
   group?: Untyped;
-  handleSubmit: (...args: Untyped[]) => void;
+  handleSubmit: (values: Untyped, ...rest: Untyped[]) => void;
   handleCancel: () => void;
   [key: string]: unknown;
 }

@@ -94,9 +94,9 @@ function ListHeader({
     pushHistoryState(qs);
   };
 
-  const handleSort = (key: string, order: unknown) => {
+  const handleSort = (key?: string, order?: string) => {
     const qs = updateQueryString(qsConfig, search, {
-      order_by: order === 'ascending' ? key : `-${key}`,
+      order_by: (order === 'ascending' ? key : `-${key}`) as QSParamValue,
       page: null,
     });
     pushHistoryState(qs);

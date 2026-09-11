@@ -17,8 +17,8 @@ import AlertModal from '../AlertModal';
 
 export interface PromptModalFormProps {
   launchConfig: LaunchConfig;
-  onCancel: (...args: Untyped[]) => void;
-  onSubmit: (...args: Untyped[]) => void;
+  onCancel: (value?: Untyped) => void;
+  onSubmit: (values: Untyped) => void;
   resource: Untyped;
   labels: LabelInput[];
   surveyConfig: SurveyConfig;

@@ -11,7 +11,7 @@ import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 export interface UserListItemProps {
   user: User;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   detailUrl: string;
   rowIndex: number;
   [key: string]: unknown;

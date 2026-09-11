@@ -28,7 +28,7 @@ export interface DisassociateButtonProps {
   itemsToDisassociate?: DisassociableItem[];
   modalNote?: React.ReactNode;
   modalTitle?: Untyped;
-  onDisassociate: (...args: Untyped[]) => void;
+  onDisassociate: () => void;
   verifyCannotDisassociate?: boolean;
   isProtectedInstanceGroup?: boolean;
   [key: string]: unknown;

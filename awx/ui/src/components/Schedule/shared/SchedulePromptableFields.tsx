@@ -23,7 +23,7 @@ export interface SchedulePromptableFieldsProps {
   surveyConfig?: SurveyConfig;
   launchConfig?: LaunchConfig;
   onCloseWizard: (...args: Untyped[]) => void;
-  onSave: (...args: Untyped[]) => void;
+  onSave: (values?: Untyped, config?: Untyped) => void;
   credentials: Credential[];
   resource: Untyped;
   resourceDefaultCredentials: unknown;

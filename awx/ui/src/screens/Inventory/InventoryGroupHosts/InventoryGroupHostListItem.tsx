@@ -16,7 +16,7 @@ export interface InventoryGroupHostListItemProps {
   host: Host;
   rowIndex: number;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   [key: string]: unknown;
 }
 

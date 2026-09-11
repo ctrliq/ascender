@@ -16,7 +16,7 @@ export interface PasswordFieldProps {
   id: Untyped;
   name: string;
   label: React.ReactNode;
-  validate?: (...args: Untyped[]) => void;
+  validate?: (value: Untyped) => string | undefined;
   isRequired?: boolean;
   helperText?: Untyped;
   [key: string]: unknown;

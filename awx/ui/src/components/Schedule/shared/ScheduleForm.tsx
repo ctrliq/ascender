@@ -39,7 +39,7 @@ const defaultSchedule: Schedule = {} as Schedule;
 export interface ScheduleFormProps {
   hasDaysToKeepField?: boolean;
   handleCancel: () => void;
-  handleSubmit: (...args: Untyped[]) => void;
+  handleSubmit: (values: Untyped, ...rest: Untyped[]) => void;
   schedule?: Schedule;
   submitError?: unknown;
   resource: Untyped;

@@ -32,7 +32,7 @@ const StartDiv = styled.div`
 `;
 
 export interface WorkflowStartNodeProps {
-  onUpdateHelpText?: (...args: Untyped[]) => void;
+  onUpdateHelpText?: (helpText: Untyped) => void;
   showActionTooltip: Untyped;
   [key: string]: unknown;
 }

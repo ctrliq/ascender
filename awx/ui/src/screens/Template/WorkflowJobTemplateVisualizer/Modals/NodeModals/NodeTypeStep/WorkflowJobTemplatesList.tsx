@@ -21,7 +21,7 @@ const QS_CONFIG = getQSConfig('workflow-job-templates', {
 
 export interface WorkflowJobTemplatesListProps {
   nodeResource?: Untyped;
-  onUpdateNodeResource: (...args: Untyped[]) => void;
+  onUpdateNodeResource: (resource: Untyped | null) => void;
   [key: string]: unknown;
 }
 

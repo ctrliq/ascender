@@ -15,7 +15,7 @@ import getProjectHelpStrings from '../Project.helptext';
 
 export interface GitSubFormProps {
   credential: Credential;
-  onCredentialSelection: (...args: Untyped[]) => void;
+  onCredentialSelection: (kind: string, value: Untyped) => void;
   scmUpdateOnLaunch: boolean;
   [key: string]: unknown;
 }

@@ -27,7 +27,7 @@ export interface ProjectListItemProps {
   onExpand: (...args: Untyped[]) => void;
   project: Project;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   onCopy: (id: number) => void;
   detailUrl: string;
   fetchProjects: Untyped;

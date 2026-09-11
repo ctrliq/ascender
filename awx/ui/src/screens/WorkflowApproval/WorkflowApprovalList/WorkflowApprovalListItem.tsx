@@ -19,7 +19,7 @@ import WorkflowDenyButton from '../shared/WorkflowDenyButton';
 export interface WorkflowApprovalListItemProps {
   workflowApproval: WorkflowApproval;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   detailUrl: string;
   rowIndex: number;
   [key: string]: unknown;

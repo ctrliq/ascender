@@ -23,7 +23,7 @@ export interface InstanceGroupListItemProps {
   instanceGroup: InstanceGroup;
   detailUrl: string;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   rowIndex: number;
   [key: string]: unknown;
 }

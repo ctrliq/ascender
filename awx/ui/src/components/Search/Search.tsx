@@ -54,8 +54,8 @@ const NoOptionDropdown = styled.div`
 export interface SearchProps {
   columns: SearchColumn[];
   onSearch?: (...args: Untyped[]) => void;
-  onReplaceSearch?: (...args: Untyped[]) => void;
-  onRemove?: (...args: Untyped[]) => void;
+  onReplaceSearch?: (key: string, value: Untyped) => void;
+  onRemove?: (key: string, value: Untyped) => void;
   qsConfig: QSConfig;
   searchableKeys?: SearchableKey[];
   relatedSearchableKeys: string[];
@@ -64,7 +64,7 @@ export interface SearchProps {
   maxSelectHeight?: Untyped;
   enableNegativeFiltering?: boolean;
   enableRelatedFuzzyFiltering?: boolean;
-  handleIsAnsibleFactsSelected?: (...args: Untyped[]) => void;
+  handleIsAnsibleFactsSelected?: (isSelected: boolean) => void;
   isFilterCleared?: boolean;
   [key: string]: unknown;
 }
@@ -244,7 +244,7 @@ function Search({
           labels={chipsByKey[key] ? chipsByKey[key].chips : []}
           deleteLabel={(unusedKey, chip) => {
             const [columnKey, ...value] = (chip as ToolbarLabel).key.split(':');
-            onRemove?.(columnKey, value.join(':'));
+            onRemove?.(columnKey as string, value.join(':'));
           }}
           categoryName={chipsByKey[key] ? chipsByKey[key].label : key}
           key={key}
@@ -458,7 +458,7 @@ function Search({
               if (columnKey === 'ansible_facts') {
                 onRemove?.('host_filter', `${columnKey}__${value}`);
               } else {
-                onRemove?.(columnKey, value.join(':'));
+                onRemove?.(columnKey as string, value.join(':'));
               }
             }}
             categoryName={

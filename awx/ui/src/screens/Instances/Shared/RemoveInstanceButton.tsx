@@ -30,7 +30,7 @@ const Label = styled.span`
 
 export interface RemoveInstanceButtonProps {
   itemsToRemove: Untyped[];
-  onRemove: (...args: Untyped[]) => void;
+  onRemove: () => void;
   isK8s: boolean;
   [key: string]: unknown;
 }

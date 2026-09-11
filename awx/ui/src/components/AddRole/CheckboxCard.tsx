@@ -21,7 +21,7 @@ export interface CheckboxCardProps {
   name: string;
   description?: React.ReactNode;
   isSelected?: boolean;
-  onSelect?: (...args: Untyped[]) => void;
+  onSelect?: (item?: Untyped) => void;
   itemId: number | string;
   [key: string]: unknown;
 }

@@ -64,7 +64,7 @@ export interface SettingGroupProps {
   isDisabled?: boolean;
   isRequired?: boolean;
   label: React.ReactNode;
-  onRevertCallback?: (...args: Untyped[]) => void;
+  onRevertCallback?: () => void;
   popoverContent: Untyped;
   validated?: Untyped;
   [key: string]: unknown;

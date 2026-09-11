@@ -18,7 +18,7 @@ export interface InventoryListItemProps {
   inventory: Inventory & { isSourceSyncRunning?: boolean };
   rowIndex: number;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   onCopy: (id: number) => void;
   fetchInventories: Untyped;
   [key: string]: unknown;

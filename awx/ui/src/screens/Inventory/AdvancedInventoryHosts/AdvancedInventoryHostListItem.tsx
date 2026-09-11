@@ -8,7 +8,7 @@ import Sparkline from 'components/Sparkline';
 export interface AdvancedInventoryHostListItemProps {
   detailUrl: string;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   rowIndex: number;
   inventoryType: Untyped;
   /** The host row, as the hosts list hands it over. */

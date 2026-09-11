@@ -24,7 +24,7 @@ export interface SubscriptionModalProps {
   subscriptionCreds?: Untyped;
   selectedSubscription?: Untyped;
   onClose: () => void;
-  onConfirm: (...args: Untyped[]) => void;
+  onConfirm: (value?: Untyped) => void;
   [key: string]: unknown;
 }
 

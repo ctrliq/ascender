@@ -56,7 +56,7 @@ export interface WorkflowToolsProps {
   onFitGraph: (...args: Untyped[]) => void;
   onPan: (...args: Untyped[]) => void;
   onPanToMiddle: (...args: Untyped[]) => void;
-  onZoomChange: (...args: Untyped[]) => void;
+  onZoomChange: (zoom: number) => void;
   zoomPercentage: Untyped;
   [key: string]: unknown;
 }

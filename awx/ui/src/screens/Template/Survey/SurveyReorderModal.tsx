@@ -20,7 +20,7 @@ export interface SurveyReorderModalProps {
   questions: Untyped;
   isOrderModalOpen: boolean;
   onCloseOrderModal: (...args: Untyped[]) => void;
-  onSave: (...args: Untyped[]) => void;
+  onSave: (values?: Untyped, config?: Untyped) => void;
   [key: string]: unknown;
 }
 

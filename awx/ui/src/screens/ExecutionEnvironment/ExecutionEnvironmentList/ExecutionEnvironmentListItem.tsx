@@ -15,7 +15,7 @@ export interface ExecutionEnvironmentListItemProps {
   executionEnvironment: ExecutionEnvironment;
   detailUrl: string;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   onCopy: (id: number) => void;
   rowIndex: number;
   fetchExecutionEnvironments: Untyped;

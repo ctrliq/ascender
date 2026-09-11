@@ -8,7 +8,7 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { WorkflowDispatchContext } from 'contexts/Workflow';
 
 export interface UnsavedChangesModalProps {
-  onSaveAndExit: (...args: Untyped[]) => void;
+  onSaveAndExit: () => void;
   onExit: (...args: Untyped[]) => void;
   [key: string]: unknown;
 }

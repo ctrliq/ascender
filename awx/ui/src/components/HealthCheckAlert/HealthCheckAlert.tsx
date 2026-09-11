@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -12,7 +11,7 @@ const Alert = styled(PFAlert)`
   z-index: 1;
 `;
 export interface HealthCheckAlertProps {
-  onSetHealthCheckAlert: (...args: Untyped[]) => void;
+  onSetHealthCheckAlert: (isOpen: boolean) => void;
   [key: string]: unknown;
 }
 

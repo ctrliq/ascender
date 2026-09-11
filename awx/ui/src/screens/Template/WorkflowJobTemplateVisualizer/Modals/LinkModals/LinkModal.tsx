@@ -18,7 +18,7 @@ import Popover from 'components/Popover';
 
 export interface LinkModalProps {
   header: React.ReactNode;
-  onConfirm: (...args: Untyped[]) => void;
+  onConfirm: (linkType?: string, linkCondition?: Untyped) => void;
   [key: string]: unknown;
 }
 

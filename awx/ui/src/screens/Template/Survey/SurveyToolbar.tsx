@@ -29,9 +29,9 @@ export interface SurveyToolbarProps {
   isAllSelected: boolean;
   onSelectAll: (isSelected: boolean) => void;
   surveyEnabled?: Untyped;
-  onToggleSurvey: (...args: Untyped[]) => void;
+  onToggleSurvey: (isEnabled: boolean) => void;
   isDeleteDisabled: boolean;
-  onToggleDeleteModal: (...args: Untyped[]) => void;
+  onToggleDeleteModal: (isOpen: boolean) => void;
   /** Absent when there is nothing to reorder, which the toolbar checks. */
   onOpenOrderModal?: (...args: Untyped[]) => void;
   emptyList?: Untyped;

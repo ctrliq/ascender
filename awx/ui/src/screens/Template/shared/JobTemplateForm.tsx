@@ -73,7 +73,7 @@ const defaultTemplate: Partial<JobTemplate> & { isNew?: boolean } = {
 export interface JobTemplateFormProps {
   template?: Partial<JobTemplate> & { isNew?: boolean };
   handleCancel?: () => void;
-  handleSubmit: (...args: Untyped[]) => void;
+  handleSubmit: (values: Untyped, ...rest: Untyped[]) => void;
   /** Injected by the formik wrapper below, never by a caller. */
   setFieldValue?: Untyped;
   setFieldTouched?: Untyped;

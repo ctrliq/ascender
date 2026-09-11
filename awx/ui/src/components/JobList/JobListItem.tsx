@@ -37,7 +37,7 @@ export interface JobListItemProps {
   job: UnifiedJob;
   rowIndex: number;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   showTypeColumn?: boolean;
   isSuperUser?: boolean;
   inventorySourceLabels: Untyped;

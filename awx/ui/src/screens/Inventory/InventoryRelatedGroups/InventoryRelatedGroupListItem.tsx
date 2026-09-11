@@ -16,7 +16,7 @@ export interface InventoryRelatedGroupListItemProps {
   group: Untyped;
   rowIndex: number;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   [key: string]: unknown;
 }
 

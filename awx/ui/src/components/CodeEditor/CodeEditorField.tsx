@@ -16,7 +16,7 @@ export interface CodeEditorFieldProps {
   label: React.ReactNode;
   tooltip?: React.ReactNode;
   helperText?: string;
-  validate?: (...args: Untyped[]) => void;
+  validate?: (value: Untyped) => string | undefined;
   isRequired?: boolean;
   mode: Untyped;
   rows?: number;

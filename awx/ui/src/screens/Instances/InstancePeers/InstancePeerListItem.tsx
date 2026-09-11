@@ -9,7 +9,7 @@ import { Detail, DetailList } from 'components/DetailList';
 export interface InstancePeerListItemProps {
   peerInstance: Untyped;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   isExpanded: boolean;
   onExpand: (...args: Untyped[]) => void;
   rowIndex: number;

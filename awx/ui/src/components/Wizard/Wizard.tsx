@@ -49,9 +49,9 @@ interface WizardFooterOverrides {
 
 export interface WizardWrapperProps {
   steps?: LegacyWizardStep[];
-  onSave?: (...args: Untyped[]) => void;
+  onSave?: (values?: Untyped, config?: Untyped) => void;
   onClose?: () => void;
-  onNext?: (...args: Untyped[]) => void;
+  onNext?: (current?: Untyped, previous?: Untyped) => void;
   onBack?: (...args: Untyped[]) => void;
   onGoToStep?: (...args: Untyped[]) => void;
   title?: React.ReactNode;

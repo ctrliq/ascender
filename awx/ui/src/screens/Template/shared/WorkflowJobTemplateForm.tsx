@@ -38,7 +38,7 @@ const urlOrigin = window.location.origin;
 
 export interface WorkflowJobTemplateFormProps {
   template?: Partial<WorkflowJobTemplate>;
-  handleSubmit: (...args: Untyped[]) => void;
+  handleSubmit: (values: Untyped, ...rest: Untyped[]) => void;
   handleCancel?: () => void;
   submitError?: unknown;
   isOrgAdmin?: boolean;

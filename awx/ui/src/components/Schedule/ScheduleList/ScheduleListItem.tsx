@@ -24,7 +24,7 @@ const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
 export interface ScheduleListItemProps {
   rowIndex: number;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   schedule: Schedule;
   isMissingInventory: boolean;
   isMissingSurvey: boolean;

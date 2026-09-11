@@ -23,7 +23,7 @@ export interface ApplicationLookupProps {
   value?: Untyped;
   label: React.ReactNode;
   fieldName?: string;
-  validate?: (...args: Untyped[]) => void;
+  validate?: (value: Untyped) => string | undefined;
   [key: string]: unknown;
 }
 

@@ -17,7 +17,7 @@ const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
 export interface EmptyOutputProps {
   hasQueryParams: boolean;
   isJobRunning: boolean;
-  onUnmount: (...args: Untyped[]) => void;
+  onUnmount: () => void;
   job: Untyped;
   [key: string]: unknown;
 }

@@ -22,7 +22,7 @@ const QS_CONFIG = getQSConfig('inventory-sources', {
 
 export interface InventorySourcesListProps {
   nodeResource?: Untyped;
-  onUpdateNodeResource: (...args: Untyped[]) => void;
+  onUpdateNodeResource: (resource: Untyped | null) => void;
   [key: string]: unknown;
 }
 

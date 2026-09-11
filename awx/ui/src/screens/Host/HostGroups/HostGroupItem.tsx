@@ -13,7 +13,7 @@ export interface HostGroupItemProps {
   group: Untyped;
   inventoryId: number | string;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   rowIndex: number;
   [key: string]: unknown;
 }

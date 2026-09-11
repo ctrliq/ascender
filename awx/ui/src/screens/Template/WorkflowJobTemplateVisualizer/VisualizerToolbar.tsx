@@ -55,7 +55,7 @@ ActionButton.displayName = 'ActionButton';
 
 export interface VisualizerToolbarProps {
   onClose: () => void;
-  onSave: (...args: Untyped[]) => void;
+  onSave: (values?: Untyped, config?: Untyped) => void;
   template: Untyped;
   hasUnsavedChanges: boolean;
   readOnly: boolean;

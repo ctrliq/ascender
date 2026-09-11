@@ -64,8 +64,8 @@ function InstanceGroupFormFields() {
 
 export interface InstanceGroupFormProps {
   instanceGroup?: Partial<InstanceGroup>;
-  onSubmit: (...args: Untyped[]) => void;
-  onCancel: (...args: Untyped[]) => void;
+  onSubmit: (values: Untyped) => void;
+  onCancel: (value?: Untyped) => void;
   submitError?: unknown;
   [key: string]: unknown;
 }

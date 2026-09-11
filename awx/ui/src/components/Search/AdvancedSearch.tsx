@@ -56,7 +56,7 @@ export interface AdvancedSearchProps {
   maxSelectHeight?: string;
   enableNegativeFiltering?: boolean;
   enableRelatedFuzzyFiltering?: boolean;
-  handleIsAnsibleFactsSelected?: (...args: Untyped[]) => void;
+  handleIsAnsibleFactsSelected?: (isSelected: boolean) => void;
   isFilterCleared?: boolean;
   [key: string]: unknown;
 }

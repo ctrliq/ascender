@@ -6,8 +6,8 @@ import { ActionGroup, Button } from '@patternfly/react-core';
 import { FormFullWidthLayout } from '../FormLayout';
 
 export interface FormActionGroupProps {
-  onCancel: (...args: Untyped[]) => void;
-  onSubmit: (...args: Untyped[]) => void;
+  onCancel: (value?: Untyped) => void;
+  onSubmit: (values: Untyped) => void;
   submitDisabled?: boolean;
   [key: string]: unknown;
 }

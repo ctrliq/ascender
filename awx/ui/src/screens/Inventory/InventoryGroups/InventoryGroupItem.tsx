@@ -12,7 +12,7 @@ import { ActionsTd, ActionItem } from 'components/PaginatedTable';
 export interface InventoryGroupItemProps {
   group: Untyped;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   rowIndex: number;
   [key: string]: unknown;
 }

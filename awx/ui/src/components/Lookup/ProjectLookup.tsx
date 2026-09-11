@@ -37,7 +37,7 @@ export interface ProjectLookupProps {
   value?: Untyped;
   onBlur?: (event?: Untyped) => void;
   isOverrideDisabled?: boolean;
-  validate?: (...args: Untyped[]) => void;
+  validate?: (value: Untyped) => string | undefined;
   fieldName?: string;
   [key: string]: unknown;
 }

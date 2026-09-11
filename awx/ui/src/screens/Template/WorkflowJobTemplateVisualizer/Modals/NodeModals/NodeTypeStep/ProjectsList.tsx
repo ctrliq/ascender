@@ -22,7 +22,7 @@ const QS_CONFIG = getQSConfig('projects', {
 
 export interface ProjectsListProps {
   nodeResource?: Untyped;
-  onUpdateNodeResource: (...args: Untyped[]) => void;
+  onUpdateNodeResource: (resource: Untyped | null) => void;
   [key: string]: unknown;
 }
 

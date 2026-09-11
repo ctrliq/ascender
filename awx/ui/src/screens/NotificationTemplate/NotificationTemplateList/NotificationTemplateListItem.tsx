@@ -24,7 +24,7 @@ export interface NotificationTemplateListItemProps {
   detailUrl: string;
   fetchTemplates: Untyped;
   isSelected?: boolean;
-  onSelect?: (...args: Untyped[]) => void;
+  onSelect?: (item?: Untyped) => void;
   rowIndex: number;
   [key: string]: unknown;
 }

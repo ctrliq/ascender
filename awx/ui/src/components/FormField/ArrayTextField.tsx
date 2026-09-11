@@ -17,7 +17,7 @@ export interface ArrayTextFieldProps {
   label: React.ReactNode;
   tooltip?: React.ReactNode;
   tooltipMaxWidth?: string;
-  validate?: (...args: Untyped[]) => void;
+  validate?: (value: Untyped) => string | undefined;
   isRequired?: boolean;
   type: Untyped;
   [key: string]: unknown;

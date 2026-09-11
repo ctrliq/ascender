@@ -13,7 +13,7 @@ import { RocketIcon } from '@patternfly/react-icons';
 
 export interface ReLaunchDropDownProps {
   isPrimary?: boolean;
-  handleRelaunch: (...args: Untyped[]) => void;
+  handleRelaunch: (params?: Untyped) => void;
   isLaunching?: boolean;
   id?: string;
   ouiaId?: string;

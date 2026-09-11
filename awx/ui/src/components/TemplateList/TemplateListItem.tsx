@@ -31,7 +31,7 @@ export interface TemplateListItemProps {
   onExpand: (...args: Untyped[]) => void;
   template: JobTemplate;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   onCopy: (id: number) => void;
   detailUrl: React.ReactNode;
   fetchTemplates: (...args: Untyped[]) => unknown;

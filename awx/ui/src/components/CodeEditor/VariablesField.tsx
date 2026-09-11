@@ -179,7 +179,7 @@ export interface VariablesFieldInternalsProps {
   tooltip: React.ReactNode;
   mode: Untyped;
   setMode: Untyped;
-  setShouldValidate: (...args: Untyped[]) => unknown;
+  setShouldValidate: (shouldValidate: boolean) => void;
   handleChange: (...args: Untyped[]) => void;
   isRequired: boolean;
   [key: string]: unknown;

@@ -17,7 +17,7 @@ export interface RevertButtonProps {
   id: string;
   defaultValue: Untyped;
   isDisabled?: boolean;
-  onRevertCallback?: (...args: Untyped[]) => void;
+  onRevertCallback?: () => void;
   [key: string]: unknown;
 }
 

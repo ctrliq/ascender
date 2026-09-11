@@ -108,8 +108,8 @@ const SmartInventoryFormFields = ({
 export interface SmartInventoryFormProps {
   inventory?: Partial<Inventory>;
   instanceGroups?: Untyped[];
-  onSubmit: (...args: Untyped[]) => void;
-  onCancel: (...args: Untyped[]) => void;
+  onSubmit: (values: Untyped) => void;
+  onCancel: (value?: Untyped) => void;
   submitError?: unknown;
   [key: string]: unknown;
 }

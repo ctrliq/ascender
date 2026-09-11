@@ -1,4 +1,4 @@
-import type { SortColumn, Untyped } from 'types/api';
+import type { SortColumn } from 'types/api';
 import React, { useState } from 'react';
 
 import { useLocation } from 'react-router';
@@ -35,7 +35,7 @@ const NoOptionDropdown = styled.div`
 export interface SortProps {
   columns: SortColumn[];
   qsConfig: QSConfig;
-  onSort?: (...args: Untyped[]) => void;
+  onSort?: (key?: string, order?: string) => void;
   [key: string]: unknown;
 }
 

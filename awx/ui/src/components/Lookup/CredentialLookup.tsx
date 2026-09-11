@@ -44,7 +44,7 @@ export interface CredentialLookupProps {
   onChange: (...args: Untyped[]) => void;
   required?: boolean;
   tooltip?: React.ReactNode;
-  validate?: (...args: Untyped[]) => void;
+  validate?: (value: Untyped) => string | undefined;
   value?: Untyped;
   [key: string]: unknown;
 }

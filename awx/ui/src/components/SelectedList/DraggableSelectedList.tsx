@@ -22,7 +22,7 @@ const RemoveActionSection = styled(DataListAction)`
 
 export interface DraggableSelectedListProps {
   selected?: unknown[];
-  onRemove?: (...args: Untyped[]) => void;
+  onRemove?: (item?: Untyped) => void;
   [key: string]: unknown;
 }
 

@@ -16,7 +16,7 @@ export interface PasswordInputProps {
   autocomplete?: string;
   id: Untyped;
   name: string;
-  validate?: (...args: Untyped[]) => void;
+  validate?: (value: Untyped) => string | undefined;
   isFieldGroupValid?: boolean;
   isRequired?: boolean;
   isDisabled?: boolean;

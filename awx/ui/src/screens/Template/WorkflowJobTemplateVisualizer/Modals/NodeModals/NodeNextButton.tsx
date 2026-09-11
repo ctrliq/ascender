@@ -6,7 +6,7 @@ export interface NodeNextButtonProps {
   activeStep: Untyped;
   buttonText: Untyped;
   onClick: (...args: Untyped[]) => void;
-  onNext: (...args: Untyped[]) => void;
+  onNext: (current?: Untyped, previous?: Untyped) => void;
   triggerNext: Untyped;
   isDisabled?: boolean;
   [key: string]: unknown;

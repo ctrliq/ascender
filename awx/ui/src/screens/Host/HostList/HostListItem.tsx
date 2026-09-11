@@ -14,7 +14,7 @@ import Sparkline from 'components/Sparkline';
 export interface HostListItemProps {
   host: Host;
   isSelected: boolean;
-  onSelect: (...args: Untyped[]) => void;
+  onSelect: (item?: Untyped) => void;
   detailUrl: string;
   rowIndex: number;
   [key: string]: unknown;

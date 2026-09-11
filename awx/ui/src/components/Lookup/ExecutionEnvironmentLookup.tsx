@@ -39,7 +39,7 @@ export interface ExecutionEnvironmentLookupProps {
   popoverContent?: Untyped;
   projectId?: number | string;
   tooltip?: React.ReactNode;
-  validate?: (...args: Untyped[]) => void;
+  validate?: (value: Untyped) => string | undefined;
   value?: Untyped;
   fieldName?: string;
   overrideLabel?: boolean;

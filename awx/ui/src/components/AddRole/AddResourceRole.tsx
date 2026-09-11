@@ -20,7 +20,7 @@ const readTeams = async (queryParams: QSParams) => TeamsAPI.read(queryParams);
 const readTeamsOptions = async () => TeamsAPI.readOptions();
 
 export interface AddResourceRoleProps {
-  onSave: (...args: Untyped[]) => void;
+  onSave: (values?: Untyped, config?: Untyped) => void;
   onClose: () => void;
   roles?: Untyped;
   resource?: Untyped;

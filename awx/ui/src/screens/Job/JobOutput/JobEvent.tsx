@@ -21,7 +21,7 @@ export interface JobEventProps {
   event: Untyped;
   measure: Untyped;
   isCollapsed?: boolean;
-  onToggleCollapsed?: (...args: Untyped[]) => void;
+  onToggleCollapsed?: () => void;
   hasChildren?: boolean;
   jobStatus?: Untyped;
   ref?: Untyped;

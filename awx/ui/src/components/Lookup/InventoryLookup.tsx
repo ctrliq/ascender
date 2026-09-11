@@ -33,7 +33,7 @@ export interface InventoryLookupProps {
   promptId?: Untyped;
   promptName?: string;
   required?: boolean;
-  validate?: (...args: Untyped[]) => void;
+  validate?: (value: Untyped) => string | undefined;
   value?: Untyped;
   multiple?: Untyped;
   [key: string]: unknown;

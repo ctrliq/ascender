@@ -101,7 +101,7 @@ function UserTokenFormFields() {
 
 export interface UserTokenFormProps {
   handleCancel: () => void;
-  handleSubmit: (...args: Untyped[]) => void;
+  handleSubmit: (values: Untyped, ...rest: Untyped[]) => void;
   submitError?: unknown;
   token?: Partial<OAuth2Token>;
   [key: string]: unknown;
