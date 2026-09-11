@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Untyped, Host, Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -7,7 +7,6 @@ import { HostsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostEdit from './InventoryHostEdit';
 import mockHost from '../shared/data.host.json';
-import type { Host, Inventory } from 'types/api';
 
 vi.mock('../../../api');
 

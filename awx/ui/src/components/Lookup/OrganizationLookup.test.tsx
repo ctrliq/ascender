@@ -5,7 +5,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { OrganizationsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
-import OrganizationLookup, { _OrganizationLookup } from './OrganizationLookup';
+import OrganizationLookup from './OrganizationLookup';
 
 vi.mock('../../api');
 

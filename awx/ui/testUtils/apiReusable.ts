@@ -1,5 +1,5 @@
 import type { Untyped } from 'types/api';
-// eslint-disable-next-line import-x/prefer-default-export
+
 export function describeNotificationMixin(Model: Untyped, name: Untyped) {
   describe(name, () => {
     let mockHttp: Untyped;

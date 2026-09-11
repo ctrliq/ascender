@@ -1,7 +1,6 @@
 import { RRule } from 'rrule';
 import buildRuleSet from './buildRuleSet';
 
-import { DateTime } from 'luxon';
 import type { ScheduleFormValues } from './types';
 
 describe('buildRuleSet', () => {

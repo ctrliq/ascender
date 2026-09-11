@@ -12,7 +12,6 @@ vi.mock('../../api/models/Metrics');
 
 describe('<Metrics/>', () => {
   let user: Untyped;
-  let container;
 
   const openSelect = async (toggleText: Untyped) => {
     const toggle = screen.getByRole('button', { name: toggleText });
@@ -42,7 +41,7 @@ describe('<Metrics/>', () => {
         },
       },
     } as unknown as ApiResponse<Untyped>);
-    ({ user, container } = renderWithContexts(<Metrics />));
+    ({ user } = renderWithContexts(<Metrics />));
     // wait for the initial instances/metrics fetch to settle
     await waitFor(() => expect(InstancesAPI.read).toHaveBeenCalled());
   });

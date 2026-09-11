@@ -15,7 +15,9 @@ vi.mock('../../api');
 vi.mock('../../util/bootstrapPendo');
 
 declare global {
-  // eslint-disable-next-line no-var
+  // The bootstrap helper reads pendo off the global object, and a global is
+  // declared with var whether or not anything else in the file uses one.
+  /* eslint-disable-next-line vars-on-top */
   var pendo: { initialize: Mock };
 }
 

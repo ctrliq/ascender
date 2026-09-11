@@ -1,11 +1,10 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, InstanceGroup } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import Instances from './Instances';
-import type { InstanceGroup } from 'types/api';
 
 // Markers for the routed panels, so assertions are about which branch of the
 // nested v6 <Routes> tree resolves.

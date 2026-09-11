@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Untyped, Schedule } from 'types/api';
 import React from 'react';
 import { act, waitFor } from '@testing-library/react';
 import { RRule } from 'rrule';
@@ -11,7 +11,6 @@ import {
 } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleEdit from './ScheduleEdit';
-import type { Schedule } from 'types/api';
 
 vi.mock('../../../api');
 

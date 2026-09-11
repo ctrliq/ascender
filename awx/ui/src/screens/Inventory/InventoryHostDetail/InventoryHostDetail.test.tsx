@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { HostsAPI } from 'api';
+import type { Host } from 'types/api';
 import {
   renderWithContexts,
   assertDetail,
@@ -8,7 +9,6 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import InventoryHostDetail from './InventoryHostDetail';
 import mockHost from '../shared/data.host.json';
-import type { Host } from 'types/api';
 
 vi.mock('../../../api');
 

@@ -8,55 +8,51 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import TopologyView from './TopologyView';
 
 vi.mock('../../api');
-vi.mock('util/webWorker', () => {
-  return {
-    __esModule: true,
-    default: () => {
-      return {
-        postMessage: vi.fn().mockReturnValueOnce({
-          data: {
-            type: 'end',
-            links: [],
-            nodes: [
-              {
-                id: 1,
-                hostname: 'foo',
-                node_type: 'control',
-                node_state: 'healthy',
-                index: 0,
-                vx: -1,
-                vy: -5,
-                x: 400,
-                y: 300,
-              },
-              {
-                id: 2,
-                hostname: 'bar',
-                node_type: 'control',
-                node_state: 'healthy',
-                index: 1,
-                vx: -1,
-                vy: -5,
-                x: 500,
-                y: 200,
-              },
-            ],
+vi.mock('util/webWorker', () => ({
+  __esModule: true,
+  default: () => ({
+    postMessage: vi.fn().mockReturnValueOnce({
+      data: {
+        type: 'end',
+        links: [],
+        nodes: [
+          {
+            id: 1,
+            hostname: 'foo',
+            node_type: 'control',
+            node_state: 'healthy',
+            index: 0,
+            vx: -1,
+            vy: -5,
+            x: 400,
+            y: 300,
           },
-        }),
-        onmessage: function handleWorkerEvent(event: Untyped) {
-          switch (event.data.type) {
-            case 'tick':
-              return vi.fn(event.data);
-            case 'end':
-              return vi.fn(event.data);
-            default:
-              return false;
-          }
-        },
-      };
+          {
+            id: 2,
+            hostname: 'bar',
+            node_type: 'control',
+            node_state: 'healthy',
+            index: 1,
+            vx: -1,
+            vy: -5,
+            x: 500,
+            y: 200,
+          },
+        ],
+      },
+    }),
+    onmessage: function handleWorkerEvent(event: Untyped) {
+      switch (event.data.type) {
+        case 'tick':
+          return vi.fn(event.data);
+        case 'end':
+          return vi.fn(event.data);
+        default:
+          return false;
+      }
     },
-  };
-});
+  }),
+}));
 afterEach(() => {
   vi.clearAllMocks();
 });

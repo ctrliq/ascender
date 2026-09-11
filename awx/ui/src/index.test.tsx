@@ -13,7 +13,7 @@ describe('index.jsx', () => {
     const div = document.createElement('div');
     div.setAttribute('id', 'app');
     document.body.appendChild(div);
-    await import('./index.js');
+    await import('.');
     expect(createRoot).toHaveBeenCalledWith(div);
     expect(mockRender).toHaveBeenCalledWith(
       <React.StrictMode>

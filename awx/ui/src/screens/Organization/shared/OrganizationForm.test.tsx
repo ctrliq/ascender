@@ -273,6 +273,8 @@ describe('<OrganizationForm />', () => {
 
     // mount with out of range value
     const mockDataOutOfRange = JSON.parse(JSON.stringify(mockData));
+    // Past the maximum the field accepts, which is the case here.
+    // eslint-disable-next-line no-loss-of-precision
     mockDataOutOfRange.max_hosts = 999999999999999999999;
     const { user: user2 } = renderWithContexts(
       <OrganizationForm

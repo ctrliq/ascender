@@ -22,12 +22,6 @@ const initialValues = {
   verbosity: 1,
 };
 
-const mockSourceOptions = {
-  actions: {
-    POST: {},
-  },
-};
-
 describe('<EC2SubForm />', () => {
   beforeEach(() => {
     vi.mocked(CredentialsAPI.read).mockResolvedValue({

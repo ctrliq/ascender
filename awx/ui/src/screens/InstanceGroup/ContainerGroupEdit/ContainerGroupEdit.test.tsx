@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Untyped, InstanceGroup } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -7,7 +7,6 @@ import { createMemoryHistory } from 'history';
 import { InstanceGroupsAPI, CredentialsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ContainerGroupEdit from './ContainerGroupEdit';
-import type { InstanceGroup } from 'types/api';
 
 vi.mock('../../../api');
 

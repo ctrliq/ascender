@@ -1,11 +1,10 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, User } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { TokensAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserToken from './UserToken';
-import type { User } from '../../../types/api';
 
 vi.mock('../../../api/models/Tokens');
 

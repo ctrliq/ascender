@@ -1,11 +1,10 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { InventoriesAPI } from 'api';
+import type { ApiResponse } from 'api/Base';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryListItem from './InventoryListItem';
-import type { ApiResponse } from 'api/Base';
-import type { Inventory } from 'types/api';
 
 vi.mock('../../../api/models/Inventories');
 

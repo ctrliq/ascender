@@ -1,9 +1,9 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
+import type { Organization } from 'types/api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import UserOrganizationListItem from './UserOrganizationListItem';
-import type { Organization } from 'types/api';
 
 describe('<UserOrganizationListItem />', () => {
   test('mounts correctly', () => {

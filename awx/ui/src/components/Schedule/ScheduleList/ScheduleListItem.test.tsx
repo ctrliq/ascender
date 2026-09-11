@@ -1,6 +1,6 @@
 import type { Untyped } from 'types/api';
 import React from 'react';
-import { screen, within } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleListItem from './ScheduleListItem';
 

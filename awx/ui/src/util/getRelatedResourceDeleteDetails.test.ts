@@ -17,7 +17,7 @@ import {
   getRelatedResourceDeleteCounts,
   relatedResourceDeleteRequests,
 } from './getRelatedResourceDeleteDetails';
-import { messages as enMessages } from '../locales/en/messages.mjs';
+import { messages as enMessages } from '../locales/en/messages';
 
 vi.mock('../api/models/Credentials');
 vi.mock('../api/models/Inventories');

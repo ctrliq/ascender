@@ -1,11 +1,10 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, User } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
 import { UsersAPI, RolesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserRolesList from './UserRolesList';
-import type { User } from '../../../types/api';
 
 vi.mock('../../../api');
 

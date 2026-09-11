@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Untyped, Label } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -10,7 +10,6 @@ import {
   assertDetail,
 } from '../../../../testUtils/rtlContexts';
 import ScheduleDetail from './ScheduleDetail';
-import type { Label } from 'types/api';
 
 vi.mock('../../../api');
 

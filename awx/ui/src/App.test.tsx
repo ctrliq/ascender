@@ -6,9 +6,9 @@ import { RootAPI } from 'api';
 import * as SessionContext from 'contexts/Session';
 import * as navigation from 'util/navigation';
 import * as auth from 'util/auth';
+import type { SessionValue } from 'contexts/Session';
 import { renderWithContexts } from '../testUtils/rtlContexts';
 import App, { ProtectedRoute } from './App';
-import type { SessionValue } from 'contexts/Session';
 
 vi.mock('./api');
 vi.mock('util/webWorker', () => ({ default: vi.fn() }));

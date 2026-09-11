@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Untyped, ExecutionEnvironment } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
@@ -8,7 +8,6 @@ import { ExecutionEnvironmentsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentEdit from './ExecutionEnvironmentEdit';
-import type { ExecutionEnvironment } from '../../../types/api';
 
 vi.mock('../../../api');
 

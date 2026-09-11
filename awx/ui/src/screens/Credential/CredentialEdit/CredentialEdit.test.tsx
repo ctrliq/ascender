@@ -1,5 +1,4 @@
-import type { Credential } from 'types/api';
-import type { Untyped } from 'types/api';
+import type { Credential, Untyped } from 'types/api';
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, Host } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -10,7 +10,6 @@ import {
 import HostDetail from './HostDetail';
 
 import mockHost from '../data.host.json';
-import type { Host } from 'types/api';
 
 vi.mock('../../../api');
 

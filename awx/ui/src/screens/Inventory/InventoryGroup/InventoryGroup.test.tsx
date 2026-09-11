@@ -1,13 +1,12 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { GroupsAPI } from 'api';
+import type { ApiResponse } from 'api/Base';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroup from './InventoryGroup';
-import type { ApiResponse } from 'api/Base';
-import type { Inventory } from 'types/api';
 
 vi.mock('../../../api');
 

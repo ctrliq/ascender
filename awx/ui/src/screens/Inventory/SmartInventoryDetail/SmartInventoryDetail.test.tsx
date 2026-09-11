@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, Inventory } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -9,7 +9,6 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import SmartInventoryDetail from './SmartInventoryDetail';
 import mockSmartInventory from '../shared/data.smart_inventory.json';
-import type { Inventory } from 'types/api';
 
 vi.mock('../../../api');
 

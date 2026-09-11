@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, InstanceGroup } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { Routes, Route } from 'react-router';
@@ -12,7 +12,6 @@ import {
 } from '../../../../testUtils/rtlContexts';
 
 import InstanceList from './InstanceList';
-import type { InstanceGroup } from 'types/api';
 
 vi.mock('../../../api');
 // InstanceList reads useParams from react-router-dom (the route tree

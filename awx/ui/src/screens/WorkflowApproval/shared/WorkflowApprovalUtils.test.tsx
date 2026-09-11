@@ -1,13 +1,10 @@
 import type { Untyped } from 'types/api';
-import React from 'react';
-import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
-import { formatDateString } from 'util/dates';
 import {
   getPendingLabel,
   getStatus,
   getTooltip,
-} from '../shared/WorkflowApprovalUtils';
+} from './WorkflowApprovalUtils';
 import mockWorkflowApprovals from '../data.workflowApprovals.json';
 
 const workflowApproval: Untyped = mockWorkflowApprovals.results[0];

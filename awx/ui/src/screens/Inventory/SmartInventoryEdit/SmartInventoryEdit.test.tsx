@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Untyped, Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -7,7 +7,6 @@ import { InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SmartInventoryEdit from './SmartInventoryEdit';
 import mockSmartInventory from '../shared/data.smart_inventory.json';
-import type { Inventory } from 'types/api';
 
 vi.mock('../../../api');
 

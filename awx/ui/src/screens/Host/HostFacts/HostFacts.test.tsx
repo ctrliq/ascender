@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, Host } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -7,7 +7,6 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import HostFacts from './HostFacts';
 import mockHost from '../data.host.json';
 import mockHostFacts from '../data.hostFacts.json';
-import type { Host } from 'types/api';
 
 vi.mock('../../../api/models/Hosts');
 vi.mock('react-router', async () => ({

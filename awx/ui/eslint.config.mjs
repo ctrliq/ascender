@@ -211,9 +211,6 @@ export default defineConfig([
       'node_modules/**',
       'dist/**',
       'images/**',
-      // The test files have always been outside linting; the conversion
-      // changed their extension, not that decision.
-      '**/*test*.{js,jsx,ts,tsx}',
       'config/**',
       'scripts/**',
       'eslint.config.mjs',
@@ -317,6 +314,9 @@ export default defineConfig([
         {
           vars: 'all',
           args: 'after-used',
+          // a parameter a stub has to declare but does not read, which is
+          // what the leading underscore says
+          argsIgnorePattern: '^_',
           ignoreRestSiblings: true,
           caughtErrors: 'none',
         },
@@ -331,6 +331,26 @@ export default defineConfig([
         'always',
         { exceptAfterSingleLine: true },
       ],
+    },
+  },
+  // The test files take the same rules as the source, less the handful that
+  // describe an application rather than a test of one.
+  {
+    files: ['**/*.{spec,test}.{ts,tsx}', 'testUtils/**/*.{ts,tsx}'],
+    rules: {
+      // an assertion names the string the user sees, which is the point of it
+      'i18next/no-literal-string': 'off',
+      // the console is what several of these silence or spy on
+      'no-console': 'off',
+      // a test file has no default export to be the module's subject
+      'import-x/prefer-default-export': 'off',
+      // the runner and the testing library are development dependencies, and
+      // a test is where they belong
+      'import-x/no-extraneous-dependencies': 'off',
+      // a stub component takes whatever the real one is given, and reads it
+      // the same way the real one would
+      'react/destructuring-assignment': 'off',
+      'react/prop-types': 'off',
     },
   },
 ]);

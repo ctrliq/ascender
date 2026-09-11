@@ -2,10 +2,10 @@ import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 
 import { ExecutionEnvironmentsAPI, CredentialTypesAPI } from 'api';
+import type { ApiResponse } from 'api/Base';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentForm from './ExecutionEnvironmentForm';
-import type { ApiResponse } from 'api/Base';
 
 vi.mock('../../../api');
 

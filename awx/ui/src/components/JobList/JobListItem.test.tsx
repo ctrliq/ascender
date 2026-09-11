@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, UnifiedJob } from 'types/api';
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -6,7 +6,6 @@ import { createMemoryHistory } from 'history';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import JobListItem from './JobListItem';
-import type { UnifiedJob } from 'types/api';
 
 const mockJob = {
   id: 123,

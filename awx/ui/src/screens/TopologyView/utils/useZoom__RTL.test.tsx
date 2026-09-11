@@ -23,7 +23,7 @@ describe('useZoom', () => {
   test('hook returns a set of zoom functions', async () => {
     render(
       <svg className="parent" width="700" height="500">
-        <g className="child"></g>
+        <g className="child" />
       </svg>
     );
     const hook = useZoom('.parent', '.child') as Exclude<
@@ -47,17 +47,17 @@ describe('useZoom', () => {
     renderWithI18n(
       <>
         <Header
-          title={`Topology View`}
+          title="Topology View"
           handleSwitchToggle={vi.fn()}
-          toggleState={true}
+          toggleState
           zoomIn={hook.zoomIn}
           zoomOut={hook.zoomOut}
           zoomFit={hook.zoomFit}
           resetZoom={hook.resetZoom}
-          showZoomControls={true}
+          showZoomControls
         />
         <svg className="parent" width="700" height="500">
-          <g className="child"></g>
+          <g className="child" />
         </svg>
       </>
     );
@@ -77,17 +77,17 @@ describe('useZoom', () => {
     renderWithI18n(
       <>
         <Header
-          title={`Topology View`}
+          title="Topology View"
           handleSwitchToggle={vi.fn()}
-          toggleState={true}
+          toggleState
           zoomIn={hook.zoomIn}
           zoomOut={hook.zoomOut}
           zoomFit={hook.zoomFit}
           resetZoom={hook.resetZoom}
-          showZoomControls={true}
+          showZoomControls
         />
         <svg className="parent" width="700" height="500">
-          <g className="child"></g>
+          <g className="child" />
         </svg>
       </>
     );
@@ -107,17 +107,17 @@ describe('useZoom', () => {
     renderWithI18n(
       <>
         <Header
-          title={`Topology View`}
+          title="Topology View"
           handleSwitchToggle={vi.fn()}
-          toggleState={true}
+          toggleState
           zoomIn={hook.zoomIn}
           zoomOut={hook.zoomOut}
           zoomFit={hook.zoomFit}
           resetZoom={hook.resetZoom}
-          showZoomControls={true}
+          showZoomControls
         />
         <svg className="parent" width="700" height="500">
-          <g className="child"></g>
+          <g className="child" />
         </svg>
       </>
     );
@@ -137,17 +137,17 @@ describe('useZoom', () => {
     renderWithI18n(
       <>
         <Header
-          title={`Topology View`}
+          title="Topology View"
           handleSwitchToggle={vi.fn()}
-          toggleState={true}
+          toggleState
           zoomIn={hook.zoomIn}
           zoomOut={hook.zoomOut}
           zoomFit={hook.zoomFit}
           resetZoom={hook.resetZoom}
-          showZoomControls={true}
+          showZoomControls
         />
         <svg className="parent" width="700" height="500">
-          <g className="child"></g>
+          <g className="child" />
         </svg>
       </>
     );

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, InstanceGroup } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -16,7 +16,6 @@ import {
 } from '../../../../testUtils/rtlContexts';
 
 import InstanceGroupDetails from './InstanceGroupDetails';
-import type { InstanceGroup } from 'types/api';
 
 vi.mock('../../../api');
 

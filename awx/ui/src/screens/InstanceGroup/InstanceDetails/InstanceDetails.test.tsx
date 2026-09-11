@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Untyped, InstanceGroup } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import * as ConfigContext from 'contexts/Config';
@@ -10,7 +10,6 @@ import {
   settleTooltips,
 } from '../../../../testUtils/rtlContexts';
 import InstanceDetails from './InstanceDetails';
-import type { InstanceGroup } from 'types/api';
 
 vi.mock('../../../api');
 vi.mock('../../../hooks/useDebounce');

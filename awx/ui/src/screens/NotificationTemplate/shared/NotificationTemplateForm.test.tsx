@@ -25,13 +25,11 @@ vi.mock('components/CodeEditor', async () => {
 vi.mock('components/CodeEditor/CodeEditorField', async () => {
   const ReactLib = await vi.importActual<typeof import('react')>('react');
   const { useField } = await vi.importActual<typeof import('formik')>('formik');
-  return {
-    __esModule: true,
-    default: ({ name }: Untyped) => {
-      const [field] = useField(name);
-      return ReactLib.createElement('div', null, field.value);
-    },
-  };
+  function MockField({ name }: Untyped) {
+    const [field] = useField(name);
+    return ReactLib.createElement('div', null, field.value);
+  }
+  return { __esModule: true, default: MockField };
 });
 
 const template = {

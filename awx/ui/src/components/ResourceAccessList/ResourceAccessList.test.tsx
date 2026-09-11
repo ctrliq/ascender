@@ -1,7 +1,7 @@
 import type { Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
-import { fireEvent, screen, waitFor, within } from '@testing-library/react';
+import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import {
   CredentialsAPI,

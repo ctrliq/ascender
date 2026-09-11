@@ -22,7 +22,7 @@ describe('useWsProject', () => {
   let debug: Untyped;
 
   beforeEach(() => {
-    debug = global.console.debug; // eslint-disable-line prefer-destructuring
+    debug = global.console.debug;
     global.console.debug = () => {};
     vi.mocked(ProjectsAPI.readDetail).mockResolvedValue({
       data: {

@@ -5,7 +5,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { CredentialsAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
-import CredentialLookup, { _CredentialLookup } from './CredentialLookup';
+import CredentialLookup from './CredentialLookup';
 
 vi.mock('../../api');
 

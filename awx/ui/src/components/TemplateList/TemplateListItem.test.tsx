@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Untyped, JobTemplate } from 'types/api';
 import React from 'react';
 
 import { createMemoryHistory } from 'history';
@@ -8,7 +8,6 @@ import { JobTemplatesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockJobTemplateData from './data.job_template.json';
 import TemplateListItem from './TemplateListItem';
-import type { JobTemplate } from 'types/api';
 
 vi.mock('../../api');
 

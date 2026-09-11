@@ -5,7 +5,7 @@ import buildRuleSet from './buildRuleSet';
 import type { ScheduleFormValues } from './types';
 
 describe(parseRuleObj, () => {
-  let origNow = Settings.now;
+  const origNow = Settings.now;
   beforeEach(() => {
     const expectedNow = DateTime.local(2022, 6, 1, 13, 0, 0);
     Settings.now = () => expectedNow.toMillis();

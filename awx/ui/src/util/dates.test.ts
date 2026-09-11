@@ -9,6 +9,7 @@ import {
   secondsToHHMMSS,
 } from './dates';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const i18n = {
   _: (key: Untyped) => {
     if (key.values) {

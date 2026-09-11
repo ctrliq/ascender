@@ -1,10 +1,9 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, Organization } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationListItem from './OrganizationListItem';
-import type { Organization } from 'types/api';
 
 function renderItem(edit: Untyped) {
   return renderWithContexts(

@@ -1,6 +1,5 @@
-import type { Project } from 'types/api';
+import type { Project, Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { CredentialTypesAPI, ProjectsAPI, RootAPI } from 'api';

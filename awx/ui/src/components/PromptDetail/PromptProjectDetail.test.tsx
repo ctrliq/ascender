@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, Project } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import {
@@ -7,7 +7,6 @@ import {
 } from '../../../testUtils/rtlContexts';
 import PromptProjectDetail from './PromptProjectDetail';
 import mockProject from './data.project.json';
-import type { Project } from 'types/api';
 
 describe('PromptProjectDetail', () => {
   const config = {

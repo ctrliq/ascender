@@ -2,12 +2,12 @@ import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { ProjectsAPI } from 'api';
+import type { ApiResponse } from 'api/Base';
 import {
   renderWithContexts,
   assertDetail,
 } from '../../../../testUtils/rtlContexts';
 import ProjectsListItem from './ProjectListItem';
-import type { ApiResponse } from 'api/Base';
 
 vi.mock('../../../api/models/Projects');
 vi.mock('hooks/useBrandName', () => ({

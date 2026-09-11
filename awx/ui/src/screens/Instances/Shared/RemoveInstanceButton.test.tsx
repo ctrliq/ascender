@@ -4,10 +4,10 @@ import React from 'react';
 import { within, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { InstanceGroupsAPI } from 'api';
-import RemoveInstanceButton from './RemoveInstanceButton';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
-import { messages as englishMessages } from '../../../../src/locales/en/messages.mjs';
+import RemoveInstanceButton from './RemoveInstanceButton';
+import { messages as englishMessages } from '../../../locales/en/messages';
 
 vi.mock('api');
 
@@ -68,7 +68,7 @@ describe('<RemoveInstanceButtton />', () => {
     render(
       <I18nProvider i18n={i18n}>
         <RemoveInstanceButton
-          isK8s={true}
+          isK8s
           itemsToRemove={[instances[0]]}
           onRemove={onRemove}
         />
@@ -93,7 +93,7 @@ describe('<RemoveInstanceButtton />', () => {
     render(
       <I18nProvider i18n={i18n}>
         <RemoveInstanceButton
-          isK8s={true}
+          isK8s
           itemsToRemove={[instances[1]]}
           onRemove={vi.fn()}
         />
@@ -125,7 +125,7 @@ describe('<RemoveInstanceButtton />', () => {
     render(
       <I18nProvider i18n={i18n}>
         <RemoveInstanceButton
-          isK8s={true}
+          isK8s
           itemsToRemove={[instances[0]]}
           onRemove={onRemove}
         />

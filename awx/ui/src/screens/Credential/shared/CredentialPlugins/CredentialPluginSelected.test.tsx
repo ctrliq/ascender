@@ -30,7 +30,7 @@ describe('<CredentialPluginSelected />', () => {
   });
 
   test('clearing plugin calls expected function', async () => {
-    const { user, container, onClearPlugin } = setup();
+    const { user, onClearPlugin } = setup();
     const label = screen
       .getByText(selectedCredential.name)
       .closest('.pf-v6-c-label');

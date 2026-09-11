@@ -4,46 +4,42 @@ import '@testing-library/jest-dom';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import MeshGraph from './MeshGraph';
 
-vi.mock('util/webWorker', () => {
-  return {
-    __esModule: true,
-    default: () => {
-      return {
-        postMessage: vi.fn().mockReturnValueOnce({
-          data: {
-            type: 'end',
-            links: [],
-            nodes: [
-              {
-                id: 1,
-                hostname: 'foo',
-                node_type: 'control',
-                node_state: 'healthy',
-                index: 0,
-                vx: -1,
-                vy: -5,
-                x: 400,
-                y: 300,
-              },
-              {
-                id: 2,
-                hostname: 'bar',
-                node_type: 'control',
-                node_state: 'healthy',
-                index: 1,
-                vx: -1,
-                vy: -5,
-                x: 500,
-                y: 200,
-              },
-            ],
+vi.mock('util/webWorker', () => ({
+  __esModule: true,
+  default: () => ({
+    postMessage: vi.fn().mockReturnValueOnce({
+      data: {
+        type: 'end',
+        links: [],
+        nodes: [
+          {
+            id: 1,
+            hostname: 'foo',
+            node_type: 'control',
+            node_state: 'healthy',
+            index: 0,
+            vx: -1,
+            vy: -5,
+            x: 400,
+            y: 300,
           },
-        }),
-        onmessage: vi.fn(),
-      };
-    },
-  };
-});
+          {
+            id: 2,
+            hostname: 'bar',
+            node_type: 'control',
+            node_state: 'healthy',
+            index: 1,
+            vx: -1,
+            vy: -5,
+            x: 500,
+            y: 200,
+          },
+        ],
+      },
+    }),
+    onmessage: vi.fn(),
+  }),
+}));
 afterEach(() => {
   vi.clearAllMocks();
 });
@@ -74,7 +70,7 @@ describe('<MeshGraph />', () => {
       <MeshGraph
         storedNodes={{ current: [] }}
         data={mockData}
-        showLegend={true}
+        showLegend
         zoom={mockZoomFn}
         setShowZoomControls={mockSetZoomCtrFn}
       />

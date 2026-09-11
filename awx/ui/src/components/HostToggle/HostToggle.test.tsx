@@ -1,9 +1,9 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { HostsAPI } from 'api';
+import type { Host } from 'types/api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import HostToggle from './HostToggle';
-import type { Host } from 'types/api';
 
 vi.mock('../../api');
 

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, Host } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen } from '@testing-library/react';
@@ -7,7 +7,6 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostFacts from './InventoryHostFacts';
 import mockHost from '../shared/data.host.json';
 import mockHostFacts from '../shared/data.hostFacts.json';
-import type { Host } from 'types/api';
 
 vi.mock('../../../api');
 

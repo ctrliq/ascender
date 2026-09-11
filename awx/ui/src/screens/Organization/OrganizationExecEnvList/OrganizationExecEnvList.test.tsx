@@ -1,13 +1,12 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, Organization } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 
 import { OrganizationsAPI } from 'api';
+import type { ApiResponse } from 'api/Base';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationExecEnvList from './OrganizationExecEnvList';
-import type { ApiResponse } from 'api/Base';
-import type { Organization } from 'types/api';
 
 vi.mock('../../../api/');
 

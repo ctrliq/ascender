@@ -1,5 +1,4 @@
-import type { InstanceGroup } from 'types/api';
-import type { Untyped } from 'types/api';
+import type { InstanceGroup, Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';

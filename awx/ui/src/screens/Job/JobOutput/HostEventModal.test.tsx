@@ -64,7 +64,8 @@ const partialHostEvent = {
 
 /*
 Some libraries return a list of string in stdout
-Example: https://github.com/ansible-collections/cisco.ios/blob/main/plugins/modules/ios_command.py#L124-L128
+Example, ios_command.py L124-L128 in ansible-collections/cisco.ios:
+https://github.com/ansible-collections/cisco.ios
 */
 const hostEventWithArray = {
   ...hostEvent,

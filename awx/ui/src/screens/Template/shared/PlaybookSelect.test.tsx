@@ -5,8 +5,8 @@ import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
-import { messages as englishMessages } from '../../../locales/en/messages.mjs';
 import { ProjectsAPI } from 'api';
+import { messages as englishMessages } from '../../../locales/en/messages';
 import PlaybookSelect from './PlaybookSelect';
 
 // Setup i18n for tests
@@ -14,9 +14,8 @@ i18n.load({ en: englishMessages });
 i18n.activate('en');
 
 // Custom render function with I18n context
-const renderWithI18n = (component: Untyped) => {
-  return render(<I18nProvider i18n={i18n}>{component}</I18nProvider>);
-};
+const renderWithI18n = (component: Untyped) =>
+  render(<I18nProvider i18n={i18n}>{component}</I18nProvider>);
 
 vi.mock('api');
 
@@ -68,7 +67,7 @@ describe('<PlaybookSelect />', () => {
     renderWithI18n(
       <PlaybookSelect
         projectId={1}
-        isValid={true}
+        isValid
         onChange={mockCallback}
         onError={() => {}}
       />
@@ -94,7 +93,7 @@ describe('<PlaybookSelect />', () => {
     renderWithI18n(
       <PlaybookSelect
         projectId={1}
-        isValid={true}
+        isValid
         onChange={mockCallback}
         onError={() => {}}
       />

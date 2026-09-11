@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, ExecutionEnvironment } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -7,7 +7,6 @@ import { ExecutionEnvironmentsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentListItem from './ExecutionEnvironmentListItem';
-import type { ExecutionEnvironment } from '../../../types/api';
 
 vi.mock('../../../api');
 

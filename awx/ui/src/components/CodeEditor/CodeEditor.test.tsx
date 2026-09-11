@@ -100,7 +100,7 @@ describe('CodeEditor', () => {
     try {
       const onChange = vi.fn();
       renderWithContexts(
-        <CodeEditor id="code" value={'---'} onChange={onChange} mode="yaml" />
+        <CodeEditor id="code" value="---" onChange={onChange} mode="yaml" />
       );
       fireEvent.change(screen.getByTestId('ace-editor'), {
         target: { value: '---\nfoo: bar' },

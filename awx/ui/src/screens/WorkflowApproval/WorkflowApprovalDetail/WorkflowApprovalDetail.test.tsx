@@ -26,7 +26,7 @@ vi.mock('@lingui/react/macro', async () => ({
     '@lingui/react/macro'
   )),
   useLingui: () => ({
-    t: (template: Untyped, values: Untyped) => {
+    t: (template: Untyped, _values: Untyped) => {
       // Handle template literals properly
       if (typeof template === 'string') {
         return template;

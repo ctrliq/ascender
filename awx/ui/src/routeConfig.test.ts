@@ -1,5 +1,6 @@
 import type { Untyped } from 'types/api';
 import getRouteConfig from './routeConfig';
+
 vi.mock('util/webWorker', () => ({ default: vi.fn() }));
 
 const userProfile = {

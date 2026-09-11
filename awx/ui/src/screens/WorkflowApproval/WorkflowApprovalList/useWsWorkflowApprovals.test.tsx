@@ -29,7 +29,7 @@ vi.mock('../../../hooks/useThrottle', () => ({
 describe('useWsWorkflowApprovals hook', () => {
   let debug: Untyped;
   beforeEach(() => {
-    debug = global.console.debug; // eslint-disable-line prefer-destructuring
+    debug = global.console.debug;
     global.console.debug = () => {};
   });
 

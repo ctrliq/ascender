@@ -1,8 +1,8 @@
 import React from 'react';
 import { screen, within } from '@testing-library/react';
+import type { Host } from 'types/api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import AdvancedInventoryHostListItem from './AdvancedInventoryHostListItem';
-import type { Host } from 'types/api';
 
 const mockHost = {
   id: 2,

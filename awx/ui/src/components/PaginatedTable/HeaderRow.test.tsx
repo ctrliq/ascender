@@ -1,8 +1,8 @@
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import type { QSConfig } from 'util/qs';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import HeaderRow, { HeaderCell } from './HeaderRow';
 
 describe('<HeaderRow />', () => {

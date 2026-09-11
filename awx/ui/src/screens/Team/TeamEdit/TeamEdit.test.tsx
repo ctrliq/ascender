@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Untyped, Team } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
@@ -7,7 +7,6 @@ import { screen, waitFor } from '@testing-library/react';
 import { TeamsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import TeamEdit from './TeamEdit';
-import type { Team } from '../../../types/api';
 
 vi.mock('../../../api');
 

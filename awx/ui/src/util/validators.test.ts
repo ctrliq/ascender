@@ -1,5 +1,5 @@
 import { i18n } from '@lingui/core';
-import { messages as enMessages } from '../locales/en/messages.mjs';
+import { messages as enMessages } from '../locales/en/messages';
 import {
   required,
   minLength,
@@ -123,8 +123,10 @@ describe('validators', () => {
   });
 
   test('number should accept large number', () => {
+    /* eslint-disable no-loss-of-precision */
     expect(number()(999999999999999999999.9)).toBeUndefined();
     expect(number()(-999999999999999999999.9)).toBeUndefined();
+    /* eslint-enable no-loss-of-precision */
   });
 
   test('number should reject string containing alphanum', () => {
