@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -25,7 +24,8 @@ const TopologyIcon = styled(PFTopologyIcon)`
 
 export interface ContentLoadingProps {
   className: string;
-  progress: Untyped;
+  /** How far the force simulation has settled, as a percentage. */
+  progress?: number | null;
   [key: string]: unknown;
 }
 
@@ -35,7 +35,7 @@ const ContentLoading = ({ className, progress }: ContentLoadingProps) => {
     <EmptyState variant="full" className={className} data-cy={className}>
       <TopologyIcon />
       <Progress
-        value={progress}
+        value={progress ?? 0}
         measureLocation={ProgressMeasureLocation.inside}
         aria-label={t`content-loading-in-progress`}
         style={{ margin: '20px' }}

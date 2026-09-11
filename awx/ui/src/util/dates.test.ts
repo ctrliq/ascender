@@ -28,9 +28,7 @@ describe('formatDateString', () => {
     expect(formatDateString({} as unknown as string)).toEqual(
       'Invalid DateTime'
     );
-    expect(formatDateString(undefined as unknown as string | null)).toEqual(
-      'Invalid DateTime'
-    );
+    expect(formatDateString(undefined)).toEqual(null);
     expect(formatDateString('foobar')).toEqual('Invalid DateTime');
     expect(formatDateString('2018-011-31T01:14:52.969227Z', undefined)).toEqual(
       'Invalid DateTime'

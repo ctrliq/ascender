@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -10,6 +9,7 @@ import { InstancesAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
+import type { MeshData, MeshLink, MeshNode } from './constants';
 import Legend from './Legend';
 import Tooltip from './Tooltip';
 import ContentLoading from './ContentLoading';
@@ -26,6 +26,7 @@ import {
   getHeight,
   getWidth,
 } from './utils/helpers';
+import type { Zoom } from './utils/useZoom';
 import webWorker from '../../util/webWorker';
 import {
   DEFAULT_RADIUS,
@@ -44,11 +45,13 @@ const Loader = styled(ContentLoading)`
   background: var(--pf-v6-global--BackgroundColor--100);
 `;
 export interface MeshGraphProps {
-  data: Untyped;
+  data: MeshData;
   showLegend: boolean;
-  zoom: Untyped;
-  setShowZoomControls: Untyped;
-  storedNodes: Untyped;
+  /** d3's zoom behaviour, which the toolbar's controls drive. */
+  zoom: Zoom['zoom'];
+  setShowZoomControls: (show: boolean) => void;
+  /** The nodes as they were fetched, which the websocket updates in place. */
+  storedNodes: React.MutableRefObject<MeshNode[] | null>;
   [key: string]: unknown;
 }
 
@@ -61,7 +64,7 @@ function MeshGraph({
 }: MeshGraphProps) {
   const { t } = useLingui();
   const [isNodeSelected, setIsNodeSelected] = useState(false);
-  const [selectedNode, setSelectedNode] = useState<Untyped>(null);
+  const [selectedNode, setSelectedNode] = useState<MeshNode | null>(null);
   const [simulationProgress, setSimulationProgress] = useState<number | null>(
     null
   );
@@ -74,11 +77,15 @@ function MeshGraph({
     request: fetchDetails,
   } = useRequest(
     useCallback(async () => {
+      // Only the effect below calls this, and only once a node is selected.
+      if (!selectedNode) {
+        return { instance: null, instanceGroups: null };
+      }
       const { data: instanceData } = await InstancesAPI.readDetail(
-        selectedNode?.id
+        selectedNode.id
       );
       const { data: instanceGroupsData } = await InstancesAPI.readInstanceGroup(
-        selectedNode?.id
+        selectedNode.id
       );
       return {
         instance: instanceData,
@@ -96,11 +103,11 @@ function MeshGraph({
     }
   }, [selectedNode, fetchDetails]);
 
-  function updateNodeSVG(nodes: Untyped) {
+  function updateNodeSVG(nodes: MeshNode[]) {
     if (nodes) {
       d3.selectAll('[class*="id-"]')
         .data(nodes)
-        .attr('stroke-dasharray', (d: Untyped) => (d.enabled ? `1 0` : `5`));
+        .attr('stroke-dasharray', (d: MeshNode) => (d.enabled ? `1 0` : `5`));
     }
   }
 
@@ -119,7 +126,7 @@ function MeshGraph({
   // update mesh when user toggles enabled/disabled slider
   useEffect(() => {
     if (instance?.id) {
-      const updatedNodes = storedNodes.current.map((n: Untyped) =>
+      const updatedNodes = (storedNodes.current ?? []).map((n: MeshNode) =>
         n.id === instance.id ? { ...n, enabled: instance.enabled } : n
       );
       storedNodes.current = updatedNodes;
@@ -173,12 +180,12 @@ function MeshGraph({
       }
     };
 
-    function ticked({ progress }: Untyped) {
+    function ticked({ progress }: { progress: number }) {
       const calculatedPercent = Math.round(progress * 100);
       setSimulationProgress(calculatedPercent);
     }
 
-    function ended({ nodes, links }: Untyped) {
+    function ended({ nodes, links }: MeshData) {
       // Remove loading screen
       d3.select('.simulation-loader').style('visibility', 'hidden');
       setShowZoomControls(true);
@@ -215,11 +222,11 @@ function MeshGraph({
         .data(links)
         .enter()
         .append('line')
-        .attr('x1', (d: Untyped) => d.source.x)
-        .attr('y1', (d: Untyped) => d.source.y)
-        .attr('x2', (d: Untyped) => d.target.x)
-        .attr('y2', (d: Untyped) => d.target.y)
-        .attr('marker-end', (d: Untyped) => {
+        .attr('x1', (d: MeshLink) => d.source.x ?? 0)
+        .attr('y1', (d: MeshLink) => d.source.y ?? 0)
+        .attr('x2', (d: MeshLink) => d.target.x ?? 0)
+        .attr('y2', (d: MeshLink) => d.target.y ?? 0)
+        .attr('marker-end', (d: MeshLink) => {
           if (d.link_state === 'adding') {
             return 'url(#end-adding)';
           }
@@ -231,12 +238,12 @@ function MeshGraph({
         .attr('class', (_, i) => `link-${i}`)
         .attr(
           'data-cy',
-          (d: Untyped) => `${d.source.hostname}-${d.target.hostname}`
+          (d: MeshLink) => `${d.source.hostname}-${d.target.hostname}`
         )
         .style('fill', 'none')
-        .style('stroke', (d: Untyped) => renderLinkStatusColor(d.link_state))
+        .style('stroke', (d: MeshLink) => renderLinkStatusColor(d.link_state))
         .style('stroke-width', '2px')
-        .style('stroke-dasharray', (d: Untyped) =>
+        .style('stroke-dasharray', (d: MeshLink) =>
           renderLinkState(d.link_state)
         )
         .attr('pointer-events', 'none')
@@ -252,7 +259,7 @@ function MeshGraph({
         .data(nodes)
         .enter()
         .append('g')
-        .attr('data-cy', (d: Untyped) => `node-${d.id}`)
+        .attr('data-cy', (d: MeshNode) => `node-${d.id}`)
         .on('mouseenter', function handleNodeHover(_, d) {
           d3.select(this).style('cursor', 'pointer');
           highlightSiblings(d);
@@ -269,20 +276,20 @@ function MeshGraph({
       nodeCircles
         .append('circle')
         .attr('r', DEFAULT_RADIUS)
-        .attr('cx', (d: Untyped) => d.x)
-        .attr('cy', (d: Untyped) => d.y)
-        .attr('class', (d: Untyped) => d.node_type)
-        .attr('class', (d: Untyped) => `id-${d.id}`)
+        .attr('cx', (d: MeshNode) => d.x ?? 0)
+        .attr('cy', (d: MeshNode) => d.y ?? 0)
+        .attr('class', (d: MeshNode) => d.node_type)
+        .attr('class', (d: MeshNode) => `id-${d.id}`)
         .attr('fill', DEFAULT_NODE_COLOR)
-        .attr('stroke-dasharray', (d: Untyped) => (d.enabled ? `1 0` : `5`))
-        .attr('stroke', (d: Untyped) => renderStateColor(d.node_state));
+        .attr('stroke-dasharray', (d: MeshNode) => (d.enabled ? `1 0` : `5`))
+        .attr('stroke', (d: MeshNode) => renderStateColor(d.node_state));
 
       // node type labels
       node
         .append('text')
-        .text((d: Untyped) => renderNodeType(d.node_type))
-        .attr('x', (d: Untyped) => d.x)
-        .attr('y', (d: Untyped) => d.y)
+        .text((d: MeshNode) => renderNodeType(d.node_type))
+        .attr('x', (d: MeshNode) => d.x ?? 0)
+        .attr('y', (d: MeshNode) => d.y ?? 0)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'central')
         .attr('fill', DEFAULT_NODE_SYMBOL_TEXT_COLOR);
@@ -291,9 +298,9 @@ function MeshGraph({
       const hostNames = node.append('g').attr('class', 'node-state-label');
       hostNames
         .append('text')
-        .attr('x', (d: Untyped) => d.x)
-        .attr('y', (d: Untyped) => d.y + 40)
-        .text((d: Untyped) => renderLabelText(d.node_state, d.hostname))
+        .attr('x', (d: MeshNode) => d.x ?? 0)
+        .attr('y', (d: MeshNode) => (d.y ?? 0) + 40)
+        .text((d: MeshNode) => renderLabelText(d.node_state, d.hostname))
         .attr('class', 'placeholder')
         .attr('fill', 'white')
         .attr('text-anchor', 'middle')
@@ -316,46 +323,46 @@ function MeshGraph({
       svg.selectAll('text.placeholder').remove();
       hostNames
         .append('text')
-        .attr('x', (d: Untyped) => d.x)
-        .attr('y', (d: Untyped) => d.y + 38)
-        .text((d: Untyped) => renderLabelText(d.node_state, d.hostname))
+        .attr('x', (d: MeshNode) => d.x ?? 0)
+        .attr('y', (d: MeshNode) => (d.y ?? 0) + 38)
+        .text((d: MeshNode) => renderLabelText(d.node_state, d.hostname))
         .attr('font-size', DEFAULT_FONT_SIZE)
         .attr('fill', 'black')
         .attr('text-anchor', 'middle');
 
       // add badge icons
       const badges = nodeCircles.append('g').attr('class', 'node-state-badge');
-      badges.each(function drawStateBadge() {
+      badges.each(function drawStateBadge(this: SVGGElement) {
         const bbox = (
-          (this as SVGElement).parentNode as SVGGraphicsElement
+          (this as SVGGElement).parentNode as SVGGraphicsElement
         ).getBBox();
 
-        d3.select(this)
+        d3.select<SVGGElement, MeshNode>(this as SVGGElement)
           .append('circle')
           .attr('r', 9)
           .attr('cx', bbox.x)
           .attr('cy', bbox.y)
-          .attr('fill', (d: Untyped) => renderStateColor(d.node_state));
-        d3.select(this)
+          .attr('fill', (d: MeshNode) => renderStateColor(d.node_state));
+        d3.select<SVGGElement, MeshNode>(this as SVGGElement)
           .append('path')
-          .attr('class', (d: Untyped) => `icon-${d.node_state}`)
-          .attr('d', (d: Untyped) => renderLabelIcons(d.node_state))
-          .attr('transform', (d: Untyped) =>
+          .attr('class', (d: MeshNode) => `icon-${d.node_state}`)
+          .attr('d', (d: MeshNode) => renderLabelIcons(d.node_state))
+          .attr('transform', (d: MeshNode) =>
             renderIconPosition(d.node_state, bbox)
           )
           .attr('fill', 'white');
       });
       svg.call(zoom);
 
-      function highlightSiblings(n: Untyped) {
+      function highlightSiblings(n: MeshNode) {
         svg
           .select(`circle.id-${n.id}`)
           .attr('fill', DEFAULT_NODE_HIGHLIGHT_COLOR);
         const immediate = links.filter(
-          (l: Untyped) =>
+          (l: MeshLink) =>
             n.hostname === l.source.hostname || n.hostname === l.target.hostname
         );
-        immediate.forEach((s: Untyped) => {
+        immediate.forEach((s: MeshLink) => {
           svg
             .selectAll(`.link-${s.index}`)
             .style('stroke', '#0066CC')
@@ -364,20 +371,20 @@ function MeshGraph({
         });
       }
 
-      function deselectSiblings(n: Untyped) {
+      function deselectSiblings(n: MeshNode) {
         svg.select(`circle.id-${n.id}`).attr('fill', DEFAULT_NODE_COLOR);
         const immediate = links.filter(
-          (l: Untyped) =>
+          (l: MeshLink) =>
             n.hostname === l.source.hostname || n.hostname === l.target.hostname
         );
-        immediate.forEach((s: Untyped) => {
+        immediate.forEach((s: MeshLink) => {
           svg
-            .selectAll(`.link-${s.index}`)
-            .style('stroke', (d: Untyped) =>
+            .selectAll<SVGLineElement, MeshLink>(`.link-${s.index}`)
+            .style('stroke', (d: MeshLink) =>
               renderLinkStatusColor(d.link_state)
             )
             .style('stroke-width', '2px')
-            .attr('marker-end', (d: Untyped) => {
+            .attr('marker-end', (d: MeshLink) => {
               if (d.link_state === 'adding') {
                 return 'url(#end-adding)';
               }
@@ -389,12 +396,13 @@ function MeshGraph({
         });
       }
 
-      function highlightSelected(n: Untyped) {
+      function highlightSelected(n: MeshNode) {
         if (svg.select(`circle.id-${n.id}`).attr('stroke-width') !== null) {
           // toggle rings
           svg
-            .select(`circle.id-${n.id}`)
-            .attr('stroke', (d: Untyped) => renderStateColor(d.node_state))
+            .select<SVGCircleElement>(`circle.id-${n.id}`)
+            .datum<MeshNode>(n)
+            .attr('stroke', (d: MeshNode) => renderStateColor(d.node_state))
             .attr('stroke-width', null);
           // show default empty state of tooltip
           setIsNodeSelected(false);
@@ -402,8 +410,8 @@ function MeshGraph({
           return;
         }
         svg
-          .selectAll('circle')
-          .attr('stroke', (d: Untyped) => renderStateColor(d.node_state))
+          .selectAll<SVGCircleElement, MeshNode>('circle')
+          .attr('stroke', (d: MeshNode) => renderStateColor(d.node_state))
           .attr('stroke-width', null);
         svg
           .select(`circle.id-${n.id}`)

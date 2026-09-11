@@ -1,6 +1,15 @@
-import type { Untyped } from 'types/api';
 import * as d3 from 'd3';
 import { getWidth, getHeight } from './helpers';
+
+/** The zoom behaviour and the controls the topology header drives. */
+export interface Zoom {
+  /** Applied to the parent svg with `selection.call(zoom)`. */
+  zoom: d3.ZoomBehavior<SVGSVGElement, unknown>;
+  zoomIn: () => void;
+  zoomOut: () => void;
+  zoomFit: () => void;
+  resetZoom: () => void;
+}
 
 /**
  * useZoom provides a collection of zoom behaviors/functions for D3 graphs
@@ -19,40 +28,40 @@ import { getWidth, getHeight } from './helpers';
  *  resetZoom: function resets the zoom level to its initial value
  * }
  */
-
 export default function useZoom(
-  parentSelector: Untyped,
-  childSelector: Untyped
-) {
-  if (typeof parentSelector !== 'string' && typeof childSelector !== 'string') {
-    return false;
-  }
-  const zoom = d3.zoom().on('zoom', ({ transform }) => {
-    d3.select(childSelector).attr('transform', transform);
-  });
+  parentSelector: string,
+  childSelector: string
+): Zoom {
+  const zoom = d3
+    .zoom<SVGSVGElement, unknown>()
+    .on('zoom', (event: d3.D3ZoomEvent<SVGSVGElement, unknown>) => {
+      d3.select(childSelector).attr('transform', event.transform.toString());
+    });
+  const parent = () => d3.select<SVGSVGElement, unknown>(parentSelector);
   const zoomIn = () => {
-    d3.select(parentSelector).transition().call(zoom.scaleBy, 2);
+    parent().transition().call(zoom.scaleBy, 2);
   };
   const zoomOut = () => {
-    d3.select(parentSelector).transition().call(zoom.scaleBy, 0.5);
+    parent().transition().call(zoom.scaleBy, 0.5);
   };
   const resetZoom = () => {
-    const parent = d3.select(parentSelector).node();
-    const width = parent.clientWidth;
-    const height = parent.clientHeight;
-    d3.select(parentSelector)
+    const node = parent().node();
+    if (!node) return;
+    const width = node.clientWidth;
+    const height = node.clientHeight;
+    parent()
       .transition()
       .duration(750)
       .call(
         zoom.transform,
         d3.zoomIdentity,
-        d3
-          .zoomTransform(d3.select(parentSelector).node())
-          .invert([width / 2, height / 2])
+        d3.zoomTransform(node).invert([width / 2, height / 2])
       );
   };
   const zoomFit = () => {
-    const bounds = d3.select(childSelector).node().getBBox();
+    const child = d3.select<SVGGraphicsElement, unknown>(childSelector).node();
+    if (!child) return;
+    const bounds = child.getBBox();
     const fullWidth = getWidth(parentSelector);
     const fullHeight = getHeight(parentSelector);
     const { width, height } = bounds;
@@ -60,12 +69,9 @@ export default function useZoom(
     const midY = bounds.y + height / 2;
     if (width === 0 || height === 0) return; // nothing to fit
     const scale = 0.8 / Math.max(width / fullWidth, height / fullHeight);
-    const translate = [
-      fullWidth / 2 - scale * midX,
-      fullHeight / 2 - scale * midY,
-    ];
-    const [x, y] = translate as [number, number];
-    d3.select(parentSelector)
+    const x = fullWidth / 2 - scale * midX;
+    const y = fullHeight / 2 - scale * midY;
+    parent()
       .transition()
       .duration(750)
       .call(zoom.transform, d3.zoomIdentity.translate(x, y).scale(scale));

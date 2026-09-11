@@ -1,4 +1,5 @@
-import type { Untyped } from 'types/api';
+import type { Instance, InstanceGroup, Paginated } from 'types/api';
+import type { Translate } from 'types/lingui';
 import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -80,13 +81,13 @@ const SliderForks = styled.div`
   text-align: center;
 `;
 
-const buildLinkURL = (inst: Untyped) =>
+const buildLinkURL = (inst: InstanceGroup) =>
   inst.is_container_group
     ? '/instance_groups/container_group/'
     : '/instance_groups/';
 
-function renderInstanceGroups(instanceGroups: Untyped) {
-  return instanceGroups.map((ig: Untyped) => (
+function renderInstanceGroups(instanceGroups: InstanceGroup[]) {
+  return instanceGroups.map((ig: InstanceGroup) => (
     <React.Fragment key={ig.id}>
       <Label
         color="blue"
@@ -107,11 +108,11 @@ function renderInstanceGroups(instanceGroups: Untyped) {
   ));
 }
 
-function usedCapacity(instance: Untyped, t: Untyped) {
+function usedCapacity(instance: Partial<Instance>, t: Translate) {
   if (instance.enabled) {
     return (
       <Progress
-        value={Math.round(100 - instance.percent_capacity_remaining)}
+        value={Math.round(100 - Number(instance.percent_capacity_remaining))}
         measureLocation={ProgressMeasureLocation.top}
         size={ProgressSize.sm}
         title={t`Used capacity`}
@@ -122,13 +123,14 @@ function usedCapacity(instance: Untyped, t: Untyped) {
 }
 
 export interface TooltipProps {
-  fetchInstance: Untyped;
+  fetchInstance: () => void;
   isNodeSelected: boolean;
-  renderNodeIcon: Untyped;
-  instanceDetail: Untyped;
-  instanceGroups: Untyped[];
+  renderNodeIcon: React.ReactNode;
+  /** The selected instance, empty until its detail request lands. */
+  instanceDetail: Partial<Instance>;
+  instanceGroups?: Paginated<InstanceGroup> | null;
   isLoading: boolean;
-  redirectToDetailsPage: Untyped;
+  redirectToDetailsPage: () => void;
   [key: string]: unknown;
 }
 
@@ -146,16 +148,16 @@ function Tooltip({
 
   const [forks, setForks] = useState(
     computeForks(
-      instanceDetail.mem_capacity,
-      instanceDetail.cpu_capacity,
-      instanceDetail.capacity_adjustment
+      instanceDetail.mem_capacity ?? 0,
+      instanceDetail.cpu_capacity ?? 0,
+      Number(instanceDetail.capacity_adjustment)
     )
   );
 
   const { error: updateInstanceError, request: updateInstance } = useRequest(
     useCallback(
-      async (values: Untyped) => {
-        await InstancesAPI.update(instanceDetail.id, values);
+      async (values: { capacity_adjustment: number }) => {
+        await InstancesAPI.update(instanceDetail.id as number, values);
       },
       [instanceDetail]
     )
@@ -166,12 +168,12 @@ function Tooltip({
   const { error: updateError, dismissError: dismissUpdateError } =
     useDismissableError(updateInstanceError);
 
-  const handleChangeValue = (value: Untyped) => {
+  const handleChangeValue = (value: number) => {
     const roundedValue = Math.round(value * 100) / 100;
     setForks(
       computeForks(
-        instanceDetail.mem_capacity,
-        instanceDetail.cpu_capacity,
+        instanceDetail.mem_capacity ?? 0,
+        instanceDetail.cpu_capacity ?? 0,
         roundedValue
       )
     );
@@ -181,9 +183,9 @@ function Tooltip({
   useEffect(() => {
     setForks(
       computeForks(
-        instanceDetail.mem_capacity,
-        instanceDetail.cpu_capacity,
-        instanceDetail.capacity_adjustment
+        instanceDetail.mem_capacity ?? 0,
+        instanceDetail.cpu_capacity ?? 0,
+        Number(instanceDetail.capacity_adjustment)
       )
     );
   }, [instanceDetail]);
@@ -251,7 +253,9 @@ function Tooltip({
               <DescriptionListGroup>
                 <DescriptionListTerm>{t`Instance status`}</DescriptionListTerm>
                 <DescriptionListDescription data-cy="node-state">
-                  <StatusLabel status={instanceDetail.node_state} />
+                  <StatusLabel
+                    status={instanceDetail.node_state ?? undefined}
+                  />
                 </DescriptionListDescription>
               </DescriptionListGroup>
               <DescriptionListGroup>
@@ -294,7 +298,7 @@ function Tooltip({
                     {t`Instance groups`}
                   </DescriptionListTerm>
                   <DescriptionListDescription data-cy="instance-groups">
-                    {renderInstanceGroups((instanceGroups as Untyped).results)}
+                    {renderInstanceGroups(instanceGroups.results)}
                   </DescriptionListDescription>
                 </DescriptionListGroup>
               )}
@@ -320,7 +324,7 @@ function Tooltip({
                             max={1}
                             min={0}
                             step={0.1}
-                            value={instanceDetail.capacity_adjustment}
+                            value={Number(instanceDetail.capacity_adjustment)}
                             onChange={(_event, value) =>
                               handleChangeValue(value)
                             }
@@ -347,7 +351,8 @@ function Tooltip({
                       <InstanceToggle
                         css="display: inline-flex;"
                         fetchInstances={fetchInstance}
-                        instance={instanceDetail}
+                        // Only rendered once the detail request has landed.
+                        instance={instanceDetail as Instance}
                         dataCy="enable-instance"
                       />
                     </DescriptionListDescription>

@@ -3,10 +3,10 @@ import { RRule } from 'rrule';
 import { DateTime, Duration } from 'luxon';
 
 export function formatDateString(
-  dateObj: string | null,
+  dateObj: string | null | undefined,
   tz: string | null = null
 ): string | null {
-  if (dateObj === null) {
+  if (dateObj === null || dateObj === undefined) {
     return null;
   }
 

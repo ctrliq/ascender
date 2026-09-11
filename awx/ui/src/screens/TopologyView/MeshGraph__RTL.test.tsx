@@ -1,6 +1,8 @@
 import React from 'react';
 import { waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import type { MeshData } from './constants';
+import type { Zoom } from './utils/useZoom';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import MeshGraph from './MeshGraph';
 
@@ -45,26 +47,25 @@ afterEach(() => {
 });
 describe('<MeshGraph />', () => {
   test('renders correctly', async () => {
-    const mockData = {
-      data: {
-        nodes: [
-          {
-            id: 1,
-            hostname: 'foo',
-            node_type: 'control',
-            node_state: 'healthy',
-          },
-          {
-            id: 2,
-            hostname: 'bar',
-            node_type: 'control',
-            node_state: 'healthy',
-          },
-        ],
-        links: [],
-      },
+    const mockData: MeshData = {
+      nodes: [
+        {
+          id: 1,
+          hostname: 'foo',
+          node_type: 'control',
+          node_state: 'healthy',
+        },
+        {
+          id: 2,
+          hostname: 'bar',
+          node_type: 'control',
+          node_state: 'healthy',
+        },
+      ],
+      links: [],
     };
-    const mockZoomFn = vi.fn();
+    // The graph only calls the behaviour through svg.call(), so a spy stands in.
+    const mockZoomFn = vi.fn() as unknown as Zoom['zoom'];
     const mockSetZoomCtrFn = vi.fn();
     renderWithContexts(
       <MeshGraph

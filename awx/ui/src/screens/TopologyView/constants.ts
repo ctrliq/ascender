@@ -51,3 +51,30 @@ export const ICONS = {
     'M416 208H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h384c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z',
   plus: 'M416 208H272V64c0-17.67-14.33-32-32-32h-32c-17.67 0-32 14.33-32 32v144H32c-17.67 0-32 14.33-32 32v32c0 17.67 14.33 32 32 32h144v144c0 17.67 14.33 32 32 32h32c17.67 0 32-14.33 32-32V304h144c17.67 0 32-14.33 32-32v-32c0-17.67-14.33-32-32-32z',
 };
+
+/** One instance in the mesh, as the topology endpoint returns it. */
+export interface MeshNode {
+  id: number;
+  hostname: string;
+  node_type: keyof typeof NODE_TYPE_SYMBOL_KEY | string;
+  node_state: keyof typeof NODE_STATE_COLOR_KEY | string;
+  enabled?: boolean;
+  /** Where the force layout put the node, once it has settled. */
+  x?: number;
+  y?: number;
+}
+
+/** One peering between two instances, as the layout resolves it. */
+export interface MeshLink {
+  source: MeshNode;
+  target: MeshNode;
+  link_state: keyof typeof LINK_STATE_COLOR_KEY | string;
+  /** The link's position in the list, which the force layout writes back. */
+  index?: number;
+}
+
+/** The mesh the topology screen draws. */
+export interface MeshData {
+  nodes: MeshNode[];
+  links: MeshLink[];
+}

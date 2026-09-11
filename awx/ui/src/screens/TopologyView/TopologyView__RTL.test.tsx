@@ -1,13 +1,17 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { MeshAPI } from 'api';
 import { waitFor, screen } from '@testing-library/react';
+import type { MeshData } from './constants';
 import '@testing-library/jest-dom';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import TopologyView from './TopologyView';
 
 vi.mock('../../api');
+
+/** What the mesh web worker posts back on every tick and at the end. */
+type WorkerMessage = MeshData & { type: 'tick' | 'end' };
+
 vi.mock('util/webWorker', () => ({
   __esModule: true,
   default: () => ({
@@ -41,16 +45,8 @@ vi.mock('util/webWorker', () => ({
         ],
       },
     }),
-    onmessage: function handleWorkerEvent(event: Untyped) {
-      switch (event.data.type) {
-        case 'tick':
-          return vi.fn(event.data);
-        case 'end':
-          return vi.fn(event.data);
-        default:
-          return false;
-      }
-    },
+    // The graph assigns its own handler over this one as soon as it draws.
+    onmessage: vi.fn<(event: MessageEvent<WorkerMessage>) => void>(),
   }),
 }));
 afterEach(() => {
@@ -76,7 +72,7 @@ describe('<TopologyView />', () => {
         ],
         links: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<MeshData>);
     renderWithContexts(<TopologyView />);
     await waitFor(() => screen.getByRole('heading', { level: 2 }));
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
@@ -90,7 +86,7 @@ describe('<TopologyView />', () => {
         nodes: [],
         links: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<MeshData>);
     renderWithContexts(<TopologyView />);
     await waitFor(() => screen.getByRole('heading', { level: 2 }));
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(

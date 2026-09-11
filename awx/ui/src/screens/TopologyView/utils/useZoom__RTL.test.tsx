@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -12,7 +11,7 @@ i18n.load('en', {});
 i18n.activate('en');
 
 // Helper function to render components with I18n context
-function renderWithI18n(component: Untyped) {
+function renderWithI18n(component: React.ReactElement) {
   return render(<I18nProvider i18n={i18n}>{component}</I18nProvider>);
 }
 
@@ -26,10 +25,7 @@ describe('useZoom', () => {
         <g className="child" />
       </svg>
     );
-    const hook = useZoom('.parent', '.child') as Exclude<
-      ReturnType<typeof useZoom>,
-      false
-    >;
+    const hook = useZoom('.parent', '.child');
     expect(hook).toMatchObject({
       zoom: expect.any(Function),
       zoomFit: expect.any(Function),
@@ -39,10 +35,7 @@ describe('useZoom', () => {
     });
   });
   test('user can zoom in', async () => {
-    const hook = useZoom('.parent', '.child') as Exclude<
-      ReturnType<typeof useZoom>,
-      false
-    >;
+    const hook = useZoom('.parent', '.child');
     vi.spyOn(hook, 'zoomIn').mockImplementationOnce(vi.fn());
     renderWithI18n(
       <>
@@ -69,10 +62,7 @@ describe('useZoom', () => {
     expect(hook.zoomIn).toHaveBeenCalledTimes(1);
   });
   test('user can zoom out', async () => {
-    const hook = useZoom('.parent', '.child') as Exclude<
-      ReturnType<typeof useZoom>,
-      false
-    >;
+    const hook = useZoom('.parent', '.child');
     vi.spyOn(hook, 'zoomOut').mockImplementationOnce(vi.fn());
     renderWithI18n(
       <>
@@ -99,10 +89,7 @@ describe('useZoom', () => {
     expect(hook.zoomOut).toHaveBeenCalledTimes(1);
   });
   test('user can zoom fit', async () => {
-    const hook = useZoom('.parent', '.child') as Exclude<
-      ReturnType<typeof useZoom>,
-      false
-    >;
+    const hook = useZoom('.parent', '.child');
     vi.spyOn(hook, 'zoomFit').mockImplementationOnce(vi.fn());
     renderWithI18n(
       <>
@@ -129,10 +116,7 @@ describe('useZoom', () => {
     expect(hook.zoomFit).toHaveBeenCalledTimes(1);
   });
   test('user can reset zoom', async () => {
-    const hook = useZoom('.parent', '.child') as Exclude<
-      ReturnType<typeof useZoom>,
-      false
-    >;
+    const hook = useZoom('.parent', '.child');
     vi.spyOn(hook, 'resetZoom').mockImplementationOnce(vi.fn());
     renderWithI18n(
       <>

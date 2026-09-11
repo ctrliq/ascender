@@ -1,3 +1,4 @@
+import type { MeshNode } from '../constants';
 import {
   renderStateColor,
   renderLabelText,
@@ -24,7 +25,7 @@ describe('renderStateColor', () => {
     expect(renderStateColor(null)).toBe('');
   });
   test('returns empty string if state is zero/integer', () => {
-    expect(renderStateColor(0)).toBe('');
+    expect(renderStateColor(0 as unknown as string)).toBe('');
   });
 });
 describe('renderNodeType', () => {
@@ -38,21 +39,21 @@ describe('renderNodeType', () => {
     expect(renderNodeType(null)).toBe('');
   });
   test('returns empty string if type is zero/integer', () => {
-    expect(renderNodeType(0)).toBe('');
+    expect(renderNodeType(0 as unknown as string)).toBe('');
   });
 });
 describe('renderNodeIcon', () => {
   test('returns correct node icon', () => {
-    expect(renderNodeIcon({ node_type: 'control' })).toBe('C');
+    expect(renderNodeIcon({ node_type: 'control' } as MeshNode)).toBe('C');
   });
   test('returns empty string if state is not found', () => {
-    expect(renderNodeIcon('foo')).toBe('');
+    expect(renderNodeIcon('foo' as unknown as MeshNode)).toBe('');
   });
   test('returns false if state is null', () => {
     expect(renderNodeIcon(null)).toBe(false);
   });
   test('returns false if state is zero/integer', () => {
-    expect(renderNodeIcon(0)).toBe(false);
+    expect(renderNodeIcon(0 as unknown as MeshNode)).toBe(false);
   });
 });
 describe('renderLabelIcons', () => {
@@ -66,24 +67,24 @@ describe('renderLabelIcons', () => {
     expect(renderLabelIcons(null)).toBe(false);
   });
   test('returns false if state is zero/integer', () => {
-    expect(renderLabelIcons(0)).toBe(false);
+    expect(renderLabelIcons(0 as unknown as string)).toBe(false);
   });
 });
 describe('renderIconPosition', () => {
   const bbox = { x: 400, y: 400, width: 10, height: 20 };
   test('returns correct label icon', () => {
-    expect(renderIconPosition('ready', bbox)).toBe(
+    expect(renderIconPosition('ready', bbox as DOMRect)).toBe(
       `translate(${bbox.x - 4.5}, ${bbox.y - 4.5}), scale(0.02)`
     );
   });
   test('returns empty string if state is not found', () => {
-    expect(renderIconPosition('foo', bbox)).toBe('');
+    expect(renderIconPosition('foo', bbox as DOMRect)).toBe('');
   });
   test('returns false if state is null', () => {
     expect(renderIconPosition(null)).toBe(false);
   });
   test('returns false if state is zero/integer', () => {
-    expect(renderIconPosition(0)).toBe(false);
+    expect(renderIconPosition(0 as unknown as string)).toBe(false);
   });
 });
 describe('renderLinkState', () => {
@@ -94,26 +95,26 @@ describe('renderLinkState', () => {
     expect(renderLinkState('foo')).toBe(null);
   });
   test('returns null if state is null', () => {
-    expect(renderLinkState(null)).toBe(null);
+    expect(renderLinkState(null as unknown as string)).toBe(null);
   });
   test('returns null if state is zero/integer', () => {
-    expect(renderLinkState(0)).toBe(null);
+    expect(renderLinkState(0 as unknown as string)).toBe(null);
   });
 });
 describe('getWidth', () => {
   test('returns 700 if selector is null', () => {
-    expect(getWidth(null)).toBe(700);
+    expect(getWidth(null as unknown as string)).toBe(700);
   });
   test('returns 700 if selector is zero/integer', () => {
-    expect(getWidth(0)).toBe(700);
+    expect(getWidth(0 as unknown as string)).toBe(700);
   });
 });
 describe('getHeight', () => {
   test('returns 600 if selector is null', () => {
-    expect(getHeight(null)).toBe(600);
+    expect(getHeight(null as unknown as string)).toBe(600);
   });
   test('returns 600 if selector is zero/integer', () => {
-    expect(getHeight(0)).toBe(600);
+    expect(getHeight(0 as unknown as string)).toBe(600);
   });
 });
 describe('renderLabelText', () => {
@@ -124,11 +125,15 @@ describe('renderLabelText', () => {
     expect(renderLabelText('foo', 'bar')).toBe('bar');
   });
   test('returns empty string if non string params are passed', () => {
-    expect(renderLabelText(0, null)).toBe('');
+    expect(
+      renderLabelText(0 as unknown as string, null as unknown as string)
+    ).toBe('');
   });
 });
 describe('redirectToDetailsPage', () => {
   test('returns false if incorrect params are passed', () => {
-    expect(redirectToDetailsPage(null, 0)).toBe(false);
+    expect(
+      redirectToDetailsPage(null, 0 as unknown as (to: string) => void)
+    ).toBe(false);
   });
 });

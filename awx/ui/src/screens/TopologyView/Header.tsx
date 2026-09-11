@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -18,15 +17,17 @@ import {
   RedoAltIcon,
 } from '@patternfly/react-icons';
 
+import type { Zoom } from './utils/useZoom';
+
 export interface HeaderProps {
   title: React.ReactNode;
-  handleSwitchToggle: (...args: Untyped[]) => void;
-  toggleState: Untyped;
-  zoomIn: Untyped;
-  zoomOut: Untyped;
-  resetZoom: Untyped;
-  zoomFit: Untyped;
-  refresh?: Untyped;
+  handleSwitchToggle: (isChecked: boolean) => void;
+  toggleState: boolean;
+  zoomIn: Zoom['zoomIn'];
+  zoomOut: Zoom['zoomOut'];
+  resetZoom: Zoom['resetZoom'];
+  zoomFit: Zoom['zoomFit'];
+  refresh?: () => void;
   showZoomControls: boolean;
   [key: string]: unknown;
 }
