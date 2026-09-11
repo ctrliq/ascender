@@ -27,11 +27,11 @@ export interface InstanceGroupsLookupProps {
   tooltip?: React.ReactNode;
   className?: string;
   required?: boolean;
-  fieldName?: Untyped;
+  fieldName?: string;
   validate?: (...args: Untyped[]) => void;
   isPromptableField?: boolean;
   promptId?: number | string;
-  promptName?: Untyped;
+  promptName?: string;
   [key: string]: unknown;
 }
 

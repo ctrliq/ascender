@@ -1,3 +1,4 @@
+import type { SearchableKey } from 'components/PaginatedTable';
 import type { SearchColumn, Untyped } from 'types/api';
 import type { ToolbarLabel } from '@patternfly/react-core';
 import React, { useState, useEffect } from 'react';
@@ -56,8 +57,8 @@ export interface SearchProps {
   onReplaceSearch?: (...args: Untyped[]) => void;
   onRemove?: (...args: Untyped[]) => void;
   qsConfig: QSConfig;
-  searchableKeys?: unknown[];
-  relatedSearchableKeys: Untyped;
+  searchableKeys?: SearchableKey[];
+  relatedSearchableKeys: string[];
   onShowAdvancedSearch?: (shown: boolean) => void;
   isDisabled?: boolean;
   maxSelectHeight?: Untyped;

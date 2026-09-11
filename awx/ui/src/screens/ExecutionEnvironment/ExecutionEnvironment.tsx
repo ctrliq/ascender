@@ -24,7 +24,7 @@ import ExecutionEnvironmentEdit from './ExecutionEnvironmentEdit';
 import ExecutionEnvironmentTemplateList from './ExecutionEnvironmentTemplate';
 
 export interface ExecutionEnvironmentProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

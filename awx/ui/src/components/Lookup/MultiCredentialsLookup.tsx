@@ -33,7 +33,7 @@ export interface MultiCredentialsLookupProps {
   value?: unknown[];
   onChange: (...args: Untyped[]) => void;
   onError: (error: unknown) => void;
-  fieldName?: Untyped;
+  fieldName?: string;
   validate?: (...args: Untyped[]) => void;
   [key: string]: unknown;
 }

@@ -19,7 +19,7 @@ import { WorkflowApprovalsAPI } from 'api';
 import WorkflowApprovalDetail from './WorkflowApprovalDetail';
 
 export interface WorkflowApprovalProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

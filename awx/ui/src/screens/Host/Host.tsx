@@ -25,7 +25,7 @@ import HostEdit from './HostEdit';
 import HostGroups from './HostGroups';
 
 export interface HostProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

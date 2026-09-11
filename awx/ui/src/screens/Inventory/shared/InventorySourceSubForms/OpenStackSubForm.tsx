@@ -17,7 +17,7 @@ import {
 import getHelpText from '../Inventory.helptext';
 
 export interface OpenStackSubFormProps {
-  autoPopulateCredential?: Untyped;
+  autoPopulateCredential?: boolean;
   [key: string]: unknown;
 }
 

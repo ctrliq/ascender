@@ -24,7 +24,7 @@ const QS_CONFIG = getQSConfig('peer', {
 });
 
 export interface InstanceListenerAddressListProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

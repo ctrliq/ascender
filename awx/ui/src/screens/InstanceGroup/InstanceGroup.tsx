@@ -25,7 +25,7 @@ import InstanceGroupEdit from './InstanceGroupEdit';
 import Instances from './Instances/Instances';
 
 export interface InstanceGroupProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

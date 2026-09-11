@@ -20,7 +20,7 @@ import InventoryGroupHosts from '../InventoryGroupHosts';
 import InventoryRelatedGroups from '../InventoryRelatedGroups';
 
 export interface InventoryGroupProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   inventory: Inventory;
   [key: string]: unknown;
 }

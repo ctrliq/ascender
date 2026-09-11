@@ -26,7 +26,7 @@ import ProjectDetail from './ProjectDetail';
 import ProjectEdit from './ProjectEdit';
 
 export interface ProjectProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

@@ -22,7 +22,11 @@ import { getInventoryPath } from './shared/utils';
 // inventoryType is a real route param that the nested group/host screens read
 // via useParams; this picks the right detail screen for the kind.
 export interface InventoryTypeRouterProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (
+    resource?: Untyped,
+    nested?: Untyped,
+    schedule?: Untyped
+  ) => void;
   [key: string]: unknown;
 }
 

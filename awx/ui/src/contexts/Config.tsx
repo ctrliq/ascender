@@ -23,15 +23,21 @@ import { useSession } from './Session';
  * provider below, which is why it is declared here rather than taken from a
  * single generated schema.
  */
+/**
+ * The current user, as /api/v2/me returns them. Only the fields the screens
+ * read are named; the index signature carries the rest of the serializer.
+ */
+export interface CurrentUser {
+  id?: number;
+  username?: string;
+  is_superuser?: boolean;
+  is_system_auditor?: boolean;
+  [key: string]: unknown;
+}
+
 export interface ConfigValue {
   /** The current user, as /api/v2/me returns them. */
-  me?: {
-    id?: number;
-    username?: string;
-    is_superuser?: boolean;
-    is_system_auditor?: boolean;
-    [key: string]: unknown;
-  };
+  me?: CurrentUser;
   /** The end user licence agreement, shown by the subscription wizard. */
   eula?: string;
   /** The subscription, whose fields differ by licence type. */

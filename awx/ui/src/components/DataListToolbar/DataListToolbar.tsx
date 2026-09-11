@@ -1,3 +1,4 @@
+import type { SearchableKey } from 'components/PaginatedTable';
 import type { SearchColumn, Untyped } from 'types/api';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
@@ -54,8 +55,8 @@ export interface DataListToolbarProps {
   itemCount?: number;
   clearAllFilters?: Untyped;
   searchColumns?: SearchColumn[];
-  searchableKeys?: unknown[];
-  relatedSearchableKeys?: unknown[];
+  searchableKeys?: SearchableKey[];
+  relatedSearchableKeys?: string[];
   sortColumns?: Untyped;
   isAllSelected?: boolean;
   onSelectAll?: (isSelected: boolean) => void;

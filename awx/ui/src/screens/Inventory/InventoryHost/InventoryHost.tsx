@@ -24,7 +24,7 @@ import InventoryHostFacts from '../InventoryHostFacts';
 import InventoryHostGroups from '../InventoryHostGroups';
 
 export interface InventoryHostProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   inventory: Inventory;
   [key: string]: unknown;
 }

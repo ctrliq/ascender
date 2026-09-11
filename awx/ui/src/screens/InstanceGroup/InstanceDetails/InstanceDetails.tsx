@@ -69,7 +69,7 @@ function computeForks(
 }
 
 export interface InstanceDetailsProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   instanceGroup: InstanceGroup;
   [key: string]: unknown;
 }

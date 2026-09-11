@@ -38,7 +38,7 @@ const unacceptableCredentialTypes = [
 ];
 
 export interface CredentialProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

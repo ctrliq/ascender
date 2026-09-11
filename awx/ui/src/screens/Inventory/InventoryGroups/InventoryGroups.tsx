@@ -9,7 +9,7 @@ import InventoryGroup from '../InventoryGroup/InventoryGroup';
 import InventoryGroupsList from './InventoryGroupsList';
 
 export interface InventoryGroupsProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   inventory: Inventory;
   [key: string]: unknown;
 }

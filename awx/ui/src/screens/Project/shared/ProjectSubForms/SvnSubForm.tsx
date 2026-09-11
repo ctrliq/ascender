@@ -13,7 +13,7 @@ import {
 export interface SvnSubFormProps {
   credential: Credential;
   onCredentialSelection: (...args: Untyped[]) => void;
-  scmUpdateOnLaunch: Untyped;
+  scmUpdateOnLaunch: boolean;
   [key: string]: unknown;
 }
 

@@ -38,7 +38,7 @@ export function getVerbosityLabel(
 export interface VerbositySelectFieldProps {
   fieldId: string;
   promptId?: number | string;
-  promptName?: Untyped;
+  promptName?: string;
   tooltip: React.ReactNode;
   [key: string]: unknown;
 }
@@ -62,7 +62,7 @@ function VerbositySelectField({
       fieldId={fieldId}
       label={t`Verbosity`}
       promptId={promptId}
-      promptName={promptName}
+      promptName={promptName as string}
       tooltip={tooltip}
     >
       <AnsibleSelect id={fieldId} data={VERBOSE_OPTIONS} {...verbosityField} />

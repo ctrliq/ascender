@@ -31,7 +31,7 @@ export interface InventoryLookupProps {
   onBlur?: (event?: Untyped) => void;
   onChange: (...args: Untyped[]) => void;
   promptId?: Untyped;
-  promptName?: Untyped;
+  promptName?: string;
   required?: boolean;
   validate?: (...args: Untyped[]) => void;
   value?: Untyped;
@@ -150,7 +150,7 @@ function InventoryLookup({
       isRequired={required}
       label={t`Inventory`}
       promptId={promptId}
-      promptName={promptName}
+      promptName={promptName as string}
       isDisabled={isDisabled}
       tooltip={t`Select the inventory containing the hosts you want this job to manage.`}
     >

@@ -31,13 +31,13 @@ export interface PeersLookupProps {
   tooltip?: React.ReactNode;
   className?: string;
   required?: boolean;
-  fieldName?: Untyped;
+  fieldName?: string;
   multiple?: boolean;
   validate?: (...args: Untyped[]) => void;
   columns?: Untyped;
   isPromptableField?: boolean;
   promptId?: number | string;
-  promptName?: Untyped;
+  promptName?: string;
   formLabel?: Untyped;
   typePeers?: boolean;
   /** The instance being peered, whose own id and peers are excluded. */
@@ -183,7 +183,7 @@ function PeersLookup({
       fieldId={id}
       label={formLabel}
       promptId={promptId as string | number}
-      promptName={promptName}
+      promptName={promptName as string}
       tooltip={tooltip}
     >
       {renderLookup()}

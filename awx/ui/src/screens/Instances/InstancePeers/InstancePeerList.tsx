@@ -29,7 +29,7 @@ const QS_CONFIG = getQSConfig('peer', {
 });
 
 export interface InstancePeerListProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

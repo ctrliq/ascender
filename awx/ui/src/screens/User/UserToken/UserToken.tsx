@@ -18,7 +18,7 @@ import useRequest from 'hooks/useRequest';
 import UserTokenDetail from '../UserTokenDetail';
 
 export interface UserTokenProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   user: User;
   [key: string]: unknown;
 }

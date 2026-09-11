@@ -24,7 +24,7 @@ import ContainerGroupDetails from './ContainerGroupDetails';
 import ContainerGroupEdit from './ContainerGroupEdit';
 
 export interface ContainerGroupProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

@@ -28,7 +28,7 @@ import AdvancedInventoryHosts from './AdvancedInventoryHosts';
 import { getInventoryPath } from './shared/utils';
 
 export interface ConstructedInventoryProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

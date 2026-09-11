@@ -1,3 +1,4 @@
+import type { CurrentUser } from 'contexts/Config';
 import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
@@ -28,7 +29,7 @@ const fetchCredentialTypes = async (pageNo = 1, credentialTypes = []) => {
 };
 
 export interface CredentialAddProps {
-  me?: Untyped;
+  me?: CurrentUser;
   [key: string]: unknown;
 }
 

@@ -16,7 +16,7 @@ import InstancePeerList from './InstancePeers';
 import InstanceListenerAddressList from './InstanceListenerAddressList';
 
 export interface InstanceProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

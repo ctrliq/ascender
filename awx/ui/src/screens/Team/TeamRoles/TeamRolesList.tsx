@@ -1,3 +1,4 @@
+import type { CurrentUser } from 'contexts/Config';
 import type { Team, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
@@ -26,7 +27,7 @@ const QS_CONFIG = getQSConfig('roles', {
 });
 
 export interface TeamRolesListProps {
-  me: Untyped;
+  me: CurrentUser;
   team: Team;
   [key: string]: unknown;
 }
@@ -62,7 +63,7 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
         actionsResponse,
       ] = await Promise.all([
         TeamsAPI.readRoles(team.id, params),
-        UsersAPI.readAdminOfOrganizations(me.id, {
+        UsersAPI.readAdminOfOrganizations(me.id as number, {
           id: team.organization,
         }),
         TeamsAPI.readRoleOptions(team.id),

@@ -1,3 +1,4 @@
+import type { CurrentUser } from 'contexts/Config';
 import type { ExecutionEnvironment, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
@@ -24,7 +25,7 @@ import useRequest from 'hooks/useRequest';
 import executionEnvironmentHelpTextStrings from './ExecutionEnvironment.helptext';
 
 export interface ExecutionEnvironmentFormFieldsProps {
-  me: Untyped;
+  me: CurrentUser;
   options: Untyped;
   executionEnvironment: ExecutionEnvironment;
   isOrgLookupDisabled: boolean;

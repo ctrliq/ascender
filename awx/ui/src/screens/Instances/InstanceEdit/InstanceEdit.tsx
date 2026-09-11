@@ -12,7 +12,7 @@ import { InstancesAPI } from 'api';
 import InstanceForm from '../Shared/InstanceForm';
 
 export interface InstanceEditProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

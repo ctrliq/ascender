@@ -13,7 +13,7 @@ import AdvancedInventoryHostDetail from '../AdvancedInventoryHostDetail';
 
 export interface AdvancedInventoryHostProps {
   inventory: Inventory;
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

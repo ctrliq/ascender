@@ -37,7 +37,7 @@ export const JOB_URL_SEGMENT_MAP = {
 };
 
 export interface JobProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

@@ -6,7 +6,7 @@ import AdvancedInventoryHost from '../AdvancedInventoryHost';
 
 export interface AdvancedInventoryHostsProps {
   inventory: Inventory;
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

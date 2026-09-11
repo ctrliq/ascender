@@ -8,7 +8,7 @@ import InventorySourceList from './InventorySourceList';
 
 export interface InventorySourcesProps {
   inventory: Inventory;
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

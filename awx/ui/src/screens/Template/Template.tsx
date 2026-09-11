@@ -27,7 +27,7 @@ import JobTemplateEdit from './JobTemplateEdit';
 import TemplateSurvey from './TemplateSurvey';
 
 export interface TemplateProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

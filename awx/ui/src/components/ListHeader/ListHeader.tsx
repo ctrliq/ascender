@@ -1,4 +1,5 @@
-import type { Untyped, SearchColumn, SortColumn } from 'types/api';
+import type { SearchableKey } from 'components/PaginatedTable';
+import type { SearchColumn, SortColumn } from 'types/api';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import styled from 'styled-components';
@@ -34,7 +35,7 @@ export interface ListHeaderProps {
   /** Lets a list render a toolbar of its own in place of the default one. */
   renderToolbar?: (props: DataListToolbarProps) => React.ReactNode;
   searchColumns?: SearchColumn[];
-  searchableKeys?: Untyped[];
+  searchableKeys?: SearchableKey[];
   sortColumns?: SortColumn[];
   [key: string]: unknown;
 }

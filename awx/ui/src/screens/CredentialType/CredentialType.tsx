@@ -23,7 +23,7 @@ import CredentialTypeDetails from './CredentialTypeDetails';
 import CredentialTypeEdit from './CredentialTypeEdit';
 
 export interface CredentialTypeProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

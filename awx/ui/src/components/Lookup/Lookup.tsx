@@ -54,7 +54,7 @@ export interface LookupProps {
   }) => React.ReactNode;
   isDisabled?: boolean;
   onDebounce?: (...args: Untyped[]) => void;
-  fieldName: Untyped;
+  fieldName: string;
   validate?: (...args: Untyped[]) => void;
   modalDescription?: React.ReactNode;
   onUpdate?: (...args: Untyped[]) => void;

@@ -1,3 +1,4 @@
+import type { SearchableKey } from 'components/PaginatedTable';
 import type { SearchColumn, SortColumn, Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
@@ -30,7 +31,7 @@ export interface OptionsListProps {
   relatedSearchableKeys?: Untyped;
   renderItemChip?: Untyped;
   searchColumns?: SearchColumn[];
-  searchableKeys?: Untyped;
+  searchableKeys?: SearchableKey[];
   selectItem: Untyped;
   sortColumns?: SortColumn[];
   sortSelectedItems?: Untyped;

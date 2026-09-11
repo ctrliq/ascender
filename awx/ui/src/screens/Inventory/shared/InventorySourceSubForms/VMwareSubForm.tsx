@@ -21,7 +21,7 @@ import {
 import getHelpText from '../Inventory.helptext';
 
 export interface VMwareSubFormProps {
-  autoPopulateCredential?: Untyped;
+  autoPopulateCredential?: boolean;
   [key: string]: unknown;
 }
 

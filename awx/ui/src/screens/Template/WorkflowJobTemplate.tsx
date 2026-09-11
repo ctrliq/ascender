@@ -31,7 +31,7 @@ import TemplateSurvey from './TemplateSurvey';
 import { Visualizer } from './WorkflowJobTemplateVisualizer';
 
 export interface WorkflowJobTemplateProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

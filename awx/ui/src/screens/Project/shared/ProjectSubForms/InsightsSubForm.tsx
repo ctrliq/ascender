@@ -9,8 +9,8 @@ import { ScmTypeOptions } from './SharedFields';
 export interface InsightsSubFormProps {
   credential: { typeId: number; value: Untyped };
   onCredentialSelection: (...args: Untyped[]) => void;
-  scmUpdateOnLaunch: Untyped;
-  autoPopulateCredential?: Untyped;
+  scmUpdateOnLaunch: boolean;
+  autoPopulateCredential?: boolean;
   [key: string]: unknown;
 }
 

@@ -1,3 +1,4 @@
+import type { CurrentUser } from 'contexts/Config';
 import type { DetailedError, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 
@@ -24,8 +25,8 @@ import UserTokens from './UserTokens';
 import UserRolesList from './UserRoles/UserRolesList';
 
 export interface UserProps {
-  setBreadcrumb: Untyped;
-  me?: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  me?: CurrentUser;
   [key: string]: unknown;
 }
 

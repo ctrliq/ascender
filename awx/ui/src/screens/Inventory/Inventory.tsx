@@ -31,7 +31,7 @@ import InventorySources from './InventorySources';
 import { getInventoryPath } from './shared/utils';
 
 export interface InventoryProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

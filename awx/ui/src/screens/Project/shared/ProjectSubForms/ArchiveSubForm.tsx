@@ -11,7 +11,7 @@ import {
 export interface ArchiveSubFormProps {
   credential: Credential;
   onCredentialSelection: (...args: Untyped[]) => void;
-  scmUpdateOnLaunch: Untyped;
+  scmUpdateOnLaunch: boolean;
   [key: string]: unknown;
 }
 

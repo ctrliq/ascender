@@ -20,7 +20,7 @@ const TokenAlert = styled(Alert)`
 `;
 
 export interface UserTokensProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   user: User;
   [key: string]: unknown;
 }

@@ -10,7 +10,7 @@ export interface SchedulesProps {
   apiModel: Untyped;
   loadScheduleOptions: Untyped;
   loadSchedules: Untyped;
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   /** Absent for a resource that cannot be prompted, a management job say. */
   launchConfig?: Untyped;
   surveyConfig?: Untyped;

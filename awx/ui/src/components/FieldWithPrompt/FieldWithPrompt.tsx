@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -22,7 +21,7 @@ export interface FieldWithPromptProps {
   isRequired?: boolean;
   label: React.ReactNode;
   promptId: number | string;
-  promptName: Untyped;
+  promptName: string;
   tooltip?: React.ReactNode;
   isDisabled?: boolean;
   [key: string]: unknown;

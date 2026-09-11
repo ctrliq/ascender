@@ -22,7 +22,7 @@ import TeamEdit from './TeamEdit';
 import TeamRolesList from './TeamRoles';
 
 export interface TeamProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

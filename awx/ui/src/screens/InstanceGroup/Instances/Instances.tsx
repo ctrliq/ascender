@@ -5,7 +5,7 @@ import InstanceList from './InstanceList';
 import InstanceDetails from '../InstanceDetails';
 
 export interface InstancesProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   instanceGroup: InstanceGroup;
   [key: string]: unknown;
 }

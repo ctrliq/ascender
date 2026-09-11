@@ -22,7 +22,7 @@ import ApplicationDetails from '../ApplicationDetails';
 import ApplicationTokens from '../ApplicationTokens';
 
 export interface ApplicationProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

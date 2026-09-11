@@ -41,11 +41,11 @@ export interface ExecutionEnvironmentLookupProps {
   tooltip?: React.ReactNode;
   validate?: (...args: Untyped[]) => void;
   value?: Untyped;
-  fieldName?: Untyped;
+  fieldName?: string;
   overrideLabel?: boolean;
   isPromptableField?: boolean;
   promptId?: number | string;
-  promptName?: Untyped;
+  promptName?: string;
   [key: string]: unknown;
 }
 

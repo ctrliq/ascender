@@ -28,7 +28,7 @@ import AdvancedInventoryHosts from './AdvancedInventoryHosts';
 import { getInventoryPath } from './shared/utils';
 
 export interface FederatedInventoryProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 

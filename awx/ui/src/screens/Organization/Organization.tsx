@@ -1,3 +1,4 @@
+import type { CurrentUser } from 'contexts/Config';
 import type { DetailedError, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
@@ -23,8 +24,8 @@ import OrganizationTeams from './OrganizationTeams';
 import OrganizationExecEnvList from './OrganizationExecEnvList';
 
 export interface OrganizationProps {
-  setBreadcrumb: Untyped;
-  me: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
+  me: CurrentUser;
   [key: string]: unknown;
 }
 

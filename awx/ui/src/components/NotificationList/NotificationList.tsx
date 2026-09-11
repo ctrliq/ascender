@@ -1,3 +1,4 @@
+import type { SearchableKey } from 'components/PaginatedTable';
 import type { NotificationsApiModel, Untyped } from 'types/api';
 import React, { useEffect, useCallback, useState } from 'react';
 import { useLocation } from 'react-router';
@@ -110,7 +111,7 @@ function NotificationList({
         changedTemplateIds: number[];
         typeLabels: Record<string, string>;
         relatedSearchableKeys: string[];
-        searchableKeys: Untyped[];
+        searchableKeys: SearchableKey[];
       } = {
         notifications: notificationsResults,
         approvalsTemplateIds: [],

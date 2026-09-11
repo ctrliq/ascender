@@ -20,7 +20,7 @@ import NotificationTemplateDetail from './NotificationTemplateDetail';
 import NotificationTemplateEdit from './NotificationTemplateEdit';
 
 export interface NotificationTemplateProps {
-  setBreadcrumb: Untyped;
+  setBreadcrumb: (resource?: Untyped, nested?: Untyped) => void;
   [key: string]: unknown;
 }
 
