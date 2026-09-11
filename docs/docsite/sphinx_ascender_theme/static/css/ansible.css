@@ -489,6 +489,11 @@ tr .ansibleOptionLink {
     white-space: pre-wrap;
 }
 
+/* Reserve room for the copy button; pre-wrap would otherwise reflow under it */
+.rst-content div.highlight:has(button.copybtn) pre {
+    padding-right: 2.6em;
+}
+
 .rst-content dl dt { margin-bottom: 0; }
 
 /*! Make sure that environment variable links are blue */
@@ -496,3 +501,48 @@ tr .ansibleOptionLink {
 
 /*! Theme toggle icon in the top nav */
 .asc-theme-toggle svg { vertical-align: middle; }
+
+/*! sphinx-copybutton base layer. Colors follow the RTD light code-block
+ * palette; dark.css re-points the color-bearing rules at --asc-* tokens. */
+.rst-content button.copybtn {
+    border: 1px solid #e1e4e5;
+    background-color: #f8f8f8;
+    color: #404040;
+    border-radius: 3px;
+}
+
+.rst-content .highlight button.copybtn:hover {
+    background-color: #fff;
+    border-color: #2980b9;
+    color: #2980b9;
+}
+
+.rst-content .highlight button.copybtn:active {
+    background-color: #e1e4e5;
+}
+
+.rst-content button.copybtn.success,
+.rst-content .highlight button.copybtn.success:hover {
+    border-color: #27ae60;
+    color: #27ae60;
+}
+
+/* Unprefixed so the dark button:focus-visible rule can still win on outline */
+button.copybtn:focus-visible {
+    opacity: 1;
+    outline: 2px solid #2980b9;
+    outline-offset: 2px;
+}
+
+.rst-content .o-tooltip--left:after {
+    background: #404040;
+    color: #fff;
+    border-radius: 3px;
+    font-family: Lato, proxima-nova, "Helvetica Neue", Arial, sans-serif;
+}
+
+@media (hover: none) {
+    .rst-content .highlight button.copybtn {
+        opacity: 1;
+    }
+}

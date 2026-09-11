@@ -47,20 +47,20 @@ The following steps show how to authenticate and get a token:
 
 ::
 
-  [root@ip-172-31-26-180 ~]# kinit username
+  $ kinit username
   Password for username@WEBSITE.COM:
-  [root@ip-172-31-26-180 ~]#
 
-  Check if we got a valid ticket.
+Check that you have a valid ticket:
 
-  [root@ip-172-31-26-180 ~]# klist
+::
+
+  $ klist
   Ticket cache: FILE:/tmp/krb5cc_0
   Default principal: username@WEBSITE.COM
 
   Valid starting     Expires            Service principal
   01/25/16 11:42:56  01/25/16 21:42:53  krbtgt/WEBSITE.COM@WEBSITE.COM
     renew until 02/01/16 11:42:56
-  [root@ip-172-31-26-180 ~]#
 
 Once you have a valid ticket, you can check to ensure that everything is working as expected from command line. To test this, make sure that your inventory looks like the following:
 
