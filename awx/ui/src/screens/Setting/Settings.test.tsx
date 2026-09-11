@@ -50,10 +50,10 @@ describe('<Settings />', () => {
         },
       }
     );
-    await waitFor(() =>
-      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()
-    );
-    expect(history.location.pathname).toBe('/');
+    // The redirect is a <Navigate>, so it lands in an effect after the
+    // loading state clears rather than with it.
+    await waitFor(() => expect(history.location.pathname).toBe('/'));
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
     expect(screen.queryByText('Authentication')).not.toBeInTheDocument();
   });
 
