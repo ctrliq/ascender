@@ -18,8 +18,9 @@ const DateTimeGroup = styled.span`
   display: flex;
 `;
 export interface DateTimePickerProps {
-  dateFieldName: Record<string, unknown>;
-  timeFieldName: Record<string, unknown>;
+  /** Formik field names, which the picker binds its two inputs to. */
+  dateFieldName: string;
+  timeFieldName: string;
   label: React.ReactNode;
   [key: string]: unknown;
 }

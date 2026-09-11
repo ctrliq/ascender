@@ -19,6 +19,7 @@ import { required, requiredPositiveInteger } from 'util/validators';
 import AnsibleSelect from '../../AnsibleSelect';
 import FormField from '../../FormField';
 import DateTimePicker from './DateTimePicker';
+import type { ScheduleFrequency } from './types';
 
 const RunOnRadio = styled(Radio)`
   display: flex;
@@ -50,8 +51,13 @@ const Checkbox = styled(_Checkbox)`
 `;
 
 export interface FrequencyDetailSubformProps {
-  frequency: unknown;
-  prefix: React.ReactNode;
+  frequency: ScheduleFrequency;
+  /**
+   * Where this frequency's options live in the form, either
+   * frequencyOptions.<freq> or exceptionOptions.<freq>. Every field below
+   * builds its own name from it.
+   */
+  prefix: string;
   isException?: boolean;
   [key: string]: unknown;
 }
@@ -170,6 +176,10 @@ const FrequencyDetailSubform = ({
     },
   ];
 
+  // The callers pass PatternFly 6's (event, checked) pair. Reading the first
+  // argument as the flag, which PatternFly 5 put there, meant checked was an
+  // event object and so always true: a weekday could be ticked but never
+  // unticked, because the else branch below was unreachable.
   const updateDaysOfWeek = (day: Untyped, checked: boolean) => {
     const newDaysOfWeek = daysOfWeek.value ? [...daysOfWeek.value] : [];
     daysOfWeekHelpers.setTouched(true);
@@ -272,7 +282,7 @@ const FrequencyDetailSubform = ({
                 (day: Untyped) =>
                   day === RRule.SU || day.weekday === RRule.SU.weekday
               )}
-              onChange={(checked) => {
+              onChange={(_event, checked) => {
                 updateDaysOfWeek(RRule.SU, checked);
               }}
               aria-label={t`Sunday`}
@@ -286,7 +296,7 @@ const FrequencyDetailSubform = ({
                 (day: Untyped) =>
                   day === RRule.MO || day.weekday === RRule.MO.weekday
               )}
-              onChange={(checked) => {
+              onChange={(_event, checked) => {
                 updateDaysOfWeek(RRule.MO, checked);
               }}
               aria-label={t`Monday`}
@@ -300,7 +310,7 @@ const FrequencyDetailSubform = ({
                 (day: Untyped) =>
                   day === RRule.TU || day.weekday === RRule.TU.weekday
               )}
-              onChange={(checked) => {
+              onChange={(_event, checked) => {
                 updateDaysOfWeek(RRule.TU, checked);
               }}
               aria-label={t`Tuesday`}
@@ -314,7 +324,7 @@ const FrequencyDetailSubform = ({
                 (day: Untyped) =>
                   day === RRule.WE || day.weekday === RRule.WE.weekday
               )}
-              onChange={(checked) => {
+              onChange={(_event, checked) => {
                 updateDaysOfWeek(RRule.WE, checked);
               }}
               aria-label={t`Wednesday`}
@@ -328,7 +338,7 @@ const FrequencyDetailSubform = ({
                 (day: Untyped) =>
                   day === RRule.TH || day.weekday === RRule.TH.weekday
               )}
-              onChange={(checked) => {
+              onChange={(_event, checked) => {
                 updateDaysOfWeek(RRule.TH, checked);
               }}
               aria-label={t`Thursday`}
@@ -342,7 +352,7 @@ const FrequencyDetailSubform = ({
                 (day: Untyped) =>
                   day === RRule.FR || day.weekday === RRule.FR.weekday
               )}
-              onChange={(checked) => {
+              onChange={(_event, checked) => {
                 updateDaysOfWeek(RRule.FR, checked);
               }}
               aria-label={t`Friday`}
@@ -356,7 +366,7 @@ const FrequencyDetailSubform = ({
                 (day: Untyped) =>
                   day === RRule.SA || day.weekday === RRule.SA.weekday
               )}
-              onChange={(checked) => {
+              onChange={(_event, checked) => {
                 updateDaysOfWeek(RRule.SA, checked);
               }}
               aria-label={t`Saturday`}
@@ -422,8 +432,8 @@ const FrequencyDetailSubform = ({
               }
               value="day"
               isChecked={runOn.value === 'day'}
-              onChange={(event) => {
-                event.target.value = 'day';
+              onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                (event.target as HTMLInputElement).value = 'day';
                 runOn.onChange(event);
               }}
             />
@@ -532,8 +542,8 @@ const FrequencyDetailSubform = ({
               }
               value="the"
               isChecked={runOn.value === 'the'}
-              onChange={(event) => {
-                event.target.value = 'the';
+              onChange={(event: React.FormEvent<HTMLInputElement>) => {
+                (event.target as HTMLInputElement).value = 'the';
                 runOn.onChange(event);
               }}
             />
@@ -560,8 +570,8 @@ const FrequencyDetailSubform = ({
           label={t`Never`}
           value="never"
           isChecked={end.value === 'never'}
-          onChange={(event) => {
-            event.target.value = 'never';
+          onChange={(event: React.FormEvent<HTMLInputElement>) => {
+            (event.target as HTMLInputElement).value = 'never';
             end.onChange(event);
           }}
           ouiaId={`end-never-radio-button-${id}`}
@@ -572,8 +582,8 @@ const FrequencyDetailSubform = ({
           label={t`After number of occurrences`}
           value="after"
           isChecked={end.value === 'after'}
-          onChange={(event) => {
-            event.target.value = 'after';
+          onChange={(event: React.FormEvent<HTMLInputElement>) => {
+            (event.target as HTMLInputElement).value = 'after';
             end.onChange(event);
           }}
           ouiaId={`end-after-radio-button-${id}`}
@@ -584,8 +594,8 @@ const FrequencyDetailSubform = ({
           label={t`On date`}
           value="onDate"
           isChecked={end.value === 'onDate'}
-          onChange={(event) => {
-            event.target.value = 'onDate';
+          onChange={(event: React.FormEvent<HTMLInputElement>) => {
+            (event.target as HTMLInputElement).value = 'onDate';
             end.onChange(event);
           }}
           ouiaId={`end-on-radio-button-${id}`}

@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 
-export const FormColumnLayout = styled.div`
+export const FormColumnLayout = styled.div<{ $stacked?: boolean }>`
   width: 100%;
   grid-column: 1 / -1;
   display: grid;

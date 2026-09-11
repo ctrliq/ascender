@@ -21,6 +21,7 @@ import { SubFormLayout, FormColumnLayout } from '../../FormLayout';
 import FrequencyDetailSubform from './FrequencyDetailSubform';
 import DateTimePicker from './DateTimePicker';
 import sortFrequencies from './sortFrequencies';
+import type { ScheduleFrequency } from './types';
 
 const SelectClearOption = styled(SelectOption)`
   & > input[type='checkbox'] {
@@ -51,10 +52,7 @@ export default function ScheduleFormFields({
     validate: required(t`Select a value for this field`),
   });
   const [timezoneMessage, setTimezoneMessage] = useState('');
-  const warnLinkedTZ = (
-    event: React.SyntheticEvent,
-    selectedValue: unknown
-  ) => {
+  const warnLinkedTZ = (event: React.SyntheticEvent, selectedValue: string) => {
     if (zoneLinks[selectedValue]) {
       setTimezoneMessage(
         t`Warning: ${selectedValue} is a link to ${zoneLinks[selectedValue]} and will be saved as that.`
@@ -62,9 +60,10 @@ export default function ScheduleFormFields({
     } else {
       setTimezoneMessage('');
     }
-    timezone.onChange(event, selectedValue);
+    // AnsibleSelect hands both through; formik's own onChange takes the event.
+    (timezone.onChange as Untyped)(event, selectedValue);
   };
-  let timezoneValidatedStatus = 'default';
+  let timezoneValidatedStatus: 'default' | 'error' | 'warning' = 'default';
   if (timezoneMeta.touched && timezoneMeta.error) {
     timezoneValidatedStatus = 'error';
   } else if (timezoneMessage) {
@@ -79,7 +78,8 @@ export default function ScheduleFormFields({
     });
 
   const updateFrequency =
-    (setFrequency: Untyped) => (values: Record<string, unknown>) => {
+    (setFrequency: (next: ScheduleFrequency[]) => void) =>
+    (values: ScheduleFrequency[]) => {
       setFrequency(values.sort(sortFrequencies));
     };
 
@@ -178,7 +178,7 @@ export default function ScheduleFormFields({
           <Title size="md" headingLevel="h4">
             {t`Frequency Details`}
           </Title>
-          {frequency.value.map((val: unknown) => (
+          {frequency.value.map((val: ScheduleFrequency) => (
             <FormColumnLayout key={val} $stacked>
               <FrequencyDetailSubform
                 frequency={val}
@@ -230,7 +230,7 @@ export default function ScheduleFormFields({
                 )}
             </FormGroup>
           </FormColumnLayout>
-          {exceptionFrequency.value.map((val: unknown) => (
+          {exceptionFrequency.value.map((val: ScheduleFrequency) => (
             <FormColumnLayout key={val} $stacked>
               <FrequencyDetailSubform
                 frequency={val}

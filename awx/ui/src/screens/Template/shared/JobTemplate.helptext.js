@@ -61,7 +61,7 @@ function getHelpText() {
         {t`Refer to the Ansible documentation for details about the configuration file.`}
       </span>
     ),
-    localTimeZone: (config = '') => (
+    localTimeZone: (config) => (
       <span>
         {t`Refer to the`}{' '}
         <a
