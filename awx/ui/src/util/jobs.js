@@ -5,6 +5,7 @@ import {
   WorkflowJobsAPI,
   InventoryUpdatesAPI,
   AdHocCommandsAPI,
+  ExecutionEnvironmentBuilderBuildsAPI,
 } from 'api';
 
 export function isJobRunning(status) {
@@ -17,6 +18,7 @@ export function getJobModel(type) {
   if (type === 'project_update') return ProjectUpdatesAPI;
   if (type === 'system_job') return SystemJobsAPI;
   if (type === 'workflow_job') return WorkflowJobsAPI;
+  if (type === 'execution_environment_builder_build') return ExecutionEnvironmentBuilderBuildsAPI;
 
   return JobsAPI;
 }

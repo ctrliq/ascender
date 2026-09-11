@@ -31,5 +31,6 @@
   "DEFAULT_CONTAINER_RUN_OPTIONS": [
       "--network",
       "slirp4netns:enable_ipv6=true"
-  ]
+  ],
+  "EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS": []
 }

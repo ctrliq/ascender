@@ -90,6 +90,9 @@ function JobsEdit() {
       DEFAULT_CONTAINER_RUN_OPTIONS: formatJson(
         form.DEFAULT_CONTAINER_RUN_OPTIONS
       ),
+      EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS: formatJson(
+        form.EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS
+      ),
     });
   };
 
@@ -227,6 +230,10 @@ function JobsEdit() {
                 <ObjectField
                   name="DEFAULT_CONTAINER_RUN_OPTIONS"
                   config={jobs.DEFAULT_CONTAINER_RUN_OPTIONS}
+                />
+                <ObjectField
+                  name="EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS"
+                  config={jobs.EXECUTION_ENVIRONMENT_BUILDER_CONTAINER_OPTIONS}
                 />
                 <ObjectField
                   name="AWX_ANSIBLE_CALLBACK_PLUGINS"

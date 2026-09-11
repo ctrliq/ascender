@@ -74,6 +74,7 @@ class ActivityStream(models.Model):
     ad_hoc_command = models.ManyToManyField("AdHocCommand", blank=True)
     schedule = models.ManyToManyField("Schedule", blank=True)
     execution_environment = models.ManyToManyField("ExecutionEnvironment", blank=True)
+    execution_environment_builder = models.ManyToManyField("ExecutionEnvironmentBuilder", blank=True)
     notification_template = models.ManyToManyField("NotificationTemplate", blank=True)
     notification = models.ManyToManyField("Notification", blank=True)
     label = models.ManyToManyField("Label", blank=True)

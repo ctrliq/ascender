@@ -22,6 +22,7 @@ from awx.dab.lib.utils.models import get_type_for_model
 # AWX
 from awx.main.dispatch.reaper import reap_job
 from awx.main.models import (
+    ExecutionEnvironmentBuilderBuild,
     Instance,
     InventorySource,
     InventoryUpdate,
@@ -407,6 +408,9 @@ class DependencyManager(TaskBase):
                 job_deps = self.gen_dep_for_job(task)
             elif type(task) is InventoryUpdate:
                 job_deps = self.gen_dep_for_inventory_update(task)
+            elif type(task) is ExecutionEnvironmentBuilderBuild:
+                # ExecutionEnvironmentBuilderBuild jobs have no dependencies
+                job_deps = []
             else:
                 continue
             if job_deps:
