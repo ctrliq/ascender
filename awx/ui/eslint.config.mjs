@@ -10,6 +10,7 @@ import i18next from 'eslint-plugin-i18next';
 import i18nextDefaults from 'eslint-plugin-i18next/lib/options/defaults.js';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import globals from 'globals';
+import tseslint from 'typescript-eslint';
 
 export default defineConfig([
   {
@@ -43,6 +44,28 @@ export default defineConfig([
   { rules: jsxA11y.flatConfigs.strict.rules },
   i18next.configs['flat/recommended'],
   prettier,
+  // TypeScript files are parsed by typescript-eslint rather than babel, and
+  // take airbnb's TypeScript rule sets on top of the shared ones above. Only
+  // these two extensions: the JavaScript block below is unchanged, which is
+  // what lets the two live side by side while the tree converts.
+  { ...airbnbPlugins.typescriptEslint, files: ['**/*.ts', '**/*.tsx'] },
+  ...airbnb.base.typescript.map((c) => ({ ...c, files: ['**/*.ts', '**/*.tsx'] })),
+  ...airbnb.react.typescript.map((c) => ({ ...c, files: ['**/*.ts', '**/*.tsx'] })),
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+  },
+  prettier,
   {
     files: ['**/*.js', '**/*.jsx'],
     languageOptions: {
@@ -69,7 +92,7 @@ export default defineConfig([
       // module resolution mirrors jsconfig.json baseUrl: src
       'import-x/resolver-next': [
         createNodeResolver({
-          extensions: ['.mjs', '.cjs', '.js', '.json', '.jsx', '.node'],
+          extensions: ['.mjs', '.cjs', '.js', '.json', '.jsx', '.ts', '.tsx', '.node'],
           modules: ['node_modules', path.resolve(import.meta.dirname, 'src')],
         }),
       ],

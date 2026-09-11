@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    // Vite strips the types, so this compiler never emits: it only checks.
+    "noEmit": true,
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    // describe, it, expect and vi come from the runner's globals rather than
+    // from imports, which is how the 553 test files are written.
+    "types": ["vitest/globals"],
+
+    // The whole approach in one flag. JavaScript and TypeScript compile side
+    // by side, so a file becomes typed when someone touches it rather than in
+    // a conversion pass. checkJs stays off: turning it on would report on
+    // 1,627 untyped files at once, which is the opposite of incremental.
+    "allowJs": true,
+    "checkJs": false,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noFallthroughCasesInSwitch": true,
+
+    // The same absolute imports the bundler resolves, from
+    // config/build/aliases.mjs. Editors and tsc read these; Vite does not.
+    // Written relative to this file rather than under a baseUrl, which
+    // TypeScript 6 deprecates and 7 removes.
+    "paths": {
+      "api": ["./src/api/index.js"],
+      "api/*": ["./src/api/*"],
+      "components/*": ["./src/components/*"],
+      "contexts/*": ["./src/contexts/*"],
+      "hooks/*": ["./src/hooks/*"],
+      "screens/*": ["./src/screens/*"],
+      "util/*": ["./src/util/*"],
+      "i18nLoader": ["./src/i18nLoader.js"],
+      "themeRegistry": ["./src/themeRegistry.js"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "build", "e2e"]
+}

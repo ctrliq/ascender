@@ -1,0 +1,9 @@
+export default function getDocsBaseUrl(): string {
+  // let version = '4.5';
+  // const licenseType = config?.license_info?.license_type;
+
+  // if (licenseType && licenseType !== 'open' && config?.version) {
+  //   version = parseFloat(config?.version.split('-')[0]).toFixed(1);
+  // }
+  return `https://docs.ascender-automation.org`;
+}
