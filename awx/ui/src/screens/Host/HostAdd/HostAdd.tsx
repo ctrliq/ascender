@@ -7,7 +7,7 @@ import { CardBody } from 'components/Card';
 import { HostsAPI } from 'api';
 
 function HostAdd() {
-  const [formError, setFormError] = useState<Untyped>(null);
+  const [formError, setFormError] = useState<unknown>(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (formData: Untyped) => {

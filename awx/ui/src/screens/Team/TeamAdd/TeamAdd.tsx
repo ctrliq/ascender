@@ -9,7 +9,7 @@ import { CardBody } from 'components/Card';
 import TeamForm from '../shared/TeamForm';
 
 function TeamAdd() {
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (values: Untyped) => {

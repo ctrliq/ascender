@@ -27,7 +27,7 @@ const SwitchWrapper = styled(ToolbarItem)`
 export interface SurveyToolbarProps {
   canEdit?: boolean;
   isAllSelected: boolean;
-  onSelectAll: (...args: Untyped[]) => void;
+  onSelectAll: (isSelected: boolean) => void;
   surveyEnabled?: Untyped;
   onToggleSurvey: (...args: Untyped[]) => void;
   isDeleteDisabled: boolean;

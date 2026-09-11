@@ -15,7 +15,7 @@ export default function SurveyQuestionEdit({
   survey,
   updateSurvey,
 }: SurveyQuestionEditProps) {
-  const [formError, setFormError] = useState<Untyped>(null);
+  const [formError, setFormError] = useState<unknown>(null);
   const navigate = useNavigate();
   const { pathname, search } = useLocation();
   const surveyUrl = `${pathname.substr(0, pathname.indexOf('survey'))}survey`;

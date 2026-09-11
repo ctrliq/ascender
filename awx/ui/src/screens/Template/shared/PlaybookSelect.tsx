@@ -22,8 +22,8 @@ export interface PlaybookSelectProps {
   projectId?: Untyped;
   isValid: boolean;
   selected?: Untyped;
-  onBlur?: (...args: Untyped[]) => void;
-  onError: (...args: Untyped[]) => void;
+  onBlur?: (event?: Untyped) => void;
+  onError: (error: unknown) => void;
   onChange?: (...args: Untyped[]) => void;
   [key: string]: unknown;
 }

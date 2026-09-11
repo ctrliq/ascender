@@ -120,7 +120,7 @@ export interface CodeEditorProps {
   value: Untyped;
   onChange?: (...args: Untyped[]) => void;
   onFocus?: (...args: Untyped[]) => void;
-  onBlur?: (...args: Untyped[]) => void;
+  onBlur?: (event?: Untyped) => void;
   mode: Untyped;
   readOnly?: boolean;
   hasErrors?: boolean;

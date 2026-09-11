@@ -17,7 +17,7 @@ export interface ContainerGroupEditProps {
 
 function ContainerGroupEdit({ instanceGroup }: ContainerGroupEditProps) {
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
   const detailsIUrl = `/instance_groups/container_group/${instanceGroup.id}/details`;
 
   const {

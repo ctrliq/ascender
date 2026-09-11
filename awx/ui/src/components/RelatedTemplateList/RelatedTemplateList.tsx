@@ -264,7 +264,7 @@ function RelatedTemplateList({
       </Card>
       <Toast {...toastProps} />
       <AlertModal
-        isOpen={deletionError}
+        isOpen={Boolean(deletionError)}
         variant="danger"
         title={t`Error!`}
         onClose={clearDeletionError}

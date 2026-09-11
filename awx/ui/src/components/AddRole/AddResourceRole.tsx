@@ -21,10 +21,10 @@ const readTeamsOptions = async () => TeamsAPI.readOptions();
 
 export interface AddResourceRoleProps {
   onSave: (...args: Untyped[]) => void;
-  onClose: (...args: Untyped[]) => void;
+  onClose: () => void;
   roles?: Untyped;
   resource?: Untyped;
-  onError: (...args: Untyped[]) => void;
+  onError: (error: unknown) => void;
   [key: string]: unknown;
 }
 

@@ -18,7 +18,7 @@ export interface ExternalTestModalProps {
   credential?: Credential | null;
   credentialType: Untyped;
   credentialFormValues: Untyped;
-  onClose: (...args: Untyped[]) => void;
+  onClose: () => void;
   [key: string]: unknown;
 }
 

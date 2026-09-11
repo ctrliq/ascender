@@ -7,7 +7,7 @@ import { useLingui } from '@lingui/react/macro';
 import AlertModal from 'components/AlertModal';
 
 export interface RevertAllAlertProps {
-  onClose: (...args: Untyped[]) => void;
+  onClose: () => void;
   onRevertAll: (...args: Untyped[]) => void;
   [key: string]: unknown;
 }

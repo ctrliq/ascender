@@ -23,7 +23,7 @@ import ContentLoading from 'components/ContentLoading';
 export interface SubscriptionModalProps {
   subscriptionCreds?: Untyped;
   selectedSubscription?: Untyped;
-  onClose: (...args: Untyped[]) => void;
+  onClose: () => void;
   onConfirm: (...args: Untyped[]) => void;
   [key: string]: unknown;
 }

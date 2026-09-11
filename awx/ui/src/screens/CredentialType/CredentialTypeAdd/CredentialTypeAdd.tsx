@@ -10,7 +10,7 @@ import CredentialTypeForm from '../shared/CredentialTypeForm';
 
 function CredentialTypeAdd() {
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
 
   const handleSubmit = async (values: Untyped) => {
     try {

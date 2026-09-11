@@ -13,7 +13,7 @@ import WorkflowJobTemplateForm from '../shared/WorkflowJobTemplateForm';
 function WorkflowJobTemplateAdd() {
   const { me = {} } = useConfig();
   const navigate = useNavigate();
-  const [formSubmitError, setFormSubmitError] = useState<Untyped>(null);
+  const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
 
   const handleSubmit = async (values: Untyped) => {
     const {

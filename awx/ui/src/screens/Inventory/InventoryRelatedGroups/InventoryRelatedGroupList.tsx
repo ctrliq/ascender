@@ -33,8 +33,8 @@ function InventoryRelatedGroupList() {
   const { t } = useLingui();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAdHocLaunchLoading, setIsAdHocLaunchLoading] = useState(false);
-  const [associateError, setAssociateError] = useState<Untyped>(null);
-  const [disassociateError, setDisassociateError] = useState<Untyped>(null);
+  const [associateError, setAssociateError] = useState<unknown>(null);
+  const [disassociateError, setDisassociateError] = useState<unknown>(null);
   const {
     id: inventoryId,
     groupId,

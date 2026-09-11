@@ -20,7 +20,7 @@ import ScheduleDetail from './ScheduleDetail';
 import ScheduleEdit from './ScheduleEdit';
 
 export interface ScheduleProps {
-  setBreadcrumb: (...args: Untyped[]) => unknown;
+  setBreadcrumb: (...args: Untyped[]) => void;
   resource: Untyped;
   launchConfig?: Untyped;
   surveyConfig?: Untyped;

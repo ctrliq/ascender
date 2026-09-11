@@ -1,11 +1,11 @@
-import type { Schedule, Untyped } from 'types/api';
+import type { Schedule } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button, Form, ActionGroup, Alert } from '@patternfly/react-core';
 
 export interface UnsupportedScheduleFormProps {
   schedule: Schedule;
-  handleCancel: (...args: Untyped[]) => void;
+  handleCancel: () => void;
   [key: string]: unknown;
 }
 

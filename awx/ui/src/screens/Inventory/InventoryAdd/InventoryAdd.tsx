@@ -8,7 +8,7 @@ import { InventoriesAPI } from 'api';
 import InventoryForm from '../shared/InventoryForm';
 
 function InventoryAdd() {
-  const [error, setError] = useState<Untyped>(null);
+  const [error, setError] = useState<unknown>(null);
   const location = useLocation();
   const navigate = useNavigate();
 

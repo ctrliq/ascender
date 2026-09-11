@@ -39,8 +39,8 @@ const urlOrigin = window.location.origin;
 export interface WorkflowJobTemplateFormProps {
   template?: Untyped;
   handleSubmit: (...args: Untyped[]) => void;
-  handleCancel?: (...args: Untyped[]) => void;
-  submitError?: Untyped;
+  handleCancel?: () => void;
+  submitError?: unknown;
   isOrgAdmin?: boolean;
   isInventoryDisabled?: boolean;
   [key: string]: unknown;
@@ -65,7 +65,7 @@ function WorkflowJobTemplateForm({
   const [enableWebhooks, setEnableWebhooks] = useState(
     Boolean(template.webhook_service)
   );
-  const [hasContentError, setContentError] = useState(null);
+  const [hasContentError, setContentError] = useState<unknown>(null);
   const [inventoryField, inventoryMeta, inventoryHelpers] =
     useField('inventory');
   const [labelsField, , labelsHelpers] = useField('labels');
@@ -292,7 +292,7 @@ function WorkflowJobTemplateForm({
         </SubFormLayout>
       )}
 
-      {submitError && <FormSubmitError error={submitError} />}
+      {Boolean(submitError) && <FormSubmitError error={submitError} />}
       <FormActionGroup
         onCancel={handleCancel as () => void}
         onSubmit={handleSubmit}

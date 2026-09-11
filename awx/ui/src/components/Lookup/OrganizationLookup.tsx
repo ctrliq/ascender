@@ -28,7 +28,7 @@ export interface OrganizationLookupProps {
   id?: string;
   helperTextInvalid?: string;
   isValid?: boolean;
-  onBlur?: (...args: Untyped[]) => void;
+  onBlur?: (event?: Untyped) => void;
   onChange: (...args: Untyped[]) => void;
   required?: boolean;
   value?: Untyped;

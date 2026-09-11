@@ -7,7 +7,7 @@ import InstanceForm from '../Shared/InstanceForm';
 
 function InstanceAdd() {
   const navigate = useNavigate();
-  const [formError, setFormError] = useState<Untyped>();
+  const [formError, setFormError] = useState<unknown>();
   const handleSubmit = async (values: Untyped) => {
     try {
       if (values.listener_port === undefined) {

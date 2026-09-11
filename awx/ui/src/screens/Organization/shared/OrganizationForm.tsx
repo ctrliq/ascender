@@ -145,7 +145,7 @@ function OrganizationForm({
   defaultGalaxyCredential = null,
   ...rest
 }: Untyped) {
-  const [contentError, setContentError] = useState<Untyped>(null);
+  const [contentError, setContentError] = useState<unknown>(null);
   const [hasContentLoading, setHasContentLoading] = useState(true);
   const [initialInstanceGroups, setInitialInstanceGroups] = useState([]);
   const [instanceGroups, setInstanceGroups] = useState([]);

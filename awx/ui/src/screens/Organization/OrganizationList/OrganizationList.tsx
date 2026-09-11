@@ -191,7 +191,7 @@ function OrganizationsList() {
         </Card>
       </PageSection>
       <AlertModal
-        isOpen={deletionError}
+        isOpen={Boolean(deletionError)}
         variant="error"
         title={t`Error!`}
         onClose={clearDeletionError}

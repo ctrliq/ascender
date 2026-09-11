@@ -30,7 +30,7 @@ export interface InventoryFormFieldsProps {
 function InventoryFormFields({ inventory }: InventoryFormFieldsProps) {
   const { t } = useLingui();
   const helpText = useHelpText();
-  const [contentError, setContentError] = useState(false);
+  const [contentError, setContentError] = useState<unknown>(false);
   const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
   const [organizationField, organizationMeta, organizationHelpers] =
     useField('organization');

@@ -38,7 +38,7 @@ function UserRolesList({ user }: UserRolesListProps) {
   const { search } = useLocation();
   const [roleToDisassociate, setRoleToDisassociate] = useState<Untyped>(null);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [associateError, setAssociateError] = useState<Untyped>(null);
+  const [associateError, setAssociateError] = useState<unknown>(null);
 
   const {
     isLoading,

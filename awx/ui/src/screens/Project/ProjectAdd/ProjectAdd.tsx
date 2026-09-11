@@ -7,7 +7,7 @@ import { ProjectsAPI } from 'api';
 import ProjectForm from '../shared/ProjectForm';
 
 function ProjectAdd() {
-  const [formSubmitError, setFormSubmitError] = useState<Untyped>(null);
+  const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
   const navigate = useNavigate();
 
   const handleSubmit = async ({

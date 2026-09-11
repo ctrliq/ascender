@@ -32,7 +32,7 @@ export interface TemplateListItemProps {
   template: JobTemplate;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
-  onCopy: (...args: Untyped[]) => void;
+  onCopy: (id: number) => void;
   detailUrl: React.ReactNode;
   fetchTemplates: (...args: Untyped[]) => unknown;
   rowIndex: number;

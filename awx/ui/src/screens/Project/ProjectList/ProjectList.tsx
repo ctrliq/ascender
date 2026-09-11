@@ -287,9 +287,9 @@ function ProjectList() {
         </Card>
       </PageSection>
       <Toast {...toastProps} />
-      {deletionError && (
+      {Boolean(deletionError) && (
         <AlertModal
-          isOpen={deletionError}
+          isOpen={Boolean(deletionError)}
           variant="error"
           aria-label={t`Deletion Error`}
           title={t`Error!`}

@@ -100,9 +100,9 @@ function UserTokenFormFields() {
 }
 
 export interface UserTokenFormProps {
-  handleCancel: (...args: Untyped[]) => void;
+  handleCancel: () => void;
   handleSubmit: (...args: Untyped[]) => void;
-  submitError?: Untyped;
+  submitError?: unknown;
   token?: Untyped;
   [key: string]: unknown;
 }
@@ -126,7 +126,7 @@ function UserTokenForm({
         <Form autoComplete="off" onSubmit={formik.handleSubmit}>
           <FormColumnLayout>
             <UserTokenFormFields />
-            {submitError && <FormSubmitError error={submitError} />}
+            {Boolean(submitError) && <FormSubmitError error={submitError} />}
             <FormActionGroup
               onCancel={handleCancel}
               onSubmit={() => {

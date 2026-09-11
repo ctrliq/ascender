@@ -42,7 +42,7 @@ function RemoveInstanceButton({
 }: RemoveInstanceButtonProps) {
   const { t, i18n } = useLingui();
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
-  const [removeMessageError, setRemoveMessageError] = useState<Untyped>(null);
+  const [removeMessageError, setRemoveMessageError] = useState<unknown>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [removeDetails, setRemoveDetails] = useState<Untyped>(null);
   const [isLoading, setIsLoading] = useState(false);

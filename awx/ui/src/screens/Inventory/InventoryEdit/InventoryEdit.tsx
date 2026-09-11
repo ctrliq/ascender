@@ -15,7 +15,7 @@ export interface InventoryEditProps {
 }
 
 function InventoryEdit({ inventory }: InventoryEditProps) {
-  const [error, setError] = useState<Untyped>(null);
+  const [error, setError] = useState<unknown>(null);
   const [associatedInstanceGroups, setInstanceGroups] = useState<Untyped>(null);
   const [contentLoading, setContentLoading] = useState(true);
   const location = useLocation();

@@ -13,7 +13,7 @@ export interface InstanceGroupEditProps {
 
 function InstanceGroupEdit({ instanceGroup }: InstanceGroupEditProps) {
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
   const detailsUrl = `/instance_groups/${instanceGroup.id}/details`;
 
   const handleSubmit = async (values: Untyped) => {

@@ -1,4 +1,4 @@
-import type { SummaryFields, Untyped } from 'types/api';
+import type { SummaryFields } from 'types/api';
 import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
@@ -44,7 +44,7 @@ export interface ToolbarDeleteButtonProps {
   itemsToDelete: DeletableItem[];
   pluralizedItemName?: React.ReactNode;
   errorMessage?: React.ReactNode;
-  onDelete: (...args: Untyped[]) => void;
+  onDelete: () => void;
   /** Builds the related-resource counts to show before the delete is allowed. */
   deleteDetailsRequests?: DeleteRequest[];
   warningMessage?: React.ReactNode;

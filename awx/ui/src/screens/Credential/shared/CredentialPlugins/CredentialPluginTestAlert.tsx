@@ -21,8 +21,10 @@ function CredentialPluginTestAlert({
   errorResponse = null,
 }: CredentialPluginTestAlertProps) {
   const { t } = useLingui();
-  const [testMessage, setTestMessage] = useState<Untyped>('');
-  const [testVariant, setTestVariant] = useState<Untyped>(false);
+  const [testMessage, setTestMessage] = useState<string | null>('');
+  const [testVariant, setTestVariant] = useState<'danger' | 'success' | null>(
+    null
+  );
   useEffect(() => {
     if (errorResponse) {
       if (errorResponse?.response?.data?.inputs) {

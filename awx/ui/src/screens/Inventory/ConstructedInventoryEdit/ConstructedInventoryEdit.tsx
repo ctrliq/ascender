@@ -26,7 +26,7 @@ function ConstructedInventoryEdit({
   inventory,
 }: ConstructedInventoryEditProps) {
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
   const detailsUrl = `/inventories/constructed_inventory/${inventory.id}/details`;
   const constructedInventoryId = inventory.id;
 

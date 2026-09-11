@@ -24,7 +24,7 @@ export interface WorkflowJobTemplateEditProps {
 function WorkflowJobTemplateEdit({ template }: WorkflowJobTemplateEditProps) {
   const { me = {} } = useConfig();
   const navigate = useNavigate();
-  const [formSubmitError, setFormSubmitError] = useState<Untyped>(null);
+  const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
 
   const handleSubmit = async (values: Untyped) => {
     const {

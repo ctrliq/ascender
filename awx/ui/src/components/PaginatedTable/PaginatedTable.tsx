@@ -22,7 +22,7 @@ import LoadingSpinner from '../LoadingSpinner';
 const noop = () => {};
 
 export interface PaginatedTableProps {
-  contentError?: Untyped;
+  contentError?: unknown;
   hasContentLoading?: boolean;
   emptyStateControls?: Untyped;
   items: Untyped;

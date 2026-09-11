@@ -11,7 +11,7 @@ import ConstructedInventoryForm from '../shared/ConstructedInventoryForm';
 
 function ConstructedInventoryAdd() {
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
 
   const {
     isLoading: isLoadingOptions,

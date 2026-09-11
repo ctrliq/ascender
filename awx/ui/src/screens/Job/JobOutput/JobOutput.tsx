@@ -230,9 +230,9 @@ function JobOutput({
     isFlatMode || forceFlatMode
   );
   const [wsEvents, setWsEvents] = useState<Untyped[]>([]);
-  const [cssMap, setCssMap] = useState<Untyped>({});
+  const [cssMap, setCssMap] = useState<Record<string, string>>({});
   const [remoteRowCount, setRemoteRowCount] = useState(0);
-  const [contentError, setContentError] = useState<Untyped>(null);
+  const [contentError, setContentError] = useState<unknown>(null);
   const [currentlyLoading, setCurrentlyLoading] = useState<Untyped[]>([]);
   const [hasContentLoading, setHasContentLoading] = useState(true);
   const [hostEvent, setHostEvent] = useState<Untyped>({});

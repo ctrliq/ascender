@@ -14,7 +14,7 @@ import ContainerGroupForm from '../shared/ContainerGroupForm';
 
 function ContainerGroupAdd() {
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
 
   const getPodSpecValue = (value: Untyped) => {
     if (isJsonString(value)) {

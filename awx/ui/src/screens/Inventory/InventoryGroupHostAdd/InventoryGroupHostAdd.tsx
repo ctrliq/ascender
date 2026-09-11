@@ -12,7 +12,7 @@ export interface InventoryGroupHostAddProps {
 }
 
 function InventoryGroupHostAdd({ inventoryGroup }: InventoryGroupHostAddProps) {
-  const [formError, setFormError] = useState<Untyped>(null);
+  const [formError, setFormError] = useState<unknown>(null);
   const baseUrl = `/inventories/inventory/${inventoryGroup.inventory}`;
   const navigate = useNavigate();
 

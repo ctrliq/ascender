@@ -98,7 +98,7 @@ function WorkflowOutputNode({
   // carries no started) count from when it was first seen running.
   const isRunning = job?.status === 'running';
   const jobStarted = job?.started;
-  const [runningElapsed, setRunningElapsed] = useState<Untyped>(null);
+  const [runningElapsed, setRunningElapsed] = useState<string | null>(null);
   useEffect(() => {
     if (!isRunning) {
       setRunningElapsed(null);

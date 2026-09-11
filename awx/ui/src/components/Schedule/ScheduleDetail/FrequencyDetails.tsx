@@ -1,4 +1,4 @@
-import type { Label, Untyped } from 'types/api';
+import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 import { Plural, SelectOrdinal, useLingui } from '@lingui/react/macro';

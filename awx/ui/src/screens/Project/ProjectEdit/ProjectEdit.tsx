@@ -12,7 +12,7 @@ export interface ProjectEditProps {
 }
 
 function ProjectEdit({ project }: ProjectEditProps) {
-  const [formSubmitError, setFormSubmitError] = useState<Untyped>(null);
+  const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
   const navigate = useNavigate();
 
   const handleSubmit = async ({

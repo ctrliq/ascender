@@ -259,7 +259,9 @@ function LabelsField({ helpTextSource }: { helpTextSource: HelpTextSource }) {
         value={field.value}
         onChange={(labels) => helpers.setValue(labels)}
         createText={t`Create`}
-        onError={(err) => helpers.setError(err)}
+        onError={(err) =>
+          helpers.setError(err instanceof Error ? err.message : String(err))
+        }
       />
       {meta.error && (
         <FormHelperText>

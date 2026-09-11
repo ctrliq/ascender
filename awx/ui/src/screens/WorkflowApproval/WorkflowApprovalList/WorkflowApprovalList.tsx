@@ -229,9 +229,9 @@ function WorkflowApprovalsList() {
           />
         </Card>
       </PageSection>
-      {deletionError && (
+      {Boolean(deletionError) && (
         <AlertModal
-          isOpen={deletionError}
+          isOpen={Boolean(deletionError)}
           variant="error"
           title={t`Error!`}
           onClose={clearDeletionError}

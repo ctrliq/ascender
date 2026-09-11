@@ -69,7 +69,7 @@ const getStdOutValue = (hostEvent: Untyped) => {
 const defaultHostEvent = {};
 
 export interface HostEventModalProps {
-  onClose: (...args: Untyped[]) => void;
+  onClose: () => void;
   hostEvent?: Untyped;
   isOpen?: boolean;
   [key: string]: unknown;

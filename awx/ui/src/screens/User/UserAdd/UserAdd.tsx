@@ -7,7 +7,7 @@ import { OrganizationsAPI } from 'api';
 import UserForm from '../shared/UserForm';
 
 function UserAdd() {
-  const [formSubmitError, setFormSubmitError] = useState<Untyped>(null);
+  const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
   const navigate = useNavigate();
 
   const handleSubmit = async (values: Untyped) => {

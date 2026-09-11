@@ -232,7 +232,7 @@ function ExecutionEnvironmentForm({
               isOrgLookupDisabled={isOrgLookupDisabled}
               {...rest}
             />
-            {submitError && <FormSubmitError error={submitError} />}
+            {Boolean(submitError) && <FormSubmitError error={submitError} />}
             <FormActionGroup
               onCancel={onCancel}
               onSubmit={formik.handleSubmit}

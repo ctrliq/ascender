@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { DetailedError, Untyped } from 'types/api';
 import React, { useState, useEffect } from 'react';
 
 import {
@@ -29,7 +29,7 @@ export interface TeamProps {
 function Team({ setBreadcrumb }: TeamProps) {
   const { t } = useLingui();
   const [team, setTeam] = useState(null);
-  const [contentError, setContentError] = useState<Untyped>(null);
+  const [contentError, setContentError] = useState<unknown>(null);
   const [hasContentLoading, setHasContentLoading] = useState(true);
   const location = useLocation();
   const { id } = useParams() as { id: string };
@@ -76,7 +76,7 @@ function Team({ setBreadcrumb }: TeamProps) {
       <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={contentError}>
-            {contentError.response.status === 404 && (
+            {(contentError as DetailedError)?.response?.status === 404 && (
               <span>
                 {t`Team not found.`}{' '}
                 <Link to="/teams">{t`View all Teams.`}</Link>

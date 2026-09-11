@@ -36,7 +36,7 @@ function InventoryHostDetail({ host }: InventoryHostDetailProps) {
   } = host;
   const { t } = useLingui();
   const [isLoading, setIsloading] = useState(false);
-  const [deletionError, setDeletionError] = useState<Untyped>(false);
+  const [deletionError, setDeletionError] = useState<unknown>(false);
   const navigate = useNavigate();
 
   const handleHostDelete = async () => {
@@ -54,7 +54,7 @@ function InventoryHostDetail({ host }: InventoryHostDetailProps) {
   if (!isLoading && deletionError) {
     return (
       <AlertModal
-        isOpen={deletionError}
+        isOpen={Boolean(deletionError)}
         variant="error"
         title={t`Error!`}
         onClose={() => setDeletionError(false)}
@@ -114,9 +114,9 @@ function InventoryHostDetail({ host }: InventoryHostDetailProps) {
           />
         )}
       </CardActionsRow>
-      {deletionError && (
+      {Boolean(deletionError) && (
         <AlertModal
-          isOpen={deletionError}
+          isOpen={Boolean(deletionError)}
           variant="error"
           title={t`Error!`}
           onClose={() => setDeletionError(null)}

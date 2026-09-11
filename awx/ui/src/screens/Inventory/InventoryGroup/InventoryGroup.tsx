@@ -29,7 +29,7 @@ function InventoryGroup({ setBreadcrumb, inventory }: InventoryGroupProps) {
   const { t } = useLingui();
   const [inventoryGroup, setInventoryGroup] = useState<Untyped>(null);
   const [contentLoading, setContentLoading] = useState(true);
-  const [contentError, setContentError] = useState<Untyped>(null);
+  const [contentError, setContentError] = useState<unknown>(null);
   const {
     id: inventoryId,
     groupId,

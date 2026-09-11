@@ -13,10 +13,10 @@ import { required } from 'util/validators';
 import { FormColumnLayout, FormFullWidthLayout } from 'components/FormLayout';
 
 export interface InventoryGroupFormProps {
-  error?: Untyped;
+  error?: unknown;
   group?: Untyped;
   handleSubmit: (...args: Untyped[]) => void;
-  handleCancel: (...args: Untyped[]) => void;
+  handleCancel: () => void;
   [key: string]: unknown;
 }
 
@@ -65,7 +65,7 @@ function InventoryGroupForm({
                   onCancel={handleCancel}
                   onSubmit={formik.handleSubmit}
                 />
-                {error && <FormSubmitError error={error} />}
+                {Boolean(error) && <FormSubmitError error={error} />}
               </FormColumnLayout>
             </Form>
           )}

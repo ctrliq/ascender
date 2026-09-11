@@ -77,7 +77,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
   const config = useConfig();
 
   const { id } = useParams() as { id: string };
-  const [forks, setForks] = useState<Untyped>();
+  const [forks, setForks] = useState<number | undefined>();
   const navigate = useNavigate();
   const [healthCheck, setHealthCheck] = useState<Untyped>({});
   const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false);
@@ -295,7 +295,11 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
                     </div>
                     <SliderForks data-cy="slider-forks">
                       <div data-cy="number-forks">
-                        <Plural value={forks} one="# fork" other="# forks" />
+                        <Plural
+                          value={forks ?? 0}
+                          one="# fork"
+                          other="# forks"
+                        />
                       </div>
                       <Slider
                         areCustomStepsContinuous

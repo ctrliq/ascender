@@ -32,7 +32,7 @@ async function loadCredentials(
 export interface MultiCredentialsLookupProps {
   value?: unknown[];
   onChange: (...args: Untyped[]) => void;
-  onError: (...args: Untyped[]) => void;
+  onError: (error: unknown) => void;
   fieldName?: Untyped;
   validate?: (...args: Untyped[]) => void;
   [key: string]: unknown;

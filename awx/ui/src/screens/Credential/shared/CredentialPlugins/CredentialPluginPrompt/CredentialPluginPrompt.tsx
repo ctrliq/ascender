@@ -18,7 +18,7 @@ import { CredentialPluginTestAlert } from '..';
 export interface CredentialPluginFooterProps {
   selectedCredential: Untyped;
   testPluginMetadata: Untyped;
-  onClose: (...args: Untyped[]) => void;
+  onClose: () => void;
   steps: Untyped;
   [key: string]: unknown;
 }

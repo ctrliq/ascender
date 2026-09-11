@@ -35,7 +35,7 @@ export interface ProjectLookupProps {
   /** Rendered in a popover beside the label, so markup is fine. */
   tooltip?: React.ReactNode;
   value?: Untyped;
-  onBlur?: (...args: Untyped[]) => void;
+  onBlur?: (event?: Untyped) => void;
   isOverrideDisabled?: boolean;
   validate?: (...args: Untyped[]) => void;
   fieldName?: string;

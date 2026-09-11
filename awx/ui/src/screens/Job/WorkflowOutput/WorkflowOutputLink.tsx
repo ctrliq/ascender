@@ -22,8 +22,8 @@ function WorkflowOutputLink({
   mouseLeave,
 }: WorkflowOutputLinkProps) {
   const ref = useRef<Untyped>(null);
-  const [hovering, setHovering] = useState<Untyped>(false);
-  const [pathD, setPathD] = useState<Untyped>();
+  const [hovering, setHovering] = useState<boolean>(false);
+  const [pathD, setPathD] = useState<string | null>();
   const [pathStroke, setPathStroke] = useState(
     'var(--pf-t--global--border--color--default)'
   );
@@ -41,7 +41,7 @@ function WorkflowOutputLink({
 
   const handleLinkMouseLeave = () => {
     ref.current.parentNode.prepend(ref.current);
-    setHovering(null);
+    setHovering(false);
     mouseLeave();
   };
 
@@ -78,7 +78,7 @@ function WorkflowOutputLink({
         opacity={hovering ? '1' : '0'}
         points={getLinkOverlayPoints(link, nodePositions)}
       />
-      <path d={pathD} stroke={pathStroke} strokeWidth="2px" />
+      <path d={pathD ?? undefined} stroke={pathStroke} strokeWidth="2px" />
       <polygon
         onMouseEnter={() => mouseEnter()}
         onMouseLeave={() => mouseLeave()}

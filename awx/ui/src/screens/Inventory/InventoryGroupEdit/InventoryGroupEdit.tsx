@@ -12,7 +12,7 @@ export interface InventoryGroupEditProps {
 }
 
 function InventoryGroupEdit({ inventoryGroup }: InventoryGroupEditProps) {
-  const [error, setError] = useState<Untyped>(null);
+  const [error, setError] = useState<unknown>(null);
   const { id, groupId } = useParams() as { id: string; groupId: string };
   const navigate = useNavigate();
 

@@ -193,7 +193,7 @@ function ApplicationForm({
               authorizationOptions={authorizationOptions}
               clientTypeOptions={clientTypeOptions}
             />
-            {submitError && <FormSubmitError error={submitError} />}
+            {Boolean(submitError) && <FormSubmitError error={submitError} />}
             <FormActionGroup
               onCancel={onCancel}
               onSubmit={formik.handleSubmit}

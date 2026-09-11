@@ -13,7 +13,7 @@ import NotificationTemplateForm from './shared/NotificationTemplateForm';
 function NotificationTemplateAdd() {
   const { t } = useLingui();
   const navigate = useNavigate();
-  const [formError, setFormError] = useState<Untyped>(null);
+  const [formError, setFormError] = useState<unknown>(null);
   const {
     result: defaultMessages,
     error,

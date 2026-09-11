@@ -1,4 +1,8 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type {
+  Inventory as InventoryModel,
+  DetailedError,
+  Untyped,
+} from 'types/api';
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -33,9 +37,9 @@ export interface InventoryProps {
 
 function Inventory({ setBreadcrumb }: InventoryProps) {
   const { t } = useLingui();
-  const [contentError, setContentError] = useState<Untyped>(null);
+  const [contentError, setContentError] = useState<unknown>(null);
   const [hasContentLoading, setHasContentLoading] = useState(true);
-  const [inventory, setInventory] = useState<Untyped>(null);
+  const [inventory, setInventory] = useState<InventoryModel | null>(null);
   const location = useLocation();
   const { id } = useParams() as { id: string };
   const inventoryBaseUrl = `/inventories/inventory/${id}`;

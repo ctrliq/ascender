@@ -202,7 +202,7 @@ function ConstructedInventoryForm({
         <Form role="form" autoComplete="off" onSubmit={formik.handleSubmit}>
           <FormColumnLayout>
             <ConstructedInventoryFormFields options={options} />
-            {submitError && <FormSubmitError error={submitError} />}
+            {Boolean(submitError) && <FormSubmitError error={submitError} />}
             <FormActionGroup
               onCancel={onCancel}
               onSubmit={formik.handleSubmit}

@@ -26,7 +26,7 @@ const Button = styled.button`
 export interface JobEventLineToggleProps {
   canToggle?: boolean;
   isCollapsed?: boolean;
-  onToggle?: (...args: Untyped[]) => void;
+  onToggle?: (result: Untyped) => void;
   [key: string]: unknown;
 }
 

@@ -11,7 +11,7 @@ export interface HostEditProps {
 }
 
 function HostEdit({ host }: HostEditProps) {
-  const [formError, setFormError] = useState<Untyped>(null);
+  const [formError, setFormError] = useState<unknown>(null);
   const detailsUrl = `/hosts/${host.id}/details`;
   const navigate = useNavigate();
 

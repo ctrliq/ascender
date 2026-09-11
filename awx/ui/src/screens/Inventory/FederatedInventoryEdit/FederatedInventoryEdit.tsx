@@ -16,7 +16,7 @@ export interface FederatedInventoryEditProps {
 
 function FederatedInventoryEdit({ inventory }: FederatedInventoryEditProps) {
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
 
   const {
     result: { inputInventories },

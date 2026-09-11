@@ -16,7 +16,7 @@ function ExecutionEnvironmentEdit({
   executionEnvironment,
 }: ExecutionEnvironmentEditProps) {
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
   const detailsUrl = `/execution_environments/${executionEnvironment.id}/details`;
 
   const handleSubmit = async (values: Untyped) => {

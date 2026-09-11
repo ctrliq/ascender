@@ -1,4 +1,4 @@
-import type { Host, Untyped } from 'types/api';
+import type { Host } from 'types/api';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 
@@ -38,7 +38,7 @@ function HostDetail({ host }: HostDetailProps) {
   } = host;
 
   const [isLoading, setIsloading] = useState(false);
-  const [deletionError, setDeletionError] = useState<Untyped>(false);
+  const [deletionError, setDeletionError] = useState<unknown>(false);
   const navigate = useNavigate();
 
   const handleHostDelete = async () => {
@@ -56,7 +56,7 @@ function HostDetail({ host }: HostDetailProps) {
   if (!isLoading && deletionError) {
     return (
       <AlertModal
-        isOpen={deletionError}
+        isOpen={Boolean(deletionError)}
         variant="error"
         title={t`Error!`}
         onClose={() => setDeletionError(false)}
@@ -121,9 +121,9 @@ function HostDetail({ host }: HostDetailProps) {
           />
         )}
       </CardActionsRow>
-      {deletionError && (
+      {Boolean(deletionError) && (
         <AlertModal
-          isOpen={deletionError}
+          isOpen={Boolean(deletionError)}
           variant="error"
           title={t`Error!`}
           onClose={() => setDeletionError(null)}

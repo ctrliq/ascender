@@ -9,7 +9,7 @@ import ErrorDetail from '../../ErrorDetail';
 
 export interface ScheduleToggleProps {
   schedule: Schedule;
-  onToggle?: (...args: Untyped[]) => void;
+  onToggle?: (result: Untyped) => void;
   className?: string;
   isDisabled?: boolean;
   [key: string]: unknown;

@@ -19,7 +19,7 @@ export interface InventoryListItemProps {
   rowIndex: number;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
-  onCopy: (...args: Untyped[]) => void;
+  onCopy: (id: number) => void;
   fetchInventories: Untyped;
   [key: string]: unknown;
 }

@@ -102,7 +102,7 @@ const ActionButton = styled(Button)`
 `;
 export interface WorkflowOutputToolbarProps {
   job: Untyped;
-  onDelete?: (...args: Untyped[]) => void;
+  onDelete?: () => void;
   isDeleteDisabled?: boolean;
   [key: string]: unknown;
 }

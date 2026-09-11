@@ -96,7 +96,7 @@ export interface ProjectFormFieldsProps {
   setSignatureValidationCredentials: Untyped;
   credentials: Untyped;
   signatureValidationCredentials: Untyped;
-  scmTypeOptions: Untyped[];
+  scmTypeOptions: [string, string][] | null;
   setScmSubFormState: Untyped;
   scmSubFormState: Untyped;
   [key: string]: unknown;
@@ -292,7 +292,7 @@ function ProjectFormFields({
               label: t`Choose a Source Control Type`,
               isDisabled: true,
             },
-            ...scmTypeOptions.map(([value, label]) => {
+            ...(scmTypeOptions ?? []).map(([value, label]) => {
               if (value === '') {
                 value = 'manual';
               }
@@ -373,7 +373,7 @@ function ProjectFormFields({
 export interface ProjectFormProps {
   /** The project being edited, absent on the add form. */
   project?: Partial<Project>;
-  submitError?: Untyped;
+  submitError?: unknown;
   handleCancel: () => void;
   handleSubmit: (values: Untyped) => void;
   [key: string]: unknown;
@@ -387,7 +387,7 @@ function ProjectForm({
   const { handleCancel, handleSubmit } = props;
   const { summary_fields = {} } = project;
   const { project_base_dir, project_local_paths } = useConfig();
-  const [contentError, setContentError] = useState<Untyped>(null);
+  const [contentError, setContentError] = useState<unknown>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [scmSubFormState, setScmSubFormState] = useState<Untyped>({
     scm_url: '',
@@ -402,7 +402,9 @@ function ProjectForm({
     allow_override: false,
     scm_update_cache_timeout: 0,
   });
-  const [scmTypeOptions, setScmTypeOptions] = useState<Untyped>(null);
+  const [scmTypeOptions, setScmTypeOptions] = useState<
+    [string, string][] | null
+  >(null);
   const [credentials, setCredentials] = useState<Untyped>({
     scm: { typeId: null, value: null },
     // insights: { typeId: null, value: null },

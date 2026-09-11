@@ -33,7 +33,7 @@ import { getStoredThemeId, applyTheme } from './themeRegistry';
 import { SESSION_REDIRECT_URL } from './constants';
 
 export interface ErrorFallbackProps {
-  error: Untyped;
+  error: unknown;
   [key: string]: unknown;
 }
 

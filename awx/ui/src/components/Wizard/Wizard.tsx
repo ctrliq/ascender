@@ -50,7 +50,7 @@ interface WizardFooterOverrides {
 export interface WizardWrapperProps {
   steps?: LegacyWizardStep[];
   onSave?: (...args: Untyped[]) => void;
-  onClose?: (...args: Untyped[]) => void;
+  onClose?: () => void;
   onNext?: (...args: Untyped[]) => void;
   onBack?: (...args: Untyped[]) => void;
   onGoToStep?: (...args: Untyped[]) => void;

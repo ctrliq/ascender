@@ -17,7 +17,7 @@ function NotificationTemplateEdit({
 }: NotificationTemplateEditProps) {
   const detailsUrl = `/notification_templates/${template.id}/details`;
   const navigate = useNavigate();
-  const [formError, setFormError] = useState<Untyped>(null);
+  const [formError, setFormError] = useState<unknown>(null);
 
   const handleSubmit = async (values: Untyped) => {
     try {

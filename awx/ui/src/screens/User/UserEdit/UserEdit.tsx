@@ -14,7 +14,7 @@ export interface UserEditProps {
 }
 
 function UserEdit({ user }: UserEditProps) {
-  const [formSubmitError, setFormSubmitError] = useState<Untyped>(null);
+  const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
   const { me } = useConfig();
   const navigate = useNavigate();
 

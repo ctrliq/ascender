@@ -13,7 +13,7 @@ export interface FrequencySelectProps {
   id: string;
   value: unknown[];
   onChange: (...args: Untyped[]) => void;
-  onBlur: (...args: Untyped[]) => void;
+  onBlur: (event?: Untyped) => void;
   placeholderText: React.ReactNode;
   children: React.ReactNode;
   [key: string]: unknown;

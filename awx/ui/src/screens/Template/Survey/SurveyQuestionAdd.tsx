@@ -14,7 +14,7 @@ export default function SurveyQuestionAdd({
   survey,
   updateSurvey,
 }: SurveyQuestionAddProps) {
-  const [formError, setFormError] = useState<Untyped>(null);
+  const [formError, setFormError] = useState<unknown>(null);
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const surveyUrl = pathname.replace('/add', '');

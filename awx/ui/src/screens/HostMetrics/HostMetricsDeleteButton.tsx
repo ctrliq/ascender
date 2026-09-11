@@ -21,7 +21,7 @@ const Label = styled.span`
 export interface HostMetricsDeleteButtonProps {
   itemsToDelete: Untyped[];
   pluralizedItemName?: Untyped;
-  onDelete: (...args: Untyped[]) => void;
+  onDelete: () => void;
   deleteDetailsRequests?: Untyped;
   warningMessage?: Untyped;
   deleteMessage?: Untyped;
@@ -40,11 +40,11 @@ function HostMetricsDeleteButton({
   if (!pluralizedItemName) {
     pluralizedItemName = t`Items`;
   }
-  const [isModalOpen, setIsModalOpen] = useState<Untyped>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [deleteDetails, setDeleteDetails] = useState<Untyped>(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [deleteMessageError, setDeleteMessageError] = useState<Untyped>();
+  const [deleteMessageError, setDeleteMessageError] = useState<unknown>();
   const handleDelete = () => {
     onDelete();
     toggleModal();

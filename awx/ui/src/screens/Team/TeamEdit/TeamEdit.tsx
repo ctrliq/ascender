@@ -15,7 +15,7 @@ export interface TeamEditProps {
 
 function TeamEdit({ team }: TeamEditProps) {
   const navigate = useNavigate();
-  const [error, setError] = useState<Untyped>(null);
+  const [error, setError] = useState<unknown>(null);
 
   const handleSubmit = async (values: Untyped) => {
     try {

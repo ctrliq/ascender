@@ -5,7 +5,7 @@ import { GroupsAPI } from 'api';
 import InventoryGroupForm from '../shared/InventoryGroupForm';
 
 function InventoryRelatedGroupAdd() {
-  const [error, setError] = useState<Untyped>(null);
+  const [error, setError] = useState<unknown>(null);
   const navigate = useNavigate();
   const { id, groupId } = useParams() as { id: string; groupId: string };
   const associateInventoryGroup = async (values: Untyped) => {

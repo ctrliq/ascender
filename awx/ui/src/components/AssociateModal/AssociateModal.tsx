@@ -24,7 +24,7 @@ export interface AssociateModalProps {
   header?: Untyped;
   columns?: SearchColumn[];
   title?: React.ReactNode;
-  onClose: (...args: Untyped[]) => void;
+  onClose: () => void;
   onAssociate: (...args: Untyped[]) => void;
   /** Reads the page of candidates the modal lists. */
   fetchRequest: (params: QSParams) => Promise<Untyped>;

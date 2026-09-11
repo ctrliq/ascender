@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory as InventoryModel, Schedule, Untyped } from 'types/api';
 import React, { useState, useCallback, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -58,9 +58,9 @@ function Inventories() {
     initScreenHeader.current
   );
 
-  const [inventory, setInventory] = useState<Untyped>();
+  const [inventory, setInventory] = useState<InventoryModel | undefined>();
   const [nestedObject, setNestedGroup] = useState<Untyped>();
-  const [schedule, setSchedule] = useState<Untyped>();
+  const [schedule, setSchedule] = useState<Schedule | undefined>();
 
   const setBreadcrumbConfig = useCallback(
     (

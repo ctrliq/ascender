@@ -14,7 +14,7 @@ export interface CredentialTypeEditProps {
 
 function CredentialTypeEdit({ credentialType }: CredentialTypeEditProps) {
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
   const detailsUrl = `/credential_types/${credentialType.id}/details`;
 
   const handleSubmit = async (values: Untyped) => {

@@ -10,13 +10,13 @@ import { CardBody } from 'components/Card';
 import ApplicationForm from '../shared/ApplicationForm';
 
 export interface ApplicationAddProps {
-  onSuccessfulAdd: (...args: Untyped[]) => void;
+  onSuccessfulAdd: (data: Untyped) => void;
   [key: string]: unknown;
 }
 
 function ApplicationAdd({ onSuccessfulAdd }: ApplicationAddProps) {
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
 
   const {
     error,

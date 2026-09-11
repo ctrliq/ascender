@@ -40,7 +40,7 @@ export interface CredentialLookupProps {
   label: React.ReactNode;
   modalDescription?: Untyped;
   multiple?: boolean;
-  onBlur?: (...args: Untyped[]) => void;
+  onBlur?: (event?: Untyped) => void;
   onChange: (...args: Untyped[]) => void;
   required?: boolean;
   tooltip?: React.ReactNode;

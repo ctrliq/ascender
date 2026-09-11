@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Schedule, Untyped } from 'types/api';
 import React, { useState, useCallback, useRef } from 'react';
 
 import { Routes, Route } from 'react-router';
@@ -24,7 +24,7 @@ function Templates() {
     initScreenHeader.current
   );
 
-  const [schedule, setSchedule] = useState<Untyped>();
+  const [schedule, setSchedule] = useState<Schedule | undefined>();
   const [template, setTemplate] = useState<Untyped>();
 
   const setBreadcrumbConfig = useCallback(

@@ -19,7 +19,7 @@ export interface OrganizationEditProps {
 function OrganizationEdit({ organization }: OrganizationEditProps) {
   const detailsUrl = `/organizations/${organization.id}/details`;
   const navigate = useNavigate();
-  const [formError, setFormError] = useState<Untyped>(null);
+  const [formError, setFormError] = useState<unknown>(null);
 
   const handleSubmit = async (
     values: Untyped,

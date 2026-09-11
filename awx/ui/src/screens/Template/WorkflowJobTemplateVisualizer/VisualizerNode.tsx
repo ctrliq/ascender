@@ -82,7 +82,7 @@ function VisualizerNode({
   const { t } = useLingui();
   const ref = useRef<Untyped>(null);
   const [hovering, setHovering] = useState(false);
-  const [detailError, setDetailError] = useState<Untyped>(null);
+  const [detailError, setDetailError] = useState<unknown>(null);
   const dispatch = useContext(
     WorkflowDispatchContext
   ) as React.Dispatch<WorkflowAction>;

@@ -74,7 +74,7 @@ const OUTPUT_NO_COUNT_JOB_TYPES = [
 
 export interface OutputToolbarProps {
   job: Untyped;
-  onDelete: (...args: Untyped[]) => void;
+  onDelete: () => void;
   isDeleteDisabled?: boolean;
   jobStatus: Untyped;
   [key: string]: unknown;
@@ -88,7 +88,7 @@ const OutputToolbar = ({
 }: OutputToolbarProps) => {
   const { t } = useLingui();
   const [activeJobElapsedTime, setActiveJobElapsedTime] = useState('00:00:00');
-  const [copyTooltip, setCopyTooltip] = useState<Untyped>(null);
+  const [copyTooltip, setCopyTooltip] = useState<string | null>(null);
   const hideCounts = OUTPUT_NO_COUNT_JOB_TYPES.includes(job.type);
 
   const playCount = job?.playbook_counts?.play_count;

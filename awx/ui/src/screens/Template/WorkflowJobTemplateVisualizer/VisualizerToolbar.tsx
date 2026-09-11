@@ -53,7 +53,7 @@ const ActionButton = styled(Button)`
 ActionButton.displayName = 'ActionButton';
 
 export interface VisualizerToolbarProps {
-  onClose: (...args: Untyped[]) => void;
+  onClose: () => void;
   onSave: (...args: Untyped[]) => void;
   template: Untyped;
   hasUnsavedChanges: boolean;

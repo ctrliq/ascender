@@ -56,7 +56,7 @@ export interface LabelSelectProps {
   value: SelectOptionValue[];
   placeholder?: string;
   onChange: (next: SelectOptionValue[]) => void;
-  onError: (...args: Untyped[]) => void;
+  onError: (error: unknown) => void;
   createText?: React.ReactNode;
   [key: string]: unknown;
 }

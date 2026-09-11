@@ -43,13 +43,13 @@ function VisualizerLink({
 }: VisualizerLinkProps) {
   const { t } = useLingui();
   const ref = useRef<Untyped>(null);
-  const [hovering, setHovering] = useState<Untyped>(false);
-  const [pathD, setPathD] = useState<Untyped>();
+  const [hovering, setHovering] = useState<boolean>(false);
+  const [pathD, setPathD] = useState<string | null>();
   const [pathStroke, setPathStroke] = useState(
     'var(--pf-t--global--border--color--default)'
   );
-  const [tooltipX, setTooltipX] = useState<Untyped>();
-  const [tooltipY, setTooltipY] = useState<Untyped>();
+  const [tooltipX, setTooltipX] = useState<number | undefined>();
+  const [tooltipY, setTooltipY] = useState<number | undefined>();
   const dispatch = useContext(
     WorkflowDispatchContext
   ) as React.Dispatch<WorkflowAction>;
@@ -122,7 +122,7 @@ function VisualizerLink({
 
   const handleLinkMouseLeave = () => {
     ref.current.parentNode.prepend(ref.current);
-    setHovering(null);
+    setHovering(false);
   };
 
   useEffect(() => {
@@ -161,7 +161,7 @@ function VisualizerLink({
         opacity={hovering ? '1' : '0'}
         points={getLinkOverlayPoints(link, nodePositions)}
       />
-      <path d={pathD} stroke={pathStroke} strokeWidth="2px" />
+      <path d={pathD ?? undefined} stroke={pathStroke} strokeWidth="2px" />
       <polygon
         id={`link-${link.source.id}-${link.target.id}-overlay`}
         onMouseEnter={() => updateLinkHelp(link)}

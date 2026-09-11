@@ -200,7 +200,7 @@ function CredentialTypeList() {
       </PageSection>
       <AlertModal
         aria-label={t`Deletion error`}
-        isOpen={deletionError}
+        isOpen={Boolean(deletionError)}
         onClose={clearDeletionError}
         title={t`Error`}
         variant="error"

@@ -8,7 +8,7 @@ import useRequest from 'hooks/useRequest';
 import UserTokenForm from '../shared/UserTokenForm';
 
 export interface UserTokenAddProps {
-  onSuccessfulAdd: (...args: Untyped[]) => void;
+  onSuccessfulAdd: (data: Untyped) => void;
   [key: string]: unknown;
 }
 

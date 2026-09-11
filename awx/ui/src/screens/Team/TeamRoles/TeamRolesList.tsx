@@ -36,7 +36,7 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
   const { search } = useLocation();
   const [roleToDisassociate, setRoleToDisassociate] = useState<Untyped>(null);
   const [showAddModal, setShowAddModal] = useState(false);
-  const [associateError, setAssociateError] = useState(null);
+  const [associateError, setAssociateError] = useState<unknown>(null);
 
   const {
     isLoading,

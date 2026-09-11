@@ -210,9 +210,9 @@ function UserTokenList() {
           ) : null
         }
       />
-      {deletionError && (
+      {Boolean(deletionError) && (
         <AlertModal
-          isOpen={deletionError}
+          isOpen={Boolean(deletionError)}
           variant="danger"
           title={t`Error!`}
           onClose={clearDeletionError}

@@ -307,7 +307,7 @@ function TemplateList({ defaultParams }: TemplateListProps) {
       <Toast {...toastProps} />
       <AlertModal
         aria-label={t`Deletion Error`}
-        isOpen={deletionError}
+        isOpen={Boolean(deletionError)}
         variant="error"
         title={t`Error!`}
         onClose={clearDeletionError}

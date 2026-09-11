@@ -12,7 +12,7 @@ export interface HostToggleProps {
   className?: string;
   host: Host;
   isDisabled?: boolean;
-  onToggle?: (...args: Untyped[]) => void;
+  onToggle?: (result: Untyped) => void;
   tooltip?: React.ReactNode;
   [key: string]: unknown;
 }

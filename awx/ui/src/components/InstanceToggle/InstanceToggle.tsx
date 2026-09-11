@@ -13,7 +13,7 @@ export interface InstanceToggleProps {
   className?: string;
   fetchInstances: (...args: Untyped[]) => unknown;
   instance: Untyped;
-  onToggle?: (...args: Untyped[]) => void;
+  onToggle?: (result: Untyped) => void;
   [key: string]: unknown;
 }
 

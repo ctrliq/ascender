@@ -54,7 +54,7 @@ export default function useLaunchSteps(
   instanceGroups: Untyped,
   resourceDefaultCredentials: Untyped
 ) {
-  const [visited, setVisited] = useState<Untyped>({});
+  const [visited, setVisited] = useState<Record<string, boolean>>({});
   const [isReady, setIsReady] = useState(false);
   const { touched, values: formikValues } =
     useFormikContext<LaunchPromptValues>();

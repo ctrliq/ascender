@@ -28,7 +28,7 @@ export interface InventoryLookupProps {
   hideAdvancedInventories?: boolean;
   isDisabled?: boolean;
   isPromptableField?: boolean;
-  onBlur?: (...args: Untyped[]) => void;
+  onBlur?: (event?: Untyped) => void;
   onChange: (...args: Untyped[]) => void;
   promptId?: Untyped;
   promptName?: Untyped;

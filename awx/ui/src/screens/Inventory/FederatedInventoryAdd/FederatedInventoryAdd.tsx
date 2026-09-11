@@ -8,7 +8,7 @@ import FederatedInventoryForm from '../shared/FederatedInventoryForm';
 
 function FederatedInventoryAdd() {
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
 
   const handleCancel = () => {
     navigate('/inventories');

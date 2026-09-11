@@ -58,7 +58,7 @@ export interface DataListToolbarProps {
   relatedSearchableKeys?: unknown[];
   sortColumns?: Untyped;
   isAllSelected?: boolean;
-  onSelectAll?: (...args: Untyped[]) => void;
+  onSelectAll?: (isSelected: boolean) => void;
   isCompact?: boolean;
   onSort?: (...args: Untyped[]) => void;
   onSearch?: (...args: Untyped[]) => void;

@@ -20,7 +20,7 @@ function InstanceEdit({ setBreadcrumb }: InstanceEditProps) {
   const { t } = useLingui();
   const navigate = useNavigate();
   const { id } = useParams() as { id: string };
-  const [formError, setFormError] = useState<Untyped>();
+  const [formError, setFormError] = useState<unknown>();
 
   const detailsUrl = `/instances/${id}/details`;
 

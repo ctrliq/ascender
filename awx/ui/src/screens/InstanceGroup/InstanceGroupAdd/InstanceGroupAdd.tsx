@@ -9,7 +9,7 @@ import InstanceGroupForm from '../shared/InstanceGroupForm';
 
 function InstanceGroupAdd() {
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
 
   const handleSubmit = async (values: Untyped) => {
     try {

@@ -35,7 +35,7 @@ function OrganizationDetail({ organization }: OrganizationDetailProps) {
     summary_fields,
     galaxy_credentials = [],
   } = organization;
-  const [contentError, setContentError] = useState<Untyped>(null);
+  const [contentError, setContentError] = useState<unknown>(null);
   const [hasContentLoading, setHasContentLoading] = useState(true);
   const [instanceGroups, setInstanceGroups] = useState([]);
   const navigate = useNavigate();

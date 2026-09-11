@@ -37,7 +37,7 @@ export interface NodeModalCustomFooterProps {
   isLaunchLoading: boolean;
   triggerNext: Untyped;
   setTriggerNext: Untyped;
-  handleCancel: (...args: Untyped[]) => void;
+  handleCancel: () => void;
   nextButtonText: Untyped;
   [key: string]: unknown;
 }

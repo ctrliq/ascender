@@ -33,7 +33,7 @@ export interface ExecutionEnvironmentLookupProps {
   helperTextInvalid?: React.ReactNode;
   isDisabled?: boolean;
   isValid?: boolean;
-  onBlur?: (...args: Untyped[]) => void;
+  onBlur?: (event?: Untyped) => void;
   onChange: (...args: Untyped[]) => void;
   organizationId?: number | string;
   popoverContent?: Untyped;

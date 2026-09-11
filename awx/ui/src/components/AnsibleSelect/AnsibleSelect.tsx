@@ -8,7 +8,7 @@ export interface AnsibleSelectProps {
   id: Untyped;
   data?: Untyped[];
   isValid?: boolean;
-  onBlur?: (...args: Untyped[]) => void;
+  onBlur?: (event?: Untyped) => void;
   value: Untyped;
   className?: string;
   isDisabled?: boolean;

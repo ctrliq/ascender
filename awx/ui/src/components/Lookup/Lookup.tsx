@@ -32,7 +32,7 @@ export interface LookupProps {
   id?: string;
   header?: React.ReactNode;
   onChange: (...args: Untyped[]) => void;
-  onBlur?: (...args: Untyped[]) => void;
+  onBlur?: (event?: Untyped) => void;
   isLoading?: boolean;
   value?: Untyped;
   multiple?: boolean;

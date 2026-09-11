@@ -11,7 +11,7 @@ import ExecutionEnvironmentForm from '../shared/ExecutionEnvironmentForm';
 function ExecutionEnvironmentAdd() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
 
   const handleSubmit = async (values: Untyped) => {
     try {

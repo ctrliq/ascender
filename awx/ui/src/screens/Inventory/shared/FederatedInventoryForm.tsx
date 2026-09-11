@@ -141,7 +141,7 @@ function FederatedInventoryForm({
         <Form role="form" autoComplete="off" onSubmit={formik.handleSubmit}>
           <FormColumnLayout>
             <FederatedInventoryFormFields inventory={federatedInventory} />
-            {submitError && <FormSubmitError error={submitError} />}
+            {Boolean(submitError) && <FormSubmitError error={submitError} />}
             <FormActionGroup
               onCancel={onCancel}
               onSubmit={formik.handleSubmit}

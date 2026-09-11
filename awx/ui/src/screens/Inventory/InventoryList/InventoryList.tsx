@@ -295,7 +295,7 @@ function InventoryList() {
           />
         </Card>
         <AlertModal
-          isOpen={deletionError}
+          isOpen={Boolean(deletionError)}
           variant="error"
           aria-label={t`Deletion Error`}
           title={t`Error!`}

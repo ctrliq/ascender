@@ -32,7 +32,7 @@ function SurveyReorderModal({
 }: SurveyReorderModalProps) {
   const { t } = useLingui();
   const [surveyQuestions, setSurveyQuestions] = useState([...questions]);
-  const [itemStartIndex, setStartItemIndex] = useState<Untyped>(null);
+  const [itemStartIndex, setStartItemIndex] = useState<number | null>(null);
   const [draggedItemId, setDraggedItemId] = useState(null);
   const ref = useRef<Untyped>(null);
 

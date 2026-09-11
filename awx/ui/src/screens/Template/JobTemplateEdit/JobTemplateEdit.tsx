@@ -18,7 +18,7 @@ export interface JobTemplateEditProps {
 
 function JobTemplateEdit({ template, reloadTemplate }: JobTemplateEditProps) {
   const navigate = useNavigate();
-  const [formSubmitError, setFormSubmitError] = useState<Untyped>(null);
+  const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isDisabled, setIsDisabled] = useState(false);
 

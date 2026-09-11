@@ -21,7 +21,7 @@ function ApplicationEdit({
 }: ApplicationEditProps) {
   const navigate = useNavigate();
   const { id } = useParams() as { id: string };
-  const [submitError, setSubmitError] = useState<Untyped>(null);
+  const [submitError, setSubmitError] = useState<unknown>(null);
 
   const handleSubmit = async ({ ...values }) => {
     values.organization = values.organization.id;

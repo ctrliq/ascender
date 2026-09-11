@@ -55,7 +55,7 @@ export interface CredentialTypeFormProps {
   credentialType?: Untyped;
   onSubmit: (...args: Untyped[]) => void;
   onCancel: (...args: Untyped[]) => void;
-  submitError?: Untyped;
+  submitError?: unknown;
   [key: string]: unknown;
 }
 
@@ -85,7 +85,7 @@ function CredentialTypeForm({
         <Form autoComplete="off" onSubmit={formik.handleSubmit}>
           <FormColumnLayout>
             <CredentialTypeFormFields {...rest} />
-            {submitError && <FormSubmitError error={submitError} />}
+            {Boolean(submitError) && <FormSubmitError error={submitError} />}
             <FormActionGroup
               onCancel={onCancel}
               onSubmit={formik.handleSubmit}

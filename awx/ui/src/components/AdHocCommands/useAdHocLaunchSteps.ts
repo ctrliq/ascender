@@ -31,7 +31,7 @@ export default function useAdHocLaunchSteps(
 ) {
   const { values, resetForm, touched } = useFormikContext<AdHocValues>();
 
-  const [visited, setVisited] = useState<Untyped>({});
+  const [visited, setVisited] = useState<Record<string, boolean>>({});
   const steps = [
     useAdHocDetailsStep(visited, moduleOptions as [string, string][]),
     useAdHocExecutionEnvironmentStep(organizationId),

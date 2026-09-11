@@ -44,7 +44,7 @@ function InventorySourceDetail({
 }: InventorySourceDetailProps) {
   const { t, i18n } = useLingui();
   const [isI18nLoading, setIsI18nLoading] = useState(true);
-  const [deletionError, setDeletionError] = useState<Untyped>(false);
+  const [deletionError, setDeletionError] = useState<unknown>(false);
   const navigate = useNavigate();
   const isMounted = useIsMounted();
 
@@ -378,11 +378,11 @@ function InventorySourceDetail({
           </DeleteButton>
         )}
       </CardActionsRow>
-      {deletionError && (
+      {Boolean(deletionError) && (
         <AlertModal
           variant="error"
           title={t`Error!`}
-          isOpen={deletionError}
+          isOpen={Boolean(deletionError)}
           onClose={() => setDeletionError(false)}
         >
           {t`Failed to delete inventory source ${name}.`}

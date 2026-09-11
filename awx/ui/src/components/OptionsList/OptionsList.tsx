@@ -15,7 +15,7 @@ const ModalList = styled.div`
 
 export interface OptionsListProps {
   columns?: Untyped;
-  contentError?: Untyped;
+  contentError?: unknown;
   deselectItem: Untyped;
   displayKey?: Untyped;
   header?: Untyped;

@@ -37,10 +37,10 @@ const defaultSchedule: Schedule = {} as Schedule;
 
 export interface ScheduleFormProps {
   hasDaysToKeepField?: boolean;
-  handleCancel: (...args: Untyped[]) => void;
+  handleCancel: () => void;
   handleSubmit: (...args: Untyped[]) => void;
   schedule?: Schedule;
-  submitError?: Untyped;
+  submitError?: unknown;
   resource: Untyped;
   launchConfig: Untyped;
   surveyConfig?: Untyped;

@@ -386,7 +386,7 @@ const InventorySourceForm = ({
               sourceOptions={sourceOptions}
               organizationId={organizationId}
             />
-            {submitError && <FormSubmitError error={submitError} />}
+            {Boolean(submitError) && <FormSubmitError error={submitError} />}
             <FormActionGroup
               onCancel={onCancel}
               onSubmit={formik.handleSubmit}

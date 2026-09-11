@@ -29,10 +29,12 @@ const InventoryGroupsDeleteModal = ({
   groups = [],
 }: InventoryGroupsDeleteModalProps) => {
   const { t } = useLingui();
-  const [radioOption, setRadioOption] = useState<Untyped>(null);
+  const [radioOption, setRadioOption] = useState<'delete' | 'promote' | null>(
+    null
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-  const [deletionError, setDeletionError] = useState<Untyped>(null);
+  const [deletionError, setDeletionError] = useState<unknown>(null);
   const { id: inventoryId } = useParams() as { id: string };
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
 
@@ -155,9 +157,9 @@ const InventoryGroupsDeleteModal = ({
           </div>
         </AlertModal>
       )}
-      {deletionError && (
+      {Boolean(deletionError) && (
         <AlertModal
-          isOpen={deletionError}
+          isOpen={Boolean(deletionError)}
           variant="error"
           aria-label={t`deletion error`}
           title={t`Error!`}

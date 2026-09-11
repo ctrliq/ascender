@@ -65,7 +65,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
     execution_environment: executionEnvironment,
   } = job.summary_fields;
   const { scm_branch: scmBranch } = job;
-  const [errorMsg, setErrorMsg] = useState<Untyped>();
+  const [errorMsg, setErrorMsg] = useState<unknown>();
   const navigate = useNavigate();
 
   const jobTypes = {
@@ -662,9 +662,9 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
             </DeleteButton>
           )}
       </CardActionsRow>
-      {errorMsg && (
+      {Boolean(errorMsg) && (
         <AlertModal
-          isOpen={errorMsg}
+          isOpen={Boolean(errorMsg)}
           variant="error"
           onClose={() => setErrorMsg(undefined)}
           title={t`Job Delete Error`}

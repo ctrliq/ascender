@@ -143,7 +143,7 @@ function ContainerGroupForm({
         <Form autoComplete="off" onSubmit={formik.handleSubmit}>
           <FormColumnLayout>
             <ContainerGroupFormFields instanceGroup={instanceGroup} {...rest} />
-            {submitError && <FormSubmitError error={submitError} />}
+            {Boolean(submitError) && <FormSubmitError error={submitError} />}
             <FormActionGroup
               onCancel={onCancel}
               onSubmit={formik.handleSubmit}

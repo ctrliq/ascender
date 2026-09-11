@@ -7,7 +7,7 @@ import { JobTemplatesAPI, OrganizationsAPI } from 'api';
 import JobTemplateForm from '../shared/JobTemplateForm';
 
 function JobTemplateAdd() {
-  const [formSubmitError, setFormSubmitError] = useState<Untyped>(null);
+  const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
   const location = useLocation();
   const navigate = useNavigate();
 

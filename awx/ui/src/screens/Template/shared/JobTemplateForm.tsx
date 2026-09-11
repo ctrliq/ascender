@@ -74,13 +74,13 @@ const defaultTemplate = {
 
 export interface JobTemplateFormProps {
   template?: Untyped;
-  handleCancel?: (...args: Untyped[]) => void;
+  handleCancel?: () => void;
   handleSubmit: (...args: Untyped[]) => void;
   /** Injected by the formik wrapper below, never by a caller. */
   setFieldValue?: Untyped;
   setFieldTouched?: Untyped;
   validateField?: Untyped;
-  submitError?: Untyped;
+  submitError?: unknown;
   isOverrideDisabledLookup?: boolean;
   [key: string]: unknown;
 }
@@ -97,7 +97,7 @@ function JobTemplateForm({
 }: JobTemplateFormProps) {
   const { t } = useLingui();
   const helpText = getHelpText();
-  const [contentError, setContentError] = useState(false);
+  const [contentError, setContentError] = useState<unknown>(false);
   const [allowCallbacks, setAllowCallbacks] = useState(
     Boolean(template?.host_config_key)
   );

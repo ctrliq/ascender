@@ -28,7 +28,7 @@ export default function useSchedulePromptSteps(
   const sourceOfValues: Untyped =
     (Object.keys(schedule).length > 0 && schedule) || resource;
   const { resetForm, values } = useFormikContext<ScheduleFormValues>();
-  const [visited, setVisited] = useState<Untyped>({});
+  const [visited, setVisited] = useState<Record<string, boolean>>({});
 
   const steps = [
     useInventoryStep(launchConfig, sourceOfValues, visited),

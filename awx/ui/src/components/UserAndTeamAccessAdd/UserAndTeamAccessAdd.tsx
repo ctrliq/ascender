@@ -30,8 +30,8 @@ export interface UserAndTeamAccessAddProps {
   title: React.ReactNode;
   onFetchData: (...args: Untyped[]) => void;
   apiModel: RolesApiModel;
-  onClose: (...args: Untyped[]) => void;
-  onError: (...args: Untyped[]) => void;
+  onClose: () => void;
+  onError: (error: unknown) => void;
   resourceId: number | string;
   [key: string]: unknown;
 }

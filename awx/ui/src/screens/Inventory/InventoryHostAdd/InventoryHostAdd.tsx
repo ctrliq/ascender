@@ -12,7 +12,7 @@ export interface InventoryHostAddProps {
 }
 
 function InventoryHostAdd({ inventory }: InventoryHostAddProps) {
-  const [formError, setFormError] = useState<Untyped>(null);
+  const [formError, setFormError] = useState<unknown>(null);
   const hostsUrl = `/inventories/inventory/${inventory.id}/hosts`;
   const navigate = useNavigate();
 

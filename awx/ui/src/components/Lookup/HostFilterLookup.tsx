@@ -99,7 +99,7 @@ export interface HostFilterLookupProps {
   helperTextInvalid: Untyped;
   isValid?: boolean;
   isDisabled: boolean;
-  onBlur?: (...args: Untyped[]) => void;
+  onBlur?: (event?: Untyped) => void;
   onChange?: (...args: Untyped[]) => void;
   organizationId?: Untyped;
   value?: string;
