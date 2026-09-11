@@ -1,4 +1,5 @@
-import type { CredentialType, Untyped } from 'types/api';
+import type { CredentialType, LaunchCredential } from 'types/api';
+import type { QSParams } from 'util/qs';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -21,8 +22,8 @@ const QS_CONFIG = getQSConfig('credentials', {
 });
 
 async function loadCredentials(
-  params: Untyped,
-  selectedCredentialTypeId: unknown
+  params: QSParams,
+  selectedCredentialTypeId: number | undefined
 ) {
   params.credential_type = selectedCredentialTypeId || 1;
   const { data } = await CredentialsAPI.read(params);
@@ -30,11 +31,11 @@ async function loadCredentials(
 }
 
 export interface MultiCredentialsLookupProps {
-  value?: unknown[];
-  onChange: (...args: Untyped[]) => void;
+  value?: LaunchCredential[];
+  onChange: (credentials: LaunchCredential[]) => void;
   onError: (error: unknown) => void;
   fieldName?: string;
-  validate?: (value: Untyped) => string | undefined;
+  validate?: (value: LaunchCredential[]) => string | undefined;
   [key: string]: unknown;
 }
 
@@ -100,13 +101,13 @@ function MultiCredentialsLookup({
         CredentialsAPI.readOptions(),
       ]);
 
-      results.map((result: Untyped) => {
-        if (result.kind === 'vault' && result.inputs?.vault_id) {
-          result.label = `${result.name} | ${result.inputs.vault_id}`;
-          return result;
-        }
-        result.label = `${result.name}`;
-        return result;
+      // Two vault credentials differ only by their vault id, so the label
+      // the list shows carries it.
+      results.forEach((result) => {
+        result.label =
+          result.kind === 'vault' && result.inputs?.vault_id
+            ? `${result.name} | ${String(result.inputs.vault_id)}`
+            : `${result.name}`;
       });
 
       return {
@@ -114,7 +115,7 @@ function MultiCredentialsLookup({
         credentialsCount: count,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
     }, [selectedType, location]),
@@ -141,15 +142,15 @@ function MultiCredentialsLookup({
     removeItem,
     canDelete,
   }: {
-    item: Untyped;
-    removeItem: (item: Untyped) => void;
+    item: LookupItem;
+    removeItem: (item: LookupItem) => void;
     canDelete: boolean;
   }) => (
     <CredentialChip
       key={item.id}
       onClick={() => removeItem(item)}
       isReadOnly={!canDelete}
-      credential={item}
+      credential={item as LaunchCredential}
     />
   );
   const isVault = selectedType?.kind === 'vault';
@@ -204,7 +205,7 @@ function MultiCredentialsLookup({
                   );
                   setSelectedType(
                     credentialTypes.find(
-                      (o: Untyped) => o.id === parseInt(String(id), 10)
+                      (o) => o.id === parseInt(String(id), 10)
                     ) ?? null
                   );
                 }}
@@ -245,15 +246,18 @@ function MultiCredentialsLookup({
             qsConfig={QS_CONFIG}
             readOnly={!canDelete}
             selectItem={(item: LookupItem) => {
-              const hasSameVaultID = (val: Untyped) =>
+              const chosen = item as LaunchCredential;
+              const hasSameVaultID = (val: LaunchCredential) =>
                 val?.inputs?.vault_id !== undefined &&
-                val?.inputs?.vault_id === (item as Untyped)?.inputs?.vault_id;
-              const hasSameCredentialType = (val: Untyped) =>
-                val.credential_type === (item as Untyped).credential_type;
-              const selectedItems = state.selectedItems.filter((i: Untyped) =>
+                val?.inputs?.vault_id === chosen?.inputs?.vault_id;
+              const hasSameCredentialType = (val: LaunchCredential) =>
+                val.credential_type === chosen.credential_type;
+              const selectedItems = (
+                state.selectedItems as LaunchCredential[]
+              ).filter((i) =>
                 isVault ? !hasSameVaultID(i) : !hasSameCredentialType(i)
               );
-              selectedItems.push(item);
+              selectedItems.push(chosen);
               return dispatch({
                 type: 'SET_SELECTED_ITEMS',
                 selectedItems,

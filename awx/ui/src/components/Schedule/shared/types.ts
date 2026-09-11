@@ -1,3 +1,4 @@
+import type { Label, LaunchCredential, SummaryFieldRef } from 'types/api';
 import type { ByWeekday } from 'rrule';
 
 /**
@@ -80,6 +81,16 @@ export interface ScheduleFormValues {
   timezone?: string;
   startDate?: string;
   startTime?: string;
+  name?: string;
+  description?: string;
+  daysToKeep?: number;
+  /** The prompt's own fields, present only where the template asks for them. */
+  credentials?: LaunchCredential[];
+  labels?: Label[];
+  instance_groups?: SummaryFieldRef[];
+  inventory?: SummaryFieldRef | null;
+  execution_environment?: SummaryFieldRef | null;
+  extra_data?: Record<string, unknown>;
   [key: string]: unknown;
 }
 

@@ -44,8 +44,8 @@ function ScheduleAdd({
 
   const handleSubmit = async (
     values: ScheduleFormValues,
-    launchConfiguration: LaunchConfig,
-    surveyConfiguration: SurveyConfig
+    launchConfiguration?: LaunchConfig,
+    surveyConfiguration?: SurveyConfig | null
   ) => {
     const {
       execution_environment,
@@ -121,7 +121,7 @@ function ScheduleAdd({
         data: { id: scheduleId },
       } = await apiModel.createSchedule(resource.id, requestData);
 
-      let labelsPromises = [];
+      let labelsPromises: Promise<unknown>[] = [];
       let credentialsPromises: Promise<unknown>[] = [];
 
       if (launchConfiguration?.ask_labels_on_launch && labels) {

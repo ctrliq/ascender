@@ -2,7 +2,7 @@
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
 import type { QSConfig } from 'util/qs';
-import type { Untyped } from 'types/api';
+import type { SearchColumn, SelectableOption } from 'types/api';
 import React, { useEffect } from 'react';
 import { Table, Tbody } from '@patternfly/react-table';
 import { useLocation, useNavigate } from 'react-router';
@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 import { parseQueryString, updateQueryString } from 'util/qs';
+import type { SearchableKey } from './getSearchableKeys';
 import ListHeader from '../ListHeader';
 import ContentEmpty from '../ContentEmpty';
 import ContentError from '../ContentError';
@@ -22,28 +23,31 @@ import LoadingSpinner from '../LoadingSpinner';
 // Stable default so the clearSelected effect dep does not change every render.
 const noop = () => {};
 
-export interface PaginatedTableProps {
+export interface PaginatedTableProps<T = SelectableOption> {
   contentError?: unknown;
   hasContentLoading?: boolean;
-  emptyStateControls?: Untyped;
-  items: Untyped;
-  itemCount: Untyped;
+  /** Rendered in the empty state, typically the add button. */
+  emptyStateControls?: React.ReactNode;
+  items: T[];
+  /** How many there are in total, which is what the pagination counts. */
+  itemCount: number;
   qsConfig: QSConfig;
-  headerRow?: Untyped;
-  renderRow: Untyped;
-  toolbarSearchColumns?: Untyped[];
-  toolbarSearchableKeys?: Untyped[];
-  toolbarRelatedSearchableKeys?: Untyped[];
-  pluralizedItemName?: Untyped;
+  headerRow?: React.ReactNode;
+  renderRow: (item: T, index: number) => React.ReactNode;
+  toolbarSearchColumns?: SearchColumn[];
+  toolbarSearchableKeys?: SearchableKey[];
+  toolbarRelatedSearchableKeys?: string[];
+  /** What the rows are, in the plural, for the empty state and the count. */
+  pluralizedItemName?: string;
   showPageSizeOptions?: boolean;
   renderToolbar?: (props: DataListToolbarProps) => React.ReactNode;
-  emptyContentMessage?: Untyped;
-  clearSelected?: Untyped;
-  ouiaId?: Untyped;
+  emptyContentMessage?: React.ReactNode;
+  clearSelected?: () => void;
+  ouiaId?: string;
   [key: string]: unknown;
 }
 
-function PaginatedTable({
+function PaginatedTable<T = SelectableOption>({
   contentError,
   hasContentLoading = false,
   emptyStateControls,
@@ -63,7 +67,7 @@ function PaginatedTable({
   emptyContentMessage,
   clearSelected = noop,
   ouiaId,
-}: PaginatedTableProps) {
+}: PaginatedTableProps<T>) {
   const { t } = useLingui();
   const location = useLocation();
   const { search, pathname } = location;

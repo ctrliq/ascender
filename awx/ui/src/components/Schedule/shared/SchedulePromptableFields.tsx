@@ -1,9 +1,9 @@
 import type {
-  Credential,
-  InstanceGroup,
   Label,
+  LaunchCredential,
+  NodeTemplate,
   Schedule,
-  Untyped,
+  SummaryFieldRef,
 } from 'types/api';
 import React, { useState } from 'react';
 import { ExpandableSection } from '@patternfly/react-core';
@@ -22,13 +22,13 @@ export interface SchedulePromptableFieldsProps {
   schedule: Schedule;
   surveyConfig?: SurveyConfig | null;
   launchConfig?: LaunchConfig;
-  onCloseWizard: (...args: Untyped[]) => void;
-  onSave: (values?: Untyped, config?: Untyped) => void;
-  credentials: Credential[];
-  resource: Untyped;
-  resourceDefaultCredentials: unknown;
+  onCloseWizard: () => void;
+  onSave: () => void;
+  credentials: LaunchCredential[];
+  resource: NodeTemplate;
+  resourceDefaultCredentials?: LaunchCredential[] | null;
   labels: Label[];
-  instanceGroups: InstanceGroup[];
+  instanceGroups: SummaryFieldRef[];
   [key: string]: unknown;
 }
 
@@ -123,7 +123,7 @@ function SchedulePromptableFields({
       }}
       title={t`Prompt | ${resource.name}`}
       description={
-        resource.description.length > 512 ? (
+        (resource.description?.length ?? 0) > 512 ? (
           <ExpandableSection
             toggleText={
               showDescription ? t`Hide description` : t`Show description`

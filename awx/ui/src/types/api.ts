@@ -253,6 +253,11 @@ export type Organization = WithNested<Schemas['Organization']> & {
  */
 export type Credential = Omit<WithNested<Schemas['Credential']>, 'inputs'> & {
   inputs?: Record<string, unknown>;
+  /**
+   * What a credential list shows for it. Built by the lookup rather than sent:
+   * two vault credentials differ only by their vault id, which it appends.
+   */
+  label?: string;
 };
 
 /**
@@ -560,8 +565,9 @@ export interface SurveyQuestion {
   required?: boolean;
   default?: unknown;
   choices?: string[] | string;
-  min?: number;
-  max?: number;
+  /** Null where the question's type has no bound to set, such as a choice. */
+  min?: number | null;
+  max?: number | null;
   new_question?: boolean;
   [key: string]: unknown;
 }
@@ -654,14 +660,25 @@ export type JobStatus =
  * Anything the API returns, for the places that genuinely handle more than one
  * kind of object. Prefer a named type above wherever the kind is known.
  */
+/**
+ * A row a selector can work with: anything the api has already given an id.
+ *
+ * The lists and lookups are generic over it so each one's handlers are called
+ * back with the rows it was given rather than with a widest common shape.
+ */
+export interface SelectableOption {
+  id?: number | string;
+  [key: string]: unknown;
+}
+
 export interface ApiEntity {
   id?: number;
   type?: string;
   url?: string;
   related?: Record<string, string>;
   summary_fields?: SummaryFields;
-  name?: string;
-  description?: string;
+  name?: string | null;
+  description?: string | null;
   [key: string]: unknown;
 }
 

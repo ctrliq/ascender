@@ -1,4 +1,10 @@
-import type { Untyped } from 'types/api';
+import type {
+  Label,
+  LaunchCredential,
+  NodeTemplate,
+  Schedule,
+  SummaryFieldRef,
+} from 'types/api';
 import { useState, useEffect } from 'react';
 import { useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -15,18 +21,18 @@ import type { LaunchConfig, SurveyConfig } from '../../LaunchPrompt/types';
 export default function useSchedulePromptSteps(
   surveyConfig: SurveyConfig,
   launchConfig: LaunchConfig,
-  schedule: Untyped,
-  resource: Untyped,
-  scheduleCredentials: Untyped,
-  resourceDefaultCredentials: Untyped,
-  labels: Untyped,
-  instanceGroups: Untyped
+  schedule: Schedule,
+  resource: NodeTemplate,
+  scheduleCredentials: LaunchCredential[],
+  resourceDefaultCredentials: LaunchCredential[] | null | undefined,
+  labels: Label[],
+  instanceGroups: SummaryFieldRef[]
 ) {
   const { t } = useLingui();
   // A schedule being edited supplies the values; a new one takes them from the
   // template it is being created on.
-  const sourceOfValues: Untyped =
-    (Object.keys(schedule).length > 0 && schedule) || resource;
+  const sourceOfValues: NodeTemplate =
+    Object.keys(schedule).length > 0 ? (schedule as NodeTemplate) : resource;
   const { resetForm, values } = useFormikContext<ScheduleFormValues>();
   const [visited, setVisited] = useState<Record<string, boolean>>({});
 
@@ -61,9 +67,9 @@ export default function useSchedulePromptSteps(
 
   useEffect(() => {
     if (launchConfig && surveyConfig && isReady) {
-      let initialValues: Record<string, Untyped> = {};
+      let initialValues: Record<string, unknown> = {};
       initialValues = steps.reduce(
-        (acc: Record<string, Untyped>, cur) => ({
+        (acc: Record<string, unknown>, cur) => ({
           ...acc,
           ...cur.initialValues,
         }),
@@ -71,20 +77,22 @@ export default function useSchedulePromptSteps(
       );
 
       if (launchConfig.ask_credential_on_launch) {
-        const defaultCredsWithoutOverrides: Untyped[] = [];
+        const defaultCredsWithoutOverrides: LaunchCredential[] = [];
 
-        const credentialHasOverride = (templateDefaultCred: Untyped) => {
+        const credentialHasOverride = (
+          templateDefaultCred: LaunchCredential
+        ) => {
           let hasOverride = false;
-          scheduleCredentials.forEach((scheduleCredential: Untyped) => {
+          scheduleCredentials.forEach((scheduleCredential) => {
             if (
               templateDefaultCred.credential_type ===
               scheduleCredential.credential_type
             ) {
               if (
-                (!templateDefaultCred.inputs.vault_id &&
-                  !scheduleCredential.inputs.vault_id) ||
-                (templateDefaultCred.inputs.vault_id &&
-                  scheduleCredential.inputs.vault_id &&
+                (!templateDefaultCred.inputs?.vault_id &&
+                  !scheduleCredential.inputs?.vault_id) ||
+                (templateDefaultCred.inputs?.vault_id &&
+                  scheduleCredential.inputs?.vault_id &&
                   templateDefaultCred.inputs.vault_id ===
                     scheduleCredential.inputs.vault_id)
               ) {
@@ -97,7 +105,7 @@ export default function useSchedulePromptSteps(
         };
 
         if (resourceDefaultCredentials) {
-          resourceDefaultCredentials.forEach((defaultCred: Untyped) => {
+          resourceDefaultCredentials.forEach((defaultCred) => {
             if (!credentialHasOverride(defaultCred)) {
               defaultCredsWithoutOverrides.push(defaultCred);
             }

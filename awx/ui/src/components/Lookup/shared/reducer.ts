@@ -1,8 +1,9 @@
-/** An item a lookup can select, which is any object the API gives an id. */
-export interface LookupItem {
-  id: number | string;
-  [key: string]: unknown;
-}
+import type { SelectableOption } from 'types/api';
+
+// A row a lookup holds is the same thing every selector works with, which is
+// declared once with the api types.
+export type LookupItem = SelectableOption;
+export type { SelectableOption };
 
 /**
  * What a lookup holds while its modal is open.

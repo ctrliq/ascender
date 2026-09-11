@@ -203,7 +203,7 @@ function CredentialLookup({
             value={state.selectedItems}
             options={credentials}
             optionCount={count}
-            header={label}
+            header={String(label)}
             qsConfig={QS_CONFIG}
             searchColumns={[
               {

@@ -1,6 +1,11 @@
 import type { QSConfig } from 'util/qs';
 import type { SearchableKey } from 'components/PaginatedTable';
-import type { SearchColumn, SortColumn, Untyped } from 'types/api';
+import type {
+  ApiEntity,
+  SearchColumn,
+  SelectableOption,
+  SortColumn,
+} from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
@@ -15,32 +20,50 @@ const ModalList = styled.div`
   }
 `;
 
-export interface OptionsListProps {
-  columns?: Untyped;
+/**
+ * One option the list offers. Generic over it so a caller that hands in
+ * credentials gets its handlers called back with credentials, rather than
+ * with whatever the widest row type happens to be.
+ */
+export interface OptionsListProps<T extends SelectableOption = ApiEntity> {
+  /** One column per field to show beside each row's checkbox. */
+  columns?: SearchColumn[];
   contentError?: unknown;
-  deselectItem: Untyped;
-  displayKey?: Untyped;
-  header?: Untyped;
+  deselectItem: (item: T) => void;
+  /** Which field of an option to show as its label; defaults to the name. */
+  displayKey?: string;
+  /** What the list is of, which names it in the table's own aria labels. */
+  header?: string;
   isLoading?: boolean;
   isSelectedDraggable?: boolean;
   multiple?: boolean;
-  name?: unknown;
-  optionCount: Untyped;
-  options: Untyped;
+  name?: string;
+  optionCount: number;
+  options: T[];
   qsConfig: QSConfig;
   readOnly?: boolean;
-  relatedSearchableKeys?: Untyped;
-  renderItemChip?: Untyped;
+  relatedSearchableKeys?: string[];
+  /**
+   * Declared as a method so the chip renderer stays bivariant: a lookup passes
+   * the same one down that it was given, typed by the rows the lookup holds.
+   */
+  renderItemChip?(props: {
+    item: T;
+    removeItem: (item: T) => void;
+    canDelete: boolean;
+  }): React.ReactNode;
   searchColumns?: SearchColumn[];
   searchableKeys?: SearchableKey[];
-  selectItem: Untyped;
+  selectItem: (item: T) => void;
   sortColumns?: SortColumn[];
-  sortSelectedItems?: Untyped;
-  value: Untyped;
+  /** Reorders the chips, where the caller lets them be dragged. */
+  sortSelectedItems?: (items: T[]) => void;
+  /** What is selected: one item, or several where multiple is set. */
+  value: T[];
   [key: string]: unknown;
 }
 
-function OptionsList({
+function OptionsList<T extends SelectableOption = ApiEntity>({
   columns,
   contentError,
   deselectItem,
@@ -62,12 +85,12 @@ function OptionsList({
   sortColumns = [],
   sortSelectedItems,
   value,
-}: OptionsListProps) {
+}: OptionsListProps<T>) {
   const { t } = useLingui();
   const buildHeaderRow = (
     <HeaderRow qsConfig={qsConfig}>
-      {columns?.length > 0 ? (
-        columns.map((col: Untyped) => (
+      {columns?.length ? (
+        columns.map((col) => (
           <HeaderCell key={col.key} sortKey={col.key}>
             {col.name}
           </HeaderCell>
@@ -117,16 +140,16 @@ function OptionsList({
         hasContentLoading={isLoading}
         headerRow={buildHeaderRow}
         onRowClick={selectItem}
-        renderRow={(item: Untyped, index: number) => (
+        renderRow={(item: T, index: number) => (
           <CheckboxListItem
             key={item.id}
             rowIndex={index}
-            itemId={item.id}
-            name={multiple ? item[displayKey] : name}
-            label={item[displayKey]}
+            itemId={item.id as number}
+            name={(multiple ? item[displayKey] : name) as string}
+            label={item[displayKey] as React.ReactNode}
             columns={columns}
             item={item}
-            isSelected={value.some((i: Untyped) => i.id === item.id)}
+            isSelected={value.some((i) => i.id === item.id)}
             onSelect={() => selectItem(item)}
             onDeselect={() => deselectItem(item)}
             isRadio={!multiple}

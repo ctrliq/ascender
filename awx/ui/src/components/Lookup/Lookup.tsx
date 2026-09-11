@@ -38,11 +38,11 @@ export interface LookupProps {
   multiple?: boolean;
   required?: boolean;
   qsConfig: QSConfig;
-  renderItemChip?: (props: {
+  renderItemChip?(props: {
     item: LookupItem;
     removeItem: (item: LookupItem) => void;
     canDelete: boolean;
-  }) => React.ReactNode;
+  }): React.ReactNode;
   /**
    * Renders the modal's body, which is a different list per lookup. It is
    * given the reducer so a list can tick and untick its own rows.

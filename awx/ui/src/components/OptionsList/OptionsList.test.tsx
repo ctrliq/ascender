@@ -45,7 +45,7 @@ describe('<OptionsList />', () => {
   it('should render selected list', () => {
     renderWithContexts(
       <OptionsList
-        value={[options[1]]}
+        value={[options[1]!]}
         options={options}
         optionCount={3}
         searchColumns={[

@@ -1,4 +1,6 @@
-import type { Untyped } from 'types/api';
+import type { OptionsField } from 'types/api';
+import type { FileUploadProps, TextInputProps } from '@patternfly/react-core';
+
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
@@ -30,6 +32,24 @@ import { combine, minMaxValue, required, url, number } from 'util/validators';
 import AlertModal from 'components/AlertModal';
 import RevertButton from './RevertButton';
 
+/**
+ * What every field below takes: the name of the setting it edits, and the
+ * OPTIONS block describing it, which is null until the options have loaded.
+ */
+/* eslint-disable react/no-unused-prop-types */
+interface SettingFieldProps {
+  name: string;
+  config?:
+    | (OptionsField & {
+        min_value?: number;
+        max_value?: number;
+        placeholder?: string;
+      })
+    | null;
+  isRequired?: boolean;
+  [key: string]: unknown;
+}
+
 const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
   && {
     color: var(--pf-v6-global--danger-color--100);
@@ -58,15 +78,16 @@ const Selected = styled.div`
 
 export interface SettingGroupProps {
   children: React.ReactNode;
-  defaultValue: Untyped;
+  /** What the revert button puts back, which is the setting's own default. */
+  defaultValue: unknown;
   fieldId: string;
-  helperTextInvalid: Untyped;
+  helperTextInvalid?: React.ReactNode;
   isDisabled?: boolean;
   isRequired?: boolean;
   label: React.ReactNode;
   onRevertCallback?: () => void;
-  popoverContent: Untyped;
-  validated?: Untyped;
+  popoverContent?: React.ReactNode;
+  validated?: 'default' | 'error';
   [key: string]: unknown;
 }
 
@@ -122,7 +143,12 @@ const BooleanField = ({
   disabled = false,
   needsConfirmationModal,
   modalTitle,
-}: Untyped) => {
+}: SettingFieldProps & {
+  ariaLabel?: string;
+  disabled?: boolean;
+  needsConfirmationModal?: boolean;
+  modalTitle?: React.ReactNode;
+}) => {
   const { t } = useLingui();
   const [field, meta, helpers] = useField(name);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -193,7 +219,11 @@ const BooleanField = ({
     </SettingGroup>
   ) : null;
 };
-const ChoiceField = ({ name, config, isRequired = false }: Untyped) => {
+const ChoiceField = ({
+  name,
+  config,
+  isRequired = false,
+}: SettingFieldProps) => {
   const validate = isRequired ? required(null) : undefined;
   const [field, meta] = useField({ name, validate });
   const isValid = !meta.error || !meta.touched;
@@ -212,7 +242,7 @@ const ChoiceField = ({ name, config, isRequired = false }: Untyped) => {
         id={name}
         {...field}
         data={[
-          ...config.choices.map(([value, label]: Untyped[], index: number) => ({
+          ...(config.choices ?? []).map(([value, label], index) => ({
             label,
             value: value ?? '',
             key: value ?? index,
@@ -222,7 +252,11 @@ const ChoiceField = ({ name, config, isRequired = false }: Untyped) => {
     </SettingGroup>
   ) : null;
 };
-const EncryptedField = ({ name, config, isRequired = false }: Untyped) => {
+const EncryptedField = ({
+  name,
+  config,
+  isRequired = false,
+}: SettingFieldProps) => {
   const validate = isRequired ? required(null) : undefined;
   const [, meta] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
@@ -251,7 +285,11 @@ const EncryptedField = ({ name, config, isRequired = false }: Untyped) => {
     </SettingGroup>
   ) : null;
 };
-const ExecutionEnvField = ({ name, config, isRequired = false }: Untyped) => {
+const ExecutionEnvField = ({
+  name,
+  config,
+  isRequired = false,
+}: SettingFieldProps) => {
   const [field, meta, helpers] = useField({ name });
   return config ? (
     <SettingGroup
@@ -275,7 +313,7 @@ const ExecutionEnvField = ({ name, config, isRequired = false }: Untyped) => {
     </SettingGroup>
   ) : null;
 };
-const InputAlertField = ({ name, config }: Untyped) => {
+const InputAlertField = ({ name, config }: SettingFieldProps) => {
   const { t } = useLingui();
   const [field, meta] = useField({ name });
   const isValid = !(meta.touched && meta.error);
@@ -376,7 +414,7 @@ const InputField = ({
   config = null,
   type = 'text',
   isRequired = false,
-}: Untyped) => {
+}: SettingFieldProps & { type?: TextInputProps['type'] }) => {
   const min_value = config?.min_value ?? Number.MIN_SAFE_INTEGER;
   const max_value = config?.max_value ?? Number.MAX_SAFE_INTEGER;
   const validators = [
@@ -386,7 +424,7 @@ const InputField = ({
   ];
   const [field, meta] = useField({
     name,
-    validate: combine<Untyped>(validators),
+    validate: combine(validators as Parameters<typeof combine>[0]),
   });
   const isValid = !(meta.touched && meta.error);
 
@@ -415,7 +453,11 @@ const InputField = ({
     </SettingGroup>
   ) : null;
 };
-const TextAreaField = ({ name, config, isRequired = false }: Untyped) => {
+const TextAreaField = ({
+  name,
+  config,
+  isRequired = false,
+}: SettingFieldProps) => {
   const validate = isRequired ? required(null) : undefined;
   const [field, meta] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
@@ -450,7 +492,7 @@ const ObjectField = ({
   config,
   revertValue,
   isRequired = false,
-}: Untyped) => {
+}: SettingFieldProps & { revertValue?: unknown }) => {
   const validate = isRequired ? required(null) : undefined;
   const [field, meta, helpers] = useField({ name, validate });
   const isValid = !(meta.touched && meta.error);
@@ -497,7 +539,7 @@ const FileUploadField = ({
   config,
   type = 'text',
   isRequired = false,
-}: Untyped) => {
+}: SettingFieldProps & { type?: FileUploadProps['type'] }) => {
   const { t } = useLingui();
   const validate = isRequired ? required(null) : undefined;
   const [filename, setFilename] = useState('');

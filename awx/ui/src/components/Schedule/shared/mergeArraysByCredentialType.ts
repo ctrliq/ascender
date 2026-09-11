@@ -1,4 +1,4 @@
-import type { Credential } from 'types/api';
+import type { LaunchCredential } from 'types/api';
 
 /**
  * Merges a schedule's own credentials over the ones its template supplies.
@@ -14,10 +14,10 @@ import type { Credential } from 'types/api';
  *   One credential per type, the override winning wherever there is one.
  */
 export default function mergeArraysByCredentialType(
-  defaultCredentials: Credential[] = [],
-  overrides: Credential[] = []
+  defaultCredentials: LaunchCredential[] | null = [],
+  overrides: LaunchCredential[] = []
 ) {
-  const mergedArray = [...defaultCredentials];
+  const mergedArray = [...(defaultCredentials ?? [])];
 
   overrides.forEach((override) => {
     const index = mergedArray.findIndex(

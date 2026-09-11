@@ -147,8 +147,8 @@ function checkForError(
       const isNumeric = ['integer', 'float'].includes(question.type ?? '');
       if (isTextField && (value || value === 0)) {
         if (
-          (question.min !== undefined && value.length < question.min) ||
-          (question.max !== undefined && value.length > question.max)
+          (question.min != null && value.length < question.min) ||
+          (question.max != null && value.length > question.max)
         ) {
           hasError = true;
         }

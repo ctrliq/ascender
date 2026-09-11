@@ -220,8 +220,8 @@ function CredentialsStep({
     removeItem,
     canDelete,
   }: {
-    item: LaunchCredential;
-    removeItem: (item: LaunchCredential) => void;
+    item: LookupItem;
+    removeItem: (item: LookupItem) => void;
     canDelete: boolean;
   }) => (
     <CredentialChip
@@ -229,7 +229,7 @@ function CredentialsStep({
       key={item.id}
       onClick={() => removeItem(item)}
       isReadOnly={!canDelete}
-      credential={item}
+      credential={item as LaunchCredential}
       ouiaId={`credential-chip-${item.id}`}
     />
   );

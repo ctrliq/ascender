@@ -1,5 +1,12 @@
 import type { SurveyConfig, LaunchConfig } from 'components/LaunchPrompt/types';
-import type { Schedule, Untyped } from 'types/api';
+import type {
+  LaunchCredential,
+  Label,
+  NodeTemplate,
+  Schedule,
+  SummaryFieldRef,
+  SurveyQuestion,
+} from 'types/api';
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { DateTime } from 'luxon';
 import { useLingui } from '@lingui/react/macro';
@@ -39,13 +46,25 @@ const defaultSchedule: Schedule = {} as Schedule;
 export interface ScheduleFormProps {
   hasDaysToKeepField?: boolean;
   handleCancel: () => void;
-  handleSubmit: (values: Untyped, ...rest: Untyped[]) => void;
+  /**
+   * The add and edit screens each need a different part of what the form
+   * gathered: the edit one diffs the labels, groups and credentials the
+   * schedule already had against what the prompt now holds.
+   */
+  handleSubmit: (
+    values: ScheduleFormValues,
+    launchConfiguration?: LaunchConfig,
+    surveyConfiguration?: SurveyConfig | null,
+    originalInstanceGroups?: SummaryFieldRef[],
+    originalLabels?: Label[],
+    scheduleCredentials?: LaunchCredential[]
+  ) => void;
   schedule?: Schedule;
   submitError?: unknown;
-  resource: Untyped;
+  resource: NodeTemplate;
   launchConfig?: LaunchConfig;
   surveyConfig?: SurveyConfig | null;
-  resourceDefaultCredentials?: Untyped;
+  resourceDefaultCredentials?: LaunchCredential[] | null;
   [key: string]: unknown;
 }
 
@@ -63,8 +82,8 @@ function ScheduleForm({
   const { t } = useLingui();
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [isSaveDisabled, setIsSaveDisabled] = useState(false);
-  const originalLabels = useRef<Untyped[]>([]);
-  const originalInstanceGroups = useRef<Untyped[]>([]);
+  const originalLabels = useRef<Label[]>([]);
+  const originalInstanceGroups = useRef<SummaryFieldRef[]>([]);
 
   let rruleError;
   const now = DateTime.now();
@@ -84,9 +103,9 @@ function ScheduleForm({
     useCallback(async () => {
       const { data } = await SchedulesAPI.readZoneInfo();
 
-      let creds: Untyped[] = [];
-      let allLabels: Untyped[] = [];
-      let allInstanceGroups: Untyped[] = [];
+      let creds: LaunchCredential[] = [];
+      let allLabels: Label[] = [];
+      let allInstanceGroups: SummaryFieldRef[] = [];
       if (schedule.id) {
         if (
           resource.type === 'job_template' &&
@@ -117,7 +136,7 @@ function ScheduleForm({
           if (launchConfig?.ask_labels_on_launch) {
             const {
               data: { results },
-            } = await JobTemplatesAPI.readAllLabels(resource.id);
+            } = await JobTemplatesAPI.readAllLabels(resource.id as number);
             allLabels = results;
           }
         }
@@ -127,7 +146,9 @@ function ScheduleForm({
         ) {
           const {
             data: { results },
-          } = await WorkflowJobTemplatesAPI.readAllLabels(resource.id);
+          } = await WorkflowJobTemplatesAPI.readAllLabels(
+            resource.id as number
+          );
           allLabels = results;
         }
       }
@@ -174,7 +195,7 @@ function ScheduleForm({
   const hasMissingSurveyValue = useCallback(() => {
     let missingValues = false;
     if (launchConfig?.survey_enabled) {
-      surveyConfig?.spec?.forEach((question: Untyped) => {
+      surveyConfig?.spec?.forEach((question: SurveyQuestion) => {
         const hasDefaultValue = Boolean(question.default);
         const hasSchedule = Object.keys(schedule).length;
         const isRequired = question.required;
@@ -209,20 +230,22 @@ function ScheduleForm({
   const hasCredentialsThatPrompt = useCallback(() => {
     if (launchConfig?.ask_credential_on_launch) {
       if (Object.keys(schedule).length > 0) {
-        const defaultCredsWithoutOverrides: Untyped[] = [];
+        const defaultCredsWithoutOverrides: LaunchCredential[] = [];
 
-        const credentialHasOverride = (templateDefaultCred: Untyped) => {
+        const credentialHasOverride = (
+          templateDefaultCred: LaunchCredential
+        ) => {
           let hasOverride = false;
-          credentials.forEach((nodeCredential: Untyped) => {
+          credentials.forEach((nodeCredential) => {
             if (
               templateDefaultCred.credential_type ===
               nodeCredential.credential_type
             ) {
               if (
                 (!templateDefaultCred.vault_id &&
-                  !nodeCredential.inputs.vault_id) ||
+                  !nodeCredential.inputs?.vault_id) ||
                 (templateDefaultCred.vault_id &&
-                  nodeCredential.inputs.vault_id &&
+                  nodeCredential.inputs?.vault_id &&
                   templateDefaultCred.vault_id ===
                     nodeCredential.inputs.vault_id)
               ) {
@@ -235,7 +258,7 @@ function ScheduleForm({
         };
 
         if (resourceDefaultCredentials) {
-          resourceDefaultCredentials.forEach((defaultCred: unknown) => {
+          resourceDefaultCredentials.forEach((defaultCred) => {
             if (!credentialHasOverride(defaultCred)) {
               defaultCredsWithoutOverrides.push(defaultCred);
             }
@@ -245,14 +268,16 @@ function ScheduleForm({
         return (
           credentials
             .concat(defaultCredsWithoutOverrides)
-            .filter((credential: Untyped) => {
+            .filter((credential) => {
               let credentialRequiresPass = false;
 
-              Object.entries(credential.inputs).forEach(([key, value]) => {
-                if (key !== 'vault_id' && value === 'ASK') {
-                  credentialRequiresPass = true;
+              Object.entries(credential.inputs ?? {}).forEach(
+                ([key, value]) => {
+                  if (key !== 'vault_id' && value === 'ASK') {
+                    credentialRequiresPass = true;
+                  }
                 }
-              });
+              );
 
               return credentialRequiresPass;
             }).length > 0
@@ -261,7 +286,7 @@ function ScheduleForm({
 
       return launchConfig?.defaults?.credentials
         ? (launchConfig.defaults?.credentials ?? []).filter(
-            (credential: Untyped) => credential?.passwords_needed?.length
+            (credential) => credential?.passwords_needed?.length
           ).length > 0
         : false;
     }

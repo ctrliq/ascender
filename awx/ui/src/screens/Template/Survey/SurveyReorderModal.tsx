@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SurveyConfig, SurveyQuestion } from 'types/api';
 import React, { useState, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { GripVerticalIcon } from '@patternfly/react-icons';
@@ -17,10 +17,11 @@ import { Modal } from '@patternfly/react-core/deprecated';
 import { Table, Thead, Tbody, Tr, Th, Td } from '@patternfly/react-table';
 
 export interface SurveyReorderModalProps {
-  questions: Untyped;
+  questions: SurveyQuestion[];
   isOrderModalOpen: boolean;
-  onCloseOrderModal: (...args: Untyped[]) => void;
-  onSave: (values?: Untyped, config?: Untyped) => void;
+  onCloseOrderModal: () => void;
+  /** Saves the survey back with its questions in the order just dragged. */
+  onSave: (questions: SurveyQuestion[], config?: SurveyConfig) => void;
   [key: string]: unknown;
 }
 
@@ -33,11 +34,17 @@ function SurveyReorderModal({
   const { t } = useLingui();
   const [surveyQuestions, setSurveyQuestions] = useState([...questions]);
   const [itemStartIndex, setStartItemIndex] = useState<number | null>(null);
-  const [draggedItemId, setDraggedItemId] = useState(null);
-  const ref = useRef<Untyped>(null);
+  const [draggedItemId, setDraggedItemId] = useState<string | null>(null);
+  const ref = useRef<HTMLTableSectionElement>(null);
 
-  const isValidDrop = (evt: Untyped) => {
-    const ulRect = ref.current.getBoundingClientRect();
+  // The rows are dragged within the table body, which is what bounds the drop.
+  const rows = () => Array.from(ref.current?.children ?? []);
+
+  const isValidDrop = (evt: React.DragEvent) => {
+    const ulRect = ref.current?.getBoundingClientRect();
+    if (!ulRect) {
+      return false;
+    }
     return (
       evt.clientX > ulRect.x &&
       evt.clientX < ulRect.x + ulRect.width &&
@@ -45,29 +52,30 @@ function SurveyReorderModal({
       evt.clientY < ulRect.y + ulRect.height
     );
   };
-  const onDrop = (evt: Untyped) => {
+  const onDrop = (evt: React.DragEvent) => {
     if (!isValidDrop(evt)) {
       onDragCancel();
     }
   };
 
   const onDragCancel = () => {
-    Array.from(ref.current.children).forEach((el: Untyped) => {
+    rows().forEach((el) => {
       el.setAttribute('aria-pressed', 'false');
     });
     setDraggedItemId(null);
     setStartItemIndex(null);
   };
 
-  const onDragOver = (evt: Untyped) => {
+  const onDragOver = (evt: React.DragEvent) => {
     evt.preventDefault();
 
-    const curListItem = evt.target.closest('tr');
+    const curListItem = (evt.target as HTMLElement).closest('tr');
+    if (!curListItem) {
+      return null;
+    }
 
     const dragId = curListItem.id;
-    const newDraggedItemIndex = Array.from(ref.current.children).findIndex(
-      (item: Untyped) => item.id === dragId
-    );
+    const newDraggedItemIndex = rows().findIndex((item) => item.id === dragId);
 
     if (newDraggedItemIndex !== itemStartIndex) {
       const temporaryOrder = moveItem(
@@ -81,39 +89,41 @@ function SurveyReorderModal({
     return null;
   };
 
-  const moveItem = (arr: Untyped, itemId: Untyped, toIndex: Untyped) => {
-    const fromIndex = arr.findIndex(
-      (item: Untyped) => item.variable === itemId
-    );
+  const moveItem = (
+    arr: SurveyQuestion[],
+    itemId: string | null,
+    toIndex: number
+  ) => {
+    const fromIndex = arr.findIndex((item) => item.variable === itemId);
 
     if (fromIndex === toIndex) {
       return arr;
     }
     const temp = arr.splice(fromIndex, 1);
-    arr.splice(toIndex, 0, temp[0]);
+    arr.splice(toIndex, 0, temp[0] as SurveyQuestion);
 
     return arr;
   };
 
-  const onDragLeave = (evt: Untyped) => {
+  const onDragLeave = (evt: React.DragEvent) => {
     if (!isValidDrop(evt)) {
       setStartItemIndex(null);
     }
   };
 
-  const onDragEnd = (evt: Untyped) => {
-    evt.target.setAttribute('aria-pressed', 'false');
+  const onDragEnd = (evt: React.DragEvent) => {
+    (evt.target as HTMLElement).setAttribute('aria-pressed', 'false');
 
     setDraggedItemId(null);
     setStartItemIndex(null);
   };
 
-  const onDragStart = (evt: Untyped) => {
+  const onDragStart = (evt: React.DragEvent<HTMLTableRowElement>) => {
     evt.dataTransfer.effectAllowed = 'move';
     const newDraggedItemId = evt.currentTarget.id;
 
-    const originalStartIndex = Array.from(ref.current.children).findIndex(
-      (item: Untyped) => item.id === evt.currentTarget.id
+    const originalStartIndex = rows().findIndex(
+      (item) => item.id === newDraggedItemId
     );
 
     evt.currentTarget.setAttribute('aria-pressed', 'true');
@@ -121,7 +131,10 @@ function SurveyReorderModal({
     setStartItemIndex(originalStartIndex);
   };
 
-  const defaultAnswer = (q: Untyped) => {
+  const defaultAnswer = (q: SurveyQuestion) => {
+    // A question's default is whatever its type takes, so the preview shows it
+    // as text; a multiselect keeps several on their own lines.
+    const answer = String(q.default ?? '');
     let component = null;
     const choices = Array.isArray(q.choices)
       ? q.choices
@@ -139,7 +152,7 @@ function SurveyReorderModal({
           <TextArea
             id={`survey-preview-textArea-${q.variable}`}
             type={`survey-preview-textArea-${q.variable}`}
-            value={q.default}
+            value={answer}
             aria-label={t`Text Area`}
             isDisabled
           />
@@ -158,13 +171,13 @@ function SurveyReorderModal({
                 aria-label={t`Multiple Choice`}
                 ouiaId={`survey-preview-multipleChoice-${q.variable}`}
               >
-                {q.default || t`Select an option`}
+                {answer || t`Select an option`}
               </MenuToggle>
             )}
           >
             <SelectList>
               {choices.length > 0 &&
-                choices.map((option: Untyped) => (
+                choices.map((option: string) => (
                   <SelectOption key={option} value={option}>
                     {option}
                   </SelectOption>
@@ -187,9 +200,9 @@ function SurveyReorderModal({
                 aria-label={t`Multi-Select`}
                 ouiaId={`survey-preview-multiSelect-${q.variable}`}
               >
-                {q.default.length > 0 ? (
+                {answer.length > 0 ? (
                   <LabelGroup>
-                    {q.default.split('\n').map((val: Untyped) => (
+                    {answer.split('\n').map((val) => (
                       <Label key={val}>{val}</Label>
                     ))}
                   </LabelGroup>
@@ -201,7 +214,7 @@ function SurveyReorderModal({
           >
             <SelectList>
               {choices.length > 0 &&
-                choices.map((option: Untyped) => (
+                choices.map((option: string) => (
                   <SelectOption key={option} value={option}>
                     {option}
                   </SelectOption>
@@ -214,7 +227,7 @@ function SurveyReorderModal({
         component = (
           <TextInput
             id={`survey-preview-text-${q.variable}`}
-            value={q.default}
+            value={answer}
             isDisabled
             aria-label={t`Text`}
           />

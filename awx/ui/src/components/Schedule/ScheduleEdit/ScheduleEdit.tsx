@@ -1,9 +1,13 @@
+import type { SurveyQuestion } from 'components/LaunchPrompt/types';
 import type {
-  SurveyConfig,
+  Label,
   LaunchConfig,
-  SurveyQuestion,
-} from 'components/LaunchPrompt/types';
-import type { Schedule, Untyped } from 'types/api';
+  LaunchCredential,
+  NodeTemplate,
+  Schedule,
+  SummaryFieldRef,
+  SurveyConfig,
+} from 'types/api';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Card } from '@patternfly/react-core';
@@ -23,10 +27,10 @@ import type { ScheduleFormValues } from '../shared/types';
 export interface ScheduleEditProps {
   hasDaysToKeepField?: boolean;
   schedule: Schedule;
-  resource: Untyped;
+  resource: NodeTemplate;
   launchConfig?: LaunchConfig;
   surveyConfig?: SurveyConfig | null;
-  resourceDefaultCredentials: Untyped;
+  resourceDefaultCredentials?: LaunchCredential[] | null;
   [key: string]: unknown;
 }
 
@@ -45,12 +49,12 @@ function ScheduleEdit({
   const pathRoot = pathname.substring(0, pathname.indexOf('schedules'));
 
   const handleSubmit = async (
-    values: Record<string, unknown>,
-    launchConfiguration: Untyped,
-    surveyConfiguration: Untyped,
-    originalInstanceGroups: Untyped[],
-    originalLabels: Untyped[],
-    scheduleCredentials = []
+    values: ScheduleFormValues,
+    launchConfiguration?: LaunchConfig,
+    surveyConfiguration?: SurveyConfig | null,
+    originalInstanceGroups: SummaryFieldRef[] = [],
+    originalLabels: Label[] = [],
+    scheduleCredentials: LaunchCredential[] = []
   ) => {
     const {
       execution_environment,
@@ -64,10 +68,10 @@ function ScheduleEdit({
       timezone,
       labels,
       ...rest
-    } = values as ScheduleFormValues & Record<string, Untyped>;
+    } = values;
     // What is left of the form values is the request body, which the handler
     // then adds the derived rrule and extra_data to.
-    const submitValues: Record<string, Untyped> = rest;
+    const submitValues: Record<string, unknown> = rest;
     let extraVars;
     const surveyValues = getSurveyValues(values);
 
@@ -125,7 +129,7 @@ function ScheduleEdit({
       }
 
       const ruleSet = buildRuleSet(values as ScheduleFormValues);
-      const requestData: Record<string, Untyped> = {
+      const requestData: Record<string, unknown> = {
         ...submitValues,
         rrule: ruleSet.toString().replace(/\n/g, ' '),
       };
@@ -138,10 +142,13 @@ function ScheduleEdit({
             days: values.daysToKeep,
           });
         } else {
-          if (typeof requestData.extra_data === 'string') {
-            requestData.extra_data = JSON.parse(requestData.extra_data);
-          }
-          requestData.extra_data.days = values.daysToKeep;
+          const extraData = (
+            typeof requestData.extra_data === 'string'
+              ? JSON.parse(requestData.extra_data)
+              : requestData.extra_data
+          ) as Record<string, unknown>;
+          extraData.days = values.daysToKeep;
+          requestData.extra_data = extraData;
         }
       }
 
@@ -152,7 +159,7 @@ function ScheduleEdit({
       const { added: addedCredentials, removed: removedCredentials } =
         getAddedAndRemoved(
           [
-            ...(resource?.summary_fields.credentials || []),
+            ...(resource?.summary_fields?.credentials ?? []),
             ...scheduleCredentials,
           ],
           credentials
@@ -160,7 +167,7 @@ function ScheduleEdit({
 
       const { added: addedLabels, removed: removedLabels } = getAddedAndRemoved(
         originalLabels,
-        labels as Untyped[]
+        labels ?? []
       );
 
       let organizationId = resource.organization;
@@ -181,15 +188,15 @@ function ScheduleEdit({
         ...addedCredentials.map(({ id }) =>
           SchedulesAPI.associateCredential(scheduleId, id)
         ),
-        ...removedLabels.map((label: Untyped) =>
+        ...removedLabels.map((label) =>
           SchedulesAPI.disassociateLabel(scheduleId, label)
         ),
-        ...addedLabels.map((label: Untyped) =>
-          SchedulesAPI.associateLabel(scheduleId, label, organizationId)
+        ...addedLabels.map((label) =>
+          SchedulesAPI.associateLabel(scheduleId, label, organizationId ?? null)
         ),
         SchedulesAPI.orderInstanceGroups(
           scheduleId,
-          (instance_groups || []) as Untyped[],
+          instance_groups ?? [],
           originalInstanceGroups
         ),
       ]);
