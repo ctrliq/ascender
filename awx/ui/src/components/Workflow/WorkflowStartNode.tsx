@@ -45,8 +45,12 @@ function WorkflowStartNode({
   const ref = useRef<SVGGraphicsElement>(null);
   const startNodeRef = useRef<HTMLDivElement>(null);
   const [hovering, setHovering] = useState(false);
-  const dispatch = useContext(WorkflowDispatchContext) as React.Dispatch<WorkflowAction>;
-  const { addingLink, nodePositions } = useContext(WorkflowStateContext) as WorkflowState;
+  const dispatch = useContext(
+    WorkflowDispatchContext
+  ) as React.Dispatch<WorkflowAction>;
+  const { addingLink, nodePositions } = useContext(
+    WorkflowStateContext
+  ) as WorkflowState;
 
   if (!nodePositions || !nodePositions[1]) {
     return null;

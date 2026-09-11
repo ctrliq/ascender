@@ -153,9 +153,8 @@ function RelatedTemplateList({
       resource_id: id ?? null,
       resource_name: resourceName as string,
       resource_type:
-        resources[
-          location.pathname.split('/')[1] as keyof typeof resources
-        ] ?? null,
+        resources[location.pathname.split('/')[1] as keyof typeof resources] ??
+        null,
       resource_kind: null,
     };
     if (Array.isArray(resourceName)) {

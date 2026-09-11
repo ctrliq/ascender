@@ -16,7 +16,11 @@ export interface WorkflowDenyButtonProps {
   [key: string]: unknown;
 }
 
-function WorkflowDenyButton({ isDetailView, workflowApproval, onHandleToast }: WorkflowDenyButtonProps) {
+function WorkflowDenyButton({
+  isDetailView,
+  workflowApproval,
+  onHandleToast,
+}: WorkflowDenyButtonProps) {
   const { t } = useLingui();
   const hasBeenActedOn =
     Object.keys(workflowApproval.summary_fields.approved_or_denied_by || {})
@@ -26,10 +30,7 @@ function WorkflowDenyButton({ isDetailView, workflowApproval, onHandleToast }: W
 
   const { id } = workflowApproval;
   const { error: denyApprovalError, request: denyWorkflowApprovals } =
-    useRequest(
-      useCallback(async () => WorkflowApprovalsAPI.deny(id), [id]),
-      {}
-    );
+    useRequest(useCallback(async () => WorkflowApprovalsAPI.deny(id), [id]));
 
   const handleDeny = async () => {
     await denyWorkflowApprovals();

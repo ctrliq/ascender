@@ -16,6 +16,13 @@ const SplitLabelItem = styled(SplitItem)`
   word-break: initial;
 `;
 
+/** What a chip renderer is handed for one selected item. */
+export interface SelectedItemChip {
+  item: Untyped;
+  removeItem: () => void;
+  canDelete: boolean;
+}
+
 export interface SelectedListProps {
   label?: React.ReactNode;
   selected: unknown[];
@@ -23,11 +30,7 @@ export interface SelectedListProps {
   displayKey?: string;
   isReadOnly?: boolean;
   /** Lets a caller render its own chip per item, a credential chip say. */
-  renderItemChip?: (props: {
-    item: Untyped;
-    removeItem: () => void;
-    canDelete: boolean;
-  }) => React.ReactNode;
+  renderItemChip?: (props: SelectedItemChip) => React.ReactNode;
   [key: string]: unknown;
 }
 
@@ -41,14 +44,7 @@ function SelectedList({
 }: SelectedListProps) {
   const renderChip =
     renderItemChip ||
-    (({
-      item,
-      removeItem,
-    }: {
-      item: Untyped;
-      removeItem: () => void;
-      canDelete: boolean;
-    }) => (
+    (({ item, removeItem }: Pick<SelectedItemChip, 'item' | 'removeItem'>) => (
       <Label variant="outline" key={item.id} onClose={removeItem}>
         {item[displayKey]}
       </Label>

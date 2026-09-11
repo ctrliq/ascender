@@ -1,14 +1,14 @@
 // The d3 the worker uses arrives through importScripts at runtime, from the
-// standalone d3-collection build rather than from the package @types/d3
-// describes, so it is named separately here rather than declared as a global.
-type WorkerD3 = {
+// standalone d3-force build rather than from the package @types/d3 describes,
+// so it is named separately here rather than declared as a global.
+interface WorkerD3 {
   forceSimulation: (nodes: unknown[]) => any;
   forceManyBody: (n?: number) => any;
   forceLink: (links: unknown[]) => any;
   forceCollide: (n: number) => any;
   forceX: (n: number) => any;
   forceY: (n: number) => any;
-};
+}
 declare function importScripts(...urls: string[]): void;
 
 // Absolute rather than relative to this file. These five live in
@@ -22,17 +22,21 @@ importScripts('/static/js/d3-quadtree.v1.min.js');
 importScripts('/static/js/d3-timer.v1.min.js');
 importScripts('/static/js/d3-force.v1.min.js');
 
+// `self` is the worker's own global scope, which is where those five leave d3.
+// eslint-disable-next-line no-restricted-globals
+const workerD3 = (self as unknown as { d3: WorkerD3 }).d3;
+
 onmessage = function calculateLayout({ data: { nodes, links } }) {
-  const simulation = d3
+  const simulation = workerD3
     .forceSimulation(nodes)
-    .force('charge', (self as unknown as { d3: WorkerD3 }).d3.forceManyBody(15).strength(-50))
+    .force('charge', workerD3.forceManyBody(15).strength(-50))
     .force(
       'link',
-      (self as unknown as { d3: WorkerD3 }).d3.forceLink(links).id((d: { hostname: string }) => d.hostname)
+      workerD3.forceLink(links).id((d: { hostname: string }) => d.hostname)
     )
-    .force('collide', (self as unknown as { d3: WorkerD3 }).d3.forceCollide(62))
-    .force('forceX', (self as unknown as { d3: WorkerD3 }).d3.forceX(0))
-    .force('forceY', (self as unknown as { d3: WorkerD3 }).d3.forceY(0))
+    .force('collide', workerD3.forceCollide(62))
+    .force('forceX', workerD3.forceX(0))
+    .force('forceY', workerD3.forceY(0))
     .stop();
 
   for (

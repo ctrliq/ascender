@@ -52,7 +52,7 @@ function PreviewStep({
       // Empty string when the launch config does not prompt for variables,
       // which is what mergeExtraVars treats as no overrides.
       const initialExtraVars: string = launchConfig.ask_variables_on_launch
-        ? ((overrides.extra_vars as string) || '---')
+        ? (overrides.extra_vars as string) || '---'
         : '';
       if (surveyConfig?.spec) {
         const passwordFields = surveyConfig.spec

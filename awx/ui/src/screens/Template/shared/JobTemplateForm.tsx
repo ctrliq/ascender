@@ -1,0 +1,818 @@
+import type { Untyped } from 'types/api';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useLingui } from '@lingui/react/macro';
+
+import { withFormik, useField } from 'formik';
+import type { FormikErrors } from 'formik';
+import {
+  Form,
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+  Switch,
+  Checkbox,
+  TextInput,
+  Title,
+} from '@patternfly/react-core';
+import ContentError from 'components/ContentError';
+import ContentLoading from 'components/ContentLoading';
+import AnsibleSelect from 'components/AnsibleSelect';
+import { TagMultiSelect } from 'components/MultiSelect';
+import useRequest from 'hooks/useRequest';
+import useBrandName from 'hooks/useBrandName';
+import FormActionGroup from 'components/FormActionGroup';
+import FormField, {
+  CheckboxField,
+  FormSubmitError,
+} from 'components/FormField';
+import FieldWithPrompt from 'components/FieldWithPrompt';
+import {
+  FormColumnLayout,
+  FormFullWidthLayout,
+  FormCheckboxLayout,
+  SubFormLayout,
+} from 'components/FormLayout';
+import { VariablesField } from 'components/CodeEditor';
+import { required, combine, maxLength } from 'util/validators';
+import {
+  InventoryLookup,
+  InstanceGroupsLookup,
+  ProjectLookup,
+  MultiCredentialsLookup,
+  ExecutionEnvironmentLookup,
+} from 'components/Lookup';
+import Popover from 'components/Popover';
+import { JobTemplatesAPI } from 'api';
+import useIsMounted from 'hooks/useIsMounted';
+import LabelSelect from 'components/LabelSelect';
+import { VerbositySelectField } from 'components/VerbositySelectField';
+import PlaybookSelect from './PlaybookSelect';
+import WebhookSubForm from './WebhookSubForm';
+import getHelpText from './JobTemplate.helptext';
+
+const { origin } = document.location;
+
+// Stable default so it doesn't change identity each render (it feeds a
+// useCallback dependency below); previously this lived in defaultProps.
+const defaultTemplate = {
+  name: '',
+  description: '',
+  job_type: 'run',
+  inventory: undefined,
+  project: undefined,
+  playbook: '',
+  scm_branch: '',
+  summary_fields: {
+    inventory: null,
+    labels: { results: [] },
+    project: null,
+    credentials: [],
+  },
+  isNew: true,
+};
+
+export interface JobTemplateFormProps {
+  template?: Untyped;
+  handleCancel?: (...args: Untyped[]) => void;
+  handleSubmit: (...args: Untyped[]) => void;
+  /** Injected by the formik wrapper below, never by a caller. */
+  setFieldValue?: Untyped;
+  setFieldTouched?: Untyped;
+  validateField?: Untyped;
+  submitError?: Untyped;
+  isOverrideDisabledLookup?: boolean;
+  [key: string]: unknown;
+}
+
+function JobTemplateForm({
+  template = defaultTemplate,
+  handleCancel,
+  handleSubmit,
+  setFieldValue,
+  setFieldTouched,
+  submitError = null,
+  validateField,
+  isOverrideDisabledLookup = false, // TODO: this is a confusing variable name
+}: JobTemplateFormProps) {
+  const { t } = useLingui();
+  const helpText = getHelpText();
+  const [contentError, setContentError] = useState(false);
+  const [allowCallbacks, setAllowCallbacks] = useState(
+    Boolean(template?.host_config_key)
+  );
+  const [enableWebhooks, setEnableWebhooks] = useState(
+    Boolean(template?.webhook_service)
+  );
+  const isMounted = useIsMounted();
+  const brandName = useBrandName();
+
+  const [askInventoryOnLaunchField] = useField('ask_inventory_on_launch');
+  const [jobTypeField, jobTypeMeta, jobTypeHelpers] = useField({
+    name: 'job_type',
+    validate: required(null),
+  });
+  const [inventoryField, inventoryMeta, inventoryHelpers] =
+    useField('inventory');
+  const [projectField, projectMeta, projectHelpers] = useField('project');
+  const [scmField, , scmHelpers] = useField('scm_branch');
+  const [playbookField, playbookMeta, playbookHelpers] = useField({
+    name: 'playbook',
+    validate: required(null),
+  });
+  const [credentialField, , credentialHelpers] = useField('credentials');
+  const [labelsField, , labelsHelpers] = useField('labels');
+  const [limitField, limitMeta, limitHelpers] = useField('limit');
+  const [forksField, forksMeta, forksHelpers] = useField('forks');
+  const [jobSliceCountField, jobSliceCountMeta, jobSliceCountHelpers] =
+    useField('job_slice_count');
+  const [timeoutField, timeoutMeta, timeoutHelpers] = useField('timeout');
+  const [diffModeField, , diffModeHelpers] = useField('diff_mode');
+  const [instanceGroupsField, , instanceGroupsHelpers] =
+    useField('instanceGroups');
+  const [jobTagsField, , jobTagsHelpers] = useField('job_tags');
+  const [skipTagsField, , skipTagsHelpers] = useField('skip_tags');
+
+  const [, webhookServiceMeta, webhookServiceHelpers] =
+    useField('webhook_service');
+  const [, webhookUrlMeta, webhookUrlHelpers] = useField('webhook_url');
+  const [, webhookKeyMeta, webhookKeyHelpers] = useField('webhook_key');
+  const [, webhookCredentialMeta, webhookCredentialHelpers] =
+    useField('webhook_credential');
+
+  const [
+    executionEnvironmentField,
+    executionEnvironmentMeta,
+    executionEnvironmentHelpers,
+  ] = useField('execution_environment');
+
+  const {
+    request: loadRelatedInstanceGroups,
+    error: instanceGroupError,
+    isLoading: instanceGroupLoading,
+  } = useRequest(
+    useCallback(async () => {
+      if (!template?.id) {
+        return;
+      }
+      const { data } = await JobTemplatesAPI.readInstanceGroups(template.id);
+      if (isMounted.current) {
+        setFieldValue('initialInstanceGroups', data.results);
+        setFieldValue('instanceGroups', [...data.results]);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [setFieldValue, template]),
+    {
+      isLoading: true,
+    }
+  );
+
+  useEffect(() => {
+    loadRelatedInstanceGroups();
+  }, [loadRelatedInstanceGroups]);
+
+  useEffect(() => {
+    if (enableWebhooks) {
+      webhookServiceHelpers.setValue(webhookServiceMeta.initialValue);
+      webhookUrlHelpers.setValue(webhookUrlMeta.initialValue);
+      webhookKeyHelpers.setValue(webhookKeyMeta.initialValue);
+      webhookCredentialHelpers.setValue(webhookCredentialMeta.initialValue);
+    } else {
+      webhookServiceHelpers.setValue('');
+      webhookUrlHelpers.setValue('');
+      webhookKeyHelpers.setValue('');
+      webhookCredentialHelpers.setValue(null);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [enableWebhooks]);
+
+  const handleProjectValidation = (project: Untyped) => {
+    if (!project) {
+      return t`This field must not be blank`;
+    }
+    if (project?.status === 'never updated') {
+      return t`This Project needs to be updated`;
+    }
+    return undefined;
+  };
+
+  const handleProjectUpdate = useCallback(
+    (value: Untyped) => {
+      setFieldValue('project', value);
+      setFieldValue('playbook', '', false);
+      setFieldValue('scm_branch', '', false);
+      setFieldTouched('project', true, false);
+    },
+    [setFieldValue, setFieldTouched]
+  );
+
+  const handleInventoryValidation = (inventory: Untyped) => {
+    if (!inventory && !askInventoryOnLaunchField.value) {
+      return t`Please select an Inventory or check the Prompt on Launch option`;
+    }
+    return undefined;
+  };
+
+  const handleInventoryUpdate = useCallback(
+    (value: Untyped) => {
+      setFieldValue('inventory', value);
+      setFieldTouched('inventory', true, false);
+    },
+    [setFieldValue, setFieldTouched]
+  );
+
+  const handleExecutionEnvironmentUpdate = useCallback(
+    (value: Untyped) => {
+      setFieldValue('execution_environment', value);
+      setFieldTouched('execution_environment', true, false);
+    },
+    [setFieldValue, setFieldTouched]
+  );
+
+  const handlePlaybookUpdate = useCallback(
+    (value: Untyped) => {
+      setFieldValue('playbook', value);
+      setFieldTouched('playbook', true, false);
+    },
+    [setFieldValue, setFieldTouched]
+  );
+
+  useEffect(() => {
+    validateField('inventory');
+  }, [askInventoryOnLaunchField.value, validateField]);
+
+  const jobTypeOptions = [
+    {
+      value: '',
+      key: '',
+      label: t`Choose a job type`,
+      isDisabled: true,
+    },
+    { value: 'run', key: 'run', label: t`Run`, isDisabled: false },
+    {
+      value: 'check',
+      key: 'check',
+      label: t`Check`,
+      isDisabled: false,
+    },
+  ];
+  let callbackUrl;
+  if (template?.related) {
+    const path = template.related.callback || `${template.url}callback`;
+    callbackUrl = `${origin}${path}`;
+  }
+
+  if (instanceGroupLoading) {
+    return <ContentLoading />;
+  }
+
+  if (contentError || instanceGroupError) {
+    return <ContentError error={contentError || instanceGroupError} />;
+  }
+
+  return (
+    <Form autoComplete="off" onSubmit={handleSubmit}>
+      <FormColumnLayout>
+        <FormField
+          id="template-name"
+          name="name"
+          type="text"
+          label={t`Name`}
+          validate={combine([required(null), maxLength(512)])}
+          isRequired
+        />
+        <FormField
+          id="template-description"
+          name="description"
+          type="text"
+          label={t`Description`}
+        />
+        <FieldWithPrompt
+          fieldId="template-job-type"
+          isRequired
+          label={t`Job Type`}
+          promptId="template-ask-job-type-on-launch"
+          promptName="ask_job_type_on_launch"
+          tooltip={helpText.jobType}
+        >
+          <AnsibleSelect
+            {...jobTypeField}
+            isValid={!jobTypeMeta.touched || !jobTypeMeta.error}
+            id="template-job-type"
+            data={jobTypeOptions}
+            onChange={(event, value) => {
+              jobTypeHelpers.setValue(value);
+            }}
+          />
+        </FieldWithPrompt>
+        <FormGroup
+          fieldId="template-inventory"
+          isRequired={!askInventoryOnLaunchField.value}
+        >
+          <InventoryLookup
+            fieldId="template-inventory"
+            value={inventoryField.value}
+            promptId="template-ask-inventory-on-launch"
+            promptName="ask_inventory_on_launch"
+            isPromptableField
+            tooltip={helpText.inventory}
+            onBlur={() => inventoryHelpers.setTouched(true)}
+            onChange={handleInventoryUpdate}
+            required={!askInventoryOnLaunchField.value}
+            touched={inventoryMeta.touched}
+            error={inventoryMeta.error}
+            isOverrideDisabled={isOverrideDisabledLookup}
+            validate={handleInventoryValidation}
+          />
+          {inventoryMeta.error && (
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem variant="error">
+                  {inventoryMeta.error}
+                </HelperTextItem>
+              </HelperText>
+            </FormHelperText>
+          )}
+        </FormGroup>
+
+        <ProjectLookup
+          value={projectField.value}
+          onBlur={() => projectHelpers.setTouched(true)}
+          tooltip={helpText.project}
+          isValid={Boolean(
+            !projectMeta.touched || (!projectMeta.error && projectField.value)
+          )}
+          helperTextInvalid={projectMeta.error}
+          onChange={handleProjectUpdate}
+          required
+          autoPopulate={!template?.id}
+          isOverrideDisabled={isOverrideDisabledLookup}
+          validate={handleProjectValidation}
+        />
+
+        <ExecutionEnvironmentLookup
+          helperTextInvalid={executionEnvironmentMeta.error}
+          isValid={
+            !executionEnvironmentMeta.touched || !executionEnvironmentMeta.error
+          }
+          onBlur={() => executionEnvironmentHelpers.setTouched(true)}
+          value={executionEnvironmentField.value}
+          onChange={handleExecutionEnvironmentUpdate}
+          popoverContent={helpText.executionEnvironmentForm}
+          tooltip={t`Select a project before editing the execution environment.`}
+          globallyAvailable
+          isDisabled={!projectField.value?.id}
+          projectId={projectField.value?.id}
+          promptId="template-ask-execution-environment-on-launch"
+          promptName="ask_execution_environment_on_launch"
+          isPromptableField
+        />
+
+        {projectField.value?.allow_override && (
+          <FieldWithPrompt
+            fieldId="template-scm-branch"
+            label={t`Source Control Branch`}
+            promptId="template-ask-scm-branch-on-launch"
+            promptName="ask_scm_branch_on_launch"
+            tooltip={helpText.sourceControlBranch}
+          >
+            <TextInput
+              id="template-scm-branch"
+              onChange={(_event, value) => {
+                scmHelpers.setValue(value);
+              }}
+              value={scmField.value}
+              aria-label={t`source control branch`}
+            />
+          </FieldWithPrompt>
+        )}
+        <FormGroup
+          fieldId="template-playbook"
+          isRequired
+          label={t`Playbook`}
+          labelHelp={<Popover content={helpText.playbook} />}
+        >
+          <PlaybookSelect
+            onChange={handlePlaybookUpdate}
+            projectId={projectField.value?.id}
+            isValid={!playbookMeta.touched || !playbookMeta.error}
+            selected={playbookField.value}
+            onBlur={() => playbookHelpers.setTouched(true)}
+            onError={setContentError}
+          />
+          {playbookMeta.error && (
+            <FormHelperText>
+              <HelperText>
+                <HelperTextItem variant="error">
+                  {playbookMeta.error}
+                </HelperTextItem>
+              </HelperText>
+            </FormHelperText>
+          )}
+        </FormGroup>
+        <FormFullWidthLayout>
+          <FieldWithPrompt
+            fieldId="template-credentials"
+            label={t`Credentials`}
+            promptId="template-ask-credential-on-launch"
+            promptName="ask_credential_on_launch"
+            tooltip={helpText.credentials}
+          >
+            <MultiCredentialsLookup
+              value={credentialField.value}
+              onChange={(newCredentials) =>
+                credentialHelpers.setValue(newCredentials)
+              }
+              onError={setContentError}
+            />
+          </FieldWithPrompt>
+          <FieldWithPrompt
+            fieldId="template-labels"
+            label={t`Labels`}
+            promptId="template-ask-labels-on-launch"
+            promptName="ask_labels_on_launch"
+            tooltip={helpText.labels}
+          >
+            <LabelSelect
+              value={labelsField.value}
+              onChange={(labels) => labelsHelpers.setValue(labels)}
+              onError={setContentError}
+              createText={t`Create`}
+            />
+          </FieldWithPrompt>
+          <VariablesField
+            id="template-variables"
+            name="extra_vars"
+            label={t`Variables`}
+            promptId="template-ask-variables-on-launch"
+            tooltip={helpText.variables}
+          />
+          <FormColumnLayout>
+            <FieldWithPrompt
+              fieldId="template-forks"
+              label={t`Forks`}
+              promptId="template-ask-forks-on-launch"
+              promptName="ask_forks_on_launch"
+              tooltip={helpText.forks}
+            >
+              <TextInput
+                id="template-forks"
+                {...forksField}
+                validated={
+                  !forksMeta.touched || !forksMeta.error ? 'default' : 'error'
+                }
+                onChange={(_event, value) => {
+                  forksHelpers.setValue(value);
+                }}
+                type="number"
+                min="0"
+              />
+            </FieldWithPrompt>
+            <FieldWithPrompt
+              fieldId="template-limit"
+              label={t`Limit`}
+              promptId="template-ask-limit-on-launch"
+              promptName="ask_limit_on_launch"
+              tooltip={helpText.limit}
+            >
+              <TextInput
+                id="template-limit"
+                {...limitField}
+                validated={
+                  !limitMeta.touched || !limitMeta.error ? 'default' : 'error'
+                }
+                onChange={(_event, value) => {
+                  limitHelpers.setValue(value);
+                }}
+              />
+            </FieldWithPrompt>
+            <VerbositySelectField
+              fieldId="template-verbosity"
+              promptId="template-ask-verbosity-on-launch"
+              promptName="ask_verbosity_on_launch"
+              tooltip={helpText.verbosity}
+            />
+            <FieldWithPrompt
+              fieldId="template-job-slicing"
+              label={t`Job Slicing`}
+              promptId="template-ask-job-slicing-on-launch"
+              promptName="ask_job_slice_count_on_launch"
+              tooltip={helpText.jobSlicing}
+            >
+              <TextInput
+                id="template-job-slicing"
+                {...jobSliceCountField}
+                validated={
+                  !jobSliceCountMeta.touched || !jobSliceCountMeta.error
+                    ? 'default'
+                    : 'error'
+                }
+                onChange={(_event, value) => {
+                  jobSliceCountHelpers.setValue(value);
+                }}
+                type="number"
+                min="1"
+              />
+            </FieldWithPrompt>
+            {Number(jobSliceCountField.value) > 1 && (
+              <FormField
+                id="template-job-slice-pinned-hosts"
+                name="job_slice_pinned_hosts"
+                type="text"
+                label={t`Job Slice Pinned Hosts`}
+                tooltip={helpText.jobSlicePinnedHosts}
+              />
+            )}
+            <FieldWithPrompt
+              fieldId="template-timeout"
+              label={t`Timeout`}
+              promptId="template-ask-timeout-on-launch"
+              promptName="ask_timeout_on_launch"
+              tooltip={helpText.timeout}
+            >
+              <TextInput
+                id="template-timeout"
+                {...timeoutField}
+                validated={
+                  !timeoutMeta.touched || !timeoutMeta.error
+                    ? 'default'
+                    : 'error'
+                }
+                onChange={(_event, value) => {
+                  timeoutHelpers.setValue(value);
+                }}
+                type="number"
+                min="0"
+              />
+            </FieldWithPrompt>
+            <FieldWithPrompt
+              fieldId="template-diff-mode"
+              label={t`Show Changes`}
+              promptId="template-ask-diff-mode-on-launch"
+              promptName="ask_diff_mode_on_launch"
+              tooltip={helpText.showChanges}
+            >
+              <Switch
+                id="template-show-changes"
+                label={diffModeField.value ? t`On` : t`Off`}
+                isChecked={diffModeField.value}
+                onChange={(_event, checked) =>
+                  diffModeHelpers.setValue(checked)
+                }
+              />
+            </FieldWithPrompt>
+            <FormFullWidthLayout>
+              <InstanceGroupsLookup
+                value={instanceGroupsField.value}
+                onChange={(value) => instanceGroupsHelpers.setValue(value)}
+                tooltip={helpText.instanceGroups}
+                fieldName="instanceGroups"
+                promptId="template-ask-instance-groups-on-launch"
+                promptName="ask_instance_groups_on_launch"
+                isPromptableField
+              />
+              <FieldWithPrompt
+                fieldId="template-tags"
+                label={t`Job Tags`}
+                promptId="template-ask-tags-on-launch"
+                promptName="ask_tags_on_launch"
+                tooltip={helpText.jobTags}
+              >
+                <TagMultiSelect
+                  value={jobTagsField.value}
+                  onChange={(value) => jobTagsHelpers.setValue(value)}
+                />
+              </FieldWithPrompt>
+              <FieldWithPrompt
+                fieldId="template-skip-tags"
+                label={t`Skip Tags`}
+                promptId="template-ask-skip-tags-on-launch"
+                promptName="ask_skip_tags_on_launch"
+                tooltip={helpText.skipTags}
+              >
+                <TagMultiSelect
+                  value={skipTagsField.value}
+                  onChange={(value) => skipTagsHelpers.setValue(value)}
+                />
+              </FieldWithPrompt>
+              <FormGroup
+                fieldId="template-option-checkboxes"
+                label={t`Options`}
+              >
+                <FormCheckboxLayout>
+                  <CheckboxField
+                    id="option-privilege-escalation"
+                    name="become_enabled"
+                    label={t`Privilege Escalation`}
+                    tooltip={helpText.privilegeEscalation}
+                  />
+                  <Checkbox
+                    aria-label={t`Provisioning Callbacks`}
+                    label={
+                      <span>
+                        {t`Provisioning Callbacks`}
+                        &nbsp;
+                        <Popover
+                          content={helpText.provisioningCallbacks(brandName)}
+                        />
+                      </span>
+                    }
+                    id="option-callbacks"
+                    ouiaId="option-callbacks"
+                    isChecked={allowCallbacks}
+                    onChange={(_event, checked) => {
+                      setAllowCallbacks(checked);
+                    }}
+                  />
+                  <Checkbox
+                    aria-label={t`Enable Webhook`}
+                    label={
+                      <span>
+                        {t`Enable Webhook`}
+                        &nbsp;
+                        <Popover content={helpText.enableWebhook} />
+                      </span>
+                    }
+                    id="wfjt-enabled-webhooks"
+                    ouiaId="wfjt-enabled-webhooks"
+                    isChecked={enableWebhooks}
+                    onChange={(_event, checked) => {
+                      setEnableWebhooks(checked);
+                    }}
+                  />
+                  <CheckboxField
+                    id="option-concurrent"
+                    name="allow_simultaneous"
+                    label={t`Concurrent Jobs`}
+                    tooltip={helpText.concurrentJobs}
+                  />
+                  <CheckboxField
+                    id="option-fact-cache"
+                    name="use_fact_cache"
+                    label={t`Enable Fact Storage`}
+                    tooltip={helpText.enableFactStorage}
+                  />
+                  <CheckboxField
+                    id="option-prevent-instance-group-fallback"
+                    name="prevent_instance_group_fallback"
+                    label={t`Prevent Instance Group Fallback`}
+                    tooltip={helpText.preventInstanceGroupFallback}
+                  />
+                </FormCheckboxLayout>
+              </FormGroup>
+            </FormFullWidthLayout>
+
+            {(allowCallbacks || enableWebhooks) && (
+              <SubFormLayout>
+                {allowCallbacks && (
+                  <>
+                    <Title size="md" headingLevel="h4">
+                      {t`Provisioning Callback details`}
+                    </Title>
+                    <FormColumnLayout>
+                      {callbackUrl && (
+                        <FormGroup
+                          label={t`Provisioning Callback URL`}
+                          fieldId="template-callback-url"
+                        >
+                          <TextInput
+                            id="template-callback-url"
+                            isDisabled
+                            value={callbackUrl}
+                          />
+                        </FormGroup>
+                      )}
+                      <FormField
+                        id="template-host-config-key"
+                        name="host_config_key"
+                        label={t`Host Config Key`}
+                        validate={allowCallbacks ? required(null) : null}
+                        isRequired={allowCallbacks}
+                      />
+                    </FormColumnLayout>
+                  </>
+                )}
+
+                {allowCallbacks && enableWebhooks && <br />}
+
+                {enableWebhooks && (
+                  <>
+                    <Title size="md" headingLevel="h4">
+                      {t`Webhook details`}
+                    </Title>
+                    <FormColumnLayout>
+                      <WebhookSubForm templateType={template.type} />
+                    </FormColumnLayout>
+                  </>
+                )}
+              </SubFormLayout>
+            )}
+          </FormColumnLayout>
+        </FormFullWidthLayout>
+        <FormSubmitError error={submitError} />
+        <FormActionGroup
+          onCancel={handleCancel as () => void}
+          onSubmit={handleSubmit}
+        />
+      </FormColumnLayout>
+    </Form>
+  );
+}
+
+// The generics are what keeps the wrapper's own props visible to callers:
+// without them withFormik types the wrapped component as taking nothing.
+const FormikApp = withFormik<JobTemplateFormProps, Untyped>({
+  mapPropsToValues({ resourceValues = null, template = {} }: Untyped) {
+    const {
+      summary_fields = {
+        labels: { results: [] },
+        inventory: null,
+      },
+    } = template;
+
+    const initialValues = {
+      allow_callbacks: template.allow_callbacks || false,
+      allow_simultaneous: template.allow_simultaneous || false,
+      ask_credential_on_launch: template.ask_credential_on_launch || false,
+      ask_diff_mode_on_launch: template.ask_diff_mode_on_launch || false,
+      ask_execution_environment_on_launch:
+        template.ask_execution_environment_on_launch || false,
+      ask_forks_on_launch: template.ask_forks_on_launch || false,
+      ask_instance_groups_on_launch:
+        template.ask_instance_groups_on_launch || false,
+      ask_inventory_on_launch: template.ask_inventory_on_launch || false,
+      ask_job_slice_count_on_launch:
+        template.ask_job_slice_count_on_launch || false,
+      ask_job_type_on_launch: template.ask_job_type_on_launch || false,
+      ask_labels_on_launch: template.ask_labels_on_launch || false,
+      ask_limit_on_launch: template.ask_limit_on_launch || false,
+      ask_scm_branch_on_launch: template.ask_scm_branch_on_launch || false,
+      ask_skip_tags_on_launch: template.ask_skip_tags_on_launch || false,
+      ask_tags_on_launch: template.ask_tags_on_launch || false,
+      ask_timeout_on_launch: template.ask_timeout_on_launch || false,
+      ask_variables_on_launch: template.ask_variables_on_launch || false,
+      ask_verbosity_on_launch: template.ask_verbosity_on_launch || false,
+      become_enabled: template.become_enabled || false,
+      credentials: summary_fields.credentials || [],
+      description: template.description || '',
+      diff_mode: template.diff_mode || false,
+      extra_vars: template.extra_vars || '---\n',
+      forks: template.forks || 0,
+      host_config_key: template.host_config_key || '',
+      initialInstanceGroups: [],
+      instanceGroups: [],
+      inventory: summary_fields?.inventory || null,
+      job_slice_count: template.job_slice_count || 1,
+      job_slice_pinned_hosts: template.job_slice_pinned_hosts || '',
+      job_tags: template.job_tags || '',
+      job_type: template.job_type || 'run',
+      labels: summary_fields.labels.results || [],
+      limit: template.limit || '',
+      name: template.name || '',
+      playbook: template.playbook || '',
+      prevent_instance_group_fallback:
+        template.prevent_instance_group_fallback || false,
+      project: summary_fields?.project || null,
+      scm_branch: template.scm_branch || '',
+      skip_tags: template.skip_tags || '',
+      timeout: template.timeout || 0,
+      use_fact_cache: template.use_fact_cache || false,
+      verbosity: template.verbosity || '0',
+      webhook_service: template.webhook_service || '',
+      webhook_url: template?.related?.webhook_receiver
+        ? `${origin}${template.related.webhook_receiver}`
+        : 'A NEW WEBHOOK URL WILL BE GENERATED ON SAVE.',
+      webhook_key: template.webhook_key || '',
+      webhook_credential: template?.summary_fields?.webhook_credential || null,
+      execution_environment:
+        template.summary_fields?.execution_environment || null,
+    };
+    if (resourceValues !== null) {
+      if (resourceValues.type === 'credentials') {
+        initialValues[resourceValues.type as keyof typeof initialValues] = [
+          {
+            id: parseInt(resourceValues.id, 10),
+            name: resourceValues.name,
+            kind: resourceValues.kind,
+          },
+        ];
+      } else {
+        initialValues[resourceValues.type as keyof typeof initialValues] = {
+          id: parseInt(resourceValues.id, 10),
+          name: resourceValues.name,
+        };
+      }
+    }
+    return initialValues;
+  },
+  handleSubmit: async (values, { props, setErrors }) => {
+    try {
+      await props.handleSubmit(values);
+    } catch (errors) {
+      setErrors(errors as FormikErrors<Untyped>);
+    }
+  },
+})(JobTemplateForm);
+
+export { JobTemplateForm as _JobTemplateForm };
+export default FormikApp;

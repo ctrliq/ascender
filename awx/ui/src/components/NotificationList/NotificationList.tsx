@@ -187,7 +187,9 @@ function NotificationList({
         );
         setValue({
           ...fetchNotificationsResults,
-          [`${status}TemplateIds`]: fetchNotificationsResults[`${status}TemplateIds` as const].filter((i: number) => i !== notificationId),
+          [`${status}TemplateIds`]: fetchNotificationsResults[
+            `${status}TemplateIds` as const
+          ].filter((i: number) => i !== notificationId),
         });
       } else {
         await apiModel.associateNotificationTemplate(

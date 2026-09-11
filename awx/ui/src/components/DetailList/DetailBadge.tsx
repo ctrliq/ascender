@@ -11,18 +11,13 @@ const Detail = styled(_Detail)`
 
 export interface DetailBadgeProps {
   label: React.ReactNode;
-  helpText: Untyped;
+  helpText?: Untyped;
   content: React.ReactNode;
   dataCy?: string;
   [key: string]: unknown;
 }
 
-function DetailBadge({
-  label,
-  helpText,
-  content,
-  dataCy,
-}: DetailBadgeProps) {
+function DetailBadge({ label, helpText, content, dataCy }: DetailBadgeProps) {
   return (
     <Detail
       label={label}

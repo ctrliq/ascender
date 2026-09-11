@@ -31,7 +31,7 @@ export function getScaleAndOffsetToFit(
   svgBoundingClientRect: Untyped,
   gBBoxDimensions: Untyped,
   currentScale: Untyped
-) {
+): [number, number] {
   gBoundingClientRect.height /= currentScale;
   gBoundingClientRect.width /= currentScale;
 
@@ -70,10 +70,11 @@ export function generateLine(points: LinkPoint[]) {
   return line(points);
 }
 
+// A pair rather than a list: every caller reads both ends of the line.
 export function getLinePoints(
   link: WorkflowLink,
   nodePositions: NodePositions
-): LinkPoint[] {
+): [LinkPoint, LinkPoint] {
   const sourceX =
     (nodePositions[link.source.id] as NodePositions[number]).x +
     (nodePositions[link.source.id] as NodePositions[number]).width +
@@ -205,7 +206,7 @@ export function getTranslatePointsForZoom(
   svgBoundingClientRect: Untyped,
   currentScaleAndOffset: Untyped,
   newScale: Untyped
-) {
+): [number, number] {
   const origScale = currentScaleAndOffset.k;
   const unscaledOffsetX =
     (currentScaleAndOffset.x +

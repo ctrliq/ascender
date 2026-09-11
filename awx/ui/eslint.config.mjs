@@ -319,6 +319,13 @@ export default defineConfig([
       // types express what a value may be; the parameter defaults beside them
       // are the defaults, and there is no separate propTypes to check against
       'react/require-default-props': 'off',
+      // a class's field declarations are a block of one-line members, and a
+      // blank line between each of them reads as noise rather than structure
+      '@stylistic/lines-between-class-members': [
+        'error',
+        'always',
+        { exceptAfterSingleLine: true },
+      ],
     },
   },
 ]);

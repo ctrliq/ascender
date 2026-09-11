@@ -26,7 +26,13 @@ interface ChartPoint {
   TOTAL: number;
 }
 
-function LineChart({ id, data, height, pageContext, jobStatus }: LineChartProps) {
+function LineChart({
+  id,
+  data,
+  height,
+  pageContext,
+  jobStatus,
+}: LineChartProps) {
   const { isNavOpen } = pageContext;
   const { t } = useLingui();
 
@@ -179,7 +185,9 @@ function LineChart({ id, data, height, pageContext, jobStatus }: LineChartProps)
     ticks = formattedData.map((d: Untyped) => d.DATE);
     if (formattedData.length === 31) {
       ticks = formattedData
-        .map((d: Untyped, i: Untyped) => (i % maxTicks === 0 ? d.DATE : undefined))
+        .map((d: Untyped, i: Untyped) =>
+          i % maxTicks === 0 ? d.DATE : undefined
+        )
         .filter((item: Untyped) => item);
     }
 
@@ -268,7 +276,9 @@ function LineChart({ id, data, height, pageContext, jobStatus }: LineChartProps)
         .attr('cx', (d: Untyped) => x(d.DATE))
         .attr('cy', (d: Untyped) => y(d.RAN))
         .attr('id', (d: Untyped) => `success-dot-${dateFormat(d.DATE)}`)
-        .on('mouseover', (event: Untyped, d: Untyped) => handleMouseOver(event, d))
+        .on('mouseover', (event: Untyped, d: Untyped) =>
+          handleMouseOver(event, d)
+        )
         .on('mousemove', handleMouseMove)
         .on('mouseout', handleMouseOut);
     }

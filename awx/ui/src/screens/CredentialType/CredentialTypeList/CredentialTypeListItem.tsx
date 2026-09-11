@@ -1,0 +1,66 @@
+import type { Untyped } from 'types/api';
+import React from 'react';
+import { useLingui } from '@lingui/react/macro';
+import { Link } from 'react-router';
+import { Button } from '@patternfly/react-core';
+import { Tr, Td } from '@patternfly/react-table';
+import { PencilAltIcon } from '@patternfly/react-icons';
+import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
+
+export interface CredentialTypeListItemProps {
+  credentialType: Untyped;
+  detailUrl: Untyped;
+  isSelected: boolean;
+  onSelect: (...args: Untyped[]) => void;
+  rowIndex: Untyped;
+  [key: string]: unknown;
+}
+
+function CredentialTypeListItem({
+  credentialType,
+  detailUrl,
+  isSelected,
+  onSelect,
+  rowIndex,
+}: CredentialTypeListItemProps) {
+  const { t } = useLingui();
+  const labelId = `check-action-${credentialType.id}`;
+
+  return (
+    <Tr
+      id={`credential-type-row-${credentialType.id}`}
+      ouiaId={`credential-type-row-${credentialType.id}`}
+    >
+      <Td
+        select={{
+          rowIndex,
+          isSelected,
+          onSelect,
+        }}
+        dataLabel={t`Selected`}
+      />
+      <TdBreakWord id={labelId} dataLabel={t`Name`}>
+        <Link to={`${detailUrl}`}>
+          <b>{credentialType.name}</b>
+        </Link>
+      </TdBreakWord>
+      <ActionsTd dataLabel={t`Actions`}>
+        <ActionItem
+          visible={credentialType.summary_fields.user_capabilities.edit}
+          tooltip={t`Edit credential type`}
+        >
+          <Button
+            icon={<PencilAltIcon />}
+            ouiaId={`${credentialType.id}-edit-button`}
+            aria-label={t`Edit credential type`}
+            variant="plain"
+            component={Link}
+            to={`/credential_types/${credentialType.id}/edit`}
+          />
+        </ActionItem>
+      </ActionsTd>
+    </Tr>
+  );
+}
+
+export default CredentialTypeListItem;

@@ -27,7 +27,7 @@ export interface AdHocValues {
 /** What AdHocCommandsWizard is handed about the hosts or groups selected. */
 export interface AdHocItem {
   id: number;
-  name: string;
+  name?: string;
   [key: string]: unknown;
 }
 

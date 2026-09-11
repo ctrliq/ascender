@@ -154,7 +154,7 @@ function Tooltip({
 
   const { error: updateInstanceError, request: updateInstance } = useRequest(
     useCallback(
-      async (values) => {
+      async (values: Untyped) => {
         await InstancesAPI.update(instanceDetail.id, values);
       },
       [instanceDetail]
@@ -294,7 +294,7 @@ function Tooltip({
                     {t`Instance groups`}
                   </DescriptionListTerm>
                   <DescriptionListDescription data-cy="instance-groups">
-                    {renderInstanceGroups(instanceGroups.results)}
+                    {renderInstanceGroups((instanceGroups as Untyped).results)}
                   </DescriptionListDescription>
                 </DescriptionListGroup>
               )}

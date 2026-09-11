@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useFormikContext } from 'formik';
 import { Alert } from '@patternfly/react-core';
+import type { FormikErrors } from 'formik';
 import { FormFullWidthLayout } from '../FormLayout';
 import sortErrorMessages from './sortErrorMessages';
-import type { FormikErrors } from 'formik';
 
 export interface FormSubmitErrorProps {
   /** Whatever the submit caught, which is unknown to TypeScript. */

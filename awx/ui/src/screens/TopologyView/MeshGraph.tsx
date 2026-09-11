@@ -61,8 +61,10 @@ function MeshGraph({
 }: MeshGraphProps) {
   const { t } = useLingui();
   const [isNodeSelected, setIsNodeSelected] = useState(false);
-  const [selectedNode, setSelectedNode] = useState(null);
-  const [simulationProgress, setSimulationProgress] = useState(null);
+  const [selectedNode, setSelectedNode] = useState<Untyped>(null);
+  const [simulationProgress, setSimulationProgress] = useState<number | null>(
+    null
+  );
   const navigate = useNavigate();
 
   const {
@@ -73,19 +75,17 @@ function MeshGraph({
   } = useRequest(
     useCallback(async () => {
       const { data: instanceData } = await InstancesAPI.readDetail(
-        selectedNode.id
+        selectedNode?.id
       );
       const { data: instanceGroupsData } = await InstancesAPI.readInstanceGroup(
-        selectedNode.id
+        selectedNode?.id
       );
       return {
         instance: instanceData,
         instanceGroups: instanceGroupsData,
       };
     }, [selectedNode]),
-    {
-      result: {},
-    }
+    { instance: null, instanceGroups: null }
   );
   const { error: fetchInstanceError, dismissError } =
     useDismissableError(fetchError);
@@ -128,8 +128,8 @@ function MeshGraph({
   }, [instance]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const draw = () => {
-    let width;
-    let height;
+    let width: number;
+    let height: number;
     setShowZoomControls(false);
     try {
       width = getWidth(SELECTOR);
@@ -229,11 +229,16 @@ function MeshGraph({
           return 'url(#end)';
         })
         .attr('class', (_, i) => `link-${i}`)
-        .attr('data-cy', (d: Untyped) => `${d.source.hostname}-${d.target.hostname}`)
+        .attr(
+          'data-cy',
+          (d: Untyped) => `${d.source.hostname}-${d.target.hostname}`
+        )
         .style('fill', 'none')
         .style('stroke', (d: Untyped) => renderLinkStatusColor(d.link_state))
         .style('stroke-width', '2px')
-        .style('stroke-dasharray', (d: Untyped) => renderLinkState(d.link_state))
+        .style('stroke-dasharray', (d: Untyped) =>
+          renderLinkState(d.link_state)
+        )
         .attr('pointer-events', 'none')
         .on('mouseover', function showPointer() {
           d3.select(this).style('cursor', 'pointer');
@@ -293,11 +298,10 @@ function MeshGraph({
         .attr('fill', 'white')
         .attr('text-anchor', 'middle')
         .each(function calculateLabelWidth() {
-          // eslint-disable-next-line react/no-this-in-sfc
-          const bbox = this.getBBox();
+          const bbox = (this as SVGGraphicsElement).getBBox();
           const padding = 10;
-          // eslint-disable-next-line react/no-this-in-sfc
-          d3.select(this.parentNode)
+
+          d3.select((this as SVGElement).parentNode as SVGElement)
             .append('rect')
             .attr('x', bbox.x - padding / 2)
             .attr('y', bbox.y)
@@ -322,8 +326,9 @@ function MeshGraph({
       // add badge icons
       const badges = nodeCircles.append('g').attr('class', 'node-state-badge');
       badges.each(function drawStateBadge() {
-        // eslint-disable-next-line react/no-this-in-sfc
-        const bbox = this.parentNode.getBBox();
+        const bbox = (
+          (this as SVGElement).parentNode as SVGGraphicsElement
+        ).getBBox();
 
         d3.select(this)
           .append('circle')
@@ -335,7 +340,9 @@ function MeshGraph({
           .append('path')
           .attr('class', (d: Untyped) => `icon-${d.node_state}`)
           .attr('d', (d: Untyped) => renderLabelIcons(d.node_state))
-          .attr('transform', (d: Untyped) => renderIconPosition(d.node_state, bbox))
+          .attr('transform', (d: Untyped) =>
+            renderIconPosition(d.node_state, bbox)
+          )
           .attr('fill', 'white');
       });
       svg.call(zoom);
@@ -366,7 +373,9 @@ function MeshGraph({
         immediate.forEach((s: Untyped) => {
           svg
             .selectAll(`.link-${s.index}`)
-            .style('stroke', (d: Untyped) => renderLinkStatusColor(d.link_state))
+            .style('stroke', (d: Untyped) =>
+              renderLinkStatusColor(d.link_state)
+            )
             .style('stroke-width', '2px')
             .attr('marker-end', (d: Untyped) => {
               if (d.link_state === 'adding') {

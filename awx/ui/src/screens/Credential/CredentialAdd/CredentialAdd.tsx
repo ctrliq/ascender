@@ -1,0 +1,175 @@
+import type { Untyped } from 'types/api';
+import React, { useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import { PageSection, Card } from '@patternfly/react-core';
+import { CardBody } from 'components/Card';
+import ContentError from 'components/ContentError';
+import ContentLoading from 'components/ContentLoading';
+import {
+  CredentialInputSourcesAPI,
+  CredentialTypesAPI,
+  CredentialsAPI,
+} from 'api';
+import useRequest from 'hooks/useRequest';
+import CredentialForm from '../shared/CredentialForm';
+
+const fetchCredentialTypes = async (pageNo = 1, credentialTypes = []) => {
+  const { data } = await CredentialTypesAPI.read({
+    page_size: 200,
+    page: pageNo,
+  });
+  if (data.next) {
+    return fetchCredentialTypes(
+      pageNo + 1,
+      credentialTypes.concat(data.results)
+    );
+  }
+  return credentialTypes.concat(data.results);
+};
+
+export interface CredentialAddProps {
+  me: Untyped;
+  [key: string]: unknown;
+}
+
+function CredentialAdd({ me }: CredentialAddProps) {
+  const navigate = useNavigate();
+
+  const {
+    error: submitError,
+    request: submitRequest,
+    result: credentialId,
+  } = useRequest(
+    useCallback(
+      async (values: Untyped, credentialTypesMap: Untyped) => {
+        const { inputs: credentialTypeInputs } =
+          credentialTypesMap[values.credential_type];
+
+        const { inputs, organization, passwordPrompts, ...remainingValues } =
+          values;
+
+        const nonPluginInputs: Record<string, Untyped> = {};
+        const pluginInputs: Record<string, Untyped> = {};
+        const possibleFields = credentialTypeInputs.fields || [];
+
+        possibleFields.forEach((field: Untyped) => {
+          const input = inputs[field.id];
+          if (input?.credential && input?.inputs) {
+            pluginInputs[field.id] = input;
+          } else if (passwordPrompts[field.id]) {
+            nonPluginInputs[field.id] = 'ASK';
+          } else {
+            nonPluginInputs[field.id] = input;
+          }
+        });
+
+        const modifiedData = { inputs: nonPluginInputs, ...remainingValues };
+        // can send only one of org, user, team
+        if (organization?.id) {
+          modifiedData.organization = organization.id;
+        } else if (me?.id) {
+          modifiedData.user = me.id;
+        }
+        const {
+          data: { id: newCredentialId },
+        } = await CredentialsAPI.create(modifiedData);
+
+        await Promise.all(
+          Object.entries<Untyped>(pluginInputs).map(([key, value]) =>
+            CredentialInputSourcesAPI.create({
+              input_field_name: key,
+              metadata: value.inputs,
+              source_credential: value.credential.id,
+              target_credential: newCredentialId,
+            })
+          )
+        );
+
+        return newCredentialId;
+      },
+      [me]
+    )
+  );
+
+  useEffect(() => {
+    if (credentialId) {
+      navigate(`/credentials/${credentialId}/details`);
+    }
+    // navigate is not referentially stable in react-router-dom
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [credentialId]);
+
+  const {
+    isLoading,
+    error,
+    request: loadData,
+    result,
+  } = useRequest(
+    useCallback(async () => {
+      const credTypes = await fetchCredentialTypes();
+      const creds = credTypes.reduce(
+        (
+          credentialTypesMap: Record<string, Untyped>,
+          credentialType: Untyped
+        ) => {
+          credentialTypesMap[credentialType.id] = credentialType;
+          return credentialTypesMap;
+        },
+        {}
+      );
+      return creds;
+    }, []),
+    {}
+  );
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  const handleCancel = () => {
+    navigate('/credentials');
+  };
+
+  const handleSubmit = async (values: Untyped) => {
+    await submitRequest(values, result);
+  };
+
+  if (error) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <Card>
+          <CardBody>
+            <ContentError error={error} />
+          </CardBody>
+        </Card>
+      </PageSection>
+    );
+  }
+  if (isLoading) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <Card>
+          <CardBody>
+            <ContentLoading />
+          </CardBody>
+        </Card>
+      </PageSection>
+    );
+  }
+  return (
+    <PageSection hasBodyWrapper={false}>
+      <Card>
+        <CardBody>
+          <CredentialForm
+            onCancel={handleCancel}
+            onSubmit={handleSubmit}
+            credentialTypes={result}
+            submitError={submitError}
+          />
+        </CardBody>
+      </Card>
+    </PageSection>
+  );
+}
+
+export { CredentialAdd as _CredentialAdd };
+export default CredentialAdd;

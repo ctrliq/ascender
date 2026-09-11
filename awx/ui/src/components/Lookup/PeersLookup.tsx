@@ -8,13 +8,13 @@ import { InstancesAPI } from 'api';
 import { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
 import useRequest from 'hooks/useRequest';
+import type { QSParams } from 'util/qs';
 import Popover from '../Popover';
 import OptionsList from '../OptionsList';
 import Lookup from './Lookup';
 import LookupErrorMessage from './shared/LookupErrorMessage';
 import FieldWithPrompt from '../FieldWithPrompt';
 import type { LookupItem } from './shared/reducer';
-import type { QSParams } from 'util/qs';
 
 const QS_CONFIG = getQSConfig('instances', {
   page: 1,

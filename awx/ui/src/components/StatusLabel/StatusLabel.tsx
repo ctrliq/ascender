@@ -2,8 +2,8 @@ import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Label, Tooltip } from '@patternfly/react-core';
-import icons from '../StatusIcon/icons';
 import type { LabelProps } from '@patternfly/react-core';
+import icons from '../StatusIcon/icons';
 
 const colors = {
   approved: 'green',

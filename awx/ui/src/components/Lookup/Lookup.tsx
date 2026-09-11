@@ -15,10 +15,10 @@ import { Modal } from '@patternfly/react-core/deprecated';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import useDebounce from 'hooks/useDebounce';
+import type { QSConfig } from 'util/qs';
 import ChipGroup from '../ChipGroup';
 import reducer, { initReducer } from './shared/reducer';
 import type { LookupAction, LookupItem, LookupState } from './shared/reducer';
-import type { QSConfig } from 'util/qs';
 
 const ChipHolder = styled.div<{ $isDisabled?: boolean }>`
   --pf-v6-c-form-control--Height: auto;

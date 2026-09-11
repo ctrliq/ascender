@@ -1,0 +1,628 @@
+import type { Untyped } from 'types/api';
+import React, { useMemo } from 'react';
+import { useLingui } from '@lingui/react/macro';
+import { useField } from 'formik';
+import {
+  FormGroup,
+  InputGroup,
+  Title,
+  InputGroupItem,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+} from '@patternfly/react-core';
+import styled from 'styled-components';
+import {
+  FormCheckboxLayout,
+  FormColumnLayout,
+  FormFullWidthLayout,
+  SubFormLayout,
+} from 'components/FormLayout';
+import FormField, {
+  PasswordInput,
+  CheckboxField,
+  ArrayTextField,
+} from 'components/FormField';
+import AnsibleSelect from 'components/AnsibleSelect';
+import { CodeEditorField } from 'components/CodeEditor';
+import {
+  combine,
+  required,
+  requiredEmail,
+  url,
+  minMaxValue,
+  twilioPhoneNumber,
+} from 'util/validators';
+import Popover from '../../../components/Popover/Popover';
+import RevertButton from '../../Setting/shared/RevertButton';
+
+const PasswordFormGroup = styled(FormGroup)`
+  .pf-v6-c-form__group-label {
+    display: inline-flex;
+    align-items: center;
+    width: 100%;
+  }
+`;
+
+const TypeFields = {
+  email: EmailFields,
+  grafana: GrafanaFields,
+  irc: IRCFields,
+  mattermost: MattermostFields,
+  pagerduty: PagerdutyFields,
+  rocketchat: RocketChatFields,
+  slack: SlackFields,
+  twilio: TwilioFields,
+  webhook: WebhookFields,
+};
+export interface TypeInputsSubFormProps {
+  type: Untyped;
+  isEdit?: boolean;
+  [key: string]: unknown;
+}
+
+function TypeInputsSubForm({ type, isEdit = false }: TypeInputsSubFormProps) {
+  const { t } = useLingui();
+  const Fields = TypeFields[type as keyof typeof TypeFields];
+  return (
+    <SubFormLayout>
+      <Title size="md" headingLevel="h4">
+        {t`Type Details`}
+      </Title>
+      <FormColumnLayout>
+        <Fields isEdit={isEdit} />
+      </FormColumnLayout>
+    </SubFormLayout>
+  );
+}
+
+export default TypeInputsSubForm;
+
+function SecretPasswordField({
+  id,
+  label,
+  name,
+  isEdit = false,
+  isRequiredOnCreate = false,
+}: Untyped) {
+  const validate = isRequiredOnCreate && !isEdit ? required(null) : undefined;
+  const [, meta] = useField({ name, validate });
+  const isRequired = isRequiredOnCreate && !isEdit;
+
+  return (
+    <PasswordFormGroup
+      fieldId={id}
+      label={label}
+      isRequired={isRequired}
+      labelHelp={
+        isEdit ? <RevertButton id={name} defaultValue="" /> : undefined
+      }
+    >
+      <InputGroup>
+        <InputGroupItem isFill>
+          <PasswordInput
+            id={id}
+            name={name}
+            validate={validate}
+            isRequired={isRequired}
+          />
+        </InputGroupItem>
+      </InputGroup>
+      {meta.touched && meta.error && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">{meta.error}</HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
+    </PasswordFormGroup>
+  );
+}
+
+function EmailFields({ isEdit = false }) {
+  const { t } = useLingui();
+  const helpText = useMemo(
+    () => ({
+      emailRecipients: t`Use one email address per line to create a recipient list for this type of notification.`,
+      emailTimeout: t`The amount of time (in seconds) before the email
+        notification stops trying to reach the host and times out. Ranges
+        from 1 to 120 seconds.`,
+      emailOptions: (
+        <>
+          {t`See Django`}{' '}
+          <a
+            href="https://docs.djangoproject.com/en/4.0/ref/settings/#std:setting-EMAIL_USE_TLS"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {t`documentation`}
+          </a>{' '}
+          <span>{t`for more information.`}</span>
+        </>
+      ),
+    }),
+    [t]
+  );
+  return (
+    <>
+      <FormField
+        id="email-username"
+        label={t`Username`}
+        name="notification_configuration.username"
+        type="text"
+      />
+      <SecretPasswordField
+        id="email-password"
+        label={t`Password`}
+        name="notification_configuration.password"
+        isEdit={isEdit}
+      />
+      <FormField
+        id="email-host"
+        label={t`Host`}
+        name="notification_configuration.host"
+        type="text"
+        validate={required(null)}
+        isRequired
+      />
+      <ArrayTextField
+        id="email-recipients"
+        label={t`Recipient list`}
+        name="notification_configuration.recipients"
+        type="textarea"
+        validate={required(null)}
+        isRequired
+        rows={3}
+        tooltip={helpText.emailRecipients}
+      />
+      <FormField
+        id="email-sender"
+        label={t`Sender e-mail`}
+        name="notification_configuration.sender"
+        type="text"
+        validate={requiredEmail()}
+        isRequired
+      />
+      <FormField
+        id="email-port"
+        label={t`Port`}
+        name="notification_configuration.port"
+        type="number"
+        validate={combine([required(null), minMaxValue(1, 65535)])}
+        isRequired
+        min="0"
+        max="65535"
+      />
+      <FormField
+        id="email-timeout"
+        label={t`Timeout`}
+        name="notification_configuration.timeout"
+        type="number"
+        validate={combine([required(null), minMaxValue(1, 120)])}
+        isRequired
+        min="1"
+        max="120"
+        tooltip={helpText.emailTimeout}
+      />
+      <FormGroup
+        fieldId="email-options"
+        label={t`Email Options`}
+        labelHelp={<Popover content={helpText.emailOptions} />}
+      >
+        <FormCheckboxLayout>
+          <CheckboxField
+            id="option-use-ssl"
+            name="notification_configuration.use_ssl"
+            label={t`Use SSL`}
+          />
+          <CheckboxField
+            id="option-use-tls"
+            name="notification_configuration.use_tls"
+            label={t`Use TLS`}
+          />
+        </FormCheckboxLayout>
+      </FormGroup>
+    </>
+  );
+}
+
+function GrafanaFields({ isEdit = false }) {
+  const { t } = useLingui();
+  const helpText = {
+    grafanaUrl: t`The base URL of the Grafana server - the
+      /api/annotations endpoint will be added automatically to the base
+      Grafana URL.`,
+    grafanaTags: t`Use one Annotation Tag per line, without commas.`,
+  };
+  return (
+    <>
+      <FormField
+        id="grafana-url"
+        label={t`Grafana URL`}
+        name="notification_configuration.grafana_url"
+        type="text"
+        validate={required(null)}
+        isRequired
+        tooltip={helpText.grafanaUrl}
+      />
+      <SecretPasswordField
+        id="grafana-key"
+        label={t`Grafana API key`}
+        name="notification_configuration.grafana_key"
+        isEdit={isEdit}
+        isRequiredOnCreate
+      />
+      <FormField
+        id="grafana-dashboard-id"
+        label={t`ID of the dashboard (optional)`}
+        name="notification_configuration.dashboardId"
+        type="text"
+      />
+      <FormField
+        id="grafana-panel-id"
+        label={t`ID of the panel (optional)`}
+        name="notification_configuration.panelId"
+        type="text"
+      />
+      <ArrayTextField
+        id="grafana-tags"
+        label={t`Tags for the annotation (optional)`}
+        name="notification_configuration.annotation_tags"
+        type="textarea"
+        rows={3}
+        tooltip={helpText.grafanaTags}
+      />
+      <CheckboxField
+        id="grafana-ssl"
+        label={t`Disable SSL verification`}
+        name="notification_configuration.grafana_no_verify_ssl"
+      />
+    </>
+  );
+}
+
+function IRCFields({ isEdit = false }) {
+  const { t } = useLingui();
+  const helpText = {
+    ircTargets: t`Use one IRC channel or username per line. The pound
+        symbol (#) for channels, and the at (@) symbol for users, are not
+        required.`,
+  };
+  return (
+    <>
+      <SecretPasswordField
+        id="irc-password"
+        label={t`IRC server password`}
+        name="notification_configuration.password"
+        isEdit={isEdit}
+      />
+      <FormField
+        id="irc-port"
+        label={t`IRC server port`}
+        name="notification_configuration.port"
+        type="number"
+        validate={required(null)}
+        isRequired
+        min="0"
+      />
+      <FormField
+        id="irc-server"
+        label={t`IRC server address`}
+        name="notification_configuration.server"
+        type="text"
+        validate={required(null)}
+        isRequired
+      />
+      <FormField
+        id="irc-nickname"
+        label={t`IRC nick`}
+        name="notification_configuration.nickname"
+        type="text"
+        validate={required(null)}
+        isRequired
+      />
+      <ArrayTextField
+        id="irc-targets"
+        label={t`Destination channels or users`}
+        name="notification_configuration.targets"
+        type="textarea"
+        validate={required(null)}
+        isRequired
+        tooltip={helpText.ircTargets}
+      />
+      <CheckboxField
+        id="grafana-ssl"
+        label={t`Disable SSL verification`}
+        name="notification_configuration.use_ssl"
+      />
+    </>
+  );
+}
+
+function MattermostFields() {
+  const { t } = useLingui();
+  return (
+    <>
+      <FormField
+        id="mattermost-url"
+        label={t`Target URL`}
+        name="notification_configuration.mattermost_url"
+        type="text"
+        validate={combine([required(null), url()])}
+        isRequired
+      />
+      <FormField
+        id="mattermost-username"
+        label={t`Username`}
+        name="notification_configuration.mattermost_username"
+        type="text"
+      />
+      <FormField
+        id="mattermost-channel"
+        label={t`Channel`}
+        name="notification_configuration.mattermost_channel"
+        type="text"
+      />
+      <FormField
+        id="mattermost-icon"
+        label={t`Icon URL`}
+        name="notification_configuration.mattermost_icon_url"
+        type="text"
+        validate={url()}
+      />
+      <CheckboxField
+        id="mattermost-ssl"
+        label={t`Disable SSL verification`}
+        name="notification_configuration.mattermost_no_verify_ssl"
+      />
+    </>
+  );
+}
+
+function PagerdutyFields({ isEdit = false }) {
+  const { t } = useLingui();
+  return (
+    <>
+      <SecretPasswordField
+        id="pagerduty-token"
+        label={t`API Token`}
+        name="notification_configuration.token"
+        isEdit={isEdit}
+        isRequiredOnCreate
+      />
+      <FormField
+        id="pagerduty-subdomain"
+        label={t`Pagerduty subdomain`}
+        name="notification_configuration.subdomain"
+        type="text"
+        validate={required(null)}
+        isRequired
+      />
+      <FormField
+        id="pagerduty-service-key"
+        label={t`API service/integration key`}
+        name="notification_configuration.service_key"
+        type="text"
+        validate={required(null)}
+        isRequired
+      />
+      <FormField
+        id="pagerduty-identifier"
+        label={t`Client identifier`}
+        name="notification_configuration.client_name"
+        type="text"
+        validate={required(null)}
+        isRequired
+      />
+    </>
+  );
+}
+
+function RocketChatFields() {
+  const { t } = useLingui();
+  return (
+    <>
+      <FormField
+        id="rocketchat-url"
+        label={t`Target URL`}
+        name="notification_configuration.rocketchat_url"
+        type="text"
+        validate={combine([required(null), url()])}
+        isRequired
+      />
+      <FormField
+        id="rocketchat-username"
+        label={t`Username`}
+        name="notification_configuration.rocketchat_username"
+        type="text"
+      />
+      <FormField
+        id="rocketchat-icon-url"
+        label={t`Icon URL`}
+        name="notification_configuration.rocketchat_icon_url"
+        type="text"
+        validate={url()}
+      />
+      <CheckboxField
+        id="rocketchat-ssl"
+        label={t`Disable SSL verification`}
+        name="notification_configuration.rocketchat_no_verify_ssl"
+      />
+    </>
+  );
+}
+
+function SlackFields({ isEdit = false }) {
+  const { t } = useLingui();
+  const helpText = useMemo(
+    () => ({
+      slackChannels: (
+        <>
+          {t`One Slack channel per line. The pound symbol (#)
+        is required for channels. To respond to or start a thread to a specific message add the parent message Id to the channel where the parent message Id is 16 digits. A dot (.) must be manually inserted after the 10th digit.  ie:#destination-channel, 1231257890.006423. See Slack`}{' '}
+          <a href="https://api.slack.com/messaging/retrieving#individual_messages">
+            {t`documentation`}
+          </a>{' '}
+          <span>{t`for more information.`}</span>
+        </>
+      ),
+      slackColor: t`Specify a notification color. Acceptable colors are hex
+        color code (example: #3af or #789abc).`,
+    }),
+    [t]
+  );
+  return (
+    <>
+      <ArrayTextField
+        id="slack-channels"
+        label={t`Destination channels`}
+        name="notification_configuration.channels"
+        type="textarea"
+        validate={required(null)}
+        isRequired
+        tooltip={helpText.slackChannels}
+      />
+      <SecretPasswordField
+        id="slack-token"
+        label={t`Token`}
+        name="notification_configuration.token"
+        isEdit={isEdit}
+        isRequiredOnCreate
+      />
+      <FormField
+        id="slack-color"
+        label={t`Notification color`}
+        name="notification_configuration.hex_color"
+        type="text"
+        tooltip={helpText.slackColor}
+      />
+    </>
+  );
+}
+
+function TwilioFields({ isEdit = false }) {
+  const { t } = useLingui();
+  const helpText = {
+    twilioSourcePhoneNumber: t`The number associated with the "Messaging
+        Service" in Twilio with the format +18005550199.`,
+    twilioDestinationNumbers: t`Use one phone number per line to specify where to
+        route SMS messages. Phone numbers should be formatted +11231231234. For more information see Twilio documentation`,
+  };
+  return (
+    <>
+      <SecretPasswordField
+        id="twilio-token"
+        label={t`Account token`}
+        name="notification_configuration.account_token"
+        isEdit={isEdit}
+        isRequiredOnCreate
+      />
+      <FormField
+        id="twilio-from-phone"
+        label={t`Source phone number`}
+        name="notification_configuration.from_number"
+        type="text"
+        validate={combine([required(null), twilioPhoneNumber()])}
+        isRequired
+        tooltip={helpText.twilioSourcePhoneNumber}
+      />
+      <ArrayTextField
+        id="twilio-destination-numbers"
+        label={t`Destination SMS number(s)`}
+        name="notification_configuration.to_numbers"
+        type="textarea"
+        validate={combine([required(null), twilioPhoneNumber()])}
+        isRequired
+        tooltip={helpText.twilioDestinationNumbers}
+      />
+      <FormField
+        id="twilio-account-sid"
+        label={t`Account SID`}
+        name="notification_configuration.account_sid"
+        type="text"
+        validate={required(null)}
+        isRequired
+      />
+    </>
+  );
+}
+
+function WebhookFields({ isEdit = false }) {
+  const { t } = useLingui();
+  const helpText = {
+    webhookHeaders: t`Specify HTTP Headers in JSON format. Refer to
+      the Ansible Controller documentation for example syntax.`,
+  };
+  const [methodField, methodMeta] = useField({
+    name: 'notification_configuration.http_method',
+    validate: required(t`Select a value for this field`),
+  });
+  return (
+    <>
+      <FormField
+        id="webhook-username"
+        label={t`Username`}
+        name="notification_configuration.username"
+        type="text"
+      />
+      <SecretPasswordField
+        id="webhook-password"
+        label={t`Basic auth password`}
+        name="notification_configuration.password"
+        isEdit={isEdit}
+      />
+      <FormField
+        id="webhook-url"
+        label={t`Target URL`}
+        name="notification_configuration.url"
+        type="text"
+        validate={combine([required(null), url()])}
+        isRequired
+      />
+      <CheckboxField
+        id="webhook-ssl"
+        label={t`Disable SSL verification`}
+        name="notification_configuration.disable_ssl_verification"
+      />
+      <FormFullWidthLayout>
+        <CodeEditorField
+          id="webhook-headers"
+          name="notification_configuration.headers"
+          label={t`HTTP Headers`}
+          mode="javascript"
+          tooltip={helpText.webhookHeaders}
+          rows={5}
+        />
+      </FormFullWidthLayout>
+      <FormGroup
+        fieldId="webhook-http-method"
+        isRequired
+        label={t`HTTP Method`}
+      >
+        <AnsibleSelect
+          {...methodField}
+          id="webhook-http-method"
+          data={[
+            {
+              value: '',
+              key: '',
+              label: t`Choose an HTTP method`,
+              isDisabled: true,
+            },
+            { value: 'POST', key: 'post', label: t`POST` },
+            { value: 'PUT', key: 'put', label: t`PUT` },
+          ]}
+        />
+        {methodMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">
+                {methodMeta.error}
+              </HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
+      </FormGroup>
+    </>
+  );
+}

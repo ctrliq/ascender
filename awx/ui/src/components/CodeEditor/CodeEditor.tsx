@@ -116,7 +116,7 @@ const AceEditor = styled(ReactAce)<{ hasErrors?: boolean }>`
 AceEditor.displayName = 'AceEditor';
 
 export interface CodeEditorProps {
-  id: Untyped;
+  id?: Untyped;
   value: Untyped;
   onChange?: (...args: Untyped[]) => void;
   onFocus?: (...args: Untyped[]) => void;
@@ -158,8 +158,7 @@ function CodeEditor({
   const editor = useRef<ReactAce>(null);
 
   useEffect(() => {
-    const editorInput =
-      editor.current?.refEditor?.querySelector('textarea');
+    const editorInput = editor.current?.refEditor?.querySelector('textarea');
     if (!editorInput) {
       return;
     }
@@ -171,8 +170,7 @@ function CodeEditor({
 
   const listen = useCallback((event: KeyboardEvent) => {
     if (wrapper.current === document.activeElement && event.key === 'Enter') {
-      const editorInput =
-      editor.current?.refEditor?.querySelector('textarea');
+      const editorInput = editor.current?.refEditor?.querySelector('textarea');
       if (!editorInput) {
         return;
       }

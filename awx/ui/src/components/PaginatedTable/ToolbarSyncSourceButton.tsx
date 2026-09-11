@@ -11,9 +11,7 @@ export interface ToolbarSyncSourceButtonProps {
   [key: string]: unknown;
 }
 
-function ToolbarSyncSourceButton({
-  onClick,
-}: ToolbarSyncSourceButtonProps) {
+function ToolbarSyncSourceButton({ onClick }: ToolbarSyncSourceButtonProps) {
   const { t } = useLingui();
   const { isKebabified } = useKebabifiedMenu();
 

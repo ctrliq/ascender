@@ -1,0 +1,67 @@
+import type { Untyped } from 'types/api';
+import React from 'react';
+
+import { useLingui } from '@lingui/react/macro';
+
+import { Button } from '@patternfly/react-core';
+import { Tr, Td } from '@patternfly/react-table';
+import { Link } from 'react-router';
+import { PencilAltIcon } from '@patternfly/react-icons';
+import { ActionsTd, ActionItem } from 'components/PaginatedTable';
+
+export interface HostGroupItemProps {
+  group: Untyped;
+  inventoryId: Untyped;
+  isSelected: boolean;
+  onSelect: (...args: Untyped[]) => void;
+  rowIndex: Untyped;
+  [key: string]: unknown;
+}
+
+function HostGroupItem({
+  group,
+  inventoryId,
+  isSelected,
+  onSelect,
+  rowIndex,
+}: HostGroupItemProps) {
+  const { t } = useLingui();
+  const labelId = `check-action-${group.id}`;
+  const detailUrl = `/inventories/inventory/${inventoryId}/groups/${group.id}/details`;
+  const editUrl = `/inventories/inventory/${inventoryId}/groups/${group.id}/edit`;
+
+  return (
+    <Tr id={`group-row-${group.id}`} ouiaId={`group-row-${group.id}`}>
+      <Td
+        select={{
+          rowIndex,
+          isSelected,
+          onSelect,
+        }}
+        dataLabel={t`Selected`}
+      />
+      <Td dataLabel={t`Name`}>
+        {' '}
+        <Link to={`${detailUrl}`} id={labelId}>
+          <b>{group.name}</b>
+        </Link>
+      </Td>
+      <ActionsTd dataLabel={t`Actions`}>
+        <ActionItem
+          visible={group.summary_fields.user_capabilities.edit}
+          tooltip={t`Edit Group`}
+        >
+          <Button
+            icon={<PencilAltIcon />}
+            ouiaId={`${group.id}-edit-button`}
+            variant="plain"
+            component={Link}
+            to={editUrl}
+          />
+        </ActionItem>
+      </ActionsTd>
+    </Tr>
+  );
+}
+
+export default HostGroupItem;

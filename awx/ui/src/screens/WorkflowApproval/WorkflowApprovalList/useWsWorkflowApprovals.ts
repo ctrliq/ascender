@@ -44,7 +44,7 @@ export default function useWsWorkflowApprovals(
       if (
         (index > -1 &&
           !['new', 'pending', 'waiting', 'running'].includes(
-            lastMessage.status
+            lastMessage.status as string
           )) ||
         (index === -1 && lastMessage.status === 'pending')
       ) {

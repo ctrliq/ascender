@@ -3,9 +3,8 @@ import { useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import StepName from '../LaunchPrompt/steps/StepName';
 import CredentialPasswordsStep from '../LaunchPrompt/steps/CredentialPasswordsStep';
-import type { AdHocValues } from './types';
+import type { AdHocValues, AdHocStep } from './types';
 import type { VisitedSteps } from '../LaunchPrompt/types';
-import type { AdHocStep } from './types';
 
 const STEP_ID = 'credentialPasswords';
 
@@ -19,8 +18,8 @@ export default function useCredentialPasswordsStep(
   const { values, setFieldError } = useFormikContext<AdHocValues>();
   const hasError = Boolean(
     showStep &&
-      Object.keys(visitedSteps).includes(STEP_ID) &&
-      checkForError(values)
+    Object.keys(visitedSteps).includes(STEP_ID) &&
+    checkForError(values)
   );
   return {
     step: showStep
@@ -58,7 +57,9 @@ export default function useCredentialPasswordsStep(
         setFieldError(fieldName, t`This field may not be blank`);
       };
 
-      Object.entries((values.credentials[0]?.inputs ?? {}) as Record<string, unknown>).forEach(([key, value]) => {
+      Object.entries(
+        (values.credentials[0]?.inputs ?? {}) as Record<string, unknown>
+      ).forEach(([key, value]) => {
         if (
           value === 'ASK' &&
           isValueMissing(

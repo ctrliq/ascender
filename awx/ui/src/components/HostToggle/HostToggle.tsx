@@ -9,11 +9,11 @@ import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
 
 export interface HostToggleProps {
-  className: string;
+  className?: string;
   host: Host;
   isDisabled?: boolean;
-  onToggle: (...args: Untyped[]) => void;
-  tooltip: Untyped;
+  onToggle?: (...args: Untyped[]) => void;
+  tooltip?: Untyped;
   [key: string]: unknown;
 }
 

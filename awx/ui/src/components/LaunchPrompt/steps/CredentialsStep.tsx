@@ -9,14 +9,14 @@ import { CredentialsAPI, CredentialTypesAPI } from 'api';
 import { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString, updateQueryString } from 'util/qs';
 import useRequest from 'hooks/useRequest';
+import type { LookupItem } from 'components/Lookup/shared/reducer';
+import type { QSConfig } from 'util/qs';
 import AnsibleSelect from '../../AnsibleSelect';
 import OptionsList from '../../OptionsList';
 import ContentLoading from '../../ContentLoading';
 import CredentialChip from '../../CredentialChip';
 import ContentError from '../../ContentError';
 import credentialsValidator from './credentialsValidator';
-import type { LookupItem } from 'components/Lookup/shared/reducer';
-import type { QSConfig } from 'util/qs';
 
 const CredentialErrorAlert = styled(Alert)`
   margin-bottom: 20px;
@@ -150,7 +150,7 @@ function CredentialsStep({
       const [{ data }, actionsResponse] = await Promise.all([
         CredentialsAPI.read({
           ...params,
-          credential_type: selectedType.id,
+          credential_type: selectedType.id as number,
         }),
         CredentialsAPI.readOptions(),
       ]);
@@ -309,7 +309,9 @@ function CredentialsStep({
           helpers.setValue(newItems);
         }}
         deselectItem={(item: LookupItem) => {
-          helpers.setValue(field.value.filter((i: Untyped) => i.id !== item.id));
+          helpers.setValue(
+            field.value.filter((i: Untyped) => i.id !== item.id)
+          );
         }}
         renderItemChip={renderChip}
       />

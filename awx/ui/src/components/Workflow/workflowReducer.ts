@@ -22,12 +22,21 @@ export interface WorkflowNode {
   isEdited?: boolean;
   linkType?: string;
   linkCondition?: Record<string, unknown>;
-  promptValues?: unknown;
-  all_parents_must_converge?: unknown;
-  max_retries?: unknown;
-  identifier?: unknown;
-  [key: string]: unknown;
+  /** The prompt overrides a node carries, shaped by the template it runs. */
+  promptValues?: Untyped;
+  all_parents_must_converge?: Untyped;
+  max_retries?: Untyped;
+  identifier?: Untyped;
+  [key: string]: Untyped;
 }
+
+/**
+ * The state as a modal sees it. A modal only renders while the thing it acts
+ * on is set, which is what opening it means.
+ */
+export type WorkflowStateWith<K extends keyof WorkflowState> = WorkflowState & {
+  [P in K]: NonNullable<WorkflowState[P]>;
+};
 
 /**
  * A workflow node as the API returns it, which is what GENERATE_NODES_AND_LINKS
@@ -50,14 +59,14 @@ export interface ApiWorkflowNode {
   summary_fields?: {
     unified_job_template?: { unified_job_type?: string } & Record<
       string,
-      unknown
+      Untyped
     >;
     /** The run this node produced, once the workflow has been launched. */
     job?: Untyped;
-    [key: string]: unknown;
+    [key: string]: Untyped;
   };
   workflowMakerNodeId?: number;
-  [key: string]: unknown;
+  [key: string]: Untyped;
 }
 
 /** What UPDATE_NODE carries: the values the node edit modal collected. */
@@ -67,7 +76,7 @@ export interface EditedWorkflowNode {
   promptValues?: unknown;
   all_parents_must_converge?: unknown;
   max_retries?: unknown;
-  identifier?: unknown;
+  identifier?: Untyped;
 }
 
 /**

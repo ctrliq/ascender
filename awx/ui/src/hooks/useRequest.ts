@@ -30,7 +30,14 @@ export interface UseRequest<T, Args extends unknown[]> {
 // that. Without one it starts undefined and callers have to say so.
 export default function useRequest<T, Args extends unknown[] = unknown[]>(
   makeRequest: (...args: Args) => Promise<T>,
-  initialValue: T
+  // isLoading alongside the initial result is how a caller says the screen
+  // starts out loading, which the state below reads back off it. Only where
+  // the result is an object, since that is the only place to put it.
+  initialValue: [T] extends [void]
+    ? unknown
+    : T extends object
+      ? T & { isLoading?: boolean }
+      : T
 ): UseRequest<T, Args>;
 export default function useRequest<T, Args extends unknown[] = unknown[]>(
   makeRequest: (...args: Args) => Promise<T>

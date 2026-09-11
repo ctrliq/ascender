@@ -3,9 +3,8 @@ import { useLingui } from '@lingui/react/macro';
 import { useFormikContext } from 'formik';
 import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocDetailsStep from './AdHocDetailsStep';
-import type { AdHocValues } from './types';
+import type { AdHocValues, AdHocStep } from './types';
 import type { VisitedSteps } from '../LaunchPrompt/types';
-import type { AdHocStep } from './types';
 
 const STEP_ID = 'details';
 export default function useAdHocDetailsStep(

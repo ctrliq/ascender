@@ -9,11 +9,11 @@ import { ExecutionEnvironmentsAPI } from 'api';
 import { parseQueryString, getQSConfig, mergeParams } from 'util/qs';
 import { getSearchableKeys } from 'components/PaginatedTable';
 import useRequest from 'hooks/useRequest';
+import type { QSParams } from 'util/qs';
 import Popover from '../Popover';
 import ContentError from '../ContentError';
 import ContentLoading from '../ContentLoading';
 import OptionsList from '../OptionsList';
-import type { QSParams } from 'util/qs';
 
 const QS_CONFIG = getQSConfig('execution_environments', {
   page: 1,

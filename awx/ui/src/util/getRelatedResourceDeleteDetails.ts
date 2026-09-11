@@ -18,11 +18,20 @@ import {
 import { msg } from '@lingui/core/macro';
 import type { MessageDescriptor } from '@lingui/core';
 import type { ApiEntity, Paginated } from '../types/api';
-import type { ApiResponse } from '../api/Base';
+
+/**
+ * A row these checks run for. It has come back from the API already, so it
+ * carries an id where ApiEntity leaves that optional.
+ */
+type DeletableEntity = ApiEntity & { id: number };
 
 /** One related-resource count to look up before a delete is allowed. */
 export interface DeleteRequest {
-  request: () => Promise<ApiResponse<{ count: number }>>;
+  /**
+   * Only the count is read off the response, so a request is free to add up
+   * several of its own and hand back a figure rather than a whole response.
+   */
+  request: () => Promise<{ data: { count: number } }>;
   label: MessageDescriptor;
 }
 
@@ -64,7 +73,7 @@ export async function getRelatedResourceDeleteCounts(
 }
 
 export const relatedResourceDeleteRequests = {
-  credential: (selected: ApiEntity) => [
+  credential: (selected: DeletableEntity) => [
     {
       request: () =>
         JobTemplatesAPI.read({
@@ -99,7 +108,7 @@ export const relatedResourceDeleteRequests = {
     },
   ],
 
-  credentialType: (selected: ApiEntity) => [
+  credentialType: (selected: DeletableEntity) => [
     {
       request: async () =>
         CredentialsAPI.read({
@@ -109,7 +118,7 @@ export const relatedResourceDeleteRequests = {
     },
   ],
 
-  inventory: (selected: ApiEntity) => [
+  inventory: (selected: DeletableEntity) => [
     {
       request: async () =>
         JobTemplatesAPI.read({
@@ -141,7 +150,7 @@ export const relatedResourceDeleteRequests = {
     },
   ],
 
-  project: (selected: ApiEntity) => [
+  project: (selected: DeletableEntity) => [
     {
       request: () =>
         JobTemplatesAPI.read({
@@ -165,7 +174,7 @@ export const relatedResourceDeleteRequests = {
     },
   ],
 
-  template: (selected: ApiEntity) => [
+  template: (selected: DeletableEntity) => [
     {
       request: async () =>
         WorkflowJobTemplateNodesAPI.read({
@@ -175,7 +184,7 @@ export const relatedResourceDeleteRequests = {
     },
   ],
 
-  organization: (selected: ApiEntity) => [
+  organization: (selected: DeletableEntity) => [
     {
       request: async () =>
         CredentialsAPI.read({
@@ -226,7 +235,7 @@ export const relatedResourceDeleteRequests = {
       label: msg`Applications`,
     },
   ],
-  executionEnvironment: (selected: ApiEntity) => [
+  executionEnvironment: (selected: DeletableEntity) => [
     {
       request: async () =>
         UnifiedJobTemplatesAPI.read({
@@ -262,7 +271,7 @@ export const relatedResourceDeleteRequests = {
         const responses = await Promise.all(
           (results as ApiEntity[]).map((result) =>
             WorkflowJobTemplateNodesAPI.read({
-              unified_job_template: result.id,
+              unified_job_template: result.id as number,
             })
           )
         );
@@ -276,7 +285,7 @@ export const relatedResourceDeleteRequests = {
       label: msg`Workflow Job Template Nodes`,
     },
   ],
-  instanceGroup: (selected: ApiEntity) => [
+  instanceGroup: (selected: DeletableEntity) => [
     {
       request: () => OrganizationsAPI.read({ instance_groups: selected.id }),
       label: msg`Organizations`,
@@ -292,7 +301,7 @@ export const relatedResourceDeleteRequests = {
     },
   ],
 
-  instance: (selected: ApiEntity) => [
+  instance: (selected: DeletableEntity) => [
     {
       request: () => InstanceGroupsAPI.read({ instances: selected.id }),
       label: msg`Instance Groups`,

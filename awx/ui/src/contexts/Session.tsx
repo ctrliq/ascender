@@ -66,18 +66,32 @@ function useStorage(key: string): [string | null, (val: unknown) => void] {
 /** What the session context carries to everything below it. */
 export interface SessionValue {
   logout: () => void;
-  handleSessionContinue?: () => void;
-  loginRedirectOverride?: string | null;
-  sessionCountdown?: number | null;
-  setAuthRedirectTo?: (path: string) => void;
-  authRedirectTo?: string | null;
-  isSessionExpired?: React.RefObject<boolean> | boolean;
-  isUserBeingLoggedOut?: boolean;
+  handleSessionContinue: () => void;
+  loginRedirectOverride: string | null;
+  sessionCountdown: number;
+  setAuthRedirectTo: (path: string) => void;
+  authRedirectTo: string;
+  isSessionExpired: React.RefObject<boolean>;
+  isUserBeingLoggedOut: boolean;
+  isRedirectLinkReceived: boolean;
+  setIsRedirectLinkReceived: (received: boolean) => void;
   [key: string]: unknown;
 }
 
+// The default matches a freshly mounted provider rather than an empty object,
+// so a component read outside one sees a logged-out session instead of
+// throwing on the first property it reaches for.
 const SessionContext = React.createContext<SessionValue>({
   logout: () => {},
+  handleSessionContinue: () => {},
+  loginRedirectOverride: null,
+  sessionCountdown: 0,
+  setAuthRedirectTo: () => {},
+  authRedirectTo: '/',
+  isSessionExpired: { current: false },
+  isUserBeingLoggedOut: false,
+  isRedirectLinkReceived: false,
+  setIsRedirectLinkReceived: () => {},
 });
 SessionContext.displayName = 'SessionContext';
 

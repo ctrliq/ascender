@@ -1,4 +1,9 @@
-import type { AccessApiModel, SearchColumn, SummaryFieldRef, Untyped } from 'types/api';
+import type {
+  AccessApiModel,
+  SearchColumn,
+  SummaryFieldRef,
+  Untyped,
+} from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';

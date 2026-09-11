@@ -1,0 +1,62 @@
+import type { Untyped } from 'types/api';
+import React, { useCallback, useEffect } from 'react';
+import { useLingui } from '@lingui/react/macro';
+
+import { CardBody } from 'components/Card';
+import { DetailList } from 'components/DetailList';
+import { VariablesDetail } from 'components/CodeEditor';
+import ContentError from 'components/ContentError';
+import ContentLoading from 'components/ContentLoading';
+import useRequest from 'hooks/useRequest';
+import { HostsAPI } from 'api';
+
+export interface HostFactsProps {
+  host: Untyped;
+  [key: string]: unknown;
+}
+
+function HostFacts({ host }: HostFactsProps) {
+  const { t } = useLingui();
+  const {
+    result: facts,
+    isLoading,
+    error,
+    request: fetchFacts,
+  } = useRequest(
+    useCallback(async () => {
+      const [{ data: factsObj }] = await Promise.all([
+        HostsAPI.readFacts(host.id),
+      ]);
+      return JSON.stringify(factsObj, null, 4);
+    }, [host]),
+    '{}'
+  );
+
+  useEffect(() => {
+    fetchFacts();
+  }, [fetchFacts]);
+
+  if (isLoading) {
+    return <ContentLoading />;
+  }
+
+  if (error) {
+    return <ContentError error={error} />;
+  }
+
+  return (
+    <CardBody>
+      <DetailList gutter="sm">
+        <VariablesDetail
+          label={t`Facts`}
+          rows="auto"
+          value={facts}
+          name="facts"
+          dataCy="host-facts-detail"
+        />
+      </DetailList>
+    </CardBody>
+  );
+}
+
+export default HostFacts;

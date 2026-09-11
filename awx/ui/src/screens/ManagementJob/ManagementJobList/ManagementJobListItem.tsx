@@ -43,7 +43,8 @@ function ManagementJobListItem({
   const [isManagementPromptOpen, setIsManagementPromptOpen] = useState(false);
   const [isManagementPromptLoading, setIsManagementPromptLoading] =
     useState(false);
-  const [managementPromptError, setManagementPromptError] = useState<unknown>(null);
+  const [managementPromptError, setManagementPromptError] =
+    useState<unknown>(null);
   const handleManagementPromptClick = () => setIsManagementPromptOpen(true);
   const handleManagementPromptClose = () => setIsManagementPromptOpen(false);
 

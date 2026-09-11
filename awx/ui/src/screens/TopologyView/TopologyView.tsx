@@ -34,10 +34,12 @@ function TopologyView() {
   useEffect(() => {
     fetchMeshVisualizer();
   }, [fetchMeshVisualizer]);
+  // useZoom returns false when either selector is missing, which cannot
+  // happen here: both are module constants.
   const { zoom, zoomFit, zoomIn, zoomOut, resetZoom } = useZoom(
     PARENTSELECTOR,
     CHILDSELECTOR
-  );
+  ) as Exclude<ReturnType<typeof useZoom>, false>;
 
   return (
     <>

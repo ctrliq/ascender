@@ -6,12 +6,12 @@ import { InventoriesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import useAutoPopulateLookup from 'hooks/useAutoPopulateLookup';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
+import type { QSParams } from 'util/qs';
 import Lookup from './Lookup';
 import OptionsList from '../OptionsList';
 import LookupErrorMessage from './shared/LookupErrorMessage';
 import FieldWithPrompt from '../FieldWithPrompt';
 import type { LookupItem } from './shared/reducer';
-import type { QSParams } from 'util/qs';
 
 const QS_CONFIG = getQSConfig('inventory', {
   page: 1,

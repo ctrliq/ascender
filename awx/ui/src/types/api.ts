@@ -171,9 +171,9 @@ export type JobStatus =
  * kind of object. Prefer a named type above wherever the kind is known.
  */
 export interface ApiEntity {
-  id: number;
-  type: string;
-  url: string;
+  id?: number;
+  type?: string;
+  url?: string;
   related?: Record<string, string>;
   summary_fields?: SummaryFields;
   name?: string;

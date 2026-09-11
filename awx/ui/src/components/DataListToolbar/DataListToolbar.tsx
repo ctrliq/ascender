@@ -66,7 +66,12 @@ export interface DataListToolbarProps {
   onRemove: (...args: Untyped[]) => void;
   onCompact?: (...args: Untyped[]) => void;
   onExpand?: (...args: Untyped[]) => void;
-  additionalControls?: React.ReactElement[];
+  /**
+   * The controls that sit above the list. Callers build these as guarded
+   * expressions, so an entry is false wherever a list does not offer that
+   * control at all.
+   */
+  additionalControls?: React.ReactNode[];
   qsConfig: Untyped;
   pagination: React.ReactNode;
   enableNegativeFiltering?: boolean;
@@ -252,7 +257,11 @@ function DataListToolbar({
         {!isAdvancedSearchShown && (
           <ToolbarGroup>
             {additionalControls.map((control) => (
-              <ToolbarItem key={control.key}>{control}</ToolbarItem>
+              <ToolbarItem
+                key={React.isValidElement(control) ? control.key : undefined}
+              >
+                {control}
+              </ToolbarItem>
             ))}
           </ToolbarGroup>
         )}

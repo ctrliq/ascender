@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, DetailedError } from 'types/api';
 import React, { useCallback, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { MinusCircleIcon } from '@patternfly/react-icons';
@@ -7,7 +7,6 @@ import { getJobModel } from 'util/jobs';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
-import type { DetailedError } from 'types/api';
 
 export interface JobCancelButtonProps {
   errorTitle?: Untyped;
@@ -47,7 +46,7 @@ function JobCancelButton({
       if (onCancelWorkflow) {
         onCancelWorkflow();
       }
-    }, [job.id, job.type, onCancelWorkflow]),
+    }, [job.id, job.type, onCancelWorkflow])
   );
   const { error, dismissError: dismissCancelError } =
     useDismissableError(cancelError);

@@ -137,8 +137,8 @@
     "extract-strings": "lingui extract",
     "extract-template": "lingui extract-template",
     "compile-strings": "lingui compile",
-    "prettier": "prettier --cache --write \"src/**/*.{js,jsx,scss}\"",
-    "prettier-check": "prettier --cache --check \"src/**/*.{js,jsx,scss}\""
+    "prettier": "prettier --cache --write \"src/**/*.{js,jsx,ts,tsx,scss}\"",
+    "prettier-check": "prettier --cache --check \"src/**/*.{js,jsx,ts,tsx,scss}\""
   },
   "browserslist": [
     "chrome >= 111",

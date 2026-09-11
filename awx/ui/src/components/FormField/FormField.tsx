@@ -9,8 +9,8 @@ import {
   TextInput,
   TextArea,
 } from '@patternfly/react-core';
-import Popover from '../Popover';
 import type { TextInputProps } from '@patternfly/react-core';
+import Popover from '../Popover';
 
 export interface FormFieldProps {
   id: Untyped;
@@ -19,7 +19,11 @@ export interface FormFieldProps {
   label: React.ReactNode;
   tooltip?: Untyped;
   tooltipMaxWidth?: string;
-  validate?: (...args: Untyped[]) => void;
+  /**
+   * Runs against the field's value; formik takes what it returns as the
+   * error. Callers pass null to say a field has no validation right now.
+   */
+  validate?: ((...args: Untyped[]) => void) | null;
   isRequired?: boolean;
   isReadOnly?: boolean;
   /** A TextInput type, or 'textarea' to render a TextArea instead. */
@@ -40,7 +44,7 @@ function FormField({
   type = 'text',
   ...rest
 }: FormFieldProps) {
-  const [field, meta] = useField({ name, validate });
+  const [field, meta] = useField({ name, validate: validate ?? undefined });
   const isValid = !(meta.touched && meta.error);
 
   const helperTextContent = (

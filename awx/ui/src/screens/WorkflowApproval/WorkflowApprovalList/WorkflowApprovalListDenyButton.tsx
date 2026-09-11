@@ -15,7 +15,10 @@ export interface WorkflowApprovalListDenyButtonProps {
   [key: string]: unknown;
 }
 
-function WorkflowApprovalListDenyButton({ onDeny, selectedItems = [] }: WorkflowApprovalListDenyButtonProps) {
+function WorkflowApprovalListDenyButton({
+  onDeny,
+  selectedItems = [],
+}: WorkflowApprovalListDenyButtonProps) {
   const { t } = useLingui();
   const { isKebabified } = useContext(KebabifiedContext);
 

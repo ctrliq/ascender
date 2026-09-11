@@ -8,7 +8,7 @@ import {
 
 /** One toast, as every caller of addToast constructs it. */
 export interface ToastMessage {
-  id: number | string;
+  id?: number | string;
   title?: React.ReactNode;
   message?: React.ReactNode;
   variant?: 'warning' | 'success' | 'custom' | 'danger' | 'info';
@@ -22,7 +22,9 @@ export default function useToast() {
     setToasts((oldToasts) => [...oldToasts, newToast]);
   }, []);
 
-  const removeToast = useCallback((toastId: number | string) => {
+  // Undefined is a real argument here: a toast raised without an id is
+  // dismissed by the same filter, since its id does not match either.
+  const removeToast = useCallback((toastId?: number | string) => {
     setToasts((oldToasts) => oldToasts.filter((t) => t.id !== toastId));
   }, []);
 
@@ -42,7 +44,7 @@ export function Toast({
   removeToast,
 }: {
   toasts: ToastMessage[];
-  removeToast: (id: number | string) => void;
+  removeToast: (id?: number | string) => void;
 }) {
   if (!toasts.length) {
     return null;

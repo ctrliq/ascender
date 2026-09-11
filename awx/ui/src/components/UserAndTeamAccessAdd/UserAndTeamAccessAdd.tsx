@@ -328,13 +328,7 @@ function UserAndTeamAccessAdd({
 
       await Promise.all(roleRequests);
       onFetchData();
-    }, [
-      onFetchData,
-      rolesSelected,
-      apiModel,
-      associationId,
-      resourcesSelected,
-    ])
+    }, [onFetchData, rolesSelected, apiModel, associationId, resourcesSelected])
   );
 
   // Object roles can be user only, so we remove them when

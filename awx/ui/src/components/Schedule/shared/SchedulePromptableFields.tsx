@@ -11,13 +11,12 @@ import Wizard from 'components/Wizard';
 import { useLingui } from '@lingui/react/macro';
 import { useFormikContext } from 'formik';
 import { useDismissableError } from 'hooks/useRequest';
+import type { SurveyConfig, LaunchConfig } from 'components/LaunchPrompt/types';
 import AlertModal from '../../AlertModal';
 import ContentError from '../../ContentError';
 import ContentLoading from '../../ContentLoading';
 import useSchedulePromptSteps from './useSchedulePromptSteps';
 import type { ScheduleFormValues } from './types';
-import type { SurveyConfig } from 'components/LaunchPrompt/types';
-import type { LaunchConfig } from 'components/LaunchPrompt/types';
 
 export interface SchedulePromptableFieldsProps {
   schedule: Schedule;

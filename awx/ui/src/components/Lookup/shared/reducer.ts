@@ -1,5 +1,3 @@
-import type { Untyped } from 'types/api';
-
 /** An item a lookup can select, which is any object the API gives an id. */
 export interface LookupItem {
   id: number | string;

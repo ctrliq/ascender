@@ -1,7 +1,7 @@
-import type { Untyped } from 'types/api';
 //
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
+import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';

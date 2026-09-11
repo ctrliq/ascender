@@ -1,0 +1,76 @@
+import type { Untyped } from 'types/api';
+import React from 'react';
+import { Button } from '@patternfly/react-core';
+import { Tr, Td } from '@patternfly/react-table';
+import { useLingui } from '@lingui/react/macro';
+import { Link } from 'react-router';
+import { PencilAltIcon } from '@patternfly/react-icons';
+import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
+import { formatDateString } from 'util/dates';
+
+export interface ApplicationListItemProps {
+  application: Untyped;
+  isSelected: boolean;
+  onSelect: (...args: Untyped[]) => void;
+  detailUrl: Untyped;
+  rowIndex: Untyped;
+  [key: string]: unknown;
+}
+
+function ApplicationListItem({
+  application,
+  isSelected,
+  onSelect,
+  detailUrl,
+  rowIndex,
+}: ApplicationListItemProps) {
+  const { t } = useLingui();
+  const labelId = `check-action-${application.id}`;
+  return (
+    <Tr
+      id={`application-row-${application.id}`}
+      ouiaId={`application-row-${application.id}`}
+    >
+      <Td
+        select={{
+          rowIndex,
+          isSelected,
+          onSelect,
+        }}
+        dataLabel={t`Selected`}
+      />
+      <TdBreakWord id={labelId} dataLabel={t`Name`}>
+        <Link to={`${detailUrl}`}>
+          <b>{application.name}</b>
+        </Link>
+      </TdBreakWord>
+      <TdBreakWord dataLabel={t`Organization`}>
+        <Link
+          to={`/organizations/${application.summary_fields.organization.id}`}
+        >
+          <b>{application.summary_fields.organization.name}</b>
+        </Link>
+      </TdBreakWord>
+      <Td dataLabel={t`Last Modified`}>
+        {formatDateString(application.modified)}
+      </Td>
+      <ActionsTd dataLabel={t`Actions`}>
+        <ActionItem
+          visible={application.summary_fields.user_capabilities.edit}
+          tooltip={t`Edit application`}
+        >
+          <Button
+            icon={<PencilAltIcon />}
+            ouiaId={`${application.id}-edit-button`}
+            aria-label={t`Edit application`}
+            variant="plain"
+            component={Link}
+            to={`/applications/${application.id}/edit`}
+          />
+        </ActionItem>
+      </ActionsTd>
+    </Tr>
+  );
+}
+
+export default ApplicationListItem;

@@ -34,7 +34,7 @@ export interface OrganizationLookupProps {
   value?: Untyped;
   autoPopulate?: boolean;
   isDisabled?: boolean;
-  helperText: Untyped;
+  helperText?: Untyped;
   validate?: (...args: Untyped[]) => void;
   fieldName?: string;
   [key: string]: unknown;

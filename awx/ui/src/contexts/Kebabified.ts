@@ -7,11 +7,14 @@ import React, { useContext } from 'react';
  */
 export interface KebabifiedValue {
   isKebabified: boolean;
-  onKebabModalChange?: React.Dispatch<React.SetStateAction<boolean>>;
+  onKebabModalChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+// The default stands for a toolbar that has not collapsed anything, so the
+// setter is a no-op rather than absent and callers need not guard it.
 export const KebabifiedContext = React.createContext<KebabifiedValue>({
   isKebabified: false,
+  onKebabModalChange: () => {},
 });
 
 export const KebabifiedProvider = KebabifiedContext.Provider;

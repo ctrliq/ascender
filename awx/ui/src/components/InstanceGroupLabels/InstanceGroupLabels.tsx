@@ -1,9 +1,8 @@
-import type { Label as ApiLabel } from 'types/api';
+import type { Untyped } from 'types/api';
 import React from 'react';
 
 import { Label, LabelGroup } from '@patternfly/react-core';
 import { Link } from 'react-router';
-import type { Untyped } from 'types/api';
 
 export interface InstanceGroupLabelsProps {
   /** Instance groups, not labels: each is drawn as a PatternFly label. */

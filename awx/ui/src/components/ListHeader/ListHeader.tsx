@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, SearchColumn, SortColumn } from 'types/api';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import styled from 'styled-components';
@@ -10,10 +10,9 @@ import {
   removeParams,
   updateQueryString,
 } from 'util/qs';
+import type { QSConfig, QSParamValue } from 'util/qs';
 import DataListToolbar from '../DataListToolbar';
 import type { DataListToolbarProps } from '../DataListToolbar/DataListToolbar';
-import type { SearchColumn, SortColumn } from 'types/api';
-import type { QSConfig, QSParamValue } from 'util/qs';
 
 const EmptyStateControlsWrapper = styled.div`
   display: flex;

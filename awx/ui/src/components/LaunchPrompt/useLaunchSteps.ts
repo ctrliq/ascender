@@ -122,9 +122,7 @@ export default function useLaunchSteps(
               )
             ) {
               newCredentialPasswords[credentialPasswordValueKey] =
-                formikCredentialPasswords[
-                  credentialPasswordValueKey
-                ] as string;
+                formikCredentialPasswords[credentialPasswordValueKey] as string;
             }
           }
         );

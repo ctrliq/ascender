@@ -13,13 +13,13 @@ import { ExecutionEnvironmentsAPI, ProjectsAPI } from 'api';
 import { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
 import useRequest from 'hooks/useRequest';
+import type { QSParams } from 'util/qs';
 import Popover from '../Popover';
 import OptionsList from '../OptionsList';
 import Lookup from './Lookup';
 import LookupErrorMessage from './shared/LookupErrorMessage';
 import FieldWithPrompt from '../FieldWithPrompt';
 import type { LookupItem } from './shared/reducer';
-import type { QSParams } from 'util/qs';
 
 const QS_CONFIG = getQSConfig('execution_environments', {
   page: 1,
@@ -29,23 +29,23 @@ const QS_CONFIG = getQSConfig('execution_environments', {
 
 export interface ExecutionEnvironmentLookupProps {
   id?: string;
-  globallyAvailable: unknown;
-  helperTextInvalid: React.ReactNode;
-  isDisabled: boolean;
+  globallyAvailable?: unknown;
+  helperTextInvalid?: React.ReactNode;
+  isDisabled?: boolean;
   isValid?: boolean;
-  onBlur: (...args: Untyped[]) => void;
+  onBlur?: (...args: Untyped[]) => void;
   onChange: (...args: Untyped[]) => void;
   organizationId?: number | string;
   popoverContent?: Untyped;
   projectId?: number | string;
-  tooltip: Untyped;
+  tooltip?: Untyped;
   validate?: (...args: Untyped[]) => void;
   value?: Untyped;
   fieldName?: Untyped;
   overrideLabel?: boolean;
-  isPromptableField: boolean;
-  promptId: number | string;
-  promptName: Untyped;
+  isPromptableField?: boolean;
+  promptId?: number | string;
+  promptName?: Untyped;
   [key: string]: unknown;
 }
 
@@ -242,12 +242,15 @@ function ExecutionEnvironmentLookup({
     return t`Execution Environment`;
   };
 
+  // Asserted rather than optional: a caller that asks for the promptable
+  // variant passes the two the checkbox needs, and one that does not never
+  // reaches this branch.
   return isPromptableField ? (
     <FieldWithPrompt
       fieldId={id}
       label={renderLabel()}
-      promptId={promptId}
-      promptName={promptName}
+      promptId={promptId as string | number}
+      promptName={promptName as string}
       tooltip={popoverContent}
     >
       {tooltip && isDisabled ? (
@@ -260,7 +263,9 @@ function ExecutionEnvironmentLookup({
     <FormGroup
       fieldId={id}
       label={renderLabel()}
-      labelHelp={popoverContent ? <Popover content={popoverContent} /> : undefined}
+      labelHelp={
+        popoverContent ? <Popover content={popoverContent} /> : undefined
+      }
     >
       {tooltip && isDisabled ? (
         <Tooltip content={tooltip}>{renderLookup()}</Tooltip>

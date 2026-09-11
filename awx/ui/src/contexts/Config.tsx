@@ -15,6 +15,7 @@ import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import { dynamicActivate, locales } from 'i18nLoader';
 import { setCustomTheme, applyTheme, getSavedThemeId } from 'themeRegistry';
+import type { Untyped } from 'types/api';
 import { useSession } from './Session';
 
 /**
@@ -23,12 +24,27 @@ import { useSession } from './Session';
  * single generated schema.
  */
 export interface ConfigValue {
-  me?: Record<string, unknown>;
-  license_info?: Record<string, unknown>;
+  /** The current user, as /api/v2/me returns them. */
+  me?: {
+    id?: number;
+    username?: string;
+    is_superuser?: boolean;
+    is_system_auditor?: boolean;
+    [key: string]: unknown;
+  };
+  /** The end user licence agreement, shown by the subscription wizard. */
+  eula?: string;
+  /** The subscription, whose fields differ by licence type. */
+  license_info?: Record<string, Untyped>;
   version?: string;
   toJSON?: () => string;
   isLoading?: boolean;
-  request?: () => void;
+  request?: () => Promise<void> | void;
+  /** Where manual projects live on disk, and the paths already taken. */
+  project_base_dir?: string;
+  project_local_paths?: string[];
+  /** The system settings, whose shape is whatever the API returns. */
+  systemConfig?: Record<string, Untyped>;
   [key: string]: unknown;
 }
 
@@ -194,7 +210,17 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const useUserProfile = () => {
+/** What the route config and the nav read off the current user. */
+export interface UserProfile {
+  isSuperUser: boolean;
+  isSystemAuditor: boolean;
+  isOrgAdmin: Untyped;
+  isNotificationAdmin: Untyped;
+  isExecEnvAdmin: Untyped;
+  systemConfig?: Record<string, Untyped>;
+}
+
+export const useUserProfile = (): UserProfile => {
   const config = useConfig();
   return {
     isSuperUser: !!config.me?.is_superuser,

@@ -14,7 +14,7 @@
     "skipLibCheck": true,
     // describe, it, expect and vi come from the runner's globals rather than
     // from imports, which is how the 553 test files are written.
-    "types": ["vitest/globals"],
+    "types": ["vitest/globals", "vite/client"],
 
     // The whole approach in one flag. JavaScript and TypeScript compile side
     // by side, so a file becomes typed when someone touches it rather than in

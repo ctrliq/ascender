@@ -11,7 +11,7 @@ export interface CredentialChipProps {
    * name, kind, cloud and the vault id are read off it.
    */
   credential: Credential | SummaryFieldRef;
-  isReadOnly: boolean;
+  isReadOnly?: boolean;
   ouiaId?: string;
   onClick?: (...args: Untyped[]) => void;
   [key: string]: unknown;

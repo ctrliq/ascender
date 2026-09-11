@@ -8,7 +8,7 @@ import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
 
 export interface CopyButtonProps {
-  id: string;
+  id?: string;
   /** Posts the copy and resolves with whatever the API returns. */
   copyItem: () => Promise<unknown>;
   isDisabled?: boolean;

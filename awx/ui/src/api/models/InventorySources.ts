@@ -18,7 +18,7 @@ class InventorySources extends InstanceGroupsMixin(
     this.destroyHosts = this.destroyHosts.bind(this);
   }
 
-  createSyncStart(sourceId: number | string, extraVars: unknown) {
+  createSyncStart(sourceId: number | string, extraVars?: unknown) {
     return this.http.post(`${this.baseUrl}${sourceId}/update/`, {
       extra_vars: extraVars,
     });

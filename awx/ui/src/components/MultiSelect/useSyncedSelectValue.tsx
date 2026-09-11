@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import { useState, useEffect } from 'react';
 import useIsMounted from 'hooks/useIsMounted';
 

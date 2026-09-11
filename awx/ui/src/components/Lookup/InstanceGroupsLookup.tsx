@@ -29,9 +29,9 @@ export interface InstanceGroupsLookupProps {
   required?: boolean;
   fieldName?: Untyped;
   validate?: (...args: Untyped[]) => void;
-  isPromptableField: boolean;
-  promptId: number | string;
-  promptName: Untyped;
+  isPromptableField?: boolean;
+  promptId?: number | string;
+  promptName?: Untyped;
   [key: string]: unknown;
 }
 
@@ -155,12 +155,15 @@ function InstanceGroupsLookup({
     </>
   );
 
+  // Asserted rather than optional: a caller that asks for the promptable
+  // variant passes the two the checkbox needs, and one that does not never
+  // reaches this branch.
   return isPromptableField ? (
     <FieldWithPrompt
       fieldId={id}
       label={t`Instance Groups`}
-      promptId={promptId}
-      promptName={promptName}
+      promptId={promptId as string | number}
+      promptName={promptName as string}
       tooltip={tooltip}
     >
       {renderLookup()}

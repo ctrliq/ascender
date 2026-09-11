@@ -1,4 +1,4 @@
-import type { InstanceGroup, Label, Untyped } from 'types/api';
+import type { InstanceGroup, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { ExpandableSection } from '@patternfly/react-core';
 import Wizard from 'components/Wizard';
@@ -8,12 +8,12 @@ import { useDismissableError } from 'hooks/useRequest';
 import mergeExtraVars from 'util/prompt/mergeExtraVars';
 import getSurveyValues from 'util/prompt/getSurveyValues';
 import createNewLabels from 'util/labels';
+import type { LabelInput } from 'util/labels';
 import ContentLoading from '../ContentLoading';
 import ContentError from '../ContentError';
 import useLaunchSteps from './useLaunchSteps';
 import type { LaunchPromptValues, LaunchConfig, SurveyConfig } from './types';
 import AlertModal from '../AlertModal';
-import type { LabelInput } from 'util/labels';
 
 export interface PromptModalFormProps {
   launchConfig: LaunchConfig;

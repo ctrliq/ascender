@@ -6,6 +6,12 @@ import { SchedulesAPI } from 'api';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import { getQSConfig, parseQueryString } from 'util/qs';
+import type { QSParams } from 'util/qs';
+import type {
+  LaunchConfig,
+  SurveyConfig,
+  SurveyQuestion,
+} from 'components/LaunchPrompt/types';
 import AlertModal from '../../AlertModal';
 import ErrorDetail from '../../ErrorDetail';
 import PaginatedTable, {
@@ -17,8 +23,6 @@ import PaginatedTable, {
 } from '../../PaginatedTable';
 import DataListToolbar from '../../DataListToolbar';
 import ScheduleListItem from './ScheduleListItem';
-import type { QSParams } from 'util/qs';
-import type { LaunchConfig, SurveyConfig, SurveyQuestion } from 'components/LaunchPrompt/types';
 
 const QS_CONFIG = getQSConfig('schedule', {
   page: 1,
@@ -31,9 +35,9 @@ export interface ScheduleListProps {
   loadSchedules: (params: QSParams) => Promise<Untyped>;
   loadScheduleOptions: () => Promise<Untyped>;
   hideAddButton?: boolean;
-  resource: Untyped;
-  launchConfig: LaunchConfig;
-  surveyConfig: SurveyConfig;
+  resource?: Untyped;
+  launchConfig?: LaunchConfig;
+  surveyConfig?: SurveyConfig;
   [key: string]: unknown;
 }
 
@@ -127,7 +131,7 @@ function ScheduleList({
 
   const missingRequiredInventory = (schedule: Untyped) => {
     if (
-      !launchConfig.inventory_needed_to_start ||
+      !launchConfig?.inventory_needed_to_start ||
       schedule?.summary_fields?.inventory?.id
     ) {
       return null;
@@ -137,8 +141,8 @@ function ScheduleList({
 
   const hasMissingSurveyValue = (schedule: Untyped) => {
     let missingValues;
-    if (launchConfig.survey_enabled) {
-      surveyConfig.spec?.forEach((question: SurveyQuestion) => {
+    if (launchConfig?.survey_enabled) {
+      surveyConfig?.spec?.forEach((question: SurveyQuestion) => {
         const hasDefaultValue = Boolean(question.default);
         if (question.required && !hasDefaultValue) {
           const extraData = (schedule?.extra_data ?? {}) as Record<
@@ -203,9 +207,7 @@ function ScheduleList({
             isMissingInventory={Boolean(
               isTemplate && missingRequiredInventory(item)
             )}
-            isMissingSurvey={Boolean(
-              isTemplate && hasMissingSurveyValue(item)
-            )}
+            isMissingSurvey={Boolean(isTemplate && hasMissingSurveyValue(item))}
           />
         )}
         clearSelected={clearSelected}

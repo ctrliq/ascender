@@ -1,0 +1,116 @@
+import type { Untyped } from 'types/api';
+import React, { useCallback, useEffect } from 'react';
+import { useNavigate } from 'react-router';
+import useRequest from 'hooks/useRequest';
+import { InventoriesAPI } from 'api';
+import { CardBody } from 'components/Card';
+import ContentError from 'components/ContentError';
+import ContentLoading from 'components/ContentLoading';
+import SmartInventoryForm from '../shared/SmartInventoryForm';
+import parseHostFilter from '../shared/utils';
+
+export interface SmartInventoryEditProps {
+  inventory: Untyped;
+  [key: string]: unknown;
+}
+
+function SmartInventoryEdit({ inventory }: SmartInventoryEditProps) {
+  const navigate = useNavigate();
+  const detailsUrl = `/inventories/smart_inventory/${inventory.id}/details`;
+
+  const {
+    error: contentError,
+    isLoading: hasContentLoading,
+    request: fetchInstanceGroups,
+    result: initialInstanceGroups,
+  } = useRequest(
+    useCallback(async () => {
+      const {
+        data: { results },
+      } = await InventoriesAPI.readInstanceGroups(inventory.id);
+      return results;
+    }, [inventory.id]),
+    []
+  );
+
+  useEffect(() => {
+    fetchInstanceGroups();
+  }, [fetchInstanceGroups]);
+
+  const {
+    error: submitError,
+    request: submitRequest,
+    result: submitResult,
+  } = useRequest(
+    useCallback(
+      async (
+        values: Untyped,
+        groupsToAssociate: Untyped,
+        groupsToDisassociate: Untyped
+      ) => {
+        const { data } = await InventoriesAPI.update(inventory.id, values);
+        await InventoriesAPI.orderInstanceGroups(
+          inventory.id,
+          groupsToAssociate,
+          groupsToDisassociate
+        );
+        return data;
+      },
+      [inventory.id]
+    )
+  );
+
+  useEffect(() => {
+    if (submitResult) {
+      navigate({
+        pathname: detailsUrl,
+        search: '',
+      });
+    }
+    // navigate is not referentially stable in react-router-dom
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submitResult, detailsUrl]);
+
+  const handleSubmit = async (form: Untyped) => {
+    const modifiedForm = parseHostFilter(form);
+    const { instance_groups, organization, ...remainingForm } = modifiedForm;
+
+    await submitRequest(
+      {
+        organization: organization?.id,
+        ...remainingForm,
+      },
+      instance_groups,
+      initialInstanceGroups
+    );
+  };
+
+  const handleCancel = () => {
+    navigate({
+      pathname: detailsUrl,
+      search: '',
+    });
+  };
+
+  if (hasContentLoading) {
+    return <ContentLoading />;
+  }
+
+  if (contentError) {
+    return <ContentError error={contentError} />;
+  }
+
+  return (
+    <CardBody>
+      <SmartInventoryForm
+        inventory={inventory}
+        instanceGroups={initialInstanceGroups}
+        onCancel={handleCancel}
+        onSubmit={handleSubmit}
+        submitError={submitError}
+      />
+    </CardBody>
+  );
+}
+
+export default SmartInventoryEdit;

@@ -20,6 +20,7 @@ import { getQSConfig, parseQueryString } from 'util/qs';
 import useWsTemplates from 'hooks/useWsTemplates';
 import useToast, { AlertVariant } from 'hooks/useToast';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
+import type { QSParams } from 'util/qs';
 import AlertModal from '../AlertModal';
 import DatalistToolbar from '../DataListToolbar';
 import ErrorDetail from '../ErrorDetail';
@@ -31,7 +32,6 @@ import PaginatedTable, {
 } from '../PaginatedTable';
 import AddDropDownButton from '../AddDropDownButton';
 import TemplateListItem from './TemplateListItem';
-import type { QSParams } from 'util/qs';
 
 export interface TemplateListProps {
   /** Narrows the list, merged into the query string's defaults. */

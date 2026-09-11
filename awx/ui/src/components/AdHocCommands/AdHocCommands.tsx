@@ -169,7 +169,6 @@ function AdHocCommands({
           credentialTypeId={credentialTypeId}
           onCloseWizard={() => setIsWizardOpen(false)}
           onLaunch={handleSubmit}
-          onDismissError={() => dismissError()}
         />
       )}
     </>

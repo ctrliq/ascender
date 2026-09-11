@@ -14,9 +14,12 @@ export interface AdHocCommandsWizardProps {
   onCloseWizard: () => void;
   credentialTypeId: number | string | null;
   organizationId: number | string | null;
-  /** The hosts or groups the command will run against. */
+  /**
+   * The hosts or groups the command will run against. Read by the formik
+   * wrapper below rather than by the component itself.
+   */
+  // eslint-disable-next-line react/no-unused-prop-types
   adHocItems: AdHocItem[];
-  onDismissError?: () => void;
   [key: string]: unknown;
 }
 

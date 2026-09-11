@@ -20,7 +20,10 @@ import { getWidth, getHeight } from './helpers';
  * }
  */
 
-export default function useZoom(parentSelector: Untyped, childSelector: Untyped) {
+export default function useZoom(
+  parentSelector: Untyped,
+  childSelector: Untyped
+) {
   if (typeof parentSelector !== 'string' && typeof childSelector !== 'string') {
     return false;
   }
@@ -61,7 +64,7 @@ export default function useZoom(parentSelector: Untyped, childSelector: Untyped)
       fullWidth / 2 - scale * midX,
       fullHeight / 2 - scale * midY,
     ];
-    const [x, y] = translate;
+    const [x, y] = translate as [number, number];
     d3.select(parentSelector)
       .transition()
       .duration(750)

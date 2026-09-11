@@ -46,8 +46,7 @@ export default function useAdHocLaunchSteps(
     const newFormValues: AdHocValues = { ...values };
 
     const inputs = values.credentials[0]?.inputs as
-      | Record<string, unknown>
-      | undefined;
+      Record<string, unknown> | undefined;
     if (!inputs) {
       return;
     }
@@ -56,8 +55,10 @@ export default function useAdHocLaunchSteps(
     // does not reset the object here, so the previous credential's entries
     // survive into the launch. Left as it is rather than changed blind, since
     // this decides which passwords get posted.
-    if ((inputs.password || inputs.become_password || inputs.ssh_key_unlock) ===
-      'ASK')
+    if (
+      (inputs.password || inputs.become_password || inputs.ssh_key_unlock) ===
+      'ASK'
+    )
       newFormValues.credential_passwords = {};
     const passwords = newFormValues.credential_passwords as Record<
       string,

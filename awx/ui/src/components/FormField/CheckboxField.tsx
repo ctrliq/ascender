@@ -8,7 +8,8 @@ export interface CheckboxFieldProps {
   id: Untyped;
   name: Untyped;
   label: React.ReactNode;
-  tooltip?: string;
+  /** Rendered in a popover beside the label, so markup is fine. */
+  tooltip?: React.ReactNode;
   validate?: (...args: Untyped[]) => void;
   isDisabled?: boolean;
   [key: string]: unknown;

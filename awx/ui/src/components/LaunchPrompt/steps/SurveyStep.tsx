@@ -28,10 +28,10 @@ import {
   integer,
   combine,
 } from 'util/validators';
+import type { TextInputProps } from '@patternfly/react-core';
 import FormField from '../../FormField';
 import Popover from '../../Popover';
 import type { SurveyConfig, SurveyQuestion } from '../types';
-import type { TextInputProps } from '@patternfly/react-core';
 
 export interface SurveyStepProps {
   surveyConfig: SurveyConfig;

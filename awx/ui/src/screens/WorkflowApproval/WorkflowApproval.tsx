@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, DetailedError } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -52,7 +52,7 @@ function WorkflowApproval({ setBreadcrumb }: WorkflowApprovalProps) {
       <PageSection hasBodyWrapper={false}>
         <Card>
           <ContentError error={error}>
-            {error.response.status === 404 && (
+            {(error as DetailedError).response?.status === 404 && (
               <span>
                 {t`Workflow Approval not found.`}{' '}
                 <Link to="/workflow_approvals">

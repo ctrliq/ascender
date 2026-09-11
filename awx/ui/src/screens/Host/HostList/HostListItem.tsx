@@ -1,0 +1,95 @@
+import type { Untyped } from 'types/api';
+import React from 'react';
+
+import { useLingui } from '@lingui/react/macro';
+
+import { Button } from '@patternfly/react-core';
+import { Tr, Td } from '@patternfly/react-table';
+import { Link } from 'react-router';
+import { PencilAltIcon } from '@patternfly/react-icons';
+import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
+import HostToggle from 'components/HostToggle';
+import Sparkline from 'components/Sparkline';
+
+export interface HostListItemProps {
+  host: Untyped;
+  isSelected: boolean;
+  onSelect: (...args: Untyped[]) => void;
+  detailUrl: Untyped;
+  rowIndex: Untyped;
+  [key: string]: unknown;
+}
+
+function HostListItem({
+  host,
+  isSelected,
+  onSelect,
+  detailUrl,
+  rowIndex,
+}: HostListItemProps) {
+  const { t } = useLingui();
+  const labelId = `check-action-${host.id}`;
+
+  const {
+    summary_fields: { recent_jobs: recentJobs = [] },
+  } = host;
+
+  return (
+    <Tr id={`host-row-${host.id}`} ouiaId={`host-row-${host.id}`}>
+      <Td
+        data-cy={labelId}
+        select={{
+          rowIndex,
+          isSelected,
+          onSelect,
+        }}
+        dataLabel={t`Selected`}
+      />
+      <TdBreakWord id={labelId} dataLabel={t`Name`}>
+        <Link to={`${detailUrl}`}>
+          <b>{host.name}</b>
+        </Link>
+      </TdBreakWord>
+      <Td>
+        {recentJobs.length > 0 ? (
+          <Sparkline jobs={recentJobs} />
+        ) : (
+          t`No job data available`
+        )}
+      </Td>
+      <TdBreakWord
+        id={`host-description-${host.id}}`}
+        dataLabel={t`Description`}
+      >
+        {host.description}
+      </TdBreakWord>
+      <TdBreakWord dataLabel={t`Inventory`}>
+        {host.summary_fields.inventory && (
+          <Link
+            to={`/inventories/inventory/${host.summary_fields.inventory.id}/details`}
+          >
+            {host.summary_fields.inventory.name}
+          </Link>
+        )}
+      </TdBreakWord>
+      <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
+        <HostToggle host={host} />
+        <ActionItem
+          visible={host.summary_fields.user_capabilities.edit}
+          tooltip={t`Edit Host`}
+        >
+          <Button
+            icon={<PencilAltIcon />}
+            ouiaId={`${host.id}-edit-button}`}
+            aria-label={t`Edit Host`}
+            variant="plain"
+            component={Link}
+            to={`/hosts/${host.id}/edit`}
+          />
+        </ActionItem>
+      </ActionsTd>
+    </Tr>
+  );
+}
+
+export default HostListItem;

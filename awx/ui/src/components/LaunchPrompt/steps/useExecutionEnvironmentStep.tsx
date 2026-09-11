@@ -3,8 +3,7 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import ExecutionEnvironmentStep from './ExecutionEnvironmentStep';
 import StepName from './StepName';
-import type { LaunchConfig, LaunchStep } from '../types';
-import type { LaunchPromptValues } from '../types';
+import type { LaunchConfig, LaunchStep, LaunchPromptValues } from '../types';
 
 const STEP_ID = 'executionEnvironment';
 

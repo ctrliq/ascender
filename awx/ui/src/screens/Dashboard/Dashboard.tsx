@@ -122,7 +122,7 @@ function Dashboard() {
             <Tabs
               aria-label={t`Tabs`}
               activeKey={activeTabId}
-              onSelect={(key, eventKey) => setActiveTabId(eventKey)}
+              onSelect={(key, eventKey) => setActiveTabId(Number(eventKey))}
               ouiaId="dashboard-tabs"
             >
               <Tab

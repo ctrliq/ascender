@@ -6,8 +6,12 @@ import styled from 'styled-components';
 import { Alert } from '@patternfly/react-core';
 import InventoryStep from './InventoryStep';
 import StepName from './StepName';
-import type { LaunchConfig, LaunchStep, VisitedSteps } from '../types';
-import type { LaunchPromptValues } from '../types';
+import type {
+  LaunchConfig,
+  LaunchStep,
+  VisitedSteps,
+  LaunchPromptValues,
+} from '../types';
 
 const InventoryAlert = styled(Alert)`
   margin-bottom: 16px;

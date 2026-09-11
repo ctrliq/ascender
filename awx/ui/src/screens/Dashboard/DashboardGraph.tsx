@@ -129,7 +129,9 @@ function DashboardGraph() {
                 onClick={() => setIsPeriodDropdownOpen(!isPeriodDropdownOpen)}
                 isExpanded={isPeriodDropdownOpen}
               >
-                {periodLabelMap[periodSelection as keyof typeof periodLabelMap] || t`Select period`}
+                {periodLabelMap[
+                  periodSelection as keyof typeof periodLabelMap
+                ] || t`Select period`}
               </MenuToggle>
             )}
           >
@@ -156,7 +158,9 @@ function DashboardGraph() {
                 onClick={() => setIsJobTypeDropdownOpen(!isJobTypeDropdownOpen)}
                 isExpanded={isJobTypeDropdownOpen}
               >
-                {jobTypeLabelMap[jobTypeSelection as keyof typeof jobTypeLabelMap] || t`Select job type`}
+                {jobTypeLabelMap[
+                  jobTypeSelection as keyof typeof jobTypeLabelMap
+                ] || t`Select job type`}
               </MenuToggle>
             )}
           >
@@ -187,7 +191,9 @@ function DashboardGraph() {
                 isExpanded={isJobStatusDropdownOpen}
                 style={{ minWidth: '165px' }}
               >
-                {jobStatusLabelMap[jobStatusSelection as keyof typeof jobStatusLabelMap] || t`Select status`}
+                {jobStatusLabelMap[
+                  jobStatusSelection as keyof typeof jobStatusLabelMap
+                ] || t`Select status`}
               </MenuToggle>
             )}
           >

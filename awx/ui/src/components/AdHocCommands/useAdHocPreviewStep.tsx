@@ -3,8 +3,7 @@ import { useLingui } from '@lingui/react/macro';
 import { useFormikContext } from 'formik';
 import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocPreviewStep from './AdHocPreviewStep';
-import type { AdHocValues } from './types';
-import type { AdHocStep } from './types';
+import type { AdHocValues, AdHocStep } from './types';
 
 const STEP_ID = 'preview';
 export default function useAdHocPreviewStep(hasErrors: boolean): AdHocStep {

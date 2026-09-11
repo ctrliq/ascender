@@ -16,7 +16,10 @@ export interface WorkflowApprovalListApproveButtonProps {
   [key: string]: unknown;
 }
 
-function WorkflowApprovalListApproveButton({ onApprove, selectedItems = [] }: WorkflowApprovalListApproveButtonProps) {
+function WorkflowApprovalListApproveButton({
+  onApprove,
+  selectedItems = [],
+}: WorkflowApprovalListApproveButtonProps) {
   const { t } = useLingui();
   const { isKebabified } = useContext(KebabifiedContext);
 

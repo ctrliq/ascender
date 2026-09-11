@@ -36,7 +36,7 @@ export interface SelectableCardProps {
   description?: React.ReactNode;
   onClick: (...args: Untyped[]) => void;
   isSelected?: boolean;
-  dataCy: string;
+  dataCy?: string;
   ariaLabel?: Untyped;
   [key: string]: unknown;
 }

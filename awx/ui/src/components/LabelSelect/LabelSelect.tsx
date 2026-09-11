@@ -99,10 +99,7 @@ function LabelSelect({
     (o) => (o.name ?? '').toLowerCase() === filterValue.toLowerCase()
   );
 
-  const handleSelect = (
-    _event?: React.MouseEvent,
-    selectedValue?: unknown
-  ) => {
+  const handleSelect = (_event?: React.MouseEvent, selectedValue?: unknown) => {
     const selectedOption =
       options.find((o) => String(o.id) === String(selectedValue)) ||
       selections.find((o) => String(o.id) === String(selectedValue));

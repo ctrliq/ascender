@@ -1,0 +1,245 @@
+import type { Untyped } from 'types/api';
+import React, { useEffect, useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+
+import { useLingui } from '@lingui/react/macro';
+
+import { Card, PageSection } from '@patternfly/react-core';
+import { HostsAPI } from 'api';
+import AlertModal from 'components/AlertModal';
+import DataListToolbar from 'components/DataListToolbar';
+import ErrorDetail from 'components/ErrorDetail';
+import PaginatedTable, {
+  HeaderRow,
+  HeaderCell,
+  ToolbarAddButton,
+  ToolbarDeleteButton,
+  getSearchableKeys,
+} from 'components/PaginatedTable';
+import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useSelected from 'hooks/useSelected';
+import { encodeQueryString, getQSConfig, parseQueryString } from 'util/qs';
+
+import HostListItem from './HostListItem';
+import SmartInventoryButton from './SmartInventoryButton';
+
+const QS_CONFIG = getQSConfig('host', {
+  page: 1,
+  page_size: 20,
+  order_by: 'name',
+});
+
+function HostList() {
+  const { t } = useLingui();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const parsedQueryStrings = parseQueryString(QS_CONFIG, location.search);
+  const nonDefaultSearchParams: Record<string, Untyped> = {};
+
+  Object.keys(parsedQueryStrings).forEach((key) => {
+    if (!QS_CONFIG.defaultParams[key]) {
+      nonDefaultSearchParams[key] = parsedQueryStrings[key];
+    }
+  });
+
+  const hasAnsibleFactsKeys = () => {
+    const nonDefaultSearchValues: Untyped[] = Object.values(
+      nonDefaultSearchParams
+    );
+    return (
+      nonDefaultSearchValues.filter((value) => value.includes('ansible_facts'))
+        .length > 0
+    );
+  };
+
+  const hasInvalidHostFilterKeys = () => {
+    const nonDefaultSearchKeys = Object.keys(nonDefaultSearchParams);
+    return (
+      nonDefaultSearchKeys.filter((searchKey) => searchKey.startsWith('not__'))
+        .length > 0 ||
+      nonDefaultSearchKeys.filter((searchKey) => searchKey.endsWith('__search'))
+        .length > 0
+    );
+  };
+
+  const {
+    result: { hosts, count, actions, relatedSearchableKeys, searchableKeys },
+    error: contentError,
+    isLoading,
+    request: fetchHosts,
+  } = useRequest(
+    useCallback(async () => {
+      const params = parseQueryString(QS_CONFIG, location.search);
+      const results = await Promise.all([
+        HostsAPI.read({
+          ...params,
+          not__inventory__kind__in: 'smart,constructed,federated',
+        }),
+        HostsAPI.readOptions(),
+      ]);
+      return {
+        hosts: results[0].data.results,
+        count: results[0].data.count,
+        actions: results[1].data.actions,
+        relatedSearchableKeys: (
+          results[1]?.data?.related_search_fields || []
+        ).map((val: Untyped) =>
+          val.endsWith('search') ? val.slice(0, -8) : val
+        ),
+        searchableKeys: getSearchableKeys(results[1].data.actions?.GET),
+      };
+    }, [location]),
+    {
+      hosts: [],
+      count: 0,
+      actions: {},
+      relatedSearchableKeys: [],
+      searchableKeys: [],
+    }
+  );
+
+  useEffect(() => {
+    fetchHosts();
+  }, [fetchHosts]);
+
+  const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
+    useSelected<Untyped>(hosts);
+
+  const {
+    isLoading: isDeleteLoading,
+    deleteItems: deleteHosts,
+    deletionError,
+    clearDeletionError,
+  } = useDeleteItems(
+    useCallback(
+      () => Promise.all(selected.map((host) => HostsAPI.destroy(host.id))),
+      [selected]
+    ),
+    {
+      qsConfig: QS_CONFIG,
+      allItemsSelected: isAllSelected,
+      fetchItems: fetchHosts,
+    }
+  );
+
+  const handleHostDelete = async () => {
+    await deleteHosts();
+    clearSelected();
+  };
+
+  const handleSmartInventoryClick = () => {
+    navigate(
+      `/inventories/smart_inventory/add?host_filter=${encodeURIComponent(
+        encodeQueryString(nonDefaultSearchParams)
+      )}`
+    );
+  };
+
+  const canAdd =
+    actions && Object.prototype.hasOwnProperty.call(actions, 'POST');
+
+  return (
+    <PageSection hasBodyWrapper={false}>
+      <Card>
+        <PaginatedTable
+          contentError={contentError}
+          hasContentLoading={isLoading || isDeleteLoading}
+          items={hosts}
+          itemCount={count}
+          pluralizedItemName={t`Hosts`}
+          qsConfig={QS_CONFIG}
+          clearSelected={clearSelected}
+          toolbarSearchColumns={[
+            {
+              name: t`Name`,
+              key: 'name__icontains',
+              isDefault: true,
+            },
+            {
+              name: t`Description`,
+              key: 'description__icontains',
+            },
+            {
+              name: t`Created By (Username)`,
+              key: 'created_by__username__icontains',
+            },
+            {
+              name: t`Modified By (Username)`,
+              key: 'modified_by__username__icontains',
+            },
+          ]}
+          toolbarSearchableKeys={searchableKeys}
+          toolbarRelatedSearchableKeys={relatedSearchableKeys}
+          headerRow={
+            <HeaderRow qsConfig={QS_CONFIG}>
+              <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+              <HeaderCell>{t`Activity`}</HeaderCell>
+              <HeaderCell sortKey="description">{t`Description`}</HeaderCell>
+              <HeaderCell>{t`Inventory`}</HeaderCell>
+              <HeaderCell>{t`Actions`}</HeaderCell>
+            </HeaderRow>
+          }
+          renderToolbar={(props) => (
+            <DataListToolbar
+              {...props}
+              isAllSelected={isAllSelected}
+              onSelectAll={selectAll}
+              qsConfig={QS_CONFIG}
+              additionalControls={[
+                ...(canAdd
+                  ? [<ToolbarAddButton key="add" linkTo="/hosts/add" />]
+                  : []),
+                <ToolbarDeleteButton
+                  key="delete"
+                  onDelete={handleHostDelete}
+                  itemsToDelete={selected}
+                  pluralizedItemName={t`Hosts`}
+                />,
+                ...(canAdd
+                  ? [
+                      <SmartInventoryButton
+                        hasInvalidKeys={hasInvalidHostFilterKeys()}
+                        hasAnsibleFactsKeys={hasAnsibleFactsKeys()}
+                        isDisabled={
+                          Object.keys(nonDefaultSearchParams).length === 0 ||
+                          hasInvalidHostFilterKeys() ||
+                          hasAnsibleFactsKeys()
+                        }
+                        onClick={() => handleSmartInventoryClick()}
+                      />,
+                    ]
+                  : []),
+              ]}
+            />
+          )}
+          renderRow={(host: Untyped, index: Untyped) => (
+            <HostListItem
+              key={host.id}
+              host={host}
+              detailUrl={`/hosts/${host.id}/details`}
+              isSelected={selected.some((row) => row.id === host.id)}
+              onSelect={() => handleSelect(host)}
+              rowIndex={index}
+            />
+          )}
+          emptyStateControls={
+            canAdd ? <ToolbarAddButton key="add" linkTo="/hosts/add" /> : null
+          }
+        />
+      </Card>
+      {Boolean(deletionError) && (
+        <AlertModal
+          isOpen={deletionError}
+          variant="error"
+          title={t`Error!`}
+          onClose={clearDeletionError}
+        >
+          {t`Failed to delete one or more hosts.`}
+          <ErrorDetail error={deletionError} />
+        </AlertModal>
+      )}
+    </PageSection>
+  );
+}
+
+export default HostList;

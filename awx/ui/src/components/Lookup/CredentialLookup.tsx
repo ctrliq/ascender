@@ -14,12 +14,12 @@ import { getSearchableKeys } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
 import useAutoPopulateLookup from 'hooks/useAutoPopulateLookup';
 import useRequest from 'hooks/useRequest';
+import type { QSParams } from 'util/qs';
 import Popover from '../Popover';
 import Lookup from './Lookup';
 import OptionsList from '../OptionsList';
 import LookupErrorMessage from './shared/LookupErrorMessage';
 import type { LookupItem } from './shared/reducer';
-import type { QSParams } from 'util/qs';
 
 const QS_CONFIG = getQSConfig('credentials', {
   page: 1,
@@ -31,19 +31,19 @@ export interface CredentialLookupProps {
   autoPopulate?: boolean;
   credentialTypeId?: string;
   credentialTypeKind?: string;
-  credentialTypeNamespace: Untyped;
+  credentialTypeNamespace?: Untyped;
   fieldName?: string;
   helperTextInvalid?: string;
   isDisabled?: boolean;
-  isSelectedDraggable: boolean;
+  isSelectedDraggable?: boolean;
   isValid?: boolean;
   label: React.ReactNode;
-  modalDescription: Untyped;
+  modalDescription?: Untyped;
   multiple?: boolean;
   onBlur?: (...args: Untyped[]) => void;
   onChange: (...args: Untyped[]) => void;
   required?: boolean;
-  tooltip: Untyped;
+  tooltip?: Untyped;
   validate?: (...args: Untyped[]) => void;
   value?: Untyped;
   [key: string]: unknown;

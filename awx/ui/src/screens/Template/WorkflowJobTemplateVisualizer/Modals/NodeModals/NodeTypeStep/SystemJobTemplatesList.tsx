@@ -1,0 +1,115 @@
+import type { Untyped } from 'types/api';
+import React, { useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router';
+import { useLingui } from '@lingui/react/macro';
+import { SystemJobTemplatesAPI } from 'api';
+import { getQSConfig, parseQueryString } from 'util/qs';
+import useRequest from 'hooks/useRequest';
+import DataListToolbar from 'components/DataListToolbar';
+import CheckboxListItem from 'components/CheckboxListItem';
+import PaginatedTable, {
+  HeaderCell,
+  HeaderRow,
+  getSearchableKeys,
+} from 'components/PaginatedTable';
+
+const QS_CONFIG = getQSConfig('system-job-templates', {
+  page: 1,
+  page_size: 5,
+  order_by: 'name',
+});
+
+export interface SystemJobTemplatesListProps {
+  nodeResource?: Untyped;
+  onUpdateNodeResource: (...args: Untyped[]) => void;
+  [key: string]: unknown;
+}
+
+function SystemJobTemplatesList({
+  nodeResource = null,
+  onUpdateNodeResource,
+}: SystemJobTemplatesListProps) {
+  const location = useLocation();
+  const { t } = useLingui();
+
+  const {
+    result: {
+      systemJobTemplates,
+      count,
+      relatedSearchableKeys,
+      searchableKeys,
+    },
+    error,
+    isLoading,
+    request: fetchWorkflowJobTemplates,
+  } = useRequest(
+    useCallback(async () => {
+      const params = parseQueryString(QS_CONFIG, location.search);
+      const [response, actionsResponse] = await Promise.all([
+        // role_level belongs in the query string; passed as a second
+        // argument it reached nothing and the list was unfiltered.
+        SystemJobTemplatesAPI.read({ ...params, role_level: 'execute_role' }),
+        SystemJobTemplatesAPI.readOptions(),
+      ]);
+      return {
+        systemJobTemplates: response.data.results,
+        count: response.data.count,
+        relatedSearchableKeys: (
+          actionsResponse?.data?.related_search_fields || []
+        ).map((val: Untyped) => val.slice(0, -8)),
+        searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
+      };
+    }, [location]),
+    {
+      systemJobTemplates: [],
+      count: 0,
+      relatedSearchableKeys: [],
+      searchableKeys: [],
+    }
+  );
+
+  useEffect(() => {
+    fetchWorkflowJobTemplates();
+  }, [fetchWorkflowJobTemplates]);
+
+  return (
+    <PaginatedTable
+      contentError={error}
+      hasContentLoading={isLoading}
+      itemCount={count}
+      items={systemJobTemplates}
+      qsConfig={QS_CONFIG}
+      headerRow={
+        <HeaderRow isExpandable={false} qsConfig={QS_CONFIG}>
+          <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+        </HeaderRow>
+      }
+      renderRow={(item: Untyped, index: Untyped) => (
+        <CheckboxListItem
+          rowIndex={index}
+          isSelected={!!(nodeResource && nodeResource.id === item.id)}
+          itemId={item.id}
+          key={item.id}
+          name={item.name}
+          label={item.name}
+          onSelect={() => onUpdateNodeResource(item)}
+          onDeselect={() => onUpdateNodeResource(null)}
+          isRadio
+        />
+      )}
+      renderToolbar={(props) => <DataListToolbar {...props} fillWidth />}
+      showPageSizeOptions={false}
+      toolbarSearchColumns={[
+        {
+          name: t`Name`,
+          key: 'name__icontains',
+          isDefault: true,
+        },
+      ]}
+      toolbarSearchableKeys={searchableKeys}
+      toolbarRelatedSearchableKeys={relatedSearchableKeys}
+    />
+  );
+}
+
+export default SystemJobTemplatesList;

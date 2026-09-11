@@ -141,10 +141,9 @@ class Tooltip {
     }
 
     const toolTipWidth = this.toolTipBase.node().getBoundingClientRect().width;
-    const chartWidth = d3
-      .select(`${this.svg}> svg`)
-      .node()
-      .getBoundingClientRect().width;
+    const chartWidth = (
+      d3.select(`${this.svg}> svg`).node() as SVGSVGElement
+    ).getBoundingClientRect().width;
     const overflow = 100 - (toolTipWidth / chartWidth) * 100;
     const flipped = overflow < (tooltipPointerX / chartWidth) * 100;
     if (data) {

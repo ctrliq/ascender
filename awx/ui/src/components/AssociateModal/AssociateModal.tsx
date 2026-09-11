@@ -10,8 +10,8 @@ import { getSearchableKeys } from 'components/PaginatedTable';
 import useRequest from 'hooks/useRequest';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useSelected from 'hooks/useSelected';
-import OptionsList from '../OptionsList';
 import type { QSParams } from 'util/qs';
+import OptionsList from '../OptionsList';
 
 const QS_CONFIG = (order_by = 'name') =>
   getQSConfig('associate', {
@@ -32,8 +32,8 @@ export interface AssociateModalProps {
   optionsRequest: () => Promise<Untyped>;
   isModalOpen?: boolean;
   displayKey?: Untyped;
-  ouiaId: string;
-  modalNote: React.ReactNode;
+  ouiaId?: string;
+  modalNote?: React.ReactNode;
   [key: string]: unknown;
 }
 

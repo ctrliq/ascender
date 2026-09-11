@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, DetailedError } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Link,
@@ -22,7 +22,6 @@ import { Schedules } from 'components/Schedule';
 import { useConfig } from 'contexts/Config';
 import useRequest from 'hooks/useRequest';
 import type { RoutedTab } from 'components/RoutedTabs/RoutedTabs';
-import type { DetailedError } from 'types/api';
 
 export interface ManagementJobProps {
   setBreadcrumb: (...args: Untyped[]) => void;

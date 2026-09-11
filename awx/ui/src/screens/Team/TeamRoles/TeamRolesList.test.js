@@ -99,8 +99,7 @@ const roles = {
 describe('<TeamRolesList />', () => {
   beforeEach(() => {
     UsersAPI.readAdminOfOrganizations.mockResolvedValue({
-      count: 1,
-      results: [{ id: 1, name: 'Foo Org' }],
+      data: { count: 1, results: [{ id: 1, name: 'Foo Org' }] },
     });
     TeamsAPI.readRoleOptions.mockResolvedValue({
       data: { actions: { GET: {} }, related_search_fields: [] },
@@ -148,8 +147,7 @@ describe('<TeamRolesList />', () => {
 
   test('should not render add button when user cannot edit team and is not an admin of the org', async () => {
     UsersAPI.readAdminOfOrganizations.mockResolvedValueOnce({
-      count: 0,
-      results: [],
+      data: { count: 0, results: [] },
     });
     TeamsAPI.readRoles.mockResolvedValue({
       data: {

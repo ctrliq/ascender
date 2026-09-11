@@ -83,7 +83,9 @@ const Close = styled(TimesIcon)`
 `;
 
 function WorkflowLegend() {
-  const dispatch = useContext(WorkflowDispatchContext) as React.Dispatch<WorkflowAction>;
+  const dispatch = useContext(
+    WorkflowDispatchContext
+  ) as React.Dispatch<WorkflowAction>;
   const { t } = useLingui();
   return (
     <Wrapper>

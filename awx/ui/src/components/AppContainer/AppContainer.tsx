@@ -24,12 +24,12 @@ import styled from 'styled-components';
 import { useConfig, useAuthorizedPath } from 'contexts/Config';
 import { useSession } from 'contexts/Session';
 import issuePendoIdentity from 'util/issuePendoIdentity';
+import type { PendoConfig } from 'util/issuePendoIdentity';
 import About from '../About';
 import BrandLogo from './BrandLogo';
 import NavExpandableGroup from './NavExpandableGroup';
 import PageHeaderToolbar from './PageHeaderToolbar';
 import AlertModal from '../AlertModal';
-import type { PendoConfig } from 'util/issuePendoIdentity';
 
 const StyledMastheadBrand = styled(MastheadBrand)`
   color: inherit;

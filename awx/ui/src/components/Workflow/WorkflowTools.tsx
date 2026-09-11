@@ -69,7 +69,9 @@ function WorkflowTools({
   zoomPercentage,
 }: WorkflowToolsProps) {
   const { t } = useLingui();
-  const dispatch = useContext(WorkflowDispatchContext) as React.Dispatch<WorkflowAction>;
+  const dispatch = useContext(
+    WorkflowDispatchContext
+  ) as React.Dispatch<WorkflowAction>;
   const zoomIn = () => {
     const newScale =
       Math.ceil((zoomPercentage + 10) / 10) * 10 < 200
@@ -119,7 +121,9 @@ function WorkflowTools({
           max="200"
           min="10"
           onChange={(event) =>
-            onZoomChange(parseInt((event.target as HTMLInputElement).value, 10) / 100)
+            onZoomChange(
+              parseInt((event.target as HTMLInputElement).value, 10) / 100
+            )
           }
           step="10"
           type="range"

@@ -64,7 +64,7 @@ export interface SearchProps {
   enableNegativeFiltering?: boolean;
   enableRelatedFuzzyFiltering?: boolean;
   handleIsAnsibleFactsSelected?: (...args: Untyped[]) => void;
-  isFilterCleared: boolean;
+  isFilterCleared?: boolean;
   [key: string]: unknown;
 }
 

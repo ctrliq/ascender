@@ -68,25 +68,15 @@ function WorkflowApprovalsList() {
     fetchWorkflowApprovals();
   }, [fetchWorkflowApprovals]);
 
-  const fetchWorkflowApprovalsById = useCallback(
-    async (ids: Untyped) => {
-      const params = { ...parseQueryString(QS_CONFIG, location.search) };
-      params.id__in = ids.join(',');
-      const { data } = await WorkflowApprovalsAPI.read(params);
-      return data.results;
-    },
-    [location.search]
-  );
-
+  // The hook takes only these two. A fetch by id and the query string config
+  // were passed to it as well and ignored, and had been since the import.
   const workflowApprovals = useWsWorkflowApprovals(
     results,
-    fetchWorkflowApprovals,
-    fetchWorkflowApprovalsById,
-    QS_CONFIG
+    fetchWorkflowApprovals
   );
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected(workflowApprovals);
+    useSelected<Untyped>(workflowApprovals);
 
   const {
     isLoading: isDeleteLoading,
@@ -120,8 +110,7 @@ function WorkflowApprovalsList() {
       async () =>
         Promise.all(selected.map(({ id }) => WorkflowApprovalsAPI.approve(id))),
       [selected]
-    ),
-    {}
+    )
   );
 
   const handleApprove = async () => {
@@ -138,8 +127,7 @@ function WorkflowApprovalsList() {
       async () =>
         Promise.all(selected.map(({ id }) => WorkflowApprovalsAPI.deny(id))),
       [selected]
-    ),
-    {}
+    )
   );
 
   const handleDeny = async () => {
@@ -204,7 +192,7 @@ function WorkflowApprovalsList() {
                     pluralizedItemName={t`Workflow Approvals`}
                     cannotDelete={(item) =>
                       item.status === 'pending' ||
-                      !item.summary_fields.user_capabilities.delete
+                      !item.summary_fields?.user_capabilities?.delete
                     }
                     errorMessage={
                       <Plural

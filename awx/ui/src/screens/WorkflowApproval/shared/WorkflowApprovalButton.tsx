@@ -29,10 +29,7 @@ function WorkflowApprovalButton({
     workflowApproval.status === 'canceled' ||
     workflowApproval.user_has_voted === true;
   const { error: approveApprovalError, request: approveWorkflowApprovals } =
-    useRequest(
-      useCallback(async () => WorkflowApprovalsAPI.approve(id), [id]),
-      {}
-    );
+    useRequest(useCallback(async () => WorkflowApprovalsAPI.approve(id), [id]));
 
   const handleApprove = async () => {
     await approveWorkflowApprovals();

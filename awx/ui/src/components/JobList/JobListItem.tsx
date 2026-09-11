@@ -228,8 +228,8 @@ function JobListItem({
                     label={t`Schedule`}
                     value={
                       <Link to={getScheduleUrl(job) as string}>
-                      {schedule.name}
-                    </Link>
+                        {schedule.name}
+                      </Link>
                     }
                   />
                 ) : (

@@ -35,7 +35,8 @@ const CountLink = styled(Link)`
 `;
 
 export interface CountProps {
-  failed: Untyped;
+  /** Styles the count as a failure figure rather than a total. */
+  failed?: boolean;
   link: Untyped;
   data: Untyped;
   label: React.ReactNode;
@@ -46,7 +47,7 @@ function Count({ failed, link, data, label }: CountProps) {
   return (
     <CountLink to={link}>
       <CountCard isClickable>
-        <h2 className={failed && 'failed'}>{data || 0}</h2>
+        <h2 className={failed ? 'failed' : undefined}>{data || 0}</h2>
         {label}
       </CountCard>
     </CountLink>

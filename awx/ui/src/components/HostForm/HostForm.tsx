@@ -10,13 +10,13 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import { required } from 'util/validators';
+import type { Untyped } from 'types/api';
 import FormField, { FormSubmitError } from '../FormField';
 import FormActionGroup from '../FormActionGroup/FormActionGroup';
 import { VariablesField } from '../CodeEditor';
 import { InventoryLookup } from '../Lookup';
 import { FormColumnLayout, FormFullWidthLayout } from '../FormLayout';
 import Popover from '../Popover';
-import type { Untyped } from 'types/api';
 
 export interface InventoryLookupFieldProps {
   isDisabled: boolean;

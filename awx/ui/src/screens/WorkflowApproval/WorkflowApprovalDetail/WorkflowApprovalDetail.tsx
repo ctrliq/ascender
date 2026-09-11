@@ -51,7 +51,10 @@ export interface WorkflowApprovalDetailProps {
   [key: string]: unknown;
 }
 
-function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }: WorkflowApprovalDetailProps) {
+function WorkflowApprovalDetail({
+  workflowApproval,
+  fetchWorkflowApproval,
+}: WorkflowApprovalDetailProps) {
   const { t } = useLingui();
   const { id: workflowApprovalId } = useParams() as { id: string };
   const navigate = useNavigate();
@@ -161,7 +164,7 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }: Wor
         {workflowApproval.status !== 'pending' && (
           <Detail
             label={t`Status`}
-            value={<StatusLabel status={getStatus(workflowApproval, t)} />}
+            value={<StatusLabel status={getStatus(workflowApproval)} />}
             dataCy="wa-detail-status"
           />
         )}
@@ -320,11 +323,13 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }: Wor
               totalChips={workflowJob.summary_fields.labels.results.length}
               ouiaId="wa-detail-label-chips"
             >
-              {workflowJob.summary_fields.labels.results.map((label: Untyped) => (
-                <Label variant="outline" key={label.id}>
-                  {label.name}
-                </Label>
-              ))}
+              {workflowJob.summary_fields.labels.results.map(
+                (label: Untyped) => (
+                  <Label variant="outline" key={label.id}>
+                    {label.name}
+                  </Label>
+                )
+              )}
             </ChipGroup>
           }
           isEmpty={!workflowJob?.summary_fields?.labels?.results?.length}
@@ -382,9 +387,9 @@ function WorkflowApprovalDetail({ workflowApproval, fetchWorkflowApproval }: Wor
           </DeleteButton>
         )}
       </CardActionsRow>
-      {deleteError && (
+      {Boolean(deleteError) && (
         <AlertModal
-          isOpen={deleteError}
+          isOpen={Boolean(deleteError)}
           variant="error"
           title={t`Error!`}
           onClose={dismissDeleteError}

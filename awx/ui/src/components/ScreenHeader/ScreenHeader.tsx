@@ -16,7 +16,7 @@ import { Link, useLocation } from 'react-router';
 
 export interface ScreenHeaderProps {
   breadcrumbConfig: Untyped;
-  streamType: React.ReactNode;
+  streamType?: React.ReactNode;
   [key: string]: unknown;
 }
 

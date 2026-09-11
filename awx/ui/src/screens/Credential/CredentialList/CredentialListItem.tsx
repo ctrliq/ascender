@@ -1,0 +1,106 @@
+import type { Untyped } from 'types/api';
+import React, { useState, useCallback } from 'react';
+
+import { useLingui } from '@lingui/react/macro';
+import { Link } from 'react-router';
+import { Button } from '@patternfly/react-core';
+import { Tr, Td } from '@patternfly/react-table';
+import { PencilAltIcon } from '@patternfly/react-icons';
+import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
+import { timeOfDay } from 'util/dates';
+
+import { CredentialsAPI } from 'api';
+import CopyButton from 'components/CopyButton';
+
+export interface CredentialListItemProps {
+  credential: Untyped;
+  detailUrl: Untyped;
+  isSelected: boolean;
+  onSelect: (...args: Untyped[]) => void;
+  onCopy: (...args: Untyped[]) => void;
+  fetchCredentials: Untyped;
+  rowIndex: Untyped;
+  [key: string]: unknown;
+}
+
+function CredentialListItem({
+  credential,
+  detailUrl,
+  isSelected,
+  onSelect,
+  onCopy,
+  fetchCredentials,
+  rowIndex,
+}: CredentialListItemProps) {
+  const { t } = useLingui();
+  const [isDisabled, setIsDisabled] = useState(false);
+
+  const labelId = `check-action-${credential.id}`;
+  const canEdit = credential.summary_fields.user_capabilities.edit;
+
+  const copyCredential = useCallback(async () => {
+    const response = await CredentialsAPI.copy(credential.id, {
+      name: `${credential.name} @ ${timeOfDay()}`,
+    });
+    if (response.status === 201) {
+      onCopy(response.data.id);
+    }
+    await fetchCredentials();
+  }, [credential.id, credential.name, fetchCredentials, onCopy]);
+
+  const handleCopyStart = useCallback(() => {
+    setIsDisabled(true);
+  }, []);
+
+  const handleCopyFinish = useCallback(() => {
+    setIsDisabled(false);
+  }, []);
+
+  return (
+    <Tr id={`${credential.id}`} ouiaId={`${credential.id}`}>
+      <Td
+        select={{
+          rowIndex,
+          isSelected,
+          onSelect,
+        }}
+        dataLabel={t`Selected`}
+      />
+      <TdBreakWord id={labelId} dataLabel={t`Name`}>
+        <Link to={`${detailUrl}`}>
+          <b>{credential.name}</b>
+        </Link>
+      </TdBreakWord>
+      <Td dataLabel={t`Type`}>
+        {credential.summary_fields.credential_type.name}
+      </Td>
+      <ActionsTd dataLabel={t`Actions`}>
+        <ActionItem visible={canEdit} tooltip={t`Edit Credential`}>
+          <Button
+            icon={<PencilAltIcon />}
+            ouiaId={`${credential.id}-edit-button`}
+            isDisabled={isDisabled}
+            aria-label={t`Edit Credential`}
+            variant="plain"
+            component={Link}
+            to={`/credentials/${credential.id}/edit`}
+          />
+        </ActionItem>
+        <ActionItem
+          tooltip={t`Copy Credential`}
+          visible={credential.summary_fields.user_capabilities.copy}
+        >
+          <CopyButton
+            isDisabled={isDisabled}
+            onCopyStart={handleCopyStart}
+            onCopyFinish={handleCopyFinish}
+            copyItem={copyCredential}
+            errorMessage={t`Failed to copy credential.`}
+          />
+        </ActionItem>
+      </ActionsTd>
+    </Tr>
+  );
+}
+
+export default CredentialListItem;

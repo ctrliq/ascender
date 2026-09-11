@@ -6,9 +6,9 @@ import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
 import { Button, Badge, Alert, Tooltip } from '@patternfly/react-core';
 import { getRelatedResourceDeleteCounts } from 'util/getRelatedResourceDeleteDetails';
+import type { DeleteCount } from 'util/getRelatedResourceDeleteDetails';
 import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
-import type { DeleteCount } from 'util/getRelatedResourceDeleteDetails';
 
 const WarningMessage = styled(Alert)`
   margin-top: 10px;
@@ -23,8 +23,8 @@ export interface DeleteButtonProps {
   modalTitle: Untyped;
   name: React.ReactNode;
   variant?: Untyped;
-  children: React.ReactNode;
-  isDisabled: boolean;
+  children?: React.ReactNode;
+  isDisabled?: boolean;
   ouiaId?: string;
   deleteMessage?: Untyped;
   deleteDetailsRequests?: Untyped;

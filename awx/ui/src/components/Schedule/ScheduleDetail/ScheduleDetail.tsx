@@ -11,6 +11,10 @@ import { JobTemplatesAPI, SchedulesAPI, WorkflowJobTemplatesAPI } from 'api';
 import { parseVariableField, jsonToYaml } from 'util/yaml';
 import { useConfig } from 'contexts/Config';
 import InstanceGroupLabels from 'components/InstanceGroupLabels';
+import type {
+  SurveyConfig,
+  SurveyQuestion,
+} from 'components/LaunchPrompt/types';
 import parseRuleObj, { UnsupportedRRuleError } from '../shared/parseRuleObj';
 import UnsupportedRRuleAlert from '../shared/UnsupportedRRuleAlert';
 import FrequencyDetails from './FrequencyDetails';
@@ -29,8 +33,6 @@ import { VariablesDetail } from '../../CodeEditor';
 import { getVerbosityLabel } from '../../VerbositySelectField';
 import getHelpText from '../../../screens/Template/shared/JobTemplate.helptext';
 import type { FrequencyOptionsMap, ScheduleFrequency } from '../shared/types';
-import type { SurveyConfig } from 'components/LaunchPrompt/types';
-import type { SurveyQuestion } from 'components/LaunchPrompt/types';
 
 const PromptDivider = styled(Divider)`
   margin-top: var(--pf-v6-global--spacer--lg);
