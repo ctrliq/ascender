@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -23,7 +23,7 @@ import InventorySourceDetail from '../InventorySourceDetail';
 import InventorySourceEdit from '../InventorySourceEdit';
 
 export interface InventorySourceProps {
-  inventory: Untyped;
+  inventory: Inventory;
   setBreadcrumb: Untyped;
   me: Untyped;
   [key: string]: unknown;

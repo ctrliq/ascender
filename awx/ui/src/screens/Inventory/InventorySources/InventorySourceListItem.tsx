@@ -17,9 +17,9 @@ export interface InventorySourceListItemProps {
   source: Untyped;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
-  detailUrl: Untyped;
+  detailUrl: string;
   label: React.ReactNode;
-  rowIndex: Untyped;
+  rowIndex: number;
   [key: string]: unknown;
 }
 

@@ -8,6 +8,7 @@ import { ExecutionEnvironmentsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentEdit from './ExecutionEnvironmentEdit';
+import type { ExecutionEnvironment } from '../../../types/api';
 
 vi.mock('../../../api');
 
@@ -18,7 +19,7 @@ const executionEnvironmentData = {
   image: 'https://registry.com/image/container',
   pull: 'one',
   name: 'Test EE',
-};
+} as unknown as ExecutionEnvironment;
 
 const updateExecutionEnvironmentData = {
   image: 'https://registry.com/image/container2',

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Team, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -27,7 +27,7 @@ const QS_CONFIG = getQSConfig('roles', {
 
 export interface TeamRolesListProps {
   me: Untyped;
-  team: Untyped;
+  team: Team;
   [key: string]: unknown;
 }
 
@@ -98,10 +98,7 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
   } = useDeleteItems(
     useCallback(async () => {
       setRoleToDisassociate(null);
-      await RolesAPI.disassociateTeamRole(
-        roleToDisassociate.id,
-        parseInt(team.id, 10)
-      );
+      await RolesAPI.disassociateTeamRole(roleToDisassociate.id, team.id);
     }, [roleToDisassociate, team.id]),
     { qsConfig: QS_CONFIG, fetchItems: fetchRoles }
   );

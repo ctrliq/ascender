@@ -1,4 +1,4 @@
-import type { ExecutionEnvironment, SummaryFieldRef, Untyped } from 'types/api';
+import type { ExecutionEnvironment, SummaryFieldRef } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
@@ -33,7 +33,7 @@ export interface ExecutionEnvironmentDetailProps {
   isDefaultEnvironment?: boolean;
   virtualEnvironment?: React.ReactNode;
   verifyMissingVirtualEnv?: boolean;
-  helpText?: Untyped;
+  helpText?: React.ReactNode;
   dataCy?: string;
   [key: string]: unknown;
 }

@@ -1,9 +1,8 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Tooltip } from '@patternfly/react-core';
 
 export interface ActionItemProps {
-  tooltip?: Untyped;
+  tooltip?: React.ReactNode;
   visible?: unknown;
   children: React.ReactNode;
   [key: string]: unknown;

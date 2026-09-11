@@ -78,8 +78,43 @@ export interface SummaryFields {
   signature_validation_credential?: SummaryFieldRef & { kind?: string };
   default_environment?: SummaryFieldRef & { image?: string };
   resolved_environment?: SummaryFieldRef & { image?: string };
-  labels?: { results: SummaryFieldRef[]; count?: number };
+  labels?: { results: (SummaryFieldRef & { name: string })[]; count?: number };
   source_workflow_job?: SummaryFieldRef;
+  source_project?: SummaryFieldRef;
+  source_credential?: SummaryFieldRef;
+  inventory_source?: SummaryFieldRef;
+  credential_type?: SummaryFieldRef;
+  application?: SummaryFieldRef;
+  host?: SummaryFieldRef;
+  workflow_job?: SummaryFieldRef;
+  workflow_approval?: SummaryFieldRef;
+  workflow_approval_template?: SummaryFieldRef & { timeout?: number };
+  /** Who the activity stream entry is about, and who it names. */
+  actor?: SummaryFieldRef & { username?: string };
+  user?: SummaryFieldRef & { username?: string };
+  approved_or_denied_by?: SummaryFieldRef & { username?: string };
+  /** The role a list row grants, on the row that grants it. */
+  role?: SummaryFieldRef & {
+    resource_name?: string;
+    resource_type?: string;
+    resource_type_display_name?: string;
+    user_capabilities?: UserCapabilities;
+  };
+  /** The roles an object offers, which the access lists assign. */
+  object_roles?: Record<string, SummaryFieldRef & { description?: string }>;
+  /** A job's own state, as the lists and the detail headers read it. */
+  job?: SummaryFieldRef & { status?: JobStatus | string };
+  last_job?: SummaryFieldRef & {
+    status?: JobStatus | string;
+    finished?: string | null;
+    failed?: boolean;
+  };
+  current_job?: SummaryFieldRef & { status?: JobStatus | string };
+  /** The groups a host belongs to, and the notifications a template sent. */
+  group?: SummaryFieldRef[];
+  groups?: { count?: number; results?: SummaryFieldRef[] };
+  recent_notifications?: (SummaryFieldRef & { status?: string })[];
+  related_field_counts?: { teams?: number; users?: number };
   /** The last few runs, which is what the sparkline on a list row draws. */
   recent_jobs?: RecentJob[];
   [key: string]: unknown;
@@ -136,10 +171,39 @@ export type UnifiedJob = WithNested<Schemas['UnifiedJobList']> & {
   canceled_on?: string | null;
 };
 export type Host = WithNested<Schemas['Host']>;
-export type Project = WithNested<Schemas['Project']>;
-export type Organization = WithNested<Schemas['Organization']>;
-export type Credential = WithNested<Schemas['Credential']>;
-export type User = WithNested<Schemas['User']>;
+/**
+ * `webhook_key` is not on the project serializer: the form fetches it from
+ * /projects/<id>/webhook_key/ and keeps it alongside the rest.
+ */
+export type Project = WithNested<Schemas['Project']> & {
+  webhook_key?: string;
+};
+
+/**
+ * The organization's galaxy credentials come from a SerializerMethodField, so
+ * the schema does not carry them; the detail screen lists them as chips.
+ */
+export type Organization = WithNested<Schemas['Organization']> & {
+  galaxy_credentials?: SummaryFieldRef[];
+};
+
+/**
+ * `inputs` is a JSONField, which the schema describes as `unknown`. Its keys
+ * are whichever fields the credential's type declares, and their values are
+ * what the user entered or `$encrypted$` for a secret the API will not return.
+ */
+export type Credential = Omit<WithNested<Schemas['Credential']>, 'inputs'> & {
+  inputs?: Record<string, unknown>;
+};
+
+/**
+ * `auth` lists the social backends the account is linked to, and is another
+ * SerializerMethodField the schema cannot see. An empty list means the user
+ * signs in with a password, which is what the forms and the list row check.
+ */
+export type User = WithNested<Schemas['User']> & {
+  auth?: { provider?: string; backend?: string }[];
+};
 export type Team = WithNested<Schemas['Team']>;
 export type Label = WithNested<Schemas['Label']>;
 export type Schedule = WithNested<Schemas['Schedule']>;

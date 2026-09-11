@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host, Untyped } from 'types/api';
 import React from 'react';
 import { Link, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -11,10 +11,10 @@ import HostToggle from 'components/HostToggle';
 import Sparkline from 'components/Sparkline';
 
 export interface InventoryGroupHostListItemProps {
-  detailUrl: Untyped;
+  detailUrl: string;
   editUrl: Untyped;
-  host: Untyped;
-  rowIndex: Untyped;
+  host: Host;
+  rowIndex: number;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
   [key: string]: unknown;
@@ -29,7 +29,7 @@ function InventoryGroupHostListItem({
   onSelect,
 }: InventoryGroupHostListItemProps) {
   const { t } = useLingui();
-  const recentPlaybookJobs = host.summary_fields.recent_jobs.map(
+  const recentPlaybookJobs = host.summary_fields.recent_jobs?.map(
     (job: Untyped) => ({
       ...job,
       type: 'job',
@@ -40,7 +40,7 @@ function InventoryGroupHostListItem({
 
   return (
     <Tr
-      id={host.id}
+      id={`${host.id}`}
       ouiaId={`inventory-group-host-row-${host.id}`}
       aria-labelledby={labelId}
     >

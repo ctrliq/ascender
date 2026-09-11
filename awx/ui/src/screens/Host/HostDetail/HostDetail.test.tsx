@@ -10,6 +10,7 @@ import {
 import HostDetail from './HostDetail';
 
 import mockHost from '../data.host.json';
+import type { Host } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -20,7 +21,7 @@ describe('<HostDetail />', () => {
 
   describe('User has edit permissions', () => {
     test('should render Details', async () => {
-      renderWithContexts(<HostDetail host={mockHost} />);
+      renderWithContexts(<HostDetail host={mockHost as unknown as Host} />);
 
       assertDetail('Name', 'localhost');
       assertDetail('Description', 'a good description');
@@ -30,7 +31,7 @@ describe('<HostDetail />', () => {
     });
 
     test('should show edit button for users with edit permission', () => {
-      renderWithContexts(<HostDetail host={mockHost} />);
+      renderWithContexts(<HostDetail host={mockHost as unknown as Host} />);
       const editButton = screen.getByRole('link', { name: 'edit' });
       expect(editButton).toHaveTextContent('Edit');
       expect(editButton).toHaveAttribute('href', '/hosts/2/edit');
@@ -40,7 +41,9 @@ describe('<HostDetail />', () => {
       vi.mocked(HostsAPI.destroy).mockResolvedValueOnce(
         {} as unknown as ApiResponse<Untyped>
       );
-      const { user } = renderWithContexts(<HostDetail host={mockHost} />);
+      const { user } = renderWithContexts(
+        <HostDetail host={mockHost as unknown as Host} />
+      );
 
       await user.click(screen.getByRole('button', { name: 'Delete' }));
       await user.click(
@@ -54,7 +57,9 @@ describe('<HostDetail />', () => {
       vi.mocked(HostsAPI.destroy).mockImplementationOnce(() =>
         Promise.reject(new Error())
       );
-      const { user } = renderWithContexts(<HostDetail host={mockHost} />);
+      const { user } = renderWithContexts(
+        <HostDetail host={mockHost as unknown as Host} />
+      );
 
       await user.click(screen.getByRole('button', { name: 'Delete' }));
       await user.click(
@@ -84,14 +89,14 @@ describe('<HostDetail />', () => {
     };
 
     test('should hide activity stream when there are no recent jobs', async () => {
-      renderWithContexts(<HostDetail host={readOnlyHost} />);
+      renderWithContexts(<HostDetail host={readOnlyHost as unknown as Host} />);
       // an empty Detail (isEmpty) renders null, so the Activity row and its
       // Sparkline are omitted entirely
       expect(screen.queryByText('Activity')).not.toBeInTheDocument();
     });
 
     test('should hide edit button for users without edit permission', async () => {
-      renderWithContexts(<HostDetail host={readOnlyHost} />);
+      renderWithContexts(<HostDetail host={readOnlyHost as unknown as Host} />);
       expect(
         screen.queryByRole('link', { name: 'edit' })
       ).not.toBeInTheDocument();

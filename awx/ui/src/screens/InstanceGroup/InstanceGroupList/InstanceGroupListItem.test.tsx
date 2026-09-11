@@ -48,6 +48,7 @@ function renderItem(instanceGroup: Untyped, props = {}) {
     <table>
       <tbody>
         <InstanceGroupListItem
+          rowIndex={0}
           instanceGroup={instanceGroup}
           detailUrl={`instance_groups/${instanceGroup.id}/details`}
           isSelected={false}

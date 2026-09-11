@@ -1,3 +1,4 @@
+import type { Host } from 'types/api';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -7,6 +8,7 @@ import { InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockHost from '../shared/data.host.json';
 import InventoryHost from './InventoryHost';
+import type { Inventory } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -24,7 +26,10 @@ function renderUnder(url: Untyped, { inventory = mockInventory } = {}) {
       <Route
         path="/inventories/:inventoryType/:id/hosts/:hostId/*"
         element={
-          <InventoryHost inventory={inventory} setBreadcrumb={() => {}} />
+          <InventoryHost
+            inventory={inventory as unknown as Inventory}
+            setBreadcrumb={() => {}}
+          />
         }
       />
     </Routes>,
@@ -34,7 +39,9 @@ function renderUnder(url: Untyped, { inventory = mockInventory } = {}) {
 
 describe('<InventoryHost />', () => {
   beforeEach(() => {
-    vi.mocked(InventoriesAPI.readHostDetail).mockResolvedValue({ ...mockHost });
+    vi.mocked(InventoriesAPI.readHostDetail).mockResolvedValue({
+      ...mockHost,
+    } as unknown as Host);
   });
 
   afterEach(() => {

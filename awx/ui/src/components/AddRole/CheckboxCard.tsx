@@ -18,7 +18,7 @@ const Checkbox = styled(PFCheckbox)`
 `;
 
 export interface CheckboxCardProps {
-  name: Untyped;
+  name: string;
   description?: React.ReactNode;
   isSelected?: boolean;
   onSelect?: (...args: Untyped[]) => void;

@@ -30,7 +30,7 @@ const LinkG = styled.g<{ $ignorePointerEvents?: Untyped }>`
 export interface VisualizerLinkProps {
   link: Untyped;
   updateLinkHelp: Untyped;
-  readOnly: Untyped;
+  readOnly: boolean;
   updateHelpText: Untyped;
   [key: string]: unknown;
 }

@@ -39,7 +39,7 @@ export interface VerbositySelectFieldProps {
   fieldId: string;
   promptId?: number | string;
   promptName?: Untyped;
-  tooltip: Untyped;
+  tooltip: React.ReactNode;
   [key: string]: unknown;
 }
 

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ExecutionEnvironment, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -26,7 +26,7 @@ import executionEnvironmentHelpTextStrings from './ExecutionEnvironment.helptext
 export interface ExecutionEnvironmentFormFieldsProps {
   me: Untyped;
   options: Untyped;
-  executionEnvironment: Untyped;
+  executionEnvironment: ExecutionEnvironment;
   isOrgLookupDisabled: boolean;
   [key: string]: unknown;
 }

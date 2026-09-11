@@ -24,7 +24,7 @@ export interface InstanceGroupsLookupProps {
   id?: string;
   value: Untyped;
   onChange: (...args: Untyped[]) => void;
-  tooltip?: Untyped;
+  tooltip?: React.ReactNode;
   className?: string;
   required?: boolean;
   fieldName?: Untyped;

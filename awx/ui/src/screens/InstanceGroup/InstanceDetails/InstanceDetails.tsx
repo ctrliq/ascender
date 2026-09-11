@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InstanceGroup, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useNavigate, useParams } from 'react-router';
@@ -70,7 +70,7 @@ function computeForks(
 
 export interface InstanceDetailsProps {
   setBreadcrumb: Untyped;
-  instanceGroup: Untyped;
+  instanceGroup: InstanceGroup;
   [key: string]: unknown;
 }
 

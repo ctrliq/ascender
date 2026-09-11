@@ -58,6 +58,7 @@ function renderItem(props = {}) {
     <table>
       <tbody>
         <InstanceListItem
+          rowIndex={0}
           instance={instance[0]}
           isSelected={false}
           onSelect={() => {}}

@@ -28,6 +28,7 @@ function renderItem(host: Untyped) {
     <table>
       <tbody>
         <HostsListItem
+          rowIndex={0}
           isSelected={false}
           detailUrl="/host/1"
           onSelect={() => {}}

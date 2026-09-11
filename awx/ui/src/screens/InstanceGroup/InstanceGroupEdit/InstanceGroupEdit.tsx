@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InstanceGroup, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -7,7 +7,7 @@ import { InstanceGroupsAPI } from 'api';
 import InstanceGroupForm from '../shared/InstanceGroupForm';
 
 export interface InstanceGroupEditProps {
-  instanceGroup: Untyped;
+  instanceGroup: InstanceGroup;
   [key: string]: unknown;
 }
 

@@ -15,9 +15,9 @@ import Popover from '../Popover';
 export interface FormFieldProps {
   id: Untyped;
   helperText?: string;
-  name: Untyped;
+  name: string;
   label: React.ReactNode;
-  tooltip?: Untyped;
+  tooltip?: React.ReactNode;
   tooltipMaxWidth?: string;
   /**
    * Runs against the field's value; formik takes what it returns as the

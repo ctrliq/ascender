@@ -1,3 +1,4 @@
+import type { Credential } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
@@ -28,7 +29,7 @@ const credential = {
   id: 1,
   name: 'A credential',
   credential_type: credentialType!.id,
-};
+} as unknown as Credential;
 
 // The modal is rendered in a portal; query its fields/buttons against document.
 const getInput = (id: Untyped) =>

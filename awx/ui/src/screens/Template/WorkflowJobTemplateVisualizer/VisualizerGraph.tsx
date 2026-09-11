@@ -40,7 +40,7 @@ const WorkflowSVG = styled.svg`
   height: 100%;
 `;
 export interface VisualizerGraphProps {
-  readOnly: Untyped;
+  readOnly: boolean;
   [key: string]: unknown;
 }
 

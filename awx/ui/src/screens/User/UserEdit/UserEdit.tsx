@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { User, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -9,7 +9,7 @@ import { dynamicActivate, locales } from 'i18nLoader';
 import UserForm from '../shared/UserForm';
 
 export interface UserEditProps {
-  user: Untyped;
+  user: User;
   [key: string]: unknown;
 }
 

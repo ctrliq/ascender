@@ -14,7 +14,7 @@ import PasswordInput from './PasswordInput';
 
 export interface PasswordFieldProps {
   id: Untyped;
-  name: Untyped;
+  name: string;
   label: React.ReactNode;
   validate?: (...args: Untyped[]) => void;
   isRequired?: boolean;

@@ -9,10 +9,10 @@ import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 
 export interface CredentialTypeListItemProps {
   credentialType: Untyped;
-  detailUrl: Untyped;
+  detailUrl: string;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
-  rowIndex: Untyped;
+  rowIndex: number;
   [key: string]: unknown;
 }
 

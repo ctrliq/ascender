@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -18,7 +18,7 @@ import DeleteButton from 'components/DeleteButton';
 import ErrorDetail from 'components/ErrorDetail';
 
 export interface FederatedInventoryDetailProps {
-  inventory: Untyped;
+  inventory: Inventory;
   [key: string]: unknown;
 }
 
@@ -99,9 +99,9 @@ function FederatedInventoryDetail({
           dataCy="federated-inventory-organization"
           value={
             <Link
-              to={`/organizations/${inventory.summary_fields?.organization.id}/details`}
+              to={`/organizations/${inventory.summary_fields?.organization?.id}/details`}
             >
-              {inventory.summary_fields?.organization.name}
+              {inventory.summary_fields?.organization?.name}
             </Link>
           }
         />

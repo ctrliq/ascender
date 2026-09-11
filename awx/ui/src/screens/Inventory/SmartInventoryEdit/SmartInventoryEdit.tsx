@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import useRequest from 'hooks/useRequest';
@@ -10,7 +10,7 @@ import SmartInventoryForm from '../shared/SmartInventoryForm';
 import parseHostFilter from '../shared/utils';
 
 export interface SmartInventoryEditProps {
-  inventory: Untyped;
+  inventory: Inventory;
   [key: string]: unknown;
 }
 

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host, Untyped } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useParams } from 'react-router';
 
@@ -30,7 +30,7 @@ const QS_CONFIG = getQSConfig('group', {
 });
 
 export interface HostGroupsListProps {
-  host: Untyped;
+  host: Host;
   [key: string]: unknown;
 }
 
@@ -39,7 +39,8 @@ function HostGroupsList({ host }: HostGroupsListProps) {
 
   const { id: hostId } = useParams() as { id: string };
   const { search } = useLocation();
-  const invId = host.summary_fields.inventory.id;
+  // The list is mounted under an inventory, so the host it lists is in one.
+  const invId = host.summary_fields.inventory?.id as number;
 
   const {
     result: {

@@ -7,6 +7,7 @@ import { createMemoryHistory } from 'history';
 import { InstanceGroupsAPI, CredentialsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ContainerGroupEdit from './ContainerGroupEdit';
+import type { InstanceGroup } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -81,7 +82,7 @@ const instanceGroup = {
       delete: true,
     },
   },
-};
+} as unknown as InstanceGroup;
 
 const initialPodSpec = {
   default: {

@@ -4,6 +4,7 @@ import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationExecEnvListItem from './OrganizationExecEnvListItem';
+import type { ExecutionEnvironment } from '../../../types/api';
 
 describe('<OrganizationExecEnvListItem/>', () => {
   const executionEnvironment = {
@@ -20,7 +21,9 @@ describe('<OrganizationExecEnvListItem/>', () => {
       <table>
         <tbody>
           <OrganizationExecEnvListItem
-            executionEnvironment={executionEnvironment}
+            executionEnvironment={
+              executionEnvironment as unknown as ExecutionEnvironment
+            }
             detailUrl="execution_environments/1/details"
           />
         </tbody>

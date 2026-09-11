@@ -7,6 +7,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationExecEnvList from './OrganizationExecEnvList';
 import type { ApiResponse } from 'api/Base';
+import type { Organization } from 'types/api';
 
 vi.mock('../../../api/');
 
@@ -58,7 +59,7 @@ const mockOrganization = {
   id: 1,
   type: 'organization',
   name: 'Default',
-};
+} as unknown as Organization;
 
 const options = { data: { actions: { POST: {}, GET: {} } } };
 

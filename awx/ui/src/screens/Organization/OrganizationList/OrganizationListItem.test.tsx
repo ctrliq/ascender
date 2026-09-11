@@ -4,25 +4,29 @@ import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationListItem from './OrganizationListItem';
+import type { Organization } from 'types/api';
 
 function renderItem(edit: Untyped) {
   return renderWithContexts(
     <table>
       <tbody>
         <OrganizationListItem
-          organization={{
-            id: 1,
-            name: 'Org',
-            summary_fields: {
-              related_field_counts: {
-                users: 1,
-                teams: 1,
+          rowIndex={0}
+          organization={
+            {
+              id: 1,
+              name: 'Org',
+              summary_fields: {
+                related_field_counts: {
+                  users: 1,
+                  teams: 1,
+                },
+                user_capabilities: {
+                  edit,
+                },
               },
-              user_capabilities: {
-                edit,
-              },
-            },
-          }}
+            } as unknown as Organization
+          }
           detailUrl="/organization/1"
           isSelected
           onSelect={() => {}}

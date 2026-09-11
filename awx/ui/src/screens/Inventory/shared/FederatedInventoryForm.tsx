@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -18,12 +18,12 @@ import OrganizationLookup from 'components/Lookup/OrganizationLookup';
 import Popover from 'components/Popover';
 
 export interface FederatedInventoryFormFieldsProps {
-  inventory?: Untyped;
+  inventory?: Inventory;
   [key: string]: unknown;
 }
 
 function FederatedInventoryFormFields({
-  inventory = {},
+  inventory,
 }: FederatedInventoryFormFieldsProps) {
   const { t } = useLingui();
   const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();

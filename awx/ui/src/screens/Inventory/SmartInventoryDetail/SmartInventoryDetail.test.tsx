@@ -9,6 +9,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import SmartInventoryDetail from './SmartInventoryDetail';
 import mockSmartInventory from '../shared/data.smart_inventory.json';
+import type { Inventory } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -40,7 +41,9 @@ describe('<SmartInventoryDetail />', () => {
 
     test('should render Details', async () => {
       renderWithContexts(
-        <SmartInventoryDetail inventory={mockSmartInventory} />
+        <SmartInventoryDetail
+          inventory={mockSmartInventory as unknown as Inventory}
+        />
       );
 
       await screen.findByText('Smart Inv');
@@ -60,7 +63,9 @@ describe('<SmartInventoryDetail />', () => {
 
     test('should show edit button for users with edit permission', async () => {
       renderWithContexts(
-        <SmartInventoryDetail inventory={mockSmartInventory} />
+        <SmartInventoryDetail
+          inventory={mockSmartInventory as unknown as Inventory}
+        />
       );
 
       const editLink = await screen.findByRole('link', { name: 'edit' });
@@ -72,7 +77,9 @@ describe('<SmartInventoryDetail />', () => {
 
     test('expected api calls are made on initial render', async () => {
       renderWithContexts(
-        <SmartInventoryDetail inventory={mockSmartInventory} />
+        <SmartInventoryDetail
+          inventory={mockSmartInventory as unknown as Inventory}
+        />
       );
 
       await screen.findByText('Smart Inv');
@@ -85,7 +92,9 @@ describe('<SmartInventoryDetail />', () => {
         {} as unknown as ApiResponse<Untyped>
       );
       const { user } = renderWithContexts(
-        <SmartInventoryDetail inventory={mockSmartInventory} />
+        <SmartInventoryDetail
+          inventory={mockSmartInventory as unknown as Inventory}
+        />
       );
 
       await user.click(await screen.findByRole('button', { name: 'Delete' }));
@@ -101,7 +110,9 @@ describe('<SmartInventoryDetail />', () => {
     test('Error dialog shown for failed deletion', async () => {
       vi.mocked(InventoriesAPI.destroy).mockRejectedValueOnce(new Error());
       const { user } = renderWithContexts(
-        <SmartInventoryDetail inventory={mockSmartInventory} />
+        <SmartInventoryDetail
+          inventory={mockSmartInventory as unknown as Inventory}
+        />
       );
 
       await user.click(await screen.findByRole('button', { name: 'Delete' }));
@@ -128,7 +139,9 @@ describe('<SmartInventoryDetail />', () => {
       } as unknown as ApiResponse<Untyped>);
 
       renderWithContexts(
-        <SmartInventoryDetail inventory={mockSmartInventory} />
+        <SmartInventoryDetail
+          inventory={mockSmartInventory as unknown as Inventory}
+        />
       );
 
       await screen.findByText('Smart Inv');
@@ -143,7 +156,9 @@ describe('<SmartInventoryDetail />', () => {
       } as unknown as ApiResponse<Untyped>);
 
       renderWithContexts(
-        <SmartInventoryDetail inventory={mockSmartInventory} />
+        <SmartInventoryDetail
+          inventory={mockSmartInventory as unknown as Inventory}
+        />
       );
 
       await screen.findByText('Smart Inv');
@@ -174,7 +189,11 @@ describe('<SmartInventoryDetail />', () => {
         },
       };
 
-      renderWithContexts(<SmartInventoryDetail inventory={readOnlySmartInv} />);
+      renderWithContexts(
+        <SmartInventoryDetail
+          inventory={readOnlySmartInv as unknown as Inventory}
+        />
+      );
 
       await screen.findByText('Smart Inv');
       expect(
@@ -191,7 +210,9 @@ describe('<SmartInventoryDetail />', () => {
       } as unknown as ApiResponse<Untyped>);
 
       renderWithContexts(
-        <SmartInventoryDetail inventory={mockSmartInventory} />
+        <SmartInventoryDetail
+          inventory={mockSmartInventory as unknown as Inventory}
+        />
       );
 
       expect(

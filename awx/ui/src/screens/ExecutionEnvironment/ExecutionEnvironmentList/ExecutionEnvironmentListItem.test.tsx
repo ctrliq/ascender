@@ -7,6 +7,7 @@ import { ExecutionEnvironmentsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentListItem from './ExecutionEnvironmentListItem';
+import type { ExecutionEnvironment } from '../../../types/api';
 
 vi.mock('../../../api');
 
@@ -20,7 +21,7 @@ const executionEnvironment = {
     user_capabilities: { edit: true, copy: true, delete: true },
   },
   managed: false,
-};
+} as unknown as ExecutionEnvironment;
 
 const renderItem = (props = {}) =>
   renderWithContexts(
@@ -53,7 +54,9 @@ describe('<ExecutionEnvironmentListItem/>', () => {
   test('should render the proper data', () => {
     renderItem();
     expect(screen.getByText('Foo')).toBeInTheDocument();
-    expect(screen.getByText(executionEnvironment.image)).toBeInTheDocument();
+    expect(
+      screen.getByText(executionEnvironment.image as string)
+    ).toBeInTheDocument();
     expect(screen.getByText('(Default)')).toBeInTheDocument();
     expect(
       screen.getByLabelText('Edit Execution Environment')
@@ -102,7 +105,9 @@ describe('<ExecutionEnvironmentListItem/>', () => {
       },
     });
     expect(screen.getByText('Foo')).toBeInTheDocument();
-    expect(screen.getByText(executionEnvironment.image)).toBeInTheDocument();
+    expect(
+      screen.getByText(executionEnvironment.image as string)
+    ).toBeInTheDocument();
     expect(screen.getByText('(Default)')).toBeInTheDocument();
     expect(
       screen.queryByLabelText('Edit Execution Environment')

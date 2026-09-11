@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Project, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Card } from '@patternfly/react-core';
@@ -7,7 +7,7 @@ import { ProjectsAPI } from 'api';
 import ProjectForm from '../shared/ProjectForm';
 
 export interface ProjectEditProps {
-  project: Untyped;
+  project: Project;
   [key: string]: unknown;
 }
 

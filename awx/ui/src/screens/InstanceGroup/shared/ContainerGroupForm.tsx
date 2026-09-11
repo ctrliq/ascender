@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InstanceGroup, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 
@@ -22,7 +22,7 @@ import CredentialLookup from 'components/Lookup/CredentialLookup';
 import { VariablesField } from 'components/CodeEditor';
 
 export interface ContainerGroupFormFieldsProps {
-  instanceGroup: Untyped;
+  instanceGroup: InstanceGroup;
   [key: string]: unknown;
 }
 

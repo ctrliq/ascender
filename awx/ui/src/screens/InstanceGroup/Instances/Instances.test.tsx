@@ -5,6 +5,7 @@ import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import Instances from './Instances';
+import type { InstanceGroup } from 'types/api';
 
 // Markers for the routed panels, so assertions are about which branch of the
 // nested v6 <Routes> tree resolves.
@@ -23,7 +24,7 @@ vi.mock('../InstanceDetails', async () => {
   };
 });
 
-const instanceGroup = { id: 42, name: 'Foo' };
+const instanceGroup = { id: 42, name: 'Foo' } as unknown as InstanceGroup;
 
 // Instances uses paths relative to its parent route, so mount it under the same
 // /instance_groups/:id/instances/* route that InstanceGroup.js gives it.

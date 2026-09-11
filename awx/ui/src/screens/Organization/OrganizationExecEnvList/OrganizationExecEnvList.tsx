@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Organization, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -23,7 +23,7 @@ const QS_CONFIG = getQSConfig('organizations', {
 });
 
 export interface OrganizationExecEnvListProps {
-  organization: Untyped;
+  organization: Organization;
   [key: string]: unknown;
 }
 

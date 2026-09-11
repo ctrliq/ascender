@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host, Untyped } from 'types/api';
 import React from 'react';
 import { Link, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -8,7 +8,7 @@ import Sparkline from 'components/Sparkline';
 import { VariablesDetail } from 'components/CodeEditor';
 
 export interface AdvancedInventoryHostDetailProps {
-  host: Untyped;
+  host: Host;
   [key: string]: unknown;
 }
 
@@ -32,7 +32,7 @@ function AdvancedInventoryHostDetail({
     type: 'job',
   }));
 
-  const inventoryKind = inventory.kind === '' ? 'inventory' : inventoryType;
+  const inventoryKind = inventory?.kind === '' ? 'inventory' : inventoryType;
   return (
     <CardBody>
       <DetailList gutter="sm">

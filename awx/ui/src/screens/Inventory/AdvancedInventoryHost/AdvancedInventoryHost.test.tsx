@@ -1,3 +1,4 @@
+import type { Host } from 'types/api';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -7,13 +8,14 @@ import { InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockHost from '../shared/data.host.json';
 import AdvancedInventoryHost from './AdvancedInventoryHost';
+import type { Inventory } from 'types/api';
 
 vi.mock('../../../api');
 
 const mockSmartInventory = {
   id: 1234,
   name: 'Mock Smart Inventory',
-};
+} as unknown as Inventory;
 
 // AdvancedInventoryHost reads :inventoryType/:hostId via useParams and renders
 // a nested v6 route tree, so mount it under its real parent route at a concrete
@@ -38,7 +40,9 @@ function renderAt(url: Untyped) {
 
 describe('<AdvancedInventoryHost />', () => {
   beforeEach(() => {
-    vi.mocked(InventoriesAPI.readHostDetail).mockResolvedValue(mockHost);
+    vi.mocked(InventoriesAPI.readHostDetail).mockResolvedValue(
+      mockHost as unknown as Host
+    );
   });
 
   afterEach(() => {

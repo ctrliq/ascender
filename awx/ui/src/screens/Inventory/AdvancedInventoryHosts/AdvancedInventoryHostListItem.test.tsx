@@ -2,6 +2,7 @@ import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import AdvancedInventoryHostListItem from './AdvancedInventoryHostListItem';
+import type { Host } from 'types/api';
 
 const mockHost = {
   id: 2,
@@ -18,7 +19,7 @@ const mockHost = {
     },
     recent_jobs: [],
   },
-};
+} as unknown as Host;
 
 describe('<AdvancedInventoryHostListItem />', () => {
   test('should render expected row cells', () => {

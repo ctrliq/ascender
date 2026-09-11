@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Organization, Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
@@ -8,11 +8,11 @@ import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 
 export interface OrganizationListItemProps {
-  organization: Untyped;
+  organization: Organization;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
-  rowIndex?: Untyped;
-  detailUrl: Untyped;
+  rowIndex: number;
+  detailUrl: string;
   [key: string]: unknown;
 }
 
@@ -45,14 +45,14 @@ function OrganizationListItem({
         </span>
       </TdBreakWord>
       <Td dataLabel={t`Members`}>
-        {organization.summary_fields.related_field_counts.users}
+        {organization.summary_fields.related_field_counts?.users}
       </Td>
       <Td dataLabel={t`Teams`}>
-        {organization.summary_fields.related_field_counts.teams}
+        {organization.summary_fields.related_field_counts?.teams}
       </Td>
       <ActionsTd dataLabel={t`Actions`}>
         <ActionItem
-          visible={organization.summary_fields.user_capabilities.edit}
+          visible={organization.summary_fields.user_capabilities?.edit}
           tooltip={t`Edit Organization`}
         >
           <Button

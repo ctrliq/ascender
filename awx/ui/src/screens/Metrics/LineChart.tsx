@@ -5,7 +5,7 @@ import * as d3 from 'd3';
 
 export interface LineChartProps {
   data: Untyped[];
-  helpText: Untyped;
+  helpText: string;
   [key: string]: unknown;
 }
 

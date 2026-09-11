@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { User, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
@@ -28,7 +28,7 @@ import {
 } from 'themeRegistry';
 
 export interface UserFormFieldsProps {
-  user: Untyped;
+  user: User;
   [key: string]: unknown;
 }
 
@@ -37,7 +37,7 @@ function UserFormFields({ user }: UserFormFieldsProps) {
   const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
   const { me = {} } = useConfig();
   const ldapUser = user.ldap_dn;
-  const socialAuthUser = user.auth?.length > 0;
+  const socialAuthUser = (user.auth?.length ?? 0) > 0;
   const externalAccount = user.external_account;
 
   const userTypeOptions = [

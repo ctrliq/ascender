@@ -11,10 +11,10 @@ import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionItem, ActionsTd } from 'components/PaginatedTable';
 
 export interface InventoryRelatedGroupListItemProps {
-  detailUrl: Untyped;
+  detailUrl: string;
   editUrl: Untyped;
   group: Untyped;
-  rowIndex: Untyped;
+  rowIndex: number;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
   [key: string]: unknown;

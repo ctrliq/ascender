@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Organization, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CardBody } from 'components/Card';
@@ -12,7 +12,7 @@ const isEqual = (array1: Untyped, array2: Untyped) =>
   );
 
 export interface OrganizationEditProps {
-  organization: Untyped;
+  organization: Organization;
   [key: string]: unknown;
 }
 
@@ -42,7 +42,7 @@ function OrganizationEdit({ organization }: OrganizationEditProps) {
       if (
         !isEqual(organization.galaxy_credentials, values.galaxy_credentials)
       ) {
-        for (const credential of organization.galaxy_credentials) {
+        for (const credential of organization.galaxy_credentials ?? []) {
           await OrganizationsAPI.disassociateGalaxyCredential(
             organization.id,
             credential.id

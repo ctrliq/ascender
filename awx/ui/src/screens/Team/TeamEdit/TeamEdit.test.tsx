@@ -7,6 +7,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { TeamsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import TeamEdit from './TeamEdit';
+import type { Team } from '../../../types/api';
 
 vi.mock('../../../api');
 
@@ -50,7 +51,7 @@ const mockData = {
   description: 'Bar',
   id: 1,
   summary_fields: { organization: { id: 1, name: 'Default' } },
-};
+} as unknown as Team;
 
 describe('<TeamEdit />', () => {
   let history: Untyped;

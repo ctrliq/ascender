@@ -10,17 +10,18 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import UserDetail from './UserDetail';
 import mockDetails from '../data.user.json';
+import type { User } from '../../../types/api';
 
 vi.mock('../../../api');
 
 describe('<UserDetail />', () => {
   test('initially renders successfully', () => {
-    renderWithContexts(<UserDetail user={mockDetails} />);
+    renderWithContexts(<UserDetail user={mockDetails as unknown as User} />);
     expect(screen.getByText('Username')).toBeInTheDocument();
   });
 
   test('should render Details', () => {
-    renderWithContexts(<UserDetail user={mockDetails} />);
+    renderWithContexts(<UserDetail user={mockDetails as unknown as User} />);
 
     assertDetail('Username', mockDetails.username);
     assertDetail('Email', mockDetails.email);
@@ -36,11 +37,13 @@ describe('<UserDetail />', () => {
   test('User Type Detail should render expected strings', () => {
     const { unmount } = renderWithContexts(
       <UserDetail
-        user={{
-          ...mockDetails,
-          is_superuser: false,
-          is_system_auditor: true,
-        }}
+        user={
+          {
+            ...mockDetails,
+            is_superuser: false,
+            is_system_auditor: true,
+          } as unknown as User
+        }
       />
     );
     assertDetail('User Type', 'System Auditor');
@@ -48,18 +51,20 @@ describe('<UserDetail />', () => {
 
     renderWithContexts(
       <UserDetail
-        user={{
-          ...mockDetails,
-          is_superuser: false,
-          is_system_auditor: false,
-        }}
+        user={
+          {
+            ...mockDetails,
+            is_superuser: false,
+            is_system_auditor: false,
+          } as unknown as User
+        }
       />
     );
     assertDetail('User Type', 'Normal User');
   });
 
   test('should show edit button for users with edit permission', () => {
-    renderWithContexts(<UserDetail user={mockDetails} />);
+    renderWithContexts(<UserDetail user={mockDetails as unknown as User} />);
 
     const editLink = screen.getByRole('link', { name: 'edit' });
     expect(editLink).toHaveAttribute('href', `/users/${mockDetails.id}/edit`);
@@ -68,14 +73,16 @@ describe('<UserDetail />', () => {
   test('should hide edit button for users without edit permission', () => {
     renderWithContexts(
       <UserDetail
-        user={{
-          ...mockDetails,
-          summary_fields: {
-            user_capabilities: {
-              edit: false,
+        user={
+          {
+            ...mockDetails,
+            summary_fields: {
+              user_capabilities: {
+                edit: false,
+              },
             },
-          },
-        }}
+          } as unknown as User
+        }
       />
     );
     expect(
@@ -85,9 +92,12 @@ describe('<UserDetail />', () => {
 
   test('edit button should navigate to user edit', async () => {
     const history = createMemoryHistory();
-    const { user } = renderWithContexts(<UserDetail user={mockDetails} />, {
-      context: { router: { history } },
-    });
+    const { user } = renderWithContexts(
+      <UserDetail user={mockDetails as unknown as User} />,
+      {
+        context: { router: { history } },
+      }
+    );
 
     await user.click(screen.getByRole('link', { name: 'edit' }));
 
@@ -98,7 +108,9 @@ describe('<UserDetail />', () => {
     vi.mocked(UsersAPI.destroy).mockResolvedValueOnce(
       {} as unknown as ApiResponse<Untyped>
     );
-    const { user } = renderWithContexts(<UserDetail user={mockDetails} />);
+    const { user } = renderWithContexts(
+      <UserDetail user={mockDetails as unknown as User} />
+    );
 
     await user.click(screen.getByRole('button', { name: 'Delete' }));
     await user.click(
@@ -110,7 +122,9 @@ describe('<UserDetail />', () => {
 
   test('Error dialog shown for failed deletion', async () => {
     vi.mocked(UsersAPI.destroy).mockRejectedValueOnce(new Error());
-    const { user } = renderWithContexts(<UserDetail user={mockDetails} />);
+    const { user } = renderWithContexts(
+      <UserDetail user={mockDetails as unknown as User} />
+    );
 
     await user.click(screen.getByRole('button', { name: 'Delete' }));
     await user.click(

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ExecutionEnvironment } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link, useNavigate } from 'react-router';
@@ -15,7 +15,7 @@ import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDeta
 import executionEnvironmentHelpTextStrings from '../shared/ExecutionEnvironment.helptext';
 
 export interface ExecutionEnvironmentDetailsProps {
-  executionEnvironment: Untyped;
+  executionEnvironment: ExecutionEnvironment;
   [key: string]: unknown;
 }
 
@@ -79,9 +79,9 @@ function ExecutionEnvironmentDetails({
           value={
             organization ? (
               <Link
-                to={`/organizations/${summary_fields.organization.id}/details`}
+                to={`/organizations/${summary_fields.organization?.id}/details`}
               >
-                {summary_fields.organization.name}
+                {summary_fields.organization?.name}
               </Link>
             ) : (
               t`Globally Available`

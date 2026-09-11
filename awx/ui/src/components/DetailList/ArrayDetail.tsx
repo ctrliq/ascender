@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 import { DetailName, DetailValue } from './Detail';
@@ -14,7 +13,7 @@ const Value = styled(DetailValue)`
 
 export interface ArrayDetailProps {
   label: React.ReactNode;
-  helpText: Untyped;
+  helpText: React.ReactNode;
   value: unknown;
   dataCy: string;
   [key: string]: unknown;

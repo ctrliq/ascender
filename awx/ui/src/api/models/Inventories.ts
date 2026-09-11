@@ -1,5 +1,5 @@
 import type { QSParams } from 'util/qs';
-import type { ApiEntity, Paginated } from '../../types/api';
+import type { ApiEntity, Host, Paginated } from '../../types/api';
 import Base from '../Base';
 import InstanceGroupsMixin from '../mixins/InstanceGroups.mixin';
 import type { Http } from '../Base';
@@ -44,7 +44,7 @@ class Inventories extends InstanceGroupsMixin(Base) {
   async readHostDetail(inventoryId: number | string, hostId: number | string) {
     const {
       data: { results },
-    } = await this.http.get<Paginated<ApiEntity>>(
+    } = await this.http.get<Paginated<Host>>(
       `${this.baseUrl}${inventoryId}/hosts/?id=${hostId}`
     );
 

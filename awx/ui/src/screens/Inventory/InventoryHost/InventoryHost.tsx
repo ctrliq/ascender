@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { Inventory, DetailedError, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -25,7 +25,7 @@ import InventoryHostGroups from '../InventoryHostGroups';
 
 export interface InventoryHostProps {
   setBreadcrumb: Untyped;
-  inventory: Untyped;
+  inventory: Inventory;
   [key: string]: unknown;
 }
 

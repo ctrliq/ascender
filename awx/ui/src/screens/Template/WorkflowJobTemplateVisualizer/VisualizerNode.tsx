@@ -66,7 +66,7 @@ NodeResourceName.displayName = 'NodeResourceName';
 export interface VisualizerNodeProps {
   node: Untyped;
   onMouseOver?: (...args: Untyped[]) => void;
-  readOnly: Untyped;
+  readOnly: boolean;
   updateHelpText: Untyped;
   updateNodeHelp: Untyped;
   [key: string]: unknown;

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Credential, Untyped } from 'types/api';
 import React, { useState, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -13,13 +13,13 @@ import { CredentialsAPI } from 'api';
 import CopyButton from 'components/CopyButton';
 
 export interface CredentialListItemProps {
-  credential: Untyped;
-  detailUrl: Untyped;
+  credential: Credential;
+  detailUrl: string;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
   onCopy: (...args: Untyped[]) => void;
   fetchCredentials: Untyped;
-  rowIndex?: Untyped;
+  rowIndex: number;
   [key: string]: unknown;
 }
 
@@ -36,7 +36,7 @@ function CredentialListItem({
   const [isDisabled, setIsDisabled] = useState(false);
 
   const labelId = `check-action-${credential.id}`;
-  const canEdit = credential.summary_fields.user_capabilities.edit;
+  const canEdit = credential.summary_fields.user_capabilities?.edit;
 
   const copyCredential = useCallback(async () => {
     const response = await CredentialsAPI.copy(credential.id, {
@@ -72,7 +72,7 @@ function CredentialListItem({
         </Link>
       </TdBreakWord>
       <Td dataLabel={t`Type`}>
-        {credential.summary_fields.credential_type.name}
+        {credential.summary_fields.credential_type?.name}
       </Td>
       <ActionsTd dataLabel={t`Actions`}>
         <ActionItem visible={canEdit} tooltip={t`Edit Credential`}>
@@ -88,7 +88,7 @@ function CredentialListItem({
         </ActionItem>
         <ActionItem
           tooltip={t`Copy Credential`}
-          visible={credential.summary_fields.user_capabilities.copy}
+          visible={credential.summary_fields.user_capabilities?.copy}
         >
           <CopyButton
             isDisabled={isDisabled}

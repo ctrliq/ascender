@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Team, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CardBody } from 'components/Card';
@@ -9,7 +9,7 @@ import { Config } from 'contexts/Config';
 import TeamForm from '../shared/TeamForm';
 
 export interface TeamEditProps {
-  team: Untyped;
+  team: Team;
   [key: string]: unknown;
 }
 

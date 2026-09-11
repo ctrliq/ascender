@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Team, Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -9,11 +9,11 @@ import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 
 export interface TeamListItemProps {
-  team: Untyped;
+  team: Team;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
-  detailUrl: Untyped;
-  rowIndex: Untyped;
+  detailUrl: string;
+  rowIndex: number;
   [key: string]: unknown;
 }
 
@@ -54,7 +54,7 @@ function TeamListItem({
       </TdBreakWord>
       <ActionsTd dataLabel={t`Actions`}>
         <ActionItem
-          visible={team.summary_fields.user_capabilities.edit}
+          visible={team.summary_fields.user_capabilities?.edit}
           tooltip={t`Edit Team`}
         >
           <Button

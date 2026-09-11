@@ -5,6 +5,7 @@ import { act, screen, waitFor } from '@testing-library/react';
 import { UsersAPI, RolesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserRolesList from './UserRolesList';
+import type { User } from '../../../types/api';
 
 vi.mock('../../../api');
 
@@ -17,7 +18,7 @@ const user = {
       delete: true,
     },
   },
-};
+} as unknown as User;
 
 const roles = {
   data: {
@@ -194,15 +195,17 @@ describe('<UserRolesList />', () => {
     } as unknown as ApiResponse<Untyped>);
     renderWithContexts(
       <UserRolesList
-        user={{
-          ...user,
-          summary_fields: {
-            user_capabilities: {
-              edit: false,
-              delete: false,
+        user={
+          {
+            ...user,
+            summary_fields: {
+              user_capabilities: {
+                edit: false,
+                delete: false,
+              },
             },
-          },
-        }}
+          } as unknown as User
+        }
       />
     );
 

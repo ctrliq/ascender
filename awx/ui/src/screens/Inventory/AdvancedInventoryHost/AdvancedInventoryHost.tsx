@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host, Inventory, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -12,7 +12,7 @@ import { InventoriesAPI } from 'api';
 import AdvancedInventoryHostDetail from '../AdvancedInventoryHostDetail';
 
 export interface AdvancedInventoryHostProps {
-  inventory: Untyped;
+  inventory: Inventory;
   setBreadcrumb: Untyped;
   [key: string]: unknown;
 }
@@ -33,7 +33,7 @@ function AdvancedInventoryHost({
     error,
     isLoading,
     request: fetchHost,
-  } = useRequest(
+  } = useRequest<Host | null | undefined>(
     useCallback(async () => {
       const response = await InventoriesAPI.readHostDetail(
         inventory.id,
@@ -41,7 +41,8 @@ function AdvancedInventoryHost({
       );
       return response;
     }, [inventory.id, hostId]),
-    { isLoading: true }
+    // The tabs render before the host arrives, and the routes below wait for it.
+    null
   );
 
   useEffect(() => {

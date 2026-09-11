@@ -9,7 +9,7 @@ export interface CheckboxListItemProps {
   isSelected?: boolean;
   itemId: number | string;
   label: React.ReactNode;
-  name: Untyped;
+  name: string;
   onDeselect: (...args: Untyped[]) => void;
   rowIndex: number;
   onSelect: (...args: Untyped[]) => void;

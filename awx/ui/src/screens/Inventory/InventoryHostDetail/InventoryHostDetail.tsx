@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -14,7 +14,7 @@ import { HostsAPI } from 'api';
 import HostToggle from 'components/HostToggle';
 
 export interface InventoryHostDetailProps {
-  host: Untyped;
+  host: Host;
   [key: string]: unknown;
 }
 
@@ -43,7 +43,7 @@ function InventoryHostDetail({ host }: InventoryHostDetailProps) {
     setIsloading(true);
     try {
       await HostsAPI.destroy(id);
-      navigate(`/inventories/inventory/${inventory.id}/hosts`);
+      navigate(`/inventories/inventory/${inventory?.id}/hosts`);
     } catch (err) {
       setDeletionError(err);
     } finally {
@@ -65,7 +65,7 @@ function InventoryHostDetail({ host }: InventoryHostDetailProps) {
     );
   }
 
-  const recentPlaybookJobs = recent_jobs.map((job: Untyped) => ({
+  const recentPlaybookJobs = recent_jobs?.map((job: Untyped) => ({
     ...job,
     type: 'job',
   }));
@@ -101,7 +101,7 @@ function InventoryHostDetail({ host }: InventoryHostDetailProps) {
             ouiaId="inventory-host-detail-edit-button"
             aria-label={t`edit`}
             component={Link}
-            to={`/inventories/inventory/${inventory.id}/hosts/${id}/edit`}
+            to={`/inventories/inventory/${inventory?.id}/hosts/${id}/edit`}
           >
             {t`Edit`}
           </Button>

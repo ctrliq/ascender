@@ -9,6 +9,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentDetails from './ExecutionEnvironmentDetails';
+import type { ExecutionEnvironment } from '../../../types/api';
 
 vi.mock('../../../api');
 
@@ -48,7 +49,7 @@ const executionEnvironment = {
   image: 'https://localhost:90/12345/ma',
   managed: false,
   credential: 4,
-};
+} as unknown as ExecutionEnvironment;
 
 describe('<ExecutionEnvironmentDetails/>', () => {
   afterEach(() => {
@@ -76,14 +77,16 @@ describe('<ExecutionEnvironmentDetails/>', () => {
   test('should render organization detail when set', async () => {
     renderWithContexts(
       <ExecutionEnvironmentDetails
-        executionEnvironment={{
-          ...executionEnvironment,
-          organization: 1,
-          summary_fields: {
-            organization: { id: 1, name: 'Bar' },
-            credential: { id: 4, name: 'Container Registry' },
-          },
-        }}
+        executionEnvironment={
+          {
+            ...executionEnvironment,
+            organization: 1,
+            summary_fields: {
+              organization: { id: 1, name: 'Bar' },
+              credential: { id: 4, name: 'Container Registry' },
+            },
+          } as unknown as ExecutionEnvironment
+        }
       />
     );
     await waitFor(() => expect(screen.getByText('Image')).toBeInTheDocument());
@@ -114,7 +117,12 @@ describe('<ExecutionEnvironmentDetails/>', () => {
   test('should render action buttons for a managed ee', async () => {
     renderWithContexts(
       <ExecutionEnvironmentDetails
-        executionEnvironment={{ ...executionEnvironment, managed: true }}
+        executionEnvironment={
+          {
+            ...executionEnvironment,
+            managed: true,
+          } as unknown as ExecutionEnvironment
+        }
       />
     );
     await waitFor(() => expect(screen.getByText('Image')).toBeInTheDocument());
@@ -126,10 +134,12 @@ describe('<ExecutionEnvironmentDetails/>', () => {
   test('should hide the edit button without edit permission', async () => {
     renderWithContexts(
       <ExecutionEnvironmentDetails
-        executionEnvironment={{
-          ...executionEnvironment,
-          summary_fields: { user_capabilities: { edit: false } },
-        }}
+        executionEnvironment={
+          {
+            ...executionEnvironment,
+            summary_fields: { user_capabilities: { edit: false } },
+          } as unknown as ExecutionEnvironment
+        }
       />
     );
     await waitFor(() => expect(screen.getByText('Image')).toBeInTheDocument());
@@ -139,10 +149,12 @@ describe('<ExecutionEnvironmentDetails/>', () => {
   test('should hide the delete button without delete permission', async () => {
     renderWithContexts(
       <ExecutionEnvironmentDetails
-        executionEnvironment={{
-          ...executionEnvironment,
-          summary_fields: { user_capabilities: { delete: false } },
-        }}
+        executionEnvironment={
+          {
+            ...executionEnvironment,
+            summary_fields: { user_capabilities: { delete: false } },
+          } as unknown as ExecutionEnvironment
+        }
       />
     );
     await waitFor(() => expect(screen.getByText('Image')).toBeInTheDocument());

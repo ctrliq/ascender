@@ -23,7 +23,7 @@ const QS_CONFIG = (order_by = 'name') =>
 export interface AssociateModalProps {
   header?: Untyped;
   columns?: SearchColumn[];
-  title?: Untyped;
+  title?: React.ReactNode;
   onClose: (...args: Untyped[]) => void;
   onAssociate: (...args: Untyped[]) => void;
   /** Reads the page of candidates the modal lists. */

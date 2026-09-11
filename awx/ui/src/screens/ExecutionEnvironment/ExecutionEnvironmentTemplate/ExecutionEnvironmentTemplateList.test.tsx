@@ -7,6 +7,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ExecutionEnvironmentTemplateList from './ExecutionEnvironmentTemplateList';
 import type { ApiResponse } from 'api/Base';
+import type { ExecutionEnvironment } from '../../../types/api';
 
 vi.mock('../../../api/');
 
@@ -39,7 +40,10 @@ const templates = {
   },
 };
 
-const mockExecutionEnvironment = { id: 1, name: 'Default EE' };
+const mockExecutionEnvironment = {
+  id: 1,
+  name: 'Default EE',
+} as unknown as ExecutionEnvironment;
 const options = { data: { actions: { GET: {} } } };
 
 const renderList = () =>

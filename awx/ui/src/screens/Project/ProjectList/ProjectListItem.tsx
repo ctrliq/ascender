@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Project, Untyped } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Button, ClipboardCopy, Tooltip } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
@@ -25,13 +25,13 @@ const Label = styled.span`
 export interface ProjectListItemProps {
   isExpanded: boolean;
   onExpand: (...args: Untyped[]) => void;
-  project: Untyped;
+  project: Project;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
   onCopy: (...args: Untyped[]) => void;
-  detailUrl: Untyped;
+  detailUrl: string;
   fetchProjects: Untyped;
-  rowIndex: Untyped;
+  rowIndex: number;
   onRefreshRow: (...args: Untyped[]) => void;
   [key: string]: unknown;
 }
@@ -203,12 +203,12 @@ function ProjectListItem({
         </Td>
         <Td dataLabel={t`Revision`}>{renderRevision()}</Td>
         <ActionsTd dataLabel={t`Actions`}>
-          {['running', 'pending', 'waiting'].includes(job?.status) ? (
+          {['running', 'pending', 'waiting'].includes(job?.status ?? '') ? (
             <ActionItem
-              visible={project.summary_fields.user_capabilities.start}
+              visible={project.summary_fields.user_capabilities?.start}
             >
               <JobCancelButton
-                job={{ id: job.id, type: 'project_update' }}
+                job={{ id: job?.id, type: 'project_update' }}
                 errorTitle={t`Project Sync Error`}
                 title={t`Cancel Project Sync`}
                 showIconButton
@@ -217,7 +217,7 @@ function ProjectListItem({
             </ActionItem>
           ) : (
             <ActionItem
-              visible={project.summary_fields.user_capabilities.start}
+              visible={project.summary_fields.user_capabilities?.start}
               tooltip={t`Sync Project`}
             >
               <ProjectSyncButton
@@ -227,7 +227,7 @@ function ProjectListItem({
             </ActionItem>
           )}
           <ActionItem
-            visible={project.summary_fields.user_capabilities.edit}
+            visible={project.summary_fields.user_capabilities?.edit}
             tooltip={t`Edit Project`}
           >
             <Button
@@ -242,7 +242,7 @@ function ProjectListItem({
           </ActionItem>
           <ActionItem
             tooltip={t`Copy Project`}
-            visible={project.summary_fields.user_capabilities.copy}
+            visible={project.summary_fields.user_capabilities?.copy}
           >
             <CopyButton
               copyItem={copyProject}

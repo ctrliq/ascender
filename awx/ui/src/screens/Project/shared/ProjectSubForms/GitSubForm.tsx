@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Credential, Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import FormField from 'components/FormField';
@@ -14,7 +14,7 @@ import {
 import getProjectHelpStrings from '../Project.helptext';
 
 export interface GitSubFormProps {
-  credential: Untyped;
+  credential: Credential;
   onCredentialSelection: (...args: Untyped[]) => void;
   scmUpdateOnLaunch: Untyped;
   [key: string]: unknown;

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React, { useState, useCallback } from 'react';
 
 import { Button, Label } from '@patternfly/react-core';
@@ -14,8 +14,9 @@ import StatusLabel from 'components/StatusLabel';
 import { getInventoryPath } from '../shared/utils';
 
 export interface InventoryListItemProps {
-  inventory: Untyped;
-  rowIndex: Untyped;
+  /** The websocket hook adds isSourceSyncRunning; the API does not send it. */
+  inventory: Inventory & { isSourceSyncRunning?: boolean };
+  rowIndex: number;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
   onCopy: (...args: Untyped[]) => void;
@@ -88,7 +89,7 @@ function InventoryListItem({
 
   return (
     <Tr
-      id={inventory.id}
+      id={`${inventory.id}`}
       aria-labelledby={labelId}
       ouiaId={`inventory-row-${inventory.id}`}
     >
@@ -145,7 +146,7 @@ function InventoryListItem({
       ) : (
         <ActionsTd dataLabel={t`Actions`}>
           <ActionItem
-            visible={inventory.summary_fields.user_capabilities.edit}
+            visible={inventory.summary_fields.user_capabilities?.edit}
             tooltip={t`Edit Inventory`}
           >
             <Button
@@ -159,7 +160,7 @@ function InventoryListItem({
             />
           </ActionItem>
           <ActionItem
-            visible={inventory.summary_fields.user_capabilities.copy}
+            visible={inventory.summary_fields.user_capabilities?.copy}
             tooltip={
               inventory.has_inventory_sources
                 ? t`Inventories with sources cannot be copied`

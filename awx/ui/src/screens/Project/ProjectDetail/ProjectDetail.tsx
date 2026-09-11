@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Project, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -37,7 +37,7 @@ const Label = styled.span`
 `;
 
 export interface ProjectDetailProps {
-  project: Untyped;
+  project: Project;
   [key: string]: unknown;
 }
 

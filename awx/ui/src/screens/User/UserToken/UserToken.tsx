@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { User, DetailedError, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -19,7 +19,7 @@ import UserTokenDetail from '../UserTokenDetail';
 
 export interface UserTokenProps {
   setBreadcrumb: Untyped;
-  user: Untyped;
+  user: User;
   [key: string]: unknown;
 }
 

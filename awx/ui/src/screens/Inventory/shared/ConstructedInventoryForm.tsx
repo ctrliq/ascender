@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -24,13 +24,13 @@ import ConstructedInventoryHint from './ConstructedInventoryHint';
 import getInventoryHelpTextStrings from './Inventory.helptext';
 
 export interface ConstructedInventoryFormFieldsProps {
-  inventory?: Untyped;
+  inventory?: Inventory;
   options: Untyped;
   [key: string]: unknown;
 }
 
 function ConstructedInventoryFormFields({
-  inventory = {},
+  inventory,
   options,
 }: ConstructedInventoryFormFieldsProps) {
   const { t } = useLingui();

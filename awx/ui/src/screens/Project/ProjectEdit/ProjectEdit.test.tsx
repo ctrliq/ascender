@@ -6,6 +6,7 @@ import { createMemoryHistory } from 'history';
 import { ProjectsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ProjectEdit from './ProjectEdit';
+import type { Project } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -41,7 +42,7 @@ const projectData = {
       name: 'Default',
     },
   },
-};
+} as unknown as Project;
 
 // the shape ProjectForm passes to handleSubmit (organization as an object)
 const submitValues = {

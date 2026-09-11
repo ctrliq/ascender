@@ -13,6 +13,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 
 import OrganizationDetail from './OrganizationDetail';
+import type { Organization } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -62,12 +63,20 @@ describe('<OrganizationDetail />', () => {
   });
 
   test('initially renders successfully', async () => {
-    renderWithContexts(<OrganizationDetail organization={mockOrganization} />);
+    renderWithContexts(
+      <OrganizationDetail
+        organization={mockOrganization as unknown as Organization}
+      />
+    );
     expect(await screen.findByText('Name')).toBeInTheDocument();
   });
 
   test('should request instance groups from api', async () => {
-    renderWithContexts(<OrganizationDetail organization={mockOrganization} />);
+    renderWithContexts(
+      <OrganizationDetail
+        organization={mockOrganization as unknown as Organization}
+      />
+    );
     await screen.findByText('Name');
     expect(OrganizationsAPI.readInstanceGroups).toHaveBeenCalledTimes(1);
   });
@@ -79,13 +88,21 @@ describe('<OrganizationDetail />', () => {
   });
 
   test('should render the expected instance group', async () => {
-    renderWithContexts(<OrganizationDetail organization={mockOrganization} />);
+    renderWithContexts(
+      <OrganizationDetail
+        organization={mockOrganization as unknown as Organization}
+      />
+    );
     expect(await screen.findByText('One')).toBeInTheDocument();
     expect(screen.getByText('Two')).toBeInTheDocument();
   });
 
   test('should render Details', async () => {
-    renderWithContexts(<OrganizationDetail organization={mockOrganization} />);
+    renderWithContexts(
+      <OrganizationDetail
+        organization={mockOrganization as unknown as Organization}
+      />
+    );
     await screen.findByText('Name');
 
     assertDetail('Name', 'Foo');
@@ -106,7 +123,11 @@ describe('<OrganizationDetail />', () => {
       <Routes>
         <Route
           path="/organizations/:id/details"
-          element={<OrganizationDetail organization={mockOrganization} />}
+          element={
+            <OrganizationDetail
+              organization={mockOrganization as unknown as Organization}
+            />
+          }
         />
       </Routes>,
       { context: { router: { history } } }
@@ -128,7 +149,11 @@ describe('<OrganizationDetail />', () => {
       },
     };
 
-    renderWithContexts(<OrganizationDetail organization={readOnlyOrg} />);
+    renderWithContexts(
+      <OrganizationDetail
+        organization={readOnlyOrg as unknown as Organization}
+      />
+    );
     await screen.findByText('Name');
     expect(
       screen.queryByRole('link', { name: 'Edit' })
@@ -144,7 +169,9 @@ describe('<OrganizationDetail />', () => {
     );
 
     const { user } = renderWithContexts(
-      <OrganizationDetail organization={mockOrganization} />
+      <OrganizationDetail
+        organization={mockOrganization as unknown as Organization}
+      />
     );
 
     await user.click(await screen.findByRole('button', { name: 'Delete' }));
@@ -162,7 +189,11 @@ describe('<OrganizationDetail />', () => {
       Promise.reject(new Error())
     );
 
-    renderWithContexts(<OrganizationDetail organization={mockOrganization} />);
+    renderWithContexts(
+      <OrganizationDetail
+        organization={mockOrganization as unknown as Organization}
+      />
+    );
     expect(
       await screen.findByText('Something went wrong...')
     ).toBeInTheDocument();
@@ -174,7 +205,9 @@ describe('<OrganizationDetail />', () => {
     );
 
     const { user } = renderWithContexts(
-      <OrganizationDetail organization={mockOrganization} />
+      <OrganizationDetail
+        organization={mockOrganization as unknown as Organization}
+      />
     );
 
     await user.click(await screen.findByRole('button', { name: 'Delete' }));
@@ -197,7 +230,11 @@ describe('<OrganizationDetail />', () => {
       },
     } as unknown as ApiResponse<Untyped>);
 
-    renderWithContexts(<OrganizationDetail organization={mockOrganization} />);
+    renderWithContexts(
+      <OrganizationDetail
+        organization={mockOrganization as unknown as Organization}
+      />
+    );
     await screen.findByText('Name');
     // an empty Instance Groups detail is not rendered at all
     expect(screen.queryByText('Instance Groups')).not.toBeInTheDocument();
@@ -210,10 +247,12 @@ describe('<OrganizationDetail />', () => {
 
     renderWithContexts(
       <OrganizationDetail
-        organization={{
-          ...mockOrganization,
-          galaxy_credentials: [],
-        }}
+        organization={
+          {
+            ...mockOrganization,
+            galaxy_credentials: [],
+          } as unknown as Organization
+        }
       />
     );
     await screen.findByText('Name');

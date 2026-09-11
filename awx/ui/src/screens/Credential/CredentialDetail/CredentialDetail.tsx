@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Credential, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -27,7 +27,7 @@ const PluginFieldText = styled.p`
 `;
 
 export interface CredentialDetailProps {
-  credential: Untyped;
+  credential: Credential;
   [key: string]: unknown;
 }
 
@@ -37,7 +37,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
     id: credentialId,
     name,
     description,
-    inputs,
+    inputs = {},
     created,
     modified,
     summary_fields: {
@@ -65,7 +65,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
           data: { results: loadedInputSources },
         },
       ] = await Promise.all([
-        CredentialTypesAPI.readDetail(credential_type.id),
+        CredentialTypesAPI.readDetail(credential_type?.id as number),
         CredentialsAPI.readInputSources(credentialId),
       ]);
       return {
@@ -79,7 +79,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
           {}
         ),
       };
-    }, [credentialId, credential_type.id]),
+    }, [credentialId, credential_type?.id]),
     {
       fields: [],
       managedByTower: true,
@@ -183,7 +183,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
         id={`credential-${id}-detail`}
         key={id}
         label={label}
-        value={inputs[id]}
+        value={inputs[id] as React.ReactNode}
         helpText={help_text}
       />
     );
@@ -241,10 +241,10 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
           label={t`Credential Type`}
           value={
             managedByTower ? (
-              credential_type.name
+              credential_type?.name
             ) : (
-              <Link to={`/credential_types/${credential_type.id}/details`}>
-                {credential_type.name}
+              <Link to={`/credential_types/${credential_type?.id}/details`}>
+                {credential_type?.name}
               </Link>
             )
           }
@@ -284,7 +284,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
         </PluginFieldText>
       )}
       <CardActionsRow>
-        {user_capabilities.edit && (
+        {user_capabilities?.edit && (
           <Button
             ouiaId="credential-detail-edit-button"
             component={Link}
@@ -293,7 +293,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
             {t`Edit`}
           </Button>
         )}
-        {user_capabilities.delete && (
+        {user_capabilities?.delete && (
           <DeleteButton
             name={name}
             itemToDelete={credential}

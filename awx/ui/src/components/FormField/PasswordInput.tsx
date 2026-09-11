@@ -15,7 +15,7 @@ import type { TextInputProps } from '@patternfly/react-core';
 export interface PasswordInputProps {
   autocomplete?: string;
   id: Untyped;
-  name: Untyped;
+  name: string;
   validate?: (...args: Untyped[]) => void;
   isFieldGroupValid?: boolean;
   isRequired?: boolean;

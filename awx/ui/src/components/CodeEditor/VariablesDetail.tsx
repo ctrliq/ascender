@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -32,16 +31,16 @@ const EditorWrapper = styled.div`
 
 export interface VariablesDetailProps {
   dataCy?: string;
-  helpText?: Untyped;
+  helpText?: React.ReactNode;
   /**
    * The variables, as the API returns them: a YAML or JSON string, or the
    * parsed object for an endpoint that returns one.
    */
-  value?: string | Record<string, unknown>;
+  value?: string | Record<string, unknown> | null;
   label: React.ReactNode;
-  rows?: Untyped;
+  rows?: number | 'auto';
   minRows?: number;
-  name: Untyped;
+  name: string;
   [key: string]: unknown;
 }
 

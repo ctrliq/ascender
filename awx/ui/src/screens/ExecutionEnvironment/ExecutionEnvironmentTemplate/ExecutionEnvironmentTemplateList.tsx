@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ExecutionEnvironment, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -28,7 +28,7 @@ const QS_CONFIG = getQSConfig(
 );
 
 export interface ExecutionEnvironmentTemplateListProps {
-  executionEnvironment: Untyped;
+  executionEnvironment: ExecutionEnvironment;
   [key: string]: unknown;
 }
 

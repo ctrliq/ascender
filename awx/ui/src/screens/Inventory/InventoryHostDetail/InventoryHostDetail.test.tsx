@@ -8,6 +8,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 import InventoryHostDetail from './InventoryHostDetail';
 import mockHost from '../shared/data.host.json';
+import type { Host } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -18,7 +19,9 @@ describe('<InventoryHostDetail />', () => {
 
   describe('User has edit permissions', () => {
     test('should render Details', () => {
-      renderWithContexts(<InventoryHostDetail host={mockHost} />);
+      renderWithContexts(
+        <InventoryHostDetail host={mockHost as unknown as Host} />
+      );
       assertDetail('Name', 'localhost');
       assertDetail('Description', 'localhost description');
       assertDetail('Created', '10/28/2019, 9:26:54 PM');
@@ -26,7 +29,9 @@ describe('<InventoryHostDetail />', () => {
     });
 
     test('should show edit button for users with edit permission', () => {
-      renderWithContexts(<InventoryHostDetail host={mockHost} />);
+      renderWithContexts(
+        <InventoryHostDetail host={mockHost as unknown as Host} />
+      );
       const editButton = screen.getByRole('link', { name: 'edit' });
       expect(editButton).toHaveTextContent('Edit');
       expect(editButton).toHaveAttribute(
@@ -37,7 +42,7 @@ describe('<InventoryHostDetail />', () => {
 
     test('expected api call is made for delete', async () => {
       const { user } = renderWithContexts(
-        <InventoryHostDetail host={mockHost} />
+        <InventoryHostDetail host={mockHost as unknown as Host} />
       );
       await user.click(screen.getByRole('button', { name: 'Delete' }));
       await user.click(
@@ -51,7 +56,7 @@ describe('<InventoryHostDetail />', () => {
         Promise.reject(new Error())
       );
       const { user } = renderWithContexts(
-        <InventoryHostDetail host={mockHost} />
+        <InventoryHostDetail host={mockHost as unknown as Host} />
       );
       await user.click(screen.getByRole('button', { name: 'Delete' }));
       await user.click(
@@ -80,13 +85,17 @@ describe('<InventoryHostDetail />', () => {
     };
 
     test('should hide activity stream when there are no recent jobs', () => {
-      renderWithContexts(<InventoryHostDetail host={readOnlyHost} />);
+      renderWithContexts(
+        <InventoryHostDetail host={readOnlyHost as unknown as Host} />
+      );
       // with no recent jobs the Activity Detail is empty and renders nothing
       expect(screen.queryByText('Activity')).not.toBeInTheDocument();
     });
 
     test('should hide edit button for users without edit permission', () => {
-      renderWithContexts(<InventoryHostDetail host={readOnlyHost} />);
+      renderWithContexts(
+        <InventoryHostDetail host={readOnlyHost as unknown as Host} />
+      );
       expect(
         screen.queryByRole('link', { name: 'edit' })
       ).not.toBeInTheDocument();

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host, Untyped } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -12,11 +12,11 @@ import HostToggle from 'components/HostToggle';
 import Sparkline from 'components/Sparkline';
 
 export interface HostListItemProps {
-  host: Untyped;
+  host: Host;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
-  detailUrl: Untyped;
-  rowIndex?: Untyped;
+  detailUrl: string;
+  rowIndex: number;
   [key: string]: unknown;
 }
 
@@ -75,7 +75,7 @@ function HostListItem({
       <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
         <HostToggle host={host} />
         <ActionItem
-          visible={host.summary_fields.user_capabilities.edit}
+          visible={host.summary_fields.user_capabilities?.edit}
           tooltip={t`Edit Host`}
         >
           <Button

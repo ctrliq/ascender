@@ -12,9 +12,9 @@ import Popover from '../Popover';
 
 export interface CodeEditorFieldProps {
   id: Untyped;
-  name: Untyped;
+  name: string;
   label: React.ReactNode;
-  tooltip?: Untyped;
+  tooltip?: React.ReactNode;
   helperText?: string;
   validate?: (...args: Untyped[]) => void;
   isRequired?: boolean;

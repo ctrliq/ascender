@@ -12,8 +12,8 @@ export interface ApplicationListItemProps {
   application: Untyped;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
-  detailUrl: Untyped;
-  rowIndex?: Untyped;
+  detailUrl: string;
+  rowIndex: number;
   [key: string]: unknown;
 }
 

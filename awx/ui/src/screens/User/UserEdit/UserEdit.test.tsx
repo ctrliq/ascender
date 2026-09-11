@@ -3,6 +3,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { UsersAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserEdit from './UserEdit';
+import type { User } from '../../../types/api';
 
 vi.mock('../../../api');
 
@@ -20,7 +21,9 @@ describe('<UserEdit />', () => {
   };
 
   test('handleSubmit should call api update', async () => {
-    const { user } = renderWithContexts(<UserEdit user={mockData} />);
+    const { user } = renderWithContexts(
+      <UserEdit user={mockData as unknown as User} />
+    );
 
     const usernameInput = screen.getByRole('textbox', { name: 'Username' });
     await user.clear(usernameInput);
@@ -42,7 +45,9 @@ describe('<UserEdit />', () => {
   });
 
   test('should navigate to user detail when cancel is clicked', async () => {
-    const { history, user } = renderWithContexts(<UserEdit user={mockData} />);
+    const { history, user } = renderWithContexts(
+      <UserEdit user={mockData as unknown as User} />
+    );
 
     await user.click(screen.getByRole('button', { name: 'Cancel' }));
 

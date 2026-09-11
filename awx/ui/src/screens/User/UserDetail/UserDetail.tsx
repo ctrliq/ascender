@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { User, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 
@@ -18,7 +18,7 @@ import { useConfig } from 'contexts/Config';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 
 export interface UserDetailProps {
-  user: Untyped;
+  user: User;
   [key: string]: unknown;
 }
 
@@ -65,7 +65,7 @@ function UserDetail({ user }: UserDetailProps) {
   let userAuthType;
   if (user.ldap_dn) {
     userAuthType = t`LDAP`;
-  } else if (user.auth.length > 0) {
+  } else if ((user.auth?.length ?? 0) > 0) {
     userAuthType = t`SOCIAL`;
   }
 

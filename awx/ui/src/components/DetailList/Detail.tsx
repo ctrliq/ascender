@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 
 import styled from 'styled-components';
@@ -47,7 +46,7 @@ export interface DetailProps {
   dataCy?: string;
   alwaysVisible?: boolean;
   isEmpty?: boolean;
-  helpText?: Untyped;
+  helpText?: React.ReactNode;
   isEncrypted?: boolean;
   isNotConfigured?: boolean;
   [key: string]: unknown;

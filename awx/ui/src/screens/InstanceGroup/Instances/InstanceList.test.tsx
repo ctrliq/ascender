@@ -12,6 +12,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 
 import InstanceList from './InstanceList';
+import type { InstanceGroup } from 'types/api';
 
 vi.mock('../../../api');
 // InstanceList reads useParams from react-router-dom (the route tree
@@ -121,7 +122,11 @@ function setup() {
     <Routes>
       <Route
         path="/instance_groups/:id/instances"
-        element={<InstanceList instanceGroup={{ name: 'Alex' }} />}
+        element={
+          <InstanceList
+            instanceGroup={{ name: 'Alex' } as unknown as InstanceGroup}
+          />
+        }
       />
     </Routes>,
     { context: { router: { history } } }

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Credential, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -15,7 +15,7 @@ import useRequest from 'hooks/useRequest';
 import { CredentialPluginTestAlert } from './CredentialPlugins';
 
 export interface ExternalTestModalProps {
-  credential?: Untyped;
+  credential?: Credential | null;
   credentialType: Untyped;
   credentialFormValues: Untyped;
   onClose: (...args: Untyped[]) => void;

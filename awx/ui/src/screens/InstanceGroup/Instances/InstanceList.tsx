@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InstanceGroup, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useLocation, useParams } from 'react-router';
@@ -35,7 +35,7 @@ const QS_CONFIG = getQSConfig('instance', {
 });
 
 export interface InstanceListProps {
-  instanceGroup: Untyped;
+  instanceGroup: InstanceGroup;
   [key: string]: unknown;
 }
 

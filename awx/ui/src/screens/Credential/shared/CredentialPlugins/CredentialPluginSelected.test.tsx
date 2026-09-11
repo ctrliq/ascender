@@ -1,3 +1,4 @@
+import type { Credential } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
@@ -9,7 +10,7 @@ function setup() {
   const onEditPlugin = vi.fn();
   const { user, container } = renderWithContexts(
     <CredentialPluginSelected
-      credential={selectedCredential}
+      credential={selectedCredential as unknown as Credential}
       onClearPlugin={onClearPlugin}
       onEditPlugin={onEditPlugin}
     />

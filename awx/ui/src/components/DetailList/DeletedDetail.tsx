@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -14,7 +13,7 @@ const Detail = styled(_Detail)`
 export interface DeletedDetailProps {
   label: React.ReactNode;
   dataCy?: string;
-  helpText?: Untyped;
+  helpText?: React.ReactNode;
   [key: string]: unknown;
 }
 

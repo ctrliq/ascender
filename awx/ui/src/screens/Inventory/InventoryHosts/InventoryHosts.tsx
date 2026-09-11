@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 
@@ -7,8 +7,8 @@ import InventoryHostAdd from '../InventoryHostAdd';
 import InventoryHostList from './InventoryHostList';
 
 export interface InventoryHostsProps {
-  setBreadcrumb?: Untyped;
-  inventory?: Untyped;
+  setBreadcrumb: Untyped;
+  inventory: Inventory;
   [key: string]: unknown;
 }
 

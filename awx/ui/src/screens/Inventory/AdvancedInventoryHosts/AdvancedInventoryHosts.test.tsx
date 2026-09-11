@@ -1,3 +1,4 @@
+import type { Host } from 'types/api';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
@@ -47,7 +48,9 @@ describe('<AdvancedInventoryHosts />', () => {
   });
 
   test('should render smart inventory host details', async () => {
-    vi.mocked(InventoriesAPI.readHostDetail).mockResolvedValue({ ...mockHost });
+    vi.mocked(InventoriesAPI.readHostDetail).mockResolvedValue({
+      ...mockHost,
+    } as unknown as Host);
     renderUnder('/inventories/smart_inventory/1/hosts/2', {
       inventory: { id: 1 },
       setBreadcrumb: () => {},

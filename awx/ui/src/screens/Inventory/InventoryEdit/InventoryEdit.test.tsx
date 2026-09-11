@@ -6,6 +6,7 @@ import { createMemoryHistory } from 'history';
 import { LabelsAPI, InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryEdit from './InventoryEdit';
+import type { Inventory } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -49,7 +50,7 @@ const mockInventory = {
   total_inventory_sources: 0,
   inventory_sources_with_failures: 0,
   pending_deletion: false,
-};
+} as unknown as Inventory;
 
 const associatedInstanceGroups = [
   {

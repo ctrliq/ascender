@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host, Untyped } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -6,13 +6,13 @@ import { Tr, Td } from '@patternfly/react-table';
 import Sparkline from 'components/Sparkline';
 
 export interface AdvancedInventoryHostListItemProps {
-  detailUrl: Untyped;
+  detailUrl: string;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
-  rowIndex: Untyped;
+  rowIndex: number;
   inventoryType: Untyped;
   /** The host row, as the hosts list hands it over. */
-  host: Untyped;
+  host: Host;
   [key: string]: unknown;
 }
 
@@ -29,12 +29,12 @@ function AdvancedInventoryHostListItem({
   inventoryType,
 }: AdvancedInventoryHostListItemProps) {
   const { t } = useLingui();
-  const recentPlaybookJobs = recent_jobs.map((job: Untyped) => ({
+  const recentPlaybookJobs = recent_jobs?.map((job: Untyped) => ({
     ...job,
     type: 'job',
   }));
-  const inventoryKind = inventory.kind === '' ? 'inventory' : inventoryType;
-  const inventoryLink = `/inventories/${inventoryKind}/${inventory.id}/details`;
+  const inventoryKind = inventory?.kind === '' ? 'inventory' : inventoryType;
+  const inventoryLink = `/inventories/${inventoryKind}/${inventory?.id}/details`;
   return (
     <Tr id={`host-row-${id}`} ouiaId={`host-row-${id}`}>
       <Td
@@ -53,7 +53,7 @@ function AdvancedInventoryHostListItem({
         <Sparkline jobs={recentPlaybookJobs} />
       </Td>
       <Td dataLabel={t`Inventory`}>
-        <Link to={inventoryLink}>{inventory.name}</Link>
+        <Link to={inventoryLink}>{inventory?.name}</Link>
       </Td>
     </Tr>
   );

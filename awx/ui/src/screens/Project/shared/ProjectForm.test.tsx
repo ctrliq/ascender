@@ -1,3 +1,4 @@
+import type { Project } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
@@ -149,7 +150,7 @@ describe('<ProjectForm />', () => {
       <ProjectForm
         handleSubmit={vi.fn()}
         handleCancel={vi.fn()}
-        project={{ ...mockData }}
+        project={{ ...mockData } as unknown as Partial<Project>}
       />
     );
     await screen.findByText('Source Control Type');
@@ -165,13 +166,15 @@ describe('<ProjectForm />', () => {
       <ProjectForm
         handleSubmit={vi.fn()}
         handleCancel={vi.fn()}
-        project={{
-          ...mockData,
-          webhook_service: 'github',
-          webhook_key: 'secretkey',
-          webhook_ref_filter: 'refs/heads/main',
-          related: { webhook_receiver: '/api/v2/projects/7/github/' },
-        }}
+        project={
+          {
+            ...mockData,
+            webhook_service: 'github',
+            webhook_key: 'secretkey',
+            webhook_ref_filter: 'refs/heads/main',
+            related: { webhook_receiver: '/api/v2/projects/7/github/' },
+          } as unknown as Partial<Project>
+        }
       />
     );
     await screen.findByText('Source Control Type');
@@ -190,7 +193,7 @@ describe('<ProjectForm />', () => {
       <ProjectForm
         handleSubmit={vi.fn()}
         handleCancel={vi.fn()}
-        project={{ ...mockData }}
+        project={{ ...mockData } as unknown as Partial<Project>}
       />
     );
     await screen.findByText('Source Control URL');
@@ -250,7 +253,7 @@ describe('<ProjectForm />', () => {
     const handleSubmit = vi.fn();
     const { user } = renderWithContexts(
       <ProjectForm
-        project={mockData}
+        project={mockData as unknown as Partial<Project>}
         handleSubmit={handleSubmit}
         handleCancel={vi.fn()}
       />
@@ -266,7 +269,7 @@ describe('<ProjectForm />', () => {
     const handleCancel = vi.fn();
     const { user } = renderWithContexts(
       <ProjectForm
-        project={mockData}
+        project={mockData as unknown as Partial<Project>}
         handleSubmit={vi.fn()}
         handleCancel={handleCancel}
       />

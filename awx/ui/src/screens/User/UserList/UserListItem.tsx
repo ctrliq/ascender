@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { User, Untyped } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -9,11 +9,11 @@ import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 
 export interface UserListItemProps {
-  user: Untyped;
+  user: User;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
-  detailUrl: Untyped;
-  rowIndex?: Untyped;
+  detailUrl: string;
+  rowIndex: number;
   [key: string]: unknown;
 }
 
@@ -37,7 +37,7 @@ function UserListItem({
   }
 
   const ldapUser = user.ldap_dn;
-  const socialAuthUser = user.auth.length > 0;
+  const socialAuthUser = (user.auth?.length ?? 0) > 0;
 
   return (
     <Tr id={`user-row-${user.id}`} ouiaId={`user-row-${user.id}`}>
@@ -72,7 +72,7 @@ function UserListItem({
       <Td dataLabel={t`Role`}>{user_type}</Td>
       <ActionsTd dataLabel={t`Actions`}>
         <ActionItem
-          visible={user.summary_fields.user_capabilities.edit}
+          visible={user.summary_fields.user_capabilities?.edit}
           tooltip={t`Edit User`}
         >
           <Button

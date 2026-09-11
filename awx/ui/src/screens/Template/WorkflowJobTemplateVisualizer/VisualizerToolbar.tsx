@@ -57,7 +57,7 @@ export interface VisualizerToolbarProps {
   onSave: (...args: Untyped[]) => void;
   template: Untyped;
   hasUnsavedChanges: boolean;
-  readOnly: Untyped;
+  readOnly: boolean;
   [key: string]: unknown;
 }
 

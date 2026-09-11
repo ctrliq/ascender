@@ -12,7 +12,7 @@ import { VariablesDetail } from 'components/CodeEditor';
 
 export interface ActivityStreamDetailButtonProps {
   streamItem: Untyped;
-  user: Untyped;
+  user: React.ReactNode;
   description: React.ReactNode;
   [key: string]: unknown;
 }

@@ -1,3 +1,4 @@
+import type { User } from 'types/api';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
@@ -36,7 +37,12 @@ describe('<UserTokens />', () => {
     });
     const { user } = renderWithContexts(
       <Routes>
-        <Route path="/users/:id/tokens/*" element={<UserTokens />} />
+        <Route
+          path="/users/:id/tokens/*"
+          element={
+            <UserTokens user={{ id: 1 } as User} setBreadcrumb={() => {}} />
+          }
+        />
       </Routes>,
       {
         context: { router: { history } },

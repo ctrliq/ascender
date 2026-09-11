@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InstanceGroup, Untyped } from 'types/api';
 import React from 'react';
 import { Formik } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -63,7 +63,7 @@ function InstanceGroupFormFields() {
 }
 
 export interface InstanceGroupFormProps {
-  instanceGroup?: Untyped;
+  instanceGroup?: Partial<InstanceGroup>;
   onSubmit: (...args: Untyped[]) => void;
   onCancel: (...args: Untyped[]) => void;
   submitError?: Untyped;

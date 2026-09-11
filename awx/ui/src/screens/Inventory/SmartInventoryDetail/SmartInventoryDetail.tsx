@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 
@@ -20,7 +20,7 @@ import Sparkline from 'components/Sparkline';
 import InstanceGroupLabels from 'components/InstanceGroupLabels';
 
 export interface SmartInventoryDetailProps {
-  inventory: Untyped;
+  inventory: Inventory;
   [key: string]: unknown;
 }
 
@@ -112,8 +112,8 @@ function SmartInventoryDetail({ inventory }: SmartInventoryDetailProps) {
           <Detail
             label={t`Organization`}
             value={
-              <Link to={`/organizations/${organization.id}/details`}>
-                {organization.name}
+              <Link to={`/organizations/${organization?.id}/details`}>
+                {organization?.name}
               </Link>
             }
           />

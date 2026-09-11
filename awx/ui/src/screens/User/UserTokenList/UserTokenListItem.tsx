@@ -10,7 +10,7 @@ export interface UserTokenListItemProps {
   token: Untyped;
   isSelected?: boolean;
   onSelect?: (...args: Untyped[]) => void;
-  rowIndex: Untyped;
+  rowIndex: number;
   [key: string]: unknown;
 }
 

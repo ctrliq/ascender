@@ -5,6 +5,7 @@ import { InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryListItem from './InventoryListItem';
 import type { ApiResponse } from 'api/Base';
+import type { Inventory } from 'types/api';
 
 vi.mock('../../../api/models/Inventories');
 
@@ -127,14 +128,16 @@ describe('<InventoryListItem />', () => {
       <table>
         <tbody>
           <InventoryListItem
-            inventory={{
-              id: 1,
-              name: 'Inventory',
-              summary_fields: {
-                organization: { id: 1, name: 'Default' },
-                user_capabilities: { edit: false, copy: true },
-              },
-            }}
+            inventory={
+              {
+                id: 1,
+                name: 'Inventory',
+                summary_fields: {
+                  organization: { id: 1, name: 'Default' },
+                  user_capabilities: { edit: false, copy: true },
+                },
+              } as unknown as Inventory
+            }
             detailUrl="/inventories/inventory/1"
             isSelected
             onSelect={() => {}}
@@ -157,14 +160,16 @@ describe('<InventoryListItem />', () => {
       <table>
         <tbody>
           <InventoryListItem
-            inventory={{
-              id: 1,
-              name: 'Inventory',
-              summary_fields: {
-                organization: { id: 1, name: 'Default' },
-                user_capabilities: { edit: false, copy: true },
-              },
-            }}
+            inventory={
+              {
+                id: 1,
+                name: 'Inventory',
+                summary_fields: {
+                  organization: { id: 1, name: 'Default' },
+                  user_capabilities: { edit: false, copy: true },
+                },
+              } as unknown as Inventory
+            }
             detailUrl="/inventories/inventory/1"
             isSelected
             onSelect={() => {}}

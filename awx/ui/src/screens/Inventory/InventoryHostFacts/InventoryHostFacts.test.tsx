@@ -7,6 +7,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostFacts from './InventoryHostFacts';
 import mockHost from '../shared/data.host.json';
 import mockHostFacts from '../shared/data.hostFacts.json';
+import type { Host } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -19,14 +20,18 @@ describe('<InventoryHostFacts />', () => {
     vi.mocked(HostsAPI.readFacts).mockResolvedValue({
       data: mockHostFacts,
     } as unknown as ApiResponse<Untyped>);
-    renderWithContexts(<InventoryHostFacts host={mockHost} />);
+    renderWithContexts(
+      <InventoryHostFacts host={mockHost as unknown as Host} />
+    );
     // react-ace renders empty under jsdom; assert the Facts label/container
     expect(await screen.findByText('Facts')).toBeInTheDocument();
   });
 
   test('renders ContentError when facts GET fails', async () => {
     vi.mocked(HostsAPI.readFacts).mockRejectedValueOnce(new Error());
-    renderWithContexts(<InventoryHostFacts host={mockHost} />);
+    renderWithContexts(
+      <InventoryHostFacts host={mockHost as unknown as Host} />
+    );
     expect(
       await screen.findByText('Something went wrong...')
     ).toBeInTheDocument();

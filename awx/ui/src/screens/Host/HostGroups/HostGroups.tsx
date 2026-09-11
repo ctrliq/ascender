@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host } from 'types/api';
 import React from 'react';
 
 import { Routes, Route } from 'react-router';
@@ -6,7 +6,7 @@ import ContentError from 'components/ContentError';
 import HostGroupsList from './HostGroupsList';
 
 export interface HostGroupsProps {
-  host: Untyped;
+  host: Host;
   [key: string]: unknown;
 }
 

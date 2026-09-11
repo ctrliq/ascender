@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { User, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -29,7 +29,7 @@ const QS_CONFIG = getQSConfig('roles', {
 // Since we only have a role ID in the top level of each role object
 // we can't really search using the normal search parameters.
 export interface UserRolesListProps {
-  user: Untyped;
+  user: User;
   [key: string]: unknown;
 }
 
@@ -94,10 +94,7 @@ function UserRolesList({ user }: UserRolesListProps) {
   } = useDeleteItems(
     useCallback(async () => {
       setRoleToDisassociate(null);
-      await RolesAPI.disassociateUserRole(
-        roleToDisassociate.id,
-        parseInt(user.id, 10)
-      );
+      await RolesAPI.disassociateUserRole(roleToDisassociate.id, user.id);
     }, [roleToDisassociate, user.id]),
     { qsConfig: QS_CONFIG, fetchItems: fetchRoles }
   );

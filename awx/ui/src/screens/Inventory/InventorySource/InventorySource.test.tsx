@@ -8,6 +8,7 @@ import { InventoriesAPI, OrganizationsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockInventorySource from '../shared/data.inventory_source.json';
 import InventorySource from './InventorySource';
+import type { Inventory } from 'types/api';
 
 vi.mock('../../../api/models/Inventories');
 vi.mock('../../../api/models/Organizations');
@@ -16,7 +17,7 @@ vi.mock('../../../api/models/InventorySources');
 const mockInventory = {
   id: 2,
   name: 'Mock Inventory',
-};
+} as unknown as Inventory;
 
 // InventorySource reads :sourceId via useParams and uses relative routes, so
 // mount it under its real ".../sources/:sourceId/*" parent route at a concrete

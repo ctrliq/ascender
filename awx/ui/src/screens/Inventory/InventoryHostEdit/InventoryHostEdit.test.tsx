@@ -7,6 +7,7 @@ import { HostsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostEdit from './InventoryHostEdit';
 import mockHost from '../shared/data.host.json';
+import type { Host, Inventory } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -40,7 +41,10 @@ describe('<InventoryHostEdit />', () => {
       {} as unknown as ApiResponse<Untyped>
     );
     const { user } = renderWithContexts(
-      <InventoryHostEdit host={mockHost} inventory={{ id: 123 }} />
+      <InventoryHostEdit
+        host={mockHost as unknown as Host}
+        inventory={{ id: 123 } as unknown as Inventory}
+      />
     );
     await user.click(screen.getByRole('button', { name: 'mock-submit' }));
     await waitFor(() =>
@@ -51,7 +55,10 @@ describe('<InventoryHostEdit />', () => {
   test('should navigate to inventory host detail when cancel is clicked', async () => {
     const history = createMemoryHistory();
     const { user } = renderWithContexts(
-      <InventoryHostEdit host={mockHost} inventory={{ id: 123 }} />,
+      <InventoryHostEdit
+        host={mockHost as unknown as Host}
+        inventory={{ id: 123 } as unknown as Inventory}
+      />,
       { context: { router: { history } } }
     );
     await user.click(screen.getByRole('button', { name: 'mock-cancel' }));
@@ -66,7 +73,10 @@ describe('<InventoryHostEdit />', () => {
     );
     const history = createMemoryHistory();
     const { user } = renderWithContexts(
-      <InventoryHostEdit host={mockHost} inventory={{ id: 123 }} />,
+      <InventoryHostEdit
+        host={mockHost as unknown as Host}
+        inventory={{ id: 123 } as unknown as Inventory}
+      />,
       { context: { router: { history } } }
     );
     await user.click(screen.getByRole('button', { name: 'mock-submit' }));
@@ -86,7 +96,10 @@ describe('<InventoryHostEdit />', () => {
     };
     vi.mocked(HostsAPI.update).mockRejectedValueOnce(error);
     const { user } = renderWithContexts(
-      <InventoryHostEdit host={mockHost} inventory={{ id: 123 }} />
+      <InventoryHostEdit
+        host={mockHost as unknown as Host}
+        inventory={{ id: 123 } as unknown as Inventory}
+      />
     );
     await user.click(screen.getByRole('button', { name: 'mock-submit' }));
     expect(

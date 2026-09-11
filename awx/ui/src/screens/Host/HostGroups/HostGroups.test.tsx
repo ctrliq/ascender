@@ -5,6 +5,7 @@ import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import HostGroups from './HostGroups';
+import type { Host } from 'types/api';
 
 vi.mock('./HostGroupsList', async () => {
   const ReactLib = await vi.importActual<typeof import('react')>('react');
@@ -18,7 +19,7 @@ const host = {
   id: 1,
   name: 'Foo',
   summary_fields: { inventory: { id: 1 } },
-};
+} as unknown as Host;
 
 // HostGroups uses paths relative to its parent route, so mount it under the
 // same /hosts/:id/groups/* route that Host.js gives it in the app.

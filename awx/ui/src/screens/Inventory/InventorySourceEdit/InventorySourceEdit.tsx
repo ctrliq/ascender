@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Card } from '@patternfly/react-core';
@@ -11,7 +11,7 @@ import InventorySourceForm from '../shared/InventorySourceForm';
 
 export interface InventorySourceEditProps {
   source: Untyped;
-  inventory: Untyped;
+  inventory: Inventory;
   [key: string]: unknown;
 }
 

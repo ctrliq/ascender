@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 
@@ -15,7 +15,7 @@ import { HostsAPI } from 'api';
 import HostToggle from 'components/HostToggle';
 
 export interface HostDetailProps {
-  host: Untyped;
+  host: Host;
   [key: string]: unknown;
 }
 
@@ -83,8 +83,8 @@ function HostDetail({ host }: HostDetailProps) {
           dataCy="host-inventory"
           helpText={t`The inventory that this host belongs to.`}
           value={
-            <Link to={`/inventories/inventory/${inventory.id}/details`}>
-              {inventory.name}
+            <Link to={`/inventories/inventory/${inventory?.id}/details`}>
+              {inventory?.name}
             </Link>
           }
         />

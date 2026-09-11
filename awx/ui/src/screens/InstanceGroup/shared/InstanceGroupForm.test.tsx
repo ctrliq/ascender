@@ -1,3 +1,4 @@
+import type { InstanceGroup } from 'types/api';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -58,7 +59,7 @@ describe('<InstanceGroupForm/>', () => {
       <InstanceGroupForm
         onCancel={onCancel}
         onSubmit={onSubmit}
-        instanceGroup={instanceGroup}
+        instanceGroup={instanceGroup as unknown as Partial<InstanceGroup>}
       />
     );
   }

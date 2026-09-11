@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLocation } from 'react-router';
@@ -22,7 +22,7 @@ import { InventoriesAPI } from 'api';
 import { useLingui } from '@lingui/react/macro';
 
 export interface SmartInventoryFormFieldsProps {
-  inventory: Untyped;
+  inventory: Partial<Inventory>;
   [key: string]: unknown;
 }
 
@@ -106,7 +106,7 @@ const SmartInventoryFormFields = ({
 };
 
 export interface SmartInventoryFormProps {
-  inventory?: Untyped;
+  inventory?: Partial<Inventory>;
   instanceGroups?: Untyped[];
   onSubmit: (...args: Untyped[]) => void;
   onCancel: (...args: Untyped[]) => void;

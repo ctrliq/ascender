@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Organization } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -6,7 +6,7 @@ import { useLingui } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
 
 export interface UserOrganizationListItemProps {
-  organization: Untyped;
+  organization: Organization;
   [key: string]: unknown;
 }
 

@@ -1,3 +1,4 @@
+import type { Inventory } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -20,7 +21,12 @@ describe('<InventoryHosts />', () => {
       <Routes>
         <Route
           path="/inventories/inventory/:id/hosts/*"
-          element={<InventoryHosts />}
+          element={
+            <InventoryHosts
+              inventory={{ id: 1 } as Inventory}
+              setBreadcrumb={() => {}}
+            />
+          }
         />
       </Routes>,
       { context: { router: { history } } }

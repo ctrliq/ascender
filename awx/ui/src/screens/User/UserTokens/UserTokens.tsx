@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { User, Untyped } from 'types/api';
 import React, { useCallback, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
@@ -20,8 +20,8 @@ const TokenAlert = styled(Alert)`
 `;
 
 export interface UserTokensProps {
-  setBreadcrumb?: Untyped;
-  user?: Untyped;
+  setBreadcrumb: Untyped;
+  user: User;
   [key: string]: unknown;
 }
 

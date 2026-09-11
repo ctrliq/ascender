@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ExecutionEnvironment, Untyped } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
@@ -12,12 +12,12 @@ import { ExecutionEnvironmentsAPI } from 'api';
 import { timeOfDay } from 'util/dates';
 
 export interface ExecutionEnvironmentListItemProps {
-  executionEnvironment: Untyped;
-  detailUrl: Untyped;
+  executionEnvironment: ExecutionEnvironment;
+  detailUrl: string;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
   onCopy: (...args: Untyped[]) => void;
-  rowIndex: Untyped;
+  rowIndex: number;
   fetchExecutionEnvironments: Untyped;
   [key: string]: unknown;
 }
@@ -111,7 +111,7 @@ function ExecutionEnvironmentListItem({
       </Td>
       <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
         <ActionItem
-          visible={executionEnvironment.summary_fields.user_capabilities.edit}
+          visible={executionEnvironment.summary_fields.user_capabilities?.edit}
           tooltip={t`Edit Execution Environment`}
         >
           <Button
@@ -124,7 +124,7 @@ function ExecutionEnvironmentListItem({
           />
         </ActionItem>
         <ActionItem
-          visible={executionEnvironment.summary_fields.user_capabilities.copy}
+          visible={executionEnvironment.summary_fields.user_capabilities?.copy}
           tooltip={t`Copy Execution Environment`}
         >
           <CopyButton

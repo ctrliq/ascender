@@ -10,6 +10,7 @@ import {
   settleTooltips,
 } from '../../../../testUtils/rtlContexts';
 import InstanceDetails from './InstanceDetails';
+import type { InstanceGroup } from 'types/api';
 
 vi.mock('../../../api');
 vi.mock('../../../hooks/useDebounce');
@@ -56,7 +57,7 @@ const instanceGroup = {
       delete: true,
     },
   },
-};
+} as unknown as InstanceGroup;
 
 const associatedInstances = {
   data: {

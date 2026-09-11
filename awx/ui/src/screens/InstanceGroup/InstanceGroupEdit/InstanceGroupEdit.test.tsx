@@ -8,6 +8,7 @@ import { InstanceGroupsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceGroupEdit from './InstanceGroupEdit';
+import type { InstanceGroup } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -64,7 +65,7 @@ const instanceGroupData = {
       delete: true,
     },
   },
-};
+} as unknown as InstanceGroup;
 
 describe('<InstanceGroupEdit>', () => {
   let history: Untyped;

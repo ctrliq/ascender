@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InstanceGroup } from 'types/api';
 import React, { useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -26,7 +26,7 @@ const Unavailable = styled.span`
 `;
 
 export interface InstanceGroupDetailsProps {
-  instanceGroup: Untyped;
+  instanceGroup: InstanceGroup;
   [key: string]: unknown;
 }
 
@@ -98,7 +98,7 @@ function InstanceGroupDetails({ instanceGroup }: InstanceGroupDetailsProps) {
           <DetailBadge
             label={t`Used capacity`}
             content={`${Math.round(
-              100 - instanceGroup.percent_capacity_remaining
+              100 - Number(instanceGroup.percent_capacity_remaining ?? 0)
             )} %`}
             dataCy="instance-group-used-capacity"
           />

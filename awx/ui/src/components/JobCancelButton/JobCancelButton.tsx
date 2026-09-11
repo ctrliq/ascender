@@ -10,14 +10,14 @@ import ErrorDetail from '../ErrorDetail';
 
 export interface JobCancelButtonProps {
   errorTitle?: Untyped;
-  title: Untyped;
+  title: string;
   showIconButton?: Untyped;
   errorMessage?: Untyped;
   buttonText?: Untyped;
   style?: Untyped;
   job?: Untyped;
   isDisabled?: boolean;
-  tooltip?: Untyped;
+  tooltip?: React.ReactNode;
   cancelationMessage?: Untyped;
   onCancelWorkflow?: (...args: Untyped[]) => void;
   [key: string]: unknown;

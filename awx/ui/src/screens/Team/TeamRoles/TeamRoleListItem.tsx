@@ -9,7 +9,7 @@ import { Link } from 'react-router';
 
 export interface TeamRoleListItemProps {
   role: Untyped;
-  detailUrl: Untyped;
+  detailUrl: string | null;
   onDisassociate: (...args: Untyped[]) => void;
   [key: string]: unknown;
 }

@@ -13,7 +13,7 @@ export interface InventoryGroupItemProps {
   group: Untyped;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
-  rowIndex: Untyped;
+  rowIndex: number;
   [key: string]: unknown;
 }
 

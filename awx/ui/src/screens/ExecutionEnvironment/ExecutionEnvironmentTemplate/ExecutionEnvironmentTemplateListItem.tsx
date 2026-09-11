@@ -6,7 +6,7 @@ import { Tr, Td } from '@patternfly/react-table';
 
 export interface ExecutionEnvironmentTemplateListItemProps {
   template: Untyped;
-  detailUrl: Untyped;
+  detailUrl: string;
   [key: string]: unknown;
 }
 

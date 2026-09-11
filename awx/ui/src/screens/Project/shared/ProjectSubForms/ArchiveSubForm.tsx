@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Credential, Untyped } from 'types/api';
 import React from 'react';
 import getProjectHelpText from '../Project.helptext';
 
@@ -9,7 +9,7 @@ import {
 } from './SharedFields';
 
 export interface ArchiveSubFormProps {
-  credential: Untyped;
+  credential: Credential;
   onCredentialSelection: (...args: Untyped[]) => void;
   scmUpdateOnLaunch: Untyped;
   [key: string]: unknown;

@@ -6,6 +6,7 @@ import { createMemoryHistory } from 'history';
 import { OrganizationsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import OrganizationEdit from './OrganizationEdit';
+import type { Organization } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -57,7 +58,9 @@ describe('<OrganizationEdit />', () => {
   });
 
   test('onSubmit should call api update', async () => {
-    renderWithContexts(<OrganizationEdit organization={mockData} />);
+    renderWithContexts(
+      <OrganizationEdit organization={mockData as unknown as Organization} />
+    );
     await screen.findByTestId('organization-form');
 
     const updatedOrgData = {
@@ -73,7 +76,9 @@ describe('<OrganizationEdit />', () => {
   });
 
   test('onSubmit associates and disassociates instance groups', async () => {
-    renderWithContexts(<OrganizationEdit organization={mockData} />);
+    renderWithContexts(
+      <OrganizationEdit organization={mockData as unknown as Organization} />
+    );
     await screen.findByTestId('organization-form');
 
     const updatedOrgData = {
@@ -120,7 +125,7 @@ describe('<OrganizationEdit />', () => {
     } as unknown as ApiResponse<Untyped>) as unknown as ApiResponse<Untyped>;
     const history = createMemoryHistory({});
     const { user } = renderWithContexts(
-      <OrganizationEdit organization={mockData} />,
+      <OrganizationEdit organization={mockData as unknown as Organization} />,
       { context: { router: { history } } }
     );
     await screen.findByTestId('organization-form');

@@ -5,6 +5,7 @@ import { screen, waitFor, within } from '@testing-library/react';
 import { TeamsAPI, RolesAPI, UsersAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import TeamRolesList from './TeamRolesList';
+import type { Team } from '../../../types/api';
 
 vi.mock('../../../api/models/Teams');
 vi.mock('../../../api/models/Roles');
@@ -23,7 +24,7 @@ const team = {
   name: 'a team',
   description: '',
   organization: 1,
-};
+} as unknown as Team;
 
 const roles = {
   data: {

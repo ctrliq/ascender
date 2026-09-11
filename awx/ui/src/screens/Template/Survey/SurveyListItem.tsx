@@ -27,7 +27,7 @@ export interface SurveyListItemProps {
   question: Untyped;
   isChecked?: boolean;
   onSelect?: (...args: Untyped[]) => void;
-  rowIndex?: Untyped;
+  rowIndex: number;
   [key: string]: unknown;
 }
 

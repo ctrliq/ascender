@@ -10,6 +10,7 @@ import {
   settleTooltips,
 } from '../../../../testUtils/rtlContexts';
 import HostGroupsList from './HostGroupsList';
+import type { Host } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -19,7 +20,7 @@ const host = {
       id: 1,
     },
   },
-};
+} as unknown as Host;
 
 const mockGroups = [
   {

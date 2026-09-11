@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Organization, Untyped } from 'types/api';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -20,7 +20,7 @@ import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 
 export interface OrganizationDetailProps {
-  organization: Untyped;
+  organization: Organization;
   [key: string]: unknown;
 }
 
@@ -153,7 +153,7 @@ function OrganizationDetail({ organization }: OrganizationDetailProps) {
         />
       </DetailList>
       <CardActionsRow>
-        {summary_fields.user_capabilities.edit && (
+        {summary_fields.user_capabilities?.edit && (
           <Button
             ouiaId="organization-detail-edit-button"
             aria-label={t`Edit`}

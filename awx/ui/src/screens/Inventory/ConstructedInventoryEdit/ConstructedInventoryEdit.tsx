@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { ConstructedInventoriesAPI, InventoriesAPI } from 'api';
@@ -18,7 +18,7 @@ function isEqual(array1: Untyped, array2: Untyped) {
 }
 
 export interface ConstructedInventoryEditProps {
-  inventory: Untyped;
+  inventory: Inventory;
   [key: string]: unknown;
 }
 

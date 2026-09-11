@@ -6,7 +6,7 @@ import Popover from '../Popover';
 
 export interface CheckboxFieldProps {
   id: Untyped;
-  name: Untyped;
+  name: string;
   label: React.ReactNode;
   /** Rendered in a popover beside the label, so markup is fine. */
   tooltip?: React.ReactNode;

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InstanceGroup } from 'types/api';
 import React, { useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -23,7 +23,7 @@ import { InstanceGroupsAPI } from 'api';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 
 export interface ContainerGroupDetailsProps {
-  instanceGroup: Untyped;
+  instanceGroup: InstanceGroup;
   [key: string]: unknown;
 }
 

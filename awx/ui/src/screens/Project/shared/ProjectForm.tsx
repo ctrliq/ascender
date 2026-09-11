@@ -1,7 +1,7 @@
 //
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
-import type { Untyped } from 'types/api';
+import type { Project, Untyped } from 'types/api';
 /* eslint no-nested-ternary: 0 */
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
@@ -88,7 +88,7 @@ const fetchCredentials = async (credential: Untyped) => {
 };
 
 export interface ProjectFormFieldsProps {
-  project: Untyped;
+  project: Partial<Project>;
   project_base_dir: Untyped;
   project_local_paths: Untyped;
   formik: Untyped;
@@ -372,7 +372,7 @@ function ProjectFormFields({
 
 export interface ProjectFormProps {
   /** The project being edited, absent on the add form. */
-  project?: Untyped;
+  project?: Partial<Project>;
   submitError?: Untyped;
   handleCancel: () => void;
   handleSubmit: (values: Untyped) => void;

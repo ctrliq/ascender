@@ -1,12 +1,12 @@
-import type { Untyped } from 'types/api';
+import type { ExecutionEnvironment } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import { Tr, Td } from '@patternfly/react-table';
 
 export interface OrganizationExecEnvListItemProps {
-  executionEnvironment: Untyped;
-  detailUrl: Untyped;
+  executionEnvironment: ExecutionEnvironment;
+  detailUrl: string;
   [key: string]: unknown;
 }
 

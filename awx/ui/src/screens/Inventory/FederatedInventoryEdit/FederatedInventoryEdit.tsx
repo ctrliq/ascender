@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -10,7 +10,7 @@ import useRequest from 'hooks/useRequest';
 import FederatedInventoryForm from '../shared/FederatedInventoryForm';
 
 export interface FederatedInventoryEditProps {
-  inventory: Untyped;
+  inventory: Inventory;
   [key: string]: unknown;
 }
 

@@ -19,6 +19,7 @@ describe('<ApplicationListItem/>', () => {
       <table>
         <tbody>
           <ApplicationListItem
+            rowIndex={0}
             application={app}
             detailUrl="/organizations/2/details"
             isSelected={false}

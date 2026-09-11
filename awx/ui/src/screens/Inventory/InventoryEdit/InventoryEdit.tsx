@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -10,7 +10,7 @@ import useIsMounted from 'hooks/useIsMounted';
 import InventoryForm from '../shared/InventoryForm';
 
 export interface InventoryEditProps {
-  inventory: Untyped;
+  inventory: Inventory;
   [key: string]: unknown;
 }
 
@@ -79,7 +79,7 @@ function InventoryEdit({ inventory }: InventoryEditProps) {
 
   const submitLabels = async (orgId: Untyped, labels = []) => {
     const { added, removed } = getAddedAndRemoved(
-      inventory.summary_fields.labels.results,
+      inventory.summary_fields.labels?.results,
       labels
     );
 

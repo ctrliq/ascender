@@ -27,7 +27,7 @@ const Grid = styled.div`
 `;
 
 export interface UserAndTeamAccessAddProps {
-  title: Untyped;
+  title: React.ReactNode;
   onFetchData: (...args: Untyped[]) => void;
   apiModel: RolesApiModel;
   onClose: (...args: Untyped[]) => void;

@@ -13,6 +13,7 @@ import {
   assertDetail,
 } from '../../../../testUtils/rtlContexts';
 import InventoryDetail from './InventoryDetail';
+import type { Inventory } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -50,7 +51,7 @@ const mockInventory = {
   total_inventory_sources: 0,
   inventory_sources_with_failures: 0,
   pending_deletion: false,
-};
+} as unknown as Inventory;
 
 const associatedInstanceGroups = [
   {
@@ -98,7 +99,7 @@ describe('<InventoryDetail />', () => {
     assertDetail('Total hosts', String(mockInventory.total_hosts));
     assertDetail(
       'Organization',
-      mockInventory.summary_fields.organization.name
+      mockInventory.summary_fields.organization?.name
     );
 
     const orgLink = screen.getByRole('link', { name: 'The Organization' });

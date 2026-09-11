@@ -51,7 +51,7 @@ export interface InstanceListItemProps {
   isSelected?: boolean;
   onSelect: (...args: Untyped[]) => void;
   fetchInstances: Untyped;
-  rowIndex?: Untyped;
+  rowIndex: number;
   [key: string]: unknown;
 }
 

@@ -1,3 +1,4 @@
+import type { Host, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -10,7 +11,6 @@ import {
   Tooltip,
 } from '@patternfly/react-core';
 import { required } from 'util/validators';
-import type { Untyped } from 'types/api';
 import FormField, { FormSubmitError } from '../FormField';
 import FormActionGroup from '../FormActionGroup/FormActionGroup';
 import { VariablesField } from '../CodeEditor';
@@ -90,7 +90,7 @@ const InventoryLookupField = ({ isDisabled }: InventoryLookupFieldProps) => {
 export interface HostFormProps {
   handleCancel: () => void;
   handleSubmit: (values: Untyped) => void;
-  host?: Untyped;
+  host?: Partial<Host>;
   isInventoryVisible?: boolean;
   submitError?: unknown;
   disableInventoryLookup?: boolean;
@@ -102,11 +102,8 @@ const HostForm = ({
   host = {
     name: '',
     description: '',
-    inventory: undefined,
     variables: '---\n',
-    summary_fields: {
-      inventory: null,
-    },
+    summary_fields: {},
   },
   isInventoryVisible = true,
   submitError = null,

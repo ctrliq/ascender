@@ -13,9 +13,9 @@ import Popover from '../Popover';
 export interface ArrayTextFieldProps {
   id: Untyped;
   helperText?: string;
-  name: Untyped;
+  name: string;
   label: React.ReactNode;
-  tooltip?: Untyped;
+  tooltip?: React.ReactNode;
   tooltipMaxWidth?: string;
   validate?: (...args: Untyped[]) => void;
   isRequired?: boolean;

@@ -4,17 +4,20 @@ import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import TeamListItem from './TeamListItem';
+import type { Team } from '../../../types/api';
 
 const renderItem = (capabilities = { edit: true }) =>
   renderWithContexts(
     <table>
       <tbody>
         <TeamListItem
-          team={{
-            id: 1,
-            name: 'Team 1',
-            summary_fields: { user_capabilities: capabilities },
-          }}
+          team={
+            {
+              id: 1,
+              name: 'Team 1',
+              summary_fields: { user_capabilities: capabilities },
+            } as unknown as Team
+          }
           detailUrl="/team/1"
           isSelected
           onSelect={() => {}}

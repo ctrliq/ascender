@@ -16,6 +16,7 @@ import {
 } from '../../../../testUtils/rtlContexts';
 
 import InstanceGroupDetails from './InstanceGroupDetails';
+import type { InstanceGroup } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -65,7 +66,11 @@ describe('<InstanceGroupDetails/>', () => {
 
   test('should render details properly', () => {
     const instanceGroup = buildInstanceGroup();
-    renderWithContexts(<InstanceGroupDetails instanceGroup={instanceGroup} />);
+    renderWithContexts(
+      <InstanceGroupDetails
+        instanceGroup={instanceGroup as unknown as InstanceGroup}
+      />
+    );
 
     assertDetail('Name', 'Foo');
     assertDetail('Type', 'Instance group');
@@ -86,7 +91,9 @@ describe('<InstanceGroupDetails/>', () => {
       {} as unknown as ApiResponse<Untyped>
     );
     const { user } = renderWithContexts(
-      <InstanceGroupDetails instanceGroup={instanceGroup} />,
+      <InstanceGroupDetails
+        instanceGroup={instanceGroup as unknown as InstanceGroup}
+      />,
       { context: { router: { history } } }
     );
 
@@ -105,7 +112,11 @@ describe('<InstanceGroupDetails/>', () => {
     const instanceGroup = buildInstanceGroup({
       summary_fields: { user_capabilities: { edit: true, delete: false } },
     });
-    renderWithContexts(<InstanceGroupDetails instanceGroup={instanceGroup} />);
+    renderWithContexts(
+      <InstanceGroupDetails
+        instanceGroup={instanceGroup as unknown as InstanceGroup}
+      />
+    );
 
     expect(
       screen.queryByRole('button', { name: 'Delete' })
@@ -116,7 +127,11 @@ describe('<InstanceGroupDetails/>', () => {
     const instanceGroup = buildInstanceGroup({
       summary_fields: { user_capabilities: { edit: false, delete: true } },
     });
-    renderWithContexts(<InstanceGroupDetails instanceGroup={instanceGroup} />);
+    renderWithContexts(
+      <InstanceGroupDetails
+        instanceGroup={instanceGroup as unknown as InstanceGroup}
+      />
+    );
 
     expect(
       screen.queryByRole('link', { name: 'Edit' })

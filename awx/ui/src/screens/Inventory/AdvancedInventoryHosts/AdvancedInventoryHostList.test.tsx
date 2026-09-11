@@ -9,6 +9,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import AdvancedInventoryHostList from './AdvancedInventoryHostList';
 import mockInventory from '../shared/data.inventory.json';
 import mockHosts from '../shared/data.hosts.json';
+import type { Inventory } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -30,7 +31,11 @@ function renderList(inventory = clonedInventory) {
     <Routes>
       <Route
         path="/inventories/:inventoryType/:id/hosts"
-        element={<AdvancedInventoryHostList inventory={inventory} />}
+        element={
+          <AdvancedInventoryHostList
+            inventory={inventory as unknown as Inventory}
+          />
+        }
       />
     </Routes>,
     { context: { router: { history } } }

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InstanceGroup, Untyped } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -20,11 +20,11 @@ const Unavailable = styled.span`
 `;
 
 export interface InstanceGroupListItemProps {
-  instanceGroup: Untyped;
-  detailUrl: Untyped;
+  instanceGroup: InstanceGroup;
+  detailUrl: string;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
-  rowIndex?: Untyped;
+  rowIndex: number;
   [key: string]: unknown;
 }
 
@@ -83,7 +83,7 @@ function InstanceGroupListItem({
       <Td dataLabel={t`Capacity`}>{usedCapacity(instanceGroup)}</Td>
       <ActionsTd dataLabel={t`Actions`}>
         <ActionItem
-          visible={instanceGroup.summary_fields.user_capabilities.edit}
+          visible={instanceGroup.summary_fields.user_capabilities?.edit}
           tooltip={t`Edit instance group`}
         >
           <Button

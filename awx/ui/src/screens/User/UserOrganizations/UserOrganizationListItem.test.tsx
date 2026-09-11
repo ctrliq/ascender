@@ -3,6 +3,7 @@ import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import UserOrganizationListItem from './UserOrganizationListItem';
+import type { Organization } from 'types/api';
 
 describe('<UserOrganizationListItem />', () => {
   test('mounts correctly', () => {
@@ -10,7 +11,13 @@ describe('<UserOrganizationListItem />', () => {
       <table>
         <tbody>
           <UserOrganizationListItem
-            organization={{ name: 'foo', id: 1, description: 'Bar' }}
+            organization={
+              {
+                name: 'foo',
+                id: 1,
+                description: 'Bar',
+              } as unknown as Organization
+            }
           />
         </tbody>
       </table>
@@ -22,7 +29,13 @@ describe('<UserOrganizationListItem />', () => {
       <table>
         <tbody>
           <UserOrganizationListItem
-            organization={{ name: 'foo', id: 1, description: 'Bar' }}
+            organization={
+              {
+                name: 'foo',
+                id: 1,
+                description: 'Bar',
+              } as unknown as Organization
+            }
           />
         </tbody>
       </table>

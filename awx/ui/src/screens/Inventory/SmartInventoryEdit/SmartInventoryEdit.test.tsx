@@ -7,6 +7,7 @@ import { InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SmartInventoryEdit from './SmartInventoryEdit';
 import mockSmartInventory from '../shared/data.smart_inventory.json';
+import type { Inventory } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -67,7 +68,11 @@ describe('<SmartInventoryEdit />', () => {
   });
 
   test('should fetch related instance groups on initial render', async () => {
-    renderWithContexts(<SmartInventoryEdit inventory={{ ...mockSmartInv }} />);
+    renderWithContexts(
+      <SmartInventoryEdit
+        inventory={{ ...mockSmartInv } as unknown as Inventory}
+      />
+    );
     expect(
       await screen.findByRole('button', { name: 'mock-submit' })
     ).toBeInTheDocument();
@@ -76,7 +81,9 @@ describe('<SmartInventoryEdit />', () => {
 
   test('should post to the api when submit is clicked', async () => {
     const { user } = renderWithContexts(
-      <SmartInventoryEdit inventory={{ ...mockSmartInv }} />
+      <SmartInventoryEdit
+        inventory={{ ...mockSmartInv } as unknown as Inventory}
+      />
     );
     await user.click(
       await screen.findByRole('button', { name: 'mock-submit' })
@@ -91,7 +98,9 @@ describe('<SmartInventoryEdit />', () => {
       initialEntries: [`/inventories/smart_inventory/${mockSmartInv.id}/edit`],
     });
     const { user } = renderWithContexts(
-      <SmartInventoryEdit inventory={{ ...mockSmartInv }} />,
+      <SmartInventoryEdit
+        inventory={{ ...mockSmartInv } as unknown as Inventory}
+      />,
       { context: { router: { history } } }
     );
     await user.click(
@@ -110,7 +119,9 @@ describe('<SmartInventoryEdit />', () => {
       initialEntries: [`/inventories/smart_inventory/${mockSmartInv.id}/edit`],
     });
     const { user } = renderWithContexts(
-      <SmartInventoryEdit inventory={{ ...mockSmartInv }} />,
+      <SmartInventoryEdit
+        inventory={{ ...mockSmartInv } as unknown as Inventory}
+      />,
       { context: { router: { history } } }
     );
     await user.click(
@@ -125,7 +136,9 @@ describe('<SmartInventoryEdit />', () => {
   test('unsuccessful form submission should show an error message', async () => {
     vi.mocked(InventoriesAPI.update).mockRejectedValueOnce(new Error('boom'));
     const { user } = renderWithContexts(
-      <SmartInventoryEdit inventory={{ ...mockSmartInv }} />
+      <SmartInventoryEdit
+        inventory={{ ...mockSmartInv } as unknown as Inventory}
+      />
     );
     await user.click(
       await screen.findByRole('button', { name: 'mock-submit' })
@@ -138,7 +151,11 @@ describe('<SmartInventoryEdit />', () => {
     vi.mocked(InventoriesAPI.readInstanceGroups).mockRejectedValueOnce(
       new Error()
     );
-    renderWithContexts(<SmartInventoryEdit inventory={{ ...mockSmartInv }} />);
+    renderWithContexts(
+      <SmartInventoryEdit
+        inventory={{ ...mockSmartInv } as unknown as Inventory}
+      />
+    );
 
     expect(
       await screen.findByText(/There was an error loading this content/i)

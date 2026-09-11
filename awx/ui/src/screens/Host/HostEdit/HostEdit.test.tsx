@@ -6,6 +6,7 @@ import { HostsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockHost from '../data.host.json';
 import HostEdit from './HostEdit';
+import type { Host } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -61,7 +62,7 @@ describe('<HostEdit />', () => {
   });
 
   function render() {
-    return renderWithContexts(<HostEdit host={mockHost} />, {
+    return renderWithContexts(<HostEdit host={mockHost as unknown as Host} />, {
       context: { router: { history } },
     });
   }

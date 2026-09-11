@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Credential, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { CardBody } from 'components/Card';
@@ -16,7 +16,7 @@ import { useConfig } from 'contexts/Config';
 import CredentialForm from '../shared/CredentialForm';
 
 export interface CredentialEditProps {
-  credential: Untyped;
+  credential: Credential;
   [key: string]: unknown;
 }
 

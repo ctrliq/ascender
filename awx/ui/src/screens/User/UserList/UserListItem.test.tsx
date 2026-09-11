@@ -4,6 +4,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import mockDetails from '../data.user.json';
 import UserListItem from './UserListItem';
+import type { User } from '../../../types/api';
 
 describe('UserListItem with full permissions', () => {
   beforeEach(() => {
@@ -11,7 +12,8 @@ describe('UserListItem with full permissions', () => {
       <table>
         <tbody>
           <UserListItem
-            user={mockDetails}
+            rowIndex={0}
+            user={mockDetails as unknown as User}
             detailUrl="/user/1"
             isSelected
             onSelect={() => {}}
@@ -42,14 +44,17 @@ describe('UserListItem without full permissions', () => {
       <table>
         <tbody>
           <UserListItem
-            user={{
-              ...mockDetails,
-              summary_fields: {
-                user_capabilities: {
-                  edit: false,
+            rowIndex={0}
+            user={
+              {
+                ...mockDetails,
+                summary_fields: {
+                  user_capabilities: {
+                    edit: false,
+                  },
                 },
-              },
-            }}
+              } as unknown as User
+            }
             detailUrl="/user/1"
             isSelected
             onSelect={() => {}}

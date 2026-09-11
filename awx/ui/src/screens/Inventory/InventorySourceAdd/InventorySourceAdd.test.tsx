@@ -6,6 +6,7 @@ import { createMemoryHistory } from 'history';
 import { InventorySourcesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventorySourceAdd from './InventorySourceAdd';
+import type { Inventory } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -29,7 +30,7 @@ const mockInventory = {
   id: 111,
   name: 'Foo',
   organization: 2,
-};
+} as unknown as Inventory;
 
 vi.mock('../shared/InventorySourceForm', () => ({
   default: ({ onSubmit, onCancel, submitError }: Untyped) => (

@@ -1,5 +1,4 @@
 import type { WorkflowAction } from 'components/Workflow/workflowReducer';
-import type { Untyped } from 'types/api';
 import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -32,7 +31,7 @@ const StartPanelWrapper = styled.div`
 `;
 
 export interface VisualizerStartScreenProps {
-  readOnly?: Untyped;
+  readOnly?: boolean;
   [key: string]: unknown;
 }
 

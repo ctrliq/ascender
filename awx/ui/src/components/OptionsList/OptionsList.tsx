@@ -26,7 +26,7 @@ export interface OptionsListProps {
   optionCount: Untyped;
   options: Untyped;
   qsConfig: Untyped;
-  readOnly?: Untyped;
+  readOnly?: boolean;
   relatedSearchableKeys?: Untyped;
   renderItemChip?: Untyped;
   searchColumns?: SearchColumn[];

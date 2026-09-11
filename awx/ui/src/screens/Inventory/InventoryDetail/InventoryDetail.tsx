@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 
@@ -26,7 +26,7 @@ import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import getHelpText from '../shared/Inventory.helptext';
 
 export interface InventoryDetailProps {
-  inventory: Untyped;
+  inventory: Inventory;
   [key: string]: unknown;
 }
 
@@ -108,8 +108,8 @@ function InventoryDetail({ inventory }: InventoryDetailProps) {
         <Detail
           label={t`Organization`}
           value={
-            <Link to={`/organizations/${organization.id}/details`}>
-              {organization.name}
+            <Link to={`/organizations/${organization?.id}/details`}>
+              {organization?.name}
             </Link>
           }
         />
@@ -178,7 +178,7 @@ function InventoryDetail({ inventory }: InventoryDetailProps) {
         />
       </DetailList>
       <CardActionsRow>
-        {userCapabilities.edit && (
+        {userCapabilities?.edit && (
           <Button
             ouiaId="inventory-detail-edit-button"
             component={Link}
@@ -187,7 +187,7 @@ function InventoryDetail({ inventory }: InventoryDetailProps) {
             {t`Edit`}
           </Button>
         )}
-        {userCapabilities.delete && (
+        {userCapabilities?.delete && (
           <DeleteButton
             name={inventory.name}
             modalTitle={t`Delete Inventory`}

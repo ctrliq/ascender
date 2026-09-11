@@ -5,6 +5,7 @@ import { screen } from '@testing-library/react';
 import { TokensAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserToken from './UserToken';
+import type { User } from '../../../types/api';
 
 vi.mock('../../../api/models/Tokens');
 
@@ -61,7 +62,9 @@ describe('<UserToken/>', () => {
   });
 
   test('should render token tabs', async () => {
-    renderWithContexts(<UserToken setBreadcrumb={vi.fn()} user={user} />);
+    renderWithContexts(
+      <UserToken setBreadcrumb={vi.fn()} user={user as unknown as User} />
+    );
 
     expect(
       await screen.findByRole('tab', { name: 'Details' })
@@ -69,7 +72,9 @@ describe('<UserToken/>', () => {
   });
 
   test('should call api for token details', async () => {
-    renderWithContexts(<UserToken setBreadcrumb={vi.fn()} user={user} />);
+    renderWithContexts(
+      <UserToken setBreadcrumb={vi.fn()} user={user as unknown as User} />
+    );
 
     await screen.findByRole('tab', { name: 'Details' });
     expect(TokensAPI.readDetail).toHaveBeenCalledWith(2);

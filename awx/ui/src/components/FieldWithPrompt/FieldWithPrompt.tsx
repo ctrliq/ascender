@@ -23,7 +23,7 @@ export interface FieldWithPromptProps {
   label: React.ReactNode;
   promptId: number | string;
   promptName: Untyped;
-  tooltip?: Untyped;
+  tooltip?: React.ReactNode;
   isDisabled?: boolean;
   [key: string]: unknown;
 }

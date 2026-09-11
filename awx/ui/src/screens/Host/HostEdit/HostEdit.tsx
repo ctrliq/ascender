@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CardBody } from 'components/Card';
@@ -6,7 +6,7 @@ import HostForm from 'components/HostForm';
 import { HostsAPI } from 'api';
 
 export interface HostEditProps {
-  host: Untyped;
+  host: Host;
   [key: string]: unknown;
 }
 

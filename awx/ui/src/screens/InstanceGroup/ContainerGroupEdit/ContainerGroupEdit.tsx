@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InstanceGroup, Untyped } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -11,7 +11,7 @@ import ContentLoading from 'components/ContentLoading';
 import ContainerGroupForm from '../shared/ContainerGroupForm';
 
 export interface ContainerGroupEditProps {
-  instanceGroup: Untyped;
+  instanceGroup: InstanceGroup;
   [key: string]: unknown;
 }
 

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Credential, Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import getProjectHelpStrings from '../Project.helptext';
@@ -11,7 +11,7 @@ import {
 } from './SharedFields';
 
 export interface SvnSubFormProps {
-  credential: Untyped;
+  credential: Credential;
   onCredentialSelection: (...args: Untyped[]) => void;
   scmUpdateOnLaunch: Untyped;
   [key: string]: unknown;

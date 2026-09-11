@@ -12,7 +12,7 @@ export interface InstancePeerListItemProps {
   onSelect: (...args: Untyped[]) => void;
   isExpanded: boolean;
   onExpand: (...args: Untyped[]) => void;
-  rowIndex: Untyped;
+  rowIndex: number;
   [key: string]: unknown;
 }
 

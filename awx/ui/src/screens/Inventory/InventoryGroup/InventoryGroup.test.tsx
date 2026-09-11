@@ -7,6 +7,7 @@ import { GroupsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroup from './InventoryGroup';
 import type { ApiResponse } from 'api/Base';
+import type { Inventory } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -26,7 +27,7 @@ const groupData = {
   },
 };
 
-const inventory = { id: 1, name: 'Foo' };
+const inventory = { id: 1, name: 'Foo' } as unknown as Inventory;
 
 // InventoryGroup reads :inventoryType/:id/:groupId via useParams and renders a
 // nested v6 route tree, so mount it under its real parent route at a concrete

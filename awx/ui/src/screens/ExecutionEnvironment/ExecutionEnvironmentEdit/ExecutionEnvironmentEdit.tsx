@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ExecutionEnvironment, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -8,7 +8,7 @@ import { Config } from 'contexts/Config';
 import ExecutionEnvironmentForm from '../shared/ExecutionEnvironmentForm';
 
 export interface ExecutionEnvironmentEditProps {
-  executionEnvironment: Untyped;
+  executionEnvironment: ExecutionEnvironment;
   [key: string]: unknown;
 }
 

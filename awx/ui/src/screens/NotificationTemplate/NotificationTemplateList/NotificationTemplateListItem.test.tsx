@@ -27,6 +27,7 @@ const renderItem = (props = {}) =>
     <table>
       <tbody>
         <NotificationTemplateListItem
+          rowIndex={0}
           template={template}
           onAddToast={vi.fn()}
           fetchTemplates={vi.fn().mockResolvedValue(undefined)}

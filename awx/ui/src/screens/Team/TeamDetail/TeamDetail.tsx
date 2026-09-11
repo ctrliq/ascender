@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Team } from 'types/api';
 import React, { useCallback } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 
@@ -15,7 +15,7 @@ import { TeamsAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 
 export interface TeamDetailProps {
-  team: Untyped;
+  team: Team;
   [key: string]: unknown;
 }
 
@@ -46,8 +46,8 @@ function TeamDetail({ team }: TeamDetailProps) {
         <Detail
           label={t`Organization`}
           value={
-            <Link to={`/organizations/${summary_fields.organization.id}`}>
-              {summary_fields.organization.name}
+            <Link to={`/organizations/${summary_fields.organization?.id}`}>
+              {summary_fields.organization?.name}
             </Link>
           }
         />

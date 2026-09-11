@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Team, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 
 import { Formik, useField, useFormikContext } from 'formik';
@@ -11,7 +11,7 @@ import { FormColumnLayout } from 'components/FormLayout';
 import { useLingui } from '@lingui/react/macro';
 
 export interface TeamFormFieldsProps {
-  team: Untyped;
+  team: Team;
   [key: string]: unknown;
 }
 

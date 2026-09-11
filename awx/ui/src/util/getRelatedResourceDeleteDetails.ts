@@ -21,9 +21,11 @@ import type { ApiEntity, Paginated } from '../types/api';
 
 /**
  * A row these checks run for. It has come back from the API already, so it
- * carries an id where ApiEntity leaves that optional.
+ * carries an id, which is all any of the requests below read off it.
  */
-type DeletableEntity = ApiEntity & { id: number };
+interface DeletableEntity {
+  id: number;
+}
 
 /** One related-resource count to look up before a delete is allowed. */
 export interface DeleteRequest {

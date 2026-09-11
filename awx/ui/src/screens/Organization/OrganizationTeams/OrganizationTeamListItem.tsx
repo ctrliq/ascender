@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Team } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { Button } from '@patternfly/react-core';
@@ -8,8 +8,8 @@ import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem } from 'components/PaginatedTable';
 
 export interface OrganizationTeamListItemProps {
-  team: Untyped;
-  detailUrl: Untyped;
+  team: Team;
+  detailUrl: string;
   [key: string]: unknown;
 }
 
@@ -27,7 +27,7 @@ function OrganizationTeamListItem({
       </Td>
       <ActionsTd dataLabel={t`Actions`}>
         <ActionItem
-          visible={team.summary_fields.user_capabilities.edit}
+          visible={team.summary_fields.user_capabilities?.edit}
           tooltip={t`Edit Team`}
         >
           <Button

@@ -7,6 +7,7 @@ import { HostsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostAdd from './InventoryHostAdd';
 import mockHost from '../shared/data.host.json';
+import type { Inventory } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -43,7 +44,7 @@ describe('<InventoryHostAdd />', () => {
 
   test('handleSubmit should post to api', async () => {
     const { user } = renderWithContexts(
-      <InventoryHostAdd inventory={{ id: 3 }} />
+      <InventoryHostAdd inventory={{ id: 3 } as unknown as Inventory} />
     );
     await user.click(screen.getByRole('button', { name: 'mock-submit' }));
     await waitFor(() =>
@@ -57,7 +58,7 @@ describe('<InventoryHostAdd />', () => {
   test('should navigate to hosts list when cancel is clicked', async () => {
     const history = createMemoryHistory();
     const { user } = renderWithContexts(
-      <InventoryHostAdd inventory={{ id: 3 }} />,
+      <InventoryHostAdd inventory={{ id: 3 } as unknown as Inventory} />,
       { context: { router: { history } } }
     );
     await user.click(screen.getByRole('button', { name: 'mock-cancel' }));
@@ -67,7 +68,7 @@ describe('<InventoryHostAdd />', () => {
   test('successful form submission should trigger redirect', async () => {
     const history = createMemoryHistory();
     const { user } = renderWithContexts(
-      <InventoryHostAdd inventory={{ id: 3 }} />,
+      <InventoryHostAdd inventory={{ id: 3 } as unknown as Inventory} />,
       { context: { router: { history } } }
     );
     await user.click(screen.getByRole('button', { name: 'mock-submit' }));
@@ -86,7 +87,7 @@ describe('<InventoryHostAdd />', () => {
       Promise.reject(new Error())
     );
     const { user } = renderWithContexts(
-      <InventoryHostAdd inventory={{ id: 3 }} />
+      <InventoryHostAdd inventory={{ id: 3 } as unknown as Inventory} />
     );
     await user.click(screen.getByRole('button', { name: 'mock-submit' }));
     expect(

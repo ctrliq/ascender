@@ -58,19 +58,31 @@ describe('<SurveyListItem />', () => {
 
   test('renders successfully', () => {
     renderInTable(
-      <SurveyListItem question={item} isFirst={false} isLast={false} />
+      <SurveyListItem
+        rowIndex={0}
+        question={item}
+        isFirst={false}
+        isLast={false}
+      />
     );
     expect(screen.getByRole('row')).toBeInTheDocument();
   });
 
   test('fields are rendering properly', () => {
     renderInTable(
-      <SurveyListItem question={item} isFirst={false} isLast={false} canEdit />
+      <SurveyListItem
+        rowIndex={0}
+        question={item}
+        isFirst={false}
+        isLast={false}
+        canEdit
+      />
     );
     expect(
-      screen.getByRole('checkbox', { name: 'Select all rows' })
+      screen.getByRole('checkbox', { name: 'Select row 0' })
     ).toBeInTheDocument();
-    expect(screen.getAllByRole('cell')).toHaveLength(4);
+    // The checkbox cell, then name, type and default.
+    expect(screen.getAllByRole('cell')).toHaveLength(5);
   });
 
   test('required item has required asterisk', () => {
@@ -84,6 +96,7 @@ describe('<SurveyListItem />', () => {
 
     renderInTable(
       <SurveyListItem
+        rowIndex={0}
         question={newItem}
         isChecked={false}
         isFirst
@@ -97,6 +110,7 @@ describe('<SurveyListItem />', () => {
   test('items that are not required should not have an asterisk', () => {
     renderInTable(
       <SurveyListItem
+        rowIndex={0}
         question={item}
         isChecked={false}
         isFirst
@@ -117,6 +131,7 @@ describe('<SurveyListItem />', () => {
 
     renderInTable(
       <SurveyListItem
+        rowIndex={0}
         question={newItem}
         isChecked={false}
         isFirst
@@ -150,6 +165,7 @@ describe('<SurveyListItem />', () => {
 
     renderInTable(
       <SurveyListItem
+        rowIndex={0}
         question={newItem}
         isChecked={false}
         isFirst
@@ -162,7 +178,12 @@ describe('<SurveyListItem />', () => {
 
   test('users without edit/delete permissions are unable to reorder the questions', () => {
     renderInTable(
-      <SurveyListItem canEdit={false} question={item} isChecked={false} />
+      <SurveyListItem
+        rowIndex={0}
+        canEdit={false}
+        question={item}
+        isChecked={false}
+      />
     );
     expect(
       screen.queryByRole('button', { name: 'move up' })
@@ -179,6 +200,7 @@ describe('<SurveyListItem />', () => {
   test('edit button shown to users with edit capabilities', () => {
     renderAtSurveyRoute(
       <SurveyListItem
+        rowIndex={0}
         question={item}
         isFirst
         isLast
@@ -200,6 +222,7 @@ describe('<SurveyListItem />', () => {
   test('question name links to the edit form for that question', () => {
     renderAtSurveyRoute(
       <SurveyListItem
+        rowIndex={0}
         question={item}
         isFirst
         isLast

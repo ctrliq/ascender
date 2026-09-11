@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { CardBody } from 'components/Card';
@@ -10,7 +10,7 @@ import useRequest from 'hooks/useRequest';
 import { HostsAPI } from 'api';
 
 export interface InventoryHostFactsProps {
-  host: Untyped;
+  host: Host;
   [key: string]: unknown;
 }
 

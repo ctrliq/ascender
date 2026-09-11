@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Title } from '@patternfly/react-core';
 import { Modal } from '@patternfly/react-core/deprecated';
@@ -32,7 +31,7 @@ export type AlertVariant = 'danger' | 'error' | 'info' | 'success' | 'warning';
 export interface AlertModalProps {
   // Coerced below, so any truthy value a caller holds, an error among them.
   isOpen?: unknown;
-  title?: Untyped;
+  title?: React.ReactNode;
   label?: string;
   variant?: AlertVariant;
   children?: React.ReactNode;

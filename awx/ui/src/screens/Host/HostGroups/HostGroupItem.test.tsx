@@ -22,6 +22,7 @@ describe('<HostGroupItem />', () => {
       <table>
         <tbody>
           <HostGroupItem
+            rowIndex={0}
             group={group}
             inventoryId={1}
             isSelected={false}

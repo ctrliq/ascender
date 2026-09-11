@@ -7,6 +7,7 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import HostFacts from './HostFacts';
 import mockHost from '../data.host.json';
 import mockHostFacts from '../data.hostFacts.json';
+import type { Host } from 'types/api';
 
 vi.mock('../../../api/models/Hosts');
 vi.mock('react-router', async () => ({
@@ -26,7 +27,7 @@ describe('<HostFacts />', () => {
     vi.mocked(HostsAPI.readFacts).mockResolvedValue({
       data: mockHostFacts,
     } as unknown as ApiResponse<Untyped>);
-    renderWithContexts(<HostFacts host={mockHost} />);
+    renderWithContexts(<HostFacts host={mockHost as unknown as Host} />);
     // react-ace renders empty under jsdom, so assert the Facts detail label
     // rather than the JSON body
     expect(await screen.findByText('Facts')).toBeInTheDocument();
@@ -49,7 +50,7 @@ describe('<HostFacts />', () => {
         },
       })
     );
-    renderWithContexts(<HostFacts host={mockHost} />);
+    renderWithContexts(<HostFacts host={mockHost as unknown as Host} />);
     expect(
       await screen.findByText('Something went wrong...')
     ).toBeInTheDocument();

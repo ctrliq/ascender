@@ -6,6 +6,7 @@ import { createMemoryHistory } from 'history';
 import { ConstructedInventoriesAPI, InventoriesAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryEdit from './ConstructedInventoryEdit';
+import type { Inventory } from 'types/api';
 
 vi.mock('../../../api');
 
@@ -17,7 +18,7 @@ const mockInv = {
   kind: 'constructed',
   source_vars: 'plugin: constructed',
   limit: 'product_dev',
-};
+} as unknown as Inventory;
 
 const associatedInstanceGroups = [{ id: 1, name: 'Foo' }];
 const associatedInputInventories = [

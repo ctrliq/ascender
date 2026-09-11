@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
@@ -16,12 +16,12 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 import Sparkline from 'components/Sparkline';
 
 export interface InventoryHostItemProps {
-  detailUrl: Untyped;
+  detailUrl: string;
   editUrl: Untyped;
-  host: Untyped;
+  host: Host;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
-  rowIndex: Untyped;
+  rowIndex: number;
   [key: string]: unknown;
 }
 

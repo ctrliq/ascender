@@ -13,7 +13,7 @@ export interface AnsibleSelectProps {
   className?: string;
   isDisabled?: boolean;
   onChange: (...args: Untyped[]) => void;
-  name?: Untyped;
+  name?: string;
   [key: string]: unknown;
 }
 
@@ -30,7 +30,11 @@ function AnsibleSelect({
 }: AnsibleSelectProps) {
   const { t } = useLingui();
   const onSelectChange = (val: unknown, event: React.SyntheticEvent) => {
-    (event.target as HTMLInputElement).name = name;
+    // Only the formik-driven selects give a name, and it is what their
+    // handlers read the field off the event by.
+    if (name) {
+      (event.target as HTMLInputElement).name = name;
+    }
     onChange(event, val);
   };
 

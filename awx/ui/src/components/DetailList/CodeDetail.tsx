@@ -29,7 +29,7 @@ export interface CodeDetailProps {
   label: React.ReactNode;
   mode: Untyped;
   rows?: Untyped;
-  helpText?: Untyped;
+  helpText?: React.ReactNode;
   dataCy?: string;
   [key: string]: unknown;
 }

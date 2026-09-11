@@ -172,11 +172,11 @@ function VariablesField({
 }
 export interface VariablesFieldInternalsProps {
   id: string;
-  name: Untyped;
+  name: string;
   label: React.ReactNode;
-  readOnly: Untyped;
+  readOnly: boolean;
   promptId?: number | string | null;
-  tooltip: Untyped;
+  tooltip: React.ReactNode;
   mode: Untyped;
   setMode: Untyped;
   setShouldValidate: (...args: Untyped[]) => unknown;

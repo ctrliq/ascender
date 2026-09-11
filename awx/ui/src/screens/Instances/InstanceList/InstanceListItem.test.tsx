@@ -246,6 +246,7 @@ describe('<InstanceListItem/>', () => {
       <table>
         <tbody>
           <InstanceListItem
+            rowIndex={0}
             instance={instance[1]}
             onSelect={() => {}}
             fetchInstances={() => {}}

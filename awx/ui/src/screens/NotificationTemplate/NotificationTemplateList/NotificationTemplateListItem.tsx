@@ -21,11 +21,11 @@ const RETRY_TIMEOUT = 5000;
 export interface NotificationTemplateListItemProps {
   onAddToast: (...args: Untyped[]) => void;
   template: Untyped;
-  detailUrl: Untyped;
+  detailUrl: string;
   fetchTemplates: Untyped;
   isSelected?: boolean;
   onSelect?: (...args: Untyped[]) => void;
-  rowIndex?: Untyped;
+  rowIndex: number;
   [key: string]: unknown;
 }
 

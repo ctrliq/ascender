@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 import { Badge } from '@patternfly/react-core';
@@ -11,7 +10,7 @@ const Detail = styled(_Detail)`
 
 export interface DetailBadgeProps {
   label: React.ReactNode;
-  helpText?: Untyped;
+  helpText?: React.ReactNode;
   content: React.ReactNode;
   dataCy?: string;
   [key: string]: unknown;

@@ -14,6 +14,7 @@ function renderItem(credential: Untyped) {
     <table>
       <tbody>
         <CredentialListItem
+          rowIndex={0}
           credential={credential}
           detailUrl="/foo/bar"
           isSelected={false}
