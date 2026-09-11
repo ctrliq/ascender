@@ -1,4 +1,5 @@
-import type { Untyped } from 'types/api';
+import type { Instance } from 'types/api';
+import type { SettingCategory } from 'api/models/Settings';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useLocation } from 'react-router';
@@ -56,18 +57,18 @@ function InstanceList() {
         InstancesAPI.readOptions(),
       ]);
 
-      let sysSettings: Untyped = {};
+      let sysSettings: { data?: SettingCategory } = {};
       if (canReadSettings) {
         sysSettings = await SettingsAPI.readCategory('system');
       }
 
       const isPending = response.data.results.some(
-        (i: Untyped) => i.health_check_pending === true
+        (i) => i.health_check_pending === true
       );
       setPendingHealthCheck(isPending);
       return {
         instances: response.data.results,
-        isK8s: sysSettings?.data?.IS_K8S ?? false,
+        isK8s: Boolean(sysSettings?.data?.IS_K8S),
         count: response.data.count,
         actions: responseActions.data.actions,
         relatedSearchableKeys: (
@@ -91,9 +92,7 @@ function InstanceList() {
   }, [fetchInstances]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(
-      instances.filter((i: Untyped) => i.node_type !== 'hop')
-    );
+    useSelected<Instance>(instances.filter((i) => i.node_type !== 'hop'));
 
   const {
     error: healthCheckError,
@@ -238,7 +237,7 @@ function InstanceList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(instance: Untyped, index: number) => (
+            renderRow={(instance: Instance, index: number) => (
               <InstanceListItem
                 isExpanded={expanded.some((row) => row.id === instance.id)}
                 onExpand={() => handleExpand(instance)}

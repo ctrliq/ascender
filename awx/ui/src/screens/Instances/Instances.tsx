@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { BreadcrumbResource } from 'types/api';
 import React, { useCallback, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -18,7 +18,7 @@ function Instances() {
   });
 
   const buildBreadcrumbConfig = useCallback(
-    (instance: Untyped) => {
+    (instance?: BreadcrumbResource & { hostname?: string | null }) => {
       if (!instance) {
         return;
       }

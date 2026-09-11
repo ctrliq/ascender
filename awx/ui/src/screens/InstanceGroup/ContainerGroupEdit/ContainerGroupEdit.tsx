@@ -1,4 +1,4 @@
-import type { InstanceGroup, Untyped } from 'types/api';
+import type { InstanceGroup } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -9,6 +9,7 @@ import useRequest from 'hooks/useRequest';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import ContainerGroupForm from '../shared/ContainerGroupForm';
+import type { ContainerGroupFormValues } from '../shared/ContainerGroupForm';
 
 export interface ContainerGroupEditProps {
   instanceGroup: InstanceGroup;
@@ -30,7 +31,10 @@ function ContainerGroupEdit({ instanceGroup }: ContainerGroupEditProps) {
       const { data } = await InstanceGroupsAPI.readInstanceGroupOptions(
         instanceGroup.id
       );
-      return data.actions.PUT?.pod_spec_override?.default;
+      return (data.actions.PUT?.pod_spec_override?.default ?? {}) as Record<
+        string,
+        unknown
+      >;
     }, [instanceGroup.id]),
     {
       initialPodSpec: {},
@@ -41,7 +45,7 @@ function ContainerGroupEdit({ instanceGroup }: ContainerGroupEditProps) {
     fetchInitialPodSpec();
   }, [fetchInitialPodSpec]);
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: ContainerGroupFormValues) => {
     try {
       await InstanceGroupsAPI.update(instanceGroup.id, {
         name: values.name,

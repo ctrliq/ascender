@@ -1,4 +1,4 @@
-import type { SetBreadcrumb, DetailedError, Untyped } from 'types/api';
+import type { SetBreadcrumb, DetailedError } from 'types/api';
 import React, { useState, useCallback, useEffect } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -10,6 +10,7 @@ import ContentLoading from 'components/ContentLoading';
 import { CardBody } from 'components/Card';
 import { InstancesAPI } from 'api';
 import InstanceForm from '../Shared/InstanceForm';
+import type { InstanceFormValues } from '../Shared/InstanceForm';
 
 export interface InstanceEditProps {
   setBreadcrumb: SetBreadcrumb;
@@ -24,7 +25,7 @@ function InstanceEdit({ setBreadcrumb }: InstanceEditProps) {
 
   const detailsUrl = `/instances/${id}/details`;
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: InstanceFormValues) => {
     try {
       await InstancesAPI.update(id, values);
       navigate(detailsUrl);

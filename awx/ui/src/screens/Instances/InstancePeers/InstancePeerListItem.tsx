@@ -1,18 +1,19 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { formatDateString } from 'util/dates';
 import { Detail, DetailList } from 'components/DetailList';
+import type { PeerAddress } from './InstancePeerList';
 
 export interface InstancePeerListItemProps {
-  peerInstance: Untyped;
+  peerInstance: PeerAddress;
   isSelected: boolean;
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;
   isExpanded: boolean;
-  onExpand: (...args: Untyped[]) => void;
+  /** Opens the row's details drawer; the list holds which are open. */
+  onExpand: () => void;
   rowIndex: number;
   [key: string]: unknown;
 }

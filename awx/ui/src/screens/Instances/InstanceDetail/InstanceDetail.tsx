@@ -1,4 +1,4 @@
-import type { SetBreadcrumb, Untyped } from 'types/api';
+import type { Instance, SetBreadcrumb } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -53,10 +53,14 @@ const SliderForks = styled.div`
   text-align: center;
 `;
 
+/**
+ * How many forks an instance offers at the capacity it is set to, which is the
+ * figure the slider previews before the value is saved.
+ */
 function computeForks(
-  memCapacity: Untyped,
-  cpuCapacity: Untyped,
-  selectedCapacityAdjustment: Untyped
+  memCapacity: number,
+  cpuCapacity: number,
+  selectedCapacityAdjustment: number
 ) {
   const minCapacity = Math.min(memCapacity, cpuCapacity);
   const maxCapacity = Math.max(memCapacity, cpuCapacity);
@@ -79,7 +83,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
   const { id } = useParams() as { id: string };
   const [forks, setForks] = useState<number | undefined>();
   const navigate = useNavigate();
-  const [healthCheck, setHealthCheck] = useState<Untyped>({});
+  const [healthCheck, setHealthCheck] = useState<Partial<Instance>>({});
   const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false);
 
   const {
@@ -108,7 +112,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
         computeForks(
           details.mem_capacity,
           details.cpu_capacity,
-          details.capacity_adjustment
+          Number(details.capacity_adjustment)
         )
       );
       return {
@@ -139,7 +143,9 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
 
   const { error: updateInstanceError, request: updateInstance } = useRequest(
     useCallback(
-      async (values: Untyped) => {
+      // A patch body rather than an instance: the capacity is sent as the
+      // number the slider holds, where the api reports it as a decimal string.
+      async (values: Record<string, unknown>) => {
         await InstancesAPI.update(id, values);
       },
       [id]
@@ -148,7 +154,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
 
   const debounceUpdateInstance = useDebounce(updateInstance, 200);
 
-  const handleChangeValue = (value: Untyped) => {
+  const handleChangeValue = (value: number) => {
     const roundedValue = Math.round(value * 100) / 100;
     setForks(
       computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue)
@@ -156,7 +162,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
     debounceUpdateInstance({ capacity_adjustment: roundedValue });
   };
 
-  const formatHealthCheckTimeStamp = (last: Untyped) => (
+  const formatHealthCheckTimeStamp = (last?: string | null) => (
     <>
       {formatDateString(last)}
       {instance.health_check_pending ? (

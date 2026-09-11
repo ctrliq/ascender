@@ -1,4 +1,4 @@
-import type { InstanceGroup, Untyped } from 'types/api';
+import type { InstanceGroup } from 'types/api';
 import React from 'react';
 import { Formik } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -62,10 +62,19 @@ function InstanceGroupFormFields() {
   );
 }
 
+/** What the instance group form holds, which is what it posts. */
+export interface InstanceGroupFormValues {
+  name: string;
+  policy_instance_minimum: number;
+  policy_instance_percentage: number;
+  max_concurrent_jobs: number;
+  max_forks: number;
+}
+
 export interface InstanceGroupFormProps {
   instanceGroup?: Partial<InstanceGroup>;
-  onSubmit: (values: Untyped) => void;
-  onCancel: (value?: Untyped) => void;
+  onSubmit: (values: InstanceGroupFormValues) => void;
+  onCancel: () => void;
   submitError?: unknown;
   [key: string]: unknown;
 }

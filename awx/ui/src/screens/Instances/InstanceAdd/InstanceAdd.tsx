@@ -1,14 +1,14 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
 import { InstancesAPI } from 'api';
 import InstanceForm from '../Shared/InstanceForm';
+import type { InstanceFormValues } from '../Shared/InstanceForm';
 
 function InstanceAdd() {
   const navigate = useNavigate();
   const [formError, setFormError] = useState<unknown>();
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: InstanceFormValues) => {
     try {
       if (values.listener_port === undefined) {
         values.listener_port = null;

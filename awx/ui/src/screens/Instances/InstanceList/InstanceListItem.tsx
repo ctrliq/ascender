@@ -1,4 +1,4 @@
-import type { Instance, Untyped } from 'types/api';
+import type { Instance } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -46,11 +46,12 @@ const SliderForks = styled.div`
 export interface InstanceListItemProps {
   instance: Instance;
   isExpanded?: boolean;
-  onExpand?: (...args: Untyped[]) => void;
+  /** Opens the row's details drawer; the list holds which are open. */
+  onExpand?: () => void;
   isSelected?: boolean;
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;
-  fetchInstances: Untyped;
+  fetchInstances: () => void;
   rowIndex: number;
   [key: string]: unknown;
 }
@@ -76,11 +77,11 @@ function InstanceListItem({
 
   const labelId = `check-action-${instance.id}`;
 
-  function usedCapacity(item: Untyped) {
+  function usedCapacity(item: Instance) {
     if (item.enabled) {
       return (
         <Progress
-          value={Math.round(100 - item.percent_capacity_remaining)}
+          value={Math.round(100 - Number(item.percent_capacity_remaining))}
           measureLocation={ProgressMeasureLocation.top}
           size={ProgressSize.sm}
           title={t`Used capacity`}
@@ -92,7 +93,9 @@ function InstanceListItem({
 
   const { error: updateInstanceError, request: updateInstance } = useRequest(
     useCallback(
-      async (values: Untyped) => {
+      // A patch body rather than an instance: the capacity is sent as the
+      // number the slider holds, where the api reports it as a decimal string.
+      async (values: Record<string, unknown>) => {
         await InstancesAPI.update(instance.id, values);
       },
       [instance]
@@ -104,7 +107,7 @@ function InstanceListItem({
 
   const debounceUpdateInstance = useDebounce(updateInstance, 200);
 
-  const handleChangeValue = (value: Untyped) => {
+  const handleChangeValue = (value: number) => {
     const roundedValue = Math.round(value * 100) / 100;
     setForks(
       computeForks(instance.mem_capacity, instance.cpu_capacity, roundedValue)
@@ -112,7 +115,7 @@ function InstanceListItem({
     debounceUpdateInstance({ capacity_adjustment: roundedValue });
   };
 
-  const formatHealthCheckTimeStamp = (last: Untyped) => (
+  const formatHealthCheckTimeStamp = (last?: string | null) => (
     <>
       {formatDateString(last)}
       {instance.health_check_pending ? (

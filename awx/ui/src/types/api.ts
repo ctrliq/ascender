@@ -280,7 +280,26 @@ export type Team = WithNested<Schemas['Team']>;
 export type Label = WithNested<Schemas['Label']>;
 export type Schedule = WithNested<Schemas['Schedule']>;
 export type ExecutionEnvironment = WithNested<Schemas['ExecutionEnvironment']>;
-export type InstanceGroup = WithNested<Schemas['InstanceGroup']>;
+/**
+ * An instance group. Its capacities and its job and instance counts are all
+ * SerializerMethodFields, which the schema can only describe as strings where
+ * the api counts them.
+ */
+export type InstanceGroup = Omit<
+  WithNested<Schemas['InstanceGroup']>,
+  | 'capacity'
+  | 'consumed_capacity'
+  | 'percent_capacity_remaining'
+  | 'jobs_running'
+  | 'instances'
+> & {
+  capacity?: number;
+  consumed_capacity?: number;
+  percent_capacity_remaining?: number;
+  jobs_running?: number;
+  /** How many instances the group has, not the instances themselves. */
+  instances?: number;
+};
 export type Group = WithNested<Schemas['Group']>;
 /**
  * `inputs` and `injectors` are JSONFields, which the schema can only describe

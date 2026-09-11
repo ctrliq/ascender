@@ -1,10 +1,11 @@
-import type { InstanceGroup, Untyped } from 'types/api';
+import type { InstanceGroup } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { CardBody } from 'components/Card';
 import { InstanceGroupsAPI } from 'api';
 import InstanceGroupForm from '../shared/InstanceGroupForm';
+import type { InstanceGroupFormValues } from '../shared/InstanceGroupForm';
 
 export interface InstanceGroupEditProps {
   instanceGroup: InstanceGroup;
@@ -16,7 +17,7 @@ function InstanceGroupEdit({ instanceGroup }: InstanceGroupEditProps) {
   const [submitError, setSubmitError] = useState<unknown>(null);
   const detailsUrl = `/instance_groups/${instanceGroup.id}/details`;
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: InstanceGroupFormValues) => {
     try {
       await InstanceGroupsAPI.update(instanceGroup.id, values);
       navigate(detailsUrl);

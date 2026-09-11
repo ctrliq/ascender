@@ -1,4 +1,4 @@
-import type { InstanceGroup, Untyped } from 'types/api';
+import type { Instance, InstanceGroup } from 'types/api';
 import React, { useCallback, useEffect, useState, useRef } from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { useLocation, useParams } from 'react-router';
@@ -74,7 +74,7 @@ function InstanceList({ instanceGroup }: InstanceListProps) {
         InstanceGroupsAPI.readInstanceOptions(instanceGroupId),
       ]);
       const isPending = response.data.results.some(
-        (i: Untyped) => i.health_check_pending === true
+        (i) => i.health_check_pending === true
       );
       if (isMounted.current) setPendingHealthCheck(isPending);
       return {
@@ -97,7 +97,7 @@ function InstanceList({ instanceGroup }: InstanceListProps) {
   );
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(instances);
+    useSelected<Instance>(instances);
 
   useEffect(() => {
     fetchInstances();
@@ -165,15 +165,14 @@ function InstanceList({ instanceGroup }: InstanceListProps) {
 
   const { request: handleAssociate, error: associateError } = useRequest(
     useCallback(
-      async (instancesToAssociate: Untyped) => {
+      // Hop and control nodes are already left out of the list the modal
+      // offers, by the query above; the filter that used to be here asked for
+      // a node that was not control or not hop, which is every node.
+      async (instancesToAssociate: Instance[]) => {
         await Promise.all(
-          instancesToAssociate
-            .filter(
-              (i: Untyped) => i.node_type !== 'control' || i.node_type !== 'hop'
-            )
-            .map((instance: Untyped) =>
-              InstanceGroupsAPI.associateInstance(instanceGroupId, instance.id)
-            )
+          instancesToAssociate.map((instance) =>
+            InstanceGroupsAPI.associateInstance(instanceGroupId, instance.id)
+          )
         );
         fetchInstances();
       },
@@ -338,7 +337,7 @@ function InstanceList({ instanceGroup }: InstanceListProps) {
             <HeaderCell>{t`Actions`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(instance: Untyped, index: number) => (
+        renderRow={(instance: Instance, index: number) => (
           <InstanceListItem
             isExpanded={expanded.some((row) => row.id === instance.id)}
             onExpand={() => handleExpand(instance)}

@@ -1,3 +1,4 @@
+import type { Instance } from 'types/api';
 import React from 'react';
 import { within, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -51,7 +52,7 @@ const instances = [
     enabled: true,
     managed_by_policy: false,
   },
-];
+] as unknown as Instance[];
 describe('<RemoveInstanceButtton />', () => {
   beforeAll(() => {
     i18n.load({ en: englishMessages });
@@ -68,7 +69,7 @@ describe('<RemoveInstanceButtton />', () => {
       <I18nProvider i18n={i18n}>
         <RemoveInstanceButton
           isK8s
-          itemsToRemove={[instances[0]]}
+          itemsToRemove={instances.slice(0, 1)}
           onRemove={onRemove}
         />
       </I18nProvider>
@@ -93,7 +94,7 @@ describe('<RemoveInstanceButtton />', () => {
       <I18nProvider i18n={i18n}>
         <RemoveInstanceButton
           isK8s
-          itemsToRemove={[instances[1]]}
+          itemsToRemove={instances.slice(1, 2)}
           onRemove={vi.fn()}
         />
       </I18nProvider>
@@ -125,7 +126,7 @@ describe('<RemoveInstanceButtton />', () => {
       <I18nProvider i18n={i18n}>
         <RemoveInstanceButton
           isK8s
-          itemsToRemove={[instances[0]]}
+          itemsToRemove={instances.slice(0, 1)}
           onRemove={onRemove}
         />
       </I18nProvider>

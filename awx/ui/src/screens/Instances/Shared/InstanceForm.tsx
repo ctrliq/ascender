@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Instance, ReceptorAddress } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField } from 'formik';
@@ -127,6 +127,38 @@ function InstanceFormFields({ isEdit }: InstanceFormFieldsProps) {
   );
 }
 
+/**
+ * What the instance form holds, which is what it posts.
+ *
+ * The peers are the addresses the instance connects out to, which the form
+ * collects as rows and sends as the hostnames the api takes.
+ */
+export interface InstanceFormValues {
+  hostname: string;
+  description: string;
+  node_type: string;
+  node_state: string;
+  listener_port?: number | string | null;
+  enabled: boolean;
+  managed_by_policy: boolean;
+  peers_from_control_nodes: boolean;
+  peers: (ReceptorAddress | string)[];
+}
+
+export interface InstanceFormProps {
+  /**
+   * The instance being edited. The description is the form's own: the field is
+   * offered here, where the instance serializer does not carry one.
+   */
+  instance?: Partial<Instance> & { description?: string };
+  /** The addresses the instance already peers to, which seed the field. */
+  instance_peers?: (ReceptorAddress | string)[];
+  isEdit?: boolean;
+  submitError?: unknown;
+  handleCancel: () => void;
+  handleSubmit: (values: InstanceFormValues) => void;
+}
+
 function InstanceForm({
   instance = {},
   instance_peers = [],
@@ -134,10 +166,10 @@ function InstanceForm({
   submitError,
   handleCancel,
   handleSubmit,
-}: Untyped) {
+}: InstanceFormProps) {
   return (
     <CardBody>
-      <Formik
+      <Formik<InstanceFormValues>
         initialValues={{
           hostname: instance.hostname || '',
           description: instance.description || '',
@@ -154,7 +186,9 @@ function InstanceForm({
             ...values,
             listener_port:
               values.listener_port === '' ? null : values.listener_port,
-            peers: values.peers.map((peer: Untyped) => peer.hostname || peer),
+            peers: values.peers.map((peer) =>
+              typeof peer === 'string' ? peer : (peer.address ?? peer)
+            ),
           });
         }}
       >

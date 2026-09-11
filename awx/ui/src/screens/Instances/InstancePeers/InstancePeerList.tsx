@@ -27,11 +27,16 @@ import InstancePeerListItem from './InstancePeerListItem';
  * A receptor address with the instance it belongs to named beside it.
  *
  * The addresses endpoint gives only the instance's id, so the list looks each
- * one up and copies the two fields it shows onto the address.
+ * one up and copies the fields the row shows onto the address: the name and
+ * the node type the row itself renders, and the four the drawer under it does.
  */
-type PeerAddress = ReceptorAddress & {
+export type PeerAddress = ReceptorAddress & {
   hostname?: string | null;
   node_type?: string | null;
+  jobs_running?: number;
+  jobs_total?: number;
+  managed_by_policy?: boolean | null;
+  last_health_check?: string | null;
 };
 
 const QS_CONFIG = getQSConfig('peer', {
@@ -89,6 +94,10 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
           ...receptor,
           hostname: host?.hostname,
           node_type: host?.node_type,
+          jobs_running: host?.jobs_running,
+          jobs_total: host?.jobs_total,
+          managed_by_policy: host?.managed_by_policy,
+          last_health_check: host?.last_health_check,
         });
       });
 
@@ -158,6 +167,10 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
           ...receptor,
           hostname: host?.hostname,
           node_type: host?.node_type,
+          jobs_running: host?.jobs_running,
+          jobs_total: host?.jobs_total,
+          managed_by_policy: host?.managed_by_policy,
+          last_health_check: host?.last_health_check,
         });
       });
 

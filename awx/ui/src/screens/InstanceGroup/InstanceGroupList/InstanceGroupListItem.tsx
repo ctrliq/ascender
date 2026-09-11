@@ -1,4 +1,4 @@
-import type { InstanceGroup, Untyped } from 'types/api';
+import type { InstanceGroup } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -39,14 +39,14 @@ function InstanceGroupListItem({
   const { t } = useLingui();
   const labelId = `check-action-${instanceGroup.id}`;
 
-  const isContainerGroup = (item: Untyped) => item.is_container_group;
+  const isContainerGroup = (item: InstanceGroup) => item.is_container_group;
 
-  function usedCapacity(item: Untyped) {
+  function usedCapacity(item: InstanceGroup) {
     if (!isContainerGroup(item)) {
       if (item.capacity) {
         return (
           <Progress
-            value={Math.round(100 - item.percent_capacity_remaining)}
+            value={Math.round(100 - (item.percent_capacity_remaining ?? 0))}
             measureLocation={ProgressMeasureLocation.top}
             size={ProgressSize.sm}
             title={t`Used capacity`}

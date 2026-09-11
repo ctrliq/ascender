@@ -1,4 +1,5 @@
-import type { Untyped } from 'types/api';
+import type { InstanceGroup } from 'types/api';
+import type { DeletableItem } from 'components/PaginatedTable';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -77,7 +78,7 @@ function InstanceGroupList() {
   }, [fetchInstanceGroups]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
-    useSelected<Untyped>(instanceGroups);
+    useSelected<InstanceGroup>(instanceGroups);
 
   const {
     isLoading: deleteLoading,
@@ -104,8 +105,8 @@ function InstanceGroupList() {
 
   const canAdd = actions && actions.POST;
 
-  const cannotDelete = (item: Untyped) =>
-    !item.summary_fields.user_capabilities.delete;
+  const cannotDelete = (item: DeletableItem) =>
+    !item.summary_fields?.user_capabilities?.delete;
 
   const pluralizedItemName = t`Instance Groups`;
   const addContainerGroup = t`Add container group`;
@@ -136,12 +137,14 @@ function InstanceGroupList() {
     />
   );
 
-  const getDetailUrl = (item: Untyped) =>
+  const getDetailUrl = (item: InstanceGroup) =>
     item.is_container_group
       ? `/instance_groups/container_group/${item.id}/details`
       : `/instance_groups/${item.id}/details`;
+  // Built on every render; the requests only run once a row has been picked,
+  // which is what the delete button waits for.
   const deleteDetailsRequests = relatedResourceDeleteRequests.instanceGroup(
-    selected[0]
+    selected[0] as InstanceGroup
   );
   return (
     <>
@@ -201,7 +204,7 @@ function InstanceGroupList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={(instanceGroup: Untyped, index: number) => (
+            renderRow={(instanceGroup: InstanceGroup, index: number) => (
               <InstanceGroupListItem
                 key={instanceGroup.id}
                 value={instanceGroup.name}

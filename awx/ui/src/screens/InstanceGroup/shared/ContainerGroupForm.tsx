@@ -1,4 +1,4 @@
-import type { InstanceGroup, Untyped } from 'types/api';
+import type { InstanceGroup, SummaryFieldRef } from 'types/api';
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 
@@ -22,7 +22,7 @@ import CredentialLookup from 'components/Lookup/CredentialLookup';
 import { VariablesField } from 'components/CodeEditor';
 
 export interface ContainerGroupFormFieldsProps {
-  instanceGroup: InstanceGroup;
+  instanceGroup: Partial<InstanceGroup>;
   [key: string]: unknown;
 }
 
@@ -38,7 +38,7 @@ function ContainerGroupFormFields({
   const [overrideField] = useField('override');
 
   const handleCredentialUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('credential', value);
       setFieldTouched('credential', true, false);
     },
@@ -112,6 +112,28 @@ function ContainerGroupFormFields({
   );
 }
 
+/** What the container group form holds, which is what it posts. */
+export interface ContainerGroupFormValues {
+  name: string;
+  max_concurrent_jobs: number;
+  max_forks: number;
+  credential?: SummaryFieldRef | null;
+  /** The pod spec as the editor holds it, which is yaml rather than json. */
+  pod_spec_override?: string | null;
+  /** Whether the form is overriding the default pod spec at all. */
+  override: boolean;
+}
+
+export interface ContainerGroupFormProps {
+  /** The default pod spec, which the editor is seeded with. */
+  initialPodSpec?: Record<string, unknown>;
+  instanceGroup?: Partial<InstanceGroup>;
+  onSubmit: (values: ContainerGroupFormValues) => void;
+  onCancel: () => void;
+  submitError?: unknown;
+  [key: string]: unknown;
+}
+
 function ContainerGroupForm({
   initialPodSpec = {},
   instanceGroup = {},
@@ -119,7 +141,7 @@ function ContainerGroupForm({
   onCancel,
   submitError = null,
   ...rest
-}: Untyped) {
+}: ContainerGroupFormProps) {
   const isCheckboxChecked = Boolean(instanceGroup?.pod_spec_override) || false;
 
   const initialValues = {

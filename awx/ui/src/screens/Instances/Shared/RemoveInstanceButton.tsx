@@ -1,7 +1,8 @@
-import type { Untyped } from 'types/api';
+import type { Instance } from 'types/api';
 import React, { useContext, useState, useEffect } from 'react';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { KebabifiedContext } from 'contexts/Kebabified';
+import type { DeleteCount } from 'util/getRelatedResourceDeleteDetails';
 import {
   getRelatedResourceDeleteCounts,
   relatedResourceDeleteRequests,
@@ -29,7 +30,7 @@ const Label = styled.span`
 `;
 
 export interface RemoveInstanceButtonProps {
-  itemsToRemove: Untyped[];
+  itemsToRemove: Instance[];
   onRemove: () => void;
   isK8s: boolean;
   [key: string]: unknown;
@@ -44,24 +45,26 @@ function RemoveInstanceButton({
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
   const [removeMessageError, setRemoveMessageError] = useState<unknown>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [removeDetails, setRemoveDetails] = useState<Untyped>(null);
+  const [removeDetails, setRemoveDetails] = useState<DeleteCount[] | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(false);
 
-  const cannotRemove = (item: Untyped) =>
+  const cannotRemove = (item: Instance) =>
     !(item.node_type === 'execution' || item.node_type === 'hop');
 
-  const toggleModal = async (isOpen: Untyped) => {
+  const toggleModal = async (isOpen: boolean) => {
     setRemoveDetails(null);
     setIsLoading(true);
     if (isOpen && itemsToRemove.length > 0) {
       const { results, error } = await getRelatedResourceDeleteCounts(
-        relatedResourceDeleteRequests.instance(itemsToRemove[0])
+        relatedResourceDeleteRequests.instance(itemsToRemove[0] as Instance)
       );
 
       if (error) {
         setRemoveMessageError(error);
       } else {
-        setRemoveDetails(results);
+        setRemoveDetails(results || null);
       }
     }
     setIsModalOpen(isOpen);
@@ -103,7 +106,7 @@ function RemoveInstanceButton({
         other="Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?"
       />
       {removeDetails &&
-        removeDetails.map(({ label, count }: Untyped) => (
+        removeDetails.map(({ label, count }) => (
           <div key={label.id} aria-label={`${i18n._(label)}: ${count}`}>
             <Label>{i18n._(label)}</Label>
             <Badge>{count}</Badge>
