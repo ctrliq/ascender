@@ -189,6 +189,35 @@ html[data-theme="dark"] .rst-content .linenodiv pre {
     color: var(--asc-text-muted);
 }
 
+/*! sphinx-copybutton. Base layer in ansible.css. */
+html[data-theme="dark"] button.copybtn {
+    background-color: var(--asc-surface);
+    border-color: var(--asc-border);
+    color: var(--asc-text);
+}
+
+html[data-theme="dark"] .highlight button.copybtn:hover {
+    background-color: var(--asc-surface-raised);
+    border-color: var(--asc-link);
+    color: var(--asc-link);
+}
+
+html[data-theme="dark"] .highlight button.copybtn:active {
+    background-color: var(--asc-border);
+}
+
+html[data-theme="dark"] button.copybtn.success,
+html[data-theme="dark"] .highlight button.copybtn.success:hover {
+    border-color: var(--asc-success);
+    color: var(--asc-success);
+}
+
+html[data-theme="dark"] .o-tooltip--left:after {
+    background: var(--asc-surface-raised);
+    color: var(--asc-text-strong);
+    border: 1px solid var(--asc-border);
+}
+
 /*! tables */
 html[data-theme="dark"] .rst-content table.docutils,
 html[data-theme="dark"] .rst-content table.field-list,
