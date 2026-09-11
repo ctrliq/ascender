@@ -6,9 +6,9 @@ vi.mock('util/webWorker', () => ({ default: vi.fn() }));
 const userProfile = {
   isSuperUser: false,
   isSystemAuditor: false,
-  isOrgAdmin: false,
-  isNotificationAdmin: false,
-  isExecEnvAdmin: false,
+  isOrgAdmin: 0,
+  isNotificationAdmin: 0,
+  isExecEnvAdmin: 0,
   systemConfig: { SUBSCRIPTION_USAGE_MODEL: 'unique_managed_hosts' },
 };
 
@@ -88,7 +88,7 @@ describe('getRouteConfig', () => {
   });
 
   test('routes for org admin', () => {
-    const sidebar = getRouteConfig({ ...userProfile, isOrgAdmin: true });
+    const sidebar = getRouteConfig({ ...userProfile, isOrgAdmin: 1 });
     const filteredPaths = filterPaths(sidebar);
     expect(filteredPaths).toEqual([
       '/home',
@@ -116,7 +116,7 @@ describe('getRouteConfig', () => {
   test('routes for notifications admin', () => {
     const sidebar = getRouteConfig({
       ...userProfile,
-      isNotificationAdmin: true,
+      isNotificationAdmin: 1,
     });
     const filteredPaths = filterPaths(sidebar);
     expect(filteredPaths).toEqual([
@@ -143,7 +143,7 @@ describe('getRouteConfig', () => {
   });
 
   test('routes for execution environments admin', () => {
-    const sidebar = getRouteConfig({ ...userProfile, isExecEnvAdmin: true });
+    const sidebar = getRouteConfig({ ...userProfile, isExecEnvAdmin: 1 });
     const filteredPaths = filterPaths(sidebar);
     expect(filteredPaths).toEqual([
       '/home',
@@ -195,8 +195,8 @@ describe('getRouteConfig', () => {
   test('routes for execution environment admins and notification admin', () => {
     const sidebar = getRouteConfig({
       ...userProfile,
-      isExecEnvAdmin: true,
-      isNotificationAdmin: true,
+      isExecEnvAdmin: 1,
+      isNotificationAdmin: 1,
     });
     const filteredPaths = filterPaths(sidebar);
     expect(filteredPaths).toEqual([
@@ -225,8 +225,8 @@ describe('getRouteConfig', () => {
   test('routes for execution environment admins and organization admins', () => {
     const sidebar = getRouteConfig({
       ...userProfile,
-      isExecEnvAdmin: true,
-      isOrgAdmin: true,
+      isExecEnvAdmin: 1,
+      isOrgAdmin: 1,
     });
     const filteredPaths = filterPaths(sidebar);
     expect(filteredPaths).toEqual([
@@ -255,8 +255,8 @@ describe('getRouteConfig', () => {
   test('routes for notification admins and organization admins', () => {
     const sidebar = getRouteConfig({
       ...userProfile,
-      isNotificationAdmin: true,
-      isOrgAdmin: true,
+      isNotificationAdmin: 1,
+      isOrgAdmin: 1,
     });
     const filteredPaths = filterPaths(sidebar);
     expect(filteredPaths).toEqual([

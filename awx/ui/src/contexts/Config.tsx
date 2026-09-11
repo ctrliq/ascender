@@ -15,8 +15,36 @@ import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import { dynamicActivate, locales } from 'i18nLoader';
 import { setCustomTheme, applyTheme, getSavedThemeId } from 'themeRegistry';
-import type { Untyped } from 'types/api';
 import { useSession } from './Session';
+
+/**
+ * What the subscription reports about itself.
+ *
+ * Which of these it carries follows the licence type, and the counts are only
+ * there once the subscription tracks hosts, so every field is optional and the
+ * index signature keeps the rest reachable.
+ */
+export interface LicenseInfo {
+  valid_key?: boolean;
+  compliant?: boolean;
+  subscription_name?: string;
+  product_name?: string;
+  license_type?: string;
+  trial?: boolean;
+  /** Unix seconds, which the detail and the banner format. */
+  license_date?: number;
+  time_remaining?: number;
+  instance_count?: number;
+  current_instances?: number;
+  free_instances?: number;
+  available_instances?: number;
+  automated_instances?: number;
+  deleted_instances?: number;
+  reactivated_instances?: number;
+  /** Unix seconds: when the automated host count started counting. */
+  automated_since?: number;
+  [key: string]: unknown;
+}
 
 /**
  * What the config context carries. Assembled from several endpoints in the
@@ -41,7 +69,7 @@ export interface ConfigValue {
   /** The end user licence agreement, shown by the subscription wizard. */
   eula?: string;
   /** The subscription, whose fields differ by licence type. */
-  license_info?: Record<string, Untyped>;
+  license_info?: LicenseInfo;
   version?: string;
   toJSON?: () => string;
   isLoading?: boolean;
@@ -50,7 +78,7 @@ export interface ConfigValue {
   project_base_dir?: string;
   project_local_paths?: string[];
   /** The system settings, whose shape is whatever the API returns. */
-  systemConfig?: Record<string, Untyped>;
+  systemConfig?: Record<string, unknown>;
   [key: string]: unknown;
 }
 
@@ -220,10 +248,15 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 export interface UserProfile {
   isSuperUser: boolean;
   isSystemAuditor: boolean;
-  isOrgAdmin: Untyped;
-  isNotificationAdmin: Untyped;
-  isExecEnvAdmin: Untyped;
-  systemConfig?: Record<string, Untyped>;
+  /**
+   * How many organizations the user administers, notification templates they
+   * may manage, and execution environments they may edit. Each is a count
+   * rather than a flag: a screen shows the control when it is above zero.
+   */
+  isOrgAdmin?: number;
+  isNotificationAdmin?: number;
+  isExecEnvAdmin?: number;
+  systemConfig?: Record<string, unknown>;
 }
 
 export const useUserProfile = (): UserProfile => {
@@ -231,9 +264,9 @@ export const useUserProfile = (): UserProfile => {
   return {
     isSuperUser: !!config.me?.is_superuser,
     isSystemAuditor: !!config.me?.is_system_auditor,
-    isOrgAdmin: config.adminOrgCount,
-    isNotificationAdmin: config.notifAdminCount,
-    isExecEnvAdmin: config.execEnvAdminCount,
+    isOrgAdmin: config.adminOrgCount as number | undefined,
+    isNotificationAdmin: config.notifAdminCount as number | undefined,
+    isExecEnvAdmin: config.execEnvAdminCount as number | undefined,
     systemConfig: config.systemConfig,
   };
 };

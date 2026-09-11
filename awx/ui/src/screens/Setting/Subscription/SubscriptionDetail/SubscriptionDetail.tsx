@@ -144,7 +144,7 @@ function SubscriptionDetail() {
           )}
 
           {systemConfig?.SUBSCRIPTION_USAGE_MODEL !== '' &&
-            license_info?.instance_count < 9999999 && (
+            (license_info?.instance_count ?? 0) < 9999999 && (
               <Detail
                 dataCy="subscription-hosts-available"
                 label={t`Hosts available`}
@@ -152,7 +152,7 @@ function SubscriptionDetail() {
               />
             )}
           {systemConfig?.SUBSCRIPTION_USAGE_MODEL !== '' &&
-            license_info?.instance_count >= 9999999 && (
+            (license_info?.instance_count ?? 0) >= 9999999 && (
               <Detail
                 dataCy="subscription-unlimited-hosts-available"
                 label={t`Hosts available`}

@@ -1,8 +1,8 @@
 import type {
   AccessApiModel,
+  ApiEntity,
   SearchColumn,
   SummaryFieldRef,
-  Untyped,
 } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
@@ -22,6 +22,7 @@ import PaginatedTable, {
 } from '../PaginatedTable';
 import DeleteRoleConfirmationModal from './DeleteRoleConfirmationModal';
 import ResourceAccessListItem from './ResourceAccessListItem';
+import type { AccessRecord, AccessRole } from './ResourceAccessListItem';
 import ErrorDetail from '../ErrorDetail';
 
 const QS_CONFIG = getQSConfig('access', {
@@ -32,7 +33,8 @@ const QS_CONFIG = getQSConfig('access', {
 
 export interface ResourceAccessListProps {
   apiModel: AccessApiModel;
-  resource: Untyped;
+  /** Whatever the screen is showing access to, which has an id and a type. */
+  resource: ApiEntity;
   [key: string]: unknown;
 }
 
@@ -40,8 +42,10 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
   const { t } = useLingui();
   const { isSuperUser } = useUserProfile();
   const [submitError, setSubmitError] = useState<unknown>(null);
-  const [deletionRecord, setDeletionRecord] = useState<Untyped>(null);
-  const [deletionRole, setDeletionRole] = useState<Untyped>(null);
+  const [deletionRecord, setDeletionRecord] = useState<AccessRecord | null>(
+    null
+  );
+  const [deletionRole, setDeletionRole] = useState<AccessRole | null>(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const location = useLocation();
@@ -58,8 +62,9 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
     canAddAdditionalControls = true;
   }
   if (resource.type !== 'credential') {
-    canAddAdditionalControls =
-      resource?.summary_fields?.user_capabilities?.edit;
+    canAddAdditionalControls = Boolean(
+      resource?.summary_fields?.user_capabilities?.edit
+    );
   }
 
   const {
@@ -77,8 +82,8 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([
-        apiModel.readAccessList(resource.id, params),
-        apiModel.readAccessOptions(resource.id),
+        apiModel.readAccessList(resource.id as number, params),
+        apiModel.readAccessOptions(resource.id as number),
       ]);
 
       // Eventually this could be expanded to other access lists.
@@ -99,7 +104,7 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
           RolesAPI.read({ singleton_name: 'system_auditor' }),
         ]);
 
-        const objectRoles = resource.summary_fields.object_roles as Record<
+        const objectRoles = resource.summary_fields?.object_roles as Record<
           string,
           SummaryFieldRef
         >;
@@ -151,10 +156,15 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
     clearDeletionError,
   } = useDeleteItems(
     useCallback(() => {
-      if (typeof deletionRole.team_id !== 'undefined') {
-        return TeamsAPI.disassociateRole(deletionRole.team_id, deletionRole.id);
+      // Both are set by the row's delete button before the modal opens.
+      const role = deletionRole as AccessRole;
+      if (typeof role.team_id !== 'undefined') {
+        return TeamsAPI.disassociateRole(role.team_id, role.id);
       }
-      return UsersAPI.disassociateRole(deletionRecord.id, deletionRole.id);
+      return UsersAPI.disassociateRole(
+        (deletionRecord as AccessRecord).id,
+        role.id
+      );
       /* eslint-disable-next-line react-hooks/exhaustive-deps */
     }, [deletionRole]),
     {
@@ -245,14 +255,14 @@ function ResourceAccessList({ apiModel, resource }: ResourceAccessListProps) {
             fetchAccessRecords();
           }}
           onError={(err: unknown) => setSubmitError(err)}
-          roles={resource.summary_fields.object_roles}
+          roles={resource.summary_fields?.object_roles}
           resource={resource}
         />
       )}
       {showDeleteModal && (
         <DeleteRoleConfirmationModal
-          role={deletionRole}
-          username={deletionRecord.username}
+          role={deletionRole as AccessRole}
+          username={deletionRecord?.username}
           onCancel={() => {
             setDeletionRecord(null);
             setDeletionRole(null);

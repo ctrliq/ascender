@@ -426,7 +426,9 @@ function UserAndTeamAccessAdd({
       steps={steps}
       onClose={onClose}
       onNext={({ id }) =>
-        setStepIdReached(stepIdReached < id ? id : stepIdReached)
+        setStepIdReached(
+          stepIdReached < Number(id) ? Number(id) : stepIdReached
+        )
       }
       onSave={handleWizardSave}
     />

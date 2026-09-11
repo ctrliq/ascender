@@ -126,10 +126,9 @@ function SubscriptionUsageChart() {
         <FlexItem>
           <CardText component="small">
             {t`Last recalculation date:`}{' '}
-            {userProfile.systemConfig?.HOST_METRIC_SUMMARY_TASK_LAST_TS.slice(
-              0,
-              10
-            )}
+            {String(
+              userProfile.systemConfig?.HOST_METRIC_SUMMARY_TASK_LAST_TS ?? ''
+            ).slice(0, 10)}
           </CardText>
         </FlexItem>
       </Flex>

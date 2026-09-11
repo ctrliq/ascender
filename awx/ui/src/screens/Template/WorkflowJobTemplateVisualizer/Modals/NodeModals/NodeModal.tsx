@@ -282,14 +282,14 @@ function NodeModalForm({
         handleSaveNode();
       }}
       onBack={async (nextStep) => {
-        validateStep(nextStep.id);
+        validateStep(nextStep.id as string);
       }}
       onGoToStep={async (nextStep, prevStep) => {
         if (nextStep.id === 'preview') {
           visitAllSteps(setFieldTouched);
         } else {
-          visitStep(prevStep.prevId, setFieldTouched);
-          validateStep(nextStep.id);
+          visitStep(prevStep.prevId as string, setFieldTouched);
+          validateStep(nextStep.id as string);
         }
       }}
       steps={promptSteps}
@@ -299,8 +299,8 @@ function NodeModalForm({
         if (nextStep.id === 'preview') {
           visitAllSteps(setFieldTouched);
         } else {
-          visitStep(prevStep.prevId, setFieldTouched);
-          validateStep(nextStep.id);
+          visitStep(prevStep.prevId as string, setFieldTouched);
+          validateStep(nextStep.id as string);
         }
       }}
     />

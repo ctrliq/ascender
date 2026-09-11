@@ -55,9 +55,9 @@ describe('NodeEditModal', () => {
     vi.mocked(useUserProfile).mockImplementation(() => ({
       isSuperUser: true,
       isSystemAuditor: false,
-      isOrgAdmin: false,
-      isNotificationAdmin: false,
-      isExecEnvAdmin: false,
+      isOrgAdmin: 0,
+      isNotificationAdmin: 0,
+      isExecEnvAdmin: 0,
     }));
   });
 

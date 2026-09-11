@@ -28,9 +28,9 @@ describe('NodeTypeStep', () => {
     vi.mocked(useUserProfile).mockImplementation(() => ({
       isSuperUser: true,
       isSystemAuditor: false,
-      isOrgAdmin: false,
-      isNotificationAdmin: false,
-      isExecEnvAdmin: false,
+      isOrgAdmin: 0,
+      isNotificationAdmin: 0,
+      isExecEnvAdmin: 0,
     }));
   });
   // vitest is configured with mockReset (vitest.config.mjs), which clears mock
@@ -250,9 +250,9 @@ describe('NodeTypeStep', () => {
     vi.mocked(useUserProfile).mockImplementation(() => ({
       isSuperUser: false,
       isSystemAuditor: false,
-      isOrgAdmin: true,
-      isNotificationAdmin: false,
-      isExecEnvAdmin: false,
+      isOrgAdmin: 1,
+      isNotificationAdmin: 0,
+      isExecEnvAdmin: 0,
     }));
 
     renderWithContexts(

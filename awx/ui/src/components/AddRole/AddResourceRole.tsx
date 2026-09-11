@@ -1,4 +1,4 @@
-import type { ApiEntity, Untyped } from 'types/api';
+import type { ApiEntity, SummaryFieldRef } from 'types/api';
 import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -7,6 +7,7 @@ import useSelected from 'hooks/useSelected';
 import type { QSParams } from 'util/qs';
 import SelectableCard from '../SelectableCard';
 import Wizard from '../Wizard';
+import type { LegacyStepRef } from '../Wizard/Wizard';
 import SelectResourceStep from './SelectResourceStep';
 import SelectRoleStep from './SelectRoleStep';
 
@@ -20,10 +21,11 @@ const readTeams = async (queryParams: QSParams) => TeamsAPI.read(queryParams);
 const readTeamsOptions = async () => TeamsAPI.readOptions();
 
 export interface AddResourceRoleProps {
-  onSave: (values?: Untyped, config?: Untyped) => void;
+  onSave: () => void;
   onClose: () => void;
-  roles?: Untyped;
-  resource?: Untyped;
+  /** The roles the resource offers, keyed by the role's own name. */
+  roles?: Record<string, SummaryFieldRef & { user_only?: boolean }>;
+  resource?: ApiEntity;
   onError: (error: unknown) => void;
   [key: string]: unknown;
 }
@@ -135,13 +137,13 @@ function AddResourceRole({
     clearRoles();
   };
 
-  const handleWizardNext = (step: Untyped) => {
-    setCurrentStepId(step.id);
-    setMaxEnabledStep(step.id);
+  const handleWizardNext = (step: LegacyStepRef) => {
+    setCurrentStepId(Number(step.id));
+    setMaxEnabledStep(Number(step.id));
   };
 
-  const handleWizardGoToStep = (step: Untyped) => {
-    setCurrentStepId(step.id);
+  const handleWizardGoToStep = (step: LegacyStepRef) => {
+    setCurrentStepId(Number(step.id));
   };
 
   const handleWizardSave = async () => {
@@ -175,7 +177,7 @@ function AddResourceRole({
   const selectableRoles = { ...roles };
   if (resourceType === 'teams') {
     Object.keys(roles).forEach((key) => {
-      if (selectableRoles[key].user_only) {
+      if (selectableRoles[key]?.user_only) {
         delete selectableRoles[key];
       }
     });
@@ -287,7 +289,7 @@ function AddResourceRole({
       style={{ overflow: 'scroll' }}
       isOpen
       onNext={handleWizardNext}
-      onBack={(step) => setCurrentStepId(step.id)}
+      onBack={(step) => setCurrentStepId(Number(step.id))}
       onClose={onClose}
       onSave={handleWizardSave}
       onGoToStep={(step) => handleWizardGoToStep(step)}

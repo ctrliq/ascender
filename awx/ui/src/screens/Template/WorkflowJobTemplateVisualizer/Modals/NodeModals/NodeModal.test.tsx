@@ -455,9 +455,9 @@ describe('NodeModal', () => {
     vi.mocked(useUserProfile).mockImplementation(() => ({
       isSuperUser: true,
       isSystemAuditor: false,
-      isOrgAdmin: false,
-      isNotificationAdmin: false,
-      isExecEnvAdmin: false,
+      isOrgAdmin: 0,
+      isNotificationAdmin: 0,
+      isExecEnvAdmin: 0,
     }));
     (JobTemplatesAPI as Untyped).read = vi.fn();
     vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
@@ -915,9 +915,9 @@ describe('Edit existing node', () => {
     vi.mocked(useUserProfile).mockImplementation(() => ({
       isSuperUser: true,
       isSystemAuditor: false,
-      isOrgAdmin: false,
-      isNotificationAdmin: false,
-      isExecEnvAdmin: false,
+      isOrgAdmin: 0,
+      isNotificationAdmin: 0,
+      isExecEnvAdmin: 0,
     }));
   });
 

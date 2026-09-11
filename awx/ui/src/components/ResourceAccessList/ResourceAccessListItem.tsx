@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Label } from '@patternfly/react-core';
@@ -13,14 +12,27 @@ import { DetailList, Detail } from '../DetailList';
  * grant them access. A role is direct when it is assigned on this resource and
  * indirect when it comes from an organization or a parent object.
  */
+/**
+ * One role a user or a team holds on a resource. A role granted through a team
+ * carries that team's id and name, which is what the chips are grouped by.
+ */
+export interface AccessRole {
+  id: number;
+  name?: string | null;
+  team_id?: number;
+  team_name?: string;
+  user_capabilities?: { unattach?: boolean };
+  [key: string]: unknown;
+}
+
 export interface AccessRecord {
   id: number;
   username?: string | null;
   first_name?: string | null;
   last_name?: string | null;
   summary_fields?: {
-    direct_access?: { role: Untyped }[];
-    indirect_access?: { role: Untyped }[];
+    direct_access?: { role: AccessRole }[];
+    indirect_access?: { role: AccessRole }[];
     [key: string]: unknown;
   };
   [key: string]: unknown;
@@ -28,7 +40,8 @@ export interface AccessRecord {
 
 export interface ResourceAccessListItemProps {
   accessRecord: AccessRecord;
-  onRoleDelete: (...args: Untyped[]) => void;
+  /** Takes one role off this row, which the list confirms before it does. */
+  onRoleDelete: (role: AccessRole, record: AccessRecord) => void;
   [key: string]: unknown;
 }
 
@@ -37,10 +50,10 @@ function ResourceAccessListItem({
   onRoleDelete,
 }: ResourceAccessListItemProps) {
   const getRoleLists = () => {
-    const teamRoles: Untyped[] = [];
-    const userRoles: Untyped[] = [];
+    const teamRoles: AccessRole[] = [];
+    const userRoles: AccessRole[] = [];
 
-    function sort(item: { role: Untyped }) {
+    function sort(item: { role: AccessRole }) {
       const { role } = item;
       if (role.team_id) {
         teamRoles.push(role);
@@ -54,7 +67,7 @@ function ResourceAccessListItem({
     return [teamRoles, userRoles] as const;
   };
 
-  const renderChip = (role: Untyped) => (
+  const renderChip = (role: AccessRole) => (
     <Label
       variant="outline"
       key={role.id}

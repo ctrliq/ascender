@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import {
   Wizard as PFWizard,
@@ -47,13 +46,24 @@ interface WizardFooterOverrides {
   isNextDisabled?: boolean;
 }
 
+/**
+ * A step as the handlers below are handed it: the id and name PatternFly gives
+ * for the step, and on the previous one its id again under the prevId the
+ * screens read it by.
+ */
+export interface LegacyStepRef {
+  id?: number | string;
+  name?: React.ReactNode;
+  prevId?: number | string;
+}
+
 export interface WizardWrapperProps {
   steps?: LegacyWizardStep[];
-  onSave?: (values?: Untyped, config?: Untyped) => void;
+  onSave?: () => void;
   onClose?: () => void;
-  onNext?: (current?: Untyped, previous?: Untyped) => void;
-  onBack?: (...args: Untyped[]) => void;
-  onGoToStep?: (...args: Untyped[]) => void;
+  onNext?: (current: LegacyStepRef, previous: LegacyStepRef) => void;
+  onBack?: (current: LegacyStepRef, previous: LegacyStepRef) => void;
+  onGoToStep?: (current: LegacyStepRef, previous: LegacyStepRef) => void;
   title?: React.ReactNode;
   description?: React.ReactNode;
   isOpen?: boolean;
@@ -89,8 +99,8 @@ function WizardWrapper({
   const handleStepChange = useCallback(
     (
       _event: unknown,
-      currentStep: Untyped,
-      prevStep: Untyped,
+      currentStep: LegacyStepRef,
+      prevStep: LegacyStepRef,
       scope: unknown
     ) => {
       const legacyCurrent = {

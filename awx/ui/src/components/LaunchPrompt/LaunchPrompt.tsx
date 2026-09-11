@@ -131,22 +131,22 @@ function PromptModalForm({
       onClose={onCancel}
       onSave={handleSubmit}
       onBack={async (nextStep) => {
-        validateStep(nextStep.id);
+        validateStep(nextStep.id as string);
       }}
       onNext={async (nextStep, prevStep) => {
         if (nextStep.id === 'preview') {
           visitAllSteps(setFieldTouched);
         } else {
-          visitStep(prevStep.prevId, setFieldTouched);
-          validateStep(nextStep.id);
+          visitStep(prevStep.prevId as string, setFieldTouched);
+          validateStep(nextStep.id as string);
         }
       }}
       onGoToStep={async (nextStep, prevStep) => {
         if (nextStep.id === 'preview') {
           visitAllSteps(setFieldTouched);
         } else {
-          visitStep(prevStep.prevId, setFieldTouched);
-          validateStep(nextStep.id);
+          visitStep(prevStep.prevId as string, setFieldTouched);
+          validateStep(nextStep.id as string);
         }
       }}
       title={t`Launch | ${resource.name}`}

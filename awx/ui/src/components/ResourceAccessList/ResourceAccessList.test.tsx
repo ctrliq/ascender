@@ -325,9 +325,9 @@ describe('<ResourceAccessList />', () => {
     vi.mocked(useUserProfile).mockImplementation(() => ({
       isSuperUser: true,
       isSystemAuditor: false,
-      isOrgAdmin: false,
-      isNotificationAdmin: false,
-      isExecEnvAdmin: false,
+      isOrgAdmin: 0,
+      isNotificationAdmin: 0,
+      isExecEnvAdmin: 0,
     }));
     vi.mocked(OrganizationsAPI.readAccessList).mockResolvedValue({
       data,
@@ -494,9 +494,9 @@ describe('<ResourceAccessList />', () => {
     vi.mocked(useUserProfile).mockImplementation(() => ({
       isSuperUser: false,
       isSystemAuditor: false,
-      isOrgAdmin: false,
-      isNotificationAdmin: false,
-      isExecEnvAdmin: false,
+      isOrgAdmin: 0,
+      isNotificationAdmin: 0,
+      isExecEnvAdmin: 0,
     }));
     renderWithContexts(
       <ResourceAccessList
@@ -532,9 +532,9 @@ describe('<ResourceAccessList />', () => {
     vi.mocked(useUserProfile).mockImplementation(() => ({
       isSuperUser: false,
       isSystemAuditor: false,
-      isOrgAdmin: true,
-      isNotificationAdmin: false,
-      isExecEnvAdmin: false,
+      isOrgAdmin: 1,
+      isNotificationAdmin: 0,
+      isExecEnvAdmin: 0,
     }));
     renderWithContexts(
       <ResourceAccessList resource={credential} apiModel={CredentialsAPI} />,
@@ -549,9 +549,9 @@ describe('<ResourceAccessList />', () => {
     vi.mocked(useUserProfile).mockImplementation(() => ({
       isSuperUser: false,
       isSystemAuditor: false,
-      isOrgAdmin: true,
-      isNotificationAdmin: false,
-      isExecEnvAdmin: false,
+      isOrgAdmin: 1,
+      isNotificationAdmin: 0,
+      isExecEnvAdmin: 0,
     }));
     renderWithContexts(
       <ResourceAccessList

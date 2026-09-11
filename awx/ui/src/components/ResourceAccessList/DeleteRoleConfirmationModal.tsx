@@ -1,15 +1,15 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Button } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
+import type { AccessRole } from './ResourceAccessListItem';
 
 import AlertModal from '../AlertModal';
 
 export interface DeleteRoleConfirmationModalProps {
-  role: Record<string, unknown>;
+  role: AccessRole;
   username?: React.ReactNode;
-  onCancel: (value?: Untyped) => void;
-  onConfirm: (value?: Untyped) => void;
+  onCancel: () => void;
+  onConfirm: () => void;
   [key: string]: unknown;
 }
 
