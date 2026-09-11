@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Link, Routes, Route, Navigate, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -14,7 +13,7 @@ import GitHubEnterpriseTeamEdit from './GitHubEnterpriseTeamEdit';
 
 // /settings/github/:category (no sub-view) redirects to that category's details
 export interface CategoryRedirectProps {
-  baseURL: Untyped;
+  baseURL: string;
   [key: string]: unknown;
 }
 

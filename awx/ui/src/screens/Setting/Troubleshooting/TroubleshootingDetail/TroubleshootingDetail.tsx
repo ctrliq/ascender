@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SettingConfig } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -32,7 +32,7 @@ function TroubleshootingDetail() {
 
       const { ...debugData } = data;
 
-      const mergedData: Record<string, Untyped> = {};
+      const mergedData: Record<string, SettingConfig> = {};
       Object.keys(debugData).forEach((key) => {
         mergedData[key] = { ...options[key], value: debugData[key] };
       });

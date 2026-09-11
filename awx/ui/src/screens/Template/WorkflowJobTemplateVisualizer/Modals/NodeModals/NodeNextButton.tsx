@@ -1,13 +1,25 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect } from 'react';
 import { Button } from '@patternfly/react-core';
 
+/**
+ * The step the button acts on: the one PatternFly says is active, carrying the
+ * enableNext flag the modal looks up for it, since the step PatternFly hands
+ * over does not have one of its own.
+ */
+export interface NodeWizardStep {
+  id?: string | number;
+  name?: React.ReactNode;
+  enableNext?: boolean;
+}
+
 export interface NodeNextButtonProps {
-  activeStep: Untyped;
-  buttonText: Untyped;
-  onClick: (...args: Untyped[]) => void;
-  onNext: (current?: Untyped, previous?: Untyped) => void;
-  triggerNext: Untyped;
+  activeStep: NodeWizardStep;
+  buttonText: React.ReactNode;
+  onClick: (step: NodeWizardStep) => void;
+  /** The wizard's own goToNextStep, which the effect below calls. */
+  onNext: () => void;
+  /** Counts up each time the modal wants the wizard moved on. */
+  triggerNext: number;
   isDisabled?: boolean;
   [key: string]: unknown;
 }

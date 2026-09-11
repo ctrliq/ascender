@@ -474,6 +474,34 @@ export interface OptionsField {
 }
 
 /**
+ * One setting as a settings screen holds it: the OPTIONS block describing the
+ * field, with the value the category endpoint returned merged onto it.
+ *
+ * The detail and edit screens are driven off these rather than off a fixed
+ * list of settings, so which keys a category has is the category's business.
+ */
+export interface SettingConfig {
+  type?: string;
+  label?: string;
+  /**
+   * Usually the api's own text. A screen may hand a rendered one instead,
+   * where what it has to say depends on what the form currently holds.
+   */
+  help_text?: React.ReactNode;
+  unit?: string;
+  required?: boolean;
+  /** Each entry is a value and the label to show for it. */
+  choices?: [string | number | null, string][];
+  value?: unknown;
+  default?: unknown;
+  /** The bounds a numeric setting is validated against, where it has any. */
+  min_value?: number;
+  max_value?: number;
+  placeholder?: string;
+  [key: string]: unknown;
+}
+
+/**
  * The api's OPTIONS response, which says what a list can do and be filtered by.
  *
  * `actions` carries one block per method the caller is allowed: GET describes

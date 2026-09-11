@@ -44,6 +44,12 @@ export interface NodeModalValues {
   convergence?: string;
   maxRetries?: number;
   linkType?: string;
+  /** What the variables step holds, before the survey is merged into it. */
+  extra_vars?: string;
+  /** What the node saves instead, once the two have been merged. */
+  extra_data?: Record<string, unknown>;
+  /** A management job node's own prompt, which is how long it keeps for. */
+  daysToKeep?: number | string;
   [key: string]: unknown;
 }
 
@@ -372,7 +378,7 @@ export default function useWorkflowNodeSteps(
 
   const steps = [
     useRunTypeStep(askLinkType),
-    useNodeTypeStep(launchConfig),
+    useNodeTypeStep(nodeToEdit ?? null),
     useDaysToKeepStep(),
     useInventoryStep(launchConfig, resource, visited),
     useCredentialsStep(launchConfig, resource, resourceDefaultCredentials),

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SettingConfig, SummaryFieldRef } from 'types/api';
 //
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
@@ -52,7 +52,7 @@ function MiscSystemEdit() {
         'CSRF_TRUSTED_ORIGINS'
       );
 
-      const mergedData: Record<string, Untyped> = {};
+      const mergedData: Record<string, SettingConfig> = {};
       Object.keys(systemData).forEach((key) => {
         if (!options[key]) {
           return;
@@ -70,7 +70,7 @@ function MiscSystemEdit() {
 
   const { error: submitError, request: submitForm } = useRequest(
     useCallback(
-      async (values: Untyped) => {
+      async (values: Record<string, unknown>) => {
         await SettingsAPI.updateAll(values);
         navigate('/settings/miscellaneous_system/details');
       },
@@ -86,14 +86,15 @@ function MiscSystemEdit() {
     null
   );
 
-  const handleSubmit = async (form: Untyped) => {
+  const handleSubmit = async (form: Record<string, unknown>) => {
     await submitForm({
       ...form,
       PROXY_IP_ALLOWED_LIST: formatJson(form.PROXY_IP_ALLOWED_LIST),
       CSRF_TRUSTED_ORIGINS: formatJson(form.CSRF_TRUSTED_ORIGINS),
       REMOTE_HOST_HEADERS: formatJson(form.REMOTE_HOST_HEADERS),
       DEFAULT_EXECUTION_ENVIRONMENT:
-        form.DEFAULT_EXECUTION_ENVIRONMENT?.id || null,
+        (form.DEFAULT_EXECUTION_ENVIRONMENT as SummaryFieldRef | null)?.id ||
+        null,
     });
   };
 
@@ -109,21 +110,23 @@ function MiscSystemEdit() {
     navigate('/settings/miscellaneous_system/details');
   };
 
-  const initialValues = (fields: Untyped) =>
+  const initialValues = (fields: Record<string, SettingConfig>) =>
     Object.keys(fields).reduce(
       (acc, key) => {
-        if (fields[key].type === 'list') {
-          acc[key] = JSON.stringify(fields[key].value, null, 2);
+        if (fields[key]?.type === 'list') {
+          acc[key] = JSON.stringify(fields[key]?.value, null, 2);
         } else {
-          acc[key] = fields[key].value ?? '';
+          acc[key] = fields[key]?.value ?? '';
         }
         return acc;
       },
-      {} as Record<string, Untyped>
+      {} as Record<string, unknown>
     );
 
+  // A setting's value is whatever its own type says; this one is an id, which
+  // is what the lookup below is read by.
   const executionEnvironmentId =
-    system?.DEFAULT_EXECUTION_ENVIRONMENT?.value || null;
+    (system?.DEFAULT_EXECUTION_ENVIRONMENT?.value as number | null) || null;
 
   const {
     isLoading: isLoadingExecutionEnvironment,

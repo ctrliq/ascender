@@ -1,4 +1,4 @@
-import type { OptionsField, Untyped } from 'types/api';
+import type { OptionsField, SettingConfig } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -37,31 +37,33 @@ function MiscAuthenticationEdit() {
     useCallback(async () => {
       const { data } = await SettingsAPI.readCategory('authentication');
 
+      const { OAUTH2_PROVIDER: oauth2Provider, ...pluckedAuthenticationData } =
+        pluck(
+          data,
+          'ALLOW_OAUTH2_FOR_EXTERNAL_USERS',
+          'AUTH_BASIC_ENABLED',
+          'LOGIN_REDIRECT_OVERRIDE',
+          'DISABLE_LOCAL_AUTH',
+          'OAUTH2_PROVIDER',
+          'SESSIONS_PER_USER',
+          'SESSION_COOKIE_AGE',
+          'SOCIAL_AUTH_ORGANIZATION_MAP',
+          'SOCIAL_AUTH_TEAM_MAP',
+          'SOCIAL_AUTH_USER_FIELDS',
+          'SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL',
+          'LOCAL_PASSWORD_MIN_LENGTH',
+          'LOCAL_PASSWORD_MIN_DIGITS',
+          'LOCAL_PASSWORD_MIN_UPPER',
+          'LOCAL_PASSWORD_MIN_SPECIAL'
+        );
+
+      // The three expirations are fields of one nested setting, which the form
+      // shows as three of its own.
       const {
-        OAUTH2_PROVIDER: {
-          ACCESS_TOKEN_EXPIRE_SECONDS,
-          REFRESH_TOKEN_EXPIRE_SECONDS,
-          AUTHORIZATION_CODE_EXPIRE_SECONDS,
-        },
-        ...pluckedAuthenticationData
-      } = pluck(
-        data,
-        'ALLOW_OAUTH2_FOR_EXTERNAL_USERS',
-        'AUTH_BASIC_ENABLED',
-        'LOGIN_REDIRECT_OVERRIDE',
-        'DISABLE_LOCAL_AUTH',
-        'OAUTH2_PROVIDER',
-        'SESSIONS_PER_USER',
-        'SESSION_COOKIE_AGE',
-        'SOCIAL_AUTH_ORGANIZATION_MAP',
-        'SOCIAL_AUTH_TEAM_MAP',
-        'SOCIAL_AUTH_USER_FIELDS',
-        'SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL',
-        'LOCAL_PASSWORD_MIN_LENGTH',
-        'LOCAL_PASSWORD_MIN_DIGITS',
-        'LOCAL_PASSWORD_MIN_UPPER',
-        'LOCAL_PASSWORD_MIN_SPECIAL'
-      );
+        ACCESS_TOKEN_EXPIRE_SECONDS,
+        REFRESH_TOKEN_EXPIRE_SECONDS,
+        AUTHORIZATION_CODE_EXPIRE_SECONDS,
+      } = (oauth2Provider ?? {}) as Record<string, unknown>;
 
       const authenticationData = {
         ACCESS_TOKEN_EXPIRE_SECONDS,
@@ -122,7 +124,7 @@ function MiscAuthenticationEdit() {
 
   const { error: submitError, request: submitForm } = useRequest(
     useCallback(
-      async (values: Untyped) => {
+      async (values: Record<string, unknown>) => {
         await SettingsAPI.updateAll(values);
         navigate('/settings/miscellaneous_authentication/details');
       },
@@ -138,7 +140,7 @@ function MiscAuthenticationEdit() {
     null
   );
 
-  const handleSubmit = async (form: Untyped) => {
+  const handleSubmit = async (form: Record<string, unknown>) => {
     const {
       ACCESS_TOKEN_EXPIRE_SECONDS,
       REFRESH_TOKEN_EXPIRE_SECONDS,
@@ -173,22 +175,22 @@ function MiscAuthenticationEdit() {
     navigate('/settings/miscellaneous_authentication/details');
   };
 
-  const initialValues = (fields: Untyped) =>
+  const initialValues = (fields: Record<string, SettingConfig>) =>
     Object.keys(fields).reduce(
       (acc, key) => {
         if (
-          fields[key].type === 'list' ||
-          fields[key].type === 'nested object'
+          fields[key]?.type === 'list' ||
+          fields[key]?.type === 'nested object'
         ) {
-          acc[key] = fields[key].value
-            ? JSON.stringify(fields[key].value, null, 2)
+          acc[key] = fields[key]?.value
+            ? JSON.stringify(fields[key]?.value, null, 2)
             : null;
         } else {
-          acc[key] = fields[key].value ?? '';
+          acc[key] = fields[key]?.value ?? '';
         }
         return acc;
       },
-      {} as Record<string, Untyped>
+      {} as Record<string, unknown>
     );
 
   return (

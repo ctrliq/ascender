@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SettingConfig } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useNavigate } from 'react-router';
@@ -42,7 +42,7 @@ function JobsEdit() {
         STDOUT_MAX_BYTES_DISPLAY,
         ...jobsData
       } = data;
-      const mergedData: Record<string, Untyped> = {};
+      const mergedData: Record<string, SettingConfig> = {};
       Object.keys(jobsData).forEach((key) => {
         if (!options[key]) {
           return;
@@ -61,7 +61,7 @@ function JobsEdit() {
 
   const { error: submitError, request: submitForm } = useRequest(
     useCallback(
-      async (values: Untyped) => {
+      async (values: Record<string, unknown>) => {
         await SettingsAPI.updateAll(values);
         navigate('/settings/jobs/details');
       },
@@ -77,7 +77,7 @@ function JobsEdit() {
     null
   );
 
-  const handleSubmit = async (form: Untyped) => {
+  const handleSubmit = async (form: Record<string, unknown>) => {
     await submitForm({
       ...form,
       AD_HOC_COMMANDS: formatJson(form.AD_HOC_COMMANDS),
@@ -105,22 +105,22 @@ function JobsEdit() {
     navigate('/settings/jobs/details');
   };
 
-  const initialValues = (fields: Untyped) =>
+  const initialValues = (fields: Record<string, SettingConfig>) =>
     Object.keys(fields).reduce(
       (acc, key) => {
         if (
-          fields[key].type === 'list' ||
-          fields[key].type === 'nested object'
+          fields[key]?.type === 'list' ||
+          fields[key]?.type === 'nested object'
         ) {
-          acc[key] = fields[key].value
-            ? JSON.stringify(fields[key].value, null, 2)
+          acc[key] = fields[key]?.value
+            ? JSON.stringify(fields[key]?.value, null, 2)
             : null;
         } else {
-          acc[key] = fields[key].value ?? '';
+          acc[key] = fields[key]?.value ?? '';
         }
         return acc;
       },
-      {} as Record<string, Untyped>
+      {} as Record<string, unknown>
     );
 
   // We have to rebuild the ALLOW_JINJA_IN_EXTRA_VARS object because the default value
@@ -130,13 +130,13 @@ function JobsEdit() {
   // rendered in those locations. For consistency sake I have changed that label
   // value below.
 
-  const jinja: Record<string, Untyped> = {
+  const jinja: SettingConfig = {
     default: 'template',
     help_text: jobs?.ALLOW_JINJA_IN_EXTRA_VARS?.help_text,
     label: jobs?.ALLOW_JINJA_IN_EXTRA_VARS?.label,
   };
-  jinja.choices = jobs?.ALLOW_JINJA_IN_EXTRA_VARS?.choices.map(
-    ([value, label]: Untyped[]) =>
+  jinja.choices = jobs?.ALLOW_JINJA_IN_EXTRA_VARS?.choices?.map(
+    ([value, label]) =>
       value === 'template' ? [value, t`Template`] : [value, label]
   );
 

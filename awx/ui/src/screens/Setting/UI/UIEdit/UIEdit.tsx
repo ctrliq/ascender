@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SettingConfig } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Formik } from 'formik';
@@ -34,7 +34,7 @@ function UIEdit() {
   } = useRequest(
     useCallback(async () => {
       const { data } = await SettingsAPI.readCategory('ui');
-      const mergedData: Record<string, Untyped> = {};
+      const mergedData: Record<string, SettingConfig> = {};
       Object.keys(data).forEach((key) => {
         if (!options[key]) {
           return;
@@ -53,7 +53,7 @@ function UIEdit() {
 
   const { error: submitError, request: submitForm } = useRequest(
     useCallback(
-      async (values: Untyped) => {
+      async (values: Record<string, unknown>) => {
         await SettingsAPI.updateAll(values);
         if (
           values?.PENDO_TRACKING_STATE !== uiData?.PENDO_TRACKING_STATE?.value
@@ -77,7 +77,7 @@ function UIEdit() {
     null
   );
 
-  const handleSubmit = async (form: Untyped) => {
+  const handleSubmit = async (form: Record<string, unknown>) => {
     await submitForm(form);
   };
 

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SubscriptionPool } from 'api/models/Config';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useMatch, useNavigate } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
@@ -22,6 +22,21 @@ import SubscriptionStep from './SubscriptionStep';
 import AnalyticsStep from './AnalyticsStep';
 import EulaStep from './EulaStep';
 
+/**
+ * What the subscription wizard collects: a manifest the user uploaded, or a
+ * subscription picked off their account, and what each analytics switch is set
+ * to. A run of the wizard uses one of the first two, never both.
+ */
+export interface SubscriptionFormValues {
+  manifest_file?: string | null;
+  manifest_filename?: string;
+  subscription?: SubscriptionPool | null;
+  insights?: boolean;
+  pendo?: boolean;
+  eula?: boolean;
+  [key: string]: unknown;
+}
+
 export interface CustomFooterProps {
   isSubmitLoading: boolean;
   [key: string]: unknown;
@@ -29,7 +44,7 @@ export interface CustomFooterProps {
 
 const CustomFooter = ({ isSubmitLoading }: CustomFooterProps) => {
   const { t } = useLingui();
-  const { values, errors } = useFormikContext<Untyped>();
+  const { values, errors } = useFormikContext<SubscriptionFormValues>();
   const { me, license_info } = useConfig();
   const navigate = useNavigate();
   const { activeStep, goToNextStep, goToPrevStep } = useWizardContext();
@@ -131,7 +146,7 @@ function SubscriptionEdit() {
     result: submitSuccessful,
     request: submitRequest,
   } = useRequest(
-    useCallback(async (form: Untyped) => {
+    useCallback(async (form: SubscriptionFormValues) => {
       if (form.manifest_file) {
         await ConfigAPI.create({
           manifest: form.manifest_file,
@@ -181,7 +196,7 @@ function SubscriptionEdit() {
   }, [submitSuccessful, subscriptionMgmtRoute]);
 
   const { error, dismissError } = useDismissableError(submitError);
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: SubscriptionFormValues) => {
     dismissError();
     await submitRequest(values);
   };

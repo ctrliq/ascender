@@ -1,20 +1,25 @@
-import type { Untyped } from 'types/api';
+import type {
+  NodeTemplate,
+  WorkflowNode,
+} from 'components/Workflow/workflowReducer';
+import type { SetFieldTouched } from 'components/LaunchPrompt/types';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
+import type { FieldInputProps } from 'formik';
 import StepName from 'components/LaunchPrompt/steps/StepName';
 import { stringIsUUID } from 'util/strings';
 import NodeTypeStep from './NodeTypeStep';
 
 const STEP_ID = 'nodeType';
 
-export default function useNodeTypeStep(nodeToEdit: Untyped) {
+export default function useNodeTypeStep(nodeToEdit: WorkflowNode | null) {
   const { t } = useLingui();
-  const [, meta] = useField('nodeType');
-  const [approvalNameField] = useField('approvalName');
-  const [nodeTypeField, ,] = useField('nodeType');
-  const [, identifierMeta] = useField('identifier');
-  const [nodeResourceField, nodeResourceMeta] = useField({
+  const [, meta] = useField<string>('nodeType');
+  const [approvalNameField] = useField<string>('approvalName');
+  const [nodeTypeField, ,] = useField<string>('nodeType');
+  const [, identifierMeta] = useField<string>('identifier');
+  const [nodeResourceField, nodeResourceMeta] = useField<NodeTemplate | null>({
     name: 'nodeResource',
     validate: (value) => {
       if (
@@ -31,7 +36,7 @@ export default function useNodeTypeStep(nodeToEdit: Untyped) {
   });
 
   const formError =
-    !!meta.error || !!nodeResourceMeta.error || identifierMeta.error;
+    !!meta.error || !!nodeResourceMeta.error || !!identifierMeta.error;
 
   return {
     step: getStep(
@@ -46,19 +51,19 @@ export default function useNodeTypeStep(nodeToEdit: Untyped) {
     isReady: true,
     contentError: null,
     hasError: formError,
-    setTouched: (setFieldTouched: Untyped) => {
+    setTouched: (setFieldTouched: SetFieldTouched) => {
       setFieldTouched('nodeType', true, false);
     },
     validate: () => {},
   };
 }
 function getStep(
-  label: Untyped,
-  nodeTypeField: Untyped,
-  approvalNameField: Untyped,
-  nodeResourceField: Untyped,
-  formError: Untyped,
-  nodeToEdit: Untyped
+  label: React.ReactNode,
+  nodeTypeField: FieldInputProps<string>,
+  approvalNameField: FieldInputProps<string>,
+  nodeResourceField: FieldInputProps<NodeTemplate | null>,
+  formError: boolean,
+  nodeToEdit: WorkflowNode | null
 ) {
   const isEnabled = () => {
     if (
@@ -81,11 +86,10 @@ function getStep(
     ),
     component: (
       <NodeTypeStep
-        isIdentifierRequired={
-          nodeToEdit &&
-          nodeToEdit.originalNodeObject &&
-          !stringIsUUID(nodeToEdit.originalNodeObject?.identifier)
-        }
+        isIdentifierRequired={Boolean(
+          nodeToEdit?.originalNodeObject &&
+          !stringIsUUID(nodeToEdit.originalNodeObject.identifier)
+        )}
       />
     ),
     enableNext: isEnabled(),

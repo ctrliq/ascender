@@ -2,7 +2,14 @@ import type {
   WorkflowAction,
   WorkflowState,
 } from 'components/Workflow/workflowReducer';
-import type { Credential, Untyped } from 'types/api';
+import type {
+  Credential,
+  Label,
+  LaunchConfig,
+  LaunchCredential,
+  SummaryFieldRef,
+  SurveyConfig,
+} from 'types/api';
 /* eslint-disable react/jsx-no-useless-fragment */
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
@@ -30,15 +37,19 @@ import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import Wizard from 'components/Wizard';
 import AlertModal from 'components/AlertModal';
 import useWorkflowNodeSteps from './useWorkflowNodeSteps';
+import type { NodeModalValues } from './useWorkflowNodeSteps';
 import NodeNextButton from './NodeNextButton';
+import type { NodeWizardStep } from './NodeNextButton';
 
 export interface NodeModalCustomFooterProps {
-  promptSteps: Untyped[];
+  promptSteps: NodeWizardStep[];
   isLaunchLoading: boolean;
-  triggerNext: Untyped;
-  setTriggerNext: Untyped;
+  /** Counts up to tell the next button to move the wizard on. */
+  triggerNext: number;
+  setTriggerNext: React.Dispatch<React.SetStateAction<number>>;
   handleCancel: () => void;
-  nextButtonText: Untyped;
+  /** Says Save on the last step and Next everywhere else. */
+  nextButtonText: (activeStep: NodeWizardStep | null) => string;
   [key: string]: unknown;
 }
 
@@ -95,6 +106,19 @@ function NodeModalCustomFooter({
   );
 }
 
+export interface NodeModalFormProps {
+  askLinkType: boolean;
+  onSave: (values: NodeModalValues, config: LaunchConfig) => void;
+  title: React.ReactNode;
+  credentialError?: unknown;
+  launchConfig: LaunchConfig;
+  surveyConfig: SurveyConfig;
+  isLaunchLoading: boolean;
+  resourceDefaultCredentials: LaunchCredential[] | null;
+  labels: SummaryFieldRef[];
+  instanceGroups: SummaryFieldRef[];
+}
+
 function NodeModalForm({
   askLinkType,
   onSave,
@@ -106,13 +130,13 @@ function NodeModalForm({
   resourceDefaultCredentials,
   labels,
   instanceGroups,
-}: Untyped) {
+}: NodeModalFormProps) {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useContext(
     WorkflowDispatchContext
   ) as React.Dispatch<WorkflowAction>;
-  const { values, setFieldTouched } = useFormikContext<Untyped>();
+  const { values, setFieldTouched } = useFormikContext<NodeModalValues>();
   const { t } = useLingui();
 
   const [triggerNext, setTriggerNext] = useState(0);
@@ -136,7 +160,7 @@ function NodeModalForm({
   } = useWorkflowNodeSteps(
     launchConfig,
     surveyConfig,
-    values.nodeResource,
+    values.nodeResource ?? null,
     askLinkType,
     resourceDefaultCredentials,
     labels,
@@ -156,28 +180,31 @@ function NodeModalForm({
     }
 
     if (
-      ['job_template', 'workflow_job_template'].includes(values.nodeType) &&
+      ['job_template', 'workflow_job_template'].includes(
+        values.nodeType ?? ''
+      ) &&
       (launchConfig.ask_variables_on_launch || launchConfig.survey_enabled)
     ) {
       let extraVars;
       const surveyValues = getSurveyValues(values);
-      const initialExtraVars =
-        launchConfig.ask_variables_on_launch && (values.extra_vars || '---');
+      const initialExtraVars = launchConfig.ask_variables_on_launch
+        ? values.extra_vars || '---'
+        : undefined;
       if (surveyConfig?.spec) {
         extraVars = yaml.dump(mergeExtraVars(initialExtraVars, surveyValues));
       } else {
         extraVars = yaml.dump(mergeExtraVars(initialExtraVars, {}));
       }
-      values.extra_data = extraVars && parseVariableField(extraVars);
+      values.extra_data = extraVars ? parseVariableField(extraVars) : {};
       delete values.extra_vars;
     } else if (
       values.nodeType === 'system_job_template' &&
       ['cleanup_activitystream', 'cleanup_jobs'].includes(
-        values?.nodeResource?.job_type
+        values?.nodeResource?.job_type ?? ''
       )
     ) {
       values.extra_data = {
-        days: parseInt(values?.daysToKeep, 10),
+        days: parseInt(String(values?.daysToKeep), 10),
       };
     }
 
@@ -195,13 +222,13 @@ function NodeModalForm({
   );
 
   const getNextButtonText = useCallback(
-    (activeStep: Untyped) => {
+    (activeStep: NodeWizardStep | null) => {
       let verifyPromptSteps = false;
       if (promptSteps.length) {
         verifyPromptSteps =
-          activeStep.id === promptSteps[promptSteps.length - 1]?.id;
+          activeStep?.id === promptSteps[promptSteps.length - 1]?.id;
       }
-      return verifyPromptSteps || activeStep.name === 'Preview'
+      return verifyPromptSteps || activeStep?.name === 'Preview'
         ? t`Save`
         : t`Next`;
     },
@@ -282,11 +309,16 @@ function NodeModalForm({
 
 export interface NodeModalInnerProps {
   title: React.ReactNode;
-  [key: string]: unknown;
+  onSave: (values: NodeModalValues, config: LaunchConfig) => void;
+  askLinkType: boolean;
 }
 
-const NodeModalInner = ({ title, ...rest }: NodeModalInnerProps) => {
-  const { values } = useFormikContext<Untyped>();
+const NodeModalInner = ({
+  title,
+  onSave,
+  askLinkType,
+}: NodeModalInnerProps) => {
+  const { values } = useFormikContext<NodeModalValues>();
   const { t } = useLingui();
 
   const wizardTitle = values.nodeResource
@@ -300,15 +332,20 @@ const NodeModalInner = ({ title, ...rest }: NodeModalInnerProps) => {
     isLoading,
   } = useRequest(
     useCallback(async () => {
-      const readLaunch = (type: Untyped, id: Untyped) =>
+      const readLaunch = (type: string | undefined, id: number) =>
         type === 'workflow_job_template'
           ? WorkflowJobTemplatesAPI.readLaunch(id)
           : JobTemplatesAPI.readLaunch(id);
+      // Read off values once: the checks below are what say the resource is a
+      // template with an id, which is what the requests are addressed by.
+      const nodeResource = values.nodeResource;
       if (
-        !values.nodeResource ||
-        !['job_template', 'workflow_job_template'].includes(values?.nodeType) ||
+        !nodeResource?.id ||
         !['job_template', 'workflow_job_template'].includes(
-          values.nodeResource?.type
+          values?.nodeType ?? ''
+        ) ||
+        !['job_template', 'workflow_job_template'].includes(
+          nodeResource.type ?? ''
         )
       ) {
         return {
@@ -321,15 +358,15 @@ const NodeModalInner = ({ title, ...rest }: NodeModalInnerProps) => {
 
       const readLabels =
         values.nodeType === 'workflow_job_template'
-          ? WorkflowJobTemplatesAPI.readAllLabels(values.nodeResource.id)
-          : JobTemplatesAPI.readAllLabels(values.nodeResource.id);
+          ? WorkflowJobTemplatesAPI.readAllLabels(nodeResource.id)
+          : JobTemplatesAPI.readAllLabels(nodeResource.id);
 
       const { data: launch } = await readLaunch(
         values.nodeType,
-        values?.nodeResource?.id
+        nodeResource.id
       );
 
-      let survey = {};
+      let survey: SurveyConfig = {};
 
       if (launch.survey_enabled) {
         const { data } = launch?.workflow_job_template_data
@@ -348,13 +385,13 @@ const NodeModalInner = ({ title, ...rest }: NodeModalInnerProps) => {
       if (launch.ask_credential_on_launch) {
         const {
           data: { results },
-        } = await JobTemplatesAPI.readCredentials(values?.nodeResource?.id, {
+        } = await JobTemplatesAPI.readCredentials(nodeResource.id, {
           page_size: 200,
         });
         defaultCredentials = results;
       }
 
-      let defaultLabels: Untyped[] = [];
+      let defaultLabels: Label[] = [];
 
       if (launch.ask_labels_on_launch) {
         const {
@@ -418,7 +455,8 @@ const NodeModalInner = ({ title, ...rest }: NodeModalInnerProps) => {
 
   return (
     <NodeModalForm
-      {...rest}
+      onSave={onSave}
+      askLinkType={askLinkType}
       launchConfig={launchConfig}
       surveyConfig={surveyConfig}
       resourceDefaultCredentials={resourceDefaultCredentials}
@@ -430,9 +468,15 @@ const NodeModalInner = ({ title, ...rest }: NodeModalInnerProps) => {
   );
 };
 
-const NodeModal = ({ onSave, askLinkType, title }: Untyped) => {
+export interface NodeModalProps {
+  onSave: (values: NodeModalValues, config: LaunchConfig) => void;
+  askLinkType: boolean;
+  title: React.ReactNode;
+}
+
+const NodeModal = ({ onSave, askLinkType, title }: NodeModalProps) => {
   const { nodeToEdit } = useContext(WorkflowStateContext) as WorkflowState;
-  const onSaveForm = (values: Untyped, config: Untyped) => {
+  const onSaveForm = (values: NodeModalValues, config: LaunchConfig) => {
     onSave(values, config);
   };
 

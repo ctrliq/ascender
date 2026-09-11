@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 
 import { Button } from '@patternfly/react-core';
@@ -8,7 +7,7 @@ import AlertModal from 'components/AlertModal';
 
 export interface RevertAllAlertProps {
   onClose: () => void;
-  onRevertAll: (...args: Untyped[]) => void;
+  onRevertAll: () => void;
   [key: string]: unknown;
 }
 

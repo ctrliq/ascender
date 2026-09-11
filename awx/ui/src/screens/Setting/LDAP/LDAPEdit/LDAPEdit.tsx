@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SettingConfig } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useMatch, useNavigate } from 'react-router';
 import { Formik } from 'formik';
@@ -22,15 +22,22 @@ import {
 } from '../../shared/SharedFields';
 import { formatJson } from '../../shared/settingUtils';
 
-function filterByPrefix(data: Untyped, prefix: Untyped) {
+/** The settings of one LDAP server, which are the ones its keys start with. */
+function filterByPrefix(
+  data: Record<string, SettingConfig>,
+  prefix: string
+): Record<string, SettingConfig> {
   return Object.keys(data)
     .filter((key) => key.includes(prefix))
     .reduce(
       (obj, key) => {
-        obj[key] = data[key];
+        const setting = data[key];
+        if (setting) {
+          obj[key] = setting;
+        }
         return obj;
       },
-      {} as Record<string, Untyped>
+      {} as Record<string, SettingConfig>
     );
 }
 
@@ -52,7 +59,7 @@ function LDAPEdit() {
     useCallback(async () => {
       const { data } = await SettingsAPI.readCategory('ldap');
 
-      const mergedData: Record<string, Untyped> = {};
+      const mergedData: Record<string, SettingConfig> = {};
       Object.keys(data).forEach((key) => {
         if (!options[key]) {
           return;
@@ -89,7 +96,7 @@ function LDAPEdit() {
 
   const { error: submitError, request: submitForm } = useRequest(
     useCallback(
-      async (values: Untyped) => {
+      async (values: Record<string, unknown>) => {
         await SettingsAPI.updateAll(values);
         navigate(`/settings/ldap/${category}/details`);
       },
@@ -98,7 +105,7 @@ function LDAPEdit() {
     null
   );
 
-  const handleSubmit = async (form: Untyped) => {
+  const handleSubmit = async (form: Record<string, unknown>) => {
     await submitForm({
       [`${ldapCategory}BIND_DN`]: form[`${ldapCategory}BIND_DN`],
       [`${ldapCategory}BIND_PASSWORD`]: form[`${ldapCategory}BIND_PASSWORD`],
@@ -133,7 +140,7 @@ function LDAPEdit() {
 
   const handleRevertAll = async () => {
     const defaultValues = Object.fromEntries(
-      Object.entries(ldap ?? {}).map(([key, value]) => [key, value.default])
+      Object.entries(ldap ?? {}).map(([key, value]) => [key, value?.default])
     );
     await submitForm(defaultValues);
     closeModal();
@@ -143,22 +150,22 @@ function LDAPEdit() {
     navigate(`/settings/ldap/${category}/details`);
   };
 
-  const initialValues = (fields: Untyped) =>
+  const initialValues = (fields: Record<string, SettingConfig>) =>
     Object.keys(fields).reduce(
       (acc, key) => {
         if (
-          fields[key].type === 'list' ||
-          fields[key].type === 'nested object'
+          fields[key]?.type === 'list' ||
+          fields[key]?.type === 'nested object'
         ) {
-          acc[key] = fields[key].value
-            ? JSON.stringify(fields[key].value, null, 2)
+          acc[key] = fields[key]?.value
+            ? JSON.stringify(fields[key]?.value, null, 2)
             : null;
         } else {
-          acc[key] = fields[key].value ?? '';
+          acc[key] = fields[key]?.value ?? '';
         }
         return acc;
       },
-      {} as Record<string, Untyped>
+      {} as Record<string, unknown>
     );
 
   return (

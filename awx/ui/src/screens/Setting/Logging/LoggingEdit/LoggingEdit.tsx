@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SettingConfig } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -39,7 +39,7 @@ function LoggingEdit() {
   } = useRequest(
     useCallback(async () => {
       const { data } = await SettingsAPI.readCategory('logging');
-      const mergedData: Record<string, Untyped> = {};
+      const mergedData: Record<string, SettingConfig> = {};
       Object.keys(data).forEach((key) => {
         if (!options[key]) {
           return;
@@ -57,7 +57,7 @@ function LoggingEdit() {
 
   const { error: submitError, request: submitForm } = useRequest(
     useCallback(
-      async (values: Untyped) => {
+      async (values: Record<string, unknown>) => {
         await SettingsAPI.updateAll(values);
         navigate('/settings/logging/details');
       },
@@ -66,7 +66,7 @@ function LoggingEdit() {
     null
   );
 
-  const handleSubmit = async (form: Untyped) => {
+  const handleSubmit = async (form: Record<string, unknown>) => {
     await submitForm({
       ...form,
       LOG_AGGREGATOR_LOGGERS: formatJson(form.LOG_AGGREGATOR_LOGGERS),
@@ -95,17 +95,17 @@ function LoggingEdit() {
     navigate('/settings/logging/details');
   };
 
-  const initialValues = (fields: Untyped) =>
+  const initialValues = (fields: Record<string, SettingConfig>) =>
     Object.keys(fields).reduce(
       (acc, key) => {
-        if (fields[key].type === 'list') {
-          acc[key] = JSON.stringify(fields[key].value, null, 2);
+        if (fields[key]?.type === 'list') {
+          acc[key] = JSON.stringify(fields[key]?.value, null, 2);
         } else {
-          acc[key] = fields[key].value ?? '';
+          acc[key] = fields[key]?.value ?? '';
         }
         return acc;
       },
-      {} as Record<string, Untyped>
+      {} as Record<string, unknown>
     );
 
   return (
@@ -180,7 +180,7 @@ function LoggingEdit() {
                   config={logging.LOG_AGGREGATOR_LEVEL}
                 />
                 {['tcp', 'https'].includes(
-                  formik.values.LOG_AGGREGATOR_PROTOCOL
+                  String(formik.values.LOG_AGGREGATOR_PROTOCOL)
                 ) && (
                   <InputField
                     name="LOG_AGGREGATOR_TCP_TIMEOUT"

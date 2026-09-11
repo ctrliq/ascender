@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SettingConfig } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Formik } from 'formik';
@@ -28,7 +28,7 @@ function RADIUSEdit() {
   } = useRequest(
     useCallback(async () => {
       const { data } = await SettingsAPI.readCategory('radius');
-      const mergedData: Record<string, Untyped> = {};
+      const mergedData: Record<string, SettingConfig> = {};
       Object.keys(data).forEach((key) => {
         mergedData[key] = { ...options[key], value: data[key] };
       });
@@ -43,7 +43,7 @@ function RADIUSEdit() {
 
   const { error: submitError, request: submitForm } = useRequest(
     useCallback(
-      async (values: Untyped) => {
+      async (values: Record<string, unknown>) => {
         await SettingsAPI.updateAll(values);
         navigate('/settings/radius/details');
       },
@@ -59,7 +59,7 @@ function RADIUSEdit() {
     null
   );
 
-  const handleSubmit = async (form: Untyped) => {
+  const handleSubmit = async (form: Record<string, unknown>) => {
     await submitForm(form);
   };
 
@@ -75,13 +75,13 @@ function RADIUSEdit() {
     navigate('/settings/radius/details');
   };
 
-  const initialValues = (fields: Untyped) =>
+  const initialValues = (fields: Record<string, SettingConfig>) =>
     Object.keys(fields).reduce(
       (acc, key) => {
-        acc[key] = fields[key].value ?? '';
+        acc[key] = fields[key]?.value ?? '';
         return acc;
       },
-      {} as Record<string, Untyped>
+      {} as Record<string, unknown>
     );
 
   return (

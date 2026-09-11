@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SettingConfig } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router';
 
@@ -48,7 +48,7 @@ function LoggingDetail() {
         'API_400_ERROR_LOG_FORMAT'
       );
 
-      const mergedData: Record<string, Untyped> = {};
+      const mergedData: Record<string, SettingConfig> = {};
       Object.keys(loggingData).forEach((key) => {
         mergedData[key] = { ...options[key], value: loggingData[key] };
       });

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SettingConfig } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { Link, Navigate, useMatch } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -16,15 +16,22 @@ import { useSettings } from 'contexts/Settings';
 import { SettingDetail } from '../../shared';
 import { sortNestedDetails } from '../../shared/settingUtils';
 
-function filterByPrefix(data: Untyped, prefix: Untyped) {
+/** The settings of one LDAP server, which are the ones its keys start with. */
+function filterByPrefix(
+  data: Record<string, SettingConfig>,
+  prefix: string
+): Record<string, SettingConfig> {
   return Object.keys(data)
     .filter((key) => key.includes(prefix))
     .reduce(
       (obj, key) => {
-        obj[key] = data[key];
+        const setting = data[key];
+        if (setting) {
+          obj[key] = setting;
+        }
         return obj;
       },
-      {} as Record<string, Untyped>
+      {} as Record<string, SettingConfig>
     );
 }
 
@@ -44,7 +51,7 @@ function LDAPDetail() {
     useCallback(async () => {
       const { data } = await SettingsAPI.readCategory('ldap');
 
-      const mergedData: Record<string, Untyped> = {};
+      const mergedData: Record<string, SettingConfig> = {};
       Object.keys(data).forEach((key) => {
         if (key.includes('_CONNECTION_OPTIONS')) {
           return;
@@ -82,7 +89,7 @@ function LDAPDetail() {
       3: null,
       4: null,
       5: null,
-    } as unknown as Record<string, Untyped>
+    } as Record<string, [string, SettingConfig][] | null>
   );
 
   useEffect(() => {
@@ -146,7 +153,7 @@ function LDAPDetail() {
           {!isLoading && Boolean(error) && <ContentError error={error} />}
           {!isLoading && !Object.values(LDAPDetails)?.includes(null) && (
             <DetailList>
-              {LDAPDetails[category].map(([key, detail]: Untyped[]) => (
+              {LDAPDetails[category]?.map(([key, detail]) => (
                 <SettingDetail
                   key={key}
                   id={key}

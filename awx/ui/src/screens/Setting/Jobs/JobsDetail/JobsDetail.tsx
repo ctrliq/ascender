@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SettingConfig } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -36,7 +36,7 @@ function JobsDetail() {
         ...jobsData
       } = data;
 
-      const mergedData: Record<string, Untyped> = {};
+      const mergedData: Record<string, SettingConfig> = {};
       Object.keys(jobsData).forEach((key) => {
         mergedData[key] = { ...options[key], value: jobsData[key] };
       });

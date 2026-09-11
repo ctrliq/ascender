@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SettingConfig } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Formik } from 'formik';
@@ -34,7 +34,7 @@ function SAMLEdit() {
   } = useRequest(
     useCallback(async () => {
       const { data } = await SettingsAPI.readCategory('saml');
-      const mergedData: Record<string, Untyped> = {};
+      const mergedData: Record<string, SettingConfig> = {};
       Object.keys(data).forEach((key) => {
         if (!options[key]) {
           return;
@@ -52,7 +52,7 @@ function SAMLEdit() {
 
   const { error: submitError, request: submitForm } = useRequest(
     useCallback(
-      async (values: Untyped) => {
+      async (values: Record<string, unknown>) => {
         await SettingsAPI.updateAll(values);
         navigate('/settings/saml/details');
       },
@@ -68,7 +68,7 @@ function SAMLEdit() {
     null
   );
 
-  const handleSubmit = async (form: Untyped) => {
+  const handleSubmit = async (form: Record<string, unknown>) => {
     await submitForm({
       ...form,
       SOCIAL_AUTH_SAML_ORG_INFO: formatJson(form.SOCIAL_AUTH_SAML_ORG_INFO),
@@ -112,22 +112,22 @@ function SAMLEdit() {
     navigate('/settings/saml/details');
   };
 
-  const initialValues = (fields: Untyped) =>
+  const initialValues = (fields: Record<string, SettingConfig>) =>
     Object.keys(fields).reduce(
       (acc, key) => {
         if (
-          fields[key].type === 'list' ||
-          fields[key].type === 'nested object'
+          fields[key]?.type === 'list' ||
+          fields[key]?.type === 'nested object'
         ) {
-          acc[key] = fields[key].value
-            ? JSON.stringify(fields[key].value, null, 2)
+          acc[key] = fields[key]?.value
+            ? JSON.stringify(fields[key]?.value, null, 2)
             : null;
         } else {
-          acc[key] = fields[key].value ?? '';
+          acc[key] = fields[key]?.value ?? '';
         }
         return acc;
       },
-      {} as Record<string, Untyped>
+      {} as Record<string, unknown>
     );
 
   return (

@@ -1,4 +1,4 @@
-import type { OptionsField } from 'types/api';
+import type { SettingConfig } from 'types/api';
 import type { FileUploadProps, TextInputProps } from '@patternfly/react-core';
 
 import React, { useState } from 'react';
@@ -39,13 +39,7 @@ import RevertButton from './RevertButton';
 /* eslint-disable react/no-unused-prop-types */
 interface SettingFieldProps {
   name: string;
-  config?:
-    | (OptionsField & {
-        min_value?: number;
-        max_value?: number;
-        placeholder?: string;
-      })
-    | null;
+  config?: SettingConfig | null;
   isRequired?: boolean;
   [key: string]: unknown;
 }

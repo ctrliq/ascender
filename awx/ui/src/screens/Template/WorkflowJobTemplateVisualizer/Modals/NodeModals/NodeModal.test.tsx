@@ -610,12 +610,7 @@ describe('NodeModal', () => {
             } as unknown as WorkflowState
           }
         >
-          <NodeModal
-            askLinkType
-            onSave={onSave}
-            title="Add Node"
-            resourceDefaultCredentials={[]}
-          />
+          <NodeModal askLinkType onSave={onSave} title="Add Node" />
         </WorkflowStateContext.Provider>
       </WorkflowDispatchContext.Provider>
     );
@@ -948,12 +943,7 @@ describe('Edit existing node', () => {
             } as unknown as WorkflowState
           }
         >
-          <NodeModal
-            askLinkType={false}
-            onSave={onSave}
-            title="Edit Node"
-            resourceDefaultCredentials={[]}
-          />
+          <NodeModal askLinkType={false} onSave={onSave} title="Edit Node" />
         </WorkflowStateContext.Provider>
       </WorkflowDispatchContext.Provider>
     );
@@ -1058,12 +1048,7 @@ describe('Edit existing node', () => {
             } as unknown as WorkflowState
           }
         >
-          <NodeModal
-            askLinkType={false}
-            onSave={onSave}
-            title="Edit Node"
-            resourceDefaultCredentials={[]}
-          />
+          <NodeModal askLinkType={false} onSave={onSave} title="Edit Node" />
         </WorkflowStateContext.Provider>
       </WorkflowDispatchContext.Provider>
     );

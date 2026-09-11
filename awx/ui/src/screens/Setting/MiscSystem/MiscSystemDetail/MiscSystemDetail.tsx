@@ -1,7 +1,7 @@
 //
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
-import type { Untyped } from 'types/api';
+import type { SettingConfig } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -59,15 +59,18 @@ function MiscSystemDetail() {
         'CSRF_TRUSTED_ORIGINS'
       );
 
-      const mergedData: Record<string, Untyped> = {};
+      // Each setting is copied before the value is put on it: options is the
+      // OPTIONS block every settings screen shares, and writing onto it left
+      // one screen's values on the next screen's fields.
+      const mergedData: Record<string, SettingConfig> = {};
       Object.keys(systemData).forEach((key) => {
-        mergedData[key] = options[key];
-
-        if (key === 'AUTOMATION_ANALYTICS_LAST_ENTRIES') {
-          mergedData[key].value = formatJson(systemData[key]) ?? '';
-        } else {
-          mergedData[key].value = systemData[key];
-        }
+        mergedData[key] = {
+          ...options[key],
+          value:
+            key === 'AUTOMATION_ANALYTICS_LAST_ENTRIES'
+              ? (formatJson(systemData[key]) ?? '')
+              : systemData[key],
+        };
       });
       return sortNestedDetails(mergedData);
     }, [options]),

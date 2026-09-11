@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SubscriptionPool } from 'api/models/Config';
 import React, { useCallback, useEffect } from 'react';
 
 import { Trans, useLingui } from '@lingui/react/macro';
@@ -21,10 +21,11 @@ import ContentEmpty from 'components/ContentEmpty';
 import ContentLoading from 'components/ContentLoading';
 
 export interface SubscriptionModalProps {
-  subscriptionCreds?: Untyped;
-  selectedSubscription?: Untyped;
+  /** What the wizard's first step collected, which the list is read with. */
+  subscriptionCreds?: { username?: string | null; password?: string | null };
+  selectedSubscription?: SubscriptionPool | null;
   onClose: () => void;
-  onConfirm: (value?: Untyped) => void;
+  onConfirm: (subscription?: SubscriptionPool) => void;
   [key: string]: unknown;
 }
 
@@ -153,7 +154,7 @@ function SubscriptionModal({
             </Tr>
           </Thead>
           <Tbody>
-            {subscriptions.map((subscription: Untyped) => (
+            {subscriptions.map((subscription) => (
               <Tr
                 key={`row-${subscription.id}`}
                 id={`row-${subscription.id}`}
@@ -166,7 +167,7 @@ function SubscriptionModal({
                       (row) => row.id === subscription.id
                     ),
                     variant: 'radio',
-                    rowIndex: subscription.id,
+                    rowIndex: subscription.id ?? 0,
                   }}
                 />
                 <Td dataLabel={t`Trial`}>{subscription.subscription_name}</Td>
@@ -175,7 +176,9 @@ function SubscriptionModal({
                 </Td>
                 <Td dataLabel={t`Expires`} modifier="nowrap">
                   {formatDateString(
-                    new Date(subscription.license_date * 1000).toISOString(),
+                    new Date(
+                      (subscription.license_date ?? 0) * 1000
+                    ).toISOString(),
                     'UTC'
                   )}
                 </Td>

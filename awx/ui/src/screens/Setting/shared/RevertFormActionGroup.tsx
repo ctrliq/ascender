@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { ActionGroup, Button } from '@patternfly/react-core';
@@ -6,9 +5,9 @@ import { FormFullWidthLayout } from 'components/FormLayout';
 
 export interface RevertFormActionGroupProps {
   children?: React.ReactNode;
-  onCancel: (value?: Untyped) => void;
-  onRevert: (...args: Untyped[]) => void;
-  onSubmit: (values: Untyped) => void;
+  onCancel: () => void;
+  onRevert: () => void;
+  onSubmit: () => void;
   [key: string]: unknown;
 }
 

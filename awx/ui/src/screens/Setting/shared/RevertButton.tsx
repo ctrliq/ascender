@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 
 import { useField } from 'formik';
@@ -15,7 +14,8 @@ const ButtonWrapper = styled.div`
 
 export interface RevertButtonProps {
   id: string;
-  defaultValue: Untyped;
+  /** What the field is put back to, which is the setting's own default. */
+  defaultValue: unknown;
   isDisabled?: boolean;
   onRevertCallback?: () => void;
   [key: string]: unknown;

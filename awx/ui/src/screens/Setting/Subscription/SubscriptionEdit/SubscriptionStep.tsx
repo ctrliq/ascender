@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 
 import { useField, useFormikContext } from 'formik';
@@ -24,6 +23,7 @@ import useModal from 'hooks/useModal';
 import FormField, { PasswordField } from 'components/FormField';
 import Popover from 'components/Popover';
 import { Trans, useLingui } from '@lingui/react/macro';
+import type { SubscriptionFormValues } from './SubscriptionEdit';
 import SubscriptionModal from './SubscriptionModal';
 
 const LICENSELINK = 'https://www.ansible.com/license';
@@ -39,7 +39,7 @@ function SubscriptionStep() {
   const config = useConfig();
   const hasValidKey = Boolean(config?.license_info?.valid_key);
 
-  const { values } = useFormikContext<Untyped>();
+  const { values } = useFormikContext<SubscriptionFormValues>();
 
   const [isSelected, setIsSelected] = useState(
     values.subscription ? 'selectSubscription' : 'uploadManifest'

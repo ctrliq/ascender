@@ -1,10 +1,10 @@
 import type { NodePositions } from 'components/Workflow/WorkflowUtils';
 import type {
+  ApiWorkflowNode,
   WorkflowAction,
   WorkflowNode,
   WorkflowState,
 } from 'components/Workflow/workflowReducer';
-import type { Untyped } from 'types/api';
 import React, { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
@@ -31,12 +31,12 @@ import {
 } from 'components/Workflow';
 import getNodeType from './shared/WorkflowJobTemplateVisualizerUtils';
 
-const NodeG = styled.g<{ $job?: Untyped; $noPointerEvents?: Untyped }>`
+const NodeG = styled.g<{ $job?: boolean; $noPointerEvents?: boolean }>`
   pointer-events: ${(props) => (props.$noPointerEvents ? 'none' : 'initial')};
   cursor: ${(props) => (props.$job ? 'pointer' : 'default')};
 `;
 
-const NodeContents = styled.div<{ $isInvalidLinkTarget?: Untyped }>`
+const NodeContents = styled.div<{ $isInvalidLinkTarget?: boolean }>`
   font-size: 13px;
   padding: 0px 10px;
   background-color: ${(props) =>
@@ -64,8 +64,8 @@ const ConvergenceLabel = styled.p`
 NodeResourceName.displayName = 'NodeResourceName';
 
 export interface VisualizerNodeProps {
-  node: Untyped;
-  onMouseOver?: (...args: Untyped[]) => void;
+  node: WorkflowNode;
+  onMouseOver?: (node: WorkflowNode) => void;
   readOnly: boolean;
   updateHelpText: (helpText: React.ReactNode) => void;
   updateNodeHelp: (node: WorkflowNode | null) => void;
@@ -80,7 +80,7 @@ function VisualizerNode({
   updateNodeHelp,
 }: VisualizerNodeProps) {
   const { t } = useLingui();
-  const ref = useRef<Untyped>(null);
+  const ref = useRef<SVGGElement | null>(null);
   const [hovering, setHovering] = useState(false);
   const [detailError, setDetailError] = useState<unknown>(null);
   const dispatch = useContext(
@@ -91,30 +91,30 @@ function VisualizerNode({
   ) as WorkflowState & {
     nodePositions: NodePositions;
   };
-  const isAddLinkSourceNode =
-    addLinkSourceNode && addLinkSourceNode.id === node.id;
+  const isAddLinkSourceNode = Boolean(
+    addLinkSourceNode && addLinkSourceNode.id === node.id
+  );
 
   const handleDetailErrorClose = () => setDetailError(null);
 
   const updateNode = async () => {
     const updatedNodes = [...nodes];
+    // The node is looked up in the copy so what the api answers is written
+    // onto the one the reducer is about to be handed, not onto this render's.
     const updatedNode = updatedNodes.find(
-      (n: Untyped) => n.id === node.id
-    ) as WorkflowNode & { originalNodeObject: Untyped };
-    if (
-      !node.fullUnifiedJobTemplate &&
-      node?.originalNodeObject?.summary_fields?.unified_job_template
-    ) {
-      const [, nodeAPI] = getNodeType(
-        node.originalNodeObject.summary_fields.unified_job_template
-      );
+      (n) => n.id === node.id
+    ) as WorkflowNode & { originalNodeObject: ApiWorkflowNode };
+    const templateSummary =
+      node?.originalNodeObject?.summary_fields?.unified_job_template;
+    const templateId = node?.originalNodeObject?.unified_job_template;
+    if (!node.fullUnifiedJobTemplate && templateSummary && templateId) {
+      const [, nodeAPI] = getNodeType(templateSummary);
       if (!nodeAPI) {
         return null;
       }
       try {
-        const { data: fullUnifiedJobTemplate } = await nodeAPI.readDetail(
-          node.originalNodeObject.unified_job_template
-        );
+        const { data: fullUnifiedJobTemplate } =
+          await nodeAPI.readDetail(templateId);
         updatedNode.fullUnifiedJobTemplate = fullUnifiedJobTemplate;
       } catch (err) {
         setDetailError(err);
@@ -198,7 +198,10 @@ function VisualizerNode({
   };
 
   const handleNodeMouseEnter = () => {
-    ref.current.parentNode.appendChild(ref.current);
+    // Re-appending the group is what raises it above its siblings, since svg
+    // has no z-index and paints in document order.
+    const group = ref.current;
+    group?.parentNode?.appendChild(group);
     setHovering(true);
     if (addingLink) {
       updateHelpText(
@@ -310,7 +313,7 @@ function VisualizerNode({
     <>
       <NodeG
         id={`node-${node.id}`}
-        $job={node.job}
+        $job={Boolean(node.job)}
         $noPointerEvents={isAddLinkSourceNode}
         onMouseEnter={handleNodeMouseEnter}
         onMouseLeave={handleNodeMouseLeave}
