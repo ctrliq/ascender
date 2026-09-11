@@ -6,7 +6,7 @@ import AdHocPreviewStep from './AdHocPreviewStep';
 import type { AdHocValues } from './types';
 
 const STEP_ID = 'preview';
-export default function useAdHocPreviewStep(hasErrors: unknown) {
+export default function useAdHocPreviewStep(hasErrors: boolean) {
   const { t } = useLingui();
   const { values } = useFormikContext<AdHocValues>();
 

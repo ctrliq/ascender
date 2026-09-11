@@ -13,6 +13,7 @@ import Popover from '../Popover';
 import ContentError from '../ContentError';
 import ContentLoading from '../ContentLoading';
 import OptionsList from '../OptionsList';
+import type { QSParams } from 'util/qs';
 
 const QS_CONFIG = getQSConfig('execution_environments', {
   page: 1,
@@ -45,8 +46,10 @@ function AdHocExecutionEnvironmentStep({
   } = useRequest(
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
-      const globallyAvailableParams = { or__organization__isnull: 'True' };
-      const organizationIdParams = organizationId
+      const globallyAvailableParams: QSParams = {
+        or__organization__isnull: 'True',
+      };
+      const organizationIdParams: QSParams = organizationId
         ? { or__organization__id: organizationId }
         : {};
 

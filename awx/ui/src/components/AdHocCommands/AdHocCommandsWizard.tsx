@@ -8,11 +8,15 @@ import useAdHocLaunchSteps from './useAdHocLaunchSteps';
 import type { AdHocItem, AdHocValues } from './types';
 
 export interface AdHocCommandsWizardProps {
-  onLaunch: (...args: Untyped[]) => void;
-  moduleOptions: unknown;
-  onCloseWizard: (...args: Untyped[]) => void;
-  credentialTypeId: number | string;
-  organizationId: number | string;
+  onLaunch: (values: AdHocValues) => void;
+  /** The ansible modules the command may run, from the API's options. */
+  moduleOptions: Untyped;
+  onCloseWizard: () => void;
+  credentialTypeId: number | string | null;
+  organizationId: number | string | null;
+  /** The hosts or groups the command will run against. */
+  adHocItems: AdHocItem[];
+  onDismissError?: () => void;
   [key: string]: unknown;
 }
 
@@ -65,7 +69,9 @@ function AdHocCommandsWizard({
   );
 }
 
-const FormikApp = withFormik({
+// The generics are what keeps the wrapper's own props visible to callers:
+// without them withFormik types the wrapped component as taking nothing.
+const FormikApp = withFormik<AdHocCommandsWizardProps, AdHocValues>({
   mapPropsToValues({ adHocItems }) {
     const adHocItemStrings = adHocItems
       .map((item: AdHocItem) => item.name)
@@ -85,6 +91,10 @@ const FormikApp = withFormik({
       execution_environment: '',
     };
   },
+  // The wizard launches from its own onSave rather than through formik, and
+  // no step renders a submitting form, so this is never reached. formik's
+  // types require it all the same.
+  handleSubmit: () => {},
 })(AdHocCommandsWizard);
 
 export default FormikApp;

@@ -454,7 +454,9 @@ function NotificationTemplateDetail({ template, defaultMessages }) {
             <Button
               onClick={sendTestNotification}
               variant="secondary"
-              isDisabled={testStatus === ('running' || 'pending')}
+              // `=== ('a' || 'b')` is `=== 'a'`: the button stayed enabled
+              // while a test was pending, so a second one could be started.
+              isDisabled={['running', 'pending'].includes(testStatus)}
             >
               {t`Test`}
             </Button>

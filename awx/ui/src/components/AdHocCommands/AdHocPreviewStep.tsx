@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Tooltip } from '@patternfly/react-core';
@@ -8,6 +9,7 @@ import { toTitleCase } from '../../util/strings';
 import { VariablesDetail } from '../CodeEditor';
 import { jsonToYaml } from '../../util/yaml';
 import { DetailList, Detail } from '../DetailList';
+import type { AdHocValues } from './types';
 
 const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
   margin-left: 10px;
@@ -23,7 +25,8 @@ const ErrorMessageWrapper = styled.div`
 `;
 export interface AdHocPreviewStepProps {
   hasErrors: boolean;
-  values: Record<string, unknown>;
+  /** The wizard's values, which this step lists back as details. */
+  values: AdHocValues & { credential?: Untyped[] };
   [key: string]: unknown;
 }
 
@@ -31,7 +34,7 @@ function AdHocPreviewStep({ hasErrors, values }: AdHocPreviewStepProps) {
   const { t, i18n } = useLingui();
   const { credential, execution_environment, extra_vars, verbosity } = values;
 
-  const items = Object.entries(values);
+  const items = Object.entries(values) as [string, React.ReactNode][];
   return (
     <>
       {hasErrors && (

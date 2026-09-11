@@ -14,7 +14,7 @@ import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
 import AdHocCommandsWizard from './AdHocCommandsWizard';
 import ContentError from '../ContentError';
-import type { AdHocItem } from './types';
+import type { AdHocItem, AdHocValues } from './types';
 
 export interface AdHocCommandsProps {
   adHocItems: AdHocItem[];
@@ -70,8 +70,11 @@ function AdHocCommands({
     request: launchAdHocCommands,
   } = useRequest(
     useCallback(
-      async (values) => {
-        const { data } = await InventoriesAPI.launchAdHocCommands(id, values);
+      async (values: Record<string, unknown>) => {
+        const { data } = await InventoriesAPI.launchAdHocCommands(
+          id as string,
+          values
+        );
         navigate(`/jobs/command/${data.id}/output`);
       },
 
@@ -83,21 +86,21 @@ function AdHocCommands({
     launchError || fetchError
   );
 
-  const handleSubmit = async (values: Record<string, unknown>) => {
+  const handleSubmit = async (values: AdHocValues) => {
     const {
       credentials,
       credential_passwords: { become_password, ssh_password, ssh_key_unlock },
       execution_environment,
       ...remainingValues
     } = values;
-    const newCredential = credentials[0].id;
+    const newCredential = credentials[0]?.id;
 
     const manipulatedValues = {
       credential: newCredential,
       become_password,
       ssh_password,
       ssh_key_unlock,
-      execution_environment: execution_environment[0]?.id,
+      execution_environment: execution_environment?.[0]?.id,
       ...remainingValues,
     };
     await launchAdHocCommands(manipulatedValues);

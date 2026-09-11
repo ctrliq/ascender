@@ -4,21 +4,23 @@ import { useLingui } from '@lingui/react/macro';
 import StepName from '../LaunchPrompt/steps/StepName';
 import CredentialPasswordsStep from '../LaunchPrompt/steps/CredentialPasswordsStep';
 import type { AdHocValues } from './types';
+import type { VisitedSteps } from '../LaunchPrompt/types';
 
 const STEP_ID = 'credentialPasswords';
 
 const isValueMissing = (val: unknown) => !val || val === '';
 
 export default function useCredentialPasswordsStep(
-  showStep: unknown,
-  visitedSteps: unknown
+  showStep: boolean,
+  visitedSteps: VisitedSteps
 ) {
   const { t } = useLingui();
   const { values, setFieldError } = useFormikContext<AdHocValues>();
-  const hasError =
+  const hasError = Boolean(
     showStep &&
-    Object.keys(visitedSteps).includes(STEP_ID) &&
-    checkForError(values);
+      Object.keys(visitedSteps).includes(STEP_ID) &&
+      checkForError(values)
+  );
   return {
     step: showStep
       ? {
@@ -51,17 +53,17 @@ export default function useCredentialPasswordsStep(
       );
     },
     validate: () => {
-      const setPasswordFieldError = (fieldName: unknown) => {
+      const setPasswordFieldError = (fieldName: string) => {
         setFieldError(fieldName, t`This field may not be blank`);
       };
 
-      Object.entries(values.credentials[0].inputs).forEach(([key, value]) => {
+      Object.entries((values.credentials[0]?.inputs ?? {}) as Record<string, unknown>).forEach(([key, value]) => {
         if (
           value === 'ASK' &&
           isValueMissing(
             key === 'password'
               ? values.credential_passwords.ssh_password
-              : values.credential_passwords[key]
+              : (values.credential_passwords ?? {})[key]
           )
         ) {
           setPasswordFieldError(
@@ -75,15 +77,18 @@ export default function useCredentialPasswordsStep(
   };
 }
 
-function checkForError(values: Record<string, unknown>) {
+function checkForError(values: AdHocValues) {
   let hasError = false;
-  Object.entries(values.credentials[0]?.inputs).forEach(([key, value]) => {
+  const passwords = values.credential_passwords ?? {};
+  const inputs = (values.credentials[0]?.inputs ?? {}) as Record<
+    string,
+    unknown
+  >;
+  Object.entries(inputs).forEach(([key, value]) => {
     if (
       value === 'ASK' &&
       isValueMissing(
-        key === 'password'
-          ? values.credential_passwords.ssh_password
-          : values.credential_passwords[key]
+        key === 'password' ? passwords.ssh_password : passwords[key]
       )
     ) {
       hasError = true;

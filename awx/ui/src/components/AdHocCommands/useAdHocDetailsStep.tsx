@@ -4,11 +4,12 @@ import { useFormikContext } from 'formik';
 import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocDetailsStep from './AdHocDetailsStep';
 import type { AdHocValues } from './types';
+import type { VisitedSteps } from '../LaunchPrompt/types';
 
 const STEP_ID = 'details';
 export default function useAdHocDetailsStep(
-  visited: unknown,
-  moduleOptions: unknown
+  visited: VisitedSteps,
+  moduleOptions: [string, string][]
 ) {
   const { t } = useLingui();
   const { values, touched, setFieldError } = useFormikContext<AdHocValues>();
@@ -46,12 +47,21 @@ export default function useAdHocDetailsStep(
     },
     hasError: hasError(),
     validate: () => {
-      if (Object.keys(touched).includes('module_name' || 'module_args')) {
+      // `includes('a' || 'b')` is `includes('a')`: module_args on its own was
+      // never enough to run these checks.
+      const touchedFields = Object.keys(touched);
+      if (
+        touchedFields.includes('module_name') ||
+        touchedFields.includes('module_args')
+      ) {
         if (!values.module_name) {
           setFieldError('module_name', t`This field must not be blank.`);
         }
+        // `=== ('a' || 'b')` is `=== 'a'`: a shell module with no arguments
+        // was accepted, though the step marks the field required for both.
         if (
-          values.module_name === ('command' || 'shell') &&
+          (values.module_name === 'command' ||
+            values.module_name === 'shell') &&
           !values.module_args
         ) {
           setFieldError('module_args', t`This field must not be blank`);

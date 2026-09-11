@@ -31,7 +31,8 @@ const TooltipWrapper = styled.div`
 `;
 
 export interface AdHocDetailsStepProps {
-  moduleOptions: unknown[];
+  /** The ansible modules the command may run, as [value, label] pairs. */
+  moduleOptions: [string, string][];
   [key: string]: unknown;
 }
 
@@ -55,7 +56,7 @@ function AdHocDetailsStep({ moduleOptions }: AdHocDetailsStepProps) {
     moduleNameField.value === 'command' || moduleNameField.value === 'shell';
   const [argumentsField, argumentsMeta, argumentsHelpers] = useField({
     name: 'module_args',
-    validate: argumentsRequired && required(null),
+    validate: argumentsRequired ? required(null) : undefined,
   });
 
   const isValid = argumentsRequired
@@ -89,7 +90,7 @@ function AdHocDetailsStep({ moduleOptions }: AdHocDetailsStepProps) {
                   label: t`Choose a module`,
                   isDisabled: true,
                 },
-                ...moduleOptions.map((value) => ({
+                ...moduleOptions.map((value: [string, string]) => ({
                   value: value[0],
                   label: value[0],
                   key: value[0],
