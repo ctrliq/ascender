@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { WorkflowJobTemplate, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField, useFormikContext, withFormik } from 'formik';
@@ -37,7 +37,7 @@ import getHelpText from './WorkflowJobTemplate.helptext';
 const urlOrigin = window.location.origin;
 
 export interface WorkflowJobTemplateFormProps {
-  template?: Untyped;
+  template?: Partial<WorkflowJobTemplate>;
   handleSubmit: (...args: Untyped[]) => void;
   handleCancel?: () => void;
   submitError?: unknown;
@@ -51,7 +51,6 @@ function WorkflowJobTemplateForm({
     name: '',
     description: '',
     inventory: undefined,
-    project: undefined,
   },
   handleSubmit,
   handleCancel,

@@ -142,7 +142,10 @@ export interface Paginated<T> {
 
 export type Job = WithNested<Schemas['JobDetail']>;
 export type JobTemplate = WithNested<Schemas['JobTemplate']>;
-export type WorkflowJobTemplate = WithNested<Schemas['WorkflowJobTemplate']>;
+/** webhook_key comes from the template's own endpoint, not the serializer. */
+export type WorkflowJobTemplate = WithNested<Schemas['WorkflowJobTemplate']> & {
+  webhook_key?: string;
+};
 export type Inventory = WithNested<Schemas['Inventory']>;
 
 /**

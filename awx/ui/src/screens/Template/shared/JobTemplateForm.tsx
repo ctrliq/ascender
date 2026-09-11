@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { JobTemplate, Untyped } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -55,25 +55,23 @@ const { origin } = document.location;
 
 // Stable default so it doesn't change identity each render (it feeds a
 // useCallback dependency below); previously this lived in defaultProps.
-const defaultTemplate = {
+const defaultTemplate: Partial<JobTemplate> & { isNew?: boolean } = {
   name: '',
   description: '',
-  job_type: 'run',
+  job_type: 'run' as const,
   inventory: undefined,
   project: undefined,
   playbook: '',
   scm_branch: '',
   summary_fields: {
-    inventory: null,
     labels: { results: [] },
-    project: null,
     credentials: [],
   },
   isNew: true,
 };
 
 export interface JobTemplateFormProps {
-  template?: Untyped;
+  template?: Partial<JobTemplate> & { isNew?: boolean };
   handleCancel?: () => void;
   handleSubmit: (...args: Untyped[]) => void;
   /** Injected by the formik wrapper below, never by a caller. */

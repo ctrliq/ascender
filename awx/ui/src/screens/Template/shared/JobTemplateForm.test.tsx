@@ -1,5 +1,5 @@
+import type { JobTemplate, Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
@@ -199,7 +199,7 @@ describe('<JobTemplateForm />', () => {
   test('should render LabelsSelect', async () => {
     renderWithContexts(
       <JobTemplateForm
-        template={mockData}
+        template={mockData as unknown as Partial<JobTemplate>}
         handleSubmit={vi.fn()}
         handleCancel={vi.fn()}
       />
@@ -220,7 +220,7 @@ describe('<JobTemplateForm />', () => {
   test('should not render source control branch when allow_override is false', async () => {
     renderWithContexts(
       <JobTemplateForm
-        template={mockData}
+        template={mockData as unknown as Partial<JobTemplate>}
         handleSubmit={vi.fn()}
         handleCancel={vi.fn()}
       />
@@ -241,7 +241,7 @@ describe('<JobTemplateForm />', () => {
   test('should update form values on input changes', async () => {
     renderWithContexts(
       <JobTemplateForm
-        template={mockData}
+        template={mockData as unknown as Partial<JobTemplate>}
         handleSubmit={vi.fn()}
         handleCancel={vi.fn()}
       />
@@ -305,7 +305,7 @@ describe('<JobTemplateForm />', () => {
   test('job slice pinned hosts field only shows when slicing is enabled', async () => {
     renderWithContexts(
       <JobTemplateForm
-        template={mockData}
+        template={mockData as unknown as Partial<JobTemplate>}
         handleSubmit={vi.fn()}
         handleCancel={vi.fn()}
       />
@@ -344,7 +344,7 @@ describe('<JobTemplateForm />', () => {
           path="/templates/job_template/:id/edit"
           element={
             <JobTemplateForm
-              template={mockData}
+              template={mockData as unknown as Partial<JobTemplate>}
               handleSubmit={vi.fn()}
               handleCancel={vi.fn()}
             />
@@ -392,13 +392,15 @@ describe('<JobTemplateForm />', () => {
           path="/templates/job_template/:id/edit"
           element={
             <JobTemplateForm
-              template={{
-                ...mockData,
-                webhook_credential: null,
-                webhook_key: '',
-                webhook_service: 'github',
-                related: { webhook_receiver: '' },
-              }}
+              template={
+                {
+                  ...mockData,
+                  webhook_credential: null,
+                  webhook_key: '',
+                  webhook_service: 'github',
+                  related: { webhook_receiver: '' },
+                } as unknown as Partial<JobTemplate>
+              }
               handleSubmit={vi.fn()}
               handleCancel={vi.fn()}
             />
@@ -423,7 +425,7 @@ describe('<JobTemplateForm />', () => {
     const handleSubmit = vi.fn();
     renderWithContexts(
       <JobTemplateForm
-        template={mockData}
+        template={mockData as unknown as Partial<JobTemplate>}
         handleSubmit={handleSubmit}
         handleCancel={vi.fn()}
       />
@@ -439,7 +441,7 @@ describe('<JobTemplateForm />', () => {
     const handleCancel = vi.fn();
     renderWithContexts(
       <JobTemplateForm
-        template={mockData}
+        template={mockData as unknown as Partial<JobTemplate>}
         handleSubmit={vi.fn()}
         handleCancel={handleCancel}
       />

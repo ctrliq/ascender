@@ -1,5 +1,5 @@
+import type { WorkflowJobTemplate, Untyped } from 'types/api';
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
@@ -67,7 +67,7 @@ describe('<WorkflowJobTemplateForm/>', () => {
           path="/templates/workflow_job_template/:id/edit"
           element={
             <WorkflowJobTemplateForm
-              template={mockTemplate}
+              template={mockTemplate as unknown as Partial<WorkflowJobTemplate>}
               handleCancel={handleCancel}
               handleSubmit={handleSubmit}
               {...props}
