@@ -1,8 +1,8 @@
 import type {
-  WorkflowState,
+  WorkflowLink,
   WorkflowNode,
+  WorkflowState,
 } from 'components/Workflow/workflowReducer';
-import type { Untyped } from 'types/api';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { WorkflowStateContext } from 'contexts/Workflow';
@@ -23,13 +23,15 @@ import WorkflowOutputLink from './WorkflowOutputLink';
 import WorkflowOutputNode from './WorkflowOutputNode';
 
 function WorkflowOutputGraph() {
-  const [linkHelp, setLinkHelp] = useState<Untyped>();
-  const [nodeHelp, setNodeHelp] = useState<Untyped>();
+  const [linkHelp, setLinkHelp] = useState<WorkflowLink | null>();
+  const [nodeHelp, setNodeHelp] = useState<WorkflowNode | null>();
   const [zoomPercentage, setZoomPercentage] = useState(100);
-  // d3 reaches into both of these, and its selection generics fight the
-  // element types react-dom gives a ref, so they stay untyped for now.
-  const svgRef = useRef<Untyped>(null);
-  const gRef = useRef<Untyped>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const gRef = useRef<SVGGElement>(null);
+  // Both elements exist for the whole life of the graph, so d3 reaches them
+  // through these rather than each call guarding the ref again.
+  const svgEl = () => svgRef.current as SVGSVGElement;
+  const gEl = () => gRef.current as SVGGElement;
   const hasFitRef = useRef(false);
   const hasFocusedRunningRef = useRef(false);
   const [isPositioned, setIsPositioned] = useState(false);
@@ -38,18 +40,18 @@ function WorkflowOutputGraph() {
     WorkflowStateContext
   ) as WorkflowState;
 
-  const zoom = (event: Untyped) => {
+  const zoom = (event: d3.D3ZoomEvent<SVGSVGElement, unknown>) => {
     if (!event.transform) return;
     const translation = [event.transform.x, event.transform.y];
-    d3.select(gRef.current).attr(
+    d3.select(gEl()).attr(
       'transform',
       `translate(${translation}) scale(${event.transform.k})`
     );
     setZoomPercentage(event.transform.k * 100);
   };
 
-  const handlePan = (direction: Untyped) => {
-    const transform = d3.zoomTransform(d3.select(svgRef.current).node());
+  const handlePan = (direction: string) => {
+    const transform = d3.zoomTransform(svgEl());
     let { x: xPos, y: yPos } = transform;
     const { k: currentScale } = transform;
     switch (direction) {
@@ -68,14 +70,14 @@ function WorkflowOutputGraph() {
       default:
         break;
     }
-    d3.select(svgRef.current).call(
+    d3.select(svgEl()).call(
       zoomRef.transform,
       d3.zoomIdentity.translate(xPos, yPos).scale(currentScale)
     );
   };
   const handlePanToMiddle = () => {
-    const svgBoundingClientRect = svgRef.current.getBoundingClientRect();
-    d3.select(svgRef.current).call(
+    const svgBoundingClientRect = svgEl().getBoundingClientRect();
+    d3.select(svgEl()).call(
       zoomRef.transform,
       d3.zoomIdentity
         .translate(0, svgBoundingClientRect.height / 2 - 30)
@@ -84,52 +86,48 @@ function WorkflowOutputGraph() {
     setZoomPercentage(100);
   };
 
-  const handleZoomChange = (newScale: Untyped) => {
-    const svgBoundingClientRect = svgRef.current.getBoundingClientRect();
-    const currentScaleAndOffset = d3.zoomTransform(
-      d3.select(svgRef.current).node()
-    );
+  const handleZoomChange = (newScale: number) => {
+    const svgBoundingClientRect = svgEl().getBoundingClientRect();
+    const currentScaleAndOffset = d3.zoomTransform(svgEl());
     const [translateX, translateY] = getTranslatePointsForZoom(
       svgBoundingClientRect,
       currentScaleAndOffset,
       newScale
     );
-    d3.select(svgRef.current).call(
+    d3.select(svgEl()).call(
       zoomRef.transform,
       d3.zoomIdentity.translate(translateX, translateY).scale(newScale)
     );
     setZoomPercentage(newScale * 100);
   };
   const handleFitGraph = () => {
-    const { k: currentScale } = d3.zoomTransform(
-      d3.select(svgRef.current).node()
-    );
-    const gBoundingClientRect = d3
-      .select(gRef.current)
-      .node()
-      .getBoundingClientRect();
+    const { k: currentScale } = d3.zoomTransform(svgEl());
+    const gBoundingClientRect = gEl().getBoundingClientRect();
 
-    const gBBoxDimensions = d3.select(gRef.current).node().getBBox();
+    const gBBoxDimensions = gEl().getBBox();
 
-    const svgBoundingClientRect = svgRef.current.getBoundingClientRect();
+    const svgBoundingClientRect = svgEl().getBoundingClientRect();
     const [scaleToFit, yTranslate] = getScaleAndOffsetToFit(
       gBoundingClientRect,
       svgBoundingClientRect,
       gBBoxDimensions,
       currentScale
     );
-    d3.select(svgRef.current).call(
+    d3.select(svgEl()).call(
       zoomRef.transform,
       d3.zoomIdentity.translate(0, yTranslate).scale(scaleToFit)
     );
     setZoomPercentage(scaleToFit * 100);
   };
 
-  const zoomRef = d3.zoom().scaleExtent([0.1, 2]).on('zoom', zoom);
+  const zoomRef = d3
+    .zoom<SVGSVGElement, unknown>()
+    .scaleExtent([0.1, 2])
+    .on('zoom', zoom);
 
   useEffect(() => {
     try {
-      d3.select(svgRef.current).call(zoomRef);
+      d3.select(svgEl()).call(zoomRef);
     } catch (e) {
       if (process.env.NODE_ENV !== 'test') throw e;
     }
@@ -143,7 +141,7 @@ function WorkflowOutputGraph() {
     const rootPosition = positions[1] as { x: number; y: number };
     const nodeX = nodePosition.x;
     const nodeY = nodePosition.y - rootPosition.y;
-    const svgRect = svgRef.current.getBoundingClientRect();
+    const svgRect = svgEl().getBoundingClientRect();
     const scale = 1;
     const tx = svgRect.width / 2 - (nodeX + wfConstants.nodeW / 2) * scale;
     const ty = svgRect.height / 2 - (nodeY + wfConstants.nodeH / 2) * scale;
@@ -152,7 +150,7 @@ function WorkflowOutputGraph() {
 
   const findRunningNode = () =>
     nodes?.find(
-      (n: Untyped) =>
+      (n: WorkflowNode) =>
         n.id > 1 &&
         nodePositions?.[n.id] &&
         n?.originalNodeObject?.summary_fields?.job?.status === 'running'
@@ -163,11 +161,12 @@ function WorkflowOutputGraph() {
     if (running) return { node: running, isRunning: true };
 
     const hasCarriedForward = nodes?.some(
-      (n: Untyped) => n.id > 1 && n?.originalNodeObject?.prior_run_succeeded
+      (n: WorkflowNode) =>
+        n.id > 1 && n?.originalNodeObject?.prior_run_succeeded
     );
     if (hasCarriedForward) {
       const rerunNode = nodes?.find(
-        (n: Untyped) =>
+        (n: WorkflowNode) =>
           n.id > 1 &&
           nodePositions?.[n.id] &&
           !n?.originalNodeObject?.prior_run_succeeded
@@ -188,10 +187,7 @@ function WorkflowOutputGraph() {
     try {
       const focus = findFocusNode();
       if (focus) {
-        d3.select(svgRef.current).call(
-          zoomRef.transform,
-          focusOnNode(focus.node)
-        );
+        d3.select(svgEl()).call(zoomRef.transform, focusOnNode(focus.node));
         setZoomPercentage(100);
         if (focus.isRunning) hasFocusedRunningRef.current = true;
       } else {
@@ -215,7 +211,7 @@ function WorkflowOutputGraph() {
     if (!runningNode) return;
     hasFocusedRunningRef.current = true;
 
-    d3.select(svgRef.current)
+    d3.select(svgEl())
       .transition()
       .duration(400)
       .call(zoomRef.transform, focusOnNode(runningNode));
@@ -246,7 +242,7 @@ function WorkflowOutputGraph() {
           }}
         >
           {nodePositions && [
-            links.map((link: Untyped) => {
+            links.map((link: WorkflowLink) => {
               if (
                 nodePositions[link.source.id] &&
                 nodePositions[link.target.id]

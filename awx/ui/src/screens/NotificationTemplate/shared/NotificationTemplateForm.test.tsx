@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, NotificationTemplate } from 'types/api';
 import React from 'react';
 import { screen, waitFor, act } from '@testing-library/react';
 
@@ -41,10 +41,10 @@ const template = {
   organization: 1,
   summary_fields: {
     user_capabilities: { edit: true },
-    recent_notifications: [{ status: 'success' }],
+    recent_notifications: [{ id: 9000, status: 'success' }],
     organization: { id: 1, name: 'The Organization' },
   },
-};
+} as Partial<NotificationTemplate>;
 
 const emailTemplate = {
   ...template,

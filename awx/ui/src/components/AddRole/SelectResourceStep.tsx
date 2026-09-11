@@ -1,4 +1,12 @@
-import type { SortColumn, Untyped } from 'types/api';
+import type {
+  ApiEntity,
+  OptionsResponse,
+  Paginated,
+  SearchColumn,
+  SortColumn,
+} from 'types/api';
+import type { ApiResponse } from 'api/Base';
+import type { QSParams } from 'util/qs';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -13,31 +21,32 @@ import PaginatedTable, {
   getSearchableKeys,
 } from '../PaginatedTable';
 
-const QS_Config = (sortColumns: Untyped) =>
+const QS_Config = (sortColumns: SortColumn[]) =>
   getQSConfig('resource', {
     page: 1,
     page_size: 5,
     order_by: `${
-      sortColumns.filter((col: Untyped) => col.key === 'name').length
+      sortColumns.filter((col) => col.key === 'name').length
         ? 'name'
         : 'username'
     }`,
   });
 export interface SelectResourceStepProps {
-  searchColumns?: Untyped;
-  sortColumns?: Untyped;
+  searchColumns?: SearchColumn[];
+  sortColumns?: SortColumn[];
   displayKey?: string;
-  onRowClick?: (...args: Untyped[]) => void;
-  selectedLabel?: Untyped;
-  selectedResourceRows?: Untyped[];
-  fetchItems: Untyped;
-  fetchOptions: Untyped;
+  onRowClick?: (item: ApiEntity) => void;
+  /** What the chips above the list are labelled, in the plural. */
+  selectedLabel?: string;
+  selectedResourceRows?: ApiEntity[];
+  fetchItems: (params: QSParams) => Promise<ApiResponse<Paginated<ApiEntity>>>;
+  fetchOptions: () => Promise<ApiResponse<OptionsResponse>>;
   [key: string]: unknown;
 }
 
 function SelectResourceStep({
   searchColumns,
-  sortColumns,
+  sortColumns = [],
   displayKey = 'name',
   onRowClick = () => {},
   selectedLabel,
@@ -78,7 +87,7 @@ function SelectResourceStep({
         itemCount: count,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []
-        ).map((val: Untyped) => val.slice(0, -8)),
+        ).map((val) => val.slice(0, -8)),
         searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
       };
     }, [location, sortColumns]),
@@ -130,18 +139,16 @@ function SelectResourceStep({
             ))}
           </HeaderRow>
         }
-        renderRow={(item: Untyped, index: number) => (
+        renderRow={(item: ApiEntity, index: number) => (
           <CheckboxListItem
-            isSelected={selectedResourceRows.some(
-              (i: Untyped) => i.id === item.id
-            )}
-            itemId={item.id}
+            isSelected={selectedResourceRows.some((i) => i.id === item.id)}
+            itemId={item.id as number}
             item={item}
             rowIndex={index}
             key={item.id}
             columns={sortColumns}
-            name={item[displayKey]}
-            label={item[displayKey]}
+            name={item[displayKey] as string}
+            label={item[displayKey] as React.ReactNode}
             onSelect={() => onRowClick(item)}
             onDeselect={() => onRowClick(item)}
           />

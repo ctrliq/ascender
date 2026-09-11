@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { NotificationTemplate, SummaryFieldRef } from 'types/api';
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -21,9 +21,60 @@ import CustomMessagesSubForm from './CustomMessagesSubForm';
 import hasCustomMessages from './hasCustomMessages';
 import typeFieldNames, { initialConfigValues } from './typeFieldNames';
 
+/** The text one notification carries: a one line message and a longer body. */
+export interface NotificationText {
+  message?: string | null;
+  body?: string | null;
+}
+
+/**
+ * The text a template sends for each thing that can happen to a job, and for
+ * each outcome of an approval node.
+ */
+export interface NotificationMessages {
+  started?: NotificationText;
+  success?: NotificationText;
+  error?: NotificationText;
+  changed?: NotificationText;
+  workflow_approval?: {
+    approved?: NotificationText;
+    denied?: NotificationText;
+    running?: NotificationText;
+    timed_out?: NotificationText;
+  };
+}
+
+/** The messages a notification of each type sends unless it is overridden. */
+export type DefaultMessages = Record<string, NotificationMessages>;
+
+/**
+ * What the notification template form holds. The type details are keyed by
+ * what the chosen notification type asks for, so they are left open.
+ */
+export interface NotificationTemplateFormValues {
+  name?: string | null;
+  description?: string | null;
+  notification_type?: string | null;
+  organization?: SummaryFieldRef | null;
+  notification_configuration?: Record<string, unknown>;
+  messages?: NotificationMessages | null;
+  useCustomMessages?: boolean;
+  emailOptions?: string;
+  [key: string]: unknown;
+}
+
+export interface NotificationTemplateFormProps {
+  template?: Partial<NotificationTemplate>;
+  defaultMessages: DefaultMessages;
+  onSubmit: (values: NotificationTemplateFormValues) => void;
+  onCancel: () => void;
+  submitError?: unknown;
+  [key: string]: unknown;
+}
+
 export interface NotificationTemplateFormFieldsProps {
-  defaultMessages: Untyped;
-  template: Untyped;
+  defaultMessages: DefaultMessages;
+  template: Partial<NotificationTemplate>;
   [key: string]: unknown;
 }
 
@@ -32,7 +83,8 @@ function NotificationTemplateFormFields({
   template,
 }: NotificationTemplateFormFieldsProps) {
   const { t } = useLingui();
-  const { setFieldValue, setFieldTouched } = useFormikContext<Untyped>();
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<NotificationTemplateFormValues>();
   const [orgField, orgMeta, orgHelpers] = useField('organization');
   const [typeField, typeMeta] = useField({
     name: 'notification_type',
@@ -40,7 +92,7 @@ function NotificationTemplateFormFields({
   });
 
   const handleOrganizationUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('organization', value);
       setFieldTouched('organization', true, false);
     },
@@ -121,36 +173,41 @@ function NotificationTemplateFormFields({
 }
 
 function NotificationTemplateForm({
-  template = {
-    name: '',
-    description: '',
-    notification_type: '',
-  },
+  template = { name: '', description: '' },
   defaultMessages,
   onSubmit,
   onCancel,
   submitError = null,
-}: Untyped) {
-  const handleSubmit = (values: Untyped) => {
+}: NotificationTemplateFormProps) {
+  const handleSubmit = (values: NotificationTemplateFormValues) => {
     onSubmit(
       normalizeFields(
         {
           ...values,
-          organization: values.organization?.id,
+          organization: values.organization?.id as unknown as SummaryFieldRef,
         },
         defaultMessages
       )
     );
   };
 
-  const messages = template.messages || { workflow_approval: {} };
-  const defs = defaultMessages[template.notification_type || 'email'];
-  const mergeDefaultMessages = (def: Untyped, templ: Untyped = {}) => ({
+  const messages: NotificationMessages = (template.messages ?? {
+    workflow_approval: {},
+  }) as NotificationMessages;
+  const defs = defaultMessages[template.notification_type || 'email'] ?? {};
+  const approvalDefaults = defs.workflow_approval ?? {};
+  const mergeDefaultMessages = (
+    def: NotificationText = {},
+    templ: NotificationText = {}
+  ) => ({
     message: templ?.message || def.message || '',
     body: templ?.body || def.body || '',
   });
 
-  const { headers } = template?.notification_configuration || {};
+  const { headers } = (template?.notification_configuration ?? {}) as Record<
+    string,
+    unknown
+  >;
 
   return (
     <Formik
@@ -172,25 +229,25 @@ function NotificationTemplateForm({
           workflow_approval: {
             approved: {
               ...mergeDefaultMessages(
-                defs.workflow_approval.approved,
+                approvalDefaults.approved,
                 messages.workflow_approval?.approved
               ),
             },
             denied: {
               ...mergeDefaultMessages(
-                defs.workflow_approval.denied,
+                approvalDefaults.denied,
                 messages.workflow_approval?.denied
               ),
             },
             running: {
               ...mergeDefaultMessages(
-                defs.workflow_approval.running,
+                approvalDefaults.running,
                 messages.workflow_approval?.running
               ),
             },
             timed_out: {
               ...mergeDefaultMessages(
-                defs.workflow_approval.timed_out,
+                approvalDefaults.timed_out,
                 messages.workflow_approval?.timed_out
               ),
             },
@@ -221,25 +278,31 @@ function NotificationTemplateForm({
 
 export default NotificationTemplateForm;
 
-function normalizeFields(values: Untyped, defaultMessages: Untyped) {
+function normalizeFields(
+  values: NotificationTemplateFormValues,
+  defaultMessages: DefaultMessages
+) {
   return normalizeTypeFields(normalizeMessageFields(values, defaultMessages));
 }
 
 /* If the user filled in some of the Type Details fields, then switched
  * to a different notification type, unecessary fields may be set in the
  * notification_configuration — this function strips them off */
-function normalizeTypeFields(values: Untyped) {
-  const stripped: Record<string, Untyped> = {};
+function normalizeTypeFields(values: NotificationTemplateFormValues) {
+  const stripped: Record<string, unknown> = {};
   const fields =
     typeFieldNames[values.notification_type as keyof typeof typeFieldNames];
 
-  fields.forEach((fieldName: Untyped) => {
-    if (typeof values.notification_configuration[fieldName] !== 'undefined') {
-      stripped[fieldName] = values.notification_configuration[fieldName];
+  const configuration = values.notification_configuration ?? {};
+  fields.forEach((fieldName) => {
+    if (typeof configuration[fieldName] !== 'undefined') {
+      stripped[fieldName] = configuration[fieldName];
     }
   });
   if (values.notification_type === 'webhook') {
-    stripped.headers = stripped.headers ? JSON.parse(stripped.headers) : {};
+    stripped.headers = stripped.headers
+      ? JSON.parse(stripped.headers as string)
+      : {};
   }
   const { emailOptions, ...rest } = values;
 
@@ -249,7 +312,10 @@ function normalizeTypeFields(values: Untyped) {
   };
 }
 
-function normalizeMessageFields(values: Untyped, defaults: Untyped) {
+function normalizeMessageFields(
+  values: NotificationTemplateFormValues,
+  defaults: DefaultMessages
+) {
   const { useCustomMessages, ...rest } = values;
   if (!useCustomMessages) {
     return {
@@ -257,10 +323,15 @@ function normalizeMessageFields(values: Untyped, defaults: Untyped) {
       messages: null,
     };
   }
-  const { messages } = values;
-  const defs = defaults[values.notification_type];
+  const messages: NotificationMessages = values.messages ?? {};
+  const defs = defaults[values.notification_type ?? 'email'] ?? {};
+  const approvals = messages.workflow_approval ?? {};
+  const defaultApprovals = defs.workflow_approval ?? {};
 
-  const nullIfDefault = (m: Untyped, d: Untyped) => ({
+  const nullIfDefault = (
+    m: NotificationText = {},
+    d: NotificationText = {}
+  ) => ({
     message: m.message === d.message ? null : m.message,
     body: m.body === d.body ? null : m.body,
   });
@@ -271,22 +342,10 @@ function normalizeMessageFields(values: Untyped, defaults: Untyped) {
     error: nullIfDefault(messages.error, defs.error),
     changed: nullIfDefault(messages.changed, defs.changed),
     workflow_approval: {
-      approved: nullIfDefault(
-        messages.workflow_approval.approved,
-        defs.workflow_approval.approved
-      ),
-      denied: nullIfDefault(
-        messages.workflow_approval.denied,
-        defs.workflow_approval.denied
-      ),
-      running: nullIfDefault(
-        messages.workflow_approval.running,
-        defs.workflow_approval.running
-      ),
-      timed_out: nullIfDefault(
-        messages.workflow_approval.timed_out,
-        defs.workflow_approval.timed_out
-      ),
+      approved: nullIfDefault(approvals.approved, defaultApprovals.approved),
+      denied: nullIfDefault(approvals.denied, defaultApprovals.denied),
+      running: nullIfDefault(approvals.running, defaultApprovals.running),
+      timed_out: nullIfDefault(approvals.timed_out, defaultApprovals.timed_out),
     },
   };
 

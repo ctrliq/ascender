@@ -1,9 +1,10 @@
-import type { JobTemplate, Untyped } from 'types/api';
+import type { JobTemplate, SummaryFieldRef, SummaryFields } from 'types/api';
+
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 import { withFormik, useField } from 'formik';
-import type { FormikErrors } from 'formik';
+import type { FormikErrors, FormikProps } from 'formik';
 import {
   Form,
   FormGroup,
@@ -51,6 +52,31 @@ import PlaybookSelect from './PlaybookSelect';
 import WebhookSubForm from './WebhookSubForm';
 import getHelpText from './JobTemplate.helptext';
 
+/**
+ * What the job template form holds. Most fields map straight onto the
+ * template; the lookups hold the whole object the user picked, and the
+ * prompt-on-launch flags add their own, so the rest is left open.
+ */
+export interface JobTemplateFormValues {
+  name?: string;
+  /** Where the form is seeded from a resource picked on another screen. */
+  type?: string;
+  id?: string;
+  kind?: string;
+  description?: string;
+  job_type?: string;
+  inventory?: SummaryFieldRef | null;
+  project?: SummaryFieldRef | null;
+  playbook?: string;
+  scm_branch?: string;
+  execution_environment?: SummaryFieldRef | null;
+  labels?: SummaryFieldRef[];
+  credentials?: SummaryFieldRef[];
+  instance_groups?: SummaryFieldRef[];
+  webhook_credential?: SummaryFieldRef | null;
+  [key: string]: unknown;
+}
+
 const { origin } = document.location;
 
 // Stable default so it doesn't change identity each render (it feeds a
@@ -73,15 +99,18 @@ const defaultTemplate: Partial<JobTemplate> & { isNew?: boolean } = {
 export interface JobTemplateFormProps {
   template?: Partial<JobTemplate> & { isNew?: boolean };
   handleCancel?: () => void;
-  handleSubmit: (values: Untyped, ...rest: Untyped[]) => void;
-  /** Injected by the formik wrapper below, never by a caller. */
-  setFieldValue?: Untyped;
-  setFieldTouched?: Untyped;
-  validateField?: Untyped;
+  handleSubmit: (values: JobTemplateFormValues) => void;
   submitError?: unknown;
   isOverrideDisabledLookup?: boolean;
   [key: string]: unknown;
 }
+
+/** What the form itself takes: its own props plus what the wrapper injects. */
+type JobTemplateFormFieldsProps = JobTemplateFormProps &
+  Pick<
+    FormikProps<JobTemplateFormValues>,
+    'setFieldValue' | 'setFieldTouched' | 'validateField'
+  >;
 
 function JobTemplateForm({
   template = defaultTemplate,
@@ -92,7 +121,7 @@ function JobTemplateForm({
   submitError = null,
   validateField,
   isOverrideDisabledLookup = false, // TODO: this is a confusing variable name
-}: JobTemplateFormProps) {
+}: JobTemplateFormFieldsProps) {
   const { t } = useLingui();
   const helpText = getHelpText();
   const [contentError, setContentError] = useState<unknown>(false);
@@ -184,7 +213,7 @@ function JobTemplateForm({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enableWebhooks]);
 
-  const handleProjectValidation = (project: Untyped) => {
+  const handleProjectValidation = (project: SummaryFieldRef | null) => {
     if (!project) {
       return t`This field must not be blank`;
     }
@@ -195,7 +224,7 @@ function JobTemplateForm({
   };
 
   const handleProjectUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('project', value);
       setFieldValue('playbook', '', false);
       setFieldValue('scm_branch', '', false);
@@ -204,7 +233,7 @@ function JobTemplateForm({
     [setFieldValue, setFieldTouched]
   );
 
-  const handleInventoryValidation = (inventory: Untyped) => {
+  const handleInventoryValidation = (inventory: SummaryFieldRef | null) => {
     if (!inventory && !askInventoryOnLaunchField.value) {
       return t`Please select an Inventory or check the Prompt on Launch option`;
     }
@@ -212,7 +241,7 @@ function JobTemplateForm({
   };
 
   const handleInventoryUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('inventory', value);
       setFieldTouched('inventory', true, false);
     },
@@ -220,7 +249,7 @@ function JobTemplateForm({
   );
 
   const handleExecutionEnvironmentUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('execution_environment', value);
       setFieldTouched('execution_environment', true, false);
     },
@@ -228,7 +257,7 @@ function JobTemplateForm({
   );
 
   const handlePlaybookUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('playbook', value);
       setFieldTouched('playbook', true, false);
     },
@@ -269,7 +298,10 @@ function JobTemplateForm({
   }
 
   return (
-    <Form autoComplete="off" onSubmit={handleSubmit}>
+    <Form
+      autoComplete="off"
+      onSubmit={handleSubmit as unknown as React.FormEventHandler}
+    >
       <FormColumnLayout>
         <FormField
           id="template-name"
@@ -719,17 +751,19 @@ function JobTemplateForm({
 
 // The generics are what keeps the wrapper's own props visible to callers:
 // without them withFormik types the wrapped component as taking nothing.
-const FormikApp = withFormik<JobTemplateFormProps, Untyped>({
-  mapPropsToValues({ resourceValues = null, template = {} }: Untyped) {
-    const {
-      summary_fields = {
-        labels: { results: [] },
-        inventory: null,
-      },
-    } = template;
+const FormikApp = withFormik<JobTemplateFormProps, JobTemplateFormValues>({
+  mapPropsToValues({
+    resourceValues = null,
+    template = {},
+  }: JobTemplateFormProps & {
+    resourceValues?: Partial<JobTemplateFormValues> | null;
+  }) {
+    const summary_fields: SummaryFields = template.summary_fields ?? {
+      labels: { results: [] },
+    };
 
     const initialValues = {
-      allow_callbacks: template.allow_callbacks || false,
+      allow_callbacks: Boolean(template.host_config_key),
       allow_simultaneous: template.allow_simultaneous || false,
       ask_credential_on_launch: template.ask_credential_on_launch || false,
       ask_diff_mode_on_launch: template.ask_diff_mode_on_launch || false,
@@ -751,7 +785,7 @@ const FormikApp = withFormik<JobTemplateFormProps, Untyped>({
       ask_variables_on_launch: template.ask_variables_on_launch || false,
       ask_verbosity_on_launch: template.ask_verbosity_on_launch || false,
       become_enabled: template.become_enabled || false,
-      credentials: summary_fields.credentials || [],
+      credentials: summary_fields?.credentials || [],
       description: template.description || '',
       diff_mode: template.diff_mode || false,
       extra_vars: template.extra_vars || '---\n',
@@ -764,7 +798,7 @@ const FormikApp = withFormik<JobTemplateFormProps, Untyped>({
       job_slice_pinned_hosts: template.job_slice_pinned_hosts || '',
       job_tags: template.job_tags || '',
       job_type: template.job_type || 'run',
-      labels: summary_fields.labels.results || [],
+      labels: summary_fields?.labels?.results || [],
       limit: template.limit || '',
       name: template.name || '',
       playbook: template.playbook || '',
@@ -785,18 +819,21 @@ const FormikApp = withFormik<JobTemplateFormProps, Untyped>({
       execution_environment:
         template.summary_fields?.execution_environment || null,
     };
-    if (resourceValues !== null) {
+    // The add screen can be reached from a credential or an inventory, which
+    // seeds the matching field with what it was reached from.
+    const seeded: Record<string, unknown> = initialValues;
+    if (resourceValues !== null && resourceValues.type) {
       if (resourceValues.type === 'credentials') {
-        initialValues[resourceValues.type as keyof typeof initialValues] = [
+        seeded[resourceValues.type] = [
           {
-            id: parseInt(resourceValues.id, 10),
+            id: parseInt(String(resourceValues.id), 10),
             name: resourceValues.name,
             kind: resourceValues.kind,
           },
         ];
       } else {
-        initialValues[resourceValues.type as keyof typeof initialValues] = {
-          id: parseInt(resourceValues.id, 10),
+        seeded[resourceValues.type] = {
+          id: parseInt(String(resourceValues.id), 10),
           name: resourceValues.name,
         };
       }
@@ -807,7 +844,7 @@ const FormikApp = withFormik<JobTemplateFormProps, Untyped>({
     try {
       await props.handleSubmit(values);
     } catch (errors) {
-      setErrors(errors as FormikErrors<Untyped>);
+      setErrors(errors as FormikErrors<JobTemplateFormValues>);
     }
   },
 })(JobTemplateForm);

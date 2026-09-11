@@ -9,6 +9,7 @@ import { NotificationTemplatesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import ContentError from 'components/ContentError';
 import NotificationTemplateForm from './shared/NotificationTemplateForm';
+import type { DefaultMessages } from './shared/NotificationTemplateForm';
 
 function NotificationTemplateAdd() {
   const { t } = useLingui();
@@ -21,7 +22,7 @@ function NotificationTemplateAdd() {
   } = useRequest(
     useCallback(async () => {
       const { data } = await NotificationTemplatesAPI.readOptions();
-      return data.actions.POST?.messages;
+      return data.actions.POST?.messages as unknown as DefaultMessages;
     }, [])
   );
 

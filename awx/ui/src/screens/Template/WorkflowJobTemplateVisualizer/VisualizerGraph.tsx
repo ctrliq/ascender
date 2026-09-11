@@ -1,10 +1,10 @@
 import type {
   WorkflowAction,
+  WorkflowLink,
   WorkflowNode,
   WorkflowState,
 } from 'components/Workflow/workflowReducer';
 import type { NodePositions } from 'components/Workflow/WorkflowUtils';
-import type { Untyped } from 'types/api';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
@@ -45,14 +45,16 @@ export interface VisualizerGraphProps {
 }
 
 function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
-  const [helpText, setHelpText] = useState<Untyped>(null);
-  const [linkHelp, setLinkHelp] = useState<Untyped>();
-  const [nodeHelp, setNodeHelp] = useState<Untyped>();
+  const [helpText, setHelpText] = useState<React.ReactNode>(null);
+  const [linkHelp, setLinkHelp] = useState<WorkflowLink | null>();
+  const [nodeHelp, setNodeHelp] = useState<WorkflowNode | null>();
   const [zoomPercentage, setZoomPercentage] = useState(100);
-  // d3 reaches into both of these, and its selection generics fight the
-  // element types react-dom gives a ref, so they stay untyped for now.
-  const svgRef = useRef<Untyped>(null);
-  const gRef = useRef<Untyped>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
+  const gRef = useRef<SVGGElement>(null);
+  // Both elements exist for the whole life of the graph, so d3 reaches them
+  // through these rather than each call guarding the ref again.
+  const svgEl = () => svgRef.current as SVGSVGElement;
+  const gEl = () => gRef.current as SVGGElement;
   const {
     addLinkSourceNode,
     addingLink,
@@ -98,9 +100,9 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
     dispatch({ type: 'CANCEL_LINK' });
   };
 
-  const drawPotentialLinkToCursor = (e: Untyped) => {
-    const currentTransform = d3.zoomTransform(d3.select(gRef.current).node());
-    const rect = e.target.getBoundingClientRect();
+  const drawPotentialLinkToCursor = (e: React.MouseEvent) => {
+    const currentTransform = d3.zoomTransform(gEl());
+    const rect = (e.target as SVGElement).getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
     const sourceNodeX = (
@@ -123,18 +125,18 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
       .raise();
   };
 
-  const zoom = (event: Untyped) => {
+  const zoom = (event: d3.D3ZoomEvent<SVGSVGElement, unknown>) => {
     if (!event.transform) return;
     const translation = [event.transform.x, event.transform.y];
-    d3.select(gRef.current).attr(
+    d3.select(gEl()).attr(
       'transform',
       `translate(${translation}) scale(${event.transform.k})`
     );
     setZoomPercentage(event.transform.k * 100);
   };
 
-  const handlePan = (direction: Untyped) => {
-    const transform = d3.zoomTransform(d3.select(svgRef.current).node());
+  const handlePan = (direction: string) => {
+    const transform = d3.zoomTransform(svgEl());
     let { x: xPos, y: yPos } = transform;
     const { k: currentScale } = transform;
     switch (direction) {
@@ -153,14 +155,14 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
       default:
         break;
     }
-    d3.select(svgRef.current).call(
+    d3.select(svgEl()).call(
       zoomRef.transform,
       d3.zoomIdentity.translate(xPos, yPos).scale(currentScale)
     );
   };
   const handlePanToMiddle = () => {
-    const svgBoundingClientRect = svgRef.current.getBoundingClientRect();
-    d3.select(svgRef.current).call(
+    const svgBoundingClientRect = svgEl().getBoundingClientRect();
+    d3.select(svgEl()).call(
       zoomRef.transform,
       d3.zoomIdentity
         .translate(0, svgBoundingClientRect.height / 2 - 30)
@@ -169,52 +171,48 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
     setZoomPercentage(100);
   };
 
-  const handleZoomChange = (newScale: Untyped) => {
-    const svgBoundingClientRect = svgRef.current.getBoundingClientRect();
-    const currentScaleAndOffset = d3.zoomTransform(
-      d3.select(svgRef.current).node()
-    );
+  const handleZoomChange = (newScale: number) => {
+    const svgBoundingClientRect = svgEl().getBoundingClientRect();
+    const currentScaleAndOffset = d3.zoomTransform(svgEl());
     const [translateX, translateY] = getTranslatePointsForZoom(
       svgBoundingClientRect,
       currentScaleAndOffset,
       newScale
     );
-    d3.select(svgRef.current).call(
+    d3.select(svgEl()).call(
       zoomRef.transform,
       d3.zoomIdentity.translate(translateX, translateY).scale(newScale)
     );
     setZoomPercentage(newScale * 100);
   };
   const handleFitGraph = () => {
-    const { k: currentScale } = d3.zoomTransform(
-      d3.select(svgRef.current).node()
-    );
-    const gBoundingClientRect = d3
-      .select(gRef.current)
-      .node()
-      .getBoundingClientRect();
+    const { k: currentScale } = d3.zoomTransform(svgEl());
+    const gBoundingClientRect = gEl().getBoundingClientRect();
 
-    const gBBoxDimensions = d3.select(gRef.current).node().getBBox();
+    const gBBoxDimensions = gEl().getBBox();
 
-    const svgBoundingClientRect = svgRef.current.getBoundingClientRect();
+    const svgBoundingClientRect = svgEl().getBoundingClientRect();
     const [scaleToFit, yTranslate] = getScaleAndOffsetToFit(
       gBoundingClientRect,
       svgBoundingClientRect,
       gBBoxDimensions,
       currentScale
     );
-    d3.select(svgRef.current).call(
+    d3.select(svgEl()).call(
       zoomRef.transform,
       d3.zoomIdentity.translate(0, yTranslate).scale(scaleToFit)
     );
     setZoomPercentage(scaleToFit * 100);
   };
 
-  const zoomRef = d3.zoom().scaleExtent([0.1, 2]).on('zoom', zoom);
+  const zoomRef = d3
+    .zoom<SVGSVGElement, unknown>()
+    .scaleExtent([0.1, 2])
+    .on('zoom', zoom);
 
   useEffect(() => {
     try {
-      d3.select(svgRef.current).call(zoomRef);
+      d3.select(svgEl()).call(zoomRef);
     } catch (e) {
       if (process.env.NODE_ENV !== 'test') throw e;
     }
@@ -273,7 +271,7 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
         />
         <g id="workflow-g" ref={gRef}>
           {nodePositions && [
-            links.map((link: Untyped) => {
+            links.map((link: WorkflowLink) => {
               if (
                 nodePositions[link.source.id] &&
                 nodePositions[link.target.id]
@@ -283,12 +281,8 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
                     key={`link-${link.source.id}-${link.target.id}`}
                     link={link}
                     readOnly={readOnly}
-                    updateLinkHelp={(newLinkHelp: Untyped) =>
-                      setLinkHelp(newLinkHelp)
-                    }
-                    updateHelpText={(newHelpText: Untyped) =>
-                      setHelpText(newHelpText)
-                    }
+                    updateLinkHelp={(newLinkHelp) => setLinkHelp(newLinkHelp)}
+                    updateHelpText={(newHelpText) => setHelpText(newHelpText)}
                   />
                 );
               }
@@ -301,12 +295,8 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
                     key={`node-${node.id}`}
                     node={node}
                     readOnly={readOnly}
-                    updateHelpText={(newHelpText: Untyped) =>
-                      setHelpText(newHelpText)
-                    }
-                    updateNodeHelp={(newNodeHelp: Untyped) =>
-                      setNodeHelp(newNodeHelp)
-                    }
+                    updateHelpText={(newHelpText) => setHelpText(newHelpText)}
+                    updateNodeHelp={(newNodeHelp) => setNodeHelp(newNodeHelp)}
                     {...(addingLink && {
                       onMouseOver: () => drawPotentialLinkToNode(node),
                     })}

@@ -313,7 +313,18 @@ export type CredentialType = Omit<
 };
 export type InventorySource = WithNested<Schemas['InventorySource']>;
 export type Instance = WithNested<Schemas['Instance']>;
-export type NotificationTemplate = WithNested<Schemas['NotificationTemplate']>;
+/**
+ * A notification template. `messages` and `notification_configuration` are
+ * JSONFields, which the schema can only describe as unknown: the first holds
+ * the text each outcome sends, the second whatever the chosen type asks for.
+ */
+export type NotificationTemplate = Omit<
+  WithNested<Schemas['NotificationTemplate']>,
+  'messages' | 'notification_configuration'
+> & {
+  messages?: Record<string, unknown> | null;
+  notification_configuration?: Record<string, unknown>;
+};
 export type WorkflowApproval = Omit<
   WithNested<Schemas['WorkflowApproval']>,
   'user_has_voted'

@@ -1,5 +1,7 @@
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
+import type { ApiResponse } from 'api/Base';
+import type { ApiEntity, Paginated } from 'types/api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import SelectResourceStep from './SelectResourceStep';
 
@@ -102,7 +104,9 @@ describe('<SelectResourceStep />', () => {
         sortColumns={sortColumns}
         displayKey="username"
         onRowClick={handleRowClick}
-        fetchItems={() => ({ data })}
+        fetchItems={async () =>
+          ({ data }) as unknown as ApiResponse<Paginated<ApiEntity>>
+        }
         fetchOptions={options}
         selectedResourceRows={[]}
       />

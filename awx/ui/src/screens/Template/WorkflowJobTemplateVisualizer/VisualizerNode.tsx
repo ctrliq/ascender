@@ -67,8 +67,8 @@ export interface VisualizerNodeProps {
   node: Untyped;
   onMouseOver?: (...args: Untyped[]) => void;
   readOnly: boolean;
-  updateHelpText: Untyped;
-  updateNodeHelp: Untyped;
+  updateHelpText: (helpText: React.ReactNode) => void;
+  updateNodeHelp: (node: WorkflowNode | null) => void;
   [key: string]: unknown;
 }
 
