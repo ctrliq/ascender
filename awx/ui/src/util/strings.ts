@@ -14,7 +14,8 @@ export const arrayToString = (value: string[]): string => value.join(',');
 export const stringToArray = (value: string): string[] =>
   value.split(',').filter((val) => !!val);
 
-export const stringIsUUID = (value: string): boolean =>
+export const stringIsUUID = (value?: string | null): boolean =>
+  typeof value === 'string' &&
   /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/gi.test(
     value
   );

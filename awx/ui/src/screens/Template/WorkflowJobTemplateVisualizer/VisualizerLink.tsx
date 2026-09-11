@@ -4,7 +4,6 @@ import type {
   WorkflowState,
 } from 'components/Workflow/workflowReducer';
 import type { NodePositions } from 'components/Workflow/WorkflowUtils';
-import type { Untyped } from 'types/api';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -24,15 +23,16 @@ import {
   WorkflowActionTooltipItem,
 } from 'components/Workflow';
 
-const LinkG = styled.g<{ $ignorePointerEvents?: Untyped }>`
+const LinkG = styled.g<{ $ignorePointerEvents?: boolean }>`
   pointer-events: ${(props) => (props.$ignorePointerEvents ? 'none' : 'auto')};
 `;
 
 export interface VisualizerLinkProps {
   link: WorkflowLink;
-  updateLinkHelp: Untyped;
+  /** Tells the visualizer which link is hovered, or null when none is. */
+  updateLinkHelp: (link: WorkflowLink | null) => void;
   readOnly: boolean;
-  updateHelpText: Untyped;
+  updateHelpText: (helpText: React.ReactNode) => void;
   [key: string]: unknown;
 }
 
@@ -43,14 +43,14 @@ function VisualizerLink({
   updateHelpText,
 }: VisualizerLinkProps) {
   const { t } = useLingui();
-  const ref = useRef<Untyped>(null);
+  const ref = useRef<SVGGElement>(null);
   const [hovering, setHovering] = useState<boolean>(false);
   const [pathD, setPathD] = useState<string | null>();
   const [pathStroke, setPathStroke] = useState(
     'var(--pf-t--global--border--color--default)'
   );
-  const [tooltipX, setTooltipX] = useState<number | undefined>();
-  const [tooltipY, setTooltipY] = useState<number | undefined>();
+  const [tooltipX, setTooltipX] = useState(0);
+  const [tooltipY, setTooltipY] = useState(0);
   const dispatch = useContext(
     WorkflowDispatchContext
   ) as React.Dispatch<WorkflowAction>;
@@ -115,14 +115,18 @@ function VisualizerLink({
           </WorkflowActionTooltipItem>,
         ];
 
+  // A hovered link is moved to the front of its group so its overlay is not
+  // covered by the links drawn after it.
   const handleLinkMouseEnter = () => {
+    const linkNode = ref.current;
     const startNode = document.getElementById('node-1');
-    ref.current.parentNode.insertBefore(ref.current, startNode);
+    linkNode?.parentNode?.insertBefore(linkNode, startNode);
     setHovering(true);
   };
 
   const handleLinkMouseLeave = () => {
-    ref.current.parentNode.prepend(ref.current);
+    const linkNode = ref.current;
+    linkNode?.parentNode?.prepend(linkNode);
     setHovering(false);
   };
 

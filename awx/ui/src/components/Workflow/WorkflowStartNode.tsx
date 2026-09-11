@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useContext, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
@@ -32,8 +31,8 @@ const StartDiv = styled.div`
 `;
 
 export interface WorkflowStartNodeProps {
-  onUpdateHelpText?: (helpText: Untyped) => void;
-  showActionTooltip: Untyped;
+  onUpdateHelpText?: (helpText: React.ReactNode) => void;
+  showActionTooltip: boolean;
   [key: string]: unknown;
 }
 
@@ -99,7 +98,7 @@ function WorkflowStartNode({
               <PlusIcon />
             </WorkflowActionTooltipItem>,
           ]}
-          pointX={startNodeRef.current?.offsetWidth}
+          pointX={startNodeRef.current?.offsetWidth ?? 0}
           pointY={(startNodeRef.current?.offsetHeight ?? 0) / 2 + 10}
         />
       )}

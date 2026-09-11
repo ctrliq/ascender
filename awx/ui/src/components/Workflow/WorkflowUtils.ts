@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import * as d3 from 'd3';
 import * as dagre from '@dagrejs/dagre';
 import type { WorkflowLink, WorkflowNode } from './workflowReducer';
@@ -26,11 +25,24 @@ export const constants = {
   rootH: 40,
 };
 
+/** A box the graph is measured against, which is all these need of a rect. */
+interface Box {
+  width: number;
+  height: number;
+}
+
+/** How the graph is currently scaled and where it has been panned to. */
+interface ScaleAndOffset {
+  k: number;
+  x: number;
+  y: number;
+}
+
 export function getScaleAndOffsetToFit(
-  gBoundingClientRect: Untyped,
-  svgBoundingClientRect: Untyped,
-  gBBoxDimensions: Untyped,
-  currentScale: Untyped
+  gBoundingClientRect: Box,
+  svgBoundingClientRect: Box,
+  gBBoxDimensions: { y: number },
+  currentScale: number
 ): [number, number] {
   gBoundingClientRect.height /= currentScale;
   gBoundingClientRect.width /= currentScale;
@@ -203,9 +215,9 @@ export function layoutGraph(nodes: WorkflowNode[], links: WorkflowLink[]) {
 }
 
 export function getTranslatePointsForZoom(
-  svgBoundingClientRect: Untyped,
-  currentScaleAndOffset: Untyped,
-  newScale: Untyped
+  svgBoundingClientRect: Box,
+  currentScaleAndOffset: ScaleAndOffset,
+  newScale: number
 ): [number, number] {
   const origScale = currentScaleAndOffset.k;
   const unscaledOffsetX =

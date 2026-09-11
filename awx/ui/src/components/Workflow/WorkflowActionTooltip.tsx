@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -43,8 +42,8 @@ const TooltipActions = styled.div`
 export interface WorkflowActionTooltipProps {
   /** One element per action; the tooltip sizes itself from how many. */
   actions: React.ReactNode[];
-  pointX: Untyped;
-  pointY: unknown;
+  pointX: number;
+  pointY: number;
   [key: string]: unknown;
 }
 

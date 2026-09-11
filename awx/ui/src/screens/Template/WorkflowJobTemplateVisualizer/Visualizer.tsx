@@ -575,7 +575,7 @@ function Visualizer({ template }: VisualizerProps) {
                   approvalTemplateRequests.push(
                     WorkflowApprovalTemplatesAPI.update(
                       node.originalNodeObject?.summary_fields
-                        ?.unified_job_template?.id,
+                        ?.unified_job_template?.id as number,
                       {
                         name: nodeTemplate.name,
                         description: nodeTemplate.description,
@@ -676,7 +676,7 @@ function Visualizer({ template }: VisualizerProps) {
                     associateLabelRequests.push(
                       WorkflowJobTemplateNodesAPI.associateLabel(
                         node.originalNodeObject?.id as number,
-                        label as unknown as { name: string },
+                        label,
                         nodeTemplate.organization || defaultOrganization
                       )
                     );

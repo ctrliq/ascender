@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -24,10 +23,10 @@ const TooltipItem = styled.div`
 
 export interface WorkflowActionTooltipItemProps {
   children?: React.ReactNode;
-  id: Untyped;
-  onClick?: (...args: Untyped[]) => void;
-  onMouseEnter?: (...args: Untyped[]) => void;
-  onMouseLeave?: (...args: Untyped[]) => void;
+  id: string;
+  onClick?: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
   [key: string]: unknown;
 }
 

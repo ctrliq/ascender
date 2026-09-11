@@ -1,7 +1,8 @@
 import type {
   AnyUnifiedJobTemplate,
+  Label,
   SummaryFieldRef,
-  Untyped,
+  UnifiedJob,
 } from 'types/api';
 import type { NodePositions } from './WorkflowUtils';
 
@@ -31,12 +32,26 @@ export interface PromptValues {
   /** What the node modal added to and removed from the template's defaults. */
   addedCredentials?: SummaryFieldRef[];
   removedCredentials?: SummaryFieldRef[];
-  labels?: (SummaryFieldRef & { name: string })[];
+  labels?: Label[];
   instance_groups?: SummaryFieldRef[];
   inventory?: SummaryFieldRef | null;
   execution_environment?: SummaryFieldRef | null;
   /** The survey answers and extra variables, as the prompt collected them. */
   extra_data?: Record<string, unknown>;
+  [key: string]: unknown;
+}
+
+/**
+ * What a template prompts for when it is launched, as far as a node reads it.
+ *
+ * Every ask_* flag says whether the launch form offers that field; defaults
+ * holds what the template would use when the prompt leaves it alone.
+ */
+export interface LaunchConfig {
+  defaults?: {
+    credentials?: SummaryFieldRef[];
+    [key: string]: unknown;
+  };
   [key: string]: unknown;
 }
 
@@ -68,7 +83,14 @@ export interface WorkflowNode {
   all_parents_must_converge?: boolean;
   max_retries?: number;
   identifier?: string;
-  [key: string]: Untyped;
+  /** What the node's template prompts for, as its launch endpoint says. */
+  launchConfig?: LaunchConfig;
+  /** What the node already had, which a prompt's values are compared to. */
+  originalNodeCredentials?: SummaryFieldRef[];
+  originalNodeInstanceGroups?: SummaryFieldRef[];
+  originalNodeLabels?: Label[];
+  /** The node modal and the visualizer hang more off the same object. */
+  [key: string]: unknown;
 }
 
 /**
@@ -86,6 +108,10 @@ export type WorkflowStateWith<K extends keyof WorkflowState> = WorkflowState & {
  */
 export interface ApiWorkflowNode {
   id: number;
+  /** A name for the node, which is a uuid until someone gives it one. */
+  identifier?: string | null;
+  unified_job_template?: number | null;
+  all_parents_must_converge?: boolean;
   success_nodes: number[];
   failure_nodes: number[];
   always_nodes: number[];
@@ -98,22 +124,25 @@ export interface ApiWorkflowNode {
     expected_value?: unknown;
   }[];
   summary_fields?: {
-    unified_job_template?: { unified_job_type?: string } & Record<
-      string,
-      Untyped
-    >;
-    /** The run this node produced, once the workflow has been launched. */
-    job?: Untyped;
-    [key: string]: Untyped;
+    unified_job_template?: NodeTemplate;
+    inventory?: SummaryFieldRef;
+    execution_environment?: SummaryFieldRef;
+    /**
+     * The run this node produced, once the workflow has been launched. Its
+     * status is wider than a job's: a project or inventory update answers
+     * with never updated, ok, missing, none or updating as well.
+     */
+    job?: Omit<Partial<UnifiedJob>, 'status'> & { status?: string };
+    [key: string]: unknown;
   };
   workflowMakerNodeId?: number;
-  [key: string]: Untyped;
+  [key: string]: unknown;
 }
 
 /** What UPDATE_NODE carries: the values the node edit modal collected. */
 export interface EditedWorkflowNode {
   nodeResource?: NodeTemplate;
-  launchConfig?: unknown;
+  launchConfig?: LaunchConfig;
   promptValues?: PromptValues;
   all_parents_must_converge?: boolean;
   max_retries?: number;
@@ -133,7 +162,7 @@ export interface NewWorkflowNode extends EditedWorkflowNode {
 export interface RefreshedWorkflowNode {
   /** The template this node runs, refreshed with what it was missing. */
   fullUnifiedJobTemplate?: NodeTemplate;
-  originalNodeCredentials?: unknown;
+  originalNodeCredentials?: SummaryFieldRef[];
 }
 
 /** An edge between two nodes. */

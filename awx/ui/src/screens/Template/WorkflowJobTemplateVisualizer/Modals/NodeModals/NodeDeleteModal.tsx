@@ -57,12 +57,12 @@ function NodeDeleteModal() {
         </Button>,
       ]}
     >
-      {nodeToDelete && nodeToDelete.unifiedJobTemplate ? (
+      {nodeToDelete && unifiedJobTemplate ? (
         <>
           <p>{t`Are you sure you want to remove the node below:`}</p>
           <br />
           <strong css="var(--pf-t--global--color--status--danger--default)">
-            {nodeToDelete.unifiedJobTemplate.name}
+            {unifiedJobTemplate.name}
           </strong>
         </>
       ) : (

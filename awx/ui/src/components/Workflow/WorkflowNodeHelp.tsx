@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
@@ -45,7 +44,7 @@ function WorkflowNodeHelp({ node }: WorkflowNodeHelpProps) {
   const unifiedJobTemplate =
     node?.fullUnifiedJobTemplate ||
     node?.originalNodeObject?.summary_fields?.unified_job_template;
-  let identifier: Untyped = null;
+  let identifier: string | null = null;
   if (node?.identifier) {
     ({ identifier } = node);
   } else if (
@@ -59,7 +58,7 @@ function WorkflowNodeHelp({ node }: WorkflowNodeHelpProps) {
   if (unifiedJobTemplate || job) {
     const type = unifiedJobTemplate
       ? unifiedJobTemplate.unified_job_type || unifiedJobTemplate.type
-      : job.type;
+      : job?.type;
     switch (type) {
       case 'job_template':
       case 'job':

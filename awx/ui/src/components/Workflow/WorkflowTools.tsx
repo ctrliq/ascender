@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useContext } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
@@ -53,11 +52,12 @@ const Close = styled(TimesIcon)`
 `;
 
 export interface WorkflowToolsProps {
-  onFitGraph: (...args: Untyped[]) => void;
-  onPan: (...args: Untyped[]) => void;
-  onPanToMiddle: (...args: Untyped[]) => void;
+  onFitGraph: () => void;
+  /** Which way the graph moves: up, down, left, right, or a zoom in or out. */
+  onPan: (direction: string) => void;
+  onPanToMiddle: () => void;
   onZoomChange: (zoom: number) => void;
-  zoomPercentage: Untyped;
+  zoomPercentage: number;
   [key: string]: unknown;
 }
 

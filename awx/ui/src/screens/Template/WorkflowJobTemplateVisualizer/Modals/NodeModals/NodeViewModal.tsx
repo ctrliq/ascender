@@ -57,10 +57,11 @@ function NodeViewModal({ readOnly }: NodeViewModalProps) {
     request: fetchLaunchConfig,
   } = useRequest(
     useCallback(async () => {
+      const templateId = id as number;
       const readLaunch =
         nodeType === 'workflow_job_template'
-          ? WorkflowJobTemplatesAPI.readLaunch(id)
-          : JobTemplatesAPI.readLaunch(id);
+          ? WorkflowJobTemplatesAPI.readLaunch(templateId)
+          : JobTemplatesAPI.readLaunch(templateId);
       const { data } = await readLaunch;
       return data;
     }, [nodeType, id]),

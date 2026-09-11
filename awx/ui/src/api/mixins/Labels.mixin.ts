@@ -43,7 +43,7 @@ const LabelsMixin = <T extends BaseConstructor>(parent: T) =>
 
     associateLabel(
       id: number | string,
-      label: { name: string },
+      label: { name: string | null },
       /** Null where the caller has no organization to put the label under. */
       orgId: number | string | null
     ) {
