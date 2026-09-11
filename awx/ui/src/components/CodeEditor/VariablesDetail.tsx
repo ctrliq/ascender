@@ -33,7 +33,11 @@ const EditorWrapper = styled.div`
 export interface VariablesDetailProps {
   dataCy?: string;
   helpText?: Untyped;
-  value: unknown;
+  /**
+   * The variables, as the API returns them: a YAML or JSON string, or the
+   * parsed object for an endpoint that returns one.
+   */
+  value?: string | Record<string, unknown>;
   label: React.ReactNode;
   rows?: Untyped;
   minRows?: number;
@@ -56,8 +60,8 @@ function VariablesDetail({
     isJsonObject(value) || isJsonString(value) ? JSON_MODE : YAML_MODE
   );
 
-  let currentValue = value;
-  let error;
+  let currentValue = value as string;
+  let error: Error | undefined;
 
   const getValueInCurrentMode = () => {
     if (!value) {
@@ -66,20 +70,22 @@ function VariablesDetail({
       }
       return '---';
     }
-    const modeMatches = isJsonString(value) === (mode === JSON_MODE);
+    const modeMatches = isJsonString(value as string) === (mode === JSON_MODE);
     if (modeMatches) {
       if (mode === JSON_MODE) {
-        return JSON.stringify(JSON.parse(value), null, 2);
+        return JSON.stringify(JSON.parse(value as string), null, 2);
       }
-      return value;
+      return value as string;
     }
-    return mode === YAML_MODE ? jsonToYaml(value) : yamlToJson(value);
+    return mode === YAML_MODE
+      ? jsonToYaml(value as string)
+      : yamlToJson(value as string);
   };
 
   try {
     currentValue = getValueInCurrentMode();
   } catch (err) {
-    error = err;
+    error = err as Error;
   }
 
   const labelCy = dataCy ? `${dataCy}-label` : null;
@@ -121,7 +127,26 @@ function VariablesDetail({
     </VariablesWrapper>
   );
 }
-function ModeToggle({ id, label, helpText, dataCy, mode, setMode, name }) {
+interface ModeToggleProps {
+  id: string;
+  label: React.ReactNode;
+  helpText?: React.ReactNode;
+  dataCy?: string;
+  /** YAML_MODE or JSON_MODE, whichever the editor is showing. */
+  mode: string;
+  setMode: (mode: string) => void;
+  name?: string;
+}
+
+function ModeToggle({
+  id,
+  label,
+  helpText,
+  dataCy,
+  mode,
+  setMode,
+  name,
+}: ModeToggleProps) {
   return (
     <Split hasGutter>
       <SplitItem isFilled>

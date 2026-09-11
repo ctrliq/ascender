@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFields, Untyped } from 'types/api';
 import React, { useState, useEffect, useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -13,8 +13,19 @@ const ModalNote = styled.div`
   margin-bottom: var(--pf-v6-global--spacer--xl);
 `;
 
+/** An item the list can disassociate, with what the button reads off it. */
+export interface DisassociableItem {
+  id: number;
+  name?: string;
+  hostname?: string;
+  /** Instances only: a control node cannot be disassociated. */
+  node_type?: string;
+  summary_fields?: SummaryFields;
+  [key: string]: unknown;
+}
+
 export interface DisassociateButtonProps {
-  itemsToDisassociate?: unknown[];
+  itemsToDisassociate?: DisassociableItem[];
   modalNote?: React.ReactNode;
   modalTitle?: Untyped;
   onDisassociate: (...args: Untyped[]) => void;
@@ -39,7 +50,7 @@ function DisassociateButton({
   const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
 
   const handleDisassociate = () => {
-    onDisassociate();
+    onDisassociate?.();
     setIsOpen(false);
   };
 
@@ -49,10 +60,10 @@ function DisassociateButton({
     }
   }, [isKebabified, isOpen, onKebabModalChange]);
 
-  function cannotDisassociateAllOthers(item: Record<string, unknown>) {
+  function cannotDisassociateAllOthers(item: DisassociableItem) {
     return !item.summary_fields?.user_capabilities?.delete;
   }
-  function cannotDisassociateInstances(item: Record<string, unknown>) {
+  function cannotDisassociateInstances(item: DisassociableItem) {
     return (
       item.node_type === 'control' ||
       (isProtectedInstanceGroup && item.node_type === 'hybrid')
@@ -71,11 +82,11 @@ function DisassociateButton({
         .filter(cannotDisassociate)
         .map((item) => item.name ?? item.hostname)
         .join(', ');
-      if (
-        cannotDisassociate
-          ? itemsToDisassociate.some(cannotDisassociateInstances)
-          : itemsToDisassociate.some(cannotDisassociateAllOthers)
-      ) {
+      // cannotDisassociate is one of the two predicates above, so it is always
+      // truthy: this ternary always took the instances branch, and a list of
+      // anything else was checked with a predicate that only ever matches an
+      // instance. Apply the predicate that was chosen for the list.
+      if (itemsToDisassociate.some(cannotDisassociate)) {
         return (
           <div>
             {t`You do not have permission to disassociate the following: ${itemsUnableToDisassociate}`}

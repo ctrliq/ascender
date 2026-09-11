@@ -1,18 +1,20 @@
+import type { Label } from 'types/api';
 import React from 'react';
 import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 export interface LabelListItemProps {
-  label: React.ReactNode;
-  searchOrg: unknown;
+  label: Label;
+  /** Whether to narrow the template search by the label's organization too. */
+  searchOrg?: boolean;
   [key: string]: unknown;
 }
 
 function LabelListItem({ label, searchOrg }: LabelListItemProps) {
   const { t } = useLingui();
   let search = `?template.labels__name__icontains=${encodeURIComponent(
-    label.name
+    label.name ?? ''
   )}`;
   if (searchOrg && label.summary_fields?.organization?.id) {
     search += `&template.organization__id=${encodeURIComponent(

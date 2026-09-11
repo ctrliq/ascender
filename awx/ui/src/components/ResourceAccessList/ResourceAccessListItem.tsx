@@ -8,8 +8,26 @@ import { Link } from 'react-router';
 import ChipGroup from '../ChipGroup';
 import { DetailList, Detail } from '../DetailList';
 
+/**
+ * One row of a resource's access list: a user or team, with the roles that
+ * grant them access. A role is direct when it is assigned on this resource and
+ * indirect when it comes from an organization or a parent object.
+ */
+export interface AccessRecord {
+  id: number;
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+  summary_fields?: {
+    direct_access?: { role: Untyped }[];
+    indirect_access?: { role: Untyped }[];
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
 export interface ResourceAccessListItemProps {
-  accessRecord: Record<string, unknown>;
+  accessRecord: AccessRecord;
   onRoleDelete: (...args: Untyped[]) => void;
   [key: string]: unknown;
 }
@@ -22,7 +40,7 @@ function ResourceAccessListItem({
     const teamRoles: Untyped[] = [];
     const userRoles: Untyped[] = [];
 
-    function sort(item: Record<string, unknown>) {
+    function sort(item: { role: Untyped }) {
       const { role } = item;
       if (role.team_id) {
         teamRoles.push(role);
@@ -31,9 +49,9 @@ function ResourceAccessListItem({
       }
     }
 
-    accessRecord.summary_fields.direct_access.map(sort);
-    accessRecord.summary_fields.indirect_access.map(sort);
-    return [teamRoles, userRoles];
+    accessRecord.summary_fields?.direct_access?.map(sort);
+    accessRecord.summary_fields?.indirect_access?.map(sort);
+    return [teamRoles, userRoles] as const;
   };
 
   const renderChip = (role: Untyped) => (
