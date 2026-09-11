@@ -1,8 +1,98 @@
-import type { Untyped } from 'types/api';
 import { useState, useEffect, useReducer } from 'react';
-import type { WorkflowNode } from '../../../components/Workflow/workflowReducer';
 
-const initialState = {
+/**
+ * One line of a job's output, as the events endpoint returns it.
+ *
+ * The events differ by job type and by what the playbook did, so only the
+ * fields the tree is built out of are named; the rest arrive alongside them.
+ */
+export interface JobEvent {
+  /** The event's position in the job's output, which indexes it here. */
+  counter: number;
+  /** Every event the api sends carries one; the tree indexes them by it. */
+  uuid: string;
+  /** Absent on a root level event, which is what puts it at the root. */
+  parent_uuid?: string;
+  /** Which row of the output list this event draws on, once assigned. */
+  rowNumber?: number;
+  [key: string]: unknown;
+}
+
+/** One event in the collapsible output tree, with the events nested under it. */
+export interface JobEventNode {
+  eventIndex: number;
+  isCollapsed: boolean;
+  children: JobEventNode[];
+}
+
+/**
+ * Where a row sits in the tree: the node holding it, or, when that row has not
+ * loaded yet, the counter the event there is expected to have.
+ */
+interface RowLookup {
+  node: JobEventNode | null;
+  expectedCounter?: number;
+}
+
+/** How many rows an event has under it, as the job's summary reports. */
+export interface ChildrenSummaryEntry {
+  rowNumber: number;
+  numChildren: number;
+}
+
+/** The output tree, as the reducer holds it between renders. */
+export interface JobEventsState {
+  /** The root level events, in counter order. */
+  tree: JobEventNode[];
+  /** Every event that has arrived, indexed by its counter. */
+  events: Record<number, JobEvent>;
+  /** A counter for each event uuid, so a parent can be found by uuid. */
+  uuidMap: Record<string, number>;
+  /** Events whose parent has not arrived yet, by the parent's uuid. */
+  eventsWithoutParents: Record<string, JobEvent[]>;
+  childrenSummary: Record<number, ChildrenSummaryEntry>;
+  /** The parent a meta event belongs under, by the event's counter. */
+  metaEventParentUuid: Record<number, string>;
+  isAllCollapsed: boolean;
+}
+
+/** What the children summary endpoint answers with for a job. */
+export interface ChildrenSummary {
+  /** How many rows sit under each parent event, by the parent's counter. */
+  children_summary?: Record<number, ChildrenSummaryEntry>;
+  /** The parent a meta event belongs under, by the event's counter. */
+  meta_event_nested_uuid?: Record<number, string>;
+  /** False while the job is still being processed, when there is no tree. */
+  event_processing_finished?: boolean;
+  is_tree?: boolean;
+}
+
+/** Something that changes the output tree. */
+export type JobEventsAction =
+  | { type: typeof ADD_EVENTS; events: JobEvent[] }
+  | { type: typeof TOGGLE_COLLAPSE_ALL; isCollapsed: boolean }
+  | { type: typeof TOGGLE_NODE_COLLAPSED; uuid: string }
+  | { type: typeof CLEAR_EVENTS }
+  | { type: typeof REBUILD_TREE }
+  | {
+      type: typeof SET_CHILDREN_SUMMARY;
+      childrenSummary?: JobEventsState['childrenSummary'];
+      metaEventParentUuid?: JobEventsState['metaEventParentUuid'];
+    };
+
+/** What the output screen gives the tree so it can fill its own gaps. */
+export interface JobEventCallbacks {
+  fetchEventByUuid: (uuid: string) => Promise<JobEvent>;
+  /**
+   * Asks the job how many rows sit under each parent event, and whether it
+   * has a tree at all: an old job, or one still being processed, has none.
+   */
+  fetchChildrenSummary: () => Promise<{ data: ChildrenSummary }>;
+  setForceFlatMode: (isFlat: boolean) => void;
+  setJobTreeReady: (isReady?: boolean) => void;
+}
+
+const initialState: JobEventsState = {
   // array of root level nodes (no parent_uuid)
   tree: [],
   // all events indexed by counter value
@@ -27,12 +117,12 @@ export const TOGGLE_COLLAPSE_ALL = 'TOGGLE_COLLAPSE_ALL';
 export const SET_CHILDREN_SUMMARY = 'SET_CHILDREN_SUMMARY';
 
 export default function useJobEvents(
-  callbacks: Untyped,
-  jobId: Untyped,
-  isFlatMode: Untyped
+  callbacks: JobEventCallbacks,
+  jobId: number | string,
+  isFlatMode: boolean
 ) {
-  const [actionQueue, setActionQueue] = useState([]);
-  const enqueueAction = (action: Untyped) => {
+  const [actionQueue, setActionQueue] = useState<JobEventsAction[]>([]);
+  const enqueueAction = (action: JobEventsAction) => {
     setActionQueue((queue) => queue.concat(action));
   };
   const reducer = jobEventsReducer(callbacks, isFlatMode, enqueueAction);
@@ -60,7 +150,7 @@ export default function useJobEvents(
 
     callbacks
       .fetchChildrenSummary()
-      .then((result: Untyped) => {
+      .then((result) => {
         const { event_processing_finished, is_tree } = result.data;
         if (event_processing_finished === false || is_tree === false) {
           callbacks.setForceFlatMode(true);
@@ -80,26 +170,26 @@ export default function useJobEvents(
   }, [jobId, isFlatMode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
-    addEvents: (events: Untyped) => dispatch({ type: ADD_EVENTS, events }),
-    getNodeByUuid: (uuid: Untyped) => getNodeByUuid(state, uuid),
-    toggleNodeIsCollapsed: (uuid: Untyped, isCollapsed: Untyped) =>
-      dispatch({ type: TOGGLE_NODE_COLLAPSED, uuid, isCollapsed }),
-    toggleCollapseAll: (isCollapsed: Untyped) =>
+    addEvents: (events: JobEvent[]) => dispatch({ type: ADD_EVENTS, events }),
+    getNodeByUuid: (uuid: string) => getNodeByUuid(state, uuid),
+    toggleNodeIsCollapsed: (uuid: string) =>
+      dispatch({ type: TOGGLE_NODE_COLLAPSED, uuid }),
+    toggleCollapseAll: (isCollapsed: boolean) =>
       dispatch({ type: TOGGLE_COLLAPSE_ALL, isCollapsed }),
     getEventForRow: (rowIndex: number) => getEventForRow(state, rowIndex),
     getNodeForRow: (rowIndex: number) => getNodeForRow(state, rowIndex),
-    getTotalNumChildren: (uuid: Untyped) => {
+    getTotalNumChildren: (uuid: string) => {
       const node = getNodeByUuid(state, uuid);
-      return getTotalNumChildren(node, state.childrenSummary);
+      return node ? getTotalNumChildren(node, state.childrenSummary) : 0;
     },
     getNumCollapsedEvents: () =>
       state.tree.reduce(
-        (sum: Untyped, node: WorkflowNode) =>
+        (sum: number, node: JobEventNode) =>
           sum + getNumCollapsedChildren(node, state.childrenSummary),
         0
       ),
     getCounterForRow: (rowIndex: number) => getCounterForRow(state, rowIndex),
-    getEvent: (eventIndex: Untyped) => getEvent(state, eventIndex),
+    getEvent: (eventIndex: number) => getEvent(state, eventIndex),
     clearLoadedEvents: () => dispatch({ type: CLEAR_EVENTS }),
     rebuildEventsTree: () => dispatch({ type: REBUILD_TREE }),
     isAllCollapsed: state.isAllCollapsed,
@@ -107,11 +197,11 @@ export default function useJobEvents(
 }
 
 export function jobEventsReducer(
-  callbacks: Untyped,
-  isFlatMode: Untyped,
-  enqueueAction: Untyped
+  callbacks: JobEventCallbacks,
+  isFlatMode: boolean,
+  enqueueAction: (action: JobEventsAction) => void
 ) {
-  return (state: Untyped, action: Untyped) => {
+  return (state: JobEventsState, action: JobEventsAction): JobEventsState => {
     switch (action.type) {
       case ADD_EVENTS:
         return addEvents(state, action.events);
@@ -131,18 +221,20 @@ export function jobEventsReducer(
           metaEventParentUuid: action.metaEventParentUuid || {},
         };
       default:
-        throw new Error(`Unrecognized action: ${action.type}`);
+        throw new Error(
+          `Unrecognized action: ${(action as { type: string }).type}`
+        );
     }
   };
 
-  function addEvents(origState: Untyped, newEvents: Untyped) {
+  function addEvents(origState: JobEventsState, newEvents: JobEvent[]) {
     let state = {
       ...origState,
       events: { ...origState.events },
       tree: [...origState.tree],
     };
     const parentsToFetch: Record<string, boolean> = {};
-    newEvents.forEach((event: Untyped) => {
+    newEvents.forEach((event: JobEvent) => {
       if (
         typeof event.rowNumber !== 'number' ||
         Number.isNaN(event.rowNumber)
@@ -163,10 +255,11 @@ export function jobEventsReducer(
         return;
       }
 
-      let isParentFound;
-      [state, isParentFound] = _addNestedLevelEvent(state, event);
+      const parentUuid = event.parent_uuid as string;
+      const [nextState, isParentFound] = _addNestedLevelEvent(state, event);
+      state = nextState;
       if (!isParentFound) {
-        parentsToFetch[event.parent_uuid] = true;
+        parentsToFetch[parentUuid] = true;
         state = _addEventWithoutParent(state, event);
       }
     });
@@ -179,7 +272,7 @@ export function jobEventsReducer(
         console.error('No row number found for ', parent.counter);
         return;
       }
-      parent.rowNumber = state.childrenSummary[parent.counter].rowNumber;
+      parent.rowNumber = state.childrenSummary[parent.counter]!.rowNumber;
 
       enqueueAction({
         type: ADD_EVENTS,
@@ -190,7 +283,7 @@ export function jobEventsReducer(
     return state;
   }
 
-  function _addRootLevelEvent(state: Untyped, event: Untyped) {
+  function _addRootLevelEvent(state: JobEventsState, event: JobEvent) {
     const eventIndex = event.counter;
     const newNode = {
       eventIndex,
@@ -198,7 +291,7 @@ export function jobEventsReducer(
       children: [],
     };
     const index = state.tree.findIndex(
-      (node: WorkflowNode) => node.eventIndex > eventIndex
+      (node: JobEventNode) => node.eventIndex > eventIndex
     );
     const updatedTree = [...state.tree];
     if (index === -1) {
@@ -220,7 +313,10 @@ export function jobEventsReducer(
     );
   }
 
-  function _addNestedLevelEvent(state: Untyped, event: Untyped) {
+  function _addNestedLevelEvent(
+    state: JobEventsState,
+    event: JobEvent
+  ): [JobEventsState, boolean] {
     const eventIndex = event.counter;
     const parent = getNodeByUuid(state, event.parent_uuid);
     if (!parent) {
@@ -232,13 +328,13 @@ export function jobEventsReducer(
       children: [],
     };
     const index = parent.children.findIndex(
-      (node: WorkflowNode) => node.eventIndex >= eventIndex
+      (node: JobEventNode) => node.eventIndex >= eventIndex
     );
     if (index === -1) {
       state = updateNodeByUuid(
         state,
-        event.parent_uuid,
-        (node: WorkflowNode) => {
+        event.parent_uuid as string,
+        (node: JobEventNode) => {
           node.children.push(newNode);
           return node;
         }
@@ -246,8 +342,8 @@ export function jobEventsReducer(
     } else {
       state = updateNodeByUuid(
         state,
-        event.parent_uuid,
-        (node: WorkflowNode) => {
+        event.parent_uuid as string,
+        (node: JobEventNode) => {
           node.children.splice(index, 0, newNode);
           return node;
         }
@@ -271,8 +367,9 @@ export function jobEventsReducer(
     return [state, true];
   }
 
-  function _addEventWithoutParent(state: Untyped, event: Untyped) {
-    const parentUuid = event.parent_uuid;
+  function _addEventWithoutParent(state: JobEventsState, event: JobEvent) {
+    // Only an event whose parent is missing reaches this.
+    const parentUuid = event.parent_uuid as string;
     let eventsList;
     if (!state.eventsWithoutParents[parentUuid]) {
       eventsList = [event];
@@ -289,7 +386,8 @@ export function jobEventsReducer(
     };
   }
 
-  function _gatherEventsForNewParent(state: Untyped, parentUuid: Untyped) {
+  function _gatherEventsForNewParent(state: JobEventsState, uuid?: string) {
+    const parentUuid = uuid as string;
     if (!state.eventsWithoutParents[parentUuid]) {
       return state;
     }
@@ -301,17 +399,17 @@ export function jobEventsReducer(
         ...state,
         eventsWithoutParents: remaining,
       },
-      newEvents
+      newEvents ?? []
     );
   }
 
-  function rebuildTree(state: Untyped) {
+  function rebuildTree(state: JobEventsState) {
     const events = Object.values(state.events);
     return addEvents(initialState, events);
   }
 }
 
-function getEventForRow(state: Untyped, rowIndex: number) {
+function getEventForRow(state: JobEventsState, rowIndex: number) {
   const { node } = _getNodeForRow(state, rowIndex, state.tree);
   if (node) {
     return {
@@ -324,12 +422,12 @@ function getEventForRow(state: Untyped, rowIndex: number) {
 
 // The children summary used to be threaded through here and dropped by the
 // helper below, which takes the nodes to walk rather than a summary.
-function getNodeForRow(state: Untyped, rowToFind: Untyped) {
+function getNodeForRow(state: JobEventsState, rowToFind: number) {
   const { node } = _getNodeForRow(state, rowToFind, state.tree);
   return node;
 }
 
-function getCounterForRow(state: Untyped, rowToFind: Untyped) {
+function getCounterForRow(state: JobEventsState, rowToFind: number) {
   const { node, expectedCounter } = _getNodeForRow(
     state,
     rowToFind,
@@ -337,20 +435,20 @@ function getCounterForRow(state: Untyped, rowToFind: Untyped) {
   );
 
   if (node) {
-    const event = state.events[node.eventIndex];
+    const event = state.events[node.eventIndex] as JobEvent;
     return event.counter;
   }
   return expectedCounter;
 }
 
 function _getNodeForRow(
-  state: Untyped,
-  rowToFind: Untyped,
-  nodes: Untyped
-): Untyped {
+  state: JobEventsState,
+  rowToFind: number,
+  nodes: JobEventNode[]
+): RowLookup {
   for (let i = 0; i < nodes.length; i++) {
-    const node = nodes[i];
-    const event = state.events[node.eventIndex];
+    const node = nodes[i] as JobEventNode;
+    const event = state.events[node.eventIndex] as JobEvent;
     if (event.rowNumber === rowToFind) {
       return { node };
     }
@@ -363,7 +461,7 @@ function _getNodeForRow(
       state.childrenSummary
     );
     const nodeChildren = totalNodeDescendants - numCollapsedChildren;
-    if (event.rowNumber + nodeChildren >= rowToFind) {
+    if ((event.rowNumber ?? 0) + nodeChildren >= rowToFind) {
       // requested row is in children/descendants
       return _getNodeInChildren(state, node, rowToFind);
     }
@@ -373,12 +471,12 @@ function _getNodeForRow(
     if (!nextNode) {
       continue;
     }
-    const nextEvent = state.events[nextNode.eventIndex];
-    const lastChild = _getLastDescendantNode([node]);
-    if (nextEvent.rowNumber > rowToFind) {
+    const nextEvent = state.events[nextNode.eventIndex] as JobEvent;
+    const lastChild = _getLastDescendantNode([node]) as JobEventNode;
+    if ((nextEvent.rowNumber ?? 0) > rowToFind) {
       // requested row is not loaded; return best guess at counter number
-      const lastChildEvent = state.events[lastChild.eventIndex];
-      const rowDiff = rowToFind - lastChildEvent.rowNumber;
+      const lastChildEvent = state.events[lastChild.eventIndex] as JobEvent;
+      const rowDiff = rowToFind - (lastChildEvent.rowNumber ?? 0);
       return {
         node: null,
         expectedCounter: lastChild.eventIndex + rowDiff,
@@ -391,8 +489,10 @@ function _getNodeForRow(
     return { node: null, expectedCounter: rowToFind };
   }
 
-  const lastDescendantEvent = state.events[lastDescendant.eventIndex];
-  const rowDiff = rowToFind - lastDescendantEvent.rowNumber;
+  const lastDescendantEvent = state.events[
+    lastDescendant.eventIndex
+  ] as JobEvent;
+  const rowDiff = rowToFind - (lastDescendantEvent.rowNumber ?? 0);
   return {
     node: null,
     expectedCounter: lastDescendant.eventIndex + rowDiff,
@@ -400,14 +500,17 @@ function _getNodeForRow(
 }
 
 function _getNodeInChildren(
-  state: Untyped,
-  node: Untyped,
-  rowToFind: Untyped
-): Untyped {
-  const event = state.events[node.eventIndex];
-  const firstChild = state.events[node.children[0]?.eventIndex];
-  if (!firstChild || rowToFind < firstChild.rowNumber) {
-    const rowDiff = rowToFind - event.rowNumber;
+  state: JobEventsState,
+  node: JobEventNode,
+  rowToFind: number
+): RowLookup {
+  const event = state.events[node.eventIndex] as JobEvent;
+  const firstChildNode = node.children[0];
+  const firstChild = firstChildNode
+    ? state.events[firstChildNode.eventIndex]
+    : undefined;
+  if (!firstChild || rowToFind < (firstChild.rowNumber ?? 0)) {
+    const rowDiff = rowToFind - (event.rowNumber ?? 0);
     return {
       node: null,
       expectedCounter: event.counter + rowDiff,
@@ -416,42 +519,49 @@ function _getNodeInChildren(
   return _getNodeForRow(state, rowToFind, node.children);
 }
 
-function _getLastDescendantNode(nodes: Untyped) {
-  let lastDescendant = nodes[nodes.length - 1];
-  let children = lastDescendant?.children || [];
+function _getLastDescendantNode(nodes: JobEventNode[]): JobEventNode | null {
+  let lastDescendant = nodes[nodes.length - 1] ?? null;
+  let children = lastDescendant?.children ?? [];
   while (children.length) {
-    lastDescendant = children[children.length - 1];
+    lastDescendant = children[children.length - 1] as JobEventNode;
     children = lastDescendant.children;
   }
   return lastDescendant;
 }
 
-function getTotalNumChildren(node: WorkflowNode, childrenSummary: Untyped) {
-  if (childrenSummary[node.eventIndex]) {
-    return childrenSummary[node.eventIndex].numChildren;
+function getTotalNumChildren(
+  node: JobEventNode,
+  childrenSummary: JobEventsState['childrenSummary']
+) {
+  const summary = childrenSummary[node.eventIndex];
+  if (summary) {
+    return summary.numChildren;
   }
 
   let estimatedNumChildren = node.children.length;
-  node.children.forEach((child: Untyped) => {
+  node.children.forEach((child: JobEventNode) => {
     estimatedNumChildren += getTotalNumChildren(child, childrenSummary);
   });
   return estimatedNumChildren;
 }
 
-function getNumCollapsedChildren(node: WorkflowNode, childrenSummary: Untyped) {
+function getNumCollapsedChildren(
+  node: JobEventNode,
+  childrenSummary: JobEventsState['childrenSummary']
+) {
   if (node.isCollapsed) {
     return getTotalNumChildren(node, childrenSummary);
   }
   let sum = 0;
-  node.children.forEach((child: Untyped) => {
+  node.children.forEach((child: JobEventNode) => {
     sum += getNumCollapsedChildren(child, childrenSummary);
   });
   return sum;
 }
 
-function toggleNodeIsCollapsed(state: Untyped, eventUuid: Untyped) {
+function toggleNodeIsCollapsed(state: JobEventsState, eventUuid: string) {
   return {
-    ...updateNodeByUuid(state, eventUuid, (node: WorkflowNode) => ({
+    ...updateNodeByUuid(state, eventUuid, (node: JobEventNode) => ({
       ...node,
       isCollapsed: !node.isCollapsed,
     })),
@@ -459,27 +569,24 @@ function toggleNodeIsCollapsed(state: Untyped, eventUuid: Untyped) {
   };
 }
 
-function toggleCollapseAll(state: Untyped, isAllCollapsed: Untyped) {
-  const newTree = state.tree.map((node: WorkflowNode) =>
+function toggleCollapseAll(state: JobEventsState, isAllCollapsed: boolean) {
+  const newTree = state.tree.map((node: JobEventNode) =>
     _toggleNestedNodes(state.events, node, isAllCollapsed)
   );
   return { ...state, tree: newTree, isAllCollapsed };
 }
 
 function _toggleNestedNodes(
-  events: Untyped,
-  node: Untyped,
-  isCollapsed: Untyped
-) {
-  const {
-    parent_uuid,
-    event_data: { playbook_uuid },
-    uuid,
-  } = events[node.eventIndex];
+  events: JobEventsState['events'],
+  node: JobEventNode,
+  isCollapsed: boolean
+): JobEventNode {
+  const { parent_uuid, event_data, uuid } = events[node.eventIndex] as JobEvent;
+  const { playbook_uuid } = (event_data ?? {}) as { playbook_uuid?: string };
 
   const eventShouldNotCollapse = uuid === playbook_uuid || !parent_uuid?.length;
 
-  const children = node.children?.map((nestedNode: Untyped) =>
+  const children = node.children?.map((nestedNode: JobEventNode) =>
     _toggleNestedNodes(events, nestedNode, isCollapsed)
   );
 
@@ -490,11 +597,15 @@ function _toggleNestedNodes(
   };
 }
 
-function updateNodeByUuid(state: Untyped, uuid: Untyped, update: Untyped) {
+function updateNodeByUuid(
+  state: JobEventsState,
+  uuid: string,
+  update: (node: JobEventNode) => JobEventNode
+) {
   if (!state.uuidMap[uuid]) {
     throw new Error(`Cannot update node; Event UUID not found ${uuid}`);
   }
-  const index = state.uuidMap[uuid];
+  const index = state.uuidMap[uuid] as number;
   return {
     ...state,
     tree: _updateNodeByIndex(index, state.tree, update),
@@ -502,28 +613,26 @@ function updateNodeByUuid(state: Untyped, uuid: Untyped, update: Untyped) {
 }
 
 function _updateNodeByIndex(
-  target: Untyped,
-  nodeArray: Untyped,
-  update: Untyped
-): Untyped {
+  target: number,
+  nodeArray: JobEventNode[],
+  update: (node: JobEventNode) => JobEventNode
+): JobEventNode[] {
   const nextIndex = nodeArray.findIndex(
-    (node: WorkflowNode) => node.eventIndex > target
+    (node: JobEventNode) => node.eventIndex > target
   );
   const targetIndex = nextIndex === -1 ? nodeArray.length - 1 : nextIndex - 1;
-  let updatedNode;
-  if (nodeArray[targetIndex].eventIndex === target) {
+  // The caller has already found the uuid in the map, so the target is here.
+  const targetNode = nodeArray[targetIndex] as JobEventNode;
+  let updatedNode: JobEventNode;
+  if (targetNode.eventIndex === target) {
     updatedNode = update({
-      ...nodeArray[targetIndex],
-      children: [...nodeArray[targetIndex].children],
+      ...targetNode,
+      children: [...targetNode.children],
     });
   } else {
     updatedNode = {
-      ...nodeArray[targetIndex],
-      children: _updateNodeByIndex(
-        target,
-        nodeArray[targetIndex].children,
-        update
-      ),
+      ...targetNode,
+      children: _updateNodeByIndex(target, targetNode.children, update),
     };
   }
   return [
@@ -533,33 +642,39 @@ function _updateNodeByIndex(
   ];
 }
 
-function getNodeByUuid(state: Untyped, uuid: Untyped) {
-  if (!state.uuidMap[uuid]) {
+function getNodeByUuid(state: JobEventsState, uuid?: string) {
+  if (!uuid || !state.uuidMap[uuid]) {
     return null;
   }
 
-  const index = state.uuidMap[uuid];
+  const index = state.uuidMap[uuid] as number;
   return _getNodeByIndex(state.tree, index);
 }
 
-function _getNodeByIndex(arr: Untyped, index: number) {
+function _getNodeByIndex(
+  arr: JobEventNode[],
+  index: number
+): JobEventNode | null {
   if (!arr.length) {
     return null;
   }
-  const i = arr.findIndex((node: WorkflowNode) => node.eventIndex >= index);
+  const i = arr.findIndex((node: JobEventNode) => node.eventIndex >= index);
   if (i === -1) {
-    return _getNodeByIndex(arr[arr.length - 1].children, index);
+    const last = arr[arr.length - 1] as JobEventNode;
+    return _getNodeByIndex(last.children, index);
   }
-  if (arr[i].eventIndex === index) {
-    return arr[i];
+  const found = arr[i] as JobEventNode;
+  if (found.eventIndex === index) {
+    return found;
   }
-  if (!arr[i - 1]) {
+  const previous = arr[i - 1];
+  if (!previous) {
     return null;
   }
-  return _getNodeByIndex(arr[i - 1].children, index);
+  return _getNodeByIndex(previous.children, index);
 }
 
-function getEvent(state: Untyped, eventIndex: Untyped) {
+function getEvent(state: JobEventsState, eventIndex: number) {
   const event = state.events[eventIndex];
   if (event) {
     return event;

@@ -704,7 +704,7 @@ function JobOutput({
       console.error(e); // eslint-disable-line no-console
       return false;
     }
-    if (getEvent(counter)) {
+    if (getEvent(counter as number)) {
       return true;
     }
     if (index >= remoteRowCount && index < remoteRowCount + wsEvents.length) {
@@ -766,7 +766,7 @@ function JobOutput({
         isCollapsed={node.isCollapsed}
         hasChildren={node.children.length}
         onToggleCollapsed={() => {
-          toggleNodeIsCollapsed(event.uuid, !node.isCollapsed);
+          toggleNodeIsCollapsed(event.uuid);
         }}
         jobStatus={jobStatus}
       />
@@ -798,7 +798,9 @@ function JobOutput({
     let range = [startIndex, stopIndex];
     if (!isFlatMode) {
       const diff = stopIndex - startIndex;
-      const startCounter = getCounterForRow(startIndex);
+      // The tree answers with the counter of the row asked for, or its best
+      // guess at one for a row that has not loaded.
+      const startCounter = getCounterForRow(startIndex) ?? startIndex;
       range = [startCounter, startCounter + diff];
     }
 

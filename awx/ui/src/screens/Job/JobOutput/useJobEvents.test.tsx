@@ -1,6 +1,7 @@
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { render, act } from '@testing-library/react';
+import type { JobEventCallbacks } from './useJobEvents';
 import useJobEvents, {
   jobEventsReducer,
   ADD_EVENTS,
@@ -36,7 +37,7 @@ function HookTest({
       fetchChildrenSummary,
       setForceFlatMode,
       setJobTreeReady,
-    },
+    } as JobEventCallbacks,
     jobId,
     isFlatMode
   );
