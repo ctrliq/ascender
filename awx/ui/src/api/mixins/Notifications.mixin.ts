@@ -1,5 +1,6 @@
-import type { BaseConstructor } from '../Base';
 import type { QSParams } from 'util/qs';
+import type { BaseConstructor } from '../Base';
+
 const NotificationsMixin = <T extends BaseConstructor>(parent: T) =>
   class extends parent {
     readOptionsNotificationTemplates(id: number | string) {
@@ -65,56 +66,80 @@ const NotificationsMixin = <T extends BaseConstructor>(parent: T) =>
       );
     }
 
-    associateNotificationTemplatesStarted(resourceId: number | string, notificationId: number | string) {
+    associateNotificationTemplatesStarted(
+      resourceId: number | string,
+      notificationId: number | string
+    ) {
       return this.http.post(
         `${this.baseUrl}${resourceId}/notification_templates_started/`,
         { id: notificationId }
       );
     }
 
-    disassociateNotificationTemplatesStarted(resourceId: number | string, notificationId: number | string) {
+    disassociateNotificationTemplatesStarted(
+      resourceId: number | string,
+      notificationId: number | string
+    ) {
       return this.http.post(
         `${this.baseUrl}${resourceId}/notification_templates_started/`,
         { id: notificationId, disassociate: true }
       );
     }
 
-    associateNotificationTemplatesSuccess(resourceId: number | string, notificationId: number | string) {
+    associateNotificationTemplatesSuccess(
+      resourceId: number | string,
+      notificationId: number | string
+    ) {
       return this.http.post(
         `${this.baseUrl}${resourceId}/notification_templates_success/`,
         { id: notificationId }
       );
     }
 
-    disassociateNotificationTemplatesSuccess(resourceId: number | string, notificationId: number | string) {
+    disassociateNotificationTemplatesSuccess(
+      resourceId: number | string,
+      notificationId: number | string
+    ) {
       return this.http.post(
         `${this.baseUrl}${resourceId}/notification_templates_success/`,
         { id: notificationId, disassociate: true }
       );
     }
 
-    associateNotificationTemplatesError(resourceId: number | string, notificationId: number | string) {
+    associateNotificationTemplatesError(
+      resourceId: number | string,
+      notificationId: number | string
+    ) {
       return this.http.post(
         `${this.baseUrl}${resourceId}/notification_templates_error/`,
         { id: notificationId }
       );
     }
 
-    disassociateNotificationTemplatesError(resourceId: number | string, notificationId: number | string) {
+    disassociateNotificationTemplatesError(
+      resourceId: number | string,
+      notificationId: number | string
+    ) {
       return this.http.post(
         `${this.baseUrl}${resourceId}/notification_templates_error/`,
         { id: notificationId, disassociate: true }
       );
     }
 
-    associateNotificationTemplatesChanged(resourceId: number | string, notificationId: number | string) {
+    associateNotificationTemplatesChanged(
+      resourceId: number | string,
+      notificationId: number | string
+    ) {
       return this.http.post(
         `${this.baseUrl}${resourceId}/notification_templates_changed/`,
         { id: notificationId }
       );
     }
 
-    disassociateNotificationTemplatesChanged(resourceId: number | string, notificationId: number | string) {
+    disassociateNotificationTemplatesChanged(
+      resourceId: number | string,
+      notificationId: number | string
+    ) {
       return this.http.post(
         `${this.baseUrl}${resourceId}/notification_templates_changed/`,
         { id: notificationId, disassociate: true }
@@ -130,7 +155,11 @@ const NotificationsMixin = <T extends BaseConstructor>(parent: T) =>
      * @param[notificationType] - the type of notification, options are "approvals",
      *   "started", "success", "error" and "changed"
      */
-    associateNotificationTemplate(resourceId: number | string, notificationId: number | string, notificationType: string) {
+    associateNotificationTemplate(
+      resourceId: number | string,
+      notificationId: number | string,
+      notificationType: string
+    ) {
       if (notificationType === 'approvals') {
         return this.associateNotificationTemplatesApprovals(
           resourceId,
@@ -180,7 +209,11 @@ const NotificationsMixin = <T extends BaseConstructor>(parent: T) =>
      * @param[notificationType] - the type of notification, options are "approvals",
      *   "started", "success", "error" and "changed"
      */
-    disassociateNotificationTemplate(resourceId: number | string, notificationId: number | string, notificationType: string) {
+    disassociateNotificationTemplate(
+      resourceId: number | string,
+      notificationId: number | string,
+      notificationType: string
+    ) {
       if (notificationType === 'approvals') {
         return this.disassociateNotificationTemplatesApprovals(
           resourceId,

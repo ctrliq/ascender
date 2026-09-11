@@ -40,8 +40,11 @@ export function babelTransform() {
           ['@babel/preset-react', { runtime: 'automatic' }],
           // Types are erased here rather than by oxc, because this pass has to
           // parse the file anyway to run the lingui macro, and a .ts file it
-          // cannot parse is a build failure rather than a fallback.
-          ['@babel/preset-typescript', { isTSX: true, allExtensions: true }],
+          // cannot parse is a build failure rather than a fallback. No options:
+          // the preset picks TS or TSX off the extension on its own, and the
+          // .js and .jsx files it skips carry no types to erase. JSX syntax in
+          // .tsx comes from preset-react above, which runs for every extension.
+          '@babel/preset-typescript',
         ],
         plugins: [
           '@lingui/babel-plugin-lingui-macro',

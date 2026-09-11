@@ -1,6 +1,7 @@
+import type { QSParams } from 'util/qs';
 import type { BaseConstructor } from '../Base';
 import type { Label, Paginated } from '../../types/api';
-import type { QSParams } from 'util/qs';
+
 const LabelsMixin = <T extends BaseConstructor>(parent: T) =>
   class extends parent {
     readLabels(id: number | string, params?: QSParams) {

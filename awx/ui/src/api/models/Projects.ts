@@ -1,9 +1,9 @@
+import type { QSParams } from 'util/qs';
 import Base from '../Base';
 import NotificationsMixin from '../mixins/Notifications.mixin';
 import LaunchUpdateMixin from '../mixins/LaunchUpdate.mixin';
 import SchedulesMixin from '../mixins/Schedules.mixin';
 import type { Http } from '../Base';
-import type { QSParams } from 'util/qs';
 
 class Projects extends SchedulesMixin(
   LaunchUpdateMixin(NotificationsMixin(Base))

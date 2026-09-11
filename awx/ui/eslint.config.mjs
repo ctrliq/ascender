@@ -12,92 +12,11 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
-export default defineConfig([
-  {
-    ignores: [
-      'vitest.config.mjs',
-      'vite.config.mjs',
-      'etc/**',
-      'coverage/**',
-      'build/**',
-      'node_modules/**',
-      'dist/**',
-      'images/**',
-      '**/*test*.js',
-      'config/**',
-      'scripts/**',
-      'eslint.config.mjs',
-      // the end-to-end suite is a separate Node package with its own
-      // dependencies and its own lint expectations, not React source
-      'e2e/**',
-    ],
-  },
-  // Airbnb (flat re-implementation): base + react, with their plugin registrations
-  airbnbPlugins.stylistic,
-  airbnbPlugins.importX,
-  ...airbnb.base.recommended,
-  airbnbPlugins.react,
-  airbnbPlugins.reactHooks,
-  airbnbPlugins.reactA11y,
-  ...airbnb.react.recommended,
-  // rules only — the jsx-a11y plugin itself is registered by airbnbPlugins.reactA11y
-  { rules: jsxA11y.flatConfigs.strict.rules },
-  i18next.configs['flat/recommended'],
-  prettier,
-  // TypeScript files are parsed by typescript-eslint rather than babel, and
-  // take airbnb's TypeScript rule sets on top of the shared ones above. Only
-  // these two extensions: the JavaScript block below is unchanged, which is
-  // what lets the two live side by side while the tree converts.
-  { ...airbnbPlugins.typescriptEslint, files: ['**/*.ts', '**/*.tsx'] },
-  ...airbnb.base.typescript.map((c) => ({ ...c, files: ['**/*.ts', '**/*.tsx'] })),
-  ...airbnb.react.typescript.map((c) => ({ ...c, files: ['**/*.ts', '**/*.tsx'] })),
-  {
-    files: ['**/*.ts', '**/*.tsx'],
-    languageOptions: {
-      parser: tseslint.parser,
-      parserOptions: {
-        projectService: true,
-        tsconfigRootDir: import.meta.dirname,
-      },
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-      },
-    },
-  },
-  prettier,
-  {
-    files: ['**/*.js', '**/*.jsx'],
-    languageOptions: {
-      parser: babelParser,
-      parserOptions: {
-        requireConfigFile: false,
-        ecmaFeatures: {
-          jsx: true,
-        },
-        babelOptions: {
-          presets: ['@babel/preset-react'],
-        },
-      },
-      globals: {
-        ...globals.browser,
-        ...globals.node,
-        ...globals.vitest,
-      },
-    },
-    settings: {
-      react: {
-        version: 'detect',
-      },
-      // module resolution mirrors jsconfig.json baseUrl: src
-      'import-x/resolver-next': [
-        createNodeResolver({
-          extensions: ['.mjs', '.cjs', '.js', '.json', '.jsx', '.ts', '.tsx', '.node'],
-          modules: ['node_modules', path.resolve(import.meta.dirname, 'src')],
-        }),
-      ],
-    },
-    rules: {
+// The rules this codebase has settled on, applied to every source file.
+// Extracted rather than written into the JavaScript block below, because which
+// of them a file gets should not depend on whether it has been converted to
+// TypeScript yet.
+const sharedRules = {
       'i18next/no-literal-string': [
         2,
         {
@@ -200,6 +119,15 @@ export default defineConfig([
         },
       ],
       camelcase: 'off',
+      // Imports are written without an extension throughout, and which
+      // extension a module has is exactly what this migration keeps changing.
+      // Requiring one would mean editing every importer each time a module is
+      // converted, in both directions.
+      'import-x/extensions': [
+        'error',
+        'ignorePackages',
+        { js: 'never', jsx: 'never', ts: 'never', tsx: 'never', mjs: 'never' },
+      ],
       '@stylistic/arrow-parens': 'off',
       '@stylistic/comma-dangle': 'off',
       'import-x/no-cycle': 'off',
@@ -267,6 +195,130 @@ export default defineConfig([
       'react/forbid-prop-types': 'off',
       // PF5 Dropdown requires toggle={(toggleRef) => <MenuToggle ref={toggleRef}/>}
       'react/no-unstable-nested-components': ['error', { allowAsProps: true }],
+};
+
+export default defineConfig([
+  {
+    ignores: [
+      'vitest.config.mjs',
+      'vite.config.mjs',
+      'etc/**',
+      'coverage/**',
+      'build/**',
+      'node_modules/**',
+      'dist/**',
+      'images/**',
+      '**/*test*.js',
+      'config/**',
+      'scripts/**',
+      'eslint.config.mjs',
+      // the end-to-end suite is a separate Node package with its own
+      // dependencies and its own lint expectations, not React source
+      'e2e/**',
+    ],
+  },
+  // Airbnb (flat re-implementation): base + react, with their plugin registrations
+  airbnbPlugins.stylistic,
+  airbnbPlugins.importX,
+  ...airbnb.base.recommended,
+  airbnbPlugins.react,
+  airbnbPlugins.reactHooks,
+  airbnbPlugins.reactA11y,
+  ...airbnb.react.recommended,
+  // rules only — the jsx-a11y plugin itself is registered by airbnbPlugins.reactA11y
+  { rules: jsxA11y.flatConfigs.strict.rules },
+  i18next.configs['flat/recommended'],
+  prettier,
+  // TypeScript files are parsed by typescript-eslint rather than babel, and
+  // take airbnb's TypeScript rule sets on top of the shared ones above. Only
+  // these two extensions: the JavaScript block below is unchanged, which is
+  // what lets the two live side by side while the tree converts.
+  { ...airbnbPlugins.typescriptEslint, files: ['**/*.ts', '**/*.tsx'] },
+  ...airbnb.base.typescript.map((c) => ({ ...c, files: ['**/*.ts', '**/*.tsx'] })),
+  ...airbnb.react.typescript.map((c) => ({ ...c, files: ['**/*.ts', '**/*.tsx'] })),
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parser: tseslint.parser,
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
+    },
+  },
+  prettier,
+  {
+    files: ['**/*.js', '**/*.jsx'],
+    languageOptions: {
+      parser: babelParser,
+      parserOptions: {
+        requireConfigFile: false,
+        ecmaFeatures: {
+          jsx: true,
+        },
+        babelOptions: {
+          presets: ['@babel/preset-react'],
+        },
+      },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.vitest,
+      },
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+      // module resolution mirrors jsconfig.json baseUrl: src
+      'import-x/resolver-next': [
+        createNodeResolver({
+          extensions: ['.mjs', '.cjs', '.js', '.json', '.jsx', '.ts', '.tsx', '.node'],
+          modules: ['node_modules', path.resolve(import.meta.dirname, 'src')],
+        }),
+      ],
+    },
+    rules: sharedRules,
+  },
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    settings: {
+      react: {
+        version: 'detect',
+      },
+      // module resolution mirrors tsconfig.json baseUrl: src
+      'import-x/resolver-next': [
+        createNodeResolver({
+          extensions: ['.mjs', '.cjs', '.js', '.json', '.jsx', '.ts', '.tsx', '.node'],
+          modules: ['node_modules', path.resolve(import.meta.dirname, 'src')],
+        }),
+      ],
+    },
+    rules: {
+      ...sharedRules,
+      // the TypeScript-aware counterparts of the rules above, which the airbnb
+      // TypeScript config turns on in place of the base ones. The base
+      // no-unused-vars does not know about types, and reports every imported
+      // one as unused.
+      '@typescript-eslint/no-use-before-define': 'off',
+      '@typescript-eslint/no-shadow': 'off',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          vars: 'all',
+          args: 'after-used',
+          ignoreRestSiblings: true,
+          caughtErrors: 'none',
+        },
+      ],
+      // types express what a value may be; the parameter defaults beside them
+      // are the defaults, and there is no separate propTypes to check against
+      'react/require-default-props': 'off',
     },
   },
 ]);

@@ -35,7 +35,9 @@ class CredentialTypes extends Base {
     }
     return results
       .concat(nextResults)
-      .filter((type: ApiEntity) => acceptableKinds.includes(type.kind as string));
+      .filter((type: ApiEntity) =>
+        acceptableKinds.includes(type.kind as string)
+      );
   }
 
   test(id: number | string, data: unknown) {

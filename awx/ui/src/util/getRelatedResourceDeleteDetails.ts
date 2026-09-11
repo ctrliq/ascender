@@ -1,4 +1,3 @@
-import type { ApiEntity, Paginated } from '../types/api';
 import {
   UnifiedJobTemplatesAPI,
   CredentialsAPI,
@@ -18,6 +17,7 @@ import {
 } from 'api';
 import { msg } from '@lingui/core/macro';
 import type { MessageDescriptor } from '@lingui/core';
+import type { ApiEntity, Paginated } from '../types/api';
 import type { ApiResponse } from '../api/Base';
 
 /** One related-resource count to look up before a delete is allowed. */
@@ -249,32 +249,29 @@ export const relatedResourceDeleteRequests = {
       label: msg`Organizations`,
     },
     {
+      // No try/catch: this used to wrap whatever it caught in new Error(err),
+      // which stringified one Error into the message of another and lost the
+      // original stack. Letting it propagate is what that wrapper was for.
       request: async () => {
-        try {
-          const {
-            data: { results },
-          } = await InventorySourcesAPI.read<Paginated<ApiEntity>>({
-            execution_environment: selected.id,
-          });
+        const {
+          data: { results },
+        } = await InventorySourcesAPI.read<Paginated<ApiEntity>>({
+          execution_environment: selected.id,
+        });
 
-          const responses = await Promise.all(
-            (results as ApiEntity[]).map((result) =>
-              WorkflowJobTemplateNodesAPI.read({
-                unified_job_template: result.id,
-              })
-            )
-          );
+        const responses = await Promise.all(
+          (results as ApiEntity[]).map((result) =>
+            WorkflowJobTemplateNodesAPI.read({
+              unified_job_template: result.id,
+            })
+          )
+        );
 
-          const total = responses.reduce(
-            (acc, { data }) => acc + ((data as { count: number }).count ?? 0),
-            0
-          );
-          return { data: { count: total } };
-        } catch (err) {
-          // Rethrow rather than wrapping: new Error(err) stringified an Error
-          // into the message of another one, losing the original stack.
-          throw err;
-        }
+        const total = responses.reduce(
+          (acc, { data }) => acc + ((data as { count: number }).count ?? 0),
+          0
+        );
+        return { data: { count: total } };
       },
       label: msg`Workflow Job Template Nodes`,
     },

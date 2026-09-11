@@ -8,7 +8,9 @@ import { useCallback, useRef } from 'react';
  * }
  */
 
-export default function useAutoPopulateLookup(populateLookupField: (value: unknown) => void) {
+export default function useAutoPopulateLookup(
+  populateLookupField: (value: unknown) => void
+) {
   const isFirst = useRef(true);
 
   return useCallback(

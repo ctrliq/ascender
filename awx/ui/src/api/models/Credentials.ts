@@ -1,7 +1,7 @@
+import type { QSParams } from 'util/qs';
 import type { ApiEntity, Paginated } from '../../types/api';
 import Base from '../Base';
 import type { Http } from '../Base';
-import type { QSParams } from 'util/qs';
 
 class Credentials extends Base {
   constructor(http?: Http) {
@@ -27,8 +27,9 @@ class Credentials extends Base {
     const maxRequests = 5;
     let requestCounter = 0;
     const fetchInputSources = async (
-        pageNo = 1,
-        inputSources: ApiEntity[] = []) => {
+      pageNo = 1,
+      inputSources: ApiEntity[] = []
+    ) => {
       try {
         requestCounter++;
         const { data } = await this.http.get<Paginated<ApiEntity>>(

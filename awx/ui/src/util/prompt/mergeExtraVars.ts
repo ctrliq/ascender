@@ -1,7 +1,7 @@
 import * as yaml from 'js-yaml';
 
 export default function mergeExtraVars(
-  extraVars: string = '',
+  extraVars = '',
   survey: Record<string, unknown> = {}
 ): Record<string, unknown> {
   const vars =

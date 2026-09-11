@@ -1,6 +1,6 @@
+import type { QSParams } from 'util/qs';
 import Base from '../Base';
 import type { Http } from '../Base';
-import type { QSParams } from 'util/qs';
 
 class Teams extends Base {
   constructor(http?: Http) {

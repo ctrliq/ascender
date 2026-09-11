@@ -94,11 +94,7 @@ const namespaceMatches = (namespace: string, fieldname: string): boolean => {
   return fieldname.startsWith(`${namespace}.`);
 };
 
-function parseValue(
-  config: QSConfig,
-  key: string,
-  rawValue: string
-): QSValue {
+function parseValue(config: QSConfig, key: string, rawValue: string): QSValue {
   if (config.integerFields && config.integerFields.some((v) => v === key)) {
     return parseInt(rawValue, 10);
   }
@@ -139,7 +135,9 @@ export const encodeQueryString = (
 function encodeValue(key: string, value: QSParamValue): string {
   if (Array.isArray(value)) {
     return value
-      .map((val) => `${encodeURIComponent(key)}=${encodeURIComponent(val ?? '')}`)
+      .map(
+        (val) => `${encodeURIComponent(key)}=${encodeURIComponent(val ?? '')}`
+      )
       .join('&');
   }
   return `${encodeURIComponent(key)}=${encodeURIComponent(
@@ -282,7 +280,7 @@ export function updateQueryString(
   return encodeQueryString(allParams);
 }
 
-function parseFullQueryString(queryString: string = ''): QSParams {
+function parseFullQueryString(queryString = ''): QSParams {
   const allParams: QSParams = {};
   queryString
     .replace(/^\?/, '')

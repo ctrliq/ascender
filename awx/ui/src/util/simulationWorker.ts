@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 // The d3 globals below arrive through importScripts at runtime, so there is
 // nothing for the compiler to resolve them to. Declaring the two names the
 // file uses keeps it checked rather than exempted.

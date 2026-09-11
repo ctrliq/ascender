@@ -44,11 +44,7 @@ export const useConfig = () => {
   return context;
 };
 
-export const ConfigProvider = ({
-  children,
-}: {
-  children: React.ReactNode;
-}) => {
+export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
   const { logout } = useSession();
 
   const {
@@ -58,13 +54,8 @@ export const ConfigProvider = ({
     result: config,
   } = useRequest<ConfigValue>(
     useCallback(async (): Promise<ConfigValue> => {
-      const [
-        { data },
-        {
-          data: meData,
-        },
-        { data: rootDataRaw },
-      ] = await Promise.all([ConfigAPI.read(), MeAPI.read(), RootAPI.read()]);
+      const [{ data }, { data: meData }, { data: rootDataRaw }] =
+        await Promise.all([ConfigAPI.read(), MeAPI.read(), RootAPI.read()]);
       const rootData = (rootDataRaw ?? {}) as Record<string, unknown>;
       const [me] = (meData as { results: Record<string, unknown>[] }).results;
       let systemConfig: Record<string, unknown> = {};
@@ -171,7 +162,9 @@ export const ConfigProvider = ({
   }, [request]);
 
   useEffect(() => {
-    if ((error as { response?: { status?: number } })?.response?.status === 401) {
+    if (
+      (error as { response?: { status?: number } })?.response?.status === 401
+    ) {
       logout();
     }
   }, [error, logout]);

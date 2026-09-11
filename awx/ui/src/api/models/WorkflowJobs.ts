@@ -1,7 +1,7 @@
+import type { QSParams } from 'util/qs';
 import Base from '../Base';
 import RunnableMixin from '../mixins/Runnable.mixin';
 import type { Http } from '../Base';
-import type { QSParams } from 'util/qs';
 
 class WorkflowJobs extends RunnableMixin(Base) {
   constructor(http?: Http) {

@@ -1,0 +1,94 @@
+import React from 'react';
+import { useLingui } from '@lingui/react/macro';
+import { useField } from 'formik';
+import {
+  DatePicker,
+  isValidDate,
+  yyyyMMddFormat,
+  TimePicker,
+  FormGroup,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+} from '@patternfly/react-core';
+import styled from 'styled-components';
+import { required, validateTime, combine } from 'util/validators';
+
+const DateTimeGroup = styled.span`
+  display: flex;
+`;
+export interface DateTimePickerProps {
+  dateFieldName: Record<string, unknown>;
+  timeFieldName: Record<string, unknown>;
+  label: React.ReactNode;
+  [key: string]: unknown;
+}
+
+function DateTimePicker({
+  dateFieldName,
+  timeFieldName,
+  label,
+}: DateTimePickerProps) {
+  const { t } = useLingui();
+  const [dateField, dateMeta, dateHelpers] = useField({
+    name: dateFieldName,
+    validate: combine([required(null), isValidDate]),
+  });
+  const [timeField, timeMeta, timeHelpers] = useField({
+    name: timeFieldName,
+    validate: combine([required(null), validateTime()]),
+  });
+
+  const onDateChange = (_: unknown, dateString: unknown, date: unknown) => {
+    dateHelpers.setTouched();
+    if (isValidDate(date) && dateString === yyyyMMddFormat(date)) {
+      dateHelpers.setValue(dateString);
+    }
+  };
+
+  return (
+    <FormGroup
+      fieldId={`schedule-${label}`}
+      data-cy={`schedule-${label}`}
+      isRequired
+      label={label}
+    >
+      <DateTimeGroup>
+        <DatePicker
+          aria-label={
+            dateFieldName.startsWith('start') ? t`Start date` : t`End date`
+          }
+          {...dateField}
+          value={dateField.value.split('T')[0]}
+          onChange={onDateChange}
+        />
+        <TimePicker
+          placeholder="hh:mm AM/PM"
+          stepMinutes={15}
+          aria-label={
+            timeFieldName.startsWith('start') ? t`Start time` : t`End time`
+          }
+          time={timeField.value}
+          {...timeField}
+          onChange={(_, time) => timeHelpers.setValue(time)}
+        />
+      </DateTimeGroup>
+      {dateMeta.touched && dateMeta.error && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">{dateMeta.error}</HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
+      {timeMeta.touched && timeMeta.error && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">{timeMeta.error}</HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
+    </FormGroup>
+  );
+}
+
+export default DateTimePicker;

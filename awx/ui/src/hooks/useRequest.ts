@@ -25,6 +25,16 @@ export interface UseRequest<T, Args extends unknown[]> {
   setValue: React.Dispatch<React.SetStateAction<T>>;
 }
 
+// Two signatures rather than one: with an initial value the result is never
+// undefined, and every caller that destructures it straight away relies on
+// that. Without one it starts undefined and callers have to say so.
+export default function useRequest<T, Args extends unknown[] = unknown[]>(
+  makeRequest: (...args: Args) => Promise<T>,
+  initialValue: T
+): UseRequest<T, Args>;
+export default function useRequest<T, Args extends unknown[] = unknown[]>(
+  makeRequest: (...args: Args) => Promise<T>
+): UseRequest<T | undefined, Args>;
 export default function useRequest<T, Args extends unknown[] = unknown[]>(
   makeRequest: (...args: Args) => Promise<T>,
   initialValue?: T

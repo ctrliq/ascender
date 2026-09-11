@@ -1,0 +1,176 @@
+import type { ApiEntity, Inventory, Paginated, Untyped } from 'types/api';
+import React, { useCallback, useEffect, useState, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router';
+
+import { useLingui } from '@lingui/react/macro';
+
+import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
+
+import useRequest, { useDismissableError } from 'hooks/useRequest';
+import { InventoriesAPI, CredentialTypesAPI } from 'api';
+
+import { KebabifiedContext } from 'contexts/Kebabified';
+import AlertModal from '../AlertModal';
+import ErrorDetail from '../ErrorDetail';
+import AdHocCommandsWizard from './AdHocCommandsWizard';
+import ContentError from '../ContentError';
+import type { AdHocItem } from './types';
+
+export interface AdHocCommandsProps {
+  adHocItems: AdHocItem[];
+  hasListItems: boolean;
+  onLaunchLoading: (...args: Untyped[]) => void;
+  moduleOptions: Untyped;
+  [key: string]: unknown;
+}
+
+function AdHocCommands({
+  adHocItems,
+  hasListItems,
+  onLaunchLoading,
+  moduleOptions,
+}: AdHocCommandsProps) {
+  const { t } = useLingui();
+  const navigate = useNavigate();
+  const { id } = useParams();
+
+  const [isWizardOpen, setIsWizardOpen] = useState(false);
+  const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
+
+  useEffect(() => {
+    if (isKebabified) {
+      onKebabModalChange?.(isWizardOpen);
+    }
+  }, [isKebabified, isWizardOpen, onKebabModalChange]);
+
+  const {
+    result: { credentialTypeId, organizationId },
+    request: fetchData,
+    error: fetchError,
+  } = useRequest(
+    useCallback(async () => {
+      const [{ data }, cred] = await Promise.all([
+        InventoriesAPI.readDetail<Inventory>(id as string),
+        CredentialTypesAPI.read<Paginated<ApiEntity>>({ namespace: 'ssh' }),
+      ]);
+      return {
+        credentialTypeId: cred.data.results[0]?.id ?? null,
+        organizationId: data.organization ?? null,
+      };
+    }, [id]),
+    { credentialTypeId: null, organizationId: null }
+  );
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const {
+    isLoading: isLaunchLoading,
+    error: launchError,
+    request: launchAdHocCommands,
+  } = useRequest(
+    useCallback(
+      async (values) => {
+        const { data } = await InventoriesAPI.launchAdHocCommands(id, values);
+        navigate(`/jobs/command/${data.id}/output`);
+      },
+
+      [id, navigate]
+    )
+  );
+
+  const { error, dismissError } = useDismissableError(
+    launchError || fetchError
+  );
+
+  const handleSubmit = async (values: Record<string, unknown>) => {
+    const {
+      credentials,
+      credential_passwords: { become_password, ssh_password, ssh_key_unlock },
+      execution_environment,
+      ...remainingValues
+    } = values;
+    const newCredential = credentials[0].id;
+
+    const manipulatedValues = {
+      credential: newCredential,
+      become_password,
+      ssh_password,
+      ssh_key_unlock,
+      execution_environment: execution_environment[0]?.id,
+      ...remainingValues,
+    };
+    await launchAdHocCommands(manipulatedValues);
+  };
+  useEffect(
+    () => onLaunchLoading(isLaunchLoading),
+    [isLaunchLoading, onLaunchLoading]
+  );
+
+  if (error && isWizardOpen) {
+    return (
+      <AlertModal
+        isOpen={error}
+        variant="error"
+        title={t`Error!`}
+        onClose={() => {
+          dismissError();
+          setIsWizardOpen(false);
+        }}
+      >
+        {launchError ? (
+          <>
+            {t`Failed to launch job.`}
+            <ErrorDetail error={error} />
+          </>
+        ) : (
+          <ContentError error={error} />
+        )}
+      </AlertModal>
+    );
+  }
+  return (
+    // render buttons for drop down and for toolbar
+    // if modal is open render the modal
+    <>
+      <Tooltip content={t`Run ad hoc command`}>
+        {isKebabified ? (
+          <DropdownItem
+            key="cancel-job"
+            isDisabled={!hasListItems}
+            component="button"
+            aria-label={t`Run Command`}
+            onClick={() => setIsWizardOpen(true)}
+            ouiaId="run-command-dropdown-item"
+          >
+            {t`Run Command`}
+          </DropdownItem>
+        ) : (
+          <Button
+            ouiaId="run-command-button"
+            variant="secondary"
+            aria-label={t`Run Command`}
+            onClick={() => setIsWizardOpen(true)}
+            isDisabled={!hasListItems}
+          >
+            {t`Run Command`}
+          </Button>
+        )}
+      </Tooltip>
+
+      {isWizardOpen && (
+        <AdHocCommandsWizard
+          adHocItems={adHocItems}
+          organizationId={organizationId}
+          moduleOptions={moduleOptions}
+          credentialTypeId={credentialTypeId}
+          onCloseWizard={() => setIsWizardOpen(false)}
+          onLaunch={handleSubmit}
+          onDismissError={() => dismissError()}
+        />
+      )}
+    </>
+  );
+}
+
+export default AdHocCommands;

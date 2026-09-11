@@ -10,7 +10,7 @@ export type ValidationError = string | undefined;
 /** A single field validator, as the factories below produce. */
 export type Validator<V = unknown> = (value: V) => ValidationError;
 
-export function required(message?: string): Validator {
+export function required(message?: string | null): Validator {
   const errorMessage = message || t`This field must not be blank`;
   return (value: unknown) => {
     if (typeof value === 'string' && !value.trim()) {
@@ -50,7 +50,7 @@ export function validateTime(): Validator<string> {
   };
 }
 
-export function maxLength(max: number, message?: string): Validator<string> {
+export function maxLength(max: number): Validator<string> {
   return (value: string) => {
     if (value.trim().length > max) {
       return t`This field must not exceed ${max} characters`;
@@ -59,7 +59,7 @@ export function maxLength(max: number, message?: string): Validator<string> {
   };
 }
 
-export function minLength(min: number, message?: string): Validator<string> {
+export function minLength(min: number): Validator<string> {
   return (value: string) => {
     if (value.trim().length < min) {
       return t`This field must be at least ${min} characters`;
@@ -68,11 +68,7 @@ export function minLength(min: number, message?: string): Validator<string> {
   };
 }
 
-export function minMaxValue(
-  min: number,
-  max: number,
-  message?: string
-): Validator<number> {
+export function minMaxValue(min: number, max: number): Validator<number> {
   return (value: number) => {
     if (!Number.isFinite(min) && value > max) {
       return t`This field must be a number and have a value less than ${max}`;
@@ -181,10 +177,10 @@ export function url(): Validator<string> {
   };
 }
 
-export function combine(
-  validators: (Validator | null | undefined)[]
-): Validator {
-  return (value: unknown) => {
+export function combine<V = unknown>(
+  validators: (Validator<V> | null | undefined)[]
+): Validator<V> {
+  return (value: V) => {
     for (let i = 0; i < validators.length; i++) {
       const validate = validators[i];
       const error = validate ? validate(value) : null;

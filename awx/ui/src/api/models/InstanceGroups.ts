@@ -1,6 +1,6 @@
+import type { QSParams } from 'util/qs';
 import Base from '../Base';
 import type { Http } from '../Base';
-import type { QSParams } from 'util/qs';
 
 class InstanceGroups extends Base {
   constructor(http?: Http) {
@@ -15,13 +15,19 @@ class InstanceGroups extends Base {
     this.readJobs = this.readJobs.bind(this);
   }
 
-  associateInstance(instanceGroupId: number | string, instanceId: number | string) {
+  associateInstance(
+    instanceGroupId: number | string,
+    instanceId: number | string
+  ) {
     return this.http.post(`${this.baseUrl}${instanceGroupId}/instances/`, {
       id: instanceId,
     });
   }
 
-  disassociateInstance(instanceGroupId: number | string, instanceId: number | string) {
+  disassociateInstance(
+    instanceGroupId: number | string,
+    instanceId: number | string
+  ) {
     return this.http.post(`${this.baseUrl}${instanceGroupId}/instances/`, {
       id: instanceId,
       disassociate: true,

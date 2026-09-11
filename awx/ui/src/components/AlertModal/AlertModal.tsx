@@ -1,3 +1,4 @@
+import type { Untyped } from 'types/api';
 import React from 'react';
 import { Title } from '@patternfly/react-core';
 import { Modal } from '@patternfly/react-core/deprecated';
@@ -29,8 +30,9 @@ const Header = styled.div`
 export type AlertVariant = 'danger' | 'error' | 'info' | 'success' | 'warning';
 
 export interface AlertModalProps {
-  isOpen?: boolean | null;
-  title?: React.ReactNode;
+  // Coerced below, so any truthy value a caller holds, an error among them.
+  isOpen?: unknown;
+  title?: Untyped;
   label?: string;
   variant?: AlertVariant;
   children?: React.ReactNode;
@@ -41,7 +43,7 @@ export interface AlertModalProps {
 }
 
 function AlertModal({
-  isOpen = null,
+  isOpen,
   title,
   label,
   variant,

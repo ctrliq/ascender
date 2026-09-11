@@ -1,0 +1,275 @@
+import type { Untyped } from 'types/api';
+import React from 'react';
+import { useLingui } from '@lingui/react/macro';
+import { useField } from 'formik';
+import {
+  Form,
+  FormGroup,
+  Switch,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+} from '@patternfly/react-core';
+import styled from 'styled-components';
+import LabelSelect from '../../LabelSelect';
+import FormField from '../../FormField';
+import { TagMultiSelect } from '../../MultiSelect';
+import AnsibleSelect from '../../AnsibleSelect';
+import { VariablesField } from '../../CodeEditor';
+import Popover from '../../Popover';
+import { VerbositySelectField } from '../../VerbositySelectField';
+import jobHelpText from '../../../screens/Job/Job.helptext';
+import workflowHelpText from '../../../screens/Template/shared/WorkflowJobTemplate.helptext';
+import type { HelpTextSource, LaunchConfig } from '../types';
+
+const FieldHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: var(--pf-v6-c-form__label--PaddingBottom);
+
+  label {
+    --pf-v6-c-form__label--PaddingBottom: 0px;
+  }
+`;
+
+export interface OtherPromptsStepProps {
+  launchConfig: LaunchConfig;
+  variablesMode: Untyped;
+  onVarModeChange: (...args: Untyped[]) => void;
+  [key: string]: unknown;
+}
+
+function OtherPromptsStep({
+  launchConfig,
+  variablesMode,
+  onVarModeChange,
+}: OtherPromptsStepProps) {
+  const { t } = useLingui();
+  // The two modules export different keys, which is what HelpTextSource is
+  // open for; a field reads the one it needs and the other form never renders.
+  const helpTextSource: HelpTextSource = launchConfig.job_template_data
+    ? jobHelpText()
+    : workflowHelpText();
+  return (
+    <div data-cy="other-prompts">
+      <Form
+        onSubmit={(e) => {
+          e.preventDefault();
+        }}
+      >
+        {launchConfig.ask_job_type_on_launch && (
+          <JobTypeField helpTextSource={helpTextSource} />
+        )}
+        {launchConfig.ask_scm_branch_on_launch && (
+          <FormField
+            id="prompt-scm-branch"
+            name="scm_branch"
+            label={t`Source Control Branch`}
+            tooltip={helpTextSource.sourceControlBranch}
+          />
+        )}
+        {launchConfig.ask_labels_on_launch && (
+          <LabelsField helpTextSource={helpTextSource} />
+        )}
+        {launchConfig.ask_forks_on_launch && (
+          <FormField
+            id="prompt-forks"
+            name="forks"
+            label={t`Forks`}
+            type="number"
+            min="0"
+            tooltip={helpTextSource.forks}
+          />
+        )}
+        {launchConfig.ask_limit_on_launch && (
+          <FormField
+            id="prompt-limit"
+            name="limit"
+            label={t`Limit`}
+            tooltip={helpTextSource.limit}
+          />
+        )}
+        {launchConfig.ask_verbosity_on_launch && (
+          <VerbosityField helpTextSource={helpTextSource} />
+        )}
+        {launchConfig.ask_job_slice_count_on_launch && (
+          <FormField
+            id="prompt-job-slicing"
+            name="job_slice_count"
+            label={t`Job Slicing`}
+            type="number"
+            min="1"
+            tooltip={helpTextSource.jobSlicing}
+          />
+        )}
+        {launchConfig.ask_timeout_on_launch && (
+          <FormField
+            id="prompt-timeout"
+            name="timeout"
+            label={t`Timeout`}
+            type="number"
+            min="0"
+            tooltip={helpTextSource.timeout}
+          />
+        )}
+        {launchConfig.ask_diff_mode_on_launch && <ShowChangesToggle />}
+        {launchConfig.ask_tags_on_launch && (
+          <TagField
+            id="prompt-job-tags"
+            name="job_tags"
+            label={t`Job Tags`}
+            aria-label={t`Job Tags`}
+            tooltip={helpTextSource.jobTags}
+          />
+        )}
+        {launchConfig.ask_skip_tags_on_launch && (
+          <TagField
+            id="prompt-skip-tags"
+            name="skip_tags"
+            label={t`Skip Tags`}
+            aria-label={t`Skip Tags`}
+            tooltip={helpTextSource.skipTags}
+          />
+        )}
+        {launchConfig.ask_variables_on_launch && (
+          <VariablesField
+            id="prompt-variables"
+            name="extra_vars"
+            label={t`Variables`}
+            initialMode={variablesMode}
+            onModeChange={onVarModeChange}
+          />
+        )}
+      </Form>
+    </div>
+  );
+}
+
+function JobTypeField({ helpTextSource }: { helpTextSource: HelpTextSource }) {
+  const { t } = useLingui();
+  const [field, , helpers] = useField('job_type');
+  const options = [
+    {
+      value: '',
+      key: '',
+      label: t`Choose a job type`,
+      isDisabled: true,
+    },
+    { value: 'run', key: 'run', label: t`Run`, isDisabled: false },
+    {
+      value: 'check',
+      key: 'check',
+      label: t`Check`,
+      isDisabled: false,
+    },
+  ];
+  return (
+    <FormGroup
+      fieldId="prompt-job-type"
+      label={t`Job Type`}
+      labelHelp={<Popover content={helpTextSource.jobType} />}
+      isRequired
+    >
+      <AnsibleSelect
+        id="prompt-job-type"
+        data={options}
+        {...field}
+        onChange={(event: React.SyntheticEvent, value: unknown) =>
+          helpers.setValue(value)
+        }
+      />
+    </FormGroup>
+  );
+}
+
+function VerbosityField({
+  helpTextSource,
+}: {
+  helpTextSource: HelpTextSource;
+}) {
+  return (
+    <VerbositySelectField
+      fieldId="prompt-verbosity"
+      tooltip={helpTextSource.verbosity}
+    />
+  );
+}
+
+function ShowChangesToggle() {
+  const { t } = useLingui();
+  const [field, , helpers] = useField('diff_mode');
+  return (
+    <FormGroup fieldId="prompt-show-changes">
+      <FieldHeader>
+        {' '}
+        <label className="pf-v6-c-form__label" htmlFor="prompt-show-changes">
+          <span className="pf-v6-c-form__label-text">
+            {t`Show Changes`}
+            <Popover
+              content={t`If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode.`}
+            />
+          </span>
+        </label>
+      </FieldHeader>
+      <Switch
+        aria-label={field.value ? t`On` : t`Off`}
+        id="prompt-show-changes"
+        label={t`On`}
+
+        isChecked={field.value}
+        onChange={helpers.setValue}
+        ouiaId="prompt-show-changes"
+      />
+    </FormGroup>
+  );
+}
+
+/** What each of the small field components below takes. */
+interface PromptFieldProps {
+  id: string;
+  name: string;
+  label: string;
+  tooltip?: React.ReactNode;
+}
+
+function TagField({ id, name, label, tooltip }: PromptFieldProps) {
+  const [field, , helpers] = useField(name);
+  return (
+    <FormGroup
+      fieldId={id}
+      label={label}
+      labelHelp={<Popover content={tooltip} />}
+    >
+      <TagMultiSelect value={field.value} onChange={helpers.setValue} />
+    </FormGroup>
+  );
+}
+
+function LabelsField({ helpTextSource }: { helpTextSource: HelpTextSource }) {
+  const { t } = useLingui();
+  const [field, meta, helpers] = useField('labels');
+
+  return (
+    <FormGroup
+      fieldId="prompt-labels"
+      label={t`Labels`}
+      labelHelp={<Popover content={helpTextSource.labels} />}
+    >
+      <LabelSelect
+        value={field.value}
+        onChange={(labels) => helpers.setValue(labels)}
+        createText={t`Create`}
+        onError={(err) => helpers.setError(err)}
+      />
+      {meta.error && (
+        <FormHelperText>
+          <HelperText>
+            <HelperTextItem variant="error">{meta.error}</HelperTextItem>
+          </HelperText>
+        </FormHelperText>
+      )}
+    </FormGroup>
+  );
+}
+
+export default OtherPromptsStep;

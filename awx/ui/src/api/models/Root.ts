@@ -10,7 +10,11 @@ class Root extends Base {
     this.redirectURL = 'api/v2/config/';
   }
 
-  async login(username: string, password: string, redirect: string = this.redirectURL) {
+  async login(
+    username: string,
+    password: string,
+    redirect: string = this.redirectURL
+  ) {
     const loginUrl = `${this.baseUrl}login/`;
     const un = encodeURIComponent(username);
     const pw = encodeURIComponent(password);

@@ -1,8 +1,8 @@
+import type { QSParams } from 'util/qs';
 import Base from '../Base';
 import NotificationsMixin from '../mixins/Notifications.mixin';
 import InstanceGroupsMixin from '../mixins/InstanceGroups.mixin';
 import type { Http } from '../Base';
-import type { QSParams } from 'util/qs';
 
 class Organizations extends InstanceGroupsMixin(NotificationsMixin(Base)) {
   constructor(http?: Http) {
@@ -53,27 +53,39 @@ class Organizations extends InstanceGroupsMixin(NotificationsMixin(Base)) {
     );
   }
 
-  associateNotificationTemplatesApprovals(resourceId: number | string, notificationId: number | string) {
+  associateNotificationTemplatesApprovals(
+    resourceId: number | string,
+    notificationId: number | string
+  ) {
     return this.http.post(
       `${this.baseUrl}${resourceId}/notification_templates_approvals/`,
       { id: notificationId }
     );
   }
 
-  disassociateNotificationTemplatesApprovals(resourceId: number | string, notificationId: number | string) {
+  disassociateNotificationTemplatesApprovals(
+    resourceId: number | string,
+    notificationId: number | string
+  ) {
     return this.http.post(
       `${this.baseUrl}${resourceId}/notification_templates_approvals/`,
       { id: notificationId, disassociate: true }
     );
   }
 
-  associateGalaxyCredential(resourceId: number | string, credentialId: number | string) {
+  associateGalaxyCredential(
+    resourceId: number | string,
+    credentialId: number | string
+  ) {
     return this.http.post(`${this.baseUrl}${resourceId}/galaxy_credentials/`, {
       id: credentialId,
     });
   }
 
-  disassociateGalaxyCredential(resourceId: number | string, credentialId: number | string) {
+  disassociateGalaxyCredential(
+    resourceId: number | string,
+    credentialId: number | string
+  ) {
     return this.http.post(`${this.baseUrl}${resourceId}/galaxy_credentials/`, {
       id: credentialId,
       disassociate: true,

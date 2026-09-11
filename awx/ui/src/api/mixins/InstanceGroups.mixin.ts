@@ -1,5 +1,6 @@
-import type { BaseConstructor } from '../Base';
 import type { QSParams } from 'util/qs';
+import type { BaseConstructor } from '../Base';
+
 function isEqual(
   array1: { id: number | string }[],
   array2: { id: number | string }[]
@@ -18,13 +19,19 @@ const InstanceGroupsMixin = <T extends BaseConstructor>(parent: T) =>
       });
     }
 
-    associateInstanceGroup(resourceId: number | string, instanceGroupId: number | string) {
+    associateInstanceGroup(
+      resourceId: number | string,
+      instanceGroupId: number | string
+    ) {
       return this.http.post(`${this.baseUrl}${resourceId}/instance_groups/`, {
         id: instanceGroupId,
       });
     }
 
-    disassociateInstanceGroup(resourceId: number | string, instanceGroupId: number | string) {
+    disassociateInstanceGroup(
+      resourceId: number | string,
+      instanceGroupId: number | string
+    ) {
       return this.http.post(`${this.baseUrl}${resourceId}/instance_groups/`, {
         id: instanceGroupId,
         disassociate: true,

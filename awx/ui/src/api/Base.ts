@@ -1,16 +1,17 @@
 // The http transport is defaulted and the base url is not, which reads
 // backwards but is the constructor every model already calls. Renaming it is
 // a change to 40 subclasses, not to this file.
-/* eslint-disable @typescript-eslint/default-param-last */
+
 // These three are still JavaScript. allowJs means their types are inferred
 // rather than declared, which is the point of adopting this a file at a time.
 import { encodeQueryString } from 'util/qs';
 import type { QSParams } from 'util/qs';
 import debounce from 'util/debounce';
+import type { Untyped } from '../types/api';
 import { SESSION_TIMEOUT_KEY } from '../constants';
 
 /** A single API response, in the shape every caller destructures. */
-export interface ApiResponse<T = unknown> {
+export interface ApiResponse<T = Untyped> {
   data: T;
   status: number;
   headers: Record<string, string>;
@@ -29,33 +30,45 @@ export interface RequestConfig extends Partial<Omit<RequestInit, 'headers'>> {
 
 type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE' | 'OPTIONS';
 
+/*
+ * The default response type is Untyped rather than unknown, which is a
+ * migration decision worth stating. unknown is the honest default and would
+ * force all 300 or so call sites to declare what their endpoint returns before
+ * anything compiles. Untyped says the same thing, that the response has not
+ * been described yet, while letting the tree build, and every one of them is
+ * greppable. A call that names its type, read<Paginated<Job>>(), still gets it.
+ */
+
 /**
  * The transport every model talks through. Declared as an interface because
  * the test suite substitutes its own, and typing it is what makes a mock that
  * does not match the real client a build error rather than a runtime surprise.
  */
 export interface Http {
-  get<T = unknown>(url: string, config?: RequestConfig): Promise<ApiResponse<T>>;
-  post<T = unknown>(
+  get<T = Untyped>(
+    url: string,
+    config?: RequestConfig
+  ): Promise<ApiResponse<T>>;
+  post<T = Untyped>(
     url: string,
     data?: unknown,
     config?: RequestConfig
   ): Promise<ApiResponse<T>>;
-  put<T = unknown>(
+  put<T = Untyped>(
     url: string,
     data?: unknown,
     config?: RequestConfig
   ): Promise<ApiResponse<T>>;
-  patch<T = unknown>(
+  patch<T = Untyped>(
     url: string,
     data?: unknown,
     config?: RequestConfig
   ): Promise<ApiResponse<T>>;
-  delete<T = unknown>(
+  delete<T = Untyped>(
     url: string,
     config?: RequestConfig
   ): Promise<ApiResponse<T>>;
-  options<T = unknown>(
+  options<T = Untyped>(
     url: string,
     config?: RequestConfig
   ): Promise<ApiResponse<T>>;
@@ -133,7 +146,7 @@ function buildUrl(url: string, params?: QSParams): string {
   return `${url}${separator}${qs}`;
 }
 
-function makeRequest<T = unknown>(
+function makeRequest<T = Untyped>(
   method: HttpMethod,
   url: string,
   dataOrConfig?: unknown,
@@ -141,7 +154,8 @@ function makeRequest<T = unknown>(
 ): Promise<ApiResponse<T>> {
   const hasBody = ['POST', 'PUT', 'PATCH'].includes(method);
   const body = hasBody ? dataOrConfig : undefined;
-  const reqConfig = (hasBody ? config : dataOrConfig) as RequestConfig | undefined;
+  const reqConfig = (hasBody ? config : dataOrConfig) as
+    RequestConfig | undefined;
   const params = reqConfig?.params;
 
   const fetchUrl = buildUrl(url, params);
@@ -215,42 +229,42 @@ class Base {
 
   // baseURL is optional because almost every subclass calls super(http) and
   // then assigns this.baseUrl itself, which is the pattern all 51 models use.
-  constructor(http: Http = defaultHttp, baseURL: string = '') {
+  constructor(http: Http = defaultHttp, baseURL = '') {
     this.http = http;
     this.baseUrl = baseURL;
   }
 
-  create<T = unknown>(data?: unknown) {
+  create<T = Untyped>(data?: unknown) {
     return this.http.post<T>(this.baseUrl, data);
   }
 
-  destroy<T = unknown>(id: number | string) {
+  destroy<T = Untyped>(id: number | string) {
     return this.http.delete<T>(`${this.baseUrl}${id}/`);
   }
 
-  read<T = unknown>(params?: QSParams) {
+  read<T = Untyped>(params?: QSParams) {
     return this.http.get<T>(this.baseUrl, {
       params,
     });
   }
 
-  readDetail<T = unknown>(id: number | string) {
+  readDetail<T = Untyped>(id: number | string) {
     return this.http.get<T>(`${this.baseUrl}${id}/`);
   }
 
-  readOptions<T = unknown>() {
+  readOptions<T = Untyped>() {
     return this.http.options<T>(this.baseUrl);
   }
 
-  replace<T = unknown>(id: number | string, data?: unknown) {
+  replace<T = Untyped>(id: number | string, data?: unknown) {
     return this.http.put<T>(`${this.baseUrl}${id}/`, data);
   }
 
-  update<T = unknown>(id: number | string, data?: unknown) {
+  update<T = Untyped>(id: number | string, data?: unknown) {
     return this.http.patch<T>(`${this.baseUrl}${id}/`, data);
   }
 
-  copy<T = unknown>(id: number | string, data?: unknown) {
+  copy<T = Untyped>(id: number | string, data?: unknown) {
     return this.http.post<T>(`${this.baseUrl}${id}/copy/`, data);
   }
 }
@@ -264,7 +278,7 @@ class Base {
 // TypeScript only recognises a class as a mixin base when its constructor
 // takes a single rest parameter of exactly any[], and rejects it as TS2545
 // otherwise.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 export type Constructor<T = object> = new (...args: any[]) => T;
 export type BaseConstructor = Constructor<Base>;
 

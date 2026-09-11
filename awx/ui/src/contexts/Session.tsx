@@ -46,9 +46,7 @@ const SESSION_WARNING_DURATION = 10;
  *      one tab will also update the state variable on any other tab
  *      using this hook with the same key and vice-versa.
  */
-function useStorage(
-  key: string
-): [string | null, (val: unknown) => void] {
+function useStorage(key: string): [string | null, (val: unknown) => void] {
   const [storageVal, setStorageVal] = useState<string | null>(
     window.localStorage.getItem(key)
   );

@@ -1,4 +1,5 @@
 import type { BaseConstructor } from '../Base';
+
 const LaunchUpdateMixin = <T extends BaseConstructor>(parent: T) =>
   class extends parent {
     launchUpdate(id: number | string, data: unknown) {

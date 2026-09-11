@@ -1,0 +1,88 @@
+import React from 'react';
+import { useLingui } from '@lingui/react/macro';
+import { useField } from 'formik';
+import styled from 'styled-components';
+import { Alert } from '@patternfly/react-core';
+import InventoryStep from './InventoryStep';
+import StepName from './StepName';
+import type { LaunchConfig, LaunchStep, VisitedSteps } from '../types';
+
+const InventoryAlert = styled(Alert)`
+  margin-bottom: 16px;
+`;
+
+const STEP_ID = 'inventory';
+
+export default function useInventoryStep(
+  launchConfig: LaunchConfig,
+  resource: Record<string, unknown>,
+  visitedSteps: VisitedSteps
+): LaunchStep {
+  const { t } = useLingui();
+  const [, meta, helpers] = useField('inventory');
+  const formError =
+    !resource || resource?.type === 'workflow_job_template'
+      ? false
+      : Object.keys(visitedSteps).includes(STEP_ID) &&
+        meta.touched &&
+        !meta.value;
+
+  return {
+    step: !launchConfig.ask_inventory_on_launch
+      ? null
+      : {
+          id: STEP_ID,
+          name: (
+            <StepName hasErrors={formError} id="inventory-step">
+              {t`Inventory`}
+            </StepName>
+          ),
+          component: (
+            <InventoryStep
+              warningMessage={
+                resource.type === 'workflow_job_template' ? (
+                  <InventoryAlert
+                    ouiaId="InventoryStep-alert"
+                    variant="warning"
+                    isInline
+                    title={t`This inventory is applied to all workflow nodes within this workflow (${resource.name}) that prompt for an inventory.`}
+                  />
+                ) : null
+              }
+            />
+          ),
+          enableNext: true,
+        },
+    initialValues: getInitialValues(launchConfig, resource),
+    isReady: true,
+    contentError: null,
+    hasError: launchConfig.ask_inventory_on_launch && formError,
+    setTouched: (
+      setFieldTouched: (
+        field: string,
+        touched?: boolean,
+        shouldValidate?: boolean
+      ) => void
+    ) => {
+      setFieldTouched('inventory', true, false);
+    },
+    validate: () => {
+      if (meta.touched && !meta.value && resource.type === 'job_template') {
+        helpers.setError(t`An inventory must be selected`);
+      }
+    },
+  };
+}
+
+function getInitialValues(
+  launchConfig: LaunchConfig,
+  resource: Record<string, unknown>
+) {
+  if (!launchConfig.ask_inventory_on_launch) {
+    return {};
+  }
+
+  return {
+    inventory: resource?.summary_fields?.inventory || null,
+  };
+}

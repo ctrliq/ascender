@@ -56,23 +56,20 @@ async function buildPendoOptionsRole(
   options: PendoOptions,
   config: PendoConfig
 ): Promise<PendoOptions> {
-  try {
-    if (config.me.is_superuser) {
-      options.visitor.role = 'admin';
+  // No try/catch: this used to wrap whatever it caught in new Error(error),
+  // which stringified one Error into the message of another and lost the
+  // original stack. Letting it propagate is what that wrapper was for.
+  if (config.me.is_superuser) {
+    options.visitor.role = 'admin';
+  } else {
+    const { data } = await UsersAPI.readAdminOfOrganizations(config.me.id);
+    if ((data as { count: number }).count > 0) {
+      options.visitor.role = 'orgadmin';
     } else {
-      const { data } = await UsersAPI.readAdminOfOrganizations(config.me.id);
-      if ((data as { count: number }).count > 0) {
-        options.visitor.role = 'orgadmin';
-      } else {
-        options.visitor.role = 'user';
-      }
+      options.visitor.role = 'user';
     }
-    return options;
-  } catch (error) {
-    // Rethrow rather than wrapping, which stringified one Error into another
-    // and lost the original stack.
-    throw error;
   }
+  return options;
 }
 
 async function issuePendoIdentity(config: PendoConfig): Promise<void> {

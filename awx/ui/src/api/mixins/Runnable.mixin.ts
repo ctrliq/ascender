@@ -1,5 +1,6 @@
-import type { BaseConstructor } from '../Base';
 import type { QSParams } from 'util/qs';
+import type { BaseConstructor } from '../Base';
+
 const Runnable = <T extends BaseConstructor>(parent: T) =>
   class extends parent {
     jobEventSlug = '/events/';

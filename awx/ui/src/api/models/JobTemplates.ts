@@ -1,10 +1,10 @@
+import type { QSParams } from 'util/qs';
 import Base from '../Base';
 import NotificationsMixin from '../mixins/Notifications.mixin';
 import InstanceGroupsMixin from '../mixins/InstanceGroups.mixin';
 import LabelsMixin from '../mixins/Labels.mixin';
 import SchedulesMixin from '../mixins/Schedules.mixin';
 import type { Http } from '../Base';
-import type { QSParams } from 'util/qs';
 
 class JobTemplates extends SchedulesMixin(
   InstanceGroupsMixin(NotificationsMixin(LabelsMixin(Base)))

@@ -1,9 +1,9 @@
+import type { QSParams } from 'util/qs';
 import Base from '../Base';
 import SchedulesMixin from '../mixins/Schedules.mixin';
 import NotificationsMixin from '../mixins/Notifications.mixin';
 import LabelsMixin from '../mixins/Labels.mixin';
 import type { Http } from '../Base';
-import type { QSParams } from 'util/qs';
 
 class WorkflowJobTemplates extends SchedulesMixin(
   NotificationsMixin(LabelsMixin(Base))
@@ -26,7 +26,11 @@ class WorkflowJobTemplates extends SchedulesMixin(
     return this.http.post(`${this.baseUrl}${id}/webhook_key/`);
   }
 
-  associateLabel(id: number | string, label: { id: number; name: string }, orgId: number | string) {
+  associateLabel(
+    id: number | string,
+    label: { id: number; name: string },
+    orgId: number | string
+  ) {
     return this.http.post(`${this.baseUrl}${id}/labels/`, {
       name: label.name,
       organization: orgId,
@@ -89,7 +93,10 @@ class WorkflowJobTemplates extends SchedulesMixin(
     );
   }
 
-  associateNotificationTemplatesApprovals(resourceId: number | string, notificationId: number | string) {
+  associateNotificationTemplatesApprovals(
+    resourceId: number | string,
+    notificationId: number | string
+  ) {
     return this.http.post(
       `${this.baseUrl}${resourceId}/notification_templates_approvals/`,
       {
@@ -98,7 +105,10 @@ class WorkflowJobTemplates extends SchedulesMixin(
     );
   }
 
-  disassociateNotificationTemplatesApprovals(resourceId: number | string, notificationId: number | string) {
+  disassociateNotificationTemplatesApprovals(
+    resourceId: number | string,
+    notificationId: number | string
+  ) {
     return this.http.post(
       `${this.baseUrl}${resourceId}/notification_templates_approvals/`,
       {

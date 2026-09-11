@@ -10,7 +10,9 @@ class FederatedInventories extends Base {
   async readFederatedInventoryOptions(id: number | string, method: string) {
     const {
       data: { actions },
-    } = await this.http.options<{ actions: Record<string, unknown> }>(`${this.baseUrl}${id}/`);
+    } = await this.http.options<{ actions: Record<string, unknown> }>(
+      `${this.baseUrl}${id}/`
+    );
 
     if (actions[method]) {
       return actions[method];

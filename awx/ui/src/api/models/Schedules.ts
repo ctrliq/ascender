@@ -1,8 +1,8 @@
+import type { QSParams } from 'util/qs';
 import Base from '../Base';
 import InstanceGroupsMixin from '../mixins/InstanceGroups.mixin';
 import LabelsMixin from '../mixins/Labels.mixin';
 import type { Http } from '../Base';
-import type { QSParams } from 'util/qs';
 
 class Schedules extends InstanceGroupsMixin(LabelsMixin(Base)) {
   constructor(http?: Http) {
@@ -20,13 +20,19 @@ class Schedules extends InstanceGroupsMixin(LabelsMixin(Base)) {
     });
   }
 
-  associateCredential(resourceId: number | string, credentialId: number | string) {
+  associateCredential(
+    resourceId: number | string,
+    credentialId: number | string
+  ) {
     return this.http.post(`${this.baseUrl}${resourceId}/credentials/`, {
       id: credentialId,
     });
   }
 
-  disassociateCredential(resourceId: number | string, credentialId: number | string) {
+  disassociateCredential(
+    resourceId: number | string,
+    credentialId: number | string
+  ) {
     return this.http.post(`${this.baseUrl}${resourceId}/credentials/`, {
       id: credentialId,
       disassociate: true,

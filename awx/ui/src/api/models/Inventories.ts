@@ -1,8 +1,8 @@
+import type { QSParams } from 'util/qs';
 import type { ApiEntity, Paginated } from '../../types/api';
 import Base from '../Base';
 import InstanceGroupsMixin from '../mixins/InstanceGroups.mixin';
 import type { Http } from '../Base';
-import type { QSParams } from 'util/qs';
 
 class Inventories extends InstanceGroupsMixin(Base) {
   constructor(http?: Http) {
@@ -96,7 +96,10 @@ class Inventories extends InstanceGroupsMixin(Base) {
     );
   }
 
-  async readSourceDetail(inventoryId: number | string, sourceId: number | string) {
+  async readSourceDetail(
+    inventoryId: number | string,
+    sourceId: number | string
+  ) {
     const {
       data: { results },
     } = await this.http.get<Paginated<ApiEntity>>(
@@ -129,7 +132,11 @@ class Inventories extends InstanceGroupsMixin(Base) {
     );
   }
 
-  associateLabel(id: number | string, label: { id: number; name: string }, orgId: number | string) {
+  associateLabel(
+    id: number | string,
+    label: { id: number; name: string },
+    orgId: number | string
+  ) {
     return this.http.post(`${this.baseUrl}${id}/labels/`, {
       name: label.name,
       organization: orgId,
@@ -149,7 +156,10 @@ class Inventories extends InstanceGroupsMixin(Base) {
     });
   }
 
-  disassociateInventory(id: number | string, inputInventoryId: number | string) {
+  disassociateInventory(
+    id: number | string,
+    inputInventoryId: number | string
+  ) {
     return this.http.post(`${this.baseUrl}${id}/input_inventories/`, {
       id: inputInventoryId,
       disassociate: true,

@@ -15,7 +15,7 @@ const srcPath = fileURLToPath(new URL('../../src', import.meta.url));
 export const srcAliases = [
   {
     // Anchored, so node's own util is still reachable as node:util.
-    find: /^(api|components|contexts|hooks|screens|util)(\/|$)/,
+    find: /^(api|components|contexts|hooks|screens|types|util)(\/|$)/,
     replacement: `${srcPath}/$1$2`,
   },
   { find: /^i18nLoader$/, replacement: `${srcPath}/i18nLoader.js` },

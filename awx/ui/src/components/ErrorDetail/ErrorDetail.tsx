@@ -1,3 +1,4 @@
+import type { DetailedError } from 'types/api';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
@@ -32,16 +33,7 @@ const Expandable = styled(PFExpandable)`
   }
 `;
 
-/** An error as the API layer throws it, with the response attached. */
-export interface DetailedError extends Error {
-  response?: {
-    status?: number;
-    config?: { method?: string; url?: string };
-    data?: unknown;
-  };
-}
-
-function ErrorDetail({ error = null }: { error?: DetailedError | null }) {
+function ErrorDetail({ error = null }: { error?: unknown }) {
   const { t } = useLingui();
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -51,7 +43,9 @@ function ErrorDetail({ error = null }: { error?: DetailedError | null }) {
   if (!error) {
     return null;
   }
-  const { response } = error;
+  // A caught value is unknown in TypeScript, which is what every caller passes
+  // here, so the shape is asserted once rather than at each of them.
+  const { response } = error as DetailedError;
 
   const handleToggle = () => {
     setIsExpanded(!isExpanded);

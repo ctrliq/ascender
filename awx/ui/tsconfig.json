@@ -38,6 +38,8 @@
       "contexts/*": ["./src/contexts/*"],
       "hooks/*": ["./src/hooks/*"],
       "screens/*": ["./src/screens/*"],
+      "types/api": ["./src/types/api.ts"],
+      "types/*": ["./src/types/*"],
       "util/*": ["./src/util/*"],
       "i18nLoader": ["./src/i18nLoader.js"],
       "themeRegistry": ["./src/themeRegistry.js"]
