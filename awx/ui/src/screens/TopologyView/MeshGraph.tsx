@@ -100,7 +100,7 @@ function MeshGraph({
     if (nodes) {
       d3.selectAll('[class*="id-"]')
         .data(nodes)
-        .attr('stroke-dasharray', (d) => (d.enabled ? `1 0` : `5`));
+        .attr('stroke-dasharray', (d: Untyped) => (d.enabled ? `1 0` : `5`));
     }
   }
 
@@ -215,11 +215,11 @@ function MeshGraph({
         .data(links)
         .enter()
         .append('line')
-        .attr('x1', (d) => d.source.x)
-        .attr('y1', (d) => d.source.y)
-        .attr('x2', (d) => d.target.x)
-        .attr('y2', (d) => d.target.y)
-        .attr('marker-end', (d) => {
+        .attr('x1', (d: Untyped) => d.source.x)
+        .attr('y1', (d: Untyped) => d.source.y)
+        .attr('x2', (d: Untyped) => d.target.x)
+        .attr('y2', (d: Untyped) => d.target.y)
+        .attr('marker-end', (d: Untyped) => {
           if (d.link_state === 'adding') {
             return 'url(#end-adding)';
           }
@@ -229,11 +229,11 @@ function MeshGraph({
           return 'url(#end)';
         })
         .attr('class', (_, i) => `link-${i}`)
-        .attr('data-cy', (d) => `${d.source.hostname}-${d.target.hostname}`)
+        .attr('data-cy', (d: Untyped) => `${d.source.hostname}-${d.target.hostname}`)
         .style('fill', 'none')
-        .style('stroke', (d) => renderLinkStatusColor(d.link_state))
+        .style('stroke', (d: Untyped) => renderLinkStatusColor(d.link_state))
         .style('stroke-width', '2px')
-        .style('stroke-dasharray', (d) => renderLinkState(d.link_state))
+        .style('stroke-dasharray', (d: Untyped) => renderLinkState(d.link_state))
         .attr('pointer-events', 'none')
         .on('mouseover', function showPointer() {
           d3.select(this).style('cursor', 'pointer');
@@ -247,7 +247,7 @@ function MeshGraph({
         .data(nodes)
         .enter()
         .append('g')
-        .attr('data-cy', (d) => `node-${d.id}`)
+        .attr('data-cy', (d: Untyped) => `node-${d.id}`)
         .on('mouseenter', function handleNodeHover(_, d) {
           d3.select(this).style('cursor', 'pointer');
           highlightSiblings(d);
@@ -264,20 +264,20 @@ function MeshGraph({
       nodeCircles
         .append('circle')
         .attr('r', DEFAULT_RADIUS)
-        .attr('cx', (d) => d.x)
-        .attr('cy', (d) => d.y)
-        .attr('class', (d) => d.node_type)
-        .attr('class', (d) => `id-${d.id}`)
+        .attr('cx', (d: Untyped) => d.x)
+        .attr('cy', (d: Untyped) => d.y)
+        .attr('class', (d: Untyped) => d.node_type)
+        .attr('class', (d: Untyped) => `id-${d.id}`)
         .attr('fill', DEFAULT_NODE_COLOR)
-        .attr('stroke-dasharray', (d) => (d.enabled ? `1 0` : `5`))
-        .attr('stroke', (d) => renderStateColor(d.node_state));
+        .attr('stroke-dasharray', (d: Untyped) => (d.enabled ? `1 0` : `5`))
+        .attr('stroke', (d: Untyped) => renderStateColor(d.node_state));
 
       // node type labels
       node
         .append('text')
-        .text((d) => renderNodeType(d.node_type))
-        .attr('x', (d) => d.x)
-        .attr('y', (d) => d.y)
+        .text((d: Untyped) => renderNodeType(d.node_type))
+        .attr('x', (d: Untyped) => d.x)
+        .attr('y', (d: Untyped) => d.y)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'central')
         .attr('fill', DEFAULT_NODE_SYMBOL_TEXT_COLOR);
@@ -286,9 +286,9 @@ function MeshGraph({
       const hostNames = node.append('g').attr('class', 'node-state-label');
       hostNames
         .append('text')
-        .attr('x', (d) => d.x)
-        .attr('y', (d) => d.y + 40)
-        .text((d) => renderLabelText(d.node_state, d.hostname))
+        .attr('x', (d: Untyped) => d.x)
+        .attr('y', (d: Untyped) => d.y + 40)
+        .text((d: Untyped) => renderLabelText(d.node_state, d.hostname))
         .attr('class', 'placeholder')
         .attr('fill', 'white')
         .attr('text-anchor', 'middle')
@@ -312,9 +312,9 @@ function MeshGraph({
       svg.selectAll('text.placeholder').remove();
       hostNames
         .append('text')
-        .attr('x', (d) => d.x)
-        .attr('y', (d) => d.y + 38)
-        .text((d) => renderLabelText(d.node_state, d.hostname))
+        .attr('x', (d: Untyped) => d.x)
+        .attr('y', (d: Untyped) => d.y + 38)
+        .text((d: Untyped) => renderLabelText(d.node_state, d.hostname))
         .attr('font-size', DEFAULT_FONT_SIZE)
         .attr('fill', 'black')
         .attr('text-anchor', 'middle');
@@ -330,12 +330,12 @@ function MeshGraph({
           .attr('r', 9)
           .attr('cx', bbox.x)
           .attr('cy', bbox.y)
-          .attr('fill', (d) => renderStateColor(d.node_state));
+          .attr('fill', (d: Untyped) => renderStateColor(d.node_state));
         d3.select(this)
           .append('path')
-          .attr('class', (d) => `icon-${d.node_state}`)
-          .attr('d', (d) => renderLabelIcons(d.node_state))
-          .attr('transform', (d) => renderIconPosition(d.node_state, bbox))
+          .attr('class', (d: Untyped) => `icon-${d.node_state}`)
+          .attr('d', (d: Untyped) => renderLabelIcons(d.node_state))
+          .attr('transform', (d: Untyped) => renderIconPosition(d.node_state, bbox))
           .attr('fill', 'white');
       });
       svg.call(zoom);
@@ -366,9 +366,9 @@ function MeshGraph({
         immediate.forEach((s: Untyped) => {
           svg
             .selectAll(`.link-${s.index}`)
-            .style('stroke', (d) => renderLinkStatusColor(d.link_state))
+            .style('stroke', (d: Untyped) => renderLinkStatusColor(d.link_state))
             .style('stroke-width', '2px')
-            .attr('marker-end', (d) => {
+            .attr('marker-end', (d: Untyped) => {
               if (d.link_state === 'adding') {
                 return 'url(#end-adding)';
               }
@@ -385,7 +385,7 @@ function MeshGraph({
           // toggle rings
           svg
             .select(`circle.id-${n.id}`)
-            .attr('stroke', (d) => renderStateColor(d.node_state))
+            .attr('stroke', (d: Untyped) => renderStateColor(d.node_state))
             .attr('stroke-width', null);
           // show default empty state of tooltip
           setIsNodeSelected(false);
@@ -394,7 +394,7 @@ function MeshGraph({
         }
         svg
           .selectAll('circle')
-          .attr('stroke', (d) => renderStateColor(d.node_state))
+          .attr('stroke', (d: Untyped) => renderStateColor(d.node_state))
           .attr('stroke-width', null);
         svg
           .select(`circle.id-${n.id}`)

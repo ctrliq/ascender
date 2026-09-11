@@ -10,10 +10,10 @@ import ErrorDetail from '../ErrorDetail';
 import AlertModal from '../AlertModal';
 
 export interface InstanceToggleProps {
-  className: string;
+  className?: string;
   fetchInstances: (...args: Untyped[]) => unknown;
   instance: Untyped;
-  onToggle: (...args: Untyped[]) => void;
+  onToggle?: (...args: Untyped[]) => void;
   [key: string]: unknown;
 }
 

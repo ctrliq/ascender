@@ -70,7 +70,8 @@ function DashboardGraph() {
         period: periodSelection,
         job_type: jobTypeSelection,
       });
-      const newData = {};
+      // One entry per day, keyed by the epoch seconds the API returns.
+      const newData: Record<string, Untyped> = {};
       data.jobs.successful.forEach(([dateSecs, count]: Untyped[]) => {
         if (!newData[dateSecs]) {
           newData[dateSecs] = {};
@@ -84,7 +85,9 @@ function DashboardGraph() {
         newData[dateSecs].failed = count;
       });
       const jobData = Object.keys(newData).map((dateSecs) => {
-        const [created] = new Date(dateSecs * 1000).toISOString().split('T');
+        const [created] = new Date(Number(dateSecs) * 1000)
+          .toISOString()
+          .split('T');
         newData[dateSecs].created = created;
         return newData[dateSecs];
       });
@@ -126,7 +129,7 @@ function DashboardGraph() {
                 onClick={() => setIsPeriodDropdownOpen(!isPeriodDropdownOpen)}
                 isExpanded={isPeriodDropdownOpen}
               >
-                {periodLabelMap[periodSelection] || t`Select period`}
+                {periodLabelMap[periodSelection as keyof typeof periodLabelMap] || t`Select period`}
               </MenuToggle>
             )}
           >
@@ -153,7 +156,7 @@ function DashboardGraph() {
                 onClick={() => setIsJobTypeDropdownOpen(!isJobTypeDropdownOpen)}
                 isExpanded={isJobTypeDropdownOpen}
               >
-                {jobTypeLabelMap[jobTypeSelection] || t`Select job type`}
+                {jobTypeLabelMap[jobTypeSelection as keyof typeof jobTypeLabelMap] || t`Select job type`}
               </MenuToggle>
             )}
           >
@@ -184,7 +187,7 @@ function DashboardGraph() {
                 isExpanded={isJobStatusDropdownOpen}
                 style={{ minWidth: '165px' }}
               >
-                {jobStatusLabelMap[jobStatusSelection] || t`Select status`}
+                {jobStatusLabelMap[jobStatusSelection as keyof typeof jobStatusLabelMap] || t`Select status`}
               </MenuToggle>
             )}
           >

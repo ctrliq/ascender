@@ -242,7 +242,7 @@ function Tooltip({
                     variant="link"
                     isInline
                     onClick={redirectToDetailsPage}
-                    dataCy="redirect-to-details-button"
+                    data-cy="redirect-to-details-button"
                   >
                     {instanceDetail.hostname}
                   </PFButton>
@@ -250,13 +250,13 @@ function Tooltip({
               </DescriptionListGroup>
               <DescriptionListGroup>
                 <DescriptionListTerm>{t`Instance status`}</DescriptionListTerm>
-                <DescriptionListDescription dataCy="node-state">
+                <DescriptionListDescription data-cy="node-state">
                   <StatusLabel status={instanceDetail.node_state} />
                 </DescriptionListDescription>
               </DescriptionListGroup>
               <DescriptionListGroup>
                 <DescriptionListTerm>{t`Instance type`}</DescriptionListTerm>
-                <DescriptionListDescription dataCy="node-type">
+                <DescriptionListDescription data-cy="node-type">
                   {instanceDetail.node_type}
                 </DescriptionListDescription>
               </DescriptionListGroup>
@@ -268,7 +268,7 @@ function Tooltip({
                   <DescriptionListDescription>
                     <PFButton
                       icon={<DownloadIcon />}
-                      dataCy="install-bundle-download-button"
+                      data-cy="install-bundle-download-button"
                       aria-label={t`Download Bundle`}
                       component="a"
                       size="sm"
@@ -293,7 +293,7 @@ function Tooltip({
                   <DescriptionListTerm>
                     {t`Instance groups`}
                   </DescriptionListTerm>
-                  <DescriptionListDescription dataCy="instance-groups">
+                  <DescriptionListDescription data-cy="instance-groups">
                     {renderInstanceGroups(instanceGroups.results)}
                   </DescriptionListDescription>
                 </DescriptionListGroup>
@@ -338,7 +338,7 @@ function Tooltip({
                   </DescriptionListGroup>
                   <DescriptionListGroup>
                     <DescriptionListTerm>{t`Capacity`}</DescriptionListTerm>
-                    <DescriptionListDescription dataCy="used-capacity">
+                    <DescriptionListDescription data-cy="used-capacity">
                       {usedCapacity(instanceDetail, t)}
                     </DescriptionListDescription>
                   </DescriptionListGroup>
@@ -357,13 +357,13 @@ function Tooltip({
 
               <DescriptionListGroup>
                 <DescriptionListTerm>{t`Last modified`}</DescriptionListTerm>
-                <DescriptionListDescription dataCy="last-modified">
+                <DescriptionListDescription data-cy="last-modified">
                   {formatDateString(instanceDetail.modified)}
                 </DescriptionListDescription>
               </DescriptionListGroup>
               <DescriptionListGroup>
                 <DescriptionListTerm>{t`Last seen`}</DescriptionListTerm>
-                <DescriptionListDescription dataCy="last-seen">
+                <DescriptionListDescription data-cy="last-seen">
                   {instanceDetail.last_seen
                     ? formatDateString(instanceDetail.last_seen)
                     : `not found`}

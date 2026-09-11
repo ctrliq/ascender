@@ -127,15 +127,15 @@ function LineChart({ id, data, height, pageContext, jobStatus }: LineChartProps)
     const successLine = d3
       .line<ChartPoint>()
       .curve(d3.curveMonotoneX)
-      .x((d) => x(d.DATE))
-      .y((d) => y(d.RAN));
+      .x((d: Untyped) => x(d.DATE))
+      .y((d: Untyped) => y(d.RAN));
 
     const failLine = d3
       .line<ChartPoint>()
-      .defined((d) => typeof d.FAIL === 'number')
+      .defined((d: Untyped) => typeof d.FAIL === 'number')
       .curve(d3.curveMonotoneX)
-      .x((d) => x(d.DATE))
-      .y((d) => y(d.FAIL));
+      .x((d: Untyped) => x(d.DATE))
+      .y((d: Untyped) => y(d.FAIL));
     // Add the Y Axis
     svg
       .append('g')
@@ -265,10 +265,10 @@ function LineChart({ id, data, height, pageContext, jobStatus }: LineChartProps)
         .attr('r', 3)
         .style('stroke', () => colors(1))
         .style('fill', () => colors(1))
-        .attr('cx', (d) => x(d.DATE))
-        .attr('cy', (d) => y(d.RAN))
-        .attr('id', (d) => `success-dot-${dateFormat(d.DATE)}`)
-        .on('mouseover', (event, d) => handleMouseOver(event, d))
+        .attr('cx', (d: Untyped) => x(d.DATE))
+        .attr('cy', (d: Untyped) => y(d.RAN))
+        .attr('id', (d: Untyped) => `success-dot-${dateFormat(d.DATE)}`)
+        .on('mouseover', (event: Untyped, d: Untyped) => handleMouseOver(event, d))
         .on('mousemove', handleMouseMove)
         .on('mouseout', handleMouseOut);
     }
@@ -295,9 +295,9 @@ function LineChart({ id, data, height, pageContext, jobStatus }: LineChartProps)
         .attr('r', 3)
         .style('stroke', () => colors(0))
         .style('fill', () => colors(0))
-        .attr('cx', (d) => x(d.DATE))
-        .attr('cy', (d) => y(d.FAIL))
-        .attr('id', (d) => `fail-dot-${dateFormat(d.DATE)}`)
+        .attr('cx', (d: Untyped) => x(d.DATE))
+        .attr('cy', (d: Untyped) => y(d.FAIL))
+        .attr('id', (d: Untyped) => `fail-dot-${dateFormat(d.DATE)}`)
         .on('mouseover', handleMouseOver)
         .on('mousemove', handleMouseMove)
         .on('mouseout', handleMouseOut);

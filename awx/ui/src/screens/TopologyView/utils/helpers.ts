@@ -19,12 +19,12 @@ export function getHeight(selector: Untyped) {
 }
 
 export function renderStateColor(nodeState: Untyped) {
-  return NODE_STATE_COLOR_KEY[nodeState] ? NODE_STATE_COLOR_KEY[nodeState] : '';
+  return NODE_STATE_COLOR_KEY[nodeState as keyof typeof NODE_STATE_COLOR_KEY] ? NODE_STATE_COLOR_KEY[nodeState as keyof typeof NODE_STATE_COLOR_KEY] : '';
 }
 
 export function renderLinkStatusColor(linkState: Untyped) {
-  return LINK_STATE_COLOR_KEY[linkState]
-    ? LINK_STATE_COLOR_KEY[linkState]
+  return LINK_STATE_COLOR_KEY[linkState as keyof typeof LINK_STATE_COLOR_KEY]
+    ? LINK_STATE_COLOR_KEY[linkState as keyof typeof LINK_STATE_COLOR_KEY]
     : '#ccc';
 }
 
@@ -36,13 +36,13 @@ export function renderLabelText(nodeState: Untyped, name: Untyped) {
 }
 
 export function renderNodeType(nodeType: Untyped) {
-  return NODE_TYPE_SYMBOL_KEY[nodeType] ? NODE_TYPE_SYMBOL_KEY[nodeType] : ``;
+  return NODE_TYPE_SYMBOL_KEY[nodeType as keyof typeof NODE_TYPE_SYMBOL_KEY] ? NODE_TYPE_SYMBOL_KEY[nodeType as keyof typeof NODE_TYPE_SYMBOL_KEY] : ``;
 }
 
 export function renderNodeIcon(selectedNode: Untyped) {
   if (selectedNode) {
     const { node_type: nodeType } = selectedNode;
-    return NODE_TYPE_SYMBOL_KEY[nodeType] ? NODE_TYPE_SYMBOL_KEY[nodeType] : ``;
+    return NODE_TYPE_SYMBOL_KEY[nodeType as keyof typeof NODE_TYPE_SYMBOL_KEY] ? NODE_TYPE_SYMBOL_KEY[nodeType as keyof typeof NODE_TYPE_SYMBOL_KEY] : ``;
   }
   return false;
 }
@@ -58,8 +58,8 @@ export function renderLabelIcons(nodeState: Untyped) {
       provisioning: 'plus',
       deprovisioning: 'minus',
     };
-    return ICONS[nodeLabelIconMapper[nodeState]]
-      ? ICONS[nodeLabelIconMapper[nodeState]]
+    return ICONS[nodeLabelIconMapper[nodeState as keyof typeof ICONS]]
+      ? ICONS[nodeLabelIconMapper[nodeState as keyof typeof ICONS]]
       : ``;
   }
   return false;
@@ -79,7 +79,7 @@ export function renderIconPosition(nodeState: Untyped, bbox: Untyped) {
         bbox.y - 4.5
       }), scale(0.02)`,
     };
-    return iconPositionMapper[nodeState] ? iconPositionMapper[nodeState] : ``;
+    return iconPositionMapper[nodeState as keyof typeof iconPositionMapper] ? iconPositionMapper[nodeState as keyof typeof iconPositionMapper] : ``;
   }
   return false;
 }
@@ -99,7 +99,7 @@ export function renderLinkState(linkState: Untyped) {
     adding: 3,
     removing: 3,
   };
-  return linkPattern[linkState] ? linkPattern[linkState] : null;
+  return linkPattern[linkState as keyof typeof linkPattern] ? linkPattern[linkState as keyof typeof linkPattern] : null;
 }
 // DEBUG TOOLS
 export function getRandomInt(min: Untyped, max: Untyped) {
