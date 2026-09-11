@@ -64,7 +64,7 @@ vi.mock('@patternfly/react-core', async () => {
   };
 
   const el = (tag: Untyped) =>
-    R.forwardRef(function PFStub(props: Untyped, ref: Untyped) {
+    R.forwardRef((props: Untyped, ref: Untyped) => {
       const { children, ...rest } = props;
       return R.createElement(tag, { ...strip(rest), ref }, children);
     });
@@ -73,7 +73,7 @@ vi.mock('@patternfly/react-core', async () => {
     children,
     onStepChange,
     onSave,
-    onClose,
+    onClose: _onClose,
     header,
     footer,
   }: Untyped) {
@@ -166,37 +166,33 @@ vi.mock('@patternfly/react-core', async () => {
 
   const exps = {
     __esModule: true,
-    Button: R.forwardRef(function Btn(
-      { children, isDisabled, ...props }: Untyped,
-      ref: Untyped
-    ) {
-      return R.createElement(
-        'button',
-        {
-          ...strip(props),
-          ref,
-          type: 'button',
-          disabled: isDisabled || false,
-        },
-        children
-      );
-    }),
+    Button: R.forwardRef(
+      ({ children, isDisabled, ...props }: Untyped, ref: Untyped) =>
+        R.createElement(
+          'button',
+          {
+            ...strip(props),
+            ref,
+            type: 'button',
+            disabled: isDisabled || false,
+          },
+          children
+        )
+    ),
     TextInput: el('input'),
     TextArea: el('textarea'),
-    FormSelect: R.forwardRef(function FSel(
-      { children, onChange, ...props }: Untyped,
-      ref: Untyped
-    ) {
-      return R.createElement(
-        'select',
-        {
-          ...strip(props),
-          ref,
-          onChange: (e: Untyped) => onChange?.(e, e.target.value),
-        },
-        children
-      );
-    }),
+    FormSelect: R.forwardRef(
+      ({ children, onChange, ...props }: Untyped, ref: Untyped) =>
+        R.createElement(
+          'select',
+          {
+            ...strip(props),
+            ref,
+            onChange: (e: Untyped) => onChange?.(e, e.target.value),
+          },
+          children
+        )
+    ),
     FormSelectOption: ({ label, children, ...props }: Untyped) =>
       R.createElement('option', strip(props), children || label),
     Switch: (props: Untyped) =>
@@ -252,9 +248,7 @@ vi.mock('@patternfly/react-table', async () => {
       'isStickyHeader',
       'isCompact',
       'variant',
-    ].forEach(
-      (k) => delete props[k] // eslint-disable-line no-param-reassign
-    );
+    ].forEach((k) => delete props[k]);
     Object.entries(props).forEach(([k, v]) => {
       out[k] = v;
     });
@@ -357,6 +351,14 @@ const selectNodeType = (value: Untyped) =>
   });
 const clickFirstResource = () =>
   fireEvent.click(document.querySelector('td#check-action-item-1 input')!);
+
+// Changing the node type refetches the list, and the rows of the previous type
+// stay mounted while it does, so waiting for the checkbox selector alone is
+// satisfied by a row that is about to be replaced: the click then lands on a
+// detached input and the selection never happens. Waiting for a row of the
+// type just chosen is what says the new list is there.
+const waitForResource = (name: string) =>
+  waitFor(() => expect(screen.getByText(name)).toBeInTheDocument());
 
 // SelectableCard does not forward its id to the DOM; the cards are
 // role="button" elements distinguished by their bold label text.
@@ -691,11 +693,7 @@ describe('NodeModal', () => {
       expect(document.querySelector('#nodeResource-select')).toBeInTheDocument()
     );
     selectNodeType('project');
-    await waitFor(() =>
-      expect(
-        document.querySelector('td#check-action-item-1 input')
-      ).toBeInTheDocument()
-    );
+    await waitForResource('Test Project');
     clickFirstResource();
     await waitFor(() =>
       expect(
@@ -736,11 +734,7 @@ describe('NodeModal', () => {
       expect(document.querySelector('#nodeResource-select')).toBeInTheDocument()
     );
     selectNodeType('inventory_source');
-    await waitFor(() =>
-      expect(
-        document.querySelector('td#check-action-item-1 input')
-      ).toBeInTheDocument()
-    );
+    await waitForResource('Test Inventory Source');
     clickFirstResource();
     await waitFor(() =>
       expect(
@@ -780,11 +774,7 @@ describe('NodeModal', () => {
       expect(document.querySelector('#nodeResource-select')).toBeInTheDocument()
     );
     selectNodeType('workflow_job_template');
-    await waitFor(() =>
-      expect(
-        document.querySelector('td#check-action-item-1 input')
-      ).toBeInTheDocument()
-    );
+    await waitForResource('Test Workflow Job Template');
     clickFirstResource();
     await waitFor(() =>
       expect(
@@ -1084,16 +1074,7 @@ describe('Edit existing node', () => {
       )
     );
     selectNodeType('workflow_job_template');
-    await waitFor(() =>
-      expect(document.querySelector('#nodeResource-select')).toHaveValue(
-        'workflow_job_template'
-      )
-    );
-    await waitFor(() =>
-      expect(
-        document.querySelector('td#check-action-item-1 input')
-      ).toBeInTheDocument()
-    );
+    await waitForResource('Test Workflow Job Template');
     clickFirstResource();
     await waitFor(() =>
       expect(

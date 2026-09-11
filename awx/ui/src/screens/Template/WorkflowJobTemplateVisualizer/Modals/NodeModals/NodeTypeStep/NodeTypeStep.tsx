@@ -1,7 +1,8 @@
+import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
-import { useField } from 'formik';
+import { useFormikContext, useField } from 'formik';
 import {
   Alert,
   Form,
@@ -54,20 +55,16 @@ export interface NodeTypeStepProps {
 function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
   const { t } = useLingui();
   const { isSuperUser } = useUserProfile();
-  const [nodeTypeField, , nodeTypeHelpers] = useField('nodeType');
+  const { setValues } = useFormikContext();
+  const [nodeTypeField] = useField('nodeType');
   const [nodeResourceField, nodeResourceMeta, nodeResourceHelpers] =
     useField('nodeResource');
-  const [, approvalNameMeta, approvalNameHelpers] = useField('approvalName');
-  const [, , approvalDescriptionHelpers] = useField('approvalDescription');
-  const [timeoutMinutesField, , timeoutMinutesHelpers] =
-    useField('timeoutMinutes');
-  const [timeoutSecondsField, , timeoutSecondsHelpers] =
-    useField('timeoutSeconds');
+  const [, approvalNameMeta] = useField('approvalName');
+  const [timeoutMinutesField] = useField('timeoutMinutes');
+  const [timeoutSecondsField] = useField('timeoutSeconds');
   const [convergenceField, , convergenceFieldHelpers] = useField('convergence');
-  const [contextTemplateField, , contextTemplateHelpers] =
-    useField('contextTemplate');
-  const [requiredApprovalsField, , requiredApprovalsHelpers] =
-    useField('requiredApprovals');
+  const [contextTemplateField] = useField('contextTemplate');
+  const [requiredApprovalsField] = useField('requiredApprovals');
   const [onTimeoutField, , onTimeoutHelpers] = useField('onTimeout');
 
   const [isConvergenceOpen, setIsConvergenceOpen] = useState(false);
@@ -137,16 +134,23 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
             data={modifiedNodeTypeChoices}
             value={nodeTypeField.value}
             onChange={(e, val) => {
-              nodeTypeHelpers.setValue(val);
-              nodeResourceHelpers.setValue(null);
-              approvalNameHelpers.setValue('');
-              approvalDescriptionHelpers.setValue('');
-              timeoutMinutesHelpers.setValue(0);
-              timeoutSecondsHelpers.setValue(0);
-              contextTemplateHelpers.setValue('');
-              requiredApprovalsHelpers.setValue(1);
-              onTimeoutHelpers.setValue('deny');
-              convergenceFieldHelpers.setValue('any');
+              // One update rather than ten: setting the fields one at a time
+              // leaves renders in between where the type has changed and the
+              // rest have not, and a selection made in that window is undone
+              // by the reset that follows it.
+              setValues((values: Untyped) => ({
+                ...values,
+                nodeType: val,
+                nodeResource: null,
+                approvalName: '',
+                approvalDescription: '',
+                timeoutMinutes: 0,
+                timeoutSeconds: 0,
+                contextTemplate: '',
+                requiredApprovals: 1,
+                onTimeout: 'deny',
+                convergence: 'any',
+              }));
             }}
           />
         </div>
