@@ -44,7 +44,8 @@ const LabelsMixin = <T extends BaseConstructor>(parent: T) =>
     associateLabel(
       id: number | string,
       label: { name: string },
-      orgId: number | string
+      /** Null where the caller has no organization to put the label under. */
+      orgId: number | string | null
     ) {
       return this.http.post(`${this.baseUrl}${id}/labels/`, {
         name: label.name,

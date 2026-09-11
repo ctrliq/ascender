@@ -1,5 +1,44 @@
-import type { Untyped } from 'types/api';
+import type {
+  AnyUnifiedJobTemplate,
+  SummaryFieldRef,
+  Untyped,
+} from 'types/api';
 import type { NodePositions } from './WorkflowUtils';
+
+/**
+ * The prompt overrides a node carries into its run.
+ *
+ * Which of them a node has is decided by what its template asks for, so every
+ * field is optional, and the index signature keeps the rest reachable.
+ */
+/**
+ * The template a node runs, as far as the visualizer has it.
+ *
+ * The related endpoints the node view modal reads are attached here too, since
+ * it puts what it fetched back onto the node.
+ */
+export type NodeTemplate = Partial<AnyUnifiedJobTemplate> & {
+  instance_groups?: SummaryFieldRef[];
+  unified_job_type?: string;
+  /** An approval node's own settings, which no other node type has. */
+  context_template?: string;
+  required_approvals?: number;
+  on_timeout?: string;
+};
+
+export interface PromptValues {
+  credentials?: SummaryFieldRef[];
+  /** What the node modal added to and removed from the template's defaults. */
+  addedCredentials?: SummaryFieldRef[];
+  removedCredentials?: SummaryFieldRef[];
+  labels?: (SummaryFieldRef & { name: string })[];
+  instance_groups?: SummaryFieldRef[];
+  inventory?: SummaryFieldRef | null;
+  execution_environment?: SummaryFieldRef | null;
+  /** The survey answers and extra variables, as the prompt collected them. */
+  extra_data?: Record<string, unknown>;
+  [key: string]: unknown;
+}
 
 /** Which nodes each node is reached from, keyed by node id. */
 export type LinkParentMapping = Record<number, number[]>;
@@ -14,20 +53,21 @@ export interface WorkflowNode {
   id: number;
   originalNodeObject?: ApiWorkflowNode;
   /**
-   * The template this node runs, which the visualiser attaches. Its shape
-   * differs per node type, an approval template least like the rest.
+   * The template this node runs, which the visualiser attaches. It is partial
+   * because the start node carries only a name and an approval node carries
+   * the summary its parent node was listed with.
    */
-  fullUnifiedJobTemplate?: Untyped;
+  fullUnifiedJobTemplate?: NodeTemplate;
   isInvalidLinkTarget?: boolean;
   isDeleted?: boolean;
   isEdited?: boolean;
   linkType?: string;
   linkCondition?: Record<string, unknown>;
   /** The prompt overrides a node carries, shaped by the template it runs. */
-  promptValues?: Untyped;
-  all_parents_must_converge?: Untyped;
-  max_retries?: Untyped;
-  identifier?: Untyped;
+  promptValues?: PromptValues;
+  all_parents_must_converge?: boolean;
+  max_retries?: number;
+  identifier?: string;
   [key: string]: Untyped;
 }
 
@@ -72,12 +112,12 @@ export interface ApiWorkflowNode {
 
 /** What UPDATE_NODE carries: the values the node edit modal collected. */
 export interface EditedWorkflowNode {
-  nodeResource?: Record<string, unknown>;
+  nodeResource?: NodeTemplate;
   launchConfig?: unknown;
-  promptValues?: unknown;
-  all_parents_must_converge?: unknown;
-  max_retries?: unknown;
-  identifier?: Untyped;
+  promptValues?: PromptValues;
+  all_parents_must_converge?: boolean;
+  max_retries?: number;
+  identifier?: string;
 }
 
 /**
@@ -91,11 +131,8 @@ export interface NewWorkflowNode extends EditedWorkflowNode {
 
 /** What REFRESH_NODE carries: the fields a re-read of the node can replace. */
 export interface RefreshedWorkflowNode {
-  /**
-   * The template this node runs, which the visualiser attaches. Its shape
-   * differs per node type, an approval template least like the rest.
-   */
-  fullUnifiedJobTemplate?: Untyped;
+  /** The template this node runs, refreshed with what it was missing. */
+  fullUnifiedJobTemplate?: NodeTemplate;
   originalNodeCredentials?: unknown;
 }
 

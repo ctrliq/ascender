@@ -1,8 +1,9 @@
 import type {
+  NodeTemplate,
+  PromptValues,
   WorkflowAction,
   WorkflowStateWith,
 } from 'components/Workflow/workflowReducer';
-import type { Untyped } from 'types/api';
 import React, { useContext, useEffect, useCallback } from 'react';
 import { Button } from '@patternfly/react-core';
 import { Modal } from '@patternfly/react-core/deprecated';
@@ -73,14 +74,15 @@ function NodeViewModal({ readOnly }: NodeViewModalProps) {
     request: fetchRelatedData,
   } = useRequest(
     useCallback(async () => {
-      const related: Record<string, Untyped> = {};
+      const related: NodeTemplate = {};
+      const templateId = fullUnifiedJobTemplate?.id as number;
       if (
         nodeType === 'job_template' &&
-        !fullUnifiedJobTemplate.instance_groups
+        !fullUnifiedJobTemplate?.instance_groups
       ) {
         const {
           data: { results = [] },
-        } = await JobTemplatesAPI.readInstanceGroups(fullUnifiedJobTemplate.id);
+        } = await JobTemplatesAPI.readInstanceGroups(templateId);
         related.instance_groups = results;
       }
 
@@ -88,11 +90,10 @@ function NodeViewModal({ readOnly }: NodeViewModalProps) {
         fullUnifiedJobTemplate?.related?.webhook_receiver &&
         !fullUnifiedJobTemplate.webhook_key
       ) {
-        let webhook_key = null;
-        if (nodeAPI) {
-          const { data } = await nodeAPI.readWebhookKey(
-            fullUnifiedJobTemplate.id
-          );
+        let webhook_key;
+        // Only job and workflow job templates have a webhook key to read.
+        if (nodeAPI && 'readWebhookKey' in nodeAPI) {
+          const { data } = await nodeAPI.readWebhookKey(templateId);
           webhook_key = data.webhook_key;
         }
 
@@ -152,7 +153,7 @@ function NodeViewModal({ readOnly }: NodeViewModalProps) {
       </p>
     );
   } else {
-    let overrides: Record<string, Untyped> = {};
+    let overrides: PromptValues = {};
 
     if (promptValues) {
       overrides = promptValues;
@@ -231,7 +232,7 @@ function NodeViewModal({ readOnly }: NodeViewModalProps) {
       }
     }
 
-    let nodeUpdatedConvergence: Record<string, Untyped> = {};
+    let nodeUpdatedConvergence: Record<string, unknown> = {};
 
     if (
       nodeToView?.all_parents_must_converge !== undefined &&

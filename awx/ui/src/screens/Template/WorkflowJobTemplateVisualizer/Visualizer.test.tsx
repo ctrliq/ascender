@@ -1,5 +1,9 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Organization, Paginated, WorkflowJobTemplate } from 'types/api';
+import type {
+  ApiWorkflowNode,
+  WorkflowState,
+} from 'components/Workflow/workflowReducer';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import {
@@ -21,6 +25,14 @@ const realWorkflowReducer = (
 ).default;
 
 vi.mock('../../../api');
+
+/** The svg geometry jsdom does not implement, which the graph reads. */
+interface SvgGeometryStubs {
+  height?: { baseVal: { value: number } };
+  width?: { baseVal: { value: number } };
+  getBBox?: () => { x: number; y: number; width: number; height: number };
+  getBoundingClientRect?: () => DOMRect;
+}
 
 const startNode = {
   id: 1,
@@ -49,7 +61,7 @@ const template = {
       copy: true,
     },
   },
-};
+} as unknown as WorkflowJobTemplate;
 
 const mockWorkflowNodes = [
   {
@@ -124,29 +136,30 @@ describe('Visualizer', () => {
         count: 1,
         results: [{ id: 1, name: 'Default' }],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<Paginated<Organization>>);
     vi.mocked(WorkflowJobTemplatesAPI.readNodes).mockResolvedValue({
       data: {
         count: mockWorkflowNodes.length,
         results: mockWorkflowNodes,
       },
-    } as unknown as ApiResponse<Untyped>);
-    (window.SVGElement.prototype as Untyped).height = {
+    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
+    (window.SVGElement.prototype as unknown as SvgGeometryStubs).height = {
       baseVal: {
         value: 100,
       },
     };
-    (window.SVGElement.prototype as Untyped).width = {
+    (window.SVGElement.prototype as unknown as SvgGeometryStubs).width = {
       baseVal: {
         value: 100,
       },
     };
-    (window.SVGElement.prototype as Untyped).getBBox = () => ({
-      x: 0,
-      y: 0,
-      width: 500,
-      height: 250,
-    });
+    (window.SVGElement.prototype as unknown as SvgGeometryStubs).getBBox =
+      () => ({
+        x: 0,
+        y: 0,
+        width: 500,
+        height: 250,
+      });
 
     window.SVGElement.prototype.getBoundingClientRect = () => ({
       x: 303,
@@ -162,10 +175,11 @@ describe('Visualizer', () => {
   });
 
   afterAll(() => {
-    delete (window.SVGElement.prototype as Untyped).getBBox;
-    delete (window.SVGElement.prototype as Untyped).getBoundingClientRect;
-    delete (window.SVGElement.prototype as Untyped).height;
-    delete (window.SVGElement.prototype as Untyped).width;
+    delete (window.SVGElement.prototype as unknown as SvgGeometryStubs).getBBox;
+    delete (window.SVGElement.prototype as unknown as SvgGeometryStubs)
+      .getBoundingClientRect;
+    delete (window.SVGElement.prototype as unknown as SvgGeometryStubs).height;
+    delete (window.SVGElement.prototype as unknown as SvgGeometryStubs).width;
   });
 
   beforeEach(() => {
@@ -245,7 +259,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
     const { container } = renderVisualizer();
     await waitFor(() =>
       expect(
@@ -257,7 +271,7 @@ describe('Visualizer', () => {
   });
 
   test('Error shown when saving fails due to node add error', async () => {
-    vi.mocked(workflowReducer).mockImplementation((state: Untyped) => {
+    vi.mocked(workflowReducer).mockImplementation((state: WorkflowState) => {
       const newState = {
         ...state,
         isLoading: false,
@@ -285,7 +299,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
     vi.mocked(WorkflowJobTemplatesAPI.createNode).mockRejectedValue(
       new Error()
     );
@@ -308,7 +322,7 @@ describe('Visualizer', () => {
   });
 
   test('Error shown when saving fails due to node edit error', async () => {
-    vi.mocked(workflowReducer).mockImplementation((state: Untyped) => {
+    vi.mocked(workflowReducer).mockImplementation((state: WorkflowState) => {
       const newState = {
         ...state,
         isLoading: false,
@@ -327,6 +341,9 @@ describe('Visualizer', () => {
             },
             originalNodeObject: {
               id: 9000,
+              success_nodes: [],
+              failure_nodes: [],
+              always_nodes: [],
             },
           },
         ];
@@ -340,7 +357,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
     vi.mocked(WorkflowJobTemplateNodesAPI.update).mockRejectedValue(
       new Error()
     );
@@ -363,7 +380,7 @@ describe('Visualizer', () => {
   });
 
   test('Error shown when saving fails due to approval template add error', async () => {
-    vi.mocked(workflowReducer).mockImplementation((state: Untyped) => {
+    vi.mocked(workflowReducer).mockImplementation((state: WorkflowState) => {
       const newState = {
         ...state,
         isLoading: false,
@@ -392,12 +409,12 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
     vi.mocked(WorkflowJobTemplatesAPI.createNode).mockResolvedValue({
       data: {
         id: 9001,
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
     vi.mocked(
       WorkflowJobTemplateNodesAPI.createApprovalTemplate
     ).mockRejectedValue(new Error());
@@ -423,7 +440,7 @@ describe('Visualizer', () => {
   });
 
   test('Error shown when saving fails due to approval template edit error', async () => {
-    vi.mocked(workflowReducer).mockImplementation((state: Untyped) => {
+    vi.mocked(workflowReducer).mockImplementation((state: WorkflowState) => {
       const newState = {
         ...state,
         isLoading: false,
@@ -443,6 +460,9 @@ describe('Visualizer', () => {
             },
             originalNodeObject: {
               id: 9000,
+              success_nodes: [],
+              failure_nodes: [],
+              always_nodes: [],
               summary_fields: {
                 unified_job_template: {
                   unified_job_type: 'workflow_approval',
@@ -461,7 +481,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
     vi.mocked(WorkflowJobTemplateNodesAPI.update).mockResolvedValue({
       data: {
         id: 9000,
@@ -472,7 +492,7 @@ describe('Visualizer', () => {
           },
         },
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
     vi.mocked(WorkflowApprovalTemplatesAPI.update).mockRejectedValue(
       new Error()
     );
@@ -496,7 +516,7 @@ describe('Visualizer', () => {
   });
 
   test('Error shown when saving fails due to node disassociate failure', async () => {
-    vi.mocked(workflowReducer).mockImplementation((state: Untyped) => {
+    vi.mocked(workflowReducer).mockImplementation((state: WorkflowState) => {
       const newState = {
         ...state,
         isLoading: false,
@@ -573,7 +593,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
     vi.mocked(
       WorkflowJobTemplateNodesAPI.disassociateFailuresNode
     ).mockRejectedValue(new Error());
@@ -598,7 +618,7 @@ describe('Visualizer', () => {
   });
 
   test('Error shown when saving fails due to node associate failure', async () => {
-    vi.mocked(workflowReducer).mockImplementation((state: Untyped) => {
+    vi.mocked(workflowReducer).mockImplementation((state: WorkflowState) => {
       const newState = {
         ...state,
         isLoading: false,
@@ -675,7 +695,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
     vi.mocked(
       WorkflowJobTemplateNodesAPI.disassociateFailuresNode
     ).mockResolvedValue(undefined as unknown as ApiResponse<any>);
@@ -703,7 +723,7 @@ describe('Visualizer', () => {
   });
 
   test('Error shown when saving fails due to credential disassociate failure', async () => {
-    vi.mocked(workflowReducer).mockImplementation((state: Untyped) => {
+    vi.mocked(workflowReducer).mockImplementation((state: WorkflowState) => {
       const newState = {
         ...state,
         isLoading: false,
@@ -765,7 +785,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
     vi.mocked(WorkflowJobTemplateNodesAPI.update).mockResolvedValue(
       undefined as unknown as ApiResponse<unknown>
     );
@@ -793,7 +813,7 @@ describe('Visualizer', () => {
   });
 
   test('Error shown when saving fails due to credential associate failure', async () => {
-    vi.mocked(workflowReducer).mockImplementation((state: Untyped) => {
+    vi.mocked(workflowReducer).mockImplementation((state: WorkflowState) => {
       const newState = {
         ...state,
         isLoading: false,
@@ -855,7 +875,7 @@ describe('Visualizer', () => {
         count: 0,
         results: [],
       },
-    } as unknown as ApiResponse<Untyped>);
+    } as unknown as ApiResponse<Paginated<ApiWorkflowNode>>);
     vi.mocked(WorkflowJobTemplateNodesAPI.update).mockResolvedValue(
       undefined as unknown as ApiResponse<unknown>
     );

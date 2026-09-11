@@ -108,6 +108,9 @@ function VisualizerNode({
       const [, nodeAPI] = getNodeType(
         node.originalNodeObject.summary_fields.unified_job_template
       );
+      if (!nodeAPI) {
+        return null;
+      }
       try {
         const { data: fullUnifiedJobTemplate } = await nodeAPI.readDetail(
           node.originalNodeObject.unified_job_template

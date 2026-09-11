@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import {
   InventorySourcesAPI,
   JobTemplatesAPI,
@@ -6,13 +5,21 @@ import {
   SystemJobTemplatesAPI,
   WorkflowJobTemplatesAPI,
 } from 'api';
-import type { WorkflowNode } from '../../../../components/Workflow/workflowReducer';
+import type { NodeTemplate } from '../../../../components/Workflow/workflowReducer';
+
+/** The model a node's template is read through, where it has one. */
+export type NodeModel =
+  | typeof JobTemplatesAPI
+  | typeof ProjectsAPI
+  | typeof InventorySourcesAPI
+  | typeof WorkflowJobTemplatesAPI
+  | typeof SystemJobTemplatesAPI;
 
 // A tuple rather than an array, so a caller destructuring it gets the name
 // and the model rather than a union of the two.
 export default function getNodeType(
-  node: WorkflowNode
-): [string | null, Untyped] {
+  node?: NodeTemplate
+): [string | null, NodeModel | null] {
   const ujtType = node?.type || node?.unified_job_type;
   switch (ujtType) {
     case 'job_template':

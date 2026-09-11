@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef, WorkflowJobTemplate } from 'types/api';
 import React, { useCallback, useEffect, useReducer } from 'react';
 import { useNavigate } from 'react-router';
 import styled from 'styled-components';
@@ -38,7 +38,26 @@ import {
 import VisualizerGraph from './VisualizerGraph';
 import VisualizerStartScreen from './VisualizerStartScreen';
 import VisualizerToolbar from './VisualizerToolbar';
-import type { WorkflowNode } from '../../../components/Workflow/workflowReducer';
+import type {
+  ApiWorkflowNode,
+  NodeTemplate,
+  WorkflowLink,
+  WorkflowNode,
+} from '../../../components/Workflow/workflowReducer';
+import type { NodePositions } from '../../../components/Workflow/WorkflowUtils';
+
+/** The links out of one node, by the node each one reaches. */
+type LinkMap = Record<number, Record<number, string | undefined>>;
+
+/**
+ * A credential as a node carries it: the summary the api lists it with, plus
+ * the vault id that tells two vault credentials apart.
+ */
+type NodeCredential = SummaryFieldRef & {
+  credential_type?: number;
+  vault_id?: string | null;
+  inputs?: { vault_id?: string | null };
+};
 
 const CenteredContent = styled.div`
   align-items: center;
@@ -73,12 +92,12 @@ const replaceIdentifier = (node: WorkflowNode) => {
   return false;
 };
 const getAggregatedCredentials = (
-  originalNodeOverride: Untyped[] = [],
-  templateDefaultCredentials = []
+  originalNodeOverride: NodeCredential[] = [],
+  templateDefaultCredentials: NodeCredential[] = []
 ) => {
-  let theArray: Untyped[] = [];
+  let theArray: NodeCredential[] = [];
 
-  const isCredentialOverriden = (templateDefaultCred: Untyped) => {
+  const isCredentialOverriden = (templateDefaultCred: NodeCredential) => {
     let credentialHasOverride = false;
     originalNodeOverride.forEach((overrideCred) => {
       if (
@@ -112,10 +131,10 @@ const getAggregatedCredentials = (
 };
 
 const fetchWorkflowNodes = async (
-  templateId: Untyped,
+  templateId: number,
   pageNo = 1,
-  workflowNodes = []
-) => {
+  workflowNodes: ApiWorkflowNode[] = []
+): Promise<ApiWorkflowNode[]> => {
   const { data } = await WorkflowJobTemplatesAPI.readNodes(templateId, {
     page_size: 200,
     page: pageNo,
@@ -131,7 +150,7 @@ const fetchWorkflowNodes = async (
 };
 
 export interface VisualizerProps {
-  template: Untyped;
+  template: WorkflowJobTemplate;
   [key: string]: unknown;
 }
 
@@ -190,39 +209,40 @@ function Visualizer({ template }: VisualizerProps) {
     }
   };
 
-  const associateNodes = (newLinks: Untyped, originalLinkMap: Untyped) => {
-    const associateNodeRequests: Untyped[] = [];
-    newLinks.forEach((link: Untyped) => {
+  const associateNodes = (
+    newLinks: WorkflowLink[],
+    originalLinkMap: Record<number, ApiWorkflowNode>
+  ) => {
+    const associateNodeRequests: Promise<unknown>[] = [];
+    newLinks.forEach((link) => {
+      // Every node the links run between has been posted by now, so both ends
+      // have a real id to associate with.
+      const sourceId = originalLinkMap[link.source.id]?.id;
+      const targetId = originalLinkMap[link.target.id]?.id;
+      if (sourceId === undefined || targetId === undefined) {
+        return;
+      }
       switch (link.linkType) {
         case 'success':
           associateNodeRequests.push(
-            WorkflowJobTemplateNodesAPI.associateSuccessNode(
-              originalLinkMap[link.source.id].id,
-              originalLinkMap[link.target.id].id
-            )
+            WorkflowJobTemplateNodesAPI.associateSuccessNode(sourceId, targetId)
           );
           break;
         case 'failure':
           associateNodeRequests.push(
-            WorkflowJobTemplateNodesAPI.associateFailureNode(
-              originalLinkMap[link.source.id].id,
-              originalLinkMap[link.target.id].id
-            )
+            WorkflowJobTemplateNodesAPI.associateFailureNode(sourceId, targetId)
           );
           break;
         case 'always':
           associateNodeRequests.push(
-            WorkflowJobTemplateNodesAPI.associateAlwaysNode(
-              originalLinkMap[link.source.id].id,
-              originalLinkMap[link.target.id].id
-            )
+            WorkflowJobTemplateNodesAPI.associateAlwaysNode(sourceId, targetId)
           );
           break;
         case 'condition':
           associateNodeRequests.push(
             WorkflowJobTemplateNodesAPI.associateConditionNode(
-              originalLinkMap[link.source.id].id,
-              originalLinkMap[link.target.id].id,
+              sourceId,
+              targetId,
               link.linkCondition
             )
           );
@@ -235,19 +255,17 @@ function Visualizer({ template }: VisualizerProps) {
   };
 
   const disassociateNodes = (
-    originalLinkMap: Untyped,
-    deletedNodeIds: Untyped,
-    linkMap: Untyped
+    originalLinkMap: Record<number, ApiWorkflowNode>,
+    deletedNodeIds: number[],
+    linkMap: LinkMap
   ) => {
-    const disassociateNodeRequests: Untyped[] = [];
-    Object.keys(originalLinkMap).forEach((key) => {
-      const node = originalLinkMap[key];
-      node.success_nodes.forEach((successNodeId: Untyped) => {
+    const disassociateNodeRequests: Promise<unknown>[] = [];
+    Object.values(originalLinkMap).forEach((node) => {
+      const nodeLinks = linkMap[node.id];
+      node.success_nodes.forEach((successNodeId) => {
         if (
           !deletedNodeIds.includes(successNodeId) &&
-          (!linkMap[node.id] ||
-            !linkMap[node.id][successNodeId] ||
-            linkMap[node.id][successNodeId] !== 'success')
+          nodeLinks?.[successNodeId] !== 'success'
         ) {
           disassociateNodeRequests.push(
             WorkflowJobTemplateNodesAPI.disassociateSuccessNode(
@@ -257,12 +275,10 @@ function Visualizer({ template }: VisualizerProps) {
           );
         }
       });
-      node.failure_nodes.forEach((failureNodeId: Untyped) => {
+      node.failure_nodes.forEach((failureNodeId) => {
         if (
           !deletedNodeIds.includes(failureNodeId) &&
-          (!linkMap[node.id] ||
-            !linkMap[node.id][failureNodeId] ||
-            linkMap[node.id][failureNodeId] !== 'failure')
+          nodeLinks?.[failureNodeId] !== 'failure'
         ) {
           disassociateNodeRequests.push(
             WorkflowJobTemplateNodesAPI.disassociateFailuresNode(
@@ -272,12 +288,10 @@ function Visualizer({ template }: VisualizerProps) {
           );
         }
       });
-      node.always_nodes.forEach((alwaysNodeId: Untyped) => {
+      node.always_nodes.forEach((alwaysNodeId) => {
         if (
           !deletedNodeIds.includes(alwaysNodeId) &&
-          (!linkMap[node.id] ||
-            !linkMap[node.id][alwaysNodeId] ||
-            linkMap[node.id][alwaysNodeId] !== 'always')
+          nodeLinks?.[alwaysNodeId] !== 'always'
         ) {
           disassociateNodeRequests.push(
             WorkflowJobTemplateNodesAPI.disassociateAlwaysNode(
@@ -287,12 +301,10 @@ function Visualizer({ template }: VisualizerProps) {
           );
         }
       });
-      (node.condition_nodes || []).forEach((conditionNodeId: Untyped) => {
+      (node.condition_nodes || []).forEach((conditionNodeId) => {
         if (
           !deletedNodeIds.includes(conditionNodeId) &&
-          (!linkMap[node.id] ||
-            !linkMap[node.id][conditionNodeId] ||
-            linkMap[node.id][conditionNodeId] !== 'condition')
+          nodeLinks?.[conditionNodeId] !== 'condition'
         ) {
           disassociateNodeRequests.push(
             WorkflowJobTemplateNodesAPI.disassociateConditionNode(
@@ -336,12 +348,12 @@ function Visualizer({ template }: VisualizerProps) {
   // Update positions of nodes/links
   useEffect(() => {
     if (nodes) {
-      const newNodePositions: Record<string, Untyped> = {};
+      const newNodePositions: NodePositions = {};
       const nonDeletedNodes = nodes.filter((node) => !node.isDeleted);
       const g = layoutGraph(nonDeletedNodes, links);
 
       g.nodes().forEach((node) => {
-        newNodePositions[node] = g.node(node);
+        newNodePositions[Number(node)] = g.node(node);
       });
 
       dispatch({ type: 'SET_NODE_POSITIONS', value: newNodePositions });
@@ -354,61 +366,50 @@ function Visualizer({ template }: VisualizerProps) {
     request: saveVisualizer,
   } = useRequest(
     useCallback(async () => {
-      const nodeRequests: Untyped[] = [];
-      const approvalTemplateRequests: Untyped[] = [];
-      const originalLinkMap: Record<string, Untyped> = {};
-      const deletedNodeIds: Untyped[] = [];
-      const associateCredentialRequests: Untyped[] = [];
-      const disassociateCredentialRequests: Untyped[] = [];
-      const associateLabelRequests: Untyped[] = [];
-      const disassociateLabelRequests: Untyped[] = [];
-      const instanceGroupRequests: Untyped[] = [];
+      const nodeRequests: Promise<unknown>[] = [];
+      const approvalTemplateRequests: Promise<unknown>[] = [];
+      const originalLinkMap: Record<number, ApiWorkflowNode> = {};
+      const deletedNodeIds: number[] = [];
+      const associateCredentialRequests: Promise<unknown>[] = [];
+      const disassociateCredentialRequests: Promise<unknown>[] = [];
+      const associateLabelRequests: Promise<unknown>[] = [];
+      const disassociateLabelRequests: Promise<unknown>[] = [];
+      const instanceGroupRequests: Promise<unknown>[] = [];
 
       const generateLinkMapAndNewLinks = () => {
-        const linkMap: Record<string, Untyped> = {};
-        const newLinks: Untyped[] = [];
+        const linkMap: LinkMap = {};
+        const newLinks: WorkflowLink[] = [];
 
         links.forEach((link) => {
-          if (link.source.id !== 1) {
-            const realLinkSourceId = originalLinkMap[link.source.id].id;
-            const realLinkTargetId = originalLinkMap[link.target.id].id;
-            if (!linkMap[realLinkSourceId]) {
-              linkMap[realLinkSourceId] = {};
-            }
-            linkMap[realLinkSourceId][realLinkTargetId] = link.linkType;
+          // Node 1 is the synthetic START node, which has no api node behind
+          // it; every other link runs between two nodes the map holds.
+          const sourceNode = originalLinkMap[link.source.id];
+          const targetNode = originalLinkMap[link.target.id];
+          if (link.source.id !== 1 && sourceNode && targetNode) {
+            const realLinkSourceId = sourceNode.id;
+            const realLinkTargetId = targetNode.id;
+            const sourceLinks = linkMap[realLinkSourceId] ?? {};
+            linkMap[realLinkSourceId] = sourceLinks;
+            sourceLinks[realLinkTargetId] = link.linkType;
             switch (link.linkType) {
               case 'success':
-                if (
-                  !originalLinkMap[link.source.id].success_nodes.includes(
-                    originalLinkMap[link.target.id].id
-                  )
-                ) {
+                if (!sourceNode.success_nodes.includes(realLinkTargetId)) {
                   newLinks.push(link);
                 }
                 break;
               case 'failure':
-                if (
-                  !originalLinkMap[link.source.id].failure_nodes.includes(
-                    originalLinkMap[link.target.id].id
-                  )
-                ) {
+                if (!sourceNode.failure_nodes.includes(realLinkTargetId)) {
                   newLinks.push(link);
                 }
                 break;
               case 'always':
-                if (
-                  !originalLinkMap[link.source.id].always_nodes.includes(
-                    originalLinkMap[link.target.id].id
-                  )
-                ) {
+                if (!sourceNode.always_nodes.includes(realLinkTargetId)) {
                   newLinks.push(link);
                 }
                 break;
               case 'condition': {
-                const sourceNode = originalLinkMap[link.source.id];
                 const existingEdge = (sourceNode.condition_edges || []).find(
-                  (edge: Untyped) =>
-                    edge.id === originalLinkMap[link.target.id].id
+                  (edge) => edge.id === realLinkTargetId
                 );
                 // re-posting an existing condition link updates its condition,
                 // so also treat links whose condition changed as new
@@ -430,7 +431,7 @@ function Visualizer({ template }: VisualizerProps) {
           }
         });
 
-        return [linkMap, newLinks];
+        return { linkMap, newLinks };
       };
 
       nodes.forEach((node) => {
@@ -462,9 +463,10 @@ function Visualizer({ template }: VisualizerProps) {
             WorkflowJobTemplateNodesAPI.destroy(node.originalNodeObject.id)
           );
         } else if (!node.isDeleted && !node.originalNodeObject) {
-          if (
-            node.fullUnifiedJobTemplate.type === 'workflow_approval_template'
-          ) {
+          // A node that has not been posted yet is one the modal just made, so
+          // it carries the template it was made from.
+          const nodeTemplate = node.fullUnifiedJobTemplate as NodeTemplate;
+          if (nodeTemplate.type === 'workflow_approval_template') {
             nodeRequests.push(
               WorkflowJobTemplatesAPI.createNode(template.id, {
                 all_parents_must_converge: node.all_parents_must_converge,
@@ -481,15 +483,12 @@ function Visualizer({ template }: VisualizerProps) {
                 };
                 approvalTemplateRequests.push(
                   WorkflowJobTemplateNodesAPI.createApprovalTemplate(data.id, {
-                    name: node.fullUnifiedJobTemplate.name,
-                    description: node.fullUnifiedJobTemplate.description,
-                    timeout: node.fullUnifiedJobTemplate.timeout,
-                    context_template:
-                      node.fullUnifiedJobTemplate.context_template || '',
-                    required_approvals:
-                      node.fullUnifiedJobTemplate.required_approvals || 1,
-                    on_timeout:
-                      node.fullUnifiedJobTemplate.on_timeout || 'deny',
+                    name: nodeTemplate.name,
+                    description: nodeTemplate.description,
+                    timeout: nodeTemplate.timeout,
+                    context_template: nodeTemplate.context_template || '',
+                    required_approvals: nodeTemplate.required_approvals || 1,
+                    on_timeout: nodeTemplate.on_timeout || 'deny',
                   })
                 );
               })
@@ -501,7 +500,7 @@ function Visualizer({ template }: VisualizerProps) {
                 execution_environment:
                   node.promptValues?.execution_environment?.id || null,
                 inventory: node.promptValues?.inventory?.id || null,
-                unified_job_template: node.fullUnifiedJobTemplate.id,
+                unified_job_template: nodeTemplate.id,
                 all_parents_must_converge: node.all_parents_must_converge,
                 max_retries: node.max_retries || 0,
                 identifier: node.identifier || undefined,
@@ -516,9 +515,9 @@ function Visualizer({ template }: VisualizerProps) {
                   condition_edges: [],
                 };
 
-                if (node.promptValues?.addedCredentials?.length > 0) {
+                if (node.promptValues?.addedCredentials?.length) {
                   node.promptValues.addedCredentials.forEach(
-                    (cred: Untyped) => {
+                    (cred: SummaryFieldRef) => {
                       associateCredentialRequests.push(
                         WorkflowJobTemplateNodesAPI.associateCredentials(
                           data.id,
@@ -529,19 +528,18 @@ function Visualizer({ template }: VisualizerProps) {
                   );
                 }
 
-                if (node.promptValues?.labels?.length > 0) {
-                  node.promptValues.labels.forEach((label: Untyped) => {
+                if (node.promptValues?.labels?.length) {
+                  node.promptValues.labels.forEach((label) => {
                     associateLabelRequests.push(
                       WorkflowJobTemplateNodesAPI.associateLabel(
                         data.id,
                         label,
-                        node.fullUnifiedJobTemplate.organization ||
-                          defaultOrganization
+                        nodeTemplate.organization || defaultOrganization
                       )
                     );
                   });
                 }
-                if (node.promptValues?.instance_groups?.length > 0)
+                if (node.promptValues?.instance_groups?.length)
                   /* eslint-disable no-restricted-syntax */
                   for (const group of node.promptValues.instance_groups) {
                     instanceGroupRequests.push(
@@ -555,9 +553,10 @@ function Visualizer({ template }: VisualizerProps) {
             );
           }
         } else if (node.isEdited) {
-          if (
-            node.fullUnifiedJobTemplate.type === 'workflow_approval_template'
-          ) {
+          // An edited node carries whatever the modal left on it, which is
+          // the template it now runs.
+          const nodeTemplate = node.fullUnifiedJobTemplate as NodeTemplate;
+          if (nodeTemplate.type === 'workflow_approval_template') {
             if (
               node.originalNodeObject?.summary_fields?.unified_job_template
                 ?.unified_job_type === 'workflow_approval'
@@ -578,15 +577,13 @@ function Visualizer({ template }: VisualizerProps) {
                       node.originalNodeObject?.summary_fields
                         ?.unified_job_template?.id,
                       {
-                        name: node.fullUnifiedJobTemplate.name,
-                        description: node.fullUnifiedJobTemplate.description,
-                        timeout: node.fullUnifiedJobTemplate.timeout,
-                        context_template:
-                          node.fullUnifiedJobTemplate.context_template || '',
+                        name: nodeTemplate.name,
+                        description: nodeTemplate.description,
+                        timeout: nodeTemplate.timeout,
+                        context_template: nodeTemplate.context_template || '',
                         required_approvals:
-                          node.fullUnifiedJobTemplate.required_approvals || 1,
-                        on_timeout:
-                          node.fullUnifiedJobTemplate.on_timeout || 'deny',
+                          nodeTemplate.required_approvals || 1,
+                        on_timeout: nodeTemplate.on_timeout || 'deny',
                       }
                     )
                   );
@@ -608,15 +605,13 @@ function Visualizer({ template }: VisualizerProps) {
                     WorkflowJobTemplateNodesAPI.createApprovalTemplate(
                       node.originalNodeObject?.id as number,
                       {
-                        name: node.fullUnifiedJobTemplate.name,
-                        description: node.fullUnifiedJobTemplate.description,
-                        timeout: node.fullUnifiedJobTemplate.timeout,
-                        context_template:
-                          node.fullUnifiedJobTemplate.context_template || '',
+                        name: nodeTemplate.name,
+                        description: nodeTemplate.description,
+                        timeout: nodeTemplate.timeout,
+                        context_template: nodeTemplate.context_template || '',
                         required_approvals:
-                          node.fullUnifiedJobTemplate.required_approvals || 1,
-                        on_timeout:
-                          node.fullUnifiedJobTemplate.on_timeout || 'deny',
+                          nodeTemplate.required_approvals || 1,
+                        on_timeout: nodeTemplate.on_timeout || 'deny',
                       }
                     )
                   );
@@ -632,7 +627,7 @@ function Visualizer({ template }: VisualizerProps) {
                   execution_environment:
                     node.promptValues?.execution_environment?.id || null,
                   inventory: node.promptValues?.inventory?.id || null,
-                  unified_job_template: node.fullUnifiedJobTemplate.id,
+                  unified_job_template: nodeTemplate.id,
                   all_parents_must_converge: node.all_parents_must_converge,
                   max_retries: node.max_retries || 0,
                   ...(replaceIdentifier(node) && {
@@ -682,8 +677,7 @@ function Visualizer({ template }: VisualizerProps) {
                       WorkflowJobTemplateNodesAPI.associateLabel(
                         node.originalNodeObject?.id as number,
                         label as unknown as { name: string },
-                        node.fullUnifiedJobTemplate.organization ||
-                          defaultOrganization
+                        nodeTemplate.organization || defaultOrganization
                       )
                     );
                   });
@@ -718,7 +712,7 @@ function Visualizer({ template }: VisualizerProps) {
       // Creating approval templates needs to happen after the node has been created
       // since we reference the node in the approval template request.
       await Promise.all(approvalTemplateRequests);
-      const [linkMap, newLinks] = generateLinkMapAndNewLinks();
+      const { linkMap, newLinks } = generateLinkMapAndNewLinks();
       await Promise.all(
         disassociateNodes(originalLinkMap, deletedNodeIds, linkMap)
       );
