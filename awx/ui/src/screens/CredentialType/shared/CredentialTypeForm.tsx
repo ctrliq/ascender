@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { CredentialType, Untyped } from 'types/api';
 import React from 'react';
 import { Formik } from 'formik';
 
@@ -52,7 +52,7 @@ function CredentialTypeFormFields() {
 }
 
 export interface CredentialTypeFormProps {
-  credentialType?: Untyped;
+  credentialType?: Partial<CredentialType>;
   onSubmit: (...args: Untyped[]) => void;
   onCancel: (...args: Untyped[]) => void;
   submitError?: unknown;

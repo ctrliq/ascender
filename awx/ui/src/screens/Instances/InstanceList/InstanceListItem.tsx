@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Instance, Untyped } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -44,7 +44,7 @@ const SliderForks = styled.div`
 `;
 
 export interface InstanceListItemProps {
-  instance: Untyped;
+  instance: Instance;
   isExpanded?: boolean;
   onExpand?: (...args: Untyped[]) => void;
   isSelected?: boolean;
@@ -69,7 +69,7 @@ function InstanceListItem({
     computeForks(
       instance.mem_capacity,
       instance.cpu_capacity,
-      instance.capacity_adjustment
+      Number(instance.capacity_adjustment)
     )
   );
 
@@ -171,7 +171,7 @@ function InstanceListItem({
               </div>
             }
           >
-            <StatusLabel status={instance.node_state} />
+            <StatusLabel status={instance.node_state ?? undefined} />
           </Tooltip>
         </Td>
 
@@ -192,7 +192,7 @@ function InstanceListItem({
                     max={1}
                     min={0}
                     step={0.1}
-                    value={instance.capacity_adjustment}
+                    value={Number(instance.capacity_adjustment)}
                     onChange={(_event, value) => handleChangeValue(value)}
                     isDisabled={!config?.me?.is_superuser || !instance.enabled}
                     data-cy="slider"

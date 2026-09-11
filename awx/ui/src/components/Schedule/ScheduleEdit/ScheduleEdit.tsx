@@ -1,4 +1,8 @@
-import type { SurveyConfig, LaunchConfig , SurveyQuestion  } from 'components/LaunchPrompt/types';
+import type {
+  SurveyConfig,
+  LaunchConfig,
+  SurveyQuestion,
+} from 'components/LaunchPrompt/types';
 import type { Schedule, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';

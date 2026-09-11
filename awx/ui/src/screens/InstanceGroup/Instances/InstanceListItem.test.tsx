@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Untyped, Instance } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 
@@ -59,7 +59,7 @@ function renderItem(props = {}) {
       <tbody>
         <InstanceListItem
           rowIndex={0}
-          instance={instance[0]}
+          instance={instance[0] as unknown as Instance}
           isSelected={false}
           onSelect={() => {}}
           fetchInstances={() => {}}
@@ -113,14 +113,14 @@ describe('<InstanceListItem/>', () => {
     // capacity_adjustment 0.40 -> floor(1 + 23*0.4) = 10 forks
     expect(forks()).toContain('10 forks');
 
-    // jsdom has no layout, so a keyboard ArrowRight on the PF slider snaps the
-    // value to the max (1.0) -> floor(1 + 23*1) = 24 forks. The handler also
-    // pushes the rounded capacity_adjustment to the API.
+    // ArrowRight steps the slider up by one 0.1 step: 0.40 -> 0.50 ->
+    // floor(1 + 23*0.5) = 12 forks. The handler also pushes the rounded
+    // capacity_adjustment to the API.
     screen.getByRole('slider').focus();
     await user.keyboard('{ArrowRight}');
-    await waitFor(() => expect(forks()).toContain('24 forks'));
+    await waitFor(() => expect(forks()).toContain('12 forks'));
     expect(InstancesAPI.update).toHaveBeenCalledWith(1, {
-      capacity_adjustment: 1,
+      capacity_adjustment: 0.5,
     });
   });
 

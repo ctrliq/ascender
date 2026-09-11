@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { CredentialType } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 
 import { Link, useNavigate } from 'react-router';
@@ -20,7 +20,7 @@ import ErrorDetail from 'components/ErrorDetail';
 import { useLingui } from '@lingui/react/macro';
 
 export interface CredentialTypeDetailsProps {
-  credentialType: Untyped;
+  credentialType: CredentialType;
   [key: string]: unknown;
 }
 

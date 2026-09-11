@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { CredentialType, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -8,7 +8,7 @@ import { parseVariableField } from 'util/yaml';
 import CredentialTypeForm from '../shared/CredentialTypeForm';
 
 export interface CredentialTypeEditProps {
-  credentialType: Untyped;
+  credentialType: CredentialType;
   [key: string]: unknown;
 }
 

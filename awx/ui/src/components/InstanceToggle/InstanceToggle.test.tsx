@@ -3,6 +3,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { InstancesAPI } from 'api';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import InstanceToggle from './InstanceToggle';
+import type { Instance } from '../../types/api';
 
 vi.mock('../../api');
 
@@ -31,7 +32,7 @@ const mockInstance = {
   mem_capacity: 1,
   enabled: true,
   managed_by_policy: true,
-};
+} as unknown as Instance;
 
 // The PF Switch renders a hidden checkbox input with the aria-label
 const getToggle = () => screen.getByRole('switch', { name: 'Toggle instance' });
@@ -66,10 +67,12 @@ describe('<InstanceToggle>', () => {
   test('should show toggle on', async () => {
     const { user } = renderWithContexts(
       <InstanceToggle
-        instance={{
-          ...mockInstance,
-          enabled: false,
-        }}
+        instance={
+          {
+            ...mockInstance,
+            enabled: false,
+          } as unknown as Instance
+        }
         onToggle={onToggle}
         fetchInstances={fetchInstances}
       />

@@ -4,6 +4,7 @@ import { WorkflowApprovalsAPI } from 'api';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowDenyButton from './WorkflowDenyButton';
 import mockData from '../data.workflowApprovals.json';
+import type { WorkflowApproval } from '../../../types/api';
 
 vi.mock('api');
 
@@ -17,7 +18,7 @@ describe('<WorkflowDenyButton/>', () => {
   test('initially render successfully', () => {
     renderWithContexts(
       <WorkflowDenyButton
-        workflowApproval={mockApprovalList[0]}
+        workflowApproval={mockApprovalList[0] as unknown as WorkflowApproval}
         onHandleToast={vi.fn()}
       />
     );
@@ -27,7 +28,7 @@ describe('<WorkflowDenyButton/>', () => {
   test('should be disabled', () => {
     renderWithContexts(
       <WorkflowDenyButton
-        workflowApproval={mockApprovalList[2]}
+        workflowApproval={mockApprovalList[2] as unknown as WorkflowApproval}
         onHandleToast={vi.fn()}
       />
     );
@@ -41,7 +42,7 @@ describe('<WorkflowDenyButton/>', () => {
   test('should handle deny', async () => {
     const { user } = renderWithContexts(
       <WorkflowDenyButton
-        workflowApproval={mockApprovalList[0]}
+        workflowApproval={mockApprovalList[0] as unknown as WorkflowApproval}
         onHandleToast={vi.fn()}
       />
     );
@@ -66,7 +67,7 @@ describe('<WorkflowDenyButton/>', () => {
     );
     const { user } = renderWithContexts(
       <WorkflowDenyButton
-        workflowApproval={mockApprovalList[0]}
+        workflowApproval={mockApprovalList[0] as unknown as WorkflowApproval}
         onHandleToast={vi.fn()}
       />
     );

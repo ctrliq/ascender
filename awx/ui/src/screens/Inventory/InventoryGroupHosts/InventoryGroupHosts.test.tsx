@@ -1,3 +1,4 @@
+import type { Group } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -23,7 +24,7 @@ describe('<InventoryGroupHosts />', () => {
       <Routes>
         <Route
           path="/inventories/:inventoryType/:id/groups/:groupId/nested_hosts/*"
-          element={<InventoryGroupHosts />}
+          element={<InventoryGroupHosts inventoryGroup={{ id: 1 } as Group} />}
         />
       </Routes>,
       { context: { router: { history } } }

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { OAuth2Token, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
@@ -103,7 +103,7 @@ export interface UserTokenFormProps {
   handleCancel: () => void;
   handleSubmit: (...args: Untyped[]) => void;
   submitError?: unknown;
-  token?: Untyped;
+  token?: Partial<OAuth2Token>;
   [key: string]: unknown;
 }
 

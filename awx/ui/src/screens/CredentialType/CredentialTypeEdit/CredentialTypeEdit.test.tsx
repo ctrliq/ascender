@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Untyped, CredentialType } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
@@ -41,7 +41,7 @@ const credentialTypeData = {
   },
   created: '2020-06-25T16:52:36.127008Z',
   modified: '2020-06-25T16:52:36.127022Z',
-};
+} as unknown as CredentialType;
 
 const mockUpdateData = {
   name: 'Bar',
@@ -96,8 +96,10 @@ describe('<CredentialTypeEdit>', () => {
     await waitFor(() =>
       expect(CredentialTypesAPI.update).toHaveBeenCalledWith(42, {
         ...mockUpdateData,
-        injectors: JSON.parse(credentialTypeData.injectors),
-        inputs: JSON.parse(credentialTypeData.inputs),
+        injectors: JSON.parse(
+          credentialTypeData.injectors as unknown as string
+        ),
+        inputs: JSON.parse(credentialTypeData.inputs as unknown as string),
       })
     );
     expect(history.location.pathname).toEqual('/credential_types/42/details');

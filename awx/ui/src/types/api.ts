@@ -209,6 +209,41 @@ export type Label = WithNested<Schemas['Label']>;
 export type Schedule = WithNested<Schemas['Schedule']>;
 export type ExecutionEnvironment = WithNested<Schemas['ExecutionEnvironment']>;
 export type InstanceGroup = WithNested<Schemas['InstanceGroup']>;
+export type Group = WithNested<Schemas['Group']>;
+/**
+ * `inputs` and `injectors` are JSONFields, which the schema can only describe
+ * as `unknown`: inputs declares the fields a credential of this type asks for,
+ * injectors what they become when a job runs.
+ */
+export type CredentialType = Omit<
+  WithNested<Schemas['CredentialType']>,
+  'inputs' | 'injectors'
+> & {
+  inputs?: {
+    fields?: Untyped[];
+    required?: string[];
+    /** The fields an external credential type asks for when it is tested. */
+    metadata?: Untyped[];
+  };
+  injectors?: Record<string, unknown>;
+};
+export type InventorySource = WithNested<Schemas['InventorySource']>;
+export type Instance = WithNested<Schemas['Instance']>;
+export type NotificationTemplate = WithNested<Schemas['NotificationTemplate']>;
+export type WorkflowApproval = Omit<
+  WithNested<Schemas['WorkflowApproval']>,
+  'user_has_voted'
+> & {
+  /** Inlined from the approval template this was created from. */
+  timeout?: number;
+  /**
+   * Whether the current user has already approved or denied this one. It is a
+   * SerializerMethodField, which the schema describes as a string.
+   */
+  user_has_voted?: boolean;
+};
+export type OAuth2Application = WithNested<Schemas['OAuth2Application']>;
+export type OAuth2Token = WithNested<Schemas['OAuth2Token']>;
 
 /** The job types, which decide which model and which url a job uses. */
 export type JobType =

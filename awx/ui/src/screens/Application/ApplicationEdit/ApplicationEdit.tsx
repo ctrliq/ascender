@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { OAuth2Application, Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
@@ -8,7 +8,7 @@ import { CardBody } from 'components/Card';
 import ApplicationForm from '../shared/ApplicationForm';
 
 export interface ApplicationEditProps {
-  application: Untyped;
+  application: OAuth2Application;
   authorizationOptions: Untyped;
   clientTypeOptions: Untyped;
   [key: string]: unknown;

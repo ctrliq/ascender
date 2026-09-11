@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { OAuth2Application, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 
@@ -22,7 +22,7 @@ import Popover from 'components/Popover';
 import getApplicationHelpTextStrings from './Application.helptext';
 
 export interface ApplicationFormFieldsProps {
-  application: Untyped;
+  application: OAuth2Application;
   authorizationOptions: Untyped;
   clientTypeOptions: Untyped;
   [key: string]: unknown;

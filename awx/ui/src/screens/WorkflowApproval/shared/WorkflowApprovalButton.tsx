@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { WorkflowApproval, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
@@ -11,7 +11,7 @@ import ErrorDetail from 'components/ErrorDetail';
 
 export interface WorkflowApprovalButtonProps {
   isDetailView?: boolean;
-  workflowApproval: Untyped;
+  workflowApproval: WorkflowApproval;
   onHandleToast: (...args: Untyped[]) => void;
   [key: string]: unknown;
 }

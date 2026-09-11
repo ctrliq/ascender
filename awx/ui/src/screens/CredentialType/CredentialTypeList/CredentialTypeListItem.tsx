@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { CredentialType, Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
@@ -8,7 +8,7 @@ import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 
 export interface CredentialTypeListItemProps {
-  credentialType: Untyped;
+  credentialType: CredentialType;
   detailUrl: string;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
@@ -46,7 +46,7 @@ function CredentialTypeListItem({
       </TdBreakWord>
       <ActionsTd dataLabel={t`Actions`}>
         <ActionItem
-          visible={credentialType.summary_fields.user_capabilities.edit}
+          visible={credentialType.summary_fields.user_capabilities?.edit}
           tooltip={t`Edit credential type`}
         >
           <Button

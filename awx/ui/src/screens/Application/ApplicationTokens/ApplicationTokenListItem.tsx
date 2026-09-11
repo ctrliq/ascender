@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { OAuth2Token, Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
@@ -8,7 +8,7 @@ import { formatDateString } from 'util/dates';
 import { toTitleCase } from 'util/strings';
 
 export interface ApplicationTokenListItemProps {
-  token: Untyped;
+  token: OAuth2Token;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
   detailUrl: string;
@@ -36,7 +36,7 @@ function ApplicationTokenListItem({
       />
       <Td dataLabel={t`Name`}>
         <Link to={detailUrl}>
-          <b>{token.summary_fields.user.username}</b>
+          <b>{token.summary_fields.user?.username}</b>
         </Link>
       </Td>
       <Td dataLabel={t`Scope`}>{toTitleCase(token.scope)}</Td>

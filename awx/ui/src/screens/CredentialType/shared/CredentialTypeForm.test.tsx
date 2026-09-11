@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { CredentialType, Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 
@@ -55,7 +55,7 @@ describe('<CredentialTypeForm/>', () => {
       <CredentialTypeForm
         onCancel={onCancel}
         onSubmit={onSubmit}
-        credentialType={credentialType}
+        credentialType={credentialType as unknown as CredentialType}
       />
     );
   };

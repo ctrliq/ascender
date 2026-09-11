@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, Instance } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 
@@ -86,7 +86,7 @@ function renderItem(props?: Untyped) {
     <table>
       <tbody>
         <InstanceListItem
-          instance={instance[0]}
+          instance={instance[0] as unknown as Instance}
           isSelected={false}
           onSelect={() => {}}
           fetchInstances={() => {}}
@@ -247,7 +247,7 @@ describe('<InstanceListItem/>', () => {
         <tbody>
           <InstanceListItem
             rowIndex={0}
-            instance={instance[1]}
+            instance={instance[1] as unknown as Instance}
             onSelect={() => {}}
             fetchInstances={() => {}}
           />

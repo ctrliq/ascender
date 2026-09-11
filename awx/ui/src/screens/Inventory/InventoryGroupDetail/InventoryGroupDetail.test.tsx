@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Untyped, Group } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
@@ -42,7 +42,9 @@ function renderAt(initialEntry: Untyped, group = inventoryGroup) {
     <Routes>
       <Route
         path="/inventories/:inventoryType/:id/groups/:groupId/details"
-        element={<InventoryGroupDetail inventoryGroup={group} />}
+        element={
+          <InventoryGroupDetail inventoryGroup={group as unknown as Group} />
+        }
       />
       <Route path="*" element={null} />
     </Routes>,

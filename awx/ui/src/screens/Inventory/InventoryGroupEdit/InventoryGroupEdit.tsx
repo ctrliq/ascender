@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Group, Untyped } from 'types/api';
 import React, { useState } from 'react';
 
 import { useNavigate, useParams } from 'react-router';
@@ -7,7 +7,7 @@ import { GroupsAPI } from 'api';
 import InventoryGroupForm from '../shared/InventoryGroupForm';
 
 export interface InventoryGroupEditProps {
-  inventoryGroup: Untyped;
+  inventoryGroup: Group;
   [key: string]: unknown;
 }
 

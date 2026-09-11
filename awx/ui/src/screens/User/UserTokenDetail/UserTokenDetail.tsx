@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { OAuth2Token } from 'types/api';
 import React, { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -15,7 +15,7 @@ import { toTitleCase } from 'util/strings';
 import userHelpTextStrings from '../shared/User.helptext';
 
 export interface UserTokenDetailProps {
-  token: Untyped;
+  token: OAuth2Token;
   [key: string]: unknown;
 }
 

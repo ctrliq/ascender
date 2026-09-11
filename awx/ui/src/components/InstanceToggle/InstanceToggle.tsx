@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Instance, Untyped } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -12,7 +12,7 @@ import AlertModal from '../AlertModal';
 export interface InstanceToggleProps {
   className?: string;
   fetchInstances: (...args: Untyped[]) => unknown;
-  instance: Untyped;
+  instance: Instance;
   onToggle?: (result: Untyped) => void;
   [key: string]: unknown;
 }

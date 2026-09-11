@@ -1,11 +1,11 @@
-import type { Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import InventoryGroupHostAdd from '../InventoryGroupHostAdd';
 import InventoryGroupHostList from './InventoryGroupHostList';
 
 export interface InventoryGroupHostsProps {
-  inventoryGroup?: Untyped;
+  inventoryGroup: Group;
   [key: string]: unknown;
 }
 

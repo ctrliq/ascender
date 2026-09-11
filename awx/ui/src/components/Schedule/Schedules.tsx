@@ -1,4 +1,4 @@
-import type { SurveyConfig, LaunchConfig  } from 'components/LaunchPrompt/types';
+import type { SurveyConfig, LaunchConfig } from 'components/LaunchPrompt/types';
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';

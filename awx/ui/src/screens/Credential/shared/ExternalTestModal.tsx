@@ -1,4 +1,4 @@
-import type { Credential, Untyped } from 'types/api';
+import type { CredentialType, Credential, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -16,7 +16,7 @@ import { CredentialPluginTestAlert } from './CredentialPlugins';
 
 export interface ExternalTestModalProps {
   credential?: Credential | null;
-  credentialType: Untyped;
+  credentialType: CredentialType;
   credentialFormValues: Untyped;
   onClose: () => void;
   [key: string]: unknown;
@@ -37,7 +37,7 @@ function ExternalTestModal({
     useCallback(
       async (values: Untyped) => {
         const payload = {
-          inputs: credentialType.inputs.fields.reduce(
+          inputs: credentialType.inputs?.fields?.reduce(
             (filteredInputs: Untyped, field: Untyped) => {
               filteredInputs[field.id] = credentialFormValues.inputs[field.id];
               return filteredInputs;
@@ -55,7 +55,7 @@ function ExternalTestModal({
       [
         credential,
         credentialType.id,
-        credentialType.inputs.fields,
+        credentialType.inputs?.fields,
         credentialFormValues.inputs,
       ]
     ),
@@ -69,7 +69,7 @@ function ExternalTestModal({
   return (
     <>
       <Formik
-        initialValues={credentialType.inputs.metadata.reduce(
+        initialValues={(credentialType.inputs?.metadata ?? []).reduce(
           (initialValues: Untyped, field: Untyped) => {
             if (field.type === 'string' && field.choices) {
               initialValues[field.id] = field.default || field.choices[0];
@@ -111,58 +111,59 @@ function ExternalTestModal({
           >
             <Form autoComplete="off">
               <FormFullWidthLayout>
-                {credentialType.inputs.metadata.map((field: Untyped) => {
-                  const isRequired = credentialType.inputs?.required.includes(
-                    field.id
-                  );
-                  if (field.type === 'string') {
-                    if (field.choices) {
+                {(credentialType.inputs?.metadata ?? []).map(
+                  (field: Untyped) => {
+                    const isRequired =
+                      credentialType.inputs?.required?.includes(field.id);
+                    if (field.type === 'string') {
+                      if (field.choices) {
+                        return (
+                          <FormGroup
+                            key={field.id}
+                            fieldId={`credential-${field.id}`}
+                            label={field.label}
+                            labelHelp={
+                              field.help_text && (
+                                <Popover content={field.help_text} />
+                              )
+                            }
+                            isRequired={isRequired}
+                          >
+                            <AnsibleSelect
+                              name={field.id}
+                              value={field.default}
+                              id={`credential-${field.id}`}
+                              data={field.choices.map((choice: Untyped) => ({
+                                value: choice,
+                                key: choice,
+                                label: choice,
+                              }))}
+                              onChange={(event, value) => {
+                                setFieldValue(field.id, value);
+                              }}
+                              validate={isRequired ? required(null) : null}
+                            />
+                          </FormGroup>
+                        );
+                      }
+
                       return (
-                        <FormGroup
+                        <FormField
                           key={field.id}
-                          fieldId={`credential-${field.id}`}
+                          id={`credential-${field.id}`}
                           label={field.label}
-                          labelHelp={
-                            field.help_text && (
-                              <Popover content={field.help_text} />
-                            )
-                          }
+                          tooltip={field.help_text}
+                          name={field.id}
+                          type={field.multiline ? 'textarea' : 'text'}
                           isRequired={isRequired}
-                        >
-                          <AnsibleSelect
-                            name={field.id}
-                            value={field.default}
-                            id={`credential-${field.id}`}
-                            data={field.choices.map((choice: Untyped) => ({
-                              value: choice,
-                              key: choice,
-                              label: choice,
-                            }))}
-                            onChange={(event, value) => {
-                              setFieldValue(field.id, value);
-                            }}
-                            validate={isRequired ? required(null) : null}
-                          />
-                        </FormGroup>
+                          validate={isRequired ? required(null) : null}
+                        />
                       );
                     }
 
-                    return (
-                      <FormField
-                        key={field.id}
-                        id={`credential-${field.id}`}
-                        label={field.label}
-                        tooltip={field.help_text}
-                        name={field.id}
-                        type={field.multiline ? 'textarea' : 'text'}
-                        isRequired={isRequired}
-                        validate={isRequired ? required(null) : null}
-                      />
-                    );
+                    return null;
                   }
-
-                  return null;
-                })}
+                )}
               </FormFullWidthLayout>
             </Form>
           </Modal>

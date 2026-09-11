@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Untyped, Group } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -35,7 +35,9 @@ function renderEdit(history: Untyped) {
     <Routes>
       <Route
         path="/inventories/inventory/:id/groups/:groupId/edit/*"
-        element={<InventoryGroupEdit inventoryGroup={{ id: 2 }} />}
+        element={
+          <InventoryGroupEdit inventoryGroup={{ id: 2 } as unknown as Group} />
+        }
       />
       <Route path="*" element={null} />
     </Routes>,

@@ -1,4 +1,4 @@
-import type { Credential, Untyped } from 'types/api';
+import type { Credential, Untyped, CredentialType } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -67,7 +67,7 @@ describe('<ExternalTestModal />', () => {
   test('should display metadata fields correctly', () => {
     renderWithContexts(
       <ExternalTestModal
-        credentialType={credentialType}
+        credentialType={credentialType as unknown as CredentialType}
         credentialFormValues={credentialFormValues}
         onClose={vi.fn()}
       />
@@ -83,7 +83,7 @@ describe('<ExternalTestModal />', () => {
     const { user } = renderWithContexts(
       <ExternalTestModal
         credential={credential}
-        credentialType={credentialType}
+        credentialType={credentialType as unknown as CredentialType}
         credentialFormValues={credentialFormValues}
         onClose={vi.fn()}
       />
@@ -98,7 +98,7 @@ describe('<ExternalTestModal />', () => {
   test('should make the test request correctly when testing a new credential', async () => {
     const { user } = renderWithContexts(
       <ExternalTestModal
-        credentialType={credentialType}
+        credentialType={credentialType as unknown as CredentialType}
         credentialFormValues={credentialFormValues}
         onClose={vi.fn()}
       />
@@ -116,7 +116,7 @@ describe('<ExternalTestModal />', () => {
     );
     const { user } = renderWithContexts(
       <ExternalTestModal
-        credentialType={credentialType}
+        credentialType={credentialType as unknown as CredentialType}
         credentialFormValues={credentialFormValues}
         onClose={vi.fn()}
       />
@@ -139,7 +139,7 @@ describe('<ExternalTestModal />', () => {
     });
     const { user } = renderWithContexts(
       <ExternalTestModal
-        credentialType={credentialType}
+        credentialType={credentialType as unknown as CredentialType}
         credentialFormValues={credentialFormValues}
         onClose={vi.fn()}
       />

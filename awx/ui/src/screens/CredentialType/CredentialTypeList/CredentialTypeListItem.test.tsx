@@ -3,6 +3,7 @@ import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import CredentialTypeListItem from './CredentialTypeListItem';
+import type { CredentialType } from '../../../types/api';
 
 describe('<CredentialTypeListItem/>', () => {
   const credential_type = {
@@ -17,7 +18,7 @@ describe('<CredentialTypeListItem/>', () => {
       <table>
         <tbody>
           <CredentialTypeListItem
-            credentialType={credential_type}
+            credentialType={credential_type as unknown as CredentialType}
             detailUrl="credential_types/1/details"
             isSelected={false}
             onSelect={() => {}}

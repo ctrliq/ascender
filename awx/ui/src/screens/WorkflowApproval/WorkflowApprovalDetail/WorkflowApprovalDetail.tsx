@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { WorkflowApproval, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link, useParams, useNavigate } from 'react-router';
@@ -46,7 +46,7 @@ const WFDetailList = styled(DetailList)`
 `;
 
 export interface WorkflowApprovalDetailProps {
-  workflowApproval: Untyped;
+  workflowApproval: WorkflowApproval;
   fetchWorkflowApproval: Untyped;
   [key: string]: unknown;
 }
@@ -188,7 +188,7 @@ function WorkflowApprovalDetail({
             dataCy="wa-detail-approvals"
           />
         )}
-        {workflowApproval.timeout > 0 && (
+        {(workflowApproval.timeout ?? 0) > 0 && (
           <Detail
             label={t`On Timeout`}
             value={
@@ -260,7 +260,7 @@ function WorkflowApprovalDetail({
         />
         <Detail
           label={t`Elapsed`}
-          value={secondsToHHMMSS(workflowApproval.elapsed)}
+          value={secondsToHHMMSS(Number(workflowApproval.elapsed))}
         />
       </DetailList>
       <Title headingLevel="h2">{t`Workflow job details`}</Title>
@@ -362,7 +362,7 @@ function WorkflowApprovalDetail({
               <JobCancelButton
                 onCancelWorkflow={() =>
                   handleToast(
-                    workflowApproval.summary_fields.source_workflow_job.id,
+                    workflowApproval.summary_fields.source_workflow_job?.id,
                     t`Workflow Cancelled `
                   )
                 }

@@ -1,4 +1,7 @@
-import type { WorkflowLink, WorkflowState  } from 'components/Workflow/workflowReducer';
+import type {
+  WorkflowLink,
+  WorkflowState,
+} from 'components/Workflow/workflowReducer';
 import type { Untyped } from 'types/api';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { WorkflowStateContext } from 'contexts/Workflow';

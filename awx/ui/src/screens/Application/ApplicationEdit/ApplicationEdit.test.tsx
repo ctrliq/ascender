@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { Untyped, OAuth2Application } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -84,7 +84,7 @@ const application = {
     user_capabilities: { edit: true, delete: true },
   },
   organization: 230,
-};
+} as unknown as OAuth2Application;
 
 function renderEdit(options?: Untyped) {
   return renderWithContexts(

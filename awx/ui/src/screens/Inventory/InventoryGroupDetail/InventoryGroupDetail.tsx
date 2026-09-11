@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useNavigate, useParams } from 'react-router';
@@ -12,7 +12,7 @@ import { DetailList, Detail, UserDateDetail } from 'components/DetailList';
 import InventoryGroupsDeleteModal from '../shared/InventoryGroupsDeleteModal';
 
 export interface InventoryGroupDetailProps {
-  inventoryGroup: Untyped;
+  inventoryGroup: Group;
   [key: string]: unknown;
 }
 

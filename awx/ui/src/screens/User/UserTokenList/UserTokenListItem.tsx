@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { OAuth2Token, Untyped } from 'types/api';
 import React from 'react';
 import { Link, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -7,7 +7,7 @@ import { toTitleCase } from 'util/strings';
 import { formatDateString } from 'util/dates';
 
 export interface UserTokenListItemProps {
-  token: Untyped;
+  token: OAuth2Token;
   isSelected?: boolean;
   onSelect?: (...args: Untyped[]) => void;
   rowIndex: number;

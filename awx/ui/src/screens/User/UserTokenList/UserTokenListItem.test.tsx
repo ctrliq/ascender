@@ -77,7 +77,7 @@ describe('<UserTokenListItem />', () => {
             isSelected={false}
             token={{
               ...token,
-              refresh_token: null,
+              refresh_token: '',
               application: null,
               scope: 'write',
               summary_fields: {

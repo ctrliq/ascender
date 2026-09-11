@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Untyped, OAuth2Token } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -43,7 +43,9 @@ describe('<UserTokenDetail/>', () => {
   };
 
   test('should render properly', () => {
-    renderWithContexts(<UserTokenDetail token={token} />);
+    renderWithContexts(
+      <UserTokenDetail token={token as unknown as OAuth2Token} />
+    );
 
     assertDetail('Application', 'hg');
     assertDetail('Description', 'cdfsg');
@@ -57,7 +59,9 @@ describe('<UserTokenDetail/>', () => {
     vi.mocked(TokensAPI.destroy).mockResolvedValueOnce(
       {} as unknown as ApiResponse<Untyped>
     );
-    const { user } = renderWithContexts(<UserTokenDetail token={token} />);
+    const { user } = renderWithContexts(
+      <UserTokenDetail token={token as unknown as OAuth2Token} />
+    );
 
     await user.click(screen.getByRole('button', { name: 'Delete' }));
     await user.click(
@@ -80,7 +84,9 @@ describe('<UserTokenDetail/>', () => {
         },
       })
     );
-    const { user } = renderWithContexts(<UserTokenDetail token={token} />);
+    const { user } = renderWithContexts(
+      <UserTokenDetail token={token as unknown as OAuth2Token} />
+    );
 
     await user.click(screen.getByRole('button', { name: 'Delete' }));
     await user.click(

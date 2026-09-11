@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { WorkflowApproval, Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import useToast, { AlertVariant } from 'hooks/useToast';
@@ -17,7 +17,7 @@ import WorkflowApprovalButton from '../shared/WorkflowApprovalButton';
 import WorkflowDenyButton from '../shared/WorkflowDenyButton';
 
 export interface WorkflowApprovalListItemProps {
-  workflowApproval: Untyped;
+  workflowApproval: WorkflowApproval;
   isSelected: boolean;
   onSelect: (...args: Untyped[]) => void;
   detailUrl: string;

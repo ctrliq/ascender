@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { OAuth2Application, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link, useNavigate } from 'react-router';
@@ -14,7 +14,7 @@ import ErrorDetail from 'components/ErrorDetail';
 import getApplicationHelpTextStrings from '../shared/Application.helptext';
 
 export interface ApplicationDetailsProps {
-  application: Untyped;
+  application: OAuth2Application;
   authorizationOptions: Untyped[];
   clientTypeOptions: Untyped[];
   [key: string]: unknown;
@@ -78,9 +78,9 @@ function ApplicationDetails({
           label={t`Organization`}
           value={
             <Link
-              to={`/organizations/${application.summary_fields.organization.id}/details`}
+              to={`/organizations/${application.summary_fields.organization?.id}/details`}
             >
-              {application.summary_fields.organization.name}
+              {application.summary_fields.organization?.name}
             </Link>
           }
           dataCy="app-detail-organization"

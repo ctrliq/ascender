@@ -1,4 +1,4 @@
-import type { SurveyConfig, LaunchConfig  } from 'components/LaunchPrompt/types';
+import type { SurveyConfig, LaunchConfig } from 'components/LaunchPrompt/types';
 import type { Schedule, Untyped } from 'types/api';
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { DateTime } from 'luxon';

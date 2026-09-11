@@ -1,6 +1,8 @@
-import type { WorkflowLink,
+import type {
+  WorkflowLink,
   WorkflowAction,
-  WorkflowState } from 'components/Workflow/workflowReducer';
+  WorkflowState,
+} from 'components/Workflow/workflowReducer';
 import type { NodePositions } from 'components/Workflow/WorkflowUtils';
 import type { Untyped } from 'types/api';
 import React, { useContext, useEffect, useRef, useState } from 'react';

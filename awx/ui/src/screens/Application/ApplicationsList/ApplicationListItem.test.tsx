@@ -3,6 +3,7 @@ import { screen, within } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ApplicationListItem from './ApplicationListItem';
+import type { OAuth2Application } from '../../../types/api';
 
 describe('<ApplicationListItem/>', () => {
   const application = {
@@ -20,7 +21,7 @@ describe('<ApplicationListItem/>', () => {
         <tbody>
           <ApplicationListItem
             rowIndex={0}
-            application={app}
+            application={app as unknown as OAuth2Application}
             detailUrl="/organizations/2/details"
             isSelected={false}
             onSelect={() => {}}
