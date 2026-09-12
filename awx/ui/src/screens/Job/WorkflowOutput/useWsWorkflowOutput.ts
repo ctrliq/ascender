@@ -198,7 +198,7 @@ function updateNode(
       },
     },
     job: {
-      ...(current.job as Record<string, unknown>),
+      ...current.job,
       id: message.unified_job_id,
       status: message.status,
       type: message.type,

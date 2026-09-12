@@ -4,7 +4,8 @@ import useIsMounted from 'hooks/useIsMounted';
 /** An option the select can hold, which is any object with an id and a name. */
 export interface SelectOptionValue {
   id: number | string;
-  name?: string;
+  /** Null where the api sends one, which the labels endpoint can. */
+  name?: string | null;
   /** True for an option the user is not allowed to remove. */
   isReadOnly?: boolean;
   [key: string]: unknown;

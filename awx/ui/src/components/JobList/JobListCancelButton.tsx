@@ -1,4 +1,4 @@
-import type { Untyped, UnifiedJob } from 'types/api';
+import type { UnifiedJob } from 'types/api';
 import React, { useContext, useEffect, useState } from 'react';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
@@ -19,8 +19,8 @@ function cannotCancelBecauseNotRunning(job: UnifiedJob) {
 
 export interface JobListCancelButtonProps {
   /** The jobs the toolbar has selected, of which the running ones can stop. */
-  jobsToCancel?: Untyped[];
-  onCancel?: (jobs: Untyped[]) => void;
+  jobsToCancel?: UnifiedJob[];
+  onCancel?: (jobs: UnifiedJob[]) => void;
 }
 
 function JobListCancelButton({

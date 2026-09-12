@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -13,7 +12,8 @@ import { RocketIcon } from '@patternfly/react-icons';
 
 export interface WorkflowReLaunchDropDownProps {
   isPrimary?: boolean;
-  handleRelaunch: (params?: Untyped) => void;
+  /** Which of the workflow's nodes to run again: all, failed, or the first. */
+  handleRelaunch: (params?: { nodes?: string }) => void;
   isLaunching?: boolean;
   id?: string;
   ouiaId?: string;

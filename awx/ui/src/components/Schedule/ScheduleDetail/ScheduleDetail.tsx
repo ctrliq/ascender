@@ -1,4 +1,9 @@
-import type { Schedule, SummaryFieldRef, Untyped } from 'types/api';
+import type {
+  LaunchConfig,
+  Schedule,
+  SchedulePreview,
+  SummaryFieldRef,
+} from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import styled from 'styled-components';
@@ -76,6 +81,20 @@ const FrequencyDetailsContainer = styled.div`
   }
 `;
 
+/**
+ * What the schedule detail reads in one go: the schedule's credentials, its
+ * next occurrences, the launch config of whatever it runs, its labels and its
+ * instance groups. Positional because which requests run at all depends on
+ * what the schedule is attached to.
+ */
+type ScheduleDetailResult = [
+  SummaryFieldRef[],
+  SchedulePreview | undefined,
+  LaunchConfig | undefined,
+  SummaryFieldRef[],
+  SummaryFieldRef[],
+];
+
 export interface ScheduleDetailProps {
   hasDaysToKeepField?: boolean;
   schedule: Schedule;
@@ -144,9 +163,9 @@ function ScheduleDetail({
       // Heterogeneous on purpose: which of these run depends on what the
       // schedule is attached to, and the results are unpacked positionally
       // below with the same conditions in mind.
-      // Each entry answers a different endpoint, and the reads below name
-      // what each one carries.
-      const promises: Promise<Untyped>[] = [
+      // Each entry answers a different endpoint, so the list is typed by
+      // what the positional unpacking below reads off each one.
+      const promises: Promise<{ data?: unknown } | void>[] = [
         SchedulesAPI.readCredentials(id),
         SchedulesAPI.createPreview({
           rrule,
@@ -179,22 +198,31 @@ function ScheduleDetail({
       }
 
       const [
-        { data },
-        { data: schedulePreview },
+        credentials,
+        preview,
         launch,
         allLabelsResults,
         instanceGroupsResults,
       ] = await Promise.all(promises);
 
+      const rows = (response?: { data?: unknown } | void) =>
+        ((response?.data as { results?: SummaryFieldRef[] })?.results ??
+          []) as SummaryFieldRef[];
+
+      // Cast once, here, rather than at each of the five reads below: the
+      // list is positional because which requests run depends on what the
+      // schedule is attached to.
       return [
-        data.results,
-        schedulePreview,
-        launch?.data,
-        allLabelsResults?.data?.results,
-        instanceGroupsResults?.data?.results,
-      ];
+        rows(credentials),
+        (preview as { data?: unknown } | undefined)?.data as
+          SchedulePreview | undefined,
+        (launch as { data?: unknown } | undefined)?.data as
+          LaunchConfig | undefined,
+        rows(allLabelsResults),
+        rows(instanceGroupsResults),
+      ] as ScheduleDetailResult;
     }, [id, schedule, rrule]),
-    []
+    [[], undefined, undefined, [], []] as ScheduleDetailResult
   );
 
   useEffect(() => {

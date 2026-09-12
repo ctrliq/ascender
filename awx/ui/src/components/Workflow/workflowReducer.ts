@@ -78,6 +78,12 @@ export interface WorkflowNode {
   isEdited?: boolean;
   linkType?: string;
   linkCondition?: LinkCondition;
+  /**
+   * The run this node produced, where the graph is a workflow job's rather
+   * than a template's: the node type letter falls back to its type when the
+   * template it ran names none.
+   */
+  job?: { id?: number; status?: string; type?: string };
   /** The prompt overrides a node carries, shaped by the template it runs. */
   promptValues?: PromptValues;
   all_parents_must_converge?: boolean;

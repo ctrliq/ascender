@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import useTitle from 'hooks/useTitle';
 
@@ -15,9 +14,12 @@ import { HistoryIcon } from '@patternfly/react-icons';
 import { Link, useLocation } from 'react-router';
 
 export interface ScreenHeaderProps {
-  breadcrumbConfig: Untyped;
+  /**
+   * Each path in the trail, and the label the crumb shows for it. Strings
+   * rather than nodes, because the page title is taken from one of them.
+   */
+  breadcrumbConfig: Record<string, string | null>;
   streamType?: React.ReactNode;
-  [key: string]: unknown;
 }
 
 const ScreenHeader = ({ breadcrumbConfig, streamType }: ScreenHeaderProps) => {
@@ -30,7 +32,9 @@ const ScreenHeader = ({ breadcrumbConfig, streamType }: ScreenHeaderProps) => {
   if (parts.length > 2) {
     parts.pop();
   }
-  const pathTitle = breadcrumbConfig[parts.join('/')];
+  // Null where a path is a grouping rather than a page of its own, which is
+  // the same as having no title for it.
+  const pathTitle = breadcrumbConfig[parts.join('/')] ?? undefined;
   useTitle(pathTitle);
 
   // Build the cumulative resolved paths along the current location, e.g.

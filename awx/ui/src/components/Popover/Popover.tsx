@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Popover as PFPopover } from '@patternfly/react-core';
@@ -22,8 +21,8 @@ const PopoverButton = styled.button`
 
 export interface PopoverProps {
   ariaLabel?: string;
-  content?: Untyped;
-  header?: Untyped;
+  content?: React.ReactNode;
+  header?: React.ReactNode;
   id?: string;
   /** A css length, capping how wide the popover grows. */
   maxWidth?: string;

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React from 'react';
 
 import { Label, LabelGroup } from '@patternfly/react-core';
@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 
 export interface InstanceGroupLabelsProps {
   /** Instance groups, not labels: each is drawn as a PatternFly label. */
-  labels: Untyped[];
+  labels: SummaryFieldRef[];
   isLinkable?: boolean;
   [key: string]: unknown;
 }

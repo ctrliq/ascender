@@ -1,4 +1,4 @@
-import type { Instance, Untyped } from 'types/api';
+import type { Instance } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -11,9 +11,10 @@ import AlertModal from '../AlertModal';
 
 export interface InstanceToggleProps {
   className?: string;
-  fetchInstances: (...args: Untyped[]) => unknown;
+  /** Re-reads the list once the toggle has landed. */
+  fetchInstances: () => unknown;
   instance: Instance;
-  onToggle?: (result: Untyped) => void;
+  onToggle?: (isEnabled: boolean) => void;
   [key: string]: unknown;
 }
 

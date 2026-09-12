@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState, useEffect } from 'react';
 import {
   Button,
@@ -20,9 +19,9 @@ import { useSyncedSelectValue } from '../MultiSelect';
 import type { SelectOptionValue } from '../MultiSelect/useSyncedSelectValue';
 
 async function loadLabelOptions(
-  setLabels: Untyped,
-  onError: Untyped,
-  isMounted: Untyped
+  setLabels: (labels: SelectOptionValue[]) => void,
+  onError: (error: unknown) => void,
+  isMounted: React.MutableRefObject<boolean>
 ) {
   if (!isMounted.current) {
     return;
@@ -187,7 +186,7 @@ function LabelSelect({
           <SelectOption
             key={option.id}
             value={String(option.id)}
-            aria-label={option.name}
+            aria-label={option.name ?? undefined}
             isDisabled={option.isReadOnly}
             hasCheckbox
             isSelected={selections.some(

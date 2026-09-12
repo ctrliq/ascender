@@ -1,6 +1,6 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
+import type { CodeEditorMode } from '../CodeEditor/CodeEditor';
 import CodeEditor from '../CodeEditor';
 import Popover from '../Popover';
 
@@ -25,10 +25,10 @@ const EditorWrapper = styled.div`
 `;
 
 export interface CodeDetailProps {
-  value: Untyped;
+  value?: string;
   label: React.ReactNode;
-  mode: Untyped;
-  rows?: Untyped;
+  mode: CodeEditorMode;
+  rows?: number | 'auto';
   helpText?: React.ReactNode;
   dataCy?: string;
   [key: string]: unknown;

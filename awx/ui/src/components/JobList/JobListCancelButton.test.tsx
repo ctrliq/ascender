@@ -1,3 +1,4 @@
+import type { UnifiedJob } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -28,19 +29,21 @@ describe('<JobListCancelButton />', () => {
   test('should be disabled when user does not have permissions to cancel selected job', () => {
     renderWithContexts(
       <JobListCancelButton
-        jobsToCancel={[
-          {
-            id: 1,
-            name: 'some job',
-            summary_fields: {
-              user_capabilities: {
-                delete: false,
-                start: false,
+        jobsToCancel={
+          [
+            {
+              id: 1,
+              name: 'some job',
+              summary_fields: {
+                user_capabilities: {
+                  delete: false,
+                  start: false,
+                },
               },
+              status: 'running',
             },
-            status: 'running',
-          },
-        ]}
+          ] as unknown as UnifiedJob[]
+        }
       />
     );
     expect(getCancelButton()).toBeDisabled();
@@ -49,19 +52,21 @@ describe('<JobListCancelButton />', () => {
   test('should be disabled when selected job is not running', () => {
     renderWithContexts(
       <JobListCancelButton
-        jobsToCancel={[
-          {
-            id: 1,
-            name: 'some job',
-            summary_fields: {
-              user_capabilities: {
-                delete: false,
-                start: false,
+        jobsToCancel={
+          [
+            {
+              id: 1,
+              name: 'some job',
+              summary_fields: {
+                user_capabilities: {
+                  delete: false,
+                  start: false,
+                },
               },
+              status: 'successful',
             },
-            status: 'successful',
-          },
-        ]}
+          ] as unknown as UnifiedJob[]
+        }
       />
     );
     expect(getCancelButton()).toBeDisabled();
@@ -70,19 +75,21 @@ describe('<JobListCancelButton />', () => {
   test('should be enabled when user does have permission to cancel selected job', () => {
     renderWithContexts(
       <JobListCancelButton
-        jobsToCancel={[
-          {
-            id: 1,
-            name: 'some job',
-            summary_fields: {
-              user_capabilities: {
-                delete: true,
-                start: true,
+        jobsToCancel={
+          [
+            {
+              id: 1,
+              name: 'some job',
+              summary_fields: {
+                user_capabilities: {
+                  delete: true,
+                  start: true,
+                },
               },
+              status: 'running',
             },
-            status: 'running',
-          },
-        ]}
+          ] as unknown as UnifiedJob[]
+        }
       />
     );
     expect(getCancelButton()).toBeEnabled();
@@ -92,19 +99,21 @@ describe('<JobListCancelButton />', () => {
     const onCancel = vi.fn();
     const { user } = renderWithContexts(
       <JobListCancelButton
-        jobsToCancel={[
-          {
-            id: 1,
-            name: 'some job',
-            summary_fields: {
-              user_capabilities: {
-                delete: true,
-                start: true,
+        jobsToCancel={
+          [
+            {
+              id: 1,
+              name: 'some job',
+              summary_fields: {
+                user_capabilities: {
+                  delete: true,
+                  start: true,
+                },
               },
+              status: 'running',
             },
-            status: 'running',
-          },
-        ]}
+          ] as unknown as UnifiedJob[]
+        }
         onCancel={onCancel}
       />
     );

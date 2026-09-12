@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useField } from 'formik';
 import type { FieldValidator } from 'formik';
@@ -8,18 +7,19 @@ import {
   HelperText,
   HelperTextItem,
 } from '@patternfly/react-core';
+import type { CodeEditorMode } from './CodeEditor';
 import CodeEditor from './CodeEditor';
 import Popover from '../Popover';
 
 export interface CodeEditorFieldProps {
-  id: Untyped;
+  id: string;
   name: string;
   label: React.ReactNode;
   tooltip?: React.ReactNode;
   helperText?: string;
   validate?: FieldValidator;
   isRequired?: boolean;
-  mode: Untyped;
+  mode: CodeEditorMode;
   rows?: number;
   [key: string]: unknown;
 }

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -34,10 +33,14 @@ const Description = styled.p`
 export interface SelectableCardProps {
   label?: React.ReactNode;
   description?: React.ReactNode;
-  onClick: (...args: Untyped[]) => void;
+  /**
+   * Declared as a method so it stays bivariant: the same handler is the
+   * card's click and its keypress, which name different events.
+   */
+  onClick(event: React.SyntheticEvent): void;
   isSelected?: boolean;
   dataCy?: string;
-  ariaLabel?: Untyped;
+  ariaLabel?: string;
   [key: string]: unknown;
 }
 
