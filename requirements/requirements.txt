@@ -11,8 +11,6 @@ annotated-doc==0.0.5
     # via typer
 # ansible-runner @ git+https://github.com/ansible/ansible-runner.git@fb826c258ea6e74ac2502c70e4ff3014ee443e40  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
-asciichartpy==1.5.25
-    # via -r /awx_devel/requirements/requirements.in
 asgiref==3.12.1
     # via
     #   channels
@@ -342,7 +340,6 @@ service-identity==26.1.0
 setuptools==84.0.0
     # via
     #   -r /awx_devel/requirements/requirements.in
-    #   asciichartpy
     #   setuptools-rust
     #   setuptools-scm
 setuptools-rust==1.13.0
