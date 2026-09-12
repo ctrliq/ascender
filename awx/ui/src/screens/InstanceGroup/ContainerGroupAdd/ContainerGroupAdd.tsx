@@ -1,0 +1,115 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { Card, PageSection } from '@patternfly/react-core';
+import { useNavigate } from 'react-router';
+
+import { CardBody } from 'components/Card';
+import { InstanceGroupsAPI } from 'api';
+import useRequest from 'hooks/useRequest';
+import ContentError from 'components/ContentError';
+import ContentLoading from 'components/ContentLoading';
+import { jsonToYaml, isJsonString } from 'util/yaml';
+
+import ContainerGroupForm from '../shared/ContainerGroupForm';
+import type { ContainerGroupFormValues } from '../shared/ContainerGroupForm';
+
+function ContainerGroupAdd() {
+  const navigate = useNavigate();
+  const [submitError, setSubmitError] = useState<unknown>(null);
+
+  const getPodSpecValue = (value?: string | null) => {
+    if (isJsonString(value)) {
+      value = jsonToYaml(value as string);
+    }
+    if (value !== jsonToYaml(JSON.stringify(initialPodSpec))) {
+      return value;
+    }
+    return null;
+  };
+
+  const handleSubmit = async (values: ContainerGroupFormValues) => {
+    try {
+      const { data: response } = await InstanceGroupsAPI.create({
+        name: values.name,
+        max_forks: values.max_forks ? values.max_forks : 0,
+        max_concurrent_jobs: values.max_concurrent_jobs
+          ? values.max_concurrent_jobs
+          : 0,
+        credential: values?.credential?.id,
+        pod_spec_override: values.override
+          ? getPodSpecValue(values.pod_spec_override)
+          : null,
+        is_container_group: true,
+      });
+      navigate(`/instance_groups/container_group/${response.id}/details`);
+    } catch (error) {
+      setSubmitError(error);
+    }
+  };
+
+  const handleCancel = () => {
+    navigate(`/instance_groups`);
+  };
+
+  const {
+    error: fetchError,
+    isLoading,
+    request: fetchInitialPodSpec,
+    result: initialPodSpec,
+  } = useRequest(
+    useCallback(async () => {
+      const { data } = await InstanceGroupsAPI.readOptions();
+      return (data.actions.POST?.pod_spec_override?.default ?? {}) as Record<
+        string,
+        unknown
+      >;
+    }, []),
+    {
+      initialPodSpec: {},
+    }
+  );
+
+  useEffect(() => {
+    fetchInitialPodSpec();
+  }, [fetchInitialPodSpec]);
+
+  if (fetchError) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <Card>
+          <CardBody>
+            <ContentError error={fetchError} />
+          </CardBody>
+        </Card>
+      </PageSection>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <Card>
+          <CardBody>
+            <ContentLoading />
+          </CardBody>
+        </Card>
+      </PageSection>
+    );
+  }
+
+  return (
+    <PageSection hasBodyWrapper={false}>
+      <Card>
+        <CardBody>
+          <ContainerGroupForm
+            initialPodSpec={initialPodSpec}
+            onSubmit={handleSubmit}
+            submitError={submitError}
+            onCancel={handleCancel}
+          />
+        </CardBody>
+      </Card>
+    </PageSection>
+  );
+}
+
+export default ContainerGroupAdd;
