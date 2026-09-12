@@ -56,6 +56,12 @@ jobs:
           - name: api-dependency-audit
             command: /bin/bash -c "/var/lib/awx/venv/awx/bin/pip install --quiet pip-audit && /var/lib/awx/venv/awx/bin/pip-audit --progress-spinner=off"
             advisory: true
+          # The UI's API types are generated from the serializers and committed.
+          # This regenerates them and fails if the committed copy has drifted,
+          # which is what happens when a serializer changes and nobody reruns
+          # make ui-api-types.
+          - name: ui-api-types-drift
+            command: /bin/bash -c "make ui-api-types && git diff --exit-code awx/ui/src/types/api.generated.ts"
           - name: ui-lint
             command: make ui-lint
           - name: ui-type-check
