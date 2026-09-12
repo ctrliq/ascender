@@ -118,9 +118,7 @@ describe('<CredentialDetail />', () => {
     );
     expect(chipValue).toHaveTextContent('External Credential');
 
-    // The metadata CodeEditor is mounted; react-ace keeps its value in an
-    // internal (jsdom-invisible) model rather than the DOM, so we assert the
-    // editor is present rather than reading its text content.
+    // the metadata editor is mounted, which is what this test is asserting
     expect(
       document.querySelector('#credential-ssh_key_unlock-metadata')
     ).toBeInTheDocument();
