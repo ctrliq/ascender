@@ -134,7 +134,7 @@
     "lint": "NODE_ENV=development eslint .",
     "type-check": "tsc --noEmit",
     "check-strings": "node config/i18n/checkCatalogs.mjs",
-    "generate-api-types": "npx --yes openapi-typescript@7 .schema.json -o src/types/api.generated.ts",
+    "generate-api-types": "npx --yes openapi-typescript@7 .schema.json -o src/types/api.generated.ts && prettier --write src/types/api.generated.ts && node -e \"const fs=require('fs');const f='src/types/api.generated.ts';fs.writeFileSync(f, fs.readFileSync('scripts/api-types-header.txt','utf8')+fs.readFileSync(f,'utf8'))\"",
     "extract-strings": "lingui extract",
     "extract-template": "lingui extract-template",
     "compile-strings": "lingui compile",
