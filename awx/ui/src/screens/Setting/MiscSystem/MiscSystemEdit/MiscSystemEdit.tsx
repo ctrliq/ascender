@@ -46,7 +46,7 @@ function MiscSystemEdit() {
         'MANAGE_ORGANIZATION_AUTH',
         'ORG_ADMINS_CAN_SEE_ALL_USERS',
         'REMOTE_HOST_HEADERS',
-        'TOWER_URL_BASE',
+        'ASCENDER_URL_BASE',
         'DEFAULT_EXECUTION_ENVIRONMENT',
         'PROXY_IP_ALLOWED_LIST',
         'CSRF_TRUSTED_ORIGINS'
@@ -181,8 +181,8 @@ function MiscSystemEdit() {
                   config={system.DEFAULT_EXECUTION_ENVIRONMENT}
                 />
                 <InputField
-                  name="TOWER_URL_BASE"
-                  config={system.TOWER_URL_BASE}
+                  name="ASCENDER_URL_BASE"
+                  config={system.ASCENDER_URL_BASE}
                   isRequired
                   type="url"
                 />

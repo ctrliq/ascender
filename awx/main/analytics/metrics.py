@@ -138,7 +138,7 @@ def metrics():
         {
             'install_uuid': settings.INSTALL_UUID,
             'insights_analytics': str(settings.INSIGHTS_TRACKING_STATE),
-            'tower_url_base': settings.TOWER_URL_BASE,
+            'tower_url_base': settings.ASCENDER_URL_BASE,
             'tower_version': get_awx_version(),
             'license_type': license_info.get('license_type', 'UNLICENSED'),
             'license_expiry': str(license_info.get('time_remaining', 0)),
