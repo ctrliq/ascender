@@ -1,10 +1,15 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Toolbar, ToolbarContent } from '@patternfly/react-core';
 import { createMemoryHistory } from 'history';
 import { screen, within, fireEvent, waitFor } from '@testing-library/react';
-import type { TestUser } from '../../../testUtils/rtlContexts';
+import type { SearchColumn } from 'types/api';
+import type { QSConfig } from 'util/qs';
+import type {
+  RenderWithContextsOptions,
+  TestUser,
+} from '../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
+import type { SearchProps } from './Search';
 import Search from './Search';
 
 const QS_CONFIG = {
@@ -14,7 +19,10 @@ const QS_CONFIG = {
   integerFields: ['page', 'page_size'],
 };
 
-function renderSearch(props: Untyped, options?: Untyped) {
+function renderSearch(
+  props: Partial<SearchProps> & Pick<SearchProps, 'columns'>,
+  options?: RenderWithContextsOptions
+) {
   return renderWithContexts(
     <Toolbar
       id={`${(props.qsConfig || QS_CONFIG).namespace}-list-toolbar`}
@@ -25,6 +33,7 @@ function renderSearch(props: Untyped, options?: Untyped) {
         <Search
           qsConfig={QS_CONFIG}
           onShowAdvancedSearch={vi.fn()}
+          relatedSearchableKeys={[]}
           {...props}
         />
       </ToolbarContent>
@@ -33,7 +42,7 @@ function renderSearch(props: Untyped, options?: Untyped) {
   );
 }
 
-async function selectKey(user: TestUser, name: Untyped) {
+async function selectKey(user: TestUser, name: string) {
   const toggle = screen.getByRole('button', { name: 'Simple key select' });
   if (toggle.getAttribute('aria-expanded') !== 'true') {
     await user.click(toggle);
@@ -135,7 +144,7 @@ describe('<Search />', () => {
   });
 
   test('filter keys are properly labeled', () => {
-    const columns = [
+    const columns: SearchColumn[] = [
       { name: 'Name', key: 'name__icontains', isDefault: true },
       { name: 'Type', key: 'or__scm_type', options: [['foo', 'Foo Bar!']] },
       { name: 'Description', key: 'description' },
@@ -163,12 +172,13 @@ describe('<Search />', () => {
   });
 
   test('should test handle remove of option-based key', async () => {
-    const qsConfigNew = {
+    const qsConfigNew: QSConfig = {
       namespace: 'item',
       defaultParams: { page: 1, page_size: 5, order_by: '-type' },
       integerFields: [],
+      dateFields: [],
     };
-    const columns = [
+    const columns: SearchColumn[] = [
       {
         name: 'type',
         key: 'type',
@@ -195,12 +205,13 @@ describe('<Search />', () => {
   });
 
   test('should test handle remove of option-based with empty string value', async () => {
-    const qsConfigNew = {
+    const qsConfigNew: QSConfig = {
       namespace: 'item',
       defaultParams: { page: 1, page_size: 5, order_by: '-type' },
       integerFields: [],
+      dateFields: [],
     };
-    const columns = [
+    const columns: SearchColumn[] = [
       {
         name: 'type',
         key: 'type',
@@ -226,7 +237,7 @@ describe('<Search />', () => {
   });
 
   test("ToolbarFilter added for any key that doesn't have search column", () => {
-    const columns = [
+    const columns: SearchColumn[] = [
       { name: 'Name', key: 'name__icontains', isDefault: true },
       { name: 'Type', key: 'or__scm_type', options: [['foo', 'Foo Bar!']] },
       { name: 'Description', key: 'description' },
@@ -257,7 +268,7 @@ describe('<Search />', () => {
       { name: 'Created', key: 'created' },
     ];
 
-    function renderDateSearch(onSearch: Untyped) {
+    function renderDateSearch(onSearch: SearchProps['onSearch']) {
       return renderSearch({ columns: dateColumns, onSearch });
     }
 

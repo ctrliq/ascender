@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import { RRule } from 'rrule';
 import {
   calculateElapsed,
@@ -8,18 +7,6 @@ import {
   secondsToDays,
   secondsToHHMMSS,
 } from './dates';
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const i18n = {
-  _: (key: Untyped) => {
-    if (key.values) {
-      Object.entries(key.values).forEach(([k, v]) => {
-        key.id = key.id.replace(new RegExp(`\\{${k}\\}`), v);
-      });
-    }
-    return key.id;
-  },
-};
 
 describe('formatDateString', () => {
   test('it returns the expected value', () => {

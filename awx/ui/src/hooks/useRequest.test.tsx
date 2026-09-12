@@ -1,5 +1,6 @@
-import type { Untyped } from 'types/api';
+import type { QSConfig } from 'util/qs';
 import React from 'react';
+import { getQSConfig } from 'util/qs';
 import { render, act, waitFor } from '@testing-library/react';
 import { renderWithContexts } from '../../testUtils/rtlContexts';
 import useRequest, { useDeleteItems } from './useRequest';
@@ -13,11 +14,34 @@ const result: {
 const latest = () => result.current as ReturnType<typeof useRequest>;
 const latestDelete = () => result.current as ReturnType<typeof useDeleteItems>;
 
-function Test({ makeRequest, initialValue = {} }: Untyped) {
-  result.current = useRequest(makeRequest, initialValue);
+/** The request each case hands over, which takes whatever that case passes. */
+type TestRequest = (...args: never[]) => unknown;
+
+function Test({
+  makeRequest,
+  initialValue = {},
+}: {
+  makeRequest: TestRequest;
+  initialValue?: unknown;
+}) {
+  result.current = useRequest(
+    makeRequest as (...args: unknown[]) => Promise<unknown>,
+    initialValue
+  );
   return null;
 }
-function DeleteTest({ makeRequest, args = {} }: Untyped) {
+
+function DeleteTest({
+  makeRequest,
+  args = {},
+}: {
+  makeRequest: () => Promise<unknown>;
+  args?: {
+    qsConfig?: QSConfig | null;
+    allItemsSelected?: boolean;
+    fetchItems?: (() => void) | null;
+  };
+}) {
   result.current = useDeleteItems(makeRequest, args);
   return null;
 }
@@ -54,14 +78,14 @@ describe('useRequest hooks', () => {
 
     test('should set isLoading flag', async () => {
       const makeRequest = vi.fn();
-      let resolve: Untyped;
+      let resolve: (value: unknown) => void;
       const promise = new Promise((r) => {
         resolve = r;
       });
       makeRequest.mockReturnValue(promise);
       render(<Test makeRequest={makeRequest} />);
 
-      let requestPromise: Untyped;
+      let requestPromise: Promise<unknown> | undefined;
       await act(async () => {
         // capture (don't await) the pending request so isLoading stays true
         requestPromise = latest().request();
@@ -103,7 +127,7 @@ describe('useRequest hooks', () => {
 
     test('should reset error/result on each request', async () => {
       const error = new Error('error');
-      const makeRequest = (throwError: Untyped) => {
+      const makeRequest = (throwError?: boolean) => {
         if (throwError) {
           throw error;
         }
@@ -131,7 +155,7 @@ describe('useRequest hooks', () => {
 
     test('should not update state after unmount', async () => {
       const makeRequest = vi.fn();
-      let resolve: Untyped;
+      let resolve: (value: unknown) => void;
       const promise = new Promise((r) => {
         resolve = r;
       });
@@ -150,6 +174,8 @@ describe('useRequest hooks', () => {
   });
 
   describe('useDeleteItems', () => {
+    const qsConfig = getQSConfig('delete-test');
+
     test('should invoke delete function', async () => {
       const makeRequest = vi.fn();
       makeRequest.mockResolvedValue({ data: 'foo' });
@@ -157,7 +183,7 @@ describe('useRequest hooks', () => {
         <DeleteTest
           makeRequest={makeRequest}
           args={{
-            qsConfig: {},
+            qsConfig,
             fetchItems: () => {},
           }}
         />
@@ -179,7 +205,7 @@ describe('useRequest hooks', () => {
         <DeleteTest
           makeRequest={makeRequest}
           args={{
-            qsConfig: {},
+            qsConfig,
             fetchItems: () => {},
           }}
         />
@@ -200,7 +226,7 @@ describe('useRequest hooks', () => {
         <DeleteTest
           makeRequest={makeRequest}
           args={{
-            qsConfig: {},
+            qsConfig,
             fetchItems: () => {},
           }}
         />

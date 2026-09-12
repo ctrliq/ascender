@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
@@ -6,7 +5,7 @@ import { createMemoryHistory } from 'history';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SurveyListItem from './SurveyListItem';
 
-const renderInTable = (ui: Untyped) =>
+const renderInTable = (ui: React.ReactElement) =>
   renderWithContexts(
     <table>
       <tbody>{ui}</tbody>
@@ -17,7 +16,7 @@ const renderInTable = (ui: Untyped) =>
 // TemplateSurvey, which renders SurveyList from its own index route. Relative
 // link targets resolve against that route path, so hrefs are only meaningful
 // when the item is mounted at the same depth.
-const renderAtSurveyRoute = (ui: Untyped) =>
+const renderAtSurveyRoute = (ui: React.ReactElement) =>
   renderWithContexts(
     <Routes>
       <Route

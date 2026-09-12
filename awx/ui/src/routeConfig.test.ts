@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { AppRouteGroup } from './routeConfig';
 import getRouteConfig from './routeConfig';
 
 vi.mock('util/webWorker', () => ({ default: vi.fn() }));
@@ -12,10 +12,10 @@ const userProfile = {
   systemConfig: { SUBSCRIPTION_USAGE_MODEL: 'unique_managed_hosts' },
 };
 
-const filterPaths = (sidebar: Untyped) => {
-  const visibleRoutes: Untyped[] = [];
-  sidebar.forEach(({ routes }: Untyped) => {
-    routes.forEach((route: Untyped) => {
+const filterPaths = (sidebar: AppRouteGroup[]) => {
+  const visibleRoutes: string[] = [];
+  sidebar.forEach(({ routes }) => {
+    routes.forEach((route) => {
       visibleRoutes.push(route.path);
     });
   });

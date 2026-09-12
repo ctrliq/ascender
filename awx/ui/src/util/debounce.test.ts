@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import debounce from './debounce';
 
 describe('debounce', () => {
@@ -13,7 +12,7 @@ describe('debounce', () => {
   test('it debounces', () => {
     vi.useFakeTimers();
     let count = 0;
-    const func = (increment: Untyped) => {
+    const func = (increment: number) => {
       count += increment;
     };
     const debounced = debounce(func, 1000);

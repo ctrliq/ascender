@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import { getJobModel, isJobRunning } from './jobs';
 
 describe('isJobRunning', () => {
@@ -27,7 +26,7 @@ describe('isJobRunning', () => {
 
 describe('getJobModel', () => {
   test('should return valid job model in all cases', () => {
-    const baseUrls: Untyped[] = [];
+    const baseUrls: string[] = [];
     [
       'ad_hoc_command',
       'inventory_update',

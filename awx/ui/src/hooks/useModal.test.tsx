@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { render, act } from '@testing-library/react';
 import useModal from './useModal';
@@ -8,12 +7,12 @@ const result: { current: ReturnType<typeof useModal> } = {
 };
 const latest = () => result.current;
 
-const TestHook = ({ initialValue }: Untyped) => {
+const TestHook = ({ initialValue }: { initialValue?: boolean }) => {
   result.current = useModal(initialValue);
   return null;
 };
 
-const testHook = (initialValue?: Untyped) => {
+const testHook = (initialValue?: boolean) => {
   render(<TestHook initialValue={initialValue} />);
 };
 

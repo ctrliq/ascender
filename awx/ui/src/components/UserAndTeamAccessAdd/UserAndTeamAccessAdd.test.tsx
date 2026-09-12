@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+
 import React from 'react';
 import { screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -62,7 +62,7 @@ function footerButton(label: string) {
 }
 
 // Returns the wizard nav <button> for a given step name.
-function navItem(name: Untyped) {
+function navItem(name: string) {
   return screen
     .getAllByRole('button')
     .find(

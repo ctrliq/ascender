@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { LaunchConfig, Schedule } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { DateTime } from 'luxon';
@@ -9,6 +9,7 @@ import { SchedulesAPI, JobTemplatesAPI, InventoriesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import type { TestUser } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import type { ScheduleFormProps } from './ScheduleForm';
 import ScheduleForm from './ScheduleForm';
 
 vi.mock('../../../api/models/Schedules');
@@ -157,7 +158,7 @@ const mockSchedule = {
   next_run: '2020-04-02T18:45:00Z',
   timezone: 'America/New_York',
   until: '',
-};
+} as unknown as Schedule;
 
 const byId = (container: HTMLElement, id: string) =>
   container.querySelector(`#${CSS.escape(id)}`);
@@ -285,7 +286,10 @@ describe('<ScheduleForm />', () => {
       } as unknown as ResponseOf<typeof SchedulesAPI.readZoneInfo>);
     });
 
-    function renderPrompt(resource: Untyped, surveyConfig: Untyped) {
+    function renderPrompt(
+      resource: ScheduleFormProps['resource'],
+      surveyConfig: ScheduleFormProps['surveyConfig']
+    ) {
       return renderWithContexts(
         <ScheduleForm
           handleSubmit={vi.fn()}
@@ -307,7 +311,7 @@ describe('<ScheduleForm />', () => {
           name: 'Foo Job Template',
           description: '',
         },
-        { spec: [{ required: true, default: '' }] }
+        { spec: [{ variable: 'foo', required: true, default: '' }] }
       );
       await waitForForm(container);
       await user.click(await screen.findByRole('button', { name: 'Prompt' }));
@@ -330,7 +334,7 @@ describe('<ScheduleForm />', () => {
           name: 'Foo Job Template',
           description: '',
         },
-        { spec: [{ required: true, default: '' }] }
+        { spec: [{ variable: 'foo', required: true, default: '' }] }
       );
       await waitForForm(container);
       await waitFor(() =>
@@ -364,7 +368,7 @@ describe('<ScheduleForm />', () => {
           name: 'Foo Job Template',
           description: '',
         },
-        { spec: [{ required: true, default: '' }] }
+        { spec: [{ variable: 'foo', required: true, default: '' }] }
       );
       await waitForForm(container);
       await user.click(await screen.findByRole('button', { name: 'Prompt' }));
@@ -401,7 +405,7 @@ describe('<ScheduleForm />', () => {
           name: 'Foo Job Template',
           description: '',
         },
-        { spec: [{ required: true, default: '' }] }
+        { spec: [{ variable: 'foo', required: true, default: '' }] }
       );
       await waitForForm(container);
       await screen.findByRole('button', { name: 'Prompt' });
@@ -634,9 +638,9 @@ describe('<ScheduleForm />', () => {
     });
 
     function renderEdit(
-      schedule: Untyped,
-      extraLaunch?: Untyped,
-      resource?: Untyped
+      schedule: ScheduleFormProps['schedule'],
+      extraLaunch?: Partial<LaunchConfig>,
+      resource?: ScheduleFormProps['resource']
     ) {
       return renderWithContexts(
         <ScheduleForm

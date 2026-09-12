@@ -1,4 +1,5 @@
-import type { Untyped } from 'types/api';
+import type { Mock } from 'vitest';
+import type { SurveyConfig, SurveyQuestion } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import type { TestHistory } from 'history';
@@ -31,9 +32,9 @@ const survey = {
 };
 
 function renderEdit(
-  surveyData: Untyped,
-  history: Untyped,
-  updateSurvey: Untyped
+  surveyData: SurveyConfig,
+  history: TestHistory,
+  updateSurvey: (spec: SurveyQuestion[]) => void
 ) {
   return renderWithContexts(
     <Routes>
@@ -56,7 +57,7 @@ function renderEdit(
 }
 
 // Edit the form (pre-filled from the foo question) and submit.
-function editAndSubmit(variable: Untyped) {
+function editAndSubmit(variable: string) {
   fireEvent.change(document.querySelector('#question-name')!, {
     target: { value: 'new question' },
   });
@@ -67,7 +68,7 @@ function editAndSubmit(variable: Untyped) {
 }
 
 describe('<SurveyQuestionEdit />', () => {
-  let updateSurvey: Untyped;
+  let updateSurvey: Mock;
   let history: TestHistory;
 
   describe('with question_variable present', () => {
@@ -91,7 +92,7 @@ describe('<SurveyQuestionEdit />', () => {
       editAndSubmit('question');
 
       await waitFor(() => expect(updateSurvey).toHaveBeenCalled());
-      const newSpec = updateSurvey.mock.calls[0][0];
+      const newSpec = updateSurvey.mock.calls[0]![0];
       // the edited question replaces spec[0], spec[1] is preserved
       expect(newSpec).toHaveLength(2);
       expect(newSpec[0]).toEqual(

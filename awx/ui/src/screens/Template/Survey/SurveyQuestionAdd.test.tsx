@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Mock } from 'vitest';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -39,7 +39,7 @@ function addQuestion(variable = 'question') {
 }
 
 describe('<SurveyQuestionAdd />', () => {
-  let updateSurvey: Untyped;
+  let updateSurvey: Mock;
 
   beforeEach(() => {
     updateSurvey = vi.fn();
@@ -62,7 +62,7 @@ describe('<SurveyQuestionAdd />', () => {
     addQuestion();
 
     await waitFor(() => expect(updateSurvey).toHaveBeenCalled());
-    const newSpec = updateSurvey.mock.calls[0][0];
+    const newSpec = updateSurvey.mock.calls[0]![0];
     // existing questions are preserved, new question is appended
     expect(newSpec).toHaveLength(3);
     expect(newSpec[0]).toEqual(survey.spec[0]);

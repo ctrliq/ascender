@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -62,7 +61,7 @@ const mockAuditorMe = { is_super_user: true, is_system_auditor: true };
 
 // Organization uses paths relative to its parent route, so mount it under the
 // same /organizations/:id/* route that Organizations.js gives it in the app.
-function renderAt(path: Untyped, me = mockMe) {
+function renderAt(path: string, me = mockMe) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
     <Routes>

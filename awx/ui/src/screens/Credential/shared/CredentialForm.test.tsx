@@ -1,16 +1,20 @@
-import type { Untyped } from 'types/api';
+import type { Credential, CredentialType } from 'types/api';
 import React from 'react';
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { OrganizationsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import type { TestUser } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
-import machineCredential from './data.machineCredential.json';
-import gceCredential from './data.gceCredential.json';
-import scmCredential from './data.scmCredential.json';
-import galaxyCredential from './data.galaxyCredential.json';
-import towerCredential from './data.towerCredential.json';
+import machineCredentialFixture from './data.machineCredential.json';
+import gceCredentialFixture from './data.gceCredential.json';
+import scmCredentialFixture from './data.scmCredential.json';
+import galaxyCredentialFixture from './data.galaxyCredential.json';
+import towerCredentialFixture from './data.towerCredential.json';
 import credentialTypesArr from './data.credentialTypes.json';
+import type {
+  CredentialFormProps,
+  CredentialTypesById,
+} from './CredentialForm';
 import CredentialForm from './CredentialForm';
 
 vi.mock('../../../api');
@@ -18,19 +22,26 @@ vi.mock('../../../api');
 // jsdom's File does not implement Blob.text(); the GceFileUploadField reads the
 // uploaded file via `await value.text()`. Build a File whose text() resolves to
 // the provided contents so the real upload path can run.
-function makeJsonFile(contents: Untyped, name = 'foo.json') {
+function makeJsonFile(contents: string, name = 'foo.json') {
   const file = new File([contents], name, { type: 'application/json' });
   file.text = () => Promise.resolve(contents);
   return file;
 }
 
-const credentialTypes = credentialTypesArr.reduce(
-  (credentialTypesMap, credentialType) => {
-    credentialTypesMap[credentialType.id] = credentialType;
-    return credentialTypesMap;
-  },
-  {} as Untyped
-);
+// The api's own payloads, saved as they arrived: cast once here rather than
+// at each of the places below that hand one to the form.
+const machineCredential = machineCredentialFixture as unknown as Credential;
+const gceCredential = gceCredentialFixture as unknown as Credential;
+const scmCredential = scmCredentialFixture as unknown as Credential;
+const galaxyCredential = galaxyCredentialFixture as unknown as Credential;
+const towerCredential = towerCredentialFixture as unknown as Credential;
+
+const credentialTypes = (
+  credentialTypesArr as unknown as CredentialType[]
+).reduce<CredentialTypesById>((credentialTypesMap, credentialType) => {
+  credentialTypesMap[credentialType.id] = credentialType;
+  return credentialTypesMap;
+}, {});
 
 // FormGroup renders its `label` text in a <label>/<span>; query that text to
 // assert a field group is present.
@@ -79,14 +90,14 @@ function gceFieldExpects() {
   expectGroup('RSA Private Key');
 }
 
-async function selectCredentialType(user: TestUser, label: Untyped) {
+async function selectCredentialType(user: TestUser, label: string) {
   const input = screen.getByRole('textbox', { name: 'Select Credential Type' });
   await user.clear(input);
   await user.click(input);
   await user.click(await screen.findByText(label));
 }
 
-async function renderForm(props?: Untyped) {
+async function renderForm(props?: Partial<CredentialFormProps>) {
   const result = renderWithContexts(
     <CredentialForm
       onCancel={() => {}}

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, fireEvent, within } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -120,8 +119,8 @@ describe('<SurveyReorderModal />', () => {
     expect(multiSelectToggle).toBeInTheDocument();
     const toggleWrapper = multiSelectToggle.closest(
       '.pf-v6-c-menu-toggle'
-    ) as Untyped;
-    const labels = toggleWrapper.querySelectorAll('.pf-v6-c-label') as Untyped;
+    ) as HTMLElement;
+    const labels = toggleWrapper.querySelectorAll('.pf-v6-c-label');
     expect(labels.length).toBe(4);
     expect(toggleWrapper).toHaveClass('pf-m-disabled');
   });
@@ -160,11 +159,11 @@ describe('<SurveyReorderModal />', () => {
       />
     );
 
-    const rows = document.querySelectorAll(
+    const rows = document.querySelectorAll<HTMLElement>(
       '[data-ouia-component-id^="survey-order-row-"]'
-    ) as Untyped;
-    const firstRow = rows[0];
-    const thirdRow = rows[2];
+    );
+    const firstRow = rows[0] as HTMLElement;
+    const thirdRow = rows[2] as HTMLElement;
 
     fireEvent.dragStart(firstRow, {
       dataTransfer: { effectAllowed: '' },

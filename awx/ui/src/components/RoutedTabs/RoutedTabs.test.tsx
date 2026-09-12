@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -13,7 +12,7 @@ const tabs = [
   { name: 'Notification', link: '/organizations/19/notification', id: 4 },
 ];
 
-function renderTabs(initialEntry: Untyped) {
+function renderTabs(initialEntry: string) {
   const history = createMemoryHistory({
     initialEntries: [initialEntry],
   });

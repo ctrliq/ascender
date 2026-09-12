@@ -1,10 +1,10 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
 } from 'contexts/Workflow';
 import { useUserProfile } from 'contexts/Config';
+import type { NodeModalProps } from './NodeModal';
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import NodeEditModal from './NodeEditModal';
 import type { WorkflowState } from '../../../../../components/Workflow/workflowReducer';
@@ -18,9 +18,9 @@ vi.mock('../../../../../api/models/WorkflowJobTemplates');
 
 // Capture the onSave prop NodeEditModal hands to NodeModal so the test can
 // invoke it directly. The real NodeModal wizard is not exercised here.
-let capturedOnSave: ((...args: unknown[]) => void) | undefined;
+let capturedOnSave: NodeModalProps['onSave'] | undefined;
 vi.mock('./NodeModal', () => ({
-  default: (props: Untyped) => {
+  default: (props: NodeModalProps) => {
     capturedOnSave = props.onSave;
     return null;
   },

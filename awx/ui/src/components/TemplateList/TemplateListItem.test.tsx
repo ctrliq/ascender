@@ -422,7 +422,7 @@ describe('<TemplateListItem />', () => {
       />
     );
 
-    function assertDetail(label: Untyped, value: Untyped) {
+    function assertDetail(label: string, value: Untyped) {
       const term = screen.getByText(label);
       expect(term.nextElementSibling).toHaveTextContent(value);
     }

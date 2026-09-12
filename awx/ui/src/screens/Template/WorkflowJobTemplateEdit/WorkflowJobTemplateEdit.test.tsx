@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { WorkflowJobTemplate } from 'types/api';
 import React from 'react';
 import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
@@ -12,6 +12,7 @@ import {
   InventoriesAPI,
 } from 'api';
 import useDebounce from 'hooks/useDebounce';
+import type { WorkflowJobTemplateFormValues } from '../shared/WorkflowJobTemplateForm';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import type { MockHandlerFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -41,12 +42,12 @@ const mockTemplate = {
   scm_branch: 'devel',
   limit: '5000',
   variables: '---',
-};
+} as unknown as WorkflowJobTemplate;
 
 // Values the (stubbed) form submits when "Submit" is clicked. They mirror the
 // user editing the name/description/scm_branch and selecting labels so the
 // container's handleSubmit produces the update payload + label calls asserted.
-const submittedValues = {
+const submittedValues: WorkflowJobTemplateFormValues = {
   name: 'Alex',
   description: 'Apollo and Athena',
   inventory: { id: 1 },
@@ -56,6 +57,7 @@ const submittedValues = {
   extra_vars: '---',
   webhook_credential: null,
   webhook_url: '',
+  webhook_key: '',
   webhook_service: '',
   allow_simultaneous: false,
   ask_inventory_on_launch: false,
@@ -80,8 +82,10 @@ const submittedValues = {
 // with controls that invoke its props. The values it submits are configurable
 // per test via setSubmitValues (mock-prefixed so the vi.mock factory may close
 // over it).
-const mockFormState = { submitValues: null };
-const setSubmitValues = (values: Untyped) => {
+const mockFormState: { submitValues: WorkflowJobTemplateFormValues | null } = {
+  submitValues: null,
+};
+const setSubmitValues = (values: WorkflowJobTemplateFormValues) => {
   mockFormState.submitValues = values;
 };
 
@@ -152,7 +156,7 @@ describe('<WorkflowJobTemplateEdit/>', () => {
     vi.clearAllMocks();
   });
 
-  const renderEdit = async (template: Untyped = mockTemplate) => {
+  const renderEdit = async (template = mockTemplate) => {
     history = createMemoryHistory({
       initialEntries: ['/templates/workflow_job_template/6/edit'],
     });
@@ -255,7 +259,7 @@ describe('<WorkflowJobTemplateEdit/>', () => {
       scm_branch: 'devel',
       limit: '5000',
       variables: '---',
-    };
+    } as unknown as WorkflowJobTemplate;
 
     // A system admin with org-admin rights gets the organization resolved to
     // their single admin org ({ id: 1 }) even though the template carries no
@@ -271,6 +275,7 @@ describe('<WorkflowJobTemplateEdit/>', () => {
       extra_vars: '---',
       webhook_credential: null,
       webhook_url: '',
+      webhook_key: '',
       webhook_service: '',
       allow_simultaneous: false,
       ask_inventory_on_launch: false,

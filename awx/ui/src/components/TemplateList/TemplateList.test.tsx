@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import {
@@ -77,7 +76,7 @@ const mockTemplates = [
   },
 ];
 
-function getRow(name: Untyped) {
+function getRow(name: string) {
   return screen.getByRole('link', { name }).closest('tr');
 }
 

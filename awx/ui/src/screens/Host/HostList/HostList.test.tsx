@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -80,13 +79,13 @@ const mockHosts = [
   },
 ];
 
-function getRow(name: Untyped) {
+function getRow(name: string) {
   return screen.getByRole('link', { name }).closest('tr');
 }
 
 // each host row has two checkbox-role controls: the row select and the
 // HostToggle switch (aria-label "Toggle host"); this returns the select one
-function getRowSelect(name: Untyped) {
+function getRowSelect(name: string) {
   return within(getRow(name)!)
     .getAllByRole('checkbox')
     .find((box) => box.getAttribute('aria-label') !== 'Toggle host');

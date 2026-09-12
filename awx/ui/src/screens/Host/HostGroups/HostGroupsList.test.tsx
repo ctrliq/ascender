@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Host, Untyped } from 'types/api';
+import type { Host } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -90,7 +90,7 @@ function renderList(props = {}) {
   );
 }
 
-function rowSelect(name: Untyped) {
+function rowSelect(name: string) {
   const row = screen.getByRole('link', { name }).closest('tr');
   return within(row!).getByRole('checkbox');
 }

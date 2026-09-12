@@ -1,9 +1,15 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import VariablesField from './VariablesField';
+
+/** The CodeEditor props this field sets, which the stub below renders back. */
+interface CodeEditorProps {
+  value?: string;
+  onChange?: (value: string) => void;
+  readOnly?: boolean;
+}
 
 // Mock the CodeEditor leaf with a controlled <textarea> that renders the value
 // and forwards edits to onChange. This keeps the existing .ace_editor-based
@@ -15,7 +21,7 @@ vi.mock('./CodeEditor', async () => {
   const ReactMock = await vi.importActual<typeof import('react')>('react');
   return {
     __esModule: true,
-    default: ({ value, onChange, readOnly }: Untyped) =>
+    default: ({ value, onChange, readOnly }: CodeEditorProps) =>
       ReactMock.createElement(
         'div',
         { className: 'ace_editor' },
@@ -23,7 +29,8 @@ vi.mock('./CodeEditor', async () => {
           'data-testid': 'code-editor',
           value: value || '',
           readOnly: !!readOnly,
-          onChange: (e: Untyped) => onChange && onChange(e.target.value),
+          onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+            onChange && onChange(e.target.value),
         })
       ),
   };
@@ -50,7 +57,8 @@ beforeEach(() => {
 
 const yamlBtn = () => screen.getByRole('button', { name: 'YAML' });
 const jsonBtn = () => screen.getByRole('button', { name: 'JSON' });
-const isPrimary = (btn: Untyped) => btn.classList.contains('pf-m-primary');
+const isPrimary = (btn: HTMLElement) =>
+  btn.classList.contains('pf-m-primary');
 
 describe('VariablesField', () => {
   it('should render code editor', () => {

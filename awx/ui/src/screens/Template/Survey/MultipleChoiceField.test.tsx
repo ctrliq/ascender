@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { Formik } from 'formik';
@@ -11,14 +10,14 @@ import MultipleChoiceField from './MultipleChoiceField';
 // rendered <svg>.
 const SELECTED_COLOR = 'var(--pf-v6-c-button--m-secondary--active--Color)';
 
-const isSelected = (ouiaId: Untyped) => {
+const isSelected = (ouiaId: string) => {
   const icon = document.querySelector(
     `[data-ouia-component-id="${ouiaId}"] svg`
   );
   return window.getComputedStyle(icon!).color === SELECTED_COLOR;
 };
 
-const toggleButton = (ouiaId: Untyped) =>
+const toggleButton = (ouiaId: string) =>
   document.querySelector(`[data-ouia-component-id="${ouiaId}"]`);
 
 describe('<MultipleChoiceField/>', () => {

@@ -1,4 +1,4 @@
-import type { NotificationTemplate, Untyped } from 'types/api';
+import type { NotificationTemplate } from 'types/api';
 import React from 'react';
 import { screen, waitFor, act } from '@testing-library/react';
 
@@ -26,7 +26,7 @@ vi.mock('components/CodeEditor', async () => {
 vi.mock('components/CodeEditor/CodeEditorField', async () => {
   const ReactLib = await vi.importActual<typeof import('react')>('react');
   const { useField } = await vi.importActual<typeof import('formik')>('formik');
-  function MockField({ name }: Untyped) {
+  function MockField({ name }: { name: string }) {
     const [field] = useField(name);
     return ReactLib.createElement('div', null, field.value);
   }
@@ -88,8 +88,8 @@ const allDefaultMessages = {
 };
 
 const buildTemplate = (
-  notificationType: Untyped,
-  notificationConfiguration: Untyped
+  notificationType: string,
+  notificationConfiguration: Record<string, unknown>
 ) => ({
   ...template,
   notification_type: notificationType,

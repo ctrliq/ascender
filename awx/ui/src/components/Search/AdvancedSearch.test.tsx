@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ByRoleOptions } from '@testing-library/react';
 import React from 'react';
 import { screen, within, fireEvent, waitFor } from '@testing-library/react';
 import type { TestUser } from '../../../testUtils/rtlContexts';
@@ -7,8 +7,8 @@ import AdvancedSearch from './AdvancedSearch';
 
 async function selectFrom(
   user: TestUser,
-  inputLabel: Untyped,
-  optionName: Untyped
+  inputLabel: ByRoleOptions['name'],
+  optionName: ByRoleOptions['name']
 ) {
   const input = screen.getByRole('textbox', { name: inputLabel });
   await user.click(input);
@@ -16,7 +16,7 @@ async function selectFrom(
   await user.click(option);
 }
 
-async function clearFrom(user: TestUser, inputLabel: Untyped) {
+async function clearFrom(user: TestUser, inputLabel: ByRoleOptions['name']) {
   const input = screen.getByRole('textbox', { name: inputLabel });
   const container = input.closest('.pf-v6-c-menu-toggle');
   await user.click(
@@ -30,7 +30,7 @@ function valueInput() {
   return screen.getByLabelText('Advanced search value input');
 }
 
-async function setValueAndSubmit(user: TestUser, value: Untyped) {
+async function setValueAndSubmit(user: TestUser, value: string) {
   const input = valueInput();
   await user.type(input, value);
   fireEvent.keyDown(input, { key: 'Enter' });

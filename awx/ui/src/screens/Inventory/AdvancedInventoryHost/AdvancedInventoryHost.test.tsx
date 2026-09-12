@@ -1,4 +1,4 @@
-import type { Host, Inventory, Untyped } from 'types/api';
+import type { Host, Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -18,7 +18,7 @@ const mockSmartInventory = {
 // AdvancedInventoryHost reads :inventoryType/:hostId via useParams and renders
 // a nested v6 route tree, so mount it under its real parent route at a concrete
 // URL.
-function renderAt(url: Untyped) {
+function renderAt(url: string) {
   const history = createMemoryHistory({ initialEntries: [url] });
   return renderWithContexts(
     <Routes>

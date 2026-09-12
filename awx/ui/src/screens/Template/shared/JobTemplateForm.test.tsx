@@ -1,5 +1,6 @@
-import type { JobTemplate, SummaryFieldRef, Untyped } from 'types/api';
+import type { JobTemplate, SummaryFieldRef } from 'types/api';
 import React from 'react';
+
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
@@ -15,6 +16,17 @@ import {
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import JobTemplateForm from './JobTemplateForm';
+/** What each stubbed lookup below is handed: the field it edits. */
+interface StubLookupProps {
+  value: SummaryFieldRef;
+  onChange: (value: SummaryFieldRef) => void;
+}
+
+/** The same, for the lookup that holds several. */
+interface StubMultiLookupProps {
+  value: SummaryFieldRef[];
+  onChange: (value: SummaryFieldRef[]) => void;
+}
 
 vi.mock('../../../api');
 
@@ -30,7 +42,7 @@ vi.mock('components/Lookup', async () => {
     );
   return {
     ...actual,
-    InventoryLookup: ({ value, onChange }: Untyped) => (
+    InventoryLookup: ({ value, onChange }: StubLookupProps) => (
       <div>
         <span data-testid="inventory-value">{JSON.stringify(value)}</span>
         <button
@@ -42,7 +54,7 @@ vi.mock('components/Lookup', async () => {
         </button>
       </div>
     ),
-    ProjectLookup: ({ value, onChange }: Untyped) => (
+    ProjectLookup: ({ value, onChange }: StubLookupProps) => (
       <div>
         <span data-testid="project-value">{JSON.stringify(value)}</span>
         <button
@@ -56,16 +68,16 @@ vi.mock('components/Lookup', async () => {
         </button>
       </div>
     ),
-    MultiCredentialsLookup: ({ value, onChange }: Untyped) => (
+    MultiCredentialsLookup: ({ value, onChange }: StubMultiLookupProps) => (
       <div>
         <span data-testid="credentials-value">{JSON.stringify(value)}</span>
-        {value.map((cred: SummaryFieldRef) => (
+        {value.map((cred) => (
           <button
             key={cred.id}
             type="button"
             aria-label={`remove credential ${cred.name}`}
             onClick={() =>
-              onChange(value.filter((c: SummaryFieldRef) => c.id !== cred.id))
+              onChange(value.filter((c) => c.id !== cred.id))
             }
           >
             {cred.name}

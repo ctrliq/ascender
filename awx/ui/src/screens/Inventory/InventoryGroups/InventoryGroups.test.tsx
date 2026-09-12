@@ -19,7 +19,7 @@ vi.mock('../InventoryGroupAdd/InventoryGroupAdd', () => {
 });
 
 // InventoryGroups uses relative routes, so mount it under its v6 parent route.
-function renderUnder(initialEntry: Untyped, inventory: Untyped) {
+function renderUnder(initialEntry: string, inventory: Untyped) {
   const history = createMemoryHistory({ initialEntries: [initialEntry] });
   return renderWithContexts(
     <Routes>

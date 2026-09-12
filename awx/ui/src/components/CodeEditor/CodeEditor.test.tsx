@@ -1,8 +1,19 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { fireEvent, screen, act } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import CodeEditor from './CodeEditor';
+
+/** The react-ace props CodeEditor sets, which the stub below renders back. */
+interface AceProps {
+  mode?: string;
+  value?: string;
+  onChange?: (value: string) => void;
+  name?: string;
+  height?: string;
+  minLines?: number;
+  maxLines?: number;
+  setOptions?: { readOnly?: boolean };
+}
 
 // CodeEditor pulls in ace-builds mode/theme files for their side effects; those
 // expect the global `ace` that the real react-ace sets up on import. Since we
@@ -22,8 +33,8 @@ vi.mock('ace-builds/src-noconflict/ext-searchbox', () => ({}));
 vi.mock('react-ace', async () => {
   const ReactMock = await vi.importActual<typeof import('react')>('react');
   // class component so CodeEditor's ref (editor.current.refEditor) resolves
-  class AceMock extends ReactMock.Component<Untyped> {
-    refEditor: Untyped;
+  class AceMock extends ReactMock.Component<AceProps> {
+    refEditor: HTMLDivElement | null = null;
 
     render() {
       const {
@@ -39,7 +50,7 @@ vi.mock('react-ace', async () => {
       return ReactMock.createElement(
         'div',
         {
-          ref: (el: Untyped) => {
+          ref: (el: HTMLDivElement | null) => {
             this.refEditor = el;
           },
         },
@@ -52,7 +63,8 @@ vi.mock('react-ace', async () => {
           name,
           value,
           readOnly: !!(setOptions && setOptions.readOnly),
-          onChange: (e: Untyped) => onChange && onChange(e.target.value),
+          onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) =>
+            onChange && onChange(e.target.value),
         })
       );
     }

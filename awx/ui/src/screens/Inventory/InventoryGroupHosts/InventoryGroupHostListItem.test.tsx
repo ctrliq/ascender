@@ -12,7 +12,7 @@ vi.mock('../../../api');
 const mockHost: Untyped = mockHosts.results[0];
 
 // The item reads :inventoryType via useParams; mount under a real v6 route.
-function renderItem(url: Untyped, host = mockHost) {
+function renderItem(url: string, host = mockHost) {
   const history = createMemoryHistory({ initialEntries: [url] });
   return renderWithContexts(
     <Routes>

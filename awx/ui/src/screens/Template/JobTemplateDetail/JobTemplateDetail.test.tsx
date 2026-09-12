@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { JobTemplate, Untyped } from 'types/api';
+import type { JobTemplate } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { JobTemplatesAPI, WorkflowJobTemplateNodesAPI, RootAPI } from 'api';
@@ -29,7 +29,7 @@ const mockInstanceGroups = {
 // Detail renders <dd data-cy="<dataCy>-value">; return the value cell for a
 // given Detail dataCy. Labels carry a help-button child, so matching on the
 // stable data-cy is more reliable than getByText on the label.
-function getDetailValueByCy(dataCy: Untyped) {
+function getDetailValueByCy(dataCy: string) {
   return document.querySelector(`[data-cy="${dataCy}-value"]`);
 }
 

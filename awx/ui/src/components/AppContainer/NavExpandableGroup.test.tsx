@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -13,7 +12,7 @@ const routes = [
   { path: '/fiz', title: 'Fiz' },
 ];
 
-function renderGroup(initialEntry: Untyped) {
+function renderGroup(initialEntry: string) {
   return renderWithContexts(
     <Nav aria-label="Test Navigation">
       <NavExpandableGroup groupId="test" groupTitle="Test" routes={routes} />

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Mock } from 'vitest';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -8,10 +8,10 @@ import mockHosts from './data.hosts.json';
 vi.mock('../../api');
 
 describe('<AssociateModal />', () => {
-  let onClose: Untyped;
-  let onAssociate: Untyped;
-  let fetchRequest: Untyped;
-  let optionsRequest: Untyped;
+  let onClose: Mock;
+  let onAssociate: Mock;
+  let fetchRequest: Mock;
+  let optionsRequest: Mock;
 
   beforeEach(() => {
     onClose = vi.fn();

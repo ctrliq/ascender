@@ -1,11 +1,12 @@
-import type { NotificationTemplate, Untyped } from 'types/api';
+import type { Mock } from 'vitest';
+import type { NotificationTemplate } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import NotificationListItem from './NotificationListItem';
 
 describe('<NotificationListItem canToggleNotifications />', () => {
-  let toggleNotification: Untyped;
+  let toggleNotification: Mock;
 
   const mockNotif = {
     id: 9000,

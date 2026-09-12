@@ -1,22 +1,34 @@
-import type { Untyped } from 'types/api';
+import type { Mock } from 'vitest';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { Formik } from 'formik';
 import { getQSConfig } from 'util/qs';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
+import type { LookupProps } from './Lookup';
 import Lookup from './Lookup';
 
 const QS_CONFIG = getQSConfig('test', {});
 
+/** What the lookup hands its options list, which the cases read back. */
+type RenderOptionsListProps = Parameters<LookupProps['renderOptionsList']>[0];
+
 describe('<Lookup />', () => {
-  let onChange: Untyped;
+  let onChange: Mock;
   // Captures the most recent render-props the Lookup passes to its options
   // list, so tests can assert on state/canDelete directly.
-  let lastRenderProps: Untyped;
+  let lastRenderProps: RenderOptionsListProps | null;
 
-  const renderOptionsList = (renderProps: Untyped) => {
+  const renderOptionsList = (renderProps: RenderOptionsListProps) => {
     lastRenderProps = renderProps;
     return <div data-testid="options-list" />;
+  };
+
+  /** The captured props, which only exist once the modal has opened. */
+  const optionsListProps = () => {
+    if (!lastRenderProps) {
+      throw new Error('the options list has not rendered');
+    }
+    return lastRenderProps;
   };
 
   function renderLookup(extraProps = {}) {
@@ -60,15 +72,15 @@ describe('<Lookup />', () => {
     await user.click(screen.getByRole('button', { name: 'Search' }));
     const dialog = await screen.findByRole('dialog');
     expect(within(dialog).getByTestId('options-list')).toBeInTheDocument();
-    expect(lastRenderProps.state).toEqual({
+    expect(optionsListProps().state).toEqual({
       selectedItems: [{ id: 1, name: 'foo', url: '/api/v2/item/1' }],
       value: [{ id: 1, name: 'foo', url: '/api/v2/item/1' }],
       multiple: true,
       isModalOpen: true,
       required: false,
     });
-    expect(lastRenderProps.dispatch).toBeTruthy();
-    expect(lastRenderProps.canDelete).toEqual(true);
+    expect(optionsListProps().dispatch).toBeTruthy();
+    expect(optionsListProps().canDelete).toEqual(true);
 
     await user.click(
       within(dialog).getByRole('button', { name: 'Cancel lookup' })
@@ -106,7 +118,7 @@ describe('<Lookup />', () => {
     );
     await user.click(screen.getByRole('button', { name: 'Search' }));
     await screen.findByRole('dialog');
-    expect(lastRenderProps.canDelete).toEqual(false);
+    expect(optionsListProps().canDelete).toEqual(false);
   });
 
   test('should be disabled while isLoading is true', () => {

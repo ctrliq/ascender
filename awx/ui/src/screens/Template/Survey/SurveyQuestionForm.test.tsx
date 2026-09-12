@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -18,7 +17,7 @@ const noop = () => {};
 
 // Drive the real AnsibleSelect (a PF FormSelect <select>) to change the
 // question type, then wait for the type-dependent fields to (re)render.
-function selectType(type: Untyped) {
+function selectType(type: string) {
   const select = document.querySelector('#question-type') as HTMLElement;
   fireEvent.change(select, { target: { value: type } });
 }
@@ -214,9 +213,9 @@ describe('<SurveyQuestionForm />', () => {
   // The default-toggle renders a styled CheckIcon whose `selected` prop drives
   // a styled-components class. In the real DOM we proxy that prop by asserting
   // the icon's class changes when toggled.
-  const toggleButton = (choice: Untyped) =>
+  const toggleButton = (choice: string) =>
     document.querySelector(`[data-ouia-component-id="${choice}-button"]`);
-  const iconClass = (choice: Untyped) =>
+  const iconClass = (choice: string) =>
     toggleButton(choice)!.querySelector('svg')!.getAttribute('class');
 
   test('should activate default values, multiselect', async () => {

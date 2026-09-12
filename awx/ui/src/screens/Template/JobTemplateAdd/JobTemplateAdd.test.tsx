@@ -1,10 +1,10 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
 import { JobTemplatesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import type { JobTemplateFormProps } from '../shared/JobTemplateForm';
 import JobTemplateAdd from './JobTemplateAdd';
 
 vi.mock('../../../api');
@@ -101,9 +101,13 @@ const mockSubmitValues = {
   webhook_credential: undefined,
   webhook_service: '',
 };
-const mockFormProps: { current: Untyped } = { current: undefined };
+// The props the container hands the form, captured so the cases can read
+// back what it seeded.
+const mockFormProps: { current?: JobTemplateFormProps } = {
+  current: undefined,
+};
 vi.mock('../shared/JobTemplateForm', () => ({
-  default: function MockJobTemplateForm(props: Untyped) {
+  default: function MockJobTemplateForm(props: JobTemplateFormProps) {
     mockFormProps.current = props;
     const { handleSubmit, handleCancel } = props;
     return (

@@ -1,10 +1,14 @@
-import type { JobTemplate, Untyped } from 'types/api';
+import type { JobTemplate } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
 import { JobTemplatesAPI, ProjectsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import type {
+  JobTemplateFormProps,
+  JobTemplateFormValues,
+} from '../shared/JobTemplateForm';
 import JobTemplateEdit from './JobTemplateEdit';
 
 vi.mock('../../../api');
@@ -103,16 +107,20 @@ const mockUpdatedLabels = [
 // The values object the real form would hand to onSubmit: scalar template
 // fields (no id/type/related/summary_fields/webhook_key) plus the object-valued
 // lookups the container unwraps, plus the edits made in the form.
-const mockBuildSubmitValues = () => {
+const mockBuildSubmitValues = (): JobTemplateFormValues => {
   const { id, type, related, summary_fields, webhook_key, ...scalarFields } =
     mockJobTemplate;
   return {
     ...scalarFields,
+    // The form holds the empty string where the api sends null.
+    description: scalarFields.description ?? '',
+    scm_branch: scalarFields.scm_branch ?? '',
+    playbook: scalarFields.playbook ?? '',
     name: 'new name',
     job_type: 'check',
     inventory: { id: 1, name: 'Other Inventory' },
     project: { id: 3, name: 'Boo' },
-    execution_environment: '',
+    execution_environment: null,
     webhook_credential: null,
     labels: mockUpdatedLabels,
     instanceGroups: [],
@@ -120,9 +128,13 @@ const mockBuildSubmitValues = () => {
     credentials: mockJobTemplate.summary_fields.credentials,
   };
 };
-const mockFormProps: { current: Untyped } = { current: undefined };
+// The props the container hands the form, captured so the cases can read
+// back what it seeded.
+const mockFormProps: { current?: JobTemplateFormProps } = {
+  current: undefined,
+};
 vi.mock('../shared/JobTemplateForm', () => ({
-  default: function MockJobTemplateForm(props: Untyped) {
+  default: function MockJobTemplateForm(props: JobTemplateFormProps) {
     mockFormProps.current = props;
     const { handleSubmit, handleCancel } = props;
     return (
