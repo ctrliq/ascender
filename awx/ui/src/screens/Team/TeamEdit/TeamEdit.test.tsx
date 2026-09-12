@@ -1,5 +1,6 @@
 import type { Untyped, Team } from 'types/api';
 import React from 'react';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
 
@@ -53,7 +54,7 @@ const mockData = {
 } as unknown as Team;
 
 describe('<TeamEdit />', () => {
-  let history: Untyped;
+  let history: TestHistory;
 
   const renderEdit = () => {
     history = createMemoryHistory({});

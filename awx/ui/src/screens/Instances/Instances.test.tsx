@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -39,7 +38,7 @@ vi.mock('./Instance', async () => {
   };
 });
 
-function renderAt(path: Untyped) {
+function renderAt(path: string) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
     <Routes>

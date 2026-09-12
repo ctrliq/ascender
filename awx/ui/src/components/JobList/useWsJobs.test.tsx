@@ -25,7 +25,7 @@ function getJobs() {
 }
 
 describe('useWsJobs hook', () => {
-  let debug: Untyped;
+  let debug: typeof global.console.debug;
   let mockServer: Untyped;
 
   beforeEach(() => {

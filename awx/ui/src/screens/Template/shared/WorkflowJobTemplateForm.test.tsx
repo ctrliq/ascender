@@ -1,7 +1,8 @@
-import type { WorkflowJobTemplate, Untyped } from 'types/api';
+import type { WorkflowJobTemplate } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import {
   WorkflowJobTemplatesAPI,
@@ -28,10 +29,10 @@ vi.mock('../../../api/models/CredentialTypes');
 vi.mock('../../../api/models/Credentials');
 
 describe('<WorkflowJobTemplateForm/>', () => {
-  let history: Untyped;
+  let history: TestHistory;
   const handleSubmit = vi.fn();
   const handleCancel = vi.fn();
-  let consoleError: Untyped;
+  let consoleError: typeof global.console.error;
   const mockTemplate = {
     id: 6,
     name: 'Foo',

@@ -1,6 +1,7 @@
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within, act } from '@testing-library/react';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI, ExecutionEnvironmentsAPI } from 'api';
@@ -35,7 +36,7 @@ const systemData = {
 };
 
 describe('<MiscSystemEdit />', () => {
-  let history: Untyped;
+  let history: TestHistory;
 
   beforeEach(() => {
     vi.mocked(SettingsAPI.revertCategory).mockResolvedValue(

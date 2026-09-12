@@ -1,6 +1,7 @@
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within, fireEvent } from '@testing-library/react';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { ConfigAPI, MeAPI, SettingsAPI, RootAPI, UsersAPI } from 'api';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
@@ -56,7 +57,15 @@ async function waitForLoaded() {
 describe('<SubscriptionEdit />', () => {
   describe('installing a fresh subscription', () => {
     let history;
-    let container: Untyped;
+    let container: HTMLElement;
+
+    // Asserted rather than checked: a selector that matches nothing here is a
+    // broken test, and the assertion that follows says so more clearly than a
+    // null guard would.
+    const find = (selector: string) =>
+      container.querySelector(selector) as HTMLElement;
+    const findInput = (selector: string) =>
+      container.querySelector(selector) as HTMLInputElement;
 
     async function renderFresh() {
       vi.resetAllMocks();
@@ -117,17 +126,13 @@ describe('<SubscriptionEdit />', () => {
 
     test('file upload field uploads a manifest file', async () => {
       await renderFresh();
-      const filenameInput = container.querySelector(
-        '#upload-manifest-filename'
-      );
+      const filenameInput = findInput('#upload-manifest-filename');
       expect(filenameInput.value).toEqual('');
-      const fileInput = container.querySelector('input[type="file"]');
+      const fileInput = find('input[type="file"]');
       const file = new File(['123'], 'mock.zip', { type: 'application/zip' });
       fireEvent.change(fileInput, { target: { files: [file] } });
       await waitFor(() =>
-        expect(
-          container.querySelector('#upload-manifest-filename').value
-        ).toEqual('mock.zip')
+        expect(findInput('#upload-manifest-filename').value).toEqual('mock.zip')
       );
     });
 
@@ -135,17 +140,15 @@ describe('<SubscriptionEdit />', () => {
       const { user } = await renderFresh();
 
       // upload a manifest so submit is enabled
-      const fileInput = container.querySelector('input[type="file"]');
+      const fileInput = find('input[type="file"]');
       const file = new File(['123'], 'mock.zip', { type: 'application/zip' });
       fireEvent.change(fileInput, { target: { files: [file] } });
       await waitFor(() =>
-        expect(
-          container.querySelector('#upload-manifest-filename').value
-        ).toEqual('mock.zip')
+        expect(findInput('#upload-manifest-filename').value).toEqual('mock.zip')
       );
 
       // advance to the analytics step
-      fireEvent.click(container.querySelector('#subscription-wizard-next'));
+      fireEvent.click(find('#subscription-wizard-next'));
       expect(await screen.findByText('User analytics')).toBeInTheDocument();
       expect(screen.getByText('Automation Analytics')).toBeInTheDocument();
       // manifest + insights enabled -> credential fields are shown. The step
@@ -157,19 +160,19 @@ describe('<SubscriptionEdit />', () => {
       expect(container.querySelector('#password-field')).toBeInTheDocument();
 
       // deselecting both analytics checkboxes hides the credential fields
-      await user.click(container.querySelector('#pendo-field'));
-      await user.click(container.querySelector('#insights-field'));
+      await user.click(find('#pendo-field'));
+      await user.click(find('#insights-field'));
       await waitFor(() =>
         expect(container.querySelector('#username-field')).toBeNull()
       );
       expect(container.querySelector('#password-field')).toBeNull();
 
       // advance to the eula step
-      fireEvent.click(container.querySelector('#subscription-wizard-next'));
+      fireEvent.click(find('#subscription-wizard-next'));
       expect(
         await screen.findByText('End User License Agreement')
       ).toBeInTheDocument();
-      const submit = container.querySelector('#subscription-wizard-submit');
+      const submit = find('#subscription-wizard-submit');
       expect(submit).toBeInTheDocument();
       expect(submit).not.toBeDisabled();
 
@@ -192,8 +195,16 @@ describe('<SubscriptionEdit />', () => {
   });
 
   describe('editing with a valid subscription', () => {
-    let history: Untyped;
-    let container: Untyped;
+    let history: TestHistory;
+    let container: HTMLElement;
+
+    // Asserted rather than checked: a selector that matches nothing here is a
+    // broken test, and the assertion that follows says so more clearly than a
+    // null guard would.
+    const find = (selector: string) =>
+      container.querySelector(selector) as HTMLElement;
+    const findInput = (selector: string) =>
+      container.querySelector(selector) as HTMLInputElement;
 
     async function renderEdit() {
       vi.resetAllMocks();
@@ -256,8 +267,8 @@ describe('<SubscriptionEdit />', () => {
       await user.click(
         screen.getByRole('button', { name: 'Username / password' })
       );
-      const usernameInput = container.querySelector('#username-field');
-      const passwordInput = container.querySelector('#password-field');
+      const usernameInput = findInput('#username-field');
+      const passwordInput = findInput('#password-field');
       expect(usernameInput.value).toEqual('');
       expect(passwordInput.value).toEqual('');
       fireEvent.change(usernameInput, {
@@ -267,13 +278,9 @@ describe('<SubscriptionEdit />', () => {
         target: { value: 'password-cred', name: 'password' },
       });
       await waitFor(() =>
-        expect(container.querySelector('#username-field').value).toEqual(
-          'username-cred'
-        )
+        expect(findInput('#username-field').value).toEqual('username-cred')
       );
-      expect(container.querySelector('#password-field').value).toEqual(
-        'password-cred'
-      );
+      expect(findInput('#password-field').value).toEqual('password-cred');
     });
 
     test('opens the subscription selection modal and selects a subscription', async () => {
@@ -281,8 +288,8 @@ describe('<SubscriptionEdit />', () => {
       await user.click(
         screen.getByRole('button', { name: 'Username / password' })
       );
-      const usernameInput = container.querySelector('#username-field');
-      const passwordInput = container.querySelector('#password-field');
+      const usernameInput = findInput('#username-field');
+      const passwordInput = findInput('#password-field');
       fireEvent.change(usernameInput, {
         target: { value: 'username-cred', name: 'username' },
       });
@@ -290,9 +297,7 @@ describe('<SubscriptionEdit />', () => {
         target: { value: 'password-cred', name: 'password' },
       });
       await waitFor(() =>
-        expect(container.querySelector('#username-field').value).toEqual(
-          'username-cred'
-        )
+        expect(findInput('#username-field').value).toEqual('username-cred')
       );
 
       // open the subscription modal (button's accessible name is its
@@ -318,19 +323,19 @@ describe('<SubscriptionEdit />', () => {
           screen.queryByRole('button', { name: 'Confirm selection' })
         ).not.toBeInTheDocument()
       );
-      const selected = container.querySelector('#selected-subscription');
+      const selected = find('#selected-subscription');
       expect(selected).toBeInTheDocument();
       expect(
         within(selected).getByText('mock subscription 50 instances')
       ).toBeInTheDocument();
 
       // next skips the analytics step and goes straight to eula
-      fireEvent.click(container.querySelector('#subscription-wizard-next'));
+      fireEvent.click(find('#subscription-wizard-next'));
       expect(
         await screen.findByText('End User License Agreement')
       ).toBeInTheDocument();
       expect(screen.queryByText('User analytics')).not.toBeInTheDocument();
-      const submit = container.querySelector('#subscription-wizard-submit');
+      const submit = find('#subscription-wizard-submit');
       expect(submit).not.toBeDisabled();
 
       // submit successfully

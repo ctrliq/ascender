@@ -1,4 +1,4 @@
-import type { Untyped, Host } from 'types/api';
+import type { Host } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -22,7 +22,7 @@ const host = {
 
 // HostGroups uses paths relative to its parent route, so mount it under the
 // same /hosts/:id/groups/* route that Host.js gives it in the app.
-function renderAt(path: Untyped) {
+function renderAt(path: string) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
     <Routes>

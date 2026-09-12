@@ -1,5 +1,6 @@
 import type { Untyped } from 'types/api';
 import React from 'react';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
 
@@ -45,7 +46,7 @@ vi.mock('../shared/ExecutionEnvironmentForm', () => ({
 }));
 
 describe('<ExecutionEnvironmentAdd/>', () => {
-  let history: Untyped;
+  let history: TestHistory;
 
   const renderAdd = (initialEntry = '/execution_environments') => {
     history = createMemoryHistory({ initialEntries: [initialEntry] });

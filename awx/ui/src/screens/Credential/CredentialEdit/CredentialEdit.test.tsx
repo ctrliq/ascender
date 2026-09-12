@@ -1,6 +1,7 @@
 import type { Credential, Untyped } from 'types/api';
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import {
   CredentialsAPI,
@@ -9,6 +10,7 @@ import {
   OrganizationsAPI,
   UsersAPI,
 } from 'api';
+import type { TestUser } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import CredentialEdit from './CredentialEdit';
 
@@ -195,8 +197,8 @@ describe('<CredentialEdit />', () => {
   });
 
   describe('Initial GET request succeeds', () => {
-    let history: Untyped;
-    let user: Untyped;
+    let history: TestHistory;
+    let user: TestUser;
 
     beforeEach(async () => {
       [

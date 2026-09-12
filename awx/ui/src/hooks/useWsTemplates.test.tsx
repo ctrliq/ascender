@@ -24,7 +24,7 @@ function getTemplates() {
 }
 
 describe('useWsTemplates hook', () => {
-  let debug: Untyped;
+  let debug: typeof global.console.debug;
   beforeEach(() => {
     ({ debug } = global.console);
     global.console.debug = () => {};

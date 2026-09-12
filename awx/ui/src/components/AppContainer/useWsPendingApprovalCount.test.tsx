@@ -23,7 +23,7 @@ function Test({ initialCount, fetchApprovalsCount }: Untyped) {
 }
 
 describe('useWsPendingApprovalCount hook', () => {
-  let debug: Untyped;
+  let debug: typeof global.console.debug;
   beforeEach(() => {
     /*
       Mock timers don't play well with vitest-websocket-mock,

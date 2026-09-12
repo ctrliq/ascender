@@ -4,6 +4,7 @@ import { screen, waitFor, within } from '@testing-library/react';
 
 import { MetricsAPI, InstancesAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
+import type { TestUser } from '../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Metrics from './Metrics';
 
@@ -11,7 +12,7 @@ vi.mock('../../api/models/Instances');
 vi.mock('../../api/models/Metrics');
 
 describe('<Metrics/>', () => {
-  let user: Untyped;
+  let user: TestUser;
 
   const openSelect = async (toggleText: Untyped) => {
     const toggle = screen.getByRole('button', { name: toggleText });

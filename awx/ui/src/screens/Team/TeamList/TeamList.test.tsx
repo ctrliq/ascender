@@ -1,8 +1,8 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { TeamsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { TestUser } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import TeamList from './TeamList';
@@ -40,7 +40,7 @@ afterEach(() => {
 });
 
 describe('<TeamList /> with full permissions', () => {
-  let user: Untyped;
+  let user: TestUser;
 
   beforeEach(async () => {
     vi.mocked(TeamsAPI.read).mockResolvedValue({

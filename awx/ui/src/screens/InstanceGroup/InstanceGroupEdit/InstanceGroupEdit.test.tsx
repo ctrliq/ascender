@@ -1,6 +1,7 @@
 import type { Untyped, InstanceGroup } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 
 import { InstanceGroupsAPI } from 'api';
@@ -67,7 +68,7 @@ const instanceGroupData = {
 } as unknown as InstanceGroup;
 
 describe('<InstanceGroupEdit>', () => {
-  let history: Untyped;
+  let history: TestHistory;
 
   beforeEach(() => {
     history = createMemoryHistory();

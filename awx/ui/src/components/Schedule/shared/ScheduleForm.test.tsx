@@ -7,6 +7,7 @@ import { DateTime } from 'luxon';
 import { dateToInputDateTime } from 'util/dates';
 import { SchedulesAPI, JobTemplatesAPI, InventoriesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { TestUser } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleForm from './ScheduleForm';
 
@@ -407,8 +408,8 @@ describe('<ScheduleForm />', () => {
   });
 
   describe('Add', () => {
-    let container: Untyped;
-    let user: Untyped;
+    let container: HTMLElement;
+    let user: TestUser;
 
     beforeEach(async () => {
       vi.mocked(SchedulesAPI.readZoneInfo).mockResolvedValue({

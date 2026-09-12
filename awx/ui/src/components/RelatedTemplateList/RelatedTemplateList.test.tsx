@@ -53,7 +53,7 @@ function rowCheckbox(name: Untyped) {
 }
 
 describe('<RelatedTemplateList />', () => {
-  let debug: Untyped;
+  let debug: typeof global.console.debug;
   beforeEach(() => {
     // Deleting one row first counts what depends on it, through one read
     // per related endpoint. Nothing here depends on the row being deleted.

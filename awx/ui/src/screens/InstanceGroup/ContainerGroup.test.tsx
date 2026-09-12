@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -44,7 +43,7 @@ const instanceGroup = {
 // ContainerGroup uses paths relative to its parent route, so mount it under the
 // same /instance_groups/container_group/:id/* route that InstanceGroups.js
 // gives it in the app.
-function renderAt(path: Untyped) {
+function renderAt(path: string) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
     <Routes>

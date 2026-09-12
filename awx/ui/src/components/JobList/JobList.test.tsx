@@ -132,7 +132,7 @@ function getRowCheckboxes() {
 }
 
 describe('<JobList />', () => {
-  let debug: Untyped;
+  let debug: typeof global.console.debug;
   beforeEach(() => {
     vi.mocked(UnifiedJobsAPI.read).mockResolvedValue({
       data: { count: 3, results: mockResults },

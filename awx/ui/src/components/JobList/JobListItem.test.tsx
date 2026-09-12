@@ -3,6 +3,7 @@ import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
+import type { TestUser } from '../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import JobListItem from './JobListItem';
@@ -76,7 +77,7 @@ const defaultProps = {
 };
 
 describe('<JobListItem />', () => {
-  let container: Untyped;
+  let container: HTMLElement;
 
   beforeEach(() => {
     const history = createMemoryHistory({
@@ -271,8 +272,8 @@ describe('<JobListItem />', () => {
 });
 
 describe('<JobListItem with failed job />', () => {
-  let user: Untyped;
-  let container: Untyped;
+  let user: TestUser;
+  let container: HTMLElement;
 
   beforeEach(() => {
     const history = createMemoryHistory({

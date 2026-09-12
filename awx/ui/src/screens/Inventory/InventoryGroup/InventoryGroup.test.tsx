@@ -1,4 +1,4 @@
-import type { Untyped, Inventory } from 'types/api';
+import type { Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -31,7 +31,7 @@ const inventory = { id: 1, name: 'Foo' } as unknown as Inventory;
 // InventoryGroup reads :inventoryType/:id/:groupId via useParams and renders a
 // nested v6 route tree, so mount it under its real parent route at a concrete
 // URL.
-function renderAt(path: Untyped) {
+function renderAt(path: string) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
     <Routes>

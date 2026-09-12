@@ -149,7 +149,7 @@ describe('<JobTemplateForm />', () => {
     { id: 5, kind: 'Machine', name: 'Cred 5', url: 'www.google.com' },
   ];
 
-  let consoleError: Untyped;
+  let consoleError: typeof global.console.error;
 
   beforeEach(() => {
     // The deeply-nested PF Lookup/OptionsList components log prop-type

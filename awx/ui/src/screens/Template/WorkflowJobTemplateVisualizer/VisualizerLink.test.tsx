@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { fireEvent } from '@testing-library/react';
 import {
@@ -67,16 +66,20 @@ const renderLink = () =>
   );
 
 describe('VisualizerLink', () => {
-  let container: Untyped;
+  let container: HTMLElement;
   beforeEach(() => {
     vi.clearAllMocks();
     ({ container } = renderLink());
   });
 
-  const getLinkG = () => container.querySelector('g#link-2-3');
-  const getOverlay = () => container.querySelector('#link-2-3-overlay');
-  const tooltipItem = (id: Untyped) =>
+  const getLinkG = () => container.querySelector('g#link-2-3') as Element;
+  const getOverlay = () =>
+    container.querySelector('#link-2-3-overlay') as Element;
+  // Nullable on purpose: half these assertions are that it is not there.
+  const tooltipItem = (id: string) =>
     container.querySelector(`[data-cy="${id}"]`);
+  /** The same item, where the test has just asserted it is on screen. */
+  const shownTooltipItem = (id: string) => tooltipItem(id) as Element;
 
   test('Displays action tooltip on hover and updates help text on hover', () => {
     expect(tooltipItem('link-add-node')).not.toBeInTheDocument();
@@ -94,16 +97,16 @@ describe('VisualizerLink', () => {
 
   test('Add Node tooltip action hover/click updates help text and dispatches properly', () => {
     fireEvent.mouseEnter(getLinkG());
-    fireEvent.mouseEnter(tooltipItem('link-add-node'));
+    fireEvent.mouseEnter(shownTooltipItem('link-add-node'));
     expect(updateHelpText).toHaveBeenCalledWith(
       'Add a new node between these two nodes'
     );
-    fireEvent.mouseLeave(tooltipItem('link-add-node'));
+    fireEvent.mouseLeave(shownTooltipItem('link-add-node'));
     expect(updateHelpText).toHaveBeenCalledWith(null);
     // mouseLeave bubbles to the link <g> and dismisses the tooltip in RTL,
     // so re-hover before clicking.
     fireEvent.mouseEnter(getLinkG());
-    fireEvent.click(tooltipItem('link-add-node'));
+    fireEvent.click(shownTooltipItem('link-add-node'));
     expect(dispatch).toHaveBeenCalledWith({
       type: 'START_ADD_NODE',
       sourceNodeId: 2,
@@ -114,12 +117,12 @@ describe('VisualizerLink', () => {
 
   test('Edit tooltip action hover/click updates help text and dispatches properly', () => {
     fireEvent.mouseEnter(getLinkG());
-    fireEvent.mouseEnter(tooltipItem('link-edit'));
+    fireEvent.mouseEnter(shownTooltipItem('link-edit'));
     expect(updateHelpText).toHaveBeenCalledWith('Edit this link');
-    fireEvent.mouseLeave(tooltipItem('link-edit'));
+    fireEvent.mouseLeave(shownTooltipItem('link-edit'));
     expect(updateHelpText).toHaveBeenCalledWith(null);
     fireEvent.mouseEnter(getLinkG());
-    fireEvent.click(tooltipItem('link-edit'));
+    fireEvent.click(shownTooltipItem('link-edit'));
     expect(dispatch).toHaveBeenCalledWith({
       type: 'SET_LINK_TO_EDIT',
       value: link,
@@ -129,12 +132,12 @@ describe('VisualizerLink', () => {
 
   test('Delete tooltip action hover/click updates help text and dispatches properly', () => {
     fireEvent.mouseEnter(getLinkG());
-    fireEvent.mouseEnter(tooltipItem('link-delete'));
+    fireEvent.mouseEnter(shownTooltipItem('link-delete'));
     expect(updateHelpText).toHaveBeenCalledWith('Delete this link');
-    fireEvent.mouseLeave(tooltipItem('link-delete'));
+    fireEvent.mouseLeave(shownTooltipItem('link-delete'));
     expect(updateHelpText).toHaveBeenCalledWith(null);
     fireEvent.mouseEnter(getLinkG());
-    fireEvent.click(tooltipItem('link-delete'));
+    fireEvent.click(shownTooltipItem('link-delete'));
     expect(dispatch).toHaveBeenCalledWith({
       type: 'START_DELETE_LINK',
       link,

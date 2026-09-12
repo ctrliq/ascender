@@ -1,6 +1,7 @@
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -67,7 +68,7 @@ function editAndSubmit(variable: Untyped) {
 
 describe('<SurveyQuestionEdit />', () => {
   let updateSurvey: Untyped;
-  let history: Untyped;
+  let history: TestHistory;
 
   describe('with question_variable present', () => {
     beforeEach(() => {

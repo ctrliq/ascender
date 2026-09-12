@@ -32,7 +32,7 @@ const subscribeMessage = JSON.stringify({
 });
 
 describe('useWsInventorySources hook', () => {
-  let debug: Untyped;
+  let debug: typeof global.console.debug;
   beforeEach(() => {
     debug = global.console.debug;
     global.console.debug = () => {};

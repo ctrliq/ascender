@@ -1,6 +1,7 @@
 import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
 import {
@@ -109,7 +110,7 @@ vi.mock('../shared', () => ({
 }));
 
 describe('<WorkflowJobTemplateEdit/>', () => {
-  let history: Untyped;
+  let history: TestHistory;
 
   beforeEach(() => {
     setSubmitValues(submittedValues);

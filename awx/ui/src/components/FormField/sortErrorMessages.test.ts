@@ -1,8 +1,7 @@
-import type { Untyped } from 'types/api';
 import sortErrorMessages from './sortErrorMessages';
 
 describe('sortErrorMessages', () => {
-  let consoleError: Untyped;
+  let consoleError: typeof global.console.error;
   beforeEach(() => {
     // Component logs errors to console. Hide those during testing.
     consoleError = global.console.error;

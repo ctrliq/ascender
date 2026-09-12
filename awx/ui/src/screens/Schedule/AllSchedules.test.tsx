@@ -29,7 +29,7 @@ vi.mock('components/Schedule', async () => {
   };
 });
 
-function renderAt(path: Untyped) {
+function renderAt(path: string) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
     <Routes>

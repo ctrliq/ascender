@@ -49,7 +49,7 @@ vi.mock('../../../hooks/useThrottle', () => ({
 }));
 
 describe('useWsInventories hook', () => {
-  let debug: Untyped;
+  let debug: typeof global.console.debug;
   beforeEach(() => {
     debug = global.console.debug;
     global.console.debug = () => {};

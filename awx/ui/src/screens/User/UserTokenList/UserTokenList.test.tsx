@@ -4,6 +4,7 @@ import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UsersAPI, TokensAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { TestUser } from '../../../../testUtils/rtlContexts';
 import {
   renderWithContexts,
   settleTooltips,
@@ -138,7 +139,7 @@ async function selectThirdTokenAndDelete(user: Untyped) {
 }
 
 describe('<UserTokenList />', () => {
-  let user: Untyped;
+  let user: TestUser;
 
   beforeEach(async () => {
     vi.mocked(UsersAPI.readTokens).mockResolvedValue(

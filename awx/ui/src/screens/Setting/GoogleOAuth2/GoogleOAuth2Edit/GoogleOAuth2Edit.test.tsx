@@ -1,6 +1,6 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
@@ -26,7 +26,7 @@ const mockSettings = {
 };
 
 describe('<GoogleOAuth2Edit />', () => {
-  let history: Untyped;
+  let history: TestHistory;
 
   beforeEach(() => {
     vi.mocked(SettingsAPI.revertCategory).mockResolvedValue(

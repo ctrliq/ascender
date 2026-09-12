@@ -1,5 +1,6 @@
 import type { Untyped } from 'types/api';
 import React from 'react';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
 
@@ -58,7 +59,7 @@ vi.mock('../shared/CredentialTypeForm', () => ({
 }));
 
 describe('<CredentialTypeAdd/>', () => {
-  let history: Untyped;
+  let history: TestHistory;
 
   const renderAdd = () => {
     history = createMemoryHistory({ initialEntries: ['/credential_types'] });

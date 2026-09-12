@@ -1,6 +1,7 @@
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import useDebounce from 'hooks/useDebounce';
 import { InstancesAPI } from 'api';
@@ -74,7 +75,7 @@ const instanceDataWithPeers = {
 };
 
 describe('<InstanceEdit/>', () => {
-  let history: Untyped;
+  let history: TestHistory;
 
   beforeEach(() => {
     vi.mocked(useDebounce).mockImplementation((fn: Untyped) => fn);

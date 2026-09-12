@@ -1,5 +1,4 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
@@ -10,6 +9,7 @@ import {
   WorkflowJobTemplateNodesAPI,
 } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { TestUser } from '../../../../testUtils/rtlContexts';
 import {
   renderWithContexts,
   settleTooltips,
@@ -74,8 +74,8 @@ function renderList(initialEntry = '/inventories/inventory/1/sources') {
 }
 
 describe('<InventorySourceList />', () => {
-  let user: Untyped;
-  let debug: Untyped;
+  let user: TestUser;
+  let debug: typeof global.console.debug;
 
   beforeEach(async () => {
     debug = global.console.debug;
@@ -198,7 +198,7 @@ describe('<InventorySourceList />', () => {
 });
 
 describe('<InventorySourceList /> error handling', () => {
-  let debug: Untyped;
+  let debug: typeof global.console.debug;
 
   beforeEach(() => {
     debug = global.console.debug;
@@ -236,7 +236,7 @@ describe('<InventorySourceList /> error handling', () => {
 });
 
 describe('<InventorySourceList /> RBAC testing', () => {
-  let debug: Untyped;
+  let debug: typeof global.console.debug;
 
   beforeEach(() => {
     debug = global.console.debug;

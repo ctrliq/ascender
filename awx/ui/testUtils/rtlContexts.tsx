@@ -112,6 +112,9 @@ function HistoryRouter({
   );
 }
 
+/** The user-event instance renderWithContexts sets up for each render. */
+export type TestUser = ReturnType<typeof userEvent.setup>;
+
 /** What renderWithContexts takes beyond the contexts: testing library's own. */
 export interface RenderWithContextsOptions extends Omit<
   RenderOptions,

@@ -1,6 +1,7 @@
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
@@ -14,7 +15,7 @@ import LDAPEdit from './LDAPEdit';
 vi.mock('../../../../api');
 
 describe('<LDAPEdit />', () => {
-  let history: Untyped;
+  let history: TestHistory;
 
   beforeEach(() => {
     vi.mocked(SettingsAPI.updateAll).mockResolvedValue(

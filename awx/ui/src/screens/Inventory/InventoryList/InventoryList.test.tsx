@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { InventoriesAPI, JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
@@ -96,7 +95,7 @@ const mockInventories = [
 ];
 
 describe('<InventoryList />', () => {
-  let debug: Untyped;
+  let debug: typeof global.console.debug;
   beforeEach(() => {
     vi.mocked(InventoriesAPI.read).mockResolvedValue({
       data: {

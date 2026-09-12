@@ -3,6 +3,7 @@ import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UsersAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { TestUser } from '../../../../testUtils/rtlContexts';
 import {
   renderWithContexts,
   settleTooltips,
@@ -125,7 +126,7 @@ afterEach(() => {
 });
 
 describe('UsersList with full permissions', () => {
-  let user: Untyped;
+  let user: TestUser;
 
   beforeEach(async () => {
     (UsersAPI as Untyped).destroy = vi.fn();

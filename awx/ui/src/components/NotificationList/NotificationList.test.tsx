@@ -1,16 +1,16 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { NotificationTemplatesAPI, JobTemplatesAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
+import type { TestUser } from '../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import NotificationList from './NotificationList';
 
 vi.mock('../../api');
 
 describe('<NotificationList />', () => {
-  let container: Untyped;
-  let user: Untyped;
+  let container: HTMLElement;
+  let user: TestUser;
   const data = {
     count: 2,
     results: [
@@ -38,7 +38,8 @@ describe('<NotificationList />', () => {
   // The PF Switch renders the toggle as an <input type="checkbox" id={...}>;
   // toggles share aria-labels across rows, so query the underlying input by
   // its stable id to disambiguate per row.
-  const toggle = (id: Untyped) => container.querySelector(`#${id}`);
+  const toggle = (id: string) =>
+    container.querySelector(`#${id}`) as HTMLElement;
 
   beforeEach(async () => {
     vi.mocked(NotificationTemplatesAPI.readOptions).mockResolvedValue({
@@ -215,8 +216,8 @@ describe('<NotificationList />', () => {
 });
 
 describe('<NotificationList showChangedToggle />', () => {
-  let container: Untyped;
-  let user: Untyped;
+  let container: HTMLElement;
+  let user: TestUser;
   const data = {
     count: 1,
     results: [
@@ -229,7 +230,8 @@ describe('<NotificationList showChangedToggle />', () => {
     ],
   };
 
-  const toggle = (id: Untyped) => container.querySelector(`#${id}`);
+  const toggle = (id: string) =>
+    container.querySelector(`#${id}`) as HTMLElement;
 
   beforeEach(async () => {
     vi.mocked(NotificationTemplatesAPI.readOptions).mockResolvedValue({

@@ -1,6 +1,7 @@
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
@@ -12,7 +13,7 @@ import AzureADTenantEdit from './AzureADTenantEdit';
 vi.mock('../../../../api');
 
 describe('<AzureADTenantEdit />', () => {
-  let history: Untyped;
+  let history: TestHistory;
   let tenantSettings: Untyped;
 
   beforeEach(() => {

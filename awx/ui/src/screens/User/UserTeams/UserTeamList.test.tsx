@@ -1,11 +1,11 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import { UsersAPI, TeamsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { TestUser } from '../../../../testUtils/rtlContexts';
 import {
   renderWithContexts,
   settleTooltips,
@@ -94,7 +94,7 @@ const mockAPIUserTeamList = [
 const options = { data: { actions: { POST: true } } };
 
 describe('<UserTeamList />', () => {
-  let user: Untyped;
+  let user: TestUser;
 
   beforeEach(async () => {
     vi.mocked(UsersAPI.readTeams).mockResolvedValue({

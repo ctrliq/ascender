@@ -19,7 +19,7 @@ function getResult() {
 }
 
 describe('useWsProject', () => {
-  let debug: Untyped;
+  let debug: typeof global.console.debug;
 
   beforeEach(() => {
     debug = global.console.debug;
