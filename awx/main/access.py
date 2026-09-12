@@ -523,6 +523,30 @@ class BaseAccess(object):
         return False
 
 
+class ReadOnlyAccess:
+    """
+    A record of something that happened, which nobody adds, changes or deletes.
+
+    Eight resources are read only, and each of them used to say so by repeating
+    the same three methods. Saying it once makes it a property of the resource
+    rather than something you have to read three method bodies to find out, and
+    leaves each class carrying only what actually differs about it: its model,
+    and which of its rows you are allowed to see.
+
+    Read only means read only for everyone, superusers included, so a class
+    whose methods are decorated with check_superuser does not belong here.
+    """
+
+    def can_add(self, data):
+        return False
+
+    def can_change(self, obj, data):
+        return False
+
+    def can_delete(self, obj):
+        return False
+
+
 class UnifiedCredentialsMixin(BaseAccess):
     """
     The credentials many-to-many is a standard relationship for JT, jobs, and others
@@ -2345,7 +2369,7 @@ class AdHocCommandAccess(BaseAccess):
         return obj.inventory is not None and self.user in obj.inventory.admin_role
 
 
-class AdHocCommandEventAccess(BaseAccess):
+class AdHocCommandEventAccess(ReadOnlyAccess, BaseAccess):
     """
     I can see ad hoc command event records whenever I can read both ad hoc
     command and host.
@@ -2363,17 +2387,8 @@ class AdHocCommandEventAccess(BaseAccess):
         host_qs = self.user.get_queryset(Host)
         return qs.filter(Q(host__isnull=True) | Q(host__in=host_qs), ad_hoc_command__in=ad_hoc_command_qs)
 
-    def can_add(self, data):
-        return False
 
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
-
-
-class JobHostSummaryAccess(BaseAccess):
+class JobHostSummaryAccess(ReadOnlyAccess, BaseAccess):
     """
     I can see job/host summary records whenever I can read both job and host.
     """
@@ -2390,17 +2405,8 @@ class JobHostSummaryAccess(BaseAccess):
         host_qs = self.user.get_queryset(Host)
         return self.model.objects.filter(job__in=job_qs, host__in=host_qs)
 
-    def can_add(self, data):
-        return False
 
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
-
-
-class JobEventAccess(BaseAccess):
+class JobEventAccess(ReadOnlyAccess, BaseAccess):
     """
     I can see job event records whenever I can read both job and host.
     """
@@ -2417,21 +2423,12 @@ class JobEventAccess(BaseAccess):
             | Q(job_id__in=Job.objects.filter(job_template__in=JobTemplate.accessible_pk_qs(self.user, 'read_role')).values('pk'))
         )
 
-    def can_add(self, data):
-        return False
-
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
-
 
 class UnpartitionedJobEventAccess(JobEventAccess):
     model = UnpartitionedJobEvent
 
 
-class ProjectUpdateEventAccess(BaseAccess):
+class ProjectUpdateEventAccess(ReadOnlyAccess, BaseAccess):
     """
     I can see project update event records whenever I can access the project update
     """
@@ -2441,17 +2438,8 @@ class ProjectUpdateEventAccess(BaseAccess):
     def filtered_queryset(self):
         return self.model.objects.filter(Q(project_update__project__in=Project.accessible_pk_qs(self.user, 'read_role')))
 
-    def can_add(self, data):
-        return False
 
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
-
-
-class InventoryUpdateEventAccess(BaseAccess):
+class InventoryUpdateEventAccess(ReadOnlyAccess, BaseAccess):
     """
     I can see inventory update event records whenever I can access the inventory update
     """
@@ -2460,15 +2448,6 @@ class InventoryUpdateEventAccess(BaseAccess):
 
     def filtered_queryset(self):
         return self.model.objects.filter(Q(inventory_update__inventory_source__inventory__in=Inventory.accessible_pk_qs(self.user, 'read_role')))
-
-    def can_add(self, data):
-        return False
-
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
 
 
 class ReceptorAddressAccess(BaseAccess):
@@ -2494,21 +2473,12 @@ class ReceptorAddressAccess(BaseAccess):
         return False
 
 
-class SystemJobEventAccess(BaseAccess):
+class SystemJobEventAccess(ReadOnlyAccess, BaseAccess):
     """
     I can only see manage System Jobs events if I'm a super user
     """
 
     model = SystemJobEvent
-
-    def can_add(self, data):
-        return False
-
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
 
 
 class UnifiedJobTemplateAccess(BaseAccess):
@@ -2781,7 +2751,7 @@ class LabelAccess(BaseAccess):
         return self.can_change(obj, None)
 
 
-class ActivityStreamAccess(BaseAccess):
+class ActivityStreamAccess(ReadOnlyAccess, BaseAccess):
     """
     I can see activity stream events only when I have permission on all objects included in the event
     """
@@ -2898,15 +2868,6 @@ class ActivityStreamAccess(BaseAccess):
             q |= Q(o_auth2_access_token__in=token_set)
 
         return qs.filter(q).distinct()
-
-    def can_add(self, data):
-        return False
-
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
 
 
 class RoleAccess(BaseAccess):
@@ -3053,7 +3014,7 @@ class WorkflowApprovalTemplateAccess(BaseAccess):
         return self.model.objects.filter(workflowjobtemplatenodes__workflow_job_template__in=WorkflowJobTemplate.accessible_pk_qs(self.user, 'read_role'))
 
 
-class WorkflowApprovalVoteAccess(BaseAccess):
+class WorkflowApprovalVoteAccess(ReadOnlyAccess, BaseAccess):
     """
     Votes are an immutable audit trail written internally when a user approves
     or denies a workflow approval; they can never be created, changed or
@@ -3071,15 +3032,6 @@ class WorkflowApprovalVoteAccess(BaseAccess):
         return self.model.objects.filter(
             workflow_approval__unified_job_node__workflow_job__unified_job_template__in=WorkflowJobTemplate.accessible_pk_qs(self.user, 'read_role')
         )
-
-    def can_add(self, data):
-        return False
-
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
 
 
 for cls in BaseAccess.__subclasses__():
