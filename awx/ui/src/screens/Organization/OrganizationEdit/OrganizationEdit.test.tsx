@@ -1,0 +1,148 @@
+import type { Organization } from 'types/api';
+import React from 'react';
+import { act, screen } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { OrganizationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import OrganizationEdit from './OrganizationEdit';
+
+vi.mock('../../../api');
+
+// Drive only OrganizationEdit's handleSubmit/handleCancel; the form's own
+// fields are covered by OrganizationForm's suite.
+/**
+ * What the screen hands the form, as the stub the test puts in its place
+ * captures it: the assertions read these back to say what the screen passed.
+ */
+interface CapturedFormProps {
+  onSubmit: (...args: unknown[]) => Promise<void> | void;
+  onCancel: () => void;
+  [key: string]: unknown;
+}
+
+let formProps: CapturedFormProps | undefined;
+vi.mock('../shared/OrganizationForm', () => {
+  const MockOrganizationForm = (props: CapturedFormProps) => {
+    formProps = props;
+    return (
+      <div data-testid="organization-form">
+        <button
+          type="button"
+          aria-label="Save"
+          onClick={() => props.onSubmit({}, [], [])}
+        >
+          Save
+        </button>
+        <button type="button" aria-label="Cancel" onClick={props.onCancel}>
+          Cancel
+        </button>
+      </div>
+    );
+  };
+  return { default: MockOrganizationForm };
+});
+
+describe('<OrganizationEdit />', () => {
+  const mockData = {
+    name: 'Foo',
+    description: 'Bar',
+    id: 1,
+    related: {
+      instance_groups: '/api/v2/organizations/1/instance_groups',
+    },
+    default_environment: 1,
+    summary_fields: {
+      default_environment: {
+        id: 1,
+        name: 'Baz',
+        image: 'quay.io/ansible/awx-ee',
+      },
+    },
+  };
+
+  afterEach(() => {
+    vi.clearAllMocks();
+    formProps = undefined;
+  });
+
+  test('onSubmit should call api update', async () => {
+    renderWithContexts(
+      <OrganizationEdit organization={mockData as unknown as Organization} />
+    );
+    await screen.findByTestId('organization-form');
+
+    const updatedOrgData = {
+      name: 'new name',
+      description: 'new description',
+      default_environment: null,
+    };
+    await act(async () => {
+      formProps!.onSubmit(updatedOrgData, [], []);
+    });
+
+    expect(OrganizationsAPI.update).toHaveBeenCalledWith(1, updatedOrgData);
+  });
+
+  test('onSubmit associates and disassociates instance groups', async () => {
+    renderWithContexts(
+      <OrganizationEdit organization={mockData as unknown as Organization} />
+    );
+    await screen.findByTestId('organization-form');
+
+    const updatedOrgData = {
+      name: 'new name',
+      description: 'new description',
+    };
+    const newInstanceGroups = [
+      {
+        name: 'mock three',
+        id: 3,
+      },
+      {
+        name: 'mock four',
+        id: 4,
+      },
+    ];
+    const oldInstanceGroups = [
+      {
+        name: 'mock two',
+        id: 2,
+      },
+    ];
+
+    await act(async () => {
+      formProps!.onSubmit(updatedOrgData, newInstanceGroups, oldInstanceGroups);
+    });
+
+    expect(OrganizationsAPI.orderInstanceGroups).toHaveBeenCalledWith(
+      mockData.id,
+      newInstanceGroups,
+      oldInstanceGroups
+    );
+  });
+
+  test('should navigate to organization detail when cancel is clicked', async () => {
+    const mockInstanceGroups = [
+      { name: 'One', id: 1 },
+      { name: 'Two', id: 2 },
+    ];
+    vi.mocked(OrganizationsAPI.readInstanceGroups).mockResolvedValue({
+      data: {
+        results: mockInstanceGroups,
+      },
+    } as unknown as ResponseOf<
+      typeof OrganizationsAPI.readInstanceGroups
+    >) as unknown as ResponseOf<typeof OrganizationsAPI.readInstanceGroups>;
+    const history = createMemoryHistory({});
+    const { user } = renderWithContexts(
+      <OrganizationEdit organization={mockData as unknown as Organization} />,
+      { context: { router: { history } } }
+    );
+    await screen.findByTestId('organization-form');
+
+    await user.click(screen.getByRole('button', { name: 'Cancel' }));
+
+    expect(history.location.pathname).toEqual('/organizations/1/details');
+  });
+});
