@@ -1376,7 +1376,7 @@ class InventoryUpdate(UnifiedJob, InventorySourceOptions, JobNotificationMixin, 
         return reverse('api:inventory_update_detail', kwargs={'pk': self.pk}, request=request)
 
     def get_ui_url(self):
-        return urljoin(settings.TOWER_URL_BASE, "/#/jobs/inventory/{}".format(self.pk))
+        return urljoin(settings.ASCENDER_URL_BASE, "/#/jobs/inventory/{}".format(self.pk))
 
     def get_actual_source_path(self):
         '''Alias to source_path that combines with project path for for SCM file based sources'''
