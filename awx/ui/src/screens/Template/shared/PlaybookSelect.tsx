@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { DetailedError } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -19,9 +19,9 @@ import useRequest from 'hooks/useRequest';
 const noop = () => {};
 
 export interface PlaybookSelectProps {
-  projectId?: Untyped;
+  projectId?: number | string | null;
   isValid: boolean;
-  selected?: Untyped;
+  selected?: string;
   /**
    * Declared method style on purpose: the handler is formik's own, which takes
    * an event or a field name, and it is handed straight to whichever
@@ -29,7 +29,8 @@ export interface PlaybookSelectProps {
    */
   onBlur?(event?: React.SyntheticEvent): void;
   onError: (error: unknown) => void;
-  onChange?: (...args: Untyped[]) => void;
+  /** Sets the field to the playbook picked, which is its path in the project. */
+  onChange?: (playbook: string) => void;
   [key: string]: unknown;
 }
 
@@ -57,8 +58,11 @@ function PlaybookSelect({
       }
       const { data } = await ProjectsAPI.readPlaybooks(projectId);
 
-      if (data.length === 1) {
-        onChange(data[0]);
+      // A project with one playbook picks it, which is what the field would
+      // have to be set to anyway.
+      const only = data[0];
+      if (data.length === 1 && only) {
+        onChange(only);
       }
       return data;
     }, [projectId, onChange]),
@@ -80,16 +84,14 @@ function PlaybookSelect({
   }, [error, onError]);
 
   const filteredOptions = filterValue
-    ? options.filter((opt: Untyped) =>
+    ? options.filter((opt) =>
         opt.toLowerCase().includes(filterValue.toLowerCase())
       )
     : options;
 
   const showCreatableOption =
     filterValue &&
-    !options.some(
-      (opt: Untyped) => opt.toLowerCase() === filterValue.toLowerCase()
-    );
+    !options.some((opt) => opt.toLowerCase() === filterValue.toLowerCase());
 
   return (
     <Select
@@ -150,7 +152,7 @@ function PlaybookSelect({
       )}
     >
       <SelectList>
-        {filteredOptions.map((opt: Untyped) => (
+        {filteredOptions.map((opt) => (
           <SelectOption key={opt} value={opt}>
             {opt}
           </SelectOption>

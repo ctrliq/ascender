@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 import {
   Select,
@@ -11,9 +10,13 @@ import type { ScheduleFrequency } from './types';
 
 export interface FrequencySelectProps {
   id: string;
-  value: unknown[];
-  onChange: (...args: Untyped[]) => void;
-  onBlur: (event?: Untyped) => void;
+  value: ScheduleFrequency[];
+  onChange: (value: ScheduleFrequency[]) => void;
+  /**
+   * Declared method style on purpose: the handler is formik's own setTouched,
+   * which takes whether the field is touched rather than an event.
+   */
+  onBlur?(touched?: boolean): void;
   placeholderText: React.ReactNode;
   children: React.ReactNode;
   [key: string]: unknown;
@@ -48,7 +51,7 @@ export default function FrequencySelect({
 
   const handleOpenChange = (val: boolean) => {
     if (!val) {
-      onBlur();
+      onBlur?.();
     }
     setIsOpen(val);
   };

@@ -1,5 +1,5 @@
 import type { SearchableKey } from 'components/PaginatedTable';
-import type { NotificationsApiModel, Untyped } from 'types/api';
+import type { NotificationsApiModel, NotificationTemplate } from 'types/api';
 import type { QSParams } from 'util/qs';
 import React, { useEffect, useCallback, useState } from 'react';
 import { useLocation } from 'react-router';
@@ -42,7 +42,7 @@ function NotificationList({
 }: NotificationListProps) {
   const { t } = useLingui();
   const location = useLocation();
-  const [loadingToggleIds, setLoadingToggleIds] = useState<Untyped[]>([]);
+  const [loadingToggleIds, setLoadingToggleIds] = useState<number[]>([]);
   const [toggleError, setToggleError] = useState<unknown>(null);
 
   const {
@@ -79,9 +79,9 @@ function NotificationList({
       const labels = (
         actionsResponse.data.actions.GET?.notification_type?.choices ?? []
       ).reduce(
-        (map: Record<string, string>, notifType: Untyped) => ({
+        (map: Record<string, string>, [value, label]) => ({
           ...map,
-          [notifType[0]]: notifType[1],
+          [String(value)]: label,
         }),
         {}
       );
@@ -104,7 +104,7 @@ function NotificationList({
       // Both of the approvals/changed keys are filled in below, whichever
       // branch runs, so they are declared here rather than added later.
       const rtnObj: {
-        notifications: Untyped[];
+        notifications: NotificationTemplate[];
         itemCount: number;
         startedTemplateIds: number[];
         successTemplateIds: number[];
@@ -119,13 +119,9 @@ function NotificationList({
         approvalsTemplateIds: [],
         changedTemplateIds: [],
         itemCount: notificationsCount,
-        startedTemplateIds: startedTemplates.results.map(
-          (st: Untyped) => st.id
-        ),
-        successTemplateIds: successTemplates.results.map(
-          (su: Untyped) => su.id
-        ),
-        errorTemplateIds: errorTemplates.results.map((e: Untyped) => e.id),
+        startedTemplateIds: startedTemplates.results.map((st) => st.id),
+        successTemplateIds: successTemplates.results.map((su) => su.id),
+        errorTemplateIds: errorTemplates.results.map((e) => e.id),
         typeLabels: labels,
         relatedSearchableKeys: (
           actionsResponse?.data?.related_search_fields || []

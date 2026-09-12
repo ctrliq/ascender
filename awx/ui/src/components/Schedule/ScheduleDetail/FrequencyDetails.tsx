@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 import { Plural, SelectOrdinal, useLingui } from '@lingui/react/macro';
@@ -58,10 +57,10 @@ const MONTH_LABELS = {
 };
 
 export interface FrequencyDetailsProps {
-  type: Untyped;
+  type: ScheduleFrequency;
   label: React.ReactNode;
-  options: Untyped;
-  timezone: Untyped;
+  options: FrequencyOptions;
+  timezone?: string | null;
   isException?: boolean;
   [key: string]: unknown;
 }
@@ -108,9 +107,9 @@ export default function FrequencyDetails({
         {type === 'week' && options.daysOfWeek ? (
           <Detail
             label={t`On days`}
-            value={options.daysOfWeek
+            value={(options.daysOfWeek as Weekday[])
               .sort(sortWeekday)
-              .map((d: Weekday) =>
+              .map((d) =>
                 i18n._(
                   RRULE_WEEKDAY_LABELS[
                     d.weekday as keyof typeof RRULE_WEEKDAY_LABELS
@@ -137,7 +136,7 @@ function sortWeekday(a: Weekday, b: Weekday) {
 interface FrequencyDetailPartProps {
   type?: ScheduleFrequency;
   options: FrequencyOptions;
-  timezone?: string;
+  timezone?: string | null;
   /** Prefixes each detail's data-cy, so the exception rules do not collide. */
   prefix: string;
 }
@@ -253,10 +252,10 @@ function EndDetail({
       `${options.endDate} ${options.endTime}`,
       'yyyy-MM-dd h:mm a',
       {
-        zone: timezone,
+        zone: timezone ?? undefined,
       }
     );
-    value = formatDateString(date.toISO(), timezone);
+    value = formatDateString(date.toISO(), timezone ?? undefined);
   }
   return <Detail label={t`End`} value={value} dataCy={`${prefix}-end`} />;
 }

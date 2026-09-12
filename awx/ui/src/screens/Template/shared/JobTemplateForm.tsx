@@ -257,7 +257,7 @@ function JobTemplateForm({
   );
 
   const handlePlaybookUpdate = useCallback(
-    (value: SummaryFieldRef | null) => {
+    (value: string) => {
       setFieldValue('playbook', value);
       setFieldTouched('playbook', true, false);
     },

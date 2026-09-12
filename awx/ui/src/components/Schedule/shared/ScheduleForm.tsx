@@ -153,7 +153,7 @@ function ScheduleForm({
         }
       }
 
-      const zones = (data.zones || []).map((zone: unknown) => ({
+      const zones = (data.zones || []).map((zone: string) => ({
         value: zone,
         key: zone,
         label: zone,

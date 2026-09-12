@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { TimeZones } from 'types/api';
 import React, { useState } from 'react';
 import { useField } from 'formik';
 import {
@@ -31,8 +31,10 @@ const SelectClearOption = styled(SelectOption)`
 
 export interface ScheduleFormFieldsProps {
   hasDaysToKeepField?: boolean;
-  zoneOptions: Untyped;
-  zoneLinks: Untyped;
+  /** The zones the api offers, as the select's own value and label pairs. */
+  zoneOptions: { value: string; key: string; label: string }[];
+  /** The zones that are aliases, each naming the zone it stands for. */
+  zoneLinks: TimeZones['links'];
   [key: string]: unknown;
 }
 
@@ -61,7 +63,10 @@ export default function ScheduleFormFields({
       setTimezoneMessage('');
     }
     // AnsibleSelect hands both through; formik's own onChange takes the event.
-    (timezone.onChange as Untyped)(event, selectedValue);
+    (timezone.onChange as (event: unknown, value: string) => void)(
+      event,
+      selectedValue
+    );
   };
   let timezoneValidatedStatus: 'default' | 'error' | 'warning' = 'default';
   if (timezoneMeta.touched && timezoneMeta.error) {

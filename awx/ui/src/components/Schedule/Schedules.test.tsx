@@ -11,6 +11,10 @@ describe('<Schedules />', () => {
       initialEntries: ['/templates/job_template/1/schedules'],
     });
     const jobTemplate = { id: 1, name: 'Mock JT' };
+    // The list never asks for them in this test: it renders the add route.
+    const loadSchedules = vi.fn();
+    const loadScheduleOptions = vi.fn();
+    const createSchedule = vi.fn();
 
     // Schedules uses relative routes, so mount it under its ".../schedules/*"
     // parent route.
@@ -22,9 +26,9 @@ describe('<Schedules />', () => {
             <Schedules
               setBreadcrumb={() => {}}
               jobTemplate={jobTemplate}
-              loadSchedules={() => {}}
-              loadScheduleOptions={() => {}}
-              apiModel={{ createSchedule: () => {} }}
+              loadSchedules={loadSchedules}
+              loadScheduleOptions={loadScheduleOptions}
+              apiModel={{ createSchedule }}
             />
           }
         />

@@ -1,4 +1,9 @@
-import type { SchedulesApiModel, Untyped } from 'types/api';
+import type {
+  ApiEntity,
+  LaunchCredential,
+  SchedulesApiModel,
+  SummaryFieldRef,
+} from 'types/api';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Card } from '@patternfly/react-core';
@@ -19,12 +24,13 @@ import { CardBody } from '../../Card';
 import type { ScheduleFormValues } from '../shared/types';
 
 export interface ScheduleAddProps {
-  resource: Untyped;
+  /** The thing the schedule is created on, which the request is addressed by. */
+  resource: ApiEntity;
   apiModel: SchedulesApiModel;
   launchConfig?: LaunchConfig;
   surveyConfig?: SurveyConfig | null;
   hasDaysToKeepField?: boolean;
-  resourceDefaultCredentials?: Untyped;
+  resourceDefaultCredentials?: LaunchCredential[];
   [key: string]: unknown;
 }
 
@@ -59,12 +65,12 @@ function ScheduleAdd({
       credentials,
       labels,
       ...rest
-    } = values as ScheduleFormValues & Record<string, Untyped>;
+    } = values as ScheduleFormValues & Record<string, unknown>;
     // What is left of the form values is the request body, which the handler
     // then adds the derived rrule and extra_data to.
-    const submitValues: Record<string, Untyped> = rest;
+    const submitValues: Record<string, unknown> = rest;
     const { added } = getAddedAndRemoved(
-      resource?.summary_fields.credentials,
+      resource?.summary_fields?.credentials,
       credentials
     );
     let extraVars;
@@ -100,7 +106,7 @@ function ScheduleAdd({
 
     try {
       const ruleSet = buildRuleSet(values);
-      const requestData: Record<string, Untyped> = {
+      const requestData: Record<string, unknown> = {
         ...submitValues,
         rrule: ruleSet.toString().replace(/\n/g, ' '),
       };
@@ -109,7 +115,8 @@ function ScheduleAdd({
 
       if (Object.keys(values).includes('daysToKeep')) {
         if (requestData.extra_data) {
-          requestData.extra_data.days = values.daysToKeep;
+          (requestData.extra_data as Record<string, unknown>).days =
+            values.daysToKeep;
         } else {
           requestData.extra_data = JSON.stringify({
             days: values.daysToKeep,
@@ -119,7 +126,7 @@ function ScheduleAdd({
 
       const {
         data: { id: scheduleId },
-      } = await apiModel.createSchedule(resource.id, requestData);
+      } = await apiModel.createSchedule(resource.id as number, requestData);
 
       let labelsPromises: Promise<unknown>[] = [];
       let credentialsPromises: Promise<unknown>[] = [];
@@ -138,8 +145,12 @@ function ScheduleAdd({
           }
         }
 
-        labelsPromises = labels.map((label: Untyped) =>
-          SchedulesAPI.associateLabel(scheduleId, label, organizationId)
+        labelsPromises = labels.map((label: SummaryFieldRef) =>
+          SchedulesAPI.associateLabel(
+            scheduleId,
+            label,
+            organizationId as number | null
+          )
         );
       }
 

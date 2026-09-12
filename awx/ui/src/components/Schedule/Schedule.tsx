@@ -1,5 +1,10 @@
 import type { SurveyConfig, LaunchConfig } from 'components/LaunchPrompt/types';
-import type { DetailedError, Untyped } from 'types/api';
+import type {
+  ApiEntity,
+  BreadcrumbResource,
+  DetailedError,
+  LaunchCredential,
+} from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -21,12 +26,16 @@ import ScheduleDetail from './ScheduleDetail';
 import ScheduleEdit from './ScheduleEdit';
 
 export interface ScheduleProps {
-  setBreadcrumb: (...args: Untyped[]) => void;
-  resource: Untyped;
+  setBreadcrumb: (
+    resource?: BreadcrumbResource,
+    schedule?: BreadcrumbResource
+  ) => void;
+  /** The thing the schedule belongs to, which it is edited under. */
+  resource: ApiEntity;
   launchConfig?: LaunchConfig;
   surveyConfig?: SurveyConfig | null;
   hasDaysToKeepField?: boolean;
-  resourceDefaultCredentials?: Untyped;
+  resourceDefaultCredentials?: LaunchCredential[];
   [key: string]: unknown;
 }
 
@@ -104,10 +113,7 @@ function Schedule({
     return <ContentLoading />;
   }
 
-  if (
-    schedule?.summary_fields.unified_job_template.id !==
-    parseInt(resource.id, 10)
-  ) {
+  if (schedule?.summary_fields.unified_job_template.id !== resource.id) {
     return (
       <ContentError>
         {schedule && (

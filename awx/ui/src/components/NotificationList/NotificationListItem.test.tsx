@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { NotificationTemplate, Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -11,7 +11,7 @@ describe('<NotificationListItem canToggleNotifications />', () => {
     id: 9000,
     name: 'Foo',
     notification_type: 'slack',
-  };
+  } as NotificationTemplate;
 
   const typeLabels = {
     slack: 'Slack',

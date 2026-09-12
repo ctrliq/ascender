@@ -12,8 +12,7 @@ import {
   HelperTextItem,
 } from '@patternfly/react-core';
 import styled from 'styled-components';
-import { required, validateTime, combine } from 'util/validators';
-import type { Untyped } from 'types/api';
+import { required, validateDate, validateTime, combine } from 'util/validators';
 
 const DateTimeGroup = styled.span`
   display: flex;
@@ -34,7 +33,7 @@ function DateTimePicker({
   const { t } = useLingui();
   const [dateField, dateMeta, dateHelpers] = useField({
     name: dateFieldName,
-    validate: combine<string>([required(null), isValidDate as Untyped]),
+    validate: combine<string>([required(null), validateDate()]),
   });
   const [timeField, timeMeta, timeHelpers] = useField({
     name: timeFieldName,

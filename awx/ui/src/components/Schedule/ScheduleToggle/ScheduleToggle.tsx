@@ -1,4 +1,4 @@
-import type { Schedule, Untyped } from 'types/api';
+import type { Schedule } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Switch, Tooltip } from '@patternfly/react-core';
@@ -9,7 +9,8 @@ import ErrorDetail from '../../ErrorDetail';
 
 export interface ScheduleToggleProps {
   schedule: Schedule;
-  onToggle?: (result: Untyped) => void;
+  /** Told whether the schedule is enabled now, once the api has said so. */
+  onToggle?: (isEnabled: boolean) => void;
   className?: string;
   isDisabled?: boolean;
   [key: string]: unknown;

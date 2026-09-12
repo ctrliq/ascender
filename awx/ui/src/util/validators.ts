@@ -26,6 +26,26 @@ export function required(message?: string | null): Validator {
   };
 }
 
+/**
+ * The date the pickers hold, which is yyyy-MM-dd.
+ *
+ * PatternFly's isValidDate was used here as the validator itself, which takes
+ * a Date and answers a boolean: given the field's string it answered false,
+ * and a validator's falsy answer is "no error", so nothing was ever checked.
+ */
+export function validateDate(): Validator<string> {
+  return (value: string) => {
+    const dateRegex = /^\s*\d{4}-\d{2}-\d{2}\s*$/;
+    if (
+      !dateRegex.test(value) ||
+      !isValidDate(new Date(`${value.trim()}T00:00:00`))
+    ) {
+      return t`Invalid date format`;
+    }
+    return undefined;
+  };
+}
+
 export function validateTime(): Validator<string> {
   return (value: string) => {
     const timeRegex = new RegExp(

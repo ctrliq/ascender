@@ -1,4 +1,4 @@
-import type { Schedule, Untyped } from 'types/api';
+import type { Schedule, SummaryFieldRef, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import styled from 'styled-components';
@@ -32,7 +32,11 @@ import ChipGroup from '../../ChipGroup';
 import { VariablesDetail } from '../../CodeEditor';
 import { getVerbosityLabel } from '../../VerbositySelectField';
 import getHelpText from '../../../screens/Template/shared/JobTemplate.helptext';
-import type { FrequencyOptionsMap, ScheduleFrequency } from '../shared/types';
+import type {
+  FrequencyOptions,
+  FrequencyOptionsMap,
+  ScheduleFrequency,
+} from '../shared/types';
 
 const PromptDivider = styled(Divider)`
   margin-top: var(--pf-v6-global--spacer--lg);
@@ -140,6 +144,8 @@ function ScheduleDetail({
       // Heterogeneous on purpose: which of these run depends on what the
       // schedule is attached to, and the results are unpacked positionally
       // below with the same conditions in mind.
+      // Each entry answers a different endpoint, and the reads below name
+      // what each one carries.
       const promises: Promise<Untyped>[] = [
         SchedulesAPI.readCredentials(id),
         SchedulesAPI.createPreview({
@@ -402,7 +408,7 @@ function ScheduleDetail({
                 key={freq}
                 type={freq}
                 label={frequencies[freq]}
-                options={frequencyOptions[freq]}
+                options={frequencyOptions[freq] as FrequencyOptions}
                 timezone={timezone}
               />
             ))}
@@ -420,7 +426,7 @@ function ScheduleDetail({
                 key={freq}
                 type={freq}
                 label={frequencies[freq]}
-                options={exceptionOptions[freq]}
+                options={exceptionOptions[freq] as FrequencyOptions}
                 timezone={timezone}
                 isException
               />
@@ -548,7 +554,7 @@ function ScheduleDetail({
                     totalChips={credentials.length}
                     ouiaId="schedule-credential-chips"
                   >
-                    {credentials.map((c: Untyped) => (
+                    {credentials.map((c: SummaryFieldRef) => (
                       <CredentialChip
                         key={c.id}
                         credential={c}
@@ -571,7 +577,7 @@ function ScheduleDetail({
                     totalChips={labels.length}
                     ouiaId="schedule-label-chips"
                   >
-                    {labels.map((l: Untyped) => (
+                    {labels.map((l: SummaryFieldRef) => (
                       <Label
                         variant="outline"
                         key={l.id}

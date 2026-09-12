@@ -1,8 +1,12 @@
-import type { Untyped, WorkflowJobTemplateNode } from 'types/api';
+import type { WorkflowJobTemplateNode } from 'types/api';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import useWebsocket from 'hooks/useWebsocket';
 import { WorkflowJobsAPI } from 'api';
-import type { WorkflowNode } from '../../../components/Workflow/workflowReducer';
+import type { WebsocketMessage } from 'hooks/useWebsocket';
+import type {
+  ApiWorkflowNode,
+  WorkflowNode,
+} from '../../../components/Workflow/workflowReducer';
 
 const fetchWorkflowNodes = async (
   jobId: number,
@@ -29,12 +33,12 @@ const STATUS_RANK = {
   error: 3,
   canceled: 3,
 };
-const statusRank = (status: Untyped) =>
+const statusRank = (status?: string) =>
   STATUS_RANK[status as keyof typeof STATUS_RANK] || 0;
 
 export default function useWsWorkflowOutput(
-  workflowJobId: Untyped,
-  initialNodes: Untyped
+  workflowJobId: number,
+  initialNodes: WorkflowNode[]
 ) {
   const [nodes, setNodes] = useState(initialNodes);
   const isMounted = useRef(true);
@@ -73,8 +77,8 @@ export default function useWsWorkflowOutput(
       map[node.id as number] = node;
       return map;
     }, {});
-    setNodes((prevNodes: Untyped) =>
-      (prevNodes || []).map((node: WorkflowNode) => {
+    setNodes((prevNodes) =>
+      (prevNodes || []).map((node) => {
         if (node.id === 1) {
           return { ...node };
         }
@@ -148,12 +152,12 @@ export default function useWsWorkflowOutput(
         ) {
           refreshNodeObjects();
         } else {
-          setNodes((prevNodes: Untyped) => {
+          setNodes((prevNodes) => {
             if (!prevNodes) {
               return prevNodes;
             }
             const index = prevNodes.findIndex(
-              (node: WorkflowNode) =>
+              (node) =>
                 node?.originalNodeObject?.id === lastMessage.workflow_node_id
             );
             return index > -1
@@ -169,16 +173,24 @@ export default function useWsWorkflowOutput(
   return nodes;
 }
 
-function updateNode(nodes: Untyped, index: number, message: Untyped) {
-  const node = {
-    ...nodes[index],
+/** The node the socket's message is about, with what it reports put on it. */
+function updateNode(
+  nodes: WorkflowNode[],
+  index: number,
+  message: WebsocketMessage
+): WorkflowNode[] {
+  // The chart node carries its own copy of the job the api node names, so both
+  // are given what the message reports.
+  const current = nodes[index] as WorkflowNode;
+  const node: WorkflowNode = {
+    ...current,
     originalNodeObject: {
-      ...nodes[index]?.originalNodeObject,
+      ...(current.originalNodeObject as ApiWorkflowNode),
       job: message.unified_job_id,
       summary_fields: {
-        ...nodes[index]?.originalNodeObject?.summary_fields,
+        ...current.originalNodeObject?.summary_fields,
         job: {
-          ...nodes[index]?.originalNodeObject?.summary_fields?.job,
+          ...current.originalNodeObject?.summary_fields?.job,
           id: message.unified_job_id,
           status: message.status,
           type: message.type,
@@ -186,7 +198,7 @@ function updateNode(nodes: Untyped, index: number, message: Untyped) {
       },
     },
     job: {
-      ...nodes[index]?.job,
+      ...(current.job as Record<string, unknown>),
       id: message.unified_job_id,
       status: message.status,
       type: message.type,

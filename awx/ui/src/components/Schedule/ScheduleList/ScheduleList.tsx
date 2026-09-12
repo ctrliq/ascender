@@ -1,4 +1,10 @@
-import type { Schedule, Untyped } from 'types/api';
+import type {
+  ApiEntity,
+  ApiResponse,
+  OptionsResponse,
+  Paginated,
+  Schedule,
+} from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -32,10 +38,13 @@ const QS_CONFIG = getQSConfig('schedule', {
 
 export interface ScheduleListProps {
   /** Reads the schedules of whichever resource this list belongs to. */
-  loadSchedules: (params: QSParams) => Promise<Untyped>;
-  loadScheduleOptions: () => Promise<Untyped>;
+  loadSchedules: (
+    params: QSParams
+  ) => Promise<ApiResponse<Paginated<Schedule>>>;
+  loadScheduleOptions: () => Promise<ApiResponse<OptionsResponse>>;
   hideAddButton?: boolean;
-  resource?: Untyped;
+  /** The thing the schedules belong to, absent on the all schedules list. */
+  resource?: ApiEntity;
   launchConfig?: LaunchConfig;
   surveyConfig?: SurveyConfig | null;
   [key: string]: unknown;
@@ -129,7 +138,7 @@ function ScheduleList({
     resource?.type === 'workflow_job_template' ||
     resource?.type === 'job_template';
 
-  const missingRequiredInventory = (schedule: Untyped) => {
+  const missingRequiredInventory = (schedule: Schedule) => {
     if (
       !launchConfig?.inventory_needed_to_start ||
       schedule?.summary_fields?.inventory?.id
@@ -139,7 +148,7 @@ function ScheduleList({
     return t`This schedule is missing an Inventory`;
   };
 
-  const hasMissingSurveyValue = (schedule: Untyped) => {
+  const hasMissingSurveyValue = (schedule: Schedule) => {
     let missingValues;
     if (launchConfig?.survey_enabled) {
       surveyConfig?.spec?.forEach((question: SurveyQuestion) => {
@@ -159,7 +168,11 @@ function ScheduleList({
               missingValues = false;
             }
           });
-          if (!Object.values(schedule.extra_data).length) {
+          if (
+            !Object.values(
+              (schedule.extra_data ?? {}) as Record<string, unknown>
+            ).length
+          ) {
             missingValues = true;
           }
         }

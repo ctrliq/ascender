@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { NotificationTemplate } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -9,13 +9,6 @@ import { Tr, Td } from '@patternfly/react-table';
 import { ActionsTd, ActionItem } from '../PaginatedTable';
 
 /** A notification template as its list row reads it. */
-export interface NotificationTemplate {
-  id: number;
-  name?: string;
-  notification_type?: string;
-  [key: string]: unknown;
-}
-
 export interface NotificationListItemProps {
   canToggleNotifications: boolean;
   notification: NotificationTemplate;
@@ -25,7 +18,12 @@ export interface NotificationListItemProps {
   successTurnedOn?: boolean;
   errorTurnedOn?: boolean;
   changedTurnedOn?: boolean;
-  toggleNotification: (...args: Untyped[]) => unknown;
+  /** Turns one of this template's five notifications on or off. */
+  toggleNotification: (
+    id: number,
+    isCurrentlyOn: boolean,
+    status: 'started' | 'success' | 'error' | 'approvals' | 'changed'
+  ) => unknown;
   /** Human readable names for each notification type, keyed by its value. */
   typeLabels: Record<string, string>;
   showApprovalsToggle?: boolean;
