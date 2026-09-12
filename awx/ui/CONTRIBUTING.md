@@ -350,9 +350,19 @@ The lingui library provides various React helpers for dealing with both marking 
 
 **Note:** We try to avoid the `I18n` consumer, or `i18nMark` function lingui gives us access to in this repo. i18nMark does not actually replace the string in the UI (leading to the potential for untranslated bugs), and the other helpers are redundant. Settling on a consistent, single pattern helps us ease the mental overhead of the need to understand the ins and outs of the lingui API.
 
-**Note:** Pluralization can be complicated so it is best to allow lingui handle cases where we have a string that may need to be pluralized based on number of items, or count. In that case lingui provides a `<Plural>` component, and a `plural()` function. When adding or updating strings in a `<Plural/>` tag you must run `npm run extra-strings` and submit the new `.po` files with your pull request. See documentation [here](https://lingui.js.org/guides/plurals.html?highlight=pluralization).
+**Note:** Pluralization can be complicated so it is best to allow lingui handle cases where we have a string that may need to be pluralized based on number of items, or count. In that case lingui provides a `<Plural>` component, and a `plural()` function. When adding or updating strings in a `<Plural/>` tag you must run `npm run extract-strings` and submit the new `.po` files with your pull request. See documentation [here](https://lingui.js.org/guides/plurals.html?highlight=pluralization).
 
 You can learn more about the ways lingui and its React helpers at [this link](https://lingui.js.org/tutorials/react-patterns.html).
+
+`npm run check-strings` fails when the catalogues no longer match the source, and
+`ui-lint` runs it in CI. Nothing else catches this: a message id is built from the
+string and from the names of whatever is interpolated into it, so an edit as small
+as guarding a value changes one. `<Plural value={forks} />` names its placeholder
+`{forks}` and `<Plural value={forks ?? 0} />` names it `{0}`, and the renamed id
+matches nothing in the catalogues, so the string falls back to English in every
+translated locale while types, lint, tests and the build all stay green. Where a
+guard is needed, put it where the value is made rather than at the point of use,
+so the name the id is built from does not change.
 
 ### Setting up .po files to give to translation team
 

@@ -439,6 +439,7 @@ ui-lint:
 	$(NPM_BIN) --prefix awx/ui install
 	$(NPM_BIN) run --prefix awx/ui lint
 	$(NPM_BIN) run --prefix awx/ui prettier-check
+	$(NPM_BIN) run --prefix awx/ui check-strings
 
 ui-type-check:
 	$(NPM_BIN) --prefix awx/ui install

@@ -133,6 +133,7 @@
     "test-watch": "TZ='UTC' vitest",
     "lint": "NODE_ENV=development eslint .",
     "type-check": "tsc --noEmit",
+    "check-strings": "node config/i18n/checkCatalogs.mjs",
     "generate-api-types": "npx --yes openapi-typescript@7 .schema.json -o src/types/api.generated.ts",
     "extract-strings": "lingui extract",
     "extract-template": "lingui extract-template",
