@@ -1,5 +1,4 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -17,7 +16,7 @@ vi.mock('../../../api/models/Groups');
 vi.mock('../../../api/models/Inventories');
 vi.mock('../../../api/models/CredentialTypes');
 
-function renderUnder(url: Untyped) {
+function renderUnder(url: string) {
   const history = createMemoryHistory({ initialEntries: [url] });
   return renderWithContexts(
     <Routes>

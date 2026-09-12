@@ -1,4 +1,4 @@
-import type { LaunchableResource, LaunchCredential } from 'types/api';
+import type { LaunchCredential, LaunchableResource } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';

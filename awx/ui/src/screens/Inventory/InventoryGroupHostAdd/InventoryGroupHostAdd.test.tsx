@@ -1,9 +1,10 @@
-import type { Untyped, Group } from 'types/api';
+import type { Group, Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { GroupsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockHandlerFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroupHostAdd from './InventoryGroupHostAdd';
 import mockHost from '../shared/data.host.json';
@@ -11,7 +12,11 @@ import mockHost from '../shared/data.host.json';
 vi.mock('../../../api');
 
 vi.mock('components/HostForm', () => ({
-  default: ({ handleSubmit, handleCancel, submitError }: Untyped) => (
+  default: ({
+    handleSubmit,
+    handleCancel,
+    submitError,
+  }: MockHandlerFormProps) => (
     <div>
       <button
         type="button"

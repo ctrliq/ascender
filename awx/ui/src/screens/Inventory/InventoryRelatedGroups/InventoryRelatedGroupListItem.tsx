@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React from 'react';
 import { Link, useParams } from 'react-router';
 
@@ -12,8 +12,8 @@ import { ActionItem, ActionsTd } from 'components/PaginatedTable';
 
 export interface InventoryRelatedGroupListItemProps {
   detailUrl: string;
-  editUrl: Untyped;
-  group: Untyped;
+  editUrl: string;
+  group: Group;
   rowIndex: number;
   isSelected: boolean;
   /** Ticks the row's checkbox; the list holds which rows are selected. */
@@ -34,7 +34,7 @@ function InventoryRelatedGroupListItem({
   const { inventoryType } = useParams() as { inventoryType: string };
   return (
     <Tr
-      id={group.id}
+      id={`group-row-${group.id}`}
       ouiaId={`group-row-${group.id}`}
       aria-labelledby={labelId}
     >

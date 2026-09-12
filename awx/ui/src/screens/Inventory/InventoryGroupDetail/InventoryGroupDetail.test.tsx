@@ -1,4 +1,4 @@
-import type { Untyped, Group } from 'types/api';
+import type { Group, Untyped } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';

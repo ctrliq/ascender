@@ -1,4 +1,4 @@
-import type { AnyInventory, SummaryFieldRef, Untyped } from 'types/api';
+import type { AnyInventory, SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -144,7 +144,7 @@ function FederatedInventoryDetail({
           helpText={t`Source inventories whose hosts will be routed to their respective instance groups when a job is launched against this federated inventory.`}
           value={
             <LabelGroup numLabels={5}>
-              {inputInventories?.map((inputInventory: Untyped) => (
+              {inputInventories?.map((inputInventory: SummaryFieldRef) => (
                 <Label
                   color="blue"
                   key={inputInventory.id}

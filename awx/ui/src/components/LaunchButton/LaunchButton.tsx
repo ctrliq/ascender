@@ -15,8 +15,8 @@ import type { LaunchConfig, SurveyConfig } from 'components/LaunchPrompt/types';
 import type {
   AnyJob,
   ApiResponse,
-  LaunchableResource,
   LaunchCredential,
+  LaunchableResource,
 } from 'types/api';
 import type { LabelInput } from 'util/labels';
 import { JOB_TYPE_URL_SEGMENTS } from '../../constants';

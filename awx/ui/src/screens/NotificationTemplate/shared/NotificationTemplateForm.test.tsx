@@ -1,4 +1,4 @@
-import type { Untyped, NotificationTemplate } from 'types/api';
+import type { NotificationTemplate, Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, act } from '@testing-library/react';
 

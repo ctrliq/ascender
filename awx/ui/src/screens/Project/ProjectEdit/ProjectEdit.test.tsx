@@ -1,9 +1,10 @@
-import type { Untyped, Project } from 'types/api';
+import type { Project } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { ProjectsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockHandlerFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ProjectEdit from './ProjectEdit';
 
@@ -56,7 +57,11 @@ vi.mock('../shared/ProjectForm', async () => {
   const ReactLib = await vi.importActual<typeof import('react')>('react');
   return {
     __esModule: true,
-    default: ({ handleSubmit, handleCancel, submitError }: Untyped) => {
+    default: ({
+      handleSubmit,
+      handleCancel,
+      submitError,
+    }: MockHandlerFormProps) => {
       // mirror submitValues; vi.mock factories cannot close over outer vars
       const values = {
         id: 123,

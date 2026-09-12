@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped, Inventory } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';

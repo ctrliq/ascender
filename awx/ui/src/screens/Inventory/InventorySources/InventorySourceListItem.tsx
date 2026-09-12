@@ -1,4 +1,4 @@
-import type { Untyped, UnifiedJob } from 'types/api';
+import type { UnifiedJob, Untyped } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';

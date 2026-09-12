@@ -4,8 +4,8 @@ import type {
 } from 'components/LaunchPrompt/types';
 import type {
   InventorySource,
-  LaunchableResource,
   LaunchDefaults,
+  LaunchableResource,
   Project,
   SummaryFields,
 } from 'types/api';

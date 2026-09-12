@@ -1,4 +1,4 @@
-import type { Untyped, Schedule } from 'types/api';
+import type { Schedule, Untyped } from 'types/api';
 import React from 'react';
 import { act, waitFor } from '@testing-library/react';
 import { RRule } from 'rrule';

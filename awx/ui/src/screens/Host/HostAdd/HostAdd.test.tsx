@@ -5,6 +5,7 @@ import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { HostsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockHandlerFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import HostAdd from './HostAdd';
 
@@ -27,7 +28,11 @@ vi.mock('components/HostForm', async () => {
   const ReactLib = await vi.importActual<typeof import('react')>('react');
   return {
     __esModule: true,
-    default: ({ handleSubmit, handleCancel, submitError }: Untyped) =>
+    default: ({
+      handleSubmit,
+      handleCancel,
+      submitError,
+    }: MockHandlerFormProps) =>
       ReactLib.createElement(
         'div',
         null,

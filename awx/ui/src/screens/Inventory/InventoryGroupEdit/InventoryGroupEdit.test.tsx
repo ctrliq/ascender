@@ -1,4 +1,4 @@
-import type { Untyped, Group } from 'types/api';
+import type { Group, Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';

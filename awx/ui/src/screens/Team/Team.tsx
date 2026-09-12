@@ -1,6 +1,6 @@
 import type {
-  SetBreadcrumb,
   DetailedError,
+  SetBreadcrumb,
   Team as TeamModel,
 } from 'types/api';
 import React, { useState, useEffect } from 'react';

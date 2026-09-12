@@ -1,4 +1,4 @@
-import type { Untyped, UnifiedJob } from 'types/api';
+import type { UnifiedJob, Untyped } from 'types/api';
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';

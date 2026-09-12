@@ -1,4 +1,4 @@
-import type { User, Untyped } from 'types/api';
+import type { Untyped, User } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 

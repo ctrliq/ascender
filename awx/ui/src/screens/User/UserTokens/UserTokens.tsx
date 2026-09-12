@@ -1,4 +1,4 @@
-import type { SetBreadcrumb, User, Untyped } from 'types/api';
+import type { SetBreadcrumb, Untyped, User } from 'types/api';
 import React, { useCallback, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';

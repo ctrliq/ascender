@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React from 'react';
 import { Button } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
@@ -9,7 +9,7 @@ import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem } from 'components/PaginatedTable';
 
 export interface InventoryHostGroupItemProps {
-  group: Untyped;
+  group: Group;
   inventoryId?: number | string;
   isSelected: boolean;
   /** Ticks the row's checkbox; the list holds which rows are selected. */
@@ -50,7 +50,7 @@ function InventoryHostGroupItem({
       </Td>
       <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
         <ActionItem
-          visible={group.summary_fields.user_capabilities.edit}
+          visible={group.summary_fields.user_capabilities?.edit}
           tooltip={t`Edit group`}
         >
           <Button

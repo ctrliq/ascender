@@ -1,4 +1,4 @@
-import type { SetBreadcrumb, DetailedError } from 'types/api';
+import type { DetailedError, SetBreadcrumb } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import {
   Link,

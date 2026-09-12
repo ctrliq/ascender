@@ -1,4 +1,4 @@
-import type { SetBreadcrumb, DetailedError } from 'types/api';
+import type { DetailedError, SetBreadcrumb } from 'types/api';
 import type { CurrentUser } from 'contexts/Config';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';

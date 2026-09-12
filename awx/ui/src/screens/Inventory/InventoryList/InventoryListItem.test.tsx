@@ -1,4 +1,4 @@
-import type { Untyped, Inventory } from 'types/api';
+import type { Inventory, Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { InventoriesAPI } from 'api';

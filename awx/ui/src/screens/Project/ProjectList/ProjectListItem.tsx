@@ -1,4 +1,4 @@
-import type { SummaryFieldRef, Project, Untyped } from 'types/api';
+import type { Project, SummaryFieldRef, Untyped } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Button, ClipboardCopy, Tooltip } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';

@@ -1,9 +1,10 @@
-import type { Untyped, Host } from 'types/api';
+import type { Host, Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { HostsAPI } from 'api';
+import type { MockHandlerFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import mockHost from '../data.host.json';
 import HostEdit from './HostEdit';
@@ -23,7 +24,11 @@ vi.mock('components/HostForm', async () => {
   const ReactLib = await vi.importActual<typeof import('react')>('react');
   return {
     __esModule: true,
-    default: ({ handleSubmit, handleCancel, submitError }: Untyped) =>
+    default: ({
+      handleSubmit,
+      handleCancel,
+      submitError,
+    }: MockHandlerFormProps) =>
       ReactLib.createElement(
         'div',
         null,

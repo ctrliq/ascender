@@ -1,4 +1,4 @@
-import type { SetBreadcrumb, InstanceGroup } from 'types/api';
+import type { InstanceGroup, SetBreadcrumb } from 'types/api';
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router';
 import InstanceList from './InstanceList';

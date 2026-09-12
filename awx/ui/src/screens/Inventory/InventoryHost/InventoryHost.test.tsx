@@ -1,4 +1,4 @@
-import type { Host, Untyped, Inventory } from 'types/api';
+import type { Host, Inventory, Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';

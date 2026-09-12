@@ -2,7 +2,8 @@ import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback } from 'react';
 import { useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
-import docsBaseUrl from 'util/getDocsBaseUrl';
+import { useConfig } from 'contexts/Config';
+import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import CredentialLookup from 'components/Lookup/CredentialLookup';
 import { required } from 'util/validators';
 import {
@@ -25,6 +26,10 @@ const SatelliteSubForm = ({
 }: SatelliteSubFormProps) => {
   const { t } = useLingui();
   const helpText = getHelpText();
+  const config = useConfig();
+  // Called rather than passed: the import named the module's default export,
+  // which is the function, so the popover's link was the function itself.
+  const docsBaseUrl = getDocsBaseUrl(config);
   const { setFieldValue, setFieldTouched } =
     useFormikContext<Record<string, unknown>>();
   const [credentialField, credentialMeta, credentialHelpers] =

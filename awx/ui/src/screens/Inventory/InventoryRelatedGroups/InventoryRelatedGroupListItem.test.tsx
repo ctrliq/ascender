@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Group, Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -24,7 +24,7 @@ function renderItem(url: Untyped, group = mockGroup) {
               <InventoryRelatedGroupListItem
                 detailUrl="/group/1"
                 editUrl="/group/1"
-                group={group}
+                group={group as Group}
                 isSelected={false}
                 onSelect={() => {}}
                 rowIndex={0}

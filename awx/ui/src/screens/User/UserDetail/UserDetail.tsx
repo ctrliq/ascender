@@ -1,4 +1,4 @@
-import type { User, Untyped } from 'types/api';
+import type { Untyped, User } from 'types/api';
 import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 

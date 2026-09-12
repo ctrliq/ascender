@@ -1,5 +1,5 @@
 import type { SearchableKey } from 'components/PaginatedTable';
-import type { NotificationsApiModel, NotificationTemplate } from 'types/api';
+import type { NotificationTemplate, NotificationsApiModel } from 'types/api';
 import type { QSParams } from 'util/qs';
 import React, { useEffect, useCallback, useState } from 'react';
 import { useLocation } from 'react-router';

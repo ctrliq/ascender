@@ -1,4 +1,4 @@
-import type { Host, Untyped, RecentJob } from 'types/api';
+import type { Host, RecentJob } from 'types/api';
 import React from 'react';
 import { Link, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -12,7 +12,7 @@ import Sparkline from 'components/Sparkline';
 
 export interface InventoryGroupHostListItemProps {
   detailUrl: string;
-  editUrl: Untyped;
+  editUrl: string;
   host: Host;
   rowIndex: number;
   isSelected: boolean;

@@ -1,4 +1,4 @@
-import type { Host, Untyped, RecentJob } from 'types/api';
+import type { Host, RecentJob, Untyped } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';

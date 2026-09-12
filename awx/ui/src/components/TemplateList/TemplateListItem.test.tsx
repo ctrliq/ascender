@@ -1,4 +1,4 @@
-import type { Untyped, JobTemplate } from 'types/api';
+import type { JobTemplate, Untyped } from 'types/api';
 import React from 'react';
 
 import { createMemoryHistory } from 'history';

@@ -1,7 +1,7 @@
 import type {
-  SetBreadcrumb,
-  Inventory as InventoryModel,
   DetailedError,
+  Inventory as InventoryModel,
+  SetBreadcrumb,
 } from 'types/api';
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';

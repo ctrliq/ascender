@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -10,7 +10,7 @@ import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem } from 'components/PaginatedTable';
 
 export interface InventoryGroupItemProps {
-  group: Untyped;
+  group: Group;
   isSelected: boolean;
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;
@@ -51,7 +51,7 @@ function InventoryGroupItem({
       {inventoryType !== 'constructed_inventory' && (
         <ActionsTd dataLabel={t`Actions`} gridColumns="auto 40px">
           <ActionItem
-            visible={group.summary_fields.user_capabilities.edit}
+            visible={group.summary_fields.user_capabilities?.edit}
             tooltip={t`Edit group`}
           >
             <Button

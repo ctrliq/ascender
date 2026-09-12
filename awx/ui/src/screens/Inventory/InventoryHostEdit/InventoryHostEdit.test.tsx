@@ -1,9 +1,10 @@
-import type { Untyped, Host, Inventory } from 'types/api';
+import type { Host, Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { HostsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockHandlerFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryHostEdit from './InventoryHostEdit';
 import mockHost from '../shared/data.host.json';
@@ -17,7 +18,11 @@ const updatedHostData = {
 };
 
 vi.mock('components/HostForm', () => ({
-  default: ({ handleSubmit, handleCancel, submitError }: Untyped) => (
+  default: ({
+    handleSubmit,
+    handleCancel,
+    submitError,
+  }: MockHandlerFormProps) => (
     <div>
       <button
         type="button"

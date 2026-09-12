@@ -280,7 +280,7 @@ function ConstructedInventoryDetail({ inventory }: Untyped) {
           label={t`Input Inventories`}
           value={
             <LabelGroup numLabels={5}>
-              {inputInventories?.map((inputInventory: Untyped) => (
+              {inputInventories?.map((inputInventory: SummaryFieldRef) => (
                 <Label
                   color="blue"
                   key={inputInventory.id}

@@ -1,7 +1,7 @@
 import type { SurveyConfig, LaunchConfig } from 'components/LaunchPrompt/types';
 import type {
-  LaunchCredential,
   Label,
+  LaunchCredential,
   NodeTemplate,
   Schedule,
   SummaryFieldRef,

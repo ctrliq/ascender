@@ -1,4 +1,4 @@
-import type { Untyped, Organization } from 'types/api';
+import type { Organization, Untyped } from 'types/api';
 import React from 'react';
 import { act, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';

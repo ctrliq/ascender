@@ -1,4 +1,4 @@
-import type { Host, SummaryFieldRef, Untyped } from 'types/api';
+import type { Host, SummaryFieldRef } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
@@ -17,7 +17,7 @@ import Sparkline from 'components/Sparkline';
 
 export interface InventoryHostItemProps {
   detailUrl: string;
-  editUrl: Untyped;
+  editUrl: string;
   host: Host;
   isSelected: boolean;
   /** Ticks the row's checkbox; the list holds which rows are selected. */

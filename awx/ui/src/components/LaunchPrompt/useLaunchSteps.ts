@@ -1,7 +1,7 @@
 import type {
   InstanceGroup,
-  LaunchableResource,
   LaunchCredential,
+  LaunchableResource,
 } from 'types/api';
 import { useState, useEffect } from 'react';
 import { useFormikContext } from 'formik';

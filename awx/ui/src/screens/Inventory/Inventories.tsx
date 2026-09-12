@@ -1,8 +1,8 @@
 import type {
   BreadcrumbResource,
-  SetBreadcrumb,
   Inventory as InventoryModel,
   Schedule,
+  SetBreadcrumb,
   Untyped,
 } from 'types/api';
 import React, { useState, useCallback, useRef } from 'react';

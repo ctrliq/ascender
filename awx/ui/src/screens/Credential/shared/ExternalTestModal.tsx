@@ -1,4 +1,4 @@
-import type { CredentialType, Credential } from 'types/api';
+import type { Credential, CredentialType } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 

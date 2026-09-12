@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
@@ -13,7 +12,7 @@ import InventoryGroupsList from './InventoryGroupsList';
 
 vi.mock('../../../api');
 
-function renderUnder(url: Untyped) {
+function renderUnder(url: string) {
   const history = createMemoryHistory({ initialEntries: [url] });
   const result = renderWithContexts(
     <Routes>

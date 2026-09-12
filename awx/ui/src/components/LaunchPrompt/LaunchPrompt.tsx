@@ -1,7 +1,7 @@
 import type {
   InstanceGroup,
-  LaunchableResource,
   LaunchCredential,
+  LaunchableResource,
 } from 'types/api';
 import React, { useState } from 'react';
 import { ExpandableSection } from '@patternfly/react-core';

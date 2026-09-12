@@ -1,4 +1,4 @@
-import type { WorkflowApproval, Untyped } from 'types/api';
+import type { Untyped, WorkflowApproval } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';

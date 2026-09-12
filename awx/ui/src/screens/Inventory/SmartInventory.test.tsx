@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
@@ -13,7 +12,7 @@ vi.mock('../../api');
 
 // SmartInventory uses relative routes and reads the id from useParams, so mount
 // it under its v6 parent route at a concrete URL.
-function renderAt(initialEntry: Untyped) {
+function renderAt(initialEntry: string) {
   const history = createMemoryHistory({ initialEntries: [initialEntry] });
   return renderWithContexts(
     <Routes>
