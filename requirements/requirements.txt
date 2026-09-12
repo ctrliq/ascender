@@ -213,7 +213,7 @@ jsonschema-specifications==2025.9.1
 jwcrypto==1.6.0
     # via django-oauth-toolkit
 kubernetes==36.0.3
-    # via openshift
+    # via -r /awx_devel/requirements/requirements.in
 libvalkey==4.1.0
     # via valkey
 lockfile==0.12.2
@@ -258,8 +258,6 @@ oauthlib==3.3.1
     #   django-oauth-toolkit
     #   requests-oauthlib
     #   social-auth-core
-openshift==0.13.2
-    # via -r /awx_devel/requirements/requirements.in
 packaging==26.3
     # via
     #   -r /awx_devel/requirements/requirements.in
@@ -321,9 +319,7 @@ pyparsing==3.3.2
 pyrad==2.5.4
     # via django-radius
 python-daemon==3.1.2
-    # via
-    #   -r /awx_devel/requirements/requirements.in
-    #   ansible-runner
+    # via -r /awx_devel/requirements/requirements.in
 python-dateutil==2.9.0.post0
     # via
     #   botocore
@@ -336,8 +332,6 @@ python-ldap==3.4.7
     # via
     #   -r /awx_devel/requirements/requirements.in
     #   django-auth-ldap
-python-string-utils==1.0.0
-    # via openshift
 python-tss-sdk==2.0.1
     # via -r /awx_devel/requirements/requirements.in
 python3-openid==3.2.0
@@ -403,7 +397,6 @@ shellingham==1.5.4
 six==1.17.0
     # via
     #   kubernetes
-    #   openshift
     #   pygerduty
     #   python-dateutil
     #   tacacs-plus
