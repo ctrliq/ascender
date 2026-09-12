@@ -35,6 +35,12 @@ logger = logging.getLogger('awx.conf.settings')
 
 SETTING_MEMORY_TTL = 5
 
+# One shared key that says when any setting last changed. Every web process
+# reads it once a request and drops its in-memory cache only when it has moved,
+# rather than dropping that cache on every request and going back to the shared
+# one for each setting it then reads.
+SETTING_CACHE_VERSION_KEY = '_awx_conf_version'
+
 # Store a special value to indicate when a setting is not set in the database.
 SETTING_CACHE_NOTSET = '___notset___'
 
@@ -59,7 +65,7 @@ SETTING_CACHE_TIMEOUT = 60
 # Flag indicating whether to store field default values in the cache.
 SETTING_CACHE_DEFAULTS = True
 
-__all__ = ['SettingsWrapper', 'get_settings_to_cache', 'SETTING_CACHE_NOTSET']
+__all__ = ['SettingsWrapper', 'get_settings_to_cache', 'SETTING_CACHE_NOTSET', 'SETTING_CACHE_VERSION_KEY', 'bump_setting_cache_version']
 
 
 @contextlib.contextmanager
@@ -187,6 +193,27 @@ class EncryptedCacheProxy(object):
 
 def get_writeable_settings(registry):
     return registry.get_registered_settings(read_only=False)
+
+
+def bump_setting_cache_version(cache=django_cache):
+    """
+    Say that a setting has changed, so other processes drop their in-memory copy.
+
+    A counter rather than a flag: every process compares the value it last saw,
+    so two changes in the same second are still two changes, and a process that
+    has never looked simply sees a value it does not recognise and drops its
+    cache once.
+
+    It never expires. A cache that has lost it looks like a change to everyone,
+    which costs one dropped in-memory cache each and is the safe direction.
+    """
+    try:
+        cache.incr(SETTING_CACHE_VERSION_KEY)
+    except ValueError:
+        # incr on a key that is not there, which is the first change after the
+        # cache was emptied. set() rather than add(), since losing a racing
+        # increment here only means one more cache drop than needed.
+        cache.set(SETTING_CACHE_VERSION_KEY, 1, None)
 
 
 def get_settings_to_cache(registry):
