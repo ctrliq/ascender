@@ -106,6 +106,10 @@ jobs:
     permissions:
       packages: write
       contents: write
+      # attest-* sign through Sigstore with the workflow's own OIDC identity,
+      # so there is no key to hold or rotate
+      id-token: write
+      attestations: write
     steps:
       - name: Checkout ascender
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -132,6 +136,41 @@ jobs:
             -t ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }} \
             ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }}-amd64 \
             ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }}-arm64
+
+      # Everything below describes the image that was just published, so it is
+      # keyed on the manifest digest rather than the tag: a tag can be moved,
+      # a digest cannot.
+      - name: Record the image digest
+        id: digest
+        run: |
+          digest=$(docker buildx imagetools inspect \
+            ghcr.io/${{ github.repository }}:${{ github.event.inputs.version }} \
+            --format '{{json .Manifest.Digest}}' | tr -d '"')
+          echo "digest=${digest}" >> "$GITHUB_OUTPUT"
+          echo "Published ghcr.io/${{ github.repository }}@${digest}"
+
+      - name: Generate an SBOM for the image
+        uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26  # v0.24.2
+        with:
+          image: ghcr.io/${{ github.repository }}@${{ steps.digest.outputs.digest }}
+          format: spdx-json
+          artifact-name: ascender-${{ github.event.inputs.version }}-sbom.spdx.json
+          output-file: ascender-sbom.spdx.json
+
+      - name: Attest the SBOM
+        uses: actions/attest-sbom@c604332985a26aa8cf1bdc465b92731239ec6b9e  # v4.1.0
+        with:
+          subject-name: ghcr.io/${{ github.repository }}
+          subject-digest: ${{ steps.digest.outputs.digest }}
+          sbom-path: ascender-sbom.spdx.json
+          push-to-registry: true
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8  # v4.2.2
+        with:
+          subject-name: ghcr.io/${{ github.repository }}
+          subject-digest: ${{ steps.digest.outputs.digest }}
+          push-to-registry: true
 
       - name: Create draft release for Ascender
         working-directory: ascender
