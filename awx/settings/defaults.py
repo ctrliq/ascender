@@ -55,6 +55,11 @@ DATABASES = {
 # the harakiri value.  Set this for non-uwsgi deployments or to override.
 DATABASE_STATEMENT_TIMEOUT = None
 
+# How many days of job events to keep, for the cleanup_job_events command.
+# 0, the default, means no window and nothing dropped: events then live exactly
+# as long as the jobs that wrote them, which is what cleanup_jobs decides.
+JOB_EVENT_RETENTION_DAYS = 0
+
 # Optional manual override for how long a database connection is kept and
 # reused, in seconds. Unset, a web process reuses one for a minute and every
 # other process opens one per request, which is Django's default. 0 turns
