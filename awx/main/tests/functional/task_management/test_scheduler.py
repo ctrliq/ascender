@@ -5,6 +5,7 @@ from datetime import timedelta
 
 from awx.main.scheduler import TaskManager, DependencyManager, WorkflowManager
 from awx.main.utils import encrypt_field
+from awx.main.middleware import impersonate
 from awx.main.models import WorkflowJobTemplate, JobTemplate, Job
 from awx.main.models.ha import Instance
 from . import create_job
@@ -750,7 +751,7 @@ def test_task_manager_loop_does_not_lazy_load(controlplane_instance_group, job_t
 
 
 @pytest.mark.django_db
-def test_start_task_hydrates_partially_loaded_task(hybrid_instance, job_template_factory):
+def test_start_task_hydrates_partially_loaded_task(hybrid_instance, job_template_factory, alice):
     """Tasks reach start_task with most columns deferred; pre_start and save must see the full row."""
     instance = hybrid_instance
     jt = job_template_factory('jt', organization='org1', project='proj', inventory='inv', credential='cred').job_template
@@ -758,11 +759,21 @@ def test_start_task_hydrates_partially_loaded_task(hybrid_instance, job_template
     job.extra_vars = '{"answer": 42}'
     job.job_args = 'untouched'
     job.save(update_fields=['extra_vars', 'job_args'])
+    Job.objects.filter(pk=job.pk).update(modified_by=alice)
 
     tm = TaskManager()
     pending = list(tm.iter_pending_tasks())
     assert pending == [job]
     assert pending[0].get_deferred_fields()  # the loop really does work on partial objects
+
+    # hydrating must not make the loaded columns look like edits: a save with no real change
+    # keeps modified_by (starting a job does change instance_group, an editable field, so the
+    # start itself resets modified_by exactly as it did before tasks were loaded partially)
+    tm.hydrate_task(pending[0])
+    with impersonate(None):
+        pending[0].save()
+    job.refresh_from_db()
+    assert job.modified_by == alice
 
     with mock.patch.object(TaskManager, "start_task", wraps=tm.start_task) as mock_start:
         tm.schedule()
@@ -778,3 +789,23 @@ def test_start_task_hydrates_partially_loaded_task(hybrid_instance, job_template
     assert job.controller_node == instance.hostname
     assert json.loads(job.extra_vars) == {'answer': 42}
     assert job.job_args == 'untouched'
+
+
+@pytest.mark.django_db
+def test_dependency_failure_keeps_modified_by(hybrid_instance, job_template_factory, alice):
+    """Failing a task whose dependency failed saves a hydrated partial instance; no phantom edits."""
+    objects = job_template_factory('jt', organization='org1', project='proj', inventory='inv', credential='cred')
+    failed_update = objects.project.create_unified_job()
+    failed_update.status = 'failed'
+    failed_update.save()
+    job = create_job(objects.job_template)
+    job.dependent_jobs.add(failed_update)
+    Job.objects.filter(pk=job.pk).update(modified_by=alice)
+
+    with impersonate(None):
+        TaskManager().schedule()
+
+    job.refresh_from_db()
+    assert job.status == 'failed'
+    assert job.job_explanation.startswith('Previous Task Failed')
+    assert job.modified_by == alice

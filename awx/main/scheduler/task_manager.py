@@ -527,11 +527,15 @@ class TaskManager(TaskBase):
         credentials and writes job_explanation, and UnifiedJob.save() reads started/finished/
         elapsed/cancel_flag and more. On a partially loaded instance each of those would be
         fetched by its own query. refresh_from_db is restricted to the deferred fields, so the
-        status, controller_node and execution_node already decided on this instance survive.
+        status, controller_node and execution_node already decided on this instance survive, and
+        the edit snapshot is brought up to date for exactly those fields.
         """
         deferred = task.get_deferred_fields()
         if deferred:
             task.refresh_from_db(fields=list(deferred))
+            # The edit-tracking snapshot was taken from the partial instance; without this the
+            # freshly loaded columns would count as edits and save() would rewrite modified_by.
+            task.sync_edit_snapshot(deferred)
         return task
 
     def process_job_dep_failures(self, task):
