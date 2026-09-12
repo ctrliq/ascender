@@ -350,7 +350,6 @@ class CredentialType(CommonModelNameNotUnique):
         ('cloud', _('Cloud')),
         ('registry', _('Container Registry')),
         ('token', _('Personal Access Token')),
-        ('insights', _('Insights')),
         ('external', _('External')),
         ('kubernetes', _('Kubernetes')),
         ('galaxy', _('Galaxy/Automation Hub')),
