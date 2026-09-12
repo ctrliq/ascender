@@ -9,6 +9,8 @@ from awx.main.models import WorkflowJobTemplate, JobTemplate, Job
 from awx.main.models.ha import Instance
 from . import create_job
 from django.conf import settings
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
 
 
 @pytest.mark.django_db
@@ -644,3 +646,135 @@ def test_generate_dependencies_only_once(job_template_factory):
         dm.generate_dependencies = mock.MagicMock(return_value=[])
         dm.schedule()
         dm.generate_dependencies.assert_not_called()
+
+
+@pytest.mark.django_db
+def test_pending_queue_is_paginated_not_capped(hybrid_instance, job_template_factory, mocker):
+    """Old blocked jobs must not hide a newer startable job that sits past the first chunk.
+
+    Blocked jobs do not consume start_task_limit, so the pending queue has to be walked in
+    chunks until the limit is reached; capping the query at the limit would starve the free job.
+    """
+    instance = hybrid_instance
+    controlplane_instance_group = instance.rampart_groups.first()
+    blocked_jt = job_template_factory('jt-blocked', organization='org1', project='proj1', inventory='inv1', credential='cred1').job_template
+    free_jt = job_template_factory('jt-free', organization='org2', project='proj2', inventory='inv2', credential='cred2').job_template
+    blocked = [create_job(blocked_jt) for _ in range(3)]  # allow_simultaneous=False, only the first may run
+    free = create_job(free_jt)
+
+    tm = TaskManager()
+    tm.pending_task_chunk_size = 2  # the free job is in the second chunk
+    qs_spy = mocker.spy(TaskManager, 'get_tasks_queryset')
+    with mock.patch.object(TaskManager, "start_task", wraps=tm.start_task) as mock_start:
+        tm.schedule()
+
+    assert [c.args[0] for c in mock_start.call_args_list] == [blocked[0], free]
+    assert all(c.args[1:] == (controlplane_instance_group, instance) for c in mock_start.call_args_list)
+    # one waiting/running load plus at least two pending chunks
+    assert qs_spy.call_count >= 3
+    for j in blocked[1:]:
+        j.refresh_from_db()
+        assert j.status == 'pending'
+
+
+@pytest.mark.django_db
+def test_pending_queue_loading_stops_at_start_task_limit(hybrid_instance, job_template_factory, mocker):
+    """Once the start limit is reached the rest of the pending queue is never loaded."""
+    instance = hybrid_instance
+    controlplane_instance_group = instance.rampart_groups.first()
+    jt = job_template_factory('jt', organization='org1', project='proj', inventory='inv', credential='cred').job_template
+    jt.allow_simultaneous = True
+    jt.save()
+    jobs = [create_job(jt) for _ in range(3)]
+
+    tm = TaskManager()
+    tm.start_task_limit = 1
+    tm.pending_task_chunk_size = 1
+    qs_spy = mocker.spy(TaskManager, 'get_tasks_queryset')
+    with mock.patch.object(TaskManager, "start_task", wraps=tm.start_task) as mock_start:
+        tm.schedule()
+
+    mock_start.assert_called_once_with(jobs[0], controlplane_instance_group, instance)
+    # one query for waiting/running tasks and exactly one pending chunk
+    assert qs_spy.call_count == 2
+    assert tm.get_local_metrics()['pending_processed'] == 1
+
+
+@pytest.mark.django_db
+def test_task_manager_loop_does_not_lazy_load(controlplane_instance_group, job_template_factory, inventory_source, mocker):
+    """The scheduling loop only reads TaskManager.TASK_FIELDS from each task.
+
+    Every task type is kept blocked by a running job of the same template so all pending tasks go
+    through the blocked path; if the loop read a deferred column the query count would grow with
+    the number of pending tasks.
+    """
+    objects = job_template_factory('jt', organization='org1', project='proj', inventory='inv', credential='cred')
+    project = objects.project
+    project.scm_type = 'git'
+    project.scm_url = 'http://github.com/ansible/ansible.git'
+    project.save(skip_update=True)
+    wfjt = WorkflowJobTemplate.objects.create(name='wfjt')
+    templates = [objects.job_template, project, inventory_source, wfjt]
+
+    def make(template, status):
+        uj = template.create_unified_job()
+        uj.status = status
+        uj.dependencies_processed = True
+        uj.save()
+        return uj
+
+    for template in templates:
+        make(template, 'running')
+
+    def add_pending(n):
+        for template in templates:
+            for _ in range(n):
+                make(template, 'pending')
+
+    def run_and_count():
+        tm = TaskManager()
+        with mock.patch.object(TaskManager, "start_task") as mock_start:
+            with CaptureQueriesContext(connection) as ctx:
+                tm.schedule()
+        mock_start.assert_not_called()
+        return len(ctx.captured_queries), tm.get_local_metrics()['pending_processed']
+
+    add_pending(1)
+    run_and_count()  # warm content type and other per-process caches
+    queries_small, processed_small = run_and_count()
+    add_pending(3)
+    queries_large, processed_large = run_and_count()
+
+    assert (processed_small, processed_large) == (4, 16)
+    assert queries_large == queries_small
+
+
+@pytest.mark.django_db
+def test_start_task_hydrates_partially_loaded_task(hybrid_instance, job_template_factory):
+    """Tasks reach start_task with most columns deferred; pre_start and save must see the full row."""
+    instance = hybrid_instance
+    jt = job_template_factory('jt', organization='org1', project='proj', inventory='inv', credential='cred').job_template
+    job = create_job(jt)
+    job.extra_vars = '{"answer": 42}'
+    job.job_args = 'untouched'
+    job.save(update_fields=['extra_vars', 'job_args'])
+
+    tm = TaskManager()
+    pending = list(tm.iter_pending_tasks())
+    assert pending == [job]
+    assert pending[0].get_deferred_fields()  # the loop really does work on partial objects
+
+    with mock.patch.object(TaskManager, "start_task", wraps=tm.start_task) as mock_start:
+        tm.schedule()
+
+    started = mock_start.call_args.args[0]
+    assert started == job
+    assert started.get_deferred_fields() == set()
+    assert [started.controller_node, started.execution_node] == [instance.hostname, instance.hostname]
+
+    job.refresh_from_db()
+    assert job.status == 'waiting'
+    assert job.celery_task_id
+    assert job.controller_node == instance.hostname
+    assert json.loads(job.extra_vars) == {'answer': 42}
+    assert job.job_args == 'untouched'
