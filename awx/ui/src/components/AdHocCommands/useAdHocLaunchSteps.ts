@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
 import useCredentialPasswordsStep from './useAdHocCredentialPasswordStep';
@@ -8,11 +7,11 @@ import useAdHocCredentialStep from './useAdHocCredentialStep';
 import useAdHocPreviewStep from './useAdHocPreviewStep';
 import type { AdHocValues } from './types';
 
-function showCredentialPasswordsStep(credential: Untyped) {
+function showCredentialPasswordsStep(credential?: { inputs?: unknown }) {
   if (!credential?.inputs) {
     return false;
   }
-  const { inputs } = credential;
+  const inputs = credential.inputs as Record<string, unknown>;
   if (
     inputs?.password === 'ASK' ||
     inputs?.become_password === 'ASK' ||
@@ -37,7 +36,9 @@ export default function useAdHocLaunchSteps(
     useAdHocExecutionEnvironmentStep(organizationId),
     useAdHocCredentialStep(visited, credentialTypeId),
     useCredentialPasswordsStep(
-      showCredentialPasswordsStep(values.credentials[0]),
+      showCredentialPasswordsStep(
+        values.credentials[0] as { inputs?: unknown } | undefined
+      ),
       visited
     ),
   ];

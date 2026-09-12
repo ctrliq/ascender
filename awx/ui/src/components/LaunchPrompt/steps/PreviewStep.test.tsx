@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { Formik } from 'formik';
@@ -9,7 +8,13 @@ import PreviewStep from './PreviewStep';
 // about the resource/overrides PreviewStep computes and forwards, so mock it
 // and surface the props it receives into the DOM for assertion.
 vi.mock('../../PromptDetail', () => ({
-  default: ({ resource, overrides }: Untyped) => (
+  default: ({
+    resource,
+    overrides,
+  }: {
+    resource: unknown;
+    overrides: unknown;
+  }) => (
     <div
       data-testid="prompt-detail"
       data-resource={JSON.stringify(resource)}

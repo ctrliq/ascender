@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
@@ -95,7 +94,7 @@ function AdHocDetailsStep({ moduleOptions }: AdHocDetailsStepProps) {
                   key: value[0],
                 })),
               ]}
-              onChange={(event: React.SyntheticEvent, value: Untyped) => {
+              onChange={(event: React.SyntheticEvent, value: string) => {
                 if (value !== 'command' && value !== 'shell') {
                   argumentsHelpers.setTouched(false);
                 }

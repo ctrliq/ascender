@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { JobTemplatesAPI, WorkflowJobTemplateNodesAPI } from 'api';
@@ -47,7 +46,7 @@ const mockTemplates = [
   },
 ];
 
-function rowCheckbox(name: Untyped) {
+function rowCheckbox(name: string) {
   const row = screen.getByText(name).closest('tr');
   return within(row as unknown as HTMLElement).getByRole('checkbox');
 }

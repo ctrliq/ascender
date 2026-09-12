@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import {
@@ -9,6 +8,7 @@ import {
   CredentialTypesAPI,
   JobTemplatesAPI,
 } from 'api';
+import type { LaunchConfig } from './types';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import LaunchPrompt from './LaunchPrompt';
@@ -20,7 +20,7 @@ vi.mock('../../api/models/Credentials');
 vi.mock('../../api/models/JobTemplates');
 vi.mock('../../api/models/InstanceGroups');
 
-let config: Untyped;
+let config: LaunchConfig;
 const resource = {
   id: 1,
   description: 'Foo Description',
@@ -49,7 +49,7 @@ async function getStepIds() {
   return waitFor(() => {
     // de-dupe: each step name renders both in the collapsed toggle and the
     // nav list, so collect unique ids in first-seen (DOM) order.
-    const seen: Untyped[] = [];
+    const seen: string[] = [];
     document.querySelectorAll('[id$="-step"]').forEach((el) => {
       if (!seen.includes(el.id)) {
         seen.push(el.id);

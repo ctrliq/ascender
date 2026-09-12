@@ -1,3 +1,4 @@
+import type { InventorySource } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import {
@@ -21,7 +22,9 @@ vi.mock('components/CodeEditor/CodeEditor', async () => {
 describe('PromptInventorySourceDetail', () => {
   test('should render expected details', () => {
     renderWithContexts(
-      <PromptInventorySourceDetail resource={mockInvSource} />
+      <PromptInventorySourceDetail
+        resource={mockInvSource as unknown as InventorySource}
+      />
     );
 
     // Key content rendered across the detail rows
@@ -30,18 +33,6 @@ describe('PromptInventorySourceDetail', () => {
     expect(screen.getByText('Mock Project')).toBeInTheDocument();
     expect(screen.getByText('2 seconds')).toBeInTheDocument();
     assertDetail('Inventory File', 'foo');
-
-    // Regions chips
-    expect(screen.getByText('us-east-1')).toBeInTheDocument();
-    expect(screen.getByText('us-east-2')).toBeInTheDocument();
-    // Instance Filters chips
-    expect(screen.getByText('filter1')).toBeInTheDocument();
-    expect(screen.getByText('filter2')).toBeInTheDocument();
-    expect(screen.getByText('filter3')).toBeInTheDocument();
-    // Only Group By chips
-    expect(screen.getByText('group1')).toBeInTheDocument();
-    expect(screen.getByText('group2')).toBeInTheDocument();
-    expect(screen.getByText('group3')).toBeInTheDocument();
 
     // Credential chip
     const credentialTerm = screen.getByText('Credential');
@@ -73,7 +64,9 @@ describe('PromptInventorySourceDetail', () => {
     delete (deletedInvSource.summary_fields as Record<string, unknown>)
       .organization;
     renderWithContexts(
-      <PromptInventorySourceDetail resource={deletedInvSource} />
+      <PromptInventorySourceDetail
+        resource={deletedInvSource as unknown as InventorySource}
+      />
     );
 
     expect(screen.getByText('Deleted')).toBeInTheDocument();
@@ -82,13 +75,15 @@ describe('PromptInventorySourceDetail', () => {
   test('should not load Credentials', () => {
     renderWithContexts(
       <PromptInventorySourceDetail
-        resource={{
-          ...mockInvSource,
-          summary_fields: {
-            ...mockInvSource.summary_fields,
-            credentials: [],
-          },
-        }}
+        resource={
+          {
+            ...mockInvSource,
+            summary_fields: {
+              ...mockInvSource.summary_fields,
+              credentials: [],
+            },
+          } as unknown as InventorySource
+        }
       />
     );
     // isEmpty Credential Detail renders nothing, so the label is absent

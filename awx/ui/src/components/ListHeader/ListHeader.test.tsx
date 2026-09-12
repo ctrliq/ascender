@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { act } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -17,8 +16,16 @@ describe('ListHeader', () => {
   // so the handlers (onSort/onSearch/onRemove/clearAllFilters) can be exercised
   // directly.
   function makeCapturingToolbar() {
-    const captured: Untyped = {};
-    const renderToolbar = (props: Untyped) => {
+    // What the header hands its toolbar, which the assertions call back.
+    const captured: {
+      onSort?: (key: string, order: string) => void;
+      onSearch?: (key: string, value: string) => void;
+      onRemove?: (key: string, value: string) => void;
+      onReplaceSearch?: (key: string, value: string) => void;
+      clearAllFilters?: () => void;
+      [key: string]: unknown;
+    } = {};
+    const renderToolbar = (props: Record<string, unknown>) => {
       Object.assign(captured, props);
       return <div data-testid="toolbar" />;
     };
@@ -53,11 +60,11 @@ describe('ListHeader', () => {
     );
 
     act(() => {
-      captured.onSort('foo', 'descending');
+      captured.onSort!('foo', 'descending');
     });
     expect(history.location.search).toEqual('?item.order_by=-foo');
     act(() => {
-      captured.onSort('foo', 'ascending');
+      captured.onSort!('foo', 'ascending');
     });
     // since order_by = foo is the default, that should be stripped out of the search
     expect(history.location.search).toEqual('');
@@ -76,7 +83,7 @@ describe('ListHeader', () => {
 
     expect(history.location.search).toEqual(query);
     act(() => {
-      captured.clearAllFilters();
+      captured.clearAllFilters!();
     });
     expect(history.location.search).toEqual('?item.page_size=5');
   });
@@ -94,7 +101,7 @@ describe('ListHeader', () => {
 
     expect(history.location.search).toEqual(query);
     act(() => {
-      captured.onSearch('name__icontains', 'foo');
+      captured.onSearch!('name__icontains', 'foo');
     });
     expect(history.location.search).toEqual(
       '?item.name__icontains=foo&item.page_size=10'
@@ -114,7 +121,7 @@ describe('ListHeader', () => {
 
     expect(history.location.search).toEqual(query);
     act(() => {
-      captured.onRemove('name__icontains', 'foo');
+      captured.onRemove!('name__icontains', 'foo');
     });
     expect(history.location.search).toEqual('?item.page_size=10');
   });

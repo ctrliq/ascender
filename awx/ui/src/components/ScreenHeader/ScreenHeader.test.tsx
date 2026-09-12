@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -14,7 +13,7 @@ describe('<ScreenHeader />', () => {
     '/foo/1/bar/fiz': 'Fiz',
   };
 
-  const renderAt = (pathname: Untyped) =>
+  const renderAt = (pathname: string) =>
     renderWithContexts(
       <ScreenHeader streamType="all_activity" breadcrumbConfig={config} />,
       {
@@ -50,7 +49,7 @@ describe('<ScreenHeader />', () => {
     ];
 
     routes.forEach(([location, crumbLength]) => {
-      const { unmount } = renderAt(location);
+      const { unmount } = renderAt(location as string);
 
       const nav = screen.queryByRole('navigation', { name: 'Breadcrumb' });
       const crumbs = nav ? within(nav).queryAllByRole('link') : [];

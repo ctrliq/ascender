@@ -43,7 +43,9 @@ vi.mock('./CodeEditor', async () => {
 // driving ace's onChange) have no DOM equivalent and are noted in place.
 
 beforeEach(() => {
-  (document.body as Untyped).createTextRange = vi.fn();
+  (
+    document.body as unknown as { createTextRange: () => void }
+  ).createTextRange = vi.fn();
 });
 
 const yamlBtn = () => screen.getByRole('button', { name: 'YAML' });

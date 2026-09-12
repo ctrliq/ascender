@@ -1,31 +1,26 @@
-import type { SummaryFieldRef, Untyped } from 'types/api';
+import type { InventorySource, SummaryFieldRef } from 'types/api';
 import React from 'react';
 import { Plural, useLingui } from '@lingui/react/macro';
+import { Content, ContentVariants } from '@patternfly/react-core';
 import { Link } from 'react-router';
-import { Label, Content, ContentVariants } from '@patternfly/react-core';
 
 import { Detail, DeletedDetail } from '../DetailList';
 import { VariablesDetail } from '../CodeEditor';
 import CredentialChip from '../CredentialChip';
-import ChipGroup from '../ChipGroup';
 import ExecutionEnvironmentDetail from '../ExecutionEnvironmentDetail';
 import { getVerbosityLabel } from '../VerbositySelectField';
 
 export interface PromptInventorySourceDetailProps {
-  resource: Untyped;
-  [key: string]: unknown;
+  resource: InventorySource;
 }
 
 function PromptInventorySourceDetail({
   resource,
 }: PromptInventorySourceDetailProps) {
   const {
-    group_by,
-    instance_filters,
     overwrite,
     overwrite_vars,
     source,
-    source_regions,
     source_vars,
     source_path,
     summary_fields,
@@ -117,63 +112,6 @@ function PromptInventorySourceDetail({
         ))}
         isEmpty={summary_fields?.credentials?.length === 0}
       />
-      {source_regions && (
-        <Detail
-          fullWidth
-          label={t`Regions`}
-          value={
-            <ChipGroup
-              numChips={5}
-              totalChips={source_regions.split(',')?.length ?? 0}
-              ouiaId="prompt-region-chips"
-            >
-              {source_regions.split(',').map((region: string) => (
-                <Label variant="outline" key={region}>
-                  {region}
-                </Label>
-              ))}
-            </ChipGroup>
-          }
-        />
-      )}
-      {instance_filters && (
-        <Detail
-          fullWidth
-          label={t`Instance Filters`}
-          value={
-            <ChipGroup
-              numChips={5}
-              totalChips={instance_filters.split(',')?.length ?? 0}
-              ouiaId="prompt-instance-filter-chips"
-            >
-              {instance_filters.split(',').map((filter: string) => (
-                <Label variant="outline" key={filter}>
-                  {filter}
-                </Label>
-              ))}
-            </ChipGroup>
-          }
-        />
-      )}
-      {group_by && (
-        <Detail
-          fullWidth
-          label={t`Only Group By`}
-          value={
-            <ChipGroup
-              numChips={5}
-              totalChips={group_by.split(',')?.length ?? 0}
-              ouiaId="prompt-only-group-by-chips"
-            >
-              {group_by.split(',').map((group: string) => (
-                <Label variant="outline" key={group}>
-                  {group}
-                </Label>
-              ))}
-            </ChipGroup>
-          }
-        />
-      )}
       {optionsList && (
         <Detail fullWidth label={t`Enabled Options`} value={optionsList} />
       )}

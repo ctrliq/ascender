@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { DeleteRequest } from 'util/getRelatedResourceDeleteDetails';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 
@@ -26,7 +26,7 @@ const itemC = {
 };
 
 describe('<ToolbarDeleteButton />', () => {
-  let deleteDetailsRequests: Untyped;
+  let deleteDetailsRequests: DeleteRequest[];
   beforeEach(() => {
     deleteDetailsRequests = [
       {

@@ -373,7 +373,7 @@ describe('<ScheduleForm />', () => {
       // The inventory list loads after the lookup's 1s debounce; wait for its
       // row checkbox to appear, then do each interaction exactly once (never a
       // click inside a waitFor retry).
-      let invCheckbox: Untyped;
+      let invCheckbox: HTMLElement | null = null;
       await waitFor(
         () => {
           invCheckbox = dialog.querySelector('#check-action-item-1 input');
@@ -381,8 +381,8 @@ describe('<ScheduleForm />', () => {
         },
         { timeout: 3000 }
       );
-      await user.click(invCheckbox);
-      await waitFor(() => expect(invCheckbox).toBeChecked());
+      await user.click(invCheckbox!);
+      await waitFor(() => expect(invCheckbox!).toBeChecked());
 
       // advance: inventory step -> preview step (final step shows Save)
       await user.click(within(dialog).getByRole('button', { name: 'Next' }));

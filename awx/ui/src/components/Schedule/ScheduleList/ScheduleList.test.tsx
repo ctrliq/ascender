@@ -1,3 +1,4 @@
+import type { Mock } from 'vitest';
 import type { ApiResponse } from 'api/Base';
 import type { Untyped } from 'types/api';
 import React from 'react';
@@ -10,8 +11,8 @@ import mockSchedules from '../data.schedules.json';
 
 vi.mock('../../../api');
 
-let loadSchedules: Untyped;
-let loadScheduleOptions: Untyped;
+let loadSchedules: Mock;
+let loadScheduleOptions: Mock;
 
 function setupMocks() {
   vi.mocked(SchedulesAPI.update).mockResolvedValue({
@@ -51,7 +52,7 @@ const rowSelectCheckboxes = () =>
       (box.getAttribute('aria-label') || '').startsWith('Select row')
     );
 
-const selectCheckboxInRow = (row: Untyped) =>
+const selectCheckboxInRow = (row: HTMLElement) =>
   within(row)
     .getAllByRole('checkbox')
     .find((box) =>
@@ -87,7 +88,7 @@ describe('ScheduleList', () => {
       const row = screen
         .getByRole('link', { name: 'Mock JT Schedule' })
         .closest('tr');
-      const checkbox = selectCheckboxInRow(row);
+      const checkbox = selectCheckboxInRow(row!);
 
       expect(checkbox).not.toBeChecked();
       await user.click(checkbox as unknown as Element);
@@ -120,7 +121,7 @@ describe('ScheduleList', () => {
       const row = screen
         .getByRole('link', { name: 'Mock System Job Schedule' })
         .closest('tr');
-      await user.click(selectCheckboxInRow(row)!);
+      await user.click(selectCheckboxInRow(row!)!);
 
       await user.click(screen.getByRole('button', { name: 'Delete' }));
       await user.click(
@@ -139,7 +140,7 @@ describe('ScheduleList', () => {
       const row = screen
         .getByRole('link', { name: 'Mock Project Update Schedule' })
         .closest('tr');
-      await user.click(selectCheckboxInRow(row)!);
+      await user.click(selectCheckboxInRow(row!)!);
 
       await user.click(screen.getByRole('button', { name: 'Delete' }));
       await user.click(

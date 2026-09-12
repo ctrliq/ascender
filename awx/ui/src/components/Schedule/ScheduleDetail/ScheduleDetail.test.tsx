@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Label, Untyped } from 'types/api';
+import type { Label, Schedule } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -110,7 +110,7 @@ const schedule = {
   forks: null,
   job_slice_count: null,
   timeout: null,
-};
+} as unknown as Schedule;
 
 const scheduleWithPrompts = {
   ...schedule,
@@ -127,9 +127,9 @@ const scheduleWithPrompts = {
   forks: 1,
   job_slice_count: 1,
   timeout: 100,
-};
+} as unknown as Schedule;
 
-function renderDetail(detailSchedule: Untyped, props = {}) {
+function renderDetail(detailSchedule: Schedule, props = {}) {
   const history = createMemoryHistory({
     initialEntries: ['/templates/job_template/1/schedules/1/details'],
   });

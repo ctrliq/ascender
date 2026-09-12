@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -14,7 +13,9 @@ import VariablesDetail from './VariablesDetail';
 // button is primary, and value-content checks are noted as unobservable.
 
 beforeEach(() => {
-  (document.body as Untyped).createTextRange = vi.fn();
+  (
+    document.body as unknown as { createTextRange: () => void }
+  ).createTextRange = vi.fn();
 });
 
 const yamlActive = () =>
