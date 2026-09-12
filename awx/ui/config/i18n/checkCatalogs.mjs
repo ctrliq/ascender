@@ -96,11 +96,24 @@ try {
     ].join('\n')
   );
 
-  execFileSync(
-    join(uiRoot, 'node_modules/.bin/lingui'),
-    ['extract', '--config', config, '--locale', 'en'],
-    { cwd: uiRoot, stdio: 'pipe' }
-  );
+  try {
+    execFileSync(
+      join(uiRoot, 'node_modules/.bin/lingui'),
+      ['extract', '--config', config, '--locale', 'en'],
+      { cwd: uiRoot, stdio: 'pipe' }
+    );
+  } catch (error) {
+    // Say what the extractor said. Left to itself node prints the failure as
+    // a dump of its stdio buffers, byte by byte.
+    const said = [error.stdout, error.stderr]
+      .map((buffer) => buffer?.toString().trim())
+      .filter(Boolean)
+      .join('\n');
+    process.stderr.write(
+      ['Could not extract the strings.', '', said, ''].join('\n')
+    );
+    process.exit(1);
+  }
 
   const fromSource = messageIds(
     readFileSync(join(work, 'en/messages.po'), 'utf8')
