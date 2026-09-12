@@ -217,7 +217,7 @@ describe('<CredentialForm />', () => {
 
       const sshKeyTextarea = container.querySelector(
         'textarea#credential-ssh_key_data'
-      ) as Untyped;
+      ) as HTMLElement;
       await user.type(sshKeyTextarea, 'my-private-key');
       expect(sshKeyTextarea).toHaveValue('my-private-key');
     });

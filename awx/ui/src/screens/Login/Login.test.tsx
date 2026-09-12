@@ -115,7 +115,7 @@ describe('<Login />', () => {
       <AWXLogin alt="Foo Application" isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
-    const logo = container.querySelector('img') as Untyped;
+    const logo = container.querySelector('img') as HTMLElement;
     expect(logo.getAttribute('alt')).toBe('Foo Application');
     expect(logo.getAttribute('src')).toBe('data:image/jpeg;base64,abc123');
   });
@@ -128,7 +128,7 @@ describe('<Login />', () => {
       <AWXLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
-    const logo = container.querySelector('img') as Untyped;
+    const logo = container.querySelector('img') as HTMLElement;
     expect(logo.getAttribute('alt')).toBe('AWX');
     expect(logo.getAttribute('src')).toBe('static/media/Ascender_logo.svg');
   });
@@ -160,7 +160,7 @@ describe('<Login />', () => {
       <AWXLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
-    const logo = container.querySelector('img') as Untyped;
+    const logo = container.querySelector('img') as HTMLElement;
     expect(logo.getAttribute('alt')).toBe(null);
     expect(logo.getAttribute('src')).toBe('static/media/Ascender_logo.svg');
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -442,11 +442,15 @@ describe('<Login />', () => {
 
     const form = document.querySelector(
       'form[action="/sso/login/azuread-oauth2/"]'
-    ) as Untyped;
+    ) as HTMLFormElement;
     expect(form).not.toBeNull();
     expect(form.method).toEqual('post');
     expect(
-      form.querySelector('input[name="csrfmiddlewaretoken"]').value
+      (
+        form.querySelector(
+          'input[name="csrfmiddlewaretoken"]'
+        ) as HTMLInputElement
+      ).value
     ).toEqual('TESTTOKEN');
     expect(submit).toHaveBeenCalled();
     submit.mockRestore();

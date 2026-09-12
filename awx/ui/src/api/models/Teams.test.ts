@@ -1,18 +1,20 @@
-import type { Untyped } from 'types/api';
+import type { Mock } from 'vitest';
+import type { Http } from '../Base';
 import Teams from './Teams';
 
 describe('TeamsAPI', () => {
   const teamId = 1;
   const roleId = 7;
 
-  let TeamsAPI: Untyped;
-  let mockHttp: Untyped;
+  let TeamsAPI: Teams;
+  // Only the methods this model calls, each a vi.fn so its calls can be read.
+  let mockHttp: Partial<Record<keyof Http, Mock>>;
 
   beforeEach(() => {
     const createPromise = () => Promise.resolve();
     mockHttp = { post: vi.fn(createPromise) };
 
-    TeamsAPI = new Teams(mockHttp);
+    TeamsAPI = new Teams(mockHttp as unknown as Http);
   });
 
   afterEach(() => {
@@ -23,7 +25,7 @@ describe('TeamsAPI', () => {
     await TeamsAPI.associateRole(teamId, roleId);
 
     expect(mockHttp.post).toHaveBeenCalledTimes(1);
-    expect(mockHttp.post.mock.calls[0]).toEqual([
+    expect(mockHttp.post?.mock.calls[0]).toEqual([
       `api/v2/teams/${teamId}/roles/`,
       { id: roleId },
     ]);
@@ -33,7 +35,7 @@ describe('TeamsAPI', () => {
     await TeamsAPI.disassociateRole(teamId, roleId);
 
     expect(mockHttp.post).toHaveBeenCalledTimes(1);
-    expect(mockHttp.post.mock.calls[0]).toEqual([
+    expect(mockHttp.post?.mock.calls[0]).toEqual([
       `api/v2/teams/${teamId}/roles/`,
       {
         id: roleId,

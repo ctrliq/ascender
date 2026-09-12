@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
 import {
@@ -69,7 +68,7 @@ describe('LinkModal', () => {
       });
       const artifactKeyInput = document.querySelector(
         '#link-condition-artifact-key'
-      ) as Untyped;
+      ) as HTMLElement;
       expect(artifactKeyInput).not.toBeNull();
       // save is disabled until an artifact key is provided
       expect(

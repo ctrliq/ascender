@@ -368,7 +368,7 @@ describe('VisualizerNode', () => {
       );
       const label = document.querySelector(
         '[data-cy="convergence-label"]'
-      ) as Untyped;
+      ) as HTMLElement;
       expect(label).not.toBeNull();
       expect(label).toHaveTextContent('ALL');
     });

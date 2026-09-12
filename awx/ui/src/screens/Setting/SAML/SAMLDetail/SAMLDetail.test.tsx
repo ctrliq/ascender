@@ -1,9 +1,9 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import type { ResponseOf } from '../../../../../testUtils/responseOf';
+import type { RenderWithContextsOptions } from '../../../../../testUtils/rtlContexts';
 import {
   renderWithContexts,
   assertDetail,
@@ -43,7 +43,7 @@ describe('<SAMLDetail />', () => {
     vi.clearAllMocks();
   });
 
-  async function renderDetail(context?: Untyped) {
+  async function renderDetail(context?: RenderWithContextsOptions) {
     const result = renderWithContexts(
       <SettingsProvider value={settingOptions}>
         <SAMLDetail />

@@ -1,11 +1,13 @@
-import type { Untyped } from 'types/api';
+import type { Mock } from 'vitest';
+import type { Http } from '../Base';
 import ConstructedInventories from './ConstructedInventories';
 
 describe('ConstructedInventoriesAPI', () => {
   const constructedInventoryId = 1;
   const constructedInventoryMethod = 'PUT';
-  let ConstructedInventoriesAPI: Untyped;
-  let mockHttp: Untyped;
+  let ConstructedInventoriesAPI: ConstructedInventories;
+  // Only the methods this model calls, each a vi.fn so its calls can be read.
+  let mockHttp: Partial<Record<keyof Http, Mock>>;
 
   beforeEach(() => {
     const optionsPromise = () =>
@@ -19,7 +21,9 @@ describe('ConstructedInventoriesAPI', () => {
     mockHttp = {
       options: vi.fn(optionsPromise),
     };
-    ConstructedInventoriesAPI = new ConstructedInventories(mockHttp);
+    ConstructedInventoriesAPI = new ConstructedInventories(
+      mockHttp as unknown as Http
+    );
   });
 
   afterEach(() => {

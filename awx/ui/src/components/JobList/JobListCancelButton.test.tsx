@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -129,7 +128,7 @@ describe('<JobListCancelButton />', () => {
     const dialog = screen.getByRole('dialog');
     const confirmButton = dialog.querySelector(
       '#cancel-job-confirm-button'
-    ) as Untyped;
+    ) as HTMLElement;
     await user.click(confirmButton);
     expect(onCancel).toHaveBeenCalledTimes(1);
   });

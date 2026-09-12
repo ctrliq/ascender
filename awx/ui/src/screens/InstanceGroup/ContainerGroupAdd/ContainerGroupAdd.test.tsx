@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import type { TestHistory } from 'history';
@@ -6,6 +5,7 @@ import { createMemoryHistory } from 'history';
 
 import { InstanceGroupsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ContainerGroupAdd from './ContainerGroupAdd';
 
@@ -24,9 +24,9 @@ const mockInstanceGroupCreateData = {
 // Mock the shared form so the test drives ContainerGroupAdd's own submit/cancel
 // handlers directly. The form itself is covered by ContainerGroupForm.test.js.
 vi.mock('../shared/ContainerGroupForm', () => ({
-  default: ({ onSubmit, onCancel, submitError }: Untyped) => (
+  default: ({ onSubmit, onCancel, submitError }: MockFormProps) => (
     <div>
-      {submitError && <div>FormSubmitError</div>}
+      {submitError ? <div>FormSubmitError</div> : null}
       <button
         type="button"
         onClick={() =>

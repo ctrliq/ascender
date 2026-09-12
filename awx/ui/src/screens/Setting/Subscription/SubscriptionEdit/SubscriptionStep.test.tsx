@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Formik } from 'formik';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
@@ -33,12 +32,14 @@ describe('<SubscriptionStep />', () => {
 
   test('should update filename when a manifest zip file is uploaded', async () => {
     const { container } = renderStep();
-    const fileInput = container.querySelector('input[type="file"]') as Untyped;
+    const fileInput = container.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
     expect(fileInput).toBeInTheDocument();
     // the readonly filename input starts empty
     const filenameInput = container.querySelector(
       '#upload-manifest-filename'
-    ) as Untyped;
+    ) as HTMLInputElement;
     expect(filenameInput.value).toEqual('');
 
     // the dropzone accept rule is '.zip' (extension based), so the file name
@@ -62,7 +63,9 @@ describe('<SubscriptionStep />', () => {
 
   test('clear button should clear manifest value and filename', async () => {
     const { container } = renderStep();
-    const fileInput = container.querySelector('input[type="file"]') as Untyped;
+    const fileInput = container.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
     const file = new File(['123'], 'new file name.zip', {
       type: 'application/zip',
     });
@@ -99,7 +102,9 @@ describe('<SubscriptionStep />', () => {
       )
     ).toBeNull();
 
-    const fileInput = document.querySelector('input[type="file"]') as Untyped;
+    const fileInput = document.querySelector(
+      'input[type="file"]'
+    ) as HTMLInputElement;
     const badFile = new File(['nope'], 'foo.txt', { type: 'text/plain' });
     fireEvent.drop(fileInput, {
       dataTransfer: { files: [badFile], types: ['Files'] },
@@ -122,8 +127,12 @@ describe('<SubscriptionStep />', () => {
       screen.getByRole('button', { name: 'Username / password' })
     );
 
-    const usernameInput = container.querySelector('#username-field') as Untyped;
-    const passwordInput = container.querySelector('#password-field') as Untyped;
+    const usernameInput = container.querySelector(
+      '#username-field'
+    ) as HTMLInputElement;
+    const passwordInput = container.querySelector(
+      '#password-field'
+    ) as HTMLInputElement;
     expect(usernameInput).toBeInTheDocument();
     expect(passwordInput).toBeInTheDocument();
 

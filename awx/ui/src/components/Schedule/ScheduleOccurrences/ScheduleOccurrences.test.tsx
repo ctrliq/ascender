@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -30,7 +29,7 @@ describe('<ScheduleOccurrences>', () => {
 
     test('It renders the correct number of dates', () => {
       const { container } = setup();
-      const dd = container.querySelector('dd') as Untyped;
+      const dd = container.querySelector('dd') as HTMLElement;
       expect(dd.children.length).toBe(2);
     });
 
@@ -40,7 +39,7 @@ describe('<ScheduleOccurrences>', () => {
       expect(screen.getByRole('button', { name: 'UTC' })).toHaveClass(
         'pf-m-primary'
       );
-      const dd = container.querySelector('dd') as Untyped;
+      const dd = container.querySelector('dd') as HTMLElement;
       expect(dd.children.length).toBe(2);
       // the time formatter uses a narrow no-break space (U+202F) before AM/PM
       expect(dd.children[0]).toHaveTextContent('3/16/2020, 4:00:00 AM');

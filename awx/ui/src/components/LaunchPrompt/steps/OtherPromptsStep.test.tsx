@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { Formik } from 'formik';
@@ -28,7 +27,9 @@ describe('OtherPromptsStep', () => {
       </Formik>
     );
 
-    const select = container.querySelector('select#prompt-job-type') as Untyped;
+    const select = container.querySelector(
+      'select#prompt-job-type'
+    ) as HTMLSelectElement;
     expect(select).not.toBeNull();
     expect(select.options).toHaveLength(3);
     expect(select.value).toEqual('run');
@@ -46,7 +47,7 @@ describe('OtherPromptsStep', () => {
       </Formik>
     );
 
-    const input = container.querySelector('input#prompt-limit') as Untyped;
+    const input = container.querySelector('input#prompt-limit') as HTMLElement;
     expect(input).not.toBeNull();
     expect(input).toHaveAttribute('name', 'limit');
   });
@@ -63,7 +64,9 @@ describe('OtherPromptsStep', () => {
       </Formik>
     );
 
-    const input = container.querySelector('input#prompt-timeout') as Untyped;
+    const input = container.querySelector(
+      'input#prompt-timeout'
+    ) as HTMLElement;
     expect(input).not.toBeNull();
     expect(input).toHaveAttribute('name', 'timeout');
   });
@@ -80,7 +83,7 @@ describe('OtherPromptsStep', () => {
       </Formik>
     );
 
-    const input = container.querySelector('input#prompt-forks') as Untyped;
+    const input = container.querySelector('input#prompt-forks') as HTMLElement;
     expect(input).not.toBeNull();
     expect(input).toHaveAttribute('name', 'forks');
   });
@@ -99,7 +102,7 @@ describe('OtherPromptsStep', () => {
 
     const input = container.querySelector(
       'input#prompt-job-slicing'
-    ) as Untyped;
+    ) as HTMLElement;
     expect(input).not.toBeNull();
     expect(input).toHaveAttribute('name', 'job_slice_count');
   });
@@ -116,7 +119,9 @@ describe('OtherPromptsStep', () => {
       </Formik>
     );
 
-    const input = container.querySelector('input#prompt-scm-branch') as Untyped;
+    const input = container.querySelector(
+      'input#prompt-scm-branch'
+    ) as HTMLElement;
     expect(input).not.toBeNull();
     expect(input).toHaveAttribute('name', 'scm_branch');
   });
@@ -135,7 +140,7 @@ describe('OtherPromptsStep', () => {
 
     const select = container.querySelector(
       'select#prompt-verbosity'
-    ) as Untyped;
+    ) as HTMLSelectElement;
     expect(select).not.toBeNull();
     expect(select.options).toHaveLength(6);
   });

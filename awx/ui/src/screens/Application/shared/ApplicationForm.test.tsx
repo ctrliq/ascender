@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { OrganizationsAPI } from 'api';
@@ -72,11 +71,15 @@ describe('<ApplicationForm/>', () => {
     const { container, user } = renderForm();
     await screen.findByText('Organization');
 
-    const nameInput = container.querySelector('#name') as Untyped;
+    const nameInput = container.querySelector('#name') as HTMLElement;
     await user.type(nameInput, 'new foo');
-    const descriptionInput = container.querySelector('#description') as Untyped;
+    const descriptionInput = container.querySelector(
+      '#description'
+    ) as HTMLElement;
     await user.type(descriptionInput, 'new bar');
-    const redirectInput = container.querySelector('#redirect_uris') as Untyped;
+    const redirectInput = container.querySelector(
+      '#redirect_uris'
+    ) as HTMLElement;
     await user.type(redirectInput, 'https://www.google.com');
 
     await user.selectOptions(

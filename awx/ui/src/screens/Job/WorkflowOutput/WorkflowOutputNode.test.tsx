@@ -140,7 +140,7 @@ describe('WorkflowOutputNode', () => {
       },
     };
     const { container } = renderNode(carriedNode);
-    const node = container.querySelector('#node-2') as Untyped;
+    const node = container.querySelector('#node-2') as HTMLElement;
     // no spawned job, but it renders the successful status icon (green)
     expect(
       node.querySelector('[data-job-status="successful"]')

@@ -190,8 +190,10 @@ describe('VisualizerGraph', () => {
       container.querySelector('#workflow-link-help-type')
     ).not.toBeInTheDocument();
 
-    const node2 = container.querySelector('g#node-2') as Untyped;
-    const node2ForeignObject = node2.querySelector('foreignObject') as Untyped;
+    const node2 = container.querySelector('g#node-2') as SVGGElement;
+    const node2ForeignObject = node2.querySelector(
+      'foreignObject'
+    ) as SVGForeignObjectElement;
     fireEvent.mouseEnter(node2ForeignObject);
 
     // WorkflowNodeHelp renders the alias/name/type for node 2
@@ -217,7 +219,9 @@ describe('VisualizerGraph', () => {
   test('proper help text is shown when hovering over links', () => {
     const { container } = renderGraph();
 
-    const linkOverlay = container.querySelector('#link-2-3-overlay') as Untyped;
+    const linkOverlay = container.querySelector(
+      '#link-2-3-overlay'
+    ) as HTMLElement;
     fireEvent.mouseEnter(linkOverlay);
 
     // WorkflowLinkHelp renders the "Run" type for the always link 2-3

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import {
@@ -40,7 +39,7 @@ describe('<ExecutionEnvironmentDetail/>', () => {
     // The deleted-EE warning wraps the icon in a PF Tooltip; its content is
     // only rendered into the DOM on hover, so we assert it after hovering.
     const term = screen.getByText('Execution Environment');
-    const icon = term.nextElementSibling!.querySelector('svg') as Untyped;
+    const icon = term.nextElementSibling!.querySelector('svg') as SVGSVGElement;
     await user.hover(icon);
     await waitFor(() => {
       expect(

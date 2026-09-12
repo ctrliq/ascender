@@ -31,7 +31,7 @@ function computeForks(
 
 describe('<InstanceDetail/>', () => {
   beforeEach(() => {
-    vi.mocked(useDebounce).mockImplementation((fn: Untyped) => fn);
+    vi.mocked(useDebounce).mockImplementation((fn) => fn);
 
     vi.mocked(InstancesAPI.readDetail).mockResolvedValue({
       data: {

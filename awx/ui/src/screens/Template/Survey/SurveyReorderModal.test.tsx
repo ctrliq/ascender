@@ -81,7 +81,7 @@ describe('<SurveyReorderModal />', () => {
     expect(screen.getByText('Text Question')).toBeInTheDocument();
     const question1Value = document.querySelector(
       '#survey-preview-text-dfgh'
-    ) as Untyped;
+    ) as HTMLElement;
     expect(question1Value).toBeInTheDocument();
     expect(question1Value).toHaveValue('Text Question Value');
     expect(question1Value).toBeDisabled();
@@ -90,7 +90,7 @@ describe('<SurveyReorderModal />', () => {
     expect(screen.getByText('Select Question')).toBeInTheDocument();
     const question2Toggle = document.querySelector(
       '[data-ouia-component-id="survey-preview-multipleChoice-sdf"]'
-    ) as Untyped;
+    ) as HTMLElement;
     expect(question2Toggle).toBeInTheDocument();
     expect(
       within(question2Toggle).getByText('Select Question Value')
@@ -99,7 +99,7 @@ describe('<SurveyReorderModal />', () => {
 
     // Question 3: textarea, disabled, with the default value.
     expect(screen.getByText('Text Area Question')).toBeInTheDocument();
-    const question3Value = document.querySelector('textarea') as Untyped;
+    const question3Value = document.querySelector('textarea') as HTMLElement;
     expect(question3Value).toBeInTheDocument();
     expect(question3Value).toHaveValue('Text Area Question Value');
     expect(question3Value).toBeDisabled();
@@ -108,7 +108,7 @@ describe('<SurveyReorderModal />', () => {
     expect(screen.getByText('Password Question')).toBeInTheDocument();
     const question4Value = document.querySelector(
       '#survey-preview-encrypted'
-    ) as Untyped;
+    ) as HTMLElement;
     expect(question4Value).toBeInTheDocument();
     expect(question4Value).toHaveTextContent('ENCRYPTED');
 
@@ -116,7 +116,7 @@ describe('<SurveyReorderModal />', () => {
     expect(screen.getByText('Multiple select Question')).toBeInTheDocument();
     const multiSelectToggle = document.querySelector(
       '[data-ouia-component-id="survey-preview-multiSelect-a"]'
-    ) as Untyped;
+    ) as HTMLElement;
     expect(multiSelectToggle).toBeInTheDocument();
     const toggleWrapper = multiSelectToggle.closest(
       '.pf-v6-c-menu-toggle'

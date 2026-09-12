@@ -142,7 +142,7 @@ describe('<WorkflowJobTemplateEdit/>', () => {
       data: { count: 1, results: [{ id: 1, name: 'Default' }] },
     } as unknown as ResponseOf<typeof UsersAPI.readAdminOfOrganizations>);
 
-    vi.mocked(useDebounce).mockImplementation((fn: Untyped) => fn);
+    vi.mocked(useDebounce).mockImplementation((fn) => fn);
   });
 
   afterEach(() => {

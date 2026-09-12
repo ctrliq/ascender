@@ -1,9 +1,9 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { LabelsAPI, InventoriesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryAdd from './InventoryAdd';
 
@@ -20,7 +20,7 @@ const submitValues = {
 };
 
 vi.mock('../shared/InventoryForm', () => ({
-  default: ({ onSubmit, onCancel, submitError }: Untyped) => (
+  default: ({ onSubmit, onCancel, submitError }: MockFormProps) => (
     <div>
       <button
         type="button"

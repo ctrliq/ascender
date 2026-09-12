@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -141,7 +140,7 @@ describe('<Sort />', () => {
     // SortNumericDownAltIcon
     const path = container.querySelector(
       'button[aria-label="Sort"] svg path'
-    ) as Untyped;
+    ) as HTMLElement;
     expect(path.getAttribute('d')).toContain('zm224 64h-16V304');
   });
 
@@ -165,7 +164,7 @@ describe('<Sort />', () => {
     // SortNumericDownIcon
     const path = container.querySelector(
       'button[aria-label="Sort"] svg path'
-    ) as Untyped;
+    ) as HTMLElement;
     expect(path.getAttribute('d')).toContain('M304 96h16v64h-16');
   });
 
@@ -189,7 +188,7 @@ describe('<Sort />', () => {
     // SortAlphaDownAltIcon
     const path = container.querySelector(
       'button[aria-label="Sort"] svg path'
-    ) as Untyped;
+    ) as HTMLElement;
     expect(path.getAttribute('d')).toContain('352zm112-128h128');
   });
 
@@ -213,7 +212,7 @@ describe('<Sort />', () => {
     // SortAlphaDownIcon
     const path = container.querySelector(
       'button[aria-label="Sort"] svg path'
-    ) as Untyped;
+    ) as HTMLElement;
     expect(path.getAttribute('d')).toContain('190.22 352 176 352zm240-64H288');
   });
 });

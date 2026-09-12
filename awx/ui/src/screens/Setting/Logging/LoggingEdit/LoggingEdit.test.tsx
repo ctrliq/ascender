@@ -93,7 +93,7 @@ describe('<LoggingEdit />', () => {
     const { container } = await renderEdit();
     const enableSwitch = container.querySelector(
       '#LOG_AGGREGATOR_ENABLED'
-    ) as Untyped;
+    ) as HTMLInputElement;
     expect(enableSwitch.checked).toBe(true);
     expect(enableSwitch.disabled).toBe(false);
     // Toggle external logging off.
@@ -101,14 +101,14 @@ describe('<LoggingEdit />', () => {
     // Clear the Logging Aggregator host input.
     const hostInput = container.querySelector(
       '#LOG_AGGREGATOR_HOST'
-    ) as Untyped;
+    ) as HTMLInputElement;
     fireEvent.change(hostInput, {
       target: { name: 'LOG_AGGREGATOR_HOST', value: '' },
     });
     await waitFor(() => {
       const toggled = container.querySelector(
         '#LOG_AGGREGATOR_ENABLED'
-      ) as Untyped;
+      ) as HTMLInputElement;
       expect(toggled.checked).toBe(false);
       expect(toggled.disabled).toBe(true);
     });
@@ -222,7 +222,7 @@ describe('<LoggingEdit />', () => {
     expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(0);
     const portInput = container.querySelector(
       '#LOG_AGGREGATOR_PORT'
-    ) as Untyped;
+    ) as HTMLInputElement;
     await user.clear(portInput);
     await user.type(portInput, '1010');
     await user.click(screen.getByRole('button', { name: 'Save' }));

@@ -99,7 +99,7 @@ function renderItem(props?: Untyped) {
 
 describe('<InstanceListItem/>', () => {
   beforeEach(() => {
-    vi.mocked(useDebounce).mockImplementation((fn: Untyped) => fn);
+    vi.mocked(useDebounce).mockImplementation((fn) => fn);
   });
 
   afterEach(() => {
@@ -117,7 +117,7 @@ describe('<InstanceListItem/>', () => {
     // initial capacity_adjustment 0.40 -> min(1,24) + (24-1)*0.4 = 1 + 9.2 -> 10
     const forksDiv = container.querySelector(
       '[data-cy="number-forks"]'
-    ) as Untyped;
+    ) as HTMLElement;
     expect(forksDiv).toHaveTextContent('10');
     expect(forksDiv).toHaveTextContent('forks');
 
@@ -161,7 +161,7 @@ describe('<InstanceListItem/>', () => {
 
     const forksDiv = container.querySelector(
       '[data-cy="number-forks"]'
-    ) as Untyped;
+    ) as HTMLElement;
     expect(forksDiv).toHaveTextContent('10');
     expect(forksDiv).toHaveTextContent('forks');
   });

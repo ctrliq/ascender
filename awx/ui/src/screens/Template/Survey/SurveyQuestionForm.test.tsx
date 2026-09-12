@@ -19,7 +19,7 @@ const noop = () => {};
 // Drive the real AnsibleSelect (a PF FormSelect <select>) to change the
 // question type, then wait for the type-dependent fields to (re)render.
 function selectType(type: Untyped) {
-  const select = document.querySelector('#question-type') as Untyped;
+  const select = document.querySelector('#question-type') as HTMLElement;
   fireEvent.change(select, { target: { value: type } });
 }
 

@@ -78,7 +78,7 @@ describe('<InstanceEdit/>', () => {
   let history: TestHistory;
 
   beforeEach(() => {
-    vi.mocked(useDebounce).mockImplementation((fn: Untyped) => fn);
+    vi.mocked(useDebounce).mockImplementation((fn) => fn);
     history = createMemoryHistory();
     vi.mocked(InstancesAPI.readDetail).mockResolvedValue({
       data: instanceData,

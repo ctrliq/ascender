@@ -117,7 +117,7 @@ function renderDetails() {
 
 describe('<InstanceDetails/>', () => {
   beforeEach(() => {
-    vi.mocked(useDebounce).mockImplementation((fn: Untyped) => fn);
+    vi.mocked(useDebounce).mockImplementation((fn) => fn);
     vi.mocked(InstanceGroupsAPI.readInstances).mockResolvedValue(
       associatedInstances as unknown as ApiResponse<any>
     );

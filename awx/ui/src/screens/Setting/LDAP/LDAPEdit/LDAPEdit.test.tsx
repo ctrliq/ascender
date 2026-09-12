@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import type { TestHistory } from 'history';
@@ -134,7 +133,7 @@ describe('<LDAPEdit />', () => {
     );
     const serverUriInput = container.querySelector(
       '#AUTH_LDAP_SERVER_URI'
-    ) as Untyped;
+    ) as HTMLElement;
     await user.clear(serverUriInput);
     await user.type(serverUriInput, 'ldap://mock.example.com');
     await user.click(screen.getByRole('button', { name: 'Save' }));

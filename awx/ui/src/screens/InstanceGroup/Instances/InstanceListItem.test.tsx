@@ -1,4 +1,4 @@
-import type { Untyped, Instance } from 'types/api';
+import type { Instance } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 
@@ -72,7 +72,7 @@ function renderItem(props = {}) {
 
 describe('<InstanceListItem/>', () => {
   beforeEach(() => {
-    vi.mocked(useDebounce).mockImplementation((fn: Untyped) => fn);
+    vi.mocked(useDebounce).mockImplementation((fn) => fn);
   });
 
   afterEach(() => {

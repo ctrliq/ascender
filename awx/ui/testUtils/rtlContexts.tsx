@@ -112,6 +112,17 @@ function HistoryRouter({
   );
 }
 
+/**
+ * The props a screen hands the form it renders, as the stub a screen's own
+ * test puts in the form's place takes them: the stub renders two buttons and
+ * reports the error, so what onSubmit is given is the test's business.
+ */
+export interface MockFormProps {
+  onSubmit: (...args: unknown[]) => void;
+  onCancel: () => void;
+  submitError?: unknown;
+}
+
 /** The user-event instance renderWithContexts sets up for each render. */
 export type TestUser = ReturnType<typeof userEvent.setup>;
 

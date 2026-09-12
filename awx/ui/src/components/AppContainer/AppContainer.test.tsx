@@ -1,5 +1,4 @@
 import type { Mock } from 'vitest';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { MeAPI, RootAPI } from 'api';
@@ -201,7 +200,7 @@ describe('<AppContainer />', () => {
     // open the user menu
     const userToggle = document.querySelector(
       '[data-ouia-component-id="toolbar-user-dropdown-toggle"]'
-    ) as Untyped;
+    ) as HTMLElement;
     await user.click(userToggle);
 
     // logout

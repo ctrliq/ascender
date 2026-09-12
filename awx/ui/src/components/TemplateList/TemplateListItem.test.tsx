@@ -464,7 +464,7 @@ describe('<TemplateListItem />', () => {
     // Asserts one Sparkline renders in the Activity cell.
     const activityCell = container.querySelector(
       '[data-label="Activity"]'
-    ) as Untyped;
+    ) as HTMLElement;
     expect(activityCell).toBeInTheDocument();
     expect(activityCell.querySelector('svg')).toBeInTheDocument();
   });

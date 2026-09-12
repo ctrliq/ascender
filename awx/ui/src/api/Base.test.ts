@@ -1,9 +1,19 @@
-import type { Untyped } from 'types/api';
+import type { Mock } from 'vitest';
+import type { ApiError, Http } from './Base';
 import Base from './Base';
+
+/** Only the members mockFetchResponse is ever handed, all of them optional. */
+interface FetchResponseOverrides {
+  ok?: boolean;
+  status?: number;
+  headers?: Record<string, string>;
+  json?: unknown;
+  text?: string;
+}
 
 // Enough of a Response for the client under test: it reads ok, status, the
 // content type and one of json or text.
-function mockFetchResponse(overrides: Untyped = {}): Response {
+function mockFetchResponse(overrides: FetchResponseOverrides = {}): Response {
   const headers = new Headers(overrides.headers || {});
   const text =
     overrides.text !== undefined
@@ -21,8 +31,9 @@ function mockFetchResponse(overrides: Untyped = {}): Response {
 describe('Base', () => {
   const mockBaseURL = '/api/v2/organizations/';
 
-  let BaseAPI: Untyped;
-  let mockHttp: Untyped;
+  let BaseAPI: Base;
+  // Each method is a vi.fn, so the assertions below can read its calls.
+  let mockHttp: Record<keyof Http, Mock>;
 
   beforeEach(() => {
     const createPromise = () => Promise.resolve();
@@ -34,7 +45,7 @@ describe('Base', () => {
       post: vi.fn(createPromise),
       put: vi.fn(createPromise),
     };
-    BaseAPI = new Base(mockHttp, mockBaseURL);
+    BaseAPI = new Base(mockHttp as unknown as Http, mockBaseURL);
   });
 
   afterEach(() => {
@@ -46,7 +57,7 @@ describe('Base', () => {
     await BaseAPI.create(data);
 
     expect(mockHttp.post).toHaveBeenCalledTimes(1);
-    expect(mockHttp.post.mock.calls[0][1]).toEqual(data);
+    expect(mockHttp.post.mock.calls[0]?.[1]).toEqual(data);
   });
 
   test('destroy calls http method with expected data', async () => {
@@ -54,7 +65,7 @@ describe('Base', () => {
     await BaseAPI.destroy(resourceId);
 
     expect(mockHttp.delete).toHaveBeenCalledTimes(1);
-    expect(mockHttp.delete.mock.calls[0][0]).toEqual(
+    expect(mockHttp.delete.mock.calls[0]?.[0]).toEqual(
       `${mockBaseURL}${resourceId}/`
     );
   });
@@ -68,12 +79,12 @@ describe('Base', () => {
     await BaseAPI.read(testParamsDuplicates);
 
     expect(mockHttp.get).toHaveBeenCalledTimes(3);
-    expect(mockHttp.get.mock.calls[0][0]).toEqual(`${mockBaseURL}`);
-    expect(mockHttp.get.mock.calls[0][1]).toEqual({ params: { foo: 'bar' } });
-    expect(mockHttp.get.mock.calls[1][0]).toEqual(`${mockBaseURL}`);
-    expect(mockHttp.get.mock.calls[1][1]).toEqual({ params: undefined });
-    expect(mockHttp.get.mock.calls[2][0]).toEqual(`${mockBaseURL}`);
-    expect(mockHttp.get.mock.calls[2][1]).toEqual({
+    expect(mockHttp.get.mock.calls[0]?.[0]).toEqual(`${mockBaseURL}`);
+    expect(mockHttp.get.mock.calls[0]?.[1]).toEqual({ params: { foo: 'bar' } });
+    expect(mockHttp.get.mock.calls[1]?.[0]).toEqual(`${mockBaseURL}`);
+    expect(mockHttp.get.mock.calls[1]?.[1]).toEqual({ params: undefined });
+    expect(mockHttp.get.mock.calls[2]?.[0]).toEqual(`${mockBaseURL}`);
+    expect(mockHttp.get.mock.calls[2]?.[1]).toEqual({
       params: { foo: ['bar', 'baz'] },
     });
   });
@@ -84,7 +95,7 @@ describe('Base', () => {
     await BaseAPI.readDetail(resourceId);
 
     expect(mockHttp.get).toHaveBeenCalledTimes(1);
-    expect(mockHttp.get.mock.calls[0][0]).toEqual(
+    expect(mockHttp.get.mock.calls[0]?.[0]).toEqual(
       `${mockBaseURL}${resourceId}/`
     );
   });
@@ -93,7 +104,7 @@ describe('Base', () => {
     await BaseAPI.readOptions();
 
     expect(mockHttp.options).toHaveBeenCalledTimes(1);
-    expect(mockHttp.options.mock.calls[0][0]).toEqual(`${mockBaseURL}`);
+    expect(mockHttp.options.mock.calls[0]?.[0]).toEqual(`${mockBaseURL}`);
   });
 
   test('replace calls http method with expected data', async () => {
@@ -103,10 +114,10 @@ describe('Base', () => {
     await BaseAPI.replace(resourceId, data);
 
     expect(mockHttp.put).toHaveBeenCalledTimes(1);
-    expect(mockHttp.put.mock.calls[0][0]).toEqual(
+    expect(mockHttp.put.mock.calls[0]?.[0]).toEqual(
       `${mockBaseURL}${resourceId}/`
     );
-    expect(mockHttp.put.mock.calls[0][1]).toEqual(data);
+    expect(mockHttp.put.mock.calls[0]?.[1]).toEqual(data);
   });
 
   test('update calls http method with expected data', async () => {
@@ -116,16 +127,28 @@ describe('Base', () => {
     await BaseAPI.update(resourceId, data);
 
     expect(mockHttp.patch).toHaveBeenCalledTimes(1);
-    expect(mockHttp.patch.mock.calls[0][0]).toEqual(
+    expect(mockHttp.patch.mock.calls[0]?.[0]).toEqual(
       `${mockBaseURL}${resourceId}/`
     );
-    expect(mockHttp.patch.mock.calls[0][1]).toEqual(data);
+    expect(mockHttp.patch.mock.calls[0]?.[1]).toEqual(data);
   });
 });
 
+/** The url and options the client passed to fetch, as this suite reads them. */
+function fetchCall(): [
+  string,
+  RequestInit & { headers: Record<string, string> },
+] {
+  const [url, options] = vi.mocked(global.fetch).mock.calls[0] as unknown as [
+    string,
+    RequestInit & { headers: Record<string, string> },
+  ];
+  return [url, options];
+}
+
 describe('defaultHttp (fetch-based client)', () => {
   const mockBaseURL = '/api/v2/items/';
-  let api: Untyped;
+  let api: Base;
 
   beforeEach(() => {
     global.fetch = vi.fn(() =>
@@ -149,7 +172,7 @@ describe('defaultHttp (fetch-based client)', () => {
   test('GET appends query string from params', async () => {
     await api.read({ page: 1, page_size: 5 });
 
-    const [url] = vi.mocked(global.fetch).mock.calls[0] as Untyped[];
+    const [url] = fetchCall();
     expect(url).toContain('page=1');
     expect(url).toContain('page_size=5');
   });
@@ -157,14 +180,14 @@ describe('defaultHttp (fetch-based client)', () => {
   test('GET appends params to URLs that already have query strings', async () => {
     await api.http.get('/api/existing?a=1&b=2', { params: { c: 3, d: 4 } });
 
-    const [url] = vi.mocked(global.fetch).mock.calls[0] as Untyped[];
+    const [url] = fetchCall();
     expect(url).toBe('/api/existing?a=1&b=2&c=3&d=4');
   });
 
   test('GET without params does not append query string', async () => {
     await api.readDetail(42);
 
-    const [url] = vi.mocked(global.fetch).mock.calls[0] as Untyped[];
+    const [url] = fetchCall();
     expect(url).toBe(`${mockBaseURL}42/`);
   });
 
@@ -172,7 +195,7 @@ describe('defaultHttp (fetch-based client)', () => {
     const data = { name: 'test' };
     await api.create(data);
 
-    const [, options] = vi.mocked(global.fetch).mock.calls[0] as Untyped[];
+    const [, options] = fetchCall();
     expect(options.method).toBe('POST');
     expect(options.headers['Content-Type']).toBe('application/json');
     expect(options.body).toBe(JSON.stringify(data));
@@ -186,7 +209,7 @@ describe('defaultHttp (fetch-based client)', () => {
 
     await api.http.post('/api/login/', formData, { headers: customHeaders });
 
-    const [, options] = vi.mocked(global.fetch).mock.calls[0] as Untyped[];
+    const [, options] = fetchCall();
     expect(options.body).toBe(formData);
     expect(options.headers['Content-Type']).toBe(
       'application/x-www-form-urlencoded'
@@ -198,7 +221,7 @@ describe('defaultHttp (fetch-based client)', () => {
       headers: { 'X-Custom': 'value' },
     });
 
-    const [, options] = vi.mocked(global.fetch).mock.calls[0] as Untyped[];
+    const [, options] = fetchCall();
     expect(options.headers['X-Custom']).toBe('value');
     expect(options.headers.Accept).toBe('application/json, text/plain, */*');
   });
@@ -208,7 +231,7 @@ describe('defaultHttp (fetch-based client)', () => {
 
     await api.read();
 
-    const [, options] = vi.mocked(global.fetch).mock.calls[0] as Untyped[];
+    const [, options] = fetchCall();
     expect(options.headers['X-CSRFToken']).toBe('abc123');
   });
 
@@ -217,7 +240,7 @@ describe('defaultHttp (fetch-based client)', () => {
 
     await api.read();
 
-    const [, options] = vi.mocked(global.fetch).mock.calls[0] as Untyped[];
+    const [, options] = fetchCall();
     expect(options.headers['X-CSRFToken']).toBeUndefined();
   });
 
@@ -247,18 +270,18 @@ describe('defaultHttp (fetch-based client)', () => {
       })
     );
 
-    let caughtError: Untyped;
+    let caughtError: ApiError | undefined;
     try {
       await api.readDetail(999);
     } catch (e) {
-      caughtError = e;
+      caughtError = e as ApiError;
     }
 
     expect(caughtError).toBeDefined();
-    expect(caughtError.message).toBe('Request failed with status code 404');
-    expect(caughtError.response.status).toBe(404);
-    expect(caughtError.response.data).toEqual({ detail: 'Not found.' });
-    expect(caughtError.response.headers).toBeDefined();
+    expect(caughtError?.message).toBe('Request failed with status code 404');
+    expect(caughtError?.response?.status).toBe(404);
+    expect(caughtError?.response?.data).toEqual({ detail: 'Not found.' });
+    expect(caughtError?.response?.headers).toBeDefined();
   });
 
   test('non-JSON response body is returned as text', async () => {
@@ -291,14 +314,14 @@ describe('defaultHttp (fetch-based client)', () => {
     const abortController = new AbortController();
     await api.http.get('/api/test/', { signal: abortController.signal });
 
-    const [, options] = vi.mocked(global.fetch).mock.calls[0] as Untyped[];
+    const [, options] = fetchCall();
     expect(options.signal).toBe(abortController.signal);
   });
 
   test('credentials are set to same-origin', async () => {
     await api.read();
 
-    const [, options] = vi.mocked(global.fetch).mock.calls[0] as Untyped[];
+    const [, options] = fetchCall();
     expect(options.credentials).toBe('same-origin');
   });
 });

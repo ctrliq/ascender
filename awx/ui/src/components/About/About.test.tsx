@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -21,7 +20,7 @@ describe('<About />', () => {
     expect(screen.getByText('AWX')).toBeInTheDocument();
 
     // The version is rendered inside the speech-bubble <pre>.
-    const pre = dialog.querySelector('pre') as Untyped;
+    const pre = dialog.querySelector('pre') as HTMLElement;
     expect(pre.textContent).toContain('AWX 1.2.3');
   });
 
