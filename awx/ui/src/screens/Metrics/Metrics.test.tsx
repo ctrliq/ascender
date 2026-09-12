@@ -1,0 +1,87 @@
+import React from 'react';
+import { screen, waitFor, within } from '@testing-library/react';
+
+import { MetricsAPI, InstancesAPI } from 'api';
+import type { ResponseOf } from '../../../testUtils/responseOf';
+import type { TestUser } from '../../../testUtils/rtlContexts';
+import { renderWithContexts } from '../../../testUtils/rtlContexts';
+import Metrics from './Metrics';
+
+vi.mock('../../api/models/Instances');
+vi.mock('../../api/models/Metrics');
+
+describe('<Metrics/>', () => {
+  let user: TestUser;
+
+  const openSelect = async (toggleText: string) => {
+    const toggle = screen.getByRole('button', { name: toggleText });
+    await user.click(toggle);
+    return screen.findByRole('listbox');
+  };
+
+  beforeEach(async () => {
+    vi.mocked(InstancesAPI.read).mockResolvedValue({
+      data: {
+        results: [
+          { hostname: 'instance 1', node_type: 'control' },
+          { hostname: 'instance 2', node_type: 'hybrid' },
+          { hostname: 'receptor', node_type: 'execution' },
+        ],
+      },
+    } as unknown as ResponseOf<typeof InstancesAPI.read>);
+    vi.mocked(MetricsAPI.read).mockResolvedValue({
+      data: {
+        metric1: {
+          helptext: 'metric 1 help text',
+          samples: [{ labels: { node: 'metric 1' }, value: 20 }],
+        },
+        metric2: {
+          helptext: 'metric 2 help text',
+          samples: [{ labels: { node: 'metric 2' }, value: 10 }],
+        },
+      },
+    } as unknown as ResponseOf<typeof MetricsAPI.read>);
+    ({ user } = renderWithContexts(<Metrics />));
+    // wait for the initial instances/metrics fetch to settle
+    await waitFor(() => expect(InstancesAPI.read).toHaveBeenCalled());
+  });
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test('should mount properly', async () => {
+    // Before an instance + metric are selected, the empty state is shown and
+    // no chart is rendered.
+    expect(
+      await screen.findByText('Select an instance and a metric to show chart')
+    ).toBeInTheDocument();
+    expect(document.querySelector('#chart')).toBeNull();
+  });
+
+  test('should render chart after selecting metric and instance', async () => {
+    // open the Instance select and pick "instance 1"
+    const instanceListbox = await openSelect('Select an instance');
+    await user.click(within(instanceListbox).getByText('instance 1'));
+
+    // open the Metric select and pick "metric1"
+    const metricListbox = await openSelect('Select a metric');
+    await user.click(within(metricListbox).getByText('metric1'));
+
+    await waitFor(() =>
+      expect(MetricsAPI.read).toHaveBeenCalledWith({
+        subsystemonly: 1,
+        format: 'json',
+        metric: 'metric1',
+        node: 'instance 1',
+      })
+    );
+  });
+
+  test('should not include receptor instances', async () => {
+    const listbox = await openSelect('Select an instance');
+    // execution-node ("receptor") instances are filtered out; the two
+    // non-execution instances plus the "All" option remain (3 total).
+    expect(within(listbox).queryByText('receptor')).toBeNull();
+    expect(within(listbox).getAllByRole('option')).toHaveLength(3);
+  });
+});
