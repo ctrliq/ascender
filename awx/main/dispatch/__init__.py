@@ -1,3 +1,30 @@
+"""
+The task dispatcher, which is ours to keep rather than ours by accident.
+
+Where it came from. This is AWX's dispatcher as it stood at the 24.0.0 sync in
+March 2024, the last one this fork took. AWX has since pulled the same code out
+into a package of its own, dispatcherd, first released in March 2025, so the
+upstream of these modules no longer lives in AWX at all.
+
+What that package is now. Around 5,800 lines across 26 modules against the
+1,800 here, and the difference is nearly all generalisation: the connection to
+PostgreSQL is a broker behind an interface, with a socket broker beside it; the
+producers that decide when work runs are separate objects; settings come from
+its own config layer rather than Django's; and it ships a testing package with
+in memory and error only brokers.
+
+What is here instead. The same job, wired straight to this application: the
+queue name is CLUSTER_HOST_ID, the pool and the reaper read our Instance and
+UnifiedJob models, and the settings are Django settings. None of that is a
+missing feature, it is the shape you get when the code has exactly one caller.
+
+Adopting dispatcherd would mean writing our Django specific pieces as its
+brokers and producers and letting it own the loop. That is a real project, and
+until somebody chooses it, this copy is a deliberate fork rather than a
+forgotten one: fixes and features here are ours to write, and worth checking
+against dispatcherd first, since it has had two years of them.
+"""
+
 import os
 import psycopg
 
