@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { BreadcrumbResource } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Routes, Route } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -15,7 +15,7 @@ function WorkflowApprovals() {
   });
 
   const updateBreadcrumbConfig = useCallback(
-    (workflowApproval: Untyped) => {
+    (workflowApproval?: BreadcrumbResource) => {
       if (!workflowApproval) {
         return;
       }

@@ -1,15 +1,17 @@
-import type { Untyped } from 'types/api';
+import type { WorkflowApproval } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowApprovalListItem from './WorkflowApprovalListItem';
 import mockWorkflowApprovals from '../data.workflowApprovals.json';
 
-const workflowApproval = mockWorkflowApprovals.results[0];
+/** The fixture as the row takes it, which is what the api sends. */
+const workflowApproval = mockWorkflowApprovals
+  .results[0] as unknown as WorkflowApproval;
 
 vi.mock('../../../api/models/WorkflowApprovals');
 
-function renderItem(approval: Untyped) {
+function renderItem(approval: WorkflowApproval) {
   return renderWithContexts(
     <table>
       <tbody>

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField, useFormikContext } from 'formik';
@@ -7,10 +6,15 @@ import { FormFullWidthLayout, SubFormLayout } from 'components/FormLayout';
 import CodeEditorField from 'components/CodeEditor/CodeEditorField';
 import { useConfig } from 'contexts/Config';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
+import type {
+  DefaultMessages,
+  NotificationText,
+} from './NotificationTemplateForm';
 
 export interface CustomMessagesSubFormProps {
-  defaultMessages: Untyped;
-  type: Untyped;
+  defaultMessages: DefaultMessages;
+  /** Which notification type the form is for, which the defaults are keyed by. */
+  type: string;
   [key: string]: unknown;
 }
 
@@ -42,9 +46,9 @@ function CustomMessagesSubForm({
         return;
       }
 
-      const resetFields = (name: Untyped, defaults: Untyped) => {
-        setFieldValue(`${name}.message`, defaults.message || '');
-        setFieldValue(`${name}.body`, defaults.body || '');
+      const resetFields = (name: string, defaults?: NotificationText) => {
+        setFieldValue(`${name}.message`, defaults?.message || '');
+        setFieldValue(`${name}.body`, defaults?.body || '');
       };
 
       resetFields('messages.started', defs.started);
@@ -53,19 +57,19 @@ function CustomMessagesSubForm({
       resetFields('messages.changed', defs.changed);
       resetFields(
         'messages.workflow_approval.approved',
-        defs.workflow_approval.approved
+        defs.workflow_approval?.approved
       );
       resetFields(
         'messages.workflow_approval.denied',
-        defs.workflow_approval.denied
+        defs.workflow_approval?.denied
       );
       resetFields(
         'messages.workflow_approval.running',
-        defs.workflow_approval.running
+        defs.workflow_approval?.running
       );
       resetFields(
         'messages.workflow_approval.timed_out',
-        defs.workflow_approval.timed_out
+        defs.workflow_approval?.timed_out
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps

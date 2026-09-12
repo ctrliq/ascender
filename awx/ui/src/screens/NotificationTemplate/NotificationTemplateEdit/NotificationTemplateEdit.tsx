@@ -1,14 +1,17 @@
-import type { Untyped } from 'types/api';
+import type { NotificationTemplate } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CardBody } from 'components/Card';
 import { NotificationTemplatesAPI } from 'api';
 import NotificationTemplateForm from '../shared/NotificationTemplateForm';
+import type {
+  DefaultMessages,
+  NotificationTemplateFormValues,
+} from '../shared/NotificationTemplateForm';
 
 export interface NotificationTemplateEditProps {
-  template: Untyped;
-  defaultMessages: Untyped;
-  [key: string]: unknown;
+  template: NotificationTemplate;
+  defaultMessages: DefaultMessages;
 }
 
 function NotificationTemplateEdit({
@@ -19,7 +22,7 @@ function NotificationTemplateEdit({
   const navigate = useNavigate();
   const [formError, setFormError] = useState<unknown>(null);
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: NotificationTemplateFormValues) => {
     try {
       await NotificationTemplatesAPI.update(template.id, values);
       navigate(detailsUrl);

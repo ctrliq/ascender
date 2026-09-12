@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { WorkflowApproval } from 'types/api';
 import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -6,13 +6,13 @@ import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
 
 import { KebabifiedContext } from 'contexts/Kebabified';
 
-function cannotApprove(item: Untyped) {
+function cannotApprove(item: WorkflowApproval) {
   return !item.can_approve_or_deny;
 }
 
 export interface WorkflowApprovalListApproveButtonProps {
-  onApprove: (...args: Untyped[]) => void;
-  selectedItems?: Untyped[];
+  onApprove: () => void;
+  selectedItems?: WorkflowApproval[];
   [key: string]: unknown;
 }
 

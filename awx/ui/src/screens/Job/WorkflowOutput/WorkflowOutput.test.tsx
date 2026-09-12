@@ -1,3 +1,4 @@
+import type { AnyJob } from 'types/api';
 import React from 'react';
 import { waitFor } from '@testing-library/react';
 import { WorkflowJobsAPI } from 'api';
@@ -18,7 +19,7 @@ const job = {
   id: 1,
   name: 'Foo JT',
   status: 'successful',
-};
+} as unknown as AnyJob;
 
 const mockWorkflowJobNodes = [
   {

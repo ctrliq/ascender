@@ -1,12 +1,12 @@
-import type { Untyped } from 'types/api';
+import type { WorkflowApproval } from 'types/api';
 import { t } from '@lingui/core/macro';
 import { formatDateString } from 'util/dates';
 
-export function getTooltip(workflowApproval: Untyped) {
+export function getTooltip(workflowApproval: WorkflowApproval) {
   if (workflowApproval.status === 'successful') {
     if (workflowApproval.summary_fields?.approved_or_denied_by?.username) {
       return t`Approved by ${
-        workflowApproval.summary_fields.approved_or_denied_by.username
+        workflowApproval.summary_fields.approved_or_denied_by.username as string
       } - ${formatDateString(workflowApproval.finished) as string}`;
     }
     return t`Approved - ${
@@ -16,7 +16,7 @@ export function getTooltip(workflowApproval: Untyped) {
   if (workflowApproval.status === 'failed' && workflowApproval.failed) {
     if (workflowApproval.summary_fields?.approved_or_denied_by?.username) {
       return t`Denied by ${
-        workflowApproval.summary_fields.approved_or_denied_by.username
+        workflowApproval.summary_fields.approved_or_denied_by.username as string
       } - ${formatDateString(workflowApproval.finished) as string}`;
     }
     return t`Denied - ${
@@ -26,7 +26,7 @@ export function getTooltip(workflowApproval: Untyped) {
   return '';
 }
 
-export function getStatus(workflowApproval: Untyped) {
+export function getStatus(workflowApproval: WorkflowApproval) {
   if (workflowApproval.timed_out) {
     return 'timedOut';
   }
@@ -43,7 +43,7 @@ export function getStatus(workflowApproval: Untyped) {
   return workflowApproval.status;
 }
 
-export function getPendingLabel(workflowApproval: Untyped) {
+export function getPendingLabel(workflowApproval: WorkflowApproval) {
   if (!workflowApproval.approval_expiration) {
     return t`Never expires`;
   }
@@ -53,7 +53,7 @@ export function getPendingLabel(workflowApproval: Untyped) {
   }`;
 }
 
-export function getDetailPendingLabel(workflowApproval: Untyped) {
+export function getDetailPendingLabel(workflowApproval: WorkflowApproval) {
   if (!workflowApproval.approval_expiration) {
     return t`Never`;
   }

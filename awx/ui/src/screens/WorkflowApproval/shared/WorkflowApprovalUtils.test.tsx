@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef, WorkflowApproval } from 'types/api';
 import { i18n } from '@lingui/core';
 import {
   getPendingLabel,
@@ -7,7 +7,11 @@ import {
 } from './WorkflowApprovalUtils';
 import mockWorkflowApprovals from '../data.workflowApprovals.json';
 
-const workflowApproval: Untyped = mockWorkflowApprovals.results[0];
+// Mutable on purpose: each case below sets the fields it is about, and the
+// api's own type has them readonly.
+const workflowApproval = mockWorkflowApprovals.results[0] as unknown as {
+  -readonly [K in keyof WorkflowApproval]: WorkflowApproval[K];
+};
 
 async function activate() {
   const { messages } = await import(`../../../locales/${'en'}/messages.mjs`);
@@ -81,7 +85,8 @@ describe('<WorkflowApproval />', () => {
   test('shows correct approved tooltip without user', () => {
     workflowApproval.summary_fields = {
       ...workflowApproval.summary_fields,
-      approved_or_denied_by: {},
+      // No username: the approval was cast by a user the api no longer names.
+      approved_or_denied_by: {} as SummaryFieldRef,
     };
     workflowApproval.status = 'successful';
     workflowApproval.finished = '2020-10-10T17:13:12.067947Z';
@@ -105,7 +110,8 @@ describe('<WorkflowApproval />', () => {
   test('shows correct denial tooltip without user', () => {
     workflowApproval.summary_fields = {
       ...workflowApproval.summary_fields,
-      approved_or_denied_by: {},
+      // No username: the approval was cast by a user the api no longer names.
+      approved_or_denied_by: {} as SummaryFieldRef,
     };
     workflowApproval.status = 'failed';
     workflowApproval.finished = '2020-10-10T17:13:12.067947Z';

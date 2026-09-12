@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { WorkflowApproval } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { WorkflowApprovalsAPI, WorkflowJobsAPI } from 'api';
@@ -11,7 +11,9 @@ import {
 import WorkflowApprovalDetail from './WorkflowApprovalDetail';
 import mockWorkflowApprovals from '../data.workflowApprovals.json';
 
-const workflowApproval = mockWorkflowApprovals.results[0];
+/** The fixture as the detail takes it, which is what the api sends. */
+const workflowApproval = mockWorkflowApprovals
+  .results[0] as unknown as WorkflowApproval;
 
 vi.mock('../../../api');
 vi.mock('react-router', async () => ({
@@ -26,7 +28,7 @@ vi.mock('@lingui/react/macro', async () => ({
     '@lingui/react/macro'
   )),
   useLingui: () => ({
-    t: (template: Untyped, _values: Untyped) => {
+    t: (template: TemplateStringsArray | string, ..._values: unknown[]) => {
       // Handle template literals properly
       if (typeof template === 'string') {
         return template;
@@ -46,7 +48,13 @@ vi.mock('components/CodeEditor', async () => ({
   ...(await vi.importActual<typeof import('components/CodeEditor')>(
     'components/CodeEditor'
   )),
-  VariablesDetail: ({ label, value }: Untyped) => (
+  VariablesDetail: ({
+    label,
+    value,
+  }: {
+    label: React.ReactNode;
+    value: React.ReactNode;
+  }) => (
     <div>
       <div>{label}</div>
       <div data-testid="variables-detail-value">{value}</div>
@@ -64,13 +72,13 @@ vi.mock('../shared/WorkflowApprovalUtils', async () => {
     await vi.importActual<typeof import('util/dates')>('util/dates');
   return {
     ...actual,
-    getDetailPendingLabel: (workflowApproval: Untyped) => {
+    getDetailPendingLabel: (workflowApproval: WorkflowApproval) => {
       if (!workflowApproval.approval_expiration) {
         return 'Never';
       }
       return dates.formatDateString(workflowApproval.approval_expiration);
     },
-    getStatus: (workflowApproval: Untyped) => {
+    getStatus: (workflowApproval: WorkflowApproval) => {
       if (workflowApproval.status === 'successful') {
         return 'approved';
       }
@@ -184,7 +192,7 @@ const workflowJob = {
   webhook_guid: '',
 };
 
-async function renderDetail(approval: Untyped, props = {}) {
+async function renderDetail(approval: WorkflowApproval, props = {}) {
   const utils = renderWithContexts(
     <WorkflowApprovalDetail
       fetchWorkflowApproval={() => {}}
@@ -214,16 +222,16 @@ describe('<WorkflowApprovalDetail />', () => {
   test('should render Details', async () => {
     await renderDetail(workflowApproval);
 
-    assertDetail('Name', workflowApproval!.name);
-    assertDetail('Description', workflowApproval!.description);
+    assertDetail('Name', workflowApproval.name);
+    assertDetail('Description', workflowApproval.description);
     assertDetail('Expires', 'Never');
     assertDetail(
       'Workflow Job',
-      `${workflowApproval!.summary_fields.workflow_job.id} - ${workflowApproval!.summary_fields.workflow_job!.name}`
+      `${workflowApproval.summary_fields.workflow_job?.id} - ${workflowApproval.summary_fields.workflow_job!.name}`
     );
     assertDetail(
       'Workflow Job Template',
-      workflowApproval!.summary_fields.workflow_job_template.name
+      workflowApproval.summary_fields.workflow_job_template?.name
     );
 
     const createdLabel = screen.getByText('Created');
@@ -232,7 +240,7 @@ describe('<WorkflowApprovalDetail />', () => {
     );
     expect(createdLabel.nextElementSibling).toHaveTextContent('admin');
 
-    assertDetail('Last Modified', formatDateString(workflowApproval!.modified));
+    assertDetail('Last Modified', formatDateString(workflowApproval.modified));
     assertDetail('Elapsed', '00:00:22');
     assertDetail('Limit', 'localhost');
     assertDetail('Source Control Branch', 'main');
@@ -257,7 +265,7 @@ describe('<WorkflowApprovalDetail />', () => {
     await renderDetail({
       ...workflowApproval,
       approval_expiration: '2020-10-10T17:13:12.067947Z',
-    });
+    } as unknown as WorkflowApproval);
     assertDetail('Expires', formatDateString('2020-10-10T17:13:12.067947Z'));
   });
 
@@ -281,7 +289,7 @@ describe('<WorkflowApprovalDetail />', () => {
       ...workflowApproval,
       required_approvals: 2,
       approvals_received: 1,
-    });
+    } as unknown as WorkflowApproval);
     assertDetail('Approvals', '1/2');
     const votesLabel = screen.getByText('Votes');
     expect(votesLabel.nextElementSibling).toHaveTextContent('alice');
@@ -294,7 +302,7 @@ describe('<WorkflowApprovalDetail />', () => {
       ...workflowApproval,
       timeout: 60,
       on_timeout: 'approve',
-    });
+    } as unknown as WorkflowApproval);
     assertDetail('On Timeout', 'Approve');
   });
 
@@ -302,7 +310,7 @@ describe('<WorkflowApprovalDetail />', () => {
     await renderDetail({
       ...workflowApproval,
       finished: '2020-10-10T17:13:12.067947Z',
-    });
+    } as unknown as WorkflowApproval);
     assertDetail('Finished', formatDateString('2020-10-10T17:13:12.067947Z'));
   });
 
@@ -310,7 +318,7 @@ describe('<WorkflowApprovalDetail />', () => {
     await renderDetail({
       ...workflowApproval,
       canceled_on: '2020-10-10T17:13:12.067947Z',
-    });
+    } as unknown as WorkflowApproval);
     assertDetail('Canceled', formatDateString('2020-10-10T17:13:12.067947Z'));
   });
 
@@ -318,7 +326,7 @@ describe('<WorkflowApprovalDetail />', () => {
     await renderDetail({
       ...workflowApproval,
       job_explanation: 'Some explanation text',
-    });
+    } as unknown as WorkflowApproval);
     assertDetail('Explanation', 'Some explanation text');
   });
 
@@ -327,13 +335,13 @@ describe('<WorkflowApprovalDetail />', () => {
       ...workflowApproval,
       status: 'successful',
       summary_fields: {
-        ...workflowApproval!.summary_fields,
+        ...workflowApproval.summary_fields,
         approved_or_denied_by: {
           id: 1,
           username: 'Foobar',
         },
       },
-    });
+    } as unknown as WorkflowApproval);
     const statusLabel = screen.getByText('Status');
     expect(statusLabel.nextElementSibling).toHaveTextContent('Approved');
   });
@@ -342,13 +350,13 @@ describe('<WorkflowApprovalDetail />', () => {
     await renderDetail({
       ...workflowApproval,
       summary_fields: {
-        ...workflowApproval!.summary_fields,
+        ...workflowApproval.summary_fields,
         approved_or_denied_by: {
           id: 1,
           username: 'Foobar',
         },
       },
-    });
+    } as unknown as WorkflowApproval);
     assertDetail('Actor', 'Foobar');
   });
 
@@ -356,7 +364,7 @@ describe('<WorkflowApprovalDetail />', () => {
     await renderDetail({
       ...workflowApproval,
       can_approve_or_deny: false,
-    });
+    } as unknown as WorkflowApproval);
     expect(
       screen.queryByRole('button', { name: 'Approve' })
     ).not.toBeInTheDocument();
@@ -370,7 +378,7 @@ describe('<WorkflowApprovalDetail />', () => {
       ...workflowApproval,
       can_approve_or_deny: true,
       status: 'successful',
-    });
+    } as unknown as WorkflowApproval);
     expect(
       screen.queryByRole('button', { name: 'Approve' })
     ).not.toBeInTheDocument();
@@ -382,7 +390,7 @@ describe('<WorkflowApprovalDetail />', () => {
       data: {
         ...workflowApproval,
         summary_fields: {
-          ...workflowApproval!.summary_fields,
+          ...workflowApproval.summary_fields,
           labels: {
             results: [],
           },
@@ -437,13 +445,13 @@ describe('<WorkflowApprovalDetail />', () => {
       ...workflowApproval,
       status: 'successful',
       summary_fields: {
-        ...workflowApproval!.summary_fields,
+        ...workflowApproval.summary_fields,
         approved_or_denied_by: {
           id: 1,
           username: 'Foobar',
         },
       },
-    });
+    } as unknown as WorkflowApproval);
     await user.click(screen.getByRole('button', { name: 'Delete' }));
     await user.click(
       await screen.findByRole('button', { name: 'Confirm Delete' })

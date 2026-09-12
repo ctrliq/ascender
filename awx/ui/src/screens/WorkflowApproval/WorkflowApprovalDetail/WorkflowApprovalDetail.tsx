@@ -1,7 +1,7 @@
 import type {
   SummaryFieldRef,
-  Untyped,
   WorkflowApproval,
+  WorkflowApprovalVote,
   WorkflowJob,
 } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
@@ -52,7 +52,8 @@ const WFDetailList = styled(DetailList)`
 
 export interface WorkflowApprovalDetailProps {
   workflowApproval: WorkflowApproval;
-  fetchWorkflowApproval: Untyped;
+  /** Re-reads the approval once a vote has landed. */
+  fetchWorkflowApproval: () => unknown;
   [key: string]: unknown;
 }
 
@@ -118,7 +119,7 @@ function WorkflowApprovalDetail({
   }, [fetchVotes]);
 
   const handleToast = useCallback(
-    (id: Untyped, title: Untyped) => {
+    (id?: number, title?: string | null) => {
       addToast({
         id,
         title,
@@ -206,7 +207,7 @@ function WorkflowApprovalDetail({
           <Detail
             fullWidth
             label={t`Votes`}
-            value={votes.map((vote: Untyped) => (
+            value={votes.map((vote: WorkflowApprovalVote) => (
               <div key={vote.id}>
                 {vote.summary_fields?.user?.username || vote.user_name}{' '}
                 {vote.vote === 'approve' ? t`approved` : t`denied`}{' '}

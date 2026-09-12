@@ -345,7 +345,7 @@ const onSave = vi.fn();
 // (screen/document) directly.
 const nextButton = () => document.querySelector('button#next-node-modal');
 const clickNext = () => fireEvent.click(nextButton()!);
-const selectNodeType = (value: Untyped) =>
+const selectNodeType = (value: string) =>
   fireEvent.change(document.querySelector('#nodeResource-select')!, {
     target: { value },
   });
@@ -357,8 +357,14 @@ const clickFirstResource = () =>
 // satisfied by a row that is about to be replaced: the click then lands on a
 // detached input and the selection never happens. Waiting for a row of the
 // type just chosen is what says the new list is there.
+//
+// The timeout is this file's own rather than the suite default: the wizard
+// refetches on every step, and under the full run's parallelism the five
+// seconds that is enough elsewhere is not always enough here.
 const waitForResource = (name: string) =>
-  waitFor(() => expect(screen.getByText(name)).toBeInTheDocument());
+  waitFor(() => expect(screen.getByText(name)).toBeInTheDocument(), {
+    timeout: 15000,
+  });
 
 // SelectableCard does not forward its id to the DOM; the cards are
 // role="button" elements distinguished by their bold label text.
@@ -370,8 +376,12 @@ const clickLinkTypeCard = (label: string) => {
 };
 
 const waitForWizard = async () => {
-  await waitFor(() =>
-    expect(document.querySelector('button#next-node-modal')).toBeInTheDocument()
+  await waitFor(
+    () =>
+      expect(
+        document.querySelector('button#next-node-modal')
+      ).toBeInTheDocument(),
+    { timeout: 15000 }
   );
   // The button existing is not the same as the wizard having settled. Without
   // this the first interaction of a test can land on a render that is then

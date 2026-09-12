@@ -1,4 +1,4 @@
-import type { DetailedError, Untyped } from 'types/api';
+import type { DetailedError } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -9,7 +9,10 @@ import { NotificationTemplatesAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import ContentError from 'components/ContentError';
 import NotificationTemplateForm from './shared/NotificationTemplateForm';
-import type { DefaultMessages } from './shared/NotificationTemplateForm';
+import type {
+  DefaultMessages,
+  NotificationTemplateFormValues,
+} from './shared/NotificationTemplateForm';
 
 function NotificationTemplateAdd() {
   const { t } = useLingui();
@@ -30,7 +33,7 @@ function NotificationTemplateAdd() {
     fetchDefaultMessages();
   }, [fetchDefaultMessages]);
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: NotificationTemplateFormValues) => {
     try {
       const { data } = await NotificationTemplatesAPI.create(values);
       navigate(`/notification_templates/${data.id}`);

@@ -1,5 +1,3 @@
-import type { Untyped } from 'types/api';
-
 const typeFieldNames = {
   email: [
     'username',
@@ -52,7 +50,7 @@ export default typeFieldNames;
 const initialConfigValues: Record<string, boolean | string> = {};
 Object.keys(typeFieldNames).forEach((key) => {
   typeFieldNames[key as keyof typeof typeFieldNames].forEach(
-    (fieldName: Untyped) => {
+    (fieldName: string) => {
       const isBoolean = fieldName.includes('_ssl') || fieldName === 'use_tls';
       initialConfigValues[fieldName] = isBoolean ? false : '';
     }

@@ -1,3 +1,4 @@
+import type { WorkflowApproval } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -8,7 +9,7 @@ const workflowApproval = {
   name: 'Foo',
   can_approve_or_deny: true,
   url: '/api/v2/workflow_approvals/218/',
-};
+} as unknown as WorkflowApproval;
 
 describe('<WorkflowApprovalListApproveButton />', () => {
   test('should render button', () => {

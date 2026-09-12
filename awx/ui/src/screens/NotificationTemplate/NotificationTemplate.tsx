@@ -18,6 +18,7 @@ import { NotificationTemplatesAPI } from 'api';
 import ContentLoading from 'components/ContentLoading';
 import NotificationTemplateDetail from './NotificationTemplateDetail';
 import NotificationTemplateEdit from './NotificationTemplateEdit';
+import type { DefaultMessages } from './shared/NotificationTemplateForm';
 
 export interface NotificationTemplateProps {
   setBreadcrumb: SetBreadcrumb;
@@ -43,10 +44,14 @@ function NotificationTemplate({ setBreadcrumb }: NotificationTemplateProps) {
       setBreadcrumb(detail.data);
       return {
         template: detail.data,
-        defaultMessages: options.data.actions?.POST?.messages,
+        // The default message bodies the api ships, which the OPTIONS block
+        // carries as the messages field's own default.
+        defaultMessages:
+          (options.data.actions?.POST?.messages?.default as DefaultMessages) ??
+          {},
       };
     }, [templateId, setBreadcrumb]),
-    { template: null, defaultMessages: null }
+    { template: null, defaultMessages: {} as DefaultMessages }
   );
 
   useEffect(() => {

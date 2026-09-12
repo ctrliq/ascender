@@ -1,4 +1,5 @@
-import type { Untyped, WorkflowJobTemplateNode } from 'types/api';
+import type { AnyJob, WorkflowJobTemplateNode } from 'types/api';
+import type { NodePositions } from 'components/Workflow/WorkflowUtils';
 import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -54,7 +55,7 @@ const fetchWorkflowNodes = async (
 };
 
 export interface WorkflowOutputProps {
-  job: Untyped;
+  job: AnyJob;
   [key: string]: unknown;
 }
 
@@ -99,11 +100,11 @@ function WorkflowOutput({ job }: WorkflowOutputProps) {
   // Update positions of nodes/links
   useEffect(() => {
     if (nodes && nodes.length > 0) {
-      const newNodePositions: Record<string, Untyped> = {};
+      const newNodePositions: NodePositions = {};
       const g = layoutGraph(nodes, links);
 
       g.nodes().forEach((node) => {
-        newNodePositions[node] = g.node(node);
+        newNodePositions[Number(node)] = g.node(node);
       });
 
       dispatch({ type: 'SET_NODE_POSITIONS', value: newNodePositions });

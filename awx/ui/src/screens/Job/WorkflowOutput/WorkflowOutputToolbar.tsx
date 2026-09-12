@@ -3,7 +3,7 @@ import type {
   WorkflowState,
   WorkflowNode,
 } from 'components/Workflow/workflowReducer';
-import type { Untyped } from 'types/api';
+import type { AnyJob, Untyped } from 'types/api';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { Badge as PFBadge, Button, Tooltip } from '@patternfly/react-core';
@@ -102,7 +102,7 @@ const ActionButton = styled(Button)`
   }
 `;
 export interface WorkflowOutputToolbarProps {
-  job: Untyped;
+  job: AnyJob;
   onDelete?: () => void;
   isDeleteDisabled?: boolean;
   [key: string]: unknown;
@@ -121,9 +121,12 @@ function WorkflowOutputToolbar({
   const { nodes, showLegend, showTools } = useContext(
     WorkflowStateContext
   ) as WorkflowState;
-  const workflowTemplateId =
-    job.summary_fields?.workflow_job_template?.id ??
-    job.summary_fields?.workflow_job_template?.[0]?.id;
+  // The api names the template as an object here and as a list elsewhere.
+  const workflowTemplate = job.summary_fields?.workflow_job_template as
+    { id?: number } | { id?: number }[] | undefined;
+  const workflowTemplateId = Array.isArray(workflowTemplate)
+    ? workflowTemplate[0]?.id
+    : workflowTemplate?.id;
 
   const [activeJobElapsedTime, setActiveJobElapsedTime] = React.useState(
     calculateElapsed(job.started)
@@ -145,7 +148,7 @@ function WorkflowOutputToolbar({
   // a workflow that did not fully succeed (failed / errored / canceled) has
   // re-runnable nodes, so it gets the relaunch-from-failed dropdown
   const canRelaunchFromFailed = ['failed', 'error', 'canceled'].includes(
-    job.status
+    job.status ?? ''
   );
   const navToWorkflow = () => {
     if (workflowTemplateId) {
@@ -202,12 +205,12 @@ function WorkflowOutputToolbar({
         <Tooltip content={t`Elapsed time that the job ran`} position="top">
           <ElapsedBadge isRead id="workflow-elapsed-badge">
             {job.finished && job.elapsed != null
-              ? secondsToHHMMSS(job.elapsed)
+              ? secondsToHHMMSS(Number(job.elapsed))
               : activeJobElapsedTime}
           </ElapsedBadge>
         </Tooltip>
 
-        {['new', 'pending', 'waiting', 'running'].includes(job?.status) &&
+        {['new', 'pending', 'waiting', 'running'].includes(job?.status ?? '') &&
         job?.summary_fields?.user_capabilities?.start ? (
           <JobCancelButton
             job={job}
@@ -264,7 +267,7 @@ function WorkflowOutputToolbar({
 
         {job?.summary_fields?.user_capabilities?.delete &&
           ['new', 'successful', 'failed', 'error', 'canceled'].includes(
-            job.status
+            job.status ?? ''
           ) && (
             <Tooltip content={t`Delete Job`} position="top">
               <DeleteButton

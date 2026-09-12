@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { BreadcrumbResource } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Routes, Route } from 'react-router';
 
@@ -17,7 +17,10 @@ function NotificationTemplates() {
   });
 
   const updateBreadcrumbConfig = useCallback(
-    (notification: Untyped) => {
+    (notification?: BreadcrumbResource) => {
+      if (!notification) {
+        return;
+      }
       const { id } = notification;
       setBreadcrumbConfig({
         '/notification_templates': t`Notification Templates`,

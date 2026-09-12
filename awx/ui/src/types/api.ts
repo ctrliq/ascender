@@ -379,15 +379,17 @@ export type NotificationTemplate = Omit<
 };
 export type WorkflowApproval = Omit<
   WithNested<Schemas['WorkflowApproval']>,
-  'user_has_voted'
+  'user_has_voted' | 'can_approve_or_deny'
 > & {
   /** Inlined from the approval template this was created from. */
   timeout?: number;
   /**
-   * Whether the current user has already approved or denied this one. It is a
-   * SerializerMethodField, which the schema describes as a string.
+   * Both are SerializerMethodFields, which the schema describes as strings:
+   * whether the current user has already voted on this one, and whether they
+   * are allowed to.
    */
   user_has_voted?: boolean;
+  can_approve_or_deny?: boolean;
 };
 export type OAuth2Application = WithNested<Schemas['OAuth2Application']>;
 export type OAuth2Token = WithNested<Schemas['OAuth2Token']>;

@@ -1,4 +1,4 @@
-import type { Untyped, WorkflowApproval } from 'types/api';
+import type { WorkflowApproval } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
@@ -12,8 +12,8 @@ import ErrorDetail from 'components/ErrorDetail';
 export interface WorkflowDenyButtonProps {
   isDetailView?: boolean;
   workflowApproval: WorkflowApproval;
-  onHandleToast: (...args: Untyped[]) => void;
-  [key: string]: unknown;
+  /** Raises the toast the screen shows once the vote has landed. */
+  onHandleToast: (id: number, title: string) => void;
 }
 
 function WorkflowDenyButton({
