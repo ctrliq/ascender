@@ -16,6 +16,15 @@ const SCREENS = [
 // The application does not pass WCAG today, so a zero-violation gate would fail
 // on arrival and be switched off within a week. This records what each screen
 // violates now and fails on anything new, which is what catches a regression.
+//
+// What is recorded, and why it is recorded rather than fixed: the list views
+// colour the sorted column's header in the brand green, #0e8c5d, which is
+// 4.25:1 on the table background where AA asks for 4.5:1. It comes out of
+// --pf-v6-c-table__sort--m-selected__button--Color, and the value behind that
+// is the brand colour itself, so moving it is a palette decision across all
+// four themes rather than a patch: the same green is 4.26:1 on the light
+// themes' white, and the lighter #12a66f that fixes the dark ones is 3.13:1
+// there. It wants a colour picked on purpose, which is not this suite's call.
 const BASELINE_FILE = path.join(__dirname, '..', 'accessibility-baseline.json');
 
 function baseline() {

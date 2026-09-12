@@ -151,17 +151,21 @@ function PageHeaderToolbar({
         </DropdownList>
       </Dropdown>
       <Tooltip position="bottom" content={t`Pending Workflow Approvals`}>
-        <Link to="/workflow_approvals?workflow_approvals.status=pending">
-          <ToolbarNotificationBadge
-            id="toolbar-workflow-approval-badge"
-            count={pendingApprovalsCount as number}
-            variant={
-              pendingApprovalsCount === 0
-                ? NotificationBadgeVariant.read
-                : NotificationBadgeVariant.unread
-            }
-          />
-        </Link>
+        {/* The badge is the link rather than a button inside one: a bell icon
+            with no text names nothing, and the button it used to render did
+            nothing of its own, so it was a second tab stop with no purpose. */}
+        <ToolbarNotificationBadge
+          id="toolbar-workflow-approval-badge"
+          component={Link}
+          to="/workflow_approvals?workflow_approvals.status=pending"
+          aria-label={t`Pending Workflow Approvals`}
+          count={pendingApprovalsCount as number}
+          variant={
+            pendingApprovalsCount === 0
+              ? NotificationBadgeVariant.read
+              : NotificationBadgeVariant.unread
+          }
+        />
       </Tooltip>
       <Dropdown
         isOpen={isHelpOpen}

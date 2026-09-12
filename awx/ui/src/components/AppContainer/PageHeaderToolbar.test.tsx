@@ -101,4 +101,31 @@ describe('PageHeaderToolbar', () => {
       ).toBeInTheDocument();
     });
   });
+
+  test('the approval badge is one named link, not a button inside one', async () => {
+    vi.mocked(WorkflowApprovalsAPI.read).mockResolvedValueOnce({
+      data: { count: 0 },
+    } as unknown as ResponseOf<typeof WorkflowApprovalsAPI.read>);
+    const { container } = renderWithContexts(
+      <PageHeaderToolbar
+        onAboutClick={onAboutClick}
+        onLogoutClick={onLogoutClick}
+      />
+    );
+
+    const badge = (await waitFor(() =>
+      container.querySelector('#toolbar-workflow-approval-badge')
+    )) as HTMLElement;
+
+    // an anchor, so it still opens in a new tab, and named, because the bell
+    // icon it renders is aria-hidden and there is no count to read at zero
+    expect(badge.tagName).toBe('A');
+    expect(badge).toHaveAttribute(
+      'href',
+      expect.stringContaining('workflow_approvals')
+    );
+    expect(badge).toHaveAccessibleName('Pending Workflow Approvals');
+    // nothing interactive inside it: one tab stop, not two
+    expect(badge.querySelector('button, a')).toBeNull();
+  });
 });
