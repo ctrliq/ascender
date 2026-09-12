@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
@@ -8,11 +8,14 @@ import {
   assertDetail,
 } from '../../../../testUtils/rtlContexts';
 import AdvancedInventoryHostDetail from './AdvancedInventoryHostDetail';
-import mockHost from '../shared/data.host.json';
+import mockHostJson from '../shared/data.host.json';
+
+/** The fixture as the detail takes it, which is what the api sends. */
+const mockHost = mockHostJson as unknown as Host;
 
 vi.mock('../../../api');
 
-function renderAt(host: Untyped) {
+function renderAt(host: Host) {
   const history = createMemoryHistory({
     initialEntries: ['/inventories/inventory/3/hosts/2/details'],
   });

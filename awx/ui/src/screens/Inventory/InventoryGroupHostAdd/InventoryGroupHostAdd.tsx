@@ -1,10 +1,11 @@
-import type { Group, Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CardBody } from 'components/Card';
 import HostForm from 'components/HostForm';
 
 import { GroupsAPI } from 'api';
+import type { HostFormValues } from 'components/HostForm/HostForm';
 
 export interface InventoryGroupHostAddProps {
   inventoryGroup: Group;
@@ -16,7 +17,7 @@ function InventoryGroupHostAdd({ inventoryGroup }: InventoryGroupHostAddProps) {
   const baseUrl = `/inventories/inventory/${inventoryGroup.inventory}`;
   const navigate = useNavigate();
 
-  const handleSubmit = async (formData: Untyped) => {
+  const handleSubmit = async (formData: HostFormValues) => {
     try {
       const values = {
         ...formData,

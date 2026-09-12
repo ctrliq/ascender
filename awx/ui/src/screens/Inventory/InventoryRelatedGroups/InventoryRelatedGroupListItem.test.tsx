@@ -1,4 +1,4 @@
-import type { Group, Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -12,7 +12,7 @@ vi.mock('../../../api');
 const mockGroup = mockRelatedGroups.results[0];
 
 // The item reads :inventoryType via useParams; mount under a real v6 route.
-function renderItem(url: Untyped, group = mockGroup) {
+function renderItem(url: string, group = mockGroup) {
   const history = createMemoryHistory({ initialEntries: [url] });
   return renderWithContexts(
     <Routes>

@@ -1,22 +1,21 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { PageSection, Card } from '@patternfly/react-core';
 import HostForm from 'components/HostForm';
 import { CardBody } from 'components/Card';
 import { HostsAPI } from 'api';
+import type { HostFormValues } from 'components/HostForm/HostForm';
 
 function HostAdd() {
   const [formError, setFormError] = useState<unknown>(null);
   const navigate = useNavigate();
 
-  const handleSubmit = async (formData: Untyped) => {
+  const handleSubmit = async (formData: HostFormValues) => {
     try {
-      const dataToSend = { ...formData };
-      if (dataToSend.inventory) {
-        dataToSend.inventory = dataToSend.inventory.id;
-      }
-      const { data: response } = await HostsAPI.create(dataToSend);
+      const { data: response } = await HostsAPI.create({
+        ...formData,
+        inventory: formData.inventory?.id,
+      });
       navigate(`/hosts/${response.id}/details`);
     } catch (error) {
       setFormError(error);

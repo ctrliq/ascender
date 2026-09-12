@@ -1,4 +1,4 @@
-import type { Group, Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
@@ -36,7 +36,7 @@ const inventoryGroup = {
   },
 };
 
-function renderAt(initialEntry: Untyped, group = inventoryGroup) {
+function renderAt(initialEntry: string, group = inventoryGroup) {
   const history = createMemoryHistory({ initialEntries: [initialEntry] });
   const utils = renderWithContexts(
     <Routes>

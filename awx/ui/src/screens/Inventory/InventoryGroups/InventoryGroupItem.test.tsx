@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
@@ -16,9 +16,9 @@ const mockGroup = {
       edit: true,
     },
   },
-};
+} as unknown as Group;
 
-function renderItem(group: Untyped, url = '/inventories/inventory/1/groups') {
+function renderItem(group: Group, url = '/inventories/inventory/1/groups') {
   const history = createMemoryHistory({ initialEntries: [url] });
   return renderWithContexts(
     <Routes>
@@ -59,7 +59,7 @@ describe('<InventoryGroupItem />', () => {
     renderItem({
       ...mockGroup,
       summary_fields: { user_capabilities: { edit: false } },
-    });
+    } as unknown as Group);
     expect(
       screen.queryByRole('link', { name: 'Edit Group' })
     ).not.toBeInTheDocument();

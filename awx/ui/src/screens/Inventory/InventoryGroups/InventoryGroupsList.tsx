@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -24,8 +24,8 @@ const QS_CONFIG = getQSConfig('group', {
   order_by: 'name',
 });
 
-function cannotDelete(item: Untyped) {
-  return !item.summary_fields.user_capabilities.delete;
+function cannotDelete(item: Group) {
+  return !item.summary_fields.user_capabilities?.delete;
 }
 
 function InventoryGroupsList() {

@@ -2,7 +2,6 @@ import type { QSParams } from 'util/qs';
 import type {
   AccessListEntry,
   AdHocCommand,
-  ApiEntity,
   Group,
   Host,
   Inventory,
@@ -145,7 +144,7 @@ class Inventories extends InstanceGroupsMixin(Base) {
   ) {
     const {
       data: { results },
-    } = await this.http.get<Paginated<ApiEntity>>(
+    } = await this.http.get<Paginated<InventorySource>>(
       `${this.baseUrl}${inventoryId}/inventory_sources/?id=${sourceId}`
     );
 

@@ -1,4 +1,9 @@
-import type { AnyInventory, SetBreadcrumb, Untyped } from 'types/api';
+import type {
+  AnyInventory,
+  BreadcrumbResource,
+  InventorySource as InventorySourceModel,
+  SetBreadcrumb,
+} from 'types/api';
 import type { CurrentUser } from 'contexts/Config';
 import React, { useEffect, useCallback } from 'react';
 
@@ -61,7 +66,7 @@ function InventorySource({
         isNotifAdmin: notifAdminRes.data.results.length > 0,
       };
     }, [inventory.id, sourceId]),
-    { source: null as Untyped, isNotifAdmin: false }
+    { source: null as InventorySourceModel | null, isNotifAdmin: false }
   );
 
   useEffect(() => {
@@ -164,7 +169,7 @@ function InventorySource({
             element={
               <Schedules
                 apiModel={InventorySourcesAPI}
-                setBreadcrumb={(schedule: Untyped) =>
+                setBreadcrumb={(schedule?: BreadcrumbResource) =>
                   setBreadcrumb(inventory, source, schedule)
                 }
                 resource={source}

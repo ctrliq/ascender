@@ -1,4 +1,4 @@
-import type { Host, Inventory, Untyped } from 'types/api';
+import type { Host, Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -17,7 +17,7 @@ const mockInventory = {
 
 // InventoryHost reads :hostId via useParams and renders a nested v6 route
 // tree; mount it under its real parent route at a concrete URL.
-function renderUnder(url: Untyped, { inventory = mockInventory } = {}) {
+function renderUnder(url: string, { inventory = mockInventory } = {}) {
   const history = createMemoryHistory({ initialEntries: [url] });
   return renderWithContexts(
     <Routes>

@@ -1,4 +1,4 @@
-import type { Host, Untyped } from 'types/api';
+import type { AnyInventory, Host } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -19,7 +19,10 @@ vi.mock('./AdvancedInventoryHostList', () => {
 });
 
 // AdvancedInventoryHosts uses relative routes; mount it under its v6 parent.
-function renderUnder(initialEntry: Untyped, props: Untyped) {
+function renderUnder(
+  initialEntry: string,
+  props: React.ComponentProps<typeof AdvancedInventoryHosts>
+) {
   const history = createMemoryHistory({ initialEntries: [initialEntry] });
   return renderWithContexts(
     <Routes>
@@ -39,7 +42,8 @@ describe('<AdvancedInventoryHosts />', () => {
 
   test('should render smart inventory host list', () => {
     renderUnder('/inventories/smart_inventory/1/hosts', {
-      inventory: { id: 1 },
+      inventory: { id: 1 } as AnyInventory,
+      setBreadcrumb: () => {},
     });
     expect(
       screen.getByLabelText('mock-advanced-host-list')
@@ -51,7 +55,7 @@ describe('<AdvancedInventoryHosts />', () => {
       ...mockHost,
     } as unknown as Host);
     renderUnder('/inventories/smart_inventory/1/hosts/2', {
-      inventory: { id: 1 },
+      inventory: { id: 1 } as AnyInventory,
       setBreadcrumb: () => {},
     });
     // the host detail dispatcher renders RoutedTabs once the host loads

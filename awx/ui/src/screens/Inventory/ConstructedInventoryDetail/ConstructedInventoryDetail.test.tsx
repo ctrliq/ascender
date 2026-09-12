@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ConstructedInventory } from 'types/api';
 import React from 'react';
 import { InventoriesAPI, ConstructedInventoriesAPI } from 'api';
 import { screen, waitForElementToBeRemoved } from '@testing-library/react';
@@ -64,10 +64,12 @@ const mockInventory = {
   verbosity: 1,
   source_vars:
     '{\n    "plugin": "constructed",\n    "strict": true,\n    "groups": {\n        "shutdown": "resolved_state == \\"shutdown\\"",\n        "shutdown_in_product_dev": "resolved_state == \\"shutdown\\" and account_alias == \\"product_dev\\""\n    },\n    "compose": {\n        "resolved_state": "state | default(\\"running\\")"\n    }\n}',
-};
+} as unknown as ConstructedInventory;
 
 describe('<ConstructedInventoryDetail />', () => {
-  const renderComponent = (props?: Untyped) => {
+  const renderComponent = (
+    props?: Partial<React.ComponentProps<typeof ConstructedInventoryDetail>>
+  ) => {
     const history = createMemoryHistory({
       initialEntries: ['/inventories/constructed_inventory/1/details'],
     });

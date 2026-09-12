@@ -1,4 +1,4 @@
-import type { AnyInventory, SetBreadcrumb, Untyped } from 'types/api';
+import type { AnyInventory, Group, SetBreadcrumb } from 'types/api';
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -27,7 +27,7 @@ export interface InventoryGroupProps {
 
 function InventoryGroup({ setBreadcrumb, inventory }: InventoryGroupProps) {
   const { t } = useLingui();
-  const [inventoryGroup, setInventoryGroup] = useState<Untyped>(null);
+  const [inventoryGroup, setInventoryGroup] = useState<Group | null>(null);
   const [contentLoading, setContentLoading] = useState(true);
   const [contentError, setContentError] = useState<unknown>(null);
   const {

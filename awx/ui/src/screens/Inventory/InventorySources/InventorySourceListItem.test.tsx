@@ -1,3 +1,4 @@
+import type { InventorySource } from 'types/api';
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -20,7 +21,7 @@ const source = {
       status: 'canceled',
     },
   },
-};
+} as unknown as InventorySource;
 
 function renderItem(
   props?: Partial<React.ComponentProps<typeof InventorySourceListItem>>
@@ -87,7 +88,7 @@ describe('<InventorySourceListItem />', () => {
         ...source,
         summary_fields: {
           user_capabilities: { start: true, edit: true },
-          last_job: null,
+          last_job: undefined,
         },
       },
     });

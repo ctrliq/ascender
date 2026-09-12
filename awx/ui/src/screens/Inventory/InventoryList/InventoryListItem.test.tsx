@@ -1,4 +1,4 @@
-import type { Inventory, Untyped } from 'types/api';
+import type { AnyInventory, Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { InventoriesAPI } from 'api';
@@ -27,9 +27,9 @@ const baseInventory = {
       edit: true,
     },
   },
-};
+} as unknown as AnyInventory;
 
-function renderItem(inventory: Untyped) {
+function renderItem(inventory: AnyInventory) {
   return renderWithContexts(
     <table>
       <tbody>
@@ -61,7 +61,7 @@ describe('<InventoryListItem />', () => {
     const { user } = renderItem({
       ...baseInventory,
       has_inventory_sources: false,
-    });
+    } as unknown as AnyInventory);
     await user.hover(screen.getByText('Disabled'));
     expect(
       await screen.findByText('Not configured for inventory sync.')
@@ -72,7 +72,7 @@ describe('<InventoryListItem />', () => {
     const { user } = renderItem({
       ...baseInventory,
       inventory_sources_with_failures: 0,
-    });
+    } as unknown as AnyInventory);
     await user.hover(screen.getByText('Success'));
     expect(
       await screen.findByText('No inventory sync failures.')
@@ -112,7 +112,7 @@ describe('<InventoryListItem />', () => {
         organization: { id: 1, name: 'Default' },
         user_capabilities: { edit: false },
       },
-    });
+    } as unknown as AnyInventory);
     expect(
       screen.queryByRole('link', { name: 'Edit Inventory' })
     ).not.toBeInTheDocument();
@@ -191,7 +191,7 @@ describe('<InventoryListItem />', () => {
         organization: { id: 1, name: 'Default' },
         user_capabilities: { edit: false, copy: false },
       },
-    });
+    } as unknown as AnyInventory);
     expect(
       screen.queryByRole('button', { name: 'Copy' })
     ).not.toBeInTheDocument();

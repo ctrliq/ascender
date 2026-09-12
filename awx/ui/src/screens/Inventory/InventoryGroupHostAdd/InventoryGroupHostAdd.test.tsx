@@ -1,6 +1,7 @@
-import type { Group, Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { GroupsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
@@ -29,7 +30,7 @@ vi.mock('components/HostForm', () => ({
   ),
 }));
 
-function renderHostAdd(history: Untyped) {
+function renderHostAdd(history: TestHistory) {
   return renderWithContexts(
     <InventoryGroupHostAdd
       inventoryGroup={{ id: 123, inventory: 3 } as unknown as Group}

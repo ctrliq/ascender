@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Formik } from 'formik';
 import { screen, waitFor } from '@testing-library/react';
@@ -9,7 +8,7 @@ import SCMSubForm from './SCMSubForm';
 
 vi.mock('../../../../api');
 
-const initialValues: Untyped = {
+const initialValues: Record<string, unknown> = {
   credential: null,
   overwrite: false,
   overwrite_vars: false,

@@ -1,4 +1,7 @@
-import type { Inventory } from 'types/api';
+import type {
+  Inventory,
+  InventorySource as InventorySourceModel,
+} from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -6,12 +9,16 @@ import { Routes, Route } from 'react-router';
 import { InventoriesAPI, OrganizationsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
-import mockInventorySource from '../shared/data.inventory_source.json';
+import mockInventorySourceJson from '../shared/data.inventory_source.json';
 import InventorySource from './InventorySource';
 
 vi.mock('../../../api/models/Inventories');
 vi.mock('../../../api/models/Organizations');
 vi.mock('../../../api/models/InventorySources');
+
+/** The fixture as the screen takes it, which is what the api sends. */
+const mockInventorySource =
+  mockInventorySourceJson as unknown as InventorySourceModel;
 
 const mockInventory = {
   id: 2,

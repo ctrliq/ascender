@@ -1,4 +1,4 @@
-import type { UnifiedJob, Untyped } from 'types/api';
+import type { InventorySource, UnifiedJob } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -14,7 +14,7 @@ import { isJobRunning } from 'util/jobs';
 import InventorySourceSyncButton from '../shared/InventorySourceSyncButton';
 
 export interface InventorySourceListItemProps {
-  source: Untyped;
+  source: InventorySource;
   isSelected: boolean;
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;
@@ -78,7 +78,7 @@ function InventorySourceListItem({
         {job && (
           <Tooltip
             position="top"
-            content={generateLastJobTooltip(job)}
+            content={generateLastJobTooltip(job as UnifiedJob)}
             key={job.id}
           >
             <Link to={`/jobs/inventory/${job.id}`}>
@@ -89,8 +89,8 @@ function InventorySourceListItem({
       </Td>
       <Td dataLabel={t`Type`}>{label}</Td>
       <ActionsTd dataLabel={t`Actions`}>
-        {['running', 'pending', 'waiting'].includes(job?.status) ? (
-          <ActionItem visible={source.summary_fields.user_capabilities.start}>
+        {['running', 'pending', 'waiting'].includes(job?.status ?? '') ? (
+          <ActionItem visible={source.summary_fields?.user_capabilities?.start}>
             {source.summary_fields?.current_job?.id && (
               <JobCancelButton
                 job={{
@@ -106,14 +106,14 @@ function InventorySourceListItem({
           </ActionItem>
         ) : (
           <ActionItem
-            visible={source.summary_fields.user_capabilities.start}
+            visible={source.summary_fields.user_capabilities?.start}
             tooltip={t`Sync`}
           >
             <InventorySourceSyncButton source={source} />
           </ActionItem>
         )}
         <ActionItem
-          visible={source.summary_fields.user_capabilities.edit}
+          visible={source.summary_fields.user_capabilities?.edit}
           tooltip={t`Edit`}
         >
           <Button

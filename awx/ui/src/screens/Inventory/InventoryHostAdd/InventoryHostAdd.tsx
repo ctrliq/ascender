@@ -1,10 +1,11 @@
-import type { AnyInventory, Untyped } from 'types/api';
+import type { AnyInventory } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CardBody } from 'components/Card';
 import HostForm from 'components/HostForm';
 
 import { HostsAPI } from 'api';
+import type { HostFormValues } from 'components/HostForm/HostForm';
 
 export interface InventoryHostAddProps {
   inventory: AnyInventory;
@@ -16,7 +17,7 @@ function InventoryHostAdd({ inventory }: InventoryHostAddProps) {
   const hostsUrl = `/inventories/inventory/${inventory.id}/hosts`;
   const navigate = useNavigate();
 
-  const handleSubmit = async (formData: Untyped) => {
+  const handleSubmit = async (formData: HostFormValues) => {
     try {
       const values = {
         ...formData,

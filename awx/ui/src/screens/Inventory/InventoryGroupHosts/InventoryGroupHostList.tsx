@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ApiEntity } from 'types/api';
 import React, { useEffect, useCallback, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 
@@ -137,10 +137,10 @@ function InventoryGroupHostList() {
 
   const { request: handleAssociate, error: associateErr } = useRequest(
     useCallback(
-      async (hostsToAssociate: Untyped) => {
+      async (hostsToAssociate: ApiEntity[]) => {
         await Promise.all(
-          hostsToAssociate.map((host: Untyped) =>
-            GroupsAPI.associateHost(groupId, host.id)
+          hostsToAssociate.map((host) =>
+            GroupsAPI.associateHost(groupId, host.id as number)
           )
         );
         fetchHosts();

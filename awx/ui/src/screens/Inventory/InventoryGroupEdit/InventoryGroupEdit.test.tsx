@@ -1,6 +1,7 @@
-import type { Group, Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
+import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { GroupsAPI } from 'api';
@@ -35,7 +36,7 @@ vi.mock('../shared/InventoryGroupForm', () => ({
   ),
 }));
 
-function renderEdit(history: Untyped) {
+function renderEdit(history: TestHistory) {
   return renderWithContexts(
     <Routes>
       <Route

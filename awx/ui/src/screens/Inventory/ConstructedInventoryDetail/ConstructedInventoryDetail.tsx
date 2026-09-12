@@ -1,4 +1,8 @@
-import type { InventorySource, SummaryFieldRef, Untyped } from 'types/api';
+import type {
+  ConstructedInventory,
+  InventorySource,
+  SummaryFieldRef,
+} from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -71,7 +75,13 @@ function JobStatusLabel({ job }: JobStatusLabelProps) {
   );
 }
 
-function ConstructedInventoryDetail({ inventory }: Untyped) {
+export interface ConstructedInventoryDetailProps {
+  inventory: ConstructedInventory;
+}
+
+function ConstructedInventoryDetail({
+  inventory,
+}: ConstructedInventoryDetailProps) {
   const { t } = useLingui();
   const navigate = useNavigate();
   const helpText = getHelpText();
@@ -184,9 +194,9 @@ function ConstructedInventoryDetail({ inventory }: Untyped) {
           dataCy="constructed-inventory-organization"
           value={
             <Link
-              to={`/organizations/${inventory.summary_fields?.organization.id}/details`}
+              to={`/organizations/${inventory.summary_fields?.organization?.id}/details`}
             >
-              {inventory.summary_fields?.organization.name}
+              {inventory.summary_fields?.organization?.name}
             </Link>
           }
         />

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -15,9 +15,9 @@ describe('<InventoryHostGroupItem />', () => {
         edit: true,
       },
     },
-  };
+  } as unknown as Group;
 
-  function renderItem(group: Untyped) {
+  function renderItem(group: Group) {
     return renderWithContexts(
       <table>
         <tbody>
@@ -50,7 +50,7 @@ describe('<InventoryHostGroupItem />', () => {
     renderItem({
       ...mockGroup,
       summary_fields: { user_capabilities: { edit: false } },
-    });
+    } as unknown as Group);
     const editLink = screen
       .queryAllByRole('link')
       .find((link) => link.getAttribute('href')?.endsWith('/edit'));
