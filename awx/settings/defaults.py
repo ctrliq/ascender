@@ -1136,6 +1136,9 @@ RECEPTOR_RELEASE_WORK = True
 RECEPTOR_LOG_LEVEL = 'info'
 
 MIDDLEWARE = [
+    # First, so its headers are on every response including those that later
+    # middleware short circuits.
+    'django.middleware.security.SecurityMiddleware',
     'django_guid.middleware.guid_middleware',
     'awx.dab.lib.middleware.logging.log_request.LogTracebackMiddleware',
     'awx.main.middleware.SettingsCacheMiddleware',
@@ -1153,7 +1156,22 @@ MIDDLEWARE = [
     'awx.main.middleware.ThreadLocalMiddleware',
     'awx.main.middleware.URLModificationMiddleware',
     'awx.main.middleware.SessionTimeoutMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Response headers the application sets for itself, rather than relying on
+# whatever proxy happens to sit in front of it. A deployment that also sets
+# them at the proxy gets the same values, not a conflict.
+SECURE_CONTENT_TYPE_NOSNIFF = True  # X-Content-Type-Options
+SECURE_REFERRER_POLICY = 'same-origin'  # Referrer-Policy
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'  # Cross-Origin-Opener-Policy
+X_FRAME_OPTIONS = 'DENY'  # the API and the UI are never framed
+
+# HSTS is deliberately not set here. Django only emits it on a request it
+# believes is HTTPS, and behind a TLS terminating proxy it sees HTTP unless
+# SECURE_PROXY_SSL_HEADER is configured, so setting it would be silently
+# inert on exactly the deployments that need it. The proxy sets it: see
+# nginx.conf in the installer and the development compose file.
 
 # Secret header value to exchange for websockets responsible for distributing websocket messages.
 # This needs to be kept secret and randomly generated
