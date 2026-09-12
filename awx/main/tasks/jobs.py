@@ -1300,7 +1300,7 @@ class RunProjectUpdate(BaseTask):
                     scm_username = False
             elif scm_url_parts.scheme.endswith('ssh'):
                 scm_password = False
-            elif scm_type in ('insights', 'archive'):
+            elif scm_type == 'archive':
                 extra_vars['scm_username'] = scm_username
                 extra_vars['scm_password'] = scm_password
             scm_url = update_scm_url(scm_type, scm_url, scm_username, scm_password, scp_format=True)
@@ -1351,7 +1351,6 @@ class RunProjectUpdate(BaseTask):
                 'projects_root': settings.PROJECTS_ROOT.rstrip('/'),
                 'local_path': os.path.basename(project_update.project.local_path),
                 'project_path': project_update.get_project_path(check_if_exists=False),  # deprecated
-                'insights_url': settings.INSIGHTS_URL_BASE,
                 'awx_license_type': get_license().get('license_type', 'UNLICENSED'),
                 'awx_version': get_awx_version(),
                 'scm_url': scm_url,

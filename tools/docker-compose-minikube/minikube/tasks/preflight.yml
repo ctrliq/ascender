@@ -1,12 +1,24 @@
 ---
-- name: Check if Kubernetes python module is installed
-  shell: pip freeze | grep openshift
-  register: _pip_openshift
-  ignore_errors: true
+# The k8s / k8s_info tasks in this role come from the kubernetes.core
+# collection, which needs the `kubernetes` python package importable by the
+# interpreter Ansible uses for localhost (not necessarily whatever `pip` is on
+# $PATH). The legacy `openshift` package is not required.
+- name: Check if the kubernetes python module is installed
+  command: >-
+    {{ ansible_facts.python.executable | default(ansible_playbook_python) }}
+    -c "import kubernetes; print(kubernetes.__version__)"
+  register: _py_kubernetes
+  changed_when: false
+  failed_when: false
 
-- name: Preflight check - require openshift python module
+- name: Preflight check - require kubernetes python module
   assert:
-    fail_msg: "The openshift python module was not found. You can either install it via 'pip install openshift' or using your distro package manager."
+    fail_msg: >-
+      The kubernetes python module was not found for
+      {{ ansible_facts.python.executable | default(ansible_playbook_python) }}.
+      It is required by the kubernetes.core k8s/k8s_info modules used by this role.
+      Install it with 'pip install kubernetes' or via your distro package manager
+      (e.g. python3-kubernetes).
+    success_msg: "Found kubernetes python module {{ _py_kubernetes.stdout }}"
     that:
-      - _pip_openshift.rc == 0
-      - "'openshift==' in _pip_openshift.stdout"
+      - _py_kubernetes.rc == 0

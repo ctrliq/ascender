@@ -14,12 +14,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="CIQ Ascender" />
+    <!-- A document needs a title before any script runs: the login screen sets the
+         branded one once its configuration arrives, and until then this is what a
+         screen reader and the browser tab have to work with. -->
+    <title>Ascender</title>
     <link rel="shortcut icon" href="/static/media/favicon.ico" />
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <!--django-body-->
     <div id="app" style="height: 100%"></div>
-    <script type="module" src="/src/index.js"></script>
+    <script type="module" src="/src/index.tsx"></script>
   </body>
 </html>
