@@ -104,7 +104,7 @@ class Metadata(metadata.SimpleMetadata):
             default = field.get_default()
             if type(default) is UUID:
                 default = 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
-            if field.field_name == 'TOWER_URL_BASE' and default == 'https://ascenderhost':
+            if field.field_name == 'ASCENDER_URL_BASE' and default == 'https://ascenderhost':
                 default = '{}://{}'.format(self.request.scheme, self.request.get_host())
             field_info['default'] = default
         except serializers.SkipField:
@@ -245,7 +245,7 @@ class Metadata(metadata.SimpleMetadata):
 
     def determine_metadata(self, request, view):
         # store request on self so we can use it to generate field defaults
-        # (such as TOWER_URL_BASE)
+        # (such as ASCENDER_URL_BASE)
         self.request = request
 
         try:
