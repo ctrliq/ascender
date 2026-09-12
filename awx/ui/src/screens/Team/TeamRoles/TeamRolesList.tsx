@@ -1,5 +1,5 @@
 import type { CurrentUser } from 'contexts/Config';
-import type { Team, Untyped } from 'types/api';
+import type { Role, Team } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -29,13 +29,14 @@ const QS_CONFIG = getQSConfig('roles', {
 export interface TeamRolesListProps {
   me: CurrentUser;
   team: Team;
-  [key: string]: unknown;
 }
 
 function TeamRolesList({ me, team }: TeamRolesListProps) {
   const { t } = useLingui();
   const { search } = useLocation();
-  const [roleToDisassociate, setRoleToDisassociate] = useState<Untyped>(null);
+  const [roleToDisassociate, setRoleToDisassociate] = useState<Role | null>(
+    null
+  );
   const [showAddModal, setShowAddModal] = useState(false);
   const [associateError, setAssociateError] = useState<unknown>(null);
 
@@ -99,13 +100,15 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
   } = useDeleteItems(
     useCallback(async () => {
       setRoleToDisassociate(null);
-      await RolesAPI.disassociateTeamRole(roleToDisassociate.id, team.id);
+      if (roleToDisassociate) {
+        await RolesAPI.disassociateTeamRole(roleToDisassociate.id, team.id);
+      }
     }, [roleToDisassociate, team.id]),
     { qsConfig: QS_CONFIG, fetchItems: fetchRoles }
   );
 
   const canAdd = team?.summary_fields?.user_capabilities?.edit || isAdminOfOrg;
-  const detailUrl = (role: Untyped) => {
+  const detailUrl = (role: Role) => {
     const { resource_id, resource_type } = role.summary_fields;
 
     if (!role || !resource_type) {
@@ -122,7 +125,7 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
   };
 
   const isSysAdmin = roles.some(
-    (role: Untyped) => role.name === 'System Administrator'
+    (role: Role) => role.name === 'System Administrator'
   );
   if (isSysAdmin) {
     return (
@@ -187,13 +190,12 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
             <HeaderCell sortKey="id">{t`Role`}</HeaderCell>
           </HeaderRow>
         }
-        renderRow={(role, index) => (
+        renderRow={(role) => (
           <TeamRoleListItem
             key={role.id}
             role={role}
             detailUrl={detailUrl(role)}
             onDisassociate={setRoleToDisassociate}
-            index={index}
           />
         )}
       />

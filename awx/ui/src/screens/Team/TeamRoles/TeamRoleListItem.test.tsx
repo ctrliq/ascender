@@ -1,25 +1,28 @@
-import type { Untyped } from 'types/api';
+import type { Role } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import TeamRoleListItem from './TeamRoleListItem';
 
-const makeRole = (overrides: Untyped = {}) => ({
-  id: 1,
-  name: 'Admin',
-  type: 'role',
-  url: '/api/v2/roles/257/',
-  summary_fields: {
-    resource_name: 'template delete project',
-    resource_id: 15,
-    resource_type: 'job_template',
-    resource_type_display_name: 'Job Template',
-    user_capabilities: {
-      unattach: true,
-      ...(overrides.user_capabilities || {}),
+const makeRole = (
+  overrides: { user_capabilities?: Record<string, boolean> } = {}
+) =>
+  ({
+    id: 1,
+    name: 'Admin',
+    type: 'role',
+    url: '/api/v2/roles/257/',
+    summary_fields: {
+      resource_name: 'template delete project',
+      resource_id: 15,
+      resource_type: 'job_template',
+      resource_type_display_name: 'Job Template',
+      user_capabilities: {
+        unattach: true,
+        ...(overrides.user_capabilities || {}),
+      },
     },
-  },
-});
+  }) as unknown as Role;
 
 const renderItem = (role = makeRole()) =>
   renderWithContexts(

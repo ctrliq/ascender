@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFields, Team } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 
@@ -11,18 +11,19 @@ import TeamDetail from './TeamDetail';
 
 vi.mock('../../../api');
 
-const makeTeam = ({ summary_fields, ...overrides }: Untyped = {}) => ({
-  name: 'Foo',
-  description: 'Bar',
-  created: '2015-07-07T17:21:26.429745Z',
-  modified: '2019-08-11T19:47:37.980466Z',
-  ...overrides,
-  summary_fields: {
-    organization: { id: 1, name: 'Default' },
-    user_capabilities: { edit: true, delete: true },
-    ...(summary_fields || {}),
-  },
-});
+const makeTeam = ({ summary_fields, ...overrides }: Partial<Team> = {}) =>
+  ({
+    name: 'Foo',
+    description: 'Bar',
+    created: '2015-07-07T17:21:26.429745Z',
+    modified: '2019-08-11T19:47:37.980466Z',
+    ...overrides,
+    summary_fields: {
+      organization: { id: 1, name: 'Default' },
+      user_capabilities: { edit: true, delete: true },
+      ...(summary_fields || {}),
+    },
+  }) as unknown as Team & { summary_fields: SummaryFields };
 
 describe('<TeamDetail />', () => {
   afterEach(() => {

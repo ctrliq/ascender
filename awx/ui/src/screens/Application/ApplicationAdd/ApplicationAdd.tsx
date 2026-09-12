@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { OAuth2Application } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -8,10 +8,11 @@ import ContentError from 'components/ContentError';
 import { ApplicationsAPI } from 'api';
 import { CardBody } from 'components/Card';
 import ApplicationForm from '../shared/ApplicationForm';
+import type { ApplicationFormValues } from '../shared/ApplicationForm';
 
 export interface ApplicationAddProps {
-  onSuccessfulAdd: (data: Untyped) => void;
-  [key: string]: unknown;
+  /** Hands the new application up so the list can show its client secret. */
+  onSuccessfulAdd: (application: OAuth2Application) => void;
 }
 
 function ApplicationAdd({ onSuccessfulAdd }: ApplicationAddProps) {
@@ -29,15 +30,15 @@ function ApplicationAdd({ onSuccessfulAdd }: ApplicationAddProps) {
         options.actions.GET?.authorization_grant_type?.choices ?? [];
       const clientChoices = options.actions.GET?.client_type?.choices ?? [];
 
-      const authorization = authChoices.map((choice: Untyped) => ({
-        value: choice[0],
-        label: choice[1],
-        key: choice[0],
+      const authorization = authChoices.map(([value, label]) => ({
+        value: value ?? '',
+        label,
+        key: value ?? '',
       }));
-      const clientType = clientChoices.map((choice: Untyped) => ({
-        value: choice[0],
-        label: choice[1],
-        key: choice[0],
+      const clientType = clientChoices.map(([value, label]) => ({
+        value: value ?? '',
+        label,
+        key: value ?? '',
       }));
 
       return {
@@ -50,10 +51,12 @@ function ApplicationAdd({ onSuccessfulAdd }: ApplicationAddProps) {
       clientTypeOptions: [],
     }
   );
-  const handleSubmit = async ({ ...values }) => {
-    values.organization = values.organization.id;
+  const handleSubmit = async (values: ApplicationFormValues) => {
     try {
-      const { data } = await ApplicationsAPI.create(values);
+      const { data } = await ApplicationsAPI.create({
+        ...values,
+        organization: values.organization?.id,
+      });
       onSuccessfulAdd(data);
       navigate(`/applications/${data.id}/details`);
     } catch (err) {

@@ -1,4 +1,4 @@
-import type { OAuth2Application, Untyped } from 'types/api';
+import type { OAuth2Application } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link, useNavigate } from 'react-router';
@@ -11,13 +11,14 @@ import { Detail, DetailList, UserDateDetail } from 'components/DetailList';
 import { ApplicationsAPI } from 'api';
 import DeleteButton from 'components/DeleteButton';
 import ErrorDetail from 'components/ErrorDetail';
+import type { AnsibleSelectOption } from 'components/AnsibleSelect/AnsibleSelect';
 import getApplicationHelpTextStrings from '../shared/Application.helptext';
 
 export interface ApplicationDetailsProps {
   application: OAuth2Application;
-  authorizationOptions: Untyped[];
-  clientTypeOptions: Untyped[];
-  [key: string]: unknown;
+  /** The grant types the api offers, which name the value shown here. */
+  authorizationOptions: AnsibleSelectOption[];
+  clientTypeOptions: AnsibleSelectOption[];
 }
 
 function ApplicationDetails({
@@ -41,7 +42,7 @@ function ApplicationDetails({
 
   const { error, dismissError } = useDismissableError(deletionError);
 
-  const getAuthorizationGrantType = (type: Untyped) => {
+  const getAuthorizationGrantType = (type?: string | null) => {
     let value;
     authorizationOptions.filter((option) => {
       if (option.value === type) {
@@ -51,7 +52,7 @@ function ApplicationDetails({
     });
     return value;
   };
-  const getClientType = (type: Untyped) => {
+  const getClientType = (type?: string | null) => {
     let value;
     clientTypeOptions.filter((option) => {
       if (option.value === type) {

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { BreadcrumbResource, OAuth2Application } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import { Routes, Route } from 'react-router';
@@ -23,14 +23,14 @@ const ApplicationAlert = styled(Alert)`
 function Applications() {
   const { t } = useLingui();
   const [applicationModalSource, setApplicationModalSource] =
-    useState<Untyped>(null);
+    useState<OAuth2Application | null>(null);
   const [breadcrumbConfig, setBreadcrumbConfig] = useState({
     '/applications': t`Applications`,
     '/applications/add': t`Create New Application`,
   });
 
   const buildBreadcrumbConfig = useCallback(
-    (application: Untyped) => {
+    (application?: BreadcrumbResource) => {
       if (!application) {
         return;
       }

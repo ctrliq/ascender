@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { BreadcrumbResource } from 'types/api';
 import React, { useState, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -17,7 +17,7 @@ function CredentialTypes() {
   });
 
   const buildBreadcrumbConfig = useCallback(
-    (credentialTypes: Untyped) => {
+    (credentialTypes?: BreadcrumbResource) => {
       if (!credentialTypes) {
         return;
       }

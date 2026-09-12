@@ -13,6 +13,7 @@ import {
 } from 'api';
 import useDebounce from 'hooks/useDebounce';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockHandlerFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowJobTemplateEdit from './WorkflowJobTemplateEdit';
 
@@ -89,11 +90,13 @@ vi.mock('../shared', () => ({
     handleSubmit,
     handleCancel,
     submitError,
-  }: Untyped) {
+  }: MockHandlerFormProps) {
     return (
       <div>
         {submitError ? (
-          <div data-testid="form-submit-error">{submitError.message}</div>
+          <div data-testid="form-submit-error">
+            {(submitError as Error).message}
+          </div>
         ) : null}
         <button
           type="button"

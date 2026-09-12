@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { BreadcrumbResource } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Routes, Route } from 'react-router';
 
@@ -19,7 +19,7 @@ function Hosts() {
   });
 
   const buildBreadcrumbConfig = useCallback(
-    (host: Untyped) => {
+    (host?: BreadcrumbResource) => {
       if (!host) {
         return;
       }

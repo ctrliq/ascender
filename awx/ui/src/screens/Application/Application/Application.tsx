@@ -1,4 +1,4 @@
-import type { SetBreadcrumb, DetailedError, Untyped } from 'types/api';
+import type { SetBreadcrumb, DetailedError } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import {
   Link,
@@ -43,17 +43,17 @@ function Application({ setBreadcrumb }: ApplicationProps) {
       ]);
       const authorization = (
         options.data.actions.GET?.authorization_grant_type?.choices ?? []
-      ).map((choice: Untyped) => ({
-        value: choice[0],
-        label: choice[1],
-        key: choice[0],
+      ).map(([value, label]) => ({
+        value: value ?? '',
+        label,
+        key: value ?? '',
       }));
       const clientType = (
         options.data.actions.GET?.client_type?.choices ?? []
-      ).map((choice: Untyped) => ({
-        value: choice[0],
-        label: choice[1],
-        key: choice[0],
+      ).map(([value, label]) => ({
+        value: value ?? '',
+        label,
+        key: value ?? '',
       }));
       setBreadcrumb(detail.data);
 

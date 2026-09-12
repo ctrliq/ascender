@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Role } from 'types/api';
 import React from 'react';
 
 import { Label } from '@patternfly/react-core';
@@ -8,10 +8,9 @@ import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 
 export interface TeamRoleListItemProps {
-  role: Untyped;
+  role: Role;
   detailUrl: string | null;
-  onDisassociate: (item: Untyped) => void;
-  [key: string]: unknown;
+  onDisassociate: (role: Role) => void;
 }
 
 function TeamRoleListItem({

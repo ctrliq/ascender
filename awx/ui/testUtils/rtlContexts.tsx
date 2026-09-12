@@ -123,6 +123,13 @@ export interface MockFormProps {
   submitError?: unknown;
 }
 
+/** The same three, where the form names its handlers handle* instead. */
+export interface MockHandlerFormProps {
+  handleSubmit: (...args: unknown[]) => void;
+  handleCancel: () => void;
+  submitError?: unknown;
+}
+
 /** The user-event instance renderWithContexts sets up for each render. */
 export type TestUser = ReturnType<typeof userEvent.setup>;
 

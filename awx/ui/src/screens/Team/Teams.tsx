@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { BreadcrumbResource } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Routes, Route } from 'react-router';
 
@@ -18,7 +18,7 @@ function Teams() {
   });
 
   const buildBreadcrumbConfig = useCallback(
-    (team: Untyped) => {
+    (team?: BreadcrumbResource) => {
       if (!team) {
         return;
       }

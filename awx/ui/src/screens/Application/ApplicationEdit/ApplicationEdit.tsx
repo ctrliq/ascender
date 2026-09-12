@@ -1,4 +1,4 @@
-import type { OAuth2Application, Untyped } from 'types/api';
+import type { OAuth2Application } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
@@ -6,12 +6,13 @@ import { Card } from '@patternfly/react-core';
 import { ApplicationsAPI } from 'api';
 import { CardBody } from 'components/Card';
 import ApplicationForm from '../shared/ApplicationForm';
+import type { ApplicationFormValues } from '../shared/ApplicationForm';
+import type { AnsibleSelectOption } from '../../../components/AnsibleSelect/AnsibleSelect';
 
 export interface ApplicationEditProps {
   application: OAuth2Application;
-  authorizationOptions: Untyped;
-  clientTypeOptions: Untyped;
-  [key: string]: unknown;
+  authorizationOptions: AnsibleSelectOption[];
+  clientTypeOptions: AnsibleSelectOption[];
 }
 
 function ApplicationEdit({
@@ -23,10 +24,12 @@ function ApplicationEdit({
   const { id } = useParams() as { id: string };
   const [submitError, setSubmitError] = useState<unknown>(null);
 
-  const handleSubmit = async ({ ...values }) => {
-    values.organization = values.organization.id;
+  const handleSubmit = async (values: ApplicationFormValues) => {
     try {
-      await ApplicationsAPI.update(id, values);
+      await ApplicationsAPI.update(id, {
+        ...values,
+        organization: values.organization?.id,
+      });
       navigate(`/applications/${id}/details`);
     } catch (err) {
       setSubmitError(err);

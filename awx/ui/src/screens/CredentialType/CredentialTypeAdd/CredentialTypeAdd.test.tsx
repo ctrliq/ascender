@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
@@ -6,6 +5,7 @@ import { screen, waitFor } from '@testing-library/react';
 
 import { CredentialTypesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import CredentialTypeAdd from './CredentialTypeAdd';
 
@@ -43,7 +43,7 @@ vi.mock('../shared/CredentialTypeForm', () => ({
     onSubmit,
     onCancel,
     submitError,
-  }: Untyped) {
+  }: MockFormProps) {
     return (
       <div>
         {submitError ? <div data-testid="form-submit-error" /> : null}

@@ -1,9 +1,13 @@
-import type { Untyped, OAuth2Application } from 'types/api';
+import type { OAuth2Application } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { ApplicationsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type {
+  MockFormProps,
+  RenderWithContextsOptions,
+} from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import ApplicationEdit from './ApplicationEdit';
@@ -26,7 +30,7 @@ vi.mock('../shared/ApplicationForm', () => ({
     onSubmit,
     onCancel,
     submitError,
-  }: Untyped) {
+  }: MockFormProps) {
     return (
       <div>
         {submitError ? <div>FormSubmitError</div> : null}
@@ -86,7 +90,7 @@ const application = {
   organization: 230,
 } as unknown as OAuth2Application;
 
-function renderEdit(options?: Untyped) {
+function renderEdit(options?: RenderWithContextsOptions) {
   return renderWithContexts(
     <ApplicationEdit
       application={application}

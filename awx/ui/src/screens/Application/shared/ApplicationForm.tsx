@@ -1,4 +1,4 @@
-import type { OAuth2Application, SummaryFieldRef, Untyped } from 'types/api';
+import type { OAuth2Application, SummaryFieldRef } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 
@@ -18,14 +18,16 @@ import { FormColumnLayout } from 'components/FormLayout';
 import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
 import OrganizationLookup from 'components/Lookup/OrganizationLookup';
 import AnsibleSelect from 'components/AnsibleSelect';
+import type { AnsibleSelectOption } from 'components/AnsibleSelect/AnsibleSelect';
 import Popover from 'components/Popover';
 import getApplicationHelpTextStrings from './Application.helptext';
 
 export interface ApplicationFormFieldsProps {
-  application: OAuth2Application;
-  authorizationOptions: Untyped;
-  clientTypeOptions: Untyped;
-  [key: string]: unknown;
+  /** Absent on the add screen, which starts the form empty. */
+  application?: Partial<OAuth2Application>;
+  /** The grant types the api offers, as the select takes them. */
+  authorizationOptions: AnsibleSelectOption[];
+  clientTypeOptions: AnsibleSelectOption[];
 }
 
 function ApplicationFormFields({
@@ -163,6 +165,22 @@ function ApplicationFormFields({
     </>
   );
 }
+/** The application as its own form holds it, before it is saved. */
+export interface ApplicationFormValues {
+  name: string;
+  description: string;
+  organization: SummaryFieldRef | null;
+  authorization_grant_type: string;
+  redirect_uris: string;
+  client_type: string;
+}
+
+export interface ApplicationFormProps extends ApplicationFormFieldsProps {
+  onCancel: () => void;
+  onSubmit: (values: ApplicationFormValues) => void;
+  submitError?: unknown;
+}
+
 function ApplicationForm({
   onCancel,
   onSubmit,
@@ -170,7 +188,7 @@ function ApplicationForm({
   application,
   authorizationOptions,
   clientTypeOptions,
-}: Untyped) {
+}: ApplicationFormProps) {
   const initialValues = {
     name: application?.name || '',
     description: application?.description || '',
@@ -189,7 +207,6 @@ function ApplicationForm({
         <Form autoComplete="off" onSubmit={formik.handleSubmit}>
           <FormColumnLayout>
             <ApplicationFormFields
-              formik={formik}
               application={application}
               authorizationOptions={authorizationOptions}
               clientTypeOptions={clientTypeOptions}

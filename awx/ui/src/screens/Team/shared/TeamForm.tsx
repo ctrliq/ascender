@@ -1,4 +1,4 @@
-import type { SummaryFieldRef, Team, Untyped } from 'types/api';
+import type { SummaryFieldRef, Team } from 'types/api';
 import React, { useCallback } from 'react';
 
 import { Formik, useField, useFormikContext } from 'formik';
@@ -11,8 +11,7 @@ import { FormColumnLayout } from 'components/FormLayout';
 import { useLingui } from '@lingui/react/macro';
 
 export interface TeamFormFieldsProps {
-  team: Team;
-  [key: string]: unknown;
+  team: Partial<Team>;
 }
 
 function TeamFormFields({ team }: TeamFormFieldsProps) {
@@ -59,13 +58,27 @@ function TeamFormFields({ team }: TeamFormFieldsProps) {
   );
 }
 
+/** The team as its own form holds it, before it is saved. */
+export interface TeamFormValues {
+  name: string;
+  description: string;
+  organization: SummaryFieldRef | null;
+}
+
+export interface TeamFormProps {
+  /** Absent on the add screen, which starts the form empty. */
+  team?: Partial<Team>;
+  handleCancel: () => void;
+  handleSubmit: (values: TeamFormValues) => void;
+  submitError?: unknown;
+}
+
 function TeamForm({
   team = {},
   handleCancel,
   handleSubmit,
   submitError = null,
-  ...rest
-}: Untyped) {
+}: TeamFormProps) {
   return (
     <Formik
       initialValues={{
@@ -78,7 +91,7 @@ function TeamForm({
       {(formik) => (
         <Form autoComplete="off" onSubmit={formik.handleSubmit}>
           <FormColumnLayout>
-            <TeamFormFields team={team} {...rest} />
+            <TeamFormFields team={team} />
             <FormSubmitError error={submitError} />
             <FormActionGroup
               onCancel={handleCancel}

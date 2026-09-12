@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { OAuth2Application } from 'types/api';
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -23,7 +23,11 @@ vi.mock('./ApplicationAdd', async () => {
   const ReactLib = await vi.importActual<typeof import('react')>('react');
   return {
     __esModule: true,
-    default: ({ onSuccessfulAdd }: Untyped) =>
+    default: ({
+      onSuccessfulAdd,
+    }: {
+      onSuccessfulAdd: (application: OAuth2Application) => void;
+    }) =>
       ReactLib.createElement(
         'button',
         {
@@ -33,7 +37,7 @@ vi.mock('./ApplicationAdd', async () => {
               name: 'test',
               client_id: 'foobar',
               client_secret: 'aaaaaaaaaaaaaaaaaaaaaaaaaa',
-            }),
+            } as unknown as OAuth2Application),
         },
         'simulate successful add'
       ),

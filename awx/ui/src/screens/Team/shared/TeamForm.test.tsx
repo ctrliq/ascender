@@ -8,7 +8,6 @@ import TeamForm from './TeamForm';
 
 vi.mock('../../../api');
 
-const meConfig = { me: { is_superuser: false } };
 const mockData = {
   id: 1,
   name: 'Foo',
@@ -37,7 +36,6 @@ describe('<TeamForm />', () => {
         team={mockData}
         handleSubmit={vi.fn()}
         handleCancel={vi.fn()}
-        me={meConfig.me}
         {...props}
       />
     );

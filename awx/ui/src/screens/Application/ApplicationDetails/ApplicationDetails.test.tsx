@@ -1,9 +1,10 @@
-import type { Untyped } from 'types/api';
+import type { OAuth2Application } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
 import { ApplicationsAPI } from 'api';
+import type { RenderWithContextsOptions } from '../../../../testUtils/rtlContexts';
 import {
   renderWithContexts,
   assertDetail,
@@ -31,7 +32,7 @@ const clientTypeOptions = [
 ];
 
 // fresh copy per test because some tests mutate user_capabilities
-function buildApplication() {
+function buildApplication(): OAuth2Application {
   return {
     id: 10,
     type: 'o_auth2_application',
@@ -82,7 +83,10 @@ function buildApplication() {
   };
 }
 
-function renderDetails(application: Untyped, options?: Untyped) {
+function renderDetails(
+  application: OAuth2Application,
+  options?: RenderWithContextsOptions
+) {
   return renderWithContexts(
     <ApplicationDetails
       application={application}
@@ -145,7 +149,7 @@ describe('<ApplicationDetails/>', () => {
 
   test('should not render delete button', () => {
     const application = buildApplication();
-    application.summary_fields.user_capabilities.delete = false;
+    application.summary_fields.user_capabilities = { delete: false };
     renderDetails(application);
     expect(
       screen.queryByRole('button', { name: 'Delete' })
@@ -154,7 +158,7 @@ describe('<ApplicationDetails/>', () => {
 
   test('should not render edit button', () => {
     const application = buildApplication();
-    application.summary_fields.user_capabilities.edit = false;
+    application.summary_fields.user_capabilities = { edit: false };
     renderDetails(application);
     expect(
       screen.queryByRole('link', { name: 'Edit' })

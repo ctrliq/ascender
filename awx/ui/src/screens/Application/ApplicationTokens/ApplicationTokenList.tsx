@@ -1,4 +1,5 @@
-import type { Untyped } from 'types/api';
+import type { OAuth2Token } from 'types/api';
+
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useParams, useLocation } from 'react-router';
@@ -12,6 +13,11 @@ import useSelected from 'hooks/useSelected';
 import DatalistToolbar from 'components/DataListToolbar';
 import ToolbarDeleteButton from 'components/PaginatedTable/ToolbarDeleteButton';
 import ApplicationTokenListItem from './ApplicationTokenListItem';
+/**
+ * A token as this list holds it. The api gives a token no name, and the list
+ * needs one for the delete confirmation, so the owner's username stands in.
+ */
+type NamedToken = OAuth2Token & { name?: string };
 
 const QS_CONFIG = getQSConfig('applications', {
   page: 1,
@@ -40,15 +46,15 @@ function ApplicationTokenList() {
         ApplicationsAPI.readTokens(id, params),
         ApplicationsAPI.readTokenOptions(id),
       ]);
-      const modifiedResults = results.map((result: Untyped) => {
-        result.summary_fields = {
+      const modifiedResults: NamedToken[] = results.map((result) => ({
+        ...result,
+        summary_fields: {
           user: result.summary_fields.user,
           application: result.summary_fields.application,
           user_capabilities: { delete: true },
-        };
-        result.name = result.summary_fields.user?.username;
-        return result;
-      });
+        },
+        name: result.summary_fields.user?.username as string | undefined,
+      }));
       return {
         tokens: modifiedResults,
         itemCount: count,
@@ -133,7 +139,7 @@ function ApplicationTokenList() {
             isSelected={selected.some((row) => row.id === token.id)}
             onSelect={() => handleSelect(token)}
             detailUrl={`/applications/${id}/tokens/${token.id}/details`}
-            rowIndex={tokens.findIndex((to: Untyped) => to.id === token.id)}
+            rowIndex={tokens.findIndex((to: OAuth2Token) => to.id === token.id)}
           />
         )}
       />

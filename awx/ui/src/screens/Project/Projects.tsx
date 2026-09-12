@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { BreadcrumbResource } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Routes, Route } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -16,7 +16,7 @@ function Projects() {
   });
 
   const buildBreadcrumbConfig = useCallback(
-    (project: Untyped, nested: Untyped) => {
+    (project?: BreadcrumbResource, nested?: BreadcrumbResource) => {
       if (!project) {
         return;
       }

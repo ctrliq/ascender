@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { BreadcrumbResource } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Routes, Route } from 'react-router';
@@ -15,7 +15,7 @@ function ManagementJobs() {
   });
 
   const buildBreadcrumbConfig = useCallback(
-    ({ id, name }: Untyped, nested: Untyped) => {
+    ({ id, name }: BreadcrumbResource = {}, nested?: BreadcrumbResource) => {
       if (!id) return;
 
       setBreadcrumbConfig({

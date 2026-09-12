@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { BreadcrumbResource } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Routes, Route } from 'react-router';
@@ -16,7 +16,7 @@ function ExecutionEnvironments() {
   });
 
   const buildBreadcrumbConfig = useCallback(
-    (executionEnvironments: Untyped) => {
+    (executionEnvironments?: BreadcrumbResource) => {
       if (!executionEnvironments) {
         return;
       }
