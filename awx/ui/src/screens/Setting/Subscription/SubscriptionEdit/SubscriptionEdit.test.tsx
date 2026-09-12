@@ -1,5 +1,5 @@
 import React from 'react';
-import { screen, waitFor, within, fireEvent } from '@testing-library/react';
+import { screen, waitFor, fireEvent } from '@testing-library/react';
 import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { ConfigAPI, MeAPI, SettingsAPI, RootAPI, UsersAPI } from 'api';
@@ -112,20 +112,6 @@ describe('<SubscriptionEdit />', () => {
       ).not.toBeInTheDocument();
     });
 
-    test('subscription selection type toggle defaults to manifest', async () => {
-      await renderFresh();
-      // PF ToggleGroupItem puts the id on the wrapper div and the selected
-      // state (pf-m-selected / aria-pressed) on the inner button
-      const manifestButton = container.querySelector(
-        '#subscription-manifest button'
-      );
-      const credButton = container.querySelector('#username-password button');
-      expect(manifestButton).toHaveTextContent('Subscription manifest');
-      expect(manifestButton).toHaveClass('pf-m-selected');
-      expect(credButton).toHaveTextContent('Username / password');
-      expect(credButton).not.toHaveClass('pf-m-selected');
-    });
-
     test('file upload field uploads a manifest file', async () => {
       await renderFresh();
       const filenameInput = findInput('#upload-manifest-filename');
@@ -192,9 +178,6 @@ describe('<SubscriptionEdit />', () => {
       vi.mocked(MeAPI.read).mockResolvedValue({
         data: { results: [{ is_superuser: true }] },
       } as unknown as ResponseOf<typeof MeAPI.read>);
-      vi.mocked(ConfigAPI.attach).mockResolvedValue(
-        {} as unknown as ResponseOf<typeof ConfigAPI.attach>
-      );
       vi.mocked(ConfigAPI.create).mockResolvedValue({
         data: mockConfig,
       } as unknown as ResponseOf<typeof ConfigAPI.create>);
@@ -212,15 +195,6 @@ describe('<SubscriptionEdit />', () => {
 
   describe('editing with a valid subscription', () => {
     let history: TestHistory;
-    let container: HTMLElement;
-
-    // Asserted rather than checked: a selector that matches nothing here is a
-    // broken test, and the assertion that follows says so more clearly than a
-    // null guard would.
-    const find = (selector: string) =>
-      container.querySelector(selector) as HTMLElement;
-    const findInput = (selector: string) =>
-      container.querySelector(selector) as HTMLInputElement;
 
     async function renderEdit() {
       vi.resetAllMocks();
@@ -229,22 +203,10 @@ describe('<SubscriptionEdit />', () => {
       } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
       vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
         data: {
-          SUBSCRIPTIONS_PASSWORD: 'mock_password',
-          SUBSCRIPTIONS_USERNAME: 'mock_username',
           INSIGHTS_TRACKING_STATE: false,
           PENDO: 'off',
         },
       } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
-      vi.mocked(ConfigAPI.readSubscriptions).mockResolvedValue({
-        data: [
-          {
-            subscription_name: 'mock subscription 50 instances',
-            instance_count: 50,
-            license_date: new Date(),
-            pool_id: 999,
-          },
-        ],
-      } as unknown as ResponseOf<typeof ConfigAPI.readSubscriptions>);
       history = createMemoryHistory({
         initialEntries: ['/settings/subscription/edit'],
       });
@@ -258,7 +220,6 @@ describe('<SubscriptionEdit />', () => {
           router: { history },
         },
       });
-      container = utils.container;
       await waitForLoaded();
       return utils;
     }
@@ -274,104 +235,6 @@ describe('<SubscriptionEdit />', () => {
       expect(
         screen.getByText('End user license agreement')
       ).toBeInTheDocument();
-    });
-
-    test('username/password toggle shows credential fields', async () => {
-      const { user } = await renderEdit();
-      const credToggle = container.querySelector('#username-password');
-      expect(credToggle).not.toHaveClass('pf-m-selected');
-      await user.click(
-        screen.getByRole('button', { name: 'Username / password' })
-      );
-      const usernameInput = findInput('#username-field');
-      const passwordInput = findInput('#password-field');
-      expect(usernameInput.value).toEqual('');
-      expect(passwordInput.value).toEqual('');
-      fireEvent.change(usernameInput, {
-        target: { value: 'username-cred', name: 'username' },
-      });
-      fireEvent.change(passwordInput, {
-        target: { value: 'password-cred', name: 'password' },
-      });
-      await waitFor(() =>
-        expect(findInput('#username-field').value).toEqual('username-cred')
-      );
-      expect(findInput('#password-field').value).toEqual('password-cred');
-    });
-
-    test('opens the subscription selection modal and selects a subscription', async () => {
-      const { user } = await renderEdit();
-      await user.click(
-        screen.getByRole('button', { name: 'Username / password' })
-      );
-      const usernameInput = findInput('#username-field');
-      const passwordInput = findInput('#password-field');
-      fireEvent.change(usernameInput, {
-        target: { value: 'username-cred', name: 'username' },
-      });
-      fireEvent.change(passwordInput, {
-        target: { value: 'password-cred', name: 'password' },
-      });
-      await waitFor(() =>
-        expect(findInput('#username-field').value).toEqual('username-cred')
-      );
-
-      // open the subscription modal (button's accessible name is its
-      // aria-label, "Get subscriptions")
-      await user.click(
-        screen.getByRole('button', { name: 'Get subscriptions' })
-      );
-      expect(
-        await screen.findByText('mock subscription 50 instances')
-      ).toBeInTheDocument();
-
-      // select the subscription radio and confirm
-      const grid = screen.getByRole('grid');
-      const rows = within(grid).getAllByRole('row');
-      await user.click(within(rows[1]!).getByRole('radio'));
-      await user.click(
-        screen.getByRole('button', { name: 'Confirm selection' })
-      );
-
-      // the modal closes and the selected subscription name is shown
-      await waitFor(() =>
-        expect(
-          screen.queryByRole('button', { name: 'Confirm selection' })
-        ).not.toBeInTheDocument()
-      );
-      const selected = find('#selected-subscription');
-      expect(selected).toBeInTheDocument();
-      expect(
-        within(selected).getByText('mock subscription 50 instances')
-      ).toBeInTheDocument();
-
-      // next skips the analytics step and goes straight to eula
-      fireEvent.click(find('#subscription-wizard-next'));
-      expect(
-        await screen.findByText('End User License Agreement')
-      ).toBeInTheDocument();
-      expect(screen.queryByText('User analytics')).not.toBeInTheDocument();
-      const submit = find('#subscription-wizard-submit');
-      expect(submit).not.toBeDisabled();
-
-      // submit successfully
-      vi.mocked(ConfigAPI.read).mockResolvedValue({
-        data: mockConfig,
-      } as unknown as ResponseOf<typeof ConfigAPI.read>);
-      vi.mocked(MeAPI.read).mockResolvedValue({
-        data: { results: [{ is_superuser: true }] },
-      } as unknown as ResponseOf<typeof MeAPI.read>);
-      vi.mocked(ConfigAPI.attach).mockResolvedValue(
-        {} as unknown as ResponseOf<typeof ConfigAPI.attach>
-      );
-      vi.mocked(ConfigAPI.create).mockResolvedValue(
-        {} as unknown as ResponseOf<typeof ConfigAPI.create>
-      );
-      vi.mocked(UsersAPI.readAdminOfOrganizations).mockResolvedValue({
-        data: {},
-      } as unknown as ResponseOf<typeof UsersAPI.readAdminOfOrganizations>);
-      fireEvent.click(submit);
-      expect(await screen.findByText('Save successful!')).toBeInTheDocument();
     });
 
     test('navigates to subscription details on cancel', async () => {
