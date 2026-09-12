@@ -9,7 +9,6 @@ import tarfile
 import time
 import re
 
-import asn1
 from awx.api import serializers
 from awx.api.generics import GenericAPIView, Response
 from awx.api.permissions import IsSystemAdminOrAuditor
@@ -26,6 +25,29 @@ from rest_framework import status
 
 # Red Hat has an OID namespace (RHANANA). Receptor has its own designation under that.
 RECEPTOR_OID = "1.3.6.1.4.1.2312.19.1"
+
+# DER tag for a UTF8String (X.690 section 8.23), which is what the receptor OID
+# carries as its value.
+DER_UTF8_STRING = 0x0C
+
+
+def der_utf8_string(value):
+    """DER-encode a string as a UTF8String.
+
+    cryptography takes the OtherName value as encoded bytes and has no public
+    encoder of its own, and this is the only ASN.1 this codebase writes, so the
+    tag, the length and the payload are assembled here rather than pulling in a
+    library for one call.
+    """
+    payload = value.encode()
+    if len(payload) < 0x80:
+        # short form: the length fits in the low seven bits of one byte
+        length = bytes([len(payload)])
+    else:
+        # long form: one byte saying how many length bytes follow, then those
+        length_bytes = len(payload).to_bytes((len(payload).bit_length() + 7) // 8, "big")
+        length = bytes([0x80 | len(length_bytes)]) + length_bytes
+    return bytes([DER_UTF8_STRING]) + length + payload
 
 
 # generate install bundle for the instance
@@ -147,10 +169,7 @@ def generate_receptor_tls(instance_obj):
 
     # encode receptor hostname to asn1
     hostname = instance_obj.hostname
-    encoder = asn1.Encoder()
-    encoder.start()
-    encoder.write(hostname.encode(), nr=asn1.Numbers.UTF8String)
-    hostname_asn1 = encoder.output()
+    hostname_asn1 = der_utf8_string(hostname)
 
     san_params = [
         DNSName(hostname),
