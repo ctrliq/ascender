@@ -1,0 +1,16 @@
+/* eslint-disable */
+/**
+ * GENERATED FILE. DO NOT EDIT.
+ *
+ * Regenerate with `make ui-api-types` from the repository root, which runs
+ * `awx-manage spectacular` and pipes the result through openapi-typescript.
+ *
+ * This is the API describing itself. Every field, its nullability, its
+ * default and its help text come from the serializers rather than from
+ * someone reading a screen and guessing, and a renamed field becomes a
+ * compile error here rather than an undefined at runtime.
+ *
+ * Two fields it does not describe: summary_fields and related arrive as bare
+ * `string`, because AWX builds them in SerializerMethodFields that carry no
+ * schema annotation. src/types/api.ts overrides those two.
+ */

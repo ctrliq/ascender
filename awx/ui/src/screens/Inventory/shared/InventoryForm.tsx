@@ -1,0 +1,194 @@
+import type { AnyInventory, SummaryFieldRef } from 'types/api';
+import React, { useCallback, useState } from 'react';
+import { Formik, useField, useFormikContext } from 'formik';
+import { Form, FormGroup } from '@patternfly/react-core';
+import { VariablesField } from 'components/CodeEditor';
+import Popover from 'components/Popover';
+import FormField, {
+  CheckboxField,
+  FormSubmitError,
+} from 'components/FormField';
+import FormActionGroup from 'components/FormActionGroup';
+import { required } from 'util/validators';
+import LabelSelect from 'components/LabelSelect';
+import InstanceGroupsLookup from 'components/Lookup/InstanceGroupsLookup';
+import OrganizationLookup from 'components/Lookup/OrganizationLookup';
+import ContentError from 'components/ContentError';
+import {
+  FormColumnLayout,
+  FormFullWidthLayout,
+  FormCheckboxLayout,
+} from 'components/FormLayout';
+import { useLingui } from '@lingui/react/macro';
+import useHelpText from './Inventory.helptext';
+
+export interface InventoryFormFieldsProps {
+  inventory: Partial<AnyInventory>;
+}
+
+function InventoryFormFields({ inventory }: InventoryFormFieldsProps) {
+  const { t } = useLingui();
+  const helpText = useHelpText();
+  const [contentError, setContentError] = useState<unknown>(false);
+  const { setFieldValue, setFieldTouched } =
+    useFormikContext<Record<string, unknown>>();
+  const [organizationField, organizationMeta, organizationHelpers] =
+    useField('organization');
+  const [instanceGroupsField, , instanceGroupsHelpers] =
+    useField('instanceGroups');
+  const [labelsField, , labelsHelpers] = useField('labels');
+  const handleOrganizationUpdate = useCallback(
+    (value: SummaryFieldRef | null) => {
+      setFieldValue('organization', value);
+      setFieldTouched('organization', true, false);
+    },
+    [setFieldValue, setFieldTouched]
+  );
+
+  if (contentError) {
+    return <ContentError error={contentError} />;
+  }
+
+  return (
+    <>
+      <FormField
+        id="inventory-name"
+        label={t`Name`}
+        name="name"
+        type="text"
+        validate={required(null)}
+        isRequired
+      />
+      <FormField
+        id="inventory-description"
+        label={t`Description`}
+        name="description"
+        type="text"
+      />
+      <OrganizationLookup
+        helperTextInvalid={organizationMeta.error}
+        isValid={!organizationMeta.touched || !organizationMeta.error}
+        onBlur={() => organizationHelpers.setTouched(true)}
+        onChange={handleOrganizationUpdate}
+        value={organizationField.value}
+        touched={organizationMeta.touched}
+        error={organizationMeta.error}
+        required
+        autoPopulate={!inventory?.id}
+        validate={required(t`Select a value for this field`)}
+      />
+      <InstanceGroupsLookup
+        value={instanceGroupsField.value}
+        onChange={(value) => {
+          instanceGroupsHelpers.setValue(value);
+        }}
+        fieldName="instanceGroups"
+      />
+      <FormFullWidthLayout>
+        <FormGroup
+          label={t`Labels`}
+          labelHelp={<Popover content={helpText.labels} />}
+          fieldId="inventory-labels"
+        >
+          <LabelSelect
+            value={labelsField.value}
+            onChange={(labels) => labelsHelpers.setValue(labels)}
+            onError={setContentError}
+            createText={t`Create`}
+          />
+        </FormGroup>
+        <FormGroup fieldId="inventory-option-checkboxes" label={t`Options`}>
+          <FormCheckboxLayout>
+            <CheckboxField
+              id="option-prevent-instance-group-fallback"
+              name="prevent_instance_group_fallback"
+              label={t`Prevent Instance Group Fallback`}
+              tooltip={helpText.preventInstanceGroupFallback}
+            />
+            <CheckboxField
+              id="option-allow-deletes-while-in-use"
+              name="allow_deletes_while_in_use"
+              label={t`Allow Deletes While In Use`}
+              tooltip={helpText.allowDeletesWhileInUse}
+            />
+          </FormCheckboxLayout>
+        </FormGroup>
+        <VariablesField
+          tooltip={helpText.variables()}
+          id="inventory-variables"
+          name="variables"
+          label={t`Variables`}
+        />
+      </FormFullWidthLayout>
+    </>
+  );
+}
+
+/** The inventory as its own form holds it, before it is saved. */
+export interface InventoryFormValues {
+  name: string;
+  description: string;
+  variables: string;
+  organization: SummaryFieldRef | null;
+  instanceGroups: SummaryFieldRef[];
+  labels: SummaryFieldRef[];
+  prevent_instance_group_fallback: boolean;
+  allow_deletes_while_in_use: boolean;
+}
+
+export interface InventoryFormProps {
+  /** Absent on the add screen, which starts the form empty. */
+  inventory?: Partial<AnyInventory>;
+  onSubmit: (values: InventoryFormValues) => void;
+  onCancel: () => void;
+  submitError?: unknown;
+  /**
+   * The groups the inventory is already in, which the api answers separately
+   * and the form associates one request at a time.
+   */
+  instanceGroups?: SummaryFieldRef[];
+}
+
+function InventoryForm({
+  inventory = {},
+  onSubmit,
+  onCancel,
+  submitError = null,
+  instanceGroups = [],
+}: InventoryFormProps) {
+  const initialValues: InventoryFormValues = {
+    name: inventory.name || '',
+    description: inventory.description || '',
+    variables: inventory.variables || '---',
+    organization: inventory.summary_fields?.organization || null,
+    instanceGroups: instanceGroups || [],
+    labels: (inventory?.summary_fields?.labels?.results ||
+      []) as SummaryFieldRef[],
+    prevent_instance_group_fallback:
+      inventory.prevent_instance_group_fallback || false,
+    allow_deletes_while_in_use: inventory.allow_deletes_while_in_use || false,
+  };
+  return (
+    <Formik
+      initialValues={initialValues}
+      onSubmit={(values) => {
+        onSubmit(values);
+      }}
+    >
+      {(formik) => (
+        <Form autoComplete="off" onSubmit={formik.handleSubmit}>
+          <FormColumnLayout>
+            <InventoryFormFields inventory={inventory} />
+            <FormSubmitError error={submitError} />
+            <FormActionGroup
+              onCancel={onCancel}
+              onSubmit={formik.handleSubmit}
+            />
+          </FormColumnLayout>
+        </Form>
+      )}
+    </Formik>
+  );
+}
+
+export default InventoryForm;

@@ -1079,10 +1079,10 @@ class InventorySourceOptions(BaseModel):
         # from the instance metadata instead of those explicitly provided.
         elif source in CLOUD_PROVIDERS and source != 'ec2':
             return _('Credential is required for a cloud source.')
-        elif source == 'custom' and cred and cred.credential_type.kind in ('scm', 'ssh', 'insights', 'vault'):
-            return _('Credentials of type machine, source control, insights and vault are disallowed for custom inventory sources.')
-        elif source == 'scm' and cred and cred.credential_type.kind in ('insights', 'vault'):
-            return _('Credentials of type insights and vault are disallowed for scm inventory sources.')
+        elif source == 'custom' and cred and cred.credential_type.kind in ('scm', 'ssh', 'vault'):
+            return _('Credentials of type machine, source control and vault are disallowed for custom inventory sources.')
+        elif source == 'scm' and cred and cred.credential_type.kind == 'vault':
+            return _('Credentials of type vault are disallowed for scm inventory sources.')
         return None
 
     def get_cloud_credential(self):

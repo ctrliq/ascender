@@ -303,6 +303,21 @@ api-lint:
 	$(MAKE) lint
 	yamllint -s .
 
+## Regenerate the UI's API types from the serializers themselves.
+## Run this after any change to a serializer, and commit the result.
+##
+## openapi-typescript is deliberately not a devDependency: it is a generator
+## rather than part of the build, its committed output is what everything else
+## consumes, and its peer range wants TypeScript 5 where this project is on 6.
+## npx fetches it for the length of this command and leaves nothing behind.
+ui-api-types: awx-link
+	@if [ "$(VENV_BASE)" ]; then \
+		. $(VENV_BASE)/awx/bin/activate; \
+	fi; \
+	$(MANAGEMENT_COMMAND) spectacular --format openapi-json --file awx/ui/.schema.json
+	$(NPM_BIN) --prefix awx/ui run generate-api-types
+	rm -f awx/ui/.schema.json
+
 ## Run egg_info_dev to generate awx.egg-info for development.
 awx-link:
 	[ -d "/awx_devel/awx.egg-info" ] || $(PYTHON) /awx_devel/tools/scripts/egg_info_dev
@@ -394,7 +409,7 @@ clean-ui:
 	mkdir -p awx/ui/build/static
 
 awx/ui/node_modules:
-	NODE_OPTIONS=--max-old-space-size=6144 $(NPM_BIN) --prefix awx/ui --loglevel warn --force ci
+	NODE_OPTIONS=--max-old-space-size=6144 $(NPM_BIN) --prefix awx/ui --loglevel warn --force ci --ignore-scripts
 
 $(UI_BUILD_FLAG_FILE):
 	$(MAKE) awx/ui/node_modules
@@ -424,6 +439,11 @@ ui-lint:
 	$(NPM_BIN) --prefix awx/ui install
 	$(NPM_BIN) run --prefix awx/ui lint
 	$(NPM_BIN) run --prefix awx/ui prettier-check
+	$(NPM_BIN) run --prefix awx/ui check-strings
+
+ui-type-check:
+	$(NPM_BIN) --prefix awx/ui install
+	$(NPM_BIN) run --prefix awx/ui type-check
 
 ui-test:
 	$(NPM_BIN) --prefix awx/ui install

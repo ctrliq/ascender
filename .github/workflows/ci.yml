@@ -50,8 +50,22 @@ jobs:
           - name: api-type-check
             command: /var/lib/awx/venv/awx/bin/tox -e typecheck
             advisory: true
+          # Audits what the image installed rather than resolving requirements.txt
+          # again, so it sees the versions that ship. Advisory until the backlog
+          # it reports is clear.
+          - name: api-dependency-audit
+            command: /bin/bash -c "/var/lib/awx/venv/awx/bin/pip install --quiet pip-audit && /var/lib/awx/venv/awx/bin/pip-audit --progress-spinner=off"
+            advisory: true
+          # The UI's API types are generated from the serializers and committed.
+          # This regenerates them and fails if the committed copy has drifted,
+          # which is what happens when a serializer changes and nobody reruns
+          # make ui-api-types.
+          - name: ui-api-types-drift
+            command: /bin/bash -c "make ui-api-types && git diff --exit-code awx/ui/src/types/api.generated.ts"
           - name: ui-lint
             command: make ui-lint
+          - name: ui-type-check
+            command: make ui-type-check
           - name: ui-test-screens
             command: make ui-test-screens
           - name: ui-test-general
@@ -144,7 +158,7 @@ jobs:
 
       - name: Install the end-to-end dependencies
         working-directory: awx/ui/e2e
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Install the browser
         working-directory: awx/ui/e2e
@@ -173,3 +187,26 @@ jobs:
       - name: Get logs from the development environment on failure
         if: failure()
         run: docker logs tools_awx_1 || true
+
+  ui-dependency-audit:
+    name: ui-dependency-audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout ascender
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+        with:
+          node-version: '22'
+
+      # --omit=dev because a vulnerability in a build-time package does not ship
+      # to anyone, and the noise would bury what does. Advisory for now, like the
+      # Python audit above.
+      - name: Audit the UI dependencies
+        continue-on-error: true
+        working-directory: awx/ui
+        run: npm audit --omit=dev
