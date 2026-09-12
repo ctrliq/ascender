@@ -773,9 +773,14 @@ class TaskManager(TaskBase):
         # that we know about; this is a fairly rare event, but it can occur if you,
         # for example, SQL backup an awx install with running jobs and restore it
         # elsewhere
-        for j in UnifiedJob.objects.filter(
-            status__in=['pending', 'waiting', 'running'],
-        ).exclude(execution_node__in=Instance.objects.exclude(node_type='hop').values_list('hostname', flat=True)):
+        # Ordinary pending jobs have no execution_node yet; exclude them in SQL so a deep queue
+        # is not materialized as full objects here on every cycle.
+        orphaned = (
+            UnifiedJob.objects.filter(status__in=['pending', 'waiting', 'running'])
+            .exclude(execution_node='')
+            .exclude(execution_node__in=Instance.objects.exclude(node_type='hop').values_list('hostname', flat=True))
+        )
+        for j in orphaned:
             if j.execution_node and not j.is_container_group_task:
                 logger.error(f'{j.execution_node} is not a registered instance; reaping {j.log_format}')
                 reap_job(j, 'failed')
