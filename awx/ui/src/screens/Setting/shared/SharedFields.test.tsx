@@ -169,8 +169,6 @@ describe('Setting form fields', () => {
         )}
       </Formik>
     );
-    // CodeEditor (react-ace) renders empty under jsdom, so assert the field's
-    // label rather than the editor contents.
     expect(screen.getByText('test')).toBeInTheDocument();
   });
 
