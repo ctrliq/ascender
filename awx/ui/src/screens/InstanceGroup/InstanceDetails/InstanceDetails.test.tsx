@@ -1,5 +1,6 @@
+import type { CurrentUser } from 'contexts/Config';
 import type { ApiResponse } from 'api/Base';
-import type { Untyped, InstanceGroup } from 'types/api';
+import type { InstanceGroup } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import * as ConfigContext from 'contexts/Config';
@@ -105,7 +106,7 @@ function instanceDetail(overrides = {}) {
   };
 }
 
-function setMe(me: Untyped) {
+function setMe(me: Partial<CurrentUser>) {
   vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({ me }));
 }
 

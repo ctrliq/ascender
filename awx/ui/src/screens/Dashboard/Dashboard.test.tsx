@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { MockedFunction } from 'vitest';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import {
@@ -22,7 +22,7 @@ vi.mock('./shared/LineChart', () => ({
 }));
 
 describe('<Dashboard />', () => {
-  let graphRequest: Untyped;
+  let graphRequest: MockedFunction<typeof DashboardAPI.readJobGraph>;
 
   beforeEach(() => {
     vi.mocked(DashboardAPI.read).mockResolvedValue(
@@ -33,7 +33,7 @@ describe('<Dashboard />', () => {
         BRAND_NAME: 'AWX',
       },
     } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
-    graphRequest = DashboardAPI.readJobGraph;
+    graphRequest = vi.mocked(DashboardAPI.readJobGraph);
     graphRequest.mockResolvedValue({
       data: {
         jobs: {
@@ -47,7 +47,7 @@ describe('<Dashboard />', () => {
           ],
         },
       },
-    });
+    } as unknown as ResponseOf<typeof DashboardAPI.readJobGraph>);
     vi.mocked(UnifiedJobTemplatesAPI.read).mockResolvedValue({
       data: { count: 0, results: [] },
     } as unknown as ResponseOf<typeof UnifiedJobTemplatesAPI.read>);

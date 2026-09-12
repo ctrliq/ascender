@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InstanceGroup } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -19,7 +19,7 @@ import ContainerGroupDetails from './ContainerGroupDetails';
 
 vi.mock('../../../api');
 
-function buildInstanceGroup(overrides: Untyped = {}) {
+function buildInstanceGroup(overrides: Partial<InstanceGroup> = {}) {
   const { summary_fields: summaryOverrides, ...rest } = overrides;
   return {
     id: 42,

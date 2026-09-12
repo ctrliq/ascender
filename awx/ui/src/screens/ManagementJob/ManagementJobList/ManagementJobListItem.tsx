@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -48,7 +47,7 @@ function ManagementJobListItem({
   const handleManagementPromptClick = () => setIsManagementPromptOpen(true);
   const handleManagementPromptClose = () => setIsManagementPromptOpen(false);
 
-  const handleManagementPromptConfirm = async (days: Untyped) => {
+  const handleManagementPromptConfirm = async (days: number) => {
     setIsManagementPromptLoading(true);
     try {
       const { data } = await SystemJobTemplatesAPI.launch(id, {

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { MockedFunction } from 'vitest';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 
@@ -18,18 +18,18 @@ vi.mock('./shared/LineChart', () => ({
   default: () => <div data-testid="line-chart" />,
 }));
 
-function getToggle(label: Untyped) {
+function getToggle(label: string) {
   return screen.getByRole('button', { name: label });
 }
 
 describe('<DashboardGraph/>', () => {
-  let graphRequest: Untyped;
+  let graphRequest: MockedFunction<typeof DashboardAPI.readJobGraph>;
 
   beforeEach(() => {
     vi.mocked(DashboardAPI.read).mockResolvedValue(
       {} as unknown as ResponseOf<typeof DashboardAPI.read>
     );
-    graphRequest = DashboardAPI.readJobGraph;
+    graphRequest = vi.mocked(DashboardAPI.readJobGraph);
     graphRequest.mockResolvedValue({
       data: {
         jobs: {
@@ -43,7 +43,7 @@ describe('<DashboardGraph/>', () => {
           ],
         },
       },
-    });
+    } as unknown as ResponseOf<typeof DashboardAPI.readJobGraph>);
   });
 
   afterEach(() => {

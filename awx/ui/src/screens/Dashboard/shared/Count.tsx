@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router';
@@ -38,9 +37,9 @@ export interface CountProps {
   /** Styles the count as a failure figure rather than a total. */
   failed?: boolean;
   link: string;
-  data?: Untyped;
+  /** The figure itself, absent while the dashboard is still loading. */
+  data?: number;
   label?: React.ReactNode;
-  [key: string]: unknown;
 }
 
 function Count({ failed, link, data, label }: CountProps) {

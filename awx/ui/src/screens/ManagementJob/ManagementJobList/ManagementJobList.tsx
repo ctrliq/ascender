@@ -1,4 +1,5 @@
-import type { Untyped } from 'types/api';
+import type { ApiResponse } from 'api/Base';
+import type { OptionsResponse, SystemJobTemplate } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -25,7 +26,7 @@ const QS_CONFIG = getQSConfig('system_job_templates', {
   page_size: 20,
 });
 
-const buildSearchKeys = (options: Untyped) => {
+const buildSearchKeys = (options?: ApiResponse<OptionsResponse>) => {
   const actions = options?.data?.actions?.GET || {};
   const searchableKeys = getSearchableKeys(actions);
 
@@ -36,7 +37,7 @@ const buildSearchKeys = (options: Untyped) => {
   return { searchableKeys, relatedSearchableKeys };
 };
 
-const loadManagementJobs = async (search: Untyped) => {
+const loadManagementJobs = async (search: string) => {
   const params = parseQueryString(QS_CONFIG, search);
   const [
     {
@@ -61,10 +62,14 @@ function ManagementJobList() {
     request,
     error = false,
     isLoading = true,
-    result: { options = {}, items = [], count = 0 },
-  } = useRequest<{ options: Untyped; items: Untyped[]; count: number }>(
+    result: { options, items = [], count = 0 },
+  } = useRequest<{
+    options?: ApiResponse<OptionsResponse>;
+    items: SystemJobTemplate[];
+    count: number;
+  }>(
     useCallback(async () => loadManagementJobs(search), [search]),
-    { options: {}, items: [], count: 0 }
+    { items: [], count: 0 }
   );
 
   useEffect(() => {
@@ -104,16 +109,16 @@ function ManagementJobList() {
                 <HeaderCell>{t`Actions`}</HeaderCell>
               </HeaderRow>
             }
-            renderRow={({ id, name, description, job_type }: Untyped) => (
+            renderRow={({ id, name, description, job_type }) => (
               <ManagementJobListItem
                 key={id}
                 id={id}
-                name={name}
-                jobType={job_type}
-                description={description}
+                name={name ?? ''}
+                jobType={job_type ?? ''}
+                description={description ?? ''}
                 isSuperUser={Boolean(me?.is_superuser)}
                 isPrompted={['cleanup_activitystream', 'cleanup_jobs'].includes(
-                  job_type
+                  job_type ?? ''
                 )}
                 onLaunchError={setLaunchError}
               />

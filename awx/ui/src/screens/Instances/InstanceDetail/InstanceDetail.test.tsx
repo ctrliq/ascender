@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import * as ConfigContext from 'contexts/Config';
@@ -20,9 +19,9 @@ vi.mock('react-router', async () => ({
 }));
 
 function computeForks(
-  memCapacity: Untyped,
-  cpuCapacity: Untyped,
-  adjustment: Untyped
+  memCapacity: number,
+  cpuCapacity: number,
+  adjustment: number
 ) {
   const minCapacity = Math.min(memCapacity, cpuCapacity);
   const maxCapacity = Math.max(memCapacity, cpuCapacity);

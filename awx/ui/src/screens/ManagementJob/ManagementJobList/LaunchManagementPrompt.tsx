@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button, TextInput, Tooltip } from '@patternfly/react-core';
@@ -8,7 +7,7 @@ import AlertModal from 'components/AlertModal';
 
 const MAX_RETENTION = 99999;
 
-const clamp = (val: Untyped, min: Untyped, max: Untyped) => {
+const clamp = (val: number, min: number, max: number) => {
   if (val < min) {
     return min;
   }
@@ -83,7 +82,7 @@ function LaunchManagementPrompt({
           value={dataRetention}
           type="number"
           onChange={(_event, value) =>
-            setDataRetention(clamp(value, 0, MAX_RETENTION))
+            setDataRetention(clamp(Number(value), 0, MAX_RETENTION))
           }
           aria-label={t`Data retention period`}
         />

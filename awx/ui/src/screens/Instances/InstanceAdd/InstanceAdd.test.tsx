@@ -1,10 +1,10 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { InstancesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockHandlerFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceAdd from './InstanceAdd';
@@ -14,7 +14,7 @@ vi.mock('../../../api');
 // Replace the shared form with a lightweight stub that exposes the container's
 // handleSubmit / handleCancel handlers through real buttons.
 vi.mock('../Shared/InstanceForm', () => {
-  const MockForm = ({ handleSubmit, handleCancel }: Untyped) => (
+  const MockForm = ({ handleSubmit, handleCancel }: MockHandlerFormProps) => (
     <div>
       <button
         type="button"

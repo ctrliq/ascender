@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import type { TestHistory } from 'history';
@@ -6,6 +5,7 @@ import { createMemoryHistory } from 'history';
 import useDebounce from 'hooks/useDebounce';
 import { InstancesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockHandlerFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import InstanceEdit from './InstanceEdit';
@@ -29,7 +29,11 @@ const updatedInstance = {
 // Stub the shared form: it surfaces the container's handleSubmit/handleCancel
 // through real buttons and renders the submit error so we can assert on it.
 vi.mock('../Shared/InstanceForm', () => {
-  const MockForm = ({ handleSubmit, handleCancel, submitError }: Untyped) => (
+  const MockForm = ({
+    handleSubmit,
+    handleCancel,
+    submitError,
+  }: MockHandlerFormProps) => (
     <div>
       <button
         type="button"

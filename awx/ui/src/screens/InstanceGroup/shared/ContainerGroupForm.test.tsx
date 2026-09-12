@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Mock } from 'vitest';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { CredentialsAPI } from 'api';
@@ -73,8 +73,8 @@ const initialPodSpec = {
 };
 
 describe('<ContainerGroupForm/>', () => {
-  let onCancel: Untyped;
-  let onSubmit: Untyped;
+  let onCancel: Mock;
+  let onSubmit: Mock;
 
   beforeEach(() => {
     onCancel = vi.fn();

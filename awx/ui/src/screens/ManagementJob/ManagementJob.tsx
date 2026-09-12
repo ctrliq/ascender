@@ -1,4 +1,4 @@
-import type { Untyped, DetailedError } from 'types/api';
+import type { DetailedError, SetBreadcrumb } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import {
   Link,
@@ -25,8 +25,7 @@ import type { RoutedTab } from 'components/RoutedTabs/RoutedTabs';
 import type { QSParams } from 'util/qs';
 
 export interface ManagementJobProps {
-  setBreadcrumb: (...args: Untyped[]) => void;
-  [key: string]: unknown;
+  setBreadcrumb: SetBreadcrumb;
 }
 
 function ManagementJob({ setBreadcrumb }: ManagementJobProps) {
@@ -66,17 +65,15 @@ function ManagementJob({ setBreadcrumb }: ManagementJobProps) {
     setIsNotificationAdmin(
       Boolean(result?.notificationRoles?.data?.results?.length)
     );
-    setBreadcrumb(result);
+    // The template, not the whole result: the breadcrumb reads an id and a
+    // name off what it is given, and the pair of effects below this one used
+    // to hand it the request's two halves instead, so it always returned
+    // early and the job was never named in the trail.
+    setBreadcrumb(result.systemJobTemplate);
   }, [result, setBreadcrumb, setIsNotificationAdmin]);
 
-  useEffect(() => {
-    if (!result) return;
-
-    setBreadcrumb(result);
-  }, [result, setBreadcrumb]);
-
   const createSchedule = useCallback(
-    (data: Untyped) =>
+    (data: unknown) =>
       SystemJobTemplatesAPI.createSchedule(
         result?.systemJobTemplate.id as number,
         data

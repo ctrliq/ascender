@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InstanceGroup } from 'types/api';
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 
@@ -41,9 +41,9 @@ const instanceGroups = [
       },
     },
   },
-];
+] as unknown as InstanceGroup[];
 
-function renderItem(instanceGroup: Untyped, props = {}) {
+function renderItem(instanceGroup: InstanceGroup, props = {}) {
   return renderWithContexts(
     <table>
       <tbody>
@@ -62,7 +62,7 @@ function renderItem(instanceGroup: Untyped, props = {}) {
 
 describe('<InstanceGroupListItem/>', () => {
   test('should render the proper data for an instance group', () => {
-    renderItem(instanceGroups[0]);
+    renderItem(instanceGroups[0] as InstanceGroup);
     const row = screen.getByRole('link', { name: 'Foo' }).closest('tr');
     const typeCell = within(row!)
       .getAllByRole('cell')
@@ -80,7 +80,7 @@ describe('<InstanceGroupListItem/>', () => {
   });
 
   test('should render the proper data for a container group', () => {
-    renderItem(instanceGroups[1]);
+    renderItem(instanceGroups[1] as InstanceGroup);
     const row = screen.getByRole('link', { name: 'Bar' }).closest('tr');
     const typeCell = within(row!)
       .getAllByRole('cell')
@@ -93,14 +93,14 @@ describe('<InstanceGroupListItem/>', () => {
   });
 
   test('edit button shown to users with edit capabilities', () => {
-    renderItem(instanceGroups[0], { isSelected: true });
+    renderItem(instanceGroups[0] as InstanceGroup, { isSelected: true });
     expect(
       screen.getByRole('link', { name: 'Edit instance group' })
     ).toBeInTheDocument();
   });
 
   test('edit button hidden from users without edit capabilities', () => {
-    renderItem(instanceGroups[1], { isSelected: true });
+    renderItem(instanceGroups[1] as InstanceGroup, { isSelected: true });
     expect(
       screen.queryByRole('link', { name: 'Edit instance group' })
     ).not.toBeInTheDocument();

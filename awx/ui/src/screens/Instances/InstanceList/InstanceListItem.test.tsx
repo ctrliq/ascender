@@ -1,4 +1,4 @@
-import type { Untyped, Instance } from 'types/api';
+import type { Instance } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 
@@ -19,9 +19,9 @@ vi.mock('react-router', async () => ({
 }));
 
 function computeForks(
-  memCapacity: Untyped,
-  cpuCapacity: Untyped,
-  adjustment: Untyped
+  memCapacity: number,
+  cpuCapacity: number,
+  adjustment: number
 ) {
   const minCapacity = Math.min(memCapacity, cpuCapacity);
   const maxCapacity = Math.max(memCapacity, cpuCapacity);
@@ -81,7 +81,9 @@ const instance = [
   },
 ];
 
-function renderItem(props?: Untyped) {
+function renderItem(
+  props?: Partial<React.ComponentProps<typeof InstanceListItem>>
+) {
   return renderWithContexts(
     <table>
       <tbody>
@@ -90,6 +92,7 @@ function renderItem(props?: Untyped) {
           isSelected={false}
           onSelect={() => {}}
           fetchInstances={() => {}}
+          rowIndex={0}
           {...props}
         />
       </tbody>
@@ -141,7 +144,7 @@ describe('<InstanceListItem/>', () => {
         Math.round(Number(slider.getAttribute('aria-valuenow')) * 100) / 100;
       const expected = computeForks(1, 24, adj);
       const text = container.querySelector('[data-cy="number-forks"]')!
-        .textContent as Untyped;
+        .textContent as string;
       expect(text).toContain(String(expected));
       expect(text).toContain(expected === 1 ? 'fork' : 'forks');
     });
