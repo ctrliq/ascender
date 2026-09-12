@@ -53,6 +53,10 @@ jobs:
           # Audits what the image installed rather than resolving requirements.txt
           # again, so it sees the versions that ship. Advisory until the backlog
           # it reports is clear.
+          # Blocking, unlike the advisory run above: it covers only the packages
+          # that already report nothing, so it fails when one of them regresses.
+          - name: api-type-check-strict
+            command: /var/lib/awx/venv/awx/bin/tox -e typecheck-strict
           - name: api-dependency-audit
             command: /bin/bash -c "/var/lib/awx/venv/awx/bin/pip install --quiet pip-audit && /var/lib/awx/venv/awx/bin/pip-audit --progress-spinner=off"
             advisory: true
