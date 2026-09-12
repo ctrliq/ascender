@@ -89,7 +89,9 @@ function InstanceDetails({
 
   const [healthCheck, setHealthCheck] = useState<Partial<Instance>>({});
   const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false);
-  const [forks, setForks] = useState<number | undefined>();
+  // Seeded rather than left undefined so the Plural below can take it as it
+  // is: an expression there would change the message id.
+  const [forks, setForks] = useState<number>(0);
 
   const policyRulesDocsLink = `${getDocsBaseUrl(
     config
@@ -275,7 +277,7 @@ function InstanceDetails({
                 </div>
                 <SliderForks data-cy="slider-forks">
                   <div data-cy="number-forks">
-                    <Plural value={forks ?? 0} one="# fork" other="# forks" />
+                    <Plural value={forks} one="# fork" other="# forks" />
                   </div>
                   <Slider
                     areCustomStepsContinuous

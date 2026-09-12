@@ -81,7 +81,9 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
   const config = useConfig();
 
   const { id } = useParams() as { id: string };
-  const [forks, setForks] = useState<number | undefined>();
+  // Seeded rather than left undefined so the Plural below can take it as it
+  // is: an expression there would change the message id.
+  const [forks, setForks] = useState<number>(0);
   const navigate = useNavigate();
   const [healthCheck, setHealthCheck] = useState<Partial<Instance>>({});
   const [showHealthCheckAlert, setShowHealthCheckAlert] = useState(false);
@@ -301,11 +303,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
                     </div>
                     <SliderForks data-cy="slider-forks">
                       <div data-cy="number-forks">
-                        <Plural
-                          value={forks ?? 0}
-                          one="# fork"
-                          other="# forks"
-                        />
+                        <Plural value={forks} one="# fork" other="# forks" />
                       </div>
                       <Slider
                         areCustomStepsContinuous

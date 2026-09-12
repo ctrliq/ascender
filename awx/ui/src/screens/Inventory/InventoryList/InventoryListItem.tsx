@@ -76,7 +76,10 @@ function InventoryListItem({
     if (failedSources > 0) {
       tooltipContent = (
         <Plural
-          value={failedSources}
+          // Not the local above: lingui names this placeholder after the
+          // expression, so a bare identifier would change the message id and
+          // orphan every translation of the string.
+          value={inventory.inventory_sources_with_failures ?? 0}
           one="# source with sync failures."
           other="# sources with sync failures."
         />

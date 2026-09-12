@@ -179,7 +179,7 @@ function AppContainer({ navRouteConfig = [], children }: AppContainerProps) {
         ]}
       >
         <Plural
-          value={sessionCountdown ?? 0}
+          value={sessionCountdown}
           one="You will be logged out in # second due to inactivity"
           other="You will be logged out in # seconds due to inactivity"
         />
