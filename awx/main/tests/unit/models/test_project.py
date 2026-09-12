@@ -1,18 +1,7 @@
-import pytest
-import json
 from awx.main.models import (
     Project,
     ProjectUpdate,
 )
-from django.core.exceptions import ValidationError
-
-
-def test_clean_credential_insights():
-    proj = Project(name="myproj", credential=None, scm_type='insights')
-    with pytest.raises(ValidationError) as e:
-        proj.clean_credential()
-
-    assert json.dumps(str(e.value)) == json.dumps(str(['Insights Credential is required for an Insights Project.']))
 
 
 def test_cache_id_prefers_scm_revision():

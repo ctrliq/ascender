@@ -46,7 +46,7 @@ class SocialAuthCallbackURL(object):
 
     def __call__(self):
         path = reverse('social:complete', args=(self.provider,))
-        return urlparse.urljoin(settings.TOWER_URL_BASE, path)
+        return urlparse.urljoin(settings.ASCENDER_URL_BASE, path)
 
 
 SOCIAL_AUTH_ORGANIZATION_MAP_HELP_TEXT = _('''\
@@ -573,7 +573,7 @@ register(
     help_text=_('Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail.'),
     category=_('Google OAuth2'),
     category_slug='google-oauth2',
-    depends_on=['TOWER_URL_BASE'],
+    depends_on=['ASCENDER_URL_BASE'],
 )
 
 register(
@@ -665,7 +665,7 @@ register(
     help_text=_('Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail.'),
     category=_('GitHub OAuth2'),
     category_slug='github',
-    depends_on=['TOWER_URL_BASE'],
+    depends_on=['ASCENDER_URL_BASE'],
 )
 
 register(
@@ -728,7 +728,7 @@ register(
     help_text=_('Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail.'),
     category=_('GitHub Organization OAuth2'),
     category_slug='github-org',
-    depends_on=['TOWER_URL_BASE'],
+    depends_on=['ASCENDER_URL_BASE'],
 )
 
 register(
@@ -807,7 +807,7 @@ register(
     ),
     category=_('GitHub Team OAuth2'),
     category_slug='github-team',
-    depends_on=['TOWER_URL_BASE'],
+    depends_on=['ASCENDER_URL_BASE'],
 )
 
 register(
@@ -881,7 +881,7 @@ register(
     help_text=_('Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail.'),
     category=_('GitHub Enterprise OAuth2'),
     category_slug='github-enterprise',
-    depends_on=['TOWER_URL_BASE'],
+    depends_on=['ASCENDER_URL_BASE'],
 )
 
 register(
@@ -968,7 +968,7 @@ register(
     help_text=_('Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail.'),
     category=_('GitHub Enterprise Organization OAuth2'),
     category_slug='github-enterprise-org',
-    depends_on=['TOWER_URL_BASE'],
+    depends_on=['ASCENDER_URL_BASE'],
 )
 
 register(
@@ -1071,7 +1071,7 @@ register(
     ),
     category=_('GitHub Enterprise Team OAuth2'),
     category_slug='github-enterprise-team',
-    depends_on=['TOWER_URL_BASE'],
+    depends_on=['ASCENDER_URL_BASE'],
 )
 
 register(
@@ -1169,7 +1169,7 @@ register(
     help_text=_('Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail. '),
     category=_('Azure AD OAuth2'),
     category_slug='azuread-oauth2',
-    depends_on=['TOWER_URL_BASE'],
+    depends_on=['ASCENDER_URL_BASE'],
 )
 
 register(
@@ -1232,7 +1232,7 @@ register(
     help_text=_('Provide this URL as the callback URL for your application as part of your registration process. Refer to the documentation for more detail.'),
     category=_('Azure AD Tenant OAuth2'),
     category_slug='azuread-oauth2-tenant',
-    depends_on=['TOWER_URL_BASE'],
+    depends_on=['ASCENDER_URL_BASE'],
 )
 
 register(
@@ -1347,11 +1347,11 @@ register(
 
 
 def get_saml_metadata_url():
-    return urlparse.urljoin(settings.TOWER_URL_BASE, reverse('sso:saml_metadata'))
+    return urlparse.urljoin(settings.ASCENDER_URL_BASE, reverse('sso:saml_metadata'))
 
 
 def get_saml_entity_id():
-    return settings.TOWER_URL_BASE
+    return settings.ASCENDER_URL_BASE
 
 
 register(
@@ -1377,7 +1377,7 @@ register(
     ),
     category=_('SAML'),
     category_slug='saml',
-    depends_on=['TOWER_URL_BASE'],
+    depends_on=['ASCENDER_URL_BASE'],
 )
 
 register(
@@ -1404,7 +1404,7 @@ register(
     ),
     category=_('SAML'),
     category_slug='saml',
-    depends_on=['TOWER_URL_BASE'],
+    depends_on=['ASCENDER_URL_BASE'],
 )
 
 register(
