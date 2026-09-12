@@ -32,7 +32,7 @@ Clone the [awx-operator](https://github.com/ansible/awx-operator).
 For the following playbooks to work, you will need to:
 
 ```
-$ pip install openshift
+$ pip install kubernetes
 ```
 
 If you are not changing any code in the operator itself, git checkout the latest version from https://github.com/ansible/awx-operator/releases, and then follow the instructions in the awx-operator [README](https://github.com/ansible/awx-operator#basic-install).

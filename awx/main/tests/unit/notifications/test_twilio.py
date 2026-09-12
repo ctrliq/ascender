@@ -12,14 +12,15 @@ class TwilioError(Exception):
 
 
 def test_send_messages():
-    with mock.patch('awx.main.notifications.twilio_backend.Client') as client_mock:
+    with mock.patch('awx.main.notifications.twilio_backend.requests.post') as post_mock:
         backend = twilio_backend.TwilioBackend('account-sid', 'account-token')
         message = EmailMessage('test subject', 'test body', '+15005550006', ['+15005550001', '+15005550002'])
 
         sent_messages = backend.send_messages([message])
 
         assert sent_messages == 2
-        assert client_mock.return_value.messages.create.call_count == 2
+        assert post_mock.call_count == 2
+        assert post_mock.call_args.kwargs['data']['Body'] == 'test subject'
 
 
 def test_send_messages_reports_the_twilio_error():
@@ -29,8 +30,8 @@ def test_send_messages_reports_the_twilio_error():
     reports the failure, so a bare raise would report a RuntimeError about
     there being no active exception instead.
     """
-    with mock.patch('awx.main.notifications.twilio_backend.Client') as client_mock:
-        client_mock.return_value.messages.create.side_effect = TwilioError('is not a valid phone number')
+    with mock.patch('awx.main.notifications.twilio_backend.requests.post') as post_mock:
+        post_mock.side_effect = TwilioError('is not a valid phone number')
         backend = twilio_backend.TwilioBackend('account-sid', 'account-token')
         message = EmailMessage('test subject', 'test body', '+15005550006', ['+15005550009'])
 
@@ -41,8 +42,8 @@ def test_send_messages_reports_the_twilio_error():
 
 
 def test_send_messages_fail_silently():
-    with mock.patch('awx.main.notifications.twilio_backend.Client') as client_mock:
-        client_mock.return_value.messages.create.side_effect = TwilioError('is not a valid phone number')
+    with mock.patch('awx.main.notifications.twilio_backend.requests.post') as post_mock:
+        post_mock.side_effect = TwilioError('is not a valid phone number')
         backend = twilio_backend.TwilioBackend('account-sid', 'account-token', fail_silently=True)
         message = EmailMessage('test subject', 'test body', '+15005550006', ['+15005550009'])
 

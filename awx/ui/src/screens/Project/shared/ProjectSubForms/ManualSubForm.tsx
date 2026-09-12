@@ -1,0 +1,107 @@
+import React from 'react';
+import { useLingui } from '@lingui/react/macro';
+import { useField } from 'formik';
+import {
+  FormGroup,
+  Alert,
+  FormHelperText,
+  HelperText,
+  HelperTextItem,
+} from '@patternfly/react-core';
+import { required } from 'util/validators';
+import AnsibleSelect from 'components/AnsibleSelect';
+import FormField from 'components/FormField';
+import Popover from 'components/Popover';
+import useBrandName from 'hooks/useBrandName';
+import getProjectHelpStrings from '../Project.helptext';
+
+export interface ManualSubFormProps {
+  localPath?: string;
+  /** The directory on the control node the api scans for projects. */
+  project_base_dir?: string;
+  project_local_paths?: string[];
+  [key: string]: unknown;
+}
+
+const ManualSubForm = ({
+  localPath,
+  project_base_dir,
+  project_local_paths,
+}: ManualSubFormProps) => {
+  const { t } = useLingui();
+  const projectHelpStrings = getProjectHelpStrings();
+  const brandName = useBrandName();
+  const localPaths = [...new Set([...(project_local_paths ?? []), localPath])];
+  const options = [
+    {
+      value: '',
+      key: '',
+      label: t`Choose a Playbook Directory`,
+    },
+    ...localPaths
+      .filter((path) => path)
+      .map((path) => ({
+        value: path as string,
+        key: path as string,
+        label: path as string,
+      })),
+  ];
+  const [pathField, pathMeta, pathHelpers] = useField({
+    name: 'local_path',
+    validate: required(t`Select a value for this field`),
+  });
+
+  return (
+    <>
+      {options.length === 1 && (
+        <Alert
+          title={t`WARNING: `}
+          css="grid-column: 1/-1"
+          variant="warning"
+          isInline
+          ouiaId="project-manual-subform-alert"
+        >
+          {t`
+            There are no available playbook directories in ${project_base_dir}.
+            Either that directory is empty, or all of the contents are already
+            assigned to other projects. Create a new directory there and make
+            sure the playbook files can be read by the "awx" system user,
+            or have ${brandName} directly retrieve your playbooks from
+            source control using the Source Control Type option above.`}
+        </Alert>
+      )}
+      <FormField
+        id="project-base-dir"
+        label={t`Project Base Path`}
+        name="base_dir"
+        type="text"
+        isReadOnly
+        tooltip={projectHelpStrings.projectBasePath(brandName)}
+      />
+      <FormGroup
+        fieldId="project-local-path"
+        isRequired
+        label={t`Playbook Directory`}
+        labelHelp={<Popover content={projectHelpStrings.projectLocalPath} />}
+      >
+        <AnsibleSelect
+          {...pathField}
+          id="local_path"
+          data={options}
+          onChange={(event, value) => {
+            pathHelpers.setValue(value);
+          }}
+        />
+        {pathMeta.touched && pathMeta.error && (
+          <FormHelperText>
+            <HelperText>
+              <HelperTextItem variant="error">{pathMeta.error}</HelperTextItem>
+            </HelperText>
+          </FormHelperText>
+        )}
+      </FormGroup>
+    </>
+  );
+};
+
+export default ManualSubForm;
