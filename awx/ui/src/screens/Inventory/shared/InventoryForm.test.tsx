@@ -1,3 +1,4 @@
+import type { AnyInventory } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { LabelsAPI, OrganizationsAPI, InstanceGroupsAPI } from 'api';
@@ -48,7 +49,7 @@ const inventory = {
   total_inventory_sources: 0,
   inventory_sources_with_failures: 0,
   pending_deletion: false,
-};
+} as unknown as AnyInventory;
 
 const instanceGroups = [
   { name: 'Foo', id: 1 },
@@ -64,7 +65,6 @@ async function renderForm(props = {}) {
       onSubmit={onSubmit}
       inventory={inventory}
       instanceGroups={instanceGroups}
-      credentialTypeId={14}
       {...props}
     />
   );
@@ -78,7 +78,7 @@ describe('<InventoryForm />', () => {
   beforeEach(() => {
     // LabelSelect calls LabelsAPI.read for its options
     vi.mocked(LabelsAPI.read).mockResolvedValue({
-      data: { results: inventory.summary_fields.labels.results },
+      data: { results: inventory.summary_fields.labels?.results },
     } as unknown as ResponseOf<typeof LabelsAPI.read>);
     // OrganizationLookup reads orgs + options
     vi.mocked(OrganizationsAPI.read).mockResolvedValue({

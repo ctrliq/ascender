@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InventorySource } from 'types/api';
 import React, { useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -10,9 +10,9 @@ import ErrorDetail from 'components/ErrorDetail/ErrorDetail';
 import { InventorySourcesAPI } from 'api';
 
 export interface InventorySourceSyncButtonProps {
-  source?: Untyped;
+  source?: Partial<InventorySource>;
+  /** Renders the icon-only button a list row uses, rather than a labelled one. */
   icon?: boolean;
-  [key: string]: unknown;
 }
 
 function InventorySourceSyncButton({
@@ -28,7 +28,7 @@ function InventorySourceSyncButton({
     useCallback(async () => {
       const {
         data: { status },
-      } = await InventorySourcesAPI.createSyncStart(source.id);
+      } = await InventorySourcesAPI.createSyncStart(source.id as number);
 
       return status;
     }, [source.id]),

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -12,7 +11,11 @@ import { FormFullWidthLayout, FormCheckboxLayout } from 'components/FormLayout';
 import Popover from 'components/Popover';
 import getHelpText from '../Inventory.helptext';
 
-export const SourceVarsField = ({ popoverContent }: Untyped) => {
+export const SourceVarsField = ({
+  popoverContent,
+}: {
+  popoverContent?: React.ReactNode;
+}) => {
   const { t } = useLingui();
   const helpText = getHelpText();
   return (

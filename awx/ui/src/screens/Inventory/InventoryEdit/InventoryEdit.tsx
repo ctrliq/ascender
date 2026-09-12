@@ -1,4 +1,4 @@
-import type { AnyInventory, Untyped } from 'types/api';
+import type { AnyInventory, SummaryFieldRef } from 'types/api';
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -8,6 +8,7 @@ import { getAddedAndRemoved } from 'util/lists';
 import ContentLoading from 'components/ContentLoading';
 import useIsMounted from 'hooks/useIsMounted';
 import InventoryForm from '../shared/InventoryForm';
+import type { InventoryFormValues } from '../shared/InventoryForm';
 
 export interface InventoryEditProps {
   inventory: AnyInventory;
@@ -16,7 +17,9 @@ export interface InventoryEditProps {
 
 function InventoryEdit({ inventory }: InventoryEditProps) {
   const [error, setError] = useState<unknown>(null);
-  const [associatedInstanceGroups, setInstanceGroups] = useState<Untyped>(null);
+  const [associatedInstanceGroups, setInstanceGroups] = useState<
+    SummaryFieldRef[]
+  >([]);
   const [contentLoading, setContentLoading] = useState(true);
   const location = useLocation();
   const navigate = useNavigate();
@@ -53,11 +56,11 @@ function InventoryEdit({ inventory }: InventoryEditProps) {
     navigate(`${url}`);
   };
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: InventoryFormValues) => {
     const { instanceGroups, organization, ...remainingValues } = values;
     try {
       await InventoriesAPI.update(inventory.id, {
-        organization: organization.id,
+        organization: organization?.id,
         ...remainingValues,
       });
       await InventoriesAPI.orderInstanceGroups(
@@ -65,7 +68,7 @@ function InventoryEdit({ inventory }: InventoryEditProps) {
         instanceGroups,
         associatedInstanceGroups
       );
-      await submitLabels(values.organization.id, values.labels);
+      await submitLabels(values.organization?.id, values.labels);
 
       const url =
         location.pathname.search('smart') > -1
@@ -77,17 +80,27 @@ function InventoryEdit({ inventory }: InventoryEditProps) {
     }
   };
 
-  const submitLabels = async (orgId: Untyped, labels = []) => {
+  const submitLabels = async (
+    orgId: number | undefined,
+    labels: SummaryFieldRef[] = []
+  ) => {
     const { added, removed } = getAddedAndRemoved(
       inventory.summary_fields.labels?.results,
       labels
     );
 
     const disassociationPromises = removed.map((label) =>
-      InventoriesAPI.disassociateLabel(inventory.id, label)
+      InventoriesAPI.disassociateLabel(
+        inventory.id,
+        label as { id: number; name: string }
+      )
     );
     const associationPromises = added.map((label) =>
-      InventoriesAPI.associateLabel(inventory.id, label, orgId)
+      InventoriesAPI.associateLabel(
+        inventory.id,
+        label as { id: number; name: string },
+        orgId as number
+      )
     );
 
     const results = await Promise.all([

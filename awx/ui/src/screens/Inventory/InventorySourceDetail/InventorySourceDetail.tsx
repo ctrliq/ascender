@@ -129,7 +129,7 @@ function InventorySourceDetail({
         InventorySourcesAPI.destroyGroups(id),
         InventorySourcesAPI.destroy(id),
       ]);
-      navigate(`/inventories/inventory/${inventory.id}/sources`);
+      navigate(`/inventories/inventory/${inventory?.id}/sources`);
     } catch (err) {
       if (isMounted.current) {
         setDeletionError(err);
@@ -220,7 +220,7 @@ function InventorySourceDetail({
             job && (
               <Tooltip
                 position="top"
-                content={generateLastJobTooltip(job)}
+                content={generateLastJobTooltip(job as UnifiedJob)}
                 key={job.id}
               >
                 <Link to={`/jobs/inventory/${job.id}`}>
@@ -231,7 +231,7 @@ function InventorySourceDetail({
           }
         />
         <Detail label={t`Description`} value={description} />
-        <Detail label={t`Source`} value={sourceChoices?.[source]} />
+        <Detail label={t`Source`} value={sourceChoices?.[source ?? '']} />
         {organization && (
           <Detail
             label={t`Organization`}
@@ -330,7 +330,7 @@ function InventorySourceDetail({
             label={t`Source variables`}
             rows={4}
             value={source_vars}
-            helpText={helpText.sourceVars(docsBaseUrl, source)}
+            helpText={helpText.sourceVars(docsBaseUrl, source ?? '')}
             name="source_vars"
             dataCy="inventory-source-detail-variables"
           />
@@ -348,15 +348,17 @@ function InventorySourceDetail({
             ouiaId="inventory-source-detail-edit-button"
             component={Link}
             aria-label={t`edit`}
-            to={`/inventories/inventory/${inventory.id}/sources/${id}/edit`}
+            to={`/inventories/inventory/${inventory?.id}/sources/${id}/edit`}
           >
             {t`Edit`}
           </Button>
         )}
         {user_capabilities?.start &&
-          (['new', 'running', 'pending', 'waiting'].includes(job?.status) ? (
+          (['new', 'running', 'pending', 'waiting'].includes(
+            job?.status ?? ''
+          ) ? (
             <JobCancelButton
-              job={{ id: job.id, type: 'inventory_update' }}
+              job={{ id: job!.id, type: 'inventory_update' }}
               errorTitle={t`Inventory Source Sync Error`}
               title={t`Cancel Inventory Source Sync`}
               errorMessage={t`Failed to cancel Inventory Source Sync`}

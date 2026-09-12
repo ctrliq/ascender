@@ -1,3 +1,4 @@
+import type { InventorySource } from 'types/api';
 import React from 'react';
 import { act, waitFor } from '@testing-library/react';
 import WS from 'vitest-websocket-mock';
@@ -11,9 +12,12 @@ vi.mock('../../../api/models/InventorySources');
 function Test({
   inventorySource,
 }: {
-  inventorySource: Parameters<typeof useWsInventorySourceDetails>[0];
+  // The fixtures carry only the id the hook matches messages against.
+  inventorySource: { id: number };
 }) {
-  const synced = useWsInventorySourceDetails(inventorySource);
+  const synced = useWsInventorySourceDetails(
+    inventorySource as InventorySource
+  );
   // expose the hook result as JSON so the test can assert on it via the DOM
   return <div data-testid="result">{JSON.stringify(synced)}</div>;
 }

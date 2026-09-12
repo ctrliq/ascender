@@ -1,3 +1,4 @@
+import type { InventorySource } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { InventorySourcesAPI } from 'api';
@@ -7,7 +8,11 @@ import InventorySourceSyncButton from './InventorySourceSyncButton';
 
 vi.mock('../../../api');
 
-const source = { id: 1, name: 'Foo', source: 'Source Bar' };
+const source = {
+  id: 1,
+  name: 'Foo',
+  source: 'Source Bar',
+} as unknown as InventorySource;
 
 describe('<InventorySourceSyncButton />', () => {
   afterEach(() => {

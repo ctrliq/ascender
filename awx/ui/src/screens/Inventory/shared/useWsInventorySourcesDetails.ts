@@ -1,9 +1,22 @@
-import type { Untyped } from 'types/api';
+import type { InventorySource } from 'types/api';
+import type { WebsocketMessage } from 'hooks/useWebsocket';
 import { useState, useEffect } from 'react';
 import useWebsocket from 'hooks/useWebsocket';
 import { InventorySourcesAPI } from 'api';
 
-export default function useWsInventorySourcesDetails(initialSource: Untyped) {
+/**
+ * Keeps one inventory source in step with the websocket.
+ *
+ * Args:
+ *   initialSource: the source the screen last fetched.
+ *
+ * Returns:
+ *   The same source, with the update it is running reported as it goes and
+ *   re-read in full once that update settles.
+ */
+export default function useWsInventorySourcesDetails(
+  initialSource: InventorySource
+) {
   const [source, setSource] = useState(initialSource);
   const lastMessage = useWebsocket({
     jobs: ['status_changed'],
@@ -44,13 +57,16 @@ export default function useWsInventorySourcesDetails(initialSource: Untyped) {
   return source;
 }
 
-function updateSource(source: Untyped, message: Untyped) {
+function updateSource(
+  source: InventorySource,
+  message: WebsocketMessage
+): InventorySource {
   return {
     ...source,
     summary_fields: {
       ...source.summary_fields,
       current_job: {
-        id: message.unified_job_id,
+        id: message.unified_job_id as number,
         status: message.status,
         finished: message.finished,
       },

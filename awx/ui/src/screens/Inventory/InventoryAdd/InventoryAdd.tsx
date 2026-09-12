@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { PageSection, Card } from '@patternfly/react-core';
@@ -6,6 +6,7 @@ import { CardBody } from 'components/Card';
 
 import { InventoriesAPI } from 'api';
 import InventoryForm from '../shared/InventoryForm';
+import type { InventoryFormValues } from '../shared/InventoryForm';
 
 function InventoryAdd() {
   const [error, setError] = useState<unknown>(null);
@@ -17,24 +18,28 @@ function InventoryAdd() {
   };
 
   async function submitLabels(
-    inventoryId: Untyped,
-    orgId: Untyped,
-    labels = []
+    inventoryId: number,
+    orgId: number | undefined,
+    labels: SummaryFieldRef[] = []
   ) {
     const associationPromises = labels.map((label) =>
-      InventoriesAPI.associateLabel(inventoryId, label, orgId)
+      InventoriesAPI.associateLabel(
+        inventoryId,
+        label as { id: number; name: string },
+        orgId as number
+      )
     );
 
     return Promise.all([...associationPromises]);
   }
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: InventoryFormValues) => {
     const { instanceGroups, organization, ...remainingValues } = values;
     try {
       const {
         data: { id: inventoryId },
       } = await InventoriesAPI.create({
-        organization: organization.id,
+        organization: organization?.id,
         ...remainingValues,
       });
       /* eslint-disable no-await-in-loop, no-restricted-syntax */

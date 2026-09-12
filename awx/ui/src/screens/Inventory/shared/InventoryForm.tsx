@@ -1,4 +1,4 @@
-import type { AnyInventory, SummaryFieldRef, Untyped } from 'types/api';
+import type { AnyInventory, SummaryFieldRef } from 'types/api';
 import React, { useCallback, useState } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
@@ -23,8 +23,7 @@ import { useLingui } from '@lingui/react/macro';
 import useHelpText from './Inventory.helptext';
 
 export interface InventoryFormFieldsProps {
-  inventory: AnyInventory;
-  [key: string]: unknown;
+  inventory: Partial<AnyInventory>;
 }
 
 function InventoryFormFields({ inventory }: InventoryFormFieldsProps) {
@@ -125,23 +124,46 @@ function InventoryFormFields({ inventory }: InventoryFormFieldsProps) {
   );
 }
 
+/** The inventory as its own form holds it, before it is saved. */
+export interface InventoryFormValues {
+  name: string;
+  description: string;
+  variables: string;
+  organization: SummaryFieldRef | null;
+  instanceGroups: SummaryFieldRef[];
+  labels: SummaryFieldRef[];
+  prevent_instance_group_fallback: boolean;
+  allow_deletes_while_in_use: boolean;
+}
+
+export interface InventoryFormProps {
+  /** Absent on the add screen, which starts the form empty. */
+  inventory?: Partial<AnyInventory>;
+  onSubmit: (values: InventoryFormValues) => void;
+  onCancel: () => void;
+  submitError?: unknown;
+  /**
+   * The groups the inventory is already in, which the api answers separately
+   * and the form associates one request at a time.
+   */
+  instanceGroups?: SummaryFieldRef[];
+}
+
 function InventoryForm({
   inventory = {},
   onSubmit,
   onCancel,
   submitError = null,
   instanceGroups = [],
-  ...rest
-}: Untyped) {
-  const initialValues = {
+}: InventoryFormProps) {
+  const initialValues: InventoryFormValues = {
     name: inventory.name || '',
     description: inventory.description || '',
     variables: inventory.variables || '---',
-    organization:
-      (inventory.summary_fields && inventory.summary_fields.organization) ||
-      null,
+    organization: inventory.summary_fields?.organization || null,
     instanceGroups: instanceGroups || [],
-    labels: inventory?.summary_fields?.labels?.results || [],
+    labels: (inventory?.summary_fields?.labels?.results ||
+      []) as SummaryFieldRef[],
     prevent_instance_group_fallback:
       inventory.prevent_instance_group_fallback || false,
     allow_deletes_while_in_use: inventory.allow_deletes_while_in_use || false,
@@ -156,7 +178,7 @@ function InventoryForm({
       {(formik) => (
         <Form autoComplete="off" onSubmit={formik.handleSubmit}>
           <FormColumnLayout>
-            <InventoryFormFields {...rest} inventory={inventory} />
+            <InventoryFormFields inventory={inventory} />
             <FormSubmitError error={submitError} />
             <FormActionGroup
               onCancel={onCancel}

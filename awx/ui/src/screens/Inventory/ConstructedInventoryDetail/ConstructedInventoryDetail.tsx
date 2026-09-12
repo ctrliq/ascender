@@ -1,4 +1,4 @@
-import type { SummaryFieldRef, Untyped } from 'types/api';
+import type { InventorySource, SummaryFieldRef, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -116,7 +116,9 @@ function ConstructedInventoryDetail({ inventory }: Untyped) {
     fetchRelatedDetails();
   }, [fetchRelatedDetails]);
 
-  const wsInventorySource = useWsInventorySourcesDetails(inventorySource);
+  const wsInventorySource = useWsInventorySourcesDetails(
+    inventorySource as InventorySource
+  );
   const inventorySourceSyncJob =
     wsInventorySource.summary_fields?.current_job ||
     wsInventorySource.summary_fields?.last_job ||
@@ -332,10 +334,10 @@ function ConstructedInventoryDetail({ inventory }: Untyped) {
         )}
         {inventorySource?.summary_fields?.user_capabilities?.start &&
           (['new', 'running', 'pending', 'waiting'].includes(
-            inventorySourceSyncJob?.status
+            (inventorySourceSyncJob?.status as string) ?? ''
           ) ? (
             <JobCancelButton
-              job={{ id: inventorySourceSyncJob.id, type: 'inventory_update' }}
+              job={{ id: inventorySourceSyncJob!.id, type: 'inventory_update' }}
               errorTitle={t`Constructed Inventory Source Sync Error`}
               title={t`Cancel Constructed Inventory Source Sync`}
               errorMessage={t`Failed to cancel Constructed Inventory Source Sync`}
