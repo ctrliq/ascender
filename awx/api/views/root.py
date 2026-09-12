@@ -18,7 +18,6 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
-import requests
 
 from awx import MODE
 from awx.api.generics import APIView
@@ -30,7 +29,6 @@ from awx.main.utils.licensing import validate_entitlement_manifest
 from awx.api.versioning import reverse, drf_reverse
 from awx.main.constants import PRIVILEGE_ESCALATION_METHODS
 from awx.main.models import Project, Organization, Instance, InstanceGroup
-from awx.main.utils import set_environ
 from awx.main.utils.licensing import get_licenser
 
 logger = logging.getLogger('awx.api.views.root')
@@ -178,89 +176,6 @@ class ApiV2PingView(APIView):
             )
             response['instance_groups'] = sorted(response['instance_groups'], key=lambda x: x['name'].lower())
         return Response(response)
-
-
-class ApiV2SubscriptionView(APIView):
-    permission_classes = (IsAuthenticated,)
-    name = _('Subscriptions')
-    swagger_topic = 'System Configuration'
-
-    def check_permissions(self, request):
-        super(ApiV2SubscriptionView, self).check_permissions(request)
-        if not request.user.is_superuser and request.method.lower() not in {'options', 'head'}:
-            self.permission_denied(request)  # Raises PermissionDenied exception.
-
-    def post(self, request):
-        data = request.data.copy()
-        if data.get('subscriptions_password') == '$encrypted$':
-            data['subscriptions_password'] = settings.SUBSCRIPTIONS_PASSWORD
-        try:
-            user, pw = data.get('subscriptions_username'), data.get('subscriptions_password')
-            with set_environ(**settings.AWX_TASK_ENV):
-                validated = get_licenser().validate_rh(user, pw)
-            if user:
-                settings.SUBSCRIPTIONS_USERNAME = data['subscriptions_username']
-            if pw:
-                settings.SUBSCRIPTIONS_PASSWORD = data['subscriptions_password']
-        except Exception as exc:
-            msg = _("Invalid Subscription")
-            if isinstance(exc, requests.exceptions.HTTPError) and getattr(getattr(exc, 'response', None), 'status_code', None) == 401:
-                msg = _("The provided credentials are invalid (HTTP 401).")
-            elif isinstance(exc, requests.exceptions.ProxyError):
-                msg = _("Unable to connect to proxy server.")
-            elif isinstance(exc, requests.exceptions.ConnectionError):
-                msg = _("Could not connect to subscription service.")
-            elif isinstance(exc, (ValueError, OSError)) and exc.args:
-                msg = exc.args[0]
-            else:
-                logger.exception(smart_str("Invalid subscription submitted."), extra=dict(actor=request.user.username))
-            return Response({"error": msg}, status=status.HTTP_400_BAD_REQUEST)
-
-        return Response(validated)
-
-
-class ApiV2AttachView(APIView):
-    permission_classes = (IsAuthenticated,)
-    name = _('Attach Subscription')
-    swagger_topic = 'System Configuration'
-
-    def check_permissions(self, request):
-        super(ApiV2AttachView, self).check_permissions(request)
-        if not request.user.is_superuser and request.method.lower() not in {'options', 'head'}:
-            self.permission_denied(request)  # Raises PermissionDenied exception.
-
-    def post(self, request):
-        data = request.data.copy()
-        pool_id = data.get('pool_id', None)
-        if not pool_id:
-            return Response({"error": _("No subscription pool ID provided.")}, status=status.HTTP_400_BAD_REQUEST)
-        user = getattr(settings, 'SUBSCRIPTIONS_USERNAME', None)
-        pw = getattr(settings, 'SUBSCRIPTIONS_PASSWORD', None)
-        if pool_id and user and pw:
-            data = request.data.copy()
-            try:
-                with set_environ(**settings.AWX_TASK_ENV):
-                    validated = get_licenser().validate_rh(user, pw)
-            except Exception as exc:
-                msg = _("Invalid Subscription")
-                if isinstance(exc, requests.exceptions.HTTPError) and getattr(getattr(exc, 'response', None), 'status_code', None) == 401:
-                    msg = _("The provided credentials are invalid (HTTP 401).")
-                elif isinstance(exc, requests.exceptions.ProxyError):
-                    msg = _("Unable to connect to proxy server.")
-                elif isinstance(exc, requests.exceptions.ConnectionError):
-                    msg = _("Could not connect to subscription service.")
-                elif isinstance(exc, (ValueError, OSError)) and exc.args:
-                    msg = exc.args[0]
-                else:
-                    logger.exception(smart_str("Invalid subscription submitted."), extra=dict(actor=request.user.username))
-                return Response({"error": msg}, status=status.HTTP_400_BAD_REQUEST)
-        for sub in validated:
-            if sub['pool_id'] == pool_id:
-                sub['valid_key'] = True
-                settings.LICENSE = sub
-                return Response(sub)
-
-        return Response({"error": _("Error processing subscription metadata.")}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ApiV2ConfigView(APIView):

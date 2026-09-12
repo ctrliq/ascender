@@ -11,8 +11,6 @@ from awx.api.views.root import (
     ApiV2RootView,
     ApiV2PingView,
     ApiV2ConfigView,
-    ApiV2SubscriptionView,
-    ApiV2AttachView,
 )
 from awx.api.views import (
     AuthView,
@@ -105,8 +103,6 @@ v2_urls = [
     path('metrics/', MetricsView.as_view(), name='metrics_view'),
     path('ping/', ApiV2PingView.as_view(), name='api_v2_ping_view'),
     path('config/', ApiV2ConfigView.as_view(), name='api_v2_config_view'),
-    path('config/subscriptions/', ApiV2SubscriptionView.as_view(), name='api_v2_subscription_view'),
-    path('config/attach/', ApiV2AttachView.as_view(), name='api_v2_attach_view'),
     path('auth/', AuthView.as_view()),
     path('me/', UserMeList.as_view(), name='user_me_list'),
     path('dashboard/', DashboardView.as_view(), name='dashboard_view'),
