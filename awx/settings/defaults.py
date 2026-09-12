@@ -951,7 +951,6 @@ DISABLE_LOCAL_AUTH = False
 # Note: This setting may be overridden by database settings.
 TOWER_URL_BASE = "https://ascenderhost"
 
-INSIGHTS_URL_BASE = "https://example.org"
 INSIGHTS_AGENT_MIME = 'application/example'
 # See https://github.com/ansible/awx-facts-playbooks
 INSIGHTS_SYSTEM_ID_FILE = '/etc/redhat-access-insights/machine-id'
