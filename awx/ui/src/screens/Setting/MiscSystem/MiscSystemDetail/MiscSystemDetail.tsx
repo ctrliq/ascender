@@ -53,7 +53,7 @@ function MiscSystemDetail() {
         'ORG_ADMINS_CAN_SEE_ALL_USERS',
         'INSTALL_UUID',
         'REMOTE_HOST_HEADERS',
-        'TOWER_URL_BASE',
+        'ASCENDER_URL_BASE',
         'DEFAULT_EXECUTION_ENVIRONMENT',
         'PROXY_IP_ALLOWED_LIST',
         'CSRF_TRUSTED_ORIGINS'

@@ -1067,6 +1067,11 @@ ManagedCredentialType(
             'CONTROLLER_PASSWORD': '{{password}}',
             'CONTROLLER_VERIFY_SSL': '{{verify_ssl}}',
             'CONTROLLER_OAUTH_TOKEN': '{{oauth_token}}',
+            'ASCENDER_HOST': '{{host}}',
+            'ASCENDER_USERNAME': '{{username}}',
+            'ASCENDER_PASSWORD': '{{password}}',
+            'ASCENDER_VERIFY_SSL': '{{verify_ssl}}',
+            'ASCENDER_OAUTH_TOKEN': '{{oauth_token}}',
         }
     },
 )
