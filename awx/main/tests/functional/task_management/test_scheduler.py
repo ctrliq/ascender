@@ -809,3 +809,37 @@ def test_dependency_failure_keeps_modified_by(hybrid_instance, job_template_fact
     assert job.status == 'failed'
     assert job.job_explanation.startswith('Previous Task Failed')
     assert job.modified_by == alice
+
+
+@pytest.mark.django_db
+def test_active_inventory_updates_do_not_lazy_load_inventory_source(controlplane_instance_group, inventory_source_factory):
+    """Placing active InventoryUpdates in the dependency graph must not dereference inventory_source.
+
+    Running (and newly started) inventory updates are added to the graph every cycle; if the graph
+    read job.inventory_source.inventory_id the cycle would issue one related-object query per
+    active update, so the query count would grow with their number.
+    """
+    counter = iter(range(1000))
+
+    def make_running(n):
+        for _ in range(n):
+            source = inventory_source_factory(f'src-{next(counter)}')
+            update = source.create_unified_job()
+            update.status = 'running'
+            update.dependencies_processed = True
+            update.save()
+
+    def run_and_count():
+        tm = TaskManager()
+        with CaptureQueriesContext(connection) as ctx:
+            tm.schedule()
+        return len(ctx.captured_queries), tm.get_local_metrics()['running_processed']
+
+    make_running(1)
+    run_and_count()  # warm per-process caches
+    queries_one, running_one = run_and_count()
+    make_running(3)
+    queries_four, running_four = run_and_count()
+
+    assert (running_one, running_four) == (1, 4)
+    assert queries_four == queries_one

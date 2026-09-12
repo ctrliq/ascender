@@ -459,6 +459,7 @@ class TaskManager(TaskBase):
         'Job___job_template',
         'Job___allow_simultaneous',
         'ProjectUpdate___project',
+        'InventoryUpdate___inventory',
         'InventoryUpdate___inventory_source',
         'AdHocCommand___inventory',
         'WorkflowJob___workflow_job_template',
