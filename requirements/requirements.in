@@ -56,7 +56,6 @@ sqlparse>=0.6.0   # CVE-2026-59893 CVE-2026-54284 CVE-2026-71491 CVE-2026-59894;
 requests>=2.33.0 # CVE-2026-25645
 slack-sdk
 tacacs-plus
-twilio
 twisted[tls]>=26.4.0   # CVE-2026-42304
 urllib3>=2.7.0 # CVE-2026-44431 CVE-2026-44432
 uWSGI>=2.0.22 # CVE-2023-27522
