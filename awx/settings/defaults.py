@@ -1302,6 +1302,8 @@ ANSIBLE_BASE_REST_FILTERS_RESERVED_NAMES = (
     'no_truncate',
     'limit',
     'validate',
+    # asks for fewer summary fields rather than filtering on one
+    'summary_fields',
     'user_ansible_id',
     'team_ansible_id',
     'object_ansible_id',
