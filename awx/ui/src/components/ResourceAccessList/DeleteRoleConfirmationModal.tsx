@@ -1,0 +1,67 @@
+import React from 'react';
+import { Button } from '@patternfly/react-core';
+import { useLingui } from '@lingui/react/macro';
+import type { AccessRole } from './ResourceAccessListItem';
+
+import AlertModal from '../AlertModal';
+
+export interface DeleteRoleConfirmationModalProps {
+  role: AccessRole;
+  username?: React.ReactNode;
+  onCancel: () => void;
+  onConfirm: () => void;
+  [key: string]: unknown;
+}
+
+function DeleteRoleConfirmationModal({
+  role,
+  username = '',
+  onCancel,
+  onConfirm,
+}: DeleteRoleConfirmationModalProps) {
+  const { t } = useLingui();
+  const isTeamRole = typeof role.team_id !== 'undefined';
+  const title = isTeamRole ? t`Remove Team Access` : t`Remove User Access`;
+  return (
+    <AlertModal
+      variant="danger"
+      title={title}
+      isOpen
+      onClose={onCancel}
+      actions={[
+        <Button
+          ouiaId="delete-role-modal-delete-button"
+          key="delete"
+          variant="danger"
+          aria-label={t`Confirm delete`}
+          onClick={onConfirm}
+        >
+          {t`Delete`}
+        </Button>,
+        <Button
+          ouiaId="delete-role-modal-cancel-button"
+          key="cancel"
+          variant="link"
+          onClick={onCancel}
+        >
+          {t`Cancel`}
+        </Button>,
+      ]}
+    >
+      {isTeamRole ? (
+        <>
+          {t`Are you sure you want to remove ${role.name} access from ${role.team_name}?  Doing so affects all members of the team.`}
+          <br />
+          <br />
+          {t`If you only want to remove access for this particular user, please remove them from the team.`}
+        </>
+      ) : (
+        <>
+          {t`Are you sure you want to remove ${role.name} access from ${username}?`}
+        </>
+      )}
+    </AlertModal>
+  );
+}
+
+export default DeleteRoleConfirmationModal;
