@@ -82,6 +82,11 @@ export default defineConfig({
   build: {
     outDir: 'build',
     emptyOutDir: true,
+    // Stated rather than left to Vite's default, because Vite does not read
+    // the browserslist policy in package.json the way the ejected build did.
+    // This is that default written down, and package.json now says the same
+    // thing for anything that does read browserslist.
+    target: ['chrome111', 'edge111', 'firefox114', 'safari16.4', 'ios16.4'],
     // Kept off, as GENERATE_SOURCEMAP=false did under the ejected scripts.
     sourcemap: false,
     rollupOptions: {
@@ -113,6 +118,12 @@ export default defineConfig({
     },
   },
   server: {
+    // The ejected dev server bound to 0.0.0.0 and allowed any Host header.
+    // The UI image starts this one and publishes the port, so the browser
+    // reaching it is not on the loopback interface Vite listens on by
+    // default, and does not arrive under a name Vite knows.
+    host: process.env.HOST || '0.0.0.0',
+    allowedHosts: true,
     port: 3001,
     // Off because the API is reached through the proxy below, on the same
     // origin, so there is nothing here for CORS to permit. Left on, Vite

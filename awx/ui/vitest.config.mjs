@@ -27,7 +27,13 @@ export default defineConfig({
     // was going: it took the environment share of the run from 26% to 2%, and
     // the whole suite from 16m to 5m39s. Module state stays isolated per file,
     // unlike isolate: false, which is 37% faster still and fails 102 tests.
-    pool: 'vmThreads',
+    //
+    // Forks rather than threads, because the VM contexts are what this costs
+    // memory in and a thread pool keeps them all in one process heap: on a
+    // twelve core machine that run reached 20GB and died in V8's own
+    // allocator, four runs in five, with the machine itself far from full.
+    // Each fork brings its own heap, and the run takes the same time.
+    pool: 'vmForks',
     environment: 'jsdom',
     // jest served pages from http://localhost/, where jsdom's own default is
     // http://localhost:3000/, and that is what window.location reads.
