@@ -5,7 +5,7 @@ import pytest
 from django.http import QueryDict
 
 from awx.api.versioning import reverse
-from awx.api.views import _approval_vote_comment
+from awx.api.views.workflow import _approval_vote_comment
 from awx.main.models import WorkflowJob, WorkflowJobTemplate, WorkflowApproval, WorkflowApprovalVote
 from awx.main.scheduler import TaskManager, DependencyManager, WorkflowManager
 
