@@ -776,7 +776,12 @@ export interface ChildrenSummary {
  * The related endpoints the node view modal reads are attached here too, since
  * it puts what it fetched back onto the node.
  */
-export type NodeTemplate = Partial<AnyUnifiedJobTemplate> & {
+export type NodeTemplate = Omit<Partial<AnyUnifiedJobTemplate>, 'job_type'> & {
+  /**
+   * Wider than a job template's: a node can run a system job template, whose
+   * job_type names a cleanup task rather than a run or a check.
+   */
+  job_type?: string | null;
   instance_groups?: SummaryFieldRef[];
   unified_job_type?: string;
   /** A system job node's own prompt values, which is where days_to_keep sits. */

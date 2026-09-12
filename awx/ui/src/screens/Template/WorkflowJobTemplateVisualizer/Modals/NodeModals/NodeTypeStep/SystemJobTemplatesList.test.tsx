@@ -1,3 +1,4 @@
+import type { NodeTemplate } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import type { ResponseOf } from '../../../../../../../testUtils/responseOf';
@@ -34,7 +35,7 @@ const nodeResource = {
   status: 'ok',
   execution_environment: null,
   job_type: 'cleanup_jobs',
-};
+} as unknown as NodeTemplate;
 const onUpdateNodeResource = vi.fn();
 
 describe('SystemJobTemplatesList', () => {

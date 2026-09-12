@@ -1,19 +1,21 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { render, act } from '@testing-library/react';
+import type { Expandable } from './useExpanded';
 import useExpanded from './useExpanded';
 
 const array = [{ id: '1' }, { id: '2' }, { id: '3' }];
 
-const result: { current: Untyped } = { current: null };
+const result: { current: ReturnType<typeof useExpanded> } = {
+  current: null as unknown as ReturnType<typeof useExpanded>,
+};
 const latest = () => result.current;
 
-const TestHook = ({ list }: Untyped) => {
+const TestHook = ({ list }: { list?: Expandable[] }) => {
   result.current = useExpanded(list);
   return null;
 };
 
-const testHook = (list?: Untyped) => {
+const testHook = (list?: Expandable[]) => {
   render(<TestHook list={list} />);
 };
 
@@ -30,12 +32,12 @@ describe('useExpanded hook', () => {
     testHook();
 
     act(() => {
-      latest().handleExpand(array[0]);
+      latest().handleExpand(array[0] as Expandable);
     });
     expect(latest().expanded).toEqual([array[0]]);
 
     act(() => {
-      latest().handleExpand(array[0]);
+      latest().handleExpand(array[0] as Expandable);
     });
     expect(latest().expanded).toEqual([]);
   });
@@ -44,16 +46,16 @@ describe('useExpanded hook', () => {
     testHook(array);
 
     act(() => {
-      latest().handleExpand(array[0]);
+      latest().handleExpand(array[0] as Expandable);
     });
     expect(latest().expanded).toEqual([array[0]]);
     expect(latest().isAllExpanded).toEqual(false);
 
     act(() => {
-      latest().handleExpand(array[1]);
+      latest().handleExpand(array[1] as Expandable);
     });
     act(() => {
-      latest().handleExpand(array[2]);
+      latest().handleExpand(array[2] as Expandable);
     });
     expect(latest().expanded).toEqual(array);
     expect(latest().isAllExpanded).toEqual(true);

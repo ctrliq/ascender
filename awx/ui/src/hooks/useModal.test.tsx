@@ -3,7 +3,9 @@ import React from 'react';
 import { render, act } from '@testing-library/react';
 import useModal from './useModal';
 
-const result: { current: Untyped } = { current: null };
+const result: { current: ReturnType<typeof useModal> } = {
+  current: null as unknown as ReturnType<typeof useModal>,
+};
 const latest = () => result.current;
 
 const TestHook = ({ initialValue }: Untyped) => {

@@ -1,3 +1,4 @@
+import type { NodeTemplate } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { WorkflowJobTemplatesAPI } from 'api';
@@ -11,7 +12,7 @@ const nodeResource = {
   id: 1,
   name: 'Test Workflow Job Template',
   unified_job_type: 'workflow_job',
-};
+} as unknown as NodeTemplate;
 const onUpdateNodeResource = vi.fn();
 
 describe('WorkflowJobTemplatesList', () => {

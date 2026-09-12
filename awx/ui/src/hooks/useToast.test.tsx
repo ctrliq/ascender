@@ -1,10 +1,11 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { render, screen, act } from '@testing-library/react';
 import useToast, { Toast, AlertVariant } from './useToast';
 
 describe('useToast', () => {
-  const result: { current: Untyped } = { current: null };
+  const result: { current: ReturnType<typeof useToast> } = {
+    current: null as unknown as ReturnType<typeof useToast>,
+  };
   const latest = () => result.current;
   const Test = () => {
     result.current = useToast();

@@ -1,3 +1,4 @@
+import type { NodeTemplate } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { ProjectsAPI } from 'api';
@@ -11,7 +12,7 @@ const nodeResource = {
   id: 1,
   name: 'Test Project',
   unified_job_type: 'project_update',
-};
+} as unknown as NodeTemplate;
 const onUpdateNodeResource = vi.fn();
 
 describe('ProjectsList', () => {

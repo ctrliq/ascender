@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ScreenHeaderProps } from 'components/ScreenHeader/ScreenHeader';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -10,10 +10,10 @@ vi.mock('../../api/models/Users');
 
 // resetMocks: true strips vi.fn implementations between tests, so capture
 // the props with a plain function instead of asserting on mock.calls.
-let mockScreenHeaderProps: Untyped;
+let mockScreenHeaderProps: ScreenHeaderProps | undefined;
 vi.mock('components/ScreenHeader/ScreenHeader', () => ({
   __esModule: true,
-  default: (props: Untyped) => {
+  default: (props: ScreenHeaderProps) => {
     mockScreenHeaderProps = props;
     return null;
   },
@@ -63,8 +63,8 @@ describe('<Users />', () => {
   test('renders the list and sets the breadcrumb config at /users', async () => {
     renderAt('/users');
     expect(await screen.findByText('UsersList')).toBeInTheDocument();
-    expect(mockScreenHeaderProps.streamType).toBe('user');
-    expect(mockScreenHeaderProps.breadcrumbConfig).toEqual({
+    expect(mockScreenHeaderProps?.streamType).toBe('user');
+    expect(mockScreenHeaderProps?.breadcrumbConfig).toEqual({
       '/users': 'Users',
       '/users/add': 'Create New User',
     });

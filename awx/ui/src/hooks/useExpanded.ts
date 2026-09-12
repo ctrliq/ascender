@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 
 /** The only thing an expandable row needs, so the only thing this requires. */
-interface Expandable {
+export interface Expandable {
   id: number | string;
 }
 

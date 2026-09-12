@@ -1,3 +1,4 @@
+import type { NodeTemplate } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 import { JobTemplatesAPI } from 'api';
@@ -11,7 +12,7 @@ const nodeResource = {
   id: 1,
   name: 'Test Job Template',
   unified_job_type: 'job',
-};
+} as unknown as NodeTemplate;
 const onUpdateNodeResource = vi.fn();
 
 describe('JobTemplatesList', () => {

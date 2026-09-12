@@ -4,8 +4,14 @@ import { render, act, waitFor } from '@testing-library/react';
 import { renderWithContexts } from '../../testUtils/rtlContexts';
 import useRequest, { useDeleteItems } from './useRequest';
 
-const result: { current: Untyped } = { current: null };
-const latest = () => result.current;
+// Both hooks write here, so the slot names each of their results.
+const result: {
+  current: ReturnType<typeof useRequest> | ReturnType<typeof useDeleteItems>;
+} = {
+  current: null as unknown as ReturnType<typeof useRequest>,
+};
+const latest = () => result.current as ReturnType<typeof useRequest>;
+const latestDelete = () => result.current as ReturnType<typeof useDeleteItems>;
 
 function Test({ makeRequest, initialValue = {} }: Untyped) {
   result.current = useRequest(makeRequest, initialValue);
@@ -60,13 +66,13 @@ describe('useRequest hooks', () => {
         // capture (don't await) the pending request so isLoading stays true
         requestPromise = latest().request();
       });
-      expect(latest().isLoading).toEqual(true);
+      expect(latestDelete().isLoading).toEqual(true);
       await act(async () => {
         resolve({ data: 'foo' });
         // await the request inside act so its state updates flush within act
         await requestPromise;
       });
-      expect(latest().isLoading).toEqual(false);
+      expect(latestDelete().isLoading).toEqual(false);
       expect(latest().result).toEqual({ data: 'foo' });
     });
 
@@ -159,7 +165,7 @@ describe('useRequest hooks', () => {
 
       expect(makeRequest).not.toHaveBeenCalled();
       await act(async () => {
-        await latest().deleteItems();
+        await latestDelete().deleteItems();
       });
       expect(makeRequest).toHaveBeenCalledTimes(1);
     });
@@ -180,9 +186,9 @@ describe('useRequest hooks', () => {
       );
 
       await act(async () => {
-        await latest().deleteItems();
+        await latestDelete().deleteItems();
       });
-      await waitFor(() => expect(latest().deletionError).toEqual(error));
+      await waitFor(() => expect(latestDelete().deletionError).toEqual(error));
     });
 
     test('should dismiss error', async () => {
@@ -201,13 +207,13 @@ describe('useRequest hooks', () => {
       );
 
       await act(async () => {
-        await latest().deleteItems();
+        await latestDelete().deleteItems();
       });
-      await waitFor(() => expect(latest().deletionError).toEqual(error));
+      await waitFor(() => expect(latestDelete().deletionError).toEqual(error));
       await act(async () => {
-        latest().clearDeletionError();
+        latestDelete().clearDeletionError();
       });
-      expect(latest().deletionError).toEqual(null);
+      expect(latestDelete().deletionError).toEqual(null);
     });
   });
 });

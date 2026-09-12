@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ScreenHeaderProps } from 'components/ScreenHeader/ScreenHeader';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -10,10 +10,10 @@ vi.mock('../../api/models/Credentials');
 
 // Capture the ScreenHeader props so we can assert the breadcrumb/title
 // mapping.
-let mockScreenHeaderProps: Untyped;
+let mockScreenHeaderProps: ScreenHeaderProps;
 vi.mock('components/ScreenHeader', () => ({
   __esModule: true,
-  default: (props: Untyped) => {
+  default: (props: ScreenHeaderProps) => {
     mockScreenHeaderProps = props;
     return null;
   },

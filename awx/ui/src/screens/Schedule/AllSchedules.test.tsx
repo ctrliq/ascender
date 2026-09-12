@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ScreenHeaderProps } from 'components/ScreenHeader/ScreenHeader';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -10,10 +10,10 @@ vi.mock('../../api');
 
 // resetMocks strips vi.fn implementations between tests, so capture the
 // props with a plain function instead of asserting on mock.calls.
-let mockScreenHeaderProps: Untyped;
+let mockScreenHeaderProps: ScreenHeaderProps | undefined;
 vi.mock('components/ScreenHeader', () => ({
   __esModule: true,
-  default: (props: Untyped) => {
+  default: (props: ScreenHeaderProps) => {
     mockScreenHeaderProps = props;
     return null;
   },
@@ -50,8 +50,8 @@ describe('<AllSchedules />', () => {
     renderAt('/schedules');
     expect(await screen.findByText('ScheduleList')).toBeInTheDocument();
     expect(mockScreenHeaderProps).toBeDefined();
-    expect(mockScreenHeaderProps.streamType).toBe('schedule');
-    expect(mockScreenHeaderProps.breadcrumbConfig).toEqual({
+    expect(mockScreenHeaderProps?.streamType).toBe('schedule');
+    expect(mockScreenHeaderProps?.breadcrumbConfig).toEqual({
       '/schedules': 'Schedules',
     });
   });

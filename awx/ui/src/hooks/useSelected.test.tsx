@@ -1,19 +1,21 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { render, act } from '@testing-library/react';
+import type { Selectable } from './useSelected';
 import useSelected from './useSelected';
 
 const array = [{ id: '1' }, { id: '2' }, { id: '3' }];
 
-const result: { current: Untyped } = { current: null };
+const result: { current: ReturnType<typeof useSelected> } = {
+  current: null as unknown as ReturnType<typeof useSelected>,
+};
 const latest = () => result.current;
 
-const TestHook = ({ list }: Untyped) => {
+const TestHook = ({ list }: { list?: Selectable[] }) => {
   result.current = useSelected(list);
   return null;
 };
 
-const testHook = (list?: Untyped) => {
+const testHook = (list?: Selectable[]) => {
   render(<TestHook list={list} />);
 };
 
@@ -30,12 +32,12 @@ describe('useSelected hook', () => {
     testHook();
 
     act(() => {
-      latest().handleSelect(array[0]);
+      latest().handleSelect(array[0] as Selectable);
     });
     expect(latest().selected).toEqual([array[0]]);
 
     act(() => {
-      latest().handleSelect(array[0]);
+      latest().handleSelect(array[0] as Selectable);
     });
     expect(latest().selected).toEqual([]);
   });
@@ -44,16 +46,16 @@ describe('useSelected hook', () => {
     testHook(array);
 
     act(() => {
-      latest().handleSelect(array[0]);
+      latest().handleSelect(array[0] as Selectable);
     });
     expect(latest().selected).toEqual([array[0]]);
     expect(latest().isAllSelected).toEqual(false);
 
     act(() => {
-      latest().handleSelect(array[1]);
+      latest().handleSelect(array[1] as Selectable);
     });
     act(() => {
-      latest().handleSelect(array[2]);
+      latest().handleSelect(array[2] as Selectable);
     });
     expect(latest().selected).toEqual(array);
     expect(latest().isAllSelected).toEqual(true);

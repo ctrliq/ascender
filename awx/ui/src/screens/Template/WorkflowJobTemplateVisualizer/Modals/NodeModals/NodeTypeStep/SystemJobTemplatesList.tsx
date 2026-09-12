@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { NodeTemplate } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -20,9 +20,9 @@ const QS_CONFIG = getQSConfig('system-job-templates', {
 });
 
 export interface SystemJobTemplatesListProps {
-  nodeResource?: Untyped;
-  onUpdateNodeResource: (resource: Untyped | null) => void;
-  [key: string]: unknown;
+  /** The template this node runs, absent until one is picked. */
+  nodeResource?: NodeTemplate | null;
+  onUpdateNodeResource: (resource: NodeTemplate | null) => void;
 }
 
 function SystemJobTemplatesList({
