@@ -26,7 +26,7 @@ function freshSystemData() {
     ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC: false,
     ORG_ADMINS_CAN_SEE_ALL_USERS: true,
     MANAGE_ORGANIZATION_AUTH: true,
-    TOWER_URL_BASE: 'https://towerhost',
+    ASCENDER_URL_BASE: 'https://towerhost',
     REMOTE_HOST_HEADERS: [],
     PROXY_IP_ALLOWED_LIST: [],
     CSRF_TRUSTED_ORIGINS: [],

@@ -30,7 +30,7 @@ const systemData = {
   MANAGE_ORGANIZATION_AUTH: true,
   ORG_ADMINS_CAN_SEE_ALL_USERS: true,
   REMOTE_HOST_HEADERS: ['REMOTE_ADDR', 'REMOTE_HOST'],
-  TOWER_URL_BASE: 'https://localhost:3000',
+  ASCENDER_URL_BASE: 'https://localhost:3000',
   PROXY_IP_ALLOWED_LIST: [],
   CSRF_TRUSTED_ORIGINS: [],
 };
