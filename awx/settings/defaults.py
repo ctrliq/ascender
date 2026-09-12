@@ -941,7 +941,7 @@ MANAGE_ORGANIZATION_AUTH = True
 DISABLE_LOCAL_AUTH = False
 
 # Note: This setting may be overridden by database settings.
-TOWER_URL_BASE = "https://ascenderhost"
+ASCENDER_URL_BASE = "https://ascenderhost"
 
 INSIGHTS_AGENT_MIME = 'application/example'
 INSIGHTS_CERT_PATH = "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
