@@ -1,6 +1,3 @@
-import boto3
-from botocore.exceptions import ClientError
-
 from .plugin import CredentialPlugin
 from django.utils.translation import gettext_lazy as _
 
@@ -40,6 +37,13 @@ def aws_secretsmanager_backend(**kwargs):
     region_name = kwargs['region_name']
     aws_secret_access_key = kwargs['aws_secret_key']
     aws_access_key_id = kwargs['aws_access_key']
+
+    # imported here rather than at module scope: every process that touches the
+    # credential models loads every plugin through its entry point, so a module
+    # level import makes each of them pay for the SDK whether or not an AWS
+    # credential is ever used
+    import boto3
+    from botocore.exceptions import ClientError
 
     session = boto3.session.Session()
     client = session.client(
