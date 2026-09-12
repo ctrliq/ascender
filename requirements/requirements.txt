@@ -266,9 +266,7 @@ packaging==26.3
     #   vcs-versioning
     #   wheel
 pexpect==4.7.0
-    # via
-    #   -r /awx_devel/requirements/requirements.in
-    #   ansible-runner
+    # via ansible-runner
 pip==26.2.1
     # via -r /awx_devel/requirements/requirements.in
 pkgconfig==1.6.0
