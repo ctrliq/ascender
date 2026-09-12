@@ -1,4 +1,3 @@
-import type { SubscriptionPool } from 'api/models/Config';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useMatch, useNavigate } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
@@ -23,14 +22,12 @@ import AnalyticsStep from './AnalyticsStep';
 import EulaStep from './EulaStep';
 
 /**
- * What the subscription wizard collects: a manifest the user uploaded, or a
- * subscription picked off their account, and what each analytics switch is set
- * to. A run of the wizard uses one of the first two, never both.
+ * What the subscription wizard collects: the manifest the user uploaded, and
+ * what each analytics switch is set to.
  */
 export interface SubscriptionFormValues {
   manifest_file?: string | null;
   manifest_filename?: string;
-  subscription?: SubscriptionPool | null;
   insights?: boolean;
   pendo?: boolean;
   eula?: boolean;
@@ -58,7 +55,7 @@ const CustomFooter = ({ isSubmitLoading }: CustomFooterProps) => {
           variant="primary"
           onClick={goToNextStep}
           isDisabled={
-            (!values.manifest_file && !values.subscription) ||
+            !values.manifest_file ||
             !me?.is_superuser ||
             Object.keys(errors).length !== 0
           }
@@ -151,8 +148,6 @@ function SubscriptionEdit() {
         await ConfigAPI.create({
           manifest: form.manifest_file,
         });
-      } else if (form.subscription) {
-        await ConfigAPI.attach({ pool_id: form.subscription.pool_id });
       }
 
       if (!hasValidKey) {
