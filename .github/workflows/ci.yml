@@ -52,6 +52,8 @@ jobs:
             advisory: true
           - name: ui-lint
             command: make ui-lint
+          - name: ui-type-check
+            command: make ui-type-check
           - name: ui-test-screens
             command: make ui-test-screens
           - name: ui-test-general
@@ -144,7 +146,7 @@ jobs:
 
       - name: Install the end-to-end dependencies
         working-directory: awx/ui/e2e
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Install the browser
         working-directory: awx/ui/e2e
