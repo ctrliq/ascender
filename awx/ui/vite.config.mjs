@@ -11,48 +11,31 @@ const resolvePath = (relative) =>
 const TARGET = process.env.TARGET || 'https://localhost:8043';
 
 /*
- * index.html is served to the browser by Django, out of awx/ui/build, which is
- * a template directory. So the built file is not plain HTML: it opens with a
- * {% load static %} and carries the CSP nonce Django renders per request.
+ * The content security policy the built page carries, and the one rule the app
+ * shell needs. Kept out of the source index.html because the dev server serves
+ * that file as it stands, and its policy is not the built one.
  *
- * Keeping that markup in the source index.html would break the dev server,
- * which serves the file as-is, so it is injected here and only when building.
+ * Nothing here is a Django template any more: the built index.html is plain
+ * HTML, the same bytes a static file server would hand out.
  */
-function djangoTemplate() {
+function contentSecurityPolicy() {
   return {
-    name: 'awx:django-template',
+    name: 'awx:content-security-policy',
     apply: 'build',
     transformIndexHtml: {
       order: 'post',
       handler(html) {
         return html
-          .replace(/^/, '{% load static %}\n')
           .replace(
             '<!--django-head-->',
             [
-              '<script nonce="{{ csp_nonce }}" type="text/javascript">',
-              "      window.NONCE_ID = '{{ csp_nonce }}';",
-              '    </script>',
-              // styled-components reads this before it reads anything else, so
-              // the injected style tags carry the nonce the policy below names.
-              '    <meta name="sc-nonce" content="{{ csp_nonce }}" />',
-              '    <meta',
+              '<meta',
               '      http-equiv="Content-Security-Policy"',
-              '      content="default-src \'self\'; connect-src \'self\' ws: wss:; style-src \'self\' \'unsafe-inline\'; script-src \'self\' \'nonce-{{ csp_nonce }}\' *.pendo.io; img-src \'self\' *.pendo.io data:; worker-src \'self\' blob: ;"',
+              "      content=\"default-src 'self'; connect-src 'self' ws: wss:; style-src 'self' 'unsafe-inline'; script-src 'self' *.pendo.io; img-src 'self' *.pendo.io data:; worker-src 'self' blob: ;\"",
               '    />',
-              "    <link rel=\"shortcut icon\" href=\"{% static 'media/favicon.ico' %}\" />",
             ].join('\n')
           )
-          // The Django one replaces it rather than joining it: only the
-          // build knows how to reach the file through staticfiles.
-          .replace(
-            '    <link rel="shortcut icon" href="/static/media/favicon.ico" />\n',
-            ''
-          )
-          .replace(
-            '<!--django-body-->',
-            '<style nonce="{{ csp_nonce }}">.app{height: 100%;}</style>'
-          )
+          .replace('<!--django-body-->', '<style>.app{height: 100%;}</style>')
           .replace('<div id="app"', '<div id="app" class="app"');
       },
     },
@@ -63,7 +46,7 @@ export default defineConfig({
   // basicSsl is what HTTPS=true gave the ejected dev server: a self-signed
   // certificate, so the UI is still served over https on 3001 and the browser
   // still has to be told once to trust it.
-  plugins: [babelTransform(), react(), basicSsl(), djangoTemplate()],
+  plugins: [babelTransform(), react(), basicSsl(), contentSecurityPolicy()],
   resolve: { alias: srcAliases },
   optimizeDeps: {
     // The scanner reads the source before any plugin runs, so it meets the
