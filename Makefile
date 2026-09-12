@@ -409,7 +409,7 @@ clean-ui:
 	mkdir -p awx/ui/build/static
 
 awx/ui/node_modules:
-	NODE_OPTIONS=--max-old-space-size=6144 $(NPM_BIN) --prefix awx/ui --loglevel warn --force ci
+	NODE_OPTIONS=--max-old-space-size=6144 $(NPM_BIN) --prefix awx/ui --loglevel warn --force ci --ignore-scripts
 
 $(UI_BUILD_FLAG_FILE):
 	$(MAKE) awx/ui/node_modules
