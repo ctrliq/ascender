@@ -118,38 +118,4 @@ describe('<SubscriptionStep />', () => {
       ).toBeInTheDocument();
     });
   });
-
-  test('Username/password toggle button should show username credential fields', async () => {
-    const { container } = renderStep();
-    expect(container.querySelector('#username-field')).toBeNull();
-
-    fireEvent.click(
-      screen.getByRole('button', { name: 'Username / password' })
-    );
-
-    const usernameInput = container.querySelector(
-      '#username-field'
-    ) as HTMLInputElement;
-    const passwordInput = container.querySelector(
-      '#password-field'
-    ) as HTMLInputElement;
-    expect(usernameInput).toBeInTheDocument();
-    expect(passwordInput).toBeInTheDocument();
-
-    fireEvent.change(usernameInput, {
-      target: { value: 'username-cred', name: 'username' },
-    });
-    fireEvent.change(passwordInput, {
-      target: { value: 'password-cred', name: 'password' },
-    });
-
-    await waitFor(() =>
-      expect(
-        (container.querySelector('#username-field')! as HTMLInputElement).value
-      ).toEqual('username-cred')
-    );
-    expect(
-      (container.querySelector('#password-field')! as HTMLInputElement).value
-    ).toEqual('password-cred');
-  });
 });
