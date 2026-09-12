@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useFormikContext } from 'formik';
+import type { OptionsChoice } from 'types/api';
 import useCredentialPasswordsStep from './useAdHocCredentialPasswordStep';
 import useAdHocDetailsStep from './useAdHocDetailsStep';
 import useAdHocExecutionEnvironmentStep from './useAdHocExecutionEnvironmentStep';
@@ -24,7 +25,7 @@ function showCredentialPasswordsStep(credential?: { inputs?: unknown }) {
 }
 
 export default function useAdHocLaunchSteps(
-  moduleOptions: unknown,
+  moduleOptions: OptionsChoice[],
   organizationId: number | string | null,
   credentialTypeId: number | string | null
 ) {
@@ -32,7 +33,7 @@ export default function useAdHocLaunchSteps(
 
   const [visited, setVisited] = useState<Record<string, boolean>>({});
   const steps = [
-    useAdHocDetailsStep(visited, moduleOptions as [string, string][]),
+    useAdHocDetailsStep(visited, moduleOptions),
     useAdHocExecutionEnvironmentStep(organizationId),
     useAdHocCredentialStep(visited, credentialTypeId),
     useCredentialPasswordsStep(

@@ -1,12 +1,17 @@
+import type { NotificationTemplate } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
+import type { DefaultMessages } from '../shared/NotificationTemplateForm';
 
 import {
   renderWithContexts,
   assertDetail,
 } from '../../../../testUtils/rtlContexts';
 import NotificationTemplateDetail from './NotificationTemplateDetail';
-import defaultMessages from '../shared/notification-template-default-messages.json';
+import defaultMessagesJson from '../shared/notification-template-default-messages.json';
+
+/** The fixtures as the detail takes them, which is what the api sends. */
+const defaultMessages = defaultMessagesJson as unknown as DefaultMessages;
 
 vi.mock('../../../api');
 
@@ -67,7 +72,7 @@ describe('<NotificationTemplateDetail />', () => {
   test('should render Details', async () => {
     renderWithContexts(
       <NotificationTemplateDetail
-        template={mockTemplate}
+        template={mockTemplate as unknown as NotificationTemplate}
         defaultMessages={defaultMessages}
       />
     );
@@ -77,8 +82,8 @@ describe('<NotificationTemplateDetail />', () => {
   test('should render Details when defaultMessages is missing', async () => {
     renderWithContexts(
       <NotificationTemplateDetail
-        template={mockTemplate}
-        defaultMessages={null}
+        template={mockTemplate as unknown as NotificationTemplate}
+        defaultMessages={null as unknown as DefaultMessages}
       />
     );
     await assertCommonDetails();

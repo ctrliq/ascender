@@ -1,4 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
+import type { OptionsChoice } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
@@ -31,7 +32,7 @@ const TooltipWrapper = styled.div`
 
 export interface AdHocDetailsStepProps {
   /** The ansible modules the command may run, as [value, label] pairs. */
-  moduleOptions: [string, string][];
+  moduleOptions: OptionsChoice[];
   [key: string]: unknown;
 }
 
@@ -88,10 +89,10 @@ function AdHocDetailsStep({ moduleOptions }: AdHocDetailsStepProps) {
                   label: t`Choose a module`,
                   isDisabled: true,
                 },
-                ...moduleOptions.map((value: [string, string]) => ({
-                  value: value[0],
-                  label: value[0],
-                  key: value[0],
+                ...moduleOptions.map(([value]) => ({
+                  value: String(value),
+                  label: String(value),
+                  key: String(value),
                 })),
               ]}
               onChange={(event: React.SyntheticEvent, value: string) => {

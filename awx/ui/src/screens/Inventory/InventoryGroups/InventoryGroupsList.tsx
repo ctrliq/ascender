@@ -60,7 +60,7 @@ function InventoryGroupsList() {
       ]);
 
       return {
-        moduleOptions: options.data.actions.GET?.module_name?.choices,
+        moduleOptions: options.data.actions.GET?.module_name?.choices ?? [],
         isAdHocDisabled: !options.data.actions.POST,
         groups: response.data.results,
         groupCount: response.data.count,

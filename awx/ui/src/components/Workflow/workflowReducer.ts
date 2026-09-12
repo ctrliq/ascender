@@ -136,6 +136,13 @@ export interface ApiWorkflowNode extends Partial<
     job?: Omit<Partial<UnifiedJob>, 'status'> & { status?: string };
     [key: string]: unknown;
   };
+  /**
+   * Set on a node of a workflow relaunched from a failed one: its job
+   * succeeded in the prior run, so it is carried forward as successful and
+   * spawns no job of its own. Only a workflow job's nodes carry these.
+   */
+  prior_run_succeeded?: boolean | null;
+  prior_run_elapsed?: number | null;
   workflowMakerNodeId?: number;
   [key: string]: unknown;
 }

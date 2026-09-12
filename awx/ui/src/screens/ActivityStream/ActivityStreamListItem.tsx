@@ -1,4 +1,4 @@
-import type { ActivityStreamEntry, Untyped } from 'types/api';
+import type { ActivityStreamEntry } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
@@ -18,7 +18,7 @@ export interface ActivityStreamListItemProps {
 function ActivityStreamListItem({ streamItem }: ActivityStreamListItemProps) {
   const { t } = useLingui();
 
-  const buildUser = (item: Untyped) => {
+  const buildUser = (item: ActivityStreamEntry) => {
     let link;
     if (item?.summary_fields?.actor?.id) {
       link = (

@@ -250,9 +250,6 @@ function CredentialLookup({
             deselectItem={(item: LookupItem) =>
               dispatch({ type: 'DESELECT_ITEM', item })
             }
-            sortSelectedItems={(selectedItems: LookupItem[]) =>
-              dispatch({ type: 'SET_SELECTED_ITEMS', selectedItems })
-            }
             multiple={multiple}
             isSelectedDraggable={isSelectedDraggable}
           />

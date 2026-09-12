@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SelectableOption } from 'types/api';
 import React from 'react';
 import {
   Button,
@@ -13,6 +13,9 @@ import { TimesIcon } from '@patternfly/react-icons';
 import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 
+/** The list numbers what it shows, so every row needs a label to number. */
+const nameOf = (item: SelectableOption) => String(item?.name ?? '');
+
 const RemoveActionSection = styled(DataListAction)`
   && {
     align-items: center;
@@ -20,27 +23,31 @@ const RemoveActionSection = styled(DataListAction)`
   }
 `;
 
-export interface DraggableSelectedListProps {
-  selected?: unknown[];
-  onRemove?: (item?: Untyped) => void;
-  [key: string]: unknown;
+export interface DraggableSelectedListProps<
+  T extends SelectableOption = SelectableOption,
+> {
+  selected?: T[];
+  /** Method style so a lookup can hand over its own narrower handler. */
+  onRemove?(item?: T): void;
 }
 
-function DraggableSelectedList({
+// Generic in the row for the same reason SelectedList is: a lookup that names
+// its own type gets it back in the remove handler.
+function DraggableSelectedList<T extends SelectableOption = SelectableOption>({
   selected = [],
   onRemove = () => null,
-}: DraggableSelectedListProps) {
+}: DraggableSelectedListProps<T>) {
   const { t } = useLingui();
 
   const removeItem = (name: string) => {
-    onRemove(selected.find((i: Untyped) => i.name === name));
+    onRemove(selected.find((i) => nameOf(i) === name));
   };
 
   if (selected.length <= 0) {
     return null;
   }
 
-  const orderedList: string[] = selected.map((item: Untyped) => item?.name);
+  const orderedList = selected.map(nameOf);
 
   return (
     <DataList aria-label={t`Selected items list.`} data-cy="draggable-list">

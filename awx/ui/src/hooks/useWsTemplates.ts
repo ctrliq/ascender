@@ -1,9 +1,13 @@
-import type { Untyped } from 'types/api';
+import type { AnyUnifiedJobTemplate } from 'types/api';
 import { useState, useEffect } from 'react';
+import type { WebsocketMessage } from './useWebsocket';
 import useWebsocket from './useWebsocket';
 
-export default function useWsTemplates(initialTemplates: Untyped[]) {
-  const [templates, setTemplates] = useState<Untyped[]>(initialTemplates);
+export default function useWsTemplates(
+  initialTemplates: AnyUnifiedJobTemplate[]
+) {
+  const [templates, setTemplates] =
+    useState<AnyUnifiedJobTemplate[]>(initialTemplates);
   const lastMessage = useWebsocket({
     jobs: ['status_changed'],
     control: ['limit_reached_1'],
@@ -39,10 +43,17 @@ export default function useWsTemplates(initialTemplates: Untyped[]) {
   return templates;
 }
 
-function updateTemplate(
-  template: Record<string, unknown>,
-  message: Record<string, unknown>
-): Record<string, unknown> {
+/**
+ * Folds a job status message into the template that job ran from, so the
+ * list's recent jobs sparkline redraws without a re-read.
+ *
+ * Generic in the template so the caller gets back what it handed over: the
+ * only member this touches is summary_fields.recent_jobs.
+ */
+function updateTemplate<T extends AnyUnifiedJobTemplate>(
+  template: T,
+  message: WebsocketMessage
+): T {
   const summaryFields = (template.summary_fields ?? {}) as {
     recent_jobs?: Record<string, unknown>[];
   };

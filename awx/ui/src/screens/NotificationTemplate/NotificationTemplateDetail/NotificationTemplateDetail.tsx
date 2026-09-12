@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { NotificationTemplate } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Button, Content, ContentVariants } from '@patternfly/react-core';
@@ -20,14 +20,17 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 import StatusLabel from 'components/StatusLabel';
 import hasCustomMessages from '../shared/hasCustomMessages';
 import { NOTIFICATION_TYPES } from '../constants';
+import type {
+  DefaultMessages,
+  NotificationMessages,
+} from '../shared/NotificationTemplateForm';
 
 const NUM_RETRIES = 25;
 const RETRY_TIMEOUT = 5000;
 
 export interface NotificationTemplateDetailProps {
-  template: Untyped;
-  defaultMessages: Untyped;
-  [key: string]: unknown;
+  template: NotificationTemplate;
+  defaultMessages: DefaultMessages;
 }
 
 function NotificationTemplateDetail({
@@ -81,15 +84,21 @@ function NotificationTemplateDetail({
   };
   const navigate = useNavigate();
   const [testStatus, setTestStatus] = useState(
-    template.summary_fields?.recent_notifications[0]?.status ?? undefined
+    template.summary_fields?.recent_notifications?.[0]?.status ?? undefined
   );
   const {
     created,
     modified,
-    notification_configuration: configuration,
+    notification_configuration = {},
     summary_fields,
     messages,
   } = template;
+  // The api shapes this per notification type, so which fields a template has
+  // depends on which type it is; every one of them is rendered as it stands.
+  const configuration = notification_configuration as Record<
+    string,
+    string | number | boolean | string[] | undefined
+  >;
 
   const renderOptionsField = configuration.use_ssl || configuration.use_tls;
 
@@ -142,7 +151,8 @@ function NotificationTemplateDetail({
   );
 
   const { error, dismissError } = useDismissableError(deleteError || testError);
-  const typeMessageDefaults = defaultMessages?.[template?.notification_type];
+  const typeMessageDefaults =
+    defaultMessages?.[template?.notification_type ?? ''] ?? {};
   return (
     <CardBody>
       <DetailList gutter="sm">
@@ -152,7 +162,7 @@ function NotificationTemplateDetail({
           value={template.description}
           dataCy="nt-detail-description"
         />
-        {summary_fields.recent_notifications.length ? (
+        {summary_fields.recent_notifications?.length ? (
           <Detail
             label={t`Status`}
             value={<StatusLabel status={testStatus} />}
@@ -447,7 +457,7 @@ function NotificationTemplateDetail({
           <CustomMessageDetails
             messages={messages}
             defaults={typeMessageDefaults}
-            type={template.notification_type}
+            type={template.notification_type ?? ''}
           />
         ) : null}
       </DetailList>
@@ -467,7 +477,7 @@ function NotificationTemplateDetail({
               variant="secondary"
               // `=== ('a' || 'b')` is `=== 'a'`: the button stayed enabled
               // while a test was pending, so a second one could be started.
-              isDisabled={['running', 'pending'].includes(testStatus)}
+              isDisabled={['running', 'pending'].includes(testStatus ?? '')}
             >
               {t`Test`}
             </Button>
@@ -501,7 +511,17 @@ function NotificationTemplateDetail({
   );
 }
 
-function CustomMessageDetails({ messages, defaults, type }: Untyped) {
+function CustomMessageDetails({
+  messages,
+  defaults,
+  type,
+}: {
+  /** What the template holds, absent where it has none of its own. */
+  messages?: NotificationMessages | null;
+  /** The bodies the api ships for this one notification type. */
+  defaults: NotificationMessages;
+  type: string;
+}) {
   const showMessages = type !== 'webhook';
   const showBodies = ['email', 'pagerduty', 'webhook'].includes(type);
   const { t } = useLingui();
@@ -510,7 +530,7 @@ function CustomMessageDetails({ messages, defaults, type }: Untyped) {
       {showMessages && (
         <CodeDetail
           label={t`Start message`}
-          value={messages.started?.message || defaults.started?.message}
+          value={messages?.started?.message || defaults.started?.message}
           mode="jinja2"
           rows={2}
           fullWidth
@@ -519,7 +539,7 @@ function CustomMessageDetails({ messages, defaults, type }: Untyped) {
       {showBodies && (
         <CodeDetail
           label={t`Start message body`}
-          value={messages.started?.body || defaults.started?.body}
+          value={messages?.started?.body || defaults.started?.body}
           mode="jinja2"
           rows={6}
           fullWidth
@@ -528,7 +548,7 @@ function CustomMessageDetails({ messages, defaults, type }: Untyped) {
       {showMessages && (
         <CodeDetail
           label={t`Success message`}
-          value={messages.success?.message || defaults.success?.message}
+          value={messages?.success?.message || defaults.success?.message}
           mode="jinja2"
           rows={2}
           fullWidth
@@ -537,7 +557,7 @@ function CustomMessageDetails({ messages, defaults, type }: Untyped) {
       {showBodies && (
         <CodeDetail
           label={t`Success message body`}
-          value={messages.success?.body || defaults.success?.body}
+          value={messages?.success?.body || defaults.success?.body}
           mode="jinja2"
           rows={6}
           fullWidth
@@ -546,7 +566,7 @@ function CustomMessageDetails({ messages, defaults, type }: Untyped) {
       {showMessages && (
         <CodeDetail
           label={t`Error message`}
-          value={messages.error?.message || defaults.error?.message}
+          value={messages?.error?.message || defaults.error?.message}
           mode="jinja2"
           rows={2}
           fullWidth
@@ -555,7 +575,7 @@ function CustomMessageDetails({ messages, defaults, type }: Untyped) {
       {showBodies && (
         <CodeDetail
           label={t`Error message body`}
-          value={messages.error?.body || defaults.error?.body}
+          value={messages?.error?.body || defaults.error?.body}
           mode="jinja2"
           rows={6}
           fullWidth
@@ -565,8 +585,8 @@ function CustomMessageDetails({ messages, defaults, type }: Untyped) {
         <CodeDetail
           label={t`Workflow approved message`}
           value={
-            messages.workflow_approval?.approved?.message ||
-            defaults.workflow_approval.approved.message
+            messages?.workflow_approval?.approved?.message ||
+            defaults.workflow_approval?.approved?.message
           }
           mode="jinja2"
           rows={2}
@@ -577,8 +597,8 @@ function CustomMessageDetails({ messages, defaults, type }: Untyped) {
         <CodeDetail
           label={t`Workflow approved message body`}
           value={
-            messages.workflow_approval?.approved?.body ||
-            defaults.workflow_approval.approved.body
+            messages?.workflow_approval?.approved?.body ||
+            defaults.workflow_approval?.approved?.body
           }
           mode="jinja2"
           rows={6}
@@ -589,8 +609,8 @@ function CustomMessageDetails({ messages, defaults, type }: Untyped) {
         <CodeDetail
           label={t`Workflow denied message`}
           value={
-            messages.workflow_approval?.denied?.message ||
-            defaults.workflow_approval.denied.message
+            messages?.workflow_approval?.denied?.message ||
+            defaults.workflow_approval?.denied?.message
           }
           mode="jinja2"
           rows={2}
@@ -601,8 +621,8 @@ function CustomMessageDetails({ messages, defaults, type }: Untyped) {
         <CodeDetail
           label={t`Workflow denied message body`}
           value={
-            messages.workflow_approval?.denied?.body ||
-            defaults.workflow_approval.denied.body
+            messages?.workflow_approval?.denied?.body ||
+            defaults.workflow_approval?.denied?.body
           }
           mode="jinja2"
           rows={6}
@@ -613,8 +633,8 @@ function CustomMessageDetails({ messages, defaults, type }: Untyped) {
         <CodeDetail
           label={t`Workflow pending message`}
           value={
-            messages.workflow_approval?.running?.message ||
-            defaults.workflow_approval.running.message
+            messages?.workflow_approval?.running?.message ||
+            defaults.workflow_approval?.running?.message
           }
           mode="jinja2"
           rows={2}
@@ -625,8 +645,8 @@ function CustomMessageDetails({ messages, defaults, type }: Untyped) {
         <CodeDetail
           label={t`Workflow pending message body`}
           value={
-            messages.workflow_approval?.running?.body ||
-            defaults.workflow_approval.running.body
+            messages?.workflow_approval?.running?.body ||
+            defaults.workflow_approval?.running?.body
           }
           mode="jinja2"
           rows={6}
@@ -637,8 +657,8 @@ function CustomMessageDetails({ messages, defaults, type }: Untyped) {
         <CodeDetail
           label={t`Workflow timed out message`}
           value={
-            messages.workflow_approval?.timed_out?.message ||
-            defaults.workflow_approval.timed_out.message
+            messages?.workflow_approval?.timed_out?.message ||
+            defaults.workflow_approval?.timed_out?.message
           }
           mode="jinja2"
           rows={2}
@@ -649,8 +669,8 @@ function CustomMessageDetails({ messages, defaults, type }: Untyped) {
         <CodeDetail
           label={t`Workflow timed out message body`}
           value={
-            messages.workflow_approval?.timed_out?.body ||
-            defaults.workflow_approval.timed_out.body
+            messages?.workflow_approval?.timed_out?.body ||
+            defaults.workflow_approval?.timed_out?.body
           }
           mode="jinja2"
           rows={6}

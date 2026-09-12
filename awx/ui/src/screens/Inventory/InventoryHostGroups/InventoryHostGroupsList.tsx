@@ -68,7 +68,8 @@ function InventoryHostGroupsList() {
       ]);
 
       return {
-        moduleOptions: adHocOptions.data.actions.GET?.module_name?.choices,
+        moduleOptions:
+          adHocOptions.data.actions.GET?.module_name?.choices ?? [],
         isAdHocDisabled: !adHocOptions.data.actions.POST,
         groups: results,
         itemCount: count,

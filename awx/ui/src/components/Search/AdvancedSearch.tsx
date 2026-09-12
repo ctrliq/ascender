@@ -1,5 +1,4 @@
 import type { SearchableKey } from 'components/PaginatedTable';
-import type { Untyped } from 'types/api';
 import React, { useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -50,9 +49,9 @@ const AdvancedGroup = styled.div`
 `;
 
 export interface AdvancedSearchProps {
-  onSearch?: (...args: Untyped[]) => void;
+  onSearch?: (key: string, value: string) => void;
   searchableKeys?: SearchableKey[];
-  relatedSearchableKeys?: Untyped[];
+  relatedSearchableKeys?: string[];
   maxSelectHeight?: string;
   enableNegativeFiltering?: boolean;
   enableRelatedFuzzyFiltering?: boolean;

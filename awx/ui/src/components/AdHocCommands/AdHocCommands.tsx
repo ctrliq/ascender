@@ -1,4 +1,4 @@
-import type { ApiEntity, Inventory, Paginated, Untyped } from 'types/api';
+import type { ApiEntity, Inventory, OptionsChoice, Paginated } from 'types/api';
 import React, { useCallback, useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router';
 
@@ -19,8 +19,9 @@ import type { AdHocItem, AdHocValues } from './types';
 export interface AdHocCommandsProps {
   adHocItems: AdHocItem[];
   hasListItems: boolean;
-  onLaunchLoading: (...args: Untyped[]) => void;
-  moduleOptions: Untyped;
+  onLaunchLoading: (isLoading: boolean) => void;
+  /** The modules the api offers, as value and label pairs. */
+  moduleOptions: OptionsChoice[];
   [key: string]: unknown;
 }
 

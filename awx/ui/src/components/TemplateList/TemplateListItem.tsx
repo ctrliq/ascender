@@ -1,4 +1,4 @@
-import type { JobTemplate, SummaryFieldRef, Untyped } from 'types/api';
+import type { AnyUnifiedJobTemplate, SummaryFieldRef } from 'types/api';
 /*
   Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 */
@@ -28,14 +28,15 @@ import CopyButton from '../CopyButton';
 
 export interface TemplateListItemProps {
   isExpanded: boolean;
-  onExpand: (...args: Untyped[]) => void;
-  template: JobTemplate;
+  onExpand: () => void;
+  template: AnyUnifiedJobTemplate;
   isSelected: boolean;
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;
   onCopy: (id: number) => void;
   detailUrl: React.ReactNode;
-  fetchTemplates: (...args: Untyped[]) => unknown;
+  /** Re-reads the page once the copy has landed. */
+  fetchTemplates: () => unknown;
   rowIndex: number;
   [key: string]: unknown;
 }

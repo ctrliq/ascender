@@ -96,20 +96,42 @@ const defaultTemplate: Partial<JobTemplate> & { isNew?: boolean } = {
   isNew: true,
 };
 
+/**
+ * The resource an add screen was reached from, which seeds the matching form
+ * field. Every member comes off the query string, so all of them are strings.
+ */
+export interface SeedResource {
+  id?: string | null;
+  name?: string | null;
+  /** The field to seed: credentials, inventory, project, and so on. */
+  type?: string | null;
+  /** Only set where the resource is a credential. */
+  kind?: string | null;
+}
+
 export interface JobTemplateFormProps {
   template?: Partial<JobTemplate> & { isNew?: boolean };
   handleCancel?: () => void;
+  /**
+   * The caller's own submit, which withFormik calls with the values. Inside
+   * the component below it is shadowed by formik's, which takes the event.
+   */
   handleSubmit: (values: JobTemplateFormValues) => void;
   submitError?: unknown;
   isOverrideDisabledLookup?: boolean;
-  [key: string]: unknown;
+  /** Where the add screen was reached from, seeded onto the new template. */
+  resourceValues?: SeedResource | null;
 }
 
-/** What the form itself takes: its own props plus what the wrapper injects. */
-type JobTemplateFormFieldsProps = JobTemplateFormProps &
+/**
+ * What the form itself takes: its own props plus what the wrapper injects.
+ * handleSubmit is one of the injected ones, so it arrives as formik's form
+ * submit handler rather than as the value taking prop of the same name.
+ */
+type JobTemplateFormFieldsProps = Omit<JobTemplateFormProps, 'handleSubmit'> &
   Pick<
     FormikProps<JobTemplateFormValues>,
-    'setFieldValue' | 'setFieldTouched' | 'validateField'
+    'handleSubmit' | 'setFieldValue' | 'setFieldTouched' | 'validateField'
   >;
 
 function JobTemplateForm({
@@ -298,10 +320,7 @@ function JobTemplateForm({
   }
 
   return (
-    <Form
-      autoComplete="off"
-      onSubmit={handleSubmit as unknown as React.FormEventHandler}
-    >
+    <Form autoComplete="off" onSubmit={handleSubmit}>
       <FormColumnLayout>
         <FormField
           id="template-name"
@@ -755,9 +774,7 @@ const FormikApp = withFormik<JobTemplateFormProps, JobTemplateFormValues>({
   mapPropsToValues({
     resourceValues = null,
     template = {},
-  }: JobTemplateFormProps & {
-    resourceValues?: Partial<JobTemplateFormValues> | null;
-  }) {
+  }: JobTemplateFormProps) {
     const summary_fields: SummaryFields = template.summary_fields ?? {
       labels: { results: [] },
     };

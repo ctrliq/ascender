@@ -1,4 +1,4 @@
-import type { BreadcrumbResource, Untyped } from 'types/api';
+import type { BreadcrumbResource } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Routes, Route, Navigate, useParams } from 'react-router';
 
@@ -13,7 +13,8 @@ import JobTypeRedirect from './JobTypeRedirect';
 import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
 
 export interface TypeRedirectProps {
-  view?: Untyped;
+  /** Which of the job screens is showing, from the route. */
+  view?: string;
   [key: string]: unknown;
 }
 

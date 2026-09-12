@@ -1,10 +1,10 @@
-import type { Untyped } from 'types/api';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { PERSISTENT_FILTER_KEY } from '../../constants';
 
 export interface PersistentFiltersProps {
-  pageKey: Untyped;
+  /** Which list the filters are remembered for. */
+  pageKey: string;
   children: React.ReactNode;
   [key: string]: unknown;
 }

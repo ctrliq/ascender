@@ -1,5 +1,7 @@
-import type { WorkflowState } from 'components/Workflow/workflowReducer';
-import type { Untyped } from 'types/api';
+import type {
+  WorkflowNode,
+  WorkflowState,
+} from 'components/Workflow/workflowReducer';
 import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -71,7 +73,7 @@ Elapsed.displayName = 'Elapsed';
 export interface WorkflowOutputNodeProps {
   mouseEnter: () => void;
   mouseLeave: () => void;
-  node: Untyped;
+  node: WorkflowNode;
   [key: string]: unknown;
 }
 
@@ -213,12 +215,13 @@ function WorkflowOutputNode({
               if (isRunning && runningElapsed) {
                 elapsedText = runningElapsed;
               } else if (job.elapsed) {
-                elapsedText = secondsToHHMMSS(job.elapsed);
+                // The api serializes the decimal as a string.
+                elapsedText = secondsToHHMMSS(Number(job.elapsed));
               }
               return (
                 <>
                   <JobTopLine>
-                    {job.status !== 'pending' && (
+                    {job.status && job.status !== 'pending' && (
                       <StatusIcon status={job.status} />
                     )}
                     <p>{nodeName}</p>

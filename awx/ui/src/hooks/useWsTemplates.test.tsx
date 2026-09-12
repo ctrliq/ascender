@@ -1,3 +1,4 @@
+import type { AnyUnifiedJobTemplate } from 'types/api';
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
 import WS from 'vitest-websocket-mock';
@@ -43,7 +44,7 @@ describe('useWsTemplates hook', () => {
   });
 
   test('should return templates list', () => {
-    const templates = [{ id: 1 }];
+    const templates = [{ id: 1 }] as unknown as AnyUnifiedJobTemplate[];
     renderWithContexts(<Test templates={templates} />);
 
     expect(getTemplates()).toEqual(templates);
@@ -54,7 +55,7 @@ describe('useWsTemplates hook', () => {
     global.document.cookie = 'csrftoken=abc123';
     const mockServer = new WS('ws://localhost/websocket/');
 
-    const templates = [{ id: 1 }];
+    const templates = [{ id: 1 }] as unknown as AnyUnifiedJobTemplate[];
     await act(async () => {
       renderWithContexts(<Test templates={templates} />);
     });
@@ -93,7 +94,7 @@ describe('useWsTemplates hook', () => {
           ],
         },
       },
-    ];
+    ] as unknown as AnyUnifiedJobTemplate[];
     await act(async () => {
       renderWithContexts(<Test templates={templates} />);
     });
@@ -151,7 +152,7 @@ describe('useWsTemplates hook', () => {
           ],
         },
       },
-    ];
+    ] as unknown as AnyUnifiedJobTemplate[];
     await act(async () => {
       renderWithContexts(<Test templates={templates} />);
     });

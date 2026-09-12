@@ -548,6 +548,13 @@ export type WorkflowJobTemplateNode = Omit<
  * Which keys a field carries depends on what kind of field it is, so only the
  * ones the screens read are named and the index signature keeps the rest.
  */
+/**
+ * One entry of an OPTIONS choice list: the value the api accepts, and the
+ * label to show for it. The value is not always a string, because a choice
+ * list over an integer or nullable field sends the raw value.
+ */
+export type OptionsChoice = [string | number | null, string];
+
 export interface OptionsField {
   type?: string;
   label?: string;
@@ -557,7 +564,7 @@ export interface OptionsField {
   filterable?: boolean;
   required?: boolean;
   /** Each entry is a value and the label to show for it. */
-  choices?: [string | number | null, string][];
+  choices?: OptionsChoice[];
   [key: string]: unknown;
 }
 
@@ -579,7 +586,7 @@ export interface SettingConfig {
   unit?: string | null;
   required?: boolean;
   /** Each entry is a value and the label to show for it. */
-  choices?: [string | number | null, string][];
+  choices?: OptionsChoice[];
   value?: unknown;
   default?: unknown;
   /** The bounds a numeric setting is validated against, where it has any. */

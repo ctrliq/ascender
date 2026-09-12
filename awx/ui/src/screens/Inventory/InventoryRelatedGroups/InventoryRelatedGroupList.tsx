@@ -67,7 +67,8 @@ function InventoryRelatedGroupList() {
       ]);
 
       return {
-        moduleOptions: adHocOptions.data.actions.GET?.module_name?.choices,
+        moduleOptions:
+          adHocOptions.data.actions.GET?.module_name?.choices ?? [],
         isAdHocDisabled: !adHocOptions.data.actions.POST,
         groups: response.data.results,
         itemCount: response.data.count,

@@ -1,7 +1,6 @@
 //
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
-import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -55,8 +54,8 @@ const UserName = styled.span`
 
 export interface PageHeaderToolbarProps {
   isAboutDisabled?: boolean;
-  onAboutClick: (...args: Untyped[]) => void;
-  onLogoutClick: (...args: Untyped[]) => void;
+  onAboutClick: () => void;
+  onLogoutClick: () => void;
   /** The signed in user, from the config; absent until it has been read. */
   loggedInUser?: { username?: string; id?: number; [key: string]: unknown };
   [key: string]: unknown;
@@ -139,7 +138,7 @@ function PageHeaderToolbar({
         )}
       >
         <DropdownList>
-          {themes.map((theme: Untyped) => (
+          {themes.map((theme) => (
             <DropdownItem
               key={theme.id}
               onClick={() => handleThemeSelect(theme.id)}

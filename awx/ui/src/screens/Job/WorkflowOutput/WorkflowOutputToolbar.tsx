@@ -3,7 +3,7 @@ import type {
   WorkflowState,
   WorkflowNode,
 } from 'components/Workflow/workflowReducer';
-import type { AnyJob, Untyped } from 'types/api';
+import type { AnyJob } from 'types/api';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router';
 import { Badge as PFBadge, Button, Tooltip } from '@patternfly/react-core';
@@ -133,7 +133,7 @@ function WorkflowOutputToolbar({
   );
 
   React.useEffect(() => {
-    let secTimer: Untyped;
+    let secTimer: ReturnType<typeof setInterval>;
     if (job.started && !job.finished) {
       secTimer = setInterval(() => {
         setActiveJobElapsedTime(calculateElapsed(job.started));
@@ -143,8 +143,10 @@ function WorkflowOutputToolbar({
   }, [job.started, job.finished]);
 
   const totalNodes =
-    nodes.reduce((n: Untyped, node: WorkflowNode) => n + !node.isDeleted, 0) -
-    1;
+    nodes.reduce(
+      (n: number, node: WorkflowNode) => n + (node.isDeleted ? 0 : 1),
+      0
+    ) - 1;
   // a workflow that did not fully succeed (failed / errored / canceled) has
   // re-runnable nodes, so it gets the relaunch-from-failed dropdown
   const canRelaunchFromFailed = ['failed', 'error', 'canceled'].includes(

@@ -14,7 +14,7 @@ vi.mock('../../api/models/Credentials');
 vi.mock('../../api/models/ExecutionEnvironments');
 vi.mock('../../api/models/Root');
 
-const moduleOptions = [
+const moduleOptions: [string, string][] = [
   ['command', 'command'],
   ['shell', 'shell'],
 ];

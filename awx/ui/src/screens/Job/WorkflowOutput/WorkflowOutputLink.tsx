@@ -2,7 +2,6 @@ import type {
   WorkflowLink,
   WorkflowState,
 } from 'components/Workflow/workflowReducer';
-import type { Untyped } from 'types/api';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { WorkflowStateContext } from 'contexts/Workflow';
 import type { NodePositions } from 'components/Workflow/WorkflowUtils';
@@ -24,7 +23,7 @@ function WorkflowOutputLink({
   mouseEnter,
   mouseLeave,
 }: WorkflowOutputLinkProps) {
-  const ref = useRef<Untyped>(null);
+  const ref = useRef<SVGPolygonElement>(null);
   const [hovering, setHovering] = useState<boolean>(false);
   const [pathD, setPathD] = useState<string | null>();
   const [pathStroke, setPathStroke] = useState(
@@ -36,14 +35,18 @@ function WorkflowOutputLink({
     WorkflowStateContext
   ) as WorkflowState & { nodePositions: NodePositions };
 
+  // The overlay is moved to the end of its parent while hovered and back to
+  // the front on the way out, which is what puts it over its neighbours.
   const handleLinkMouseEnter = () => {
-    ref.current.parentNode.appendChild(ref.current);
+    const polygon = ref.current;
+    polygon?.parentNode?.appendChild(polygon);
     setHovering(true);
     mouseEnter();
   };
 
   const handleLinkMouseLeave = () => {
-    ref.current.parentNode.prepend(ref.current);
+    const polygon = ref.current;
+    polygon?.parentNode?.prepend(polygon);
     setHovering(false);
     mouseLeave();
   };

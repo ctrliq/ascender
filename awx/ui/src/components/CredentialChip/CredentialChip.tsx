@@ -1,4 +1,4 @@
-import type { Credential, SummaryFieldRef, Untyped } from 'types/api';
+import type { Credential, SummaryFieldRef } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -13,7 +13,7 @@ export interface CredentialChipProps {
   credential: Credential | SummaryFieldRef;
   isReadOnly?: boolean;
   ouiaId?: string;
-  onClick?: (...args: Untyped[]) => void;
+  onClick?: () => void;
   [key: string]: unknown;
 }
 

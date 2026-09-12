@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useFormikContext } from 'formik';
+import type { OptionsChoice } from 'types/api';
 import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocDetailsStep from './AdHocDetailsStep';
 import type { AdHocValues, AdHocStep } from './types';
@@ -9,7 +10,7 @@ import type { VisitedSteps } from '../LaunchPrompt/types';
 const STEP_ID = 'details';
 export default function useAdHocDetailsStep(
   visited: VisitedSteps,
-  moduleOptions: [string, string][]
+  moduleOptions: OptionsChoice[]
 ): AdHocStep {
   const { t } = useLingui();
   const { values, touched, setFieldError } = useFormikContext<AdHocValues>();

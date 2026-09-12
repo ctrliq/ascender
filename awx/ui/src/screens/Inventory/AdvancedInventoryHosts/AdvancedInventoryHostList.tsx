@@ -53,7 +53,8 @@ function AdvancedInventoryHostList({
       return {
         hosts: results,
         count: hostCount,
-        moduleOptions: adHocOptions.data.actions.GET?.module_name?.choices,
+        moduleOptions:
+          adHocOptions.data.actions.GET?.module_name?.choices ?? [],
       };
     }, [location.search, inventory.id]),
     {

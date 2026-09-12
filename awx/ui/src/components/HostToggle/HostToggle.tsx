@@ -1,4 +1,4 @@
-import type { Host, Untyped } from 'types/api';
+import type { Host } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -12,7 +12,7 @@ export interface HostToggleProps {
   className?: string;
   host: Host;
   isDisabled?: boolean;
-  onToggle?: (result: Untyped) => void;
+  onToggle?: (isEnabled: boolean) => void;
   tooltip?: React.ReactNode;
   [key: string]: unknown;
 }

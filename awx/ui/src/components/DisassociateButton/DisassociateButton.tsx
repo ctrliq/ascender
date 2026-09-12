@@ -1,4 +1,4 @@
-import type { SummaryFields, Untyped } from 'types/api';
+import type { SummaryFields } from 'types/api';
 import React, { useState, useEffect, useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -27,7 +27,7 @@ export interface DisassociableItem {
 export interface DisassociateButtonProps {
   itemsToDisassociate?: DisassociableItem[];
   modalNote?: React.ReactNode;
-  modalTitle?: Untyped;
+  modalTitle?: React.ReactNode;
   onDisassociate: () => void;
   verifyCannotDisassociate?: boolean;
   isProtectedInstanceGroup?: boolean;

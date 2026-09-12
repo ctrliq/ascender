@@ -1,9 +1,4 @@
-import type {
-  JobTemplate,
-  RecentJob,
-  SummaryFieldRef,
-  Untyped,
-} from 'types/api';
+import type { JobTemplate, RecentJob, SummaryFieldRef } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
@@ -29,7 +24,7 @@ import { getVerbosityLabel } from '../VerbositySelectField';
  */
 export type PromptJobTemplate = JobTemplate & {
   webhook_key?: string;
-  instance_groups?: Untyped[];
+  instance_groups?: SummaryFieldRef[];
 };
 
 export interface PromptJobTemplateDetailProps {

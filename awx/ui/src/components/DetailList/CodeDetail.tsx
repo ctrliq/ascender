@@ -25,7 +25,8 @@ const EditorWrapper = styled.div`
 `;
 
 export interface CodeDetailProps {
-  value?: string;
+  /** Null where the api sends one, which most message bodies do. */
+  value?: string | null;
   label: React.ReactNode;
   mode: CodeEditorMode;
   rows?: number | 'auto';
@@ -56,7 +57,7 @@ function CodeDetail({
         <CodeEditor
           id={editorId}
           mode={mode}
-          value={value}
+          value={value ?? ''}
           readOnly
           rows={rows}
         />

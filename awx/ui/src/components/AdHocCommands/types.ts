@@ -1,4 +1,4 @@
-import type { ApiEntity, Untyped } from 'types/api';
+import type { ApiEntity, SummaryFieldRef } from 'types/api';
 
 /**
  * The values the ad hoc command wizard collects, which become the body of the
@@ -20,7 +20,8 @@ export interface AdHocValues {
   job_type: string;
   /** Keyed by the password the chosen credential prompts for. */
   credential_passwords: Record<string, string>;
-  execution_environment: Untyped;
+  /** The lookup holds a list, because its own step selects from one. */
+  execution_environment: SummaryFieldRef[] | null;
   [key: string]: unknown;
 }
 

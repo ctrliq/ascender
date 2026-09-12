@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState, useEffect } from 'react';
 
 import {
@@ -25,6 +24,7 @@ import { useConfig, useAuthorizedPath } from 'contexts/Config';
 import { useSession } from 'contexts/Session';
 import issuePendoIdentity from 'util/issuePendoIdentity';
 import type { PendoConfig } from 'util/issuePendoIdentity';
+import type { AppRouteGroup } from '../../routeConfig';
 import About from '../About';
 import BrandLogo from './BrandLogo';
 import NavExpandableGroup from './NavExpandableGroup';
@@ -39,7 +39,7 @@ const StyledMastheadBrand = styled(MastheadBrand)`
 `;
 
 export interface AppContainerProps {
-  navRouteConfig?: unknown[];
+  navRouteConfig?: AppRouteGroup[];
   children?: React.ReactNode;
   [key: string]: unknown;
 }
@@ -119,7 +119,7 @@ function AppContainer({ navRouteConfig = [], children }: AppContainerProps) {
           ouiaId="sidebar-navigation"
         >
           <NavList>
-            {navRouteConfig.map(({ groupId, groupTitle, routes }: Untyped) => (
+            {navRouteConfig.map(({ groupId, groupTitle, routes }) => (
               <NavExpandableGroup
                 key={groupId}
                 groupId={groupId}

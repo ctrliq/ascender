@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -6,8 +5,12 @@ import { ActionGroup, Button } from '@patternfly/react-core';
 import { FormFullWidthLayout } from '../FormLayout';
 
 export interface FormActionGroupProps {
-  onCancel: (value?: Untyped) => void;
-  onSubmit: (values: Untyped) => void;
+  onCancel: () => void;
+  /**
+   * Formik's own handleSubmit, which the form also uses as its onSubmit.
+   * Declared as a method so it stays bivariant: here it is a button's click.
+   */
+  onSubmit(event?: React.SyntheticEvent): void;
   submitDisabled?: boolean;
   [key: string]: unknown;
 }

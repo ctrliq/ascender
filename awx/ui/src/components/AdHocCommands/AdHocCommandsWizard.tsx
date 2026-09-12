@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { OptionsChoice } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -9,8 +9,8 @@ import type { AdHocItem, AdHocValues } from './types';
 
 export interface AdHocCommandsWizardProps {
   onLaunch: (values: AdHocValues) => void;
-  /** The ansible modules the command may run, from the API's options. */
-  moduleOptions: Untyped;
+  /** The modules the api offers, as value and label pairs. */
+  moduleOptions: OptionsChoice[];
   onCloseWizard: () => void;
   credentialTypeId: number | string | null;
   organizationId: number | string | null;
@@ -91,7 +91,7 @@ const FormikApp = withFormik<AdHocCommandsWizardProps, AdHocValues>({
       extra_vars: '---',
       job_type: 'run',
       credential_passwords: {},
-      execution_environment: '',
+      execution_environment: [],
     };
   },
   // The wizard launches from its own onSave rather than through formik, and

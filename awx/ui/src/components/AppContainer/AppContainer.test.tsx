@@ -3,6 +3,7 @@ import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { MeAPI, RootAPI } from 'api';
 import { useAuthorizedPath } from 'contexts/Config';
+import type { AppRouteGroup } from '../../routeConfig';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import {
   renderWithContexts,
@@ -63,7 +64,7 @@ describe('<AppContainer />', () => {
     ];
 
     const { container } = renderWithContexts(
-      <AppContainer navRouteConfig={routeConfig}>
+      <AppContainer navRouteConfig={routeConfig as unknown as AppRouteGroup[]}>
         {routeConfig.map(({ groupId }) => (
           <div key={groupId} id={groupId} />
         ))}
