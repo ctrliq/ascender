@@ -115,7 +115,7 @@ To setup SAML authentication:
 
 3. The **SAML Assertion Consume Service (ACS) URL** and **SAML Service Provider Metadata URL** fields are pre-populated and are non-editable. Contact the Identity Provider administrator and provide the information contained in these fields. 
 
-4. Click **Edit** and set the **SAML Service Provider Entity ID** to be the same as the **Base URL of the service** field that can be found in the Miscellaneous System settings screen by clicking **Settings** from the left navigation bar. Through the API, it can be viewed in the ``/api/v2/settings/system``, under the ``TOWER_URL_BASE`` variable. The Entity ID can be set to any one of the individual Ascender cluster nodes, but it is good practice to set it to the URL of the Service Provider. Ensure that the Base URL matches the FQDN of the load balancer (if used).
+4. Click **Edit** and set the **SAML Service Provider Entity ID** to be the same as the **Base URL of the service** field that can be found in the Miscellaneous System settings screen by clicking **Settings** from the left navigation bar. Through the API, it can be viewed in the ``/api/v2/settings/system``, under the ``ASCENDER_URL_BASE`` variable. The Entity ID can be set to any one of the individual Ascender cluster nodes, but it is good practice to set it to the URL of the Service Provider. Ensure that the Base URL matches the FQDN of the load balancer (if used).
 
 .. note:: 
 
