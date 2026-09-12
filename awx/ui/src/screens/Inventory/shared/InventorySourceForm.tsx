@@ -49,7 +49,7 @@ import {
 
 const buildSourceChoiceOptions = (options: OptionsResponse) => {
   const sourceChoices = (options.actions.GET?.source?.choices ?? []).map(
-    ([choice, label]) => ({ label, key: choice, value: choice })
+    ([choice, label]) => ({ label, key: choice ?? '', value: choice ?? '' })
   );
   return sourceChoices.filter(({ key }) => key !== 'file');
 };

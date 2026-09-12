@@ -84,7 +84,7 @@ function MetadataStep() {
                     >
                       <AnsibleSelect
                         name={`inputs.${field.id}`}
-                        value={form.values.inputs[field.id]}
+                        value={form.values.inputs[field.id] as string}
                         id={`credential-${field.id}`}
                         data={(field.choices ?? []).map((choice) => ({
                           value: choice,
@@ -94,7 +94,6 @@ function MetadataStep() {
                         onChange={(event, value) => {
                           form.setFieldValue(`inputs.${field.id}`, value);
                         }}
-                        validate={field.required ? required(null) : null}
                       />
                     </FormGroup>
                   );

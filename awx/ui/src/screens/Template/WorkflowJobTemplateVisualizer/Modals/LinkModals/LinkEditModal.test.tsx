@@ -35,7 +35,7 @@ describe('LinkEditModal', () => {
     expect(dispatch).toHaveBeenCalledWith({
       type: 'UPDATE_LINK',
       linkType: 'always',
-      linkCondition: null,
+      linkCondition: undefined,
     });
   });
 });

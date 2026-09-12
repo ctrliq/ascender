@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import {
@@ -11,15 +10,17 @@ import { useLingui } from '@lingui/react/macro';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
 export interface ToolbarAddButtonProps {
-  linkTo?: Untyped;
-  onClick?: (...args: Untyped[]) => void;
+  /** Where the button leads. Either this or onClick, never neither. */
+  linkTo?: string;
+  onClick?: (event: React.MouseEvent) => void;
   isDisabled?: boolean;
   isExpanded?: boolean;
-  defaultLabel?: Untyped;
-  showToggleIndicator?: unknown;
+  defaultLabel?: string;
+  /** Renders a menu toggle rather than a button, for an add with a menu. */
+  showToggleIndicator?: boolean;
   ouiaId?: string;
-  ref?: Untyped;
-  [key: string]: unknown;
+  /** The toggle's own element, which the menu it opens is anchored to. */
+  ref?: React.Ref<HTMLButtonElement>;
 }
 
 function ToolbarAddButton({

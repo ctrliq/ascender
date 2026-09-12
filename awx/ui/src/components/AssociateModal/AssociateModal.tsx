@@ -1,4 +1,9 @@
-import type { SearchColumn, Untyped } from 'types/api';
+import type {
+  ApiEntity,
+  OptionsResponse,
+  Paginated,
+  SearchColumn,
+} from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -21,20 +26,25 @@ const QS_CONFIG = (order_by = 'name') =>
   });
 
 export interface AssociateModalProps {
-  header?: Untyped;
+  /** What the list is of, which names it in the table's own aria labels. */
+  header?: string;
   columns?: SearchColumn[];
   title?: React.ReactNode;
   onClose: () => void;
-  onAssociate: (...args: Untyped[]) => void;
+  /**
+   * Declared as a method so it stays bivariant: every caller types the rows
+   * it is associating, which are narrower than what this modal lists.
+   */
+  onAssociate(items: ApiEntity[]): Promise<unknown> | void;
   /** Reads the page of candidates the modal lists. */
-  fetchRequest: (params: QSParams) => Promise<Untyped>;
+  fetchRequest: (params: QSParams) => Promise<{ data: Paginated<ApiEntity> }>;
   /** Reads that list's options, for the searchable keys. */
-  optionsRequest: () => Promise<Untyped>;
+  optionsRequest: () => Promise<{ data: OptionsResponse }>;
   isModalOpen?: boolean;
-  displayKey?: Untyped;
+  /** Which field of a row to show as its label; defaults to the name. */
+  displayKey?: string;
   ouiaId?: string;
   modalNote?: React.ReactNode;
-  [key: string]: unknown;
 }
 
 function AssociateModal({
@@ -53,7 +63,7 @@ function AssociateModal({
   const { t } = useLingui();
   const location = useLocation();
   const navigate = useNavigate();
-  const { selected, handleSelect } = useSelected([]);
+  const { selected, handleSelect } = useSelected<ApiEntity>([]);
 
   // Set default values for header and title after i18n is available
   header = header || t`Items`;

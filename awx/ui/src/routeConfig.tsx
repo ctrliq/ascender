@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import type { UserProfile } from 'contexts/Config';
 import React from 'react';
 import { Trans } from '@lingui/react/macro';
@@ -29,8 +28,22 @@ import { Jobs } from 'screens/Job';
 import HostMetrics from 'screens/HostMetrics';
 import Labels from 'screens/Labels';
 
+/** One screen the navigation leads to, and the route that reaches it. */
+export interface AppRoute {
+  title: React.ReactNode;
+  path: string;
+  screen: React.ComponentType;
+}
+
+/** One group of the navigation, which is how the sidebar is divided. */
+export interface AppRouteGroup {
+  groupTitle: React.ReactNode;
+  groupId: string;
+  routes: AppRoute[];
+}
+
 function getRouteConfig(userProfile: Partial<UserProfile> = {}) {
-  let routeConfig = [
+  let routeConfig: AppRouteGroup[] = [
     {
       groupTitle: <Trans>Views</Trans>,
       groupId: 'views_group',
@@ -188,14 +201,14 @@ function getRouteConfig(userProfile: Partial<UserProfile> = {}) {
     },
   ];
 
-  const deleteRoute = (name: Untyped) => {
+  const deleteRoute = (name: string) => {
     routeConfig.forEach((group) => {
       group.routes = group.routes.filter(({ path }) => !path.includes(name));
     });
     routeConfig = routeConfig.filter((groups) => groups.routes.length);
   };
 
-  const deleteRouteGroup = (name: Untyped) => {
+  const deleteRouteGroup = (name: string) => {
     routeConfig = routeConfig.filter(({ groupId }) => !groupId.includes(name));
   };
   if (

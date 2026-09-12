@@ -1,19 +1,18 @@
-import type { Organization, Untyped } from 'types/api';
+import type { Organization, SummaryFieldRef } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CardBody } from 'components/Card';
 import { OrganizationsAPI } from 'api';
 import OrganizationForm from '../shared/OrganizationForm';
+import type { OrganizationFormValues } from '../shared/OrganizationForm';
 
-const isEqual = (array1: Untyped, array2: Untyped) =>
+/** Whether both lists name the same rows, in the same order. */
+const isEqual = (array1: SummaryFieldRef[], array2: SummaryFieldRef[]) =>
   array1.length === array2.length &&
-  array1.every(
-    (element: Untyped, index: number) => element.id === array2[index].id
-  );
+  array1.every((element, index) => element.id === array2[index]?.id);
 
 export interface OrganizationEditProps {
   organization: Organization;
-  [key: string]: unknown;
 }
 
 function OrganizationEdit({ organization }: OrganizationEditProps) {
@@ -22,9 +21,9 @@ function OrganizationEdit({ organization }: OrganizationEditProps) {
   const [formError, setFormError] = useState<unknown>(null);
 
   const handleSubmit = async (
-    values: Untyped,
-    groupsToAssociate: Untyped,
-    groupsToDisassociate: Untyped
+    values: OrganizationFormValues,
+    groupsToAssociate: SummaryFieldRef[],
+    groupsToDisassociate: SummaryFieldRef[]
   ) => {
     try {
       await OrganizationsAPI.update(organization.id, {
@@ -40,7 +39,10 @@ function OrganizationEdit({ organization }: OrganizationEditProps) {
       /* eslint-disable no-await-in-loop, no-restricted-syntax */
       // Resolve Promises sequentially to avoid race condition
       if (
-        !isEqual(organization.galaxy_credentials, values.galaxy_credentials)
+        !isEqual(
+          organization.galaxy_credentials ?? [],
+          values.galaxy_credentials
+        )
       ) {
         for (const credential of organization.galaxy_credentials ?? []) {
           await OrganizationsAPI.disassociateGalaxyCredential(

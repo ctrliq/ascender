@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ApiEntity, SummaryFieldRef } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -6,14 +6,18 @@ import { useLingui } from '@lingui/react/macro';
 import CheckboxCard from './CheckboxCard';
 import { SelectedList } from '../SelectedList';
 
+/** One role a resource offers, as its own summary field names it. */
+export type SelectableRole = SummaryFieldRef & { user_only?: boolean };
+
 export interface RolesStepProps {
-  onRolesClick?: (...args: Untyped[]) => void;
-  roles: Untyped;
+  onRolesClick?: (role: SelectableRole) => void;
+  /** The roles on offer, keyed by the role's own name. */
+  roles: Record<string, SelectableRole>;
+  /** Which field of a selected row to show as its label. */
   selectedListKey?: string;
-  selectedListLabel?: Untyped;
-  selectedResourceRows?: Untyped[];
-  selectedRoleRows?: Untyped[];
-  [key: string]: unknown;
+  selectedListLabel?: string;
+  selectedResourceRows?: ApiEntity[];
+  selectedRoleRows?: SelectableRole[];
 }
 
 function RolesStep({
@@ -49,16 +53,14 @@ function RolesStep({
           marginTop: '20px',
         }}
       >
-        {Object.keys(roles).map((role) => (
+        {Object.entries(roles).map(([key, role]) => (
           <CheckboxCard
-            description={roles[role].description}
-            itemId={roles[role].id}
-            isSelected={selectedRoleRows.some(
-              (item) => item.id === roles[role].id
-            )}
-            key={roles[role].id}
-            name={roles[role].name}
-            onSelect={() => onRolesClick(roles[role])}
+            description={role.description}
+            itemId={role.id}
+            isSelected={selectedRoleRows.some((item) => item.id === role.id)}
+            key={key}
+            name={role.name ?? ''}
+            onSelect={() => onRolesClick(role)}
           />
         ))}
       </div>

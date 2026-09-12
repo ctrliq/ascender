@@ -43,6 +43,18 @@ export interface LaunchConfig {
   [key: string]: unknown;
 }
 
+/**
+ * The condition a link can carry, which the api holds on the edge rather than
+ * on either node: the parent outcome to evaluate on, the artifact the parent
+ * produced with set_stats, and the comparison to make against it.
+ */
+export interface LinkCondition {
+  trigger?: string;
+  artifact_key?: string;
+  operator?: string;
+  expected_value?: string;
+}
+
 /** Which nodes each node is reached from, keyed by node id. */
 export type LinkParentMapping = Record<number, number[]>;
 
@@ -65,7 +77,7 @@ export interface WorkflowNode {
   isDeleted?: boolean;
   isEdited?: boolean;
   linkType?: string;
-  linkCondition?: Record<string, unknown>;
+  linkCondition?: LinkCondition;
   /** The prompt overrides a node carries, shaped by the template it runs. */
   promptValues?: PromptValues;
   all_parents_must_converge?: boolean;
@@ -138,7 +150,7 @@ export interface EditedWorkflowNode {
  */
 export interface NewWorkflowNode extends EditedWorkflowNode {
   linkType?: string;
-  linkCondition?: Record<string, unknown>;
+  linkCondition?: LinkCondition;
 }
 
 /** What REFRESH_NODE carries: the fields a re-read of the node can replace. */
@@ -153,7 +165,7 @@ export interface WorkflowLink {
   source: { id: number };
   target: { id: number };
   linkType?: string;
-  linkCondition?: Record<string, unknown>;
+  linkCondition?: LinkCondition;
   isConvergenceLink?: boolean;
   [key: string]: unknown;
 }
@@ -195,12 +207,12 @@ export type WorkflowAction =
   | {
       type: 'CREATE_LINK';
       linkType?: string;
-      linkCondition?: Record<string, unknown>;
+      linkCondition?: LinkCondition;
     }
   | {
       type: 'UPDATE_LINK';
       linkType?: string;
-      linkCondition?: Record<string, unknown>;
+      linkCondition?: LinkCondition;
     }
   | { type: 'CREATE_NODE'; node: NewWorkflowNode }
   | { type: 'UPDATE_NODE'; node: EditedWorkflowNode }
@@ -395,7 +407,7 @@ export default function visualizerReducer(
 function createLink(
   state: WorkflowState,
   linkType?: string,
-  linkCondition?: Record<string, unknown>
+  linkCondition?: LinkCondition
 ) {
   const { addLinkSourceNode, addLinkTargetNode, links, nodes } = state;
 
@@ -983,7 +995,7 @@ function toggleUnsavedChangesModal(state: WorkflowState) {
 function updateLink(
   state: WorkflowState,
   linkType?: string,
-  linkCondition?: Record<string, unknown>
+  linkCondition?: LinkCondition
 ) {
   const { linkToEdit, links } = state;
 

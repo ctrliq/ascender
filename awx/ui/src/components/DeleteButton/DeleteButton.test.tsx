@@ -27,7 +27,6 @@ describe('<DeleteButton />', () => {
           },
         ]}
         deleteMessage="Delete this?"
-        warningMessage="Are you sure to want to delete this"
       />
     );
     await user.click(screen.getByRole('button', { name: 'Delete' }));
@@ -40,7 +39,6 @@ describe('<DeleteButton />', () => {
     const { user } = renderWithContexts(
       <DeleteButton
         onConfirm={onConfirm}
-        itemsToDelete="foo"
         deleteDetailsRequests={[
           {
             label: { id: 'job', message: 'job' },
@@ -64,7 +62,6 @@ describe('<DeleteButton />', () => {
     const { user } = renderWithContexts(
       <DeleteButton
         onConfirm={onConfirm}
-        itemsToDelete="foo"
         deleteDetailsRequests={[
           {
             label: { id: 'job', message: 'job' },

@@ -3,14 +3,18 @@ import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import { jsonToYaml, yamlToJson } from 'util/yaml';
+import { JSON_MODE, YAML_MODE } from 'components/CodeEditor/constants';
+import type { VariablesMode } from 'components/CodeEditor/constants';
 import type { LabelInput } from 'util/labels';
 import OtherPromptsStep from './OtherPromptsStep';
 import StepName from './StepName';
 import type { LaunchConfig, LaunchPromptValues, LaunchStep } from '../types';
 
 const STEP_ID = 'other';
-export const YAML_MODE = 'yaml';
-export const JSON_MODE = 'javascript';
+// Re-exported from the editor's own constants, which is where they are
+// declared: nothing outside this module reads them off it today, but the pair
+// was declared here twice over before.
+export { JSON_MODE, YAML_MODE };
 
 const getVariablesData = (resource: LaunchableResource | null) => {
   if (resource?.extra_data) {
@@ -44,10 +48,10 @@ export default function useOtherPromptsStep(
 ): LaunchStep {
   const { t } = useLingui();
   const [variablesField] = useField('extra_vars');
-  const [variablesMode, setVariablesMode] = useState<string | undefined>();
+  const [variablesMode, setVariablesMode] = useState<VariablesMode>();
   const [isTouched, setIsTouched] = useState(false);
 
-  const handleModeChange = (mode: string) => {
+  const handleModeChange = (mode: VariablesMode) => {
     setVariablesMode(mode);
   };
 

@@ -47,12 +47,15 @@ export interface CredentialLookupProps {
    * PatternFly input the field renders, which names its own event type.
    */
   onBlur?(event?: React.SyntheticEvent): void;
-  /** Declared method style so a caller may name its own row type. */
-  onChange(value: SummaryFieldRef | null): void;
+  /**
+   * Declared method style so a caller may name its own row type. A multiple
+   * lookup hands back the whole list, a single one the row or nothing.
+   */
+  onChange(value: SummaryFieldRef | SummaryFieldRef[] | null): void;
   required?: boolean;
   tooltip?: React.ReactNode;
   validate?: FieldValidator;
-  value?: SummaryFieldRef | null;
+  value?: SummaryFieldRef | SummaryFieldRef[] | null;
   [key: string]: unknown;
 }
 

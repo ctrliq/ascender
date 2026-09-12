@@ -91,11 +91,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
     }
   );
 
-  const {
-    request: deleteCredential,
-    isLoading,
-    error: deleteError,
-  } = useRequest(
+  const { request: deleteCredential, error: deleteError } = useRequest(
     useCallback(async () => {
       await CredentialsAPI.destroy(credentialId);
       navigate('/credentials');
@@ -139,7 +135,6 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
           />
           <PluginInputMetadata>
             <CodeEditor
-              dataCy={`credential-${id}-detail`}
               id={`credential-${id}-metadata`}
               mode="javascript"
               readOnly
@@ -303,10 +298,8 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
         {user_capabilities?.delete && (
           <DeleteButton
             name={name}
-            itemToDelete={credential}
             modalTitle={t`Delete Credential`}
             onConfirm={deleteCredential}
-            isLoading={isLoading}
             deleteDetailsRequests={deleteDetailsRequests}
             deleteMessage={t`This credential is currently being used by other resources. Are you sure you want to delete it?`}
           >

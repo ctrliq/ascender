@@ -8,6 +8,7 @@ import MultiButtonToggle from '../MultiButtonToggle';
 import Popover from '../Popover';
 import CodeEditor from './CodeEditor';
 import { JSON_MODE, YAML_MODE } from './constants';
+import type { VariablesMode } from './constants';
 
 const VariablesWrapper = styled.div`
   grid-column: 1 / -1;
@@ -132,8 +133,8 @@ interface ModeToggleProps {
   helpText?: React.ReactNode;
   dataCy?: string;
   /** YAML_MODE or JSON_MODE, whichever the editor is showing. */
-  mode: string;
-  setMode: (mode: string) => void;
+  mode: VariablesMode;
+  setMode: (mode: VariablesMode) => void;
   name?: string;
 }
 

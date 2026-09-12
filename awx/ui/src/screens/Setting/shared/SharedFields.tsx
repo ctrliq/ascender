@@ -519,7 +519,6 @@ const ObjectField = ({
           onChange={(value) => {
             helpers.setValue(value);
           }}
-          placeholder={JSON.stringify(config?.placeholder, null, 2)}
         />
       </SettingGroup>
     </FormFullWidthLayout>

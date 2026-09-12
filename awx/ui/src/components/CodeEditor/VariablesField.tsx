@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -12,6 +11,7 @@ import {
   isJsonString,
   parseVariableField,
 } from 'util/yaml';
+import type { VariablesMode } from './constants';
 import { CheckboxField } from '../FormField';
 import MultiButtonToggle from '../MultiButtonToggle';
 import CodeEditor from './CodeEditor';
@@ -29,7 +29,10 @@ const StyledCheckboxField = styled(CheckboxField)`
   margin-left: auto;
 `;
 
-const defaultValidators = {};
+const defaultValidators: Record<
+  string,
+  (value: unknown) => string | undefined
+> = {};
 
 export interface VariablesFieldProps {
   id: string;
@@ -40,10 +43,14 @@ export interface VariablesFieldProps {
   promptId?: string | null;
   tooltip?: React.ReactNode;
   /** YAML_MODE or JSON_MODE, which is how the editor opens. */
-  initialMode?: string;
-  onModeChange?: (mode: string) => void;
+  initialMode?: VariablesMode;
+  onModeChange?: (mode: VariablesMode) => void;
   isRequired?: boolean;
-  validators?: Record<string, Untyped>;
+  /**
+   * One validator per variable name, each answering a message where that
+   * variable's value is wrong and nothing where it is not.
+   */
+  validators?: Record<string, (value: unknown) => string | undefined>;
 }
 
 function VariablesField({
@@ -70,7 +77,7 @@ function VariablesField({
         const parsedVariables = parseVariableField(value);
         if (validators) {
           const errorMessages = Object.keys(validators)
-            .map((field) => validators[field](parsedVariables[field]))
+            .map((field) => validators[field]?.(parsedVariables[field]))
             .filter((e) => e);
 
           if (errorMessages.length > 0) {
@@ -109,7 +116,7 @@ function VariablesField({
   );
   const [isJsonEdited, setIsJsonEdited] = useState(false);
 
-  const handleModeChange = (newMode: string) => {
+  const handleModeChange = (newMode: VariablesMode) => {
     if (newMode === YAML_MODE && !isJsonEdited && lastYamlValue !== null) {
       helpers.setValue(lastYamlValue, false);
       setMode(newMode);
@@ -177,12 +184,11 @@ export interface VariablesFieldInternalsProps {
   readOnly: boolean;
   promptId?: string | null;
   tooltip: React.ReactNode;
-  mode: Untyped;
-  setMode: Untyped;
+  mode: VariablesMode;
+  setMode: (mode: VariablesMode) => void;
   setShouldValidate: (shouldValidate: boolean) => void;
-  handleChange: (...args: Untyped[]) => void;
+  handleChange: (value: string) => void;
   isRequired: boolean;
-  [key: string]: unknown;
 }
 
 function VariablesFieldInternals({

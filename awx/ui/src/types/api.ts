@@ -452,7 +452,17 @@ export interface JobEventRecord {
   [key: string]: unknown;
 }
 
-export type AdHocCommand = WithNested<Schemas['AdHocCommandDetail']>;
+/**
+ * host_status_counts is a SerializerMethodField, so the schema can only
+ * describe it as a string; it counts the hosts by how the run ended, the same
+ * way the job serializer's does.
+ */
+export type AdHocCommand = Omit<
+  WithNested<Schemas['AdHocCommandDetail']>,
+  'host_status_counts'
+> & {
+  host_status_counts?: Record<string, number>;
+};
 export type ConstructedInventory = WithNested<Schemas['ConstructedInventory']>;
 
 /**
@@ -523,10 +533,10 @@ export type WorkflowJobTemplateNode = Omit<
 > & {
   condition_edges?: {
     id: number;
-    trigger?: unknown;
-    artifact_key?: unknown;
-    operator?: unknown;
-    expected_value?: unknown;
+    trigger?: string;
+    artifact_key?: string;
+    operator?: string;
+    expected_value?: string;
   }[];
 };
 

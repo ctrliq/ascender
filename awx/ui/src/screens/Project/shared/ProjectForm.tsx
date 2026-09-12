@@ -338,10 +338,11 @@ function ProjectFormFields({
               label: t`Choose a Source Control Type`,
               isDisabled: true,
             },
-            ...(scmTypeOptions ?? []).map(([value, label]) => {
-              if (value === '') {
-                value = 'manual';
-              }
+            ...(scmTypeOptions ?? []).map(([choice, label]) => {
+              // The manual type is the empty scm_type, which the select
+              // cannot hold as a value because the prompt row above uses it.
+              const value =
+                choice === '' || choice === null ? 'manual' : choice;
               return {
                 label,
                 value,

@@ -1,5 +1,4 @@
 import type { Mock } from 'vitest';
-import type { Untyped } from 'types/api';
 import '@testing-library/jest-dom/vitest';
 import { configure } from '@testing-library/dom';
 import React from 'react';
@@ -17,8 +16,12 @@ configure({ asyncUtilTimeout: 5000 });
 // there is no such global, so waitFor concludes the timers are real and polls on
 // a clock that nothing advances, which hangs every fake-timer test until the
 // suite timeout rather than failing. The one method it calls is enough.
-(globalThis as Untyped).jest = {
-  advanceTimersByTime: (ms: Untyped) => vi.advanceTimersByTime(ms),
+(
+  globalThis as typeof globalThis & {
+    jest: { advanceTimersByTime: (ms: number) => void };
+  }
+).jest = {
+  advanceTimersByTime: (ms: number) => vi.advanceTimersByTime(ms),
 };
 
 // mockument replaces document.createRange with a stub that lacks cloneRange,
@@ -42,7 +45,9 @@ export const asyncFlush = () =>
 
 let hasConsoleError = false;
 let hasConsoleWarn = false;
-let networkRequestUrl = false;
+// The url a test tried to reach, or true where the call named none: either
+// way truthy, which is what the afterEach below checks.
+let networkRequestUrl: string | boolean = false;
 const { error, warn } = global.console;
 
 global.console = {
@@ -79,8 +84,8 @@ global.console = {
   },
 };
 
-const fetchSafeguard = (url: Untyped) => {
-  networkRequestUrl = url || true;
+const fetchSafeguard = (url?: RequestInfo | URL) => {
+  networkRequestUrl = typeof url === 'string' ? url : true;
   return Promise.resolve({
     ok: true,
     status: 200,

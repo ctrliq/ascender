@@ -1,12 +1,15 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 
 import styled from 'styled-components';
 import { Button, Badge, Alert, Tooltip } from '@patternfly/react-core';
+import type { ButtonProps } from '@patternfly/react-core';
 import { getRelatedResourceDeleteCounts } from 'util/getRelatedResourceDeleteDetails';
-import type { DeleteCount } from 'util/getRelatedResourceDeleteDetails';
+import type {
+  DeleteCount,
+  DeleteRequest,
+} from 'util/getRelatedResourceDeleteDetails';
 import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
 
@@ -19,17 +22,23 @@ const Label = styled.span`
   }
 `;
 export interface DeleteButtonProps {
-  onConfirm: (value?: Untyped) => void;
-  modalTitle?: Untyped;
+  /** Called with nothing: the caller already holds what it is deleting. */
+  onConfirm: () => void;
+  modalTitle?: React.ReactNode;
   name?: React.ReactNode;
-  variant?: Untyped;
+  variant?: ButtonProps['variant'];
   children?: React.ReactNode;
   isDisabled?: boolean;
   ouiaId?: string;
-  deleteMessage?: Untyped;
-  deleteDetailsRequests?: Untyped;
-  disabledTooltip?: Untyped;
-  [key: string]: unknown;
+  /** Also the warning's aria-label, so a string rather than a node. */
+  deleteMessage?: string;
+  /**
+   * Counts to look up before the modal opens, so it can warn about what the
+   * delete takes with it. Lists build these on every render and only run
+   * them once a row is picked, which is why they may be empty.
+   */
+  deleteDetailsRequests?: DeleteRequest[];
+  disabledTooltip?: React.ReactNode;
 }
 
 function DeleteButton({
@@ -52,7 +61,7 @@ function DeleteButton({
   >(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  const toggleModal = async (isModalOpen: unknown) => {
+  const toggleModal = async (isModalOpen: boolean) => {
     setIsLoading(true);
     if (deleteDetailsRequests?.length && isModalOpen) {
       const { results, error } = await getRelatedResourceDeleteCounts(

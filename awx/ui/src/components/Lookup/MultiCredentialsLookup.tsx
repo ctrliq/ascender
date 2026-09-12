@@ -187,14 +187,13 @@ function MultiCredentialsLookup({
               <AnsibleSelect
                 css="flex: 1 1 75%;"
                 id="multiCredentialsLookUp-select"
-                label={t`Selected Category`}
                 data={credentialTypes.map((type) => ({
                   key: type.id,
                   value: type.id,
-                  label: type.name,
+                  label: type.name ?? '',
                   isDisabled: false,
                 }))}
-                value={selectedType && selectedType.id}
+                value={selectedType?.id ?? ''}
                 onChange={(e: React.SyntheticEvent, id: number | string) => {
                   // Reset query params when the category of credentials is changed
                   navigate(

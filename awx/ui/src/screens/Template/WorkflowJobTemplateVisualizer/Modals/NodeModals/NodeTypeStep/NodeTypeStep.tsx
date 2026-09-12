@@ -130,7 +130,6 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
         <div>
           <AnsibleSelect
             id="nodeResource-select"
-            label={t`Select a Node Type`}
             data={modifiedNodeTypeChoices}
             value={nodeTypeField.value}
             onChange={(e, val) => {

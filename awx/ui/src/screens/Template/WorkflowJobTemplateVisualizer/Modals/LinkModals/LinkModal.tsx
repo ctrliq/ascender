@@ -1,8 +1,8 @@
 import type {
+  LinkCondition,
   WorkflowAction,
   WorkflowState,
 } from 'components/Workflow/workflowReducer';
-import type { Untyped } from 'types/api';
 import React, { useContext, useState } from 'react';
 import { Button, FormGroup, TextInput } from '@patternfly/react-core';
 import { Modal } from '@patternfly/react-core/deprecated';
@@ -18,8 +18,7 @@ import Popover from 'components/Popover';
 
 export interface LinkModalProps {
   header: React.ReactNode;
-  onConfirm: (linkType?: string, linkCondition?: Untyped) => void;
-  [key: string]: unknown;
+  onConfirm: (linkType?: string, linkCondition?: LinkCondition) => void;
 }
 
 function LinkModal({ header, onConfirm }: LinkModalProps) {
@@ -28,19 +27,17 @@ function LinkModal({ header, onConfirm }: LinkModalProps) {
     WorkflowDispatchContext
   ) as React.Dispatch<WorkflowAction>;
   const { linkToEdit } = useContext(WorkflowStateContext) as WorkflowState;
-  const [linkType, setLinkType] = useState(
-    linkToEdit ? linkToEdit.linkType : 'success'
-  );
+  const [linkType, setLinkType] = useState(linkToEdit?.linkType ?? 'success');
   const [trigger, setTrigger] = useState(
     linkToEdit?.linkCondition?.trigger || 'success'
   );
-  const [artifactKey, setArtifactKey] = useState<Untyped>(
+  const [artifactKey, setArtifactKey] = useState(
     linkToEdit?.linkCondition?.artifact_key || ''
   );
   const [operator, setOperator] = useState(
     linkToEdit?.linkCondition?.operator || 'eq'
   );
-  const [expectedValue, setExpectedValue] = useState<Untyped>(
+  const [expectedValue, setExpectedValue] = useState(
     linkToEdit?.linkCondition?.expected_value || ''
   );
 
@@ -72,7 +69,7 @@ function LinkModal({ header, onConfirm }: LinkModalProps) {
                     operator,
                     expected_value: expectedValue,
                   }
-                : null
+                : undefined
             )
           }
         >

@@ -10,6 +10,7 @@ import Wizard from '../Wizard';
 import type { LegacyStepRef } from '../Wizard/Wizard';
 import SelectResourceStep from './SelectResourceStep';
 import SelectRoleStep from './SelectRoleStep';
+import type { SelectableRole } from './SelectRoleStep';
 
 const readUsers = async (queryParams: QSParams) =>
   UsersAPI.read(Object.assign(queryParams, { is_superuser: false }));
@@ -116,7 +117,7 @@ function AddResourceRole({
     selected: rolesSelected,
     handleSelect: handleRoleSelect,
     clearSelected: clearRoles,
-  } = useSelected<ApiEntity>([]);
+  } = useSelected<SelectableRole>([]);
 
   const [resourceType, setResourceType] = useState<string | null>(null);
   const [currentStepId, setCurrentStepId] = useState(1);

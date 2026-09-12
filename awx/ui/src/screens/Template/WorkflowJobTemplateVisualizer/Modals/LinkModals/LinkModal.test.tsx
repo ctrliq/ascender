@@ -60,7 +60,7 @@ describe('LinkModal', () => {
         target: { value: 'always' },
       });
       fireEvent.click(document.querySelector('button#link-confirm')!);
-      expect(onConfirm).toHaveBeenCalledWith('always', null);
+      expect(onConfirm).toHaveBeenCalledWith('always', undefined);
     });
 
     test('Condition fields shown and passed to callback when selecting condition', () => {

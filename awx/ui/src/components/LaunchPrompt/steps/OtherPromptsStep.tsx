@@ -15,6 +15,7 @@ import FormField from '../../FormField';
 import { TagMultiSelect } from '../../MultiSelect';
 import AnsibleSelect from '../../AnsibleSelect';
 import { VariablesField } from '../../CodeEditor';
+import type { VariablesMode } from '../../CodeEditor/constants';
 import Popover from '../../Popover';
 import { VerbositySelectField } from '../../VerbositySelectField';
 import jobHelpText from '../../../screens/Job/Job.helptext';
@@ -33,8 +34,8 @@ const FieldHeader = styled.div`
 
 export interface OtherPromptsStepProps {
   launchConfig: LaunchConfig;
-  variablesMode?: string;
-  onVarModeChange?: (mode: string) => void;
+  variablesMode?: VariablesMode;
+  onVarModeChange?: (mode: VariablesMode) => void;
   [key: string]: unknown;
 }
 

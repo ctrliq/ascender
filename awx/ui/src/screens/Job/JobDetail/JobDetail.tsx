@@ -39,8 +39,7 @@ const StatusDetailValue = styled.div`
 `;
 
 export interface JobDetailProps {
-  /** A job the api has already answered with, so its summary is there. */
-  job: AnyJob & { summary_fields: SummaryFields };
+  job: AnyJob;
   /** The source types the api offers, as value and label pairs. */
   inventorySourceLabels?: [string | number | null, string][];
   [key: string]: unknown;
@@ -65,7 +64,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
     project_update: projectUpdate,
     source_workflow_job,
     execution_environment: executionEnvironment,
-  } = job.summary_fields;
+  } = job.summary_fields ?? ({} as SummaryFields);
   const { scm_branch: scmBranch } = job;
   const [errorMsg, setErrorMsg] = useState<unknown>();
   const navigate = useNavigate();
@@ -615,7 +614,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
       </DetailList>
       <CardActionsRow>
         {job.type !== 'system_job' &&
-          job.summary_fields.user_capabilities?.start &&
+          job.summary_fields?.user_capabilities?.start &&
           (job.status === 'failed' && job.type === 'job' ? (
             <LaunchButton resource={job}>
               {({ handleRelaunch, isLaunching }) => (

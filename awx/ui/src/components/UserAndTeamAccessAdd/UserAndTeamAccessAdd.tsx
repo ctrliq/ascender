@@ -1,8 +1,11 @@
 import type {
   ApiEntity,
+  OptionsResponse,
+  Paginated,
   RolesApiModel,
+  SearchColumn,
+  SortColumn,
   SummaryFieldRef,
-  Untyped,
 } from 'types/api';
 import React, { useState, useCallback, useMemo } from 'react';
 import { useParams, useMatch } from 'react-router';
@@ -17,6 +20,7 @@ import {
   OrganizationsAPI,
   InstanceGroupsAPI,
 } from 'api';
+import type { ApiResponse } from 'api/Base';
 import useRequest from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import type { QSParams } from 'util/qs';
@@ -24,6 +28,7 @@ import SelectableCard from '../SelectableCard';
 import Wizard from '../Wizard/Wizard';
 import SelectResourceStep from '../AddRole/SelectResourceStep';
 import SelectRoleStep from '../AddRole/SelectRoleStep';
+import type { SelectableRole } from '../AddRole/SelectRoleStep';
 
 const Grid = styled.div`
   display: grid;
@@ -31,14 +36,25 @@ const Grid = styled.div`
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
 `;
 
+/** One kind of resource the wizard can add roles on, and how to list it. */
+export interface ResourceAccessOption {
+  /** Which card is picked, which is what the wizard branches on. */
+  selectedResource: string;
+  label: string;
+  searchColumns: SearchColumn[];
+  sortColumns: SortColumn[];
+  fetchItems: (params: QSParams) => Promise<ApiResponse<Paginated<ApiEntity>>>;
+  fetchOptions: () => Promise<ApiResponse<OptionsResponse>>;
+}
+
 export interface UserAndTeamAccessAddProps {
   title: React.ReactNode;
-  onFetchData: (...args: Untyped[]) => void;
+  /** Re-reads the access list once the roles have been associated. */
+  onFetchData: () => void;
   apiModel: RolesApiModel;
   onClose: () => void;
   onError: (error: unknown) => void;
   resourceId: number | string;
-  [key: string]: unknown;
 }
 
 function UserAndTeamAccessAdd({
@@ -51,7 +67,7 @@ function UserAndTeamAccessAdd({
 }: UserAndTeamAccessAddProps) {
   const { t } = useLingui();
   const [selectedResourceType, setSelectedResourceType] =
-    useState<Untyped>(null);
+    useState<ResourceAccessOption | null>(null);
   const [stepIdReached, setStepIdReached] = useState(1);
   const { id: routeId } = useParams() as { id: string };
   // The caller passes the resource id explicitly (works whether the parent
@@ -69,9 +85,9 @@ function UserAndTeamAccessAdd({
     selected: rolesSelected,
     handleSelect: handleRoleSelect,
     clearSelected: clearRolesSelected,
-  } = useSelected<ApiEntity>([]);
+  } = useSelected<SelectableRole>([]);
 
-  const resourceAccessConfig = useMemo(
+  const resourceAccessConfig: ResourceAccessOption[] = useMemo(
     () => [
       {
         selectedResource: 'jobTemplate',
@@ -311,17 +327,16 @@ function UserAndTeamAccessAdd({
   const { request: handleWizardSave, error: saveError } = useRequest(
     useCallback(async () => {
       const roleRequests: Promise<unknown>[] = [];
-      const resourceRolesTypes = resourcesSelected.flatMap(
-        (resource: Untyped) =>
-          Object.values(
-            resource.summary_fields.object_roles as Record<
-              string,
-              SummaryFieldRef
-            >
-          )
+      const resourceRolesTypes = resourcesSelected.flatMap((resource) =>
+        Object.values(
+          (resource.summary_fields?.object_roles ?? {}) as Record<
+            string,
+            SummaryFieldRef
+          >
+        )
       );
 
-      rolesSelected.map((role: Untyped) =>
+      rolesSelected.map((role) =>
         resourceRolesTypes.forEach((rolename) => {
           if (rolename.name === role.name) {
             roleRequests.push(
@@ -401,9 +416,7 @@ function UserAndTeamAccessAdd({
         <SelectRoleStep
           onRolesClick={handleRoleSelect}
           roles={selectableRoles}
-          selectedListKey={
-            selectedResourceType === 'users' ? 'username' : 'name'
-          }
+          selectedListKey="name"
           selectedListLabel={t`Selected`}
           selectedResourceRows={resourcesSelected}
           selectedRoleRows={rolesSelected}

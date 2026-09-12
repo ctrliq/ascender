@@ -85,7 +85,7 @@ function ExternalTestModal({
         )}
         onSubmit={(values) => handleTest(values)}
       >
-        {({ handleSubmit, setFieldValue }) => (
+        {({ handleSubmit, setFieldValue, values }) => (
           <Modal
             title={t`Test External Credential`}
             isOpen
@@ -134,7 +134,10 @@ function ExternalTestModal({
                         >
                           <AnsibleSelect
                             name={field.id}
-                            value={field.default}
+                            // The form's value, not the field's default: bound
+                            // to the default this select showed it whatever the
+                            // user picked, while the form held the choice.
+                            value={values[field.id] as string}
                             id={`credential-${field.id}`}
                             data={(field.choices ?? []).map((choice) => ({
                               value: choice,
@@ -144,7 +147,6 @@ function ExternalTestModal({
                             onChange={(event, value) => {
                               setFieldValue(field.id, value);
                             }}
-                            validate={isRequired ? required(null) : null}
                           />
                         </FormGroup>
                       );

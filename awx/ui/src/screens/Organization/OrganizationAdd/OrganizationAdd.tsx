@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { PageSection, Card } from '@patternfly/react-core';
@@ -8,6 +8,7 @@ import { CardBody } from 'components/Card';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import OrganizationForm from '../shared/OrganizationForm';
+import type { OrganizationFormValues } from '../shared/OrganizationForm';
 
 function OrganizationAdd() {
   const navigate = useNavigate();
@@ -36,7 +37,10 @@ function OrganizationAdd() {
     fetchDefaultGalaxyCredential();
   }, [fetchDefaultGalaxyCredential]);
 
-  const handleSubmit = async (values: Untyped, groupsToAssociate: Untyped) => {
+  const handleSubmit = async (
+    values: OrganizationFormValues,
+    groupsToAssociate: SummaryFieldRef[]
+  ) => {
     try {
       const { data: response } = await OrganizationsAPI.create({
         ...values,

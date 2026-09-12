@@ -7,9 +7,8 @@ import Detail from './Detail';
 
 export interface LaunchedByDetailProps {
   /** A job of any kind: what it reports here is the same for all of them. */
-  job: AnyJob & { summary_fields: SummaryFields };
+  job: AnyJob;
   dataCy?: string;
-  [key: string]: unknown;
 }
 
 export default function LaunchedByDetail({
@@ -24,7 +23,7 @@ export default function LaunchedByDetail({
       job_template: jobTemplate,
       workflow_job_template: workflowJT,
       schedule,
-    } = job.summary_fields;
+    } = job.summary_fields ?? ({} as SummaryFields);
 
     if (!createdBy && !schedule) {
       return {};

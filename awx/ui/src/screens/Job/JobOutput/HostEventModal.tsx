@@ -124,7 +124,10 @@ function HostEventModal({
   };
 
   const jsonObj = processCodeEditorValue(hostEvent?.event_data?.res);
-  const stdErr = hostEvent?.event_data?.res?.stderr;
+  const rawStdErr = hostEvent?.event_data?.res?.stderr;
+  // A module is free to answer with the lines rather than the text, the way
+  // getStdOutValue above already allows for stdout.
+  const stdErr = Array.isArray(rawStdErr) ? rawStdErr.join('\n') : rawStdErr;
   const stdOut = getStdOutValue(hostEvent);
   const hostDescription = (
     hostEvent.summary_fields as { host?: { description?: string } } | undefined

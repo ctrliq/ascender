@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import {
   HashRouter,
@@ -27,6 +26,7 @@ import { isAuthenticated } from 'util/auth';
 import { getLanguageWithoutRegionCode } from 'util/language';
 import Metrics from 'screens/Metrics';
 import SubscriptionEdit from 'screens/Setting/Subscription/SubscriptionEdit';
+import type { AppRouteGroup } from './routeConfig';
 import { dynamicActivate, locales } from './i18nLoader';
 import getRouteConfig from './routeConfig';
 import { getStoredThemeId, applyTheme } from './themeRegistry';
@@ -59,8 +59,7 @@ const RenderAppContainer = () => {
 };
 
 export interface AuthorizedRoutesProps {
-  routeConfig: Untyped;
-  [key: string]: unknown;
+  routeConfig: AppRouteGroup[];
 }
 
 const AuthorizedRoutes = ({ routeConfig }: AuthorizedRoutesProps) => {
@@ -92,8 +91,8 @@ const AuthorizedRoutes = ({ routeConfig }: AuthorizedRoutesProps) => {
   return (
     <Routes>
       {routeConfig
-        .flatMap(({ routes }: Untyped) => routes)
-        .map(({ path, screen: Screen }: Untyped) => (
+        .flatMap(({ routes }) => routes)
+        .map(({ path, screen: Screen }) => (
           // /* so each screen's own nested <Routes> can match the rest
           <Route
             key={path}
@@ -129,7 +128,7 @@ const AuthorizedRoutes = ({ routeConfig }: AuthorizedRoutesProps) => {
   );
 };
 
-export function ProtectedRoute({ children }: Untyped) {
+export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const {
     authRedirectTo,
     isUserBeingLoggedOut,

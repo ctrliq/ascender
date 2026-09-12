@@ -1,12 +1,19 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import { FormSelect, FormSelectOption } from '@patternfly/react-core';
 
+/** One entry of the select, as every caller builds it. */
+export interface AnsibleSelectOption {
+  key: string | number;
+  value: string | number;
+  label: string;
+  isDisabled?: boolean;
+}
+
 export interface AnsibleSelectProps {
-  id: Untyped;
-  data?: Untyped[];
+  id: string;
+  data?: AnsibleSelectOption[];
   isValid?: boolean;
   /**
    * Declared method style on purpose: the handler is formik's own, which takes
@@ -14,12 +21,15 @@ export interface AnsibleSelectProps {
    * PatternFly input the field renders, which names its own event type.
    */
   onBlur?(event?: React.SyntheticEvent): void;
-  value: Untyped;
+  value: string | number;
   className?: string;
   isDisabled?: boolean;
-  onChange: (...args: Untyped[]) => void;
+  /**
+   * Declared method style for the same reason as onBlur above: the handler is
+   * often formik's, which names its own event.
+   */
+  onChange(event: React.FormEvent<HTMLSelectElement>, value: string): void;
   name?: string;
-  [key: string]: unknown;
 }
 
 function AnsibleSelect({
@@ -34,7 +44,10 @@ function AnsibleSelect({
   name,
 }: AnsibleSelectProps) {
   const { t } = useLingui();
-  const onSelectChange = (val: unknown, event: React.SyntheticEvent) => {
+  const onSelectChange = (
+    val: string,
+    event: React.FormEvent<HTMLSelectElement>
+  ) => {
     // Only the formik-driven selects give a name, and it is what their
     // handlers read the field off the event by.
     if (name) {

@@ -1,4 +1,4 @@
-import type { InstanceGroup, Untyped } from 'types/api';
+import type { Organization, SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Trans, useLingui } from '@lingui/react/macro';
@@ -19,10 +19,10 @@ import { FormColumnLayout } from 'components/FormLayout';
 import CredentialLookup from 'components/Lookup/CredentialLookup';
 
 export interface OrganizationFormFieldsProps {
-  instanceGroups: Untyped;
-  setInstanceGroups: Untyped;
-  organizationId: number | string;
-  [key: string]: unknown;
+  instanceGroups: SummaryFieldRef[];
+  setInstanceGroups: (value: SummaryFieldRef[]) => void;
+  /** Absent while the organization is still being added. */
+  organizationId: number | string | null;
 }
 
 function OrganizationFormFields({
@@ -48,7 +48,7 @@ function OrganizationFormFields({
   ] = useField('default_environment');
 
   const handleCredentialUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef[]) => {
       setFieldValue('galaxy_credentials', value);
     },
     [setFieldValue]
@@ -99,7 +99,7 @@ function OrganizationFormFields({
         onChange={(value) => executionEnvironmentHelpers.setValue(value)}
         popoverContent={t`The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level.`}
         globallyAvailable
-        organizationId={organizationId}
+        organizationId={organizationId ?? undefined}
         isDefaultEnvironment
         fieldName="default_environment"
       />
@@ -131,39 +131,57 @@ function OrganizationFormFields({
   );
 }
 
+/** The organization as its own form holds it, before it is saved. */
+export interface OrganizationFormValues {
+  name?: string | null;
+  description?: string | null;
+  /** A string while the number field holds it, zero where it is unset. */
+  max_hosts: number | string;
+  galaxy_credentials: SummaryFieldRef[];
+  default_environment: SummaryFieldRef | null;
+}
+
+export interface OrganizationFormProps {
+  /** Absent on the add screen, which starts the form empty. */
+  organization?: Partial<Organization>;
+  onCancel: () => void;
+  /**
+   * Takes the instance groups alongside the values, because they are
+   * associated one request at a time rather than saved with the organization.
+   */
+  onSubmit: (
+    values: OrganizationFormValues,
+    instanceGroups: SummaryFieldRef[],
+    initialInstanceGroups: SummaryFieldRef[]
+  ) => void;
+  submitError?: unknown;
+  defaultGalaxyCredential?: SummaryFieldRef | null;
+}
+
 function OrganizationForm({
-  organization = {
-    id: '',
-    name: '',
-    description: '',
-    max_hosts: '0',
-    default_environment: '',
-  },
+  organization = {},
   onCancel,
   onSubmit,
   submitError = null,
   defaultGalaxyCredential = null,
-  ...rest
-}: Untyped) {
+}: OrganizationFormProps) {
   const [contentError, setContentError] = useState<unknown>(null);
   const [hasContentLoading, setHasContentLoading] = useState(true);
   const [initialInstanceGroups, setInitialInstanceGroups] = useState<
-    InstanceGroup[]
+    SummaryFieldRef[]
   >([]);
-  const [instanceGroups, setInstanceGroups] = useState<InstanceGroup[]>([]);
+  const [instanceGroups, setInstanceGroups] = useState<SummaryFieldRef[]>([]);
 
   const handleCancel = () => {
     onCancel();
   };
 
-  const handleSubmit = (values: Untyped) => {
-    if (
-      typeof values.max_hosts !== 'number' ||
-      values.max_hosts === 'undefined'
-    ) {
-      values.max_hosts = 0;
-    }
-    onSubmit(values, instanceGroups, initialInstanceGroups);
+  const handleSubmit = (values: OrganizationFormValues) => {
+    // The number field hands back a string, and an empty one where the user
+    // cleared it: the api wants a number, and zero is its own no limit.
+    const max_hosts =
+      typeof values.max_hosts === 'number' ? values.max_hosts : 0;
+    onSubmit({ ...values, max_hosts }, instanceGroups, initialInstanceGroups);
   };
 
   useEffect(() => {
@@ -200,14 +218,15 @@ function OrganizationForm({
   return (
     <Formik
       initialValues={{
-        name: organization.name,
-        description: organization.description,
+        name: organization.name ?? '',
+        description: organization.description ?? '',
         max_hosts: organization.max_hosts || '0',
-        galaxy_credentials:
-          organization.galaxy_credentials ||
-          (defaultGalaxyCredential ? [defaultGalaxyCredential] : []),
+        galaxy_credentials: (organization.galaxy_credentials ??
+          (defaultGalaxyCredential
+            ? [defaultGalaxyCredential]
+            : [])) as SummaryFieldRef[],
         default_environment:
-          organization.summary_fields?.default_environment || null,
+          organization.summary_fields?.default_environment ?? null,
       }}
       onSubmit={handleSubmit}
     >
@@ -217,8 +236,7 @@ function OrganizationForm({
             <OrganizationFormFields
               instanceGroups={instanceGroups}
               setInstanceGroups={setInstanceGroups}
-              organizationId={organization?.id || null}
-              {...rest}
+              organizationId={organization?.id ?? null}
             />
             <FormSubmitError error={submitError} />
             <FormActionGroup

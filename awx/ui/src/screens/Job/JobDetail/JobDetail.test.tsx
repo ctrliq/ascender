@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { AnyJob, SummaryFields } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -9,7 +9,6 @@ import {
   assertDetail,
 } from '../../../../testUtils/rtlContexts';
 import JobDetail from './JobDetail';
-import type { JobDetailProps } from './JobDetail';
 import mockJobDataJson from '../shared/data.job.json';
 
 vi.mock('../../../api');
@@ -25,17 +24,19 @@ vi.mock('@patternfly/react-core', async () => {
   );
   return {
     ...actual,
-    Tooltip: ({ children }: Untyped) => children,
+    Tooltip: ({ children }: { children: React.ReactNode }) => children,
   };
 });
 
 // Detail renders <dt>label</dt> as a sibling of its <dd>value</dd>; this scopes
 // to the value cell of a given label.
-const detailValue = (label: Untyped) =>
+const detailValue = (label: string) =>
   screen.getByText(label).nextElementSibling;
 
 /** The fixture as the detail takes it: a job of some kind with its summary. */
-const mockJobData = mockJobDataJson as unknown as JobDetailProps['job'];
+const mockJobData = mockJobDataJson as unknown as AnyJob & {
+  summary_fields: SummaryFields;
+};
 
 describe('<JobDetail />', () => {
   afterEach(() => {
@@ -511,7 +512,7 @@ describe('<JobDetail />', () => {
       webhook_service: '',
       webhook_credential: null,
       webhook_guid: '',
-    } as unknown as JobDetailProps['job'];
+    } as unknown as AnyJob;
     renderWithContexts(<JobDetail job={workFlowJob} />);
     expect(detailValue('Status')).toHaveTextContent('Successful');
     assertDetail('Started', '7/6/2021, 7:40:17 PM');

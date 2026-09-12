@@ -80,7 +80,6 @@ function AdHocDetailsStep({ moduleOptions }: AdHocDetailsStepProps) {
           >
             <AnsibleSelect
               {...moduleNameField}
-              placeHolder={t`Select a module`}
               isValid={!moduleNameMeta.touched || !moduleNameMeta.error}
               id="module_name"
               data={[

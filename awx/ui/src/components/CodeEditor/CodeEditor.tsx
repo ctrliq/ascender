@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useRef, useCallback } from 'react';
 
 import ReactAce from 'react-ace';
@@ -115,26 +114,31 @@ const AceEditor = styled(ReactAce)<{ hasErrors?: boolean }>`
 `;
 AceEditor.displayName = 'AceEditor';
 
+/**
+ * The languages the editor knows, named as the UI names them rather than as
+ * ace does: jinja2 is ace's django mode, and javascript its json one.
+ */
+export type CodeEditorMode = 'javascript' | 'yaml' | 'jinja2' | 'json';
+
 export interface CodeEditorProps {
-  id?: Untyped;
-  value: Untyped;
-  onChange?: (...args: Untyped[]) => void;
-  onFocus?: (...args: Untyped[]) => void;
+  id?: string;
+  value?: string;
+  onChange?: (value: string) => void;
+  onFocus?: () => void;
   /**
    * Declared method style on purpose: the handler is formik's own, which takes
    * an event or a field name, and it is handed straight to whichever
    * PatternFly input the field renders, which names its own event type.
    */
   onBlur?(event?: React.SyntheticEvent): void;
-  mode: Untyped;
+  mode: CodeEditorMode;
   readOnly?: boolean;
   hasErrors?: boolean;
   /** A fixed number of rows, or 'auto' to grow with the content. */
   rows?: number | 'auto';
   minRows?: number;
-  maxRows?: Untyped;
+  maxRows?: number;
   className?: string;
-  [key: string]: unknown;
 }
 
 function CodeEditor({
@@ -170,7 +174,9 @@ function CodeEditor({
     if (!readOnly) {
       editorInput.tabIndex = -1;
     }
-    editorInput.id = id;
+    if (id) {
+      editorInput.id = id;
+    }
   }, [readOnly, id]);
 
   const listen = useCallback((event: KeyboardEvent) => {
@@ -197,7 +203,7 @@ function CodeEditor({
     };
   });
 
-  const aceModes = {
+  const aceModes: Record<CodeEditorMode, string> = {
     javascript: 'json',
     yaml: 'yaml',
     jinja2: 'django',
@@ -216,7 +222,7 @@ function CodeEditor({
     <>
       <FocusWrapper ref={wrapper} tabIndex={readOnly ? -1 : 0}>
         <AceEditor
-          mode={aceModes[mode as keyof typeof aceModes] || 'text'}
+          mode={aceModes[mode] || 'text'}
           className={`pf-v6-c-form-control ${className}`}
           theme="twilight"
           onChange={debounce(onChange, 250)}

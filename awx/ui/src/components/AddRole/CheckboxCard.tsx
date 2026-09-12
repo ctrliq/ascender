@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Checkbox as PFCheckbox } from '@patternfly/react-core';
 import styled from 'styled-components';
@@ -21,9 +20,12 @@ export interface CheckboxCardProps {
   name: string;
   description?: React.ReactNode;
   isSelected?: boolean;
-  onSelect?: (item?: Untyped) => void;
+  /**
+   * Declared as a method so it stays bivariant: the callers ignore both of
+   * the arguments PatternFly's checkbox hands it.
+   */
+  onSelect?(event: React.FormEvent<HTMLInputElement>, checked: boolean): void;
   itemId: number | string;
-  [key: string]: unknown;
 }
 
 function CheckboxCard({
