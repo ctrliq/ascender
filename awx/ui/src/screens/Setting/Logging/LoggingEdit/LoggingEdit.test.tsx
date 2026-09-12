@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import type { TestHistory } from 'history';
@@ -76,7 +75,7 @@ describe('<LoggingEdit />', () => {
 
   // FormGroup label -> the FormGroup wrapper element, used to scope assertions
   // about the required marker to a single field.
-  function getFormGroup(container: HTMLElement, label: Untyped) {
+  function getFormGroup(container: HTMLElement, label: string) {
     const labelEl = screen.queryByText(label);
     if (!labelEl) {
       return null;

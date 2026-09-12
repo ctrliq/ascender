@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { screen, waitFor } from '@testing-library/react';
@@ -12,7 +11,7 @@ import GitHub from './GitHub';
 
 vi.mock('../../../api/models/Settings');
 
-async function setup(initialEntry: Untyped) {
+async function setup(initialEntry: string) {
   const history = createMemoryHistory({ initialEntries: [initialEntry] });
   const utils = renderWithContexts(
     <SettingsProvider value={settingOptions}>

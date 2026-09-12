@@ -1,9 +1,10 @@
-import type { Untyped } from 'types/api';
+import type { OptionsField } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI, ExecutionEnvironmentsAPI } from 'api';
 import type { ResponseOf } from '../../../../../testUtils/responseOf';
+import type { TestContexts } from '../../../../../testUtils/rtlContexts';
 import {
   renderWithContexts,
   assertDetail,
@@ -56,8 +57,8 @@ describe('<MiscSystemDetail />', () => {
   });
 
   async function mountDetail(
-    options: Untyped = settingOptions,
-    context: Untyped = undefined
+    options: typeof settingOptions = settingOptions,
+    context: TestContexts | undefined = undefined
   ) {
     renderWithContexts(
       <SettingsProvider value={options}>
@@ -105,7 +106,11 @@ describe('<MiscSystemDetail />', () => {
     } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     await mountDetail({
       ...settingOptions,
-      DEFAULT_EXECUTION_ENVIRONMENT: null,
+      // Null on purpose: the detail reads this as not configured.
+      DEFAULT_EXECUTION_ENVIRONMENT: null as unknown as Record<
+        string,
+        OptionsField
+      >,
     });
     assertDetail('Global default execution environment', 'Not configured');
   });

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
@@ -6,6 +5,7 @@ import { createMemoryHistory } from 'history';
 import { SettingsAPI } from 'api';
 import { SettingsProvider } from 'contexts/Settings';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { TestContexts } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import { settingOptions } from '../../../../testUtils/settingOptions';
 import mockAllSettings from '../shared/data.allSettings.json';
@@ -25,8 +25,8 @@ describe('<MiscAuthentication />', () => {
   });
 
   function renderMiscAuthentication(
-    initialEntries: Untyped,
-    context?: Untyped
+    initialEntries: string[],
+    context?: TestContexts
   ) {
     const history = createMemoryHistory({ initialEntries });
     return renderWithContexts(

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -13,7 +12,7 @@ import Jobs from './Jobs';
 
 vi.mock('../../../api');
 
-function mountAt(path: Untyped) {
+function mountAt(path: string) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
     <SettingsProvider value={settingOptions}>

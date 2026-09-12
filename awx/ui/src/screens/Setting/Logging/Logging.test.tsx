@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
@@ -6,6 +5,7 @@ import { createMemoryHistory } from 'history';
 import { SettingsAPI } from 'api';
 import { SettingsProvider } from 'contexts/Settings';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { TestContexts } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import { settingOptions } from '../../../../testUtils/settingOptions';
 import Logging from './Logging';
@@ -48,7 +48,7 @@ describe('<Logging />', () => {
     vi.clearAllMocks();
   });
 
-  function renderLogging(initialEntries: Untyped, context?: Untyped) {
+  function renderLogging(initialEntries: string[], context?: TestContexts) {
     const history = createMemoryHistory({ initialEntries });
     return renderWithContexts(
       <SettingsProvider value={settingOptions}>

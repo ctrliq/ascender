@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -26,7 +25,7 @@ const mockSettings = {
   SOCIAL_AUTH_GOOGLE_OAUTH2_TEAM_MAP: {},
 };
 
-function mountAt(path: Untyped) {
+function mountAt(path: string) {
   const history = createMemoryHistory({ initialEntries: [path] });
   return renderWithContexts(
     <SettingsProvider value={JSON.parse(JSON.stringify(settingOptions))}>

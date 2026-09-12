@@ -1,9 +1,9 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
 import type { ResponseOf } from '../../../../../testUtils/responseOf';
+import type { TestContexts } from '../../../../../testUtils/rtlContexts';
 import {
   renderWithContexts,
   assertDetail,
@@ -31,7 +31,7 @@ describe('<JobsDetail />', () => {
     vi.clearAllMocks();
   });
 
-  async function mountDetail(context?: Untyped) {
+  async function mountDetail(context?: TestContexts) {
     renderWithContexts(
       <SettingsProvider value={settingOptions}>
         <JobsDetail />

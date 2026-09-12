@@ -1,11 +1,11 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { TestContexts } from '../../../../../testUtils/rtlContexts';
 import {
   renderWithContexts,
   assertDetail,
@@ -106,7 +106,7 @@ function mockAllCategories() {
   );
 }
 
-async function setup(category: Untyped, context?: Untyped) {
+async function setup(category: string, context?: TestContexts) {
   const history = createMemoryHistory({
     initialEntries: [`/settings/github/${category}/details`],
   });

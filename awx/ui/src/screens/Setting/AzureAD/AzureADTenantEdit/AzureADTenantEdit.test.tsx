@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import type { TestHistory } from 'history';
@@ -14,43 +13,7 @@ vi.mock('../../../../api');
 
 describe('<AzureADTenantEdit />', () => {
   let history: TestHistory;
-  let tenantSettings: Untyped;
-
   beforeEach(() => {
-    tenantSettings = {
-      ...settingOptions,
-      SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY: {
-        label: 'Azure AD Tenant OAuth2 Key',
-        help_text: 'The OAuth2 key',
-        type: 'string',
-        unit: null,
-      },
-      SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET: {
-        label: 'Azure AD Tenant OAuth2 Secret',
-        help_text: 'The OAuth2 secret',
-        type: 'password',
-        unit: null,
-      },
-      SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID: {
-        label: 'Azure AD Tenant OAuth2 Tenant ID',
-        help_text: 'The tenant ID',
-        type: 'string',
-        unit: null,
-      },
-      SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_ORGANIZATION_MAP: {
-        label: 'Azure AD Tenant OAuth2 Organization Map',
-        help_text: 'The organization map',
-        type: 'nested object',
-        unit: null,
-      },
-      SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TEAM_MAP: {
-        label: 'Azure AD Tenant OAuth2 Team Map',
-        help_text: 'The team map',
-        type: 'nested object',
-        unit: null,
-      },
-    };
-
     vi.mocked(SettingsAPI.revertCategory).mockResolvedValue(
       {} as unknown as ResponseOf<typeof SettingsAPI.revertCategory>
     );
@@ -81,7 +44,7 @@ describe('<AzureADTenantEdit />', () => {
       initialEntries: ['/settings/azure/tenant/edit'],
     });
     const result = renderWithContexts(
-      <SettingsProvider value={tenantSettings}>
+      <SettingsProvider value={settingOptions}>
         <AzureADTenantEdit />
       </SettingsProvider>,
       { context: { router: { history } } }
@@ -120,8 +83,8 @@ describe('<AzureADTenantEdit />', () => {
     const { user } = await renderEdit();
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
-    const callArgs: Untyped = vi.mocked(SettingsAPI.updateAll).mock
-      .calls[0]![0];
+    const callArgs = vi.mocked(SettingsAPI.updateAll).mock
+      .calls[0]![0] as Record<string, unknown>;
     expect(callArgs.SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY).toEqual(
       'mock tenant key'
     );

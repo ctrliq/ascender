@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
@@ -25,7 +24,7 @@ describe('<Troubleshooting />', () => {
     vi.clearAllMocks();
   });
 
-  function renderTroubleshooting(initialEntries: Untyped) {
+  function renderTroubleshooting(initialEntries: string[]) {
     const history = createMemoryHistory({ initialEntries });
     return renderWithContexts(
       <SettingsProvider value={settingOptions}>

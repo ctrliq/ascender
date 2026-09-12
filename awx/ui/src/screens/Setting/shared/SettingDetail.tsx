@@ -25,7 +25,8 @@ export interface SettingDetailProps {
   label?: React.ReactNode;
   /** The field's type, as the category's OPTIONS response declares it. */
   type?: string;
-  unit?: string;
+  /** Null where the api sends one, which it does for most settings. */
+  unit?: string | null;
   value?: unknown;
 }
 

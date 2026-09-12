@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within, fireEvent } from '@testing-library/react';
 import type { TestHistory } from 'history';
@@ -180,7 +179,13 @@ describe('<SubscriptionEdit />', () => {
       expect(submit).not.toBeDisabled();
 
       // submit successfully
-      (global.window as Untyped).pendo = { initialize: async () => ({}) };
+      // The tracker the app initialises at login, which the wizard's submit
+      // path reaches for; jsdom has no script tag to load it.
+      (
+        global.window as unknown as {
+          pendo: { initialize: () => Promise<unknown> };
+        }
+      ).pendo = { initialize: async () => ({}) };
       vi.mocked(ConfigAPI.read).mockResolvedValue({
         data: mockConfig,
       } as unknown as ResponseOf<typeof ConfigAPI.read>);

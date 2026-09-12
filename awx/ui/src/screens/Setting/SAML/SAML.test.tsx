@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
@@ -42,7 +41,7 @@ describe('<SAML />', () => {
     vi.clearAllMocks();
   });
 
-  function renderSAML(initialEntries: Untyped) {
+  function renderSAML(initialEntries: string[]) {
     const history = createMemoryHistory({ initialEntries });
     return renderWithContexts(
       <SettingsProvider value={settingOptions}>

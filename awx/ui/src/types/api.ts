@@ -551,7 +551,7 @@ export interface OptionsField {
   label?: string;
   help_text?: string;
   /** What the value is measured in, which a detail shows beside it. */
-  unit?: string;
+  unit?: string | null;
   filterable?: boolean;
   required?: boolean;
   /** Each entry is a value and the label to show for it. */
@@ -574,7 +574,7 @@ export interface SettingConfig {
    * where what it has to say depends on what the form currently holds.
    */
   help_text?: React.ReactNode;
-  unit?: string;
+  unit?: string | null;
   required?: boolean;
   /** Each entry is a value and the label to show for it. */
   choices?: [string | number | null, string][];

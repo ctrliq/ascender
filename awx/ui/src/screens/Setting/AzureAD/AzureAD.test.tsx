@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
@@ -34,7 +33,7 @@ describe('<AzureAD />', () => {
     vi.clearAllMocks();
   });
 
-  function renderAzure(initialEntries: Untyped) {
+  function renderAzure(initialEntries: string[]) {
     const history = createMemoryHistory({ initialEntries });
     return renderWithContexts(
       <SettingsProvider value={settingOptions}>
