@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
@@ -12,8 +11,9 @@ export interface CopyButtonProps {
   /** Posts the copy and resolves with whatever the API returns. */
   copyItem: () => Promise<unknown>;
   isDisabled?: boolean;
-  onCopyStart: (...args: Untyped[]) => void;
-  onCopyFinish: (...args: Untyped[]) => void;
+  /** Called either side of the copy, which is what disables the row. */
+  onCopyStart: () => void;
+  onCopyFinish: () => void;
   errorMessage: React.ReactNode;
   ouiaId?: string;
   [key: string]: unknown;

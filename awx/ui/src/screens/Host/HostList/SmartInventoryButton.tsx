@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
 
@@ -7,7 +6,7 @@ import { useLingui } from '@lingui/react/macro';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
 export interface SmartInventoryButtonProps {
-  onClick: (...args: Untyped[]) => void;
+  onClick: (event?: React.MouseEvent) => void;
   isDisabled?: boolean;
   hasInvalidKeys?: boolean;
   hasAnsibleFactsKeys?: boolean;

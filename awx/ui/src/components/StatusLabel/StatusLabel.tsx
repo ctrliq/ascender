@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Label, Tooltip } from '@patternfly/react-core';
@@ -36,7 +35,7 @@ const colors = {
 export interface StatusLabelProps {
   /** The job status, which keys the colour and label maps below. */
   status?: string;
-  tooltipContent?: Untyped;
+  tooltipContent?: React.ReactNode;
   children?: React.ReactNode;
   [key: string]: unknown;
 }

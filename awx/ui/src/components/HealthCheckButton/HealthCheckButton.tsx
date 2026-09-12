@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
@@ -7,9 +6,10 @@ import { useKebabifiedMenu } from 'contexts/Kebabified';
 
 export interface HealthCheckButtonProps {
   isDisabled: boolean;
-  onClick: (...args: Untyped[]) => void;
+  onClick: (event?: React.MouseEvent) => void;
   selectedItems: unknown[];
-  healthCheckPending: Untyped;
+  /** Whether a check is already running, which is the button's spinner. */
+  healthCheckPending: boolean;
   [key: string]: unknown;
 }
 

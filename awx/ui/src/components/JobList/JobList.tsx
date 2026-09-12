@@ -1,4 +1,4 @@
-import type { UnifiedJob, Untyped } from 'types/api';
+import type { UnifiedJob } from 'types/api';
 import React, { useEffect, useCallback, useRef } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui, Plural } from '@lingui/react/macro';
@@ -113,7 +113,7 @@ function JobList({
   }, []);
 
   const fetchJobsById = useCallback(
-    async (ids: Untyped) => {
+    async (ids: (number | string)[]) => {
       const params = parseQueryString(qsConfig, location.search);
       params.id__in = ids.join(',');
       try {

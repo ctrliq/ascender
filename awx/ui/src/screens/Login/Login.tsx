@@ -2,7 +2,7 @@
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
 
-import type { DetailedError, Untyped } from 'types/api';
+import type { DetailedError } from 'types/api';
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { Navigate } from 'react-router';
 
@@ -153,7 +153,7 @@ function AWXLogin({ alt, isAuthenticated }: AWXLoginProps) {
     }, [isAuthenticated])
   );
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: LoginFormValues) => {
     dismissAuthError();
     await authenticate(values);
     await fetchUserId();

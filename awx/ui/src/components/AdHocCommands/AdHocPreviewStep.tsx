@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Tooltip } from '@patternfly/react-core';
@@ -26,13 +25,13 @@ const ErrorMessageWrapper = styled.div`
 export interface AdHocPreviewStepProps {
   hasErrors: boolean;
   /** The wizard's values, which this step lists back as details. */
-  values: AdHocValues & { credential?: Untyped[] };
+  values: AdHocValues;
   [key: string]: unknown;
 }
 
 function AdHocPreviewStep({ hasErrors, values }: AdHocPreviewStepProps) {
   const { t, i18n } = useLingui();
-  const { credential, execution_environment, extra_vars, verbosity } = values;
+  const { credentials, execution_environment, extra_vars, verbosity } = values;
 
   const items = Object.entries(values) as [string, React.ReactNode][];
   return (
@@ -60,8 +59,8 @@ function AdHocPreviewStep({ hasErrors, values }: AdHocPreviewStepProps) {
               <Detail key={key} label={toTitleCase(key)} value={value} />
             )
         )}
-        {credential && (
-          <Detail label={t`Credential`} value={credential[0]?.name} />
+        {credentials && (
+          <Detail label={t`Credential`} value={credentials[0]?.name} />
         )}
         {execution_environment && (
           <Detail

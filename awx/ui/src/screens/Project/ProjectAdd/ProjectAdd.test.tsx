@@ -45,8 +45,9 @@ vi.mock('../shared/ProjectForm', async () => {
         scm_url: 'https://foo.bar',
         scm_clean: true,
         scm_track_submodules: false,
-        credential: 100,
-        signature_validation_credential: 200,
+        // The lookups hold the whole credential; the request carries its id.
+        credential: { id: 100, name: 'Scm' },
+        signature_validation_credential: { id: 200, name: 'Gpg' },
         local_path: '',
         organization: { id: 2, name: 'Bar' },
         scm_update_on_launch: true,
