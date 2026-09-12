@@ -94,9 +94,7 @@ describe('<GitHubEdit />', () => {
     await user.type(keyInput!, 'new key');
     await user.click(container.querySelector('button[aria-label="Save"]')!);
     await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
-    // the org/team maps are unchanged from their initial values; the CodeEditor
-    // (react-ace) renders empty under jsdom so it cannot be driven here, so we
-    // assert the map values pass through unchanged rather than editing them.
+    // this test edits no org/team map, so both pass through unchanged
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       SOCIAL_AUTH_GITHUB_KEY: 'new key',
       SOCIAL_AUTH_GITHUB_SECRET: '',
