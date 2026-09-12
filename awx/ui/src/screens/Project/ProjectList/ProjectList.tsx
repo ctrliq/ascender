@@ -1,4 +1,4 @@
-import type { Project, Untyped } from 'types/api';
+import type { Project } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -129,7 +129,7 @@ function ProjectList() {
   );
 
   const handleCopy = useCallback(
-    (newId: Untyped) => {
+    (newId: number) => {
       addToast({
         id: newId,
         title: t`Project copied successfully`,

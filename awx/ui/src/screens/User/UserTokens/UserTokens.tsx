@@ -1,4 +1,4 @@
-import type { SetBreadcrumb, Untyped, User } from 'types/api';
+import type { OAuth2Token, SetBreadcrumb, User } from 'types/api';
 import React, { useCallback, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
@@ -27,10 +27,12 @@ export interface UserTokensProps {
 
 function UserTokens({ setBreadcrumb, user }: UserTokensProps) {
   const { t } = useLingui();
-  const [tokenModalSource, setTokenModalSource] = useState<Untyped>(null);
+  const [tokenModalSource, setTokenModalSource] = useState<OAuth2Token | null>(
+    null
+  );
 
   const onSuccessfulAdd = useCallback(
-    (token: Untyped) => setTokenModalSource(token),
+    (token: OAuth2Token) => setTokenModalSource(token),
     [setTokenModalSource]
   );
 

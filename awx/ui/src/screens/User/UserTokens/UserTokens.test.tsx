@@ -1,4 +1,4 @@
-import type { Untyped, User } from 'types/api';
+import type { OAuth2Token, User } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -12,7 +12,11 @@ vi.mock('../UserTokenAdd', async () => {
   const React = await vi.importActual<typeof import('react')>('react');
   return {
     __esModule: true,
-    default: ({ onSuccessfulAdd }: Untyped) =>
+    default: ({
+      onSuccessfulAdd,
+    }: {
+      onSuccessfulAdd: (token: OAuth2Token) => void;
+    }) =>
       React.createElement(
         'button',
         {
@@ -22,7 +26,7 @@ vi.mock('../UserTokenAdd', async () => {
               expires: '3020-03-28T14:26:48.099297Z',
               token: 'foobar',
               refresh_token: 'aaaaaaaaaaaaaaaaaaaaaaaaaa',
-            }),
+            } as unknown as OAuth2Token),
         },
         'simulate successful add'
       ),

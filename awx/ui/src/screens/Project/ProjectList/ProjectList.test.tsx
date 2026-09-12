@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import {
@@ -88,7 +87,7 @@ const mockProjects = [
   },
 ];
 
-function getRowCheckbox(name: Untyped) {
+function getRowCheckbox(name: string) {
   const row = screen.getByRole('link', { name }).closest('tr');
   return within(row!).getByRole('checkbox');
 }

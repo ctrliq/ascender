@@ -1,4 +1,4 @@
-import type { Untyped, User } from 'types/api';
+import type { User } from 'types/api';
 import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 
@@ -94,7 +94,7 @@ function UserDetail({ user }: UserDetailProps) {
             value={(() => {
               const themes = getThemes();
               const current = themes.find(
-                (th: Untyped) => th.id === getStoredThemeId()
+                (th: { id: string }) => th.id === getStoredThemeId()
               );
               return current ? current.name : t`Default`;
             })()}

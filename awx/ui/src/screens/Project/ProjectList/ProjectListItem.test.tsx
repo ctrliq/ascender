@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Project } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { ProjectsAPI } from 'api';
@@ -17,14 +17,23 @@ vi.mock('hooks/useBrandName', () => ({
   }),
 }));
 
-function renderItem(props: Untyped) {
+function renderItem(
+  props: Partial<React.ComponentProps<typeof ProjectsListItem>>
+) {
   return renderWithContexts(
     <table>
       <tbody>
         <ProjectsListItem
           isSelected={false}
+          isExpanded={false}
+          onExpand={() => {}}
           detailUrl="/project/1"
           onSelect={() => {}}
+          onCopy={() => {}}
+          fetchProjects={() => {}}
+          onRefreshRow={() => {}}
+          rowIndex={0}
+          project={baseProject}
           {...props}
         />
       </tbody>
@@ -48,7 +57,7 @@ const baseProject = {
     },
     user_capabilities: {},
   },
-};
+} as unknown as Project;
 
 describe('<ProjectsListItem />', () => {
   test('launch button shown to users with start capabilities', () => {
@@ -202,7 +211,7 @@ describe('<ProjectsListItem />', () => {
     renderItem({
       project: {
         ...baseProject,
-        scm_revision: null,
+        scm_revision: null as unknown as string,
         summary_fields: {
           current_job: {
             id: 9001,

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Mock } from 'vitest';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -15,7 +15,7 @@ vi.mock('react-router', async () => ({
 }));
 
 describe('<UserTokenAdd />', () => {
-  let onSuccessfulAdd: Untyped;
+  let onSuccessfulAdd: Mock;
 
   beforeEach(() => {
     onSuccessfulAdd = vi.fn();

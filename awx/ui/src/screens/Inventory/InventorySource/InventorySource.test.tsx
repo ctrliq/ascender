@@ -1,4 +1,4 @@
-import type { Inventory, Untyped } from 'types/api';
+import type { Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -21,7 +21,7 @@ const mockInventory = {
 // InventorySource reads :sourceId via useParams and uses relative routes, so
 // mount it under its real ".../sources/:sourceId/*" parent route at a concrete
 // URL.
-function renderInventorySource(initialEntry: Untyped, props = {}) {
+function renderInventorySource(initialEntry: string, props = {}) {
   const history = createMemoryHistory({ initialEntries: [initialEntry] });
   return renderWithContexts(
     <Routes>

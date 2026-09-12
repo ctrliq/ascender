@@ -1,8 +1,9 @@
-import type { Host, Untyped } from 'types/api';
+import type { Host } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CardBody } from 'components/Card';
 import HostForm from 'components/HostForm';
+import type { HostFormValues } from 'components/HostForm/HostForm';
 import { HostsAPI } from 'api';
 
 export interface HostEditProps {
@@ -15,13 +16,12 @@ function HostEdit({ host }: HostEditProps) {
   const detailsUrl = `/hosts/${host.id}/details`;
   const navigate = useNavigate();
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: HostFormValues) => {
     try {
-      const dataToSend = { ...values };
-      if (dataToSend.inventory) {
-        dataToSend.inventory = dataToSend.inventory.id;
-      }
-      await HostsAPI.update(host.id, dataToSend);
+      await HostsAPI.update(host.id, {
+        ...values,
+        inventory: values.inventory?.id,
+      });
       navigate(detailsUrl);
     } catch (error) {
       setFormError(error);

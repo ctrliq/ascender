@@ -1,4 +1,4 @@
-import type { OAuth2Token, Untyped } from 'types/api';
+import type { OAuth2Token } from 'types/api';
 import React from 'react';
 import { Link, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -9,7 +9,8 @@ import { formatDateString } from 'util/dates';
 export interface UserTokenListItemProps {
   token: OAuth2Token;
   isSelected?: boolean;
-  onSelect?: (item?: Untyped) => void;
+  /** Ticks the row's checkbox; the list holds which rows are selected. */
+  onSelect?: () => void;
   rowIndex: number;
   [key: string]: unknown;
 }

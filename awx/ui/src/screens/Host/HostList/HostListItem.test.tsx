@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host } from 'types/api';
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -21,9 +21,9 @@ const mockHost = {
     },
     recent_jobs: [],
   },
-};
+} as unknown as Host;
 
-function renderItem(host: Untyped) {
+function renderItem(host: Host) {
   return renderWithContexts(
     <table>
       <tbody>

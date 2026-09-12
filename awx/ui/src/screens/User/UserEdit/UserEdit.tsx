@@ -1,4 +1,4 @@
-import type { Untyped, User } from 'types/api';
+import type { User } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -7,6 +7,7 @@ import { UsersAPI } from 'api';
 import { useConfig } from 'contexts/Config';
 import { dynamicActivate, locales } from 'i18nLoader';
 import UserForm from '../shared/UserForm';
+import type { UserFormPayload } from '../shared/UserForm';
 
 export interface UserEditProps {
   user: User;
@@ -18,11 +19,13 @@ function UserEdit({ user }: UserEditProps) {
   const { me } = useConfig();
   const navigate = useNavigate();
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: UserFormPayload) => {
     setFormSubmitError(null);
     try {
-      delete values.organization;
-      await UsersAPI.update(user.id, values);
+      // The organization is only set when a user is added, through the
+      // organization's own endpoint.
+      const { organization, ...payload } = values;
+      await UsersAPI.update(user.id, payload);
       if (me?.id === user.id) {
         const lang = values.preferred_language;
         if (lang && Object.keys(locales).includes(lang)) {

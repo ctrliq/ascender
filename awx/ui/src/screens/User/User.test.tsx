@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -13,7 +12,7 @@ vi.mock('../../api');
 
 // Mount under the same /users/:id/* route that Users.js gives it, so the
 // nested v6 <Routes> resolve and useParams sees the id.
-function renderUser(initialEntry: Untyped, props = {}) {
+function renderUser(initialEntry: string, props = {}) {
   const history = createMemoryHistory({
     initialEntries: [initialEntry],
   });

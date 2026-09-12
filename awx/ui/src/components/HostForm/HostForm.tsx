@@ -1,4 +1,4 @@
-import type { Host, Untyped } from 'types/api';
+import type { Host, SummaryFieldRef } from 'types/api';
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -88,9 +88,17 @@ const InventoryLookupField = ({ isDisabled }: InventoryLookupFieldProps) => {
   );
 };
 
+/** A host as its own form holds it, before it is saved. */
+export interface HostFormValues {
+  name: string;
+  description: string;
+  inventory: SummaryFieldRef | null;
+  variables: string;
+}
+
 export interface HostFormProps {
   handleCancel: () => void;
-  handleSubmit: (values: Untyped) => void;
+  handleSubmit: (values: HostFormValues) => void;
   host?: Partial<Host>;
   isInventoryVisible?: boolean;
   submitError?: unknown;
@@ -114,10 +122,10 @@ const HostForm = ({
   return (
     <Formik
       initialValues={{
-        name: host.name,
-        description: host.description,
+        name: host.name ?? '',
+        description: host.description ?? '',
         inventory: host.summary_fields?.inventory || null,
-        variables: host.variables,
+        variables: host.variables ?? '',
       }}
       onSubmit={handleSubmit}
     >

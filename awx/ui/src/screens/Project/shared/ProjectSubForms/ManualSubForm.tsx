@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
@@ -17,9 +16,10 @@ import useBrandName from 'hooks/useBrandName';
 import getProjectHelpStrings from '../Project.helptext';
 
 export interface ManualSubFormProps {
-  localPath: Untyped;
-  project_base_dir: Untyped;
-  project_local_paths: Untyped;
+  localPath?: string;
+  /** The directory on the control node the api scans for projects. */
+  project_base_dir?: string;
+  project_local_paths?: string[];
   [key: string]: unknown;
 }
 
@@ -31,7 +31,7 @@ const ManualSubForm = ({
   const { t } = useLingui();
   const projectHelpStrings = getProjectHelpStrings();
   const brandName = useBrandName();
-  const localPaths = [...new Set([...project_local_paths, localPath])];
+  const localPaths = [...new Set([...(project_local_paths ?? []), localPath])];
   const options = [
     {
       value: '',
@@ -41,9 +41,9 @@ const ManualSubForm = ({
     ...localPaths
       .filter((path) => path)
       .map((path) => ({
-        value: path,
-        key: path,
-        label: path,
+        value: path as string,
+        key: path as string,
+        label: path as string,
       })),
   ];
   const [pathField, pathMeta, pathHelpers] = useField({

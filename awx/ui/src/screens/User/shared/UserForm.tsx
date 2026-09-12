@@ -1,6 +1,7 @@
-import type { SummaryFieldRef, Untyped, User } from 'types/api';
+import type { SummaryFieldRef, User } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
+import type { FormikHelpers } from 'formik';
 import { Formik, useField, useFormikContext } from 'formik';
 import {
   Form,
@@ -28,8 +29,8 @@ import {
 } from 'themeRegistry';
 
 export interface UserFormFieldsProps {
-  user: User;
-  [key: string]: unknown;
+  /** Absent on the add screen, which starts the form empty. */
+  user: Partial<User>;
 }
 
 function UserFormFields({ user }: UserFormFieldsProps) {
@@ -79,7 +80,7 @@ function UserFormFields({ user }: UserFormFieldsProps) {
     })),
   ];
 
-  const themeOptions = getThemes().map((theme: Untyped) => ({
+  const themeOptions = getThemes().map((theme) => ({
     value: theme.id,
     key: theme.id,
     label: theme.name,
@@ -205,14 +206,49 @@ function UserFormFields({ user }: UserFormFieldsProps) {
   );
 }
 
+/** A user as its own form holds it, before it is saved. */
+export interface UserFormValues {
+  first_name: string;
+  last_name: string;
+  organization: SummaryFieldRef | null;
+  email: string;
+  username: string;
+  password: string;
+  confirm_password: string;
+  /** Which of the three the user is, which the two flags below are set from. */
+  user_type: string;
+  preferred_language: string;
+  preferred_theme: string;
+}
+
+/** What the form posts: the values, minus the two the form only uses itself. */
+export type UserFormPayload = Omit<
+  UserFormValues,
+  'confirm_password' | 'preferred_theme'
+> & {
+  is_superuser: boolean;
+  is_system_auditor: boolean;
+};
+
+export interface UserFormProps {
+  /** Absent on the add screen, which starts the form empty. */
+  user?: Partial<User>;
+  handleCancel: () => void;
+  handleSubmit: (values: UserFormPayload) => void;
+  submitError?: unknown;
+}
+
 function UserForm({
   user = {},
   handleCancel,
   handleSubmit,
   submitError,
-}: Untyped) {
+}: UserFormProps) {
   const { t } = useLingui();
-  const handleValidateAndSubmit = (values: Untyped, { setErrors }: Untyped) => {
+  const handleValidateAndSubmit = (
+    values: UserFormValues,
+    { setErrors }: FormikHelpers<UserFormValues>
+  ) => {
     if (values.password !== values.confirm_password) {
       setErrors({
         confirm_password: t`This value does not match the password you entered previously. Please confirm that password.`,
@@ -221,11 +257,14 @@ function UserForm({
       // Build the payload from a copy — mutating Formik's `values` object
       // (e.g. deleting password) flips the still-mounted password field from
       // controlled to uncontrolled after submit, which React warns about.
-      const { confirm_password, preferred_theme, ...submitValues } = values;
-      submitValues.is_superuser = submitValues.user_type === 'administrator';
-      submitValues.is_system_auditor = submitValues.user_type === 'auditor';
+      const { confirm_password, preferred_theme, ...rest } = values;
+      const submitValues: UserFormPayload = {
+        ...rest,
+        is_superuser: rest.user_type === 'administrator',
+        is_system_auditor: rest.user_type === 'auditor',
+      };
       if (!submitValues.password) {
-        delete submitValues.password;
+        delete (submitValues as Partial<UserFormPayload>).password;
       }
       if (preferred_theme) {
         applyTheme(preferred_theme, true);
@@ -245,18 +284,20 @@ function UserForm({
 
   return (
     <Formik
-      initialValues={{
-        first_name: user.first_name || '',
-        last_name: user.last_name || '',
-        organization: null,
-        email: user.email || '',
-        username: user.username || '',
-        password: '',
-        confirm_password: '',
-        user_type: userType,
-        preferred_language: user.preferred_language || '',
-        preferred_theme: getStoredThemeId(),
-      }}
+      initialValues={
+        {
+          first_name: user.first_name || '',
+          last_name: user.last_name || '',
+          organization: null,
+          email: user.email || '',
+          username: user.username || '',
+          password: '',
+          confirm_password: '',
+          user_type: userType,
+          preferred_language: user.preferred_language || '',
+          preferred_theme: getStoredThemeId(),
+        } as UserFormValues
+      }
       onSubmit={handleValidateAndSubmit}
     >
       {(formik) => (

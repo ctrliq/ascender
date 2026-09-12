@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { BreadcrumbResource } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Routes, Route } from 'react-router';
@@ -18,7 +18,10 @@ function Users() {
   });
 
   const addUserBreadcrumb = useCallback(
-    (user: Untyped, token: Untyped) => {
+    (
+      user?: BreadcrumbResource & { username?: string | null },
+      token?: BreadcrumbResource
+    ) => {
       if (!user) {
         return;
       }

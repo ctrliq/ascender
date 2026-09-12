@@ -1,4 +1,4 @@
-import type { Project, SummaryFieldRef, Untyped } from 'types/api';
+import type { Project, SummaryFieldRef } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Button, ClipboardCopy, Tooltip } from '@patternfly/react-core';
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
@@ -24,17 +24,18 @@ const Label = styled.span`
 
 export interface ProjectListItemProps {
   isExpanded: boolean;
-  onExpand: (...args: Untyped[]) => void;
+  onExpand: () => void;
   project: Project;
   isSelected: boolean;
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;
   onCopy: (id: number) => void;
   detailUrl: string;
-  fetchProjects: Untyped;
+  /** Re-reads the page once the copy has landed. */
+  fetchProjects: () => unknown;
   rowIndex: number;
-  onRefreshRow: (...args: Untyped[]) => void;
-  [key: string]: unknown;
+  /** Re-reads this one project, once its sync has settled. */
+  onRefreshRow: (projectId: number) => void;
 }
 
 function ProjectListItem({

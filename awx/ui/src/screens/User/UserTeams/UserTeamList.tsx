@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef, Team } from 'types/api';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -87,18 +87,21 @@ function UserTeamList() {
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
     useSelected(teams);
 
-  const disassociateUserRoles = (team: Untyped) => [
+  const disassociateUserRoles = (team: Team) => [
     UsersAPI.disassociateRole(
       userId,
-      team.summary_fields.object_roles.admin_role.id
+      (team.summary_fields.object_roles as Record<string, SummaryFieldRef>)
+        ?.admin_role?.id as number
     ),
     UsersAPI.disassociateRole(
       userId,
-      team.summary_fields.object_roles.member_role.id
+      (team.summary_fields.object_roles as Record<string, SummaryFieldRef>)
+        ?.member_role?.id as number
     ),
     UsersAPI.disassociateRole(
       userId,
-      team.summary_fields.object_roles.read_role.id
+      (team.summary_fields.object_roles as Record<string, SummaryFieldRef>)
+        ?.read_role?.id as number
     ),
   ];
 
@@ -122,12 +125,17 @@ function UserTeamList() {
 
   const { request: handleAssociate, error: associateError } = useRequest(
     useCallback(
-      async (teamsToAssociate: Untyped) => {
+      async (teamsToAssociate: Team[]) => {
         await Promise.all(
-          teamsToAssociate.map((team: Untyped) =>
+          teamsToAssociate.map((team) =>
             UsersAPI.associateRole(
               userId,
-              team.summary_fields.object_roles.member_role.id
+              (
+                team.summary_fields.object_roles as Record<
+                  string,
+                  SummaryFieldRef
+                >
+              )?.member_role?.id as number
             )
           )
         );

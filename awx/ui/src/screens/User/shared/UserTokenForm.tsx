@@ -1,4 +1,4 @@
-import type { OAuth2Token, SummaryFieldRef, Untyped } from 'types/api';
+import type { OAuth2Token, SummaryFieldRef } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
@@ -100,12 +100,18 @@ function UserTokenFormFields() {
   );
 }
 
+/** A token as its own form holds it, before it is created. */
+export interface UserTokenFormValues {
+  description: string;
+  application: SummaryFieldRef | null;
+  scope: string;
+}
+
 export interface UserTokenFormProps {
   handleCancel: () => void;
-  handleSubmit: (values: Untyped, ...rest: Untyped[]) => void;
+  handleSubmit: (values: UserTokenFormValues) => void;
   submitError?: unknown;
   token?: Partial<OAuth2Token>;
-  [key: string]: unknown;
 }
 
 function UserTokenForm({
@@ -116,11 +122,15 @@ function UserTokenForm({
 }: UserTokenFormProps) {
   return (
     <Formik
-      initialValues={{
-        description: token.description || '',
-        application: token.application || null,
-        scope: token.scope || '',
-      }}
+      initialValues={
+        {
+          description: token.description || '',
+          // The lookup holds the whole application, where the token names
+          // only its id.
+          application: token.summary_fields?.application || null,
+          scope: token.scope || '',
+        } as UserTokenFormValues
+      }
       onSubmit={handleSubmit}
     >
       {(formik) => (

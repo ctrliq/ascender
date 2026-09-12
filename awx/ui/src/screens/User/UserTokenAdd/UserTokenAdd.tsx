@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { OAuth2Token } from 'types/api';
 import React, { useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router';
 
@@ -6,10 +6,11 @@ import { CardBody } from 'components/Card';
 import { TokensAPI, UsersAPI } from 'api';
 import useRequest from 'hooks/useRequest';
 import UserTokenForm from '../shared/UserTokenForm';
+import type { UserTokenFormValues } from '../shared/UserTokenForm';
 
 export interface UserTokenAddProps {
-  onSuccessfulAdd: (data: Untyped) => void;
-  [key: string]: unknown;
+  /** Hands the new token up so the list can show it once, in the clear. */
+  onSuccessfulAdd: (token: OAuth2Token) => void;
 }
 
 function UserTokenAdd({ onSuccessfulAdd }: UserTokenAddProps) {
@@ -17,7 +18,7 @@ function UserTokenAdd({ onSuccessfulAdd }: UserTokenAddProps) {
   const { id: userId } = useParams() as { id: string };
   const { error: submitError, request: handleSubmit } = useRequest(
     useCallback(
-      async (formData: Untyped) => {
+      async (formData: UserTokenFormValues) => {
         let response;
         if (formData.application) {
           response = await UsersAPI.createToken(userId, {
