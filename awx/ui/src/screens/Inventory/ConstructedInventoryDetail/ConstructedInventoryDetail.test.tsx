@@ -1,0 +1,242 @@
+import type { ConstructedInventory } from 'types/api';
+import React from 'react';
+import { InventoriesAPI, ConstructedInventoriesAPI } from 'api';
+import { screen, waitForElementToBeRemoved } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { createMemoryHistory } from 'history';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import ConstructedInventoryDetail from './ConstructedInventoryDetail';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
+
+vi.mock('../../../api');
+
+const mockInventory = {
+  id: 1,
+  type: 'inventory',
+  summary_fields: {
+    organization: {
+      id: 1,
+      name: 'The Organization',
+      description: '',
+    },
+    created_by: {
+      username: 'the_creator',
+      id: 2,
+    },
+    modified_by: {
+      username: 'the_modifier',
+      id: 3,
+    },
+    user_capabilities: {
+      edit: true,
+      delete: true,
+      copy: true,
+      adhoc: true,
+    },
+    labels: {
+      count: 1,
+      results: [
+        {
+          id: 17,
+          name: 'seventeen',
+        },
+      ],
+    },
+  },
+  created: '2019-10-04T16:56:48.025455Z',
+  modified: '2019-10-04T16:56:48.025468Z',
+  name: 'Constructed Inv',
+  description: '',
+  organization: 1,
+  kind: 'constructed',
+  has_active_failures: false,
+  total_hosts: 0,
+  hosts_with_active_failures: 0,
+  total_groups: 0,
+  groups_with_active_failures: 0,
+  has_inventory_sources: false,
+  total_inventory_sources: 0,
+  inventory_sources_with_failures: 0,
+  pending_deletion: false,
+  prevent_instance_group_fallback: true,
+  update_cache_timeout: 0,
+  limit: '',
+  verbosity: 1,
+  source_vars:
+    '{\n    "plugin": "constructed",\n    "strict": true,\n    "groups": {\n        "shutdown": "resolved_state == \\"shutdown\\"",\n        "shutdown_in_product_dev": "resolved_state == \\"shutdown\\" and account_alias == \\"product_dev\\""\n    },\n    "compose": {\n        "resolved_state": "state | default(\\"running\\")"\n    }\n}',
+} as unknown as ConstructedInventory;
+
+describe('<ConstructedInventoryDetail />', () => {
+  const renderComponent = (
+    props?: Partial<React.ComponentProps<typeof ConstructedInventoryDetail>>
+  ) => {
+    const history = createMemoryHistory({
+      initialEntries: ['/inventories/constructed_inventory/1/details'],
+    });
+    return renderWithContexts(
+      <ConstructedInventoryDetail inventory={mockInventory} {...props} />,
+      { context: { router: { history } } }
+    );
+  };
+
+  beforeEach(() => {
+    vi.mocked(InventoriesAPI.readInstanceGroups).mockResolvedValue({
+      data: { results: [] },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInstanceGroups>);
+    vi.mocked(InventoriesAPI.readInputInventories).mockResolvedValue({
+      data: {
+        results: [
+          {
+            id: 123,
+            name: 'input_inventory_123',
+          },
+          {
+            id: 456,
+            name: 'input_inventory_456',
+          },
+        ],
+      },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readInputInventories>);
+    vi.mocked(InventoriesAPI.readSources).mockResolvedValue({
+      data: {
+        results: [
+          {
+            id: 999,
+            type: 'inventory_source',
+            summary_fields: {
+              last_job: {
+                id: 101,
+                name: 'Auto-created source for: Constructed Inv',
+                status: 'successful',
+                finished: '2023-02-02T22:22:22.222220Z',
+              },
+              user_capabilities: {
+                start: true,
+              },
+            },
+          },
+        ],
+      },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readSources>);
+    vi.mocked(ConstructedInventoriesAPI.readOptions).mockResolvedValue({
+      data: {
+        related: {},
+        actions: {
+          GET: {
+            limit: {
+              label: 'Limit',
+              help_text: '',
+            },
+            total_groups: {
+              label: 'Total Groups',
+              help_text: '',
+            },
+            total_hosts: {
+              label: 'Total Hosts',
+              help_text: '',
+            },
+            total_inventory_sources: {
+              label: 'Total inventory sources',
+              help_text: '',
+            },
+            update_cache_timeout: {
+              label: 'Update cache timeout',
+              help_text: '',
+            },
+            inventory_sources_with_failures: {
+              label: 'Inventory sources with failures',
+              help_text: '',
+            },
+            source_vars: {
+              label: 'Source vars',
+              help_text: '',
+            },
+            verbosity: {
+              label: 'Verbosity',
+              help_text: '',
+            },
+            created: {
+              label: 'Created by',
+              help_text: '',
+            },
+            modified: {
+              label: 'Modified by',
+              help_text: '',
+            },
+          },
+        },
+      },
+    } as unknown as ResponseOf<typeof ConstructedInventoriesAPI.readOptions>);
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test('should render details', async () => {
+    renderComponent();
+    await waitForElementToBeRemoved(() => screen.getByRole('progressbar'));
+    expect(screen.getByText('Name')).toBeInTheDocument();
+    expect(screen.getByText('Constructed Inv')).toBeInTheDocument();
+    expect(screen.getByText('Last Job Status')).toBeInTheDocument();
+    expect(screen.getByText('Successful')).toBeInTheDocument();
+    expect(screen.getByText('Type')).toBeInTheDocument();
+    expect(screen.getByText('Constructed Inventory')).toBeInTheDocument();
+  });
+
+  test('should render action buttons', async () => {
+    renderComponent();
+    await waitForElementToBeRemoved(() => screen.getByRole('progressbar'));
+    expect(screen.getByRole('link', { name: 'Edit' })).toHaveAttribute(
+      'href',
+      '/inventories/constructed_inventory/1/edit'
+    );
+    expect(
+      screen.getByRole('button', { name: 'Start inventory source sync' })
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
+  });
+
+  test('should show cancel sync button during an inventory source sync running job', async () => {
+    vi.mocked(InventoriesAPI.readSources).mockResolvedValue({
+      data: {
+        results: [
+          {
+            id: 999,
+            type: 'inventory_source',
+            summary_fields: {
+              current_job: {
+                id: 111,
+                name: 'Auto-created source for: Constructed Inv',
+                status: 'running',
+              },
+              user_capabilities: {
+                start: true,
+              },
+            },
+          },
+        ],
+      },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readSources>);
+    renderComponent();
+    await waitForElementToBeRemoved(() => screen.getByRole('progressbar'));
+    expect(
+      screen.getByRole('button', {
+        name: 'Cancel Constructed Inventory Source Sync',
+      })
+    ).toBeInTheDocument();
+  });
+
+  test('should show error when the api throws while fetching details', async () => {
+    vi.mocked(InventoriesAPI.readInputInventories).mockRejectedValueOnce(
+      new Error()
+    );
+    renderComponent();
+    await waitForElementToBeRemoved(() => screen.getByRole('progressbar'));
+    expect(
+      screen.getByText(
+        'There was an error loading this content. Please reload the page.'
+      )
+    ).toBeInTheDocument();
+  });
+});

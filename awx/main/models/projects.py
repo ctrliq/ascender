@@ -49,7 +49,6 @@ class ProjectOptions(models.Model):
         ('', _('Manual')),
         ('git', _('Git')),
         ('svn', _('Subversion')),
-        # ('insights', _('Red Hat Insights')),
         ('archive', _('Remote Archive')),
     ]
 
@@ -138,8 +137,6 @@ class ProjectOptions(models.Model):
         return self.scm_type or ''
 
     def clean_scm_url(self):
-        if self.scm_type == 'insights':
-            self.scm_url = settings.INSIGHTS_URL_BASE
         scm_url = str(self.scm_url or '')
         if not self.scm_type:
             return ''
@@ -156,17 +153,10 @@ class ProjectOptions(models.Model):
         if not self.scm_type:
             return None
         cred = self.credential
-        if not cred and self.scm_type == 'insights':
-            raise ValidationError(_("Insights Credential is required for an Insights Project."))
-        elif cred:
-            if self.scm_type == 'insights':
-                if cred.kind != 'insights':
-                    raise ValidationError(_("Credential kind must be 'insights'."))
-            elif cred.kind != 'scm':
+        if cred:
+            if cred.kind != 'scm':
                 raise ValidationError(_("Credential kind must be 'scm'."))
             try:
-                if self.scm_type == 'insights':
-                    self.scm_url = settings.INSIGHTS_URL_BASE
                 scm_url = update_scm_url(self.scm_type, self.scm_url, check_special_cases=False)
                 scm_url_parts = urlparse.urlsplit(scm_url)
                 # Prefer the username/password in the URL, if provided.

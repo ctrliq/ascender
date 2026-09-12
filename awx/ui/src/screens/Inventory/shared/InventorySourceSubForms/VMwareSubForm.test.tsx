@@ -1,0 +1,73 @@
+import React from 'react';
+import { Formik } from 'formik';
+import { waitFor } from '@testing-library/react';
+import { CredentialsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
+import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
+import VMwareSubForm from './VMwareSubForm';
+
+vi.mock('../../../../api');
+
+const initialValues = {
+  credential: null,
+  overwrite: false,
+  overwrite_vars: false,
+  source_path: '',
+  source_project: null,
+  source_script: null,
+  source_vars: '---\n',
+  update_cache_timeout: 0,
+  update_on_launch: true,
+  verbosity: 1,
+  vmware_plugin: 'community.vmware.vmware_vm_inventory',
+};
+
+const mockSourceOptions = {
+  actions: {
+    POST: {},
+  },
+};
+
+describe('<VMwareSubForm />', () => {
+  beforeEach(() => {
+    vi.mocked(CredentialsAPI.read).mockResolvedValue({
+      data: { count: 0, results: [] },
+    } as unknown as ResponseOf<typeof CredentialsAPI.read>);
+  });
+
+  afterAll(() => {
+    vi.clearAllMocks();
+  });
+
+  function renderForm() {
+    return renderWithContexts(
+      <Formik onSubmit={() => {}} initialValues={initialValues}>
+        <VMwareSubForm sourceOptions={mockSourceOptions} />
+      </Formik>
+    );
+  }
+
+  test('should render subform fields', async () => {
+    const { getByText } = renderForm();
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalled());
+    expect(getByText('Credential')).toBeInTheDocument();
+    expect(getByText('Collection')).toBeInTheDocument();
+    expect(getByText('community.vmware')).toBeInTheDocument();
+    expect(getByText('vmware.vmware')).toBeInTheDocument();
+    expect(getByText('Verbosity')).toBeInTheDocument();
+    expect(getByText('Update options')).toBeInTheDocument();
+    expect(getByText('Cache timeout (seconds)')).toBeInTheDocument();
+    expect(getByText('Source variables')).toBeInTheDocument();
+  });
+
+  test('should make expected api calls', async () => {
+    renderForm();
+    await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
+    expect(CredentialsAPI.read).toHaveBeenCalledWith({
+      credential_type__namespace: 'vmware',
+      order_by: 'name',
+      page: 1,
+      page_size: 5,
+    });
+  });
+});
