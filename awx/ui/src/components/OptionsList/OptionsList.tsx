@@ -56,6 +56,8 @@ export interface OptionsListProps<T extends SelectableOption = ApiEntity> {
   searchableKeys?: SearchableKey[];
   selectItem: (item: T) => void;
   sortColumns?: SortColumn[];
+  /** Reorders the selected rows, where the caller lets them be dragged. */
+  sortSelectedItems?: (items: T[]) => void;
   /** What is selected: one item, or several where multiple is set. */
   value: T[];
   [key: string]: unknown;
@@ -81,6 +83,7 @@ function OptionsList<T extends SelectableOption = ApiEntity>({
   searchableKeys,
   selectItem,
   sortColumns = [],
+  sortSelectedItems,
   value,
 }: OptionsListProps<T>) {
   const { t } = useLingui();
@@ -101,7 +104,11 @@ function OptionsList<T extends SelectableOption = ApiEntity>({
   if (value.length > 0) {
     if (isSelectedDraggable) {
       selectionPreview = (
-        <DraggableSelectedList onRemove={deselectItem} selected={value} />
+        <DraggableSelectedList
+          onRemove={deselectItem}
+          onRowDrag={sortSelectedItems}
+          selected={value}
+        />
       );
     } else {
       selectionPreview = (

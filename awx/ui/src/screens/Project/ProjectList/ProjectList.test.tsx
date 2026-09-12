@@ -54,7 +54,7 @@ const mockProjects = [
     name: 'Project 3',
     url: '/api/v2/projects/3',
     type: 'project',
-    scm_type: 'insights',
+    scm_type: 'git',
     scm_revision: '4893adfi749493afjksjoaiosdgjoaisdjadfisjaso',
     summary_fields: {
       last_job: {

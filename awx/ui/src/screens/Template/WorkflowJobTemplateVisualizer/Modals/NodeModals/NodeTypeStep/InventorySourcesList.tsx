@@ -111,7 +111,6 @@ function InventorySourcesList({
             [`vmware`, t`VMware vCenter`],
             [`satellite6`, t`Red Hat Satellite 6`],
             [`openstack`, t`OpenStack`],
-            [`rhv`, t`Red Hat Virtualization`],
             [`ascender`, t`CIQ Ascender Automation Platform`],
           ],
         },

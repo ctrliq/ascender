@@ -10,13 +10,10 @@ const ansibleDocUrls = {
   ascender:
     'https://docs.ansible.com/ansible/latest/collections/awx/awx/tower_inventory.html',
   gce: 'https://docs.ansible.com/ansible/latest/collections/google/cloud/gcp_compute_inventory.html',
-  insights:
-    'https://docs.ansible.com/ansible/latest/collections/redhatinsights/insights/insights_inventory.html',
   openstack:
     'https://docs.ansible.com/ansible/latest/collections/openstack/cloud/openstack_inventory.html',
   satellite6:
     'https://docs.ansible.com/ansible/latest/collections/theforeman/foreman/foreman_inventory.html',
-  rhv: 'https://docs.ansible.com/ansible/latest/collections/ovirt/ovirt/ovirt_inventory.html',
   vmware:
     'https://docs.ansible.com/ansible/latest/collections/community/vmware/vmware_vm_inventory_inventory.html',
   constructed:

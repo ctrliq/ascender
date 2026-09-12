@@ -32,14 +32,12 @@ import {
   AzureSubForm,
   EC2SubForm,
   GCESubForm,
-  InsightsSubForm,
   OpenStackSubForm,
   SCMSubForm,
   SatelliteSubForm,
   ControllerSubForm,
   TerraformSubForm,
   VMwareSubForm,
-  VirtualizationSubForm,
 } from './InventorySourceSubForms';
 import {
   VMWARE_DEFAULT_PLUGIN,
@@ -229,27 +227,10 @@ const InventorySourceFormFields = ({
                     }
                   />
                 ),
-                // insights and rhv below are source types the platform no
-                // longer offers, so neither sub form is reachable; the source
-                // a saved inventory carries cannot be either of them.
-                insights: (
-                  <InsightsSubForm
-                    autoPopulateCredential={
-                      !source?.id || (source?.source as string) !== 'insights'
-                    }
-                  />
-                ),
                 openstack: (
                   <OpenStackSubForm
                     autoPopulateCredential={
                       !source?.id || source?.source !== 'openstack'
-                    }
-                  />
-                ),
-                rhv: (
-                  <VirtualizationSubForm
-                    autoPopulateCredential={
-                      !source?.id || (source?.source as string) !== 'rhv'
                     }
                   />
                 ),
@@ -293,9 +274,7 @@ const InventorySourceFormFields = ({
                   | 'azure_rm'
                   | 'ec2'
                   | 'gce'
-                  | 'insights'
                   | 'openstack'
-                  | 'rhv'
                   | 'satellite6'
                   | 'scm'
                   | 'ascender'

@@ -21,7 +21,10 @@ const QS_CONFIG = getQSConfig('instance-groups', {
 function InstanceGroupsStep() {
   const { t } = useLingui();
   const [field, , helpers] = useField('instance_groups');
-  const { selected, handleSelect } = useSelected<LookupItem>([], field.value);
+  const { selected, handleSelect, setSelected } = useSelected<LookupItem>(
+    [],
+    field.value
+  );
 
   const location = useLocation();
 
@@ -100,6 +103,9 @@ function InstanceGroupsStep() {
         qsConfig={QS_CONFIG}
         selectItem={handleSelect}
         deselectItem={handleSelect}
+        sortSelectedItems={(selectedItems: LookupItem[]) =>
+          setSelected(selectedItems)
+        }
         isSelectedDraggable
       />
     </div>

@@ -30,7 +30,6 @@ const readOptionsResult = {
             ['vmware', 'VMware vCenter'],
             ['satellite6', 'Red Hat Satellite 6'],
             ['openstack', 'OpenStack'],
-            ['rhv', 'Red Hat Virtualization'],
             ['ascender', 'CIQ Ascender Automation Platform'],
             ['terraform', 'Terraform State'],
           ],

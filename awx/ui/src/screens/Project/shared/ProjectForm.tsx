@@ -33,7 +33,6 @@ import {
   GitSubForm,
   SvnSubForm,
   ArchiveSubForm,
-  // InsightsSubForm,
   ManualSubForm,
 } from './ProjectSubForms';
 
@@ -61,11 +60,6 @@ const fetchCredentials = async (credential?: SummaryFieldRef) => {
         results: [scmCredentialType],
       },
     },
-    // {
-    //   data: {
-    //     results: [insightsCredentialType],
-    //   },
-    // },
     {
       data: {
         results: [cryptographyCredentialType],
@@ -73,7 +67,6 @@ const fetchCredentials = async (credential?: SummaryFieldRef) => {
     },
   ] = await Promise.all([
     CredentialTypesAPI.read({ kind: 'scm' }),
-    // CredentialTypesAPI.read({ name: 'Insights' }),
     CredentialTypesAPI.read({ kind: 'cryptography' }),
   ]);
 
@@ -83,7 +76,6 @@ const fetchCredentials = async (credential?: SummaryFieldRef) => {
   if (!credential) {
     return {
       scm: { typeId: scmTypeId },
-      // insights: { typeId: insightsCredentialType.id },
       cryptography: { typeId: cryptographyTypeId },
     };
   }
@@ -94,11 +86,6 @@ const fetchCredentials = async (credential?: SummaryFieldRef) => {
       typeId: scmTypeId,
       value: credential_type_id === scmTypeId ? credential : null,
     },
-    // insights: {
-    //   typeId: insightsCredentialType.id,
-    //   value:
-    //     credential_type_id === insightsCredentialType.id ? credential : null,
-    // },
     cryptography: {
       typeId: cryptographyTypeId,
       value: credential_type_id === cryptographyTypeId ? credential : null,
@@ -454,13 +441,11 @@ function ProjectForm({
   >(null);
   const [credentials, setCredentials] = useState<ProjectCredentials>({
     scm: { typeId: null, value: null },
-    // insights: { typeId: null, value: null },
     cryptography: { typeId: null, value: null },
   });
   const [signatureValidationCredentials, setSignatureValidationCredentials] =
     useState<ProjectCredentials>({
       scm: { typeId: null, value: null },
-      // insights: { typeId: null, value: null },
       cryptography: { typeId: null, value: null },
     });
 

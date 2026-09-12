@@ -201,7 +201,6 @@ function ProjectList() {
                   [`git`, t`Git`],
                   [`svn`, t`Subversion`],
                   [`archive`, t`Remote Archive`],
-                  [`insights`, t`Red Hat Insights`],
                 ],
               },
               {

@@ -92,7 +92,6 @@ export default function getResourceAccessConfig(t: Translate) {
             [`git`, t`Git`],
             [`svn`, t`Subversion`],
             [`archive`, t`Remote Archive`],
-            [`insights`, t`Red Hat Insights`],
           ],
         },
         {
@@ -161,7 +160,6 @@ export default function getResourceAccessConfig(t: Translate) {
             [`git`, t`Git`],
             [`svn`, t`Subversion`],
             [`archive`, t`Remote Archive`],
-            [`insights`, t`Red Hat Insights`],
           ],
         },
         {
