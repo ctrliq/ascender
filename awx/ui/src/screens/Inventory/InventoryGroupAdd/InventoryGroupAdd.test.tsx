@@ -1,0 +1,106 @@
+import React from 'react';
+import { screen, waitFor } from '@testing-library/react';
+import type { TestHistory } from 'history';
+import { createMemoryHistory } from 'history';
+import { Routes, Route } from 'react-router';
+import { GroupsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockHandlerFormProps } from '../../../../testUtils/rtlContexts';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import InventoryGroupAdd from './InventoryGroupAdd';
+
+vi.mock('../../../api');
+
+vi.mock('../shared/InventoryGroupForm', () => ({
+  default: ({
+    handleSubmit,
+    handleCancel,
+    error,
+  }: MockHandlerFormProps & { error?: unknown }) => (
+    <div>
+      <button
+        type="button"
+        aria-label="mock-submit"
+        onClick={() =>
+          handleSubmit({
+            name: 'Bar',
+            description: 'Ansible',
+            variables: 'ying: yang',
+          })
+        }
+      />
+      <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
+      {error ? <div data-testid="mock-submit-error" /> : null}
+    </div>
+  ),
+}));
+
+function renderAdd(history: TestHistory) {
+  return renderWithContexts(
+    <Routes>
+      <Route
+        path="/inventories/inventory/:id/groups/add/*"
+        element={<InventoryGroupAdd />}
+      />
+      <Route path="*" element={null} />
+    </Routes>,
+    { context: { router: { history } } }
+  );
+}
+
+describe('<InventoryGroupAdd />', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test('InventoryGroupAdd renders successfully', () => {
+    const history = createMemoryHistory({
+      initialEntries: ['/inventories/inventory/1/groups/add'],
+    });
+    renderAdd(history);
+    expect(
+      screen.getByRole('button', { name: 'mock-submit' })
+    ).toBeInTheDocument();
+  });
+
+  test('cancel should navigate user to Inventory Groups List', async () => {
+    const history = createMemoryHistory({
+      initialEntries: ['/inventories/inventory/1/groups/add'],
+    });
+    const { user } = renderAdd(history);
+
+    await user.click(screen.getByRole('button', { name: 'mock-cancel' }));
+
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/inventories/inventory/1/groups'
+      )
+    );
+  });
+
+  test('handleSubmit should call api', async () => {
+    vi.mocked(GroupsAPI.create).mockResolvedValue({
+      data: { id: 5 },
+    } as unknown as ResponseOf<typeof GroupsAPI.create>);
+    const history = createMemoryHistory({
+      initialEntries: ['/inventories/inventory/1/groups/add'],
+    });
+    const { user } = renderAdd(history);
+
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+
+    await waitFor(() =>
+      expect(GroupsAPI.create).toHaveBeenCalledWith({
+        inventory: '1',
+        name: 'Bar',
+        description: 'Ansible',
+        variables: 'ying: yang',
+      })
+    );
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/inventories/inventory/1/groups/5'
+      )
+    );
+  });
+});
