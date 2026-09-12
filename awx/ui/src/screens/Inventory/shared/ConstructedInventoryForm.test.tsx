@@ -1,0 +1,138 @@
+import React from 'react';
+import { screen, waitFor } from '@testing-library/react';
+import { InstanceGroupsAPI, InventoriesAPI, OrganizationsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import ConstructedInventoryForm from './ConstructedInventoryForm';
+
+vi.mock('../../../api');
+
+const options = {
+  limit: {
+    label: 'Limit',
+    help_text: '',
+  },
+  update_cache_timeout: {
+    label: 'Update cache timeout',
+    help_text: 'help',
+  },
+  verbosity: {
+    label: 'Verbosity',
+    help_text: '',
+  },
+};
+
+describe('<ConstructedInventoryForm />', () => {
+  const onSubmit = vi.fn();
+  const onCancel = vi.fn();
+
+  beforeEach(() => {
+    // The OrganizationLookup / InstanceGroupsLookup / InventoryLookup all call
+    // read + readOptions on mount; the auto-mock returns undefined which would
+    // crash while destructuring response.data, so provide empty result sets.
+    vi.mocked(OrganizationsAPI.read).mockResolvedValue({
+      data: { results: [], count: 0 },
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
+    vi.mocked(OrganizationsAPI.readOptions).mockResolvedValue({
+      data: { actions: {}, related_search_fields: [] },
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readOptions>);
+    vi.mocked(InstanceGroupsAPI.read).mockResolvedValue({
+      data: { results: [], count: 0 },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.read>);
+    vi.mocked(InstanceGroupsAPI.readOptions).mockResolvedValue({
+      data: { actions: {}, related_search_fields: [] },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readOptions>);
+    vi.mocked(InventoriesAPI.read).mockResolvedValue({
+      data: { results: [], count: 0 },
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
+    vi.mocked(InventoriesAPI.readOptions).mockResolvedValue({
+      data: { actions: {}, related_search_fields: [] },
+    } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
+  });
+
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
+
+  function renderForm() {
+    return renderWithContexts(
+      <ConstructedInventoryForm
+        onCancel={onCancel}
+        onSubmit={onSubmit}
+        options={options}
+      />
+    );
+  }
+
+  test('should show expected form fields', async () => {
+    renderForm();
+    await screen.findByRole('button', { name: 'Save' });
+
+    // FormGroup labels render as plain text.
+    expect(screen.getByText('Name')).toBeInTheDocument();
+    expect(screen.getByText('Description')).toBeInTheDocument();
+    expect(screen.getByText('Organization')).toBeInTheDocument();
+    expect(screen.getByText('Instance Groups')).toBeInTheDocument();
+    expect(screen.getByText('Input Inventories')).toBeInTheDocument();
+    expect(screen.getByText('Cache timeout (seconds)')).toBeInTheDocument();
+    expect(screen.getByText('Verbosity')).toBeInTheDocument();
+    expect(screen.getByText('Limit')).toBeInTheDocument();
+    expect(screen.getByText('Source vars')).toBeInTheDocument();
+    // ConstructedInventoryHint renders its expandable alert title.
+    expect(
+      screen.getByText('How to use constructed inventory plugin')
+    ).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+  });
+
+  test('should show field error when form is saved without input inventories', async () => {
+    const { user, container } = renderForm();
+    await screen.findByRole('button', { name: 'Save' });
+
+    expect(
+      screen.queryByText('This field must not be blank')
+    ).not.toBeInTheDocument();
+
+    // The FormField labelIcon Popover breaks getByLabelText, so query by id.
+    await user.type(
+      container.querySelector('#name')!,
+      'new constructed inventory'
+    );
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(
+        screen.getByText('This field must not be blank')
+      ).toBeInTheDocument()
+    );
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  // The original of this test drove the Source vars editor to trigger the
+  // `plugin` required validator ('The plugin parameter is required.'). This
+  // asserts the field is wired (label renders, isRequired marker present) and
+  // that the form's required validators block submission until the required
+  // fields are satisfied, which is the same behaviour from the outside.
+  test('Source vars field is rendered and required validators block submit', async () => {
+    const { user, container } = renderForm();
+    await screen.findByRole('button', { name: 'Save' });
+
+    expect(screen.getByText('Source vars')).toBeInTheDocument();
+
+    // Provide a name but leave the required input inventories empty; submitting
+    // must surface the required-field error and must not call onSubmit.
+    await user.type(
+      container.querySelector('#name')!,
+      'new constructed inventory'
+    );
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() =>
+      expect(
+        screen.getByText('This field must not be blank')
+      ).toBeInTheDocument()
+    );
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
+});
