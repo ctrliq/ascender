@@ -1,59 +1,25 @@
 import React from 'react';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import VariablesField from './VariablesField';
 
-/** The CodeEditor props this field sets, which the stub below renders back. */
-interface CodeEditorProps {
-  value?: string;
-  onChange?: (value: string) => void;
-  readOnly?: boolean;
-}
-
-// Mock the CodeEditor leaf with a controlled <textarea> that renders the value
-// and forwards edits to onChange. This keeps the existing .ace_editor-based
-// assertions working (the mock renders an .ace_editor wrapper) while making the
-// editor's value drivable, so the onChange -> Formik path is observable (the
-// real react-ace editor does not surface its value/edits to the DOM under
-// jsdom).
-vi.mock('./CodeEditor', async () => {
-  const ReactMock = await vi.importActual<typeof import('react')>('react');
-  return {
-    __esModule: true,
-    default: ({ value, onChange, readOnly }: CodeEditorProps) =>
-      ReactMock.createElement(
-        'div',
-        { className: 'ace_editor' },
-        ReactMock.createElement('textarea', {
-          'data-testid': 'code-editor',
-          value: value || '',
-          readOnly: !!readOnly,
-          onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) =>
-            onChange && onChange(e.target.value),
-        })
-      ),
-  };
-});
-
-// VariablesField renders a YAML/JSON MultiButtonToggle plus a CodeEditor
-// (react-ace). Under jsdom react-ace keeps its value in an internal model that
-// never reaches the DOM (the hidden textarea stays empty and editing it does
-// not fire onChange), so the editor *text* and the field's onChange path are
-// unobservable through the rendered DOM. We therefore assert what does surface:
-//   - the active mode, via which toggle button is primary (pf-m-primary)
-//   - validation errors, via the .pf-m-error helper text
-//   - the tooltip, via the rendered "More information" help button
-//   - modal expansion, via the second editor / Done button appearing
-//   - Formik submission of the current field value
-// Tests that only asserted converted/edited CodeEditor values (which required
-// driving ace's onChange) have no DOM equivalent and are noted in place.
+// VariablesField renders a YAML/JSON MultiButtonToggle plus a CodeEditor. The
+// editor keeps its document in the DOM, one element per line, so both the text
+// it shows and the edits made to it are observable: editorText() reads it back
+// and typing into it drives the field's onChange into Formik.
 
 beforeEach(() => {
   (
     document.body as unknown as { createTextRange: () => void }
   ).createTextRange = vi.fn();
 });
+
+/** The editor's document, read back out of the DOM one line at a time. */
+const editorText = () =>
+  Array.from(document.querySelectorAll('.cm-line'))
+    .map((line) => (line.textContent ?? '').replace(/\u00a0/g, ' '))
+    .join('\n');
 
 const yamlBtn = () => screen.getByRole('button', { name: 'YAML' });
 const jsonBtn = () => screen.getByRole('button', { name: 'JSON' });
@@ -68,11 +34,10 @@ describe('VariablesField', () => {
         )}
       </Formik>
     );
-    expect(container.querySelector('.ace_editor')).toBeInTheDocument();
+    expect(container.querySelector('.cm-editor')).toBeInTheDocument();
+    expect(editorText()).toBe('---\n');
     // starts in YAML mode
     expect(isPrimary(yamlBtn())).toBe(true);
-    // NOTE: original asserted CodeEditor value === '---\n'; ace holds its value
-    // internally so it is not observable through the DOM.
   });
 
   it('should toggle between yaml/json', async () => {
@@ -93,25 +58,20 @@ describe('VariablesField', () => {
     await user.click(jsonBtn());
     expect(isPrimary(jsonBtn())).toBe(true);
     expect(isPrimary(yamlBtn())).toBe(false);
+    expect(editorText()).toBe('{\n  "foo": "bar",\n  "baz": 3\n}');
 
     await user.click(yamlBtn());
     expect(isPrimary(yamlBtn())).toBe(true);
     expect(isPrimary(jsonBtn())).toBe(false);
-    // NOTE: original also asserted the converted CodeEditor value in each mode
-    // ('{\n  "foo": "bar",\n  "baz": 3\n}' / '---\nfoo: bar\nbaz: 3'); not
-    // observable through ace's DOM.
+    expect(editorText()).toBe('---\nfoo: bar\nbaz: 3');
   });
 
-  it('should round-trip yaml->json->yaml mode without error', async () => {
-    // original "should retain non-expanded yaml if JSON value not edited":
-    // it asserted the yaml value was restored after a json round trip. The
-    // value is unobservable; what we can assert is the toggle round-trips back
-    // to yaml mode and the field does not enter an error state.
+  it('should retain yaml if the JSON value is not edited', async () => {
+    // anchors and aliases have no JSON form, so a round trip through JSON has
+    // to give the original yaml back rather than the expansion of it
+    const yamlValue = '---\na: &aa [a,b,c]\nb: *aa';
     const { user, container } = renderWithContexts(
-      <Formik
-        onSubmit={() => {}}
-        initialValues={{ variables: '---\na: &aa [a,b,c]\nb: *aa' }}
-      >
+      <Formik onSubmit={() => {}} initialValues={{ variables: yamlValue }}>
         {() => (
           <VariablesField id="the-field" name="variables" label="Variables" />
         )}
@@ -121,16 +81,8 @@ describe('VariablesField', () => {
     await user.click(yamlBtn());
     expect(isPrimary(yamlBtn())).toBe(true);
     expect(container.querySelector('.pf-m-error')).not.toBeInTheDocument();
-    // NOTE: original asserted the restored CodeEditor value equalled the
-    // original yaml; ace's value is not observable through the DOM.
+    expect(editorText()).toBe(yamlValue);
   });
-
-  // NOTE: original "should retain expanded yaml if JSON value is edited" and
-  // "should retain non-expanded yaml if YAML value is edited" drove the
-  // CodeEditor's onChange (an edit of the editor text) and then asserted the
-  // resulting value. Under jsdom react-ace does not surface a DOM event that
-  // reaches onChange, and the resulting value lives in ace's internal model, so
-  // these edit-and-assert-value scenarios have no RTL equivalent.
 
   it('should set Formik error if yaml is invalid', async () => {
     const { user, container } = renderWithContexts(
@@ -171,13 +123,10 @@ describe('VariablesField', () => {
     ).toBeInTheDocument();
   });
 
-  it('should submit value through Formik', async () => {
+  it('should submit an edited value through Formik', async () => {
     const handleSubmit = vi.fn();
     const { user } = renderWithContexts(
-      <Formik
-        initialValues={{ variables: '---\nfoo: bar\n' }}
-        onSubmit={handleSubmit}
-      >
+      <Formik initialValues={{ variables: 'foo: bar' }} onSubmit={handleSubmit}>
         {(formik) => (
           <form onSubmit={formik.handleSubmit}>
             <VariablesField id="the-field" name="variables" label="Variables" />
@@ -188,19 +137,26 @@ describe('VariablesField', () => {
         )}
       </Formik>
     );
-    // edit the (mocked) editor, which drives VariablesField's onChange ->
-    // Formik, then submit and assert the updated value is submitted
-    fireEvent.change(screen.getByTestId('code-editor'), {
-      target: { value: '---\nfoo: baz\n' },
+
+    // type in the editor, which drives onChange into Formik after the debounce
+    await user.click(document.querySelector('.cm-content') as HTMLElement);
+    await user.keyboard('{Control>}a{/Control}');
+    await user.keyboard('foo: baz');
+    expect(editorText()).toBe('foo: baz');
+
+    // the editor's onChange is debounced, so let it reach Formik before submit
+    await act(async () => {
+      await new Promise((resolve) => {
+        setTimeout(resolve, 300);
+      });
     });
+
     await user.click(screen.getByText('Submit'));
     await waitFor(() => expect(handleSubmit).toHaveBeenCalled());
-    expect(handleSubmit.mock.calls[0]![0]).toEqual({
-      variables: '---\nfoo: baz\n',
-    });
+    expect(handleSubmit.mock.calls[0]![0]).toEqual({ variables: 'foo: baz' });
   });
 
-  it('should initialize to JSON if value is JSON', async () => {
+  it('should initialize to JSON if value is JSON, formatted', async () => {
     renderWithContexts(
       <Formik
         initialValues={{ variables: '{"foo": "bar"}' }}
@@ -216,6 +172,7 @@ describe('VariablesField', () => {
     // effect's setValue inside act).
     await waitFor(() => expect(isPrimary(jsonBtn())).toBe(true));
     expect(isPrimary(yamlBtn())).toBe(false);
+    expect(editorText()).toBe('{\n  "foo": "bar"\n}');
   });
 
   it('offers no expand button: the editor grows with its content', () => {
@@ -231,9 +188,4 @@ describe('VariablesField', () => {
     ).not.toBeInTheDocument();
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
-
-  // NOTE: original "should format JSON for code editor" asserted the CodeEditor
-  // value was the pretty-printed '{\n  "foo": "bar"\n}'. That formatted value is
-  // fed into ace's internal model and does not surface to the DOM; the JSON
-  // mode it implies is covered by "should initialize to JSON if value is JSON".
 });

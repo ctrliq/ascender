@@ -49,7 +49,6 @@ describe('<AdvancedInventoryHostDetail />', () => {
     const activity = screen.getByText('Activity');
     expect(activity.nextElementSibling).not.toBeEmptyDOMElement();
 
-    // react-ace VariablesDetail renders empty under jsdom, assert the label.
     expect(screen.getByText('Variables')).toBeInTheDocument();
   });
 
