@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
@@ -14,7 +13,7 @@ i18n.load({ en: englishMessages });
 i18n.activate('en');
 
 // Custom render function with I18n context
-const renderWithI18n = (component: Untyped) =>
+const renderWithI18n = (component: React.ReactElement) =>
   render(<I18nProvider i18n={i18n}>{component}</I18nProvider>);
 
 vi.mock('api');

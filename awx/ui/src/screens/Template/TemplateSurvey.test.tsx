@@ -1,4 +1,4 @@
-import type { JobTemplate, Untyped, WorkflowJobTemplate } from 'types/api';
+import type { JobTemplate, WorkflowJobTemplate } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
@@ -32,7 +32,7 @@ const surveyData = {
 // `.../:id/survey/*`, so mount it under the same real v6 route here (its child
 // routes are relative; the SurveyList is the index route). The template id used
 // by the API comes from the `template` prop, not the route param.
-function renderSurvey(url: Untyped, element: Untyped) {
+function renderSurvey(url: string, element: React.ReactElement) {
   const history = createMemoryHistory({ initialEntries: [url] });
   return renderWithContexts(
     <Routes>

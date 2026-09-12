@@ -12,7 +12,7 @@ const dispatch = vi.fn();
 
 // Capture the onSave prop NodeAddModal hands to NodeModal so the test can
 // invoke it directly. The real NodeModal wizard is not exercised here.
-let capturedOnSave: Untyped;
+let capturedOnSave: ((...args: unknown[]) => void) | undefined;
 vi.mock('./NodeModal', () => ({
   default: (props: Untyped) => {
     capturedOnSave = props.onSave;
@@ -43,7 +43,7 @@ describe('NodeAddModal', () => {
       </WorkflowDispatchContext.Provider>
     );
 
-    capturedOnSave({ linkType: 'success', nodeResource }, {});
+    capturedOnSave!({ linkType: 'success', nodeResource }, {});
 
     expect(dispatch).toHaveBeenCalledWith({
       node: {

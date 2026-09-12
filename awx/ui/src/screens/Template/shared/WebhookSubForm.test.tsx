@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
@@ -23,9 +22,9 @@ describe('<WebhookSubForm />', () => {
   };
 
   const renderForm = (
-    values: Untyped,
-    templateType: Untyped,
-    pathname: Untyped
+    values: Record<string, unknown>,
+    templateType: string,
+    pathname: string
   ) => {
     history = createMemoryHistory({ initialEntries: [`/${pathname}`] });
     return renderWithContexts(
@@ -192,7 +191,7 @@ describe('<WebhookSubForm />', () => {
       webhook_ref_filter: '',
     };
 
-    const renderProjectForm = (values: Untyped) => {
+    const renderProjectForm = (values: Record<string, unknown>) => {
       history = createMemoryHistory({ initialEntries: ['/projects/7/edit'] });
       return renderWithContexts(
         <Routes>

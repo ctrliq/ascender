@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent, act } from '@testing-library/react';
 import {
@@ -17,6 +16,13 @@ import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import NodeModal from './NodeModal';
 import type { WorkflowState } from '../../../../../components/Workflow/workflowReducer';
 
+/**
+ * The props a stub in this file passes through, and one child of the wizard
+ * stub, which is read for its step's id and name.
+ */
+type MockProps = Record<string, unknown> & { children?: React.ReactNode };
+type MockStep = React.ReactElement<{ id?: string; name?: string }>;
+
 // ---------------------------------------------------------------------------
 // Mock ALL PatternFly packages to avoid loading the 308MB / 586-file PF6
 // module tree.  The tests exercise wizard-step logic (navigation, API calls,
@@ -28,8 +34,8 @@ vi.mock('@patternfly/react-core', async () => {
   const WizCtx = R.createContext({});
 
   // Helper: strip PF-only props so React doesn't warn about unknown DOM attrs.
-  const strip = (props: Untyped) => {
-    const out: Untyped = {};
+  const strip = (props: MockProps) => {
+    const out: MockProps = {};
     const skip = new Set([
       'ouiaId',
       'validated',
@@ -63,8 +69,8 @@ vi.mock('@patternfly/react-core', async () => {
     return out;
   };
 
-  const el = (tag: Untyped) =>
-    R.forwardRef((props: Untyped, ref: Untyped) => {
+  const el = (tag: string) =>
+    R.forwardRef((props: MockProps, ref: React.Ref<never>) => {
       const { children, ...rest } = props;
       return R.createElement(tag, { ...strip(rest), ref }, children);
     });
@@ -76,8 +82,15 @@ vi.mock('@patternfly/react-core', async () => {
     onClose: _onClose,
     header,
     footer,
-  }: Untyped) {
-    const steps: Untyped[] = R.Children.toArray(children);
+  }: {
+    children?: React.ReactNode;
+    onStepChange?: (...args: unknown[]) => void;
+    onSave?: () => void;
+    onClose?: () => void;
+    header?: React.ReactNode;
+    footer?: React.ReactNode;
+  }) {
+    const steps = R.Children.toArray(children) as MockStep[];
     const [idx, setIdx] = R.useState(0);
     const stepsRef = R.useRef(steps);
     const cbRef = R.useRef({ onStepChange, onSave });
@@ -89,7 +102,7 @@ vi.mock('@patternfly/react-core', async () => {
     const curProps = cur?.props || {};
 
     const goToNextStep = R.useCallback(() => {
-      setIdx((prev: Untyped) => {
+      setIdx((prev: number) => {
         const s = stepsRef.current;
         if (prev + 1 >= s.length) {
           cbRef.current.onSave?.();
@@ -107,7 +120,7 @@ vi.mock('@patternfly/react-core', async () => {
     }, []);
 
     const goToPrevStep = R.useCallback(() => {
-      setIdx((prev: Untyped) => {
+      setIdx((prev: number) => {
         if (prev <= 0) return prev;
         const s = stepsRef.current;
         const ni = prev - 1;
@@ -137,7 +150,7 @@ vi.mock('@patternfly/react-core', async () => {
       R.createElement(
         'nav',
         null,
-        steps.map((s: Untyped, i: Untyped) =>
+        steps.map((s: MockStep, i: number) =>
           R.createElement(
             'button',
             {
@@ -167,7 +180,7 @@ vi.mock('@patternfly/react-core', async () => {
   const exps = {
     __esModule: true,
     Button: R.forwardRef(
-      ({ children, isDisabled, ...props }: Untyped, ref: Untyped) =>
+      ({ children, isDisabled, ...props }: MockProps, ref: React.Ref<never>) =>
         R.createElement(
           'button',
           {
@@ -182,26 +195,34 @@ vi.mock('@patternfly/react-core', async () => {
     TextInput: el('input'),
     TextArea: el('textarea'),
     FormSelect: R.forwardRef(
-      ({ children, onChange, ...props }: Untyped, ref: Untyped) =>
+      ({ children, onChange, ...props }: MockProps, ref: React.Ref<never>) =>
         R.createElement(
           'select',
           {
             ...strip(props),
             ref,
-            onChange: (e: Untyped) => onChange?.(e, e.target.value),
+            onChange: (e: React.ChangeEvent<HTMLSelectElement>) =>
+              (onChange as ((e: unknown, value: string) => void) | undefined)?.(
+                e,
+                e.target.value
+              ),
           },
           children
         )
     ),
-    FormSelectOption: ({ label, children, ...props }: Untyped) =>
-      R.createElement('option', strip(props), children || label),
-    Switch: (props: Untyped) =>
+    FormSelectOption: ({ label, children, ...props }: MockProps) =>
+      R.createElement(
+        'option',
+        strip(props),
+        children || (label as React.ReactNode)
+      ),
+    Switch: (props: MockProps) =>
       R.createElement('input', { ...strip(props), type: 'checkbox' }),
-    Checkbox: (props: Untyped) =>
+    Checkbox: (props: MockProps) =>
       R.createElement('input', { ...strip(props), type: 'checkbox' }),
     Form: el('div'),
     Title: el('h2'),
-    Tooltip: ({ children }: Untyped) => children || null,
+    Tooltip: ({ children }: MockProps) => children || null,
     WizardFooterWrapper: el('div'),
     Wizard: MockWizard,
     WizardStep: el('div'),
@@ -209,15 +230,16 @@ vi.mock('@patternfly/react-core', async () => {
     useWizardContext: () => R.useContext(WizCtx),
   };
 
-  return new Proxy(exps as Untyped, {
+  return new Proxy(exps as MockProps, {
     get(t, p) {
+      if (typeof p !== 'string') return undefined;
       if (p in t) return t[p];
       if (p === '__esModule') return true;
-      if (typeof p === 'string' && /^[A-Z]/.test(p)) {
+      if (/^[A-Z]/.test(p)) {
         t[p] = el('div');
         return t[p];
       }
-      if (typeof p === 'string' && p.startsWith('use')) {
+      if (p.startsWith('use')) {
         t[p] = () => ({});
         return t[p];
       }
@@ -230,7 +252,7 @@ vi.mock('@patternfly/react-core/deprecated', async () => {
   const R = await vi.importActual<typeof import('react')>('react');
   return {
     __esModule: true,
-    Modal: ({ children, isOpen }: Untyped) =>
+    Modal: ({ children, isOpen }: MockProps) =>
       isOpen ? R.createElement('div', null, children) : null,
     ModalVariant: { large: 'large', medium: 'medium', small: 'small' },
   };
@@ -238,8 +260,8 @@ vi.mock('@patternfly/react-core/deprecated', async () => {
 
 vi.mock('@patternfly/react-table', async () => {
   const R = await vi.importActual<typeof import('react')>('react');
-  const strip = (props: Untyped) => {
-    const out: Untyped = {};
+  const strip = (props: MockProps) => {
+    const out: MockProps = {};
     [
       'ouiaId',
       'dataLabel',
@@ -257,26 +279,31 @@ vi.mock('@patternfly/react-table', async () => {
 
   return {
     __esModule: true,
-    Table: ({ children, ...p }: Untyped) =>
+    Table: ({ children, ...p }: MockProps) =>
       R.createElement('table', strip(p), children),
-    Thead: ({ children, ...p }: Untyped) =>
+    Thead: ({ children, ...p }: MockProps) =>
       R.createElement('thead', strip(p), children),
-    Tbody: ({ children, ...p }: Untyped) =>
+    Tbody: ({ children, ...p }: MockProps) =>
       R.createElement('tbody', strip(p), children),
-    Tr: ({ children, ...p }: Untyped) =>
+    Tr: ({ children, ...p }: MockProps) =>
       R.createElement('tr', strip(p), children),
-    Th: ({ children, ...p }: Untyped) =>
+    Th: ({ children, ...p }: MockProps) =>
       R.createElement('th', strip(p), children),
-    Td: ({ select, children, ...p }: Untyped) => {
+    Td: ({ select, children, ...p }: MockProps) => {
       const cleaned = strip(p);
       if (select) {
+        const cell = select as {
+          variant?: string;
+          isSelected?: boolean;
+          onSelect?: () => void;
+        };
         return R.createElement(
           'td',
           cleaned,
           R.createElement('input', {
-            type: select.variant === 'radio' ? 'radio' : 'checkbox',
-            checked: select.isSelected || false,
-            onChange: select.onSelect || (() => {}),
+            type: cell.variant === 'radio' ? 'radio' : 'checkbox',
+            checked: cell.isSelected || false,
+            onChange: cell.onSelect || (() => {}),
           })
         );
       }
@@ -288,15 +315,16 @@ vi.mock('@patternfly/react-table', async () => {
 vi.mock('@patternfly/react-icons', async () => {
   const R = await vi.importActual<typeof import('react')>('react');
   // Every icon the modal reaches for is made on demand and remembered.
-  return new Proxy({} as Untyped, {
-    get(t: Untyped, p) {
+  return new Proxy({} as MockProps, {
+    get(t: MockProps, p) {
+      if (typeof p !== 'string') return undefined;
       if (p === '__esModule') return true;
       // The factory is async, so its result gets awaited. Handing back a
       // function for `then` would make this namespace look like a thenable
       // and the await would never settle.
       if (p === 'then') return undefined;
-      if (!(p in t) && typeof p === 'string') {
-        t[p] = (props: Untyped) =>
+      if (!(p in t)) {
+        t[p] = (props: MockProps) =>
           R.createElement('span', { 'data-icon': p, ...props });
       }
       return t[p];
@@ -308,7 +336,7 @@ vi.mock('@patternfly/react-icons', async () => {
 // nesting mismatches).  Real errors still propagate to setupTests.js.
 const _origErr = console.error;
 const _origWarn = console.warn;
-const isReactDomNoise = (args: Untyped) => {
+const isReactDomNoise = (args: unknown[]) => {
   const m = typeof args[0] === 'string' ? args[0] : '';
   return (
     m.includes('validateDOMNesting') ||

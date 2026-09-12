@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Mock } from 'vitest';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import {
@@ -22,7 +22,7 @@ const waitForLoaded = async () =>
   );
 
 describe('NodeViewModal', () => {
-  let dispatch: Untyped;
+  let dispatch: Mock;
 
   beforeEach(() => {
     dispatch = vi.fn();

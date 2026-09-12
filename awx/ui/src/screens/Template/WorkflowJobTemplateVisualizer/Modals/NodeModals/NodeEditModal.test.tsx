@@ -18,7 +18,7 @@ vi.mock('../../../../../api/models/WorkflowJobTemplates');
 
 // Capture the onSave prop NodeEditModal hands to NodeModal so the test can
 // invoke it directly. The real NodeModal wizard is not exercised here.
-let capturedOnSave: Untyped;
+let capturedOnSave: ((...args: unknown[]) => void) | undefined;
 vi.mock('./NodeModal', () => ({
   default: (props: Untyped) => {
     capturedOnSave = props.onSave;
@@ -70,7 +70,7 @@ describe('NodeEditModal', () => {
       </WorkflowDispatchContext.Provider>
     );
 
-    capturedOnSave(values, {});
+    capturedOnSave!(values, {});
 
     expect(dispatch).toHaveBeenCalledWith({
       node: {

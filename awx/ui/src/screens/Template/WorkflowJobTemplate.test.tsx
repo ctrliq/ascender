@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { CurrentUser } from 'contexts/Config';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -26,7 +26,7 @@ const mockMe = {
 // reads :id and its relative child routes resolve.
 function renderWFJT(
   entry = '/templates/workflow_job_template/1/foobar',
-  me: Untyped = mockMe
+  me: Partial<CurrentUser> = mockMe
 ) {
   const history = createMemoryHistory({ initialEntries: [entry] });
   return renderWithContexts(
