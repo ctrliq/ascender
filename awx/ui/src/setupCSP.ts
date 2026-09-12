@@ -1,7 +1,7 @@
-// The nonce for the style tags styled-components injects is carried by the
-// <meta name="sc-nonce"> that Django renders into index.html, which
-// styled-components looks for before anything else. It replaces the
-// __webpack_nonce__ global this used to assign, which only webpack understood.
+// The style tags styled-components injects are covered by the style-src
+// 'unsafe-inline' in the policy index.html carries, so they need no nonce of
+// their own. There used to be a <meta name="sc-nonce"> and a window.NONCE_ID
+// for them, left over from __webpack_nonce__, which nothing read.
 
 // Send report when a CSP violation occurs
 // See: https://w3c.github.io/webappsec-csp/2/#violation-reports
