@@ -1,13 +1,14 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useField } from 'formik';
+import type { FieldInputProps, FieldMetaProps } from 'formik';
+import type { SetFieldTouched } from 'components/LaunchPrompt/types';
 import { useLingui } from '@lingui/react/macro';
 import StepName from 'components/LaunchPrompt/steps/StepName';
 import RunStep from './RunStep';
 
 const STEP_ID = 'runType';
 
-export default function useRunTypeStep(askLinkType: Untyped) {
+export default function useRunTypeStep(askLinkType: boolean) {
   const { t } = useLingui();
   const [, meta] = useField('linkType');
   const [artifactKeyField] = useField('linkConditionArtifactKey');
@@ -26,17 +27,17 @@ export default function useRunTypeStep(askLinkType: Untyped) {
     isReady: true,
     contentError: null,
     hasError: !!meta.error,
-    setTouched: (setFieldTouched: Untyped) => {
+    setTouched: (setFieldTouched: SetFieldTouched) => {
       setFieldTouched('linkType', true, false);
     },
     validate: () => {},
   };
 }
 function getStep(
-  label: Untyped,
-  askLinkType: Untyped,
-  meta: Untyped,
-  artifactKeyField: Untyped
+  label: React.ReactNode,
+  askLinkType: boolean,
+  meta: FieldMetaProps<string>,
+  artifactKeyField: FieldInputProps<string>
 ) {
   if (!askLinkType) {
     return null;

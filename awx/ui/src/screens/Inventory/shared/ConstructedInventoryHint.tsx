@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -144,11 +143,11 @@ function ConstructedInventoryHint() {
 function LimitToIntersectionExample() {
   const { t } = useLingui();
   const [copied, setCopied] = React.useState(false);
-  const clipboardCopyFunc = (event: Untyped, text: Untyped) => {
+  const clipboardCopyFunc = (_event: unknown, text: string) => {
     navigator.clipboard.writeText(text.toString());
   };
 
-  const onClick = (event: Untyped, text: Untyped) => {
+  const onClick = (event: unknown, text: string) => {
     clipboardCopyFunc(event, text);
     setCopied(true);
   };
@@ -214,11 +213,11 @@ groups:
 function FilterOnNestedGroupExample() {
   const { t } = useLingui();
   const [copied, setCopied] = React.useState(false);
-  const clipboardCopyFunc = (event: Untyped, text: Untyped) => {
+  const clipboardCopyFunc = (_event: unknown, text: string) => {
     navigator.clipboard.writeText(text.toString());
   };
 
-  const onClick = (event: Untyped, text: Untyped) => {
+  const onClick = (event: unknown, text: string) => {
     clipboardCopyFunc(event, text);
     setCopied(true);
   };
@@ -301,11 +300,11 @@ function FilterOnNestedGroupExample() {
 function HostsByProcessorTypeExample() {
   const { t } = useLingui();
   const [copied, setCopied] = React.useState(false);
-  const clipboardCopyFunc = (event: Untyped, text: Untyped) => {
+  const clipboardCopyFunc = (_event: unknown, text: string) => {
     navigator.clipboard.writeText(text.toString());
   };
 
-  const onClick = (event: Untyped, text: Untyped) => {
+  const onClick = (event: unknown, text: string) => {
     clipboardCopyFunc(event, text);
     setCopied(true);
   };

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField, useFormikContext } from 'formik';
@@ -12,10 +12,11 @@ import {
   FormColumnLayout,
   FormFullWidthLayout,
 } from 'components/FormLayout';
+import type { ProjectCredentialField } from '../ProjectForm';
 import WebhookSubForm from '../../../Template/shared/WebhookSubForm';
 import getProjectHelpStrings from '../Project.helptext';
 
-export const UrlFormField = ({ tooltip }: Untyped) => {
+export const UrlFormField = ({ tooltip }: { tooltip: React.ReactNode }) => {
   const { t } = useLingui();
   return (
     <FormField
@@ -31,7 +32,7 @@ export const UrlFormField = ({ tooltip }: Untyped) => {
   );
 };
 
-export const BranchFormField = ({ label }: Untyped) => {
+export const BranchFormField = ({ label }: { label: React.ReactNode }) => {
   const projectHelpStrings = getProjectHelpStrings();
   return (
     <FormField
@@ -47,13 +48,16 @@ export const BranchFormField = ({ label }: Untyped) => {
 export const ScmCredentialFormField = ({
   credential,
   onCredentialSelection,
-}: Untyped) => {
+}: {
+  credential: ProjectCredentialField;
+  onCredentialSelection: (kind: string, value: SummaryFieldRef | null) => void;
+}) => {
   const { t } = useLingui();
   const { setFieldValue, setFieldTouched } =
     useFormikContext<Record<string, unknown>>();
 
   const onCredentialChange = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       onCredentialSelection('scm', value);
       setFieldValue('credential', value);
       setFieldTouched('credential', true, false);
@@ -74,9 +78,12 @@ export const ScmCredentialFormField = ({
 export const ScmTypeOptions = ({
   scmUpdateOnLaunch,
   hideAllowOverride,
-}: Untyped) => {
+}: {
+  scmUpdateOnLaunch?: boolean;
+  hideAllowOverride?: boolean;
+}) => {
   const { t } = useLingui();
-  const { values } = useFormikContext<Untyped>();
+  const { values } = useFormikContext<Record<string, unknown>>();
   const projectHelpStrings = getProjectHelpStrings();
 
   const [enableWebhooks, setEnableWebhooks] = useState(

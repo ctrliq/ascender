@@ -1,3 +1,4 @@
+import type { ActivityStreamEntry } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -6,7 +7,7 @@ import ActivityStreamDescription from './ActivityStreamDescription';
 describe('ActivityStreamDescription', () => {
   test('initially renders successfully', () => {
     const { container } = renderWithContexts(
-      <ActivityStreamDescription activity={{}} />
+      <ActivityStreamDescription activity={{} as ActivityStreamEntry} />
     );
     expect(container.querySelectorAll('span')).toHaveLength(1);
   });
@@ -23,7 +24,7 @@ describe('ActivityStreamDescription', () => {
         schedule: [{ id: 5, name: 'Sync Schedule' }],
         inventory_source: [{ id: 3, name: 'src', inventory_id: 7 }],
       },
-    };
+    } as unknown as ActivityStreamEntry;
     renderWithContexts(<ActivityStreamDescription activity={activity} />);
     const link = screen.getByRole('link', { name: 'Sync Schedule' });
     expect(link).toHaveAttribute(
@@ -43,7 +44,7 @@ describe('ActivityStreamDescription', () => {
       summary_fields: {
         schedule: [{ id: 5, name: 'Mystery Schedule' }],
       },
-    };
+    } as unknown as ActivityStreamEntry;
     renderWithContexts(<ActivityStreamDescription activity={activity} />);
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
     expect(screen.getByText(/Mystery Schedule/)).toBeInTheDocument();

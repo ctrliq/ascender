@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { JobTemplate, Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { JobTemplatesAPI, WorkflowJobTemplateNodesAPI, RootAPI } from 'api';
@@ -9,7 +9,10 @@ import {
   assertDetail,
 } from '../../../../testUtils/rtlContexts';
 import JobTemplateDetail from './JobTemplateDetail';
-import mockTemplate from '../shared/data.job_template.json';
+import mockTemplateJson from '../shared/data.job_template.json';
+
+/** The fixture as the detail takes it, which is the template the api sends. */
+const mockTemplate = mockTemplateJson as unknown as JobTemplate;
 
 vi.mock('../../../api');
 
@@ -113,8 +116,8 @@ describe('<JobTemplateDetail />', () => {
 
   test('should render credential chips', async () => {
     await renderDefault();
-    mockTemplate.summary_fields.credentials.forEach((credential) => {
-      expect(screen.getByText(credential.name)).toBeInTheDocument();
+    (mockTemplate.summary_fields.credentials ?? []).forEach((credential) => {
+      expect(screen.getByText(credential.name as string)).toBeInTheDocument();
     });
   });
 
@@ -145,6 +148,7 @@ describe('<JobTemplateDetail />', () => {
           ask_inventory_on_launch: true,
           summary_fields: {
             inventory: {
+              id: 1,
               kind: 'smart',
             },
           },

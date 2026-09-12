@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import * as d3 from 'd3';
 import { PageContextConsumer } from '@patternfly/react-core';
@@ -12,13 +11,16 @@ export interface UsageChartProps {
   /** One row per month of the subscription usage the API reports. */
   data?: SubscriptionUsageMonth[];
   height: number;
-  /** PatternFly's page context, which says whether the nav is open. */
-  pageContext: Untyped;
-  [key: string]: unknown;
+  /**
+   * PatternFly's page context, which the chart redraws on: the width it has
+   * changes when the sidebar opens. PatternFly 4 called this isNavOpen, which
+   * is the name that was read here until now, and 6 has no such property.
+   */
+  pageContext: { isSidebarOpen?: boolean };
 }
 
 function UsageChart({ id, data, height, pageContext }: UsageChartProps) {
-  const { isNavOpen } = pageContext;
+  const { isSidebarOpen } = pageContext;
   const { t } = useLingui();
 
   // Methods
@@ -54,14 +56,25 @@ function UsageChart({ id, data, height, pageContext }: UsageChartProps) {
         .getPropertyValue('--pf-t--global--text--color--100')
         .trim() || '#151515';
 
-    function transition(path: Untyped) {
+    // The selection the line was drawn into: one path element holding the
+    // whole series, which is what call() hands this.
+    function transition(
+      path: d3.Selection<SVGPathElement, UsagePoint[], HTMLElement, unknown>
+    ) {
       path.transition().duration(1000).attrTween('stroke-dasharray', tweenDash);
     }
 
-    function tweenDash(...params: Untyped[]) {
-      const l = params[2][params[1]].getTotalLength();
+    // d3 calls this with (datum, index, nodes), and the element is reached
+    // through the last two rather than through this: an arrow function here
+    // would not have the element as its this at all.
+    function tweenDash(
+      _datum: unknown,
+      index: number,
+      nodes: ArrayLike<SVGPathElement>
+    ) {
+      const l = (nodes[index] as SVGPathElement).getTotalLength();
       const i = d3.interpolateString(`0,${l}`, `${l},${l}`);
-      return (val: Untyped) => i(val);
+      return (val: number) => i(val);
     }
 
     const x = d3.scaleTime().rangeRound([0, width]);
@@ -325,7 +338,7 @@ function UsageChart({ id, data, height, pageContext }: UsageChartProps) {
 
   useEffect(() => {
     draw();
-  }, [draw, isNavOpen]);
+  }, [draw, isSidebarOpen]);
 
   useEffect(() => {
     function handleResize() {
@@ -342,8 +355,8 @@ function UsageChart({ id, data, height, pageContext }: UsageChartProps) {
   return <div id={id} />;
 }
 
-const withPageContext = (Component: Untyped) =>
-  function contextComponent(props: Untyped) {
+const withPageContext = (Component: React.ComponentType<UsageChartProps>) =>
+  function contextComponent(props: Omit<UsageChartProps, 'pageContext'>) {
     return (
       <PageContextConsumer>
         {(pageContext) => <Component {...props} pageContext={pageContext} />}

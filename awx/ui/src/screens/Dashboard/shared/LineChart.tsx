@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import * as d3 from 'd3';
 import { useLingui } from '@lingui/react/macro';
@@ -18,8 +17,12 @@ export interface LineChartProps {
   id: string;
   data: JobGraphDay[];
   height: number;
-  /** PatternFly's page context, which says whether the nav is open. */
-  pageContext: { isNavOpen?: boolean };
+  /**
+   * PatternFly's page context, which the chart redraws on: the width it has
+   * changes when the sidebar opens. PatternFly 4 called this isNavOpen, which
+   * is the name that was read here until now, and 6 has no such property.
+   */
+  pageContext: { isSidebarOpen?: boolean };
   /** Which series the graph is showing: all, successful or failed. */
   jobStatus: string;
 }
@@ -31,7 +34,7 @@ function LineChart({
   pageContext,
   jobStatus,
 }: LineChartProps) {
-  const { isNavOpen } = pageContext;
+  const { isSidebarOpen } = pageContext;
   const { t } = useLingui();
 
   // Methods
@@ -67,15 +70,26 @@ function LineChart({
         .getPropertyValue('--pf-t--global--border--color--default')
         .trim() || '#373a41';
 
-    function transition(path: Untyped) {
+    // The selection the line was drawn into: one path element holding the
+    // whole series, which is what call() hands this.
+    function transition(
+      path: d3.Selection<SVGPathElement, ChartPoint[], HTMLElement, unknown>
+    ) {
       path.transition().duration(1000).attrTween('stroke-dasharray', tweenDash);
     }
 
     // d3 calls this with (datum, index, nodes); only the last two are used.
-    function tweenDash(...params: Untyped[]) {
-      const l = params[2][params[1]].getTotalLength();
+    // d3 calls this with (datum, index, nodes), and the element is reached
+    // through the last two rather than through this: an arrow function here
+    // would not have the element as its this at all.
+    function tweenDash(
+      _datum: unknown,
+      index: number,
+      nodes: ArrayLike<SVGPathElement>
+    ) {
+      const l = (nodes[index] as SVGPathElement).getTotalLength();
       const i = d3.interpolateString(`0,${l}`, `${l},${l}`);
-      return (val: Untyped) => i(val);
+      return (val: number) => i(val);
     }
 
     const x = d3.scaleTime().rangeRound([0, width]);
@@ -203,7 +217,13 @@ function LineChart({
           .axisBottom(x)
           .tickValues(ticks)
           .tickSize(-height)
-          .tickFormat(d3.timeFormat('%-m/%-d') as Untyped) // "1/19"
+          // d3 types the formatter by the scale's own domain, which is a
+          // Date here, and the axis by the wider NumberValue it accepts.
+          .tickFormat(
+            d3.timeFormat('%-m/%-d') as unknown as (
+              domainValue: d3.NumberValue
+            ) => string
+          ) // "1/19"
       ) // "Jan-01"
       .selectAll('line')
       .attr('stroke', gridColor);
@@ -317,7 +337,7 @@ function LineChart({
 
   useEffect(() => {
     draw();
-  }, [draw, isNavOpen]);
+  }, [draw, isSidebarOpen]);
 
   useEffect(() => {
     function handleResize() {
@@ -340,7 +360,7 @@ const withPageContext = (Component: React.ComponentType<LineChartProps>) =>
   function contextComponent(props: Omit<LineChartProps, 'pageContext'>) {
     return (
       <PageContextConsumer>
-        {(pageContext: Untyped) => (
+        {(pageContext: { isSidebarOpen?: boolean }) => (
           <Component {...props} pageContext={pageContext} />
         )}
       </PageContextConsumer>

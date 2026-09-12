@@ -391,7 +391,26 @@ export type WorkflowApproval = Omit<
 };
 export type OAuth2Application = WithNested<Schemas['OAuth2Application']>;
 export type OAuth2Token = WithNested<Schemas['OAuth2Token']>;
-export type ActivityStreamEntry = WithNested<Schemas['ActivityStream']>;
+/**
+ * One entry of the activity stream.
+ *
+ * `changes` is a SerializerMethodField the schema can only describe as a
+ * string: it is the object's new and changed values, keyed by field. The
+ * summary fields are the stream's own shape as well: every object it names
+ * comes as a list, because an association names two of them, and only the
+ * actor is a single reference.
+ */
+export type ActivityStreamEntry = Omit<
+  WithNested<Schemas['ActivityStream']>,
+  'changes' | 'summary_fields'
+> & {
+  changes?: Record<string, unknown>;
+  summary_fields: {
+    actor?: SummaryFieldRef & { username?: string };
+    [key: string]:
+      SummaryFieldRef[] | (SummaryFieldRef & { username?: string }) | undefined;
+  };
+};
 /**
  * One line of a job's output, as the events endpoint returns it.
  *

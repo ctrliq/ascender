@@ -1,11 +1,26 @@
-import type { Untyped } from 'types/api';
+import type { ActivityStreamEntry, SummaryFieldRef } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
-const buildAnchor = (obj: Untyped, resource: Untyped, activity: Untyped) => {
+const buildAnchor = (
+  obj: SummaryFieldRef,
+  resource: string,
+  activity: ActivityStreamEntry
+) => {
   let url;
   let name;
+  // Both are read unguarded on purpose: the stream names every object as a
+  // list, and reaching for one it did not name throws into the catch below,
+  // which is what falls back to the resource's plain name.
+  const named = (key: string) =>
+    (
+      activity.summary_fields[key] as SummaryFieldRef[]
+    )[0] as SummaryFieldRef & {
+      username?: string;
+      inventory_id?: number;
+    };
+  const changes = (activity.changes ?? {}) as Record<string, string>;
   // try/except pattern asserts that:
   // if we encounter a case where a UI url can't or
   // shouldn't be generated, just supply the name of the resource
@@ -25,15 +40,13 @@ const buildAnchor = (obj: Untyped, resource: Untyped, activity: Untyped) => {
           activity.operation === 'delete'
         ) {
           // the API formats the changes.inventory field as str 'myInventoryName-PrimaryKey'
-          const [inventory_id] = activity.changes.inventory
+          const [inventory_id] = (changes.inventory as string)
             .split('-')
             .slice(-1);
-          url = `/inventories/inventory/${inventory_id}/groups/${activity.changes.id}/details/`;
+          url = `/inventories/inventory/${inventory_id}/groups/${changes.id}/details/`;
         } else {
-          url = `/inventories/inventory/${
-            activity.summary_fields.inventory[0].id
-          }/groups/${
-            activity.changes.id || activity.changes.object1_pk
+          url = `/inventories/inventory/${named('inventory').id}/groups/${
+            changes.id || changes.object1_pk
           }/details/`;
         }
         break;
@@ -52,17 +65,17 @@ const buildAnchor = (obj: Untyped, resource: Untyped, activity: Untyped) => {
       case 'schedule':
         // schedule urls depend on the resource they're associated with
         if (activity.summary_fields.job_template) {
-          const jt_id = activity.summary_fields.job_template[0].id;
+          const jt_id = named('job_template').id;
           url = `/templates/job_template/${jt_id}/schedules/${obj.id}/`;
         } else if (activity.summary_fields.workflow_job_template) {
-          const wfjt_id = activity.summary_fields.workflow_job_template[0].id;
+          const wfjt_id = named('workflow_job_template').id;
           url = `/templates/workflow_job_template/${wfjt_id}/schedules/${obj.id}/`;
         } else if (activity.summary_fields.project) {
-          url = `/projects/${activity.summary_fields.project[0].id}/schedules/${obj.id}/`;
+          url = `/projects/${named('project').id}/schedules/${obj.id}/`;
         } else if (activity.summary_fields.system_job_template) {
           url = null;
         } else if (activity.summary_fields.inventory_source) {
-          const invSource = activity.summary_fields.inventory_source[0];
+          const invSource = named('inventory_source');
           url = invSource.inventory_id
             ? `/inventories/inventory/${invSource.inventory_id}/sources/${invSource.id}/schedules/${obj.id}/`
             : null;
@@ -91,8 +104,7 @@ const buildAnchor = (obj: Untyped, resource: Untyped, activity: Untyped) => {
         url = `/templates/workflow_job_template/${obj.id}/`;
         break;
       case 'workflow_job_template_node': {
-        const { id: wfjt_id, name: wfjt_name } =
-          activity.summary_fields.workflow_job_template[0];
+        const { id: wfjt_id, name: wfjt_name } = named('workflow_job_template');
         url = `/templates/workflow_job_template/${wfjt_id}/`;
         name = wfjt_name;
         break;
@@ -104,7 +116,9 @@ const buildAnchor = (obj: Untyped, resource: Untyped, activity: Untyped) => {
         url = null;
         break;
       case 'inventory_source': {
-        const inventoryId = (obj.inventory || '').split('-').reverse()[0];
+        const inventoryId = String(obj.inventory ?? '')
+          .split('-')
+          .reverse()[0];
         url = `/inventories/inventory/${inventoryId}/sources/${obj.id}/details/`;
         break;
       }
@@ -112,18 +126,20 @@ const buildAnchor = (obj: Untyped, resource: Untyped, activity: Untyped) => {
         url = `/applications/${obj.id}/`;
         break;
       case 'workflow_approval':
-        url = `/jobs/workflow/${activity.summary_fields.workflow_job[0].id}/output/`;
-        name = `${activity.summary_fields.workflow_job[0].name} | ${activity.summary_fields.workflow_approval[0].name}`;
+        url = `/jobs/workflow/${named('workflow_job').id}/output/`;
+        name = `${named('workflow_job').name} | ${named('workflow_approval').name}`;
         break;
       case 'workflow_approval_template':
-        url = `/templates/workflow_job_template/${activity.summary_fields.workflow_job_template[0].id}/visualizer/`;
-        name = `${activity.summary_fields.workflow_job_template[0].name} | ${activity.summary_fields.workflow_approval_template[0].name}`;
+        url = `/templates/workflow_job_template/${named('workflow_job_template').id}/visualizer/`;
+        name = `${named('workflow_job_template').name} | ${
+          named('workflow_approval_template').name
+        }`;
         break;
       default:
         url = `/${resource}s/${obj.id}/`;
     }
 
-    name = name || obj.name || obj.username;
+    name = name || obj.name || (obj as { username?: string }).username;
 
     if (url) {
       return <Link to={url}>{name}</Link>;
@@ -131,26 +147,28 @@ const buildAnchor = (obj: Untyped, resource: Untyped, activity: Untyped) => {
 
     return <span>{name}</span>;
   } catch (err) {
-    return <span>{obj.name || obj.username || ''}</span>;
+    return (
+      <span>{obj.name || (obj as { username?: string }).username || ''}</span>
+    );
   }
 };
 
-const getPastTense = (item: Untyped) =>
+const getPastTense = (item: string) =>
   /e$/.test(item) ? `${item}d` : `${item}ed`;
 
-const isGroupRelationship = (item: Untyped) =>
+const isGroupRelationship = (item: ActivityStreamEntry) =>
   item.object1 === 'group' &&
   item.object2 === 'group' &&
-  item.summary_fields.group.length > 1;
+  ((item.summary_fields.group as SummaryFieldRef[]) ?? []).length > 1;
 
-const buildLabeledLink = (label: Untyped, link: Untyped) => (
+const buildLabeledLink = (label: React.ReactNode, link: React.ReactNode) => (
   <span>
     {label} {link}
   </span>
 );
 
 export interface ActivityStreamDescriptionProps {
-  activity: Untyped;
+  activity: ActivityStreamEntry;
   [key: string]: unknown;
 }
 
@@ -158,6 +176,19 @@ function ActivityStreamDescription({
   activity,
 }: ActivityStreamDescriptionProps) {
   const { t } = useLingui();
+  // Every object the stream names comes as a list, because an association
+  // names two of them; a branch below only reaches for one it has tested for.
+  const named = (key: string, index = 0) =>
+    ((activity.summary_fields[key] as SummaryFieldRef[]) ?? [])[
+      index
+    ] as SummaryFieldRef & { role_field?: string };
+  // A created or deleted object is named by no summary field, because it does
+  // not exist on one side of the entry: what names it there is the change
+  // set, which buildAnchor reads for the same id and name.
+  const changes = (activity.changes ?? {}) as SummaryFieldRef & {
+    status?: [string, string];
+    timed_out?: [boolean, boolean];
+  };
   const labeledLinks = [];
   // Activity stream objects will outlive the resources they reference
   // in that case, summary_fields will not be available - show generic error text instead
@@ -165,13 +196,16 @@ function ActivityStreamDescription({
     switch (activity.object_association) {
       // explicit role dis+associations
       case 'role': {
-        let { object1, object2 } = activity;
+        // Both are set on a role association; the catch below is what covers
+        // an entry whose objects the api no longer names.
+        let object1 = activity.object1 as string;
+        let object2 = activity.object2 as string;
 
         // if object1 winds up being the role's resource, we need to swap the objects
         // in order to make the sentence make sense.
         if (activity.object_type === object1) {
-          object1 = activity.object2;
-          object2 = activity.object1;
+          object1 = activity.object2 as string;
+          object2 = activity.object1 as string;
         }
 
         // object1 field is resource targeted by the dis+association
@@ -183,30 +217,24 @@ function ActivityStreamDescription({
             if (isGroupRelationship(activity)) {
               labeledLinks.push(
                 buildLabeledLink(
-                  getPastTense(activity.operation),
-                  buildAnchor(
-                    activity.summary_fields.group[1],
-                    object2,
-                    activity
-                  )
+                  getPastTense(activity.operation as string),
+                  buildAnchor(named('group', 1), object2, activity)
                 )
               );
               labeledLinks.push(
                 buildLabeledLink(
-                  `${activity.summary_fields.role[0].role_field} from`,
-                  buildAnchor(
-                    activity.summary_fields.group[0],
-                    object1,
-                    activity
-                  )
+                  `${named('role').role_field} from`,
+                  buildAnchor(named('group'), object1, activity)
                 )
               );
             } else {
               labeledLinks.push(
                 buildLabeledLink(
-                  getPastTense(activity.operation),
+                  getPastTense(activity.operation as string),
                   buildAnchor(
-                    activity.summary_fields[object2][0],
+                    (
+                      activity.summary_fields[object2] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
                     object2,
                     activity
                   )
@@ -214,9 +242,11 @@ function ActivityStreamDescription({
               );
               labeledLinks.push(
                 buildLabeledLink(
-                  `${activity.summary_fields.role[0].role_field} from`,
+                  `${named('role').role_field} from`,
                   buildAnchor(
-                    activity.summary_fields[object1][0],
+                    (
+                      activity.summary_fields[object1] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
                     object1,
                     activity
                   )
@@ -229,30 +259,24 @@ function ActivityStreamDescription({
             if (isGroupRelationship(activity)) {
               labeledLinks.push(
                 buildLabeledLink(
-                  getPastTense(activity.operation),
-                  buildAnchor(
-                    activity.summary_fields.group[1],
-                    object2,
-                    activity
-                  )
+                  getPastTense(activity.operation as string),
+                  buildAnchor(named('group', 1), object2, activity)
                 )
               );
               labeledLinks.push(
                 buildLabeledLink(
-                  `${activity.summary_fields.role[0].role_field} to`,
-                  buildAnchor(
-                    activity.summary_fields.group[0],
-                    object1,
-                    activity
-                  )
+                  `${named('role').role_field} to`,
+                  buildAnchor(named('group'), object1, activity)
                 )
               );
             } else {
               labeledLinks.push(
                 buildLabeledLink(
-                  getPastTense(activity.operation),
+                  getPastTense(activity.operation as string),
                   buildAnchor(
-                    activity.summary_fields[object2][0],
+                    (
+                      activity.summary_fields[object2] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
                     object2,
                     activity
                   )
@@ -260,9 +284,11 @@ function ActivityStreamDescription({
               );
               labeledLinks.push(
                 buildLabeledLink(
-                  `${activity.summary_fields.role[0].role_field} to`,
+                  `${named('role').role_field} to`,
                   buildAnchor(
-                    activity.summary_fields[object1][0],
+                    (
+                      activity.summary_fields[object1] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
                     object1,
                     activity
                   )
@@ -286,10 +312,10 @@ function ActivityStreamDescription({
             if (isGroupRelationship(activity)) {
               labeledLinks.push(
                 buildLabeledLink(
-                  `${getPastTense(activity.operation)} ${activity.object2}`,
+                  `${getPastTense(activity.operation as string)} ${activity.object2}`,
                   buildAnchor(
-                    activity.summary_fields.group[1],
-                    activity.object2,
+                    named('group', 1),
+                    activity.object2 as string,
                     activity
                   )
                 )
@@ -298,8 +324,8 @@ function ActivityStreamDescription({
                 buildLabeledLink(
                   `from ${activity.object1}`,
                   buildAnchor(
-                    activity.summary_fields.group[0],
-                    activity.object1,
+                    named('group'),
+                    activity.object1 as string,
                     activity
                   )
                 )
@@ -307,20 +333,28 @@ function ActivityStreamDescription({
             } else {
               labeledLinks.push(
                 buildLabeledLink(
-                  getPastTense(activity.operation),
+                  getPastTense(activity.operation as string),
                   buildAnchor(
-                    activity.summary_fields[activity.object2][0],
-                    activity.object2,
+                    (
+                      activity.summary_fields[
+                        activity.object2 as string
+                      ] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
+                    activity.object2 as string,
                     activity
                   )
                 )
               );
               labeledLinks.push(
                 buildLabeledLink(
-                  `${activity.summary_fields.role[0].role_field} from`,
+                  `${named('role').role_field} from`,
                   buildAnchor(
-                    activity.summary_fields[activity.object1][0],
-                    activity.object1,
+                    (
+                      activity.summary_fields[
+                        activity.object1 as string
+                      ] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
+                    activity.object1 as string,
                     activity
                   )
                 )
@@ -332,10 +366,10 @@ function ActivityStreamDescription({
             if (isGroupRelationship(activity)) {
               labeledLinks.push(
                 buildLabeledLink(
-                  `${getPastTense(activity.operation)} ${activity.object1}`,
+                  `${getPastTense(activity.operation as string)} ${activity.object1}`,
                   buildAnchor(
-                    activity.summary_fields.group[0],
-                    activity.object1,
+                    named('group'),
+                    activity.object1 as string,
                     activity
                   )
                 )
@@ -344,8 +378,8 @@ function ActivityStreamDescription({
                 buildLabeledLink(
                   `to ${activity.object2}`,
                   buildAnchor(
-                    activity.summary_fields.group[1],
-                    activity.object2,
+                    named('group', 1),
+                    activity.object2 as string,
                     activity
                   )
                 )
@@ -353,20 +387,28 @@ function ActivityStreamDescription({
             } else {
               labeledLinks.push(
                 buildLabeledLink(
-                  getPastTense(activity.operation),
+                  getPastTense(activity.operation as string),
                   buildAnchor(
-                    activity.summary_fields[activity.object2][0],
-                    activity.object2,
+                    (
+                      activity.summary_fields[
+                        activity.object2 as string
+                      ] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
+                    activity.object2 as string,
                     activity
                   )
                 )
               );
               labeledLinks.push(
                 buildLabeledLink(
-                  `${activity.summary_fields.role[0].role_field} to`,
+                  `${named('role').role_field} to`,
                   buildAnchor(
-                    activity.summary_fields[activity.object1][0],
-                    activity.object1,
+                    (
+                      activity.summary_fields[
+                        activity.object1 as string
+                      ] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
+                    activity.object1 as string,
                     activity
                   )
                 )
@@ -385,10 +427,10 @@ function ActivityStreamDescription({
             if (isGroupRelationship(activity)) {
               labeledLinks.push(
                 buildLabeledLink(
-                  `${getPastTense(activity.operation)} ${activity.object2}`,
+                  `${getPastTense(activity.operation as string)} ${activity.object2}`,
                   buildAnchor(
-                    activity.summary_fields.group[1],
-                    activity.object2,
+                    named('group', 1),
+                    activity.object2 as string,
                     activity
                   )
                 )
@@ -397,8 +439,8 @@ function ActivityStreamDescription({
                 buildLabeledLink(
                   `from ${activity.object1}`,
                   buildAnchor(
-                    activity.summary_fields.group[0],
-                    activity.object1,
+                    named('group'),
+                    activity.object1 as string,
                     activity
                   )
                 )
@@ -409,10 +451,17 @@ function ActivityStreamDescription({
             ) {
               labeledLinks.push(
                 buildLabeledLink(
-                  `${getPastTense(activity.operation)} two nodes on workflow`,
+                  `${getPastTense(activity.operation as string)} two nodes on workflow`,
                   buildAnchor(
-                    activity.summary_fields[activity.object1[0]],
-                    activity.object1,
+                    // Indexed by the whole name: this took the first
+                    // character of it, which names no summary field, so the
+                    // workflow went unnamed.
+                    (
+                      activity.summary_fields[
+                        activity.object1 as string
+                      ] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
+                    activity.object1 as string,
                     activity
                   )
                 )
@@ -420,10 +469,14 @@ function ActivityStreamDescription({
             } else {
               labeledLinks.push(
                 buildLabeledLink(
-                  `${getPastTense(activity.operation)} ${activity.object2}`,
+                  `${getPastTense(activity.operation as string)} ${activity.object2}`,
                   buildAnchor(
-                    activity.summary_fields[activity.object2][0],
-                    activity.object2,
+                    (
+                      activity.summary_fields[
+                        activity.object2 as string
+                      ] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
+                    activity.object2 as string,
                     activity
                   )
                 )
@@ -432,8 +485,12 @@ function ActivityStreamDescription({
                 buildLabeledLink(
                   `from ${activity.object1}`,
                   buildAnchor(
-                    activity.summary_fields[activity.object1][0],
-                    activity.object1,
+                    (
+                      activity.summary_fields[
+                        activity.object1 as string
+                      ] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
+                    activity.object1 as string,
                     activity
                   )
                 )
@@ -446,10 +503,10 @@ function ActivityStreamDescription({
             if (isGroupRelationship(activity)) {
               labeledLinks.push(
                 buildLabeledLink(
-                  `${getPastTense(activity.operation)} ${activity.object1}`,
+                  `${getPastTense(activity.operation as string)} ${activity.object1}`,
                   buildAnchor(
-                    activity.summary_fields.group[0],
-                    activity.object1,
+                    named('group'),
+                    activity.object1 as string,
                     activity
                   )
                 )
@@ -458,8 +515,8 @@ function ActivityStreamDescription({
                 buildLabeledLink(
                   `to ${activity.object2}`,
                   buildAnchor(
-                    activity.summary_fields.group[1],
-                    activity.object2,
+                    named('group', 1),
+                    activity.object2 as string,
                     activity
                   )
                 )
@@ -470,10 +527,17 @@ function ActivityStreamDescription({
             ) {
               labeledLinks.push(
                 buildLabeledLink(
-                  `${getPastTense(activity.operation)} two nodes on workflow`,
+                  `${getPastTense(activity.operation as string)} two nodes on workflow`,
                   buildAnchor(
-                    activity.summary_fields[activity.object1[0]],
-                    activity.object1,
+                    // Indexed by the whole name: this took the first
+                    // character of it, which names no summary field, so the
+                    // workflow went unnamed.
+                    (
+                      activity.summary_fields[
+                        activity.object1 as string
+                      ] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
+                    activity.object1 as string,
                     activity
                   )
                 )
@@ -481,10 +545,14 @@ function ActivityStreamDescription({
             } else {
               labeledLinks.push(
                 buildLabeledLink(
-                  `${getPastTense(activity.operation)} ${activity.object1}`,
+                  `${getPastTense(activity.operation as string)} ${activity.object1}`,
                   buildAnchor(
-                    activity.summary_fields[activity.object1][0],
-                    activity.object1,
+                    (
+                      activity.summary_fields[
+                        activity.object1 as string
+                      ] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
+                    activity.object1 as string,
                     activity
                   )
                 )
@@ -493,8 +561,12 @@ function ActivityStreamDescription({
                 buildLabeledLink(
                   `to ${activity.object2}`,
                   buildAnchor(
-                    activity.summary_fields[activity.object2][0],
-                    activity.object2,
+                    (
+                      activity.summary_fields[
+                        activity.object2 as string
+                      ] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
+                    activity.object2 as string,
                     activity
                   )
                 )
@@ -504,8 +576,8 @@ function ActivityStreamDescription({
           case 'delete':
             labeledLinks.push(
               buildLabeledLink(
-                `${getPastTense(activity.operation)} ${activity.object1}`,
-                buildAnchor(activity.changes, activity.object1, activity)
+                `${getPastTense(activity.operation as string)} ${activity.object1}`,
+                buildAnchor(changes, activity.object1 as string, activity)
               )
             );
             break;
@@ -513,16 +585,13 @@ function ActivityStreamDescription({
           case 'update':
             if (
               activity.object1 === 'workflow_approval' &&
-              activity?.changes?.status?.length === 2
+              changes.status?.length === 2
             ) {
               let operationText = '';
-              if (activity.changes.status[1] === 'successful') {
+              if (changes.status?.[1] === 'successful') {
                 operationText = t`approved`;
-              } else if (activity.changes.status[1] === 'failed') {
-                if (
-                  activity.changes.timed_out &&
-                  activity.changes.timed_out[1] === true
-                ) {
+              } else if (changes.status?.[1] === 'failed') {
+                if (changes.timed_out && changes.timed_out[1] === true) {
                   operationText = t`timed out`;
                 } else {
                   operationText = t`denied`;
@@ -534,8 +603,12 @@ function ActivityStreamDescription({
                 buildLabeledLink(
                   `${operationText} ${activity.object1}`,
                   buildAnchor(
-                    activity.summary_fields[activity.object1][0],
-                    activity.object1,
+                    (
+                      activity.summary_fields[
+                        activity.object1 as string
+                      ] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
+                    activity.object1 as string,
                     activity
                   )
                 )
@@ -543,10 +616,14 @@ function ActivityStreamDescription({
             } else {
               labeledLinks.push(
                 buildLabeledLink(
-                  `${getPastTense(activity.operation)} ${activity.object1}`,
+                  `${getPastTense(activity.operation as string)} ${activity.object1}`,
                   buildAnchor(
-                    activity.summary_fields[activity.object1][0],
-                    activity.object1,
+                    (
+                      activity.summary_fields[
+                        activity.object1 as string
+                      ] as SummaryFieldRef[]
+                    )[0] as SummaryFieldRef,
+                    activity.object1 as string,
                     activity
                   )
                 )
@@ -556,8 +633,8 @@ function ActivityStreamDescription({
           case 'create':
             labeledLinks.push(
               buildLabeledLink(
-                `${getPastTense(activity.operation)} ${activity.object1}`,
-                buildAnchor(activity.changes, activity.object1, activity)
+                `${getPastTense(activity.operation as string)} ${activity.object1}`,
+                buildAnchor(changes, activity.object1 as string, activity)
               )
             );
             break;

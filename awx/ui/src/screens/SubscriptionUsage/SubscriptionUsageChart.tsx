@@ -167,8 +167,9 @@ function SubscriptionUsageChart() {
         </GraphCardActions>
       </GraphCardHeader>
       <CardBody>
+        {/* The chart redraws on its data, which the period selection is what
+            fetches; it never read a period prop of its own. */}
         <UsageChart
-          period={periodSelection}
           height={600}
           id="d3-usage-line-chart-root"
           data={subscriptionUsageChartData}

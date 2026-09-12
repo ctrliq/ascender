@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { JobTemplate } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import {
@@ -35,7 +35,7 @@ import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import getHelpText from '../shared/JobTemplate.helptext';
 
 export interface JobTemplateDetailProps {
-  template: Untyped;
+  template: JobTemplate;
   [key: string]: unknown;
 }
 
@@ -148,19 +148,19 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
     </Content>
   );
 
-  const inventoryValue = (kind: Untyped, id: Untyped) => {
+  const inventoryValue = (kind?: string, id?: number) => {
     const inventorykind = kind === 'smart' ? 'smart_inventory' : 'inventory';
 
     return ask_inventory_on_launch ? (
       <>
         <Link to={`/inventories/${inventorykind}/${id}/details`}>
-          {summary_fields.inventory.name}
+          {summary_fields.inventory?.name}
         </Link>
         <span> {t`(Prompt on launch)`} </span>
       </>
     ) : (
       <Link to={`/inventories/${inventorykind}/${id}/details`}>
-        {summary_fields.inventory.name}
+        {summary_fields.inventory?.name}
       </Link>
     );
   };
@@ -378,7 +378,7 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
                 totalChips={summary_fields.credentials.length}
                 ouiaId="jt-detail-credential-chips"
               >
-                {summary_fields.credentials.map((c: Untyped) => (
+                {summary_fields.credentials?.map((c) => (
                   <Link to={`/credentials/${c.id}/details`} key={c.id}>
                     <CredentialChip
                       key={c.id}
@@ -405,7 +405,7 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
                 totalChips={summary_fields.labels.results.length}
                 ouiaId="label-chips"
               >
-                {summary_fields.labels.results.map((l: Untyped) => (
+                {summary_fields.labels?.results.map((l) => (
                   <Label
                     variant="outline"
                     key={l.id}
@@ -439,7 +439,7 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
                 totalChips={job_tags.split(',').length}
                 ouiaId="job-tag-chips"
               >
-                {job_tags.split(',').map((jobTag: Untyped) => (
+                {job_tags.split(',').map((jobTag) => (
                   <Label
                     variant="outline"
                     key={jobTag}
@@ -465,7 +465,7 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
                 totalChips={skip_tags.split(',').length}
                 ouiaId="skip-tag-chips"
               >
-                {skip_tags.split(',').map((skipTag: Untyped) => (
+                {skip_tags.split(',').map((skipTag) => (
                   <Label
                     variant="outline"
                     key={skipTag}
