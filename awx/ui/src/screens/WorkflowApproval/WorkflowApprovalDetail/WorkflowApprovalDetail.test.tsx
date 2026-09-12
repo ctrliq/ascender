@@ -42,25 +42,11 @@ vi.mock('@lingui/react/macro', async () => ({
   }),
 }));
 
-// react-ace does not render its value into the DOM under jsdom, so surface the
-// value VariablesDetail receives as plain text to keep the original assertion.
-vi.mock('components/CodeEditor', async () => ({
-  ...(await vi.importActual<typeof import('components/CodeEditor')>(
-    'components/CodeEditor'
-  )),
-  VariablesDetail: ({
-    label,
-    value,
-  }: {
-    label: React.ReactNode;
-    value: React.ReactNode;
-  }) => (
-    <div>
-      <div>{label}</div>
-      <div data-testid="variables-detail-value">{value}</div>
-    </div>
-  ),
-}));
+/** The variables editor's document, read back one line at a time. */
+const editorText = () =>
+  Array.from(document.querySelectorAll('.cm-line'))
+    .map((line) => (line.textContent ?? '').replace(/\u00a0/g, ' '))
+    .join('\n');
 
 vi.mock('../shared/WorkflowApprovalUtils', async () => {
   const actual = await vi.importActual<
@@ -256,8 +242,9 @@ describe('<WorkflowApprovalDetail />', () => {
 
     assertDetail('Labels', 'Test2');
 
-    expect(screen.getByTestId('variables-detail-value')).toHaveTextContent(
-      '{"foo": "bar", "baz": "qux", "first_one": 10}'
+    // the detail reads the value as JSON and shows it formatted
+    expect(editorText()).toBe(
+      '{\n  "foo": "bar",\n  "baz": "qux",\n  "first_one": 10\n}'
     );
   });
 
