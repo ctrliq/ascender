@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UsersAPI, TokensAPI } from 'api';
@@ -142,7 +141,7 @@ describe('<UserTokenList />', () => {
 
   beforeEach(async () => {
     vi.mocked(UsersAPI.readTokens).mockResolvedValue(
-      tokens as unknown as ApiResponse<any>
+      tokens as unknown as ResponseOf<typeof UsersAPI.readTokens>
     );
     vi.mocked(UsersAPI.readTokenOptions).mockResolvedValue({
       data: { related_search_fields: [] },

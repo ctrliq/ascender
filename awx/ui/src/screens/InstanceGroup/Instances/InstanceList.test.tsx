@@ -1,5 +1,4 @@
 import type { InstanceGroup } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { screen, waitFor, within } from '@testing-library/react';
@@ -142,7 +141,9 @@ describe('<InstanceList/>', () => {
       },
     } as unknown as ResponseOf<typeof InstanceGroupsAPI.readInstances>);
     vi.mocked(InstanceGroupsAPI.readInstanceOptions).mockResolvedValue(
-      options as unknown as ApiResponse<any>
+      options as unknown as ResponseOf<
+        typeof InstanceGroupsAPI.readInstanceOptions
+      >
     );
   });
 

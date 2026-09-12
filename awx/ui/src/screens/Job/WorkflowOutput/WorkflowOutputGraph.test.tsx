@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { WorkflowState } from 'components/Workflow/workflowReducer';
 import React from 'react';
 import { fireEvent } from '@testing-library/react';
 import { WorkflowStateContext } from 'contexts/Workflow';
@@ -103,11 +103,11 @@ const workflowContext = {
   showTools: false,
 };
 
-function renderGraph(contextOverride?: Untyped) {
+function renderGraph(contextOverride?: Partial<WorkflowState>) {
   return renderWithContexts(
     <svg>
       <WorkflowStateContext.Provider
-        value={{ ...workflowContext, ...contextOverride }}
+        value={{ ...workflowContext, ...contextOverride } as WorkflowState}
       >
         <WorkflowOutputGraph />
       </WorkflowStateContext.Provider>

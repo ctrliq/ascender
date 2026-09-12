@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { LaunchConfig, Schedule } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
@@ -249,10 +248,12 @@ describe('<ScheduleForm />', () => {
     test('should make the appropriate callback', async () => {
       const handleCancel = vi.fn();
       vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
-        launchData as unknown as ApiResponse<any>
+        launchData as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>
       );
       vi.mocked(SchedulesAPI.readCredentials).mockResolvedValue(
-        credentials as unknown as ApiResponse<any>
+        credentials as unknown as ResponseOf<
+          typeof SchedulesAPI.readCredentials
+        >
       );
       vi.mocked(SchedulesAPI.readZoneInfo).mockResolvedValue({
         data: { zones: ['UTC', 'America/New_York'], links: {} },
@@ -627,7 +628,9 @@ describe('<ScheduleForm />', () => {
         data: { zones: ['UTC', 'America/New_York'], links: {} },
       } as unknown as ResponseOf<typeof SchedulesAPI.readZoneInfo>);
       vi.mocked(SchedulesAPI.readCredentials).mockResolvedValue(
-        credentials as unknown as ApiResponse<any>
+        credentials as unknown as ResponseOf<
+          typeof SchedulesAPI.readCredentials
+        >
       );
       vi.mocked(SchedulesAPI.readAllLabels).mockResolvedValue({
         data: { results: [] },

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -551,10 +550,8 @@ describe('<Login />', () => {
         container.querySelectorAll('[data-cy="social-auth-saml"]')
       ).toHaveLength(2)
     );
-    const buttons = container.querySelectorAll(
-      '[data-cy="social-auth-saml"]'
-    ) as Untyped;
-    expect(buttons[0].textContent).toEqual('Sign in with SAML');
-    expect(buttons[1].textContent).toEqual('Sign in with SAML onelogin');
+    const buttons = container.querySelectorAll('[data-cy="social-auth-saml"]');
+    expect(buttons[0]).toHaveTextContent('Sign in with SAML');
+    expect(buttons[1]).toHaveTextContent('Sign in with SAML onelogin');
   });
 });

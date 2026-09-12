@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { AnyInventory } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
@@ -18,8 +18,10 @@ vi.mock('../InventoryGroupAdd/InventoryGroupAdd', () => {
   return { __esModule: true, default: InventoryGroupsAdd };
 });
 
+const inventory = { id: 1, name: 'Foo' } as unknown as AnyInventory;
+
 // InventoryGroups uses relative routes, so mount it under its v6 parent route.
-function renderUnder(initialEntry: string, inventory: Untyped) {
+function renderUnder(initialEntry: string, inventory: AnyInventory) {
   const history = createMemoryHistory({ initialEntries: [initialEntry] });
   return renderWithContexts(
     <Routes>
@@ -36,12 +38,12 @@ function renderUnder(initialEntry: string, inventory: Untyped) {
 
 describe('<InventoryGroups />', () => {
   test('initially renders successfully', () => {
-    renderUnder('/inventories/inventory/1/groups', { id: 1, name: 'Foo' });
+    renderUnder('/inventories/inventory/1/groups', inventory);
     expect(screen.getByTestId('groups-list')).toBeInTheDocument();
   });
 
   test('test that InventoryGroupsAdd renders', () => {
-    renderUnder('/inventories/inventory/1/groups/add', { id: 1, name: 'Foo' });
+    renderUnder('/inventories/inventory/1/groups/add', inventory);
     expect(screen.getByTestId('groups-add')).toBeInTheDocument();
   });
 });

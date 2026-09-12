@@ -15,6 +15,7 @@ import {
   WorkflowJobTemplatesAPI,
 } from 'api';
 import workflowReducer from 'components/Workflow/workflowReducer';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import Visualizer from './Visualizer';
 
@@ -700,7 +701,11 @@ describe('Visualizer', () => {
     } as unknown as ApiResponse<Paginated<WorkflowJobTemplateNode>>);
     vi.mocked(
       WorkflowJobTemplateNodesAPI.disassociateFailuresNode
-    ).mockResolvedValue(undefined as unknown as ApiResponse<any>);
+    ).mockResolvedValue(
+      undefined as unknown as ResponseOf<
+        typeof WorkflowJobTemplateNodesAPI.disassociateFailuresNode
+      >
+    );
     vi.mocked(
       WorkflowJobTemplateNodesAPI.associateSuccessNode
     ).mockRejectedValue(new Error());
@@ -883,7 +888,11 @@ describe('Visualizer', () => {
     );
     vi.mocked(
       WorkflowJobTemplateNodesAPI.disassociateCredentials
-    ).mockResolvedValue(undefined as unknown as ApiResponse<any>);
+    ).mockResolvedValue(
+      undefined as unknown as ResponseOf<
+        typeof WorkflowJobTemplateNodesAPI.disassociateCredentials
+      >
+    );
     vi.mocked(
       WorkflowJobTemplateNodesAPI.associateCredentials
     ).mockRejectedValue(new Error());

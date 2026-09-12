@@ -1,7 +1,10 @@
 import babelParser from '@babel/eslint-parser';
 import { defineConfig } from 'eslint/config';
 import path from 'node:path';
-import { configs as airbnb, plugins as airbnbPlugins } from 'eslint-config-airbnb-extended';
+import {
+  configs as airbnb,
+  plugins as airbnbPlugins,
+} from 'eslint-config-airbnb-extended';
 import { createNodeResolver } from 'eslint-plugin-import-x';
 import prettier from 'eslint-config-prettier';
 import i18next from 'eslint-plugin-i18next';
@@ -17,187 +20,187 @@ import tseslint from 'typescript-eslint';
 // of them a file gets should not depend on whether it has been converted to
 // TypeScript yet.
 const sharedRules = {
-      'i18next/no-literal-string': [
-        2,
-        {
-          mode: 'jsx-text-only',
-          'jsx-attributes': {
-            exclude: [
-              ...i18nextDefaults['jsx-attributes'].exclude,
-              'data-testid',
-              'dateFieldName',
-              'timeFieldName',
-              'to',
-              'streamType',
-              'path',
-              'component',
-              'variant',
-              'key',
-              'position',
-              'promptName',
-              'color',
-              'promptId',
-              'headingLevel',
-              'size',
-              'target',
-              'autoComplete',
-              'trigger',
-              'from',
-              'name',
-              'fieldId',
-              'css',
-              'gutter',
-              'dataCy',
-              'tooltipMaxWidth',
-              'mode',
-              'aria-labelledby',
-              'aria-hidden',
-              'aria-controls',
-              'aria-pressed',
-              'sortKey',
-              'ouiaId',
-              'credentialTypeNamespace',
-              'link',
-              'value',
-              'credentialTypeKind',
-              'linkTo',
-              'scrollToAlignment',
-              'displayKey',
-              'sortedColumnKey',
-              'maxHeight',
-              'maxWidth',
-              'role',
-              'aria-haspopup',
-              'dropDirection',
-              'resizeOrientation',
-              'src',
-              'theme',
-              'gridColumns',
-              'rows',
-              'href',
-              'modifier',
-              'data-cy',
-              'fieldName',
-              'splitButtonVariant',
-              'pageKey',
-              'textId',
-              'rel',
-            ],
-          },
-          words: {
-            exclude: [
-              ...i18nextDefaults.words.exclude,
-              'Ansible',
-              'Tower',
-              'JSON:?',
-              'YAML:?',
-              'lg',
-              'hh:mm AM/PM',
-              'Twilio',
-            ],
-          },
-          'jsx-components': {
-            exclude: [
-              // lingui translation components (v5 ignored these by default)
-              'Trans',
-              'AboutModal',
-              'code',
-              'Omit',
-              'PotentialLink',
-              'TypeRedirect',
-              'Radio',
-              'RunOnRadio',
-              'NodeTypeLetter',
-              'SelectableItem',
-              'Dash',
-              'Plural',
-            ],
-          },
-          callees: {
-            exclude: [...i18nextDefaults.callees.exclude, 'describe'],
-          },
-        },
-      ],
-      camelcase: 'off',
-      // history is supplied by an alias in the test config, over
-      // react-router's own, and the resolver here does not read that.
-      'import-x/no-unresolved': ['error', { ignore: ['^history$'] }],
-      // Imports are written without an extension throughout, and which
-      // extension a module has is exactly what this migration keeps changing.
-      // Requiring one would mean editing every importer each time a module is
-      // converted, in both directions.
-      'import-x/extensions': [
-        'error',
-        'ignorePackages',
-        { js: 'never', jsx: 'never', ts: 'never', tsx: 'never', mjs: 'never' },
-      ],
-      '@stylistic/arrow-parens': 'off',
-      '@stylistic/comma-dangle': 'off',
-      'import-x/no-cycle': 'off',
-      // https://github.com/benmosher/eslint-plugin-import/issues/479#issuecomment-252500896
-      'import-x/no-extraneous-dependencies': 'off',
-      '@stylistic/max-len': [
-        'error',
-        {
-          code: 100,
-          ignoreStrings: true,
-          ignoreTemplateLiterals: true,
-        },
-      ],
-      'no-continue': 'off',
-      'no-debugger': 'off',
-      'no-param-reassign': 'off',
-      'no-plusplus': 'off',
-      'no-underscore-dangle': 'off',
-      'no-use-before-define': 'off',
-      '@stylistic/no-multiple-empty-lines': ['error', { max: 1 }],
-      'object-curly-newline': 'off',
-      '@stylistic/no-trailing-spaces': ['error'],
-      'no-unused-expressions': ['error', { allowShortCircuit: true }],
-      // airbnb@19 options; eslint 9 changed the caughtErrors default to 'all'
-      'no-unused-vars': [
-        'error',
-        {
-          vars: 'all',
-          args: 'after-used',
-          ignoreRestSiblings: true,
-          caughtErrors: 'none',
-        },
-      ],
-      // rules newer than the airbnb@19 baseline this codebase was linted with
-      'prefer-object-has-own': 'off',
-      'import-x/no-rename-default': 'off',
-      'react/jsx-no-useless-fragment': 'error',
-      'react/jsx-props-no-spreading': ['off'],
-      'react/prefer-stateless-function': 'off',
-      'react/prop-types': 'off',
-      // default values are expressed via ES default parameters (the React
-      // 18.3/19 migration away from the deprecated defaultProps), so accept a
-      // destructured default argument in place of a defaultProps entry
-      'react/require-default-props': ['error', { functions: 'defaultArguments' }],
-      'react/sort-comp': ['error', {}],
-      'jsx-a11y/label-has-for': 'off',
-      'jsx-a11y/label-has-associated-control': 'off',
-      'react-hooks/rules-of-hooks': 'error',
-      'react-hooks/exhaustive-deps': 'warn',
-      // react-hooks 7.x ships React Compiler-powered rules; the codebase
-      // predates them. Off until addressed as their own effort.
-      'react-hooks/set-state-in-effect': 'off',
-      'react-hooks/immutability': 'off',
-      'react-hooks/refs': 'off',
-      'react-hooks/purity': 'off',
-      'react/jsx-filename-extension': 'off',
-      'no-restricted-exports': 'off',
-      'react/function-component-definition': 'off',
-      'prefer-regex-literals': 'off',
-      // Resolve these 2 rules later
-      'react/no-unknown-property': [
-        'error',
-        { ignore: ['css', 'ouia-component-id'] },
-      ],
-      'react/forbid-prop-types': 'off',
-      // PF5 Dropdown requires toggle={(toggleRef) => <MenuToggle ref={toggleRef}/>}
-      'react/no-unstable-nested-components': ['error', { allowAsProps: true }],
+  'i18next/no-literal-string': [
+    2,
+    {
+      mode: 'jsx-text-only',
+      'jsx-attributes': {
+        exclude: [
+          ...i18nextDefaults['jsx-attributes'].exclude,
+          'data-testid',
+          'dateFieldName',
+          'timeFieldName',
+          'to',
+          'streamType',
+          'path',
+          'component',
+          'variant',
+          'key',
+          'position',
+          'promptName',
+          'color',
+          'promptId',
+          'headingLevel',
+          'size',
+          'target',
+          'autoComplete',
+          'trigger',
+          'from',
+          'name',
+          'fieldId',
+          'css',
+          'gutter',
+          'dataCy',
+          'tooltipMaxWidth',
+          'mode',
+          'aria-labelledby',
+          'aria-hidden',
+          'aria-controls',
+          'aria-pressed',
+          'sortKey',
+          'ouiaId',
+          'credentialTypeNamespace',
+          'link',
+          'value',
+          'credentialTypeKind',
+          'linkTo',
+          'scrollToAlignment',
+          'displayKey',
+          'sortedColumnKey',
+          'maxHeight',
+          'maxWidth',
+          'role',
+          'aria-haspopup',
+          'dropDirection',
+          'resizeOrientation',
+          'src',
+          'theme',
+          'gridColumns',
+          'rows',
+          'href',
+          'modifier',
+          'data-cy',
+          'fieldName',
+          'splitButtonVariant',
+          'pageKey',
+          'textId',
+          'rel',
+        ],
+      },
+      words: {
+        exclude: [
+          ...i18nextDefaults.words.exclude,
+          'Ansible',
+          'Tower',
+          'JSON:?',
+          'YAML:?',
+          'lg',
+          'hh:mm AM/PM',
+          'Twilio',
+        ],
+      },
+      'jsx-components': {
+        exclude: [
+          // lingui translation components (v5 ignored these by default)
+          'Trans',
+          'AboutModal',
+          'code',
+          'Omit',
+          'PotentialLink',
+          'TypeRedirect',
+          'Radio',
+          'RunOnRadio',
+          'NodeTypeLetter',
+          'SelectableItem',
+          'Dash',
+          'Plural',
+        ],
+      },
+      callees: {
+        exclude: [...i18nextDefaults.callees.exclude, 'describe'],
+      },
+    },
+  ],
+  camelcase: 'off',
+  // history is supplied by an alias in the test config, over
+  // react-router's own, and the resolver here does not read that.
+  'import-x/no-unresolved': ['error', { ignore: ['^history$'] }],
+  // Imports are written without an extension throughout, and which
+  // extension a module has is exactly what this migration keeps changing.
+  // Requiring one would mean editing every importer each time a module is
+  // converted, in both directions.
+  'import-x/extensions': [
+    'error',
+    'ignorePackages',
+    { js: 'never', jsx: 'never', ts: 'never', tsx: 'never', mjs: 'never' },
+  ],
+  '@stylistic/arrow-parens': 'off',
+  '@stylistic/comma-dangle': 'off',
+  'import-x/no-cycle': 'off',
+  // https://github.com/benmosher/eslint-plugin-import/issues/479#issuecomment-252500896
+  'import-x/no-extraneous-dependencies': 'off',
+  '@stylistic/max-len': [
+    'error',
+    {
+      code: 100,
+      ignoreStrings: true,
+      ignoreTemplateLiterals: true,
+    },
+  ],
+  'no-continue': 'off',
+  'no-debugger': 'off',
+  'no-param-reassign': 'off',
+  'no-plusplus': 'off',
+  'no-underscore-dangle': 'off',
+  'no-use-before-define': 'off',
+  '@stylistic/no-multiple-empty-lines': ['error', { max: 1 }],
+  'object-curly-newline': 'off',
+  '@stylistic/no-trailing-spaces': ['error'],
+  'no-unused-expressions': ['error', { allowShortCircuit: true }],
+  // airbnb@19 options; eslint 9 changed the caughtErrors default to 'all'
+  'no-unused-vars': [
+    'error',
+    {
+      vars: 'all',
+      args: 'after-used',
+      ignoreRestSiblings: true,
+      caughtErrors: 'none',
+    },
+  ],
+  // rules newer than the airbnb@19 baseline this codebase was linted with
+  'prefer-object-has-own': 'off',
+  'import-x/no-rename-default': 'off',
+  'react/jsx-no-useless-fragment': 'error',
+  'react/jsx-props-no-spreading': ['off'],
+  'react/prefer-stateless-function': 'off',
+  'react/prop-types': 'off',
+  // default values are expressed via ES default parameters (the React
+  // 18.3/19 migration away from the deprecated defaultProps), so accept a
+  // destructured default argument in place of a defaultProps entry
+  'react/require-default-props': ['error', { functions: 'defaultArguments' }],
+  'react/sort-comp': ['error', {}],
+  'jsx-a11y/label-has-for': 'off',
+  'jsx-a11y/label-has-associated-control': 'off',
+  'react-hooks/rules-of-hooks': 'error',
+  'react-hooks/exhaustive-deps': 'warn',
+  // react-hooks 7.x ships React Compiler-powered rules; the codebase
+  // predates them. Off until addressed as their own effort.
+  'react-hooks/set-state-in-effect': 'off',
+  'react-hooks/immutability': 'off',
+  'react-hooks/refs': 'off',
+  'react-hooks/purity': 'off',
+  'react/jsx-filename-extension': 'off',
+  'no-restricted-exports': 'off',
+  'react/function-component-definition': 'off',
+  'prefer-regex-literals': 'off',
+  // Resolve these 2 rules later
+  'react/no-unknown-property': [
+    'error',
+    { ignore: ['css', 'ouia-component-id'] },
+  ],
+  'react/forbid-prop-types': 'off',
+  // PF5 Dropdown requires toggle={(toggleRef) => <MenuToggle ref={toggleRef}/>}
+  'react/no-unstable-nested-components': ['error', { allowAsProps: true }],
 };
 
 export default defineConfig([
@@ -236,8 +239,14 @@ export default defineConfig([
   // these two extensions: the JavaScript block below is unchanged, which is
   // what lets the two live side by side while the tree converts.
   { ...airbnbPlugins.typescriptEslint, files: ['**/*.ts', '**/*.tsx'] },
-  ...airbnb.base.typescript.map((c) => ({ ...c, files: ['**/*.ts', '**/*.tsx'] })),
-  ...airbnb.react.typescript.map((c) => ({ ...c, files: ['**/*.ts', '**/*.tsx'] })),
+  ...airbnb.base.typescript.map((c) => ({
+    ...c,
+    files: ['**/*.ts', '**/*.tsx'],
+  })),
+  ...airbnb.react.typescript.map((c) => ({
+    ...c,
+    files: ['**/*.ts', '**/*.tsx'],
+  })),
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
@@ -279,7 +288,16 @@ export default defineConfig([
       // module resolution mirrors jsconfig.json baseUrl: src
       'import-x/resolver-next': [
         createNodeResolver({
-          extensions: ['.mjs', '.cjs', '.js', '.json', '.jsx', '.ts', '.tsx', '.node'],
+          extensions: [
+            '.mjs',
+            '.cjs',
+            '.js',
+            '.json',
+            '.jsx',
+            '.ts',
+            '.tsx',
+            '.node',
+          ],
           modules: ['node_modules', path.resolve(import.meta.dirname, 'src')],
         }),
       ],
@@ -295,7 +313,16 @@ export default defineConfig([
       // module resolution mirrors tsconfig.json baseUrl: src
       'import-x/resolver-next': [
         createNodeResolver({
-          extensions: ['.mjs', '.cjs', '.js', '.json', '.jsx', '.ts', '.tsx', '.node'],
+          extensions: [
+            '.mjs',
+            '.cjs',
+            '.js',
+            '.json',
+            '.jsx',
+            '.ts',
+            '.tsx',
+            '.node',
+          ],
           modules: ['node_modules', path.resolve(import.meta.dirname, 'src')],
         }),
       ],
@@ -308,6 +335,11 @@ export default defineConfig([
       // one as unused.
       '@typescript-eslint/no-use-before-define': 'off',
       '@typescript-eslint/no-shadow': 'off',
+      // nothing under src or testUtils is any: where a shape cannot be
+      // described it is unknown, narrowed where it is read, and a partial
+      // test fixture is cast once at its literal. Base.ts is the exception
+      // it names: a mixin's constructor signature has to take any[].
+      '@typescript-eslint/no-explicit-any': 'error',
       'no-unused-vars': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',

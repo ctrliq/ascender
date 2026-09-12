@@ -1,10 +1,9 @@
-import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { ConstructedInventoriesAPI, InventoriesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryAdd from './ConstructedInventoryAdd';
 
@@ -25,7 +24,7 @@ vi.mock('../shared/ConstructedInventoryForm', () => ({
     onSubmit,
     onCancel,
     submitError,
-  }: Untyped) {
+  }: MockFormProps) {
     return (
       <div>
         <button
@@ -61,10 +60,14 @@ describe('<ConstructedInventoryAdd />', () => {
       data: { id: 1 },
     } as unknown as ResponseOf<typeof ConstructedInventoriesAPI.create>);
     vi.mocked(InventoriesAPI.associateInventory).mockResolvedValue(
-      undefined as unknown as ApiResponse<any>
+      undefined as unknown as ResponseOf<
+        typeof InventoriesAPI.associateInventory
+      >
     );
     vi.mocked(InventoriesAPI.associateInstanceGroup).mockResolvedValue(
-      undefined as unknown as ApiResponse<any>
+      undefined as unknown as ResponseOf<
+        typeof InventoriesAPI.associateInstanceGroup
+      >
     );
   });
 

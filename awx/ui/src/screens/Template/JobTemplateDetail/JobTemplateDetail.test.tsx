@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { JobTemplate } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
@@ -36,7 +35,9 @@ function getDetailValueByCy(dataCy: string) {
 describe('<JobTemplateDetail />', () => {
   beforeEach(() => {
     vi.mocked(JobTemplatesAPI.readInstanceGroups).mockResolvedValue(
-      mockInstanceGroups as unknown as ApiResponse<any>
+      mockInstanceGroups as unknown as ResponseOf<
+        typeof JobTemplatesAPI.readInstanceGroups
+      >
     );
     vi.mocked(WorkflowJobTemplateNodesAPI.read).mockResolvedValue({
       data: { count: 0 },

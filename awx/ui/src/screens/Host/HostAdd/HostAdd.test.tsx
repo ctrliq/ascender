@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { HostFormValues } from 'components/HostForm/HostForm';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import type { TestHistory } from 'history';
@@ -10,6 +10,15 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import HostAdd from './HostAdd';
 
 vi.mock('../../../api');
+
+declare global {
+  /**
+   * What the stubbed host form below submits. It lives on the global
+   * because a vi.mock factory may not close over a local.
+   */
+  // eslint-disable-next-line vars-on-top
+  var __hostFormSubmitData: Partial<HostFormValues> | undefined;
+}
 
 const hostData = {
   name: 'new name',
@@ -41,8 +50,7 @@ vi.mock('components/HostForm', async () => {
           {
             type: 'button',
             'aria-label': 'Save',
-            onClick: () =>
-              handleSubmit((global as Untyped).__hostFormSubmitData),
+            onClick: () => handleSubmit(global.__hostFormSubmitData),
           },
           'Save'
         ),
@@ -62,7 +70,7 @@ describe('<HostAdd />', () => {
   let history: TestHistory;
 
   beforeEach(() => {
-    (global as Untyped).__hostFormSubmitData = hostData;
+    global.__hostFormSubmitData = hostData;
     history = createMemoryHistory({
       initialEntries: ['/templates/job_templates/1/survey/edit/foo'],
       state: { some: 'state' },

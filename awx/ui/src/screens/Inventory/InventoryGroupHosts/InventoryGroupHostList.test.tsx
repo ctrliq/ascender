@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -56,7 +55,9 @@ describe('<InventoryGroupHostList />', () => {
       data: { actions: { GET: {}, POST: {} } },
     } as unknown as ResponseOf<typeof InventoriesAPI.readHostsOptions>);
     vi.mocked(InventoriesAPI.readAdHocOptions).mockResolvedValue(
-      adHocOptions as unknown as ApiResponse<any>
+      adHocOptions as unknown as ResponseOf<
+        typeof InventoriesAPI.readAdHocOptions
+      >
     );
   });
 
@@ -262,7 +263,9 @@ describe('<InventoryGroupHostList> for constructed inventories', () => {
       data: { actions: { GET: {}, POST: {} } },
     } as unknown as ResponseOf<typeof InventoriesAPI.readHostsOptions>);
     vi.mocked(InventoriesAPI.readAdHocOptions).mockResolvedValue(
-      adHocOptions as unknown as ApiResponse<any>
+      adHocOptions as unknown as ResponseOf<
+        typeof InventoriesAPI.readAdHocOptions
+      >
     );
   });
 

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Project, SummaryFields } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -86,10 +86,20 @@ const mockProject = {
   scm_update_cache_timeout: 5,
   allow_override: true,
   default_environment: 1,
+} as unknown as Project & {
+  summary_fields: Required<
+    Pick<
+      SummaryFields,
+      | 'organization'
+      | 'credential'
+      | 'signature_validation_credential'
+      | 'default_environment'
+    >
+  >;
 };
 
 function renderDetail(
-  project: Untyped = mockProject,
+  project: Project = mockProject,
   entry = '/projects/1/details'
 ) {
   const history = createMemoryHistory({ initialEntries: [entry] });
@@ -167,7 +177,7 @@ describe('<ProjectDetail />', () => {
   });
 
   test('should hide options label when all project options return false', () => {
-    const mockOptions = {
+    const mockOptions: Partial<Project> = {
       scm_type: '',
       scm_clean: false,
       scm_delete_on_update: false,

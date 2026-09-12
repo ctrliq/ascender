@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -331,7 +330,7 @@ describe('<ResourceAccessList />', () => {
     }));
     vi.mocked(OrganizationsAPI.readAccessList).mockResolvedValue({
       data,
-    } as unknown as ApiResponse<any>);
+    } as unknown as ResponseOf<typeof OrganizationsAPI.readAccessList>);
     vi.mocked(OrganizationsAPI.readAccessOptions).mockResolvedValue({
       data: {
         actions: {

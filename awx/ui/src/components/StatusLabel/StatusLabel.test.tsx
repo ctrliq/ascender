@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -22,7 +21,10 @@ function getLabel(container: HTMLElement) {
   return container.querySelector('.pf-v6-c-label') as HTMLElement;
 }
 
-function expectLabel(container: HTMLElement, { icon, color, text }: Untyped) {
+function expectLabel(
+  container: HTMLElement,
+  { icon, color, text }: { icon: string; color: string; text: string }
+) {
   const label = getLabel(container);
   if (color === 'grey') {
     // PF Label renders no color modifier class for the default grey color, so

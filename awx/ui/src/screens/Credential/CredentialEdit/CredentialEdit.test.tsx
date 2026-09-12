@@ -1,4 +1,4 @@
-import type { Credential, Untyped } from 'types/api';
+import type { Credential } from 'types/api';
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
 import type { TestHistory } from 'history';
@@ -214,13 +214,16 @@ describe('<CredentialEdit />', () => {
     let user: TestUser;
 
     beforeEach(async () => {
-      [
+      // Every model method is a vitest automock here, so each pair below is
+      // one of them and the response to give it.
+      const responses: [(...args: never[]) => unknown, unknown][] = [
         [UsersAPI.readAdminOfOrganizations, mockOrgAdmins],
         [OrganizationsAPI.read, mockOrganizations],
         [CredentialTypesAPI.read, mockCredentialResults],
         [CredentialsAPI.update, { data: { id: 3 } }],
         [CredentialsAPI.readInputSources, mockInputSources],
-      ].forEach(([apiMethod, mockData]: Untyped[]) => {
+      ];
+      responses.forEach(([apiMethod, mockData]) => {
         vi.mocked(apiMethod).mockResolvedValue(mockData);
       });
       history = createMemoryHistory({ initialEntries: ['/credentials'] });

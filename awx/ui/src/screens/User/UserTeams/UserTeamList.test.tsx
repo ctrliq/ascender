@@ -105,7 +105,7 @@ describe('<UserTeamList />', () => {
     } as unknown as ResponseOf<typeof UsersAPI.readTeams>);
 
     vi.mocked(UsersAPI.readTeamsOptions).mockResolvedValue(
-      options as unknown as ApiResponse<any>
+      options as unknown as ResponseOf<typeof UsersAPI.readTeamsOptions>
     );
     vi.mocked(UsersAPI.readOptions).mockResolvedValue(
       options as unknown as ApiResponse<unknown>

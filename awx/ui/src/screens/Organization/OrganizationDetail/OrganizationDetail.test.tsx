@@ -1,5 +1,4 @@
 import type { Organization } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
@@ -83,7 +82,9 @@ describe('<OrganizationDetail />', () => {
     } as unknown as ResponseOf<typeof CredentialsAPI.read>);
 
     vi.mocked(OrganizationsAPI.readInstanceGroups).mockResolvedValue(
-      mockInstanceGroups as unknown as ApiResponse<any>
+      mockInstanceGroups as unknown as ResponseOf<
+        typeof OrganizationsAPI.readInstanceGroups
+      >
     );
   });
 

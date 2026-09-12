@@ -57,8 +57,7 @@ beforeEach(() => {
 
 const yamlBtn = () => screen.getByRole('button', { name: 'YAML' });
 const jsonBtn = () => screen.getByRole('button', { name: 'JSON' });
-const isPrimary = (btn: HTMLElement) =>
-  btn.classList.contains('pf-m-primary');
+const isPrimary = (btn: HTMLElement) => btn.classList.contains('pf-m-primary');
 
 describe('VariablesField', () => {
   it('should render code editor', () => {

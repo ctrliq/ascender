@@ -1,5 +1,4 @@
 import type { JobTemplate, WorkflowJobTemplate } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 
@@ -99,7 +98,7 @@ describe('<TemplateSurvey />', () => {
       data: twoQuestionSurvey,
     } as unknown as ResponseOf<typeof JobTemplatesAPI.readSurvey>);
     vi.mocked(JobTemplatesAPI.updateSurvey).mockResolvedValue(
-      undefined as unknown as ApiResponse<any>
+      undefined as unknown as ResponseOf<typeof JobTemplatesAPI.updateSurvey>
     );
     renderSurvey(
       '/templates/job_template/7/survey',

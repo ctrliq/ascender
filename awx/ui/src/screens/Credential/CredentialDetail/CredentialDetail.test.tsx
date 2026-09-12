@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Credential } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -21,7 +21,14 @@ import { mockCredentials, mockCredentialType } from '../shared';
 
 vi.mock('../../../api');
 
-const mockCredential: Untyped = mockCredentials.results[0];
+// The fixture's own inputs are all strings, which the Credential type cannot
+// say: inputs is a JSONField, so the schema describes its values as unknown.
+const mockCredential = mockCredentials.results[0] as unknown as Credential & {
+  inputs: Record<string, string>;
+  summary_fields: Credential['summary_fields'] & {
+    credential_type: { id: number; name: string };
+  };
+};
 
 const mockInputSource = {
   id: 33,
@@ -77,7 +84,7 @@ describe('<CredentialDetail />', () => {
     vi.clearAllMocks();
   });
 
-  async function renderDetail(credential = mockCredential) {
+  async function renderDetail(credential: Credential = mockCredential) {
     const result = renderWithContexts(
       <CredentialDetail credential={credential} />
     );
@@ -89,17 +96,17 @@ describe('<CredentialDetail />', () => {
   test('should render details', async () => {
     await renderDetail();
 
-    assertDetail('Name', mockCredential!.name);
-    assertDetail('Description', mockCredential!.description);
+    assertDetail('Name', mockCredential.name);
+    assertDetail('Description', mockCredential.description);
     assertDetail(
       'Organization',
-      mockCredential!.summary_fields.organization!.name
+      mockCredential.summary_fields.organization!.name
     );
     assertDetail(
       'Credential Type',
-      mockCredential!.summary_fields.credential_type.name
+      mockCredential.summary_fields.credential_type.name
     );
-    assertDetail('Username', mockCredential!.inputs.username);
+    assertDetail('Username', mockCredential.inputs.username);
     assertDetail('Password', 'Encrypted');
     assertDetail('SSH Private Key', 'Encrypted');
     assertDetail('Signed SSH Certificate', 'Encrypted');
@@ -120,11 +127,11 @@ describe('<CredentialDetail />', () => {
 
     assertDetail(
       'Privilege Escalation Method',
-      mockCredential!.inputs.become_method
+      mockCredential.inputs.become_method
     );
     assertDetail(
       'Privilege Escalation Username',
-      mockCredential!.inputs.become_username
+      mockCredential.inputs.become_username
     );
     assertDetail('Privilege Escalation Password', 'Prompt on launch');
 
@@ -179,7 +186,7 @@ describe('<CredentialDetail />', () => {
     // Enabled Options Detail as isEmpty (nothing in the DOM)
     await renderDetail({
       ...mockCredential,
-      inputs: { ...mockCredential!.inputs, authorize: false },
+      inputs: { ...mockCredential.inputs, authorize: false },
     });
 
     expect(screen.queryByText('Enabled Options')).not.toBeInTheDocument();

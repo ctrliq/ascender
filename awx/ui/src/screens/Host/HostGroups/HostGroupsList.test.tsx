@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Host } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
@@ -207,7 +206,7 @@ describe('<HostGroupsList />', () => {
 
   test('should make expected api request when associating groups', async () => {
     vi.mocked(HostsAPI.associateGroup).mockResolvedValue(
-      undefined as unknown as ApiResponse<any>
+      undefined as unknown as ResponseOf<typeof HostsAPI.associateGroup>
     );
     vi.mocked(InventoriesAPI.readGroups).mockResolvedValue({
       data: {
@@ -243,7 +242,7 @@ describe('<HostGroupsList />', () => {
 
   test('expected api calls are made for multi-disassociation', async () => {
     vi.mocked(HostsAPI.disassociateGroup).mockResolvedValue(
-      undefined as unknown as ApiResponse<any>
+      undefined as unknown as ResponseOf<typeof HostsAPI.disassociateGroup>
     );
     const { user } = renderList();
     await screen.findByRole('link', { name: 'foo' });

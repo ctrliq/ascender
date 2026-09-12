@@ -1,16 +1,30 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { WorkflowStateContext } from 'contexts/Workflow';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import WorkflowOutputNode from './WorkflowOutputNode';
-import type { WorkflowState } from '../../../components/Workflow/workflowReducer';
+import type {
+  ApiWorkflowNode,
+  WorkflowNode,
+  WorkflowState,
+} from '../../../components/Workflow/workflowReducer';
+
+/**
+ * What the cases below build: the chart node's own fields, plus the part of
+ * the api's node this component reaches through. The api sends a good deal
+ * more of both, which is what the index signatures stand in for.
+ */
+interface TestNode {
+  id: number;
+  originalNodeObject?: Partial<ApiWorkflowNode>;
+  [key: string]: unknown;
+}
 
 const nodeWithJT = {
   id: 2,
   originalNodeObject: {
     summary_fields: {
       job: {
-        elapsed: 7,
+        elapsed: '7',
         id: 9000,
         name: 'Automation JT',
         status: 'successful',
@@ -33,7 +47,7 @@ const nodeWithoutJT = {
   originalNodeObject: {
     summary_fields: {
       job: {
-        elapsed: 7,
+        elapsed: '7',
         id: 9000,
         name: 'Automation JT 2',
         status: 'successful',
@@ -73,7 +87,7 @@ const nodePositions = {
   },
 };
 
-function renderNode(node: Untyped) {
+function renderNode(node: TestNode) {
   return renderWithContexts(
     <svg>
       <WorkflowStateContext.Provider
@@ -82,7 +96,7 @@ function renderNode(node: Untyped) {
         <WorkflowOutputNode
           mouseEnter={() => {}}
           mouseLeave={() => {}}
-          node={node}
+          node={node as unknown as WorkflowNode}
         />
       </WorkflowStateContext.Provider>
     </svg>

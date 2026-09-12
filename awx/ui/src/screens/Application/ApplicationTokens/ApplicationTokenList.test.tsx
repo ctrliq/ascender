@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -101,7 +100,7 @@ describe('<ApplicationTokenList/>', () => {
 
   test('should have data fetched and render 2 rows', async () => {
     vi.mocked(ApplicationsAPI.readTokens).mockResolvedValue(
-      tokens as unknown as ApiResponse<any>
+      tokens as unknown as ResponseOf<typeof ApplicationsAPI.readTokens>
     );
 
     renderWithContexts(<ApplicationTokenList />);
@@ -117,7 +116,7 @@ describe('<ApplicationTokenList/>', () => {
   // returned {} and tokens were fetched for /applications/undefined/tokens.
   test('fetches tokens for the application id from the v6 route params', async () => {
     vi.mocked(ApplicationsAPI.readTokens).mockResolvedValue(
-      tokens as unknown as ApiResponse<any>
+      tokens as unknown as ResponseOf<typeof ApplicationsAPI.readTokens>
     );
     const history = createMemoryHistory({
       initialEntries: ['/applications/5/tokens'],
@@ -143,7 +142,7 @@ describe('<ApplicationTokenList/>', () => {
 
   test('should delete item successfully', async () => {
     vi.mocked(ApplicationsAPI.readTokens).mockResolvedValue(
-      tokens as unknown as ApiResponse<any>
+      tokens as unknown as ResponseOf<typeof ApplicationsAPI.readTokens>
     );
     vi.mocked(TokensAPI.destroy).mockResolvedValue(
       {} as unknown as ResponseOf<typeof TokensAPI.destroy>
@@ -191,7 +190,7 @@ describe('<ApplicationTokenList/>', () => {
 
   test('should render deletion error modal', async () => {
     vi.mocked(ApplicationsAPI.readTokens).mockResolvedValue(
-      tokens as unknown as ApiResponse<any>
+      tokens as unknown as ResponseOf<typeof ApplicationsAPI.readTokens>
     );
     vi.mocked(TokensAPI.destroy).mockRejectedValue(
       Object.assign(new Error('An error occurred'), {
@@ -227,7 +226,7 @@ describe('<ApplicationTokenList/>', () => {
 
   test('should not render add button', async () => {
     vi.mocked(ApplicationsAPI.readTokens).mockResolvedValue(
-      tokens as unknown as ApiResponse<any>
+      tokens as unknown as ResponseOf<typeof ApplicationsAPI.readTokens>
     );
 
     renderWithContexts(<ApplicationTokenList />);

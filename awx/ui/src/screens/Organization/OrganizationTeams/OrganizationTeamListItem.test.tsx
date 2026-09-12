@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Team } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 
@@ -6,14 +6,15 @@ import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationTeamListItem from './OrganizationTeamListItem';
 
-const buildTeam = (edit = true) => ({
-  id: 1,
-  name: 'one',
-  url: '/org/team/1',
-  summary_fields: { user_capabilities: { edit, delete: true } },
-});
+const buildTeam = (edit = true) =>
+  ({
+    id: 1,
+    name: 'one',
+    url: '/org/team/1',
+    summary_fields: { user_capabilities: { edit, delete: true } },
+  }) as unknown as Team;
 
-function renderItem(team: Untyped) {
+function renderItem(team: Team) {
   return renderWithContexts(
     <table>
       <tbody>

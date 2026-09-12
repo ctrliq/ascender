@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import type { Label, Schedule } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -156,7 +155,7 @@ describe('<ScheduleDetail />', () => {
       data: { count: 0, results: [] },
     } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
-      noPrompts as unknown as ApiResponse<any>
+      noPrompts as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>
     );
     renderDetail(schedule);
     await screen.findByText('Mock JT Schedule');
@@ -207,7 +206,7 @@ describe('<ScheduleDetail />', () => {
       data: { results: [{ id: 1, name: 'Label 1' } as unknown as Label] },
     });
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
-      allPrompts as unknown as ApiResponse<any>
+      allPrompts as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>
     );
     renderDetail(scheduleWithPrompts);
     await screen.findByText('Prompted Values');
@@ -252,7 +251,7 @@ describe('<ScheduleDetail />', () => {
       data: { results: [] },
     });
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
-      allPrompts as unknown as ApiResponse<any>
+      allPrompts as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>
     );
     renderDetail(schedule);
     await screen.findByText('Mock JT Schedule');
@@ -275,7 +274,7 @@ describe('<ScheduleDetail />', () => {
       data: { count: 0, results: [] },
     } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
-      noPrompts as unknown as ApiResponse<any>
+      noPrompts as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>
     );
     renderDetail(scheduleWithPrompts);
     await screen.findByText('Mock JT Schedule');
@@ -291,7 +290,7 @@ describe('<ScheduleDetail />', () => {
   test('error shown when error encountered fetching credentials', async () => {
     vi.mocked(SchedulesAPI.readCredentials).mockRejectedValue(new Error());
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
-      noPrompts as unknown as ApiResponse<any>
+      noPrompts as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>
     );
     renderDetail(schedule);
 
@@ -305,7 +304,7 @@ describe('<ScheduleDetail />', () => {
       data: { count: 0, results: [] },
     } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
-      noPrompts as unknown as ApiResponse<any>
+      noPrompts as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>
     );
     renderDetail(schedule);
 
@@ -322,7 +321,7 @@ describe('<ScheduleDetail />', () => {
       data: { count: 0, results: [] },
     } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
-      noPrompts as unknown as ApiResponse<any>
+      noPrompts as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>
     );
     const { user } = renderDetail(schedule);
     await screen.findByText('Mock JT Schedule');
@@ -351,7 +350,7 @@ describe('<ScheduleDetail />', () => {
       data: { results: [] },
     });
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
-      allPrompts as unknown as ApiResponse<any>
+      allPrompts as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>
     );
     renderDetail(schedule, { surveyConfig: { spec: [] } });
     await screen.findByText('Mock JT Schedule');
@@ -373,7 +372,7 @@ describe('<ScheduleDetail />', () => {
       data: { count: 0, results: [] },
     } as unknown as ResponseOf<typeof SchedulesAPI.readCredentials>);
     vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue(
-      noPrompts as unknown as ApiResponse<any>
+      noPrompts as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>
     );
     renderDetail(unsupportedSchedule);
 

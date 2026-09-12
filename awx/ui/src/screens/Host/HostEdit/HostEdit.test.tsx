@@ -1,4 +1,5 @@
-import type { Host, Untyped } from 'types/api';
+import type { Host } from 'types/api';
+import type { HostFormValues } from 'components/HostForm/HostForm';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import type { TestHistory } from 'history';
@@ -10,6 +11,15 @@ import mockHost from '../data.host.json';
 import HostEdit from './HostEdit';
 
 vi.mock('../../../api');
+
+declare global {
+  /**
+   * What the stubbed host form below submits. It lives on the global
+   * because a vi.mock factory may not close over a local.
+   */
+  // eslint-disable-next-line vars-on-top
+  var __hostFormSubmitData: Partial<HostFormValues> | undefined;
+}
 
 const updatedHostData = {
   name: 'new name',
@@ -37,8 +47,7 @@ vi.mock('components/HostForm', async () => {
           {
             type: 'button',
             'aria-label': 'Save',
-            onClick: () =>
-              handleSubmit((global as Untyped).__hostFormSubmitData),
+            onClick: () => handleSubmit(global.__hostFormSubmitData),
           },
           'Save'
         ),
@@ -58,7 +67,7 @@ describe('<HostEdit />', () => {
   let history: TestHistory;
 
   beforeEach(() => {
-    (global as Untyped).__hostFormSubmitData = updatedHostData;
+    global.__hostFormSubmitData = updatedHostData;
     history = createMemoryHistory();
   });
 
@@ -96,7 +105,6 @@ describe('<HostEdit />', () => {
   });
 
   test('failed form submission should show an error message', async () => {
-    (global as Untyped).__hostFormSubmitData = mockHost;
     const error = {
       response: {
         data: { detail: 'An error occurred' },

@@ -1,4 +1,5 @@
-import type { Untyped } from 'types/api';
+import type { AnyJob } from 'types/api';
+import type { WorkflowState } from 'components/Workflow/workflowReducer';
 import React from 'react';
 import { act } from '@testing-library/react';
 import {
@@ -23,22 +24,22 @@ const job = {
       delete: true,
     },
   },
-};
+} as unknown as AnyJob;
 const workflowContext = {
   nodes: [],
   showLegend: false,
   showTools: false,
-};
+} as unknown as WorkflowState;
 
 function renderToolbar(
-  jobOverride: Untyped,
-  contextOverride?: Untyped,
-  onDelete?: Untyped
+  jobOverride?: AnyJob,
+  contextOverride?: Partial<WorkflowState>,
+  onDelete?: () => void
 ) {
   return renderWithContexts(
     <WorkflowDispatchContext.Provider value={dispatch}>
       <WorkflowStateContext.Provider
-        value={{ ...workflowContext, ...contextOverride }}
+        value={{ ...workflowContext, ...contextOverride } as WorkflowState}
       >
         <WorkflowOutputToolbar
           job={jobOverride || job}
@@ -84,7 +85,7 @@ describe('WorkflowOutputToolbar', () => {
 
   ['error', 'canceled'].forEach((status) => {
     test(`${status} workflow also shows the relaunch-from-failed dropdown`, () => {
-      renderToolbar({ ...job, status }, { nodes: [{ id: 1 }] });
+      renderToolbar({ ...job, status } as AnyJob, { nodes: [{ id: 1 }] });
       expect(byOuia('relaunch-workflow-toggle')).toBeInTheDocument();
       expect(byOuia('workflow-output-relaunch-button')).not.toBeInTheDocument();
     });
@@ -130,7 +131,7 @@ describe('WorkflowOutputToolbar', () => {
         workflow_job_template: null,
       },
     };
-    renderToolbar(slicedJob, { nodes });
+    renderToolbar(slicedJob as unknown as AnyJob, { nodes });
     expect(byOuia('edit-workflow')).not.toBeInTheDocument();
   });
 
@@ -177,7 +178,8 @@ describe('WorkflowOutputToolbar', () => {
         status: 'successful',
         started: '2021-09-01T11:00:00.000Z',
         finished: '2021-09-01T12:01:01.000Z',
-        elapsed: 3661,
+        // The api serializes the decimal as a string.
+        elapsed: '3661',
       });
       expect(elapsedText()).toBe('01:01:01');
       act(() => {

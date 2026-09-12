@@ -1,13 +1,34 @@
 // The d3 the worker uses arrives through importScripts at runtime, from the
 // standalone d3-force build rather than from the package @types/d3 describes,
 // so it is named separately here rather than declared as a global.
+
+/** A force, which the simulation is given one of per named slot below. */
+interface WorkerForce {
+  /** Charge only: how hard the bodies push each other apart. */
+  strength?: (n: number) => WorkerForce;
+  /** Link only: what identifies the node at either end of a link. */
+  id?: (accessor: (d: { hostname: string }) => string) => WorkerForce;
+}
+
+/**
+ * The simulation itself, which is run to completion here rather than ticked
+ * on a timer: the worker reports its progress and posts the laid out nodes.
+ */
+interface WorkerSimulation {
+  force: (name: string, force: WorkerForce) => WorkerSimulation;
+  stop: () => WorkerSimulation;
+  tick: () => WorkerSimulation;
+  alphaMin: () => number;
+  alphaDecay: () => number;
+}
+
 interface WorkerD3 {
-  forceSimulation: (nodes: unknown[]) => any;
-  forceManyBody: (n?: number) => any;
-  forceLink: (links: unknown[]) => any;
-  forceCollide: (n: number) => any;
-  forceX: (n: number) => any;
-  forceY: (n: number) => any;
+  forceSimulation: (nodes: unknown[]) => WorkerSimulation;
+  forceManyBody: (n?: number) => Required<Pick<WorkerForce, 'strength'>>;
+  forceLink: (links: unknown[]) => Required<Pick<WorkerForce, 'id'>>;
+  forceCollide: (n: number) => WorkerForce;
+  forceX: (n: number) => WorkerForce;
+  forceY: (n: number) => WorkerForce;
 }
 declare function importScripts(...urls: string[]): void;
 

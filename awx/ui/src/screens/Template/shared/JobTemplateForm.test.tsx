@@ -76,9 +76,7 @@ vi.mock('components/Lookup', async () => {
             key={cred.id}
             type="button"
             aria-label={`remove credential ${cred.name}`}
-            onClick={() =>
-              onChange(value.filter((c) => c.id !== cred.id))
-            }
+            onClick={() => onChange(value.filter((c) => c.id !== cred.id))}
           >
             {cred.name}
           </button>

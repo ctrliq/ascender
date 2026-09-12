@@ -1,10 +1,10 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { CredentialsAPI, ExecutionEnvironmentsAPI, RootAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import type { TestUser } from '../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
+import type { AdHocCommandsWizardProps } from './AdHocCommandsWizard';
 import AdHocCommandsWizard from './AdHocCommandsWizard';
 import type { AdHocItem } from './types';
 
@@ -24,7 +24,7 @@ const adHocItems = [
   { name: 'inventory 3' },
 ];
 
-function renderWizard(onLaunch: Untyped) {
+function renderWizard(onLaunch: AdHocCommandsWizardProps['onLaunch']) {
   return renderWithContexts(
     <AdHocCommandsWizard
       adHocItems={adHocItems as unknown as AdHocItem[]}

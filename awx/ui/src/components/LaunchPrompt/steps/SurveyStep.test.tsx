@@ -1,13 +1,12 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { Formik } from 'formik';
 import type { TestUser } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SurveyStep from './SurveyStep';
-import type { SurveyConfig } from '../types';
+import type { SurveyConfig, SurveyQuestion } from '../types';
 
-function makeConfig(choices: Untyped) {
+function makeConfig(choices: SurveyQuestion['choices']) {
   return {
     name: 'survey',
     description: '',

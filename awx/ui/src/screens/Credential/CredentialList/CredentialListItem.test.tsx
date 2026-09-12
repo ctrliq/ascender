@@ -1,15 +1,20 @@
-import type { Untyped } from 'types/api';
+import type { Credential } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { CredentialsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import { CredentialListItem } from '.';
-import { mockCredentials } from '../shared';
+import { mockCredentials as mockCredentialsFixture } from '../shared';
 
 vi.mock('../../../api');
 
-function renderItem(credential: Untyped) {
+// The api's own list payload, saved as it arrived.
+const mockCredentials = mockCredentialsFixture as unknown as {
+  results: [Credential, Credential];
+};
+
+function renderItem(credential: Credential) {
   return renderWithContexts(
     <table>
       <tbody>

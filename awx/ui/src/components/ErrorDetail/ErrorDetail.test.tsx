@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -9,7 +8,7 @@ import ErrorDetail from './ErrorDetail';
 // renders. Object.prototype.hasOwnProperty(error, 'response') drives the
 // network-error vs stack-trace branch, so the property must live on the
 // instance.
-function makeNetworkError(response: Untyped) {
+function makeNetworkError(response: Record<string, unknown>) {
   return Object.assign(new Error('request failed'), { response });
 }
 

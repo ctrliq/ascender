@@ -912,20 +912,6 @@ export type SetBreadcrumb = (
 ) => void;
 
 /**
- * A value this migration has not typed yet.
- *
- * Deliberately an alias rather than a bare `any`, so what remains is greppable
- * and countable: `grep -r ': Untyped' src | wc -l` is the size of the debt, and
- * it only ever goes down. Every one of these is a place where the shape could
- * not be derived from the code, because nothing in the tree described it.
- *
- * Replace with a real type when the surrounding area is next worked on. Prefer
- * a generated type from api.generated.ts wherever the value comes from the API.
- */
-
-export type Untyped = any;
-
-/**
  * One column a list can be searched or sorted by, as the list screens declare
  * them and the toolbar renders them.
  *

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
@@ -10,6 +9,7 @@ import {
   WorkflowJobsAPI,
   WorkflowJobTemplatesAPI,
 } from 'api';
+import type { LaunchButtonRenderProps } from './LaunchButton';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
@@ -20,11 +20,11 @@ vi.mock('../../api');
 describe('LaunchButton', () => {
   // The render-prop children expose a plain button; give it an accessible name
   // so it can be driven by role.
-  const launchButton = ({ handleLaunch }: Untyped) => (
+  const launchButton = ({ handleLaunch }: LaunchButtonRenderProps) => (
     <button type="submit" aria-label="launch" onClick={() => handleLaunch()} />
   );
 
-  const relaunchButton = ({ handleRelaunch }: Untyped) => (
+  const relaunchButton = ({ handleRelaunch }: LaunchButtonRenderProps) => (
     <button
       type="submit"
       aria-label="relaunch"

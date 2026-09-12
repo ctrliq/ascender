@@ -1,5 +1,4 @@
 import type { User } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
 import { UsersAPI, RolesAPI } from 'api';
@@ -109,7 +108,7 @@ describe('<UserRolesList />', () => {
 
   test('should render properly', async () => {
     vi.mocked(UsersAPI.readRoles).mockResolvedValue(
-      roles as unknown as ApiResponse<any>
+      roles as unknown as ResponseOf<typeof UsersAPI.readRoles>
     );
 
     renderWithContexts(<UserRolesList user={user} />);
@@ -119,7 +118,7 @@ describe('<UserRolesList />', () => {
 
   test('should create proper detailUrl', async () => {
     vi.mocked(UsersAPI.readRoles).mockResolvedValue(
-      roles as unknown as ApiResponse<any>
+      roles as unknown as ResponseOf<typeof UsersAPI.readRoles>
     );
 
     renderWithContexts(<UserRolesList user={user} />);
@@ -217,7 +216,7 @@ describe('<UserRolesList />', () => {
   });
   test('should open and close wizard', async () => {
     vi.mocked(UsersAPI.readRoles).mockResolvedValue(
-      roles as unknown as ApiResponse<any>
+      roles as unknown as ResponseOf<typeof UsersAPI.readRoles>
     );
     const { user: events } = renderWithContexts(<UserRolesList user={user} />);
 
@@ -238,7 +237,7 @@ describe('<UserRolesList />', () => {
   });
   test('should render disassociate modal', async () => {
     vi.mocked(UsersAPI.readRoles).mockResolvedValue(
-      roles as unknown as ApiResponse<any>
+      roles as unknown as ResponseOf<typeof UsersAPI.readRoles>
     );
 
     const { user: events } = renderWithContexts(<UserRolesList user={user} />);
@@ -261,7 +260,7 @@ describe('<UserRolesList />', () => {
   });
   test('should throw disassociation error', async () => {
     vi.mocked(UsersAPI.readRoles).mockResolvedValue(
-      roles as unknown as ApiResponse<any>
+      roles as unknown as ResponseOf<typeof UsersAPI.readRoles>
     );
     vi.mocked(RolesAPI.disassociateUserRole).mockRejectedValue(
       Object.assign(new Error('An error occurred'), {

@@ -1,12 +1,18 @@
-import type { UnifiedJob, Untyped } from 'types/api';
+import type { UnifiedJob } from 'types/api';
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 
-import type { TestUser } from '../../../testUtils/rtlContexts';
+import type {
+  RenderWithContextsOptions,
+  TestUser,
+} from '../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import JobListItem from './JobListItem';
+
+/** What within() and a render result both offer: the bound queries. */
+type QueryScope = ReturnType<typeof within>;
 
 const mockJob = {
   id: 123,
@@ -39,7 +45,10 @@ const mockJob = {
   execution_environment: 1,
 } as unknown as UnifiedJob;
 
-function renderItem(ui: Untyped, options?: Untyped) {
+function renderItem(
+  ui: React.ReactElement,
+  options?: RenderWithContextsOptions
+) {
   return renderWithContexts(
     <table>
       <tbody>{ui}</tbody>
@@ -51,7 +60,7 @@ function renderItem(ui: Untyped, options?: Untyped) {
 // A non-failed job renders the plain "Relaunch" button; a failed playbook run
 // renders the relaunch dropdown whose toggle is labelled "relaunch jobs". This
 // returns whichever launch control is present.
-function queryLaunchButton(scope: Untyped) {
+function queryLaunchButton(scope: QueryScope) {
   return (
     scope.queryByRole('button', { name: 'Relaunch' }) ||
     scope.queryByRole('button', { name: 'relaunch jobs' })
@@ -60,7 +69,7 @@ function queryLaunchButton(scope: Untyped) {
 
 // Detail renders <dt>label</dt><dd>value</dd>; scope to the render so multiple
 // rows from earlier renders in the same test don't collide.
-function assertDetail(scope: Untyped, label: Untyped, value: Untyped) {
+function assertDetail(scope: QueryScope, label: string, value: string) {
   const term = scope.getByText(label);
   expect(term.nextElementSibling).toHaveTextContent(value);
 }

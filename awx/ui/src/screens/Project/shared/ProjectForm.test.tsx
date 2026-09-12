@@ -1,4 +1,4 @@
-import type { Project, Untyped } from 'types/api';
+import type { Project } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -97,7 +97,9 @@ describe('<ProjectForm />', () => {
     );
     vi.mocked(CredentialTypesAPI.read).mockImplementation((({
       kind,
-    }: Untyped) =>
+    }: {
+      kind?: string;
+    }) =>
       kind === 'cryptography'
         ? cryptographyCredentialResolve
         : scmCredentialResolve) as unknown as typeof CredentialTypesAPI.read);

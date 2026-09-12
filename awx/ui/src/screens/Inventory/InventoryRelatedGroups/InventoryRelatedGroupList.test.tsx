@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -87,10 +86,14 @@ describe('<InventoryRelatedGroupList />', () => {
       data: { ...mockRelatedGroups },
     } as unknown as ResponseOf<typeof GroupsAPI.readChildren>);
     vi.mocked(InventoriesAPI.readGroupsOptions).mockResolvedValue(
-      groupsOptions as unknown as ApiResponse<any>
+      groupsOptions as unknown as ResponseOf<
+        typeof InventoriesAPI.readGroupsOptions
+      >
     );
     vi.mocked(InventoriesAPI.readAdHocOptions).mockResolvedValue(
-      adHocOptions as unknown as ApiResponse<any>
+      adHocOptions as unknown as ResponseOf<
+        typeof InventoriesAPI.readAdHocOptions
+      >
     );
   });
 
@@ -224,10 +227,14 @@ describe('<InventoryRelatedGroupList> for constructed inventories', () => {
       data: { ...mockRelatedGroups },
     } as unknown as ResponseOf<typeof GroupsAPI.readChildren>);
     vi.mocked(InventoriesAPI.readGroupsOptions).mockResolvedValue(
-      groupsOptions as unknown as ApiResponse<any>
+      groupsOptions as unknown as ResponseOf<
+        typeof InventoriesAPI.readGroupsOptions
+      >
     );
     vi.mocked(InventoriesAPI.readAdHocOptions).mockResolvedValue(
-      adHocOptions as unknown as ApiResponse<any>
+      adHocOptions as unknown as ResponseOf<
+        typeof InventoriesAPI.readAdHocOptions
+      >
     );
   });
 

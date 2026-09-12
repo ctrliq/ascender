@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
@@ -81,7 +80,7 @@ describe('<InventorySourceList />', () => {
     debug = global.console.debug;
     global.console.debug = () => {};
     vi.mocked(InventoriesAPI.readSources).mockResolvedValue(
-      sources as unknown as ApiResponse<any>
+      sources as unknown as ResponseOf<typeof InventoriesAPI.readSources>
     );
     vi.mocked(InventoriesAPI.updateSources).mockResolvedValue({
       data: [{ inventory_source: 1 }],
@@ -223,7 +222,7 @@ describe('<InventorySourceList /> error handling', () => {
 
   test('displays error after unsuccessful read options fetch', async () => {
     vi.mocked(InventoriesAPI.readSources).mockResolvedValue(
-      sources as unknown as ApiResponse<any>
+      sources as unknown as ResponseOf<typeof InventoriesAPI.readSources>
     );
     vi.mocked(InventorySourcesAPI.readOptions).mockRejectedValue(new Error());
 
@@ -256,7 +255,7 @@ describe('<InventorySourceList /> RBAC testing', () => {
       schedule: true,
     };
     vi.mocked(InventoriesAPI.readSources).mockResolvedValue(
-      sources as unknown as ApiResponse<any>
+      sources as unknown as ResponseOf<typeof InventoriesAPI.readSources>
     );
     vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
       data: {
@@ -287,7 +286,7 @@ describe('<InventorySourceList /> RBAC testing', () => {
       schedule: true,
     };
     vi.mocked(InventoriesAPI.readSources).mockResolvedValue(
-      sources as unknown as ApiResponse<any>
+      sources as unknown as ResponseOf<typeof InventoriesAPI.readSources>
     );
     vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
       data: {

@@ -1,4 +1,3 @@
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen } from '@testing-library/react';
 
@@ -51,7 +50,7 @@ const listData = {
 describe('<OrganizationTeamList />', () => {
   beforeEach(() => {
     vi.mocked(OrganizationsAPI.readTeams).mockResolvedValue(
-      listData as unknown as ApiResponse<any>
+      listData as unknown as ResponseOf<typeof OrganizationsAPI.readTeams>
     );
     vi.mocked(OrganizationsAPI.readTeamsOptions).mockResolvedValue({
       data: {

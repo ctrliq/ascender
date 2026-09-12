@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 
@@ -14,7 +13,7 @@ vi.mock('../../api/models/Metrics');
 describe('<Metrics/>', () => {
   let user: TestUser;
 
-  const openSelect = async (toggleText: Untyped) => {
+  const openSelect = async (toggleText: string) => {
     const toggle = screen.getByRole('button', { name: toggleText });
     await user.click(toggle);
     return screen.findByRole('listbox');

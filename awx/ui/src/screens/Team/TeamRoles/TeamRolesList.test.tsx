@@ -1,5 +1,4 @@
 import type { Team } from 'types/api';
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { TeamsAPI, RolesAPI, UsersAPI } from 'api';
@@ -115,7 +114,7 @@ describe('<TeamRolesList />', () => {
 
   test('should render properly', async () => {
     vi.mocked(TeamsAPI.readRoles).mockResolvedValue(
-      roles as unknown as ApiResponse<any>
+      roles as unknown as ResponseOf<typeof TeamsAPI.readRoles>
     );
     renderWithContexts(<TeamRolesList me={me} team={team} />);
     expect(await screen.findByText('Credential Bar')).toBeInTheDocument();
@@ -123,7 +122,7 @@ describe('<TeamRolesList />', () => {
 
   test('should create proper detailUrl', async () => {
     vi.mocked(TeamsAPI.readRoles).mockResolvedValue(
-      roles as unknown as ApiResponse<any>
+      roles as unknown as ResponseOf<typeof TeamsAPI.readRoles>
     );
     const { container } = renderWithContexts(
       <TeamRolesList me={me} team={team} />
@@ -186,7 +185,7 @@ describe('<TeamRolesList />', () => {
 
   test('should render disassociate modal and call the api', async () => {
     vi.mocked(TeamsAPI.readRoles).mockResolvedValue(
-      roles as unknown as ApiResponse<any>
+      roles as unknown as ResponseOf<typeof TeamsAPI.readRoles>
     );
     vi.mocked(RolesAPI.disassociateTeamRole).mockResolvedValue(
       {} as unknown as ResponseOf<typeof RolesAPI.disassociateTeamRole>
@@ -210,7 +209,7 @@ describe('<TeamRolesList />', () => {
 
   test('should throw disassociation error', async () => {
     vi.mocked(TeamsAPI.readRoles).mockResolvedValue(
-      roles as unknown as ApiResponse<any>
+      roles as unknown as ResponseOf<typeof TeamsAPI.readRoles>
     );
     vi.mocked(RolesAPI.disassociateTeamRole).mockRejectedValue(new Error());
     const { user } = renderWithContexts(<TeamRolesList me={me} team={team} />);

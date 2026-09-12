@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -9,7 +9,12 @@ import mockHosts from '../shared/data.hosts.json';
 
 vi.mock('../../../api');
 
-const mockHost: Untyped = mockHosts.results[0];
+// The fixture names and describes its host, which the Host type cannot say:
+// the api allows both to be null.
+const mockHost = mockHosts.results[0] as unknown as Host & {
+  name: string;
+  description: string;
+};
 
 // The item reads :inventoryType via useParams; mount under a real v6 route.
 function renderItem(url: string, host = mockHost) {

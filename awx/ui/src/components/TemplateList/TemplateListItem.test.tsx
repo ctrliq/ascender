@@ -1,9 +1,10 @@
-import type { JobTemplate, Untyped } from 'types/api';
+import type { JobTemplate } from 'types/api';
 import React from 'react';
 
 import { createMemoryHistory } from 'history';
 import { screen, waitFor, within } from '@testing-library/react';
 import { JobTemplatesAPI } from 'api';
+import type { RenderWithContextsOptions } from '../../../testUtils/rtlContexts';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import mockJobTemplateData from './data.job_template.json';
@@ -11,7 +12,10 @@ import TemplateListItem from './TemplateListItem';
 
 vi.mock('../../api');
 
-function renderItem(ui: Untyped, options?: Untyped) {
+function renderItem(
+  ui: React.ReactElement,
+  options?: RenderWithContextsOptions
+) {
   return renderWithContexts(
     <table>
       <tbody>{ui}</tbody>
@@ -422,7 +426,7 @@ describe('<TemplateListItem />', () => {
       />
     );
 
-    function assertDetail(label: string, value: Untyped) {
+    function assertDetail(label: string, value: string) {
       const term = screen.getByText(label);
       expect(term.nextElementSibling).toHaveTextContent(value);
     }

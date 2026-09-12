@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
-import type { Inventory, Untyped } from 'types/api';
+import type { Inventory } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { ConstructedInventoriesAPI, InventoriesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryEdit from './ConstructedInventoryEdit';
 
@@ -41,7 +41,7 @@ vi.mock('../shared/ConstructedInventoryForm', () => ({
     onSubmit,
     onCancel,
     submitError,
-  }: Untyped) {
+  }: MockFormProps) {
     return (
       <div>
         <button
@@ -79,10 +79,14 @@ describe('<ConstructedInventoryEdit />', () => {
     } as unknown as ResponseOf<typeof ConstructedInventoriesAPI.update>);
     vi.mocked(InventoriesAPI.orderInstanceGroups).mockResolvedValue(undefined);
     vi.mocked(InventoriesAPI.disassociateInventory).mockResolvedValue(
-      undefined as unknown as ApiResponse<any>
+      undefined as unknown as ResponseOf<
+        typeof InventoriesAPI.disassociateInventory
+      >
     );
     vi.mocked(InventoriesAPI.associateInventory).mockResolvedValue(
-      undefined as unknown as ApiResponse<any>
+      undefined as unknown as ResponseOf<
+        typeof InventoriesAPI.associateInventory
+      >
     );
   });
 

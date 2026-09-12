@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Route, Routes } from 'react-router';
@@ -76,7 +75,7 @@ const slicedJobs = [
   },
 ];
 
-function renderAt(jobId: Untyped, jobs = relatedJobs) {
+function renderAt(jobId: number, jobs = relatedJobs) {
   const history = createMemoryHistory({
     initialEntries: [`/jobs/playbook/${jobId}/output`],
   });

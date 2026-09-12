@@ -276,6 +276,7 @@ class Base<TModel = unknown> {
 // takes a single rest parameter of exactly any[], and rejects it as TS2545
 // otherwise.
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Constructor<T = object> = new (...args: any[]) => T;
 export type BaseConstructor = Constructor<Base>;
 

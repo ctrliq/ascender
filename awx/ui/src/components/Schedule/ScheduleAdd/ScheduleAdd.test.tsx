@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { act, waitFor } from '@testing-library/react';
 import { RRule } from 'rrule';
@@ -9,6 +8,11 @@ import {
   JobTemplatesAPI,
   InventoriesAPI,
 } from 'api';
+import type {
+  FrequencyOptions,
+  ScheduleFormValues,
+  ScheduleFrequency,
+} from '../shared/types';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleAdd from './ScheduleAdd';
@@ -27,6 +31,7 @@ vi.mock('../../../api/models/Inventories');
  * What the screen hands the form, as the stub the test puts in its place
  * captures it: the assertions read these back to say what the screen passed.
  */
+/* eslint-disable react/no-unused-prop-types */
 interface CapturedFormProps {
   onSubmit: (...args: unknown[]) => Promise<void> | void;
   handleSubmit: (...args: unknown[]) => Promise<void> | void;
@@ -35,10 +40,28 @@ interface CapturedFormProps {
   submitError?: unknown;
   [key: string]: unknown;
 }
+/* eslint-enable react/no-unused-prop-types */
+
+/**
+ * What a case hands the stubbed form. Deliberately partial: each case names
+ * only the fields the rule it builds needs, where the real form always carries
+ * every frequency option.
+ */
+type SubmittedValues = Omit<
+  Partial<ScheduleFormValues>,
+  'frequencyOptions' | 'exceptionOptions'
+> & {
+  frequencyOptions?: Partial<
+    Record<ScheduleFrequency, Partial<FrequencyOptions>>
+  >;
+  exceptionOptions?: Partial<
+    Record<ScheduleFrequency, Partial<FrequencyOptions>>
+  >;
+};
 
 let formProps: CapturedFormProps | undefined;
 vi.mock('../shared/ScheduleForm', () => {
-  const MockScheduleForm = (props: Untyped) => {
+  const MockScheduleForm = (props: CapturedFormProps) => {
     formProps = props;
     return <div data-testid="schedule-form" />;
   };
@@ -89,7 +112,7 @@ const resource = {
   description: '',
 };
 
-function submit(values: Untyped) {
+function submit(values: SubmittedValues) {
   // mirror ScheduleForm's onSubmit, which forwards the launch/survey config.
   // handleSubmit navigates on success, which updates the router; wrap in act so
   // that state update is flushed inside the test.

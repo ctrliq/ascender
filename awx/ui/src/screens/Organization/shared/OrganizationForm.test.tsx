@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { SummaryFieldRef, Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { OrganizationsAPI, ExecutionEnvironmentsAPI } from 'api';
@@ -7,6 +7,18 @@ import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationForm from './OrganizationForm';
+
+/** What the stubbed execution environment lookup is handed. */
+interface StubLookupProps {
+  value: SummaryFieldRef | null;
+  onChange: (value: SummaryFieldRef | null) => void;
+}
+
+/** The same, for the lookup that holds several instance groups. */
+interface StubMultiLookupProps {
+  value: SummaryFieldRef[];
+  onChange: (value: SummaryFieldRef[]) => void;
+}
 
 vi.mock('../../../api');
 
@@ -20,7 +32,7 @@ vi.mock('components/Lookup', async () => {
     );
   return {
     ...actual,
-    InstanceGroupsLookup: ({ value, onChange }: Untyped) => (
+    InstanceGroupsLookup: ({ value, onChange }: StubMultiLookupProps) => (
       <div data-testid="instance-groups-lookup">
         {(value || []).map((ig: SummaryFieldRef) => (
           <span key={ig.id} data-testid="instance-group-chip">
@@ -31,20 +43,17 @@ vi.mock('components/Lookup', async () => {
           type="button"
           aria-label="add-instance-groups"
           onClick={() =>
-            onChange(
-              [
-                { name: 'One', id: 1 },
-                { name: 'Three', id: 3 },
-              ],
-              'instanceGroups'
-            )
+            onChange([
+              { name: 'One', id: 1 },
+              { name: 'Three', id: 3 },
+            ])
           }
         >
           add-instance-groups
         </button>
       </div>
     ),
-    ExecutionEnvironmentLookup: ({ value, onChange }: Untyped) => (
+    ExecutionEnvironmentLookup: ({ value, onChange }: StubLookupProps) => (
       <div data-testid="execution-environment-lookup">
         {value ? <span>{value.name}</span> : null}
         <button

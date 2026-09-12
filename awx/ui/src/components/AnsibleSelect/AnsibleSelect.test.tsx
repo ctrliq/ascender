@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -49,7 +48,7 @@ describe('<AnsibleSelect />', () => {
     );
     expect(onChange).toHaveBeenCalled();
     // onSelectChange forwards (event, value); the selected value is the option.
-    const [, value] = onChange.mock.calls[0] as Untyped[];
+    const [, value] = onChange.mock.calls[0] as [unknown, string];
     expect(value).toEqual('/var/lib/awx/venv/ansible/');
   });
 

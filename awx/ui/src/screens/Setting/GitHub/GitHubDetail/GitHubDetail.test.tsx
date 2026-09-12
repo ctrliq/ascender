@@ -1,10 +1,10 @@
-import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { Routes, Route } from 'react-router';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import type { TestContexts } from '../../../../../testUtils/rtlContexts';
 import {
   renderWithContexts,
@@ -87,22 +87,22 @@ const mockEnterpriseTeam = {
 
 function mockAllCategories() {
   vi.mocked(SettingsAPI.readCategory).mockResolvedValueOnce(
-    mockDefault as unknown as ApiResponse<any>
+    mockDefault as unknown as ResponseOf<typeof SettingsAPI.readCategory>
   );
   vi.mocked(SettingsAPI.readCategory).mockResolvedValueOnce(
-    mockOrg as unknown as ApiResponse<any>
+    mockOrg as unknown as ResponseOf<typeof SettingsAPI.readCategory>
   );
   vi.mocked(SettingsAPI.readCategory).mockResolvedValueOnce(
-    mockTeam as unknown as ApiResponse<any>
+    mockTeam as unknown as ResponseOf<typeof SettingsAPI.readCategory>
   );
   vi.mocked(SettingsAPI.readCategory).mockResolvedValueOnce(
-    mockEnterprise as unknown as ApiResponse<any>
+    mockEnterprise as unknown as ResponseOf<typeof SettingsAPI.readCategory>
   );
   vi.mocked(SettingsAPI.readCategory).mockResolvedValueOnce(
-    mockEnterpriseOrg as unknown as ApiResponse<any>
+    mockEnterpriseOrg as unknown as ResponseOf<typeof SettingsAPI.readCategory>
   );
   vi.mocked(SettingsAPI.readCategory).mockResolvedValueOnce(
-    mockEnterpriseTeam as unknown as ApiResponse<any>
+    mockEnterpriseTeam as unknown as ResponseOf<typeof SettingsAPI.readCategory>
   );
 }
 

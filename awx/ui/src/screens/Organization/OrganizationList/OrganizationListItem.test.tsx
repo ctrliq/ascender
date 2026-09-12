@@ -1,11 +1,11 @@
-import type { Organization, Untyped } from 'types/api';
+import type { Organization } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 
 import OrganizationListItem from './OrganizationListItem';
 
-function renderItem(edit: Untyped) {
+function renderItem(edit: boolean) {
   return renderWithContexts(
     <table>
       <tbody>

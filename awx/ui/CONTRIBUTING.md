@@ -57,7 +57,7 @@ The UI is built using [ReactJS](https://reactjs.org/docs/getting-started.html) a
 The AWX UI requires the following:
 
 - Node >= 16.13.1 LTS
-- NPM 8.x 
+- NPM 8.x
 
 Run the following to install all the dependencies:
 
@@ -258,10 +258,9 @@ export interface AboutProps {
 function About({ ansibleVersion, isOpen = false, onClose, version }: AboutProps) {
 ```
 
-`Untyped` is the migration marker, exported from `types/api`. It is `any` with a
-name, so a value that has not been described yet is greppable rather than
-invisible, and narrowing one is a self-contained change. Reach for it where the
-shape genuinely is not known yet; do not use it to silence a checker that is
+Nothing under `src` or `testUtils` is `any`. Where a shape genuinely cannot be
+described, say so with `unknown` and narrow at the point of use, or cast a test
+fixture once at its literal. Do not reach for `any` to silence a checker that is
 right.
 
 The API types in `src/types/api.generated.ts` come from the platform's own

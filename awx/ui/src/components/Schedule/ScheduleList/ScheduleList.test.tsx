@@ -1,9 +1,9 @@
 import type { Mock } from 'vitest';
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { SchedulesAPI } from 'api';
+import type { ScheduleListProps } from './ScheduleList';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ScheduleList from './ScheduleList';
@@ -30,7 +30,7 @@ function setupMocks() {
   });
 }
 
-function renderList(props?: Untyped) {
+function renderList(props?: Partial<ScheduleListProps>) {
   return renderWithContexts(
     <ScheduleList
       loadSchedules={loadSchedules}
@@ -197,7 +197,9 @@ describe('ScheduleList', () => {
         hideAddButton: true,
         resource: { type: 'job_template', inventory: 1 },
         launchConfig: { survey_enabled: true },
-        surveyConfig: { spec: [{ required: true, default: null }] },
+        surveyConfig: {
+          spec: [{ variable: 'foo', required: true, default: null }],
+        },
       });
       await screen.findByRole('link', {
         name: 'Mock Inventory Update Schedule',

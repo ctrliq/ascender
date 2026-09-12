@@ -1,5 +1,4 @@
 import type { CurrentUser } from 'contexts/Config';
-import type { ApiResponse } from 'api/Base';
 import type { InstanceGroup } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
@@ -120,7 +119,9 @@ describe('<InstanceDetails/>', () => {
   beforeEach(() => {
     vi.mocked(useDebounce).mockImplementation((fn) => fn);
     vi.mocked(InstanceGroupsAPI.readInstances).mockResolvedValue(
-      associatedInstances as unknown as ApiResponse<any>
+      associatedInstances as unknown as ResponseOf<
+        typeof InstanceGroupsAPI.readInstances
+      >
     );
     vi.mocked(InstancesAPI.readDetail).mockResolvedValue(
       instanceDetail() as unknown as ResponseOf<typeof InstancesAPI.readDetail>
