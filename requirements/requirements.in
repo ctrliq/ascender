@@ -41,7 +41,6 @@ packaging==26.3
 prometheus-client
 psycopg
 psutil
-pygerduty
 pygithub
 pyjwt[crypto]  # used by vendored awx/dab jwt_consumer (formerly a django-ansible-base dep)
 pyopenssl>=26.4.0  # tracks cryptography pin above (pyopenssl 26.3.0 requires cryptography>=49)
