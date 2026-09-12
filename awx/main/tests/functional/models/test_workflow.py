@@ -23,7 +23,7 @@ from awx.main.models.label import Label
 from awx.main.models.ha import InstanceGroup
 from awx.main.scheduler.dag_workflow import WorkflowDAG
 from awx.api.versioning import reverse
-from awx.api.views import WorkflowJobTemplateNodeSuccessNodesList
+from awx.api.views.workflow import WorkflowJobTemplateNodeSuccessNodesList
 
 # Django
 from django.test import TransactionTestCase
