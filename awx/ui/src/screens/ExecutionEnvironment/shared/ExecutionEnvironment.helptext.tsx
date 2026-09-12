@@ -1,8 +1,10 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
-import { Trans } from '@lingui/react/macro';
+import { Trans, useLingui } from '@lingui/react/macro';
 
-function getHelpText(t: Untyped) {
+// Calls useLingui itself, the way every other helptext module does: it was
+// the only one taking t from its caller, and the use prefix is what says so.
+function useExecutionEnvironmentHelpTextStrings() {
+  const { t } = useLingui();
   return {
     image: (
       <span>
@@ -27,4 +29,4 @@ function getHelpText(t: Untyped) {
   };
 }
 
-export default getHelpText;
+export default useExecutionEnvironmentHelpTextStrings;

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { Card, PageSection } from '@patternfly/react-core';
 import { useLocation, useNavigate } from 'react-router';
@@ -7,13 +6,14 @@ import { ExecutionEnvironmentsAPI } from 'api';
 import { Config } from 'contexts/Config';
 import { CardBody } from 'components/Card';
 import ExecutionEnvironmentForm from '../shared/ExecutionEnvironmentForm';
+import type { ExecutionEnvironmentFormValues } from '../shared/ExecutionEnvironmentForm';
 
 function ExecutionEnvironmentAdd() {
   const location = useLocation();
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState<unknown>(null);
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: ExecutionEnvironmentFormValues) => {
     try {
       const { data: response } = await ExecutionEnvironmentsAPI.create({
         ...values,

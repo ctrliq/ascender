@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { CredentialType } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
@@ -14,38 +14,39 @@ import CredentialTypeDetails from './CredentialTypeDetails';
 
 vi.mock('../../../api');
 
-const makeCredentialType = (overrides: Untyped = {}) => ({
-  name: 'Foo',
-  description: 'Bar',
-  kind: 'cloud',
-  inputs: {
-    fields: [
-      { id: 'username', type: 'string', label: 'Jenkins username' },
-      {
-        id: 'password',
-        type: 'string',
-        label: 'Jenkins password',
-        secret: true,
-      },
-    ],
-    required: ['username', 'password'],
-  },
-  injectors: {
-    extra_vars: {
-      Jenkins_password: '{{ password }}',
-      Jenkins_username: '{{ username }}',
+const makeCredentialType = (overrides: Partial<CredentialType> = {}) =>
+  ({
+    name: 'Foo',
+    description: 'Bar',
+    kind: 'cloud',
+    inputs: {
+      fields: [
+        { id: 'username', type: 'string', label: 'Jenkins username' },
+        {
+          id: 'password',
+          type: 'string',
+          label: 'Jenkins password',
+          secret: true,
+        },
+      ],
+      required: ['username', 'password'],
     },
-  },
-  summary_fields: {
-    created_by: { id: 1, username: 'admin', first_name: '', last_name: '' },
-    modified_by: { id: 1, username: 'admin', first_name: '', last_name: '' },
-    user_capabilities: { edit: true, delete: true },
-    ...(overrides.summary_fields || {}),
-  },
-  created: '2020-06-25T16:52:36.127008Z',
-  modified: '2020-06-25T16:52:36.127022Z',
-  ...overrides,
-});
+    injectors: {
+      extra_vars: {
+        Jenkins_password: '{{ password }}',
+        Jenkins_username: '{{ username }}',
+      },
+    },
+    summary_fields: {
+      created_by: { id: 1, username: 'admin', first_name: '', last_name: '' },
+      modified_by: { id: 1, username: 'admin', first_name: '', last_name: '' },
+      user_capabilities: { edit: true, delete: true },
+      ...(overrides.summary_fields || {}),
+    },
+    created: '2020-06-25T16:52:36.127008Z',
+    modified: '2020-06-25T16:52:36.127022Z',
+    ...overrides,
+  }) as unknown as CredentialType;
 
 describe('<CredentialTypeDetails/>', () => {
   afterEach(() => {

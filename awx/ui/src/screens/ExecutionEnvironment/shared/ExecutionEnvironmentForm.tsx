@@ -1,5 +1,9 @@
 import type { CurrentUser } from 'contexts/Config';
-import type { ExecutionEnvironment, SummaryFieldRef, Untyped } from 'types/api';
+import type {
+  ExecutionEnvironment,
+  OptionsResponse,
+  SummaryFieldRef,
+} from 'types/api';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -22,14 +26,15 @@ import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import { required } from 'util/validators';
 import useRequest from 'hooks/useRequest';
-import executionEnvironmentHelpTextStrings from './ExecutionEnvironment.helptext';
+import useExecutionEnvironmentHelpTextStrings from './ExecutionEnvironment.helptext';
 
 export interface ExecutionEnvironmentFormFieldsProps {
   me: CurrentUser;
-  options: Untyped;
-  executionEnvironment: ExecutionEnvironment;
+  /** The endpoint's own OPTIONS, which name the pull policies on offer. */
+  options: OptionsResponse;
+  /** Absent on the add screen, which starts the form empty. */
+  executionEnvironment?: Partial<ExecutionEnvironment>;
   isOrgLookupDisabled: boolean;
-  [key: string]: unknown;
 }
 
 function ExecutionEnvironmentFormFields({
@@ -39,7 +44,7 @@ function ExecutionEnvironmentFormFields({
   isOrgLookupDisabled,
 }: ExecutionEnvironmentFormFieldsProps) {
   const { t } = useLingui();
-  const helpText = executionEnvironmentHelpTextStrings(t);
+  const helpText = useExecutionEnvironmentHelpTextStrings();
   const [credentialField, credentialMeta, credentialHelpers] =
     useField('credential');
   const [organizationField, organizationMeta, organizationHelpers] =
@@ -68,9 +73,13 @@ function ExecutionEnvironmentFormFields({
   const [containerOptionsField, containerOptionsMeta, containerOptionsHelpers] =
     useField('pull');
 
-  const containerPullChoices = options?.actions?.POST?.pull?.choices.map(
-    ([value, label]: Untyped[]) => ({ value, label, key: value })
-  );
+  const containerPullChoices = (
+    options?.actions?.POST?.pull?.choices ?? []
+  ).map(([value, label]) => ({
+    value: value ?? '',
+    label,
+    key: value ?? '',
+  }));
 
   const renderOrganizationLookup = () => (
     <OrganizationLookup
@@ -175,6 +184,27 @@ function ExecutionEnvironmentFormFields({
   );
 }
 
+/** The execution environment as its own form holds it, before it is saved. */
+export interface ExecutionEnvironmentFormValues {
+  name: string;
+  image: string;
+  pull: string;
+  description: string;
+  credential: SummaryFieldRef | null;
+  organization: SummaryFieldRef | null;
+}
+
+export interface ExecutionEnvironmentFormProps {
+  /** Absent on the add screen, which starts the form empty. */
+  executionEnvironment?: Partial<ExecutionEnvironment>;
+  onSubmit: (values: ExecutionEnvironmentFormValues) => void;
+  onCancel: () => void;
+  submitError?: unknown;
+  me: CurrentUser;
+  /** True on the edit screen: an environment does not change organization. */
+  isOrgLookupDisabled?: boolean;
+}
+
 function ExecutionEnvironmentForm({
   executionEnvironment = {},
   onSubmit,
@@ -182,8 +212,7 @@ function ExecutionEnvironmentForm({
   submitError = null,
   me,
   isOrgLookupDisabled = false,
-  ...rest
-}: Untyped) {
+}: ExecutionEnvironmentFormProps) {
   const {
     isLoading,
     error,
@@ -232,7 +261,6 @@ function ExecutionEnvironmentForm({
               options={options}
               executionEnvironment={executionEnvironment}
               isOrgLookupDisabled={isOrgLookupDisabled}
-              {...rest}
             />
             {Boolean(submitError) && <FormSubmitError error={submitError} />}
             <FormActionGroup

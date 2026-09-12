@@ -1,4 +1,4 @@
-import type { ExecutionEnvironment, Untyped } from 'types/api';
+import type { ExecutionEnvironment } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
@@ -19,8 +19,8 @@ export interface ExecutionEnvironmentListItemProps {
   onSelect: () => void;
   onCopy: (id: number) => void;
   rowIndex: number;
-  fetchExecutionEnvironments: Untyped;
-  [key: string]: unknown;
+  /** Re-reads the page once the copy has landed. */
+  fetchExecutionEnvironments: () => Promise<unknown> | void;
 }
 
 function ExecutionEnvironmentListItem({

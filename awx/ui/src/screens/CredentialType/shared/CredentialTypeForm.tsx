@@ -1,4 +1,4 @@
-import type { CredentialType, Untyped } from 'types/api';
+import type { CredentialType } from 'types/api';
 import React from 'react';
 import { Formik } from 'formik';
 
@@ -51,12 +51,24 @@ function CredentialTypeFormFields() {
   );
 }
 
+/**
+ * The credential type as its own form holds it, before it is saved: the two
+ * configurations are YAML here and JSON on the api, so the screens parse them
+ * on the way out.
+ */
+export interface CredentialTypeFormValues {
+  name: string;
+  description: string;
+  inputs: string;
+  injectors: string;
+}
+
 export interface CredentialTypeFormProps {
+  /** Absent on the add screen, which starts the form empty. */
   credentialType?: Partial<CredentialType>;
-  onSubmit: (values: Untyped) => void;
-  onCancel: (value?: Untyped) => void;
+  onSubmit: (values: CredentialTypeFormValues) => void;
+  onCancel: () => void;
   submitError?: unknown;
-  [key: string]: unknown;
 }
 
 function CredentialTypeForm({
@@ -64,7 +76,6 @@ function CredentialTypeForm({
   onSubmit,
   onCancel,
   submitError = null,
-  ...rest
 }: CredentialTypeFormProps) {
   const initialValues = {
     name: credentialType.name || '',
@@ -84,7 +95,7 @@ function CredentialTypeForm({
       {(formik) => (
         <Form autoComplete="off" onSubmit={formik.handleSubmit}>
           <FormColumnLayout>
-            <CredentialTypeFormFields {...rest} />
+            <CredentialTypeFormFields />
             {Boolean(submitError) && <FormSubmitError error={submitError} />}
             <FormActionGroup
               onCancel={onCancel}

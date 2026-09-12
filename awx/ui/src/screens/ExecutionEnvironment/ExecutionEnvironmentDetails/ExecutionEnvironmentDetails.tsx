@@ -12,7 +12,7 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { toTitleCase } from 'util/strings';
 import { ExecutionEnvironmentsAPI } from 'api';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
-import executionEnvironmentHelpTextStrings from '../shared/ExecutionEnvironment.helptext';
+import useExecutionEnvironmentHelpTextStrings from '../shared/ExecutionEnvironment.helptext';
 
 export interface ExecutionEnvironmentDetailsProps {
   executionEnvironment: ExecutionEnvironment;
@@ -23,7 +23,7 @@ function ExecutionEnvironmentDetails({
   executionEnvironment,
 }: ExecutionEnvironmentDetailsProps) {
   const { t } = useLingui();
-  const helpText = executionEnvironmentHelpTextStrings(t);
+  const helpText = useExecutionEnvironmentHelpTextStrings();
   const navigate = useNavigate();
   const {
     id,

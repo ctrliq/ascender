@@ -1,4 +1,5 @@
-import type { CredentialType, Untyped } from 'types/api';
+import type { Mock } from 'vitest';
+import type { CredentialType } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 
@@ -45,8 +46,8 @@ const credentialType = {
 };
 
 describe('<CredentialTypeForm/>', () => {
-  let onCancel: Untyped;
-  let onSubmit: Untyped;
+  let onCancel: Mock;
+  let onSubmit: Mock;
 
   const renderForm = () => {
     onCancel = vi.fn();

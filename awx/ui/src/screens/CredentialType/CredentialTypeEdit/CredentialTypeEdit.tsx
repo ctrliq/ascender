@@ -1,4 +1,4 @@
-import type { CredentialType, Untyped } from 'types/api';
+import type { CredentialType } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -6,6 +6,7 @@ import { CardBody } from 'components/Card';
 import { CredentialTypesAPI } from 'api';
 import { parseVariableField } from 'util/yaml';
 import CredentialTypeForm from '../shared/CredentialTypeForm';
+import type { CredentialTypeFormValues } from '../shared/CredentialTypeForm';
 
 export interface CredentialTypeEditProps {
   credentialType: CredentialType;
@@ -17,7 +18,7 @@ function CredentialTypeEdit({ credentialType }: CredentialTypeEditProps) {
   const [submitError, setSubmitError] = useState<unknown>(null);
   const detailsUrl = `/credential_types/${credentialType.id}/details`;
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: CredentialTypeFormValues) => {
     try {
       await CredentialTypesAPI.update(credentialType.id, {
         ...values,

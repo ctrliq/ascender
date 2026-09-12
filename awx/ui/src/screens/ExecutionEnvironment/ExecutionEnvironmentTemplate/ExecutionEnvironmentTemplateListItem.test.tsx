@@ -1,3 +1,4 @@
+import type { AnyUnifiedJobTemplate } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 
@@ -9,7 +10,7 @@ const template = {
   id: 1,
   name: 'Foo',
   type: 'job_template',
-};
+} as unknown as AnyUnifiedJobTemplate;
 
 const renderItem = (props = {}) =>
   renderWithContexts(

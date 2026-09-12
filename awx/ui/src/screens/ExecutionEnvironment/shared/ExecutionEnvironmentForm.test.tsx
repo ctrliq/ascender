@@ -1,3 +1,4 @@
+import type { ExecutionEnvironment } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 
@@ -25,7 +26,7 @@ const executionEnvironment = {
   image: 'https://registry.com/image/container',
   managed: false,
   credential: 4,
-};
+} as unknown as ExecutionEnvironment;
 
 const globallyAvailableEE = {
   ...executionEnvironment,

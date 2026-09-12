@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { Card, PageSection } from '@patternfly/react-core';
 import { useNavigate } from 'react-router';
@@ -7,12 +6,13 @@ import { CardBody } from 'components/Card';
 import { CredentialTypesAPI } from 'api';
 import { parseVariableField } from 'util/yaml';
 import CredentialTypeForm from '../shared/CredentialTypeForm';
+import type { CredentialTypeFormValues } from '../shared/CredentialTypeForm';
 
 function CredentialTypeAdd() {
   const navigate = useNavigate();
   const [submitError, setSubmitError] = useState<unknown>(null);
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: CredentialTypeFormValues) => {
     try {
       const { data: response } = await CredentialTypesAPI.create({
         ...values,

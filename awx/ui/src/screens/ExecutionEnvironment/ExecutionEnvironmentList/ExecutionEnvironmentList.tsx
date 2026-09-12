@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -98,7 +97,7 @@ function ExecutionEnvironmentList() {
   );
 
   const handleCopy = useCallback(
-    (newId: Untyped) => {
+    (newId: number) => {
       addToast({
         id: newId,
         title: t`Execution environment copied successfully`,

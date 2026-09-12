@@ -1,4 +1,4 @@
-import type { ExecutionEnvironment, Untyped } from 'types/api';
+import type { ExecutionEnvironment } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -6,6 +6,7 @@ import { CardBody } from 'components/Card';
 import { ExecutionEnvironmentsAPI } from 'api';
 import { Config } from 'contexts/Config';
 import ExecutionEnvironmentForm from '../shared/ExecutionEnvironmentForm';
+import type { ExecutionEnvironmentFormValues } from '../shared/ExecutionEnvironmentForm';
 
 export interface ExecutionEnvironmentEditProps {
   executionEnvironment: ExecutionEnvironment;
@@ -19,12 +20,12 @@ function ExecutionEnvironmentEdit({
   const [submitError, setSubmitError] = useState<unknown>(null);
   const detailsUrl = `/execution_environments/${executionEnvironment.id}/details`;
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: ExecutionEnvironmentFormValues) => {
     try {
       await ExecutionEnvironmentsAPI.update(executionEnvironment.id, {
         ...values,
-        credential: values.credential ? values.credential.id : null,
-        organization: values.organization ? values.organization.id : null,
+        credential: values.credential?.id ?? null,
+        organization: values.organization?.id ?? null,
       });
       navigate(detailsUrl);
     } catch (error) {

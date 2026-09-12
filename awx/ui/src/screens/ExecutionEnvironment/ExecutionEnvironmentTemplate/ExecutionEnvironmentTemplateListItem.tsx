@@ -1,13 +1,12 @@
-import type { Untyped } from 'types/api';
+import type { AnyUnifiedJobTemplate } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import { Tr, Td } from '@patternfly/react-table';
 
 export interface ExecutionEnvironmentTemplateListItemProps {
-  template: Untyped;
+  template: AnyUnifiedJobTemplate;
   detailUrl: string;
-  [key: string]: unknown;
 }
 
 function ExecutionEnvironmentTemplateListItem({
