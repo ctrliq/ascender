@@ -1,3 +1,4 @@
+import type { NotificationTemplate } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 
@@ -19,7 +20,7 @@ const template = {
     user_capabilities: { edit: true, copy: true },
     recent_notifications: [{ status: 'success' }],
   },
-};
+} as unknown as NotificationTemplate;
 
 const renderItem = (props = {}) =>
   renderWithContexts(

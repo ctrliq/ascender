@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { BreadcrumbResource } from 'types/api';
 import React, { useCallback, useState } from 'react';
 import { Routes, Route } from 'react-router';
 
@@ -19,7 +19,7 @@ function Organizations() {
   });
 
   const setBreadcrumb = useCallback(
-    (organization: Untyped) => {
+    (organization?: BreadcrumbResource) => {
       if (!organization) {
         return;
       }

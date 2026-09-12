@@ -1,3 +1,4 @@
+import type { ActivityStreamEntry } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { screen, within } from '@testing-library/react';
@@ -13,9 +14,11 @@ describe('<ActivityStreamDetailButton />', () => {
   test('initially renders successfully', () => {
     renderWithContexts(
       <ActivityStreamDetailButton
-        streamItem={{
-          timestamp: '12:00:00',
-        }}
+        streamItem={
+          {
+            timestamp: '12:00:00',
+          } as unknown as ActivityStreamEntry
+        }
         user={<Link to="/users/1/details">Bob</Link>}
         description={<span>foo</span>}
       />
@@ -28,33 +31,35 @@ describe('<ActivityStreamDetailButton />', () => {
   test('details are properly rendered', async () => {
     const { user } = renderWithContexts(
       <ActivityStreamDetailButton
-        streamItem={{
-          summary_fields: {
-            actor: {
-              id: 1,
-              username: 'Bob',
-              first_name: '',
-              last_name: '',
-            },
-            setting: [
-              {
-                category: 'system',
-                name: 'INSIGHTS_TRACKING_STATE',
+        streamItem={
+          {
+            summary_fields: {
+              actor: {
+                id: 1,
+                username: 'Bob',
+                first_name: '',
+                last_name: '',
               },
-            ],
-          },
-          timestamp: '2021-05-25T18:17:59.835788Z',
-          operation: 'create',
-          changes: {
-            value: false,
-            id: 6,
-          },
-          object1: 'setting',
-          object2: '',
-          object_association: '',
-          action_node: 'awx_1',
-          object_type: '',
-        }}
+              setting: [
+                {
+                  category: 'system',
+                  name: 'INSIGHTS_TRACKING_STATE',
+                },
+              ],
+            },
+            timestamp: '2021-05-25T18:17:59.835788Z',
+            operation: 'create',
+            changes: {
+              value: false,
+              id: 6,
+            },
+            object1: 'setting',
+            object2: '',
+            object_association: '',
+            action_node: 'awx_1',
+            object_type: '',
+          } as unknown as ActivityStreamEntry
+        }
         user={<Link to="/users/1/details">Bob</Link>}
         description={<span>foo</span>}
       />

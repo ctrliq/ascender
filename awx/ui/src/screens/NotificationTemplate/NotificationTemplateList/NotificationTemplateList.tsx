@@ -1,3 +1,4 @@
+import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
 
@@ -205,8 +206,10 @@ function NotificationTemplatesList() {
 
                   addToast({
                     id: notification.id,
-                    title:
-                      notification.summary_fields.notification_template.name,
+                    title: (
+                      notification.summary_fields
+                        .notification_template as SummaryFieldRef
+                    )?.name,
                     variant:
                       notification.status === 'failed'
                         ? AlertVariant.danger

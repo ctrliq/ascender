@@ -1,4 +1,4 @@
-import type { InstanceGroup, Organization, Untyped } from 'types/api';
+import type { InstanceGroup, Organization, SummaryFieldRef } from 'types/api';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Link, useNavigate, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -134,7 +134,7 @@ function OrganizationDetail({ organization }: OrganizationDetailProps) {
               totalChips={galaxy_credentials?.length ?? 0}
               ouiaId="galaxy-credential-chips"
             >
-              {galaxy_credentials?.map((credential: Untyped) => (
+              {galaxy_credentials?.map((credential: SummaryFieldRef) => (
                 <Link
                   key={credential.id}
                   to={`/credentials/${credential.id}/details`}

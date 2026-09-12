@@ -1,4 +1,4 @@
-import type { SummaryFieldRef, Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField, useFormikContext } from 'formik';
@@ -7,8 +7,8 @@ import { required } from 'util/validators';
 import { ScmTypeOptions } from './SharedFields';
 
 export interface InsightsSubFormProps {
-  credential: { typeId: number; value: Untyped };
-  onCredentialSelection: (kind: string, value: Untyped) => void;
+  credential: { typeId: number; value: SummaryFieldRef | null };
+  onCredentialSelection: (kind: string, value: SummaryFieldRef | null) => void;
   scmUpdateOnLaunch?: boolean;
   autoPopulateCredential?: boolean;
   [key: string]: unknown;

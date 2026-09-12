@@ -15,7 +15,7 @@ import { constants as wfConstants } from 'components/Workflow/WorkflowUtils';
 
 // $hasJob is transient: the job object itself used to be forwarded to the <g>
 // and land in the DOM as an attribute.
-const NodeG = styled.g<{ $hasJob?: Untyped }>`
+const NodeG = styled.g<{ $hasJob?: boolean }>`
   cursor: ${(props) => (props.$hasJob ? 'pointer' : 'default')};
 `;
 
@@ -69,8 +69,8 @@ const ConvergenceLabel = styled.p`
 Elapsed.displayName = 'Elapsed';
 
 export interface WorkflowOutputNodeProps {
-  mouseEnter: Untyped;
-  mouseLeave: Untyped;
+  mouseEnter: () => void;
+  mouseLeave: () => void;
   node: Untyped;
   [key: string]: unknown;
 }

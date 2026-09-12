@@ -575,7 +575,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
           dataCy="job-module-name"
           label={t`Module Name`}
           value={job.module_name}
-          helpText={jobHelpText.module(job.module_name)}
+          helpText={jobHelpText.module(job.module_name ?? '')}
         />
         <Detail
           dataCy="job-module-arguments"

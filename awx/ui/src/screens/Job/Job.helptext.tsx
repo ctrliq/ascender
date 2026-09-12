@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { t } from '@lingui/core/macro';
 
@@ -28,7 +27,7 @@ const jobHelpText = () => ({
       {t`Refer to the Ansible documentation for details about the configuration file.`}
     </span>
   ),
-  module: (moduleName: Untyped) =>
+  module: (moduleName: string) =>
     moduleName ? (
       <>
         {t`These arguments are used with the specified module. You can find information about ${moduleName} by clicking `}{' '}

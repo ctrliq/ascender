@@ -1,9 +1,9 @@
-import type { Untyped } from 'types/api';
+import type { Project } from 'types/api';
 import { useState, useEffect } from 'react';
 import useWebsocket from 'hooks/useWebsocket';
 import { ProjectsAPI } from 'api';
 
-export default function useWsProjects(initialProject: Untyped) {
+export default function useWsProjects(initialProject: Project) {
   const [project, setProject] = useState(initialProject);
   const lastMessage = useWebsocket({
     jobs: ['status_changed'],

@@ -1,11 +1,11 @@
-import type { Untyped } from 'types/api';
+import type { HostMetric } from 'types/api';
 import React from 'react';
 import { Tr, Td } from '@patternfly/react-table';
 import { formatDateString } from 'util/dates';
 import { useLingui } from '@lingui/react/macro';
 
 export interface HostMetricsListItemProps {
-  item: Untyped;
+  item: HostMetric;
   isSelected: boolean;
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;

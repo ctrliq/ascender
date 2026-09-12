@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Notification, NotificationTemplate } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
@@ -19,10 +19,13 @@ const NUM_RETRIES = 25;
 const RETRY_TIMEOUT = 5000;
 
 export interface NotificationTemplateListItemProps {
-  onAddToast: (...args: Untyped[]) => void;
-  template: Untyped;
+  /** Raises the toast the list shows once the test notification is sent. */
+  /** Raises the toast the list shows once the test notification has run. */
+  onAddToast: (notification: Notification) => void;
+  template: NotificationTemplate;
   detailUrl: string;
-  fetchTemplates: Untyped;
+  /** Re-reads the page once the copy has landed. */
+  fetchTemplates: () => unknown;
   isSelected?: boolean;
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect?: () => void;
@@ -136,9 +139,9 @@ function NotificationTemplateListItem({
         </Td>
         <Td dataLabel={t`Oragnization`}>
           <Link
-            to={`/organizations/${template.summary_fields.organization.id}/details`}
+            to={`/organizations/${template.summary_fields.organization?.id}/details`}
           >
-            <b>{template.summary_fields.organization.name}</b>
+            <b>{template.summary_fields.organization?.name}</b>
           </Link>
         </Td>
         <ActionsTd dataLabel={t`Actions`}>
@@ -153,7 +156,7 @@ function NotificationTemplateListItem({
             />
           </ActionItem>
           <ActionItem
-            visible={template.summary_fields.user_capabilities.edit}
+            visible={template.summary_fields.user_capabilities?.edit}
             tooltip={t`Edit`}
           >
             <Button
@@ -166,7 +169,7 @@ function NotificationTemplateListItem({
             />
           </ActionItem>
           <ActionItem
-            visible={template.summary_fields.user_capabilities.copy}
+            visible={template.summary_fields.user_capabilities?.copy}
             tooltip={t`Copy Notification Template`}
           >
             <CopyButton

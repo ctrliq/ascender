@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ActivityStreamEntry, SummaryFieldRef } from 'types/api';
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
@@ -11,7 +11,7 @@ import { DetailList, Detail } from 'components/DetailList';
 import { VariablesDetail } from 'components/CodeEditor';
 
 export interface ActivityStreamDetailButtonProps {
-  streamItem: Untyped;
+  streamItem: ActivityStreamEntry;
   user: React.ReactNode;
   description: React.ReactNode;
   [key: string]: unknown;
@@ -25,7 +25,8 @@ function ActivityStreamDetailButton({
   const { t } = useLingui();
   const [isOpen, setIsOpen] = useState(false);
 
-  const setting = streamItem?.summary_fields?.setting;
+  const setting = streamItem?.summary_fields?.setting as
+    SummaryFieldRef[] | undefined;
   const changeRows = Math.max(
     Object.keys(streamItem?.changes || []).length + 2,
     6
@@ -56,7 +57,7 @@ function ActivityStreamDetailButton({
           <Detail label={t`Initiated by`} value={user} />
           <Detail
             label={t`Setting category`}
-            value={setting && setting[0]?.category}
+            value={setting && (setting[0]?.category as React.ReactNode)}
           />
           <Detail label={t`Setting name`} value={setting && setting[0]?.name} />
           <Detail fullWidth label={t`Action`} value={description} />

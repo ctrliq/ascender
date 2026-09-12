@@ -1,3 +1,4 @@
+import type { ActivityStreamEntry } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -11,9 +12,11 @@ describe('<ActivityStreamListItem />', () => {
       <table>
         <tbody>
           <ActivityStreamListItem
-            streamItem={{
-              timestamp: '12:00:00',
-            }}
+            streamItem={
+              {
+                timestamp: '12:00:00',
+              } as unknown as ActivityStreamEntry
+            }
           />
         </tbody>
       </table>

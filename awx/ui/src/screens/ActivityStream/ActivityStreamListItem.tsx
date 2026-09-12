@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ActivityStreamEntry, Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Tr, Td } from '@patternfly/react-table';
@@ -11,7 +11,7 @@ import ActivityStreamDetailButton from './ActivityStreamDetailButton';
 import ActivityStreamDescription from './ActivityStreamDescription';
 
 export interface ActivityStreamListItemProps {
-  streamItem: Untyped;
+  streamItem: ActivityStreamEntry;
   [key: string]: unknown;
 }
 
@@ -39,7 +39,11 @@ function ActivityStreamListItem({ streamItem }: ActivityStreamListItemProps) {
   const description = <ActivityStreamDescription activity={streamItem} />;
 
   return (
-    <Tr id={streamItem.id} ouiaId={streamItem.id} aria-labelledby={labelId}>
+    <Tr
+      id={`activity-stream-row-${streamItem.id}`}
+      ouiaId={streamItem.id}
+      aria-labelledby={labelId}
+    >
       <Td />
       <Td dataLabel={t`Time`}>
         {streamItem.timestamp ? formatDateString(streamItem.timestamp) : ''}

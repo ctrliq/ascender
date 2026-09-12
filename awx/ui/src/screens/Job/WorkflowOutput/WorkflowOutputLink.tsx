@@ -14,8 +14,8 @@ import {
 
 export interface WorkflowOutputLinkProps {
   link: WorkflowLink;
-  mouseEnter: Untyped;
-  mouseLeave: Untyped;
+  mouseEnter: () => void;
+  mouseLeave: () => void;
   [key: string]: unknown;
 }
 

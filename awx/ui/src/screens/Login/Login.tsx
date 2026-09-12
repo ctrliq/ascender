@@ -41,6 +41,12 @@ const loginLogoSrc = 'static/media/Ascender_logo.svg';
 
 const Login = PFLogin;
 
+/** What the login form holds, which is the two fields it posts. */
+export interface LoginFormValues {
+  username: string;
+  password: string;
+}
+
 export interface AWXLoginProps {
   /** Alternate text for the brand logo, when the install overrides it. */
   alt?: string;
@@ -115,7 +121,7 @@ function AWXLogin({ alt, isAuthenticated }: AWXLoginProps) {
     error: authenticationError,
     request: authenticate,
   } = useRequest(
-    useCallback(async ({ username, password }: Untyped) => {
+    useCallback(async ({ username, password }: LoginFormValues) => {
       await RootAPI.login(username, password);
     }, [])
   );
@@ -183,11 +189,11 @@ function AWXLogin({ alt, isAuthenticated }: AWXLoginProps) {
 
   // social-auth-app-django 6.x only accepts POST on the login-initiation
   // view, so navigate there with a CSRF-carrying form rather than a link.
-  const startSocialLogin = (loginUrl: Untyped) => {
+  const startSocialLogin = (loginUrl?: string) => {
     setSessionRedirect();
     const form = document.createElement('form');
     form.method = 'post';
-    form.action = loginUrl;
+    form.action = loginUrl ?? '';
     const input = document.createElement('input');
     input.type = 'hidden';
     input.name = 'csrfmiddlewaretoken';
@@ -250,7 +256,7 @@ function AWXLogin({ alt, isAuthenticated }: AWXLoginProps) {
     },
   };
 
-  const getSocialAuthProvider = (authKey: Untyped) => {
+  const getSocialAuthProvider = (authKey: string) => {
     if (!authKey.startsWith('saml')) {
       return socialAuthProviders[authKey as keyof typeof socialAuthProviders];
     }

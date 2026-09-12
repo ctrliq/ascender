@@ -168,7 +168,7 @@ function ProjectDetail({ project }: ProjectDetailProps) {
             job && (
               <Tooltip
                 position="top"
-                content={generateLastJobTooltip(job)}
+                content={generateLastJobTooltip(job as UnifiedJob)}
                 key={job.id}
               >
                 <Link to={`/jobs/project/${job.id}`}>
@@ -351,9 +351,9 @@ function ProjectDetail({ project }: ProjectDetailProps) {
           </Button>
         )}
         {summary_fields.user_capabilities?.start &&
-          (['running', 'pending', 'waiting'].includes(job?.status) ? (
+          (['running', 'pending', 'waiting'].includes(job?.status ?? '') ? (
             <JobCancelButton
-              job={{ id: job.id, type: 'project_update' }}
+              job={{ id: job!.id, type: 'project_update' }}
               errorTitle={t`Project Sync Error`}
               title={t`Cancel Project Sync`}
               errorMessage={t`Failed to cancel Project Sync`}

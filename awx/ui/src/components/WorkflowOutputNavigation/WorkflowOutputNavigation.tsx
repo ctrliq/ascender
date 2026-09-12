@@ -1,3 +1,4 @@
+import type { SummaryFieldRef } from 'types/api';
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -46,9 +47,10 @@ WorkflowMenuToggle.displayName = 'WorkflowMenuToggle';
 export interface WorkflowJobNode {
   id: number;
   job?: number | null;
-  identifier?: string;
+  /** Null where the node was never given one, which is most of them. */
+  identifier?: string | null;
   summary_fields?: {
-    job?: { id?: number; name?: string; status?: string; type?: string };
+    job?: SummaryFieldRef & { status?: string };
     [key: string]: unknown;
   };
   [key: string]: unknown;

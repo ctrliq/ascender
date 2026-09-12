@@ -1,8 +1,9 @@
 import type {
   DetailedError,
+  OptionsResponse,
   SetBreadcrumb,
   SummaryFieldRef,
-  Untyped,
+  WorkflowJobTemplateNode,
 } from 'types/api';
 import React, { useEffect, useCallback, useRef } from 'react';
 import { Link, Routes, Route, Navigate, useParams } from 'react-router';
@@ -69,8 +70,10 @@ function Job({ setBreadcrumb }: JobProps) {
     },
   } = useRequest(
     useCallback(async () => {
-      let eventOptions: Untyped = {};
-      let relatedJobData: Untyped = {};
+      let eventOptions: Partial<OptionsResponse> = {};
+      // The nodes of the workflow this job was launched from, which the
+      // navigation between sibling jobs is built out of.
+      let relatedJobData: WorkflowJobTemplateNode[] = [];
       const { data: jobDetailData } = await getJobModel(type).readDetail(id);
       if (type !== 'workflow_job') {
         const { data: jobEventOptions } =

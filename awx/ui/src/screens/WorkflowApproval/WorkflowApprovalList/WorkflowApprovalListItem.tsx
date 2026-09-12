@@ -1,4 +1,4 @@
-import type { Untyped, WorkflowApproval } from 'types/api';
+import type { WorkflowApproval } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import useToast, { AlertVariant } from 'hooks/useToast';
@@ -43,7 +43,7 @@ function WorkflowApprovalListItem({
   const workflowJob = workflowApproval?.summary_fields?.source_workflow_job;
   const status = getStatus(workflowApproval);
   // Toast handler for approve/deny actions (PatternFly style)
-  const handleToast = (id: Untyped, message: Untyped) => {
+  const handleToast = (id: number, message: string) => {
     addToast({
       id,
       title: message,

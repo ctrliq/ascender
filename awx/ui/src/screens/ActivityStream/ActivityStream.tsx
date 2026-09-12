@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import styled from 'styled-components';
@@ -99,7 +98,7 @@ function ActivityStream() {
     fetchActivityStream();
   }, [fetchActivityStream]);
 
-  const pushHistoryState = (urlParamsToAdd: Untyped) => {
+  const pushHistoryState = (urlParamsToAdd: URLSearchParams) => {
     const pageOneQs = updateQueryString(QS_CONFIG, location.search, {
       page: 1,
     });

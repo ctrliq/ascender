@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -18,6 +17,7 @@ import PaginatedTable, {
 } from 'components/PaginatedTable';
 import useRequest, { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
+import type { QSParams, QSParamValue } from 'util/qs';
 import { encodeQueryString, getQSConfig, parseQueryString } from 'util/qs';
 
 import HostListItem from './HostListItem';
@@ -34,21 +34,20 @@ function HostList() {
   const navigate = useNavigate();
   const location = useLocation();
   const parsedQueryStrings = parseQueryString(QS_CONFIG, location.search);
-  const nonDefaultSearchParams: Record<string, Untyped> = {};
+  const nonDefaultSearchParams: QSParams = {};
 
   Object.keys(parsedQueryStrings).forEach((key) => {
     if (!QS_CONFIG.defaultParams[key]) {
-      nonDefaultSearchParams[key] = parsedQueryStrings[key];
+      nonDefaultSearchParams[key] = parsedQueryStrings[key] as QSParamValue;
     }
   });
 
   const hasAnsibleFactsKeys = () => {
-    const nonDefaultSearchValues: Untyped[] = Object.values(
-      nonDefaultSearchParams
-    );
+    const nonDefaultSearchValues = Object.values(nonDefaultSearchParams);
     return (
-      nonDefaultSearchValues.filter((value) => value.includes('ansible_facts'))
-        .length > 0
+      nonDefaultSearchValues.filter((value) =>
+        String(value).includes('ansible_facts')
+      ).length > 0
     );
   };
 

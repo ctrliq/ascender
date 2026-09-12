@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { Button, Tooltip } from '@patternfly/react-core';
@@ -13,8 +12,8 @@ import { ProjectsAPI } from 'api';
 import getProjectHelpStrings from './Project.helptext';
 
 export interface ProjectSyncButtonProps {
-  projectId: Untyped;
-  lastJobStatus?: Untyped;
+  projectId: number;
+  lastJobStatus?: string | null;
   [key: string]: unknown;
 }
 
@@ -34,7 +33,9 @@ function ProjectSyncButton({
   );
   const { error, dismissError } = useDismissableError(syncError);
   const isDetailsView = pathname.endsWith('/details');
-  const isDisabled = ['pending', 'waiting', 'running'].includes(lastJobStatus);
+  const isDisabled = ['pending', 'waiting', 'running'].includes(
+    lastJobStatus ?? ''
+  );
 
   return (
     <>

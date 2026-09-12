@@ -1,4 +1,4 @@
-import type { Host, Untyped } from 'types/api';
+import type { ApiEntity, Host } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useParams } from 'react-router';
 
@@ -134,10 +134,10 @@ function HostGroupsList({ host }: HostGroupsListProps) {
 
   const { request: handleAssociate, error: associateError } = useRequest(
     useCallback(
-      async (groupsToAssociate: Untyped) => {
+      async (groupsToAssociate: ApiEntity[]) => {
         await Promise.all(
-          groupsToAssociate.map((group: Untyped) =>
-            HostsAPI.associateGroup(hostId, group.id)
+          groupsToAssociate.map((group) =>
+            HostsAPI.associateGroup(hostId, group.id as number)
           )
         );
         fetchGroups();
