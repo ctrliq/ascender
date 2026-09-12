@@ -3,7 +3,7 @@
 
 from django.urls import path
 
-from awx.api.views import WorkflowApprovalList, WorkflowApprovalDetail, WorkflowApprovalApprove, WorkflowApprovalDeny, WorkflowApprovalVotesList
+from awx.api.views.workflow import WorkflowApprovalList, WorkflowApprovalDetail, WorkflowApprovalApprove, WorkflowApprovalDeny, WorkflowApprovalVotesList
 
 urls = [
     path('', WorkflowApprovalList.as_view(), name='workflow_approval_list'),
