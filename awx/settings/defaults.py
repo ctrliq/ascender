@@ -895,14 +895,6 @@ SATELLITE6_INSTANCE_ID_VAR = 'foreman_id,foreman.id'
 # SATELLITE6_GROUP_PREFIX and SATELLITE6_GROUP_PATTERNS defined in source vars
 
 # ----------------
-# -- Red Hat Insights --
-# ----------------
-# INSIGHTS_ENABLED_VAR =
-# INSIGHTS_ENABLED_VALUE =
-INSIGHTS_INSTANCE_ID_VAR = 'insights_id'
-INSIGHTS_EXCLUDE_EMPTY_GROUPS = False
-
-# ----------------
 # -- Terraform State --
 # ----------------
 # TERRAFORM_ENABLED_VAR =
@@ -952,8 +944,6 @@ DISABLE_LOCAL_AUTH = False
 TOWER_URL_BASE = "https://ascenderhost"
 
 INSIGHTS_AGENT_MIME = 'application/example'
-# See https://github.com/ansible/awx-facts-playbooks
-INSIGHTS_SYSTEM_ID_FILE = '/etc/redhat-access-insights/machine-id'
 INSIGHTS_CERT_PATH = "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
 
 # Settings related to external logger configuration
