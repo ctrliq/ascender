@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import {
   getScaleAndOffsetToFit,
   generateLine,
@@ -188,7 +187,13 @@ describe('layoutGraph', () => {
     },
   ];
   test('returns the correct dimensions and positions for the nodes', () => {
-    const laidOut = (layoutGraph(nodes, links) as Untyped)._nodes;
+    // dagre keeps the laid-out nodes on a private field of the graph it
+    // answers with, which its own types do not name.
+    const laidOut = (
+      layoutGraph(nodes, links) as unknown as {
+        _nodes: Record<string, { x: number; y: number }>;
+      }
+    )._nodes;
     // assert geometry only: @dagrejs/dagre also leaves internal rank/order
     // metadata on the nodes, and sibling order within a rank (which of
     // nodes 2/4 sits on top) is an arbitrary layout decision
@@ -209,7 +214,7 @@ describe('layoutGraph', () => {
     [laidOut[2], laidOut[4]].forEach((node) => {
       expect(node).toMatchObject({ height: 60, label: '', width: 180, x: 282 });
     });
-    expect([laidOut[2].y, laidOut[4].y].sort((a, b) => a - b)).toEqual([
+    expect([laidOut[2]!.y, laidOut[4]!.y].sort((a, b) => a - b)).toEqual([
       30, 120,
     ]);
   });

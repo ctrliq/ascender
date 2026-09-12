@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import {
@@ -8,6 +7,7 @@ import {
   ExecutionEnvironmentsAPI,
 } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import { mockReadOptions } from '../../../../testUtils/apiMocks';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventorySourceForm from './InventorySourceForm';
 
@@ -48,18 +48,16 @@ describe('<InventorySourceForm />', () => {
     vi.mocked(ProjectsAPI.readInventories).mockResolvedValue({
       data: ['foo', 'bar'],
     } as unknown as ResponseOf<typeof ProjectsAPI.readInventories>);
-    (InventorySourcesAPI as Untyped).readOptions = async () =>
-      readOptionsResult as unknown as ResponseOf<
-        typeof ProjectsAPI.readInventories
-      >;
+    mockReadOptions(InventorySourcesAPI, readOptionsResult.data);
     // The ExecutionEnvironmentLookup rendered by the form fetches EEs on mount;
     // mock its API calls so loading settles without console errors.
     vi.mocked(ExecutionEnvironmentsAPI.read).mockResolvedValue({
       data: { count: 0, results: [] },
     } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.read>);
-    vi.mocked(ExecutionEnvironmentsAPI.readOptions).mockResolvedValue({
-      data: { actions: { GET: {} }, related_search_fields: [] },
-    } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readOptions>);
+    mockReadOptions(ExecutionEnvironmentsAPI, {
+      actions: { GET: {} },
+      related_search_fields: [],
+    });
   });
 
   afterEach(() => {
@@ -150,10 +148,9 @@ describe('<InventorySourceForm />', () => {
   });
 
   test('should display ContentError on throw', async () => {
-    (InventorySourcesAPI as Untyped).readOptions = vi.fn();
-    vi.mocked(InventorySourcesAPI.readOptions).mockRejectedValueOnce(
-      new Error()
-    );
+    // Shadowed on the model for the same reason mockReadOptions is: the
+    // inherited readOptions is one mock shared by every model.
+    InventorySourcesAPI.readOptions = () => Promise.reject(new Error());
     renderWithContexts(
       <InventorySourceForm onCancel={() => {}} onSubmit={() => {}} />
     );

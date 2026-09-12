@@ -142,7 +142,9 @@ describe('<CredentialDetail />', () => {
   });
 
   test('handleDelete should call api', async () => {
-    (CredentialsAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
+    vi.mocked(CredentialsAPI.destroy).mockResolvedValue(
+      {} as unknown as ResponseOf<typeof CredentialsAPI.destroy>
+    );
     const { user } = await renderDetail();
 
     await user.click(screen.getByRole('button', { name: 'Delete' }));
@@ -156,9 +158,7 @@ describe('<CredentialDetail />', () => {
   });
 
   test('should show error modal when credential is not successfully deleted from api', async () => {
-    (CredentialsAPI as Untyped).destroy = vi
-      .fn()
-      .mockRejectedValueOnce(new Error());
+    vi.mocked(CredentialsAPI.destroy).mockRejectedValueOnce(new Error());
     const { user } = await renderDetail();
 
     await user.click(screen.getByRole('button', { name: 'Delete' }));

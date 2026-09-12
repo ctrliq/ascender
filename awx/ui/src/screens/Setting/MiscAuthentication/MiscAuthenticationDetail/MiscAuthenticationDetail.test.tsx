@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { SettingsProvider } from 'contexts/Settings';
@@ -16,7 +15,6 @@ vi.mock('../../../../api');
 
 describe('<MiscAuthenticationDetail />', () => {
   beforeEach(() => {
-    (SettingsAPI as Untyped).readCategory = vi.fn();
     vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
       data: {
         SESSION_COOKIE_AGE: 1800,

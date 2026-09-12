@@ -204,13 +204,13 @@ describe('<JobTemplateEdit />', () => {
       project: 3,
       execution_environment: null,
     };
-    delete (expected as Untyped).summary_fields;
-    delete (expected as Untyped).id;
-    delete (expected as Untyped).type;
-    delete (expected as Untyped).related;
-    delete (expected as Untyped).webhook_key;
-    delete (expected as Untyped).webhook_url;
-    delete (expected as Untyped).webhook_credential;
+    delete (expected as Record<string, unknown>).summary_fields;
+    delete (expected as Record<string, unknown>).id;
+    delete (expected as Record<string, unknown>).type;
+    delete (expected as Record<string, unknown>).related;
+    delete (expected as Record<string, unknown>).webhook_key;
+    delete (expected as Record<string, unknown>).webhook_url;
+    delete (expected as Record<string, unknown>).webhook_credential;
 
     await waitFor(() =>
       expect(JobTemplatesAPI.update).toHaveBeenCalledWith(1, {

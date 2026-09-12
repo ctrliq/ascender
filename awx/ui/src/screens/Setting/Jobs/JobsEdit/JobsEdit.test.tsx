@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import type { TestHistory } from 'history';
@@ -131,7 +130,7 @@ describe('<JobsEdit />', () => {
     };
     // If AWX_ISOLATION_BASE_PATH has been set in a settings file it will be
     // absent in the PUT options
-    delete (mockOptions.PUT as Untyped).AWX_ISOLATION_BASE_PATH;
+    delete (mockOptions.PUT as Record<string, unknown>).AWX_ISOLATION_BASE_PATH;
     const { user } = await mountEdit(mockOptions);
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));

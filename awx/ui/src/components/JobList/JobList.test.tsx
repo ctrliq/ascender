@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import {
@@ -12,6 +11,7 @@ import {
   InventorySourcesAPI,
 } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
+import { mockInherited } from '../../../testUtils/apiMocks';
 import {
   renderWithContexts,
   settleTooltips,
@@ -214,12 +214,17 @@ describe('<JobList />', () => {
     vi.mocked(UnifiedJobsAPI.read).mockResolvedValue({
       data: { count: 6, results: deletableResults },
     } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
-    (AdHocCommandsAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
-    (InventoryUpdatesAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
-    (JobsAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
-    (ProjectUpdatesAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
-    (SystemJobsAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
-    (WorkflowJobsAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
+    // Each model gets its own destroy: they inherit one from Base, so the
+    // counts below would otherwise all be the same function's.
+    const destroyAdHoc = mockInherited(AdHocCommandsAPI, 'destroy');
+    const destroyInventoryUpdate = mockInherited(
+      InventoryUpdatesAPI,
+      'destroy'
+    );
+    const destroyJob = mockInherited(JobsAPI, 'destroy');
+    const destroyProjectUpdate = mockInherited(ProjectUpdatesAPI, 'destroy');
+    const destroySystemJob = mockInherited(SystemJobsAPI, 'destroy');
+    const destroyWorkflowJob = mockInherited(WorkflowJobsAPI, 'destroy');
 
     const { user } = renderWithContexts(<JobList />);
     await screen.findByRole('link', { name: '1 — job 1' });
@@ -231,12 +236,12 @@ describe('<JobList />', () => {
     );
 
     await waitFor(() => {
-      expect(AdHocCommandsAPI.destroy).toHaveBeenCalledTimes(1);
-      expect(InventoryUpdatesAPI.destroy).toHaveBeenCalledTimes(1);
-      expect(JobsAPI.destroy).toHaveBeenCalledTimes(1);
-      expect(ProjectUpdatesAPI.destroy).toHaveBeenCalledTimes(1);
-      expect(SystemJobsAPI.destroy).toHaveBeenCalledTimes(1);
-      expect(WorkflowJobsAPI.destroy).toHaveBeenCalledTimes(1);
+      expect(destroyAdHoc).toHaveBeenCalledTimes(1);
+      expect(destroyInventoryUpdate).toHaveBeenCalledTimes(1);
+      expect(destroyJob).toHaveBeenCalledTimes(1);
+      expect(destroyProjectUpdate).toHaveBeenCalledTimes(1);
+      expect(destroySystemJob).toHaveBeenCalledTimes(1);
+      expect(destroyWorkflowJob).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -264,7 +269,9 @@ describe('<JobList />', () => {
         ],
       },
     } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
-    (ProjectUpdatesAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
+    vi.mocked(ProjectUpdatesAPI.destroy).mockResolvedValue(
+      {} as unknown as ResponseOf<typeof ProjectUpdatesAPI.destroy>
+    );
     const jobListParams = {
       order_by: '-finished',
       not__launch_type: 'sync',
@@ -393,12 +400,14 @@ describe('<JobList />', () => {
         })),
       },
     } as unknown as ResponseOf<typeof UnifiedJobsAPI.read>);
-    (AdHocCommandsAPI as Untyped).cancel = vi.fn().mockResolvedValue({});
-    (InventoryUpdatesAPI as Untyped).cancel = vi.fn().mockResolvedValue({});
-    (JobsAPI as Untyped).cancel = vi.fn().mockResolvedValue({});
-    (ProjectUpdatesAPI as Untyped).cancel = vi.fn().mockResolvedValue({});
-    (SystemJobsAPI as Untyped).cancel = vi.fn().mockResolvedValue({});
-    (WorkflowJobsAPI as Untyped).cancel = vi.fn().mockResolvedValue({});
+    // Each model gets its own cancel, so the assertions below say which
+    // model was asked rather than only that some model was.
+    const cancelAdHoc = mockInherited(AdHocCommandsAPI, 'cancel');
+    const cancelInventoryUpdate = mockInherited(InventoryUpdatesAPI, 'cancel');
+    const cancelJob = mockInherited(JobsAPI, 'cancel');
+    const cancelProjectUpdate = mockInherited(ProjectUpdatesAPI, 'cancel');
+    const cancelSystemJob = mockInherited(SystemJobsAPI, 'cancel');
+    const cancelWorkflowJob = mockInherited(WorkflowJobsAPI, 'cancel');
 
     const { user } = renderWithContexts(<JobList />);
     await screen.findByRole('link', { name: '1 — job 1' });
@@ -410,12 +419,12 @@ describe('<JobList />', () => {
     await user.click(dialog.querySelector('#cancel-job-confirm-button')!);
 
     await waitFor(() => {
-      expect(ProjectUpdatesAPI.cancel).toHaveBeenCalledWith(1);
-      expect(JobsAPI.cancel).toHaveBeenCalledWith(2);
-      expect(InventoryUpdatesAPI.cancel).toHaveBeenCalledWith(3);
-      expect(WorkflowJobsAPI.cancel).toHaveBeenCalledWith(4);
-      expect(SystemJobsAPI.cancel).toHaveBeenCalledWith(5);
-      expect(AdHocCommandsAPI.cancel).toHaveBeenCalledWith(6);
+      expect(cancelProjectUpdate).toHaveBeenCalledWith(1);
+      expect(cancelJob).toHaveBeenCalledWith(2);
+      expect(cancelInventoryUpdate).toHaveBeenCalledWith(3);
+      expect(cancelWorkflowJob).toHaveBeenCalledWith(4);
+      expect(cancelSystemJob).toHaveBeenCalledWith(5);
+      expect(cancelAdHoc).toHaveBeenCalledWith(6);
     });
   });
 

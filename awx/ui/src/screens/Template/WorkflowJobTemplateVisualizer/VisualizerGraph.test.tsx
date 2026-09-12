@@ -1,10 +1,16 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
 import { WorkflowStateContext } from 'contexts/Workflow';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import VisualizerGraph from './VisualizerGraph';
 import type { WorkflowState } from '../../../components/Workflow/workflowReducer';
+
+// jsdom implements none of the SVG geometry the graph measures, so the suite
+// patches these onto the prototype and takes them off again afterwards.
+const svgPrototype = window.SVGElement.prototype as unknown as Record<
+  string,
+  unknown
+>;
 
 const workflowContext = {
   links: [
@@ -108,17 +114,17 @@ const renderGraph = (contextOverrides = {}) =>
 
 describe('VisualizerGraph', () => {
   beforeAll(() => {
-    (window.SVGElement.prototype as Untyped).height = {
+    svgPrototype.height = {
       baseVal: {
         value: 100,
       },
     };
-    (window.SVGElement.prototype as Untyped).width = {
+    svgPrototype.width = {
       baseVal: {
         value: 100,
       },
     };
-    (window.SVGElement.prototype as Untyped).getBBox = () => ({
+    svgPrototype.getBBox = () => ({
       x: 0,
       y: 0,
       width: 500,
@@ -139,10 +145,10 @@ describe('VisualizerGraph', () => {
   });
 
   afterAll(() => {
-    delete (window.SVGElement.prototype as Untyped).getBBox;
-    delete (window.SVGElement.prototype as Untyped).getBoundingClientRect;
-    delete (window.SVGElement.prototype as Untyped).height;
-    delete (window.SVGElement.prototype as Untyped).width;
+    delete svgPrototype.getBBox;
+    delete svgPrototype.getBoundingClientRect;
+    delete svgPrototype.height;
+    delete svgPrototype.width;
   });
 
   test('mounts successfully', () => {

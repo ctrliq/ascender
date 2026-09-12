@@ -1,7 +1,7 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { ConfigAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import SubscriptionModal from './SubscriptionModal';
 
@@ -44,9 +44,9 @@ describe('<SubscriptionModal />', () => {
     const onClose = vi.fn();
 
     async function setup() {
-      (ConfigAPI as Untyped).readSubscriptions = vi.fn().mockResolvedValue({
+      vi.mocked(ConfigAPI.readSubscriptions).mockResolvedValue({
         data: mockSubscriptions.map((s) => ({ ...s })),
-      });
+      } as unknown as ResponseOf<typeof ConfigAPI.readSubscriptions>);
       const utils = renderWithContexts(
         <SubscriptionModal
           subscriptionCreds={{ username: 'admin', password: '$encrypted' }}
@@ -101,9 +101,9 @@ describe('<SubscriptionModal />', () => {
     });
 
     test('should auto-select current selected subscription', async () => {
-      (ConfigAPI as Untyped).readSubscriptions = vi.fn().mockResolvedValue({
+      vi.mocked(ConfigAPI.readSubscriptions).mockResolvedValue({
         data: mockSubscriptions.map((s) => ({ ...s })),
-      });
+      } as unknown as ResponseOf<typeof ConfigAPI.readSubscriptions>);
       renderWithContexts(
         <SubscriptionModal
           onClose={() => {}}
@@ -135,9 +135,7 @@ describe('<SubscriptionModal />', () => {
   });
 
   test('should display error detail message', async () => {
-    (ConfigAPI as Untyped).readSubscriptions = vi
-      .fn()
-      .mockRejectedValueOnce(new Error());
+    vi.mocked(ConfigAPI.readSubscriptions).mockRejectedValueOnce(new Error());
     renderWithContexts(
       <SubscriptionModal
         onClose={() => {}}

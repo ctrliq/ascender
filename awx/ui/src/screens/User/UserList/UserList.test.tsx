@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UsersAPI } from 'api';
@@ -129,7 +128,6 @@ describe('UsersList with full permissions', () => {
   let user: TestUser;
 
   beforeEach(async () => {
-    (UsersAPI as Untyped).destroy = vi.fn();
     vi.mocked(UsersAPI.read).mockResolvedValue({
       data: {
         count: mockUsers.length,

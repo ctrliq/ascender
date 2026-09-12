@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -45,8 +44,6 @@ function renderProject(initialEntry = '/projects/1/details') {
 
 describe('<Project />', () => {
   beforeEach(() => {
-    (OrganizationsAPI as Untyped).read = vi.fn();
-    (ProjectsAPI as Untyped).readDetail = vi.fn();
     vi.mocked(ProjectsAPI.readDetail).mockResolvedValue({
       data: mockDetails,
     } as unknown as ResponseOf<typeof ProjectsAPI.readDetail>);
@@ -77,12 +74,12 @@ describe('<Project />', () => {
   });
 
   test('notifications tab hidden with reduced permissions', async () => {
-    (OrganizationsAPI as Untyped).read = async () => ({
+    vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       count: 0,
       next: null,
       previous: null,
       data: { results: [] },
-    });
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     renderProject();
     await screen.findByRole('tab', { name: 'Details' });
 
@@ -93,12 +90,12 @@ describe('<Project />', () => {
   });
 
   test('schedules tab shown for scm based projects', async () => {
-    (OrganizationsAPI as Untyped).read = async () => ({
+    vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       count: 0,
       next: null,
       previous: null,
       data: { results: [] },
-    });
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     renderProject();
     await screen.findByRole('tab', { name: 'Details' });
 
@@ -109,13 +106,15 @@ describe('<Project />', () => {
 
   test('schedules tab hidden for manual projects', async () => {
     const manualDetails = { ...mockDetails, scm_type: '' };
-    (ProjectsAPI as Untyped).readDetail = async () => ({ data: manualDetails });
-    (OrganizationsAPI as Untyped).read = async () => ({
+    vi.mocked(ProjectsAPI.readDetail).mockResolvedValue({
+      data: manualDetails,
+    } as unknown as ResponseOf<typeof ProjectsAPI.readDetail>);
+    vi.mocked(OrganizationsAPI.read).mockResolvedValue({
       count: 0,
       next: null,
       previous: null,
       data: { results: [] },
-    });
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     renderProject();
     await screen.findByRole('tab', { name: 'Details' });
 

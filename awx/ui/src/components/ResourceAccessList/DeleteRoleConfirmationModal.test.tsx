@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -42,7 +41,7 @@ describe('<DeleteRoleConfirmationModal />', () => {
     // use a per-test copy without team_id so the shared role fixture (and test
     // order) is not affected
     const userRole = { ...role };
-    delete (userRole as Untyped).team_id;
+    delete (userRole as Record<string, unknown>).team_id;
     renderWithContexts(
       <DeleteRoleConfirmationModal
         role={userRole}

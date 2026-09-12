@@ -164,7 +164,9 @@ describe('<HostList />', () => {
   });
 
   test('api is called to delete hosts for each selected host.', async () => {
-    (HostsAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
+    vi.mocked(HostsAPI.destroy).mockResolvedValue(
+      {} as unknown as ResponseOf<typeof HostsAPI.destroy>
+    );
     const { user } = renderWithContexts(<HostList />);
     await screen.findByRole('link', { name: 'Host 1' });
 

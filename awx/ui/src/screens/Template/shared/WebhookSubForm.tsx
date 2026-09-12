@@ -47,7 +47,10 @@ function WebhookSubForm({ templateType }: WebhookSubFormProps) {
   // Projects use the webhook to trigger an SCM update, so there is no
   // credential to post job statuses back with and no payload variables.
   const isProject = templateType === 'project';
-  const helpText = isProject ? getProjectHelpText() : getHelpText();
+  // Kept apart as well as merged: only the template strings name a webhook
+  // credential, and the branch that uses it is the one isProject rules out.
+  const templateHelpText = getHelpText();
+  const helpText = isProject ? getProjectHelpText() : templateHelpText;
 
   const [webhookServiceField, webhookServiceMeta, webhookServiceHelpers] =
     useField('webhook_service');
@@ -240,7 +243,7 @@ function WebhookSubForm({ templateType }: WebhookSubFormProps) {
       {!isProject && credTypeId && (
         <CredentialLookup
           label={t`Webhook Credential`}
-          tooltip={(helpText as Untyped).webhookCredential}
+          tooltip={templateHelpText.webhookCredential}
           credentialTypeId={credTypeId}
           onChange={onCredentialChange}
           isValid={!webhookCredentialMeta.error}

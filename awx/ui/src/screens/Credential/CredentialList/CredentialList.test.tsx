@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import {
@@ -108,7 +107,9 @@ describe('<CredentialList />', () => {
   });
 
   test('should call api delete credentials for each selected credential', async () => {
-    (CredentialsAPI as Untyped).destroy = vi.fn().mockResolvedValue({});
+    vi.mocked(CredentialsAPI.destroy).mockResolvedValue(
+      {} as unknown as ResponseOf<typeof CredentialsAPI.destroy>
+    );
     const { user } = renderWithContexts(<CredentialList />);
     await screen.findByRole('link', { name: 'Baz' });
 
@@ -126,9 +127,7 @@ describe('<CredentialList />', () => {
   });
 
   test('should show error modal when credential is not successfully deleted from api', async () => {
-    (CredentialsAPI as Untyped).destroy = vi
-      .fn()
-      .mockRejectedValueOnce(new Error());
+    vi.mocked(CredentialsAPI.destroy).mockRejectedValueOnce(new Error());
     const { user } = renderWithContexts(<CredentialList />);
     await screen.findByRole('link', { name: 'Foo' });
 

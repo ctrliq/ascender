@@ -1,4 +1,4 @@
-import type { Untyped, Project } from 'types/api';
+import type { Project } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import {
@@ -62,7 +62,8 @@ describe('PromptProjectDetail', () => {
       ...mockProject,
       summary_fields: { ...mockProject.summary_fields },
     };
-    delete (deletedProject.summary_fields as Untyped).organization;
+    delete (deletedProject.summary_fields as Record<string, unknown>)
+      .organization;
     renderWithContexts(
       <PromptProjectDetail resource={deletedProject as unknown as Project} />,
       {

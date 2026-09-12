@@ -450,6 +450,145 @@ const mockJobTemplate = {
   project: 5,
 };
 
+// Every mocked endpoint the wizard reads, in one place: the config sets
+// mockReset, so each test needs these put back rather than inheriting
+// them from whichever describe ran first.
+function mockWizardEndpoints() {
+  vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
+    data: {
+      count: 1,
+      results: [mockJobTemplate],
+    },
+  } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
+  vi.mocked(JobTemplatesAPI.readOptions).mockResolvedValue({
+    data: {
+      actions: {
+        GET: {},
+        POST: {},
+      },
+      related_search_fields: [],
+    },
+  } as unknown as ResponseOf<typeof JobTemplatesAPI.readOptions>);
+  vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue({
+    data: jtLaunchConfig,
+  } as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>);
+  vi.mocked(JobTemplatesAPI.readCredentials).mockResolvedValue({
+    data: {
+      results: [],
+    },
+  } as unknown as ResponseOf<typeof JobTemplatesAPI.readCredentials>);
+  vi.mocked(JobTemplatesAPI.readSurvey).mockResolvedValue({
+    data: {
+      name: '',
+      description: '',
+      spec: [
+        {
+          question_name: 'Foo',
+          required: true,
+          variable: 'bar',
+          type: 'text',
+          default: 'answer',
+        },
+      ],
+      type: 'text',
+      variable: 'bar',
+    },
+  } as unknown as ResponseOf<typeof JobTemplatesAPI.readSurvey>);
+  vi.mocked(ProjectsAPI.read).mockResolvedValue({
+    data: {
+      count: 1,
+      results: [
+        {
+          id: 1,
+          name: 'Test Project',
+          type: 'project',
+          url: '/api/v2/projects/1',
+        },
+      ],
+    },
+  } as unknown as ResponseOf<typeof ProjectsAPI.read>);
+  vi.mocked(ProjectsAPI.readOptions).mockResolvedValue({
+    data: {
+      actions: {
+        GET: {},
+        POST: {},
+      },
+      related_search_fields: [],
+    },
+  } as unknown as ResponseOf<typeof ProjectsAPI.readOptions>);
+  vi.mocked(InventorySourcesAPI.read).mockResolvedValue({
+    data: {
+      count: 1,
+      results: [
+        {
+          id: 1,
+          name: 'Test Inventory Source',
+          type: 'inventory_source',
+          url: '/api/v2/inventory_sources/1',
+        },
+      ],
+    },
+  } as unknown as ResponseOf<typeof InventorySourcesAPI.read>);
+  vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
+    data: {
+      actions: {
+        GET: {},
+        POST: {},
+      },
+      related_search_fields: [],
+    },
+  } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
+  vi.mocked(WorkflowJobTemplatesAPI.read).mockResolvedValue({
+    data: {
+      count: 1,
+      results: [
+        {
+          id: 1,
+          name: 'Test Workflow Job Template',
+          type: 'workflow_job_template',
+          url: '/api/v2/workflow_job_templates/1',
+        },
+      ],
+    },
+  } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.read>);
+  vi.mocked(WorkflowJobTemplatesAPI.readOptions).mockResolvedValue({
+    data: {
+      actions: {
+        GET: {},
+        POST: {},
+      },
+      related_search_fields: [],
+    },
+  } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readOptions>);
+  vi.mocked(WorkflowJobTemplatesAPI.readLaunch).mockResolvedValue({
+    data: {
+      ask_inventory_on_launch: false,
+      ask_limit_on_launch: false,
+      ask_scm_branch_on_launch: false,
+      can_start_without_user_input: false,
+      defaults: {
+        extra_vars: '---',
+        inventory: {
+          name: null,
+          id: null,
+        },
+        limit: '',
+        scm_branch: '',
+      },
+      survey_enabled: false,
+      variables_needed_to_start: [],
+      node_templates_missing: [],
+      node_prompts_rejected: [272, 273],
+      workflow_job_template_data: {
+        name: 'jt',
+        id: 53,
+        description: '',
+      },
+      ask_variables_on_launch: false,
+    },
+  } as unknown as ResponseOf<typeof WorkflowJobTemplatesAPI.readLaunch>);
+}
+
 describe('NodeModal', () => {
   beforeEach(async () => {
     vi.mocked(useUserProfile).mockImplementation(() => ({
@@ -459,148 +598,7 @@ describe('NodeModal', () => {
       isNotificationAdmin: 0,
       isExecEnvAdmin: 0,
     }));
-    (JobTemplatesAPI as Untyped).read = vi.fn();
-    vi.mocked(JobTemplatesAPI.read).mockResolvedValue({
-      data: {
-        count: 1,
-        results: [mockJobTemplate],
-      },
-    } as unknown as ResponseOf<typeof JobTemplatesAPI.read>);
-    (JobTemplatesAPI as Untyped).readOptions = vi.fn();
-    vi.mocked(JobTemplatesAPI.readOptions).mockResolvedValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-        related_search_fields: [],
-      },
-    } as unknown as ResponseOf<typeof JobTemplatesAPI.readOptions>);
-    (JobTemplatesAPI as Untyped).readLaunch = vi.fn();
-    vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue({
-      data: jtLaunchConfig,
-    } as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>);
-    (JobTemplatesAPI as Untyped).readCredentials = vi.fn();
-    vi.mocked(JobTemplatesAPI.readCredentials).mockResolvedValue({
-      data: {
-        results: [],
-      },
-    } as unknown as ResponseOf<typeof JobTemplatesAPI.readCredentials>);
-    (JobTemplatesAPI as Untyped).readSurvey = vi.fn();
-    vi.mocked(JobTemplatesAPI.readSurvey).mockResolvedValue({
-      data: {
-        name: '',
-        description: '',
-        spec: [
-          {
-            question_name: 'Foo',
-            required: true,
-            variable: 'bar',
-            type: 'text',
-            default: 'answer',
-          },
-        ],
-        type: 'text',
-        variable: 'bar',
-      },
-    } as unknown as ResponseOf<typeof JobTemplatesAPI.readSurvey>);
-    (ProjectsAPI as Untyped).read = vi.fn();
-    vi.mocked(ProjectsAPI.read).mockResolvedValue({
-      data: {
-        count: 1,
-        results: [
-          {
-            id: 1,
-            name: 'Test Project',
-            type: 'project',
-            url: '/api/v2/projects/1',
-          },
-        ],
-      },
-    } as unknown as ResponseOf<typeof ProjectsAPI.read>);
-    (ProjectsAPI as Untyped).readOptions = vi.fn();
-    vi.mocked(ProjectsAPI.readOptions).mockResolvedValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-        related_search_fields: [],
-      },
-    } as unknown as ResponseOf<typeof ProjectsAPI.readOptions>);
-    (InventorySourcesAPI as Untyped).read = vi.fn();
-    vi.mocked(InventorySourcesAPI.read).mockResolvedValue({
-      data: {
-        count: 1,
-        results: [
-          {
-            id: 1,
-            name: 'Test Inventory Source',
-            type: 'inventory_source',
-            url: '/api/v2/inventory_sources/1',
-          },
-        ],
-      },
-    } as unknown as ResponseOf<typeof InventorySourcesAPI.read>);
-    (InventorySourcesAPI as Untyped).readOptions = vi.fn();
-    vi.mocked(InventorySourcesAPI.readOptions).mockResolvedValue({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-        related_search_fields: [],
-      },
-    } as unknown as ResponseOf<typeof InventorySourcesAPI.readOptions>);
-    (WorkflowJobTemplatesAPI as Untyped).read = async () => ({
-      data: {
-        count: 1,
-        results: [
-          {
-            id: 1,
-            name: 'Test Workflow Job Template',
-            type: 'workflow_job_template',
-            url: '/api/v2/workflow_job_templates/1',
-          },
-        ],
-      },
-    });
-    (WorkflowJobTemplatesAPI as Untyped).readOptions = async () => ({
-      data: {
-        actions: {
-          GET: {},
-          POST: {},
-        },
-        related_search_fields: [],
-      },
-    });
-    (WorkflowJobTemplatesAPI as Untyped).readLaunch = async () => ({
-      data: {
-        ask_inventory_on_launch: false,
-        ask_limit_on_launch: false,
-        ask_scm_branch_on_launch: false,
-        can_start_without_user_input: false,
-        defaults: {
-          extra_vars: '---',
-          inventory: {
-            name: null,
-            id: null,
-          },
-          limit: '',
-          scm_branch: '',
-        },
-        survey_enabled: false,
-        variables_needed_to_start: [],
-        node_templates_missing: [],
-        node_prompts_rejected: [272, 273],
-        workflow_job_template_data: {
-          name: 'jt',
-          id: 53,
-          description: '',
-        },
-        ask_variables_on_launch: false,
-      },
-    });
+    mockWizardEndpoints();
     renderWithContexts(
       <WorkflowDispatchContext.Provider value={dispatch}>
         <WorkflowStateContext.Provider
@@ -919,6 +917,7 @@ describe('Edit existing node', () => {
       isNotificationAdmin: 0,
       isExecEnvAdmin: 0,
     }));
+    mockWizardEndpoints();
   });
 
   afterEach(() => {

@@ -4,6 +4,7 @@ import { screen, waitFor, within, fireEvent } from '@testing-library/react';
 import type { TestHistory } from 'history';
 import { createMemoryHistory } from 'history';
 import { ConfigAPI, MeAPI, SettingsAPI, RootAPI, UsersAPI } from 'api';
+import type { ResponseOf } from '../../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import SubscriptionEdit from './SubscriptionEdit';
 
@@ -69,13 +70,15 @@ describe('<SubscriptionEdit />', () => {
 
     async function renderFresh() {
       vi.resetAllMocks();
-      (RootAPI as Untyped).readAssetVariables = async () => ({
+      vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
         data: {
           BRAND_NAME: 'Mock',
           PENDO_API_KEY: '',
         },
-      });
-      (SettingsAPI as Untyped).readCategory = async () => ({ data: {} });
+      } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
+      vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
+        data: {},
+      } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
       history = createMemoryHistory({
         initialEntries: ['/settings/subscription_managment'],
       });
@@ -178,16 +181,24 @@ describe('<SubscriptionEdit />', () => {
 
       // submit successfully
       (global.window as Untyped).pendo = { initialize: async () => ({}) };
-      (ConfigAPI as Untyped).read = async () => ({ data: mockConfig });
-      (MeAPI as Untyped).read = async () => ({
+      vi.mocked(ConfigAPI.read).mockResolvedValue({
+        data: mockConfig,
+      } as unknown as ResponseOf<typeof ConfigAPI.read>);
+      vi.mocked(MeAPI.read).mockResolvedValue({
         data: { results: [{ is_superuser: true }] },
-      });
-      (ConfigAPI as Untyped).attach = async () => ({});
-      (ConfigAPI as Untyped).create = async () => ({ data: mockConfig });
-      (SettingsAPI as Untyped).updateCategory = async () => ({});
-      (UsersAPI as Untyped).readAdminOfOrganizations = async () => ({
+      } as unknown as ResponseOf<typeof MeAPI.read>);
+      vi.mocked(ConfigAPI.attach).mockResolvedValue(
+        {} as unknown as ResponseOf<typeof ConfigAPI.attach>
+      );
+      vi.mocked(ConfigAPI.create).mockResolvedValue({
+        data: mockConfig,
+      } as unknown as ResponseOf<typeof ConfigAPI.create>);
+      vi.mocked(SettingsAPI.updateCategory).mockResolvedValue(
+        {} as unknown as ResponseOf<typeof SettingsAPI.updateCategory>
+      );
+      vi.mocked(UsersAPI.readAdminOfOrganizations).mockResolvedValue({
         data: {},
-      });
+      } as unknown as ResponseOf<typeof UsersAPI.readAdminOfOrganizations>);
 
       fireEvent.click(submit);
       expect(await screen.findByText('Save successful!')).toBeInTheDocument();
@@ -208,18 +219,18 @@ describe('<SubscriptionEdit />', () => {
 
     async function renderEdit() {
       vi.resetAllMocks();
-      (RootAPI as Untyped).readAssetVariables = async () => ({
+      vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
         data: { BRAND_NAME: 'Mock', PENDO_API_KEY: '' },
-      });
-      (SettingsAPI as Untyped).readCategory = async () => ({
+      } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
+      vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
         data: {
           SUBSCRIPTIONS_PASSWORD: 'mock_password',
           SUBSCRIPTIONS_USERNAME: 'mock_username',
           INSIGHTS_TRACKING_STATE: false,
           PENDO: 'off',
         },
-      });
-      (ConfigAPI as Untyped).readSubscriptions = async () => ({
+      } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
+      vi.mocked(ConfigAPI.readSubscriptions).mockResolvedValue({
         data: [
           {
             subscription_name: 'mock subscription 50 instances',
@@ -228,7 +239,7 @@ describe('<SubscriptionEdit />', () => {
             pool_id: 999,
           },
         ],
-      });
+      } as unknown as ResponseOf<typeof ConfigAPI.readSubscriptions>);
       history = createMemoryHistory({
         initialEntries: ['/settings/subscription/edit'],
       });
@@ -339,15 +350,21 @@ describe('<SubscriptionEdit />', () => {
       expect(submit).not.toBeDisabled();
 
       // submit successfully
-      (ConfigAPI as Untyped).read = async () => ({ data: mockConfig });
-      (MeAPI as Untyped).read = async () => ({
+      vi.mocked(ConfigAPI.read).mockResolvedValue({
+        data: mockConfig,
+      } as unknown as ResponseOf<typeof ConfigAPI.read>);
+      vi.mocked(MeAPI.read).mockResolvedValue({
         data: { results: [{ is_superuser: true }] },
-      });
-      (ConfigAPI as Untyped).attach = async () => ({});
-      (ConfigAPI as Untyped).create = async () => ({});
-      (UsersAPI as Untyped).readAdminOfOrganizations = async () => ({
+      } as unknown as ResponseOf<typeof MeAPI.read>);
+      vi.mocked(ConfigAPI.attach).mockResolvedValue(
+        {} as unknown as ResponseOf<typeof ConfigAPI.attach>
+      );
+      vi.mocked(ConfigAPI.create).mockResolvedValue(
+        {} as unknown as ResponseOf<typeof ConfigAPI.create>
+      );
+      vi.mocked(UsersAPI.readAdminOfOrganizations).mockResolvedValue({
         data: {},
-      });
+      } as unknown as ResponseOf<typeof UsersAPI.readAdminOfOrganizations>);
       fireEvent.click(submit);
       expect(await screen.findByText('Save successful!')).toBeInTheDocument();
     });
@@ -367,9 +384,7 @@ describe('<SubscriptionEdit />', () => {
 
   test('shows a content error when asset variables fail to load', async () => {
     vi.resetAllMocks();
-    (RootAPI as Untyped).readAssetVariables = vi
-      .fn()
-      .mockRejectedValueOnce(new Error());
+    vi.mocked(RootAPI.readAssetVariables).mockRejectedValueOnce(new Error());
     renderWithContexts(<SubscriptionEdit />, {
       context: { config: emptyConfig },
     });

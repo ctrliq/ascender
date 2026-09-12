@@ -71,7 +71,8 @@ describe('PromptInventorySourceDetail', () => {
       ...mockInvSource,
       summary_fields: { ...mockInvSource.summary_fields },
     };
-    delete (deletedInvSource.summary_fields as Untyped).organization;
+    delete (deletedInvSource.summary_fields as Record<string, unknown>)
+      .organization;
     renderWithContexts(
       <PromptInventorySourceDetail resource={deletedInvSource} />
     );

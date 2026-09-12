@@ -114,9 +114,9 @@ describe('PromptJobTemplateDetail', () => {
       ...mockJT,
       summary_fields: { ...mockJT.summary_fields },
     };
-    delete (deletedJT.summary_fields as Untyped).inventory;
-    delete (deletedJT.summary_fields as Untyped).organization;
-    delete (deletedJT.summary_fields as Untyped).project;
+    delete (deletedJT.summary_fields as Record<string, unknown>).inventory;
+    delete (deletedJT.summary_fields as Record<string, unknown>).organization;
+    delete (deletedJT.summary_fields as Record<string, unknown>).project;
 
     renderWithContexts(
       <PromptJobTemplateDetail

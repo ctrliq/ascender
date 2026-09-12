@@ -14,7 +14,6 @@ let loadSchedules: Untyped;
 let loadScheduleOptions: Untyped;
 
 function setupMocks() {
-  (SchedulesAPI as Untyped).destroy = vi.fn();
   vi.mocked(SchedulesAPI.update).mockResolvedValue({
     data: mockSchedules.results[0],
   } as unknown as ResponseOf<typeof SchedulesAPI.update>);
