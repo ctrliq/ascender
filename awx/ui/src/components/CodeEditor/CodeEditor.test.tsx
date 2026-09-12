@@ -1,151 +1,99 @@
 import React from 'react';
-import { fireEvent, screen, act } from '@testing-library/react';
+import { act } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import CodeEditor from './CodeEditor';
 
-/** The react-ace props CodeEditor sets, which the stub below renders back. */
-interface AceProps {
-  mode?: string;
-  value?: string;
-  onChange?: (value: string) => void;
-  name?: string;
-  height?: string;
-  minLines?: number;
-  maxLines?: number;
-  setOptions?: { readOnly?: boolean };
-}
-
-// CodeEditor pulls in ace-builds mode/theme files for their side effects; those
-// expect the global `ace` that the real react-ace sets up on import. Since we
-// mock react-ace below, neutralize those side-effect imports so they don't throw.
-vi.mock('ace-builds/src-noconflict/mode-json', () => ({}));
-vi.mock('ace-builds/src-noconflict/mode-javascript', () => ({}));
-vi.mock('ace-builds/src-noconflict/mode-yaml', () => ({}));
-vi.mock('ace-builds/src-noconflict/mode-django', () => ({}));
-vi.mock('ace-builds/src-noconflict/theme-twilight', () => ({}));
-vi.mock('ace-builds/src-noconflict/ext-searchbox', () => ({}));
-
-// Mock react-ace so the controlled props CodeEditor passes through
-// (mode/value/setOptions/onChange) are observable. Under jsdom the real
-// react-ace keeps its value in an internal model that never reaches the DOM and
-// editing it fires no onChange, so we render those props onto a textarea and
-// forward edits to onChange instead.
-vi.mock('react-ace', async () => {
-  const ReactMock = await vi.importActual<typeof import('react')>('react');
-  // class component so CodeEditor's ref (editor.current.refEditor) resolves
-  class AceMock extends ReactMock.Component<AceProps> {
-    refEditor: HTMLDivElement | null = null;
-
-    render() {
-      const {
-        mode,
-        value,
-        onChange,
-        setOptions,
-        name,
-        height,
-        minLines,
-        maxLines,
-      } = this.props;
-      return ReactMock.createElement(
-        'div',
-        {
-          ref: (el: HTMLDivElement | null) => {
-            this.refEditor = el;
-          },
-        },
-        ReactMock.createElement('textarea', {
-          'data-testid': 'ace-editor',
-          'data-mode': mode,
-          'data-height': height,
-          'data-min-lines': minLines,
-          'data-max-lines': maxLines,
-          name,
-          value,
-          readOnly: !!(setOptions && setOptions.readOnly),
-          onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) =>
-            onChange && onChange(e.target.value),
-        })
-      );
-    }
-  }
-  return { __esModule: true, default: AceMock };
-});
+const content = () => document.querySelector('.cm-content') as HTMLElement;
 
 describe('CodeEditor', () => {
-  it('should render the ace editor in the requested mode with the given value', () => {
-    const onChange = vi.fn();
+  it('should render the value, one line per line', () => {
     renderWithContexts(
-      <CodeEditor
-        id="code"
-        value={'---\nfoo: bar'}
-        onChange={onChange}
-        mode="yaml"
-      />
+      <CodeEditor id="code" value={'---\nfoo: bar'} mode="yaml" />
     );
-    const editor = screen.getByTestId('ace-editor');
-    // mode is mapped through aceModes (yaml -> yaml) and passed to the editor
-    expect(editor).toHaveAttribute('data-mode', 'yaml');
-    // the controlled value is passed through
-    expect(editor).toHaveValue('---\nfoo: bar');
-    // not read only -> editor is editable
-    expect(editor).not.toHaveAttribute('readonly');
+    expect(content()).toBeInTheDocument();
+    expect(content().textContent).toBe('---foo: bar');
+    expect(document.querySelectorAll('.cm-line')).toHaveLength(2);
+  });
+
+  it('should be editable by default and carry the id it was given', () => {
+    renderWithContexts(<CodeEditor id="code" value="---" mode="yaml" />);
+    expect(content()).toHaveAttribute('contenteditable', 'true');
+    expect(content()).toHaveAttribute('id', 'code');
+    expect(content()).toHaveAttribute('role', 'textbox');
   });
 
   it('should render in read only mode', () => {
-    const onChange = vi.fn();
     renderWithContexts(
-      <CodeEditor
-        id="code"
-        value="---"
-        onChange={onChange}
-        mode="yaml"
-        readOnly
-      />
+      <CodeEditor id="code" value="---" mode="yaml" readOnly />
     );
-    // readOnly is forwarded via setOptions.readOnly
-    expect(screen.getByTestId('ace-editor')).toHaveAttribute('readonly');
+    expect(content()).toHaveAttribute('contenteditable', 'false');
   });
 
-  it('should trigger the onChange prop (debounced) on edit', () => {
-    vi.useFakeTimers();
-    try {
-      const onChange = vi.fn();
-      renderWithContexts(
-        <CodeEditor id="code" value="---" onChange={onChange} mode="yaml" />
-      );
-      fireEvent.change(screen.getByTestId('ace-editor'), {
-        target: { value: '---\nfoo: bar' },
+  it('should replace the document when the value changes from outside', () => {
+    const { rerender } = renderWithContexts(
+      <CodeEditor id="code" value="one: 1" mode="yaml" />
+    );
+    expect(content().textContent).toBe('one: 1');
+    rerender(<CodeEditor id="code" value="two: 2" mode="yaml" />);
+    expect(content().textContent).toBe('two: 2');
+  });
+
+  it('should trigger the onChange prop (debounced) on edit', async () => {
+    const user = userEvent.setup();
+    const onChange = vi.fn();
+    renderWithContexts(
+      <CodeEditor id="code" value="" onChange={onChange} mode="yaml" />
+    );
+
+    await user.click(content());
+    await user.keyboard('hi');
+
+    expect(onChange).not.toHaveBeenCalled();
+    await act(async () => {
+      await new Promise((resolve) => {
+        setTimeout(resolve, 300);
       });
-      // CodeEditor wraps onChange in debounce(onChange, 250)
-      act(() => {
-        vi.advanceTimersByTime(300);
-      });
-      expect(onChange).toHaveBeenCalledWith('---\nfoo: bar');
-    } finally {
-      vi.useRealTimers();
-    }
+    });
+    expect(onChange).toHaveBeenCalledWith('hi');
+  });
+
+  it('should name itself after the label that points at it', () => {
+    renderWithContexts(
+      <>
+        <label htmlFor="code">Variables</label>
+        <CodeEditor id="code" value="---" mode="yaml" />
+      </>
+    );
+    const label = document.querySelector('label') as HTMLLabelElement;
+    expect(content()).toHaveAttribute('aria-labelledby', label.id);
+    expect(label.id).toBeTruthy();
+  });
+
+  it('should fall back to a generic name where no label points at it', () => {
+    renderWithContexts(<CodeEditor id="lonely" value="---" mode="yaml" />);
+    expect(content()).toHaveAttribute('aria-label', 'Code editor');
   });
 
   describe('height', () => {
     // one row is 24px, plus 8px for the margins above and below
+    const scroller = () =>
+      window.getComputedStyle(
+        document.querySelector('.cm-scroller') as HTMLElement
+      );
+
     it('is a fixed number of rows by default', () => {
       renderWithContexts(<CodeEditor id="ed" mode="yaml" value="a: 1" />);
-      const editor = screen.getByTestId('ace-editor');
-      expect(editor).toHaveAttribute('data-height', '152px');
-      expect(editor).not.toHaveAttribute('data-min-lines');
-      expect(editor).not.toHaveAttribute('data-max-lines');
+      expect(scroller().height).toBe('152px');
     });
 
-    it('lets ace size the box to the content in auto mode, never below minRows', () => {
+    it('sizes the box to the content in auto mode, never below minRows', () => {
       renderWithContexts(
         <CodeEditor id="ed" mode="yaml" value="a: 1" rows="auto" minRows={4} />
       );
-      const editor = screen.getByTestId('ace-editor');
-      expect(editor).toHaveAttribute('data-height', 'auto');
-      expect(editor).toHaveAttribute('data-min-lines', '4');
+      expect(scroller().minHeight).toBe('104px');
       // capped by default, so a long value cannot grow the editor without bound
-      expect(editor).toHaveAttribute('data-max-lines', '50');
+      expect(scroller().maxHeight).toBe('1208px');
     });
 
     it('caps the auto height at maxRows', () => {
@@ -159,10 +107,7 @@ describe('CodeEditor', () => {
           maxRows={12}
         />
       );
-      expect(screen.getByTestId('ace-editor')).toHaveAttribute(
-        'data-max-lines',
-        '12'
-      );
+      expect(scroller().maxHeight).toBe('296px');
     });
   });
 });

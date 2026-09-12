@@ -4,19 +4,22 @@ import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import VariablesDetail from './VariablesDetail';
 
 // VariablesDetail renders a YAML/JSON MultiButtonToggle and a read-only
-// CodeEditor (react-ace). Under jsdom react-ace's value is held in an internal
-// model and never reaches the DOM, so the editor *text* (formatted JSON,
-// yaml<->json conversion, "---"/"{}" defaults) is unobservable. The active
-// `mode` IS observable: MultiButtonToggle marks the selected button
-// variant="primary" -> class pf-m-primary (inactive -> pf-m-secondary). So the
-// original `CodeEditor.prop('mode')` checks are asserted via which toggle
-// button is primary, and value-content checks are noted as unobservable.
+// CodeEditor. The editor holds its document in the DOM, one element per line,
+// so the text it shows is assertable: editorText() reads it back. The active
+// `mode` is observable too, through MultiButtonToggle marking the selected
+// button variant="primary" -> class pf-m-primary (inactive -> pf-m-secondary).
 
 beforeEach(() => {
   (
     document.body as unknown as { createTextRange: () => void }
   ).createTextRange = vi.fn();
 });
+
+/** The editor's document, read back out of the DOM one line at a time. */
+const editorText = () =>
+  Array.from(document.querySelectorAll('.cm-line'))
+    .map((line) => (line.textContent ?? '').replace(/\u00a0/g, ' '))
+    .join('\n');
 
 const yamlActive = () =>
   screen
@@ -32,15 +35,16 @@ describe('<VariablesDetail>', () => {
     const { container } = renderWithContexts(
       <VariablesDetail value="---foo: bar" label="Variables" name="test" />
     );
-    // a single read-only ace editor is rendered
-    const editors = container.querySelectorAll('.ace_editor');
-    expect(editors).toHaveLength(1);
-    expect(container.querySelector('textarea')).toHaveAttribute('readonly');
+    // a single read-only editor is rendered, showing the value it was given
+    expect(container.querySelectorAll('.cm-editor')).toHaveLength(1);
+    expect(container.querySelector('.cm-content')).toHaveAttribute(
+      'contenteditable',
+      'false'
+    );
+    expect(editorText()).toBe('---foo: bar');
     // mode === 'yaml' -> YAML toggle is the active (primary) button
     expect(yamlActive()).toBe(true);
     expect(jsonActive()).toBe(false);
-    // NOTE: original also asserted CodeEditor value === '---foo: bar';
-    // ace holds its value internally so it is not observable through the DOM.
   });
 
   test('should detect JSON', () => {
@@ -52,9 +56,12 @@ describe('<VariablesDetail>', () => {
     expect(yamlActive()).toBe(false);
   });
 
-  // NOTE: original "should format JSON" asserted the CodeEditor value was the
-  // pretty-printed '{\n  "foo": "bar"\n}'. That value lives in ace's internal
-  // model and is not observable through the DOM, so there is no RTL equivalent.
+  test('should format JSON', () => {
+    renderWithContexts(
+      <VariablesDetail value='{"foo": "bar"}' label="Variables" name="test" />
+    );
+    expect(editorText()).toBe('{\n  "foo": "bar"\n}');
+  });
 
   test('should convert between modes', async () => {
     const { user } = renderWithContexts(
@@ -65,22 +72,40 @@ describe('<VariablesDetail>', () => {
     await user.click(screen.getByRole('button', { name: 'JSON' }));
     expect(jsonActive()).toBe(true);
     expect(yamlActive()).toBe(false);
+    // the fixture is a single line, so yaml reads '---foo' as the key
+    expect(editorText()).toBe('{\n  "---foo": "bar"\n}');
 
     await user.click(screen.getByRole('button', { name: 'YAML' }));
     expect(yamlActive()).toBe(true);
     expect(jsonActive()).toBe(false);
-    // NOTE: original also asserted the converted CodeEditor value in each mode
-    // ('{\n  "foo": "bar"\n}' / '---foo: bar'); not observable through ace's DOM.
+    expect(editorText()).toBe('---foo: bar');
   });
 
   test('should render label and an editor when there are no values', () => {
     const { container } = renderWithContexts(
       <VariablesDetail value="" label="Variables" name="test" />
     );
-    expect(container.querySelectorAll('.ace_editor')).toHaveLength(1);
+    expect(container.querySelectorAll('.cm-editor')).toHaveLength(1);
     expect(container.querySelector('.pf-v6-c-form__label')).toHaveTextContent(
       'Variables'
     );
+  });
+
+  test('should default an empty yaml value to ---', () => {
+    renderWithContexts(
+      <VariablesDetail value="" label="Variables" name="test" />
+    );
+    expect(yamlActive()).toBe(true);
+    expect(editorText()).toBe('---');
+  });
+
+  test('should default an empty json value to {}', async () => {
+    const { user } = renderWithContexts(
+      <VariablesDetail value="" label="Variables" name="test" />
+    );
+    await user.click(screen.getByRole('button', { name: 'JSON' }));
+    expect(jsonActive()).toBe(true);
+    expect(editorText()).toBe('{}');
   });
 
   test('offers no expand button: the editor grows with its content', () => {
@@ -103,15 +128,9 @@ describe('<VariablesDetail>', () => {
     rerender(
       <VariablesDetail value="---bar: baz" label="Variables" name="test" />
     );
-    // mode is preserved (still JSON) after the value prop changes
+    // mode is preserved (still JSON) after the value prop changes, and the new
+    // value is converted into it
     expect(jsonActive()).toBe(true);
-    // NOTE: original also asserted the recomputed CodeEditor value
-    // ('{\n  "bar": "baz"\n}'); ace's value is not observable through the DOM.
+    expect(editorText()).toBe('{\n  "---bar": "baz"\n}');
   });
-
-  // NOTE: original "should default yaml value to '---'" and "should default
-  // empty json to '{}'" asserted the CodeEditor value the empty-state default
-  // produces. Those defaults are fed into ace's internal model and do not
-  // surface to the DOM, so they have no RTL equivalent; the mode that drives
-  // each default is exercised by the tests above.
 });

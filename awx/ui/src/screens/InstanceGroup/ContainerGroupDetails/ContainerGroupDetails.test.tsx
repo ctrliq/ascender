@@ -100,7 +100,6 @@ describe('<ContainerGroupDetails/>', () => {
       'href',
       '/credentials/71'
     );
-    // react-ace renders empty under jsdom, so assert the pod-spec label only.
     expect(screen.getByText('Pod spec override')).toBeInTheDocument();
   });
 

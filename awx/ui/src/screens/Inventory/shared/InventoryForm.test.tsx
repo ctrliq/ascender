@@ -107,8 +107,6 @@ describe('<InventoryForm />', () => {
     expect(screen.getByText('Description')).toBeInTheDocument();
     expect(screen.getByText('Organization')).toBeInTheDocument();
     expect(screen.getByText('Instance Groups')).toBeInTheDocument();
-    // react-ace renders empty under jsdom, so the CodeEditor's '---' value
-    // can't be read; assert the VariablesField's "Variables" label instead.
     expect(screen.getByText('Variables')).toBeInTheDocument();
   });
 

@@ -163,7 +163,6 @@ describe('OtherPromptsStep', () => {
   });
 
   test('should render variables field', async () => {
-    // react-ace renders empty under jsdom, so assert the surrounding label.
     // VariablesField does an async Formik update on mount; findBy settles it
     // inside act so the console-error trap stays quiet.
     renderWithContexts(

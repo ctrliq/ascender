@@ -74,7 +74,6 @@ describe('<AdHocDetailsStep />', () => {
     expect(document.querySelector('#template-forks')).toBeInTheDocument(); // forks
     expect(screen.getByText('Show changes')).toBeInTheDocument();
     expect(document.querySelector('#become_enabled')).toBeInTheDocument();
-    // VariablesField (react-ace) renders empty under jsdom; assert its label
     expect(screen.getByText('Extra variables')).toBeInTheDocument();
   });
 

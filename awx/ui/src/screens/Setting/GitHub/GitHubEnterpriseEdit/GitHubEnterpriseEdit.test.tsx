@@ -104,8 +104,7 @@ describe('<GitHubEnterpriseEdit />', () => {
     await user.type(urlInput!, 'https://localhost');
     await user.click(container.querySelector('button[aria-label="Save"]')!);
     await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
-    // org/team maps start as null and are not editable in jsdom (react-ace
-    // renders empty); they pass through unchanged.
+    // this test edits no org/team map, so both pass through unchanged
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       SOCIAL_AUTH_GITHUB_ENTERPRISE_URL: 'https://localhost',
       SOCIAL_AUTH_GITHUB_ENTERPRISE_API_URL: '',
