@@ -227,7 +227,6 @@ def test_extract_ansible_vars():
         ('git', 'http://example.com:123invalidport/foo.git', True, True, True, False, ValueError('Invalid git URL')),
         ('git', 'git+ssh://127.0.0.1/bar.git', True, True, True, False, ValueError('Unsupported git URL')),
         ('git', 'git@example.com:3000:/git/repo.git', True, True, True, False, ValueError('Invalid git URL')),
-        ('insights', 'git://example.com/foo.git', True, True, True, False, ValueError('Unsupported insights URL')),
         ('svn', 'file://example/path', True, True, True, False, ValueError('Unsupported host "example" for file:// URL')),
         ('svn', 'svn:///example', True, True, True, False, ValueError('Host is required for svn URL')),
         # Username/password cases

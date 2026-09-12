@@ -1,0 +1,159 @@
+import type {
+  Label,
+  LaunchCredential,
+  NodeTemplate,
+  Schedule,
+  SummaryFieldRef,
+} from 'types/api';
+import React, { useState } from 'react';
+import { ExpandableSection } from '@patternfly/react-core';
+import Wizard from 'components/Wizard';
+import { useLingui } from '@lingui/react/macro';
+import { useFormikContext } from 'formik';
+import { useDismissableError } from 'hooks/useRequest';
+import type { SurveyConfig, LaunchConfig } from 'components/LaunchPrompt/types';
+import AlertModal from '../../AlertModal';
+import ContentError from '../../ContentError';
+import ContentLoading from '../../ContentLoading';
+import useSchedulePromptSteps from './useSchedulePromptSteps';
+import type { ScheduleFormValues } from './types';
+
+export interface SchedulePromptableFieldsProps {
+  schedule: Schedule;
+  surveyConfig?: SurveyConfig | null;
+  launchConfig?: LaunchConfig;
+  onCloseWizard: () => void;
+  onSave: () => void;
+  credentials: LaunchCredential[];
+  resource: NodeTemplate;
+  resourceDefaultCredentials?: LaunchCredential[] | null;
+  labels: Label[];
+  instanceGroups: SummaryFieldRef[];
+  [key: string]: unknown;
+}
+
+function SchedulePromptableFields({
+  schedule,
+  surveyConfig,
+  launchConfig,
+  onCloseWizard,
+  onSave,
+  credentials,
+  resource,
+  resourceDefaultCredentials,
+  labels,
+  instanceGroups,
+}: SchedulePromptableFieldsProps) {
+  const { setFieldTouched, values, initialValues, resetForm } =
+    useFormikContext<ScheduleFormValues>();
+  const {
+    steps,
+    visitStep,
+    visitAllSteps,
+    validateStep,
+    contentError,
+    isReady,
+  } = useSchedulePromptSteps(
+    // The wizard only opens for a resource that prompts, which is what having
+    // these means.
+    surveyConfig as SurveyConfig,
+    launchConfig as LaunchConfig,
+    schedule,
+    resource,
+    credentials,
+    resourceDefaultCredentials,
+    labels,
+    instanceGroups
+  );
+  const [showDescription, setShowDescription] = useState(false);
+  const { error, dismissError } = useDismissableError(contentError);
+  const cancelPromptableValues = async () => {
+    resetForm({
+      values: {
+        ...initialValues,
+        description: values.description,
+        frequency: values.frequency,
+        name: values.name,
+        startDateTime: values.startDateTime,
+        timezone: values.timezone,
+      },
+    });
+    onCloseWizard();
+  };
+
+  const { t } = useLingui();
+  if (error) {
+    return (
+      <AlertModal
+        isOpen={error}
+        variant="error"
+        title={t`Error!`}
+        onClose={() => {
+          dismissError();
+          onCloseWizard();
+        }}
+      >
+        <ContentError error={error} />
+      </AlertModal>
+    );
+  }
+  return (
+    <Wizard
+      isOpen
+      onClose={cancelPromptableValues}
+      onSave={onSave}
+      onBack={async (nextStep) => {
+        validateStep(nextStep.id as string);
+      }}
+      onNext={async (nextStep, prevStep) => {
+        if (nextStep.id === 'preview') {
+          visitAllSteps(setFieldTouched);
+        } else {
+          visitStep(prevStep.prevId as string, setFieldTouched);
+          validateStep(nextStep.id as string);
+        }
+      }}
+      onGoToStep={async (nextStep, prevStep) => {
+        if (nextStep.id === 'preview') {
+          visitAllSteps(setFieldTouched);
+        } else {
+          visitStep(prevStep.prevId as string, setFieldTouched);
+          validateStep(nextStep.id as string);
+        }
+      }}
+      title={t`Prompt | ${resource.name}`}
+      description={
+        (resource.description?.length ?? 0) > 512 ? (
+          <ExpandableSection
+            toggleText={
+              showDescription ? t`Hide description` : t`Show description`
+            }
+            onToggle={(_event, isExpanded) => {
+              setShowDescription(isExpanded);
+            }}
+            isExpanded={showDescription}
+          >
+            {resource.description as React.ReactNode}
+          </ExpandableSection>
+        ) : (
+          resource.description
+        )
+      }
+      steps={
+        isReady
+          ? steps
+          : [
+              {
+                name: t`Content Loading`,
+                component: <ContentLoading />,
+              },
+            ]
+      }
+      backButtonText={t`Back`}
+      cancelButtonText={t`Cancel`}
+      nextButtonText={t`Next`}
+    />
+  );
+}
+
+export default SchedulePromptableFields;

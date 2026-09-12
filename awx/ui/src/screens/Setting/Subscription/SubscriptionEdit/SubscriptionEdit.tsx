@@ -1,0 +1,294 @@
+import type { SubscriptionPool } from 'api/models/Config';
+import React, { useCallback, useEffect } from 'react';
+import { Link, useMatch, useNavigate } from 'react-router';
+import { Trans, useLingui } from '@lingui/react/macro';
+import { Formik, useFormikContext } from 'formik';
+import {
+  Alert,
+  AlertGroup,
+  Button,
+  Form,
+  WizardFooterWrapper,
+  useWizardContext,
+} from '@patternfly/react-core';
+import Wizard from 'components/Wizard';
+import { ConfigAPI, SettingsAPI, RootAPI } from 'api';
+import useRequest, { useDismissableError } from 'hooks/useRequest';
+import ContentLoading from 'components/ContentLoading';
+import ContentError from 'components/ContentError';
+import { FormSubmitError } from 'components/FormField';
+import { useConfig } from 'contexts/Config';
+import SubscriptionStep from './SubscriptionStep';
+import AnalyticsStep from './AnalyticsStep';
+import EulaStep from './EulaStep';
+
+/**
+ * What the subscription wizard collects: a manifest the user uploaded, or a
+ * subscription picked off their account, and what each analytics switch is set
+ * to. A run of the wizard uses one of the first two, never both.
+ */
+export interface SubscriptionFormValues {
+  manifest_file?: string | null;
+  manifest_filename?: string;
+  subscription?: SubscriptionPool | null;
+  insights?: boolean;
+  pendo?: boolean;
+  eula?: boolean;
+  [key: string]: unknown;
+}
+
+export interface CustomFooterProps {
+  isSubmitLoading: boolean;
+  [key: string]: unknown;
+}
+
+const CustomFooter = ({ isSubmitLoading }: CustomFooterProps) => {
+  const { t } = useLingui();
+  const { values, errors } = useFormikContext<SubscriptionFormValues>();
+  const { me, license_info } = useConfig();
+  const navigate = useNavigate();
+  const { activeStep, goToNextStep, goToPrevStep } = useWizardContext();
+
+  return (
+    <WizardFooterWrapper>
+      {activeStep.id === 'eula-step' ? (
+        <Button
+          id="subscription-wizard-submit"
+          aria-label={t`Submit`}
+          variant="primary"
+          onClick={goToNextStep}
+          isDisabled={
+            (!values.manifest_file && !values.subscription) ||
+            !me?.is_superuser ||
+            Object.keys(errors).length !== 0
+          }
+          type="button"
+          ouiaId="subscription-wizard-submit"
+          isLoading={isSubmitLoading}
+        >
+          <Trans>Submit</Trans>
+        </Button>
+      ) : (
+        <Button
+          id="subscription-wizard-next"
+          ouiaId="subscription-wizard-next"
+          variant="primary"
+          onClick={goToNextStep}
+          type="button"
+        >
+          <Trans>Next</Trans>
+        </Button>
+      )}
+      <Button
+        id="subscription-wizard-back"
+        variant="secondary"
+        ouiaId="subscription-wizard-back"
+        onClick={goToPrevStep}
+        isDisabled={activeStep.id === 'subscription-step'}
+        type="button"
+      >
+        <Trans>Back</Trans>
+      </Button>
+      {license_info?.valid_key && (
+        <Button
+          id="subscription-wizard-cancel"
+          ouiaId="subscription-wizard-cancel"
+          variant="link"
+          aria-label={t`Cancel subscription edit`}
+          onClick={() => navigate('/settings/subscription/details')}
+        >
+          <Trans>Cancel</Trans>
+        </Button>
+      )}
+    </WizardFooterWrapper>
+  );
+};
+
+function SubscriptionEdit() {
+  const { t } = useLingui();
+  const navigate = useNavigate();
+  const { request: updateConfig, license_info } = useConfig();
+  const hasValidKey = Boolean(license_info?.valid_key);
+  const subscriptionMgmtRoute = useMatch({
+    path: '/subscription_management',
+    end: false,
+  });
+
+  const {
+    isLoading: isContentLoading,
+    error: contentError,
+    request: fetchContent,
+    result: { brandName },
+  } = useRequest(
+    useCallback(async () => {
+      const {
+        data: { BRAND_NAME },
+      } = await RootAPI.readAssetVariables();
+      return {
+        brandName: BRAND_NAME,
+      };
+    }, []),
+    {
+      brandName: null,
+    }
+  );
+
+  useEffect(() => {
+    if (subscriptionMgmtRoute && hasValidKey) {
+      navigate('/settings/subscription/edit');
+    }
+    fetchContent();
+  }, [fetchContent]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const {
+    error: submitError,
+    isLoading: submitLoading,
+    result: submitSuccessful,
+    request: submitRequest,
+  } = useRequest(
+    useCallback(async (form: SubscriptionFormValues) => {
+      if (form.manifest_file) {
+        await ConfigAPI.create({
+          manifest: form.manifest_file,
+        });
+      } else if (form.subscription) {
+        await ConfigAPI.attach({ pool_id: form.subscription.pool_id });
+      }
+
+      if (!hasValidKey) {
+        if (form.pendo) {
+          await SettingsAPI.updateCategory('ui', {
+            PENDO_TRACKING_STATE: 'detailed',
+          });
+        } else {
+          await SettingsAPI.updateCategory('ui', {
+            PENDO_TRACKING_STATE: 'off',
+          });
+        }
+
+        if (form.insights) {
+          await SettingsAPI.updateCategory('system', {
+            INSIGHTS_TRACKING_STATE: true,
+          });
+        } else {
+          await SettingsAPI.updateCategory('system', {
+            INSIGHTS_TRACKING_STATE: false,
+          });
+        }
+      }
+
+      await updateConfig?.();
+
+      return true;
+    }, []) // eslint-disable-line react-hooks/exhaustive-deps
+  );
+
+  useEffect(() => {
+    if (submitSuccessful) {
+      setTimeout(() => {
+        navigate(
+          subscriptionMgmtRoute ? '/home' : '/settings/subscription/details'
+        );
+      }, 3000);
+    }
+    // navigate is not referentially stable in react-router-dom
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [submitSuccessful, subscriptionMgmtRoute]);
+
+  const { error, dismissError } = useDismissableError(submitError);
+  const handleSubmit = async (values: SubscriptionFormValues) => {
+    dismissError();
+    await submitRequest(values);
+  };
+
+  if (isContentLoading) {
+    return <ContentLoading />;
+  }
+
+  if (contentError) {
+    return <ContentError />;
+  }
+
+  const steps = [
+    {
+      name: hasValidKey
+        ? t`Subscription Management`
+        : t`${brandName} Subscription`,
+      id: 'subscription-step',
+      component: <SubscriptionStep />,
+    },
+    ...(!hasValidKey
+      ? [
+          {
+            name: t`User and Automation Analytics`,
+            id: 'analytics-step',
+            component: <AnalyticsStep />,
+          },
+        ]
+      : []),
+    {
+      name: t`End user license agreement`,
+      component: <EulaStep />,
+      id: 'eula-step',
+      nextButtonText: t`Submit`,
+    },
+  ];
+
+  return (
+    <>
+      <Formik
+        initialValues={{
+          insights: true,
+          manifest_file: null,
+          manifest_filename: '',
+          pendo: true,
+          subscription: null,
+          password: '',
+          username: '',
+        }}
+        onSubmit={handleSubmit}
+      >
+        {(formik) => (
+          <Form
+            onSubmit={(e) => {
+              e.preventDefault();
+            }}
+          >
+            <Wizard
+              steps={steps}
+              onSave={formik.handleSubmit}
+              footer={<CustomFooter isSubmitLoading={submitLoading} />}
+              height="fit-content"
+            />
+            {Boolean(error) && (
+              <div style={{ margin: '0 24px 24px 24px' }}>
+                <FormSubmitError error={error} />
+              </div>
+            )}
+          </Form>
+        )}
+      </Formik>
+      <AlertGroup isToast>
+        {submitSuccessful && (
+          <Alert
+            variant="success"
+            title={t`Save successful!`}
+            ouiaId="success-alert"
+          >
+            {subscriptionMgmtRoute ? (
+              <Link to="/home">
+                <Trans>Redirecting to dashboard</Trans>
+              </Link>
+            ) : (
+              <Link to="/settings/subscription/details">
+                <Trans>Redirecting to subscription detail</Trans>
+              </Link>
+            )}
+          </Alert>
+        )}
+      </AlertGroup>
+    </>
+  );
+}
+
+export default SubscriptionEdit;
