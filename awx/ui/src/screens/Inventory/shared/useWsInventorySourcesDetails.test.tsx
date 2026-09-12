@@ -9,7 +9,11 @@ import useWsInventorySourceDetails from './useWsInventorySourcesDetails';
 
 vi.mock('../../../api/models/InventorySources');
 
-function Test({ inventorySource }: Untyped) {
+function Test({
+  inventorySource,
+}: {
+  inventorySource: Parameters<typeof useWsInventorySourceDetails>[0];
+}) {
   const synced = useWsInventorySourceDetails(inventorySource);
   // expose the hook result as JSON so the test can assert on it via the DOM
   return <div data-testid="result">{JSON.stringify(synced)}</div>;

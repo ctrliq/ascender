@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
 import WS from 'vitest-websocket-mock';
@@ -14,7 +13,11 @@ vi.mock('./useThrottle', () => ({
   default: vi.fn((val) => val),
 }));
 
-function Test({ templates }: Untyped) {
+function Test({
+  templates,
+}: {
+  templates: Parameters<typeof useWsTemplates>[0];
+}) {
   const syncedTemplates = useWsTemplates(templates);
   return <div data-testid="templates">{JSON.stringify(syncedTemplates)}</div>;
 }

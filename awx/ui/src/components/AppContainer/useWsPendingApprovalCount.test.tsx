@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { act, screen } from '@testing-library/react';
 import WS from 'vitest-websocket-mock';
@@ -11,10 +10,16 @@ vi.mock('../../hooks/useThrottle', () => ({
   default: vi.fn((val) => val),
 }));
 
-function TestInner({ count }: Untyped) {
+function TestInner({ count }: { count: number }) {
   return <div data-testid="count">{count}</div>;
 }
-function Test({ initialCount, fetchApprovalsCount }: Untyped) {
+function Test({
+  initialCount,
+  fetchApprovalsCount,
+}: {
+  initialCount: Parameters<typeof useWsPendingApprovalCount>[0];
+  fetchApprovalsCount: Parameters<typeof useWsPendingApprovalCount>[1];
+}) {
   const updatedWorkflowApprovals = useWsPendingApprovalCount(
     initialCount,
     fetchApprovalsCount

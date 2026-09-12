@@ -1,4 +1,4 @@
-import type { Inventory, Untyped } from 'types/api';
+import type { Inventory, SummaryFieldRef, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -56,14 +56,14 @@ function ConstructedInventoryFormFields({
       },
     });
   const handleOrganizationUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('organization', value);
       setFieldTouched('organization', true, false);
     },
     [setFieldValue, setFieldTouched]
   );
   const handleInputInventoriesUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('inputInventories', value);
       setFieldTouched('inputInventories', true, false);
     },

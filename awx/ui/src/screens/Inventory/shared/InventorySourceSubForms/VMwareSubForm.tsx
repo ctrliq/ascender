@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback } from 'react';
 import { useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -35,7 +35,7 @@ const VMwareSubForm = ({ autoPopulateCredential }: VMwareSubFormProps) => {
   const [pluginField, , pluginHelpers] = useField('vmware_plugin');
   const config = useConfig();
   const handleCredentialUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('credential', value);
       setFieldTouched('credential', true, false);
     },

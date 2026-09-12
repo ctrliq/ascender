@@ -1,11 +1,21 @@
-import type { Untyped } from 'types/api';
 import { useState, useEffect } from 'react';
 import useWebsocket from 'hooks/useWebsocket';
 import useThrottle from 'hooks/useThrottle';
 
+/**
+ * Keeps the pending approval count in the navigation in step with the
+ * websocket.
+ *
+ * Args:
+ *   initialCount: the count the container last fetched.
+ *   fetchApprovalsCount: re-reads it, throttled to once a second.
+ *
+ * Returns:
+ *   The count, re-read whenever a workflow approval changes.
+ */
 export default function useWsPendingApprovalCount(
-  initialCount: unknown,
-  fetchApprovalsCount: Untyped
+  initialCount: number,
+  fetchApprovalsCount: () => void
 ) {
   const [pendingApprovalCount, setPendingApprovalCount] =
     useState(initialCount);

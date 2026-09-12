@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { SyncAltIcon } from '@patternfly/react-icons';
 import { useParams, useLocation } from 'react-router';
@@ -102,7 +102,7 @@ function WebhookSubForm({ templateType }: WebhookSubFormProps) {
   };
 
   const onCredentialChange = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('webhook_credential', value || null);
     },
     [setFieldValue]

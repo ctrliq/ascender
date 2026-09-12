@@ -1,5 +1,5 @@
 import type { CurrentUser } from 'contexts/Config';
-import type { ExecutionEnvironment, Untyped } from 'types/api';
+import type { ExecutionEnvironment, SummaryFieldRef, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -51,14 +51,14 @@ function ExecutionEnvironmentFormFields({
     useFormikContext<Record<string, unknown>>();
 
   const onCredentialChange = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('credential', value);
     },
     [setFieldValue]
   );
 
   const handleOrganizationUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('organization', value);
       setFieldTouched('organization', true, false);
     },

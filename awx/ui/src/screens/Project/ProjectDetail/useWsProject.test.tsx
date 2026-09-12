@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Project } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import WS from 'vitest-websocket-mock';
@@ -9,8 +9,8 @@ import useWsProject from './useWsProject';
 
 vi.mock('../../../api/models/Projects');
 
-function Test({ project }: Untyped) {
-  const synced = useWsProject(project);
+function Test({ project }: { project: Partial<Project> }) {
+  const synced = useWsProject(project as Project);
   return <div data-testid="result">{JSON.stringify(synced)}</div>;
 }
 

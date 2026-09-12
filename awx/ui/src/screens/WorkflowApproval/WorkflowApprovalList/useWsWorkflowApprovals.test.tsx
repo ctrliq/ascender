@@ -1,13 +1,21 @@
-import type { Untyped } from 'types/api';
+import type { WorkflowApproval } from 'types/api';
 import React from 'react';
 import { act } from '@testing-library/react';
 import WS from 'vitest-websocket-mock';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import useWsWorkflowApprovals from './useWsWorkflowApprovals';
 
-function Test({ workflowApprovals, fetchWorkflowApprovals }: Untyped) {
+function Test({
+  workflowApprovals,
+  fetchWorkflowApprovals,
+}: {
+  // The fixtures carry the id the hook matches messages against and the
+  // status it updates in place.
+  workflowApprovals: { id: number; status?: string }[];
+  fetchWorkflowApprovals: Parameters<typeof useWsWorkflowApprovals>[1];
+}) {
   const updatedWorkflowApprovals = useWsWorkflowApprovals(
-    workflowApprovals,
+    workflowApprovals as unknown as WorkflowApproval[],
     fetchWorkflowApprovals
   );
   return (

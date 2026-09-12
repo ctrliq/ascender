@@ -1,4 +1,4 @@
-import type { OAuth2Application, Untyped } from 'types/api';
+import type { OAuth2Application, SummaryFieldRef, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 
@@ -55,7 +55,7 @@ function ApplicationFormFields({
   });
 
   const handleOrganizationUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('organization', value);
       setFieldTouched('organization', true, false);
     },

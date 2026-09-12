@@ -1,12 +1,18 @@
-import type { Untyped } from 'types/api';
+import type { Project } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import WS from 'vitest-websocket-mock';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import useWsProjects from './useWsProjects';
 
-function Test({ projects }: Untyped) {
-  const synced = useWsProjects(projects);
+function Test({
+  projects,
+}: {
+  // The fixtures carry only what the hook reads: the id, and the current job
+  // the socket updates in place.
+  projects: Partial<Project>[];
+}) {
+  const synced = useWsProjects(projects as Project[]);
   return <div data-testid="result">{JSON.stringify(synced)}</div>;
 }
 

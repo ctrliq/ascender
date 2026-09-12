@@ -1,4 +1,5 @@
-import type { Untyped } from 'types/api';
+import type { AnyInventory } from 'types/api';
+import type { QSConfig } from 'util/qs';
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
 import WS from 'vitest-websocket-mock';
@@ -12,12 +13,19 @@ function Test({
   fetchInventories,
   fetchInventoriesById,
   qsConfig,
-}: Untyped) {
+}: {
+  // The fixtures carry only the ids the hook matches messages against, and
+  // the query config only the default params it reads.
+  inventories: { id: number }[];
+  fetchInventories: () => void;
+  fetchInventoriesById: (ids: number[]) => unknown;
+  qsConfig: { defaultParams: Record<string, unknown> };
+}) {
   const syncedInventories = useWsInventories(
-    inventories,
+    inventories as AnyInventory[],
     fetchInventories,
-    fetchInventoriesById,
-    qsConfig
+    fetchInventoriesById as Parameters<typeof useWsInventories>[2],
+    qsConfig as QSConfig
   );
   return <div data-testid="ws-result">{JSON.stringify(syncedInventories)}</div>;
 }

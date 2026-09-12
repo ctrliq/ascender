@@ -1,4 +1,4 @@
-import type { AnyInventory, Untyped } from 'types/api';
+import type { AnyInventory, SummaryFieldRef, Untyped } from 'types/api';
 import React, { useCallback, useState } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
@@ -39,7 +39,7 @@ function InventoryFormFields({ inventory }: InventoryFormFieldsProps) {
     useField('instanceGroups');
   const [labelsField, , labelsHelpers] = useField('labels');
   const handleOrganizationUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('organization', value);
       setFieldTouched('organization', true, false);
     },

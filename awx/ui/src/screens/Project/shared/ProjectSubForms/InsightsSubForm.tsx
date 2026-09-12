@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField, useFormikContext } from 'formik';
@@ -26,7 +26,7 @@ const InsightsSubForm = ({
   const [, credMeta, credHelpers] = useField('credential');
 
   const onCredentialChange = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       onCredentialSelection('insights', value);
       setFieldValue('credential', value);
       setFieldTouched('credential', true, false);

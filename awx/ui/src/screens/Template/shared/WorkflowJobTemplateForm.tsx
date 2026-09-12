@@ -1,4 +1,4 @@
-import type { WorkflowJobTemplate, Untyped } from 'types/api';
+import type { SummaryFieldRef, Untyped, WorkflowJobTemplate } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField, useFormikContext, withFormik } from 'formik';
@@ -98,7 +98,7 @@ function WorkflowJobTemplateForm({
   }, [enableWebhooks]);
 
   const handleOrganizationChange = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('organization', value);
       setFieldTouched('organization', true, false);
     },
@@ -106,7 +106,7 @@ function WorkflowJobTemplateForm({
   );
 
   const handleInventoryUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('inventory', value);
       setFieldTouched('inventory', true, false);
     },

@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback } from 'react';
 import { useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -23,7 +23,7 @@ const EC2SubForm = () => {
   const [credentialField, credentialMeta] = useField('credential');
   const config = useConfig();
   const handleCredentialUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('credential', value);
       setFieldTouched('credential', true, false);
     },

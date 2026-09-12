@@ -1,4 +1,4 @@
-import type { User, Untyped } from 'types/api';
+import type { SummaryFieldRef, Untyped, User } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
@@ -87,7 +87,7 @@ function UserFormFields({ user }: UserFormFieldsProps) {
   }));
 
   const handleOrganizationUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('organization', value);
       setFieldTouched('organization', true, false);
     },

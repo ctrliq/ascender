@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { InventorySource } from 'types/api';
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
 import WS from 'vitest-websocket-mock';
@@ -16,8 +16,13 @@ vi.mock('../../../hooks/useThrottle', () => ({
 
 // Render the hook's synced result as JSON so tests can read it from the DOM
 // (RTL 12 has no renderHook, and the hook returns plain data).
-function Test({ sources }: Untyped) {
-  const syncedSources = useWsInventorySources(sources);
+function Test({
+  sources,
+}: {
+  // The fixtures carry only the ids the hook matches messages against.
+  sources: { id: number }[];
+}) {
+  const syncedSources = useWsInventorySources(sources as InventorySource[]);
   return <div data-testid="ws-result">{JSON.stringify(syncedSources)}</div>;
 }
 

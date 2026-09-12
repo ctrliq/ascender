@@ -1,9 +1,16 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { render, act } from '@testing-library/react';
 import useDebounce from './useDebounce';
 
-function Test({ fn, delay = 500, data }: Untyped) {
+function Test({
+  fn,
+  delay = 500,
+  data,
+}: {
+  fn: (data: unknown) => void;
+  delay?: number;
+  data: unknown;
+}) {
   const debounce = useDebounce(fn, delay);
   debounce(data);
   return <div />;

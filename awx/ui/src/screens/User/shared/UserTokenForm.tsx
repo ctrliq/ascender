@@ -1,4 +1,4 @@
-import type { OAuth2Token, Untyped } from 'types/api';
+import type { OAuth2Token, SummaryFieldRef, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Formik, useField, useFormikContext } from 'formik';
@@ -31,7 +31,7 @@ function UserTokenFormFields() {
   });
 
   const handleApplicationUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('application', value);
       setFieldTouched('application', true, false);
     },

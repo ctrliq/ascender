@@ -1,4 +1,4 @@
-import type { Team, Untyped } from 'types/api';
+import type { SummaryFieldRef, Team, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 
 import { Formik, useField, useFormikContext } from 'formik';
@@ -22,7 +22,7 @@ function TeamFormFields({ team }: TeamFormFieldsProps) {
   const [orgField, orgMeta, orgHelpers] = useField('organization');
 
   const handleOrganizationUpdate = useCallback(
-    (value: Untyped) => {
+    (value: SummaryFieldRef | null) => {
       setFieldValue('organization', value);
       setFieldTouched('organization', true, false);
     },

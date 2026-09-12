@@ -1,5 +1,5 @@
 import type { QSConfig } from 'util/qs';
-import type { Untyped } from 'types/api';
+import type { UnifiedJob } from 'types/api';
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
 import WS from 'vitest-websocket-mock';
@@ -14,9 +14,22 @@ import useWsJobs from './useWsJobs';
 
 // RTL 12 has no renderHook, so we drive the hook through a test component that
 // serializes its result into a data-testid node we can read back.
-function Test({ jobs, fetch }: Untyped) {
+function Test({
+  jobs,
+  fetch,
+}: {
+  // The fixtures carry an id and sometimes a status, which is all the hook
+  // reads off a job.
+  jobs: { id: number; status?: string }[];
+  // Absent where the test never lets the hook get as far as re-reading.
+  fetch?: Parameters<typeof useWsJobs>[1];
+}) {
   const qsConfig = {};
-  const syncedJobs = useWsJobs(jobs, fetch, qsConfig as unknown as QSConfig);
+  const syncedJobs = useWsJobs(
+    jobs as UnifiedJob[],
+    fetch ?? (() => Promise.resolve([])),
+    qsConfig as unknown as QSConfig
+  );
   return <div data-testid="jobs">{JSON.stringify(syncedJobs)}</div>;
 }
 
@@ -26,7 +39,7 @@ function getJobs() {
 
 describe('useWsJobs hook', () => {
   let debug: typeof global.console.debug;
-  let mockServer: Untyped;
+  let mockServer: WS | null;
 
   beforeEach(() => {
     debug = global.console.debug;
@@ -41,7 +54,6 @@ describe('useWsJobs hook', () => {
 
     if (mockServer) {
       mockServer.close();
-      mockServer = null;
     }
     WS.clean();
   });
@@ -101,7 +113,7 @@ describe('useWsJobs hook', () => {
     expect(getJobs()[0].status).toEqual('running');
 
     await act(async () => {
-      mockServer.send(
+      mockServer!.send(
         JSON.stringify({
           unified_job_id: 1,
           type: 'job',
@@ -119,14 +131,14 @@ describe('useWsJobs hook', () => {
     global.document.cookie = 'csrftoken=abc123';
     mockServer = new WS('ws://localhost/websocket/');
     const jobs = [{ id: 1 }];
-    const fetch = vi.fn(() => []);
+    const fetch = vi.fn(() => Promise.resolve([] as UnifiedJob[]));
     await act(async () => {
       renderWithContexts(<Test jobs={jobs} fetch={fetch} />);
     });
 
     await mockServer.connected;
     await act(async () => {
-      mockServer.send(
+      mockServer!.send(
         JSON.stringify({
           unified_job_id: 2,
           type: 'job',
