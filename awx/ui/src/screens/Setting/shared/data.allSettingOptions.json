@@ -38,7 +38,7 @@
               "category_slug": "system",
               "default": true
           },
-          "TOWER_URL_BASE": {
+          "ASCENDER_URL_BASE": {
               "type": "string",
               "required": true,
               "label": "Base URL of the service",
@@ -4500,7 +4500,7 @@
               "category_slug": "system",
               "defined_in_file": false
           },
-          "TOWER_URL_BASE": {
+          "ASCENDER_URL_BASE": {
               "type": "string",
               "label": "Base URL of the service",
               "help_text": "This setting is used by services like notifications to render a valid url to the service.",
