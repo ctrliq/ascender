@@ -15,7 +15,7 @@ export default defineConfig({
     alias: [
       {
         find: /^history$/,
-        replacement: resolvePath('./testUtils/historyShim.js'),
+        replacement: resolvePath('./testUtils/historyShim.ts'),
       },
       ...srcAliases,
     ],
@@ -42,7 +42,7 @@ export default defineConfig({
     },
     setupFiles: [
       resolvePath('./config/vitest/textEncoderPolyfill.js'),
-      resolvePath('./src/setupTests.js'),
+      resolvePath('./src/setupTests.ts'),
     ],
     include: [
       'src/**/__tests__/**/*.{js,jsx,ts,tsx}',
@@ -64,7 +64,7 @@ export default defineConfig({
     // a second run from 90s to 68s natively, and from 101s to 108s inside the
     // container, where the cache is written through a bind mount. Turn it on
     // locally if your checkout is not bind mounted.
-    // jest's resetMocks, and the timeout setupTests.js used to set by hand.
+    // jest's resetMocks, and the timeout setupTests used to set by hand.
     mockReset: true,
     // Both, because Vitest has two timeouts where jest had one, and a hook that
     // renders a whole form can outrun the 10s hookTimeout default while every
@@ -72,8 +72,8 @@ export default defineConfig({
     testTimeout: 120000,
     hookTimeout: 120000,
     coverage: {
-      include: ['src/**/*.{js,jsx}', 'testUtils/**/*.{js,jsx}'],
-      exclude: ['src/locales/**', '**/index.js'],
+      include: ['src/**/*.{ts,tsx}', 'testUtils/**/*.{ts,tsx}'],
+      exclude: ['src/locales/**', '**/index.ts'],
     },
   },
 });

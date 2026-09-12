@@ -1,0 +1,131 @@
+import type { AnyInventory, SummaryFieldRef } from 'types/api';
+import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+
+import { CardBody } from 'components/Card';
+import { InventoriesAPI } from 'api';
+import { getAddedAndRemoved } from 'util/lists';
+import ContentLoading from 'components/ContentLoading';
+import useIsMounted from 'hooks/useIsMounted';
+import InventoryForm from '../shared/InventoryForm';
+import type { InventoryFormValues } from '../shared/InventoryForm';
+
+export interface InventoryEditProps {
+  inventory: AnyInventory;
+  [key: string]: unknown;
+}
+
+function InventoryEdit({ inventory }: InventoryEditProps) {
+  const [error, setError] = useState<unknown>(null);
+  const [associatedInstanceGroups, setInstanceGroups] = useState<
+    SummaryFieldRef[]
+  >([]);
+  const [contentLoading, setContentLoading] = useState(true);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const isMounted = useIsMounted();
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const {
+          data: { results: loadedInstanceGroups },
+        } = await InventoriesAPI.readInstanceGroups(inventory.id);
+        if (!isMounted.current) {
+          return;
+        }
+        setInstanceGroups(loadedInstanceGroups);
+      } catch (err) {
+        setError(err);
+      } finally {
+        if (isMounted.current) {
+          setContentLoading(false);
+        }
+      }
+    };
+    loadData();
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  }, [inventory.id, contentLoading, inventory]);
+
+  const handleCancel = () => {
+    const url =
+      inventory.kind === 'smart'
+        ? `/inventories/smart_inventory/${inventory.id}/details`
+        : `/inventories/inventory/${inventory.id}/details`;
+
+    navigate(`${url}`);
+  };
+
+  const handleSubmit = async (values: InventoryFormValues) => {
+    const { instanceGroups, organization, ...remainingValues } = values;
+    try {
+      await InventoriesAPI.update(inventory.id, {
+        organization: organization?.id,
+        ...remainingValues,
+      });
+      await InventoriesAPI.orderInstanceGroups(
+        inventory.id,
+        instanceGroups,
+        associatedInstanceGroups
+      );
+      await submitLabels(values.organization?.id, values.labels);
+
+      const url =
+        location.pathname.search('smart') > -1
+          ? `/inventories/smart_inventory/${inventory.id}/details`
+          : `/inventories/inventory/${inventory.id}/details`;
+      navigate(`${url}`);
+    } catch (err) {
+      setError(err);
+    }
+  };
+
+  const submitLabels = async (
+    orgId: number | undefined,
+    labels: SummaryFieldRef[] = []
+  ) => {
+    const { added, removed } = getAddedAndRemoved(
+      inventory.summary_fields.labels?.results,
+      labels
+    );
+
+    const disassociationPromises = removed.map((label) =>
+      InventoriesAPI.disassociateLabel(
+        inventory.id,
+        label as { id: number; name: string }
+      )
+    );
+    const associationPromises = added.map((label) =>
+      InventoriesAPI.associateLabel(
+        inventory.id,
+        label as { id: number; name: string },
+        orgId as number
+      )
+    );
+
+    const results = await Promise.all([
+      ...disassociationPromises,
+      ...associationPromises,
+    ]);
+    return results;
+  };
+
+  if (contentLoading) {
+    return <ContentLoading />;
+  }
+
+  return (
+    <CardBody>
+      <InventoryForm
+        onCancel={handleCancel}
+        onSubmit={handleSubmit}
+        inventory={inventory}
+        instanceGroups={associatedInstanceGroups}
+        submitError={error}
+      />
+    </CardBody>
+  );
+}
+
+export { InventoryEdit as _InventoryEdit };
+export default InventoryEdit;
