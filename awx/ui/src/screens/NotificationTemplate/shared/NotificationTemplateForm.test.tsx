@@ -8,31 +8,6 @@ import NotificationTemplateForm from './NotificationTemplateForm';
 vi.mock('../../../api/models/NotificationTemplates');
 vi.mock('../../../api/models/Organizations');
 
-// react-ace (CodeEditor) does not expose its value as queryable text in jsdom,
-// so render the editor value as plain text to allow content assertions. The
-// custom-message fields use CodeEditorField, which is rendered from its formik
-// field value.
-vi.mock('components/CodeEditor', async () => {
-  const ReactLib = await vi.importActual<typeof import('react')>('react');
-  return {
-    __esModule: true,
-    ...(await vi.importActual<typeof import('components/CodeEditor')>(
-      'components/CodeEditor'
-    )),
-    default: ({ value }: { value: React.ReactNode }) =>
-      ReactLib.createElement('div', null, value),
-  };
-});
-vi.mock('components/CodeEditor/CodeEditorField', async () => {
-  const ReactLib = await vi.importActual<typeof import('react')>('react');
-  const { useField } = await vi.importActual<typeof import('formik')>('formik');
-  function MockField({ name }: { name: string }) {
-    const [field] = useField(name);
-    return ReactLib.createElement('div', null, field.value);
-  }
-  return { __esModule: true, default: MockField };
-});
-
 const template = {
   id: 3,
   notification_type: 'slack',

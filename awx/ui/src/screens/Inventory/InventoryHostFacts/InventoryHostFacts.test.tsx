@@ -22,7 +22,6 @@ describe('<InventoryHostFacts />', () => {
     renderWithContexts(
       <InventoryHostFacts host={mockHost as unknown as Host} />
     );
-    // react-ace renders empty under jsdom; assert the Facts label/container
     expect(await screen.findByText('Facts')).toBeInTheDocument();
   });
 
