@@ -727,7 +727,7 @@ class Job(UnifiedJob, JobOptions, SurveyJobMixin, JobNotificationMixin, TaskMana
         return reverse('api:job_detail', kwargs={'pk': self.pk}, request=request)
 
     def get_ui_url(self):
-        return urljoin(settings.TOWER_URL_BASE, "/#/jobs/playbook/{}".format(self.pk))
+        return urljoin(settings.ASCENDER_URL_BASE, "/#/jobs/playbook/{}".format(self.pk))
 
     def _set_default_dependencies_processed(self):
         """
@@ -1390,7 +1390,7 @@ class SystemJob(UnifiedJob, SystemJobOptions, JobNotificationMixin):
         return reverse('api:system_job_detail', kwargs={'pk': self.pk}, request=request)
 
     def get_ui_url(self):
-        return urljoin(settings.TOWER_URL_BASE, "/#/jobs/system/{}".format(self.pk))
+        return urljoin(settings.ASCENDER_URL_BASE, "/#/jobs/system/{}".format(self.pk))
 
     @property
     def event_class(self):

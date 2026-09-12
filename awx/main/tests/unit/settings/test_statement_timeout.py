@@ -1,7 +1,7 @@
 import types
 from unittest import mock
 
-from awx.settings.statement_timeout import set_statement_timeout
+from awx.settings.statement_timeout import DEFAULT_WEB_TIMEOUT_MS, set_statement_timeout
 
 PG_ENGINE = "django.db.backends.postgresql"
 
@@ -99,3 +99,35 @@ class TestSetStatementTimeout:
             set_statement_timeout(databases, 60000)
         assert databases["default"]["OPTIONS"]["sslmode"] == "require"
         assert _options(databases) == "-c statement_timeout=60000"
+
+
+class TestWebProcessWithoutUwsgi:
+    """Off uwsgi, a web process still has to be protected.
+
+    Reading the timeout off harakiri only works while uwsgi is what serves, so
+    a process that announces itself with AWX_WEB_PROCESS gets the same cap.
+    """
+
+    def test_web_process_gets_the_default(self, monkeypatch):
+        monkeypatch.setenv('AWX_WEB_PROCESS', '1')
+        databases = {'default': {}}
+
+        set_statement_timeout(databases)
+
+        assert databases['default']['OPTIONS']['options'] == f'-c statement_timeout={DEFAULT_WEB_TIMEOUT_MS}'
+
+    def test_web_process_prefers_the_setting(self, monkeypatch):
+        monkeypatch.setenv('AWX_WEB_PROCESS', '1')
+        databases = {'default': {}}
+
+        set_statement_timeout(databases, DATABASE_STATEMENT_TIMEOUT=30000)
+
+        assert databases['default']['OPTIONS']['options'] == '-c statement_timeout=30000'
+
+    def test_a_task_process_is_left_alone(self, monkeypatch):
+        monkeypatch.delenv('AWX_WEB_PROCESS', raising=False)
+        databases = {'default': {}}
+
+        set_statement_timeout(databases)
+
+        assert 'OPTIONS' not in databases['default']

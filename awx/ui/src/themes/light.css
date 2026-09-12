@@ -515,7 +515,7 @@ html[data-theme="light"] {
     box-shadow: none;
   }
 
-  & .ace_editor.pf-v6-c-form-control {
+  & .pf-v6-c-form-control:has(> .cm-editor) {
     border: 1px solid var(--pf-v6-global--BorderColor--100);
     border-radius: var(--pf-v6-global--BorderRadius--sm);
   }

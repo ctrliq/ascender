@@ -106,3 +106,16 @@ from .statement_timeout import set_statement_timeout
 set_statement_timeout(DATABASES, DATABASE_STATEMENT_TIMEOUT)  # NOQA
 
 del set_statement_timeout
+
+from .connection_reuse import set_conn_max_age
+
+set_conn_max_age(DATABASES, DATABASE_CONN_MAX_AGE)  # NOQA
+
+del set_conn_max_age
+
+# Deployments that set the former name in /etc/tower/conf.d keep working for a
+# release. The installers set this through the API rather than on disk, and the
+# stored value is carried over by conf migration 0011, so this covers the hand
+# written case only.
+if 'TOWER_URL_BASE' in locals() and 'ASCENDER_URL_BASE' not in locals():
+    ASCENDER_URL_BASE = locals()['TOWER_URL_BASE']  # noqa: F821
