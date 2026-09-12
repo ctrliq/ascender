@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 /*
  * The theme an administrator saves in the CUSTOM_THEME setting.
  *
@@ -11,11 +10,23 @@ import type { Untyped } from 'types/api';
  * be reasoned about and tested on its own.
  */
 
+/**
+ * One theme the user may pick: its stylesheet's own id, the name shown in the
+ * menu, and whether it is a dark one, which decides the PatternFly class.
+ */
+export interface Theme {
+  id: string;
+  name: string;
+  dark: boolean;
+  /** True for the administrator's own theme, which is not one that ships. */
+  custom?: boolean;
+}
+
 export const CUSTOM_THEME_ID = 'custom';
 
 const STYLE_ELEMENT_ID = 'awx-custom-theme';
 
-let customTheme: Untyped = null;
+let customTheme: Theme | null = null;
 
 export function getCustomTheme() {
   return customTheme;
@@ -33,7 +44,7 @@ export function getCustomTheme() {
  * it for the shipped themes, by looking for the PatternFly dark class, so an
  * uploaded theme and a built in one are judged by the same rule.
  */
-export function setCustomTheme(css: Untyped, name: Untyped) {
+export function setCustomTheme(css?: string | null, name?: string | null) {
   const existing = document.getElementById(STYLE_ELEMENT_ID);
   if (existing) existing.remove();
 

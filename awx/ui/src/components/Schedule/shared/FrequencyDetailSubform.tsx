@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 import { useField } from 'formik';
@@ -6,6 +5,7 @@ import { useField } from 'formik';
 import { Trans, Plural, useLingui } from '@lingui/react/macro';
 
 import { RRule } from 'rrule';
+import type { Weekday } from 'rrule';
 import {
   Checkbox as _Checkbox,
   FormGroup,
@@ -180,7 +180,7 @@ const FrequencyDetailSubform = ({
   // argument as the flag, which PatternFly 5 put there, meant checked was an
   // event object and so always true: a weekday could be ticked but never
   // unticked, because the else branch below was unreachable.
-  const updateDaysOfWeek = (day: Untyped, checked: boolean) => {
+  const updateDaysOfWeek = (day: Weekday, checked: boolean) => {
     const newDaysOfWeek = daysOfWeek.value ? [...daysOfWeek.value] : [];
     daysOfWeekHelpers.setTouched(true);
     if (checked) {
@@ -279,7 +279,7 @@ const FrequencyDetailSubform = ({
             <Checkbox
               label={t`Sun`}
               isChecked={daysOfWeek.value?.some(
-                (day: Untyped) =>
+                (day: Weekday) =>
                   day === RRule.SU || day.weekday === RRule.SU.weekday
               )}
               onChange={(_event, checked) => {
@@ -293,7 +293,7 @@ const FrequencyDetailSubform = ({
             <Checkbox
               label={t`Mon`}
               isChecked={daysOfWeek.value?.some(
-                (day: Untyped) =>
+                (day: Weekday) =>
                   day === RRule.MO || day.weekday === RRule.MO.weekday
               )}
               onChange={(_event, checked) => {
@@ -307,7 +307,7 @@ const FrequencyDetailSubform = ({
             <Checkbox
               label={t`Tue`}
               isChecked={daysOfWeek.value?.some(
-                (day: Untyped) =>
+                (day: Weekday) =>
                   day === RRule.TU || day.weekday === RRule.TU.weekday
               )}
               onChange={(_event, checked) => {
@@ -321,7 +321,7 @@ const FrequencyDetailSubform = ({
             <Checkbox
               label={t`Wed`}
               isChecked={daysOfWeek.value?.some(
-                (day: Untyped) =>
+                (day: Weekday) =>
                   day === RRule.WE || day.weekday === RRule.WE.weekday
               )}
               onChange={(_event, checked) => {
@@ -335,7 +335,7 @@ const FrequencyDetailSubform = ({
             <Checkbox
               label={t`Thu`}
               isChecked={daysOfWeek.value?.some(
-                (day: Untyped) =>
+                (day: Weekday) =>
                   day === RRule.TH || day.weekday === RRule.TH.weekday
               )}
               onChange={(_event, checked) => {
@@ -349,7 +349,7 @@ const FrequencyDetailSubform = ({
             <Checkbox
               label={t`Fri`}
               isChecked={daysOfWeek.value?.some(
-                (day: Untyped) =>
+                (day: Weekday) =>
                   day === RRule.FR || day.weekday === RRule.FR.weekday
               )}
               onChange={(_event, checked) => {
@@ -363,7 +363,7 @@ const FrequencyDetailSubform = ({
             <Checkbox
               label={t`Sat`}
               isChecked={daysOfWeek.value?.some(
-                (day: Untyped) =>
+                (day: Weekday) =>
                   day === RRule.SA || day.weekday === RRule.SA.weekday
               )}
               onChange={(_event, checked) => {

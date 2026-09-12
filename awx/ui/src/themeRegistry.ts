@@ -1,5 +1,5 @@
-import type { Untyped } from 'types/api';
 import { getCustomTheme, setCustomTheme, CUSTOM_THEME_ID } from './customTheme';
+import type { Theme } from './customTheme';
 
 export { setCustomTheme, CUSTOM_THEME_ID };
 
@@ -19,7 +19,7 @@ const themeSources = import.meta.glob('./themes/[!_]*.css', {
   import: 'default',
 });
 
-let themes: Untyped = null;
+let themes: Theme[] | null = null;
 
 export function getThemes() {
   if (!themes) {
@@ -33,7 +33,7 @@ export function getThemes() {
         dark,
       };
     });
-    themes.sort((a: Untyped, b: Untyped) => a.name.localeCompare(b.name));
+    themes.sort((a, b) => a.name.localeCompare(b.name));
   }
   // Appended rather than sorted in: an administrator's own theme is easier to
   // find at the end of the list than filed alphabetically among the shipped ones.
@@ -63,14 +63,14 @@ export function getSavedThemeId() {
   return localStorage.getItem('theme') || 'default';
 }
 
-let activeThemeId: Untyped = null;
+let activeThemeId: string | null = null;
 
-export function applyTheme(themeId: Untyped, persist = false) {
+export function applyTheme(themeId?: string | null, persist = false) {
   const allThemes = getThemes();
-  const theme =
-    allThemes.find((t: Untyped) => t.id === themeId) ||
-    allThemes.find((t: Untyped) => t.id === 'default') ||
-    allThemes[0];
+  // There is always a themes/default.css, so the last fallback always hits.
+  const theme = (allThemes.find((t) => t.id === themeId) ||
+    allThemes.find((t) => t.id === 'default') ||
+    allThemes[0]) as Theme;
 
   if (theme.dark) {
     document.documentElement.classList.add('pf-v6-theme-dark');

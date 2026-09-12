@@ -84,7 +84,7 @@ function PageHeaderToolbar({
 
   const themes = getThemes();
 
-  const handleThemeSelect = (themeId: unknown) => {
+  const handleThemeSelect = (themeId: string) => {
     setIsThemeOpen(false);
     const theme = applyTheme(themeId, true);
     setCurrentThemeId(theme.id);

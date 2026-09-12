@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Schedule } from 'types/api';
 import { RRule, RRuleSet, rrulestr, type Weekday } from 'rrule';
 import { dateToInputDateTime } from 'util/dates';
 import { DateTime } from 'luxon';
@@ -17,7 +17,20 @@ export class UnsupportedRRuleError extends Error {
   }
 }
 
-export default function parseRuleObj(schedule: Untyped): ScheduleFormValues {
+/**
+ * What the parser reads off a schedule: the rule itself, when it starts, and
+ * the zone both are in. A form's own draft carries these before it is saved,
+ * which is what the preview is built from.
+ */
+export type ScheduleRule = Partial<Schedule> & {
+  rrule?: string | null;
+  dtstart?: string | null;
+  timezone?: string | null;
+};
+
+export default function parseRuleObj(
+  schedule: ScheduleRule
+): ScheduleFormValues {
   let values: ScheduleFormValues = {
     frequency: [],
     frequencyOptions: {},
@@ -27,7 +40,7 @@ export default function parseRuleObj(schedule: Untyped): ScheduleFormValues {
   };
   // forceset makes this an RRuleSet rather than a bare RRule, which is what
   // gives one string per DTSTART, RRULE and EXRULE line below.
-  const ruleset = rrulestr(schedule.rrule.replace(' ', '\n'), {
+  const ruleset = rrulestr((schedule.rrule ?? '').replace(' ', '\n'), {
     forceset: true,
   }) as RRuleSet;
 
@@ -70,13 +83,13 @@ function isSingleOccurrence(values: ScheduleFormValues) {
 }
 
 function parseDtstart(
-  schedule: Untyped,
+  schedule: ScheduleRule,
   values: ScheduleFormValues
 ): ScheduleFormValues {
   // TODO: should this rely on DTSTART in rruleset rather than schedule.dtstart?
   const [startDate, startTime] = dateToInputDateTime(
-    schedule.dtstart,
-    schedule.timezone
+    schedule.dtstart ?? '',
+    schedule.timezone ?? undefined
   );
   return {
     ...values,
@@ -96,7 +109,7 @@ const frequencyTypes: Record<number, ScheduleFrequency> = {
 
 function parseRrule(
   rruleString: string,
-  schedule: Untyped,
+  schedule: ScheduleRule,
   values: ScheduleFormValues
 ): ScheduleFormValues {
   const { frequency, options } = parseRule(rruleString, schedule);
@@ -119,7 +132,7 @@ function parseRrule(
 
 function parseExRule(
   exruleString: string,
-  schedule: Untyped,
+  schedule: ScheduleRule,
   values: ScheduleFormValues
 ): ScheduleFormValues {
   const { frequency, options } = parseRule(exruleString, schedule);
@@ -144,7 +157,7 @@ function parseExRule(
 
 function parseRule(
   ruleString: string,
-  schedule: Untyped
+  schedule: ScheduleRule
 ): { frequency: ScheduleFrequency; options: FrequencyOptions } {
   const {
     origOptions: {
@@ -180,7 +193,7 @@ function parseRule(
     // RFC 5545: UNTIL without Z is in DTSTART's timezone. The rrule
     // library always parses it as UTC, so strip the Z for non-Z values
     // so dateToInputDateTime interprets the digits in the schedule tz.
-    const untilIsUTC = /UNTIL=\d{8}T\d{6}Z/i.test(schedule.rrule);
+    const untilIsUTC = /UNTIL=\d{8}T\d{6}Z/i.test(schedule.rrule ?? '');
     const isoStr = until.toISOString();
     const [endDate, endTime] = dateToInputDateTime(
       untilIsUTC ? isoStr : isoStr.replace('Z', ''),

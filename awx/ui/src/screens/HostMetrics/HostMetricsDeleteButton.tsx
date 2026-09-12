@@ -1,4 +1,8 @@
-import type { Untyped } from 'types/api';
+import type { HostMetric } from 'types/api';
+import type {
+  DeleteCount,
+  DeleteRequest,
+} from 'util/getRelatedResourceDeleteDetails';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Alert, Badge, Button, Tooltip } from '@patternfly/react-core';
@@ -19,12 +23,13 @@ const Label = styled.span`
 `;
 
 export interface HostMetricsDeleteButtonProps {
-  itemsToDelete: Untyped[];
-  pluralizedItemName?: Untyped;
+  itemsToDelete: HostMetric[];
+  pluralizedItemName?: React.ReactNode;
   onDelete: () => void;
-  deleteDetailsRequests?: Untyped;
-  warningMessage?: Untyped;
-  deleteMessage?: Untyped;
+  /** What to count before the delete is allowed, where a row has related rows. */
+  deleteDetailsRequests?: DeleteRequest[];
+  warningMessage?: React.ReactNode;
+  deleteMessage?: React.ReactNode;
   [key: string]: unknown;
 }
 
@@ -41,31 +46,33 @@ function HostMetricsDeleteButton({
     pluralizedItemName = t`Items`;
   }
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [deleteDetails, setDeleteDetails] = useState<Untyped>(null);
+  const [deleteDetails, setDeleteDetails] = useState<DeleteCount[] | null>(
+    null
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const [deleteMessageError, setDeleteMessageError] = useState<unknown>();
   const handleDelete = () => {
     onDelete();
-    toggleModal();
+    toggleModal(false);
   };
 
-  const toggleModal = async (isOpen?: Untyped) => {
+  const toggleModal = async (isOpen: boolean) => {
     setIsLoading(true);
     setDeleteDetails(null);
     if (
       isOpen &&
       itemsToDelete.length === 1 &&
-      deleteDetailsRequests?.length > 0
+      (deleteDetailsRequests?.length ?? 0) > 0
     ) {
       const { results, error } = await getRelatedResourceDeleteCounts(
-        deleteDetailsRequests
+        deleteDetailsRequests ?? []
       );
 
       if (error) {
         setDeleteMessageError(error);
       } else {
-        setDeleteDetails(results);
+        setDeleteDetails(results || null);
       }
     }
     setIsLoading(false);
@@ -96,12 +103,12 @@ function HostMetricsDeleteButton({
     return (
       <div>
         {deleteMessages.map((message) => (
-          <div aria-label={message} key={message}>
+          <div aria-label={String(message)} key={String(message)}>
             {message}
           </div>
         ))}
         {deleteDetails &&
-          deleteDetails.map(({ label, count }: Untyped) => (
+          deleteDetails.map(({ label, count }) => (
             <div key={label.id} aria-label={`${i18n._(label)}: ${count}`}>
               <Label>{i18n._(label)}</Label>
               <Badge>{count}</Badge>
@@ -160,7 +167,9 @@ function HostMetricsDeleteButton({
               variant="danger"
               aria-label={t`confirm delete`}
               isDisabled={Boolean(
-                deleteDetails && itemsToDelete[0]?.type === 'credential_type'
+                deleteDetails &&
+                (itemsToDelete[0] as { type?: string })?.type ===
+                  'credential_type'
               )}
               onClick={handleDelete}
             >

@@ -31,15 +31,15 @@ describe('setCustomTheme', () => {
 
   test('falls back to Custom when no name is configured', () => {
     setCustomTheme(LIGHT_CSS, '');
-    expect(getCustomTheme().name).toBe('Custom');
+    expect(getCustomTheme()!.name).toBe('Custom');
   });
 
   test('reads darkness from the stylesheet, the way the build time loader does', () => {
     setCustomTheme(DARK_CSS, 'Midnight');
-    expect(getCustomTheme().dark).toBe(true);
+    expect(getCustomTheme()!.dark).toBe(true);
 
     setCustomTheme(LIGHT_CSS, 'Noon');
-    expect(getCustomTheme().dark).toBe(false);
+    expect(getCustomTheme()!.dark).toBe(false);
   });
 
   test('replaces the previous stylesheet rather than stacking them', () => {
@@ -48,7 +48,7 @@ describe('setCustomTheme', () => {
 
     expect(document.querySelectorAll(`#${STYLE_ID}`)).toHaveLength(1);
     expect(document.getElementById(STYLE_ID)!.textContent).toBe(DARK_CSS);
-    expect(getCustomTheme().name).toBe('Second');
+    expect(getCustomTheme()!.name).toBe('Second');
   });
 
   test('clearing the setting removes both the theme and the stylesheet', () => {
