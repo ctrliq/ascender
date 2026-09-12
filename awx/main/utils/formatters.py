@@ -250,7 +250,7 @@ class LogstashFormatter(LogstashFormatterBase):
         # General AWX metadata
         fields['cluster_host_id'] = self.cluster_host_id
         fields['tower_uuid'] = settings.INSTALL_UUID
-        fields['tower_url'] = settings.TOWER_URL_BASE
+        fields['tower_url'] = settings.ASCENDER_URL_BASE
         return fields
 
     def format(self, record):

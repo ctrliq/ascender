@@ -161,7 +161,7 @@ class AdHocCommand(UnifiedJob, JobNotificationMixin):
         return reverse('api:ad_hoc_command_detail', kwargs={'pk': self.pk}, request=request)
 
     def get_ui_url(self):
-        return urljoin(settings.TOWER_URL_BASE, "/#/jobs/command/{}".format(self.pk))
+        return urljoin(settings.ASCENDER_URL_BASE, "/#/jobs/command/{}".format(self.pk))
 
     @property
     def notification_templates(self):

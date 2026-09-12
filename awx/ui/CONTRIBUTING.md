@@ -25,7 +25,7 @@ Have questions about this document or anything not covered here? Feel free to re
       - [Naming components that use the context api](#naming-components-that-use-the-context-api)
     - [Class constructors vs Class properties](#class-constructors-vs-class-properties)
     - [Binding](#binding)
-    - [Typechecking with PropTypes](#typechecking-with-proptypes)
+    - [Typechecking with TypeScript](#typechecking-with-typescript)
     - [Custom Hooks](#custom-hooks)
     - [Naming Functions](#naming-functions)
     - [Default State Initialization](#default-state-initialization)
@@ -57,7 +57,7 @@ The UI is built using [ReactJS](https://reactjs.org/docs/getting-started.html) a
 The AWX UI requires the following:
 
 - Node >= 16.13.1 LTS
-- NPM 8.x 
+- NPM 8.x
 
 Run the following to install all the dependencies:
 
@@ -170,24 +170,20 @@ Inside these folders, the internal structure is:
 
 In the root of `/src`, there are a few files which are used to initialize the react app. These are
 
-- **index.js**
+- **index.tsx**
   - Connects react app to root dom node.
-  - Sets up root route structure, navigation grouping and login modal
-  - Calls base context providers
-  - Imports .scss styles.
-- **app.js**
-  - Sets standard page layout, about modal, and root dialog modal.
-- **RootProvider.js**
-  - Sets up all context providers.
-  - Initializes i18n and router
+  - Imports the PatternFly base stylesheet and the content security policy.
+- **App.tsx**
+  - Sets up the router, the context providers and i18n.
+  - Sets root route structure, navigation grouping and the login route.
 
 ### Naming files
 
-Ideally, files should be named the same as the component they export, and tests with `.test` appended. In other words, `<FooBar>` would be defined in `FooBar.js`, and its tests would be defined in `FooBar.test.js`.
+Ideally, files should be named the same as the component they export, and tests with `.test` appended. In other words, `<FooBar>` would be defined in `FooBar.tsx`, and its tests would be defined in `FooBar.test.tsx`.
 
 #### Naming components that use the context api
 
-**File naming** - Since contexts export both consumer and provider (and potentially in withContext function form), the file can be simplified to be named after the consumer export. In other words, the file containing the `Network` context components would be named `Network.js`.
+**File naming** - Since contexts export both consumer and provider (and potentially in withContext function form), the file can be simplified to be named after the consumer export. In other words, the file containing the `Network` context components would be named `Network.tsx`.
 
 **Component naming and conventions** - In order to provide a consistent interface with react-router and [lingui](https://lingui.js.org/), as well as make their usage easier and less verbose, context components follow these conventions:
 
@@ -239,24 +235,38 @@ It is good practice to bind our class methods within our class constructor metho
 2. [Performance advantages](https://stackoverflow.com/a/44844916).
 3. Ease of testing.
 
-### Typechecking with PropTypes
+### Typechecking with TypeScript
 
-Shared components should have their prop values typechecked. This will help catch bugs when components get refactored/renamed.
+`src` and `testUtils` are TypeScript, checked under `strict` with
+`noUncheckedIndexedAccess`. `npm run type-check` runs the checker, and CI runs it
+as its own job, so a type error fails the pull request the way a lint error does.
 
-```javascript
-About.propTypes = {
-  ansible_version: PropTypes.string,
-  isOpen: PropTypes.bool,
-  onClose: PropTypes.func.isRequired,
-  version: PropTypes.string,
-};
+A component declares its props as an exported interface named after it, and a
+prop is optional when the component copes without it: when it gives the prop a
+default, guards every read of it, or hands it to a child that declares it
+optional. A prop the component calls or dereferences on its own stays required,
+and the caller passes it.
 
-About.defaultProps = {
-  ansible_version: null,
-  isOpen: false,
-  version: null,
-};
+```typescript
+export interface AboutProps {
+  ansibleVersion?: string;
+  isOpen?: boolean;
+  onClose: () => void;
+  version?: string;
+}
+
+function About({ ansibleVersion, isOpen = false, onClose, version }: AboutProps) {
 ```
+
+Nothing under `src` or `testUtils` is `any`. Where a shape genuinely cannot be
+described, say so with `unknown` and narrow at the point of use, or cast a test
+fixture once at its literal. Do not reach for `any` to silence a checker that is
+right.
+
+The API types in `src/types/api.generated.ts` come from the platform's own
+OpenAPI schema, via `npm run generate-api-types`. Prefer them over describing a
+response by hand, and give a partial fixture in a test an explicit cast rather
+than loosening the type the application uses.
 
 ### Custom Hooks
 
@@ -303,7 +313,7 @@ this.state = {
 
 ### Testing components that use contexts
 
-We have several React contexts that wrap much of the app, including those from react-router, lingui, and some of our own. When testing a component that depends on one or more of these, use the `renderWithContexts()` helper function found in `testUtils/rtlContexts.js`. It wraps the component tree with the necessary context providers and basic stub data, then returns [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)'s `render` result plus a `history` object and a configured `user` (from `@testing-library/user-event`).
+We have several React contexts that wrap much of the app, including those from react-router, lingui, and some of our own. When testing a component that depends on one or more of these, use the `renderWithContexts()` helper function found in `testUtils/rtlContexts.tsx`. It wraps the component tree with the necessary context providers and basic stub data, then returns [React Testing Library](https://testing-library.com/docs/react-testing-library/intro)'s `render` result plus a `history` object and a configured `user` (from `@testing-library/user-event`).
 
 If you want to stub the value of a context, or assert actions taken on it, you can customize a context's value by passing a `context` object as the second parameter. For example, this provides a custom value for the `Config` context:
 
@@ -340,16 +350,26 @@ The lingui library provides various React helpers for dealing with both marking 
 
 **Note:** We try to avoid the `I18n` consumer, or `i18nMark` function lingui gives us access to in this repo. i18nMark does not actually replace the string in the UI (leading to the potential for untranslated bugs), and the other helpers are redundant. Settling on a consistent, single pattern helps us ease the mental overhead of the need to understand the ins and outs of the lingui API.
 
-**Note:** Pluralization can be complicated so it is best to allow lingui handle cases where we have a string that may need to be pluralized based on number of items, or count. In that case lingui provides a `<Plural>` component, and a `plural()` function. When adding or updating strings in a `<Plural/>` tag you must run `npm run extra-strings` and submit the new `.po` files with your pull request. See documentation [here](https://lingui.js.org/guides/plurals.html?highlight=pluralization).
+**Note:** Pluralization can be complicated so it is best to allow lingui handle cases where we have a string that may need to be pluralized based on number of items, or count. In that case lingui provides a `<Plural>` component, and a `plural()` function. When adding or updating strings in a `<Plural/>` tag you must run `npm run extract-strings` and submit the new `.po` files with your pull request. See documentation [here](https://lingui.js.org/guides/plurals.html?highlight=pluralization).
 
 You can learn more about the ways lingui and its React helpers at [this link](https://lingui.js.org/tutorials/react-patterns.html).
+
+`npm run check-strings` fails when the catalogues no longer match the source, and
+`ui-lint` runs it in CI. Nothing else catches this: a message id is built from the
+string and from the names of whatever is interpolated into it, so an edit as small
+as guarding a value changes one. `<Plural value={forks} />` names its placeholder
+`{forks}` and `<Plural value={forks ?? 0} />` names it `{0}`, and the renamed id
+matches nothing in the catalogues, so the string falls back to English in every
+translated locale while types, lint, tests and the build all stay green. Where a
+guard is needed, put it where the value is made rather than at the point of use,
+so the name the id is built from does not change.
 
 ### Setting up .po files to give to translation team
 
 1. Make sure that the languages you intend to translate are set correctly in the `.linguirc` configuration file.
 2. `npm run extract-strings` to create .po files for each language specified. The .po files will be placed in src/locales. When updating strings that are used by `<Plural>` or `plural()` you will need to run this command to get the strings to render properly. This command will create `.po` files for each of the supported languages that will need to be committed with your PR.
 3. Open up the .po file for the language you want to test and add some translations. In production we would pass this .po file off to the translation team.
-4. Once you've edited your .po file (or we've gotten a .po file back from the translation team) run `npm run compile-strings`. This command takes the .po files and turns them into a minified JSON object and can be seen in the `messages.js` file in each locale directory. These files get loaded at the App root level (see: App.js).
+4. Once you've edited your .po file (or we've gotten a .po file back from the translation team) run `npm run compile-strings`. This command takes the .po files and turns them into a minified JSON object and can be seen in the `messages.mjs` file in each locale directory. These files get loaded at the App root level (see: App.tsx).
 5. Change the language in your browser and reload the page. You should see your specified translations in place of English strings.
 
 ### Marking an issue to be translated

@@ -12,6 +12,7 @@ from asgiref.sync import iscoroutinefunction, markcoroutinefunction
 from django.conf import settings
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.db.migrations.recorder import MigrationRecorder
 from django.db import connection
 from django.shortcuts import redirect
@@ -24,6 +25,7 @@ from awx.main import migrations, request_context
 from awx.main.request_context import get_current_request, get_current_user, impersonate  # noqa: F401 -- long-standing import location
 from awx.main.utils.named_url_graph import generate_graph, GraphNode
 from awx.conf import fields, register
+from awx.conf.settings import SETTING_CACHE_VERSION_KEY
 from awx.main.utils.profiling import AWXProfiler
 from awx.main.utils.common import memoize
 
@@ -67,13 +69,42 @@ class ThreadLocalMiddleware:
 
 class SettingsCacheMiddleware(MiddlewareMixin):
     """
-    Clears the in-memory settings cache at the beginning of a request.
-    We do this so that a script can POST to /api/v2/settings/all/ and then
-    right away GET /api/v2/settings/all/ and see the updated value.
+    Drops this process's in-memory settings cache when a setting has changed,
+    so that a script can POST to /api/v2/settings/all/ and then right away GET
+    /api/v2/settings/all/ and see the updated value, even where the two
+    requests were served by different workers.
+
+    It used to drop that cache at the start of every request. The cache
+    therefore never survived one, and every setting read during the request
+    went to the shared cache instead: around nine round trips a request rather
+    than two, to cover a setting write that almost never happens. Now one key
+    is read, the counter that every setting change moves, and the in-memory
+    cache is dropped only when it has moved since this process last looked.
     """
 
+    #: a value the cache cannot return, so "never looked" is not the same as
+    #: "looked, and the cache was empty"
+    _NEVER_LOOKED = object()
+
+    #: the counter value this process last saw
+    _seen_version = _NEVER_LOOKED
+
     def process_request(self, request):
-        settings._awx_conf_memoizedcache.clear()
+        try:
+            version = cache.get(SETTING_CACHE_VERSION_KEY)
+        except Exception:
+            # A cache that cannot be reached is no reason to fail the request,
+            # and no reason to trust an in-memory copy of what it holds either.
+            logger.warning('could not read the settings cache version, dropping the in-memory settings cache')
+            settings._awx_conf_memoizedcache.clear()
+            return
+
+        if version != self._seen_version:
+            settings._awx_conf_memoizedcache.clear()
+            # an instance attribute over the class one: a worker that runs
+            # threads shares this middleware, and the worst a race costs is one
+            # more cache drop than was needed
+            self._seen_version = version
 
 
 class TimingMiddleware(threading.local, MiddlewareMixin):

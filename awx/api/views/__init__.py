@@ -4502,13 +4502,13 @@ class NotificationTemplateTest(GenericAPIView):
 
     def post(self, request, *args, **kwargs):
         obj = self.get_object()
-        msg = "Notification Test {} {}".format(obj.id, settings.TOWER_URL_BASE)
+        msg = "Notification Test {} {}".format(obj.id, settings.ASCENDER_URL_BASE)
         if obj.notification_type in ('email', 'pagerduty'):
-            body = "Test Notification {} {}".format(obj.id, settings.TOWER_URL_BASE)
+            body = "Test Notification {} {}".format(obj.id, settings.ASCENDER_URL_BASE)
         elif obj.notification_type in ('webhook', 'grafana'):
-            body = '{{"body": "Test Notification {} {}"}}'.format(obj.id, settings.TOWER_URL_BASE)
+            body = '{{"body": "Test Notification {} {}"}}'.format(obj.id, settings.ASCENDER_URL_BASE)
         else:
-            body = {"body": "Test Notification {} {}".format(obj.id, settings.TOWER_URL_BASE)}
+            body = {"body": "Test Notification {} {}".format(obj.id, settings.ASCENDER_URL_BASE)}
         notification = obj.generate_notification(msg, body)
 
         if not notification:
