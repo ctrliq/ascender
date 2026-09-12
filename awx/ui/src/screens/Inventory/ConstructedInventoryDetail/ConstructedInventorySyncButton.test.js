@@ -3,7 +3,7 @@ import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import { InventoriesAPI } from 'api';
 import { render, fireEvent, screen, waitFor } from '@testing-library/react';
-import english from '../../../locales/en/messages';
+import { messages as englishMessages } from '../../../locales/en/messages.mjs';
 import ConstructedInventorySyncButton from './ConstructedInventorySyncButton';
 import '@testing-library/jest-dom';
 
@@ -19,7 +19,7 @@ describe('<ConstructedInventorySyncButton />', () => {
   );
 
   beforeEach(() => {
-    i18n.load({ en: english });
+    i18n.load({ en: englishMessages });
     i18n.activate('en');
   });
 

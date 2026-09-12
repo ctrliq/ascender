@@ -1,7 +1,14 @@
 import '@testing-library/jest-dom/vitest';
+import { configure } from '@testing-library/dom';
 import React from 'react';
 // apply polyfills for jsdom
 import '@nteract/mockument';
+
+// findBy* and waitFor have their own timeout, separate from vitest's, and its
+// one second default is not enough once the vm pool has every core rendering a
+// different file's component tree. A query that will never match still fails,
+// it just takes longer to say so.
+configure({ asyncUtilTimeout: 5000 });
 
 // @testing-library/dom decides whether timers are faked by looking for a global
 // `jest` object, and only then checks setTimeout for sinon's clock. Under Vitest
@@ -97,6 +104,10 @@ vi.mock('hooks/useTitle');
 // where the next file's router starts, which is why the redirect tests were the
 // ones failing, and a different one each run.
 afterEach(() => {
+  // Fake timers are per environment, and the environment outlives the file,
+  // so a file that installs them and does not put them back changes how every
+  // later file in that worker behaves.
+  vi.useRealTimers();
   window.history.replaceState(null, '', '/');
   // Optional calls, not defensiveness for its own sake: a test may have
   // replaced window.localStorage with a mock that has no clear().
@@ -127,11 +138,6 @@ afterEach(() => {
     throw new Error('Warning logged to console');
   }
 });
-
-// This global variable is part of our Content Security Policy framework
-// and so this mock ensures that we don't encounter a reference error
-// when running the tests
-global.__webpack_nonce__ = null;
 
 const MockConfigContext = React.createContext({});
 vi.doMock('./contexts/Config', () => ({

@@ -416,6 +416,7 @@ ui-devel: awx/ui/node_modules
 		cp -r awx/ui/build/static/media/* /var/lib/awx/public/static/media; \
 	fi
 
+## Start the Vite dev server on port 3001, proxying the API to TARGET.
 ui-devel-test: awx/ui/node_modules
 	$(NPM_BIN) --prefix awx/ui --loglevel warn run start
 

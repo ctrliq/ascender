@@ -17,13 +17,13 @@ import { Router } from 'react-router';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import { createMemoryHistory } from './historyShim';
-import english from '../src/locales/en/messages';
+import { messages as englishMessages } from '../src/locales/en/messages';
 import { SessionProvider } from '../src/contexts/Session';
 import { ConfigProvider } from '../src/contexts/Config';
 
 // Match mountWithContexts' i18n defaults. Lingui v6 derives plural rules
 // from Intl.PluralRules, so no loadLocaleData step is needed.
-i18n.load({ en: english.messages });
+i18n.load({ en: englishMessages });
 i18n.activate('en');
 
 const defaultContexts = {

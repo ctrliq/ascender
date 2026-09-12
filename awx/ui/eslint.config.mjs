@@ -15,7 +15,7 @@ export default defineConfig([
   {
     ignores: [
       'vitest.config.mjs',
-      'webpack.*.js',
+      'vite.config.mjs',
       'etc/**',
       'coverage/**',
       'build/**',

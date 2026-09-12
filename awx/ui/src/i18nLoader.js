@@ -21,7 +21,10 @@ export const rtlLocales = new Set(['ar']);
  * @param locale any locale string
  */
 export async function dynamicActivate(locale, pseudolocalization = false) {
-  const { messages } = await import(`./locales/${locale}/messages`);
+  // The extension is not decoration: the static part of a dynamic import has
+  // to carry one, or the import cannot be analysed and no catalogue is bundled.
+  // .mjs because lingui compiles these as ES modules now, see lingui.config.js.
+  const { messages } = await import(`./locales/${locale}/messages.mjs`);
 
   if (pseudolocalization) {
     Object.keys(messages).forEach((key) => {

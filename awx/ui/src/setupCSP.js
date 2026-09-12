@@ -1,8 +1,7 @@
-/* eslint-disable */
-
-// Set a special variable to add `nonce` attributes to all styles/script tags
-// See https://github.com/webpack/webpack/pull/3210
-__webpack_nonce__ = window.NONCE_ID;
+// The nonce for the style tags styled-components injects is carried by the
+// <meta name="sc-nonce"> that Django renders into index.html, which
+// styled-components looks for before anything else. It replaces the
+// __webpack_nonce__ global this used to assign, which only webpack understood.
 
 // Send report when a CSP violation occurs
 // See: https://w3c.github.io/webappsec-csp/2/#violation-reports

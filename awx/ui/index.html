@@ -1,0 +1,25 @@
+<!--
+  Modifications Copyright (c) 2023 Ctrl IQ, Inc.
+
+  Django serves this file as a template out of awx/ui/build, so the production
+  build is not what you see here: vite.config.mjs injects the {% load static %},
+  the CSP nonce and the policy itself at the two comment markers below. The dev
+  server serves the file as it stands, which is why those parts are not here.
+-->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!--django-head-->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="CIQ Ascender" />
+    <link rel="shortcut icon" href="/static/media/favicon.ico" />
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <!--django-body-->
+    <div id="app" style="height: 100%"></div>
+    <script type="module" src="/src/index.js"></script>
+  </body>
+</html>

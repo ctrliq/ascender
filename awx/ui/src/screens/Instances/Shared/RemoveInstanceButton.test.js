@@ -5,7 +5,7 @@ import { InstanceGroupsAPI } from 'api';
 import RemoveInstanceButton from './RemoveInstanceButton';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
-import english from '../../../../src/locales/en/messages';
+import { messages as englishMessages } from '../../../../src/locales/en/messages.mjs';
 
 vi.mock('api');
 
@@ -53,7 +53,7 @@ const instances = [
 ];
 describe('<RemoveInstanceButtton />', () => {
   beforeAll(() => {
-    i18n.load({ en: english });
+    i18n.load({ en: englishMessages });
     i18n.activate('en');
   });
 

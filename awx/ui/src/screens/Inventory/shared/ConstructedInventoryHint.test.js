@@ -2,7 +2,7 @@ import React from 'react';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import english from '../../../locales/en/messages';
+import { messages as englishMessages } from '../../../locales/en/messages.mjs';
 import '@testing-library/jest-dom';
 import { settleTooltips } from '../../../../testUtils/rtlContexts';
 import ConstructedInventoryHint from './ConstructedInventoryHint';
@@ -17,7 +17,7 @@ vi.mock('contexts/Config', () => ({
 
 describe('<ConstructedInventoryHint />', () => {
   beforeEach(() => {
-    i18n.load({ en: english });
+    i18n.load({ en: englishMessages });
     i18n.activate('en');
   });
 

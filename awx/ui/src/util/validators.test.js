@@ -1,5 +1,5 @@
 import { i18n } from '@lingui/core';
-import en from '../locales/en/messages';
+import { messages as enMessages } from '../locales/en/messages.mjs';
 import {
   required,
   minLength,
@@ -16,7 +16,7 @@ import {
 
 describe('validators', () => {
   beforeAll(() => {
-    i18n.load({ en });
+    i18n.load({ en: enMessages });
     i18n.activate('en');
   });
 

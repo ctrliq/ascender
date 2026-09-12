@@ -1,70 +1,23 @@
 import { fileURLToPath, URL } from 'node:url';
-import { transformAsync } from '@babel/core';
 import { defineConfig } from 'vitest/config';
+import { babelTransform } from './config/build/babel.mjs';
+import { srcAliases } from './config/build/aliases.mjs';
 
 const resolvePath = (relative) =>
   fileURLToPath(new URL(relative, import.meta.url));
 
-const SOURCE = /\.[jt]sx?$/;
-
-/*
- * The babel pass config/jest/babelTransform.js used to run, ported rather than
- * replaced. @vitejs/plugin-react is not the vehicle for it: version 6 dropped
- * babel entirely in favour of oxc, and oxc has no lingui macro, so the macros
- * in `useLingui()` and every t`...` would go through untransformed.
- *
- * @babel/preset-env is deliberately not here, where the jest transformer had
- * it. It only ever targeted the running node, and under babel-jest it also
- * rewrote the modules to CommonJS, which is the one thing that must not happen
- * now that Vite is handling ESM. JSX still needs babel, so preset-react stays.
- * The import.meta rewrite the transformer carried is gone with it: that existed
- * because jest could not parse the syntax, and Vitest is ESM.
- */
-const babel = {
-  name: 'awx:babel',
-  enforce: 'pre',
-  async transform(code, id) {
-    if (!SOURCE.test(id.split('?')[0]) || id.includes('/node_modules/')) {
-      return null;
-    }
-    const result = await transformAsync(code, {
-      filename: id,
-      babelrc: false,
-      configFile: false,
-      sourceMaps: true,
-      presets: [['@babel/preset-react', { runtime: 'automatic' }]],
-      plugins: [
-        '@lingui/babel-plugin-lingui-macro',
-        resolvePath('./config/babel/jsx-compat-plugin.js'),
-      ],
-    });
-    return { code: result.code, map: result.map };
-  },
-};
-
 export default defineConfig({
-  plugins: [babel],
+  plugins: [babelTransform()],
   resolve: {
-    // jest resolved these through modulePaths and moduleNameMapper. Vite has no
-    // module search path, so every absolute import out of src is an alias.
+    // The application's own aliases, plus the one module the tests stand in
+    // for. Shared with vite.config.mjs rather than restated, so a module that
+    // resolves when the application builds resolves the same way here.
     alias: [
-      // The real registry reaches for require.context, which only webpack has,
-      // so the mock stands in for it exactly as it did under jest. The pattern
-      // has to catch the relative imports too, not only the bare one.
-      {
-        find: /(?:^|.*\/)themeRegistry(?:\.js)?$/,
-        replacement: resolvePath('./testUtils/themeRegistryMock.js'),
-      },
       {
         find: /^history$/,
         replacement: resolvePath('./testUtils/historyShim.js'),
       },
-      { find: /^i18nLoader$/, replacement: resolvePath('./src/i18nLoader.js') },
-      // Anchored, so node's own util is still reachable as node:util.
-      {
-        find: /^(api|components|contexts|hooks|screens|util)(\/|$)/,
-        replacement: `${resolvePath('./src')}/$1$2`,
-      },
+      ...srcAliases,
     ],
   },
   test: {
@@ -74,7 +27,13 @@ export default defineConfig({
     // was going: it took the environment share of the run from 26% to 2%, and
     // the whole suite from 16m to 5m39s. Module state stays isolated per file,
     // unlike isolate: false, which is 37% faster still and fails 102 tests.
-    pool: 'vmThreads',
+    //
+    // Forks rather than threads, because the VM contexts are what this costs
+    // memory in and a thread pool keeps them all in one process heap: on a
+    // twelve core machine that run reached 20GB and died in V8's own
+    // allocator, four runs in five, with the machine itself far from full.
+    // Each fork brings its own heap, and the run takes the same time.
+    pool: 'vmForks',
     environment: 'jsdom',
     // jest served pages from http://localhost/, where jsdom's own default is
     // http://localhost:3000/, and that is what window.location reads.
@@ -107,7 +66,11 @@ export default defineConfig({
     // locally if your checkout is not bind mounted.
     // jest's resetMocks, and the timeout setupTests.js used to set by hand.
     mockReset: true,
+    // Both, because Vitest has two timeouts where jest had one, and a hook that
+    // renders a whole form can outrun the 10s hookTimeout default while every
+    // other worker in the vm pool is doing the same thing.
     testTimeout: 120000,
+    hookTimeout: 120000,
     coverage: {
       include: ['src/**/*.{js,jsx}', 'testUtils/**/*.{js,jsx}'],
       exclude: ['src/locales/**', '**/index.js'],
