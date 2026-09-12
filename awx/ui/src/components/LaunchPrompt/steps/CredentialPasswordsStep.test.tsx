@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Formik } from 'formik';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -9,7 +8,7 @@ import CredentialPasswordsStep from './CredentialPasswordsStep';
 // breaks the label/input association).
 describe('CredentialPasswordsStep', () => {
   function assertPasswordFields(
-    container: Untyped,
+    container: HTMLElement,
     {
       ssh,
       passphrase,

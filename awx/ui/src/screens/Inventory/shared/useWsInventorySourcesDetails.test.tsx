@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { act, waitFor } from '@testing-library/react';
 import WS from 'vitest-websocket-mock';
@@ -19,9 +18,9 @@ function Test({
   return <div data-testid="result">{JSON.stringify(synced)}</div>;
 }
 
-function readResult(container: Untyped) {
+function readResult(container: HTMLElement) {
   return JSON.parse(
-    container.querySelector('[data-testid="result"]').textContent
+    container.querySelector('[data-testid="result"]')!.textContent as string
   );
 }
 

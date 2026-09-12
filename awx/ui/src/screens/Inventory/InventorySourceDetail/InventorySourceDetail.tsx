@@ -1,4 +1,4 @@
-import type { Untyped, UnifiedJob } from 'types/api';
+import type { SummaryFieldRef, UnifiedJob, Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -317,7 +317,7 @@ function InventorySourceDetail({
         <Detail
           fullWidth
           label={t`Credential`}
-          value={credentials?.map((cred: Untyped) => (
+          value={credentials?.map((cred: SummaryFieldRef) => (
             <CredentialChip key={cred?.id} credential={cred} isReadOnly />
           ))}
           isEmpty={credentials?.length === 0}

@@ -1,4 +1,4 @@
-import type { Untyped, UnifiedJob } from 'types/api';
+import type { SummaryFieldRef, UnifiedJob, Untyped } from 'types/api';
 import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -215,7 +215,7 @@ function WorkflowJobTemplateDetail({
               totalChips={summary_fields.labels.results.length}
               ouiaId="workflow-job-template-detail-label-chips"
             >
-              {summary_fields.labels.results.map((l: Untyped) => (
+              {summary_fields.labels.results.map((l: SummaryFieldRef) => (
                 <Label
                   variant="outline"
                   key={l.id}

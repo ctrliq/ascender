@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within, act } from '@testing-library/react';
 import type { TestHistory } from 'history';
@@ -6,6 +5,7 @@ import { createMemoryHistory } from 'history';
 import { SettingsProvider } from 'contexts/Settings';
 import { SettingsAPI, ExecutionEnvironmentsAPI } from 'api';
 import type { ResponseOf } from '../../../../../testUtils/responseOf';
+import type { TestUser } from '../../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import { settingOptions } from '../../../../../testUtils/settingOptions';
 import mockAllSettings from '../../shared/data.allSettings.json';
@@ -79,7 +79,7 @@ describe('<MiscSystemEdit />', () => {
   }
 
   // Open the Execution Environment lookup modal, pick the mocked EE and confirm.
-  async function selectExecutionEnvironment(user: Untyped) {
+  async function selectExecutionEnvironment(user: TestUser) {
     await user.click(screen.getByRole('button', { name: 'Search' }));
     const dialog = await screen.findByRole('dialog');
     const row = await within(dialog).findByText('Default EE');

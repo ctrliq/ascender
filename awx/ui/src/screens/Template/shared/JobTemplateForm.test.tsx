@@ -1,4 +1,4 @@
-import type { JobTemplate, Untyped } from 'types/api';
+import type { JobTemplate, SummaryFieldRef, Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
@@ -59,13 +59,13 @@ vi.mock('components/Lookup', async () => {
     MultiCredentialsLookup: ({ value, onChange }: Untyped) => (
       <div>
         <span data-testid="credentials-value">{JSON.stringify(value)}</span>
-        {value.map((cred: Untyped) => (
+        {value.map((cred: SummaryFieldRef) => (
           <button
             key={cred.id}
             type="button"
             aria-label={`remove credential ${cred.name}`}
             onClick={() =>
-              onChange(value.filter((c: Untyped) => c.id !== cred.id))
+              onChange(value.filter((c: SummaryFieldRef) => c.id !== cred.id))
             }
           >
             {cred.name}

@@ -362,7 +362,7 @@ const waitForResource = (name: string) =>
 
 // SelectableCard does not forward its id to the DOM; the cards are
 // role="button" elements distinguished by their bold label text.
-const clickLinkTypeCard = (label: Untyped) => {
+const clickLinkTypeCard = (label: string) => {
   const card = [...document.querySelectorAll('[role="button"]')].find(
     (el) => el.querySelector('b')?.textContent === label
   );

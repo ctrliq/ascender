@@ -1,5 +1,4 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { UsersAPI, TokensAPI } from 'api';
@@ -125,7 +124,7 @@ const tokens = {
   },
 };
 
-async function selectThirdTokenAndDelete(user: Untyped) {
+async function selectThirdTokenAndDelete(user: TestUser) {
   // the third token is the one described as 'fgds' (title-cased to 'Fgds') (id 3)
   const row = screen.getByText('Fgds').closest('tr');
   await user.click(within(row!).getByRole('checkbox'));

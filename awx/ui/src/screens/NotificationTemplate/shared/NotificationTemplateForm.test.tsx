@@ -19,7 +19,8 @@ vi.mock('components/CodeEditor', async () => {
     ...(await vi.importActual<typeof import('components/CodeEditor')>(
       'components/CodeEditor'
     )),
-    default: ({ value }: Untyped) => ReactLib.createElement('div', null, value),
+    default: ({ value }: { value: React.ReactNode }) =>
+      ReactLib.createElement('div', null, value),
   };
 });
 vi.mock('components/CodeEditor/CodeEditorField', async () => {

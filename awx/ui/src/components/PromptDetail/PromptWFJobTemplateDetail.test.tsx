@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import {
@@ -15,7 +14,7 @@ vi.mock('components/CodeEditor/CodeEditor', async () => {
   const ReactMock = await vi.importActual<typeof import('react')>('react');
   return {
     __esModule: true,
-    default: ({ value }: Untyped) =>
+    default: ({ value }: { value: React.ReactNode }) =>
       ReactMock.createElement('div', { 'data-testid': 'code-editor' }, value),
   };
 });

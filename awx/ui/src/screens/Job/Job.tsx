@@ -90,7 +90,7 @@ function Job({ setBreadcrumb }: JobProps) {
       }
       if (
         jobDetailData?.summary_fields?.credentials?.find(
-          (cred: Untyped) => cred.kind === 'vault'
+          (cred: SummaryFieldRef) => cred.kind === 'vault'
         )
       ) {
         const {

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import WorkflowTools from './WorkflowTools';
@@ -34,7 +33,7 @@ describe('WorkflowTools', () => {
         zoomPercentage={95.7}
       />
     );
-    const byOuia = (id: Untyped) =>
+    const byOuia = (id: string) =>
       container.querySelector(`[data-ouia-component-id="${id}"]`);
     await user.click(byOuia('visualizer-zoom-in-button')!);
     expect(zoomChange).toHaveBeenCalledWith(1.1);

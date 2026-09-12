@@ -55,7 +55,7 @@ const options = {
 };
 
 // Returns the PF Wizard footer navigation button by its visible label.
-function footerButton(label: Untyped) {
+function footerButton(label: string) {
   return screen
     .getAllByRole('button')
     .find((b) => b.textContent.trim() === label);

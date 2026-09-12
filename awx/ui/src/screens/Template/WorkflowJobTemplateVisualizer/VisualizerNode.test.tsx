@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 import {
@@ -61,7 +60,7 @@ const nodeG = (id = 2) => document.querySelector(`#node-${id}`);
 // The action tooltip is only rendered when hovering; its items carry the
 // data-cy/id of each action (node-add, node-details, ...). Use the presence of
 // an action item as the DOM proxy for "tooltip is open" and count the actions.
-const tooltipItem = (id: Untyped) => document.querySelector(`#${id}`);
+const tooltipItem = (id: string) => document.querySelector(`#${id}`);
 const tooltipItemCount = () =>
   document.querySelectorAll(
     '#node-add, #node-details, #node-edit, #node-link, #node-delete'

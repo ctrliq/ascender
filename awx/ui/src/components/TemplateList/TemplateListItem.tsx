@@ -1,4 +1,4 @@
-import type { JobTemplate, Untyped } from 'types/api';
+import type { JobTemplate, SummaryFieldRef, Untyped } from 'types/api';
 /*
   Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 */
@@ -304,7 +304,7 @@ function TemplateListItem({
                       totalChips={summaryFields.credentials.length}
                       ouiaId={`template-${template.id}-credential-chips`}
                     >
-                      {summaryFields.credentials.map((c: Untyped) => (
+                      {summaryFields.credentials.map((c: SummaryFieldRef) => (
                         <CredentialChip
                           key={c.id}
                           credential={c}
@@ -328,16 +328,18 @@ function TemplateListItem({
                       totalChips={summaryFields.labels.results.length}
                       ouiaId={`template-${template.id}-label-chips`}
                     >
-                      {summaryFields.labels.results.map((l: Untyped) => (
-                        <Label
-                          variant="outline"
-                          key={l.id}
+                      {summaryFields.labels.results.map(
+                        (l: SummaryFieldRef) => (
+                          <Label
+                            variant="outline"
+                            key={l.id}
 
-                          data-ouia-component-id={`label-${l.id}-chip`}
-                        >
-                          {l.name}
-                        </Label>
-                      ))}
+                            data-ouia-component-id={`label-${l.id}-chip`}
+                          >
+                            {l.name}
+                          </Label>
+                        )
+                      )}
                     </ChipGroup>
                   }
                   dataCy={`template-${template.id}-labels`}

@@ -2,6 +2,7 @@ import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { Formik } from 'formik';
+import type { TestUser } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SurveyStep from './SurveyStep';
 import type { SurveyConfig } from '../types';
@@ -26,7 +27,7 @@ function makeConfig(choices: Untyped) {
   };
 }
 
-async function openAndAssertOptions(user: Untyped) {
+async function openAndAssertOptions(user: TestUser) {
   // The typeahead toggle is the textbox inside the MenuToggle.
   const input = screen.getByRole('textbox');
   await user.click(input);

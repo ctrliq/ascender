@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef, Untyped } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 
@@ -60,7 +60,7 @@ function TemplatePopoverContent({ template }: TemplatePopoverContentProps) {
             totalChips={template.summary_fields?.credentials?.length}
             ouiaId={`template-${template.id}-credential-chips`}
           >
-            {template.summary_fields?.credentials?.map((c: Untyped) => (
+            {template.summary_fields?.credentials?.map((c: SummaryFieldRef) => (
               <CredentialChip
                 key={c.id}
                 credential={c}

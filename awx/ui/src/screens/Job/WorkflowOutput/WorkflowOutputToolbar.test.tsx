@@ -49,7 +49,7 @@ function renderToolbar(
   );
 }
 
-const byOuia = (id: Untyped) =>
+const byOuia = (id: string) =>
   document.querySelector(`[data-ouia-component-id="${id}"]`);
 
 const nodes = [{ id: 1 }, { id: 2 }, { id: 3, isDeleted: true }];

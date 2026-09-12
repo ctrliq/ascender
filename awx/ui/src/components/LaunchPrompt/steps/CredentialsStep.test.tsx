@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { Formik } from 'formik';
@@ -107,11 +106,13 @@ const credentials = [
 
 // The credential-type AnsibleSelect renders a native <select> with a generic
 // "Select Input" aria-label, so locate it by its stable id.
-async function findCategorySelect(container: Untyped) {
+async function findCategorySelect(container: HTMLElement) {
   return waitFor(() => {
-    const el = container.querySelector('select#multiCredentialsLookUp-select');
+    const el = container.querySelector<HTMLSelectElement>(
+      'select#multiCredentialsLookUp-select'
+    );
     expect(el).not.toBeNull();
-    return el;
+    return el as HTMLSelectElement;
   });
 }
 

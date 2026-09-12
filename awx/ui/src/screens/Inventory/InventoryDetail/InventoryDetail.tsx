@@ -1,4 +1,4 @@
-import type { AnyInventory, Untyped } from 'types/api';
+import type { AnyInventory, SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 
@@ -148,11 +148,13 @@ function InventoryDetail({ inventory }: InventoryDetailProps) {
                 numChips={5}
                 totalChips={inventory.summary_fields.labels?.results?.length}
               >
-                {inventory.summary_fields.labels?.results?.map((l: Untyped) => (
-                  <Label variant="outline" key={l.id}>
-                    {l.name}
-                  </Label>
-                ))}
+                {inventory.summary_fields.labels?.results?.map(
+                  (l: SummaryFieldRef) => (
+                    <Label variant="outline" key={l.id}>
+                      {l.name}
+                    </Label>
+                  )
+                )}
               </ChipGroup>
             }
             isEmpty={inventory.summary_fields.labels?.results?.length === 0}

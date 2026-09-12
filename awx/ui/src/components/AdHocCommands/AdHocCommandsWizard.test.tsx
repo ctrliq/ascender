@@ -3,6 +3,7 @@ import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { CredentialsAPI, ExecutionEnvironmentsAPI, RootAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
+import type { TestUser } from '../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AdHocCommandsWizard from './AdHocCommandsWizard';
 import type { AdHocItem } from './types';
@@ -37,14 +38,14 @@ function renderWizard(onLaunch: Untyped) {
 }
 
 // Fill the details step (module/args/verbosity) so Next is enabled.
-async function fillDetails(user: Untyped) {
+async function fillDetails(user: TestUser) {
   await waitFor(() =>
     expect(document.querySelector('#module_name')).toBeInTheDocument()
   );
-  await user.selectOptions(document.querySelector('#module_name'), 'command');
-  await user.type(document.querySelector('#module_args'), 'foo');
+  await user.selectOptions(document.querySelector('#module_name')!, 'command');
+  await user.type(document.querySelector('#module_args')!, 'foo');
   // select verbosity by its stable option value ('1'), not the i18n label
-  await user.selectOptions(document.querySelector('#verbosity'), '1');
+  await user.selectOptions(document.querySelector('#verbosity')!, '1');
 }
 
 // The Wizard footer renders a Next button and a final Launch button.

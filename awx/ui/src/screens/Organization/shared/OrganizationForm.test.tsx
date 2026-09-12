@@ -1,5 +1,5 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef, Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { OrganizationsAPI, ExecutionEnvironmentsAPI } from 'api';
@@ -22,7 +22,7 @@ vi.mock('components/Lookup', async () => {
     ...actual,
     InstanceGroupsLookup: ({ value, onChange }: Untyped) => (
       <div data-testid="instance-groups-lookup">
-        {(value || []).map((ig: Untyped) => (
+        {(value || []).map((ig: SummaryFieldRef) => (
           <span key={ig.id} data-testid="instance-group-chip">
             {ig.name}
           </span>
@@ -60,7 +60,7 @@ vi.mock('components/Lookup', async () => {
 });
 
 vi.mock('components/Lookup/CredentialLookup', () => ({
-  default: ({ value }: Untyped) => (
+  default: ({ value }: { value: unknown }) => (
     <div data-testid="credential-lookup">
       {(Array.isArray(value) ? value : [value].filter(Boolean)).map((cred) => (
         <span key={cred.id} data-testid="galaxy-credential-chip">

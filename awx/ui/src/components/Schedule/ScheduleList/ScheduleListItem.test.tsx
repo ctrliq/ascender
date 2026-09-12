@@ -64,7 +64,7 @@ function renderItem(props?: Untyped) {
   );
 }
 
-const cellByLabel = (label: Untyped) =>
+const cellByLabel = (label: string) =>
   document.querySelector(`td[data-label="${label}"]`);
 
 describe('ScheduleListItem', () => {

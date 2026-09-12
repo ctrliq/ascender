@@ -1,4 +1,8 @@
-import type { RecentJob, Untyped, WorkflowJobTemplate } from 'types/api';
+import type {
+  RecentJob,
+  SummaryFieldRef,
+  WorkflowJobTemplate,
+} from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
@@ -129,7 +133,7 @@ function PromptWFJobTemplateDetail({
               totalChips={summary_fields.labels.results.length}
               ouiaId="prompt-wf-jt-label-chips"
             >
-              {summary_fields.labels.results.map((label: Untyped) => (
+              {summary_fields.labels.results.map((label: SummaryFieldRef) => (
                 <Label variant="outline" key={label.id}>
                   {label.name}
                 </Label>

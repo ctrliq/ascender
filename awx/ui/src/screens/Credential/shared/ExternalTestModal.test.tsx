@@ -1,8 +1,9 @@
-import type { Credential, Untyped, CredentialType } from 'types/api';
+import type { Credential, CredentialType } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { TestUser } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import ExternalTestModal from './ExternalTestModal';
 import credentialTypesArr from './data.credentialTypes.json';
@@ -32,8 +33,8 @@ const credential = {
 } as unknown as Credential;
 
 // The modal is rendered in a portal; query its fields/buttons against document.
-const getInput = (id: Untyped) =>
-  document.querySelector(`input#credential-${id}`);
+const getInput = (id: string) =>
+  document.querySelector(`input#credential-${id}`) as HTMLInputElement;
 const getRunButton = () => screen.getByRole('button', { name: 'Run' });
 
 const expectedPayload = {
@@ -54,7 +55,7 @@ const expectedPayload = {
   },
 };
 
-async function fillAndRun(user: Untyped) {
+async function fillAndRun(user: TestUser) {
   await user.type(getInput('secret_path'), '/secret/foo/bar/baz');
   await user.type(getInput('secret_key'), 'password');
   await user.click(getRunButton());

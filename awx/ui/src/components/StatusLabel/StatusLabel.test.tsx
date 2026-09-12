@@ -16,11 +16,13 @@ const ICON_PATH_PREFIX = {
   ExclamationTriangleIcon: 'M569.517 440.013C587.975 472.0',
 };
 
-function getLabel(container: Untyped) {
-  return container.querySelector('.pf-v6-c-label');
+// Asserted: every case here renders one, and the assertions that follow say
+// so more clearly than a null guard would.
+function getLabel(container: HTMLElement) {
+  return container.querySelector('.pf-v6-c-label') as HTMLElement;
 }
 
-function expectLabel(container: Untyped, { icon, color, text }: Untyped) {
+function expectLabel(container: HTMLElement, { icon, color, text }: Untyped) {
   const label = getLabel(container);
   if (color === 'grey') {
     // PF Label renders no color modifier class for the default grey color, so
@@ -33,7 +35,7 @@ function expectLabel(container: Untyped, { icon, color, text }: Untyped) {
     expect(label).toHaveClass(`pf-m-${color}`);
   }
   expect(label).toHaveTextContent(text);
-  const path = container.querySelector('svg path').getAttribute('d');
+  const path = container.querySelector('svg path')!.getAttribute('d');
   expect(path).toContain(
     ICON_PATH_PREFIX[icon as keyof typeof ICON_PATH_PREFIX]
   );

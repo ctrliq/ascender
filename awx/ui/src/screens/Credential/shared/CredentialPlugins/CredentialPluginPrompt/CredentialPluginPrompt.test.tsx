@@ -1,4 +1,4 @@
-import type { Credential, Untyped } from 'types/api';
+import type { Credential } from 'types/api';
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
@@ -69,7 +69,7 @@ const mockCredentialTypeDetail = {
   },
 };
 
-const getInput = (id: Untyped) =>
+const getInput = (id: string) =>
   document.querySelector(`input#credential-${id}`);
 
 describe('<CredentialPluginPrompt />', () => {

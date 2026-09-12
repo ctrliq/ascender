@@ -1,8 +1,8 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { LabelsAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
+import type { TestUser } from '../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import LabelSelect from './LabelSelect';
 
@@ -13,7 +13,7 @@ const options = [
   { id: 2, name: 'two' },
 ];
 
-async function openAndGetOptions(user: Untyped) {
+async function openAndGetOptions(user: TestUser) {
   const input = screen.getByRole('textbox', { name: 'Select Labels' });
   await user.click(input);
   const listbox = await screen.findByRole('listbox');

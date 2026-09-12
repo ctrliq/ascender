@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import {
@@ -9,6 +8,7 @@ import {
   RootAPI,
 } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
+import type { TestUser } from '../../../testUtils/rtlContexts';
 import {
   renderWithContexts,
   settleTooltips,
@@ -60,17 +60,17 @@ function renderAdHoc(props = {}) {
 
 // Walk the open wizard from the details step through to launch, selecting the
 // EE row at index 2 (EE2) and the credential row at index 4 (Cred 4).
-async function runWizardToLaunch(user: Untyped) {
-  await user.selectOptions(document.querySelector('#module_name'), 'command');
-  await user.type(document.querySelector('#module_args'), 'foo');
+async function runWizardToLaunch(user: TestUser) {
+  await user.selectOptions(document.querySelector('#module_name')!, 'command');
+  await user.type(document.querySelector('#module_args')!, 'foo');
   // select verbosity by its stable option value ('1'), not the i18n label
-  await user.selectOptions(document.querySelector('#verbosity'), '1');
+  await user.selectOptions(document.querySelector('#verbosity')!, '1');
   await user.click(screen.getByRole('button', { name: 'Next' }));
 
   // step 2: execution environment - select EE2
   await screen.findByText('EE2');
   await user.click(
-    screen.getByRole('row', { name: /EE2/ }).querySelector('input')
+    screen.getByRole('row', { name: /EE2/ }).querySelector('input')!
   );
   await waitFor(() =>
     expect(
@@ -82,7 +82,7 @@ async function runWizardToLaunch(user: Untyped) {
   // step 3: machine credential - select Cred 4
   await screen.findByText('Cred 4');
   await user.click(
-    screen.getByRole('row', { name: /Cred 4/ }).querySelector('input')
+    screen.getByRole('row', { name: /Cred 4/ }).querySelector('input')!
   );
   await waitFor(() =>
     expect(

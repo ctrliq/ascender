@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -22,9 +21,11 @@ const qsConfig = {
 
 // the bottom Pagination is rendered with ouiaId="bottom-pagination"; scope
 // queries to it because the top (compact) pagination shares the same labels
-const bottomPagination = (container: Untyped) =>
+const bottomPagination = (container: HTMLElement) =>
   within(
-    container.querySelector('[data-ouia-component-id="bottom-pagination"]')
+    container.querySelector(
+      '[data-ouia-component-id="bottom-pagination"]'
+    ) as HTMLElement
   );
 
 describe('<PaginatedTable />', () => {

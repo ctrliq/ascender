@@ -1,4 +1,4 @@
-import type { UnifiedJob, Untyped } from 'types/api';
+import type { SummaryFieldRef, UnifiedJob, Untyped } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 
@@ -315,7 +315,7 @@ function JobListItem({
                       totalChips={credentials.length}
                       ouiaId={`job-${job.id}-credential-chips`}
                     >
-                      {credentials.map((c: Untyped) => (
+                      {credentials.map((c: SummaryFieldRef) => (
                         <CredentialChip
                           credential={c}
                           isReadOnly
@@ -338,7 +338,7 @@ function JobListItem({
                       totalChips={labels.results.length}
                       ouiaId={`job-${job.id}-label-chips`}
                     >
-                      {labels.results.map((l: Untyped) => (
+                      {labels.results.map((l: SummaryFieldRef) => (
                         <Label
                           variant="outline"
                           key={l.id}

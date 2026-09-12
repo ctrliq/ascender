@@ -28,24 +28,26 @@ vi.mocked(AuthAPI.read).mockResolvedValue({
   data: {},
 } as unknown as ResponseOf<typeof AuthAPI.read>);
 
-function getUsernameInput(container: Untyped) {
-  return container.querySelector('#pf-login-username-id');
+// Asserted rather than checked: a login form without these fields is a
+// broken test, and what follows says so more clearly than a null guard.
+function getUsernameInput(container: HTMLElement) {
+  return container.querySelector('#pf-login-username-id') as HTMLInputElement;
 }
 
-function getPasswordInput(container: Untyped) {
-  return container.querySelector('#pf-login-password-id');
+function getPasswordInput(container: HTMLElement) {
+  return container.querySelector('#pf-login-password-id') as HTMLInputElement;
 }
 
 function getSubmitButton() {
   return screen.getByRole('button', { name: 'Log In' });
 }
 
-async function waitForLoginForm(container: Untyped) {
+async function waitForLoginForm(container: HTMLElement) {
   await waitFor(() => expect(getUsernameInput(container)).toBeInTheDocument());
 }
 
 describe('<Login />', () => {
-  let realLocalStorage: Untyped;
+  let realLocalStorage: Storage;
 
   beforeEach(() => {
     vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({

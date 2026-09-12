@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef, Untyped } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
@@ -94,7 +94,9 @@ function useInventoryHelpTextStrings() {
           {t`When not checked, a merge will be performed, combining local variables with those found on the external source.`}
         </>
       ),
-      updateOnLaunch: ({ value }: Untyped) => (
+      // The project the inventory source syncs from, absent until one is
+      // picked, which is what the paragraph below is conditional on.
+      updateOnLaunch: ({ value }: { value?: SummaryFieldRef | null }) => (
         <>
           <div>
             {t`Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks.`}
@@ -109,7 +111,11 @@ function useInventoryHelpTextStrings() {
           )}
         </>
       ),
-      updateOnProjectUpdate: ({ value }: Untyped) => (
+      updateOnProjectUpdate: ({
+        value,
+      }: {
+        value?: SummaryFieldRef | null;
+      }) => (
         <>
           <div>
             {t`After every project update where the SCM revision changes, refresh the inventory from the selected source before executing job tasks. This is intended for static content, like the Ansible inventory .ini file format.`}

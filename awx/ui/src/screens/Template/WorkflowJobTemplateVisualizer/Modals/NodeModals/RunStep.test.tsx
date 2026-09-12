@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, fireEvent, act } from '@testing-library/react';
 import { Formik } from 'formik';
@@ -11,7 +10,7 @@ import RunStep from './RunStep';
 // selection state share a generated class, so we assert selection by comparing
 // each card's class against the success card while it is the default-selected
 // one.
-function getCard(label: Untyped) {
+function getCard(label: string) {
   return screen.getByText(label).closest('[role="button"]');
 }
 

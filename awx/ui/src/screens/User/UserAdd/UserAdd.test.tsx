@@ -1,9 +1,9 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { OrganizationsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { TestUser } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserAdd from './UserAdd';
 
@@ -20,7 +20,7 @@ describe('<UserAdd />', () => {
     } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
   });
 
-  async function fillRequiredFields(user: Untyped) {
+  async function fillRequiredFields(user: TestUser) {
     await user.type(
       screen.getByRole('textbox', { name: 'Username' }),
       'sysadmin'

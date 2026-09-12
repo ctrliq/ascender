@@ -3,6 +3,7 @@ import React from 'react';
 import { Toolbar, ToolbarContent } from '@patternfly/react-core';
 import { createMemoryHistory } from 'history';
 import { screen, within, fireEvent, waitFor } from '@testing-library/react';
+import type { TestUser } from '../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import Search from './Search';
 
@@ -32,7 +33,7 @@ function renderSearch(props: Untyped, options?: Untyped) {
   );
 }
 
-async function selectKey(user: Untyped, name: Untyped) {
+async function selectKey(user: TestUser, name: Untyped) {
   const toggle = screen.getByRole('button', { name: 'Simple key select' });
   if (toggle.getAttribute('aria-expanded') !== 'true') {
     await user.click(toggle);

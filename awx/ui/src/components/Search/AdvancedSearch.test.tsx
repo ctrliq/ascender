@@ -1,11 +1,12 @@
 import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, within, fireEvent, waitFor } from '@testing-library/react';
+import type { TestUser } from '../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import AdvancedSearch from './AdvancedSearch';
 
 async function selectFrom(
-  user: Untyped,
+  user: TestUser,
   inputLabel: Untyped,
   optionName: Untyped
 ) {
@@ -15,7 +16,7 @@ async function selectFrom(
   await user.click(option);
 }
 
-async function clearFrom(user: Untyped, inputLabel: Untyped) {
+async function clearFrom(user: TestUser, inputLabel: Untyped) {
   const input = screen.getByRole('textbox', { name: inputLabel });
   const container = input.closest('.pf-v6-c-menu-toggle');
   await user.click(
@@ -29,7 +30,7 @@ function valueInput() {
   return screen.getByLabelText('Advanced search value input');
 }
 
-async function setValueAndSubmit(user: Untyped, value: Untyped) {
+async function setValueAndSubmit(user: TestUser, value: Untyped) {
   const input = valueInput();
   await user.type(input, value);
   fireEvent.keyDown(input, { key: 'Enter' });

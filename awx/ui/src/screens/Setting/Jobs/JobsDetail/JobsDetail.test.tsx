@@ -16,7 +16,7 @@ vi.mock('../../../../api');
 
 // CodeEditor (react-ace) renders empty under jsdom, so for variable details we
 // assert the surrounding label is present rather than the editor contents.
-function assertVariableDetail(label: Untyped) {
+function assertVariableDetail(label: string) {
   expect(screen.getByText(label)).toBeInTheDocument();
 }
 

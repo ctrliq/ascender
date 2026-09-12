@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { render } from '@testing-library/react';
 import StatusIcon from './StatusIcon';
@@ -17,10 +16,10 @@ const ICON_PATH_PREFIX = {
 };
 
 function expectIcon(
-  container: Untyped,
+  container: HTMLElement,
   iconName: keyof typeof ICON_PATH_PREFIX
 ) {
-  const path = container.querySelector('svg path').getAttribute('d');
+  const path = container.querySelector('svg path')!.getAttribute('d');
   expect(path).toContain(ICON_PATH_PREFIX[iconName]);
 }
 

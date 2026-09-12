@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef, Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -264,11 +264,13 @@ function ConstructedInventoryDetail({ inventory }: Untyped) {
               numChips={5}
               totalChips={inventory.summary_fields.labels?.results?.length}
             >
-              {inventory.summary_fields.labels?.results?.map((l: Untyped) => (
-                <Label variant="outline" key={l.id}>
-                  {l.name}
-                </Label>
-              ))}
+              {inventory.summary_fields.labels?.results?.map(
+                (l: SummaryFieldRef) => (
+                  <Label variant="outline" key={l.id}>
+                    {l.name}
+                  </Label>
+                )
+              )}
             </ChipGroup>
           }
           isEmpty={inventory.summary_fields.labels?.results?.length === 0}

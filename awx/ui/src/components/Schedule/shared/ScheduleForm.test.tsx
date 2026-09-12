@@ -159,25 +159,29 @@ const mockSchedule = {
   until: '',
 };
 
-const byId = (container: Untyped, id: Untyped) =>
+const byId = (container: HTMLElement, id: string) =>
   container.querySelector(`#${CSS.escape(id)}`);
 
 // FrequencySelect (PF Select) carries its id only on the ouia wrapper div, not
 // on a queryable input.
-const freqSelect = (container: Untyped, id: Untyped) =>
-  container.querySelector(`[data-ouia-component-id="frequency-select-${id}"]`);
+// Asserted: a form without the select is a broken test, and the click that
+// follows says so more clearly than a null guard.
+const freqSelect = (container: HTMLElement, id: string) =>
+  container.querySelector(
+    `[data-ouia-component-id="frequency-select-${id}"]`
+  ) as HTMLElement;
 
 // Wait until the form has finished loading (the name input is present).
-async function waitForForm(container: Untyped) {
+async function waitForForm(container: HTMLElement) {
   await waitFor(() =>
     expect(byId(container, 'schedule-name')).toBeInTheDocument()
   );
 }
 
 async function selectRunFrequency(
-  user: Untyped,
-  container: Untyped,
-  optionLabel: Untyped
+  user: TestUser,
+  container: HTMLElement,
+  optionLabel: string
 ) {
   const toggle = freqSelect(container, 'schedule-frequency');
   await user.click(toggle);
@@ -189,8 +193,8 @@ async function selectRunFrequency(
 // Mirrors the original defaultFieldsVisible(): core fields + (optionally) the
 // exception FrequencySelect once a run-frequency has been chosen.
 function defaultFieldsVisible(
-  container: Untyped,
-  isExceptionsVisible: Untyped
+  container: HTMLElement,
+  isExceptionsVisible: boolean
 ) {
   expect(byId(container, 'schedule-name')).toBeInTheDocument();
   expect(byId(container, 'schedule-description')).toBeInTheDocument();
@@ -207,7 +211,7 @@ function defaultFieldsVisible(
   }
 }
 
-function nonRRuleValuesMatch(container: Untyped) {
+function nonRRuleValuesMatch(container: HTMLElement) {
   expect(byId(container, 'schedule-name')).toHaveValue('mock schedule');
   expect(byId(container, 'schedule-description')).toHaveValue(
     'test description'
@@ -561,7 +565,7 @@ describe('<ScheduleForm />', () => {
 
     test('occurrences field properly shown when end after selection is made', async () => {
       await selectRunFrequency(user, container, 'Minute');
-      await user.click(byId(container, 'end-after-frequencyOptions-minute'));
+      await user.click(byId(container, 'end-after-frequencyOptions-minute')!);
       expect(
         byId(container, 'end-never-frequencyOptions-minute')
       ).not.toBeChecked();
@@ -572,7 +576,7 @@ describe('<ScheduleForm />', () => {
         byId(container, 'schedule-occurrences-frequencyOptions-minute')
       ).toHaveValue(1);
 
-      await user.click(byId(container, 'end-never-frequencyOptions-minute'));
+      await user.click(byId(container, 'end-never-frequencyOptions-minute')!);
       expect(
         byId(container, 'schedule-occurrences-frequencyOptions-minute')
       ).not.toBeInTheDocument();
@@ -580,7 +584,7 @@ describe('<ScheduleForm />', () => {
 
     test('error shown when end date/time comes before start date/time', async () => {
       await selectRunFrequency(user, container, 'Minute');
-      await user.click(byId(container, 'end-on-date-frequencyOptions-minute'));
+      await user.click(byId(container, 'end-on-date-frequencyOptions-minute')!);
       expect(
         byId(container, 'end-on-date-frequencyOptions-minute')
       ).toBeChecked();
@@ -603,7 +607,7 @@ describe('<ScheduleForm />', () => {
         container,
         'schedule-run-on-day-number-frequencyOptions-month'
       );
-      fireEvent.change(dayNumber, { target: { value: 32 } });
+      fireEvent.change(dayNumber!, { target: { value: 32 } });
       expect(dayNumber).toHaveValue(32);
 
       await user.click(screen.getByRole('button', { name: 'Save' }));

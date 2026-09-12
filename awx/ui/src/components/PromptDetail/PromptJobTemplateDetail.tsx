@@ -1,4 +1,9 @@
-import type { JobTemplate, RecentJob, Untyped } from 'types/api';
+import type {
+  JobTemplate,
+  RecentJob,
+  SummaryFieldRef,
+  Untyped,
+} from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
@@ -203,7 +208,7 @@ function PromptJobTemplateDetail({ resource }: PromptJobTemplateDetailProps) {
               totalChips={summary_fields.credentials.length}
               ouiaId="prompt-jt-credential-chips"
             >
-              {summary_fields.credentials.map((cred: Untyped) => (
+              {summary_fields.credentials.map((cred: SummaryFieldRef) => (
                 <CredentialChip key={cred.id} credential={cred} isReadOnly />
               ))}
             </ChipGroup>
@@ -221,7 +226,7 @@ function PromptJobTemplateDetail({ resource }: PromptJobTemplateDetailProps) {
               totalChips={summary_fields.labels.results.length}
               ouiaId="prompt-jt-label-chips"
             >
-              {summary_fields.labels.results.map((label: Untyped) => (
+              {summary_fields.labels.results.map((label: SummaryFieldRef) => (
                 <Label variant="outline" key={label.id}>
                   {label.name}
                 </Label>
@@ -240,7 +245,7 @@ function PromptJobTemplateDetail({ resource }: PromptJobTemplateDetailProps) {
             totalChips={instance_groups?.length}
             ouiaId="prompt-jt-instance-group-chips"
           >
-            {instance_groups?.map((ig: Untyped) => (
+            {instance_groups?.map((ig: SummaryFieldRef) => (
               <Label variant="outline" key={ig.id}>
                 {ig.name}
               </Label>

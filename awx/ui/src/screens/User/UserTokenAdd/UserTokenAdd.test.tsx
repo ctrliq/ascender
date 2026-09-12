@@ -4,6 +4,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { UsersAPI, TokensAPI, ApplicationsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { TestUser } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import UserTokenAdd from './UserTokenAdd';
 
@@ -37,7 +38,7 @@ describe('<UserTokenAdd />', () => {
     vi.clearAllMocks();
   });
 
-  async function selectApplication(user: Untyped) {
+  async function selectApplication(user: TestUser) {
     await user.click(await screen.findByRole('button', { name: 'Search' }));
     await user.click(await screen.findByText('app'));
     await user.click(screen.getByRole('button', { name: 'Select' }));

@@ -3,6 +3,7 @@ import React from 'react';
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { OrganizationsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { TestUser } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import machineCredential from './data.machineCredential.json';
 import gceCredential from './data.gceCredential.json';
@@ -33,7 +34,7 @@ const credentialTypes = credentialTypesArr.reduce(
 
 // FormGroup renders its `label` text in a <label>/<span>; query that text to
 // assert a field group is present.
-function expectGroup(label: Untyped) {
+function expectGroup(label: string) {
   expect(screen.getByText(label)).toBeInTheDocument();
 }
 
@@ -44,7 +45,7 @@ function expectCommonGroups() {
   expectGroup('Credential Type');
 }
 
-function machineFieldExpects(container: Untyped) {
+function machineFieldExpects(container: HTMLElement) {
   expectCommonGroups();
   expectGroup('Username');
   expect(
@@ -78,7 +79,7 @@ function gceFieldExpects() {
   expectGroup('RSA Private Key');
 }
 
-async function selectCredentialType(user: Untyped, label: Untyped) {
+async function selectCredentialType(user: TestUser, label: Untyped) {
   const input = screen.getByRole('textbox', { name: 'Select Credential Type' });
   await user.clear(input);
   await user.click(input);

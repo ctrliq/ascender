@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 
@@ -14,7 +13,7 @@ vi.mock('../../../api');
 
 // Detail renders <div><dt>label</dt><dd>value</dd></div>; return the dd cell for
 // a given Detail label so tests can assert on its contents.
-function getDetailValue(label: Untyped) {
+function getDetailValue(label: string) {
   return screen.getByText(label).nextElementSibling;
 }
 

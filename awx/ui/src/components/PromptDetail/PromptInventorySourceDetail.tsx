@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef, Untyped } from 'types/api';
 import React from 'react';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
@@ -112,7 +112,7 @@ function PromptInventorySourceDetail({
       <Detail
         fullWidth
         label={t`Credential`}
-        value={summary_fields?.credentials?.map((cred: Untyped) => (
+        value={summary_fields?.credentials?.map((cred: SummaryFieldRef) => (
           <CredentialChip key={cred?.id} credential={cred} isReadOnly />
         ))}
         isEmpty={summary_fields?.credentials?.length === 0}

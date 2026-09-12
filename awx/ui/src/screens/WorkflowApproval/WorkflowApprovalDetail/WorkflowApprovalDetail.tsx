@@ -1,4 +1,9 @@
-import type { WorkflowApproval, WorkflowJob, Untyped } from 'types/api';
+import type {
+  SummaryFieldRef,
+  Untyped,
+  WorkflowApproval,
+  WorkflowJob,
+} from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link, useParams, useNavigate } from 'react-router';
@@ -324,7 +329,7 @@ function WorkflowApprovalDetail({
               ouiaId="wa-detail-label-chips"
             >
               {workflowJob.summary_fields?.labels?.results.map(
-                (label: Untyped) => (
+                (label: SummaryFieldRef & { name: string }) => (
                   <Label variant="outline" key={label.id}>
                     {label.name}
                   </Label>
