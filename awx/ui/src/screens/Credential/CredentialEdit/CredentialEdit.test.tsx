@@ -25,9 +25,22 @@ vi.mock('react-router', async () => ({
 }));
 
 // Drive the container directly through the shared CredentialForm's props.
-let formProps: Untyped;
+/**
+ * What the screen hands the form, as the stub the test puts in its place
+ * captures it: the assertions read these back to say what the screen passed.
+ */
+interface CapturedFormProps {
+  onSubmit: (...args: unknown[]) => Promise<void> | void;
+  handleSubmit: (...args: unknown[]) => Promise<void> | void;
+  onCancel: () => void;
+  handleCancel: () => void;
+  submitError?: unknown;
+  [key: string]: unknown;
+}
+
+let formProps: CapturedFormProps | undefined;
 vi.mock('../shared/CredentialForm', () => ({
-  default: (props: Untyped) => {
+  default: (props: CapturedFormProps) => {
     formProps = props;
     return (
       <button type="button" onClick={() => props.onCancel()}>
@@ -221,9 +234,9 @@ describe('<CredentialEdit />', () => {
     });
 
     test('passes the credential and its input sources to the form', () => {
-      expect(formProps.credential).toEqual(mockCredential);
+      expect(formProps!.credential).toEqual(mockCredential);
       // loaded input sources are keyed by input_field_name
-      expect(Object.keys(formProps.inputSources)).toEqual(
+      expect(Object.keys(formProps!.inputSources as object)).toEqual(
         expect.arrayContaining(['password', 'become_username'])
       );
     });
@@ -235,7 +248,7 @@ describe('<CredentialEdit />', () => {
 
     test('handleSubmit should post to the api', async () => {
       await act(async () => {
-        await formProps.onSubmit({
+        await formProps!.onSubmit({
           user: 1,
           name: 'foo',
           description: 'bar',

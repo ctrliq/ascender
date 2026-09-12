@@ -5,13 +5,18 @@ import { createMemoryHistory } from 'history';
 import { Routes, Route } from 'react-router';
 import { GroupsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockHandlerFormProps } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import InventoryGroupEdit from './InventoryGroupEdit';
 
 vi.mock('../../../api');
 
 vi.mock('../shared/InventoryGroupForm', () => ({
-  default: ({ handleSubmit, handleCancel, error }: Untyped) => (
+  default: ({
+    handleSubmit,
+    handleCancel,
+    error,
+  }: MockHandlerFormProps & { error?: unknown }) => (
     <div>
       <button
         type="button"

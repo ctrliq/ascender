@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { act, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -12,9 +11,19 @@ vi.mock('../../../api');
 // The shared OrganizationForm carries galaxy-credential and instance-group
 // lookups that are exercised by OrganizationForm's own suite; here we only
 // need to drive its onSubmit/onCancel callbacks, so capture the latest props.
-let formProps: Untyped;
+/**
+ * What the screen hands the form, as the stub the test puts in its place
+ * captures it: the assertions read these back to say what the screen passed.
+ */
+interface CapturedFormProps {
+  onSubmit: (...args: unknown[]) => Promise<void> | void;
+  onCancel: () => void;
+  [key: string]: unknown;
+}
+
+let formProps: CapturedFormProps | undefined;
 vi.mock('../shared/OrganizationForm', () => {
-  const MockOrganizationForm = (props: Untyped) => {
+  const MockOrganizationForm = (props: CapturedFormProps) => {
     formProps = props;
     return (
       <div data-testid="organization-form">
@@ -71,7 +80,7 @@ describe('<OrganizationAdd />', () => {
     await screen.findByTestId('organization-form');
 
     await act(async () => {
-      formProps.onSubmit(updatedOrgData, []);
+      formProps!.onSubmit(updatedOrgData, []);
     });
 
     expect(OrganizationsAPI.create).toHaveBeenCalledWith({
@@ -115,7 +124,7 @@ describe('<OrganizationAdd />', () => {
     await screen.findByTestId('organization-form');
 
     await act(async () => {
-      await formProps.onSubmit(orgData, [{ id: 3 }]);
+      await formProps!.onSubmit(orgData, [{ id: 3 }]);
     });
 
     expect(history.location.pathname).toEqual('/organizations/5');
@@ -146,7 +155,7 @@ describe('<OrganizationAdd />', () => {
     await screen.findByTestId('organization-form');
 
     await act(async () => {
-      await formProps.onSubmit(orgData, mockInstanceGroups);
+      await formProps!.onSubmit(orgData, mockInstanceGroups);
     });
 
     expect(OrganizationsAPI.associateInstanceGroup).toHaveBeenCalledWith(5, 3);
@@ -175,7 +184,7 @@ describe('<OrganizationAdd />', () => {
     await screen.findByTestId('organization-form');
 
     await act(async () => {
-      await formProps.onSubmit(orgData, [{ id: 3 }]);
+      await formProps!.onSubmit(orgData, [{ id: 3 }]);
     });
 
     expect(OrganizationsAPI.associateGalaxyCredential).toHaveBeenCalledWith(

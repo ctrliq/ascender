@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -47,11 +46,14 @@ const mockSchedule = {
 
 const onSelect = vi.fn();
 
-function renderItem(props?: Untyped) {
+function renderItem(
+  props?: Partial<React.ComponentProps<typeof ScheduleListItem>>
+) {
   return renderWithContexts(
     <table>
       <tbody>
         <ScheduleListItem
+          rowIndex={0}
           isSelected={false}
           onSelect={onSelect}
           schedule={mockSchedule}
@@ -187,8 +189,8 @@ describe('ScheduleListItem', () => {
             user_capabilities: { edit: false, delete: false },
           },
         },
-        isMissingInventory: 'Inventory Error',
-        isMissingSurvey: 'Survey Error',
+        isMissingInventory: true,
+        isMissingSurvey: true,
       });
       // ExclamationTriangleIcon renders an svg inside the Name cell tooltip wrapper
       const nameCell = cellByLabel('Name');

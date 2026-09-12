@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Host } from 'types/api';
 import React from 'react';
 import { fireEvent, screen, waitFor, within } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -41,7 +41,7 @@ const mockHost = {
       ],
     },
   },
-};
+} as unknown as Host;
 
 const getChips = () => {
   const list = screen.getByRole('list', { name: 'Related Groups' });
@@ -49,7 +49,9 @@ const getChips = () => {
   return items.map((item) => item.textContent);
 };
 
-function renderItem(props?: Untyped) {
+function renderItem(
+  props?: Partial<React.ComponentProps<typeof InventoryHostItem>>
+) {
   const history = createMemoryHistory({
     initialEntries: ['/inventories/inventory/1/hosts'],
   });
@@ -62,6 +64,7 @@ function renderItem(props?: Untyped) {
           host={mockHost}
           isSelected={false}
           onSelect={() => {}}
+          rowIndex={0}
           {...props}
         />
       </tbody>

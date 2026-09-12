@@ -1,4 +1,4 @@
-import type { Organization, Untyped } from 'types/api';
+import type { Organization } from 'types/api';
 import React from 'react';
 import { act, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
@@ -11,9 +11,19 @@ vi.mock('../../../api');
 
 // Drive only OrganizationEdit's handleSubmit/handleCancel; the form's own
 // fields are covered by OrganizationForm's suite.
-let formProps: Untyped;
+/**
+ * What the screen hands the form, as the stub the test puts in its place
+ * captures it: the assertions read these back to say what the screen passed.
+ */
+interface CapturedFormProps {
+  onSubmit: (...args: unknown[]) => Promise<void> | void;
+  onCancel: () => void;
+  [key: string]: unknown;
+}
+
+let formProps: CapturedFormProps | undefined;
 vi.mock('../shared/OrganizationForm', () => {
-  const MockOrganizationForm = (props: Untyped) => {
+  const MockOrganizationForm = (props: CapturedFormProps) => {
     formProps = props;
     return (
       <div data-testid="organization-form">
@@ -68,7 +78,7 @@ describe('<OrganizationEdit />', () => {
       default_environment: null,
     };
     await act(async () => {
-      formProps.onSubmit(updatedOrgData, [], []);
+      formProps!.onSubmit(updatedOrgData, [], []);
     });
 
     expect(OrganizationsAPI.update).toHaveBeenCalledWith(1, updatedOrgData);
@@ -102,7 +112,7 @@ describe('<OrganizationEdit />', () => {
     ];
 
     await act(async () => {
-      formProps.onSubmit(updatedOrgData, newInstanceGroups, oldInstanceGroups);
+      formProps!.onSubmit(updatedOrgData, newInstanceGroups, oldInstanceGroups);
     });
 
     expect(OrganizationsAPI.orderInstanceGroups).toHaveBeenCalledWith(

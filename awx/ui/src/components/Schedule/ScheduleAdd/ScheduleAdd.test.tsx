@@ -23,7 +23,20 @@ vi.mock('../../../api/models/Inventories');
 // suite. Here we mock it so we can drive ScheduleAdd's handleSubmit directly
 // (the original suite invoked the Formik onSubmit, which simply forwards the
 // form values + launchConfig/surveyConfig to that handleSubmit).
-let formProps: Untyped;
+/**
+ * What the screen hands the form, as the stub the test puts in its place
+ * captures it: the assertions read these back to say what the screen passed.
+ */
+interface CapturedFormProps {
+  onSubmit: (...args: unknown[]) => Promise<void> | void;
+  handleSubmit: (...args: unknown[]) => Promise<void> | void;
+  onCancel: () => void;
+  handleCancel: () => void;
+  submitError?: unknown;
+  [key: string]: unknown;
+}
+
+let formProps: CapturedFormProps | undefined;
 vi.mock('../shared/ScheduleForm', () => {
   const MockScheduleForm = (props: Untyped) => {
     formProps = props;
@@ -81,10 +94,10 @@ function submit(values: Untyped) {
   // handleSubmit navigates on success, which updates the router; wrap in act so
   // that state update is flushed inside the test.
   return act(() =>
-    formProps.handleSubmit(
+    formProps!.handleSubmit(
       values,
-      formProps.launchConfig,
-      formProps.surveyConfig
+      formProps!.launchConfig,
+      formProps!.surveyConfig
     )
   );
 }

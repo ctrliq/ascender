@@ -1,5 +1,4 @@
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
 import type { TestHistory } from 'history';
@@ -17,9 +16,22 @@ import CredentialAdd from './CredentialAdd';
 vi.mock('../../../api');
 
 // Drive the container directly through the shared CredentialForm's props.
-let formProps: Untyped;
+/**
+ * What the screen hands the form, as the stub the test puts in its place
+ * captures it: the assertions read these back to say what the screen passed.
+ */
+interface CapturedFormProps {
+  onSubmit: (...args: unknown[]) => Promise<void> | void;
+  handleSubmit: (...args: unknown[]) => Promise<void> | void;
+  onCancel: () => void;
+  handleCancel: () => void;
+  submitError?: unknown;
+  [key: string]: unknown;
+}
+
+let formProps: CapturedFormProps | undefined;
 vi.mock('../shared/CredentialForm', () => ({
-  default: (props: Untyped) => {
+  default: (props: CapturedFormProps) => {
     formProps = props;
     return (
       <button type="button" onClick={() => props.onCancel()}>
@@ -122,7 +134,7 @@ describe('<CredentialAdd />', () => {
 
     test('handleSubmit should call the api and redirect to details page', async () => {
       await act(async () => {
-        await formProps.onSubmit({
+        await formProps!.onSubmit({
           user: 1,
           name: 'foo',
           description: 'bar',

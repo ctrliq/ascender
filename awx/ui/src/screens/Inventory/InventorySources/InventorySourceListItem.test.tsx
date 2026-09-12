@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, within } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -23,7 +22,9 @@ const source = {
   },
 };
 
-function renderItem(props?: Untyped) {
+function renderItem(
+  props?: Partial<React.ComponentProps<typeof InventorySourceListItem>>
+) {
   return renderWithContexts(
     <table>
       <tbody>
@@ -31,6 +32,7 @@ function renderItem(props?: Untyped) {
           source={source}
           isSelected={false}
           onSelect={() => {}}
+          detailUrl="/inventories/inventory/1/sources/1/details"
           label="Source Bar"
           rowIndex={0}
           {...props}
