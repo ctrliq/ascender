@@ -422,8 +422,37 @@ class BaseSerializer(serializers.ModelSerializer, metaclass=BaseSerializerMetacl
             res['modified_by'] = self.reverse('api:user_detail', kwargs={'pk': obj.modified_by.pk})
         return res
 
+    def _requested_summary_fields(self):
+        """What the caller asked for with ?summary_fields=, or None if they did not.
+
+        Absent, every summary field is returned, which is what every client has
+        always received. "none" asks for an empty object, and a comma separated
+        list asks for those keys only. A list view of fifty jobs otherwise
+        carries fifty copies of the same embedded user, project, inventory and
+        template, which is most of the response.
+        """
+        request = self.context.get('request', None)
+        if request is None:
+            return None
+        raw = request.query_params.get('summary_fields', None) if hasattr(request, 'query_params') else None
+        if raw is None:
+            return None
+        raw = raw.strip()
+        if raw.lower() in ('none', 'false', '0', ''):
+            return set()
+        return {name.strip() for name in raw.split(',') if name.strip()}
+
     def _get_summary_fields(self, obj):
-        return {} if obj is None else self.get_summary_fields(obj)
+        if obj is None:
+            return {}
+        requested = self._requested_summary_fields()
+        if requested is not None and not requested:
+            # nothing was asked for, so the related objects are never fetched
+            return {}
+        summary_fields = self.get_summary_fields(obj)
+        if requested is None:
+            return summary_fields
+        return OrderedDict((key, value) for key, value in summary_fields.items() if key in requested)
 
     def get_summary_fields(self, obj):
         # Return values for certain fields on related objects, to simplify
