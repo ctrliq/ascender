@@ -20,6 +20,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+      # cosign signs keylessly with the workflow's own OIDC identity
+      id-token: write
     steps:
       - name: Checkout ascender
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
@@ -64,6 +66,21 @@ jobs:
           docker buildx imagetools create \
             -t ghcr.io/${{ github.repository }}:latest \
             ghcr.io/${{ github.repository }}:${{ github.event.release.tag_name }}
+
+      - name: Install cosign
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6  # v4.1.2
+
+      # Signs the digest the release points at, not the tag, so moving :latest
+      # later cannot change what was signed. Verify with:
+      #   cosign verify ghcr.io/<repo>@<digest> \
+      #     --certificate-identity-regexp '^https://github.com/<repo>/' \
+      #     --certificate-oidc-issuer https://token.actions.githubusercontent.com
+      - name: Sign the released image
+        run: |
+          digest=$(docker buildx imagetools inspect \
+            ghcr.io/${{ github.repository }}:${{ github.event.release.tag_name }} \
+            --format '{{json .Manifest.Digest}}' | tr -d '"')
+          cosign sign --yes "ghcr.io/${{ github.repository }}@${digest}"
 
 #          docker pull ghcr.io/${{ github.repository }}:${{ github.event.release.tag_name }}
 #          docker tag ghcr.io/${{ github.repository }}:${{ github.event.release.tag_name }} quay.io/${{ github.repository }}:${{ github.event.release.tag_name }}

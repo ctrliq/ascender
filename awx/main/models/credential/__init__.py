@@ -350,7 +350,6 @@ class CredentialType(CommonModelNameNotUnique):
         ('cloud', _('Cloud')),
         ('registry', _('Container Registry')),
         ('token', _('Personal Access Token')),
-        ('insights', _('Insights')),
         ('external', _('External')),
         ('kubernetes', _('Kubernetes')),
         ('galaxy', _('Galaxy/Automation Hub')),
@@ -1068,6 +1067,11 @@ ManagedCredentialType(
             'CONTROLLER_PASSWORD': '{{password}}',
             'CONTROLLER_VERIFY_SSL': '{{verify_ssl}}',
             'CONTROLLER_OAUTH_TOKEN': '{{oauth_token}}',
+            'ASCENDER_HOST': '{{host}}',
+            'ASCENDER_USERNAME': '{{username}}',
+            'ASCENDER_PASSWORD': '{{password}}',
+            'ASCENDER_VERIFY_SSL': '{{verify_ssl}}',
+            'ASCENDER_OAUTH_TOKEN': '{{oauth_token}}',
         }
     },
 )
