@@ -3,12 +3,14 @@
 
 import json
 import logging
-import pygerduty
+import requests
 
+from django.conf import settings
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
 from awx.main.notifications.base import AWXBaseEmailBackend
+from awx.main.utils import get_awx_http_client_headers
 from awx.main.notifications.custom_notification_base import CustomNotificationBase
 
 DEFAULT_MSG = CustomNotificationBase.DEFAULT_MSG
@@ -27,6 +29,11 @@ DEFAULT_APPROVAL_DENIED_MSG = CustomNotificationBase.DEFAULT_APPROVAL_DENIED_MSG
 DEFAULT_APPROVAL_DENIED_BODY = CustomNotificationBase.DEFAULT_APPROVAL_DENIED_BODY
 
 logger = logging.getLogger('awx.main.notifications.pagerduty_backend')
+
+# The Events API v1 endpoint pygerduty posted to. The subdomain and token
+# belong to the REST API and were never part of triggering an incident, but
+# they stay as init parameters so existing notification templates keep working.
+EVENTS_URL = 'https://events.pagerduty.com/generic/2010-04-15/create_event.json'
 
 
 class PagerDutyBackend(AWXBaseEmailBackend, CustomNotificationBase):
@@ -77,15 +84,21 @@ class PagerDutyBackend(AWXBaseEmailBackend, CustomNotificationBase):
     def send_messages(self, messages):
         sent_messages = 0
 
-        try:
-            pager = pygerduty.PagerDuty(self.subdomain, self.token)
-        except Exception as e:
-            if not self.fail_silently:
-                raise
-            logger.error(smart_str(_("Exception connecting to PagerDuty: {}").format(e)))
         for m in messages:
             try:
-                pager.trigger_incident(m.recipients()[0], description=m.subject, details=m.body, client=m.from_email)
+                r = requests.post(
+                    EVENTS_URL,
+                    json={
+                        "service_key": m.recipients()[0],
+                        "event_type": "trigger",
+                        "description": m.subject,
+                        "details": m.body,
+                        "client": m.from_email,
+                    },
+                    headers=get_awx_http_client_headers(),
+                    timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+                )
+                r.raise_for_status()
                 sent_messages += 1
             except Exception as e:
                 logger.error(smart_str(_("Exception sending messages: {}").format(e)))

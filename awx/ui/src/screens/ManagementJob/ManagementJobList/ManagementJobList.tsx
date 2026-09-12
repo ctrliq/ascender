@@ -1,0 +1,142 @@
+import type { ApiResponse } from 'api/Base';
+import type { OptionsResponse, SystemJobTemplate } from 'types/api';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useLingui } from '@lingui/react/macro';
+
+import { useLocation } from 'react-router';
+import { Card, PageSection } from '@patternfly/react-core';
+
+import { SystemJobTemplatesAPI } from 'api';
+import AlertModal from 'components/AlertModal';
+import DatalistToolbar from 'components/DataListToolbar';
+import ErrorDetail from 'components/ErrorDetail';
+import PaginatedTable, {
+  HeaderRow,
+  HeaderCell,
+  getSearchableKeys,
+} from 'components/PaginatedTable';
+import { useConfig } from 'contexts/Config';
+import { parseQueryString, getQSConfig } from 'util/qs';
+import useRequest from 'hooks/useRequest';
+
+import ManagementJobListItem from './ManagementJobListItem';
+
+const QS_CONFIG = getQSConfig('system_job_templates', {
+  page: 1,
+  page_size: 20,
+});
+
+const buildSearchKeys = (options?: ApiResponse<OptionsResponse>) => {
+  const actions = options?.data?.actions?.GET || {};
+  const searchableKeys = getSearchableKeys(actions);
+
+  const relatedSearchableKeys = (
+    options?.data?.related_search_fields || []
+  ).map((val: string) => val.slice(0, -8));
+
+  return { searchableKeys, relatedSearchableKeys };
+};
+
+const loadManagementJobs = async (search: string) => {
+  const params = parseQueryString(QS_CONFIG, search);
+  const [
+    {
+      data: { results: items, count },
+    },
+    options,
+  ] = await Promise.all([
+    SystemJobTemplatesAPI.read(params),
+    SystemJobTemplatesAPI.readOptions(),
+  ]);
+
+  return { items, count, options };
+};
+
+function ManagementJobList() {
+  const { t } = useLingui();
+  const { search } = useLocation();
+  const { me } = useConfig();
+  const [launchError, setLaunchError] = useState<unknown>(null);
+
+  const {
+    request,
+    error = false,
+    isLoading = true,
+    result: { options, items = [], count = 0 },
+  } = useRequest<{
+    options?: ApiResponse<OptionsResponse>;
+    items: SystemJobTemplate[];
+    count: number;
+  }>(
+    useCallback(async () => loadManagementJobs(search), [search]),
+    { items: [], count: 0 }
+  );
+
+  useEffect(() => {
+    request();
+  }, [request]);
+
+  const { searchableKeys, relatedSearchableKeys } = buildSearchKeys(options);
+
+  return (
+    <>
+      <PageSection hasBodyWrapper={false}>
+        <Card>
+          <PaginatedTable
+            qsConfig={QS_CONFIG}
+            contentError={error}
+            hasContentLoading={isLoading}
+            items={items}
+            itemCount={count}
+            pluralizedItemName={t`Management Jobs`}
+            emptyContentMessage={' '}
+            toolbarSearchableKeys={searchableKeys}
+            toolbarRelatedSearchableKeys={relatedSearchableKeys}
+            toolbarSearchColumns={[
+              {
+                name: t`Name`,
+                key: 'name__icontains',
+                isDefault: true,
+              },
+            ]}
+            renderToolbar={(props) => (
+              <DatalistToolbar {...props} qsConfig={QS_CONFIG} />
+            )}
+            headerRow={
+              <HeaderRow qsConfig={QS_CONFIG}>
+                <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
+                <HeaderCell>{t`Description`}</HeaderCell>
+                <HeaderCell>{t`Actions`}</HeaderCell>
+              </HeaderRow>
+            }
+            renderRow={({ id, name, description, job_type }) => (
+              <ManagementJobListItem
+                key={id}
+                id={id}
+                name={name ?? ''}
+                jobType={job_type ?? ''}
+                description={description ?? ''}
+                isSuperUser={Boolean(me?.is_superuser)}
+                isPrompted={['cleanup_activitystream', 'cleanup_jobs'].includes(
+                  job_type ?? ''
+                )}
+                onLaunchError={setLaunchError}
+              />
+            )}
+          />
+        </Card>
+      </PageSection>
+      <AlertModal
+        isOpen={Boolean(launchError)}
+        variant="error"
+        title={t`Error!`}
+        onClose={() => setLaunchError(null)}
+      >
+        {t`Failed to launch job.`}
+        <ErrorDetail error={launchError} />
+      </AlertModal>
+    </>
+  );
+}
+
+export default ManagementJobList;
