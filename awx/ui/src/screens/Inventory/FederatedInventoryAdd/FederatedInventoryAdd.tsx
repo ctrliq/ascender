@@ -1,9 +1,9 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
 import { FederatedInventoriesAPI, InventoriesAPI } from 'api';
 import { CardBody } from 'components/Card';
+import type { FederatedInventoryFormValues } from '../shared/FederatedInventoryForm';
 import FederatedInventoryForm from '../shared/FederatedInventoryForm';
 
 function FederatedInventoryAdd() {
@@ -14,7 +14,7 @@ function FederatedInventoryAdd() {
     navigate('/inventories');
   };
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: FederatedInventoryFormValues) => {
     try {
       const {
         data: { id: inventoryId },

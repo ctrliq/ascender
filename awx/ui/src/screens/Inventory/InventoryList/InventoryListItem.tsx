@@ -1,4 +1,4 @@
-import type { AnyInventory, Untyped } from 'types/api';
+import type { AnyInventory } from 'types/api';
 import React, { useState, useCallback } from 'react';
 
 import { Button, Label } from '@patternfly/react-core';
@@ -20,7 +20,8 @@ export interface InventoryListItemProps {
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;
   onCopy: (id: number) => void;
-  fetchInventories: Untyped;
+  /** Re-reads the page once the copy has landed. */
+  fetchInventories: () => unknown;
   [key: string]: unknown;
 }
 

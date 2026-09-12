@@ -1,5 +1,9 @@
 import type { QSParams } from 'util/qs';
-import type { ConstructedInventory, Paginated } from '../../types/api';
+import type {
+  ConstructedInventory,
+  OptionsField,
+  Paginated,
+} from '../../types/api';
 import Base from '../Base';
 import InstanceGroupsMixin from '../mixins/InstanceGroups.mixin';
 import type { Http } from '../Base';
@@ -35,9 +39,9 @@ class ConstructedInventories extends InstanceGroupsMixin(Base) {
   async readConstructedInventoryOptions(id: number | string, method: string) {
     const {
       data: { actions },
-    } = await this.http.options<{ actions: Record<string, unknown> }>(
-      `${this.baseUrl}${id}/`
-    );
+    } = await this.http.options<{
+      actions: Record<string, Record<string, OptionsField>>;
+    }>(`${this.baseUrl}${id}/`);
 
     if (actions[method]) {
       return actions[method];

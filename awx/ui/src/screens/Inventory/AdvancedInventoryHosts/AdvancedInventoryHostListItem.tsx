@@ -1,4 +1,4 @@
-import type { Host, RecentJob, Untyped } from 'types/api';
+import type { Host, RecentJob } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -11,7 +11,8 @@ export interface AdvancedInventoryHostListItemProps {
   /** Ticks the row's checkbox; the list holds which rows are selected. */
   onSelect: () => void;
   rowIndex: number;
-  inventoryType: Untyped;
+  /** Which kind of inventory the row is listed under, from the route. */
+  inventoryType: string;
   /** The host row, as the hosts list hands it over. */
   host: Host;
   [key: string]: unknown;

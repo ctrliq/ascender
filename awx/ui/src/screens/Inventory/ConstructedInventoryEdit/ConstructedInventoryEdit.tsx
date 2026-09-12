@@ -148,7 +148,7 @@ function ConstructedInventoryEdit({
         constructedInventory={inventory}
         instanceGroups={initialInstanceGroups}
         inputInventories={initialInputInventories}
-        options={options}
+        options={options ?? {}}
       />
     </CardBody>
   );

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -77,7 +76,7 @@ function InventoryList() {
   }, [fetchInventories]);
 
   const fetchInventoriesById = useCallback(
-    async (ids: Untyped) => {
+    async (ids: number[]) => {
       const params = { ...parseQueryString(QS_CONFIG, location.search) };
       params.id__in = ids.join(',');
       const { data } = await InventoriesAPI.read(params);
@@ -118,7 +117,7 @@ function InventoryList() {
   };
 
   const handleCopy = useCallback(
-    (newInventoryId: Untyped) => {
+    (newInventoryId: number) => {
       addToast({
         id: newInventoryId,
         title: t`Inventory copied successfully`,

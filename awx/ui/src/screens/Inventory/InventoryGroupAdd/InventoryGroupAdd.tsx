@@ -1,9 +1,9 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 
 import { useNavigate, useParams } from 'react-router';
 import { Card } from '@patternfly/react-core';
 import { GroupsAPI } from 'api';
+import type { InventoryGroupFormValues } from '../shared/InventoryGroupForm';
 
 import InventoryGroupForm from '../shared/InventoryGroupForm';
 
@@ -12,10 +12,9 @@ function InventoryGroupsAdd() {
   const { id } = useParams() as { id: string };
   const navigate = useNavigate();
 
-  const handleSubmit = async (values: Untyped) => {
-    values.inventory = id;
+  const handleSubmit = async (values: InventoryGroupFormValues) => {
     try {
-      const { data } = await GroupsAPI.create(values);
+      const { data } = await GroupsAPI.create({ ...values, inventory: id });
       navigate(`/inventories/inventory/${id}/groups/${data.id}`);
     } catch (err) {
       setError(err);

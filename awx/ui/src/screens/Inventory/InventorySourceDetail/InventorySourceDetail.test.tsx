@@ -1,3 +1,4 @@
+import type { InventorySource } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
@@ -12,7 +13,10 @@ import {
   assertDetail,
 } from '../../../../testUtils/rtlContexts';
 import InventorySourceDetail from './InventorySourceDetail';
-import mockInvSource from '../shared/data.inventory_source.json';
+import mockInvSourceJson from '../shared/data.inventory_source.json';
+
+/** The fixture as the detail takes it, which is what the api sends. */
+const mockInvSource = mockInvSourceJson as unknown as InventorySource;
 
 vi.mock('../../../api');
 
@@ -61,16 +65,18 @@ describe('InventorySourceDetail', () => {
   test('should render cancel button while job is running', async () => {
     renderWithContexts(
       <InventorySourceDetail
-        inventorySource={{
-          ...mockInvSource,
-          summary_fields: {
-            ...mockInvSource.summary_fields,
-            current_job: {
-              id: 42,
-              status: 'running',
+        inventorySource={
+          {
+            ...mockInvSource,
+            summary_fields: {
+              ...mockInvSource.summary_fields,
+              current_job: {
+                id: 42,
+                status: 'running',
+              },
             },
-          },
-        }}
+          } as unknown as InventorySource
+        }
       />
     );
 
@@ -98,7 +104,7 @@ describe('InventorySourceDetail', () => {
 
     assertDetail(
       'Execution Environment',
-      mockInvSource.summary_fields.execution_environment.name
+      mockInvSource.summary_fields.execution_environment?.name
     );
 
     // CredentialChip splits "Cloud:" and the name across nodes; assert on the
@@ -233,12 +239,14 @@ describe('InventorySourceDetail', () => {
   test('should not load Credentials', async () => {
     renderWithContexts(
       <InventorySourceDetail
-        inventorySource={{
-          ...mockInvSource,
-          summary_fields: {
-            credentials: [],
-          },
-        }}
+        inventorySource={
+          {
+            ...mockInvSource,
+            summary_fields: {
+              credentials: [],
+            },
+          } as unknown as InventorySource
+        }
       />
     );
 

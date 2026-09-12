@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
@@ -12,12 +12,19 @@ import { VariablesField } from 'components/CodeEditor';
 import { required } from 'util/validators';
 import { FormColumnLayout, FormFullWidthLayout } from 'components/FormLayout';
 
+/** A group as its own form holds it, before it is saved. */
+export interface InventoryGroupFormValues {
+  name: string;
+  description: string;
+  variables: string;
+}
+
 export interface InventoryGroupFormProps {
   error?: unknown;
-  group?: Untyped;
-  handleSubmit: (values: Untyped, ...rest: Untyped[]) => void;
+  /** Absent on the add screen, which starts the form empty. */
+  group?: Partial<Group>;
+  handleSubmit: (values: InventoryGroupFormValues) => void;
   handleCancel: () => void;
-  [key: string]: unknown;
 }
 
 function InventoryGroupForm({
@@ -27,7 +34,7 @@ function InventoryGroupForm({
   handleCancel,
 }: InventoryGroupFormProps) {
   const { t } = useLingui();
-  const initialValues = {
+  const initialValues: InventoryGroupFormValues = {
     name: group.name || '',
     description: group.description || '',
     variables: group.variables || '---',

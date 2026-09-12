@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { Group } from 'types/api';
 import React, { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -17,10 +17,10 @@ const ListItem = styled.li`
 `;
 
 export interface InventoryGroupsDeleteModalProps {
-  onAfterDelete: (...args: Untyped[]) => void;
+  /** Re-reads the list once the groups are gone. */
+  onAfterDelete: () => void;
   isDisabled: boolean;
-  groups?: Untyped[];
-  [key: string]: unknown;
+  groups?: Group[];
 }
 
 const InventoryGroupsDeleteModal = ({
@@ -43,7 +43,7 @@ const InventoryGroupsDeleteModal = ({
       onKebabModalChange(isModalOpen);
     }
   }, [isKebabified, isModalOpen, onKebabModalChange]);
-  const handleDelete = async (option: Untyped) => {
+  const handleDelete = async (option: 'delete' | 'promote' | null) => {
     setIsDeleteLoading(true);
 
     try {
@@ -51,11 +51,11 @@ const InventoryGroupsDeleteModal = ({
       /* Delete groups sequentially to avoid api integrity errors */
       /* https://eslint.org/docs/rules/no-await-in-loop#when-not-to-use-it */
       for (let i = 0; i < groups.length; i++) {
-        const group = groups[i];
+        const group = groups[i] as Group;
         if (option === 'delete') {
-          await GroupsAPI.destroy(+group.id);
+          await GroupsAPI.destroy(group.id);
         } else if (option === 'promote') {
-          await InventoriesAPI.promoteGroup(inventoryId, +group.id);
+          await InventoriesAPI.promoteGroup(inventoryId, group.id);
         }
       }
       /* eslint-enable no-await-in-loop */

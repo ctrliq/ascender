@@ -3,7 +3,6 @@ import type {
   Inventory as InventoryModel,
   Schedule,
   SetBreadcrumb,
-  Untyped,
 } from 'types/api';
 import React, { useState, useCallback, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
@@ -65,7 +64,7 @@ function Inventories() {
   );
 
   const [inventory, setInventory] = useState<InventoryModel | undefined>();
-  const [nestedObject, setNestedGroup] = useState<Untyped>();
+  const [nestedObject, setNestedGroup] = useState<BreadcrumbResource>();
   const [schedule, setSchedule] = useState<Schedule | undefined>();
 
   const setBreadcrumbConfig = useCallback(

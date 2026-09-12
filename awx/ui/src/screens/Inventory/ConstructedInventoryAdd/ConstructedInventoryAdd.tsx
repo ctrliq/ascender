@@ -78,7 +78,7 @@ function ConstructedInventoryAdd() {
             onCancel={handleCancel}
             onSubmit={handleSubmit}
             submitError={submitError}
-            options={options}
+            options={options ?? {}}
           />
         </CardBody>
       </Card>

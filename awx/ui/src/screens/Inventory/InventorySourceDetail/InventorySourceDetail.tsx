@@ -1,4 +1,4 @@
-import type { SummaryFieldRef, UnifiedJob, Untyped } from 'types/api';
+import type { InventorySource, SummaryFieldRef, UnifiedJob } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -35,8 +35,7 @@ import getHelpText from '../shared/Inventory.helptext';
 import { getVmwarePlugin } from '../shared/utils';
 
 export interface InventorySourceDetailProps {
-  inventorySource: Untyped;
-  [key: string]: unknown;
+  inventorySource: InventorySource;
 }
 
 function InventorySourceDetail({

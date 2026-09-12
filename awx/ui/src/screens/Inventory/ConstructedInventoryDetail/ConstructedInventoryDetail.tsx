@@ -34,8 +34,7 @@ import useWsInventorySourcesDetails from '../shared/useWsInventorySourcesDetails
 import getHelpText from '../shared/Inventory.helptext';
 
 export interface JobStatusLabelProps {
-  job: Untyped;
-  [key: string]: unknown;
+  job?: SummaryFieldRef & { status?: string; finished?: string | null };
 }
 
 function JobStatusLabel({ job }: JobStatusLabelProps) {
@@ -54,7 +53,7 @@ function JobStatusLabel({ job }: JobStatusLabelProps) {
             {t`JOB ID:`} {job.id}
           </div>
           <div>
-            {t`STATUS:`} {job.status.toUpperCase()}
+            {t`STATUS:`} {job.status?.toUpperCase()}
           </div>
           {job.finished && (
             <div>

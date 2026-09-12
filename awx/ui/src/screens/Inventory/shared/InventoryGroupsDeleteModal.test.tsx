@@ -1,3 +1,4 @@
+import type { Group } from 'types/api';
 import React from 'react';
 import { createMemoryHistory } from 'history';
 import { screen, waitFor } from '@testing-library/react';
@@ -22,10 +23,12 @@ function renderModal() {
           <InventoryGroupsDeleteModal
             onAfterDelete={() => {}}
             isDisabled={false}
-            groups={[
-              { id: 1, name: 'Foo' },
-              { id: 2, name: 'Bar' },
-            ]}
+            groups={
+              [
+                { id: 1, name: 'Foo' },
+                { id: 2, name: 'Bar' },
+              ] as Group[]
+            }
           />
         }
       />

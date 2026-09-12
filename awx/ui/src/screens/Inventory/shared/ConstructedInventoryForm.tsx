@@ -1,4 +1,9 @@
-import type { Inventory, SummaryFieldRef, Untyped } from 'types/api';
+import type {
+  ConstructedInventory,
+  Inventory,
+  OptionsField,
+  SummaryFieldRef,
+} from 'types/api';
 import React, { useCallback } from 'react';
 import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -25,8 +30,8 @@ import getInventoryHelpTextStrings from './Inventory.helptext';
 
 export interface ConstructedInventoryFormFieldsProps {
   inventory?: Inventory;
-  options: Untyped;
-  [key: string]: unknown;
+  /** The POST fields off the endpoint's OPTIONS, keyed by field name. */
+  options: Record<string, OptionsField>;
 }
 
 function ConstructedInventoryFormFields({
@@ -141,13 +146,13 @@ function ConstructedInventoryFormFields({
         max="2147483647"
         min="0"
         name="update_cache_timeout"
-        tooltip={options.update_cache_timeout.help_text}
+        tooltip={options.update_cache_timeout?.help_text}
         type="number"
         validate={minMaxValue(0, 2147483647)}
       />
       <VerbositySelectField
         fieldId="verbosity"
-        tooltip={options.verbosity.help_text}
+        tooltip={options.verbosity?.help_text}
       />
       <FormFullWidthLayout>
         <ConstructedInventoryHint />
@@ -157,7 +162,7 @@ function ConstructedInventoryFormFields({
         label={t`Limit`}
         name="limit"
         type="text"
-        tooltip={options.limit.help_text}
+        tooltip={options.limit?.help_text}
       />
       <FormFullWidthLayout>
         <VariablesField
@@ -173,6 +178,32 @@ function ConstructedInventoryFormFields({
   );
 }
 
+/** A constructed inventory as its own form holds it, before it is saved. */
+export interface ConstructedInventoryFormValues {
+  kind: string;
+  description: string;
+  instanceGroups: SummaryFieldRef[];
+  inputInventories: SummaryFieldRef[];
+  limit: string;
+  name: string;
+  organization: SummaryFieldRef | null;
+  update_cache_timeout: number;
+  verbosity: number;
+  source_vars: string;
+}
+
+export interface ConstructedInventoryFormProps {
+  /** Absent on the add screen, which starts the form empty. */
+  constructedInventory?: Partial<ConstructedInventory>;
+  /** Both are associated one request at a time rather than saved with it. */
+  instanceGroups?: SummaryFieldRef[];
+  inputInventories?: SummaryFieldRef[];
+  onCancel: () => void;
+  onSubmit: (values: ConstructedInventoryFormValues) => void;
+  submitError?: unknown;
+  options: Record<string, OptionsField>;
+}
+
 function ConstructedInventoryForm({
   constructedInventory,
   instanceGroups,
@@ -181,8 +212,8 @@ function ConstructedInventoryForm({
   onSubmit,
   submitError = null,
   options,
-}: Untyped) {
-  const initialValues = {
+}: ConstructedInventoryFormProps) {
+  const initialValues: ConstructedInventoryFormValues = {
     kind: 'constructed',
     description: constructedInventory?.description || '',
     instanceGroups: instanceGroups || [],
