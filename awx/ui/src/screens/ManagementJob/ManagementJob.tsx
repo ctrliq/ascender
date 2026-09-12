@@ -1,0 +1,210 @@
+import type { DetailedError, SetBreadcrumb } from 'types/api';
+import React, { useState, useEffect, useCallback } from 'react';
+import {
+  Link,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useParams,
+} from 'react-router';
+
+import { useLingui } from '@lingui/react/macro';
+import { CaretLeftIcon } from '@patternfly/react-icons';
+import { Card, PageSection } from '@patternfly/react-core';
+
+import { SystemJobTemplatesAPI, OrganizationsAPI } from 'api';
+import ContentError from 'components/ContentError';
+import ContentLoading from 'components/ContentLoading';
+import NotificationList from 'components/NotificationList';
+import RoutedTabs from 'components/RoutedTabs';
+import { Schedules } from 'components/Schedule';
+import { useConfig } from 'contexts/Config';
+import useRequest from 'hooks/useRequest';
+import type { RoutedTab } from 'components/RoutedTabs/RoutedTabs';
+import type { QSParams } from 'util/qs';
+
+export interface ManagementJobProps {
+  setBreadcrumb: SetBreadcrumb;
+}
+
+function ManagementJob({ setBreadcrumb }: ManagementJobProps) {
+  const { t } = useLingui();
+  const basePath = '/management_jobs';
+
+  const { id } = useParams() as { id: string };
+  const { pathname } = useLocation();
+  const detailUrl = `${basePath}/${id}`;
+  const { me } = useConfig();
+
+  const [isNotificationAdmin, setIsNotificationAdmin] = useState(false);
+
+  const { isLoading, error, request, result } = useRequest(
+    useCallback(
+      () =>
+        Promise.all([
+          SystemJobTemplatesAPI.readDetail(id as string),
+          OrganizationsAPI.read({
+            page_size: 1,
+            role_level: 'notification_admin_role',
+          }),
+        ]).then(([{ data: systemJobTemplate }, notificationRoles]) => ({
+          systemJobTemplate,
+          notificationRoles,
+        })),
+      [id]
+    )
+  );
+
+  useEffect(() => {
+    request();
+  }, [request, pathname]);
+
+  useEffect(() => {
+    if (!result) return;
+    setIsNotificationAdmin(
+      Boolean(result?.notificationRoles?.data?.results?.length)
+    );
+    // The template, not the whole result: the breadcrumb reads an id and a
+    // name off what it is given, and the pair of effects below this one used
+    // to hand it the request's two halves instead, so it always returned
+    // early and the job was never named in the trail.
+    setBreadcrumb(result.systemJobTemplate);
+  }, [result, setBreadcrumb, setIsNotificationAdmin]);
+
+  const createSchedule = useCallback(
+    (data: unknown) =>
+      SystemJobTemplatesAPI.createSchedule(
+        result?.systemJobTemplate.id as number,
+        data
+      ),
+    [result]
+  );
+  const loadSchedules = useCallback(
+    (params: QSParams) =>
+      SystemJobTemplatesAPI.readSchedules(
+        result?.systemJobTemplate.id as number,
+        params
+      ),
+    [result]
+  );
+  const loadScheduleOptions = useCallback(
+    () =>
+      SystemJobTemplatesAPI.readScheduleOptions(
+        result?.systemJobTemplate.id as number
+      ),
+    [result]
+  );
+
+  const shouldShowNotifications =
+    result?.systemJobTemplate?.id &&
+    (isNotificationAdmin || me?.is_system_auditor);
+  const shouldShowSchedules = !!result?.systemJobTemplate?.id;
+
+  const tabsArray: RoutedTab[] = [
+    {
+      id: 99,
+      link: basePath,
+      name: (
+        <>
+          <CaretLeftIcon />
+          {t`Back to management jobs`}
+        </>
+      ),
+      persistentFilterKey: 'managementJobs',
+    },
+  ];
+
+  if (shouldShowSchedules) {
+    tabsArray.push({
+      id: 0,
+      name: t`Schedules`,
+      link: `${detailUrl}/schedules`,
+    });
+  }
+
+  if (shouldShowNotifications) {
+    tabsArray.push({
+      id: 1,
+      name: t`Notifications`,
+      link: `${detailUrl}/notifications`,
+    });
+  }
+
+  let Tabs: React.ReactNode = <RoutedTabs tabsArray={tabsArray} />;
+  if (pathname.includes('edit') || pathname.includes('schedules/')) {
+    Tabs = null;
+  }
+
+  if (error) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <Card>
+          <ContentError error={error}>
+            {(error as DetailedError)?.response?.status === 404 && (
+              <span>
+                {t`Management job not found.`}
+                <Link to={basePath}>{t`View all management jobs`}</Link>
+              </span>
+            )}
+          </ContentError>
+        </Card>
+      </PageSection>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <PageSection hasBodyWrapper={false}>
+        <Card>
+          {Tabs}
+          <ContentLoading />
+        </Card>
+      </PageSection>
+    );
+  }
+
+  return (
+    <PageSection hasBodyWrapper={false}>
+      <Card>
+        {Tabs}
+        <Routes>
+          <Route
+            index
+            element={<Navigate to={`${detailUrl}/schedules`} replace />}
+          />
+          {shouldShowNotifications ? (
+            <Route
+              path="notifications"
+              element={
+                <NotificationList
+                  id={Number(result?.systemJobTemplate?.id)}
+                  canToggleNotifications={isNotificationAdmin}
+                  apiModel={SystemJobTemplatesAPI}
+                />
+              }
+            />
+          ) : null}
+          {/* /* so the nested <Schedules> route tree can match */}
+          {shouldShowSchedules ? (
+            <Route
+              path="schedules/*"
+              element={
+                <Schedules
+                  apiModel={SystemJobTemplatesAPI}
+                  resource={result.systemJobTemplate}
+                  createSchedule={createSchedule}
+                  loadSchedules={loadSchedules}
+                  loadScheduleOptions={loadScheduleOptions}
+                  setBreadcrumb={setBreadcrumb}
+                />
+              }
+            />
+          ) : null}
+        </Routes>
+      </Card>
+    </PageSection>
+  );
+}
+
+export default ManagementJob;
