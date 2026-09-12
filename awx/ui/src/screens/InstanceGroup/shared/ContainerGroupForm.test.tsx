@@ -127,7 +127,6 @@ describe('<ContainerGroupForm/>', () => {
     );
     await user.click(overrideCheckbox!);
     expect(overrideCheckbox).toBeChecked();
-    // react-ace renders empty under jsdom, so assert the surrounding label.
     expect(await screen.findByText('Custom pod spec')).toBeInTheDocument();
   });
 
