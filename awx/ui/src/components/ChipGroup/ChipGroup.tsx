@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -6,10 +5,11 @@ import { useLingui } from '@lingui/react/macro';
 import { LabelGroup } from '@patternfly/react-core';
 
 export interface ChipGroupProps {
-  numChips: Untyped;
-  totalChips: Untyped;
+  /** How many chips to show before the rest collapse behind a count. */
+  numChips: number;
+  totalChips: number;
   ouiaId?: string;
-  onOverflowChipClick?: (...args: Untyped[]) => void;
+  onOverflowChipClick?: (event: React.SyntheticEvent) => void;
   [key: string]: unknown;
 }
 
@@ -27,7 +27,7 @@ function ChipGroup({
       onOverflowChipClick &&
       (e.target as HTMLElement).closest('.pf-m-overflow')
     ) {
-      onOverflowChipClick();
+      onOverflowChipClick(e);
     }
   };
 

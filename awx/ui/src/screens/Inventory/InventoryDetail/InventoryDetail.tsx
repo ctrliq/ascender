@@ -146,7 +146,9 @@ function InventoryDetail({ inventory }: InventoryDetailProps) {
             value={
               <ChipGroup
                 numChips={5}
-                totalChips={inventory.summary_fields.labels?.results?.length}
+                totalChips={
+                  inventory.summary_fields.labels?.results?.length ?? 0
+                }
               >
                 {inventory.summary_fields.labels?.results?.map(
                   (l: SummaryFieldRef) => (

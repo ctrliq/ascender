@@ -124,7 +124,7 @@ function PromptInventorySourceDetail({
           value={
             <ChipGroup
               numChips={5}
-              totalChips={source_regions.split(',').length}
+              totalChips={source_regions.split(',')?.length ?? 0}
               ouiaId="prompt-region-chips"
             >
               {source_regions.split(',').map((region: string) => (
@@ -143,7 +143,7 @@ function PromptInventorySourceDetail({
           value={
             <ChipGroup
               numChips={5}
-              totalChips={instance_filters.split(',').length}
+              totalChips={instance_filters.split(',')?.length ?? 0}
               ouiaId="prompt-instance-filter-chips"
             >
               {instance_filters.split(',').map((filter: string) => (
@@ -162,7 +162,7 @@ function PromptInventorySourceDetail({
           value={
             <ChipGroup
               numChips={5}
-              totalChips={group_by.split(',').length}
+              totalChips={group_by.split(',')?.length ?? 0}
               ouiaId="prompt-only-group-by-chips"
             >
               {group_by.split(',').map((group: string) => (

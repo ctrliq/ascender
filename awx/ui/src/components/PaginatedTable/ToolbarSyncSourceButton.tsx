@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
 
@@ -7,7 +6,7 @@ import { useLingui } from '@lingui/react/macro';
 import { useKebabifiedMenu } from 'contexts/Kebabified';
 
 export interface ToolbarSyncSourceButtonProps {
-  onClick?: (...args: Untyped[]) => void;
+  onClick?: () => void;
   [key: string]: unknown;
 }
 

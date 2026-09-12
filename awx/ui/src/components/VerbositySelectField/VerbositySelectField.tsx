@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { I18n } from '@lingui/core';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { msg } from '@lingui/core/macro';
@@ -27,10 +27,7 @@ export const VERBOSITY = {
  * Returns:
  *   The level's label, or undefined for a level outside the six.
  */
-export function getVerbosityLabel(
-  verbosity: number | undefined,
-  i18n: Untyped
-) {
+export function getVerbosityLabel(verbosity: number | undefined, i18n: I18n) {
   const key = verbosity as keyof typeof VERBOSITY;
   return VERBOSITY[key] ? i18n._(VERBOSITY[key]) : undefined;
 }

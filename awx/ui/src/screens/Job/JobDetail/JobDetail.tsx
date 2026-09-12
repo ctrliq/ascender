@@ -476,7 +476,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
             value={
               <ChipGroup
                 numChips={5}
-                totalChips={credentials.length}
+                totalChips={credentials?.length ?? 0}
                 ouiaId="job-credential-chips"
               >
                 {credentials.map((c) => (
@@ -501,7 +501,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
             value={
               <ChipGroup
                 numChips={5}
-                totalChips={labels.results.length}
+                totalChips={labels.results?.length ?? 0}
                 ouiaId="job-label-chips"
               >
                 {labels.results.map((l) => (
@@ -526,7 +526,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
             value={
               <ChipGroup
                 numChips={5}
-                totalChips={job.job_tags.split(',').length}
+                totalChips={job.job_tags.split(',')?.length ?? 0}
                 ouiaId="job-tag-chips"
               >
                 {job.job_tags.split(',').map((jobTag) => (
@@ -553,7 +553,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
             value={
               <ChipGroup
                 numChips={5}
-                totalChips={job.skip_tags.split(',').length}
+                totalChips={job.skip_tags.split(',')?.length ?? 0}
                 ouiaId="job-skip-tag-chips"
               >
                 {job.skip_tags.split(',').map((skipTag) => (

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import styled from 'styled-components';
 import { Button } from '@patternfly/react-core';
@@ -12,22 +11,23 @@ const SmallButton = styled(Button)`
 `;
 SmallButton.displayName = 'SmallButton';
 
-export interface MultiButtonToggleProps {
-  /** The choices, as [value, label] pairs. */
-  buttons: [Untyped, string][];
-  value: unknown;
-  onChange: (...args: Untyped[]) => void;
+export interface MultiButtonToggleProps<V extends string = string> {
+  /** Each button's value and the label it shows. */
+  buttons: [V, string][];
+  value: V;
+  onChange: (value: V) => void;
   name: React.ReactNode;
-  [key: string]: unknown;
 }
 
-function MultiButtonToggle({
+// Generic in the value so a caller whose choices are narrower than string,
+// the variables editor's two modes among them, gets that type back.
+function MultiButtonToggle<V extends string = string>({
   buttons,
   value,
   onChange,
   name,
-}: MultiButtonToggleProps) {
-  const setValue = (newValue: unknown) => {
+}: MultiButtonToggleProps<V>) {
+  const setValue = (newValue: V) => {
     if (value !== newValue) {
       onChange(newValue);
     }
@@ -36,7 +36,7 @@ function MultiButtonToggle({
   return (
     <ButtonGroup>
       {buttons &&
-        buttons.map(([buttonValue, buttonLabel]: [Untyped, string]) => (
+        buttons.map(([buttonValue, buttonLabel]) => (
           <SmallButton
             aria-label={buttonLabel}
             ouiaId={`${name}-${buttonLabel}-button`}

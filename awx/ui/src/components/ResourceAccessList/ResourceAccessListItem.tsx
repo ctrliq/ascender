@@ -107,7 +107,7 @@ function ResourceAccessListItem({
             value={
               <ChipGroup
                 numChips={5}
-                totalChips={userRoles.length}
+                totalChips={userRoles?.length ?? 0}
                 ouiaId="user-role-chips"
               >
                 {userRoles.map(renderChip)}
@@ -120,7 +120,7 @@ function ResourceAccessListItem({
             value={
               <ChipGroup
                 numChips={5}
-                totalChips={teamRoles.length}
+                totalChips={teamRoles?.length ?? 0}
                 ouiaId="team-role-chips"
               >
                 {teamRoles.map(renderChip)}

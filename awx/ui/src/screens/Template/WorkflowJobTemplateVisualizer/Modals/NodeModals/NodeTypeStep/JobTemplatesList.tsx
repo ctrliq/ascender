@@ -57,7 +57,7 @@ function TemplatePopoverContent({ template }: TemplatePopoverContentProps) {
         value={
           <ChipGroup
             numChips={5}
-            totalChips={template.summary_fields?.credentials?.length}
+            totalChips={template.summary_fields?.credentials?.length ?? 0}
             ouiaId={`template-${template.id}-credential-chips`}
           >
             {template.summary_fields?.credentials?.map((c: SummaryFieldRef) => (

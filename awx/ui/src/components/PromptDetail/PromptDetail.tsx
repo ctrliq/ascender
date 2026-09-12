@@ -271,7 +271,7 @@ function PromptDetail({
                   value={
                     <ChipGroup
                       numChips={5}
-                      totalChips={(overrides.credentials ?? []).length}
+                      totalChips={(overrides.credentials ?? [])?.length ?? 0}
                       ouiaId="prompt-credential-chips"
                     >
                       {(overrides.credentials ?? []).map((cred) => (
@@ -403,7 +403,7 @@ function PromptDetail({
                   value={
                     <ChipGroup
                       numChips={5}
-                      totalChips={(overrides.labels ?? []).length}
+                      totalChips={(overrides.labels ?? [])?.length ?? 0}
                       ouiaId="prompt-label-chips"
                     >
                       {(overrides.labels ?? []).map((label) => (

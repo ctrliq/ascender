@@ -205,7 +205,7 @@ function PromptJobTemplateDetail({ resource }: PromptJobTemplateDetailProps) {
           value={
             <ChipGroup
               numChips={5}
-              totalChips={summary_fields.credentials.length}
+              totalChips={summary_fields.credentials?.length ?? 0}
               ouiaId="prompt-jt-credential-chips"
             >
               {summary_fields.credentials.map((cred: SummaryFieldRef) => (
@@ -223,7 +223,7 @@ function PromptJobTemplateDetail({ resource }: PromptJobTemplateDetailProps) {
           value={
             <ChipGroup
               numChips={5}
-              totalChips={summary_fields.labels.results.length}
+              totalChips={summary_fields.labels.results?.length ?? 0}
               ouiaId="prompt-jt-label-chips"
             >
               {summary_fields.labels.results.map((label: SummaryFieldRef) => (
@@ -242,7 +242,7 @@ function PromptJobTemplateDetail({ resource }: PromptJobTemplateDetailProps) {
         value={
           <ChipGroup
             numChips={5}
-            totalChips={instance_groups?.length}
+            totalChips={instance_groups?.length ?? 0}
             ouiaId="prompt-jt-instance-group-chips"
           >
             {instance_groups?.map((ig: SummaryFieldRef) => (
@@ -261,7 +261,7 @@ function PromptJobTemplateDetail({ resource }: PromptJobTemplateDetailProps) {
           value={
             <ChipGroup
               numChips={5}
-              totalChips={job_tags.split(',').length}
+              totalChips={job_tags.split(',')?.length ?? 0}
               ouiaId="prompt-jt-job-tag-chips"
             >
               {job_tags.split(',').map((jobTag: string) => (
@@ -281,7 +281,7 @@ function PromptJobTemplateDetail({ resource }: PromptJobTemplateDetailProps) {
           value={
             <ChipGroup
               numChips={5}
-              totalChips={skip_tags.split(',').length}
+              totalChips={skip_tags.split(',')?.length ?? 0}
               ouiaId="prompt-jt-skip-tag-chips"
             >
               {skip_tags.split(',').map((skipTag: string) => (

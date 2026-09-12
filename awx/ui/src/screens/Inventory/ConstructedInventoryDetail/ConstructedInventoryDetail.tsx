@@ -262,7 +262,7 @@ function ConstructedInventoryDetail({ inventory }: Untyped) {
           value={
             <ChipGroup
               numChips={5}
-              totalChips={inventory.summary_fields.labels?.results?.length}
+              totalChips={inventory.summary_fields.labels?.results?.length ?? 0}
             >
               {inventory.summary_fields.labels?.results?.map(
                 (l: SummaryFieldRef) => (

@@ -1,7 +1,6 @@
 //
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
-import type { Untyped } from 'types/api';
 import React from 'react';
 
 import styled from 'styled-components';
@@ -20,7 +19,7 @@ const BrandImg = styled.img`
 const defaultSrc = 'static/media/Ascender_logo.svg';
 
 export interface BrandLogoProps {
-  alt: Untyped;
+  alt: string;
   [key: string]: unknown;
 }
 

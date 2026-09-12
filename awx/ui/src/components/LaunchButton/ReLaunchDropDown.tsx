@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -13,7 +12,8 @@ import { RocketIcon } from '@patternfly/react-icons';
 
 export interface ReLaunchDropDownProps {
   isPrimary?: boolean;
-  handleRelaunch: (params?: Untyped) => void;
+  /** Which of a failed run's hosts to run again: all, or just the failures. */
+  handleRelaunch: (params?: { hosts?: string }) => void;
   isLaunching?: boolean;
   id?: string;
   ouiaId?: string;

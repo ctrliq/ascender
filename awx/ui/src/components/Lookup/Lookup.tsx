@@ -204,7 +204,7 @@ function Lookup({
             >
               <ChipGroup
                 numChips={5}
-                totalChips={items.length}
+                totalChips={items?.length ?? 0}
                 ouiaId={`${id}-chips`}
               >
                 {items.map((item: LookupItem) =>

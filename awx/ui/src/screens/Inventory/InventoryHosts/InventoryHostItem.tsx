@@ -104,7 +104,7 @@ function InventoryHostItem({
           <ChipGroup
             aria-label={t`Related Groups`}
             numChips={4}
-            totalChips={initialGroups.count}
+            totalChips={initialGroups.count ?? 0}
             ouiaId="host-related-groups-chips"
             onOverflowChipClick={() => handleOverflowChipClick(host.id)}
           >

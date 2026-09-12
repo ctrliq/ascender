@@ -18,7 +18,10 @@ function FormSubmitError({ error }: FormSubmitErrorProps) {
   const { values, setErrors } = useFormikContext<Record<string, unknown>>();
 
   useEffect(() => {
-    const { formError, fieldErrors } = sortErrorMessages(error, values);
+    const { formError, fieldErrors } = sortErrorMessages(
+      error as Parameters<typeof sortErrorMessages>[0],
+      values
+    );
     if (formError) {
       setErrorMessage(formError);
     }

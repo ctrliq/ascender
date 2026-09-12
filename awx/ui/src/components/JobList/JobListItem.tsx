@@ -1,4 +1,4 @@
-import type { SummaryFieldRef, UnifiedJob, Untyped } from 'types/api';
+import type { SummaryFieldRef, UnifiedJob } from 'types/api';
 import React from 'react';
 import { Link } from 'react-router';
 
@@ -33,7 +33,7 @@ import JobCancelButton from '../JobCancelButton';
 const Dash = styled.span``;
 export interface JobListItemProps {
   isExpanded: boolean;
-  onExpand: (...args: Untyped[]) => void;
+  onExpand: () => void;
   job: UnifiedJob;
   rowIndex: number;
   isSelected: boolean;
@@ -41,7 +41,8 @@ export interface JobListItemProps {
   onSelect: () => void;
   showTypeColumn?: boolean;
   isSuperUser?: boolean;
-  inventorySourceLabels: Untyped;
+  /** The source types the api offers, as value and label pairs. */
+  inventorySourceLabels: [string | number | null, string][];
   [key: string]: unknown;
 }
 
@@ -214,9 +215,8 @@ function JobListItem({
                 <Detail
                   dataCy="job-inventory-source-type"
                   label={t`Source`}
-                  value={inventorySourceLabels?.map(
-                    ([value, label]: [string, string]) =>
-                      value === job.source ? label : null
+                  value={inventorySourceLabels?.map(([value, label]) =>
+                    value === job.source ? label : null
                   )}
                   isEmpty={inventorySourceLabels?.length === 0}
                 />
@@ -312,7 +312,7 @@ function JobListItem({
                   value={
                     <ChipGroup
                       numChips={5}
-                      totalChips={credentials.length}
+                      totalChips={credentials?.length ?? 0}
                       ouiaId={`job-${job.id}-credential-chips`}
                     >
                       {credentials.map((c: SummaryFieldRef) => (
@@ -335,7 +335,7 @@ function JobListItem({
                   value={
                     <ChipGroup
                       numChips={5}
-                      totalChips={labels.results.length}
+                      totalChips={labels.results?.length ?? 0}
                       ouiaId={`job-${job.id}-label-chips`}
                     >
                       {labels.results.map((l: SummaryFieldRef) => (

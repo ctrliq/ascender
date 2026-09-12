@@ -579,7 +579,7 @@ function ScheduleDetail({
                 value={
                   <ChipGroup
                     numChips={5}
-                    totalChips={credentials.length}
+                    totalChips={credentials?.length ?? 0}
                     ouiaId="schedule-credential-chips"
                   >
                     {credentials.map((c: SummaryFieldRef) => (
@@ -602,7 +602,7 @@ function ScheduleDetail({
                 value={
                   <ChipGroup
                     numChips={5}
-                    totalChips={labels.length}
+                    totalChips={labels?.length ?? 0}
                     ouiaId="schedule-label-chips"
                   >
                     {labels.map((l: SummaryFieldRef) => (
@@ -626,7 +626,7 @@ function ScheduleDetail({
                 value={
                   <ChipGroup
                     numChips={5}
-                    totalChips={job_tags.split(',').length}
+                    totalChips={job_tags.split(',')?.length ?? 0}
                     ouiaId="schedule-job-tag-chips"
                   >
                     {job_tags.split(',').map((jobTag: string) => (
@@ -651,7 +651,7 @@ function ScheduleDetail({
                 value={
                   <ChipGroup
                     numChips={5}
-                    totalChips={skip_tags.split(',').length}
+                    totalChips={skip_tags.split(',')?.length ?? 0}
                     ouiaId="schedule-skip-tag-chips"
                   >
                     {skip_tags.split(',').map((skipTag: string) => (
@@ -704,7 +704,7 @@ function ScheduleDetail({
           </DeleteButton>
         )}
       </CardActionsRow>
-      {error && (
+      {Boolean(error) && (
         <AlertModal
           isOpen={error}
           variant="error"

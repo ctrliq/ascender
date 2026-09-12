@@ -375,7 +375,7 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
             value={
               <ChipGroup
                 numChips={5}
-                totalChips={summary_fields.credentials.length}
+                totalChips={summary_fields.credentials?.length ?? 0}
                 ouiaId="jt-detail-credential-chips"
               >
                 {summary_fields.credentials?.map((c) => (
@@ -402,7 +402,7 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
             value={
               <ChipGroup
                 numChips={5}
-                totalChips={summary_fields.labels.results.length}
+                totalChips={summary_fields.labels.results?.length ?? 0}
                 ouiaId="label-chips"
               >
                 {summary_fields.labels?.results.map((l) => (
@@ -436,7 +436,7 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
             value={
               <ChipGroup
                 numChips={5}
-                totalChips={job_tags.split(',').length}
+                totalChips={job_tags.split(',')?.length ?? 0}
                 ouiaId="job-tag-chips"
               >
                 {job_tags.split(',').map((jobTag) => (
@@ -462,7 +462,7 @@ function JobTemplateDetail({ template }: JobTemplateDetailProps) {
             value={
               <ChipGroup
                 numChips={5}
-                totalChips={skip_tags.split(',').length}
+                totalChips={skip_tags.split(',')?.length ?? 0}
                 ouiaId="skip-tag-chips"
               >
                 {skip_tags.split(',').map((skipTag) => (

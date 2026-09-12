@@ -301,7 +301,7 @@ function TemplateListItem({
                   value={
                     <ChipGroup
                       numChips={5}
-                      totalChips={summaryFields.credentials.length}
+                      totalChips={summaryFields.credentials?.length ?? 0}
                       ouiaId={`template-${template.id}-credential-chips`}
                     >
                       {summaryFields.credentials.map((c: SummaryFieldRef) => (
@@ -325,7 +325,7 @@ function TemplateListItem({
                   value={
                     <ChipGroup
                       numChips={5}
-                      totalChips={summaryFields.labels.results.length}
+                      totalChips={summaryFields.labels.results?.length ?? 0}
                       ouiaId={`template-${template.id}-label-chips`}
                     >
                       {summaryFields.labels.results.map(

@@ -325,7 +325,9 @@ function WorkflowApprovalDetail({
           value={
             <ChipGroup
               numChips={5}
-              totalChips={workflowJob.summary_fields?.labels?.results.length}
+              totalChips={
+                workflowJob.summary_fields?.labels?.results?.length ?? 0
+              }
               ouiaId="wa-detail-label-chips"
             >
               {workflowJob.summary_fields?.labels?.results.map(

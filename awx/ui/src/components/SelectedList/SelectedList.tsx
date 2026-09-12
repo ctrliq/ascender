@@ -56,7 +56,7 @@ function SelectedList({
       <SplitItem>
         <ChipGroup
           numChips={5}
-          totalChips={selected.length}
+          totalChips={selected?.length ?? 0}
           ouiaId="selected-list-chips"
         >
           {selected.map((item) =>

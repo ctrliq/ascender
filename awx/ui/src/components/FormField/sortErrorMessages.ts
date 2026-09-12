@@ -1,5 +1,3 @@
-import type { Untyped } from 'types/api';
-
 /**
  * Splits an API validation error into the form's own message and each field's.
  *
@@ -11,7 +9,7 @@ import type { Untyped } from 'types/api';
  *   The message for the form as a whole, and one per field that has one.
  */
 export default function sortErrorMessages(
-  error: Untyped,
+  error?: { message?: string; response?: { data?: unknown } },
   formValues: Record<string, unknown> = {}
 ) {
   if (!error) {
@@ -23,7 +21,10 @@ export default function sortErrorMessages(
     typeof error.response.data === 'object' &&
     Object.keys(error.response.data).length > 0
   ) {
-    const parsed = parseFieldErrors(error.response.data, formValues);
+    const parsed = parseFieldErrors(
+      error.response.data as Record<string, unknown>,
+      formValues
+    );
     return {
       formError: parsed.formErrors.join('; '),
       fieldErrors: Object.keys(parsed.fieldErrors).length
@@ -40,7 +41,10 @@ export default function sortErrorMessages(
 }
 
 // Recursively traverse field errors object and build up field/form errors
-function parseFieldErrors(obj: Untyped, formValues: Untyped) {
+function parseFieldErrors(
+  obj: Record<string, unknown>,
+  formValues: Record<string, unknown>
+) {
   let fieldErrors: Record<string, unknown> = {};
   let formErrors: string[] = [];
   Object.keys(obj).forEach((key) => {
@@ -57,8 +61,11 @@ function parseFieldErrors(obj: Untyped, formValues: Untyped) {
       } else {
         fieldErrors[key] = value.join('; ');
       }
-    } else if (typeof value === 'object') {
-      const parsed = parseFieldErrors(value, formValues[key] || {});
+    } else if (value && typeof value === 'object') {
+      const parsed = parseFieldErrors(
+        value as Record<string, unknown>,
+        (formValues[key] as Record<string, unknown>) || {}
+      );
       if (Object.keys(parsed.fieldErrors).length) {
         fieldErrors = {
           ...fieldErrors,
@@ -68,7 +75,7 @@ function parseFieldErrors(obj: Untyped, formValues: Untyped) {
       formErrors = formErrors.concat(parsed.formErrors);
     }
     if (typeof formValues[key] === 'boolean') {
-      formErrors = formErrors.concat(value);
+      formErrors = formErrors.concat(value as string | string[]);
     }
   });
 

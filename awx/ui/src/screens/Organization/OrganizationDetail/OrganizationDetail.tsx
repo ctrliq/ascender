@@ -131,7 +131,7 @@ function OrganizationDetail({ organization }: OrganizationDetailProps) {
           value={
             <ChipGroup
               numChips={5}
-              totalChips={galaxy_credentials?.length}
+              totalChips={galaxy_credentials?.length ?? 0}
               ouiaId="galaxy-credential-chips"
             >
               {galaxy_credentials?.map((credential: Untyped) => (

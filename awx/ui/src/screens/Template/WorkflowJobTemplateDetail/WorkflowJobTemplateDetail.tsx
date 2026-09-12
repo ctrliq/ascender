@@ -212,7 +212,7 @@ function WorkflowJobTemplateDetail({
           value={
             <ChipGroup
               numChips={3}
-              totalChips={summary_fields.labels.results.length}
+              totalChips={summary_fields.labels.results?.length ?? 0}
               ouiaId="workflow-job-template-detail-label-chips"
             >
               {summary_fields.labels.results.map((l: SummaryFieldRef) => (

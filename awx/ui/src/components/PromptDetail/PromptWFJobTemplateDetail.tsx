@@ -130,7 +130,7 @@ function PromptWFJobTemplateDetail({
           value={
             <ChipGroup
               numChips={5}
-              totalChips={summary_fields.labels.results.length}
+              totalChips={summary_fields.labels.results?.length ?? 0}
               ouiaId="prompt-wf-jt-label-chips"
             >
               {summary_fields.labels.results.map((label: SummaryFieldRef) => (

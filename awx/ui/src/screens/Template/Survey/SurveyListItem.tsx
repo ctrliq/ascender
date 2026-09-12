@@ -90,7 +90,7 @@ function SurveyListItem({
           defaultAnswer.length > 0 && (
             <ChipGroup
               numChips={5}
-              totalChips={defaultAnswer.split('\n').length}
+              totalChips={defaultAnswer.split('\n')?.length ?? 0}
               ouiaId="multiselect-default-chips"
             >
               {defaultAnswer.split('\n').map((chip) => (
