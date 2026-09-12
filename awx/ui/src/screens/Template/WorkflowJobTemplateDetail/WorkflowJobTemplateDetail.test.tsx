@@ -1,3 +1,4 @@
+import type { WorkflowJobTemplate } from 'types/api';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 
@@ -51,7 +52,7 @@ describe('<WorkflowJobTemplateDetail/>', () => {
     webhook_key: 'Foo webhook key',
     scm_branch: 'main',
     limit: 'servers',
-  };
+  } as unknown as WorkflowJobTemplate;
 
   beforeEach(() => {
     vi.mocked(WorkflowJobTemplateNodesAPI.read).mockResolvedValue({

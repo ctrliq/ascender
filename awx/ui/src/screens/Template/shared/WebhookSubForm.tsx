@@ -1,4 +1,4 @@
-import type { SummaryFieldRef, Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { SyncAltIcon } from '@patternfly/react-icons';
 import { useParams, useLocation } from 'react-router';
@@ -34,8 +34,8 @@ import getProjectHelpText from '../../Project/shared/Project.helptext';
 import getHelpText from './WorkflowJobTemplate.helptext';
 
 export interface WebhookSubFormProps {
-  templateType: Untyped;
-  [key: string]: unknown;
+  /** Which resource the webhook belongs to: a project sets no credential. */
+  templateType: string;
 }
 
 function WebhookSubForm({ templateType }: WebhookSubFormProps) {

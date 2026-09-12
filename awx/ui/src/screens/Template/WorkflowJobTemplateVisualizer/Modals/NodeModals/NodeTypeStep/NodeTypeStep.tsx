@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useState } from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import styled from 'styled-components';
@@ -24,6 +23,7 @@ import AnsibleSelect from 'components/AnsibleSelect';
 import FormField from 'components/FormField';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig, useUserProfile } from 'contexts/Config';
+import type { NodeModalValues } from '../useWorkflowNodeSteps';
 import InventorySourcesList from './InventorySourcesList';
 import JobTemplatesList from './JobTemplatesList';
 import ProjectsList from './ProjectsList';
@@ -137,7 +137,7 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
               // leaves renders in between where the type has changed and the
               // rest have not, and a selection made in that window is undone
               // by the reset that follows it.
-              setValues((values: Untyped) => ({
+              setValues((values: NodeModalValues) => ({
                 ...values,
                 nodeType: val,
                 nodeResource: null,

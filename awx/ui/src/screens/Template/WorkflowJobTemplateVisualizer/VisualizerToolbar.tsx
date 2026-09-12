@@ -3,7 +3,7 @@ import type {
   WorkflowState,
   WorkflowNode,
 } from 'components/Workflow/workflowReducer';
-import type { Untyped } from 'types/api';
+import type { WorkflowJobTemplate } from 'types/api';
 import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -55,11 +55,10 @@ ActionButton.displayName = 'ActionButton';
 
 export interface VisualizerToolbarProps {
   onClose: () => void;
-  onSave: (values?: Untyped, config?: Untyped) => void;
-  template: Untyped;
+  onSave: () => void;
+  template: WorkflowJobTemplate;
   hasUnsavedChanges: boolean;
   readOnly: boolean;
-  [key: string]: unknown;
 }
 
 function VisualizerToolbar({
@@ -79,8 +78,10 @@ function VisualizerToolbar({
   const config = useConfig();
 
   const totalNodes =
-    nodes.reduce((n: Untyped, node: WorkflowNode) => n + !node.isDeleted, 0) -
-    1;
+    nodes.reduce(
+      (n: number, node: WorkflowNode) => n + (node.isDeleted ? 0 : 1),
+      0
+    ) - 1;
 
   return (
     <div id="visualizer-toolbar">

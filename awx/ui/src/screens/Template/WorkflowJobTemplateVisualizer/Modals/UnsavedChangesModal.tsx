@@ -1,5 +1,4 @@
 import type { WorkflowAction } from 'components/Workflow/workflowReducer';
-import type { Untyped } from 'types/api';
 import React, { useContext } from 'react';
 import { Button } from '@patternfly/react-core';
 import { Modal } from '@patternfly/react-core/deprecated';
@@ -9,7 +8,7 @@ import { WorkflowDispatchContext } from 'contexts/Workflow';
 
 export interface UnsavedChangesModalProps {
   onSaveAndExit: () => void;
-  onExit: (...args: Untyped[]) => void;
+  onExit: () => void;
   [key: string]: unknown;
 }
 

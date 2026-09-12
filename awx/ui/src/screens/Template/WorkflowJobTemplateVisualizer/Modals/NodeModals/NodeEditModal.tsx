@@ -1,11 +1,12 @@
 import type { WorkflowAction } from 'components/Workflow/workflowReducer';
-import type { Untyped } from 'types/api';
 import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 
 import { WorkflowDispatchContext } from 'contexts/Workflow';
+import type { LaunchConfig } from 'components/LaunchPrompt/types';
 import NodeModal from './NodeModal';
+import type { NodeModalValues } from './useWorkflowNodeSteps';
 
 function NodeEditModal() {
   const { t } = useLingui();
@@ -13,7 +14,7 @@ function NodeEditModal() {
     WorkflowDispatchContext
   ) as React.Dispatch<WorkflowAction>;
 
-  const updateNode = (values: Untyped, config: Untyped) => {
+  const updateNode = (values: NodeModalValues, config: LaunchConfig) => {
     const {
       approvalName,
       approvalDescription,
@@ -33,7 +34,7 @@ function NodeEditModal() {
       ...rest
     } = values;
     // Built up from the fields the chosen node type carries.
-    let node: Record<string, Untyped>;
+    let node: Record<string, unknown>;
     if (values.nodeType === 'workflow_approval_template') {
       node = {
         all_parents_must_converge: convergence === 'all',

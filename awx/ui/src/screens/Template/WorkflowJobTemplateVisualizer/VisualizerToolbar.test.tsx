@@ -1,3 +1,4 @@
+import type { WorkflowJobTemplate } from 'types/api';
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
 import {
@@ -19,7 +20,7 @@ const template = {
       start: true,
     },
   },
-};
+} as unknown as WorkflowJobTemplate;
 const workflowContext = {
   nodes: [],
   showLegend: false,

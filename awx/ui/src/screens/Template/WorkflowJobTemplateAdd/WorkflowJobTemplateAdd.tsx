@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef } from 'types/api';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -9,13 +9,14 @@ import useRequest from 'hooks/useRequest';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import WorkflowJobTemplateForm from '../shared/WorkflowJobTemplateForm';
+import type { WorkflowJobTemplateFormValues } from '../shared/WorkflowJobTemplateForm';
 
 function WorkflowJobTemplateAdd() {
   const { me = {} } = useConfig();
   const navigate = useNavigate();
   const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: WorkflowJobTemplateFormValues) => {
     const {
       labels,
       inventory,
@@ -28,22 +29,25 @@ function WorkflowJobTemplateAdd() {
       scm_branch,
       ...templatePayload
     } = values;
-    templatePayload.inventory = inventory?.id;
-    templatePayload.organization = organization?.id;
-    templatePayload.webhook_credential = webhook_credential?.id;
+    const payload: Record<string, unknown> = { ...templatePayload };
+    payload.inventory = inventory?.id;
+    payload.organization = organization?.id;
+    payload.webhook_credential = webhook_credential?.id;
     if (webhook_key) {
-      templatePayload.webhook_key = webhook_key;
+      payload.webhook_key = webhook_key;
     }
-    templatePayload.limit = limit === '' ? null : limit;
-    templatePayload.job_tags = job_tags === '' ? null : job_tags;
-    templatePayload.skip_tags = skip_tags === '' ? null : skip_tags;
-    templatePayload.scm_branch = scm_branch === '' ? null : scm_branch;
+    payload.limit = limit === '' ? null : limit;
+    payload.job_tags = job_tags === '' ? null : job_tags;
+    payload.skip_tags = skip_tags === '' ? null : skip_tags;
+    payload.scm_branch = scm_branch === '' ? null : scm_branch;
     const organizationId =
-      organization?.id || inventory?.summary_fields?.organization.id;
+      organization?.id ||
+      (inventory?.summary_fields as { organization?: { id?: number } })
+        ?.organization?.id;
     try {
       const {
         data: { id },
-      } = await WorkflowJobTemplatesAPI.create(templatePayload);
+      } = await WorkflowJobTemplatesAPI.create(payload);
       await Promise.all(await submitLabels(id, organizationId, labels));
       navigate(`/templates/workflow_job_template/${id}/visualizer`);
     } catch (err) {
@@ -52,9 +56,9 @@ function WorkflowJobTemplateAdd() {
   };
 
   const submitLabels = async (
-    templateId: Untyped,
-    organizationId: Untyped,
-    labels = []
+    templateId: number,
+    organizationId: number | undefined,
+    labels: SummaryFieldRef[] = []
   ) => {
     if (!organizationId) {
       // eslint-disable-next-line no-useless-catch
@@ -68,7 +72,11 @@ function WorkflowJobTemplateAdd() {
       }
     }
     const associatePromises = labels.map((label) =>
-      WorkflowJobTemplatesAPI.associateLabel(templateId, label, organizationId)
+      WorkflowJobTemplatesAPI.associateLabel(
+        templateId,
+        label as { id: number; name: string },
+        organizationId as number
+      )
     );
     return [...associatePromises];
   };

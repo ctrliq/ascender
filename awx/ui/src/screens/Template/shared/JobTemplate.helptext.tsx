@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { t } from '@lingui/core/macro';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
@@ -62,7 +61,7 @@ function getHelpText() {
         {t`Refer to the Ansible documentation for details about the configuration file.`}
       </span>
     ),
-    localTimeZone: (config: Untyped) => (
+    localTimeZone: (config: Parameters<typeof getDocsBaseUrl>[0]) => (
       <span>
         {t`Refer to the`}{' '}
         <a

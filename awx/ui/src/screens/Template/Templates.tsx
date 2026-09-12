@@ -1,4 +1,4 @@
-import type { BreadcrumbResource, Schedule, Untyped } from 'types/api';
+import type { BreadcrumbResource, Schedule } from 'types/api';
 import React, { useState, useCallback, useRef } from 'react';
 
 import { Routes, Route } from 'react-router';
@@ -25,7 +25,7 @@ function Templates() {
   );
 
   const [schedule, setSchedule] = useState<Schedule | undefined>();
-  const [template, setTemplate] = useState<Untyped>();
+  const [template, setTemplate] = useState<BreadcrumbResource>();
 
   const setBreadcrumbConfig = useCallback(
     (

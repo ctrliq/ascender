@@ -1,4 +1,4 @@
-import type { SummaryFieldRef, UnifiedJob, Untyped } from 'types/api';
+import type { SummaryFieldRef, WorkflowJobTemplate } from 'types/api';
 import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -26,7 +26,7 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 import getHelpText from '../shared/WorkflowJobTemplate.helptext';
 
 export interface WorkflowJobTemplateDetailProps {
-  template: Untyped;
+  template: WorkflowJobTemplate;
   [key: string]: unknown;
 }
 
@@ -81,30 +81,28 @@ function WorkflowJobTemplateDetail({
 
   const { error, dismissError } = useDismissableError(deleteError);
 
-  const inventoryValue = (kind: Untyped, inventoryId: Untyped) => {
+  const inventoryValue = (kind?: string | null, inventoryId?: number) => {
     const inventorykind = kind === 'smart' ? 'smart_inventory' : 'inventory';
 
     return ask_inventory_on_launch ? (
       <>
         <Link to={`/inventories/${inventorykind}/${inventoryId}/details`}>
-          <Label>{summary_fields.inventory.name}</Label>
+          <Label>{summary_fields.inventory?.name}</Label>
         </Link>
         <span> {t`(Prompt on launch)`}</span>
       </>
     ) : (
       <Link to={`/inventories/${inventorykind}/${inventoryId}/details`}>
-        <Label>{summary_fields.inventory.name}</Label>
+        <Label>{summary_fields.inventory?.name}</Label>
       </Link>
     );
   };
 
   const canLaunch = summary_fields?.user_capabilities?.start;
-  const recentPlaybookJobs = summary_fields.recent_jobs.map(
-    (job: UnifiedJob) => ({
-      ...job,
-      type: 'workflow_job',
-    })
-  );
+  const recentPlaybookJobs = (summary_fields.recent_jobs ?? []).map((job) => ({
+    ...job,
+    type: 'workflow_job',
+  }));
 
   const deleteDetailsRequests =
     relatedResourceDeleteRequests.template(template);
@@ -145,8 +143,8 @@ function WorkflowJobTemplateDetail({
             label={t`Inventory`}
             helpText={helpText.inventory}
             value={inventoryValue(
-              summary_fields.inventory.kind,
-              summary_fields.inventory.id
+              summary_fields.inventory?.kind,
+              summary_fields.inventory?.id
             )}
           />
         )}
@@ -180,9 +178,9 @@ function WorkflowJobTemplateDetail({
             helpText={helpText.webhookCredential}
             value={
               <Link
-                to={`/credentials/${summary_fields.webhook_credential.id}/details`}
+                to={`/credentials/${summary_fields.webhook_credential?.id}/details`}
               >
-                <Label>{summary_fields.webhook_credential.name}</Label>
+                <Label>{summary_fields.webhook_credential?.name}</Label>
               </Link>
             }
           />
@@ -212,10 +210,10 @@ function WorkflowJobTemplateDetail({
           value={
             <ChipGroup
               numChips={3}
-              totalChips={summary_fields.labels.results?.length ?? 0}
+              totalChips={summary_fields.labels?.results?.length ?? 0}
               ouiaId="workflow-job-template-detail-label-chips"
             >
-              {summary_fields.labels.results.map((l: SummaryFieldRef) => (
+              {summary_fields.labels?.results.map((l: SummaryFieldRef) => (
                 <Label
                   variant="outline"
                   key={l.id}

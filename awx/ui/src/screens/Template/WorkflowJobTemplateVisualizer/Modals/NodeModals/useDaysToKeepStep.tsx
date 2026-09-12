@@ -1,4 +1,5 @@
-import type { Untyped } from 'types/api';
+import type { FieldMetaProps } from 'formik';
+import type { NodeTemplate } from 'types/api';
 import React from 'react';
 import { useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
@@ -18,20 +19,26 @@ export default function useDaysToKeepStep() {
     isReady: true,
     contentError: null,
     hasError: !!daysToKeepMeta.error,
-    setTouched: (setFieldTouched: Untyped) => {
+    setTouched: (
+      setFieldTouched: (
+        field: string,
+        touched?: boolean,
+        shouldValidate?: boolean
+      ) => void
+    ) => {
       setFieldTouched('daysToKeep', true, false);
     },
     validate: () => {},
   };
 }
 function getStep(
-  label: Untyped,
-  nodeResourceMeta: Untyped,
-  daysToKeepMeta: Untyped
+  label: React.ReactNode,
+  nodeResourceMeta: FieldMetaProps<NodeTemplate | null>,
+  daysToKeepMeta: FieldMetaProps<number | string>
 ) {
   if (
     ['cleanup_activitystream', 'cleanup_jobs'].includes(
-      nodeResourceMeta?.value?.job_type
+      nodeResourceMeta?.value?.job_type ?? ''
     )
   ) {
     return {

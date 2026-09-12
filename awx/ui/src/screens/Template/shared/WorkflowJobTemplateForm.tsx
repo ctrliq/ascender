@@ -1,8 +1,8 @@
-import type { SummaryFieldRef, Untyped, WorkflowJobTemplate } from 'types/api';
+import type { SummaryFieldRef, WorkflowJobTemplate } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
+import type { FormikErrors, FormikProps } from 'formik';
 import { useField, useFormikContext, withFormik } from 'formik';
-import type { FormikErrors } from 'formik';
 import {
   Form,
   FormGroup,
@@ -36,14 +36,43 @@ import getHelpText from './WorkflowJobTemplate.helptext';
 
 const urlOrigin = window.location.origin;
 
+/** A workflow job template as its own form holds it, before it is saved. */
+export interface WorkflowJobTemplateFormValues {
+  name: string;
+  description: string;
+  inventory: SummaryFieldRef | null;
+  organization: SummaryFieldRef | null;
+  labels: SummaryFieldRef[];
+  extra_vars: string;
+  limit: string;
+  scm_branch: string;
+  skip_tags: string;
+  job_tags: string;
+  allow_simultaneous: boolean;
+  webhook_credential: SummaryFieldRef | null;
+  webhook_service: string;
+  ask_labels_on_launch: boolean;
+  ask_limit_on_launch: boolean;
+  ask_inventory_on_launch: boolean;
+  ask_variables_on_launch: boolean;
+  ask_scm_branch_on_launch: boolean;
+  ask_skip_tags_on_launch: boolean;
+  ask_tags_on_launch: boolean;
+  webhook_url: string;
+  webhook_key: string;
+}
+
 export interface WorkflowJobTemplateFormProps {
   template?: Partial<WorkflowJobTemplate>;
-  handleSubmit: (values: Untyped, ...rest: Untyped[]) => void;
+  /**
+   * The caller's own submit, which withFormik calls with the values. Inside
+   * the component below it is shadowed by formik's, which takes the event.
+   */
+  handleSubmit: (values: WorkflowJobTemplateFormValues) => void;
   handleCancel?: () => void;
   submitError?: unknown;
   isOrgAdmin?: boolean;
   isInventoryDisabled?: boolean;
-  [key: string]: unknown;
 }
 
 function WorkflowJobTemplateForm({
@@ -57,7 +86,9 @@ function WorkflowJobTemplateForm({
   submitError = null,
   isOrgAdmin = false,
   isInventoryDisabled = false,
-}: WorkflowJobTemplateFormProps) {
+}: Omit<WorkflowJobTemplateFormProps, 'handleSubmit'> & {
+  handleSubmit: FormikProps<WorkflowJobTemplateFormValues>['handleSubmit'];
+}) {
   const { t } = useLingui();
   const helpText = getHelpText();
   const { setFieldValue, setFieldTouched } =
@@ -288,7 +319,7 @@ function WorkflowJobTemplateForm({
           <Title size="md" headingLevel="h4">
             {t`Webhook details`}
           </Title>
-          <WebhookSubForm templateType={template.type} />
+          <WebhookSubForm templateType={template.type ?? ''} />
         </SubFormLayout>
       )}
 
@@ -303,8 +334,11 @@ function WorkflowJobTemplateForm({
 
 // The generics are what keeps the wrapper's own props visible to callers:
 // without them withFormik types the wrapped component as taking nothing.
-const FormikApp = withFormik<WorkflowJobTemplateFormProps, Untyped>({
-  mapPropsToValues({ template = {} }) {
+const FormikApp = withFormik<
+  WorkflowJobTemplateFormProps,
+  WorkflowJobTemplateFormValues
+>({
+  mapPropsToValues({ template = {} }): WorkflowJobTemplateFormValues {
     return {
       name: template.name || '',
       description: template.description || '',
@@ -336,7 +370,7 @@ const FormikApp = withFormik<WorkflowJobTemplateFormProps, Untyped>({
     try {
       await props.handleSubmit(values);
     } catch (errors) {
-      setErrors(errors as FormikErrors<Untyped>);
+      setErrors(errors as FormikErrors<WorkflowJobTemplateFormValues>);
     }
   },
 })(WorkflowJobTemplateForm);

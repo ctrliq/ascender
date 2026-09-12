@@ -731,7 +731,7 @@ function JobTemplateForm({
                       {t`Webhook details`}
                     </Title>
                     <FormColumnLayout>
-                      <WebhookSubForm templateType={template.type} />
+                      <WebhookSubForm templateType={template.type ?? ''} />
                     </FormColumnLayout>
                   </>
                 )}

@@ -1,4 +1,9 @@
-import type { SurveyConfig, SurveyQuestion, Untyped } from 'types/api';
+import type {
+  JobTemplate,
+  SurveyConfig,
+  SurveyQuestion,
+  WorkflowJobTemplate,
+} from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { Routes, Route } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -10,14 +15,15 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { SurveyList, SurveyQuestionAdd, SurveyQuestionEdit } from './Survey';
 
 export interface TemplateSurveyProps {
-  template: Untyped;
+  template: JobTemplate | WorkflowJobTemplate;
   canEdit?: boolean;
-  [key: string]: unknown;
 }
 
 function TemplateSurvey({ template, canEdit }: TemplateSurveyProps) {
   const { t } = useLingui();
-  const [surveyEnabled, setSurveyEnabled] = useState(template.survey_enabled);
+  const [surveyEnabled, setSurveyEnabled] = useState(
+    Boolean(template.survey_enabled)
+  );
 
   const templateType = template.type;
   const templateId = template.id;

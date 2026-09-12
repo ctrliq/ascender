@@ -1,8 +1,8 @@
+import type { LaunchCredential } from 'types/api';
 import type {
   WorkflowAction,
   WorkflowState,
 } from 'components/Workflow/workflowReducer';
-import type { Untyped } from 'types/api';
 import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -12,7 +12,9 @@ import {
   WorkflowStateContext,
 } from 'contexts/Workflow';
 import { getAddedAndRemoved } from 'util/lists';
+import type { LaunchConfig } from 'components/LaunchPrompt/types';
 import NodeModal from './NodeModal';
+import type { NodeModalValues } from './useWorkflowNodeSteps';
 
 function NodeAddModal() {
   const { t } = useLingui();
@@ -21,7 +23,7 @@ function NodeAddModal() {
   ) as React.Dispatch<WorkflowAction>;
   const { addNodeSource } = useContext(WorkflowStateContext) as WorkflowState;
 
-  const addNode = (values: Untyped, config: Untyped) => {
+  const addNode = (values: NodeModalValues, config: LaunchConfig) => {
     const {
       approvalName,
       approvalDescription,
@@ -40,7 +42,7 @@ function NodeAddModal() {
     if (values) {
       const { added, removed } = getAddedAndRemoved(
         config?.defaults?.credentials,
-        values?.credentials
+        values?.credentials as LaunchCredential[] | undefined
       );
 
       values.addedCredentials = added;
@@ -49,7 +51,7 @@ function NodeAddModal() {
 
     // Built up from the fields the chosen node type carries.
 
-    const node: Record<string, Untyped> = {
+    const node: Record<string, unknown> = {
       linkType,
       all_parents_must_converge: convergence === 'all',
       max_retries: Number(maxRetries) || 0,

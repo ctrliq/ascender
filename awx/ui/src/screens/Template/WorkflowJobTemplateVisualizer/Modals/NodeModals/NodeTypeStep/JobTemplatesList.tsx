@@ -1,4 +1,4 @@
-import type { SummaryFieldRef, Untyped } from 'types/api';
+import type { NodeTemplate, SummaryFieldRef } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 
@@ -27,8 +27,7 @@ const QS_CONFIG = getQSConfig('job-templates', {
 });
 
 export interface TemplatePopoverContentProps {
-  template: Untyped;
-  [key: string]: unknown;
+  template: NodeTemplate;
 }
 
 function TemplatePopoverContent({ template }: TemplatePopoverContentProps) {
@@ -76,10 +75,16 @@ function TemplatePopoverContent({ template }: TemplatePopoverContentProps) {
   );
 }
 
+export interface JobTemplatesListProps {
+  /** The template this node runs, absent until one is picked. */
+  nodeResource?: NodeTemplate | null;
+  onUpdateNodeResource: (resource: NodeTemplate | null) => void;
+}
+
 function JobTemplatesList({
   nodeResource = null,
   onUpdateNodeResource,
-}: Untyped) {
+}: JobTemplatesListProps) {
   const location = useLocation();
   const { t } = useLingui();
 

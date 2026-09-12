@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { SummaryFieldRef, WorkflowJobTemplate } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 
@@ -15,9 +15,10 @@ import useRequest from 'hooks/useRequest';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import { WorkflowJobTemplateForm } from '../shared';
+import type { WorkflowJobTemplateFormValues } from '../shared/WorkflowJobTemplateForm';
 
 export interface WorkflowJobTemplateEditProps {
-  template: Untyped;
+  template: WorkflowJobTemplate;
   [key: string]: unknown;
 }
 
@@ -26,7 +27,7 @@ function WorkflowJobTemplateEdit({ template }: WorkflowJobTemplateEditProps) {
   const navigate = useNavigate();
   const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: WorkflowJobTemplateFormValues) => {
     const {
       labels,
       inventory,
@@ -39,24 +40,28 @@ function WorkflowJobTemplateEdit({ template }: WorkflowJobTemplateEditProps) {
       scm_branch,
       ...templatePayload
     } = values;
-    templatePayload.inventory = inventory?.id || null;
-    templatePayload.organization = organization?.id || null;
-    templatePayload.webhook_credential = webhook_credential?.id || null;
+    const payload: Record<string, unknown> = { ...templatePayload };
+    payload.inventory = inventory?.id || null;
+    payload.organization = organization?.id || null;
+    payload.webhook_credential = webhook_credential?.id || null;
     if (webhook_key) {
-      templatePayload.webhook_key = webhook_key;
+      payload.webhook_key = webhook_key;
     }
-    templatePayload.limit = limit === '' ? null : limit;
-    templatePayload.job_tags = job_tags === '' ? null : job_tags;
-    templatePayload.skip_tags = skip_tags === '' ? null : skip_tags;
-    templatePayload.scm_branch = scm_branch === '' ? null : scm_branch;
+    payload.limit = limit === '' ? null : limit;
+    payload.job_tags = job_tags === '' ? null : job_tags;
+    payload.skip_tags = skip_tags === '' ? null : skip_tags;
+    payload.scm_branch = scm_branch === '' ? null : scm_branch;
 
     const formOrgId =
-      organization?.id || inventory?.summary_fields?.organization.id || null;
+      organization?.id ||
+      (inventory?.summary_fields as { organization?: { id?: number } })
+        ?.organization?.id ||
+      null;
     try {
       await Promise.all(
         await submitLabels(formOrgId, template.organization, labels)
       );
-      await WorkflowJobTemplatesAPI.update(template.id, templatePayload);
+      await WorkflowJobTemplatesAPI.update(template.id, payload);
       navigate(`/templates/workflow_job_template/${template.id}/details`);
     } catch (err) {
       setFormSubmitError(err);
@@ -64,12 +69,12 @@ function WorkflowJobTemplateEdit({ template }: WorkflowJobTemplateEditProps) {
   };
 
   const submitLabels = async (
-    formOrgId: Untyped,
-    templateOrgId: Untyped,
-    labels = []
+    formOrgId: number | null,
+    templateOrgId: number | null | undefined,
+    labels: SummaryFieldRef[] = []
   ) => {
     const { added, removed } = getAddedAndRemoved(
-      template.summary_fields.labels.results,
+      template.summary_fields.labels?.results as SummaryFieldRef[] | undefined,
       labels
     );
     let orgId = formOrgId || templateOrgId;
@@ -86,10 +91,17 @@ function WorkflowJobTemplateEdit({ template }: WorkflowJobTemplateEditProps) {
     }
 
     const disassociationPromises = await removed.map((label) =>
-      WorkflowJobTemplatesAPI.disassociateLabel(template.id, label)
+      WorkflowJobTemplatesAPI.disassociateLabel(
+        template.id,
+        label as { id: number; name: string }
+      )
     );
     const associationPromises = await added.map((label) =>
-      WorkflowJobTemplatesAPI.associateLabel(template.id, label, orgId)
+      WorkflowJobTemplatesAPI.associateLabel(
+        template.id,
+        label as { id: number; name: string },
+        orgId as number
+      )
     );
     const results = [...disassociationPromises, ...associationPromises];
     return results;

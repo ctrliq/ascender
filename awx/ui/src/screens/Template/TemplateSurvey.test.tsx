@@ -1,5 +1,5 @@
+import type { JobTemplate, Untyped, WorkflowJobTemplate } from 'types/api';
 import type { ApiResponse } from 'api/Base';
-import type { Untyped } from 'types/api';
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
 
@@ -9,8 +9,13 @@ import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import TemplateSurvey from './TemplateSurvey';
-import mockJobTemplateData from './shared/data.job_template.json';
-import mockWorkflowJobTemplateData from './shared/data.workflow_job_template.json';
+import mockJobTemplateJson from './shared/data.job_template.json';
+import mockWorkflowJobTemplateJson from './shared/data.workflow_job_template.json';
+
+/** The fixtures as the survey takes them, which is what the api sends. */
+const mockJobTemplateData = mockJobTemplateJson as unknown as JobTemplate;
+const mockWorkflowJobTemplateData =
+  mockWorkflowJobTemplateJson as unknown as WorkflowJobTemplate;
 
 vi.mock('../../api/models/JobTemplates');
 vi.mock('../../api/models/WorkflowJobTemplates');
@@ -64,7 +69,9 @@ describe('<TemplateSurvey />', () => {
     vi.mocked(JobTemplatesAPI.readSurvey).mockRejectedValue(new Error());
     renderSurvey(
       '/templates/job_template/7/survey',
-      <TemplateSurvey template={{ ...mockJobTemplateData, id: 'a' }} />
+      <TemplateSurvey
+        template={{ ...mockJobTemplateData, id: 'a' as unknown as number }}
+      />
     );
     // ContentError renders a 'Something went wrong' heading.
     expect(
