@@ -1,6 +1,3 @@
-from azure.keyvault.secrets import SecretClient
-from azure.identity import AzureAuthorityHosts, ClientSecretCredential
-
 from .plugin import CredentialPlugin
 
 from django.utils.translation import gettext_lazy as _
@@ -13,11 +10,15 @@ from django.utils.translation import gettext_lazy as _
 # AzureAuthorityHosts.AZURE_GERMANY constant, which warns on access) so
 # existing credentials keep validating.
 DEFAULT_CLOUD_NAME = 'AzureCloud'
+# These are the literal values of the AzureAuthorityHosts constants. They are
+# spelled out so the module does not import azure.identity just to build this
+# dict, the way the German host already was; test_credential_plugins asserts
+# they still match what the SDK defines.
 AUTHORITY_HOSTS = {
-    'AzureChinaCloud': AzureAuthorityHosts.AZURE_CHINA,
+    'AzureChinaCloud': 'login.chinacloudapi.cn',
     'AzureGermanCloud': 'login.microsoftonline.de',
-    DEFAULT_CLOUD_NAME: AzureAuthorityHosts.AZURE_PUBLIC_CLOUD,
-    'AzureUSGovernment': AzureAuthorityHosts.AZURE_GOVERNMENT,
+    DEFAULT_CLOUD_NAME: 'login.microsoftonline.com',
+    'AzureUSGovernment': 'login.microsoftonline.us',
 }
 CLOUD_NAMES = sorted(AUTHORITY_HOSTS)
 
@@ -65,6 +66,13 @@ azure_keyvault_inputs = {
 
 
 def azure_keyvault_backend(**kwargs):
+    # imported here rather than at module scope: every process that touches the
+    # credential models loads every plugin through its entry point, so a module
+    # level import makes each of them pay for the SDK whether or not an Azure
+    # credential is ever used
+    from azure.identity import AzureAuthorityHosts, ClientSecretCredential
+    from azure.keyvault.secrets import SecretClient
+
     csc = ClientSecretCredential(
         tenant_id=kwargs['tenant'],
         client_id=kwargs['client'],

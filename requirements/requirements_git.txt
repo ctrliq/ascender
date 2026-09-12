@@ -17,6 +17,6 @@
 # updater.sh uses these lines to comment out matching entries in requirements.txt
 # so they are not installed twice (once from git, once from PyPI).
 #
-certifi @ git+https://github.com/ansible/system-certifi.git@devel
-ansible-runner @ git+https://github.com/ansible/ansible-runner.git@devel
+certifi @ git+https://github.com/ansible/system-certifi.git@5aa52ab91f9d579bfe52b5acf30ca799f1a563d9
+ansible-runner @ git+https://github.com/ansible/ansible-runner.git@fb826c258ea6e74ac2502c70e4ff3014ee443e40
 python3-saml @ git+https://github.com/SAML-Toolkits/python3-saml.git@52d2ac8da3f35262755f6e1c32ba7c62a6011fe1
