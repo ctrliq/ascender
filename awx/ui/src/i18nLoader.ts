@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import { i18n } from '@lingui/core';
 
 export const locales = {
@@ -22,7 +21,7 @@ export const rtlLocales = new Set(['ar']);
  * @param locale any locale string
  */
 export async function dynamicActivate(
-  locale: Untyped,
+  locale: string,
   pseudolocalization = false
 ) {
   // The extension is not decoration: the static part of a dynamic import has
@@ -48,7 +47,7 @@ export async function dynamicActivate(
   // Apply text direction and lang on the root <html> element so that
   // PatternFly and the rest of the UI render right-to-left when needed.
   if (typeof document !== 'undefined' && document.documentElement) {
-    const language = locale.split(/[-_]/)[0];
+    const language = locale.split(/[-_]/)[0] as string;
     document.documentElement.lang = language;
     document.documentElement.dir = rtlLocales.has(language) ? 'rtl' : 'ltr';
 

@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useMemo } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
@@ -56,9 +55,9 @@ const TypeFields = {
   webhook: WebhookFields,
 };
 export interface TypeInputsSubFormProps {
-  type: Untyped;
+  /** Which notification type the form is for, which picks its fields. */
+  type: string;
   isEdit?: boolean;
-  [key: string]: unknown;
 }
 
 function TypeInputsSubForm({ type, isEdit = false }: TypeInputsSubFormProps) {
@@ -84,7 +83,14 @@ function SecretPasswordField({
   name,
   isEdit = false,
   isRequiredOnCreate = false,
-}: Untyped) {
+}: {
+  id: string;
+  label: React.ReactNode;
+  name: string;
+  /** True on the edit screen, where the api keeps whatever is already set. */
+  isEdit?: boolean;
+  isRequiredOnCreate?: boolean;
+}) {
   const validate = isRequiredOnCreate && !isEdit ? required(null) : undefined;
   const [, meta] = useField({ name, validate });
   const isRequired = isRequiredOnCreate && !isEdit;

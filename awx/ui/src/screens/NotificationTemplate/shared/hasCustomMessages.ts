@@ -1,8 +1,21 @@
-import type { Untyped } from 'types/api';
+import type {
+  NotificationMessages,
+  NotificationText,
+} from './NotificationTemplateForm';
 
+/**
+ * Whether a template's messages differ from the defaults the api ships.
+ *
+ * Args:
+ *   messages: what the template holds, absent where it has none of its own.
+ *   defaults: the bodies the api ships for this notification type.
+ *
+ * Returns:
+ *   True where any one of the eight differs from its default.
+ */
 export default function hasCustomMessages(
-  messages: Untyped,
-  defaults: Untyped
+  messages?: NotificationMessages | null,
+  defaults: NotificationMessages = {}
 ) {
   if (!messages) {
     return false;
@@ -15,24 +28,27 @@ export default function hasCustomMessages(
     isCustomized(messages.changed, defaults.changed) ||
     isCustomized(
       messages.workflow_approval?.approved,
-      defaults.workflow_approval.approved
+      defaults.workflow_approval?.approved
     ) ||
     isCustomized(
       messages.workflow_approval?.denied,
-      defaults.workflow_approval.denied
+      defaults.workflow_approval?.denied
     ) ||
     isCustomized(
       messages.workflow_approval?.running,
-      defaults.workflow_approval.running
+      defaults.workflow_approval?.running
     ) ||
     isCustomized(
       messages.workflow_approval?.timed_out,
-      defaults.workflow_approval.timed_out
+      defaults.workflow_approval?.timed_out
     )
   );
 }
 
-function isCustomized(message: Untyped, defaultMessage: Untyped) {
+function isCustomized(
+  message?: NotificationText,
+  defaultMessage?: NotificationText
+) {
   if (!message) {
     return false;
   }

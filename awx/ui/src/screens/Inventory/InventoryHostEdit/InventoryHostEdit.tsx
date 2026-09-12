@@ -1,10 +1,11 @@
-import type { AnyInventory, Host, Untyped } from 'types/api';
+import type { AnyInventory, Host } from 'types/api';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CardBody } from 'components/Card';
 import HostForm from 'components/HostForm';
 
 import { HostsAPI } from 'api';
+import type { HostFormValues } from 'components/HostForm/HostForm';
 
 export interface InventoryHostEditProps {
   host: Host;
@@ -17,7 +18,7 @@ function InventoryHostEdit({ host, inventory }: InventoryHostEditProps) {
   const detailsUrl = `/inventories/inventory/${inventory.id}/hosts/${host.id}/details`;
   const navigate = useNavigate();
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: HostFormValues) => {
     try {
       await HostsAPI.update(host.id, values);
       navigate(detailsUrl);

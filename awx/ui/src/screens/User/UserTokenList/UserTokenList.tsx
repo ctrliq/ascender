@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { OAuth2Token } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
@@ -17,6 +17,12 @@ import DataListToolbar from 'components/DataListToolbar';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import UserTokensListItem from './UserTokenListItem';
+
+/**
+ * A token as this list holds it. The api gives a token no name, and the list
+ * needs one for the delete confirmation, so the application's stands in.
+ */
+type NamedToken = OAuth2Token & { name?: string };
 
 const QS_CONFIG = getQSConfig('user', {
   page: 1,
@@ -45,15 +51,15 @@ function UserTokenList() {
         UsersAPI.readTokens(id, params),
         UsersAPI.readTokenOptions(id),
       ]);
-      const modifiedResults = results.map((result: Untyped) => {
-        result.summary_fields = {
+      const modifiedResults: NamedToken[] = results.map((result) => ({
+        ...result,
+        summary_fields: {
           user: result.summary_fields.user,
           application: result.summary_fields.application,
           user_capabilities: { delete: true },
-        };
-        result.name = result.summary_fields.application?.name;
-        return result;
-      });
+        },
+        name: result.summary_fields.application?.name as string | undefined,
+      }));
       return {
         tokens: modifiedResults,
         itemCount: count,

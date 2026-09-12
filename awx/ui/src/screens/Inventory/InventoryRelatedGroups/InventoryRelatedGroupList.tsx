@@ -1,4 +1,4 @@
-import type { Untyped } from 'types/api';
+import type { ApiEntity } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
@@ -105,11 +105,11 @@ function InventoryRelatedGroupList() {
   );
 
   const associateGroup = useCallback(
-    async (selectedGroups: Untyped) => {
+    async (selectedGroups: ApiEntity[]) => {
       try {
         await Promise.all(
-          selectedGroups.map((selected: Untyped) =>
-            GroupsAPI.associateChildGroup(groupId, selected.id)
+          selectedGroups.map((selected) =>
+            GroupsAPI.associateChildGroup(groupId, selected.id as number)
           )
         );
       } catch (err) {

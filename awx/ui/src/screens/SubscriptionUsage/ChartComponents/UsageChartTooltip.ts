@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import * as d3 from 'd3';
 
 /** One month of the subscription usage the API reports. */
@@ -20,8 +19,24 @@ export interface UsagePoint {
   CAPACITY: number;
 }
 
-/** One of the shapes or labels this tooltip appends, as d3 hands it back. */
-type Appended = d3.Selection<Untyped, unknown, HTMLElement, unknown>;
+/**
+ * One of the shapes or labels this tooltip appends, as d3 hands it back.
+ *
+ * d3 keys a selection on the element it holds and is invariant in it, so each
+ * of these names the element it was appended as.
+ */
+type Appended<E extends d3.BaseType> = d3.Selection<
+  E,
+  unknown,
+  HTMLElement,
+  unknown
+>;
+
+/** lingui's tagged template, as the chart hands it down. */
+type TranslateFn = (
+  strings: TemplateStringsArray,
+  ...values: unknown[]
+) => string;
 
 /** What the chart tells the tooltip about itself when it builds one. */
 export interface UsageTooltipOptions {
@@ -31,31 +46,31 @@ export interface UsageTooltipOptions {
   colors: (series: number) => string;
   label: string;
   /** lingui's t, which the labels below are translated through. */
-  t: Untyped;
+  t: TranslateFn;
 }
 
 class UsageChartTooltip {
   // draw() builds every one of these, and the constructor calls it.
-  boundingBox!: Appended;
+  boundingBox!: Appended<SVGRectElement>;
   boxWidth!: number;
-  capacity!: Appended;
-  capacityText!: Appended;
+  capacity!: Appended<SVGTextElement>;
+  capacityText!: Appended<SVGTextElement>;
   capacityTextWidth!: number;
-  circleBlue!: Appended;
-  circleRed!: Appended;
+  circleBlue!: Appended<SVGCircleElement>;
+  circleRed!: Appended<SVGCircleElement>;
   colors: (series: number) => string;
-  consumed!: Appended;
-  consumedText!: Appended;
+  consumed!: Appended<SVGTextElement>;
+  consumedText!: Appended<SVGTextElement>;
   consumedTextWidth!: number;
-  date!: Appended;
-  icon!: Appended;
+  date!: Appended<SVGTextElement>;
+  icon!: Appended<SVGTextElement>;
   jobsWidth!: number;
   label: string;
   svg: string;
-  t: Untyped;
+  t: TranslateFn;
   textWidthThreshold!: number;
-  toolTipBase!: Appended;
-  toolTipPoint!: Appended;
+  toolTipBase!: Appended<SVGGElement>;
+  toolTipPoint!: Appended<SVGRectElement>;
 
   constructor(opts: UsageTooltipOptions) {
     this.label = opts.label;
@@ -163,7 +178,7 @@ class UsageChartTooltip {
       return;
     }
 
-    const toolTipWidth = this.toolTipBase.node().getBoundingClientRect().width;
+    const toolTipWidth = this.toolTipBase.node()!.getBoundingClientRect().width;
     const chartWidth = (
       d3.select(`${this.svg}> svg`).node() as SVGSVGElement
     ).getBoundingClientRect().width;
@@ -177,8 +192,8 @@ class UsageChartTooltip {
 
     this.capacity.text(`${capacity}`);
     this.consumed.text(`${consumed}`);
-    this.consumedTextWidth = this.consumed.node().getComputedTextLength();
-    this.capacityTextWidth = this.capacity.node().getComputedTextLength();
+    this.consumedTextWidth = this.consumed.node()!.getComputedTextLength();
+    this.capacityTextWidth = this.capacity.node()!.getComputedTextLength();
 
     const maxTextPerc = (this.jobsWidth / this.boxWidth) * 100;
     const threshold = 40;

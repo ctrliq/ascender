@@ -1,4 +1,4 @@
-import type { AnyInventory, Untyped } from 'types/api';
+import type { AnyInventory, SummaryFieldRef } from 'types/api';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { ConstructedInventoriesAPI, InventoriesAPI } from 'api';
@@ -7,13 +7,13 @@ import { CardBody } from 'components/Card';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import ConstructedInventoryForm from '../shared/ConstructedInventoryForm';
+import type { ConstructedInventoryFormValues } from '../shared/ConstructedInventoryForm';
 
-function isEqual(array1: Untyped, array2: Untyped) {
+/** Whether both lists name the same rows, in the same order. */
+function isEqual(array1: SummaryFieldRef[], array2: SummaryFieldRef[]) {
   return (
     array1.length === array2.length &&
-    array1.every(
-      (element: Untyped, index: number) => element.id === array2[index].id
-    )
+    array1.every((element, index) => element.id === array2[index]?.id)
   );
 }
 
@@ -80,7 +80,7 @@ function ConstructedInventoryEdit({
     fetchedRelatedData();
   }, [fetchedRelatedData]);
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: ConstructedInventoryFormValues) => {
     const {
       instanceGroups,
       inputInventories,
@@ -88,15 +88,15 @@ function ConstructedInventoryEdit({
       ...remainingValues
     } = values;
 
-    remainingValues.organization = organization.id;
-    remainingValues.kind = 'constructed';
+    const payload = {
+      ...remainingValues,
+      organization: organization?.id,
+      kind: 'constructed',
+    };
 
     try {
       await Promise.all([
-        ConstructedInventoriesAPI.update(
-          constructedInventoryId,
-          remainingValues
-        ),
+        ConstructedInventoriesAPI.update(constructedInventoryId, payload),
         InventoriesAPI.orderInstanceGroups(
           constructedInventoryId,
           instanceGroups,

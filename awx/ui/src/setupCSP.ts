@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 // The nonce for the style tags styled-components injects is carried by the
 // <meta name="sc-nonce"> that Django renders into index.html, which
 // styled-components looks for before anything else. It replaces the
@@ -8,7 +7,7 @@ import type { Untyped } from 'types/api';
 // See: https://w3c.github.io/webappsec-csp/2/#violation-reports
 // See: https://developer.mozilla.org/en-US/docs/Web/API/SecurityPolicyViolationEvent
 document.addEventListener('securitypolicyviolation', (e) => {
-  const violation: { 'csp-report': Record<string, Untyped> } = {
+  const violation: { 'csp-report': Record<string, string | number> } = {
     'csp-report': {
       'blocked-uri': e.blockedURI,
       'document-uri': e.documentURI,

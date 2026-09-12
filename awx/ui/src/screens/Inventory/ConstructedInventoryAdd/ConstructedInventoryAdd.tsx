@@ -1,4 +1,3 @@
-import type { Untyped } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -8,6 +7,7 @@ import { CardBody } from 'components/Card';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import ConstructedInventoryForm from '../shared/ConstructedInventoryForm';
+import type { ConstructedInventoryFormValues } from '../shared/ConstructedInventoryForm';
 
 function ConstructedInventoryAdd() {
   const navigate = useNavigate();
@@ -43,7 +43,7 @@ function ConstructedInventoryAdd() {
     navigate('/inventories');
   };
 
-  const handleSubmit = async (values: Untyped) => {
+  const handleSubmit = async (values: ConstructedInventoryFormValues) => {
     try {
       const {
         data: { id: inventoryId },
