@@ -57,7 +57,7 @@ docker exec tools_awx_1 bash -c "cd /awx_devel && yamllint -s ."
 
 ## Running Tests
 
-Tests run against PostgreSQL, the same backend Ascender deploys on, with an in-memory channel layer. Settings: `awx.main.tests.settings_for_test` (configured in `pytest.ini`). Default pytest flags: `--reuse-db --nomigrations --tb=native --timeout=300`.
+Tests run against PostgreSQL, the same backend Ascender deploys on, with an in-memory channel layer. Settings: `awx.main.tests.settings_for_test` (configured in `pyproject.toml`). Default pytest flags: `--reuse-db --nomigrations --tb=native --timeout=300`.
 
 ### Unit tests (~15 seconds, run frequently)
 ```bash
@@ -133,7 +133,7 @@ Migration files live in `awx/main/migrations/` (218 existing files).
 | `pyproject.toml` | Build system, package metadata and entry points, ruff config |
 | `tox.ini` | tox testenv definitions |
 | `.yamllint` | yamllint rules |
-| `pytest.ini` | pytest settings and markers |
+| `pyproject.toml` | packaging, ruff, pytest and coverage settings |
 | `Makefile` | All build/test/lint targets |
 
 ---
