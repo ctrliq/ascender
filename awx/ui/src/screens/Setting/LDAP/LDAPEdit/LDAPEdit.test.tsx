@@ -138,9 +138,7 @@ describe('<LDAPEdit />', () => {
     await user.type(serverUriInput, 'ldap://mock.example.com');
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
-    // The AUTH_LDAP_TEAM_MAP CodeEditor cannot be driven through the DOM under
-    // jsdom (react-ace renders no usable input), so the original test's
-    // team-map edit is folded out: AUTH_LDAP_TEAM_MAP stays at its default {}.
+    // this test edits no team map, so AUTH_LDAP_TEAM_MAP stays at its {} default
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       AUTH_LDAP_BIND_DN: '',
       AUTH_LDAP_BIND_PASSWORD: '',

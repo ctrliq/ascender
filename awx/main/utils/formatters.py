@@ -11,7 +11,7 @@ from datetime import datetime
 from dateutil.tz import tzutc
 from django.utils.timezone import now
 from django.core.serializers.json import DjangoJSONEncoder
-from django.conf import settings
+from awx.settings.typed import settings
 
 
 class TimeFormatter(logging.Formatter):
@@ -250,7 +250,7 @@ class LogstashFormatter(LogstashFormatterBase):
         # General AWX metadata
         fields['cluster_host_id'] = self.cluster_host_id
         fields['tower_uuid'] = settings.INSTALL_UUID
-        fields['tower_url'] = settings.TOWER_URL_BASE
+        fields['tower_url'] = settings.ASCENDER_URL_BASE
         return fields
 
     def format(self, record):

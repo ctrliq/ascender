@@ -113,7 +113,7 @@ class ResourceRegistry:
 
 
 def get_registry() -> Optional[ResourceRegistry]:
-    from django.conf import settings
+    from awx.settings.typed import settings
 
     if hasattr(settings, "ANSIBLE_BASE_RESOURCE_CONFIG_MODULE"):
         from django.utils.module_loading import import_string

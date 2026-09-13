@@ -55,6 +55,24 @@ DATABASES = {
 # the harakiri value.  Set this for non-uwsgi deployments or to override.
 DATABASE_STATEMENT_TIMEOUT = None
 
+# How many days of job events to keep, for the cleanup_job_events command.
+# 0, the default, means no window and nothing dropped: events then live exactly
+# as long as the jobs that wrote them, which is what cleanup_jobs decides.
+JOB_EVENT_RETENTION_DAYS = 0
+
+# Where cleanup_job_events writes a partition before dropping it. Unset, the
+# default, means no archive: a partition that falls out of the window is gone.
+# Set to a directory and each partition is COPYed out as gzipped CSV first, and
+# is only dropped once that file is written, so the window becomes hot storage
+# with something behind it rather than a delete.
+JOB_EVENT_ARCHIVE_DIR = None
+
+# Optional manual override for how long a database connection is kept and
+# reused, in seconds. Unset, a web process reuses one for a minute and every
+# other process opens one per request, which is Django's default. 0 turns
+# reuse off everywhere.
+DATABASE_CONN_MAX_AGE = None
+
 # Special database overrides for dispatcher connections listening to pg_notify
 LISTENER_DATABASES = {
     'default': {
@@ -895,14 +913,6 @@ SATELLITE6_INSTANCE_ID_VAR = 'foreman_id,foreman.id'
 # SATELLITE6_GROUP_PREFIX and SATELLITE6_GROUP_PATTERNS defined in source vars
 
 # ----------------
-# -- Red Hat Insights --
-# ----------------
-# INSIGHTS_ENABLED_VAR =
-# INSIGHTS_ENABLED_VALUE =
-INSIGHTS_INSTANCE_ID_VAR = 'insights_id'
-INSIGHTS_EXCLUDE_EMPTY_GROUPS = False
-
-# ----------------
 # -- Terraform State --
 # ----------------
 # TERRAFORM_ENABLED_VAR =
@@ -949,12 +959,9 @@ MANAGE_ORGANIZATION_AUTH = True
 DISABLE_LOCAL_AUTH = False
 
 # Note: This setting may be overridden by database settings.
-TOWER_URL_BASE = "https://ascenderhost"
+ASCENDER_URL_BASE = "https://ascenderhost"
 
-INSIGHTS_URL_BASE = "https://example.org"
 INSIGHTS_AGENT_MIME = 'application/example'
-# See https://github.com/ansible/awx-facts-playbooks
-INSIGHTS_SYSTEM_ID_FILE = '/etc/redhat-access-insights/machine-id'
 INSIGHTS_CERT_PATH = "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
 
 # Settings related to external logger configuration
@@ -1147,6 +1154,9 @@ RECEPTOR_RELEASE_WORK = True
 RECEPTOR_LOG_LEVEL = 'info'
 
 MIDDLEWARE = [
+    # First, so its headers are on every response including those that later
+    # middleware short circuits.
+    'django.middleware.security.SecurityMiddleware',
     'django_guid.middleware.guid_middleware',
     'awx.dab.lib.middleware.logging.log_request.LogTracebackMiddleware',
     'awx.main.middleware.SettingsCacheMiddleware',
@@ -1164,7 +1174,22 @@ MIDDLEWARE = [
     'awx.main.middleware.ThreadLocalMiddleware',
     'awx.main.middleware.URLModificationMiddleware',
     'awx.main.middleware.SessionTimeoutMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# Response headers the application sets for itself, rather than relying on
+# whatever proxy happens to sit in front of it. A deployment that also sets
+# them at the proxy gets the same values, not a conflict.
+SECURE_CONTENT_TYPE_NOSNIFF = True  # X-Content-Type-Options
+SECURE_REFERRER_POLICY = 'same-origin'  # Referrer-Policy
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'  # Cross-Origin-Opener-Policy
+X_FRAME_OPTIONS = 'DENY'  # the API and the UI are never framed
+
+# HSTS is deliberately not set here. Django only emits it on a request it
+# believes is HTTPS, and behind a TLS terminating proxy it sees HTTP unless
+# SECURE_PROXY_SSL_HEADER is configured, so setting it would be silently
+# inert on exactly the deployments that need it. The proxy sets it: see
+# nginx.conf in the installer and the development compose file.
 
 # Secret header value to exchange for websockets responsible for distributing websocket messages.
 # This needs to be kept secret and randomly generated
@@ -1295,6 +1320,8 @@ ANSIBLE_BASE_REST_FILTERS_RESERVED_NAMES = (
     'no_truncate',
     'limit',
     'validate',
+    # asks for fewer summary fields rather than filtering on one
+    'summary_fields',
     'user_ansible_id',
     'team_ansible_id',
     'object_ansible_id',

@@ -3,7 +3,7 @@ from urllib.parse import urljoin
 
 from argparse import ArgumentTypeError
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Q
 from django.utils.timezone import now
@@ -63,7 +63,7 @@ class AWXInstance:
     def instance_pretty(self):
         instance = (
             self.instance.hostname,
-            urljoin(settings.TOWER_URL_BASE, f"/#/instances/{self.instance.pk}/details"),
+            urljoin(settings.ASCENDER_URL_BASE, f"/#/instances/{self.instance.pk}/details"),
         )
         return f"[\"{instance[0]}\"]({instance[1]})"
 
