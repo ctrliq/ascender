@@ -266,6 +266,23 @@ class HasEditsMixin(BaseModel):
     def _values_have_edits(self, new_values):
         return any(new_values.get(fd_name, None) != self._prior_values_store.get(fd_name, None) for fd_name in new_values.keys())
 
+    def sync_edit_snapshot(self, attnames):
+        """Take the current values of the named fields as the edit-tracking baseline.
+
+        For use after refresh_from_db(fields=...) on an instance loaded with only()/defer(): the
+        snapshot taken at instantiation lacks the deferred fields, so once they are loaded save()
+        would otherwise report every one of them as an edit and rewrite modified_by. Only the named
+        fields are touched, so a change already made to another loaded field is still detected, and
+        a new dict is assigned rather than mutating the old one because callers such as
+        Project.save() hold a reference to the previous snapshot to compare against after saving.
+        """
+        store = getattr(self, '_prior_values_store', None)
+        if store is None:
+            return
+        attnames = set(attnames)
+        current = self._get_fields_snapshot()
+        self._prior_values_store = {**store, **{k: v for k, v in current.items() if k in attnames}}
+
 
 class PrimordialModel(HasEditsMixin, CreatedModifiedModel):
     """
