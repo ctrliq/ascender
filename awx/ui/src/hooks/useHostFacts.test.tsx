@@ -3,7 +3,7 @@ import { screen, waitFor } from '@testing-library/react';
 
 import { HostsAPI } from 'api';
 import { renderWithContexts } from '../../testUtils/rtlContexts';
-import type { ResponseOf } from '../../testUtils/types';
+import type { ResponseOf } from '../../testUtils/responseOf';
 import useHostFacts from './useHostFacts';
 
 vi.mock('../api');
