@@ -211,7 +211,7 @@ describe('<SurveyQuestionForm />', () => {
   });
 
   // The default-toggle renders a styled CheckIcon whose `selected` prop drives
-  // a styled-components class. In the real DOM we proxy that prop by asserting
+  // a modifier class. In the real DOM we proxy that prop by asserting
   // the icon's class changes when toggled.
   const toggleButton = (choice: string) =>
     document.querySelector(`[data-ouia-component-id="${choice}-button"]`);

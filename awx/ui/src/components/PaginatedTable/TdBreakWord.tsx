@@ -1,18 +1,24 @@
 import React from 'react';
-import { Td as _Td } from '@patternfly/react-table';
-import styled from 'styled-components';
-
-const Td = styled(_Td)`
-  && {
-    word-break: break-all;
-  }
-`;
+import { Td } from '@patternfly/react-table';
+import './TdBreakWord.css';
 
 export interface TdBreakWordProps {
   children: React.ReactNode;
+  className?: string;
   [key: string]: unknown;
 }
 
-export default function TdBreakWord({ children, ...props }: TdBreakWordProps) {
-  return <Td {...props}>{children}</Td>;
+export default function TdBreakWord({
+  children,
+  className,
+  ...props
+}: TdBreakWordProps) {
+  return (
+    <Td
+      className={['awx-td-break-word__td', className].filter(Boolean).join(' ')}
+      {...props}
+    >
+      {children}
+    </Td>
+  );
 }

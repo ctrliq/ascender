@@ -6,6 +6,7 @@ import { Tr, Td } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem } from 'components/PaginatedTable';
+import './OrganizationTeamListItem.css';
 
 export interface OrganizationTeamListItemProps {
   team: Team;
@@ -32,9 +33,9 @@ function OrganizationTeamListItem({
         >
           <Button
             icon={<PencilAltIcon />}
+            className="awx-organization-team-list-item__grid-column-2"
             ouiaId={`${team.id}-edit-button`}
             aria-label={t`Edit Team`}
-            css="grid-column: 2"
             variant="plain"
             component={Link}
             to={`${detailUrl}/edit`}

@@ -8,7 +8,6 @@ import type {
 import React, { useEffect, useCallback, useRef } from 'react';
 import { Link, Routes, Route, Navigate, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { Card as PFCard, PageSection } from '@patternfly/react-core';
 import { InventorySourcesAPI } from 'api';
@@ -24,12 +23,7 @@ import JobDetail from './JobDetail';
 import JobOutput from './JobOutput';
 import { WorkflowOutput } from './WorkflowOutput';
 import useWsJob from './useWsJob';
-
-const WorkflowCard = styled(PFCard)`
-  display: flex;
-  flex-direction: column;
-  height: calc(100vh - 160px);
-`;
+import './Job.css';
 
 // maps the displayed url segments to actual api types
 export const JOB_URL_SEGMENT_MAP = {
@@ -191,12 +185,14 @@ function Job({ setBreadcrumb }: JobProps) {
     );
   }
 
-  const CardComponent = typeSegment === 'workflow' ? WorkflowCard : PFCard;
-
   return (
     <PageSection hasBodyWrapper={false}>
       <div ref={ref}>
-        <CardComponent>
+        <PFCard
+          className={
+            typeSegment === 'workflow' ? 'awx-job__workflow-card' : undefined
+          }
+        >
           <RoutedTabs
             isWorkflow={typeSegment === 'workflow'}
             tabsArray={tabsArray}
@@ -243,7 +239,7 @@ function Job({ setBreadcrumb }: JobProps) {
               }
             />
           </Routes>
-        </CardComponent>
+        </PFCard>
       </div>
     </PageSection>
   );

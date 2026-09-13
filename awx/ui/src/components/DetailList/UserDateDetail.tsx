@@ -2,13 +2,9 @@ import type { SummaryFieldRef, User } from 'types/api';
 import React from 'react';
 import { Trans } from '@lingui/react/macro';
 import { Link } from 'react-router';
-import styled from 'styled-components';
 import { formatDateString } from 'util/dates';
-import _Detail from './Detail';
-
-const Detail = styled(_Detail)`
-  word-break: break-word;
-`;
+import Detail from './Detail';
+import './DetailList.css';
 
 export interface UserDateDetailProps {
   label: React.ReactNode;
@@ -26,6 +22,7 @@ function UserDateDetail({ label, date, user = null }: UserDateDetailProps) {
   const username = user ? (user.username as string) : '';
   return (
     <Detail
+      className="awx-detail--break-word"
       label={label}
       dataCy="user-date-detail"
       value={

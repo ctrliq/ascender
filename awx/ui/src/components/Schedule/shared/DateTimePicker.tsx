@@ -11,12 +11,9 @@ import {
   HelperText,
   HelperTextItem,
 } from '@patternfly/react-core';
-import styled from 'styled-components';
 import { required, validateDate, validateTime, combine } from 'util/validators';
+import './DateTimePicker.css';
 
-const DateTimeGroup = styled.span`
-  display: flex;
-`;
 export interface DateTimePickerProps {
   /** Formik field names, which the picker binds its two inputs to. */
   dateFieldName: string;
@@ -54,7 +51,7 @@ function DateTimePicker({
       isRequired
       label={label}
     >
-      <DateTimeGroup>
+      <span className="awx-date-time-picker__group">
         <DatePicker
           aria-label={
             dateFieldName.startsWith('start') ? t`Start date` : t`End date`
@@ -73,7 +70,7 @@ function DateTimePicker({
           {...timeField}
           onChange={(_, time) => timeHelpers.setValue(time)}
         />
-      </DateTimeGroup>
+      </span>
       {dateMeta.touched && dateMeta.error && (
         <FormHelperText>
           <HelperText>

@@ -3,7 +3,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
 import type { FieldValidator } from 'formik';
-import styled from 'styled-components';
 import { Split, SplitItem } from '@patternfly/react-core';
 import {
   yamlToJson,
@@ -17,17 +16,7 @@ import MultiButtonToggle from '../MultiButtonToggle';
 import CodeEditor from './CodeEditor';
 import Popover from '../Popover';
 import { JSON_MODE, YAML_MODE } from './constants';
-
-const FieldHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: var(--pf-v6-c-form__group-label--PaddingBottom);
-`;
-
-const StyledCheckboxField = styled(CheckboxField)`
-  --pf-v6-c-check__label--FontSize: var(--pf-v6-c-form__label--FontSize);
-  margin-left: auto;
-`;
+import './VariablesField.css';
 
 const defaultValidators: Record<
   string,
@@ -220,7 +209,7 @@ function VariablesFieldInternals({
 
   return (
     <div className="pf-v6-c-form__group">
-      <FieldHeader data-cy={`${id}-label`}>
+      <div className="awx-variables-field__header" data-cy={`${id}-label`}>
         <Split hasGutter>
           <SplitItem>
             <label htmlFor={id} className="pf-v6-c-form__label">
@@ -250,13 +239,14 @@ function VariablesFieldInternals({
           </SplitItem>
         </Split>
         {promptId && (
-          <StyledCheckboxField
+          <CheckboxField
+            className="awx-variables-field__styled-checkbox-field"
             id="template-ask-variables-on-launch"
             label={t`Prompt on launch`}
             name="ask_variables_on_launch"
           />
         )}
-      </FieldHeader>
+      </div>
       <CodeEditor
         id={id}
         mode={mode}
