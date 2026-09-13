@@ -11,6 +11,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import locationReplace from 'util/navigation';
 import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { Card, PageSection } from '@patternfly/react-core';
 import {
   ConfigProvider,
@@ -30,6 +31,7 @@ import { dynamicActivate, locales } from './i18nLoader';
 import getRouteConfig from './routeConfig';
 import { getStoredThemeId, applyTheme } from './themeRegistry';
 import { SESSION_REDIRECT_URL } from './constants';
+import queryClient from './queryClient';
 
 const Metrics = React.lazy(() => import('screens/Metrics'));
 const SubscriptionEdit = React.lazy(
@@ -243,7 +245,9 @@ function App() {
 }
 
 export default () => (
-  <HashRouter>
-    <App />
-  </HashRouter>
+  <QueryClientProvider client={queryClient}>
+    <HashRouter>
+      <App />
+    </HashRouter>
+  </QueryClientProvider>
 );

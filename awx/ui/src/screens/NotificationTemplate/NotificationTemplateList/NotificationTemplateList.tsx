@@ -1,5 +1,5 @@
 import type { SummaryFieldRef } from 'types/api';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
@@ -15,7 +15,8 @@ import PaginatedTable, {
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import DataListToolbar from 'components/DataListToolbar';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import useToast, { AlertVariant } from 'hooks/useToast';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -46,7 +47,8 @@ function NotificationTemplatesList() {
     error: contentError,
     isLoading: isTemplatesLoading,
     request: fetchTemplates,
-  } = useRequest(
+  } = useCachedRequest(
+    ['notification-templates-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([
@@ -71,10 +73,6 @@ function NotificationTemplatesList() {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchTemplates();
-  }, [fetchTemplates]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
     useSelected(templates);

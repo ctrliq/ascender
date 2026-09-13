@@ -1,8 +1,9 @@
 import type { InventorySource } from 'types/api';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 
+import useCachedRequest from 'hooks/useCachedRequest';
 import useRequest, {
   useDeleteItems,
   useDismissableError,
@@ -51,7 +52,8 @@ function InventorySourceList() {
       relatedSearchableKeys,
     },
     request: fetchSources,
-  } = useRequest(
+  } = useCachedRequest(
+    ['inventory-source-list', id, search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, search);
       const [sources, options] = await Promise.all([
@@ -95,10 +97,6 @@ function InventorySourceList() {
       }
     }, [id, canSyncSources])
   );
-
-  useEffect(() => {
-    fetchSources();
-  }, [fetchSources]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
     useSelected(sources);

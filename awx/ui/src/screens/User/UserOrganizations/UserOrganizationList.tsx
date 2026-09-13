@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
@@ -7,7 +7,7 @@ import PaginatedTable, {
   HeaderCell,
   getSearchableKeys,
 } from 'components/PaginatedTable';
-import useRequest from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
 import { UsersAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import UserOrganizationListItem from './UserOrganizationListItem';
@@ -28,8 +28,8 @@ function UserOrganizationList() {
     result: { organizations, count, searchableKeys, relatedSearchableKeys },
     error: contentError,
     isLoading,
-    request: fetchOrgs,
-  } = useRequest(
+  } = useCachedRequest(
+    ['user-organization-list', id, location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [
@@ -57,10 +57,6 @@ function UserOrganizationList() {
       relatedSearchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchOrgs();
-  }, [fetchOrgs]);
 
   return (
     <PaginatedTable
