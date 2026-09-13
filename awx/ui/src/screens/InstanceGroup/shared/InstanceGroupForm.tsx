@@ -1,6 +1,6 @@
 import type { InstanceGroup } from 'types/api';
 import React from 'react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { useLingui } from '@lingui/react/macro';
 import { Form } from '@patternfly/react-core';
 
@@ -94,7 +94,7 @@ function InstanceGroupForm({
     max_forks: instanceGroup.max_forks || 0,
   };
   return (
-    <Formik
+    <FormRoot
       initialValues={initialValues}
       onSubmit={(values) => onSubmit(values)}
     >
@@ -110,7 +110,7 @@ function InstanceGroupForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

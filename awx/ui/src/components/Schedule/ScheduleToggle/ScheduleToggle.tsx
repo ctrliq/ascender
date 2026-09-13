@@ -66,7 +66,6 @@ function ScheduleToggle({
       >
         <Switch
           className={className}
-          css="display: inline-flex;"
           id={`schedule-${schedule.id}-toggle`}
           label={t`On`}
 

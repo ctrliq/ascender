@@ -6,30 +6,16 @@ import {
   ToolbarItem as PFToolbarItem,
 } from '@patternfly/react-core';
 import { BarsIcon, EqualsIcon } from '@patternfly/react-icons';
-import styled from 'styled-components';
-
-const Button = styled(PFButton)<{ $isActive?: boolean }>`
-  padding: 0;
-  margin: 0;
-  height: 30px;
-  width: 30px;
-  ${(props) =>
-    props.$isActive
-      ? `
-      background-color: var(--pf-v6-global--primary-color--100);
-      --pf-v6-c-button--m-plain--active--Color: white;
-      --pf-v6-c-button--m-plain--focus--Color: white;`
-      : null};
-`;
-
-const ToolbarItem = styled(PFToolbarItem)`
-  & :not(:last-child) {
-    margin-right: 20px;
-  }
-`;
+import './ExpandCollapse.css';
 
 // TODO: Recommend renaming this component to avoid confusion
 // with ExpandingContainer
+/** The toggle that is showing its own layout carries the active colours. */
+const buttonClass = (isActive: boolean) =>
+  isActive
+    ? 'awx-expand-collapse__button awx-expand-collapse__button--active'
+    : 'awx-expand-collapse__button';
+
 export interface ExpandCollapseProps {
   isCompact?: boolean;
   onCompact: () => void;
@@ -45,28 +31,28 @@ function ExpandCollapse({
   const { t } = useLingui();
   return (
     <>
-      <ToolbarItem>
-        <Button
+      <PFToolbarItem className="awx-expand-collapse__toolbar-item">
+        <PFButton
           ouiaId="toolbar-collapse-button"
           variant="plain"
           aria-label={t`Collapse`}
           onClick={onCompact}
-          $isActive={isCompact}
+          className={buttonClass(isCompact)}
         >
           <BarsIcon />
-        </Button>
-      </ToolbarItem>
-      <ToolbarItem>
-        <Button
+        </PFButton>
+      </PFToolbarItem>
+      <PFToolbarItem className="awx-expand-collapse__toolbar-item">
+        <PFButton
           ouiaId="toolbar-expand-button"
           variant="plain"
           aria-label={t`Expand`}
           onClick={onExpand}
-          $isActive={!isCompact}
+          className={buttonClass(!isCompact)}
         >
           <EqualsIcon />
-        </Button>
-      </ToolbarItem>
+        </PFButton>
+      </PFToolbarItem>
     </>
   );
 }

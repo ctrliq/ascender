@@ -20,17 +20,9 @@ import {
   SortNumericDownAltIcon,
 } from '@patternfly/react-icons';
 
-import styled from 'styled-components';
 import type { QSConfig } from 'util/qs';
 import { parseQueryString } from 'util/qs';
-
-const NoOptionDropdown = styled.div`
-  align-self: stretch;
-  border: 1px solid var(--pf-v6-global--BorderColor--300);
-  padding: 5px 15px;
-  white-space: nowrap;
-  border-bottom-color: var(--pf-v6-global--BorderColor--200);
-`;
+import './Sort.css';
 
 export interface SortProps {
   columns: SortColumn[];
@@ -142,7 +134,11 @@ function Sort({ columns, qsConfig, onSort }: SortProps) {
             >
               <DropdownList>{sortDropdownItems}</DropdownList>
             </Dropdown>
-          )) || <NoOptionDropdown>{sortedColumnName}</NoOptionDropdown>}
+          )) || (
+            <div className="awx-sort__no-option-dropdown">
+              {sortedColumnName}
+            </div>
+          )}
 
           <InputGroupItem>
             <Button

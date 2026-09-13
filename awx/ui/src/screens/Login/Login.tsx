@@ -7,7 +7,7 @@ import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { Navigate } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import DOMPurify from 'dompurify';
 
 import {
@@ -307,7 +307,7 @@ function AWXLogin({ alt, isAuthenticated }: AWXLoginProps) {
           />
         ) : null}
         {Header}
-        <Formik
+        <FormRoot
           initialValues={{
             password: '',
             username: '',
@@ -345,7 +345,7 @@ function AWXLogin({ alt, isAuthenticated }: AWXLoginProps) {
               usernameValue={formik.values.username}
             />
           )}
-        </Formik>
+        </FormRoot>
         {socialAuthEntries.length > 0 && (
           <div className="ascender-login__sso">
             <div className="ascender-login__sso-separator">{t`or`}</div>

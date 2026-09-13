@@ -15,7 +15,7 @@ import {
   Button,
   InputGroupItem,
 } from '@patternfly/react-core';
-import { useField, useFormikContext } from 'formik';
+import { useField, useFormContext } from 'components/Form';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import useRequest from 'hooks/useRequest';
@@ -40,7 +40,7 @@ export interface WebhookSubFormProps {
 
 function WebhookSubForm({ templateType }: WebhookSubFormProps) {
   const { t } = useLingui();
-  const { setFieldValue } = useFormikContext<Record<string, unknown>>();
+  const { setFieldValue } = useFormContext<Record<string, unknown>>();
   const { id } = useParams() as { id: string };
   const { pathname } = useLocation();
   const { origin } = document.location;

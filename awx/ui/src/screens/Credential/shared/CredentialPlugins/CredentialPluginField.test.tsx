@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { TextInput } from '@patternfly/react-core';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import CredentialPluginField from './CredentialPluginField';
@@ -20,7 +20,7 @@ describe('<CredentialPluginField />', () => {
   describe('No plugin configured', () => {
     function renderField() {
       return renderWithContexts(
-        <Formik
+        <FormRoot
           onSubmit={() => {}}
           initialValues={{
             inputs: {
@@ -37,7 +37,7 @@ describe('<CredentialPluginField />', () => {
               <TextInput id="credential-username" />
             </CredentialPluginField>
           )}
-        </Formik>
+        </FormRoot>
       );
     }
 
@@ -72,7 +72,7 @@ describe('<CredentialPluginField />', () => {
   describe('Plugin already configured', () => {
     function renderField() {
       return renderWithContexts(
-        <Formik
+        <FormRoot
           onSubmit={() => {}}
           initialValues={{
             inputs: {
@@ -97,7 +97,7 @@ describe('<CredentialPluginField />', () => {
               <TextInput id="credential-username" />
             </CredentialPluginField>
           )}
-        </Formik>
+        </FormRoot>
       );
     }
 

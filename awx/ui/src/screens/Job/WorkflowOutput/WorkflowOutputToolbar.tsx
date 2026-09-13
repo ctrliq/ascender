@@ -16,7 +16,6 @@ import {
   RocketIcon,
   TrashAltIcon,
 } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import StatusLabel from 'components/StatusLabel';
 import { calculateElapsed, secondsToHHMMSS } from 'util/dates';
 import JobCancelButton from 'components/JobCancelButton';
@@ -29,78 +28,13 @@ import {
   WorkflowDispatchContext,
   WorkflowStateContext,
 } from 'contexts/Workflow';
-
-const Toolbar = styled.div`
-  align-items: center;
-  border-bottom: 1px solid var(--pf-v6-global--BorderColor--100);
-  display: flex;
-  height: 56px;
-`;
-
-const ToolbarJob = styled.div`
-  display: inline-flex;
-  align-items: center;
-
-  h1 {
-    font-weight: var(--pf-v6-global--FontWeight--bold);
-  }
-`;
-
-const ToolbarActions = styled.div`
-  align-items: center;
-  display: flex;
-  flex: 1;
-  justify-content: flex-end;
-
-  /* uniform width/spacing for every action button (incl. the relaunch dropdown toggle, which is wider by default) */
-  button {
-    margin: 0px 6px;
-    padding: 6px 10px;
-    font-size: 1.1rem;
-  }
-  /* hover background only on enabled action buttons, so disabled controls
-     (relaunch while launching, delete while disabled) don't look interactive
-     (badges aren't buttons; modals portal out) */
-  button:not(:disabled):not([aria-disabled='true']):hover {
-    background-color: var(--pf-v6-global--primary-color--100);
-    color: #fff;
-  }
-  /* whiten the icon; the dropdown toggle colors its icon separately */
-  button:not(:disabled):not([aria-disabled='true']):hover svg {
-    fill: #fff;
-  }
-`;
-
-const Badge = styled(PFBadge)`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  margin-left: 10px;
-  /* enlarge the badge value from PatternFly's small default */
-  font-size: 14px;
-`;
-
-const ElapsedBadge = styled(Badge)`
-  margin-right: 20px;
-  min-width: 70px;
-  font-variant-numeric: tabular-nums;
-`;
+import './WorkflowOutputToolbar.css';
 
 // matches the 20px gap the job output toolbar puts before each info badge group
-const BadgeLabel = styled.div`
-  margin-left: 20px;
-`;
 
 // width, spacing and hover styling come from ToolbarActions; only the toggled
 // active state is specific to these buttons
-const ActionButton = styled(Button)`
-  border: none;
 
-  &.pf-m-active {
-    background-color: var(--pf-v6-global--primary-color--100);
-    color: #fff;
-  }
-`;
 export interface WorkflowOutputToolbarProps {
   job: AnyJob;
   onDelete?: () => void;
@@ -160,15 +94,19 @@ function WorkflowOutputToolbar({
     }
   };
   return (
-    <Toolbar id="workflow-output-toolbar">
-      <ToolbarJob>
+    <div
+      className="awx-workflow-output-toolbar__toolbar"
+      id="workflow-output-toolbar"
+    >
+      <div className="awx-workflow-output-toolbar__job">
         <h1>{job.name}</h1>
         <StatusLabel status={job.status} />
-      </ToolbarJob>
-      <ToolbarActions>
+      </div>
+      <div className="awx-workflow-output-toolbar__actions">
         {workflowTemplateId && (
           <Tooltip content={t`Edit workflow`} position="top">
-            <ActionButton
+            <Button
+              className="awx-workflow-output-toolbar__action-button"
               ouiaId="edit-workflow"
               aria-label={t`Edit workflow`}
               id="edit-workflow"
@@ -176,40 +114,46 @@ function WorkflowOutputToolbar({
               onClick={navToWorkflow}
             >
               <ProjectDiagramIcon />
-            </ActionButton>
+            </Button>
           </Tooltip>
         )}
         <Tooltip content={t`Toggle Legend`} position="top">
-          <ActionButton
+          <Button
             id="workflow-output-toggle-legend"
-            className={showLegend ? 'pf-m-active' : undefined}
+            className={`awx-workflow-output-toolbar__action-button ${showLegend ? 'pf-m-active' : undefined}`}
             onClick={() => dispatch({ type: 'TOGGLE_LEGEND' })}
             variant="plain"
           >
             <CompassIcon />
-          </ActionButton>
+          </Button>
         </Tooltip>
         <Tooltip content={t`Toggle Tools`} position="top">
-          <ActionButton
+          <Button
             id="workflow-output-toggle-tools"
-            className={showTools ? 'pf-m-active' : undefined}
+            className={`awx-workflow-output-toolbar__action-button ${showTools ? 'pf-m-active' : undefined}`}
             onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })}
             variant="plain"
           >
             <WrenchIcon />
-          </ActionButton>
+          </Button>
         </Tooltip>
 
-        <BadgeLabel>{t`Total Nodes`}</BadgeLabel>
-        <Badge isRead>{totalNodes}</Badge>
+        <div className="awx-workflow-output-toolbar__badge-label">{t`Total Nodes`}</div>
+        <PFBadge className="awx-workflow-output-toolbar__badge" isRead>
+          {totalNodes}
+        </PFBadge>
 
-        <BadgeLabel>{t`Elapsed`}</BadgeLabel>
+        <div className="awx-workflow-output-toolbar__badge-label">{t`Elapsed`}</div>
         <Tooltip content={t`Elapsed time that the job ran`} position="top">
-          <ElapsedBadge isRead id="workflow-elapsed-badge">
+          <PFBadge
+            className="awx-workflow-output-toolbar__badge awx-workflow-output-toolbar__elapsed-badge"
+            isRead
+            id="workflow-elapsed-badge"
+          >
             {job.finished && job.elapsed != null
               ? secondsToHHMMSS(Number(job.elapsed))
               : activeJobElapsedTime}
-          </ElapsedBadge>
+          </PFBadge>
         </Tooltip>
 
         {['new', 'pending', 'waiting', 'running'].includes(job?.status ?? '') &&
@@ -253,7 +197,8 @@ function WorkflowOutputToolbar({
             <LaunchButton key="relaunch-plain" resource={job}>
               {({ handleRelaunch, isLaunching }) => (
                 <Tooltip position="top" content={t`Relaunch Job`}>
-                  <ActionButton
+                  <Button
+                    className="awx-workflow-output-toolbar__action-button"
                     ouiaId="workflow-output-relaunch-button"
                     variant="plain"
                     aria-label={t`Relaunch`}
@@ -261,7 +206,7 @@ function WorkflowOutputToolbar({
                     onClick={() => handleRelaunch()}
                   >
                     <RocketIcon />
-                  </ActionButton>
+                  </Button>
                 </Tooltip>
               )}
             </LaunchButton>
@@ -284,8 +229,8 @@ function WorkflowOutputToolbar({
               </DeleteButton>
             </Tooltip>
           )}
-      </ToolbarActions>
-    </Toolbar>
+      </div>
+    </div>
   );
 }
 

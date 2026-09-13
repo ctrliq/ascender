@@ -4,14 +4,10 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Button, Tooltip, DropdownItem } from '@patternfly/react-core';
 
-import styled from 'styled-components';
 import { KebabifiedContext } from 'contexts/Kebabified';
 
 import AlertModal from '../AlertModal';
-
-const ModalNote = styled.div`
-  margin-bottom: var(--pf-v6-global--spacer--xl);
-`;
+import './DisassociateButton.css';
 
 /** An item the list can disassociate, with what the button reads off it. */
 export interface DisassociableItem {
@@ -165,7 +161,11 @@ function DisassociateButton({
             </Button>,
           ]}
         >
-          {modalNote && <ModalNote>{modalNote}</ModalNote>}
+          {modalNote && (
+            <div className="awx-disassociate-button__modal-note">
+              {modalNote}
+            </div>
+          )}
 
           <div>{t`This action will disassociate the following:`}</div>
 

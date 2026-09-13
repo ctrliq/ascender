@@ -7,18 +7,12 @@ import type {
   SortColumn,
 } from 'types/api';
 import React from 'react';
-import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import { SelectedList, DraggableSelectedList } from '../SelectedList';
 import CheckboxListItem from '../CheckboxListItem';
 import DataListToolbar from '../DataListToolbar';
 import PaginatedTable, { HeaderCell, HeaderRow } from '../PaginatedTable';
-
-const ModalList = styled.div`
-  .pf-v6-c-toolbar__content {
-    padding: 0 !important;
-  }
-`;
+import './OptionsList.css';
 
 /**
  * One option the list offers. Generic over it so a caller that hands in
@@ -125,7 +119,7 @@ function OptionsList<T extends SelectableOption = ApiEntity>({
   }
 
   return (
-    <ModalList>
+    <div className="awx-options-list__modal-list">
       {selectionPreview}
       <PaginatedTable
         contentError={contentError}
@@ -158,7 +152,7 @@ function OptionsList<T extends SelectableOption = ApiEntity>({
         renderToolbar={(props) => <DataListToolbar {...props} fillWidth />}
         showPageSizeOptions={false}
       />
-    </ModalList>
+    </div>
   );
 }
 

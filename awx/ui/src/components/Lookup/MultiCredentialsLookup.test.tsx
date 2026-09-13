@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { createMemoryHistory } from 'history';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
@@ -9,7 +9,7 @@ import MultiCredentialsLookup from './MultiCredentialsLookup';
 
 vi.mock('../../api');
 
-describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
+describe('<FormRoot><MultiCredentialsLookup /></FormRoot>', () => {
   const credentials = [
     {
       id: 1,
@@ -38,7 +38,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
 
   function renderLookup(props = {}, options = {}) {
     return renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <MultiCredentialsLookup
           value={credentials}
           tooltip="This is credentials look up"
@@ -46,7 +46,7 @@ describe('<Formik><MultiCredentialsLookup /></Formik>', () => {
           onError={() => {}}
           {...props}
         />
-      </Formik>,
+      </FormRoot>,
       options
     );
   }

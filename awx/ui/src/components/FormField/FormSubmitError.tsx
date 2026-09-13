@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useFormikContext } from 'formik';
+import { useFormContext } from 'components/Form';
+import type { FormErrors } from 'components/Form';
 import { Alert } from '@patternfly/react-core';
-import type { FormikErrors } from 'formik';
 import { FormFullWidthLayout } from '../FormLayout';
 import sortErrorMessages from './sortErrorMessages';
 
@@ -15,7 +15,7 @@ function FormSubmitError({ error }: FormSubmitErrorProps) {
   const [errorMessage, setErrorMessage] = useState<string | string[] | null>(
     null
   );
-  const { values, setErrors } = useFormikContext<Record<string, unknown>>();
+  const { values, setErrors } = useFormContext<Record<string, unknown>>();
 
   useEffect(() => {
     const { formError, fieldErrors } = sortErrorMessages(
@@ -26,7 +26,7 @@ function FormSubmitError({ error }: FormSubmitErrorProps) {
       setErrorMessage(formError);
     }
     if (fieldErrors) {
-      setErrors(fieldErrors as FormikErrors<Record<string, unknown>>);
+      setErrors(fieldErrors as FormErrors<Record<string, unknown>>);
     }
   }, [error, setErrors, values]);
 

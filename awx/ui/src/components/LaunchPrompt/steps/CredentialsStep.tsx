@@ -2,8 +2,7 @@ import type { CredentialType, LaunchCredential } from 'types/api';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
-import styled from 'styled-components';
+import { useField } from 'components/Form';
 import { Alert, ToolbarItem } from '@patternfly/react-core';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
 import { getSearchableKeys } from 'components/PaginatedTable';
@@ -17,10 +16,7 @@ import ContentLoading from '../../ContentLoading';
 import CredentialChip from '../../CredentialChip';
 import ContentError from '../../ContentError';
 import credentialsValidator from './credentialsValidator';
-
-const CredentialErrorAlert = styled(Alert)`
-  margin-bottom: 20px;
-`;
+import './CredentialsStep.css';
 
 const QS_CONFIG = getQSConfig('credential', {
   page: 1,
@@ -237,15 +233,20 @@ function CredentialsStep({
   return (
     <div data-cy="credentials-prompt">
       {meta.error && (
-        <CredentialErrorAlert variant="danger" isInline title={meta.error} />
+        <Alert
+          className="awx-credentials-step__credential-error-alert"
+          variant="danger"
+          isInline
+          title={meta.error}
+        />
       )}
       {types && types.length > 0 && (
-        <ToolbarItem css=" display: flex; align-items: center;">
-          <div css="flex: 0 0 25%; margin-right: 32px">
+        <ToolbarItem className="awx-credentials-step__display-align-items">
+          <div className="awx-credentials-step__flex-margin-right">
             {t`Selected Category`}
           </div>
           <AnsibleSelect
-            css="flex: 1 1 75%;"
+            className="awx-credentials-step__flex-1-1-75"
             id="multiCredentialsLookUp-select"
             data={types.map((type) => ({
               key: type.id,

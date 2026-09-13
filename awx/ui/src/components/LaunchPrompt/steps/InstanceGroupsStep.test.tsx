@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { InstanceGroupsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -38,9 +38,9 @@ describe('InstanceGroupsStep', () => {
 
   test('should load instance groups', async () => {
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ instance_groups: [] }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ instance_groups: [] }}>
         <InstanceGroupsStep />
-      </Formik>
+      </FormRoot>
     );
 
     await waitFor(() => expect(InstanceGroupsAPI.read).toHaveBeenCalled());
