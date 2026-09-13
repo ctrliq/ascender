@@ -3,7 +3,10 @@
 
 from django.urls import path
 
-from awx.api.views import ActivityStreamList, ActivityStreamDetail
+from awx.api.views.activity_stream import (
+    ActivityStreamList,
+    ActivityStreamDetail,
+)
 
 urls = [
     path('', ActivityStreamList.as_view(), name='activity_stream_list'),

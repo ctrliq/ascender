@@ -14,21 +14,33 @@ from awx.api.views.root import (
 )
 from awx.api.views import (
     AuthView,
-    UserMeList,
     DashboardView,
     DashboardJobsGraphView,
-    UnifiedJobTemplateList,
-    UnifiedJobList,
-    HostAnsibleFactsDetail,
-    JobCredentialsList,
-    JobTemplateCredentialsList,
+)
+from awx.api.views.schedule import (
     SchedulePreview,
     ScheduleZoneInfo,
+)
+from awx.api.views.job import (
+    UnifiedJobList,
+    JobCredentialsList,
+)
+from awx.api.views.host import (
+    HostAnsibleFactsDetail,
+    HostMetricSummaryMonthlyList,
+)
+from awx.api.views.user import (
+    UserMeList,
+)
+from awx.api.views.oauth2 import (
     OAuth2ApplicationList,
     OAuth2TokenList,
     ApplicationOAuth2TokenList,
     OAuth2ApplicationDetail,
-    HostMetricSummaryMonthlyList,
+)
+from awx.api.views.job_template import (
+    UnifiedJobTemplateList,
+    JobTemplateCredentialsList,
 )
 
 from awx.api.views.bulk import (
