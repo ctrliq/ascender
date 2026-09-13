@@ -10,16 +10,11 @@ import {
   PencilAltIcon,
   ExclamationTriangleIcon as PFExclamationTriangleIcon,
 } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import { formatDateString } from 'util/dates';
 import { DetailList, Detail } from '../../DetailList';
 import { ActionsTd, ActionItem, TdBreakWord } from '../../PaginatedTable';
 import { ScheduleToggle } from '..';
-
-const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
-  color: var(--pf-v6-global--danger-color--100);
-  margin-left: 20px;
-`;
+import './ScheduleListItem.css';
 
 export interface ScheduleListItemProps {
   rowIndex: number;
@@ -113,7 +108,7 @@ function ScheduleListItem({
               )}
               position="right"
             >
-              <ExclamationTriangleIcon />
+              <PFExclamationTriangleIcon className="awx-schedule-list-item__exclamation-triangle-icon" />
             </Tooltip>
           </span>
         )}
@@ -147,9 +142,9 @@ function ScheduleListItem({
         >
           <Button
             icon={<PencilAltIcon />}
+            className="awx-schedule-list-item__grid-column-2"
             ouiaId={`${schedule.id}-edit-button`}
             aria-label={t`Edit Schedule`}
-            css="grid-column: 2"
             variant="plain"
             component={Link}
             to={`${scheduleBaseUrl}/edit`}

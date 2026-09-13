@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { CredentialsAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -30,12 +30,12 @@ describe('<AdHocCredentialStep />', () => {
 
   test('should mount properly', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <AdHocCredentialStep
           credentialTypeId={1}
           onEnableLaunch={onEnableLaunch}
         />
-      </Formik>
+      </FormRoot>
     );
     // OptionsList renders the fetched credential rows once loading resolves
     await waitFor(() => expect(screen.getByText('Cred 1')).toBeInTheDocument());
@@ -43,12 +43,12 @@ describe('<AdHocCredentialStep />', () => {
 
   test('should call api', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <AdHocCredentialStep
           credentialTypeId={1}
           onEnableLaunch={onEnableLaunch}
         />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(screen.getByText('Cred 1')).toBeInTheDocument());
     expect(CredentialsAPI.read).toHaveBeenCalled();

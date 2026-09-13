@@ -1,7 +1,7 @@
 import type { SettingConfig } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import ContentError from 'components/ContentError';
@@ -107,7 +107,7 @@ function OIDCEdit() {
       {Boolean(isLoading) && <ContentLoading />}
       {!isLoading && Boolean(error) && <ContentError error={error} />}
       {!isLoading && OIDC && (
-        <Formik initialValues={initialValues(OIDC)} onSubmit={handleSubmit}>
+        <FormRoot initialValues={initialValues(OIDC)} onSubmit={handleSubmit}>
           {(formik) => (
             <Form autoComplete="off" onSubmit={formik.handleSubmit}>
               <FormColumnLayout>
@@ -148,7 +148,7 @@ function OIDCEdit() {
               )}
             </Form>
           )}
-        </Formik>
+        </FormRoot>
       )}
     </CardBody>
   );

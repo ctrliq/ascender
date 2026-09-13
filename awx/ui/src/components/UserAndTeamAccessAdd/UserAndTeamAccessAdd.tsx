@@ -10,7 +10,6 @@ import type {
 import React, { useState, useCallback, useMemo } from 'react';
 import { useParams, useMatch } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import {
   JobTemplatesAPI,
   WorkflowJobTemplatesAPI,
@@ -29,12 +28,7 @@ import Wizard from '../Wizard/Wizard';
 import SelectResourceStep from '../AddRole/SelectResourceStep';
 import SelectRoleStep from '../AddRole/SelectRoleStep';
 import type { SelectableRole } from '../AddRole/SelectRoleStep';
-
-const Grid = styled.div`
-  display: grid;
-  grid-gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-`;
+import './UserAndTeamAccessAdd.css';
 
 /** One kind of resource the wizard can add roles on, and how to list it. */
 export interface ResourceAccessOption {
@@ -367,7 +361,7 @@ function UserAndTeamAccessAdd({
       id: 1,
       name: t`Add resource type`,
       component: (
-        <Grid>
+        <div className="awx-user-and-team-access-add__grid">
           {resourceAccessConfig.map((resource) => (
             <SelectableCard
               key={resource.selectedResource}
@@ -384,7 +378,7 @@ function UserAndTeamAccessAdd({
               }}
             />
           ))}
-        </Grid>
+        </div>
       ),
       enableNext: selectedResourceType !== null,
     },

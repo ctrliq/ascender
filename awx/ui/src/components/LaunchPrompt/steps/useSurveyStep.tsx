@@ -1,7 +1,7 @@
 import type { LaunchableResource } from 'types/api';
 import React from 'react';
 import { t } from '@lingui/core/macro';
-import { useFormikContext } from 'formik';
+import { useFormContext } from 'components/Form';
 import SurveyStep from './SurveyStep';
 import StepName from './StepName';
 import type {
@@ -31,7 +31,7 @@ export default function useSurveyStep(
   resource: LaunchableResource | null,
   visitedSteps: VisitedSteps
 ): LaunchStep {
-  const { setFieldError, values } = useFormikContext<LaunchPromptValues>();
+  const { setFieldError, values } = useFormContext<LaunchPromptValues>();
   const hasError =
     Object.keys(visitedSteps).includes(STEP_ID) &&
     checkForError(launchConfig, surveyConfig, values);

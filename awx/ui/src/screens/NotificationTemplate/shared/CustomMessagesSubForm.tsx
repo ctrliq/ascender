@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useField, useFormikContext } from 'formik';
+import { useField, useFormContext } from 'components/Form';
 import { Switch, Content } from '@patternfly/react-core';
 import { FormFullWidthLayout, SubFormLayout } from 'components/FormLayout';
 import CodeEditorField from 'components/CodeEditor/CodeEditorField';
@@ -10,6 +10,7 @@ import type {
   DefaultMessages,
   NotificationText,
 } from './NotificationTemplateForm';
+import './CustomMessagesSubForm.css';
 
 export interface CustomMessagesSubFormProps {
   defaultMessages: DefaultMessages;
@@ -27,7 +28,7 @@ function CustomMessagesSubForm({
   const showMessages = type !== 'webhook';
   const showBodies = ['email', 'pagerduty', 'webhook'].includes(type);
 
-  const { setFieldValue } = useFormikContext<Record<string, unknown>>();
+  const { setFieldValue } = useFormContext<Record<string, unknown>>();
   const config = useConfig();
   const prevTypeRef = useRef(type);
   useEffect(
@@ -90,8 +91,7 @@ function CustomMessagesSubForm({
         <SubFormLayout>
           <Content
             component="p"
-            className="pf-v6-c-content"
-            css="margin-bottom: var(--pf-v6-c-content--MarginBottom)"
+            className="awx-custom-messages-sub-form__margin-bottom-var-pf-v6-c-content-marginbottom pf-v6-c-content"
           >
             <small>
               {t`Use custom messages to change the content of

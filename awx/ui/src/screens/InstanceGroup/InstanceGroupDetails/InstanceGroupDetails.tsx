@@ -4,7 +4,6 @@ import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 import { Link, useNavigate } from 'react-router';
-import styled from 'styled-components';
 import { Button } from '@patternfly/react-core';
 
 import AlertModal from 'components/AlertModal';
@@ -20,10 +19,7 @@ import {
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { InstanceGroupsAPI } from 'api';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
-
-const Unavailable = styled.span`
-  color: var(--pf-v6-global--danger-color--200);
-`;
+import './InstanceGroupDetails.css';
 
 export interface InstanceGroupDetailsProps {
   instanceGroup: InstanceGroup;
@@ -105,7 +101,9 @@ function InstanceGroupDetails({ instanceGroup }: InstanceGroupDetailsProps) {
         ) : (
           <Detail
             label={t`Used capacity`}
-            value={<Unavailable>{t`Unavailable`}</Unavailable>}
+            value={
+              <span className="awx-instance-group-details__unavailable">{t`Unavailable`}</span>
+            }
             dataCy="instance-group-used-capacity"
           />
         )}

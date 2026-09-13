@@ -18,8 +18,6 @@ import {
 
 import { Plural, Trans, useLingui } from '@lingui/react/macro';
 
-import styled from 'styled-components';
-
 import { useConfig, useAuthorizedPath } from 'contexts/Config';
 import { useSession } from 'contexts/Session';
 import issuePendoIdentity from 'util/issuePendoIdentity';
@@ -30,13 +28,7 @@ import BrandLogo from './BrandLogo';
 import NavExpandableGroup from './NavExpandableGroup';
 import PageHeaderToolbar from './PageHeaderToolbar';
 import AlertModal from '../AlertModal';
-
-const StyledMastheadBrand = styled(MastheadBrand)`
-  color: inherit;
-  &:hover {
-    color: inherit;
-  }
-`;
+import './AppContainer.css';
 
 export interface AppContainerProps {
   navRouteConfig?: AppRouteGroup[];
@@ -78,9 +70,12 @@ function AppContainer({ navRouteConfig = [], children }: AppContainerProps) {
             aria-label={t`Global navigation`}
           />
         </MastheadToggle>
-        <StyledMastheadBrand href="/">
+        <MastheadBrand
+          className="awx-app-container__styled-masthead-brand"
+          href="/"
+        >
           <BrandLogo alt={alt} />
-        </StyledMastheadBrand>
+        </MastheadBrand>
       </MastheadMain>
       <MastheadContent>
         <PageHeaderToolbar

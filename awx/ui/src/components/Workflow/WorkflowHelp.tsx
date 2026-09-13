@@ -1,22 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const Outer = styled.div`
-  height: 0;
-  pointer-events: none;
-  position: relative;
-`;
-
-const Inner = styled.div`
-  background-color: #383f44;
-  border-radius: 2px;
-  color: white;
-  left: 10px;
-  max-width: 300px;
-  padding: 5px 10px;
-  position: absolute;
-  top: 10px;
-`;
+import './WorkflowHelp.css';
 
 export interface WorkflowHelpProps {
   children: React.ReactNode;
@@ -25,9 +8,9 @@ export interface WorkflowHelpProps {
 
 function WorkflowHelp({ children }: WorkflowHelpProps) {
   return (
-    <Outer>
-      <Inner>{children}</Inner>
-    </Outer>
+    <div className="awx-workflow-help__outer">
+      <div className="awx-workflow-help__inner">{children}</div>
+    </div>
   );
 }
 

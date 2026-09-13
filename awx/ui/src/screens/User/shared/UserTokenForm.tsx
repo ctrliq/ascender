@@ -1,7 +1,7 @@
 import type { OAuth2Token, SummaryFieldRef } from 'types/api';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Formik, useField, useFormikContext } from 'formik';
 import {
   Form,
   FormGroup,
@@ -22,7 +22,7 @@ function UserTokenFormFields() {
   const { t } = useLingui();
   const helptext = userHelpTextStrings();
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
   const [applicationField, applicationMeta] = useField('application');
 
   const [scopeField, scopeMeta, scopeHelpers] = useField({
@@ -121,7 +121,7 @@ function UserTokenForm({
   token = {},
 }: UserTokenFormProps) {
   return (
-    <Formik
+    <FormRoot
       initialValues={
         {
           description: token.description || '',
@@ -147,7 +147,7 @@ function UserTokenForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 export default UserTokenForm;

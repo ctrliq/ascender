@@ -7,7 +7,6 @@ import { Label, Button } from '@patternfly/react-core';
 
 import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { RocketIcon } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import { formatDateString } from 'util/dates';
 import { isJobRunning } from 'util/jobs';
 import getScheduleUrl from 'util/getScheduleUrl';
@@ -29,8 +28,8 @@ import CredentialChip from '../CredentialChip';
 import ExecutionEnvironmentDetail from '../ExecutionEnvironmentDetail';
 import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
 import JobCancelButton from '../JobCancelButton';
+import './JobListItem.css';
 
-const Dash = styled.span``;
 export interface JobListItemProps {
   isExpanded: boolean;
   onExpand: () => void;
@@ -114,7 +113,9 @@ function JobListItem({
           <span>
             <Link to={`/jobs/${JOB_TYPE_URL_SEGMENTS[job.type]}/${job.id}`}>
               <b>
-                {job.id} <Dash>&mdash;</Dash> {job.name}
+                {job.id}{' '}
+                <span className="awx-job-list-item__dash">&mdash;</span>{' '}
+                {job.name}
               </b>
             </Link>
           </span>

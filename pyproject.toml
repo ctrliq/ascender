@@ -81,3 +81,36 @@ select = [
     "F811", "F821", "F822", "F823", "F841", "F842", "F901",
     "W291", "W292", "W293", "W391", "W605",
 ]
+
+# Moved here from pytest.ini. One value changed on the way, python_files, and
+# the reason is below.
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "awx.main.tests.settings_for_test"
+
+# pytest.ini said every .py, which made collection import the whole repository
+# looking for tests, including modules that parse argv and call sys.exit at
+# import time. That is where the 14 collection errors came from, and one of
+# them, tools/data_generators/rbac_dummy_data_generator.py, took the run down
+# with SystemExit rather than reporting.
+#
+# Nothing needed the wider net: not one file outside these two patterns defines
+# a test. The two that look like they do are fixtures named test_* inside a
+# conftest.py, which pytest never collects as a module anyway.
+python_files = ["test_*.py", "*_test.py"]
+addopts = "--reuse-db --nomigrations --tb=native --timeout=300"
+junit_family = "xunit2"
+markers = [
+    "ac: access control test",
+    "survey: tests related to survey feature",
+    "inventory_import: tests of code used by inventory import command",
+    "defined_in_file:",
+    "job_permissions:",
+    "activity_stream_access:",
+    "job_runtime_vars:",
+    "fixture_args:",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore:CoreAPI compatibility is deprecated:UserWarning",
+    "ignore:pkg_resources is deprecated as an API:UserWarning",
+]

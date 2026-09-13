@@ -4,17 +4,11 @@ import { useParams } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Button, Radio, DropdownItem } from '@patternfly/react-core';
 
-import styled from 'styled-components';
 import { KebabifiedContext } from 'contexts/Kebabified';
 import { GroupsAPI, InventoriesAPI } from 'api';
 import ErrorDetail from 'components/ErrorDetail';
 import AlertModal from 'components/AlertModal';
-
-const ListItem = styled.li`
-  display: flex;
-  font-weight: 600;
-  color: var(--pf-v6-global--danger-color--100);
-`;
+import './InventoryGroupsDeleteModal.css';
 
 export interface InventoryGroupsDeleteModalProps {
   /** Re-reads the list once the groups are gone. */
@@ -131,9 +125,14 @@ const InventoryGroupsDeleteModal = ({
             other="Are you sure you want to delete the groups below?"
           />
 
-          <div css="padding: 24px 0;">
+          <div className="awx-inventory-groups-delete-modal__padding-24-0">
             {groups.map((group) => (
-              <ListItem key={group.id}>{group.name}</ListItem>
+              <li
+                className="awx-inventory-groups-delete-modal__list-item"
+                key={group.id}
+              >
+                {group.name}
+              </li>
             ))}
           </div>
           <div>
@@ -146,7 +145,7 @@ const InventoryGroupsDeleteModal = ({
               ouiaId="delete-all-radio-button"
             />
             <Radio
-              css="margin-top: 5px;"
+              className="awx-inventory-groups-delete-modal__margin-top-5"
               id="radio-promote"
               key="radio-promote"
               label={t`Promote Child Groups and Hosts`}
