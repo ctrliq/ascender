@@ -39,8 +39,13 @@ function UIEdit() {
         if (!options[key]) {
           return;
         }
-        mergedData[key] = options[key];
-        mergedData[key].value = data[key] ?? { value: null, label: '' }; // Fallback for undefined values
+        // Spread rather than assign: options[key] is the object the Settings
+        // context holds and every other screen reads, so writing a value into
+        // it put this category's values into shared state.
+        mergedData[key] = {
+          ...options[key],
+          value: data[key] ?? { value: null, label: '' }, // Fallback for undefined values
+        };
       });
       return mergedData;
     }, [options]),

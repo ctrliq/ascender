@@ -1,6 +1,7 @@
 export { default as SettingDetail } from './SettingDetail';
 export { default as RevertAllAlert } from './RevertAllAlert';
 export { default as RevertFormActionGroup } from './RevertFormActionGroup';
+export { default as SettingsEditForm } from './SettingsEditForm';
 export {
   BooleanField,
   ChoiceField,
