@@ -281,7 +281,9 @@ def _job_list_queryset(user, querystring=''):
     from rest_framework.request import Request
     from rest_framework.test import APIRequestFactory
 
-    from awx.api.views import JobList
+    from awx.api.views.job import (
+        JobList,
+    )
 
     view = JobList()
     view.request = Request(APIRequestFactory().get('/api/v2/jobs/' + querystring))
