@@ -43,17 +43,6 @@ class Config extends Base<ConfigResponse> {
   read<T = ConfigResponse>() {
     return this.http.get<T>(this.baseUrl);
   }
-
-  readSubscriptions(username: unknown, password: unknown) {
-    return this.http.post<SubscriptionPool[]>(`${this.baseUrl}subscriptions/`, {
-      subscriptions_username: username,
-      subscriptions_password: password,
-    });
-  }
-
-  attach(data: unknown) {
-    return this.http.post(`${this.baseUrl}attach/`, data);
-  }
 }
 
 export default Config;

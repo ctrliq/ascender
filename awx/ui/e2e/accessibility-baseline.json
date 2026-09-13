@@ -1,0 +1,42 @@
+{
+  "login": [],
+  "jobs": [
+    "button-name",
+    "color-contrast",
+    "link-name"
+  ],
+  "templates": [
+    "button-name",
+    "color-contrast",
+    "link-name"
+  ],
+  "project-add": [
+    "button-name",
+    "link-name"
+  ],
+  "inventory-add": [
+    "button-name",
+    "link-name"
+  ],
+  "credential-add": [
+    "button-name",
+    "link-name"
+  ],
+  "organization-add": [
+    "button-name",
+    "link-name"
+  ],
+  "user-add": [
+    "button-name",
+    "link-name"
+  ],
+  "team-add": [
+    "button-name",
+    "link-name"
+  ],
+  "template-add": [
+    "button-name",
+    "label",
+    "link-name"
+  ]
+}

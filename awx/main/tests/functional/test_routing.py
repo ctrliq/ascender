@@ -1,13 +1,19 @@
-import pytest
 import asyncio
+import os
+import re
+
+import pytest
 
 from django.contrib.auth.models import AnonymousUser
 
 from channels.routing import ProtocolTypeRouter
 from channels.testing.websocket import WebsocketCommunicator
 
+from django.test import AsyncRequestFactory
 
+import awx
 from awx.main.consumers import WebsocketSecretAuthHelper
+from awx.main.middleware import URLModificationMiddleware
 
 
 @pytest.fixture
@@ -108,3 +114,48 @@ class TestWebsocketEventConsumer:
         """
         connected, _ = await server.connect()
         assert connected is True, "User should be allowed in via cookies auth via a session key in the cookies"
+
+
+@pytest.mark.django_db
+def test_the_application_answers_http_as_well_as_websockets(application):
+    # Channels 2 supplied an http application when the mapping left it out.
+    # Channels 4 raises "No application configured for scope type 'http'", so
+    # without one the ASGI application serves websockets only and a second
+    # server has to exist for the API.
+    assert set(application.application_mapping) == {'http', 'websocket'}
+
+
+@pytest.mark.django_db
+def test_the_named_url_middleware_works_on_an_asgi_request(mocker):
+    # This is the line that used to end the request under an ASGI server:
+    # ASGIRequest carries META and no environ, so writing the rewrite marker to
+    # environ raised AttributeError before the response was ever built.
+    request = AsyncRequestFactory().get('/api/v2/job_templates/some-name/')
+    assert not hasattr(request, 'environ'), 'AsyncRequestFactory should build an ASGIRequest'
+    middleware = URLModificationMiddleware(lambda r: None)
+    mocker.patch.object(URLModificationMiddleware, '_convert_named_url', return_value='/api/v2/job_templates/42/')
+
+    middleware.process_request(request)
+
+    assert request.META['awx.named_url_rewritten'] == '/api/v2/job_templates/some-name/'
+    assert request.path_info == '/api/v2/job_templates/42/'
+
+
+def test_no_view_reads_the_wsgi_environ():
+    # request.environ exists on WSGIRequest and not on ASGIRequest, while
+    # request.META is the same dict under WSGI and is built from the scope under
+    # ASGI. Reading environ is what made the API 500 behind an ASGI server, so
+    # this keeps it from coming back.
+    package = os.path.dirname(os.path.abspath(awx.__file__))
+    offenders = []
+    for dirpath, dirnames, filenames in os.walk(package):
+        if 'tests' in dirpath.split(os.sep) or 'node_modules' in dirpath:
+            continue
+        for name in filenames:
+            if not name.endswith('.py'):
+                continue
+            path = os.path.join(dirpath, name)
+            for lineno, line in enumerate(open(path, encoding='utf-8'), 1):
+                if re.search(r'(?<!os)\.environ\b', line) and 'os.environ' not in line:
+                    offenders.append('{}:{}: {}'.format(os.path.relpath(path, package), lineno, line.strip()))
+    assert offenders == [], 'use request.META, which works under both servers:\n' + '\n'.join(offenders)
