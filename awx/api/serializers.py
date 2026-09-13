@@ -5539,7 +5539,9 @@ class NotificationTemplateSerializer(BaseSerializer):
         return messages
 
     def validate(self, attrs):
-        from awx.api.views import NotificationTemplateDetail
+        from awx.api.views.notification import (
+            NotificationTemplateDetail,
+        )
 
         notification_type = None
         if 'notification_type' in attrs:

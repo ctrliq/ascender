@@ -6,7 +6,9 @@ from unittest import mock
 from awx.api.serializers import (
     JobTemplateSerializer,
 )
-from awx.api.views import JobTemplateDetail
+from awx.api.views.job_template import (
+    JobTemplateDetail,
+)
 from awx.main.models import (
     Role,
     User,
