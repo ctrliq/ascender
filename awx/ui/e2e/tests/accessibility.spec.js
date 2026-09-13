@@ -11,11 +11,31 @@ const SCREENS = [
   { name: 'login', hash: '/login', authenticated: false },
   { name: 'jobs', hash: '/jobs', authenticated: true },
   { name: 'templates', hash: '/templates', authenticated: true },
+  // The forms, which is where accessibility problems usually live: a label that
+  // names nothing, a required field that only says so in colour, a control
+  // reachable by mouse and not by keyboard. Three lists would not have found
+  // any of those.
+  { name: 'project-add', hash: '/projects/add', authenticated: true },
+  { name: 'inventory-add', hash: '/inventories/inventory/add', authenticated: true },
+  { name: 'credential-add', hash: '/credentials/add', authenticated: true },
+  { name: 'organization-add', hash: '/organizations/add', authenticated: true },
+  { name: 'user-add', hash: '/users/add', authenticated: true },
+  { name: 'team-add', hash: '/teams/add', authenticated: true },
+  { name: 'template-add', hash: '/templates/job_template/add', authenticated: true },
 ];
 
 // The application does not pass WCAG today, so a zero-violation gate would fail
 // on arrival and be switched off within a week. This records what each screen
 // violates now and fails on anything new, which is what catches a regression.
+//
+// What is recorded, and why it is recorded rather than fixed: the list views
+// colour the sorted column's header in the brand green, #0e8c5d, which is
+// 4.25:1 on the table background where AA asks for 4.5:1. It comes out of
+// --pf-v6-c-table__sort--m-selected__button--Color, and the value behind that
+// is the brand colour itself, so moving it is a palette decision across all
+// four themes rather than a patch: the same green is 4.26:1 on the light
+// themes' white, and the lighter #12a66f that fixes the dark ones is 3.13:1
+// there. It wants a colour picked on purpose, which is not this suite's call.
 const BASELINE_FILE = path.join(__dirname, '..', 'accessibility-baseline.json');
 
 function baseline() {
@@ -35,8 +55,17 @@ test.describe('accessibility', () => {
       } else {
         await page.goto(route(screen.hash), { waitUntil: 'domcontentloaded' });
       }
-      // the lists fetch before they render, so wait for the toolbar rather than a timer
-      await page.waitForLoadState('networkidle');
+      // Wait for the shell to actually be on the page. networkidle was what
+      // this did before and it is wrong twice over: it fires while React still
+      // has an empty root, so axe scanned 21 elements and a screen with three
+      // violations looked clean, and on the forms that poll it never fires at
+      // all. A selector plus a settle does not depend on the network going
+      // quiet.
+      await page.waitForSelector(
+        screen.authenticated ? '.pf-v6-c-page__main' : 'form',
+        { timeout: 60000 }
+      );
+      await page.waitForTimeout(2000);
 
       const results = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa'])
