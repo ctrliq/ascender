@@ -15,6 +15,7 @@ import AlertModal from 'components/AlertModal';
 import useToast, { AlertVariant } from 'hooks/useToast';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { useLocation, useParams } from 'react-router';
+import useCachedRequest from 'hooks/useCachedRequest';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import DataListToolbar from 'components/DataListToolbar';
 import { InstancesAPI, ReceptorAPI } from 'api';
@@ -67,7 +68,8 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
     error: contentError,
     request: fetchPeers,
     result: { instance, peers, count, relatedSearchableKeys, searchableKeys },
-  } = useRequest(
+  } = useCachedRequest(
+    ['instance-peer-list', id, location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [
@@ -119,10 +121,6 @@ function InstancePeerList({ setBreadcrumb }: InstancePeerListProps) {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchPeers();
-  }, [fetchPeers]);
 
   useEffect(() => {
     if (instance) {

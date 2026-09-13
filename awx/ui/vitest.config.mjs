@@ -35,6 +35,14 @@ export default defineConfig({
     // Each fork brings its own heap, and the run takes the same time.
     pool: 'vmForks',
     environment: 'jsdom',
+    // The suite asserts on formatted local times, so it only passes in the
+    // zone it was written in. GitHub's runners are UTC, so CI has always been
+    // green and a developer anywhere else sees two dozen failures that are
+    // nothing to do with their change. Pinning it here makes the run say the
+    // same thing on every machine.
+    env: {
+      TZ: 'UTC',
+    },
     // jest served pages from http://localhost/, where jsdom's own default is
     // http://localhost:3000/, and that is what window.location reads.
     environmentOptions: {
