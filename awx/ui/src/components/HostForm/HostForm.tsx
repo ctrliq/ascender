@@ -1,6 +1,6 @@
 import type { Host, SummaryFieldRef } from 'types/api';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import React, { useCallback } from 'react';
-import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import {
   Form,
@@ -26,7 +26,7 @@ export interface InventoryLookupFieldProps {
 const InventoryLookupField = ({ isDisabled }: InventoryLookupFieldProps) => {
   const { t } = useLingui();
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
   const [inventoryField, inventoryMeta, inventoryHelpers] =
     useField('inventory');
 
@@ -120,7 +120,7 @@ const HostForm = ({
 }: HostFormProps) => {
   const { t } = useLingui();
   return (
-    <Formik
+    <FormRoot
       initialValues={{
         name: host.name ?? '',
         description: host.description ?? '',
@@ -164,7 +164,7 @@ const HostForm = ({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 };
 

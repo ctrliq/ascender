@@ -1,7 +1,7 @@
 import type { SettingConfig } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import ContentError from 'components/ContentError';
@@ -94,7 +94,7 @@ function TACACSEdit() {
       {Boolean(isLoading) && <ContentLoading />}
       {!isLoading && Boolean(error) && <ContentError error={error} />}
       {!isLoading && tacacs && (
-        <Formik initialValues={initialValues(tacacs)} onSubmit={handleSubmit}>
+        <FormRoot initialValues={initialValues(tacacs)} onSubmit={handleSubmit}>
           {(formik) => (
             <Form autoComplete="off" onSubmit={formik.handleSubmit}>
               <FormColumnLayout>
@@ -144,7 +144,7 @@ function TACACSEdit() {
               )}
             </Form>
           )}
-        </Formik>
+        </FormRoot>
       )}
     </CardBody>
   );

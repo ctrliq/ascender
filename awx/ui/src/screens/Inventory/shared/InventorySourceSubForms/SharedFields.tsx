@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import { FormGroup } from '@patternfly/react-core';
 import { minMaxValue, regExp } from 'util/validators';
 import AnsibleSelect from 'components/AnsibleSelect';

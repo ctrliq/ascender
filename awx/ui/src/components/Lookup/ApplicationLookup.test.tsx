@@ -1,7 +1,7 @@
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { ApplicationsAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -47,13 +47,13 @@ describe('ApplicationLookup', () => {
 
   test('should render successfully', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ApplicationLookup
           label="Application"
           value={application}
           onChange={() => {}}
         />
-      </Formik>
+      </FormRoot>
     );
     expect(await screen.findByText('Application')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
@@ -61,26 +61,26 @@ describe('ApplicationLookup', () => {
 
   test('should fetch applications', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ApplicationLookup
           label="Application"
           value={application}
           onChange={() => {}}
         />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(ApplicationsAPI.read).toHaveBeenCalledTimes(1));
   });
 
   test('should display label', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ApplicationLookup
           label="Application"
           value={application}
           onChange={() => {}}
         />
-      </Formik>
+      </FormRoot>
     );
     expect(await screen.findByText('Application')).toBeInTheDocument();
   });

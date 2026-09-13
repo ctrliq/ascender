@@ -1,8 +1,8 @@
 import type { SummaryFieldRef, WorkflowJobTemplate } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import type { FormikErrors, FormikProps } from 'formik';
-import { useField, useFormikContext, withFormik } from 'formik';
+import type { FormErrors, FormContextValue } from 'components/Form';
+import { useField, useFormContext, withForm } from 'components/Form';
 import {
   Form,
   FormGroup,
@@ -87,12 +87,12 @@ function WorkflowJobTemplateForm({
   isOrgAdmin = false,
   isInventoryDisabled = false,
 }: Omit<WorkflowJobTemplateFormProps, 'handleSubmit'> & {
-  handleSubmit: FormikProps<WorkflowJobTemplateFormValues>['handleSubmit'];
+  handleSubmit: FormContextValue<WorkflowJobTemplateFormValues>['handleSubmit'];
 }) {
   const { t } = useLingui();
   const helpText = getHelpText();
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
   const [enableWebhooks, setEnableWebhooks] = useState(
     Boolean(template.webhook_service)
   );
@@ -334,7 +334,7 @@ function WorkflowJobTemplateForm({
 
 // The generics are what keeps the wrapper's own props visible to callers:
 // without them withFormik types the wrapped component as taking nothing.
-const FormikApp = withFormik<
+const FormikApp = withForm<
   WorkflowJobTemplateFormProps,
   WorkflowJobTemplateFormValues
 >({
@@ -370,7 +370,7 @@ const FormikApp = withFormik<
     try {
       await props.handleSubmit(values);
     } catch (errors) {
-      setErrors(errors as FormikErrors<WorkflowJobTemplateFormValues>);
+      setErrors(errors as FormErrors<WorkflowJobTemplateFormValues>);
     }
   },
 })(WorkflowJobTemplateForm);

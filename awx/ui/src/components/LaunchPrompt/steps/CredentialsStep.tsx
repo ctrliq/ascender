@@ -2,7 +2,7 @@ import type { CredentialType, LaunchCredential } from 'types/api';
 import React, { useState, useCallback, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import { Alert, ToolbarItem } from '@patternfly/react-core';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
 import { getSearchableKeys } from 'components/PaginatedTable';
