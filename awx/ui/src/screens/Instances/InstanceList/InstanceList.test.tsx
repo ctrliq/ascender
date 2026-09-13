@@ -1,0 +1,246 @@
+import type { ApiResponse } from 'api/Base';
+import React from 'react';
+import { Routes, Route } from 'react-router';
+import { createMemoryHistory } from 'history';
+import * as ConfigContext from 'contexts/Config';
+import { within, waitFor, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import userEvent from '@testing-library/user-event';
+import { InstanceGroupsAPI, InstancesAPI, SettingsAPI } from 'api';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import InstanceList from './InstanceList';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
+
+vi.mock('../../../api/models/InstanceGroups');
+vi.mock('../../../api/models/Instances');
+vi.mock('../../../api/models/Settings');
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual<typeof import('react-router')>('react-router')),
+  useParams: () => ({
+    id: 1,
+  }),
+  useLocation: () => ({
+    search: '',
+  }),
+}));
+
+const instances = [
+  {
+    id: 1,
+    type: 'instance',
+    url: '/api/v2/instances/1/',
+    capacity_adjustment: '0.40',
+    version: '13.0.0',
+    capacity: 10,
+    consumed_capacity: 0,
+    percent_capacity_remaining: 60.0,
+    jobs_running: 0,
+    jobs_total: 68,
+    cpu: 6,
+    node_type: 'execution',
+    node_state: 'ready',
+    memory: 2087469056,
+    cpu_capacity: 24,
+    mem_capacity: 1,
+    enabled: true,
+    managed_by_policy: true,
+    hostname: 'alex',
+  },
+  {
+    id: 2,
+    type: 'instance',
+    url: '/api/v2/instances/2/',
+    capacity_adjustment: '0.40',
+    version: '13.0.0',
+    capacity: 10,
+    consumed_capacity: 0,
+    percent_capacity_remaining: 60.0,
+    jobs_running: 0,
+    jobs_total: 68,
+    cpu: 6,
+    node_type: 'execution',
+    node_state: 'ready',
+    memory: 2087469056,
+    cpu_capacity: 24,
+    mem_capacity: 1,
+    enabled: true,
+    managed_by_policy: false,
+    hostname: 'athena',
+  },
+  {
+    id: 3,
+    type: 'instance',
+    url: '/api/v2/instances/3/',
+    capacity_adjustment: '0.40',
+    version: '13.0.0',
+    capacity: 10,
+    consumed_capacity: 0,
+    percent_capacity_remaining: 60.0,
+    jobs_running: 0,
+    jobs_total: 68,
+    cpu: 6,
+    node_type: 'execution',
+    node_state: 'ready',
+    memory: 2087469056,
+    cpu_capacity: 24,
+    mem_capacity: 1,
+    enabled: false,
+    managed_by_policy: true,
+    hostname: 'apollo',
+  },
+  {
+    id: 4,
+    type: 'instance',
+    url: '/api/v2/instances/4/',
+    capacity_adjustment: '0.40',
+    version: '13.0.0',
+    capacity: 10,
+    consumed_capacity: 0,
+    percent_capacity_remaining: 60.0,
+    jobs_running: 0,
+    jobs_total: 68,
+    cpu: 6,
+    node_type: 'hop',
+    node_state: 'ready',
+    memory: 2087469056,
+    cpu_capacity: 24,
+    mem_capacity: 1,
+    enabled: false,
+    managed_by_policy: true,
+    hostname: 'Eno',
+  },
+];
+
+describe('<InstanceList />, React testing library tests', () => {
+  const user = userEvent.setup();
+  const options = { data: { actions: { POST: true } } };
+
+  const customRender = (ui: React.ReactElement, isK8s = true) => {
+    vi.spyOn(ConfigContext, 'useConfig').mockImplementation(() => ({
+      me: { is_superuser: true },
+    }));
+    vi.mocked(InstancesAPI.read).mockResolvedValue({
+      data: {
+        count: instances.length,
+        results: instances,
+      },
+    } as unknown as ResponseOf<typeof InstancesAPI.read>);
+    vi.mocked(InstancesAPI.readOptions).mockResolvedValue(
+      options as unknown as ApiResponse<unknown>
+    );
+    vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
+      data: { IS_K8S: isK8s },
+    } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
+
+    vi.mocked(InstanceGroupsAPI.read).mockResolvedValue({
+      data: { results: [{ id: 1 }], count: 1 },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.read>);
+
+    const history = createMemoryHistory({
+      initialEntries: ['/instances'],
+    });
+    return renderWithContexts(
+      <Routes>
+        <Route path="/instances" element={ui} />
+      </Routes>,
+      { context: { router: { history } } }
+    );
+  };
+
+  test('Should show error modal on failure to deprovision instance', async () => {
+    vi.mocked(InstancesAPI.deprovisionInstance).mockRejectedValue(
+      Object.assign(new Error('An error occurred'), {
+        response: {
+          config: {
+            method: 'post',
+            url: '/api/v2/instances',
+          },
+          data: 'An error occurred',
+          status: 403,
+        },
+      })
+    );
+
+    await waitFor(() => customRender(<InstanceList />));
+
+    const selectedRowItem = screen.getByRole('checkbox', {
+      name: 'Select row 2',
+    });
+    const button = screen.getByRole('button', { name: 'Remove' });
+
+    await user.click(selectedRowItem);
+    await user.click(button);
+
+    await waitFor(() => screen.getByRole('dialog'));
+    const deprovisionModal = screen.getByRole('dialog');
+    const removeButton = within(deprovisionModal).getByRole('button', {
+      name: 'Confirm remove',
+    });
+
+    await user.click(removeButton);
+    await waitFor(() =>
+      expect(InstancesAPI.deprovisionInstance).toHaveBeenCalledWith(3)
+    );
+    screen.getByText('Error!');
+  });
+
+  test('Should fetch instances from the api and render them in the list', async () => {
+    await waitFor(() => customRender(<InstanceList />));
+    expect(InstancesAPI.read).toHaveBeenCalled();
+    expect(InstancesAPI.readOptions).toHaveBeenCalled();
+    expect(screen.getAllByTestId('instances list item')).toHaveLength(4);
+  });
+
+  test('Should run health check, and inform user to reload the page', async () => {
+    await waitFor(() => customRender(<InstanceList />));
+    const selectedRowItem = screen.getByRole('checkbox', {
+      name: 'Select row 2',
+    });
+    const button = screen.getByRole('button', { name: 'Run health check' });
+
+    await user.click(selectedRowItem);
+    await user.click(button);
+
+    await waitFor(() =>
+      screen.getByText(
+        'Health check request(s) submitted. Please wait and reload the page.'
+      )
+    );
+  });
+
+  test('Should render health check error', async () => {
+    vi.mocked(InstancesAPI.healthCheck).mockRejectedValue(
+      Object.assign(new Error('An error occurred'), {
+        response: {
+          config: {
+            method: 'create',
+            url: '/api/v2/instances',
+          },
+          data: 'An error occurred',
+          status: 403,
+        },
+      })
+    );
+
+    await waitFor(() => customRender(<InstanceList />));
+    const selectedRowItem = screen.getByRole('checkbox', {
+      name: 'Select row 2',
+    });
+    const button = screen.getByRole('button', { name: 'Run health check' });
+
+    await user.click(selectedRowItem);
+    await user.click(button);
+
+    expect(screen.getByText('Error!')).toBeInTheDocument();
+  });
+  test('Should show Add button', async () => {
+    await waitFor(() => customRender(<InstanceList />));
+    expect(screen.getByRole('link', { name: 'Add' })).toBeInTheDocument();
+  });
+
+  test('Should not show Add button', async () => {
+    await waitFor(() => customRender(<InstanceList />, false));
+    const add = screen.queryByText('Add');
+    expect(add).toBeNull();
+  });
+});

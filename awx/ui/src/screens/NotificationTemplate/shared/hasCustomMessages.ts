@@ -1,0 +1,62 @@
+import type {
+  NotificationMessages,
+  NotificationText,
+} from './NotificationTemplateForm';
+
+/**
+ * Whether a template's messages differ from the defaults the api ships.
+ *
+ * Args:
+ *   messages: what the template holds, absent where it has none of its own.
+ *   defaults: the bodies the api ships for this notification type.
+ *
+ * Returns:
+ *   True where any one of the eight differs from its default.
+ */
+export default function hasCustomMessages(
+  messages?: NotificationMessages | null,
+  defaults: NotificationMessages = {}
+) {
+  if (!messages) {
+    return false;
+  }
+
+  return (
+    isCustomized(messages.started, defaults.started) ||
+    isCustomized(messages.success, defaults.success) ||
+    isCustomized(messages.error, defaults.error) ||
+    isCustomized(messages.changed, defaults.changed) ||
+    isCustomized(
+      messages.workflow_approval?.approved,
+      defaults.workflow_approval?.approved
+    ) ||
+    isCustomized(
+      messages.workflow_approval?.denied,
+      defaults.workflow_approval?.denied
+    ) ||
+    isCustomized(
+      messages.workflow_approval?.running,
+      defaults.workflow_approval?.running
+    ) ||
+    isCustomized(
+      messages.workflow_approval?.timed_out,
+      defaults.workflow_approval?.timed_out
+    )
+  );
+}
+
+function isCustomized(
+  message?: NotificationText,
+  defaultMessage?: NotificationText
+) {
+  if (!message) {
+    return false;
+  }
+  if (message?.message !== defaultMessage?.message) {
+    return true;
+  }
+  if (message?.body !== defaultMessage?.body) {
+    return true;
+  }
+  return false;
+}

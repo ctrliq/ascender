@@ -1,0 +1,188 @@
+import type {
+  WorkflowLink,
+  WorkflowAction,
+  WorkflowState,
+} from 'components/Workflow/workflowReducer';
+import type { NodePositions } from 'components/Workflow/WorkflowUtils';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import styled from 'styled-components';
+
+import { useLingui } from '@lingui/react/macro';
+import { PencilAltIcon, PlusIcon, TrashAltIcon } from '@patternfly/react-icons';
+import {
+  WorkflowDispatchContext,
+  WorkflowStateContext,
+} from 'contexts/Workflow';
+import {
+  generateLine,
+  getLinePoints,
+  getLinkOverlayPoints,
+} from 'components/Workflow/WorkflowUtils';
+import {
+  WorkflowActionTooltip,
+  WorkflowActionTooltipItem,
+} from 'components/Workflow';
+
+const LinkG = styled.g<{ $ignorePointerEvents?: boolean }>`
+  pointer-events: ${(props) => (props.$ignorePointerEvents ? 'none' : 'auto')};
+`;
+
+export interface VisualizerLinkProps {
+  link: WorkflowLink;
+  /** Tells the visualizer which link is hovered, or null when none is. */
+  updateLinkHelp: (link: WorkflowLink | null) => void;
+  readOnly: boolean;
+  updateHelpText: (helpText: React.ReactNode) => void;
+  [key: string]: unknown;
+}
+
+function VisualizerLink({
+  link,
+  updateLinkHelp,
+  readOnly,
+  updateHelpText,
+}: VisualizerLinkProps) {
+  const { t } = useLingui();
+  const ref = useRef<SVGGElement>(null);
+  const [hovering, setHovering] = useState<boolean>(false);
+  const [pathD, setPathD] = useState<string | null>();
+  const [pathStroke, setPathStroke] = useState(
+    'var(--pf-t--global--border--color--default)'
+  );
+  const [tooltipX, setTooltipX] = useState(0);
+  const [tooltipY, setTooltipY] = useState(0);
+  const dispatch = useContext(
+    WorkflowDispatchContext
+  ) as React.Dispatch<WorkflowAction>;
+  // A link is only drawn once the layout has placed both of its nodes,
+  // which is what fills the positions in.
+  const { addingLink, nodePositions } = useContext(
+    WorkflowStateContext
+  ) as WorkflowState & { nodePositions: NodePositions };
+
+  const addNodeAction = (
+    <WorkflowActionTooltipItem
+      id="link-add-node"
+      key="add"
+      onClick={() => {
+        updateHelpText(null);
+        setHovering(false);
+        dispatch({
+          type: 'START_ADD_NODE',
+          sourceNodeId: link.source.id,
+          targetNodeId: link.target.id,
+        });
+      }}
+      onMouseEnter={() =>
+        updateHelpText(t`Add a new node between these two nodes`)
+      }
+      onMouseLeave={() => updateHelpText(null)}
+    >
+      <PlusIcon />
+    </WorkflowActionTooltipItem>
+  );
+
+  const tooltipActions =
+    link.source.id === 1
+      ? [addNodeAction]
+      : [
+          addNodeAction,
+          <WorkflowActionTooltipItem
+            id="link-edit"
+            key="edit"
+            onClick={() => {
+              updateHelpText(null);
+              setHovering(false);
+              dispatch({ type: 'SET_LINK_TO_EDIT', value: link });
+            }}
+            onMouseEnter={() => updateHelpText(t`Edit this link`)}
+            onMouseLeave={() => updateHelpText(null)}
+          >
+            <PencilAltIcon />
+          </WorkflowActionTooltipItem>,
+          <WorkflowActionTooltipItem
+            id="link-delete"
+            key="delete"
+            onClick={() => {
+              updateHelpText(null);
+              setHovering(false);
+              dispatch({ type: 'START_DELETE_LINK', link });
+            }}
+            onMouseEnter={() => updateHelpText(t`Delete this link`)}
+            onMouseLeave={() => updateHelpText(null)}
+          >
+            <TrashAltIcon />
+          </WorkflowActionTooltipItem>,
+        ];
+
+  // A hovered link is moved to the front of its group so its overlay is not
+  // covered by the links drawn after it.
+  const handleLinkMouseEnter = () => {
+    const linkNode = ref.current;
+    const startNode = document.getElementById('node-1');
+    linkNode?.parentNode?.insertBefore(linkNode, startNode);
+    setHovering(true);
+  };
+
+  const handleLinkMouseLeave = () => {
+    const linkNode = ref.current;
+    linkNode?.parentNode?.prepend(linkNode);
+    setHovering(false);
+  };
+
+  useEffect(() => {
+    if (link.linkType === 'failure') {
+      setPathStroke('var(--pf-t--global--color--status--danger--default)');
+    }
+    if (link.linkType === 'success') {
+      setPathStroke('var(--pf-t--global--color--status--success--default)');
+    }
+    if (link.linkType === 'always') {
+      setPathStroke('var(--pf-t--global--color--brand--default)');
+    }
+    if (link.linkType === 'condition') {
+      setPathStroke('var(--pf-t--global--color--status--warning--default)');
+    }
+  }, [link.linkType]);
+
+  useEffect(() => {
+    const linePoints = getLinePoints(link, nodePositions);
+    setPathD(generateLine(linePoints));
+    setTooltipX((linePoints[0].x + linePoints[1].x) / 2);
+    setTooltipY((linePoints[0].y + linePoints[1].y) / 2);
+  }, [link, nodePositions]);
+
+  return (
+    <LinkG
+      id={`link-${link.source.id}-${link.target.id}`}
+      $ignorePointerEvents={addingLink}
+      onMouseEnter={handleLinkMouseEnter}
+      onMouseLeave={handleLinkMouseLeave}
+      ref={ref}
+    >
+      <polygon
+        style={{ fill: 'var(--pf-t--global--background--color--200)' }}
+        id={`link-${link.source.id}-${link.target.id}-background`}
+        opacity={hovering ? '1' : '0'}
+        points={getLinkOverlayPoints(link, nodePositions)}
+      />
+      <path d={pathD ?? undefined} stroke={pathStroke} strokeWidth="2px" />
+      <polygon
+        id={`link-${link.source.id}-${link.target.id}-overlay`}
+        onMouseEnter={() => updateLinkHelp(link)}
+        onMouseLeave={() => updateLinkHelp(null)}
+        opacity="0"
+        points={getLinkOverlayPoints(link, nodePositions)}
+      />
+      {!readOnly && hovering && (
+        <WorkflowActionTooltip
+          actions={tooltipActions}
+          pointX={tooltipX}
+          pointY={tooltipY}
+        />
+      )}
+    </LinkG>
+  );
+}
+
+export default VisualizerLink;

@@ -1,0 +1,73 @@
+import type { Host, RecentJob } from 'types/api';
+import React from 'react';
+import { Link, useParams } from 'react-router';
+import { useLingui } from '@lingui/react/macro';
+import { CardBody } from 'components/Card';
+import { Detail, DetailList, UserDateDetail } from 'components/DetailList';
+import Sparkline from 'components/Sparkline';
+import { VariablesDetail } from 'components/CodeEditor';
+
+export interface AdvancedInventoryHostDetailProps {
+  host: Host;
+  [key: string]: unknown;
+}
+
+function AdvancedInventoryHostDetail({
+  host,
+}: AdvancedInventoryHostDetailProps) {
+  const { t } = useLingui();
+  const { inventoryType } = useParams() as { inventoryType: string };
+  const {
+    created,
+    description,
+    enabled,
+    modified,
+    name,
+    variables,
+    summary_fields: { inventory, recent_jobs, created_by, modified_by },
+  } = host;
+
+  const recentPlaybookJobs = recent_jobs?.map((job: RecentJob) => ({
+    ...job,
+    type: 'job',
+  }));
+
+  const inventoryKind = inventory?.kind === '' ? 'inventory' : inventoryType;
+  return (
+    <CardBody>
+      <DetailList gutter="sm">
+        <Detail label={t`Name`} value={name} />
+        <Detail
+          label={t`Activity`}
+          value={<Sparkline jobs={recentPlaybookJobs} />}
+          isEmpty={recentPlaybookJobs?.length === 0}
+        />
+        <Detail label={t`Description`} value={description} />
+        <Detail
+          label={t`Inventory`}
+          value={
+            <Link to={`/inventories/${inventoryKind}/${inventory?.id}/details`}>
+              {inventory?.name}
+            </Link>
+          }
+        />
+        <Detail label={t`Enabled`} value={enabled ? t`On` : t`Off`} />
+        <UserDateDetail date={created} label={t`Created`} user={created_by} />
+        <UserDateDetail
+          date={modified}
+          label={t`Last modified`}
+          user={modified_by}
+        />
+        <VariablesDetail
+          label={t`Variables`}
+          rows={4}
+          value={variables}
+          name="variables"
+          dataCy="smart-inventory-host-detail-variables"
+        />
+      </DetailList>
+    </CardBody>
+  );
+}
+
+export default AdvancedInventoryHostDetail;
