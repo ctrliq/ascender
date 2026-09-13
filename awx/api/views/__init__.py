@@ -22,8 +22,7 @@ from django.db.models.functions import Trunc
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.template.loader import render_to_string
-from django.http import HttpResponseRedirect, StreamingHttpResponse
-from django.contrib.contenttypes.models import ContentType
+from django.http import StreamingHttpResponse
 from django.utils.translation import gettext_lazy as _
 
 # Django REST Framework
