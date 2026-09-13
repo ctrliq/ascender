@@ -195,20 +195,18 @@ collectstatic:
 	fi; \
 	$(PYTHON) manage.py collectstatic --clear --noinput > /dev/null 2>&1
 
-uwsgi: collectstatic
+# uwsgi ran five worker processes, so the ASGI server starts with the same.
+UVICORN_WORKERS ?= 5
+
+## Run the ASGI server that answers both the API and the websockets.
+uvicorn: collectstatic
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	uwsgi /etc/tower/uwsgi.ini
+	uvicorn --host 127.0.0.1 --port 8051 --workers $(UVICORN_WORKERS) --ws auto --no-server-header awx.asgi:channel_layer
 
 awx-autoreload:
 	@/awx_devel/tools/docker-compose/awx-autoreload /awx_devel/awx
-
-daphne:
-	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
-	fi; \
-	daphne -b 127.0.0.1 -p 8051 awx.asgi:channel_layer
 
 ## Run to start the background task dispatcher for development.
 dispatcher:

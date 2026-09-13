@@ -12,7 +12,7 @@ channels
 channels-valkey
 cryptography>=50.0.0  # CVE-2026-69247
 Cython>=3 # this is needed as a build dependency, one day we may have separated build deps; <3 cap removed once pyyaml>=6.0.1 supported Cython 3
-daphne>=4.2.2  # CVE-2026-44545 CVE-2026-44546
+daphne>=4.2.2  # CVE-2026-44545 CVE-2026-44546; the Django app, for runserver
 distro
 django>=6.1.1 # floor was 5.2.17 for CVE-2026-15307 CVE-2026-15830, both long fixed by 6.1
 django-auth-ldap
@@ -57,7 +57,7 @@ slack-sdk
 tacacs-plus
 twisted[tls]>=26.4.0   # CVE-2026-42304
 urllib3>=2.7.0 # CVE-2026-44431 CVE-2026-44432
-uWSGI>=2.0.22 # CVE-2023-27522
+uvicorn[standard]  # the ASGI server that serves the API and the websockets
 valkey[libvalkey]
 wheel>=0.46.2  # CVE-2026-24049
 pip==26.2.1  # CVE-2026-13346

@@ -21,31 +21,13 @@ stdout_logfile_maxbytes=0
 stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
 
-[program:uwsgi]
+[program:uvicorn]
 environment = AWX_WEB_PROCESS=1
 {% if kube_dev | bool %}
-command = make uwsgi
+command = make uvicorn
 directory = /awx_devel
 {% else %}
-command = /var/lib/awx/venv/awx/bin/uwsgi /etc/tower/uwsgi.ini
-directory = /var/lib/awx
-{% endif %}
-autorestart = true
-startsecs = 30
-stopasgroup=true
-killasgroup=true
-stdout_logfile=/dev/stdout
-stdout_logfile_maxbytes=0
-stderr_logfile=/dev/stderr
-stderr_logfile_maxbytes=0
-
-[program:daphne]
-environment = AWX_WEB_PROCESS=1
-{% if kube_dev | bool %}
-command = make daphne
-directory = /awx_devel
-{% else %}
-command = /var/lib/awx/venv/awx/bin/daphne -b 127.0.0.1 -p 8051 --websocket_timeout -1 awx.asgi:channel_layer
+command = /var/lib/awx/venv/awx/bin/uvicorn --host 127.0.0.1 --port 8051 --workers 5 --ws auto --no-server-header --timeout-graceful-shutdown 110 awx.asgi:channel_layer
 directory = /var/lib/awx
 {% endif %}
 autorestart = true
@@ -105,7 +87,7 @@ stderr_logfile_maxbytes=0
 {% endif %}
 
 [group:tower-processes]
-programs=nginx,uwsgi,daphne,awx-cache-clear,ws-heartbeat
+programs=nginx,uvicorn,awx-cache-clear,ws-heartbeat
 priority=5
 
 [eventlistener:superwatcher]
