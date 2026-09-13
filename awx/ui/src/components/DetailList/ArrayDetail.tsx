@@ -1,15 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import { DetailName, DetailValue } from './Detail';
+import './DetailList.css';
 import Popover from '../Popover';
-
-const Value = styled(DetailValue)`
-  margin-top: var(--pf-v6-global--spacer--xs);
-  padding: var(--pf-v6-global--spacer--xs);
-  border: 1px solid var(--pf-v6-global--BorderColor--100);
-  max-height: 5.5em;
-  overflow: auto;
-`;
 
 export interface ArrayDetailProps {
   label: React.ReactNode;
@@ -31,11 +23,11 @@ function ArrayDetail({ label, helpText, value, dataCy }: ArrayDetailProps) {
         {label}
         {helpText && <Popover header={label} content={helpText} id={dataCy} />}
       </DetailName>
-      <Value data-cy={valueCy}>
+      <DetailValue className="awx-detail-value--array" data-cy={valueCy}>
         {vals.map((v) => (
           <div key={v}>{v}</div>
         ))}
-      </Value>
+      </DetailValue>
     </div>
   );
 }
