@@ -4,6 +4,7 @@ import { configure } from '@testing-library/dom';
 import React from 'react';
 // apply polyfills for jsdom
 import '@nteract/mockument';
+import { clearOptionsCache } from './api/optionsCache';
 
 // findBy* and waitFor have their own timeout, separate from vitest's, and its
 // one second default is not enough once the vm pool has every core rendering a
@@ -101,6 +102,10 @@ global.fetch = vi.fn(fetchSafeguard) as unknown as typeof fetch;
 // vi.fn implementations between tests.
 beforeEach(() => {
   (global.fetch as unknown as Mock).mockImplementation(fetchSafeguard);
+  // The OPTIONS cache is a module singleton and the VM pool reuses one
+  // environment per worker, so a cached response would otherwise answer a
+  // later test that expected its own mock to be called.
+  clearOptionsCache();
 });
 
 vi.mock('hooks/useTitle');

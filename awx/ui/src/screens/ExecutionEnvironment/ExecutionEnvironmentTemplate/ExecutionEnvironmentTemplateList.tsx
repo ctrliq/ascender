@@ -1,12 +1,12 @@
 import type { ExecutionEnvironment } from 'types/api';
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Card } from '@patternfly/react-core';
 
 import { ExecutionEnvironmentsAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
-import useRequest from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
 import DatalistToolbar from 'components/DataListToolbar';
 import PaginatedTable, {
   HeaderCell,
@@ -42,14 +42,14 @@ function ExecutionEnvironmentTemplateList({
   const {
     error: contentError,
     isLoading,
-    request: fetchTemplates,
     result: {
       templates,
       templatesCount,
       relatedSearchableKeys,
       searchableKeys,
     },
-  } = useRequest(
+  } = useCachedRequest(
+    ['execution-environment-template-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
 
@@ -76,10 +76,6 @@ function ExecutionEnvironmentTemplateList({
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchTemplates();
-  }, [fetchTemplates]);
 
   return (
     <Card>
