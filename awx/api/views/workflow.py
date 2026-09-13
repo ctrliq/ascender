@@ -49,10 +49,14 @@ from rest_framework.views import APIView
 # the shared bases these views are built on, which stay where they are
 from awx.api.views import (
     EnforceParentRelationshipMixin,
+    LaunchConfigCredentialsBase,
+)
+from awx.api.views.job import (
     JobLabelList,
+)
+from awx.api.views.job_template import (
     JobTemplateLabelList,
     JobTemplateSurveySpec,
-    LaunchConfigCredentialsBase,
 )
 
 logger = logging.getLogger('awx.api.views.workflow')

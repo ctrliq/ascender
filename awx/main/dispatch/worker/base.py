@@ -14,7 +14,7 @@ from queue import Empty as QueueEmpty
 from datetime import timedelta
 
 from django import db
-from django.conf import settings
+from awx.settings.typed import settings
 
 from awx.main.dispatch.pool import WorkerPool
 from awx.main.dispatch.periodic import Scheduler
