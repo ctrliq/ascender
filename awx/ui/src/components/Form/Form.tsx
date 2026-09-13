@@ -7,6 +7,10 @@ import React, {
   useState,
 } from 'react';
 
+import { FormikContext } from 'formik';
+
+import { getIn, setIn } from './paths';
+
 import type {
   Errors,
   FieldValidator,
@@ -63,47 +67,52 @@ export function Form<V extends Values>({
   const initial = useRef(initialValues);
   const registry = useRef<Registry>({ boxes: new Map() });
 
-  /** Run one field's validator, and write or clear its error. */
-  const validateField = useCallback((name: string, value: unknown) => {
-    const validate = registry.current.boxes.get(name)?.current;
-    if (!validate) return;
-    const error = (validate as (v: unknown) => string | undefined)(value);
-    setErrorsState((prev) => {
-      if (error === undefined) {
-        if (!(name in prev)) return prev;
-        const next = { ...prev };
-        delete next[name];
-        return next;
-      }
-      if (prev[name] === error) return prev;
-      return { ...prev, [name]: error };
+  /**
+   * Every registered validator, run against a set of values.
+   *
+   * The whole form rather than the one field that changed, which is what
+   * formik does: a change anywhere re-runs everything, so an error that has
+   * been fixed elsewhere clears at the same time. Rebuilding the object also
+   * means a cleared error leaves nothing behind, which keeps isValid honest.
+   */
+  const runValidators = useCallback((against: Values): Errors => {
+    let found: Errors = {};
+    registry.current.boxes.forEach((box, name) => {
+      const validate = box.current as
+        ((value: unknown) => string | undefined) | undefined;
+      const error = validate?.(getIn(against, name));
+      if (error !== undefined) found = setIn(found, name, error);
     });
+    return found;
   }, []);
 
   const setFieldValue = useCallback(
     (name: string, value: unknown, shouldValidate = true) => {
-      setValuesState((prev) => ({ ...prev, [name]: value }));
-      if (shouldValidate) validateField(name, value);
+      setValuesState((prev) => {
+        const next = setIn(prev, name, value);
+        if (shouldValidate) setErrorsState(runValidators(next));
+        return next;
+      });
     },
-    [validateField]
+    [runValidators]
   );
 
   const setFieldTouched = useCallback(
     (name: string, isTouched = true, shouldValidate = true) => {
-      setTouchedState((prev) => ({ ...prev, [name]: isTouched }));
+      setTouchedState((prev) => setIn(prev, name, isTouched));
       if (shouldValidate) {
         setValuesState((prev) => {
-          validateField(name, prev[name]);
+          setErrorsState(runValidators(prev));
           return prev;
         });
       }
     },
-    [validateField]
+    [runValidators]
   );
 
   const setFieldError = useCallback(
     (name: string, error: string | undefined) => {
-      setErrorsState((prev) => ({ ...prev, [name]: error }));
+      setErrorsState((prev) => setIn(prev, name, error));
     },
     []
   );
@@ -118,21 +127,20 @@ export function Form<V extends Values>({
     (event?: { preventDefault?: () => void }) => {
       event?.preventDefault?.();
       setValuesState((current) => {
-        // Every key in values is marked touched, visited or not, which is what
-        // makes a required field that was never opened show its error.
-        const allTouched: Touched = {};
-        Object.keys(current).forEach((key) => {
-          allTouched[key] = true;
+        // Every field is marked touched, visited or not, which is what makes a
+        // required field nobody opened show its error.
+        setTouchedState((prev) => {
+          let next = prev;
+          Object.keys(current).forEach((key) => {
+            next = setIn(next, key, true);
+          });
+          registry.current.boxes.forEach((_box, name) => {
+            next = setIn(next, name, true);
+          });
+          return next;
         });
-        setTouchedState((prev) => ({ ...prev, ...allTouched }));
 
-        const found: Errors = {};
-        registry.current.boxes.forEach((box, name) => {
-          const error = (
-            box.current as ((v: unknown) => string | undefined) | undefined
-          )?.(current[name]);
-          if (error !== undefined) found[name] = error;
-        });
+        const found = runValidators(current);
         setErrorsState(found);
         if (Object.keys(found).length === 0) {
           onSubmit(current);
@@ -140,7 +148,7 @@ export function Form<V extends Values>({
         return current;
       });
     },
-    [onSubmit]
+    [onSubmit, runValidators]
   );
 
   const context = useMemo<FormContextValue<V>>(
@@ -182,19 +190,23 @@ export function Form<V extends Values>({
 export function useFormContext<
   V extends Values = Values,
 >(): FormContextValue<V> {
-  const context = useContext(FormContext);
+  const own = useContext(FormContext);
+  // While the tree is mixed a form may still be a formik one. Its context
+  // carries the same members under the same names, so it answers here
+  // unchanged, and this branch goes when the last <Formik> does. Read
+  // directly rather than through useFormikContext, which warns to the console
+  // when it is called with no <Formik> above it.
+  const formik = useContext(FormikContext);
+  const context = own ?? (formik as unknown as FormContextValue | undefined);
   if (!context) {
-    throw new Error('useFormContext was called outside a Form');
+    throw new Error('useFormContext was called outside a form');
   }
   return context as FormContextValue<V>;
 }
 
-export function useFieldRegistry(): Registry {
-  const registry = useContext(RegistryContext);
-  if (!registry) {
-    throw new Error('useField was called outside a Form');
-  }
-  return registry;
+/** The validator registry, or null when the form above is a formik one. */
+export function useOptionalFieldRegistry(): Registry | null {
+  return useContext(RegistryContext);
 }
 
 export default Form;
