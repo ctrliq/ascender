@@ -149,11 +149,11 @@ def api_exception_handler(exc, context):
         context['view'].renderer_classes = [renderers.BrowsableAPIRenderer, JSONRenderer]
     if isinstance(exc, APIException):
         req = context['request']._request
-        if 'awx.named_url_rewritten' in req.environ and not str(getattr(exc, 'status_code', 0)).startswith('2'):
+        if 'awx.named_url_rewritten' in req.META and not str(getattr(exc, 'status_code', 0)).startswith('2'):
             # if the URL was rewritten, and it's not a 2xx level status code,
             # revert the request.path to its original value to avoid leaking
             # any context about the existence of resources
-            req.path = req.environ['awx.named_url_rewritten']
+            req.path = req.META['awx.named_url_rewritten']
             if exc.status_code == 403:
                 exc = NotFound(detail=_('Not found.'))
     return exception_handler(exc, context)
