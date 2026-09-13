@@ -53,6 +53,8 @@ from awx.api.serializers import (
     CredentialSerializer,
 )
 from awx.api.views.mixin import RelatedJobsPreventDeleteMixin, OrganizationCountsMixin, OrganizationInstanceGroupMembershipMixin
+from awx.main import models
+from awx.api import serializers
 
 logger = logging.getLogger('awx.api.views.organization')
 
@@ -235,3 +237,33 @@ class OrganizationObjectRolesList(SubListAPIView):
         po = self.get_parent_object()
         content_type = ContentType.objects.get_for_model(self.parent_model)
         return Role.objects.filter(content_type=content_type, object_id=po.pk)
+
+
+class OrganizationApplicationList(SubListCreateAPIView):
+    name = _("Organization OAuth2 Applications")
+
+    model = models.OAuth2Application
+    serializer_class = serializers.OAuth2ApplicationSerializer
+    parent_model = models.Organization
+    relationship = 'applications'
+    parent_key = 'organization'
+    swagger_topic = 'Authentication'
+
+
+class OrganizationCredentialList(SubListCreateAPIView):
+    model = models.Credential
+    serializer_class = serializers.OrganizationCredentialSerializerCreate
+    parent_model = models.Organization
+    parent_key = 'organization'
+
+    def get_queryset(self):
+        organization = self.get_parent_object()
+        self.check_parent_access(organization)
+
+        user_visible = models.Credential.accessible_objects(self.request.user, 'read_role').all()
+        org_set = models.Credential.objects.filter(organization=organization)
+
+        if self.request.user.is_superuser or self.request.user.is_system_auditor:
+            return org_set
+
+        return org_set & user_visible
