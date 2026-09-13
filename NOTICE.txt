@@ -1,13 +1,13 @@
 This product includes software originally developed by
   https://github.com/ansible/awx
 All original code is copyright by their respective authors
-and are LICENSED under the Apache 2.0 License (see /LICENSE.md)
+and are LICENSED under the Apache 2.0 License (see /LICENSE)
 
 In addition to various code files (all marked via proper headers)
 the following data files have been modified by Ctrl IQ, Inc
 and the modifications are Copyright 2023 by Ctrl IQ, Inc All rights reserved
 Any and all changes are being distributed under the original License
-Apache 2.0 License (see /LICENSE.md)
+Apache 2.0 License (see /LICENSE)
 
 Data Files modified by Ctrl IQ, Inc
   /MANIFEST.in
