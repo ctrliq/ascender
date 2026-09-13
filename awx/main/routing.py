@@ -2,6 +2,7 @@ import valkey
 import logging
 
 from django.conf import settings
+from django.core.asgi import get_asgi_application
 from django.urls import path
 
 from channels.routing import ProtocolTypeRouter, URLRouter
@@ -70,10 +71,16 @@ websocket_relay_urlpatterns = [
 def application_func(cls=AWXProtocolTypeRouter) -> ProtocolTypeRouter:
     return cls(
         {
+            # Channels 2 filled in an http application when one was not given.
+            # Channels 4 raises "No application configured for scope type 'http'"
+            # instead, so without this line the ASGI application answers
+            # websockets and nothing else, and a second server has to exist to
+            # serve the API.
+            'http': get_asgi_application(),
             'websocket': MultipleURLRouterAdapter(
                 URLRouter(websocket_relay_urlpatterns),
                 DrfAuthMiddlewareStack(URLRouter(websocket_urlpatterns)),
-            )
+            ),
         }
     )
 
