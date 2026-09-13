@@ -114,3 +114,29 @@ filterwarnings = [
     "ignore:CoreAPI compatibility is deprecated:UserWarning",
     "ignore:pkg_resources is deprecated as an API:UserWarning",
 ]
+# Moved here from .coveragerc, unchanged. The exclude_lines entries are regular
+# expressions, so they are literal strings: a backslash in them is the regex's,
+# not TOML's.
+[tool.coverage.run]
+source = ["awx"]
+branch = true
+omit = ["awx/main/migrations/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    # Have to re-enable the standard pragma
+    "pragma: no cover",
+    # Don't complain about missing debug-only code:
+    "def __repr__",
+    'if self\.debug',
+    # Don't complain if tests don't hit defensive assertion code:
+    "raise AssertionError",
+    "raise NotImplementedError",
+    # Don't complain if non-runnable code isn't run:
+    "if 0:",
+    'if __name__ == .__main__.:',
+]
+ignore_errors = true
+
+[tool.coverage.xml]
+output = "./reports/coverage.xml"
