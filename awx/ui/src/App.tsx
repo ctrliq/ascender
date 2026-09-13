@@ -38,6 +38,11 @@ const SubscriptionEdit = React.lazy(
   () => import('screens/Setting/Subscription/SubscriptionEdit')
 );
 
+const Metrics = React.lazy(() => import('screens/Metrics'));
+const SubscriptionEdit = React.lazy(
+  () => import('screens/Setting/Subscription/SubscriptionEdit')
+);
+
 export interface ErrorFallbackProps {
   error: unknown;
   [key: string]: unknown;
