@@ -11,6 +11,17 @@ const SCREENS = [
   { name: 'login', hash: '/login', authenticated: false },
   { name: 'jobs', hash: '/jobs', authenticated: true },
   { name: 'templates', hash: '/templates', authenticated: true },
+  // The forms, which is where accessibility problems usually live: a label that
+  // names nothing, a required field that only says so in colour, a control
+  // reachable by mouse and not by keyboard. Three lists would not have found
+  // any of those.
+  { name: 'project-add', hash: '/projects/add', authenticated: true },
+  { name: 'inventory-add', hash: '/inventories/inventory/add', authenticated: true },
+  { name: 'credential-add', hash: '/credentials/add', authenticated: true },
+  { name: 'organization-add', hash: '/organizations/add', authenticated: true },
+  { name: 'user-add', hash: '/users/add', authenticated: true },
+  { name: 'team-add', hash: '/teams/add', authenticated: true },
+  { name: 'template-add', hash: '/templates/job_template/add', authenticated: true },
 ];
 
 // The application does not pass WCAG today, so a zero-violation gate would fail
@@ -35,8 +46,17 @@ test.describe('accessibility', () => {
       } else {
         await page.goto(route(screen.hash), { waitUntil: 'domcontentloaded' });
       }
-      // the lists fetch before they render, so wait for the toolbar rather than a timer
-      await page.waitForLoadState('networkidle');
+      // Wait for the shell to actually be on the page. networkidle was what
+      // this did before and it is wrong twice over: it fires while React still
+      // has an empty root, so axe scanned 21 elements and a screen with three
+      // violations looked clean, and on the forms that poll it never fires at
+      // all. A selector plus a settle does not depend on the network going
+      // quiet.
+      await page.waitForSelector(
+        screen.authenticated ? '.pf-v6-c-page__main' : 'form',
+        { timeout: 60000 }
+      );
+      await page.waitForTimeout(2000);
 
       const results = await new AxeBuilder({ page })
         .withTags(['wcag2a', 'wcag2aa'])
