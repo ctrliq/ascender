@@ -2,7 +2,7 @@ from typing import Any, Type, Union
 from uuid import UUID
 
 from django.apps import apps as django_apps
-from django.conf import settings
+from awx.settings.typed import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Model

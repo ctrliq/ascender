@@ -1,7 +1,7 @@
 import valkey
 import logging
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.urls import path
 
 from channels.routing import ProtocolTypeRouter, URLRouter
