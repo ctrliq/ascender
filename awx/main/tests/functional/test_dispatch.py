@@ -6,6 +6,8 @@ import time
 import yaml
 from unittest import mock
 
+from django.db import connection
+from django.test.utils import CaptureQueriesContext
 from django.utils.timezone import now as tz_now
 import pytest
 
@@ -487,6 +489,37 @@ class TestJobReaper(object):
 
         job.refresh_from_db()
         assert job.status == 'waiting'
+
+    def test_reaper_does_not_load_ordinary_pending_jobs(self):
+        """Pending jobs have no execution_node; the reaper must exclude them in SQL, not in Python.
+
+        Loading them here would materialize the whole pending queue as full polymorphic objects
+        on every task manager cycle. If a pending Job row were loaded, django-polymorphic would
+        issue a follow-up query against main_job to build the concrete instance.
+        """
+        from awx.main.scheduler import TaskManager
+
+        Instance(hostname='awx-task-live', node_type='hybrid').save()
+        for _ in range(3):
+            Job.objects.create(status='pending')
+
+        with CaptureQueriesContext(connection) as ctx:
+            TaskManager().reap_jobs_from_orphaned_instances()
+
+        assert not [q['sql'] for q in ctx.captured_queries if '"main_job"' in q['sql']]
+        assert Job.objects.filter(status='pending').count() == 3
+
+    def test_reaper_still_reaps_job_on_unregistered_execution_node(self):
+        """The SQL narrowing must keep genuinely orphaned rows in scope."""
+        from awx.main.scheduler import TaskManager
+
+        Instance(hostname='awx-task-live', node_type='hybrid').save()
+        job = Job.objects.create(status='running', controller_node='awx-task-live', execution_node='exec-gone')
+
+        TaskManager().reap_jobs_from_orphaned_instances()
+
+        job.refresh_from_db()
+        assert job.status == 'failed'
 
 
 @pytest.mark.django_db
