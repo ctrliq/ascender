@@ -1,6 +1,6 @@
 import type { Inventory, SummaryFieldRef } from 'types/api';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import React, { useEffect, useCallback } from 'react';
-import { Formik, useField, useFormikContext } from 'formik';
 import { useLocation } from 'react-router';
 import { Form } from '@patternfly/react-core';
 import { VariablesField } from 'components/CodeEditor';
@@ -31,7 +31,7 @@ const SmartInventoryFormFields = ({
 }: SmartInventoryFormFieldsProps) => {
   const { t } = useLingui();
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
   const [organizationField, organizationMeta, organizationHelpers] =
     useField('organization');
   const [instanceGroupsField, , instanceGroupsHelpers] =
@@ -191,7 +191,7 @@ function SmartInventoryForm({
   }
 
   return (
-    <Formik
+    <FormRoot
       initialValues={initialValues}
       onSubmit={(values) => {
         onSubmit(values);
@@ -210,7 +210,7 @@ function SmartInventoryForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

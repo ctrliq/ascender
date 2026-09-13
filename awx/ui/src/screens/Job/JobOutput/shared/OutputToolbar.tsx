@@ -1,6 +1,5 @@
 import type { AnyJob } from 'types/api';
 import React, { useEffect, useState, useRef } from 'react';
-import styled from 'styled-components';
 import { calculateElapsed, secondsToHHMMSS } from 'util/dates';
 import {
   CopyIcon,
@@ -15,57 +14,8 @@ import { useConfig } from 'contexts/Config';
 import { useLingui } from '@lingui/react/macro';
 
 import JobCancelButton from 'components/JobCancelButton';
+import './OutputToolbar.css';
 
-const BadgeGroup = styled.div`
-  margin-left: 20px;
-  height: 18px;
-  display: inline-flex;
-`;
-
-const Badge = styled(PFBadge)`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  margin-left: 10px;
-  /* enlarge the badge value from PatternFly's small default */
-  font-size: 14px;
-  ${(props) =>
-    props.color
-      ? `
-  background-color: ${props.color}
-  color: white;
-  `
-      : null}
-`;
-
-const ElapsedBadge = styled(Badge)`
-  margin-right: 20px;
-  min-width: 70px;
-  font-variant-numeric: tabular-nums;
-`;
-
-const Wrapper = styled.div`
-  align-items: center;
-  display: flex;
-  flex-flow: row wrap;
-  font-size: 14px;
-
-  /* compact action icons + hover background, matching the workflow toolbar */
-  button {
-    margin: 0px 6px;
-    padding: 6px 10px;
-    font-size: 1.1rem;
-  }
-  /* only on enabled buttons, so disabled controls don't look interactive */
-  button:not(:disabled):not([aria-disabled='true']):hover {
-    background-color: var(--pf-v6-global--primary-color--100);
-    color: #fff;
-  }
-  /* whiten the icon; the dropdown toggle colors its icon separately */
-  button:not(:disabled):not([aria-disabled='true']):hover svg {
-    fill: #fff;
-  }
-`;
 const OUTPUT_NO_COUNT_JOB_TYPES = [
   'ad_hoc_command',
   'system_job',
@@ -126,60 +76,87 @@ const OutputToolbar = ({
   }, [job.started, job.finished]);
 
   return (
-    <Wrapper>
+    <div className="awx-output-toolbar__wrapper">
       {!hideCounts && (
         <>
           {playCount > 0 && (
-            <BadgeGroup aria-label={t`Play Count`}>
+            <div
+              className="awx-output-toolbar__badge-group"
+              aria-label={t`Play Count`}
+            >
               <div>{t`Plays`}</div>
-              <Badge isRead>{playCount}</Badge>
-            </BadgeGroup>
+              <PFBadge className="awx-output-toolbar__badge" isRead>
+                {playCount}
+              </PFBadge>
+            </div>
           )}
           {taskCount > 0 && (
-            <BadgeGroup aria-label={t`Task Count`}>
+            <div
+              className="awx-output-toolbar__badge-group"
+              aria-label={t`Task Count`}
+            >
               <div>{t`Tasks`}</div>
-              <Badge isRead>{taskCount}</Badge>
-            </BadgeGroup>
+              <PFBadge className="awx-output-toolbar__badge" isRead>
+                {taskCount}
+              </PFBadge>
+            </div>
           )}
           {totalHostCount > 0 && (
-            <BadgeGroup aria-label={t`Host Count`}>
+            <div
+              className="awx-output-toolbar__badge-group"
+              aria-label={t`Host Count`}
+            >
               <div>{t`Hosts`}</div>
-              <Badge isRead>{totalHostCount}</Badge>
-            </BadgeGroup>
+              <PFBadge className="awx-output-toolbar__badge" isRead>
+                {totalHostCount}
+              </PFBadge>
+            </div>
           )}
           {darkCount > 0 && (
-            <BadgeGroup aria-label={t`Unreachable Host Count`}>
+            <div
+              className="awx-output-toolbar__badge-group"
+              aria-label={t`Unreachable Host Count`}
+            >
               <div>{t`Unreachable`}</div>
               <Tooltip content={t`Unreachable Hosts`}>
-                <Badge color="#470000" isRead>
+                <PFBadge className="awx-output-toolbar__badge" isRead>
                   {darkCount}
-                </Badge>
+                </PFBadge>
               </Tooltip>
-            </BadgeGroup>
+            </div>
           )}
           {failureCount > 0 && (
-            <BadgeGroup aria-label={t`Failed Host Count`}>
+            <div
+              className="awx-output-toolbar__badge-group"
+              aria-label={t`Failed Host Count`}
+            >
               <div>{t`Failed`}</div>
               <Tooltip content={t`Failed Hosts`}>
-                <Badge color="#C9190B" isRead>
+                <PFBadge className="awx-output-toolbar__badge" isRead>
                   {failureCount}
-                </Badge>
+                </PFBadge>
               </Tooltip>
-            </BadgeGroup>
+            </div>
           )}
         </>
       )}
 
-      <BadgeGroup aria-label={t`Elapsed Time`}>
+      <div
+        className="awx-output-toolbar__badge-group"
+        aria-label={t`Elapsed Time`}
+      >
         <div>{t`Elapsed`}</div>
         <Tooltip content={t`Elapsed time that the job ran`}>
-          <ElapsedBadge isRead>
+          <PFBadge
+            className="awx-output-toolbar__badge awx-output-toolbar__elapsed-badge"
+            isRead
+          >
             {job.finished && job.elapsed != null
               ? secondsToHHMMSS(Number(job.elapsed))
               : activeJobElapsedTime}
-          </ElapsedBadge>
+          </PFBadge>
         </Tooltip>
-      </BadgeGroup>
+      </div>
       {['pending', 'waiting', 'running'].includes(jobStatus) &&
         (job.type === 'system_job'
           ? me?.is_superuser
@@ -274,7 +251,7 @@ const OutputToolbar = ({
             </DeleteButton>
           </Tooltip>
         )}
-    </Wrapper>
+    </div>
   );
 };
 

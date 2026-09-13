@@ -1,7 +1,7 @@
 import type { CredentialType } from 'types/api';
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import credentialTypes from '../data.credentialTypes.json';
 import CredentialField from './CredentialField';
@@ -29,7 +29,7 @@ function renderField(
   options = fieldOptions
 ) {
   return renderWithContexts(
-    <Formik
+    <FormRoot
       onSubmit={() => {}}
       initialValues={{
         passwordPrompts: {},
@@ -37,7 +37,7 @@ function renderField(
       }}
     >
       {() => <CredentialField fieldOptions={options} credentialType={type} />}
-    </Formik>
+    </FormRoot>
   );
 }
 

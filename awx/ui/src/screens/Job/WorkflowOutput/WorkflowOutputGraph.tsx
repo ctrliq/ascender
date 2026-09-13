@@ -21,6 +21,7 @@ import {
 } from 'components/Workflow';
 import WorkflowOutputLink from './WorkflowOutputLink';
 import WorkflowOutputNode from './WorkflowOutputNode';
+import './WorkflowOutputGraph.css';
 
 function WorkflowOutputGraph() {
   const [linkHelp, setLinkHelp] = useState<WorkflowLink | null>();
@@ -228,9 +229,9 @@ function WorkflowOutputGraph() {
         </WorkflowHelp>
       )}
       <svg
+        className="awx-workflow-output-graph__flex-width"
         id="workflow-svg"
         ref={svgRef}
-        css="flex: 1; width: 100%; background-color: var(--ascender-workflow-graph-bg); border: 1px solid var(--pf-v6-global--BorderColor--100); border-top: none;"
       >
         <rect width="100%" height="100%" opacity="0" />
         <g
@@ -275,7 +276,7 @@ function WorkflowOutputGraph() {
           ]}
         </g>
       </svg>
-      <div css="position: absolute; top: 75px;right: 20px;display: flex">
+      <div className="awx-workflow-output-graph__position-top">
         {showTools && (
           <WorkflowTools
             onFitGraph={handleFitGraph}

@@ -1,8 +1,4 @@
-import { fileURLToPath, URL } from 'node:url';
 import { transformAsync } from '@babel/core';
-
-const resolvePath = (relative) =>
-  fileURLToPath(new URL(relative, import.meta.url));
 
 const SOURCE = /\.[jt]sx?$/;
 
@@ -46,10 +42,7 @@ export function babelTransform() {
           // .tsx comes from preset-react above, which runs for every extension.
           '@babel/preset-typescript',
         ],
-        plugins: [
-          '@lingui/babel-plugin-lingui-macro',
-          resolvePath('../babel/jsx-compat-plugin.js'),
-        ],
+        plugins: ['@lingui/babel-plugin-lingui-macro'],
       });
       return { code: result.code, map: result.map };
     },

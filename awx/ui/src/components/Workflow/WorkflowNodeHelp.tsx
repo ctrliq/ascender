@@ -1,37 +1,13 @@
 import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import { ExclamationTriangleIcon } from '@patternfly/react-icons';
 import { secondsToHHMMSS } from 'util/dates';
 import { stringIsUUID } from 'util/strings';
 import type { WorkflowNode } from './workflowReducer';
-
-const GridDL = styled.dl`
-  column-gap: 15px;
-  display: grid;
-  grid-template-columns: max-content;
-  row-gap: 0px;
-  dt {
-    grid-column-start: 1;
-  }
-  dd {
-    grid-column-start: 2;
-  }
-`;
+import './WorkflowNodeHelp.css';
 
 // $hasJob is transient: a plain prop would be forwarded to the <p> and land in
 // the DOM as an unknown attribute.
-const ResourceDeleted = styled.p<{ $hasJob?: boolean }>`
-  margin-bottom: ${(props) => (props.$hasJob ? '10px' : '0px')};
-`;
-
-const StyledExclamationTriangleIcon = styled(ExclamationTriangleIcon)`
-  color: var(--pf-v6-global--warning-color--100);
-  height: 20px;
-  margin-right: 10px;
-  width: 20px;
-`;
-
 export interface WorkflowNodeHelpProps {
   node: WorkflowNode;
   [key: string]: unknown;
@@ -139,15 +115,19 @@ function WorkflowNodeHelp({ node }: WorkflowNodeHelpProps) {
   return (
     <>
       {!unifiedJobTemplate && (!job || job.type !== 'workflow_approval') && (
-        <ResourceDeleted $hasJob={Boolean(job)}>
-          <StyledExclamationTriangleIcon />
+        <p
+          className={`awx-workflow-node-help__resource-deleted${
+            job ? ' awx-workflow-node-help__resource-deleted--has-job' : ''
+          }`}
+        >
+          <ExclamationTriangleIcon className="awx-workflow-node-help__styled-exclamation-triangle-icon" />
           <Trans>
             The resource associated with this node has been deleted.
           </Trans>
-        </ResourceDeleted>
+        </p>
       )}
       {job && (
-        <GridDL>
+        <dl className="awx-workflow-node-help__grid-dl">
           {identifier && (
             <>
               <dt>
@@ -180,10 +160,10 @@ function WorkflowNodeHelp({ node }: WorkflowNodeHelpProps) {
               </dd>
             </>
           )}
-        </GridDL>
+        </dl>
       )}
       {unifiedJobTemplate && !job && (
-        <GridDL>
+        <dl className="awx-workflow-node-help__grid-dl">
           {identifier && (
             <>
               <dt>
@@ -202,10 +182,10 @@ function WorkflowNodeHelp({ node }: WorkflowNodeHelpProps) {
             <b>{t`Type`}</b>
           </dt>
           <dd id="workflow-node-help-type">{nodeType}</dd>
-        </GridDL>
+        </dl>
       )}
       {job && job.type !== 'workflow_approval' && (
-        <p css="margin-top: 10px">{t`Click to view job details`}</p>
+        <p className="awx-workflow-node-help__margin-top-10">{t`Click to view job details`}</p>
       )}
     </>
   );

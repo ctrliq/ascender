@@ -1,13 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 
 import { Trans, Plural, useLingui } from '@lingui/react/macro';
 
 import { RRule } from 'rrule';
 import type { Weekday } from 'rrule';
 import {
-  Checkbox as _Checkbox,
+  Checkbox,
   FormGroup,
   Radio,
   TextInput,
@@ -20,35 +19,7 @@ import AnsibleSelect from '../../AnsibleSelect';
 import FormField from '../../FormField';
 import DateTimePicker from './DateTimePicker';
 import type { ScheduleFrequency } from './types';
-
-const RunOnRadio = styled(Radio)`
-  display: flex;
-  align-items: center;
-
-  label {
-    display: block;
-    width: 100%;
-  }
-
-  &:not(:last-of-type) {
-    margin-bottom: 10px;
-  }
-
-  select:not(:first-of-type) {
-    margin-left: 10px;
-  }
-`;
-
-const RunEveryLabel = styled.p`
-  display: flex;
-  align-items: center;
-`;
-
-const Checkbox = styled(_Checkbox)`
-  &:not(:last-of-type) {
-    margin-right: 10px;
-  }
-`;
+import './FrequencyDetailSubform.css';
 
 export interface FrequencyDetailSubformProps {
   frequency: ScheduleFrequency;
@@ -235,7 +206,7 @@ const FrequencyDetailSubform = ({
 
   return (
     <>
-      <p css="grid-column: 1/-1">
+      <p className="awx-frequency-detail-subform__grid-column-1-1">
         <b>{getPeriodLabel()}</b>
       </p>
       <FormGroup
@@ -244,9 +215,9 @@ const FrequencyDetailSubform = ({
         isRequired
         label={isException ? t`Skip every` : t`Run every`}
       >
-        <div css="display: flex">
+        <div className="awx-frequency-detail-subform__display-flex">
           <TextInput
-            css="margin-right: 10px;"
+            className="awx-frequency-detail-subform__margin-right-10"
             id={`schedule-run-every-${id}`}
             type="number"
             min="1"
@@ -256,7 +227,9 @@ const FrequencyDetailSubform = ({
               interval.onChange(event);
             }}
           />
-          <RunEveryLabel>{getRunEveryLabel()}</RunEveryLabel>
+          <p className="awx-frequency-detail-subform__run-every-label">
+            {getRunEveryLabel()}
+          </p>
         </div>
         {intervalMeta.error && (
           <FormHelperText>
@@ -275,8 +248,9 @@ const FrequencyDetailSubform = ({
           isRequired
           label={t`On days`}
         >
-          <div css="display: flex">
+          <div className="awx-frequency-detail-subform__display-flex">
             <Checkbox
+              className="awx-frequency-detail-subform__checkbox"
               label={t`Sun`}
               isChecked={daysOfWeek.value?.some(
                 (day: Weekday) =>
@@ -291,6 +265,7 @@ const FrequencyDetailSubform = ({
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
+              className="awx-frequency-detail-subform__checkbox"
               label={t`Mon`}
               isChecked={daysOfWeek.value?.some(
                 (day: Weekday) =>
@@ -305,6 +280,7 @@ const FrequencyDetailSubform = ({
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
+              className="awx-frequency-detail-subform__checkbox"
               label={t`Tue`}
               isChecked={daysOfWeek.value?.some(
                 (day: Weekday) =>
@@ -319,6 +295,7 @@ const FrequencyDetailSubform = ({
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
+              className="awx-frequency-detail-subform__checkbox"
               label={t`Wed`}
               isChecked={daysOfWeek.value?.some(
                 (day: Weekday) =>
@@ -333,6 +310,7 @@ const FrequencyDetailSubform = ({
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
+              className="awx-frequency-detail-subform__checkbox"
               label={t`Thu`}
               isChecked={daysOfWeek.value?.some(
                 (day: Weekday) =>
@@ -347,6 +325,7 @@ const FrequencyDetailSubform = ({
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
+              className="awx-frequency-detail-subform__checkbox"
               label={t`Fri`}
               isChecked={daysOfWeek.value?.some(
                 (day: Weekday) =>
@@ -361,6 +340,7 @@ const FrequencyDetailSubform = ({
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
+              className="awx-frequency-detail-subform__checkbox"
               label={t`Sat`}
               isChecked={daysOfWeek.value?.some(
                 (day: Weekday) =>
@@ -394,23 +374,24 @@ const FrequencyDetailSubform = ({
             isRequired
             label={t`Run on`}
           >
-            <RunOnRadio
+            <Radio
+              className="awx-frequency-detail-subform__run-on-radio"
               id={`schedule-run-on-day-${id}`}
               name={`${prefix}.runOn`}
               label={
-                <div css="display: flex;align-items: center;">
+                <div className="awx-frequency-detail-subform__display-align-items">
                   {frequency === 'month' && (
                     <span
+                      className="awx-frequency-detail-subform__margin-right-10"
                       id="radio-schedule-run-on-day"
-                      css="margin-right: 10px;"
                     >
                       <Trans>Day</Trans>
                     </span>
                   )}
                   {frequency === 'year' && (
                     <AnsibleSelect
+                      className="awx-frequency-detail-subform__margin-right-10"
                       id={`schedule-run-on-day-month-${id}`}
-                      css="margin-right: 10px"
                       isDisabled={runOn.value !== 'day'}
                       data={monthOptions}
                       {...runOnDayMonth}
@@ -437,14 +418,15 @@ const FrequencyDetailSubform = ({
                 runOn.onChange(event);
               }}
             />
-            <RunOnRadio
+            <Radio
+              className="awx-frequency-detail-subform__run-on-radio"
               id={`schedule-run-on-the-${id}`}
               name={`${prefix}.runOn`}
               label={
-                <div css="display: flex;align-items: center;">
+                <div className="awx-frequency-detail-subform__display-align-items">
                   <span
+                    className="awx-frequency-detail-subform__margin-right-10"
                     id={`radio-schedule-run-on-the-${id}`}
-                    css="margin-right: 10px;"
                   >
                     <Trans>The</Trans>
                   </span>
@@ -525,8 +507,8 @@ const FrequencyDetailSubform = ({
                   {frequency === 'year' && (
                     <>
                       <span
+                        className="awx-frequency-detail-subform__margin-left-10"
                         id={`of-schedule-run-on-the-month-${id}`}
-                        css="margin-left: 10px;"
                       >
                         <Trans>of</Trans>
                       </span>

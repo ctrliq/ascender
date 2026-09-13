@@ -1,7 +1,7 @@
 import type { LaunchCredential } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useFormikContext } from 'formik';
+import { useFormContext } from 'components/Form';
 import CredentialPasswordsStep from './CredentialPasswordsStep';
 import StepName from './StepName';
 import type {
@@ -22,7 +22,7 @@ export default function useCredentialPasswordsStep(
   visitedSteps: VisitedSteps
 ): LaunchStep {
   const { t } = useLingui();
-  const { values, setFieldError } = useFormikContext<LaunchPromptValues>();
+  const { values, setFieldError } = useFormContext<LaunchPromptValues>();
   // Seeded by getInitialValues below before the step is reachable.
   const credentialPasswords = values.credential_passwords ?? {};
   const hasError =

@@ -12,10 +12,10 @@ import {
   TextInputGroup,
   TextInputGroupMain,
 } from '@patternfly/react-core';
-import styled from 'styled-components';
 
 import ChipGroup from 'components/ChipGroup';
 import { stringIsUUID } from 'util/strings';
+import './WorkflowOutputNavigation.css';
 
 // api job type -> the segment the job routes are mounted under, the inverse of
 // JOB_URL_SEGMENT_MAP in screens/Job/Job.js. A type missing here builds a url
@@ -34,10 +34,6 @@ const JOB_TYPE_URL_SEGMENT_MAP = {
 // short chip, which collapsed the toggle and the menu with it, down to the width
 // of the filter input and truncating the node names. A floor keeps both usable,
 // and leaves room for the longer translations of the position text.
-const WorkflowMenuToggle = styled(MenuToggle)`
-  min-width: 220px;
-`;
-WorkflowMenuToggle.displayName = 'WorkflowMenuToggle';
 
 /**
  * One node of the workflow, as the workflow job's nodes endpoint returns it.
@@ -173,7 +169,8 @@ function WorkflowOutputNavigation({
         parentRef?.current ? { appendTo: parentRef.current } : undefined
       }
       toggle={(toggleRef) => (
-        <WorkflowMenuToggle
+        <MenuToggle
+          className="awx-workflow-output-navigation__menu-toggle"
           ref={toggleRef}
           onClick={() => setIsOpen(!isOpen)}
           isExpanded={isOpen}
@@ -193,7 +190,7 @@ function WorkflowOutputNavigation({
             (viewedPosition > 0
               ? positionLabel(viewedPosition)
               : t`Workflow Jobs (${total})`)}
-        </WorkflowMenuToggle>
+        </MenuToggle>
       )}
     >
       <TextInputGroup>

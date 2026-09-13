@@ -1,7 +1,7 @@
 import type { SettingConfig } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import ContentError from 'components/ContentError';
@@ -112,7 +112,7 @@ function GitHubEdit() {
       {Boolean(isLoading) && <ContentLoading />}
       {!isLoading && Boolean(error) && <ContentError error={error} />}
       {!isLoading && github && (
-        <Formik initialValues={initialValues(github)} onSubmit={handleSubmit}>
+        <FormRoot initialValues={initialValues(github)} onSubmit={handleSubmit}>
           {(formik) => (
             <Form autoComplete="off" onSubmit={formik.handleSubmit}>
               <FormColumnLayout>
@@ -152,7 +152,7 @@ function GitHubEdit() {
               )}
             </Form>
           )}
-        </Formik>
+        </FormRoot>
       )}
     </CardBody>
   );

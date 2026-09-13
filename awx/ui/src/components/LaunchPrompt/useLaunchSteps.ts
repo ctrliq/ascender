@@ -4,7 +4,7 @@ import type {
   LaunchableResource,
 } from 'types/api';
 import { useState, useEffect } from 'react';
-import { useFormikContext } from 'formik';
+import { useFormContext } from 'components/Form';
 import type { LabelInput } from 'util/labels';
 import useInventoryStep from './steps/useInventoryStep';
 import useCredentialsStep from './steps/useCredentialsStep';
@@ -62,7 +62,7 @@ export default function useLaunchSteps(
   const [visited, setVisited] = useState<Record<string, boolean>>({});
   const [isReady, setIsReady] = useState(false);
   const { touched, values: formikValues } =
-    useFormikContext<LaunchPromptValues>();
+    useFormContext<LaunchPromptValues>();
   const steps = [
     useInventoryStep(launchConfig, resource, visited),
     useCredentialsStep(
@@ -81,7 +81,7 @@ export default function useLaunchSteps(
     useOtherPromptsStep(launchConfig, resource, labels),
     useSurveyStep(launchConfig, surveyConfig, resource, visited),
   ];
-  const { resetForm } = useFormikContext<LaunchPromptValues>();
+  const { resetForm } = useFormContext<LaunchPromptValues>();
   const hasErrors = steps.some((step) => step.hasError);
 
   steps.push(

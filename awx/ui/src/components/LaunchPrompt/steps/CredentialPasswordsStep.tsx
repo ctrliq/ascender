@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Form } from '@patternfly/react-core';
-import { useFormikContext } from 'formik';
+import { useFormContext } from 'components/Form';
 import { PasswordField } from '../../FormField';
 import type { LaunchConfig, LaunchPromptValues } from '../types';
 
@@ -16,7 +16,7 @@ function CredentialPasswordsStep({
   const { t } = useLingui();
   const {
     values: { credentials },
-  } = useFormikContext<LaunchPromptValues>();
+  } = useFormContext<LaunchPromptValues>();
 
   const vaultsThatPrompt: string[] = [];
   let showcredentialPasswordSsh = false;

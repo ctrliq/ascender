@@ -1,12 +1,12 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import PasswordInput from './PasswordInput';
 
 function renderInput() {
   return renderWithContexts(
-    <Formik
+    <FormRoot
       initialValues={{
         password: '',
       }}
@@ -15,7 +15,7 @@ function renderInput() {
       {() => (
         <PasswordInput id="test-password" name="password" label="Password" />
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

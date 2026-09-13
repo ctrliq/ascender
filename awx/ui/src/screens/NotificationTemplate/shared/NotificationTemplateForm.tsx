@@ -1,6 +1,6 @@
 import type { NotificationTemplate, SummaryFieldRef } from 'types/api';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import React, { useCallback } from 'react';
-import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import {
   Form,
@@ -84,7 +84,7 @@ function NotificationTemplateFormFields({
 }: NotificationTemplateFormFieldsProps) {
   const { t } = useLingui();
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<NotificationTemplateFormValues>();
+    useFormContext<NotificationTemplateFormValues>();
   const [orgField, orgMeta, orgHelpers] = useField('organization');
   const [typeField, typeMeta] = useField({
     name: 'notification_type',
@@ -210,7 +210,7 @@ function NotificationTemplateForm({
   >;
 
   return (
-    <Formik
+    <FormRoot
       initialValues={{
         name: template.name,
         description: template.description,
@@ -272,7 +272,7 @@ function NotificationTemplateForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

@@ -7,12 +7,12 @@ import React, { useState } from 'react';
 import { ExpandableSection } from '@patternfly/react-core';
 import Wizard from 'components/Wizard';
 import { useLingui } from '@lingui/react/macro';
-import { Formik, useFormikContext } from 'formik';
 import { useDismissableError } from 'hooks/useRequest';
 import mergeExtraVars from 'util/prompt/mergeExtraVars';
 import getSurveyValues from 'util/prompt/getSurveyValues';
 import createNewLabels from 'util/labels';
 import type { LabelInput } from 'util/labels';
+import { FormRoot, useFormContext } from 'components/Form';
 import ContentLoading from '../ContentLoading';
 import ContentError from '../ContentError';
 import useLaunchSteps from './useLaunchSteps';
@@ -42,7 +42,7 @@ function PromptModalForm({
   resourceDefaultCredentials,
 }: PromptModalFormProps) {
   const { t } = useLingui();
-  const { setFieldTouched, values } = useFormikContext<LaunchPromptValues>();
+  const { setFieldTouched, values } = useFormContext<LaunchPromptValues>();
   const [showDescription, setShowDescription] = useState(false);
 
   const {
@@ -207,7 +207,7 @@ function LaunchPrompt({
   resourceDefaultCredentials = [],
 }: LaunchPromptProps) {
   return (
-    <Formik initialValues={{}} onSubmit={(values) => onLaunch(values)}>
+    <FormRoot initialValues={{}} onSubmit={(values) => onLaunch(values)}>
       {/* Both are read before the prompt is opened, which is what gates it. */}
       <PromptModalForm
         onSubmit={(values) => onLaunch(values)}
@@ -219,7 +219,7 @@ function LaunchPrompt({
         resourceDefaultCredentials={resourceDefaultCredentials}
         instanceGroups={[]}
       />
-    </Formik>
+    </FormRoot>
   );
 }
 

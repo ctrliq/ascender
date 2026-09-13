@@ -1,23 +1,11 @@
 import React from 'react';
 
 import { Spinner } from '@patternfly/react-core';
-import styled from 'styled-components';
-
-const UpdatingContent = styled.div`
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  z-index: 300;
-  width: 100%;
-  height: 100%;
-  & + * {
-    opacity: 0.5;
-  }
-`;
+import './LoadingSpinner.css';
 
 const LoadingSpinner = () => (
-  <UpdatingContent>
+  <div className="awx-loading-spinner__updating-content">
     <Spinner />
-  </UpdatingContent>
+  </div>
 );
 export default LoadingSpinner;

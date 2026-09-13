@@ -1,6 +1,6 @@
 import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback } from 'react';
-import { useField, useFormikContext } from 'formik';
+import { useField, useFormContext } from 'components/Form';
 import { useLingui } from '@lingui/react/macro';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
@@ -25,7 +25,7 @@ const GCESubForm = ({ autoPopulateCredential }: GCESubFormProps) => {
   const { t } = useLingui();
   const helpText = getHelpText();
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
   const [credentialField, credentialMeta, credentialHelpers] =
     useField('credential');
   const config = useConfig();
