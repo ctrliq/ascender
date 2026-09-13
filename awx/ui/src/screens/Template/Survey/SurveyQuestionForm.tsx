@@ -1,6 +1,6 @@
 import type { SurveyQuestion } from 'types/api';
+import { FormRoot, useField } from 'components/Form';
 import React from 'react';
-import { Formik, useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import { Form, FormGroup } from '@patternfly/react-core';
 import { FormColumnLayout } from 'components/FormLayout';
@@ -191,7 +191,7 @@ function SurveyQuestionForm({
   }
 
   return (
-    <Formik
+    <FormRoot
       enableReinitialize
       initialValues={initialValues}
       onSubmit={handleSubmit}
@@ -324,7 +324,7 @@ function SurveyQuestionForm({
           />
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

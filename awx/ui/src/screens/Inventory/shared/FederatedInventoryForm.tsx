@@ -1,6 +1,6 @@
 import type { AnyInventory, Inventory, SummaryFieldRef } from 'types/api';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import React, { useCallback } from 'react';
-import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import { required } from 'util/validators';
 import {
@@ -27,7 +27,7 @@ function FederatedInventoryFormFields({
 }: FederatedInventoryFormFieldsProps) {
   const { t } = useLingui();
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
 
   const [organizationField, organizationMeta, organizationHelpers] =
     useField('organization');
@@ -158,7 +158,7 @@ function FederatedInventoryForm({
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+    <FormRoot initialValues={initialValues} onSubmit={onSubmit}>
       {(formik) => (
         <Form role="form" autoComplete="off" onSubmit={formik.handleSubmit}>
           <FormColumnLayout>
@@ -171,7 +171,7 @@ function FederatedInventoryForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

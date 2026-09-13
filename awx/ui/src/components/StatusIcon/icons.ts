@@ -1,8 +1,6 @@
-import styled, { keyframes } from 'styled-components';
 import {
   CheckCircleIcon,
   ExclamationCircleIcon,
-  SyncAltIcon,
   ExclamationTriangleIcon,
   ClockIcon,
   MinusCircleIcon,
@@ -10,19 +8,7 @@ import {
   PlusCircleIcon,
 } from '@patternfly/react-icons';
 
-const Spin = keyframes`
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(1turn);
-  }
-`;
-
-const RunningIcon = styled(SyncAltIcon)`
-  animation: ${Spin} 1.75s linear infinite;
-`;
-RunningIcon.displayName = 'RunningIcon';
+import RunningIcon from './RunningIcon';
 
 const icons = {
   approved: CheckCircleIcon,

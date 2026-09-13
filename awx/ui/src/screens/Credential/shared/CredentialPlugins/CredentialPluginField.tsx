@@ -2,7 +2,7 @@ import type { CredentialField } from 'types/api';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import {
   Button,
   ButtonVariant,

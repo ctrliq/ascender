@@ -1,5 +1,6 @@
 import React from 'react';
 import { t } from '@lingui/core/macro';
+import './Project.helptext.css';
 
 const getProjectHelpText = () => ({
   executionEnvironment: t`The execution environment that will be used for jobs that use this project. This will be used as fallback when an execution environment has not been explicitly assigned at the job template or workflow level.`,
@@ -15,7 +16,7 @@ const getProjectHelpText = () => ({
   githubSourceControlUrl: (
     <span>
       {t`Example URLs for GIT Source Control include:`}
-      <ul css="margin: 10px 0 10px 20px">
+      <ul className="awx-project-helptext__list">
         <li>
           <code>https://github.com/ansible/ansible.git</code>
         </li>
@@ -32,7 +33,7 @@ const getProjectHelpText = () => ({
   svnSourceControlUrl: (
     <span>
       {t`Example URLs for Subversion Source Control include:`}
-      <ul css={{ margin: '10px 0 10px 20px' }}>
+      <ul className="awx-project-helptext__list">
         <li>
           <code>https://github.com/ansible/ansible</code>
         </li>
@@ -49,7 +50,7 @@ const getProjectHelpText = () => ({
   archiveUrl: (
     <span>
       {t`Example URLs for Remote Archive Source Control include:`}
-      <ul css={{ margin: '10px 0 10px 20px' }}>
+      <ul className="awx-project-helptext__list">
         <li>
           <code>https://github.com/username/project/archive/v0.0.1.tar.gz</code>
         </li>
@@ -69,7 +70,7 @@ const getProjectHelpText = () => ({
       <br />
       <br />
       {t`Examples include:`}
-      <ul css={{ margin: '10px 0 10px 20px' }}>
+      <ul className="awx-project-helptext__list">
         <li>
           <code>refs/*:refs/remotes/origin/*</code>
         </li>

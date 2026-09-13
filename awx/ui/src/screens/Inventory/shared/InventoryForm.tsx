@@ -1,6 +1,6 @@
 import type { AnyInventory, SummaryFieldRef } from 'types/api';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import React, { useCallback, useState } from 'react';
-import { Formik, useField, useFormikContext } from 'formik';
 import { Form, FormGroup } from '@patternfly/react-core';
 import { VariablesField } from 'components/CodeEditor';
 import Popover from 'components/Popover';
@@ -31,7 +31,7 @@ function InventoryFormFields({ inventory }: InventoryFormFieldsProps) {
   const helpText = useHelpText();
   const [contentError, setContentError] = useState<unknown>(false);
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
   const [organizationField, organizationMeta, organizationHelpers] =
     useField('organization');
   const [instanceGroupsField, , instanceGroupsHelpers] =
@@ -169,7 +169,7 @@ function InventoryForm({
     allow_deletes_while_in_use: inventory.allow_deletes_while_in_use || false,
   };
   return (
-    <Formik
+    <FormRoot
       initialValues={initialValues}
       onSubmit={(values) => {
         onSubmit(values);
@@ -187,7 +187,7 @@ function InventoryForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

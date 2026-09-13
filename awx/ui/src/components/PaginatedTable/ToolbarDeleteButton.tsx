@@ -1,6 +1,5 @@
 import type { SummaryFields } from 'types/api';
 import React, { useContext, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import {
   Alert,
   Badge,
@@ -19,16 +18,7 @@ import type {
 import AlertModal from '../AlertModal';
 
 import ErrorDetail from '../ErrorDetail';
-
-const WarningMessage = styled(Alert)`
-  margin-top: 10px;
-`;
-
-const Label = styled.span`
-  && {
-    margin-right: 10px;
-  }
-`;
+import './ToolbarDeleteButton.css';
 
 /** An item a list's toolbar can delete, with what the button reads off it. */
 export interface DeletableItem {
@@ -165,7 +155,9 @@ function ToolbarDeleteButton({
         {deleteDetails &&
           deleteDetails.map(({ label, count }) => (
             <div key={label.id} aria-label={`${i18n._(label)}: ${count}`}>
-              <Label>{i18n._(label)}</Label>
+              <span className="awx-toolbar-delete-button__label">
+                {i18n._(label)}
+              </span>
               <Badge>{count}</Badge>
             </div>
           ))}
@@ -269,7 +261,8 @@ function ToolbarDeleteButton({
             </span>
           ))}
           {shouldShowDeleteWarning && (
-            <WarningMessage
+            <Alert
+              className="awx-toolbar-delete-button__warning-message"
               variant="warning"
               isInline
               title={buildDeleteWarning()}

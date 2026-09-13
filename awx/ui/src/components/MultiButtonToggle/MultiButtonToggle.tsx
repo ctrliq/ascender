@@ -1,15 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Button } from '@patternfly/react-core';
 import ButtonGroup from './ButtonGroup';
-
-const SmallButton = styled(Button)`
-  && {
-    padding: 3px 8px;
-    font-size: var(--pf-v6-global--FontSize--xs);
-  }
-`;
-SmallButton.displayName = 'SmallButton';
+import './MultiButtonToggle.css';
 
 export interface MultiButtonToggleProps<V extends string = string> {
   /** Each button's value and the label it shows. */
@@ -37,16 +29,16 @@ function MultiButtonToggle<V extends string = string>({
     <ButtonGroup>
       {buttons &&
         buttons.map(([buttonValue, buttonLabel]) => (
-          <SmallButton
+          <Button
             aria-label={buttonLabel}
             ouiaId={`${name}-${buttonLabel}-button`}
             key={buttonLabel}
-            className={`toggle-button-${buttonValue}`}
+            className={`awx-multi-button-toggle__small-button ${`toggle-button-${buttonValue}`}`}
             onClick={() => setValue(buttonValue)}
             variant={buttonValue === value ? 'primary' : 'secondary'}
           >
             {buttonLabel}
-          </SmallButton>
+          </Button>
         ))}
     </ButtonGroup>
   );

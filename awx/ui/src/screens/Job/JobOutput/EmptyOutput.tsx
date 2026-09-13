@@ -8,11 +8,11 @@ import {
 import ContentEmpty from 'components/ContentEmpty';
 import { useLingui } from '@lingui/react/macro';
 
-import styled from 'styled-components';
+import './EmptyOutput.css';
 
-const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
-  color: var(--pf-v6-global--danger-color--100);
-`;
+const FailureIcon = () => (
+  <PFExclamationCircleIcon className="awx-empty-output__icon" />
+);
 
 export interface EmptyOutputProps {
   hasQueryParams: boolean;
@@ -67,14 +67,14 @@ export default function EmptyOutput({
           `${job.job_explanation}`
         )
     );
-    icon = ExclamationCircleIcon;
+    icon = FailureIcon;
   } else {
     title = t`No output found for this job.`;
   }
 
   return (
     <ContentEmpty
-      css="height: 100%"
+      className="awx-empty-output__height-100"
       title={title}
       message={message}
       icon={icon}

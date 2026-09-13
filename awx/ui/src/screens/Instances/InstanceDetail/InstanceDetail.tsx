@@ -13,7 +13,6 @@ import {
   Slider,
 } from '@patternfly/react-core';
 import { DownloadIcon, OutlinedClockIcon } from '@patternfly/react-icons';
-import styled from 'styled-components';
 
 import { useConfig } from 'contexts/Config';
 import { InstancesAPI } from 'api';
@@ -35,23 +34,7 @@ import useRequest, {
 import HealthCheckAlert from 'components/HealthCheckAlert';
 import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import RemoveInstanceButton from '../Shared/RemoveInstanceButton';
-
-const Unavailable = styled.span`
-  color: var(--pf-v6-global--danger-color--200);
-`;
-
-const SliderHolder = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const SliderForks = styled.div`
-  flex-grow: 1;
-  margin-right: 8px;
-  margin-left: 8px;
-  text-align: center;
-`;
+import './InstanceDetail.css';
 
 /**
  * How many forks an instance offers at the capacity it is set to, which is the
@@ -297,11 +280,17 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
                 label={t`Capacity Adjustment`}
                 dataCy="capacity-adjustment"
                 value={
-                  <SliderHolder data-cy="slider-holder">
+                  <div
+                    className="awx-instance-detail__slider-holder"
+                    data-cy="slider-holder"
+                  >
                     <div data-cy="cpu-capacity">
                       {t`CPU ${instance.cpu_capacity}`}
                     </div>
-                    <SliderForks data-cy="slider-forks">
+                    <div
+                      className="awx-instance-detail__slider-forks"
+                      data-cy="slider-forks"
+                    >
                       <div data-cy="number-forks">
                         <Plural value={forks} one="# fork" other="# forks" />
                       </div>
@@ -319,11 +308,11 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
                         }
                         data-cy="slider"
                       />
-                    </SliderForks>
+                    </div>
                     <div data-cy="mem-capacity">
                       {t`RAM ${instance.mem_capacity}`}
                     </div>
-                  </SliderHolder>
+                  </div>
                 }
               />
               <Detail
@@ -341,7 +330,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
                       aria-label={t`Used capacity`}
                     />
                   ) : (
-                    <Unavailable>{t`Unavailable`}</Unavailable>
+                    <span className="awx-instance-detail__unavailable">{t`Unavailable`}</span>
                   )
                 }
               />
@@ -401,7 +390,6 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
           )}
           {!isHopNode && (
             <InstanceToggle
-              css="display: inline-flex;"
               fetchInstances={fetchDetails}
               instance={instance}
               dataCy="enable-instance"

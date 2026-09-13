@@ -1,7 +1,7 @@
 import type { ApiResponse } from 'api/Base';
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { InventoriesAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -38,9 +38,9 @@ describe('InventoryLookup', () => {
 
   test('should render successfully and fetch data', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <InventoryLookup onChange={() => {}} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(InventoriesAPI.read).toHaveBeenCalledTimes(1));
     expect(InventoriesAPI.read).toHaveBeenCalledWith({
@@ -54,9 +54,9 @@ describe('InventoryLookup', () => {
 
   test('should fetch only regular inventories when hideSmartInventories is true', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <InventoryLookup onChange={() => {}} hideAdvancedInventories />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(InventoriesAPI.read).toHaveBeenCalledTimes(1));
     expect(InventoriesAPI.read).toHaveBeenCalledWith({
@@ -74,9 +74,9 @@ describe('InventoryLookup', () => {
       data: { actions: { GET: {} }, related_search_fields: [] },
     } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <InventoryLookup onChange={() => {}} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(InventoriesAPI.read).toHaveBeenCalledTimes(1));
     expect(screen.getByRole('button', { name: 'Search' })).toBeEnabled();
@@ -87,9 +87,9 @@ describe('InventoryLookup', () => {
       data: { actions: { GET: {} }, related_search_fields: [] },
     } as unknown as ResponseOf<typeof InventoriesAPI.readOptions>);
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <InventoryLookup isDisabled onChange={() => {}} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(InventoriesAPI.read).toHaveBeenCalledTimes(1));
     expect(screen.getByRole('button', { name: 'Search' })).toBeDisabled();

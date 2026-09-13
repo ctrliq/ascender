@@ -2,7 +2,7 @@
 import type { OptionsChoice } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import {
   Form,
   FormGroup,
@@ -12,7 +12,6 @@ import {
   HelperText,
   HelperTextItem,
 } from '@patternfly/react-core';
-import styled from 'styled-components';
 import { required } from 'util/validators';
 import useBrandName from 'hooks/useBrandName';
 import { VerbositySelectField } from 'components/VerbositySelectField';
@@ -25,10 +24,7 @@ import {
   FormCheckboxLayout,
 } from '../FormLayout';
 import Popover from '../Popover';
-
-const TooltipWrapper = styled.div`
-  text-align: left;
-`;
+import './AdHocDetailsStep.css';
 
 export interface AdHocDetailsStepProps {
   /** The ansible modules the command may run, as [value, label] pairs. */
@@ -199,7 +195,6 @@ function AdHocDetailsStep({ moduleOptions }: AdHocDetailsStepProps) {
               }
             >
               <Switch
-                css="display: inline-flex;"
                 id="diff_mode"
                 label={t`On`}
 
@@ -251,7 +246,7 @@ function AdHocDetailsStep({ moduleOptions }: AdHocDetailsStepProps) {
             id="extra_vars"
             name="extra_vars"
             tooltip={
-              <TooltipWrapper>
+              <div className="awx-ad-hoc-details-step__tooltip-wrapper">
                 <p>
                   {t`Pass extra command line changes. There are two ansible command line parameters: `}
                   <br />
@@ -280,7 +275,7 @@ function AdHocDetailsStep({ moduleOptions }: AdHocDetailsStepProps) {
                     {'\n'}password: magic
                   </pre>
                 </code>
-              </TooltipWrapper>
+              </div>
             }
             label={t`Extra variables`}
             aria-label={t`Extra variables`}

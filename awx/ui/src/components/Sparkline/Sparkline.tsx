@@ -1,24 +1,13 @@
 import type { RecentJob } from 'types/api';
 import React from 'react';
 
-import { Link as _Link } from 'react-router';
+import { Link } from 'react-router';
 import { Tooltip } from '@patternfly/react-core';
-import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import { formatDateString } from 'util/dates';
 import StatusIcon from '../StatusIcon';
 import { JOB_TYPE_URL_SEGMENTS } from '../../constants';
-
-/* eslint-disable react/jsx-pascal-case */
-const Link = styled((props) => <_Link {...props} />)`
-  margin-right: 5px;
-`;
-
-const Wrapper = styled.div`
-  display: inline-flex;
-  flex-wrap: wrap;
-`;
-/* eslint-enable react/jsx-pascal-case */
+import './Sparkline.css';
 
 export interface SparklineProps {
   jobs?: RecentJob[];
@@ -46,6 +35,7 @@ const Sparkline = ({ jobs = [] }: SparklineProps) => {
   const statusIcons = jobs.map((job) => (
     <Tooltip position="top" content={generateTooltip(job)} key={job.id}>
       <Link
+        className="awx-sparkline__link"
         aria-label={t`View job ${job.id}`}
         to={`/jobs/${JOB_TYPE_URL_SEGMENTS[job.type as string]}/${job.id}`}
       >
@@ -54,7 +44,7 @@ const Sparkline = ({ jobs = [] }: SparklineProps) => {
     </Tooltip>
   ));
 
-  return <Wrapper>{statusIcons}</Wrapper>;
+  return <div className="awx-sparkline__wrapper">{statusIcons}</div>;
 };
 
 export default Sparkline;

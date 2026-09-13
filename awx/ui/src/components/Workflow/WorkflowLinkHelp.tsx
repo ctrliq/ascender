@@ -1,21 +1,8 @@
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import type { WorkflowLink } from './workflowReducer';
-
-const GridDL = styled.dl`
-  column-gap: 15px;
-  display: grid;
-  grid-template-columns: max-content;
-  row-gap: 0px;
-  dt {
-    grid-column-start: 1;
-  }
-  dd {
-    grid-column-start: 2;
-  }
-`;
+import './WorkflowLinkHelp.css';
 
 export interface WorkflowLinkHelpProps {
   link: WorkflowLink;
@@ -55,7 +42,7 @@ function WorkflowLinkHelp({ link }: WorkflowLinkHelpProps) {
   }
 
   return (
-    <GridDL>
+    <dl className="awx-workflow-link-help__grid-dl">
       <dt>
         <b>{t`Run`}</b>
       </dt>
@@ -76,7 +63,7 @@ function WorkflowLinkHelp({ link }: WorkflowLinkHelpProps) {
           </dd>
         </>
       )}
-    </GridDL>
+    </dl>
   );
 }
 

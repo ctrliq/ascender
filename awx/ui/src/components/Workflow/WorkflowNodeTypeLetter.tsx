@@ -1,22 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import { PauseIcon } from '@patternfly/react-icons';
 import type { WorkflowNode } from './workflowReducer';
-
-const NodeTypeLetter = styled.div`
-  background-color: #393f43;
-  border-radius: 50%;
-  color: white;
-  font-size: 10px;
-  line-height: 20px;
-  text-align: center;
-  height: 20px;
-  width: 20px;
-`;
-
-const CenteredPauseIcon = styled(PauseIcon)`
-  vertical-align: middle !important;
-`;
+import './WorkflowNodeTypeLetter.css';
 
 export interface WorkflowNodeTypeLetterProps {
   node: WorkflowNode;
@@ -64,7 +49,9 @@ function WorkflowNodeTypeLetter({ node }: WorkflowNodeTypeLetterProps) {
         break;
       case 'workflow_approval_template':
       case 'workflow_approval':
-        nodeTypeLetter = <CenteredPauseIcon />;
+        nodeTypeLetter = (
+          <PauseIcon className="awx-workflow-node-type-letter__centered-pause-icon" />
+        );
         break;
       default:
         nodeTypeLetter = '';
@@ -73,9 +60,12 @@ function WorkflowNodeTypeLetter({ node }: WorkflowNodeTypeLetterProps) {
 
   return (
     <foreignObject y="50" x="-10" height="20" width="20">
-      <NodeTypeLetter id={`node-${node.id}-type-letter`}>
+      <div
+        className="awx-workflow-node-type-letter__letter"
+        id={`node-${node.id}-type-letter`}
+      >
         {nodeTypeLetter}
-      </NodeTypeLetter>
+      </div>
     </foreignObject>
   );
 }

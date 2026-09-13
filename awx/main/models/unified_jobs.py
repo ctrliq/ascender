@@ -537,6 +537,23 @@ class UnifiedJob(
 ):
     """
     Concrete base class for unified job run by the task engine.
+
+    A job is two rows: one here and one in its own table, joined on
+    unifiedjob_ptr_id, which is what lets /api/v2/jobs/42/ and
+    /api/v2/unified_jobs/42/ answer for the same thing. Reading a mixed page
+    costs one query for the base rows and one more per job type on the page,
+    so a page of fifty across five types is six queries, and a page of a
+    hundred across the same five is still six.
+
+    That bound, on types rather than on rows, is why flattening this into a
+    table per job type has never been worth doing: it is the cost the roadmap
+    item weighs, and it does not grow with the table. The tests in
+    awx/main/tests/functional/models/test_unified_job_queries.py hold it there,
+    so an N+1 introduced into this path fails the suite rather than an instance.
+
+    The content type lookups behind get_real_instance_class are cached by
+    Django for the life of the process, so a fresh worker pays five extra
+    queries once and none after that.
     """
 
     STATUS_CHOICES = UnifiedJobTemplate.JOB_STATUS_CHOICES

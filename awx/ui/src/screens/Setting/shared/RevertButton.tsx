@@ -1,16 +1,9 @@
 import React from 'react';
 
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import { Button, Tooltip } from '@patternfly/react-core';
-import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
-
-const ButtonWrapper = styled.div`
-  margin-left: auto;
-  &&& {
-    --pf-v6-c-button--FontSize: var(--pf-v6-c-button--m-small--FontSize);
-  }
-`;
+import './RevertButton.css';
 
 export interface RevertButtonProps {
   id: string;
@@ -57,7 +50,7 @@ function RevertButton({
 
   return (
     <Tooltip entryDelay={700} content={tooltipContent}>
-      <ButtonWrapper>
+      <div className="awx-revert-button__wrapper">
         <Button
           aria-label={isRevertable ? t`Revert` : t`Undo`}
           ouiaId={`${id}-revert`}
@@ -70,7 +63,7 @@ function RevertButton({
         >
           {isRevertable ? t`Revert` : t`Undo`}
         </Button>
-      </ButtonWrapper>
+      </div>
     </Tooltip>
   );
 }
