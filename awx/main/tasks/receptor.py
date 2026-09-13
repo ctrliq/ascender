@@ -16,7 +16,7 @@ from django.db import connections
 # Runner
 import ansible_runner
 
-# AWX
+# Ascender
 from awx.main.utils.execution_environments import get_default_pod_spec
 from awx.main.exceptions import ReceptorNodeNotFound
 from awx.main.utils.common import (

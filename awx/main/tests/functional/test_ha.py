@@ -1,6 +1,6 @@
 import pytest
 
-# AWX
+# Ascender
 from awx.main.ha import is_ha_environment
 from awx.main.models.ha import Instance
 

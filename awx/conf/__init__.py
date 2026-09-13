@@ -4,7 +4,7 @@
 # Django
 from django.utils.module_loading import autodiscover_modules
 
-# AWX
+# Ascender
 from .registry import settings_registry
 
 

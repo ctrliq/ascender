@@ -5,7 +5,7 @@
 import pytest
 from unittest import mock
 
-# AWX
+# Ascender
 from awx.main.models import Host, Inventory, InventorySource, InventoryUpdate, CredentialType, Credential, Job
 from awx.main.constants import CLOUD_PROVIDERS
 from awx.main.utils.filters import SmartFilter

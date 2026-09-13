@@ -1,6 +1,6 @@
 import pytest
 
-# AWX
+# Ascender
 from awx.api.serializers import JobTemplateSerializer
 from awx.api.versioning import reverse
 from awx.main.models import Job, JobTemplate, CredentialType, WorkflowJobTemplate, Organization, Project, Inventory

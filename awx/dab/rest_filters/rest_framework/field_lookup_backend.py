@@ -175,7 +175,7 @@ class FieldLookupBackend(BaseFilterBackend):
                 if queryset.model._meta.object_name == 'User' and key.startswith('created'):
                     key = key.replace('created', 'date_joined')
 
-                # TODO: Do we want to keep these AWX specific items here?
+                # TODO: Do we want to keep these Ascender specific items here?
                 # HACK: Make job event filtering by host name mostly work even
                 # when not capturing job event hosts M2M.
                 if queryset.model._meta.object_name == 'JobEvent' and key.startswith('hosts__name'):

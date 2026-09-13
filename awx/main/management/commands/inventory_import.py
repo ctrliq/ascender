@@ -21,13 +21,13 @@ from django.utils.encoding import smart_str
 # DRF error class to distinguish license exceptions
 from rest_framework.exceptions import PermissionDenied
 
-# AWX inventory imports
+# Ascender inventory imports
 from awx.main.models.inventory import Inventory, InventorySource, InventoryUpdate, Host
 from awx.main.models.jobs import JobHostSummary
 from awx.main.utils.mem_inventory import MemInventory, dict_to_mem_data
 from awx.main.utils.safe_yaml import sanitize_jinja
 
-# other AWX imports
+# other Ascender imports
 from awx.main.models.rbac import batch_role_ancestor_rebuilding
 from awx.main.utils import ignore_inventory_computed_fields, get_licenser
 from awx.main.utils.execution_environments import get_default_execution_environment

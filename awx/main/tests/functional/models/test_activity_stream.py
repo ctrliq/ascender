@@ -3,10 +3,10 @@ from unittest import mock
 
 import json
 
-# AWX models
+# Ascender models
 from awx.main.models import ActivityStream, Organization, JobTemplate, Credential, CredentialType, Inventory, InventorySource, Label, Project, User
 
-# other AWX
+# other Ascender
 from awx.main.utils import model_to_dict, model_instance_diff
 from awx.main.utils.common import get_allowed_fields
 from awx.main.signals import model_serializer_mapping
@@ -14,7 +14,7 @@ from awx.main.signals import model_serializer_mapping
 # Django
 from django.contrib.auth.models import AnonymousUser
 
-# AWX current-request/user tracking (in-tree django-crum replacement)
+# Ascender current-request/user tracking (in-tree django-crum replacement)
 from awx.main.middleware import impersonate
 
 

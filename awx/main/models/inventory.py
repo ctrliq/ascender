@@ -30,7 +30,7 @@ from rest_framework.exceptions import ParseError
 
 from awx.dab.lib.utils.models import prevent_search
 
-# AWX
+# Ascender
 from awx.api.versioning import reverse
 from awx.main.constants import CLOUD_PROVIDERS
 from awx.main.consumers import emit_channel_notification

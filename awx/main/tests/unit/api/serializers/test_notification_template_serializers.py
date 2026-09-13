@@ -2,7 +2,7 @@
 import pytest
 from rest_framework.serializers import ValidationError
 
-# AWX
+# Ascender
 from awx.api.serializers import NotificationTemplateSerializer
 
 

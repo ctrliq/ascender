@@ -84,7 +84,7 @@ LOGGER_BLOCKLIST = (
 # failed or is in progress
 RECEPTOR_PENDING = 'ansible-runner-???'
 
-# Naming pattern for AWX jobs in /tmp folder, like /tmp/awx_42_xiwm
+# Naming pattern for Ascender jobs in /tmp folder, like /tmp/awx_42_xiwm
 # also update awxkit.api.pages.unified_jobs in ctrliq/ascender-kit if changed
 JOB_FOLDER_PREFIX = 'awx_%s_'
 

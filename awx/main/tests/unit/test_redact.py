@@ -1,7 +1,7 @@
 import textwrap
 import pytest
 
-# AWX
+# Ascender
 from awx.main.redact import UriCleaner
 from awx.main.tests.URI import URI
 

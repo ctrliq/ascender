@@ -1,4 +1,4 @@
-# AWX utils
+# Ascender utils
 from awx.main.utils.mem_inventory import MemInventory, mem_data_to_dict, dict_to_mem_data
 
 import pytest

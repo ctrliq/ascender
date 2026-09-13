@@ -7,7 +7,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.exceptions import PermissionDenied
 
-# AWX
+# Ascender
 from awx.api.generics import ParentMixin, SubListCreateAttachDetachAPIView, SubListAttachDetachAPIView, ResourceAccessList, ListAPIView
 from awx.main.models import Organization, Credential
 

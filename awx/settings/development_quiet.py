@@ -1,7 +1,7 @@
 # Copyright (c) 2015 Ansible, Inc.
 # All Rights Reserved.
 
-# Development settings for AWX project, but with DEBUG disabled
+# Development settings for Ascender project, but with DEBUG disabled
 
 # Load development settings.
 from defaults import *  # NOQA

@@ -29,7 +29,7 @@ def get_fields_from_path(model, path, treat_jsonfield_as_text=True):
 
         if model is None:
             raise ParseError(_('No related model for field %(model_name)s.') % {'model_name': name})
-        # TODO: Do we want to keep these AWX specific items here?
+        # TODO: Do we want to keep these Ascender specific items here?
         # HACK: Make project and inventory source filtering by old field names work for backwards compatibility.
         if model._meta.object_name in ('Project', 'InventorySource'):
             name = {'current_update': 'current_job', 'last_update': 'last_job', 'last_update_failed': 'last_job_failed', 'last_updated': 'last_job_run'}.get(

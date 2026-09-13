@@ -9,7 +9,7 @@ from datetime import timedelta
 # Django
 from django.utils import timezone
 
-# AWX
+# Ascender
 from awx.main.models import (
     Job,
     JobEvent,

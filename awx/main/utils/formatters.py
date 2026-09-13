@@ -247,7 +247,7 @@ class LogstashFormatter(LogstashFormatterBase):
         if record.name.startswith('awx.analytics'):
             log_kind = record.name[len('awx.analytics.') :]
             fields = self.reformat_data_for_log(fields, kind=log_kind)
-        # General AWX metadata
+        # General Ascender metadata
         fields['cluster_host_id'] = self.cluster_host_id
         fields['tower_uuid'] = settings.INSTALL_UUID
         fields['tower_url'] = settings.ASCENDER_URL_BASE

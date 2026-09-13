@@ -5,7 +5,7 @@ import json
 # Django Rest Framework
 from rest_framework.test import APIRequestFactory
 
-# AWX
+# Ascender
 from awx.api.views.host import (
     HostList,
 )

@@ -10,7 +10,7 @@ from django.contrib.sessions.models import Session
 from django.utils.timezone import now as tz_now
 from django.utils.translation import gettext_lazy as _
 
-# AWX
+# Ascender
 from awx.api.versioning import reverse
 from awx.main.fields import AutoOneToOneField, ImplicitRoleField, OrderedManyToManyField
 from awx.main.models.base import BaseModel, CommonModel, CommonModelNameNotUnique, CreatedModifiedModel, NotificationFieldsModel

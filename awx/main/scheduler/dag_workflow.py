@@ -8,7 +8,7 @@ from awx.main.models import (
 )
 from awx.main.models.workflow import evaluate_artifact_condition
 
-# AWX
+# Ascender
 from awx.main.scheduler.dag_simple import SimpleDAG
 
 

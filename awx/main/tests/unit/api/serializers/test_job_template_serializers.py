@@ -2,7 +2,7 @@
 import pytest
 from unittest import mock
 
-# AWX
+# Ascender
 from awx.api.serializers import (
     JobTemplateSerializer,
 )

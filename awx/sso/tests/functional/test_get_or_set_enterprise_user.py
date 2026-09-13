@@ -2,7 +2,7 @@
 import pytest
 from unittest import mock
 
-# AWX
+# Ascender
 from awx.sso.backends import _get_or_set_enterprise_user
 
 

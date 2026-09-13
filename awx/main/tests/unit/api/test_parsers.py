@@ -1,7 +1,7 @@
 import pytest
 from io import StringIO
 
-# AWX
+# Ascender
 from awx.api.parsers import JSONParser
 
 # Django REST Framework

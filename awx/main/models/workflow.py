@@ -22,7 +22,7 @@ from django.utils.timezone import now, timedelta
 
 # from django import settings as tower_settings
 
-# AWX current-request/user tracking (in-tree django-crum replacement)
+# Ascender current-request/user tracking (in-tree django-crum replacement)
 from awx.main.request_context import get_current_user
 
 from jinja2 import sandbox
@@ -30,7 +30,7 @@ from jinja2.exceptions import TemplateSyntaxError, UndefinedError, SecurityError
 
 from awx.dab.lib.utils.models import prevent_search
 
-# AWX
+# Ascender
 from awx.api.versioning import reverse
 from awx.main.models import accepts_json, UnifiedJobTemplate, UnifiedJob
 from awx.main.models.notifications import NotificationTemplate, JobNotificationMixin

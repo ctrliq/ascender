@@ -1,6 +1,6 @@
 import pytest
 
-# AWX
+# Ascender
 from awx.main.models.jobs import JobTemplate
 
 from unittest import mock

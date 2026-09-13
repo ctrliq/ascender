@@ -4,7 +4,7 @@
 import logging
 from awx import __version__ as tower_version
 
-# Prepare the AWX environment.
+# Prepare the Ascender environment.
 from awx import prepare_env, MODE
 
 prepare_env()

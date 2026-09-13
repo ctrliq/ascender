@@ -14,7 +14,7 @@ from django.core.exceptions import ValidationError
 
 from awx.dab.lib.utils.models import prevent_search
 
-# AWX
+# Ascender
 from awx.api.versioning import reverse
 from awx.main.models.base import AD_HOC_JOB_TYPE_CHOICES, VERBOSITY_CHOICES, VarsDictProperty
 from awx.main.models.events import AdHocCommandEvent, UnpartitionedAdHocCommandEvent

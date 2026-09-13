@@ -13,7 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.utils.translation import gettext_lazy as _
 
-# AWX
+# Ascender
 from awx.api.versioning import reverse
 
 __all__ = [

@@ -34,7 +34,7 @@ from rest_framework.settings import api_settings
 from rest_framework.views import exception_handler, get_view_name
 from rest_framework import status
 
-# AWX YAML parser/renderer (in-tree replacement for djangorestframework-yaml)
+# Ascender YAML parser/renderer (in-tree replacement for djangorestframework-yaml)
 from awx.api.parsers import YAMLParser
 from awx.api.renderers import YAMLRenderer
 
@@ -45,7 +45,7 @@ from social_core.backends.utils import load_backends
 
 from wsgiref.util import FileWrapper
 
-# AWX
+# Ascender
 from awx.main.access import get_user_queryset
 from awx.api.generics import (
     APIView,

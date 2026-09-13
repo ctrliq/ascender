@@ -2,7 +2,7 @@
 from awx.settings.typed import settings
 from django.utils.translation import gettext_lazy as _
 
-# AWX
+# Ascender
 from awx.conf import fields, register
 from awx.conf import settings_registry
 

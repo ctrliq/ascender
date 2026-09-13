@@ -4,7 +4,7 @@ import logging
 # Django
 from awx.settings.typed import settings
 
-# AWX
+# Ascender
 from awx import MODE
 from awx.main.scheduler import TaskManager, DependencyManager, WorkflowManager
 from awx.main.dispatch.publish import task

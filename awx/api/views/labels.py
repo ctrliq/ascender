@@ -1,4 +1,4 @@
-# AWX
+# Ascender
 from awx.api.generics import SubListCreateAttachDetachAPIView, RetrieveUpdateAPIView, ListCreateAPIView
 from awx.main.models import Label
 from awx.api.serializers import LabelSerializer

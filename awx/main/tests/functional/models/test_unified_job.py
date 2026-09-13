@@ -1,13 +1,13 @@
 import itertools
 import pytest
 
-# AWX current-request/user tracking (in-tree django-crum replacement)
+# Ascender current-request/user tracking (in-tree django-crum replacement)
 from awx.main.middleware import impersonate
 
 # Django
 from django.contrib.contenttypes.models import ContentType
 
-# AWX
+# Ascender
 from awx.main.models import UnifiedJobTemplate, Job, JobTemplate, WorkflowJobTemplate, WorkflowApprovalTemplate, Project, WorkflowJob, Schedule, Credential
 from awx.api.versioning import reverse
 from awx.main.constants import JOB_VARIABLE_PREFIXES

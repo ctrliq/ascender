@@ -5,7 +5,7 @@ import pytest
 from unittest import mock
 import json
 
-# AWX
+# Ascender
 from awx.main.models import workflow as workflow_models
 from awx.main.models.workflow import (
     WorkflowApproval,

@@ -9,7 +9,7 @@ import logging
 from django.core.management.base import BaseCommand
 from django.utils.timezone import now
 
-# AWX
+# Ascender
 from awx.main.models import ActivityStream
 
 

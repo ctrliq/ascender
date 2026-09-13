@@ -13,7 +13,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.fields import BooleanField, CharField, ChoiceField, DictField, DateTimeField, EmailField, IntegerField, ListField  # noqa
 from rest_framework.serializers import PrimaryKeyRelatedField  # noqa
 
-# AWX
+# Ascender
 from awx.main.constants import CONTAINER_VOLUMES_MOUNT_TYPES, MAX_ISOLATED_PATH_COLON_DELIMITER
 
 logger = logging.getLogger('awx.conf.fields')

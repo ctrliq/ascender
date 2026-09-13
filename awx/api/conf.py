@@ -4,7 +4,7 @@ from django.utils.translation import gettext_lazy as _
 # Django REST Framework
 from rest_framework import serializers
 
-# AWX
+# Ascender
 from awx.conf import fields, register, register_validate
 from awx.api.fields import OAuth2ProviderField
 from oauth2_provider.settings import oauth2_settings

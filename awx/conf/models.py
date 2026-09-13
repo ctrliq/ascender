@@ -9,7 +9,7 @@ from django.db import models
 
 from awx.dab.lib.utils.models import prevent_search
 
-# AWX
+# Ascender
 from awx.main.models.base import CreatedModifiedModel
 from awx.main.utils import encrypt_field
 from awx.conf import settings_registry

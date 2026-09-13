@@ -19,7 +19,7 @@ from solo.models import SingletonModel
 
 from awx.dab.lib.utils.models import prevent_search
 
-# AWX
+# Ascender
 from awx import __version__ as awx_application_version
 from awx.main.utils import is_testing
 from awx.api.versioning import reverse

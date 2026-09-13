@@ -5,7 +5,7 @@
 # Python
 import pytest
 
-# AWX
+# Ascender
 from awx.api.versioning import reverse
 from awx.conf.models import Setting
 from awx.conf.registry import settings_registry

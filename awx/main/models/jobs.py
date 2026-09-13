@@ -22,7 +22,7 @@ from rest_framework.exceptions import ParseError
 
 from awx.dab.lib.utils.models import prevent_search
 
-# AWX
+# Ascender
 from awx.api.versioning import reverse
 from awx.main.constants import HOST_FACTS_FIELDS
 from awx.main.models.base import (

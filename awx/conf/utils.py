@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# AWX
+# Ascender
 from awx.conf.registry import settings_registry
 
 __all__ = ['conf_to_dict']

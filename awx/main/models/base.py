@@ -7,10 +7,10 @@ from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now
 
-# AWX current-request/user tracking (in-tree django-crum replacement)
+# Ascender current-request/user tracking (in-tree django-crum replacement)
 from awx.main.request_context import get_current_user
 
-# AWX
+# Ascender
 from awx.main.utils import encrypt_field, parse_yaml_or_json
 from awx.main.constants import CLOUD_PROVIDERS
 
