@@ -1,13 +1,12 @@
 import type { Host } from 'types/api';
-import React, { useCallback, useEffect } from 'react';
+import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { CardBody } from 'components/Card';
 import { DetailList } from 'components/DetailList';
 import { VariablesDetail } from 'components/CodeEditor';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
-import useRequest from 'hooks/useRequest';
-import { HostsAPI } from 'api';
+import useHostFacts from 'hooks/useHostFacts';
 
 export interface InventoryHostFactsProps {
   host: Host;
@@ -15,25 +14,15 @@ export interface InventoryHostFactsProps {
 }
 
 function InventoryHostFacts({ host }: InventoryHostFactsProps) {
-  const { request, isLoading, error, result } = useRequest(
-    useCallback(async () => {
-      const { data } = await HostsAPI.readFacts(host.id);
-
-      return JSON.stringify(data, null, 4);
-    }, [host]),
-    null
-  );
+  const { data: result, isPending, error } = useHostFacts(host.id);
 
   const { t } = useLingui();
-  useEffect(() => {
-    request();
-  }, [request]);
 
   if (error) {
     return <ContentError error={error} />;
   }
 
-  if (isLoading || result === null) {
+  if (isPending) {
     return <ContentLoading />;
   }
 
