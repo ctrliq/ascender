@@ -9,7 +9,7 @@ import React, { useState } from 'react';
 import { ExpandableSection } from '@patternfly/react-core';
 import Wizard from 'components/Wizard';
 import { useLingui } from '@lingui/react/macro';
-import { useFormikContext } from 'formik';
+import { useFormContext } from 'components/Form';
 import { useDismissableError } from 'hooks/useRequest';
 import type { SurveyConfig, LaunchConfig } from 'components/LaunchPrompt/types';
 import AlertModal from '../../AlertModal';
@@ -45,7 +45,7 @@ function SchedulePromptableFields({
   instanceGroups,
 }: SchedulePromptableFieldsProps) {
   const { setFieldTouched, values, initialValues, resetForm } =
-    useFormikContext<ScheduleFormValues>();
+    useFormContext<ScheduleFormValues>();
   const {
     steps,
     visitStep,

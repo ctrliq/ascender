@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { screen, waitFor } from '@testing-library/react';
 import { ProjectsAPI, CredentialsAPI } from 'api';
 import type { ResponseOf } from '../../../../../testUtils/responseOf';
@@ -52,9 +52,9 @@ describe('<SCMSubForm />', () => {
 
   function renderForm(values = initialValues) {
     return renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={values}>
+      <FormRoot onSubmit={() => {}} initialValues={values}>
         <SCMSubForm />
-      </Formik>
+      </FormRoot>
     );
   }
 

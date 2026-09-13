@@ -2,7 +2,7 @@ import type { OptionsField, SettingConfig } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import ContentError from 'components/ContentError';
@@ -198,7 +198,7 @@ function MiscAuthenticationEdit() {
       {Boolean(isLoading) && <ContentLoading />}
       {!isLoading && Boolean(error) && <ContentError error={error} />}
       {!isLoading && authentication && (
-        <Formik
+        <FormRoot
           initialValues={initialValues(authentication)}
           onSubmit={handleSubmit}
         >
@@ -310,7 +310,7 @@ function MiscAuthenticationEdit() {
               )}
             </Form>
           )}
-        </Formik>
+        </FormRoot>
       )}
     </CardBody>
   );

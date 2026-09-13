@@ -4,7 +4,6 @@ import { Link, useNavigate } from 'react-router';
 
 import { Label, Button } from '@patternfly/react-core';
 
-import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 
 import { useConfig } from 'contexts/Config';
@@ -30,13 +29,7 @@ import { getVerbosityLabel } from 'components/VerbositySelectField';
 import { getJobModel, isJobRunning } from 'util/jobs';
 import { formatDateString } from 'util/dates';
 import getJobHelpText from '../Job.helptext';
-
-const StatusDetailValue = styled.div`
-  align-items: center;
-  display: inline-grid;
-  grid-gap: 10px;
-  grid-template-columns: auto auto;
-`;
+import './JobDetail.css';
 
 export interface JobDetailProps {
   job: AnyJob;
@@ -237,7 +230,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
           fullWidth={Boolean(job.job_explanation)}
           label={t`Status`}
           value={
-            <StatusDetailValue>
+            <div className="awx-job-detail__status-detail-value">
               {validateReactNode(job.status) ? (
                 <StatusLabel status={job.status} />
               ) : (
@@ -246,7 +239,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
               {job?.job_explanation && job.job_explanation !== job.status
                 ? validateReactNode(job.job_explanation)
                 : null}
-            </StatusDetailValue>
+            </div>
           }
         />
         <Detail
@@ -590,7 +583,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
         <UserDateDetail label={t`Last Modified`} date={job.modified} />
         {job.extra_vars && (
           <VariablesDetail
-            css="margin: 20px 0"
+            className="awx-job-detail__margin-20-0"
             id="job-variables"
             readOnly
             value={job.extra_vars}
@@ -602,7 +595,7 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
         )}
         {job.artifacts && (
           <VariablesDetail
-            css="margin: 20px 0"
+            className="awx-job-detail__margin-20-0"
             id="job-artifacts"
             readOnly
             value={JSON.stringify(job.artifacts)}

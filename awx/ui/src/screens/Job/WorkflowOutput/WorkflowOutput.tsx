@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useMemo, useReducer } from 'react';
 import { useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
-import styled from 'styled-components';
 import { CardBody as PFCardBody } from '@patternfly/react-core';
 import {
   WorkflowDispatchContext,
@@ -22,21 +21,7 @@ import { WorkflowJobsAPI } from 'api';
 import WorkflowOutputGraph from './WorkflowOutputGraph';
 import WorkflowOutputToolbar from './WorkflowOutputToolbar';
 import useWsWorkflowOutput from './useWsWorkflowOutput';
-
-const CardBody = styled(PFCardBody)`
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-  overflow: hidden;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-flow: column;
-  height: 100%;
-  position: relative;
-`;
+import './WorkflowOutput.css';
 
 const fetchWorkflowNodes = async (
   jobId: number,
@@ -122,25 +107,25 @@ function WorkflowOutput({ job }: WorkflowOutputProps) {
 
   if (contentError) {
     return (
-      <CardBody>
+      <PFCardBody className="awx-workflow-output__card-body">
         <ContentError error={contentError} />
-      </CardBody>
+      </PFCardBody>
     );
   }
 
   return (
     <WorkflowStateContext.Provider value={liveState}>
       <WorkflowDispatchContext.Provider value={dispatch}>
-        <CardBody>
-          <Wrapper>
+        <PFCardBody className="awx-workflow-output__card-body">
+          <div className="awx-workflow-output__wrapper">
             <WorkflowOutputToolbar
               job={job}
               onDelete={deleteJob}
               isDeleteDisabled={isDeleting}
             />
             {nodePositions && <WorkflowOutputGraph />}
-          </Wrapper>
-        </CardBody>
+          </div>
+        </PFCardBody>
       </WorkflowDispatchContext.Provider>
       {Boolean(dismissableDeleteError) && (
         <AlertModal

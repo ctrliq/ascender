@@ -2,7 +2,6 @@ import type { Instance } from 'types/api';
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import {
   Progress,
   ProgressMeasureLocation,
@@ -25,23 +24,7 @@ import { useConfig } from 'contexts/Config';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import { Detail, DetailList } from 'components/DetailList';
-
-const Unavailable = styled.span`
-  color: var(--pf-v6-global--danger-color--200);
-`;
-
-const SliderHolder = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const SliderForks = styled.div`
-  flex-grow: 1;
-  margin-right: 8px;
-  margin-left: 8px;
-  text-align: center;
-`;
+import './InstanceListItem.css';
 
 export interface InstanceListItemProps {
   instance: Instance;
@@ -88,7 +71,9 @@ function InstanceListItem({
         />
       );
     }
-    return <Unavailable>{t`Unavailable`}</Unavailable>;
+    return (
+      <span className="awx-instance-list-item__unavailable">{t`Unavailable`}</span>
+    );
   }
 
   const { error: updateInstanceError, request: updateInstance } = useRequest(
@@ -183,11 +168,17 @@ function InstanceListItem({
         {!isHopNode && (
           <>
             <Td dataLabel={t`Capacity Adjustment`}>
-              <SliderHolder data-cy="slider-holder">
+              <div
+                className="awx-instance-list-item__slider-holder"
+                data-cy="slider-holder"
+              >
                 <div data-cy="cpu-capacity">
                   {t`CPU ${instance.cpu_capacity}`}
                 </div>
-                <SliderForks data-cy="slider-forks">
+                <div
+                  className="awx-instance-list-item__slider-forks"
+                  data-cy="slider-forks"
+                >
                   <div data-cy="number-forks">
                     <Plural value={forks} one="# fork" other="# forks" />
                   </div>
@@ -201,27 +192,26 @@ function InstanceListItem({
                     isDisabled={!config?.me?.is_superuser || !instance.enabled}
                     data-cy="slider"
                   />
-                </SliderForks>
+                </div>
                 <div data-cy="mem-capacity">
                   {t`RAM ${instance.mem_capacity}`}
                 </div>
-              </SliderHolder>
+              </div>
             </Td>
 
             <Td
+              className="awx-instance-list-item__pf-v6-c-table-cell-MinWidth-175"
               dataLabel={t`Instance group used capacity`}
-              css="--pf-v6-c-table--cell--MinWidth: 175px;"
             >
               {usedCapacity(instance)}
             </Td>
 
             <ActionsTd
+              className="awx-instance-list-item__pf-v6-c-table-cell-Width-125"
               dataLabel={t`Actions`}
-              css="--pf-v6-c-table--cell--Width: 125px"
             >
               <ActionItem visible>
                 <InstanceToggle
-                  css="display: inline-flex;"
                   fetchInstances={fetchInstances}
                   instance={instance}
                 />

@@ -2,7 +2,7 @@ import type { Credential } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import { CredentialsAPI } from 'api';
 import CheckboxListItem from 'components/CheckboxListItem';
 import ContentError from 'components/ContentError';

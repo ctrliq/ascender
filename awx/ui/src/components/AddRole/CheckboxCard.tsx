@@ -1,20 +1,6 @@
 import React from 'react';
 import { Checkbox as PFCheckbox } from '@patternfly/react-core';
-import styled from 'styled-components';
-
-const CheckboxWrapper = styled.div`
-  display: flex;
-  border: 1px solid var(--pf-v6-global--BorderColor--200);
-  border-radius: var(--pf-v6-global--BorderRadius--sm);
-  padding: 10px;
-`;
-
-const Checkbox = styled(PFCheckbox)`
-  width: 100%;
-  & label {
-    width: 100%;
-  }
-`;
+import './CheckboxCard.css';
 
 export interface CheckboxCardProps {
   name: string;
@@ -36,8 +22,9 @@ function CheckboxCard({
   itemId,
 }: CheckboxCardProps) {
   return (
-    <CheckboxWrapper>
-      <Checkbox
+    <div className="awx-checkbox-card__wrapper">
+      <PFCheckbox
+        className="awx-checkbox-card__checkbox"
         isChecked={isSelected}
         onChange={onSelect}
         aria-label={name}
@@ -51,7 +38,7 @@ function CheckboxCard({
         }
         value={itemId}
       />
-    </CheckboxWrapper>
+    </div>
   );
 }
 

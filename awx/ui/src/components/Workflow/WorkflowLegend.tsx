@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import {
   ExclamationTriangleIcon,
   PauseIcon,
@@ -9,78 +8,7 @@ import {
 } from '@patternfly/react-icons';
 import { WorkflowDispatchContext } from 'contexts/Workflow';
 import type { WorkflowAction } from './workflowReducer';
-
-const Wrapper = styled.div`
-  background-color: var(--ascender-workflow-node-bg);
-  border: 1px solid var(--pf-v6-global--BorderColor--100);
-  margin-left: 20px;
-  min-width: 100px;
-  position: relative;
-`;
-
-const Header = styled.div`
-  border-bottom: 1px solid var(--pf-v6-global--BorderColor--100);
-  padding: 10px;
-  position: relative;
-`;
-
-const Legend = styled.ul`
-  padding: 5px 10px;
-
-  li {
-    align-items: center;
-    display: flex;
-    padding: 5px 0px;
-  }
-`;
-
-const NodeTypeLetter = styled.div`
-  background-color: #393f43;
-  border-radius: 50%;
-  color: white;
-  font-size: 10px;
-  height: 20px;
-  line-height: 20px;
-  margin-right: 10px;
-  text-align: center;
-  width: 20px;
-`;
-
-const StyledExclamationTriangleIcon = styled(ExclamationTriangleIcon)`
-  color: var(--pf-v6-global--warning-color--100);
-  height: 20px;
-  margin-right: 10px;
-  width: 20px;
-`;
-
-const Link = styled.div`
-  height: 5px;
-  margin-right: 10px;
-  width: 20px;
-`;
-
-const SuccessLink = styled(Link)`
-  background-color: #5cb85c;
-`;
-
-const FailureLink = styled(Link)`
-  background-color: #d9534f;
-`;
-
-const AlwaysLink = styled(Link)`
-  background-color: #337ab7;
-`;
-
-const ConditionLink = styled(Link)`
-  background-color: #f0ab00;
-`;
-
-const Close = styled(TimesIcon)`
-  cursor: pointer;
-  position: absolute;
-  right: 10px;
-  top: 15px;
-`;
+import './WorkflowLegend.css';
 
 function WorkflowLegend() {
   const dispatch = useContext(
@@ -88,60 +16,63 @@ function WorkflowLegend() {
   ) as React.Dispatch<WorkflowAction>;
   const { t } = useLingui();
   return (
-    <Wrapper>
-      <Header>
+    <div className="awx-workflow-legend__wrapper">
+      <div className="awx-workflow-legend__header">
         <b>{t`Legend`}</b>
-        <Close onClick={() => dispatch({ type: 'TOGGLE_LEGEND' })} />
-      </Header>
-      <Legend>
+        <TimesIcon
+          className="awx-workflow-legend__close"
+          onClick={() => dispatch({ type: 'TOGGLE_LEGEND' })}
+        />
+      </div>
+      <ul className="awx-workflow-legend__legend">
         <li>
-          <NodeTypeLetter>JT</NodeTypeLetter>
+          <div className="awx-workflow-legend__node-type-letter">JT</div>
           <span>{t`Job Template`}</span>
         </li>
         <li>
-          <NodeTypeLetter>W</NodeTypeLetter>
+          <div className="awx-workflow-legend__node-type-letter">W</div>
           <span>{t`Workflow`}</span>
         </li>
         <li>
-          <NodeTypeLetter>I</NodeTypeLetter>
+          <div className="awx-workflow-legend__node-type-letter">I</div>
           <span>{t`Inventory Sync`}</span>
         </li>
         <li>
-          <NodeTypeLetter>P</NodeTypeLetter>
+          <div className="awx-workflow-legend__node-type-letter">P</div>
           <span>{t`Project Sync`}</span>
         </li>
         <li>
-          <NodeTypeLetter>M</NodeTypeLetter>
+          <div className="awx-workflow-legend__node-type-letter">M</div>
           <span>{t`Management Job`}</span>
         </li>
         <li>
-          <NodeTypeLetter>
+          <div className="awx-workflow-legend__node-type-letter">
             <PauseIcon />
-          </NodeTypeLetter>
+          </div>
           <span>{t`Approval`}</span>
         </li>
         <li>
-          <StyledExclamationTriangleIcon />
+          <ExclamationTriangleIcon className="awx-workflow-legend__styled-exclamation-triangle-icon" />
           <span>{t`Warning`}</span>
         </li>
         <li>
-          <SuccessLink />
+          <div className="awx-workflow-legend__link awx-workflow-legend__success-link" />
           <span>{t`On Success`}</span>
         </li>
         <li>
-          <FailureLink />
+          <div className="awx-workflow-legend__link awx-workflow-legend__failure-link" />
           <span>{t`On Failure`}</span>
         </li>
         <li>
-          <AlwaysLink />
+          <div className="awx-workflow-legend__link awx-workflow-legend__always-link" />
           <span>{t`Always`}</span>
         </li>
         <li>
-          <ConditionLink />
+          <div className="awx-workflow-legend__link awx-workflow-legend__condition-link" />
           <span>{t`On Condition`}</span>
         </li>
-      </Legend>
-    </Wrapper>
+      </ul>
+    </div>
   );
 }
 

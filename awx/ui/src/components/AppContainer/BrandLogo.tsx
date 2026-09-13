@@ -3,18 +3,8 @@
 //
 import React from 'react';
 
-import styled from 'styled-components';
 import { useConfig } from 'contexts/Config';
-
-const BrandImg = styled.img`
-  flex: initial;
-  width: initial;
-  padding-left: 0px;
-  margin: 0px 0px 0px 0px;
-  max-width: initial;
-  max-height: 46px;
-  pointer-events: none;
-`;
+import './BrandLogo.css';
 
 const defaultSrc = 'static/media/Ascender_logo.svg';
 
@@ -26,7 +16,7 @@ export interface BrandLogoProps {
 const BrandLogo = ({ alt }: BrandLogoProps) => {
   const { custom_header_logo } = useConfig();
   const src = (custom_header_logo as string) || defaultSrc;
-  return <BrandImg src={src} alt={alt} />;
+  return <img className="awx-brand-logo__img" src={src} alt={alt} />;
 };
 
 export default BrandLogo;

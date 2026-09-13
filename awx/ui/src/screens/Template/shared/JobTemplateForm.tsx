@@ -3,8 +3,8 @@ import type { JobTemplate, SummaryFieldRef, SummaryFields } from 'types/api';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { withFormik, useField } from 'formik';
-import type { FormikErrors, FormikProps } from 'formik';
+import { useField, withForm } from 'components/Form';
+import type { FormErrors, FormContextValue } from 'components/Form';
 import {
   Form,
   FormGroup,
@@ -130,7 +130,7 @@ export interface JobTemplateFormProps {
  */
 type JobTemplateFormFieldsProps = Omit<JobTemplateFormProps, 'handleSubmit'> &
   Pick<
-    FormikProps<JobTemplateFormValues>,
+    FormContextValue<JobTemplateFormValues>,
     'handleSubmit' | 'setFieldValue' | 'setFieldTouched' | 'validateField'
   >;
 
@@ -770,7 +770,7 @@ function JobTemplateForm({
 
 // The generics are what keeps the wrapper's own props visible to callers:
 // without them withFormik types the wrapped component as taking nothing.
-const FormikApp = withFormik<JobTemplateFormProps, JobTemplateFormValues>({
+const FormikApp = withForm<JobTemplateFormProps, JobTemplateFormValues>({
   mapPropsToValues({
     resourceValues = null,
     template = {},
@@ -861,7 +861,7 @@ const FormikApp = withFormik<JobTemplateFormProps, JobTemplateFormValues>({
     try {
       await props.handleSubmit(values);
     } catch (errors) {
-      setErrors(errors as FormikErrors<JobTemplateFormValues>);
+      setErrors(errors as FormErrors<JobTemplateFormValues>);
     }
   },
 })(JobTemplateForm);

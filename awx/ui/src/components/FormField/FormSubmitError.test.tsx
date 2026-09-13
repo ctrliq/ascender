@@ -1,15 +1,15 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import FormSubmitError from './FormSubmitError';
 
 describe('<FormSubmitError>', () => {
   test('should render null when no error present', () => {
     const { container } = renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         {() => <FormSubmitError error={null} />}
-      </Formik>
+      </FormRoot>
     );
     expect(container).toBeEmptyDOMElement();
     expect(container.querySelector('.pf-v6-c-alert')).not.toBeInTheDocument();
@@ -24,14 +24,14 @@ describe('<FormSubmitError>', () => {
       },
     };
     renderWithContexts(
-      <Formik initialValues={{ name: '' }} onSubmit={() => {}}>
+      <FormRoot initialValues={{ name: '' }} onSubmit={() => {}}>
         {({ errors }) => (
           <div>
             <p>{errors.name}</p>
             <FormSubmitError error={error} />
           </div>
         )}
-      </Formik>
+      </FormRoot>
     );
     expect(await screen.findByText('invalid')).toBeInTheDocument();
   });
@@ -45,9 +45,9 @@ describe('<FormSubmitError>', () => {
       message: 'There was an error',
     };
     const { container } = renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         {() => <FormSubmitError error={error} />}
-      </Formik>
+      </FormRoot>
     );
     expect(await screen.findByText('There was an error')).toBeInTheDocument();
     // PF inline danger Alert: no role="alert", identified by .pf-v6-c-alert
