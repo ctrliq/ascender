@@ -12,6 +12,7 @@ import signal
 
 # Django
 from django.db import transaction
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _, gettext_noop
 from django.utils.timezone import now as tz_now
 from django.conf import settings
@@ -87,17 +88,19 @@ class TaskBase:
             return True
         return False
 
-    @timeit
-    def get_tasks(self, filter_args):
+    def get_tasks_queryset(self, filter_args):
         wf_approval_ctype_id = ContentType.objects.get_for_model(WorkflowApproval).id
-        qs = (
+        return (
             UnifiedJob.objects.filter(**filter_args)
             .exclude(launch_type='sync')
             .exclude(polymorphic_ctype_id=wf_approval_ctype_id)
             .order_by('created')
             .prefetch_related('dependent_jobs')
         )
-        self.all_tasks = [t for t in qs]
+
+    @timeit
+    def get_tasks(self, filter_args):
+        self.all_tasks = list(self.get_tasks_queryset(filter_args))
 
     def record_aggregate_metrics(self, *args):
         if not is_testing():
@@ -432,6 +435,37 @@ class DependencyManager(TaskBase):
 
 
 class TaskManager(TaskBase):
+    # The only columns the scheduling loop reads from a task. Every other column is deferred so
+    # that loading a large queue costs a fraction of instantiating full polymorphic Job objects.
+    # hydrate_task() loads the rest before any code path that saves a task or calls pre_start(),
+    # so nothing outside this class ever sees a partially loaded task. If the loop grows a new
+    # attribute read, add the field here; test_task_manager_loop_does_not_lazy_load guards it.
+    TASK_FIELDS = (
+        'polymorphic_ctype',
+        'created',
+        'status',
+        'name',
+        'organization',
+        'work_unit_id',
+        'job_explanation',
+        'task_impact',
+        'controller_node',
+        'execution_node',
+        'instance_group',
+        'preferred_instance_groups_cache',
+        'unified_job_template',
+        'Job___project',
+        'Job___inventory',
+        'Job___job_template',
+        'Job___allow_simultaneous',
+        'ProjectUpdate___project',
+        'InventoryUpdate___inventory',
+        'InventoryUpdate___inventory_source',
+        'AdHocCommand___inventory',
+        'WorkflowJob___workflow_job_template',
+        'WorkflowJob___allow_simultaneous',
+    )
+
     def __init__(self):
         """
         Do NOT put database queries or other potentially expensive operations
@@ -449,6 +483,11 @@ class TaskManager(TaskBase):
         # will no longer be started and will be started on the next task manager cycle.
         self.time_delta_job_explanation = timedelta(seconds=30)
         super().__init__(prefix="task_manager")
+        # Pending tasks are loaded one chunk at a time (see iter_pending_tasks). Each chunk costs a
+        # few fixed round trips (base rows, per-type rows, dependent_jobs prefetch), so chunks are
+        # sized well above the start limit: a queue that drains freely is still served by a single
+        # query, and a deep capacity-starved queue is not paid for in hundreds of small queries.
+        self.pending_task_chunk_size = max(self.start_task_limit, 500)
 
     def after_lock_init(self):
         """
@@ -458,11 +497,54 @@ class TaskManager(TaskBase):
         self.tm_models = TaskManagerModels()
         self.controlplane_ig = self.tm_models.instance_groups.controlplane_ig
 
+    def get_tasks_queryset(self, filter_args):
+        return super().get_tasks_queryset(filter_args).only(*self.TASK_FIELDS)
+
+    def iter_pending_tasks(self):
+        """Yield pending tasks oldest first, loading them a chunk at a time.
+
+        process_pending_tasks stops once start_task_limit jobs have started or the manager times
+        out, so with a deep queue most of it is never examined; loading lazily keeps memory and ORM
+        work proportional to what is actually visited. Blocked and capacity-starved tasks do not
+        count against the limit, which is why the query is paginated rather than capped: a plain
+        LIMIT of start_task_limit would let a run of old blocked jobs starve every newer job
+        behind them indefinitely.
+        """
+        last = None
+        while True:
+            qs = self.get_tasks_queryset(dict(status='pending', dependencies_processed=True)).order_by('created', 'id')
+            if last is not None:
+                qs = qs.filter(Q(created__gt=last.created) | Q(created=last.created, id__gt=last.id))
+            chunk = list(qs[: self.pending_task_chunk_size])
+            yield from chunk
+            if len(chunk) < self.pending_task_chunk_size:
+                return
+            last = chunk[-1]
+
+    def hydrate_task(self, task):
+        """Load the columns that TASK_FIELDS deferred, keeping in-memory changes.
+
+        Required before pre_start() or any save(): pre_start decrypts start_args, walks
+        credentials and writes job_explanation, and UnifiedJob.save() reads started/finished/
+        elapsed/cancel_flag and more. On a partially loaded instance each of those would be
+        fetched by its own query. refresh_from_db is restricted to the deferred fields, so the
+        status, controller_node and execution_node already decided on this instance survive, and
+        the edit snapshot is brought up to date for exactly those fields.
+        """
+        deferred = task.get_deferred_fields()
+        if deferred:
+            task.refresh_from_db(fields=list(deferred))
+            # The edit-tracking snapshot was taken from the partial instance; without this the
+            # freshly loaded columns would count as edits and save() would rewrite modified_by.
+            task.sync_edit_snapshot(deferred)
+        return task
+
     def process_job_dep_failures(self, task):
         """If job depends on a job that has failed, mark as failed and handle misc stuff."""
         for dep in task.dependent_jobs.all():
             # if we detect a failed or error dependency, go ahead and fail this task.
             if dep.status in ("error", "failed"):
+                self.hydrate_task(task)
                 task.status = 'failed'
                 logger.warning(f'Previous task failed task: {task.id} dep: {dep.id} task manager')
                 task.job_explanation = 'Previous Task Failed: {"job_type": "%s", "job_name": "%s", "job_id": "%s"}' % (
@@ -493,6 +575,9 @@ class TaskManager(TaskBase):
 
     @timeit
     def start_task(self, task, instance_group, instance=None):
+        # The scheduling loop works on partially loaded tasks; from here on the task is saved
+        # and pre_start() runs, so make sure every column is present first.
+        self.hydrate_task(task)
         # Just like for process_running_tasks, add the job to the dependency graph and
         # ask the TaskManagerInstanceGroups object to update consumed capacity on all
         # implicated instances and container groups.
@@ -562,13 +647,26 @@ class TaskManager(TaskBase):
 
     @timeit
     def process_pending_tasks(self, pending_tasks):
+        """Walk pending tasks oldest first and start what capacity and blocking allow.
+
+        pending_tasks may be any iterable, normally the lazy iter_pending_tasks(); the limit and
+        timeout checks run before each task is pulled so an exhausted manager stops loading.
+        Returns the number of tasks examined.
+        """
         tasks_to_update_job_explanation = []
-        for task in pending_tasks:
+        pending_tasks = iter(pending_tasks)
+        processed = 0
+        while True:
+            # Check before pulling the next task so a finished manager never loads another chunk.
             if self.start_task_limit <= 0:
                 break
             if self.timed_out():
                 logger.warning("Task manager has reached time out while processing pending jobs, exiting loop early")
                 break
+            task = next(pending_tasks, None)
+            if task is None:
+                break
+            processed += 1
 
             has_failed = self.process_job_dep_failures(task)
             if has_failed:
@@ -661,6 +759,7 @@ class TaskManager(TaskBase):
             if not found_acceptable_queue:
                 self.task_needs_capacity(task, tasks_to_update_job_explanation)
         UnifiedJob.objects.bulk_update(tasks_to_update_job_explanation, ['job_explanation'])
+        return processed
 
     def task_needs_capacity(self, task, tasks_to_update_job_explanation):
         task.log_lifecycle("needs_capacity")
@@ -679,9 +778,14 @@ class TaskManager(TaskBase):
         # that we know about; this is a fairly rare event, but it can occur if you,
         # for example, SQL backup an awx install with running jobs and restore it
         # elsewhere
-        for j in UnifiedJob.objects.filter(
-            status__in=['pending', 'waiting', 'running'],
-        ).exclude(execution_node__in=Instance.objects.exclude(node_type='hop').values_list('hostname', flat=True)):
+        # Ordinary pending jobs have no execution_node yet; exclude them in SQL so a deep queue
+        # is not materialized as full objects here on every cycle.
+        orphaned = (
+            UnifiedJob.objects.filter(status__in=['pending', 'waiting', 'running'])
+            .exclude(execution_node='')
+            .exclude(execution_node__in=Instance.objects.exclude(node_type='hop').values_list('hostname', flat=True))
+        )
+        for j in orphaned:
             if j.execution_node and not j.is_container_group_task:
                 logger.error(f'{j.execution_node} is not a registered instance; reaping {j.log_format}')
                 reap_job(j, 'failed')
@@ -707,10 +811,8 @@ class TaskManager(TaskBase):
         self.process_running_tasks(running_tasks)
         self.subsystem_metrics.inc(f"{self.prefix}_running_processed", len(running_tasks))
 
-        pending_tasks = [t for t in self.all_tasks if t.status == 'pending']
-
-        self.process_pending_tasks(pending_tasks)
-        self.subsystem_metrics.inc(f"{self.prefix}_pending_processed", len(pending_tasks))
+        pending_processed = self.process_pending_tasks(self.iter_pending_tasks())
+        self.subsystem_metrics.inc(f"{self.prefix}_pending_processed", pending_processed)
 
         if self.pre_start_failed:
             from awx.main.tasks.system import handle_failure_notifications
@@ -745,13 +847,15 @@ class TaskManager(TaskBase):
 
     @timeit
     def _schedule(self):
-        self.get_tasks(dict(status__in=["pending", "waiting", "running"], dependencies_processed=True))
-
         self.after_lock_init()
+        # Reap before loading: it resets orphaned waiting jobs to pending, and they must be seen
+        # as pending by the loop below rather than as stale waiting entries in the graph.
         self.reap_jobs_from_orphaned_instances()
 
-        if len(self.all_tasks) > 0:
-            self.process_tasks()
+        # Waiting/running tasks seed the dependency graph and capacity accounting, so all of them
+        # are needed up front. Pending tasks are streamed lazily by process_tasks.
+        self.get_tasks(dict(status__in=["waiting", "running"], dependencies_processed=True))
+        self.process_tasks()
 
         for workflow_approval in self.get_expired_workflow_approvals():
             self.timeout_approval_node(workflow_approval)
