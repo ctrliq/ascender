@@ -1,11 +1,11 @@
 import React from 'react';
 import { screen, fireEvent, act } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import RunStep from './RunStep';
 
 // SelectableCard does not forward `id`/`isSelected` to the DOM; selection is
-// expressed only through styled-components classes ($isSelected). The cards are
+// expressed only through a modifier class. The cards are
 // role="button" elements identified by their label text. Cards in the same
 // selection state share a generated class, so we assert selection by comparing
 // each card's class against the success card while it is the default-selected
@@ -17,9 +17,9 @@ function getCard(label: string) {
 describe('RunStep', () => {
   test('Default selected card matches default link type when present', () => {
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ linkType: 'success' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ linkType: 'success' }}>
         <RunStep />
-      </Formik>
+      </FormRoot>
     );
     const success = getCard('On Success');
     const failure = getCard('On Failure');
@@ -31,9 +31,9 @@ describe('RunStep', () => {
 
   test('Clicking always card makes expected callback', async () => {
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ linkType: 'success' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ linkType: 'success' }}>
         <RunStep />
-      </Formik>
+      </FormRoot>
     );
     // class carried by the currently-selected (success) card
     const selectedClass = getCard('On Success')!.className;
@@ -49,9 +49,9 @@ describe('RunStep', () => {
 
   test('Clicking failure card makes expected callback', async () => {
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ linkType: 'success' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ linkType: 'success' }}>
         <RunStep />
-      </Formik>
+      </FormRoot>
     );
     const selectedClass = getCard('On Success')!.className;
     expect(getCard('On Failure')!.className).not.toBe(selectedClass);

@@ -4,7 +4,7 @@ import type { SettingConfig, SummaryFieldRef } from 'types/api';
 //
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import ContentError from 'components/ContentError';
@@ -156,7 +156,7 @@ function MiscSystemEdit() {
         <ContentError error={error || errorExecutionEnvironment} />
       )}
       {!(isLoading || isLoadingExecutionEnvironment) && system && (
-        <Formik
+        <FormRoot
           initialValues={{
             ...initialValues(system),
             DEFAULT_EXECUTION_ENVIRONMENT: executionEnvironment
@@ -226,7 +226,7 @@ function MiscSystemEdit() {
               )}
             </Form>
           )}
-        </Formik>
+        </FormRoot>
       )}
     </CardBody>
   );

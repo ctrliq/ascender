@@ -1,0 +1,113 @@
+/*
+ * The detail list's styling, which used to be six styled-components spread
+ * across five files. Every rule here is the rule that was there, with the
+ * class taking the place of the generated one.
+ *
+ * The variants that were props are modifier classes: what was
+ * `${(props) => props.fullWidth && ...}` is `.awx-detail-name--full-width`,
+ * and the component adds it or does not.
+ */
+
+.awx-detail-list {
+  display: grid;
+  align-items: stretch;
+  font-size: var(--pf-v6-global--FontSize--sm);
+  column-gap: 2rem;
+  row-gap: 0;
+  margin: 0;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .awx-detail-list {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .awx-detail-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* stacked overrides the responsive columns above, at every width */
+.awx-detail-list.awx-detail-list--stacked,
+.awx-detail-list.awx-detail-list--stacked:is(:root *) {
+  grid-template-columns: auto 1fr;
+}
+
+.awx-detail-list > div {
+  padding: 0.875rem 0;
+}
+
+.awx-detail-list dd .pf-v6-c-label {
+  margin-left: -6px;
+}
+
+.awx-detail-list + .awx-detail-list {
+  margin-top: var(--pf-v6-global--spacer--2xl);
+}
+
+.awx-detail-name {
+  font-size: var(--pf-v6-global--FontSize--xs);
+  font-weight: var(--pf-v6-global--FontWeight--bold);
+  color: var(--pf-v6-global--Color--200);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.25rem;
+}
+
+.awx-detail-value {
+  overflow-wrap: break-word;
+  margin: 0;
+}
+
+.awx-detail-name--full-width,
+.awx-detail-value--full-width {
+  grid-column: 1 / -1;
+}
+
+/* what isEncrypted and isNotConfigured both did */
+.awx-detail-value--muted {
+  color: var(--pf-v6-global--disabled-color--100);
+}
+
+/* DetailBadge and UserDateDetail */
+.awx-detail--break-word {
+  word-break: break-word;
+}
+
+/* DeletedDetail, which coloured the value rather than the name */
+dd.awx-detail--deleted {
+  color: red;
+}
+
+/* ArrayDetail's boxed, scrolling value */
+.awx-detail-value--array {
+  margin-top: var(--pf-v6-global--spacer--xs);
+  padding: var(--pf-v6-global--spacer--xs);
+  border: 1px solid var(--pf-v6-global--BorderColor--100);
+  max-height: 5.5em;
+  overflow: auto;
+}
+
+/* CodeDetail */
+.awx-code-detail {
+  grid-column: 1 / -1;
+  padding: 1.25rem 0 0.875rem;
+}
+
+.awx-code-detail__label {
+  font-size: var(--pf-v6-global--FontSize--xs);
+  font-weight: var(--pf-v6-global--FontWeight--bold);
+  color: var(--pf-v6-global--Color--200);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.5rem;
+}
+
+.awx-code-detail__editor {
+  border: 1px solid var(--pf-v6-global--BorderColor--100);
+  border-radius: var(--pf-v6-global--BorderRadius--sm);
+  overflow: hidden;
+}

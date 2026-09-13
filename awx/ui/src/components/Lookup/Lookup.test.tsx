@@ -1,7 +1,7 @@
 import type { Mock } from 'vitest';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { getQSConfig } from 'util/qs';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import type { LookupProps } from './Lookup';
@@ -34,7 +34,7 @@ describe('<Lookup />', () => {
   function renderLookup(extraProps = {}) {
     const mockSelected = [{ name: 'foo', id: 1, url: '/api/v2/item/1' }];
     return renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <Lookup
           id="test"
           multiple
@@ -46,7 +46,7 @@ describe('<Lookup />', () => {
           fieldName="foo"
           {...extraProps}
         />
-      </Formik>
+      </FormRoot>
     );
   }
 
@@ -103,7 +103,7 @@ describe('<Lookup />', () => {
   test('should pass canDelete false if required single select', async () => {
     const mockSelected = { name: 'foo', id: 1, url: '/api/v2/item/1' };
     const { user } = renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <Lookup
           id="test"
           header="Foo Bar"
@@ -114,7 +114,7 @@ describe('<Lookup />', () => {
           renderOptionsList={renderOptionsList}
           fieldName="foo"
         />
-      </Formik>
+      </FormRoot>
     );
     await user.click(screen.getByRole('button', { name: 'Search' }));
     await screen.findByRole('dialog');

@@ -66,7 +66,6 @@ function InstanceToggle({
       >
         <Switch
           className={className}
-          css="display: inline-flex;"
           id={`host-${instance.id}-toggle`}
           label={t`Enabled`}
 

@@ -1,6 +1,6 @@
 import type { CredentialType } from 'types/api';
 import React from 'react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -88,7 +88,7 @@ function CredentialTypeForm({
       : '---',
   };
   return (
-    <Formik
+    <FormRoot
       initialValues={initialValues}
       onSubmit={(values) => onSubmit(values)}
     >
@@ -104,7 +104,7 @@ function CredentialTypeForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

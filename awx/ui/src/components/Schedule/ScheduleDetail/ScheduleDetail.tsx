@@ -6,7 +6,6 @@ import type {
 } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
-import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import { Label, Divider, Title, Button } from '@patternfly/react-core';
 
@@ -42,44 +41,7 @@ import type {
   FrequencyOptionsMap,
   ScheduleFrequency,
 } from '../shared/types';
-
-const PromptDivider = styled(Divider)`
-  margin-top: var(--pf-v6-global--spacer--lg);
-  margin-bottom: var(--pf-v6-global--spacer--lg);
-`;
-
-const PromptTitle = styled(Title)`
-  margin-top: 40px;
-  --pf-v6-c-title--m-md--FontWeight: 700;
-  grid-column: 1 / -1;
-`;
-
-const PromptDetailList = styled(DetailList)`
-  padding: 0px 20px;
-`;
-
-const FrequencyDetailsContainer = styled.div`
-  background-color: var(--pf-v6-global--BackgroundColor--200);
-  margin-top: var(--pf-v6-global--spacer--lg);
-  margin-bottom: var(--pf-v6-global--spacer--lg);
-  margin-right: calc(var(--pf-v6-c-card--child--PaddingRight) * -1);
-  margin-left: calc(var(--pf-v6-c-card--child--PaddingLeft) * -1);
-  padding: var(--pf-v6-c-card--child--PaddingRight);
-
-  & > p {
-    margin-bottom: var(--pf-v6-global--spacer--md);
-  }
-
-  & > *:not(:first-child):not(:last-child) {
-    margin-bottom: var(--pf-v6-global--spacer--md);
-    padding-bottom: var(--pf-v6-global--spacer--md);
-    border-bottom: 1px solid var(--pf-v6-global--BorderColor--100);
-  }
-
-  & + & {
-    margin-top: calc(var(--pf-v6-global--spacer--lg) * -1);
-  }
-`;
+import './ScheduleDetail.css';
 
 /**
  * What the schedule detail reads in one go: the schedule's credentials, its
@@ -386,8 +348,8 @@ function ScheduleDetail({
   return (
     <CardBody>
       <ScheduleToggle
+        className="awx-schedule-detail__padding-bottom-40"
         schedule={schedule}
-        css="padding-bottom: 40px"
         isDisabled={isDisabled}
       />
       <DetailList gutter="sm">
@@ -426,7 +388,7 @@ function ScheduleDetail({
         />
       </DetailList>
       {frequency.length ? (
-        <FrequencyDetailsContainer>
+        <div className="awx-schedule-detail__frequency-details-container">
           <div ouia-component-id="schedule-frequency-details">
             <p>
               <strong>{t`Frequency Details`}</strong>
@@ -441,12 +403,12 @@ function ScheduleDetail({
               />
             ))}
           </div>
-        </FrequencyDetailsContainer>
+        </div>
       ) : null}
       {exceptionFrequency.length ? (
-        <FrequencyDetailsContainer>
+        <div className="awx-schedule-detail__frequency-details-container">
           <div ouia-component-id="schedule-exception-details">
-            <p css="border-top: 0">
+            <p className="awx-schedule-detail__border-top-0">
               <strong>{t`Frequency Exception Details`}</strong>
             </p>
             {exceptionFrequency.map((freq) => (
@@ -460,7 +422,7 @@ function ScheduleDetail({
               />
             ))}
           </div>
-        </FrequencyDetailsContainer>
+        </div>
       ) : null}
       <DetailList gutter="sm">
         {hasDaysToKeepField ? (
@@ -484,9 +446,12 @@ function ScheduleDetail({
       </DetailList>
       {showPromptedFields && (
         <>
-          <PromptTitle headingLevel="h2">{t`Prompted Values`}</PromptTitle>
-          <PromptDivider />
-          <PromptDetailList>
+          <Title
+            className="awx-schedule-detail__prompt-title"
+            headingLevel="h2"
+          >{t`Prompted Values`}</Title>
+          <Divider className="awx-schedule-detail__prompt-divider" />
+          <DetailList className="awx-schedule-detail__prompt-detail-list">
             {ask_job_type_on_launch && (
               <Detail
                 label={t`Job Type`}
@@ -678,7 +643,7 @@ function ScheduleDetail({
                 dataCy="schedule-detail-variables"
               />
             )}
-          </PromptDetailList>
+          </DetailList>
         </>
       )}
       {rruleError && <UnsupportedRRuleAlert schedule={schedule} />}

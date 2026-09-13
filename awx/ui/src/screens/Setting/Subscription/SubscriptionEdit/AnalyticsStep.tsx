@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import { Button, Flex, FormGroup } from '@patternfly/react-core';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { required } from 'util/validators';

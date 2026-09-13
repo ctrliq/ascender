@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import BecomeMethodField from './BecomeMethodField';
 
@@ -15,18 +15,18 @@ const fieldOptions = {
 describe('<BecomeMethodField>', () => {
   test('should mount properly', () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <BecomeMethodField fieldOptions={fieldOptions} isRequired />
-      </Formik>
+      </FormRoot>
     );
     expect(screen.getByText('Privilege Escalation Method')).toBeInTheDocument();
   });
 
   test('should open privilege escalation properly', async () => {
     const { user } = renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <BecomeMethodField fieldOptions={fieldOptions} isRequired />
-      </Formik>
+      </FormRoot>
     );
     await user.click(
       screen.getByRole('textbox', { name: 'Privilege Escalation Method' })

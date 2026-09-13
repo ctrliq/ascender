@@ -19,8 +19,8 @@ describe('<HostStatusBar />', () => {
   });
 
   test('segments keep their styling props out of the DOM', () => {
-    // color and count drive the CSS only; as plain props styled-components
-    // forwarded them to the div, and count is not an HTML attribute
+    // colour and count drive the styling only, through the style attribute;
+    // as plain props they would land on the div, and count is not one
     const { container } = renderWithContexts(
       <HostStatusBar counts={mockCounts} />
     );

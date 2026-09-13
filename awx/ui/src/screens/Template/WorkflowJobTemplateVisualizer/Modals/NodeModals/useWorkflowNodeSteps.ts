@@ -15,7 +15,7 @@ import type {
   SetFieldTouched,
 } from 'components/LaunchPrompt/types';
 import { useContext, useState, useEffect, useRef } from 'react';
-import { useFormikContext } from 'formik';
+import { useFormContext } from 'components/Form';
 import { useLingui } from '@lingui/react/macro';
 import useInventoryStep from 'components/LaunchPrompt/steps/useInventoryStep';
 import useCredentialsStep from 'components/LaunchPrompt/steps/useCredentialsStep';
@@ -366,7 +366,7 @@ export default function useWorkflowNodeSteps(
     resetForm,
     values: formikValues,
     errors: formikErrors,
-  } = useFormikContext<NodeModalValues>();
+  } = useFormContext<NodeModalValues>();
   const [visited, setVisited] = useState({});
   // The reset below runs when the launch config arrives, and the values it
   // carries over have to be the ones on screen by then rather than the ones

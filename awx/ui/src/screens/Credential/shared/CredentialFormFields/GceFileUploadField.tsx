@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useFormikContext } from 'formik';
+import { useFormContext } from 'components/Form';
 import { useLingui } from '@lingui/react/macro';
 
 import {
@@ -12,7 +12,7 @@ import {
 
 function GceFileUploadField() {
   const { t } = useLingui();
-  const { setFieldValue } = useFormikContext<Record<string, unknown>>();
+  const { setFieldValue } = useFormContext<Record<string, unknown>>();
   const [fileError, setFileError] = useState<string | null>(null);
   const [filename, setFilename] = useState('');
   const [fileValue, setFileValue] = useState('');
