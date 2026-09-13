@@ -1,12 +1,15 @@
 import pytest
 
+from awx.api.versioning import reverse
 from awx.main.access import (
     InstanceGroupAccess,
     OrganizationAccess,
     InventoryAccess,
     InventorySourceAccess,
     JobTemplateAccess,
+    ReceptorAddressAccess,
 )
+from awx.main.models import Instance, ReceptorAddress
 
 
 @pytest.mark.django_db
@@ -133,3 +136,34 @@ def test_ig_associability(organization, default_instance_group, admin, system_au
     assert not oadmin_access.can_attach(objects.job_template, default_instance_group, 'instance_groups', None)
     assert not auditor_access.can_attach(objects.job_template, default_instance_group, 'instance_groups', None)
     assert not omember_access.can_attach(objects.job_template, default_instance_group, 'instance_groups', None)
+
+
+@pytest.mark.django_db
+def test_receptor_address_visibility_follows_the_instance(default_instance_group, rando):
+    # ReceptorAddressAccess said it shows an address "whenever I can access the
+    # instance", but asked Instance for accessible_pk_qs, which Instance does not
+    # have: it is not a ResourceMixin. Every user get_queryset() did not short
+    # circuit, meaning everyone but a superuser or system auditor, got an
+    # AttributeError and a 500 off /api/v2/receptor_addresses/.
+    instance = Instance.objects.create(hostname='addr-host', node_type='execution')
+    default_instance_group.instances.add(instance)
+    address = ReceptorAddress.objects.create(instance=instance, address='addr-host', canonical=True)
+
+    assert list(ReceptorAddressAccess(rando).filtered_queryset()) == []
+    assert not ReceptorAddressAccess(rando).can_read(address)
+
+    default_instance_group.read_role.members.add(rando)
+
+    assert list(ReceptorAddressAccess(rando).filtered_queryset()) == [address]
+    assert ReceptorAddressAccess(rando).can_read(address)
+
+
+@pytest.mark.django_db
+def test_receptor_address_list_is_not_a_500(default_instance_group, rando, get):
+    instance = Instance.objects.create(hostname='addr-host', node_type='execution')
+    default_instance_group.instances.add(instance)
+    ReceptorAddress.objects.create(instance=instance, address='addr-host', canonical=True)
+
+    response = get(reverse('api:receptor_addresses_list'), user=rando, expect=200)
+
+    assert response.data['count'] == 0
