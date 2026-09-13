@@ -441,6 +441,126 @@ describe.each(implementations)('a form, per $name', (impl) => {
     });
   });
 
+  // Names are not all single keys. The schedule subform builds
+  // `${prefix}.startDate` and the credential plugin fields build
+  // `inputs.${id}`, so a name is a path and every read and write walks it.
+  describe('field names that are paths', () => {
+    function Nested() {
+      return (
+        <Root
+          initialValues={{ inputs: { host: 'example' } }}
+          onSubmit={() => {}}
+        >
+          {() => <Probe name="inputs.host" validate={required} />}
+        </Root>
+      );
+    }
+
+    test('a nested field reads its value and its initialValue', () => {
+      render(<Nested />);
+
+      expect(screen.getByLabelText('inputs.host')).toHaveValue('example');
+      expect(at('inputs.host-initial')).toBe('example');
+    });
+
+    test('typing writes through the path rather than over it', async () => {
+      const user = userEvent.setup();
+      render(<Nested />);
+
+      await user.clear(screen.getByLabelText('inputs.host'));
+      await user.type(screen.getByLabelText('inputs.host'), 'other');
+
+      expect(screen.getByLabelText('inputs.host')).toHaveValue('other');
+    });
+
+    test('submitting validates and touches a nested field too', async () => {
+      const user = userEvent.setup();
+      const onSubmit = vi.fn();
+      render(
+        <Root initialValues={{ inputs: { host: '' } }} onSubmit={onSubmit}>
+          {(form) => (
+            <form onSubmit={form.handleSubmit}>
+              <Probe name="inputs.host" validate={required} />
+              <button type="submit">submit</button>
+            </form>
+          )}
+        </Root>
+      );
+
+      await user.click(press('submit'));
+
+      await waitFor(() => expect(at('inputs.host-error')).toBe('required'));
+      expect(at('inputs.host-touched')).toBe('true');
+      expect(onSubmit).not.toHaveBeenCalled();
+    });
+
+    test('a nested field carries its own error and touched flag', async () => {
+      const user = userEvent.setup();
+      render(<Nested />);
+
+      await user.clear(screen.getByLabelText('inputs.host'));
+      await waitFor(() => expect(at('inputs.host-error')).toBe('required'));
+
+      await user.click(screen.getByLabelText('inputs.host'));
+      await user.tab();
+      await waitFor(() => expect(at('inputs.host-touched')).toBe('true'));
+    });
+  });
+
+  // A number input hands over a string, and a form that stores the string
+  // where a number was stored changes what the API is sent.
+  describe('the value a control type means', () => {
+    function Numeric() {
+      const [field] = useField({ name: 'count' });
+      return (
+        <input
+          aria-label="count"
+          type="number"
+          name="count"
+          value={String(field.value ?? '')}
+          onChange={field.onChange}
+        />
+      );
+    }
+
+    test('a number input writes a number, not the string of one', async () => {
+      const user = userEvent.setup();
+      render(
+        <Root initialValues={{ count: 0 }} onSubmit={() => {}}>
+          {() => (
+            <>
+              <Numeric />
+              <ContextProbe />
+            </>
+          )}
+        </Root>
+      );
+
+      await user.clear(screen.getByLabelText('count'));
+      await user.type(screen.getByLabelText('count'), '134');
+
+      await waitFor(() => expect(at('values')).toBe('{"count":134}'));
+    });
+
+    test('a number input that is emptied writes an empty string', async () => {
+      const user = userEvent.setup();
+      render(
+        <Root initialValues={{ count: 7 }} onSubmit={() => {}}>
+          {() => (
+            <>
+              <Numeric />
+              <ContextProbe />
+            </>
+          )}
+        </Root>
+      );
+
+      await user.clear(screen.getByLabelText('count'));
+
+      await waitFor(() => expect(at('values')).toBe('{"count":""}'));
+    });
+  });
+
   describe('the form context', () => {
     test('values carries every field', () => {
       render(<Harness initialValues={{ a: '1', b: '2' }} />);
