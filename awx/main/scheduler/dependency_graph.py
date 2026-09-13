@@ -64,7 +64,11 @@ class DependencyGraph(object):
         if type(job) is AdHocCommand:
             self.mark_if_no_key(self.INVENTORY_UPDATES, job.inventory_id, job)
         else:
-            self.mark_if_no_key(self.INVENTORY_UPDATES, job.inventory_source.inventory_id, job)
+            # InventoryUpdate carries its own inventory FK (copied from the source at creation);
+            # use it so no related-object query is issued per active update. The field is
+            # nullable, so fall back to the source for any row that lacks it.
+            inventory_id = job.inventory_id or job.inventory_source.inventory_id
+            self.mark_if_no_key(self.INVENTORY_UPDATES, inventory_id, job)
 
     def mark_inventory_source_update(self, job):
         self.mark_if_no_key(self.INVENTORY_SOURCE_UPDATES, job.inventory_source_id, job)
