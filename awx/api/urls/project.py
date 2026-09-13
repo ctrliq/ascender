@@ -3,7 +3,7 @@
 
 from django.urls import include, path
 
-from awx.api.views import (
+from awx.api.views.project import (
     ProjectList,
     ProjectDetail,
     ProjectPlaybooks,

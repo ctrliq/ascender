@@ -3,7 +3,13 @@
 
 from django.urls import path
 
-from awx.api.views import CredentialTypeList, CredentialTypeDetail, CredentialTypeCredentialList, CredentialTypeActivityStreamList, CredentialTypeExternalTest
+from awx.api.views.credential import (
+    CredentialTypeList,
+    CredentialTypeDetail,
+    CredentialTypeCredentialList,
+    CredentialTypeActivityStreamList,
+    CredentialTypeExternalTest,
+)
 
 urls = [
     path('', CredentialTypeList.as_view(), name='credential_type_list'),

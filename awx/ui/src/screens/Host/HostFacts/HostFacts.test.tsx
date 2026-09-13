@@ -27,8 +27,6 @@ describe('<HostFacts />', () => {
       data: mockHostFacts,
     } as unknown as ResponseOf<typeof HostsAPI.readFacts>);
     renderWithContexts(<HostFacts host={mockHost as unknown as Host} />);
-    // react-ace renders empty under jsdom, so assert the Facts detail label
-    // rather than the JSON body
     expect(await screen.findByText('Facts')).toBeInTheDocument();
     await waitFor(() =>
       expect(screen.queryByRole('progressbar')).not.toBeInTheDocument()

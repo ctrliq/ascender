@@ -2,7 +2,7 @@
 import logging
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 
 # AWX
 from awx import MODE
