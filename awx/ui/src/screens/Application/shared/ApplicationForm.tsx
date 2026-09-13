@@ -1,9 +1,9 @@
 import type { OAuth2Application, SummaryFieldRef } from 'types/api';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
-import { Formik, useField, useFormikContext } from 'formik';
 import {
   Form,
   FormGroup,
@@ -39,7 +39,7 @@ function ApplicationFormFields({
   const applicationHelpTextStrings = getApplicationHelpTextStrings();
   const { pathname } = useLocation();
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
   const [organizationField, organizationMeta, organizationHelpers] =
     useField('organization');
   const [
@@ -199,7 +199,7 @@ function ApplicationForm({
   };
 
   return (
-    <Formik
+    <FormRoot
       initialValues={initialValues}
       onSubmit={(values) => onSubmit(values)}
     >
@@ -219,7 +219,7 @@ function ApplicationForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

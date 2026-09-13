@@ -14,7 +14,6 @@ import type {
 import React, { useContext, useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import { Formik, useFormikContext } from 'formik';
 import * as yaml from 'js-yaml';
 import {
   Button,
@@ -40,6 +39,7 @@ import useWorkflowNodeSteps from './useWorkflowNodeSteps';
 import type { NodeModalValues } from './useWorkflowNodeSteps';
 import NodeNextButton from './NodeNextButton';
 import type { NodeWizardStep } from './NodeNextButton';
+import { FormRoot, useFormContext } from 'components/Form';
 import './NodeModal.css';
 
 export interface NodeModalCustomFooterProps {
@@ -137,7 +137,7 @@ function NodeModalForm({
   const dispatch = useContext(
     WorkflowDispatchContext
   ) as React.Dispatch<WorkflowAction>;
-  const { values, setFieldTouched } = useFormikContext<NodeModalValues>();
+  const { values, setFieldTouched } = useFormContext<NodeModalValues>();
   const { t } = useLingui();
 
   const [triggerNext, setTriggerNext] = useState(0);
@@ -319,7 +319,7 @@ const NodeModalInner = ({
   onSave,
   askLinkType,
 }: NodeModalInnerProps) => {
-  const { values } = useFormikContext<NodeModalValues>();
+  const { values } = useFormContext<NodeModalValues>();
   const { t } = useLingui();
 
   const wizardTitle = values.nodeResource
@@ -482,7 +482,7 @@ const NodeModal = ({ onSave, askLinkType, title }: NodeModalProps) => {
   };
 
   return (
-    <Formik
+    <FormRoot
       initialValues={{
         approvalName: '',
         approvalDescription: '',
@@ -517,7 +517,7 @@ const NodeModal = ({ onSave, askLinkType, title }: NodeModalProps) => {
           />
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 };
 

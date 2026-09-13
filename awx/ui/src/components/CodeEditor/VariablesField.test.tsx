@@ -1,6 +1,6 @@
 import React from 'react';
 import { act, screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import VariablesField from './VariablesField';
 
@@ -28,11 +28,11 @@ const isPrimary = (btn: HTMLElement) => btn.classList.contains('pf-m-primary');
 describe('VariablesField', () => {
   it('should render code editor', () => {
     const { container } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ variables: '---\n' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ variables: '---\n' }}>
         {() => (
           <VariablesField id="the-field" name="variables" label="Variables" />
         )}
-      </Formik>
+      </FormRoot>
     );
     expect(container.querySelector('.cm-editor')).toBeInTheDocument();
     expect(editorText()).toBe('---\n');
@@ -42,14 +42,14 @@ describe('VariablesField', () => {
 
   it('should toggle between yaml/json', async () => {
     const { user } = renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{ variables: '---\nfoo: bar\nbaz: 3' }}
       >
         {() => (
           <VariablesField id="the-field" name="variables" label="Variables" />
         )}
-      </Formik>
+      </FormRoot>
     );
     // YAML active to start
     expect(isPrimary(yamlBtn())).toBe(true);
@@ -71,11 +71,11 @@ describe('VariablesField', () => {
     // to give the original yaml back rather than the expansion of it
     const yamlValue = '---\na: &aa [a,b,c]\nb: *aa';
     const { user, container } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ variables: yamlValue }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ variables: yamlValue }}>
         {() => (
           <VariablesField id="the-field" name="variables" label="Variables" />
         )}
-      </Formik>
+      </FormRoot>
     );
     await user.click(jsonBtn());
     await user.click(yamlBtn());
@@ -86,14 +86,14 @@ describe('VariablesField', () => {
 
   it('should set Formik error if yaml is invalid', async () => {
     const { user, container } = renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{ variables: '---\nfoo bar\n' }}
       >
         {() => (
           <VariablesField id="the-field" name="variables" label="Variables" />
         )}
-      </Formik>
+      </FormRoot>
     );
     // switching the invalid yaml to JSON mode raises a conversion error
     await user.click(jsonBtn());
@@ -106,7 +106,7 @@ describe('VariablesField', () => {
 
   it('should render tooltip', () => {
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ variables: '---\n' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ variables: '---\n' }}>
         {() => (
           <VariablesField
             id="the-field"
@@ -115,7 +115,7 @@ describe('VariablesField', () => {
             tooltip="This is a tooltip"
           />
         )}
-      </Formik>
+      </FormRoot>
     );
     // the Popover renders its help-icon trigger button when a tooltip is passed
     expect(
@@ -126,7 +126,7 @@ describe('VariablesField', () => {
   it('should submit an edited value through Formik', async () => {
     const handleSubmit = vi.fn();
     const { user } = renderWithContexts(
-      <Formik initialValues={{ variables: 'foo: bar' }} onSubmit={handleSubmit}>
+      <FormRoot initialValues={{ variables: 'foo: bar' }} onSubmit={handleSubmit}>
         {(formik) => (
           <form onSubmit={formik.handleSubmit}>
             <VariablesField id="the-field" name="variables" label="Variables" />
@@ -135,7 +135,7 @@ describe('VariablesField', () => {
             </button>
           </form>
         )}
-      </Formik>
+      </FormRoot>
     );
 
     // type in the editor, which drives onChange into Formik after the debounce
@@ -158,14 +158,14 @@ describe('VariablesField', () => {
 
   it('should initialize to JSON if value is JSON, formatted', async () => {
     renderWithContexts(
-      <Formik
+      <FormRoot
         initialValues={{ variables: '{"foo": "bar"}' }}
         onSubmit={vi.fn()}
       >
         {() => (
           <VariablesField id="the-field" name="variables" label="Variables" />
         )}
-      </Formik>
+      </FormRoot>
     );
     // a JSON initial value starts the field in JSON mode; the JSON-formatting
     // effect runs on mount, so wait for the mode to settle (also flushes the
@@ -177,11 +177,11 @@ describe('VariablesField', () => {
 
   it('offers no expand button: the editor grows with its content', () => {
     renderWithContexts(
-      <Formik initialValues={{ variables: '---' }} onSubmit={vi.fn()}>
+      <FormRoot initialValues={{ variables: '---' }} onSubmit={vi.fn()}>
         {() => (
           <VariablesField id="the-field" name="variables" label="Variables" />
         )}
-      </Formik>
+      </FormRoot>
     );
     expect(
       screen.queryByRole('button', { name: 'Expand input' })

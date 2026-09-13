@@ -5,7 +5,6 @@ import type {
   SummaryFieldRef,
 } from 'types/api';
 import React, { useCallback } from 'react';
-import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import { minMaxValue, required } from 'util/validators';
 import {
@@ -27,6 +26,7 @@ import { VerbositySelectField } from 'components/VerbositySelectField';
 
 import ConstructedInventoryHint from './ConstructedInventoryHint';
 import getInventoryHelpTextStrings from './Inventory.helptext';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 
 export interface ConstructedInventoryFormFieldsProps {
   inventory?: Inventory;
@@ -41,7 +41,7 @@ function ConstructedInventoryFormFields({
   const { t } = useLingui();
   const helpText = getInventoryHelpTextStrings();
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
   const constructedPluginValidator = {
     plugin: required(t`The plugin parameter is required.`),
   };
@@ -229,7 +229,7 @@ function ConstructedInventoryForm({
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit}>
+    <FormRoot initialValues={initialValues} onSubmit={onSubmit}>
       {(formik) => (
         <Form role="form" autoComplete="off" onSubmit={formik.handleSubmit}>
           <FormColumnLayout>
@@ -242,7 +242,7 @@ function ConstructedInventoryForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

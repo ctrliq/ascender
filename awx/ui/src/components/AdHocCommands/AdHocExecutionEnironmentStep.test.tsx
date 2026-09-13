@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { ExecutionEnvironmentsAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -30,9 +30,9 @@ describe('<AdHocExecutionEnvironmentStep />', () => {
 
   test('should mount properly', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <AdHocExecutionEnvironmentStep organizationId={1} />
-      </Formik>
+      </FormRoot>
     );
     // OptionsList renders the fetched rows once loading resolves
     await waitFor(() => expect(screen.getByText('EE1 1')).toBeInTheDocument());
@@ -40,9 +40,9 @@ describe('<AdHocExecutionEnvironmentStep />', () => {
 
   test('should call api', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <AdHocExecutionEnvironmentStep organizationId={1} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(screen.getByText('EE1 1')).toBeInTheDocument());
     expect(ExecutionEnvironmentsAPI.read).toHaveBeenCalled();

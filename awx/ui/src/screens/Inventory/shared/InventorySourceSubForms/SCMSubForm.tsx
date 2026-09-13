@@ -1,6 +1,6 @@
 import type { DetailedError, SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useField, useFormikContext } from 'formik';
+import { useField, useFormContext } from 'components/Form';
 import { useLingui } from '@lingui/react/macro';
 import {
   Button,
@@ -46,7 +46,7 @@ const SCMSubForm = ({ autoPopulateProject }: SCMSubFormProps) => {
   const [filterValue, setFilterValue] = useState('');
   const [sourcePath, setSourcePath] = useState<string[]>([]);
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
   const [credentialField] = useField('credential');
 
   const [projectField, projectMeta, projectHelpers] =

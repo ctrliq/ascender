@@ -1,6 +1,6 @@
 import type { Organization, SummaryFieldRef } from 'types/api';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Formik, useField, useFormikContext } from 'formik';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Form } from '@patternfly/react-core';
 
@@ -33,7 +33,7 @@ function OrganizationFormFields({
   const { t } = useLingui();
   const { license_info = {}, me = {} } = useConfig();
 
-  const { setFieldValue } = useFormikContext<Record<string, unknown>>();
+  const { setFieldValue } = useFormContext<Record<string, unknown>>();
 
   const [
     galaxyCredentialsField,
@@ -216,7 +216,7 @@ function OrganizationForm({
   }
 
   return (
-    <Formik
+    <FormRoot
       initialValues={{
         name: organization.name ?? '',
         description: organization.description ?? '',
@@ -246,7 +246,7 @@ function OrganizationForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { InstancesAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -87,9 +87,9 @@ describe('PeersLookup', () => {
 
   test('should render successfully without instance_details (for new added instance)', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <PeersLookup value={instances} onChange={() => {}} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(InstancesAPI.read).toHaveBeenCalledTimes(1));
     expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
@@ -100,13 +100,13 @@ describe('PeersLookup', () => {
 
   test('should render successfully with instance_details for edit instance', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <PeersLookup
           value={instances}
           instance_details={instances[0]}
           onChange={() => {}}
         />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(InstancesAPI.read).toHaveBeenCalledTimes(1));
     expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
