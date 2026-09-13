@@ -1,32 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
-
 import { useLingui } from '@lingui/react/macro';
 import { Badge, Tooltip } from '@patternfly/react-core';
+import './HostStatusBar.css';
 
-const BarWrapper = styled.div.attrs({ className: 'host-status-bar' })`
-  background-color: var(--pf-v6-global--BackgroundColor--200);
-  display: flex;
-  height: 5px;
-  width: 100%;
-`;
-
-// Both props are transient: as plain props they would be forwarded to the div
-// and land in the DOM as attributes, count an unknown one.
-const BarSegment = styled.div<{ $color?: string; $count?: number }>`
-  background-color: ${(props) => props.$color || 'inherit'};
-  flex-grow: ${(props) => props.$count || 0};
-`;
-BarSegment.displayName = 'BarSegment';
-
-const TooltipContent = styled.div`
-  align-items: center;
-  display: flex;
-
-  span.pf-v6-c-badge {
-    margin-left: 10px;
-  }
-`;
+// A segment's colour and share of the bar are per host status, so they stay
+// on the element rather than becoming a class apiece.
+const segmentStyle = (color: string | undefined, count: number) => ({
+  backgroundColor: color || 'inherit',
+  flexGrow: count || 0,
+});
 
 export interface HostStatusBarProps {
   /** How many hosts ended in each state, as the job's summary reports. */
@@ -66,16 +48,19 @@ const HostStatusBar = ({ counts = {} }: HostStatusBarProps) => {
       <Tooltip
         key={key}
         content={
-          <TooltipContent>
+          <div className="awx-host-status-bar__tooltip-content">
             {hostStatus[key as keyof typeof hostStatus].label}
             <Badge isRead>{count}</Badge>
-          </TooltipContent>
+          </div>
         }
       >
-        <BarSegment
+        <div
           key={key}
-          $color={hostStatus[key as keyof typeof hostStatus].color}
-          $count={count}
+          className="awx-host-status-bar__segment"
+          style={segmentStyle(
+            hostStatus[key as keyof typeof hostStatus].color,
+            count
+          )}
         />
       </Tooltip>
     );
@@ -83,17 +68,24 @@ const HostStatusBar = ({ counts = {} }: HostStatusBarProps) => {
 
   if (noData) {
     return (
-      <BarWrapper>
+      <div className="host-status-bar awx-host-status-bar__wrapper">
         <Tooltip
           content={t`Host status information for this job is unavailable.`}
         >
-          <BarSegment $count={1} />
+          <div
+            className="awx-host-status-bar__segment"
+            style={segmentStyle(undefined, 1)}
+          />
         </Tooltip>
-      </BarWrapper>
+      </div>
     );
   }
 
-  return <BarWrapper>{barSegments}</BarWrapper>;
+  return (
+    <div className="host-status-bar awx-host-status-bar__wrapper">
+      {barSegments}
+    </div>
+  );
 };
 
 export default HostStatusBar;

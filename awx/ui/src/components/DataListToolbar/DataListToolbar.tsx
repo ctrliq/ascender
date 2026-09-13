@@ -2,7 +2,6 @@ import type { QSConfig, QSParamValue } from 'util/qs';
 import type { SearchableKey } from 'components/PaginatedTable';
 import type { SearchColumn, SortColumn } from 'types/api';
 import React, { useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import {
   Button,
@@ -27,28 +26,7 @@ import { KebabifiedProvider } from 'contexts/Kebabified';
 import ExpandCollapse from '../ExpandCollapse';
 import Search from '../Search';
 import Sort from '../Sort';
-
-const ToolbarContent = styled(PFToolbarContent)`
-  & > .pf-v6-c-toolbar__content-section {
-    flex-wrap: nowrap;
-    align-items: stretch;
-  }
-  & .pf-v6-c-toolbar__group,
-  & .pf-v6-c-toolbar__toggle-group {
-    align-items: stretch;
-  }
-  & .pf-v6-c-toolbar__item,
-  & .pf-v6-c-toolbar__filter {
-    align-items: stretch;
-    align-self: stretch;
-  }
-  & .pf-v6-c-select {
-    height: 100%;
-  }
-  & .pf-v6-c-menu-toggle:not(.pf-m-plain) {
-    height: 100%;
-  }
-`;
+import './DataListToolbar.css';
 
 export interface DataListToolbarProps {
   isAllExpanded?: boolean;
@@ -152,7 +130,7 @@ function DataListToolbar({
       collapseListedFiltersBreakpoint="lg"
       clearFiltersButtonText={t`Clear all filters`}
     >
-      <ToolbarContent>
+      <PFToolbarContent className="awx-data-list-toolbar__content">
         {onExpandAll && (
           <ToolbarGroup>
             <ToolbarItem>
@@ -273,7 +251,7 @@ function DataListToolbar({
             {pagination}
           </ToolbarItem>
         )}
-      </ToolbarContent>
+      </PFToolbarContent>
     </Toolbar>
   );
 }

@@ -15,7 +15,6 @@ import {
   Slider,
 } from '@patternfly/react-core';
 import { CaretLeftIcon, OutlinedClockIcon } from '@patternfly/react-icons';
-import styled from 'styled-components';
 
 import { useConfig } from 'contexts/Config';
 import { InstancesAPI, InstanceGroupsAPI } from 'api';
@@ -37,23 +36,7 @@ import useRequest, {
   useDeleteItems,
   useDismissableError,
 } from 'hooks/useRequest';
-
-const Unavailable = styled.span`
-  color: var(--pf-v6-global--danger-color--200);
-`;
-
-const SliderHolder = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const SliderForks = styled.div`
-  flex-grow: 1;
-  margin-right: 8px;
-  margin-left: 8px;
-  text-align: center;
-`;
+import './InstanceDetails.css';
 
 /**
  * How many forks an instance offers at the capacity it is set to, which is the
@@ -271,11 +254,17 @@ function InstanceDetails({
           <Detail
             label={t`Capacity Adjustment`}
             value={
-              <SliderHolder data-cy="slider-holder">
+              <div
+                className="awx-instance-details__slider-holder"
+                data-cy="slider-holder"
+              >
                 <div data-cy="cpu-capacity">
                   {t`CPU ${instance.cpu_capacity}`}
                 </div>
-                <SliderForks data-cy="slider-forks">
+                <div
+                  className="awx-instance-details__slider-forks"
+                  data-cy="slider-forks"
+                >
                   <div data-cy="number-forks">
                     <Plural value={forks} one="# fork" other="# forks" />
                   </div>
@@ -289,11 +278,11 @@ function InstanceDetails({
                     isDisabled={!config?.me?.is_superuser || !instance.enabled}
                     data-cy="slider"
                   />
-                </SliderForks>
+                </div>
                 <div data-cy="mem-capacity">
                   {t`RAM ${instance.mem_capacity}`}
                 </div>
-              </SliderHolder>
+              </div>
             }
           />
           <Detail
@@ -310,7 +299,7 @@ function InstanceDetails({
                   aria-label={t`Used capacity`}
                 />
               ) : (
-                <Unavailable>{t`Unavailable`}</Unavailable>
+                <span className="awx-instance-details__unavailable">{t`Unavailable`}</span>
               )
             }
           />
@@ -373,11 +362,7 @@ function InstanceDetails({
               }
             />
           )}
-          <InstanceToggle
-            css="display: inline-flex;"
-            fetchInstances={fetchDetails}
-            instance={instance}
-          />
+          <InstanceToggle fetchInstances={fetchDetails} instance={instance} />
         </CardActionsRow>
         {Boolean(error) && (
           <AlertModal

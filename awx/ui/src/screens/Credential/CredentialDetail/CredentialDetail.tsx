@@ -7,7 +7,6 @@ import type {
 import React, { useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import { Button, Content, ContentVariants } from '@patternfly/react-core';
 import AlertModal from 'components/AlertModal';
 import { CardBody, CardActionsRow } from 'components/Card';
@@ -22,14 +21,7 @@ import ErrorDetail from 'components/ErrorDetail';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
-
-const PluginInputMetadata = styled.div`
-  grid-column: 1 / -1;
-`;
-
-const PluginFieldText = styled.p`
-  margin-top: 10px;
-`;
+import './CredentialDetail.css';
 
 export interface CredentialDetailProps {
   credential: Credential;
@@ -133,7 +125,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
               </ChipGroup>
             }
           />
-          <PluginInputMetadata>
+          <div className="awx-credential-detail__plugin-input-metadata">
             <CodeEditor
               id={`credential-${id}-metadata`}
               mode="javascript"
@@ -143,7 +135,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
               rows={5}
               hasErrors={false}
             />
-          </PluginInputMetadata>
+          </div>
         </React.Fragment>
       );
     }
@@ -281,9 +273,9 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
         />
       </DetailList>
       {Object.keys(inputSources).length > 0 && (
-        <PluginFieldText>
+        <p className="awx-credential-detail__plugin-field-text">
           {t`* This field will be retrieved from an external secret management system using the specified credential.`}
-        </PluginFieldText>
+        </p>
       )}
       <CardActionsRow>
         {user_capabilities?.edit && (

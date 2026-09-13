@@ -13,6 +13,7 @@ import Sparkline from 'components/Sparkline';
 import DeleteButton from 'components/DeleteButton';
 import { HostsAPI } from 'api';
 import HostToggle from 'components/HostToggle';
+import './HostDetail.css';
 
 export interface HostDetailProps {
   host: Host;
@@ -69,7 +70,7 @@ function HostDetail({ host }: HostDetailProps) {
 
   return (
     <CardBody>
-      <HostToggle host={host} css="padding-bottom: 40px" />
+      <HostToggle className="awx-host-detail__padding-bottom-40" host={host} />
       <DetailList gutter="sm">
         <Detail label={t`Name`} value={name} dataCy="host-name" />
         <Detail

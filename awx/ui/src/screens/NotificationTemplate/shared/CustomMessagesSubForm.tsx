@@ -10,6 +10,7 @@ import type {
   DefaultMessages,
   NotificationText,
 } from './NotificationTemplateForm';
+import './CustomMessagesSubForm.css';
 
 export interface CustomMessagesSubFormProps {
   defaultMessages: DefaultMessages;
@@ -90,8 +91,7 @@ function CustomMessagesSubForm({
         <SubFormLayout>
           <Content
             component="p"
-            className="pf-v6-c-content"
-            css="margin-bottom: var(--pf-v6-c-content--MarginBottom)"
+            className="awx-custom-messages-sub-form__margin-bottom-var-pf-v6-c-content-marginbottom pf-v6-c-content"
           >
             <small>
               {t`Use custom messages to change the content of

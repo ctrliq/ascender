@@ -16,18 +16,8 @@ import {
 } from '@patternfly/react-core';
 
 import AlertModal from 'components/AlertModal';
-import styled from 'styled-components';
 import ErrorDetail from 'components/ErrorDetail';
-
-const WarningMessage = styled(Alert)`
-  margin-top: 10px;
-`;
-
-const Label = styled.span`
-  && {
-    margin-right: 10px;
-  }
-`;
+import './RemoveInstanceButton.css';
 
 export interface RemoveInstanceButtonProps {
   itemsToRemove: Instance[];
@@ -108,7 +98,9 @@ function RemoveInstanceButton({
       {removeDetails &&
         removeDetails.map(({ label, count }) => (
           <div key={label.id} aria-label={`${i18n._(label)}: ${count}`}>
-            <Label>{i18n._(label)}</Label>
+            <span className="awx-remove-instance-button__label">
+              {i18n._(label)}
+            </span>
             <Badge>{count}</Badge>
           </div>
         ))}
@@ -202,7 +194,8 @@ function RemoveInstanceButton({
             </span>
           ))}
           {removeDetails && (
-            <WarningMessage
+            <Alert
+              className="awx-remove-instance-button__warning-message"
               variant="warning"
               isInline
               title={buildRemoveWarning()}
