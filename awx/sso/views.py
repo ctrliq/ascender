@@ -11,7 +11,7 @@ from django.http import HttpResponse
 from django.views.generic import View
 from django.views.generic.base import RedirectView
 from django.utils.encoding import smart_str
-from django.conf import settings
+from awx.settings.typed import settings
 
 logger = logging.getLogger('awx.sso.views')
 

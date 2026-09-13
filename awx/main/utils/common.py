@@ -156,7 +156,7 @@ class RequireDebugTrueOrTest(logging.Filter):
     """
 
     def filter(self, record):
-        from django.conf import settings
+        from awx.settings.typed import settings
 
         return settings.DEBUG or is_testing()
 
