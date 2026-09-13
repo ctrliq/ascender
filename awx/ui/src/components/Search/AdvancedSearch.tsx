@@ -23,30 +23,12 @@ import {
   QuestionCircleIcon,
   TimesIcon,
 } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import { useLocation } from 'react-router';
 import { useConfig } from 'contexts/Config';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import RelatedLookupTypeInput from './RelatedLookupTypeInput';
 import LookupTypeInput from './LookupTypeInput';
-
-const SubmitButtonWrapper = styled.div<{ $disabled?: boolean }>`
-  ${(props) => (props.$disabled ? 'cursor: not-allowed;' : '')}
-`;
-SubmitButtonWrapper.displayName = 'SubmitButtonWrapper';
-
-const AdvancedGroup = styled.div`
-  display: flex;
-
-  @media (max-width: 991px) {
-    display: grid;
-    grid-gap: var(--pf-v6-global--spacer--sm);
-  }
-
-  & .pf-v6-c-select {
-    min-width: 150px;
-  }
-`;
+import './AdvancedSearch.css';
 
 export interface AdvancedSearchProps {
   onSearch?: (key: string, value: string) => void;
@@ -351,7 +333,7 @@ function AdvancedSearch({
   );
 
   return (
-    <AdvancedGroup>
+    <div className="awx-advanced-search__group">
       {renderLookupSelection()}
       <Select
         aria-label={t`Key select`}
@@ -447,7 +429,13 @@ function AdvancedSearch({
       <InputGroup>
         {renderTextInput()}
         <InputGroupItem>
-          <SubmitButtonWrapper $disabled={!searchValue}>
+          <div
+            className={`awx-advanced-search__submit-button-wrapper${
+              !searchValue
+                ? ' awx-advanced-search__submit-button-wrapper--disabled'
+                : ''
+            }`}
+          >
             <Button
               icon={<SearchIcon />}
               ouiaId="advanced-search-text-input"
@@ -456,7 +444,7 @@ function AdvancedSearch({
               aria-label={t`Search submit button`}
               onClick={handleAdvancedSearch}
             />
-          </SubmitButtonWrapper>
+          </div>
         </InputGroupItem>
       </InputGroup>
       <Tooltip content={t`Advanced search documentation`} position="bottom">
@@ -470,7 +458,7 @@ function AdvancedSearch({
           rel="noopener noreferrer"
         />
       </Tooltip>
-    </AdvancedGroup>
+    </div>
   );
 }
 

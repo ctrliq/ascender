@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, within } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import type { TestUser } from '../../../../testUtils/rtlContexts';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import SurveyStep from './SurveyStep';
@@ -40,13 +40,13 @@ async function openAndAssertOptions(user: TestUser) {
 describe('SurveyStep', () => {
   test('should handle choices as a string', async () => {
     const { user } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ job_type: 'run' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ job_type: 'run' }}>
         <SurveyStep
           surveyConfig={
             makeConfig('1\n2\n3\n4\n5\n6') as unknown as SurveyConfig
           }
         />
-      </Formik>
+      </FormRoot>
     );
 
     await openAndAssertOptions(user);
@@ -54,7 +54,7 @@ describe('SurveyStep', () => {
 
   test('should handle choices as an array', async () => {
     const { user } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ job_type: 'run' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ job_type: 'run' }}>
         <SurveyStep
           surveyConfig={
             makeConfig([
@@ -67,7 +67,7 @@ describe('SurveyStep', () => {
             ]) as unknown as SurveyConfig
           }
         />
-      </Formik>
+      </FormRoot>
     );
 
     await openAndAssertOptions(user);

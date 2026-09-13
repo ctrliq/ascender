@@ -1,7 +1,8 @@
-// The style tags styled-components injects are covered by the style-src
-// 'unsafe-inline' in the policy index.html carries, so they need no nonce of
-// their own. There used to be a <meta name="sc-nonce"> and a window.NONCE_ID
-// for them, left over from __webpack_nonce__, which nothing read.
+// The style-src 'unsafe-inline' in the policy index.html carries covers the
+// two inline styles the app still has: the style element the job output writes
+// for a job's ANSI colours, and the style attributes that carry a per instance
+// value. There used to be a <meta name="sc-nonce"> and a window.NONCE_ID for
+// styled-components, left over from __webpack_nonce__, which nothing read.
 
 // Send report when a CSP violation occurs
 // See: https://w3c.github.io/webappsec-csp/2/#violation-reports

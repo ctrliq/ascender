@@ -3,7 +3,6 @@ import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Button, Alert as PFAlert } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import { CardBody, CardActionsRow } from 'components/Card';
 import ContentLoading from 'components/ContentLoading';
 import ContentError from 'components/ContentError';
@@ -14,10 +13,7 @@ import { DetailList } from 'components/DetailList';
 import { useConfig } from 'contexts/Config';
 import { useSettings } from 'contexts/Settings';
 import { SettingDetail } from '../../shared';
-
-const Alert = styled(PFAlert)`
-  margin-bottom: 20px;
-`;
+import './TACACSDetail.css';
 
 function TACACSDetail() {
   const { t } = useLingui();
@@ -72,7 +68,8 @@ function TACACSDetail() {
         {!isLoading && Boolean(error) && <ContentError error={error} />}
         {!isLoading && tacacs && (
           <>
-            <Alert
+            <PFAlert
+              className="awx-tacacs-detail__alert"
               variant="info"
               isInline
               data-cy="TACACS-deprecation-warning"

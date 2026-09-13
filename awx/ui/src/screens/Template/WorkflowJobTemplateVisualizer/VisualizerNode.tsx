@@ -6,7 +6,6 @@ import type {
   WorkflowState,
 } from 'components/Workflow/workflowReducer';
 import React, { useContext, useRef, useState } from 'react';
-import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import {
   InfoIcon,
@@ -30,38 +29,7 @@ import {
   WorkflowNodeTypeLetter,
 } from 'components/Workflow';
 import getNodeType from './shared/WorkflowJobTemplateVisualizerUtils';
-
-const NodeG = styled.g<{ $job?: boolean; $noPointerEvents?: boolean }>`
-  pointer-events: ${(props) => (props.$noPointerEvents ? 'none' : 'initial')};
-  cursor: ${(props) => (props.$job ? 'pointer' : 'default')};
-`;
-
-const NodeContents = styled.div<{ $isInvalidLinkTarget?: boolean }>`
-  font-size: 13px;
-  padding: 0px 10px;
-  background-color: ${(props) =>
-    props.$isInvalidLinkTarget
-      ? 'var(--ascender-workflow-graph-bg)'
-      : 'var(--ascender-workflow-node-bg)'};
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const NodeResourceName = styled.p`
-  overflow: hidden;
-  text-align: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const ConvergenceLabel = styled.p`
-  font-size: 12px;
-  color: #ffffff;
-`;
-
-NodeResourceName.displayName = 'NodeResourceName';
+import './VisualizerNode.css';
 
 export interface VisualizerNodeProps {
   node: WorkflowNode;
@@ -311,10 +279,14 @@ function VisualizerNode({
 
   return (
     <>
-      <NodeG
+      <g
         id={`node-${node.id}`}
-        $job={Boolean(node.job)}
-        $noPointerEvents={isAddLinkSourceNode}
+        className={[
+          node.job && 'awx-visualizer-node__node-g--has-job',
+          isAddLinkSourceNode && 'awx-visualizer-node__node-g--inert',
+        ]
+          .filter(Boolean)
+          .join(' ')}
         onMouseEnter={handleNodeMouseEnter}
         onMouseLeave={handleNodeMouseLeave}
         ref={ref}
@@ -355,9 +327,12 @@ function VisualizerNode({
               x={wfConstants.nodeW / 2 - wfConstants.nodeW / 10 + 7}
               y={-wfConstants.nodeH / 4 - 1}
             >
-              <ConvergenceLabel data-cy="convergence-label">
+              <p
+                className="awx-visualizer-node__convergence-label"
+                data-cy="convergence-label"
+              >
                 {t`ALL`}
-              </ConvergenceLabel>
+              </p>
             </foreignObject>
           </>
         )}
@@ -386,11 +361,22 @@ function VisualizerNode({
           x="1"
           y="1"
         >
-          <NodeContents $isInvalidLinkTarget={node.isInvalidLinkTarget}>
-            <NodeResourceName id={`node-${node.id}-name`}>
+          <div
+            className={[
+              'awx-visualizer-node__contents',
+              node.isInvalidLinkTarget &&
+                'awx-visualizer-node__contents--invalid-link-target',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          >
+            <p
+              className="awx-visualizer-node__resource-name"
+              id={`node-${node.id}-name`}
+            >
               {nodeName}
-            </NodeResourceName>
-          </NodeContents>
+            </p>
+          </div>
         </foreignObject>
         <WorkflowNodeTypeLetter node={node} />
         {hovering && !addingLink && (
@@ -400,7 +386,7 @@ function VisualizerNode({
             actions={tooltipActions}
           />
         )}
-      </NodeG>
+      </g>
       {detailError && (
         <AlertModal
           isOpen={detailError}

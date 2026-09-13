@@ -1,5 +1,6 @@
 import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
+import './ExecutionEnvironment.helptext.css';
 
 // Calls useLingui itself, the way every other helptext module does: it was
 // the only one taking t from its caller, and the use prefix is what says so.
@@ -15,7 +16,7 @@ function useExecutionEnvironmentHelpTextStrings() {
         <br />
         <br />
         <Trans>Examples:</Trans>
-        <ul css="margin: 10px 0 10px 20px">
+        <ul className="awx-execution-environment-helptext__list">
           <li>
             <code>quay.io/ctrliq/ascender-ee:latest</code>
           </li>

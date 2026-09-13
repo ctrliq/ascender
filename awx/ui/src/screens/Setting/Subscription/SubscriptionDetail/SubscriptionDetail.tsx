@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import {
   Button,
   HelperText as PFHelperText,
@@ -18,10 +17,7 @@ import { CardBody, CardActionsRow } from 'components/Card';
 import { DetailList, Detail } from 'components/DetailList';
 import { useConfig } from 'contexts/Config';
 import { formatDateString, secondsToDays } from 'util/dates';
-
-const HelperText = styled(PFHelperText)`
-  margin-top: 10px;
-`;
+import './SubscriptionDetail.css';
 
 function SubscriptionDetail() {
   const { t } = useLingui();
@@ -68,11 +64,11 @@ function SubscriptionDetail() {
                     <Label variant="outline" color="green" icon={<CheckIcon />}>
                       {t`Compliant`}
                     </Label>
-                    <HelperText>
+                    <PFHelperText className="awx-subscription-detail__helper-text">
                       <HelperTextItem>
                         {t`The number of hosts you have automated against is below your subscription count.`}
                       </HelperTextItem>
-                    </HelperText>
+                    </PFHelperText>
                   </>
                 ) : (
                   <>
@@ -83,11 +79,11 @@ function SubscriptionDetail() {
                     >
                       {t`Out of compliance`}
                     </Label>
-                    <HelperText>
+                    <PFHelperText className="awx-subscription-detail__helper-text">
                       <HelperTextItem>
                         {t`You have automated against more hosts than your subscription allows.`}
                       </HelperTextItem>
-                    </HelperText>
+                    </PFHelperText>
                   </>
                 )
               }

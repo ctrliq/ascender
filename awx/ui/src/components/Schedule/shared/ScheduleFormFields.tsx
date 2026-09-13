@@ -1,6 +1,6 @@
 import type { TimeZones } from 'types/api';
 import React, { useState } from 'react';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import {
   FormGroup,
   FormHelperText,
@@ -9,7 +9,6 @@ import {
   Title,
 } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import FormField from 'components/FormField';
 import { required } from 'util/validators';
 import { useConfig } from 'contexts/Config';
@@ -22,12 +21,7 @@ import FrequencyDetailSubform from './FrequencyDetailSubform';
 import DateTimePicker from './DateTimePicker';
 import sortFrequencies from './sortFrequencies';
 import type { ScheduleFrequency } from './types';
-
-const SelectClearOption = styled(SelectOption)`
-  & > input[type='checkbox'] {
-    display: none;
-  }
-`;
+import './ScheduleFormFields.css';
 
 export interface ScheduleFormFieldsProps {
   hasDaysToKeepField?: boolean;
@@ -148,9 +142,12 @@ export default function ScheduleFormFields({
           }
           onBlur={frequencyHelper.setTouched}
         >
-          <SelectClearOption value="none">
+          <SelectOption
+            className="awx-schedule-form-fields__select-clear-option"
+            value="none"
+          >
             {t`None (run once)`}
-          </SelectClearOption>
+          </SelectOption>
           <SelectOption value="minute">{t`Minute`}</SelectOption>
           <SelectOption value="hour">{t`Hour`}</SelectOption>
           <SelectOption value="day">{t`Day`}</SelectOption>
@@ -215,7 +212,10 @@ export default function ScheduleFormFields({
                 }
                 onBlur={exceptionFrequencyHelper.setTouched}
               >
-                <SelectClearOption value="none">{t`None`}</SelectClearOption>
+                <SelectOption
+                  className="awx-schedule-form-fields__select-clear-option"
+                  value="none"
+                >{t`None`}</SelectOption>
                 <SelectOption value="minute">{t`Minute`}</SelectOption>
                 <SelectOption value="hour">{t`Hour`}</SelectOption>
                 <SelectOption value="day">{t`Day`}</SelectOption>

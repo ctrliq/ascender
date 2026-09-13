@@ -6,7 +6,7 @@ import type {
 } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
-import { Formik, useField, useFormikContext } from 'formik';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import { useLingui } from '@lingui/react/macro';
 
 import {
@@ -27,32 +27,13 @@ import {
   TextInputGroupUtilities,
 } from '@patternfly/react-core';
 import { TimesIcon } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import FormField, { FormSubmitError } from 'components/FormField';
 import { FormColumnLayout, FormFullWidthLayout } from 'components/FormLayout';
 import { required } from 'util/validators';
 import OrganizationLookup from 'components/Lookup/OrganizationLookup';
 import TypeInputsSubForm from './TypeInputsSubForm';
 import ExternalTestModal from './ExternalTestModal';
-
-const StyledSelect = styled(Select)`
-  ul {
-    max-width: 495px;
-  }
-
-  /*
-   * Truncate long credential type names, but scope the styles to the menu
-   * item's text span only. PatternFly applies the SelectOption className to
-   * both the flex <li> and the inner button, and setting overflow: hidden on
-   * the flex <li> (align-items: baseline) collapses its height, clipping the
-   * option so the text isn't visible.
-   */
-  .pf-v6-c-menu__item-text {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-`;
+import './CredentialForm.css';
 
 /**
  * What the credential form holds. `inputs` is keyed by whichever fields the
@@ -112,7 +93,7 @@ function CredentialFormFields({
   const { t } = useLingui();
   const { pathname } = useLocation();
   const { setFieldValue, initialValues, setFieldTouched } =
-    useFormikContext<CredentialFormValues>();
+    useFormContext<CredentialFormValues>();
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [filterValue, setFilterValue] = useState('');
   const [credTypeField, credTypeMeta, credTypeHelpers] = useField({
@@ -204,7 +185,8 @@ function CredentialFormFields({
   );
 
   const credentialTypeSelect = (
-    <StyledSelect
+    <Select
+      className="awx-credential-form__styled-select"
       isOpen={isSelectOpen}
       onOpenChange={(open) => {
         setIsSelectOpen(open);
@@ -283,7 +265,7 @@ function CredentialFormFields({
           <SelectOption isDisabled>{t`No results found`}</SelectOption>
         )}
       </SelectList>
-    </StyledSelect>
+    </Select>
   );
 
   return (
@@ -419,7 +401,7 @@ function CredentialForm({
   });
 
   return (
-    <Formik
+    <FormRoot
       initialValues={initialValues}
       onSubmit={(values) => {
         const { credential_type, ...actualValues } = values;
@@ -502,7 +484,7 @@ function CredentialForm({
           )}
         </>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

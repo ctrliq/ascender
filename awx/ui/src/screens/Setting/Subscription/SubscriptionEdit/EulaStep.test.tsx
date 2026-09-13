@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import EulaStep from './EulaStep';
@@ -7,7 +7,7 @@ import EulaStep from './EulaStep';
 describe('<EulaStep />', () => {
   test('initially renders the expected content', () => {
     renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{
           insights: false,
@@ -20,7 +20,7 @@ describe('<EulaStep />', () => {
         }}
       >
         <EulaStep />
-      </Formik>
+      </FormRoot>
     );
     expect(screen.getByText('End User License Agreement')).toBeInTheDocument();
   });

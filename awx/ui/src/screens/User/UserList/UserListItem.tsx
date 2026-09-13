@@ -7,6 +7,7 @@ import { Tr, Td } from '@patternfly/react-table';
 import { Link } from 'react-router';
 import { PencilAltIcon } from '@patternfly/react-icons';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
+import './UserListItem.css';
 
 export interface UserListItemProps {
   user: User;
@@ -54,12 +55,12 @@ function UserListItem({
           <b>{user.username}</b>
         </Link>
         {ldapUser && (
-          <span css="margin-left: 12px">
+          <span className="awx-user-list-item__margin-left-12">
             <Label aria-label={t`ldap user`}>{t`LDAP`}</Label>
           </span>
         )}
         {socialAuthUser && (
-          <span css="margin-left: 12px">
+          <span className="awx-user-list-item__margin-left-12">
             <Label aria-label={t`social login`}>{t`SOCIAL`}</Label>
           </span>
         )}

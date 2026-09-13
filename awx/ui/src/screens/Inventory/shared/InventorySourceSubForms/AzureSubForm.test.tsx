@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { waitFor } from '@testing-library/react';
 import { CredentialsAPI } from 'api';
 import type { ResponseOf } from '../../../../../testUtils/responseOf';
@@ -40,9 +40,9 @@ describe('<AzureSubForm />', () => {
 
   function renderForm() {
     return renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={initialValues}>
+      <FormRoot onSubmit={() => {}} initialValues={initialValues}>
         <AzureSubForm sourceOptions={mockSourceOptions} />
-      </Formik>
+      </FormRoot>
     );
   }
 
