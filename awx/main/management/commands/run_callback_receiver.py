@@ -1,7 +1,7 @@
 # Copyright (c) 2015 Ansible, Inc.
 # All Rights Reserved.
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.core.management.base import BaseCommand
 from awx.main.analytics.subsystem_metrics import CallbackReceiverMetricsServer
 

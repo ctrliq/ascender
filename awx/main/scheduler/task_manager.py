@@ -15,7 +15,7 @@ from django.db import transaction
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _, gettext_noop
 from django.utils.timezone import now as tz_now
-from django.conf import settings
+from awx.settings.typed import settings
 from django.contrib.contenttypes.models import ContentType
 
 from awx.dab.lib.utils.models import get_type_for_model
