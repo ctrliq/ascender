@@ -1,10 +1,10 @@
 import type { NodeTemplate } from 'types/api';
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 
 import { InventorySourcesAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
-import useRequest from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
 import DataListToolbar from 'components/DataListToolbar';
 import CheckboxListItem from 'components/CheckboxListItem';
 import PaginatedTable, {
@@ -37,8 +37,8 @@ function InventorySourcesList({
     result: { inventorySources, count, relatedSearchableKeys, searchableKeys },
     error,
     isLoading,
-    request: fetchInventorySources,
-  } = useRequest(
+  } = useCachedRequest(
+    ['inventory-sources-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([
@@ -61,10 +61,6 @@ function InventorySourcesList({
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchInventorySources();
-  }, [fetchInventorySources]);
 
   return (
     <PaginatedTable

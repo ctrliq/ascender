@@ -1,5 +1,5 @@
 import type { NodeTemplate, SummaryFieldRef } from 'types/api';
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
@@ -7,7 +7,7 @@ import { Popover } from '@patternfly/react-core';
 import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
 import { JobTemplatesAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
-import useRequest from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
 import CheckboxListItem from 'components/CheckboxListItem';
 import ChipGroup from 'components/ChipGroup';
 import CredentialChip from 'components/CredentialChip';
@@ -92,8 +92,8 @@ function JobTemplatesList({
     result: { jobTemplates, count, relatedSearchableKeys, searchableKeys },
     error,
     isLoading,
-    request: fetchJobTemplates,
-  } = useRequest(
+  } = useCachedRequest(
+    ['job-templates-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([
@@ -118,10 +118,6 @@ function JobTemplatesList({
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchJobTemplates();
-  }, [fetchJobTemplates]);
 
   return (
     <PaginatedTable
