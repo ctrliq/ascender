@@ -24,9 +24,9 @@ import OrganizationLookup from 'components/Lookup/OrganizationLookup';
 import Popover from 'components/Popover';
 import { VerbositySelectField } from 'components/VerbositySelectField';
 
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import ConstructedInventoryHint from './ConstructedInventoryHint';
 import getInventoryHelpTextStrings from './Inventory.helptext';
-import { FormRoot, useField, useFormContext } from 'components/Form';
 
 export interface ConstructedInventoryFormFieldsProps {
   inventory?: Inventory;
