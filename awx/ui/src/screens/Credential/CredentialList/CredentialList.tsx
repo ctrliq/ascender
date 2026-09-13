@@ -45,7 +45,7 @@ function CredentialList() {
     isLoading,
     request: fetchCredentials,
   } = useCachedRequest(
-    ['credential', location.search],
+    ['credential-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [creds, credActions] = await Promise.all([

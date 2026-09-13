@@ -29,7 +29,7 @@ function UserOrganizationList() {
     error: contentError,
     isLoading,
   } = useCachedRequest(
-    ['organizations', location.search],
+    ['user-organization-list', id, location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [

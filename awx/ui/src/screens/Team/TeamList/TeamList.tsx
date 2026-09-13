@@ -44,7 +44,7 @@ function TeamList() {
     isLoading,
     request: fetchTeams,
   } = useCachedRequest(
-    ['team', location.search],
+    ['team-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([

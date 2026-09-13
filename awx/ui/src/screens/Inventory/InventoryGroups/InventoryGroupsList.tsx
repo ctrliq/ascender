@@ -51,7 +51,7 @@ function InventoryGroupsList() {
     isLoading,
     request: fetchData,
   } = useCachedRequest(
-    ['group', location.search],
+    ['inventory-groups-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, groupOptions, options] = await Promise.all([

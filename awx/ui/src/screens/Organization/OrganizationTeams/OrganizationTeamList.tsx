@@ -31,7 +31,7 @@ function OrganizationTeamList({ id }: OrganizationTeamListProps) {
     error,
     isLoading,
   } = useCachedRequest(
-    ['team', location.search],
+    ['organization-team-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([

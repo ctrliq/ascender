@@ -68,7 +68,7 @@ function HostList() {
     isLoading,
     request: fetchHosts,
   } = useCachedRequest(
-    ['host', location.search],
+    ['host-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const results = await Promise.all([

@@ -36,7 +36,7 @@ function ApplicationTokenList() {
     result: { tokens, itemCount, relatedSearchableKeys, searchableKeys },
     request: fetchTokens,
   } = useCachedRequest(
-    ['applications', location.search],
+    ['application-token-list', id, location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [

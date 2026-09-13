@@ -44,7 +44,7 @@ function OrganizationsList() {
     isLoading: isOrgsLoading,
     request: fetchOrganizations,
   } = useCachedRequest(
-    ['organization', location.search],
+    ['organizations-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [orgs, orgActions] = await Promise.all([

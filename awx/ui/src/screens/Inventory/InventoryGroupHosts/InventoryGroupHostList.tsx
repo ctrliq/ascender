@@ -60,7 +60,7 @@ function InventoryGroupHostList() {
     isLoading,
     request: fetchHosts,
   } = useCachedRequest(
-    ['host', location.search],
+    ['inventory-group-host-list', groupId, location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse, options] = await Promise.all([

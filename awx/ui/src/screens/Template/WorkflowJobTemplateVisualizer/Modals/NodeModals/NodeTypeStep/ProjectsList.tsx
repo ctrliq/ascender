@@ -38,7 +38,7 @@ function ProjectsList({
     error,
     isLoading,
   } = useCachedRequest(
-    ['projects', location.search],
+    ['projects-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([
