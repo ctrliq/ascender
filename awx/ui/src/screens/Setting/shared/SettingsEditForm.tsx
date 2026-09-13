@@ -24,6 +24,17 @@ export interface SettingsEditFormProps {
   /** Where to go after a save, a revert or a cancel. */
   detailUrl: string;
   /**
+   * Only these settings, in this order, when the category returns more than the
+   * screen shows. Miscellaneous System is the case: `system` carries a good
+   * deal the screen does not put on the form.
+   */
+  only?: string[];
+  /**
+   * Everything the category returns except these. Jobs is the case: it shows
+   * every job setting but the two stdout display limits, which live elsewhere.
+   */
+  except?: string[];
+  /**
    * The fields for this category, given the configuration just read.
    * Everything around them is the same for every category and lives here.
    */
@@ -43,11 +54,19 @@ export interface SettingsEditFormProps {
 function SettingsEditForm({
   category,
   detailUrl,
+  only,
+  except,
   children,
 }: SettingsEditFormProps) {
   const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options = {} } = useSettings();
+
+  // A caller writes these inline, so the arrays are new on every render even
+  // when they say the same thing. Depending on them directly would rebuild the
+  // read each time and the screen would fetch in a loop.
+  const onlyKey = only?.join(',');
+  const exceptKey = except?.join(',');
 
   const {
     isLoading,
@@ -57,8 +76,11 @@ function SettingsEditForm({
   } = useRequest(
     useCallback(async () => {
       const { data } = await SettingsAPI.readCategory(category);
+      const wanted =
+        only ??
+        Object.keys(data).filter((key) => !(except ?? []).includes(key));
       const merged: SettingsConfigMap = {};
-      Object.keys(data).forEach((key) => {
+      wanted.forEach((key) => {
         if (!options[key]) {
           // A value the PUT options do not describe has no label, no help text
           // and no type, so there is no field to render for it. Seventeen of
@@ -68,7 +90,7 @@ function SettingsEditForm({
         merged[key] = { ...options[key], value: data[key] };
       });
       return merged;
-    }, [category, options]),
+    }, [category, options, onlyKey, exceptKey]), // eslint-disable-line react-hooks/exhaustive-deps
     null
   );
 
