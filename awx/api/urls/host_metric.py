@@ -3,7 +3,10 @@
 
 from django.urls import path
 
-from awx.api.views import HostMetricList, HostMetricDetail
+from awx.api.views.host import (
+    HostMetricList,
+    HostMetricDetail,
+)
 
 urls = [path('', HostMetricList.as_view(), name='host_metric_list'), path('<int:pk>/', HostMetricDetail.as_view(), name='host_metric_detail')]
 

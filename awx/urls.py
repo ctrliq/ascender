@@ -2,7 +2,7 @@
 # All Rights Reserved.
 # Modifications Copyright (c) 2024 Ctrl IQ, Inc.
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.urls import path
 from django.urls import re_path, include
 

@@ -6,7 +6,9 @@ import json
 from rest_framework.test import APIRequestFactory
 
 # AWX
-from awx.api.views import HostList
+from awx.api.views.host import (
+    HostList,
+)
 from awx.main.models import Host, Group, Inventory
 from awx.api.versioning import reverse
 
