@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { OrganizationsAPI } from 'api';
@@ -8,7 +8,7 @@ import PaginatedTable, {
   getSearchableKeys,
 } from 'components/PaginatedTable';
 import { getQSConfig, parseQueryString } from 'util/qs';
-import useRequest from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
 import OrganizationTeamListItem from './OrganizationTeamListItem';
 
 const QS_CONFIG = getQSConfig('team', {
@@ -30,8 +30,8 @@ function OrganizationTeamList({ id }: OrganizationTeamListProps) {
     result: { teams, count, relatedSearchableKeys, searchableKeys },
     error,
     isLoading,
-    request: fetchTeams,
-  } = useRequest(
+  } = useCachedRequest(
+    ['organization-team-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([
@@ -54,10 +54,6 @@ function OrganizationTeamList({ id }: OrganizationTeamListProps) {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchTeams();
-  }, [fetchTeams]);
 
   return (
     <PaginatedTable
