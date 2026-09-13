@@ -1,7 +1,6 @@
 import type { SummaryFieldRef, WorkflowJobTemplate } from 'types/api';
 import React, { useCallback, useEffect, useReducer } from 'react';
 import { useNavigate } from 'react-router';
-import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 
 import {
@@ -45,6 +44,7 @@ import type {
   WorkflowNode,
 } from '../../../components/Workflow/workflowReducer';
 import type { NodePositions } from '../../../components/Workflow/WorkflowUtils';
+import './Visualizer.css';
 
 /** The links out of one node, by the node each one reaches. */
 type LinkMap = Record<number, Record<number, string | undefined>>;
@@ -58,20 +58,6 @@ type NodeCredential = SummaryFieldRef & {
   vault_id?: string | null;
   inputs?: { vault_id?: string | null };
 };
-
-const CenteredContent = styled.div`
-  align-items: center;
-  display: flex;
-  flex-flow: column;
-  height: 100%;
-  justify-content: center;
-`;
-
-const Wrapper = styled.div`
-  display: flex;
-  flex-flow: column;
-  height: 100%;
-`;
 
 const replaceIdentifier = (node: WorkflowNode) => {
   if (
@@ -738,17 +724,17 @@ function Visualizer({ template }: VisualizerProps) {
 
   if (isLoading || isSavingVisualizer) {
     return (
-      <CenteredContent>
+      <div className="awx-visualizer__centered-content">
         <ContentLoading />
-      </CenteredContent>
+      </div>
     );
   }
 
   if (contentError) {
     return (
-      <CenteredContent>
+      <div className="awx-visualizer__centered-content">
         <ContentError error={contentError} />
-      </CenteredContent>
+      </div>
     );
   }
 
@@ -756,7 +742,7 @@ function Visualizer({ template }: VisualizerProps) {
   return (
     <WorkflowStateContext.Provider value={state}>
       <WorkflowDispatchContext.Provider value={dispatch}>
-        <Wrapper>
+        <div className="awx-visualizer__wrapper">
           <VisualizerToolbar
             onClose={handleVisualizerClose}
             onSave={() => saveVisualizer()}
@@ -769,7 +755,7 @@ function Visualizer({ template }: VisualizerProps) {
           ) : (
             <VisualizerStartScreen readOnly={readOnly} />
           )}
-        </Wrapper>
+        </div>
         {nodeToDelete && <NodeDeleteModal />}
         {linkToDelete && <LinkDeleteModal />}
         {linkToEdit && <LinkEditModal />}

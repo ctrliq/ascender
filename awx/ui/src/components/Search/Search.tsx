@@ -20,37 +20,12 @@ import {
   MenuToggle,
 } from '@patternfly/react-core';
 import { SearchIcon } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import type { QSConfig, QSParamValue } from 'util/qs';
 import { parseQueryString } from 'util/qs';
 import AdvancedSearch from './AdvancedSearch';
 import getChipsByKey from './getChipsByKey';
 import type { SearchChipGroup } from './getChipsByKey';
-
-const SubmitButtonWrapper = styled.div<{ $disabled?: boolean }>`
-  ${(props) => (props.$disabled ? 'cursor: not-allowed;' : '')}
-`;
-SubmitButtonWrapper.displayName = 'SubmitButtonWrapper';
-
-const DateInputGroup = styled(InputGroup)`
-  /* keep the operator select at its natural width so the date input
-     next to it stays visible */
-  & > .pf-v6-c-select {
-    width: auto;
-    flex: 0 0 auto;
-  }
-  & > .pf-v6-c-form-control {
-    flex: 1 1 auto;
-  }
-`;
-
-const NoOptionDropdown = styled.div`
-  align-self: stretch;
-  border: 1px solid var(--pf-v6-global--BorderColor--300);
-  padding: 5px 15px;
-  white-space: nowrap;
-  border-bottom-color: var(--pf-v6-global--BorderColor--200);
-`;
+import './Search.css';
 
 export interface SearchProps {
   columns: SearchColumn[];
@@ -243,7 +218,9 @@ function Search({
             </SelectList>
           </Select>
         ) : (
-          <NoOptionDropdown>{searchColumnName}</NoOptionDropdown>
+          <div className="awx-search__no-option-dropdown">
+            {searchColumnName}
+          </div>
         )}
       </ToolbarItem>
       {columns.map(({ key, name, options, isBoolean, booleanLabels = {} }) => (
@@ -351,7 +328,7 @@ function Search({
               </Select>
             )) ||
             ((qsConfig.dateFields || []).includes(key) && (
-              <DateInputGroup>
+              <InputGroup className="awx-search__date-input-group">
                 <Select
                   className="dateOperatorSelect"
                   aria-label={t`Date operator select`}
@@ -402,7 +379,13 @@ function Search({
                   onKeyDown={handleDateKeyDown}
                   isDisabled={isDisabled}
                 />
-                <SubmitButtonWrapper $disabled={!searchValue}>
+                <div
+                  className={`awx-search__submit-button-wrapper${
+                    !searchValue
+                      ? ' awx-search__submit-button-wrapper--disabled'
+                      : ''
+                  }`}
+                >
                   <Button
                     icon={<SearchIcon />}
                     ouiaId="date-search-submit-button"
@@ -411,8 +394,8 @@ function Search({
                     aria-label={t`Search submit button`}
                     onClick={handleDateSearch}
                   />
-                </SubmitButtonWrapper>
-              </DateInputGroup>
+                </div>
+              </InputGroup>
             )) || (
               <InputGroup>
                 <InputGroupItem isFill>
@@ -433,7 +416,13 @@ function Search({
                   />
                 </InputGroupItem>
                 <InputGroupItem>
-                  <SubmitButtonWrapper $disabled={!searchValue}>
+                  <div
+                    className={`awx-search__submit-button-wrapper${
+                      !searchValue
+                        ? ' awx-search__submit-button-wrapper--disabled'
+                        : ''
+                    }`}
+                  >
                     <Button
                       icon={<SearchIcon />}
                       ouiaId="search-submit-button"
@@ -442,7 +431,7 @@ function Search({
                       aria-label={t`Search submit button`}
                       onClick={handleSearch}
                     />
-                  </SubmitButtonWrapper>
+                  </div>
                 </InputGroupItem>
               </InputGroup>
             )}

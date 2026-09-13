@@ -5,7 +5,6 @@ import type {
 import React, { useState } from 'react';
 import { useLocation } from 'react-router';
 import { useField, useFormikContext } from 'formik';
-import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import {
   Button,
@@ -27,10 +26,7 @@ import { required } from 'util/validators';
 import type { CredentialFormValues } from '../CredentialForm';
 import { CredentialPluginField } from '../CredentialPlugins';
 import BecomeMethodField from './BecomeMethodField';
-
-const FileUpload = styled(PFFileUpload)`
-  flex-grow: 1;
-`;
+import './CredentialField.css';
 
 export interface CredentialInputProps {
   fieldOptions: CredentialTypeField;
@@ -120,13 +116,24 @@ function CredentialInput({
         <InputGroup>
           {RevertReplaceButton}
           <InputGroupItem isFill>
-            <FileUpload {...fileUploadProps} {...rest} />
+            <PFFileUpload
+              {...fileUploadProps}
+              {...rest}
+              className="awx-credential-field__file-upload"
+            />
           </InputGroupItem>
         </InputGroup>
       );
     }
 
-    return <FileUpload {...fileUploadProps} {...rest} isDisabled={false} />;
+    return (
+      <PFFileUpload
+        {...fileUploadProps}
+        {...rest}
+        className="awx-credential-field__file-upload"
+        isDisabled={false}
+      />
+    );
   }
 
   if (fieldOptions.secret) {

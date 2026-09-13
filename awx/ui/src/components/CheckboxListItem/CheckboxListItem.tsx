@@ -3,6 +3,7 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Td, Tr } from '@patternfly/react-table';
 import { ActionsTd } from 'components/PaginatedTable';
+import './CheckboxListItem.css';
 
 export interface CheckboxListItemProps {
   isRadio?: boolean;
@@ -46,10 +47,10 @@ const CheckboxListItem = ({
 
   return (
     <Tr
+      className="awx-checkbox-list-item__cursor-default"
       ouiaId={`list-item-${itemId}`}
       id={`list-item-${itemId}`}
       onClick={handleRowClick}
-      css="cursor: default"
     >
       <Td
         id={`check-action-item-${itemId}`}

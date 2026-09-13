@@ -10,20 +10,11 @@ import {
 } from '@patternfly/react-icons';
 
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
+import './AlertModal.css';
 
 // The svg rule below is what sizes these icons. PatternFly 6 dropped the
 // size prop from SVGIconProps, so the size="xl" that used to sit on each of
 // them was being ignored and is gone.
-const Header = styled.div`
-  display: flex;
-  align-items: center;
-  svg {
-    margin-right: 16px;
-    font-size: 1.5rem;
-    min-width: 1.5rem;
-  }
-`;
 
 /** The variants this modal knows how to badge, matching PatternFly's. */
 export type AlertVariant = 'danger' | 'error' | 'info' | 'success' | 'warning';
@@ -83,12 +74,12 @@ function AlertModal({
   };
 
   const customHeader = (
-    <Header>
+    <div className="awx-alert-modal__header">
       {variant ? variantIcons[variant] : null}
       <Title id="alert-modal-header-label" size="2xl" headingLevel="h2">
         {title}
       </Title>
-    </Header>
+    </div>
   );
 
   return (

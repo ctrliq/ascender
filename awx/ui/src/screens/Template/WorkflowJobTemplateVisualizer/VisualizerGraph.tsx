@@ -7,7 +7,6 @@ import type {
 import type { NodePositions } from 'components/Workflow/WorkflowUtils';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import * as d3 from 'd3';
 import {
   WorkflowDispatchContext,
@@ -28,17 +27,8 @@ import {
 } from 'components/Workflow';
 import VisualizerLink from './VisualizerLink';
 import VisualizerNode from './VisualizerNode';
+import './VisualizerGraph.css';
 
-const PotentialLink = styled.polyline`
-  pointer-events: none;
-`;
-const WorkflowSVG = styled.svg`
-  background-color: var(--ascender-workflow-graph-bg);
-  border: 1px solid var(--pf-v6-global--BorderColor--100);
-  border-top: none;
-  display: flex;
-  height: 100%;
-`;
 export interface VisualizerGraphProps {
   readOnly: boolean;
   [key: string]: unknown;
@@ -236,7 +226,11 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
           {linkHelp && <WorkflowLinkHelp link={linkHelp} />}
         </WorkflowHelp>
       )}
-      <WorkflowSVG id="workflow-svg" ref={svgRef}>
+      <svg
+        className="awx-visualizer-graph__workflow-svg"
+        id="workflow-svg"
+        ref={svgRef}
+      >
         <defs>
           <marker
             className="WorkflowChart-noPointerEvents"
@@ -313,7 +307,8 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
             />,
           ]}
           {addingLink && (
-            <PotentialLink
+            <polyline
+              className="awx-visualizer-graph__potential-link"
               id="workflow-potentialLink"
               markerEnd="url(#workflow-triangle)"
               style={{ stroke: 'var(--pf-t--global--border--color--default)' }}
@@ -322,8 +317,8 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
             />
           )}
         </g>
-      </WorkflowSVG>
-      <div css="position: absolute; top: 75px;right: 20px;display: flex;">
+      </svg>
+      <div className="awx-visualizer-graph__position-top">
         {showTools && (
           <WorkflowTools
             onFitGraph={handleFitGraph}

@@ -1,18 +1,8 @@
 import React from 'react';
 import { Tab, Tabs as PFTabs, TabTitleText } from '@patternfly/react-core';
-import type { TabsProps } from '@patternfly/react-core';
 import { useLocation, useNavigate } from 'react-router';
-import styled from 'styled-components';
 import { getPersistentFilters } from 'components/PersistentFilters';
-
-// Tabs is a class component whose static members styled-components does not
-// accept as a target; the cast keeps its props and drops the statics, which
-// nothing here uses.
-const Tabs = styled(PFTabs as React.ComponentType<TabsProps>)`
-  & > ul {
-    flex-grow: 1;
-  }
-`;
+import './RoutedTabs.css';
 
 // A tab bar can carry a control beside its tabs, the workflow job selector
 // being the one that does. It used to be registered as a link-less tab, which
@@ -20,21 +10,6 @@ const Tabs = styled(PFTabs as React.ComponentType<TabsProps>)`
 // React reported on every job page inside a workflow. The control now renders
 // as a sibling of the tab list. This wrapper is the positioned ancestor, so
 // the bottom border PatternFly draws with ::before spans the control as well.
-const TabBar = styled.div`
-  position: relative;
-  display: flex;
-  align-items: center;
-
-  & > .pf-v6-c-tabs {
-    position: static;
-    flex-grow: 1;
-  }
-`;
-
-const TabBarControl = styled.div`
-  margin-inline-start: auto;
-  padding-inline-end: var(--pf-t--global--spacer--md);
-`;
 
 /**
  * One entry of a tab bar. An entry with a link is a tab; one without is a
@@ -90,7 +65,8 @@ function RoutedTabs({ tabsArray }: RoutedTabsProps) {
   };
 
   const tabList = (
-    <Tabs
+    <PFTabs
+      className="awx-routed-tabs__tabs"
       activeKey={getActiveTabId()}
       onSelect={handleTabSelect}
       ouiaId="routed-tabs"
@@ -106,19 +82,21 @@ function RoutedTabs({ tabsArray }: RoutedTabsProps) {
           ouiaId={`${tab.name}-tab`}
         />
       ))}
-    </Tabs>
+    </PFTabs>
   );
 
   if (controls.length === 0) {
     return tabList;
   }
   return (
-    <TabBar>
+    <div className="awx-routed-tabs__tab-bar">
       {tabList}
       {controls.map((control) => (
-        <TabBarControl key={control.id}>{control.name}</TabBarControl>
+        <div className="awx-routed-tabs__tab-bar-control" key={control.id}>
+          {control.name}
+        </div>
       ))}
-    </TabBar>
+    </div>
   );
 }
 

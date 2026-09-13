@@ -5,7 +5,6 @@ import { Tr, Td, ExpandableRowContent } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
 import { PencilAltIcon, UndoIcon } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
 import { formatDateString, timeOfDay } from 'util/dates';
 import { ProjectsAPI } from 'api';
@@ -17,10 +16,7 @@ import { isJobRunning } from 'util/jobs';
 import CopyButton from 'components/CopyButton';
 import JobCancelButton from 'components/JobCancelButton';
 import ProjectSyncButton from '../shared/ProjectSyncButton';
-
-const Label = styled.span`
-  color: var(--pf-v6-global--disabled-color--100);
-`;
+import './ProjectListItem.css';
 
 export interface ProjectListItemProps {
   isExpanded: boolean;
@@ -105,11 +101,12 @@ function ProjectListItem({
           {project.scm_revision.substring(0, 7)}
         </ClipboardCopy>
       ) : (
-        <Label
+        <span
+          className="awx-project-list-item__label"
           aria-label={t`The project must be synced before a revision is available.`}
         >
           {t`Sync for revision`}
-        </Label>
+        </span>
       );
     }
 
@@ -118,21 +115,23 @@ function ProjectListItem({
       !project.scm_revision
     ) {
       return (
-        <Label
+        <span
+          className="awx-project-list-item__label"
           aria-label={t`The project is currently syncing and the revision will be available after the sync is complete.`}
         >
           {t`Syncing`}
-        </Label>
+        </span>
       );
     }
 
     return (
       <>
-        <Label
+        <span
+          className="awx-project-list-item__label"
           aria-label={t`The project revision is currently out of date.  Please refresh to fetch the most recent revision.`}
         >
           {t`Refresh for revision`}
-        </Label>
+        </span>
         <Tooltip content={t`Refresh project revision`}>
           <Button
             icon={<UndoIcon />}

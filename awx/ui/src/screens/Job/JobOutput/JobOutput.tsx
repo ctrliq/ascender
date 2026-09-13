@@ -4,12 +4,11 @@ import type { SearchableKey } from 'components/PaginatedTable';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import { useVirtualizer, defaultRangeExtractor } from '@tanstack/react-virtual';
 import { Button, Alert } from '@patternfly/react-core';
 
 import AlertModal from 'components/AlertModal';
-import { CardBody as _CardBody } from 'components/Card';
+import { CardBody } from 'components/Card';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import ErrorDetail from 'components/ErrorDetail';
@@ -37,86 +36,22 @@ import { prependTraceback } from './loadJobEvents';
 import useJobEvents from './useJobEvents';
 import type { JobEvent as OutputEvent, JobEventNode } from './useJobEvents';
 import type { LineTextHtml } from './getLineTextHtml';
+import './JobOutput.css';
 
 const QS_CONFIG = getQSConfig('job_output', {
   order_by: 'counter',
 });
 
-const CardBody = styled(_CardBody)`
-  display: flex;
-  flex-flow: column;
-  height: calc(100vh - 267px);
-  padding-block-start: 1rem;
-`;
-
-const HeaderTitle = styled.div`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  h1 {
-    font-weight: var(--pf-v6-global--FontWeight--bold);
-  }
-`;
-
-const OutputHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.25rem 0;
-
-  h1 {
-    margin: 0;
-  }
-`;
-
-const OutputWrapper = styled.div<{ $cssMap: Record<string, string> }>`
-  background-color: var(--ascender-output-bg, #fff);
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  /* min-height: 0 lets this flex child shrink below its content height so the
-     fixed-height CardBody bounds it; without it the column grows to fit all
-     rows and the nested scroll container never constrains. */
-  min-height: 0;
-  font-family: monospace;
-  font-size: 15px;
-  outline: none;
-  ${({ $cssMap }) =>
-    Object.keys($cssMap).map(
-      (className) => `.${className}{${$cssMap[className]}}`
-    )}
-`;
-
-// The scroll container that hosts the virtualized rows. Replaces
-// react-virtualized's AutoSizer + Grid. It must have a real height; the parent
-// OutputWrapper is `flex: 1 1 auto` inside the flex-column CardBody, so this
-// fills the remaining space and owns the scrollbar.
-//
-// Its height must not depend on its content. react-virtual observes both this
-// element and every rendered row with a ResizeObserver, and a row measurement
-// changes the total size of the rows. With a content-sized flex basis that
-// change resized the container too, in the same frame, which the browser
-// reports as "ResizeObserver loop completed with undelivered notifications":
-// the row observations are delivered, the container's cannot be. A zero flex
-// basis makes the height the free space of the column and nothing else. The
-// gutter strip is painted here as a background so it runs to the bottom when
-// the output is shorter than the container.
-// One source of truth for the gutter width: the ScrollContainer paints it as a
+// One source of truth for the gutter width: the scroll container paints it as a
 // background so it reaches the bottom of a short output, and the virtualized
 // content draws its own strip over the rows. The two have to agree.
 const GUTTER_WIDTH = 85;
 
-const ScrollContainer = styled.div`
-  flex: 1 1 0%;
-  min-height: 0;
-  overflow: auto;
-  position: relative;
-  background: linear-gradient(
-    to right,
-    var(--ascender-gutter-bg, #e8e8e8) ${GUTTER_WIDTH}px,
-    var(--ascender-output-bg, #fff) ${GUTTER_WIDTH}px
-  );
-`;
+/** The per job ANSI classes, as one stylesheet scoped to the output wrapper. */
+const ansiRules = (cssMap: Record<string, string>) =>
+  Object.keys(cssMap)
+    .map((name) => `.awx-job-output__wrapper .${name}{${cssMap[name]}}`)
+    .join('\n');
 
 export const MAX_SELECTION_OVERSCAN = 500;
 
@@ -1080,7 +1015,7 @@ function JobOutput({
 
   return (
     <>
-      <CardBody>
+      <CardBody className="awx-job-output__card-body">
         {isHostModalOpen && (
           <HostEventModal
             onClose={handleHostModalClose}
@@ -1088,11 +1023,11 @@ function JobOutput({
             hostEvent={hostEvent ?? undefined}
           />
         )}
-        <OutputHeader>
-          <HeaderTitle>
+        <div className="awx-job-output__header">
+          <div className="awx-job-output__header-title">
             <h1>{job.name}</h1>
             <StatusLabel status={job.status} />
-          </HeaderTitle>
+          </div>
           <OutputToolbar
             job={job}
             jobStatus={jobStatus}
@@ -1100,7 +1035,7 @@ function JobOutput({
             onDelete={deleteJob}
             isDeleteDisabled={isDeleting}
           />
-        </OutputHeader>
+        </div>
         <HostStatusBar
           counts={(job.host_status_counts as Record<string, number>) || {}}
         />
@@ -1145,11 +1080,11 @@ function JobOutput({
           isTemplateJob={job.type === 'job'}
           isAllCollapsed={isAllCollapsed}
         />
-        <OutputWrapper
+        <div
           ref={outputRef}
-          $cssMap={cssMap}
-          className="ascender-output-wrapper"
+          className="ascender-output-wrapper awx-job-output__wrapper"
         >
+          <style>{ansiRules(cssMap)}</style>
           {showEmptyOutput ? (
             <EmptyOutput
               job={job}
@@ -1163,7 +1098,13 @@ function JobOutput({
               onUnmount={() => {}}
             />
           ) : (
-            <ScrollContainer
+            /* eslint-disable-next-line jsx-a11y/no-static-element-interactions */
+            <div
+              style={
+                {
+                  '--awx-job-output-gutter-width': `${GUTTER_WIDTH}px`,
+                } as React.CSSProperties
+              }
               ref={parentRef}
               // Programmatically focusable so handleMouseDown can direct
               // keyboard-scroll keys here (see handleMouseDown); -1 keeps it
@@ -1177,7 +1118,7 @@ function JobOutput({
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
               onTouchCancel={handleTouchEnd}
-              className="ascender-output-scroll"
+              className="ascender-output-scroll awx-job-output__scroll-container"
             >
               {hasContentLoading ? (
                 <ContentLoading />
@@ -1218,9 +1159,9 @@ function JobOutput({
                   ))}
                 </div>
               )}
-            </ScrollContainer>
+            </div>
           )}
-        </OutputWrapper>
+        </div>
       </CardBody>
       {showCancelModal && isJobRunning(job.status) && (
         <AlertModal

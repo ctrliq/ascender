@@ -12,18 +12,11 @@ import {
   DataListItemCells,
 } from '@patternfly/react-core';
 import { TimesIcon } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
+import './DraggableSelectedList.css';
 
 /** The list numbers what it shows, so every row needs a label to number. */
 const nameOf = (item: SelectableOption) => String(item?.name ?? '');
-
-const RemoveActionSection = styled(DataListAction)`
-  && {
-    align-items: center;
-    padding: 0;
-  }
-`;
 
 /** Moves one entry within a copy of the list, leaving the original alone. */
 function moveItem<T>(items: T[], from: number, to: number) {
@@ -242,7 +235,8 @@ function DraggableSelectedList<T extends SelectableOption = SelectableOption>({
                     </DataListCell>,
                   ]}
                 />
-                <RemoveActionSection
+                <DataListAction
+                  className="awx-draggable-selected-list__remove-action-section"
                   aria-label={t`Actions`}
                   id={`draggable-item-actions-${rowPosition}`}
                   aria-labelledby={`draggable-item-${rowPosition}`}
@@ -255,7 +249,7 @@ function DraggableSelectedList<T extends SelectableOption = SelectableOption>({
                     ouiaId={`draggable-list-remove-${label}`}
                     isDisabled={draggedName !== null}
                   />
-                </RemoveActionSection>
+                </DataListAction>
               </DataListItemRow>
             </DataListItem>
           );
