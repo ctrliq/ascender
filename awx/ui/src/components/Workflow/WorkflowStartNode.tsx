@@ -71,6 +71,7 @@ function WorkflowStartNode({
         <WorkflowActionTooltip
           actions={[
             <WorkflowActionTooltipItem
+              label={t`Add a new node`}
               id="node-add"
               key="add"
               onMouseEnter={() => onUpdateHelpText(t`Add a new node`)}
