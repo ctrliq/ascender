@@ -134,7 +134,10 @@ describe('NodeTypeStep', () => {
 
   test('It shows the job template list by default', async () => {
     renderWithContexts(
-      <FormRoot onSubmit={() => {}} initialValues={{ nodeType: 'job_template' }}>
+      <FormRoot
+        onSubmit={() => {}}
+        initialValues={{ nodeType: 'job_template' }}
+      >
         <NodeTypeStep />
       </FormRoot>
     );
