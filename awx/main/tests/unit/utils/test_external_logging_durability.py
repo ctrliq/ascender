@@ -36,7 +36,7 @@ def conf():
 
 def test_the_queue_is_written_to_disk(conf):
     """Otherwise a restart loses whatever had not been delivered."""
-    assert 'queue.spoolDirectory="/var/lib/awx"' in conf
+    assert 'queue.spoolDirectory="/var/lib/ascender"' in conf
     assert 'queue.filename="awx-external-logger-action-queue"' in conf
 
 

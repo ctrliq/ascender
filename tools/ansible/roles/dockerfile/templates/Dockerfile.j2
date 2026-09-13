@@ -77,6 +77,12 @@ ADD requirements/requirements.txt \
 
 RUN cd /tmp && make requirements_awx
 
+# The data the platform reads and writes is addressed as /var/lib/ascender, and
+# /var/lib/awx is where it has always sat. Nothing moves on disk: the alias is
+# what lets the operator and the installers change their mount paths later,
+# while a volume still attached to the old path keeps resolving.
+RUN ln -s /var/lib/awx /var/lib/ascender
+
 ARG VERSION
 ARG SETUPTOOLS_SCM_PRETEND_VERSION
 ARG HEADLESS
@@ -287,6 +293,9 @@ RUN for dir in \
       /etc/passwd \
       /var/lib/awx/rsyslog/rsyslog.conf ; \
     do touch $file ; chmod g+rw $file ; chgrp root $file ; done
+
+# The same alias as in the builder, for the runtime paths in the settings.
+RUN ln -s /var/lib/awx /var/lib/ascender
 
 {% if (build_dev|bool) or (kube_dev|bool) %}
 RUN for dir in \

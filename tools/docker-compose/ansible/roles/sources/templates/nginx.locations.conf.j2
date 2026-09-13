@@ -1,9 +1,9 @@
 location {{ (ingress_path + '/static').replace('//', '/') }} {
-    alias /var/lib/awx/public/static/;
+    alias /var/lib/ascender/public/static/;
 }
 
 location {{ (ingress_path + '/locales').replace('//', '/') }} {
-    alias /var/lib/awx/public/static/awx/locales;
+    alias /var/lib/ascender/public/static/awx/locales;
 }
 
 location {{ (ingress_path + '/favicon.ico').replace('//', '/') }} {
