@@ -1,6 +1,5 @@
 aiohttp>=3.14.3  # CVE-2026-69244 CVE-2026-59881 CVE-2026-69243
 asciichartpy
-asn1
 azure-identity>=1.25.2
 # only azure.keyvault.secrets is used (credential_plugins/azure_kv.py); the
 # azure-keyvault meta-package also pulled unused certificates/keys. >=4.11
