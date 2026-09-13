@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { InventoriesAPI, HostsAPI } from 'api';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
 import DataListToolbar from 'components/DataListToolbar';
 import ErrorDetail from 'components/ErrorDetail';
@@ -43,7 +44,8 @@ function InventoryHostList() {
     error: contentError,
     isLoading,
     request: fetchData,
-  } = useRequest(
+  } = useCachedRequest(
+    ['inventory-host-list', id, search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, search);
       const [response, hostOptions, adHocOptions] = await Promise.all([
@@ -75,10 +77,6 @@ function InventoryHostList() {
       isAdHocDisabled: true,
     }
   );
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
 
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
     useSelected(hosts);

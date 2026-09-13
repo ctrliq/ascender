@@ -1,12 +1,12 @@
 import type { Organization } from 'types/api';
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Card } from '@patternfly/react-core';
 
 import { OrganizationsAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
-import useRequest from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
 import PaginatedTable, {
   HeaderRow,
   HeaderCell,
@@ -36,14 +36,14 @@ function OrganizationExecEnvList({
   const {
     error: contentError,
     isLoading,
-    request: fetchExecutionEnvironments,
     result: {
       executionEnvironments,
       executionEnvironmentsCount,
       relatedSearchableKeys,
       searchableKeys,
     },
-  } = useRequest(
+  } = useCachedRequest(
+    ['organization-exec-env-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
 
@@ -70,10 +70,6 @@ function OrganizationExecEnvList({
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchExecutionEnvironments();
-  }, [fetchExecutionEnvironments]);
 
   return (
     <Card>

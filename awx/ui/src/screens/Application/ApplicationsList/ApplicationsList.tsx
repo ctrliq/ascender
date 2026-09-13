@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useLocation } from 'react-router';
 import { Card, PageSection } from '@patternfly/react-core';
 import { getQSConfig, parseQueryString } from 'util/qs';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import ErrorDetail from 'components/ErrorDetail';
 import AlertModal from 'components/AlertModal';
 import DatalistToolbar from 'components/DataListToolbar';
@@ -40,7 +41,8 @@ function ApplicationsList() {
       relatedSearchableKeys,
       searchableKeys,
     },
-  } = useRequest(
+  } = useCachedRequest(
+    ['applications-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
 
@@ -67,10 +69,6 @@ function ApplicationsList() {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchApplications();
-  }, [fetchApplications]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
     useSelected(applications);

@@ -11,6 +11,8 @@ import { DateTime } from 'luxon';
 import { RootAPI, MeAPI } from 'api';
 import { isAuthenticated } from 'util/auth';
 import useRequest from 'hooks/useRequest';
+import queryClient from '../queryClient';
+import { clearOptionsCache } from '../api/optionsCache';
 import { SESSION_TIMEOUT_KEY, SESSION_USER_ID } from '../constants';
 
 // The maximum supported timeout for setTimeout(), in milliseconds,
@@ -150,6 +152,12 @@ function SessionProvider({ children }: { children: React.ReactNode }) {
       window.localStorage.removeItem(SESSION_USER_ID);
     }
     sessionStorage.clear();
+    // Both caches are keyed by what was asked for and not by who asked, and
+    // logging out does not reload the tab, so the next user to log in here
+    // would be answered from the last one's reads. The `actions` an OPTIONS
+    // reply carries are what decide which buttons a screen offers.
+    queryClient.clear();
+    clearOptionsCache();
     await RootAPI.logout();
     setSessionTimeout(0);
     setSessionCountdown(0);
