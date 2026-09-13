@@ -14,7 +14,7 @@ from urllib.parse import urljoin
 
 # Django
 from django.db import connection, models
-from django.conf import settings
+from awx.settings.typed import settings
 from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import MaxValueValidator

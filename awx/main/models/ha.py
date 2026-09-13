@@ -10,7 +10,7 @@ from django.db import models, connection
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-from django.conf import settings
+from awx.settings.typed import settings
 from django.utils.timezone import now, timedelta
 from django.db.models import Sum, Q
 
