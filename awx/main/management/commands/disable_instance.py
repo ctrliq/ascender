@@ -3,7 +3,7 @@ from urllib.parse import urljoin
 
 from argparse import ArgumentTypeError
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.core.management.base import BaseCommand, CommandError
 from django.db.models import Q
 from django.utils.timezone import now

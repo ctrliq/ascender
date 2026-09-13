@@ -1,13 +1,13 @@
 import valkey
 import logging
 
-from django.conf import settings
 from django.core.asgi import get_asgi_application
 from django.urls import path
 
 from channels.routing import ProtocolTypeRouter, URLRouter
 
 from awx.dab.lib.channels.middleware import DrfAuthMiddlewareStack
+from awx.settings.typed import settings
 
 from . import consumers
 
