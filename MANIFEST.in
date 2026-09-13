@@ -12,7 +12,6 @@ recursive-include awx/lib/site-packages *
 recursive-include awx/plugins *.ps1
 recursive-include requirements *.txt
 recursive-include requirements *.yml
-recursive-include config *
 recursive-include licenses *
 recursive-exclude awx devonly.py*
 recursive-exclude awx/api/tests *
