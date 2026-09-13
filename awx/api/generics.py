@@ -153,13 +153,13 @@ class APIView(views.APIView):
         if all(
             [
                 settings.PROXY_IP_ALLOWED_LIST,
-                request.environ.get('REMOTE_ADDR') not in settings.PROXY_IP_ALLOWED_LIST,
-                request.environ.get('REMOTE_HOST') not in settings.PROXY_IP_ALLOWED_LIST,
+                request.META.get('REMOTE_ADDR') not in settings.PROXY_IP_ALLOWED_LIST,
+                request.META.get('REMOTE_HOST') not in settings.PROXY_IP_ALLOWED_LIST,
             ]
         ):
             for custom_header in settings.REMOTE_HOST_HEADERS:
                 if custom_header.startswith('HTTP_'):
-                    request.environ.pop(custom_header, None)
+                    request.META.pop(custom_header, None)
 
         drf_request = super(APIView, self).initialize_request(request, *args, **kwargs)
         request.drf_request = drf_request
@@ -195,7 +195,7 @@ class APIView(views.APIView):
         # guarantees that the rendered response will look exactly like the response
         # when you visit a URL that has no matching URL paths in `awx.api.urls`.
         #
-        if response.status_code == 404 and 'awx.named_url_rewritten' in request.environ:
+        if response.status_code == 404 and 'awx.named_url_rewritten' in request.META:
             self.headers.pop('Allow', None)
             response = super(APIView, self).finalize_response(request, response, *args, **kwargs)
             view = ApiErrorView()
