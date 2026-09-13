@@ -4,23 +4,13 @@ import type {
   DeleteRequest,
 } from 'util/getRelatedResourceDeleteDetails';
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import { Alert, Badge, Button, Tooltip } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 import { getRelatedResourceDeleteCounts } from 'util/getRelatedResourceDeleteDetails';
 import AlertModal from '../../components/AlertModal';
 
 import ErrorDetail from '../../components/ErrorDetail';
-
-const WarningMessage = styled(Alert)`
-  margin-top: 10px;
-`;
-
-const Label = styled.span`
-  && {
-    margin-right: 10px;
-  }
-`;
+import './HostMetricsDeleteButton.css';
 
 export interface HostMetricsDeleteButtonProps {
   itemsToDelete: HostMetric[];
@@ -110,7 +100,9 @@ function HostMetricsDeleteButton({
         {deleteDetails &&
           deleteDetails.map(({ label, count }) => (
             <div key={label.id} aria-label={`${i18n._(label)}: ${count}`}>
-              <Label>{i18n._(label)}</Label>
+              <span className="awx-host-metrics-delete-button__label">
+                {i18n._(label)}
+              </span>
               <Badge>{count}</Badge>
             </div>
           ))}
@@ -197,7 +189,8 @@ function HostMetricsDeleteButton({
             </span>
           ))}
           {shouldShowDeleteWarning && (
-            <WarningMessage
+            <Alert
+              className="awx-host-metrics-delete-button__warning-message"
               variant="warning"
               isInline
               title={buildDeleteWarning()}

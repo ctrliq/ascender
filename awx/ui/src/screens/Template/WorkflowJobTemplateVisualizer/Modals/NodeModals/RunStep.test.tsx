@@ -5,7 +5,7 @@ import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import RunStep from './RunStep';
 
 // SelectableCard does not forward `id`/`isSelected` to the DOM; selection is
-// expressed only through styled-components classes ($isSelected). The cards are
+// expressed only through a modifier class. The cards are
 // role="button" elements identified by their label text. Cards in the same
 // selection state share a generated class, so we assert selection by comparing
 // each card's class against the success card while it is the default-selected

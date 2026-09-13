@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 
-import styled from 'styled-components';
 import { Button, Badge, Alert, Tooltip } from '@patternfly/react-core';
 import type { ButtonProps } from '@patternfly/react-core';
 import { getRelatedResourceDeleteCounts } from 'util/getRelatedResourceDeleteDetails';
@@ -12,15 +11,8 @@ import type {
 } from 'util/getRelatedResourceDeleteDetails';
 import AlertModal from '../AlertModal';
 import ErrorDetail from '../ErrorDetail';
+import './DeleteButton.css';
 
-const WarningMessage = styled(Alert)`
-  margin-top: 10px;
-`;
-const Label = styled.span`
-  && {
-    margin-right: 10px;
-  }
-`;
 export interface DeleteButtonProps {
   /** Called with nothing: the caller already holds what it is deleting. */
   onConfirm: () => void;
@@ -156,7 +148,7 @@ function DeleteButton({
         <br />
         <strong>{name}</strong>
         {deleteDetails && (
-          <WarningMessage
+          <Alert
             variant="warning"
             isInline
             title={
@@ -165,7 +157,10 @@ function DeleteButton({
                 <br />
                 {deleteDetails.map(({ label, count }) => (
                   <div aria-label={`${i18n._(label)}: ${count}`} key={label.id}>
-                    <Label>{i18n._(label)}</Label> <Badge>{count}</Badge>
+                    <span className="awx-delete-button__warning-message awx-delete-button__label">
+                      {i18n._(label)}
+                    </span>{' '}
+                    <Badge>{count}</Badge>
                   </div>
                 ))}
               </div>

@@ -2,7 +2,6 @@
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
 import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
 
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -22,26 +21,7 @@ import ContentLoading from 'components/ContentLoading';
 import TemplateList from 'components/TemplateList';
 import Count from './shared/Count';
 import DashboardGraph from './DashboardGraph';
-
-const Counts = styled.div`
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  grid-gap: var(--pf-v6-global--spacer--lg);
-
-  @media (max-width: 900px) {
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 1fr;
-  }
-`;
-
-const MainPageSection = styled(PageSection)`
-  padding-top: 0;
-  padding-bottom: 0;
-
-  & .spacer {
-    margin-bottom: var(--pf-v6-global--spacer--lg);
-  }
-`;
+import './Dashboard.css';
 
 function Dashboard() {
   const { t } = useLingui();
@@ -80,7 +60,7 @@ function Dashboard() {
         breadcrumbConfig={{ '/home': t`Dashboard` }}
       />
       <PageSection hasBodyWrapper={false}>
-        <Counts>
+        <div className="awx-dashboard__counts">
           <Count
             link="/hosts"
             data={countData?.hosts?.total}
@@ -114,9 +94,9 @@ function Dashboard() {
             data={countData?.projects?.failed}
             label={t`Project sync failures`}
           />
-        </Counts>
+        </div>
       </PageSection>
-      <MainPageSection>
+      <PageSection className="awx-dashboard__main-page-section">
         <div className="spacer">
           <Card id="dashboard-main-container">
             <Tabs
@@ -160,7 +140,7 @@ function Dashboard() {
             </Tabs>
           </Card>
         </div>
-      </MainPageSection>
+      </PageSection>
     </>
   );
 }

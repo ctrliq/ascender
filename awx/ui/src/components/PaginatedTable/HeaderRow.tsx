@@ -7,15 +7,9 @@ import type {
   ThProps,
 } from '@patternfly/react-table';
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import type { QSConfig, QSParamValue } from 'util/qs';
 import { parseQueryString, updateQueryString } from 'util/qs';
-
-const Th = styled(PFTh)<{ $alignRight?: boolean }>`
-  --pf-v6-c-table--cell--Overflow: initial;
-  --pf-v6-c-table--cell--MaxWidth: none;
-  ${(props) => (props.$alignRight ? 'text-align: right;' : '')}
-`;
+import './HeaderRow.css';
 
 export interface HeaderRowProps {
   qsConfig: QSConfig;
@@ -57,8 +51,15 @@ export default function HeaderRow({
   return (
     <Thead>
       <Tr ouiaId="paginated-table-header-row">
-        {isExpandable && <Th screenReaderText={t`Expand`} />}
-        {isSelectable && <Th screenReaderText={t`Row select`} />}
+        {isExpandable && (
+          <PFTh className="awx-header-row__th" screenReaderText={t`Expand`} />
+        )}
+        {isSelectable && (
+          <PFTh
+            className="awx-header-row__th"
+            screenReaderText={t`Row select`}
+          />
+        )}
         {React.Children.map(children, (child) => {
           if (!React.isValidElement<HeaderCellProps>(child)) {
             return child;
@@ -120,14 +121,19 @@ export function HeaderCell({
       }
     : undefined;
   return (
-    <Th
+    <PFTh
       info={tooltip ? { popover: <div>{tooltip}</div> } : undefined}
       id={sortKey ? `${idPrefix}-${sortKey}` : undefined}
-      className={className}
+      className={[
+        'awx-header-row__th',
+        children === 'Actions' && 'awx-header-row__th--align-right',
+        className,
+      ]
+        .filter(Boolean)
+        .join(' ')}
       sort={sort}
-      $alignRight={children === 'Actions'}
     >
       {children}
-    </Th>
+    </PFTh>
   );
 }

@@ -1,7 +1,6 @@
 /* eslint i18next/no-literal-string: "off" */
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import {
   Button as PFButton,
   DescriptionList as PFDescriptionList,
@@ -20,47 +19,15 @@ import {
   PlusIcon,
   MinusIcon,
 } from '@patternfly/react-icons';
-
-const Wrapper = styled.div`
-  position: absolute;
-  left: 0;
-  padding: 0 10px;
-  min-width: 150px;
-  background-color: var(--pf-v6-global--BackgroundColor--100);
-  overflow: auto;
-  height: 100%;
-`;
-const Button = styled(PFButton)`
-  &&& {
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    padding: 0;
-    font-size: 11px;
-    background-color: var(--pf-v6-global--BackgroundColor--100);
-    border: 1px solid var(--pf-v6-global--BorderColor--100);
-    color: var(--pf-v6-global--Color--100);
-  }
-`;
-const DescriptionListDescription = styled(PFDescriptionListDescription)`
-  font-size: 11px;
-`;
-const DescriptionList = styled(PFDescriptionList)`
-  gap: 7px;
-`;
-const DescriptionListGroup = styled(PFDescriptionListGroup)`
-  align-items: center;
-`;
-const Text = styled(Content)`
-  margin: 10px 0 5px;
-`;
+import './Legend.css';
 
 function Legend() {
   const { t } = useLingui();
   return (
-    <Wrapper className="legend" data-cy="legend">
+    <div className="awx-legend__wrapper legend" data-cy="legend">
       <Content>
-        <Text
+        <Content
+          className="awx-legend__text"
           component={ContentVariants.small}
           style={{
             fontWeight: 'bold',
@@ -69,55 +36,84 @@ function Legend() {
           }}
         >
           {t`Legend`}
-        </Text>
+        </Content>
         <Divider component="div" />
-        <Text component={ContentVariants.small}>{t`Node types`}</Text>
+        <Content
+          className="awx-legend__text"
+          component={ContentVariants.small}
+        >{t`Node types`}</Content>
       </Content>
-      <DescriptionList isHorizontal isFluid>
-        <DescriptionListGroup>
+      <PFDescriptionList
+        className="awx-legend__description-list"
+        isHorizontal
+        isFluid
+      >
+        <PFDescriptionListGroup className="awx-legend__description-list-group">
           <DescriptionListTerm>
-            <Button size="sm">C</Button>
+            <PFButton className="awx-legend__button" size="sm">
+              C
+            </PFButton>
           </DescriptionListTerm>
-          <DescriptionListDescription>
+          <PFDescriptionListDescription className="awx-legend__description-list-description">
             {t`Control node`}
-          </DescriptionListDescription>
-        </DescriptionListGroup>
-        <DescriptionListGroup>
+          </PFDescriptionListDescription>
+        </PFDescriptionListGroup>
+        <PFDescriptionListGroup className="awx-legend__description-list-group">
           <DescriptionListTerm>
-            <Button variant="primary" size="sm">
+            <PFButton
+              className="awx-legend__button"
+              variant="primary"
+              size="sm"
+            >
               Ex
-            </Button>
+            </PFButton>
           </DescriptionListTerm>
-          <DescriptionListDescription>
+          <PFDescriptionListDescription className="awx-legend__description-list-description">
             {t`Execution node`}
-          </DescriptionListDescription>
-        </DescriptionListGroup>
-        <DescriptionListGroup>
+          </PFDescriptionListDescription>
+        </PFDescriptionListGroup>
+        <PFDescriptionListGroup className="awx-legend__description-list-group">
           <DescriptionListTerm>
-            <Button variant="primary" size="sm">
+            <PFButton
+              className="awx-legend__button"
+              variant="primary"
+              size="sm"
+            >
               Hy
-            </Button>
+            </PFButton>
           </DescriptionListTerm>
-          <DescriptionListDescription>
+          <PFDescriptionListDescription className="awx-legend__description-list-description">
             {t`Hybrid node`}
-          </DescriptionListDescription>
-        </DescriptionListGroup>
-        <DescriptionListGroup>
+          </PFDescriptionListDescription>
+        </PFDescriptionListGroup>
+        <PFDescriptionListGroup className="awx-legend__description-list-group">
           <DescriptionListTerm>
-            <Button variant="primary" size="sm">
+            <PFButton
+              className="awx-legend__button"
+              variant="primary"
+              size="sm"
+            >
               h
-            </Button>
+            </PFButton>
           </DescriptionListTerm>
-          <DescriptionListDescription>{t`Hop node`}</DescriptionListDescription>
-        </DescriptionListGroup>
-      </DescriptionList>
+          <PFDescriptionListDescription className="awx-legend__description-list-description">{t`Hop node`}</PFDescriptionListDescription>
+        </PFDescriptionListGroup>
+      </PFDescriptionList>
       <Content>
-        <Text component={ContentVariants.small}>{t`Node state types`}</Text>
+        <Content
+          className="awx-legend__text"
+          component={ContentVariants.small}
+        >{t`Node state types`}</Content>
       </Content>
-      <DescriptionList isHorizontal isFluid>
-        <DescriptionListGroup>
+      <PFDescriptionList
+        className="awx-legend__description-list"
+        isHorizontal
+        isFluid
+      >
+        <PFDescriptionListGroup className="awx-legend__description-list-group">
           <DescriptionListTerm>
-            <Button
+            <PFButton
+              className="awx-legend__button"
               icon={
                 <CheckIcon
                   style={{ fill: 'white', marginLeft: '2px', marginTop: '3px' }}
@@ -127,11 +123,12 @@ function Legend() {
               style={{ backgroundColor: '#3E8635' }}
             />
           </DescriptionListTerm>
-          <DescriptionListDescription>{t`Ready`}</DescriptionListDescription>
-        </DescriptionListGroup>
-        <DescriptionListGroup>
+          <PFDescriptionListDescription className="awx-legend__description-list-description">{t`Ready`}</PFDescriptionListDescription>
+        </PFDescriptionListGroup>
+        <PFDescriptionListGroup className="awx-legend__description-list-group">
           <DescriptionListTerm>
-            <Button
+            <PFButton
+              className="awx-legend__button"
               icon={
                 <OutlinedClockIcon
                   style={{ fill: 'white', marginLeft: '3px', marginTop: '3px' }}
@@ -141,13 +138,14 @@ function Legend() {
               style={{ backgroundColor: '#0066CC' }}
             />
           </DescriptionListTerm>
-          <DescriptionListDescription>
+          <PFDescriptionListDescription className="awx-legend__description-list-description">
             {t`Installed`}
-          </DescriptionListDescription>
-        </DescriptionListGroup>
-        <DescriptionListGroup>
+          </PFDescriptionListDescription>
+        </PFDescriptionListGroup>
+        <PFDescriptionListGroup className="awx-legend__description-list-group">
           <DescriptionListTerm>
-            <Button
+            <PFButton
+              className="awx-legend__button"
               icon={
                 <PlusIcon
                   style={{ fill: 'white', marginLeft: '3px', marginTop: '3px' }}
@@ -157,13 +155,14 @@ function Legend() {
               style={{ backgroundColor: '#6A6E73' }}
             />
           </DescriptionListTerm>
-          <DescriptionListDescription>
+          <PFDescriptionListDescription className="awx-legend__description-list-description">
             {t`Provisioning`}
-          </DescriptionListDescription>
-        </DescriptionListGroup>
-        <DescriptionListGroup>
+          </PFDescriptionListDescription>
+        </PFDescriptionListGroup>
+        <PFDescriptionListGroup className="awx-legend__description-list-group">
           <DescriptionListTerm>
-            <Button
+            <PFButton
+              className="awx-legend__button"
               icon={
                 <MinusIcon
                   style={{ fill: 'white', marginLeft: '3px', marginTop: '3px' }}
@@ -173,13 +172,14 @@ function Legend() {
               style={{ backgroundColor: '#6A6E73' }}
             />
           </DescriptionListTerm>
-          <DescriptionListDescription>
+          <PFDescriptionListDescription className="awx-legend__description-list-description">
             {t`Deprovisioning`}
-          </DescriptionListDescription>
-        </DescriptionListGroup>
-        <DescriptionListGroup>
+          </PFDescriptionListDescription>
+        </PFDescriptionListGroup>
+        <PFDescriptionListGroup className="awx-legend__description-list-group">
           <DescriptionListTerm>
-            <Button
+            <PFButton
+              className="awx-legend__button"
               icon={
                 <ExclamationIcon
                   style={{ fill: 'white', marginLeft: '3px', marginTop: '3px' }}
@@ -189,9 +189,9 @@ function Legend() {
               style={{ backgroundColor: '#C9190B' }}
             />
           </DescriptionListTerm>
-          <DescriptionListDescription>{t`Error`}</DescriptionListDescription>
-        </DescriptionListGroup>
-        <DescriptionListGroup>
+          <PFDescriptionListDescription className="awx-legend__description-list-description">{t`Error`}</PFDescriptionListDescription>
+        </PFDescriptionListGroup>
+        <PFDescriptionListGroup className="awx-legend__description-list-group">
           <DescriptionListTerm>
             <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
               <circle
@@ -218,9 +218,9 @@ function Legend() {
               </text>
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>{t`Enabled`}</DescriptionListDescription>
-        </DescriptionListGroup>
-        <DescriptionListGroup>
+          <PFDescriptionListDescription className="awx-legend__description-list-description">{t`Enabled`}</PFDescriptionListDescription>
+        </PFDescriptionListGroup>
+        <PFDescriptionListGroup className="awx-legend__description-list-group">
           <DescriptionListTerm>
             <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
               <circle
@@ -248,14 +248,21 @@ function Legend() {
               </text>
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>{t`Disabled`}</DescriptionListDescription>
-        </DescriptionListGroup>
-      </DescriptionList>
+          <PFDescriptionListDescription className="awx-legend__description-list-description">{t`Disabled`}</PFDescriptionListDescription>
+        </PFDescriptionListGroup>
+      </PFDescriptionList>
       <Content>
-        <Text component={ContentVariants.small}>{t`Link state types`}</Text>
+        <Content
+          className="awx-legend__text"
+          component={ContentVariants.small}
+        >{t`Link state types`}</Content>
       </Content>
-      <DescriptionList isHorizontal isFluid>
-        <DescriptionListGroup>
+      <PFDescriptionList
+        className="awx-legend__description-list"
+        isHorizontal
+        isFluid
+      >
+        <PFDescriptionListGroup className="awx-legend__description-list-group">
           <DescriptionListTerm>
             <svg width="20" height="15" xmlns="http://www.w3.org/2000/svg">
               <line
@@ -268,11 +275,11 @@ function Legend() {
               />
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>
+          <PFDescriptionListDescription className="awx-legend__description-list-description">
             {t`Established`}
-          </DescriptionListDescription>
-        </DescriptionListGroup>
-        <DescriptionListGroup>
+          </PFDescriptionListDescription>
+        </PFDescriptionListGroup>
+        <PFDescriptionListGroup className="awx-legend__description-list-group">
           <DescriptionListTerm>
             <svg width="20" height="15" xmlns="http://www.w3.org/2000/svg">
               <line
@@ -286,9 +293,9 @@ function Legend() {
               />
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>{t`Adding`}</DescriptionListDescription>
-        </DescriptionListGroup>
-        <DescriptionListGroup>
+          <PFDescriptionListDescription className="awx-legend__description-list-description">{t`Adding`}</PFDescriptionListDescription>
+        </PFDescriptionListGroup>
+        <PFDescriptionListGroup className="awx-legend__description-list-group">
           <DescriptionListTerm>
             <svg width="20" height="15" xmlns="http://www.w3.org/2000/svg">
               <line
@@ -302,10 +309,10 @@ function Legend() {
               />
             </svg>
           </DescriptionListTerm>
-          <DescriptionListDescription>{t`Removing`}</DescriptionListDescription>
-        </DescriptionListGroup>
-      </DescriptionList>
-    </Wrapper>
+          <PFDescriptionListDescription className="awx-legend__description-list-description">{t`Removing`}</PFDescriptionListDescription>
+        </PFDescriptionListGroup>
+      </PFDescriptionList>
+    </div>
   );
 }
 
