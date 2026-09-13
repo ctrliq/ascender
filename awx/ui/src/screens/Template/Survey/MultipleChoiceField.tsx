@@ -11,24 +11,9 @@ import {
   InputGroup as PFInputGroup,
 } from '@patternfly/react-core';
 import PFCheckIcon from '@patternfly/react-icons/dist/js/icons/check-icon';
-import styled from 'styled-components';
 import Popover from 'components/Popover';
 import type { SurveyChoice } from './SurveyQuestionForm';
-
-const InputGroup = styled(PFInputGroup)`
-  padding-bottom: 5px;
-`;
-
-const HelperTextWrapper = styled.div`
-  font-size: var(--pf-v6-c-form__label--FontSize);
-`;
-
-const CheckIcon = styled(PFCheckIcon)`
-  color: var(--pf-v6-c-button--m-plain--disabled--Color);
-  ${(props) =>
-    props.selected &&
-    `color: var(--pf-v6-c-button--m-secondary--active--Color)`};
-`;
+import './MultipleChoiceField.css';
 
 export interface MultipleChoiceFieldProps {
   label?: React.ReactNode;
@@ -72,7 +57,10 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
     >
       {formattedChoicesField.value.map(
         ({ choice, isDefault, id }: SurveyChoice, i: number) => (
-          <InputGroup key={id}>
+          <PFInputGroup
+            className="awx-multiple-choice-field__input-group"
+            key={id}
+          >
             <TextInput
               data-cy={choice ? `${choice}-input` : 'new-choice-input'}
               aria-label={choice || t`new choice`}
@@ -149,22 +137,30 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
                   : formattedChoicesHelpers.setValue(newValues);
               }}
             >
-              <CheckIcon selected={isDefault} />
+              <PFCheckIcon
+                className={[
+                  'awx-multiple-choice-field__check-icon',
+                  isDefault &&
+                    'awx-multiple-choice-field__check-icon--selected',
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+              />
             </Button>
-          </InputGroup>
+          </PFInputGroup>
         )
       )}
       <FormHelperText>
         <HelperText>
           <HelperTextItem variant={isValid ? 'default' : 'error'}>
             {isValid ? (
-              <HelperTextWrapper>
+              <div className="awx-multiple-choice-field__helper-text-wrapper">
                 {t`Type answer then click checkbox on right to select answer as
 default.`}
                 <br />
                 {t`Press 'Enter' to add more answer choices. One answer
 choice per line.`}
-              </HelperTextWrapper>
+              </div>
             ) : (
               formattedChoicesMeta.error
             )}

@@ -4,25 +4,11 @@ import { Link } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
 
 import { Popover, Tooltip } from '@patternfly/react-core';
-import styled from 'styled-components';
 import { ExclamationTriangleIcon as PFExclamationTriangleIcon } from '@patternfly/react-icons';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
 import { Detail } from '../DetailList';
-
-const ExclamationTriangleIcon = styled(PFExclamationTriangleIcon)`
-  color: var(--pf-v6-global--warning-color--100);
-  margin-left: 18px;
-  cursor: pointer;
-`;
-
-const ExclamationTrianglePopover = styled(PFExclamationTriangleIcon)`
-  color: var(--pf-v6-global--warning-color--100);
-  margin-left: 18px;
-  cursor: pointer;
-`;
-
-ExclamationTrianglePopover.displayName = 'ExclamationTrianglePopover';
+import './ExecutionEnvironmentDetail.css';
 
 export interface ExecutionEnvironmentDetailProps {
   /**
@@ -101,7 +87,7 @@ function ExecutionEnvironmentDetail({
                 }
                 position="right"
               >
-                <ExclamationTrianglePopover />
+                <PFExclamationTriangleIcon className="awx-execution-environment-detail__exclamation-triangle-popover" />
               </Popover>
             </span>
           </>
@@ -126,7 +112,7 @@ function ExecutionEnvironmentDetail({
               <Tooltip
                 content={t`Execution environment is missing or deleted.`}
               >
-                <ExclamationTriangleIcon />
+                <PFExclamationTriangleIcon className="awx-execution-environment-detail__exclamation-triangle-icon" />
               </Tooltip>
             </span>
           </>

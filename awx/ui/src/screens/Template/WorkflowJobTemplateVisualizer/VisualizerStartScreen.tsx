@@ -3,32 +3,8 @@ import React, { useContext } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import { Button as PFButton } from '@patternfly/react-core';
-import styled from 'styled-components';
 import { WorkflowDispatchContext } from 'contexts/Workflow';
-
-const Button = styled(PFButton)`
-  && {
-    background-color: #5cb85c;
-    padding: 5px 8px;
-    --pf-v6-global--FontSize--md: 14px;
-    margin-top: 20px;
-  }
-`;
-
-const StartPanel = styled.div`
-  background-color: var(--pf-v6-global--BackgroundColor--100);
-  border: 1px solid var(--pf-v6-global--BorderColor--100);
-  padding: 60px 80px;
-  text-align: center;
-`;
-
-const StartPanelWrapper = styled.div`
-  align-items: center;
-  background-color: var(--pf-v6-global--BackgroundColor--200);
-  display: flex;
-  height: 100%;
-  justify-content: center;
-`;
+import './VisualizerStartScreen.css';
 
 export interface VisualizerStartScreenProps {
   readOnly?: boolean;
@@ -41,15 +17,16 @@ function VisualizerStartScreen({ readOnly }: VisualizerStartScreenProps) {
     WorkflowDispatchContext
   ) as React.Dispatch<WorkflowAction>;
   return (
-    <div css="flex: 1">
-      <StartPanelWrapper>
-        <StartPanel>
+    <div className="awx-visualizer-start-screen__flex-1">
+      <div className="awx-visualizer-start-screen__panel-wrapper">
+        <div className="awx-visualizer-start-screen__panel">
           {readOnly ? (
             <p>{t`This workflow does not have any nodes configured.`}</p>
           ) : (
             <>
               <p>{t`Please click the Start button to begin.`}</p>
-              <Button
+              <PFButton
+                className="awx-visualizer-start-screen__button"
                 ouiaId="visualizer-start-button"
                 id="visualizer-start"
                 aria-label={t`Start`}
@@ -59,11 +36,11 @@ function VisualizerStartScreen({ readOnly }: VisualizerStartScreenProps) {
                 variant="primary"
               >
                 {t`Start`}
-              </Button>
+              </PFButton>
             </>
           )}
-        </StartPanel>
-      </StartPanelWrapper>
+        </div>
+      </div>
     </div>
   );
 }

@@ -10,7 +10,6 @@ import {
   HelperText,
   HelperTextItem,
 } from '@patternfly/react-core';
-import styled from 'styled-components';
 import {
   FormCheckboxLayout,
   FormColumnLayout,
@@ -34,14 +33,7 @@ import {
 } from 'util/validators';
 import Popover from '../../../components/Popover/Popover';
 import RevertButton from '../../Setting/shared/RevertButton';
-
-const PasswordFormGroup = styled(FormGroup)`
-  .pf-v6-c-form__group-label {
-    display: inline-flex;
-    align-items: center;
-    width: 100%;
-  }
-`;
+import './TypeInputsSubForm.css';
 
 const TypeFields = {
   email: EmailFields,
@@ -96,7 +88,8 @@ function SecretPasswordField({
   const isRequired = isRequiredOnCreate && !isEdit;
 
   return (
-    <PasswordFormGroup
+    <FormGroup
+      className="awx-type-inputs-sub-form__password-form-group"
       fieldId={id}
       label={label}
       isRequired={isRequired}
@@ -121,7 +114,7 @@ function SecretPasswordField({
           </HelperText>
         </FormHelperText>
       )}
-    </PasswordFormGroup>
+    </FormGroup>
   );
 }
 

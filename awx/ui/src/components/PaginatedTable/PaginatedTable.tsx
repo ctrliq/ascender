@@ -19,6 +19,7 @@ import Pagination from '../Pagination';
 import DataListToolbar from '../DataListToolbar';
 import type { DataListToolbarProps } from '../DataListToolbar/DataListToolbar';
 import LoadingSpinner from '../LoadingSpinner';
+import './PaginatedTable.css';
 
 // Stable default so the clearSelected effect dep does not change every render.
 const noop = () => {};
@@ -146,7 +147,7 @@ function PaginatedTable<T = SelectableOption>({
     );
   } else {
     Content = (
-      <div css="overflow: auto">
+      <div className="awx-paginated-table__overflow-auto">
         {hasContentLoading && <LoadingSpinner />}
         <Table
           aria-label={dataListLabel}

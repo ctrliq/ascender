@@ -4,17 +4,15 @@ import { Formik } from 'formik';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import MultipleChoiceField from './MultipleChoiceField';
 
-// The CheckIcon styled-component encodes the `selected` prop purely as a CSS
-// color rule (selected -> secondary active color, unselected -> disabled
-// color). To proxy the `selected` prop we read the resolved color on the
-// rendered <svg>.
-const SELECTED_COLOR = 'var(--pf-v6-c-button--m-secondary--active--Color)';
+// The tick encodes its selected state as a modifier class, which the
+// stylesheet colours; the class is the state itself.
+const SELECTED_CLASS = 'awx-multiple-choice-field__check-icon--selected';
 
 const isSelected = (ouiaId: string) => {
   const icon = document.querySelector(
     `[data-ouia-component-id="${ouiaId}"] svg`
   );
-  return window.getComputedStyle(icon!).color === SELECTED_COLOR;
+  return icon!.classList.contains(SELECTED_CLASS);
 };
 
 const toggleButton = (ouiaId: string) =>

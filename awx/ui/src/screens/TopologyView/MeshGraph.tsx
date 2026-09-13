@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import debounce from 'util/debounce';
 import * as d3 from 'd3';
 import { InstancesAPI } from 'api';
@@ -38,13 +37,8 @@ import {
   DEFAULT_FONT_SIZE,
   SELECTOR,
 } from './constants';
+import './MeshGraph.css';
 
-const Loader = styled(ContentLoading)`
-  height: 100%;
-  position: absolute;
-  width: 100%;
-  background: var(--pf-v6-global--BackgroundColor--100);
-`;
 export interface MeshGraphProps {
   data: MeshData;
   showLegend: boolean;
@@ -444,7 +438,10 @@ function MeshGraph({
           }
         />
       )}
-      <Loader className="simulation-loader" progress={simulationProgress} />
+      <ContentLoading
+        className="awx-mesh-graph__loader simulation-loader"
+        progress={simulationProgress}
+      />
       {Boolean(fetchInstanceError) && (
         <AlertModal
           variant="error"

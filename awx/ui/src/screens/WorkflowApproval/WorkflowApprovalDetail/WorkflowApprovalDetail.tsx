@@ -7,7 +7,6 @@ import type {
 import React, { useCallback, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Link, useParams, useNavigate } from 'react-router';
-import styled from 'styled-components';
 import {
   Label,
   Divider as PFDivider,
@@ -35,20 +34,7 @@ import {
   getDetailPendingLabel,
   getStatus,
 } from '../shared/WorkflowApprovalUtils';
-
-const Divider = styled(PFDivider)`
-  margin-top: var(--pf-v6-global--spacer--lg);
-  margin-bottom: var(--pf-v6-global--spacer--lg);
-`;
-
-const Title = styled(PFTitle)`
-  margin-top: var(--pf-v6-global--spacer--xl);
-  --pf-v6-c-title--m-md--FontWeight: 700;
-`;
-
-const WFDetailList = styled(DetailList)`
-  padding: 0px var(--pf-v6-global--spacer--lg);
-`;
+import './WorkflowApprovalDetail.css';
 
 export interface WorkflowApprovalDetailProps {
   workflowApproval: WorkflowApproval;
@@ -269,9 +255,15 @@ function WorkflowApprovalDetail({
           value={secondsToHHMMSS(Number(workflowApproval.elapsed))}
         />
       </DetailList>
-      <Title headingLevel="h2">{t`Workflow job details`}</Title>
-      <Divider />
-      <WFDetailList gutter="sm">
+      <PFTitle
+        className="awx-workflow-approval-detail__title"
+        headingLevel="h2"
+      >{t`Workflow job details`}</PFTitle>
+      <PFDivider className="awx-workflow-approval-detail__divider" />
+      <DetailList
+        className="awx-workflow-approval-detail__wf-detail-list"
+        gutter="sm"
+      >
         <Detail
           label={t`Workflow Job`}
           value={
@@ -351,7 +343,7 @@ function WorkflowApprovalDetail({
             value={workflowJob.extra_vars}
           />
         ) : null}
-      </WFDetailList>
+      </DetailList>
 
       <CardActionsRow>
         {workflowApproval.status === 'pending' &&

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
-import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import { SearchIcon } from '@patternfly/react-icons';
 import {
@@ -44,27 +43,7 @@ import {
 } from './shared/HostFilterUtils';
 import type { SearchChip, SearchChipGroup } from '../Search/getChipsByKey';
 import type { HostSearchParams } from './shared/HostFilterUtils';
-
-const Alert = styled(PFAlert)`
-  && {
-    margin-bottom: 8px;
-  }
-`;
-
-const ChipHolder = styled.div`
-  && {
-    --pf-v6-c-form-control--Height: auto;
-  }
-  .pf-v6-c-label-group {
-    margin-right: 8px;
-  }
-`;
-
-const ModalList = styled.div`
-  .pf-v6-c-toolbar__content {
-    padding: 0 !important;
-  }
-`;
+import './HostFilterLookup.css';
 
 const useModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -339,7 +318,7 @@ function HostFilterLookup({
         />
       </InputGroupItem>
       <InputGroupItem>
-        <ChipHolder className="pf-v6-c-form-control">
+        <div className="awx-host-filter-lookup__chip-holder pf-v6-c-form-control">
           {searchColumns.map(({ name, key }) => (
             <ChipGroup
               categoryName={name}
@@ -378,7 +357,7 @@ function HostFilterLookup({
                   ))}
                 </ChipGroup>
               ))}
-        </ChipHolder>
+        </div>
       </InputGroupItem>
     </InputGroup>
   );
@@ -433,9 +412,10 @@ function HostFilterLookup({
           </Button>,
         ]}
       >
-        <ModalList>
+        <div className="awx-host-filter-lookup__modal-list">
           {isAnsibleFactsSelected && (
-            <Alert
+            <PFAlert
+              className="awx-host-filter-lookup__alert"
               variant="info"
               title={
                 <>
@@ -484,7 +464,7 @@ function HostFilterLookup({
             toolbarSearchableKeys={searchableKeys}
             toolbarRelatedSearchableKeys={relatedSearchableKeys}
           />
-        </ModalList>
+        </div>
       </Modal>
       <LookupErrorMessage error={error} />
       {!isValid && (

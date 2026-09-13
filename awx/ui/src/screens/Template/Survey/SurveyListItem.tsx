@@ -7,20 +7,9 @@ import { useLingui } from '@lingui/react/macro';
 
 import { Tr, Td } from '@patternfly/react-table';
 import { PencilAltIcon } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import ChipGroup from 'components/ChipGroup';
 import { ActionItem, ActionsTd } from 'components/PaginatedTable';
-
-const Required = styled.span`
-  color: var(--pf-v6-global--danger-color--100);
-  margin-left: var(--pf-v6-global--spacer--xs);
-`;
-
-const SurveyActionsTd = styled(ActionsTd)`
-  && {
-    padding-right: 35px;
-  }
-`;
+import './SurveyListItem.css';
 
 export interface SurveyListItemProps {
   canEdit?: boolean;
@@ -69,13 +58,13 @@ function SurveyListItem({
             <b>{question.question_name}</b>
           </Link>
           {question.required && (
-            <Required
+            <span
               aria-label={t`Required`}
-              className="pf-v6-c-form__label-required"
+              className="awx-survey-list-item__required pf-v6-c-form__label-required"
               aria-hidden="true"
             >
               *
-            </Required>
+            </span>
           )}
         </>
       </Td>
@@ -109,7 +98,10 @@ function SurveyListItem({
             <span>{defaultAnswer}</span>
           )}
       </Td>
-      <SurveyActionsTd dataLabel={t`Actions`}>
+      <ActionsTd
+        className="awx-survey-list-item__actions-td"
+        dataLabel={t`Actions`}
+      >
         <ActionItem visible={canEdit}>
           <Tooltip content={t`Edit Survey`} position="top">
             <Button
@@ -123,7 +115,7 @@ function SurveyListItem({
             />
           </Tooltip>
         </ActionItem>
-      </SurveyActionsTd>
+      </ActionsTd>
     </Tr>
   );
 }

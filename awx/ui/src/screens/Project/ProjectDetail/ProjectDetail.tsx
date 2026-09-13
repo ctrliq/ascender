@@ -2,7 +2,6 @@ import type { Project, UnifiedJob } from 'types/api';
 import React, { useCallback } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import {
   Button,
   ClipboardCopy,
@@ -31,10 +30,7 @@ import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import ProjectSyncButton from '../shared/ProjectSyncButton';
 import getProjectHelpText from '../shared/Project.helptext';
 import useWsProject from './useWsProject';
-
-const Label = styled.span`
-  color: var(--pf-v6-global--disabled-color--100);
-`;
+import './ProjectDetail.css';
 
 export interface ProjectDetailProps {
   project: Project;
@@ -212,11 +208,12 @@ function ProjectDetail({ project }: ProjectDetailProps) {
                 {scm_revision.substring(0, 7)}
               </ClipboardCopy>
             ) : (
-              <Label
+              <span
+                className="awx-project-detail__label"
                 aria-label={t`The project must be synced before a revision is available.`}
               >
                 {t`Sync for revision`}
-              </Label>
+              </span>
             )
           }
           alwaysVisible

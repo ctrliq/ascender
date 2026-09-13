@@ -29,9 +29,9 @@ import { jinja2 } from '@codemirror/legacy-modes/mode/jinja2';
 
 import { useLingui } from '@lingui/react/macro';
 
-import styled from 'styled-components';
 import debounce from 'util/debounce';
 import { editorTheme, editorHighlightStyle } from './theme';
+import './CodeEditor.css';
 
 const LINE_HEIGHT = 24;
 // the scroll margins below: 4px above the first line and 4px below the last
@@ -42,67 +42,6 @@ const PADDING = 8;
 // replaced allowed, and it holds the render cost flat however long the value
 // is. The rest scrolls.
 const MAX_ROWS = 50;
-
-const FocusWrapper = styled.div`
-  && + .keyboard-help-text {
-    opacity: 0;
-    transition: opacity 0.1s linear;
-  }
-
-  &:focus-within + .keyboard-help-text {
-    opacity: 1;
-  }
-`;
-
-const EditorWrapper = styled.div<{
-  $hasErrors?: boolean;
-  $isReadOnly?: boolean;
-}>`
-  & .cm-editor {
-    /* the form control's own border is drawn by PatternFly on this wrapper */
-    outline: none;
-  }
-
-  & .cm-editor.cm-focused {
-    outline: none;
-  }
-
-  ${(props) =>
-    props.$hasErrors &&
-    `
-    && {
-      --pf-v6-c-form-control--PaddingRight: var(--pf-v6-c-form-control--invalid--PaddingRight);
-      --pf-v6-c-form-control--BorderBottomColor: var(--pf-v6-c-form-control--invalid--BorderBottomColor);
-      padding-right: 24px;
-      padding-bottom: var(--pf-v6-c-form-control--invalid--PaddingBottom);
-      background: var(--pf-v6-c-form-control--invalid--Background);
-      border-bottom-width: var(--pf-v6-c-form-control--invalid--BorderBottomWidth);
-    }`}
-
-  ${(props) =>
-    props.$isReadOnly &&
-    `
-    && .cm-cursor {
-      display: none;
-    }
-    &&.pf-v6-c-form-control {
-      border: none;
-      outline: none;
-      padding: 0;
-    }
-    &&.pf-v6-c-form-control:focus,
-    &&.pf-v6-c-form-control:focus-within,
-    &&.pf-v6-c-form-control:hover {
-      border: none;
-      outline: none;
-      box-shadow: none;
-    }
-    &&.pf-v6-c-form-control::before,
-    &&.pf-v6-c-form-control::after {
-      border: none;
-    }
-    `}
-`;
 
 /**
  * The languages the editor knows, named as the UI names them rather than as
@@ -377,16 +316,29 @@ function CodeEditor({
 
   return (
     <>
-      <FocusWrapper ref={wrapper} tabIndex={readOnly ? -1 : 0}>
-        <EditorWrapper
+      <div
+        className="awx-code-editor__focus-wrapper"
+        ref={wrapper}
+        tabIndex={readOnly ? -1 : 0}
+      >
+        {/* The host div is where CodeMirror mounts; the textbox role and the
+            keyboard handling belong to the editor it creates inside. */}
+        {/* eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
+        <div
           ref={host}
           data-cy="code-editor"
-          className={`pf-v6-c-form-control ${className}`}
-          $hasErrors={hasErrors}
-          $isReadOnly={readOnly}
+          className={[
+            'awx-code-editor__wrapper',
+            hasErrors && 'awx-code-editor__wrapper--has-errors',
+            readOnly && 'awx-code-editor__wrapper--read-only',
+            'pf-v6-c-form-control',
+            className,
+          ]
+            .filter(Boolean)
+            .join(' ')}
           onKeyDown={escape}
         />
-      </FocusWrapper>
+      </div>
       {!readOnly && (
         <div
           className="pf-v6-c-form__helper-text keyboard-help-text"

@@ -1,5 +1,4 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Plural, SelectOrdinal, useLingui } from '@lingui/react/macro';
 import { msg } from '@lingui/core/macro';
 import { DateTime } from 'luxon';
@@ -7,11 +6,7 @@ import type { Weekday } from 'rrule';
 import { formatDateString } from 'util/dates';
 import { DetailList, Detail } from '../../DetailList';
 import type { FrequencyOptions, ScheduleFrequency } from '../shared/types';
-
-const Label = styled.div`
-  margin-bottom: var(--pf-v6-global--spacer--sm);
-  font-weight: var(--pf-v6-global--FontWeight--bold);
-`;
+import './FrequencyDetails.css';
 
 const DAY_LABELS = {
   sunday: msg`Sunday`,
@@ -97,7 +92,7 @@ export default function FrequencyDetails({
 
   return (
     <div>
-      <Label>{label}</Label>
+      <div className="awx-frequency-details__label">{label}</div>
       <DetailList gutter="sm">
         <Detail
           label={isException ? t`Skip every` : t`Run every`}

@@ -5,7 +5,6 @@ import type {
 } from 'components/Workflow/workflowReducer';
 import type { NodePositions } from 'components/Workflow/WorkflowUtils';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import styled from 'styled-components';
 
 import { useLingui } from '@lingui/react/macro';
 import { PencilAltIcon, PlusIcon, TrashAltIcon } from '@patternfly/react-icons';
@@ -22,10 +21,7 @@ import {
   WorkflowActionTooltip,
   WorkflowActionTooltipItem,
 } from 'components/Workflow';
-
-const LinkG = styled.g<{ $ignorePointerEvents?: boolean }>`
-  pointer-events: ${(props) => (props.$ignorePointerEvents ? 'none' : 'auto')};
-`;
+import './VisualizerLink.css';
 
 export interface VisualizerLinkProps {
   link: WorkflowLink;
@@ -153,9 +149,9 @@ function VisualizerLink({
   }, [link, nodePositions]);
 
   return (
-    <LinkG
+    <g
       id={`link-${link.source.id}-${link.target.id}`}
-      $ignorePointerEvents={addingLink}
+      className={addingLink ? 'awx-visualizer-link__link-g--inert' : undefined}
       onMouseEnter={handleLinkMouseEnter}
       onMouseLeave={handleLinkMouseLeave}
       ref={ref}
@@ -181,7 +177,7 @@ function VisualizerLink({
           pointY={tooltipY}
         />
       )}
-    </LinkG>
+    </g>
   );
 }
 
