@@ -213,6 +213,7 @@ function VisualizerNode({
 
   const viewDetailsAction = (
     <WorkflowActionTooltipItem
+      label={t`View node details`}
       id="node-details"
       key="details"
       onClick={handleViewClick}
@@ -227,6 +228,7 @@ function VisualizerNode({
     ? [viewDetailsAction]
     : [
         <WorkflowActionTooltipItem
+          label={t`Add a new node`}
           id="node-add"
           key="add"
           onClick={() => {
@@ -241,6 +243,7 @@ function VisualizerNode({
         </WorkflowActionTooltipItem>,
         viewDetailsAction,
         <WorkflowActionTooltipItem
+          label={t`Edit this node`}
           id="node-edit"
           key="edit"
           onClick={handleEditClick}
@@ -250,6 +253,7 @@ function VisualizerNode({
           <PencilAltIcon />
         </WorkflowActionTooltipItem>,
         <WorkflowActionTooltipItem
+          label={t`Link to an available node`}
           id="node-link"
           key="link"
           onClick={() => {
@@ -263,6 +267,7 @@ function VisualizerNode({
           <LinkIcon />
         </WorkflowActionTooltipItem>,
         <WorkflowActionTooltipItem
+          label={t`Delete this node`}
           id="node-delete"
           key="delete"
           onClick={() => {
