@@ -3,7 +3,6 @@ source = awx
 branch = True
 omit =
     awx/main/migrations/*
-    awx/lib/site-packages/*
 
 [report]
 # Regexes for lines to exclude from consideration
