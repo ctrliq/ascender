@@ -1,11 +1,12 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 
 import { ExecutionEnvironmentsAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import useToast, { AlertVariant } from 'hooks/useToast';
 import PaginatedTable, {
@@ -43,7 +44,8 @@ function ExecutionEnvironmentList() {
       relatedSearchableKeys,
       searchableKeys,
     },
-  } = useRequest(
+  } = useCachedRequest(
+    ['execution-environment-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
 
@@ -70,10 +72,6 @@ function ExecutionEnvironmentList() {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchExecutionEnvironments();
-  }, [fetchExecutionEnvironments]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
     useSelected(executionEnvironments);
