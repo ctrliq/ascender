@@ -11,7 +11,7 @@ from socket import SHUT_RDWR
 
 # Django
 from django.db import connection
-from django.conf import settings
+from awx.settings.typed import settings
 from django.http import Http404
 from django.utils.translation import gettext_lazy as _
 
@@ -141,12 +141,12 @@ class SettingSingletonDetail(RetrieveUpdateDestroyAPIView):
                 # call notify to rsyslog. no data is need so payload is empty
                 reconfigure_rsyslog.delay()
 
-        # When TOWER_URL_BASE is deleted from the API, reset it to the hostname
+        # When ASCENDER_URL_BASE is deleted from the API, reset it to the hostname
         # used to make the request as a default.
-        if hasattr(instance, 'TOWER_URL_BASE'):
+        if hasattr(instance, 'ASCENDER_URL_BASE'):
             url = '{}://{}'.format(self.request.scheme, self.request.get_host())
-            if settings.TOWER_URL_BASE != url:
-                settings.TOWER_URL_BASE = url
+            if settings.ASCENDER_URL_BASE != url:
+                settings.ASCENDER_URL_BASE = url
 
 
 class SettingLoggingTest(GenericAPIView):

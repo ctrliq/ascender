@@ -19,7 +19,7 @@ from awx.api.views.inventory import (
     InventoryLabelList,
     InventoryCopy,
 )
-from awx.api.views import (
+from awx.api.views.inventory import (
     InventoryHostsList,
     InventoryGroupsList,
     InventoryInventorySourcesList,

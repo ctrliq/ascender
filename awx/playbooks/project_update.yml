@@ -5,11 +5,10 @@
 # local_path: Path within projects_root to use for this project
 # project_path: A simple join of projects_root/local_path folders
 # scm_url: https://server/repo
-# insights_url: Insights service URL (from configuration)
 # scm_branch: branch/tag/revision (HEAD if unset)
 # scm_clean: true/false
-# scm_username: username (only for svn/insights)
-# scm_password: password (only for svn/insights)
+# scm_username: username (only for svn)
+# scm_password: password (only for svn)
 # scm_accept_hostkey: true/false (only for git, set automatically)
 # scm_refspec: a refspec to fetch in addition to obtaining version
 # scm_track_submodules: true/false
@@ -82,32 +81,6 @@
             scm_version: "{{ scm_version | regex_replace('^.*Revision: ([0-9]+).*$', '\\1') }}"
 
 
-    - name: Project update for Insights
-      tags:
-        - update_insights
-      block:
-        - name: Ensure the project directory is present
-          ansible.builtin.file:
-            dest: "{{ project_path | quote }}"
-            state: directory
-            mode: '0755'
-
-        - name: Fetch Insights Playbook(s)
-          insights:
-            insights_url: "{{ insights_url }}"
-            username: "{{ scm_username }}"
-            password: "{{ scm_password }}"
-            project_path: "{{ project_path }}"
-            awx_license_type: "{{ awx_license_type }}"
-            awx_version: "{{ awx_version }}"
-          register: results
-
-        - name: Save Insights Version
-          ansible.builtin.set_fact:
-            scm_version: "{{ results.version }}"
-          when: results is defined
-
-
     - name: Update project using archive
       tags:
         - update_archive
@@ -161,7 +134,6 @@
       tags:
         - update_git
         - update_svn
-        - update_insights
         - update_archive
 
 - hosts: localhost

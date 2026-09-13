@@ -537,7 +537,7 @@ html[data-theme="awx"] {
     box-shadow: none;
   }
 
-  & .ace_editor.pf-v6-c-form-control {
+  & .pf-v6-c-form-control:has(> .cm-editor) {
     border: 1px solid #d2d2d2;
     border-bottom-color: #151515;
     border-radius: 0;
