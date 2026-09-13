@@ -10,16 +10,13 @@ The Licenser class can do the following:
 '''
 
 import base64
-import configparser
 from datetime import datetime, timezone
-import collections
 import copy
 import io
 import os
 import json
 import logging
 import re
-import requests
 import time
 import zipfile
 
@@ -40,13 +37,6 @@ from awx.main.constants import SUBSCRIPTION_USAGE_MODEL_UNIQUE_HOSTS
 MAX_INSTANCES = 9999999
 
 logger = logging.getLogger(__name__)
-
-
-def rhsm_config():
-    path = '/etc/rhsm/rhsm.conf'
-    config = configparser.ConfigParser()
-    config.read(path)
-    return config
 
 
 def validate_entitlement_manifest(data):
@@ -113,7 +103,6 @@ class Licenser(object):
             license_date=0,
             license_type='UNLICENSED',
         )
-        self.config = rhsm_config()
         if not kwargs:
             license_setting = getattr(settings, 'LICENSE', None)
             if license_setting is not None:
@@ -215,206 +204,6 @@ class Licenser(object):
         if 'license_date' in kwargs:
             kwargs['license_date'] = int(kwargs['license_date'])
         self._attrs.update(kwargs)
-
-    def validate_rh(self, user, pw):
-        try:
-            host = 'https://' + str(self.config.get("server", "hostname"))
-        except Exception:
-            logger.exception('Cannot access rhsm.conf, make sure subscription manager is installed and configured.')
-            host = None
-        if not host:
-            host = getattr(settings, 'REDHAT_CANDLEPIN_HOST', None)
-
-        if not user:
-            raise ValueError('subscriptions_username is required')
-
-        if not pw:
-            raise ValueError('subscriptions_password is required')
-
-        if host and user and pw:
-            if 'subscription.rhsm.redhat.com' in host:
-                json = self.get_rhsm_subs(host, user, pw)
-            else:
-                json = self.get_satellite_subs(host, user, pw)
-            return self.generate_license_options_from_entitlements(json)
-        return []
-
-    def get_rhsm_subs(self, host, user, pw):
-        verify = getattr(settings, 'REDHAT_CANDLEPIN_VERIFY', True)
-        json = []
-        try:
-            subs = requests.get('/'.join([host, 'subscription/users/{}/owners'.format(user)]), verify=verify, auth=(user, pw))
-        except requests.exceptions.ConnectionError as error:
-            raise error
-        except OSError as error:
-            raise OSError('Unable to open certificate bundle {}. Check that the service is running on Red Hat Enterprise Linux.'.format(verify)) from error  # noqa
-        subs.raise_for_status()
-
-        for sub in subs.json():
-            resp = requests.get('/'.join([host, 'subscription/owners/{}/pools/?match=*tower*'.format(sub['key'])]), verify=verify, auth=(user, pw))
-            resp.raise_for_status()
-            json.extend(resp.json())
-        return json
-
-    def get_satellite_subs(self, host, user, pw):
-        port = None
-        try:
-            verify = str(self.config.get("rhsm", "repo_ca_cert"))
-            port = str(self.config.get("server", "port"))
-        except Exception as e:
-            logger.exception('Unable to read rhsm config to get ca_cert location. {}'.format(str(e)))
-            verify = getattr(settings, 'REDHAT_CANDLEPIN_VERIFY', True)
-        if port:
-            host = ':'.join([host, port])
-        json = []
-        try:
-            orgs = requests.get('/'.join([host, 'katello/api/organizations']), verify=verify, auth=(user, pw))
-        except requests.exceptions.ConnectionError as error:
-            raise error
-        except OSError as error:
-            raise OSError('Unable to open certificate bundle {}. Check that the service is running on Red Hat Enterprise Linux.'.format(verify)) from error  # noqa
-        orgs.raise_for_status()
-
-        for org in orgs.json()['results']:
-            resp = requests.get(
-                '/'.join([host, '/katello/api/organizations/{}/subscriptions/?search=Red Hat Ansible Automation'.format(org['id'])]),
-                verify=verify,
-                auth=(user, pw),
-            )
-            resp.raise_for_status()
-            results = resp.json()['results']
-            if results != []:
-                for sub in results:
-                    # Parse output for subscription metadata to build config
-                    license = dict()
-                    license['productId'] = sub['product_id']
-                    license['quantity'] = int(sub['quantity'])
-                    license['support_level'] = sub['support_level']
-                    license['usage'] = sub.get('usage')
-                    license['subscription_name'] = sub['name']
-                    license['subscriptionId'] = sub['subscription_id']
-                    license['accountNumber'] = sub['account_number']
-                    license['id'] = sub['upstream_pool_id']
-                    license['endDate'] = sub['end_date']
-                    license['productName'] = "Red Hat Ansible Automation"
-                    license['valid_key'] = True
-                    license['license_type'] = 'enterprise'
-                    license['satellite'] = True
-                    json.append(license)
-        return json
-
-    def is_appropriate_sat_sub(self, sub):
-        if 'Red Hat Ansible Automation' not in sub['subscription_name']:
-            return False
-        return True
-
-    def is_appropriate_sub(self, sub):
-        if sub['activeSubscription'] is False:
-            return False
-        # Products that contain Ansible Tower
-        products = sub.get('providedProducts', [])
-        if any(product.get('productId') == '480' for product in products):
-            return True
-        return False
-
-    def generate_license_options_from_entitlements(self, json):
-        from dateutil.parser import parse
-
-        ValidSub = collections.namedtuple(
-            'ValidSub', 'sku name support_level end_date trial developer_license quantity pool_id satellite subscription_id account_number usage'
-        )
-        valid_subs = []
-        for sub in json:
-            satellite = sub.get('satellite')
-            if satellite:
-                is_valid = self.is_appropriate_sat_sub(sub)
-            else:
-                is_valid = self.is_appropriate_sub(sub)
-            if is_valid:
-                try:
-                    end_date = parse(sub.get('endDate'))
-                except Exception:
-                    continue
-                now = datetime.now(timezone.utc)
-                now = now.replace(tzinfo=end_date.tzinfo)
-                if end_date < now:
-                    # If the sub has a past end date, skip it
-                    continue
-                try:
-                    quantity = int(sub['quantity'])
-                    if quantity == -1:
-                        # effectively, unlimited
-                        quantity = MAX_INSTANCES
-                except Exception:
-                    continue
-
-                sku = sub['productId']
-                trial = sku.startswith('S')  # i.e.,, SER/SVC
-                developer_license = False
-                support_level = ''
-                usage = ''
-                pool_id = sub['id']
-                subscription_id = sub['subscriptionId']
-                account_number = sub['accountNumber']
-                if satellite:
-                    support_level = sub['support_level']
-                    usage = sub['usage']
-                else:
-                    for attr in sub.get('productAttributes', []):
-                        if attr.get('name') == 'support_level':
-                            support_level = attr.get('value')
-                        elif attr.get('name') == 'usage':
-                            usage = attr.get('value')
-                        elif attr.get('name') == 'ph_product_name' and attr.get('value') == 'RHEL Developer':
-                            developer_license = True
-
-                valid_subs.append(
-                    ValidSub(
-                        sku,
-                        sub['productName'],
-                        support_level,
-                        end_date,
-                        trial,
-                        developer_license,
-                        quantity,
-                        pool_id,
-                        satellite,
-                        subscription_id,
-                        account_number,
-                        usage,
-                    )
-                )
-
-        if valid_subs:
-            licenses = []
-            for sub in valid_subs:
-                license = self.__class__(subscription_name='Red Hat Ansible Automation Platform')
-                license._attrs['instance_count'] = int(sub.quantity)
-                license._attrs['sku'] = sub.sku
-                license._attrs['support_level'] = sub.support_level
-                license._attrs['usage'] = sub.usage
-                license._attrs['license_type'] = 'enterprise'
-                if sub.trial:
-                    license._attrs['trial'] = True
-                    license._attrs['license_type'] = 'trial'
-                if sub.developer_license:
-                    license._attrs['license_type'] = 'developer'
-                license._attrs['instance_count'] = min(MAX_INSTANCES, license._attrs['instance_count'])
-                human_instances = license._attrs['instance_count']
-                if human_instances == MAX_INSTANCES:
-                    human_instances = 'Unlimited'
-                subscription_name = re.sub(r' \([\d]+ Managed Nodes', ' ({} Managed Nodes'.format(human_instances), sub.name)
-                license._attrs['subscription_name'] = subscription_name
-                license._attrs['satellite'] = satellite
-                license._attrs['valid_key'] = True
-                license.update(license_date=int(sub.end_date.strftime('%s')))
-                license.update(pool_id=sub.pool_id)
-                license.update(subscription_id=sub.subscription_id)
-                license.update(account_number=sub.account_number)
-                licenses.append(license._attrs.copy())
-            return licenses
-
-        raise ValueError('No valid Red Hat Ansible Automation subscription could be found for this account.')  # noqa
 
     def validate(self):
         # Return license attributes with additional validation info.
