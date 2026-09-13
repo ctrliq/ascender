@@ -2,26 +2,18 @@ import React from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
-import styled from 'styled-components';
-
 import {
   Switch,
   Checkbox,
   Button,
-  Toolbar as _Toolbar,
+  Toolbar,
   ToolbarContent,
   ToolbarGroup,
   ToolbarItem,
   Tooltip,
 } from '@patternfly/react-core';
 import { ToolbarAddButton } from 'components/PaginatedTable';
-
-const Toolbar = styled(_Toolbar)`
-  margin-left: 10px;
-`;
-const SwitchWrapper = styled(ToolbarItem)`
-  padding-left: 4px;
-`;
+import './SurveyToolbar.css';
 
 export interface SurveyToolbarProps {
   canEdit?: boolean;
@@ -53,7 +45,11 @@ function SurveyToolbar({
   const { pathname } = useLocation();
   const surveyUrl = `${pathname.substr(0, pathname.indexOf('survey'))}survey`;
   return (
-    <Toolbar id="survey-toolbar" ouiaId="survey-toolbar">
+    <Toolbar
+      className="awx-survey-toolbar__toolbar"
+      id="survey-toolbar"
+      ouiaId="survey-toolbar"
+    >
       <ToolbarContent>
         <ToolbarItem>
           <Checkbox
@@ -113,7 +109,7 @@ function SurveyToolbar({
           </ToolbarItem>
         </ToolbarGroup>
         {!emptyList && (
-          <SwitchWrapper>
+          <ToolbarItem className="awx-survey-toolbar__switch-wrapper">
             <Switch
               aria-label={t`Survey Toggle`}
               id="survey-toggle"
@@ -123,7 +119,7 @@ function SurveyToolbar({
               isDisabled={!canEdit}
               onChange={() => onToggleSurvey(!surveyEnabled)}
             />
-          </SwitchWrapper>
+          </ToolbarItem>
         )}
       </ToolbarContent>
     </Toolbar>

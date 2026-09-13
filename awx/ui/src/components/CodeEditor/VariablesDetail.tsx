@@ -2,33 +2,13 @@ import React, { useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import { Split, SplitItem } from '@patternfly/react-core';
-import styled from 'styled-components';
 import { yamlToJson, jsonToYaml, isJsonObject, isJsonString } from 'util/yaml';
 import MultiButtonToggle from '../MultiButtonToggle';
 import Popover from '../Popover';
 import CodeEditor from './CodeEditor';
 import { JSON_MODE, YAML_MODE } from './constants';
 import type { VariablesMode } from './constants';
-
-const VariablesWrapper = styled.div`
-  grid-column: 1 / -1;
-  padding: 1.25rem 0 0.875rem;
-`;
-
-const VariablesLabel = styled.div`
-  font-size: var(--pf-v6-global--FontSize--xs);
-  font-weight: var(--pf-v6-global--FontWeight--bold);
-  color: var(--pf-v6-global--Color--200);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  margin-bottom: 0.5rem;
-`;
-
-const EditorWrapper = styled.div`
-  border: 1px solid var(--pf-v6-global--BorderColor--100);
-  border-radius: var(--pf-v6-global--BorderRadius--sm);
-  overflow: hidden;
-`;
+import './VariablesDetail.css';
 
 export interface VariablesDetailProps {
   dataCy?: string;
@@ -92,8 +72,12 @@ function VariablesDetail({
   const valueCy = dataCy ? `${dataCy}-value` : null;
 
   return (
-    <VariablesWrapper>
-      <VariablesLabel data-cy={labelCy} id={dataCy}>
+    <div className="awx-variables-detail__wrapper">
+      <div
+        className="awx-variables-detail__label"
+        data-cy={labelCy}
+        id={dataCy}
+      >
         <ModeToggle
           id={`${dataCy}-preview`}
           label={label}
@@ -103,8 +87,8 @@ function VariablesDetail({
           setMode={setMode}
           name={name}
         />
-      </VariablesLabel>
-      <EditorWrapper data-cy={valueCy}>
+      </div>
+      <div className="awx-variables-detail__editor-wrapper" data-cy={valueCy}>
         <CodeEditor
           id={`${dataCy}-preview`}
           mode={mode}
@@ -113,7 +97,7 @@ function VariablesDetail({
           rows={rows}
           minRows={minRows}
         />
-      </EditorWrapper>
+      </div>
       {error && (
         <div
           style={{
@@ -124,7 +108,7 @@ function VariablesDetail({
           {t`Error:`} {error.message}
         </div>
       )}
-    </VariablesWrapper>
+    </div>
   );
 }
 interface ModeToggleProps {

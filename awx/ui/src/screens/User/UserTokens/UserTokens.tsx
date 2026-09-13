@@ -1,7 +1,6 @@
 import type { OAuth2Token, SetBreadcrumb, User } from 'types/api';
 import React, { useCallback, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import { Routes, Route } from 'react-router';
 import {
   Alert,
@@ -14,10 +13,7 @@ import { Detail, DetailList } from 'components/DetailList';
 import UserTokenAdd from '../UserTokenAdd';
 import UserTokenList from '../UserTokenList';
 import UserToken from '../UserToken';
-
-const TokenAlert = styled(Alert)`
-  margin-bottom: 20px;
-`;
+import './UserTokens.css';
 
 export interface UserTokensProps {
   setBreadcrumb: SetBreadcrumb;
@@ -58,7 +54,8 @@ function UserTokens({ setBreadcrumb, user }: UserTokensProps) {
           title={t`Token information`}
           onClose={() => setTokenModalSource(null)}
         >
-          <TokenAlert
+          <Alert
+            className="awx-user-tokens__token-alert"
             variant="info"
             isInline
             title={t`This is the only time the token value and associated refresh token value will be shown.`}

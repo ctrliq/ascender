@@ -9,7 +9,6 @@ import {
   HelperText,
   HelperTextItem,
 } from '@patternfly/react-core';
-import styled from 'styled-components';
 import LabelSelect from '../../LabelSelect';
 import FormField from '../../FormField';
 import { TagMultiSelect } from '../../MultiSelect';
@@ -21,16 +20,7 @@ import { VerbositySelectField } from '../../VerbositySelectField';
 import jobHelpText from '../../../screens/Job/Job.helptext';
 import workflowHelpText from '../../../screens/Template/shared/WorkflowJobTemplate.helptext';
 import type { HelpTextSource, LaunchConfig } from '../types';
-
-const FieldHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: var(--pf-v6-c-form__label--PaddingBottom);
-
-  label {
-    --pf-v6-c-form__label--PaddingBottom: 0px;
-  }
-`;
+import './OtherPromptsStep.css';
 
 export interface OtherPromptsStepProps {
   launchConfig: LaunchConfig;
@@ -201,7 +191,7 @@ function ShowChangesToggle() {
   const [field, , helpers] = useField('diff_mode');
   return (
     <FormGroup fieldId="prompt-show-changes">
-      <FieldHeader>
+      <div className="awx-other-prompts-step__field-header">
         {' '}
         <label className="pf-v6-c-form__label" htmlFor="prompt-show-changes">
           <span className="pf-v6-c-form__label-text">
@@ -211,7 +201,7 @@ function ShowChangesToggle() {
             />
           </span>
         </label>
-      </FieldHeader>
+      </div>
       <Switch
         aria-label={field.value ? t`On` : t`Off`}
         id="prompt-show-changes"

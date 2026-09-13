@@ -3,7 +3,6 @@ import type { Translate } from 'types/lingui';
 import React, { useState, useCallback, useEffect } from 'react';
 import { Link } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import { useConfig } from 'contexts/Config';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
 import useDebounce from 'hooks/useDebounce';
@@ -31,55 +30,7 @@ import StatusLabel from 'components/StatusLabel';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import { formatDateString } from 'util/dates';
-
-const Wrapper = styled.div`
-  position: absolute;
-  right: 0;
-  padding: 0 10px;
-  width: 25%;
-  background-color: var(--pf-v6-global--BackgroundColor--100);
-  overflow: auto;
-  height: 100%;
-`;
-const Button = styled(PFButton)`
-  &&& {
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    padding: 0;
-    font-size: 16px;
-    background-color: var(--pf-v6-global--BackgroundColor--100);
-    border: 1px solid var(--pf-v6-global--BorderColor--100);
-    color: var(--pf-v6-global--Color--100);
-  }
-`;
-const DescriptionList = styled(PFDescriptionList)`
-  gap: 0;
-`;
-const DescriptionListGroup = styled(PFDescriptionListGroup)`
-  align-items: center;
-  margin-top: 10px;
-`;
-const Text = styled(Content)`
-  margin: 10px 0 5px;
-`;
-
-const Unavailable = styled.span`
-  color: var(--pf-v6-global--danger-color--200);
-`;
-
-const SliderHolder = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-`;
-
-const SliderForks = styled.div`
-  flex-grow: 1;
-  margin-right: 8px;
-  margin-left: 8px;
-  text-align: center;
-`;
+import './Tooltip.css';
 
 const buildLinkURL = (inst: InstanceGroup) =>
   inst.is_container_group
@@ -119,7 +70,7 @@ function usedCapacity(instance: Partial<Instance>, t: Translate) {
       />
     );
   }
-  return <Unavailable>{t`Unavailable`}</Unavailable>;
+  return <span className="awx-tooltip__unavailable">{t`Unavailable`}</span>;
 }
 
 export interface TooltipProps {
@@ -190,10 +141,11 @@ function Tooltip({
     );
   }, [instanceDetail]);
   return (
-    <Wrapper className="tooltip" data-cy="tooltip">
+    <div className="awx-tooltip__wrapper tooltip" data-cy="tooltip">
       {isNodeSelected === false ? (
         <Content>
-          <Text
+          <Content
+            className="awx-tooltip__text"
             component={ContentVariants.small}
             style={{
               fontWeight: 'bold',
@@ -202,11 +154,14 @@ function Tooltip({
             }}
           >
             {t`Details`}
-          </Text>
+          </Content>
           <Divider component="div" />
-          <Text component={ContentVariants.small}>
+          <Content
+            className="awx-tooltip__text"
+            component={ContentVariants.small}
+          >
             {t`Click on a node icon to display the details.`}
-          </Text>
+          </Content>
         </Content>
       ) : (
         <>
@@ -223,7 +178,8 @@ function Tooltip({
             </AlertModal>
           )}
           <Content>
-            <Text
+            <Content
+              className="awx-tooltip__text"
               component={ContentVariants.small}
               style={{
                 fontWeight: 'bold',
@@ -231,15 +187,17 @@ function Tooltip({
               }}
             >
               {t`Details`}
-            </Text>
+            </Content>
             <Divider component="div" />
           </Content>
           {isLoading && <ContentLoading />}
           {!isLoading && (
-            <DescriptionList>
-              <DescriptionListGroup>
+            <PFDescriptionList className="awx-tooltip__description-list">
+              <PFDescriptionListGroup className="awx-tooltip__description-list-group">
                 <DescriptionListDescription>
-                  <Button>{renderNodeIcon}</Button>{' '}
+                  <PFButton className="awx-tooltip__button">
+                    {renderNodeIcon}
+                  </PFButton>{' '}
                   <PFButton
                     variant="link"
                     isInline
@@ -249,23 +207,23 @@ function Tooltip({
                     {instanceDetail.hostname}
                   </PFButton>
                 </DescriptionListDescription>
-              </DescriptionListGroup>
-              <DescriptionListGroup>
+              </PFDescriptionListGroup>
+              <PFDescriptionListGroup className="awx-tooltip__description-list-group">
                 <DescriptionListTerm>{t`Instance status`}</DescriptionListTerm>
                 <DescriptionListDescription data-cy="node-state">
                   <StatusLabel
                     status={instanceDetail.node_state ?? undefined}
                   />
                 </DescriptionListDescription>
-              </DescriptionListGroup>
-              <DescriptionListGroup>
+              </PFDescriptionListGroup>
+              <PFDescriptionListGroup className="awx-tooltip__description-list-group">
                 <DescriptionListTerm>{t`Instance type`}</DescriptionListTerm>
                 <DescriptionListDescription data-cy="node-type">
                   {instanceDetail.node_type}
                 </DescriptionListDescription>
-              </DescriptionListGroup>
+              </PFDescriptionListGroup>
               {instanceDetail.related?.install_bundle && (
-                <DescriptionListGroup>
+                <PFDescriptionListGroup className="awx-tooltip__description-list-group">
                   <DescriptionListTerm>
                     {t`Download bundle`}
                   </DescriptionListTerm>
@@ -282,36 +240,42 @@ function Tooltip({
                       rel="noopener noreferrer"
                     />
                   </DescriptionListDescription>
-                </DescriptionListGroup>
+                </PFDescriptionListGroup>
               )}
               {instanceDetail.ip_address && (
-                <DescriptionListGroup>
+                <PFDescriptionListGroup className="awx-tooltip__description-list-group">
                   <DescriptionListTerm>{t`IP address`}</DescriptionListTerm>
                   <DescriptionListDescription>
                     {instanceDetail.ip_address}
                   </DescriptionListDescription>
-                </DescriptionListGroup>
+                </PFDescriptionListGroup>
               )}
               {instanceGroups && (
-                <DescriptionListGroup>
+                <PFDescriptionListGroup className="awx-tooltip__description-list-group">
                   <DescriptionListTerm>
                     {t`Instance groups`}
                   </DescriptionListTerm>
                   <DescriptionListDescription data-cy="instance-groups">
                     {renderInstanceGroups(instanceGroups.results)}
                   </DescriptionListDescription>
-                </DescriptionListGroup>
+                </PFDescriptionListGroup>
               )}
               {instanceDetail.node_type !== 'hop' && (
                 <>
-                  <DescriptionListGroup>
+                  <PFDescriptionListGroup className="awx-tooltip__description-list-group">
                     <DescriptionListTerm>{t`Forks`}</DescriptionListTerm>
                     <DescriptionListDescription>
-                      <SliderHolder data-cy="slider-holder">
+                      <div
+                        className="awx-tooltip__slider-holder"
+                        data-cy="slider-holder"
+                      >
                         <div data-cy="cpu-capacity">
                           {t`CPU ${instanceDetail.cpu_capacity}`}
                         </div>
-                        <SliderForks data-cy="slider-forks">
+                        <div
+                          className="awx-tooltip__slider-forks"
+                          data-cy="slider-forks"
+                        >
                           <div data-cy="number-forks">
                             <Plural
                               value={forks}
@@ -333,52 +297,51 @@ function Tooltip({
                             }
                             data-cy="slider"
                           />
-                        </SliderForks>
+                        </div>
                         <div data-cy="mem-capacity">
                           {t`RAM ${instanceDetail.mem_capacity}`}
                         </div>
-                      </SliderHolder>
+                      </div>
                     </DescriptionListDescription>
-                  </DescriptionListGroup>
-                  <DescriptionListGroup>
+                  </PFDescriptionListGroup>
+                  <PFDescriptionListGroup className="awx-tooltip__description-list-group">
                     <DescriptionListTerm>{t`Capacity`}</DescriptionListTerm>
                     <DescriptionListDescription data-cy="used-capacity">
                       {usedCapacity(instanceDetail, t)}
                     </DescriptionListDescription>
-                  </DescriptionListGroup>
-                  <DescriptionListGroup>
+                  </PFDescriptionListGroup>
+                  <PFDescriptionListGroup className="awx-tooltip__description-list-group">
                     <DescriptionListDescription>
                       <InstanceToggle
-                        css="display: inline-flex;"
                         fetchInstances={fetchInstance}
                         // Only rendered once the detail request has landed.
                         instance={instanceDetail as Instance}
                         dataCy="enable-instance"
                       />
                     </DescriptionListDescription>
-                  </DescriptionListGroup>
+                  </PFDescriptionListGroup>
                 </>
               )}
 
-              <DescriptionListGroup>
+              <PFDescriptionListGroup className="awx-tooltip__description-list-group">
                 <DescriptionListTerm>{t`Last modified`}</DescriptionListTerm>
                 <DescriptionListDescription data-cy="last-modified">
                   {formatDateString(instanceDetail.modified)}
                 </DescriptionListDescription>
-              </DescriptionListGroup>
-              <DescriptionListGroup>
+              </PFDescriptionListGroup>
+              <PFDescriptionListGroup className="awx-tooltip__description-list-group">
                 <DescriptionListTerm>{t`Last seen`}</DescriptionListTerm>
                 <DescriptionListDescription data-cy="last-seen">
                   {instanceDetail.last_seen
                     ? formatDateString(instanceDetail.last_seen)
                     : `not found`}
                 </DescriptionListDescription>
-              </DescriptionListGroup>
-            </DescriptionList>
+              </PFDescriptionListGroup>
+            </PFDescriptionList>
           )}
         </>
       )}
-    </Wrapper>
+    </div>
   );
 }
 

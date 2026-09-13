@@ -110,8 +110,8 @@ describe('WorkflowOutputNode', () => {
   });
 
   test('keeps the job object off the node group in the DOM', () => {
-    // the job only decides the cursor; as a plain prop styled-components
-    // forwarded the whole object to the <g> as an attribute
+    // the job only decides the cursor, through a class; passing it as a prop
+    // would put the whole object on the <g> as an attribute
     const { container } = renderNode(nodeWithJT);
     expect(container.querySelector('#node-2')).not.toHaveAttribute('job');
   });

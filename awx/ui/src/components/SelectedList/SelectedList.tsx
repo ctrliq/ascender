@@ -2,19 +2,8 @@ import type { SelectableOption } from 'types/api';
 import React from 'react';
 import { Label, Split as PFSplit, SplitItem } from '@patternfly/react-core';
 
-import styled from 'styled-components';
 import ChipGroup from '../ChipGroup';
-
-const Split = styled(PFSplit)`
-  margin: 20px 0 5px 0 !important;
-  align-items: baseline;
-`;
-
-const SplitLabelItem = styled(SplitItem)`
-  font-weight: bold;
-  margin-right: 32px;
-  word-break: initial;
-`;
+import './SelectedList.css';
 
 /**
  * What a chip renderer is handed for one selected item.
@@ -67,8 +56,10 @@ function SelectedList<T extends SelectableOption = SelectableOption>({
     ));
 
   return (
-    <Split>
-      <SplitLabelItem>{label}</SplitLabelItem>
+    <PFSplit className="awx-selected-list__split">
+      <SplitItem className="awx-selected-list__split-label-item">
+        {label}
+      </SplitItem>
       <SplitItem>
         <ChipGroup
           numChips={5}
@@ -84,7 +75,7 @@ function SelectedList<T extends SelectableOption = SelectableOption>({
           )}
         </ChipGroup>
       </SplitItem>
-    </Split>
+    </PFSplit>
   );
 }
 

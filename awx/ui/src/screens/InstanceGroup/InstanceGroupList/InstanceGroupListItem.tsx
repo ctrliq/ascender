@@ -12,12 +12,8 @@ import {
 } from '@patternfly/react-core';
 import { Tr, Td } from '@patternfly/react-table';
 import { PencilAltIcon } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import { ActionsTd, ActionItem, TdBreakWord } from 'components/PaginatedTable';
-
-const Unavailable = styled.span`
-  color: var(--pf-v6-global--danger-color--200);
-`;
+import './InstanceGroupListItem.css';
 
 export interface InstanceGroupListItemProps {
   instanceGroup: InstanceGroup;
@@ -53,7 +49,9 @@ function InstanceGroupListItem({
           />
         );
       }
-      return <Unavailable>{t`Unavailable`}</Unavailable>;
+      return (
+        <span className="awx-instance-group-list-item__unavailable">{t`Unavailable`}</span>
+      );
     }
     return null;
   }

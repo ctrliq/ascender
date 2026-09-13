@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { useField } from 'formik';
-import styled from 'styled-components';
 import {
   Button,
   Divider,
@@ -16,14 +15,9 @@ import { useConfig } from 'contexts/Config';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import Popover from 'components/Popover';
 import { Trans, useLingui } from '@lingui/react/macro';
+import './SubscriptionStep.css';
 
 const LICENSELINK = 'https://www.ansible.com/license';
-const FileUploadField = styled(FormGroup)`
-  && {
-    max-width: 500px;
-    width: 100%;
-  }
-`;
 
 function SubscriptionStep() {
   const { t } = useLingui();
@@ -84,7 +78,8 @@ function SubscriptionStep() {
             on the Red Hat Customer Portal.
           </Trans>
         </p>
-        <FileUploadField
+        <FormGroup
+          className="awx-subscription-step__file-upload-field"
           fieldId="subscription-manifest"
           label={t`Red Hat subscription manifest`}
           labelHelp={
@@ -162,7 +157,7 @@ function SubscriptionStep() {
               </HelperTextItem>
             </HelperText>
           </FormHelperText>
-        </FileUploadField>
+        </FormGroup>
       </>
     </Flex>
   );

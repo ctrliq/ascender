@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
 import {
   Card,
   CardHeader,
@@ -21,28 +20,7 @@ import { SubscriptionUsageAPI } from 'api';
 import { useUserProfile } from 'contexts/Config';
 import ContentLoading from 'components/ContentLoading';
 import UsageChart from './ChartComponents/UsageChart';
-
-const GraphCardHeader = styled(CardHeader)`
-  margin-bottom: var(--pf-v6-global--spacer--lg);
-`;
-
-const ChartCardTitle = styled(CardTitle)`
-  padding-right: 24px;
-  font-size: 20px;
-  font-weight: var(--pf-v6-c-title--m-xl--FontWeight);
-`;
-
-const CardText = styled(Content)`
-  padding-right: 24px;
-`;
-
-const GraphCardActions = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--pf-v6-global--spacer--sm);
-  margin-left: initial;
-  padding-left: 0;
-`;
+import './SubscriptionUsageChart.css';
 
 function SubscriptionUsageChart() {
   const { t } = useLingui();
@@ -121,19 +99,22 @@ function SubscriptionUsageChart() {
     <Card>
       <Flex style={{ justifyContent: 'space-between' }}>
         <FlexItem>
-          <ChartCardTitle>{t`Subscription Compliance`}</ChartCardTitle>
+          <CardTitle className="awx-subscription-usage-chart__card-title">{t`Subscription Compliance`}</CardTitle>
         </FlexItem>
         <FlexItem>
-          <CardText component="small">
+          <Content
+            className="awx-subscription-usage-chart__card-text"
+            component="small"
+          >
             {t`Last recalculation date:`}{' '}
             {String(
               userProfile.systemConfig?.HOST_METRIC_SUMMARY_TASK_LAST_TS ?? ''
             ).slice(0, 10)}
-          </CardText>
+          </Content>
         </FlexItem>
       </Flex>
-      <GraphCardHeader>
-        <GraphCardActions>
+      <CardHeader className="awx-subscription-usage-chart__graph-card-header">
+        <div className="awx-subscription-usage-chart__graph-card-actions">
           <Select
             isOpen={isPeriodDropdownOpen}
             onOpenChange={setIsPeriodDropdownOpen}
@@ -164,8 +145,8 @@ function SubscriptionUsageChart() {
               </SelectOption>
             </SelectList>
           </Select>
-        </GraphCardActions>
-      </GraphCardHeader>
+        </div>
+      </CardHeader>
       <CardBody>
         {/* The chart redraws on its data, which the period selection is what
             fetches; it never read a period prop of its own. */}

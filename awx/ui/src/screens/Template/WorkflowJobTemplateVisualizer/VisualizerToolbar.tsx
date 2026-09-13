@@ -21,7 +21,6 @@ import {
   TrashAltIcon,
   WrenchIcon,
 } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import { LaunchButton } from 'components/LaunchButton';
 import {
   WorkflowDispatchContext,
@@ -29,29 +28,7 @@ import {
 } from 'contexts/Workflow';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
-
-const Badge = styled(PFBadge)`
-  align-items: center;
-  display: flex;
-  justify-content: center;
-  margin-left: 10px;
-`;
-
-const ActionButton = styled(Button)`
-  padding: 6px 10px;
-  margin: 0px 6px;
-  border: none;
-  &:hover {
-    background-color: var(--pf-v6-global--primary-color--100);
-    color: #fff;
-  }
-
-  &.pf-m-active {
-    background-color: var(--pf-v6-global--primary-color--100);
-    color: #fff;
-  }
-`;
-ActionButton.displayName = 'ActionButton';
+import './VisualizerToolbar.css';
 
 export interface VisualizerToolbarProps {
   onClose: () => void;
@@ -85,50 +62,55 @@ function VisualizerToolbar({
 
   return (
     <div id="visualizer-toolbar">
-      <div css="display: flex; align-items: center; border-bottom: 1px solid var(--pf-t--global--border--color--default); padding: 8px 16px;">
+      <div className="awx-visualizer-toolbar__display-align-items">
         <Title
+          className="awx-visualizer-toolbar__white-space-margin"
           headingLevel="h2"
           size="xl"
           id="visualizer-toolbar-template-name"
-          css="white-space: nowrap; margin: 0;"
         >
           {template.name}
         </Title>
-        <div css="align-items: center; display: flex; flex: 1; justify-content: flex-end">
+        <div className="awx-visualizer-toolbar__align-items-display">
           <div>{t`Total Nodes`}</div>
-          <Badge id="visualizer-total-nodes-badge" isRead>
+          <PFBadge
+            className="awx-visualizer-toolbar__badge"
+            id="visualizer-total-nodes-badge"
+            isRead
+          >
             {totalNodes}
-          </Badge>
+          </PFBadge>
           <Tooltip content={t`Toggle legend`} position="bottom">
-            <ActionButton
+            <Button
               aria-label={t`Toggle legend`}
               id="visualizer-toggle-legend"
-              className={
+              className={`awx-visualizer-toolbar__action-button ${
                 totalNodes > 0 && showLegend ? 'pf-m-active' : undefined
-              }
+              }`}
               isDisabled={totalNodes === 0}
               onClick={() => dispatch({ type: 'TOGGLE_LEGEND' })}
               variant="plain"
             >
               <CompassIcon />
-            </ActionButton>
+            </Button>
           </Tooltip>
           <Tooltip content={t`Toggle tools`} position="bottom">
-            <ActionButton
+            <Button
               aria-label={t`Toggle tools`}
               id="visualizer-toggle-tools"
-              className={
+              className={`awx-visualizer-toolbar__action-button ${
                 totalNodes > 0 && showTools ? 'pf-m-active' : undefined
-              }
+              }`}
               isDisabled={totalNodes === 0}
               onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })}
               variant="plain"
             >
               <WrenchIcon />
-            </ActionButton>
+            </Button>
           </Tooltip>
           <Tooltip content={t`Workflow documentation`} position="bottom">
-            <ActionButton
+            <Button
+              className="awx-visualizer-toolbar__action-button"
               aria-label={t`Workflow documentation`}
               id="visualizer-documentation"
               variant="plain"
@@ -140,13 +122,14 @@ function VisualizerToolbar({
               )}/userguide/workflow_templates.html#ug-wf-editor`}
             >
               <BookIcon />
-            </ActionButton>
+            </Button>
           </Tooltip>
           {template.summary_fields?.user_capabilities?.start && (
             <Tooltip content={t`Launch workflow`} position="bottom">
               <LaunchButton resource={template} aria-label={t`Launch workflow`}>
                 {({ handleLaunch, isLaunching }) => (
-                  <ActionButton
+                  <Button
+                    className="awx-visualizer-toolbar__action-button"
                     id="visualizer-launch"
                     variant="plain"
                     isDisabled={
@@ -155,7 +138,7 @@ function VisualizerToolbar({
                     onClick={handleLaunch}
                   >
                     <RocketIcon />
-                  </ActionButton>
+                  </Button>
                 )}
               </LaunchButton>
             </Tooltip>
@@ -163,7 +146,8 @@ function VisualizerToolbar({
           {!readOnly && (
             <>
               <Tooltip content={t`Delete all nodes`} position="bottom">
-                <ActionButton
+                <Button
+                  className="awx-visualizer-toolbar__action-button"
                   id="visualizer-delete-all"
                   aria-label={t`Delete all nodes`}
                   isDisabled={totalNodes === 0}
@@ -176,12 +160,12 @@ function VisualizerToolbar({
                   variant="plain"
                 >
                   <TrashAltIcon />
-                </ActionButton>
+                </Button>
               </Tooltip>
               <Button
+                className="awx-visualizer-toolbar__margin-0-32"
                 ouiaId="visualizer-save-button"
                 id="visualizer-save"
-                css="margin: 0 32px"
                 aria-label={t`Save`}
                 variant="primary"
                 onClick={onSave}

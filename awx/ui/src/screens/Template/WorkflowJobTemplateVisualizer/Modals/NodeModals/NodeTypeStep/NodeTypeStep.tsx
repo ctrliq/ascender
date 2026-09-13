@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import { useFormikContext, useField } from 'formik';
 import {
   Alert,
@@ -29,23 +28,7 @@ import JobTemplatesList from './JobTemplatesList';
 import ProjectsList from './ProjectsList';
 import SystemJobTemplatesList from './SystemJobTemplatesList';
 import WorkflowJobTemplatesList from './WorkflowJobTemplatesList';
-
-const NodeTypeErrorAlert = styled(Alert)`
-  margin-bottom: 20px;
-`;
-
-const TimeoutInput = styled(TextInput)`
-  width: 200px !important;
-  :not(:first-of-type) {
-    margin-left: 20px;
-  }
-`;
-TimeoutInput.displayName = 'TimeoutInput';
-
-const TimeoutLabel = styled.p`
-  margin-left: 10px;
-  min-width: fit-content;
-`;
+import './NodeTypeStep.css';
 
 export interface NodeTypeStepProps {
   isIdentifierRequired?: boolean;
@@ -119,14 +102,15 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
   return (
     <>
       {nodeResourceMeta.error && (
-        <NodeTypeErrorAlert
+        <Alert
+          className="awx-node-type-step__error-alert"
           variant="danger"
           isInline
           title={nodeResourceMeta.error}
         />
       )}
-      <div css="display: flex; align-items: center; margin-bottom: 20px;">
-        <b css="margin-right: 24px">{t`Node Type`}</b>
+      <div className="awx-node-type-step__display-align-items">
+        <b className="awx-node-type-step__margin-right-24">{t`Node Type`}</b>
         <div>
           <AnsibleSelect
             id="nodeResource-select"
@@ -184,7 +168,7 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
           onUpdateNodeResource={nodeResourceHelpers.setValue}
         />
       )}
-      <Form autoComplete="off" css="margin-top: 20px;">
+      <Form className="awx-node-type-step__margin-top-20" autoComplete="off">
         <FormColumnLayout>
           <FormFullWidthLayout>
             {nodeTypeField.value === 'workflow_approval_template' && (
@@ -207,8 +191,9 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
                   fieldId="approval-timeout"
                   name="timeout"
                 >
-                  <div css="display: flex;align-items: center;">
-                    <TimeoutInput
+                  <div className="awx-node-type-step__display-align-items-2">
+                    <TextInput
+                      className="awx-node-type-step__timeout-input"
                       {...timeoutMinutesField}
                       aria-label={t`Timeout minutes`}
                       id="approval-timeout-minutes"
@@ -219,10 +204,11 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
                       step="1"
                       type="number"
                     />
-                    <TimeoutLabel>
+                    <p className="awx-node-type-step__timeout-label">
                       <Trans>min</Trans>
-                    </TimeoutLabel>
-                    <TimeoutInput
+                    </p>
+                    <TextInput
+                      className="awx-node-type-step__timeout-input"
                       {...timeoutSecondsField}
                       aria-label={t`Timeout seconds`}
                       id="approval-timeout-seconds"
@@ -233,9 +219,9 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
                       step="1"
                       type="number"
                     />
-                    <TimeoutLabel>
+                    <p className="awx-node-type-step__timeout-label">
                       <Trans>sec</Trans>
-                    </TimeoutLabel>
+                    </p>
                   </div>
                 </FormGroup>
                 <FormGroup
@@ -269,7 +255,8 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
                     />
                   }
                 >
-                  <TimeoutInput
+                  <TextInput
+                    className="awx-node-type-step__timeout-input"
                     {...requiredApprovalsField}
                     aria-label={t`Required approvals`}
                     id="approval-required-approvals"

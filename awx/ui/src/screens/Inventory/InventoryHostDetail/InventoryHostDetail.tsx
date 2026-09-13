@@ -12,6 +12,7 @@ import Sparkline from 'components/Sparkline';
 import DeleteButton from 'components/DeleteButton';
 import { HostsAPI } from 'api';
 import HostToggle from 'components/HostToggle';
+import './InventoryHostDetail.css';
 
 export interface InventoryHostDetailProps {
   host: Host;
@@ -72,7 +73,10 @@ function InventoryHostDetail({ host }: InventoryHostDetailProps) {
 
   return (
     <CardBody>
-      <HostToggle host={host} css="padding-bottom: 40px" />
+      <HostToggle
+        className="awx-inventory-host-detail__padding-bottom-40"
+        host={host}
+      />
       <DetailList gutter="sm">
         <Detail label={t`Name`} value={name} />
         <Detail

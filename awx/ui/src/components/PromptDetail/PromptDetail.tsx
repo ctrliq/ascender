@@ -12,7 +12,6 @@ import type {
 import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
-import styled from 'styled-components';
 import { Label, Divider, Title } from '@patternfly/react-core';
 
 import { toTitleCase } from 'util/strings';
@@ -28,21 +27,7 @@ import type { PromptJobTemplate } from './PromptJobTemplateDetail';
 import PromptWFJobTemplateDetail from './PromptWFJobTemplateDetail';
 import type { PromptWorkflowJobTemplate } from './PromptWFJobTemplateDetail';
 import { getVerbosityLabel } from '../VerbositySelectField';
-
-const PromptTitle = styled(Title)`
-  margin-top: var(--pf-v6-global--spacer--xl);
-  --pf-v6-c-title--m-md--FontWeight: 700;
-  grid-column: 1 / -1;
-`;
-
-const PromptDivider = styled(Divider)`
-  margin-top: var(--pf-v6-global--spacer--lg);
-  margin-bottom: var(--pf-v6-global--spacer--lg);
-`;
-
-const PromptDetailList = styled(DetailList)`
-  padding: 0px var(--pf-v6-global--spacer--lg);
-`;
+import './PromptDetail.css';
 
 function formatTimeout(timeout: number | string | null | undefined) {
   if (typeof timeout === 'undefined' || timeout === null) {
@@ -254,9 +239,15 @@ function PromptDetail({
         hasPromptData(launchConfig) &&
         hasOverrides && (
           <>
-            <PromptTitle headingLevel="h2">{t`Prompted Values`}</PromptTitle>
-            <PromptDivider />
-            <PromptDetailList aria-label={t`Prompt Overrides`}>
+            <Title
+              className="awx-prompt-detail__title"
+              headingLevel="h2"
+            >{t`Prompted Values`}</Title>
+            <Divider className="awx-prompt-detail__divider" />
+            <DetailList
+              className="awx-prompt-detail__list"
+              aria-label={t`Prompt Overrides`}
+            >
               {launchConfig.ask_job_type_on_launch && (
                 <Detail
                   label={t`Job Type`}
@@ -451,7 +442,7 @@ function PromptDetail({
                   name="extra_vars"
                 />
               )}
-            </PromptDetailList>
+            </DetailList>
           </>
         )}
     </>
