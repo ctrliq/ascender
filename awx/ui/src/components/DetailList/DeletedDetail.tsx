@@ -1,14 +1,8 @@
 import React from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
-import _Detail from './Detail';
-
-const Detail = styled(_Detail)`
-  dd& {
-    color: red;
-  }
-`;
+import Detail from './Detail';
+import './DetailList.css';
 
 export interface DeletedDetailProps {
   label: React.ReactNode;
