@@ -165,7 +165,7 @@ def test_custom_environment_injection(post, user, organization):
     template = NotificationTemplate.objects.get(pk=response.data['id'])
     with (
         pytest.raises(ConnectionError),
-        override_settings(AWX_TASK_ENV={'HTTPS_PROXY': '192.168.50.100:1234'}),
+        override_settings(ASCENDER_TASK_ENV={'HTTPS_PROXY': '192.168.50.100:1234'}),
         mock.patch.object(HTTPAdapter, 'send') as fake_send,
     ):
 

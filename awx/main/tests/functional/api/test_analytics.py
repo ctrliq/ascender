@@ -90,7 +90,7 @@ class TestAnalyticsGenericView:
 
     @pytest.mark.django_db
     def test__send_to_analytics_applies_task_env(self):
-        """The proxy settings live in AWX_TASK_ENV, and requests reads them from the
+        """The proxy settings live in ASCENDER_TASK_ENV, and requests reads them from the
         process environment, so they have to be applied around the outbound call."""
         seen = {}
 
@@ -106,7 +106,7 @@ class TestAnalyticsGenericView:
             REDHAT_USERNAME='user',
             REDHAT_PASSWORD='pass',
             AUTOMATION_ANALYTICS_URL='https://example.invalid',
-            AWX_TASK_ENV={'https_proxy': 'http://proxy.example.invalid:3128'},
+            ASCENDER_TASK_ENV={'https_proxy': 'http://proxy.example.invalid:3128'},
         ):
             with mock.patch.object(requests, 'request', side_effect=fake_request):
                 view._send_to_analytics(request, 'GET')

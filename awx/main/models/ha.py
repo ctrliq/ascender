@@ -268,8 +268,8 @@ class Instance(HasPolicyEditsMixin, BaseModel):
         any kwargs will override that key=value combination in the returned dict
         """
         vargs = dict()
-        if settings.AWX_CLEANUP_PATHS:
-            vargs['file_pattern'] = os.path.join(settings.AWX_ISOLATION_BASE_PATH, JOB_FOLDER_PREFIX % '*') + '*'
+        if settings.ASCENDER_CLEANUP_PATHS:
+            vargs['file_pattern'] = os.path.join(settings.ASCENDER_ISOLATION_BASE_PATH, JOB_FOLDER_PREFIX % '*') + '*'
         vargs.update(kwargs)
         if not isinstance(vargs.get('grace_period'), int):
             vargs['grace_period'] = 60  # grace period of 60 minutes, need to set because CLI default will not take effect

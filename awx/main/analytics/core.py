@@ -374,7 +374,7 @@ def ship(path):
         s = requests.Session()
         s.headers = get_awx_http_client_headers()
         s.headers.pop('Content-Type')
-        with set_environ(**settings.AWX_TASK_ENV):
+        with set_environ(**settings.ASCENDER_TASK_ENV):
             response = s.post(url, files=files, verify=settings.INSIGHTS_CERT_PATH, auth=(rh_user, rh_password), headers=s.headers, timeout=(31, 31))
         # Accept 2XX status_codes
         if response.status_code >= 300:

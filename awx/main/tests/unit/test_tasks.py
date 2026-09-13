@@ -616,7 +616,7 @@ class TestGenericRun:
         task.instance = job
         task._write_extra_vars_file = mock.Mock()
 
-        with mock.patch('awx.main.tasks.jobs.settings.AWX_TASK_ENV', {'FOO': 'BAR'}):
+        with mock.patch('awx.main.tasks.jobs.settings.ASCENDER_TASK_ENV', {'FOO': 'BAR'}):
             env = task.build_env(job, private_data_dir)
         assert env['FOO'] == 'BAR'
 
@@ -1397,7 +1397,7 @@ class TestJobCredentials(TestJobExecution):
         assert safe_env['AZURE_PASSWORD'] == HIDDEN_PASSWORD
 
     def test_awx_task_env(self, settings, private_data_dir, job, mock_me):
-        settings.AWX_TASK_ENV = {'FOO': 'BAR'}
+        settings.ASCENDER_TASK_ENV = {'FOO': 'BAR'}
         task = jobs.RunJob()
         task.instance = job
         env = task.build_env(job, private_data_dir)
@@ -1571,7 +1571,7 @@ class TestProjectUpdateCredentials(TestJobExecution):
 
     def test_awx_task_env(self, project_update, settings, private_data_dir, scm_type, execution_environment, mock_me):
         project_update.execution_environment = execution_environment
-        settings.AWX_TASK_ENV = {'FOO': 'BAR'}
+        settings.ASCENDER_TASK_ENV = {'FOO': 'BAR'}
         task = jobs.RunProjectUpdate()
         task.instance = project_update
         project_update.scm_type = scm_type
@@ -1886,7 +1886,7 @@ class TestInventoryUpdateCredentials(TestJobExecution):
 
         inventory_update.get_cloud_credential = get_cred
         inventory_update.get_extra_credentials = mocker.Mock(return_value=[])
-        settings.AWX_TASK_ENV = {'FOO': 'BAR'}
+        settings.ASCENDER_TASK_ENV = {'FOO': 'BAR'}
 
         private_data_files, ssh_key_data = task.build_private_data_files(inventory_update, private_data_dir)
         env = task.build_env(inventory_update, private_data_dir, private_data_files)

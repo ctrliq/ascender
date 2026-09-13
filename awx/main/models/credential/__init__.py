@@ -1358,7 +1358,7 @@ class CredentialInputSource(PrimordialModel):
 
         backend_kwargs.update(self.metadata)
 
-        with set_environ(**settings.AWX_TASK_ENV):
+        with set_environ(**settings.ASCENDER_TASK_ENV):
             return backend(**backend_kwargs)
 
     def get_absolute_url(self, request=None):

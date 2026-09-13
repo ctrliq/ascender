@@ -746,7 +746,7 @@ ANSIBLE_FORCE_COLOR = True
 ANSIBLE_INVENTORY_UNPARSED_FAILED = True
 
 # Additional environment variables to be passed to the ansible subprocesses
-AWX_TASK_ENV = {}
+ASCENDER_TASK_ENV = {}
 
 # Additional environment variables to apply when running ansible-galaxy commands
 # to fetch Ansible content - roles and collections
@@ -764,15 +764,15 @@ PROJECT_UPDATE_VVV = False
 # Enable dynamically pulling roles from a requirement.yml file
 # when updating SCM projects
 # Note: This setting may be overridden by database settings.
-AWX_ROLES_ENABLED = True
+ASCENDER_ROLES_ENABLED = True
 
 # Enable dynamically pulling collections from a requirement.yml file
 # when updating SCM projects
 # Note: This setting may be overridden by database settings.
-AWX_COLLECTIONS_ENABLED = True
+ASCENDER_COLLECTIONS_ENABLED = True
 
 # Follow symlinks when scanning for playbooks
-AWX_SHOW_PLAYBOOK_LINKS = False
+ASCENDER_SHOW_PLAYBOOK_LINKS = False
 
 # Automatically add ascender_stats_* keys (changed/failed flags and host lists
 # derived from the playbook stats) to job artifacts when a job finishes.
@@ -791,17 +791,17 @@ GALAXY_IGNORE_CERTS = False
 
 # Additional paths to show for jobs using process isolation.
 # Note: This setting may be overridden by database settings.
-AWX_ISOLATION_SHOW_PATHS = []
+ASCENDER_ISOLATION_SHOW_PATHS = []
 
 # The directory in which the service will create new temporary directories for job
 # execution and isolation (such as credential files and custom
 # inventory scripts).
 # Note: This setting may be overridden by database settings.
-AWX_ISOLATION_BASE_PATH = tempfile.gettempdir()
+ASCENDER_ISOLATION_BASE_PATH = tempfile.gettempdir()
 
 # User definable ansible callback plugins
 # Note: This setting may be overridden by database settings.
-AWX_ANSIBLE_CALLBACK_PLUGINS = ""
+ASCENDER_ANSIBLE_CALLBACK_PLUGINS = ""
 
 # Automatically remove nodes that have missed their heartbeats after some time
 AWX_AUTO_DEPROVISION_INSTANCES = False
@@ -1114,7 +1114,7 @@ COLOR_LOGS = False
 SILENCED_SYSTEM_CHECKS = ['models.E006']
 
 # Use middleware to get request statistics
-AWX_REQUEST_PROFILE = False
+ASCENDER_REQUEST_PROFILE = False
 
 #
 # Optionally, AWX can generate DOT graphs
@@ -1133,7 +1133,7 @@ AWX_REQUEST_PROFILE_WITH_DOT = False
 AWX_CALLBACK_PROFILE = False
 
 # Delete temporary directories created to store playbook run-time
-AWX_CLEANUP_PATHS = True
+ASCENDER_CLEANUP_PATHS = True
 
 # Allow ansible-runner to store env folder (may contain sensitive information)
 AWX_RUNNER_OMIT_ENV_FILES = True
@@ -1145,7 +1145,7 @@ AWX_RUNNER_SUPPRESS_OUTPUT_FILE = True
 # https://github.com/ansible/ansible-runner/pull/1191/files
 # Interval in seconds between the last message and keep-alive messages that
 # ansible-runner will send
-AWX_RUNNER_KEEPALIVE_SECONDS = 0
+ASCENDER_RUNNER_KEEPALIVE_SECONDS = 0
 
 # Delete completed work units in receptor
 RECEPTOR_RELEASE_WORK = True
@@ -1242,7 +1242,7 @@ DEFAULT_CONTROL_PLANE_QUEUE_NAME = 'controlplane'
 DEFAULT_CONTAINER_RUN_OPTIONS = ['--network', 'slirp4netns:enable_ipv6=true']
 
 # Mount exposed paths as hostPath resource in k8s/ocp
-AWX_MOUNT_ISOLATED_PATHS_ON_K8S = False
+ASCENDER_MOUNT_ISOLATED_PATHS_ON_K8S = False
 
 # This is overridden downstream via /etc/tower/conf.d/cluster_host_id.py
 CLUSTER_HOST_ID = socket.gethostname()

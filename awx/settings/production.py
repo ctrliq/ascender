@@ -31,7 +31,7 @@ SECRET_KEY = None
 ALLOWED_HOSTS = []
 
 # Very important that this is editable (not read_only) in the API
-AWX_ISOLATION_SHOW_PATHS = [
+ASCENDER_ISOLATION_SHOW_PATHS = [
     '/etc/pki/ca-trust:/etc/pki/ca-trust:O',
     '/usr/share/pki:/usr/share/pki:O',
 ]
@@ -113,9 +113,34 @@ set_conn_max_age(DATABASES, DATABASE_CONN_MAX_AGE)  # NOQA
 
 del set_conn_max_age
 
-# Deployments that set the former name in /etc/tower/conf.d keep working for a
-# release. The installers set this through the API rather than on disk, and the
-# stored value is carried over by conf migration 0011, so this covers the hand
-# written case only.
-if 'TOWER_URL_BASE' in locals() and 'ASCENDER_URL_BASE' not in locals():
-    ASCENDER_URL_BASE = locals()['TOWER_URL_BASE']  # noqa: F821
+# Deployments that set a former name in /etc/tower/conf.d keep working for a
+# release. The stored values are carried over by conf migrations 0011 and 0012,
+# so this covers the hand written case only.
+#
+# The test is against DEFAULTS_SNAPSHOT rather than for the current name being
+# absent. Every one of these has a default, so the current name is always
+# present by the time this runs, and asking whether it exists answers nothing.
+# What matters is whether anything has changed it.
+_FORMER_NAMES = {
+    'TOWER_URL_BASE': 'ASCENDER_URL_BASE',
+    'AWX_ANSIBLE_CALLBACK_PLUGINS': 'ASCENDER_ANSIBLE_CALLBACK_PLUGINS',
+    'AWX_CLEANUP_PATHS': 'ASCENDER_CLEANUP_PATHS',
+    'AWX_COLLECTIONS_ENABLED': 'ASCENDER_COLLECTIONS_ENABLED',
+    'AWX_ISOLATION_BASE_PATH': 'ASCENDER_ISOLATION_BASE_PATH',
+    'AWX_ISOLATION_SHOW_PATHS': 'ASCENDER_ISOLATION_SHOW_PATHS',
+    'AWX_MOUNT_ISOLATED_PATHS_ON_K8S': 'ASCENDER_MOUNT_ISOLATED_PATHS_ON_K8S',
+    'AWX_REQUEST_PROFILE': 'ASCENDER_REQUEST_PROFILE',
+    'AWX_ROLES_ENABLED': 'ASCENDER_ROLES_ENABLED',
+    'AWX_RUNNER_KEEPALIVE_SECONDS': 'ASCENDER_RUNNER_KEEPALIVE_SECONDS',
+    'AWX_SHOW_PLAYBOOK_LINKS': 'ASCENDER_SHOW_PLAYBOOK_LINKS',
+    'AWX_TASK_ENV': 'ASCENDER_TASK_ENV',
+}
+for _former, _current in _FORMER_NAMES.items():
+    _scope = locals()
+    if _former not in _scope:
+        continue
+    if _current in _scope and _scope[_current] != DEFAULTS_SNAPSHOT.get(_current):
+        # Both names were written down. The current one wins.
+        continue
+    _scope[_current] = _scope[_former]
+del _FORMER_NAMES, _former, _current, _scope

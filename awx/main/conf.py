@@ -229,7 +229,7 @@ register(
 )
 
 register(
-    'AWX_ISOLATION_BASE_PATH',
+    'ASCENDER_ISOLATION_BASE_PATH',
     field_class=fields.CharField,
     label=_('Job execution path'),
     help_text=_('The directory in which the service will create new temporary directories for job execution and isolation (such as credential files).'),
@@ -238,7 +238,7 @@ register(
 )
 
 register(
-    'AWX_ISOLATION_SHOW_PATHS',
+    'ASCENDER_ISOLATION_SHOW_PATHS',
     field_class=fields.StringListIsolatedPathField,
     required=False,
     label=_('Paths to expose to isolated jobs'),
@@ -252,7 +252,7 @@ register(
 )
 
 register(
-    'AWX_TASK_ENV',
+    'ASCENDER_TASK_ENV',
     field_class=fields.KeyValueField,
     default={},
     label=_('Extra Environment Variables'),
@@ -263,7 +263,7 @@ register(
 )
 
 register(
-    'AWX_RUNNER_KEEPALIVE_SECONDS',
+    'ASCENDER_RUNNER_KEEPALIVE_SECONDS',
     field_class=fields.IntegerField,
     label=_('K8S Ansible Runner Keep-Alive Message Interval'),
     help_text=_('Only applies to jobs running in a Container Group. If not 0, send a message every so-many seconds to keep connection open.'),
@@ -305,7 +305,7 @@ register(
 )
 
 register(
-    'AWX_ROLES_ENABLED',
+    'ASCENDER_ROLES_ENABLED',
     field_class=fields.BooleanField,
     default=True,
     label=_('Enable Role Download'),
@@ -348,7 +348,7 @@ register(
 )
 
 register(
-    'AWX_COLLECTIONS_ENABLED',
+    'ASCENDER_COLLECTIONS_ENABLED',
     field_class=fields.BooleanField,
     default=True,
     label=_('Enable Collection(s) Download'),
@@ -368,7 +368,7 @@ register(
 )
 
 register(
-    'AWX_SHOW_PLAYBOOK_LINKS',
+    'ASCENDER_SHOW_PLAYBOOK_LINKS',
     field_class=fields.BooleanField,
     default=False,
     label=_('Follow symlinks'),
@@ -381,7 +381,7 @@ register(
 )
 
 register(
-    'AWX_MOUNT_ISOLATED_PATHS_ON_K8S',
+    'ASCENDER_MOUNT_ISOLATED_PATHS_ON_K8S',
     field_class=fields.BooleanField,
     default=False,
     label=_('Expose host paths for Container Groups'),
@@ -447,7 +447,7 @@ register(
 )
 
 register(
-    'AWX_ANSIBLE_CALLBACK_PLUGINS',
+    'ASCENDER_ANSIBLE_CALLBACK_PLUGINS',
     field_class=fields.StringListField,
     required=False,
     label=_('Ansible Callback Plugins'),
@@ -881,7 +881,7 @@ register(
 )
 
 register(
-    'AWX_CLEANUP_PATHS',
+    'ASCENDER_CLEANUP_PATHS',
     field_class=fields.BooleanField,
     label=_('Enable or Disable tmp dir cleanup'),
     default=True,
@@ -891,7 +891,7 @@ register(
 )
 
 register(
-    'AWX_REQUEST_PROFILE',
+    'ASCENDER_REQUEST_PROFILE',
     field_class=fields.BooleanField,
     label=_('Debug Web Requests'),
     default=False,

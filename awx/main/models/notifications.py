@@ -181,7 +181,7 @@ class NotificationTemplate(CommonModelNameNotUnique):
                     notification_configuration[field] = params['default']
         backend_obj = self.notification_class(**notification_configuration)
         notification_obj = EmailMessage(subject, backend_obj.format_body(body), sender, recipients)
-        with set_environ(**settings.AWX_TASK_ENV):
+        with set_environ(**settings.ASCENDER_TASK_ENV):
             return backend_obj.send_messages([notification_obj])
 
     def display_notification_configuration(self):
