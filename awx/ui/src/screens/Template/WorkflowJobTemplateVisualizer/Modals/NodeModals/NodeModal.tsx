@@ -40,6 +40,7 @@ import useWorkflowNodeSteps from './useWorkflowNodeSteps';
 import type { NodeModalValues } from './useWorkflowNodeSteps';
 import NodeNextButton from './NodeNextButton';
 import type { NodeWizardStep } from './NodeNextButton';
+import './NodeModal.css';
 
 export interface NodeModalCustomFooterProps {
   promptSteps: NodeWizardStep[];
@@ -266,6 +267,7 @@ function NodeModalForm({
   }
   return (
     <Wizard
+      className="awx-node-modal__overflow-scroll"
       footer={
         <NodeModalCustomFooter
           promptSteps={promptSteps}
@@ -293,7 +295,6 @@ function NodeModalForm({
         }
       }}
       steps={promptSteps}
-      css="overflow: scroll"
       title={title}
       onNext={async (nextStep, prevStep) => {
         if (nextStep.id === 'preview') {

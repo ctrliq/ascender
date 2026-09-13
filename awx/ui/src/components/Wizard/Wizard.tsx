@@ -6,7 +6,7 @@ import {
 } from '@patternfly/react-core';
 import type { WizardProps } from '@patternfly/react-core';
 import { Modal, ModalVariant } from '@patternfly/react-core/deprecated';
-import styled from 'styled-components';
+import './Wizard.css';
 
 /**
  * Compatibility wrapper that accepts the legacy PF4/deprecated Wizard API
@@ -157,7 +157,7 @@ function WizardWrapper({
       onSave={onSave}
       onClose={onClose}
       height={height}
-      className={className}
+      className={['awx-wizard', className].filter(Boolean).join(' ')}
       style={style}
       {...rest}
     >
@@ -217,8 +217,4 @@ function WizardWrapper({
 
 WizardWrapper.displayName = 'PFWizard';
 
-export default styled(WizardWrapper)`
-  .pf-v6-c-toolbar__content {
-    padding: 0 !important;
-  }
-`;
+export default WizardWrapper;

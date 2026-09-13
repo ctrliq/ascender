@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
 
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -18,18 +17,7 @@ import { DashboardAPI } from 'api';
 import ContentLoading from 'components/ContentLoading';
 import type { JobGraphDay } from './shared/LineChart';
 import LineChart from './shared/LineChart';
-
-const GraphCardHeader = styled(CardHeader)`
-  margin-top: var(--pf-v6-global--spacer--lg);
-`;
-
-const GraphCardActions = styled.div`
-  display: flex;
-  align-items: center;
-  gap: var(--pf-v6-global--spacer--sm);
-  margin-left: initial;
-  padding-left: 0;
-`;
+import './DashboardGraph.css';
 
 function DashboardGraph() {
   const { t } = useLingui();
@@ -109,8 +97,8 @@ function DashboardGraph() {
 
   return (
     <>
-      <GraphCardHeader>
-        <GraphCardActions>
+      <CardHeader className="awx-dashboard-graph__card-header">
+        <div className="awx-dashboard-graph__card-actions">
           <Select
             isOpen={isPeriodDropdownOpen}
             onOpenChange={setIsPeriodDropdownOpen}
@@ -203,8 +191,8 @@ function DashboardGraph() {
               <SelectOption value="failed">{t`Failed jobs`}</SelectOption>
             </SelectList>
           </Select>
-        </GraphCardActions>
-      </GraphCardHeader>
+        </div>
+      </CardHeader>
       <CardBody>
         <LineChart
           jobStatus={jobStatusSelection}

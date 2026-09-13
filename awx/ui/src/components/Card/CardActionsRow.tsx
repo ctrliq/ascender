@@ -1,12 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const CardActionsWrapper = styled.div`
-  margin-top: var(--pf-v6-global--spacer--xl);
-  display: flex;
-  align-items: center;
-  gap: var(--pf-v6-global--spacer--sm);
-`;
+import './CardActionsRow.css';
 
 export interface CardActionsRowProps {
   children: React.ReactNode;
@@ -14,7 +7,7 @@ export interface CardActionsRowProps {
 }
 
 function CardActionsRow({ children }: CardActionsRowProps) {
-  return <CardActionsWrapper>{children}</CardActionsWrapper>;
+  return <div className="awx-card-actions-row__wrapper">{children}</div>;
 }
 
 export default CardActionsRow;

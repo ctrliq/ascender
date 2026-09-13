@@ -2,7 +2,6 @@ import React, { useCallback, useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'formik';
-import styled from 'styled-components';
 import { Alert } from '@patternfly/react-core';
 import { InventoriesAPI } from 'api';
 import { getSearchableKeys } from 'components/PaginatedTable';
@@ -11,10 +10,7 @@ import useRequest from 'hooks/useRequest';
 import OptionsList from '../../OptionsList';
 import ContentLoading from '../../ContentLoading';
 import ContentError from '../../ContentError';
-
-const InventoryErrorAlert = styled(Alert)`
-  margin-bottom: 20px;
-`;
+import './InventoryStep.css';
 
 const QS_CONFIG = getQSConfig('inventory', {
   page: 1,
@@ -77,7 +73,12 @@ function InventoryStep({ warningMessage = null }: InventoryStepProps) {
   return (
     <div data-cy="inventory-prompt">
       {meta.touched && meta.error && (
-        <InventoryErrorAlert variant="danger" isInline title={meta.error} />
+        <Alert
+          className="awx-inventory-step__error-alert"
+          variant="danger"
+          isInline
+          title={meta.error}
+        />
       )}
       {warningMessage}
       <OptionsList

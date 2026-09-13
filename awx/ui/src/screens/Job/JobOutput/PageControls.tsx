@@ -9,27 +9,7 @@ import {
   AngleDownIcon,
   AngleRightIcon,
 } from '@patternfly/react-icons';
-import styled from 'styled-components';
-
-const ControllsWrapper = styled.div`
-  display: flex;
-  height: 35px;
-  border: 1px solid var(--pf-v6-global--BorderColor--100);
-  width: 100%;
-  justify-content: space-between;
-`;
-
-const ScrollWrapper = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
-const ExpandCollapseWrapper = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  & > Button {
-    padding-left: 8px;
-  }
-`;
+import './PageControls.css';
 
 export interface PageControlsProps {
   onScrollFirst?: () => void;
@@ -55,8 +35,8 @@ const PageControls = ({
 }: PageControlsProps) => {
   const { t } = useLingui();
   return (
-    <ControllsWrapper>
-      <ExpandCollapseWrapper>
+    <div className="awx-page-controls__controlls-wrapper">
+      <div className="awx-page-controls__expand-collapse-wrapper">
         {!isFlatMode && isTemplateJob && (
           <Button
             icon={isAllCollapsed ? <AngleRightIcon /> : <AngleDownIcon />}
@@ -68,8 +48,8 @@ const PageControls = ({
             onClick={toggleExpandCollapseAll}
           />
         )}
-      </ExpandCollapseWrapper>
-      <ScrollWrapper>
+      </div>
+      <div className="awx-page-controls__scroll-wrapper">
         <Button
           icon={<AngleUpIcon />}
           ouiaId="job-output-scroll-previous-button"
@@ -98,8 +78,8 @@ const PageControls = ({
           onClick={onScrollLast}
           variant="plain"
         />
-      </ScrollWrapper>
-    </ControllsWrapper>
+      </div>
+    </div>
   );
 };
 

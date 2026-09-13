@@ -5,7 +5,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import { Link } from 'react-router';
-import styled from 'styled-components';
 import {
   Dropdown,
   DropdownItem,
@@ -26,31 +25,7 @@ import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
 import { getThemes, applyTheme, getStoredThemeId } from 'themeRegistry';
 import useWsPendingApprovalCount from './useWsPendingApprovalCount';
-
-const ToolbarItems = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex: 1;
-  gap: 1.25rem;
-`;
-
-const ToolbarNotificationBadge = styled(NotificationBadge)`
-  &.pf-v6-c-button.pf-m-stateful {
-    --pf-v6-c-button--m-read--BackgroundColor: transparent;
-    --pf-v6-c-button--m-read--BorderColor: transparent;
-    --pf-v6-c-button--m-read--hover--BackgroundColor: #12a66f;
-    --pf-v6-c-button--m-read--hover--BorderColor: transparent;
-    --pf-v6-c-button--m-read--m-clicked--BackgroundColor: #0e8c5d;
-    --pf-v6-c-button--m-read--m-clicked--BorderColor: transparent;
-    padding: var(--pf-v6-global--spacer--xs);
-  }
-`;
-
-const UserName = styled.span`
-  margin-left: 1rem;
-  font-size: var(--pf-v6-global--FontSize--md);
-`;
+import './PageHeaderToolbar.css';
 
 export interface PageHeaderToolbarProps {
   isAboutDisabled?: boolean;
@@ -115,7 +90,7 @@ function PageHeaderToolbar({
   }, [fetchPendingApprovalCount]);
 
   return (
-    <ToolbarItems>
+    <div className="awx-page-header-toolbar__items">
       <Dropdown
         isOpen={isThemeOpen}
         onSelect={() => setIsThemeOpen(false)}
@@ -154,7 +129,8 @@ function PageHeaderToolbar({
         {/* The badge is the link rather than a button inside one: a bell icon
             with no text names nothing, and the button it used to render did
             nothing of its own, so it was a second tab stop with no purpose. */}
-        <ToolbarNotificationBadge
+        <NotificationBadge
+          className="awx-page-header-toolbar__notification-badge"
           id="toolbar-workflow-approval-badge"
           component={Link}
           to="/workflow_approvals?workflow_approvals.status=pending"
@@ -221,7 +197,11 @@ function PageHeaderToolbar({
             ouiaId="toolbar-user-dropdown-toggle"
           >
             <UserIcon />
-            {loggedInUser && <UserName>{loggedInUser.username}</UserName>}
+            {loggedInUser && (
+              <span className="awx-page-header-toolbar__user-name">
+                {loggedInUser.username}
+              </span>
+            )}
           </MenuToggle>
         )}
       >
@@ -244,7 +224,7 @@ function PageHeaderToolbar({
           </DropdownItem>
         </DropdownList>
       </Dropdown>
-    </ToolbarItems>
+    </div>
   );
 }
 

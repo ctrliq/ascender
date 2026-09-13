@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import {
   Card,
@@ -25,13 +24,7 @@ import { getQSConfig, parseQueryString, updateQueryString } from 'util/qs';
 import { ActivityStreamAPI } from 'api';
 
 import ActivityStreamListItem from './ActivityStreamListItem';
-
-const StyledMenuToggle = styled(MenuToggle)`
-  && {
-    width: 250px;
-    white-space: nowrap;
-  }
-`;
+import './ActivityStream.css';
 
 function ActivityStream() {
   const { t } = useLingui();
@@ -160,14 +153,15 @@ function ActivityStream() {
           popperProps={{ position: 'end' }}
           isScrollable
           toggle={(toggleRef) => (
-            <StyledMenuToggle
+            <MenuToggle
+              className="awx-activity-stream__styled-menu-toggle"
               ref={toggleRef}
               onClick={() => setIsTypeDropdownOpen(!isTypeDropdownOpen)}
               isExpanded={isTypeDropdownOpen}
             >
               {typeLabelMap[activityStreamType as keyof typeof typeLabelMap] ||
                 activityStreamType}
-            </StyledMenuToggle>
+            </MenuToggle>
           )}
         >
           <SelectGroup label={t`Views`} key="views">
