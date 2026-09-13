@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection, DropdownItem } from '@patternfly/react-core';
 
 import { InventoriesAPI } from 'api';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import useToast, { AlertVariant } from 'hooks/useToast';
 import AlertModal from 'components/AlertModal';
@@ -45,7 +46,8 @@ function InventoryList() {
     error: contentError,
     isLoading,
     request: fetchInventories,
-  } = useRequest(
+  } = useCachedRequest(
+    ['inventory', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([
@@ -70,10 +72,6 @@ function InventoryList() {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchInventories();
-  }, [fetchInventories]);
 
   const fetchInventoriesById = useCallback(
     async (ids: number[]) => {

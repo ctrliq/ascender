@@ -1,6 +1,6 @@
 import type { OAuth2Token } from 'types/api';
 
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useParams, useLocation } from 'react-router';
 import PaginatedTable, { getSearchableKeys } from 'components/PaginatedTable';
@@ -8,7 +8,8 @@ import { getQSConfig, parseQueryString } from 'util/qs';
 import { TokensAPI, ApplicationsAPI } from 'api';
 import ErrorDetail from 'components/ErrorDetail';
 import AlertModal from 'components/AlertModal';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import DatalistToolbar from 'components/DataListToolbar';
 import ToolbarDeleteButton from 'components/PaginatedTable/ToolbarDeleteButton';
@@ -34,7 +35,8 @@ function ApplicationTokenList() {
     isLoading,
     result: { tokens, itemCount, relatedSearchableKeys, searchableKeys },
     request: fetchTokens,
-  } = useRequest(
+  } = useCachedRequest(
+    ['applications', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [
@@ -66,10 +68,6 @@ function ApplicationTokenList() {
     }, [id, location.search]),
     { tokens: [], itemCount: 0, relatedSearchableKeys: [], searchableKeys: [] }
   );
-
-  useEffect(() => {
-    fetchTokens();
-  }, [fetchTokens]);
 
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
     useSelected(tokens);

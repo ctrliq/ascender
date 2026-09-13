@@ -1,5 +1,5 @@
 import type { SummaryFieldRef, Team } from 'types/api';
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import PaginatedTable, {
@@ -13,6 +13,7 @@ import DisassociateButton from 'components/DisassociateButton';
 import AssociateModal from 'components/AssociateModal';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
+import useCachedRequest from 'hooks/useCachedRequest';
 import useRequest, {
   useDeleteItems,
   useDismissableError,
@@ -47,7 +48,8 @@ function UserTeamList() {
     error: contentError,
     isLoading,
     request: fetchTeams,
-  } = useRequest(
+  } = useCachedRequest(
+    ['teams', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [
@@ -79,10 +81,6 @@ function UserTeamList() {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchTeams();
-  }, [fetchTeams]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
     useSelected(teams);

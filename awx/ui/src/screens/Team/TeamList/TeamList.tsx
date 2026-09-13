@@ -1,11 +1,12 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 
 import { Card, PageSection } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 
 import { TeamsAPI } from 'api';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
 import DataListToolbar from 'components/DataListToolbar';
 import ErrorDetail from 'components/ErrorDetail';
@@ -42,7 +43,8 @@ function TeamList() {
     error: contentError,
     isLoading,
     request: fetchTeams,
-  } = useRequest(
+  } = useCachedRequest(
+    ['team', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([
@@ -67,10 +69,6 @@ function TeamList() {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchTeams();
-  }, [fetchTeams]);
 
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
     useSelected(teams);

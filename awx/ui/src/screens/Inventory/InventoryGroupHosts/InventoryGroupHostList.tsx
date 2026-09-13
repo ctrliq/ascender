@@ -1,5 +1,5 @@
 import type { ApiEntity } from 'types/api';
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
@@ -7,6 +7,7 @@ import { DropdownItem } from '@patternfly/react-core';
 import { getQSConfig, mergeParams, parseQueryString } from 'util/qs';
 import { GroupsAPI, InventoriesAPI } from 'api';
 
+import useCachedRequest from 'hooks/useCachedRequest';
 import useRequest, {
   useDeleteItems,
   useDismissableError,
@@ -58,7 +59,8 @@ function InventoryGroupHostList() {
     error: contentError,
     isLoading,
     request: fetchHosts,
-  } = useRequest(
+  } = useCachedRequest(
+    ['host', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse, options] = await Promise.all([
@@ -92,10 +94,6 @@ function InventoryGroupHostList() {
 
   const { selected, isAllSelected, handleSelect, setSelected } =
     useSelected(hosts);
-
-  useEffect(() => {
-    fetchHosts();
-  }, [fetchHosts]);
 
   const {
     isLoading: isDisassociateLoading,

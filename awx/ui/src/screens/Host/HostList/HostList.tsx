@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
@@ -15,7 +15,8 @@ import PaginatedTable, {
   ToolbarDeleteButton,
   getSearchableKeys,
 } from 'components/PaginatedTable';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import type { QSParams, QSParamValue } from 'util/qs';
 import { encodeQueryString, getQSConfig, parseQueryString } from 'util/qs';
@@ -66,7 +67,8 @@ function HostList() {
     error: contentError,
     isLoading,
     request: fetchHosts,
-  } = useRequest(
+  } = useCachedRequest(
+    ['host', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const results = await Promise.all([
@@ -94,10 +96,6 @@ function HostList() {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchHosts();
-  }, [fetchHosts]);
 
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
     useSelected(hosts);

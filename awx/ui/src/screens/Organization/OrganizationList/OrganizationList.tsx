@@ -1,10 +1,11 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 
 import { OrganizationsAPI } from 'api';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
 import DataListToolbar from 'components/DataListToolbar';
 import ErrorDetail from 'components/ErrorDetail';
@@ -42,7 +43,8 @@ function OrganizationsList() {
     error: contentError,
     isLoading: isOrgsLoading,
     request: fetchOrganizations,
-  } = useRequest(
+  } = useCachedRequest(
+    ['organization', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [orgs, orgActions] = await Promise.all([
@@ -67,10 +69,6 @@ function OrganizationsList() {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchOrganizations();
-  }, [fetchOrganizations]);
 
   const { selected, isAllSelected, handleSelect, selectAll, clearSelected } =
     useSelected(organizations);

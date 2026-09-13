@@ -1,5 +1,5 @@
 import type { Credential } from 'types/api';
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -16,7 +16,8 @@ import PaginatedTable, {
   ToolbarDeleteButton,
   getSearchableKeys,
 } from 'components/PaginatedTable';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
 import CredentialListItem from './CredentialListItem';
@@ -43,7 +44,8 @@ function CredentialList() {
     error: contentError,
     isLoading,
     request: fetchCredentials,
-  } = useRequest(
+  } = useCachedRequest(
+    ['credential', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [creds, credActions] = await Promise.all([
@@ -72,10 +74,6 @@ function CredentialList() {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchCredentials();
-  }, [fetchCredentials]);
 
   const {
     selected,

@@ -1,11 +1,11 @@
 import type { Group } from 'types/api';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Tooltip } from '@patternfly/react-core';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import useSelected from 'hooks/useSelected';
-import useRequest from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
 import { InventoriesAPI } from 'api';
 import DataListToolbar from 'components/DataListToolbar';
 import PaginatedTable, {
@@ -50,7 +50,8 @@ function InventoryGroupsList() {
     error: contentError,
     isLoading,
     request: fetchData,
-  } = useRequest(
+  } = useCachedRequest(
+    ['group', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, groupOptions, options] = await Promise.all([
@@ -81,10 +82,6 @@ function InventoryGroupsList() {
       isAdHocDisabled: true,
     }
   );
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
     useSelected(groups);
