@@ -1,12 +1,13 @@
 import type { ApiEntity } from 'types/api';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
 import { useLocation, useNavigate, useParams } from 'react-router';
 
 import { DropdownItem } from '@patternfly/react-core';
 import { GroupsAPI, InventoriesAPI } from 'api';
-import useRequest, { useDismissableError } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDismissableError } from 'hooks/useRequest';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
 import useSelected from 'hooks/useSelected';
 
@@ -57,7 +58,8 @@ function InventoryRelatedGroupList() {
     },
     isLoading,
     error: contentError,
-  } = useRequest(
+  } = useCachedRequest(
+    ['inventory-related-group-list', groupId, inventoryType, location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actions, adHocOptions] = await Promise.all([
@@ -92,10 +94,6 @@ function InventoryRelatedGroupList() {
       isAdHocDisabled: true,
     }
   );
-  useEffect(() => {
-    fetchRelated();
-  }, [fetchRelated]);
-
   const fetchGroupsToAssociate = useCallback(
     (params: QSParams) =>
       GroupsAPI.readPotentialGroups(

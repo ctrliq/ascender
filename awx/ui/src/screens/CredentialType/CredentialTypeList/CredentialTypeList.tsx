@@ -1,11 +1,12 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 
 import { CredentialTypesAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import PaginatedTable, {
   HeaderRow,
@@ -41,7 +42,8 @@ function CredentialTypeList() {
       relatedSearchableKeys,
       searchableKeys,
     },
-  } = useRequest(
+  } = useCachedRequest(
+    ['credential-type-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
 
@@ -68,10 +70,6 @@ function CredentialTypeList() {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchCredentialTypes();
-  }, [fetchCredentialTypes]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
     useSelected(credentialTypes);
