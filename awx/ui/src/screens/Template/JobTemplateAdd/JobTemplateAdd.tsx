@@ -1,0 +1,156 @@
+import type { SummaryFieldRef, SummaryFields } from 'types/api';
+import React, { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+import { Card, PageSection } from '@patternfly/react-core';
+import { CardBody } from 'components/Card';
+import { JobTemplatesAPI, OrganizationsAPI } from 'api';
+import JobTemplateForm from '../shared/JobTemplateForm';
+import type { JobTemplateFormValues } from '../shared/JobTemplateForm';
+
+function JobTemplateAdd() {
+  const [formSubmitError, setFormSubmitError] = useState<unknown>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const resourceParams: Record<string, string | null> = {
+    resource_id: null,
+    resource_name: null,
+    resource_type: null,
+    resource_kind: null,
+  };
+  location.search
+    .replace(/^\?/, '')
+    .split('&')
+    .map((s) => s.split('='))
+    .forEach(([key, val]) => {
+      if (!key || !(key in resourceParams)) {
+        return;
+      }
+      resourceParams[key] = decodeURIComponent(val as string);
+    });
+
+  let resourceValues = null;
+
+  if (
+    location.search.includes('resource_id') &&
+    location.search.includes('resource_name')
+  ) {
+    resourceValues = {
+      id: resourceParams.resource_id,
+      name: resourceParams.resource_name,
+      type: resourceParams.resource_type,
+      kind: resourceParams.resource_kind, // refers to credential kind
+    };
+  }
+
+  const handleSubmit = async (values: JobTemplateFormValues) => {
+    const {
+      labels,
+      instanceGroups,
+      initialInstanceGroups,
+      inventory,
+      project,
+      credentials,
+      webhook_credential,
+      webhook_key,
+      webhook_url,
+      ...remainingValues
+    } = values;
+
+    setFormSubmitError(null);
+    remainingValues.project = project?.id;
+    remainingValues.webhook_credential = webhook_credential?.id;
+    if (webhook_key) {
+      remainingValues.webhook_key = webhook_key;
+    }
+    remainingValues.inventory = inventory?.id || null;
+    try {
+      const {
+        data: { id, type },
+      } = await JobTemplatesAPI.create({
+        ...remainingValues,
+        execution_environment: values.execution_environment?.id,
+      });
+      await Promise.all([
+        submitLabels(
+          id,
+          (project?.summary_fields as SummaryFields | undefined)?.organization
+            ?.id,
+          labels
+        ),
+        submitInstanceGroups(id, instanceGroups as SummaryFieldRef[]),
+        submitCredentials(id, credentials),
+      ]);
+      navigate(`/templates/${type}/${id}/details`);
+    } catch (error) {
+      setFormSubmitError(error);
+    }
+  };
+
+  async function submitLabels(
+    templateId: number,
+    orgId?: number | null,
+    labels: SummaryFieldRef[] = []
+  ) {
+    if (!orgId) {
+      // eslint-disable-next-line no-useless-catch
+      try {
+        const {
+          data: { results },
+        } = await OrganizationsAPI.read();
+        orgId = results[0]?.id;
+      } catch (err) {
+        throw err;
+      }
+    }
+    const associationPromises = labels.map((label) =>
+      JobTemplatesAPI.associateLabel(templateId, label, orgId ?? null)
+    );
+
+    return Promise.all([...associationPromises]);
+  }
+
+  async function submitInstanceGroups(
+    templateId: number,
+    addedGroups: SummaryFieldRef[] = []
+  ) {
+    /* eslint-disable no-await-in-loop, no-restricted-syntax */
+    // Resolve Promises sequentially to maintain order and avoid race condition
+    for (const group of addedGroups) {
+      await JobTemplatesAPI.associateInstanceGroup(templateId, group.id);
+    }
+    /* eslint-enable no-await-in-loop, no-restricted-syntax */
+  }
+
+  function submitCredentials(
+    templateId: number,
+    credentials: SummaryFieldRef[] = []
+  ) {
+    const associateCredentials = credentials.map((cred) =>
+      JobTemplatesAPI.associateCredentials(templateId, cred.id)
+    );
+    return Promise.all(associateCredentials);
+  }
+
+  const handleCancel = () => {
+    navigate(`/templates`);
+  };
+
+  return (
+    <PageSection hasBodyWrapper={false}>
+      <Card>
+        <CardBody>
+          <JobTemplateForm
+            handleCancel={handleCancel}
+            handleSubmit={handleSubmit}
+            submitError={formSubmitError}
+            resourceValues={resourceValues}
+            isOverrideDisabledLookup
+          />
+        </CardBody>
+      </Card>
+    </PageSection>
+  );
+}
+
+export default JobTemplateAdd;

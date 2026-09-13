@@ -1,0 +1,53 @@
+import type { Mock } from 'vitest';
+import type { Http } from '../Base';
+import Root from './Root';
+
+describe('RootAPI', () => {
+  // Only the methods this model calls, each a vi.fn so its calls can be read.
+  let mockHttp: Partial<Record<keyof Http, Mock>>;
+  let RootAPI: Root;
+  beforeEach(() => {
+    const createPromise = () => Promise.resolve();
+    mockHttp = {
+      get: vi.fn(createPromise),
+      post: vi.fn(createPromise),
+    };
+
+    RootAPI = new Root(mockHttp as unknown as Http);
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test('login calls get and post with expected content headers', async () => {
+    const headers = { 'Content-Type': 'application/x-www-form-urlencoded' };
+
+    await RootAPI.login('username', 'password');
+
+    expect(mockHttp.get).toHaveBeenCalledTimes(1);
+    expect(mockHttp.get?.mock.calls[0]).toContainEqual({ headers });
+
+    expect(mockHttp.post).toHaveBeenCalledTimes(1);
+    expect(mockHttp.post?.mock.calls[0]).toContainEqual({ headers });
+  });
+
+  test('login sends expected data', async () => {
+    await RootAPI.login('foo', 'bar');
+    await RootAPI.login('foo', 'bar', 'baz');
+
+    expect(mockHttp.post).toHaveBeenCalledTimes(2);
+    expect(mockHttp.post?.mock.calls[0]).toContainEqual(
+      'username=foo&password=bar&next=%2Fapi%2Fv2%2Fconfig%2F'
+    );
+    expect(mockHttp.post?.mock.calls[1]).toContainEqual(
+      'username=foo&password=bar&next=%2Fbaz'
+    );
+  });
+
+  test('logout calls expected http method', async () => {
+    await RootAPI.logout();
+
+    expect(mockHttp.post).toHaveBeenCalledTimes(1);
+  });
+});

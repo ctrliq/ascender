@@ -1,0 +1,166 @@
+import type { ApiResponse } from 'api/Base';
+import React from 'react';
+import { screen, waitFor, within } from '@testing-library/react';
+
+import {
+  InstanceGroupsAPI,
+  OrganizationsAPI,
+  InventoriesAPI,
+  UnifiedJobTemplatesAPI,
+} from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+
+import InstanceGroupList from './InstanceGroupList';
+
+vi.mock('../../../api');
+
+const instanceGroups = {
+  data: {
+    results: [
+      {
+        id: 1,
+        name: 'Foo',
+        type: 'instance_group',
+        url: '/api/v2/instance_groups/1',
+        consumed_capacity: 10,
+        summary_fields: { user_capabilities: { edit: true, delete: true } },
+      },
+      {
+        id: 2,
+        name: 'controlplan',
+        type: 'instance_group',
+        url: '/api/v2/instance_groups/2',
+        consumed_capacity: 42,
+        summary_fields: { user_capabilities: { edit: true, delete: true } },
+      },
+      {
+        id: 3,
+        name: 'default',
+        type: 'instance_group',
+        url: '/api/v2/instance_groups/2',
+        consumed_capacity: 42,
+        summary_fields: { user_capabilities: { edit: true, delete: true } },
+      },
+      {
+        id: 4,
+        name: 'Bar',
+        type: 'instance_group',
+        url: '/api/v2/instance_groups/3',
+        consumed_capacity: 42,
+        summary_fields: { user_capabilities: { edit: true, delete: false } },
+      },
+    ],
+    count: 4,
+  },
+};
+
+const options = { data: { actions: { POST: true } } };
+
+describe('<InstanceGroupList />', () => {
+  beforeEach(() => {
+    vi.mocked(OrganizationsAPI.read).mockResolvedValue({
+      data: { count: 0 },
+    } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
+    vi.mocked(InventoriesAPI.read).mockResolvedValue({
+      data: { count: 0 },
+    } as unknown as ResponseOf<typeof InventoriesAPI.read>);
+    vi.mocked(UnifiedJobTemplatesAPI.read).mockResolvedValue({
+      data: { count: 0 },
+    } as unknown as ResponseOf<typeof UnifiedJobTemplatesAPI.read>);
+    vi.mocked(InstanceGroupsAPI.read).mockResolvedValue(
+      instanceGroups as unknown as ApiResponse<unknown>
+    );
+    vi.mocked(InstanceGroupsAPI.readOptions).mockResolvedValue(
+      options as unknown as ApiResponse<unknown>
+    );
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test('should have data fetched and render all rows', async () => {
+    renderWithContexts(<InstanceGroupList />);
+    await screen.findByRole('link', { name: 'Foo' });
+
+    expect(InstanceGroupsAPI.read).toHaveBeenCalled();
+    expect(InstanceGroupsAPI.readOptions).toHaveBeenCalled();
+    expect(
+      screen.getAllByRole('link', {
+        name: /^(Foo|controlplan|default|Bar)$/,
+      })
+    ).toHaveLength(4);
+  });
+
+  test('should delete item successfully', async () => {
+    vi.mocked(InstanceGroupsAPI.destroy).mockResolvedValue(
+      {} as unknown as ResponseOf<typeof InstanceGroupsAPI.destroy>
+    );
+    const { user } = renderWithContexts(<InstanceGroupList />);
+    await screen.findByRole('link', { name: 'Foo' });
+
+    const row = screen.getByRole('link', { name: 'Foo' }).closest('tr');
+    await user.click(within(row!).getByRole('checkbox'));
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
+
+    await waitFor(() =>
+      expect(InstanceGroupsAPI.destroy).toHaveBeenCalledWith(
+        instanceGroups.data.results[0]!.id
+      )
+    );
+  });
+
+  test('delete button is disabled when a protected (non-deletable) group is selected', async () => {
+    const { user } = renderWithContexts(<InstanceGroupList />);
+    await screen.findByRole('link', { name: 'Foo' });
+
+    // Select all rows; "Bar" has delete=false, which disables the toolbar Delete.
+    await user.click(screen.getByRole('checkbox', { name: 'Select all' }));
+
+    expect(screen.getByRole('button', { name: 'Delete' })).toBeDisabled();
+  });
+
+  test('should show content error', async () => {
+    vi.mocked(InstanceGroupsAPI.read).mockRejectedValue(new Error());
+    renderWithContexts(<InstanceGroupList />);
+
+    expect(
+      await screen.findByText('Something went wrong...')
+    ).toBeInTheDocument();
+  });
+
+  test('should render deletion error modal', async () => {
+    vi.mocked(InstanceGroupsAPI.destroy).mockRejectedValue(new Error());
+    const { user } = renderWithContexts(<InstanceGroupList />);
+    await screen.findByRole('link', { name: 'Foo' });
+
+    const row = screen.getByRole('link', { name: 'Foo' }).closest('tr');
+    await user.click(within(row!).getByRole('checkbox'));
+
+    await user.click(screen.getByRole('button', { name: 'Delete' }));
+    await user.click(
+      await screen.findByRole('button', { name: 'confirm delete' })
+    );
+
+    expect(
+      await screen.findByText('Failed to delete one or more instance groups.')
+    ).toBeInTheDocument();
+  });
+
+  test('should not render add button', async () => {
+    vi.mocked(InstanceGroupsAPI.readOptions).mockResolvedValue({
+      data: { actions: { POST: false } },
+    } as unknown as ResponseOf<typeof InstanceGroupsAPI.readOptions>);
+    renderWithContexts(<InstanceGroupList />);
+    await screen.findByRole('link', { name: 'Foo' });
+
+    expect(
+      screen.queryByRole('button', { name: /Add/ })
+    ).not.toBeInTheDocument();
+  });
+});

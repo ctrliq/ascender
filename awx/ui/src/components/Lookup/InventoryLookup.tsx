@@ -1,0 +1,290 @@
+import type { SummaryFieldRef } from 'types/api';
+import React, { useCallback, useEffect } from 'react';
+import type { FieldValidator } from 'formik';
+import { useLocation } from 'react-router';
+import { useLingui } from '@lingui/react/macro';
+import { InventoriesAPI } from 'api';
+import useRequest from 'hooks/useRequest';
+import useAutoPopulateLookup from 'hooks/useAutoPopulateLookup';
+import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
+import type { QSParams } from 'util/qs';
+import Lookup from './Lookup';
+import OptionsList from '../OptionsList';
+import LookupErrorMessage from './shared/LookupErrorMessage';
+import FieldWithPrompt from '../FieldWithPrompt';
+import type { LookupItem } from './shared/reducer';
+
+const QS_CONFIG = getQSConfig('inventory', {
+  page: 1,
+  page_size: 5,
+  order_by: 'name',
+  role_level: 'use_role',
+});
+
+export interface InventoryLookupProps {
+  autoPopulate?: boolean;
+  /** Inventories the list leaves out, which is how a host filter skips its own. */
+  excludeIds?: (number | string)[];
+  fieldId?: string;
+  fieldName?: string;
+  hideAdvancedInventories?: boolean;
+  isDisabled?: boolean;
+  isPromptableField?: boolean;
+  /**
+   * Declared method style on purpose: the handler is formik's own, which takes
+   * an event or a field name, and it is handed straight to whichever
+   * PatternFly input the field renders, which names its own event type.
+   */
+  onBlur?(event?: React.SyntheticEvent): void;
+  /** Declared method style so a caller may name its own row type. */
+  onChange(value: SummaryFieldRef | null): void;
+  promptId?: string;
+  promptName?: string;
+  required?: boolean;
+  validate?: FieldValidator;
+  value?: SummaryFieldRef | null;
+  multiple?: boolean;
+  [key: string]: unknown;
+}
+
+function InventoryLookup({
+  autoPopulate = false,
+  excludeIds = [],
+  fieldId = 'inventory',
+  fieldName = 'inventory',
+  hideAdvancedInventories = false,
+  isDisabled = false,
+  isPromptableField,
+  onBlur,
+  onChange,
+  promptId,
+  promptName,
+  required = false,
+  validate = () => {},
+  value,
+  multiple,
+}: InventoryLookupProps) {
+  const location = useLocation();
+  const { t } = useLingui();
+  const autoPopulateLookup = useAutoPopulateLookup(onChange);
+
+  const excludeIdsKey = (excludeIds || []).join(',');
+
+  const {
+    result: { inventories, count, relatedSearchableKeys, searchableKeys },
+    request: fetchInventories,
+    error,
+    isLoading,
+  } = useRequest(
+    useCallback(async () => {
+      const params = parseQueryString(QS_CONFIG, location.search);
+      const inventoryKindParams: QSParams = hideAdvancedInventories
+        ? { not__kind: ['smart', 'constructed', 'federated'] }
+        : {};
+      const excludeParams: QSParams = excludeIdsKey
+        ? { not__id__in: excludeIdsKey }
+        : {};
+      const [{ data }, actionsResponse] = await Promise.all([
+        InventoriesAPI.read(
+          mergeParams(params, {
+            ...inventoryKindParams,
+            ...excludeParams,
+          })
+        ),
+        InventoriesAPI.readOptions(),
+      ]);
+
+      if (autoPopulate) {
+        autoPopulateLookup(data.results);
+      }
+
+      return {
+        inventories: data.results,
+        count: data.count,
+        relatedSearchableKeys: (
+          actionsResponse?.data?.related_search_fields || []
+        ).map((val) => val.slice(0, -8)),
+        searchableKeys: Object.keys(actionsResponse.data.actions?.GET || {})
+          .filter((key) => {
+            if (
+              ['kind', 'host_filter'].includes(key) &&
+              hideAdvancedInventories
+            ) {
+              return false;
+            }
+            return actionsResponse.data.actions?.GET?.[key]?.filterable;
+          })
+          .map((key) => ({
+            key,
+            type: actionsResponse.data.actions?.GET?.[key]?.type,
+          })),
+      };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [autoPopulate, autoPopulateLookup, excludeIdsKey, location]),
+    {
+      inventories: [],
+      count: 0,
+      relatedSearchableKeys: [],
+      searchableKeys: [],
+    }
+  );
+
+  const checkInventoryName = useCallback(
+    async (name: string) => {
+      if (!name) {
+        onChange(null);
+        return;
+      }
+
+      try {
+        const {
+          data: { results: nameMatchResults, count: nameMatchCount },
+        } = await InventoriesAPI.read({ name });
+        onChange(nameMatchCount ? (nameMatchResults[0] ?? null) : null);
+      } catch {
+        onChange(null);
+      }
+    },
+    [onChange]
+  );
+
+  useEffect(() => {
+    fetchInventories();
+  }, [fetchInventories]);
+
+  return isPromptableField ? (
+    <FieldWithPrompt
+      fieldId={fieldId}
+      isRequired={required}
+      label={t`Inventory`}
+      promptId={promptId as string}
+      promptName={promptName as string}
+      isDisabled={isDisabled}
+      tooltip={t`Select the inventory containing the hosts you want this job to manage.`}
+    >
+      <Lookup
+        id="inventory-lookup"
+        header={t`Inventory`}
+        value={value}
+        onChange={onChange}
+        onUpdate={fetchInventories}
+        onBlur={onBlur}
+        required={required}
+        onDebounce={checkInventoryName}
+        fieldName={fieldName}
+        validate={validate}
+        isLoading={isLoading}
+        isDisabled={isDisabled}
+        qsConfig={QS_CONFIG}
+        renderOptionsList={({ state, dispatch, canDelete }) => (
+          <OptionsList
+            value={state.selectedItems}
+            options={inventories}
+            optionCount={count}
+            searchColumns={[
+              {
+                name: t`Name`,
+                key: 'name__icontains',
+                isDefault: true,
+              },
+              {
+                name: t`Created By (Username)`,
+                key: 'created_by__username__icontains',
+              },
+              {
+                name: t`Modified By (Username)`,
+                key: 'modified_by__username__icontains',
+              },
+            ]}
+            sortColumns={[
+              {
+                name: t`Name`,
+                key: 'name',
+              },
+            ]}
+            searchableKeys={searchableKeys}
+            relatedSearchableKeys={relatedSearchableKeys}
+            multiple={state.multiple}
+            header={t`Inventory`}
+            name="inventory"
+            qsConfig={QS_CONFIG}
+            readOnly={!canDelete}
+            selectItem={(item: LookupItem) =>
+              dispatch({ type: 'SELECT_ITEM', item })
+            }
+            deselectItem={(item: LookupItem) =>
+              dispatch({ type: 'DESELECT_ITEM', item })
+            }
+            sortSelectedItems={(selectedItems: LookupItem[]) =>
+              dispatch({ type: 'SET_SELECTED_ITEMS', selectedItems })
+            }
+          />
+        )}
+      />
+      <LookupErrorMessage error={error} />
+    </FieldWithPrompt>
+  ) : (
+    <>
+      <Lookup
+        id="inventory-lookup"
+        header={t`Inventory`}
+        value={value}
+        onChange={onChange}
+        onDebounce={checkInventoryName}
+        fieldName={fieldName}
+        validate={validate}
+        multiple={multiple}
+        onBlur={onBlur}
+        required={required}
+        isLoading={isLoading}
+        isDisabled={isDisabled}
+        qsConfig={QS_CONFIG}
+        renderOptionsList={({ state, dispatch, canDelete }) => (
+          <OptionsList
+            value={state.selectedItems}
+            options={inventories}
+            optionCount={count}
+            searchColumns={[
+              {
+                name: t`Name`,
+                key: 'name__icontains',
+                isDefault: true,
+              },
+              {
+                name: t`Created By (Username)`,
+                key: 'created_by__username__icontains',
+              },
+              {
+                name: t`Modified By (Username)`,
+                key: 'modified_by__username__icontains',
+              },
+            ]}
+            sortColumns={[
+              {
+                name: t`Name`,
+                key: 'name',
+              },
+            ]}
+            searchableKeys={searchableKeys}
+            relatedSearchableKeys={relatedSearchableKeys}
+            multiple={state.multiple}
+            header={t`Inventory`}
+            name="inventory"
+            qsConfig={QS_CONFIG}
+            readOnly={!canDelete}
+            selectItem={(item: LookupItem) =>
+              dispatch({ type: 'SELECT_ITEM', item })
+            }
+            deselectItem={(item: LookupItem) =>
+              dispatch({ type: 'DESELECT_ITEM', item })
+            }
+            isSelectedDraggable
+          />
+        )}
+      />
+      <LookupErrorMessage error={error} />
+    </>
+  );
+}
+
+export default InventoryLookup;

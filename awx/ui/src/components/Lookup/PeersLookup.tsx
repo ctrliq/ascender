@@ -1,0 +1,206 @@
+import type { Instance, SearchColumn, SummaryFieldRef } from 'types/api';
+import React, { useCallback, useEffect } from 'react';
+import type { FieldValidator } from 'formik';
+import { useLocation } from 'react-router';
+import { useLingui } from '@lingui/react/macro';
+import { Label, FormGroup } from '@patternfly/react-core';
+
+import { InstancesAPI } from 'api';
+import { getSearchableKeys } from 'components/PaginatedTable';
+import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
+import useRequest from 'hooks/useRequest';
+import type { QSParams } from 'util/qs';
+import Popover from '../Popover';
+import OptionsList from '../OptionsList';
+import Lookup from './Lookup';
+import LookupErrorMessage from './shared/LookupErrorMessage';
+import FieldWithPrompt from '../FieldWithPrompt';
+import type { LookupItem } from './shared/reducer';
+
+const QS_CONFIG = getQSConfig('instances', {
+  page: 1,
+  page_size: 5,
+  order_by: 'hostname',
+});
+
+const defaultInstanceDetails = {};
+
+export interface PeersLookupProps {
+  id?: string;
+  value: SummaryFieldRef[];
+  /** Declared method style so a caller may name its own row type. */
+  onChange(value: SummaryFieldRef[]): void;
+  tooltip?: React.ReactNode;
+  className?: string;
+  required?: boolean;
+  fieldName?: string;
+  multiple?: boolean;
+  validate?: FieldValidator;
+  columns?: SearchColumn[];
+  isPromptableField?: boolean;
+  promptId?: string;
+  promptName?: string;
+  formLabel?: string;
+  typePeers?: boolean;
+  /** The instance being peered, whose own id and peers are excluded. */
+  /** The instance being edited, which is left out of its own peer list. */
+  instance_details?: Partial<Instance>;
+  [key: string]: unknown;
+}
+
+function PeersLookup({
+  id = 'instances',
+  value,
+  onChange,
+  tooltip = '',
+  className = '',
+  required = false,
+  fieldName = 'instances',
+  multiple = true,
+  validate = () => undefined,
+  columns = undefined,
+  isPromptableField,
+  promptId,
+  promptName,
+  formLabel = undefined,
+  typePeers = false,
+  instance_details = defaultInstanceDetails,
+}: PeersLookupProps) {
+  const location = useLocation();
+  const { t } = useLingui();
+  const {
+    result: { instances, count, relatedSearchableKeys, searchableKeys },
+    request: fetchInstances,
+    error,
+    isLoading,
+  } = useRequest(
+    useCallback(async () => {
+      const params = parseQueryString(QS_CONFIG, location.search);
+      const peersFilter: QSParams = {};
+      if (typePeers) {
+        peersFilter.not__node_type = ['control', 'hybrid'];
+        if (instance_details) {
+          if (instance_details.id) {
+            peersFilter.not__id = instance_details.id;
+            peersFilter.not__hostname = instance_details.peers ?? [];
+          }
+        }
+      }
+
+      const [{ data }, actionsResponse] = await Promise.all([
+        InstancesAPI.read(
+          mergeParams(params, {
+            ...peersFilter,
+          })
+        ),
+        InstancesAPI.readOptions(),
+      ]);
+      return {
+        instances: data.results,
+        count: data.count,
+        relatedSearchableKeys: (
+          actionsResponse?.data?.related_search_fields || []
+        ).map((val) => val.slice(0, -8)),
+        searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
+      };
+    }, [location, typePeers, instance_details]),
+    {
+      instances: [],
+      count: 0,
+      relatedSearchableKeys: [],
+      searchableKeys: [],
+    }
+  );
+
+  useEffect(() => {
+    fetchInstances();
+  }, [fetchInstances]);
+
+  const renderLookup = () => (
+    <>
+      <Lookup
+        id={fieldName}
+        header={formLabel}
+        value={value}
+        onChange={onChange}
+        onUpdate={fetchInstances}
+        fieldName={fieldName}
+        validate={validate}
+        qsConfig={QS_CONFIG}
+        multiple={multiple}
+        required={required}
+        isLoading={isLoading}
+        label={formLabel}
+        renderItemChip={({ item, removeItem }) => (
+          <Label
+            variant="outline"
+            key={item.id}
+            onClose={() => removeItem(item)}
+          >
+            {item.hostname as React.ReactNode}
+          </Label>
+        )}
+        renderOptionsList={({ state, dispatch, canDelete }) => (
+          <OptionsList
+            value={state.selectedItems}
+            options={instances}
+            optionCount={count}
+            columns={columns}
+            header={formLabel}
+            displayKey="hostname"
+            searchColumns={[
+              {
+                name: t`Hostname`,
+                key: 'hostname__icontains',
+                isDefault: true,
+              },
+            ]}
+            sortColumns={[
+              {
+                name: t`Hostname`,
+                key: 'hostname',
+              },
+            ]}
+            searchableKeys={searchableKeys}
+            relatedSearchableKeys={relatedSearchableKeys}
+            multiple={multiple}
+            label={formLabel}
+            name={fieldName}
+            qsConfig={QS_CONFIG}
+            readOnly={!canDelete}
+            selectItem={(item: LookupItem) =>
+              dispatch({ type: 'SELECT_ITEM', item })
+            }
+            deselectItem={(item: LookupItem) =>
+              dispatch({ type: 'DESELECT_ITEM', item })
+            }
+          />
+        )}
+      />
+      <LookupErrorMessage error={error} />
+    </>
+  );
+
+  return isPromptableField ? (
+    <FieldWithPrompt
+      fieldId={id}
+      label={formLabel}
+      promptId={promptId as string}
+      promptName={promptName as string}
+      tooltip={tooltip}
+    >
+      {renderLookup()}
+    </FieldWithPrompt>
+  ) : (
+    <FormGroup
+      className={className}
+      label={formLabel}
+      labelHelp={tooltip ? <Popover content={tooltip} /> : undefined}
+      fieldId={id}
+    >
+      {renderLookup()}
+    </FormGroup>
+  );
+}
+
+export default PeersLookup;

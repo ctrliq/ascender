@@ -1,0 +1,67 @@
+import type { ActivityStreamEntry } from 'types/api';
+import React from 'react';
+import { useLingui } from '@lingui/react/macro';
+import { Tr, Td } from '@patternfly/react-table';
+import { Link } from 'react-router';
+
+import { formatDateString } from 'util/dates';
+import { ActionsTd, ActionItem } from 'components/PaginatedTable';
+
+import ActivityStreamDetailButton from './ActivityStreamDetailButton';
+import ActivityStreamDescription from './ActivityStreamDescription';
+
+export interface ActivityStreamListItemProps {
+  streamItem: ActivityStreamEntry;
+  [key: string]: unknown;
+}
+
+function ActivityStreamListItem({ streamItem }: ActivityStreamListItemProps) {
+  const { t } = useLingui();
+
+  const buildUser = (item: ActivityStreamEntry) => {
+    let link;
+    if (item?.summary_fields?.actor?.id) {
+      link = (
+        <Link to={`/users/${item.summary_fields.actor.id}/details`}>
+          {item.summary_fields.actor.username}
+        </Link>
+      );
+    } else if (item?.summary_fields?.actor) {
+      link = t`${item.summary_fields.actor.username} (deleted)`;
+    } else {
+      link = t`system`;
+    }
+    return link;
+  };
+
+  const labelId = `check-action-${streamItem.id}`;
+  const user = buildUser(streamItem);
+  const description = <ActivityStreamDescription activity={streamItem} />;
+
+  return (
+    <Tr
+      id={`activity-stream-row-${streamItem.id}`}
+      ouiaId={streamItem.id}
+      aria-labelledby={labelId}
+    >
+      <Td />
+      <Td dataLabel={t`Time`}>
+        {streamItem.timestamp ? formatDateString(streamItem.timestamp) : ''}
+      </Td>
+      <Td dataLabel={t`Initiated By`}>{user}</Td>
+      <Td id={labelId} dataLabel={t`Event`}>
+        {description}
+      </Td>
+      <ActionsTd dataLabel={t`Actions`}>
+        <ActionItem visible tooltip={t`View event details`}>
+          <ActivityStreamDetailButton
+            streamItem={streamItem}
+            user={user}
+            description={description}
+          />
+        </ActionItem>
+      </ActionsTd>
+    </Tr>
+  );
+}
+export default ActivityStreamListItem;

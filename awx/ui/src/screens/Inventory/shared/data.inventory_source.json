@@ -53,6 +53,7 @@
         "scm_type":"git"
      },
      "source_script": {
+       "id": 1,
        "name": "Mock Script",
        "description": ""
      },
