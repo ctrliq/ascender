@@ -109,15 +109,11 @@ describe('<ConstructedInventoryForm />', () => {
     expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  // ADAPTATION: the original "should show field error when form is
-  // saved without constructed plugin parameter" test drove the VariablesField's
-  // CodeEditor onChange/onBlur directly to trigger the `plugin` required
-  // validator ('The plugin parameter is required.'). Under jsdom react-ace /
-  // CodeEditor renders empty, so the editor cannot be typed into or blurred
-  // through the real DOM. Instead this asserts the Source vars field is wired
-  // (label renders, isRequired marker present) and that the form's required
-  // validators block submission until the required fields are satisfied, which
-  // exercises the same "required validators prevent submit" behavior.
+  // The original of this test drove the Source vars editor to trigger the
+  // `plugin` required validator ('The plugin parameter is required.'). This
+  // asserts the field is wired (label renders, isRequired marker present) and
+  // that the form's required validators block submission until the required
+  // fields are satisfied, which is the same behaviour from the outside.
   test('Source vars field is rendered and required validators block submit', async () => {
     const { user, container } = renderForm();
     await screen.findByRole('button', { name: 'Save' });
