@@ -1,0 +1,101 @@
+import type { Inventory } from 'types/api';
+import React from 'react';
+import { screen, waitFor } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import { HostsAPI } from 'api';
+import type { ResponseOf } from '../../../../testUtils/responseOf';
+import type { MockHandlerFormProps } from '../../../../testUtils/rtlContexts';
+import { renderWithContexts } from '../../../../testUtils/rtlContexts';
+import InventoryHostAdd from './InventoryHostAdd';
+import mockHost from '../shared/data.host.json';
+
+vi.mock('../../../api');
+
+const submitValues = {
+  name: 'new name',
+  description: 'new description',
+  variables: '---\nfoo: bar',
+};
+
+vi.mock('components/HostForm', () => ({
+  default: ({
+    handleSubmit,
+    handleCancel,
+    submitError,
+  }: MockHandlerFormProps) => (
+    <div>
+      <button
+        type="button"
+        aria-label="mock-submit"
+        onClick={() => handleSubmit(submitValues)}
+      />
+      <button type="button" aria-label="mock-cancel" onClick={handleCancel} />
+      {submitError ? <div aria-label="mock-submit-error" /> : null}
+    </div>
+  ),
+}));
+
+describe('<InventoryHostAdd />', () => {
+  beforeEach(() => {
+    vi.mocked(HostsAPI.create).mockResolvedValue({
+      data: { ...mockHost },
+    } as unknown as ResponseOf<typeof HostsAPI.create>);
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test('handleSubmit should post to api', async () => {
+    const { user } = renderWithContexts(
+      <InventoryHostAdd inventory={{ id: 3 } as unknown as Inventory} />
+    );
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+    await waitFor(() =>
+      expect(HostsAPI.create).toHaveBeenCalledWith({
+        ...submitValues,
+        inventory: 3,
+      })
+    );
+  });
+
+  test('should navigate to hosts list when cancel is clicked', async () => {
+    const history = createMemoryHistory();
+    const { user } = renderWithContexts(
+      <InventoryHostAdd inventory={{ id: 3 } as unknown as Inventory} />,
+      { context: { router: { history } } }
+    );
+    await user.click(screen.getByRole('button', { name: 'mock-cancel' }));
+    expect(history.location.pathname).toEqual('/inventories/inventory/3/hosts');
+  });
+
+  test('successful form submission should trigger redirect', async () => {
+    const history = createMemoryHistory();
+    const { user } = renderWithContexts(
+      <InventoryHostAdd inventory={{ id: 3 } as unknown as Inventory} />,
+      { context: { router: { history } } }
+    );
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+    await waitFor(() =>
+      expect(history.location.pathname).toEqual(
+        '/inventories/inventory/3/hosts/2/details'
+      )
+    );
+    expect(
+      screen.queryByLabelText('mock-submit-error')
+    ).not.toBeInTheDocument();
+  });
+
+  test('failed form submission should show an error message', async () => {
+    vi.mocked(HostsAPI.create).mockImplementationOnce(() =>
+      Promise.reject(new Error())
+    );
+    const { user } = renderWithContexts(
+      <InventoryHostAdd inventory={{ id: 3 } as unknown as Inventory} />
+    );
+    await user.click(screen.getByRole('button', { name: 'mock-submit' }));
+    expect(
+      await screen.findByLabelText('mock-submit-error')
+    ).toBeInTheDocument();
+  });
+});

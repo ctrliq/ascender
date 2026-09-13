@@ -1,0 +1,71 @@
+import type { WorkflowApproval } from 'types/api';
+import React, { useCallback } from 'react';
+import { useLingui } from '@lingui/react/macro';
+import { Button } from '@patternfly/react-core';
+import { OutlinedThumbsUpIcon } from '@patternfly/react-icons';
+import { WorkflowApprovalsAPI } from 'api';
+import useRequest, { useDismissableError } from 'hooks/useRequest';
+
+import AlertModal from 'components/AlertModal';
+import ErrorDetail from 'components/ErrorDetail';
+
+export interface WorkflowApprovalButtonProps {
+  isDetailView?: boolean;
+  workflowApproval: WorkflowApproval;
+  /** Raises the toast the screen shows once the vote has landed. */
+  onHandleToast: (id: number, title: string) => void;
+}
+
+function WorkflowApprovalButton({
+  isDetailView,
+  workflowApproval,
+  onHandleToast,
+}: WorkflowApprovalButtonProps) {
+  const { t } = useLingui();
+  const { id } = workflowApproval;
+  const hasBeenActedOn =
+    Object.keys(workflowApproval.summary_fields.approved_or_denied_by || {})
+      .length > 0 ||
+    workflowApproval.status === 'canceled' ||
+    workflowApproval.user_has_voted === true;
+  const { error: approveApprovalError, request: approveWorkflowApprovals } =
+    useRequest(useCallback(async () => WorkflowApprovalsAPI.approve(id), [id]));
+
+  const handleApprove = async () => {
+    await approveWorkflowApprovals();
+    onHandleToast(workflowApproval.id, t`Successfully Approved`);
+  };
+
+  const { error: approveError, dismissError: dismissApproveError } =
+    useDismissableError(approveApprovalError);
+
+  return (
+    <>
+      <Button
+        isDisabled={hasBeenActedOn}
+        variant={isDetailView ? 'primary' : 'plain'}
+        ouiaId="workflow-approve-button"
+        onClick={() => handleApprove()}
+        aria-label={
+          hasBeenActedOn
+            ? t`This workflow has already been acted on`
+            : t`Approve`
+        }
+      >
+        {isDetailView ? t`Approve` : <OutlinedThumbsUpIcon />}
+      </Button>
+      {approveError && (
+        <AlertModal
+          isOpen={approveError}
+          variant="error"
+          title={t`Error!`}
+          onClose={dismissApproveError}
+        >
+          {t`Failed to approve ${workflowApproval.name}.`}
+          <ErrorDetail error={approveError} />
+        </AlertModal>
+      )}
+    </>
+  );
+}
+export default WorkflowApprovalButton;

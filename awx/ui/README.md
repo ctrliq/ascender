@@ -49,7 +49,7 @@ npm --prefix awx/ui run lint
 npm --prefix awx/ui run test
 
 # run a single test (in this case the login page test):
-npm --prefix awx/ui test -- src/screens/Login/Login.test.jsx
+npm --prefix awx/ui test -- src/screens/Login/Login.test.tsx
 
 # start the test watcher and run tests on files that you've changed
 npm --prefix awx/ui run test-watch

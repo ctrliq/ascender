@@ -1,0 +1,137 @@
+import React from 'react';
+import { useLingui } from '@lingui/react/macro';
+import { Label } from '@patternfly/react-core';
+import { Tr, Td } from '@patternfly/react-table';
+import { Link } from 'react-router';
+
+import ChipGroup from '../ChipGroup';
+import { DetailList, Detail } from '../DetailList';
+
+/**
+ * One row of a resource's access list: a user or team, with the roles that
+ * grant them access. A role is direct when it is assigned on this resource and
+ * indirect when it comes from an organization or a parent object.
+ */
+/**
+ * One role a user or a team holds on a resource. A role granted through a team
+ * carries that team's id and name, which is what the chips are grouped by.
+ */
+export interface AccessRole {
+  id: number;
+  name?: string | null;
+  team_id?: number;
+  team_name?: string;
+  user_capabilities?: { unattach?: boolean };
+  [key: string]: unknown;
+}
+
+export interface AccessRecord {
+  id: number;
+  username?: string | null;
+  first_name?: string | null;
+  last_name?: string | null;
+  summary_fields?: {
+    direct_access?: { role: AccessRole }[];
+    indirect_access?: { role: AccessRole }[];
+    [key: string]: unknown;
+  };
+  [key: string]: unknown;
+}
+
+export interface ResourceAccessListItemProps {
+  accessRecord: AccessRecord;
+  /** Takes one role off this row, which the list confirms before it does. */
+  onRoleDelete: (role: AccessRole, record: AccessRecord) => void;
+  [key: string]: unknown;
+}
+
+function ResourceAccessListItem({
+  accessRecord,
+  onRoleDelete,
+}: ResourceAccessListItemProps) {
+  const getRoleLists = () => {
+    const teamRoles: AccessRole[] = [];
+    const userRoles: AccessRole[] = [];
+
+    function sort(item: { role: AccessRole }) {
+      const { role } = item;
+      if (role.team_id) {
+        teamRoles.push(role);
+      } else {
+        userRoles.push(role);
+      }
+    }
+
+    accessRecord.summary_fields?.direct_access?.map(sort);
+    accessRecord.summary_fields?.indirect_access?.map(sort);
+    return [teamRoles, userRoles] as const;
+  };
+
+  const renderChip = (role: AccessRole) => (
+    <Label
+      variant="outline"
+      key={role.id}
+      onClose={() => {
+        onRoleDelete(role, accessRecord);
+      }}
+
+      data-ouia-component-id={`${role.name}-${role.id}`}
+      closeBtnAriaLabel={t`Remove ${role.name} chip`}
+    >
+      {role.name}
+    </Label>
+  );
+
+  const [teamRoles, userRoles] = getRoleLists();
+  const { t } = useLingui();
+  return (
+    <Tr
+      id={`access-item-row-${accessRecord.id}`}
+      ouiaId={`access-item-row-${accessRecord.id}`}
+    >
+      <Td id={`access-record-${accessRecord.id}`} dataLabel={t`Name`}>
+        {accessRecord.id ? (
+          <Link to={{ pathname: `/users/${accessRecord.id}/details` }}>
+            <b>{accessRecord.username}</b>
+          </Link>
+        ) : (
+          <b>{accessRecord.username}</b>
+        )}
+      </Td>
+      <Td dataLabel={t`First name`}>{accessRecord.first_name}</Td>
+      <Td dataLabel={t`Last name`}>{accessRecord.last_name}</Td>
+      <Td dataLabel={t`Roles`}>
+        <DetailList stacked>
+          <Detail
+            label={t`User Roles`}
+            value={
+              <ChipGroup
+                numChips={5}
+                totalChips={userRoles?.length ?? 0}
+                ouiaId="user-role-chips"
+              >
+                {userRoles.map(renderChip)}
+              </ChipGroup>
+            }
+            isEmpty={userRoles.length === 0}
+          />
+          <Detail
+            label={t`Team Roles`}
+            value={
+              <ChipGroup
+                numChips={5}
+                totalChips={teamRoles?.length ?? 0}
+                ouiaId="team-role-chips"
+              >
+                {teamRoles.map(renderChip)}
+              </ChipGroup>
+            }
+            isEmpty={teamRoles.length === 0}
+          />
+        </DetailList>
+      </Td>
+    </Tr>
+  );
+}
+
+export default ResourceAccessListItem;

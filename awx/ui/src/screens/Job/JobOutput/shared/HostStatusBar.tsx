@@ -1,0 +1,99 @@
+import React from 'react';
+import styled from 'styled-components';
+
+import { useLingui } from '@lingui/react/macro';
+import { Badge, Tooltip } from '@patternfly/react-core';
+
+const BarWrapper = styled.div.attrs({ className: 'host-status-bar' })`
+  background-color: var(--pf-v6-global--BackgroundColor--200);
+  display: flex;
+  height: 5px;
+  width: 100%;
+`;
+
+// Both props are transient: as plain props they would be forwarded to the div
+// and land in the DOM as attributes, count an unknown one.
+const BarSegment = styled.div<{ $color?: string; $count?: number }>`
+  background-color: ${(props) => props.$color || 'inherit'};
+  flex-grow: ${(props) => props.$count || 0};
+`;
+BarSegment.displayName = 'BarSegment';
+
+const TooltipContent = styled.div`
+  align-items: center;
+  display: flex;
+
+  span.pf-v6-c-badge {
+    margin-left: 10px;
+  }
+`;
+
+export interface HostStatusBarProps {
+  /** How many hosts ended in each state, as the job's summary reports. */
+  counts?: Record<string, number>;
+  [key: string]: unknown;
+}
+
+const HostStatusBar = ({ counts = {} }: HostStatusBarProps) => {
+  const { t } = useLingui();
+  const noData = Object.keys(counts).length === 0;
+  const hostStatus = {
+    ok: {
+      color: '#12a66f',
+      label: t`OK`,
+    },
+    skipped: {
+      color: '#73BCF7',
+      label: t`Skipped`,
+    },
+    changed: {
+      color: '#F0AB00',
+      label: t`Changed`,
+    },
+    failures: {
+      color: '#f04438',
+      label: t`Failed`,
+    },
+    dark: {
+      color: '#8F4700',
+      label: t`Unreachable`,
+    },
+  };
+
+  const barSegments = Object.keys(hostStatus).map((key) => {
+    const count = counts[key] ?? 0;
+    return (
+      <Tooltip
+        key={key}
+        content={
+          <TooltipContent>
+            {hostStatus[key as keyof typeof hostStatus].label}
+            <Badge isRead>{count}</Badge>
+          </TooltipContent>
+        }
+      >
+        <BarSegment
+          key={key}
+          $color={hostStatus[key as keyof typeof hostStatus].color}
+          $count={count}
+        />
+      </Tooltip>
+    );
+  });
+
+  if (noData) {
+    return (
+      <BarWrapper>
+        <Tooltip
+          content={t`Host status information for this job is unavailable.`}
+        >
+          <BarSegment $count={1} />
+        </Tooltip>
+      </BarWrapper>
+    );
+  }
+
+  return <BarWrapper>{barSegments}</BarWrapper>;
+};
+
+export default HostStatusBar;

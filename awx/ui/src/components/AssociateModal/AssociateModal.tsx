@@ -1,0 +1,201 @@
+import type {
+  ApiEntity,
+  OptionsResponse,
+  Paginated,
+  SearchColumn,
+} from 'types/api';
+import React, { useEffect, useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router';
+
+import { useLingui } from '@lingui/react/macro';
+
+import { Button } from '@patternfly/react-core';
+import { Modal } from '@patternfly/react-core/deprecated';
+import { getSearchableKeys } from 'components/PaginatedTable';
+import useRequest from 'hooks/useRequest';
+import { getQSConfig, parseQueryString } from 'util/qs';
+import useSelected from 'hooks/useSelected';
+import type { QSParams } from 'util/qs';
+import OptionsList from '../OptionsList';
+
+const QS_CONFIG = (order_by = 'name') =>
+  getQSConfig('associate', {
+    page: 1,
+    page_size: 5,
+    order_by,
+  });
+
+export interface AssociateModalProps {
+  /** What the list is of, which names it in the table's own aria labels. */
+  header?: string;
+  columns?: SearchColumn[];
+  title?: React.ReactNode;
+  onClose: () => void;
+  /**
+   * Declared as a method so it stays bivariant: every caller types the rows
+   * it is associating, which are narrower than what this modal lists.
+   */
+  onAssociate(items: ApiEntity[]): Promise<unknown> | void;
+  /** Reads the page of candidates the modal lists. */
+  fetchRequest: (params: QSParams) => Promise<{ data: Paginated<ApiEntity> }>;
+  /** Reads that list's options, for the searchable keys. */
+  optionsRequest: () => Promise<{ data: OptionsResponse }>;
+  isModalOpen?: boolean;
+  /** Which field of a row to show as its label; defaults to the name. */
+  displayKey?: string;
+  ouiaId?: string;
+  modalNote?: React.ReactNode;
+}
+
+function AssociateModal({
+  header,
+  columns = [],
+  title,
+  onClose,
+  onAssociate,
+  fetchRequest,
+  optionsRequest,
+  isModalOpen = false,
+  displayKey = 'name',
+  ouiaId,
+  modalNote,
+}: AssociateModalProps) {
+  const { t } = useLingui();
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { selected, handleSelect } = useSelected<ApiEntity>([]);
+
+  // Set default values for header and title after i18n is available
+  header = header || t`Items`;
+  title = title || t`Select Items`;
+
+  const {
+    request: fetchItems,
+    result: { items, itemCount, relatedSearchableKeys, searchableKeys },
+    error: contentError,
+    isLoading,
+  } = useRequest(
+    useCallback(async () => {
+      const params = parseQueryString(QS_CONFIG(displayKey), location.search);
+      const [
+        {
+          data: { count, results },
+        },
+        actionsResponse,
+      ] = await Promise.all([fetchRequest(params), optionsRequest()]);
+
+      return {
+        items: results,
+        itemCount: count,
+        relatedSearchableKeys: (
+          actionsResponse?.data?.related_search_fields || []
+        ).map((val: string) => val.slice(0, -8)),
+        searchableKeys: getSearchableKeys(actionsResponse.data.actions?.GET),
+      };
+    }, [fetchRequest, optionsRequest, location.search, displayKey]),
+    {
+      items: [],
+      itemCount: 0,
+      relatedSearchableKeys: [],
+      searchableKeys: [],
+    }
+  );
+
+  useEffect(() => {
+    fetchItems();
+  }, [fetchItems]);
+
+  const clearQSParams = () => {
+    const parts = location.search.replace(/^\?/, '').split('&');
+    const { namespace } = QS_CONFIG(displayKey);
+    const otherParts = parts.filter(
+      (param) => !param.startsWith(`${namespace}.`)
+    );
+    navigate(`${location.pathname}?${otherParts.join('&')}`, { replace: true });
+  };
+
+  const handleSave = async () => {
+    await onAssociate(selected);
+    clearQSParams();
+    onClose();
+  };
+
+  const handleClose = () => {
+    clearQSParams();
+    onClose();
+  };
+
+  return (
+    <Modal
+      ouiaId={ouiaId}
+      variant="large"
+      title={title}
+      aria-label={t`Association modal`}
+      isOpen={isModalOpen}
+      onClose={handleClose}
+      actions={[
+        <Button
+          ouiaId="associate-modal-save"
+          aria-label={t`Save`}
+          key="select"
+          variant="primary"
+          onClick={handleSave}
+          isDisabled={selected.length === 0}
+        >
+          {t`Save`}
+        </Button>,
+        <Button
+          ouiaId="associate-modal-cancel"
+          aria-label={t`Cancel`}
+          key="cancel"
+          variant="link"
+          onClick={handleClose}
+        >
+          {t`Cancel`}
+        </Button>,
+      ]}
+    >
+      {modalNote}
+      <OptionsList
+        displayKey={displayKey}
+        contentError={contentError}
+        columns={columns}
+        deselectItem={handleSelect}
+        header={header}
+        isLoading={isLoading}
+        multiple
+        optionCount={itemCount}
+        options={items}
+        qsConfig={QS_CONFIG(displayKey)}
+        readOnly={false}
+        selectItem={handleSelect}
+        value={selected}
+        searchColumns={[
+          {
+            name: t`Name`,
+            key: `${displayKey}__icontains`,
+            isDefault: true,
+          },
+          {
+            name: t`Created By (Username)`,
+            key: 'created_by__username__icontains',
+          },
+          {
+            name: t`Modified By (Username)`,
+            key: 'modified_by__username__icontains',
+          },
+        ]}
+        sortColumns={[
+          {
+            name: t`Name`,
+            key: `${displayKey}`,
+          },
+        ]}
+        searchableKeys={searchableKeys}
+        relatedSearchableKeys={relatedSearchableKeys}
+      />
+    </Modal>
+  );
+}
+
+export default AssociateModal;

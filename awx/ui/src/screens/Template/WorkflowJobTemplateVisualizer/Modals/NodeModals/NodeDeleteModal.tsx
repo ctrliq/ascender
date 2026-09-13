@@ -1,0 +1,75 @@
+import type {
+  WorkflowAction,
+  WorkflowState,
+} from 'components/Workflow/workflowReducer';
+import React, { useContext } from 'react';
+import { Button } from '@patternfly/react-core';
+import { useLingui } from '@lingui/react/macro';
+
+import {
+  WorkflowDispatchContext,
+  WorkflowStateContext,
+} from 'contexts/Workflow';
+import AlertModal from 'components/AlertModal';
+import { stringIsUUID } from 'util/strings';
+
+function NodeDeleteModal() {
+  const { t } = useLingui();
+  const dispatch = useContext(
+    WorkflowDispatchContext
+  ) as React.Dispatch<WorkflowAction>;
+  const { nodeToDelete } = useContext(WorkflowStateContext) as WorkflowState;
+  const identifier = nodeToDelete?.originalNodeObject?.identifier;
+  const nodeIdentifier =
+    identifier && !stringIsUUID(identifier)
+      ? identifier
+      : nodeToDelete?.identifier;
+  const unifiedJobTemplate =
+    nodeToDelete?.fullUnifiedJobTemplate ||
+    nodeToDelete?.originalNodeObject?.summary_fields?.unified_job_template;
+  const nodeName = nodeIdentifier || unifiedJobTemplate?.name;
+  return (
+    <AlertModal
+      variant="danger"
+      title={t`Remove Node ${nodeName}`}
+      isOpen={nodeToDelete}
+      onClose={() => dispatch({ type: 'SET_NODE_TO_DELETE', value: null })}
+      actions={[
+        <Button
+          ouiaId="node-removal-confirm-button"
+          id="confirm-node-removal"
+          key="remove"
+          variant="danger"
+          aria-label={t`Confirm node removal`}
+          onClick={() => dispatch({ type: 'DELETE_NODE' })}
+        >
+          {t`Remove`}
+        </Button>,
+        <Button
+          ouiaId="node-removal-cancel-button"
+          id="cancel-node-removal"
+          key="cancel"
+          variant="link"
+          aria-label={t`Cancel node removal`}
+          onClick={() => dispatch({ type: 'SET_NODE_TO_DELETE', value: null })}
+        >
+          {t`Cancel`}
+        </Button>,
+      ]}
+    >
+      {nodeToDelete && unifiedJobTemplate ? (
+        <>
+          <p>{t`Are you sure you want to remove the node below:`}</p>
+          <br />
+          <strong css="var(--pf-t--global--color--status--danger--default)">
+            {unifiedJobTemplate.name}
+          </strong>
+        </>
+      ) : (
+        <p>{t`Are you sure you want to remove this node?`}</p>
+      )}
+    </AlertModal>
+  );
+}
+
+export default NodeDeleteModal;

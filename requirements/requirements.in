@@ -31,24 +31,20 @@ djangorestframework>=3.18.0 # first release declaring Django 6.1 support; floor 
 filelock
 GitPython>=3.1.58  # GHSA-hh9p-6wh2-4mfc GHSA-9rj7-rf2p-w77r GHSA-4gmw-gg2m-w46p GHSA-hmq2-w58f-27jc GHSA-wvpp-8hx9-p66j GHSA-jm78-9fvv-mhgr
 inflection  # used by vendored awx/dab (formerly a django-ansible-base dep)
-irc
 jaraco.functools>= 4
 jinja2>=3.1.6  # CVE-2025-27516
 jsonschema
+kubernetes
 Markdown>=3.8.1  # CVE-2025-69534 # used for formatting API help
 msal>=1.37.0  # cryptography>=49 compatibility (msal<1.37 caps cryptography<49)
-openshift
 packaging==26.3
-pexpect==4.7.0  # UPGRADE BLOCKER: 4.8+ enforces ansible-runner's searchwindowsize=100, see library notes
 prometheus-client
 psycopg
 psutil
-pygerduty
 pygithub
 pyjwt[crypto]  # used by vendored awx/dab jwt_consumer (formerly a django-ansible-base dep)
 pyopenssl>=26.4.0  # tracks cryptography pin above (pyopenssl 26.3.0 requires cryptography>=49)
 pyparsing>=3  # 3.x renamed the API; the grammar in awx/main/utils/filters.py needs ignore_whitespace(), which 2.x does not have
-python-daemon>3.0.0
 python-dsv-sdk>=1.0.4
 python-tss-sdk>=1.2.1
 python-ldap>=3.4.5  # CVE-2025-61911 CVE-2025-61912
