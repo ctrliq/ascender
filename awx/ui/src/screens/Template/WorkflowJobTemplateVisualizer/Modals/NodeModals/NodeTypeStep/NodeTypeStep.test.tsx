@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor, fireEvent, within } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import {
   InventorySourcesAPI,
   JobTemplatesAPI,
@@ -134,9 +134,9 @@ describe('NodeTypeStep', () => {
 
   test('It shows the job template list by default', async () => {
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ nodeType: 'job_template' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ nodeType: 'job_template' }}>
         <NodeTypeStep />
-      </Formik>
+      </FormRoot>
     );
     expect(getNodeTypeSelect()).toHaveValue('job_template');
     expect(
@@ -146,9 +146,9 @@ describe('NodeTypeStep', () => {
 
   test('It shows the project list when node type is project', async () => {
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ nodeType: 'project' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ nodeType: 'project' }}>
         <NodeTypeStep />
-      </Formik>
+      </FormRoot>
     );
     expect(getNodeTypeSelect()).toHaveValue('project');
     expect(
@@ -158,12 +158,12 @@ describe('NodeTypeStep', () => {
 
   test('It shows the inventory source list when node type is inventory source', async () => {
     renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{ nodeType: 'inventory_source' }}
       >
         <NodeTypeStep />
-      </Formik>
+      </FormRoot>
     );
     expect(getNodeTypeSelect()).toHaveValue('inventory_source');
     expect(
@@ -173,12 +173,12 @@ describe('NodeTypeStep', () => {
 
   test('It shows the workflow job template list when node type is workflow job template', async () => {
     renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{ nodeType: 'workflow_job_template' }}
       >
         <NodeTypeStep />
-      </Formik>
+      </FormRoot>
     );
     expect(getNodeTypeSelect()).toHaveValue('workflow_job_template');
     expect(
@@ -188,7 +188,7 @@ describe('NodeTypeStep', () => {
 
   test('It shows the approval form fields when node type is approval', async () => {
     renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{
           nodeType: 'workflow_approval_template',
@@ -202,7 +202,7 @@ describe('NodeTypeStep', () => {
         }}
       >
         <NodeTypeStep />
-      </Formik>
+      </FormRoot>
     );
 
     expect(getNodeTypeSelect()).toHaveValue('workflow_approval_template');
@@ -256,12 +256,12 @@ describe('NodeTypeStep', () => {
     }));
 
     renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{ nodeType: 'workflow_job_template' }}
       >
         <NodeTypeStep />
-      </Formik>
+      </FormRoot>
     );
     await screen.findByRole('row', { name: /Test Workflow Job Template/ });
     const options = within(getNodeTypeSelect()).getAllByRole('option');
@@ -277,12 +277,12 @@ describe('NodeTypeStep', () => {
 
   test('it does show management job as a choice for system admin', async () => {
     renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{ nodeType: 'workflow_job_template' }}
       >
         <NodeTypeStep />
-      </Formik>
+      </FormRoot>
     );
     await screen.findByRole('row', { name: /Test Workflow Job Template/ });
     const options = within(getNodeTypeSelect()).getAllByRole('option');

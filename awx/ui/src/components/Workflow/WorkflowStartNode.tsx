@@ -1,5 +1,4 @@
 import React, { useContext, useRef, useState } from 'react';
-import styled from 'styled-components';
 import { useLingui } from '@lingui/react/macro';
 import { PlusIcon } from '@patternfly/react-icons';
 import {
@@ -9,26 +8,7 @@ import {
 import WorkflowActionTooltip from './WorkflowActionTooltip';
 import WorkflowActionTooltipItem from './WorkflowActionTooltipItem';
 import type { WorkflowAction, WorkflowState } from './workflowReducer';
-
-const StartG = styled.g<{ $ignorePointerEvents?: boolean }>`
-  pointer-events: ${(props) => (props.$ignorePointerEvents ? 'none' : 'auto')};
-`;
-
-const StartForeignObject = styled.foreignObject`
-  overflow: visible;
-`;
-
-const StartDiv = styled.div`
-  background-color: #0279bc;
-  color: white;
-  width: max-content;
-  min-width: 80px;
-  height: 40px;
-  border-radius: 0.35em;
-  text-align: center;
-  line-height: 40px;
-  padding: 0px 10px;
-`;
+import './WorkflowStartNode.css';
 
 export interface WorkflowStartNodeProps {
   onUpdateHelpText?: (helpText: React.ReactNode) => void;
@@ -63,24 +43,30 @@ function WorkflowStartNode({
   };
 
   return (
-    <StartG
+    <g
       id="node-1"
-      $ignorePointerEvents={addingLink}
+      className={
+        addingLink ? 'awx-workflow-start-node__start-g--inert' : undefined
+      }
       onMouseEnter={handleNodeMouseEnter}
       onMouseLeave={() => setHovering(false)}
       ref={ref}
       transform={`translate(${nodePositions[1].x},0)`}
     >
-      <StartForeignObject
+      <foreignObject
+        className="awx-workflow-start-node__foreign-object"
         height="1"
         width="1"
         y="10"
         style={{ overflow: 'visible' }}
       >
-        <StartDiv ref={startNodeRef as React.Ref<HTMLDivElement>}>
+        <div
+          className="awx-workflow-start-node__div"
+          ref={startNodeRef as React.Ref<HTMLDivElement>}
+        >
           {t`START`}
-        </StartDiv>
-      </StartForeignObject>
+        </div>
+      </foreignObject>
       {showActionTooltip && hovering && (
         <WorkflowActionTooltip
           actions={[
@@ -102,7 +88,7 @@ function WorkflowStartNode({
           pointY={(startNodeRef.current?.offsetHeight ?? 0) / 2 + 10}
         />
       )}
-    </StartG>
+    </g>
   );
 }
 

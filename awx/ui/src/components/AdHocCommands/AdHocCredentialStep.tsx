@@ -1,8 +1,7 @@
 import React, { useEffect, useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import {
   Form,
   FormGroup,
@@ -21,10 +20,7 @@ import Popover from '../Popover';
 import ContentError from '../ContentError';
 import ContentLoading from '../ContentLoading';
 import OptionsList from '../OptionsList';
-
-const CredentialErrorAlert = styled(Alert)`
-  margin-bottom: 20px;
-`;
+import './AdHocCredentialStep.css';
 
 const QS_CONFIG = getQSConfig('credentials', {
   page: 1,
@@ -102,7 +98,12 @@ function AdHocCredentialStep({ credentialTypeId }: AdHocCredentialStepProps) {
   return (
     <>
       {meta.touched && meta.error && (
-        <CredentialErrorAlert variant="danger" isInline title={meta.error} />
+        <Alert
+          className="awx-ad-hoc-credential-step__error-alert"
+          variant="danger"
+          isInline
+          title={meta.error}
+        />
       )}
       <Form autoComplete="off">
         <FormGroup

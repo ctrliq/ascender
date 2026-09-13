@@ -2,7 +2,7 @@ import type { I18n } from '@lingui/core';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { msg } from '@lingui/core/macro';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import { FormGroup } from '@patternfly/react-core';
 import Popover from 'components/Popover';
 import AnsibleSelect from 'components/AnsibleSelect';

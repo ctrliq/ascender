@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { ExecutionEnvironmentsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -38,9 +38,9 @@ describe('ExecutionEnvironmentStep', () => {
 
   test('should load execution environments', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ExecutionEnvironmentStep />
-      </Formik>
+      </FormRoot>
     );
 
     await waitFor(() =>

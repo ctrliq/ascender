@@ -3,7 +3,7 @@ import type { FileUploadProps, TextInputProps } from '@patternfly/react-core';
 
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import {
   Button,
   FileUpload,
@@ -21,7 +21,6 @@ import {
 } from '@patternfly/react-core';
 import FileUploadIcon from '@patternfly/react-icons/dist/js/icons/file-upload-icon';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
-import styled from 'styled-components';
 import AnsibleSelect from 'components/AnsibleSelect';
 import { ExecutionEnvironmentLookup } from 'components/Lookup';
 import CodeEditor from 'components/CodeEditor';
@@ -31,6 +30,7 @@ import Popover from 'components/Popover';
 import { combine, minMaxValue, required, url, number } from 'util/validators';
 import AlertModal from 'components/AlertModal';
 import RevertButton from './RevertButton';
+import './SharedFields.css';
 
 /**
  * What every field below takes: the name of the setting it edits, and the
@@ -43,32 +43,6 @@ interface SettingFieldProps {
   isRequired?: boolean;
   [key: string]: unknown;
 }
-
-const ExclamationCircleIcon = styled(PFExclamationCircleIcon)`
-  && {
-    color: var(--pf-v6-global--danger-color--100);
-  }
-`;
-
-const FormGroup = styled(PFFormGroup)`
-  .pf-v6-c-form__group-label {
-    display: inline-flex;
-    align-items: center;
-    width: 100%;
-  }
-  .pf-v6-c-form__group-label-help {
-    display: inline-flex;
-    align-items: center;
-    flex: 1 1 auto;
-  }
-`;
-
-const Selected = styled.div`
-  display: flex;
-  justify-content: space-between;
-  background-color: var(--pf-v6-global--BackgroundColor--100);
-  border-bottom-color: var(--pf-v6-global--BorderColor--200);
-`;
 
 export interface SettingGroupProps {
   children: React.ReactNode;
@@ -99,7 +73,8 @@ const SettingGroup = ({
 }: SettingGroupProps) => {
   const { t } = useLingui();
   return (
-    <FormGroup
+    <PFFormGroup
+      className="awx-shared-fields__form-group"
       fieldId={fieldId}
       id={`${fieldId}-field`}
       isRequired={isRequired}
@@ -127,7 +102,7 @@ const SettingGroup = ({
           </HelperText>
         </FormHelperText>
       )}
-    </FormGroup>
+    </PFFormGroup>
   );
 };
 const BooleanField = ({
@@ -333,7 +308,7 @@ const InputAlertField = ({ name, config }: SettingFieldProps) => {
         validated={isValid ? 'default' : 'error'}
         isDisabled={isDisable}
       >
-        <Selected>
+        <div className="awx-shared-fields__selected">
           {isDisable && (
             <Tooltip
               content={t`Edit Login redirect override URL`}
@@ -346,7 +321,7 @@ const InputAlertField = ({ name, config }: SettingFieldProps) => {
                 ouiaId="confirm-edit-login-redirect"
                 variant={ButtonVariant.control}
               >
-                <ExclamationCircleIcon />
+                <PFExclamationCircleIcon className="awx-shared-fields__exclamation-circle-icon" />
               </Button>
             </Tooltip>
           )}
@@ -361,7 +336,7 @@ const InputAlertField = ({ name, config }: SettingFieldProps) => {
             }}
             isDisabled={isDisable}
           />
-        </Selected>
+        </div>
       </SettingGroup>
       {isModalOpen && isDisable && (
         <AlertModal
@@ -524,9 +499,7 @@ const ObjectField = ({
     </FormFullWidthLayout>
   ) : null;
 };
-const FileUploadIconWrapper = styled.div`
-  margin: var(--pf-v6-global--spacer--md);
-`;
+
 const FileUploadField = ({
   name,
   config,
@@ -580,7 +553,7 @@ const FileUploadField = ({
           clearButtonText={t`Clear`}
         >
           {type === 'dataURL' && (
-            <FileUploadIconWrapper>
+            <div className="awx-shared-fields__file-upload-icon-wrapper">
               {field.value ? (
                 <img
                   src={field.value}
@@ -591,7 +564,7 @@ const FileUploadField = ({
               ) : (
                 <FileUploadIcon />
               )}
-            </FileUploadIconWrapper>
+            </div>
           )}
         </FileUpload>
       </SettingGroup>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { InstanceGroupsAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -72,9 +72,9 @@ describe('InstanceGroupsLookup', () => {
 
   test('should render successfully', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <InstanceGroupsLookup value={instanceGroups} onChange={() => {}} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() =>
       expect(InstanceGroupsAPI.read).toHaveBeenCalledTimes(1)
@@ -87,7 +87,7 @@ describe('InstanceGroupsLookup', () => {
 
   test('should render prompt on launch checkbox when necessary', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <InstanceGroupsLookup
           value={instanceGroups}
           onChange={() => {}}
@@ -95,7 +95,7 @@ describe('InstanceGroupsLookup', () => {
           promptId="ig-prompt"
           promptName="ask_instance_groups_on_launch"
         />
-      </Formik>
+      </FormRoot>
     );
     expect(
       await screen.findByRole('checkbox', { name: 'Prompt on launch' })

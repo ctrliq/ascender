@@ -1,13 +1,13 @@
 //
 // Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 //
-import type { FormikContextType } from 'formik';
+import type { FormContextValue } from 'components/Form';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import type { OptionsField, Project, SummaryFieldRef } from 'types/api';
 
 /* eslint no-nested-ternary: 0 */
 import React, { useCallback, useState, useEffect } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Formik, useField, useFormikContext } from 'formik';
 import {
   Form,
   FormGroup,
@@ -120,7 +120,7 @@ export interface ProjectFormFieldsProps {
   project: Partial<Project>;
   project_base_dir?: string;
   project_local_paths?: string[];
-  formik: FormikContextType<ProjectFormValues>;
+  formik: FormContextValue<ProjectFormValues>;
   setCredentials: (credentials: ProjectCredentials) => void;
   setSignatureValidationCredentials: (credentials: ProjectCredentials) => void;
   credentials: ProjectCredentials;
@@ -160,7 +160,7 @@ function ProjectFormFields({
     scm_update_cache_timeout: 0,
   };
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<ProjectFormValues>();
+    useFormContext<ProjectFormValues>();
 
   const [scmTypeField, scmTypeMeta, scmTypeHelpers] = useField({
     name: 'scm_type',
@@ -176,7 +176,7 @@ function ProjectFormFields({
   ] = useField('default_environment');
 
   /* Save current scm subform field values to state */
-  const saveSubFormState = (form: FormikContextType<ProjectFormValues>) => {
+  const saveSubFormState = (form: FormContextValue<ProjectFormValues>) => {
     const currentScmFormFields: ScmSubFormState = { ...scmFormFields };
 
     Object.keys(currentScmFormFields).forEach((label) => {
@@ -194,7 +194,7 @@ function ProjectFormFields({
    */
   const resetScmTypeFields = (
     value: string,
-    form: FormikContextType<ProjectFormValues>
+    form: FormContextValue<ProjectFormValues>
   ) => {
     if (form.values.scm_type === form.initialValues.scm_type) {
       saveSubFormState(formik);
@@ -486,7 +486,7 @@ function ProjectForm({
   }
 
   return (
-    <Formik<ProjectFormValues>
+    <FormRoot<ProjectFormValues>
       initialValues={{
         allow_override: project.allow_override || false,
         base_dir: project_base_dir || '',
@@ -545,7 +545,7 @@ function ProjectForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

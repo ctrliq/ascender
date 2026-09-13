@@ -10,7 +10,7 @@ import type {
 import React, { useEffect, useCallback, useState, useRef } from 'react';
 import { DateTime } from 'luxon';
 import { useLingui } from '@lingui/react/macro';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { RRule } from 'rrule';
 import { Button, Form, ActionGroup } from '@patternfly/react-core';
 import { Config } from 'contexts/Config';
@@ -542,7 +542,7 @@ function ScheduleForm({
   return (
     <Config>
       {() => (
-        <Formik
+        <FormRoot
           initialValues={{
             ...initialValues,
             ...overriddenValues,
@@ -633,7 +633,7 @@ function ScheduleForm({
               </FormColumnLayout>
             </Form>
           )}
-        </Formik>
+        </FormRoot>
       )}
     </Config>
   );

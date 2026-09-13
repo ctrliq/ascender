@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { screen, within, fireEvent, waitFor } from '@testing-library/react';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import {
@@ -16,14 +16,14 @@ import {
 describe('Setting form fields', () => {
   test('BooleanField renders the expected content', async () => {
     const { user, container } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ boolean: true }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ boolean: true }}>
         {() => (
           <BooleanField
             name="boolean"
             config={{ label: 'test', help_text: 'test' }}
           />
         )}
-      </Formik>
+      </FormRoot>
     );
     const toggle = container.querySelector('#boolean');
     expect(toggle).toBeChecked();
@@ -34,7 +34,7 @@ describe('Setting form fields', () => {
 
   test('ChoiceField renders unrequired form field', () => {
     const { container } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ choice: 'one' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ choice: 'one' }}>
         {() => (
           <ChoiceField
             name="choice"
@@ -48,7 +48,7 @@ describe('Setting form fields', () => {
             }}
           />
         )}
-      </Formik>
+      </FormRoot>
     );
     expect(container.querySelector('select#choice')).toBeInTheDocument();
     expect(
@@ -58,14 +58,14 @@ describe('Setting form fields', () => {
 
   test('EncryptedField renders the expected content', () => {
     const { container } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ encrypted: '' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ encrypted: '' }}>
         {() => (
           <EncryptedField
             name="encrypted"
             config={{ label: 'test', help_text: 'test' }}
           />
         )}
-      </Formik>
+      </FormRoot>
     );
     const input = container.querySelector('#encrypted');
     expect(input).toBeInTheDocument();
@@ -74,14 +74,14 @@ describe('Setting form fields', () => {
 
   test('InputField renders the expected content', async () => {
     const { user, container } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ text: '' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ text: '' }}>
         {() => (
           <InputField
             name="text"
             config={{ label: 'test', help_text: 'test', default: '' }}
           />
         )}
-      </Formik>
+      </FormRoot>
     );
     const input = container.querySelector('#text');
     expect(input).toHaveValue('');
@@ -91,7 +91,7 @@ describe('Setting form fields', () => {
 
   test('InputField should revert to expected default value', async () => {
     const { user, container } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ number: 5 }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ number: 5 }}>
         {() => (
           <InputField
             name="number"
@@ -99,7 +99,7 @@ describe('Setting form fields', () => {
             config={{ label: 'test number input', min_value: -10, default: 0 }}
           />
         )}
-      </Formik>
+      </FormRoot>
     );
     const input = container.querySelector('#number');
     expect(input).toHaveValue(5);
@@ -113,14 +113,14 @@ describe('Setting form fields', () => {
 
   test('InputAlertField initially renders disabled TextInput', () => {
     const { container } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ text: '' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ text: '' }}>
         {() => (
           <InputAlertField
             name="text"
             config={{ label: 'test', help_text: 'test', default: '' }}
           />
         )}
-      </Formik>
+      </FormRoot>
     );
     const input = container.querySelector('#text');
     expect(input).toHaveValue('');
@@ -129,7 +129,7 @@ describe('Setting form fields', () => {
 
   test('TextAreaField renders the expected content', async () => {
     const { user, container } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ mock_textarea: '' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ mock_textarea: '' }}>
         {() => (
           <TextAreaField
             name="mock_textarea"
@@ -140,7 +140,7 @@ describe('Setting form fields', () => {
             }}
           />
         )}
-      </Formik>
+      </FormRoot>
     );
     const textarea = container.querySelector('textarea#mock_textarea');
     expect(textarea).toHaveValue('');
@@ -152,7 +152,7 @@ describe('Setting form fields', () => {
 
   test('ObjectField renders the expected content', () => {
     renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{ object: '["one", "two", "three"]' }}
       >
@@ -167,14 +167,14 @@ describe('Setting form fields', () => {
             }}
           />
         )}
-      </Formik>
+      </FormRoot>
     );
     expect(screen.getByText('test')).toBeInTheDocument();
   });
 
   test('FileUploadField renders the expected content', async () => {
     const { user, container } = renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{ mock_file: 'mock file value' }}
       >
@@ -188,7 +188,7 @@ describe('Setting form fields', () => {
             }}
           />
         )}
-      </Formik>
+      </FormRoot>
     );
     expect(screen.getByText('mock file label')).toBeInTheDocument();
     const filenameInput = container.querySelector('#mock_file-filename');
@@ -226,7 +226,7 @@ describe('Setting form fields', () => {
 
   test('should render confirmation modal when toggle on for disable local auth', async () => {
     const { user, container } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ DISABLE_LOCAL_AUTH: false }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ DISABLE_LOCAL_AUTH: false }}>
         {() => (
           <BooleanField
             name="DISABLE_LOCAL_AUTH"
@@ -245,7 +245,7 @@ describe('Setting form fields', () => {
             }}
           />
         )}
-      </Formik>
+      </FormRoot>
     );
     const toggle = container.querySelector('#DISABLE_LOCAL_AUTH');
     expect(toggle).not.toBeChecked();
@@ -263,7 +263,7 @@ describe('Setting form fields', () => {
 
   test('should not render confirmation modal when toggling off', async () => {
     const { user, container } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ DISABLE_LOCAL_AUTH: true }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ DISABLE_LOCAL_AUTH: true }}>
         {() => (
           <BooleanField
             name="DISABLE_LOCAL_AUTH"
@@ -282,7 +282,7 @@ describe('Setting form fields', () => {
             }}
           />
         )}
-      </Formik>
+      </FormRoot>
     );
     const toggle = container.querySelector('#DISABLE_LOCAL_AUTH');
     expect(toggle).toBeChecked();
@@ -296,7 +296,7 @@ describe('Setting form fields', () => {
 
   test('should not toggle disable local auth when cancelled', async () => {
     const { user, container } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ DISABLE_LOCAL_AUTH: false }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ DISABLE_LOCAL_AUTH: false }}>
         {() => (
           <BooleanField
             name="DISABLE_LOCAL_AUTH"
@@ -315,7 +315,7 @@ describe('Setting form fields', () => {
             }}
           />
         )}
-      </Formik>
+      </FormRoot>
     );
     const toggle = container.querySelector('#DISABLE_LOCAL_AUTH');
     expect(toggle).not.toBeChecked();

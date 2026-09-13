@@ -3,7 +3,6 @@ import type { SearchableKey } from 'components/PaginatedTable';
 import type { QSConfig, QSParamValue } from 'util/qs';
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import styled from 'styled-components';
 import {
   Toolbar,
   ToolbarContent,
@@ -22,18 +21,7 @@ import {
 } from 'util/qs';
 import { isJobRunning } from 'util/jobs';
 import { useLingui } from '@lingui/react/macro';
-
-const SearchToolbarWrapper = styled.div`
-  margin-top: 0;
-  #job_output-toolbar {
-    --pf-v6-c-toolbar--PaddingInlineStart: 0 !important;
-  }
-`;
-
-const SearchToolbarContent = styled(ToolbarContent)`
-  padding-left: 0px !important;
-  padding-right: 0px !important;
-`;
+import './JobOutputSearch.css';
 
 export interface JobOutputSearchProps {
   qsConfig: QSConfig;
@@ -159,7 +147,7 @@ function JobOutputSearch({
   const isDisabled = isJobRunning(job.status);
 
   return (
-    <SearchToolbarWrapper>
+    <div className="awx-job-output-search__toolbar-wrapper">
       <Toolbar
         id="job_output-toolbar"
         clearAllFilters={handleRemoveAllSearchTerms}
@@ -167,7 +155,7 @@ function JobOutputSearch({
         clearFiltersButtonText={t`Clear all filters`}
         ouiaId="job-output-toolbar"
       >
-        <SearchToolbarContent>
+        <ToolbarContent className="awx-job-output-search__toolbar-content">
           <ToolbarToggleGroup toggleIcon={<SearchIcon />} breakpoint="lg">
             <ToolbarItem>
               {isDisabled ? (
@@ -208,9 +196,9 @@ function JobOutputSearch({
               {isFollowModeEnabled ? t`Unfollow` : t`Follow`}
             </Button>
           ) : null}
-        </SearchToolbarContent>
+        </ToolbarContent>
       </Toolbar>
-    </SearchToolbarWrapper>
+    </div>
   );
 }
 

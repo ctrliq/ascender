@@ -2,7 +2,6 @@ import type { SearchableKey } from 'components/PaginatedTable';
 import type { SearchColumn, SortColumn } from 'types/api';
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import styled from 'styled-components';
 import { Toolbar, ToolbarContent } from '@patternfly/react-core';
 
 import {
@@ -14,18 +13,8 @@ import {
 import type { QSConfig, QSParamValue } from 'util/qs';
 import DataListToolbar from '../DataListToolbar';
 import type { DataListToolbarProps } from '../DataListToolbar/DataListToolbar';
+import './ListHeader.css';
 
-const EmptyStateControlsWrapper = styled.div`
-  display: flex;
-  margin-top: 20px;
-  margin-right: 20px;
-  margin-bottom: 20px;
-  justify-content: flex-end;
-
-  & > :not(:first-child) {
-    margin-left: 20px;
-  }
-`;
 export interface ListHeaderProps {
   emptyStateControls?: React.ReactNode;
   itemCount?: number;
@@ -118,9 +107,9 @@ function ListHeader({
           ouiaId={`${qsConfig.namespace}-list-toolbar`}
         >
           <ToolbarContent>
-            <EmptyStateControlsWrapper>
+            <div className="awx-list-header__empty-state-controls-wrapper">
               {emptyStateControls}
-            </EmptyStateControlsWrapper>
+            </div>
           </ToolbarContent>
         </Toolbar>
       ) : (
