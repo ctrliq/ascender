@@ -1,5 +1,5 @@
 import type { Host } from 'types/api';
-import React, { useCallback, useEffect } from 'react';
+import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
 import { CardBody } from 'components/Card';
@@ -7,8 +7,7 @@ import { DetailList } from 'components/DetailList';
 import { VariablesDetail } from 'components/CodeEditor';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
-import useRequest from 'hooks/useRequest';
-import { HostsAPI } from 'api';
+import useHostFacts from 'hooks/useHostFacts';
 
 export interface HostFactsProps {
   host: Host;
@@ -17,26 +16,9 @@ export interface HostFactsProps {
 
 function HostFacts({ host }: HostFactsProps) {
   const { t } = useLingui();
-  const {
-    result: facts,
-    isLoading,
-    error,
-    request: fetchFacts,
-  } = useRequest(
-    useCallback(async () => {
-      const [{ data: factsObj }] = await Promise.all([
-        HostsAPI.readFacts(host.id),
-      ]);
-      return JSON.stringify(factsObj, null, 4);
-    }, [host]),
-    '{}'
-  );
+  const { data: facts = '{}', isPending, error } = useHostFacts(host.id);
 
-  useEffect(() => {
-    fetchFacts();
-  }, [fetchFacts]);
-
-  if (isLoading) {
+  if (isPending) {
     return <ContentLoading />;
   }
 
