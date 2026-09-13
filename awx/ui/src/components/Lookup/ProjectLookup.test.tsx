@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { ProjectsAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -32,9 +32,9 @@ describe('<ProjectLookup />', () => {
     } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ProjectLookup autoPopulate onChange={onChange} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(onChange).toHaveBeenCalledWith(project));
   });
@@ -48,9 +48,9 @@ describe('<ProjectLookup />', () => {
     } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ProjectLookup onChange={onChange} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(ProjectsAPI.read).toHaveBeenCalledTimes(1));
     expect(onChange).not.toHaveBeenCalled();
@@ -68,9 +68,9 @@ describe('<ProjectLookup />', () => {
     } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ProjectLookup autoPopulate onChange={onChange} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(ProjectsAPI.read).toHaveBeenCalledTimes(1));
     expect(onChange).not.toHaveBeenCalled();
@@ -84,9 +84,9 @@ describe('<ProjectLookup />', () => {
       },
     } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ProjectLookup isOverrideDisabled onChange={() => {}} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(ProjectsAPI.read).toHaveBeenCalledTimes(1));
     await waitFor(() =>
@@ -99,9 +99,9 @@ describe('<ProjectLookup />', () => {
       data: { results: [], count: 0 },
     } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ProjectLookup onChange={() => {}} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(ProjectsAPI.read).toHaveBeenCalledTimes(1));
     await waitFor(() =>
@@ -114,13 +114,13 @@ describe('<ProjectLookup />', () => {
       data: { results: [], count: 0 },
     } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ProjectLookup
           isValid
           helperTextInvalid="select value"
           onChange={() => {}}
         />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(ProjectsAPI.read).toHaveBeenCalledTimes(1));
     expect(screen.queryByText('select value')).not.toBeInTheDocument();
@@ -131,13 +131,13 @@ describe('<ProjectLookup />', () => {
       data: { results: [], count: 0 },
     } as unknown as ResponseOf<typeof ProjectsAPI.read>);
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ProjectLookup
           isValid={false}
           helperTextInvalid="select value"
           onChange={() => {}}
         />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(ProjectsAPI.read).toHaveBeenCalledTimes(1));
     expect(await screen.findByText('select value')).toBeInTheDocument();

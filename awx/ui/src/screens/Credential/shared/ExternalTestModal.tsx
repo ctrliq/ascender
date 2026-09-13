@@ -2,7 +2,7 @@ import type { Credential, CredentialType } from 'types/api';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { Button, Form, FormGroup } from '@patternfly/react-core';
 import { Modal } from '@patternfly/react-core/deprecated';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
@@ -71,7 +71,7 @@ function ExternalTestModal({
 
   return (
     <>
-      <Formik
+      <FormRoot
         initialValues={(credentialType.inputs?.metadata ?? []).reduce(
           (initialValues: Record<string, unknown>, field) => {
             if (field.type === 'string' && field.choices) {
@@ -172,7 +172,7 @@ function ExternalTestModal({
             </Form>
           </Modal>
         )}
-      </Formik>
+      </FormRoot>
       <CredentialPluginTestAlert
         credentialName={credentialFormValues.name}
         successResponse={testPluginSuccess}

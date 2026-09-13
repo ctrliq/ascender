@@ -1,5 +1,5 @@
 import React from 'react';
-import { useFormikContext } from 'formik';
+import { useFormContext } from 'components/Form';
 import { useLingui } from '@lingui/react/macro';
 import StepName from '../LaunchPrompt/steps/StepName';
 import CredentialPasswordsStep from '../LaunchPrompt/steps/CredentialPasswordsStep';
@@ -15,7 +15,7 @@ export default function useCredentialPasswordsStep(
   visitedSteps: VisitedSteps
 ): AdHocStep {
   const { t } = useLingui();
-  const { values, setFieldError } = useFormikContext<AdHocValues>();
+  const { values, setFieldError } = useFormContext<AdHocValues>();
   const hasError = Boolean(
     showStep &&
     Object.keys(visitedSteps).includes(STEP_ID) &&

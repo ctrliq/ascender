@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { useFormikContext, useField } from 'formik';
+import { useFormContext, useField } from 'components/Form';
 import {
   Alert,
   Form,
@@ -38,7 +38,7 @@ export interface NodeTypeStepProps {
 function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
   const { t } = useLingui();
   const { isSuperUser } = useUserProfile();
-  const { setValues } = useFormikContext();
+  const { setValues } = useFormContext();
   const [nodeTypeField] = useField('nodeType');
   const [nodeResourceField, nodeResourceMeta, nodeResourceHelpers] =
     useField('nodeResource');

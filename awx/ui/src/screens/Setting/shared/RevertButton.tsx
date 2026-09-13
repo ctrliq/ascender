@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import { Button, Tooltip } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
 import './RevertButton.css';

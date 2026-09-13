@@ -3,7 +3,7 @@ import type { FileUploadProps, TextInputProps } from '@patternfly/react-core';
 
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import {
   Button,
   FileUpload,

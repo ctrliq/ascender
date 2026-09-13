@@ -1,7 +1,7 @@
 import type { Instance, ReceptorAddress } from 'types/api';
+import { FormRoot, useField } from 'components/Form';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Formik, useField } from 'formik';
 import {
   Form,
   FormGroup,
@@ -169,7 +169,7 @@ function InstanceForm({
 }: InstanceFormProps) {
   return (
     <CardBody>
-      <Formik<InstanceFormValues>
+      <FormRoot<InstanceFormValues>
         initialValues={{
           hostname: instance.hostname || '',
           description: instance.description || '',
@@ -204,7 +204,7 @@ function InstanceForm({
             </FormColumnLayout>
           </Form>
         )}
-      </Formik>
+      </FormRoot>
     </CardBody>
   );
 }

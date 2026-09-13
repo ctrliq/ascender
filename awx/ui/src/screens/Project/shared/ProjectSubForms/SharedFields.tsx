@@ -1,7 +1,7 @@
 import type { SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useField, useFormikContext } from 'formik';
+import { useField, useFormContext } from 'components/Form';
 import { Checkbox, FormGroup, Title } from '@patternfly/react-core';
 import CredentialLookup from 'components/Lookup/CredentialLookup';
 import FormField, { CheckboxField } from 'components/FormField';
@@ -54,7 +54,7 @@ export const ScmCredentialFormField = ({
 }) => {
   const { t } = useLingui();
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
 
   const onCredentialChange = useCallback(
     (value: SummaryFieldRef | null) => {
@@ -83,7 +83,7 @@ export const ScmTypeOptions = ({
   hideAllowOverride?: boolean;
 }) => {
   const { t } = useLingui();
-  const { values } = useFormikContext<Record<string, unknown>>();
+  const { values } = useFormContext<Record<string, unknown>>();
   const projectHelpStrings = getProjectHelpStrings();
 
   const [enableWebhooks, setEnableWebhooks] = useState(
