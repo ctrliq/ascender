@@ -4,7 +4,7 @@ import logging
 from base64 import b64encode
 from urllib import parse as urlparse
 
-from django.conf import settings
+from awx.settings.typed import settings
 from kubernetes import client, config
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
