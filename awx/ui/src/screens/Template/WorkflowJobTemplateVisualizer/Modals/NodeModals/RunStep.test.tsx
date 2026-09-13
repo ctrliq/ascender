@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, fireEvent, act } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import RunStep from './RunStep';
 
@@ -17,9 +17,9 @@ function getCard(label: string) {
 describe('RunStep', () => {
   test('Default selected card matches default link type when present', () => {
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ linkType: 'success' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ linkType: 'success' }}>
         <RunStep />
-      </Formik>
+      </FormRoot>
     );
     const success = getCard('On Success');
     const failure = getCard('On Failure');
@@ -31,9 +31,9 @@ describe('RunStep', () => {
 
   test('Clicking always card makes expected callback', async () => {
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ linkType: 'success' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ linkType: 'success' }}>
         <RunStep />
-      </Formik>
+      </FormRoot>
     );
     // class carried by the currently-selected (success) card
     const selectedClass = getCard('On Success')!.className;
@@ -49,9 +49,9 @@ describe('RunStep', () => {
 
   test('Clicking failure card makes expected callback', async () => {
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ linkType: 'success' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ linkType: 'success' }}>
         <RunStep />
-      </Formik>
+      </FormRoot>
     );
     const selectedClass = getCard('On Success')!.className;
     expect(getCard('On Failure')!.className).not.toBe(selectedClass);

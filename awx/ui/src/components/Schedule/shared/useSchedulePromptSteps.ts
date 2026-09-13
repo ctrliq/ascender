@@ -6,7 +6,7 @@ import type {
   SummaryFieldRef,
 } from 'types/api';
 import { useState, useEffect } from 'react';
-import { useFormikContext } from 'formik';
+import { useFormContext } from 'components/Form';
 import { useLingui } from '@lingui/react/macro';
 import useInventoryStep from '../../LaunchPrompt/steps/useInventoryStep';
 import useCredentialsStep from '../../LaunchPrompt/steps/useCredentialsStep';
@@ -33,7 +33,7 @@ export default function useSchedulePromptSteps(
   // template it is being created on.
   const sourceOfValues: NodeTemplate =
     Object.keys(schedule).length > 0 ? (schedule as NodeTemplate) : resource;
-  const { resetForm, values } = useFormikContext<ScheduleFormValues>();
+  const { resetForm, values } = useFormContext<ScheduleFormValues>();
   const [visited, setVisited] = useState<Record<string, boolean>>({});
 
   const steps = [

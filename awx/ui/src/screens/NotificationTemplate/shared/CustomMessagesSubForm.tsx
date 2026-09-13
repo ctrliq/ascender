@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useField, useFormikContext } from 'formik';
+import { useField, useFormContext } from 'components/Form';
 import { Switch, Content } from '@patternfly/react-core';
 import { FormFullWidthLayout, SubFormLayout } from 'components/FormLayout';
 import CodeEditorField from 'components/CodeEditor/CodeEditorField';
@@ -28,7 +28,7 @@ function CustomMessagesSubForm({
   const showMessages = type !== 'webhook';
   const showBodies = ['email', 'pagerduty', 'webhook'].includes(type);
 
-  const { setFieldValue } = useFormikContext<Record<string, unknown>>();
+  const { setFieldValue } = useFormContext<Record<string, unknown>>();
   const config = useConfig();
   const prevTypeRef = useRef(type);
   useEffect(

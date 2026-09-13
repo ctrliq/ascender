@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { ExecutionEnvironmentsAPI, ProjectsAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -49,12 +49,12 @@ describe('ExecutionEnvironmentLookup', () => {
 
   test('should render successfully', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ExecutionEnvironmentLookup
           value={executionEnvironment}
           onChange={() => {}}
         />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() =>
       expect(ExecutionEnvironmentsAPI.read).toHaveBeenCalledTimes(1)
@@ -69,12 +69,12 @@ describe('ExecutionEnvironmentLookup', () => {
 
   test('should fetch execution environments', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ExecutionEnvironmentLookup
           value={executionEnvironment}
           onChange={() => {}}
         />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() =>
       expect(ExecutionEnvironmentsAPI.read).toHaveBeenCalledTimes(1)
@@ -89,14 +89,14 @@ describe('ExecutionEnvironmentLookup', () => {
 
   test('should call api with organization id', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ExecutionEnvironmentLookup
           value={executionEnvironment}
           onChange={() => {}}
           organizationId={1}
           globallyAvailable
         />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() =>
       expect(ExecutionEnvironmentsAPI.read).toHaveBeenCalledWith({
@@ -111,14 +111,14 @@ describe('ExecutionEnvironmentLookup', () => {
 
   test('should call api with organization id from the related project', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ExecutionEnvironmentLookup
           value={executionEnvironment}
           onChange={() => {}}
           projectId={12}
           globallyAvailable
         />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() =>
       expect(ProjectsAPI.readDetail).toHaveBeenCalledWith(12)
@@ -136,7 +136,7 @@ describe('ExecutionEnvironmentLookup', () => {
 
   test('should render prompt on launch checkbox when necessary', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <ExecutionEnvironmentLookup
           value={executionEnvironment}
           onChange={() => {}}
@@ -146,7 +146,7 @@ describe('ExecutionEnvironmentLookup', () => {
           promptId="ee-prompt"
           promptName="ask_execution_environment_on_launch"
         />
-      </Formik>
+      </FormRoot>
     );
     expect(
       await screen.findByRole('checkbox', { name: 'Prompt on launch' })

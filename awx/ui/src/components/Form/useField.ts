@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { fieldNameFromEvent, valueFromEvent } from './changeValue';
-import { useFormContext, useOptionalFieldRegistry } from './Form';
+import { useFieldRegistry, useFormContext } from './Form';
 import { getIn } from './paths';
 import type {
   FieldHelpers,
@@ -22,10 +22,6 @@ export interface UseFieldConfig {
  * uses. The triple it returns is the one the call sites already destructure,
  * so a screen moving off formik changes an import and nothing else.
  *
- * While the tree is mixed it serves both kinds of form. Which one is above is
- * read on every render from both contexts, so the hook order never depends on
- * the answer, and a field component shared by a migrated screen and an
- * unmigrated one works in both. The formik half goes when the last one does.
  */
 /*
  * The value type defaults to any, which formik's own useField does too. It is
@@ -42,39 +38,23 @@ export default function useField<V = any>(
     typeof nameOrConfig === 'string' ? { name: nameOrConfig } : nameOrConfig;
   const { name } = config;
 
-  const registry = useOptionalFieldRegistry();
+  const registry = useFieldRegistry();
   const context = useFormContext();
 
-  // The box holds the latest validator, so neither form ever runs a closure
+  // The box holds the latest validator, so the registry never runs a closure
   // from a render that has been replaced.
   const box = useRef<{ current: FieldValidator | undefined }>({
     current: undefined,
   });
   box.current.current = config.validate;
 
-  // Held in a ref because formik builds a new context value every render, and
-  // depending on it directly would re-register the field on each one.
-  const contextRef = useRef(context);
-  contextRef.current = context;
-
   useEffect(() => {
-    if (registry) {
-      const { boxes } = registry;
-      const mine = box.current;
-      boxes.set(name, mine);
-      return () => {
-        if (boxes.get(name) === mine) boxes.delete(name);
-      };
-    }
-    const above = contextRef.current as unknown as {
-      registerField?: (n: string, f: { validate: unknown }) => void;
-      unregisterField?: (n: string) => void;
+    const { boxes } = registry;
+    const mine = box.current;
+    boxes.set(name, mine);
+    return () => {
+      if (boxes.get(name) === mine) boxes.delete(name);
     };
-    if (!above.registerField) return undefined;
-    above.registerField(name, {
-      validate: (value: never) => box.current.current?.(value),
-    });
-    return () => above.unregisterField?.(name);
   }, [name, registry]);
 
   const { setFieldValue, setFieldTouched, setFieldError } = context;

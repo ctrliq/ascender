@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { createMemoryHistory } from 'history';
 import { CredentialsAPI, CredentialTypesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
@@ -142,9 +142,9 @@ describe('CredentialsStep', () => {
 
   test('should load credentials', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <CredentialsStep allowCredentialsWithPasswords />
-      </Formik>
+      </FormRoot>
     );
 
     await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalled());
@@ -155,9 +155,9 @@ describe('CredentialsStep', () => {
 
   test('should load credentials for selected type', async () => {
     const { user, container } = renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <CredentialsStep allowCredentialsWithPasswords />
-      </Formik>
+      </FormRoot>
     );
 
     await waitFor(() =>
@@ -191,9 +191,9 @@ describe('CredentialsStep', () => {
       ],
     });
     const { user, container } = renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <CredentialsStep allowCredentialsWithPasswords />
-      </Formik>,
+      </FormRoot>,
       {
         context: { router: { history } },
       }
@@ -225,14 +225,14 @@ describe('CredentialsStep', () => {
 
   test("error should be shown when a credential that prompts for passwords is selected on a step that doesn't allow it", async () => {
     const { user, container } = renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{
           credentials: [],
         }}
       >
         <CredentialsStep allowCredentialsWithPasswords={false} />
-      </Formik>
+      </FormRoot>
     );
 
     await screen.findByText('Cred 2');
@@ -263,7 +263,7 @@ describe('CredentialsStep', () => {
       },
     ];
     const { user, container } = renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{
           credentials: selectedCredentials,
@@ -273,7 +273,7 @@ describe('CredentialsStep', () => {
           allowCredentialsWithPasswords={false}
           defaultCredentials={selectedCredentials}
         />
-      </Formik>
+      </FormRoot>
     );
 
     await screen.findByText('Cred 2');
@@ -329,7 +329,7 @@ describe('CredentialsStep', () => {
       },
     ];
     const { user, container } = renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{
           credentials: selectedCredentials,
@@ -339,7 +339,7 @@ describe('CredentialsStep', () => {
           allowCredentialsWithPasswords={false}
           defaultCredentials={selectedCredentials}
         />
-      </Formik>
+      </FormRoot>
     );
 
     await screen.findByText('Cred 1');

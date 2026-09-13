@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import MultipleChoiceField from './MultipleChoiceField';
 
@@ -21,7 +21,7 @@ const toggleButton = (ouiaId: string) =>
 describe('<MultipleChoiceField/>', () => {
   test('should activate default values, multiselect', async () => {
     renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{
           formattedChoices: [
@@ -33,7 +33,7 @@ describe('<MultipleChoiceField/>', () => {
         }}
       >
         <MultipleChoiceField id="question-options" name="choices" />
-      </Formik>
+      </FormRoot>
     );
 
     expect(isSelected('alex-button')).toBe(true);
@@ -64,7 +64,7 @@ describe('<MultipleChoiceField/>', () => {
 
   test('should select default, multiplechoice', async () => {
     renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{
           formattedChoices: [
@@ -76,7 +76,7 @@ describe('<MultipleChoiceField/>', () => {
         }}
       >
         <MultipleChoiceField id="question-options" name="choices" />
-      </Formik>
+      </FormRoot>
     );
 
     expect(isSelected('alex-button')).toBe(true);

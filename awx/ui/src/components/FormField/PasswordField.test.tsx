@@ -1,13 +1,13 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import PasswordField from './PasswordField';
 
 describe('PasswordField', () => {
   test('renders the expected content', () => {
     const { container } = renderWithContexts(
-      <Formik
+      <FormRoot
         initialValues={{
           password: '',
         }}
@@ -16,7 +16,7 @@ describe('PasswordField', () => {
         {() => (
           <PasswordField id="test-password" name="password" label="Password" />
         )}
-      </Formik>
+      </FormRoot>
     );
     expect(container.querySelector('#test-password')).toBeInTheDocument();
     expect(screen.getByText('Password')).toBeInTheDocument();
