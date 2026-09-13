@@ -60,3 +60,55 @@ def invalid_setting_defaults():
         except Exception as exc:
             problems.append('{}: {} refuses its own default {!r}: {}'.format(setting, type(field).__name__, default, exc))
     return problems
+
+
+def unresolvable_settings(package_root):
+    """
+    Which settings the code reads by name that resolve to nothing.
+
+    A ``settings.SOME_NAME`` that no settings file defines and no registration
+    carries raises AttributeError the first time that line runs, which is the
+    same shape of fault as a view calling a method its model does not have.
+    Nothing checked for it, so nothing caught it.
+
+    Args:
+        package_root (str): the directory holding the ``awx`` package contents.
+
+    Returns:
+        dict[str, list[str]]: setting name to the ``path:line`` sites reading
+            it, for the ones that resolve to nothing. Empty when all of them do.
+    """
+    import ast
+    import os
+
+    from django.conf import settings as django_settings
+
+    read = {}
+    for dirpath, dirnames, filenames in os.walk(package_root):
+        parts = dirpath.split(os.sep)
+        if 'tests' in parts or 'migrations' in parts or 'node_modules' in parts or 'ui' in parts:
+            continue
+        for name in filenames:
+            if not name.endswith('.py'):
+                continue
+            path = os.path.join(dirpath, name)
+            try:
+                tree = ast.parse(open(path, encoding='utf-8').read())
+            except SyntaxError:
+                continue
+            for node in ast.walk(tree):
+                if not isinstance(node, ast.Attribute):
+                    continue
+                if not (isinstance(node.value, ast.Name) and node.value.id == 'settings'):
+                    continue
+                if node.attr.isupper() and isinstance(node.ctx, ast.Load):
+                    read.setdefault(node.attr, []).append('{}:{}'.format(os.path.relpath(path, package_root), node.lineno))
+
+    missing = {}
+    for name, sites in read.items():
+        if name in settings_registry.get_registered_settings():
+            continue
+        if hasattr(django_settings, name):
+            continue
+        missing[name] = sorted(sites)
+    return missing

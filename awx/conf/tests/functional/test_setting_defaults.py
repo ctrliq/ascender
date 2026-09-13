@@ -6,15 +6,36 @@ nothing asked whether the two agreed. A default its own field refuses is not a
 startup failure: it surfaces when somebody reads that setting through the API.
 """
 
+import os
+
 import pytest
 
+from django.conf import settings
 from django.core.management import call_command
+from django.core.exceptions import ImproperlyConfigured
 from django.core.management.base import CommandError
 
 from rest_framework import fields as drf_fields
 
+import awx
 from awx.conf import fields, register, settings_registry
-from awx.conf.validation import invalid_setting_defaults
+from awx.conf.validation import invalid_setting_defaults, unresolvable_settings
+from awx.main.middleware import URLModificationMiddleware
+
+
+@pytest.fixture(scope='module')
+def named_url_middleware(django_db_setup, django_db_blocker):
+    """
+    Build the middleware chain once, which is what creates the named url
+    settings. Its __init__ registers two settings and register() refuses a
+    second registration, so this cannot be done per test.
+    """
+    with django_db_blocker.unblock():
+        try:
+            URLModificationMiddleware(lambda request: None)
+        except ImproperlyConfigured:
+            pass  # another test in this process built it first
+    return True
 
 
 @pytest.mark.django_db
@@ -82,3 +103,35 @@ def test_the_command_fails_on_a_bad_default():
         settings_registry.unregister('AWX_TEST_BROKEN_LIST')
 
     assert 'AWX_TEST_BROKEN_LIST' in str(exc.value)
+
+
+@pytest.mark.django_db
+def test_every_setting_the_code_reads_resolves(named_url_middleware):
+    # A settings.SOME_NAME that nothing defines raises AttributeError the first
+    # time that line runs. Three of these exist only because
+    # URLModificationMiddleware builds them in __init__, so the chain has to
+    # have been built once before they answer, which is the wart this records.
+    package = os.path.dirname(os.path.abspath(awx.__file__))
+
+    missing = unresolvable_settings(package)
+
+    assert missing == {}, 'read but never defined:\n' + '\n'.join('{}: {}'.format(k, ', '.join(v)) for k, v in sorted(missing.items()))
+
+
+@pytest.mark.django_db
+def test_named_url_mappings_exists_only_once_the_middleware_is_built(named_url_middleware):
+    # The wart, pinned so it is a decision rather than a surprise. Three named
+    # url settings appear when URLModificationMiddleware is constructed rather
+    # than in any settings file. Two of them it registers, so the registry
+    # answers for them. NAMED_URL_MAPPINGS it only assigns, so nothing but a
+    # built middleware chain makes settings.NAMED_URL_MAPPINGS resolve at all.
+    package = os.path.dirname(os.path.abspath(awx.__file__))
+    for name in ('NAMED_URL_FORMATS', 'NAMED_URL_GRAPH_NODES', 'NAMED_URL_MAPPINGS'):
+        if hasattr(settings, name):
+            delattr(settings, name)
+
+    missing = unresolvable_settings(package)
+
+    assert set(missing) == {'NAMED_URL_MAPPINGS'}
+    assert 'NAMED_URL_FORMATS' in settings_registry.get_registered_settings()
+    assert 'NAMED_URL_GRAPH_NODES' in settings_registry.get_registered_settings()
