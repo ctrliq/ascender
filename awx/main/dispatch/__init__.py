@@ -32,7 +32,7 @@ from contextlib import contextmanager
 
 from awx.settings.application_name import get_application_name
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db import connection as pg_connection
 
 

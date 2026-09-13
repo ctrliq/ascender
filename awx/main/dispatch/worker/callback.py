@@ -5,7 +5,7 @@ import signal
 import time
 import datetime
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.utils.functional import cached_property
 from django.utils.timezone import now as tz_now
 from django.db import transaction, connection as django_connection

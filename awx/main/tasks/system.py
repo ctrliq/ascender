@@ -15,7 +15,7 @@ from packaging.version import Version
 from datetime import datetime
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db import connection, transaction, DatabaseError, IntegrityError
 from django.db.models.fields.related import ForeignKey
 from django.utils.timezone import now, timedelta

@@ -2,7 +2,7 @@ import datetime
 from dateutil.relativedelta import relativedelta
 import logging
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db.models import Count, F
 from django.db.models.functions import TruncMonth
 from django.utils.timezone import now
