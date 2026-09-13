@@ -4,7 +4,7 @@ import logging
 from collections import deque
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django_guid import get_guid
 from django.utils.functional import cached_property
 from django.db import connections

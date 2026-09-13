@@ -16,7 +16,7 @@ from urllib.parse import urljoin
 import yaml
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db import models, connection
 from django.utils.translation import gettext_lazy as _
 from django.db import transaction
