@@ -500,7 +500,7 @@ def test_inventory_update_access_called(post, inventory_source, alice, mock_acce
 
 @pytest.mark.django_db
 def test_inventory_source_vars_prohibition(post, inventory, admin_user):
-    with mock.patch('awx.api.serializers.settings') as mock_settings:
+    with mock.patch('awx.api.serializers.inventory.settings') as mock_settings:
         mock_settings.INV_ENV_VARIABLE_BLOCKED = ('FOOBAR',)
         r = post(
             reverse('api:inventory_source_list'),
@@ -568,14 +568,14 @@ class TestInventorySourceCredential:
             expect=400,
             user=admin_user,
         )
-        assert 'Credentials of type insights and vault' in r.data['credential'][0]
+        assert 'Credentials of type vault' in r.data['credential'][0]
         assert 'disallowed for scm inventory sources' in r.data['credential'][0]
 
     def test_vault_credential_not_allowed_via_related(self, project, inventory, vault_credential, admin_user, post):
         """Vault credentials cannot be associated via related endpoint"""
         inv_src = InventorySource.objects.create(inventory=inventory, name='foobar', source='scm', source_project=project, source_path='')
         r = post(url=reverse('api:inventory_source_credentials_list', kwargs={'pk': inv_src.pk}), data={'id': vault_credential.pk}, expect=400, user=admin_user)
-        assert 'Credentials of type insights and vault' in r.data['msg']
+        assert 'Credentials of type vault' in r.data['msg']
         assert 'disallowed for scm inventory sources' in r.data['msg']
 
     def test_credentials_relationship_mapping(self, project, inventory, organization, admin_user, post, patch):

@@ -6,7 +6,9 @@ from unittest import mock
 from awx.api.serializers import (
     JobTemplateSerializer,
 )
-from awx.api.views import JobTemplateDetail
+from awx.api.views.job_template import (
+    JobTemplateDetail,
+)
 from awx.main.models import (
     Role,
     User,
@@ -107,7 +109,7 @@ class TestJobTemplateSerializerGetSummaryFields:
         view.kwargs = {}
         serializer.context['view'] = view
 
-        mocker.patch("awx.api.serializers.role_summary_fields_generator", return_value='Can eat pie')
+        mocker.patch("awx.api.serializers.base.role_summary_fields_generator", return_value='Can eat pie')
         mocker.patch("awx.main.access.JobTemplateAccess.can_change", return_value='foobar')
         mocker.patch("awx.main.access.JobTemplateAccess.can_copy", return_value='foo')
         response = serializer.get_summary_fields(jt_obj)

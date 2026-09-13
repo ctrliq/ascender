@@ -14,8 +14,8 @@ import MiscSystemDetail from './MiscSystemDetail';
 
 vi.mock('../../../../api');
 
-// CodeEditor (react-ace) renders empty under jsdom, so for variable details we
-// assert the surrounding label is present rather than the editor contents.
+// A variable detail is asserted by its surrounding label: what each editor
+// holds is covered by the VariablesDetail tests rather than repeated here.
 function assertVariableDetail(label: string) {
   expect(screen.getByText(label)).toBeInTheDocument();
 }
@@ -26,7 +26,7 @@ function freshSystemData() {
     ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC: false,
     ORG_ADMINS_CAN_SEE_ALL_USERS: true,
     MANAGE_ORGANIZATION_AUTH: true,
-    TOWER_URL_BASE: 'https://towerhost',
+    ASCENDER_URL_BASE: 'https://towerhost',
     REMOTE_HOST_HEADERS: [],
     PROXY_IP_ALLOWED_LIST: [],
     CSRF_TRUSTED_ORIGINS: [],

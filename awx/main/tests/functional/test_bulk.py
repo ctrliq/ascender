@@ -103,7 +103,7 @@ def test_bulk_job_launch_queries(job_template, organization, inventory, project,
     jobs = [{'unified_job_template': jt.id, 'inventory': inventory.id} for _ in range(num_jobs)]
 
     # This is not working, we need to figure that out if we want to include tests for more jobs
-    # with mock.patch('awx.api.serializers.settings.BULK_JOB_MAX_LAUNCH', num_jobs + 1):
+    # with mock.patch('awx.api.serializers.bulk.settings.BULK_JOB_MAX_LAUNCH', num_jobs + 1):
     with django_assert_max_num_queries(num_queries):
         bulk_job_launch_response = post(reverse('api:bulk_job_launch'), {'name': 'Bulk Job Launch', 'jobs': jobs}, normal_user, expect=201).data
 

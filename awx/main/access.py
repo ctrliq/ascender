@@ -8,7 +8,7 @@ import logging
 from functools import reduce
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db.models import Q, Prefetch
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
@@ -255,10 +255,26 @@ class BaseAccess(object):
 
         return qs
 
+    # Most classes show the rows reachable from an object the user may read, and
+    # say so identically: the read_role of some model, reached by an ORM path from
+    # this one. Naming the two instead of writing the query keeps the query in one
+    # place, which is where a mistake in it can be caught. ReceptorAddressAccess is
+    # why that matters: it wrote the query by hand against a model with no
+    # read_role at all, and raised AttributeError for years without anyone seeing.
+    #
+    # Read as: rows whose `path` is an object of `model` this user can read. An
+    # empty path means this model itself carries the role.
+    read_via = None  # (model, 'orm__path')
+
     def filtered_queryset(self):
-        # Override in subclasses
+        # Override in subclasses, or set read_via when the rule is the usual one.
         # filter objects according to user's read access
-        return self.model.objects.none()
+        if self.read_via is None:
+            return self.model.objects.none()
+        gate, path = self.read_via
+        if not path:
+            return gate.accessible_objects(self.user, 'read_role')
+        return self.model.objects.filter(**{'{}__in'.format(path): gate.accessible_pk_qs(self.user, 'read_role')})
 
     def can_read(self, obj):
         return bool(obj and self.get_queryset().filter(pk=obj.pk).exists())
@@ -523,6 +539,30 @@ class BaseAccess(object):
         return False
 
 
+class ReadOnlyAccess:
+    """
+    A record of something that happened, which nobody adds, changes or deletes.
+
+    Eight resources are read only, and each of them used to say so by repeating
+    the same three methods. Saying it once makes it a property of the resource
+    rather than something you have to read three method bodies to find out, and
+    leaves each class carrying only what actually differs about it: its model,
+    and which of its rows you are allowed to see.
+
+    Read only means read only for everyone, superusers included, so a class
+    whose methods are decorated with check_superuser does not belong here.
+    """
+
+    def can_add(self, data):
+        return False
+
+    def can_change(self, obj, data):
+        return False
+
+    def can_delete(self, obj):
+        return False
+
+
 class UnifiedCredentialsMixin(BaseAccess):
     """
     The credentials many-to-many is a standard relationship for JT, jobs, and others
@@ -616,8 +656,7 @@ class InstanceGroupAccess(BaseAccess):
     model = InstanceGroup
     prefetch_related = ('instances',)
 
-    def filtered_queryset(self):
-        return self.model.accessible_objects(self.user, 'read_role')
+    read_via = (InstanceGroup, '')
 
     @check_superuser
     def can_use(self, obj):
@@ -854,8 +893,7 @@ class OrganizationAccess(NotificationAttachMixin, BaseAccess):
     # organization admin_role is not a parent of organization auditor_role
     notification_attach_roles = ['admin_role', 'auditor_role']
 
-    def filtered_queryset(self):
-        return self.model.accessible_objects(self.user, 'read_role')
+    read_via = (Organization, '')
 
     @check_superuser
     def can_change(self, obj, data):
@@ -924,8 +962,7 @@ class InventoryAccess(BaseAccess):
         Prefetch('labels', queryset=Label.objects.all().order_by('name')),
     )
 
-    def filtered_queryset(self, allowed=None, ad_hoc=None):
-        return self.model.accessible_objects(self.user, 'read_role')
+    read_via = (Inventory, '')
 
     @check_superuser
     def can_use(self, obj):
@@ -993,8 +1030,7 @@ class HostAccess(BaseAccess):
     )
     prefetch_related = ('groups', 'inventory_sources')
 
-    def filtered_queryset(self):
-        return self.model.objects.filter(inventory__in=Inventory.accessible_pk_qs(self.user, 'read_role'))
+    read_via = (Inventory, 'inventory')
 
     def can_add(self, data):
         if not data:  # So the browseable API will work
@@ -1055,8 +1091,7 @@ class GroupAccess(BaseAccess):
         'children',
     )
 
-    def filtered_queryset(self):
-        return Group.objects.filter(inventory__in=Inventory.accessible_pk_qs(self.user, 'read_role'))
+    read_via = (Inventory, 'inventory')
 
     def can_add(self, data):
         if not data:  # So the browseable API will work
@@ -1097,8 +1132,7 @@ class InventorySourceAccess(NotificationAttachMixin, UnifiedCredentialsMixin, Ba
     select_related = ('created_by', 'modified_by', 'inventory')
     prefetch_related = ('credentials__credential_type', 'last_job', 'source_project')
 
-    def filtered_queryset(self):
-        return self.model.objects.filter(inventory__in=Inventory.accessible_pk_qs(self.user, 'read_role'))
+    read_via = (Inventory, 'inventory')
 
     def can_add(self, data):
         if not data or 'inventory' not in data:
@@ -1161,8 +1195,7 @@ class InventoryUpdateAccess(BaseAccess):
     )
     prefetch_related = ('unified_job_template', 'instance_group', 'credentials__credential_type', 'inventory')
 
-    def filtered_queryset(self):
-        return self.model.objects.filter(inventory_source__inventory__in=Inventory.accessible_pk_qs(self.user, 'read_role'))
+    read_via = (Inventory, 'inventory_source__inventory')
 
     def can_cancel(self, obj):
         if not obj.can_cancel:
@@ -1230,8 +1263,7 @@ class CredentialAccess(BaseAccess):
     )
     prefetch_related = ('admin_role', 'use_role', 'read_role', 'admin_role__parents', 'admin_role__members', 'credential_type', 'organization')
 
-    def filtered_queryset(self):
-        return self.model.accessible_objects(self.user, 'read_role')
+    read_via = (Credential, '')
 
     @check_superuser
     def can_add(self, data):
@@ -1292,8 +1324,7 @@ class CredentialInputSourceAccess(BaseAccess):
     model = CredentialInputSource
     select_related = ('target_credential', 'source_credential')
 
-    def filtered_queryset(self):
-        return CredentialInputSource.objects.filter(target_credential__in=Credential.accessible_pk_qs(self.user, 'read_role'))
+    read_via = (Credential, 'target_credential')
 
     @check_superuser
     def can_add(self, data):
@@ -1465,8 +1496,7 @@ class ProjectAccess(NotificationAttachMixin, BaseAccess):
     prefetch_related = ('modified_by', 'created_by', 'organization', 'last_job', 'current_job')
     notification_attach_roles = ['admin_role']
 
-    def filtered_queryset(self):
-        return self.model.accessible_objects(self.user, 'read_role')
+    read_via = (Project, '')
 
     @check_superuser
     def can_add(self, data):
@@ -1521,8 +1551,7 @@ class ProjectUpdateAccess(BaseAccess):
         'instance_group',
     )
 
-    def filtered_queryset(self):
-        return self.model.objects.filter(project__in=Project.accessible_pk_qs(self.user, 'read_role'))
+    read_via = (Project, 'project')
 
     @check_superuser
     def can_cancel(self, obj):
@@ -1567,8 +1596,7 @@ class JobTemplateAccess(NotificationAttachMixin, UnifiedCredentialsMixin, BaseAc
         Prefetch('last_job', queryset=UnifiedJob.objects.non_polymorphic()),
     )
 
-    def filtered_queryset(self):
-        return self.model.accessible_objects(self.user, 'read_role')
+    read_via = (JobTemplate, '')
 
     def can_add(self, data):
         """
@@ -1981,8 +2009,7 @@ class WorkflowJobTemplateNodeAccess(UnifiedCredentialsMixin, BaseAccess):
         'workflow_job_template',
     )
 
-    def filtered_queryset(self):
-        return self.model.objects.filter(workflow_job_template__in=WorkflowJobTemplate.accessible_objects(self.user, 'read_role'))
+    read_via = (WorkflowJobTemplate, 'workflow_job_template')
 
     @check_superuser
     def can_add(self, data):
@@ -2099,8 +2126,7 @@ class WorkflowJobTemplateAccess(NotificationAttachMixin, BaseAccess):
         'read_role',
     )
 
-    def filtered_queryset(self):
-        return self.model.accessible_objects(self.user, 'read_role')
+    read_via = (WorkflowJobTemplate, '')
 
     @check_superuser
     def can_add(self, data):
@@ -2297,8 +2323,7 @@ class AdHocCommandAccess(BaseAccess):
         'credential',
     )
 
-    def filtered_queryset(self):
-        return self.model.objects.filter(inventory__in=Inventory.accessible_pk_qs(self.user, 'read_role'))
+    read_via = (Inventory, 'inventory')
 
     def can_add(self, data, validate_license=True):
         if not data:  # So the browseable API will work
@@ -2345,7 +2370,7 @@ class AdHocCommandAccess(BaseAccess):
         return obj.inventory is not None and self.user in obj.inventory.admin_role
 
 
-class AdHocCommandEventAccess(BaseAccess):
+class AdHocCommandEventAccess(ReadOnlyAccess, BaseAccess):
     """
     I can see ad hoc command event records whenever I can read both ad hoc
     command and host.
@@ -2363,17 +2388,8 @@ class AdHocCommandEventAccess(BaseAccess):
         host_qs = self.user.get_queryset(Host)
         return qs.filter(Q(host__isnull=True) | Q(host__in=host_qs), ad_hoc_command__in=ad_hoc_command_qs)
 
-    def can_add(self, data):
-        return False
 
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
-
-
-class JobHostSummaryAccess(BaseAccess):
+class JobHostSummaryAccess(ReadOnlyAccess, BaseAccess):
     """
     I can see job/host summary records whenever I can read both job and host.
     """
@@ -2390,17 +2406,8 @@ class JobHostSummaryAccess(BaseAccess):
         host_qs = self.user.get_queryset(Host)
         return self.model.objects.filter(job__in=job_qs, host__in=host_qs)
 
-    def can_add(self, data):
-        return False
 
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
-
-
-class JobEventAccess(BaseAccess):
+class JobEventAccess(ReadOnlyAccess, BaseAccess):
     """
     I can see job event records whenever I can read both job and host.
     """
@@ -2417,58 +2424,29 @@ class JobEventAccess(BaseAccess):
             | Q(job_id__in=Job.objects.filter(job_template__in=JobTemplate.accessible_pk_qs(self.user, 'read_role')).values('pk'))
         )
 
-    def can_add(self, data):
-        return False
-
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
-
 
 class UnpartitionedJobEventAccess(JobEventAccess):
     model = UnpartitionedJobEvent
 
 
-class ProjectUpdateEventAccess(BaseAccess):
+class ProjectUpdateEventAccess(ReadOnlyAccess, BaseAccess):
     """
     I can see project update event records whenever I can access the project update
     """
 
     model = ProjectUpdateEvent
 
-    def filtered_queryset(self):
-        return self.model.objects.filter(Q(project_update__project__in=Project.accessible_pk_qs(self.user, 'read_role')))
-
-    def can_add(self, data):
-        return False
-
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
+    read_via = (Project, 'project_update__project')
 
 
-class InventoryUpdateEventAccess(BaseAccess):
+class InventoryUpdateEventAccess(ReadOnlyAccess, BaseAccess):
     """
     I can see inventory update event records whenever I can access the inventory update
     """
 
     model = InventoryUpdateEvent
 
-    def filtered_queryset(self):
-        return self.model.objects.filter(Q(inventory_update__inventory_source__inventory__in=Inventory.accessible_pk_qs(self.user, 'read_role')))
-
-    def can_add(self, data):
-        return False
-
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
+    read_via = (Inventory, 'inventory_update__inventory_source__inventory')
 
 
 class ReceptorAddressAccess(BaseAccess):
@@ -2498,21 +2476,12 @@ class ReceptorAddressAccess(BaseAccess):
         return False
 
 
-class SystemJobEventAccess(BaseAccess):
+class SystemJobEventAccess(ReadOnlyAccess, BaseAccess):
     """
     I can only see manage System Jobs events if I'm a super user
     """
 
     model = SystemJobEvent
-
-    def can_add(self, data):
-        return False
-
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
 
 
 class UnifiedJobTemplateAccess(BaseAccess):
@@ -2785,7 +2754,7 @@ class LabelAccess(BaseAccess):
         return self.can_change(obj, None)
 
 
-class ActivityStreamAccess(BaseAccess):
+class ActivityStreamAccess(ReadOnlyAccess, BaseAccess):
     """
     I can see activity stream events only when I have permission on all objects included in the event
     """
@@ -2903,15 +2872,6 @@ class ActivityStreamAccess(BaseAccess):
 
         return qs.filter(q).distinct()
 
-    def can_add(self, data):
-        return False
-
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
-
 
 class RoleAccess(BaseAccess):
     """
@@ -3007,8 +2967,7 @@ class WorkflowApprovalAccess(BaseAccess):
     def can_start(self, obj, validate_license=True):
         return True
 
-    def filtered_queryset(self):
-        return self.model.objects.filter(unified_job_node__workflow_job__unified_job_template__in=WorkflowJobTemplate.accessible_pk_qs(self.user, 'read_role'))
+    read_via = (WorkflowJobTemplate, 'unified_job_node__workflow_job__unified_job_template')
 
     def can_approve_or_deny(self, obj):
         if (obj.workflow_job_template and self.user in obj.workflow_job_template.approval_role) or self.user.is_superuser:
@@ -3053,11 +3012,10 @@ class WorkflowApprovalTemplateAccess(BaseAccess):
 
         return self.user in obj.workflow_job_template.execute_role
 
-    def filtered_queryset(self):
-        return self.model.objects.filter(workflowjobtemplatenodes__workflow_job_template__in=WorkflowJobTemplate.accessible_pk_qs(self.user, 'read_role'))
+    read_via = (WorkflowJobTemplate, 'workflowjobtemplatenodes__workflow_job_template')
 
 
-class WorkflowApprovalVoteAccess(BaseAccess):
+class WorkflowApprovalVoteAccess(ReadOnlyAccess, BaseAccess):
     """
     Votes are an immutable audit trail written internally when a user approves
     or denies a workflow approval; they can never be created, changed or
@@ -3075,15 +3033,6 @@ class WorkflowApprovalVoteAccess(BaseAccess):
         return self.model.objects.filter(
             workflow_approval__unified_job_node__workflow_job__unified_job_template__in=WorkflowJobTemplate.accessible_pk_qs(self.user, 'read_role')
         )
-
-    def can_add(self, data):
-        return False
-
-    def can_change(self, obj, data):
-        return False
-
-    def can_delete(self, obj):
-        return False
 
 
 for cls in BaseAccess.__subclasses__():

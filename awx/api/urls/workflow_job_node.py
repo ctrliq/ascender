@@ -3,7 +3,7 @@
 
 from django.urls import path
 
-from awx.api.views import (
+from awx.api.views.workflow import (
     WorkflowJobNodeList,
     WorkflowJobNodeDetail,
     WorkflowJobNodeSuccessNodesList,

@@ -3,7 +3,10 @@
 
 from django.urls import path
 
-from awx.api.views import JobEventDetail, JobEventChildrenList
+from awx.api.views.job import (
+    JobEventDetail,
+    JobEventChildrenList,
+)
 
 urls = [
     path('<int:pk>/', JobEventDetail.as_view(), name='job_event_detail'),

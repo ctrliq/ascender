@@ -3,7 +3,7 @@ import json
 import os
 
 from django.core.management.base import BaseCommand
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db import transaction
 from django.db.models.signals import post_save
 
@@ -25,18 +25,19 @@ class Command(BaseCommand):
             dest='use_custom_key',
             action='store_true',
             default=False,
-            help='Use existing key provided as TOWER_SECRET_KEY environment variable',
+            help='Use existing key provided as ASCENDER_SECRET_KEY environment variable',
         )
 
     @transaction.atomic
     def handle(self, **options):
         self.old_key = settings.SECRET_KEY
-        custom_key = os.environ.get("TOWER_SECRET_KEY")
+        # TOWER_SECRET_KEY is the former name, still honoured for a release
+        custom_key = os.environ.get("ASCENDER_SECRET_KEY") or os.environ.get("TOWER_SECRET_KEY")
         if options.get("use_custom_key"):
             if custom_key:
                 self.new_key = custom_key
             else:
-                print("Use custom key was specified but the env var TOWER_SECRET_KEY was not available")
+                print("Use custom key was specified but the env var ASCENDER_SECRET_KEY was not available")
                 import sys
 
                 sys.exit(1)
