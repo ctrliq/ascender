@@ -36,6 +36,10 @@ function WorkflowActionTooltipItem({
   onMouseEnter = () => {},
   onMouseLeave = () => {},
 }: WorkflowActionTooltipItemProps) {
+  // A tooltip action inside the workflow SVG, which reaches the keyboard
+  // through the node it hangs off rather than on its own. The rules below could
+  // not see this element while it was a styled component; the element itself is
+  // unchanged.
   return (
     <button
       type="button"

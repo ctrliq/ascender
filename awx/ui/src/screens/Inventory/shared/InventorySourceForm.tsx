@@ -27,6 +27,7 @@ import {
   ExecutionEnvironmentLookup,
   InstanceGroupsLookup,
 } from 'components/Lookup';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import {
   AzureSubForm,
   EC2SubForm,
@@ -43,7 +44,6 @@ import {
   getVmwarePlugin,
   mergeVmwarePlugin,
 } from './utils';
-import { FormRoot, useField, useFormContext } from 'components/Form';
 
 const buildSourceChoiceOptions = (options: OptionsResponse) => {
   const sourceChoices = (options.actions.GET?.source?.choices ?? []).map(
