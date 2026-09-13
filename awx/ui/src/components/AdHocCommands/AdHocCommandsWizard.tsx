@@ -2,7 +2,7 @@ import type { OptionsChoice } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { withFormik, useFormikContext } from 'formik';
+import { useFormContext, withForm } from 'components/Form';
 import Wizard from '../Wizard';
 import useAdHocLaunchSteps from './useAdHocLaunchSteps';
 import type { AdHocItem, AdHocValues } from './types';
@@ -31,7 +31,7 @@ function AdHocCommandsWizard({
   organizationId,
 }: AdHocCommandsWizardProps) {
   const { t } = useLingui();
-  const { setFieldTouched, values } = useFormikContext<AdHocValues>();
+  const { setFieldTouched, values } = useFormContext<AdHocValues>();
 
   const { steps, validateStep, visitStep, visitAllSteps } = useAdHocLaunchSteps(
     moduleOptions,
@@ -74,7 +74,7 @@ function AdHocCommandsWizard({
 
 // The generics are what keeps the wrapper's own props visible to callers:
 // without them withFormik types the wrapped component as taking nothing.
-const FormikApp = withFormik<AdHocCommandsWizardProps, AdHocValues>({
+const FormikApp = withForm<AdHocCommandsWizardProps, AdHocValues>({
   mapPropsToValues({ adHocItems }) {
     const adHocItemStrings = adHocItems
       .map((item: AdHocItem) => item.name)

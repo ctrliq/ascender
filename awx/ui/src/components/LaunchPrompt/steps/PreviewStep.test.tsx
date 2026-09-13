@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import PreviewStep from './PreviewStep';
 
@@ -53,7 +53,7 @@ function getPromptDetail() {
 describe('PreviewStep', () => {
   test('should render PromptDetail', () => {
     renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{ limit: '4', survey_foo: 'abc' }}
       >
@@ -66,7 +66,7 @@ describe('PreviewStep', () => {
           surveyConfig={survey}
           formErrors={formErrors}
         />
-      </Formik>
+      </FormRoot>
     );
 
     const detail = getPromptDetail();
@@ -82,7 +82,7 @@ describe('PreviewStep', () => {
 
   test('should render PromptDetail without survey', () => {
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ limit: '4' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ limit: '4' }}>
         <PreviewStep
           resource={resource}
           launchConfig={{
@@ -90,7 +90,7 @@ describe('PreviewStep', () => {
           }}
           formErrors={formErrors}
         />
-      </Formik>
+      </FormRoot>
     );
 
     const detail = getPromptDetail();
@@ -104,7 +104,7 @@ describe('PreviewStep', () => {
 
   test('should handle extra vars with survey', () => {
     renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{ extra_vars: 'one: 1', survey_foo: 'abc' }}
       >
@@ -117,7 +117,7 @@ describe('PreviewStep', () => {
           surveyConfig={survey}
           formErrors={formErrors}
         />
-      </Formik>
+      </FormRoot>
     );
 
     const detail = getPromptDetail();
@@ -132,7 +132,7 @@ describe('PreviewStep', () => {
 
   test('should handle extra vars without survey', () => {
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ extra_vars: 'one: 1' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ extra_vars: 'one: 1' }}>
         <PreviewStep
           resource={resource}
           launchConfig={{
@@ -140,7 +140,7 @@ describe('PreviewStep', () => {
           }}
           formErrors={formErrors}
         />
-      </Formik>
+      </FormRoot>
     );
 
     const detail = getPromptDetail();
@@ -154,10 +154,9 @@ describe('PreviewStep', () => {
 
   test('should remove survey with empty array value', () => {
     renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{ extra_vars: 'one: 1' }}
-        values={{ extra_vars: 'one: 1', survey_foo: [] }}
       >
         <PreviewStep
           resource={resource}
@@ -166,7 +165,7 @@ describe('PreviewStep', () => {
           }}
           formErrors={formErrors}
         />
-      </Formik>
+      </FormRoot>
     );
 
     const detail = getPromptDetail();

@@ -218,15 +218,16 @@ describe('<WorkflowOutputNavigation />', () => {
   test('keeps a width floor on the toggle once a status filter is on', async () => {
     const { user } = renderAt(101);
     const toggle = screen.getByRole('button');
-    expect(window.getComputedStyle(toggle).minWidth).toBe('220px');
+    // the floor is the stylesheet's; what the toggle has to keep is the class
+    expect(toggle).toHaveClass('awx-workflow-output-navigation__menu-toggle');
 
     // the toggle swaps the position text for a much shorter chip here, and the
     // menu takes its minimum width from the toggle, so the floor has to survive
     await user.click(toggle);
     await user.click(screen.getByRole('option', { name: /Failed/ }));
     await waitFor(() => expect(screen.getByText('Failed')).toBeInTheDocument());
-    expect(window.getComputedStyle(screen.getByRole('button')).minWidth).toBe(
-      '220px'
+    expect(screen.getByRole('button')).toHaveClass(
+      'awx-workflow-output-navigation__menu-toggle'
     );
   });
 

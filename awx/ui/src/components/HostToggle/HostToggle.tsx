@@ -68,7 +68,6 @@ function HostToggle({
       <Tooltip content={tooltip} position="top">
         <Switch
           className={className}
-          css="display: inline-flex;"
           id={`host-${host.id}-toggle`}
           label={t`On`}
 

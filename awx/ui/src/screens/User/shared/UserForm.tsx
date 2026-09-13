@@ -1,8 +1,8 @@
 import type { SummaryFieldRef, User } from 'types/api';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import React, { useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import type { FormikHelpers } from 'formik';
-import { Formik, useField, useFormikContext } from 'formik';
+import type { SubmitHelpers } from 'components/Form';
 import {
   Form,
   FormGroup,
@@ -36,7 +36,7 @@ export interface UserFormFieldsProps {
 function UserFormFields({ user }: UserFormFieldsProps) {
   const { t } = useLingui();
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
   const { me = {} } = useConfig();
   const ldapUser = user.ldap_dn;
   const socialAuthUser = (user.auth?.length ?? 0) > 0;
@@ -247,7 +247,7 @@ function UserForm({
   const { t } = useLingui();
   const handleValidateAndSubmit = (
     values: UserFormValues,
-    { setErrors }: FormikHelpers<UserFormValues>
+    { setErrors }: SubmitHelpers<UserFormValues>
   ) => {
     if (values.password !== values.confirm_password) {
       setErrors({
@@ -283,7 +283,7 @@ function UserForm({
   }
 
   return (
-    <Formik
+    <FormRoot
       initialValues={
         {
           first_name: user.first_name || '',
@@ -315,7 +315,7 @@ function UserForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

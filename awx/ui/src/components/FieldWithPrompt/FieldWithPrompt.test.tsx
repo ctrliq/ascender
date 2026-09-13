@@ -1,13 +1,13 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { Field, Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import FieldWithPrompt from './FieldWithPrompt';
 
 describe('FieldWithPrompt', () => {
   test('Required asterisk and Popover hidden when not required and tooltip not provided', () => {
     const { container } = renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{
           ask_limit_on_launch: false,
@@ -21,12 +21,10 @@ describe('FieldWithPrompt', () => {
             promptId="job-template-ask-limit-on-launch"
             promptName="ask_limit_on_launch"
           >
-            <Field name="limit">
-              {() => <input id="job-template-limit" type="text" />}
-            </Field>
+            <input id="job-template-limit" name="limit" type="text" />
           </FieldWithPrompt>
         )}
-      </Formik>
+      </FormRoot>
     );
 
     // the prompt-on-launch checkbox is always rendered
@@ -43,7 +41,7 @@ describe('FieldWithPrompt', () => {
 
   test('Required asterisk and Popover shown when required and tooltip provided', () => {
     const { container } = renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{
           ask_limit_on_launch: false,
@@ -59,12 +57,10 @@ describe('FieldWithPrompt', () => {
             tooltip="Help text"
             isRequired
           >
-            <Field name="limit">
-              {() => <input id="job-template-limit" type="text" />}
-            </Field>
+            <input id="job-template-limit" name="limit" type="text" />
           </FieldWithPrompt>
         )}
-      </Formik>
+      </FormRoot>
     );
 
     expect(screen.getByLabelText('Prompt on launch')).toBeInTheDocument();

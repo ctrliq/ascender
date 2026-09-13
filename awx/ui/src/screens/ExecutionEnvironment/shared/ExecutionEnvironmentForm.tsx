@@ -1,11 +1,11 @@
 import type { CurrentUser } from 'contexts/Config';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import type {
   ExecutionEnvironment,
   OptionsResponse,
   SummaryFieldRef,
 } from 'types/api';
 import React, { useCallback, useEffect, useRef } from 'react';
-import { Formik, useField, useFormikContext } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import {
   Form,
@@ -53,7 +53,7 @@ function ExecutionEnvironmentFormFields({
   const isGloballyAvailable = useRef(!organizationField.value);
 
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
 
   const onCredentialChange = useCallback(
     (value: SummaryFieldRef | null) => {
@@ -248,7 +248,7 @@ function ExecutionEnvironmentForm({
     organization: executionEnvironment.summary_fields?.organization || null,
   };
   return (
-    <Formik
+    <FormRoot
       enableReinitialize
       initialValues={initialValues}
       onSubmit={(values) => onSubmit(values)}
@@ -270,7 +270,7 @@ function ExecutionEnvironmentForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import CredentialPasswordsStep from './CredentialPasswordsStep';
 
@@ -42,7 +42,7 @@ describe('CredentialPasswordsStep', () => {
   describe('JT default credentials (no credential replacement) and creds are promptable', () => {
     test('should render ssh password field when JT has default machine cred', () => {
       const { container } = renderWithContexts(
-        <Formik
+        <FormRoot
           onSubmit={() => {}}
           initialValues={{
             credentials: [{ id: 1 }],
@@ -61,7 +61,7 @@ describe('CredentialPasswordsStep', () => {
               },
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {
@@ -73,7 +73,7 @@ describe('CredentialPasswordsStep', () => {
 
     test('should render become password field when JT has default machine cred', () => {
       const { container } = renderWithContexts(
-        <Formik
+        <FormRoot
           onSubmit={() => {}}
           initialValues={{
             credentials: [{ id: 1 }],
@@ -92,7 +92,7 @@ describe('CredentialPasswordsStep', () => {
               },
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {
@@ -104,7 +104,7 @@ describe('CredentialPasswordsStep', () => {
 
     test('should render private key passphrase field when JT has default machine cred', () => {
       const { container } = renderWithContexts(
-        <Formik
+        <FormRoot
           onSubmit={() => {}}
           initialValues={{
             credentials: [{ id: 1 }],
@@ -123,7 +123,7 @@ describe('CredentialPasswordsStep', () => {
               },
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {
@@ -135,7 +135,7 @@ describe('CredentialPasswordsStep', () => {
 
     test('should render vault password field when JT has default vault cred', () => {
       const { container } = renderWithContexts(
-        <Formik
+        <FormRoot
           onSubmit={() => {}}
           initialValues={{
             credentials: [{ id: 1 }],
@@ -154,7 +154,7 @@ describe('CredentialPasswordsStep', () => {
               },
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {
@@ -167,7 +167,7 @@ describe('CredentialPasswordsStep', () => {
 
     test('should render all password field when JT has default vault cred and machine cred', () => {
       const { container } = renderWithContexts(
-        <Formik
+        <FormRoot
           onSubmit={() => {}}
           initialValues={{
             credentials: [{ id: 1 }, { id: 2 }],
@@ -194,7 +194,7 @@ describe('CredentialPasswordsStep', () => {
               },
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {
@@ -209,7 +209,7 @@ describe('CredentialPasswordsStep', () => {
   describe('Credentials have been replaced and creds are promptable', () => {
     test('should render ssh password field when replacement machine cred prompts for it', () => {
       const { container } = renderWithContexts(
-        <Formik
+        <FormRoot
           onSubmit={() => {}}
           initialValues={{
             credentials: [
@@ -233,7 +233,7 @@ describe('CredentialPasswordsStep', () => {
               },
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {
@@ -245,7 +245,7 @@ describe('CredentialPasswordsStep', () => {
 
     test('should render become password field when replacement machine cred prompts for it', () => {
       const { container } = renderWithContexts(
-        <Formik
+        <FormRoot
           onSubmit={() => {}}
           initialValues={{
             credentials: [
@@ -269,7 +269,7 @@ describe('CredentialPasswordsStep', () => {
               },
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {
@@ -281,7 +281,7 @@ describe('CredentialPasswordsStep', () => {
 
     test('should render private key passphrase field when replacement machine cred prompts for it', () => {
       const { container } = renderWithContexts(
-        <Formik
+        <FormRoot
           onSubmit={() => {}}
           initialValues={{
             credentials: [
@@ -305,7 +305,7 @@ describe('CredentialPasswordsStep', () => {
               },
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {
@@ -317,7 +317,7 @@ describe('CredentialPasswordsStep', () => {
 
     test('should render vault password field when replacement vault cred prompts for it', () => {
       const { container } = renderWithContexts(
-        <Formik
+        <FormRoot
           onSubmit={() => {}}
           initialValues={{
             credentials: [
@@ -342,7 +342,7 @@ describe('CredentialPasswordsStep', () => {
               },
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {
@@ -355,7 +355,7 @@ describe('CredentialPasswordsStep', () => {
 
     test('should render all password fields when replacement vault and machine creds prompt for it', () => {
       const { container } = renderWithContexts(
-        <Formik
+        <FormRoot
           onSubmit={() => {}}
           initialValues={{
             credentials: [
@@ -388,7 +388,7 @@ describe('CredentialPasswordsStep', () => {
               },
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {
@@ -403,14 +403,14 @@ describe('CredentialPasswordsStep', () => {
   describe('Credentials have been replaced and creds are not promptable', () => {
     test('should render ssh password field when required', () => {
       const { container } = renderWithContexts(
-        <Formik onSubmit={() => {}} initialValues={{}}>
+        <FormRoot onSubmit={() => {}} initialValues={{}}>
           <CredentialPasswordsStep
             launchConfig={{
               ask_credential_on_launch: false,
               passwords_needed_to_start: ['ssh_password'],
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {
@@ -422,14 +422,14 @@ describe('CredentialPasswordsStep', () => {
 
     test('should render become password field when required', () => {
       const { container } = renderWithContexts(
-        <Formik onSubmit={() => {}} initialValues={{}}>
+        <FormRoot onSubmit={() => {}} initialValues={{}}>
           <CredentialPasswordsStep
             launchConfig={{
               ask_credential_on_launch: false,
               passwords_needed_to_start: ['become_password'],
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {
@@ -441,14 +441,14 @@ describe('CredentialPasswordsStep', () => {
 
     test('should render private key passphrase field when required', () => {
       const { container } = renderWithContexts(
-        <Formik onSubmit={() => {}} initialValues={{}}>
+        <FormRoot onSubmit={() => {}} initialValues={{}}>
           <CredentialPasswordsStep
             launchConfig={{
               ask_credential_on_launch: false,
               passwords_needed_to_start: ['ssh_key_unlock'],
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {
@@ -460,14 +460,14 @@ describe('CredentialPasswordsStep', () => {
 
     test('should render vault password field when required', () => {
       const { container } = renderWithContexts(
-        <Formik onSubmit={() => {}} initialValues={{}}>
+        <FormRoot onSubmit={() => {}} initialValues={{}}>
           <CredentialPasswordsStep
             launchConfig={{
               ask_credential_on_launch: false,
               passwords_needed_to_start: ['vault_password.foobar'],
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {
@@ -480,7 +480,7 @@ describe('CredentialPasswordsStep', () => {
 
     test('should render all password fields when required', () => {
       const { container } = renderWithContexts(
-        <Formik onSubmit={() => {}} initialValues={{}}>
+        <FormRoot onSubmit={() => {}} initialValues={{}}>
           <CredentialPasswordsStep
             launchConfig={{
               ask_credential_on_launch: false,
@@ -492,7 +492,7 @@ describe('CredentialPasswordsStep', () => {
               ],
             }}
           />
-        </Formik>
+        </FormRoot>
       );
 
       assertPasswordFields(container, {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { OrganizationsAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -24,9 +24,9 @@ describe('OrganizationLookup', () => {
 
   test('should render successfully', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <OrganizationLookup onChange={() => {}} />
-      </Formik>
+      </FormRoot>
     );
     expect(await screen.findByText('Organization')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
@@ -34,9 +34,9 @@ describe('OrganizationLookup', () => {
 
   test('should fetch organizations', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <OrganizationLookup onChange={() => {}} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1));
     expect(OrganizationsAPI.read).toHaveBeenCalledWith({
@@ -48,9 +48,9 @@ describe('OrganizationLookup', () => {
 
   test('should display "Organization" label', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <OrganizationLookup onChange={() => {}} />
-      </Formik>
+      </FormRoot>
     );
     expect(await screen.findByText('Organization')).toBeInTheDocument();
   });
@@ -65,9 +65,9 @@ describe('OrganizationLookup', () => {
     } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <OrganizationLookup autoPopulate onChange={onChange} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(onChange).toHaveBeenCalledWith(org));
   });
@@ -81,9 +81,9 @@ describe('OrganizationLookup', () => {
     } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <OrganizationLookup onChange={onChange} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1));
     expect(onChange).not.toHaveBeenCalled();
@@ -101,9 +101,9 @@ describe('OrganizationLookup', () => {
     } as unknown as ResponseOf<typeof OrganizationsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <OrganizationLookup autoPopulate onChange={onChange} />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(OrganizationsAPI.read).toHaveBeenCalledTimes(1));
     expect(onChange).not.toHaveBeenCalled();

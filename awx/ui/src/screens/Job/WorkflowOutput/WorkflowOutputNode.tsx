@@ -6,7 +6,6 @@ import React, { useContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import { WorkflowStateContext } from 'contexts/Workflow';
 import type { NodePositions } from 'components/Workflow/WorkflowUtils';
 import StatusIcon from 'components/StatusIcon';
@@ -14,61 +13,10 @@ import { WorkflowNodeTypeLetter } from 'components/Workflow';
 import { secondsToHHMMSS } from 'util/dates';
 import { stringIsUUID } from 'util/strings';
 import { constants as wfConstants } from 'components/Workflow/WorkflowUtils';
+import './WorkflowOutputNode.css';
 
 // $hasJob is transient: the job object itself used to be forwarded to the <g>
 // and land in the DOM as an attribute.
-const NodeG = styled.g<{ $hasJob?: boolean }>`
-  cursor: ${(props) => (props.$hasJob ? 'pointer' : 'default')};
-`;
-
-const JobTopLine = styled.div`
-  align-items: center;
-  display: flex;
-  margin-top: 5px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  p {
-    margin-left: 10px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-  }
-`;
-
-const Elapsed = styled.div`
-  margin-top: 5px;
-  text-align: center;
-
-  span {
-    font-size: 12px;
-    font-weight: bold;
-    background-color: var(--pf-v6-global--BackgroundColor--200);
-    padding: 3px 12px;
-    border-radius: 14px;
-  }
-`;
-
-const NodeContents = styled.div`
-  font-size: 13px;
-  padding: 0px 10px;
-`;
-
-const NodeDefaultLabel = styled.p`
-  margin-top: 20px;
-  overflow: hidden;
-  text-align: center;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const ConvergenceLabel = styled.p`
-  font-size: 12px;
-  color: #ffffff;
-`;
-
-Elapsed.displayName = 'Elapsed';
 
 export interface WorkflowOutputNodeProps {
   mouseEnter: () => void;
@@ -164,12 +112,12 @@ function WorkflowOutputNode({
   const rootPosition = nodePositions[1] as NodePositions[number];
 
   return (
-    <NodeG
+    <g
       id={`node-${node.id}`}
       transform={`translate(${nodePosition.x},${
         nodePosition.y - rootPosition.y
       })`}
-      $hasJob={Boolean(job)}
+      className={job ? 'awx-workflow-output-node__node-g--has-job' : undefined}
       onClick={handleNodeClick}
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}
@@ -194,7 +142,7 @@ function WorkflowOutputNode({
             x={wfConstants.nodeW / 2 - wfConstants.nodeW / 10 + 7}
             y={-wfConstants.nodeH / 4 - 1}
           >
-            <ConvergenceLabel>{t`ALL`}</ConvergenceLabel>
+            <p className="awx-workflow-output-node__convergence-label">{t`ALL`}</p>
           </foreignObject>
         </>
       )}
@@ -208,7 +156,7 @@ function WorkflowOutputNode({
         width={wfConstants.nodeW}
       />
       <foreignObject height="58" width="178" x="1" y="1">
-        <NodeContents>
+        <div className="awx-workflow-output-node__contents">
           {(() => {
             if (job) {
               let elapsedText = null;
@@ -220,39 +168,49 @@ function WorkflowOutputNode({
               }
               return (
                 <>
-                  <JobTopLine>
+                  <div className="awx-workflow-output-node__job-top-line">
                     {job.status && job.status !== 'pending' && (
                       <StatusIcon status={job.status} />
                     )}
                     <p>{nodeName}</p>
-                  </JobTopLine>
-                  {elapsedText && <Elapsed>{elapsedText}</Elapsed>}
+                  </div>
+                  {elapsedText && (
+                    <div className="awx-workflow-output-node__elapsed">
+                      {elapsedText}
+                    </div>
+                  )}
                 </>
               );
             }
             if (priorRunSucceeded) {
               return (
                 <>
-                  <JobTopLine>
+                  <div className="awx-workflow-output-node__job-top-line">
                     <StatusIcon status="successful" />
                     <p>{nodeName}</p>
-                  </JobTopLine>
+                  </div>
                   {priorRunElapsed != null && (
-                    <Elapsed>{secondsToHHMMSS(priorRunElapsed)}</Elapsed>
+                    <div className="awx-workflow-output-node__elapsed">
+                      {secondsToHHMMSS(priorRunElapsed)}
+                    </div>
                   )}
                 </>
               );
             }
-            return <NodeDefaultLabel>{nodeName}</NodeDefaultLabel>;
+            return (
+              <p className="awx-workflow-output-node__default-label">
+                {nodeName}
+              </p>
+            );
           })()}
-        </NodeContents>
+        </div>
       </foreignObject>
       {(node.unifiedJobTemplate ||
         node.fullUnifiedJobTemplate ||
         node?.originalNodeObject?.summary_fields?.unified_job_template ||
         job ||
         priorRunSucceeded) && <WorkflowNodeTypeLetter node={node} />}
-    </NodeG>
+    </g>
   );
 }
 

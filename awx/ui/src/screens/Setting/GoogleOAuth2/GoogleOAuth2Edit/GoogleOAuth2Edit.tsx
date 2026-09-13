@@ -1,7 +1,7 @@
 import type { SettingConfig } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { Form } from '@patternfly/react-core';
 import { CardBody } from 'components/Card';
 import ContentError from 'components/ContentError';
@@ -120,7 +120,7 @@ function GoogleOAuth2Edit() {
       {Boolean(isLoading) && <ContentLoading />}
       {!isLoading && Boolean(error) && <ContentError error={error} />}
       {!isLoading && googleOAuth2 && (
-        <Formik
+        <FormRoot
           initialValues={initialValues(googleOAuth2)}
           onSubmit={handleSubmit}
         >
@@ -177,7 +177,7 @@ function GoogleOAuth2Edit() {
               )}
             </Form>
           )}
-        </Formik>
+        </FormRoot>
       )}
     </CardBody>
   );

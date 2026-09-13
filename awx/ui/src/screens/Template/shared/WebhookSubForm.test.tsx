@@ -3,7 +3,7 @@ import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { Routes, Route } from 'react-router';
 import { createMemoryHistory } from 'history';
 
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { CredentialsAPI, CredentialTypesAPI, ProjectsAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -32,9 +32,9 @@ describe('<WebhookSubForm />', () => {
         <Route
           path="/templates/:templateType/:id/edit"
           element={
-            <Formik onSubmit={() => {}} initialValues={values}>
+            <FormRoot onSubmit={() => {}} initialValues={values}>
               <WebhookSubForm templateType={templateType} />
-            </Formik>
+            </FormRoot>
           }
         />
       </Routes>,
@@ -198,9 +198,9 @@ describe('<WebhookSubForm />', () => {
           <Route
             path="/projects/:id/edit"
             element={
-              <Formik onSubmit={() => {}} initialValues={values}>
+              <FormRoot onSubmit={() => {}} initialValues={values}>
                 <WebhookSubForm templateType="project" />
-              </Formik>
+              </FormRoot>
             }
           />
         </Routes>,

@@ -1,7 +1,7 @@
 import type { Credential } from 'types/api';
-import type { FieldInputProps } from 'formik';
+import { FormRoot, useField } from 'components/Form';
+import type { FieldProps } from 'components/Form';
 import React, { useCallback } from 'react';
-import { Formik, useField } from 'formik';
 import { useLingui } from '@lingui/react/macro';
 import {
   Button,
@@ -36,7 +36,7 @@ export interface CredentialPluginValues {
 
 export interface CredentialPluginFooterProps {
   /** The formik field holding the credential the wizard has picked. */
-  selectedCredential: FieldInputProps<Credential | null>;
+  selectedCredential: FieldProps<Credential | null>;
   /** Runs the test against the metadata the second step collected. */
   testPluginMetadata: () => void;
   onClose: () => void;
@@ -191,7 +191,7 @@ function CredentialPluginPrompt({
   initialValues = {},
 }: CredentialPluginPromptProps) {
   return (
-    <Formik
+    <FormRoot
       initialValues={{
         credential: initialValues?.credential || null,
         inputs: initialValues?.inputs || {},
@@ -201,7 +201,7 @@ function CredentialPluginPrompt({
       {({ handleSubmit }) => (
         <CredentialPluginWizard handleSubmit={handleSubmit} onClose={onClose} />
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

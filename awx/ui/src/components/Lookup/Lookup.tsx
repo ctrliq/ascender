@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { useField } from 'formik';
-import type { FieldValidator } from 'formik';
+import { useField } from 'components/Form';
+import type { FieldValidator } from 'components/Form';
 import { SearchIcon } from '@patternfly/react-icons';
 import {
   Label,
@@ -13,21 +13,12 @@ import {
 } from '@patternfly/react-core';
 import { Modal } from '@patternfly/react-core/deprecated';
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import useDebounce from 'hooks/useDebounce';
 import type { QSConfig } from 'util/qs';
 import ChipGroup from '../ChipGroup';
 import reducer, { initReducer } from './shared/reducer';
 import type { LookupAction, LookupItem, LookupState } from './shared/reducer';
 
-const ChipHolder = styled.div<{ $isDisabled?: boolean }>`
-  --pf-v6-c-form-control--Height: auto;
-  min-height: 37px;
-  display: flex;
-  align-items: center;
-  background-color: ${(props) =>
-    props.$isDisabled ? 'var(--pf-t--global--text--color--disabled)' : null};
-`;
 export interface LookupProps {
   id?: string;
   header?: React.ReactNode;
@@ -198,9 +189,14 @@ function Lookup({
         </InputGroupItem>
         {multiple ? (
           <InputGroupItem isFill>
-            <ChipHolder
-              $isDisabled={isDisabled}
-              className="pf-v6-c-form-control"
+            <div
+              className={[
+                'awx-lookup__chip-holder',
+                isDisabled && 'awx-lookup__chip-holder--disabled',
+                'pf-v6-c-form-control',
+              ]
+                .filter(Boolean)
+                .join(' ')}
             >
               <ChipGroup
                 numChips={5}
@@ -215,7 +211,7 @@ function Lookup({
                   })
                 )}
               </ChipGroup>
-            </ChipHolder>
+            </div>
           </InputGroupItem>
         ) : (
           <InputGroupItem isFill>
