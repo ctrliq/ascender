@@ -11,6 +11,8 @@ annotated-doc==0.0.5
     # via typer
 # ansible-runner @ git+https://github.com/ansible/ansible-runner.git@fb826c258ea6e74ac2502c70e4ff3014ee443e40  # git requirements installed separately
     # via -r /awx_devel/requirements/requirements_git.txt
+anyio==4.15.1
+    # via watchfiles
 asciichartpy==1.5.25
     # via -r /awx_devel/requirements/requirements.in
 asgiref==3.12.1
@@ -147,6 +149,10 @@ gitdb==4.0.12
     # via gitpython
 gitpython==3.1.62
     # via -r /awx_devel/requirements/requirements.in
+h11==0.16.0
+    # via uvicorn
+httptools==0.8.0
+    # via uvicorn
 hyperlink==21.0.0
     # via
     #   autobahn
@@ -283,6 +289,8 @@ python-dateutil==2.9.0.post0
     #   kubernetes
     #   receptorctl
     #   tempora
+python-dotenv==1.2.3
+    # via uvicorn
 python-dsv-sdk==1.0.4
     # via -r /awx_devel/requirements/requirements.in
 python-ldap==3.4.7
@@ -395,8 +403,10 @@ urllib3==2.7.0
     #   kubernetes
     #   pygithub
     #   requests
-uwsgi==2.0.31
+uvicorn[standard]==0.52.4
     # via -r /awx_devel/requirements/requirements.in
+uvloop==0.22.1
+    # via uvicorn
 valkey[libvalkey]==6.1.1
     # via
     #   -r /awx_devel/requirements/requirements.in
@@ -404,8 +414,12 @@ valkey[libvalkey]==6.1.1
     #   django-valkey
 vcs-versioning==2.3.4
     # via setuptools-scm
+watchfiles==1.2.0
+    # via uvicorn
 websocket-client==1.9.2
     # via kubernetes
+websockets==17.1
+    # via uvicorn
 wheel==0.48.0
     # via -r /awx_devel/requirements/requirements.in
 xmlsec==1.3.17
