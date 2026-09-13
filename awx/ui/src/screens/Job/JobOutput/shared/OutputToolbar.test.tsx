@@ -85,6 +85,37 @@ describe('<OutputToolbar />', () => {
     expect(within(elapsed).getByText('76:11:05')).toBeInTheDocument();
   });
 
+  // The two counts that mean something went wrong used to be given a `color`
+  // prop, which nothing read: the rule behind it was invalid CSS and the
+  // browser dropped it, so both badges rendered in PatternFly's default. They
+  // carry a class now, and this is what says so.
+  test('marks the unreachable and failed counts as the failures they are', () => {
+    const { container } = renderWithContexts(
+      <OutputToolbar
+        job={{
+          ...mockJob,
+          host_status_counts: { dark: 1, failures: 2 },
+        }}
+        jobStatus="successful"
+        onDelete={() => {}}
+      />
+    );
+
+    const unreachable = container.querySelector(
+      '.awx-output-toolbar__badge--unreachable'
+    );
+    const failed = container.querySelector(
+      '.awx-output-toolbar__badge--failed'
+    );
+
+    expect(unreachable).toHaveTextContent('1');
+    expect(failed).toHaveTextContent('2');
+    // and the counts that mean nothing went wrong are left alone
+    expect(
+      container.querySelectorAll('.awx-output-toolbar__badge').length
+    ).toBeGreaterThan(2);
+  });
+
   test('should hide relaunch button based on user capabilities', () => {
     const { unmount } = renderWithContexts(
       <OutputToolbar
