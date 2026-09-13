@@ -143,7 +143,7 @@ class FieldLookupBackend(BaseFilterBackend):
 
     def reserved_names(self, view):
         """The names in query_params to ignore given the current settings and current view"""
-        from django.conf import settings
+        from awx.settings.typed import settings
 
         reserved_set = set(settings.ANSIBLE_BASE_REST_FILTERS_RESERVED_NAMES)
 

@@ -1,7 +1,7 @@
 import sys
 import uuid
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db import IntegrityError, models, transaction
 
 
