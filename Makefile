@@ -409,7 +409,7 @@ clean-ui:
 	mkdir -p awx/ui/build/static
 
 awx/ui/node_modules:
-	NODE_OPTIONS=--max-old-space-size=6144 $(NPM_BIN) --prefix awx/ui --loglevel warn --force ci
+	NODE_OPTIONS=--max-old-space-size=6144 $(NPM_BIN) --prefix awx/ui --loglevel warn --force ci --ignore-scripts
 
 $(UI_BUILD_FLAG_FILE):
 	$(MAKE) awx/ui/node_modules
@@ -435,27 +435,22 @@ ui-devel: awx/ui/node_modules
 ui-devel-test: awx/ui/node_modules
 	$(NPM_BIN) --prefix awx/ui --loglevel warn run start
 
-ui-lint:
-	$(NPM_BIN) --prefix awx/ui install
+ui-lint: awx/ui/node_modules
 	$(NPM_BIN) run --prefix awx/ui lint
 	$(NPM_BIN) run --prefix awx/ui prettier-check
 	$(NPM_BIN) run --prefix awx/ui check-strings
 
-ui-type-check:
-	$(NPM_BIN) --prefix awx/ui install
+ui-type-check: awx/ui/node_modules
 	$(NPM_BIN) run --prefix awx/ui type-check
 
-ui-test:
-	$(NPM_BIN) --prefix awx/ui install
+ui-test: awx/ui/node_modules
 	$(NPM_BIN) run --prefix awx/ui test
 
-ui-test-screens:
-	$(NPM_BIN) --prefix awx/ui install
+ui-test-screens: awx/ui/node_modules
 	$(NPM_BIN) run --prefix awx/ui pretest
 	$(NPM_BIN) run --prefix awx/ui test-screens
 
-ui-test-general:
-	$(NPM_BIN) --prefix awx/ui install
+ui-test-general: awx/ui/node_modules
 	$(NPM_BIN) run --prefix awx/ui pretest
 	$(NPM_BIN) run --prefix awx/ui/ test-general
 
