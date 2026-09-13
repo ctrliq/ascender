@@ -1,5 +1,5 @@
 import type { Role, User } from 'types/api';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
@@ -7,7 +7,8 @@ import { Button, EmptyState, EmptyStateBody } from '@patternfly/react-core';
 import { CubesIcon } from '@patternfly/react-icons';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { UsersAPI, RolesAPI } from 'api';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import PaginatedTable, {
   HeaderRow,
   HeaderCell,
@@ -53,7 +54,8 @@ function UserRolesList({ user }: UserRolesListProps) {
       relatedSearchableKeys,
       searchableKeys,
     },
-  } = useRequest(
+  } = useCachedRequest(
+    ['user-roles-list', search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, search);
       const [
@@ -83,10 +85,6 @@ function UserRolesList({ user }: UserRolesListProps) {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchRoles();
-  }, [fetchRoles]);
 
   const {
     isLoading: isDisassociateLoading,

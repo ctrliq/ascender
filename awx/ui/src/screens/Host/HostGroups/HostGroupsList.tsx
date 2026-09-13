@@ -1,9 +1,10 @@
 import type { ApiEntity, Host } from 'types/api';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useLocation, useParams } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
+import useCachedRequest from 'hooks/useCachedRequest';
 import useRequest, {
   useDismissableError,
   useDeleteItems,
@@ -54,7 +55,8 @@ function HostGroupsList({ host }: HostGroupsListProps) {
     error: contentError,
     isLoading,
     request: fetchGroups,
-  } = useRequest(
+  } = useCachedRequest(
+    ['host-groups-list', search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, search);
 
@@ -86,10 +88,6 @@ function HostGroupsList({ host }: HostGroupsListProps) {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchGroups();
-  }, [fetchGroups]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
     useSelected(groups);

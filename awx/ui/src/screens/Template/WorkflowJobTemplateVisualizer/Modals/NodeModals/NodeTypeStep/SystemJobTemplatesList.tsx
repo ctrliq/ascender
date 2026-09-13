@@ -1,10 +1,10 @@
 import type { NodeTemplate } from 'types/api';
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { SystemJobTemplatesAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
-import useRequest from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
 import DataListToolbar from 'components/DataListToolbar';
 import CheckboxListItem from 'components/CheckboxListItem';
 import PaginatedTable, {
@@ -41,8 +41,8 @@ function SystemJobTemplatesList({
     },
     error,
     isLoading,
-    request: fetchWorkflowJobTemplates,
-  } = useRequest(
+  } = useCachedRequest(
+    ['system-job-templates-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([
@@ -67,10 +67,6 @@ function SystemJobTemplatesList({
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchWorkflowJobTemplates();
-  }, [fetchWorkflowJobTemplates]);
 
   return (
     <PaginatedTable
