@@ -16,6 +16,7 @@ import type { RenderOptions } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Router } from 'react-router';
 import { I18nProvider } from '@lingui/react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { i18n } from '@lingui/core';
 import { createMemoryHistory } from './historyShim';
 import type { TestHistory } from './historyShim';
@@ -149,20 +150,29 @@ export function renderWithContexts(
   const { config, router, session } = applyDefaultContexts(userContext);
   const history = router.history || createMemoryHistory({});
 
+  // One cache per render, so a query cached by one test is never seen by the
+  // next, and no retries, because a test that fails should say so at once.
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false, gcTime: 0 } },
+  });
+
   function Wrapper({ children }: { children?: React.ReactNode }) {
     return (
-      <I18nProvider i18n={i18n}>
-        <MockableSessionProvider value={session}>
-          <MockableConfigProvider value={config}>
-            <HistoryRouter history={history}>{children}</HistoryRouter>
-          </MockableConfigProvider>
-        </MockableSessionProvider>
-      </I18nProvider>
+      <QueryClientProvider client={queryClient}>
+        <I18nProvider i18n={i18n}>
+          <MockableSessionProvider value={session}>
+            <MockableConfigProvider value={config}>
+              <HistoryRouter history={history}>{children}</HistoryRouter>
+            </MockableConfigProvider>
+          </MockableSessionProvider>
+        </I18nProvider>
+      </QueryClientProvider>
     );
   }
 
   return {
     history,
+    queryClient,
     user: userEvent.setup(),
     ...render(ui, { wrapper: Wrapper, ...renderOptions }),
   };

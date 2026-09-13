@@ -10,7 +10,6 @@ recursive-include awx/ui/build *
 recursive-include awx/playbooks *.yml
 recursive-include requirements *.txt
 recursive-include requirements *.yml
-recursive-include config *
 recursive-include licenses *
 recursive-exclude awx devonly.py*
 recursive-exclude awx/main/tests *

@@ -4,6 +4,7 @@ import { useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
 import { ProjectsAPI } from 'api';
+import useCachedRequest from 'hooks/useCachedRequest';
 import useRequest, {
   useDeleteItems,
   useDismissableError,
@@ -67,7 +68,8 @@ function ProjectList() {
     isLoading,
     request: fetchProjects,
     setValue: setProjects,
-  } = useRequest(
+  } = useCachedRequest(
+    ['project-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([
@@ -92,10 +94,6 @@ function ProjectList() {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
 
   const projects = useWsProjects(results);
 

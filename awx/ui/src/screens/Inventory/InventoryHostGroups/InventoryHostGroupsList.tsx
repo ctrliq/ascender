@@ -1,9 +1,10 @@
 import type { ApiEntity } from 'types/api';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 
 import { getQSConfig, parseQueryString, mergeParams } from 'util/qs';
+import useCachedRequest from 'hooks/useCachedRequest';
 import useRequest, {
   useDismissableError,
   useDeleteItems,
@@ -51,7 +52,8 @@ function InventoryHostGroupsList() {
     error: contentError,
     isLoading,
     request: fetchGroups,
-  } = useRequest(
+  } = useCachedRequest(
+    ['inventory-host-groups-list', hostId, search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, search);
 
@@ -90,10 +92,6 @@ function InventoryHostGroupsList() {
       isAdHocDisabled: true,
     }
   );
-
-  useEffect(() => {
-    fetchGroups();
-  }, [fetchGroups]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
     useSelected(groups);
