@@ -18,7 +18,7 @@ from jinja2.exceptions import TemplateSyntaxError, UndefinedError, SecurityError
 
 from awx.dab.lib.utils.models import prevent_search
 
-# AWX
+# Ascender
 from awx.api.versioning import reverse
 from awx.main.models.base import CommonModelNameNotUnique, CreatedModifiedModel
 from awx.main.utils import encrypt_field, decrypt_field, set_environ

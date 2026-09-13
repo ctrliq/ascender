@@ -5,7 +5,7 @@ from unittest import mock
 from rest_framework import exceptions
 from rest_framework.generics import ListAPIView
 
-# AWX
+# Ascender
 from awx.main.views import ApiErrorView
 from awx.api.views.job import (
     JobList,

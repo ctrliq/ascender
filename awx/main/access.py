@@ -23,7 +23,7 @@ from awx.main.models.oauth import OAuth2Application, OAuth2AccessToken
 
 from awx.dab.lib.utils.validation import to_python_boolean
 
-# AWX
+# Ascender
 from awx.main.fields import AskForField
 from awx.main.utils import (
     get_object_or_400,

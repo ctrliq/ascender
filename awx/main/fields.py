@@ -40,7 +40,7 @@ import jsonschema.exceptions
 # DRF
 from rest_framework import serializers
 
-# AWX
+# Ascender
 from awx.main.utils.filters import SmartFilter
 from awx.main.utils.encryption import encrypt_value, decrypt_value, get_encryption_key
 from awx.main.validators import validate_ssh_private_key

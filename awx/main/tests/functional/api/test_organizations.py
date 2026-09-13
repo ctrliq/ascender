@@ -3,7 +3,7 @@
 
 import pytest
 
-# AWX
+# Ascender
 from awx.main.models import ProjectUpdate, CredentialType, Credential
 from awx.api.versioning import reverse
 

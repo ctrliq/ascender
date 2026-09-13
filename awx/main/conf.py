@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 # Django REST Framework
 from rest_framework import serializers
 
-# AWX
+# Ascender
 from awx.conf import fields, register, register_validate
 from awx.main.models import ExecutionEnvironment
 from awx.main.constants import SUBSCRIPTION_USAGE_MODEL_UNIQUE_HOSTS

@@ -13,7 +13,7 @@ from awx.settings.typed import settings
 from django.utils.timezone import now
 from django.utils.encoding import force_str
 
-# AWX
+# Ascender
 from awx.main.exceptions import PostRunError
 
 

@@ -434,7 +434,7 @@ def test_create_inventory_host(post, inventory, alice, role_field, expected_stat
 )
 @pytest.mark.django_db
 def test_create_inventory_host_with_limits(post, admin_user, inventory, hosts, expected_status_code):
-    # The per-Organization host limits functionality should be a no-op on AWX.
+    # The per-Organization host limits functionality should be a no-op on Ascender.
     inventory.organization.max_hosts = 2
     inventory.organization.save()
     for i in range(hosts):
@@ -470,7 +470,7 @@ def test_edit_inventory_host(put, host, alice, role_field, expected_status_code)
 
 @pytest.mark.django_db
 def test_edit_inventory_host_with_limits(put, host, admin_user):
-    # The per-Organization host limits functionality should be a no-op on AWX.
+    # The per-Organization host limits functionality should be a no-op on Ascender.
     inventory = host.inventory
     inventory.organization.max_hosts = 1
     inventory.organization.save()

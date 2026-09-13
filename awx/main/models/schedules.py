@@ -16,7 +16,7 @@ from django.db.models.query import QuerySet
 from django.utils.timezone import now, make_aware
 from django.utils.translation import gettext_lazy as _
 
-# AWX
+# Ascender
 from awx.api.versioning import reverse
 from awx.main.fields import OrderedManyToManyField
 from awx.main.models.base import PrimordialModel

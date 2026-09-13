@@ -23,10 +23,10 @@ from django.contrib.auth import SESSION_KEY
 from django.contrib.sessions.models import Session
 from django.utils import timezone
 
-# AWX current-request/user tracking (in-tree django-crum replacement)
+# Ascender current-request/user tracking (in-tree django-crum replacement)
 from awx.main.request_context import get_current_user
 
-# AWX
+# Ascender
 from awx.main.models import (
     ActivityStream,
     ExecutionEnvironment,

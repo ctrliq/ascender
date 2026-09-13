@@ -8,7 +8,7 @@ import logging
 from rest_framework.exceptions import MethodNotAllowed, PermissionDenied
 from rest_framework import permissions
 
-# AWX
+# Ascender
 from awx.main.access import check_user_access
 from awx.main.models import Inventory, UnifiedJob
 from awx.main.utils import get_object_or_400

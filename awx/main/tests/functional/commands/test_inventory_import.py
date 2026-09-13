@@ -13,7 +13,7 @@ from django.core.management.base import CommandError
 # for license errors
 from rest_framework.exceptions import PermissionDenied
 
-# AWX
+# Ascender
 from awx.main.management.commands import inventory_import
 from awx.main.models import Inventory, Host, Group, InventorySource
 from awx.main.utils.mem_inventory import MemGroup

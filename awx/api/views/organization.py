@@ -9,7 +9,7 @@ from django.db.models import Count
 from django.contrib.contenttypes.models import ContentType
 from django.utils.translation import gettext_lazy as _
 
-# AWX
+# Ascender
 from awx.main.models import (
     ActivityStream,
     Inventory,

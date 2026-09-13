@@ -17,7 +17,7 @@ from awx.dab.resource_registry.models import Resource
 
 # Coverage for the vendored awx.dab.jwt_consumer auth path (formerly covered
 # by django-ansible-base's own test suite). AwxJWTAuthentication authenticates
-# gateway-issued JWTs and syncs the old AWX Role model from gateway claims.
+# gateway-issued JWTs and syncs the old Ascender Role model from gateway claims.
 
 SERVICE_ID = str(uuid.uuid4())
 

@@ -3,7 +3,7 @@ import pytest
 from unittest import mock
 import json
 
-# AWX
+# Ascender
 from awx.api.serializers import JobSerializer, JobOptionsSerializer
 
 from awx.main.models import (

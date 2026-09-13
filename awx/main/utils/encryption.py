@@ -71,12 +71,12 @@ def encrypt_field(instance, field_name, ask=False, subfield=None, secret_key=Non
     # !!! PLEASE READ BEFORE USING THIS FUNCTION ANYWHERE !!!
     #
     # You should know that this function is used in various places throughout
-    # AWX for symmetric encryption - generally it's used to encrypt sensitive
-    # values that we store in the AWX database (such as SSH private keys for
+    # Ascender for symmetric encryption - generally it's used to encrypt sensitive
+    # values that we store in the Ascender database (such as SSH private keys for
     # credentials).
     #
     # If you're reading this function's code because you're thinking about
-    # using it to encrypt *something new*, please remember that AWX has
+    # using it to encrypt *something new*, please remember that Ascender has
     # official support for *regenerating* the SECRET_KEY (on which the
     # symmetric key is based):
     #

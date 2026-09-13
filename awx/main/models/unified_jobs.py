@@ -34,7 +34,7 @@ from polymorphic.models import PolymorphicModel
 
 from awx.dab.lib.utils.models import prevent_search, get_type_for_model
 
-# AWX
+# Ascender
 from awx.main.models.base import CommonModelNameNotUnique, PasswordFieldsModel, NotificationFieldsModel
 from awx.main.dispatch import get_task_queuename
 from awx.main.dispatch.control import Control as ControlDispatcher

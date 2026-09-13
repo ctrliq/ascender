@@ -1,4 +1,4 @@
-# AWX
+# Ascender
 from awx.main.models import (
     WorkflowJobTemplateNode,
     WorkflowJobTemplate,

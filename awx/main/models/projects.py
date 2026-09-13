@@ -18,7 +18,7 @@ from django.utils.text import slugify
 from django.core.exceptions import ValidationError
 from django.utils.timezone import now, make_aware, get_default_timezone
 
-# AWX
+# Ascender
 from awx.api.versioning import reverse
 from awx.main.models.base import PROJECT_UPDATE_JOB_TYPE_CHOICES, PERM_INVENTORY_DEPLOY
 from awx.main.models.events import ProjectUpdateEvent, UnpartitionedProjectUpdateEvent

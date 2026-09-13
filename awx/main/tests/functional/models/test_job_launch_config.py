@@ -1,6 +1,6 @@
 import pytest
 
-# AWX
+# Ascender
 from awx.main.models.jobs import JobTemplate, LaunchTimeConfigBase
 from awx.main.models.execution_environments import ExecutionEnvironment
 

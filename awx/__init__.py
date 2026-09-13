@@ -97,7 +97,7 @@ def prepare_env():
 
 
 def manage():
-    # Prepare the AWX environment.
+    # Prepare the Ascender environment.
     prepare_env()
     # Now run the command (or display the version).
     from django.conf import settings

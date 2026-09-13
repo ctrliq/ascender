@@ -34,7 +34,7 @@ from awx.dab.rest_filters.rest_framework.field_lookup_backend import FieldLookup
 from awx.dab.lib.utils.models import get_all_field_names
 from awx.dab.lib.utils.requests import get_remote_host
 
-# AWX
+# Ascender
 from awx.main.models import UnifiedJob, UnifiedJobTemplate, User, Role, Credential, WorkflowJobTemplateNode, WorkflowApprovalTemplate
 from awx.main.access import optimize_queryset
 from awx.main.utils import camelcase_to_underscore, get_search_fields, getattrd, get_object_or_400, decrypt_field, get_awx_version

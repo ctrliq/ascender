@@ -15,7 +15,7 @@ from django.utils.translation import gettext_lazy as _
 
 from awx.dab.lib.utils.models import prevent_search
 
-# AWX
+# Ascender
 from awx.main.models.rbac import Role, RoleAncestorEntry
 from awx.main.utils import parse_yaml_or_json, get_licenser, polymorphic
 from awx.main.utils.execution_environments import get_default_execution_environment

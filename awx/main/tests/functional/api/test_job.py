@@ -10,7 +10,7 @@ import datetime
 from rest_framework.exceptions import PermissionDenied
 from django.utils import timezone
 
-# AWX
+# Ascender
 from awx.api.versioning import reverse
 from awx.api.views.mixin import (
     RelatedJobsPreventDeleteMixin,

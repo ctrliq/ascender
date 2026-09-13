@@ -1,7 +1,7 @@
 # Python
 import logging
 
-# AWX
+# Ascender
 from awx.main.analytics.subsystem_metrics import DispatcherMetrics, CallbackReceiverMetrics
 from awx.main.dispatch.publish import task
 from awx.main.dispatch import get_task_queuename

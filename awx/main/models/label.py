@@ -5,7 +5,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-# AWX
+# Ascender
 from awx.api.versioning import reverse
 from awx.main.models.base import CommonModelNameNotUnique
 from awx.main.models.unified_jobs import UnifiedJobTemplate, UnifiedJob

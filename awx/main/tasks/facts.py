@@ -8,7 +8,7 @@ from awx.settings.typed import settings
 from django.utils.encoding import smart_str
 from django.utils.timezone import now
 
-# AWX
+# Ascender
 from awx.main.utils.common import log_excess_runtime
 from awx.main.utils.db import bulk_update_sorted_by_id
 from awx.main.models import Host

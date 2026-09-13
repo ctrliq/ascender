@@ -121,7 +121,7 @@ class TestKeyRegeneration:
 
         # verify that we can't decrypt old encrypted value with new key
         with pytest.raises(InvalidToken):
-            # Use AWX's own encryption utilities to test proper key handling
+            # Use Ascender's own encryption utilities to test proper key handling
             from awx.main.utils.encryption import decrypt_value, get_encryption_key
 
             # Get the proper encryption key for the new key

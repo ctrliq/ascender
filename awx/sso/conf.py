@@ -10,7 +10,7 @@ from django.utils.translation import gettext_lazy as _
 # Django REST Framework
 from rest_framework import serializers
 
-# AWX
+# Ascender
 from awx.conf import register, register_validate, fields
 from awx.sso.fields import (
     AuthenticationBackendsField,

@@ -25,7 +25,7 @@ from django.utils.encoding import force_str
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 
-# AWX
+# Ascender
 from awx.api.versioning import reverse
 from awx.main.fields import (
     ImplicitRoleField,

@@ -1,7 +1,7 @@
 # Copyright (c) 2015 Ansible, Inc.
 # All Rights Reserved.
 
-# AWX
+# Ascender
 from awx.main.models import Instance
 
 

@@ -8,7 +8,7 @@ from django.db.models.signals import pre_delete  # noqa
 
 from awx.dab.lib.utils.models import prevent_search
 
-# AWX
+# Ascender
 from awx.main.models.base import BaseModel, PrimordialModel, accepts_json, CLOUD_INVENTORY_SOURCES, VERBOSITY_CHOICES  # noqa
 from awx.main.models.unified_jobs import UnifiedJob, UnifiedJobTemplate, StdoutMaxBytesExceeded  # noqa
 from awx.main.models.organization import Organization, Profile, Team, UserSessionMembership  # noqa

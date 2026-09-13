@@ -7,7 +7,7 @@ import pytest
 # Django
 from django.core.management.base import CommandError
 
-# AWX
+# Ascender
 from awx.main.management.commands.inventory_import import Command
 
 

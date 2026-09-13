@@ -28,7 +28,7 @@ import ansible_runner
 import git
 from gitdb.exc import BadName as BadGitName
 
-# AWX
+# Ascender
 from awx.main.dispatch.publish import task
 from awx.main.dispatch import get_task_queuename
 from awx.main.constants import (

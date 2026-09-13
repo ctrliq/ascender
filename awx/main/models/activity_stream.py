@@ -1,7 +1,7 @@
 # Copyright (c) 2015 Ansible, Inc.
 # All Rights Reserved.
 
-# AWX
+# Ascender
 from awx.api.versioning import reverse
 from awx.main.models.base import accepts_json
 

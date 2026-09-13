@@ -8,7 +8,7 @@ import sys
 from django.db.models import Count
 from django.core.management.base import BaseCommand
 
-# AWX
+# Ascender
 from awx.main.models import Job, Instance
 
 DEFAULT_WIDTH = 100

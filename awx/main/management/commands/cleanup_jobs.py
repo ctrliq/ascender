@@ -15,7 +15,7 @@ from django.db.models import Min, Max
 from django.db.models.signals import pre_save, post_save, pre_delete, post_delete, m2m_changed
 from django.utils.timezone import now
 
-# AWX
+# Ascender
 from awx.main.models import Job, AdHocCommand, ProjectUpdate, InventoryUpdate, SystemJob, WorkflowJob, Notification
 from awx.main.utils import unified_job_class_to_event_table_name
 
@@ -63,7 +63,7 @@ def _pre_delete_job_host_summaries(job_pks, logger=None):
     if not job_pks:
         return
 
-    # ANY(%s) is PostgreSQL-specific; AWX only supports PostgreSQL
+    # ANY(%s) is PostgreSQL-specific; Ascender only supports PostgreSQL
     with connection.cursor() as cursor:
         for i in range(0, len(job_pks), JHS_CHUNK_SIZE):
             chunk = list(job_pks[i : i + JHS_CHUNK_SIZE])

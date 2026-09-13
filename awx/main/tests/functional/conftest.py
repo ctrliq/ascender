@@ -16,7 +16,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import transaction
 from django.db.models.signals import post_migrate
 
-# AWX
+# Ascender
 from awx.main.models.projects import Project
 from awx.main.models.ha import Instance
 

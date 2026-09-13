@@ -1,7 +1,7 @@
 # Copyright (c) 2015 Ansible, Inc.
 # All Rights Reserved.
 
-# Production settings for AWX project.
+# Production settings for Ascender project.
 
 # Python
 import os

@@ -8,7 +8,7 @@ from django.core.signals import setting_changed
 from django.db.models.signals import post_save, pre_delete, post_delete
 from django.dispatch import receiver
 
-# AWX
+# Ascender
 from awx.conf import settings_registry
 from awx.conf.models import Setting
 from awx.conf.settings import bump_setting_cache_version

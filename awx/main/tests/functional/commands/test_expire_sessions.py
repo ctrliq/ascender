@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.core.management.base import CommandError
 
-# AWX
+# Ascender
 from awx.main.management.commands.expire_sessions import Command
 
 

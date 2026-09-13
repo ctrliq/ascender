@@ -96,7 +96,7 @@ AWX_CONTAINER_GROUP_K8S_API_TIMEOUT = 10
 # Whether container group Kubernetes API calls should be routed through the
 # HTTP_PROXY/HTTPS_PROXY environment variables of the task container. The Python
 # Kubernetes client started honouring those on its own in 34.1, but this traffic
-# has never been proxied by AWX, and a TLS-terminating proxy breaks certificate
+# has never been proxied by Ascender, and a TLS-terminating proxy breaks certificate
 # verification against the cluster CA (the client verifies against the cluster
 # credential's CA data or the service account CA, never the system trust store).
 # Leave disabled unless the cluster API really is only reachable through a proxy.
@@ -730,7 +730,7 @@ SOCIAL_AUTH_SAML_USER_FLAGS_BY_ATTR = {}
 # Any ANSIBLE_* settings will be passed to the task runner subprocess
 # environment
 
-# Do not want AWX to ask interactive questions and want it to be friendly with
+# Do not want Ascender to ask interactive questions and want it to be friendly with
 # reprovisioning
 ANSIBLE_HOST_KEY_CHECKING = False
 
@@ -1117,7 +1117,7 @@ SILENCED_SYSTEM_CHECKS = ['models.E006']
 AWX_REQUEST_PROFILE = False
 
 #
-# Optionally, AWX can generate DOT graphs
+# Optionally, Ascender can generate DOT graphs
 # (http://www.graphviz.org/doc/info/lang.html) for per-request profiling
 # via gprof2dot (https://github.com/jrfonseca/gprof2dot)
 #
@@ -1150,7 +1150,7 @@ AWX_RUNNER_KEEPALIVE_SECONDS = 0
 # Delete completed work units in receptor
 RECEPTOR_RELEASE_WORK = True
 
-# K8S only. Use receptor_log_level on AWX spec to set this properly
+# K8S only. Use receptor_log_level on Ascender spec to set this properly
 RECEPTOR_LOG_LEVEL = 'info'
 
 MIDDLEWARE = [
@@ -1202,7 +1202,7 @@ BROADCAST_WEBSOCKET_PORT = 443
 # Whether or not broadcast websockets should check nginx certs when interconnecting
 BROADCAST_WEBSOCKET_VERIFY_CERT = False
 
-# Connect to other AWX nodes using http or https
+# Connect to other Ascender nodes using http or https
 BROADCAST_WEBSOCKET_PROTOCOL = 'https'
 
 # All websockets that connect to the broadcast websocket endpoint will be put into this group

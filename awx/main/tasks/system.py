@@ -26,7 +26,7 @@ from django.utils.translation import gettext_noop
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 
-# AWX current-request/user tracking (in-tree django-crum replacement)
+# Ascender current-request/user tracking (in-tree django-crum replacement)
 from awx.main.request_context import impersonate
 
 # Runner
@@ -35,7 +35,7 @@ import ansible_runner.cleanup
 # dateutil
 from dateutil.parser import parse as parse_date
 
-# AWX
+# Ascender
 from awx import __version__ as awx_application_version
 from awx.main.access import access_registry
 from awx.main.models import (

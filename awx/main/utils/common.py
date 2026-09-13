@@ -40,7 +40,7 @@ from django.utils.text import slugify
 from django.utils.timezone import now
 from django.apps import apps
 
-# AWX
+# Ascender
 from awx.conf.license import get_license
 
 logger = logging.getLogger('awx.main.utils')

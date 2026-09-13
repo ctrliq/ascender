@@ -9,7 +9,7 @@ from django_guid import get_guid
 from django.utils.functional import cached_property
 from django.db import connections
 
-# AWX
+# Ascender
 from awx.main.redact import UriCleaner
 from awx.main.constants import MINIMAL_EVENTS, ANSIBLE_RUNNER_NEEDS_UPDATE_MESSAGE
 from awx.main.utils.update_model import update_model

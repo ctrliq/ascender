@@ -20,7 +20,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from awx.dab.lib.utils.models import get_type_for_model
 
-# AWX
+# Ascender
 from awx.main.dispatch.reaper import reap_job
 from awx.main.models import (
     Instance,

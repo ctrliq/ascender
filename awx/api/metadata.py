@@ -24,7 +24,7 @@ from rest_framework.relations import RelatedField, ManyRelatedField
 from rest_framework.fields import JSONField as DRFJSONField
 from rest_framework.request import clone_request
 
-# AWX
+# Ascender
 from awx.api.fields import ChoiceNullField
 from awx.main.fields import ImplicitRoleField
 from awx.main.models import NotificationTemplate

@@ -14,7 +14,7 @@ from django.core.exceptions import ValidationError
 from rest_framework.serializers import ValidationError as RestValidationError
 from rest_framework.exceptions import ParseError
 
-# AWX
+# Ascender
 from awx.main.utils import parse_yaml_or_json
 
 

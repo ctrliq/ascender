@@ -1,10 +1,10 @@
 """
 The task dispatcher, which is ours to keep rather than ours by accident.
 
-Where it came from. This is AWX's dispatcher as it stood at the 24.0.0 sync in
-March 2024, the last one this fork took. AWX has since pulled the same code out
+Where it came from. This is Ascender's dispatcher as it stood at the 24.0.0 sync in
+March 2024, the last one this fork took. Ascender has since pulled the same code out
 into a package of its own, dispatcherd, first released in March 2025, so the
-upstream of these modules no longer lives in AWX at all.
+upstream of these modules no longer lives in Ascender at all.
 
 What that package is now. Around 5,800 lines across 26 modules against the
 1,800 here, and the difference is nearly all generalisation: the connection to

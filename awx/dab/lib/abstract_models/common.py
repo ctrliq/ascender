@@ -24,7 +24,7 @@ def get_cls_view_basename(cls):
 
 
 def get_url_for_object(obj, request=None, pk=None):
-    # get_absolute_url mainly exists to support AWX
+    # get_absolute_url mainly exists to support Ascender
     if hasattr(obj, 'get_absolute_url'):
         return obj.get_absolute_url()
 

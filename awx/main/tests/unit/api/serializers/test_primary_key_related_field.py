@@ -4,7 +4,7 @@ import pytest
 # Django Rest Framework
 from rest_framework.exceptions import ValidationError
 
-# AWX
+# Ascender
 from awx.api.serializers import JobLaunchSerializer
 
 
