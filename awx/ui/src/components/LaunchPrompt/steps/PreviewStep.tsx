@@ -3,7 +3,7 @@ import React from 'react';
 import { ExclamationCircleIcon as PFExclamationCircleIcon } from '@patternfly/react-icons';
 import { Tooltip } from '@patternfly/react-core';
 import { useLingui } from '@lingui/react/macro';
-import { useFormikContext } from 'formik';
+import { useFormContext } from 'components/Form';
 
 import * as yaml from 'js-yaml';
 import mergeExtraVars, { maskPasswords } from 'util/prompt/mergeExtraVars';
@@ -27,7 +27,7 @@ function PreviewStep({
   formErrors,
 }: PreviewStepProps) {
   const { t } = useLingui();
-  const { values } = useFormikContext<LaunchPromptValues>();
+  const { values } = useFormContext<LaunchPromptValues>();
   const surveyValues = getSurveyValues(values);
 
   const overrides = {

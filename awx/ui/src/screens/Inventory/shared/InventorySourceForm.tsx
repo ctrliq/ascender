@@ -5,7 +5,6 @@ import type {
 } from 'types/api';
 import React, { useEffect, useCallback } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { Formik, useField, useFormikContext } from 'formik';
 import {
   Form,
   FormGroup,
@@ -44,6 +43,7 @@ import {
   getVmwarePlugin,
   mergeVmwarePlugin,
 } from './utils';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 
 const buildSourceChoiceOptions = (options: OptionsResponse) => {
   const sourceChoices = (options.actions.GET?.source?.choices ?? []).map(
@@ -104,7 +104,7 @@ const InventorySourceFormFields = ({
 }: InventorySourceFormFieldsProps) => {
   const { t } = useLingui();
   const { values, initialValues, resetForm, setFieldTouched, setFieldValue } =
-    useFormikContext<InventorySourceFormValues>();
+    useFormContext<InventorySourceFormValues>();
   const [sourceField, sourceMeta] = useField({
     name: 'source',
     validate: required(t`Set a value for this field`),
@@ -390,7 +390,7 @@ const InventorySourceForm = ({
   }
 
   return (
-    <Formik<InventorySourceFormValues>
+    <FormRoot<InventorySourceFormValues>
       initialValues={initialValues}
       onSubmit={(values) => {
         const { vmware_plugin, ...submitValues } = values;
@@ -420,7 +420,7 @@ const InventorySourceForm = ({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 };
 

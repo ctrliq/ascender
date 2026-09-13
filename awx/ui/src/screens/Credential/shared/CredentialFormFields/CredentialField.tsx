@@ -4,7 +4,7 @@ import type {
 } from 'types/api';
 import React, { useState } from 'react';
 import { useLocation } from 'react-router';
-import { useField, useFormikContext } from 'formik';
+import { useField, useFormContext } from 'components/Form';
 import { useLingui } from '@lingui/react/macro';
 import {
   Button,
@@ -177,7 +177,7 @@ function CredentialField({
   credentialType,
   fieldOptions,
 }: CredentialFieldProps) {
-  const { values: formikValues } = useFormikContext<CredentialFormValues>();
+  const { values: formikValues } = useFormContext<CredentialFormValues>();
   const location = useLocation();
   const { t } = useLingui();
   const requiredFields = credentialType?.inputs?.required || [];

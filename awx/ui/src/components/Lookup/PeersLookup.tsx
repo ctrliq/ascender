@@ -1,6 +1,6 @@
 import type { Instance, SearchColumn, SummaryFieldRef } from 'types/api';
 import React, { useCallback, useEffect } from 'react';
-import type { FieldValidator } from 'formik';
+import type { FieldValidator } from 'components/Form';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Label, FormGroup } from '@patternfly/react-core';

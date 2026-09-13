@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 
-import { useField, useFormikContext } from 'formik';
+import { useField, useFormContext } from 'components/Form';
 import { Form, FormGroup } from '@patternfly/react-core';
 import { CredentialTypesAPI } from 'api';
 import AnsibleSelect from 'components/AnsibleSelect';
@@ -14,7 +14,7 @@ import { required } from 'util/validators';
 import type { CredentialPluginValues } from './CredentialPluginPrompt';
 
 function MetadataStep() {
-  const form = useFormikContext<CredentialPluginValues>();
+  const form = useFormContext<CredentialPluginValues>();
   const [selectedCredential] = useField('credential');
   const [inputValues] = useField('inputs');
 

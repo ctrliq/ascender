@@ -1,14 +1,14 @@
 import React from 'react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../../../../testUtils/rtlContexts';
 import DaysToKeepStep from './DaysToKeepStep';
 
 describe('DaysToKeepStep', () => {
   test('Days to keep field rendered correctly', () => {
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ daysToKeep: 30 }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ daysToKeep: 30 }}>
         <DaysToKeepStep />
-      </Formik>
+      </FormRoot>
     );
     const input = document.querySelector('input#days-to-keep');
     // FormField#days-to-keep is rendered

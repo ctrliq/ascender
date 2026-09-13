@@ -1,7 +1,7 @@
 import type { LaunchCredential, LaunchableResource } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import CredentialsStep from './CredentialsStep';
 import StepName from './StepName';
 import credentialsValidator from './credentialsValidator';
