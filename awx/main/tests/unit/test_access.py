@@ -5,7 +5,15 @@ from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 from rest_framework.exceptions import ParseError
 
-from awx.main.access import BaseAccess, check_superuser, JobTemplateAccess, WorkflowJobTemplateAccess, SystemJobTemplateAccess, vars_are_encrypted
+from awx.main.access import (
+    BaseAccess,
+    access_registry,
+    check_superuser,
+    JobTemplateAccess,
+    WorkflowJobTemplateAccess,
+    SystemJobTemplateAccess,
+    vars_are_encrypted,
+)
 from awx.main.fields import AskForField
 
 from awx.main.models import (
@@ -297,3 +305,39 @@ def test_consumer_access_covers_all_event_groups():
 
     for group_name in group_names:
         assert consumer_access(group_name) is not None, f'no Access class registered for websocket group {group_name}'
+
+
+class TestReadVia:
+    """
+    Every class that declares read_via has to name a model that carries the role
+    and a path Django can follow to it. ReceptorAddressAccess wrote that query by
+    hand against a model with no read_role, and raised AttributeError for every
+    user who was neither superuser nor system auditor, for two years.
+    """
+
+    def declared(self):
+        return [(model, cls) for model, cls in access_registry.items() if getattr(cls, 'read_via', None) is not None]
+
+    def test_there_are_declarations_to_check(self):
+        assert len(self.declared()) >= 19
+
+    def test_the_gate_model_carries_the_role(self):
+        for model, cls in self.declared():
+            gate, _ = cls.read_via
+            assert hasattr(gate, 'accessible_pk_qs'), '{}: {} has no role accessor'.format(cls.__name__, gate.__name__)
+            assert hasattr(gate, 'accessible_objects'), '{}: {} has no role accessor'.format(cls.__name__, gate.__name__)
+
+    def test_the_path_resolves_to_the_gate_model(self):
+        for model, cls in self.declared():
+            gate, path = cls.read_via
+            if not path:
+                assert gate is model, '{}: empty path but gate is {}'.format(cls.__name__, gate.__name__)
+                continue
+            at = model
+            for part in path.split('__'):
+                field = at._meta.get_field(part)
+                at = field.related_model
+                assert at is not None, '{}: {} in {} is not a relation'.format(cls.__name__, part, path)
+            # the last hop may be typed as a parent of the gate, as a workflow node's
+            # unified_job_template is, so either direction of the relationship is fine
+            assert issubclass(gate, at) or issubclass(at, gate), '{}: {} ends at {}, not {}'.format(cls.__name__, path, at.__name__, gate.__name__)
