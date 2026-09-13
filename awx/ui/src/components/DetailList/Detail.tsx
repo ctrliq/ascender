@@ -1,42 +1,66 @@
 import React from 'react';
 
-import styled from 'styled-components';
 import Popover from '../Popover';
+import './DetailList.css';
 
-const DetailName = styled(({ fullWidth, component, ...props }) => (
-  <dt {...props} />
-))`
-  font-size: var(--pf-v6-global--FontSize--xs);
-  font-weight: var(--pf-v6-global--FontWeight--bold);
-  color: var(--pf-v6-global--Color--200);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  margin-bottom: 0.25rem;
-  ${(props) =>
-    props.fullWidth &&
-    `
-    grid-column: 1 / -1;
-  `}
-`;
+/** Join the class names that are actually set, the way styled-components did. */
+export const classes = (...names: (string | false | null | undefined)[]) =>
+  names.filter(Boolean).join(' ');
 
-const DetailValue = styled(
-  ({ fullWidth, isEncrypted, isNotConfigured, component, ...props }) => (
-    <dd {...props} />
-  )
-)`
-  overflow-wrap: break-word;
-  margin: 0;
-  ${(props) =>
-    props.fullWidth &&
-    `
-    grid-column: 1 / -1;
-  `}
-  ${(props) =>
-    (props.isEncrypted || props.isNotConfigured) &&
-    `
-    color: var(--pf-v6-global--disabled-color--100);
-  `}
-`;
+export interface DetailNameProps {
+  fullWidth?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+  [key: string]: unknown;
+}
+
+export const DetailName = ({
+  fullWidth = false,
+  className,
+  children,
+  ...props
+}: DetailNameProps) => (
+  <dt
+    className={classes(
+      'awx-detail-name',
+      fullWidth && 'awx-detail-name--full-width',
+      className
+    )}
+    {...props}
+  >
+    {children}
+  </dt>
+);
+
+export interface DetailValueProps {
+  fullWidth?: boolean;
+  isEncrypted?: boolean;
+  isNotConfigured?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+  [key: string]: unknown;
+}
+
+export const DetailValue = ({
+  fullWidth = false,
+  isEncrypted = false,
+  isNotConfigured = false,
+  className,
+  children,
+  ...props
+}: DetailValueProps) => (
+  <dd
+    className={classes(
+      'awx-detail-value',
+      fullWidth && 'awx-detail-value--full-width',
+      (isEncrypted || isNotConfigured) && 'awx-detail-value--muted',
+      className
+    )}
+    {...props}
+  >
+    {children}
+  </dd>
+);
 
 export interface DetailProps {
   label: React.ReactNode;
@@ -99,5 +123,3 @@ const Detail = ({
   );
 };
 export default Detail;
-export { DetailName };
-export { DetailValue };
