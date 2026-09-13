@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 import { Plural, useLingui } from '@lingui/react/macro';
 import { Card, PageSection } from '@patternfly/react-core';
@@ -12,6 +12,7 @@ import PaginatedTable, {
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import DataListToolbar from 'components/DataListToolbar';
+import useCachedRequest from 'hooks/useCachedRequest';
 import useRequest, {
   useDeleteItems,
   useDismissableError,
@@ -37,7 +38,8 @@ function WorkflowApprovalsList() {
     error: contentError,
     isLoading: isWorkflowApprovalsLoading,
     request: fetchWorkflowApprovals,
-  } = useRequest(
+  } = useCachedRequest(
+    ['workflow_approvals', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([
@@ -62,10 +64,6 @@ function WorkflowApprovalsList() {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchWorkflowApprovals();
-  }, [fetchWorkflowApprovals]);
 
   // The hook takes only these two. A fetch by id and the query string config
   // were passed to it as well and ignored, and had been since the import.

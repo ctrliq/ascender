@@ -1,12 +1,13 @@
 import type { CurrentUser } from 'contexts/Config';
 import type { Role, Team } from 'types/api';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { useLocation } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { Button, EmptyState, EmptyStateBody } from '@patternfly/react-core';
 import { CubesIcon } from '@patternfly/react-icons';
 import { TeamsAPI, RolesAPI, UsersAPI } from 'api';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import DataListToolbar from 'components/DataListToolbar';
 import PaginatedTable, {
   HeaderCell,
@@ -51,7 +52,8 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
       relatedSearchableKeys,
       searchableKeys,
     },
-  } = useRequest(
+  } = useCachedRequest(
+    ['team-roles-list', search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, search);
       const [
@@ -87,10 +89,6 @@ function TeamRolesList({ me, team }: TeamRolesListProps) {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchRoles();
-  }, [fetchRoles]);
 
   const {
     isLoading: isDisassociateLoading,
