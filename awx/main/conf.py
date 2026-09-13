@@ -55,7 +55,7 @@ register(
 )
 
 register(
-    'TOWER_URL_BASE',
+    'ASCENDER_URL_BASE',
     field_class=fields.URLField,
     schemes=('http', 'https'),
     allow_plain_hostname=True,  # Allow hostname only without TLD.
