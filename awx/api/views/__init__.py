@@ -22,7 +22,7 @@ from django.db.models.functions import Trunc
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.template.loader import render_to_string
-from django.http import HttpResponse
+from django.http import StreamingHttpResponse
 from django.utils.translation import gettext_lazy as _
 
 # Django REST Framework
@@ -767,7 +767,11 @@ class UnifiedJobStdout(RetrieveAPIView):
                     redactor.register(redact_ansi)
                 if type(unified_job) == models.ProjectUpdate:
                     redactor.register(UriCleaner.remove_sensitive)
-                response = HttpResponse(FileWrapper(redactor), content_type='text/plain')
+                # StreamingHttpResponse, not HttpResponse: the latter joins the whole
+                # iterator into one bytes object on assignment, which undoes the temporary
+                # file result_stdout_raw_handle() writes precisely to keep the download off
+                # the heap. Streaming hands the worker back its 8 KiB block size.
+                response = StreamingHttpResponse(FileWrapper(redactor), content_type='text/plain')
                 response["Content-Disposition"] = 'attachment; filename="{}"'.format(filename)
                 return response
             else:

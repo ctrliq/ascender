@@ -1,5 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { FormRoot } from 'components/Form';
 import { InventoriesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
@@ -47,6 +48,31 @@ describe('InventoryStep', () => {
     expect(await screen.findByText('inv one')).toBeInTheDocument();
     expect(screen.getByText('inv two')).toBeInTheDocument();
     expect(screen.getByText('inv three')).toBeInTheDocument();
+  });
+
+  // Deselecting used to call field.onChange(null), and a form reads `target`
+  // off what it is handed, so that threw where it stood. Nothing covered it,
+  // which is how it survived.
+  test('clears the selection without throwing', async () => {
+    const user = userEvent.setup();
+
+    renderWithContexts(
+      <FormRoot
+        initialValues={{ inventory: inventories[0] }}
+        onSubmit={() => {}}
+      >
+        <InventoryStep />
+      </FormRoot>
+    );
+
+    const close = await screen.findByRole('button', { name: 'Close inv one' });
+    await user.click(close);
+
+    await waitFor(() =>
+      expect(
+        screen.queryByRole('button', { name: 'Close inv one' })
+      ).not.toBeInTheDocument()
+    );
   });
 
   test('should show warning message when one is passed in', async () => {

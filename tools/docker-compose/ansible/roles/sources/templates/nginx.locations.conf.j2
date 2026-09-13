@@ -12,7 +12,7 @@ location {{ (ingress_path + '/favicon.ico').replace('//', '/') }} {
 
 location ~ ^({{ (ingress_path + '/websocket/').replace('//', '/') }}|{{ (ingress_path + '/api/websocket/').replace('//', '/') }}) {
     # Pass request to the upstream alias
-    proxy_pass http://daphne;
+    proxy_pass http://uvicorn;
     # Require http version 1.1 to allow for upgrade requests
     proxy_http_version 1.1;
     # We want proxy_buffering off for proxying to websockets.
@@ -35,13 +35,17 @@ location ~ ^({{ (ingress_path + '/websocket/').replace('//', '/') }}|{{ (ingress
 location {{ ingress_path }} {
     # Add trailing / if missing
     rewrite ^(.*)$http_host(.*[^/])$ $1$http_host$2/ permanent;
-    uwsgi_read_timeout 120s;
-    uwsgi_pass uwsgi;
-    include /etc/nginx/uwsgi_params;
+    proxy_read_timeout 120s;
+    proxy_pass http://uvicorn;
+    proxy_http_version 1.1;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
     error_page 502 = @fallback;
 }
 
-# Enable scenario where we shutdown uwsgi and launching runserver for debugging purposes
+# Enable scenario where we shutdown uvicorn and launching runserver for debugging purposes
 location @fallback {
     # Add trailing / if missing
     rewrite ^(.*)$http_host(.*[^/])$ $1$http_host$2/ permanent;
