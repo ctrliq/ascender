@@ -30,9 +30,26 @@ def test_azure_backend_authority(cloud_name, expected_authority):
     kwargs = {'tenant': 't', 'client': 'c', 'secret': 's', 'url': 'https://example.vault.azure.net', 'secret_field': 'foo'}
     if cloud_name is not None:
         kwargs['cloud_name'] = cloud_name
-    with mock.patch.object(azure_kv, 'ClientSecretCredential') as csc, mock.patch.object(azure_kv, 'SecretClient'):
+    # the SDK is imported inside the backend, so the patch has to land on the
+    # module it is imported from rather than on azure_kv
+    with mock.patch('azure.identity.ClientSecretCredential') as csc, mock.patch('azure.keyvault.secrets.SecretClient'):
         azure_kv.azure_keyvault_backend(**kwargs)
     assert csc.call_args.kwargs['authority'] == expected_authority
+
+
+def test_azure_authority_hosts_match_the_sdk():
+    """azure_kv spells the authority hosts out so it need not import the SDK.
+
+    They are constants rather than a moving target, but if Microsoft ever
+    changes one this is where it should fail.
+    """
+    from azure.identity import AzureAuthorityHosts
+
+    from awx.main.credential_plugins import azure_kv
+
+    assert azure_kv.AUTHORITY_HOSTS['AzureChinaCloud'] == AzureAuthorityHosts.AZURE_CHINA
+    assert azure_kv.AUTHORITY_HOSTS['AzureCloud'] == AzureAuthorityHosts.AZURE_PUBLIC_CLOUD
+    assert azure_kv.AUTHORITY_HOSTS['AzureUSGovernment'] == AzureAuthorityHosts.AZURE_GOVERNMENT
 
 
 def test_hashivault_approle_auth():
