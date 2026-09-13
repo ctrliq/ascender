@@ -1,6 +1,6 @@
 import type { InstanceGroup } from 'types/api';
 import type { DeletableItem } from 'components/PaginatedTable';
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 
 import { Plural, useLingui } from '@lingui/react/macro';
@@ -9,7 +9,8 @@ import { Card, PageSection, DropdownItem } from '@patternfly/react-core';
 
 import { InstanceGroupsAPI } from 'api';
 import { getQSConfig, parseQueryString } from 'util/qs';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import PaginatedTable, {
   HeaderRow,
@@ -45,7 +46,8 @@ function InstanceGroupList() {
       relatedSearchableKeys,
       searchableKeys,
     },
-  } = useRequest(
+  } = useCachedRequest(
+    ['instance-group-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
 
@@ -72,10 +74,6 @@ function InstanceGroupList() {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchInstanceGroups();
-  }, [fetchInstanceGroups]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
     useSelected<InstanceGroup>(instanceGroups);

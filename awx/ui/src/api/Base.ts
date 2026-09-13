@@ -9,6 +9,7 @@ import type { QSParams } from 'util/qs';
 import debounce from 'util/debounce';
 import type { ApiResponse, OptionsResponse, Paginated } from '../types/api';
 import { SESSION_TIMEOUT_KEY } from '../constants';
+import { cachedOptions } from './optionsCache';
 
 // Declared with the api types, and re-exported here because every caller
 // reaches it through the transport rather than through the type module.
@@ -207,7 +208,18 @@ const defaultHttp: Http = {
   put: (url, data, config) => makeRequest('PUT', url, data, config),
   patch: (url, data, config) => makeRequest('PATCH', url, data, config),
   delete: (url, config) => makeRequest('DELETE', url, config),
-  options: (url, config) => makeRequest('OPTIONS', url, config),
+  // OPTIONS goes through the query cache, where the other five methods do not.
+  // It describes an endpoint rather than any row in it, so it is the one read
+  // the UI makes over and over for the same answer: 89 call sites ask for it,
+  // nearly always in the same Promise.all as the list read beside it. Two
+  // components mounting together now share one request, and a tab switched
+  // away and back does not ask again. The other methods are left alone: four
+  // of them write, and a list read is exactly the thing that should not be
+  // served from a cache without the screen saying so.
+  options: (url, config) =>
+    cachedOptions(['options', url, config?.params ?? null], () =>
+      makeRequest('OPTIONS', url, config)
+    ),
 };
 
 /**
