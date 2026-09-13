@@ -249,7 +249,7 @@ def update_scm_url(scm_type, url, username=True, password=True, check_special_ca
     # Handle all of the URL formats supported by the SCM systems:
     # git: https://www.kernel.org/pub/software/scm/git/docs/git-clone.html#URLS
     # svn: http://svnbook.red-bean.com/en/1.7/svn-book.html#svn.advanced.reposurls
-    if scm_type not in ('git', 'svn', 'insights', 'archive'):
+    if scm_type not in ('git', 'svn', 'archive'):
         raise ValueError(_('Unsupported SCM type "%s"') % str(scm_type))
     if not url.strip():
         return ''
@@ -300,7 +300,6 @@ def update_scm_url(scm_type, url, username=True, password=True, check_special_ca
     scm_type_schemes = {
         'git': ('ssh', 'git', 'git+ssh', 'http', 'https', 'ftp', 'ftps', 'file'),
         'svn': ('http', 'https', 'svn', 'svn+ssh', 'file'),
-        'insights': ('http', 'https'),
         'archive': ('http', 'https'),
     }
     if parts.scheme not in scm_type_schemes.get(scm_type, ()):
@@ -341,7 +340,7 @@ def update_scm_url(scm_type, url, username=True, password=True, check_special_ca
                 # raise ValueError('Password not allowed for SSH access to %s.' % parts.hostname)
                 netloc_password = ''
 
-    if netloc_username and parts.scheme != 'file' and scm_type not in ("insights", "archive"):
+    if netloc_username and parts.scheme != 'file' and scm_type != "archive":
         netloc = ':'.join([urllib.parse.quote(x, safe='') for x in (netloc_username, netloc_password) if x])
     else:
         netloc = ''

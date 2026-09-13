@@ -193,11 +193,6 @@ def user_project(user):
 
 
 @pytest.fixture
-def insights_project():
-    return Project.objects.create(name="test-insights-project", scm_type="insights")
-
-
-@pytest.fixture
 def instance(settings):
     return Instance.objects.create(uuid=settings.SYSTEM_UUID, hostname="instance.example.org", capacity=100)
 
@@ -325,13 +320,6 @@ def kube_credential(credentialtype_kube):
 @pytest.fixture
 def inventory(organization):
     return organization.inventories.create(name="test-inv")
-
-
-@pytest.fixture
-def insights_inventory(inventory):
-    inventory.scm_type = 'insights'
-    inventory.save()
-    return inventory
 
 
 @pytest.fixture
