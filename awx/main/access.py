@@ -2479,7 +2479,11 @@ class ReceptorAddressAccess(BaseAccess):
     model = ReceptorAddress
 
     def filtered_queryset(self):
-        return self.model.objects.filter(Q(instance__in=Instance.accessible_pk_qs(self.user, 'read_role')))
+        # Instance is not a ResourceMixin, so it has no accessible_pk_qs and the
+        # previous call raised AttributeError for everyone get_queryset did not
+        # short circuit, which is every user who is neither superuser nor system
+        # auditor. InstanceAccess is what decides which instances a user sees.
+        return self.model.objects.filter(instance__in=InstanceAccess(self.user).filtered_queryset())
 
     @check_superuser
     def can_add(self, data):
