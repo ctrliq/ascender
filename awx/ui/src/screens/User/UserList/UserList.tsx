@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation } from 'react-router';
 
 import { Card, PageSection } from '@patternfly/react-core';
@@ -13,7 +13,8 @@ import PaginatedTable, {
   ToolbarDeleteButton,
   getSearchableKeys,
 } from 'components/PaginatedTable';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import useSelected from 'hooks/useSelected';
 import { getQSConfig, parseQueryString } from 'util/qs';
 import { useLingui } from '@lingui/react/macro';
@@ -40,7 +41,8 @@ function UserList() {
     error: contentError,
     isLoading,
     request: fetchUsers,
-  } = useRequest(
+  } = useCachedRequest(
+    ['user-list', location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [response, actionsResponse] = await Promise.all([
@@ -65,10 +67,6 @@ function UserList() {
       searchableKeys: [],
     }
   );
-
-  useEffect(() => {
-    fetchUsers();
-  }, [fetchUsers]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
     useSelected(users);
