@@ -369,10 +369,10 @@ describe.each(implementations)('a form, per $name', (impl) => {
       await waitFor(() => expect(at('values')).toBe('{"a":"made up"}'));
     });
 
-    // Recorded rather than desired. InventoryStep deselects with
-    // `field.onChange(null)`, and a form reads `target` off what it is given,
-    // so that call throws where it stands. Pinned as it behaves so a port is
-    // not the change that quietly fixes it: that wants its own.
+    // A change handler reads `target` off what it is handed, so handing it
+    // nothing throws. Pinned because it is the behaviour, not because anything
+    // relies on it: InventoryStep used to deselect this way and now sets the
+    // value directly, the way every other single-select step already did.
     test('onChange(null) throws, and leaves the value alone', async () => {
       const user = userEvent.setup();
       render(<Harness initialValues={{ a: 'kept' }} />);

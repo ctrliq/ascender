@@ -61,6 +61,14 @@ function NodeDeleteModal() {
         <>
           <p>{t`Are you sure you want to remove the node below:`}</p>
           <br />
+          {/*
+            Bold rather than the danger colour. There used to be a
+            `css="var(--pf-t--global--color--status--danger--default)"` here,
+            which named no CSS property and so never applied. Measured before
+            reviving it: that token against the modal background is 4.19:1 in
+            the light theme and 3.87:1 in the dark one, and this text needs
+            4.5:1. The emphasis is what the bold is for.
+          */}
           <strong>{unifiedJobTemplate.name}</strong>
         </>
       ) : (

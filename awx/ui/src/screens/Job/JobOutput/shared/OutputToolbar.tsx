@@ -119,7 +119,10 @@ const OutputToolbar = ({
             >
               <div>{t`Unreachable`}</div>
               <Tooltip content={t`Unreachable Hosts`}>
-                <PFBadge className="awx-output-toolbar__badge" isRead>
+                <PFBadge
+                  className="awx-output-toolbar__badge awx-output-toolbar__badge--unreachable"
+                  isRead
+                >
                   {darkCount}
                 </PFBadge>
               </Tooltip>
@@ -132,7 +135,10 @@ const OutputToolbar = ({
             >
               <div>{t`Failed`}</div>
               <Tooltip content={t`Failed Hosts`}>
-                <PFBadge className="awx-output-toolbar__badge" isRead>
+                <PFBadge
+                  className="awx-output-toolbar__badge awx-output-toolbar__badge--failed"
+                  isRead
+                >
                   {failureCount}
                 </PFBadge>
               </Tooltip>
