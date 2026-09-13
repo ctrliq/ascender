@@ -42,7 +42,7 @@ To drive a running server from the command line or from a playbook, use [ascende
 Ascender uses pytest, with tox for environment management.
 
 - **Unit and functional**: `py.test awx/main/tests/`
-- **Configuration**: [`pytest.ini`](./pytest.ini) and [`tox.ini`](./tox.ini)
+- **Configuration**: [`pyproject.toml`](./pyproject.toml) and [`tox.ini`](./tox.ini)
 
 ## Documentation
 
