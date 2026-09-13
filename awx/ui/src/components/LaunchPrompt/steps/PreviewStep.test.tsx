@@ -154,10 +154,7 @@ describe('PreviewStep', () => {
 
   test('should remove survey with empty array value', () => {
     renderWithContexts(
-      <FormRoot
-        onSubmit={() => {}}
-        initialValues={{ extra_vars: 'one: 1' }}
-      >
+      <FormRoot onSubmit={() => {}} initialValues={{ extra_vars: 'one: 1' }}>
         <PreviewStep
           resource={resource}
           launchConfig={{
