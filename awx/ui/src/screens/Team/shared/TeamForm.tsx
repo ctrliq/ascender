@@ -1,7 +1,7 @@
 import type { SummaryFieldRef, Team } from 'types/api';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import React, { useCallback } from 'react';
 
-import { Formik, useField, useFormikContext } from 'formik';
 import { Form } from '@patternfly/react-core';
 import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
 import FormField, { FormSubmitError } from 'components/FormField';
@@ -17,7 +17,7 @@ export interface TeamFormFieldsProps {
 function TeamFormFields({ team }: TeamFormFieldsProps) {
   const { t } = useLingui();
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
   const [orgField, orgMeta, orgHelpers] = useField('organization');
 
   const handleOrganizationUpdate = useCallback(
@@ -80,7 +80,7 @@ function TeamForm({
   submitError = null,
 }: TeamFormProps) {
   return (
-    <Formik
+    <FormRoot
       initialValues={{
         description: team.description || '',
         name: team.name || '',
@@ -100,7 +100,7 @@ function TeamForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

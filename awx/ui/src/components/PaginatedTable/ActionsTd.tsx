@@ -1,47 +1,31 @@
 import React from 'react';
 import { Td } from '@patternfly/react-table';
-import styled from 'styled-components';
-
-const ActionsGrid = styled.div`
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  justify-content: flex-end;
-  padding-right: 20px;
-`;
-ActionsGrid.displayName = 'ActionsGrid';
-
-const ActionsCell = styled(Td)<{ $width?: number }>`
-  text-align: right;
-  --pf-v6-c-table--cell--Width: ${(props) => props.$width}px;
-
-  [role='presentation'] {
-    color: var(--pf-v6-global--Color--300);
-    opacity: 0.5;
-  }
-
-  &:hover [role='presentation'] {
-    opacity: 1;
-  }
-`;
-ActionsCell.displayName = 'ActionsCell';
+import './ActionsTd.css';
 
 export interface ActionsTdProps {
   children: React.ReactNode;
   gridColumns?: unknown;
+  className?: string;
   [key: string]: unknown;
 }
 
 export default function ActionsTd({
   children,
   gridColumns: _gridColumns,
+  className,
   ...props
 }: ActionsTdProps) {
   const numActions = React.Children.count(children) || 1;
   const width = numActions * 40;
   return (
-    <ActionsCell $width={width} {...props}>
-      <ActionsGrid>{children}</ActionsGrid>
-    </ActionsCell>
+    <Td
+      className={['awx-actions-td__cell', className].filter(Boolean).join(' ')}
+      style={
+        { '--pf-v6-c-table--cell--Width': `${width}px` } as React.CSSProperties
+      }
+      {...props}
+    >
+      <div className="awx-actions-td__grid">{children}</div>
+    </Td>
   );
 }

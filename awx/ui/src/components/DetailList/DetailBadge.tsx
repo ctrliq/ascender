@@ -1,12 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
 import { Badge } from '@patternfly/react-core';
 
-import _Detail from './Detail';
-
-const Detail = styled(_Detail)`
-  word-break: break-word;
-`;
+import Detail from './Detail';
+import './DetailList.css';
 
 export interface DetailBadgeProps {
   label: React.ReactNode;
@@ -19,6 +15,7 @@ export interface DetailBadgeProps {
 function DetailBadge({ label, helpText, content, dataCy }: DetailBadgeProps) {
   return (
     <Detail
+      className="awx-detail--break-word"
       label={label}
       dataCy={dataCy}
       helpText={helpText}

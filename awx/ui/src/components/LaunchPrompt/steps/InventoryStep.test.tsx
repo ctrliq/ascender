@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { InventoriesAPI } from 'api';
 import type { ResponseOf } from '../../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
@@ -38,9 +38,9 @@ describe('InventoryStep', () => {
 
   test('should load inventories', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <InventoryStep />
-      </Formik>
+      </FormRoot>
     );
 
     await waitFor(() => expect(InventoriesAPI.read).toHaveBeenCalled());
@@ -51,11 +51,11 @@ describe('InventoryStep', () => {
 
   test('should show warning message when one is passed in', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <InventoryStep
           warningMessage={<div id="test-warning-message">TEST</div>}
         />
-      </Formik>
+      </FormRoot>
     );
 
     expect(await screen.findByText('TEST')).toBeInTheDocument();

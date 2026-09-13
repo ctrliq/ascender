@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { CredentialsAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -41,13 +41,13 @@ describe('CredentialLookup', () => {
 
   test('should render successfully', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <CredentialLookup
           credentialTypeId={1}
           label="Foo"
           onChange={() => {}}
         />
-      </Formik>
+      </FormRoot>
     );
     expect(await screen.findByText('Foo')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
@@ -55,13 +55,13 @@ describe('CredentialLookup', () => {
 
   test('should fetch credentials', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <CredentialLookup
           credentialTypeId={1}
           label="Foo"
           onChange={() => {}}
         />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
     expect(CredentialsAPI.read).toHaveBeenCalledWith({
@@ -74,13 +74,13 @@ describe('CredentialLookup', () => {
 
   test('should display label', async () => {
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <CredentialLookup
           credentialTypeId={1}
           label="Foo"
           onChange={() => {}}
         />
-      </Formik>
+      </FormRoot>
     );
     expect(await screen.findByText('Foo')).toBeInTheDocument();
   });
@@ -94,13 +94,13 @@ describe('CredentialLookup', () => {
     } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <CredentialLookup
           credentialTypeId={1}
           label="Foo"
           onChange={onChange}
         />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
     expect(onChange).not.toHaveBeenCalled();
@@ -118,14 +118,14 @@ describe('CredentialLookup', () => {
     } as unknown as ResponseOf<typeof CredentialsAPI.read>);
     const onChange = vi.fn();
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <CredentialLookup
           credentialTypeId={1}
           label="Foo"
           autoPopulate
           onChange={onChange}
         />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(CredentialsAPI.read).toHaveBeenCalledTimes(1));
     expect(onChange).not.toHaveBeenCalled();
@@ -146,14 +146,14 @@ describe('CredentialLookup auto select', () => {
     } as unknown as ResponseOf<typeof CredentialsAPI.readOptions>);
     const onChange = vi.fn();
     renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <CredentialLookup
           autoPopulate
           credentialTypeId={1}
           label="Foo"
           onChange={onChange}
         />
-      </Formik>
+      </FormRoot>
     );
     await waitFor(() => expect(onChange).toHaveBeenCalledWith(cred));
   });

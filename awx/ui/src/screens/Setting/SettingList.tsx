@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
-  Card as _Card,
-  CardHeader as _CardHeader,
+  Card,
+  CardHeader,
   CardTitle,
   DataList,
   DataListItem,
@@ -12,37 +12,10 @@ import {
   DataListItemRow,
   PageSection,
 } from '@patternfly/react-core';
-import styled from 'styled-components';
 import { useConfig } from 'contexts/Config';
 import ContentLoading from 'components/ContentLoading/ContentLoading';
 import useBrandName from 'hooks/useBrandName';
-
-const SplitLayout = styled(PageSection)`
-  display: block;
-  column-count: 1;
-  column-gap: 24px;
-  @media (min-width: 576px) {
-    column-count: 2;
-  }
-`;
-const Card = styled(_Card)`
-  && {
-    display: inline-block;
-    margin-bottom: 24px;
-    width: 100%;
-  }
-`;
-const CardHeader = styled(_CardHeader)`
-  && {
-    align-items: flex-start;
-    display: flex;
-    flex-flow: column nowrap;
-  }
-`;
-const CardDescription = styled.div`
-  color: var(--pf-v6-global--Color--200);
-  font-size: var(--pf-v6-global--FontSize--xs);
-`;
+import './SettingList.css';
 
 function SettingList() {
   const config = useConfig();
@@ -157,7 +130,7 @@ function SettingList() {
   if (Object.keys(config).length === 0) {
     return (
       <PageSection hasBodyWrapper={false}>
-        <Card>
+        <Card className="awx-setting-list__card">
           <ContentLoading />
         </Card>
       </PageSection>
@@ -165,7 +138,7 @@ function SettingList() {
   }
 
   return (
-    <SplitLayout>
+    <PageSection className="awx-setting-list__split-layout">
       {settingRoutes.map(({ description, header, id, routes }) => {
         if (
           id === 'subscription' &&
@@ -174,10 +147,12 @@ function SettingList() {
           return null;
         }
         return (
-          <Card isCompact key={header}>
-            <CardHeader>
+          <Card className="awx-setting-list__card" isCompact key={header}>
+            <CardHeader className="awx-setting-list__card-header">
               <CardTitle>{header}</CardTitle>
-              <CardDescription>{description}</CardDescription>
+              <div className="awx-setting-list__card-description">
+                {description}
+              </div>
             </CardHeader>
             <DataList aria-label={`${id}-settings`} isCompact>
               {routes.map(({ title, path }) => (
@@ -197,7 +172,7 @@ function SettingList() {
           </Card>
         );
       })}
-    </SplitLayout>
+    </PageSection>
   );
 }
 

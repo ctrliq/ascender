@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useFormikContext } from 'formik';
+import { useFormContext } from 'components/Form';
 import type { OptionsChoice } from 'types/api';
 import useCredentialPasswordsStep from './useAdHocCredentialPasswordStep';
 import useAdHocDetailsStep from './useAdHocDetailsStep';
@@ -29,7 +29,7 @@ export default function useAdHocLaunchSteps(
   organizationId: number | string | null,
   credentialTypeId: number | string | null
 ) {
-  const { values, resetForm, touched } = useFormikContext<AdHocValues>();
+  const { values, resetForm, touched } = useFormContext<AdHocValues>();
 
   const [visited, setVisited] = useState<Record<string, boolean>>({});
   const steps = [

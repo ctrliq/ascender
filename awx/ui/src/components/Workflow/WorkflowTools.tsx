@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import { Button, Tooltip } from '@patternfly/react-core';
 import {
   CaretDownIcon,
@@ -15,41 +14,7 @@ import {
 } from '@patternfly/react-icons';
 import { WorkflowDispatchContext } from 'contexts/Workflow';
 import type { WorkflowAction } from './workflowReducer';
-
-const Wrapper = styled.div`
-  background-color: var(--ascender-workflow-node-bg);
-  border: 1px solid var(--pf-v6-global--BorderColor--100);
-  height: 215px;
-  position: relative;
-`;
-
-const Header = styled.div`
-  border-bottom: 1px solid var(--pf-v6-global--BorderColor--100);
-  padding: 10px;
-`;
-
-const Pan = styled.div`
-  align-items: center;
-  display: flex;
-`;
-
-const PanCenter = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Tools = styled.div`
-  align-items: center;
-  display: flex;
-  padding: 20px;
-`;
-
-const Close = styled(TimesIcon)`
-  cursor: pointer;
-  position: absolute;
-  right: 10px;
-  top: 15px;
-`;
+import './WorkflowTools.css';
 
 export interface WorkflowToolsProps {
   onFitGraph: () => void;
@@ -89,30 +54,33 @@ function WorkflowTools({
   };
 
   return (
-    <Wrapper>
-      <Header>
+    <div className="awx-workflow-tools__wrapper">
+      <div className="awx-workflow-tools__header">
         <b>{t`Tools`}</b>
-        <Close onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })} />
-      </Header>
-      <Tools>
+        <TimesIcon
+          className="awx-workflow-tools__close"
+          onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })}
+        />
+      </div>
+      <div className="awx-workflow-tools__tools">
         <Tooltip
           content={t`Fit the graph to the available screen size`}
           position="bottom"
         >
           <Button
             icon={<DesktopIcon />}
+            className="awx-workflow-tools__margin-right-30"
             ouiaId="visualizer-zoom-to-fit-button"
             variant="tertiary"
-            css="margin-right: 30px;"
             onClick={() => onFitGraph()}
           />
         </Tooltip>
         <Tooltip content={t`Zoom Out`} position="bottom">
           <Button
             icon={<MinusIcon />}
+            className="awx-workflow-tools__margin-right-10"
             ouiaId="visualizer-zoom-out-button"
             variant="tertiary"
-            css="margin-right: 10px;"
             onClick={() => zoomOut()}
           />
         </Tooltip>
@@ -132,29 +100,29 @@ function WorkflowTools({
         <Tooltip content={t`Zoom In`} position="bottom">
           <Button
             icon={<PlusIcon />}
+            className="awx-workflow-tools__margin-0-25-0-10"
             ouiaId="visualizer-zoom-in-button"
             variant="tertiary"
-            css="margin: 0px 25px 0px 10px;"
             onClick={() => zoomIn()}
           />
         </Tooltip>
-        <Pan>
+        <div className="awx-workflow-tools__pan">
           <Tooltip content={t`Pan Left`} position="left">
             <Button
               icon={<CaretLeftIcon />}
+              className="awx-workflow-tools__margin-right-10"
               ouiaId="visualizer-pan-left-button"
               variant="tertiary"
-              css="margin-right: 10px;"
               onClick={() => onPan('left')}
             />
           </Tooltip>
-          <PanCenter>
+          <div className="awx-workflow-tools__pan-center">
             <Tooltip content={t`Pan Up`} position="top">
               <Button
                 icon={<CaretUpIcon />}
+                className="awx-workflow-tools__margin-bottom-10"
                 ouiaId="visualizer-pan-up-button"
                 variant="tertiary"
-                css="margin-bottom: 10px;"
                 onClick={() => onPan('up')}
               />
             </Tooltip>
@@ -172,25 +140,25 @@ function WorkflowTools({
             <Tooltip content={t`Pan Down`} position="bottom">
               <Button
                 icon={<CaretDownIcon />}
+                className="awx-workflow-tools__margin-top-10"
                 ouiaId="visualizer-pan-down-button"
                 variant="tertiary"
-                css="margin-top: 10px;"
                 onClick={() => onPan('down')}
               />
             </Tooltip>
-          </PanCenter>
+          </div>
           <Tooltip content={t`Pan Right`} position="right">
             <Button
               icon={<CaretRightIcon />}
+              className="awx-workflow-tools__margin-left-10"
               ouiaId="visualizer-pan-right-button"
               variant="tertiary"
-              css="margin-left: 10px;"
               onClick={() => onPan('right')}
             />
           </Tooltip>
-        </Pan>
-      </Tools>
-    </Wrapper>
+        </div>
+      </div>
+    </div>
   );
 }
 

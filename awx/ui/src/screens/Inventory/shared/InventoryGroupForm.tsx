@@ -2,7 +2,7 @@ import type { Group } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { Form, Card } from '@patternfly/react-core';
 
 import { CardBody } from 'components/Card';
@@ -43,7 +43,7 @@ function InventoryGroupForm({
   return (
     <Card>
       <CardBody>
-        <Formik initialValues={initialValues} onSubmit={handleSubmit}>
+        <FormRoot initialValues={initialValues} onSubmit={handleSubmit}>
           {(formik) => (
             <Form autoComplete="off" onSubmit={formik.handleSubmit}>
               <FormColumnLayout>
@@ -76,7 +76,7 @@ function InventoryGroupForm({
               </FormColumnLayout>
             </Form>
           )}
-        </Formik>
+        </FormRoot>
       </CardBody>
     </Card>
   );

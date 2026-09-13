@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from 'react';
+import { FormRoot, useFormContext } from 'components/Form';
 import { Link, useMatch, useNavigate } from 'react-router';
 import { Trans, useLingui } from '@lingui/react/macro';
-import { Formik, useFormikContext } from 'formik';
 import {
   Alert,
   AlertGroup,
@@ -41,7 +41,7 @@ export interface CustomFooterProps {
 
 const CustomFooter = ({ isSubmitLoading }: CustomFooterProps) => {
   const { t } = useLingui();
-  const { values, errors } = useFormikContext<SubscriptionFormValues>();
+  const { values, errors } = useFormContext<SubscriptionFormValues>();
   const { me, license_info } = useConfig();
   const navigate = useNavigate();
   const { activeStep, goToNextStep, goToPrevStep } = useWizardContext();
@@ -231,7 +231,7 @@ function SubscriptionEdit() {
 
   return (
     <>
-      <Formik
+      <FormRoot
         initialValues={{
           insights: true,
           manifest_file: null,
@@ -262,7 +262,7 @@ function SubscriptionEdit() {
             )}
           </Form>
         )}
-      </Formik>
+      </FormRoot>
       <AlertGroup isToast>
         {submitSuccessful && (
           <Alert

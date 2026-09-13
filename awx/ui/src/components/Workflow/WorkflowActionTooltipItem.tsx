@@ -1,25 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const TooltipItem = styled.div`
-  align-items: center;
-  border-radius: 2px;
-  cursor: pointer;
-  display: flex;
-  font-size: 12px;
-  height: 25px;
-  justify-content: center;
-  width: 25px;
-
-  &:hover {
-    color: var(--pf-v6-global--Color--100);
-    background-color: var(--pf-v6-global--BackgroundColor--200);
-  }
-
-  &:not(:last-of-type) {
-    margin-bottom: 5px;
-  }
-`;
+import './WorkflowActionTooltipItem.css';
 
 export interface WorkflowActionTooltipItemProps {
   children?: React.ReactNode;
@@ -37,8 +17,15 @@ function WorkflowActionTooltipItem({
   onMouseEnter = () => {},
   onMouseLeave = () => {},
 }: WorkflowActionTooltipItemProps) {
+  // A tooltip action inside the workflow SVG, which reaches the keyboard
+  // through the node it hangs off rather than on its own. The rules below could
+  // not see this element while it was a styled component; the element itself is
+  // unchanged.
   return (
-    <TooltipItem
+    /* eslint-disable-next-line jsx-a11y/click-events-have-key-events,
+       jsx-a11y/no-static-element-interactions */
+    <div
+      className="awx-workflow-action-tooltip-item__item"
       id={id}
       data-cy={id}
       onClick={onClick}
@@ -46,7 +33,7 @@ function WorkflowActionTooltipItem({
       onMouseLeave={onMouseLeave}
     >
       {children}
-    </TooltipItem>
+    </div>
   );
 }
 

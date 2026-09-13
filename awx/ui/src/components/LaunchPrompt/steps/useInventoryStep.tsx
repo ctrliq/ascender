@@ -1,8 +1,7 @@
 import type { LaunchableResource } from 'types/api';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
-import styled from 'styled-components';
+import { useField } from 'components/Form';
 import { Alert } from '@patternfly/react-core';
 import InventoryStep from './InventoryStep';
 import StepName from './StepName';
@@ -12,10 +11,7 @@ import type {
   VisitedSteps,
   LaunchPromptValues,
 } from '../types';
-
-const InventoryAlert = styled(Alert)`
-  margin-bottom: 16px;
-`;
+import './useInventoryStep.css';
 
 const STEP_ID = 'inventory';
 
@@ -47,7 +43,8 @@ export default function useInventoryStep(
             <InventoryStep
               warningMessage={
                 resource?.type === 'workflow_job_template' ? (
-                  <InventoryAlert
+                  <Alert
+                    className="awx-use-inventory-step__alert"
                     ouiaId="InventoryStep-alert"
                     variant="warning"
                     isInline

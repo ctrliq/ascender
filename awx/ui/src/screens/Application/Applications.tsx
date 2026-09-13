@@ -1,6 +1,5 @@
 import type { BreadcrumbResource, OAuth2Application } from 'types/api';
 import React, { useState, useCallback } from 'react';
-import styled from 'styled-components';
 import { Routes, Route } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -15,10 +14,7 @@ import PersistentFilters from 'components/PersistentFilters';
 import ApplicationsList from './ApplicationsList';
 import ApplicationAdd from './ApplicationAdd';
 import Application from './Application';
-
-const ApplicationAlert = styled(Alert)`
-  margin-bottom: 20px;
-`;
+import './Applications.css';
 
 function Applications() {
   const { t } = useLingui();
@@ -84,7 +80,8 @@ function Applications() {
           onClose={() => setApplicationModalSource(null)}
         >
           {applicationModalSource.client_secret && (
-            <ApplicationAlert
+            <Alert
+              className="awx-applications__application-alert"
               variant="info"
               isInline
               title={t`This is the only time the client secret will be shown.`}

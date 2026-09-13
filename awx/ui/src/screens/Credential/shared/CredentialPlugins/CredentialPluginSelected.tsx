@@ -1,25 +1,10 @@
 import type { Credential } from 'types/api';
 import React from 'react';
 import { Trans, useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import { Button, ButtonVariant, Tooltip } from '@patternfly/react-core';
 import { KeyIcon } from '@patternfly/react-icons';
 import CredentialChip from 'components/CredentialChip';
-
-const SelectedCredential = styled.div`
-  display: flex;
-  justify-content: space-between;
-  background-color: var(--pf-v6-global--BackgroundColor--100);
-  border-bottom-color: var(--pf-v6-global--BorderColor--200);
-`;
-
-const SpacedCredentialChip = styled(CredentialChip)`
-  margin: 5px 8px;
-`;
-
-const PluginHelpText = styled.p`
-  margin-top: 5px;
-`;
+import './CredentialPluginSelected.css';
 
 export interface CredentialPluginSelectedProps {
   credential: Credential;
@@ -38,8 +23,12 @@ function CredentialPluginSelected({
   const { t } = useLingui();
   return (
     <>
-      <SelectedCredential>
-        <SpacedCredentialChip onClick={onClearPlugin} credential={credential} />
+      <div className="awx-credential-plugin-selected__credential">
+        <CredentialChip
+          className="awx-credential-plugin-selected__spaced-credential-chip"
+          onClick={onClearPlugin}
+          credential={credential}
+        />
         <Tooltip
           content={t`Edit Credential Plugin Configuration`}
           position="top"
@@ -52,13 +41,13 @@ function CredentialPluginSelected({
             variant={ButtonVariant.control}
           />
         </Tooltip>
-      </SelectedCredential>
-      <PluginHelpText>
+      </div>
+      <p className="awx-credential-plugin-selected__help-text">
         <Trans>
           This field will be retrieved from an external secret management system
           using the specified credential.
         </Trans>
-      </PluginHelpText>
+      </p>
     </>
   );
 }

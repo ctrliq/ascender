@@ -1,7 +1,7 @@
 import type { LaunchableResource } from 'types/api';
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import { jsonToYaml, yamlToJson } from 'util/yaml';
 import { JSON_MODE, YAML_MODE } from 'components/CodeEditor/constants';
 import type { VariablesMode } from 'components/CodeEditor/constants';

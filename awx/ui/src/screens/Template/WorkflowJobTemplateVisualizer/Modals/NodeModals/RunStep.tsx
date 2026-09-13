@@ -1,29 +1,12 @@
 import React from 'react';
 
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import { useLingui } from '@lingui/react/macro';
-import styled from 'styled-components';
 import { FormGroup, TextInput, Title } from '@patternfly/react-core';
 import AnsibleSelect from 'components/AnsibleSelect';
 import Popover from 'components/Popover';
 import SelectableCard from 'components/SelectableCard';
-
-const Grid = styled.div`
-  display: grid;
-  grid-auto-rows: minmax(100px, auto);
-  grid-gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  margin: 20px 0px;
-  width: 100%;
-`;
-
-const ConditionFields = styled.div`
-  display: grid;
-  grid-gap: 20px;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  margin-bottom: 20px;
-  width: 100%;
-`;
+import './RunStep.css';
 
 function RunStep() {
   const { t } = useLingui();
@@ -44,7 +27,7 @@ function RunStep() {
       <p>
         {t`Specify the conditions under which this node should be executed`}
       </p>
-      <Grid>
+      <div className="awx-run-step__grid">
         <SelectableCard
           id="link-type-success"
           isSelected={field.value === 'success'}
@@ -73,9 +56,9 @@ function RunStep() {
           description={t`Execute when an artifact of the parent node matches the condition.`}
           onClick={() => helpers.setValue('condition')}
         />
-      </Grid>
+      </div>
       {field.value === 'condition' && (
-        <ConditionFields>
+        <div className="awx-run-step__condition-fields">
           <FormGroup
             fieldId="link-condition-trigger"
             label={t`Evaluate on`}
@@ -170,7 +153,7 @@ function RunStep() {
               aria-label={t`Expected value`}
             />
           </FormGroup>
-        </ConditionFields>
+        </div>
       )}
     </>
   );

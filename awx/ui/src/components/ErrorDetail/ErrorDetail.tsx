@@ -1,6 +1,5 @@
 import type { DetailedError } from 'types/api';
 import React, { useState } from 'react';
-import styled from 'styled-components';
 
 import { useLingui } from '@lingui/react/macro';
 
@@ -10,28 +9,7 @@ import {
   ExpandableSection as PFExpandable,
 } from '@patternfly/react-core';
 import getErrorMessage from './getErrorMessage';
-
-const Card = styled(PFCard)`
-  background-color: var(--pf-v6-global--BackgroundColor--200);
-  overflow-wrap: break-word;
-`;
-
-const CardBody = styled(PFCardBody)`
-  max-height: 200px;
-  overflow: scroll;
-`;
-
-const Expandable = styled(PFExpandable)`
-  text-align: left;
-  max-width: 75vw;
-
-  & .pf-v6-c-expandable__toggle {
-    padding-left: 10px;
-    margin-left: 5px;
-    margin-top: 10px;
-    margin-bottom: 10px;
-  }
-`;
+import './ErrorDetail.css';
 
 function ErrorDetail({ error = null }: { error?: unknown }) {
   const { t } = useLingui();
@@ -56,11 +34,14 @@ function ErrorDetail({ error = null }: { error?: unknown }) {
 
     return (
       <>
-        <CardBody>
+        <PFCardBody className="awx-error-detail__card-body">
           {response?.config?.method?.toUpperCase()} {response?.config?.url}{' '}
           <strong>{response?.status}</strong>
-        </CardBody>
-        <CardBody style={{ maxWidth: '70vw' }}>
+        </PFCardBody>
+        <PFCardBody
+          className="awx-error-detail__card-body"
+          style={{ maxWidth: '70vw' }}
+        >
           {Array.isArray(message) ? (
             <ul>
               {message.map((m) =>
@@ -70,38 +51,40 @@ function ErrorDetail({ error = null }: { error?: unknown }) {
           ) : (
             message
           )}
-        </CardBody>
+        </PFCardBody>
       </>
     );
   };
 
   const renderStack = () => (
     <>
-      <CardBody>
+      <PFCardBody className="awx-error-detail__card-body">
         <strong>
           {(error as Error).name}: {(error as Error).message}
         </strong>
-      </CardBody>
-      <CardBody
+      </PFCardBody>
+      <PFCardBody
+        className="awx-error-detail__card-body"
         style={{ fontFamily: 'var(--pf-t--global--font--family--mono)' }}
       >
         {(error as Error).stack}
-      </CardBody>
+      </PFCardBody>
     </>
   );
 
   return (
-    <Expandable
+    <PFExpandable
+      className="awx-error-detail__expandable"
       toggleText={t`Details`}
       onToggle={handleToggle}
       isExpanded={isExpanded}
     >
-      <Card>
+      <PFCard className="awx-error-detail__card">
         {Object.prototype.hasOwnProperty.call(error, 'response')
           ? renderNetworkError()
           : renderStack()}
-      </Card>
-    </Expandable>
+      </PFCard>
+    </PFExpandable>
   );
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { useField } from 'formik';
-import type { FieldInputProps, FieldMetaProps } from 'formik';
+import { useField } from 'components/Form';
+import type { FieldProps, FieldMeta } from 'components/Form';
 import type { SetFieldTouched } from 'components/LaunchPrompt/types';
 import { useLingui } from '@lingui/react/macro';
 import StepName from 'components/LaunchPrompt/steps/StepName';
@@ -36,8 +36,8 @@ export default function useRunTypeStep(askLinkType: boolean) {
 function getStep(
   label: React.ReactNode,
   askLinkType: boolean,
-  meta: FieldMetaProps<string>,
-  artifactKeyField: FieldInputProps<string>
+  meta: FieldMeta<string>,
+  artifactKeyField: FieldProps<string>
 ) {
   if (!askLinkType) {
     return null;

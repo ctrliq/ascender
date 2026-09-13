@@ -5,8 +5,8 @@ import type {
 import type { SetFieldTouched } from 'components/LaunchPrompt/types';
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
-import type { FieldInputProps } from 'formik';
+import { useField } from 'components/Form';
+import type { FieldProps } from 'components/Form';
 import StepName from 'components/LaunchPrompt/steps/StepName';
 import { stringIsUUID } from 'util/strings';
 import NodeTypeStep from './NodeTypeStep';
@@ -59,9 +59,9 @@ export default function useNodeTypeStep(nodeToEdit: WorkflowNode | null) {
 }
 function getStep(
   label: React.ReactNode,
-  nodeTypeField: FieldInputProps<string>,
-  approvalNameField: FieldInputProps<string>,
-  nodeResourceField: FieldInputProps<NodeTemplate | null>,
+  nodeTypeField: FieldProps<string>,
+  approvalNameField: FieldProps<string>,
+  nodeResourceField: FieldProps<NodeTemplate | null>,
   formError: boolean,
   nodeToEdit: WorkflowNode | null
 ) {

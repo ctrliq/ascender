@@ -1,6 +1,6 @@
 import type { InstanceGroup, SummaryFieldRef } from 'types/api';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import React, { useCallback } from 'react';
-import { Formik, useField, useFormikContext } from 'formik';
 
 import { useLingui } from '@lingui/react/macro';
 import { Form, FormGroup } from '@patternfly/react-core';
@@ -31,7 +31,7 @@ function ContainerGroupFormFields({
 }: ContainerGroupFormFieldsProps) {
   const { t } = useLingui();
   const { setFieldValue, setFieldTouched } =
-    useFormikContext<Record<string, unknown>>();
+    useFormContext<Record<string, unknown>>();
   const [credentialField, credentialMeta, credentialHelpers] =
     useField('credential');
 
@@ -156,7 +156,7 @@ function ContainerGroupForm({
   };
 
   return (
-    <Formik
+    <FormRoot
       initialValues={initialValues}
       onSubmit={(values) => {
         onSubmit(values);
@@ -174,7 +174,7 @@ function ContainerGroupForm({
           </FormColumnLayout>
         </Form>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

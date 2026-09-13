@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useFormikContext } from 'formik';
+import { useFormContext } from 'components/Form';
 import StepName from '../LaunchPrompt/steps/StepName';
 import AdHocPreviewStep from './AdHocPreviewStep';
 import type { AdHocValues, AdHocStep } from './types';
@@ -8,7 +8,7 @@ import type { AdHocValues, AdHocStep } from './types';
 const STEP_ID = 'preview';
 export default function useAdHocPreviewStep(hasErrors: boolean): AdHocStep {
   const { t } = useLingui();
-  const { values } = useFormikContext<AdHocValues>();
+  const { values } = useFormContext<AdHocValues>();
 
   return {
     step: {

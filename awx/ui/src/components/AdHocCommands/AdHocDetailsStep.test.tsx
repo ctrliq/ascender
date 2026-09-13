@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { RootAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
@@ -34,13 +34,13 @@ const initialValues = {
 
 function renderStep() {
   return renderWithContexts(
-    <Formik onSubmit={() => {}} initialValues={initialValues}>
+    <FormRoot onSubmit={() => {}} initialValues={initialValues}>
       <DetailsStep
         verbosityOptions={verbosityOptions}
         moduleOptions={moduleOptions}
         onLimitChange={onLimitChange}
       />
-    </Formik>
+    </FormRoot>
   );
 }
 

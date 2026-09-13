@@ -5,11 +5,8 @@ import {
   Button,
   AlertActionCloseButton,
 } from '@patternfly/react-core';
-import styled from 'styled-components';
+import './HealthCheckAlert.css';
 
-const Alert = styled(PFAlert)`
-  z-index: 1;
-`;
 export interface HealthCheckAlertProps {
   onSetHealthCheckAlert: (isOpen: boolean) => void;
   [key: string]: unknown;
@@ -18,7 +15,8 @@ export interface HealthCheckAlertProps {
 function HealthCheckAlert({ onSetHealthCheckAlert }: HealthCheckAlertProps) {
   const { t } = useLingui();
   return (
-    <Alert
+    <PFAlert
+      className="awx-health-check-alert__alert"
       // PatternFly 5's "default" became "custom" in 6; "info" would make it
       // blue where this alert has always been neutral.
       variant="custom"

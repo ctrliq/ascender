@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import {
   FormGroup,
   Alert,
@@ -14,6 +14,7 @@ import FormField from 'components/FormField';
 import Popover from 'components/Popover';
 import useBrandName from 'hooks/useBrandName';
 import getProjectHelpStrings from '../Project.helptext';
+import './ManualSubForm.css';
 
 export interface ManualSubFormProps {
   localPath?: string;
@@ -55,8 +56,8 @@ const ManualSubForm = ({
     <>
       {options.length === 1 && (
         <Alert
+          className="awx-manual-sub-form__grid-column-1-1"
           title={t`WARNING: `}
-          css="grid-column: 1/-1"
           variant="warning"
           isInline
           ouiaId="project-manual-subform-alert"

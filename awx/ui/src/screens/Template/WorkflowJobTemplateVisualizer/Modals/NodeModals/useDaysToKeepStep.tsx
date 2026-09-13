@@ -1,7 +1,7 @@
-import type { FieldMetaProps } from 'formik';
+import type { FieldMeta } from 'components/Form';
 import type { NodeTemplate } from 'types/api';
 import React from 'react';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import { useLingui } from '@lingui/react/macro';
 import DaysToKeepStep from './DaysToKeepStep';
 import StepName from '../../../../../components/LaunchPrompt/steps/StepName';
@@ -33,8 +33,8 @@ export default function useDaysToKeepStep() {
 }
 function getStep(
   label: React.ReactNode,
-  nodeResourceMeta: FieldMetaProps<NodeTemplate | null>,
-  daysToKeepMeta: FieldMetaProps<number | string>
+  nodeResourceMeta: FieldMeta<NodeTemplate | null>,
+  daysToKeepMeta: FieldMeta<number | string>
 ) {
   if (
     ['cleanup_activitystream', 'cleanup_jobs'].includes(
