@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { Suspense, useEffect, useLayoutEffect, useState } from 'react';
 import {
   HashRouter,
   Routes,
@@ -20,17 +20,21 @@ import {
 import { SessionProvider, useSession } from 'contexts/Session';
 import AppContainer from 'components/AppContainer';
 import ContentError from 'components/ContentError';
+import ContentLoading from 'components/ContentLoading';
 import NotFound from 'screens/NotFound';
 import Login from 'screens/Login';
 import { isAuthenticated } from 'util/auth';
 import { getLanguageWithoutRegionCode } from 'util/language';
-import Metrics from 'screens/Metrics';
-import SubscriptionEdit from 'screens/Setting/Subscription/SubscriptionEdit';
 import type { AppRouteGroup } from './routeConfig';
 import { dynamicActivate, locales } from './i18nLoader';
 import getRouteConfig from './routeConfig';
 import { getStoredThemeId, applyTheme } from './themeRegistry';
 import { SESSION_REDIRECT_URL } from './constants';
+
+const Metrics = React.lazy(() => import('screens/Metrics'));
+const SubscriptionEdit = React.lazy(
+  () => import('screens/Setting/Subscription/SubscriptionEdit')
+);
 
 export interface ErrorFallbackProps {
   error: unknown;
@@ -67,64 +71,68 @@ const AuthorizedRoutes = ({ routeConfig }: AuthorizedRoutesProps) => {
 
   if (!isAuthorized) {
     return (
-      <Routes>
-        <Route
-          path="/subscription_management"
-          element={
-            <ProtectedRoute>
-              <PageSection hasBodyWrapper={false}>
-                <Card>
-                  <SubscriptionEdit />
-                </Card>
-              </PageSection>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="*"
-          element={<Navigate to="/subscription_management" replace />}
-        />
-      </Routes>
+      <Suspense fallback={<ContentLoading />}>
+        <Routes>
+          <Route
+            path="/subscription_management"
+            element={
+              <ProtectedRoute>
+                <PageSection hasBodyWrapper={false}>
+                  <Card>
+                    <SubscriptionEdit />
+                  </Card>
+                </PageSection>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="*"
+            element={<Navigate to="/subscription_management" replace />}
+          />
+        </Routes>
+      </Suspense>
     );
   }
 
   return (
-    <Routes>
-      {routeConfig
-        .flatMap(({ routes }) => routes)
-        .map(({ path, screen: Screen }) => (
-          // /* so each screen's own nested <Routes> can match the rest
-          <Route
-            key={path}
-            path={`${path}/*`}
-            element={
-              <ProtectedRoute>
-                <Screen />
-              </ProtectedRoute>
-            }
-          />
-        ))
-        .concat(
-          <Route
-            key="metrics"
-            path="/metrics/*"
-            element={
-              <ProtectedRoute>
-                <Metrics />
-              </ProtectedRoute>
-            }
-          />,
-          <Route
-            key="not-found"
-            path="*"
-            element={
-              <ProtectedRoute>
-                <NotFound />
-              </ProtectedRoute>
-            }
-          />
-        )}
-    </Routes>
+    <Suspense fallback={<ContentLoading />}>
+      <Routes>
+        {routeConfig
+          .flatMap(({ routes }) => routes)
+          .map(({ path, screen: Screen }) => (
+            // /* so each screen's own nested <Routes> can match the rest
+            <Route
+              key={path}
+              path={`${path}/*`}
+              element={
+                <ProtectedRoute>
+                  <Screen />
+                </ProtectedRoute>
+              }
+            />
+          ))
+          .concat(
+            <Route
+              key="metrics"
+              path="/metrics/*"
+              element={
+                <ProtectedRoute>
+                  <Metrics />
+                </ProtectedRoute>
+              }
+            />,
+            <Route
+              key="not-found"
+              path="*"
+              element={
+                <ProtectedRoute>
+                  <NotFound />
+                </ProtectedRoute>
+              }
+            />
+          )}
+      </Routes>
+    </Suspense>
   );
 };
 

@@ -1,32 +1,43 @@
 import type { UserProfile } from 'contexts/Config';
 import React from 'react';
+
+// Each screen is loaded when its route is first visited. Statically imported,
+// all twenty-six shipped in the first bundle whether or not anyone opened them.
 import { Trans } from '@lingui/react/macro';
 
-import ActivityStream from 'screens/ActivityStream';
-import Applications from 'screens/Application';
-import CredentialTypes from 'screens/CredentialType';
-import Credentials from 'screens/Credential';
-import Dashboard from 'screens/Dashboard';
-import ExecutionEnvironments from 'screens/ExecutionEnvironment';
-import Hosts from 'screens/Host';
-import Instances from 'screens/Instances';
-import InstanceGroups from 'screens/InstanceGroup';
-import Inventory from 'screens/Inventory';
-import ManagementJobs from 'screens/ManagementJob';
-import NotificationTemplates from 'screens/NotificationTemplate';
-import Organizations from 'screens/Organization';
-import Projects from 'screens/Project';
-import Schedules from 'screens/Schedule';
-import Settings from 'screens/Setting';
-import SubscriptionUsage from 'screens/SubscriptionUsage/SubscriptionUsage';
-import Teams from 'screens/Team';
-import Templates from 'screens/Template';
-import TopologyView from 'screens/TopologyView';
-import Users from 'screens/User';
-import WorkflowApprovals from 'screens/WorkflowApproval';
-import { Jobs } from 'screens/Job';
-import HostMetrics from 'screens/HostMetrics';
-import Labels from 'screens/Labels';
+const ActivityStream = React.lazy(() => import('screens/ActivityStream'));
+const Applications = React.lazy(() => import('screens/Application'));
+const CredentialTypes = React.lazy(() => import('screens/CredentialType'));
+const Credentials = React.lazy(() => import('screens/Credential'));
+const Dashboard = React.lazy(() => import('screens/Dashboard'));
+const ExecutionEnvironments = React.lazy(
+  () => import('screens/ExecutionEnvironment')
+);
+const Hosts = React.lazy(() => import('screens/Host'));
+const Instances = React.lazy(() => import('screens/Instances'));
+const InstanceGroups = React.lazy(() => import('screens/InstanceGroup'));
+const Inventory = React.lazy(() => import('screens/Inventory'));
+const ManagementJobs = React.lazy(() => import('screens/ManagementJob'));
+const NotificationTemplates = React.lazy(
+  () => import('screens/NotificationTemplate')
+);
+const Organizations = React.lazy(() => import('screens/Organization'));
+const Projects = React.lazy(() => import('screens/Project'));
+const Schedules = React.lazy(() => import('screens/Schedule'));
+const Settings = React.lazy(() => import('screens/Setting'));
+const SubscriptionUsage = React.lazy(
+  () => import('screens/SubscriptionUsage/SubscriptionUsage')
+);
+const Teams = React.lazy(() => import('screens/Team'));
+const Templates = React.lazy(() => import('screens/Template'));
+const TopologyView = React.lazy(() => import('screens/TopologyView'));
+const Users = React.lazy(() => import('screens/User'));
+const WorkflowApprovals = React.lazy(() => import('screens/WorkflowApproval'));
+const Jobs = React.lazy(() =>
+  import('screens/Job').then((m) => ({ default: m.Jobs }))
+);
+const HostMetrics = React.lazy(() => import('screens/HostMetrics'));
+const Labels = React.lazy(() => import('screens/Labels'));
 
 /** One screen the navigation leads to, and the route that reaches it. */
 export interface AppRoute {
