@@ -1,14 +1,16 @@
 # Copyright (c) 2026 Ascender
 # All Rights Reserved.
 """
-Which event partitions a retention window drops, and which it leaves alone.
+Which event partitions a retention window drops, which it leaves alone, and what
+an archive of one looks like.
 """
 
+import gzip
 from datetime import datetime, timedelta, timezone
 
 import pytest
 
-from awx.main.management.commands.cleanup_job_events import partitions_to_drop
+from awx.main.management.commands.cleanup_job_events import archive_partition, partitions_to_drop
 
 CUTOFF = datetime(2026, 9, 10, 12, 0, tzinfo=timezone.utc)
 
@@ -70,3 +72,89 @@ def test_the_window_is_the_only_thing_that_moves(days):
     outside = (cutoff - timedelta(hours=2)).strftime('main_jobevent_%Y%m%d_%H')
 
     assert partitions_to_drop([inside, outside], cutoff) == [outside]
+
+
+class FakeCopy:
+    """Stands in for a psycopg copy context, handing back fixed chunks."""
+
+    def __init__(self, chunks):
+        self._chunks = list(chunks)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
+
+    def read(self):
+        return self._chunks.pop(0) if self._chunks else b''
+
+
+class FakeCursor:
+    def __init__(self, chunks=(b'id,stdout\n', b'1,hello\n'), explode=False):
+        self.chunks = chunks
+        self.explode = explode
+        self.copied = None
+
+    def copy(self, statement):
+        self.copied = statement
+        if self.explode:
+            raise RuntimeError('the database said no')
+        return FakeCopy(self.chunks)
+
+
+def test_an_archive_is_gzipped_csv_named_for_its_partition(tmp_path):
+    cursor = FakeCursor()
+
+    path = archive_partition(cursor, 'main_jobevent_20260901_03', str(tmp_path))
+
+    assert path == str(tmp_path / 'main_jobevent_20260901_03.csv.gz')
+    with gzip.open(path, 'rt') as fh:
+        assert fh.read() == 'id,stdout\n1,hello\n'
+
+
+def test_the_copy_asks_for_a_header_so_the_file_can_be_read_back(tmp_path):
+    cursor = FakeCursor()
+
+    archive_partition(cursor, 'main_jobevent_20260901_03', str(tmp_path))
+
+    assert cursor.copied == 'COPY main_jobevent_20260901_03 TO STDOUT WITH (FORMAT csv, HEADER)'
+
+
+def test_a_failed_archive_leaves_nothing_behind(tmp_path):
+    # the caller drops the partition only if this returns, so a half-written
+    # file must never be left looking like a finished one
+    cursor = FakeCursor(explode=True)
+
+    with pytest.raises(RuntimeError):
+        archive_partition(cursor, 'main_jobevent_20260901_03', str(tmp_path))
+
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_the_directory_is_created_if_it_is_not_there(tmp_path):
+    target = tmp_path / 'not' / 'yet'
+
+    archive_partition(FakeCursor(), 'main_jobevent_20260901_03', str(target))
+
+    assert (target / 'main_jobevent_20260901_03.csv.gz').exists()
+
+
+def test_the_archive_carries_no_timestamp(tmp_path):
+    # gzip stamps the time of writing into its header unless told not to, which
+    # makes two archives of identical rows differ and defeats deduplication on
+    # whatever the files are copied to. Checking the header directly rather than
+    # writing twice, because two writes a second apart is what it takes to see it.
+    path = archive_partition(FakeCursor(), 'main_jobevent_20260901_03', str(tmp_path))
+
+    header = open(path, 'rb').read(10)
+    assert header[:2] == b'\x1f\x8b', 'not gzip'
+    assert int.from_bytes(header[4:8], 'little') == 0, 'gzip header carries a timestamp'
+
+
+def test_the_same_partition_archived_twice_gives_the_same_bytes(tmp_path):
+    first = archive_partition(FakeCursor(), 'main_jobevent_20260901_03', str(tmp_path))
+    firstbytes = open(first, 'rb').read()
+    second = archive_partition(FakeCursor(), 'main_jobevent_20260901_03', str(tmp_path))
+
+    assert open(second, 'rb').read() == firstbytes

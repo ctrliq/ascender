@@ -2,7 +2,7 @@ import logging
 import time
 from contextlib import ExitStack
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.utils.translation import gettext_lazy as _
 from rest_framework.views import APIView
 

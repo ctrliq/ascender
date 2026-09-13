@@ -6,7 +6,7 @@ import asyncio
 import valkey
 
 from django.core.serializers.json import DjangoJSONEncoder
-from django.conf import settings
+from awx.settings.typed import settings
 from django.utils.encoding import force_bytes
 from django.contrib.auth.models import User
 
