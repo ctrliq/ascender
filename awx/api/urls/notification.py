@@ -3,7 +3,10 @@
 
 from django.urls import path
 
-from awx.api.views import NotificationList, NotificationDetail
+from awx.api.views.notification import (
+    NotificationList,
+    NotificationDetail,
+)
 
 urls = [
     path('', NotificationList.as_view(), name='notification_list'),

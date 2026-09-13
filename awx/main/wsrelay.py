@@ -11,7 +11,7 @@ import valkey
 
 from channels.layers import get_channel_layer
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.apps import apps
 
 import psycopg

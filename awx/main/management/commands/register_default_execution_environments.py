@@ -4,7 +4,7 @@ import sys
 from argparse import RawTextHelpFormatter
 
 from django.core.management.base import BaseCommand
-from django.conf import settings
+from awx.settings.typed import settings
 from awx.main.models import CredentialType, Credential, ExecutionEnvironment
 
 

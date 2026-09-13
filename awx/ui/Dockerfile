@@ -18,7 +18,7 @@ ADD public public
 ADD package.json package.json
 ADD package-lock.json package-lock.json
 COPY ${NPMRC_FILE} .npmrc
-RUN npm ci && npm cache clean --force
+RUN npm ci --ignore-scripts && npm cache clean --force
 ADD src src
 EXPOSE 3001
 CMD [ "npm", "start" ]

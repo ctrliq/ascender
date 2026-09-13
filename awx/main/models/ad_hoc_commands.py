@@ -6,7 +6,7 @@ import logging
 from urllib.parse import urljoin
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db import models
 from django.utils.text import Truncator
 from django.utils.translation import gettext_lazy as _
@@ -161,7 +161,7 @@ class AdHocCommand(UnifiedJob, JobNotificationMixin):
         return reverse('api:ad_hoc_command_detail', kwargs={'pk': self.pk}, request=request)
 
     def get_ui_url(self):
-        return urljoin(settings.TOWER_URL_BASE, "/#/jobs/command/{}".format(self.pk))
+        return urljoin(settings.ASCENDER_URL_BASE, "/#/jobs/command/{}".format(self.pk))
 
     @property
     def notification_templates(self):
