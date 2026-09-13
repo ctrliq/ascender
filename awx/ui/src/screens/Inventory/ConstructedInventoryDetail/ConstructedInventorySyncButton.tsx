@@ -1,0 +1,62 @@
+import React, { useCallback } from 'react';
+import { useLingui } from '@lingui/react/macro';
+import { Button, Tooltip } from '@patternfly/react-core';
+import useRequest, { useDismissableError } from 'hooks/useRequest';
+import AlertModal from 'components/AlertModal/AlertModal';
+import ErrorDetail from 'components/ErrorDetail/ErrorDetail';
+import { InventoriesAPI } from 'api';
+
+export interface ConstructedInventorySyncButtonProps {
+  inventoryId: number | string;
+  [key: string]: unknown;
+}
+
+function ConstructedInventorySyncButton({
+  inventoryId,
+}: ConstructedInventorySyncButtonProps) {
+  const { t } = useLingui();
+  const testId = `constructed-inventory-${inventoryId}-sync`;
+  const {
+    isLoading: startSyncLoading,
+    error: startSyncError,
+    request: startSyncProcess,
+  } = useRequest(
+    useCallback(
+      async () => InventoriesAPI.syncAllSources(inventoryId),
+      [inventoryId]
+    ),
+    undefined
+  );
+
+  const { error: startError, dismissError: dismissStartError } =
+    useDismissableError(startSyncError);
+
+  return (
+    <>
+      <Tooltip content={t`Start sync process`} position="top">
+        <Button
+          ouiaId={testId}
+          isDisabled={startSyncLoading}
+          aria-label={t`Start inventory source sync`}
+          variant="secondary"
+          onClick={startSyncProcess}
+        >
+          {t`Sync`}
+        </Button>
+      </Tooltip>
+      {startError && (
+        <AlertModal
+          isOpen={startError}
+          variant="error"
+          title={t`Error!`}
+          onClose={dismissStartError}
+        >
+          {t`Failed to sync constructed inventory source`}
+          <ErrorDetail error={startError} />
+        </AlertModal>
+      )}
+    </>
+  );
+}
+
+export default ConstructedInventorySyncButton;

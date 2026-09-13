@@ -1,0 +1,81 @@
+import type { ActivityStreamEntry, SummaryFieldRef } from 'types/api';
+import React, { useState } from 'react';
+import { useLingui } from '@lingui/react/macro';
+import { Button } from '@patternfly/react-core';
+import { Modal } from '@patternfly/react-core/deprecated';
+import { SearchPlusIcon } from '@patternfly/react-icons';
+
+import { formatDateString } from 'util/dates';
+
+import { DetailList, Detail } from 'components/DetailList';
+import { VariablesDetail } from 'components/CodeEditor';
+
+export interface ActivityStreamDetailButtonProps {
+  streamItem: ActivityStreamEntry;
+  user: React.ReactNode;
+  description: React.ReactNode;
+  [key: string]: unknown;
+}
+
+function ActivityStreamDetailButton({
+  streamItem,
+  user,
+  description,
+}: ActivityStreamDetailButtonProps) {
+  const { t } = useLingui();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const setting = streamItem?.summary_fields?.setting as
+    SummaryFieldRef[] | undefined;
+  const changeRows = Math.max(
+    Object.keys(streamItem?.changes || []).length + 2,
+    6
+  );
+
+  return (
+    <>
+      <Button
+        icon={<SearchPlusIcon />}
+        ouiaId={`${streamItem.id}-view-details-button`}
+        aria-label={t`View event details`}
+        variant="plain"
+        component="button"
+        onClick={() => setIsOpen(true)}
+      />
+      <Modal
+        variant="large"
+        isOpen={isOpen}
+        title={t`Event detail`}
+        aria-label={t`Event detail modal`}
+        onClose={() => setIsOpen(false)}
+      >
+        <DetailList gutter="sm">
+          <Detail
+            label={t`Time`}
+            value={formatDateString(streamItem.timestamp)}
+          />
+          <Detail label={t`Initiated by`} value={user} />
+          <Detail
+            label={t`Setting category`}
+            value={setting && (setting[0]?.category as React.ReactNode)}
+          />
+          <Detail label={t`Setting name`} value={setting && setting[0]?.name} />
+          <Detail fullWidth label={t`Action`} value={description} />
+          {streamItem?.changes && (
+            <VariablesDetail
+              label={t`Changes`}
+              rows={changeRows}
+              value={
+                streamItem?.changes ? JSON.stringify(streamItem.changes) : ''
+              }
+              name="changes"
+              dataCy="activity-stream-detail-changes"
+            />
+          )}
+        </DetailList>
+      </Modal>
+    </>
+  );
+}
+
+export default ActivityStreamDetailButton;

@@ -1,0 +1,194 @@
+import type { AnyUnifiedJobTemplate } from 'types/api';
+import React from 'react';
+import { act, screen, waitFor } from '@testing-library/react';
+import WS from 'vitest-websocket-mock';
+import { renderWithContexts } from '../../testUtils/rtlContexts';
+import useWsTemplates from './useWsTemplates';
+
+/*
+  Mock timers don’t play well with vitest-websocket-mock,
+  so we'll stub out throttling to resolve immediately
+*/
+vi.mock('./useThrottle', () => ({
+  __esModule: true,
+  default: vi.fn((val) => val),
+}));
+
+function Test({
+  templates,
+}: {
+  templates: Parameters<typeof useWsTemplates>[0];
+}) {
+  const syncedTemplates = useWsTemplates(templates);
+  return <div data-testid="templates">{JSON.stringify(syncedTemplates)}</div>;
+}
+
+function getTemplates() {
+  return JSON.parse(screen.getByTestId('templates').textContent);
+}
+
+describe('useWsTemplates hook', () => {
+  let debug: typeof global.console.debug;
+  beforeEach(() => {
+    ({ debug } = global.console);
+    global.console.debug = () => {};
+  });
+
+  afterEach(async () => {
+    global.console.debug = debug;
+    WS.clean();
+    // Add small delay to ensure websocket cleanup completes
+    await new Promise((resolve) => {
+      setTimeout(resolve, 50);
+    });
+  });
+
+  test('should return templates list', () => {
+    const templates = [{ id: 1 }] as unknown as AnyUnifiedJobTemplate[];
+    renderWithContexts(<Test templates={templates} />);
+
+    expect(getTemplates()).toEqual(templates);
+    WS.clean();
+  });
+
+  test('should establish websocket connection', async () => {
+    global.document.cookie = 'csrftoken=abc123';
+    const mockServer = new WS('ws://localhost/websocket/');
+
+    const templates = [{ id: 1 }] as unknown as AnyUnifiedJobTemplate[];
+    await act(async () => {
+      renderWithContexts(<Test templates={templates} />);
+    });
+
+    await mockServer.connected;
+    await expect(mockServer).toReceiveMessage(
+      JSON.stringify({
+        xrftoken: 'abc123',
+        groups: {
+          jobs: ['status_changed'],
+          control: ['limit_reached_1'],
+        },
+      })
+    );
+  });
+
+  test('should update recent job status', async () => {
+    global.document.cookie = 'csrftoken=abc123';
+    const mockServer = new WS('ws://localhost/websocket/');
+
+    const templates = [
+      {
+        id: 1,
+        summary_fields: {
+          recent_jobs: [
+            {
+              id: 10,
+              type: 'job',
+              status: 'running',
+            },
+            {
+              id: 11,
+              type: 'job',
+              status: 'successful',
+            },
+          ],
+        },
+      },
+    ] as unknown as AnyUnifiedJobTemplate[];
+    await act(async () => {
+      renderWithContexts(<Test templates={templates} />);
+    });
+
+    await mockServer.connected;
+    await expect(mockServer).toReceiveMessage(
+      JSON.stringify({
+        xrftoken: 'abc123',
+        groups: {
+          jobs: ['status_changed'],
+          control: ['limit_reached_1'],
+        },
+      })
+    );
+    expect(getTemplates()[0].summary_fields.recent_jobs[0].status).toEqual(
+      'running'
+    );
+    act(() => {
+      mockServer.send(
+        JSON.stringify({
+          unified_job_template_id: 1,
+          unified_job_id: 10,
+          type: 'job',
+          status: 'successful',
+        })
+      );
+    });
+
+    await waitFor(() =>
+      expect(getTemplates()[0].summary_fields.recent_jobs[0].status).toEqual(
+        'successful'
+      )
+    );
+  });
+
+  test('should add new job status', async () => {
+    global.document.cookie = 'csrftoken=abc123';
+    const mockServer = new WS('ws://localhost/websocket/');
+
+    const templates = [
+      {
+        id: 1,
+        summary_fields: {
+          recent_jobs: [
+            {
+              id: 10,
+              type: 'job',
+              status: 'running',
+            },
+            {
+              id: 11,
+              type: 'job',
+              status: 'successful',
+            },
+          ],
+        },
+      },
+    ] as unknown as AnyUnifiedJobTemplate[];
+    await act(async () => {
+      renderWithContexts(<Test templates={templates} />);
+    });
+
+    await mockServer.connected;
+    await expect(mockServer).toReceiveMessage(
+      JSON.stringify({
+        xrftoken: 'abc123',
+        groups: {
+          jobs: ['status_changed'],
+          control: ['limit_reached_1'],
+        },
+      })
+    );
+    expect(getTemplates()[0].summary_fields.recent_jobs[0].status).toEqual(
+      'running'
+    );
+    act(() => {
+      mockServer.send(
+        JSON.stringify({
+          unified_job_template_id: 1,
+          unified_job_id: 13,
+          type: 'job',
+          status: 'running',
+        })
+      );
+    });
+
+    await waitFor(() =>
+      expect(getTemplates()[0].summary_fields.recent_jobs).toHaveLength(3)
+    );
+    expect(getTemplates()[0].summary_fields.recent_jobs[0]).toEqual({
+      id: 13,
+      status: 'running',
+      finished: null,
+      type: 'job',
+    });
+  });
+});

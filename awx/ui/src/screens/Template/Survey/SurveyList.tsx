@@ -1,0 +1,192 @@
+import type { SurveyConfig, SurveyQuestion } from 'types/api';
+import React, { useState } from 'react';
+
+import { Button } from '@patternfly/react-core';
+import { Table, Thead, Tr, Th, Tbody } from '@patternfly/react-table';
+import AlertModal from 'components/AlertModal';
+import ContentEmpty from 'components/ContentEmpty';
+import ContentLoading from 'components/ContentLoading';
+import { useLingui } from '@lingui/react/macro';
+
+import useSelected from 'hooks/useSelected';
+import type { Selectable } from 'hooks/useSelected';
+import SurveyListItem from './SurveyListItem';
+import SurveyToolbar from './SurveyToolbar';
+import SurveyReorderModal from './SurveyReorderModal';
+
+export interface SurveyListProps {
+  isLoading?: boolean;
+  survey?: SurveyConfig | null;
+  surveyEnabled?: boolean;
+  toggleSurvey: () => void;
+  /** Saves the questions that are left, which is how one is deleted. */
+  updateSurvey: (questions: SurveyQuestion[]) => void;
+  deleteSurvey: () => void;
+  canEdit?: boolean;
+  [key: string]: unknown;
+}
+
+function SurveyList({
+  isLoading,
+  survey,
+  surveyEnabled,
+  toggleSurvey,
+  updateSurvey,
+  deleteSurvey,
+  canEdit,
+}: SurveyListProps) {
+  const { t } = useLingui();
+  const questions = survey?.spec || [];
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+
+  // A survey question has no id: it is keyed by its variable, which is what
+  // handleSelect below compares, so the hook only holds the selection here.
+  const { selected, isAllSelected, setSelected, selectAll, clearSelected } =
+    useSelected<SurveyQuestion & Selectable>(questions);
+
+  const handleSelect = (item: SurveyQuestion) => {
+    if (selected.some((q) => q.variable === item.variable)) {
+      setSelected(selected.filter((q) => q.variable !== item.variable));
+    } else {
+      setSelected(selected.concat(item));
+    }
+  };
+
+  const handleDelete = async () => {
+    if (isAllSelected) {
+      await deleteSurvey();
+    } else {
+      await updateSurvey(questions.filter((q) => !selected.includes(q)));
+    }
+    setIsDeleteModalOpen(false);
+    clearSelected();
+  };
+
+  const deleteModal = (
+    <AlertModal
+      variant="danger"
+      title={isAllSelected ? t`Delete Survey` : t`Delete Questions`}
+      isOpen={isDeleteModalOpen}
+      onClose={() => {
+        setIsDeleteModalOpen(false);
+        clearSelected();
+      }}
+      actions={[
+        <Button
+          ouiaId="delete-confirm-button"
+          key="delete"
+          variant="danger"
+          aria-label={t`confirm delete`}
+          onClick={handleDelete}
+        >
+          {t`Delete`}
+        </Button>,
+        <Button
+          ouiaId="delete-cancel-button"
+          key="cancel"
+          variant="link"
+          aria-label={t`cancel delete`}
+          onClick={() => {
+            setIsDeleteModalOpen(false);
+            clearSelected();
+          }}
+        >
+          {t`Cancel`}
+        </Button>,
+      ]}
+    >
+      <div>{t`This action will delete the following:`}</div>
+      {selected.map((question) => (
+        <span key={question.variable}>
+          <strong>{question.question_name}</strong>
+          <br />
+        </span>
+      ))}
+    </AlertModal>
+  );
+
+  let content;
+  if (isLoading) {
+    content = <ContentLoading />;
+  } else {
+    content = (
+      <>
+        <Table ouiaId="survey-list">
+          <Thead>
+            <Tr ouiaId="survey-table-header">
+              <Th screenReaderText={t`Row select`} />
+              <Th dataLabel={t`Name`}>{t`Name`}</Th>
+              <Th dataLabel={t`Type`}>{t`Type`}</Th>
+              <Th dataLabel={t`Default`}>{t`Default`}</Th>
+              <Th dataLabel={t`Actions`}>{t`Actions`}</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {questions?.map((question, index) => (
+              <SurveyListItem
+                key={question.variable}
+                isLast={index === questions.length - 1}
+                isFirst={index === 0}
+                question={question}
+                isChecked={selected.some(
+                  (q) => q.variable === question.variable
+                )}
+                onSelect={() => handleSelect(question)}
+                canEdit={canEdit}
+                rowIndex={index}
+              />
+            ))}
+          </Tbody>
+        </Table>
+        {isDeleteModalOpen && deleteModal}
+        {isOrderModalOpen && (
+          <SurveyReorderModal
+            isOrderModalOpen={isOrderModalOpen}
+            onCloseOrderModal={() => setIsOrderModalOpen(false)}
+            questions={questions}
+            onSave={(newOrder) => {
+              updateSurvey(newOrder);
+              setIsOrderModalOpen(false);
+            }}
+          />
+        )}
+      </>
+    );
+  }
+
+  const emptyList = !questions || questions?.length <= 0;
+
+  if (emptyList && !isLoading) {
+    content = (
+      <ContentEmpty
+        message={t`Please add survey questions.`}
+        title={t`No survey questions found.`}
+      />
+    );
+  }
+  return (
+    <>
+      <SurveyToolbar
+        onOpenOrderModal={
+          questions.length > 1
+            ? () => {
+                setIsOrderModalOpen(true);
+              }
+            : undefined
+        }
+        isAllSelected={isAllSelected}
+        onSelectAll={selectAll}
+        surveyEnabled={surveyEnabled}
+        onToggleSurvey={toggleSurvey}
+        isDeleteDisabled={selected?.length === 0}
+        canEdit={canEdit}
+        emptyList={emptyList}
+        onToggleDeleteModal={() => setIsDeleteModalOpen(true)}
+      />
+      {content}
+    </>
+  );
+}
+
+export default SurveyList;

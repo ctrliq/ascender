@@ -1,11 +1,17 @@
 # Copyright (c) 2016 Ansible, Inc.
 # All Rights Reserved.
 
-import time
-import ssl
-import logging
+"""IRC notification backend.
 
-import irc.client
+Speaks enough of RFC 2812 to register, join and send, which is all a
+notification needs, so the dependency is the standard library rather than a
+client library and the fifteen packages behind it.
+"""
+
+import logging
+import socket
+import ssl
+import time
 
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
@@ -14,6 +20,14 @@ from awx.main.notifications.base import AWXBaseEmailBackend
 from awx.main.notifications.custom_notification_base import CustomNotificationBase
 
 logger = logging.getLogger('awx.main.notifications.irc_backend')
+
+# A line is at most 512 bytes including the trailing CRLF (RFC 2812 section 2.3).
+MAX_LINE_LENGTH = 510
+# The whole send, registration included, is given the same budget the previous
+# implementation gave it.
+SEND_TIMEOUT = 60
+# Channel names begin with one of these (RFC 2812 section 1.3).
+CHANNEL_PREFIXES = ('#', '&', '+', '!')
 
 
 class IrcBackend(AWXBaseEmailBackend, CustomNotificationBase):
@@ -39,64 +53,122 @@ class IrcBackend(AWXBaseEmailBackend, CustomNotificationBase):
         self.password = password if password != "" else None
         self.use_ssl = use_ssl
         self.connection = None
+        self._buffer = b''
 
     def open(self):
         if self.connection is not None:
             return False
-        if self.use_ssl:
-            connection_factory = irc.connection.Factory(wrapper=ssl.wrap_socket)
-        else:
-            connection_factory = irc.connection.Factory()
         try:
-            self.reactor = irc.client.Reactor()
-            self.connection = self.reactor.server().connect(
-                self.server,
-                self.port,
-                self.nickname,
-                password=self.password,
-                connect_factory=connection_factory,
-            )
-        except irc.client.ServerConnectionError as e:
+            self.connection = socket.create_connection((self.server, int(self.port)), timeout=SEND_TIMEOUT)
+            if self.use_ssl:
+                context = ssl.create_default_context()
+                self.connection = context.wrap_socket(self.connection, server_hostname=self.server)
+            self._register()
+        except (OSError, ssl.SSLError) as e:
+            self.connection = None
             logger.error(smart_str(_("Exception connecting to irc server: {}").format(e)))
             if not self.fail_silently:
                 raise
+            return False
         return True
 
     def close(self):
         if self.connection is None:
             return
-        self.connection = None
+        try:
+            self._send_line('QUIT')
+        except OSError:
+            pass
+        finally:
+            try:
+                self.connection.close()
+            except OSError:
+                pass
+            self.connection = None
+            self._buffer = b''
 
-    def on_connect(self, connection, event):
-        for c in self.channels:
-            if irc.client.is_channel(c):
-                connection.join(c)
-            else:
-                for m in self.channels[c]:
-                    connection.privmsg(c, m.subject)
-                self.channels_sent += 1
+    def _send_line(self, line):
+        payload = line.encode('utf-8', errors='replace')[:MAX_LINE_LENGTH]
+        self.connection.sendall(payload + b'\r\n')
 
-    def on_join(self, connection, event):
-        for m in self.channels[event.target]:
-            connection.privmsg(event.target, m.subject)
-        self.channels_sent += 1
+    def _read_line(self, deadline):
+        """Return the next line from the server, or None once the deadline passes.
+
+        PING is answered here rather than by the caller, since a server that
+        gets no PONG during registration drops the connection.
+        """
+        while True:
+            if b'\r\n' in self._buffer:
+                line, self._buffer = self._buffer.split(b'\r\n', 1)
+                text = line.decode('utf-8', errors='replace')
+                if text.startswith('PING'):
+                    self._send_line('PONG' + text[4:])
+                    continue
+                return text
+            remaining = deadline - time.time()
+            if remaining <= 0:
+                return None
+            self.connection.settimeout(remaining)
+            try:
+                chunk = self.connection.recv(4096)
+            except (TimeoutError, socket.timeout):
+                return None
+            if not chunk:
+                return None
+            self._buffer += chunk
+
+    def _register(self):
+        """Send the registration handshake and wait for the welcome reply."""
+        if self.password:
+            self._send_line('PASS {}'.format(self.password))
+        self._send_line('NICK {}'.format(self.nickname))
+        self._send_line('USER {0} 0 * :{0}'.format(self.nickname))
+        deadline = time.time() + SEND_TIMEOUT
+        while True:
+            line = self._read_line(deadline)
+            if line is None:
+                raise OSError('timed out waiting for the irc server to accept the connection')
+            parts = line.split()
+            if len(parts) > 1 and parts[1] == '001':  # RPL_WELCOME
+                return
+            if len(parts) > 1 and parts[1].startswith('4'):  # 4xx replies are errors
+                raise OSError(line)
+
+    def _join(self, channel, deadline):
+        """Join a channel and wait for the server to confirm it."""
+        self._send_line('JOIN {}'.format(channel))
+        while True:
+            line = self._read_line(deadline)
+            if line is None:
+                return False
+            parts = line.split()
+            if len(parts) > 1 and parts[1] in ('366', 'JOIN'):  # end of names, or the join echoed back
+                return True
+            if len(parts) > 1 and parts[1].startswith('4'):
+                logger.error(smart_str(_("Could not join {}: {}").format(channel, line)))
+                return False
 
     def send_messages(self, messages):
-        if self.connection is None:
-            self.open()
-        self.channels = {}
-        self.channels_sent = 0
+        if self.connection is None and not self.open():
+            return 0
+        targets = {}
         for m in messages:
             for r in m.recipients():
-                if r not in self.channels:
-                    self.channels[r] = []
-                self.channels[r].append(m)
-        self.connection.add_global_handler("welcome", self.on_connect)
-        self.connection.add_global_handler("join", self.on_join)
-        start_time = time.time()
-        process_time = time.time()
-        while self.channels_sent < len(self.channels) and (process_time - start_time) < 60:
-            self.reactor.process_once(0.1)
-            process_time = time.time()
-        self.reactor.disconnect_all()
-        return self.channels_sent
+                targets.setdefault(r, []).append(m)
+        deadline = time.time() + SEND_TIMEOUT
+        sent = 0
+        try:
+            for target, target_messages in targets.items():
+                if target.startswith(CHANNEL_PREFIXES) and not self._join(target, deadline):
+                    continue
+                for m in target_messages:
+                    for line in smart_str(m.subject).splitlines() or ['']:
+                        self._send_line('PRIVMSG {} :{}'.format(target, line))
+                sent += 1
+        except OSError as e:
+            logger.error(smart_str(_("Exception sending to irc server: {}").format(e)))
+            if not self.fail_silently:
+                raise
+        finally:
+            self.close()
+        return sent

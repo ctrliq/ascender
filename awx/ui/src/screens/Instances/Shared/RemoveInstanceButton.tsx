@@ -1,0 +1,217 @@
+import type { Instance } from 'types/api';
+import React, { useContext, useState, useEffect } from 'react';
+import { Plural, useLingui } from '@lingui/react/macro';
+import { KebabifiedContext } from 'contexts/Kebabified';
+import type { DeleteCount } from 'util/getRelatedResourceDeleteDetails';
+import {
+  getRelatedResourceDeleteCounts,
+  relatedResourceDeleteRequests,
+} from 'util/getRelatedResourceDeleteDetails';
+import {
+  Button,
+  Tooltip,
+  Alert,
+  Badge,
+  DropdownItem,
+} from '@patternfly/react-core';
+
+import AlertModal from 'components/AlertModal';
+import styled from 'styled-components';
+import ErrorDetail from 'components/ErrorDetail';
+
+const WarningMessage = styled(Alert)`
+  margin-top: 10px;
+`;
+
+const Label = styled.span`
+  && {
+    margin-right: 10px;
+  }
+`;
+
+export interface RemoveInstanceButtonProps {
+  itemsToRemove: Instance[];
+  onRemove: () => void;
+  isK8s: boolean;
+  [key: string]: unknown;
+}
+
+function RemoveInstanceButton({
+  itemsToRemove,
+  onRemove,
+  isK8s,
+}: RemoveInstanceButtonProps) {
+  const { t, i18n } = useLingui();
+  const { isKebabified, onKebabModalChange } = useContext(KebabifiedContext);
+  const [removeMessageError, setRemoveMessageError] = useState<unknown>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [removeDetails, setRemoveDetails] = useState<DeleteCount[] | null>(
+    null
+  );
+  const [isLoading, setIsLoading] = useState(false);
+
+  const cannotRemove = (item: Instance) =>
+    !(item.node_type === 'execution' || item.node_type === 'hop');
+
+  const toggleModal = async (isOpen: boolean) => {
+    setRemoveDetails(null);
+    setIsLoading(true);
+    if (isOpen && itemsToRemove.length > 0) {
+      const { results, error } = await getRelatedResourceDeleteCounts(
+        relatedResourceDeleteRequests.instance(itemsToRemove[0])
+      );
+
+      if (error) {
+        setRemoveMessageError(error);
+      } else {
+        setRemoveDetails(results || null);
+      }
+    }
+    setIsModalOpen(isOpen);
+    setIsLoading(false);
+  };
+
+  const handleRemove = async () => {
+    await onRemove();
+    toggleModal(false);
+  };
+  useEffect(() => {
+    if (isKebabified) {
+      onKebabModalChange(isModalOpen);
+    }
+  }, [isKebabified, isModalOpen, onKebabModalChange]);
+
+  const renderTooltip = () => {
+    const itemsUnableToremove = itemsToRemove
+      .filter(cannotRemove)
+      .map((item) => item.hostname)
+      .join(', ');
+    if (itemsToRemove.some(cannotRemove)) {
+      return t`You do not have permission to remove instances: ${itemsUnableToremove}`;
+    }
+    if (itemsToRemove.length) {
+      return t`Remove`;
+    }
+    return t`Select a row to remove`;
+  };
+
+  const isDisabled =
+    itemsToRemove.length === 0 || itemsToRemove.some(cannotRemove);
+
+  const buildRemoveWarning = () => (
+    <div>
+      <Plural
+        value={itemsToRemove.length}
+        one="This instance is currently being used by other resources. Are you sure you want to delete it?"
+        other="Deprovisioning these instances could impact other resources that rely on them. Are you sure you want to delete anyway?"
+      />
+      {removeDetails &&
+        removeDetails.map(({ label, count }) => (
+          <div key={label.id} aria-label={`${i18n._(label)}: ${count}`}>
+            <Label>{i18n._(label)}</Label>
+            <Badge>{count}</Badge>
+          </div>
+        ))}
+    </div>
+  );
+
+  if (removeMessageError) {
+    return (
+      <AlertModal
+        isOpen={removeMessageError}
+        title={t`Error!`}
+        onClose={() => {
+          toggleModal(false);
+          setRemoveMessageError(undefined);
+        }}
+      >
+        <ErrorDetail error={removeMessageError} />
+      </AlertModal>
+    );
+  }
+  return (
+    <>
+      {isKebabified ? (
+        <Tooltip content={renderTooltip()} position="top">
+          <DropdownItem
+            key="add"
+            isDisabled={isDisabled || !isK8s}
+            isLoading={isLoading}
+            ouiaId="remove-button"
+            component="button"
+            onClick={() => {
+              toggleModal(true);
+            }}
+          >
+            {t`Remove`}
+          </DropdownItem>
+        </Tooltip>
+      ) : (
+        <Tooltip content={renderTooltip()} position="top">
+          <div>
+            <Button
+              variant="secondary"
+              isLoading={isLoading}
+              ouiaId="remove-button"
+              spinnerAriaValueText={isLoading ? 'Loading' : undefined}
+              onClick={() => toggleModal(true)}
+              isDisabled={isDisabled || !isK8s}
+            >
+              {t`Remove`}
+            </Button>
+          </div>
+        </Tooltip>
+      )}
+
+      {isModalOpen && (
+        <AlertModal
+          variant="danger"
+          title={t`Remove Instances`}
+          isOpen={isModalOpen}
+          onClose={() => toggleModal(false)}
+          actions={[
+            <Button
+              ouiaId="remove-modal-confirm"
+              key="remove"
+              variant="danger"
+              aria-label={t`Confirm remove`}
+              onClick={handleRemove}
+            >
+              {t`Remove`}
+            </Button>,
+            <Button
+              ouiaId="remove-cancel"
+              key="cancel"
+              variant="link"
+              aria-label={t`cancel remove`}
+              onClick={() => {
+                toggleModal(false);
+              }}
+            >
+              {t`Cancel`}
+            </Button>,
+          ]}
+        >
+          <div>
+            {t`This action will remove the following instance and you may need to rerun the install bundle for any instance that was previously connected to:`}
+          </div>
+          {itemsToRemove.map((item) => (
+            <span key={item.id} id={`item-to-be-removed-${item.id}`}>
+              <strong>{item.hostname}</strong>
+              <br />
+            </span>
+          ))}
+          {removeDetails && (
+            <WarningMessage
+              variant="warning"
+              isInline
+              title={buildRemoveWarning()}
+            />
+          )}
+        </AlertModal>
+      )}
+    </>
+  );
+}
+
+export default RemoveInstanceButton;
