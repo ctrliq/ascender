@@ -17,6 +17,10 @@ authors = [{ name = "Red Hat" }, { email = "info@ansible.com" }]
 dynamic = ["version"]
 
 [project.scripts]
+# Both names run the same entry point. `ascender-manage` is the name the
+# product has, and `awx-manage` is the one the installers, the operator and
+# people's own scripts call, so it stays until they have all moved.
+ascender-manage = "awx:manage"
 awx-manage = "awx:manage"
 
 [project.entry-points."awx.credential_plugins"]
