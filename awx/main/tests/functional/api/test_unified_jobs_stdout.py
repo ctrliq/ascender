@@ -28,6 +28,11 @@ from awx.main.models import (
 )
 
 
+def body(response):
+    """The download formats stream, so their bytes come from the iterator."""
+    return response.getvalue() if response.streaming else response.content
+
+
 def _mk_project_update(created=None):
     kwargs = {}
     if created:
@@ -65,7 +70,7 @@ def test_text_stdout(Parent, Child, relation, view, get, admin):
     url = reverse(view, kwargs={'pk': job.pk}) + '?format=txt'
 
     response = get(url, user=admin, expect=200)
-    assert smart_str(response.content).splitlines() == ['Testing %d' % i for i in range(3)]
+    assert smart_str(body(response)).splitlines() == ['Testing %d' % i for i in range(3)]
 
 
 @pytest.mark.django_db
@@ -89,14 +94,14 @@ def test_ansi_stdout_filtering(Parent, Child, relation, view, download, get, adm
     # ansi codes in ?format=txt should get filtered
     fmt = "?format={}".format("txt_download" if download else "txt")
     response = get(url + fmt, user=admin, expect=200)
-    assert smart_str(response.content).splitlines() == ['Testing %d' % i for i in range(3)]
+    assert smart_str(body(response)).splitlines() == ['Testing %d' % i for i in range(3)]
     has_download_header = response.has_header('Content-Disposition')
     assert has_download_header if download else not has_download_header
 
     # ask for ansi and you'll get it
     fmt = "?format={}".format("ansi_download" if download else "ansi")
     response = get(url + fmt, user=admin, expect=200)
-    assert smart_str(response.content).splitlines() == ['\x1b[0;36mTesting %d\x1b[0m' % i for i in range(3)]
+    assert smart_str(body(response)).splitlines() == ['\x1b[0;36mTesting %d\x1b[0m' % i for i in range(3)]
     has_download_header = response.has_header('Content-Disposition')
     assert has_download_header if download else not has_download_header
 
@@ -119,9 +124,9 @@ def test_colorized_html_stdout(Parent, Child, relation, view, get, admin):
     url = reverse(view, kwargs={'pk': job.pk}) + '?format=html'
 
     response = get(url, user=admin, expect=200)
-    assert '.ansi36 { color: #2dbaba; }' in smart_str(response.content)
+    assert '.ansi36 { color: #2dbaba; }' in smart_str(body(response))
     for i in range(3):
-        assert '<span class="ansi36">Testing {}</span>'.format(i) in smart_str(response.content)
+        assert '<span class="ansi36">Testing {}</span>'.format(i) in smart_str(body(response))
 
 
 @pytest.mark.django_db
@@ -142,7 +147,7 @@ def test_stdout_line_range(Parent, Child, relation, view, get, admin):
     url = reverse(view, kwargs={'pk': job.pk}) + '?format=html&start_line=5&end_line=10'
 
     response = get(url, user=admin, expect=200)
-    assert re.findall('Testing [0-9]+', smart_str(response.content)) == ['Testing %d' % i for i in range(5, 10)]
+    assert re.findall('Testing [0-9]+', smart_str(body(response))) == ['Testing %d' % i for i in range(5, 10)]
 
 
 @pytest.mark.django_db
@@ -196,7 +201,7 @@ def test_max_bytes_display(Parent, Child, relation, view, fmt, get, admin):
     url = reverse(view, kwargs={'pk': job.pk})
 
     response = get(url + '?format={}'.format(fmt), user=admin, expect=200)
-    assert smart_str(response.content) == (
+    assert smart_str(body(response)) == (
         'Standard Output too large to display ({actual} bytes), only download supported for sizes over {max} bytes.'.format(
             actual=total_bytes, max=settings.STDOUT_MAX_BYTES_DISPLAY
         )
@@ -204,7 +209,7 @@ def test_max_bytes_display(Parent, Child, relation, view, fmt, get, admin):
 
     response = get(url + '?format={}_download'.format(fmt), user=admin, expect=200)
     # COPY terminates every row, so the assembled download ends with a newline
-    assert smart_str(response.content) == large_stdout + '\n'
+    assert smart_str(body(response)) == large_stdout + '\n'
 
 
 @pytest.mark.django_db
@@ -221,7 +226,7 @@ def test_legacy_result_stdout_text_fallback(Cls, view, fmt, get, admin):
     url = reverse(view, kwargs={'pk': job.pk})
 
     response = get(url + '?format={}'.format(fmt), user=admin, expect=200)
-    assert smart_str(response.content) == 'LEGACY STDOUT!'
+    assert smart_str(body(response)) == 'LEGACY STDOUT!'
 
 
 @pytest.mark.django_db
@@ -238,14 +243,14 @@ def test_legacy_result_stdout_with_max_bytes(Cls, view, fmt, get, admin):
     url = reverse(view, kwargs={'pk': job.pk})
 
     response = get(url + '?format={}'.format(fmt), user=admin, expect=200)
-    assert smart_str(response.content) == (
+    assert smart_str(body(response)) == (
         'Standard Output too large to display ({actual} bytes), only download supported for sizes over {max} bytes.'.format(
             actual=total_bytes, max=settings.STDOUT_MAX_BYTES_DISPLAY
         )
     )
 
     response = get(url + '?format={}'.format(fmt + '_download'), user=admin, expect=200)
-    assert smart_str(response.content) == large_stdout
+    assert smart_str(body(response)) == large_stdout
 
 
 @pytest.mark.django_db
@@ -267,7 +272,7 @@ def test_text_with_unicode_stdout(Parent, Child, relation, view, get, admin, fmt
     url = reverse(view, kwargs={'pk': job.pk}) + '?format=' + fmt
 
     response = get(url, user=admin, expect=200)
-    assert smart_str(response.content).splitlines() == ['オ%d' % i for i in range(3)]
+    assert smart_str(body(response)).splitlines() == ['オ%d' % i for i in range(3)]
 
 
 @pytest.mark.django_db
@@ -280,5 +285,39 @@ def test_unicode_with_base64_ansi(get, admin):
     url = reverse('api:job_stdout', kwargs={'pk': job.pk}) + '?format=json&content_encoding=base64'
 
     response = get(url, user=admin, expect=200)
-    content = base64.b64decode(json.loads(smart_str(response.content))['content'])
+    content = base64.b64decode(json.loads(smart_str(body(response)))['content'])
     assert smart_str(content).splitlines() == ['オ%d' % i for i in range(3)]
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize(
+    'Parent, Child, relation, view',
+    [
+        [Job, JobEvent, 'job', 'api:job_stdout'],
+        [AdHocCommand, AdHocCommandEvent, 'ad_hoc_command', 'api:ad_hoc_command_stdout'],
+        [_mk_project_update, ProjectUpdateEvent, 'project_update', 'api:project_update_stdout'],
+        [_mk_inventory_update, InventoryUpdateEvent, 'inventory_update', 'api:inventory_update_stdout'],
+    ],
+)
+@pytest.mark.parametrize('fmt', ['txt_download', 'ansi_download'])
+def test_download_is_streamed_in_blocks(Parent, Child, relation, view, fmt, get, admin):
+    # result_stdout_raw_handle() goes to the trouble of COPYing stdout to a
+    # temporary file instead of through the ORM, so that a large download never
+    # lands on the heap. That only holds if the response streams: HttpResponse
+    # joins the whole iterator on assignment and puts every byte back.
+    job = Parent()
+    job.save()
+    for i in range(64):
+        Child(**{relation: job, 'stdout': 'X' * 4096, 'start_line': i, 'job_created': job.created}).save()
+    url = reverse(view, kwargs={'pk': job.pk}) + '?format=' + fmt
+
+    response = get(url, user=admin, expect=200)
+
+    assert response.streaming, '{} must not buffer the whole download'.format(fmt)
+    # More than one block out of the iterator, so it is genuinely incremental
+    # rather than a single chunk wearing a streaming response's clothes.
+    blocks = list(response.streaming_content)
+    assert len(blocks) > 1
+    assert max(len(b) for b in blocks) <= 8192
+    assert smart_str(b''.join(blocks)).splitlines() == ['X' * 4096] * 64
+    assert response.has_header('Content-Disposition')

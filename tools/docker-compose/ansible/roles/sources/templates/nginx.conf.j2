@@ -25,16 +25,12 @@ http {
 
     sendfile        on;
 
-    upstream uwsgi {
-        server localhost:8050;
+    upstream uvicorn {
+        server localhost:8051;
     }
 
     upstream runserver {
         server localhost:8052;
-    }
-
-    upstream daphne {
-        server localhost:8051;
     }
 
     server {
