@@ -1,136 +1,218 @@
 /*
- * What formik does today, written down.
+ * What a form does here, asked of two implementations.
  *
  * The roadmap asks for an exit from formik, and the risk in that is not the
- * API, which is small here: five runtime names, flat field keys, no schema
- * validation and no field arrays. The risk is the behaviour those names imply,
- * which nothing states. When a validator runs, when a field counts as touched,
- * what isValid says about a pristine form with an empty required field: none
- * of that is in a type signature, and all of it is what a user would notice.
+ * API, which is small: five runtime names, flat field keys, no schema
+ * validation and no field arrays. The risk is the behaviour those names imply
+ * and nothing states. When a validator runs, when a field counts as touched,
+ * what isValid says about a pristine form whose required field is empty: none
+ * of that is in a type signature, and all of it is what someone would notice.
  *
- * So these are written against formik, before any replacement exists. They are
- * a description of today rather than of anything intended, and a replacement
- * that passes them unchanged is a replacement that nobody has to inspect the
- * forms to trust.
+ * So every test below runs twice, once against formik and once against the
+ * field layer meant to replace it. They were written against formik first, so
+ * they describe today rather than anything intended, and a difference in
+ * either direction is a failure.
  */
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Formik, useField, useFormikContext } from 'formik';
-import type { FieldValidator } from 'formik';
+import { Formik, useField as useFormikField, useFormikContext } from 'formik';
+import {
+  Form as OwnForm,
+  useField as useOwnField,
+  useFormContext as useOwnFormContext,
+} from 'components/Form';
+
+type Validator = (value: never) => string | undefined;
+type Bag = Record<string, unknown>;
+
+interface FieldLike {
+  name: string;
+  value: unknown;
+  onChange: (event: unknown) => void;
+  onBlur: (event?: unknown) => void;
+}
+interface MetaLike {
+  value: unknown;
+  initialValue?: unknown;
+  touched: boolean;
+  error?: string;
+}
+interface HelpersLike {
+  setValue: (value: unknown, shouldValidate?: boolean) => void;
+  setTouched: (touched: boolean, shouldValidate?: boolean) => void;
+  setError: (error: string | undefined) => void;
+}
+interface ContextLike {
+  values: Bag;
+  errors: Bag;
+  touched: Bag;
+  isValid: boolean;
+  handleSubmit: (event?: unknown) => void;
+  setFieldValue: (n: string, v: unknown, shouldValidate?: boolean) => void;
+  setFieldTouched: (n: string, t?: boolean, shouldValidate?: boolean) => void;
+  setFieldError: (n: string, e: string | undefined) => void;
+  resetForm: () => void;
+}
+interface RootLike {
+  handleSubmit: (event?: unknown) => void;
+  values: Bag;
+  setFieldValue: (n: string, v: unknown, shouldValidate?: boolean) => void;
+  isValid: boolean;
+  initialValues: Bag;
+}
+
+interface Implementation {
+  name: string;
+  Root: React.ComponentType<{
+    initialValues: Bag;
+    onSubmit: (values: Bag) => void | Promise<void>;
+    children: (form: RootLike) => React.ReactNode;
+  }>;
+  useField: (
+    config: string | { name: string; validate?: Validator }
+  ) => [FieldLike, MetaLike, HelpersLike];
+  useFormContext: () => ContextLike;
+}
+
+const implementations: Implementation[] = [
+  {
+    name: 'formik',
+    Root: Formik as unknown as Implementation['Root'],
+    useField: useFormikField as unknown as Implementation['useField'],
+    useFormContext:
+      useFormikContext as unknown as Implementation['useFormContext'],
+  },
+  {
+    name: 'the field layer',
+    Root: OwnForm as unknown as Implementation['Root'],
+    useField: useOwnField as unknown as Implementation['useField'],
+    useFormContext:
+      useOwnFormContext as unknown as Implementation['useFormContext'],
+  },
+];
 
 const required = (value: unknown) => (value ? undefined : 'required');
-
-/** A field that shows everything the codebase reads off useField. */
-function Probe({
-  name,
-  validate,
-}: {
-  name: string;
-  validate?: FieldValidator;
-}) {
-  const [field, meta, helpers] = useField(
-    validate ? { name, validate } : { name }
-  );
-  return (
-    <div>
-      <input
-        aria-label={name}
-        name={field.name}
-        value={String(field.value ?? '')}
-        onChange={field.onChange}
-        onBlur={field.onBlur}
-      />
-      <output data-testid={`${name}-error`}>{meta.error ?? ''}</output>
-      <output data-testid={`${name}-touched`}>{String(meta.touched)}</output>
-      <output data-testid={`${name}-initial`}>
-        {String(meta.initialValue ?? '')}
-      </output>
-      <button type="button" onClick={() => helpers.setValue('set')}>
-        {`field set ${name}`}
-      </button>
-      <button type="button" onClick={() => helpers.setTouched(true)}>
-        {`field touch ${name}`}
-      </button>
-      <button type="button" onClick={() => helpers.setError('forced')}>
-        {`field error ${name}`}
-      </button>
-      <button
-        type="button"
-        onClick={() => field.onChange({ target: { name, value: 'made up' } })}
-      >
-        {`hand made event ${name}`}
-      </button>
-      <button
-        type="button"
-        onClick={() => {
-          try {
-            (field.onChange as (v: unknown) => void)(null);
-          } catch (err) {
-            (
-              window as unknown as { onChangeNullThrew?: boolean }
-            ).onChangeNullThrew = true;
-          }
-        }}
-      >
-        {`null change ${name}`}
-      </button>
-    </div>
-  );
-}
-
-/** Everything the codebase reads off useFormikContext. */
-function ContextProbe() {
-  const ctx = useFormikContext<Record<string, unknown>>();
-  return (
-    <div>
-      <output data-testid="values">{JSON.stringify(ctx.values)}</output>
-      <output data-testid="errors">{JSON.stringify(ctx.errors)}</output>
-      <output data-testid="touched">{JSON.stringify(ctx.touched)}</output>
-      <output data-testid="isValid">{String(ctx.isValid)}</output>
-      <button type="button" onClick={() => ctx.setFieldValue('a', 'ctx')}>
-        context set a
-      </button>
-      <button type="button" onClick={() => ctx.setFieldTouched('a', true)}>
-        context touch a
-      </button>
-      <button type="button" onClick={() => ctx.setFieldError('a', 'ctx error')}>
-        context error a
-      </button>
-      <button type="button" onClick={() => ctx.resetForm()}>
-        reset
-      </button>
-    </div>
-  );
-}
-
-interface FormProps {
-  initialValues?: Record<string, unknown>;
-  onSubmit?: (values: Record<string, unknown>) => void | Promise<void>;
-  validate?: FieldValidator;
-}
-
-function Harness({
-  initialValues = { a: '' },
-  onSubmit = () => {},
-  validate,
-}: FormProps) {
-  return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit}>
-      {(formik) => (
-        <form onSubmit={formik.handleSubmit}>
-          <Probe name="a" validate={validate} />
-          <ContextProbe />
-          <button type="submit">submit</button>
-        </form>
-      )}
-    </Formik>
-  );
-}
-
+const never = () => 'always wrong';
 const at = (id: string) => screen.getByTestId(id).textContent;
+const press = (name: string) =>
+  screen.getByRole('button', { name }) as HTMLElement;
 
-describe('the form contract, as formik implements it today', () => {
+describe.each(implementations)('a form, per $name', (impl) => {
+  const { useField, useFormContext, Root } = impl;
+
+  /** A field showing everything the codebase reads off useField. */
+  function Probe({ name, validate }: { name: string; validate?: Validator }) {
+    const [field, meta, helpers] = useField(
+      validate ? { name, validate } : { name }
+    );
+    return (
+      <div>
+        <input
+          aria-label={name}
+          name={field.name}
+          value={String(field.value ?? '')}
+          onChange={field.onChange}
+          onBlur={field.onBlur}
+        />
+        <output data-testid={`${name}-error`}>{meta.error ?? ''}</output>
+        <output data-testid={`${name}-touched`}>{String(meta.touched)}</output>
+        <output data-testid={`${name}-initial`}>
+          {String(meta.initialValue ?? '')}
+        </output>
+        <button type="button" onClick={() => helpers.setValue('set')}>
+          {`field set ${name}`}
+        </button>
+        <button type="button" onClick={() => helpers.setTouched(true)}>
+          {`field touch ${name}`}
+        </button>
+        <button type="button" onClick={() => helpers.setError('forced')}>
+          {`field error ${name}`}
+        </button>
+        <button
+          type="button"
+          onClick={() => field.onChange({ target: { name, value: 'made up' } })}
+        >
+          {`hand made event ${name}`}
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            try {
+              field.onChange(null);
+            } catch {
+              (window as unknown as Bag).onChangeNullThrew = true;
+            }
+          }}
+        >
+          {`null change ${name}`}
+        </button>
+      </div>
+    );
+  }
+
+  /** Everything the codebase reads off the form context. */
+  function ContextProbe() {
+    const ctx = useFormContext();
+    return (
+      <div>
+        <output data-testid="values">{JSON.stringify(ctx.values)}</output>
+        <output data-testid="errors">{JSON.stringify(ctx.errors)}</output>
+        <output data-testid="touched">{JSON.stringify(ctx.touched)}</output>
+        <output data-testid="isValid">{String(ctx.isValid)}</output>
+        <button type="button" onClick={() => ctx.setFieldValue('a', 'ctx')}>
+          context set a
+        </button>
+        <button type="button" onClick={() => ctx.setFieldTouched('a', true)}>
+          context touch a
+        </button>
+        <button
+          type="button"
+          onClick={() => ctx.setFieldError('a', 'ctx error')}
+        >
+          context error a
+        </button>
+        <button
+          type="button"
+          onClick={() => ctx.setFieldValue('a', 'quiet', false)}
+        >
+          context set a without validating
+        </button>
+        <button
+          type="button"
+          onClick={() => ctx.setFieldTouched('a', true, false)}
+        >
+          context touch a without validating
+        </button>
+        <button type="button" onClick={() => ctx.resetForm()}>
+          reset
+        </button>
+      </div>
+    );
+  }
+
+  function Harness({
+    initialValues = { a: '' },
+    onSubmit = () => {},
+    validate,
+  }: {
+    initialValues?: Bag;
+    onSubmit?: (values: Bag) => void | Promise<void>;
+    validate?: Validator;
+  }) {
+    return (
+      <Root initialValues={initialValues} onSubmit={onSubmit}>
+        {(form) => (
+          <form onSubmit={form.handleSubmit}>
+            <Probe name="a" validate={validate} />
+            <ContextProbe />
+            <button type="submit">submit</button>
+          </form>
+        )}
+      </Root>
+    );
+  }
+
   describe('initial state', () => {
     test('a field takes its value and its initialValue from initialValues', () => {
       render(<Harness initialValues={{ a: 'first' }} />);
@@ -151,7 +233,7 @@ describe('the form contract, as formik implements it today', () => {
     test('a pristine form with an empty required field still says it is valid', () => {
       render(<Harness validate={required} />);
 
-      // the validator has not run yet, so there is no error to be invalid about
+      // the validator has not run, so there is no error to be invalid about
       expect(at('isValid')).toBe('true');
     });
   });
@@ -215,7 +297,7 @@ describe('the form contract, as formik implements it today', () => {
       const onSubmit = vi.fn();
       render(<Harness initialValues={{ a: 'yes' }} onSubmit={onSubmit} />);
 
-      await user.click(screen.getByRole('button', { name: 'submit' }));
+      await user.click(press('submit'));
 
       await waitFor(() => expect(onSubmit).toHaveBeenCalledTimes(1));
       expect(onSubmit.mock.calls[0]?.[0]).toEqual({ a: 'yes' });
@@ -226,7 +308,7 @@ describe('the form contract, as formik implements it today', () => {
       const onSubmit = vi.fn();
       render(<Harness onSubmit={onSubmit} validate={required} />);
 
-      await user.click(screen.getByRole('button', { name: 'submit' }));
+      await user.click(press('submit'));
 
       await waitFor(() => expect(at('a-error')).toBe('required'));
       expect(onSubmit).not.toHaveBeenCalled();
@@ -236,7 +318,7 @@ describe('the form contract, as formik implements it today', () => {
       const user = userEvent.setup();
       render(<Harness validate={required} />);
 
-      await user.click(screen.getByRole('button', { name: 'submit' }));
+      await user.click(press('submit'));
 
       await waitFor(() => expect(at('a-touched')).toBe('true'));
     });
@@ -245,7 +327,7 @@ describe('the form contract, as formik implements it today', () => {
       const user = userEvent.setup();
       render(<Harness validate={required} />);
 
-      await user.click(screen.getByRole('button', { name: 'submit' }));
+      await user.click(press('submit'));
 
       await waitFor(() => expect(at('isValid')).toBe('false'));
     });
@@ -256,17 +338,16 @@ describe('the form contract, as formik implements it today', () => {
       const user = userEvent.setup();
       render(<Harness />);
 
-      await user.click(screen.getByRole('button', { name: 'field set a' }));
+      await user.click(press('field set a'));
 
       await waitFor(() => expect(at('values')).toBe('{"a":"set"}'));
     });
 
     test('setValue runs the validator', async () => {
       const user = userEvent.setup();
-      const never = () => 'always wrong';
       render(<Harness validate={never} />);
 
-      await user.click(screen.getByRole('button', { name: 'field set a' }));
+      await user.click(press('field set a'));
 
       await waitFor(() => expect(at('a-error')).toBe('always wrong'));
     });
@@ -275,7 +356,7 @@ describe('the form contract, as formik implements it today', () => {
       const user = userEvent.setup();
       render(<Harness />);
 
-      await user.click(screen.getByRole('button', { name: 'field touch a' }));
+      await user.click(press('field touch a'));
 
       await waitFor(() => expect(at('a-touched')).toBe('true'));
     });
@@ -284,7 +365,7 @@ describe('the form contract, as formik implements it today', () => {
       const user = userEvent.setup();
       render(<Harness />);
 
-      await user.click(screen.getByRole('button', { name: 'field error a' }));
+      await user.click(press('field error a'));
 
       await waitFor(() => expect(at('a-error')).toBe('forced'));
     });
@@ -295,27 +376,22 @@ describe('the form contract, as formik implements it today', () => {
       const user = userEvent.setup();
       render(<Harness />);
 
-      await user.click(
-        screen.getByRole('button', { name: 'hand made event a' })
-      );
+      await user.click(press('hand made event a'));
 
       await waitFor(() => expect(at('values')).toBe('{"a":"made up"}'));
     });
 
     // Recorded rather than desired. InventoryStep deselects with
-    // `field.onChange(null)`, and formik reads `target` off what it is given,
-    // so that call throws where it stands. Pinned here so a replacement is
-    // held to the same shape of contract, and so the call site is not fixed by
-    // accident in the middle of a port: it wants its own change.
+    // `field.onChange(null)`, and a form reads `target` off what it is given,
+    // so that call throws where it stands. Pinned as it behaves so a port is
+    // not the change that quietly fixes it: that wants its own.
     test('onChange(null) throws, and leaves the value alone', async () => {
       const user = userEvent.setup();
       render(<Harness initialValues={{ a: 'kept' }} />);
 
-      await user.click(screen.getByRole('button', { name: 'null change a' }));
+      await user.click(press('null change a'));
 
-      expect(
-        (window as unknown as { onChangeNullThrew?: boolean }).onChangeNullThrew
-      ).toBe(true);
+      expect((window as unknown as Bag).onChangeNullThrew).toBe(true);
       expect(at('values')).toBe('{"a":"kept"}');
     });
   });
@@ -324,8 +400,8 @@ describe('the form contract, as formik implements it today', () => {
     test('handleSubmit, values, setFieldValue, isValid and initialValues', () => {
       const seen: string[] = [];
       render(
-        <Formik initialValues={{ a: '1' }} onSubmit={() => {}}>
-          {(formik) => {
+        <Root initialValues={{ a: '1' }} onSubmit={() => {}}>
+          {(form) => {
             seen.push(
               ...(
                 [
@@ -335,11 +411,11 @@ describe('the form contract, as formik implements it today', () => {
                   'isValid',
                   'initialValues',
                 ] as const
-              ).filter((k) => formik[k] !== undefined)
+              ).filter((k) => form[k] !== undefined)
             );
-            return <form onSubmit={formik.handleSubmit} />;
+            return <form onSubmit={form.handleSubmit} />;
           }}
-        </Formik>
+        </Root>
       );
 
       expect(new Set(seen)).toEqual(
@@ -353,12 +429,12 @@ describe('the form contract, as formik implements it today', () => {
       );
     });
 
-    test('onSubmit is given the values, and nothing here reads a second argument', async () => {
+    test('onSubmit is given the values', async () => {
       const user = userEvent.setup();
       const onSubmit = vi.fn();
       render(<Harness initialValues={{ a: 'v' }} onSubmit={onSubmit} />);
 
-      await user.click(screen.getByRole('button', { name: 'submit' }));
+      await user.click(press('submit'));
 
       await waitFor(() => expect(onSubmit).toHaveBeenCalled());
       expect(onSubmit.mock.calls[0]?.[0]).toEqual({ a: 'v' });
@@ -376,7 +452,7 @@ describe('the form contract, as formik implements it today', () => {
       const user = userEvent.setup();
       render(<Harness />);
 
-      await user.click(screen.getByRole('button', { name: 'context set a' }));
+      await user.click(press('context set a'));
 
       await waitFor(() =>
         expect(screen.getByLabelText('a')).toHaveValue('ctx')
@@ -387,11 +463,44 @@ describe('the form contract, as formik implements it today', () => {
       const user = userEvent.setup();
       render(<Harness />);
 
-      await user.click(screen.getByRole('button', { name: 'context touch a' }));
-      await user.click(screen.getByRole('button', { name: 'context error a' }));
+      await user.click(press('context touch a'));
+      await user.click(press('context error a'));
 
       await waitFor(() => expect(at('a-touched')).toBe('true'));
       expect(at('a-error')).toBe('ctx error');
+    });
+
+    // A run of call sites pass a third argument to say "do not validate this
+    // one", which is the difference between a field the user changed and one
+    // the form changed underneath them. A lookup clearing a dependent field
+    // uses it so that field does not show an error the user did not cause.
+    test('setFieldValue with shouldValidate false skips the validator', async () => {
+      const user = userEvent.setup();
+      render(<Harness validate={never} />);
+
+      await user.click(press('context set a without validating'));
+
+      await waitFor(() => expect(at('values')).toBe('{"a":"quiet"}'));
+      expect(at('a-error')).toBe('');
+    });
+
+    test('setFieldTouched with shouldValidate false skips the validator', async () => {
+      const user = userEvent.setup();
+      render(<Harness validate={never} />);
+
+      await user.click(press('context touch a without validating'));
+
+      await waitFor(() => expect(at('a-touched')).toBe('true'));
+      expect(at('a-error')).toBe('');
+    });
+
+    test('setFieldTouched validates by default', async () => {
+      const user = userEvent.setup();
+      render(<Harness validate={never} />);
+
+      await user.click(press('context touch a'));
+
+      await waitFor(() => expect(at('a-error')).toBe('always wrong'));
     });
 
     test('resetForm puts the values, touched and errors back', async () => {
@@ -400,10 +509,10 @@ describe('the form contract, as formik implements it today', () => {
 
       await user.clear(screen.getByLabelText('a'));
       await user.type(screen.getByLabelText('a'), 'changed');
-      await user.click(screen.getByRole('button', { name: 'context touch a' }));
+      await user.click(press('context touch a'));
       await waitFor(() => expect(at('a-touched')).toBe('true'));
 
-      await user.click(screen.getByRole('button', { name: 'reset' }));
+      await user.click(press('reset'));
 
       await waitFor(() =>
         expect(screen.getByLabelText('a')).toHaveValue('first')
