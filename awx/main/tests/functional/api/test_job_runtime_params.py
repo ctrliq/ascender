@@ -692,7 +692,7 @@ def test_callback_accept_prompted_extra_var(mocker, survey_spec_factory, job_tem
     mock_job = mocker.MagicMock(spec=Job, id=968, extra_vars={"job_launch_var": 3, "survey_var": 4})
     mocker.patch.object(UnifiedJobTemplate, 'create_unified_job', return_value=mock_job)
     mocker.patch('awx.api.serializers.JobSerializer.to_representation', return_value={})
-    mocker.patch('awx.api.views.JobTemplateCallback.find_matching_hosts', return_value=[host])
+    mocker.patch('awx.api.views.job_template.JobTemplateCallback.find_matching_hosts', return_value=[host])
     post(
         reverse('api:job_template_callback', kwargs={'pk': job_template.pk}),
         dict(extra_vars={"job_launch_var": 3, "survey_var": 4}, host_config_key="foo"),
@@ -719,7 +719,7 @@ def test_callback_ignore_unprompted_extra_var(mocker, survey_spec_factory, job_t
     mock_job = mocker.MagicMock(spec=Job, id=968, extra_vars={"job_launch_var": 3, "survey_var": 4})
     mocker.patch.object(UnifiedJobTemplate, 'create_unified_job', return_value=mock_job)
     mocker.patch('awx.api.serializers.JobSerializer.to_representation', return_value={})
-    mocker.patch('awx.api.views.JobTemplateCallback.find_matching_hosts', return_value=[host])
+    mocker.patch('awx.api.views.job_template.JobTemplateCallback.find_matching_hosts', return_value=[host])
     post(
         reverse('api:job_template_callback', kwargs={'pk': job_template.pk}),
         dict(extra_vars={"job_launch_var": 3, "survey_var": 4}, host_config_key="foo"),

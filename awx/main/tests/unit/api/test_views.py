@@ -6,7 +6,13 @@ from unittest import mock
 from collections import namedtuple
 
 from awx.api.views.root import ApiVersionRootView
-from awx.api.views import JobTemplateLabelList, InventoryInventorySourcesUpdate, JobTemplateSurveySpec
+from awx.api.views.inventory import (
+    InventoryInventorySourcesUpdate,
+)
+from awx.api.views.job_template import (
+    JobTemplateLabelList,
+    JobTemplateSurveySpec,
+)
 
 from awx.main.views import handle_error
 

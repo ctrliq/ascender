@@ -1707,38 +1707,6 @@ export interface paths {
     patch?: never;
     trace?: never;
   };
-  '/api/v2/config/attach/': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['config_attach_create'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
-  '/api/v2/config/subscriptions/': {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    get?: never;
-    put?: never;
-    post: operations['config_subscriptions_create'];
-    delete?: never;
-    options?: never;
-    head?: never;
-    patch?: never;
-    trace?: never;
-  };
   '/api/v2/constructed_inventories/': {
     parameters: {
       query?: never;
@@ -8430,7 +8398,6 @@ export interface components {
      *     * `cloud` - Cloud
      *     * `registry` - Container Registry
      *     * `token` - Personal Access Token
-     *     * `insights` - Insights
      *     * `external` - External
      *     * `kubernetes` - Kubernetes
      *     * `galaxy` - Galaxy/Automation Hub
@@ -8445,7 +8412,6 @@ export interface components {
       | 'cloud'
       | 'registry'
       | 'token'
-      | 'insights'
       | 'external'
       | 'kubernetes'
       | 'galaxy'
@@ -12528,7 +12494,7 @@ export interface components {
        * @description This setting is used by services like notifications to render a valid url to the service.
        * @default https://ascenderhost
        */
-      TOWER_URL_BASE: string;
+      ASCENDER_URL_BASE: string;
       /**
        * @description HTTP headers and meta keys to search to determine remote host name or IP. Add additional items to this list, such as "HTTP_X_FORWARDED_FOR", if behind a reverse proxy. See the "Proxy Support" section of the AAP Installation guide for more details.
        * @default [
@@ -12560,18 +12526,6 @@ export interface components {
        * @default
        */
       REDHAT_PASSWORD: string;
-      /**
-       * Red Hat or Satellite username
-       * @description This username is used to retrieve subscription and content information
-       * @default
-       */
-      SUBSCRIPTIONS_USERNAME: string;
-      /**
-       * Red Hat or Satellite password
-       * @description This password is used to retrieve subscription and content information
-       * @default
-       */
-      SUBSCRIPTIONS_PASSWORD: string;
       /**
        * Automation Analytics upload URL
        * Format: uri
@@ -15583,7 +15537,7 @@ export interface components {
        * @description This setting is used by services like notifications to render a valid url to the service.
        * @default https://ascenderhost
        */
-      TOWER_URL_BASE: string;
+      ASCENDER_URL_BASE: string;
       /**
        * @description HTTP headers and meta keys to search to determine remote host name or IP. Add additional items to this list, such as "HTTP_X_FORWARDED_FOR", if behind a reverse proxy. See the "Proxy Support" section of the AAP Installation guide for more details.
        * @default [
@@ -15619,18 +15573,6 @@ export interface components {
        * @default
        */
       REDHAT_PASSWORD: string;
-      /**
-       * Red Hat or Satellite username
-       * @description This username is used to retrieve subscription and content information
-       * @default
-       */
-      SUBSCRIPTIONS_USERNAME: string;
-      /**
-       * Red Hat or Satellite password
-       * @description This password is used to retrieve subscription and content information
-       * @default
-       */
-      SUBSCRIPTIONS_PASSWORD: string;
       /**
        * Automation Analytics upload URL
        * Format: uri
@@ -17685,7 +17627,7 @@ export interface components {
        * @description This setting is used by services like notifications to render a valid url to the service.
        * @default https://ascenderhost
        */
-      TOWER_URL_BASE: string;
+      ASCENDER_URL_BASE: string;
       /**
        * @description HTTP headers and meta keys to search to determine remote host name or IP. Add additional items to this list, such as "HTTP_X_FORWARDED_FOR", if behind a reverse proxy. See the "Proxy Support" section of the AAP Installation guide for more details.
        * @default [
@@ -17717,18 +17659,6 @@ export interface components {
        * @default
        */
       REDHAT_PASSWORD: string;
-      /**
-       * Red Hat or Satellite username
-       * @description This username is used to retrieve subscription and content information
-       * @default
-       */
-      SUBSCRIPTIONS_USERNAME: string;
-      /**
-       * Red Hat or Satellite password
-       * @description This password is used to retrieve subscription and content information
-       * @default
-       */
-      SUBSCRIPTIONS_PASSWORD: string;
       /**
        * Automation Analytics upload URL
        * Format: uri
@@ -22740,42 +22670,6 @@ export interface operations {
     responses: {
       /** @description No response body */
       204: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  config_attach_create: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description No response body */
-      200: {
-        headers: {
-          [name: string]: unknown;
-        };
-        content?: never;
-      };
-    };
-  };
-  config_subscriptions_create: {
-    parameters: {
-      query?: never;
-      header?: never;
-      path?: never;
-      cookie?: never;
-    };
-    requestBody?: never;
-    responses: {
-      /** @description No response body */
-      200: {
         headers: {
           [name: string]: unknown;
         };

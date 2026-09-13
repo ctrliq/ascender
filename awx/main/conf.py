@@ -55,7 +55,7 @@ register(
 )
 
 register(
-    'TOWER_URL_BASE',
+    'ASCENDER_URL_BASE',
     field_class=fields.URLField,
     schemes=('http', 'https'),
     allow_plain_hostname=True,  # Allow hostname only without TLD.
@@ -141,32 +141,6 @@ register(
     read_only=False,
     label=_('Red Hat customer password'),
     help_text=_('This password is used to send data to Automation Analytics'),
-    category=_('System'),
-    category_slug='system',
-)
-
-register(
-    'SUBSCRIPTIONS_USERNAME',
-    field_class=fields.CharField,
-    default='',
-    allow_blank=True,
-    encrypted=False,
-    read_only=False,
-    label=_('Red Hat or Satellite username'),
-    help_text=_('This username is used to retrieve subscription and content information'),  # noqa
-    category=_('System'),
-    category_slug='system',
-)
-
-register(
-    'SUBSCRIPTIONS_PASSWORD',
-    field_class=fields.CharField,
-    default='',
-    allow_blank=True,
-    encrypted=True,
-    read_only=False,
-    label=_('Red Hat or Satellite password'),
-    help_text=_('This password is used to retrieve subscription and content information'),  # noqa
     category=_('System'),
     category_slug='system',
 )
