@@ -226,7 +226,10 @@ describe('Setting form fields', () => {
 
   test('should render confirmation modal when toggle on for disable local auth', async () => {
     const { user, container } = renderWithContexts(
-      <FormRoot onSubmit={() => {}} initialValues={{ DISABLE_LOCAL_AUTH: false }}>
+      <FormRoot
+        onSubmit={() => {}}
+        initialValues={{ DISABLE_LOCAL_AUTH: false }}
+      >
         {() => (
           <BooleanField
             name="DISABLE_LOCAL_AUTH"
@@ -263,7 +266,10 @@ describe('Setting form fields', () => {
 
   test('should not render confirmation modal when toggling off', async () => {
     const { user, container } = renderWithContexts(
-      <FormRoot onSubmit={() => {}} initialValues={{ DISABLE_LOCAL_AUTH: true }}>
+      <FormRoot
+        onSubmit={() => {}}
+        initialValues={{ DISABLE_LOCAL_AUTH: true }}
+      >
         {() => (
           <BooleanField
             name="DISABLE_LOCAL_AUTH"
@@ -296,7 +302,10 @@ describe('Setting form fields', () => {
 
   test('should not toggle disable local auth when cancelled', async () => {
     const { user, container } = renderWithContexts(
-      <FormRoot onSubmit={() => {}} initialValues={{ DISABLE_LOCAL_AUTH: false }}>
+      <FormRoot
+        onSubmit={() => {}}
+        initialValues={{ DISABLE_LOCAL_AUTH: false }}
+      >
         {() => (
           <BooleanField
             name="DISABLE_LOCAL_AUTH"

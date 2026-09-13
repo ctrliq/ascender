@@ -39,6 +39,9 @@ const FormActionGroup = ({
           aria-label={t`Cancel`}
           variant="link"
           type="button"
+          // Takes the click without taking the focus. Blurring a required
+          // field that is still empty runs its validator, which put an error
+          // on a form the user was walking away from: ansible/awx#8826.
           onMouseDown={(e) => e.preventDefault()}
           onClick={onCancel}
         >

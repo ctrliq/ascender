@@ -113,7 +113,10 @@ function LoggingEdit() {
       {Boolean(isLoading) && <ContentLoading />}
       {!isLoading && Boolean(error) && <ContentError error={error} />}
       {!isLoading && logging && (
-        <FormRoot initialValues={initialValues(logging)} onSubmit={handleSubmit}>
+        <FormRoot
+          initialValues={initialValues(logging)}
+          onSubmit={handleSubmit}
+        >
           {(formik) => (
             <Form autoComplete="off" onSubmit={formik.handleSubmit}>
               <FormColumnLayout>
