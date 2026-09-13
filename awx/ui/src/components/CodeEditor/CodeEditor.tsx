@@ -133,6 +133,27 @@ const languages: Record<CodeEditorMode, () => Extension> = {
   jinja2: () => StreamLanguage.define(jinja2),
 };
 
+/**
+ * Where the cursor sits when the editor is first entered.
+ *
+ * A YAML document opens with a `---` marker, so starting at the top of the
+ * document puts the first keystroke on syntax rather than on the content the
+ * user came for. Start below the marker instead, or at the end of it where it
+ * is all there is, which is what ansible/awx#8827 asked of the editor this one
+ * replaces.
+ */
+const openingAnchor = (doc: string, mode: CodeEditorMode): number => {
+  if (mode !== 'yaml') {
+    return 0;
+  }
+  const breakAt = doc.indexOf('\n');
+  const first = breakAt === -1 ? doc : doc.slice(0, breakAt);
+  if (first.trim() !== '---') {
+    return 0;
+  }
+  return breakAt === -1 ? doc.length : breakAt + 1;
+};
+
 export interface CodeEditorProps {
   id?: string;
   value?: string;
@@ -231,6 +252,7 @@ function CodeEditor({
 
     const state = EditorState.create({
       doc: value,
+      selection: { anchor: openingAnchor(value, mode) },
       extensions: [
         lineNumbers(),
         highlightSpecialChars(),

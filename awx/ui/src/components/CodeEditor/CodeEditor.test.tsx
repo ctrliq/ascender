@@ -58,6 +58,73 @@ describe('CodeEditor', () => {
     expect(onChange).toHaveBeenCalledWith('hi');
   });
 
+  describe('where the cursor opens', () => {
+    // ansible/awx#8827: tabbing into the editor this one replaces landed on the
+    // YAML marker, so the first keystroke went into the syntax.
+    const settle = async () => {
+      await act(async () => {
+        await new Promise((resolve) => {
+          setTimeout(resolve, 300);
+        });
+      });
+    };
+
+    it('should open below the YAML marker rather than on it', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      renderWithContexts(
+        <CodeEditor
+          id="code"
+          value={'---\nfoo: bar'}
+          onChange={onChange}
+          mode="yaml"
+        />
+      );
+
+      await user.tab();
+      await user.keyboard('{Enter}');
+      await user.keyboard('x');
+      await settle();
+
+      expect(onChange).toHaveBeenCalledWith('---\nxfoo: bar');
+    });
+
+    it('should open after the marker where the marker is the whole document', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      renderWithContexts(
+        <CodeEditor id="code" value="---" onChange={onChange} mode="yaml" />
+      );
+
+      await user.tab();
+      await user.keyboard('{Enter}');
+      await user.keyboard('x');
+      await settle();
+
+      expect(onChange).toHaveBeenCalledWith('---x');
+    });
+
+    it('should open at the top of a document with no marker to skip', async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      renderWithContexts(
+        <CodeEditor
+          id="code"
+          value='{"a": 1}'
+          onChange={onChange}
+          mode="javascript"
+        />
+      );
+
+      await user.tab();
+      await user.keyboard('{Enter}');
+      await user.keyboard('x');
+      await settle();
+
+      expect(onChange).toHaveBeenCalledWith('x{"a": 1}');
+    });
+  });
+
   it('should name itself after the label that points at it', () => {
     renderWithContexts(
       <>
