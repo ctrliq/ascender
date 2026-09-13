@@ -2,7 +2,7 @@ from datetime import timedelta
 import logging
 
 from django.db.models import Q
-from django.conf import settings
+from awx.settings.typed import settings
 from django.utils.timezone import now as tz_now
 from django.contrib.contenttypes.models import ContentType
 

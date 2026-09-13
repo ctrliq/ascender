@@ -8,7 +8,7 @@ from typing import Any, Optional, Tuple
 from cryptography.fernet import Fernet
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.ciphers import algorithms
-from django.conf import settings
+from awx.settings.typed import settings
 from django.utils.encoding import smart_bytes, smart_str
 from django.utils.functional import SimpleLazyObject
 

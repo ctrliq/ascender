@@ -7,7 +7,7 @@ import distro
 
 from django.db import connection
 from django.db.models import Count, Min
-from django.conf import settings
+from awx.settings.typed import settings
 from django.contrib.sessions.models import Session
 from django.utils.timezone import now, timedelta
 from django.utils.translation import gettext_lazy as _
