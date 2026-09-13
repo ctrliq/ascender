@@ -19,7 +19,7 @@ from jinja2 import sandbox, StrictUndefined
 from jinja2.exceptions import TemplateSyntaxError, UndefinedError, SecurityError
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password as django_validate_password
