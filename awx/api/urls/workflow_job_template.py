@@ -4,7 +4,7 @@
 from django.urls import path
 from django.urls import include
 
-from awx.api.views import (
+from awx.api.views.workflow import (
     WorkflowJobTemplateList,
     WorkflowJobTemplateDetail,
     WorkflowJobTemplateJobsList,

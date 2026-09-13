@@ -12,7 +12,10 @@ from django.utils import timezone
 
 # AWX
 from awx.api.versioning import reverse
-from awx.api.views import RelatedJobsPreventDeleteMixin, UnifiedJobDeletionMixin
+from awx.api.views.mixin import (
+    RelatedJobsPreventDeleteMixin,
+    UnifiedJobDeletionMixin,
+)
 from awx.main.models import JobTemplate, User, Job, AdHocCommand, ProjectUpdate, InstanceGroup, Label, Organization
 
 
