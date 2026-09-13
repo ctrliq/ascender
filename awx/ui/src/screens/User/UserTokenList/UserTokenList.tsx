@@ -1,5 +1,5 @@
 import type { OAuth2Token } from 'types/api';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 import { useLocation, useParams } from 'react-router';
 import { useLingui } from '@lingui/react/macro';
 import { getQSConfig, parseQueryString } from 'util/qs';
@@ -11,7 +11,8 @@ import PaginatedTable, {
   getSearchableKeys,
 } from 'components/PaginatedTable';
 import useSelected from 'hooks/useSelected';
-import useRequest, { useDeleteItems } from 'hooks/useRequest';
+import useCachedRequest from 'hooks/useCachedRequest';
+import { useDeleteItems } from 'hooks/useRequest';
 import { UsersAPI, TokensAPI } from 'api';
 import DataListToolbar from 'components/DataListToolbar';
 import AlertModal from 'components/AlertModal';
@@ -39,7 +40,8 @@ function UserTokenList() {
     isLoading,
     request: fetchTokens,
     result: { tokens, itemCount, relatedSearchableKeys, searchableKeys },
-  } = useRequest(
+  } = useCachedRequest(
+    ['user-token-list', id, location.search],
     useCallback(async () => {
       const params = parseQueryString(QS_CONFIG, location.search);
       const [
@@ -71,10 +73,6 @@ function UserTokenList() {
     }, [id, location.search]),
     { tokens: [], itemCount: 0, relatedSearchableKeys: [], searchableKeys: [] }
   );
-
-  useEffect(() => {
-    fetchTokens();
-  }, [fetchTokens]);
 
   const { selected, isAllSelected, handleSelect, clearSelected, selectAll } =
     useSelected(tokens);
