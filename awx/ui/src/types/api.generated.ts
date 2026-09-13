@@ -8430,7 +8430,6 @@ export interface components {
      *     * `cloud` - Cloud
      *     * `registry` - Container Registry
      *     * `token` - Personal Access Token
-     *     * `insights` - Insights
      *     * `external` - External
      *     * `kubernetes` - Kubernetes
      *     * `galaxy` - Galaxy/Automation Hub
@@ -8445,7 +8444,6 @@ export interface components {
       | 'cloud'
       | 'registry'
       | 'token'
-      | 'insights'
       | 'external'
       | 'kubernetes'
       | 'galaxy'
