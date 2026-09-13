@@ -200,7 +200,10 @@ RUN dnf --enablerepo=baseos-debug -y install python3-debuginfo || : && \
 # Copy app from builder
 COPY --from=builder /var/lib/awx /var/lib/awx
 
-RUN ln -s /var/lib/awx/venv/awx/bin/awx-manage /usr/bin/awx-manage
+# Both names on PATH. The installers and the operator exec awx-manage inside
+# this container by absolute path, so the old link stays until they move.
+RUN ln -s /var/lib/awx/venv/awx/bin/ascender-manage /usr/bin/ascender-manage \
+    && ln -s /var/lib/awx/venv/awx/bin/awx-manage /usr/bin/awx-manage
 
 {%if build_dev|bool %}
 COPY --from={{ receptor_image }} /usr/bin/receptor /usr/bin/receptor
@@ -257,6 +260,7 @@ ADD tools/scripts/awx-python /usr/bin/awx-python
 {% if (build_dev|bool) or (kube_dev|bool) %}
 RUN echo /awx_devel > /var/lib/awx/venv/awx/lib/python3.14/site-packages/awx.egg-link && \
     echo /awx_devel > /var/lib/awx/venv/awx/lib/python3.14/site-packages/awx.pth && \
+    ln -sf /awx_devel/tools/docker-compose/awx-manage /usr/local/bin/ascender-manage && \
     ln -sf /awx_devel/tools/docker-compose/awx-manage /usr/local/bin/awx-manage && \
     ln -sf /awx_devel/tools/scripts/awx-python /usr/bin/awx-python && \
     ln -sf /awx_devel/tools/scripts/rsyslog-4xx-recovery /usr/bin/rsyslog-4xx-recovery
