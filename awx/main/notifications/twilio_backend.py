@@ -3,15 +3,20 @@
 
 import logging
 
-from twilio.rest import Client
+import requests
 
+from django.conf import settings
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
 from awx.main.notifications.base import AWXBaseEmailBackend
+from awx.main.utils import get_awx_http_client_headers
 from awx.main.notifications.custom_notification_base import CustomNotificationBase
 
 logger = logging.getLogger('awx.main.notifications.twilio_backend')
+
+# The Messages endpoint the SDK posts to, with the account SID interpolated.
+MESSAGES_URL = 'https://api.twilio.com/2010-04-01/Accounts/{}/Messages.json'
 
 
 class TwilioBackend(AWXBaseEmailBackend, CustomNotificationBase):
@@ -34,19 +39,21 @@ class TwilioBackend(AWXBaseEmailBackend, CustomNotificationBase):
 
     def send_messages(self, messages):
         sent_messages = 0
-        try:
-            connection = Client(self.account_sid, self.account_token)
-        except Exception as e:
-            if not self.fail_silently:
-                raise
-            logger.error(smart_str(_("Exception connecting to Twilio: {}").format(e)))
+        url = MESSAGES_URL.format(self.account_sid)
 
         for m in messages:
             failure = None
             for dest in m.to:
                 try:
                     logger.debug(smart_str(_("FROM: {} / TO: {}").format(m.from_email, dest)))
-                    connection.messages.create(to=dest, from_=m.from_email, body=m.subject)
+                    r = requests.post(
+                        url,
+                        auth=(self.account_sid, self.account_token),
+                        data={"To": dest, "From": m.from_email, "Body": m.subject},
+                        headers=get_awx_http_client_headers(),
+                        timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+                    )
+                    r.raise_for_status()
                     sent_messages += 1
                 except Exception as e:
                     logger.error(smart_str(_("Exception sending messages: {}").format(e)))
