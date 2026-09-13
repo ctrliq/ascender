@@ -636,7 +636,9 @@ def _request(verb):
             response.render()
         __SWAGGER_REQUESTS__.setdefault(request.path, {})[(request.method.lower(), response.status_code)] = (
             response.get('Content-Type', None),
-            response.content,
+            # A streaming response has no .content, and draining its iterator here
+            # would hand the caller an empty one, so record the headers alone.
+            None if response.streaming else response.content,
             kwargs.get('data'),
         )
         return response
