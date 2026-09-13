@@ -3,7 +3,7 @@
 
 from django.urls import path
 
-from awx.api.views import (
+from awx.api.views.oauth2 import (
     OAuth2ApplicationList,
     OAuth2ApplicationDetail,
     ApplicationOAuth2TokenList,
