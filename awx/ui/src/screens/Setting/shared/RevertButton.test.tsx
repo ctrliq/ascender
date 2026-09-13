@@ -16,10 +16,7 @@ describe('RevertButton', () => {
 
   test('button text should display "Revert" when default differs from value', () => {
     renderWithContexts(
-      <FormRoot
-        onSubmit={() => {}}
-        initialValues={{ test_input: 'foo' }}
-      >
+      <FormRoot onSubmit={() => {}} initialValues={{ test_input: 'foo' }}>
         <RevertButton id="test_input" defaultValue="bar" />
       </FormRoot>
     );
@@ -39,10 +36,7 @@ describe('RevertButton', () => {
 
   test('should be disabled when current value equals the initial and default values', () => {
     renderWithContexts(
-      <FormRoot
-        onSubmit={() => {}}
-        initialValues={{ test_input: 'bar' }}
-      >
+      <FormRoot onSubmit={() => {}} initialValues={{ test_input: 'bar' }}>
         <RevertButton id="test_input" defaultValue="bar" />
       </FormRoot>
     );
