@@ -7,7 +7,7 @@ from django.core.validators import RegexValidator
 from django.db import models, connection
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
-from django.conf import settings
+from awx.settings.typed import settings
 
 # Django OAuth Toolkit
 from oauth2_provider.models import AbstractApplication, AbstractAccessToken, AbstractRefreshToken, AbstractIDToken
