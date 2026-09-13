@@ -1,12 +1,12 @@
 <!--
   Modifications Copyright (c) 2023 Ctrl IQ, Inc.
 
-  Django serves this file as a template out of awx/ui/build, so the production
-  build is not what you see here: vite.config.mjs injects the {% load static %},
-  the CSP nonce and the policy itself at the two comment markers below. The dev
-  server serves the file as it stands, which is why those parts are not here.
+  The built file is plain HTML, with no Django template syntax in it at all.
+  vite.config.mjs injects the content security policy and one style rule at the
+  two comment markers below, because the dev server serves this file as it
+  stands and its policy is not the built one.
 -->
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <!--django-head-->

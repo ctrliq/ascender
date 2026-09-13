@@ -55,6 +55,18 @@ DATABASES = {
 # deployment still running uwsgi derives it from harakiri instead.
 DATABASE_STATEMENT_TIMEOUT = None
 
+# How many days of job events to keep, for the cleanup_job_events command.
+# 0, the default, means no window and nothing dropped: events then live exactly
+# as long as the jobs that wrote them, which is what cleanup_jobs decides.
+JOB_EVENT_RETENTION_DAYS = 0
+
+# Where cleanup_job_events writes a partition before dropping it. Unset, the
+# default, means no archive: a partition that falls out of the window is gone.
+# Set to a directory and each partition is COPYed out as gzipped CSV first, and
+# is only dropped once that file is written, so the window becomes hot storage
+# with something behind it rather than a delete.
+JOB_EVENT_ARCHIVE_DIR = None
+
 # Optional manual override for how long a database connection is kept and
 # reused, in seconds. Unset, a web process reuses one for a minute and every
 # other process opens one per request, which is Django's default. 0 turns

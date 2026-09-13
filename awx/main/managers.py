@@ -4,7 +4,7 @@
 import logging
 import uuid
 from django.db import models
-from django.conf import settings
+from awx.settings.typed import settings
 from django.db.models import OuterRef, Subquery
 from django.db.models.functions import Lower
 from awx.main.utils.filters import SmartFilter
