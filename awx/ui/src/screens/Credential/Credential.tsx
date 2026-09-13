@@ -32,7 +32,6 @@ const unacceptableCredentialTypes = [
   'thycotic_dsv',
   'thycotic_tss',
   'galaxy_api_token',
-  'insights',
   'registry',
   'scm',
 ];
