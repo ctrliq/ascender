@@ -152,10 +152,20 @@ def _customize_graph():
 
 
 class URLModificationMiddleware(MiddlewareMixin):
+    # Django builds the middleware chain once per handler, and there is more than
+    # one handler as soon as the ASGI application serves http beside the WSGI one.
+    # register() refuses a setting it already holds, so these two happen once for
+    # the life of the process rather than once per handler.
+    _named_url_settings_registered = False
+
     def __init__(self, get_response):
         models = [m for m in apps.get_app_config('main').get_models() if hasattr(m, 'get_absolute_url')]
         generate_graph(models)
         _customize_graph()
+        if URLModificationMiddleware._named_url_settings_registered:
+            super().__init__(get_response)
+            return
+        URLModificationMiddleware._named_url_settings_registered = True
         register(
             'NAMED_URL_FORMATS',
             field_class=fields.DictField,
@@ -231,7 +241,7 @@ class URLModificationMiddleware(MiddlewareMixin):
         old_path = request.path_info
         new_path = self._convert_named_url(old_path)
         if request.path_info != new_path:
-            request.environ['awx.named_url_rewritten'] = request.path
+            request.META['awx.named_url_rewritten'] = request.path
             request.path = request.path.replace(request.path_info, new_path)
             request.path_info = new_path
 
