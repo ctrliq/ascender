@@ -1,7 +1,8 @@
 import os
 
-# What the uwsgi path works out to today: harakiri of 115 seconds less a
-# five second margin. Used for a web process that is not uwsgi and has no
+# What the uwsgi path used to work out to: harakiri of 115 seconds less a five
+# second margin. uvicorn serves the web process now and uwsgi is no longer
+# installed, so this is the number every web process gets unless it carries a
 # DATABASE_STATEMENT_TIMEOUT of its own.
 DEFAULT_WEB_TIMEOUT_MS = 110000
 
@@ -10,15 +11,14 @@ def set_statement_timeout(DATABASES, DATABASE_STATEMENT_TIMEOUT=None):
     '''
     Set PostgreSQL statement_timeout on web worker DB connections.
 
-    Under uwsgi, derives the timeout from the harakiri value with a safety
-    margin so PostgreSQL cancels the query before uwsgi kills the worker.
-    The margin is 10% of harakiri, clamped to [1s, 5s].
+    A process that announces itself as a web process through AWX_WEB_PROCESS
+    gets DATABASE_STATEMENT_TIMEOUT, or DEFAULT_WEB_TIMEOUT_MS when that is
+    unset. That is the path uvicorn takes, and it is the one this ships.
 
-    Off uwsgi, a process that announces itself as a web process through
-    AWX_WEB_PROCESS gets DATABASE_STATEMENT_TIMEOUT, or DEFAULT_WEB_TIMEOUT_MS
-    when that is unset. This is what keeps the protection when the server is
-    daphne, uvicorn or anything else: reading it off harakiri only works while
-    uwsgi is the thing serving.
+    The uwsgi branch stays for a deployment that still runs uwsgi out of tree:
+    it derives the timeout from harakiri with a margin of 10% clamped to
+    [1s, 5s], so PostgreSQL cancels the query before uwsgi kills the worker.
+    uwsgi is no longer a dependency, so that import simply fails here.
 
     Anything else, task workers, management commands, migrations, gets no
     timeout, since a long query there is the job rather than a symptom.
