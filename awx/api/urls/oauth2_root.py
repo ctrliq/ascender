@@ -3,7 +3,7 @@
 from datetime import timedelta
 
 from django.utils.timezone import now
-from django.conf import settings
+from awx.settings.typed import settings
 from django.urls import path
 
 from oauthlib import oauth2
