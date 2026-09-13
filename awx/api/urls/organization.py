@@ -26,7 +26,10 @@ from awx.api.views.organization import (
     OrganizationObjectRolesList,
     OrganizationAccessList,
 )
-from awx.api.views import OrganizationCredentialList, OrganizationApplicationList
+from awx.api.views.organization import (
+    OrganizationCredentialList,
+    OrganizationApplicationList,
+)
 
 urls = [
     path('', OrganizationList.as_view(), name='organization_list'),

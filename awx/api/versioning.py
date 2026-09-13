@@ -1,7 +1,7 @@
 # Copyright (c) 2017 Ansible by Red Hat
 # All Rights Reserved.
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.urls import NoReverseMatch
 
 from rest_framework.reverse import _reverse

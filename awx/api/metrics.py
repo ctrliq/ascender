@@ -3,7 +3,9 @@
 
 from django.urls import path
 
-from awx.api.views import MetricsView
+from awx.api.views.metrics import (
+    MetricsView,
+)
 
 urls = [path('', MetricsView.as_view(), name='metrics_view')]
 

@@ -3,7 +3,7 @@
 
 from django.urls import path
 
-from awx.api.views import (
+from awx.api.views.user import (
     UserList,
     UserDetail,
     UserTeamsList,
@@ -14,10 +14,12 @@ from awx.api.views import (
     UserRolesList,
     UserActivityStreamList,
     UserAccessList,
-    OAuth2ApplicationList,
     OAuth2UserTokenList,
     UserPersonalTokenList,
     UserAuthorizedTokenList,
+)
+from awx.api.views.oauth2 import (
+    OAuth2ApplicationList,
 )
 
 urls = [

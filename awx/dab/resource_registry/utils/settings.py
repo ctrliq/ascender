@@ -1,4 +1,4 @@
-from django.conf import settings
+from awx.settings.typed import settings
 
 
 def resource_server_defined() -> bool:

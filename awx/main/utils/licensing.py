@@ -29,7 +29,7 @@ from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography import x509
 
 # Django
-from django.conf import settings
+from awx.settings.typed import settings
 from django.utils.translation import gettext_lazy as _
 
 from awx.main.constants import SUBSCRIPTION_USAGE_MODEL_UNIQUE_HOSTS
