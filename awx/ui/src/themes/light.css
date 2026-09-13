@@ -62,6 +62,7 @@ html[data-theme="light"] {
   --ascender-output-bg: #fff;
   --ascender-workflow-node-bg: #fff;
   --ascender-workflow-graph-bg: var(--pf-v6-global--BackgroundColor--200);
+  --ascender-workflow-link-always: #0066cc;
   --pf-v6-global--primary-color--100: #12a66f;
   --pf-v6-global--primary-color--200: #17c484;
   --pf-v6-global--danger-color--100: #f04438;

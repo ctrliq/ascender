@@ -138,7 +138,7 @@ function VisualizerLink({
       setPathStroke('var(--pf-t--global--color--status--success--default)');
     }
     if (link.linkType === 'always') {
-      setPathStroke('var(--pf-t--global--color--brand--default)');
+      setPathStroke('var(--ascender-workflow-link-always)');
     }
     if (link.linkType === 'condition') {
       setPathStroke('var(--pf-t--global--color--status--warning--default)');

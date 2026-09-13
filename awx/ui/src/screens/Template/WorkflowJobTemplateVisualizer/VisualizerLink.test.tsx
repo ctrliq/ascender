@@ -49,13 +49,13 @@ const updateLinkHelp = vi.fn();
 // The component-under-test is the root <g id="link-2-3"> element; hovering it
 // reveals the WorkflowActionTooltip, whose action items render with data-cy
 // (and id) of link-add-node / link-edit / link-delete inside a foreignObject.
-const renderLink = () =>
+const renderLink = (linkType = link.linkType) =>
   renderWithContexts(
     <WorkflowDispatchContext.Provider value={dispatch}>
       <WorkflowStateContext.Provider value={mockedContext}>
         <svg>
           <VisualizerLink
-            link={link}
+            link={{ ...link, linkType }}
             readOnly={false}
             updateHelpText={updateHelpText}
             updateLinkHelp={updateLinkHelp}
@@ -143,5 +143,27 @@ describe('VisualizerLink', () => {
       link,
     });
     expect(tooltipItem('link-delete')).not.toBeInTheDocument();
+  });
+});
+
+describe('VisualizerLink colours', () => {
+  const strokeFor = (linkType: string) => {
+    const { container, unmount } = renderLink(linkType);
+    const stroke = container
+      .querySelector('#link-2-3 path[stroke]')
+      ?.getAttribute('stroke');
+    unmount();
+    return stroke;
+  };
+
+  test('always links use their own colour, not the brand colour', () => {
+    expect(strokeFor('always')).toBe('var(--ascender-workflow-link-always)');
+  });
+
+  test('each link type is drawn in a distinct colour', () => {
+    const strokes = ['success', 'failure', 'always', 'condition'].map(
+      strokeFor
+    );
+    expect(new Set(strokes).size).toBe(strokes.length);
   });
 });

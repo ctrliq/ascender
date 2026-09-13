@@ -60,19 +60,19 @@ const Link = styled.div`
 `;
 
 const SuccessLink = styled(Link)`
-  background-color: #5cb85c;
+  background-color: var(--pf-t--global--color--status--success--default);
 `;
 
 const FailureLink = styled(Link)`
-  background-color: #d9534f;
+  background-color: var(--pf-t--global--color--status--danger--default);
 `;
 
 const AlwaysLink = styled(Link)`
-  background-color: #337ab7;
+  background-color: var(--ascender-workflow-link-always);
 `;
 
 const ConditionLink = styled(Link)`
-  background-color: #f0ab00;
+  background-color: var(--pf-t--global--color--status--warning--default);
 `;
 
 const Close = styled(TimesIcon)`

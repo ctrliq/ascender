@@ -63,6 +63,7 @@ html.pf-v6-theme-dark[data-theme="dark"] {
   --ascender-output-bg: #000;
   --ascender-workflow-node-bg: #1a1e25;
   --ascender-workflow-graph-bg: #0d0f12;
+  --ascender-workflow-link-always: #4394e5;
   --pf-v6-global--primary-color--100: #12a66f;
   --pf-v6-global--primary-color--200: #17c484;
   --pf-v6-global--danger-color--100: #f04438;
