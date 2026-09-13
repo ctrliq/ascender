@@ -28,7 +28,7 @@ walkthrough, and [kind.md](./docs/development/kind.md) or
 py.test awx/main/tests/
 ```
 
-Configuration lives in [`pytest.ini`](./pytest.ini) and [`tox.ini`](./tox.ini).
+Configuration lives in [`pyproject.toml`](./pyproject.toml) and [`tox.ini`](./tox.ini).
 
 
 ## Making changes
