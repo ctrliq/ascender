@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { screen } from '@testing-library/react';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import AnalyticsStep from './AnalyticsStep';
@@ -7,7 +7,7 @@ import AnalyticsStep from './AnalyticsStep';
 describe('<AnalyticsStep />', () => {
   test('initially renders the expected content', async () => {
     renderWithContexts(
-      <Formik
+      <FormRoot
         onSubmit={() => {}}
         initialValues={{
           insights: false,
@@ -20,7 +20,7 @@ describe('<AnalyticsStep />', () => {
         }}
       >
         <AnalyticsStep />
-      </Formik>
+      </FormRoot>
     );
     // AnalyticsStep resets username/password on mount via a useEffect; await an
     // async query so that Formik state update settles inside act()

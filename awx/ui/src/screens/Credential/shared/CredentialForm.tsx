@@ -6,7 +6,7 @@ import type {
 } from 'types/api';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
-import { Formik, useField, useFormikContext } from 'formik';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 import { useLingui } from '@lingui/react/macro';
 
 import {
@@ -93,7 +93,7 @@ function CredentialFormFields({
   const { t } = useLingui();
   const { pathname } = useLocation();
   const { setFieldValue, initialValues, setFieldTouched } =
-    useFormikContext<CredentialFormValues>();
+    useFormContext<CredentialFormValues>();
   const [isSelectOpen, setIsSelectOpen] = useState(false);
   const [filterValue, setFilterValue] = useState('');
   const [credTypeField, credTypeMeta, credTypeHelpers] = useField({
@@ -401,7 +401,7 @@ function CredentialForm({
   });
 
   return (
-    <Formik
+    <FormRoot
       initialValues={initialValues}
       onSubmit={(values) => {
         const { credential_type, ...actualValues } = values;
@@ -484,7 +484,7 @@ function CredentialForm({
           )}
         </>
       )}
-    </Formik>
+    </FormRoot>
   );
 }
 

@@ -1,27 +1,22 @@
 /*
- * What a form does here, asked of two implementations.
+ * What a form does here.
  *
- * The roadmap asks for an exit from formik, and the risk in that is not the
- * API, which is small: five runtime names, flat field keys, no schema
- * validation and no field arrays. The risk is the behaviour those names imply
- * and nothing states. When a validator runs, when a field counts as touched,
- * what isValid says about a pristine form whose required field is empty: none
- * of that is in a type signature, and all of it is what someone would notice.
+ * These were written against formik, before any replacement existed, because
+ * the risk in leaving it was never the API. It was the behaviour the API
+ * implies and nothing states: when a validator runs, when a field counts as
+ * touched, what isValid says about a pristine form whose required field is
+ * empty. None of that is in a type signature, and all of it is what someone
+ * would notice.
  *
- * So every test below runs twice, once against formik and once against the
- * field layer meant to replace it. They were written against formik first, so
- * they describe today rather than anything intended, and a difference in
- * either direction is a failure.
+ * While the tree held both, every test here ran twice, once against each, and
+ * a difference in either direction was a failure. Formik is gone now, so they
+ * run once. The table below is left as a table so a second implementation can
+ * be put beside this one the same way, should there ever be a reason to.
  */
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Formik, useField as useFormikField, useFormikContext } from 'formik';
-import {
-  Form as OwnForm,
-  useField as useOwnField,
-  useFormContext as useOwnFormContext,
-} from 'components/Form';
+import { FormRoot, useField, useFormContext } from 'components/Form';
 
 type Validator = (value: never) => string | undefined;
 type Bag = Record<string, unknown>;
@@ -66,7 +61,7 @@ interface Implementation {
   name: string;
   Root: React.ComponentType<{
     initialValues: Bag;
-    onSubmit: (values: Bag) => void | Promise<void>;
+    onSubmit: (values: Bag, helpers: never) => void | Promise<void>;
     children: (form: RootLike) => React.ReactNode;
   }>;
   useField: (
@@ -77,18 +72,11 @@ interface Implementation {
 
 const implementations: Implementation[] = [
   {
-    name: 'formik',
-    Root: Formik as unknown as Implementation['Root'],
-    useField: useFormikField as unknown as Implementation['useField'],
-    useFormContext:
-      useFormikContext as unknown as Implementation['useFormContext'],
-  },
-  {
     name: 'the field layer',
-    Root: OwnForm as unknown as Implementation['Root'],
-    useField: useOwnField as unknown as Implementation['useField'],
+    Root: FormRoot as unknown as Implementation['Root'],
+    useField: useField as unknown as Implementation['useField'],
     useFormContext:
-      useOwnFormContext as unknown as Implementation['useFormContext'],
+      useFormContext as unknown as Implementation['useFormContext'],
   },
 ];
 
@@ -197,7 +185,7 @@ describe.each(implementations)('a form, per $name', (impl) => {
     validate,
   }: {
     initialValues?: Bag;
-    onSubmit?: (values: Bag) => void | Promise<void>;
+    onSubmit?: (values: Bag, helpers: never) => void | Promise<void>;
     validate?: Validator;
   }) {
     return (
@@ -427,6 +415,23 @@ describe.each(implementations)('a form, per $name', (impl) => {
           'initialValues',
         ])
       );
+    });
+
+    // UserForm compares the two password fields and calls setErrors on the
+    // bag handed as the second argument, which is the only caller that takes
+    // it and the reason it exists here.
+    test('onSubmit is handed a bag it can set errors through', async () => {
+      const user = userEvent.setup();
+      const onSubmit = vi.fn(
+        (_values: Bag, helpers: { setErrors?: (e: Bag) => void }) => {
+          helpers.setErrors?.({ a: 'from submit' });
+        }
+      );
+      render(<Harness initialValues={{ a: 'v' }} onSubmit={onSubmit} />);
+
+      await user.click(press('submit'));
+
+      await waitFor(() => expect(at('a-error')).toBe('from submit'));
     });
 
     test('onSubmit is given the values', async () => {

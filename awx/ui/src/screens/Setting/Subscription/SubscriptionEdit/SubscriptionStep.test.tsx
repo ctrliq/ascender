@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { renderWithContexts } from '../../../../../testUtils/rtlContexts';
 import SubscriptionStep from './SubscriptionStep';
@@ -16,9 +16,9 @@ const initialValues = {
 
 function renderStep() {
   return renderWithContexts(
-    <Formik onSubmit={() => {}} initialValues={initialValues}>
+    <FormRoot onSubmit={() => {}} initialValues={initialValues}>
       <SubscriptionStep />
-    </Formik>
+    </FormRoot>
   );
 }
 

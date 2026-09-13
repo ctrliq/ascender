@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { Form } from '@patternfly/react-core';
-import { useField } from 'formik';
+import { useField } from 'components/Form';
 import {
   required,
   minMaxValue,

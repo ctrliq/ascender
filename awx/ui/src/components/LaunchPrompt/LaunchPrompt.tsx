@@ -7,7 +7,6 @@ import React, { useState } from 'react';
 import { ExpandableSection } from '@patternfly/react-core';
 import Wizard from 'components/Wizard';
 import { useLingui } from '@lingui/react/macro';
-import { Formik, useFormikContext } from 'formik';
 import { useDismissableError } from 'hooks/useRequest';
 import mergeExtraVars from 'util/prompt/mergeExtraVars';
 import getSurveyValues from 'util/prompt/getSurveyValues';
@@ -18,6 +17,7 @@ import ContentError from '../ContentError';
 import useLaunchSteps from './useLaunchSteps';
 import type { LaunchPromptValues, LaunchConfig, SurveyConfig } from './types';
 import AlertModal from '../AlertModal';
+import { FormRoot, useFormContext } from 'components/Form';
 
 export interface PromptModalFormProps {
   launchConfig: LaunchConfig;
@@ -42,7 +42,7 @@ function PromptModalForm({
   resourceDefaultCredentials,
 }: PromptModalFormProps) {
   const { t } = useLingui();
-  const { setFieldTouched, values } = useFormikContext<LaunchPromptValues>();
+  const { setFieldTouched, values } = useFormContext<LaunchPromptValues>();
   const [showDescription, setShowDescription] = useState(false);
 
   const {
@@ -207,7 +207,7 @@ function LaunchPrompt({
   resourceDefaultCredentials = [],
 }: LaunchPromptProps) {
   return (
-    <Formik initialValues={{}} onSubmit={(values) => onLaunch(values)}>
+    <FormRoot initialValues={{}} onSubmit={(values) => onLaunch(values)}>
       {/* Both are read before the prompt is opened, which is what gates it. */}
       <PromptModalForm
         onSubmit={(values) => onLaunch(values)}
@@ -219,7 +219,7 @@ function LaunchPrompt({
         resourceDefaultCredentials={resourceDefaultCredentials}
         instanceGroups={[]}
       />
-    </Formik>
+    </FormRoot>
   );
 }
 

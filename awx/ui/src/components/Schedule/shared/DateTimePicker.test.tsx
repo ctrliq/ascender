@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import DateTimePicker from './DateTimePicker';
 
@@ -32,7 +32,7 @@ afterEach(() => {
 
 function setup() {
   return renderWithContexts(
-    <Formik
+    <FormRoot
       onSubmit={() => {}}
       initialValues={{ startDate: '2021-05-26', startTime: '2:15 PM' }}
     >
@@ -41,7 +41,7 @@ function setup() {
         timeFieldName="startTime"
         label="Start date/time"
       />
-    </Formik>
+    </FormRoot>
   );
 }
 

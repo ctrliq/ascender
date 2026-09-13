@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { Formik } from 'formik';
+import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import OtherPromptsStep from './OtherPromptsStep';
 
@@ -17,14 +17,14 @@ describe('OtherPromptsStep', () => {
   // association, so query inputs and selects by id from the container.
   test('should render job type field', () => {
     const { container } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ job_type: 'run' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ job_type: 'run' }}>
         <OtherPromptsStep
           launchConfig={{
             ask_job_type_on_launch: true,
             ...jobTemplateData,
           }}
         />
-      </Formik>
+      </FormRoot>
     );
 
     const select = container.querySelector(
@@ -37,14 +37,14 @@ describe('OtherPromptsStep', () => {
 
   test('should render limit field', () => {
     const { container } = renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <OtherPromptsStep
           launchConfig={{
             ask_limit_on_launch: true,
             ...jobTemplateData,
           }}
         />
-      </Formik>
+      </FormRoot>
     );
 
     const input = container.querySelector('input#prompt-limit') as HTMLElement;
@@ -54,14 +54,14 @@ describe('OtherPromptsStep', () => {
 
   test('should render timeout field', () => {
     const { container } = renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <OtherPromptsStep
           launchConfig={{
             ask_timeout_on_launch: true,
             ...jobTemplateData,
           }}
         />
-      </Formik>
+      </FormRoot>
     );
 
     const input = container.querySelector(
@@ -73,14 +73,14 @@ describe('OtherPromptsStep', () => {
 
   test('should render forks field', () => {
     const { container } = renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <OtherPromptsStep
           launchConfig={{
             ask_forks_on_launch: true,
             ...jobTemplateData,
           }}
         />
-      </Formik>
+      </FormRoot>
     );
 
     const input = container.querySelector('input#prompt-forks') as HTMLElement;
@@ -90,14 +90,14 @@ describe('OtherPromptsStep', () => {
 
   test('should render job slicing field', () => {
     const { container } = renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <OtherPromptsStep
           launchConfig={{
             ask_job_slice_count_on_launch: true,
             ...jobTemplateData,
           }}
         />
-      </Formik>
+      </FormRoot>
     );
 
     const input = container.querySelector(
@@ -109,14 +109,14 @@ describe('OtherPromptsStep', () => {
 
   test('should render source control branch field', () => {
     const { container } = renderWithContexts(
-      <Formik initialValues={{}} onSubmit={() => {}}>
+      <FormRoot initialValues={{}} onSubmit={() => {}}>
         <OtherPromptsStep
           launchConfig={{
             ask_scm_branch_on_launch: true,
             ...jobTemplateData,
           }}
         />
-      </Formik>
+      </FormRoot>
     );
 
     const input = container.querySelector(
@@ -128,14 +128,14 @@ describe('OtherPromptsStep', () => {
 
   test('should render verbosity field', () => {
     const { container } = renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ verbosity: '' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ verbosity: '' }}>
         <OtherPromptsStep
           launchConfig={{
             ask_verbosity_on_launch: true,
             ...jobTemplateData,
           }}
         />
-      </Formik>
+      </FormRoot>
     );
 
     const select = container.querySelector(
@@ -147,14 +147,14 @@ describe('OtherPromptsStep', () => {
 
   test('should render show changes toggle', () => {
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ diff_mode: true }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ diff_mode: true }}>
         <OtherPromptsStep
           launchConfig={{
             ask_diff_mode_on_launch: true,
             ...jobTemplateData,
           }}
         />
-      </Formik>
+      </FormRoot>
     );
 
     const toggle = screen.getByRole('switch', { name: 'On' });
@@ -166,7 +166,7 @@ describe('OtherPromptsStep', () => {
     // VariablesField does an async Formik update on mount; findBy settles it
     // inside act so the console-error trap stays quiet.
     renderWithContexts(
-      <Formik onSubmit={() => {}} initialValues={{ extra_vars: '{}' }}>
+      <FormRoot onSubmit={() => {}} initialValues={{ extra_vars: '{}' }}>
         <OtherPromptsStep
           variablesMode="javascript"
           onVarModeChange={vi.fn()}
@@ -175,7 +175,7 @@ describe('OtherPromptsStep', () => {
             ...jobTemplateData,
           }}
         />
-      </Formik>
+      </FormRoot>
     );
 
     expect(await screen.findByText('Variables')).toBeInTheDocument();

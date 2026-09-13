@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
 import { useLingui } from '@lingui/react/macro';
-import { useField } from 'formik';
-import type { FieldValidator } from 'formik';
+import { useField } from 'components/Form';
+import type { FieldValidator } from 'components/Form';
 import { Split, SplitItem } from '@patternfly/react-core';
 import {
   yamlToJson,
