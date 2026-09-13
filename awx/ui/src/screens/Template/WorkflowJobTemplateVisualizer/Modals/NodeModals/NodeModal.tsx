@@ -35,11 +35,11 @@ import {
 import { JobTemplatesAPI, WorkflowJobTemplatesAPI } from 'api';
 import Wizard from 'components/Wizard';
 import AlertModal from 'components/AlertModal';
+import { FormRoot, useFormContext } from 'components/Form';
 import useWorkflowNodeSteps from './useWorkflowNodeSteps';
 import type { NodeModalValues } from './useWorkflowNodeSteps';
 import NodeNextButton from './NodeNextButton';
 import type { NodeWizardStep } from './NodeNextButton';
-import { FormRoot, useFormContext } from 'components/Form';
 import './NodeModal.css';
 
 export interface NodeModalCustomFooterProps {

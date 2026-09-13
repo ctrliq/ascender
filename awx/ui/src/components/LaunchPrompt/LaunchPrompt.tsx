@@ -12,12 +12,12 @@ import mergeExtraVars from 'util/prompt/mergeExtraVars';
 import getSurveyValues from 'util/prompt/getSurveyValues';
 import createNewLabels from 'util/labels';
 import type { LabelInput } from 'util/labels';
+import { FormRoot, useFormContext } from 'components/Form';
 import ContentLoading from '../ContentLoading';
 import ContentError from '../ContentError';
 import useLaunchSteps from './useLaunchSteps';
 import type { LaunchPromptValues, LaunchConfig, SurveyConfig } from './types';
 import AlertModal from '../AlertModal';
-import { FormRoot, useFormContext } from 'components/Form';
 
 export interface PromptModalFormProps {
   launchConfig: LaunchConfig;
