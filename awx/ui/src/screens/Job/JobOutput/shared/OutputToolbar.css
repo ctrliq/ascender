@@ -48,3 +48,20 @@
   /* enlarge the badge value from PatternFly's small default */
   font-size: 14px;
 }
+
+/*
+ * The two counts that mean something went wrong.
+ *
+ * These carry a literal colour rather than a theme token because the text on
+ * them is always white: a token that changes with the theme would take the
+ * contrast with it, and these two are the badges where being read matters.
+ */
+.awx-output-toolbar__badge--unreachable {
+  background-color: #470000;
+  color: #fff;
+}
+
+.awx-output-toolbar__badge--failed {
+  background-color: #c9190b;
+  color: #fff;
+}

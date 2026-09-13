@@ -58,6 +58,7 @@ function VisualizerLink({
 
   const addNodeAction = (
     <WorkflowActionTooltipItem
+      label={t`Add a node between these two`}
       id="link-add-node"
       key="add"
       onClick={() => {
@@ -84,6 +85,7 @@ function VisualizerLink({
       : [
           addNodeAction,
           <WorkflowActionTooltipItem
+            label={t`Edit this link`}
             id="link-edit"
             key="edit"
             onClick={() => {
@@ -97,6 +99,7 @@ function VisualizerLink({
             <PencilAltIcon />
           </WorkflowActionTooltipItem>,
           <WorkflowActionTooltipItem
+            label={t`Delete this link`}
             id="link-delete"
             key="delete"
             onClick={() => {
