@@ -126,7 +126,10 @@ describe('VariablesField', () => {
   it('should submit an edited value through Formik', async () => {
     const handleSubmit = vi.fn();
     const { user } = renderWithContexts(
-      <FormRoot initialValues={{ variables: 'foo: bar' }} onSubmit={handleSubmit}>
+      <FormRoot
+        initialValues={{ variables: 'foo: bar' }}
+        onSubmit={handleSubmit}
+      >
         {(formik) => (
           <form onSubmit={formik.handleSubmit}>
             <VariablesField id="the-field" name="variables" label="Variables" />
