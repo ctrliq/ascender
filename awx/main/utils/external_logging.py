@@ -1,3 +1,26 @@
+"""
+The rsyslog configuration the platform writes for shipping logs elsewhere.
+
+Worth knowing before anyone moves this onto a Python logging handler, which
+the roadmap asks about. What rsyslog is doing here is not formatting, it is
+durability: a disk backed queue in queue.spoolDirectory that survives a
+restart, fsynced every thousand messages, bounded at a gigabyte and 131,072
+messages, with back pressure at 75% and graded discarding at 90% that drops
+debug before it drops a warning, and retries that never give up on an
+aggregator that is down.
+
+Four settings a user can see are promises about exactly that:
+LOG_AGGREGATOR_ACTION_QUEUE_SIZE, LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB,
+LOG_AGGREGATOR_MAX_DISK_USAGE_PATH and LOG_AGGREGATOR_RSYSLOGD_ERROR_LOG_FILE.
+A handler that posts to the aggregator from the web process would have to
+provide all of it, or those settings stop meaning anything and logs are lost
+quietly on a restart.
+
+Each guarantee is asserted on its own in
+awx/main/tests/unit/utils/test_external_logging_durability.py, so a change
+that weakens one says which one.
+"""
+
 import os
 import shutil
 import tempfile
