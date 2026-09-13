@@ -7,7 +7,7 @@ import distro
 
 from django.db import connection
 from django.db.models import Count, Min
-from django.conf import settings
+from awx.settings.typed import settings
 from django.contrib.sessions.models import Session
 from django.utils.timezone import now, timedelta
 from django.utils.translation import gettext_lazy as _
@@ -148,7 +148,7 @@ def config(since, **kwargs):
         },
         'install_uuid': settings.INSTALL_UUID,
         'instance_uuid': settings.SYSTEM_UUID,
-        'tower_url_base': settings.TOWER_URL_BASE,
+        'tower_url_base': settings.ASCENDER_URL_BASE,
         'tower_version': get_awx_version(),
         'license_type': license_info.get('license_type', 'UNLICENSED'),
         'license_date': license_info.get('license_date'),

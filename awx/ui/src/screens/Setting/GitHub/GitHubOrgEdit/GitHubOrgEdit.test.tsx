@@ -98,8 +98,7 @@ describe('<GitHubOrgEdit />', () => {
     await user.type(nameInput!, 'new org');
     await user.click(container.querySelector('button[aria-label="Save"]')!);
     await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));
-    // org/team maps start as null and are not editable in jsdom (react-ace
-    // renders empty); they pass through unchanged.
+    // this test edits no org/team map, so both pass through unchanged
     expect(SettingsAPI.updateAll).toHaveBeenCalledWith({
       SOCIAL_AUTH_GITHUB_ORG_KEY: '',
       SOCIAL_AUTH_GITHUB_ORG_SECRET: '',

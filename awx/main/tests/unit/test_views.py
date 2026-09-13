@@ -7,7 +7,9 @@ from rest_framework.generics import ListAPIView
 
 # AWX
 from awx.main.views import ApiErrorView
-from awx.api.views import JobList
+from awx.api.views.job import (
+    JobList,
+)
 from awx.api.generics import ListCreateAPIView, SubListAttachDetachAPIView
 
 HTTP_METHOD_NAMES = [

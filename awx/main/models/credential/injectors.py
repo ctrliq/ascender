@@ -4,7 +4,7 @@ import os
 import stat
 import tempfile
 
-from django.conf import settings
+from awx.settings.typed import settings
 
 from awx.main.utils.execution_environments import to_container_path
 

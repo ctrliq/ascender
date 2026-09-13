@@ -1,6 +1,6 @@
 import logging
 
-from django.conf import settings
+from awx.settings.typed import settings
 from django.contrib.auth.backends import ModelBackend
 
 logger = logging.getLogger('awx.main.backends')
