@@ -16,7 +16,7 @@ describe('<Settings />', () => {
   beforeEach(() => {
     vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
       data: {
-        BRAND_NAME: 'AWX',
+        BRAND_NAME: 'Ascender Automation',
       },
     } as unknown as ApiResponse<AssetVariables>);
     vi.mocked(SettingsAPI.readAllOptions).mockResolvedValue({

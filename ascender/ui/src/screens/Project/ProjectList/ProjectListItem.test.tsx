@@ -13,7 +13,7 @@ vi.mock('../../../api/models/Projects');
 vi.mock('hooks/useBrandName', () => ({
   __esModule: true,
   default: () => ({
-    current: 'AWX',
+    current: 'Ascender Automation',
   }),
 }));
 

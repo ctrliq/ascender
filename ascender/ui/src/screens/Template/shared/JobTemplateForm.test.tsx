@@ -169,7 +169,7 @@ describe('<JobTemplateForm />', () => {
     global.console.error = vi.fn();
     vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
       data: {
-        BRAND_NAME: 'AWX',
+        BRAND_NAME: 'Ascender Automation',
       },
     } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
     vi.mocked(LabelsAPI.read).mockResolvedValue({

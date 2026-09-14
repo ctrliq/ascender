@@ -53,7 +53,7 @@ describe('<Project />', () => {
     // the resolved detail route mounts components that read the brand name
     RootAPI.readAssetVariables = vi
       .fn()
-      .mockResolvedValue({ data: { BRAND_NAME: 'AWX' } });
+      .mockResolvedValue({ data: { BRAND_NAME: 'Ascender Automation' } });
   });
 
   test('initially renders successfully', async () => {

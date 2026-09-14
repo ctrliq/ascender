@@ -44,7 +44,7 @@ describe('<JobTemplateDetail />', () => {
     } as unknown as ResponseOf<typeof WorkflowJobTemplateNodesAPI.read>);
     vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
       data: {
-        BRAND_NAME: 'AWX',
+        BRAND_NAME: 'Ascender Automation',
       },
     } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
   });

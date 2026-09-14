@@ -5,7 +5,7 @@ import About from './About';
 
 vi.mock('../../hooks/useBrandName', () => ({
   __esModule: true,
-  default: () => 'AWX',
+  default: () => 'Ascender Automation',
 }));
 
 describe('<About />', () => {
@@ -17,11 +17,11 @@ describe('<About />', () => {
     // dialog's accessible name.
     const dialog = screen.getByRole('dialog');
     expect(dialog).toBeInTheDocument();
-    expect(screen.getByText('AWX')).toBeInTheDocument();
+    expect(screen.getByText('Ascender Automation')).toBeInTheDocument();
 
     // The version is rendered inside the speech-bubble <pre>.
     const pre = dialog.querySelector('pre') as HTMLElement;
-    expect(pre.textContent).toContain('AWX 1.2.3');
+    expect(pre.textContent).toContain('Ascender Automation 1.2.3');
   });
 
   test('should not render when isOpen is false', () => {

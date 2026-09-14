@@ -21,8 +21,12 @@ function About({ version = null, isOpen = false, onClose }: AboutProps) {
   const createSpeechBubble = () => {
     let text = '';
     if (typeof brandName === 'string' && brandName.length > 0) {
+      // The subscription product is the one called Controller. Ours is not,
+      // so the brand alone carries the name. This checked for AWX before the
+      // rename, which no longer matches BRAND_NAME, so an unsubscribed
+      // install was printing the subscription wording.
       text =
-        brandName.indexOf('AWX') === -1
+        brandName.indexOf('Ascender') === -1
           ? `${brandName} Controller ${version}`
           : `${brandName} ${version}`;
     }

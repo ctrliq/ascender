@@ -14,7 +14,7 @@ vi.mocked(SettingsAPI.readCategory).mockResolvedValue({
 } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
 vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
   data: {
-    BRAND_NAME: 'AWX',
+    BRAND_NAME: 'Ascender Automation',
     PENDO_API_KEY: '',
   },
 } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);

@@ -31,7 +31,7 @@ describe('<AppContainer />', () => {
   beforeEach(() => {
     vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
       data: {
-        BRAND_NAME: 'AWX',
+        BRAND_NAME: 'Ascender Automation',
         PENDO_API_KEY: 'some-pendo-key',
       },
     } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
@@ -117,7 +117,7 @@ describe('<AppContainer />', () => {
   test('Pendo not initialized when key is missing', async () => {
     vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
       data: {
-        BRAND_NAME: 'AWX',
+        BRAND_NAME: 'Ascender Automation',
         PENDO_API_KEY: '',
       },
     } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);

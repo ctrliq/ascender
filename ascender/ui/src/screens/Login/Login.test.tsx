@@ -19,7 +19,7 @@ vi.mock('util/auth', () => ({
 
 vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
   data: {
-    BRAND_NAME: 'AWX',
+    BRAND_NAME: 'Ascender Automation',
   },
 } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
 
@@ -51,7 +51,7 @@ describe('<Login />', () => {
   beforeEach(() => {
     vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
       data: {
-        BRAND_NAME: 'AWX',
+        BRAND_NAME: 'Ascender Automation',
       },
     } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
 
@@ -130,7 +130,7 @@ describe('<Login />', () => {
     );
     await waitForLoginForm(container);
     const logo = container.querySelector('img') as HTMLElement;
-    expect(logo.getAttribute('alt')).toBe('AWX');
+    expect(logo.getAttribute('alt')).toBe('Ascender Automation');
     expect(logo.getAttribute('src')).toBe('static/media/Ascender_logo.svg');
   });
 
