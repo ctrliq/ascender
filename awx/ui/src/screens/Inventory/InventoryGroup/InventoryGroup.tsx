@@ -18,6 +18,7 @@ import InventoryGroupEdit from '../InventoryGroupEdit/InventoryGroupEdit';
 import InventoryGroupDetail from '../InventoryGroupDetail/InventoryGroupDetail';
 import InventoryGroupHosts from '../InventoryGroupHosts';
 import InventoryRelatedGroups from '../InventoryRelatedGroups';
+import { isReadOnlyInventoryType } from '../shared/utils';
 
 export interface InventoryGroupProps {
   setBreadcrumb: SetBreadcrumb;
@@ -109,6 +110,11 @@ function InventoryGroup({ setBreadcrumb, inventory }: InventoryGroupProps) {
     );
   }
 
+  const groupBaseUrl = `/inventories/${inventoryType}/${inventoryId}/groups/${groupId}`;
+  // Groups under a constructed or federated inventory are read-only, so the
+  // edit url is sent back to the details rather than mounting the form.
+  const readOnly = isReadOnlyInventoryType(inventoryType);
+
   let showCardHeader = true;
   if (['add', 'edit'].some((name) => location.pathname.includes(name))) {
     showCardHeader = false;
@@ -130,7 +136,13 @@ function InventoryGroup({ setBreadcrumb, inventory }: InventoryGroupProps) {
         {inventoryGroup && (
           <Route
             path="edit"
-            element={<InventoryGroupEdit inventoryGroup={inventoryGroup} />}
+            element={
+              readOnly ? (
+                <Navigate to={`${groupBaseUrl}/details`} replace />
+              ) : (
+                <InventoryGroupEdit inventoryGroup={inventoryGroup} />
+              )
+            }
           />
         )}
         {inventoryGroup && (

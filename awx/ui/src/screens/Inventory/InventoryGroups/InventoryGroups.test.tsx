@@ -46,4 +46,13 @@ describe('<InventoryGroups />', () => {
     renderUnder('/inventories/inventory/1/groups/add', inventory);
     expect(screen.getByTestId('groups-add')).toBeInTheDocument();
   });
+
+  test.each(['constructed_inventory', 'federated_inventory'])(
+    'sends the add url of a %s back to the groups list',
+    (inventoryType) => {
+      renderUnder(`/inventories/${inventoryType}/1/groups/add`, inventory);
+      expect(screen.getByTestId('groups-list')).toBeInTheDocument();
+      expect(screen.queryByTestId('groups-add')).not.toBeInTheDocument();
+    }
+  );
 });

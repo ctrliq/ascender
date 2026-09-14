@@ -160,7 +160,7 @@ describe('federated inventory', () => {
 
   function renderFederated(path: string) {
     const history = createMemoryHistory({ initialEntries: [path] });
-    return renderWithContexts(
+    renderWithContexts(
       <Routes>
         <Route
           path="/inventories/:inventoryType/:id/groups/:groupId/*"
@@ -174,10 +174,29 @@ describe('federated inventory', () => {
       </Routes>,
       { context: { router: { history } } }
     );
+    return history;
   }
 
   afterEach(() => {
     vi.clearAllMocks();
+  });
+
+  test('sends the edit url back to the details instead of mounting the form', async () => {
+    vi.mocked(InventoriesAPI.readGroups).mockResolvedValue(
+      groupList({ ...groupData.data, id: 2 })
+    );
+    const history = renderFederated(
+      '/inventories/federated_inventory/3/groups/2/edit'
+    );
+    await screen.findByRole('tab', { name: 'Details' });
+    await waitFor(() =>
+      expect(history.location.pathname).toBe(
+        '/inventories/federated_inventory/3/groups/2/details'
+      )
+    );
+    expect(
+      screen.queryByRole('button', { name: 'Save' })
+    ).not.toBeInTheDocument();
   });
 
   test('renders a group that belongs to an input inventory', async () => {
