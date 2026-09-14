@@ -1,4 +1,4 @@
-#!/usr/bin/awx-python
+#!/usr/bin/ascender-python
 import sys
 from importlib.metadata import distribution
 

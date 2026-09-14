@@ -261,7 +261,9 @@ ADD tools/scripts/rsyslog-4xx-recovery /usr/bin/rsyslog-4xx-recovery
 ADD {{ template_dest }}/supervisor_web.conf /etc/supervisord_web.conf
 ADD {{ template_dest }}/supervisor_task.conf /etc/supervisord_task.conf
 ADD {{ template_dest }}/supervisor_rsyslog.conf /etc/supervisord_rsyslog.conf
-ADD tools/scripts/awx-python /usr/bin/awx-python
+ADD tools/scripts/ascender-python /usr/bin/ascender-python
+# The old name as well, for a script of anyone's that shebangs it.
+RUN ln -s /usr/bin/ascender-python /usr/bin/awx-python
 {% endif %}
 
 {% if (build_dev|bool) or (kube_dev|bool) %}
@@ -269,7 +271,8 @@ RUN echo /ascender_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packag
     echo /ascender_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/awx.pth && \
     ln -sf /ascender_devel/tools/docker-compose/ascender-manage /usr/local/bin/ascender-manage && \
     ln -sf /ascender_devel/tools/docker-compose/ascender-manage /usr/local/bin/awx-manage && \
-    ln -sf /ascender_devel/tools/scripts/awx-python /usr/bin/awx-python && \
+    ln -sf /ascender_devel/tools/scripts/ascender-python /usr/bin/ascender-python && \
+    ln -sf /ascender_devel/tools/scripts/ascender-python /usr/bin/awx-python && \
     ln -sf /ascender_devel/tools/scripts/rsyslog-4xx-recovery /usr/bin/rsyslog-4xx-recovery
 {% endif %}
 
