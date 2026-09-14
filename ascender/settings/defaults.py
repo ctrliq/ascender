@@ -369,7 +369,14 @@ USER_COOKIE_SAMESITE = 'Lax'
 
 # Name of the cookie that contains the session information.
 # Note: Changing this value may require changes to any clients.
-SESSION_COOKIE_NAME = 'awx_sessionid'
+#
+# This was awx_sessionid, and the rename logs everyone out once: a browser
+# holding the old cookie presents a name this no longer reads, and the session
+# is not found. It is a login rather than a loss, and it only happens on the
+# upgrade that carries this change, but it belongs in the release notes.
+# A client should read the name from the X-API-Session-Cookie-Name header the
+# API returns on a successful login rather than assuming either value.
+SESSION_COOKIE_NAME = 'ascender_sessionid'
 
 # Maximum number of per-user valid, concurrent sessions.
 # -1 is unlimited

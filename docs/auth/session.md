@@ -6,9 +6,9 @@ Session authentication is a safer way of utilizing HTTP(S) cookies. Theoreticall
 `Cookie` header, but this method is vulnerable to cookie hijacks, where crackers can see and steal user
 information from the cookie payload.
 
-Session authentication, on the other hand, sets a single `awx_sessionid` cookie. The `awx_sessionid`
+Session authentication, on the other hand, sets a single `ascender_sessionid` cookie. The `ascender_sessionid`
 is _a random string which will be mapped to user authentication information by the server_. Crackers who
-hijack cookies will only get the `awx_sessionid` itself, which does not imply any critical user info, is valid only for
+hijack cookies will only get the `ascender_sessionid` itself, which does not imply any critical user info, is valid only for
 a limited time, and can be revoked at any time.
 
 > Note: The CSRF token will by default allow HTTP. To increase security, the `CSRF_COOKIE_SECURE` setting should
@@ -37,26 +37,26 @@ be provided in the form:
 The `awx_session_id` is provided as a return `Set-Cookie` header. Here is a typical one:
 
 ```
-Set-Cookie: awx_sessionid=lwan8l5ynhrqvps280rg5upp7n3yp6ds; expires=Tue, 21-Nov-2017 16:33:13 GMT; httponly; Max-Age=1209600; Path=/
+Set-Cookie: ascender_sessionid=lwan8l5ynhrqvps280rg5upp7n3yp6ds; expires=Tue, 21-Nov-2017 16:33:13 GMT; httponly; Max-Age=1209600; Path=/
 ```
 
-In addition, when the `awx_sessionid` a header called `X-API-Session-Cookie-Name` this header will only be displayed once on a successful logging and denotes the name of the session cookie name. By default this is `awx_sessionid` but can be changed (see below).
+In addition, when the `ascender_sessionid` a header called `X-API-Session-Cookie-Name` this header will only be displayed once on a successful logging and denotes the name of the session cookie name. By default this is `ascender_sessionid` but can be changed (see below).
 
 Any client should follow the standard rules of [cookie protocol](https://tools.ietf.org/html/rfc6265) to
-parse that header to obtain information about the session, such as session cookie name (`awx_sessionid`),
+parse that header to obtain information about the session, such as session cookie name (`ascender_sessionid`),
 session cookie value, expiration date, duration, etc.
 
-The name of the cookie is configurable by Tower Configuration setting `SESSION_COOKIE_NAME` under the category `authentication`. It is a string. The default session cookie name is `awx_sessionid`.
+The name of the cookie is configurable by Tower Configuration setting `SESSION_COOKIE_NAME` under the category `authentication`. It is a string. The default session cookie name is `ascender_sessionid`.
 
 The duration of the cookie is configurable by Tower Configuration setting `SESSION_COOKIE_AGE` under
 category `authentication`. It is an integer denoting the number of seconds the session cookie should
 live. The default session cookie age is two weeks.
 
-After a valid session is acquired, a client should provide the `awx_sessionid` as a cookie for subsequent requests
+After a valid session is acquired, a client should provide the `ascender_sessionid` as a cookie for subsequent requests
 in order to be authenticated. For example:
 
 ```
-Cookie: awx_sessionid=lwan8l5ynhrqvps280rg5upp7n3yp6ds; ...
+Cookie: ascender_sessionid=lwan8l5ynhrqvps280rg5upp7n3yp6ds; ...
 ```
 
 User should use the `/api/logout/` endpoint to log out. In the API browser, a logged-in user can do that by

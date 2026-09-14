@@ -58,7 +58,7 @@ A typical response might look like:
 	Content-Length: 0
 	Connection: keep-alive
 	Location: /accounts/profile/
-	X-API-Session-Cookie-Name: awx_sessionid
+	X-API-Session-Cookie-Name: ascender_sessionid
 	Expires: <date>
 	Cache-Control: max-age=0, no-cache, no-store, must-revalidate, private
 	Vary: Cookie, Accept-Language, Origin
@@ -70,7 +70,7 @@ A typical response might look like:
 	Set-Cookie: userLoggedIn=true; Path=/
 	Set-Cookie: current_user=<user cookie data>; Path=/
 	Set-Cookie: csrftoken=<csrftoken>; Path=/; SameSite=Lax
-	Set-Cookie: awx_sessionid=<your session id>; expires=<date>; HttpOnly; Max-Age=1800; Path=/; SameSite=Lax
+	Set-Cookie: ascender_sessionid=<your session id>; expires=<date>; HttpOnly; Max-Age=1800; Path=/; SameSite=Lax
 	Strict-Transport-Security: max-age=15768000
 
 
