@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-import { Formik, Field } from 'formik';
+import { FormRoot, useField } from 'components/Form';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
 import FormActionGroup from './FormActionGroup';
@@ -24,36 +24,15 @@ describe('FormActionGroup', () => {
   // focus, so nothing validates on the way out.
   test('should leave a touched required field alone when cancelling', async () => {
     const onCancel = vi.fn();
-    const required = (value: string) =>
-      value ? undefined : 'This field must not be blank';
     const { user } = renderWithContexts(
-      <Formik initialValues={{ name: '' }} onSubmit={vi.fn()}>
-        {(formik) => (
+      <FormRoot initialValues={{ name: '' }} onSubmit={vi.fn()}>
+        {(form) => (
           <>
-            <Field name="name" validate={required}>
-              {({
-                field,
-                meta,
-              }: {
-                field: object;
-                meta: { error?: string; touched: boolean };
-              }) => (
-                <>
-                  <label htmlFor="name">Name</label>
-                  <input id="name" {...field} />
-                  {meta.touched && meta.error ? (
-                    <span role="alert">{meta.error}</span>
-                  ) : null}
-                </>
-              )}
-            </Field>
-            <FormActionGroup
-              onSubmit={formik.handleSubmit}
-              onCancel={onCancel}
-            />
+            <RequiredName />
+            <FormActionGroup onSubmit={form.handleSubmit} onCancel={onCancel} />
           </>
         )}
-      </Formik>
+      </FormRoot>
     );
 
     await user.click(screen.getByLabelText('Name'));
@@ -63,3 +42,19 @@ describe('FormActionGroup', () => {
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
   });
 });
+
+/** A required field that shows its error once touched, the way the screens do. */
+function RequiredName() {
+  const required = (value: string) =>
+    value ? undefined : 'This field must not be blank';
+  const [field, meta] = useField<string>({ name: 'name', validate: required });
+  return (
+    <>
+      <label htmlFor="name">Name</label>
+      <input id="name" {...field} />
+      {meta.touched && meta.error ? (
+        <span role="alert">{meta.error}</span>
+      ) : null}
+    </>
+  );
+}
