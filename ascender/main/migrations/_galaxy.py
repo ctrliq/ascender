@@ -19,7 +19,7 @@ def migrate_galaxy_settings(apps, schema_editor):
         # nothing to migrate
         return
     set_current_apps(apps)
-    ModernCredentialType.setup_tower_managed_defaults(apps)
+    ModernCredentialType.setup_managed_defaults(apps)
     CredentialType = apps.get_model('main', 'CredentialType')
     Credential = apps.get_model('main', 'Credential')
     Setting = apps.get_model('conf', 'Setting')

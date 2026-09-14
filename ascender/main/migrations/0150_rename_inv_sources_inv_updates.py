@@ -36,10 +36,10 @@ def forwards(apps, schema_editor):
             raise RuntimeError('Excpected to find controller credential, this may need to be edited in the future!')
         logger.warning('Renaming the Ansible Tower credential type for existing install')
         tower_type.name = registry_type.name  # sensitive to translations
-        tower_type.namespace = 'controller'  # if not done, will error setup_tower_managed_defaults
+        tower_type.namespace = 'controller'  # if not done, will error setup_managed_defaults
         tower_type.save(update_fields=['name', 'namespace'])
 
-    ModernCredentialType.setup_tower_managed_defaults(apps)
+    ModernCredentialType.setup_managed_defaults(apps)
 
 
 def backwards(apps, schema_editor):

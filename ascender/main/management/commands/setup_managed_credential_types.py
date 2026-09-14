@@ -10,4 +10,4 @@ class Command(BaseCommand):
     help = 'Load default managed credential types.'
 
     def handle(self, *args, **options):
-        CredentialType.setup_tower_managed_defaults()
+        CredentialType.setup_managed_defaults()

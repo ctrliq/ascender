@@ -7,7 +7,7 @@ from ascender.main.models import CredentialType
 
 class Migration(migrations.Migration):
     def update_cyberark_plugin_names(apps, schema_editor):
-        CredentialType.setup_tower_managed_defaults(apps)
+        CredentialType.setup_managed_defaults(apps)
         migrate_credential_type(apps, 'aim')
         migrate_credential_type(apps, 'conjur')
 

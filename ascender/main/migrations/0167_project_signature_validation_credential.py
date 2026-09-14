@@ -7,9 +7,9 @@ from ascender.main.models import CredentialType
 from ascender.main.utils.common import set_current_apps
 
 
-def setup_tower_managed_defaults(apps, schema_editor):
+def setup_managed_defaults(apps, schema_editor):
     set_current_apps(apps)
-    CredentialType.setup_tower_managed_defaults(apps)
+    CredentialType.setup_managed_defaults(apps)
 
 
 class Migration(migrations.Migration):
@@ -52,5 +52,5 @@ class Migration(migrations.Migration):
                 max_length=32,
             ),
         ),
-        migrations.RunPython(setup_tower_managed_defaults),
+        migrations.RunPython(setup_managed_defaults),
     ]

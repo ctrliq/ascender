@@ -439,7 +439,7 @@ class CredentialType(CommonModelNameNotUnique):
         return dict((k, functools.partial(v.create)) for k, v in ManagedCredentialType.registry.items())
 
     @classmethod
-    def setup_tower_managed_defaults(cls, apps=None):
+    def setup_managed_defaults(cls, apps=None):
         if apps is not None:
             ct_class = apps.get_model('main', 'CredentialType')
         else:
