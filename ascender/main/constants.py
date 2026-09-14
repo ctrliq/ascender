@@ -90,10 +90,15 @@ RECEPTOR_PENDING = 'ansible-runner-???'
 # places parse the prefix back out of a record name, so it is defined once.
 ANALYTICS_LOGGER_PREFIX = 'ascender.analytics'
 
-# Naming pattern for Ascender jobs in /tmp folder, like /tmp/awx_42_xiwm
+# Naming pattern for Ascender jobs in /tmp folder, like /tmp/ascender_42_xiwm
 # also update ascenderkit.api.pages.unified_jobs in ctrliq/ascender-kit if changed,
 # which is pinned by test_job_folder_prefix.py rather than left to this comment
-JOB_FOLDER_PREFIX = 'awx_%s_'
+JOB_FOLDER_PREFIX = 'ascender_%s_'
+
+# What the folders were called before the rename. The cleanup sweeps both, since
+# a job folder that predates an upgrade is still rubbish that has to be removed,
+# and glob has no way to spell the two prefixes in one safe pattern.
+FORMER_JOB_FOLDER_PREFIX = 'awx_%s_'
 
 # :z option tells Podman that two containers share the volume content with r/w
 # :O option tells Podman to mount the directory from the host as a temporary storage using the overlay file system.

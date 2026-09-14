@@ -99,7 +99,7 @@ def read_content(private_data_dir, raw_env, inventory_update):
     for key, value in env.items():
         inverse_env.setdefault(value, []).append(key)
 
-    cache_file_regex = re.compile(r'/tmp/awx_{0}_[a-zA-Z0-9_]+/{1}_cache[a-zA-Z0-9_]+'.format(inventory_update.id, inventory_update.source))
+    cache_file_regex = re.compile(r'/tmp/ascender_{0}_[a-zA-Z0-9_]+/{1}_cache[a-zA-Z0-9_]+'.format(inventory_update.id, inventory_update.source))
     private_key_regex = re.compile(r'-----BEGIN ENCRYPTED PRIVATE KEY-----.*-----END ENCRYPTED PRIVATE KEY-----')
 
     # read directory content

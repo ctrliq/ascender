@@ -23,7 +23,7 @@ def test_the_prefix_is_what_ascender_kit_expects():
     against it. If this changes, ctrliq/ascender-kit has to change with it, in
     the same release.
     """
-    assert JOB_FOLDER_PREFIX % 42 == 'awx_42_'
+    assert JOB_FOLDER_PREFIX % 42 == 'ascender_42_'
 
 
 def test_the_prefix_ends_with_a_separator():
@@ -32,7 +32,7 @@ def test_the_prefix_ends_with_a_separator():
     cleaning up job 4 would match job 42's folder as well.
     """
     assert JOB_FOLDER_PREFIX.endswith('_')
-    assert not ('awx_4_').startswith(JOB_FOLDER_PREFIX % 42)
+    assert not ('ascender_4_').startswith(JOB_FOLDER_PREFIX % 42)
 
 
 def test_the_prefix_takes_exactly_one_substitution():

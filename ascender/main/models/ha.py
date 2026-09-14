@@ -25,7 +25,7 @@ from ascender.main.utils import is_testing
 from ascender.api.versioning import reverse
 from ascender.main.fields import ImplicitRoleField
 from ascender.main.managers import InstanceManager, UUID_DEFAULT
-from ascender.main.constants import JOB_FOLDER_PREFIX
+from ascender.main.constants import FORMER_JOB_FOLDER_PREFIX, JOB_FOLDER_PREFIX
 from ascender.main.models.base import BaseModel, HasEditsMixin
 from ascender.main.models.rbac import (
     ROLE_SINGLETON_SYSTEM_ADMINISTRATOR,
@@ -261,7 +261,7 @@ class Instance(HasPolicyEditsMixin, BaseModel):
                 return addr.peers_from_control_nodes
         return False
 
-    def get_cleanup_task_kwargs(self, **kwargs):
+    def get_cleanup_task_kwargs(self, folder_prefix=JOB_FOLDER_PREFIX, **kwargs):
         """
         Produce options to use for the command: ansible-runner worker cleanup
         returns a dict that is passed to the python interface for the runner method corresponding to that command
@@ -269,7 +269,7 @@ class Instance(HasPolicyEditsMixin, BaseModel):
         """
         vargs = dict()
         if settings.ASCENDER_CLEANUP_PATHS:
-            vargs['file_pattern'] = os.path.join(settings.ASCENDER_ISOLATION_BASE_PATH, JOB_FOLDER_PREFIX % '*') + '*'
+            vargs['file_pattern'] = os.path.join(settings.ASCENDER_ISOLATION_BASE_PATH, folder_prefix % '*') + '*'
         vargs.update(kwargs)
         if not isinstance(vargs.get('grace_period'), int):
             vargs['grace_period'] = 60  # grace period of 60 minutes, need to set because CLI default will not take effect
@@ -281,7 +281,9 @@ class Instance(HasPolicyEditsMixin, BaseModel):
                 active_job_qs = active_job_qs.filter(controller_node=self.hostname)
             active_pks = list(active_job_qs.values_list('pk', flat=True))
             if active_pks:
-                vargs['exclude_strings'] = [JOB_FOLDER_PREFIX % job_id for job_id in active_pks]
+                # Both names, so a running job is never swept by the pass
+                # that is looking for the other prefix.
+                vargs['exclude_strings'] = [prefix % job_id for job_id in active_pks for prefix in (JOB_FOLDER_PREFIX, FORMER_JOB_FOLDER_PREFIX)]
         if 'remove_images' in vargs or 'image_prune' in vargs:
             vargs.setdefault('process_isolation_executable', 'podman')
         return vargs

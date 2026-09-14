@@ -28,7 +28,7 @@ def test_get_cleanup_task_kwargs_active_jobs(node_type, active):
     kwargs = instance.get_cleanup_task_kwargs()
 
     if active:
-        assert kwargs['exclude_strings'] == [f'awx_{job.pk}_']
+        assert sorted(kwargs['exclude_strings']) == sorted([f'ascender_{job.pk}_', f'awx_{job.pk}_'])
     else:
         assert 'exclude_strings' not in kwargs
 

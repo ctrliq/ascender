@@ -50,7 +50,7 @@ from ascender.main.models import (
     Job,
     convert_jsonfields,
 )
-from ascender.main.constants import ACTIVE_STATES
+from ascender.main.constants import ACTIVE_STATES, FORMER_JOB_FOLDER_PREFIX, JOB_FOLDER_PREFIX
 from ascender.main.dispatch.publish import task
 from ascender.main.dispatch import get_task_queuename, reaper
 from ascender.main.utils.common import ignore_inventory_computed_fields, ignore_inventory_group_removal
@@ -384,15 +384,19 @@ def _cleanup_images_and_files(**kwargs):
     if settings.IS_K8S:
         return
     this_inst = Instance.objects.me()
-    runner_cleanup_kwargs = this_inst.get_cleanup_task_kwargs(**kwargs)
-    if runner_cleanup_kwargs:
-        stdout = ''
-        with StringIO() as buffer:
-            with redirect_stdout(buffer):
-                ansible_runner.cleanup.run_cleanup(runner_cleanup_kwargs)
-                stdout = buffer.getvalue()
-        if '(changed: True)' in stdout:
-            logger.info(f'Performed local cleanup with kwargs {kwargs}, output:\n{stdout}')
+    # One pass per folder prefix. glob cannot spell both in a single pattern
+    # without matching far more than these folders, and a job folder left by a
+    # release that used the old name still has to be swept.
+    for folder_prefix in (JOB_FOLDER_PREFIX, FORMER_JOB_FOLDER_PREFIX):
+        runner_cleanup_kwargs = this_inst.get_cleanup_task_kwargs(folder_prefix=folder_prefix, **kwargs)
+        if runner_cleanup_kwargs:
+            stdout = ''
+            with StringIO() as buffer:
+                with redirect_stdout(buffer):
+                    ansible_runner.cleanup.run_cleanup(runner_cleanup_kwargs)
+                    stdout = buffer.getvalue()
+            if '(changed: True)' in stdout:
+                logger.info(f'Performed local cleanup with kwargs {kwargs}, output:\n{stdout}')
 
     # if we are the first instance alphabetically, then run cleanup on execution nodes
     checker_instance = (
@@ -401,8 +405,11 @@ def _cleanup_images_and_files(**kwargs):
         .first()
     )
     if checker_instance and this_inst.hostname == checker_instance.hostname:
-        for inst in Instance.objects.filter(node_type='execution', node_state=Instance.States.READY, enabled=True, capacity__gt=0):
-            runner_cleanup_kwargs = inst.get_cleanup_task_kwargs(**kwargs)
+        for inst, folder_prefix in (
+            (i, p) for i in Instance.objects.filter(node_type='execution', node_state=Instance.States.READY, enabled=True, capacity__gt=0)
+            for p in (JOB_FOLDER_PREFIX, FORMER_JOB_FOLDER_PREFIX)
+        ):
+            runner_cleanup_kwargs = inst.get_cleanup_task_kwargs(folder_prefix=folder_prefix, **kwargs)
             if not runner_cleanup_kwargs:
                 continue
             try:
