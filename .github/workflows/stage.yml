@@ -72,7 +72,7 @@ jobs:
           python3 -m pip install docker==6.1.3 requests==2.31.0 --force-reinstall
           # The arm64 runner image does not ship with ansible preinstalled.
           # Constrained to the same tested minor series as the other CI
-          # scripts (see .github/actions/awx_devel_image/action.yml).
+          # scripts (see .github/actions/ascender_devel_image/action.yml).
           if ! command -v ansible-playbook > /dev/null 2>&1; then
             python3 -m pip install 'ansible-core~=2.21.0'
           fi

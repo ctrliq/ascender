@@ -17,8 +17,8 @@ updates:
     # next to it in step. Composite actions are only picked up per directory.
     directories:
       - "/"
-      - "/.github/actions/awx_devel_image"
-      - "/.github/actions/run_awx_devel"
+      - "/.github/actions/ascender_devel_image"
+      - "/.github/actions/run_ascender_devel"
     schedule:
       interval: weekly
       day: monday

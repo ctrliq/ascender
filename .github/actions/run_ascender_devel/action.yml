@@ -4,7 +4,7 @@ name: Run Ascender docker-compose
 description: Runs the Ascender development environment with `make docker-compose`
 inputs:
   github-token:
-    description: GitHub Token to pass to awx_devel_image
+    description: GitHub Token to pass to ascender_devel_image
     required: true
   build-ui:
     description: Should the UI be built?
@@ -26,7 +26,7 @@ runs:
         fi
 
     - name: Build ascender_devel image for the development environment
-      uses: ./.github/actions/awx_devel_image
+      uses: ./.github/actions/ascender_devel_image
       with:
         github-token: ${{ inputs.github-token }}
 
@@ -79,7 +79,7 @@ runs:
         done
         echo "The API is up, updating the password..."
         docker exec -i tools_awx_1 sh <<-EOSH
-          awx-manage update_password --username=admin --password=password
+          ascender-manage update_password --username=admin --password=password
         EOSH
 
     - name: Build UI

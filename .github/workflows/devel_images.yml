@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         build-targets:
-          - image-name: awx_devel
+          - image-name: ascender_devel
             make-target: docker-compose-buildx
           #- image-name: awx_kube_devel
           #  make-target: awx-kube-dev-buildx

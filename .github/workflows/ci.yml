@@ -22,9 +22,9 @@ jobs:
     # assertion untested. The service is shared by the whole matrix, which
     # costs nothing for the jobs that do not open a connection.
     #
-    # The credentials have to match the fallback in awx/settings/defaults.py:
+    # The credentials have to match the fallback in ascender/settings/defaults.py:
     # the suite itself is told where to connect through AWX_TEST_DATABASE_*
-    # below, but the awx-manage checks that make test runs afterwards load
+    # below, but the ascender-manage checks that make test runs afterwards load
     # the development settings, and the throwaway container has no settings
     # files for those to read, so they connect with the fallback.
     services:
@@ -85,7 +85,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
       - name: Build ascender_devel image for running checks
-        uses: ./.github/actions/awx_devel_image
+        uses: ./.github/actions/ascender_devel_image
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -114,7 +114,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7.0.1
 
       - name: Start the development environment
-        uses: ./.github/actions/run_awx_devel
+        uses: ./.github/actions/run_ascender_devel
         with:
           build-ui: false
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -143,7 +143,7 @@ jobs:
       # build-ui, unlike the dev-env job, because these tests drive the built UI
       # the way a user meets it rather than a development server
       - name: Start the development environment with the UI built
-        uses: ./.github/actions/run_awx_devel
+        uses: ./.github/actions/run_ascender_devel
         with:
           build-ui: true
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -174,7 +174,7 @@ jobs:
         working-directory: ascender/ui/e2e
         run: npx playwright install --with-deps chromium
 
-      # run_awx_devel sets the admin password to this
+      # run_ascender_devel sets the admin password to this
       - name: Run the end-to-end tests
         working-directory: ascender/ui/e2e
         env:
