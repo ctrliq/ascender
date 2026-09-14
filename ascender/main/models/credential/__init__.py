@@ -34,6 +34,7 @@ from ascender.main.fields import (
     CredentialTypeInjectorField,
     DynamicCredentialInputField,
 )
+from ascender.main.constants import RESERVED_NAMESPACE_NAMES
 from ascender.main.utils import decrypt_field, classproperty, set_environ
 from ascender.main.utils.safe_yaml import safe_dump
 from ascender.main.utils.execution_environments import to_container_path
@@ -498,16 +499,23 @@ class CredentialType(CommonModelNameNotUnique):
                 safe_env.update(build_safe_env(injected_env))
             return
 
-        class TowerNamespace:
+        class ReservedNamespace:
             pass
 
-        tower_namespace = TowerNamespace()
+        reserved_namespace = ReservedNamespace()
+
+        # Both names, bound to the one object. A custom credential type is the
+        # administrator's own template, stored in the database, and the ones
+        # written before the rename say {{tower.filename}}. Rebinding rather
+        # than renaming means those keep rendering, and `ascender` is what the
+        # documentation and the examples use from here.
+        # Defined once, in constants, since the validator uses the same pair.
 
         # maintain a normal namespace for building the ansible-playbook arguments (env and args)
-        namespace = {'tower': tower_namespace}
+        namespace = {name: reserved_namespace for name in RESERVED_NAMESPACE_NAMES}
 
         # maintain a sanitized namespace for building the DB-stored arguments (safe_env)
-        safe_namespace = {'tower': tower_namespace}
+        safe_namespace = {name: reserved_namespace for name in RESERVED_NAMESPACE_NAMES}
 
         # build a normal namespace with secret values decrypted (for
         # ansible-playbook) and a safe namespace with secret values hidden (for
@@ -554,12 +562,12 @@ class CredentialType(CommonModelNameNotUnique):
 
             # determine if filename indicates single file or many
             if file_label.find('.') == -1:
-                tower_namespace.filename = container_path
+                reserved_namespace.filename = container_path
             else:
-                if not hasattr(tower_namespace, 'filename'):
-                    tower_namespace.filename = TowerNamespace()
+                if not hasattr(reserved_namespace, 'filename'):
+                    reserved_namespace.filename = ReservedNamespace()
                 file_label = file_label.split('.')[1]
-                setattr(tower_namespace.filename, file_label, container_path)
+                setattr(reserved_namespace.filename, file_label, container_path)
 
         injector_field = self._meta.get_field('injectors')
         for env_var, tmpl in self.injectors.get('env', {}).items():

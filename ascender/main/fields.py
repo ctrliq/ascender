@@ -44,7 +44,7 @@ from rest_framework import serializers
 from ascender.main.utils.filters import SmartFilter
 from ascender.main.utils.encryption import encrypt_value, decrypt_value, get_encryption_key
 from ascender.main.validators import validate_ssh_private_key
-from ascender.main.constants import ENV_BLOCKLIST
+from ascender.main.constants import ENV_BLOCKLIST, RESERVED_NAMESPACE_NAMES
 from ascender.main import utils
 
 __all__ = [
@@ -758,9 +758,9 @@ class CredentialTypeInputField(JSONSchemaField):
         ids = {}
         for field in value.get('fields', []):
             id_ = field.get('id')
-            if id_ == 'tower':
+            if id_ in RESERVED_NAMESPACE_NAMES:
                 raise django_exceptions.ValidationError(
-                    _('"tower" is a reserved field name'),
+                    _('"%s" is a reserved field name') % id_,
                     code='invalid',
                     params={'value': value},
                 )
@@ -881,21 +881,24 @@ class CredentialTypeInjectorField(JSONSchemaField):
 
         class ExplodingNamespace:
             def __str__(self):
-                raise UndefinedError(_('Must define unnamed file injector in order to reference `tower.filename`.'))
+                raise UndefinedError(_('Must define unnamed file injector in order to reference `ascender.filename`.'))
 
-        class TowerNamespace:
+        class ReservedNamespace:
             def __init__(self):
                 self.filename = ExplodingNamespace()
 
             def __str__(self):
-                raise UndefinedError(_('Cannot directly reference reserved `tower` namespace container.'))
+                raise UndefinedError(_('Cannot directly reference a reserved namespace container.'))
 
-        valid_namespace['tower'] = TowerNamespace()
+        # Both names, one object, matching what a job renders against.
+        _reserved = ReservedNamespace()
+        for _name in RESERVED_NAMESPACE_NAMES:
+            valid_namespace[_name] = _reserved
 
         # ensure either single file or multi-file syntax is used (but not both)
         template_names = [x for x in value.get('file', {}).keys() if x.startswith('template')]
         if 'template' in template_names:
-            valid_namespace['tower'].filename = 'EXAMPLE_FILENAME'
+            _reserved.filename = 'EXAMPLE_FILENAME'
             if len(template_names) > 1:
                 raise django_exceptions.ValidationError(
                     _('Must use multi-file syntax when injecting multiple files'),
@@ -905,7 +908,7 @@ class CredentialTypeInjectorField(JSONSchemaField):
         elif template_names:
             for template_name in template_names:
                 template_name = template_name.split('.')[1]
-                setattr(valid_namespace['tower'].filename, template_name, 'EXAMPLE_FILENAME')
+                setattr(_reserved.filename, template_name, 'EXAMPLE_FILENAME')
 
         def validate_template_string(type_, key, tmpl):
             try:

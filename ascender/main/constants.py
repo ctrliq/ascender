@@ -95,6 +95,13 @@ ANALYTICS_LOGGER_PREFIX = 'ascender.analytics'
 # which is pinned by test_job_folder_prefix.py rather than left to this comment
 JOB_FOLDER_PREFIX = 'ascender_%s_'
 
+#: The namespace a credential type's injectors render against. Both names are
+#: bound to the same object: `ascender` is the current one, and `tower` is what
+#: an administrator's own credential type written before the rename says, stored
+#: in the database where it cannot be rewritten from here. A field may not be
+#: called either, or it would shadow the namespace.
+RESERVED_NAMESPACE_NAMES = ('ascender', 'tower')
+
 # What the folders were called before the rename. The cleanup sweeps both, since
 # a job folder that predates an upgrade is still rubbish that has to be removed,
 # and glob has no way to spell the two prefixes in one safe pattern.

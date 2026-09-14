@@ -1326,6 +1326,30 @@ class TestJobCredentials(TestJobExecution):
         path = to_host_path(env['MY_CLOUD_INI_FILE'], private_data_dir)
         assert open(path, 'r').read() == '[mycloud]\nABC123'
 
+    @pytest.mark.parametrize('namespace', ['ascender', 'tower'])
+    def test_custom_environment_injectors_with_file_under_either_namespace(self, namespace, private_data_dir, mock_me):
+        """The filename resolves under the Ascender name and the one it replaced.
+
+        A custom credential type is the administrator's own template, stored in
+        the database, so the ones written before the rename say tower.filename
+        and cannot be rewritten from here. Both names are bound to one object,
+        and this is what says so.
+        """
+        some_cloud = CredentialType(
+            kind='cloud',
+            name='SomeCloud',
+            managed=False,
+            inputs={'fields': [{'id': 'api_token', 'label': 'API Token', 'type': 'string'}]},
+            injectors={'file': {'template': '[mycloud]\n{{api_token}}'}, 'env': {'MY_CLOUD_INI_FILE': '{{%s.filename}}' % namespace}},
+        )
+        credential = Credential(pk=1, credential_type=some_cloud, inputs={'api_token': 'ABC123'})
+
+        env = {}
+        credential.credential_type.inject_credential(credential, env, {}, [], private_data_dir)
+
+        path = to_host_path(env['MY_CLOUD_INI_FILE'], private_data_dir)
+        assert open(path, 'r').read() == '[mycloud]\nABC123'
+
     def test_custom_environment_injectors_with_unicode_content(self, private_data_dir, mock_me):
         value = 'Iñtërnâtiônàlizætiøn'
         some_cloud = CredentialType(
