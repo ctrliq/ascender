@@ -8,7 +8,11 @@ requires = ["setuptools==84.0.0", "setuptools_scm[toml]==10.2.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "awx"
+# Renamed from awx. An installed distribution keeps whatever name it was built
+# under, so the version lookup in ascender/__init__.py reads both, and the
+# Makefile still leaves a dist/awx.tar.gz symlink beside the new one for a
+# caller that builds from source by that path.
+name = "ascender"
 # Two entries rather than one: a combined { name, email } renders as a single
 # "Author-email: Red Hat <info@ansible.com>" header, where setup.cfg produced
 # separate Author and Author-email fields. This keeps the metadata identical.

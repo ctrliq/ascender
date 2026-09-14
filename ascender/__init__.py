@@ -35,9 +35,16 @@ def version_file():
 
 
 try:
-    __version__ = _get_version('awx')
+    # Either name: the distribution was called awx before the rename, so an
+    # environment installed by an older release still carries that metadata and
+    # would otherwise fall through to reading the version out of git, which is
+    # not there in an installed tree.
+    __version__ = _get_version('ascender')
 except PackageNotFoundError:
-    __version__ = get_version()
+    try:
+        __version__ = _get_version('awx')
+    except PackageNotFoundError:
+        __version__ = get_version()
 
 __all__ = ['__version__']
 

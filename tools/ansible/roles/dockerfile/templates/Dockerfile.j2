@@ -101,7 +101,7 @@ RUN cd /tmp && make requirements_ascender_dev
 # Copy source into builder, build sdist, install it into awx venv
 COPY . /tmp/src/
 WORKDIR /tmp/src/
-RUN make sdist && /var/lib/ascender/venv/awx/bin/pip install dist/awx.tar.gz
+RUN make sdist && /var/lib/ascender/venv/awx/bin/pip install dist/ascender.tar.gz
 
 {% if not headless|bool %}
 # collectstatic only needs settings that import cleanly and define nothing.
@@ -267,8 +267,8 @@ RUN ln -s /usr/bin/ascender-python /usr/bin/awx-python
 {% endif %}
 
 {% if (build_dev|bool) or (kube_dev|bool) %}
-RUN echo /ascender_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/awx.egg-link && \
-    echo /ascender_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/awx.pth && \
+RUN echo /ascender_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/ascender.egg-link && \
+    echo /ascender_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/ascender.pth && \
     ln -sf /ascender_devel/tools/docker-compose/ascender-manage /usr/local/bin/ascender-manage && \
     ln -sf /ascender_devel/tools/docker-compose/ascender-manage /usr/local/bin/awx-manage && \
     ln -sf /ascender_devel/tools/scripts/ascender-python /usr/bin/ascender-python && \

@@ -48,7 +48,7 @@ SRC_ONLY_PKGS ?= cffi,pycparser,psycopg,twilio
 # to install the actual requirements
 VENV_BOOTSTRAP ?= pip==26.2.1 setuptools==84.0.0 setuptools_scm[toml]==10.2.3 wheel==0.48.0
 
-NAME ?= awx
+NAME ?= ascender
 
 # TAR build parameters
 SDIST_TAR_NAME=$(NAME)-$(VERSION)
@@ -326,9 +326,9 @@ ui-api-types: ascender-link ascender/ui/node_modules
 	$(NPM_BIN) --prefix ascender/ui run generate-api-types
 	rm -f ascender/ui/.schema.json
 
-## Run egg_info_dev to generate awx.egg-info for development.
+## Run egg_info_dev to generate ascender.egg-info for development.
 ascender-link:
-	[ -d "/ascender_devel/awx.egg-info" ] || $(PYTHON) /ascender_devel/tools/scripts/egg_info_dev
+	[ -d "/ascender_devel/ascender.egg-info" ] || $(PYTHON) /ascender_devel/tools/scripts/egg_info_dev
 
 TEST_DIRS ?= ascender/main/tests/unit ascender/main/tests/functional ascender/conf/tests ascender/sso/tests
 PYTEST_ARGS ?= -n auto --dist=loadfile
@@ -472,6 +472,9 @@ else
 dist/$(SDIST_TAR_FILE): $(UI_BUILD_FLAG_FILE)
 endif
 	$(PYTHON) -m build -s
+	ln -sf $(SDIST_TAR_FILE) dist/ascender.tar.gz
+# ascender-install pip installs dist/awx.tar.gz by that path from its own
+# repository, so the old name stays beside the new one until it moves.
 	ln -sf $(SDIST_TAR_FILE) dist/awx.tar.gz
 
 sdist: dist/$(SDIST_TAR_FILE)
