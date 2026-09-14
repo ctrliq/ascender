@@ -45,7 +45,7 @@ location ~ ^({{ prefix }}/websocket/|{{ prefix }}/api/websocket/) {
 
 {% if prefix %}
 location = {{ prefix }} {
-    return 301 {{ prefix }}/;
+    return 301 {{ prefix }}/$is_args$args;
 }
 
 {% endif %}
