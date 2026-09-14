@@ -6,7 +6,7 @@
   vars:
     private_key_file: ../_sources/keycloak.key
     public_key_file: ../_sources/keycloak.cert
-    awx_host: "https://localhost:8043"
+    ascender_host: "https://localhost:8043"
     keycloak_realm_template: ../_sources/keycloak.awx.realm.json
     keycloak_user: admin
     keycloak_pass: admin
@@ -22,9 +22,9 @@
         private_key: "{{ private_key_content }}"
         public_key: "{{ public_key_content }}"
         public_key_trimmed: "{{ public_key_content | regex_replace('-----BEGIN CERTIFICATE-----\\\\n', '') | regex_replace('\\\\n-----END CERTIFICATE-----', '') }}"
-        existing_saml: "{{ lookup('ctrliq.ascender.controller_api', 'settings/saml', host=awx_host, verify_ssl=false) }}"
+        existing_saml: "{{ lookup('ctrliq.ascender.controller_api', 'settings/saml', host=ascender_host, verify_ssl=false) }}"
         new_saml: "{{ lookup('template', 'saml_settings.json.j2') }}"
-        existing_oidc: "{{ lookup('ctrliq.ascender.controller_api', 'settings/oidc', host=awx_host, verify_ssl=false) }}"
+        existing_oidc: "{{ lookup('ctrliq.ascender.controller_api', 'settings/oidc', host=ascender_host, verify_ssl=false) }}"
         new_oidc: "{{ lookup('template', 'oidc_settings.json.j2') }}"
       vars:
         # We add the extra \\ in here so that when jinja is templating out the files we end up with \n in the strings.
@@ -55,13 +55,13 @@
     - name: Configure AWX SAML adapter
       ctrliq.ascender.settings:
         settings: "{{ new_saml }}"
-        controller_host: "{{ awx_host }}"
+        controller_host: "{{ ascender_host }}"
         validate_certs: False
 
     - name: Configure AWX OIDC adapter
       ctrliq.ascender.settings:
         settings: "{{ new_oidc }}"
-        controller_host: "{{ awx_host }}"
+        controller_host: "{{ ascender_host }}"
         validate_certs: False
 
     - name: Get a keycloak token

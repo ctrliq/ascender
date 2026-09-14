@@ -270,9 +270,9 @@ drwxrwxr-x 1 0 0 4096 Oct 20 12:43 ..
 The class behind the decorator can also be used for profiling.
 
 ```
-from ascender.main.utils.profiling import AWXProfiler
+from ascender.main.utils.profiling import AscenderProfiler
 
-prof = AWXProfiler("hello_world")
+prof = AscenderProfiler("hello_world")
 prof.start()
 '''
 code to profile here

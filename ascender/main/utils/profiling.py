@@ -8,7 +8,7 @@ import json
 import sys
 
 
-class AWXProfileBase:
+class AscenderProfileBase:
     def __init__(self, name, dest):
         self.name = name
         self.dest = dest
@@ -27,7 +27,7 @@ class AWXProfileBase:
                 f.write(json.dumps(self.results, indent=2))
 
 
-class AWXTiming(AWXProfileBase):
+class AWXTiming(AscenderProfileBase):
     def __init__(self, name, dest='/var/log/tower/timing'):
         super().__init__(name, dest)
 
@@ -70,7 +70,7 @@ def timing(name, *init_args, **init_kwargs):
     return decorator_profile
 
 
-class AWXProfiler(AWXProfileBase):
+class AscenderProfiler(AscenderProfileBase):
     def __init__(self, name, dest='/var/log/tower/profile', dot_enabled=True):
         """
         Try to do as little as possible in init. Instead, do the init
@@ -130,7 +130,7 @@ class AWXProfiler(AWXProfileBase):
             self.started = False
             return res
         else:
-            print("AWXProfiler::stop() called without calling start() first", file=sys.stderr)
+            print("AscenderProfiler::stop() called without calling start() first", file=sys.stderr)
             return None
 
 
@@ -138,7 +138,7 @@ def profile(name, *init_args, **init_kwargs):
     def decorator_profile(func):
         @functools.wraps(func)
         def wrapper_profile(*args, **kwargs):
-            prof = AWXProfiler(name, *init_args, **init_kwargs)
+            prof = AscenderProfiler(name, *init_args, **init_kwargs)
             prof.start()
             res = func(*args, **kwargs)
             prof.stop()

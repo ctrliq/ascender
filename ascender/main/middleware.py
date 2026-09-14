@@ -26,7 +26,7 @@ from ascender.main.request_context import get_current_request, get_current_user,
 from ascender.main.utils.named_url_graph import generate_graph, GraphNode
 from ascender.conf import fields, register, settings_registry
 from ascender.conf.settings import SETTING_CACHE_VERSION_KEY
-from ascender.main.utils.profiling import AWXProfiler
+from ascender.main.utils.profiling import AscenderProfiler
 from ascender.main.utils.common import memoize
 
 logger = logging.getLogger('awx.main.middleware')
@@ -112,7 +112,7 @@ class TimingMiddleware(threading.local, MiddlewareMixin):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.prof = AWXProfiler("TimingMiddleware")
+        self.prof = AscenderProfiler("TimingMiddleware")
 
     def process_request(self, request):
         self.start_time = time.time()

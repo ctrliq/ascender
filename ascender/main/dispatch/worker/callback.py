@@ -19,7 +19,7 @@ from ascender.main.consumers import emit_channel_notification
 from ascender.main.models import JobEvent, AdHocCommandEvent, ProjectUpdateEvent, InventoryUpdateEvent, SystemJobEvent, UnifiedJob
 from ascender.main.constants import ACTIVE_STATES
 from ascender.main.models.events import emit_event_detail
-from ascender.main.utils.profiling import AWXProfiler
+from ascender.main.utils.profiling import AscenderProfiler
 import ascender.main.analytics.subsystem_metrics as s_metrics
 from .base import BaseWorker
 
@@ -75,7 +75,7 @@ class CallbackBrokerWorker(BaseWorker):
         self.subsystem_metrics = s_metrics.CallbackReceiverMetrics(auto_pipe_execute=False)
         self.queue_pop = 0
         self.queue_name = settings.CALLBACK_QUEUE
-        self.prof = AWXProfiler("CallbackBrokerWorker")
+        self.prof = AscenderProfiler("CallbackBrokerWorker")
         for key in self.valkey.keys('ascender_callback_receiver_statistics_*'):
             self.valkey.delete(key)
 

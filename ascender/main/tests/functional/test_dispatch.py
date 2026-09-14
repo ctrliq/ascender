@@ -449,9 +449,9 @@ class TestJobReaper(object):
         by the task manager so they can be re-dispatched."""
         from ascender.main.scheduler import TaskManager
 
-        Instance(hostname='awx-task-live', node_type='control').save()
-        # No instance record for 'awx-task-dead' — it was already deprovisioned
-        job = Job.objects.create(status='waiting', controller_node='awx-task-dead', execution_node='')
+        Instance(hostname='ascender-task-live', node_type='control').save()
+        # No instance record for 'ascender-task-dead' — it was already deprovisioned
+        job = Job.objects.create(status='waiting', controller_node='ascender-task-dead', execution_node='')
 
         tm = TaskManager()
         tm.reap_jobs_from_orphaned_instances()
@@ -466,22 +466,22 @@ class TestJobReaper(object):
         """Waiting jobs on a live control or hybrid node should not be touched."""
         from ascender.main.scheduler import TaskManager
 
-        Instance(hostname='awx-task-live', node_type=node_type).save()
-        job = Job.objects.create(status='waiting', controller_node='awx-task-live', execution_node='')
+        Instance(hostname='ascender-task-live', node_type=node_type).save()
+        job = Job.objects.create(status='waiting', controller_node='ascender-task-live', execution_node='')
 
         tm = TaskManager()
         tm.reap_jobs_from_orphaned_instances()
 
         job.refresh_from_db()
         assert job.status == 'waiting'
-        assert job.controller_node == 'awx-task-live'
+        assert job.controller_node == 'ascender-task-live'
 
     def test_waiting_job_not_reset_when_controller_node_unassigned(self):
         """A waiting job with no controller_node assigned yet is not orphaned
         and should not be swept by the deprovisioned-controller check."""
         from ascender.main.scheduler import TaskManager
 
-        Instance(hostname='awx-task-live', node_type='control').save()
+        Instance(hostname='ascender-task-live', node_type='control').save()
         job = Job.objects.create(status='waiting', controller_node='', execution_node='')
 
         tm = TaskManager()
@@ -499,7 +499,7 @@ class TestJobReaper(object):
         """
         from ascender.main.scheduler import TaskManager
 
-        Instance(hostname='awx-task-live', node_type='hybrid').save()
+        Instance(hostname='ascender-task-live', node_type='hybrid').save()
         for _ in range(3):
             Job.objects.create(status='pending')
 
@@ -513,8 +513,8 @@ class TestJobReaper(object):
         """The SQL narrowing must keep genuinely orphaned rows in scope."""
         from ascender.main.scheduler import TaskManager
 
-        Instance(hostname='awx-task-live', node_type='hybrid').save()
-        job = Job.objects.create(status='running', controller_node='awx-task-live', execution_node='exec-gone')
+        Instance(hostname='ascender-task-live', node_type='hybrid').save()
+        job = Job.objects.create(status='running', controller_node='ascender-task-live', execution_node='exec-gone')
 
         TaskManager().reap_jobs_from_orphaned_instances()
 
