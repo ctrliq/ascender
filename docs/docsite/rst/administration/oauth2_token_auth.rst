@@ -159,7 +159,7 @@ Following is an example of using the personal token to access an API endpoint us
 
 ::
 
-	curl -H "Authorization: Bearer <token>" -H "Content-Type: application/json" -d '{}' https://awx/api/v2/job_templates/5/launch/
+	curl -H "Authorization: Bearer <token>" -H "Content-Type: application/json" -d '{}' https://ascender/api/v2/job_templates/5/launch/
 
 
 In Ascender, the OAuth 2 system is built on top of the `Django Oauth Toolkit`_, which provides dedicated endpoints for authorizing, revoking, and refreshing tokens. These endpoints can be found under the ``/api/v2/users/<USER_ID>/personal_tokens/`` endpoint, which also provides detailed examples on some typical usage of those endpoints. These special OAuth 2 endpoints only support using the ``x-www-form-urlencoded`` **Content-type**, so none of the ``api/o/*`` endpoints accept ``application/json``. 

@@ -54,7 +54,7 @@ Support for version 2 of the API (``api/v2/``) means a one-to-many relationship 
 
 ::
     
-    $ curl "https://awx.example.org/api/v2/credentials/?credential_type__namespace=aws"
+    $ curl "https://ascender.example.org/api/v2/credentials/?credential_type__namespace=aws"
 
 
 In the V2 CredentialType model, the relationships are defined as follows:
