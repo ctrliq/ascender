@@ -67,7 +67,7 @@ from awx.conf.utils import conf_to_dict
 __all__ = []
 
 logger = logging.getLogger('awx.main.signals')
-analytics_logger = logging.getLogger('awx.analytics.activity_stream')
+analytics_logger = logging.getLogger('ascender.analytics.activity_stream')
 
 # Update has_active_failures for inventory/groups when a Host/Group is deleted,
 # when a Host-Group or Group-Group relationship is updated, or when a Job is deleted

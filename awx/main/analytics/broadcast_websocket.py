@@ -19,7 +19,7 @@ from awx.settings.typed import settings
 BROADCAST_WEBSOCKET_VALKEY_KEY_NAME = 'broadcast_websocket_stats'
 
 
-logger = logging.getLogger('awx.analytics.broadcast_websocket')
+logger = logging.getLogger('ascender.analytics.broadcast_websocket')
 
 
 def dt_to_seconds(dt):

@@ -19,8 +19,8 @@ from django.db.models import Q
         # skip all records if underlying logger is used by handlers themselves
         ({'enabled_flag': True}, 'awx.main.utils.handlers', False),
         ({'enabled_flag': True, 'enabled_loggers': ['awx']}, 'awx.main', True),
-        ({'enabled_flag': True, 'enabled_loggers': ['abc']}, 'awx.analytics.xyz', False),
-        ({'enabled_flag': True, 'enabled_loggers': ['xyz']}, 'awx.analytics.xyz', True),
+        ({'enabled_flag': True, 'enabled_loggers': ['abc']}, 'ascender.analytics.xyz', False),
+        ({'enabled_flag': True, 'enabled_loggers': ['xyz']}, 'ascender.analytics.xyz', True),
     ],
 )
 def test_base_logging_handler_skip_log(params, logger_name, expected, dummy_log_record):

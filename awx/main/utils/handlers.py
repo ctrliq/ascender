@@ -15,6 +15,7 @@ from django.utils.encoding import force_str
 
 # Ascender
 from awx.main.exceptions import PostRunError
+from awx.main.constants import ANALYTICS_LOGGER_PREFIX
 
 
 class RSysLogHandler(logging.handlers.SysLogHandler):
@@ -115,7 +116,7 @@ if settings.COLOR_LOGS is True:
                 # comment out this method if you don't like the job_lifecycle
                 # logs rendered with cyan text
                 previous_level_map = self.level_map.copy()
-                if record.name == "awx.analytics.job_lifecycle":
+                if record.name == f'{ANALYTICS_LOGGER_PREFIX}.job_lifecycle':
                     self.level_map[logging.INFO] = (None, 'cyan', True)
                 msg = super(ColorHandler, self).colorize(line, record)
                 self.level_map = previous_level_map

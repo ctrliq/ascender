@@ -21,7 +21,7 @@ from awx.api import renderers
 
 from awx.api.generics import APIView
 
-logger = logging.getLogger('awx.analytics')
+logger = logging.getLogger('ascender.analytics')
 
 
 class MetricsView(APIView):

@@ -14,7 +14,7 @@ from awx.main.utils.db import bulk_update_sorted_by_id
 from awx.main.models import Host
 
 logger = logging.getLogger('awx.main.tasks.facts')
-system_tracking_logger = logging.getLogger('awx.analytics.system_tracking')
+system_tracking_logger = logging.getLogger('ascender.analytics.system_tracking')
 
 
 @log_excess_runtime(logger, debug_cutoff=0.01, msg='Inventory {inventory_id} host facts prepared for {written_ct} hosts, took {delta:.3f} s', add_log_data=True)

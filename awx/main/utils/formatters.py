@@ -12,6 +12,7 @@ from dateutil.tz import tzutc
 from django.utils.timezone import now
 from django.core.serializers.json import DjangoJSONEncoder
 from awx.settings.typed import settings
+from awx.main.constants import ANALYTICS_LOGGER_PREFIX
 
 
 class TimeFormatter(logging.Formatter):
@@ -244,8 +245,8 @@ class LogstashFormatter(LogstashFormatterBase):
 
     def get_extra_fields(self, record):
         fields = super(LogstashFormatter, self).get_extra_fields(record)
-        if record.name.startswith('awx.analytics'):
-            log_kind = record.name[len('awx.analytics.') :]
+        if record.name.startswith(ANALYTICS_LOGGER_PREFIX):
+            log_kind = record.name[len(ANALYTICS_LOGGER_PREFIX) + 1 :]
             fields = self.reformat_data_for_log(fields, kind=log_kind)
         # General Ascender metadata
         fields['cluster_host_id'] = self.cluster_host_id
