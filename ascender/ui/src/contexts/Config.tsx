@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
-import { useMatch } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -271,11 +270,9 @@ export const useUserProfile = (): UserProfile => {
   };
 };
 
-export const useAuthorizedPath = () => {
-  const config = useConfig();
-  const subscriptionMgmtRoute = useMatch({
-    path: '/subscription_management',
-    end: false,
-  });
-  return !!config.license_info?.valid_key && !subscriptionMgmtRoute;
-};
+export const useAuthorizedPath = () =>
+  // Kept as a hook rather than removed so its callers read the same. It used to
+  // answer false when the licence had no valid key, which sent the whole app to
+  // the subscription wizard. There is no subscription and no wizard, and the
+  // open licence is always valid, so there is nothing left for it to refuse.
+  true;

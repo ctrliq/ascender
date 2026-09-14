@@ -13,11 +13,7 @@ import { I18nProvider } from '@lingui/react';
 import { i18n } from '@lingui/core';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { Card, PageSection } from '@patternfly/react-core';
-import {
-  ConfigProvider,
-  useAuthorizedPath,
-  useUserProfile,
-} from 'contexts/Config';
+import { ConfigProvider, useUserProfile } from 'contexts/Config';
 import { SessionProvider, useSession } from 'contexts/Session';
 import AppContainer from 'components/AppContainer';
 import ContentError from 'components/ContentError';
@@ -34,9 +30,6 @@ import { SESSION_REDIRECT_URL } from './constants';
 import queryClient from './queryClient';
 
 const Metrics = React.lazy(() => import('screens/Metrics'));
-const SubscriptionEdit = React.lazy(
-  () => import('screens/Setting/Subscription/SubscriptionEdit')
-);
 
 export interface ErrorFallbackProps {
   error: unknown;
@@ -68,75 +61,46 @@ export interface AuthorizedRoutesProps {
   routeConfig: AppRouteGroup[];
 }
 
-const AuthorizedRoutes = ({ routeConfig }: AuthorizedRoutesProps) => {
-  const isAuthorized = useAuthorizedPath();
-
-  if (!isAuthorized) {
-    return (
-      <Suspense fallback={<ContentLoading />}>
-        <Routes>
+const AuthorizedRoutes = ({ routeConfig }: AuthorizedRoutesProps) => (
+  <Suspense fallback={<ContentLoading />}>
+    <Routes>
+      {routeConfig
+        .flatMap(({ routes }) => routes)
+        .map(({ path, screen: Screen }) => (
+          // /* so each screen's own nested <Routes> can match the rest
           <Route
-            path="/subscription_management"
+            key={path}
+            path={`${path}/*`}
             element={
               <ProtectedRoute>
-                <PageSection hasBodyWrapper={false}>
-                  <Card>
-                    <SubscriptionEdit />
-                  </Card>
-                </PageSection>
+                <Screen />
               </ProtectedRoute>
             }
           />
+        ))
+        .concat(
           <Route
+            key="metrics"
+            path="/metrics/*"
+            element={
+              <ProtectedRoute>
+                <Metrics />
+              </ProtectedRoute>
+            }
+          />,
+          <Route
+            key="not-found"
             path="*"
-            element={<Navigate to="/subscription_management" replace />}
+            element={
+              <ProtectedRoute>
+                <NotFound />
+              </ProtectedRoute>
+            }
           />
-        </Routes>
-      </Suspense>
-    );
-  }
-
-  return (
-    <Suspense fallback={<ContentLoading />}>
-      <Routes>
-        {routeConfig
-          .flatMap(({ routes }) => routes)
-          .map(({ path, screen: Screen }) => (
-            // /* so each screen's own nested <Routes> can match the rest
-            <Route
-              key={path}
-              path={`${path}/*`}
-              element={
-                <ProtectedRoute>
-                  <Screen />
-                </ProtectedRoute>
-              }
-            />
-          ))
-          .concat(
-            <Route
-              key="metrics"
-              path="/metrics/*"
-              element={
-                <ProtectedRoute>
-                  <Metrics />
-                </ProtectedRoute>
-              }
-            />,
-            <Route
-              key="not-found"
-              path="*"
-              element={
-                <ProtectedRoute>
-                  <NotFound />
-                </ProtectedRoute>
-              }
-            />
-          )}
-      </Routes>
-    </Suspense>
-  );
-};
+        )}
+    </Routes>
+  </Suspense>
+);
 
 export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const {
