@@ -271,6 +271,11 @@ def get_licenser(*args, **kwargs):
     from ascender.main.utils.licensing import Licenser, OpenLicense
 
     try:
+        # .tower_version keeps its name deliberately. Its presence is what says
+        # this is the subscription product rather than the open one, and nothing
+        # in this ecosystem writes it: an install that has it got it from the
+        # Tower it was migrated from. Renaming the check would silently move
+        # such an install onto the open licence.
         if os.path.exists('/var/lib/ascender/.tower_version'):
             return Licenser(*args, **kwargs)
         else:

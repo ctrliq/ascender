@@ -149,6 +149,7 @@ def config(since, **kwargs):
         'install_uuid': settings.INSTALL_UUID,
         'instance_uuid': settings.SYSTEM_UUID,
         'tower_url_base': settings.ASCENDER_URL_BASE,
+        'ascender_version': get_ascender_version(),
         'tower_version': get_ascender_version(),
         'license_type': license_info.get('license_type', 'UNLICENSED'),
         'license_date': license_info.get('license_date'),
