@@ -19,7 +19,7 @@ import pytest
 from django.conf import settings
 
 from awx.main.tests.functional.api.test_settings import _mock_logging_defaults
-from awx.main.utils.external_logging import construct_rsyslog_conf_template
+from awx.main.utils.external_logging import DEFAULT_SPOOL_DIRECTORY, construct_rsyslog_conf_template
 
 
 @pytest.fixture
@@ -36,7 +36,7 @@ def conf():
 
 def test_the_queue_is_written_to_disk(conf):
     """Otherwise a restart loses whatever had not been delivered."""
-    assert 'queue.spoolDirectory="/var/lib/ascender"' in conf
+    assert f'queue.spoolDirectory="{DEFAULT_SPOOL_DIRECTORY}"' in conf
     assert 'queue.filename="awx-external-logger-action-queue"' in conf
 
 
@@ -120,7 +120,7 @@ def test_an_unwritable_spool_directory_falls_back(tmp_path):
     conf = _conf_with_spool(str(missing))
 
     assert f'queue.spoolDirectory="{missing}"' not in conf
-    assert 'queue.spoolDirectory="/var/lib/ascender"' in conf
+    assert f'queue.spoolDirectory="{DEFAULT_SPOOL_DIRECTORY}"' in conf
 
 
 def test_the_fallback_says_so(tmp_path, caplog):
@@ -133,3 +133,32 @@ def test_the_fallback_says_so(tmp_path, caplog):
         _conf_with_spool(str(missing))
 
     assert str(missing) in caplog.text
+
+
+def test_a_spool_path_that_is_a_file_falls_back(tmp_path):
+    """os.access says a plain file is writable, so W_OK alone would have let a
+    file through as the spool directory and rsyslog would have had nowhere to
+    put its queue files.
+    """
+    a_file = tmp_path / 'not-a-directory'
+    a_file.write_text('')
+
+    conf = _conf_with_spool(str(a_file))
+
+    assert f'queue.spoolDirectory="{a_file}"' not in conf
+    assert f'queue.spoolDirectory="{DEFAULT_SPOOL_DIRECTORY}"' in conf
+
+
+def test_a_spool_directory_that_cannot_be_entered_falls_back(tmp_path):
+    """Writable but not searchable: the write bit alone does not let anything
+    create a file inside, so rsyslog could not spool there either.
+    """
+    unsearchable = tmp_path / 'no-search'
+    unsearchable.mkdir(mode=0o200)
+    try:
+        conf = _conf_with_spool(str(unsearchable))
+    finally:
+        unsearchable.chmod(0o700)
+
+    assert f'queue.spoolDirectory="{unsearchable}"' not in conf
+    assert f'queue.spoolDirectory="{DEFAULT_SPOOL_DIRECTORY}"' in conf
