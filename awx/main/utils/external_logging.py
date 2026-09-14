@@ -21,6 +21,7 @@ awx/main/tests/unit/utils/test_external_logging_durability.py, so a change
 that weakens one says which one.
 """
 
+import logging
 import os
 import shutil
 import tempfile
@@ -30,6 +31,13 @@ from awx.settings.typed import settings
 
 from awx.main.utils.reload import supervisor_service_command
 from awx.main.dispatch.publish import task
+
+logger = logging.getLogger('awx.main.utils.external_logging')
+
+# Where the external log queue spools when the setting does not name somewhere
+# usable. One definition because it is the same path in two places, and because
+# the filesystem rename moved it there in #985.
+DEFAULT_SPOOL_DIRECTORY = '/var/lib/ascender'
 
 
 def construct_rsyslog_conf_template(settings=settings):
@@ -42,8 +50,21 @@ def construct_rsyslog_conf_template(settings=settings):
     timeout = getattr(settings, 'LOG_AGGREGATOR_TCP_TIMEOUT', 5)
     action_queue_size = getattr(settings, 'LOG_AGGREGATOR_ACTION_QUEUE_SIZE', 131072)
     max_disk_space_action_queue = getattr(settings, 'LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB', 1)
-    spool_directory = getattr(settings, 'LOG_AGGREGATOR_MAX_DISK_USAGE_PATH', '/var/lib/ascender').rstrip('/')
+    spool_directory = getattr(settings, 'LOG_AGGREGATOR_MAX_DISK_USAGE_PATH', DEFAULT_SPOOL_DIRECTORY).rstrip('/')
     error_log_file = getattr(settings, 'LOG_AGGREGATOR_RSYSLOGD_ERROR_LOG_FILE', '')
+
+    # Has to happen before queue.spoolDirectory is written below. The fallback used
+    # to sit after it, where it changed a variable nothing read again, so a setting
+    # naming a directory rsyslog cannot write produced a config naming that same
+    # directory. rsyslog then has nowhere to spool and the disk queue, which is the
+    # whole point of these options, stops surviving a restart without saying so.
+    #
+    # A directory, writable and searchable: rsyslog creates its queue files inside
+    # this path, so W_OK alone is not enough. W_OK is true of a plain file, and a
+    # directory with the write bit but not the execute bit cannot be entered.
+    if not (os.path.isdir(spool_directory) and os.access(spool_directory, os.W_OK | os.X_OK)):
+        logger.warning('Cannot spool external logs in %s, using %s instead.', spool_directory, DEFAULT_SPOOL_DIRECTORY)
+        spool_directory = DEFAULT_SPOOL_DIRECTORY
 
     queue_options = [
         f'queue.spoolDirectory="{spool_directory}"',
@@ -59,9 +80,6 @@ def construct_rsyslog_conf_template(settings=settings):
         f'queue.discardMark="{int(action_queue_size * 0.9)}"',  # 90% of queue.size
         'queue.discardSeverity="5"',  # Only discard notice, info, debug if we must discard anything
     ]
-
-    if not os.access(spool_directory, os.W_OK):
-        spool_directory = '/var/lib/ascender'
 
     max_bytes = settings.MAX_EVENT_RES_DATA
     if settings.LOG_AGGREGATOR_RSYSLOGD_DEBUG:
