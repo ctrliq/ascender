@@ -14,5 +14,5 @@ def load_entry_point(dist, group, name):
 
 if __name__ == '__main__':
     sys.exit(
-        load_entry_point('awx', 'console_scripts', 'awx-manage')()
+        load_entry_point('awx', 'console_scripts', 'ascender-manage')()
     )

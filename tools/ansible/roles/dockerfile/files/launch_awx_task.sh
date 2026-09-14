@@ -17,6 +17,6 @@ set -e
 
 wait-for-migrations
 
-awx-manage provision_instance
+ascender-manage provision_instance
 
 exec supervisord -c /etc/supervisord_task.conf

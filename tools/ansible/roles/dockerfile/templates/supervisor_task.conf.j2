@@ -10,7 +10,7 @@ pidfile = /var/run/supervisor/supervisor.task.pid
 command = make dispatcher
 directory = /ascender_devel
 {% else %}
-command = awx-manage run_dispatcher
+command = ascender-manage run_dispatcher
 directory = /var/lib/ascender
 {% endif %}
 autorestart = true
@@ -27,7 +27,7 @@ stderr_logfile_maxbytes=0
 command = make run-wsrelay
 directory = /ascender_devel
 {% else %}
-command = awx-manage run_wsrelay
+command = ascender-manage run_wsrelay
 directory = /var/lib/ascender
 {% endif %}
 autorestart = true
@@ -44,7 +44,7 @@ stderr_logfile_maxbytes=0
 command = make receiver
 directory = /ascender_devel
 {% else %}
-command = awx-manage run_callback_receiver
+command = ascender-manage run_callback_receiver
 directory = /var/lib/ascender
 {% endif %}
 autorestart = true

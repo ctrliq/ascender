@@ -78,7 +78,7 @@ docker exec tools_ascender_1 bash -c "cd /ascender_devel && PYTHONDONTWRITEBYTEC
 
 ### Migration check (always run after model changes)
 ```bash
-docker exec tools_ascender_1 bash -c "cd /ascender_devel && awx-manage check_migrations --dry-run --check -n 'missing_migration_file'"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && ascender-manage check_migrations --dry-run --check -n 'missing_migration_file'"
 ```
 Expected output: `No changes detected`
 
@@ -94,12 +94,12 @@ docker exec tools_ascender_1 bash -c "cd /ascender_devel && PYTHONDONTWRITEBYTEC
 After changing any Django model, always generate and commit the migration:
 
 ```bash
-docker exec tools_ascender_1 bash -c "cd /ascender_devel && awx-manage makemigrations"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && ascender-manage makemigrations"
 ```
 
 Then verify no missing migration file:
 ```bash
-docker exec tools_ascender_1 bash -c "cd /ascender_devel && awx-manage check_migrations --dry-run --check -n 'missing_migration_file'"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && ascender-manage check_migrations --dry-run --check -n 'missing_migration_file'"
 ```
 
 Migration files live in `ascender/main/migrations/` (218 existing files).
@@ -161,7 +161,7 @@ make .git/hooks/pre-commit
 
 ## Key Conventions
 
-- **`awx-manage`** is the Django management command (equivalent of `django-admin` with project settings loaded). It is in `PATH` inside the container.
+- **`ascender-manage`** is the Django management command (equivalent of `django-admin` with project settings loaded). It is in `PATH` inside the container.
 - **RBAC** is implemented in `ascender/main/access.py` — one class per model, `can_*` methods.
 - **API views** use a generic base in `ascender/api/generics.py`. Most views are in `ascender/api/views/`.
 - **Serializers** are in `ascender/api/serializers.py` (large file, ~5000 lines) and `ascender/api/fields.py`.

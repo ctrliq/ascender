@@ -327,10 +327,10 @@ def delete_project_files(project_path):
 @task(queue='tower_broadcast_all')
 def profile_sql(threshold=1, minutes=1):
     if threshold <= 0:
-        cache.delete('awx-profile-sql-threshold')
+        cache.delete('ascender-profile-sql-threshold')
         logger.error('SQL PROFILING DISABLED')
     else:
-        cache.set('awx-profile-sql-threshold', threshold, timeout=minutes * 60)
+        cache.set('ascender-profile-sql-threshold', threshold, timeout=minutes * 60)
         logger.error('SQL QUERIES >={}s ENABLED FOR {} MINUTE(S)'.format(threshold, minutes))
 
 
@@ -672,15 +672,15 @@ def cluster_node_heartbeat(dispatch_time=None, worker_tasks=None):
 @task(queue=get_task_queuename)
 def awx_receptor_workunit_reaper():
     """
-    When an AWX job is launched via receptor, files such as status, stdin, and stdout are created
+    When an Ascender job is launched via receptor, files such as status, stdin, and stdout are created
     in a specific receptor directory. This directory on disk is a random 8 character string, e.g. qLL2JFNT
     This is also called the work Unit ID in receptor, and is used in various receptor commands,
     e.g. "work results qLL2JFNT"
-    After an AWX job executes, the receptor work unit directory is cleaned up by
+    After an Ascender job executes, the receptor work unit directory is cleaned up by
     issuing the work release command. In some cases the release process might fail, or
-    if AWX crashes during a job's execution, the work release command is never issued to begin with.
+    if Ascender crashes during a job's execution, the work release command is never issued to begin with.
     As such, this periodic task will obtain a list of all receptor work units, and find which ones
-    belong to AWX jobs that are in a completed state (status is canceled, error, or succeeded).
+    belong to Ascender jobs that are in a completed state (status is canceled, error, or succeeded).
     This task will call "work release" on each of these work units to clean up the files on disk.
 
     Note that when we call "work release" on a work unit that actually represents remote work

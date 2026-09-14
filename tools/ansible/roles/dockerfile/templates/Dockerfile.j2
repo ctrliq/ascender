@@ -267,8 +267,8 @@ ADD tools/scripts/awx-python /usr/bin/awx-python
 {% if (build_dev|bool) or (kube_dev|bool) %}
 RUN echo /ascender_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/awx.egg-link && \
     echo /ascender_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/awx.pth && \
-    ln -sf /ascender_devel/tools/docker-compose/awx-manage /usr/local/bin/ascender-manage && \
-    ln -sf /ascender_devel/tools/docker-compose/awx-manage /usr/local/bin/awx-manage && \
+    ln -sf /ascender_devel/tools/docker-compose/ascender-manage /usr/local/bin/ascender-manage && \
+    ln -sf /ascender_devel/tools/docker-compose/ascender-manage /usr/local/bin/awx-manage && \
     ln -sf /ascender_devel/tools/scripts/awx-python /usr/bin/awx-python && \
     ln -sf /ascender_devel/tools/scripts/rsyslog-4xx-recovery /usr/bin/rsyslog-4xx-recovery
 {% endif %}

@@ -7,12 +7,12 @@ except ImportError:
     from sos.report.plugins import Plugin, RedHatPlugin
 
 SOSREPORT_CONTROLLER_COMMANDS = [
-    "awx-manage --version",  # controller version
-    "awx-manage list_instances",  # controller cluster configuration
-    "awx-manage run_dispatcher --status",  # controller dispatch worker status
-    "awx-manage run_callback_receiver --status",  # controller callback worker status
-    "awx-manage check_license --data",  # controller license status
-    "awx-manage run_wsrelay --status",  # controller websocket relay status
+    "ascender-manage --version",  # controller version
+    "ascender-manage list_instances",  # controller cluster configuration
+    "ascender-manage run_dispatcher --status",  # controller dispatch worker status
+    "ascender-manage run_callback_receiver --status",  # controller callback worker status
+    "ascender-manage check_license --data",  # controller license status
+    "ascender-manage run_wsrelay --status",  # controller websocket relay status
     "supervisorctl status",  # controller process status
     "/var/lib/ascender/venv/awx/bin/pip freeze",  # pip package list
     "/var/lib/ascender/venv/awx/bin/pip freeze -l",  # pip package list without globally-installed packages

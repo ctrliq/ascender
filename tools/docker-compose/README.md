@@ -221,7 +221,7 @@ Once migrations are completed and the UI is built, you can begin using Ascender.
 Before you can log into Ascender, you need to create an admin user. With this user you will be able to create more users, and begin configuring the server. From within the container shell, run the following command:
 
 ```bash
-$ docker exec -ti tools_ascender_1 awx-manage createsuperuser
+$ docker exec -ti tools_ascender_1 ascender-manage createsuperuser
 ```
 
 > Remember the username and password, as you will use them to log into the web interface for the first time.
@@ -231,7 +231,7 @@ $ docker exec -ti tools_ascender_1 awx-manage createsuperuser
 Optionally, you may also want to load some demo data. This will create a demo project, inventory, and job template.
 
 ```bash
-$ docker exec tools_ascender_1 awx-manage create_preload_data
+$ docker exec tools_ascender_1 ascender-manage create_preload_data
 ```
 
 > This information will persist in the database running in the `tools_postgres_1` container, until the container is removed. You may periodically need to recreate
@@ -264,7 +264,7 @@ $ make docker-compose
 
 ### Start a Shell
 
-To run `awx-manage` commands and modify things inside the container, you will want to start a shell session on the _awx_ container. In a new terminal session, use the `docker exec` command to start the shell session:
+To run `ascender-manage` commands and modify things inside the container, you will want to start a shell session on the _awx_ container. In a new terminal session, use the `docker exec` command to start the shell session:
 
 ```bash
 (host)$ docker exec -it tools_ascender_1 bash

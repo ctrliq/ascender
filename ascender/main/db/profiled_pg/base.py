@@ -21,7 +21,7 @@ class RecordedQueryLog(object):
         self.db = db
         self.dest = dest
         try:
-            self.threshold = cache.get('awx-profile-sql-threshold')
+            self.threshold = cache.get('ascender-profile-sql-threshold')
         except Exception:
             # if we can't reach the cache, just assume profiling's off
             self.threshold = None
@@ -152,7 +152,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         # second is a good enough window to detect when profiling is turned
         # on/off by a system administrator
         try:
-            threshold = cache.get('awx-profile-sql-threshold')
+            threshold = cache.get('ascender-profile-sql-threshold')
         except Exception:
             # if we can't reach the cache, just assume profiling's off
             threshold = None

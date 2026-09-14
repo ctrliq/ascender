@@ -53,7 +53,7 @@ _mp_ctx = multiprocessing.get_context('fork')
 
 db = json.loads(
     subprocess.check_output(
-        ['awx-manage', 'shell', '-c', 'import json; from django.conf import settings; print(json.dumps({"DATABASES": settings.DATABASES}))']
+        ['ascender-manage', 'shell', '-c', 'import json; from django.conf import settings; print(json.dumps({"DATABASES": settings.DATABASES}))']
     )
 )
 name = db['DATABASES']['default']['NAME']

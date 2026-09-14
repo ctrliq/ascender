@@ -350,17 +350,17 @@ class TestJobReaper(object):
         'status, execution_node, controller_node, modified, fail',
         [
             ('running', '', '', None, False),  # running, not assigned to the instance
-            ('running', 'awx', '', None, True),  # running, has the instance as its execution_node
-            ('running', '', 'awx', None, True),  # running, has the instance as its controller_node
+            ('running', 'ascender', '', None, True),  # running, has the instance as its execution_node
+            ('running', '', 'ascender', None, True),  # running, has the instance as its controller_node
             ('waiting', '', '', None, False),  # waiting, not assigned to the instance
-            ('waiting', 'awx', '', None, False),  # waiting, was edited less than a minute ago
-            ('waiting', '', 'awx', None, False),  # waiting, was edited less than a minute ago
-            ('waiting', 'awx', '', yesterday, False),  # waiting, managed by another node, ignore
-            ('waiting', '', 'awx', yesterday, True),  # waiting, assigned to the controller_node, stale
+            ('waiting', 'ascender', '', None, False),  # waiting, was edited less than a minute ago
+            ('waiting', '', 'ascender', None, False),  # waiting, was edited less than a minute ago
+            ('waiting', 'ascender', '', yesterday, False),  # waiting, managed by another node, ignore
+            ('waiting', '', 'ascender', yesterday, True),  # waiting, assigned to the controller_node, stale
         ],
     )
     def test_should_reap(self, status, fail, execution_node, controller_node, modified):
-        i = Instance(hostname='awx')
+        i = Instance(hostname='ascender')
         i.save()
         j = Job(
             status=status,
@@ -393,11 +393,11 @@ class TestJobReaper(object):
     )
     def test_do_not_reap_excluded_uuids(self, excluded_uuids, fail, started):
         """Modified Test to account for ref_time in reap()"""
-        i = Instance(hostname='awx')
+        i = Instance(hostname='ascender')
         i.save()
         j = Job(
             status='running',
-            execution_node='awx',
+            execution_node='ascender',
             controller_node='',
             start_args='SENSITIVE',
             celery_task_id='abc123',
@@ -418,9 +418,9 @@ class TestJobReaper(object):
             assert job.status == 'running'
 
     def test_workflow_does_not_reap(self):
-        i = Instance(hostname='awx')
+        i = Instance(hostname='ascender')
         i.save()
-        j = WorkflowJob(status='running', execution_node='awx')
+        j = WorkflowJob(status='running', execution_node='ascender')
         j.save()
         reaper.reap(i)
 
@@ -431,7 +431,7 @@ class TestJobReaper(object):
         This test is designed specifically to ensure that jobs that are launched after the dispatcher has provided a list of UUIDs aren't reaped.
         It is very racy and this test is designed with that in mind
         """
-        i = Instance(hostname='awx')
+        i = Instance(hostname='ascender')
         # ref_time is set to 10 seconds in the past to mimic someone launching a job in the heartbeat window.
         ref_time = tz_now() - datetime.timedelta(seconds=10)
         # creating job at current time

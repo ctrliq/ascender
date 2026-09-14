@@ -22,7 +22,7 @@ stderr_events_enabled = true
 command = make run-rsyslog-configurer
 directory = /ascender_devel
 {% else %}
-command = awx-manage run_rsyslog_configurer
+command = ascender-manage run_rsyslog_configurer
 directory = /var/lib/ascender
 {% endif %}
 autorestart = true
