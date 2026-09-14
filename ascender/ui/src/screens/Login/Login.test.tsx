@@ -5,7 +5,7 @@ import { AuthAPI, RootAPI, MeAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 
-import AWXLogin from './Login';
+import AscenderLogin from './Login';
 
 import { SESSION_USER_ID } from '../../constants';
 
@@ -91,7 +91,7 @@ describe('<Login />', () => {
 
   test('initially renders without crashing', async () => {
     const { container } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
 
@@ -103,7 +103,7 @@ describe('<Login />', () => {
 
   test('form has autocomplete off', async () => {
     const { container } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
     expect(container.querySelectorAll('form[autocomplete="off"]')).toHaveLength(
@@ -113,7 +113,7 @@ describe('<Login />', () => {
 
   test('custom logo renders Brand component with correct src and alt', async () => {
     const { container } = renderWithContexts(
-      <AWXLogin alt="Foo Application" isAuthenticated={() => false} />
+      <AscenderLogin alt="Foo Application" isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
     const logo = container.querySelector('img') as HTMLElement;
@@ -126,7 +126,7 @@ describe('<Login />', () => {
       data: {},
     } as unknown as ResponseOf<typeof RootAPI.read>);
     const { container } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
     const logo = container.querySelector('img') as HTMLElement;
@@ -136,7 +136,7 @@ describe('<Login />', () => {
 
   test('custom login info handled correctly', async () => {
     const { container } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
     expect(container.querySelector('footer')!.outerHTML).toContain(
@@ -158,7 +158,7 @@ describe('<Login />', () => {
       })
     );
     const { container } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
     const logo = container.querySelector('img') as HTMLElement;
@@ -169,7 +169,7 @@ describe('<Login />', () => {
 
   test('state maps to un/pw input value props', async () => {
     const { container, user } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
 
@@ -195,7 +195,7 @@ describe('<Login />', () => {
     );
 
     const { container, user } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
 
@@ -241,7 +241,7 @@ describe('<Login />', () => {
 
   test('submit calls api.login successfully', async () => {
     const { container, user } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
 
@@ -261,7 +261,7 @@ describe('<Login />', () => {
     const history = createMemoryHistory({
       initialEntries: ['/login'],
     });
-    renderWithContexts(<AWXLogin isAuthenticated={() => true} />, {
+    renderWithContexts(<AscenderLogin isAuthenticated={() => true} />, {
       context: {
         router: { history },
         session: {
@@ -294,7 +294,7 @@ describe('<Login />', () => {
     const history = createMemoryHistory({
       initialEntries: ['/login'],
     });
-    renderWithContexts(<AWXLogin isAuthenticated={() => true} />, {
+    renderWithContexts(<AscenderLogin isAuthenticated={() => true} />, {
       context: {
         router: { history },
         session: {
@@ -339,7 +339,7 @@ describe('<Login />', () => {
     } as unknown as ResponseOf<typeof AuthAPI.read>);
 
     const { container } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
     await waitFor(() =>
@@ -369,7 +369,7 @@ describe('<Login />', () => {
     } as unknown as ResponseOf<typeof AuthAPI.read>);
 
     const { container } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
     await waitFor(() =>
@@ -399,7 +399,7 @@ describe('<Login />', () => {
     } as unknown as ResponseOf<typeof AuthAPI.read>);
 
     const { container } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
     await waitFor(() =>
@@ -433,7 +433,7 @@ describe('<Login />', () => {
       .mockImplementation(() => {});
 
     const { container } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
     const button = await waitFor(() =>
@@ -480,7 +480,7 @@ describe('<Login />', () => {
     } as unknown as ResponseOf<typeof AuthAPI.read>);
 
     const { container } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
     await waitFor(() =>
@@ -512,7 +512,7 @@ describe('<Login />', () => {
     } as unknown as ResponseOf<typeof AuthAPI.read>);
 
     const { container } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
     await waitFor(() =>
@@ -542,7 +542,7 @@ describe('<Login />', () => {
     } as unknown as ResponseOf<typeof AuthAPI.read>);
 
     const { container } = renderWithContexts(
-      <AWXLogin isAuthenticated={() => false} />
+      <AscenderLogin isAuthenticated={() => false} />
     );
     await waitForLoginForm(container);
     await waitFor(() =>

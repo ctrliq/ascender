@@ -47,14 +47,14 @@ export interface LoginFormValues {
   password: string;
 }
 
-export interface AWXLoginProps {
+export interface AscenderLoginProps {
   /** Alternate text for the brand logo, when the install overrides it. */
   alt?: string;
   /** The `util/auth` predicate, handed down rather than imported here. */
   isAuthenticated: (cookie: string | null | undefined) => boolean;
 }
 
-function AWXLogin({ alt, isAuthenticated }: AWXLoginProps) {
+function AscenderLogin({ alt, isAuthenticated }: AscenderLoginProps) {
   const { t } = useLingui();
   const [userId, setUserId] = useState<number | null>(null);
   const { authRedirectTo, isSessionExpired, isRedirectLinkReceived } =
@@ -371,5 +371,5 @@ function AWXLogin({ alt, isAuthenticated }: AWXLoginProps) {
   );
 }
 
-export default AWXLogin;
-export { AWXLogin as _AWXLogin };
+export default AscenderLogin;
+export { AscenderLogin as _AscenderLogin };

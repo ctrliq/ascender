@@ -77,6 +77,11 @@ register(
     category_slug='ui',
 )
 
+# The class names the UI renders are still awx-* and stay that way while this
+# setting exists. A custom theme is an administrator's own CSS, and those class
+# names are the only stable hooks it has to target, so renaming them would stop
+# every theme already uploaded from applying, with no error and nothing in the
+# logs. Moving them needs a deprecation rather than a rename.
 register(
     'CUSTOM_THEME',
     field_class=CustomThemeField,
