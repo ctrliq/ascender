@@ -11,7 +11,7 @@ command = make dispatcher
 directory = /awx_devel
 {% else %}
 command = awx-manage run_dispatcher
-directory = /var/lib/awx
+directory = /var/lib/ascender
 {% endif %}
 autorestart = true
 startsecs = 30
@@ -28,7 +28,7 @@ command = make run-wsrelay
 directory = /awx_devel
 {% else %}
 command = awx-manage run_wsrelay
-directory = /var/lib/awx
+directory = /var/lib/ascender
 {% endif %}
 autorestart = true
 startsecs = 30
@@ -45,7 +45,7 @@ command = make receiver
 directory = /awx_devel
 {% else %}
 command = awx-manage run_callback_receiver
-directory = /var/lib/awx
+directory = /var/lib/ascender
 {% endif %}
 autorestart = true
 startsecs = 30

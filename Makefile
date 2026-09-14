@@ -159,11 +159,11 @@ develop:
 	fi
 
 version_file:
-	mkdir -p /var/lib/awx/; \
+	mkdir -p /var/lib/ascender/; \
 	if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	$(PYTHON) -c "import awx; print(awx.__version__)" > /var/lib/awx/.awx_version; \
+	$(PYTHON) -c "import ascender; print(ascender.__version__)" > /var/lib/ascender/.awx_version; \
 
 ## Refresh development environment after pulling new code.
 refresh: clean requirements_dev version_file develop migrate
@@ -433,13 +433,13 @@ ui-release: $(UI_BUILD_FLAG_FILE)
 
 ui-devel: ascender/ui/node_modules
 	@$(MAKE) -B $(UI_BUILD_FLAG_FILE)
-	@if [ -d "/var/lib/awx" ] ; then \
-		mkdir -p /var/lib/awx/public/static/css; \
-		mkdir -p /var/lib/awx/public/static/js; \
-		mkdir -p /var/lib/awx/public/static/media; \
-		cp -r ascender/ui/build/static/css/* /var/lib/awx/public/static/css; \
-		cp -r ascender/ui/build/static/js/* /var/lib/awx/public/static/js; \
-		cp -r ascender/ui/build/static/media/* /var/lib/awx/public/static/media; \
+	@if [ -d "/var/lib/ascender" ] ; then \
+		mkdir -p /var/lib/ascender/public/static/css; \
+		mkdir -p /var/lib/ascender/public/static/js; \
+		mkdir -p /var/lib/ascender/public/static/media; \
+		cp -r ascender/ui/build/static/css/* /var/lib/ascender/public/static/css; \
+		cp -r ascender/ui/build/static/js/* /var/lib/ascender/public/static/js; \
+		cp -r ascender/ui/build/static/media/* /var/lib/ascender/public/static/media; \
 	fi
 
 ## Start the Vite dev server on port 3001, proxying the API to TARGET.

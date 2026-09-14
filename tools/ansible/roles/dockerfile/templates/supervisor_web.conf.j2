@@ -41,7 +41,7 @@ command = make uvicorn
 directory = /awx_devel
 {% else %}
 command = /var/lib/awx/venv/awx/bin/uvicorn --host 127.0.0.1 --port 8051 --workers 5 --ws auto --no-server-header --timeout-graceful-shutdown 110 --limit-concurrency 512 ascender.asgi:channel_layer
-directory = /var/lib/awx
+directory = /var/lib/ascender
 {% endif %}
 autorestart = true
 startsecs = 30
@@ -58,7 +58,7 @@ command = make run-ws-heartbeat
 directory = /awx_devel
 {% else %}
 command = awx-manage run_ws_heartbeat
-directory = /var/lib/awx
+directory = /var/lib/ascender
 {% endif %}
 autorestart = true
 startsecs = 30
@@ -75,7 +75,7 @@ command = make run-cache-clear
 directory = /awx_devel
 {% else %}
 command = awx-manage run_cache_clear
-directory = /var/lib/awx
+directory = /var/lib/ascender
 {% endif %}
 autorestart = true
 startsecs = 30
