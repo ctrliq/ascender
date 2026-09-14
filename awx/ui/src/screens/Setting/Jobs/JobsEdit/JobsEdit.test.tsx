@@ -128,9 +128,10 @@ describe('<JobsEdit />', () => {
       GET: { ...settingOptions.GET },
       PUT: { ...settingOptions.PUT },
     };
-    // If AWX_ISOLATION_BASE_PATH has been set in a settings file it will be
+    // If ASCENDER_ISOLATION_BASE_PATH has been set in a settings file it will be
     // absent in the PUT options
-    delete (mockOptions.PUT as Record<string, unknown>).AWX_ISOLATION_BASE_PATH;
+    delete (mockOptions.PUT as Record<string, unknown>)
+      .ASCENDER_ISOLATION_BASE_PATH;
     const { user } = await mountEdit(mockOptions);
     await user.click(screen.getByRole('button', { name: 'Save' }));
     await waitFor(() => expect(SettingsAPI.updateAll).toHaveBeenCalledTimes(1));

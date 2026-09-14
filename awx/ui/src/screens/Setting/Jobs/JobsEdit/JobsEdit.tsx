@@ -33,9 +33,9 @@ function JobsEdit() {
         return (
           <>
             <InputField
-              name="AWX_ISOLATION_BASE_PATH"
-              config={jobs.AWX_ISOLATION_BASE_PATH ?? null}
-              isRequired={Boolean(jobs?.AWX_ISOLATION_BASE_PATH)}
+              name="ASCENDER_ISOLATION_BASE_PATH"
+              config={jobs.ASCENDER_ISOLATION_BASE_PATH ?? null}
+              isRequired={Boolean(jobs?.ASCENDER_ISOLATION_BASE_PATH)}
             />
             <InputField
               name="SCHEDULE_MAX_JOBS"
@@ -44,9 +44,11 @@ function JobsEdit() {
               isRequired={Boolean(jobs?.SCHEDULE_MAX_JOBS)}
             />
             <InputField
-              name="AWX_RUNNER_KEEPALIVE_SECONDS"
-              config={jobs.AWX_RUNNER_KEEPALIVE_SECONDS ?? null}
-              type={jobs?.AWX_RUNNER_KEEPALIVE_SECONDS ? 'number' : undefined}
+              name="ASCENDER_RUNNER_KEEPALIVE_SECONDS"
+              config={jobs.ASCENDER_RUNNER_KEEPALIVE_SECONDS ?? null}
+              type={
+                jobs?.ASCENDER_RUNNER_KEEPALIVE_SECONDS ? 'number' : undefined
+              }
             />
             <InputField
               name="DEFAULT_JOB_TIMEOUT"
@@ -88,24 +90,24 @@ function JobsEdit() {
               config={jobs.GALAXY_IGNORE_CERTS}
             />
             <BooleanField
-              name="AWX_ROLES_ENABLED"
-              config={jobs.AWX_ROLES_ENABLED}
+              name="ASCENDER_ROLES_ENABLED"
+              config={jobs.ASCENDER_ROLES_ENABLED}
             />
             <BooleanField
-              name="AWX_COLLECTIONS_ENABLED"
-              config={jobs.AWX_COLLECTIONS_ENABLED}
+              name="ASCENDER_COLLECTIONS_ENABLED"
+              config={jobs.ASCENDER_COLLECTIONS_ENABLED}
             />
             <BooleanField
               name="ENABLE_ANSIBLE_29"
               config={jobs.ENABLE_ANSIBLE_29}
             />
             <BooleanField
-              name="AWX_SHOW_PLAYBOOK_LINKS"
-              config={jobs.AWX_SHOW_PLAYBOOK_LINKS}
+              name="ASCENDER_SHOW_PLAYBOOK_LINKS"
+              config={jobs.ASCENDER_SHOW_PLAYBOOK_LINKS}
             />
             <BooleanField
-              name="AWX_MOUNT_ISOLATED_PATHS_ON_K8S"
-              config={jobs.AWX_MOUNT_ISOLATED_PATHS_ON_K8S}
+              name="ASCENDER_MOUNT_ISOLATED_PATHS_ON_K8S"
+              config={jobs.ASCENDER_MOUNT_ISOLATED_PATHS_ON_K8S}
             />
             <ObjectField name="AD_HOC_COMMANDS" config={jobs.AD_HOC_COMMANDS} />
             <ObjectField
@@ -113,14 +115,17 @@ function JobsEdit() {
               config={jobs.DEFAULT_CONTAINER_RUN_OPTIONS}
             />
             <ObjectField
-              name="AWX_ANSIBLE_CALLBACK_PLUGINS"
-              config={jobs.AWX_ANSIBLE_CALLBACK_PLUGINS}
+              name="ASCENDER_ANSIBLE_CALLBACK_PLUGINS"
+              config={jobs.ASCENDER_ANSIBLE_CALLBACK_PLUGINS}
             />
             <ObjectField
-              name="AWX_ISOLATION_SHOW_PATHS"
-              config={jobs.AWX_ISOLATION_SHOW_PATHS}
+              name="ASCENDER_ISOLATION_SHOW_PATHS"
+              config={jobs.ASCENDER_ISOLATION_SHOW_PATHS}
             />
-            <ObjectField name="AWX_TASK_ENV" config={jobs.AWX_TASK_ENV} />
+            <ObjectField
+              name="ASCENDER_TASK_ENV"
+              config={jobs.ASCENDER_TASK_ENV}
+            />
             <ObjectField name="GALAXY_TASK_ENV" config={jobs.GALAXY_TASK_ENV} />
           </>
         );

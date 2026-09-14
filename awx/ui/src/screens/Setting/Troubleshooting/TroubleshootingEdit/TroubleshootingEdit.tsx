@@ -10,12 +10,12 @@ function TroubleshootingEdit() {
       {(debug) => (
         <>
           <BooleanField
-            name="AWX_CLEANUP_PATHS"
-            config={debug.AWX_CLEANUP_PATHS}
+            name="ASCENDER_CLEANUP_PATHS"
+            config={debug.ASCENDER_CLEANUP_PATHS}
           />
           <BooleanField
-            name="AWX_REQUEST_PROFILE"
-            config={debug.AWX_REQUEST_PROFILE}
+            name="ASCENDER_REQUEST_PROFILE"
+            config={debug.ASCENDER_REQUEST_PROFILE}
           />
           <BooleanField
             name="RECEPTOR_RELEASE_WORK"

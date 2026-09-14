@@ -12579,19 +12579,19 @@ export interface components {
        * @description The directory in which the service will create new temporary directories for job execution and isolation (such as credential files).
        * @default /tmp
        */
-      AWX_ISOLATION_BASE_PATH: string;
+      ASCENDER_ISOLATION_BASE_PATH: string;
       /**
        * Paths to expose to isolated jobs
        * @description List of paths that would otherwise be hidden to expose to isolated jobs. Enter one path per line. Volumes will be mounted from the execution node to the container. The supported format is HOST-DIR[:CONTAINER-DIR[:OPTIONS]].
        * @default []
        */
-      AWX_ISOLATION_SHOW_PATHS: string[];
+      ASCENDER_ISOLATION_SHOW_PATHS: string[];
       /**
        * Extra Environment Variables
        * @description Additional environment variables set for playbook runs, inventory updates, project updates, and notification sending.
        * @default {}
        */
-      AWX_TASK_ENV: {
+      ASCENDER_TASK_ENV: {
         [key: string]: string;
       };
       /**
@@ -12599,7 +12599,7 @@ export interface components {
        * @description Only applies to jobs running in a Container Group. If not 0, send a message every so-many seconds to keep connection open.
        * @default 0
        */
-      AWX_RUNNER_KEEPALIVE_SECONDS: number;
+      ASCENDER_RUNNER_KEEPALIVE_SECONDS: number;
       /**
        * Environment Variables for Galaxy Commands
        * @description Additional environment variables set for invocations of ansible-galaxy within project updates. Useful if you must use a proxy server for ansible-galaxy but not git.
@@ -12628,7 +12628,7 @@ export interface components {
        * @description Allows roles to be dynamically downloaded from a requirements.yml file for SCM projects.
        * @default true
        */
-      AWX_ROLES_ENABLED: boolean;
+      ASCENDER_ROLES_ENABLED: boolean;
       /**
        * Enable Automatic Job Stats Artifacts
        * @description Automatically add ascender_stats_* keys (changed/failed flags and host name lists derived from the playbook stats) to the artifacts of every finished playbook job (jobs launched from job templates; project updates, inventory syncs and ad hoc commands are not affected), so they can be used by downstream workflow nodes and conditional connectors without requiring set_stats in the playbook. Can be overridden per job or workflow with an ASCENDER_AUTO_STATS_ENABLED extra variable.
@@ -12646,7 +12646,7 @@ export interface components {
        * @description Allows collections to be dynamically downloaded from a requirements.yml file for SCM projects.
        * @default true
        */
-      AWX_COLLECTIONS_ENABLED: boolean;
+      ASCENDER_COLLECTIONS_ENABLED: boolean;
       /**
        * Enable Ansible 2.9 Compatibility
        * @description If enabled, sets ANSIBLE_COLLECTIONS_PATHS for legacy Ansible 2.9 compatibility.
@@ -12658,13 +12658,13 @@ export interface components {
        * @description Follow symbolic links when scanning for playbooks. Be aware that setting this to True can lead to infinite recursion if a link points to a parent directory of itself.
        * @default false
        */
-      AWX_SHOW_PLAYBOOK_LINKS: boolean;
+      ASCENDER_SHOW_PLAYBOOK_LINKS: boolean;
       /**
        * Expose host paths for Container Groups
        * @description Expose paths via hostPath for the Pods created by a Container Group. HostPath volumes present many security risks, and it is a best practice to avoid the use of HostPaths when possible.
        * @default false
        */
-      AWX_MOUNT_ISOLATED_PATHS_ON_K8S: boolean;
+      ASCENDER_MOUNT_ISOLATED_PATHS_ON_K8S: boolean;
       /**
        * Ignore Ansible Galaxy SSL Certificate Verification
        * @description If set to true, certificate validation will not be done when installing content from any Galaxy server.
@@ -12700,7 +12700,7 @@ export interface components {
        * @description List of paths to search for extra callback plugins to be used when running jobs. Enter one path per line.
        * @default []
        */
-      AWX_ANSIBLE_CALLBACK_PLUGINS: string[];
+      ASCENDER_ANSIBLE_CALLBACK_PLUGINS: string[];
       /**
        * @description Maximum time in seconds to allow jobs to run. Use value of 0 to indicate that no timeout should be imposed. A timeout set on an individual job template will override this.
        * @default 0
@@ -12857,8 +12857,8 @@ export interface components {
       LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB: number;
       /**
        * File system location for rsyslogd disk persistence
-       * @description Location to persist logs that should be retried after an outage of the external log aggregator (defaults to /var/lib/awx). Equivalent to the rsyslogd queue.spoolDirectory setting.
-       * @default /var/lib/awx
+       * @description Location to persist logs that should be retried after an outage of the external log aggregator (defaults to /var/lib/ascender). Equivalent to the rsyslogd queue.spoolDirectory setting.
+       * @default /var/lib/ascender
        */
       LOG_AGGREGATOR_MAX_DISK_USAGE_PATH: string;
       /**
@@ -12934,13 +12934,13 @@ export interface components {
        * @description Enable or Disable TMP Dir cleanup
        * @default true
        */
-      AWX_CLEANUP_PATHS: boolean;
+      ASCENDER_CLEANUP_PATHS: boolean;
       /**
        * Debug Web Requests
        * @description Debug web request python timing
        * @default false
        */
-      AWX_REQUEST_PROFILE: boolean;
+      ASCENDER_REQUEST_PROFILE: boolean;
       /**
        * Container Run Options
        * @description List of options to pass to podman run example: ['--network', 'slirp4netns:enable_ipv6=true', '--log-level', 'debug']
@@ -15641,19 +15641,19 @@ export interface components {
        * @description The directory in which the service will create new temporary directories for job execution and isolation (such as credential files).
        * @default /tmp
        */
-      AWX_ISOLATION_BASE_PATH: string;
+      ASCENDER_ISOLATION_BASE_PATH: string;
       /**
        * Paths to expose to isolated jobs
        * @description List of paths that would otherwise be hidden to expose to isolated jobs. Enter one path per line. Volumes will be mounted from the execution node to the container. The supported format is HOST-DIR[:CONTAINER-DIR[:OPTIONS]].
        * @default []
        */
-      AWX_ISOLATION_SHOW_PATHS: string[];
+      ASCENDER_ISOLATION_SHOW_PATHS: string[];
       /**
        * Extra Environment Variables
        * @description Additional environment variables set for playbook runs, inventory updates, project updates, and notification sending.
        * @default {}
        */
-      AWX_TASK_ENV: {
+      ASCENDER_TASK_ENV: {
         [key: string]: string;
       };
       /**
@@ -15661,7 +15661,7 @@ export interface components {
        * @description Only applies to jobs running in a Container Group. If not 0, send a message every so-many seconds to keep connection open.
        * @default 0
        */
-      AWX_RUNNER_KEEPALIVE_SECONDS: number;
+      ASCENDER_RUNNER_KEEPALIVE_SECONDS: number;
       /**
        * Environment Variables for Galaxy Commands
        * @description Additional environment variables set for invocations of ansible-galaxy within project updates. Useful if you must use a proxy server for ansible-galaxy but not git.
@@ -15690,7 +15690,7 @@ export interface components {
        * @description Allows roles to be dynamically downloaded from a requirements.yml file for SCM projects.
        * @default true
        */
-      AWX_ROLES_ENABLED: boolean;
+      ASCENDER_ROLES_ENABLED: boolean;
       /**
        * Enable Automatic Job Stats Artifacts
        * @description Automatically add ascender_stats_* keys (changed/failed flags and host name lists derived from the playbook stats) to the artifacts of every finished playbook job (jobs launched from job templates; project updates, inventory syncs and ad hoc commands are not affected), so they can be used by downstream workflow nodes and conditional connectors without requiring set_stats in the playbook. Can be overridden per job or workflow with an ASCENDER_AUTO_STATS_ENABLED extra variable.
@@ -15708,7 +15708,7 @@ export interface components {
        * @description Allows collections to be dynamically downloaded from a requirements.yml file for SCM projects.
        * @default true
        */
-      AWX_COLLECTIONS_ENABLED: boolean;
+      ASCENDER_COLLECTIONS_ENABLED: boolean;
       /**
        * Enable Ansible 2.9 Compatibility
        * @description If enabled, sets ANSIBLE_COLLECTIONS_PATHS for legacy Ansible 2.9 compatibility.
@@ -15720,13 +15720,13 @@ export interface components {
        * @description Follow symbolic links when scanning for playbooks. Be aware that setting this to True can lead to infinite recursion if a link points to a parent directory of itself.
        * @default false
        */
-      AWX_SHOW_PLAYBOOK_LINKS: boolean;
+      ASCENDER_SHOW_PLAYBOOK_LINKS: boolean;
       /**
        * Expose host paths for Container Groups
        * @description Expose paths via hostPath for the Pods created by a Container Group. HostPath volumes present many security risks, and it is a best practice to avoid the use of HostPaths when possible.
        * @default false
        */
-      AWX_MOUNT_ISOLATED_PATHS_ON_K8S: boolean;
+      ASCENDER_MOUNT_ISOLATED_PATHS_ON_K8S: boolean;
       /**
        * Ignore Ansible Galaxy SSL Certificate Verification
        * @description If set to true, certificate validation will not be done when installing content from any Galaxy server.
@@ -15762,7 +15762,7 @@ export interface components {
        * @description List of paths to search for extra callback plugins to be used when running jobs. Enter one path per line.
        * @default []
        */
-      AWX_ANSIBLE_CALLBACK_PLUGINS: string[];
+      ASCENDER_ANSIBLE_CALLBACK_PLUGINS: string[];
       /**
        * @description Maximum time in seconds to allow jobs to run. Use value of 0 to indicate that no timeout should be imposed. A timeout set on an individual job template will override this.
        * @default 0
@@ -15919,8 +15919,8 @@ export interface components {
       LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB: number;
       /**
        * File system location for rsyslogd disk persistence
-       * @description Location to persist logs that should be retried after an outage of the external log aggregator (defaults to /var/lib/awx). Equivalent to the rsyslogd queue.spoolDirectory setting.
-       * @default /var/lib/awx
+       * @description Location to persist logs that should be retried after an outage of the external log aggregator (defaults to /var/lib/ascender). Equivalent to the rsyslogd queue.spoolDirectory setting.
+       * @default /var/lib/ascender
        */
       LOG_AGGREGATOR_MAX_DISK_USAGE_PATH: string;
       /**
@@ -16001,13 +16001,13 @@ export interface components {
        * @description Enable or Disable TMP Dir cleanup
        * @default true
        */
-      AWX_CLEANUP_PATHS: boolean;
+      ASCENDER_CLEANUP_PATHS: boolean;
       /**
        * Debug Web Requests
        * @description Debug web request python timing
        * @default false
        */
-      AWX_REQUEST_PROFILE: boolean;
+      ASCENDER_REQUEST_PROFILE: boolean;
       /**
        * Container Run Options
        * @description List of options to pass to podman run example: ['--network', 'slirp4netns:enable_ipv6=true', '--log-level', 'debug']
@@ -17712,19 +17712,19 @@ export interface components {
        * @description The directory in which the service will create new temporary directories for job execution and isolation (such as credential files).
        * @default /tmp
        */
-      AWX_ISOLATION_BASE_PATH: string;
+      ASCENDER_ISOLATION_BASE_PATH: string;
       /**
        * Paths to expose to isolated jobs
        * @description List of paths that would otherwise be hidden to expose to isolated jobs. Enter one path per line. Volumes will be mounted from the execution node to the container. The supported format is HOST-DIR[:CONTAINER-DIR[:OPTIONS]].
        * @default []
        */
-      AWX_ISOLATION_SHOW_PATHS: string[];
+      ASCENDER_ISOLATION_SHOW_PATHS: string[];
       /**
        * Extra Environment Variables
        * @description Additional environment variables set for playbook runs, inventory updates, project updates, and notification sending.
        * @default {}
        */
-      AWX_TASK_ENV: {
+      ASCENDER_TASK_ENV: {
         [key: string]: string;
       };
       /**
@@ -17732,7 +17732,7 @@ export interface components {
        * @description Only applies to jobs running in a Container Group. If not 0, send a message every so-many seconds to keep connection open.
        * @default 0
        */
-      AWX_RUNNER_KEEPALIVE_SECONDS: number;
+      ASCENDER_RUNNER_KEEPALIVE_SECONDS: number;
       /**
        * Environment Variables for Galaxy Commands
        * @description Additional environment variables set for invocations of ansible-galaxy within project updates. Useful if you must use a proxy server for ansible-galaxy but not git.
@@ -17761,7 +17761,7 @@ export interface components {
        * @description Allows roles to be dynamically downloaded from a requirements.yml file for SCM projects.
        * @default true
        */
-      AWX_ROLES_ENABLED: boolean;
+      ASCENDER_ROLES_ENABLED: boolean;
       /**
        * Enable Automatic Job Stats Artifacts
        * @description Automatically add ascender_stats_* keys (changed/failed flags and host name lists derived from the playbook stats) to the artifacts of every finished playbook job (jobs launched from job templates; project updates, inventory syncs and ad hoc commands are not affected), so they can be used by downstream workflow nodes and conditional connectors without requiring set_stats in the playbook. Can be overridden per job or workflow with an ASCENDER_AUTO_STATS_ENABLED extra variable.
@@ -17779,7 +17779,7 @@ export interface components {
        * @description Allows collections to be dynamically downloaded from a requirements.yml file for SCM projects.
        * @default true
        */
-      AWX_COLLECTIONS_ENABLED: boolean;
+      ASCENDER_COLLECTIONS_ENABLED: boolean;
       /**
        * Enable Ansible 2.9 Compatibility
        * @description If enabled, sets ANSIBLE_COLLECTIONS_PATHS for legacy Ansible 2.9 compatibility.
@@ -17791,13 +17791,13 @@ export interface components {
        * @description Follow symbolic links when scanning for playbooks. Be aware that setting this to True can lead to infinite recursion if a link points to a parent directory of itself.
        * @default false
        */
-      AWX_SHOW_PLAYBOOK_LINKS: boolean;
+      ASCENDER_SHOW_PLAYBOOK_LINKS: boolean;
       /**
        * Expose host paths for Container Groups
        * @description Expose paths via hostPath for the Pods created by a Container Group. HostPath volumes present many security risks, and it is a best practice to avoid the use of HostPaths when possible.
        * @default false
        */
-      AWX_MOUNT_ISOLATED_PATHS_ON_K8S: boolean;
+      ASCENDER_MOUNT_ISOLATED_PATHS_ON_K8S: boolean;
       /**
        * Ignore Ansible Galaxy SSL Certificate Verification
        * @description If set to true, certificate validation will not be done when installing content from any Galaxy server.
@@ -17833,7 +17833,7 @@ export interface components {
        * @description List of paths to search for extra callback plugins to be used when running jobs. Enter one path per line.
        * @default []
        */
-      AWX_ANSIBLE_CALLBACK_PLUGINS: string[];
+      ASCENDER_ANSIBLE_CALLBACK_PLUGINS: string[];
       /**
        * @description Maximum time in seconds to allow jobs to run. Use value of 0 to indicate that no timeout should be imposed. A timeout set on an individual job template will override this.
        * @default 0
@@ -17990,8 +17990,8 @@ export interface components {
       LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB: number;
       /**
        * File system location for rsyslogd disk persistence
-       * @description Location to persist logs that should be retried after an outage of the external log aggregator (defaults to /var/lib/awx). Equivalent to the rsyslogd queue.spoolDirectory setting.
-       * @default /var/lib/awx
+       * @description Location to persist logs that should be retried after an outage of the external log aggregator (defaults to /var/lib/ascender). Equivalent to the rsyslogd queue.spoolDirectory setting.
+       * @default /var/lib/ascender
        */
       LOG_AGGREGATOR_MAX_DISK_USAGE_PATH: string;
       /**
@@ -18067,13 +18067,13 @@ export interface components {
        * @description Enable or Disable TMP Dir cleanup
        * @default true
        */
-      AWX_CLEANUP_PATHS: boolean;
+      ASCENDER_CLEANUP_PATHS: boolean;
       /**
        * Debug Web Requests
        * @description Debug web request python timing
        * @default false
        */
-      AWX_REQUEST_PROFILE: boolean;
+      ASCENDER_REQUEST_PROFILE: boolean;
       /**
        * Container Run Options
        * @description List of options to pass to podman run example: ['--network', 'slirp4netns:enable_ipv6=true', '--log-level', 'debug']
