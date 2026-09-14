@@ -19,7 +19,7 @@ def rename_setting(apps, schema_editor, old_key, new_key):
     if Setting.objects.filter(key=old_key).exists():
         old_setting = Setting.objects.filter(key=old_key).last().value
         Setting.objects.filter(key=old_key).delete()
-    # Look for "on-disk" setting (/etc/tower/conf.d)
+    # Look for "on-disk" setting (/etc/ascender/conf.d)
     if hasattr(settings, old_key):
         old_setting = getattr(settings, old_key)
     if old_setting is not None:

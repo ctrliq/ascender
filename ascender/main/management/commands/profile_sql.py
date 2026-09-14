@@ -6,7 +6,7 @@ from ascender.main.tasks.system import profile_sql
 class Command(BaseCommand):
     """
     Enable or disable SQL Profiling across all Python processes.
-    SQL profile data will be recorded at /var/log/tower/profile
+    SQL profile data will be recorded at /var/log/ascender/profile
     """
 
     def add_arguments(self, parser):
@@ -21,7 +21,7 @@ class Command(BaseCommand):
             print(
                 f"SQL profiling initiated with a threshold of {options['threshold']} second(s) and a"
                 f" duration of {options['minutes']} minute(s), any queries that meet criteria can"
-                f" be found in /var/log/tower/profile/."
+                f" be found in /var/log/ascender/profile/."
             )
         else:
             print("SQL profiling disabled.")

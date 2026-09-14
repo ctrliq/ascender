@@ -288,7 +288,8 @@ RUN for dir in \
       /var/run/supervisor \
       /var/run/ascender-receptor \
       /var/lib/nginx \
-      /var/log/tower ; \
+      /var/log/ascender \
+      /etc/ascender/conf.d ; \
     do mkdir -m 0775 -p $dir ; chmod g+rwx $dir ; chgrp root $dir ; done && \
     for file in \
       /etc/subuid \
@@ -300,6 +301,13 @@ RUN for dir in \
 
 # The same alias as in the builder, for anything still naming the old path.
 RUN ln -s /var/lib/ascender /var/lib/awx
+
+# The settings directory and the log directory, the same way round as the rest:
+# the Ascender name is the directory and the Tower name is an alias onto it. The
+# installers write settings files into /etc/tower and the operator mounts
+# individual files there, so the old path has to keep resolving until they move.
+RUN ln -s /etc/ascender /etc/tower \
+    && ln -s /var/log/ascender /var/log/tower
 
 # The receptor control socket sits in /var/run/ascender-receptor, with the old
 # path an alias onto it. ascender-install mounts a volume at /var/run/awx-receptor

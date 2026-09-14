@@ -28,7 +28,7 @@ class AscenderProfileBase:
 
 
 class AWXTiming(AscenderProfileBase):
-    def __init__(self, name, dest='/var/log/tower/timing'):
+    def __init__(self, name, dest='/var/log/ascender/timing'):
         super().__init__(name, dest)
 
         self.time_start = None
@@ -71,7 +71,7 @@ def timing(name, *init_args, **init_kwargs):
 
 
 class AscenderProfiler(AscenderProfileBase):
-    def __init__(self, name, dest='/var/log/tower/profile', dot_enabled=True):
+    def __init__(self, name, dest='/var/log/ascender/profile', dot_enabled=True):
         """
         Try to do as little as possible in init. Instead, do the init
         only when the profiling is started.

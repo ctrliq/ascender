@@ -60,12 +60,12 @@ services:
 {% endif %}
       - "../../../:/ascender_devel"
       - "../../docker-compose/supervisor.conf:/etc/supervisord.conf"
-      - "../../docker-compose/_sources/database.py:/etc/tower/conf.d/database.py"
-      - "../../docker-compose/_sources/websocket_secret.py:/etc/tower/conf.d/websocket_secret.py"
-      - "../../docker-compose/_sources/local_settings.py:/etc/tower/conf.d/local_settings.py"
+      - "../../docker-compose/_sources/database.py:/etc/ascender/conf.d/database.py"
+      - "../../docker-compose/_sources/websocket_secret.py:/etc/ascender/conf.d/websocket_secret.py"
+      - "../../docker-compose/_sources/local_settings.py:/etc/ascender/conf.d/local_settings.py"
       - "../../docker-compose/_sources/nginx.conf:/etc/nginx/nginx.conf"
       - "../../docker-compose/_sources/nginx.locations.conf:/etc/nginx/conf.d/nginx.locations.conf"
-      - "../../docker-compose/_sources/SECRET_KEY:/etc/tower/SECRET_KEY"
+      - "../../docker-compose/_sources/SECRET_KEY:/etc/ascender/SECRET_KEY"
       - "../../docker-compose/_sources/receptor/receptor-awx-{{ loop.index }}.conf:/etc/receptor/receptor.conf"
       - "../../docker-compose/_sources/receptor/receptor-awx-{{ loop.index }}.conf.lock:/etc/receptor/receptor.conf.lock"
 {% if sign_work|bool %}

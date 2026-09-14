@@ -25,7 +25,7 @@ def write_hash(f, h):
 
 
 def main():
-    settings_file = "/etc/tower/settings.py"
+    settings_file = "/etc/ascender/settings.py"
     hash_file = "/var/lib/ascender/.configsha"
 
     while 1:

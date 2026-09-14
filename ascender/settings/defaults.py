@@ -26,7 +26,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 # existing models.
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
-# A real deployment always overrides this from /etc/tower/conf.d/database.py,
+# A real deployment always overrides this from /etc/ascender/conf.d/database.py,
 # and the development environment and the test settings both supply their own.
 # What is left here is the fallback for a process started with no settings files
 # at all, and it is PostgreSQL because nothing supports SQLite any more: the
@@ -202,7 +202,7 @@ PROJECTS_ROOT = '/var/lib/ascender/projects/'
 JOBOUTPUT_ROOT = '/var/lib/ascender/job_status/'
 
 # Absolute filesystem path to the directory to store logs
-LOG_ROOT = '/var/log/tower/'
+LOG_ROOT = '/var/log/ascender/'
 
 # Django gettext files path: locale/<lang-code>/LC_MESSAGES/django.po, django.mo
 LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
@@ -227,8 +227,8 @@ BULK_HOST_MAX_DELETE = 250
 SITE_ID = 1
 
 # Make this unique, and don't share it with anybody.
-if os.path.exists('/etc/tower/SECRET_KEY'):
-    with open('/etc/tower/SECRET_KEY', 'rb') as f:
+if os.path.exists('/etc/ascender/SECRET_KEY'):
+    with open('/etc/ascender/SECRET_KEY', 'rb') as f:
         SECRET_KEY = f.read().strip()
 else:
     SECRET_KEY = base64.encodebytes(os.urandom(32)).decode().rstrip()
@@ -986,7 +986,7 @@ LOG_AGGREGATOR_ACTION_QUEUE_SIZE = 131072
 LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB = 1  # Action queue
 LOG_AGGREGATOR_MAX_DISK_USAGE_PATH = '/var/lib/ascender'
 LOG_AGGREGATOR_RSYSLOGD_DEBUG = False
-LOG_AGGREGATOR_RSYSLOGD_ERROR_LOG_FILE = '/var/log/tower/rsyslog.err'
+LOG_AGGREGATOR_RSYSLOGD_ERROR_LOG_FILE = '/var/log/ascender/rsyslog.err'
 API_400_ERROR_LOG_FORMAT = 'status {status_code} received by user {user_name} attempting to access {url_path} from {remote_addr}'
 
 ASGI_APPLICATION = "ascender.main.routing.application"
@@ -1135,10 +1135,10 @@ ASCENDER_REQUEST_PROFILE = False
 # via gprof2dot (https://github.com/jrfonseca/gprof2dot)
 #
 # If you set this to True, you must `/var/lib/ascender/venv/awx/bin/pip install gprof2dot`
-# .dot files will be saved in `/var/log/tower/profile/` and can be converted e.g.,
+# .dot files will be saved in `/var/log/ascender/profile/` and can be converted e.g.,
 #
 # ~ yum install graphviz
-# ~ dot -o profile.png -Tpng /var/log/tower/profile/some-profile-data.dot
+# ~ dot -o profile.png -Tpng /var/log/ascender/profile/some-profile-data.dot
 #
 AWX_REQUEST_PROFILE_WITH_DOT = False
 
@@ -1257,7 +1257,7 @@ DEFAULT_CONTAINER_RUN_OPTIONS = ['--network', 'slirp4netns:enable_ipv6=true']
 # Mount exposed paths as hostPath resource in k8s/ocp
 ASCENDER_MOUNT_ISOLATED_PATHS_ON_K8S = False
 
-# This is overridden downstream via /etc/tower/conf.d/cluster_host_id.py
+# This is overridden downstream via /etc/ascender/conf.d/cluster_host_id.py
 CLUSTER_HOST_ID = socket.gethostname()
 
 # License compliance for total host count. Possible values:

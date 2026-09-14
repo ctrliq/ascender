@@ -3,7 +3,7 @@
 """
 Where the logs go, which is half of one process per container.
 
-AWX_LOGGING_MODE decides it: 'file' writes to /var/log/tower, which is what a
+AWX_LOGGING_MODE decides it: 'file' writes to /var/log/ascender, which is what a
 VM install wants, and 'stdout' lets the container runtime collect them. The
 images set stdout, and these hold the settings to that so a handler added later
 cannot quietly start writing a file nobody reads inside a container.

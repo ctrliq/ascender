@@ -23,7 +23,7 @@ CACHES = {
 # every assertNumQueries, none of which behave the same way on SQLite.
 #
 # Inside the development container the connection comes from the settings that
-# ascender.settings.development already loaded out of /etc/tower/conf.d. Anywhere
+# ascender.settings.development already loaded out of /etc/ascender/conf.d. Anywhere
 # without those files, such as a throwaway CI container, each part can be
 # supplied through the environment instead.
 _dev_database = DATABASES.get('default', {})  # noqa: F405

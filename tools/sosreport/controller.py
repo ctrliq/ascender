@@ -21,7 +21,7 @@ SOSREPORT_CONTROLLER_COMMANDS = [
     "tree -d /var/lib/ascender",  # show me the dirs
     "ls -ll /var/lib/ascender",  # check permissions
     "ls -ll /var/lib/ascender/venv",  # list all venvs
-    "ls -ll /etc/tower",
+    "ls -ll /etc/ascender",
     "ls -ll /var/run/ascender-receptor",  # list contents of dirctory where receptor socket should be
     "ls -ll /etc/receptor",
     "receptorctl --socket /var/run/ascender-receptor/receptor.sock status",  # Get information about the status of the mesh
@@ -29,12 +29,12 @@ SOSREPORT_CONTROLLER_COMMANDS = [
 ]
 
 SOSREPORT_CONTROLLER_DIRS = [
-    "/etc/tower/",
+    "/etc/ascender/",
     "/etc/receptor/",
     "/etc/supervisord.conf",
     "/etc/supervisord.d/",
     "/etc/nginx/",
-    "/var/log/tower",
+    "/var/log/ascender",
     "/var/log/nginx",
     "/var/log/supervisor",
     "/var/log/valkey",
@@ -46,12 +46,12 @@ SOSREPORT_CONTROLLER_DIRS = [
 ]
 
 SOSREPORT_FORBIDDEN_PATHS = [
-    "/etc/tower/SECRET_KEY",
-    "/etc/tower/tower.key",
-    "/etc/tower/awx.key",
-    "/etc/tower/tower.cert",
-    "/etc/tower/awx.cert",
-    "/var/log/tower/profile",
+    "/etc/ascender/SECRET_KEY",
+    "/etc/ascender/tower.key",
+    "/etc/ascender/awx.key",
+    "/etc/ascender/tower.cert",
+    "/etc/ascender/awx.cert",
+    "/var/log/ascender/profile",
     "/etc/receptor/tls/ca/*.key",
     "/etc/receptor/tls/*.key",
 ]
@@ -76,19 +76,19 @@ class Controller(Plugin, RedHatPlugin):
         # remove database password
         jreg = r"(\s*\'PASSWORD\'\s*:(\s))(?:\"){1,}(.+)(?:\"){1,}"
         repl = r"\1********"
-        self.do_path_regex_sub("/etc/tower/conf.d/postgres.py", jreg, repl)
+        self.do_path_regex_sub("/etc/ascender/conf.d/postgres.py", jreg, repl)
 
         # remove email password
         jreg = r"(EMAIL_HOST_PASSWORD\s*=)\'(.+)\'"
         repl = r"\1********"
-        self.do_path_regex_sub("/etc/tower/settings.py", jreg, repl)
+        self.do_path_regex_sub("/etc/ascender/settings.py", jreg, repl)
 
         # remove email password (if customized)
         jreg = r"(EMAIL_HOST_PASSWORD\s*=)\'(.+)\'"
         repl = r"\1********"
-        self.do_path_regex_sub("/etc/tower/conf.d/custom.py", jreg, repl)
+        self.do_path_regex_sub("/etc/ascender/conf.d/custom.py", jreg, repl)
 
         # remove websocket secret
         jreg = r"(BROADCAST_WEBSOCKET_SECRET\s*=\s*)\"(.+)\""
         repl = r"\1********"
-        self.do_path_regex_sub("/etc/tower/conf.d/channels.py", jreg, repl)
+        self.do_path_regex_sub("/etc/ascender/conf.d/channels.py", jreg, repl)

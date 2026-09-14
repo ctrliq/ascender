@@ -24,7 +24,7 @@ class SettingsRegistry(object):
         """
         :param settings: a ``django.conf.LazySettings`` object used to lookup
                          file-based field values (e.g., ``local_settings.py``
-                         and ``/etc/tower/conf.d/example.py``).  If unspecified,
+                         and ``/etc/ascender/conf.d/example.py``).  If unspecified,
                          defaults to ``django.conf.settings``.
         """
         if settings is None:

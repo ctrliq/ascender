@@ -43,11 +43,11 @@ data_loggly = {
             'http://logs-01.loggly.com/inputs/1fd38090-2af1-4e1e-8d80-492899da0f71/tag/http/',
             None,
             'https',
-            '/var/log/tower/rsyslog.err',
+            '/var/log/ascender/rsyslog.err',
             '\n'.join(
                 [
                     'template(name="ascender" type="string" string="%rawmsg-after-pri%")\nmodule(load="omhttp")',
-                    'action(type="omhttp" server="logs-01.loggly.com" serverport="80" usehttps="off" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/tower/rsyslog.err" restpath="inputs/1fd38090-2af1-4e1e-8d80-492899da0f71/tag/http/")',  # noqa
+                    'action(type="omhttp" server="logs-01.loggly.com" serverport="80" usehttps="off" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/ascender/rsyslog.err" restpath="inputs/1fd38090-2af1-4e1e-8d80-492899da0f71/tag/http/")',  # noqa
                 ]
             ),
         ),
@@ -71,7 +71,7 @@ data_loggly = {
             'localhost',
             9000,
             'tcp',
-            '/var/log/tower/rsyslog.err',
+            '/var/log/ascender/rsyslog.err',
             '\n'.join(
                 [
                     'template(name="ascender" type="string" string="%rawmsg-after-pri%")',
@@ -85,11 +85,11 @@ data_loggly = {
             'https://yoursplunk/services/collector/event',
             None,
             None,
-            '/var/log/tower/rsyslog.err',
+            '/var/log/ascender/rsyslog.err',
             '\n'.join(
                 [
                     'template(name="ascender" type="string" string="%rawmsg-after-pri%")\nmodule(load="omhttp")',
-                    'action(type="omhttp" server="yoursplunk" serverport="443" usehttps="on" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/tower/rsyslog.err" restpath="services/collector/event")',  # noqa
+                    'action(type="omhttp" server="yoursplunk" serverport="443" usehttps="on" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/ascender/rsyslog.err" restpath="services/collector/event")',  # noqa
                 ]
             ),
         ),
@@ -99,11 +99,11 @@ data_loggly = {
             'http://yoursplunk/services/collector/event',
             None,
             None,
-            '/var/log/tower/rsyslog.err',
+            '/var/log/ascender/rsyslog.err',
             '\n'.join(
                 [
                     'template(name="ascender" type="string" string="%rawmsg-after-pri%")\nmodule(load="omhttp")',
-                    'action(type="omhttp" server="yoursplunk" serverport="80" usehttps="off" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/tower/rsyslog.err" restpath="services/collector/event")',  # noqa
+                    'action(type="omhttp" server="yoursplunk" serverport="80" usehttps="off" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/ascender/rsyslog.err" restpath="services/collector/event")',  # noqa
                 ]
             ),
         ),
@@ -113,11 +113,11 @@ data_loggly = {
             'https://yoursplunk:8088/services/collector/event',
             None,
             None,
-            '/var/log/tower/rsyslog.err',
+            '/var/log/ascender/rsyslog.err',
             '\n'.join(
                 [
                     'template(name="ascender" type="string" string="%rawmsg-after-pri%")\nmodule(load="omhttp")',
-                    'action(type="omhttp" server="yoursplunk" serverport="8088" usehttps="on" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/tower/rsyslog.err" restpath="services/collector/event")',  # noqa
+                    'action(type="omhttp" server="yoursplunk" serverport="8088" usehttps="on" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/ascender/rsyslog.err" restpath="services/collector/event")',  # noqa
                 ]
             ),
         ),
@@ -127,11 +127,11 @@ data_loggly = {
             'https://yoursplunk/services/collector/event',
             8088,
             None,
-            '/var/log/tower/rsyslog.err',
+            '/var/log/ascender/rsyslog.err',
             '\n'.join(
                 [
                     'template(name="ascender" type="string" string="%rawmsg-after-pri%")\nmodule(load="omhttp")',
-                    'action(type="omhttp" server="yoursplunk" serverport="8088" usehttps="on" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/tower/rsyslog.err" restpath="services/collector/event")',  # noqa
+                    'action(type="omhttp" server="yoursplunk" serverport="8088" usehttps="on" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/ascender/rsyslog.err" restpath="services/collector/event")',  # noqa
                 ]
             ),
         ),
@@ -141,11 +141,11 @@ data_loggly = {
             'yoursplunk.org/services/collector/event',
             8088,
             'https',
-            '/var/log/tower/rsyslog.err',
+            '/var/log/ascender/rsyslog.err',
             '\n'.join(
                 [
                     'template(name="ascender" type="string" string="%rawmsg-after-pri%")\nmodule(load="omhttp")',
-                    'action(type="omhttp" server="yoursplunk.org" serverport="8088" usehttps="on" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/tower/rsyslog.err" restpath="services/collector/event")',  # noqa
+                    'action(type="omhttp" server="yoursplunk.org" serverport="8088" usehttps="on" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/ascender/rsyslog.err" restpath="services/collector/event")',  # noqa
                 ]
             ),
         ),
@@ -155,11 +155,11 @@ data_loggly = {
             'http://yoursplunk.org/services/collector/event',
             8088,
             None,
-            '/var/log/tower/rsyslog.err',
+            '/var/log/ascender/rsyslog.err',
             '\n'.join(
                 [
                     'template(name="ascender" type="string" string="%rawmsg-after-pri%")\nmodule(load="omhttp")',
-                    'action(type="omhttp" server="yoursplunk.org" serverport="8088" usehttps="off" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/tower/rsyslog.err" restpath="services/collector/event")',  # noqa
+                    'action(type="omhttp" server="yoursplunk.org" serverport="8088" usehttps="off" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/ascender/rsyslog.err" restpath="services/collector/event")',  # noqa
                 ]
             ),
         ),
@@ -169,11 +169,11 @@ data_loggly = {
             'https://endpoint5.collection.us2.sumologic.com/receiver/v1/http/ZaVnC4dhaV0qoiETY0MrM3wwLoDgO1jFgjOxE6-39qokkj3LGtOroZ8wNaN2M6DtgYrJZsmSi4-36_Up5TbbN_8hosYonLKHSSOSKY845LuLZBCBwStrHQ==',  # noqa
             None,
             'https',
-            '/var/log/tower/rsyslog.err',
+            '/var/log/ascender/rsyslog.err',
             '\n'.join(
                 [
                     'template(name="ascender" type="string" string="%rawmsg-after-pri%")\nmodule(load="omhttp")',
-                    'action(type="omhttp" server="endpoint5.collection.us2.sumologic.com" serverport="443" usehttps="on" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/tower/rsyslog.err" restpath="receiver/v1/http/ZaVnC4dhaV0qoiETY0MrM3wwLoDgO1jFgjOxE6-39qokkj3LGtOroZ8wNaN2M6DtgYrJZsmSi4-36_Up5TbbN_8hosYonLKHSSOSKY845LuLZBCBwStrHQ==")',  # noqa
+                    'action(type="omhttp" server="endpoint5.collection.us2.sumologic.com" serverport="443" usehttps="on" allowunsignedcerts="off" skipverifyhost="off" action.resumeRetryCount="-1" template="ascender" action.resumeInterval="5" queue.spoolDirectory="/var/lib/ascender" queue.filename="awx-external-logger-action-queue" queue.maxDiskSpace="1g" queue.maxFileSize="100m" queue.type="LinkedList" queue.saveOnShutdown="on" queue.syncqueuefiles="on" queue.checkpointInterval="1000" queue.size="131072" queue.highwaterMark="98304" queue.discardMark="117964" queue.discardSeverity="5" errorfile="/var/log/ascender/rsyslog.err" restpath="receiver/v1/http/ZaVnC4dhaV0qoiETY0MrM3wwLoDgO1jFgjOxE6-39qokkj3LGtOroZ8wNaN2M6DtgYrJZsmSi4-36_Up5TbbN_8hosYonLKHSSOSKY845LuLZBCBwStrHQ==")',  # noqa
                 ]
             ),
         ),

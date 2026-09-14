@@ -50,7 +50,7 @@ def settings(request):
     # @pytest.mark.defined_in_file can be used to mark specific setting values
     # as "defined in a settings file".  This is analogous to manually
     # specifying a setting on the filesystem (e.g., in a local_settings.py in
-    # development, or in /etc/tower/conf.d/<something>.py)
+    # development, or in /etc/ascender/conf.d/<something>.py)
     for marker in request.node.own_markers:
         if marker.name == 'defined_in_file':
             defaults = marker.kwargs
