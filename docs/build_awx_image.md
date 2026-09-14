@@ -5,7 +5,7 @@
 To build a custom awx image to use with the awx-operator:
 
 ```
-make awx-kube-build
+make ascender-kube-build
 ```
 
 > Note: The development image (`make docker-compose-build`) will not work with the awx-operator, the UI is not built in that image, among other things (see Dockerfile.j2 for more info).

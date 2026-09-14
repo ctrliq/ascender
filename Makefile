@@ -9,7 +9,7 @@ NPM_BIN ?= npm
 KIND_BIN ?= $(shell which kind)
 CHROMIUM_BIN=/tmp/chrome-linux/chrome
 GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
-MANAGEMENT_COMMAND ?= awx-manage
+MANAGEMENT_COMMAND ?= ascender-manage
 VERSION ?= $(shell $(PYTHON) tools/scripts/scm_version.py 2> /dev/null)
 
 # NOTE: This defaults the container image version to the branch that's active
@@ -113,12 +113,12 @@ guard-%:
 	    exit 1; \
 	fi
 
-virtualenv: virtualenv_awx
+virtualenv: virtualenv_ascender
 
 # flit is needed for offline install of certain packages, specifically ptyprocess
 # it is needed for setup, but not always recognized as a setup dependency
 # similar to pip, setuptools, and wheel, these are all needed here as a bootstrapping issues
-virtualenv_awx:
+virtualenv_ascender:
 	if [ "$(VENV_BASE)" ]; then \
 		if [ ! -d "$(VENV_BASE)" ]; then \
 			mkdir $(VENV_BASE); \
@@ -131,7 +131,7 @@ virtualenv_awx:
 
 ## Install third-party requirements needed for Ascender's environment.
 # this does not use system site packages intentionally
-requirements_awx: virtualenv_awx
+requirements_ascender: virtualenv_ascender
 	if [[ "$(PIP_OPTIONS)" == *"--no-index"* ]]; then \
 	    cat requirements/requirements.txt requirements/requirements_local.txt | UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/awx/bin/pip install $(PIP_OPTIONS) -r /dev/stdin ; \
 	else \
@@ -139,12 +139,12 @@ requirements_awx: virtualenv_awx
 	fi
 	$(VENV_BASE)/awx/bin/pip uninstall --yes -r requirements/requirements_tower_uninstall.txt
 
-requirements_awx_dev:
+requirements_ascender_dev:
 	UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/awx/bin/pip install -r requirements/requirements_dev.txt
 
-requirements: requirements_awx
+requirements: requirements_ascender
 
-requirements_dev: requirements_awx requirements_awx_dev
+requirements_dev: requirements_ascender requirements_ascender_dev
 
 requirements_test: requirements
 
@@ -631,7 +631,7 @@ Dockerfile: tools/ansible/roles/dockerfile/templates/Dockerfile.j2
 		-e headless=$(HEADLESS)
 
 ## Build awx image for deployment on Kubernetes environment.
-awx-kube-build: Dockerfile
+ascender-kube-build: Dockerfile
 	DOCKER_BUILDKIT=1 docker build -f Dockerfile \
 		--build-arg VERSION=$(VERSION) \
 		--build-arg SETUPTOOLS_SCM_PRETEND_VERSION=$(VERSION) \
@@ -639,9 +639,9 @@ awx-kube-build: Dockerfile
 		-t $(DEV_DOCKER_TAG_BASE)/ascender:$(COMPOSE_TAG) .
 
 ## Build multi-arch awx image for deployment on Kubernetes environment.
-awx-kube-buildx: Dockerfile
-	- docker buildx create --name awx-kube-buildx
-	docker buildx use awx-kube-buildx
+ascender-kube-buildx: Dockerfile
+	- docker buildx create --name ascender-kube-buildx
+	docker buildx use ascender-kube-buildx
 	- docker buildx build \
 		--push \
 		--build-arg VERSION=$(VERSION) \
@@ -650,11 +650,11 @@ awx-kube-buildx: Dockerfile
 		--platform=$(PLATFORMS) \
 		--tag $(DEV_DOCKER_TAG_BASE)/ascender:$(COMPOSE_TAG) \
 		-f Dockerfile .
-	- docker buildx rm awx-kube-buildx
+	- docker buildx rm ascender-kube-buildx
 
 
 .PHONY: Dockerfile.kube-dev
-## Generate Docker.kube-dev for awx_kube_devel image
+## Generate Docker.kube-dev for ascender_kube_devel image
 Dockerfile.kube-dev: tools/ansible/roles/dockerfile/templates/Dockerfile.j2
 	ansible-playbook tools/ansible/dockerfile.yml \
 	    -e dockerfile_name=Dockerfile.kube-dev \
@@ -662,17 +662,17 @@ Dockerfile.kube-dev: tools/ansible/roles/dockerfile/templates/Dockerfile.j2
 	    -e template_dest=_build_kube_dev \
 	    -e receptor_image=$(RECEPTOR_IMAGE)
 
-## Build awx_kube_devel image for development on local Kubernetes environment.
-awx-kube-dev-build: Dockerfile.kube-dev
+## Build ascender_kube_devel image for development on local Kubernetes environment.
+ascender-kube-dev-build: Dockerfile.kube-dev
 	DOCKER_BUILDKIT=1 docker build -f Dockerfile.kube-dev \
 	    --build-arg BUILDKIT_INLINE_CACHE=1 \
 	    --cache-from=$(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG) \
 	    -t $(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG) .
 
-## Build and push multi-arch awx_kube_devel image for development on local Kubernetes environment.
-awx-kube-dev-buildx: Dockerfile.kube-dev
-	- docker buildx create --name awx-kube-dev-buildx
-	docker buildx use awx-kube-dev-buildx
+## Build and push multi-arch ascender_kube_devel image for development on local Kubernetes environment.
+ascender-kube-dev-buildx: Dockerfile.kube-dev
+	- docker buildx create --name ascender-kube-dev-buildx
+	docker buildx use ascender-kube-dev-buildx
 	- docker buildx build \
 		--push \
 		--build-arg BUILDKIT_INLINE_CACHE=1 \
@@ -680,9 +680,9 @@ awx-kube-dev-buildx: Dockerfile.kube-dev
 		--platform=$(PLATFORMS) \
 		--tag $(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG) \
 		-f Dockerfile.kube-dev .
-	- docker buildx rm awx-kube-dev-buildx
+	- docker buildx rm ascender-kube-dev-buildx
 
-kind-dev-load: awx-kube-dev-build
+kind-dev-load: ascender-kube-dev-build
 	$(KIND_BIN) load docker-image $(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG)
 
 # Translation TASKS

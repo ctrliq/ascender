@@ -75,7 +75,7 @@ ADD requirements/requirements.txt \
     requirements/requirements_git.txt \
     /tmp/requirements/
 
-RUN cd /tmp && make requirements_awx
+RUN cd /tmp && make requirements_ascender
 
 # The data the platform reads and writes lives at /var/lib/ascender, and
 # /var/lib/awx is the alias onto it. Pointed this way round, retiring the old
@@ -90,7 +90,7 @@ ARG HEADLESS
 
 {% if (build_dev|bool) or (kube_dev|bool) %}
 ADD requirements/requirements_dev.txt /tmp/requirements
-RUN cd /tmp && make requirements_awx_dev
+RUN cd /tmp && make requirements_ascender_dev
 {% else %}
 # Use the distro provided npm to bootstrap our required version of node
 

@@ -132,7 +132,7 @@ TIME_ZONE = 'UTC'
 LANGUAGE_CODE = 'en-us'
 
 # Languages LocaleMiddleware is allowed to activate: the catalog directories
-# under awx/locale/<code>/, plus 'en'. Declaring this explicitly (rather than
+# under ascender/locale/<code>/, plus 'en'. Declaring this explicitly (rather than
 # relying on Django's full global LANGUAGES list) ensures LocaleMiddleware
 # selects the exact catalog code we ship. In particular Django's global list
 # only has 'zh-hans'/'zh-hant', so without this a request asking for 'zh' would

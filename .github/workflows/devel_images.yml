@@ -23,10 +23,10 @@ jobs:
         build-targets:
           - image-name: ascender_devel
             make-target: docker-compose-buildx
-          #- image-name: awx_kube_devel
-          #  make-target: awx-kube-dev-buildx
+          #- image-name: ascender_kube_devel
+          #  make-target: ascender-kube-dev-buildx
           #- image-name: awx
-          #  make-target: awx-kube-buildx
+          #  make-target: ascender-kube-buildx
     steps:
       - name: Skipping build of Ascender image for non-Ascender repository
         run: |

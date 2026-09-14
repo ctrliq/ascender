@@ -42,12 +42,12 @@
 
 # Calling Docker directly because docker-py doesnt support BuildKit
 - name: Create buildx builder
-  shell: docker buildx inspect awx-multiarch > /dev/null 2>&1 || docker buildx create --name awx-multiarch --use
+  shell: docker buildx inspect ascender-multiarch > /dev/null 2>&1 || docker buildx create --name ascender-multiarch --use
   args:
     chdir: "{{ playbook_dir }}/../../"
 
 - name: Use buildx builder
-  shell: docker buildx use awx-multiarch
+  shell: docker buildx use ascender-multiarch
   args:
     chdir: "{{ playbook_dir }}/../../"
 
