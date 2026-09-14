@@ -30,7 +30,7 @@ from awx.main.utils.profiling import AWXProfiler
 from awx.main.utils.common import memoize
 
 logger = logging.getLogger('awx.main.middleware')
-perf_logger = logging.getLogger('awx.analytics.performance')
+perf_logger = logging.getLogger('ascender.analytics.performance')
 
 
 class ThreadLocalMiddleware:

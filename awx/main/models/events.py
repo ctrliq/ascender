@@ -24,7 +24,7 @@ from awx.main.constants import MINIMAL_EVENTS
 from awx.main.models.base import CreatedModifiedModel
 from awx.main.utils import ignore_inventory_computed_fields, camelcase_to_underscore
 
-analytics_logger = logging.getLogger('awx.analytics.job_events')
+analytics_logger = logging.getLogger('ascender.analytics.job_events')
 
 logger = logging.getLogger('awx.main.models.events')
 

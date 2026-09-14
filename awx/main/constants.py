@@ -84,6 +84,12 @@ LOGGER_BLOCKLIST = (
 # failed or is in progress
 RECEPTOR_PENDING = 'ansible-runner-???'
 
+# The analytics loggers are the platform's data feed rather than its diagnostics:
+# Ledger parses job events and the activity stream straight off these names, and
+# so does anything a deployment has pointed at its external log aggregator. Four
+# places parse the prefix back out of a record name, so it is defined once.
+ANALYTICS_LOGGER_PREFIX = 'ascender.analytics'
+
 # Naming pattern for Ascender jobs in /tmp folder, like /tmp/awx_42_xiwm
 # also update awxkit.api.pages.unified_jobs in ctrliq/ascender-kit if changed
 JOB_FOLDER_PREFIX = 'awx_%s_'

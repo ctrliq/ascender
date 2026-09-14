@@ -23,6 +23,7 @@ from django_guid.log_filters import CorrelationId
 from awx import MODE
 from awx.main.constants import LOGGER_BLOCKLIST
 from awx.main.utils.common import get_search_fields
+from awx.main.constants import ANALYTICS_LOGGER_PREFIX
 
 __all__ = ['SmartFilter', 'ExternalLoggerEnabled', 'DynamicLevelFilter']
 
@@ -96,7 +97,7 @@ class ExternalLoggerEnabled(Filter):
         loggers = self.enabled_loggers
         if not loggers:
             return False
-        if record.name.startswith('awx.analytics'):
+        if record.name.startswith(ANALYTICS_LOGGER_PREFIX):
             base_path, headline_name = record.name.rsplit('.', 1)
             return bool(headline_name in loggers)
         else:
