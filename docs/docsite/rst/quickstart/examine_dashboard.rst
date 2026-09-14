@@ -21,7 +21,7 @@ The Dashboard offers a friendly graphical framework for your IT orchestration ne
 
   The new Ascender User Interface is available for tech preview and is subject to change in a future release. To preview the new UI, click the **Enable Preview of New User Interface** toggle to **On** from the Miscellaneous System option of the Settings menu. 
 
-  .. image:: ../common/images/configure-awx-system-misc-preview-newui.png
+  .. image:: ../common/images/configure-ascender-system-misc-preview-newui.png
 
   After saving, logout and log back in to access the new UI from the preview banner. To return to the current UI, click the link on the top banner where indicated.
 

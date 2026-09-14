@@ -175,7 +175,7 @@ Configuring the ``ascenderhost`` hostname for notifications
 
 In the :ref:`System Settings <configure_ascender_system>`, you can replace ``https://ascenderhost`` in the **Base URL of the service** field with your preferred hostname to change the notification hostname.     
 
-.. image:: ../common/images/configure-awx-system-misc-baseurl.png
+.. image:: ../common/images/configure-ascender-system-misc-baseurl.png
 
 New installations of Ascender should not have to set the hostname for notifications.
 
@@ -292,7 +292,7 @@ https://github.com/ansible/ansible/tree/devel/lib/ansible/plugins/callback
 
 To use these plugins, put the callback plugin ``.py`` file into a directory called ``/callback_plugins`` alongside your playbook in your Ascender Project. Then, specify their paths (one path per line) in the **Ansible Callback Plugins** field of the Job settings, located towards the bottom of the screen:
 
-.. image:: ../common/images/configure-awx-jobs-callback.png
+.. image:: ../common/images/configure-ascender-jobs-callback.png
 
 .. note::
 

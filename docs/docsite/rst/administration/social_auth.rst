@@ -48,7 +48,7 @@ The **GitHub OAuth2 Callback URL** field is already pre-populated and non-editab
 
 8. To verify that the authentication was configured correctly, logout of Ascender and the login screen will now display the GitHub logo to allow logging in with those credentials.
 
-.. image:: ../common/images/configure-awx-auth-github-logo.png
+.. image:: ../common/images/configure-ascender-auth-github-logo.png
 
 
 .. _ag_auth_github_org:
@@ -89,7 +89,7 @@ Once the application is registered, GitHub displays the Client ID and Client Sec
 
 9. To verify that the authentication was configured correctly, logout of Ascender and the login screen will now display the GitHub Organization logo to allow logging in with those credentials.
 
-.. image:: ../common/images/configure-awx-auth-github-orgs-logo.png
+.. image:: ../common/images/configure-ascender-auth-github-orgs-logo.png
 
 
 .. _ag_auth_github_team:
@@ -125,7 +125,7 @@ The **GitHub Team OAuth2 Callback URL** field is already pre-populated and non-e
 
 10. To verify that the authentication was configured correctly, logout of Ascender and the login screen will now display the GitHub Team logo to allow logging in with those credentials.
 
-.. image:: ../common/images/configure-awx-auth-github-teams-logo.png
+.. image:: ../common/images/configure-ascender-auth-github-teams-logo.png
 
 
 GitHub Enterprise settings
@@ -162,7 +162,7 @@ The **GitHub Enterprise OAuth2 Callback URL** field is already pre-populated and
 
 11. To verify that the authentication was configured correctly, logout of Ascender and the login screen will now display the GitHub Enterprise logo to allow logging in with those credentials.
 
-.. image:: ../common/images/configure-awx-auth-github-ent-logo.png
+.. image:: ../common/images/configure-ascender-auth-github-ent-logo.png
 
 
 GitHub Enterprise Organization settings
@@ -201,7 +201,7 @@ The **GitHub Enterprise Organization OAuth2 Callback URL** field is already pre-
 
 12. To verify that the authentication was configured correctly, logout of Ascender and the login screen will now display the GitHub Enterprise Organization logo to allow logging in with those credentials.
 
-.. image:: ../common/images/configure-awx-auth-github-ent-org-logo.png
+.. image:: ../common/images/configure-ascender-auth-github-ent-org-logo.png
 
 
 GitHub Enterprise Team settings
@@ -242,7 +242,7 @@ The **GitHub Enterprise Team OAuth2 Callback URL** field is already pre-populate
 
 13. To verify that the authentication was configured correctly, logout of Ascender and the login screen will now display the GitHub Enterprise Teams logo to allow logging in with those credentials.
 
-.. image:: ../common/images/configure-awx-auth-github-ent-teams-logo.png
+.. image:: ../common/images/configure-ascender-auth-github-ent-teams-logo.png
 
 
 .. _ag_auth_google_oauth2:
@@ -267,7 +267,7 @@ The **Google OAuth2 Callback URL** field is already pre-populated and non-editab
 
   - Copy and paste Google's Client secret into the **Google OAuth2 Secret** field. 
 
-    .. image:: ../common/images/configure-awx-auth-google.png
+    .. image:: ../common/images/configure-ascender-auth-google.png
 
 4. To complete the remaining optional fields, refer to the tooltips in each of the fields for instructions and required format. 
 
@@ -277,7 +277,7 @@ The **Google OAuth2 Callback URL** field is already pre-populated and non-editab
 
 7. To verify that the authentication was configured correctly, logout of Ascender and the login screen will now display the Google logo to indicate it as a alternate method of logging into Ascender.
 
-.. image:: ../common/images/configure-awx-auth-google-logo.png
+.. image:: ../common/images/configure-ascender-auth-google-logo.png
 
 
 

@@ -42,7 +42,7 @@ Here ``CN=josie,CN=users,DC=website,DC=com`` is the Distinguished Name of the co
 
   Multiple LDAP configurations are not needed per LDAP server, but you can configure multiple LDAP servers from this page, otherwise, leave the server at **Default**:
 
-  .. image:: ../common/images/configure-awx-auth-ldap-servers.png
+  .. image:: ../common/images/configure-ascender-auth-ldap-servers.png
 
   |
 
@@ -51,7 +51,7 @@ Here ``CN=josie,CN=users,DC=website,DC=com`` is the Distinguished Name of the co
 
 4. To enter or modify the LDAP server address to connect to, click **Edit** and enter  in the **LDAP Server URI** field using the same format as the one prepopulated in the text field:
 
-.. image:: ../common/images/configure-awx-auth-ldap-server-uri.png
+.. image:: ../common/images/configure-ascender-auth-ldap-server-uri.png
 
 .. note::
 
@@ -61,7 +61,7 @@ Here ``CN=josie,CN=users,DC=website,DC=com`` is the Distinguished Name of the co
 
 5. Enter the password to use for the Binding user in the **LDAP Bind Password** text field. In this example, the password is 'passme':
 
-.. image:: ../common/images/configure-awx-auth-ldap-bind-pwd.png
+.. image:: ../common/images/configure-ascender-auth-ldap-bind-pwd.png
 
 6. Click to select a group type from the **LDAP Group Type** drop-down menu list. 
 
@@ -88,18 +88,18 @@ Here ``CN=josie,CN=users,DC=website,DC=com`` is the Distinguished Name of the co
 
 7. The **LDAP Start TLS** is disabled by default. To enable TLS when the LDAP connection is not using SSL/TLS, click the toggle to **ON**. 
 
-.. image:: ../common/images/configure-awx-auth-ldap-start-tls.png
+.. image:: ../common/images/configure-ascender-auth-ldap-start-tls.png
 
 8. Enter the Distinguished Name in the **LDAP Bind DN** text field to specify the user that Ascender uses to connect (Bind) to the LDAP server. Below uses the example, ``CN=josie,CN=users,DC=website,DC=com``:
 
-.. image:: ../common/images/configure-awx-auth-ldap-bind-dn.png
+.. image:: ../common/images/configure-ascender-auth-ldap-bind-dn.png
 
 
 9. If that name is stored in key ``sAMAccountName``, the **LDAP User DN Template** populates with ``(sAMAccountName=%(user)s)``. Active Directory stores the username to ``sAMAccountName``. Similarly, for OpenLDAP, the key is ``uid``--hence the line becomes ``(uid=%(user)s)``.
 
 10. Enter the group distinguish name to allow users within that group to access Ascender in the **LDAP Require Group** field, using the same format as the one shown in the text field, ``CN=awx Users,OU=Users,DC=website,DC=com``.
 
-.. image:: ../common/images/configure-awx-auth-ldap-req-group.png
+.. image:: ../common/images/configure-ascender-auth-ldap-req-group.png
 
 11. Enter the group distinguish name to prevent users within that group to access Ascender in the **LDAP Deny Group** field, using the same format as the one shown in the text field. In this example, leave the field blank. 
 
@@ -124,7 +124,7 @@ The second line specifies the scope where the users should be searched:
 
 The third line specifies the key name where the user name is stored.
 
-.. image:: ../common/images/configure-awx-authen-ldap-user-search.png
+.. image:: ../common/images/configure-ascender-authen-ldap-user-search.png
 
 .. note::
 
@@ -164,7 +164,7 @@ The third line specifies the key name where the user name is stored.
 - The second lines specifies the scope and is the same as that for the user directive.
 - The third line specifies what the ``objectclass`` of a group object is in the LDAP you are using.
 
-.. image:: ../common/images/configure-awx-authen-ldap-group-search.png
+.. image:: ../common/images/configure-ascender-authen-ldap-group-search.png
 
 14. Enter the user attributes in the **LDAP User Attribute Map** the text field. In this example, use:
 
@@ -179,7 +179,7 @@ The third line specifies the key name where the user name is stored.
 
 The above example retrieves users by last name from the key ``sn``. You can use the same LDAP query for the user to figure out what keys they are stored under.
 
-.. image:: ../common/images/configure-awx-auth-ldap-user-attrb-map.png
+.. image:: ../common/images/configure-ascender-auth-ldap-user-attrb-map.png
 
 .. _ldap_grp_params:
 
@@ -205,7 +205,7 @@ The above example retrieves users by last name from the key ``sn``. You can use 
 
 The above example retrieves users who are flagged as superusers or as auditor in their profile.
 
-.. image:: ../common/images/configure-awx-auth-ldap-user-flags.png 
+.. image:: ../common/images/configure-ascender-auth-ldap-user-flags.png 
 
 17. For details on completing the mapping fields, see :ref:`ag_ldap_org_team_maps`. 
 

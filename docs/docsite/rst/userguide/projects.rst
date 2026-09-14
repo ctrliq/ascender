@@ -380,14 +380,14 @@ At the end of a Project update, Ascender searches for a file called ``requiremen
 
 This file allows you to reference Galaxy roles or roles within other repositories which can be checked out in conjunction with your own project. The addition of this Ansible Galaxy support eliminates the need to create git submodules for achieving this result. Given that SCM projects (along with roles/collections) are pulled into and executed from a private job environment, a <private job directory> specific to the project within ``/tmp`` is created by default. However, you can specify another **Job Execution Path** based on your environment in the Jobs Settings tab of the Settings window:
 
-.. image:: ../common/images/configure-awx-jobs-execution-path.png
+.. image:: ../common/images/configure-ascender-jobs-execution-path.png
    :alt: Job Settings page showing where to configure the Job execution path.
 
 The cache directory is a subdirectory inside the global projects folder. The content may be copied from the cache location to ``<job private directory>/requirements_roles`` location.
 
 By default, Ascender has a system-wide setting that allows roles to be dynamically downloaded from the ``roles/requirements.yml`` file for SCM projects. You may turn off this setting in the **Jobs settings** screen of the Settings menu by switching the **Enable Role Download** toggle button to **OFF**.
 
-.. image:: ../common/images/configure-awx-jobs-download-roles.png
+.. image:: ../common/images/configure-ascender-jobs-download-roles.png
    :alt: Job Settings page showing the option to Enable Role Download.
 
 
@@ -430,7 +430,7 @@ If you made changes in the settings file, be sure to restart services with the `
 In the User Interface, you can configure these settings in the Jobs settings window.
 
 
-.. image:: ../common/images/configure-awx-jobs-path-to-expose.png
+.. image:: ../common/images/configure-ascender-jobs-path-to-expose.png
    :alt: Job Settings page showing example paths to expose to isolated jobs.
 
 
@@ -447,7 +447,7 @@ Ascender supports project-specific `Ansible collections <https://docs.ansible.co
 
 By default, Ascender has a system-wide setting that allows collections to be dynamically downloaded from the ``collections/requirements.yml`` file for SCM projects. You may turn off this setting in the **Jobs settings** tab of the Settings menu by switching the **Enable Collections Download** toggle button to **OFF**.
 
-  .. image:: ../common/images/configure-awx-jobs-download-collections.png
+  .. image:: ../common/images/configure-ascender-jobs-download-collections.png
      :alt: Job Settings page showing where to enable collection(s) download.
 
 Roles and collections are locally cached for performance reasons, and you will need to select **Update Revision on Launch** in the project SCM Update Options to ensure this:

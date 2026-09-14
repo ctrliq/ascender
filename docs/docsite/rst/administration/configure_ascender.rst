@@ -47,7 +47,7 @@ The Jobs tab allows you to configure the types of modules that are allowed to be
 
     The values for all the timeouts are in seconds.
 
-.. image:: ../common/images/configure-awx-jobs.png
+.. image:: ../common/images/configure-ascender-jobs.png
    :alt: Screenshot of the Ascender job configuration settings.
 
 3. Click **Save** to apply the settings or **Cancel** to abandon the changes.
@@ -70,7 +70,7 @@ The System tab allows you to define the base URL for the Ascender host, configur
   - **Miscellaneous Authentication settings**: configure options associated with authentication methods (built-in or SSO), sessions (timeout, number of sessions logged in, tokens), and social authentication mapping.
   - **Logging settings**: configure logging options based on the type you choose:
 
-    .. image:: ../common/images/configure-awx-system-logging-types.png
+    .. image:: ../common/images/configure-ascender-system-logging-types.png
       :alt: Logging settings shown with the list of options for Logging Aggregator Types.
 
     For more information about each of the logging aggregation types, refer to the :ref:`ag_logging` section of the |ata|.
@@ -80,7 +80,7 @@ The System tab allows you to define the base URL for the Ascender host, configur
 
 .. |help| image:: ../common/images/tooltips-icon.png
 
-.. image:: ../common/images/configure-awx-system.png
+.. image:: ../common/images/configure-ascender-system.png
    :alt: Miscellaneous System settings window showing all possible configurable options.
 
 .. note::

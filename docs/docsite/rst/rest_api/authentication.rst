@@ -98,7 +98,7 @@ For more information about the Basic HTTP Authentication scheme, see `RFC 7617 <
 
 	You can disable the Basic Auth for security purposes from the Miscellaneous Authentication settings of the Ascender UI Settings menu:
 
-	.. image:: ../common/images/configure-awx-auth-basic-off.png
+	.. image:: ../common/images/configure-ascender-auth-basic-off.png
 
 .. _api_oauth2_auth:
 
@@ -111,7 +111,7 @@ OAuth (Open Authorization) is an open standard for token-based authentication an
 
 	By default, external users such as those created by SSO are not allowed to generate OAuth tokens for security purposes. This can be changed from the Miscellaneous Authentication settings of the Ascender UI Settings menu:
 
-	.. image:: ../common/images/configure-awx-external-tokens-off.png 
+	.. image:: ../common/images/configure-ascender-external-tokens-off.png 
 
 The different methods for obtaining OAuth 2 Access Tokens in Ascender are:
 
