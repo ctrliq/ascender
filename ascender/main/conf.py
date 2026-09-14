@@ -641,7 +641,7 @@ register(
     category_slug='logging',
 )
 register(
-    'LOG_AGGREGATOR_TOWER_UUID',
+    'LOG_AGGREGATOR_ASCENDER_UUID',
     field_class=fields.CharField,
     allow_blank=True,
     default='',

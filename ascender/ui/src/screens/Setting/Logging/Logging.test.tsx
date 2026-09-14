@@ -29,7 +29,7 @@ describe('<Logging />', () => {
         ],
         LOG_AGGREGATOR_INDIVIDUAL_FACTS: false,
         LOG_AGGREGATOR_ENABLED: false,
-        LOG_AGGREGATOR_TOWER_UUID: '',
+        LOG_AGGREGATOR_ASCENDER_UUID: '',
         LOG_AGGREGATOR_PROTOCOL: 'https',
         LOG_AGGREGATOR_TCP_TIMEOUT: 5,
         LOG_AGGREGATOR_VERIFY_CERT: true,

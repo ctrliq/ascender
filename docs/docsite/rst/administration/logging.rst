@@ -150,7 +150,7 @@ These instructions describe how to use the logstash container.
           "system_tracking"
       ],
       "LOG_AGGREGATOR_INDIVIDUAL_FACTS": false,
-      "LOG_AGGREGATOR_TOWER_UUID": "991ac7e9-6d68-48c8-bbde-7ca1096653c6",
+      "LOG_AGGREGATOR_ASCENDER_UUID": "991ac7e9-6d68-48c8-bbde-7ca1096653c6",
       "LOG_AGGREGATOR_ENABLED": true
   }
 
@@ -189,7 +189,7 @@ Ascender's Splunk logging integration uses the Splunk HTTP Collector. When confi
           ],
           "LOG_AGGREGATOR_INDIVIDUAL_FACTS": false,
           "LOG_AGGREGATOR_ENABLED": true,
-          "LOG_AGGREGATOR_TOWER_UUID": ""
+          "LOG_AGGREGATOR_ASCENDER_UUID": ""
       }
 
 Splunk HTTP Event Collector listens on 8088 by default so it is necessary to provide the full HEC event URL (with port) in order for incoming requests to be processed successfully. These values are entered in the example below:

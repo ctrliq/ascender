@@ -12808,7 +12808,7 @@ export interface components {
        * @description Useful to uniquely identify instances.
        * @default
        */
-      LOG_AGGREGATOR_TOWER_UUID: string;
+      LOG_AGGREGATOR_ASCENDER_UUID: string;
       /**
        * Logging Aggregator Protocol
        * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.
@@ -15870,7 +15870,7 @@ export interface components {
        * @description Useful to uniquely identify instances.
        * @default
        */
-      LOG_AGGREGATOR_TOWER_UUID: string;
+      LOG_AGGREGATOR_ASCENDER_UUID: string;
       /**
        * Logging Aggregator Protocol
        * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.
@@ -17941,7 +17941,7 @@ export interface components {
        * @description Useful to uniquely identify instances.
        * @default
        */
-      LOG_AGGREGATOR_TOWER_UUID: string;
+      LOG_AGGREGATOR_ASCENDER_UUID: string;
       /**
        * Logging Aggregator Protocol
        * @description Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS unless http:// is explicitly used in the Logging Aggregator hostname.
