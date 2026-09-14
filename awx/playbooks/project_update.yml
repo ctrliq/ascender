@@ -180,8 +180,8 @@
         - name: Warn about disabled content sync
           ansible.builtin.debug:
             msg: >
-              Collection and role syncing disabled. Check the AWX_ROLES_ENABLED and
-              AWX_COLLECTIONS_ENABLED settings and Galaxy credentials on the project's organization.
+              Collection and role syncing disabled. Check the ASCENDER_ROLES_ENABLED and
+              ASCENDER_COLLECTIONS_ENABLED settings and Galaxy credentials on the project's organization.
         - name: End play due to disabled content sync
           ansible.builtin.meta: end_play
 

@@ -180,9 +180,9 @@ class BaseTask(object):
         if pull:
             params['container_options'].append(f'--pull={pull}')
 
-        if settings.AWX_ISOLATION_SHOW_PATHS:
+        if settings.ASCENDER_ISOLATION_SHOW_PATHS:
             params['container_volume_mounts'] = []
-            for this_path in settings.AWX_ISOLATION_SHOW_PATHS:
+            for this_path in settings.ASCENDER_ISOLATION_SHOW_PATHS:
                 # Verify if a mount path and SELinux context has been passed
                 # Using z allows the dir to be mounted by multiple containers
                 # Uppercase Z restricts access (in weird ways) to 1 container at a time
@@ -212,9 +212,9 @@ class BaseTask(object):
         """
         Create a temporary directory for job-related files.
         """
-        path = tempfile.mkdtemp(prefix=JOB_FOLDER_PREFIX % instance.pk, dir=settings.AWX_ISOLATION_BASE_PATH)
+        path = tempfile.mkdtemp(prefix=JOB_FOLDER_PREFIX % instance.pk, dir=settings.ASCENDER_ISOLATION_BASE_PATH)
         os.chmod(path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR)
-        if settings.AWX_CLEANUP_PATHS:
+        if settings.ASCENDER_CLEANUP_PATHS:
             self.cleanup_paths.append(path)
         # We will write files in these folders later
         for subfolder in ('inventory', 'env'):
@@ -303,8 +303,8 @@ class BaseTask(object):
         for attr in dir(settings):
             if attr == attr.upper() and attr.startswith('ANSIBLE_') and not attr.startswith('ANSIBLE_BASE_'):
                 env[attr] = str(getattr(settings, attr))
-        # Also set environment variables configured in AWX_TASK_ENV setting.
-        for key, value in settings.AWX_TASK_ENV.items():
+        # Also set environment variables configured in ASCENDER_TASK_ENV setting.
+        for key, value in settings.ASCENDER_TASK_ENV.items():
             env[key] = str(value)
 
         env['AWX_PRIVATE_DATA_DIR'] = private_data_dir
@@ -533,8 +533,8 @@ class BaseTask(object):
                 status = self.instance.status
                 raise RuntimeError('not starting %s task' % self.instance.status)
 
-            if not os.path.exists(settings.AWX_ISOLATION_BASE_PATH):
-                raise RuntimeError('AWX_ISOLATION_BASE_PATH=%s does not exist' % settings.AWX_ISOLATION_BASE_PATH)
+            if not os.path.exists(settings.ASCENDER_ISOLATION_BASE_PATH):
+                raise RuntimeError('ASCENDER_ISOLATION_BASE_PATH=%s does not exist' % settings.ASCENDER_ISOLATION_BASE_PATH)
 
             # May have to serialize the value
             private_data_files, ssh_key_data = self.build_private_data_files(self.instance, private_data_dir)
@@ -964,8 +964,8 @@ class RunJob(SourceControlMixin, BaseTask):
             env['PROJECT_REVISION'] = job.project.scm_revision
         env['ANSIBLE_RETRY_FILES_ENABLED'] = "False"
         env['MAX_EVENT_RES'] = str(settings.MAX_EVENT_RES_DATA)
-        if hasattr(settings, 'AWX_ANSIBLE_CALLBACK_PLUGINS') and settings.AWX_ANSIBLE_CALLBACK_PLUGINS:
-            env['ANSIBLE_CALLBACK_PLUGINS'] = ':'.join(settings.AWX_ANSIBLE_CALLBACK_PLUGINS)
+        if hasattr(settings, 'ASCENDER_ANSIBLE_CALLBACK_PLUGINS') and settings.ASCENDER_ANSIBLE_CALLBACK_PLUGINS:
+            env['ANSIBLE_CALLBACK_PLUGINS'] = ':'.join(settings.ASCENDER_ANSIBLE_CALLBACK_PLUGINS)
         env['AWX_HOST'] = settings.ASCENDER_URL_BASE
 
         # Create a directory for ControlPath sockets that is unique to each job
@@ -1250,7 +1250,7 @@ class RunProjectUpdate(BaseTask):
         env['DISPLAY'] = ''  # Prevent stupid password popup when running tests.
         # give ansible a hint about the intended tmpdir to work around issues
         # like https://github.com/ansible/ansible/issues/30064
-        env['TMP'] = settings.AWX_ISOLATION_BASE_PATH
+        env['TMP'] = settings.ASCENDER_ISOLATION_BASE_PATH
         env['PROJECT_UPDATE_ID'] = str(project_update.pk)
         if settings.GALAXY_IGNORE_CERTS:
             env['ANSIBLE_GALAXY_IGNORE'] = str(True)
@@ -1343,7 +1343,7 @@ class RunProjectUpdate(BaseTask):
             scm_branch = 'HEAD'
 
         galaxy_creds_are_defined = project_update.project.organization and project_update.project.organization.galaxy_credentials.exists()
-        if not galaxy_creds_are_defined and (settings.AWX_ROLES_ENABLED or settings.AWX_COLLECTIONS_ENABLED):
+        if not galaxy_creds_are_defined and (settings.ASCENDER_ROLES_ENABLED or settings.ASCENDER_COLLECTIONS_ENABLED):
             logger.warning(f'Galaxy role/collection syncing is enabled, but no credentials are configured for {project_update.project.organization}.')
 
         extra_vars.update(
@@ -1357,8 +1357,8 @@ class RunProjectUpdate(BaseTask):
                 'scm_branch': scm_branch,
                 'scm_clean': project_update.scm_clean,
                 'scm_track_submodules': project_update.scm_track_submodules,
-                'roles_enabled': galaxy_creds_are_defined and settings.AWX_ROLES_ENABLED,
-                'collections_enabled': galaxy_creds_are_defined and settings.AWX_COLLECTIONS_ENABLED,
+                'roles_enabled': galaxy_creds_are_defined and settings.ASCENDER_ROLES_ENABLED,
+                'collections_enabled': galaxy_creds_are_defined and settings.ASCENDER_COLLECTIONS_ENABLED,
                 'galaxy_task_env': settings.GALAXY_TASK_ENV,
             }
         )
@@ -1448,9 +1448,9 @@ class RunProjectUpdate(BaseTask):
         # copy over the roles and collection cache to job folder
         cache_path = os.path.join(project.get_cache_path(), project.cache_id)
         subfolders = []
-        if settings.AWX_COLLECTIONS_ENABLED:
+        if settings.ASCENDER_COLLECTIONS_ENABLED:
             subfolders.append('requirements_collections')
-        if settings.AWX_ROLES_ENABLED:
+        if settings.ASCENDER_ROLES_ENABLED:
             subfolders.append('requirements_roles')
         for subfolder in subfolders:
             cache_subpath = os.path.join(cache_path, subfolder)
