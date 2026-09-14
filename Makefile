@@ -318,7 +318,7 @@ api-lint:
 ## rather than part of the build, its committed output is what everything else
 ## consumes, and its peer range wants TypeScript 5 where this project is on 6.
 ## npx fetches it for the length of this command and leaves nothing behind.
-ui-api-types: awx-link
+ui-api-types: awx-link awx/ui/node_modules
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
