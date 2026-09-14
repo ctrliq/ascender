@@ -10,6 +10,7 @@ import ErrorDetail from 'components/ErrorDetail';
 import AlertModal from 'components/AlertModal';
 import { DetailList, Detail, UserDateDetail } from 'components/DetailList';
 import InventoryGroupsDeleteModal from '../shared/InventoryGroupsDeleteModal';
+import { isReadOnlyInventoryType } from '../shared/utils';
 
 export interface InventoryGroupDetailProps {
   inventoryGroup: Group;
@@ -57,7 +58,7 @@ function InventoryGroupDetail({ inventoryGroup }: InventoryGroupDetailProps) {
           user={modified_by}
         />
       </DetailList>
-      {inventoryType !== 'constructed_inventory' && (
+      {!isReadOnlyInventoryType(inventoryType) && (
         <CardActionsRow>
           {user_capabilities?.edit && (
             <Button

@@ -86,35 +86,38 @@ describe('<InventoryGroupHostListItem />', () => {
   });
 });
 
-describe('<InventoryGroupHostListItem> inside constructed inventories', () => {
-  test('Edit button hidden for constructed inventory', () => {
-    const history = createMemoryHistory({
-      initialEntries: ['/inventories/constructed_inventory/1/groups/2/hosts'],
-    });
-    renderWithContexts(
-      <Routes>
-        <Route
-          path="/inventories/:inventoryType/:id/groups/:groupId/hosts"
-          element={
-            <table>
-              <tbody>
-                <InventoryGroupHostListItem
-                  detailUrl="/host/1"
-                  editUrl="/host/1"
-                  host={mockHost}
-                  isSelected={false}
-                  onSelect={() => {}}
-                  rowIndex={0}
-                />
-              </tbody>
-            </table>
-          }
-        />
-      </Routes>,
-      { context: { router: { history } } }
-    );
-    expect(
-      screen.queryByRole('link', { name: 'Edit Host' })
-    ).not.toBeInTheDocument();
-  });
+describe('<InventoryGroupHostListItem> inside read-only inventories', () => {
+  test.each(['constructed_inventory', 'federated_inventory'])(
+    'Edit button hidden for %s',
+    (inventoryType) => {
+      const history = createMemoryHistory({
+        initialEntries: [`/inventories/${inventoryType}/1/groups/2/hosts`],
+      });
+      renderWithContexts(
+        <Routes>
+          <Route
+            path="/inventories/:inventoryType/:id/groups/:groupId/hosts"
+            element={
+              <table>
+                <tbody>
+                  <InventoryGroupHostListItem
+                    detailUrl="/host/1"
+                    editUrl="/host/1"
+                    host={mockHost}
+                    isSelected={false}
+                    onSelect={() => {}}
+                    rowIndex={0}
+                  />
+                </tbody>
+              </table>
+            }
+          />
+        </Routes>,
+        { context: { router: { history } } }
+      );
+      expect(
+        screen.queryByRole('link', { name: 'Edit Host' })
+      ).not.toBeInTheDocument();
+    }
+  );
 });

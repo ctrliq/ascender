@@ -9,6 +9,7 @@ import { Td, Tr } from '@patternfly/react-table';
 import { ActionItem, ActionsTd } from 'components/PaginatedTable';
 import HostToggle from 'components/HostToggle';
 import Sparkline from 'components/Sparkline';
+import { isReadOnlyInventoryType } from '../shared/utils';
 
 export interface InventoryGroupHostListItemProps {
   detailUrl: string;
@@ -69,7 +70,7 @@ function InventoryGroupHostListItem({
         >
           <HostToggle host={host} />
         </ActionItem>
-        {inventoryType !== 'constructed_inventory' && (
+        {!isReadOnlyInventoryType(inventoryType) && (
           <ActionItem
             tooltip={t`Edit Host`}
             visible={host.summary_fields.user_capabilities?.edit}

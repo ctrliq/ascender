@@ -13,7 +13,7 @@ import { CaretLeftIcon } from '@patternfly/react-icons';
 import RoutedTabs from 'components/RoutedTabs';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
-import { GroupsAPI } from 'api';
+import { InventoriesAPI } from 'api';
 import InventoryGroupEdit from '../InventoryGroupEdit/InventoryGroupEdit';
 import InventoryGroupDetail from '../InventoryGroupDetail/InventoryGroupDetail';
 import InventoryGroupHosts from '../InventoryGroupHosts';
@@ -40,9 +40,17 @@ function InventoryGroup({ setBreadcrumb, inventory }: InventoryGroupProps) {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const { data } = await GroupsAPI.readDetail(groupId);
-        setInventoryGroup(data);
-        setBreadcrumb(inventory, data);
+        // Read the group through the inventory in the url rather than by its
+        // own id: the api only lists the groups this inventory presents, which
+        // for a federated inventory are the groups of its input inventories.
+        const {
+          data: { results },
+        } = await InventoriesAPI.readGroups(inventoryId, { id: groupId });
+        const group = results?.[0] ?? null;
+        setInventoryGroup(group);
+        if (group) {
+          setBreadcrumb(inventory, group);
+        }
       } catch (err) {
         setContentError(err);
       } finally {
@@ -51,7 +59,7 @@ function InventoryGroup({ setBreadcrumb, inventory }: InventoryGroupProps) {
     };
 
     loadData();
-  }, [location.pathname, groupId, inventory, setBreadcrumb]);
+  }, [location.pathname, inventoryId, groupId, inventory, setBreadcrumb]);
 
   const tabsArray = [
     {
@@ -89,17 +97,12 @@ function InventoryGroup({ setBreadcrumb, inventory }: InventoryGroupProps) {
     return <ContentError error={contentError} />;
   }
 
-  // In cases where a user manipulates the url such that they try to navigate to a
-  // Inventory Group that is not associated with the Inventory Id in the Url this
-  // Content Error is thrown. Inventory Groups have a 1:1 relationship to Inventories
-  // thus their Ids must corrolate.
-
-  if (
-    inventoryGroup?.summary_fields?.inventory?.id !== parseInt(inventoryId, 10)
-  ) {
+  // The inventory-scoped list came back empty: the url names a group this
+  // inventory does not present (typically a hand-edited url).
+  if (!inventoryGroup) {
     return (
       <ContentError isNotFound>
-        <Link to={`/inventories/inventory/${inventory.id}/groups`}>
+        <Link to={`/inventories/${inventoryType}/${inventoryId}/groups`}>
           {t`View Inventory Groups`}
         </Link>
       </ContentError>

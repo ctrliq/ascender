@@ -27,6 +27,7 @@ import AdHocCommands from 'components/AdHocCommands/AdHocCommands';
 import AddDropDownButton from 'components/AddDropDownButton';
 import type { QSParams } from 'util/qs';
 import InventoryGroupHostListItem from './InventoryGroupHostListItem';
+import { isReadOnlyInventoryType } from '../shared/utils';
 
 const QS_CONFIG = getQSConfig('host', {
   page: 1,
@@ -151,11 +152,11 @@ function InventoryGroupHostList() {
     useDismissableError(associateErr);
   const { error: disassociateError, dismissError: dismissDisassociateError } =
     useDismissableError(disassociateErr);
-  const isNotConstructedInventory = inventoryType !== 'constructed_inventory';
+  const isNotReadOnlyInventory = !isReadOnlyInventoryType(inventoryType);
   const canAdd =
     actions &&
     Object.prototype.hasOwnProperty.call(actions, 'POST') &&
-    isNotConstructedInventory;
+    isNotReadOnlyInventory;
   const addFormUrl = `/inventories/inventory/${inventoryId}/groups/${groupId}/nested_hosts/add`;
   const addExistingHost = t`Add existing host`;
   const addNewHost = t`Add new host`;
@@ -247,7 +248,7 @@ function InventoryGroupHostList() {
                     />,
                   ]
                 : []),
-              ...(isNotConstructedInventory
+              ...(isNotReadOnlyInventory
                 ? [
                     <DisassociateButton
                       key="disassociate"
