@@ -19,7 +19,7 @@ from ascender.main.constants import JOB_FOLDER_PREFIX
 
 
 def test_the_prefix_is_what_ascender_kit_expects():
-    """ascender-kit builds `/tmp/awx_<id>` from this and matches host paths
+    """ascender-kit builds `/tmp/ascender_<id>` from this and matches host paths
     against it. If this changes, ctrliq/ascender-kit has to change with it, in
     the same release.
     """

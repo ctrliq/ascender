@@ -144,7 +144,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "name": "debug",
         "is_conditional": false,
         "uuid": "0242ac12-0004-20a0-8d35-000000000008"
@@ -209,7 +209,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "uuid": "d4bc464d-1402-4bb3-b5b8-36ef23c06d52"
       },
@@ -273,7 +273,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 1",
@@ -346,7 +346,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 2",
@@ -419,7 +419,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 3",
@@ -492,7 +492,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 4",
@@ -565,7 +565,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 5",
@@ -638,7 +638,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 6",
@@ -711,7 +711,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 7",
@@ -784,7 +784,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 8",
@@ -857,7 +857,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 9",
@@ -930,7 +930,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 10",
@@ -1003,7 +1003,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 11",
@@ -1076,7 +1076,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 12",
@@ -1149,7 +1149,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 13",
@@ -1222,7 +1222,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 14",
@@ -1295,7 +1295,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 15",
@@ -1368,7 +1368,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 16",
@@ -1441,7 +1441,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 17",
@@ -1514,7 +1514,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 18",
@@ -1587,7 +1587,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 19",
@@ -1660,7 +1660,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 20",
@@ -1733,7 +1733,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 21",
@@ -1806,7 +1806,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 22",
@@ -1879,7 +1879,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 23",
@@ -1952,7 +1952,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 24",
@@ -2025,7 +2025,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 25",
@@ -2098,7 +2098,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 26",
@@ -2171,7 +2171,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 27",
@@ -2244,7 +2244,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 28",
@@ -2317,7 +2317,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 29",
@@ -2390,7 +2390,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 30",
@@ -2463,7 +2463,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 31",
@@ -2536,7 +2536,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 32",
@@ -2609,7 +2609,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 33",
@@ -2682,7 +2682,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 34",
@@ -2755,7 +2755,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 35",
@@ -2828,7 +2828,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 36",
@@ -2901,7 +2901,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 37",
@@ -2974,7 +2974,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 38",
@@ -3047,7 +3047,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 39",
@@ -3120,7 +3120,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 40",
@@ -3193,7 +3193,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 41",
@@ -3266,7 +3266,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 42",
@@ -3339,7 +3339,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 43",
@@ -3412,7 +3412,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 44",
@@ -3485,7 +3485,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 45",
@@ -3558,7 +3558,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 46",
@@ -3631,7 +3631,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 47",
@@ -3704,7 +3704,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 48",
@@ -3777,7 +3777,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 49",
@@ -3850,7 +3850,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 50",
@@ -3923,7 +3923,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 51",
@@ -3996,7 +3996,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 52",
@@ -4069,7 +4069,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 53",
@@ -4142,7 +4142,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 54",
@@ -4215,7 +4215,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 55",
@@ -4288,7 +4288,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 56",
@@ -4361,7 +4361,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 57",
@@ -4434,7 +4434,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 58",
@@ -4507,7 +4507,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 59",
@@ -4580,7 +4580,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 60",
@@ -4653,7 +4653,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 61",
@@ -4726,7 +4726,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 62",
@@ -4799,7 +4799,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 63",
@@ -4872,7 +4872,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 64",
@@ -4945,7 +4945,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 65",
@@ -5018,7 +5018,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 66",
@@ -5091,7 +5091,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 67",
@@ -5164,7 +5164,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 68",
@@ -5237,7 +5237,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 69",
@@ -5310,7 +5310,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 70",
@@ -5383,7 +5383,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 71",
@@ -5456,7 +5456,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 72",
@@ -5529,7 +5529,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 73",
@@ -5602,7 +5602,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 74",
@@ -5675,7 +5675,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 75",
@@ -5748,7 +5748,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 76",
@@ -5821,7 +5821,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 77",
@@ -5894,7 +5894,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 78",
@@ -5967,7 +5967,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 79",
@@ -6040,7 +6040,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 80",
@@ -6113,7 +6113,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 81",
@@ -6186,7 +6186,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 82",
@@ -6259,7 +6259,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 83",
@@ -6332,7 +6332,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 84",
@@ -6405,7 +6405,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 85",
@@ -6478,7 +6478,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 86",
@@ -6551,7 +6551,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 87",
@@ -6624,7 +6624,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 88",
@@ -6697,7 +6697,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 89",
@@ -6770,7 +6770,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 90",
@@ -6843,7 +6843,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 91",
@@ -6916,7 +6916,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 92",
@@ -6989,7 +6989,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 93",
@@ -7062,7 +7062,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "res": {
           "msg": "This is a debug message: 94",
@@ -7197,7 +7197,7 @@
         "task_uuid": "0242ac12-0004-20a0-8d35-000000000008",
         "task_action": "debug",
         "task_args": "",
-        "task_path": "/tmp/awx_8_2sz9q_jd/project/chatty_tasks.yml:8",
+        "task_path": "/tmp/ascender_8_2sz9q_jd/project/chatty_tasks.yml:8",
         "host": "localhost",
         "remote_addr": "localhost",
         "res": {

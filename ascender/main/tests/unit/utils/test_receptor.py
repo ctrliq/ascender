@@ -2,8 +2,8 @@ from ascender.main.tasks.receptor import _convert_args_to_cli
 
 
 def test_file_cleanup_scenario():
-    args = _convert_args_to_cli({'exclude_strings': ['awx_423_', 'awx_582_'], 'file_pattern': '/tmp/awx_*_*'})
-    assert ' '.join(args) == 'cleanup --exclude-strings=awx_423_ awx_582_ --file-pattern=/tmp/awx_*_*'
+    args = _convert_args_to_cli({'exclude_strings': ['ascender_423_', 'ascender_582_'], 'file_pattern': '/tmp/ascender_*_*'})
+    assert ' '.join(args) == 'cleanup --exclude-strings=ascender_423_ ascender_582_ --file-pattern=/tmp/ascender_*_*'
 
 
 def test_image_cleanup_scenario():

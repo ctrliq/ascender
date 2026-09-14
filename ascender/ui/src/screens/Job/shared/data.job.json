@@ -121,7 +121,7 @@
   "started": "2019-08-08T19:24:18.329589Z",
   "finished": "2019-08-08T19:24:50.119995Z",
   "elapsed": 31.79,
-  "job_args": "[\"bwrap\", \"--unshare-pid\", \"--dev-bind\", \"/\", \"/\", \"--proc\", \"/proc\", \"--bind\", \"/tmp/ansible_runner_pi_pzufy15c/ansible_runner_pi_r_aeukpy/tmpvsg8ly2y\", \"/etc/ssh\", \"--bind\", \"/tmp/ansible_runner_pi_pzufy15c/ansible_runner_pi_r_aeukpy/tmpq_grmdym\", \"/projects\", \"--bind\", \"/tmp/ansible_runner_pi_pzufy15c/ansible_runner_pi_r_aeukpy/tmpfq8ea2z6\", \"/tmp\", \"--bind\", \"/tmp/ansible_runner_pi_pzufy15c/ansible_runner_pi_r_aeukpy/tmpq6v4y_tt\", \"/var/lib/awx\", \"--bind\", \"/tmp/ansible_runner_pi_pzufy15c/ansible_runner_pi_r_aeukpy/tmpupj_jhhb\", \"/var/log\", \"--ro-bind\", \"/var/lib/awx/venv/ansible\", \"/var/lib/awx/venv/ansible\", \"--ro-bind\", \"/var/lib/awx/venv/awx\", \"/var/lib/awx/venv/awx\", \"--bind\", \"/projects/_6__demo_project\", \"/projects/_6__demo_project\", \"--bind\", \"/tmp/awx_2_a4b1afiw\", \"/tmp/awx_2_a4b1afiw\", \"--chdir\", \"/projects/_6__demo_project\", \"ansible-playbook\", \"-u\", \"admin\", \"-i\", \"/tmp/awx_2_a4b1afiw/tmppb57i4_e\", \"-e\", \"@/tmp/awx_2_a4b1afiw/env/extravars\", \"chatty_tasks.yml\"]",
+  "job_args": "[\"bwrap\", \"--unshare-pid\", \"--dev-bind\", \"/\", \"/\", \"--proc\", \"/proc\", \"--bind\", \"/tmp/ansible_runner_pi_pzufy15c/ansible_runner_pi_r_aeukpy/tmpvsg8ly2y\", \"/etc/ssh\", \"--bind\", \"/tmp/ansible_runner_pi_pzufy15c/ansible_runner_pi_r_aeukpy/tmpq_grmdym\", \"/projects\", \"--bind\", \"/tmp/ansible_runner_pi_pzufy15c/ansible_runner_pi_r_aeukpy/tmpfq8ea2z6\", \"/tmp\", \"--bind\", \"/tmp/ansible_runner_pi_pzufy15c/ansible_runner_pi_r_aeukpy/tmpq6v4y_tt\", \"/var/lib/awx\", \"--bind\", \"/tmp/ansible_runner_pi_pzufy15c/ansible_runner_pi_r_aeukpy/tmpupj_jhhb\", \"/var/log\", \"--ro-bind\", \"/var/lib/awx/venv/ansible\", \"/var/lib/awx/venv/ansible\", \"--ro-bind\", \"/var/lib/awx/venv/awx\", \"/var/lib/awx/venv/awx\", \"--bind\", \"/projects/_6__demo_project\", \"/projects/_6__demo_project\", \"--bind\", \"/tmp/ascender_2_a4b1afiw\", \"/tmp/ascender_2_a4b1afiw\", \"--chdir\", \"/projects/_6__demo_project\", \"ansible-playbook\", \"-u\", \"admin\", \"-i\", \"/tmp/ascender_2_a4b1afiw/tmppb57i4_e\", \"-e\", \"@/tmp/ascender_2_a4b1afiw/env/extravars\", \"chatty_tasks.yml\"]",
   "job_cwd": "/projects/_6__demo_project",
   "job_env": {
       "HOSTNAME": "awx",
@@ -155,7 +155,7 @@
       "ANSIBLE_INVENTORY_UNPARSED_FAILED": "True",
       "ANSIBLE_PARAMIKO_RECORD_HOST_KEYS": "False",
       "ANSIBLE_VENV_PATH": "/var/lib/awx/venv/ansible",
-      "AWX_PRIVATE_DATA_DIR": "/tmp/awx_2_a4b1afiw",
+      "AWX_PRIVATE_DATA_DIR": "/tmp/ascender_2_a4b1afiw",
       "ANSIBLE_COLLECTIONS_PATHS": "/tmp/collections",
       "PYTHONPATH": "/var/lib/awx/venv/ansible/lib/python2.7/site-packages:/ascender_devel/awx/lib:",
       "JOB_ID": "2",
@@ -165,7 +165,7 @@
       "MAX_EVENT_RES": "700000",
       "ANSIBLE_CALLBACK_PLUGINS": "/ascender_devel/awx/plugins/callback",
       "AWX_HOST": "https://towerhost",
-      "ANSIBLE_SSH_CONTROL_PATH_DIR": "/tmp/awx_2_a4b1afiw/cp",
+      "ANSIBLE_SSH_CONTROL_PATH_DIR": "/tmp/ascender_2_a4b1afiw/cp",
       "ANSIBLE_STDOUT_CALLBACK": "awx_display"
   },
   "job_explanation": "Job explanation placeholder",
