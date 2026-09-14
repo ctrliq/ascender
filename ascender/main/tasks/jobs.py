@@ -324,7 +324,7 @@ class BaseTask(object):
         return self.write_private_data_file(private_data_dir, file_name, file_content, sub_dir='inventory', file_permissions=0o700)
 
     def build_inventory(self, instance, private_data_dir):
-        script_params = dict(hostvars=True, towervars=True)
+        script_params = dict(hostvars=True, ascendervars=True)
         if hasattr(instance, 'job_slice_number'):
             script_params['slice_number'] = instance.job_slice_number
             script_params['slice_count'] = instance.job_slice_count
@@ -1632,7 +1632,7 @@ class RunInventoryUpdate(SourceControlMixin, BaseTask):
             inventory_update.log_lifecycle("start_job_fact_cache")
             for input_inventory in inventory_update.inventory.input_inventories.all():
                 args.append('-i')
-                script_params = dict(hostvars=True, towervars=True)
+                script_params = dict(hostvars=True, ascendervars=True)
                 source_inv_path = self.write_inventory_file(input_inventory, private_data_dir, f'hosts_{input_inventory.id}', script_params)
                 args.append(to_container_path(source_inv_path, private_data_dir))
                 # Include any facts from input inventories so they can be used in filters

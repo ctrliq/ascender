@@ -316,12 +316,12 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
             host_queryset = host_queryset[offset::slice_count]
         return host_queryset
 
-    def get_script_data(self, hostvars=False, towervars=False, show_all=False, slice_number=1, slice_count=1, slice_pinned_hosts=None):
+    def get_script_data(self, hostvars=False, ascendervars=False, show_all=False, slice_number=1, slice_count=1, slice_pinned_hosts=None):
         hosts_kw = dict()
         if not show_all:
             hosts_kw['enabled'] = True
         fetch_fields = ['name', 'id', 'variables', 'inventory_id']
-        if towervars:
+        if ascendervars:
             fetch_fields.append('enabled')
         host_queryset = self.hosts.filter(**hosts_kw).order_by('name').only(*fetch_fields)
         hosts = self.get_sliced_hosts(host_queryset, slice_number, slice_count, pinned_hosts=slice_pinned_hosts)
@@ -388,7 +388,7 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
             data['_meta'].setdefault('hostvars', dict())
             for host in hosts:
                 data['_meta']['hostvars'][host.name] = host.variables_dict
-                if towervars:
+                if ascendervars:
                     for prefix in ('host', 'tower'):
                         tower_dict = {
                             f'remote_{prefix}_enabled': str(host.enabled).lower(),

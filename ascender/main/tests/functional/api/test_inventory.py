@@ -778,3 +778,18 @@ class TestConstructedInventory:
         assert inv_r.data['url'] != const_r.data['url']
         assert inv_r.data['related']['constructed_url'] == url_const
         assert const_r.data['related']['constructed_url'] == url_const
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('param', ['ascendervars', 'towervars'])
+def test_inventory_script_accepts_either_spelling(param, get, admin, inventory):
+    """The query parameter is published, so the name it had still answers.
+
+    A script of someone's asks for ?towervars=1 and cannot be rewritten from
+    here, so both spellings have to reach the same flag.
+    """
+    inventory.hosts.create(name='some-host')
+    url = reverse('api:inventory_script_view', kwargs={'pk': inventory.pk})
+    resp = get(f'{url}?hostvars=1&{param}=1', user=admin)
+    assert resp.status_code == 200
+    assert 'remote_tower_enabled' in resp.data['_meta']['hostvars']['some-host']

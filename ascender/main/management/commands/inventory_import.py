@@ -543,7 +543,7 @@ class Command(BaseCommand):
             update_fields.append('instance_id')
 
         if self.inventory.kind == 'constructed':
-            # remote towervars so the constructed hosts do not have extra variables
+            # remote ascendervars so the constructed hosts do not have extra variables
             for prefix in ('host', 'tower'):
                 for var in ('remote_{}_enabled', 'remote_{}_id'):
                     mem_variables.pop(var.format(prefix), None)
@@ -682,7 +682,7 @@ class Command(BaseCommand):
                 instance_id = self._get_instance_id(mem_host.variables)
                 host_attrs['instance_id'] = instance_id
             if self.inventory.kind == 'constructed':
-                # remote towervars so the constructed hosts do not have extra variables
+                # remote ascendervars so the constructed hosts do not have extra variables
                 for prefix in ('host', 'tower'):
                     for var in ('remote_{}_enabled', 'remote_{}_id'):
                         import_vars.pop(var.format(prefix), None)

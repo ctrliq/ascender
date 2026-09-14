@@ -23,7 +23,7 @@ are enabled in the inventory.  This feature allows disabled hosts to be skipped
 when running jobs without removing them from the inventory.  Specify a query
 string of `?all=1` to return all hosts, including disabled ones.
 
-Specify a query string of `?towervars=1` to add variables
+Specify a query string of `?ascendervars=1` to add variables
 to the hostvars of each host that specifies its enabled state and database ID.
 
 Specify a query string of `?subset=slice2of5` to produce an inventory that
@@ -37,3 +37,5 @@ Make a GET request to this resource with a query string similar to
 `?host=HOSTNAME` to retrieve a JSON object containing host variables for the
 specified host.  The response data is equivalent to that returned by passing
 the `--host HOSTNAME` argument to an inventory script.
+
+The parameter was called `towervars` before the rename, and that spelling is still accepted.

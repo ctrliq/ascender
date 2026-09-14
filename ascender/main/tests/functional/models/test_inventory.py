@@ -17,9 +17,9 @@ class TestInventoryScript:
         inventory.hosts.create(name='ahost', variables={"foo": "bar"})
         assert inventory.get_script_data(hostvars=True)['_meta']['hostvars']['ahost'] == {'foo': 'bar'}
 
-    def test_towervars(self, inventory):
+    def test_ascendervars(self, inventory):
         host = inventory.hosts.create(name='ahost')
-        assert inventory.get_script_data(hostvars=True, towervars=True)['_meta']['hostvars']['ahost'] == {
+        assert inventory.get_script_data(hostvars=True, ascendervars=True)['_meta']['hostvars']['ahost'] == {
             'remote_tower_enabled': 'true',
             'remote_tower_id': host.id,
             'remote_host_enabled': 'true',

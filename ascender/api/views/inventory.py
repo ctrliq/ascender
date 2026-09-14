@@ -302,7 +302,10 @@ class InventoryScriptView(RetrieveAPIView):
         obj = self.get_object()
         hostname = request.query_params.get('host', '')
         hostvars = bool(request.query_params.get('hostvars', ''))
-        towervars = bool(request.query_params.get('towervars', ''))
+        # Either spelling. The query string is a published parameter: a script
+        # of someone's asks for ?towervars=1, and that cannot be rewritten from
+        # here, so the Ascender name is read first and the old one after it.
+        ascendervars = bool(request.query_params.get('ascendervars', '') or request.query_params.get('towervars', ''))
         show_all = bool(request.query_params.get('all', ''))
         subset = request.query_params.get('subset', '')
         if subset:
@@ -320,7 +323,9 @@ class InventoryScriptView(RetrieveAPIView):
                 hosts_q['enabled'] = True
             host = get_object_or_404(obj.hosts, **hosts_q)
             return Response(host.variables_dict)
-        return Response(obj.get_script_data(hostvars=hostvars, towervars=towervars, show_all=show_all, slice_number=slice_number, slice_count=slice_count))
+        return Response(
+            obj.get_script_data(hostvars=hostvars, ascendervars=ascendervars, show_all=show_all, slice_number=slice_number, slice_count=slice_count)
+        )
 
 
 class InventoryTreeView(RetrieveAPIView):
