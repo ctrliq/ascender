@@ -42,6 +42,7 @@ from django.apps import apps
 
 # Ascender
 from ascender.conf.license import get_license
+from ascender.main.utils.licensing import OPEN_PRODUCT_NAME, SUBSCRIPTION_PRODUCT_NAME
 
 logger = logging.getLogger('awx.main.utils')
 
@@ -234,7 +235,7 @@ def get_ascender_http_client_headers():
     license = get_license().get('license_type', 'UNLICENSED')
     headers = {
         'Content-Type': 'application/json',
-        'User-Agent': '{} {} ({})'.format('AWX' if license == 'open' else 'Red Hat Ansible Automation Platform', get_ascender_version(), license),
+        'User-Agent': '{} {} ({})'.format(OPEN_PRODUCT_NAME if license == 'open' else SUBSCRIPTION_PRODUCT_NAME, get_ascender_version(), license),
     }
     return headers
 

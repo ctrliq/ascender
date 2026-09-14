@@ -13,7 +13,7 @@ def test_send_messages_as_POST():
         mock.patch('ascender.main.notifications.webhook_backend.get_ascender_http_client_headers') as version_mock,
     ):
         requests_mock.post.return_value.status_code = 200
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = webhook_backend.WebhookBackend('POST', None)
         message = EmailMessage(
             'test subject',
@@ -32,7 +32,7 @@ def test_send_messages_as_POST():
             url='http://example.com',
             auth=None,
             data=json.dumps({'text': 'test body'}, ensure_ascii=False).encode('utf-8'),
-            headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
+            headers={'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'},
             verify=True,
             timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
@@ -46,7 +46,7 @@ def test_send_messages_as_PUT():
         mock.patch('ascender.main.notifications.webhook_backend.get_ascender_http_client_headers') as version_mock,
     ):
         requests_mock.put.return_value.status_code = 200
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = webhook_backend.WebhookBackend('PUT', None)
         message = EmailMessage(
             'test subject 2',
@@ -65,7 +65,7 @@ def test_send_messages_as_PUT():
             url='http://example.com',
             auth=None,
             data=json.dumps({'text': 'test body 2'}, ensure_ascii=False).encode('utf-8'),
-            headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
+            headers={'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'},
             verify=True,
             timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
@@ -79,7 +79,7 @@ def test_send_messages_with_username():
         mock.patch('ascender.main.notifications.webhook_backend.get_ascender_http_client_headers') as version_mock,
     ):
         requests_mock.post.return_value.status_code = 200
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = webhook_backend.WebhookBackend('POST', None, username='userstring')
         message = EmailMessage(
             'test subject',
@@ -98,7 +98,7 @@ def test_send_messages_with_username():
             url='http://example.com',
             auth=('userstring', None),
             data=json.dumps({'text': 'test body'}, ensure_ascii=False).encode('utf-8'),
-            headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
+            headers={'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'},
             verify=True,
             timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
@@ -112,7 +112,7 @@ def test_send_messages_with_password():
         mock.patch('ascender.main.notifications.webhook_backend.get_ascender_http_client_headers') as version_mock,
     ):
         requests_mock.post.return_value.status_code = 200
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = webhook_backend.WebhookBackend('POST', None, password='passwordstring')
         message = EmailMessage(
             'test subject',
@@ -131,7 +131,7 @@ def test_send_messages_with_password():
             url='http://example.com',
             auth=(None, 'passwordstring'),
             data=json.dumps({'text': 'test body'}, ensure_ascii=False).encode('utf-8'),
-            headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
+            headers={'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'},
             verify=True,
             timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
@@ -145,7 +145,7 @@ def test_send_messages_with_username_and_password():
         mock.patch('ascender.main.notifications.webhook_backend.get_ascender_http_client_headers') as version_mock,
     ):
         requests_mock.post.return_value.status_code = 200
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = webhook_backend.WebhookBackend('POST', None, username='userstring', password='passwordstring')
         message = EmailMessage(
             'test subject',
@@ -164,7 +164,7 @@ def test_send_messages_with_username_and_password():
             url='http://example.com',
             auth=('userstring', 'passwordstring'),
             data=json.dumps({'text': 'test body'}, ensure_ascii=False).encode('utf-8'),
-            headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
+            headers={'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'},
             verify=True,
             timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
@@ -178,7 +178,7 @@ def test_send_messages_with_no_verify_ssl():
         mock.patch('ascender.main.notifications.webhook_backend.get_ascender_http_client_headers') as version_mock,
     ):
         requests_mock.post.return_value.status_code = 200
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = webhook_backend.WebhookBackend('POST', None, disable_ssl_verification=True)
         message = EmailMessage(
             'test subject',
@@ -197,7 +197,7 @@ def test_send_messages_with_no_verify_ssl():
             url='http://example.com',
             auth=None,
             data=json.dumps({'text': 'test body'}, ensure_ascii=False).encode('utf-8'),
-            headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
+            headers={'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'},
             verify=False,
             timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
@@ -211,7 +211,7 @@ def test_send_messages_with_additional_headers():
         mock.patch('ascender.main.notifications.webhook_backend.get_ascender_http_client_headers') as version_mock,
     ):
         requests_mock.post.return_value.status_code = 200
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = webhook_backend.WebhookBackend('POST', {'X-Test-Header1': 'test-content-1', 'X-Test-Header2': 'test-content-2'})
         message = EmailMessage(
             'test subject',
@@ -232,7 +232,7 @@ def test_send_messages_with_additional_headers():
             data=json.dumps({'text': 'test body'}, ensure_ascii=False).encode('utf-8'),
             headers={
                 'Content-Type': 'application/json',
-                'User-Agent': 'AWX 0.0.1.dev (open)',
+                'User-Agent': 'Ascender 0.0.1.dev (open)',
                 'X-Test-Header1': 'test-content-1',
                 'X-Test-Header2': 'test-content-2',
             },
@@ -254,7 +254,7 @@ def test_send_messages_with_redirects_ok():
             mock.Mock(status_code=307, headers={"Location": "http://redirect2.com"}),
             mock.Mock(status_code=200),
         ]
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = webhook_backend.WebhookBackend('POST', None)
         message = EmailMessage(
             'test subject',
@@ -274,7 +274,7 @@ def test_send_messages_with_redirects_ok():
             url='http://redirect2.com',
             auth=None,
             data=json.dumps({'text': 'test body'}, ensure_ascii=False).encode('utf-8'),
-            headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
+            headers={'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'},
             verify=True,
             timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
@@ -293,7 +293,7 @@ def test_send_messages_with_redirects_blank():
             mock.Mock(status_code=301, headers={"Location": "http://redirect1.com"}),
             mock.Mock(status_code=301, headers={}),  # 301 with no Location header
         ]
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = webhook_backend.WebhookBackend('POST', None, fail_silently=True)
         message = EmailMessage(
             'test subject',
@@ -331,7 +331,7 @@ def test_send_messages_with_redirects_max_retries_exceeded():
             mock.Mock(status_code=301, headers={"Location": "http://redirect4.com"}),
             mock.Mock(status_code=307, headers={"Location": "http://redirect5.com"}),
         ]
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = webhook_backend.WebhookBackend('POST', None, fail_silently=True)
         message = EmailMessage(
             'test subject',
@@ -364,7 +364,7 @@ def test_send_messages_with_error_status_code():
     ):
         # Return a 404 error status code
         requests_mock.post.return_value = mock.Mock(status_code=404)
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = webhook_backend.WebhookBackend('POST', None, fail_silently=True)
         message = EmailMessage(
             'test subject',
@@ -401,7 +401,7 @@ def test_send_messages_logs_base64_encoded_urls_in_redirects():
             mock.Mock(status_code=301, headers={"Location": dangerous_url}),
             mock.Mock(status_code=200),  # Success on redirect attempt
         ]
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = webhook_backend.WebhookBackend('POST', None, fail_silently=True)
         message = EmailMessage(
             'test subject',
@@ -444,7 +444,7 @@ def test_send_messages_logs_base64_encoded_urls_on_max_retries():
             mock.Mock(status_code=301, headers={"Location": "http://redirect4.com"}),
             mock.Mock(status_code=307, headers={"Location": dangerous_url_final}),
         ]
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = webhook_backend.WebhookBackend('POST', None, fail_silently=True)
         message = EmailMessage(
             'test subject',

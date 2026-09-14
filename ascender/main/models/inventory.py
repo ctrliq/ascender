@@ -56,7 +56,7 @@ from ascender.main.models.credential.injectors import _openstack_data
 from ascender.main.utils import _inventory_updates
 from ascender.main.utils.safe_yaml import sanitize_jinja
 from ascender.main.utils.execution_environments import to_container_path, get_control_plane_execution_environment
-from ascender.main.utils.licensing import server_product_name
+from ascender.main.utils.licensing import OPEN_PRODUCT_NAME, server_product_name
 
 __all__ = ['Inventory', 'Host', 'Group', 'InventorySource', 'InventoryUpdate', 'SmartInventoryMembership', 'HostMetric', 'HostMetricSummaryMonthly']
 
@@ -1514,7 +1514,7 @@ class PluginFileInjector(object):
         if self.plugin_name is not None:
             if self.get_alternate_plugin(source_vars) is not None:
                 pass  # user selected an alternate supported plugin, keep it
-            elif hasattr(self, 'downstream_namespace') and server_product_name() != 'AWX':
+            elif hasattr(self, 'downstream_namespace') and server_product_name() != OPEN_PRODUCT_NAME:
                 source_vars['plugin'] = f'{self.downstream_namespace}.{self.downstream_collection}.{self.plugin_name}'
             elif self.use_fqcn:
                 source_vars['plugin'] = f'{self.namespace}.{self.collection}.{self.plugin_name}'

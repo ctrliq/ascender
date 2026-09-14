@@ -41,6 +41,16 @@ MAX_INSTANCES = 9999999
 # matching. The diagnostic names move in their own change.
 logger = logging.getLogger('awx.main.utils.licensing')
 
+#: What the product calls itself, unsubscribed and subscribed. These are read
+#: back by callers deciding which product they are, so they are constants rather
+#: than literals repeated at each site: a comparison against a spelling is the
+#: kind of thing a rename breaks silently, by flipping a branch rather than
+#: failing.
+OPEN_PRODUCT_NAME = 'Ascender'
+SUBSCRIPTION_PRODUCT_NAME = 'Red Hat Ansible Automation Platform'
+
+
+
 
 def validate_entitlement_manifest(data):
     buff = io.BytesIO()
@@ -81,7 +91,7 @@ class OpenLicense(object):
             license_type='open',
             valid_key=True,
             subscription_name='OPEN',
-            product_name="AWX",
+            product_name=OPEN_PRODUCT_NAME,
         )
 
 
@@ -96,7 +106,7 @@ class Licenser(object):
         instance_count=0,
         license_date=0,
         license_type="UNLICENSED",
-        product_name="Red Hat Ansible Automation Platform",
+        product_name=SUBSCRIPTION_PRODUCT_NAME,
         valid_key=False,
     )
 
@@ -272,4 +282,4 @@ def get_licenser(*args, **kwargs):
 
 
 def server_product_name():
-    return 'AWX' if isinstance(get_licenser(), OpenLicense) else 'Red Hat Ansible Automation Platform'
+    return OPEN_PRODUCT_NAME if isinstance(get_licenser(), OpenLicense) else SUBSCRIPTION_PRODUCT_NAME

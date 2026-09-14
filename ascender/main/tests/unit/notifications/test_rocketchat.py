@@ -13,7 +13,7 @@ def test_send_messages():
         mock.patch('ascender.main.notifications.rocketchat_backend.get_ascender_http_client_headers') as version_mock,
     ):
         requests_mock.post.return_value.status_code = 201
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = rocketchat_backend.RocketChatBackend()
         message = EmailMessage(
             'test subject',
@@ -31,7 +31,7 @@ def test_send_messages():
         requests_mock.post.assert_called_once_with(
             'http://example.com',
             data='{"text": "test subject"}',
-            headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
+            headers={'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'},
             verify=True,
             timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
         )
@@ -100,7 +100,7 @@ def test_send_messages_with_no_verify_ssl():
         mock.patch('ascender.main.notifications.rocketchat_backend.get_ascender_http_client_headers') as version_mock,
     ):
         requests_mock.post.return_value.status_code = 201
-        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'}
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
         backend = rocketchat_backend.RocketChatBackend(rocketchat_no_verify_ssl=True)
         message = EmailMessage(
             'test subject',
@@ -118,7 +118,7 @@ def test_send_messages_with_no_verify_ssl():
         requests_mock.post.assert_called_once_with(
             'http://example.com',
             data='{"text": "test subject"}',
-            headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
+            headers={'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'},
             verify=False,
             timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
         )
