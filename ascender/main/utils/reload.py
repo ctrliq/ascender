@@ -12,7 +12,7 @@ logger = logging.getLogger('awx.main.utils.reload')
 def supervisor_service_command(command, service='*', communicate=True):
     """
     example use pattern of supervisorctl:
-    # supervisorctl restart tower-processes:receiver tower-processes:factcacher
+    # supervisorctl restart ascender-processes:receiver ascender-processes:factcacher
     """
     args = ['supervisorctl']
 
@@ -20,7 +20,7 @@ def supervisor_service_command(command, service='*', communicate=True):
     if supervisor_config_path:
         args.extend(['-c', supervisor_config_path])
 
-    args.extend([command, ':'.join(['tower-processes', service])])
+    args.extend([command, ':'.join(['ascender-processes', service])])
     logger.debug('Issuing command to {} services, args={}'.format(command, args))
     supervisor_process = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     if communicate:

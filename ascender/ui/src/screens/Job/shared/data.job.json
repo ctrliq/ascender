@@ -133,7 +133,7 @@
       "VIRTUAL_ENV": "/var/lib/awx/venv/ansible",
       "MFLAGS": "-w",
       "PATH": "/var/lib/awx/venv/ansible/bin:/var/lib/awx/venv/awx/bin:/var/lib/awx/venv/awx/bin:/usr/local/n/versions/node/10.15.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
-      "SUPERVISOR_GROUP_NAME": "tower-processes",
+      "SUPERVISOR_GROUP_NAME": "ascender-processes",
       "PWD": "/ascender_devel",
       "LANG": "\"en-us\"",
       "PS1": "(awx) ",

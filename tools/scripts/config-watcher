@@ -50,7 +50,7 @@ def main():
                     group = proc['group']
                     name = proc['name']
                     program = "{}:{}".format(group, name)
-                    if group == "tower-processes":
+                    if group == "ascender-processes":
                         sys.stderr.write('Restarting %s\n' % program)
                         rpc.supervisor.stopProcess(program)
                         rpc.supervisor.startProcess(program)

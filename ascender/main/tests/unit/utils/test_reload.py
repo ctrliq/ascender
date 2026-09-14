@@ -13,7 +13,7 @@ def test_produce_supervisor_command(mocker):
         [
             'supervisorctl',
             'restart',
-            'tower-processes:*',
+            'ascender-processes:*',
         ],
         stderr=-1,
         stdin=-1,

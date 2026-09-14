@@ -112,7 +112,7 @@
       "ANSIBLE_FORCE_COLOR": "True",
       "ANSIBLE_CACHE_PLUGIN": "jsonfile",
       "AWX_PRIVATE_DATA_DIR": "/tmp/ascender_13_r1ffeqze",
-      "SUPERVISOR_GROUP_NAME": "tower-processes",
+      "SUPERVISOR_GROUP_NAME": "ascender-processes",
       "SUPERVISOR_SERVER_URL": "unix:///tmp/supervisor.sock",
       "DJANGO_SETTINGS_MODULE": "awx.settings.development",
       "ANSIBLE_STDOUT_CALLBACK": "awx_display",
