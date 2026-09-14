@@ -17,6 +17,7 @@ import PaginatedTable, {
 import AdHocCommands from 'components/AdHocCommands/AdHocCommands';
 import InventoryGroupItem from './InventoryGroupItem';
 import InventoryGroupsDeleteModal from '../shared/InventoryGroupsDeleteModal';
+import { isReadOnlyInventoryType } from '../shared/utils';
 
 const QS_CONFIG = getQSConfig('group', {
   page: 1,
@@ -104,13 +105,11 @@ function InventoryGroupsList() {
     }
     return t`Select a row to delete`;
   };
-  const isNotConstructedInventory =
-    inventoryType !== 'constructed_inventory' &&
-    inventoryType !== 'federated_inventory';
+  const isNotReadOnlyInventory = !isReadOnlyInventoryType(inventoryType);
   const canAdd =
     actions &&
     Object.prototype.hasOwnProperty.call(actions, 'POST') &&
-    isNotConstructedInventory;
+    isNotReadOnlyInventory;
 
   return (
     <PaginatedTable
@@ -145,7 +144,7 @@ function InventoryGroupsList() {
       headerRow={
         <HeaderRow qsConfig={QS_CONFIG}>
           <HeaderCell sortKey="name">{t`Name`}</HeaderCell>
-          {isNotConstructedInventory && <HeaderCell>{t`Actions`}</HeaderCell>}
+          {isNotReadOnlyInventory && <HeaderCell>{t`Actions`}</HeaderCell>}
         </HeaderRow>
       }
       renderRow={(item, index) => (
@@ -182,7 +181,7 @@ function InventoryGroupsList() {
                   />,
                 ]
               : []),
-            ...(isNotConstructedInventory
+            ...(isNotReadOnlyInventory
               ? [
                   <Tooltip
                     content={renderTooltip()}

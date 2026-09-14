@@ -63,11 +63,14 @@ describe('<InventoryRelatedGroupListItem />', () => {
   });
 });
 
-describe('<InventoryRelatedGroupListItem> for constructed inventories', () => {
-  test('edit button hidden for constructed inventory', () => {
-    renderItem('/inventories/constructed_inventory/1/groups/2/nested_groups');
-    expect(
-      screen.queryByRole('link', { name: 'Edit Group' })
-    ).not.toBeInTheDocument();
-  });
+describe('<InventoryRelatedGroupListItem> for read-only inventories', () => {
+  test.each(['constructed_inventory', 'federated_inventory'])(
+    'edit button hidden for %s',
+    (inventoryType) => {
+      renderItem(`/inventories/${inventoryType}/1/groups/2/nested_groups`);
+      expect(
+        screen.queryByRole('link', { name: 'Edit Group' })
+      ).not.toBeInTheDocument();
+    }
+  );
 });
