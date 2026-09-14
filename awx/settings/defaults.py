@@ -38,12 +38,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # carries DATABASE_* for the compose environment and AWX_TEST_DATABASE_* for the
 # test settings, and a third scheme here would earn nothing: anything that needs
 # to point somewhere else is supplying a settings file anyway.
+#
+# The name and the user are the Ascender ones here, which costs nothing because
+# nothing deployed reads them. What a deployment actually connects to is set by
+# the operator, which derives the database name and user from deployment_type,
+# and those stay awx: renaming them means renaming a PostgreSQL role and
+# database that already hold the data, for a name almost nobody ever types.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'awx',
-        'USER': 'awx',
-        'PASSWORD': 'awxpass',
+        'NAME': 'ascender',
+        'USER': 'ascender',
+        'PASSWORD': 'ascenderpass',
         'HOST': '127.0.0.1',
         'PORT': '5432',
         'ATOMIC_REQUESTS': True,
