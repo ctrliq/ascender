@@ -190,7 +190,9 @@ function Job({ setBreadcrumb }: JobProps) {
       <div ref={ref}>
         <PFCard
           className={
-            typeSegment === 'workflow' ? 'ascender-job__workflow-card' : undefined
+            typeSegment === 'workflow'
+              ? 'ascender-job__workflow-card'
+              : undefined
           }
         >
           <RoutedTabs

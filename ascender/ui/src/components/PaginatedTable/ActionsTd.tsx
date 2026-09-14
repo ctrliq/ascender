@@ -19,7 +19,9 @@ export default function ActionsTd({
   const width = numActions * 40;
   return (
     <Td
-      className={['ascender-actions-td__cell', className].filter(Boolean).join(' ')}
+      className={['ascender-actions-td__cell', className]
+        .filter(Boolean)
+        .join(' ')}
       style={
         { '--pf-v6-c-table--cell--Width': `${width}px` } as React.CSSProperties
       }

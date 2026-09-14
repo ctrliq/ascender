@@ -70,7 +70,9 @@ function usedCapacity(instance: Partial<Instance>, t: Translate) {
       />
     );
   }
-  return <span className="ascender-tooltip__unavailable">{t`Unavailable`}</span>;
+  return (
+    <span className="ascender-tooltip__unavailable">{t`Unavailable`}</span>
+  );
 }
 
 export interface TooltipProps {

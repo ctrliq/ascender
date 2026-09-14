@@ -175,7 +175,7 @@ describe('<AppContainer />', () => {
     // of the speech bubble that toHaveTextContent would collapse)
     const dialog = await screen.findByRole('dialog');
     expect(dialog.querySelector('pre')!.textContent).toContain(
-      `<  AWX ${version}  >`
+      `<  Ascender Automation ${version}  >`
     );
 
     // close the about modal

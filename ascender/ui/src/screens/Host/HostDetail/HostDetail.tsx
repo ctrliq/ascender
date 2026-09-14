@@ -70,7 +70,10 @@ function HostDetail({ host }: HostDetailProps) {
 
   return (
     <CardBody>
-      <HostToggle className="ascender-host-detail__padding-bottom-40" host={host} />
+      <HostToggle
+        className="ascender-host-detail__padding-bottom-40"
+        host={host}
+      />
       <DetailList gutter="sm">
         <Detail label={t`Name`} value={name} dataCy="host-name" />
         <Detail

@@ -88,7 +88,10 @@ function VariablesDetail({
           name={name}
         />
       </div>
-      <div className="ascender-variables-detail__editor-wrapper" data-cy={valueCy}>
+      <div
+        className="ascender-variables-detail__editor-wrapper"
+        data-cy={valueCy}
+      >
         <CodeEditor
           id={`${dataCy}-preview`}
           mode={mode}

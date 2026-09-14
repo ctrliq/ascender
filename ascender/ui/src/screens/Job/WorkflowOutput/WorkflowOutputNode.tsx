@@ -117,7 +117,9 @@ function WorkflowOutputNode({
       transform={`translate(${nodePosition.x},${
         nodePosition.y - rootPosition.y
       })`}
-      className={job ? 'ascender-workflow-output-node__node-g--has-job' : undefined}
+      className={
+        job ? 'ascender-workflow-output-node__node-g--has-job' : undefined
+      }
       onClick={handleNodeClick}
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}

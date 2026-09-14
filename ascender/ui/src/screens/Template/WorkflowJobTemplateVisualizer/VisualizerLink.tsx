@@ -154,7 +154,9 @@ function VisualizerLink({
   return (
     <g
       id={`link-${link.source.id}-${link.target.id}`}
-      className={addingLink ? 'ascender-visualizer-link__link-g--inert' : undefined}
+      className={
+        addingLink ? 'ascender-visualizer-link__link-g--inert' : undefined
+      }
       onMouseEnter={handleLinkMouseEnter}
       onMouseLeave={handleLinkMouseLeave}
       ref={ref}

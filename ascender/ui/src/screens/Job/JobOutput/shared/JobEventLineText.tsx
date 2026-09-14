@@ -14,7 +14,9 @@ const JobEventLineText = ({
   ...props
 }: JobEventLineTextProps) => (
   <div
-    className={['ascender-job-event-line-text', className].filter(Boolean).join(' ')}
+    className={['ascender-job-event-line-text', className]
+      .filter(Boolean)
+      .join(' ')}
     {...props}
   >
     {children}

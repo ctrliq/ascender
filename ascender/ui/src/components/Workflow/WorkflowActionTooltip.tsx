@@ -27,7 +27,9 @@ function WorkflowActionTooltip({
           <div className="ascender-workflow-action-tooltip__arrow-outer" />
           <div className="ascender-workflow-action-tooltip__arrow-inner" />
         </div>
-        <div className="ascender-workflow-action-tooltip__actions">{actions}</div>
+        <div className="ascender-workflow-action-tooltip__actions">
+          {actions}
+        </div>
       </div>
     </foreignObject>
   );

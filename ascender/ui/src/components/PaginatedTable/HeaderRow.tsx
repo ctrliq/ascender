@@ -52,7 +52,10 @@ export default function HeaderRow({
     <Thead>
       <Tr ouiaId="paginated-table-header-row">
         {isExpandable && (
-          <PFTh className="ascender-header-row__th" screenReaderText={t`Expand`} />
+          <PFTh
+            className="ascender-header-row__th"
+            screenReaderText={t`Expand`}
+          />
         )}
         {isSelectable && (
           <PFTh

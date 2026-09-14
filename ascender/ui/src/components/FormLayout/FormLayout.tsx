@@ -39,7 +39,10 @@ export const FormFullWidthLayout = ({
   children,
   ...props
 }: LayoutProps) => (
-  <div className={join('ascender-form-full-width-layout', className)} {...props}>
+  <div
+    className={join('ascender-form-full-width-layout', className)}
+    {...props}
+  >
     {children}
   </div>
 );

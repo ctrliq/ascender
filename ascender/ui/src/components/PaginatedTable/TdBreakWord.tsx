@@ -15,7 +15,9 @@ export default function TdBreakWord({
 }: TdBreakWordProps) {
   return (
     <Td
-      className={['ascender-td-break-word__td', className].filter(Boolean).join(' ')}
+      className={['ascender-td-break-word__td', className]
+        .filter(Boolean)
+        .join(' ')}
       {...props}
     >
       {children}

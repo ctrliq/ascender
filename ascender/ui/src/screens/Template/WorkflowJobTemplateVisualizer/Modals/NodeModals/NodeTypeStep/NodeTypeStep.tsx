@@ -168,7 +168,10 @@ function NodeTypeStep({ isIdentifierRequired }: NodeTypeStepProps) {
           onUpdateNodeResource={nodeResourceHelpers.setValue}
         />
       )}
-      <Form className="ascender-node-type-step__margin-top-20" autoComplete="off">
+      <Form
+        className="ascender-node-type-step__margin-top-20"
+        autoComplete="off"
+      >
         <FormColumnLayout>
           <FormFullWidthLayout>
             {nodeTypeField.value === 'workflow_approval_template' && (
