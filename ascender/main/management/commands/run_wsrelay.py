@@ -58,7 +58,7 @@ class Command(BaseCommand):
         for h in hostnames:
             connection_color = '91'  # red
             h_safe = safe_name(h)
-            prefix = f'awx_{h_safe}'
+            prefix = f'ascender_{h_safe}'
             connection_state = data.get(f'{prefix}_connection', 'N/A')
             connection_started = 'N/A'
             connection_duration = 'N/A'
@@ -82,7 +82,7 @@ class Command(BaseCommand):
         host_stats = [('hostname', 'total', 'per minute')]
         for h in hostnames:
             h_safe = safe_name(h)
-            prefix = f'awx_{h_safe}'
+            prefix = f'ascender_{h_safe}'
             messages_total = data.get(f'{prefix}_messages_received', '0')
             messages_per_minute = data.get(f'{prefix}_messages_received_per_minute', '0')
 

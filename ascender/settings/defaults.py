@@ -315,7 +315,7 @@ JOB_EVENT_MAX_QUEUE_SIZE = 10000
 JOB_EVENT_MIGRATION_CHUNK_SIZE = 1000000
 
 # The prefix of the valkey key that stores metrics
-SUBSYSTEM_METRICS_VALKEY_KEY_PREFIX = "awx_metrics"
+SUBSYSTEM_METRICS_VALKEY_KEY_PREFIX = "ascender_metrics"
 
 # Histogram buckets for the callback_receiver_batch_events_insert_db metric
 SUBSYSTEM_METRICS_BATCH_INSERT_BUCKETS = [10, 50, 150, 350, 650, 2000]

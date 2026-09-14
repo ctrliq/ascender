@@ -10,10 +10,10 @@ m.pipe_execute() # save the values to Redis
 
 ## Endpoint reflects Redis
 
-The endpoint reflects whatever values are in Redis. The metrics are stored in a Redis hash set called `awx_metrics`, and each metric is a field in this hash set. When a POST or GET is made to the endpoint, the view will load the data stored in Redis, format it to be Prometheus-compatible, and return it as a response. You can view the metrics in Redis by connecting to an instance via a client.
+The endpoint reflects whatever values are in Redis. The metrics are stored in a Redis hash set called `ascender_metrics`, and each metric is a field in this hash set. When a POST or GET is made to the endpoint, the view will load the data stored in Redis, format it to be Prometheus-compatible, and return it as a response. You can view the metrics in Redis by connecting to an instance via a client.
 
 ```
-valkey /run/valkey/valkey.sock> hget awx_metrics callback_receiver_events_insert_db
+valkey /run/valkey/valkey.sock> hget ascender_metrics callback_receiver_events_insert_db
 "100"
 ```
 
@@ -120,9 +120,9 @@ Periodically, the `Metrics` object will broadcast the full metrics dataset to ot
 This data received from other metrics is stored in Redis as a JSON string. For example, in a cluster with three control nodes, each Redis instance will contain the following keys.
 
 ```
-awx_metrics_instance_awx_1
-awx_metrics_instance_awx_2
-awx_metrics_instance_awx_3
+ascender_metrics_instance_ascender_1
+ascender_metrics_instance_ascender_2
+ascender_metrics_instance_ascender_3
 ```
 
 The `api/v2/metrics` endpoint will load the data from each of these instances, format it into Prometheus, and return it as a response.

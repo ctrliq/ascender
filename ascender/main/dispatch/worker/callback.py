@@ -76,7 +76,7 @@ class CallbackBrokerWorker(BaseWorker):
         self.queue_pop = 0
         self.queue_name = settings.CALLBACK_QUEUE
         self.prof = AWXProfiler("CallbackBrokerWorker")
-        for key in self.valkey.keys('awx_callback_receiver_statistics_*'):
+        for key in self.valkey.keys('ascender_callback_receiver_statistics_*'):
             self.valkey.delete(key)
 
     @cached_property
@@ -118,7 +118,7 @@ class CallbackBrokerWorker(BaseWorker):
         # buffer stat recording to once per (by default) 5s
         if time.time() - self.last_stats > settings.JOB_EVENT_STATISTICS_INTERVAL:
             try:
-                self.valkey.set(f'awx_callback_receiver_statistics_{self.pid}', self.debug())
+                self.valkey.set(f'ascender_callback_receiver_statistics_{self.pid}', self.debug())
                 self.last_stats = time.time()
             except Exception:
                 logger.exception("encountered an error communicating with valkey")

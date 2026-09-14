@@ -26,11 +26,11 @@ class Control(object):
     def status(self, *args, **kwargs):
         r = valkey.Valkey.from_url(settings.BROKER_URL)
         if self.service == 'dispatcher':
-            stats = r.get(f'awx_{self.service}_statistics') or b''
+            stats = r.get(f'ascender_{self.service}_statistics') or b''
             return stats.decode('utf-8')
         else:
             workers = []
-            for key in r.keys('awx_callback_receiver_statistics_*'):
+            for key in r.keys('ascender_callback_receiver_statistics_*'):
                 workers.append(r.get(key).decode('utf-8'))
             return '\n'.join(workers)
 

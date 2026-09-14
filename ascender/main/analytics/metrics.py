@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from ascender.settings.typed import settings
 from prometheus_client import CollectorRegistry, Gauge, Info, generate_latest
@@ -52,44 +53,44 @@ def job_timing(window_minutes=JOB_TIMING_WINDOW_MINUTES):
 def metrics():
     REGISTRY = CollectorRegistry()
 
-    SYSTEM_INFO = Info('awx_system', 'AWX System Information', registry=REGISTRY)
-    ORG_COUNT = Gauge('awx_organizations_total', 'Number of organizations', registry=REGISTRY)
-    USER_COUNT = Gauge('awx_users_total', 'Number of users', registry=REGISTRY)
-    TEAM_COUNT = Gauge('awx_teams_total', 'Number of teams', registry=REGISTRY)
-    INV_COUNT = Gauge('awx_inventories_total', 'Number of inventories', registry=REGISTRY)
-    PROJ_COUNT = Gauge('awx_projects_total', 'Number of projects', registry=REGISTRY)
-    JT_COUNT = Gauge('awx_job_templates_total', 'Number of job templates', registry=REGISTRY)
-    WFJT_COUNT = Gauge('awx_workflow_job_templates_total', 'Number of workflow job templates', registry=REGISTRY)
+    SYSTEM_INFO = Info('ascender_system', 'Ascender System Information', registry=REGISTRY)
+    ORG_COUNT = Gauge('ascender_organizations_total', 'Number of organizations', registry=REGISTRY)
+    USER_COUNT = Gauge('ascender_users_total', 'Number of users', registry=REGISTRY)
+    TEAM_COUNT = Gauge('ascender_teams_total', 'Number of teams', registry=REGISTRY)
+    INV_COUNT = Gauge('ascender_inventories_total', 'Number of inventories', registry=REGISTRY)
+    PROJ_COUNT = Gauge('ascender_projects_total', 'Number of projects', registry=REGISTRY)
+    JT_COUNT = Gauge('ascender_job_templates_total', 'Number of job templates', registry=REGISTRY)
+    WFJT_COUNT = Gauge('ascender_workflow_job_templates_total', 'Number of workflow job templates', registry=REGISTRY)
     HOST_COUNT = Gauge(
-        'awx_hosts_total',
+        'ascender_hosts_total',
         'Number of hosts',
         [
             'type',
         ],
         registry=REGISTRY,
     )
-    SCHEDULE_COUNT = Gauge('awx_schedules_total', 'Number of schedules', registry=REGISTRY)
+    SCHEDULE_COUNT = Gauge('ascender_schedules_total', 'Number of schedules', registry=REGISTRY)
     USER_SESSIONS = Gauge(
-        'awx_sessions_total',
+        'ascender_sessions_total',
         'Number of sessions',
         [
             'type',
         ],
         registry=REGISTRY,
     )
-    RUNNING_JOBS = Gauge('awx_running_jobs_total', 'Number of running jobs on the system', registry=REGISTRY)
-    PENDING_JOBS = Gauge('awx_pending_jobs_total', 'Number of pending jobs on the system', registry=REGISTRY)
+    RUNNING_JOBS = Gauge('ascender_running_jobs_total', 'Number of running jobs on the system', registry=REGISTRY)
+    PENDING_JOBS = Gauge('ascender_pending_jobs_total', 'Number of pending jobs on the system', registry=REGISTRY)
     JOB_WAIT_AVERAGE = Gauge(
-        'awx_job_wait_seconds_average', 'Mean seconds a job waited before the dispatcher started it, over the recent window', registry=REGISTRY
+        'ascender_job_wait_seconds_average', 'Mean seconds a job waited before the dispatcher started it, over the recent window', registry=REGISTRY
     )
     JOB_WAIT_LONGEST = Gauge(
-        'awx_job_wait_seconds_longest', 'Longest seconds a job waited before the dispatcher started it, over the recent window', registry=REGISTRY
+        'ascender_job_wait_seconds_longest', 'Longest seconds a job waited before the dispatcher started it, over the recent window', registry=REGISTRY
     )
-    JOB_RUN_AVERAGE = Gauge('awx_job_run_seconds_average', 'Mean seconds a job ran once started, over the recent window', registry=REGISTRY)
-    JOB_RUN_LONGEST = Gauge('awx_job_run_seconds_longest', 'Longest seconds a job ran once started, over the recent window', registry=REGISTRY)
-    JOB_TIMING_SAMPLE = Gauge('awx_job_timing_sample_total', 'Number of jobs the timing gauges above were taken from', registry=REGISTRY)
+    JOB_RUN_AVERAGE = Gauge('ascender_job_run_seconds_average', 'Mean seconds a job ran once started, over the recent window', registry=REGISTRY)
+    JOB_RUN_LONGEST = Gauge('ascender_job_run_seconds_longest', 'Longest seconds a job ran once started, over the recent window', registry=REGISTRY)
+    JOB_TIMING_SAMPLE = Gauge('ascender_job_timing_sample_total', 'Number of jobs the timing gauges above were taken from', registry=REGISTRY)
     STATUS = Gauge(
-        'awx_status_total',
+        'ascender_status_total',
         'Status of Job launched',
         [
             'status',
@@ -98,7 +99,7 @@ def metrics():
     )
 
     INSTANCE_CAPACITY = Gauge(
-        'awx_instance_capacity',
+        'ascender_instance_capacity',
         'Capacity of each node in the system',
         [
             'hostname',
@@ -108,7 +109,7 @@ def metrics():
         registry=REGISTRY,
     )
     INSTANCE_CPU = Gauge(
-        'awx_instance_cpu',
+        'ascender_instance_cpu',
         'CPU cores on each node in the system',
         [
             'hostname',
@@ -117,7 +118,7 @@ def metrics():
         registry=REGISTRY,
     )
     INSTANCE_MEMORY = Gauge(
-        'awx_instance_memory',
+        'ascender_instance_memory',
         'RAM (Kb) on each node in the system',
         [
             'hostname',
@@ -126,7 +127,7 @@ def metrics():
         registry=REGISTRY,
     )
     INSTANCE_INFO = Info(
-        'awx_instance',
+        'ascender_instance',
         'Info about each node in the system',
         [
             'hostname',
@@ -136,7 +137,7 @@ def metrics():
         registry=REGISTRY,
     )
     INSTANCE_LAUNCH_TYPE = Gauge(
-        'awx_instance_launch_type_total',
+        'ascender_instance_launch_type_total',
         'Type of Job launched',
         [
             'node',
@@ -145,7 +146,7 @@ def metrics():
         registry=REGISTRY,
     )
     INSTANCE_STATUS = Gauge(
-        'awx_instance_status_total',
+        'ascender_instance_status_total',
         'Status of Job launched',
         [
             'node',
@@ -154,7 +155,7 @@ def metrics():
         registry=REGISTRY,
     )
     INSTANCE_CONSUMED_CAPACITY = Gauge(
-        'awx_instance_consumed_capacity',
+        'ascender_instance_consumed_capacity',
         'Consumed capacity of each node in the system',
         [
             'hostname',
@@ -164,7 +165,7 @@ def metrics():
         registry=REGISTRY,
     )
     INSTANCE_REMAINING_CAPACITY = Gauge(
-        'awx_instance_remaining_capacity',
+        'ascender_instance_remaining_capacity',
         'Remaining capacity of each node in the system',
         [
             'hostname',
@@ -174,10 +175,10 @@ def metrics():
         registry=REGISTRY,
     )
 
-    LICENSE_INSTANCE_TOTAL = Gauge('awx_license_instance_total', 'Total number of managed hosts provided by your license', registry=REGISTRY)
-    LICENSE_INSTANCE_FREE = Gauge('awx_license_instance_free', 'Number of remaining managed hosts provided by your license', registry=REGISTRY)
+    LICENSE_INSTANCE_TOTAL = Gauge('ascender_license_instance_total', 'Total number of managed hosts provided by your license', registry=REGISTRY)
+    LICENSE_INSTANCE_FREE = Gauge('ascender_license_instance_free', 'Number of remaining managed hosts provided by your license', registry=REGISTRY)
 
-    DATABASE_CONNECTIONS = Gauge('awx_database_connections_total', 'Number of connections to database', registry=REGISTRY)
+    DATABASE_CONNECTIONS = Gauge('ascender_database_connections_total', 'Number of connections to database', registry=REGISTRY)
 
     license_info = get_license()
     SYSTEM_INFO.info(
@@ -266,7 +267,32 @@ def metrics():
         for status, value in statuses.items():
             INSTANCE_STATUS.labels(node=node, status=status).set(value)
 
-    return generate_latest(registry=REGISTRY)
+    return with_former_names(generate_latest(registry=REGISTRY))
 
 
-__all__ = ['metrics']
+#: The metric names were awx_ before the rename, and a Prometheus name is a
+#: contract: a dashboard, a recording rule and an alert all key on it, and a
+#: rename that only renames stops them matching with nothing to say why. So each
+#: family is exposed twice, under both names, and the old one can be dropped once
+#: the dashboards have moved.
+FORMER_METRIC_PREFIX = 'awx_'
+ASCENDER_METRIC_PREFIX = 'ascender_'
+
+_HELP_OR_TYPE = re.compile(r'^(# (?:HELP|TYPE) )' + ASCENDER_METRIC_PREFIX, re.MULTILINE)
+_SAMPLE = re.compile(r'^' + ASCENDER_METRIC_PREFIX + r'(?=[A-Za-z0-9_]*[\s{])', re.MULTILINE)
+
+
+def with_former_names(payload):
+    """The exposition text, followed by the same families under their awx_ names.
+
+    Operates on the metric name alone, at the start of a HELP line, a TYPE line
+    or a sample line, so a label value that happens to contain the prefix is
+    left alone.
+    """
+    text = payload.decode('utf-8')
+    former = _HELP_OR_TYPE.sub(r'\1' + FORMER_METRIC_PREFIX, text)
+    former = _SAMPLE.sub(FORMER_METRIC_PREFIX, former)
+    return payload + former.encode('utf-8')
+
+
+__all__ = ['metrics', 'with_former_names']

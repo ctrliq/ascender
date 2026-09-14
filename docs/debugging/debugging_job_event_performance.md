@@ -52,10 +52,10 @@ The other log message above is an overflow in the `job_events-49` group. Overflo
 valkey-cli -s /var/run/valkey/valkey.sock
 
 valkey /var/run/valkey/valkey.sock> keys *
-1) "awx_dispatcher_statistics"
+1) "ascender_dispatcher_statistics"
 2) "callback_tasks"
 3) "broadcast_websocket_stats"
-4) "awx_callback_receiver_statistics_105217"
+4) "ascender_callback_receiver_statistics_105217"
 5) "asgi:group:broadcast-group_send"
 6) "asgispecific.2061d193ea1c4dd487d8f455dfeabd6a!"
 ```

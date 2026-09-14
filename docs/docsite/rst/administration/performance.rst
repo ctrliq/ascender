@@ -76,7 +76,7 @@ Metrics enhancements
 
 Metrics added in this release to track:
 
-- **awx_database_connections_total** - Tracks current number of open database connections. When included in monitoring, can help identify when errors have occurred due lack of available database connections.
+- **ascender_database_connections_total** - Tracks current number of open database connections. When included in monitoring, can help identify when errors have occurred due lack of available database connections.
 
 - **callback_receiver_event_processing_avg_seconds** - Proxy for “how far behind the callback receiver workers are in processing output". If this number stays large, consider horizontally scaling the control plane and reducing the ``capacity_adjustment`` value on the node.
 

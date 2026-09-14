@@ -130,7 +130,7 @@ class AWXConsumerBase(object):
     def record_statistics(self):
         if time.time() - self.last_stats > 1:  # buffer stat recording to once per second
             try:
-                self.valkey.set(f'awx_{self.name}_statistics', self.pool.debug())
+                self.valkey.set(f'ascender_{self.name}_statistics', self.pool.debug())
             except Exception:
                 logger.exception(f"encountered an error communicating with valkey to store {self.name} statistics")
             self.last_stats = time.time()

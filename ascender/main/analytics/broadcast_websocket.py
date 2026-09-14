@@ -117,29 +117,29 @@ class RelayWebsocketStats:
         self.remote_name = safe_name(self._remote_hostname)
 
         self._messages_received_total = Counter(
-            f'awx_{self.remote_name}_messages_received_total',
+            f'ascender_{self.remote_name}_messages_received_total',
             'Number of messages received, to be forwarded, by the broadcast websocket system',
             registry=self._registry,
         )
         self._messages_received_current_conn = Gauge(
-            f'awx_{self.remote_name}_messages_received_currrent_conn',
+            f'ascender_{self.remote_name}_messages_received_currrent_conn',
             'Number forwarded messages received by the broadcast websocket system, for the duration of the current connection',
             registry=self._registry,
         )
         self._connection = Enum(
-            f'awx_{self.remote_name}_connection', 'Websocket broadcast connection', states=['disconnected', 'connected'], registry=self._registry
+            f'ascender_{self.remote_name}_connection', 'Websocket broadcast connection', states=['disconnected', 'connected'], registry=self._registry
         )
         self._connection.state('disconnected')
-        self._connection_start = Gauge(f'awx_{self.remote_name}_connection_start', 'Time the connection was established', registry=self._registry)
+        self._connection_start = Gauge(f'ascender_{self.remote_name}_connection_start', 'Time the connection was established', registry=self._registry)
 
         self._messages_received_per_minute = Gauge(
-            f'awx_{self.remote_name}_messages_received_per_minute', 'Messages received per minute', registry=self._registry
+            f'ascender_{self.remote_name}_messages_received_per_minute', 'Messages received per minute', registry=self._registry
         )
         self._internal_messages_received_per_minute = FixedSlidingWindow()
 
     def unregister(self):
-        self._registry.unregister(f'awx_{self.remote_name}_messages_received')
-        self._registry.unregister(f'awx_{self.remote_name}_connection')
+        self._registry.unregister(f'ascender_{self.remote_name}_messages_received')
+        self._registry.unregister(f'ascender_{self.remote_name}_connection')
 
     def record_message_received(self):
         self._internal_messages_received_per_minute.record()

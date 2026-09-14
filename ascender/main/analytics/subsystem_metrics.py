@@ -224,7 +224,7 @@ class Metrics(MetricsNamespace):
         if instance_name:
             self.instance_name = instance_name
         elif is_testing():
-            self.instance_name = "awx_testing"
+            self.instance_name = "ascender_testing"
         else:
             self.instance_name = settings.CLUSTER_HOST_ID  # Same as Instance.objects.my_hostname() BUT we do not need to import Instance
 
@@ -340,7 +340,7 @@ class Metrics(MetricsNamespace):
 
     def load_other_metrics(self, request):
         # data received from other nodes are stored in their own keys
-        # e.g., awx_metrics_instance_awx-1, awx_metrics_instance_awx-2
+        # e.g., ascender_metrics_instance_ascender-1, ascender_metrics_instance_ascender-2
         # this method looks for keys with "_instance_" in the name and loads the data
         # also filters data based on request query params
         # if additional filtering is added, update metrics_view.md
