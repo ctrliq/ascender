@@ -53,7 +53,9 @@ aws_secretsmanager_credential = "awx.main.credential_plugins.aws_secretsmanager:
 github_app_lookup = "awx.main.credential_plugins.github_app:github_app_plugin"
 
 [tool.setuptools]
-packages = ["awx"]
+# `ascender` is a handful of lines that make every awx module importable under
+# the Ascender name as well. See ascender/__init__.py.
+packages = ["awx", "ascender"]
 zip-safe = false
 include-package-data = true
 
