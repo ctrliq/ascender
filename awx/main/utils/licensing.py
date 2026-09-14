@@ -260,7 +260,7 @@ def get_licenser(*args, **kwargs):
     from awx.main.utils.licensing import Licenser, OpenLicense
 
     try:
-        if os.path.exists('/var/lib/awx/.tower_version'):
+        if os.path.exists('/var/lib/ascender/.tower_version'):
             return Licenser(*args, **kwargs)
         else:
             return OpenLicense()

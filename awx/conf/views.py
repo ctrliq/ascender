@@ -175,7 +175,7 @@ class SettingLoggingTest(GenericAPIView):
         protocol = getattr(settings, 'LOG_AGGREGATOR_PROTOCOL', None)
 
         try:
-            subprocess.check_output(['rsyslogd', '-N1', '-f', '/var/lib/awx/rsyslog/rsyslog.conf'], stderr=subprocess.STDOUT)
+            subprocess.check_output(['rsyslogd', '-N1', '-f', '/var/lib/ascender/rsyslog/rsyslog.conf'], stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as exc:
             return Response({'error': exc.output}, status=status.HTTP_400_BAD_REQUEST)
 

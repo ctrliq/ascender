@@ -169,7 +169,7 @@ STATICFILES_DIRS = [
 
 # Absolute filesystem path to the directory where static file are collected via
 # the collectstatic command.
-STATIC_ROOT = '/var/lib/awx/public/static'
+STATIC_ROOT = '/var/lib/ascender/public/static'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
@@ -188,12 +188,12 @@ LOGIN_URL = '/api/login/'
 
 # Absolute filesystem path to the directory to host projects (with playbooks).
 # This directory should not be web-accessible.
-PROJECTS_ROOT = '/var/lib/awx/projects/'
+PROJECTS_ROOT = '/var/lib/ascender/projects/'
 
 # Absolute filesystem path to the directory for job status stdout (default for
 # development and tests, default for production defined in production.py). This
 # directory should not be web-accessible
-JOBOUTPUT_ROOT = '/var/lib/awx/job_status/'
+JOBOUTPUT_ROOT = '/var/lib/ascender/job_status/'
 
 # Absolute filesystem path to the directory to store logs
 LOG_ROOT = '/var/log/tower/'
@@ -971,7 +971,7 @@ LOG_AGGREGATOR_VERIFY_CERT = True
 LOG_AGGREGATOR_LEVEL = 'INFO'
 LOG_AGGREGATOR_ACTION_QUEUE_SIZE = 131072
 LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB = 1  # Action queue
-LOG_AGGREGATOR_MAX_DISK_USAGE_PATH = '/var/lib/awx'
+LOG_AGGREGATOR_MAX_DISK_USAGE_PATH = '/var/lib/ascender'
 LOG_AGGREGATOR_RSYSLOGD_DEBUG = False
 LOG_AGGREGATOR_RSYSLOGD_ERROR_LOG_FILE = '/var/log/tower/rsyslog.err'
 API_400_ERROR_LOG_FORMAT = 'status {status_code} received by user {user_name} attempting to access {url_path} from {remote_addr}'

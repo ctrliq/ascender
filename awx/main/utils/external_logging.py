@@ -42,7 +42,7 @@ def construct_rsyslog_conf_template(settings=settings):
     timeout = getattr(settings, 'LOG_AGGREGATOR_TCP_TIMEOUT', 5)
     action_queue_size = getattr(settings, 'LOG_AGGREGATOR_ACTION_QUEUE_SIZE', 131072)
     max_disk_space_action_queue = getattr(settings, 'LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB', 1)
-    spool_directory = getattr(settings, 'LOG_AGGREGATOR_MAX_DISK_USAGE_PATH', '/var/lib/awx').rstrip('/')
+    spool_directory = getattr(settings, 'LOG_AGGREGATOR_MAX_DISK_USAGE_PATH', '/var/lib/ascender').rstrip('/')
     error_log_file = getattr(settings, 'LOG_AGGREGATOR_RSYSLOGD_ERROR_LOG_FILE', '')
 
     queue_options = [
@@ -61,14 +61,14 @@ def construct_rsyslog_conf_template(settings=settings):
     ]
 
     if not os.access(spool_directory, os.W_OK):
-        spool_directory = '/var/lib/awx'
+        spool_directory = '/var/lib/ascender'
 
     max_bytes = settings.MAX_EVENT_RES_DATA
     if settings.LOG_AGGREGATOR_RSYSLOGD_DEBUG:
         parts.append('$DebugLevel 2')
     parts.extend(
         [
-            f'global (maxMessageSize="{max_bytes}" workDirectory="/var/lib/awx/rsyslog")',
+            f'global (maxMessageSize="{max_bytes}" workDirectory="/var/lib/ascender/rsyslog")',
             'module(load="imptcp")',
             'input(type="imptcp" Path="' + settings.LOGGING['handlers']['external_logger']['address'] + '" unlink="on")',
             'template(name="awx" type="string" string="%rawmsg-after-pri%")',
@@ -168,10 +168,10 @@ def construct_rsyslog_conf_template(settings=settings):
 def reconfigure_rsyslog():
     tmpl = construct_rsyslog_conf_template()
     # Write config to a temp file then move it to preserve atomicity
-    with tempfile.TemporaryDirectory(dir='/var/lib/awx/rsyslog/', prefix='rsyslog-conf-') as temp_dir:
+    with tempfile.TemporaryDirectory(dir='/var/lib/ascender/rsyslog/', prefix='rsyslog-conf-') as temp_dir:
         path = temp_dir + '/rsyslog.conf.temp'
         with open(path, 'w') as f:
             os.chmod(path, 0o640)
             f.write(tmpl + '\n')
-        shutil.move(path, '/var/lib/awx/rsyslog/rsyslog.conf')
+        shutil.move(path, '/var/lib/ascender/rsyslog/rsyslog.conf')
     supervisor_service_command(command='restart', service='awx-rsyslogd')

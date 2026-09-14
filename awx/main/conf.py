@@ -736,11 +736,11 @@ register(
 register(
     'LOG_AGGREGATOR_MAX_DISK_USAGE_PATH',
     field_class=fields.CharField,
-    default='/var/lib/awx',
+    default='/var/lib/ascender',
     label=_('File system location for rsyslogd disk persistence'),
     help_text=_(
         'Location to persist logs that should be retried after an outage '
-        'of the external log aggregator (defaults to /var/lib/awx). '
+        'of the external log aggregator (defaults to /var/lib/ascender). '
         'Equivalent to the rsyslogd queue.spoolDirectory setting.'
     ),
     category=_('Logging'),
