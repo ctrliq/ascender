@@ -4,7 +4,7 @@
 services:
 {% if editable_dependencies | length > 0 %}
   init_ascender:
-    image: "{{ awx_image }}:{{ awx_image_tag }}"
+    image: "{{ ascender_image }}:{{ ascender_image_tag }}"
     container_name: tools_init_ascender
     command: /ascender_devel/tools/docker-compose/editable_dependencies/install.sh
     user: root
@@ -25,7 +25,7 @@ services:
   # Primary Ascender Development Container
   ascender_{{ container_postfix }}:
     user: "{{ ansible_user_uid }}"
-    image: "{{ awx_image }}:{{ awx_image_tag }}"
+    image: "{{ ascender_image }}:{{ ascender_image_tag }}"
     container_name: tools_ascender_{{ container_postfix }}
     hostname: ascender_{{ container_postfix }}
     command: launch_awx.sh
@@ -237,7 +237,7 @@ services:
       - "../../docker-compose/_sources/receptor/receptor-hop.conf:/etc/receptor/receptor.conf"
   {% for i in range(execution_node_count|int) %}
   receptor-{{ loop.index }}:
-    image: "{{ awx_image }}:{{ awx_image_tag }}"
+    image: "{{ ascender_image }}:{{ ascender_image_tag }}"
     user: "{{ ansible_user_uid }}"
     container_name: tools_receptor_{{ loop.index }}
     hostname: receptor-{{ loop.index }}

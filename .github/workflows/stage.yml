@@ -87,13 +87,13 @@ jobs:
             -e registry=ghcr.io \
             -e registry_username=${{ github.actor }} \
             -e registry_password=${{ secrets.GITHUB_TOKEN }} \
-            -e awx_image=${{ github.repository }} \
-            -e awx_version=${{ github.event.inputs.version }} \
-            -e awx_image_tag=${{ github.event.inputs.version }}-${{ matrix.arch }} \
+            -e ascender_image=${{ github.repository }} \
+            -e ascender_version=${{ github.event.inputs.version }} \
+            -e ascender_image_tag=${{ github.event.inputs.version }}-${{ matrix.arch }} \
             -e ansible_python_interpreter=$(which python3) \
             -e push=yes \
             -e tag_latest=no \
-            -e awx_official=no \
+            -e ascender_official=no \
             -e build_platforms=linux/${{ matrix.arch }} \
             -e "build_cache_from=type=gha,scope=${{ github.repository }}-release-${{ matrix.arch }}" \
             -e "build_cache_to=type=gha,scope=${{ github.repository }}-release-${{ matrix.arch }},mode=max"
@@ -177,6 +177,6 @@ jobs:
         run: |
           ansible-playbook -v tools/ansible/stage.yml \
             -e repo=${{ github.repository }} \
-            -e awx_image=ghcr.io/${{ github.repository }} \
+            -e ascender_image=ghcr.io/${{ github.repository }} \
             -e version=${{ github.event.inputs.version }} \
             -e github_token=${{ secrets.GITHUB_TOKEN }}

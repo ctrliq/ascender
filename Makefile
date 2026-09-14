@@ -163,7 +163,7 @@ version_file:
 	if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	$(PYTHON) -c "import ascender; print(ascender.__version__)" > /var/lib/ascender/.awx_version; \
+	$(PYTHON) -c "import ascender; print(ascender.__version__)" > /var/lib/ascender/.ascender_version; \
 
 ## Refresh development environment after pulling new code.
 refresh: clean requirements_dev version_file develop migrate
@@ -505,8 +505,8 @@ docker-compose-sources: .git/hooks/pre-commit
 	fi;
 
 	ansible-playbook -i tools/docker-compose/inventory tools/docker-compose/ansible/sources.yml \
-	    -e awx_image=$(DEV_DOCKER_TAG_BASE)/ascender_devel \
-	    -e awx_image_tag=$(COMPOSE_TAG) \
+	    -e ascender_image=$(DEV_DOCKER_TAG_BASE)/ascender_devel \
+	    -e ascender_image_tag=$(COMPOSE_TAG) \
 	    -e receptor_image=$(RECEPTOR_IMAGE) \
 	    -e control_plane_node_count=$(CONTROL_PLANE_NODE_COUNT) \
 	    -e execution_node_count=$(EXECUTION_NODE_COUNT) \

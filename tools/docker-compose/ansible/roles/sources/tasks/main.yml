@@ -82,8 +82,8 @@
 
 - name: Set global version if not provided
   set_fact:
-    awx_image_tag: "{{ lookup('file', playbook_dir + '/../../../VERSION') }}"
-  when: awx_image_tag is not defined
+    ascender_image_tag: "{{ lookup('file', playbook_dir + '/../../../VERSION') }}"
+  when: ascender_image_tag is not defined
 
 - name: Generate Private RSA key for signing work
   command: openssl genrsa -out {{ work_sign_private_keyfile }} {{ receptor_rsa_bits }}

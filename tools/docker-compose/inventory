@@ -15,5 +15,5 @@ localhost ansible_connection=local ansible_python_interpreter=auto
 # pg_username=""
 # pg_hostname=""
 
-# awx_image="ghcr.io/ansible/ascender_devel"
+# ascender_image="ghcr.io/ctrliq/ascender_devel"
 # migrate_local_docker=false

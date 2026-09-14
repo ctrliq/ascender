@@ -4,13 +4,13 @@
     path: "../../../awx-logos"
   register: logosdir
   failed_when: logosdir.stat.isdir is not defined or not logosdir.stat.isdir
-  when: awx_official|default(false)|bool
+  when: ascender_official|default(false)|bool
 
 - name: Copy logos for inclusion in sdist
   copy:
     src: "../../../awx-logos/awx/ui/client/assets/"
     dest: "../../ascender/ui/public/static/media/"
-  when: awx_official|default(false)|bool
+  when: ascender_official|default(false)|bool
 
 - name: Authenticate with Docker registry before multi-arch build
   shell: echo "{{ registry_password }}" | docker login {{ registry }} -u "{{ registry_username }}" --password-stdin
@@ -22,16 +22,16 @@
     - registry_password is defined
 
 - set_fact:
-    _image_ref: "{{ (registry + '/') if registry is defined else '' }}{{ awx_image }}"
+    _image_ref: "{{ (registry + '/') if registry is defined else '' }}{{ ascender_image }}"
 
 - set_fact:
     command_to_run: >-
       docker buildx build
-      -t {{ _image_ref }}:{{ awx_image_tag }}
+      -t {{ _image_ref }}:{{ ascender_image_tag }}
       {{ ('-t ' + _image_ref + ':latest') if ((push | default(false) | bool) and (tag_latest | default(true) | bool)) else '' }}
       -f {{ dockerfile_name }}
-      --build-arg VERSION={{ awx_version }}
-      --build-arg SETUPTOOLS_SCM_PRETEND_VERSION={{ awx_version }}
+      --build-arg VERSION={{ ascender_version }}
+      --build-arg SETUPTOOLS_SCM_PRETEND_VERSION={{ ascender_version }}
       --build-arg HEADLESS={{ headless }}
       --platform={{ build_platforms if (push | default(false) | bool) else 'linux/' + (ansible_facts['architecture'] | replace('x86_64', 'amd64') | replace('aarch64', 'arm64')) }}
       --provenance=false
