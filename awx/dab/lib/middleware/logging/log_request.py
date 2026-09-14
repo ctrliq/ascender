@@ -2,9 +2,12 @@ import logging
 import signal
 import traceback
 import uuid
-from inspect import isfunction
 
-from asgiref.sync import iscoroutinefunction, markcoroutinefunction
+# Straight from inspect rather than through asgiref.sync: on 3.12 and later
+# asgiref only re-exports these, and it annotates its re-export with a bare
+# TypeVar that ty cannot solve, so the markcoroutinefunction(self) below is
+# rejected as ill-typed when imported that way.
+from inspect import iscoroutinefunction, isfunction, markcoroutinefunction
 
 from awx.dab.lib.logging import thread_local
 

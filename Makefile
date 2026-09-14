@@ -202,13 +202,18 @@ UVICORN_WORKERS ?= 5
 # AWX_MOUNT_PATH is the ingress prefix the stack serves under, and --root-path is
 # what uwsgi's mount did with it: tell the application which prefix nginx has
 # already matched, so a reverse URL carries it and a request below it resolves.
-# Unset, which is the default, it adds nothing.
+#
+# uvicorn builds the request path as root_path + path, so the prefix must not
+# end in a slash: "/" or "/awx/" would turn /api/ into //api/ and 404 every
+# request. The trailing slash is stripped, which also makes the compose
+# default of "/" mean what uwsgi's mount made it mean: no prefix at all.
 uvicorn: collectstatic
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
+	root_path="$${AWX_MOUNT_PATH%/}"; \
 	uvicorn --host 127.0.0.1 --port 8051 --workers $(UVICORN_WORKERS) --ws auto --no-server-header \
-		$${AWX_MOUNT_PATH:+--root-path "$$AWX_MOUNT_PATH"} awx.asgi:channel_layer
+		$${root_path:+--root-path "$$root_path"} awx.asgi:channel_layer
 
 awx-autoreload:
 	@/awx_devel/tools/docker-compose/awx-autoreload /awx_devel/awx
@@ -313,7 +318,7 @@ api-lint:
 ## rather than part of the build, its committed output is what everything else
 ## consumes, and its peer range wants TypeScript 5 where this project is on 6.
 ## npx fetches it for the length of this command and leaves nothing behind.
-ui-api-types: awx-link
+ui-api-types: awx-link awx/ui/node_modules
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \

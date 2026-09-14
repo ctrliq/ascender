@@ -30,6 +30,18 @@ export function getInventoryPath(
   return url[inventory.kind as keyof typeof url];
 }
 
+/**
+ * Constructed and federated inventories only present hosts and groups that
+ * belong to their input inventories, and the api refuses to create or
+ * associate either on them directly, so the ui shows them read-only.
+ */
+export function isReadOnlyInventoryType(inventoryType?: string | null) {
+  return (
+    inventoryType === 'constructed_inventory' ||
+    inventoryType === 'federated_inventory'
+  );
+}
+
 // The vmware source supports two inventory plugins: the deprecated
 // community.vmware collection (the default) and its vmware.vmware
 // replacement. The choice is carried in the `plugin` key of source_vars.

@@ -103,10 +103,15 @@ def _ctit_db_wrapper(trans_safe=False):
     except DatabaseError as e:
         if trans_safe:
             logger.warning('Database settings are not available, using defaults. error: %s', e)
-            cause = e.__cause__
-            if cause and hasattr(cause, 'sqlstate'):
-                sqlstate = cause.sqlstate
-                sqlstate_str = psycopg.errors.lookup(sqlstate)
+            # A refused connection carries no SQLSTATE: psycopg sets the
+            # attribute to None, and lookup() would raise on it, turning the
+            # warning above into a traceback that hides the real message.
+            sqlstate = getattr(e.__cause__, 'sqlstate', None)
+            if sqlstate:
+                try:
+                    sqlstate_str = psycopg.errors.lookup(sqlstate).__name__
+                except KeyError:
+                    sqlstate_str = 'unknown'
                 logger.error('SQL Error state: {} - {}'.format(sqlstate, sqlstate_str))
         else:
             logger.exception('Error modifying something related to database settings.')

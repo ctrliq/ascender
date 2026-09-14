@@ -131,17 +131,20 @@ describe('<InventoryGroupDetail />', () => {
     });
   });
 
-  describe('Cannot edit or delete constructed inventory group', () => {
-    test('should not show edit or delete buttons', async () => {
-      renderAt('/inventories/constructed_inventory/1/groups/1/details');
+  describe.each(['constructed_inventory', 'federated_inventory'])(
+    'Cannot edit or delete %s group',
+    (inventoryType) => {
+      test('should not show edit or delete buttons', async () => {
+        renderAt(`/inventories/${inventoryType}/1/groups/1/details`);
 
-      await screen.findByText('Foo');
-      expect(
-        screen.queryByRole('button', { name: 'Edit' })
-      ).not.toBeInTheDocument();
-      expect(
-        screen.queryByRole('button', { name: 'Delete' })
-      ).not.toBeInTheDocument();
-    });
-  });
+        await screen.findByText('Foo');
+        expect(
+          screen.queryByRole('button', { name: 'Edit' })
+        ).not.toBeInTheDocument();
+        expect(
+          screen.queryByRole('button', { name: 'Delete' })
+        ).not.toBeInTheDocument();
+      });
+    }
+  );
 });

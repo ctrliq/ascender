@@ -254,7 +254,7 @@ describe('<InventoryGroupHostList />', () => {
   });
 });
 
-describe('<InventoryGroupHostList> for constructed inventories', () => {
+describe('<InventoryGroupHostList> for read-only inventories', () => {
   beforeEach(() => {
     vi.mocked(GroupsAPI.readAllHosts).mockResolvedValue({
       data: { ...mockHosts },
@@ -273,14 +273,17 @@ describe('<InventoryGroupHostList> for constructed inventories', () => {
     vi.clearAllMocks();
   });
 
-  test('Should not show associate, or disassociate button', async () => {
-    renderUnder('/inventories/constructed_inventory/1/groups/2/nested_hosts');
-    await screen.findAllByRole('link', { name: /dummy/ });
-    expect(
-      screen.queryByRole('button', { name: 'Add' })
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole('button', { name: 'Disassociate' })
-    ).not.toBeInTheDocument();
-  });
+  test.each(['constructed_inventory', 'federated_inventory'])(
+    'Should not show associate, or disassociate button for %s',
+    async (inventoryType) => {
+      renderUnder(`/inventories/${inventoryType}/1/groups/2/nested_hosts`);
+      await screen.findAllByRole('link', { name: /dummy/ });
+      expect(
+        screen.queryByRole('button', { name: 'Add' })
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'Disassociate' })
+      ).not.toBeInTheDocument();
+    }
+  );
 });

@@ -65,10 +65,13 @@ describe('<InventoryGroupItem />', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('edit button should be hidden from constructed inventory group', () => {
-    renderItem(mockGroup, '/inventories/constructed_inventory/42/groups');
-    expect(
-      screen.queryByRole('link', { name: 'Edit Group' })
-    ).not.toBeInTheDocument();
-  });
+  test.each(['constructed_inventory', 'federated_inventory'])(
+    'edit button should be hidden from %s group',
+    (inventoryType) => {
+      renderItem(mockGroup, `/inventories/${inventoryType}/42/groups`);
+      expect(
+        screen.queryByRole('link', { name: 'Edit Group' })
+      ).not.toBeInTheDocument();
+    }
+  );
 });
