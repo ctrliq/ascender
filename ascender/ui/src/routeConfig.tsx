@@ -25,9 +25,6 @@ const Organizations = React.lazy(() => import('screens/Organization'));
 const Projects = React.lazy(() => import('screens/Project'));
 const Schedules = React.lazy(() => import('screens/Schedule'));
 const Settings = React.lazy(() => import('screens/Setting'));
-const SubscriptionUsage = React.lazy(
-  () => import('screens/SubscriptionUsage/SubscriptionUsage')
-);
 const Teams = React.lazy(() => import('screens/Team'));
 const Templates = React.lazy(() => import('screens/Template'));
 const TopologyView = React.lazy(() => import('screens/TopologyView'));
@@ -88,11 +85,6 @@ function getRouteConfig(userProfile: Partial<UserProfile> = {}) {
           title: <Trans>Host Metrics</Trans>,
           path: '/host_metrics',
           screen: HostMetrics,
-        },
-        {
-          title: <Trans>Subscription Usage</Trans>,
-          path: '/subscription_usage',
-          screen: SubscriptionUsage,
         },
       ],
     },
@@ -227,7 +219,6 @@ function getRouteConfig(userProfile: Partial<UserProfile> = {}) {
     'unique_managed_hosts'
   ) {
     deleteRoute('host_metrics');
-    deleteRoute('subscription_usage');
   }
   if (userProfile?.isSuperUser || userProfile?.isSystemAuditor)
     return routeConfig;
@@ -236,7 +227,6 @@ function getRouteConfig(userProfile: Partial<UserProfile> = {}) {
   deleteRoute('management_jobs');
   deleteRoute('topology_view');
   deleteRoute('instances');
-  deleteRoute('subscription_usage');
   if (userProfile?.isOrgAdmin) return routeConfig;
   if (!userProfile?.isNotificationAdmin) deleteRoute('notification_templates');
 

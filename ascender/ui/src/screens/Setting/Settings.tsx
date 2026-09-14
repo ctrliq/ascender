@@ -15,7 +15,6 @@ import GoogleOAuth2 from './GoogleOAuth2';
 import OIDC from './OIDC';
 import Jobs from './Jobs';
 import LDAP from './LDAP';
-import Subscription from './Subscription';
 import Logging from './Logging';
 import MiscAuthentication from './MiscAuthentication';
 import MiscSystem from './MiscSystem';
@@ -28,7 +27,7 @@ import Troubleshooting from './Troubleshooting';
 
 function Settings() {
   const { t } = useLingui();
-  const { license_info = {}, me } = useConfig();
+  const { me } = useConfig();
 
   const { request, result, isLoading, error } = useRequest(
     useCallback(async () => {
@@ -115,9 +114,6 @@ function Settings() {
     '/settings/saml': t`SAML`,
     '/settings/saml/details': t`Details`,
     '/settings/saml/edit': t`Edit Details`,
-    '/settings/subscription': t`Subscription`,
-    '/settings/subscription/details': t`Details`,
-    '/settings/subscription/edit': t`Edit Details`,
     '/settings/tacacs': t`TACACS+`,
     '/settings/tacacs/details': t`Details`,
     '/settings/tacacs/edit': t`Edit Details`,
@@ -164,16 +160,6 @@ function Settings() {
         <Route path="oidc/*" element={<OIDC />} />
         <Route path="jobs/*" element={<Jobs />} />
         <Route path="ldap/*" element={<LDAP />} />
-        <Route
-          path="subscription/*"
-          element={
-            license_info?.license_type === 'open' ? (
-              <Navigate to="/settings" replace />
-            ) : (
-              <Subscription />
-            )
-          }
-        />
         <Route path="logging/*" element={<Logging />} />
         <Route
           path="miscellaneous_authentication/*"
