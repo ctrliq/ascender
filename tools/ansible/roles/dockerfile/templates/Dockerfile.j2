@@ -247,12 +247,12 @@ ADD tools/docker-compose/entrypoint.sh /entrypoint.sh
 ADD tools/scripts/config-watcher /usr/bin/config-watcher
 ADD tools/docker-compose/containers.conf /etc/containers/containers.conf
 {% elif kube_dev|bool %}
-RUN ln -sf /awx_devel/tools/ansible/roles/dockerfile/files/launch_awx_web.sh /usr/bin/launch_awx_web.sh && \
-    ln -sf /awx_devel/tools/ansible/roles/dockerfile/files/launch_awx_task.sh /usr/bin/launch_awx_task.sh && \
-    ln -sf /awx_devel/tools/ansible/roles/dockerfile/files/launch_awx_rsyslog.sh /usr/bin/launch_awx_rsyslog.sh && \
-    ln -sf /awx_devel/{{ template_dest }}/supervisor_web.conf /etc/supervisord_web.conf && \
-    ln -sf /awx_devel/{{ template_dest }}/supervisor_task.conf /etc/supervisord_task.conf && \
-    ln -sf /awx_devel/{{ template_dest }}/supervisor_rsyslog.conf /etc/supervisord_rsyslog.conf
+RUN ln -sf /ascender_devel/tools/ansible/roles/dockerfile/files/launch_awx_web.sh /usr/bin/launch_awx_web.sh && \
+    ln -sf /ascender_devel/tools/ansible/roles/dockerfile/files/launch_awx_task.sh /usr/bin/launch_awx_task.sh && \
+    ln -sf /ascender_devel/tools/ansible/roles/dockerfile/files/launch_awx_rsyslog.sh /usr/bin/launch_awx_rsyslog.sh && \
+    ln -sf /ascender_devel/{{ template_dest }}/supervisor_web.conf /etc/supervisord_web.conf && \
+    ln -sf /ascender_devel/{{ template_dest }}/supervisor_task.conf /etc/supervisord_task.conf && \
+    ln -sf /ascender_devel/{{ template_dest }}/supervisor_rsyslog.conf /etc/supervisord_rsyslog.conf
 {% else %}
 ADD tools/ansible/roles/dockerfile/files/launch_awx_web.sh /usr/bin/launch_awx_web.sh
 ADD tools/ansible/roles/dockerfile/files/launch_awx_task.sh /usr/bin/launch_awx_task.sh
@@ -265,12 +265,12 @@ ADD tools/scripts/awx-python /usr/bin/awx-python
 {% endif %}
 
 {% if (build_dev|bool) or (kube_dev|bool) %}
-RUN echo /awx_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/awx.egg-link && \
-    echo /awx_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/awx.pth && \
-    ln -sf /awx_devel/tools/docker-compose/awx-manage /usr/local/bin/ascender-manage && \
-    ln -sf /awx_devel/tools/docker-compose/awx-manage /usr/local/bin/awx-manage && \
-    ln -sf /awx_devel/tools/scripts/awx-python /usr/bin/awx-python && \
-    ln -sf /awx_devel/tools/scripts/rsyslog-4xx-recovery /usr/bin/rsyslog-4xx-recovery
+RUN echo /ascender_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/awx.egg-link && \
+    echo /ascender_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/awx.pth && \
+    ln -sf /ascender_devel/tools/docker-compose/awx-manage /usr/local/bin/ascender-manage && \
+    ln -sf /ascender_devel/tools/docker-compose/awx-manage /usr/local/bin/awx-manage && \
+    ln -sf /ascender_devel/tools/scripts/awx-python /usr/bin/awx-python && \
+    ln -sf /ascender_devel/tools/scripts/rsyslog-4xx-recovery /usr/bin/rsyslog-4xx-recovery
 {% endif %}
 
 # Pre-create things we need to access
@@ -297,6 +297,14 @@ RUN for dir in \
 
 # The same alias as in the builder, for anything still naming the old path.
 RUN ln -s /var/lib/ascender /var/lib/awx
+
+{% if (build_dev|bool) or (kube_dev|bool) %}
+# The development tree is mounted in from outside, at /ascender_devel. The old
+# path is an alias onto it so a compose file or an operator deployment still
+# naming /awx_devel keeps working: the runtime resolves the link and lands the
+# mount on the directory it names.
+RUN mkdir -p /ascender_devel && ln -s /ascender_devel /awx_devel
+{% endif %}
 
 {% if (build_dev|bool) or (kube_dev|bool) %}
 RUN for dir in \

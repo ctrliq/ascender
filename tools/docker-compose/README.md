@@ -70,16 +70,16 @@ $ make docker-compose-build
 
 > The image will need to be rebuilt if there are any changes to Dockerfile.j2 or any of the files used by the templated Dockerfile.
 
-Once the build completes, you will have a `ansible/awx_devel` image in your local image cache. Use the `docker images` command to view it, as follows:
+Once the build completes, you will have a `ansible/ascender_devel` image in your local image cache. Use the `docker images` command to view it, as follows:
 
 ```bash
 (host)$ docker images
 
 REPOSITORY                                   TAG                 IMAGE ID            CREATED             SIZE
-ansible/awx_devel                            latest              ba9ec3e8df74        26 minutes ago      1.42GB
+ansible/ascender_devel                            latest              ba9ec3e8df74        26 minutes ago      1.42GB
 ```
 
-> By default, this image will be tagged with your branch name. You can specify a custom tag by setting an environment variable, for example: `DEVEL_IMAGE_NAME=quay.io/your_user/awx_devel:17.0.1`
+> By default, this image will be tagged with your branch name. You can specify a custom tag by setting an environment variable, for example: `DEVEL_IMAGE_NAME=quay.io/your_user/ascender_devel:17.0.1`
 
 #### Customizing the Receptor Image
 

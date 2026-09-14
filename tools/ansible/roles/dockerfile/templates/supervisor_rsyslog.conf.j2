@@ -20,7 +20,7 @@ stderr_events_enabled = true
 [program:awx-rsyslog-configurer]
 {% if kube_dev | bool %}
 command = make run-rsyslog-configurer
-directory = /awx_devel
+directory = /ascender_devel
 {% else %}
 command = awx-manage run_rsyslog_configurer
 directory = /var/lib/ascender
@@ -36,7 +36,7 @@ stderr_logfile_maxbytes=0
 
 {% if kube_dev | bool %}
 [program:awx-autoreload]
-command = /awx_devel/tools/docker-compose/awx-autoreload /awx_devel/ascender
+command = /ascender_devel/tools/docker-compose/awx-autoreload /ascender_devel/ascender
 autostart = true
 autorestart = true
 stopasgroup=true

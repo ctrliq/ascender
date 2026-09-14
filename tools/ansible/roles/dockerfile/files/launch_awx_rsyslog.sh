@@ -6,7 +6,7 @@ if [ `id -u` -ge 500 ]; then
 fi
 
 if [ -n "${AWX_KUBE_DEVEL}" ]; then
-    pushd /awx_devel
+    pushd /ascender_devel
     make awx-link
     popd
 

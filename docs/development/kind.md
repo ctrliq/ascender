@@ -14,7 +14,7 @@ nodes:
 - role: control-plane
   extraMounts:
   - hostPath: /path/to/awx
-    containerPath: /awx_devel
+    containerPath: /ascender_devel
   extraPortMappings:
   - containerPort: 30080
     hostPort: 30080
@@ -27,7 +27,7 @@ Start Kind cluster
 
 Verify Ascender source tree is mounted in the kind-control-plane container
 ```bash
- docker exec -it kind-control-plane ls /awx_devel
+ docker exec -it kind-control-plane ls /ascender_devel
 ```
 
 ## Deploy the AWX Operator

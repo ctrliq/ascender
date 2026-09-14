@@ -168,7 +168,7 @@ class TestWorkflowJobTemplateNodeAccess:
                 # We explicitly catch NotImplemented because the _nodes type will raise a different exception
                 assert False, "Exception was raised when it should not have been"
             except Exception:
-                #  File "/awx_devel/awx/main/access.py", line 2074, in check_same_WFJT
+                #  File "/ascender_devel/awx/main/access.py", line 2074, in check_same_WFJT
                 #    raise Exception('Attaching workflow nodes only allowed for other nodes')
                 pass
 

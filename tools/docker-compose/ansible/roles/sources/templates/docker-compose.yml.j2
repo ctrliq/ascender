@@ -6,13 +6,13 @@ services:
   init_ascender:
     image: "{{ awx_image }}:{{ awx_image_tag }}"
     container_name: tools_init_ascender
-    command: /awx_devel/tools/docker-compose/editable_dependencies/install.sh
+    command: /ascender_devel/tools/docker-compose/editable_dependencies/install.sh
     user: root
     working_dir: "/"
     environment:
       RUN_MIGRATIONS: 1
     volumes:
-      - "../../../:/awx_devel"
+      - "../../../:/ascender_devel"
 {% for editable_dependency in editable_dependencies %}
       - "{{ editable_dependency }}:/editable_dependencies/{{ editable_dependency | basename }}"
 {% endfor %}
@@ -50,7 +50,7 @@ services:
     networks:
       - awx
       - service-mesh
-    working_dir: "/awx_devel"
+    working_dir: "/ascender_devel"
     volumes:
 {% if editable_dependencies | length > 0 %}
       - "var_lib_awx:/var/lib/ascender"
@@ -58,7 +58,7 @@ services:
       - "{{ editable_dependency }}:/editable_dependencies/{{ editable_dependency | basename }}"
 {% endfor %}
 {% endif %}
-      - "../../../:/awx_devel"
+      - "../../../:/ascender_devel"
       - "../../docker-compose/supervisor.conf:/etc/supervisord.conf"
       - "../../docker-compose/_sources/database.py:/etc/tower/conf.d/database.py"
       - "../../docker-compose/_sources/websocket_secret.py:/etc/tower/conf.d/websocket_secret.py"
@@ -247,7 +247,7 @@ services:
     networks:
       - awx
     volumes:
-      - "../../../:/awx_devel"  # not used, but mounted so that any in-place installs can be used for whole cluster
+      - "../../../:/ascender_devel"  # not used, but mounted so that any in-place installs can be used for whole cluster
       - "../../docker-compose/_sources/receptor/receptor-worker-{{ loop.index }}.conf:/etc/receptor/receptor.conf"
       - "/sys/fs/cgroup:/sys/fs/cgroup"
       - "../../docker-compose/_sources/receptor/work_public_key.pem:/etc/receptor/work_public_key.pem"

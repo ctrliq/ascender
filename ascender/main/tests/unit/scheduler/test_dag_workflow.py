@@ -940,7 +940,7 @@ class TestDocsExample:
 
     def test_dnr_step(self, complex_dag):
         g, nodes = complex_dag
-        base_dir = '/awx_devel'
+        base_dir = '/ascender_devel'
 
         g.generate_graphviz_plot(file_name=os.path.join(base_dir, "workflow_step0.gv"))
         nodes[0].job = Job(status='successful')

@@ -216,7 +216,7 @@ uvicorn: collectstatic
 		$${root_path:+--root-path "$$root_path"} ascender.asgi:channel_layer
 
 awx-autoreload:
-	@/awx_devel/tools/docker-compose/awx-autoreload /awx_devel/ascender
+	@/ascender_devel/tools/docker-compose/awx-autoreload /ascender_devel/ascender
 
 ## Run to start the background task dispatcher for development.
 dispatcher:
@@ -328,7 +328,7 @@ ui-api-types: awx-link ascender/ui/node_modules
 
 ## Run egg_info_dev to generate awx.egg-info for development.
 awx-link:
-	[ -d "/awx_devel/awx.egg-info" ] || $(PYTHON) /awx_devel/tools/scripts/egg_info_dev
+	[ -d "/ascender_devel/awx.egg-info" ] || $(PYTHON) /ascender_devel/tools/scripts/egg_info_dev
 
 TEST_DIRS ?= ascender/main/tests/unit ascender/main/tests/functional ascender/conf/tests ascender/sso/tests
 PYTEST_ARGS ?= -n auto --dist=loadfile
@@ -372,7 +372,7 @@ test_migrations:
 DOCKER_RUNNER_OPTS ?=
 
 docker-runner:
-	docker run -u $(shell id -u) --rm -v $(shell pwd):/awx_devel/:Z --workdir=/awx_devel $(DOCKER_RUNNER_OPTS) $(DEVEL_IMAGE_NAME) $(AWX_DOCKER_CMD)
+	docker run -u $(shell id -u) --rm -v $(shell pwd):/ascender_devel/:Z --workdir=/ascender_devel $(DOCKER_RUNNER_OPTS) $(DEVEL_IMAGE_NAME) $(AWX_DOCKER_CMD)
 
 test_unit:
 	@if [ "$(VENV_BASE)" ]; then \

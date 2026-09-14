@@ -3,6 +3,6 @@ set +x
 
 bootstrap_development.sh
 
-cd /awx_devel
+cd /ascender_devel
 # Start the services
 exec make supervisor

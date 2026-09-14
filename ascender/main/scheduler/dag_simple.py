@@ -54,7 +54,7 @@ class SimpleDAG(object):
     def __iter__(self):
         return self.nodes.__iter__()
 
-    def generate_graphviz_plot(self, file_name="/awx_devel/graph.gv"):
+    def generate_graphviz_plot(self, file_name="/ascender_devel/graph.gv"):
         def run_status(obj):
             dnr = "RUN"
             status = "NA"

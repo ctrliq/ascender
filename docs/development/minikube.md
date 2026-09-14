@@ -10,7 +10,7 @@ Note: This environment has only been tested on Linux.
 ```
 $ minikube start \
     --mount \
-    --mount-string="/path/to/awx:/awx_devel" \
+    --mount-string="/path/to/awx:/ascender_devel" \
     --cpus=4 \
     --memory=8g \
     --addons=ingress
@@ -22,7 +22,7 @@ Ensure that your Ascender source code is properly mounted inside of the minikube
 
 ```
 $ minikube ssh
-$ ls -la /awx_devel
+$ ls -la /ascender_devel
 ```
 
 ## Deploy the AWX Operator
