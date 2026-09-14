@@ -33,9 +33,9 @@ if 'postgresql' not in _dev_database.get('ENGINE', '') and 'pg' not in _dev_data
 DATABASES = {
     'default': {
         'ENGINE': 'awx.main.db.profiled_pg',
-        'NAME': os.getenv('AWX_TEST_DATABASE_NAME', _dev_database.get('NAME', 'awx')),  # noqa
-        'USER': os.getenv('AWX_TEST_DATABASE_USER', _dev_database.get('USER', 'awx')),  # noqa
-        'PASSWORD': os.getenv('AWX_TEST_DATABASE_PASSWORD', _dev_database.get('PASSWORD', 'awxpass')),  # noqa
+        'NAME': os.getenv('AWX_TEST_DATABASE_NAME', _dev_database.get('NAME', 'ascender')),  # noqa
+        'USER': os.getenv('AWX_TEST_DATABASE_USER', _dev_database.get('USER', 'ascender')),  # noqa
+        'PASSWORD': os.getenv('AWX_TEST_DATABASE_PASSWORD', _dev_database.get('PASSWORD', 'ascenderpass')),  # noqa
         'HOST': os.getenv('AWX_TEST_DATABASE_HOST', _dev_database.get('HOST', '127.0.0.1')),  # noqa
         'PORT': os.getenv('AWX_TEST_DATABASE_PORT', str(_dev_database.get('PORT', '5432'))),  # noqa
         'ATOMIC_REQUESTS': True,

@@ -24,7 +24,7 @@ from django.urls import reverse, resolve
 from awx.main import migrations, request_context
 from awx.main.request_context import get_current_request, get_current_user, impersonate  # noqa: F401 -- long-standing import location
 from awx.main.utils.named_url_graph import generate_graph, GraphNode
-from awx.conf import fields, register
+from awx.conf import fields, register, settings_registry
 from awx.conf.settings import SETTING_CACHE_VERSION_KEY
 from awx.main.utils.profiling import AWXProfiler
 from awx.main.utils.common import memoize
@@ -183,40 +183,34 @@ def _customize_graph():
 
 
 class URLModificationMiddleware(MiddlewareMixin):
-    # Django builds the middleware chain once per handler, and there is more than
-    # one handler as soon as the ASGI application serves http beside the WSGI one.
-    # register() refuses a setting it already holds, so these two happen once for
-    # the life of the process rather than once per handler.
-    _named_url_settings_registered = False
+    # Neither is declared in a settings file: they describe the graph built below.
+    NAMED_URL_SETTINGS = {
+        'NAMED_URL_FORMATS': dict(
+            label=_('Formats of all available named urls'),
+            help_text=_('Read-only list of key-value pairs that shows the standard format of all available named URLs.'),
+        ),
+        'NAMED_URL_GRAPH_NODES': dict(
+            label=_('List of all named url graph nodes.'),
+            help_text=_(
+                'Read-only list of key-value pairs that exposes named URL graph topology. Use this list to programmatically generate named URLs for resources'
+            ),
+        ),
+    }
 
     def __init__(self, get_response):
         models = [m for m in apps.get_app_config('main').get_models() if hasattr(m, 'get_absolute_url')]
         generate_graph(models)
         _customize_graph()
-        if URLModificationMiddleware._named_url_settings_registered:
-            super().__init__(get_response)
-            return
-        URLModificationMiddleware._named_url_settings_registered = True
-        register(
-            'NAMED_URL_FORMATS',
-            field_class=fields.DictField,
-            read_only=True,
-            label=_('Formats of all available named urls'),
-            help_text=_('Read-only list of key-value pairs that shows the standard format of all available named URLs.'),
-            category=_('Named URL'),
-            category_slug='named-url',
-        )
-        register(
-            'NAMED_URL_GRAPH_NODES',
-            field_class=fields.DictField,
-            read_only=True,
-            label=_('List of all named url graph nodes.'),
-            help_text=_(
-                'Read-only list of key-value pairs that exposes named URL graph topology. Use this list to programmatically generate named URLs for resources'
-            ),
-            category=_('Named URL'),
-            category_slug='named-url',
-        )
+        # Django builds the middleware chain once per handler, and there is more
+        # than one handler as soon as the ASGI application serves http beside the
+        # WSGI one. register() refuses a setting it already holds, so ask the
+        # registry rather than remember: a flag on the class outlives anything
+        # that unregisters these, and then nothing would ever register them again.
+        # Each is asked about on its own, since unregister() takes them one at a time.
+        registered = settings_registry.get_registered_settings()
+        for name, kwargs in self.NAMED_URL_SETTINGS.items():
+            if name not in registered:
+                register(name, field_class=fields.DictField, read_only=True, category=_('Named URL'), category_slug='named-url', **kwargs)
         super().__init__(get_response)
 
     @staticmethod

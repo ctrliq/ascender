@@ -1,3 +1,9 @@
+{# The ingress prefix without its trailing slash: "" for the default "/", "/awx"
+   for "/awx/" or "/awx". uwsgi's mount used to strip the prefix itself before
+   Django saw the path. uvicorn does the opposite: --root-path is prepended to
+   whatever path it is handed, so the prefix must come off here, or Django is
+   asked for /awx/awx/api/. With no prefix, nothing below changes. #}
+{% set prefix = ingress_path.rstrip('/') %}
 location {{ (ingress_path + '/static').replace('//', '/') }} {
     alias /var/lib/ascender/public/static/;
 }
@@ -10,9 +16,14 @@ location {{ (ingress_path + '/favicon.ico').replace('//', '/') }} {
     alias /awx_devel/awx/public/static/favicon.ico;
 }
 
-location ~ ^({{ (ingress_path + '/websocket/').replace('//', '/') }}|{{ (ingress_path + '/api/websocket/').replace('//', '/') }}) {
+{# Prefix locations rather than one regex over both paths: the mount is a path,
+   not a pattern, and a "+" or "[" in it would be read as one. The URI on
+   proxy_pass replaces the matched prefix, which takes the mount off the front;
+   uvicorn's --root-path puts it back. With no mount, it replaces it with itself. #}
+{% for path in ['/websocket/', '/api/websocket/'] %}
+location {{ prefix }}{{ path }} {
     # Pass request to the upstream alias
-    proxy_pass http://uvicorn;
+    proxy_pass http://uvicorn{{ path }};
     # Require http version 1.1 to allow for upgrade requests
     proxy_http_version 1.1;
     # We want proxy_buffering off for proxying to websockets.
@@ -32,11 +43,24 @@ location ~ ^({{ (ingress_path + '/websocket/').replace('//', '/') }}|{{ (ingress
     proxy_set_header Connection $connection_upgrade;
 }
 
-location {{ ingress_path }} {
+{% endfor %}
+{% if prefix %}
+location = {{ prefix }} {
+    return 301 {{ prefix }}/$is_args$args;
+}
+
+{% endif %}
+location {{ prefix }}/ {
     # Add trailing / if missing
     rewrite ^(.*)$http_host(.*[^/])$ $1$http_host$2/ permanent;
     proxy_read_timeout 120s;
+{% if prefix %}
+    # The trailing slash makes nginx replace the matched prefix with "/", so
+    # /awx/api/ reaches uvicorn as /api/ and --root-path /awx puts it back.
+    proxy_pass http://uvicorn/;
+{% else %}
     proxy_pass http://uvicorn;
+{% endif %}
     proxy_http_version 1.1;
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto https;
@@ -49,6 +73,11 @@ location {{ ingress_path }} {
 location @fallback {
     # Add trailing / if missing
     rewrite ^(.*)$http_host(.*[^/])$ $1$http_host$2/ permanent;
+{% if prefix %}
+    # runserver has no --root-path, so it answers below the prefix but the
+    # URLs it reverses will not carry it. Good enough for a debugging fallback.
+    rewrite ^{{ prefix | regex_escape }}(/.*)$ $1 break;
+{% endif %}
     proxy_pass http://runserver;
     proxy_set_header Host $http_host;
 }
