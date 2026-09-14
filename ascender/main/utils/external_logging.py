@@ -68,6 +68,11 @@ def construct_rsyslog_conf_template(settings=settings):
 
     queue_options = [
         f'queue.spoolDirectory="{spool_directory}"',
+        # Not renamed with the template above. This is the name of the spool
+        # file on disk, so changing it would start a new queue at upgrade and
+        # leave whatever was still spooled in the old one, losing those records
+        # with nothing logged to say so. The template name is safe because it is
+        # declared and referenced in the config generated right here.
         'queue.filename="awx-external-logger-action-queue"',
         f'queue.maxDiskSpace="{max_disk_space_action_queue}g"',  # overall disk space for all queue files
         'queue.maxFileSize="100m"',  # individual file size
@@ -89,7 +94,7 @@ def construct_rsyslog_conf_template(settings=settings):
             f'global (maxMessageSize="{max_bytes}" workDirectory="/var/lib/ascender/rsyslog")',
             'module(load="imptcp")',
             'input(type="imptcp" Path="' + settings.LOGGING['handlers']['external_logger']['address'] + '" unlink="on")',
-            'template(name="awx" type="string" string="%rawmsg-after-pri%")',
+            'template(name="ascender" type="string" string="%rawmsg-after-pri%")',
         ]
     )
 
@@ -130,7 +135,7 @@ def construct_rsyslog_conf_template(settings=settings):
             f'allowunsignedcerts="{allow_unsigned}"',
             f'skipverifyhost="{skip_verify}"',
             'action.resumeRetryCount="-1"',
-            'template="awx"',
+            'template="ascender"',
             f'action.resumeInterval="{timeout}"',
         ] + queue_options
         if error_log_file:
@@ -171,7 +176,7 @@ def construct_rsyslog_conf_template(settings=settings):
             f'protocol="{protocol}"',
             'action.resumeRetryCount="-1"',
             f'action.resumeInterval="{timeout}"',
-            'template="awx"',
+            'template="ascender"',
         ] + queue_options
         params = ' '.join(params)
         parts.append(f'action({params})')

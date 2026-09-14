@@ -24,7 +24,7 @@ from ascender.api.generics import APIView
 from ascender.conf.registry import settings_registry
 from ascender.main.analytics import all_collectors
 from ascender.main.ha import is_ha_environment
-from ascender.main.utils import get_awx_version
+from ascender.main.utils import get_ascender_version
 from ascender.main.utils.licensing import validate_entitlement_manifest
 from ascender.api.versioning import reverse, drf_reverse
 from ascender.main.constants import PRIVILEGE_ESCALATION_METHODS
@@ -154,7 +154,7 @@ class ApiV2PingView(APIView):
         Everything returned here should be considered public / insecure, as
         this requires no auth and is intended for use by the installer process.
         """
-        response = {'ha': is_ha_environment(), 'version': get_awx_version(), 'active_node': settings.CLUSTER_HOST_ID, 'install_uuid': settings.INSTALL_UUID}
+        response = {'ha': is_ha_environment(), 'version': get_ascender_version(), 'active_node': settings.CLUSTER_HOST_ID, 'install_uuid': settings.INSTALL_UUID}
 
         response['instances'] = []
         for instance in Instance.objects.exclude(node_type='hop'):
@@ -201,7 +201,7 @@ class ApiV2ConfigView(APIView):
         data = dict(
             time_zone=settings.TIME_ZONE,
             license_info=license_data,
-            version=get_awx_version(),
+            version=get_ascender_version(),
             eula=render_to_string("eula.md") if license_data.get('license_type', 'UNLICENSED') != 'open' else '',
             analytics_status=pendo_state,
             analytics_collectors=all_collectors(),

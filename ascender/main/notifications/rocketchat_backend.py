@@ -9,14 +9,14 @@ from ascender.settings.typed import settings
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
-from ascender.main.notifications.base import AWXBaseEmailBackend
-from ascender.main.utils import get_awx_http_client_headers
+from ascender.main.notifications.base import AscenderBaseEmailBackend
+from ascender.main.utils import get_ascender_http_client_headers
 from ascender.main.notifications.custom_notification_base import CustomNotificationBase
 
 logger = logging.getLogger('awx.main.notifications.rocketchat_backend')
 
 
-class RocketChatBackend(AWXBaseEmailBackend, CustomNotificationBase):
+class RocketChatBackend(AscenderBaseEmailBackend, CustomNotificationBase):
     init_parameters = {"rocketchat_url": {"label": "Target URL", "type": "string"}, "rocketchat_no_verify_ssl": {"label": "Verify SSL", "type": "bool"}}
     recipient_parameter = "rocketchat_url"
     sender_parameter = None
@@ -45,7 +45,7 @@ class RocketChatBackend(AWXBaseEmailBackend, CustomNotificationBase):
             r = requests.post(
                 "{}".format(m.recipients()[0]),
                 data=json.dumps(payload),
-                headers=get_awx_http_client_headers(),
+                headers=get_ascender_http_client_headers(),
                 verify=(not self.rocketchat_no_verify_ssl),
                 timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
             )

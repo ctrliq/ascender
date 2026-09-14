@@ -6,7 +6,7 @@ import requests
 from ascender.api.views.analytics import AnalyticsGenericView, MissingSettings, AUTOMATION_ANALYTICS_API_URL_PATH
 from django.test.utils import override_settings
 
-from ascender.main.utils import get_awx_version
+from ascender.main.utils import get_ascender_version
 from django.utils import translation
 
 
@@ -22,7 +22,7 @@ class TestAnalyticsGenericView:
     )
     def test__request_headers(self, existing_headers, expected_headers):
         expected_headers['X-Rh-Analytics-Source'] = 'controller'
-        expected_headers['X-Rh-Analytics-Source-Version'] = get_awx_version()
+        expected_headers['X-Rh-Analytics-Source-Version'] = get_ascender_version()
         expected_headers['Accept-Language'] = translation.get_language()
 
         request = requests.session()

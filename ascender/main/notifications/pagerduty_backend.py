@@ -9,8 +9,8 @@ from ascender.settings.typed import settings
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
-from ascender.main.notifications.base import AWXBaseEmailBackend
-from ascender.main.utils import get_awx_http_client_headers
+from ascender.main.notifications.base import AscenderBaseEmailBackend
+from ascender.main.utils import get_ascender_http_client_headers
 from ascender.main.notifications.custom_notification_base import CustomNotificationBase
 
 DEFAULT_MSG = CustomNotificationBase.DEFAULT_MSG
@@ -36,7 +36,7 @@ logger = logging.getLogger('awx.main.notifications.pagerduty_backend')
 EVENTS_URL = 'https://events.pagerduty.com/generic/2010-04-15/create_event.json'
 
 
-class PagerDutyBackend(AWXBaseEmailBackend, CustomNotificationBase):
+class PagerDutyBackend(AscenderBaseEmailBackend, CustomNotificationBase):
     init_parameters = {
         "subdomain": {"label": "Pagerduty subdomain", "type": "string"},
         "token": {"label": "API Token", "type": "password"},
@@ -95,7 +95,7 @@ class PagerDutyBackend(AWXBaseEmailBackend, CustomNotificationBase):
                         "details": m.body,
                         "client": m.from_email,
                     },
-                    headers=get_awx_http_client_headers(),
+                    headers=get_ascender_http_client_headers(),
                     timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
                 )
                 r.raise_for_status()

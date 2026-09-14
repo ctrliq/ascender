@@ -9,7 +9,7 @@ from django.utils import translation
 from ascender.api.generics import APIView, Response
 from ascender.api.permissions import AnalyticsPermission
 from ascender.api.versioning import reverse
-from ascender.main.utils import get_awx_version, set_environ
+from ascender.main.utils import get_ascender_version, set_environ
 from rest_framework import status
 
 from collections import OrderedDict
@@ -107,7 +107,7 @@ class AnalyticsGenericView(APIView):
             if request.headers.get(header, None):
                 headers[header] = request.headers.get(header)
         headers['X-Rh-Analytics-Source'] = 'controller'
-        headers['X-Rh-Analytics-Source-Version'] = get_awx_version()
+        headers['X-Rh-Analytics-Source-Version'] = get_ascender_version()
         headers['Accept-Language'] = translation.get_language()
 
         return headers

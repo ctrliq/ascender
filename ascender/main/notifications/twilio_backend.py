@@ -9,8 +9,8 @@ from ascender.settings.typed import settings
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
-from ascender.main.notifications.base import AWXBaseEmailBackend
-from ascender.main.utils import get_awx_http_client_headers
+from ascender.main.notifications.base import AscenderBaseEmailBackend
+from ascender.main.utils import get_ascender_http_client_headers
 from ascender.main.notifications.custom_notification_base import CustomNotificationBase
 
 logger = logging.getLogger('awx.main.notifications.twilio_backend')
@@ -19,7 +19,7 @@ logger = logging.getLogger('awx.main.notifications.twilio_backend')
 MESSAGES_URL = 'https://api.twilio.com/2010-04-01/Accounts/{}/Messages.json'
 
 
-class TwilioBackend(AWXBaseEmailBackend, CustomNotificationBase):
+class TwilioBackend(AscenderBaseEmailBackend, CustomNotificationBase):
     init_parameters = {
         "account_sid": {"label": "Account SID", "type": "string"},
         "account_token": {"label": "Account Token", "type": "password"},
@@ -50,7 +50,7 @@ class TwilioBackend(AWXBaseEmailBackend, CustomNotificationBase):
                         url,
                         auth=(self.account_sid, self.account_token),
                         data={"To": dest, "From": m.from_email, "Body": m.subject},
-                        headers=get_awx_http_client_headers(),
+                        headers=get_ascender_http_client_headers(),
                         timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
                     )
                     r.raise_for_status()

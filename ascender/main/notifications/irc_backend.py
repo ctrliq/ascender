@@ -16,7 +16,7 @@ import time
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
-from ascender.main.notifications.base import AWXBaseEmailBackend
+from ascender.main.notifications.base import AscenderBaseEmailBackend
 from ascender.main.notifications.custom_notification_base import CustomNotificationBase
 
 logger = logging.getLogger('awx.main.notifications.irc_backend')
@@ -30,7 +30,7 @@ SEND_TIMEOUT = 60
 CHANNEL_PREFIXES = ('#', '&', '+', '!')
 
 
-class IrcBackend(AWXBaseEmailBackend, CustomNotificationBase):
+class IrcBackend(AscenderBaseEmailBackend, CustomNotificationBase):
     init_parameters = {
         "server": {"label": "IRC Server Address", "type": "string"},
         "port": {"label": "IRC Server Port", "type": "int"},

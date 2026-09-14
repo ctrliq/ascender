@@ -7,7 +7,7 @@ from django.db.models import Avg, Count, DurationField, ExpressionWrapper, F, Ma
 from django.utils import timezone
 
 from ascender.conf.license import get_license
-from ascender.main.utils import get_awx_version
+from ascender.main.utils import get_ascender_version
 from ascender.main.models import UnifiedJob
 from ascender.main.analytics.collectors import (
     counts,
@@ -185,7 +185,7 @@ def metrics():
             'install_uuid': settings.INSTALL_UUID,
             'insights_analytics': str(settings.INSIGHTS_TRACKING_STATE),
             'tower_url_base': settings.ASCENDER_URL_BASE,
-            'tower_version': get_awx_version(),
+            'tower_version': get_ascender_version(),
             'license_type': license_info.get('license_type', 'UNLICENSED'),
             'license_expiry': str(license_info.get('time_remaining', 0)),
             'pendo_tracking': settings.PENDO_TRACKING_STATE,

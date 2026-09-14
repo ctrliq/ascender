@@ -37,7 +37,7 @@ from ascender.dab.lib.utils.requests import get_remote_host
 # Ascender
 from ascender.main.models import UnifiedJob, UnifiedJobTemplate, User, Role, Credential, WorkflowJobTemplateNode, WorkflowApprovalTemplate
 from ascender.main.access import optimize_queryset
-from ascender.main.utils import camelcase_to_underscore, get_search_fields, getattrd, get_object_or_400, decrypt_field, get_awx_version
+from ascender.main.utils import camelcase_to_underscore, get_search_fields, getattrd, get_object_or_400, decrypt_field, get_ascender_version
 from ascender.main.utils.licensing import server_product_name
 from ascender.main.views import ApiErrorView
 from ascender.api.serializers import ResourceAccessListElementSerializer, CopySerializer
@@ -237,7 +237,7 @@ class APIView(views.APIView):
         response = super(APIView, self).finalize_response(request, response, *args, **kwargs)
         time_started = getattr(self, 'time_started', None)
         if request.user.is_authenticated:
-            response['X-API-Product-Version'] = get_awx_version()
+            response['X-API-Product-Version'] = get_ascender_version()
         response['X-API-Product-Name'] = server_product_name()
 
         response['X-API-Node'] = settings.CLUSTER_HOST_ID

@@ -8,14 +8,14 @@ from slack_sdk.errors import SlackApiError
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
-from ascender.main.notifications.base import AWXBaseEmailBackend
+from ascender.main.notifications.base import AscenderBaseEmailBackend
 from ascender.main.notifications.custom_notification_base import CustomNotificationBase
 
 logger = logging.getLogger('awx.main.notifications.slack_backend')
 WEBSOCKET_TIMEOUT = 30
 
 
-class SlackBackend(AWXBaseEmailBackend, CustomNotificationBase):
+class SlackBackend(AscenderBaseEmailBackend, CustomNotificationBase):
     init_parameters = {"token": {"label": "Token", "type": "password"}, "channels": {"label": "Destination Channels", "type": "list"}}
     recipient_parameter = "channels"
     sender_parameter = None

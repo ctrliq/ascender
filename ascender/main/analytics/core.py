@@ -18,7 +18,7 @@ import requests
 from ascender.conf.license import get_license
 from ascender.main.models import Job
 from ascender.main.access import access_registry
-from ascender.main.utils import get_awx_http_client_headers, set_environ, datetime_hook
+from ascender.main.utils import get_ascender_http_client_headers, set_environ, datetime_hook
 from ascender.main.utils.pglock import advisory_lock
 
 __all__ = ['register', 'gather', 'ship']
@@ -372,7 +372,7 @@ def ship(path):
     with open(path, 'rb') as f:
         files = {'file': (os.path.basename(path), f, settings.INSIGHTS_AGENT_MIME)}
         s = requests.Session()
-        s.headers = get_awx_http_client_headers()
+        s.headers = get_ascender_http_client_headers()
         s.headers.pop('Content-Type')
         with set_environ(**settings.ASCENDER_TASK_ENV):
             response = s.post(url, files=files, verify=settings.INSIGHTS_CERT_PATH, auth=(rh_user, rh_password), headers=s.headers, timeout=(31, 31))

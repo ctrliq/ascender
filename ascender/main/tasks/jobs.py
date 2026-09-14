@@ -73,7 +73,7 @@ from ascender.main.utils.safe_yaml import safe_dump, sanitize_jinja
 from ascender.main.utils.common import (
     update_scm_url,
     extract_ansible_vars,
-    get_awx_version,
+    get_ascender_version,
     create_partition,
     ScheduleWorkflowManager,
     ScheduleTaskManager,
@@ -1352,7 +1352,7 @@ class RunProjectUpdate(BaseTask):
                 'local_path': os.path.basename(project_update.project.local_path),
                 'project_path': project_update.get_project_path(check_if_exists=False),  # deprecated
                 'awx_license_type': get_license().get('license_type', 'UNLICENSED'),
-                'awx_version': get_awx_version(),
+                'awx_version': get_ascender_version(),
                 'scm_url': scm_url,
                 'scm_branch': scm_branch,
                 'scm_clean': project_update.scm_clean,

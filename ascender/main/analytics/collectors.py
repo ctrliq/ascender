@@ -13,7 +13,7 @@ from django.utils.timezone import now, timedelta
 from django.utils.translation import gettext_lazy as _
 
 from ascender.conf.license import get_license
-from ascender.main.utils import get_awx_version, camelcase_to_underscore, datetime_hook
+from ascender.main.utils import get_ascender_version, camelcase_to_underscore, datetime_hook
 from ascender.main import models
 from ascender.main.analytics import register
 from ascender.main.scheduler.task_manager_models import TaskManagerModels
@@ -149,7 +149,7 @@ def config(since, **kwargs):
         'install_uuid': settings.INSTALL_UUID,
         'instance_uuid': settings.SYSTEM_UUID,
         'tower_url_base': settings.ASCENDER_URL_BASE,
-        'tower_version': get_awx_version(),
+        'tower_version': get_ascender_version(),
         'license_type': license_info.get('license_type', 'UNLICENSED'),
         'license_date': license_info.get('license_date'),
         'subscription_name': license_info.get('subscription_name'),

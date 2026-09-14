@@ -8,14 +8,14 @@ import requests
 
 from ascender.settings.typed import settings
 
-from ascender.main.notifications.base import AWXBaseEmailBackend
-from ascender.main.utils import get_awx_http_client_headers
+from ascender.main.notifications.base import AscenderBaseEmailBackend
+from ascender.main.utils import get_ascender_http_client_headers
 from ascender.main.notifications.custom_notification_base import CustomNotificationBase
 
 logger = logging.getLogger('awx.main.notifications.webhook_backend')
 
 
-class WebhookBackend(AWXBaseEmailBackend, CustomNotificationBase):
+class WebhookBackend(AscenderBaseEmailBackend, CustomNotificationBase):
     MAX_RETRIES = 5
 
     init_parameters = {
@@ -82,7 +82,7 @@ class WebhookBackend(AWXBaseEmailBackend, CustomNotificationBase):
 
             url = str(m.recipients()[0])
             data = json.dumps(m.body, ensure_ascii=False).encode('utf-8')
-            headers = {**(get_awx_http_client_headers()), **(self.headers or {})}
+            headers = {**(get_ascender_http_client_headers()), **(self.headers or {})}
 
             err = None
 

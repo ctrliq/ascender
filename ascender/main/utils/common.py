@@ -51,8 +51,8 @@ __all__ = [
     'underscore_to_camelcase',
     'memoize',
     'memoize_delete',
-    'get_awx_http_client_headers',
-    'get_awx_version',
+    'get_ascender_http_client_headers',
+    'get_ascender_version',
     'update_scm_url',
     'get_model_for_type',
     'copy_model_by_class',
@@ -218,7 +218,7 @@ def get_event_partition_epoch():
     return MigrationRecorder.Migration.objects.filter(app='main', name='0144_event_partitions').first().applied
 
 
-def get_awx_version():
+def get_ascender_version():
     """
     Return AWX version as reported by setuptools.
     """
@@ -230,11 +230,11 @@ def get_awx_version():
         return __version__
 
 
-def get_awx_http_client_headers():
+def get_ascender_http_client_headers():
     license = get_license().get('license_type', 'UNLICENSED')
     headers = {
         'Content-Type': 'application/json',
-        'User-Agent': '{} {} ({})'.format('AWX' if license == 'open' else 'Red Hat Ansible Automation Platform', get_awx_version(), license),
+        'User-Agent': '{} {} ({})'.format('AWX' if license == 'open' else 'Red Hat Ansible Automation Platform', get_ascender_version(), license),
     }
     return headers
 

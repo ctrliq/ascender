@@ -11,7 +11,7 @@ from ascender.settings.typed import settings
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
-from ascender.main.notifications.base import AWXBaseEmailBackend
+from ascender.main.notifications.base import AscenderBaseEmailBackend
 from ascender.main.notifications.custom_notification_base import CustomNotificationBase
 
 DEFAULT_MSG = CustomNotificationBase.DEFAULT_MSG
@@ -32,7 +32,7 @@ DEFAULT_APPROVAL_DENIED_BODY = CustomNotificationBase.DEFAULT_APPROVAL_DENIED_BO
 logger = logging.getLogger('awx.main.notifications.grafana_backend')
 
 
-class GrafanaBackend(AWXBaseEmailBackend, CustomNotificationBase):
+class GrafanaBackend(AscenderBaseEmailBackend, CustomNotificationBase):
     init_parameters = {"grafana_url": {"label": "Grafana URL", "type": "string"}, "grafana_key": {"label": "Grafana API Key", "type": "password"}}
     recipient_parameter = "grafana_url"
     sender_parameter = None

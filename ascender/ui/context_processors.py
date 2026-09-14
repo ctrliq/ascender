@@ -1,7 +1,7 @@
 import base64
 import os
 
-from ascender.main.utils import get_awx_version
+from ascender.main.utils import get_ascender_version
 
 
 def csp(request):
@@ -11,8 +11,8 @@ def csp(request):
 def version(request):
     context = getattr(request, 'parser_context', {})
     return {
-        'version': get_awx_version(),
-        'tower_version': get_awx_version(),
-        'short_tower_version': get_awx_version().split('-')[0],
+        'version': get_ascender_version(),
+        'tower_version': get_ascender_version(),
+        'short_tower_version': get_ascender_version().split('-')[0],
         'deprecated': getattr(context.get('view'), 'deprecated', False),
     }

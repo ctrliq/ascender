@@ -8,13 +8,13 @@ from ascender.settings.typed import settings
 from django.utils.encoding import smart_str
 from django.utils.translation import gettext_lazy as _
 
-from ascender.main.notifications.base import AWXBaseEmailBackend
+from ascender.main.notifications.base import AscenderBaseEmailBackend
 from ascender.main.notifications.custom_notification_base import CustomNotificationBase
 
 logger = logging.getLogger('awx.main.notifications.mattermost_backend')
 
 
-class MattermostBackend(AWXBaseEmailBackend, CustomNotificationBase):
+class MattermostBackend(AscenderBaseEmailBackend, CustomNotificationBase):
     init_parameters = {"mattermost_url": {"label": "Target URL", "type": "string"}, "mattermost_no_verify_ssl": {"label": "Verify SSL", "type": "bool"}}
     recipient_parameter = "mattermost_url"
     sender_parameter = None
