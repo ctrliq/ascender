@@ -7,6 +7,7 @@ from ascender.settings.typed import settings
 from django.core.management.base import BaseCommand
 
 from ascender.main.dispatch import get_task_queuename
+from ascender.main.constants import BROADCAST_CHANNEL, FORMER_BROADCAST_CHANNEL, FORMER_SETTINGS_CHANGE_CHANNEL, SETTINGS_CHANGE_CHANNEL
 from ascender.main.dispatch.control import Control
 from ascender.main.dispatch.pool import AutoscalePool
 from ascender.main.dispatch.worker import AWXConsumerPG, TaskWorker
@@ -66,7 +67,15 @@ class Command(BaseCommand):
         DispatcherMetricsServer().start()
 
         try:
-            queues = ['tower_broadcast_all', 'tower_settings_change', get_task_queuename()]
+            # Both names of each broadcast channel, so a publisher still on
+            # the old release is heard during a rolling upgrade.
+            queues = [
+                BROADCAST_CHANNEL,
+                FORMER_BROADCAST_CHANNEL,
+                SETTINGS_CHANGE_CHANNEL,
+                FORMER_SETTINGS_CHANGE_CHANNEL,
+                get_task_queuename(),
+            ]
             consumer = AWXConsumerPG('dispatcher', TaskWorker(), queues, AutoscalePool(min_workers=4), schedule=settings.CELERYBEAT_SCHEDULE)
             consumer.run()
         except KeyboardInterrupt:

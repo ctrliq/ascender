@@ -95,6 +95,16 @@ ANALYTICS_LOGGER_PREFIX = 'ascender.analytics'
 # which is pinned by test_job_folder_prefix.py rather than left to this comment
 JOB_FOLDER_PREFIX = 'ascender_%s_'
 
+#: The postgres LISTEN/NOTIFY channels the dispatcher and the cache clearer use.
+#: A listener subscribes to both names and a publisher writes to the current one,
+#: because a NOTIFY reaches only whoever is listening at that moment: during a
+#: rolling upgrade a node still on the old release publishes to the former name,
+#: and a node that had stopped listening for it would simply not hear.
+BROADCAST_CHANNEL = 'ascender_broadcast_all'
+FORMER_BROADCAST_CHANNEL = 'tower_broadcast_all'
+SETTINGS_CHANGE_CHANNEL = 'ascender_settings_change'
+FORMER_SETTINGS_CHANGE_CHANNEL = 'tower_settings_change'
+
 #: The namespace a credential type's injectors render against. Both names are
 #: bound to the same object: `ascender` is the current one, and `tower` is what
 #: an administrator's own credential type written before the rename says, stored

@@ -4,6 +4,7 @@ import json
 from django.core.management.base import BaseCommand
 
 from ascender.main.dispatch import pg_bus_conn
+from ascender.main.constants import FORMER_SETTINGS_CHANGE_CHANNEL, SETTINGS_CHANGE_CHANNEL
 from ascender.main.dispatch.worker.task import TaskWorker
 
 logger = logging.getLogger('awx.main.cache_clear')
@@ -20,7 +21,9 @@ class Command(BaseCommand):
     def handle(self, *arg, **options):
         try:
             with pg_bus_conn() as conn:
-                conn.listen("tower_settings_change")
+                # Both names, for the same reason the dispatcher listens twice.
+                conn.listen(SETTINGS_CHANGE_CHANNEL)
+                conn.listen(FORMER_SETTINGS_CHANGE_CHANNEL)
                 for e in conn.events(yield_timeouts=True):
                     if e is not None:
                         body = json.loads(e.payload)

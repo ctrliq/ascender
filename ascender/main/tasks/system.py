@@ -50,7 +50,7 @@ from ascender.main.models import (
     Job,
     convert_jsonfields,
 )
-from ascender.main.constants import ACTIVE_STATES, FORMER_JOB_FOLDER_PREFIX, JOB_FOLDER_PREFIX
+from ascender.main.constants import BROADCAST_CHANNEL, SETTINGS_CHANGE_CHANNEL, ACTIVE_STATES, FORMER_JOB_FOLDER_PREFIX, JOB_FOLDER_PREFIX
 from ascender.main.dispatch.publish import task
 from ascender.main.dispatch import get_task_queuename, reaper
 from ascender.main.utils.common import ignore_inventory_computed_fields, ignore_inventory_group_removal
@@ -293,7 +293,7 @@ def apply_cluster_membership_policies():
         logger.debug('Cluster policy computation finished in {} seconds'.format(time.time() - started_compute))
 
 
-@task(queue='tower_settings_change')
+@task(queue=SETTINGS_CHANGE_CHANNEL)
 def clear_setting_cache(setting_keys):
     # log that cache is being cleared
     logger.info(f"clear_setting_cache of keys {setting_keys}")
@@ -306,7 +306,7 @@ def clear_setting_cache(setting_keys):
     cache.delete_many(cache_keys)
 
 
-@task(queue='tower_broadcast_all')
+@task(queue=BROADCAST_CHANNEL)
 def delete_project_files(project_path):
     # TODO: possibly implement some retry logic
     lock_file = project_path + '.lock'
@@ -324,7 +324,7 @@ def delete_project_files(project_path):
             logger.exception('Could not remove lock file {}'.format(lock_file))
 
 
-@task(queue='tower_broadcast_all')
+@task(queue=BROADCAST_CHANNEL)
 def profile_sql(threshold=1, minutes=1):
     if threshold <= 0:
         cache.delete('ascender-profile-sql-threshold')
@@ -421,7 +421,7 @@ def _cleanup_images_and_files(**kwargs):
                 logger.exception(f'Error running cleanup on execution node {inst.hostname}')
 
 
-@task(queue='tower_broadcast_all')
+@task(queue=BROADCAST_CHANNEL)
 def handle_removed_image(remove_images=None):
     """Special broadcast invocation of this method to handle case of deleted EE"""
     _cleanup_images_and_files(remove_images=remove_images, file_pattern='')

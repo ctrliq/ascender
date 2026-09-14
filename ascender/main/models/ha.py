@@ -25,7 +25,7 @@ from ascender.main.utils import is_testing
 from ascender.api.versioning import reverse
 from ascender.main.fields import ImplicitRoleField
 from ascender.main.managers import InstanceManager, UUID_DEFAULT
-from ascender.main.constants import FORMER_JOB_FOLDER_PREFIX, JOB_FOLDER_PREFIX
+from ascender.main.constants import BROADCAST_CHANNEL, FORMER_JOB_FOLDER_PREFIX, JOB_FOLDER_PREFIX
 from ascender.main.models.base import BaseModel, HasEditsMixin
 from ascender.main.models.rbac import (
     ROLE_SINGLETON_SYSTEM_ADMINISTRATOR,
@@ -518,7 +518,7 @@ def schedule_write_receptor_config(broadcast=True):
 
     # broadcast to all control instances to update their receptor configs
     if broadcast:
-        connection.on_commit(lambda: write_receptor_config.apply_async(queue='tower_broadcast_all'))
+        connection.on_commit(lambda: write_receptor_config.apply_async(queue=BROADCAST_CHANNEL))
     else:
         if not is_testing():
             write_receptor_config()  # just run locally
