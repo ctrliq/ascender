@@ -85,7 +85,8 @@ LOGGER_BLOCKLIST = (
 RECEPTOR_PENDING = 'ansible-runner-???'
 
 # Naming pattern for Ascender jobs in /tmp folder, like /tmp/awx_42_xiwm
-# also update awxkit.api.pages.unified_jobs in ctrliq/ascender-kit if changed
+# also update ascenderkit.api.pages.unified_jobs in ctrliq/ascender-kit if changed,
+# which is pinned by test_job_folder_prefix.py rather than left to this comment
 JOB_FOLDER_PREFIX = 'awx_%s_'
 
 # :z option tells Podman that two containers share the volume content with r/w
