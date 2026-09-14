@@ -46,7 +46,7 @@ function getHelpText() {
           {t`Privilege escalation: If enabled, run this playbook as an administrator.`}
         </p>
         <p>
-          {t`Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ansible AWX and request a configuration update using this job template.`}
+          {t`Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template.`}
         </p>
         <p>{t`Webhooks: Enable webhook for this template.`}</p>
         <p>

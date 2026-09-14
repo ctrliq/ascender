@@ -46,7 +46,7 @@ class ApiRootView(APIView):
 
         v2 = reverse('api:api_v2_root_view', kwargs={'version': 'v2'})
         data = OrderedDict()
-        data['description'] = _('AWX REST API')
+        data['description'] = _('Ascender REST API')
         data['current_version'] = v2
         data['available_versions'] = dict(v2=v2)
         data['oauth2'] = drf_reverse('api:oauth_authorization_root_view')
