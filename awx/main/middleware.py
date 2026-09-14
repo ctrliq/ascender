@@ -183,6 +183,20 @@ def _customize_graph():
 
 
 class URLModificationMiddleware(MiddlewareMixin):
+    # Neither is declared in a settings file: they describe the graph built below.
+    NAMED_URL_SETTINGS = {
+        'NAMED_URL_FORMATS': dict(
+            label=_('Formats of all available named urls'),
+            help_text=_('Read-only list of key-value pairs that shows the standard format of all available named URLs.'),
+        ),
+        'NAMED_URL_GRAPH_NODES': dict(
+            label=_('List of all named url graph nodes.'),
+            help_text=_(
+                'Read-only list of key-value pairs that exposes named URL graph topology. Use this list to programmatically generate named URLs for resources'
+            ),
+        ),
+    }
+
     def __init__(self, get_response):
         models = [m for m in apps.get_app_config('main').get_models() if hasattr(m, 'get_absolute_url')]
         generate_graph(models)
@@ -192,29 +206,11 @@ class URLModificationMiddleware(MiddlewareMixin):
         # WSGI one. register() refuses a setting it already holds, so ask the
         # registry rather than remember: a flag on the class outlives anything
         # that unregisters these, and then nothing would ever register them again.
-        if 'NAMED_URL_FORMATS' in settings_registry.get_registered_settings():
-            super().__init__(get_response)
-            return
-        register(
-            'NAMED_URL_FORMATS',
-            field_class=fields.DictField,
-            read_only=True,
-            label=_('Formats of all available named urls'),
-            help_text=_('Read-only list of key-value pairs that shows the standard format of all available named URLs.'),
-            category=_('Named URL'),
-            category_slug='named-url',
-        )
-        register(
-            'NAMED_URL_GRAPH_NODES',
-            field_class=fields.DictField,
-            read_only=True,
-            label=_('List of all named url graph nodes.'),
-            help_text=_(
-                'Read-only list of key-value pairs that exposes named URL graph topology. Use this list to programmatically generate named URLs for resources'
-            ),
-            category=_('Named URL'),
-            category_slug='named-url',
-        )
+        # Each is asked about on its own, since unregister() takes them one at a time.
+        registered = settings_registry.get_registered_settings()
+        for name, kwargs in self.NAMED_URL_SETTINGS.items():
+            if name not in registered:
+                register(name, field_class=fields.DictField, read_only=True, category=_('Named URL'), category_slug='named-url', **kwargs)
         super().__init__(get_response)
 
     @staticmethod
