@@ -39,7 +39,7 @@ from ascender.main.models.receptor_address import ReceptorAddress
 # ansible-runner
 from ansible_runner.utils.capacity import get_cpu_count, get_mem_in_bytes
 
-__all__ = ('Instance', 'InstanceGroup', 'InstanceLink', 'TowerScheduleState')
+__all__ = ('Instance', 'InstanceGroup', 'InstanceLink', 'AscenderScheduleState')
 
 logger = logging.getLogger('awx.main.models.ha')
 
@@ -494,7 +494,7 @@ class InstanceGroup(HasPolicyEditsMixin, BaseModel, RelatedJobsMixin, ResourceMi
         self.policy_instance_percentage = 0
 
 
-class TowerScheduleState(SingletonModel):
+class AscenderScheduleState(SingletonModel):
     schedule_last_run = models.DateTimeField(auto_now_add=True)
 
 

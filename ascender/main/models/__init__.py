@@ -55,7 +55,7 @@ from ascender.main.models.ha import (  # noqa
     Instance,
     InstanceLink,
     InstanceGroup,
-    TowerScheduleState,
+    AscenderScheduleState,
 )
 from ascender.main.models.rbac import (  # noqa
     Role,

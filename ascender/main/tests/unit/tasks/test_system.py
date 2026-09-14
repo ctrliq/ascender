@@ -76,7 +76,7 @@ def test_awx_periodic_scheduler_skips_schedule_processing_when_all_schedules_dis
         yield True
 
     with patch("ascender.main.tasks.system.advisory_lock", mock_advisory_lock):
-        with patch("ascender.main.tasks.system.TowerScheduleState.get_solo", return_value=state):
+        with patch("ascender.main.tasks.system.AscenderScheduleState.get_solo", return_value=state):
             with patch("ascender.main.tasks.system.now", return_value=run_now):
                 with patch("ascender.main.tasks.system.Schedule.objects.enabled") as mock_enabled:
                     with patch("ascender.main.tasks.system.settings.DISABLE_ALL_SCHEDULES", True):

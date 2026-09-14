@@ -40,7 +40,7 @@ from ascender import __version__ as awx_application_version
 from ascender.main.access import access_registry
 from ascender.main.models import (
     Schedule,
-    TowerScheduleState,
+    AscenderScheduleState,
     Instance,
     InstanceGroup,
     UnifiedJob,
@@ -734,7 +734,7 @@ def awx_periodic_scheduler():
         logger.debug("Starting periodic scheduler")
 
         run_now = now()
-        state = TowerScheduleState.get_solo()
+        state = AscenderScheduleState.get_solo()
         last_run = state.schedule_last_run
         logger.debug("Last scheduler run was: %s", last_run)
         state.schedule_last_run = run_now
