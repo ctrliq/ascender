@@ -24,7 +24,7 @@ from django.urls import reverse, resolve
 from awx.main import migrations, request_context
 from awx.main.request_context import get_current_request, get_current_user, impersonate  # noqa: F401 -- long-standing import location
 from awx.main.utils.named_url_graph import generate_graph, GraphNode
-from awx.conf import fields, register
+from awx.conf import fields, register, settings_registry
 from awx.conf.settings import SETTING_CACHE_VERSION_KEY
 from awx.main.utils.profiling import AWXProfiler
 from awx.main.utils.common import memoize
@@ -183,20 +183,18 @@ def _customize_graph():
 
 
 class URLModificationMiddleware(MiddlewareMixin):
-    # Django builds the middleware chain once per handler, and there is more than
-    # one handler as soon as the ASGI application serves http beside the WSGI one.
-    # register() refuses a setting it already holds, so these two happen once for
-    # the life of the process rather than once per handler.
-    _named_url_settings_registered = False
-
     def __init__(self, get_response):
         models = [m for m in apps.get_app_config('main').get_models() if hasattr(m, 'get_absolute_url')]
         generate_graph(models)
         _customize_graph()
-        if URLModificationMiddleware._named_url_settings_registered:
+        # Django builds the middleware chain once per handler, and there is more
+        # than one handler as soon as the ASGI application serves http beside the
+        # WSGI one. register() refuses a setting it already holds, so ask the
+        # registry rather than remember: a flag on the class outlives anything
+        # that unregisters these, and then nothing would ever register them again.
+        if 'NAMED_URL_FORMATS' in settings_registry.get_registered_settings():
             super().__init__(get_response)
             return
-        URLModificationMiddleware._named_url_settings_registered = True
         register(
             'NAMED_URL_FORMATS',
             field_class=fields.DictField,

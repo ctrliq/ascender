@@ -45,6 +45,22 @@ def teardown_module(module):
 
 
 @pytest.mark.django_db
+def test_the_middleware_registers_the_named_url_settings_again_after_they_are_unregistered():
+    # The teardown above unregisters them, and other test modules in the same
+    # process build the middleware afterwards expecting the registry to answer
+    # for them. It did not, once a flag on the class recorded the first
+    # registration for the life of the process.
+    settings_registry.unregister('NAMED_URL_FORMATS')
+    settings_registry.unregister('NAMED_URL_GRAPH_NODES')
+
+    URLModificationMiddleware(mock.Mock())
+
+    registered = settings_registry.get_registered_settings()
+    assert 'NAMED_URL_FORMATS' in registered
+    assert 'NAMED_URL_GRAPH_NODES' in registered
+
+
+@pytest.mark.django_db
 def test_user(get, admin_user):
     test_user = User.objects.create(username='test_user', password='test_user', is_superuser=False)
     url = reverse('api:user_detail', kwargs={'pk': test_user.pk})
