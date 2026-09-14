@@ -23,6 +23,23 @@ dynamic = ["version"]
 ascender-manage = "awx:manage"
 awx-manage = "awx:manage"
 
+# The group a credential plugin registers against is a published name: anything
+# third party declares itself under `awx.credential_plugins` and cannot be
+# rewritten from here. Both groups carry the same ten plugins, and the loader
+# reads both, so a plugin written against either is found. They are asserted
+# identical by a test, which is what keeps the two lists from drifting.
+[project.entry-points."ascender.credential_plugins"]
+conjur = "awx.main.credential_plugins.conjur:conjur_plugin"
+hashivault_kv = "awx.main.credential_plugins.hashivault:hashivault_kv_plugin"
+hashivault_ssh = "awx.main.credential_plugins.hashivault:hashivault_ssh_plugin"
+azure_kv = "awx.main.credential_plugins.azure_kv:azure_keyvault_plugin"
+aim = "awx.main.credential_plugins.aim:aim_plugin"
+centrify_vault_kv = "awx.main.credential_plugins.centrify_vault:centrify_plugin"
+thycotic_dsv = "awx.main.credential_plugins.dsv:dsv_plugin"
+thycotic_tss = "awx.main.credential_plugins.tss:tss_plugin"
+aws_secretsmanager_credential = "awx.main.credential_plugins.aws_secretsmanager:aws_secretmanager_plugin"
+github_app_lookup = "awx.main.credential_plugins.github_app:github_app_plugin"
+
 [project.entry-points."awx.credential_plugins"]
 conjur = "awx.main.credential_plugins.conjur:conjur_plugin"
 hashivault_kv = "awx.main.credential_plugins.hashivault:hashivault_kv_plugin"
