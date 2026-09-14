@@ -2,7 +2,7 @@
 
 This folder contains the symlink to editable dependencies for AWX
 
-During the bootstrap of awx development environment we will try to crawl through the symlinks and mount (the source of the symlink) to `tools_awx_` containers and `init_awx` containers than install all the dependencies in editable mode
+During the bootstrap of awx development environment we will try to crawl through the symlinks and mount (the source of the symlink) to `tools_ascender_` containers and `init_ascender` containers than install all the dependencies in editable mode
 
 ## How to enable/disable editable dependnecies
 

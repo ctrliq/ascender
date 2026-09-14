@@ -127,7 +127,7 @@ jobs:
 
       - name: Get logs from the development environment on failure
         if: failure()
-        run: docker logs tools_awx_1 || true
+        run: docker logs tools_ascender_1 || true
 
   e2e:
     name: ui-e2e
@@ -153,7 +153,7 @@ jobs:
       # run against whatever was in the image, not against this pull request.
       - name: Serve the UI that was just built
         run: |
-          docker exec tools_awx_1 \
+          docker exec tools_ascender_1 \
             supervisorctl -c /etc/supervisord.conf restart tower-processes:awx-uvicorn
           SECONDS=0
           while [[ "$(curl -s -o /dev/null -w ''%{http_code}'' -k https://localhost:8043/api/v2/ping/)" != "200" ]]; do
@@ -196,7 +196,7 @@ jobs:
 
       - name: Get logs from the development environment on failure
         if: failure()
-        run: docker logs tools_awx_1 || true
+        run: docker logs tools_ascender_1 || true
 
   ui-dependency-audit:
     name: ui-dependency-audit

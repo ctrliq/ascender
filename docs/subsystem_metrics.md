@@ -100,15 +100,15 @@ The above metrics are designed to override whatever values are in Redis. Calling
 Example, the following metric captures how many events are batch-inserted into the database.
 
 ```
-callback_receiver_batch_events_insert_db_bucket{le="10",node="awx_1"} 1
-callback_receiver_batch_events_insert_db_bucket{le="50",node="awx_1"} 5
-callback_receiver_batch_events_insert_db_bucket{le="150",node="awx_1"} 5
-callback_receiver_batch_events_insert_db_bucket{le="350",node="awx_1"} 5
-callback_receiver_batch_events_insert_db_bucket{le="650",node="awx_1"} 5
-callback_receiver_batch_events_insert_db_bucket{le="2000",node="awx_1"} 5
-callback_receiver_batch_events_insert_db_bucket{le="+Inf",node="awx_1"} 5
-callback_receiver_batch_events_insert_db_count{node="awx_1"} 5
-callback_receiver_batch_events_insert_db_sum{node="awx_1"} 5
+callback_receiver_batch_events_insert_db_bucket{le="10",node="ascender_1"} 1
+callback_receiver_batch_events_insert_db_bucket{le="50",node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_bucket{le="150",node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_bucket{le="350",node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_bucket{le="650",node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_bucket{le="2000",node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_bucket{le="+Inf",node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_count{node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_sum{node="ascender_1"} 5
 ```
 
 The histogram is cumulative, meaning each successive bucket includes the values in the *preceding* bucket. In the above, one occurrence of the insertion process resulted in less than 10 events being inserted into the database. Four (5-1) occurrences resulted in between 10 and 50 events being inserted into the database.

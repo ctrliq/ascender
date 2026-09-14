@@ -17,7 +17,7 @@ This is a useful tool for examining per-api endpoint SQL queries, performance, h
 To enable DDT, you need to set your `INTERNAL_IPS` to the IP address of your load balancer.  This can be overridden by creating a new settings file beginning with `local_` in `ascender/settings/` (e.g. `local_overrides.py`).
 This IP address can be found by making a GET to any page on the browsable API and looking for information like this in the standard output:
 ```
-awx_1        | 14:42:08 uwsgi.1     | 172.18.0.1 GET /api/v2/tokens/ - HTTP/1.1 200
+ascender_1        | 14:42:08 uwsgi.1     | 172.18.0.1 GET /api/v2/tokens/ - HTTP/1.1 200
 ```
 
 Allow this IP address by adding it to the `INTERNAL_IPS` variable in your new override local settings file, then navigate to the API and you should see DDT on the

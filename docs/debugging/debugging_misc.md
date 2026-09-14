@@ -50,14 +50,14 @@ log_line_prefix = '< %m %a >' # timestamp, application name
 We've made it easier to correlate postgres connections <--> the processes that is doing the query. For example, the following line is a log entry from a slow running `awx-manage` command. 
 
 ```
-< 2021-04-21 12:42:10.307 UTC awx_1-1540765-/bin/awx-manage gather_analytics --dry-run -v 3 >LOG:  duration: 1211.270 ms  statement: SELECT MIN("main_jobevent"."id") AS "pk__min", MAX("main_jobevent"."id") AS "pk__max" FROM "main_jobevent" WHERE ("main_jobevent"."modified" >= '2021-03-24T12:42:08.846790+00:00'::timestamptz AND "main_jobevent"."modified" <= '2021-04-21T12:42:08.846790+00:00'::timestamptz)
+< 2021-04-21 12:42:10.307 UTC ascender_1-1540765-/bin/awx-manage gather_analytics --dry-run -v 3 >LOG:  duration: 1211.270 ms  statement: SELECT MIN("main_jobevent"."id") AS "pk__min", MAX("main_jobevent"."id") AS "pk__max" FROM "main_jobevent" WHERE ("main_jobevent"."modified" >= '2021-03-24T12:42:08.846790+00:00'::timestamptz AND "main_jobevent"."modified" <= '2021-04-21T12:42:08.846790+00:00'::timestamptz)
 ```
 
 The above entry was found in the log file `/var/lib/pgsql/data/pg_log/postgresql-Wed.log`
 
-Note the `application_name` portion. This allows us to trace the query to the node `awx_1` with processes id `1540765`. The full task command line string gives us context for each long-running query that we need to find the needle in the hay stack without having to go to each individual Ascender node and query Linux by the pid to understand what work is being done by each pid.
+Note the `application_name` portion. This allows us to trace the query to the node `ascender_1` with processes id `1540765`. The full task command line string gives us context for each long-running query that we need to find the needle in the hay stack without having to go to each individual Ascender node and query Linux by the pid to understand what work is being done by each pid.
 ```
-awx_1-1540765-/bin/awx-manage gather_analytics --dry-run -v 3
+ascender_1-1540765-/bin/awx-manage gather_analytics --dry-run -v 3
 <tower_instance_hostname>-<pid>-<pid_launch_string>
 ```
 
@@ -76,7 +76,7 @@ WHERE (now() - pg_stat_activity.query_start) > interval '5 minutes' and state='a
 ```
     duration     |                                                     query                                                     | state  |                        application_name
 -----------------+---------------------------------------------------------------------------------------------------------------+--------+-----------------------------------------------------------------
- 00:13:13.125703 | COPY (SELECT main_jobevent.id,                                                                               +| active | awx_1-1540765-/bin/awx-manage gather_analytics --dry-run -v 3
+ 00:13:13.125703 | COPY (SELECT main_jobevent.id,                                                                               +| active | ascender_1-1540765-/bin/awx-manage gather_analytics --dry-run -v 3
                  |                          main_jobevent.created,                                                              +|        |
                  |                          main_jobevent.modified,                                                             +|        |
                  |                          main_jobevent.uuid,                                                                 +|        |
@@ -95,7 +95,7 @@ WHERE (now() - pg_stat_activity.query_start) > interval '5 minutes' and state='a
                  |                          main_jobevent.host_name,                                                            +|        |
                  |                          CAST(main_jobevent.event_data::json->>'start' AS TIMESTAMP WITH TIME ZONE) AS start,+|        |
                  |                                                                                                               |        |
- 00:13:13.125703 | COPY (SELECT main_jobevent.id,                                                                               +| active | awx_1-1540765-/bin/awx-manage gather_analytics --dry-run -v 3
+ 00:13:13.125703 | COPY (SELECT main_jobevent.id,                                                                               +| active | ascender_1-1540765-/bin/awx-manage gather_analytics --dry-run -v 3
                  |                          main_jobevent.created,                                                              +|        |
                  |                          main_jobevent.modified,                                                             +|        |
                  |                          main_jobevent.uuid,                                                                 +|        |

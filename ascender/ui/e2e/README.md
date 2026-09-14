@@ -15,7 +15,7 @@ starts, with the UI built into it:
 
 ```bash
 make docker-compose            # in one terminal, from the repository root
-docker exec tools_awx_1 make ui-devel
+docker exec tools_ascender_1 make ui-devel
 ```
 
 Then, from this directory:

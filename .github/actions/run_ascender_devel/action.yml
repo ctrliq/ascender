@@ -57,9 +57,9 @@ runs:
       shell: bash
       run: |
         echo "--- image ---"
-        docker inspect tools_awx_1 --format 'image={{.Config.Image}} ({{.Image}}) user={{.Config.User}}'
+        docker inspect tools_ascender_1 --format 'image={{.Config.Image}} ({{.Image}}) user={{.Config.User}}'
         echo "--- runtime user and rsyslog permissions ---"
-        docker exec tools_awx_1 bash -c 'id; ls -land /var/lib/ascender /var/lib/ascender/rsyslog; ls -lan /var/lib/ascender/rsyslog/'
+        docker exec tools_ascender_1 bash -c 'id; ls -land /var/lib/ascender /var/lib/ascender/rsyslog; ls -lan /var/lib/ascender/rsyslog/'
 
     - name: Wait for the development environment and set the admin password
       shell: bash
@@ -69,16 +69,16 @@ runs:
           if [[ $SECONDS -gt 600 ]]; then
             echo "Timing out, the API never came up"
             docker ps -a
-            docker logs tools_awx_1 || true
+            docker logs tools_ascender_1 || true
             echo "--- rsyslog diagnostics ---"
-            docker exec tools_awx_1 bash -c 'id; ls -lan /var/lib/ascender/rsyslog/; ps aux' || true
+            docker exec tools_ascender_1 bash -c 'id; ls -lan /var/lib/ascender/rsyslog/; ps aux' || true
             exit 1
           fi
           echo "Waiting for the API..."
           sleep 5
         done
         echo "The API is up, updating the password..."
-        docker exec -i tools_awx_1 sh <<-EOSH
+        docker exec -i tools_ascender_1 sh <<-EOSH
           ascender-manage update_password --username=admin --password=password
         EOSH
 
@@ -88,6 +88,6 @@ runs:
       if: ${{ inputs.build-ui == 'true' }}
       shell: bash
       run: |
-        docker exec -i tools_awx_1 sh <<-EOSH
+        docker exec -i tools_ascender_1 sh <<-EOSH
           make ui-devel
         EOSH

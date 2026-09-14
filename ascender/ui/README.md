@@ -69,25 +69,25 @@ container to ensure consistency.
 
 ```shell
 # make sure the awx development container is running and open a shell
-docker exec -it tools_awx_1 bash
+docker exec -it tools_ascender_1 bash
 
 # start with a fresh install of the current dependencies
-(tools_awx_1)$ make clean-ui && npm --prefix=awx/ui ci
+(tools_ascender_1)$ make clean-ui && npm --prefix=awx/ui ci
 
 # add an exact development dependency
-(tools_awx_1)$ npm --prefix awx/ui install --save-dev --save-exact dev-package@1.2.3
+(tools_ascender_1)$ npm --prefix awx/ui install --save-dev --save-exact dev-package@1.2.3
 
 # add an exact production dependency
-(tools_awx_1)$ npm --prefix awx/ui install --save --save-exact prod-package@1.23
+(tools_ascender_1)$ npm --prefix awx/ui install --save --save-exact prod-package@1.23
 
 # remove a development dependency
-(tools_awx_1)$ npm --prefix awx/ui uninstall --save-dev dev-package
+(tools_ascender_1)$ npm --prefix awx/ui uninstall --save-dev dev-package
 
 # remove a production dependency
-(tools_awx_1)$ npm --prefix awx/ui uninstall --save prod-package
+(tools_ascender_1)$ npm --prefix awx/ui uninstall --save prod-package
 
 # exit the container
-(tools_awx_1)$ exit
+(tools_ascender_1)$ exit
 
 # add the updated package.json and package-lock.json files to scm
 git add awx/ui/package.json awx/ui/package-lock.json
@@ -109,7 +109,7 @@ To run:
 ```shell
 cd awx/awx/ui
 docker build -t awx-ui .
-docker run --name tools_ui_1 --network _sources_default --link 'tools_awx_1:awx' -e TARGET="https://awx:8043" -p '3001:3001' --rm -v $(pwd)/src:/ui/src awx-ui
+docker run --name tools_ui_1 --network _sources_default --link 'tools_ascender_1:awx' -e TARGET="https://awx:8043" -p '3001:3001' --rm -v $(pwd)/src:/ui/src awx-ui
 ```
 
 **Note:** This is for CI, test systems, zuul, etc. For local development, see [usage](https://github.com/ansible/awx/blob/devel/awx/ui/README.md#Development)

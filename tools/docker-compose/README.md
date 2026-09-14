@@ -163,7 +163,7 @@ This will spin up a topology represented below.
                                             │              │
 ┌──────────────┐                 ┌──────────┤  receptor-1  │
 │              │                 │          │              │
-│    awx_1     │◄──────────┐     │          └──────────────┘
+│    ascender_1     │◄──────────┐     │          └──────────────┘
 │              │           │     ▼
 └──────┬───────┘    ┌──────┴───────┐        ┌──────────────┐
        │            │              │        │              │
@@ -171,7 +171,7 @@ This will spin up a topology represented below.
        ▼            │              │        │              │
 ┌──────────────┐    └──────────────┘        └──────────────┘
 │              │                 ▲
-│    awx_2     │                 │          ┌──────────────┐
+│    ascender_2     │                 │          ┌──────────────┐
 │              │                 │          │              │
 └──────────────┘                 └──────────┤  receptor-3  │
                                             │              │
@@ -179,11 +179,11 @@ This will spin up a topology represented below.
 ```
 
 All execution (`receptor-*`) nodes connect to the hop node.
-Only the `awx_1` node connects to the hop node out of the AWX cluster.
-`awx_1` connects to `awx_2`, fulfilling the requirement that the AWX cluster is fully connected.
+Only the `ascender_1` node connects to the hop node out of the AWX cluster.
+`ascender_1` connects to `ascender_2`, fulfilling the requirement that the AWX cluster is fully connected.
 
-For example, if a job is launched with `awx_2` as the `controller_node` and `receptor-3` as the `execution_node`,
-then `awx_2` communicates to `receptor-3` via `awx_1` and then `receptor-hop`.
+For example, if a job is launched with `ascender_2` as the `controller_node` and `receptor-3` as the `execution_node`,
+then `ascender_2` communicates to `receptor-3` via `ascender_1` and then `receptor-hop`.
 
 
 ##### Wait for migrations to complete
@@ -191,25 +191,25 @@ then `awx_2` communicates to `receptor-3` via `awx_1` and then `receptor-hop`.
 The first time you start the environment, database migrations need to run in order to build the PostgreSQL database. It will take few moments, but eventually you will see output in your terminal session that looks like the following:
 
 ```bash
-awx_1        | Operations to perform:
-awx_1        |   Synchronize unmigrated apps: solo, api, staticfiles, debug_toolbar, messages, channels, ui, rest_framework, polymorphic
-awx_1        |   Apply all migrations: sso, taggit, sessions, sites, kombu_transport_django, social_auth, contenttypes, auth, conf, main
-awx_1        | Synchronizing apps without migrations:
-awx_1        |   Creating tables...
-awx_1        |     Running deferred SQL...
-awx_1        |   Installing custom SQL...
-awx_1        | Running migrations:
-awx_1        |   Rendering model states... DONE
-awx_1        |   Applying contenttypes.0001_initial... OK
-awx_1        |   Applying contenttypes.0002_remove_content_type_name... OK
-awx_1        |   Applying auth.0001_initial... OK
+ascender_1        | Operations to perform:
+ascender_1        |   Synchronize unmigrated apps: solo, api, staticfiles, debug_toolbar, messages, channels, ui, rest_framework, polymorphic
+ascender_1        |   Apply all migrations: sso, taggit, sessions, sites, kombu_transport_django, social_auth, contenttypes, auth, conf, main
+ascender_1        | Synchronizing apps without migrations:
+ascender_1        |   Creating tables...
+ascender_1        |     Running deferred SQL...
+ascender_1        |   Installing custom SQL...
+ascender_1        | Running migrations:
+ascender_1        |   Rendering model states... DONE
+ascender_1        |   Applying contenttypes.0001_initial... OK
+ascender_1        |   Applying contenttypes.0002_remove_content_type_name... OK
+ascender_1        |   Applying auth.0001_initial... OK
 ...
 ```
 
 ##### Clean and build the UI
 
 ```bash
-$ docker exec tools_awx_1 make clean-ui ui-devel
+$ docker exec tools_ascender_1 make clean-ui ui-devel
 ```
 
 See [the ui development documentation](../../ascender/ui/README.md) for more information on using the frontend development, build, and test tooling.
@@ -221,7 +221,7 @@ Once migrations are completed and the UI is built, you can begin using AWX. The 
 Before you can log into AWX, you need to create an admin user. With this user you will be able to create more users, and begin configuring the server. From within the container shell, run the following command:
 
 ```bash
-$ docker exec -ti tools_awx_1 awx-manage createsuperuser
+$ docker exec -ti tools_ascender_1 awx-manage createsuperuser
 ```
 
 > Remember the username and password, as you will use them to log into the web interface for the first time.
@@ -231,7 +231,7 @@ $ docker exec -ti tools_awx_1 awx-manage createsuperuser
 Optionally, you may also want to load some demo data. This will create a demo project, inventory, and job template.
 
 ```bash
-$ docker exec tools_awx_1 awx-manage create_preload_data
+$ docker exec tools_ascender_1 awx-manage create_preload_data
 ```
 
 > This information will persist in the database running in the `tools_postgres_1` container, until the container is removed. You may periodically need to recreate
@@ -267,7 +267,7 @@ $ make docker-compose
 To run `awx-manage` commands and modify things inside the container, you will want to start a shell session on the _awx_ container. In a new terminal session, use the `docker exec` command to start the shell session:
 
 ```bash
-(host)$ docker exec -it tools_awx_1 bash
+(host)$ docker exec -it tools_ascender_1 bash
 ```
 
 This creates a session in the _awx_ containers, just as if you were using `ssh`, and allows you execute commands within the running container.
@@ -310,7 +310,7 @@ Certain features or bugs are only applicable when running a cluster of AWX nodes
 
 `CONTROL_PLANE_NODE_COUNT` is configurable and defaults to 1, effectively a non-clustered AWX.
 
-Note that you may see multiple messages of the form `2021-03-04 20:11:47,666 WARNING [-] ascender.main.wsrelay Connection from awx_2 to awx_5 failed: 'Cannot connect to host awx_5:8013 ssl:False [Name or service not known]'.`. This can happen when you bring up a cluster of many nodes, say 10, then you bring up a cluster of less nodes, say 3. In this example, there will be 7 `Instance` records in the database that represent AWX instances. The AWX development environment mimics the VM deployment (vs. kubernetes) and expects the missing nodes to be brought back to healthy by the admin. The warning message you are seeing is all of the AWX nodes trying to connect the websocket backplane. You can manually delete the `Instance` records from the database i.e. `Instance.objects.get(hostname='awx_9').delete()` to stop the warnings.
+Note that you may see multiple messages of the form `2021-03-04 20:11:47,666 WARNING [-] ascender.main.wsrelay Connection from ascender_2 to ascender_5 failed: 'Cannot connect to host ascender_5:8013 ssl:False [Name or service not known]'.`. This can happen when you bring up a cluster of many nodes, say 10, then you bring up a cluster of less nodes, say 3. In this example, there will be 7 `Instance` records in the database that represent AWX instances. The AWX development environment mimics the VM deployment (vs. kubernetes) and expects the missing nodes to be brought back to healthy by the admin. The warning message you are seeing is all of the AWX nodes trying to connect the websocket backplane. You can manually delete the `Instance` records from the database i.e. `Instance.objects.get(hostname='ascender_9').delete()` to stop the warnings.
 
 ### Start with Minikube
 

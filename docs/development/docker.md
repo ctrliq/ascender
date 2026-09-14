@@ -74,13 +74,13 @@ You will need to start the containers, and then once they are up, start npm in a
 When starting containers, after migrations are done, it will randomly generate a password for the admin user, you will see it in the logs.  If you change the password, it will still state in the logs that the password is the randomly generated one, but your new one will be the actual one to work.
 
 ```
-tools_awx_1   	|   Applying social_django.0015_rename_extra_data_new_usersocialauth_extra_data... OK
-tools_awx_1   	|   Applying social_django.0016_alter_usersocialauth_extra_data... OK
-tools_awx_1   	|   Applying sso.0001_initial... OK
-tools_awx_1   	|   Applying sso.0002_expand_provider_options... OK
-tools_awx_1   	|   Applying sso.0003_convert_saml_string_to_list... OK
-tools_awx_1   	| Superuser created successfully.
-tools_awx_1   	| Admin password: vHwSodfHzdssZwQduUrAYMn
+tools_ascender_1   	|   Applying social_django.0015_rename_extra_data_new_usersocialauth_extra_data... OK
+tools_ascender_1   	|   Applying social_django.0016_alter_usersocialauth_extra_data... OK
+tools_ascender_1   	|   Applying sso.0001_initial... OK
+tools_ascender_1   	|   Applying sso.0002_expand_provider_options... OK
+tools_ascender_1   	|   Applying sso.0003_convert_saml_string_to_list... OK
+tools_ascender_1   	| Superuser created successfully.
+tools_ascender_1   	| Admin password: vHwSodfHzdssZwQduUrAYMn
 ```
 
 The default user is "***admin***".  
@@ -95,7 +95,7 @@ When you have python packages to update due to upstream or dependency CVE remedi
 2. From there, create a new branch to handle the CVE changes
 3. Start the containers using `./start_containers.sh`
 4. Login to the ascender web container using
-`docker exec -it tools_awx_1 /bin/bash`
+`docker exec -it tools_ascender_1 /bin/bash`
 5. Change to the `requirements` directory and update `requirements.in`
 6. While still in the container, run the `./updates.sh run` command to update the `requirements.txt`
 7. Exit the container
@@ -121,7 +121,7 @@ When you have npm packages to update due to upstream or dependency CVE remediati
 
 1. start the containers
 2. do not start npm
-3. enter the `tools_awx_1` container
+3. enter the `tools_ascender_1` container
 4. `cd tools/docker-compose`
 5. `./start_tests.sh test_coverage`
 

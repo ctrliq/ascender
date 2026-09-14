@@ -26,7 +26,7 @@
   tasks:
     - name: Reset admin password
       shell: |
-        docker exec -i tools_awx_1 bash <<EOSH
+        docker exec -i tools_ascender_1 bash <<EOSH
           awx-manage update_password --username=admin --password={{ controller_password }}
           awx-manage create_preload_data
         EOSH

@@ -9,10 +9,10 @@ Ascender is a web-based UI, REST API, and task engine built on top of [Ansible](
 
 ## Runtime Environment
 
-All development tooling runs inside the **`tools_awx_1` Docker container**. The repository root is mounted at `/awx_devel` inside the container. The host working directory (`/root/ascender`) does not have the project's Python environment. Always prefix commands with:
+All development tooling runs inside the **`tools_ascender_1` Docker container**. The repository root is mounted at `/awx_devel` inside the container. The host working directory (`/root/ascender`) does not have the project's Python environment. Always prefix commands with:
 
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && <command>"
+docker exec tools_ascender_1 bash -c "cd /awx_devel && <command>"
 ```
 
 Supporting containers also running:
@@ -34,23 +34,23 @@ Config in `pyproject.toml` under `[tool.ruff]` and `[tool.ruff.format]`: `line-l
 
 ```bash
 # Check (CI-style):
-docker exec tools_awx_1 bash -c "cd /awx_devel && ruff format --check awx"
+docker exec tools_ascender_1 bash -c "cd /awx_devel && ruff format --check awx"
 # Auto-fix:
-docker exec tools_awx_1 bash -c "cd /awx_devel && ruff format awx"
+docker exec tools_ascender_1 bash -c "cd /awx_devel && ruff format awx"
 ```
 
 ### Ruff (linting)
 Config in `pyproject.toml` under `[tool.ruff.lint]`. Selects 48 rules explicitly rather than by class, ported from the `[flake8]` block this replaced: the `E7xx` statement checks, `F4xx` through `F9xx`, and `W2xx`/`W3xx`/`W605`. `preview = true` is required because `E265`, `E266` and `W391` are still preview rules and are silently inert without it. Excludes `ascender/ui/node_modules`, `env`.
 
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && ruff check awx"
+docker exec tools_ascender_1 bash -c "cd /awx_devel && ruff check awx"
 ```
 
 ### Yamllint
 Config in `.yamllint` (root). `line-length` and `truthy` rules are disabled. Ignores `.github`, `.tox`, `tools/docker-compose/_sources`, and a few test data paths.
 
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && yamllint -s ."
+docker exec tools_ascender_1 bash -c "cd /awx_devel && yamllint -s ."
 ```
 
 ---
@@ -61,30 +61,30 @@ Tests run against PostgreSQL, the same backend Ascender deploys on, with an in-m
 
 ### Unit tests (~15 seconds, run frequently)
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n auto --dist=loadfile ascender/main/tests/unit/"
+docker exec tools_ascender_1 bash -c "cd /awx_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n auto --dist=loadfile ascender/main/tests/unit/"
 ```
 Result: 1139 passed, 1 skipped.
 
 ### Functional tests (~3 minutes)
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n auto --dist=loadfile ascender/main/tests/functional/"
+docker exec tools_ascender_1 bash -c "cd /awx_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n auto --dist=loadfile ascender/main/tests/functional/"
 ```
 Result: 1987 passed, 5 skipped.
 
 ### Full test suite (all dirs, ~4 minutes)
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n auto --dist=loadfile ascender/main/tests/unit ascender/main/tests/functional ascender/conf/tests ascender/sso/tests"
+docker exec tools_ascender_1 bash -c "cd /awx_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n auto --dist=loadfile ascender/main/tests/unit ascender/main/tests/functional ascender/conf/tests ascender/sso/tests"
 ```
 
 ### Migration check (always run after model changes)
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && awx-manage check_migrations --dry-run --check -n 'missing_migration_file'"
+docker exec tools_ascender_1 bash -c "cd /awx_devel && awx-manage check_migrations --dry-run --check -n 'missing_migration_file'"
 ```
 Expected output: `No changes detected`
 
 ### Target a single test file
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider ascender/main/tests/unit/test_capacity.py"
+docker exec tools_ascender_1 bash -c "cd /awx_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider ascender/main/tests/unit/test_capacity.py"
 ```
 
 ---
@@ -94,12 +94,12 @@ docker exec tools_awx_1 bash -c "cd /awx_devel && PYTHONDONTWRITEBYTECODE=1 py.t
 After changing any Django model, always generate and commit the migration:
 
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && awx-manage makemigrations"
+docker exec tools_ascender_1 bash -c "cd /awx_devel && awx-manage makemigrations"
 ```
 
 Then verify no missing migration file:
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && awx-manage check_migrations --dry-run --check -n 'missing_migration_file'"
+docker exec tools_ascender_1 bash -c "cd /awx_devel && awx-manage check_migrations --dry-run --check -n 'missing_migration_file'"
 ```
 
 Migration files live in `ascender/main/migrations/` (218 existing files).

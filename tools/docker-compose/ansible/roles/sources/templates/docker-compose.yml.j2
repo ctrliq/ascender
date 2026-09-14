@@ -3,9 +3,9 @@
 ---
 services:
 {% if editable_dependencies | length > 0 %}
-  init_awx:
+  init_ascender:
     image: "{{ awx_image }}:{{ awx_image_tag }}"
-    container_name: tools_init_awx
+    container_name: tools_init_ascender
     command: /awx_devel/tools/docker-compose/editable_dependencies/install.sh
     user: root
     working_dir: "/"
@@ -23,11 +23,11 @@ services:
   {% set awx_sdb_port_start = 7899 + (loop.index0*1000) | int %}
   {% set awx_sdb_port_end = 7999 + (loop.index0*1000) | int %}
   # Primary AWX Development Container
-  awx_{{ container_postfix }}:
+  ascender_{{ container_postfix }}:
     user: "{{ ansible_user_uid }}"
     image: "{{ awx_image }}:{{ awx_image_tag }}"
-    container_name: tools_awx_{{ container_postfix }}
-    hostname: awx_{{ container_postfix }}
+    container_name: tools_ascender_{{ container_postfix }}
+    hostname: ascender_{{ container_postfix }}
     command: launch_awx.sh
     environment:
       OS: "{{ os_info.stdout }}"
@@ -83,7 +83,7 @@ services:
       valkey_{{ container_postfix }}:
         condition: service_started
 {% if editable_dependencies | length > 0 %}
-      init_awx:
+      init_ascender:
         condition: service_completed_successfully
 {% endif %}
     tty: true
@@ -128,7 +128,7 @@ services:
     depends_on:
   {% for i in range(control_plane_node_count|int) -%}
   {% set container_postfix = loop.index %}
-    - "awx_{{ container_postfix }}"
+    - "ascender_{{ container_postfix }}"
   {% endfor %}
 {% endif %}
 {% if enable_keycloak|bool %}
