@@ -1082,22 +1082,27 @@ ManagedCredentialType(
         'required': ['host'],
     },
     injectors={
+        # Ascender first, then the names it inherited. All three are set, so the
+        # order changes nothing at runtime, but it is the order they are meant
+        # to be read in and the order they will be removed in: the CONTROLLER_
+        # and TOWER_ blocks go when nothing reads them any more, and the one
+        # that stays is at the top rather than buried under them.
         'env': {
-            'TOWER_HOST': '{{host}}',
-            'TOWER_USERNAME': '{{username}}',
-            'TOWER_PASSWORD': '{{password}}',
-            'TOWER_VERIFY_SSL': '{{verify_ssl}}',
-            'TOWER_OAUTH_TOKEN': '{{oauth_token}}',
-            'CONTROLLER_HOST': '{{host}}',
-            'CONTROLLER_USERNAME': '{{username}}',
-            'CONTROLLER_PASSWORD': '{{password}}',
-            'CONTROLLER_VERIFY_SSL': '{{verify_ssl}}',
-            'CONTROLLER_OAUTH_TOKEN': '{{oauth_token}}',
             'ASCENDER_HOST': '{{host}}',
             'ASCENDER_USERNAME': '{{username}}',
             'ASCENDER_PASSWORD': '{{password}}',
             'ASCENDER_VERIFY_SSL': '{{verify_ssl}}',
             'ASCENDER_OAUTH_TOKEN': '{{oauth_token}}',
+            'CONTROLLER_HOST': '{{host}}',
+            'CONTROLLER_USERNAME': '{{username}}',
+            'CONTROLLER_PASSWORD': '{{password}}',
+            'CONTROLLER_VERIFY_SSL': '{{verify_ssl}}',
+            'CONTROLLER_OAUTH_TOKEN': '{{oauth_token}}',
+            'TOWER_HOST': '{{host}}',
+            'TOWER_USERNAME': '{{username}}',
+            'TOWER_PASSWORD': '{{password}}',
+            'TOWER_VERIFY_SSL': '{{verify_ssl}}',
+            'TOWER_OAUTH_TOKEN': '{{oauth_token}}',
         }
     },
 )
