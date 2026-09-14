@@ -63,7 +63,7 @@ even if the project revision does not change in the course of the update.
 Project updates all initially target a staging directory at a path like:
 
 ```
-/var/lib/awx/projects/.__awx_cache/_42__project_name/stage
+/var/lib/ascender/projects/.__awx_cache/_42__project_name/stage
 ```
 
 After the update finishes, the task logic will decide what id to associate
@@ -72,7 +72,7 @@ Then the folder will be renamed from "stage" to the cache id.
 For instance, if the cache id is determined to be 63:
 
 ```
-/var/lib/awx/projects/.__awx_cache/_42__project_name/63
+/var/lib/ascender/projects/.__awx_cache/_42__project_name/63
 ```
 
 The cache may be updated by project syncs (the "run" type) which happen before

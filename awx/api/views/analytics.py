@@ -191,9 +191,9 @@ class AnalyticsGenericView(APIView):
             if method not in ["GET", "POST", "OPTIONS"]:
                 return self._error_response(ERROR_UNSUPPORTED_METHOD, method, remote=False, status_code=status.HTTP_500_INTERNAL_SERVER_ERROR)
             else:
-                # AWX_TASK_ENV carries the configured proxy settings, which requests reads
+                # ASCENDER_TASK_ENV carries the configured proxy settings, which requests reads
                 # from the process environment. The web worker does not have them otherwise.
-                with set_environ(**settings.AWX_TASK_ENV):
+                with set_environ(**settings.ASCENDER_TASK_ENV):
                     response = requests.request(
                         method,
                         url,

@@ -38,12 +38,18 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # carries DATABASE_* for the compose environment and AWX_TEST_DATABASE_* for the
 # test settings, and a third scheme here would earn nothing: anything that needs
 # to point somewhere else is supplying a settings file anyway.
+#
+# The name and the user are the Ascender ones here, which costs nothing because
+# nothing deployed reads them. What a deployment actually connects to is set by
+# the operator, which derives the database name and user from deployment_type,
+# and those stay awx: renaming them means renaming a PostgreSQL role and
+# database that already hold the data, for a name almost nobody ever types.
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'awx',
-        'USER': 'awx',
-        'PASSWORD': 'awxpass',
+        'NAME': 'ascender',
+        'USER': 'ascender',
+        'PASSWORD': 'ascenderpass',
         'HOST': '127.0.0.1',
         'PORT': '5432',
         'ATOMIC_REQUESTS': True,
@@ -169,7 +175,7 @@ STATICFILES_DIRS = [
 
 # Absolute filesystem path to the directory where static file are collected via
 # the collectstatic command.
-STATIC_ROOT = '/var/lib/awx/public/static'
+STATIC_ROOT = '/var/lib/ascender/public/static'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
@@ -188,12 +194,12 @@ LOGIN_URL = '/api/login/'
 
 # Absolute filesystem path to the directory to host projects (with playbooks).
 # This directory should not be web-accessible.
-PROJECTS_ROOT = '/var/lib/awx/projects/'
+PROJECTS_ROOT = '/var/lib/ascender/projects/'
 
 # Absolute filesystem path to the directory for job status stdout (default for
 # development and tests, default for production defined in production.py). This
 # directory should not be web-accessible
-JOBOUTPUT_ROOT = '/var/lib/awx/job_status/'
+JOBOUTPUT_ROOT = '/var/lib/ascender/job_status/'
 
 # Absolute filesystem path to the directory to store logs
 LOG_ROOT = '/var/log/tower/'
@@ -746,7 +752,7 @@ ANSIBLE_FORCE_COLOR = True
 ANSIBLE_INVENTORY_UNPARSED_FAILED = True
 
 # Additional environment variables to be passed to the ansible subprocesses
-AWX_TASK_ENV = {}
+ASCENDER_TASK_ENV = {}
 
 # Additional environment variables to apply when running ansible-galaxy commands
 # to fetch Ansible content - roles and collections
@@ -764,15 +770,15 @@ PROJECT_UPDATE_VVV = False
 # Enable dynamically pulling roles from a requirement.yml file
 # when updating SCM projects
 # Note: This setting may be overridden by database settings.
-AWX_ROLES_ENABLED = True
+ASCENDER_ROLES_ENABLED = True
 
 # Enable dynamically pulling collections from a requirement.yml file
 # when updating SCM projects
 # Note: This setting may be overridden by database settings.
-AWX_COLLECTIONS_ENABLED = True
+ASCENDER_COLLECTIONS_ENABLED = True
 
 # Follow symlinks when scanning for playbooks
-AWX_SHOW_PLAYBOOK_LINKS = False
+ASCENDER_SHOW_PLAYBOOK_LINKS = False
 
 # Automatically add ascender_stats_* keys (changed/failed flags and host lists
 # derived from the playbook stats) to job artifacts when a job finishes.
@@ -791,17 +797,17 @@ GALAXY_IGNORE_CERTS = False
 
 # Additional paths to show for jobs using process isolation.
 # Note: This setting may be overridden by database settings.
-AWX_ISOLATION_SHOW_PATHS = []
+ASCENDER_ISOLATION_SHOW_PATHS = []
 
 # The directory in which the service will create new temporary directories for job
 # execution and isolation (such as credential files and custom
 # inventory scripts).
 # Note: This setting may be overridden by database settings.
-AWX_ISOLATION_BASE_PATH = tempfile.gettempdir()
+ASCENDER_ISOLATION_BASE_PATH = tempfile.gettempdir()
 
 # User definable ansible callback plugins
 # Note: This setting may be overridden by database settings.
-AWX_ANSIBLE_CALLBACK_PLUGINS = ""
+ASCENDER_ANSIBLE_CALLBACK_PLUGINS = ""
 
 # Automatically remove nodes that have missed their heartbeats after some time
 AWX_AUTO_DEPROVISION_INSTANCES = False
@@ -971,7 +977,7 @@ LOG_AGGREGATOR_VERIFY_CERT = True
 LOG_AGGREGATOR_LEVEL = 'INFO'
 LOG_AGGREGATOR_ACTION_QUEUE_SIZE = 131072
 LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB = 1  # Action queue
-LOG_AGGREGATOR_MAX_DISK_USAGE_PATH = '/var/lib/awx'
+LOG_AGGREGATOR_MAX_DISK_USAGE_PATH = '/var/lib/ascender'
 LOG_AGGREGATOR_RSYSLOGD_DEBUG = False
 LOG_AGGREGATOR_RSYSLOGD_ERROR_LOG_FILE = '/var/log/tower/rsyslog.err'
 API_400_ERROR_LOG_FORMAT = 'status {status_code} received by user {user_name} attempting to access {url_path} from {remote_addr}'
@@ -1058,10 +1064,10 @@ LOGGING = {
         'awx.main.access': {'level': 'INFO'},  # very verbose debug-level logs
         'awx.main.signals': {'level': 'INFO'},  # very verbose debug-level logs
         'awx.api.permissions': {'level': 'INFO'},  # very verbose debug-level logs
-        'awx.analytics': {'handlers': ['external_logger'], 'level': 'INFO', 'propagate': False},
-        'awx.analytics.broadcast_websocket': {'handlers': ['console', 'file', 'wsrelay', 'external_logger'], 'level': 'INFO', 'propagate': False},
-        'awx.analytics.performance': {'handlers': ['console', 'file', 'tower_warnings', 'external_logger'], 'level': 'DEBUG', 'propagate': False},
-        'awx.analytics.job_lifecycle': {'handlers': ['console', 'job_lifecycle', 'external_logger'], 'level': 'DEBUG', 'propagate': False},
+        'ascender.analytics': {'handlers': ['external_logger'], 'level': 'INFO', 'propagate': False},
+        'ascender.analytics.broadcast_websocket': {'handlers': ['console', 'file', 'wsrelay', 'external_logger'], 'level': 'INFO', 'propagate': False},
+        'ascender.analytics.performance': {'handlers': ['console', 'file', 'tower_warnings', 'external_logger'], 'level': 'DEBUG', 'propagate': False},
+        'ascender.analytics.job_lifecycle': {'handlers': ['console', 'job_lifecycle', 'external_logger'], 'level': 'DEBUG', 'propagate': False},
         'django_auth_ldap': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
         'social': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
         'system_tracking_migrations': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
@@ -1114,7 +1120,7 @@ COLOR_LOGS = False
 SILENCED_SYSTEM_CHECKS = ['models.E006']
 
 # Use middleware to get request statistics
-AWX_REQUEST_PROFILE = False
+ASCENDER_REQUEST_PROFILE = False
 
 #
 # Optionally, Ascender can generate DOT graphs
@@ -1133,7 +1139,7 @@ AWX_REQUEST_PROFILE_WITH_DOT = False
 AWX_CALLBACK_PROFILE = False
 
 # Delete temporary directories created to store playbook run-time
-AWX_CLEANUP_PATHS = True
+ASCENDER_CLEANUP_PATHS = True
 
 # Allow ansible-runner to store env folder (may contain sensitive information)
 AWX_RUNNER_OMIT_ENV_FILES = True
@@ -1145,7 +1151,7 @@ AWX_RUNNER_SUPPRESS_OUTPUT_FILE = True
 # https://github.com/ansible/ansible-runner/pull/1191/files
 # Interval in seconds between the last message and keep-alive messages that
 # ansible-runner will send
-AWX_RUNNER_KEEPALIVE_SECONDS = 0
+ASCENDER_RUNNER_KEEPALIVE_SECONDS = 0
 
 # Delete completed work units in receptor
 RECEPTOR_RELEASE_WORK = True
@@ -1242,7 +1248,7 @@ DEFAULT_CONTROL_PLANE_QUEUE_NAME = 'controlplane'
 DEFAULT_CONTAINER_RUN_OPTIONS = ['--network', 'slirp4netns:enable_ipv6=true']
 
 # Mount exposed paths as hostPath resource in k8s/ocp
-AWX_MOUNT_ISOLATED_PATHS_ON_K8S = False
+ASCENDER_MOUNT_ISOLATED_PATHS_ON_K8S = False
 
 # This is overridden downstream via /etc/tower/conf.d/cluster_host_id.py
 CLUSTER_HOST_ID = socket.gethostname()

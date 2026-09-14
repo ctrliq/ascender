@@ -27,7 +27,7 @@ https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/
 if MODE == 'production':
     logger = logging.getLogger('awx.main.models.jobs')
     try:
-        fd = open("/var/lib/awx/.tower_version", "r")
+        fd = open("/var/lib/ascender/.tower_version", "r")
         if fd.read().strip() != tower_version:
             raise ValueError()
     except FileNotFoundError:

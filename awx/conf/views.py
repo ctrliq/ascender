@@ -31,6 +31,7 @@ from awx.conf.models import Setting
 from awx.conf.serializers import SettingCategorySerializer, SettingSingletonSerializer
 from awx.conf import settings_registry
 from awx.main.utils.external_logging import reconfigure_rsyslog
+from awx.main.constants import ANALYTICS_LOGGER_PREFIX
 
 SettingCategory = collections.namedtuple('SettingCategory', ('url', 'slug', 'name'))
 
@@ -166,7 +167,7 @@ class SettingLoggingTest(GenericAPIView):
         try:
             default_logger = settings.LOG_AGGREGATOR_LOGGERS[0]
             if default_logger != 'awx':
-                default_logger = f'awx.analytics.{default_logger}'
+                default_logger = f'{ANALYTICS_LOGGER_PREFIX}.{default_logger}'
         except IndexError:
             default_logger = 'awx'
         logging.getLogger(default_logger).error('AWX Connection Test Message')
@@ -175,7 +176,7 @@ class SettingLoggingTest(GenericAPIView):
         protocol = getattr(settings, 'LOG_AGGREGATOR_PROTOCOL', None)
 
         try:
-            subprocess.check_output(['rsyslogd', '-N1', '-f', '/var/lib/awx/rsyslog/rsyslog.conf'], stderr=subprocess.STDOUT)
+            subprocess.check_output(['rsyslogd', '-N1', '-f', '/var/lib/ascender/rsyslog/rsyslog.conf'], stderr=subprocess.STDOUT)
         except subprocess.CalledProcessError as exc:
             return Response({'error': exc.output}, status=status.HTTP_400_BAD_REQUEST)
 

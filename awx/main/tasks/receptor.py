@@ -483,7 +483,7 @@ class AWXReceptorJob:
                 receptor_params["secret_kube_config"] = kubeconfig_yaml
         else:
             private_data_dir = self.runner_params['private_data_dir']
-            if self.work_type == 'ansible-runner' and settings.AWX_CLEANUP_PATHS:
+            if self.work_type == 'ansible-runner' and settings.ASCENDER_CLEANUP_PATHS:
                 # on execution nodes, we rely on the private data dir being deleted
                 cli_params = f"--private-data-dir={private_data_dir} --delete"
             else:
@@ -527,9 +527,11 @@ class AWXReceptorJob:
         pod_spec['spec']['containers'][0]['image'] = ee.image
         pod_spec['spec']['containers'][0]['args'] = ['ansible-runner', 'worker', '--private-data-dir=/runner']
 
-        if settings.AWX_RUNNER_KEEPALIVE_SECONDS:
+        if settings.ASCENDER_RUNNER_KEEPALIVE_SECONDS:
             pod_spec['spec']['containers'][0].setdefault('env', [])
-            pod_spec['spec']['containers'][0]['env'].append({'name': 'ANSIBLE_RUNNER_KEEPALIVE_SECONDS', 'value': str(settings.AWX_RUNNER_KEEPALIVE_SECONDS)})
+            pod_spec['spec']['containers'][0]['env'].append(
+                {'name': 'ANSIBLE_RUNNER_KEEPALIVE_SECONDS', 'value': str(settings.ASCENDER_RUNNER_KEEPALIVE_SECONDS)}
+            )
 
         # Enforce EE Pull Policy
         pull_options = {"always": "Always", "missing": "IfNotPresent", "never": "Never"}
@@ -542,11 +544,11 @@ class AWXReceptorJob:
         # This assumes the node and SA supports hostPath volumes
         # type is not passed due to backward compatibility,
         # which means that no checks will be performed before mounting the hostPath volume.
-        if settings.AWX_MOUNT_ISOLATED_PATHS_ON_K8S and settings.AWX_ISOLATION_SHOW_PATHS:
+        if settings.ASCENDER_MOUNT_ISOLATED_PATHS_ON_K8S and settings.ASCENDER_ISOLATION_SHOW_PATHS:
             spec_volume_mounts = []
             spec_volumes = []
 
-            for idx, this_path in enumerate(settings.AWX_ISOLATION_SHOW_PATHS):
+            for idx, this_path in enumerate(settings.ASCENDER_ISOLATION_SHOW_PATHS):
                 mount_option = None
                 if this_path.count(':') == MAX_ISOLATED_PATH_COLON_DELIMITER:
                     src, dest, mount_option = this_path.split(':')

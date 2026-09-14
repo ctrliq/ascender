@@ -30,15 +30,15 @@ def test_jobs_settings(get, put, patch, delete, admin):
     response = get(url, user=admin, expect=200)
     data = dict(response.data.items())
     put(url, user=admin, data=data, expect=200)
-    patch(url, user=admin, data={'AWX_ISOLATION_SHOW_PATHS': ['/home']}, expect=200)
+    patch(url, user=admin, data={'ASCENDER_ISOLATION_SHOW_PATHS': ['/home']}, expect=200)
     response = get(url, user=admin, expect=200)
-    assert response.data['AWX_ISOLATION_SHOW_PATHS'] == ['/home']
-    data.pop('AWX_ISOLATION_SHOW_PATHS')
-    data.pop('AWX_ANSIBLE_CALLBACK_PLUGINS')
+    assert response.data['ASCENDER_ISOLATION_SHOW_PATHS'] == ['/home']
+    data.pop('ASCENDER_ISOLATION_SHOW_PATHS')
+    data.pop('ASCENDER_ANSIBLE_CALLBACK_PLUGINS')
     put(url, user=admin, data=data, expect=200)
     response = get(url, user=admin, expect=200)
-    assert response.data['AWX_ISOLATION_SHOW_PATHS'] == []
-    assert response.data['AWX_ANSIBLE_CALLBACK_PLUGINS'] == []
+    assert response.data['ASCENDER_ISOLATION_SHOW_PATHS'] == []
+    assert response.data['ASCENDER_ANSIBLE_CALLBACK_PLUGINS'] == []
 
 
 @pytest.mark.django_db
@@ -57,13 +57,13 @@ def test_jobs_settings(get, put, patch, delete, admin):
 )
 def test_awx_task_env_validity(get, patch, admin, value, expected):
     url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'jobs'})
-    patch(url, user=admin, data={'AWX_TASK_ENV': value}, expect=expected)
+    patch(url, user=admin, data={'ASCENDER_TASK_ENV': value}, expect=expected)
 
     resp = get(url, user=admin)
     if expected == 200:
-        assert resp.data['AWX_TASK_ENV'] == dict((k, str(v)) for k, v in value.items())
+        assert resp.data['ASCENDER_TASK_ENV'] == dict((k, str(v)) for k, v in value.items())
     else:
-        assert resp.data['AWX_TASK_ENV'] == dict()
+        assert resp.data['ASCENDER_TASK_ENV'] == dict()
 
 
 @pytest.mark.django_db

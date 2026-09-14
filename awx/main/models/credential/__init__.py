@@ -51,17 +51,43 @@ __all__ = ['Credential', 'CredentialType', 'CredentialInputSource', 'build_safe_
 
 logger = logging.getLogger('awx.main.models.credential')
 
+# The groups a credential plugin can register against, in precedence order.
+# `ascender.credential_plugins` is the name the product has; `awx.credential_plugins`
+# is the one third party plugins already declare themselves under, and nothing here
+# can rewrite an entry point in someone else's package, so it is read for as long as
+# any of them exist rather than for a release.
+CREDENTIAL_PLUGIN_GROUPS = ('ascender.credential_plugins', 'awx.credential_plugins')
+
+
+def load_credential_plugins(groups=CREDENTIAL_PLUGIN_GROUPS):
+    """Every credential plugin registered under any of `groups`, by name.
+
+    A name found in an earlier group wins, and the later groups are still read,
+    which is what lets the built in plugins move to the Ascender group while a
+    plugin that only ever registered under the AWX one keeps being found.
+
+    A plugin that fails to import is logged and skipped rather than taking the
+    process down with it, since a broken third party plugin should not stop the
+    platform from starting.
+    """
+    plugins = {}
+    for group in groups:
+        for entry_point in entry_points(group=group):
+            if entry_point.name in plugins:
+                continue
+            try:
+                plugins[entry_point.name] = entry_point.load()
+            except (ImportError, AttributeError, ModuleNotFoundError) as e:
+                logger.warning(f"Failed to load credential plugin {entry_point.name}: {e}")
+                # Continue without this plugin
+            except Exception as e:
+                logger.error(f"Unexpected error loading credential plugin {entry_point.name}: {e}")
+                # Continue without this plugin
+    return plugins
+
+
 # Load credential plugins, handling cases where Django settings aren't configured
-credential_plugins = {}
-for entry_point in entry_points(group='awx.credential_plugins'):
-    try:
-        credential_plugins[entry_point.name] = entry_point.load()
-    except (ImportError, AttributeError, ModuleNotFoundError) as e:
-        logger.warning(f"Failed to load credential plugin {entry_point.name}: {e}")
-        # Continue without this plugin
-    except Exception as e:
-        logger.error(f"Unexpected error loading credential plugin {entry_point.name}: {e}")
-        # Continue without this plugin
+credential_plugins = load_credential_plugins()
 
 HIDDEN_PASSWORD = '**********'
 
@@ -1358,7 +1384,7 @@ class CredentialInputSource(PrimordialModel):
 
         backend_kwargs.update(self.metadata)
 
-        with set_environ(**settings.AWX_TASK_ENV):
+        with set_environ(**settings.ASCENDER_TASK_ENV):
             return backend(**backend_kwargs)
 
     def get_absolute_url(self, request=None):
