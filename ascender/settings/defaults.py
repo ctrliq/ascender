@@ -143,9 +143,9 @@ LANGUAGE_CODE = 'en-us'
 # 'en' has to resolve to something here. It falls through to the source strings,
 # which are already English.
 #
-# This is NOT the same list as SUPPORTED_UI_LOCALES in awx/api/serializers.py.
-# That one mirrors the bundles under awx/ui/src/locales/ and therefore contains
-# 'en' but not 'en-us'. awx/main/tests/unit/test_locales.py pins both sets
+# This is NOT the same list as SUPPORTED_UI_LOCALES in ascender/api/serializers.py.
+# That one mirrors the bundles under ascender/ui/src/locales/ and therefore contains
+# 'en' but not 'en-us'. ascender/main/tests/unit/test_locales.py pins both sets
 # against the directories on disk, so adding a language means adding it to
 # whichever of the two lists actually gained a catalog.
 LANGUAGES = [
@@ -1303,13 +1303,13 @@ METRICS_SUBSYSTEM_CONFIG = {
 }
 
 
-# ascender.dab (vendored django-ansible-base subset, see awx/dab/VENDORED.md)
+# ascender.dab (vendored django-ansible-base subset, see ascender/dab/VENDORED.md)
 ANSIBLE_BASE_TEAM_MODEL = 'main.Team'
 ANSIBLE_BASE_ORGANIZATION_MODEL = 'main.Organization'
 ANSIBLE_BASE_RESOURCE_CONFIG_MODULE = 'ascender.resource_api'
 
 # The setting below was formerly produced by including ascender.dab's dynamic_settings
-# (deleted along with awx/dab/lib/dynamic_config); DEFAULT_FILTER_BACKENDS, the other
+# (deleted along with ascender/dab/lib/dynamic_config); DEFAULT_FILTER_BACKENDS, the other
 # surviving piece of that include, moved into the REST_FRAMEWORK definition above.
 
 # Query parameters the field lookup filter backend refuses to treat as field lookups.

@@ -149,7 +149,7 @@ def test_backend_binds_the_names_the_installed_tacacs_plus_actually_exports():
     assert backends.TACACSClient is installed_client
     assert backends.TAC_PLUS_AUTHEN_TYPES is installed_types
 
-    # awx/sso/conf.py offers exactly these two for TACACSPLUS_AUTH_PROTOCOL, and
+    # ascender/sso/conf.py offers exactly these two for TACACSPLUS_AUTH_PROTOCOL, and
     # authenticate() indexes the dict with whichever one is set.
     for protocol in ('ascii', 'pap'):
         assert protocol in installed_types

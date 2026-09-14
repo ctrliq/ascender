@@ -3,7 +3,7 @@
 """
 The project endpoints, and the updates that sync one from its source control.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 3,448 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 3,448 lines and
 228 classes with no order to them. Nothing here changed on the way across.
 """
 

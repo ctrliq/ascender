@@ -548,7 +548,7 @@ class UnifiedJob(
     That bound, on types rather than on rows, is why flattening this into a
     table per job type has never been worth doing: it is the cost the roadmap
     item weighs, and it does not grow with the table. The tests in
-    awx/main/tests/functional/models/test_unified_job_queries.py hold it there,
+    ascender/main/tests/functional/models/test_unified_job_queries.py hold it there,
     so an N+1 introduced into this path fails the suite rather than an instance.
 
     The content type lookups behind get_real_instance_class are cached by

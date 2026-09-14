@@ -3,7 +3,7 @@
 """
 Ad hoc commands, and the events one produces while it runs.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 4,172 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 4,172 lines and
 257 classes with no order to them. Nothing here changed on the way across.
 """
 

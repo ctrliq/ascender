@@ -39,7 +39,7 @@ SETTING_MEMORY_TTL = 5
 # reads it once a request and drops its in-memory cache only when it has moved,
 # rather than dropping that cache on every request and going back to the shared
 # one for each setting it then reads.
-SETTING_CACHE_VERSION_KEY = '_awx_conf_version'
+SETTING_CACHE_VERSION_KEY = '_ascender_conf_version'
 
 # Store a special value to indicate when a setting is not set in the database.
 SETTING_CACHE_NOTSET = '___notset___'
@@ -265,7 +265,7 @@ class SettingsWrapper(UserSettingsHolder):
         :param registry: the settings registry instance used.  The global
         ``ascender.conf.settings_registry`` is used by default.
         """
-        if not getattr(settings, '_awx_conf_settings', False):
+        if not getattr(settings, '_ascender_conf_settings', False):
             settings_wrapper = cls(settings._wrapped, cache=cache or django_cache, registry=registry or settings_registry)
             settings._wrapped = settings_wrapper
 
@@ -281,14 +281,14 @@ class SettingsWrapper(UserSettingsHolder):
         # store API-assigned settings in the database).
         self.__dict__['__forks__'] = {}
         self.__dict__['default_settings'] = default_settings
-        self.__dict__['_awx_conf_settings'] = self
-        self.__dict__['_awx_conf_preload_expires'] = None
-        self.__dict__['_awx_conf_preload_lock'] = threading.RLock()
-        self.__dict__['_awx_conf_init_readonly'] = False
+        self.__dict__['_ascender_conf_settings'] = self
+        self.__dict__['_ascender_conf_preload_expires'] = None
+        self.__dict__['_ascender_conf_preload_lock'] = threading.RLock()
+        self.__dict__['_ascender_conf_init_readonly'] = False
         self.__dict__['cache'] = EncryptedCacheProxy(cache, registry)
         self.__dict__['registry'] = registry
-        self.__dict__['_awx_conf_memoizedcache'] = cachetools.TTLCache(maxsize=2048, ttl=SETTING_MEMORY_TTL)
-        self.__dict__['_awx_conf_memoizedcache_lock'] = threading.Lock()
+        self.__dict__['_ascender_conf_memoizedcache'] = cachetools.TTLCache(maxsize=2048, ttl=SETTING_MEMORY_TTL)
+        self.__dict__['_ascender_conf_memoizedcache_lock'] = threading.Lock()
 
         # record the current pid so we compare it post-fork for
         # processes like the dispatcher and callback receiver
@@ -316,15 +316,15 @@ class SettingsWrapper(UserSettingsHolder):
 
     def _preload_cache(self):
         # Ensure we're only modifying local preload timeout from one thread.
-        with self._awx_conf_preload_lock:
+        with self._ascender_conf_preload_lock:
             # If local preload timeout has not expired, skip preloading.
-            if self._awx_conf_preload_expires and self._awx_conf_preload_expires > time.time():
+            if self._ascender_conf_preload_expires and self._ascender_conf_preload_expires > time.time():
                 return
             # Otherwise update local preload timeout.
-            self.__dict__['_awx_conf_preload_expires'] = time.time() + SETTING_CACHE_TIMEOUT
+            self.__dict__['_ascender_conf_preload_expires'] = time.time() + SETTING_CACHE_TIMEOUT
             # Check for any settings that have been defined in Python files and
             # make those read-only to avoid overriding in the database.
-            if not self._awx_conf_init_readonly:
+            if not self._ascender_conf_init_readonly:
                 defaults_snapshot = self._get_default('DEFAULTS_SNAPSHOT')
                 for key in get_writeable_settings(self.registry):
                     init_default = defaults_snapshot.get(key, None)
@@ -336,10 +336,10 @@ class SettingsWrapper(UserSettingsHolder):
                         logger.debug('Setting %s has been marked read-only!', key)
                         self.registry._registry[key]['read_only'] = True
                         self.registry._registry[key]['defined_in_file'] = True
-                    self.__dict__['_awx_conf_init_readonly'] = True
+                    self.__dict__['_ascender_conf_init_readonly'] = True
         # If local preload timer has expired, check to see if another process
         # has already preloaded the cache and skip preloading if so.
-        if self.cache.get('_awx_conf_preload_expires', default=empty) is not empty:
+        if self.cache.get('_ascender_conf_preload_expires', default=empty) is not empty:
             return
         # Initialize all database-configurable settings with a marker value so
         # to indicate from the cache that the setting is not configured without
@@ -374,7 +374,7 @@ class SettingsWrapper(UserSettingsHolder):
         for k, id_val in setting_ids.items():
             logger.debug('Saving id in cache for encrypted setting %s, %s', Setting.get_cache_id_key(k), id_val)
             self.cache.cache.set(Setting.get_cache_id_key(k), id_val)
-        settings_to_cache['_awx_conf_preload_expires'] = self._awx_conf_preload_expires
+        settings_to_cache['_ascender_conf_preload_expires'] = self._ascender_conf_preload_expires
         self.cache.set_many(settings_to_cache, timeout=SETTING_CACHE_TIMEOUT)
 
     def _get_local(self, name, validate=True):
@@ -452,9 +452,9 @@ class SettingsWrapper(UserSettingsHolder):
         return self._get_default('SETTINGS_MODULE')
 
     @cachetools.cachedmethod(
-        cache=lambda self: self.__dict__['_awx_conf_memoizedcache'],
+        cache=lambda self: self.__dict__['_ascender_conf_memoizedcache'],
         key=lambda *args, **kwargs: SettingsWrapper.hashkey(*args, **kwargs),
-        lock=lambda self: self.__dict__['_awx_conf_memoizedcache_lock'],
+        lock=lambda self: self.__dict__['_ascender_conf_memoizedcache_lock'],
     )
     def _get_local_with_cache(self, name):
         """Get value while accepting the in-memory cache if key is available.

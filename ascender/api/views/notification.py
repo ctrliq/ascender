@@ -3,7 +3,7 @@
 """
 Notification templates, and the notifications sent from them.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 1,169 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 1,169 lines and
 47 classes with no order to them. Nothing here changed on the way across.
 """
 

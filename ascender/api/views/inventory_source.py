@@ -3,7 +3,7 @@
 """
 Inventory sources, and the updates that pull hosts in from them.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 3,260 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 3,260 lines and
 205 classes with no order to them. Nothing here changed on the way across.
 """
 

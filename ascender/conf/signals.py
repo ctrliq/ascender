@@ -30,7 +30,7 @@ def handle_setting_change(key, for_delete=False):
     cache.delete_many(cache_keys)
 
     # if we have changed a setting, we want to avoid mucking with the in-memory cache entirely
-    settings._awx_conf_memoizedcache.clear()
+    settings._ascender_conf_memoizedcache.clear()
 
     # and tell every other process to do the same, which is what the web
     # processes check once a request

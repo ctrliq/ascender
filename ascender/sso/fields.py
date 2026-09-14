@@ -220,7 +220,7 @@ class AuthenticationBackendsField(fields.StringListField):
         from django.conf import settings
 
         try:
-            backends = settings._awx_conf_settings._get_default('AUTHENTICATION_BACKENDS')
+            backends = settings._ascender_conf_settings._get_default('AUTHENTICATION_BACKENDS')
         except AttributeError:
             backends = self.REQUIRED_BACKEND_SETTINGS.keys()
         # Filter which authentication backends are enabled based on their

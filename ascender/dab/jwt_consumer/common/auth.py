@@ -338,7 +338,7 @@ class JWTCommonAuth:
         """
         Fetch JWT claims from the gateway's jwt_claims endpoint.
 
-        The resource-server HTTP client is not vendored (see awx/dab/VENDORED.md),
+        The resource-server HTTP client is not vendored (see ascender/dab/VENDORED.md),
         so this build cannot fetch claims. process_rbac_permissions() guards this
         call behind resource_server_defined(); this method remains as the hook a
         future claims transport (or a test) can override.

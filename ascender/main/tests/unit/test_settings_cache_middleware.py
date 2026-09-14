@@ -14,7 +14,7 @@ from ascender.main.middleware import SettingsCacheMiddleware
 
 @pytest.fixture
 def memoized():
-    """Stand in for settings._awx_conf_memoizedcache, which only clear() is called on."""
+    """Stand in for settings._ascender_conf_memoizedcache, which only clear() is called on."""
     return mock.MagicMock()
 
 
@@ -22,7 +22,7 @@ def memoized():
 def middleware(memoized):
     mw = SettingsCacheMiddleware(get_response=lambda request: None)
     with mock.patch('ascender.main.middleware.settings') as settings:
-        settings._awx_conf_memoizedcache = memoized
+        settings._ascender_conf_memoizedcache = memoized
         yield mw
 
 

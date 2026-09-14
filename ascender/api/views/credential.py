@@ -3,7 +3,7 @@
 """
 Credentials, the types that describe their inputs, and the sources those inputs come from.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 2,048 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 2,048 lines and
 120 classes with no order to them. Nothing here changed on the way across.
 """
 

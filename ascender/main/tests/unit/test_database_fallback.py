@@ -2,7 +2,7 @@
 # All Rights Reserved.
 """What the database settings fall back to when nothing supplies them.
 
-The block in awx/settings/defaults.py is the fallback for a process started
+The block in ascender/settings/defaults.py is the fallback for a process started
 with no settings files at all. Every real path supplies its own: the operator
 writes credentials.py, the development environment writes database.py, and the
 test settings build their own from AWX_TEST_DATABASE_*.

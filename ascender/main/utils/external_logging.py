@@ -17,7 +17,7 @@ provide all of it, or those settings stop meaning anything and logs are lost
 quietly on a restart.
 
 Each guarantee is asserted on its own in
-awx/main/tests/unit/utils/test_external_logging_durability.py, so a change
+ascender/main/tests/unit/utils/test_external_logging_durability.py, so a change
 that weakens one says which one.
 """
 

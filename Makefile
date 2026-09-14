@@ -61,7 +61,7 @@ I18N_FLAG_FILE = .i18n_built
 ## PLATFORMS defines the target platforms for  the manager image be build to provide support to multiple
 PLATFORMS ?= linux/amd64,linux/arm64  # linux/ppc64le,linux/s390x
 
-.PHONY: awx-link clean clean-tmp clean-venv requirements requirements_dev \
+.PHONY: ascender-link clean clean-tmp clean-venv requirements requirements_dev \
 	develop refresh adduser migrate dbchange \
 	receiver test test_unit test_coverage coverage_html \
 	sdist \
@@ -293,13 +293,13 @@ lint:
 	@echo "fi" >> .git/hooks/pre-commit
 	@chmod +x .git/hooks/pre-commit
 
-genschema: awx-link reports
+genschema: ascender-link reports
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
 	$(MANAGEMENT_COMMAND) spectacular --format openapi-json --file schema.json
 
-genschema-yaml: awx-link reports
+genschema-yaml: ascender-link reports
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
@@ -318,7 +318,7 @@ api-lint:
 ## rather than part of the build, its committed output is what everything else
 ## consumes, and its peer range wants TypeScript 5 where this project is on 6.
 ## npx fetches it for the length of this command and leaves nothing behind.
-ui-api-types: awx-link ascender/ui/node_modules
+ui-api-types: ascender-link ascender/ui/node_modules
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
@@ -327,7 +327,7 @@ ui-api-types: awx-link ascender/ui/node_modules
 	rm -f ascender/ui/.schema.json
 
 ## Run egg_info_dev to generate awx.egg-info for development.
-awx-link:
+ascender-link:
 	[ -d "/ascender_devel/awx.egg-info" ] || $(PYTHON) /ascender_devel/tools/scripts/egg_info_dev
 
 TEST_DIRS ?= ascender/main/tests/unit ascender/main/tests/functional ascender/conf/tests ascender/sso/tests

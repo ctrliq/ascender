@@ -3,7 +3,7 @@
 """
 OAuth2 applications and tokens: what may talk to the API on a user behalf.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 3,076 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 3,076 lines and
 186 classes with no order to them. Nothing here changed on the way across.
 """
 

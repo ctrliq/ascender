@@ -193,7 +193,7 @@ def pytest_runtest_teardown(item, nextitem):
     # not in the django cache. Clearing one without the other hands the next
     # test an incoherent state: a memoized settings value with no backing cache
     # key, which no runtime code path can produce or repair within the TTL.
-    memoized = getattr(settings, '_awx_conf_memoizedcache', None)
+    memoized = getattr(settings, '_ascender_conf_memoizedcache', None)
     if memoized is not None:
         memoized.clear()
     # A test that leaves the settings cache-invalidation receiver disconnected

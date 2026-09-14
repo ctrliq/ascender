@@ -21,7 +21,7 @@ from split_settings.tools import optional, include
 from .defaults import *  # NOQA
 
 # show colored logs in the dev environment
-# to disable this, set `COLOR_LOGS = False` in awx/settings/local_settings.py
+# to disable this, set `COLOR_LOGS = False` in ascender/settings/local_settings.py
 COLOR_LOGS = True
 LOGGING['handlers']['console']['()'] = 'ascender.main.utils.handlers.ColorHandler'  # noqa
 
@@ -89,7 +89,7 @@ del this_module
 include(optional('/etc/tower/settings.py'), scope=locals())
 include(optional('/etc/tower/conf.d/*.py'), scope=locals())
 
-# If any local_*.py files are present in awx/settings/, use them to override
+# If any local_*.py files are present in ascender/settings/, use them to override
 # default settings for development.  If not present, we can still run using
 # only the defaults.
 # this needs to stay at the bottom of this file

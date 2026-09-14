@@ -3,7 +3,7 @@
 """
 The user endpoints: an account, what it belongs to, and what it may reach.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 3,011 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 3,011 lines and
 179 classes with no order to them. Nothing here changed on the way across.
 """
 

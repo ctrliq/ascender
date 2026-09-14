@@ -1,6 +1,6 @@
 # HACK: the dab_resource_registry app requires ServiceID to be created in a
 # data migration, which is skipped under pytest's --nomigrations.  Mirror the
-# hack in awx/main/tests/functional/conftest.py so these SSO functional tests
+# hack in ascender/main/tests/functional/conftest.py so these SSO functional tests
 # can be run in isolation (without that conftest tree on the collection path).
 import importlib
 

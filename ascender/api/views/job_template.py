@@ -3,7 +3,7 @@
 """
 The job template endpoints: a template, what it launches with, and the jobs it has run.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 4,021 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 4,021 lines and
 248 classes with no order to them. Nothing here changed on the way across.
 """
 

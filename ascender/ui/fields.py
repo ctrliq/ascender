@@ -45,7 +45,7 @@ class CustomLogoField(fields.CharField):
 class CustomThemeField(fields.CharField):
     """Stylesheet uploaded by an administrator and served as an extra UI theme.
 
-    The shipped themes under awx/ui/src/themes are bundled at build time, so the
+    The shipped themes under ascender/ui/src/themes are bundled at build time, so the
     only way to add one without rebuilding the image is to hand the browser the
     stylesheet at runtime. That is what this setting holds: the literal contents
     of a .css file, which the UI injects and offers alongside the built in

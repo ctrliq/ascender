@@ -3,7 +3,7 @@
 """
 Execution environments: the images jobs run inside.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 1,219 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 1,219 lines and
 52 classes with no order to them. Nothing here changed on the way across.
 """
 

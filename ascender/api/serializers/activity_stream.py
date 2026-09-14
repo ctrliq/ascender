@@ -3,7 +3,7 @@
 """
 The activity stream entry: what changed, and who changed it.
 
-Lifted out of awx/api/serializers.py, which had grown to 6,558 lines and
+Lifted out of ascender/api/serializers.py, which had grown to 6,558 lines and
 136 classes. Nothing here changed on the way across.
 """
 

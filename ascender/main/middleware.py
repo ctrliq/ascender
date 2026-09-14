@@ -96,11 +96,11 @@ class SettingsCacheMiddleware(MiddlewareMixin):
             # A cache that cannot be reached is no reason to fail the request,
             # and no reason to trust an in-memory copy of what it holds either.
             logger.warning('could not read the settings cache version, dropping the in-memory settings cache')
-            settings._awx_conf_memoizedcache.clear()
+            settings._ascender_conf_memoizedcache.clear()
             return
 
         if version != self._seen_version:
-            settings._awx_conf_memoizedcache.clear()
+            settings._ascender_conf_memoizedcache.clear()
             # an instance attribute over the class one: a worker that runs
             # threads shares this middleware, and the worst a race costs is one
             # more cache drop than was needed

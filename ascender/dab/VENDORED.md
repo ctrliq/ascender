@@ -42,7 +42,7 @@ Do not rename the labels.
   `middleware/profiling|observability|request_context` — unused by the vendored apps or awx.
 - `lib/dynamic_config/` — its `dynamic_settings.py` include used to compute a handful of
   settings at import time; the entire net effect for the three installed apps was
-  snapshotted and inlined into `awx/settings/defaults.py` (DEFAULT_FILTER_BACKENDS,
+  snapshotted and inlined into `ascender/settings/defaults.py` (DEFAULT_FILTER_BACKENDS,
   ANSIBLE_BASE_REST_FILTERS_RESERVED_NAMES). This also dropped the `dynaconf` dependency.
 - Resource-server (gateway) client machinery — we do not deploy behind a gateway:
   `resource_registry/{resource_server,rest_client,service_client,workload_identity_client}.py`
@@ -74,7 +74,7 @@ Do not rename the labels.
   (`ROLE_DEFINITION_TO_ROLE_FIELD`, `disable_rbac_sync`) only exist in upstream AWX;
   they were added to our `rbac.py` so the sync actually works — before that the
   ImportError fallback made JWT role sync a silent no-op. Covered by
-  `awx/main/tests/functional/test_dab_jwt_auth.py`.
+  `ascender/main/tests/functional/test_dab_jwt_auth.py`.
 - `resource_registry/views.py` — `DEFAULT_MAX_PAGE_SIZE = 200` inlined from
   `ansible_base.rest_pagination` (app not vendored).
 - `lib/utils/response.py` — `CSVStreamResponse.content_type` default corrected from
@@ -85,7 +85,7 @@ Do not rename the labels.
   only the bare field name at the queryset root and left the lookup pointing at an
   unreachable annotation, so such filters always failed with a 400. The Cast now
   follows the full related path and the lookup is rewritten to target the top-level
-  annotation. Covered by `awx/main/tests/functional/test_dab_rest_filters.py`.
+  annotation. Covered by `ascender/main/tests/functional/test_dab_rest_filters.py`.
 
 Remaining `awx.dab.rbac.*` / `awx.dab.oauth2_provider.*` / `awx.dab.activitystream.*`
 imports are lazy and guarded by INSTALLED_APPS checks; those apps are never installed here.

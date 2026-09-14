@@ -3,7 +3,7 @@ set +x
 
 cd /ascender_devel
 make clean
-make awx-link
+make ascender-link
 
 if [[ ! $@ ]]; then
     make test

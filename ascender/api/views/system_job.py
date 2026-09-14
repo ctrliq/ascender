@@ -3,7 +3,7 @@
 """
 System jobs: the management tasks the platform runs on itself, and their templates.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 1,732 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 1,732 lines and
 94 classes with no order to them. Nothing here changed on the way across.
 """
 

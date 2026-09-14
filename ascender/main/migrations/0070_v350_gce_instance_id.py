@@ -11,7 +11,7 @@ from ascender.main.migrations._inventory_source import set_new_instance_id, back
 logger = logging.getLogger('awx.main.migrations')
 
 
-# new value introduced in awx/settings/defaults.py, frozen in time here
+# new value introduced in ascender/settings/defaults.py, frozen in time here
 GCE_INSTANCE_ID_VAR = 'gce_id'
 
 

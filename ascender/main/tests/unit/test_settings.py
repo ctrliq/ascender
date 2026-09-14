@@ -38,7 +38,7 @@ def test_default_settings():
 def test_image_build_hands_collectstatic_an_importable_settings_file():
     """The image build must not pass a path django-split-settings cannot import.
 
-    ``awx/settings/production.py`` feeds ``AWX_SETTINGS_FILE`` straight to
+    ``ascender/settings/production.py`` feeds ``AWX_SETTINGS_FILE`` straight to
     ``split_settings.tools.include``, which builds a module from an import spec.
     A path with no source suffix, ``/dev/null`` being the one that was used
     here, produces no spec, so the call fails before ``collectstatic`` runs.

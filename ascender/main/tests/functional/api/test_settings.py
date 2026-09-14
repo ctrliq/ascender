@@ -154,7 +154,7 @@ def test_radius_settings(get, put, patch, delete, admin, settings):
     assert Setting.objects.filter(key='RADIUS_SECRET').first().value.startswith('$encrypted$')
     assert settings.RADIUS_SECRET == 'mysecret'
     # Set secret via settings wrapper.
-    settings_wrapper = settings._awx_conf_settings
+    settings_wrapper = settings._ascender_conf_settings
     settings_wrapper.RADIUS_SECRET = 'mysecret2'
     response = get(url, user=admin, expect=200)
     assert response.data['RADIUS_SECRET'] == '$encrypted$'

@@ -3,7 +3,7 @@
 """
 Schedules: what runs later, and the preview of when it will.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 1,287 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 1,287 lines and
 60 classes with no order to them. Nothing here changed on the way across.
 """
 

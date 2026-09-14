@@ -5,7 +5,7 @@ The pieces every serializer is built from: the base class, the summary
 fields machinery, and the unified job and template views that dispatch to a
 concrete serializer.
 
-Lifted out of awx/api/serializers.py, which had grown to 6,558 lines and
+Lifted out of ascender/api/serializers.py, which had grown to 6,558 lines and
 136 classes. Nothing here changed on the way across.
 """
 

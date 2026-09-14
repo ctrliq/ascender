@@ -3,7 +3,7 @@
 """
 Hosts, the facts gathered about them, and the metrics counted over them.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 2,640 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 2,640 lines and
 153 classes with no order to them. Nothing here changed on the way across.
 """
 

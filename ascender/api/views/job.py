@@ -3,7 +3,7 @@
 """
 Jobs: their output, the events they emit, and what they ran against.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 2,441 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 2,441 lines and
 137 classes with no order to them. Nothing here changed on the way across.
 """
 

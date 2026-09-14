@@ -4,7 +4,7 @@ from django.db import migrations
 def cleanup_dab_rbac_leftovers(apps, schema_editor):
     """Remove leftovers of the django-ansible-base RBAC app.
 
-    Before django-ansible-base was vendored (awx/dab), its settings logic
+    Before django-ansible-base was vendored (ascender/dab), its settings logic
     auto-injected the 'ansible_base.rbac' app (label 'dab_rbac') into
     INSTALLED_APPS whenever jwt_consumer was installed, so existing databases
     carry its applied migrations and empty tables. The app was never used by

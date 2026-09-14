@@ -3,7 +3,7 @@
 """
 Inventory groups: the tree of them, and the hosts that sit inside.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 2,789 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 2,789 lines and
 165 classes with no order to them. Nothing here changed on the way across.
 """
 

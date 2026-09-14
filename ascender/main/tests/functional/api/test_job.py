@@ -86,7 +86,7 @@ def test_job_relaunch_prompts_not_accepted_response(post, get, inventory, projec
 def test_job_relaunch_permission_denied_response_other_user(get, post, inventory, project, alice, bob, survey_spec_factory):
     """
     Asserts custom permission denied message corresponding to
-    awx/main/tests/functional/test_rbac_job.py::TestJobRelaunchAccess::test_other_user_prompts
+    ascender/main/tests/functional/test_rbac_job.py::TestJobRelaunchAccess::test_other_user_prompts
     """
     jt = JobTemplate.objects.create(
         name='testjt',

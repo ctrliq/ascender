@@ -4,7 +4,7 @@
 The views behind every workflow endpoint: templates, their nodes, the jobs
 they run, and the approvals a workflow waits on.
 
-Lifted out of awx/api/views/__init__.py, which had grown to 4,780 lines and
+Lifted out of ascender/api/views/__init__.py, which had grown to 4,780 lines and
 303 classes with no order to them. Nothing here changed on the way across.
 """
 
@@ -669,7 +669,7 @@ class WorkflowApprovalVoteDetail(RetrieveAPIView):
     serializer_class = serializers.WorkflowApprovalVoteSerializer
 
 
-# The same lowercase_with_underscore view functions awx/api/views/__init__.py
+# The same lowercase_with_underscore view functions ascender/api/views/__init__.py
 # makes for the classes it still holds, so moving these out takes nothing away.
 this_module = sys.modules[__name__]
 for attr, value in list(locals().items()):

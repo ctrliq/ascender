@@ -3,7 +3,7 @@
 """
 Organizations: the top of the ownership tree.
 
-Lifted out of awx/api/serializers.py, which had grown to 6,558 lines and
+Lifted out of ascender/api/serializers.py, which had grown to 6,558 lines and
 136 classes. Nothing here changed on the way across.
 """
 

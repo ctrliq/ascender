@@ -32,7 +32,7 @@ class Command(BaseCommand):
                         # clear the cache of relevant settings then restart
                         setting_keys = [k for k in dir(settings) if k.startswith('LOG_AGGREGATOR')]
                         cache.delete_many(setting_keys)
-                        settings._awx_conf_memoizedcache.clear()
+                        settings._ascender_conf_memoizedcache.clear()
                         body = json.loads(e.payload)
                         TaskWorker.run_callable(body)
         except Exception:

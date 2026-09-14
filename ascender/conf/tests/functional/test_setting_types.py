@@ -1,7 +1,7 @@
 # Copyright (c) 2026 Ctrl IQ, Inc.
 # All Rights Reserved.
 """
-Whether awx/settings/typed.py still describes the settings the code can read.
+Whether ascender/settings/typed.py still describes the settings the code can read.
 
 The Protocol is what lets a checker say anything about settings.SOMETHING, and
 it is generated, so the only thing keeping it useful is a test that fails when a

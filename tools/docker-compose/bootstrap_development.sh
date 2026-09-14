@@ -8,7 +8,7 @@ else
     echo "Failed to find awx source tree, map your development tree volume"
 fi
 
-make awx-link
+make ascender-link
 
 # AWX bootstrapping
 make version_file

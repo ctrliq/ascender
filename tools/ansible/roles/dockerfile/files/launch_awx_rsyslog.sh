@@ -7,7 +7,7 @@ fi
 
 if [ -n "${AWX_KUBE_DEVEL}" ]; then
     pushd /ascender_devel
-    make awx-link
+    make ascender-link
     popd
 
     export SDB_NOTIFY_HOST=$MY_POD_IP

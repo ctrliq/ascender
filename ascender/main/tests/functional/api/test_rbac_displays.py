@@ -10,9 +10,9 @@ from ascender.api.serializers import JobTemplateSerializer, UnifiedJobTemplateSe
 
 # This file covers special-cases of displays of user_capabilities
 # general functionality should be covered fully by unit tests, see:
-#   awx/main/tests/unit/api/serializers/test_job_template_serializers.py ::
+#   ascender/main/tests/unit/api/serializers/test_job_template_serializers.py ::
 #           TestJobTemplateSerializerGetSummaryFields.test_copy_edit_standard
-#   awx/main/tests/unit/test_access.py ::
+#   ascender/main/tests/unit/test_access.py ::
 #           test_user_capabilities_method
 
 
