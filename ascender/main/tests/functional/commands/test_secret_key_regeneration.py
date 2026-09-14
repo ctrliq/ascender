@@ -184,27 +184,27 @@ class TestKeyRegeneration:
         with override_settings(SECRET_KEY=new_key):
             assert models.OAuth2Application.objects.get(pk=oauth_application.pk).client_secret == secret
 
-    def test_use_custom_key_with_tower_secret_key_env_var(self):
+    def test_use_custom_key_with_ascender_secret_key_env_var(self):
         custom_key = 'MXSq9uqcwezBOChl/UfmbW1k4op+bC+FQtwPqgJ1u9XV'
         os.environ['TOWER_SECRET_KEY'] = custom_key
         new_key = call_command('regenerate_secret_key', '--use-custom-key')
         assert custom_key == new_key
 
-    def test_use_custom_key_with_empty_tower_secret_key_env_var(self):
+    def test_use_custom_key_with_empty_ascender_secret_key_env_var(self):
         os.environ['TOWER_SECRET_KEY'] = ''
         with pytest.raises(SystemExit) as e:
             call_command('regenerate_secret_key', '--use-custom-key')
         assert e.type == SystemExit
         assert e.value.code == 1
 
-    def test_use_custom_key_with_no_tower_secret_key_env_var(self):
+    def test_use_custom_key_with_no_ascender_secret_key_env_var(self):
         os.environ.pop('TOWER_SECRET_KEY', None)
         with pytest.raises(SystemExit) as e:
             call_command('regenerate_secret_key', '--use-custom-key')
         assert e.type == SystemExit
         assert e.value.code == 1
 
-    def test_with_tower_secret_key_env_var(self):
+    def test_with_ascender_secret_key_env_var(self):
         custom_key = 'MXSq9uqcwezBOChl/UfmbW1k4op+bC+FQtwPqgJ1u9XV'
         os.environ['TOWER_SECRET_KEY'] = custom_key
         new_key = call_command('regenerate_secret_key')

@@ -35,7 +35,7 @@ One way to be notified of websocket queue reaching capacity is to hook into the 
 
 ```
 LOGGING['loggers']['channels_valkey.core'] = {
-    'handlers': ['console', 'file', 'tower_warnings'],
+    'handlers': ['console', 'file', 'ascender_warnings'],
     'level': 'DEBUG'
 }
 

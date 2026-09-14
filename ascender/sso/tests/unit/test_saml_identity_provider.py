@@ -30,7 +30,7 @@ import pytest
 from social_core.backends.saml import OID_MAIL, OID_USERID, SAMLIdentityProvider
 from social_core.exceptions import AuthInvalidParameter
 
-from ascender.sso.backends import SAMLAuth, TowerSAMLIdentityProvider
+from ascender.sso.backends import SAMLAuth, AscenderSAMLIdentityProvider
 
 IDP_CONF = {
     'entity_id': 'https://idp.example.com/metadata',
@@ -65,7 +65,7 @@ def quiet_logger():
 
 
 def _idp(**extra):
-    return TowerSAMLIdentityProvider(object(), 'test', **dict(IDP_CONF, **extra))
+    return AscenderSAMLIdentityProvider(object(), 'test', **dict(IDP_CONF, **extra))
 
 
 def test_init_signature_matches_upstream():
@@ -93,7 +93,7 @@ def test_get_idp_passes_backend_through():
 
     idp = SAMLAuth.get_idp(backend, 'test')
 
-    assert isinstance(idp, TowerSAMLIdentityProvider)
+    assert isinstance(idp, AscenderSAMLIdentityProvider)
     assert idp.name == 'test'
     assert idp.backend is backend
 

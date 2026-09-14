@@ -272,7 +272,7 @@ class TACACSPlusBackend(object):
         return request.META.get('REMOTE_ADDR')
 
 
-class TowerSAMLIdentityProvider(BaseSAMLIdentityProvider):
+class AscenderSAMLIdentityProvider(BaseSAMLIdentityProvider):
     """
     Custom Identity Provider to make attributes to what we expect.
     """
@@ -335,7 +335,7 @@ class SAMLAuth(BaseSAMLAuth):
 
     def get_idp(self, idp_name):
         idp_config = self.setting('ENABLED_IDPS')[idp_name]
-        return TowerSAMLIdentityProvider(self, idp_name, **idp_config)
+        return AscenderSAMLIdentityProvider(self, idp_name, **idp_config)
 
     def authenticate(self, request, *args, **kwargs):
         if not all(

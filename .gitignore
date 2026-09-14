@@ -24,7 +24,7 @@ ascender/ui/tests/test-results.xml
 ascender/ui/client/src/local_settings.json
 ascender/main/fixtures
 ascender/*.log
-tower/tower_warnings.log
+ascender/ascender_warnings.log
 celerybeat-schedule
 ascender/ui/static
 ascender/ui/build_test

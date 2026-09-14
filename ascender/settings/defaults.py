@@ -1049,17 +1049,17 @@ LOGGING = {
     },
     'loggers': {
         'django': {'handlers': ['console']},
-        'django.request': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'WARNING'},
-        'daphne': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'INFO'},
-        'rest_framework.request': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'WARNING', 'propagate': False},
+        'django.request': {'handlers': ['console', 'file', 'ascender_warnings'], 'level': 'WARNING'},
+        'daphne': {'handlers': ['console', 'file', 'ascender_warnings'], 'level': 'INFO'},
+        'rest_framework.request': {'handlers': ['console', 'file', 'ascender_warnings'], 'level': 'WARNING', 'propagate': False},
         'py.warnings': {'handlers': ['console']},
-        'awx': {'handlers': ['console', 'file', 'tower_warnings', 'external_logger'], 'level': 'DEBUG'},
+        'awx': {'handlers': ['console', 'file', 'ascender_warnings', 'external_logger'], 'level': 'DEBUG'},
         'awx.conf': {'handlers': ['null'], 'level': 'WARNING'},
         'awx.conf.settings': {'handlers': ['null'], 'level': 'WARNING'},
         'awx.main': {'handlers': ['null']},
         'awx.main.commands.run_callback_receiver': {'handlers': ['callback_receiver'], 'level': 'INFO'},  # very noisey debug-level logs
         'awx.main.dispatch': {'handlers': ['dispatcher']},
-        'awx.main.consumers': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'INFO'},
+        'awx.main.consumers': {'handlers': ['console', 'file', 'ascender_warnings'], 'level': 'INFO'},
         'awx.main.rsyslog_configurer': {'handlers': ['rsyslog_configurer']},
         'awx.main.cache_clear': {'handlers': ['cache_clear']},
         'awx.main.ws_heartbeat': {'handlers': ['ws_heartbeat']},
@@ -1073,12 +1073,12 @@ LOGGING = {
         'awx.api.permissions': {'level': 'INFO'},  # very verbose debug-level logs
         'ascender.analytics': {'handlers': ['external_logger'], 'level': 'INFO', 'propagate': False},
         'ascender.analytics.broadcast_websocket': {'handlers': ['console', 'file', 'wsrelay', 'external_logger'], 'level': 'INFO', 'propagate': False},
-        'ascender.analytics.performance': {'handlers': ['console', 'file', 'tower_warnings', 'external_logger'], 'level': 'DEBUG', 'propagate': False},
+        'ascender.analytics.performance': {'handlers': ['console', 'file', 'ascender_warnings', 'external_logger'], 'level': 'DEBUG', 'propagate': False},
         'ascender.analytics.job_lifecycle': {'handlers': ['console', 'job_lifecycle', 'external_logger'], 'level': 'DEBUG', 'propagate': False},
-        'django_auth_ldap': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
-        'social': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
-        'system_tracking_migrations': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
-        'rbac_migrations': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
+        'django_auth_ldap': {'handlers': ['console', 'file', 'ascender_warnings'], 'level': 'DEBUG'},
+        'social': {'handlers': ['console', 'file', 'ascender_warnings'], 'level': 'DEBUG'},
+        'system_tracking_migrations': {'handlers': ['console', 'file', 'ascender_warnings'], 'level': 'DEBUG'},
+        'rbac_migrations': {'handlers': ['console', 'file', 'ascender_warnings'], 'level': 'DEBUG'},
     },
 }
 
@@ -1087,12 +1087,12 @@ LOGGING = {
 # Specify 'filename' (used if the environment variable AWX_LOGGING_MODE is unset or 'file')
 # and an optional 'formatter'. If no formatter is specified, 'simple' is used.
 handler_config = {
-    'tower_warnings': {'filename': 'tower.log'},
+    'ascender_warnings': {'filename': 'ascender.log'},
     'callback_receiver': {'filename': 'callback_receiver.log'},
     'dispatcher': {'filename': 'dispatcher.log', 'formatter': 'dispatcher'},
     'wsrelay': {'filename': 'wsrelay.log'},
     'task_system': {'filename': 'task_system.log'},
-    'rbac_migrations': {'filename': 'tower_rbac_migrations.log'},
+    'rbac_migrations': {'filename': 'ascender_rbac_migrations.log'},
     'job_lifecycle': {'filename': 'job_lifecycle.log'},
     'rsyslog_configurer': {'filename': 'rsyslog_configurer.log'},
     'cache_clear': {'filename': 'cache_clear.log'},
