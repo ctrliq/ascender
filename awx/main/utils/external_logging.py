@@ -21,6 +21,7 @@ awx/main/tests/unit/utils/test_external_logging_durability.py, so a change
 that weakens one says which one.
 """
 
+import logging
 import os
 import shutil
 import tempfile
@@ -30,6 +31,8 @@ from awx.settings.typed import settings
 
 from awx.main.utils.reload import supervisor_service_command
 from awx.main.dispatch.publish import task
+
+logger = logging.getLogger('awx.main.utils.external_logging')
 
 
 def construct_rsyslog_conf_template(settings=settings):
@@ -45,6 +48,15 @@ def construct_rsyslog_conf_template(settings=settings):
     spool_directory = getattr(settings, 'LOG_AGGREGATOR_MAX_DISK_USAGE_PATH', '/var/lib/ascender').rstrip('/')
     error_log_file = getattr(settings, 'LOG_AGGREGATOR_RSYSLOGD_ERROR_LOG_FILE', '')
 
+    # Has to happen before queue.spoolDirectory is written below. The fallback used
+    # to sit after it, where it changed a variable nothing read again, so a setting
+    # naming a directory rsyslog cannot write produced a config naming that same
+    # directory. rsyslog then has nowhere to spool and the disk queue, which is the
+    # whole point of these options, stops surviving a restart without saying so.
+    if not os.access(spool_directory, os.W_OK):
+        logger.warning(f'Cannot write to {spool_directory}, spooling external logs to /var/lib/ascender instead.')
+        spool_directory = '/var/lib/ascender'
+
     queue_options = [
         f'queue.spoolDirectory="{spool_directory}"',
         'queue.filename="awx-external-logger-action-queue"',
@@ -59,9 +71,6 @@ def construct_rsyslog_conf_template(settings=settings):
         f'queue.discardMark="{int(action_queue_size * 0.9)}"',  # 90% of queue.size
         'queue.discardSeverity="5"',  # Only discard notice, info, debug if we must discard anything
     ]
-
-    if not os.access(spool_directory, os.W_OK):
-        spool_directory = '/var/lib/ascender'
 
     max_bytes = settings.MAX_EVENT_RES_DATA
     if settings.LOG_AGGREGATOR_RSYSLOGD_DEBUG:

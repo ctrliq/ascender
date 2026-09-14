@@ -89,3 +89,47 @@ def test_delivery_is_retried_forever(conf):
 def test_the_settings_users_can_set_reach_the_queue(conf, setting, appears_as):
     """Each of these is a promise in the settings UI, kept by an rsyslog option."""
     assert appears_as in conf
+
+
+def _conf_with_spool(path):
+    mock_settings, _ = _mock_logging_defaults()
+    setattr(mock_settings, 'LOGGING', getattr(settings, 'LOGGING'))
+    setattr(mock_settings, 'LOG_AGGREGATOR_ENABLED', True)
+    setattr(mock_settings, 'LOG_AGGREGATOR_TYPE', 'other')
+    setattr(mock_settings, 'LOG_AGGREGATOR_HOST', 'localhost')
+    setattr(mock_settings, 'LOG_AGGREGATOR_PORT', 9000)
+    setattr(mock_settings, 'LOG_AGGREGATOR_PROTOCOL', 'tcp')
+    setattr(mock_settings, 'LOG_AGGREGATOR_MAX_DISK_USAGE_PATH', path)
+    return construct_rsyslog_conf_template(mock_settings)
+
+
+def test_a_writable_spool_directory_is_used(tmp_path):
+    """The setting is honoured when rsyslog can actually write there."""
+    conf = _conf_with_spool(str(tmp_path))
+
+    assert f'queue.spoolDirectory="{tmp_path}"' in conf
+
+
+def test_an_unwritable_spool_directory_falls_back(tmp_path):
+    """LOG_AGGREGATOR_MAX_DISK_USAGE_PATH is an API setting, so anyone can point it
+    at a directory rsyslog cannot write. The config used to name that directory
+    anyway, leaving rsyslog with nowhere to spool and the disk queue quietly not
+    surviving a restart, which is the one thing these options exist for.
+    """
+    missing = tmp_path / 'not-created'
+    conf = _conf_with_spool(str(missing))
+
+    assert f'queue.spoolDirectory="{missing}"' not in conf
+    assert 'queue.spoolDirectory="/var/lib/ascender"' in conf
+
+
+def test_the_fallback_says_so(tmp_path, caplog):
+    """Silently writing somewhere other than the configured path is how this went
+    unnoticed. An administrator who set the path gets told it was not used.
+    """
+    missing = tmp_path / 'not-created'
+
+    with caplog.at_level('WARNING'):
+        _conf_with_spool(str(missing))
+
+    assert str(missing) in caplog.text
