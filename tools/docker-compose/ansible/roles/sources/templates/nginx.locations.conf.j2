@@ -13,7 +13,7 @@ location {{ (ingress_path + '/locales').replace('//', '/') }} {
 }
 
 location {{ (ingress_path + '/favicon.ico').replace('//', '/') }} {
-    alias /awx_devel/awx/public/static/favicon.ico;
+    alias /awx_devel/ascender/public/static/favicon.ico;
 }
 
 {# Prefix locations rather than one regex over both paths: the mount is a path,

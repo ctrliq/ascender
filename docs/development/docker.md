@@ -55,10 +55,10 @@ EOF
 cat << EOF > ~/start_npm.sh
 #!/bin/bash
 cd ascender
-#npm --prefix=awx/ui install
+#npm --prefix=ascender/ui install
 # If using openssl-3.0.7 or earlier, uncomment the next line and comment out the one after it.
-export NODE_OPTIONS=--openssl-legacy-provider; npm --prefix=awx/ui start
-#npm --prefix=awx/ui start
+export NODE_OPTIONS=--openssl-legacy-provider; npm --prefix=ascender/ui start
+#npm --prefix=ascender/ui start
 EOF
 ```
 
@@ -110,7 +110,7 @@ When you have npm packages to update due to upstream or dependency CVE remediati
 1. Checkout the `main` branch in your docker environment
 2. From there, create a new branch to handle the CVE changes
 3. Start the containers using `./start_containers.sh`
-4. Before starting the user interface using `./start_npm.sh`, login to the web container and goto the `awx/ui` directory and update the `package.json` file with the new package requirements
+4. Before starting the user interface using `./start_npm.sh`, login to the web container and goto the `ascender/ui` directory and update the `package.json` file with the new package requirements
 5. Run `npm audit fix` to see if there are any other security changes to be made as a result of the updated packages.
 6. If that runs clean, start the user interface using `./start_npm.sh`
 7. Check for startup errors and run your regressions

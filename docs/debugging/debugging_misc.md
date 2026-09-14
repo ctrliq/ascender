@@ -128,9 +128,9 @@ can use it to set remote breakpoints in Ascender code and debug interactively ov
 a telnet session:
 
 ```python
-    # awx/main/tasks.py
+    # ascender/main/tasks.py
 
-    class SomeTask(awx.main.tasks.jobs.BaseTask):
+    class SomeTask(ascender.main.tasks.jobs.BaseTask):
 
         def run(self, pk, **kwargs):
             # This will set a breakpoint and open an interactive Python
@@ -208,7 +208,7 @@ Below is the signature of the `@profile` decorator.
 ```
 
 ```
-from awx.main.utils.profiling import profile
+from ascender.main.utils.profiling import profile
 
 @profile(name="task_manager_profile")
 def task_manager():
@@ -248,7 +248,7 @@ Below is the signature of the `@timing` decorator.
 ```
 
 ```
-from awx.main.utils.profiling import timing
+from ascender.main.utils.profiling import timing
 
 @timing(name="my_task_manager_timing")
 def task_manager():
@@ -270,7 +270,7 @@ drwxrwxr-x 1 0 0 4096 Oct 20 12:43 ..
 The class behind the decorator can also be used for profiling.
 
 ```
-from awx.main.utils.profiling import AWXProfiler
+from ascender.main.utils.profiling import AWXProfiler
 
 prof = AWXProfiler("hello_world")
 prof.start()

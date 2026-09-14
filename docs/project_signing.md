@@ -63,7 +63,7 @@ it will be skipped.
 
 Project verification happens only during project update, _not_ during Job
 launch. There is an action plugin in
-`awx/playbooks/action_plugins/verify_project.py` which uses `ansible-sign` as a
+`ascender/playbooks/action_plugins/verify_project.py` which uses `ansible-sign` as a
 library for doing verification. The implementation is similar to the
 `ansible-sign project gpg-verify` subcommand; they both use the same library
 calls internally. If the API changes, both places will need to be updated.

@@ -29,7 +29,7 @@ updates:
       - build
 
   - package-ecosystem: npm
-    directory: /awx/ui
+    directory: /ascender/ui
     schedule:
       interval: weekly
       day: monday

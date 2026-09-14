@@ -85,14 +85,14 @@ clean-schema:
 
 clean-languages:
 	rm -f $(I18N_FLAG_FILE)
-	find ./awx/locale/ -type f -regex '.*\.mo$$' -delete
+	find ./ascender/locale/ -type f -regex '.*\.mo$$' -delete
 
 ## Remove temporary build files, compiled Python files.
 clean: clean-ui clean-api clean-dist
-	rm -rf awx/public
-	rm -rf awx/lib/site-packages
-	rm -rf awx/job_status
-	rm -rf awx/job_output
+	rm -rf ascender/public
+	rm -rf ascender/lib/site-packages
+	rm -rf ascender/job_status
+	rm -rf ascender/job_output
 	rm -rf reports
 	rm -rf tmp
 	rm -rf $(I18N_FLAG_FILE)
@@ -104,7 +104,7 @@ clean-api:
 	find . -type f -regex ".*\.py[co]$$" -delete
 	find . -depth -type d -name "__pycache__" -delete
 	rm -rf requirements/vendor
-	rm -rf awx/projects
+	rm -rf ascender/projects
 
 ## convenience target to assert environment variables are defined
 guard-%:
@@ -213,10 +213,10 @@ uvicorn: collectstatic
 	fi; \
 	root_path="$${AWX_MOUNT_PATH%/}"; \
 	uvicorn --host 127.0.0.1 --port 8051 --workers $(UVICORN_WORKERS) --ws auto --no-server-header \
-		$${root_path:+--root-path "$$root_path"} awx.asgi:channel_layer
+		$${root_path:+--root-path "$$root_path"} ascender.asgi:channel_layer
 
 awx-autoreload:
-	@/awx_devel/tools/docker-compose/awx-autoreload /awx_devel/awx
+	@/awx_devel/tools/docker-compose/awx-autoreload /awx_devel/ascender
 
 ## Run to start the background task dispatcher for development.
 dispatcher:
@@ -241,7 +241,7 @@ jupyter:
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	DJANGO_SETTINGS_MODULE=awx.settings.development $(PYTHON) -m notebook --IdentityProvider.token= --ip 0.0.0.0 --port 9888 --allow-root --no-browser
+	DJANGO_SETTINGS_MODULE=ascender.settings.development $(PYTHON) -m notebook --IdentityProvider.token= --ip 0.0.0.0 --port 9888 --allow-root --no-browser
 
 ## Start the rsyslog configurer process in background in development environment.
 run-rsyslog-configurer:
@@ -318,19 +318,19 @@ api-lint:
 ## rather than part of the build, its committed output is what everything else
 ## consumes, and its peer range wants TypeScript 5 where this project is on 6.
 ## npx fetches it for the length of this command and leaves nothing behind.
-ui-api-types: awx-link awx/ui/node_modules
+ui-api-types: awx-link ascender/ui/node_modules
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	$(MANAGEMENT_COMMAND) spectacular --format openapi-json --file awx/ui/.schema.json
-	$(NPM_BIN) --prefix awx/ui run generate-api-types
-	rm -f awx/ui/.schema.json
+	$(MANAGEMENT_COMMAND) spectacular --format openapi-json --file ascender/ui/.schema.json
+	$(NPM_BIN) --prefix ascender/ui run generate-api-types
+	rm -f ascender/ui/.schema.json
 
 ## Run egg_info_dev to generate awx.egg-info for development.
 awx-link:
 	[ -d "/awx_devel/awx.egg-info" ] || $(PYTHON) /awx_devel/tools/scripts/egg_info_dev
 
-TEST_DIRS ?= awx/main/tests/unit awx/main/tests/functional awx/conf/tests awx/sso/tests
+TEST_DIRS ?= ascender/main/tests/unit ascender/main/tests/functional ascender/conf/tests ascender/sso/tests
 PYTEST_ARGS ?= -n auto --dist=loadfile
 ## Run all API unit tests.
 test:
@@ -378,7 +378,7 @@ test_unit:
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	py.test awx/main/tests/unit awx/conf/tests/unit awx/sso/tests/unit
+	py.test ascender/main/tests/unit ascender/conf/tests/unit ascender/sso/tests/unit
 
 ## Run all API unit tests with coverage enabled.
 test_coverage:
@@ -408,62 +408,62 @@ bulk_data:
 # UI TASKS
 # --------------------------------------
 
-UI_BUILD_FLAG_FILE = awx/ui/.ui-built
+UI_BUILD_FLAG_FILE = ascender/ui/.ui-built
 
 clean-ui:
 	rm -rf node_modules
-	rm -rf awx/ui/node_modules
-	rm -rf awx/ui/build
-	rm -rf awx/ui/src/locales/_build
+	rm -rf ascender/ui/node_modules
+	rm -rf ascender/ui/build
+	rm -rf ascender/ui/src/locales/_build
 	rm -rf $(UI_BUILD_FLAG_FILE)
         # the collectstatic command doesn't like it if this dir doesn't exist.
-	mkdir -p awx/ui/build/static
+	mkdir -p ascender/ui/build/static
 
-awx/ui/node_modules:
-	NODE_OPTIONS=--max-old-space-size=6144 $(NPM_BIN) --prefix awx/ui --loglevel warn --force ci --ignore-scripts
+ascender/ui/node_modules:
+	NODE_OPTIONS=--max-old-space-size=6144 $(NPM_BIN) --prefix ascender/ui --loglevel warn --force ci --ignore-scripts
 
 $(UI_BUILD_FLAG_FILE):
-	$(MAKE) awx/ui/node_modules
+	$(MAKE) ascender/ui/node_modules
 	$(PYTHON) tools/scripts/compilemessages.py
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run compile-strings
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run build
+	$(NPM_BIN) --prefix ascender/ui --loglevel warn run compile-strings
+	$(NPM_BIN) --prefix ascender/ui --loglevel warn run build
 	touch $@
 
 ui-release: $(UI_BUILD_FLAG_FILE)
 
-ui-devel: awx/ui/node_modules
+ui-devel: ascender/ui/node_modules
 	@$(MAKE) -B $(UI_BUILD_FLAG_FILE)
 	@if [ -d "/var/lib/awx" ] ; then \
 		mkdir -p /var/lib/awx/public/static/css; \
 		mkdir -p /var/lib/awx/public/static/js; \
 		mkdir -p /var/lib/awx/public/static/media; \
-		cp -r awx/ui/build/static/css/* /var/lib/awx/public/static/css; \
-		cp -r awx/ui/build/static/js/* /var/lib/awx/public/static/js; \
-		cp -r awx/ui/build/static/media/* /var/lib/awx/public/static/media; \
+		cp -r ascender/ui/build/static/css/* /var/lib/awx/public/static/css; \
+		cp -r ascender/ui/build/static/js/* /var/lib/awx/public/static/js; \
+		cp -r ascender/ui/build/static/media/* /var/lib/awx/public/static/media; \
 	fi
 
 ## Start the Vite dev server on port 3001, proxying the API to TARGET.
-ui-devel-test: awx/ui/node_modules
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run start
+ui-devel-test: ascender/ui/node_modules
+	$(NPM_BIN) --prefix ascender/ui --loglevel warn run start
 
-ui-lint: awx/ui/node_modules
-	$(NPM_BIN) run --prefix awx/ui lint
-	$(NPM_BIN) run --prefix awx/ui prettier-check
-	$(NPM_BIN) run --prefix awx/ui check-strings
+ui-lint: ascender/ui/node_modules
+	$(NPM_BIN) run --prefix ascender/ui lint
+	$(NPM_BIN) run --prefix ascender/ui prettier-check
+	$(NPM_BIN) run --prefix ascender/ui check-strings
 
-ui-type-check: awx/ui/node_modules
-	$(NPM_BIN) run --prefix awx/ui type-check
+ui-type-check: ascender/ui/node_modules
+	$(NPM_BIN) run --prefix ascender/ui type-check
 
-ui-test: awx/ui/node_modules
-	$(NPM_BIN) run --prefix awx/ui test
+ui-test: ascender/ui/node_modules
+	$(NPM_BIN) run --prefix ascender/ui test
 
-ui-test-screens: awx/ui/node_modules
-	$(NPM_BIN) run --prefix awx/ui pretest
-	$(NPM_BIN) run --prefix awx/ui test-screens
+ui-test-screens: ascender/ui/node_modules
+	$(NPM_BIN) run --prefix ascender/ui pretest
+	$(NPM_BIN) run --prefix ascender/ui test-screens
 
-ui-test-general: awx/ui/node_modules
-	$(NPM_BIN) run --prefix awx/ui pretest
-	$(NPM_BIN) run --prefix awx/ui/ test-general
+ui-test-general: ascender/ui/node_modules
+	$(NPM_BIN) run --prefix ascender/ui pretest
+	$(NPM_BIN) run --prefix ascender/ui/ test-general
 
 HEADLESS ?= no
 ifeq ($(HEADLESS), yes)
@@ -484,7 +484,7 @@ sdist: dist/$(SDIST_TAR_FILE)
 # This directory is bind-mounted inside of the development container and
 # needs to be pre-created for permissions to be set correctly. Otherwise,
 # Docker will create this directory as root.
-awx/projects:
+ascender/projects:
 	@mkdir -p $@
 
 COMPOSE_UP_OPTS ?=
@@ -520,7 +520,7 @@ docker-compose-sources: .git/hooks/pre-commit
 		-e install_editable_dependencies=$(EDITABLE_DEPENDENCIES) \
 	    $(EXTRA_SOURCES_ANSIBLE_OPTS)
 
-docker-compose: awx/projects docker-compose-sources
+docker-compose: ascender/projects docker-compose-sources
 	ansible-galaxy install --ignore-certs -r tools/docker-compose/ansible/requirements.yml;
 	ansible-playbook -i tools/docker-compose/inventory tools/docker-compose/ansible/initialize_containers.yml \
 	    -e enable_vault=$(VAULT) \
@@ -534,17 +534,17 @@ docker-compose-up:
 docker-compose-down:
 	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml $(COMPOSE_OPTS) down --remove-orphans
 
-docker-compose-credential-plugins: awx/projects docker-compose-sources
+docker-compose-credential-plugins: ascender/projects docker-compose-sources
 	echo -e "\033[0;31mTo generate a CyberArk Conjur API key: docker exec -it tools_conjur_1 conjurctl account create quick-start\033[0m"
 	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml -f tools/docker-credential-plugins-override.yml up --no-recreate awx_1 --remove-orphans
 
-docker-compose-test: awx/projects docker-compose-sources
+docker-compose-test: ascender/projects docker-compose-sources
 	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml run --rm --service-ports awx_1 /bin/bash
 
-docker-compose-runtest: awx/projects docker-compose-sources
+docker-compose-runtest: ascender/projects docker-compose-sources
 	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml run --rm --service-ports awx_1 /start_tests.sh
 
-docker-compose-build-schema: awx/projects docker-compose-sources
+docker-compose-build-schema: ascender/projects docker-compose-sources
 	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml run --rm --service-ports --no-deps awx_1 make genschema
 
 SCHEMA_DIFF_BASE_BRANCH ?= devel
@@ -554,7 +554,7 @@ detect-schema-change: genschema
 	# diff exits with 1 when files differ - capture but don't fail
 	-diff -u -b reference-schema.json schema.json
 
-docker-compose-clean: awx/projects
+docker-compose-clean: ascender/projects
 	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml rm -sf
 
 docker-compose-container-group-clean:
@@ -690,11 +690,11 @@ kind-dev-load: awx-kube-dev-build
 
 ## generate UI .pot file, an empty template of strings yet to be translated
 pot: $(UI_BUILD_FLAG_FILE)
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run extract-template --clean
+	$(NPM_BIN) --prefix ascender/ui --loglevel warn run extract-template --clean
 
 ## generate UI .po files for each locale (will update translated strings for `en`)
 po: $(UI_BUILD_FLAG_FILE)
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run extract-strings -- --clean
+	$(NPM_BIN) --prefix ascender/ui --loglevel warn run extract-strings -- --clean
 
 ## generate API django .pot .po
 messages:

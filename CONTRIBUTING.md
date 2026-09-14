@@ -25,7 +25,7 @@ walkthrough, and [kind.md](./docs/development/kind.md) or
 ## Running tests
 
 ```bash
-py.test awx/main/tests/
+py.test ascender/main/tests/
 ```
 
 Configuration lives in [`pyproject.toml`](./pyproject.toml) and [`tox.ini`](./tox.ini).

@@ -17,7 +17,7 @@ A `ContainerGroup` is simply an `InstanceGroup` that has an associated Credentia
 that allows for connecting to an OpenShift or Kubernetes cluster.
 
 To create a new type, add a new `ManagedCredentialType` to
-`awx/main/models/credential/__init__.py` where `kind='kubernetes'`.
+`ascender/main/models/credential/__init__.py` where `kind='kubernetes'`.
 
 ### Create Credential
 

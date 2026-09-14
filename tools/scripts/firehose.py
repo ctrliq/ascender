@@ -48,7 +48,7 @@ from django.utils.timezone import now
 # registry, which only the fork start method provides. Python 3.14 changed the
 # Linux default to forkserver, where the child re-imports and raises
 # AppRegistryNotReady, so the context is pinned here as it is in
-# awx/main/dispatch/pool.py.
+# ascender/main/dispatch/pool.py.
 _mp_ctx = multiprocessing.get_context('fork')
 
 db = json.loads(
@@ -143,12 +143,12 @@ def cleanup(sql):
 def generate_jobs(jobs, batch_size, time_delta):
     print(f'inserting {jobs} job(s)')
     sys.path[:0] = site.getsitepackages()
-    from awx import prepare_env
+    from ascender import prepare_env
 
     prepare_env()
     setup_django()
 
-    from awx.main.models import UnifiedJob, Job, JobTemplate
+    from ascender.main.models import UnifiedJob, Job, JobTemplate
 
     fields = list(set(Job._meta.fields) - set(UnifiedJob._meta.fields))
     job_field_names = set([f.attname for f in fields])
@@ -201,8 +201,8 @@ def generate_jobs(jobs, batch_size, time_delta):
     created_job_ids = []
     s = time()
 
-    from awx.main.models import JobEvent
-    from awx.main.utils.common import create_partition
+    from ascender.main.models import JobEvent
+    from ascender.main.utils.common import create_partition
 
     start_partition = (now() - time_delta).replace(minute=0, second=0, microsecond=0)
     create_partition(JobEvent._meta.db_table, start_partition)

@@ -36,7 +36,7 @@ stderr_logfile_maxbytes=0
 
 {% if kube_dev | bool %}
 [program:awx-autoreload]
-command = /awx_devel/tools/docker-compose/awx-autoreload /awx_devel/awx
+command = /awx_devel/tools/docker-compose/awx-autoreload /awx_devel/ascender
 autostart = true
 autorestart = true
 stopasgroup=true

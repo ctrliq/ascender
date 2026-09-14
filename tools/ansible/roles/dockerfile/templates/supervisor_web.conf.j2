@@ -40,7 +40,7 @@ environment = AWX_WEB_PROCESS=1
 command = make uvicorn
 directory = /awx_devel
 {% else %}
-command = /var/lib/awx/venv/awx/bin/uvicorn --host 127.0.0.1 --port 8051 --workers 5 --ws auto --no-server-header --timeout-graceful-shutdown 110 --limit-concurrency 512 awx.asgi:channel_layer
+command = /var/lib/awx/venv/awx/bin/uvicorn --host 127.0.0.1 --port 8051 --workers 5 --ws auto --no-server-header --timeout-graceful-shutdown 110 --limit-concurrency 512 ascender.asgi:channel_layer
 directory = /var/lib/awx
 {% endif %}
 autorestart = true
@@ -88,7 +88,7 @@ stderr_logfile_maxbytes=0
 
 {% if kube_dev | bool %}
 [program:awx-autoreload]
-command = /awx_devel/tools/docker-compose/awx-autoreload /awx_devel/awx
+command = /awx_devel/tools/docker-compose/awx-autoreload /awx_devel/ascender
 autostart = true
 autorestart = true
 stopasgroup=true

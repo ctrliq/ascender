@@ -36,8 +36,8 @@ done
 
 cd .. 
 
-awx_api_path="awx/locale" # locale will be dropped here
-awx_ui_path="awx/ui/src/locales" # locales will be dropped here
+awx_api_path="ascender/locale" # locale will be dropped here
+awx_ui_path="ascender/ui/src/locales" # locales will be dropped here
 
 rsync -av locale/ $awx_api_path
 rsync -av locales/ $awx_ui_path

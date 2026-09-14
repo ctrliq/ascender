@@ -10,7 +10,7 @@
     keycloak_realm_template: ../_sources/keycloak.awx.realm.json
     keycloak_user: admin
     keycloak_pass: admin
-    cert_subject: "/C=US/ST=NC/L=Durham/O=awx/CN="
+    cert_subject: "/C=US/ST=NC/L=Durham/O=ascender/CN="
   tasks:
     - name: Generate certificates for keycloak
       command: 'openssl req -new -x509 -days 365 -nodes -out {{ public_key_file }} -keyout {{ private_key_file }} -subj "{{ cert_subject }}"'

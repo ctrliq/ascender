@@ -1,0 +1,1335 @@
+#
+# Modifications Copyright (c) 2023 Ctrl IQ, Inc.
+#
+# Copyright (c) 2015 Ansible, Inc.
+# All Rights Reserved.
+
+# Python
+import base64
+import os
+import re  # noqa
+import tempfile
+import socket
+from datetime import timedelta
+
+# python-ldap
+import ldap
+
+DEBUG = True
+SQL_DEBUG = DEBUG
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(__file__))
+
+# FIXME: it would be nice to cycle back around and allow this to be
+# BigAutoField going forward, but we'd have to be explicit about our
+# existing models.
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+# A real deployment always overrides this from /etc/tower/conf.d/database.py,
+# and the development environment and the test settings both supply their own.
+# What is left here is the fallback for a process started with no settings files
+# at all, and it is PostgreSQL because nothing supports SQLite any more: the
+# suite moved to PostgreSQL, and Django 6.1 requires SQLite 3.37 while the
+# Rocky 9 base image ships 3.34, so the old SQLite fallback could not open a
+# connection even to fail usefully.
+#
+# Deliberately plain values rather than an environment lookup. The tree already
+# carries DATABASE_* for the compose environment and AWX_TEST_DATABASE_* for the
+# test settings, and a third scheme here would earn nothing: anything that needs
+# to point somewhere else is supplying a settings file anyway.
+#
+# The name and the user are the Ascender ones here, which costs nothing because
+# nothing deployed reads them. What a deployment actually connects to is set by
+# the operator, which derives the database name and user from deployment_type,
+# and those stay awx: renaming them means renaming a PostgreSQL role and
+# database that already hold the data, for a name almost nobody ever types.
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'ascender',
+        'USER': 'ascender',
+        'PASSWORD': 'ascenderpass',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+        'ATOMIC_REQUESTS': True,
+    }
+}
+
+# Optional manual override for statement_timeout (ms) on web worker DB
+# connections.  uvicorn serves the web process, so this is what it uses; a
+# deployment still running uwsgi derives it from harakiri instead.
+DATABASE_STATEMENT_TIMEOUT = None
+
+# How many days of job events to keep, for the cleanup_job_events command.
+# 0, the default, means no window and nothing dropped: events then live exactly
+# as long as the jobs that wrote them, which is what cleanup_jobs decides.
+JOB_EVENT_RETENTION_DAYS = 0
+
+# Where cleanup_job_events writes a partition before dropping it. Unset, the
+# default, means no archive: a partition that falls out of the window is gone.
+# Set to a directory and each partition is COPYed out as gzipped CSV first, and
+# is only dropped once that file is written, so the window becomes hot storage
+# with something behind it rather than a delete.
+JOB_EVENT_ARCHIVE_DIR = None
+
+# Optional manual override for how long a database connection is kept and
+# reused, in seconds. Unset, a web process reuses one for a minute and every
+# other process opens one per request, which is Django's default. 0 turns
+# reuse off everywhere.
+DATABASE_CONN_MAX_AGE = None
+
+# Special database overrides for dispatcher connections listening to pg_notify
+LISTENER_DATABASES = {
+    'default': {
+        'OPTIONS': {
+            'keepalives': 1,
+            'keepalives_idle': 5,
+            'keepalives_interval': 5,
+            'keepalives_count': 5,
+        },
+    }
+}
+
+# Whether or not the deployment is a K8S-based deployment
+# In K8S-based deployments, instances have zero capacity - all playbook
+# automation is intended to flow through defined Container Groups that
+# interface with some (or some set of) K8S api (which may or may not include
+# the K8S cluster where awx itself is running)
+IS_K8S = False
+
+AWX_CONTAINER_GROUP_K8S_API_TIMEOUT = 10
+# Whether container group Kubernetes API calls should be routed through the
+# HTTP_PROXY/HTTPS_PROXY environment variables of the task container. The Python
+# Kubernetes client started honouring those on its own in 34.1, but this traffic
+# has never been proxied by Ascender, and a TLS-terminating proxy breaks certificate
+# verification against the cluster CA (the client verifies against the cluster
+# credential's CA data or the service account CA, never the system trust store).
+# Leave disabled unless the cluster API really is only reachable through a proxy.
+AWX_CONTAINER_GROUP_K8S_API_USE_PROXY = False
+AWX_CONTAINER_GROUP_DEFAULT_NAMESPACE = os.getenv('MY_POD_NAMESPACE', 'default')
+AWX_CONTAINER_GROUP_DEFAULT_JOB_LABEL = os.getenv('AWX_CONTAINER_GROUP_DEFAULT_JOB_LABEL', 'ansible_job')
+# Timeout when waiting for pod to enter running state. If the pod is still in pending state , it will be terminated. Valid time units are "s", "m", "h". Example : "5m" , "10s".
+AWX_CONTAINER_GROUP_POD_PENDING_TIMEOUT = "2h"
+
+# How much capacity controlling a task costs a hybrid or control node
+AWX_CONTROL_NODE_TASK_IMPACT = 1
+
+# Internationalization
+# https://docs.djangoproject.com/en/dev/topics/i18n/
+#
+# Local time zone for this installation. Choices can be found here:
+# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
+# although not all choices may be available on all operating systems.
+# On Unix systems, a value of None will cause Django to use the same
+# timezone as the operating system.
+# If running in a Windows environment this must be set to the same as your
+# system time zone.
+TIME_ZONE = 'UTC'
+
+# Language code for this installation. All choices can be found here:
+# http://www.i18nguy.com/unicode/language-identifiers.html
+LANGUAGE_CODE = 'en-us'
+
+# Languages LocaleMiddleware is allowed to activate: the catalog directories
+# under awx/locale/<code>/, plus 'en'. Declaring this explicitly (rather than
+# relying on Django's full global LANGUAGES list) ensures LocaleMiddleware
+# selects the exact catalog code we ship. In particular Django's global list
+# only has 'zh-hans'/'zh-hant', so without this a request asking for 'zh' would
+# resolve to 'zh-hans' (which has no catalog) and fall back to English.
+#
+# 'en' is the one entry with no catalog of its own: the UI names its English
+# bundle 'en' while the backend catalog is 'en-us', so a preferred_language of
+# 'en' has to resolve to something here. It falls through to the source strings,
+# which are already English.
+#
+# This is NOT the same list as SUPPORTED_UI_LOCALES in awx/api/serializers.py.
+# That one mirrors the bundles under awx/ui/src/locales/ and therefore contains
+# 'en' but not 'en-us'. awx/main/tests/unit/test_locales.py pins both sets
+# against the directories on disk, so adding a language means adding it to
+# whichever of the two lists actually gained a catalog.
+LANGUAGES = [
+    ('en-us', 'English (US)'),
+    ('en', 'English'),
+    ('ar', 'Arabic'),
+    ('es', 'Spanish'),
+    ('fr', 'French'),
+    ('hi', 'Hindi'),
+    ('ja', 'Japanese'),
+    ('ko', 'Korean'),
+    ('nl', 'Dutch'),
+    ('zh', 'Chinese'),
+]
+
+# If you set this to False, Django will make some optimizations so as not
+# to load the internationalization machinery.
+USE_I18N = True
+
+
+USE_TZ = True
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'ui', 'build', 'static'),
+    os.path.join(BASE_DIR, 'static'),
+]
+
+# Absolute filesystem path to the directory where static file are collected via
+# the collectstatic command.
+STATIC_ROOT = '/var/lib/ascender/public/static'
+
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/dev/howto/static-files/
+STATIC_URL = '/static/'
+
+# Absolute filesystem path to the directory that will hold user-uploaded files.
+# Example: "/home/media/media.lawrence.com/"
+MEDIA_ROOT = os.path.join(BASE_DIR, 'public', 'media')
+
+# URL that handles the media served from MEDIA_ROOT. Make sure to use a
+# trailing slash if there is a path component (optional in other cases).
+# Examples: "http://media.lawrence.com", "http://example.com/media/"
+MEDIA_URL = '/media/'
+
+LOGIN_URL = '/api/login/'
+
+# Absolute filesystem path to the directory to host projects (with playbooks).
+# This directory should not be web-accessible.
+PROJECTS_ROOT = '/var/lib/ascender/projects/'
+
+# Absolute filesystem path to the directory for job status stdout (default for
+# development and tests, default for production defined in production.py). This
+# directory should not be web-accessible
+JOBOUTPUT_ROOT = '/var/lib/ascender/job_status/'
+
+# Absolute filesystem path to the directory to store logs
+LOG_ROOT = '/var/log/tower/'
+
+# Django gettext files path: locale/<lang-code>/LC_MESSAGES/django.po, django.mo
+LOCALE_PATHS = (os.path.join(BASE_DIR, 'locale'),)
+
+# Graph of resources that can have named-url
+NAMED_URL_GRAPH = {}
+
+# Maximum number of the same job that can be waiting to run when launching from scheduler
+# Note: This setting may be overridden by database settings.
+SCHEDULE_MAX_JOBS = 10
+
+# Bulk API related settings
+# Maximum number of jobs that can be launched in 1 bulk job
+BULK_JOB_MAX_LAUNCH = 100
+
+# Maximum number of host that can be created in 1 bulk host create
+BULK_HOST_MAX_CREATE = 100
+
+# Maximum number of host that can be deleted in 1 bulk host delete
+BULK_HOST_MAX_DELETE = 250
+
+SITE_ID = 1
+
+# Make this unique, and don't share it with anybody.
+if os.path.exists('/etc/tower/SECRET_KEY'):
+    with open('/etc/tower/SECRET_KEY', 'rb') as f:
+        SECRET_KEY = f.read().strip()
+else:
+    SECRET_KEY = base64.encodebytes(os.urandom(32)).decode().rstrip()
+
+# Hosts/domain names that are valid for this site; required if DEBUG is False
+# See https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = []
+
+# HTTP headers and meta keys to search to determine remote host name or IP. Add
+# additional items to this list, such as "HTTP_X_FORWARDED_FOR", if behind a
+# reverse proxy.
+REMOTE_HOST_HEADERS = ['REMOTE_ADDR', 'REMOTE_HOST']
+
+# If we are behind a reverse proxy/load balancer, use this setting to
+# allow the proxy IP addresses from which Tower should trust custom
+# REMOTE_HOST_HEADERS header values
+# REMOTE_HOST_HEADERS = ['HTTP_X_FORWARDED_FOR', ''REMOTE_ADDR', 'REMOTE_HOST']
+# PROXY_IP_ALLOWED_LIST = ['10.0.1.100', '10.0.1.101']
+# If this setting is an empty list (the default), the headers specified by
+# REMOTE_HOST_HEADERS will be trusted unconditionally')
+PROXY_IP_ALLOWED_LIST = []
+
+# If we are behind a reverse proxy/load balancer, use this setting to
+# allow the scheme://addresses from which Tower should trust csrf requests from
+# If this setting is an empty list (the default), we will only trust ourself
+CSRF_TRUSTED_ORIGINS = []
+
+
+# Warning: this is a placeholder for a database setting
+# This should not be set via a file.
+DEFAULT_EXECUTION_ENVIRONMENT = None
+
+# This list is used for creating default EEs when running awx-manage create_preload_data.
+# Should be ordered from highest to lowest precedence.
+# The awx-manage register_default_execution_environments command reads this setting and registers the EE(s)
+# If a registry credential is needed to pull the image, that can be provided to the awx-manage command
+GLOBAL_JOB_EXECUTION_ENVIRONMENTS = [{'name': 'Ascender EE (latest)', 'image': 'ghcr.io/ctrliq/ascender-ee:latest'}]
+# This setting controls which EE will be used for project updates.
+# The awx-manage register_default_execution_environments command reads this setting and registers the EE
+# This image is distinguished from others by having "managed" set to True and users have limited
+# ability to modify it through the API.
+# If a registry credential is needed to pull the image, that can be provided to the awx-manage command
+CONTROL_PLANE_EXECUTION_ENVIRONMENT = 'ghcr.io/ctrliq/ascender-ee:latest'
+
+# Note: This setting may be overridden by database settings.
+STDOUT_MAX_BYTES_DISPLAY = 1048576
+
+# Returned in the header on event api lists as a recommendation to the UI
+# on how many events to display before truncating/hiding
+MAX_UI_JOB_EVENTS = 4000
+
+# Returned in index.html, tells the UI if it should make requests
+# to update job data in response to status changes websocket events
+UI_LIVE_UPDATES_ENABLED = True
+
+# The maximum size of the ansible callback event's res data structure
+# beyond this limit and the value will be removed
+MAX_EVENT_RES_DATA = 25000000
+
+# Note: These settings may be overridden by database settings.
+EVENT_STDOUT_MAX_BYTES_DISPLAY = 1024
+MAX_WEBSOCKET_EVENT_RATE = 30
+
+# The amount of time before a stdout file is expired and removed locally
+# Note that this can be recreated if the stdout is downloaded
+LOCAL_STDOUT_EXPIRE_TIME = 2592000
+
+# The number of processes spawned by the callback receiver to process job
+# events into the database
+JOB_EVENT_WORKERS = 4
+
+# The number of seconds to buffer callback receiver bulk
+# writes in memory before flushing via JobEvent.objects.bulk_create()
+JOB_EVENT_BUFFER_SECONDS = 1
+
+# The interval at which callback receiver statistics should be
+# recorded
+JOB_EVENT_STATISTICS_INTERVAL = 5
+
+# The maximum size of the job event worker queue before requests are blocked
+JOB_EVENT_MAX_QUEUE_SIZE = 10000
+
+# The number of job events to migrate per-transaction when moving from int -> bigint
+JOB_EVENT_MIGRATION_CHUNK_SIZE = 1000000
+
+# The prefix of the valkey key that stores metrics
+SUBSYSTEM_METRICS_VALKEY_KEY_PREFIX = "awx_metrics"
+
+# Histogram buckets for the callback_receiver_batch_events_insert_db metric
+SUBSYSTEM_METRICS_BATCH_INSERT_BUCKETS = [10, 50, 150, 350, 650, 2000]
+
+# Interval in seconds for sending local metrics to other nodes
+SUBSYSTEM_METRICS_INTERVAL_SEND_METRICS = 3
+
+# Interval in seconds for saving local metrics to valkey
+SUBSYSTEM_METRICS_INTERVAL_SAVE_TO_VALKEY = 2
+
+# Record task manager metrics at the following interval in seconds
+# If using Prometheus, it is recommended to be => the Prometheus scrape interval
+SUBSYSTEM_METRICS_TASK_MANAGER_RECORD_INTERVAL = 15
+
+# The maximum allowed jobs to start on a given task manager cycle
+START_TASK_LIMIT = 100
+
+# Number of seconds an outgoing notification waits on the service it posts to.
+# Without it the dispatcher worker running send_notifications is held for as
+# long as the far end keeps the connection open. Matches the default timeout of
+# the email backend.
+AWX_NOTIFICATION_REQUEST_TIMEOUT = 30
+
+# Time out task managers if they take longer than this many seconds, plus TASK_MANAGER_TIMEOUT_GRACE_PERIOD
+# We have the grace period so the task manager can bail out before the timeout.
+TASK_MANAGER_TIMEOUT = 300
+TASK_MANAGER_TIMEOUT_GRACE_PERIOD = 60
+
+# Number of seconds _in addition to_ the task manager timeout a job can stay
+# in waiting without being reaped
+JOB_WAITING_GRACE_PERIOD = 60
+
+# Number of seconds after a container group job finished time to wait
+# before the awx_k8s_reaper task will tear down the pods
+K8S_POD_REAPER_GRACE_PERIOD = 60
+
+# Disallow sending session cookies over insecure connections
+SESSION_COOKIE_SECURE = True
+
+# When enabled, schedules remain stored as configured in the database, but
+# they are treated as disabled by the API and periodic scheduler. This is
+# intended for DR restore testing to prevent scheduled jobs from firing.
+DISABLE_ALL_SCHEDULES = False
+
+# Seconds before sessions expire.
+# Note: This setting may be overridden by database settings.
+SESSION_COOKIE_AGE = 1800
+
+# Option to change userLoggedIn cookie SameSite policy.
+USER_COOKIE_SAMESITE = 'Lax'
+
+# Name of the cookie that contains the session information.
+# Note: Changing this value may require changes to any clients.
+SESSION_COOKIE_NAME = 'awx_sessionid'
+
+# Maximum number of per-user valid, concurrent sessions.
+# -1 is unlimited
+# Note: This setting may be overridden by database settings.
+SESSIONS_PER_USER = -1
+
+CSRF_USE_SESSIONS = False
+
+# Disallow sending csrf cookies over insecure connections
+CSRF_COOKIE_SECURE = True
+
+# Limit CSRF cookies to browser sessions
+CSRF_COOKIE_AGE = None
+
+TEMPLATES = [
+    {
+        'NAME': 'default',
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [  # NOQA
+                'django.contrib.auth.context_processors.auth',
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                'ascender.ui.context_processors.csp',
+                'ascender.ui.context_processors.version',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
+            ],
+            'builtins': ['ascender.main.templatetags.swagger'],
+        },
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'ui', 'build'),
+            os.path.join(BASE_DIR, 'ui', 'public'),
+        ],
+    },
+]
+
+ROOT_URLCONF = 'ascender.urls'
+
+WSGI_APPLICATION = 'ascender.wsgi.application'
+
+INSTALLED_APPS = [
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.messages',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    # daphne has to be installed before django.contrib.staticfiles for the app to startup
+    # According to channels 4.0 docs you install daphne instead of channels now
+    'daphne',
+    'django.contrib.staticfiles',
+    'oauth2_provider',
+    'rest_framework',
+    'polymorphic',
+    'social_django',
+    'django_guid',
+    'corsheaders',
+    'ascender.conf',
+    'ascender.main',
+    'ascender.api',
+    'ascender.ui',
+    'ascender.sso',
+    'solo',
+    'ascender.dab.rest_filters',
+    'ascender.dab.jwt_consumer',
+    'ascender.dab.resource_registry',
+]
+
+
+INTERNAL_IPS = ('127.0.0.1',)
+
+MAX_PAGE_SIZE = 200
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'ascender.api.pagination.Pagination',
+    'PAGE_SIZE': 25,
+    # Formerly set by ascender.dab's dynamic_settings include (now inlined). The generic
+    # ascender.dab FieldLookupBackend is replaced by HostFieldLookupBackend, which adds
+    # the Host filter fields derived from JobHostSummary on top of it.
+    'DEFAULT_FILTER_BACKENDS': (
+        'ascender.dab.rest_filters.rest_framework.type_filter_backend.TypeFilterBackend',
+        'ascender.api.filters.HostFieldLookupBackend',
+        'rest_framework.filters.SearchFilter',
+        'ascender.dab.rest_filters.rest_framework.order_backend.OrderByBackend',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'ascender.dab.jwt_consumer.awx.auth.AwxJWTAuthentication',
+        'ascender.api.authentication.LoggedOAuth2Authentication',
+        'ascender.api.authentication.SessionAuthentication',
+        'ascender.api.authentication.LoggedBasicAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': ('ascender.api.permissions.ModelAccessPermission',),
+    'DEFAULT_PARSER_CLASSES': ('ascender.api.parsers.JSONParser',),
+    'DEFAULT_RENDERER_CLASSES': ('ascender.api.renderers.DefaultJSONRenderer', 'ascender.api.renderers.BrowsableAPIRenderer'),
+    'DEFAULT_METADATA_CLASS': 'ascender.api.metadata.Metadata',
+    'EXCEPTION_HANDLER': 'ascender.api.views.api_exception_handler',
+    'VIEW_DESCRIPTION_FUNCTION': 'ascender.api.generics.get_view_description',
+    'NON_FIELD_ERRORS_KEY': '__all__',
+    'DEFAULT_VERSION': 'v2',
+    # For OpenAPI schema generation with drf-spectacular
+    # see https://github.com/encode/django-rest-framework/pull/6532
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    # 'URL_FORMAT_OVERRIDE': None,
+}
+
+# SWAGGER_SETTINGS removed - migrated to drf-spectacular (see SPECTACULAR_SETTINGS below)
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Ascender API',
+    'DESCRIPTION': 'Ascender API Documentation',
+    'VERSION': 'v2',
+    'OAS_VERSION': '3.0.3',  # Set OpenAPI Specification version to 3.0.3
+    'SERVE_INCLUDE_SCHEMA': False,
+    'SCHEMA_PATH_PREFIX': r'/api/v[0-9]',
+    'DEFAULT_GENERATOR_CLASS': 'drf_spectacular.generators.SchemaGenerator',
+    'SCHEMA_COERCE_PATH_PK_SUFFIX': True,
+    'CONTACT': {'email': 'contact@snippets.local'},
+    'LICENSE': {'name': 'Apache License'},
+    'TERMS_OF_SERVICE': 'https://www.google.com/policies/terms/',
+    # Use our custom schema class that handles swagger_topic and deprecated views
+    'DEFAULT_SCHEMA_CLASS': 'ascender.api.schema.CustomAutoSchema',
+    'COMPONENT_SPLIT_REQUEST': True,
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+        'persistAuthorization': True,
+        'displayOperationId': True,
+    },
+    # Resolve enum naming collisions with meaningful names
+    'ENUM_NAME_OVERRIDES': {
+        # Status field collisions
+        'Status4e1Enum': 'UnifiedJobStatusEnum',
+        'Status876Enum': 'JobStatusEnum',
+        # Job type field collisions
+        'JobType8b8Enum': 'JobTemplateJobTypeEnum',
+        'JobType95bEnum': 'AdHocCommandJobTypeEnum',
+        'JobType963Enum': 'ProjectUpdateJobTypeEnum',
+        # Verbosity field collisions
+        'Verbosity481Enum': 'JobVerbosityEnum',
+        'Verbosity8cfEnum': 'InventoryUpdateVerbosityEnum',
+        # Event field collision
+        'Event4d3Enum': 'JobEventEnum',
+        # Kind field collision
+        'Kind362Enum': 'InventoryKindEnum',
+    },
+}
+
+AUTHENTICATION_BACKENDS = (
+    'ascender.sso.backends.LDAPBackend',
+    'ascender.sso.backends.LDAPBackend1',
+    'ascender.sso.backends.LDAPBackend2',
+    'ascender.sso.backends.LDAPBackend3',
+    'ascender.sso.backends.LDAPBackend4',
+    'ascender.sso.backends.LDAPBackend5',
+    'ascender.sso.backends.RADIUSBackend',
+    'ascender.sso.backends.TACACSPlusBackend',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.github.GithubOrganizationOAuth2',
+    'social_core.backends.github.GithubTeamOAuth2',
+    'social_core.backends.github_enterprise.GithubEnterpriseOAuth2',
+    'social_core.backends.github_enterprise.GithubEnterpriseOrganizationOAuth2',
+    'social_core.backends.github_enterprise.GithubEnterpriseTeamOAuth2',
+    'social_core.backends.open_id_connect.OpenIdConnectAuth',
+    'social_core.backends.azuread.AzureADOAuth2',
+    'social_core.backends.azuread_tenant.AzureADTenantOAuth2',
+    'ascender.sso.backends.SAMLAuth',
+    'ascender.main.backends.AWXModelBackend',
+)
+
+
+# Django OAuth Toolkit settings
+OAUTH2_PROVIDER_APPLICATION_MODEL = 'main.OAuth2Application'
+OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = 'main.OAuth2AccessToken'
+OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = 'main.OAuth2RefreshToken'
+OAUTH2_PROVIDER_ID_TOKEN_MODEL = 'main.OAuth2IDToken'
+
+OAUTH2_PROVIDER = {'ACCESS_TOKEN_EXPIRE_SECONDS': 31536000000, 'AUTHORIZATION_CODE_EXPIRE_SECONDS': 600, 'REFRESH_TOKEN_EXPIRE_SECONDS': 2628000}
+ALLOW_OAUTH2_FOR_EXTERNAL_USERS = False
+
+# LDAP server (default to None to skip using LDAP authentication).
+# Note: This setting may be overridden by database settings.
+AUTH_LDAP_SERVER_URI = None
+
+# Disable LDAP referrals by default (to prevent certain LDAP queries from
+# hanging with AD).
+# Note: This setting may be overridden by database settings.
+AUTH_LDAP_CONNECTION_OPTIONS = {ldap.OPT_REFERRALS: 0, ldap.OPT_NETWORK_TIMEOUT: 30}
+
+# Radius server settings (default to empty string to skip using Radius auth).
+# Note: These settings may be overridden by database settings.
+RADIUS_SERVER = ''
+RADIUS_PORT = 1812
+RADIUS_SECRET = ''
+
+# TACACS+ settings (default host to empty string to skip using TACACS+ auth).
+# Note: These settings may be overridden by database settings.
+TACACSPLUS_HOST = ''
+TACACSPLUS_PORT = 49
+TACACSPLUS_SECRET = ''
+TACACSPLUS_SESSION_TIMEOUT = 5
+TACACSPLUS_AUTH_PROTOCOL = 'ascii'
+TACACSPLUS_REM_ADDR = False
+
+# Enable / Disable HTTP Basic Authentication used in the API browser
+# Note: Session limits are not enforced when using HTTP Basic Authentication.
+# Note: This setting may be overridden by database settings.
+AUTH_BASIC_ENABLED = True
+
+# If set, specifies a URL that unauthenticated users will be redirected to
+# when trying to access a UI page that requries authentication.
+LOGIN_REDIRECT_OVERRIDE = ''
+
+# Note: This setting may be overridden by database settings.
+ALLOW_METRICS_FOR_ANONYMOUS_USERS = False
+
+DEVSERVER_DEFAULT_ADDR = '0.0.0.0'
+DEVSERVER_DEFAULT_PORT = '8013'
+
+# Set default ports for live server tests.
+os.environ.setdefault('DJANGO_LIVE_TEST_SERVER_ADDRESS', 'localhost:9013-9199')
+
+# heartbeat period can factor into some forms of logic, so it is maintained as a setting here
+CLUSTER_NODE_HEARTBEAT_PERIOD = 60
+
+# Number of missed heartbeats until a node gets marked as lost
+CLUSTER_NODE_MISSED_HEARTBEAT_TOLERANCE = 2
+
+RECEPTOR_SERVICE_ADVERTISEMENT_PERIOD = 60  # https://github.com/ansible/receptor/blob/aa1d589e154d8a0cb99a220aff8f98faf2273be6/pkg/netceptor/netceptor.go#L34
+EXECUTION_NODE_REMEDIATION_CHECKS = 60 * 30  # once every 30 minutes check if an execution node errors have been resolved
+
+# Amount of time dispatcher will try to reconnect to database for jobs and consuming new work
+DISPATCHER_DB_DOWNTIME_TOLERANCE = 40
+
+BROKER_URL = 'unix:///var/run/valkey/valkey.sock?db=0'
+CELERYBEAT_SCHEDULE = {
+    'tower_scheduler': {'task': 'ascender.main.tasks.system.awx_periodic_scheduler', 'schedule': timedelta(seconds=30), 'options': {'expires': 20}},
+    'cluster_heartbeat': {
+        'task': 'ascender.main.tasks.system.cluster_node_heartbeat',
+        'schedule': timedelta(seconds=CLUSTER_NODE_HEARTBEAT_PERIOD),
+        'options': {'expires': 50},
+    },
+    'gather_analytics': {'task': 'ascender.main.tasks.system.gather_analytics', 'schedule': timedelta(minutes=5)},
+    'task_manager': {'task': 'ascender.main.scheduler.tasks.task_manager', 'schedule': timedelta(seconds=20), 'options': {'expires': 20}},
+    'dependency_manager': {'task': 'ascender.main.scheduler.tasks.dependency_manager', 'schedule': timedelta(seconds=20), 'options': {'expires': 20}},
+    'k8s_reaper': {'task': 'ascender.main.tasks.system.awx_k8s_reaper', 'schedule': timedelta(seconds=60), 'options': {'expires': 50}},
+    'receptor_reaper': {'task': 'ascender.main.tasks.system.awx_receptor_workunit_reaper', 'schedule': timedelta(seconds=60)},
+    'send_subsystem_metrics': {'task': 'ascender.main.analytics.analytics_tasks.send_subsystem_metrics', 'schedule': timedelta(seconds=20)},
+    'cleanup_images': {'task': 'ascender.main.tasks.system.cleanup_images_and_files', 'schedule': timedelta(hours=3)},
+    'cleanup_host_metrics': {'task': 'ascender.main.tasks.host_metrics.cleanup_host_metrics', 'schedule': timedelta(hours=3, minutes=30)},
+    'host_metric_summary_monthly': {'task': 'ascender.main.tasks.host_metrics.host_metric_summary_monthly', 'schedule': timedelta(hours=4)},
+}
+
+# Django Caching Configuration
+DJANGO_CACHE_IGNORE_EXCEPTIONS = True
+CACHES = {
+    'default': {
+        'BACKEND': 'ascender.main.cache.AWXValkeyCache',
+        'LOCATION': 'unix:///var/run/valkey/valkey.sock',
+        'OPTIONS': {
+            'CONNECTION_POOL_KWARGS': {
+                'socket_timeout': 30,
+                'socket_connect_timeout': 30,
+            },
+            'db': 1,
+        },
+    }
+}
+
+# Social Auth configuration.
+SOCIAL_AUTH_STRATEGY = 'social_django.strategy.DjangoStrategy'
+SOCIAL_AUTH_STORAGE = 'social_django.models.DjangoStorage'
+SOCIAL_AUTH_USER_MODEL = 'auth.User'
+
+_SOCIAL_AUTH_PIPELINE_BASE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'ascender.sso.social_base_pipeline.check_user_found_or_created',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'ascender.sso.social_base_pipeline.set_is_active_for_new_user',
+    'social_core.pipeline.user.user_details',
+    'ascender.sso.social_base_pipeline.prevent_inactive_login',
+)
+SOCIAL_AUTH_PIPELINE = _SOCIAL_AUTH_PIPELINE_BASE + ('ascender.sso.social_pipeline.update_user_org_team_mappings',)
+SOCIAL_AUTH_SAML_PIPELINE = _SOCIAL_AUTH_PIPELINE_BASE + ('ascender.sso.saml_pipeline.populate_user', 'ascender.sso.saml_pipeline.update_user_flags')
+SAML_AUTO_CREATE_OBJECTS = True
+
+SOCIAL_AUTH_LOGIN_URL = '/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/sso/complete/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/sso/error/'
+SOCIAL_AUTH_INACTIVE_USER_URL = '/sso/inactive/'
+
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = False
+# SOCIAL_AUTH_SLUGIFY_USERNAMES = True
+SOCIAL_AUTH_CLEAN_USERNAMES = True
+
+SOCIAL_AUTH_SANITIZE_REDIRECTS = True
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
+
+# Note: These settings may be overridden by database settings.
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = ''
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['profile']
+
+SOCIAL_AUTH_GITHUB_KEY = ''
+SOCIAL_AUTH_GITHUB_SECRET = ''
+SOCIAL_AUTH_GITHUB_SCOPE = ['user:email', 'read:org']
+
+SOCIAL_AUTH_GITHUB_ORG_KEY = ''
+SOCIAL_AUTH_GITHUB_ORG_SECRET = ''
+SOCIAL_AUTH_GITHUB_ORG_NAME = ''
+SOCIAL_AUTH_GITHUB_ORG_SCOPE = ['user:email', 'read:org']
+
+SOCIAL_AUTH_GITHUB_TEAM_KEY = ''
+SOCIAL_AUTH_GITHUB_TEAM_SECRET = ''
+SOCIAL_AUTH_GITHUB_TEAM_ID = ''
+SOCIAL_AUTH_GITHUB_TEAM_SCOPE = ['user:email', 'read:org']
+
+SOCIAL_AUTH_GITHUB_ENTERPRISE_KEY = ''
+SOCIAL_AUTH_GITHUB_ENTERPRISE_SECRET = ''
+SOCIAL_AUTH_GITHUB_ENTERPRISE_SCOPE = ['user:email', 'read:org']
+
+SOCIAL_AUTH_GITHUB_ENTERPRISE_ORG_KEY = ''
+SOCIAL_AUTH_GITHUB_ENTERPRISE_ORG_SECRET = ''
+SOCIAL_AUTH_GITHUB_ENTERPRISE_ORG_NAME = ''
+SOCIAL_AUTH_GITHUB_ENTERPRISE_ORG_SCOPE = ['user:email', 'read:org']
+
+SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_KEY = ''
+SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_SECRET = ''
+SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_ID = ''
+SOCIAL_AUTH_GITHUB_ENTERPRISE_TEAM_SCOPE = ['user:email', 'read:org']
+
+SOCIAL_AUTH_AZUREAD_OAUTH2_KEY = ''
+SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET = ''
+
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY = ''
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET = ''
+SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID = ''
+
+SOCIAL_AUTH_SAML_SP_ENTITY_ID = ''
+SOCIAL_AUTH_SAML_SP_PUBLIC_CERT = ''
+SOCIAL_AUTH_SAML_SP_PRIVATE_KEY = ''
+SOCIAL_AUTH_SAML_ORG_INFO = {}
+SOCIAL_AUTH_SAML_TECHNICAL_CONTACT = {}
+SOCIAL_AUTH_SAML_SUPPORT_CONTACT = {}
+SOCIAL_AUTH_SAML_ENABLED_IDPS = {}
+
+SOCIAL_AUTH_SAML_ORGANIZATION_ATTR = {}
+SOCIAL_AUTH_SAML_TEAM_ATTR = {}
+SOCIAL_AUTH_SAML_USER_FLAGS_BY_ATTR = {}
+
+# Any ANSIBLE_* settings will be passed to the task runner subprocess
+# environment
+
+# Do not want Ascender to ask interactive questions and want it to be friendly with
+# reprovisioning
+ANSIBLE_HOST_KEY_CHECKING = False
+
+# RHEL has too old of an SSH so ansible will select paramiko and this is VERY
+# slow.
+ANSIBLE_PARAMIKO_RECORD_HOST_KEYS = False
+
+# Force ansible in color even if we don't have a TTY so we can properly colorize
+# output
+ANSIBLE_FORCE_COLOR = True
+
+# If tmp generated inventory parsing fails (error state), fail playbook fast
+ANSIBLE_INVENTORY_UNPARSED_FAILED = True
+
+# Additional environment variables to be passed to the ansible subprocesses
+ASCENDER_TASK_ENV = {}
+
+# Additional environment variables to apply when running ansible-galaxy commands
+# to fetch Ansible content - roles and collections
+GALAXY_TASK_ENV = {'ANSIBLE_FORCE_COLOR': 'false', 'GIT_SSH_COMMAND': "ssh -o StrictHostKeyChecking=no"}
+
+# Rebuild Host Smart Inventory memberships.
+AWX_REBUILD_SMART_MEMBERSHIP = False
+
+# By default, allow arbitrary Jinja templating in extra_vars defined on a Job Template
+ALLOW_JINJA_IN_EXTRA_VARS = 'template'
+
+# Run project updates with extra verbosity
+PROJECT_UPDATE_VVV = False
+
+# Enable dynamically pulling roles from a requirement.yml file
+# when updating SCM projects
+# Note: This setting may be overridden by database settings.
+ASCENDER_ROLES_ENABLED = True
+
+# Enable dynamically pulling collections from a requirement.yml file
+# when updating SCM projects
+# Note: This setting may be overridden by database settings.
+ASCENDER_COLLECTIONS_ENABLED = True
+
+# Follow symlinks when scanning for playbooks
+ASCENDER_SHOW_PLAYBOOK_LINKS = False
+
+# Automatically add ascender_stats_* keys (changed/failed flags and host lists
+# derived from the playbook stats) to job artifacts when a job finishes.
+# Can be overridden per job/workflow with an ASCENDER_AUTO_STATS_ENABLED extra var.
+# Note: This setting may be overridden by database settings.
+ASCENDER_AUTO_STATS_ENABLED = True
+
+# Skip the ascender_stats_* host name lists (keeping the boolean flags) when the
+# play involved more hosts than this, to keep artifacts reasonably small.
+# Can be overridden per job/workflow with an ASCENDER_AUTO_STATS_MAX_HOSTS extra var.
+# Note: This setting may be overridden by database settings.
+ASCENDER_AUTO_STATS_MAX_HOSTS = 100
+
+# Applies to any galaxy server
+GALAXY_IGNORE_CERTS = False
+
+# Additional paths to show for jobs using process isolation.
+# Note: This setting may be overridden by database settings.
+ASCENDER_ISOLATION_SHOW_PATHS = []
+
+# The directory in which the service will create new temporary directories for job
+# execution and isolation (such as credential files and custom
+# inventory scripts).
+# Note: This setting may be overridden by database settings.
+ASCENDER_ISOLATION_BASE_PATH = tempfile.gettempdir()
+
+# User definable ansible callback plugins
+# Note: This setting may be overridden by database settings.
+ASCENDER_ANSIBLE_CALLBACK_PLUGINS = ""
+
+# Automatically remove nodes that have missed their heartbeats after some time
+AWX_AUTO_DEPROVISION_INSTANCES = False
+
+# Enable Pendo on the UI, possible values are 'off', 'anonymous', and 'detailed'
+# Note: This setting may be overridden by database settings.
+PENDO_TRACKING_STATE = "off"
+
+# Enables Insights data collection.
+# Note: This setting may be overridden by database settings.
+INSIGHTS_TRACKING_STATE = False
+
+# Last gather date for Analytics
+AUTOMATION_ANALYTICS_LAST_GATHER = None
+# Last gathered entries for expensive Analytics
+AUTOMATION_ANALYTICS_LAST_ENTRIES = ''
+
+# Default list of modules allowed for ad hoc commands.
+# Note: This setting may be overridden by database settings.
+AD_HOC_COMMANDS = [
+    'command',
+    'shell',
+    'yum',
+    'apt',
+    'apt_key',
+    'apt_repository',
+    'apt_rpm',
+    'service',
+    'group',
+    'user',
+    'mount',
+    'ping',
+    'selinux',
+    'setup',
+    'win_ping',
+    'win_service',
+    'win_updates',
+    'win_group',
+    'win_user',
+]
+
+INV_ENV_VARIABLE_BLOCKED = ("HOME", "USER", "_", "TERM", "PATH")
+
+# ----------------
+# -- Amazon EC2 --
+# ----------------
+EC2_ENABLED_VAR = 'ec2_state'
+EC2_ENABLED_VALUE = 'running'
+EC2_INSTANCE_ID_VAR = 'instance_id'
+EC2_EXCLUDE_EMPTY_GROUPS = True
+
+# ------------
+# -- VMware --
+# ------------
+VMWARE_ENABLED_VAR = 'guest.gueststate'
+VMWARE_ENABLED_VALUE = 'running'
+VMWARE_INSTANCE_ID_VAR = 'config.instanceUuid, config.instanceuuid'
+VMWARE_EXCLUDE_EMPTY_GROUPS = True
+
+VMWARE_VALIDATE_CERTS = False
+
+# ---------------------------
+# -- Google Compute Engine --
+# ---------------------------
+GCE_ENABLED_VAR = 'status'
+GCE_ENABLED_VALUE = 'running'
+GCE_EXCLUDE_EMPTY_GROUPS = True
+GCE_INSTANCE_ID_VAR = 'gce_id'
+
+# --------------------------------------
+# -- Microsoft Azure Resource Manager --
+# --------------------------------------
+AZURE_RM_ENABLED_VAR = 'powerstate'
+AZURE_RM_ENABLED_VALUE = 'running'
+AZURE_RM_INSTANCE_ID_VAR = 'id'
+AZURE_RM_EXCLUDE_EMPTY_GROUPS = True
+
+# ---------------------
+# ----- OpenStack -----
+# ---------------------
+OPENSTACK_ENABLED_VAR = 'status'
+OPENSTACK_ENABLED_VALUE = 'ACTIVE'
+OPENSTACK_EXCLUDE_EMPTY_GROUPS = True
+OPENSTACK_INSTANCE_ID_VAR = 'openstack.id'
+
+# ---------------------
+# ----- oVirt4 -----
+# ---------------------
+RHV_ENABLED_VAR = 'status'
+RHV_ENABLED_VALUE = 'up'
+RHV_EXCLUDE_EMPTY_GROUPS = True
+RHV_INSTANCE_ID_VAR = 'id'
+
+# ---------------------
+# ----- Ascender -----
+# ---------------------
+ASCENDER_ENABLED_VAR = 'remote_tower_enabled'
+ASCENDER_ENABLED_VALUE = 'true'
+ASCENDER_EXCLUDE_EMPTY_GROUPS = True
+ASCENDER_INSTANCE_ID_VAR = 'remote_tower_id'
+
+# ---------------------
+# ----- Foreman -----
+# ---------------------
+SATELLITE6_ENABLED_VAR = 'foreman_enabled,foreman.enabled'
+SATELLITE6_ENABLED_VALUE = 'True'
+SATELLITE6_EXCLUDE_EMPTY_GROUPS = True
+SATELLITE6_INSTANCE_ID_VAR = 'foreman_id,foreman.id'
+# SATELLITE6_GROUP_PREFIX and SATELLITE6_GROUP_PATTERNS defined in source vars
+
+# ----------------
+# -- Terraform State --
+# ----------------
+# TERRAFORM_ENABLED_VAR =
+# TERRAFORM_ENABLED_VALUE =
+TERRAFORM_INSTANCE_ID_VAR = 'id'
+TERRAFORM_EXCLUDE_EMPTY_GROUPS = True
+
+# ---------------------
+# ----- Custom -----
+# ---------------------
+# CUSTOM_ENABLED_VAR =
+# CUSTOM_ENABLED_VALUE =
+CUSTOM_EXCLUDE_EMPTY_GROUPS = False
+# CUSTOM_INSTANCE_ID_VAR =
+
+# ---------------------
+# ----- SCM -----
+# ---------------------
+# SCM_ENABLED_VAR =
+# SCM_ENABLED_VALUE =
+SCM_EXCLUDE_EMPTY_GROUPS = False
+# SCM_INSTANCE_ID_VAR =
+
+# ----------------
+# -- Constructed --
+# ----------------
+CONSTRUCTED_INSTANCE_ID_VAR = 'remote_tower_id'
+
+CONSTRUCTED_EXCLUDE_EMPTY_GROUPS = False
+
+# ---------------------
+# -- Activity Stream --
+# ---------------------
+# Defaults for enabling/disabling activity stream.
+# Note: These settings may be overridden by database settings.
+ACTIVITY_STREAM_ENABLED = True
+ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC = False
+
+CALLBACK_QUEUE = "callback_tasks"
+
+# Note: This setting may be overridden by database settings.
+ORG_ADMINS_CAN_SEE_ALL_USERS = True
+MANAGE_ORGANIZATION_AUTH = True
+DISABLE_LOCAL_AUTH = False
+
+# Note: This setting may be overridden by database settings.
+ASCENDER_URL_BASE = "https://ascenderhost"
+
+INSIGHTS_AGENT_MIME = 'application/example'
+INSIGHTS_CERT_PATH = "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
+
+# Settings related to external logger configuration
+LOG_AGGREGATOR_ENABLED = False
+LOG_AGGREGATOR_TCP_TIMEOUT = 5
+LOG_AGGREGATOR_VERIFY_CERT = True
+LOG_AGGREGATOR_LEVEL = 'INFO'
+LOG_AGGREGATOR_ACTION_QUEUE_SIZE = 131072
+LOG_AGGREGATOR_ACTION_MAX_DISK_USAGE_GB = 1  # Action queue
+LOG_AGGREGATOR_MAX_DISK_USAGE_PATH = '/var/lib/ascender'
+LOG_AGGREGATOR_RSYSLOGD_DEBUG = False
+LOG_AGGREGATOR_RSYSLOGD_ERROR_LOG_FILE = '/var/log/tower/rsyslog.err'
+API_400_ERROR_LOG_FORMAT = 'status {status_code} received by user {user_name} attempting to access {url_path} from {remote_addr}'
+
+ASGI_APPLICATION = "ascender.main.routing.application"
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_valkey.core.ValkeyChannelLayer",
+        "CONFIG": {
+            "hosts": [
+                {
+                    "address": BROKER_URL,
+                    "socket_timeout": 60,
+                    "socket_connect_timeout": 60,
+                }
+            ],
+            "capacity": 10000,
+            "group_expiry": 157784760,  # 5 years
+            "symmetric_encryption_keys": [SECRET_KEY],
+        },
+    }
+}
+
+# Logging configuration.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {'()': 'django.utils.log.RequireDebugFalse'},
+        'require_debug_true': {'()': 'django.utils.log.RequireDebugTrue'},
+        'require_debug_true_or_test': {'()': 'ascender.main.utils.RequireDebugTrueOrTest'},
+        'external_log_enabled': {'()': 'ascender.main.utils.filters.ExternalLoggerEnabled'},
+        'dynamic_level_filter': {'()': 'ascender.main.utils.filters.DynamicLevelFilter'},
+        'guid': {'()': 'ascender.main.utils.filters.DefaultCorrelationId'},
+    },
+    'formatters': {
+        'simple': {'format': '%(asctime)s %(levelname)-8s [%(guid)s] %(name)s %(message)s'},
+        'json': {'()': 'ascender.main.utils.formatters.LogstashFormatter'},
+        'timed_import': {'()': 'ascender.main.utils.formatters.TimeFormatter', 'format': '%(relativeSeconds)9.3f %(levelname)-8s %(message)s'},
+        'dispatcher': {'format': '%(asctime)s %(levelname)-8s [%(guid)s] %(name)s PID:%(process)d %(message)s'},
+    },
+    # Extended below based on install scenario. You probably don't want to add something directly here.
+    # See 'handler_config' below.
+    'handlers': {
+        'console': {
+            '()': 'logging.StreamHandler',
+            'level': 'DEBUG',
+            'filters': ['dynamic_level_filter', 'guid'],
+            'formatter': 'simple',
+        },
+        'null': {'class': 'logging.NullHandler'},
+        'file': {'class': 'logging.NullHandler', 'formatter': 'simple'},
+        'syslog': {'level': 'WARNING', 'filters': ['require_debug_false'], 'class': 'logging.NullHandler', 'formatter': 'simple'},
+        'inventory_import': {'level': 'DEBUG', 'class': 'logging.StreamHandler', 'formatter': 'timed_import'},
+        'external_logger': {
+            'class': 'ascender.main.utils.handlers.RSysLogHandler',
+            'formatter': 'json',
+            'address': '/var/run/awx-rsyslog/rsyslog.sock',
+            'filters': ['external_log_enabled', 'dynamic_level_filter', 'guid'],
+        },
+    },
+    'loggers': {
+        'django': {'handlers': ['console']},
+        'django.request': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'WARNING'},
+        'daphne': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'INFO'},
+        'rest_framework.request': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'WARNING', 'propagate': False},
+        'py.warnings': {'handlers': ['console']},
+        'awx': {'handlers': ['console', 'file', 'tower_warnings', 'external_logger'], 'level': 'DEBUG'},
+        'awx.conf': {'handlers': ['null'], 'level': 'WARNING'},
+        'awx.conf.settings': {'handlers': ['null'], 'level': 'WARNING'},
+        'awx.main': {'handlers': ['null']},
+        'awx.main.commands.run_callback_receiver': {'handlers': ['callback_receiver'], 'level': 'INFO'},  # very noisey debug-level logs
+        'awx.main.dispatch': {'handlers': ['dispatcher']},
+        'awx.main.consumers': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'INFO'},
+        'awx.main.rsyslog_configurer': {'handlers': ['rsyslog_configurer']},
+        'awx.main.cache_clear': {'handlers': ['cache_clear']},
+        'awx.main.ws_heartbeat': {'handlers': ['ws_heartbeat']},
+        'awx.main.wsrelay': {'handlers': ['wsrelay']},
+        'awx.main.commands.inventory_import': {'handlers': ['inventory_import'], 'propagate': False},
+        'awx.main.tasks': {'handlers': ['task_system', 'external_logger', 'console'], 'propagate': False},
+        'awx.main.analytics': {'handlers': ['task_system', 'external_logger', 'console'], 'level': 'INFO', 'propagate': False},
+        'awx.main.scheduler': {'handlers': ['task_system', 'external_logger', 'console'], 'propagate': False},
+        'awx.main.access': {'level': 'INFO'},  # very verbose debug-level logs
+        'awx.main.signals': {'level': 'INFO'},  # very verbose debug-level logs
+        'awx.api.permissions': {'level': 'INFO'},  # very verbose debug-level logs
+        'ascender.analytics': {'handlers': ['external_logger'], 'level': 'INFO', 'propagate': False},
+        'ascender.analytics.broadcast_websocket': {'handlers': ['console', 'file', 'wsrelay', 'external_logger'], 'level': 'INFO', 'propagate': False},
+        'ascender.analytics.performance': {'handlers': ['console', 'file', 'tower_warnings', 'external_logger'], 'level': 'DEBUG', 'propagate': False},
+        'ascender.analytics.job_lifecycle': {'handlers': ['console', 'job_lifecycle', 'external_logger'], 'level': 'DEBUG', 'propagate': False},
+        'django_auth_ldap': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
+        'social': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
+        'system_tracking_migrations': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
+        'rbac_migrations': {'handlers': ['console', 'file', 'tower_warnings'], 'level': 'DEBUG'},
+    },
+}
+
+# Log handler configuration. Keys are the name of the handler. Be mindful when renaming things here.
+# People might have created custom settings files that augments the behavior of these.
+# Specify 'filename' (used if the environment variable AWX_LOGGING_MODE is unset or 'file')
+# and an optional 'formatter'. If no formatter is specified, 'simple' is used.
+handler_config = {
+    'tower_warnings': {'filename': 'tower.log'},
+    'callback_receiver': {'filename': 'callback_receiver.log'},
+    'dispatcher': {'filename': 'dispatcher.log', 'formatter': 'dispatcher'},
+    'wsrelay': {'filename': 'wsrelay.log'},
+    'task_system': {'filename': 'task_system.log'},
+    'rbac_migrations': {'filename': 'tower_rbac_migrations.log'},
+    'job_lifecycle': {'filename': 'job_lifecycle.log'},
+    'rsyslog_configurer': {'filename': 'rsyslog_configurer.log'},
+    'cache_clear': {'filename': 'cache_clear.log'},
+    'ws_heartbeat': {'filename': 'ws_heartbeat.log'},
+}
+
+# If running on a VM, we log to files. When running in a container, we log to stdout.
+logging_mode = os.getenv('AWX_LOGGING_MODE', 'file')
+if logging_mode not in ('file', 'stdout'):
+    raise Exception("AWX_LOGGING_MODE must be 'file' or 'stdout'")
+
+for name, config in handler_config.items():
+    # Common log handler config. Don't define a level here, it's set by settings.LOG_AGGREGATOR_LEVEL
+    LOGGING['handlers'][name] = {'filters': ['dynamic_level_filter', 'guid'], 'formatter': config.get('formatter', 'simple')}
+
+    if logging_mode == 'file':
+        LOGGING['handlers'][name]['class'] = 'logging.handlers.WatchedFileHandler'
+        LOGGING['handlers'][name]['filename'] = os.path.join(LOG_ROOT, config['filename'])
+
+    if logging_mode == 'stdout':
+        LOGGING['handlers'][name]['class'] = 'logging.NullHandler'
+
+# Prevents logging to stdout on traditional VM installs
+if logging_mode == 'file':
+    LOGGING['handlers']['console']['filters'].insert(0, 'require_debug_true_or_test')
+
+# Apply coloring to messages logged to the console
+COLOR_LOGS = False
+
+# https://github.com/django-polymorphic/django-polymorphic/issues/195
+# FIXME: Disabling models.E006 warning until we can renamed Project and InventorySource
+SILENCED_SYSTEM_CHECKS = ['models.E006']
+
+# Use middleware to get request statistics
+ASCENDER_REQUEST_PROFILE = False
+
+#
+# Optionally, Ascender can generate DOT graphs
+# (http://www.graphviz.org/doc/info/lang.html) for per-request profiling
+# via gprof2dot (https://github.com/jrfonseca/gprof2dot)
+#
+# If you set this to True, you must `/var/lib/awx/venv/awx/bin/pip install gprof2dot`
+# .dot files will be saved in `/var/log/tower/profile/` and can be converted e.g.,
+#
+# ~ yum install graphviz
+# ~ dot -o profile.png -Tpng /var/log/tower/profile/some-profile-data.dot
+#
+AWX_REQUEST_PROFILE_WITH_DOT = False
+
+# Allow profiling callback workers via SIGUSR1
+AWX_CALLBACK_PROFILE = False
+
+# Delete temporary directories created to store playbook run-time
+ASCENDER_CLEANUP_PATHS = True
+
+# Allow ansible-runner to store env folder (may contain sensitive information)
+AWX_RUNNER_OMIT_ENV_FILES = True
+
+# Allow ansible-runner to save ansible output
+# (changing to False may cause performance issues)
+AWX_RUNNER_SUPPRESS_OUTPUT_FILE = True
+
+# https://github.com/ansible/ansible-runner/pull/1191/files
+# Interval in seconds between the last message and keep-alive messages that
+# ansible-runner will send
+ASCENDER_RUNNER_KEEPALIVE_SECONDS = 0
+
+# Delete completed work units in receptor
+RECEPTOR_RELEASE_WORK = True
+
+# K8S only. Use receptor_log_level on Ascender spec to set this properly
+RECEPTOR_LOG_LEVEL = 'info'
+
+MIDDLEWARE = [
+    # First, so its headers are on every response including those that later
+    # middleware short circuits.
+    'django.middleware.security.SecurityMiddleware',
+    'django_guid.middleware.guid_middleware',
+    'ascender.dab.lib.middleware.logging.log_request.LogTracebackMiddleware',
+    'ascender.main.middleware.SettingsCacheMiddleware',
+    'ascender.main.middleware.TimingMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'ascender.main.middleware.MigrationRanCheckMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'ascender.main.middleware.DisableLocalAuthMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'ascender.sso.middleware.SocialAuthMiddleware',
+    'ascender.main.middleware.ThreadLocalMiddleware',
+    'ascender.main.middleware.URLModificationMiddleware',
+    'ascender.main.middleware.SessionTimeoutMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+]
+
+# Response headers the application sets for itself, rather than relying on
+# whatever proxy happens to sit in front of it. A deployment that also sets
+# them at the proxy gets the same values, not a conflict.
+SECURE_CONTENT_TYPE_NOSNIFF = True  # X-Content-Type-Options
+SECURE_REFERRER_POLICY = 'same-origin'  # Referrer-Policy
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin'  # Cross-Origin-Opener-Policy
+X_FRAME_OPTIONS = 'DENY'  # the API and the UI are never framed
+
+# HSTS is deliberately not set here. Django only emits it on a request it
+# believes is HTTPS, and behind a TLS terminating proxy it sees HTTP unless
+# SECURE_PROXY_SSL_HEADER is configured, so setting it would be silently
+# inert on exactly the deployments that need it. The proxy sets it: see
+# nginx.conf in the installer and the development compose file.
+
+# Secret header value to exchange for websockets responsible for distributing websocket messages.
+# This needs to be kept secret and randomly generated
+BROADCAST_WEBSOCKET_SECRET = ''
+
+# Port for broadcast websockets to connect to
+# Note: that the clients will follow redirect responses
+BROADCAST_WEBSOCKET_PORT = 443
+
+# Whether or not broadcast websockets should check nginx certs when interconnecting
+BROADCAST_WEBSOCKET_VERIFY_CERT = False
+
+# Connect to other Ascender nodes using http or https
+BROADCAST_WEBSOCKET_PROTOCOL = 'https'
+
+# All websockets that connect to the broadcast websocket endpoint will be put into this group
+BROADCAST_WEBSOCKET_GROUP_NAME = 'broadcast-group_send'
+
+# Time wait before retrying connecting to a websocket broadcast tower node
+BROADCAST_WEBSOCKET_RECONNECT_RETRY_RATE_SECONDS = 5
+
+# How often websocket process will look for changes in the Instance table
+BROADCAST_WEBSOCKET_NEW_INSTANCE_POLL_RATE_SECONDS = 10
+
+# How often websocket process will generate stats
+BROADCAST_WEBSOCKET_STATS_POLL_RATE_SECONDS = 5
+
+# How often should web instances advertise themselves?
+BROADCAST_WEBSOCKET_BEACON_FROM_WEB_RATE_SECONDS = 15
+
+DJANGO_GUID = {'GUID_HEADER_NAME': 'X-API-Request-Id'}
+
+# Name of the default task queue
+DEFAULT_EXECUTION_QUEUE_NAME = 'default'
+# pod spec used when the default execution queue is a container group, e.g. when deploying on k8s/ocp with the operator
+DEFAULT_EXECUTION_QUEUE_POD_SPEC_OVERRIDE = ''
+# Max number of concurrently consumed forks for the default execution queue
+# Zero means no limit
+DEFAULT_EXECUTION_QUEUE_MAX_FORKS = 0
+# Max number of concurrently running jobs for the default execution queue
+# Zero means no limit
+DEFAULT_EXECUTION_QUEUE_MAX_CONCURRENT_JOBS = 0
+
+# Name of the default controlplane queue
+DEFAULT_CONTROL_PLANE_QUEUE_NAME = 'controlplane'
+
+# Extend container runtime attributes.
+# For example, to disable SELinux in containers for podman
+# DEFAULT_CONTAINER_RUN_OPTIONS = ['--security-opt', 'label=disable']
+DEFAULT_CONTAINER_RUN_OPTIONS = ['--network', 'slirp4netns:enable_ipv6=true']
+
+# Mount exposed paths as hostPath resource in k8s/ocp
+ASCENDER_MOUNT_ISOLATED_PATHS_ON_K8S = False
+
+# This is overridden downstream via /etc/tower/conf.d/cluster_host_id.py
+CLUSTER_HOST_ID = socket.gethostname()
+
+# License compliance for total host count. Possible values:
+# - '': No model - Subscription not counted from Host Metrics
+# - 'unique_managed_hosts': Compliant = automated - deleted hosts (using /api/v2/host_metrics/)
+SUBSCRIPTION_USAGE_MODEL = ''
+
+# Host metrics cleanup - last time of the task/command run
+CLEANUP_HOST_METRICS_LAST_TS = None
+# Host metrics cleanup - minimal interval between two cleanups in days
+CLEANUP_HOST_METRICS_INTERVAL = 30  # days
+# Host metrics cleanup - soft-delete HostMetric records with last_automation < [threshold] (in months)
+CLEANUP_HOST_METRICS_SOFT_THRESHOLD = 12  # months
+# Host metrics cleanup
+# - delete HostMetric record with deleted=True and last_deleted < [threshold]
+# - also threshold for computing HostMetricSummaryMonthly (command/scheduled task)
+CLEANUP_HOST_METRICS_HARD_THRESHOLD = 36  # months
+
+# Host metric summary monthly task - last time of run
+HOST_METRIC_SUMMARY_TASK_LAST_TS = None
+HOST_METRIC_SUMMARY_TASK_INTERVAL = 7  # days
+
+
+# TODO: cmeyers, replace with with register pattern
+# The register pattern is particularly nice for this because we need
+# to know the process to start the thread that will be the server.
+# The registration location should be the same location as we would
+# call MetricsServer.start()
+# Note: if we don't get to this TODO, then at least create constants
+# for the services strings below.
+# TODO: cmeyers, break this out into a separate django app so other
+# projects can take advantage.
+
+METRICS_SERVICE_CALLBACK_RECEIVER = 'callback_receiver'
+METRICS_SERVICE_DISPATCHER = 'dispatcher'
+METRICS_SERVICE_WEBSOCKETS = 'websockets'
+
+METRICS_SUBSYSTEM_CONFIG = {
+    'server': {
+        METRICS_SERVICE_CALLBACK_RECEIVER: {
+            'port': 8014,
+        },
+        METRICS_SERVICE_DISPATCHER: {
+            'port': 8015,
+        },
+        METRICS_SERVICE_WEBSOCKETS: {
+            'port': 8016,
+        },
+    }
+}
+
+
+# ascender.dab (vendored django-ansible-base subset, see awx/dab/VENDORED.md)
+ANSIBLE_BASE_TEAM_MODEL = 'main.Team'
+ANSIBLE_BASE_ORGANIZATION_MODEL = 'main.Organization'
+ANSIBLE_BASE_RESOURCE_CONFIG_MODULE = 'ascender.resource_api'
+
+# The setting below was formerly produced by including ascender.dab's dynamic_settings
+# (deleted along with awx/dab/lib/dynamic_config); DEFAULT_FILTER_BACKENDS, the other
+# surviving piece of that include, moved into the REST_FRAMEWORK definition above.
+
+# Query parameters the field lookup filter backend refuses to treat as field lookups.
+ANSIBLE_BASE_REST_FILTERS_RESERVED_NAMES = (
+    'page',
+    'page_size',
+    'format',
+    'order',
+    'order_by',
+    'search',
+    'type',
+    'host_filter',
+    'count_disabled',
+    'no_truncate',
+    'limit',
+    'validate',
+    # asks for fewer summary fields rather than filtering on one
+    'summary_fields',
+    'user_ansible_id',
+    'team_ansible_id',
+    'object_ansible_id',
+    'assignment',
+)

@@ -47,7 +47,7 @@ registered using setuptools entrypoints
 (https://setuptools.readthedocs.io/en/latest/setuptools.html#dynamic-discovery-of-services-and-plugins)
 
 Example plugins officially supported in Ascender can be found in the source code at
-`awx.main.credential_plugins`.
+`ascender.main.credential_plugins`.
 
 For instructions on writing and installing your own custom credential plugin, see: https://github.com/ansible/awx-custom-credential-plugin-example
 
@@ -59,7 +59,7 @@ string in `/etc/tower/conf.d/postgres.py` using an external system rather than
 storing the password in plaintext on your disk), doing so is fairly easy:
 
 ```python
-from awx.main.credential_plugins import hashivault
+from ascender.main.credential_plugins import hashivault
 hashivault.hashivault_kv_plugin.backend(
     url='https://hcv.example.org',
     token='some-valid-token',
