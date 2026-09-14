@@ -283,7 +283,7 @@ RUN for dir in \
       /var/log/nginx \
       /var/lib/pgsql \
       /var/run/supervisor \
-      /var/run/awx-receptor \
+      /var/run/ascender-receptor \
       /var/lib/nginx \
       /var/log/tower ; \
     do mkdir -m 0775 -p $dir ; chmod g+rwx $dir ; chgrp root $dir ; done && \
@@ -297,6 +297,12 @@ RUN for dir in \
 
 # The same alias as in the builder, for anything still naming the old path.
 RUN ln -s /var/lib/ascender /var/lib/awx
+
+# The receptor control socket sits in /var/run/ascender-receptor, with the old
+# path an alias onto it. ascender-install mounts a volume at /var/run/awx-receptor
+# and passes it as RECEPTORCTL_SOCKET from its own compose file, so the old name
+# has to keep resolving until that moves.
+RUN ln -s /var/run/ascender-receptor /var/run/awx-receptor
 
 {% if (build_dev|bool) or (kube_dev|bool) %}
 # The development tree is mounted in from outside, at /ascender_devel. The old

@@ -2456,7 +2456,7 @@ def test_administrative_workunit_reaper(work_unit_data, expected_function_call):
     # Mock the get_receptor_ctl call and let it return a dummy object
     # It does not matter what file name we return as the socket because we won't actually call receptor (unless something is broken)
     with mock.patch('ascender.main.tasks.receptor.get_receptor_ctl') as mock_get_receptor_ctl:
-        mock_get_receptor_ctl.return_value = ReceptorControl('/var/run/awx-receptor/receptor.sock')
+        mock_get_receptor_ctl.return_value = ReceptorControl('/var/run/ascender-receptor/receptor.sock')
         with mock.patch('receptorctl.socket_interface.ReceptorControl.simple_command') as simple_command:
             receptor.administrative_workunit_reaper(work_list=work_unit_data)
 
