@@ -687,7 +687,7 @@
               "choices": [
                   [
                       "",
-                      "Default model for AWX - no subscription. Deletion of host_metrics will not be considered for purposes of managed host counting"
+                      "Default model for Ascender - no subscription. Deletion of host_metrics will not be considered for purposes of managed host counting"
                   ],
                   [
                       "unique_managed_hosts",
@@ -5079,7 +5079,7 @@
               "choices": [
                   [
                       "",
-                      "Default model for AWX - no subscription. Deletion of host_metrics will not be considered for purposes of managed host counting"
+                      "Default model for Ascender - no subscription. Deletion of host_metrics will not be considered for purposes of managed host counting"
                   ],
                   [
                       "unique_managed_hosts",

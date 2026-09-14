@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.db import migrations
 
-# AWX
+# Ascender
 from ascender.main.migrations import _credentialtypes as credentialtypes
 
 

@@ -5,7 +5,7 @@ from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
 
-# AWX
+# Ascender
 import ascender.main.fields
 from ascender.main.models import CredentialType
 from ascender.main.utils.common import set_current_apps

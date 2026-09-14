@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 from django.db import connection, migrations, models, OperationalError, ProgrammingError
 from django.conf import settings
 
-# AWX
+# Ascender
 import ascender.main.fields
 from ascender.main.models import Host
 

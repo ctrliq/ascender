@@ -2,7 +2,7 @@
 # Python
 from __future__ import unicode_literals
 
-# AWX
+# Ascender
 from ascender.main.migrations import ActivityStreamDisabledMigration
 
 

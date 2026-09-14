@@ -11,6 +11,6 @@
  * compile error here rather than an undefined at runtime.
  *
  * Two fields it does not describe: summary_fields and related arrive as bare
- * `string`, because AWX builds them in SerializerMethodFields that carry no
+ * `string`, because Ascender builds them in SerializerMethodFields that carry no
  * schema annotation. src/types/api.ts overrides those two.
  */

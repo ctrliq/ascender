@@ -22,7 +22,7 @@ services:
   {% set container_postfix = loop.index %}
   {% set awx_sdb_port_start = 7899 + (loop.index0*1000) | int %}
   {% set awx_sdb_port_end = 7999 + (loop.index0*1000) | int %}
-  # Primary AWX Development Container
+  # Primary Ascender Development Container
   ascender_{{ container_postfix }}:
     user: "{{ ansible_user_uid }}"
     image: "{{ awx_image }}:{{ awx_image_tag }}"

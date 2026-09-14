@@ -3,7 +3,7 @@
 #
 # !!! READ BEFORE POINTING THIS AT YOUR FOOT !!!
 #
-# This script attempts to connect to an AWX database and insert (by default)
+# This script attempts to connect to an Ascender database and insert (by default)
 # a billion main_jobevent rows as screamingly fast as possible.
 #
 # tl;dr for best results, feed it high IOPS.

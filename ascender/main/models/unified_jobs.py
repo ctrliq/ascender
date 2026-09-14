@@ -895,7 +895,7 @@ class UnifiedJob(
         if self.status in ('successful', 'failed', 'error', 'canceled') and not self.finished:
             # Only record a finished time if the job actually started.
             # Jobs canceled before starting (e.g. pending) should not
-            # have a finished timestamp. (Resolves #3988 from AWX main repo)
+            # have a finished timestamp. (Resolves #3988 from the AWX main repo)
             if self.started is not None:
                 self.finished = now()
                 if 'finished' not in update_fields:

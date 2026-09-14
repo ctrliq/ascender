@@ -1,4 +1,4 @@
-# Ansible AWX UI With PatternFly
+# Ansible Ascender UI With PatternFly
 
 Hi there! We're excited to have you as a contributor.
 
@@ -6,15 +6,15 @@ Have questions about this document or anything not covered here? Feel free to re
 
 ## Table of contents
 
-- [Ansible AWX UI With PatternFly](#ansible-awx-ui-with-patternfly)
+- [Ansible Ascender UI With PatternFly](#ansible-ascender-ui-with-patternfly)
   - [Table of contents](#table-of-contents)
   - [Things to know prior to submitting code](#things-to-know-prior-to-submitting-code)
   - [Setting up your development environment](#setting-up-your-development-environment)
     - [Prerequisites](#prerequisites)
       - [Node and npm](#node-and-npm)
       - [Build the User Interface](#build-the-user-interface)
-  - [Accessing the AWX web interface](#accessing-the-awx-web-interface)
-  - [AWX REST API Interaction](#awx-rest-api-interaction)
+  - [Accessing the Ascender web interface](#accessing-the-ascender-web-interface)
+  - [Ascender REST API Interaction](#ascender-rest-api-interaction)
   - [Handling API Errors](#handling-api-errors)
   - [Forms](#forms)
   - [Working with React](#working-with-react)
@@ -54,7 +54,7 @@ The UI is built using [ReactJS](https://reactjs.org/docs/getting-started.html) a
 
 #### Node and npm
 
-The AWX UI requires the following:
+The Ascender UI requires the following:
 
 - Node >= 16.13.1 LTS
 - NPM 8.x
@@ -67,19 +67,19 @@ Run the following to install all the dependencies:
 
 #### Build the User Interface
 
-Run the following to build the AWX UI:
+Run the following to build the Ascender UI:
 
 ```bash
 (host) $ npm run start
 ```
 
-## Accessing the AWX web interface
+## Accessing the Ascender web interface
 
-You can now log into the AWX web interface at [https://127.0.0.1:3001](https://127.0.0.1:3001).
+You can now log into the Ascender web interface at [https://127.0.0.1:3001](https://127.0.0.1:3001).
 
-## AWX REST API Interaction
+## Ascender REST API Interaction
 
-This interface is built on top of the AWX REST API. If a component needs to interact with the API then the model that corresponds to that base endpoint will need to be imported from the api module.
+This interface is built on top of the Ascender REST API. If a component needs to interact with the API then the model that corresponds to that base endpoint will need to be imported from the api module.
 
 Example:
 
@@ -153,7 +153,7 @@ All source code lives in the `/src` directory and all tests are colocated with t
 
 Inside these folders, the internal structure is:
 
-- **/api** - All classes used to interact with API's are found here. See [AWX REST API Interaction](#awx-rest-api-interaction) for more information.
+- **/api** - All classes used to interact with API's are found here. See [Ascender REST API Interaction](#ascender-rest-api-interaction) for more information.
 - **/components** - All generic components that are meant to be used in multiple contexts throughout awx. Things like buttons, tabs go here.
 - **/contexts** - Components which utilize react's context api.
 - **/hooks** - Custom react [hooks](https://reactjs.org/docs/hooks-custom.html)

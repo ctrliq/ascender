@@ -11,7 +11,7 @@
  * compile error here rather than an undefined at runtime.
  *
  * Two fields it does not describe: summary_fields and related arrive as bare
- * `string`, because AWX builds them in SerializerMethodFields that carry no
+ * `string`, because Ascender builds them in SerializerMethodFields that carry no
  * schema annotation. src/types/api.ts overrides those two.
  */
 /**
@@ -15372,7 +15372,7 @@ export interface components {
       readonly description: string;
     };
     /**
-     * @description * `` - Default model for AWX - no subscription. Deletion of host_metrics will not be considered for purposes of managed host counting
+     * @description * `` - Default model for Ascender - no subscription. Deletion of host_metrics will not be considered for purposes of managed host counting
      *     * `unique_managed_hosts` - Usage based on unique managed nodes in a large historical time frame and delete functionality for no longer used managed nodes
      * @enum {string}
      */

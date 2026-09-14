@@ -2,7 +2,7 @@
 
 from django.db import migrations
 
-# AWX migration utils
+# Ascender migration utils
 from ascender.main.migrations._inventory_source import delete_custom_inv_source
 
 

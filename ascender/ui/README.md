@@ -1,4 +1,4 @@
-# AWX-UI
+# Ascender-UI
 
 ## Requirements
 - node >= 16.13.1, npm >= 8.x make, git

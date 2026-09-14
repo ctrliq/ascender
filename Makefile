@@ -44,7 +44,7 @@ RECEPTOR_IMAGE ?= quay.io/ansible/receptor:devel
 # Python packages to install only from source (not from binary wheels)
 # Comma separated list
 SRC_ONLY_PKGS ?= cffi,pycparser,psycopg,twilio
-# These should be upgraded in the AWX and Ansible venv before attempting
+# These should be upgraded in the Ascender and Ansible venv before attempting
 # to install the actual requirements
 VENV_BOOTSTRAP ?= pip==26.2.1 setuptools==84.0.0 setuptools_scm[toml]==10.2.3 wheel==0.48.0
 
@@ -129,7 +129,7 @@ virtualenv_awx:
 		fi; \
 	fi
 
-## Install third-party requirements needed for AWX's environment.
+## Install third-party requirements needed for Ascender's environment.
 # this does not use system site packages intentionally
 requirements_awx: virtualenv_awx
 	if [[ "$(PIP_OPTIONS)" == *"--no-index"* ]]; then \

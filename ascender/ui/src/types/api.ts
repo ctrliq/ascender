@@ -6,7 +6,7 @@
  * nullability, its default, its enum and its help text all come from the
  * backend rather than from someone reading a screen.
  *
- * What it gets wrong is summary_fields and related. AWX builds both in
+ * What it gets wrong is summary_fields and related. Ascender builds both in
  * SerializerMethodFields that carry no schema annotation, so drf-spectacular
  * emits them as bare `string` in all 67 schemas that have them. The UI reads
  * summary_fields in over 1,200 places, so leaving that as `string` would make

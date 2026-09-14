@@ -10,7 +10,7 @@ fi
 
 make ascender-link
 
-# AWX bootstrapping
+# Ascender bootstrapping
 make version_file
 
 if [[ -n "$RUN_MIGRATIONS" ]]; then

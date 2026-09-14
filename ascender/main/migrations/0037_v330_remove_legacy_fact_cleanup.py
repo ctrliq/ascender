@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# AWX
+# Ascender
 from ascender.main.migrations._scan_jobs import remove_legacy_fact_cleanup
 
 from django.db import migrations

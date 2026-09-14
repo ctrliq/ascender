@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-# AWX
+# Ascender
 from ascender.conf.migrations._ldap_group_type import fill_ldap_group_type_params
 
 from django.db import migrations

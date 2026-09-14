@@ -4,7 +4,7 @@ This page lists OAuth 2 utility endpoints used for authorization, token refresh 
 Note endpoints other than `/api/o/authorize/` are not meant to be used in browsers and do not
 support HTTP GET. The endpoints here strictly follow
 [RFC specs for OAuth2](https://tools.ietf.org/html/rfc6749), so please use that for detailed
-reference. Note AWX net location default to `http://localhost:8013` in examples:
+reference. Note Ascender net location default to `http://localhost:8013` in examples:
 
 
 ## Create Token for an Application using Authorization code grant type
@@ -16,9 +16,9 @@ from the client app, the user makes a GET to the Authorize endpoint with
 * `redirect_uris`
 * `scope`  
 
-AWX will respond with the authorization `code` and `state`
+Ascender will respond with the authorization `code` and `state`
 to the redirect_uri specified in the application. The client application will then make a POST to the
-`api/o/token/` endpoint on AWX with
+`api/o/token/` endpoint on Ascender with
 
 * `code`
 * `client_id`
@@ -26,7 +26,7 @@ to the redirect_uri specified in the application. The client application will th
 * `grant_type`
 * `redirect_uri`
 
-AWX will respond with the `access_token`, `token_type`, `refresh_token`, and `expires_in`. For more
+Ascender will respond with the `access_token`, `token_type`, `refresh_token`, and `expires_in`. For more
 information on testing this flow, refer to [django-oauth-toolkit](http://django-oauth-toolkit.readthedocs.io/en/latest/tutorial/tutorial_01.html#test-your-authorization-server).
 
 
@@ -52,7 +52,7 @@ IaUBsaVDgt2eiwOGe0bg5m5vCSstClZmtdy359RVx2rQK5YlIWyPlrolpt2LEpVeKXWaiybo" \
   http://localhost:8013/api/o/token/ -i
 ```
 In the above post request, parameters `username` and `password` are username and password of the related
-AWX user of the underlying application, and the authentication information is of format
+Ascender user of the underlying application, and the authentication information is of format
 `<client_id>:<client_secret>`, where `client_id` and `client_secret` are the corresponding fields of
 underlying application.
 
