@@ -69,7 +69,7 @@ stdout_logfile_maxbytes=0
 stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
 
-[program:awx-cache-clear]
+[program:cache-clear]
 {% if kube_dev | bool %}
 command = make run-cache-clear
 directory = /ascender_devel
@@ -87,8 +87,8 @@ stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
 
 {% if kube_dev | bool %}
-[program:awx-autoreload]
-command = /ascender_devel/tools/docker-compose/awx-autoreload /ascender_devel/ascender
+[program:ascender-autoreload]
+command = /ascender_devel/tools/docker-compose/ascender-autoreload /ascender_devel/ascender
 autostart = true
 autorestart = true
 stopasgroup=true
@@ -100,7 +100,7 @@ stderr_logfile_maxbytes=0
 {% endif %}
 
 [group:tower-processes]
-programs=nginx,uvicorn,awx-cache-clear,ws-heartbeat
+programs=nginx,uvicorn,cache-clear,ws-heartbeat
 priority=5
 
 [eventlistener:superwatcher]

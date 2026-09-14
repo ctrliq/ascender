@@ -143,7 +143,7 @@
       "LANGUAGE": "en_US:en",
       "AWX_GROUP_QUEUES": "tower",
       "SUPERVISOR_SERVER_URL": "unix:///tmp/supervisor.sock",
-      "SUPERVISOR_PROCESS_NAME": "awx-dispatcher",
+      "SUPERVISOR_PROCESS_NAME": "dispatcher",
       "CURRENT_UID": "501",
       "_": "/var/lib/awx/venv/awx/bin/python3",
       "DJANGO_SETTINGS_MODULE": "awx.settings.development",

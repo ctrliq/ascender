@@ -36,7 +36,7 @@ def main():
             # pertinent data to process that produced PROCES_LOG_STDERR is in the first line of the data payload; so lets extract it
             proc_details = dict([x.split(":") for x in (data.split("\n")[0]).split()])
 
-            if proc_details["processname"] == "awx-rsyslogd":
+            if proc_details["processname"] == "rsyslogd":
                 log_message = "".join(data.split("\n")[1:])
 
                 # look for a 4XX HTTP CODE in the log message. if found, issue a sigkill

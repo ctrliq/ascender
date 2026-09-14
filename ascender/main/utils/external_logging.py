@@ -197,4 +197,4 @@ def reconfigure_rsyslog():
             os.chmod(path, 0o640)
             f.write(tmpl + '\n')
         shutil.move(path, '/var/lib/ascender/rsyslog/rsyslog.conf')
-    supervisor_service_command(command='restart', service='awx-rsyslogd')
+    supervisor_service_command(command='restart', service='rsyslogd')

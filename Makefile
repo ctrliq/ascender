@@ -215,8 +215,8 @@ uvicorn: collectstatic
 	uvicorn --host 127.0.0.1 --port 8051 --workers $(UVICORN_WORKERS) --ws auto --no-server-header \
 		$${root_path:+--root-path "$$root_path"} ascender.asgi:channel_layer
 
-awx-autoreload:
-	@/ascender_devel/tools/docker-compose/awx-autoreload /ascender_devel/ascender
+ascender-autoreload:
+	@/ascender_devel/tools/docker-compose/ascender-autoreload /ascender_devel/ascender
 
 ## Run to start the background task dispatcher for development.
 dispatcher:
