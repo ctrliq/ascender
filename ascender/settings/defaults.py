@@ -1127,7 +1127,7 @@ ASCENDER_REQUEST_PROFILE = False
 # (http://www.graphviz.org/doc/info/lang.html) for per-request profiling
 # via gprof2dot (https://github.com/jrfonseca/gprof2dot)
 #
-# If you set this to True, you must `/var/lib/awx/venv/awx/bin/pip install gprof2dot`
+# If you set this to True, you must `/var/lib/ascender/venv/awx/bin/pip install gprof2dot`
 # .dot files will be saved in `/var/log/tower/profile/` and can be converted e.g.,
 #
 # ~ yum install graphviz

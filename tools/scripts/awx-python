@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Enable AWX virtualenv
-for venv_path in /var/lib/awx/venv/awx; do
+for venv_path in /var/lib/ascender/venv/awx; do
   if [ -f $venv_path/bin/activate ]; then
     . $venv_path/bin/activate
   fi

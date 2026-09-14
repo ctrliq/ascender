@@ -16,7 +16,7 @@ services:
 {% for editable_dependency in editable_dependencies %}
       - "{{ editable_dependency }}:/editable_dependencies/{{ editable_dependency | basename }}"
 {% endfor %}
-      - "var_lib_awx:/var/lib/awx"
+      - "var_lib_awx:/var/lib/ascender"
 {% endif %}
 {% for i in range(control_plane_node_count|int) %}
   {% set container_postfix = loop.index %}
@@ -53,7 +53,7 @@ services:
     working_dir: "/awx_devel"
     volumes:
 {% if editable_dependencies | length > 0 %}
-      - "var_lib_awx:/var/lib/awx"
+      - "var_lib_awx:/var/lib/ascender"
 {% for editable_dependency in editable_dependencies %}
       - "{{ editable_dependency }}:/editable_dependencies/{{ editable_dependency | basename }}"
 {% endfor %}
@@ -74,7 +74,7 @@ services:
 {% endif %}
       # - "../../docker-compose/_sources/certs:/etc/receptor/certs"  # TODO: optionally generate certs
       - "/sys/fs/cgroup:/sys/fs/cgroup"
-      - "~/.kube/config:/var/lib/awx/.kube/config"
+      - "~/.kube/config:/var/lib/ascender/.kube/config"
       - "valkey_socket_{{ container_postfix }}:/var/run/valkey/:rw"
     privileged: true
     depends_on:

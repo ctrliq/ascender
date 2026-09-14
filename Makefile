@@ -30,7 +30,7 @@ TACACS ?= false
 
 EDITABLE_DEPENDENCIES ?= false
 
-VENV_BASE ?= /var/lib/awx/venv
+VENV_BASE ?= /var/lib/ascender/venv
 
 DEV_DOCKER_OWNER ?= ctrliq
 # Docker will only accept lowercase, so github names like Paul need to be paul

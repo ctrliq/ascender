@@ -14,13 +14,13 @@ SOSREPORT_CONTROLLER_COMMANDS = [
     "awx-manage check_license --data",  # controller license status
     "awx-manage run_wsrelay --status",  # controller websocket relay status
     "supervisorctl status",  # controller process status
-    "/var/lib/awx/venv/awx/bin/pip freeze",  # pip package list
-    "/var/lib/awx/venv/awx/bin/pip freeze -l",  # pip package list without globally-installed packages
-    "/var/lib/awx/venv/ansible/bin/pip freeze",  # pip package list
-    "/var/lib/awx/venv/ansible/bin/pip freeze -l",  # pip package list without globally-installed packages
+    "/var/lib/ascender/venv/awx/bin/pip freeze",  # pip package list
+    "/var/lib/ascender/venv/awx/bin/pip freeze -l",  # pip package list without globally-installed packages
+    "/var/lib/ascender/venv/ansible/bin/pip freeze",  # pip package list
+    "/var/lib/ascender/venv/ansible/bin/pip freeze -l",  # pip package list without globally-installed packages
     "tree -d /var/lib/ascender",  # show me the dirs
-    "ls -ll /var/lib/awx",  # check permissions
-    "ls -ll /var/lib/awx/venv",  # list all venvs
+    "ls -ll /var/lib/ascender",  # check permissions
+    "ls -ll /var/lib/ascender/venv",  # list all venvs
     "ls -ll /etc/tower",
     "ls -ll /var/run/awx-receptor",  # list contents of dirctory where receptor socket should be
     "ls -ll /etc/receptor",

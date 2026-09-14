@@ -77,11 +77,12 @@ ADD requirements/requirements.txt \
 
 RUN cd /tmp && make requirements_awx
 
-# The data the platform reads and writes is addressed as /var/lib/ascender, and
-# /var/lib/awx is where it has always sat. Nothing moves on disk: the alias is
-# what lets the operator and the installers change their mount paths later,
-# while a volume still attached to the old path keeps resolving.
-RUN ln -s /var/lib/awx /var/lib/ascender
+# The data the platform reads and writes lives at /var/lib/ascender, and
+# /var/lib/awx is the alias onto it. Pointed this way round, retiring the old
+# name is one deleted symlink rather than a move of everything on disk. A
+# deployment still mounting a volume at /var/lib/awx keeps working: the runtime
+# resolves the link and lands the mount on the directory it names.
+RUN ln -s /var/lib/ascender /var/lib/awx
 
 ARG VERSION
 ARG SETUPTOOLS_SCM_PRETEND_VERSION
@@ -100,7 +101,7 @@ RUN cd /tmp && make requirements_awx_dev
 # Copy source into builder, build sdist, install it into awx venv
 COPY . /tmp/src/
 WORKDIR /tmp/src/
-RUN make sdist && /var/lib/awx/venv/awx/bin/pip install dist/awx.tar.gz
+RUN make sdist && /var/lib/ascender/venv/awx/bin/pip install dist/awx.tar.gz
 
 {% if not headless|bool %}
 # collectstatic only needs settings that import cleanly and define nothing.
@@ -108,7 +109,7 @@ RUN make sdist && /var/lib/awx/venv/awx/bin/pip install dist/awx.tar.gz
 # 1.0.0 builds the module from an import spec, and a path with no source
 # suffix yields no spec, so include() fails before collectstatic starts.
 RUN touch /tmp/empty_settings.py \
-    && AWX_SETTINGS_FILE=/tmp/empty_settings.py SKIP_SECRET_KEY_CHECK=yes SKIP_PG_VERSION_CHECK=yes /var/lib/awx/venv/awx/bin/awx-manage collectstatic --noinput --clear \
+    && AWX_SETTINGS_FILE=/tmp/empty_settings.py SKIP_SECRET_KEY_CHECK=yes SKIP_PG_VERSION_CHECK=yes /var/lib/ascender/venv/awx/bin/awx-manage collectstatic --noinput --clear \
     && rm -f /tmp/empty_settings.py
 {% endif %}
 
@@ -204,12 +205,12 @@ RUN dnf --enablerepo=baseos-debug -y install python3-debuginfo || : && \
 {% endif %}
 
 # Copy app from builder
-COPY --from=builder /var/lib/awx /var/lib/awx
+COPY --from=builder /var/lib/ascender /var/lib/ascender
 
 # Both names on PATH. The installers and the operator exec awx-manage inside
 # this container by absolute path, so the old link stays until they move.
-RUN ln -s /var/lib/awx/venv/awx/bin/ascender-manage /usr/bin/ascender-manage \
-    && ln -s /var/lib/awx/venv/awx/bin/awx-manage /usr/bin/awx-manage
+RUN ln -s /var/lib/ascender/venv/awx/bin/ascender-manage /usr/bin/ascender-manage \
+    && ln -s /var/lib/ascender/venv/awx/bin/awx-manage /usr/bin/awx-manage
 
 {%if build_dev|bool %}
 COPY --from={{ receptor_image }} /usr/bin/receptor /usr/bin/receptor
@@ -233,7 +234,7 @@ ENV _CONTAINERS_USERNS_CONFIGURED=""
 RUN mkdir -p /etc/containers/registries.conf.d/ && echo "unqualified-search-registries = []" >> /etc/containers/registries.conf.d/force-fully-qualified-images.conf && chmod 644 /etc/containers/registries.conf.d/force-fully-qualified-images.conf
 {% endif %}
 
-ADD tools/ansible/roles/dockerfile/files/rsyslog.conf /var/lib/awx/rsyslog/rsyslog.conf
+ADD tools/ansible/roles/dockerfile/files/rsyslog.conf /var/lib/ascender/rsyslog/rsyslog.conf
 ADD tools/ansible/roles/dockerfile/files/wait-for-migrations /usr/local/bin/wait-for-migrations
 ADD tools/ansible/roles/dockerfile/files/stop-supervisor /usr/local/bin/stop-supervisor
 
@@ -264,8 +265,8 @@ ADD tools/scripts/awx-python /usr/bin/awx-python
 {% endif %}
 
 {% if (build_dev|bool) or (kube_dev|bool) %}
-RUN echo /awx_devel > /var/lib/awx/venv/awx/lib/python3.14/site-packages/awx.egg-link && \
-    echo /awx_devel > /var/lib/awx/venv/awx/lib/python3.14/site-packages/awx.pth && \
+RUN echo /awx_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/awx.egg-link && \
+    echo /awx_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/awx.pth && \
     ln -sf /awx_devel/tools/docker-compose/awx-manage /usr/local/bin/ascender-manage && \
     ln -sf /awx_devel/tools/docker-compose/awx-manage /usr/local/bin/awx-manage && \
     ln -sf /awx_devel/tools/scripts/awx-python /usr/bin/awx-python && \
@@ -274,10 +275,10 @@ RUN echo /awx_devel > /var/lib/awx/venv/awx/lib/python3.14/site-packages/awx.egg
 
 # Pre-create things we need to access
 RUN for dir in \
-      /var/lib/awx \
-      /var/lib/awx/rsyslog \
-      /var/lib/awx/rsyslog/conf.d \
-      /var/lib/awx/.local/share/containers/storage \
+      /var/lib/ascender \
+      /var/lib/ascender/rsyslog \
+      /var/lib/ascender/rsyslog/conf.d \
+      /var/lib/ascender/.local/share/containers/storage \
       /var/run/awx-rsyslog \
       /var/log/nginx \
       /var/lib/pgsql \
@@ -291,29 +292,29 @@ RUN for dir in \
       /etc/subgid \
       /etc/group \
       /etc/passwd \
-      /var/lib/awx/rsyslog/rsyslog.conf ; \
+      /var/lib/ascender/rsyslog/rsyslog.conf ; \
     do touch $file ; chmod g+rw $file ; chgrp root $file ; done
 
-# The same alias as in the builder, for the runtime paths in the settings.
-RUN ln -s /var/lib/awx /var/lib/ascender
+# The same alias as in the builder, for anything still naming the old path.
+RUN ln -s /var/lib/ascender /var/lib/awx
 
 {% if (build_dev|bool) or (kube_dev|bool) %}
 RUN for dir in \
       /etc/containers \
-      /var/lib/awx/.local \
-      /var/lib/awx/venv \
-      /var/lib/awx/venv/awx/bin \
-      /var/lib/awx/venv/awx/lib/python3.14 \
-      /var/lib/awx/venv/awx/lib/python3.14/site-packages \
-      /var/lib/awx/projects \
-      /var/lib/awx/rsyslog \
+      /var/lib/ascender/.local \
+      /var/lib/ascender/venv \
+      /var/lib/ascender/venv/awx/bin \
+      /var/lib/ascender/venv/awx/lib/python3.14 \
+      /var/lib/ascender/venv/awx/lib/python3.14/site-packages \
+      /var/lib/ascender/projects \
+      /var/lib/ascender/rsyslog \
       /var/run/awx-rsyslog \
       /.ansible \
       /var/lib/shared/overlay-images \
       /var/lib/shared/overlay-layers \
       /var/lib/shared/vfs-images \
       /var/lib/shared/vfs-layers \
-      /var/lib/awx/vendor ; \
+      /var/lib/ascender/vendor ; \
     do mkdir -m 0775 -p $dir ; chmod g+rwx $dir ; chgrp root $dir ; done && \
     for file in \
       /etc/containers/containers.conf \
@@ -323,7 +324,7 @@ RUN for dir in \
       /var/lib/shared/vfs-layers/layers.lock \
       /var/run/nginx.pid; \
     do touch $file ; chmod g+rw $file ; done && \
-    echo "\setenv PAGER 'less -SXF'" > /var/lib/awx/.psqlrc
+    echo "\setenv PAGER 'less -SXF'" > /var/lib/ascender/.psqlrc
 {% endif %}
 
 {% if not build_dev|bool %}
@@ -331,10 +332,10 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
     ln -sf /dev/stderr /var/log/nginx/error.log
 {% endif %}
 
-ENV HOME="/var/lib/awx"
+ENV HOME="/var/lib/ascender"
 
 {% if build_dev|bool %}
-ENV PATH="/var/lib/awx/venv/awx/bin/:${PATH}"
+ENV PATH="/var/lib/ascender/venv/awx/bin/:${PATH}"
 
 EXPOSE 8043 8013 8080 22
 
@@ -346,5 +347,5 @@ EXPOSE 8052
 
 ENTRYPOINT ["dumb-init", "--"]
 VOLUME /var/lib/nginx
-VOLUME /var/lib/awx/.local/share/containers
+VOLUME /var/lib/ascender/.local/share/containers
 {% endif %}

@@ -67,10 +67,10 @@ runs:
     - name: Verify the image answers to the Ascender path
       shell: bash
       # The settings address projects, job output, static files and the rsyslog
-      # spool under /var/lib/ascender, which is an alias for /var/lib/awx rather
-      # than a second directory. Without the link every one of those is a write
-      # to a path that does not exist, and the first symptom is a project sync
-      # failing rather than anything naming the cause.
+      # spool under /var/lib/ascender, and /var/lib/awx is an alias onto it
+      # rather than a second directory. Without the link, anything still naming
+      # the old path writes somewhere that does not exist, and the first symptom
+      # is a project sync failing rather than anything naming the cause.
       run: |
         docker run --rm ghcr.io/${OWNER_LC}/ascender_devel:${COMPOSE_TAG} \
           test /var/lib/ascender/venv -ef /var/lib/awx/venv
