@@ -724,7 +724,7 @@ function Visualizer({ template }: VisualizerProps) {
 
   if (isLoading || isSavingVisualizer) {
     return (
-      <div className="awx-visualizer__centered-content">
+      <div className="ascender-visualizer__centered-content">
         <ContentLoading />
       </div>
     );
@@ -732,7 +732,7 @@ function Visualizer({ template }: VisualizerProps) {
 
   if (contentError) {
     return (
-      <div className="awx-visualizer__centered-content">
+      <div className="ascender-visualizer__centered-content">
         <ContentError error={contentError} />
       </div>
     );
@@ -742,7 +742,7 @@ function Visualizer({ template }: VisualizerProps) {
   return (
     <WorkflowStateContext.Provider value={state}>
       <WorkflowDispatchContext.Provider value={dispatch}>
-        <div className="awx-visualizer__wrapper">
+        <div className="ascender-visualizer__wrapper">
           <VisualizerToolbar
             onClose={handleVisualizerClose}
             onSave={() => saveVisualizer()}

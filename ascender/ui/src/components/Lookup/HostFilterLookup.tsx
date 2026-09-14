@@ -318,7 +318,7 @@ function HostFilterLookup({
         />
       </InputGroupItem>
       <InputGroupItem>
-        <div className="awx-host-filter-lookup__chip-holder pf-v6-c-form-control">
+        <div className="ascender-host-filter-lookup__chip-holder pf-v6-c-form-control">
           {searchColumns.map(({ name, key }) => (
             <ChipGroup
               categoryName={name}
@@ -412,10 +412,10 @@ function HostFilterLookup({
           </Button>,
         ]}
       >
-        <div className="awx-host-filter-lookup__modal-list">
+        <div className="ascender-host-filter-lookup__modal-list">
           {isAnsibleFactsSelected && (
             <PFAlert
-              className="awx-host-filter-lookup__alert"
+              className="ascender-host-filter-lookup__alert"
               variant="info"
               title={
                 <>

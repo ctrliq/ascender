@@ -56,8 +56,8 @@ function SelectedList<T extends SelectableOption = SelectableOption>({
     ));
 
   return (
-    <PFSplit className="awx-selected-list__split">
-      <SplitItem className="awx-selected-list__split-label-item">
+    <PFSplit className="ascender-selected-list__split">
+      <SplitItem className="ascender-selected-list__split-label-item">
         {label}
       </SplitItem>
       <SplitItem>

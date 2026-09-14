@@ -18,8 +18,8 @@ const DetailList = ({
 }: DetailListProps) => (
   <dl
     className={classes(
-      'awx-detail-list',
-      Boolean(stacked) && 'awx-detail-list--stacked',
+      'ascender-detail-list',
+      Boolean(stacked) && 'ascender-detail-list--stacked',
       className
     )}
     {...props}

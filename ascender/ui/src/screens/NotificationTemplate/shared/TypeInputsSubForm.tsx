@@ -89,7 +89,7 @@ function SecretPasswordField({
 
   return (
     <FormGroup
-      className="awx-type-inputs-sub-form__password-form-group"
+      className="ascender-type-inputs-sub-form__password-form-group"
       fieldId={id}
       label={label}
       isRequired={isRequired}

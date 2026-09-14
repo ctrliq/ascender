@@ -117,7 +117,7 @@ function WorkflowOutputNode({
       transform={`translate(${nodePosition.x},${
         nodePosition.y - rootPosition.y
       })`}
-      className={job ? 'awx-workflow-output-node__node-g--has-job' : undefined}
+      className={job ? 'ascender-workflow-output-node__node-g--has-job' : undefined}
       onClick={handleNodeClick}
       onMouseEnter={mouseEnter}
       onMouseLeave={mouseLeave}
@@ -142,7 +142,7 @@ function WorkflowOutputNode({
             x={wfConstants.nodeW / 2 - wfConstants.nodeW / 10 + 7}
             y={-wfConstants.nodeH / 4 - 1}
           >
-            <p className="awx-workflow-output-node__convergence-label">{t`ALL`}</p>
+            <p className="ascender-workflow-output-node__convergence-label">{t`ALL`}</p>
           </foreignObject>
         </>
       )}
@@ -156,7 +156,7 @@ function WorkflowOutputNode({
         width={wfConstants.nodeW}
       />
       <foreignObject height="58" width="178" x="1" y="1">
-        <div className="awx-workflow-output-node__contents">
+        <div className="ascender-workflow-output-node__contents">
           {(() => {
             if (job) {
               let elapsedText = null;
@@ -168,14 +168,14 @@ function WorkflowOutputNode({
               }
               return (
                 <>
-                  <div className="awx-workflow-output-node__job-top-line">
+                  <div className="ascender-workflow-output-node__job-top-line">
                     {job.status && job.status !== 'pending' && (
                       <StatusIcon status={job.status} />
                     )}
                     <p>{nodeName}</p>
                   </div>
                   {elapsedText && (
-                    <div className="awx-workflow-output-node__elapsed">
+                    <div className="ascender-workflow-output-node__elapsed">
                       {elapsedText}
                     </div>
                   )}
@@ -185,12 +185,12 @@ function WorkflowOutputNode({
             if (priorRunSucceeded) {
               return (
                 <>
-                  <div className="awx-workflow-output-node__job-top-line">
+                  <div className="ascender-workflow-output-node__job-top-line">
                     <StatusIcon status="successful" />
                     <p>{nodeName}</p>
                   </div>
                   {priorRunElapsed != null && (
-                    <div className="awx-workflow-output-node__elapsed">
+                    <div className="ascender-workflow-output-node__elapsed">
                       {secondsToHHMMSS(priorRunElapsed)}
                     </div>
                   )}
@@ -198,7 +198,7 @@ function WorkflowOutputNode({
               );
             }
             return (
-              <p className="awx-workflow-output-node__default-label">
+              <p className="ascender-workflow-output-node__default-label">
                 {nodeName}
               </p>
             );

@@ -191,8 +191,8 @@ function Lookup({
           <InputGroupItem isFill>
             <div
               className={[
-                'awx-lookup__chip-holder',
-                isDisabled && 'awx-lookup__chip-holder--disabled',
+                'ascender-lookup__chip-holder',
+                isDisabled && 'ascender-lookup__chip-holder--disabled',
                 'pf-v6-c-form-control',
               ]
                 .filter(Boolean)

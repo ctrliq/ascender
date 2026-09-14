@@ -96,7 +96,7 @@ describe('<OrganizationForm />', () => {
   ];
 
   const mockExecutionEnvironment = [
-    { id: 1, name: 'EE', image: 'quay.io/ansible/awx-ee' },
+    { id: 1, name: 'EE', image: 'ghcr.io/ctrliq/ascender-ee' },
   ];
 
   beforeEach(() => {

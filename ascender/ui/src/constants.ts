@@ -13,7 +13,7 @@ export const JOB_TYPE_URL_SEGMENTS: Record<string, string> = {
   workflow_job: 'workflow',
 };
 
-export const SESSION_TIMEOUT_KEY = 'awx-session-timeout';
-export const SESSION_REDIRECT_URL = 'awx-redirect-url';
-export const PERSISTENT_FILTER_KEY = 'awx-persistent-filter';
-export const SESSION_USER_ID = 'awx-session-user-id';
+export const SESSION_TIMEOUT_KEY = 'ascender-session-timeout';
+export const SESSION_REDIRECT_URL = 'ascender-redirect-url';
+export const PERSISTENT_FILTER_KEY = 'ascender-persistent-filter';
+export const SESSION_USER_ID = 'ascender-session-user-id';

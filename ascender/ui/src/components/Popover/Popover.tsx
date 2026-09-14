@@ -41,7 +41,7 @@ function Popover({
       <button
         aria-label={ariaLabel ?? t`More information`}
         aria-haspopup="true"
-        className="awx-popover__button pf-v6-c-form__group-label-help"
+        className="ascender-popover__button pf-v6-c-form__group-label-help"
         onClick={(e) => e.preventDefault()}
         type="button"
         {...(ouiaId ? { 'data-ouia-component-id': ouiaId } : {})}

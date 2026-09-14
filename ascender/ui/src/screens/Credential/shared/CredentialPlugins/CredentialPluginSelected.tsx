@@ -23,9 +23,9 @@ function CredentialPluginSelected({
   const { t } = useLingui();
   return (
     <>
-      <div className="awx-credential-plugin-selected__credential">
+      <div className="ascender-credential-plugin-selected__credential">
         <CredentialChip
-          className="awx-credential-plugin-selected__spaced-credential-chip"
+          className="ascender-credential-plugin-selected__spaced-credential-chip"
           onClick={onClearPlugin}
           credential={credential}
         />
@@ -42,7 +42,7 @@ function CredentialPluginSelected({
           />
         </Tooltip>
       </div>
-      <p className="awx-credential-plugin-selected__help-text">
+      <p className="ascender-credential-plugin-selected__help-text">
         <Trans>
           This field will be retrieved from an external secret management system
           using the specified credential.

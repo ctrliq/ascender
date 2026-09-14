@@ -91,7 +91,7 @@ function CustomMessagesSubForm({
         <SubFormLayout>
           <Content
             component="p"
-            className="awx-custom-messages-sub-form__margin-bottom-var-pf-v6-c-content-marginbottom pf-v6-c-content"
+            className="ascender-custom-messages-sub-form__margin-bottom-var-pf-v6-c-content-marginbottom pf-v6-c-content"
           >
             <small>
               {t`Use custom messages to change the content of

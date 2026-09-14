@@ -1,6 +1,6 @@
 import { setCustomTheme, getCustomTheme, CUSTOM_THEME_ID } from './customTheme';
 
-const STYLE_ID = 'awx-custom-theme';
+const STYLE_ID = 'ascender-custom-theme';
 const DARK_CSS = 'html.pf-v6-theme-dark[data-theme="custom"] { --x: 1; }';
 const LIGHT_CSS = 'html[data-theme="custom"] { --x: 1; }';
 

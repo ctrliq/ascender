@@ -47,7 +47,7 @@ const CheckboxListItem = ({
 
   return (
     <Tr
-      className="awx-checkbox-list-item__cursor-default"
+      className="ascender-checkbox-list-item__cursor-default"
       ouiaId={`list-item-${itemId}`}
       id={`list-item-${itemId}`}
       onClick={handleRowClick}

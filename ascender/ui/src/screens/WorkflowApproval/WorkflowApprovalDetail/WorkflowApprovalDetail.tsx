@@ -256,12 +256,12 @@ function WorkflowApprovalDetail({
         />
       </DetailList>
       <PFTitle
-        className="awx-workflow-approval-detail__title"
+        className="ascender-workflow-approval-detail__title"
         headingLevel="h2"
       >{t`Workflow job details`}</PFTitle>
-      <PFDivider className="awx-workflow-approval-detail__divider" />
+      <PFDivider className="ascender-workflow-approval-detail__divider" />
       <DetailList
-        className="awx-workflow-approval-detail__wf-detail-list"
+        className="ascender-workflow-approval-detail__wf-detail-list"
         gutter="sm"
       >
         <Detail

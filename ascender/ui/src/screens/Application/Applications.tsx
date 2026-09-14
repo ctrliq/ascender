@@ -81,7 +81,7 @@ function Applications() {
         >
           {applicationModalSource.client_secret && (
             <Alert
-              className="awx-applications__application-alert"
+              className="ascender-applications__application-alert"
               variant="info"
               isInline
               title={t`This is the only time the client secret will be shown.`}

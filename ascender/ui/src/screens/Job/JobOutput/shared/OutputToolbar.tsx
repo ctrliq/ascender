@@ -76,51 +76,51 @@ const OutputToolbar = ({
   }, [job.started, job.finished]);
 
   return (
-    <div className="awx-output-toolbar__wrapper">
+    <div className="ascender-output-toolbar__wrapper">
       {!hideCounts && (
         <>
           {playCount > 0 && (
             <div
-              className="awx-output-toolbar__badge-group"
+              className="ascender-output-toolbar__badge-group"
               aria-label={t`Play Count`}
             >
               <div>{t`Plays`}</div>
-              <PFBadge className="awx-output-toolbar__badge" isRead>
+              <PFBadge className="ascender-output-toolbar__badge" isRead>
                 {playCount}
               </PFBadge>
             </div>
           )}
           {taskCount > 0 && (
             <div
-              className="awx-output-toolbar__badge-group"
+              className="ascender-output-toolbar__badge-group"
               aria-label={t`Task Count`}
             >
               <div>{t`Tasks`}</div>
-              <PFBadge className="awx-output-toolbar__badge" isRead>
+              <PFBadge className="ascender-output-toolbar__badge" isRead>
                 {taskCount}
               </PFBadge>
             </div>
           )}
           {totalHostCount > 0 && (
             <div
-              className="awx-output-toolbar__badge-group"
+              className="ascender-output-toolbar__badge-group"
               aria-label={t`Host Count`}
             >
               <div>{t`Hosts`}</div>
-              <PFBadge className="awx-output-toolbar__badge" isRead>
+              <PFBadge className="ascender-output-toolbar__badge" isRead>
                 {totalHostCount}
               </PFBadge>
             </div>
           )}
           {darkCount > 0 && (
             <div
-              className="awx-output-toolbar__badge-group"
+              className="ascender-output-toolbar__badge-group"
               aria-label={t`Unreachable Host Count`}
             >
               <div>{t`Unreachable`}</div>
               <Tooltip content={t`Unreachable Hosts`}>
                 <PFBadge
-                  className="awx-output-toolbar__badge awx-output-toolbar__badge--unreachable"
+                  className="ascender-output-toolbar__badge ascender-output-toolbar__badge--unreachable"
                   isRead
                 >
                   {darkCount}
@@ -130,13 +130,13 @@ const OutputToolbar = ({
           )}
           {failureCount > 0 && (
             <div
-              className="awx-output-toolbar__badge-group"
+              className="ascender-output-toolbar__badge-group"
               aria-label={t`Failed Host Count`}
             >
               <div>{t`Failed`}</div>
               <Tooltip content={t`Failed Hosts`}>
                 <PFBadge
-                  className="awx-output-toolbar__badge awx-output-toolbar__badge--failed"
+                  className="ascender-output-toolbar__badge ascender-output-toolbar__badge--failed"
                   isRead
                 >
                   {failureCount}
@@ -148,13 +148,13 @@ const OutputToolbar = ({
       )}
 
       <div
-        className="awx-output-toolbar__badge-group"
+        className="ascender-output-toolbar__badge-group"
         aria-label={t`Elapsed Time`}
       >
         <div>{t`Elapsed`}</div>
         <Tooltip content={t`Elapsed time that the job ran`}>
           <PFBadge
-            className="awx-output-toolbar__badge awx-output-toolbar__elapsed-badge"
+            className="ascender-output-toolbar__badge ascender-output-toolbar__elapsed-badge"
             isRead
           >
             {job.finished && job.elapsed != null

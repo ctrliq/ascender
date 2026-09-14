@@ -267,7 +267,7 @@ function NodeModalForm({
   }
   return (
     <Wizard
-      className="awx-node-modal__overflow-scroll"
+      className="ascender-node-modal__overflow-scroll"
       footer={
         <NodeModalCustomFooter
           promptSteps={promptSteps}

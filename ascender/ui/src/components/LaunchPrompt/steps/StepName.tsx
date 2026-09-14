@@ -18,7 +18,7 @@ function StepName({ hasErrors, children, id }: StepNameProps) {
     return <div id={id}>{children}</div>;
   }
   return (
-    <div className="awx-step-name__alert-text" id={id}>
+    <div className="ascender-step-name__alert-text" id={id}>
       {children}
       <Tooltip
         position="right"
@@ -26,7 +26,7 @@ function StepName({ hasErrors, children, id }: StepNameProps) {
         trigger="click mouseenter focus"
       >
         <PFExclamationCircleIcon
-          className="awx-step-name__exclamation-circle-icon"
+          className="ascender-step-name__exclamation-circle-icon"
           style={{
             color: 'var(--pf-t--global--color--status--danger--default)',
           }}

@@ -11,7 +11,7 @@ export interface FullPageProps {
 /** A fixed backdrop covering the viewport, used by the visualizer. */
 const FullPage = ({ className, children, ...props }: FullPageProps) => (
   <div
-    className={['awx-full-page', className].filter(Boolean).join(' ')}
+    className={['ascender-full-page', className].filter(Boolean).join(' ')}
     {...props}
   >
     {children}

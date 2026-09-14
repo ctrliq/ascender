@@ -22,12 +22,12 @@ function WorkflowActionTooltip({
       width="52"
       height={tipHeight}
     >
-      <div className="awx-workflow-action-tooltip__contents">
-        <div className="awx-workflow-action-tooltip__arrow">
-          <div className="awx-workflow-action-tooltip__arrow-outer" />
-          <div className="awx-workflow-action-tooltip__arrow-inner" />
+      <div className="ascender-workflow-action-tooltip__contents">
+        <div className="ascender-workflow-action-tooltip__arrow">
+          <div className="ascender-workflow-action-tooltip__arrow-outer" />
+          <div className="ascender-workflow-action-tooltip__arrow-inner" />
         </div>
-        <div className="awx-workflow-action-tooltip__actions">{actions}</div>
+        <div className="ascender-workflow-action-tooltip__actions">{actions}</div>
       </div>
     </foreignObject>
   );

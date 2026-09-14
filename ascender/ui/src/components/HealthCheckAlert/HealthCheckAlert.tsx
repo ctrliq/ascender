@@ -16,7 +16,7 @@ function HealthCheckAlert({ onSetHealthCheckAlert }: HealthCheckAlertProps) {
   const { t } = useLingui();
   return (
     <PFAlert
-      className="awx-health-check-alert__alert"
+      className="ascender-health-check-alert__alert"
       // PatternFly 5's "default" became "custom" in 6; "info" would make it
       // blue where this alert has always been neutral.
       variant="custom"

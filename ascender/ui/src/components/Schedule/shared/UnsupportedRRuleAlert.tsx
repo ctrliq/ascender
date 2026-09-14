@@ -14,14 +14,14 @@ export default function UnsupportedRRuleAlert({
 }: UnsupportedRRuleAlertProps) {
   const { t } = useLingui();
   return (
-    <div className="awx-unsupported-r-rule-alert__wrapper">
+    <div className="ascender-unsupported-r-rule-alert__wrapper">
       <Alert
         isInline
         variant="danger"
         ouiaId="schedule-warning"
         title={t`This schedule uses complex rules that are not supported in the\n        UI.  Please use the API to manage this schedule.`}
       />
-      <p className="awx-unsupported-r-rule-alert__rules-title">
+      <p className="ascender-unsupported-r-rule-alert__rules-title">
         {t`Schedule Rules`}:
       </p>
       <pre style={{ fontFamily: 'var(--pf-t--global--font--family--mono)' }}>

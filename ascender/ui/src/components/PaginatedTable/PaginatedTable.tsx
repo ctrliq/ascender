@@ -147,7 +147,7 @@ function PaginatedTable<T = SelectableOption>({
     );
   } else {
     Content = (
-      <div className="awx-paginated-table__overflow-auto">
+      <div className="ascender-paginated-table__overflow-auto">
         {hasContentLoading && <LoadingSpinner />}
         <Table
           aria-label={dataListLabel}

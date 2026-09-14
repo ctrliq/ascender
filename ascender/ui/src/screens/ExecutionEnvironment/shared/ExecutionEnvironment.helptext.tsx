@@ -16,9 +16,9 @@ function useExecutionEnvironmentHelpTextStrings() {
         <br />
         <br />
         <Trans>Examples:</Trans>
-        <ul className="awx-execution-environment-helptext__list">
+        <ul className="ascender-execution-environment-helptext__list">
           <li>
-            <code>quay.io/ctrliq/ascender-ee:latest</code>
+            <code>ghcr.io/ctrliq/ascender-ee:latest</code>
           </li>
           <li>
             <code>repo/project/image-name:tag</code>

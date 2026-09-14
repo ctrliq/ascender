@@ -125,7 +125,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
               </ChipGroup>
             }
           />
-          <div className="awx-credential-detail__plugin-input-metadata">
+          <div className="ascender-credential-detail__plugin-input-metadata">
             <CodeEditor
               id={`credential-${id}-metadata`}
               mode="javascript"
@@ -273,7 +273,7 @@ function CredentialDetail({ credential }: CredentialDetailProps) {
         />
       </DetailList>
       {Object.keys(inputSources).length > 0 && (
-        <p className="awx-credential-detail__plugin-field-text">
+        <p className="ascender-credential-detail__plugin-field-text">
           {t`* This field will be retrieved from an external secret management system using the specified credential.`}
         </p>
       )}

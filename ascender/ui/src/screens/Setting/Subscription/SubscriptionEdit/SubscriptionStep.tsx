@@ -79,7 +79,7 @@ function SubscriptionStep() {
           </Trans>
         </p>
         <FormGroup
-          className="awx-subscription-step__file-upload-field"
+          className="ascender-subscription-step__file-upload-field"
           fieldId="subscription-manifest"
           label={t`Red Hat subscription manifest`}
           labelHelp={

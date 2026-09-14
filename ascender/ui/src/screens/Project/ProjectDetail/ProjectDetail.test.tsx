@@ -35,7 +35,7 @@ const mockProject = {
     default_environment: {
       id: 12,
       name: 'Bar',
-      image: 'quay.io/ansible/awx-ee',
+      image: 'ghcr.io/ctrliq/ascender-ee',
     },
     credential: {
       id: 1000,

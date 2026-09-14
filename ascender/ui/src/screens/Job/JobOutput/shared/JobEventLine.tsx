@@ -18,8 +18,8 @@ const JobEventLine = ({
 }: JobEventLineProps) => (
   <div
     className={[
-      'awx-job-event-line',
-      $isClickable && 'awx-job-event-line--clickable',
+      'ascender-job-event-line',
+      $isClickable && 'ascender-job-event-line--clickable',
       className,
     ]
       .filter(Boolean)

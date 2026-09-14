@@ -100,7 +100,7 @@ function HostMetricsDeleteButton({
         {deleteDetails &&
           deleteDetails.map(({ label, count }) => (
             <div key={label.id} aria-label={`${i18n._(label)}: ${count}`}>
-              <span className="awx-host-metrics-delete-button__label">
+              <span className="ascender-host-metrics-delete-button__label">
                 {i18n._(label)}
               </span>
               <Badge>{count}</Badge>
@@ -190,7 +190,7 @@ function HostMetricsDeleteButton({
           ))}
           {shouldShowDeleteWarning && (
             <Alert
-              className="awx-host-metrics-delete-button__warning-message"
+              className="ascender-host-metrics-delete-button__warning-message"
               variant="warning"
               isInline
               title={buildDeleteWarning()}

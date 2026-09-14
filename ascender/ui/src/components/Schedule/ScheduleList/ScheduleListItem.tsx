@@ -108,7 +108,7 @@ function ScheduleListItem({
               )}
               position="right"
             >
-              <PFExclamationTriangleIcon className="awx-schedule-list-item__exclamation-triangle-icon" />
+              <PFExclamationTriangleIcon className="ascender-schedule-list-item__exclamation-triangle-icon" />
             </Tooltip>
           </span>
         )}
@@ -142,7 +142,7 @@ function ScheduleListItem({
         >
           <Button
             icon={<PencilAltIcon />}
-            className="awx-schedule-list-item__grid-column-2"
+            className="ascender-schedule-list-item__grid-column-2"
             ouiaId={`${schedule.id}-edit-button`}
             aria-label={t`Edit Schedule`}
             variant="plain"

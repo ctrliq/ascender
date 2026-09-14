@@ -3,7 +3,7 @@
  * GENERATED FILE. DO NOT EDIT.
  *
  * Regenerate with `make ui-api-types` from the repository root, which runs
- * `awx-manage spectacular` and pipes the result through openapi-typescript.
+ * `ascender-manage spectacular` and pipes the result through openapi-typescript.
  *
  * This is the API describing itself. Every field, its nullability, its
  * default and its help text come from the serializers rather than from

@@ -116,18 +116,18 @@ function WorkflowNodeHelp({ node }: WorkflowNodeHelpProps) {
     <>
       {!unifiedJobTemplate && (!job || job.type !== 'workflow_approval') && (
         <p
-          className={`awx-workflow-node-help__resource-deleted${
-            job ? ' awx-workflow-node-help__resource-deleted--has-job' : ''
+          className={`ascender-workflow-node-help__resource-deleted${
+            job ? ' ascender-workflow-node-help__resource-deleted--has-job' : ''
           }`}
         >
-          <ExclamationTriangleIcon className="awx-workflow-node-help__styled-exclamation-triangle-icon" />
+          <ExclamationTriangleIcon className="ascender-workflow-node-help__styled-exclamation-triangle-icon" />
           <Trans>
             The resource associated with this node has been deleted.
           </Trans>
         </p>
       )}
       {job && (
-        <dl className="awx-workflow-node-help__grid-dl">
+        <dl className="ascender-workflow-node-help__grid-dl">
           {identifier && (
             <>
               <dt>
@@ -163,7 +163,7 @@ function WorkflowNodeHelp({ node }: WorkflowNodeHelpProps) {
         </dl>
       )}
       {unifiedJobTemplate && !job && (
-        <dl className="awx-workflow-node-help__grid-dl">
+        <dl className="ascender-workflow-node-help__grid-dl">
           {identifier && (
             <>
               <dt>
@@ -185,7 +185,7 @@ function WorkflowNodeHelp({ node }: WorkflowNodeHelpProps) {
         </dl>
       )}
       {job && job.type !== 'workflow_approval' && (
-        <p className="awx-workflow-node-help__margin-top-10">{t`Click to view job details`}</p>
+        <p className="ascender-workflow-node-help__margin-top-10">{t`Click to view job details`}</p>
       )}
     </>
   );

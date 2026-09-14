@@ -66,7 +66,7 @@ function RoutedTabs({ tabsArray }: RoutedTabsProps) {
 
   const tabList = (
     <PFTabs
-      className="awx-routed-tabs__tabs"
+      className="ascender-routed-tabs__tabs"
       activeKey={getActiveTabId()}
       onSelect={handleTabSelect}
       ouiaId="routed-tabs"
@@ -89,10 +89,10 @@ function RoutedTabs({ tabsArray }: RoutedTabsProps) {
     return tabList;
   }
   return (
-    <div className="awx-routed-tabs__tab-bar">
+    <div className="ascender-routed-tabs__tab-bar">
       {tabList}
       {controls.map((control) => (
-        <div className="awx-routed-tabs__tab-bar-control" key={control.id}>
+        <div className="ascender-routed-tabs__tab-bar-control" key={control.id}>
           {control.name}
         </div>
       ))}

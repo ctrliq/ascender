@@ -40,13 +40,13 @@ function ScheduleOccurrences({
   return (
     <>
       <DetailName
-        className="awx-schedule-occurrences__grid-column-1-1"
+        className="ascender-schedule-occurrences__grid-column-1-1"
         component={ContentVariants.dt}
         fullWidth
       >
         <Split hasGutter>
           <SplitItem>
-            <div className="awx-schedule-occurrences__label">
+            <div className="ascender-schedule-occurrences__label">
               <span>{t`Occurrences`}</span>
               <span>{t`(Limited to first 10)`}</span>
             </div>
@@ -65,7 +65,7 @@ function ScheduleOccurrences({
         </Split>
       </DetailName>
       <DetailValue
-        className="awx-schedule-occurrences__grid-column-margin-top"
+        className="ascender-schedule-occurrences__grid-column-margin-top"
         component={ContentVariants.dd}
         fullWidth
       >

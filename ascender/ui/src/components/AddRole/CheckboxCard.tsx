@@ -22,9 +22,9 @@ function CheckboxCard({
   itemId,
 }: CheckboxCardProps) {
   return (
-    <div className="awx-checkbox-card__wrapper">
+    <div className="ascender-checkbox-card__wrapper">
       <PFCheckbox
-        className="awx-checkbox-card__checkbox"
+        className="ascender-checkbox-card__checkbox"
         isChecked={isSelected}
         onChange={onSelect}
         aria-label={name}

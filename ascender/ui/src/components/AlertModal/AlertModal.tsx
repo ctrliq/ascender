@@ -74,7 +74,7 @@ function AlertModal({
   };
 
   const customHeader = (
-    <div className="awx-alert-modal__header">
+    <div className="ascender-alert-modal__header">
       {variant ? variantIcons[variant] : null}
       <Title id="alert-modal-header-label" size="2xl" headingLevel="h2">
         {title}

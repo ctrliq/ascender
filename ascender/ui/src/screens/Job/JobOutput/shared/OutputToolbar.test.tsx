@@ -102,17 +102,17 @@ describe('<OutputToolbar />', () => {
     );
 
     const unreachable = container.querySelector(
-      '.awx-output-toolbar__badge--unreachable'
+      '.ascender-output-toolbar__badge--unreachable'
     );
     const failed = container.querySelector(
-      '.awx-output-toolbar__badge--failed'
+      '.ascender-output-toolbar__badge--failed'
     );
 
     expect(unreachable).toHaveTextContent('1');
     expect(failed).toHaveTextContent('2');
     // and the counts that mean nothing went wrong are left alone
     expect(
-      container.querySelectorAll('.awx-output-toolbar__badge').length
+      container.querySelectorAll('.ascender-output-toolbar__badge').length
     ).toBeGreaterThan(2);
   });
 

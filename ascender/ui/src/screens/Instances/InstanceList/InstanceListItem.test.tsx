@@ -59,7 +59,7 @@ const instance = [
     type: 'instance',
     url: '/api/v2/instances/1/',
     uuid: '00000000-0000-0000-0000-000000000001',
-    hostname: 'awx-control',
+    hostname: 'ascender-control',
     created: '2020-07-14T19:03:49.000054Z',
     modified: '2020-08-12T20:08:02.836748Z',
     capacity_adjustment: '0.40',

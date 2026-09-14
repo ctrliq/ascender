@@ -24,8 +24,8 @@ export const FormColumnLayout = ({
 }: FormColumnLayoutProps) => (
   <div
     className={join(
-      'awx-form-column-layout',
-      $stacked && 'awx-form-column-layout--stacked',
+      'ascender-form-column-layout',
+      $stacked && 'ascender-form-column-layout--stacked',
       className
     )}
     {...props}
@@ -39,7 +39,7 @@ export const FormFullWidthLayout = ({
   children,
   ...props
 }: LayoutProps) => (
-  <div className={join('awx-form-full-width-layout', className)} {...props}>
+  <div className={join('ascender-form-full-width-layout', className)} {...props}>
     {children}
   </div>
 );
@@ -49,7 +49,7 @@ export const FormCheckboxLayout = ({
   children,
   ...props
 }: LayoutProps) => (
-  <div className={join('awx-form-checkbox-layout', className)} {...props}>
+  <div className={join('ascender-form-checkbox-layout', className)} {...props}>
     {children}
   </div>
 );
@@ -59,7 +59,7 @@ export const SubFormLayout = ({
   children,
   ...props
 }: LayoutProps) => (
-  <div className={join('awx-sub-form-layout', className)} {...props}>
+  <div className={join('ascender-sub-form-layout', className)} {...props}>
     {children}
   </div>
 );

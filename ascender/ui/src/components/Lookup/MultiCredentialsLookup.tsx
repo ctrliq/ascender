@@ -173,7 +173,7 @@ function MultiCredentialsLookup({
         <>
           {isVault && (
             <Alert
-              className="awx-multi-credentials-lookup__margin-bottom-20"
+              className="ascender-multi-credentials-lookup__margin-bottom-20"
               variant="info"
               isInline
               title={t`You cannot select multiple vault credentials with the same vault ID. Doing so will automatically deselect the other with the same vault ID.`}
@@ -181,12 +181,12 @@ function MultiCredentialsLookup({
             />
           )}
           {credentialTypes && credentialTypes.length > 0 && (
-            <ToolbarItem className="awx-multi-credentials-lookup__display-align-items">
-              <div className="awx-multi-credentials-lookup__flex-margin-right">
+            <ToolbarItem className="ascender-multi-credentials-lookup__display-align-items">
+              <div className="ascender-multi-credentials-lookup__flex-margin-right">
                 {t`Selected Category`}
               </div>
               <AnsibleSelect
-                className="awx-multi-credentials-lookup__flex-1-1-75"
+                className="ascender-multi-credentials-lookup__flex-1-1-75"
                 id="multiCredentialsLookUp-select"
                 data={credentialTypes.map((type) => ({
                   key: type.id,

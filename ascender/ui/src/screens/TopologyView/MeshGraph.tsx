@@ -439,7 +439,7 @@ function MeshGraph({
         />
       )}
       <ContentLoading
-        className="awx-mesh-graph__loader simulation-loader"
+        className="ascender-mesh-graph__loader simulation-loader"
         progress={simulationProgress}
       />
       {Boolean(fetchInstanceError) && (

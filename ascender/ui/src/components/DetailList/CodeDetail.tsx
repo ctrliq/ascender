@@ -28,12 +28,12 @@ function CodeDetail({
   const editorId = dataCy ? `${dataCy}-editor` : 'code-editor';
 
   return (
-    <div className="awx-code-detail">
-      <div className="awx-code-detail__label" data-cy={labelCy}>
+    <div className="ascender-code-detail">
+      <div className="ascender-code-detail__label" data-cy={labelCy}>
         <label htmlFor={editorId}>{label}</label>
         {helpText && <Popover header={label} content={helpText} id={dataCy} />}
       </div>
-      <div className="awx-code-detail__editor" data-cy={valueCy}>
+      <div className="ascender-code-detail__editor" data-cy={valueCy}>
         <CodeEditor
           id={editorId}
           mode={mode}

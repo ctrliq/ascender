@@ -50,7 +50,7 @@ function RevertButton({
 
   return (
     <Tooltip entryDelay={700} content={tooltipContent}>
-      <div className="awx-revert-button__wrapper">
+      <div className="ascender-revert-button__wrapper">
         <Button
           aria-label={isRevertable ? t`Revert` : t`Undo`}
           ouiaId={`${id}-revert`}

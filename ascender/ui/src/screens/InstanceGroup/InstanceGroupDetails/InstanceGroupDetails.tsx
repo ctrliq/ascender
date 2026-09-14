@@ -102,7 +102,7 @@ function InstanceGroupDetails({ instanceGroup }: InstanceGroupDetailsProps) {
           <Detail
             label={t`Used capacity`}
             value={
-              <span className="awx-instance-group-details__unavailable">{t`Unavailable`}</span>
+              <span className="ascender-instance-group-details__unavailable">{t`Unavailable`}</span>
             }
             dataCy="instance-group-used-capacity"
           />

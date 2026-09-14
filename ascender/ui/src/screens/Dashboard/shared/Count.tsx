@@ -14,8 +14,8 @@ export interface CountProps {
 
 function Count({ failed, link, data, label }: CountProps) {
   return (
-    <Link className="awx-count__link" to={link}>
-      <Card className="awx-count__card" isClickable>
+    <Link className="ascender-count__link" to={link}>
+      <Card className="ascender-count__card" isClickable>
         <h2 className={failed ? 'failed' : undefined}>{data || 0}</h2>
         {label}
       </Card>

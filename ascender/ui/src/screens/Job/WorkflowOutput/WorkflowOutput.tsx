@@ -107,7 +107,7 @@ function WorkflowOutput({ job }: WorkflowOutputProps) {
 
   if (contentError) {
     return (
-      <PFCardBody className="awx-workflow-output__card-body">
+      <PFCardBody className="ascender-workflow-output__card-body">
         <ContentError error={contentError} />
       </PFCardBody>
     );
@@ -116,8 +116,8 @@ function WorkflowOutput({ job }: WorkflowOutputProps) {
   return (
     <WorkflowStateContext.Provider value={liveState}>
       <WorkflowDispatchContext.Provider value={dispatch}>
-        <PFCardBody className="awx-workflow-output__card-body">
-          <div className="awx-workflow-output__wrapper">
+        <PFCardBody className="ascender-workflow-output__card-body">
+          <div className="ascender-workflow-output__wrapper">
             <WorkflowOutputToolbar
               job={job}
               onDelete={deleteJob}

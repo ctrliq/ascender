@@ -98,7 +98,7 @@ function RemoveInstanceButton({
       {removeDetails &&
         removeDetails.map(({ label, count }) => (
           <div key={label.id} aria-label={`${i18n._(label)}: ${count}`}>
-            <span className="awx-remove-instance-button__label">
+            <span className="ascender-remove-instance-button__label">
               {i18n._(label)}
             </span>
             <Badge>{count}</Badge>
@@ -195,7 +195,7 @@ function RemoveInstanceButton({
           ))}
           {removeDetails && (
             <Alert
-              className="awx-remove-instance-button__warning-message"
+              className="ascender-remove-instance-button__warning-message"
               variant="warning"
               isInline
               title={buildRemoveWarning()}

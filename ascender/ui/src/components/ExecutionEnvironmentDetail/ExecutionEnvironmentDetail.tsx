@@ -87,7 +87,7 @@ function ExecutionEnvironmentDetail({
                 }
                 position="right"
               >
-                <PFExclamationTriangleIcon className="awx-execution-environment-detail__exclamation-triangle-popover" />
+                <PFExclamationTriangleIcon className="ascender-execution-environment-detail__exclamation-triangle-popover" />
               </Popover>
             </span>
           </>
@@ -112,7 +112,7 @@ function ExecutionEnvironmentDetail({
               <Tooltip
                 content={t`Execution environment is missing or deleted.`}
               >
-                <PFExclamationTriangleIcon className="awx-execution-environment-detail__exclamation-triangle-icon" />
+                <PFExclamationTriangleIcon className="ascender-execution-environment-detail__exclamation-triangle-icon" />
               </Tooltip>
             </span>
           </>

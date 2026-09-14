@@ -11,7 +11,7 @@ export interface RunningIconProps {
 /** The running status icon, which turns for as long as the job does. */
 const RunningIcon = ({ className, ...props }: RunningIconProps) => (
   <SyncAltIcon
-    className={['awx-running-icon', className].filter(Boolean).join(' ')}
+    className={['ascender-running-icon', className].filter(Boolean).join(' ')}
     {...props}
   />
 );

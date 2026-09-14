@@ -157,7 +157,7 @@ function WizardWrapper({
       onSave={onSave}
       onClose={onClose}
       height={height}
-      className={['awx-wizard', className].filter(Boolean).join(' ')}
+      className={['ascender-wizard', className].filter(Boolean).join(' ')}
       style={style}
       {...rest}
     >

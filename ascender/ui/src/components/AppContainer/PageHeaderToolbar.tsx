@@ -90,7 +90,7 @@ function PageHeaderToolbar({
   }, [fetchPendingApprovalCount]);
 
   return (
-    <div className="awx-page-header-toolbar__items">
+    <div className="ascender-page-header-toolbar__items">
       <Dropdown
         isOpen={isThemeOpen}
         onSelect={() => setIsThemeOpen(false)}
@@ -130,7 +130,7 @@ function PageHeaderToolbar({
             with no text names nothing, and the button it used to render did
             nothing of its own, so it was a second tab stop with no purpose. */}
         <NotificationBadge
-          className="awx-page-header-toolbar__notification-badge"
+          className="ascender-page-header-toolbar__notification-badge"
           id="toolbar-workflow-approval-badge"
           component={Link}
           to="/workflow_approvals?workflow_approvals.status=pending"
@@ -198,7 +198,7 @@ function PageHeaderToolbar({
           >
             <UserIcon />
             {loggedInUser && (
-              <span className="awx-page-header-toolbar__user-name">
+              <span className="ascender-page-header-toolbar__user-name">
                 {loggedInUser.username}
               </span>
             )}

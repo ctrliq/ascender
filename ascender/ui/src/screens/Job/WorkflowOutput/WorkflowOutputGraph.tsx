@@ -229,7 +229,7 @@ function WorkflowOutputGraph() {
         </WorkflowHelp>
       )}
       <svg
-        className="awx-workflow-output-graph__flex-width"
+        className="ascender-workflow-output-graph__flex-width"
         id="workflow-svg"
         ref={svgRef}
       >
@@ -276,7 +276,7 @@ function WorkflowOutputGraph() {
           ]}
         </g>
       </svg>
-      <div className="awx-workflow-output-graph__position-top">
+      <div className="ascender-workflow-output-graph__position-top">
         {showTools && (
           <WorkflowTools
             onFitGraph={handleFitGraph}

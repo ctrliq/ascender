@@ -155,7 +155,7 @@ function ToolbarDeleteButton({
         {deleteDetails &&
           deleteDetails.map(({ label, count }) => (
             <div key={label.id} aria-label={`${i18n._(label)}: ${count}`}>
-              <span className="awx-toolbar-delete-button__label">
+              <span className="ascender-toolbar-delete-button__label">
                 {i18n._(label)}
               </span>
               <Badge>{count}</Badge>
@@ -262,7 +262,7 @@ function ToolbarDeleteButton({
           ))}
           {shouldShowDeleteWarning && (
             <Alert
-              className="awx-toolbar-delete-button__warning-message"
+              className="ascender-toolbar-delete-button__warning-message"
               variant="warning"
               isInline
               title={buildDeleteWarning()}

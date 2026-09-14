@@ -46,7 +46,7 @@ describe('<MiscSystemDetail />', () => {
       data: {
         id: 1,
         name: 'Foo',
-        image: 'quay.io/ansible/awx-ee',
+        image: 'ghcr.io/ctrliq/ascender-ee',
         pull: 'missing',
       },
     } as unknown as ResponseOf<typeof ExecutionEnvironmentsAPI.readDetail>);

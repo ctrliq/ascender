@@ -240,12 +240,12 @@ function PromptDetail({
         hasOverrides && (
           <>
             <Title
-              className="awx-prompt-detail__title"
+              className="ascender-prompt-detail__title"
               headingLevel="h2"
             >{t`Prompted Values`}</Title>
-            <Divider className="awx-prompt-detail__divider" />
+            <Divider className="ascender-prompt-detail__divider" />
             <DetailList
-              className="awx-prompt-detail__list"
+              className="ascender-prompt-detail__list"
               aria-label={t`Prompt Overrides`}
             >
               {launchConfig.ask_job_type_on_launch && (

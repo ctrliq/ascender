@@ -99,11 +99,11 @@ function SubscriptionUsageChart() {
     <Card>
       <Flex style={{ justifyContent: 'space-between' }}>
         <FlexItem>
-          <CardTitle className="awx-subscription-usage-chart__card-title">{t`Subscription Compliance`}</CardTitle>
+          <CardTitle className="ascender-subscription-usage-chart__card-title">{t`Subscription Compliance`}</CardTitle>
         </FlexItem>
         <FlexItem>
           <Content
-            className="awx-subscription-usage-chart__card-text"
+            className="ascender-subscription-usage-chart__card-text"
             component="small"
           >
             {t`Last recalculation date:`}{' '}
@@ -113,8 +113,8 @@ function SubscriptionUsageChart() {
           </Content>
         </FlexItem>
       </Flex>
-      <CardHeader className="awx-subscription-usage-chart__graph-card-header">
-        <div className="awx-subscription-usage-chart__graph-card-actions">
+      <CardHeader className="ascender-subscription-usage-chart__graph-card-header">
+        <div className="ascender-subscription-usage-chart__graph-card-actions">
           <Select
             isOpen={isPeriodDropdownOpen}
             onOpenChange={setIsPeriodDropdownOpen}

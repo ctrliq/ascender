@@ -147,7 +147,7 @@ function JobOutputSearch({
   const isDisabled = isJobRunning(job.status);
 
   return (
-    <div className="awx-job-output-search__toolbar-wrapper">
+    <div className="ascender-job-output-search__toolbar-wrapper">
       <Toolbar
         id="job_output-toolbar"
         clearAllFilters={handleRemoveAllSearchTerms}
@@ -155,7 +155,7 @@ function JobOutputSearch({
         clearFiltersButtonText={t`Clear all filters`}
         ouiaId="job-output-toolbar"
       >
-        <ToolbarContent className="awx-job-output-search__toolbar-content">
+        <ToolbarContent className="ascender-job-output-search__toolbar-content">
           <ToolbarToggleGroup toggleIcon={<SearchIcon />} breakpoint="lg">
             <ToolbarItem>
               {isDisabled ? (

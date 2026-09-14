@@ -123,7 +123,7 @@ function Sort({ columns, qsConfig, onSort }: SortProps) {
               toggle={(toggleRef) => (
                 <MenuToggle
                   ref={toggleRef}
-                  id="awx-sort"
+                  id="ascender-sort"
                   onClick={() => handleDropdownToggle(!isSortDropdownOpen)}
                   isExpanded={isSortDropdownOpen}
                   ouiaId="sort-dropdown-toggle"
@@ -135,7 +135,7 @@ function Sort({ columns, qsConfig, onSort }: SortProps) {
               <DropdownList>{sortDropdownItems}</DropdownList>
             </Dropdown>
           )) || (
-            <div className="awx-sort__no-option-dropdown">
+            <div className="ascender-sort__no-option-dropdown">
               {sortedColumnName}
             </div>
           )}

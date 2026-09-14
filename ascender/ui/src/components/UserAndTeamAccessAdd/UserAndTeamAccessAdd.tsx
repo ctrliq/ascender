@@ -361,7 +361,7 @@ function UserAndTeamAccessAdd({
       id: 1,
       name: t`Add resource type`,
       component: (
-        <div className="awx-user-and-team-access-add__grid">
+        <div className="ascender-user-and-team-access-add__grid">
           {resourceAccessConfig.map((resource) => (
             <SelectableCard
               key={resource.selectedResource}

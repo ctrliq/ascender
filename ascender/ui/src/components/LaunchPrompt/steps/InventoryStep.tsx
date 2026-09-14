@@ -74,7 +74,7 @@ function InventoryStep({ warningMessage = null }: InventoryStepProps) {
     <div data-cy="inventory-prompt">
       {meta.touched && meta.error && (
         <Alert
-          className="awx-inventory-step__error-alert"
+          className="ascender-inventory-step__error-alert"
           variant="danger"
           isInline
           title={meta.error}

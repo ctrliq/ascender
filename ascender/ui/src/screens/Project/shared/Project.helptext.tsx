@@ -16,7 +16,7 @@ const getProjectHelpText = () => ({
   githubSourceControlUrl: (
     <span>
       {t`Example URLs for GIT Source Control include:`}
-      <ul className="awx-project-helptext__list">
+      <ul className="ascender-project-helptext__list">
         <li>
           <code>https://github.com/ansible/ansible.git</code>
         </li>
@@ -33,7 +33,7 @@ const getProjectHelpText = () => ({
   svnSourceControlUrl: (
     <span>
       {t`Example URLs for Subversion Source Control include:`}
-      <ul className="awx-project-helptext__list">
+      <ul className="ascender-project-helptext__list">
         <li>
           <code>https://github.com/ansible/ansible</code>
         </li>
@@ -50,7 +50,7 @@ const getProjectHelpText = () => ({
   archiveUrl: (
     <span>
       {t`Example URLs for Remote Archive Source Control include:`}
-      <ul className="awx-project-helptext__list">
+      <ul className="ascender-project-helptext__list">
         <li>
           <code>https://github.com/username/project/archive/v0.0.1.tar.gz</code>
         </li>
@@ -70,7 +70,7 @@ const getProjectHelpText = () => ({
       <br />
       <br />
       {t`Examples include:`}
-      <ul className="awx-project-helptext__list">
+      <ul className="ascender-project-helptext__list">
         <li>
           <code>refs/*:refs/remotes/origin/*</code>
         </li>

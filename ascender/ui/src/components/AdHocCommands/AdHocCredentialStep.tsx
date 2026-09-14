@@ -99,7 +99,7 @@ function AdHocCredentialStep({ credentialTypeId }: AdHocCredentialStepProps) {
     <>
       {meta.touched && meta.error && (
         <Alert
-          className="awx-ad-hoc-credential-step__error-alert"
+          className="ascender-ad-hoc-credential-step__error-alert"
           variant="danger"
           isInline
           title={meta.error}

@@ -60,7 +60,7 @@ function SurveyListItem({
           {question.required && (
             <span
               aria-label={t`Required`}
-              className="awx-survey-list-item__required pf-v6-c-form__label-required"
+              className="ascender-survey-list-item__required pf-v6-c-form__label-required"
               aria-hidden="true"
             >
               *
@@ -99,7 +99,7 @@ function SurveyListItem({
           )}
       </Td>
       <ActionsTd
-        className="awx-survey-list-item__actions-td"
+        className="ascender-survey-list-item__actions-td"
         dataLabel={t`Actions`}
       >
         <ActionItem visible={canEdit}>

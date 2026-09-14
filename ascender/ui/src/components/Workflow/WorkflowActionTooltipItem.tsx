@@ -43,7 +43,7 @@ function WorkflowActionTooltipItem({
   return (
     <button
       type="button"
-      className="awx-workflow-action-tooltip-item__item"
+      className="ascender-workflow-action-tooltip-item__item"
       id={id}
       data-cy={id}
       aria-label={label}

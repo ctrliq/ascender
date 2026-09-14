@@ -18,7 +18,7 @@ const TabbedCardBody = ({
   ...props
 }: TabbedCardBodyProps) => (
   <CardBody
-    className={['awx-card-body__tabbed', className].filter(Boolean).join(' ')}
+    className={['ascender-card-body__tabbed', className].filter(Boolean).join(' ')}
     {...props}
   >
     {children}

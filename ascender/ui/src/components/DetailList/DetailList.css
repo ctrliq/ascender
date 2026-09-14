@@ -4,11 +4,11 @@
  * class taking the place of the generated one.
  *
  * The variants that were props are modifier classes: what was
- * `${(props) => props.fullWidth && ...}` is `.awx-detail-name--full-width`,
+ * `${(props) => props.fullWidth && ...}` is `.ascender-detail-name--full-width`,
  * and the component adds it or does not.
  */
 
-.awx-detail-list {
+.ascender-detail-list {
   display: grid;
   align-items: stretch;
   font-size: var(--pf-v6-global--FontSize--sm);
@@ -19,36 +19,36 @@
 }
 
 @media (min-width: 640px) {
-  .awx-detail-list {
+  .ascender-detail-list {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
 @media (min-width: 1024px) {
-  .awx-detail-list {
+  .ascender-detail-list {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 /* stacked overrides the responsive columns above, at every width */
-.awx-detail-list.awx-detail-list--stacked,
-.awx-detail-list.awx-detail-list--stacked:is(:root *) {
+.ascender-detail-list.ascender-detail-list--stacked,
+.ascender-detail-list.ascender-detail-list--stacked:is(:root *) {
   grid-template-columns: auto 1fr;
 }
 
-.awx-detail-list > div {
+.ascender-detail-list > div {
   padding: 0.875rem 0;
 }
 
-.awx-detail-list dd .pf-v6-c-label {
+.ascender-detail-list dd .pf-v6-c-label {
   margin-left: -6px;
 }
 
-.awx-detail-list + .awx-detail-list {
+.ascender-detail-list + .ascender-detail-list {
   margin-top: var(--pf-v6-global--spacer--2xl);
 }
 
-.awx-detail-name {
+.ascender-detail-name {
   font-size: var(--pf-v6-global--FontSize--xs);
   font-weight: var(--pf-v6-global--FontWeight--bold);
   color: var(--pf-v6-global--Color--200);
@@ -57,33 +57,33 @@
   margin-bottom: 0.25rem;
 }
 
-.awx-detail-value {
+.ascender-detail-value {
   overflow-wrap: break-word;
   margin: 0;
 }
 
-.awx-detail-name--full-width,
-.awx-detail-value--full-width {
+.ascender-detail-name--full-width,
+.ascender-detail-value--full-width {
   grid-column: 1 / -1;
 }
 
 /* what isEncrypted and isNotConfigured both did */
-.awx-detail-value--muted {
+.ascender-detail-value--muted {
   color: var(--pf-v6-global--disabled-color--100);
 }
 
 /* DetailBadge and UserDateDetail */
-.awx-detail--break-word {
+.ascender-detail--break-word {
   word-break: break-word;
 }
 
 /* DeletedDetail, which coloured the value rather than the name */
-dd.awx-detail--deleted {
+dd.ascender-detail--deleted {
   color: red;
 }
 
 /* ArrayDetail's boxed, scrolling value */
-.awx-detail-value--array {
+.ascender-detail-value--array {
   margin-top: var(--pf-v6-global--spacer--xs);
   padding: var(--pf-v6-global--spacer--xs);
   border: 1px solid var(--pf-v6-global--BorderColor--100);
@@ -92,12 +92,12 @@ dd.awx-detail--deleted {
 }
 
 /* CodeDetail */
-.awx-code-detail {
+.ascender-code-detail {
   grid-column: 1 / -1;
   padding: 1.25rem 0 0.875rem;
 }
 
-.awx-code-detail__label {
+.ascender-code-detail__label {
   font-size: var(--pf-v6-global--FontSize--xs);
   font-weight: var(--pf-v6-global--FontWeight--bold);
   color: var(--pf-v6-global--Color--200);
@@ -106,7 +106,7 @@ dd.awx-detail--deleted {
   margin-bottom: 0.5rem;
 }
 
-.awx-code-detail__editor {
+.ascender-code-detail__editor {
   border: 1px solid var(--pf-v6-global--BorderColor--100);
   border-radius: var(--pf-v6-global--BorderRadius--sm);
   overflow: hidden;

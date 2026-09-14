@@ -209,7 +209,7 @@ function VariablesFieldInternals({
 
   return (
     <div className="pf-v6-c-form__group">
-      <div className="awx-variables-field__header" data-cy={`${id}-label`}>
+      <div className="ascender-variables-field__header" data-cy={`${id}-label`}>
         <Split hasGutter>
           <SplitItem>
             <label htmlFor={id} className="pf-v6-c-form__label">
@@ -240,7 +240,7 @@ function VariablesFieldInternals({
         </Split>
         {promptId && (
           <CheckboxField
-            className="awx-variables-field__styled-checkbox-field"
+            className="ascender-variables-field__styled-checkbox-field"
             id="template-ask-variables-on-launch"
             label={t`Prompt on launch`}
             name="ask_variables_on_launch"

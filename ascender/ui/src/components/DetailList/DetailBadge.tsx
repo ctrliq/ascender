@@ -15,7 +15,7 @@ export interface DetailBadgeProps {
 function DetailBadge({ label, helpText, content, dataCy }: DetailBadgeProps) {
   return (
     <Detail
-      className="awx-detail--break-word"
+      className="ascender-detail--break-word"
       label={label}
       dataCy={dataCy}
       helpText={helpText}

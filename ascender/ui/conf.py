@@ -77,11 +77,12 @@ register(
     category_slug='ui',
 )
 
-# The class names the UI renders are still awx-* and stay that way while this
-# setting exists. A custom theme is an administrator's own CSS, and those class
-# names are the only stable hooks it has to target, so renaming them would stop
-# every theme already uploaded from applying, with no error and nothing in the
-# logs. Moving them needs a deprecation rather than a rename.
+# The component class names the UI renders were renamed from awx-* to ascender-*.
+# That is safe to do rather than safe to assume: none of the four shipped themes
+# targets one. They scope to html[data-theme="..."] and style PatternFly classes
+# and element ids, which is the shape the help text below asks a custom theme to
+# follow. A theme that reached past that into a component class is the one thing
+# this breaks, and it breaks quietly, so it belongs in the release notes.
 register(
     'CUSTOM_THEME',
     field_class=CustomThemeField,

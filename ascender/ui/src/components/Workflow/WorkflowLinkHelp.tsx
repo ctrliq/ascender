@@ -42,7 +42,7 @@ function WorkflowLinkHelp({ link }: WorkflowLinkHelpProps) {
   }
 
   return (
-    <dl className="awx-workflow-link-help__grid-dl">
+    <dl className="ascender-workflow-link-help__grid-dl">
       <dt>
         <b>{t`Run`}</b>
       </dt>

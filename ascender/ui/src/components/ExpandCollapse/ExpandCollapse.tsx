@@ -13,8 +13,8 @@ import './ExpandCollapse.css';
 /** The toggle that is showing its own layout carries the active colours. */
 const buttonClass = (isActive: boolean) =>
   isActive
-    ? 'awx-expand-collapse__button awx-expand-collapse__button--active'
-    : 'awx-expand-collapse__button';
+    ? 'ascender-expand-collapse__button ascender-expand-collapse__button--active'
+    : 'ascender-expand-collapse__button';
 
 export interface ExpandCollapseProps {
   isCompact?: boolean;
@@ -31,7 +31,7 @@ function ExpandCollapse({
   const { t } = useLingui();
   return (
     <>
-      <PFToolbarItem className="awx-expand-collapse__toolbar-item">
+      <PFToolbarItem className="ascender-expand-collapse__toolbar-item">
         <PFButton
           ouiaId="toolbar-collapse-button"
           variant="plain"
@@ -42,7 +42,7 @@ function ExpandCollapse({
           <BarsIcon />
         </PFButton>
       </PFToolbarItem>
-      <PFToolbarItem className="awx-expand-collapse__toolbar-item">
+      <PFToolbarItem className="ascender-expand-collapse__toolbar-item">
         <PFButton
           ouiaId="toolbar-expand-button"
           variant="plain"

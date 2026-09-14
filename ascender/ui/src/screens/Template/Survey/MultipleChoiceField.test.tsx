@@ -6,7 +6,7 @@ import MultipleChoiceField from './MultipleChoiceField';
 
 // The tick encodes its selected state as a modifier class, which the
 // stylesheet colours; the class is the state itself.
-const SELECTED_CLASS = 'awx-multiple-choice-field__check-icon--selected';
+const SELECTED_CLASS = 'ascender-multiple-choice-field__check-icon--selected';
 
 const isSelected = (ouiaId: string) => {
   const icon = document.querySelector(

@@ -339,7 +339,7 @@ function CodeEditor({
   return (
     <>
       <div
-        className="awx-code-editor__focus-wrapper"
+        className="ascender-code-editor__focus-wrapper"
         ref={wrapper}
         tabIndex={readOnly ? -1 : 0}
       >
@@ -350,9 +350,9 @@ function CodeEditor({
           ref={host}
           data-cy="code-editor"
           className={[
-            'awx-code-editor__wrapper',
-            hasErrors && 'awx-code-editor__wrapper--has-errors',
-            readOnly && 'awx-code-editor__wrapper--read-only',
+            'ascender-code-editor__wrapper',
+            hasErrors && 'ascender-code-editor__wrapper--has-errors',
+            readOnly && 'ascender-code-editor__wrapper--read-only',
             'pf-v6-c-form-control',
             className,
           ]

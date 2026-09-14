@@ -13,5 +13,5 @@ export default function JobEventEllipsis({
     return null;
   }
 
-  return <div className="awx-job-event-ellipsis__wrapper">...</div>;
+  return <div className="ascender-job-event-ellipsis__wrapper">...</div>;
 }

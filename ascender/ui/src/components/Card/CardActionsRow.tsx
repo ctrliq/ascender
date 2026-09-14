@@ -7,7 +7,7 @@ export interface CardActionsRowProps {
 }
 
 function CardActionsRow({ children }: CardActionsRowProps) {
-  return <div className="awx-card-actions-row__wrapper">{children}</div>;
+  return <div className="ascender-card-actions-row__wrapper">{children}</div>;
 }
 
 export default CardActionsRow;

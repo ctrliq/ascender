@@ -162,7 +162,7 @@ function DisassociateButton({
           ]}
         >
           {modalNote && (
-            <div className="awx-disassociate-button__modal-note">
+            <div className="ascender-disassociate-button__modal-note">
               {modalNote}
             </div>
           )}

@@ -119,7 +119,7 @@ function CredentialInput({
             <PFFileUpload
               {...fileUploadProps}
               {...rest}
-              className="awx-credential-field__file-upload"
+              className="ascender-credential-field__file-upload"
             />
           </InputGroupItem>
         </InputGroup>
@@ -130,7 +130,7 @@ function CredentialInput({
       <PFFileUpload
         {...fileUploadProps}
         {...rest}
-        className="awx-credential-field__file-upload"
+        className="ascender-credential-field__file-upload"
         isDisabled={false}
       />
     );

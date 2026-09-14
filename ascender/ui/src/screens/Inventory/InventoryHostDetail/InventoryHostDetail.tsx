@@ -74,7 +74,7 @@ function InventoryHostDetail({ host }: InventoryHostDetailProps) {
   return (
     <CardBody>
       <HostToggle
-        className="awx-inventory-host-detail__padding-bottom-40"
+        className="ascender-inventory-host-detail__padding-bottom-40"
         host={host}
       />
       <DetailList gutter="sm">

@@ -22,8 +22,8 @@ export const DetailName = ({
 }: DetailNameProps) => (
   <dt
     className={classes(
-      'awx-detail-name',
-      fullWidth && 'awx-detail-name--full-width',
+      'ascender-detail-name',
+      fullWidth && 'ascender-detail-name--full-width',
       className
     )}
     {...props}
@@ -51,9 +51,9 @@ export const DetailValue = ({
 }: DetailValueProps) => (
   <dd
     className={classes(
-      'awx-detail-value',
-      fullWidth && 'awx-detail-value--full-width',
-      (isEncrypted || isNotConfigured) && 'awx-detail-value--muted',
+      'ascender-detail-value',
+      fullWidth && 'ascender-detail-value--full-width',
+      (isEncrypted || isNotConfigured) && 'ascender-detail-value--muted',
       className
     )}
     {...props}

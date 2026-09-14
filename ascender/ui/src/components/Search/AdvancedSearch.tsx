@@ -333,7 +333,7 @@ function AdvancedSearch({
   );
 
   return (
-    <div className="awx-advanced-search__group">
+    <div className="ascender-advanced-search__group">
       {renderLookupSelection()}
       <Select
         aria-label={t`Key select`}
@@ -430,9 +430,9 @@ function AdvancedSearch({
         {renderTextInput()}
         <InputGroupItem>
           <div
-            className={`awx-advanced-search__submit-button-wrapper${
+            className={`ascender-advanced-search__submit-button-wrapper${
               !searchValue
-                ? ' awx-advanced-search__submit-button-wrapper--disabled'
+                ? ' ascender-advanced-search__submit-button-wrapper--disabled'
                 : ''
             }`}
           >

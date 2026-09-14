@@ -209,7 +209,7 @@ function ProjectDetail({ project }: ProjectDetailProps) {
               </ClipboardCopy>
             ) : (
               <span
-                className="awx-project-detail__label"
+                className="ascender-project-detail__label"
                 aria-label={t`The project must be synced before a revision is available.`}
               >
                 {t`Sync for revision`}

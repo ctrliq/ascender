@@ -130,7 +130,7 @@ function DataListToolbar({
       collapseListedFiltersBreakpoint="lg"
       clearFiltersButtonText={t`Clear all filters`}
     >
-      <PFToolbarContent className="awx-data-list-toolbar__content">
+      <PFToolbarContent className="ascender-data-list-toolbar__content">
         {onExpandAll && (
           <ToolbarGroup>
             <ToolbarItem>

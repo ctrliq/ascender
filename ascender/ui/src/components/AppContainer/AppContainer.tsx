@@ -71,7 +71,7 @@ function AppContainer({ navRouteConfig = [], children }: AppContainerProps) {
           />
         </MastheadToggle>
         <MastheadBrand
-          className="awx-app-container__styled-masthead-brand"
+          className="ascender-app-container__styled-masthead-brand"
           href="/"
         >
           <BrandLogo alt={alt} />

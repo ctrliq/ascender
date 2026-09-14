@@ -102,7 +102,7 @@ function ProjectListItem({
         </ClipboardCopy>
       ) : (
         <span
-          className="awx-project-list-item__label"
+          className="ascender-project-list-item__label"
           aria-label={t`The project must be synced before a revision is available.`}
         >
           {t`Sync for revision`}
@@ -116,7 +116,7 @@ function ProjectListItem({
     ) {
       return (
         <span
-          className="awx-project-list-item__label"
+          className="ascender-project-list-item__label"
           aria-label={t`The project is currently syncing and the revision will be available after the sync is complete.`}
         >
           {t`Syncing`}
@@ -127,7 +127,7 @@ function ProjectListItem({
     return (
       <>
         <span
-          className="awx-project-list-item__label"
+          className="ascender-project-list-item__label"
           aria-label={t`The project revision is currently out of date.  Please refresh to fetch the most recent revision.`}
         >
           {t`Refresh for revision`}

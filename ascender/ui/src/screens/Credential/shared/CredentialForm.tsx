@@ -186,7 +186,7 @@ function CredentialFormFields({
 
   const credentialTypeSelect = (
     <Select
-      className="awx-credential-form__styled-select"
+      className="ascender-credential-form__styled-select"
       isOpen={isSelectOpen}
       onOpenChange={(open) => {
         setIsSelectOpen(open);

@@ -16,7 +16,7 @@ export interface BrandLogoProps {
 const BrandLogo = ({ alt }: BrandLogoProps) => {
   const { custom_header_logo } = useConfig();
   const src = (custom_header_logo as string) || defaultSrc;
-  return <img className="awx-brand-logo__img" src={src} alt={alt} />;
+  return <img className="ascender-brand-logo__img" src={src} alt={alt} />;
 };
 
 export default BrandLogo;

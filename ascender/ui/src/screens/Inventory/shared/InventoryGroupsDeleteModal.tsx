@@ -125,10 +125,10 @@ const InventoryGroupsDeleteModal = ({
             other="Are you sure you want to delete the groups below?"
           />
 
-          <div className="awx-inventory-groups-delete-modal__padding-24-0">
+          <div className="ascender-inventory-groups-delete-modal__padding-24-0">
             {groups.map((group) => (
               <li
-                className="awx-inventory-groups-delete-modal__list-item"
+                className="ascender-inventory-groups-delete-modal__list-item"
                 key={group.id}
               >
                 {group.name}
@@ -145,7 +145,7 @@ const InventoryGroupsDeleteModal = ({
               ouiaId="delete-all-radio-button"
             />
             <Radio
-              className="awx-inventory-groups-delete-modal__margin-top-5"
+              className="ascender-inventory-groups-delete-modal__margin-top-5"
               id="radio-promote"
               key="radio-promote"
               label={t`Promote Child Groups and Hosts`}

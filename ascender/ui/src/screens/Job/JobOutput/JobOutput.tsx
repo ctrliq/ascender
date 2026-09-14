@@ -50,7 +50,7 @@ const GUTTER_WIDTH = 85;
 /** The per job ANSI classes, as one stylesheet scoped to the output wrapper. */
 const ansiRules = (cssMap: Record<string, string>) =>
   Object.keys(cssMap)
-    .map((name) => `.awx-job-output__wrapper .${name}{${cssMap[name]}}`)
+    .map((name) => `.ascender-job-output__wrapper .${name}{${cssMap[name]}}`)
     .join('\n');
 
 export const MAX_SELECTION_OVERSCAN = 500;
@@ -1015,7 +1015,7 @@ function JobOutput({
 
   return (
     <>
-      <CardBody className="awx-job-output__card-body">
+      <CardBody className="ascender-job-output__card-body">
         {isHostModalOpen && (
           <HostEventModal
             onClose={handleHostModalClose}
@@ -1023,8 +1023,8 @@ function JobOutput({
             hostEvent={hostEvent ?? undefined}
           />
         )}
-        <div className="awx-job-output__header">
-          <div className="awx-job-output__header-title">
+        <div className="ascender-job-output__header">
+          <div className="ascender-job-output__header-title">
             <h1>{job.name}</h1>
             <StatusLabel status={job.status} />
           </div>
@@ -1082,7 +1082,7 @@ function JobOutput({
         />
         <div
           ref={outputRef}
-          className="ascender-output-wrapper awx-job-output__wrapper"
+          className="ascender-output-wrapper ascender-job-output__wrapper"
         >
           <style>{ansiRules(cssMap)}</style>
           {showEmptyOutput ? (
@@ -1102,7 +1102,7 @@ function JobOutput({
             <div
               style={
                 {
-                  '--awx-job-output-gutter-width': `${GUTTER_WIDTH}px`,
+                  '--ascender-job-output-gutter-width': `${GUTTER_WIDTH}px`,
                 } as React.CSSProperties
               }
               ref={parentRef}
@@ -1118,7 +1118,7 @@ function JobOutput({
               onTouchStart={handleTouchStart}
               onTouchEnd={handleTouchEnd}
               onTouchCancel={handleTouchEnd}
-              className="ascender-output-scroll awx-job-output__scroll-container"
+              className="ascender-output-scroll ascender-job-output__scroll-container"
             >
               {hasContentLoading ? (
                 <ContentLoading />

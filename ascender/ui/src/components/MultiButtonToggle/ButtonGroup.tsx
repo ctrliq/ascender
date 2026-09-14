@@ -7,7 +7,7 @@ export interface ButtonGroupProps {
 }
 
 function ButtonGroup({ children }: ButtonGroupProps) {
-  return <div className="awx-button-group__group">{children}</div>;
+  return <div className="ascender-button-group__group">{children}</div>;
 }
 
 export default ButtonGroup;

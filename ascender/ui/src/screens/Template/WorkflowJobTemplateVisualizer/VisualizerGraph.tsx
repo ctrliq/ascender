@@ -227,7 +227,7 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
         </WorkflowHelp>
       )}
       <svg
-        className="awx-visualizer-graph__workflow-svg"
+        className="ascender-visualizer-graph__workflow-svg"
         id="workflow-svg"
         ref={svgRef}
       >
@@ -308,7 +308,7 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
           ]}
           {addingLink && (
             <polyline
-              className="awx-visualizer-graph__potential-link"
+              className="ascender-visualizer-graph__potential-link"
               id="workflow-potentialLink"
               markerEnd="url(#workflow-triangle)"
               style={{ stroke: 'var(--pf-t--global--border--color--default)' }}
@@ -318,7 +318,7 @@ function VisualizerGraph({ readOnly }: VisualizerGraphProps) {
           )}
         </g>
       </svg>
-      <div className="awx-visualizer-graph__position-top">
+      <div className="ascender-visualizer-graph__position-top">
         {showTools && (
           <WorkflowTools
             onFitGraph={handleFitGraph}

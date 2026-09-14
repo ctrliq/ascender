@@ -107,7 +107,7 @@ function ListHeader({
           ouiaId={`${qsConfig.namespace}-list-toolbar`}
         >
           <ToolbarContent>
-            <div className="awx-list-header__empty-state-controls-wrapper">
+            <div className="ascender-list-header__empty-state-controls-wrapper">
               {emptyStateControls}
             </div>
           </ToolbarContent>

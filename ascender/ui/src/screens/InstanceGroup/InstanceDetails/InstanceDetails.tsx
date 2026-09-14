@@ -255,14 +255,14 @@ function InstanceDetails({
             label={t`Capacity Adjustment`}
             value={
               <div
-                className="awx-instance-details__slider-holder"
+                className="ascender-instance-details__slider-holder"
                 data-cy="slider-holder"
               >
                 <div data-cy="cpu-capacity">
                   {t`CPU ${instance.cpu_capacity}`}
                 </div>
                 <div
-                  className="awx-instance-details__slider-forks"
+                  className="ascender-instance-details__slider-forks"
                   data-cy="slider-forks"
                 >
                   <div data-cy="number-forks">
@@ -299,7 +299,7 @@ function InstanceDetails({
                   aria-label={t`Used capacity`}
                 />
               ) : (
-                <span className="awx-instance-details__unavailable">{t`Unavailable`}</span>
+                <span className="ascender-instance-details__unavailable">{t`Unavailable`}</span>
               )
             }
           />

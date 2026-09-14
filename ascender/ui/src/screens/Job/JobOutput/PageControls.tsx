@@ -35,8 +35,8 @@ const PageControls = ({
 }: PageControlsProps) => {
   const { t } = useLingui();
   return (
-    <div className="awx-page-controls__controlls-wrapper">
-      <div className="awx-page-controls__expand-collapse-wrapper">
+    <div className="ascender-page-controls__controlls-wrapper">
+      <div className="ascender-page-controls__expand-collapse-wrapper">
         {!isFlatMode && isTemplateJob && (
           <Button
             icon={isAllCollapsed ? <AngleRightIcon /> : <AngleDownIcon />}
@@ -49,7 +49,7 @@ const PageControls = ({
           />
         )}
       </div>
-      <div className="awx-page-controls__scroll-wrapper">
+      <div className="ascender-page-controls__scroll-wrapper">
         <Button
           icon={<AngleUpIcon />}
           ouiaId="job-output-scroll-previous-button"

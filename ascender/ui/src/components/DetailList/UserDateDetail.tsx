@@ -22,7 +22,7 @@ function UserDateDetail({ label, date, user = null }: UserDateDetailProps) {
   const username = user ? (user.username as string) : '';
   return (
     <Detail
-      className="awx-detail--break-word"
+      className="ascender-detail--break-word"
       label={label}
       dataCy="user-date-detail"
       value={

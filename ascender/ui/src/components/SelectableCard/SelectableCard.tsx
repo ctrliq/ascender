@@ -31,8 +31,8 @@ function SelectableCard({
       tabIndex={0}
       data-cy={dataCy}
       className={[
-        'awx-selectable-card__item',
-        isSelected && 'awx-selectable-card__item--selected',
+        'ascender-selectable-card__item',
+        isSelected && 'ascender-selectable-card__item--selected',
       ]
         .filter(Boolean)
         .join(' ')}
@@ -40,15 +40,15 @@ function SelectableCard({
     >
       <div
         className={[
-          'awx-selectable-card__indicator',
-          isSelected && 'awx-selectable-card__indicator--selected',
+          'ascender-selectable-card__indicator',
+          isSelected && 'ascender-selectable-card__indicator--selected',
         ]
           .filter(Boolean)
           .join(' ')}
       />
-      <div className="awx-selectable-card__contents">
+      <div className="ascender-selectable-card__contents">
         <b>{label}</b>
-        <p className="awx-selectable-card__description">{description}</p>
+        <p className="ascender-selectable-card__description">{description}</p>
       </div>
     </div>
   );

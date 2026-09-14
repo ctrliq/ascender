@@ -170,7 +170,7 @@ function WorkflowOutputNavigation({
       }
       toggle={(toggleRef) => (
         <MenuToggle
-          className="awx-workflow-output-navigation__menu-toggle"
+          className="ascender-workflow-output-navigation__menu-toggle"
           ref={toggleRef}
           onClick={() => setIsOpen(!isOpen)}
           isExpanded={isOpen}

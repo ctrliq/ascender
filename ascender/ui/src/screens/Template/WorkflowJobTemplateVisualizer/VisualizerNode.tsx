@@ -287,8 +287,8 @@ function VisualizerNode({
       <g
         id={`node-${node.id}`}
         className={[
-          node.job && 'awx-visualizer-node__node-g--has-job',
-          isAddLinkSourceNode && 'awx-visualizer-node__node-g--inert',
+          node.job && 'ascender-visualizer-node__node-g--has-job',
+          isAddLinkSourceNode && 'ascender-visualizer-node__node-g--inert',
         ]
           .filter(Boolean)
           .join(' ')}
@@ -333,7 +333,7 @@ function VisualizerNode({
               y={-wfConstants.nodeH / 4 - 1}
             >
               <p
-                className="awx-visualizer-node__convergence-label"
+                className="ascender-visualizer-node__convergence-label"
                 data-cy="convergence-label"
               >
                 {t`ALL`}
@@ -368,15 +368,15 @@ function VisualizerNode({
         >
           <div
             className={[
-              'awx-visualizer-node__contents',
+              'ascender-visualizer-node__contents',
               node.isInvalidLinkTarget &&
-                'awx-visualizer-node__contents--invalid-link-target',
+                'ascender-visualizer-node__contents--invalid-link-target',
             ]
               .filter(Boolean)
               .join(' ')}
           >
             <p
-              className="awx-visualizer-node__resource-name"
+              className="ascender-visualizer-node__resource-name"
               id={`node-${node.id}-name`}
             >
               {nodeName}

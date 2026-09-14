@@ -234,19 +234,19 @@ function CredentialsStep({
     <div data-cy="credentials-prompt">
       {meta.error && (
         <Alert
-          className="awx-credentials-step__credential-error-alert"
+          className="ascender-credentials-step__credential-error-alert"
           variant="danger"
           isInline
           title={meta.error}
         />
       )}
       {types && types.length > 0 && (
-        <ToolbarItem className="awx-credentials-step__display-align-items">
-          <div className="awx-credentials-step__flex-margin-right">
+        <ToolbarItem className="ascender-credentials-step__display-align-items">
+          <div className="ascender-credentials-step__flex-margin-right">
             {t`Selected Category`}
           </div>
           <AnsibleSelect
-            className="awx-credentials-step__flex-1-1-75"
+            className="ascender-credentials-step__flex-1-1-75"
             id="multiCredentialsLookUp-select"
             data={types.map((type) => ({
               key: type.id,

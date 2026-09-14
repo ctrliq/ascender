@@ -24,7 +24,7 @@ export interface Theme {
 
 export const CUSTOM_THEME_ID = 'custom';
 
-const STYLE_ELEMENT_ID = 'awx-custom-theme';
+const STYLE_ELEMENT_ID = 'ascender-custom-theme';
 
 let customTheme: Theme | null = null;
 

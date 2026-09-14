@@ -62,19 +62,19 @@ function VisualizerToolbar({
 
   return (
     <div id="visualizer-toolbar">
-      <div className="awx-visualizer-toolbar__display-align-items">
+      <div className="ascender-visualizer-toolbar__display-align-items">
         <Title
-          className="awx-visualizer-toolbar__white-space-margin"
+          className="ascender-visualizer-toolbar__white-space-margin"
           headingLevel="h2"
           size="xl"
           id="visualizer-toolbar-template-name"
         >
           {template.name}
         </Title>
-        <div className="awx-visualizer-toolbar__align-items-display">
+        <div className="ascender-visualizer-toolbar__align-items-display">
           <div>{t`Total Nodes`}</div>
           <PFBadge
-            className="awx-visualizer-toolbar__badge"
+            className="ascender-visualizer-toolbar__badge"
             id="visualizer-total-nodes-badge"
             isRead
           >
@@ -84,7 +84,7 @@ function VisualizerToolbar({
             <Button
               aria-label={t`Toggle legend`}
               id="visualizer-toggle-legend"
-              className={`awx-visualizer-toolbar__action-button ${
+              className={`ascender-visualizer-toolbar__action-button ${
                 totalNodes > 0 && showLegend ? 'pf-m-active' : undefined
               }`}
               isDisabled={totalNodes === 0}
@@ -98,7 +98,7 @@ function VisualizerToolbar({
             <Button
               aria-label={t`Toggle tools`}
               id="visualizer-toggle-tools"
-              className={`awx-visualizer-toolbar__action-button ${
+              className={`ascender-visualizer-toolbar__action-button ${
                 totalNodes > 0 && showTools ? 'pf-m-active' : undefined
               }`}
               isDisabled={totalNodes === 0}
@@ -110,7 +110,7 @@ function VisualizerToolbar({
           </Tooltip>
           <Tooltip content={t`Workflow documentation`} position="bottom">
             <Button
-              className="awx-visualizer-toolbar__action-button"
+              className="ascender-visualizer-toolbar__action-button"
               aria-label={t`Workflow documentation`}
               id="visualizer-documentation"
               variant="plain"
@@ -129,7 +129,7 @@ function VisualizerToolbar({
               <LaunchButton resource={template} aria-label={t`Launch workflow`}>
                 {({ handleLaunch, isLaunching }) => (
                   <Button
-                    className="awx-visualizer-toolbar__action-button"
+                    className="ascender-visualizer-toolbar__action-button"
                     id="visualizer-launch"
                     variant="plain"
                     isDisabled={
@@ -147,7 +147,7 @@ function VisualizerToolbar({
             <>
               <Tooltip content={t`Delete all nodes`} position="bottom">
                 <Button
-                  className="awx-visualizer-toolbar__action-button"
+                  className="ascender-visualizer-toolbar__action-button"
                   id="visualizer-delete-all"
                   aria-label={t`Delete all nodes`}
                   isDisabled={totalNodes === 0}
@@ -163,7 +163,7 @@ function VisualizerToolbar({
                 </Button>
               </Tooltip>
               <Button
-                className="awx-visualizer-toolbar__margin-0-32"
+                className="ascender-visualizer-toolbar__margin-0-32"
                 ouiaId="visualizer-save-button"
                 id="visualizer-save"
                 aria-label={t`Save`}

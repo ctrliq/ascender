@@ -42,7 +42,7 @@ describe('<OrganizationDetail />', () => {
         id: 1,
         name: 'Default EE',
         description: '',
-        image: 'quay.io/ansible/awx-ee',
+        image: 'ghcr.io/ctrliq/ascender-ee',
       },
     },
     default_environment: 1,

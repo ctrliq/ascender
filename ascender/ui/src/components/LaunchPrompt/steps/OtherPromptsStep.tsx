@@ -191,7 +191,7 @@ function ShowChangesToggle() {
   const [field, , helpers] = useField('diff_mode');
   return (
     <FormGroup fieldId="prompt-show-changes">
-      <div className="awx-other-prompts-step__field-header">
+      <div className="ascender-other-prompts-step__field-header">
         {' '}
         <label className="pf-v6-c-form__label" htmlFor="prompt-show-changes">
           <span className="pf-v6-c-form__label-text">

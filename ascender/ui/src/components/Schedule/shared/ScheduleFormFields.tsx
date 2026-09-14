@@ -143,7 +143,7 @@ export default function ScheduleFormFields({
           onBlur={frequencyHelper.setTouched}
         >
           <SelectOption
-            className="awx-schedule-form-fields__select-clear-option"
+            className="ascender-schedule-form-fields__select-clear-option"
             value="none"
           >
             {t`None (run once)`}
@@ -213,7 +213,7 @@ export default function ScheduleFormFields({
                 onBlur={exceptionFrequencyHelper.setTouched}
               >
                 <SelectOption
-                  className="awx-schedule-form-fields__select-clear-option"
+                  className="ascender-schedule-form-fields__select-clear-option"
                   value="none"
                 >{t`None`}</SelectOption>
                 <SelectOption value="minute">{t`Minute`}</SelectOption>

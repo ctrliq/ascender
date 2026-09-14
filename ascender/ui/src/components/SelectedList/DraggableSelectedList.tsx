@@ -236,7 +236,7 @@ function DraggableSelectedList<T extends SelectableOption = SelectableOption>({
                   ]}
                 />
                 <DataListAction
-                  className="awx-draggable-selected-list__remove-action-section"
+                  className="ascender-draggable-selected-list__remove-action-section"
                   aria-label={t`Actions`}
                   id={`draggable-item-actions-${rowPosition}`}
                   aria-labelledby={`draggable-item-${rowPosition}`}

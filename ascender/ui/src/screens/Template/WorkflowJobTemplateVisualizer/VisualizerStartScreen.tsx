@@ -17,16 +17,16 @@ function VisualizerStartScreen({ readOnly }: VisualizerStartScreenProps) {
     WorkflowDispatchContext
   ) as React.Dispatch<WorkflowAction>;
   return (
-    <div className="awx-visualizer-start-screen__flex-1">
-      <div className="awx-visualizer-start-screen__panel-wrapper">
-        <div className="awx-visualizer-start-screen__panel">
+    <div className="ascender-visualizer-start-screen__flex-1">
+      <div className="ascender-visualizer-start-screen__panel-wrapper">
+        <div className="ascender-visualizer-start-screen__panel">
           {readOnly ? (
             <p>{t`This workflow does not have any nodes configured.`}</p>
           ) : (
             <>
               <p>{t`Please click the Start button to begin.`}</p>
               <PFButton
-                className="awx-visualizer-start-screen__button"
+                className="ascender-visualizer-start-screen__button"
                 ouiaId="visualizer-start-button"
                 id="visualizer-start"
                 aria-label={t`Start`}

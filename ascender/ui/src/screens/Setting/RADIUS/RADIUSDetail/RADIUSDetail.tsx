@@ -64,7 +64,7 @@ function RADIUSDetail() {
         {!isLoading && radius && (
           <>
             <PFAlert
-              className="awx-radius-detail__alert"
+              className="ascender-radius-detail__alert"
               variant="info"
               isInline
               data-cy="RADIUS-deprecation-warning"

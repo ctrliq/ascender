@@ -74,7 +74,7 @@ const SettingGroup = ({
   const { t } = useLingui();
   return (
     <PFFormGroup
-      className="awx-shared-fields__form-group"
+      className="ascender-shared-fields__form-group"
       fieldId={fieldId}
       id={`${fieldId}-field`}
       isRequired={isRequired}
@@ -308,7 +308,7 @@ const InputAlertField = ({ name, config }: SettingFieldProps) => {
         validated={isValid ? 'default' : 'error'}
         isDisabled={isDisable}
       >
-        <div className="awx-shared-fields__selected">
+        <div className="ascender-shared-fields__selected">
           {isDisable && (
             <Tooltip
               content={t`Edit Login redirect override URL`}
@@ -321,7 +321,7 @@ const InputAlertField = ({ name, config }: SettingFieldProps) => {
                 ouiaId="confirm-edit-login-redirect"
                 variant={ButtonVariant.control}
               >
-                <PFExclamationCircleIcon className="awx-shared-fields__exclamation-circle-icon" />
+                <PFExclamationCircleIcon className="ascender-shared-fields__exclamation-circle-icon" />
               </Button>
             </Tooltip>
           )}
@@ -553,7 +553,7 @@ const FileUploadField = ({
           clearButtonText={t`Clear`}
         >
           {type === 'dataURL' && (
-            <div className="awx-shared-fields__file-upload-icon-wrapper">
+            <div className="ascender-shared-fields__file-upload-icon-wrapper">
               {field.value ? (
                 <img
                   src={field.value}

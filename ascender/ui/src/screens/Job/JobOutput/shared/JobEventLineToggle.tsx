@@ -17,12 +17,12 @@ export default function JobEventLineToggle({
 }: JobEventLineToggleProps) {
   const { t } = useLingui();
   if (!canToggle) {
-    return <div className="awx-job-event-line-toggle__wrapper" />;
+    return <div className="ascender-job-event-line-toggle__wrapper" />;
   }
   return (
-    <div className="awx-job-event-line-toggle__wrapper">
+    <div className="ascender-job-event-line-toggle__wrapper">
       <button
-        className="awx-job-event-line-toggle__button"
+        className="ascender-job-event-line-toggle__button"
         onClick={onToggle}
         type="button"
       >

@@ -64,7 +64,7 @@ function SubscriptionDetail() {
                     <Label variant="outline" color="green" icon={<CheckIcon />}>
                       {t`Compliant`}
                     </Label>
-                    <PFHelperText className="awx-subscription-detail__helper-text">
+                    <PFHelperText className="ascender-subscription-detail__helper-text">
                       <HelperTextItem>
                         {t`The number of hosts you have automated against is below your subscription count.`}
                       </HelperTextItem>
@@ -79,7 +79,7 @@ function SubscriptionDetail() {
                     >
                       {t`Out of compliance`}
                     </Label>
-                    <PFHelperText className="awx-subscription-detail__helper-text">
+                    <PFHelperText className="ascender-subscription-detail__helper-text">
                       <HelperTextItem>
                         {t`You have automated against more hosts than your subscription allows.`}
                       </HelperTextItem>

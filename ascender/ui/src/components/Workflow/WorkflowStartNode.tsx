@@ -46,7 +46,7 @@ function WorkflowStartNode({
     <g
       id="node-1"
       className={
-        addingLink ? 'awx-workflow-start-node__start-g--inert' : undefined
+        addingLink ? 'ascender-workflow-start-node__start-g--inert' : undefined
       }
       onMouseEnter={handleNodeMouseEnter}
       onMouseLeave={() => setHovering(false)}
@@ -54,14 +54,14 @@ function WorkflowStartNode({
       transform={`translate(${nodePositions[1].x},0)`}
     >
       <foreignObject
-        className="awx-workflow-start-node__foreign-object"
+        className="ascender-workflow-start-node__foreign-object"
         height="1"
         width="1"
         y="10"
         style={{ overflow: 'visible' }}
       >
         <div
-          className="awx-workflow-start-node__div"
+          className="ascender-workflow-start-node__div"
           ref={startNodeRef as React.Ref<HTMLDivElement>}
         >
           {t`START`}

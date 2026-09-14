@@ -17,7 +17,7 @@ function SubscriptionUsage() {
           '/subscription_usage': t`Subscription Usage`,
         }}
       />
-      <PageSection className="awx-subscription-usage__main-page-section">
+      <PageSection className="ascender-subscription-usage__main-page-section">
         <div className="spacer">
           <Card id="dashboard-main-container">
             <SubscriptionUsageChart />

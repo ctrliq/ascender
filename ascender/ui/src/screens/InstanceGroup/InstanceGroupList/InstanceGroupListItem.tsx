@@ -50,7 +50,7 @@ function InstanceGroupListItem({
         );
       }
       return (
-        <span className="awx-instance-group-list-item__unavailable">{t`Unavailable`}</span>
+        <span className="ascender-instance-group-list-item__unavailable">{t`Unavailable`}</span>
       );
     }
     return null;

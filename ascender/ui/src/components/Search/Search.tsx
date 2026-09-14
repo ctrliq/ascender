@@ -218,7 +218,7 @@ function Search({
             </SelectList>
           </Select>
         ) : (
-          <div className="awx-search__no-option-dropdown">
+          <div className="ascender-search__no-option-dropdown">
             {searchColumnName}
           </div>
         )}
@@ -328,7 +328,7 @@ function Search({
               </Select>
             )) ||
             ((qsConfig.dateFields || []).includes(key) && (
-              <InputGroup className="awx-search__date-input-group">
+              <InputGroup className="ascender-search__date-input-group">
                 <Select
                   className="dateOperatorSelect"
                   aria-label={t`Date operator select`}
@@ -380,9 +380,9 @@ function Search({
                   isDisabled={isDisabled}
                 />
                 <div
-                  className={`awx-search__submit-button-wrapper${
+                  className={`ascender-search__submit-button-wrapper${
                     !searchValue
-                      ? ' awx-search__submit-button-wrapper--disabled'
+                      ? ' ascender-search__submit-button-wrapper--disabled'
                       : ''
                   }`}
                 >
@@ -417,9 +417,9 @@ function Search({
                 </InputGroupItem>
                 <InputGroupItem>
                   <div
-                    className={`awx-search__submit-button-wrapper${
+                    className={`ascender-search__submit-button-wrapper${
                       !searchValue
-                        ? ' awx-search__submit-button-wrapper--disabled'
+                        ? ' ascender-search__submit-button-wrapper--disabled'
                         : ''
                     }`}
                   >

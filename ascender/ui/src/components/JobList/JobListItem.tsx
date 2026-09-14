@@ -114,7 +114,7 @@ function JobListItem({
             <Link to={`/jobs/${JOB_TYPE_URL_SEGMENTS[job.type]}/${job.id}`}>
               <b>
                 {job.id}{' '}
-                <span className="awx-job-list-item__dash">&mdash;</span>{' '}
+                <span className="ascender-job-list-item__dash">&mdash;</span>{' '}
                 {job.name}
               </b>
             </Link>

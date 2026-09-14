@@ -60,14 +60,14 @@ function PreviewStep({
   return (
     <div data-cy="prompt-preview">
       {formErrors && (
-        <div className="awx-preview-step__error-message-wrapper">
+        <div className="ascender-preview-step__error-message-wrapper">
           {t`Some of the previous step(s) have errors`}
           <Tooltip
             position="right"
             content={t`See errors on the left`}
             trigger="click mouseenter focus"
           >
-            <PFExclamationCircleIcon className="awx-preview-step__exclamation-circle-icon" />
+            <PFExclamationCircleIcon className="ascender-preview-step__exclamation-circle-icon" />
           </Tooltip>
         </div>
       )}

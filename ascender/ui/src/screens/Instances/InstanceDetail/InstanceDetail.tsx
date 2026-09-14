@@ -281,14 +281,14 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
                 dataCy="capacity-adjustment"
                 value={
                   <div
-                    className="awx-instance-detail__slider-holder"
+                    className="ascender-instance-detail__slider-holder"
                     data-cy="slider-holder"
                   >
                     <div data-cy="cpu-capacity">
                       {t`CPU ${instance.cpu_capacity}`}
                     </div>
                     <div
-                      className="awx-instance-detail__slider-forks"
+                      className="ascender-instance-detail__slider-forks"
                       data-cy="slider-forks"
                     >
                       <div data-cy="number-forks">
@@ -330,7 +330,7 @@ function InstanceDetail({ setBreadcrumb, isK8s }: InstanceDetailProps) {
                       aria-label={t`Used capacity`}
                     />
                   ) : (
-                    <span className="awx-instance-detail__unavailable">{t`Unavailable`}</span>
+                    <span className="ascender-instance-detail__unavailable">{t`Unavailable`}</span>
                   )
                 }
               />

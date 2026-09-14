@@ -55,7 +55,7 @@ const mockJobTemplate = {
       id: 1,
       name: 'Default EE',
       description: '',
-      image: 'quay.io/ansible/awx-ee',
+      image: 'ghcr.io/ctrliq/ascender-ee',
     },
     user_capabilities: {
       edit: true,

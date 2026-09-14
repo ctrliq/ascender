@@ -119,7 +119,7 @@ function OptionsList<T extends SelectableOption = ApiEntity>({
   }
 
   return (
-    <div className="awx-options-list__modal-list">
+    <div className="ascender-options-list__modal-list">
       {selectionPreview}
       <PaginatedTable
         contentError={contentError}

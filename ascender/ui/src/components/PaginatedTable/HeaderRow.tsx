@@ -52,11 +52,11 @@ export default function HeaderRow({
     <Thead>
       <Tr ouiaId="paginated-table-header-row">
         {isExpandable && (
-          <PFTh className="awx-header-row__th" screenReaderText={t`Expand`} />
+          <PFTh className="ascender-header-row__th" screenReaderText={t`Expand`} />
         )}
         {isSelectable && (
           <PFTh
-            className="awx-header-row__th"
+            className="ascender-header-row__th"
             screenReaderText={t`Row select`}
           />
         )}
@@ -125,8 +125,8 @@ export function HeaderCell({
       info={tooltip ? { popover: <div>{tooltip}</div> } : undefined}
       id={sortKey ? `${idPrefix}-${sortKey}` : undefined}
       className={[
-        'awx-header-row__th',
-        children === 'Actions' && 'awx-header-row__th--align-right',
+        'ascender-header-row__th',
+        children === 'Actions' && 'ascender-header-row__th--align-right',
         className,
       ]
         .filter(Boolean)

@@ -56,7 +56,7 @@ describe('<OrganizationEdit />', () => {
       default_environment: {
         id: 1,
         name: 'Baz',
-        image: 'quay.io/ansible/awx-ee',
+        image: 'ghcr.io/ctrliq/ascender-ee',
       },
     },
   };

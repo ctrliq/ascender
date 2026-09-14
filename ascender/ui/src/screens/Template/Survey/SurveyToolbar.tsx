@@ -46,7 +46,7 @@ function SurveyToolbar({
   const surveyUrl = `${pathname.substr(0, pathname.indexOf('survey'))}survey`;
   return (
     <Toolbar
-      className="awx-survey-toolbar__toolbar"
+      className="ascender-survey-toolbar__toolbar"
       id="survey-toolbar"
       ouiaId="survey-toolbar"
     >
@@ -109,7 +109,7 @@ function SurveyToolbar({
           </ToolbarItem>
         </ToolbarGroup>
         {!emptyList && (
-          <ToolbarItem className="awx-survey-toolbar__switch-wrapper">
+          <ToolbarItem className="ascender-survey-toolbar__switch-wrapper">
             <Switch
               aria-label={t`Survey Toggle`}
               id="survey-toggle"

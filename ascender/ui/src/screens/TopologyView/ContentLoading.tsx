@@ -24,10 +24,10 @@ const ContentLoading = ({ className, progress }: ContentLoadingProps) => {
   return (
     <PFEmptyState
       variant="full"
-      className={`awx-topology-content-loading__empty-state ${className}`}
+      className={`ascender-topology-content-loading__empty-state ${className}`}
       data-cy={className}
     >
-      <PFTopologyIcon className="awx-topology-content-loading__topology-icon" />
+      <PFTopologyIcon className="ascender-topology-content-loading__topology-icon" />
       <Progress
         value={progress ?? 0}
         measureLocation={ProgressMeasureLocation.inside}

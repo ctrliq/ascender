@@ -23,7 +23,7 @@ function ArrayDetail({ label, helpText, value, dataCy }: ArrayDetailProps) {
         {label}
         {helpText && <Popover header={label} content={helpText} id={dataCy} />}
       </DetailName>
-      <DetailValue className="awx-detail-value--array" data-cy={valueCy}>
+      <DetailValue className="ascender-detail-value--array" data-cy={valueCy}>
         {vals.map((v) => (
           <div key={v}>{v}</div>
         ))}

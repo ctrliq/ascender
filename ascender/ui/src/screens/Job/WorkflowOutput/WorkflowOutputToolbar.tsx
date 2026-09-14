@@ -95,18 +95,18 @@ function WorkflowOutputToolbar({
   };
   return (
     <div
-      className="awx-workflow-output-toolbar__toolbar"
+      className="ascender-workflow-output-toolbar__toolbar"
       id="workflow-output-toolbar"
     >
-      <div className="awx-workflow-output-toolbar__job">
+      <div className="ascender-workflow-output-toolbar__job">
         <h1>{job.name}</h1>
         <StatusLabel status={job.status} />
       </div>
-      <div className="awx-workflow-output-toolbar__actions">
+      <div className="ascender-workflow-output-toolbar__actions">
         {workflowTemplateId && (
           <Tooltip content={t`Edit workflow`} position="top">
             <Button
-              className="awx-workflow-output-toolbar__action-button"
+              className="ascender-workflow-output-toolbar__action-button"
               ouiaId="edit-workflow"
               aria-label={t`Edit workflow`}
               id="edit-workflow"
@@ -120,7 +120,7 @@ function WorkflowOutputToolbar({
         <Tooltip content={t`Toggle Legend`} position="top">
           <Button
             id="workflow-output-toggle-legend"
-            className={`awx-workflow-output-toolbar__action-button ${showLegend ? 'pf-m-active' : undefined}`}
+            className={`ascender-workflow-output-toolbar__action-button ${showLegend ? 'pf-m-active' : undefined}`}
             onClick={() => dispatch({ type: 'TOGGLE_LEGEND' })}
             variant="plain"
           >
@@ -130,7 +130,7 @@ function WorkflowOutputToolbar({
         <Tooltip content={t`Toggle Tools`} position="top">
           <Button
             id="workflow-output-toggle-tools"
-            className={`awx-workflow-output-toolbar__action-button ${showTools ? 'pf-m-active' : undefined}`}
+            className={`ascender-workflow-output-toolbar__action-button ${showTools ? 'pf-m-active' : undefined}`}
             onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })}
             variant="plain"
           >
@@ -138,15 +138,15 @@ function WorkflowOutputToolbar({
           </Button>
         </Tooltip>
 
-        <div className="awx-workflow-output-toolbar__badge-label">{t`Total Nodes`}</div>
-        <PFBadge className="awx-workflow-output-toolbar__badge" isRead>
+        <div className="ascender-workflow-output-toolbar__badge-label">{t`Total Nodes`}</div>
+        <PFBadge className="ascender-workflow-output-toolbar__badge" isRead>
           {totalNodes}
         </PFBadge>
 
-        <div className="awx-workflow-output-toolbar__badge-label">{t`Elapsed`}</div>
+        <div className="ascender-workflow-output-toolbar__badge-label">{t`Elapsed`}</div>
         <Tooltip content={t`Elapsed time that the job ran`} position="top">
           <PFBadge
-            className="awx-workflow-output-toolbar__badge awx-workflow-output-toolbar__elapsed-badge"
+            className="ascender-workflow-output-toolbar__badge ascender-workflow-output-toolbar__elapsed-badge"
             isRead
             id="workflow-elapsed-badge"
           >
@@ -198,7 +198,7 @@ function WorkflowOutputToolbar({
               {({ handleRelaunch, isLaunching }) => (
                 <Tooltip position="top" content={t`Relaunch Job`}>
                   <Button
-                    className="awx-workflow-output-toolbar__action-button"
+                    className="ascender-workflow-output-toolbar__action-button"
                     ouiaId="workflow-output-relaunch-button"
                     variant="plain"
                     aria-label={t`Relaunch`}

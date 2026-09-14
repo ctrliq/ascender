@@ -14,12 +14,12 @@ const ContentLoading = ({ className }: ContentLoadingProps) => {
   return (
     <PFEmptyState
       variant="full"
-      className={`awx-content-loading__empty-state ${className}`}
+      className={`ascender-content-loading__empty-state ${className}`}
     >
       {/* indeterminate progressbar: the same accessible contract as the
           spinner this replaces */}
       <div
-        className="awx-content-loading__skeleton-stack"
+        className="ascender-content-loading__skeleton-stack"
         role="progressbar"
         aria-label={t`Loading`}
       >

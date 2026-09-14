@@ -157,7 +157,7 @@ function DeleteButton({
                 <br />
                 {deleteDetails.map(({ label, count }) => (
                   <div aria-label={`${i18n._(label)}: ${count}`} key={label.id}>
-                    <span className="awx-delete-button__warning-message awx-delete-button__label">
+                    <span className="ascender-delete-button__warning-message ascender-delete-button__label">
                       {i18n._(label)}
                     </span>{' '}
                     <Badge>{count}</Badge>

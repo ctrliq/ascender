@@ -54,22 +54,22 @@ function WorkflowTools({
   };
 
   return (
-    <div className="awx-workflow-tools__wrapper">
-      <div className="awx-workflow-tools__header">
+    <div className="ascender-workflow-tools__wrapper">
+      <div className="ascender-workflow-tools__header">
         <b>{t`Tools`}</b>
         <TimesIcon
-          className="awx-workflow-tools__close"
+          className="ascender-workflow-tools__close"
           onClick={() => dispatch({ type: 'TOGGLE_TOOLS' })}
         />
       </div>
-      <div className="awx-workflow-tools__tools">
+      <div className="ascender-workflow-tools__tools">
         <Tooltip
           content={t`Fit the graph to the available screen size`}
           position="bottom"
         >
           <Button
             icon={<DesktopIcon />}
-            className="awx-workflow-tools__margin-right-30"
+            className="ascender-workflow-tools__margin-right-30"
             ouiaId="visualizer-zoom-to-fit-button"
             variant="tertiary"
             onClick={() => onFitGraph()}
@@ -78,7 +78,7 @@ function WorkflowTools({
         <Tooltip content={t`Zoom Out`} position="bottom">
           <Button
             icon={<MinusIcon />}
-            className="awx-workflow-tools__margin-right-10"
+            className="ascender-workflow-tools__margin-right-10"
             ouiaId="visualizer-zoom-out-button"
             variant="tertiary"
             onClick={() => zoomOut()}
@@ -100,27 +100,27 @@ function WorkflowTools({
         <Tooltip content={t`Zoom In`} position="bottom">
           <Button
             icon={<PlusIcon />}
-            className="awx-workflow-tools__margin-0-25-0-10"
+            className="ascender-workflow-tools__margin-0-25-0-10"
             ouiaId="visualizer-zoom-in-button"
             variant="tertiary"
             onClick={() => zoomIn()}
           />
         </Tooltip>
-        <div className="awx-workflow-tools__pan">
+        <div className="ascender-workflow-tools__pan">
           <Tooltip content={t`Pan Left`} position="left">
             <Button
               icon={<CaretLeftIcon />}
-              className="awx-workflow-tools__margin-right-10"
+              className="ascender-workflow-tools__margin-right-10"
               ouiaId="visualizer-pan-left-button"
               variant="tertiary"
               onClick={() => onPan('left')}
             />
           </Tooltip>
-          <div className="awx-workflow-tools__pan-center">
+          <div className="ascender-workflow-tools__pan-center">
             <Tooltip content={t`Pan Up`} position="top">
               <Button
                 icon={<CaretUpIcon />}
-                className="awx-workflow-tools__margin-bottom-10"
+                className="ascender-workflow-tools__margin-bottom-10"
                 ouiaId="visualizer-pan-up-button"
                 variant="tertiary"
                 onClick={() => onPan('up')}
@@ -140,7 +140,7 @@ function WorkflowTools({
             <Tooltip content={t`Pan Down`} position="bottom">
               <Button
                 icon={<CaretDownIcon />}
-                className="awx-workflow-tools__margin-top-10"
+                className="ascender-workflow-tools__margin-top-10"
                 ouiaId="visualizer-pan-down-button"
                 variant="tertiary"
                 onClick={() => onPan('down')}
@@ -150,7 +150,7 @@ function WorkflowTools({
           <Tooltip content={t`Pan Right`} position="right">
             <Button
               icon={<CaretRightIcon />}
-              className="awx-workflow-tools__margin-left-10"
+              className="ascender-workflow-tools__margin-left-10"
               ouiaId="visualizer-pan-right-button"
               variant="tertiary"
               onClick={() => onPan('right')}

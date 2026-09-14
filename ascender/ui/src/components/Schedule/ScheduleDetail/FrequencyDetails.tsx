@@ -92,7 +92,7 @@ export default function FrequencyDetails({
 
   return (
     <div>
-      <div className="awx-frequency-details__label">{label}</div>
+      <div className="ascender-frequency-details__label">{label}</div>
       <DetailList gutter="sm">
         <Detail
           label={isException ? t`Skip every` : t`Run every`}

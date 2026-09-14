@@ -50,7 +50,7 @@ function WorkflowNodeTypeLetter({ node }: WorkflowNodeTypeLetterProps) {
       case 'workflow_approval_template':
       case 'workflow_approval':
         nodeTypeLetter = (
-          <PauseIcon className="awx-workflow-node-type-letter__centered-pause-icon" />
+          <PauseIcon className="ascender-workflow-node-type-letter__centered-pause-icon" />
         );
         break;
       default:
@@ -61,7 +61,7 @@ function WorkflowNodeTypeLetter({ node }: WorkflowNodeTypeLetterProps) {
   return (
     <foreignObject y="50" x="-10" height="20" width="20">
       <div
-        className="awx-workflow-node-type-letter__letter"
+        className="ascender-workflow-node-type-letter__letter"
         id={`node-${node.id}-type-letter`}
       >
         {nodeTypeLetter}

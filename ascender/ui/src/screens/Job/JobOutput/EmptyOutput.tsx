@@ -11,7 +11,7 @@ import { useLingui } from '@lingui/react/macro';
 import './EmptyOutput.css';
 
 const FailureIcon = () => (
-  <PFExclamationCircleIcon className="awx-empty-output__icon" />
+  <PFExclamationCircleIcon className="ascender-empty-output__icon" />
 );
 
 export interface EmptyOutputProps {
@@ -74,7 +74,7 @@ export default function EmptyOutput({
 
   return (
     <ContentEmpty
-      className="awx-empty-output__height-100"
+      className="ascender-empty-output__height-100"
       title={title}
       message={message}
       icon={icon}

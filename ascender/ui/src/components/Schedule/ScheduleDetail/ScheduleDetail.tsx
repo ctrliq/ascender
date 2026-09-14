@@ -348,7 +348,7 @@ function ScheduleDetail({
   return (
     <CardBody>
       <ScheduleToggle
-        className="awx-schedule-detail__padding-bottom-40"
+        className="ascender-schedule-detail__padding-bottom-40"
         schedule={schedule}
         isDisabled={isDisabled}
       />
@@ -388,7 +388,7 @@ function ScheduleDetail({
         />
       </DetailList>
       {frequency.length ? (
-        <div className="awx-schedule-detail__frequency-details-container">
+        <div className="ascender-schedule-detail__frequency-details-container">
           <div ouia-component-id="schedule-frequency-details">
             <p>
               <strong>{t`Frequency Details`}</strong>
@@ -406,9 +406,9 @@ function ScheduleDetail({
         </div>
       ) : null}
       {exceptionFrequency.length ? (
-        <div className="awx-schedule-detail__frequency-details-container">
+        <div className="ascender-schedule-detail__frequency-details-container">
           <div ouia-component-id="schedule-exception-details">
-            <p className="awx-schedule-detail__border-top-0">
+            <p className="ascender-schedule-detail__border-top-0">
               <strong>{t`Frequency Exception Details`}</strong>
             </p>
             {exceptionFrequency.map((freq) => (
@@ -447,11 +447,11 @@ function ScheduleDetail({
       {showPromptedFields && (
         <>
           <Title
-            className="awx-schedule-detail__prompt-title"
+            className="ascender-schedule-detail__prompt-title"
             headingLevel="h2"
           >{t`Prompted Values`}</Title>
-          <Divider className="awx-schedule-detail__prompt-divider" />
-          <DetailList className="awx-schedule-detail__prompt-detail-list">
+          <Divider className="ascender-schedule-detail__prompt-divider" />
+          <DetailList className="ascender-schedule-detail__prompt-detail-list">
             {ask_job_type_on_launch && (
               <Detail
                 label={t`Job Type`}

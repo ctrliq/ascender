@@ -130,7 +130,7 @@ function SettingList() {
   if (Object.keys(config).length === 0) {
     return (
       <PageSection hasBodyWrapper={false}>
-        <Card className="awx-setting-list__card">
+        <Card className="ascender-setting-list__card">
           <ContentLoading />
         </Card>
       </PageSection>
@@ -138,7 +138,7 @@ function SettingList() {
   }
 
   return (
-    <PageSection className="awx-setting-list__split-layout">
+    <PageSection className="ascender-setting-list__split-layout">
       {settingRoutes.map(({ description, header, id, routes }) => {
         if (
           id === 'subscription' &&
@@ -147,10 +147,10 @@ function SettingList() {
           return null;
         }
         return (
-          <Card className="awx-setting-list__card" isCompact key={header}>
-            <CardHeader className="awx-setting-list__card-header">
+          <Card className="ascender-setting-list__card" isCompact key={header}>
+            <CardHeader className="ascender-setting-list__card-header">
               <CardTitle>{header}</CardTitle>
-              <div className="awx-setting-list__card-description">
+              <div className="ascender-setting-list__card-description">
                 {description}
               </div>
             </CardHeader>

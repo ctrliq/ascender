@@ -30,7 +30,7 @@ function FieldWithPrompt({
   const { t } = useLingui();
   return (
     <div className="pf-v6-c-form__group" data-cy={`${fieldId}-form-group`}>
-      <div className="awx-field-with-prompt__header">
+      <div className="ascender-field-with-prompt__header">
         <div>
           <label className="pf-v6-c-form__label" htmlFor={fieldId}>
             <span className="pf-v6-c-form__label-text">{label}</span>
@@ -43,7 +43,7 @@ function FieldWithPrompt({
           {tooltip && <Popover content={tooltip} id={`${fieldId}-tooltip`} />}
         </div>
         <CheckboxField
-          className="awx-field-with-prompt__styled-checkbox-field"
+          className="ascender-field-with-prompt__styled-checkbox-field"
           isDisabled={isDisabled}
           id={promptId}
           label={t`Prompt on launch`}

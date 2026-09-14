@@ -51,7 +51,7 @@ function DateTimePicker({
       isRequired
       label={label}
     >
-      <span className="awx-date-time-picker__group">
+      <span className="ascender-date-time-picker__group">
         <DatePicker
           aria-label={
             dateFieldName.startsWith('start') ? t`Start date` : t`End date`

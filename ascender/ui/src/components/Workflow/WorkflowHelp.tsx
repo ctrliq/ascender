@@ -8,8 +8,8 @@ export interface WorkflowHelpProps {
 
 function WorkflowHelp({ children }: WorkflowHelpProps) {
   return (
-    <div className="awx-workflow-help__outer">
-      <div className="awx-workflow-help__inner">{children}</div>
+    <div className="ascender-workflow-help__outer">
+      <div className="ascender-workflow-help__inner">{children}</div>
     </div>
   );
 }

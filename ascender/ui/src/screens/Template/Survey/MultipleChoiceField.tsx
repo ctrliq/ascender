@@ -58,7 +58,7 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
       {formattedChoicesField.value.map(
         ({ choice, isDefault, id }: SurveyChoice, i: number) => (
           <PFInputGroup
-            className="awx-multiple-choice-field__input-group"
+            className="ascender-multiple-choice-field__input-group"
             key={id}
           >
             <TextInput
@@ -139,9 +139,9 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
             >
               <PFCheckIcon
                 className={[
-                  'awx-multiple-choice-field__check-icon',
+                  'ascender-multiple-choice-field__check-icon',
                   isDefault &&
-                    'awx-multiple-choice-field__check-icon--selected',
+                    'ascender-multiple-choice-field__check-icon--selected',
                 ]
                   .filter(Boolean)
                   .join(' ')}
@@ -154,7 +154,7 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
         <HelperText>
           <HelperTextItem variant={isValid ? 'default' : 'error'}>
             {isValid ? (
-              <div className="awx-multiple-choice-field__helper-text-wrapper">
+              <div className="ascender-multiple-choice-field__helper-text-wrapper">
                 {t`Type answer then click checkbox on right to select answer as
 default.`}
                 <br />

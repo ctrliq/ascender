@@ -35,7 +35,7 @@ const Sparkline = ({ jobs = [] }: SparklineProps) => {
   const statusIcons = jobs.map((job) => (
     <Tooltip position="top" content={generateTooltip(job)} key={job.id}>
       <Link
-        className="awx-sparkline__link"
+        className="ascender-sparkline__link"
         aria-label={t`View job ${job.id}`}
         to={`/jobs/${JOB_TYPE_URL_SEGMENTS[job.type as string]}/${job.id}`}
       >
@@ -44,7 +44,7 @@ const Sparkline = ({ jobs = [] }: SparklineProps) => {
     </Tooltip>
   ));
 
-  return <div className="awx-sparkline__wrapper">{statusIcons}</div>;
+  return <div className="ascender-sparkline__wrapper">{statusIcons}</div>;
 };
 
 export default Sparkline;

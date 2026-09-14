@@ -14,7 +14,7 @@ const mockedExecutionEnvironments = {
     {
       id: 2,
       name: 'Foo',
-      image: 'quay.io/ansible/awx-ee',
+      image: 'ghcr.io/ctrliq/ascender-ee',
       pull: 'missing',
     },
   ],

@@ -33,7 +33,7 @@ function OrganizationTeamListItem({
         >
           <Button
             icon={<PencilAltIcon />}
-            className="awx-organization-team-list-item__grid-column-2"
+            className="ascender-organization-team-list-item__grid-column-2"
             ouiaId={`${team.id}-edit-button`}
             aria-label={t`Edit Team`}
             variant="plain"

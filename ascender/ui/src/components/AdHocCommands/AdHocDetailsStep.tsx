@@ -246,7 +246,7 @@ function AdHocDetailsStep({ moduleOptions }: AdHocDetailsStepProps) {
             id="extra_vars"
             name="extra_vars"
             tooltip={
-              <div className="awx-ad-hoc-details-step__tooltip-wrapper">
+              <div className="ascender-ad-hoc-details-step__tooltip-wrapper">
                 <p>
                   {t`Pass extra command line changes. There are two ansible command line parameters: `}
                   <br />

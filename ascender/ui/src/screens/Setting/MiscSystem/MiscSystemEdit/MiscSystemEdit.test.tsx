@@ -18,7 +18,7 @@ const mockExecutionEnvironment = [
     id: 1,
     name: 'Default EE',
     description: '',
-    image: 'quay.io/ansible/awx-ee',
+    image: 'ghcr.io/ctrliq/ascender-ee',
     url: '/api/v2/execution_environments/1/',
   },
 ];

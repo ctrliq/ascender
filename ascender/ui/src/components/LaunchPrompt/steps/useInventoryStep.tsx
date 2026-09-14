@@ -44,7 +44,7 @@ export default function useInventoryStep(
               warningMessage={
                 resource?.type === 'workflow_job_template' ? (
                   <Alert
-                    className="awx-use-inventory-step__alert"
+                    className="ascender-use-inventory-step__alert"
                     ouiaId="InventoryStep-alert"
                     variant="warning"
                     isInline

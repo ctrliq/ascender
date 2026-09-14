@@ -219,7 +219,7 @@ describe('<WorkflowOutputNavigation />', () => {
     const { user } = renderAt(101);
     const toggle = screen.getByRole('button');
     // the floor is the stylesheet's; what the toggle has to keep is the class
-    expect(toggle).toHaveClass('awx-workflow-output-navigation__menu-toggle');
+    expect(toggle).toHaveClass('ascender-workflow-output-navigation__menu-toggle');
 
     // the toggle swaps the position text for a much shorter chip here, and the
     // menu takes its minimum width from the toggle, so the floor has to survive
@@ -227,7 +227,7 @@ describe('<WorkflowOutputNavigation />', () => {
     await user.click(screen.getByRole('option', { name: /Failed/ }));
     await waitFor(() => expect(screen.getByText('Failed')).toBeInTheDocument());
     expect(screen.getByRole('button')).toHaveClass(
-      'awx-workflow-output-navigation__menu-toggle'
+      'ascender-workflow-output-navigation__menu-toggle'
     );
   });
 

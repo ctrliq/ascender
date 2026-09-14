@@ -33,7 +33,7 @@ function MultiButtonToggle<V extends string = string>({
             aria-label={buttonLabel}
             ouiaId={`${name}-${buttonLabel}-button`}
             key={buttonLabel}
-            className={`awx-multi-button-toggle__small-button ${`toggle-button-${buttonValue}`}`}
+            className={`ascender-multi-button-toggle__small-button ${`toggle-button-${buttonValue}`}`}
             onClick={() => setValue(buttonValue)}
             variant={buttonValue === value ? 'primary' : 'secondary'}
           >

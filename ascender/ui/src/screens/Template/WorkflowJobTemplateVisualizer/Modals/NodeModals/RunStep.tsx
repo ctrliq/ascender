@@ -27,7 +27,7 @@ function RunStep() {
       <p>
         {t`Specify the conditions under which this node should be executed`}
       </p>
-      <div className="awx-run-step__grid">
+      <div className="ascender-run-step__grid">
         <SelectableCard
           id="link-type-success"
           isSelected={field.value === 'success'}
@@ -58,7 +58,7 @@ function RunStep() {
         />
       </div>
       {field.value === 'condition' && (
-        <div className="awx-run-step__condition-fields">
+        <div className="ascender-run-step__condition-fields">
           <FormGroup
             fieldId="link-condition-trigger"
             label={t`Evaluate on`}

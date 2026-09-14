@@ -161,7 +161,7 @@ describe('LaunchPrompt', () => {
             name: 'AWX EE (latest)',
             description: '',
             organization: null,
-            image: 'quay.io/ansible/awx-ee:latest',
+            image: 'ghcr.io/ctrliq/ascender-ee:latest',
             managed: false,
             credential: null,
             pull: '',

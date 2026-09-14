@@ -25,14 +25,14 @@ function AdHocPreviewStep({ hasErrors, values }: AdHocPreviewStepProps) {
   return (
     <>
       {hasErrors && (
-        <div className="awx-ad-hoc-preview-step__error-message-wrapper">
+        <div className="ascender-ad-hoc-preview-step__error-message-wrapper">
           {t`Some of the previous step(s) have errors`}
           <Tooltip
             position="right"
             content={t`See errors on the left`}
             trigger="click mouseenter focus"
           >
-            <PFExclamationCircleIcon className="awx-ad-hoc-preview-step__exclamation-circle-icon" />
+            <PFExclamationCircleIcon className="ascender-ad-hoc-preview-step__exclamation-circle-icon" />
           </Tooltip>
         </div>
       )}

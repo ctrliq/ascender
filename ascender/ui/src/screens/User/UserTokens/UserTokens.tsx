@@ -55,7 +55,7 @@ function UserTokens({ setBreadcrumb, user }: UserTokensProps) {
           onClose={() => setTokenModalSource(null)}
         >
           <Alert
-            className="awx-user-tokens__token-alert"
+            className="ascender-user-tokens__token-alert"
             variant="info"
             isInline
             title={t`This is the only time the token value and associated refresh token value will be shown.`}

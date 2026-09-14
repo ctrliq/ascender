@@ -48,7 +48,7 @@ const HostStatusBar = ({ counts = {} }: HostStatusBarProps) => {
       <Tooltip
         key={key}
         content={
-          <div className="awx-host-status-bar__tooltip-content">
+          <div className="ascender-host-status-bar__tooltip-content">
             {hostStatus[key as keyof typeof hostStatus].label}
             <Badge isRead>{count}</Badge>
           </div>
@@ -56,7 +56,7 @@ const HostStatusBar = ({ counts = {} }: HostStatusBarProps) => {
       >
         <div
           key={key}
-          className="awx-host-status-bar__segment"
+          className="ascender-host-status-bar__segment"
           style={segmentStyle(
             hostStatus[key as keyof typeof hostStatus].color,
             count
@@ -68,12 +68,12 @@ const HostStatusBar = ({ counts = {} }: HostStatusBarProps) => {
 
   if (noData) {
     return (
-      <div className="host-status-bar awx-host-status-bar__wrapper">
+      <div className="host-status-bar ascender-host-status-bar__wrapper">
         <Tooltip
           content={t`Host status information for this job is unavailable.`}
         >
           <div
-            className="awx-host-status-bar__segment"
+            className="ascender-host-status-bar__segment"
             style={segmentStyle(undefined, 1)}
           />
         </Tooltip>
@@ -82,7 +82,7 @@ const HostStatusBar = ({ counts = {} }: HostStatusBarProps) => {
   }
 
   return (
-    <div className="host-status-bar awx-host-status-bar__wrapper">
+    <div className="host-status-bar ascender-host-status-bar__wrapper">
       {barSegments}
     </div>
   );

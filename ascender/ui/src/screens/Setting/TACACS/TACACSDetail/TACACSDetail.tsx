@@ -69,7 +69,7 @@ function TACACSDetail() {
         {!isLoading && tacacs && (
           <>
             <PFAlert
-              className="awx-tacacs-detail__alert"
+              className="ascender-tacacs-detail__alert"
               variant="info"
               isInline
               data-cy="TACACS-deprecation-warning"

@@ -154,7 +154,7 @@ function ActivityStream() {
           isScrollable
           toggle={(toggleRef) => (
             <MenuToggle
-              className="awx-activity-stream__styled-menu-toggle"
+              className="ascender-activity-stream__styled-menu-toggle"
               ref={toggleRef}
               onClick={() => setIsTypeDropdownOpen(!isTypeDropdownOpen)}
               isExpanded={isTypeDropdownOpen}

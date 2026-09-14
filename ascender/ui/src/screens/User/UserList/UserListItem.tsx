@@ -55,12 +55,12 @@ function UserListItem({
           <b>{user.username}</b>
         </Link>
         {ldapUser && (
-          <span className="awx-user-list-item__margin-left-12">
+          <span className="ascender-user-list-item__margin-left-12">
             <Label aria-label={t`ldap user`}>{t`LDAP`}</Label>
           </span>
         )}
         {socialAuthUser && (
-          <span className="awx-user-list-item__margin-left-12">
+          <span className="ascender-user-list-item__margin-left-12">
             <Label aria-label={t`social login`}>{t`SOCIAL`}</Label>
           </span>
         )}

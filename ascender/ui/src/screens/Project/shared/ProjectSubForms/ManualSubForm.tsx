@@ -56,7 +56,7 @@ const ManualSubForm = ({
     <>
       {options.length === 1 && (
         <Alert
-          className="awx-manual-sub-form__grid-column-1-1"
+          className="ascender-manual-sub-form__grid-column-1-1"
           title={t`WARNING: `}
           variant="warning"
           isInline

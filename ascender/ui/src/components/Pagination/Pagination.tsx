@@ -18,7 +18,7 @@ export default function Pagination({
     <PFPagination
       className={
         perPageOptions && !perPageOptions.length
-          ? 'awx-pagination--no-page-sizes'
+          ? 'ascender-pagination--no-page-sizes'
           : undefined
       }
       perPageOptions={perPageOptions}

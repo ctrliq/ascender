@@ -74,7 +74,7 @@ function InstanceListItem({
       );
     }
     return (
-      <span className="awx-instance-group-instance-list-item__unavailable">{t`Unavailable`}</span>
+      <span className="ascender-instance-group-instance-list-item__unavailable">{t`Unavailable`}</span>
     );
   }
 
@@ -156,12 +156,12 @@ function InstanceListItem({
         <Td dataLabel={t`Node Type`}>{instance.node_type}</Td>
         <Td dataLabel={t`Capacity Adjustment`}>
           <div
-            className="awx-instance-group-instance-list-item__slider-holder"
+            className="ascender-instance-group-instance-list-item__slider-holder"
             data-cy="slider-holder"
           >
             <div data-cy="cpu-capacity">{t`CPU ${instance.cpu_capacity}`}</div>
             <div
-              className="awx-instance-group-instance-list-item__slider-forks"
+              className="ascender-instance-group-instance-list-item__slider-forks"
               data-cy="slider-forks"
             >
               <div data-cy="number-forks">
@@ -182,13 +182,13 @@ function InstanceListItem({
           </div>
         </Td>
         <Td
-          className="awx-instance-group-instance-list-item__pf-v6-c-table-cell-MinWidth-175"
+          className="ascender-instance-group-instance-list-item__pf-v6-c-table-cell-MinWidth-175"
           dataLabel={t`Instance group used capacity`}
         >
           {usedCapacity(instance)}
         </Td>
         <ActionsTd
-          className="awx-instance-group-instance-list-item__pf-v6-c-table-cell-Width-125"
+          className="ascender-instance-group-instance-list-item__pf-v6-c-table-cell-Width-125"
           dataLabel={t`Actions`}
         >
           <ActionItem visible>

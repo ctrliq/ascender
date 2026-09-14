@@ -72,9 +72,9 @@ function VariablesDetail({
   const valueCy = dataCy ? `${dataCy}-value` : null;
 
   return (
-    <div className="awx-variables-detail__wrapper">
+    <div className="ascender-variables-detail__wrapper">
       <div
-        className="awx-variables-detail__label"
+        className="ascender-variables-detail__label"
         data-cy={labelCy}
         id={dataCy}
       >
@@ -88,7 +88,7 @@ function VariablesDetail({
           name={name}
         />
       </div>
-      <div className="awx-variables-detail__editor-wrapper" data-cy={valueCy}>
+      <div className="ascender-variables-detail__editor-wrapper" data-cy={valueCy}>
         <CodeEditor
           id={`${dataCy}-preview`}
           mode={mode}

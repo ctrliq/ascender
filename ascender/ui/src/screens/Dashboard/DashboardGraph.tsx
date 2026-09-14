@@ -97,8 +97,8 @@ function DashboardGraph() {
 
   return (
     <>
-      <CardHeader className="awx-dashboard-graph__card-header">
-        <div className="awx-dashboard-graph__card-actions">
+      <CardHeader className="ascender-dashboard-graph__card-header">
+        <div className="ascender-dashboard-graph__card-actions">
           <Select
             isOpen={isPeriodDropdownOpen}
             onOpenChange={setIsPeriodDropdownOpen}

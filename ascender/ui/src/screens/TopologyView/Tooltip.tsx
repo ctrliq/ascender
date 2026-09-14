@@ -70,7 +70,7 @@ function usedCapacity(instance: Partial<Instance>, t: Translate) {
       />
     );
   }
-  return <span className="awx-tooltip__unavailable">{t`Unavailable`}</span>;
+  return <span className="ascender-tooltip__unavailable">{t`Unavailable`}</span>;
 }
 
 export interface TooltipProps {
@@ -141,11 +141,11 @@ function Tooltip({
     );
   }, [instanceDetail]);
   return (
-    <div className="awx-tooltip__wrapper tooltip" data-cy="tooltip">
+    <div className="ascender-tooltip__wrapper tooltip" data-cy="tooltip">
       {isNodeSelected === false ? (
         <Content>
           <Content
-            className="awx-tooltip__text"
+            className="ascender-tooltip__text"
             component={ContentVariants.small}
             style={{
               fontWeight: 'bold',
@@ -157,7 +157,7 @@ function Tooltip({
           </Content>
           <Divider component="div" />
           <Content
-            className="awx-tooltip__text"
+            className="ascender-tooltip__text"
             component={ContentVariants.small}
           >
             {t`Click on a node icon to display the details.`}
@@ -179,7 +179,7 @@ function Tooltip({
           )}
           <Content>
             <Content
-              className="awx-tooltip__text"
+              className="ascender-tooltip__text"
               component={ContentVariants.small}
               style={{
                 fontWeight: 'bold',
@@ -192,10 +192,10 @@ function Tooltip({
           </Content>
           {isLoading && <ContentLoading />}
           {!isLoading && (
-            <PFDescriptionList className="awx-tooltip__description-list">
-              <PFDescriptionListGroup className="awx-tooltip__description-list-group">
+            <PFDescriptionList className="ascender-tooltip__description-list">
+              <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
                 <DescriptionListDescription>
-                  <PFButton className="awx-tooltip__button">
+                  <PFButton className="ascender-tooltip__button">
                     {renderNodeIcon}
                   </PFButton>{' '}
                   <PFButton
@@ -208,7 +208,7 @@ function Tooltip({
                   </PFButton>
                 </DescriptionListDescription>
               </PFDescriptionListGroup>
-              <PFDescriptionListGroup className="awx-tooltip__description-list-group">
+              <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
                 <DescriptionListTerm>{t`Instance status`}</DescriptionListTerm>
                 <DescriptionListDescription data-cy="node-state">
                   <StatusLabel
@@ -216,14 +216,14 @@ function Tooltip({
                   />
                 </DescriptionListDescription>
               </PFDescriptionListGroup>
-              <PFDescriptionListGroup className="awx-tooltip__description-list-group">
+              <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
                 <DescriptionListTerm>{t`Instance type`}</DescriptionListTerm>
                 <DescriptionListDescription data-cy="node-type">
                   {instanceDetail.node_type}
                 </DescriptionListDescription>
               </PFDescriptionListGroup>
               {instanceDetail.related?.install_bundle && (
-                <PFDescriptionListGroup className="awx-tooltip__description-list-group">
+                <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
                   <DescriptionListTerm>
                     {t`Download bundle`}
                   </DescriptionListTerm>
@@ -243,7 +243,7 @@ function Tooltip({
                 </PFDescriptionListGroup>
               )}
               {instanceDetail.ip_address && (
-                <PFDescriptionListGroup className="awx-tooltip__description-list-group">
+                <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
                   <DescriptionListTerm>{t`IP address`}</DescriptionListTerm>
                   <DescriptionListDescription>
                     {instanceDetail.ip_address}
@@ -251,7 +251,7 @@ function Tooltip({
                 </PFDescriptionListGroup>
               )}
               {instanceGroups && (
-                <PFDescriptionListGroup className="awx-tooltip__description-list-group">
+                <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
                   <DescriptionListTerm>
                     {t`Instance groups`}
                   </DescriptionListTerm>
@@ -262,18 +262,18 @@ function Tooltip({
               )}
               {instanceDetail.node_type !== 'hop' && (
                 <>
-                  <PFDescriptionListGroup className="awx-tooltip__description-list-group">
+                  <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
                     <DescriptionListTerm>{t`Forks`}</DescriptionListTerm>
                     <DescriptionListDescription>
                       <div
-                        className="awx-tooltip__slider-holder"
+                        className="ascender-tooltip__slider-holder"
                         data-cy="slider-holder"
                       >
                         <div data-cy="cpu-capacity">
                           {t`CPU ${instanceDetail.cpu_capacity}`}
                         </div>
                         <div
-                          className="awx-tooltip__slider-forks"
+                          className="ascender-tooltip__slider-forks"
                           data-cy="slider-forks"
                         >
                           <div data-cy="number-forks">
@@ -304,13 +304,13 @@ function Tooltip({
                       </div>
                     </DescriptionListDescription>
                   </PFDescriptionListGroup>
-                  <PFDescriptionListGroup className="awx-tooltip__description-list-group">
+                  <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
                     <DescriptionListTerm>{t`Capacity`}</DescriptionListTerm>
                     <DescriptionListDescription data-cy="used-capacity">
                       {usedCapacity(instanceDetail, t)}
                     </DescriptionListDescription>
                   </PFDescriptionListGroup>
-                  <PFDescriptionListGroup className="awx-tooltip__description-list-group">
+                  <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
                     <DescriptionListDescription>
                       <InstanceToggle
                         fetchInstances={fetchInstance}
@@ -323,13 +323,13 @@ function Tooltip({
                 </>
               )}
 
-              <PFDescriptionListGroup className="awx-tooltip__description-list-group">
+              <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
                 <DescriptionListTerm>{t`Last modified`}</DescriptionListTerm>
                 <DescriptionListDescription data-cy="last-modified">
                   {formatDateString(instanceDetail.modified)}
                 </DescriptionListDescription>
               </PFDescriptionListGroup>
-              <PFDescriptionListGroup className="awx-tooltip__description-list-group">
+              <PFDescriptionListGroup className="ascender-tooltip__description-list-group">
                 <DescriptionListTerm>{t`Last seen`}</DescriptionListTerm>
                 <DescriptionListDescription data-cy="last-seen">
                   {instanceDetail.last_seen

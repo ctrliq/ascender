@@ -206,7 +206,7 @@ const FrequencyDetailSubform = ({
 
   return (
     <>
-      <p className="awx-frequency-detail-subform__grid-column-1-1">
+      <p className="ascender-frequency-detail-subform__grid-column-1-1">
         <b>{getPeriodLabel()}</b>
       </p>
       <FormGroup
@@ -215,9 +215,9 @@ const FrequencyDetailSubform = ({
         isRequired
         label={isException ? t`Skip every` : t`Run every`}
       >
-        <div className="awx-frequency-detail-subform__display-flex">
+        <div className="ascender-frequency-detail-subform__display-flex">
           <TextInput
-            className="awx-frequency-detail-subform__margin-right-10"
+            className="ascender-frequency-detail-subform__margin-right-10"
             id={`schedule-run-every-${id}`}
             type="number"
             min="1"
@@ -227,7 +227,7 @@ const FrequencyDetailSubform = ({
               interval.onChange(event);
             }}
           />
-          <p className="awx-frequency-detail-subform__run-every-label">
+          <p className="ascender-frequency-detail-subform__run-every-label">
             {getRunEveryLabel()}
           </p>
         </div>
@@ -248,9 +248,9 @@ const FrequencyDetailSubform = ({
           isRequired
           label={t`On days`}
         >
-          <div className="awx-frequency-detail-subform__display-flex">
+          <div className="ascender-frequency-detail-subform__display-flex">
             <Checkbox
-              className="awx-frequency-detail-subform__checkbox"
+              className="ascender-frequency-detail-subform__checkbox"
               label={t`Sun`}
               isChecked={daysOfWeek.value?.some(
                 (day: Weekday) =>
@@ -265,7 +265,7 @@ const FrequencyDetailSubform = ({
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
-              className="awx-frequency-detail-subform__checkbox"
+              className="ascender-frequency-detail-subform__checkbox"
               label={t`Mon`}
               isChecked={daysOfWeek.value?.some(
                 (day: Weekday) =>
@@ -280,7 +280,7 @@ const FrequencyDetailSubform = ({
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
-              className="awx-frequency-detail-subform__checkbox"
+              className="ascender-frequency-detail-subform__checkbox"
               label={t`Tue`}
               isChecked={daysOfWeek.value?.some(
                 (day: Weekday) =>
@@ -295,7 +295,7 @@ const FrequencyDetailSubform = ({
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
-              className="awx-frequency-detail-subform__checkbox"
+              className="ascender-frequency-detail-subform__checkbox"
               label={t`Wed`}
               isChecked={daysOfWeek.value?.some(
                 (day: Weekday) =>
@@ -310,7 +310,7 @@ const FrequencyDetailSubform = ({
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
-              className="awx-frequency-detail-subform__checkbox"
+              className="ascender-frequency-detail-subform__checkbox"
               label={t`Thu`}
               isChecked={daysOfWeek.value?.some(
                 (day: Weekday) =>
@@ -325,7 +325,7 @@ const FrequencyDetailSubform = ({
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
-              className="awx-frequency-detail-subform__checkbox"
+              className="ascender-frequency-detail-subform__checkbox"
               label={t`Fri`}
               isChecked={daysOfWeek.value?.some(
                 (day: Weekday) =>
@@ -340,7 +340,7 @@ const FrequencyDetailSubform = ({
               name={`${prefix}.daysOfWeek`}
             />
             <Checkbox
-              className="awx-frequency-detail-subform__checkbox"
+              className="ascender-frequency-detail-subform__checkbox"
               label={t`Sat`}
               isChecked={daysOfWeek.value?.some(
                 (day: Weekday) =>
@@ -375,14 +375,14 @@ const FrequencyDetailSubform = ({
             label={t`Run on`}
           >
             <Radio
-              className="awx-frequency-detail-subform__run-on-radio"
+              className="ascender-frequency-detail-subform__run-on-radio"
               id={`schedule-run-on-day-${id}`}
               name={`${prefix}.runOn`}
               label={
-                <div className="awx-frequency-detail-subform__display-align-items">
+                <div className="ascender-frequency-detail-subform__display-align-items">
                   {frequency === 'month' && (
                     <span
-                      className="awx-frequency-detail-subform__margin-right-10"
+                      className="ascender-frequency-detail-subform__margin-right-10"
                       id="radio-schedule-run-on-day"
                     >
                       <Trans>Day</Trans>
@@ -390,7 +390,7 @@ const FrequencyDetailSubform = ({
                   )}
                   {frequency === 'year' && (
                     <AnsibleSelect
-                      className="awx-frequency-detail-subform__margin-right-10"
+                      className="ascender-frequency-detail-subform__margin-right-10"
                       id={`schedule-run-on-day-month-${id}`}
                       isDisabled={runOn.value !== 'day'}
                       data={monthOptions}
@@ -419,13 +419,13 @@ const FrequencyDetailSubform = ({
               }}
             />
             <Radio
-              className="awx-frequency-detail-subform__run-on-radio"
+              className="ascender-frequency-detail-subform__run-on-radio"
               id={`schedule-run-on-the-${id}`}
               name={`${prefix}.runOn`}
               label={
-                <div className="awx-frequency-detail-subform__display-align-items">
+                <div className="ascender-frequency-detail-subform__display-align-items">
                   <span
-                    className="awx-frequency-detail-subform__margin-right-10"
+                    className="ascender-frequency-detail-subform__margin-right-10"
                     id={`radio-schedule-run-on-the-${id}`}
                   >
                     <Trans>The</Trans>
@@ -507,7 +507,7 @@ const FrequencyDetailSubform = ({
                   {frequency === 'year' && (
                     <>
                       <span
-                        className="awx-frequency-detail-subform__margin-left-10"
+                        className="ascender-frequency-detail-subform__margin-left-10"
                         id={`of-schedule-run-on-the-month-${id}`}
                       >
                         <Trans>of</Trans>

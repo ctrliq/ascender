@@ -1,8 +1,8 @@
-.awx-header-row__th {
+.ascender-header-row__th {
   --pf-v6-c-table--cell--Overflow: initial;
   --pf-v6-c-table--cell--MaxWidth: none;
 }
 
-.awx-header-row__th--align-right {
+.ascender-header-row__th--align-right {
   text-align: right;
 }

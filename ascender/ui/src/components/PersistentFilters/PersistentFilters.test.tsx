@@ -4,7 +4,7 @@ import { createMemoryHistory } from 'history';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import PersistentFilters from './PersistentFilters';
 
-const KEY = 'awx-persistent-filter';
+const KEY = 'ascender-persistent-filter';
 
 describe('PersistentFilters', () => {
   test('should initialize filter in sessionStorage', () => {

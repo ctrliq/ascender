@@ -60,7 +60,7 @@ function Dashboard() {
         breadcrumbConfig={{ '/home': t`Dashboard` }}
       />
       <PageSection hasBodyWrapper={false}>
-        <div className="awx-dashboard__counts">
+        <div className="ascender-dashboard__counts">
           <Count
             link="/hosts"
             data={countData?.hosts?.total}
@@ -96,7 +96,7 @@ function Dashboard() {
           />
         </div>
       </PageSection>
-      <PageSection className="awx-dashboard__main-page-section">
+      <PageSection className="ascender-dashboard__main-page-section">
         <div className="spacer">
           <Card id="dashboard-main-container">
             <Tabs
