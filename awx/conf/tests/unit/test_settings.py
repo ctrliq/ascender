@@ -15,6 +15,7 @@ from django.core.cache.backends.locmem import LocMemCache
 from django.core.exceptions import ImproperlyConfigured
 from django.db.utils import Error as DBError, OperationalError
 from django.utils.translation import gettext_lazy as _
+import psycopg
 import pytest
 
 from awx.conf import models, fields
@@ -373,3 +374,46 @@ def test_database_error_is_not_memoized(settings, mocker):
     mocks = mocker.Mock(**{'order_by.return_value': mocker.Mock(**{'__iter__': lambda self: iter([setting_from_db]), 'first.return_value': setting_from_db})})
     mocker.patch('awx.conf.models.Setting.objects.filter', return_value=mocks)
     assert settings.AWX_VAR == ['from-db']
+
+
+@pytest.mark.parametrize(
+    'cause',
+    [
+        pytest.param(psycopg.OperationalError('connection failed: password authentication failed'), id='no-sqlstate'),
+        pytest.param(None, id='no-cause'),
+    ],
+)
+def test_database_error_without_sqlstate_is_logged_not_raised(settings, caplog, cause):
+    """
+    A refused connection is a psycopg OperationalError whose sqlstate is None,
+    and a Django error need not carry a cause at all. Either used to make the
+    error reporting itself crash in psycopg.errors.lookup, which replaced the
+    useful warning with a traceback about NoneType.
+    """
+    settings.registry.register('AWX_VAR', field_class=fields.StringListField, default=[], category=_('System'), category_slug='system')
+    settings._awx_conf_memoizedcache.clear()
+
+    error = OperationalError('connection failed')
+    error.__cause__ = cause
+    with mock.patch('django.db.backends.base.base.BaseDatabaseWrapper.ensure_connection') as mock_ensure:
+        mock_ensure.side_effect = error
+        with caplog.at_level('WARNING', logger='awx.conf.settings'):
+            assert getattr(settings, 'AWX_VAR', 'unavailable') == 'unavailable'
+
+    assert 'Database settings are not available, using defaults. error: connection failed' in caplog.text
+    assert 'SQL Error state' not in caplog.text
+    assert 'Traceback' not in caplog.text
+
+
+def test_database_error_with_sqlstate_names_it(settings, caplog):
+    settings.registry.register('AWX_VAR', field_class=fields.StringListField, default=[], category=_('System'), category_slug='system')
+    settings._awx_conf_memoizedcache.clear()
+
+    error = OperationalError('too many clients')
+    error.__cause__ = psycopg.errors.TooManyConnections('too many clients')
+    with mock.patch('django.db.backends.base.base.BaseDatabaseWrapper.ensure_connection') as mock_ensure:
+        mock_ensure.side_effect = error
+        with caplog.at_level('WARNING', logger='awx.conf.settings'):
+            assert getattr(settings, 'AWX_VAR', 'unavailable') == 'unavailable'
+
+    assert 'SQL Error state: 53300 - TooManyConnections' in caplog.text
