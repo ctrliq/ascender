@@ -51,7 +51,7 @@ class TwilioBackend(AWXBaseEmailBackend, CustomNotificationBase):
                         auth=(self.account_sid, self.account_token),
                         data={"To": dest, "From": m.from_email, "Body": m.subject},
                         headers=get_awx_http_client_headers(),
-                        timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+                        timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
                     )
                     r.raise_for_status()
                     sent_messages += 1

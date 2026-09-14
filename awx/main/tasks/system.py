@@ -598,7 +598,7 @@ def cluster_node_heartbeat(dispatch_time=None, worker_tasks=None):
         elif (nowtime - last_last_seen) > timedelta(seconds=settings.CLUSTER_NODE_HEARTBEAT_PERIOD + 2):
             logger.warning(f'Heartbeat skew - interval={(nowtime - last_last_seen).total_seconds():.4f}, expected={settings.CLUSTER_NODE_HEARTBEAT_PERIOD}')
     else:
-        if settings.AWX_AUTO_DEPROVISION_INSTANCES:
+        if settings.ASCENDER_AUTO_DEPROVISION_INSTANCES:
             changed, this_inst = Instance.objects.register(ip_address=os.environ.get('MY_POD_IP'), node_type='control', node_uuid=settings.SYSTEM_UUID)
             if changed:
                 logger.warning(f'Recreated instance record {this_inst.hostname} after unexpected removal')
@@ -630,7 +630,7 @@ def cluster_node_heartbeat(dispatch_time=None, worker_tasks=None):
         except Exception:
             logger.exception('failed to reap jobs for {}'.format(other_inst.hostname))
         try:
-            if settings.AWX_AUTO_DEPROVISION_INSTANCES and other_inst.node_type == "control":
+            if settings.ASCENDER_AUTO_DEPROVISION_INSTANCES and other_inst.node_type == "control":
                 deprovision_hostname = other_inst.hostname
                 other_inst.delete()  # FIXME: what about associated inbound links?
                 logger.info("Host {} Automatically Deprovisioned.".format(deprovision_hostname))
@@ -713,7 +713,7 @@ def awx_k8s_reaper():
             logger.debug('{} is no longer active, reaping orphaned k8s pod'.format(job.log_format))
             try:
                 pm = PodManager(job)
-                pm.kube_api.delete_namespaced_pod(name=pods[job.id], namespace=pm.namespace, _request_timeout=settings.AWX_CONTAINER_GROUP_K8S_API_TIMEOUT)
+                pm.kube_api.delete_namespaced_pod(name=pods[job.id], namespace=pm.namespace, _request_timeout=settings.ASCENDER_CONTAINER_GROUP_K8S_API_TIMEOUT)
             except Exception:
                 logger.exception("Failed to delete orphaned pod {} from {}".format(job.log_format, group))
 

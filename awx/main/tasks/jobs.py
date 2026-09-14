@@ -572,7 +572,7 @@ class BaseTask(object):
                 'playbook': self.build_playbook_path_relative_to_cwd(self.instance, private_data_dir),
                 'inventory': self.build_inventory(self.instance, private_data_dir),
                 'passwords': expect_passwords,
-                'suppress_env_files': getattr(settings, 'AWX_RUNNER_OMIT_ENV_FILES', True),
+                'suppress_env_files': getattr(settings, 'ASCENDER_RUNNER_OMIT_ENV_FILES', True),
                 'envvars': env,
             }
 
@@ -604,7 +604,7 @@ class BaseTask(object):
             runner_settings = {
                 'job_timeout': self.get_instance_timeout(self.instance),
                 'suppress_ansible_output': True,
-                'suppress_output_file': getattr(settings, 'AWX_RUNNER_SUPPRESS_OUTPUT_FILE', True),
+                'suppress_output_file': getattr(settings, 'ASCENDER_RUNNER_SUPPRESS_OUTPUT_FILE', True),
             }
 
             idle_timeout = getattr(settings, 'DEFAULT_JOB_IDLE_TIMEOUT', 0)

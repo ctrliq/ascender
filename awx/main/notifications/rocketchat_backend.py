@@ -47,7 +47,7 @@ class RocketChatBackend(AWXBaseEmailBackend, CustomNotificationBase):
                 data=json.dumps(payload),
                 headers=get_awx_http_client_headers(),
                 verify=(not self.rocketchat_no_verify_ssl),
-                timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+                timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
             )
 
             if r.status_code >= 400:

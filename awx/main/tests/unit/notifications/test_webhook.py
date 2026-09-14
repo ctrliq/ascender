@@ -34,7 +34,7 @@ def test_send_messages_as_POST():
             data=json.dumps({'text': 'test body'}, ensure_ascii=False).encode('utf-8'),
             headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
             verify=True,
-            timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+            timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
         )
         assert sent_messages == 1
@@ -67,7 +67,7 @@ def test_send_messages_as_PUT():
             data=json.dumps({'text': 'test body 2'}, ensure_ascii=False).encode('utf-8'),
             headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
             verify=True,
-            timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+            timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
         )
         assert sent_messages == 1
@@ -100,7 +100,7 @@ def test_send_messages_with_username():
             data=json.dumps({'text': 'test body'}, ensure_ascii=False).encode('utf-8'),
             headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
             verify=True,
-            timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+            timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
         )
         assert sent_messages == 1
@@ -133,7 +133,7 @@ def test_send_messages_with_password():
             data=json.dumps({'text': 'test body'}, ensure_ascii=False).encode('utf-8'),
             headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
             verify=True,
-            timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+            timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
         )
         assert sent_messages == 1
@@ -166,7 +166,7 @@ def test_send_messages_with_username_and_password():
             data=json.dumps({'text': 'test body'}, ensure_ascii=False).encode('utf-8'),
             headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
             verify=True,
-            timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+            timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
         )
         assert sent_messages == 1
@@ -199,7 +199,7 @@ def test_send_messages_with_no_verify_ssl():
             data=json.dumps({'text': 'test body'}, ensure_ascii=False).encode('utf-8'),
             headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
             verify=False,
-            timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+            timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
         )
         assert sent_messages == 1
@@ -237,7 +237,7 @@ def test_send_messages_with_additional_headers():
                 'X-Test-Header2': 'test-content-2',
             },
             verify=True,
-            timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+            timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
         )
         assert sent_messages == 1
@@ -276,7 +276,7 @@ def test_send_messages_with_redirects_ok():
             data=json.dumps({'text': 'test body'}, ensure_ascii=False).encode('utf-8'),
             headers={'Content-Type': 'application/json', 'User-Agent': 'AWX 0.0.1.dev (open)'},
             verify=True,
-            timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+            timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
             allow_redirects=False,
         )
         assert sent_messages == 1

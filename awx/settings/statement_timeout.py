@@ -1,4 +1,4 @@
-import os
+from awx.settings.environment import environment_setting
 
 # What the uwsgi path used to work out to: harakiri of 115 seconds less a five
 # second margin. uvicorn serves the web process now and uwsgi is no longer
@@ -39,7 +39,7 @@ def set_statement_timeout(DATABASES, DATABASE_STATEMENT_TIMEOUT=None):
     except (ImportError, ValueError, TypeError):
         pass
 
-    if timeout_ms is None and os.environ.get('AWX_WEB_PROCESS'):
+    if timeout_ms is None and environment_setting('WEB_PROCESS'):
         # a web process that is not uwsgi: same protection, explicit source
         timeout_ms = DATABASE_STATEMENT_TIMEOUT if DATABASE_STATEMENT_TIMEOUT is not None else DEFAULT_WEB_TIMEOUT_MS
 

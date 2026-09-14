@@ -154,5 +154,5 @@ def test_kube_api_ignores_proxy_environment(containerized_job, default_job_execu
         assert pm.kube_api.api_client.configuration.proxy is None
 
         del pm.__dict__['kube_api']  # drop the cached_property
-        with override_settings(AWX_CONTAINER_GROUP_K8S_API_USE_PROXY=True):
+        with override_settings(ASCENDER_CONTAINER_GROUP_K8S_API_USE_PROXY=True):
             assert pm.kube_api.api_client.configuration.proxy == 'http://proxy.example.com:3128'

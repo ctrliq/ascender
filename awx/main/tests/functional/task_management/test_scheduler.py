@@ -237,7 +237,7 @@ class TestJobLifeCycle:
     def test_hybrid_capacity(self, job_template, hybrid_instance):
         enough_capacity = job_template.create_unified_job()
         insufficient_capacity = job_template.create_unified_job()
-        expected_task_impact = enough_capacity.task_impact + settings.AWX_CONTROL_NODE_TASK_IMPACT
+        expected_task_impact = enough_capacity.task_impact + settings.ASCENDER_CONTROL_NODE_TASK_IMPACT
         all_ujs = [enough_capacity, insufficient_capacity]
         for uj in all_ujs:
             uj.signal_start()
@@ -261,7 +261,7 @@ class TestJobLifeCycle:
     def test_project_update_capacity(self, project, hybrid_instance, instance_group_factory, controlplane_instance_group):
         pu = project.create_unified_job()
         instance_group_factory(name='second_ig', instances=[hybrid_instance])
-        expected_task_impact = pu.task_impact + settings.AWX_CONTROL_NODE_TASK_IMPACT
+        expected_task_impact = pu.task_impact + settings.ASCENDER_CONTROL_NODE_TASK_IMPACT
         pu.signal_start()
 
         tm = TaskManager()

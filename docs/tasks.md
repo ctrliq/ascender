@@ -245,7 +245,7 @@ Running the Update Inventory Computed Fields task in the background, in response
 
 The `smart_inventories` field in Ascender uses a membership lookup table that identifies the set of every Smart Inventory a host is associated with. This particular task generates memberships and is launched whenever certain conditions are met (_e.g._, a new host is added or an existing host is modified).
 
-An important thing to note is that this task is only run if the `AWX_REBUILD_SMART_MEMBERSHIP` is set to `True` (default is `False`).
+An important thing to note is that this task is only run if the `ASCENDER_REBUILD_SMART_MEMBERSHIP` is set to `True` (default is `False`).
 
 For more information, visit the [Smart Inventories section](https://docs.ansible.com/ansible-tower/latest/html/userguide/inventories.html#smart-inventories) of the Tower User Guide's "Inventory" page or the Ascender documentation page [Inventory Refresh Overview page](github.com/ctrliq/ascender/blob/main/docs/inventory_refresh.md#inventory-changes) in this repo.
 

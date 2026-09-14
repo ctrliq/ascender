@@ -55,7 +55,7 @@ INSTALL_UUID = '00000000-0000-0000-0000-000000000000'
 
 CLUSTER_HOST_ID = socket.gethostname()
 
-AWX_CALLBACK_PROFILE = True
+ASCENDER_CALLBACK_PROFILE = True
 
 # ======================!!!!!!! FOR DEVELOPMENT ONLY !!!!!!!=================================
 # Disable normal scheduled/triggered task managers (DependencyManager, TaskManager, WorkflowManager).
