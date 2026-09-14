@@ -81,7 +81,11 @@ def test_get_registered_read_only_settings(reg):
 def test_get_dependent_settings(reg):
     reg.register('ASCENDER_SOME_SETTING_ENABLED', field_class=fields.BooleanField, category=_('System'), category_slug='system')
     reg.register(
-        'ASCENDER_SOME_DEPENDENT_SETTING', field_class=fields.BooleanField, category=_('System'), category_slug='system', depends_on=['ASCENDER_SOME_SETTING_ENABLED']
+        'ASCENDER_SOME_DEPENDENT_SETTING',
+        field_class=fields.BooleanField,
+        category=_('System'),
+        category_slug='system',
+        depends_on=['ASCENDER_SOME_SETTING_ENABLED'],
     )
     assert reg.get_dependent_settings('ASCENDER_SOME_SETTING_ENABLED') == set(['ASCENDER_SOME_DEPENDENT_SETTING'])
 

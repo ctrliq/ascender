@@ -154,7 +154,12 @@ class ApiV2PingView(APIView):
         Everything returned here should be considered public / insecure, as
         this requires no auth and is intended for use by the installer process.
         """
-        response = {'ha': is_ha_environment(), 'version': get_ascender_version(), 'active_node': settings.CLUSTER_HOST_ID, 'install_uuid': settings.INSTALL_UUID}
+        response = {
+            'ha': is_ha_environment(),
+            'version': get_ascender_version(),
+            'active_node': settings.CLUSTER_HOST_ID,
+            'install_uuid': settings.INSTALL_UUID,
+        }
 
         response['instances'] = []
         for instance in Instance.objects.exclude(node_type='hop'):

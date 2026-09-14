@@ -16,7 +16,11 @@ def test_capacity_adjustment_no_save(capacity_adjustment):
 
 def test_cleanup_params_defaults():
     inst = Instance(hostname='foobar')
-    assert inst.get_cleanup_task_kwargs(exclude_strings=['ascender_423_']) == {'exclude_strings': ['ascender_423_'], 'file_pattern': '/tmp/ascender_*_*', 'grace_period': 60}
+    assert inst.get_cleanup_task_kwargs(exclude_strings=['ascender_423_']) == {
+        'exclude_strings': ['ascender_423_'],
+        'file_pattern': '/tmp/ascender_*_*',
+        'grace_period': 60,
+    }
 
 
 def test_cleanup_params_for_image_cleanup():

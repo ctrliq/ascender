@@ -50,8 +50,6 @@ OPEN_PRODUCT_NAME = 'Ascender'
 SUBSCRIPTION_PRODUCT_NAME = 'Red Hat Ansible Automation Platform'
 
 
-
-
 def validate_entitlement_manifest(data):
     buff = io.BytesIO()
     buff.write(base64.b64decode(data))

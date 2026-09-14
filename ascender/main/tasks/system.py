@@ -406,7 +406,8 @@ def _cleanup_images_and_files(**kwargs):
     )
     if checker_instance and this_inst.hostname == checker_instance.hostname:
         for inst, folder_prefix in (
-            (i, p) for i in Instance.objects.filter(node_type='execution', node_state=Instance.States.READY, enabled=True, capacity__gt=0)
+            (i, p)
+            for i in Instance.objects.filter(node_type='execution', node_state=Instance.States.READY, enabled=True, capacity__gt=0)
             for p in (JOB_FOLDER_PREFIX, FORMER_JOB_FOLDER_PREFIX)
         ):
             runner_cleanup_kwargs = inst.get_cleanup_task_kwargs(folder_prefix=folder_prefix, **kwargs)
