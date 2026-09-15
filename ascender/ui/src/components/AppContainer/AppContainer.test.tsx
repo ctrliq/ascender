@@ -77,9 +77,6 @@ describe('<AppContainer />', () => {
             version: '9000',
             me: { is_superuser: true },
             toJSON: () => '/config/',
-            license_info: {
-              valid_key: true,
-            },
           },
         },
       }
@@ -129,9 +126,6 @@ describe('<AppContainer />', () => {
           version: '9000',
           me: { is_superuser: true },
           toJSON: () => '/config/',
-          license_info: {
-            valid_key: true,
-          },
         },
       },
     });
@@ -149,9 +143,6 @@ describe('<AppContainer />', () => {
           version: '9000',
           me: { is_superuser: true },
           toJSON: () => '/config/',
-          license_info: {
-            valid_key: true,
-          },
         },
       },
     });

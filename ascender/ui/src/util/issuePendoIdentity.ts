@@ -4,13 +4,8 @@ import bootstrapPendo from './bootstrapPendo';
 /** The parts of /api/v2/config/ this reads, plus whatever else it carries. */
 export interface PendoConfig {
   version: string;
-  trial?: boolean;
-  license_type?: string;
-  instance_count?: number;
-  license_date?: number;
   ansible_version?: string;
   analytics_status?: string;
-  license_info?: Record<string, unknown>;
   me: { id: number; is_superuser?: boolean };
   [key: string]: unknown;
 }
@@ -32,7 +27,6 @@ function buildPendoOptions(
   pendoApiKey: string
 ): PendoOptions {
   const towerVersion = config.version.split('-')[0];
-  const trial = config.trial ? config.trial : false;
 
   return {
     apiKey: pendoApiKey,
@@ -42,10 +36,6 @@ function buildPendoOptions(
     },
     account: {
       id: 'tower.ansible.com',
-      planLevel: config.license_type,
-      planPrice: config.instance_count,
-      creationDate: config.license_date,
-      trial,
       tower_version: towerVersion,
       ansible_version: config.ansible_version,
     },
@@ -73,13 +63,6 @@ async function buildPendoOptionsRole(
 }
 
 async function issuePendoIdentity(config: PendoConfig): Promise<void> {
-  if (!('license_info' in config)) {
-    config.license_info = {};
-  }
-  config.license_info!.analytics_status = config.analytics_status;
-  config.license_info!.version = config.version;
-  config.license_info!.ansible_version = config.ansible_version;
-
   if (config.analytics_status !== 'off') {
     const { data } = await RootAPI.readAssetVariables();
     const { PENDO_API_KEY } = data as { PENDO_API_KEY?: string };

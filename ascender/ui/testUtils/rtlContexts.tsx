@@ -45,9 +45,6 @@ const defaultContexts = {
     version: null,
     me: { is_superuser: true },
     toJSON: () => '/config/',
-    license_info: {
-      valid_key: true,
-    },
   },
   router: {},
   session: {

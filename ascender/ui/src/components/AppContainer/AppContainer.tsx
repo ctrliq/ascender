@@ -22,6 +22,7 @@ import { useConfig, useAuthorizedPath } from 'contexts/Config';
 import { useSession } from 'contexts/Session';
 import issuePendoIdentity from 'util/issuePendoIdentity';
 import type { PendoConfig } from 'util/issuePendoIdentity';
+import useBrandName from 'hooks/useBrandName';
 import type { AppRouteGroup } from '../../routeConfig';
 import About from '../About';
 import BrandLogo from './BrandLogo';
@@ -41,7 +42,10 @@ function AppContainer({ navRouteConfig = [], children }: AppContainerProps) {
   const config = useConfig();
   const { logout, handleSessionContinue, sessionCountdown } = useSession();
 
-  const isReady = !!config.license_info;
+  // The config context starts empty and fills once /api/v2/config/ answers.
+  // version is the field that says so; it used to be license_info, which
+  // meant the app waited on a licence to decide the config had loaded.
+  const isReady = !!config.version;
   const isSidebarVisible = useAuthorizedPath();
   const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
 
@@ -57,7 +61,7 @@ function AppContainer({ navRouteConfig = [], children }: AppContainerProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config.analytics_status]);
 
-  const brandName = config?.license_info?.product_name;
+  const brandName = useBrandName();
   const alt = brandName ? t`${brandName} logo` : t`brand logo`;
 
   const header = (
