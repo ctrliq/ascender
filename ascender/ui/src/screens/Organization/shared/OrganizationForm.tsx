@@ -5,7 +5,6 @@ import { Trans, useLingui } from '@lingui/react/macro';
 import { Form } from '@patternfly/react-core';
 
 import { OrganizationsAPI } from 'api';
-import { useConfig } from 'contexts/Config';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import FormField, { FormSubmitError } from 'components/FormField';
@@ -14,7 +13,7 @@ import {
   InstanceGroupsLookup,
   ExecutionEnvironmentLookup,
 } from 'components/Lookup';
-import { required, minMaxValue } from 'util/validators';
+import { required } from 'util/validators';
 import { FormColumnLayout } from 'components/FormLayout';
 import CredentialLookup from 'components/Lookup/CredentialLookup';
 
@@ -31,7 +30,6 @@ function OrganizationFormFields({
   organizationId,
 }: OrganizationFormFieldsProps) {
   const { t } = useLingui();
-  const { license_info = {}, me = {} } = useConfig();
 
   const { setFieldValue } = useFormContext<Record<string, unknown>>();
 
@@ -70,20 +68,6 @@ function OrganizationFormFields({
         type="text"
         label={t`Description`}
       />
-      {license_info?.license_type !== 'open' && (
-        <FormField
-          id="org-max_hosts"
-          name="max_hosts"
-          type="number"
-          label={t`Max Hosts`}
-          tooltip={t`The maximum number of hosts allowed to be managed by this organization.
-            Value defaults to 0 which means no limit. Refer to the Ansible
-            documentation for more details.`}
-          validate={minMaxValue(0, Number.MAX_SAFE_INTEGER)}
-          me={me}
-          isDisabled={!me.is_superuser}
-        />
-      )}
       <InstanceGroupsLookup
         value={instanceGroups}
         onChange={setInstanceGroups}

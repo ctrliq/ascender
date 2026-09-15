@@ -195,14 +195,11 @@ describe('<OrganizationForm />', () => {
 
     const nameInput = container.querySelector('#org-name');
     const descriptionInput = container.querySelector('#org-description');
-    const maxHostsInput = container.querySelector('#org-max_hosts');
 
     await user.clear(nameInput!);
     await user.type(nameInput!, 'new foo');
     await user.clear(descriptionInput!);
     await user.type(descriptionInput!, 'new bar');
-    await user.clear(maxHostsInput!);
-    await user.type(maxHostsInput!, '134');
     await user.click(screen.getByRole('button', { name: 'select-ee' }));
 
     await user.click(screen.getByRole('button', { name: 'Save' }));
@@ -212,7 +209,7 @@ describe('<OrganizationForm />', () => {
       name: 'new foo',
       description: 'new bar',
       galaxy_credentials: [],
-      max_hosts: 134,
+      max_hosts: 1,
       default_environment: { id: 1, name: 'Test EE' },
     });
   });
@@ -262,40 +259,6 @@ describe('<OrganizationForm />', () => {
         mockInstanceGroups
       )
     );
-  });
-
-  test('onSubmit does not get called if max_hosts value is out of range', async () => {
-    const onSubmit = vi.fn();
-    // mount with negative value
-    const mockDataNegative = JSON.parse(JSON.stringify(mockData));
-    mockDataNegative.max_hosts = -5;
-    const { user, unmount } = renderWithContexts(
-      <OrganizationForm
-        organization={mockDataNegative}
-        onSubmit={onSubmit}
-        onCancel={vi.fn()}
-      />
-    );
-    await screen.findByTestId('instance-groups-lookup');
-    await user.click(screen.getByRole('button', { name: 'Save' }));
-    expect(onSubmit).not.toHaveBeenCalled();
-    unmount();
-
-    // mount with out of range value
-    const mockDataOutOfRange = JSON.parse(JSON.stringify(mockData));
-    // Past the maximum the field accepts, which is the case here.
-    // eslint-disable-next-line no-loss-of-precision
-    mockDataOutOfRange.max_hosts = 999999999999999999999;
-    const { user: user2 } = renderWithContexts(
-      <OrganizationForm
-        organization={mockDataOutOfRange}
-        onSubmit={onSubmit}
-        onCancel={vi.fn()}
-      />
-    );
-    await screen.findByTestId('instance-groups-lookup');
-    await user2.click(screen.getByRole('button', { name: 'Save' }));
-    expect(onSubmit).not.toHaveBeenCalled();
   });
 
   test('onSubmit is called and max_hosts value defaults to 0 if input is not a number', async () => {

@@ -1,27 +1,9 @@
 import Base from '../Base';
 import type { Http } from '../Base';
 
-/**
- * One subscription the account holds, as the subscriptions endpoint lists it.
- *
- * The list is keyed by pool, and two entries can share a pool id, so the
- * screen numbers them itself before it puts them in a table.
- */
-export interface SubscriptionPool {
-  id?: number;
-  pool_id?: string;
-  subscription_name?: string;
-  instance_count?: number;
-  license_date?: number;
-  trial?: boolean;
-  [key: string]: unknown;
-}
-
-/** What /api/v2/config/ reports about the install and its subscription. */
+/** What /api/v2/config/ reports about the install. */
 export interface ConfigResponse {
   version?: string;
-  eula?: string;
-  license_info?: Record<string, unknown>;
   analytics_status?: string;
   ansible_version?: string;
   project_base_dir?: string;

@@ -38,7 +38,6 @@ from ascender.main.utils import encrypt_field, encrypt_value
 from ascender.main.utils.safe_yaml import SafeLoader
 from ascender.main.utils.execution_environments import CONTAINER_ROOT
 
-from ascender.main.utils.licensing import OpenLicense
 from ascender.main.constants import JOB_VARIABLE_PREFIXES
 
 from receptorctl.socket_interface import ReceptorControl
@@ -1468,8 +1467,7 @@ class TestProjectUpdateGalaxyCredentials(TestJobExecution):
         task.instance = project_update
         env = task.build_env(project_update, private_data_dir)
 
-        with mock.patch.object(OpenLicense, 'validate', lambda *args, **kw: {}):
-            task.build_extra_vars_file(project_update, private_data_dir)
+        task.build_extra_vars_file(project_update, private_data_dir)
 
         assert task.__vars__['roles_enabled'] is False
         assert task.__vars__['collections_enabled'] is False
@@ -1496,8 +1494,7 @@ class TestProjectUpdateGalaxyCredentials(TestJobExecution):
         task.instance = project_update
         env = task.build_env(project_update, private_data_dir)
 
-        with mock.patch.object(OpenLicense, 'validate', lambda *args, **kw: {}):
-            task.build_extra_vars_file(project_update, private_data_dir)
+        task.build_extra_vars_file(project_update, private_data_dir)
 
         assert task.__vars__['roles_enabled'] is True
         assert task.__vars__['collections_enabled'] is True

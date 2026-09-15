@@ -139,7 +139,6 @@ describe('<OrganizationDetail />', () => {
     assertDetail('Description', 'Bar');
     assertDetail('Created', '7/7/2015, 5:21:26 PM');
     assertDetail('Last Modified', '8/11/2019, 7:47:37 PM');
-    assertDetail('Max Hosts', '0');
     assertDetail('Default Execution Environment', 'Default EE');
   });
 

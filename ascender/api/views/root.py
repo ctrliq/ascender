@@ -22,7 +22,6 @@ from ascender.main.utils import get_ascender_version
 from ascender.api.versioning import reverse, drf_reverse
 from ascender.main.constants import PRIVILEGE_ESCALATION_METHODS
 from ascender.main.models import Project, Organization, Instance, InstanceGroup
-from ascender.main.utils.licensing import get_licenser
 
 logger = logging.getLogger('awx.api.views.root')
 
@@ -188,18 +187,11 @@ class ApiV2ConfigView(APIView):
     def get(self, request, format=None):
         '''Return various sitewide configuration settings'''
 
-        license_data = get_licenser().validate()
-
-        if not license_data.get('valid_key', False):
-            license_data = {}
-
         pendo_state = settings.PENDO_TRACKING_STATE if settings.PENDO_TRACKING_STATE in ('off', 'anonymous', 'detailed') else 'off'
 
         data = dict(
             time_zone=settings.TIME_ZONE,
-            license_info=license_data,
             version=get_ascender_version(),
-            eula='',
             analytics_status=pendo_state,
             become_methods=PRIVILEGE_ESCALATION_METHODS,
         )

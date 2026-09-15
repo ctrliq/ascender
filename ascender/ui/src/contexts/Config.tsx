@@ -17,35 +17,6 @@ import { setCustomTheme, applyTheme, getSavedThemeId } from 'themeRegistry';
 import { useSession } from './Session';
 
 /**
- * What the subscription reports about itself.
- *
- * Which of these it carries follows the licence type, and the counts are only
- * there once the subscription tracks hosts, so every field is optional and the
- * index signature keeps the rest reachable.
- */
-export interface LicenseInfo {
-  valid_key?: boolean;
-  compliant?: boolean;
-  subscription_name?: string;
-  product_name?: string;
-  license_type?: string;
-  trial?: boolean;
-  /** Unix seconds, which the detail and the banner format. */
-  license_date?: number;
-  time_remaining?: number;
-  instance_count?: number;
-  current_instances?: number;
-  free_instances?: number;
-  available_instances?: number;
-  automated_instances?: number;
-  deleted_instances?: number;
-  reactivated_instances?: number;
-  /** Unix seconds: when the automated host count started counting. */
-  automated_since?: number;
-  [key: string]: unknown;
-}
-
-/**
  * What the config context carries. Assembled from several endpoints in the
  * provider below, which is why it is declared here rather than taken from a
  * single generated schema.
@@ -65,10 +36,6 @@ export interface CurrentUser {
 export interface ConfigValue {
   /** The current user, as /api/v2/me returns them. */
   me?: CurrentUser;
-  /** The end user licence agreement, shown by the subscription wizard. */
-  eula?: string;
-  /** The subscription, whose fields differ by licence type. */
-  license_info?: LicenseInfo;
   version?: string;
   toJSON?: () => string;
   isLoading?: boolean;
