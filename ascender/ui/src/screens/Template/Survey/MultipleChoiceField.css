@@ -8,10 +8,38 @@
   font-size: var(--pf-v6-c-form__label--FontSize);
 }
 
-.ascender-multiple-choice-field__check-icon {
-  color: var(--pf-v6-c-button--m-plain--disabled--Color);
+/*
+ * The default-choice toggle is a control button whose background shows the
+ * state: the brand colour when the choice is the default, a disabled-looking
+ * grey when it is not (including the disabled toggle on a still-empty row).
+ *
+ * The themes paint every control button in the brand colour with
+ * high-specificity nested rules (html[data-theme] ...
+ * .pf-v6-c-button.pf-m-control, with :not(:disabled), :hover and :disabled
+ * variants), so the grey state has to use !important to win. PatternFly draws
+ * the border with a ::after pseudo-element from --pf-v6-c-button--BorderColor,
+ * so that variable has to change as well as border-color (the light, dark and
+ * awx themes also set a real border on the element). The selected
+ * state lets the theme through and only supplies a fallback for themes that do
+ * not style control buttons.
+ */
+.ascender-multiple-choice-field__default-toggle--selected {
+  background-color: var(--pf-t--global--color--brand--default);
+  color: var(--pf-t--global--text--color--on-brand--default);
 }
 
-.ascender-multiple-choice-field__check-icon--selected {
-  color: var(--pf-v6-c-button--m-secondary--active--Color);
+.ascender-multiple-choice-field__default-toggle:not(
+  .ascender-multiple-choice-field__default-toggle--selected
+) {
+  --pf-v6-c-button--BorderColor: var(
+    --pf-t--global--border--color--disabled
+  ) !important;
+  --pf-v6-c-button--hover--BorderColor: var(
+    --pf-t--global--border--color--disabled
+  ) !important;
+  background: var(
+    --pf-t--global--background--color--disabled--default
+  ) !important;
+  border-color: var(--pf-t--global--border--color--disabled) !important;
+  color: var(--pf-t--global--icon--color--disabled) !important;
 }
