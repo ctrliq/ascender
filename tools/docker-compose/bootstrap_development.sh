@@ -16,9 +16,6 @@ mkdir -p /ascender_devel/ascender/ui/build/static
 
 make ascender-link
 
-# Ascender bootstrapping
-make version_file
-
 if [[ -n "$RUN_MIGRATIONS" ]]; then
     # wait for postgres to be ready
     while ! nc -z postgres 5432; do
