@@ -78,7 +78,7 @@ Hop nodes can be added to sit between the control plane of Ascender and standalo
 
 Below is an example of an Ascender task pod with two execution nodes. Traffic to execution node 2 flows through a hop node that is setup between it and the control plane.
 
-.. image:: ../common/images/instances_awx_task_pods_hopnode.drawio.png
+.. image:: ../common/images/instances_ascender_task_pods_hopnode.drawio.png
 	:alt: Ascender task pod with a hop node between the control plane of Ascender and standalone execution nodes.
 
 

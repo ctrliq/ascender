@@ -8,7 +8,7 @@ pidfile = /var/run/supervisor/supervisor.web.pid
 [program:nginx]
 {% if kube_dev | bool %}
 command = make nginx
-directory = /awx_devel
+directory = /ascender_devel
 {% else %}
 command = nginx -g "daemon off;"
 {% endif %}
@@ -38,10 +38,10 @@ stderr_logfile_maxbytes=0
 environment = AWX_WEB_PROCESS=1
 {% if kube_dev | bool %}
 command = make uvicorn
-directory = /awx_devel
+directory = /ascender_devel
 {% else %}
-command = /var/lib/awx/venv/awx/bin/uvicorn --host 127.0.0.1 --port 8051 --workers 5 --ws auto --no-server-header --timeout-graceful-shutdown 110 --limit-concurrency 512 awx.asgi:channel_layer
-directory = /var/lib/awx
+command = /var/lib/ascender/venv/awx/bin/uvicorn --host 127.0.0.1 --port 8051 --workers 5 --ws auto --no-server-header --timeout-graceful-shutdown 110 --limit-concurrency 512 ascender.asgi:channel_layer
+directory = /var/lib/ascender
 {% endif %}
 autorestart = true
 startsecs = 30
@@ -55,10 +55,10 @@ stderr_logfile_maxbytes=0
 [program:ws-heartbeat]
 {% if kube_dev | bool %}
 command = make run-ws-heartbeat
-directory = /awx_devel
+directory = /ascender_devel
 {% else %}
-command = awx-manage run_ws_heartbeat
-directory = /var/lib/awx
+command = ascender-manage run_ws_heartbeat
+directory = /var/lib/ascender
 {% endif %}
 autorestart = true
 startsecs = 30
@@ -69,13 +69,13 @@ stdout_logfile_maxbytes=0
 stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
 
-[program:awx-cache-clear]
+[program:cache-clear]
 {% if kube_dev | bool %}
 command = make run-cache-clear
-directory = /awx_devel
+directory = /ascender_devel
 {% else %}
-command = awx-manage run_cache_clear
-directory = /var/lib/awx
+command = ascender-manage run_cache_clear
+directory = /var/lib/ascender
 {% endif %}
 autorestart = true
 startsecs = 30
@@ -87,8 +87,8 @@ stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
 
 {% if kube_dev | bool %}
-[program:awx-autoreload]
-command = /awx_devel/tools/docker-compose/awx-autoreload /awx_devel/awx
+[program:ascender-autoreload]
+command = /ascender_devel/tools/docker-compose/ascender-autoreload /ascender_devel/ascender
 autostart = true
 autorestart = true
 stopasgroup=true
@@ -99,8 +99,8 @@ stderr_logfile=/dev/stderr
 stderr_logfile_maxbytes=0
 {% endif %}
 
-[group:tower-processes]
-programs=nginx,uvicorn,awx-cache-clear,ws-heartbeat
+[group:ascender-processes]
+programs=nginx,uvicorn,cache-clear,ws-heartbeat
 priority=5
 
 [eventlistener:superwatcher]

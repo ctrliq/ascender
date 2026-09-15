@@ -1,0 +1,7319 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-07 07:17+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ascender/api/conf.py:19
+msgid "Idle Time Force Log Out"
+msgstr ""
+
+#: ascender/api/conf.py:20
+msgid ""
+"Number of seconds that a user is inactive before they will need to login "
+"again."
+msgstr ""
+
+#: ascender/api/conf.py:21 ascender/api/conf.py:31 ascender/api/conf.py:42 ascender/api/conf.py:50
+#: ascender/api/conf.py:70 ascender/api/conf.py:85 ascender/api/conf.py:96 ascender/api/conf.py:105
+#: ascender/sso/conf.py:106 ascender/sso/conf.py:117 ascender/sso/conf.py:129
+#: ascender/sso/conf.py:146 ascender/sso/conf.py:157 ascender/sso/conf.py:1604
+#: ascender/sso/conf.py:1615 ascender/sso/conf.py:1626 ascender/sso/conf.py:1637
+msgid "Authentication"
+msgstr ""
+
+#: ascender/api/conf.py:23 ascender/api/conf.py:72 ascender/main/conf.py:473
+#: ascender/main/conf.py:488 ascender/main/conf.py:503 ascender/main/conf.py:518
+#: ascender/main/conf.py:535 ascender/main/conf.py:677 ascender/main/conf.py:810
+#: ascender/sso/conf.py:543
+msgid "seconds"
+msgstr ""
+
+#: ascender/api/conf.py:29
+msgid "Maximum number of simultaneous logged in sessions"
+msgstr ""
+
+#: ascender/api/conf.py:30
+msgid ""
+"Maximum number of simultaneous logged in sessions a user may have. To "
+"disable enter -1."
+msgstr ""
+
+#: ascender/api/conf.py:37
+msgid "Disable the built-in authentication system"
+msgstr ""
+
+#: ascender/api/conf.py:39
+msgid ""
+"Controls whether users are prevented from using the built-in authentication "
+"system. You probably want to do this if you are using an LDAP or SAML "
+"integration."
+msgstr ""
+
+#: ascender/api/conf.py:48
+msgid "Enable HTTP Basic Auth"
+msgstr ""
+
+#: ascender/api/conf.py:49
+msgid "Enable HTTP Basic Auth for the API Browser."
+msgstr ""
+
+#: ascender/api/conf.py:61
+msgid "OAuth 2 Timeout Settings"
+msgstr ""
+
+#: ascender/api/conf.py:63
+msgid ""
+"Dictionary for customizing OAuth 2 timeouts, available items are "
+"`ACCESS_TOKEN_EXPIRE_SECONDS`, the duration of access tokens in the number "
+"of seconds, `AUTHORIZATION_CODE_EXPIRE_SECONDS`, the duration of "
+"authorization codes in the number of seconds, and "
+"`REFRESH_TOKEN_EXPIRE_SECONDS`, the duration of refresh tokens, after "
+"expired access tokens, in the number of seconds."
+msgstr ""
+
+#: ascender/api/conf.py:78
+msgid "Allow External Users to Create OAuth2 Tokens"
+msgstr ""
+
+#: ascender/api/conf.py:80
+msgid ""
+"For security reasons, users from external auth providers (LDAP, SAML, SSO, "
+"Radius, and others) are not allowed to create OAuth2 tokens. To change this "
+"behavior, enable this setting. Existing tokens will not be deleted when this "
+"setting is toggled off."
+msgstr ""
+
+#: ascender/api/conf.py:94
+msgid "Login redirect override URL"
+msgstr ""
+
+#: ascender/api/conf.py:95
+msgid ""
+"URL to which unauthorized users will be redirected to log in.  If blank, "
+"users will be sent to the login page."
+msgstr ""
+
+#: ascender/api/conf.py:103
+msgid "Allow anonymous users to poll metrics"
+msgstr ""
+
+#: ascender/api/conf.py:104
+msgid "If true, anonymous users are allowed to poll metrics."
+msgstr ""
+
+#: ascender/api/conf.py:112
+msgid "There are no remote authentication systems configured."
+msgstr ""
+
+#: ascender/api/exceptions.py:19
+msgid "Resource is being used by running jobs."
+msgstr ""
+
+#: ascender/api/fields.py:83
+#, python-brace-format
+msgid "Invalid key names: {invalid_key_names}"
+msgstr ""
+
+#: ascender/api/fields.py:111
+msgid "Credential {} does not exist"
+msgstr ""
+
+#: ascender/api/generics.py:177
+msgid ""
+"You did not use correct Content-Type in your HTTP request. If you are using "
+"our REST API, the Content-Type must be application/json"
+msgstr ""
+
+#: ascender/api/generics.py:234
+msgid " To establish a login session, visit"
+msgstr ""
+
+#: ascender/api/generics.py:648 ascender/api/generics.py:708
+msgid "\"id\" field must be an integer."
+msgstr ""
+
+#: ascender/api/generics.py:705
+msgid "\"id\" is required to disassociate"
+msgstr ""
+
+#: ascender/api/generics.py:758
+msgid "{} 'id' field is missing."
+msgstr ""
+
+#: ascender/api/metadata.py:70
+msgid "Database ID for this {}."
+msgstr ""
+
+#: ascender/api/metadata.py:71
+msgid "Name of this {}."
+msgstr ""
+
+#: ascender/api/metadata.py:72
+msgid "Optional description of this {}."
+msgstr ""
+
+#: ascender/api/metadata.py:73
+msgid "Data type for this {}."
+msgstr ""
+
+#: ascender/api/metadata.py:74
+msgid "URL for this {}."
+msgstr ""
+
+#: ascender/api/metadata.py:75
+msgid "Data structure with URLs of related resources."
+msgstr ""
+
+#: ascender/api/metadata.py:77
+msgid ""
+"Data structure with name/description for related resources.  The output for "
+"some objects may be limited for performance reasons."
+msgstr ""
+
+#: ascender/api/metadata.py:79
+msgid "Timestamp when this {} was created."
+msgstr ""
+
+#: ascender/api/metadata.py:80
+msgid "Timestamp when this {} was last modified."
+msgstr ""
+
+#: ascender/api/pagination.py:76
+msgid "Number of results to return per page."
+msgstr ""
+
+#: ascender/api/parsers.py:33
+msgid "JSON parse error - not a JSON object"
+msgstr ""
+
+#: ascender/api/parsers.py:36
+#, python-format
+msgid ""
+"JSON parse error - %s\n"
+"Possible cause: trailing comma."
+msgstr ""
+
+#: ascender/api/serializers.py:225
+msgid ""
+"The original object is already named {}, a copy from it cannot have the same "
+"name."
+msgstr ""
+
+#: ascender/api/serializers.py:354
+#, python-format
+msgid "Cannot use dictionary for %s"
+msgstr ""
+
+#: ascender/api/serializers.py:368
+msgid "Playbook Run"
+msgstr ""
+
+#: ascender/api/serializers.py:369
+msgid "Command"
+msgstr ""
+
+#: ascender/api/serializers.py:370 ascender/main/models/unified_jobs.py:551
+msgid "SCM Update"
+msgstr ""
+
+#: ascender/api/serializers.py:371
+msgid "Inventory Sync"
+msgstr ""
+
+#: ascender/api/serializers.py:372
+msgid "Management Job"
+msgstr ""
+
+#: ascender/api/serializers.py:373
+msgid "Workflow Job"
+msgstr ""
+
+#: ascender/api/serializers.py:374
+msgid "Workflow Template"
+msgstr ""
+
+#: ascender/api/serializers.py:375
+msgid "Job Template"
+msgstr ""
+
+#: ascender/api/serializers.py:765
+msgid ""
+"Indicates whether all of the events generated by this unified job have been "
+"saved to the database."
+msgstr ""
+
+#: ascender/api/serializers.py:959
+msgid "Field used to change the password."
+msgstr ""
+
+#: ascender/api/serializers.py:961
+msgid "Set if the account is managed by an external service"
+msgstr ""
+
+#: ascender/api/serializers.py:1004
+msgid "Password required for new User."
+msgstr ""
+
+#: ascender/api/serializers.py:1009
+msgid "Password max length is {}"
+msgstr ""
+
+#: ascender/api/serializers.py:1011
+msgid "Password must be at least {} characters long."
+msgstr ""
+
+#: ascender/api/serializers.py:1013
+msgid "Password must contain at least {} digits."
+msgstr ""
+
+#: ascender/api/serializers.py:1016
+msgid "Password must contain at least {} uppercase characters."
+msgstr ""
+
+#: ascender/api/serializers.py:1020
+msgid "Password must contain at least {} special characters."
+msgstr ""
+
+#: ascender/api/serializers.py:1096
+#, python-format
+msgid "Unable to change %s on user managed by LDAP."
+msgstr ""
+
+#: ascender/api/serializers.py:1181
+msgid "Must be a simple space-separated string with allowed scopes {}."
+msgstr ""
+
+#: ascender/api/serializers.py:1265
+msgid "Authorization Grant Type"
+msgstr ""
+
+#: ascender/api/serializers.py:1266 ascender/main/credential_plugins/azure_kv.py:26
+#: ascender/main/credential_plugins/dsv.py:30
+#: ascender/main/models/credential/__init__.py:880
+msgid "Client Secret"
+msgstr ""
+
+#: ascender/api/serializers.py:1267
+msgid "Client Type"
+msgstr ""
+
+#: ascender/api/serializers.py:1268
+msgid "Redirect URIs"
+msgstr ""
+
+#: ascender/api/serializers.py:1269
+msgid "Skip Authorization"
+msgstr ""
+
+#: ascender/api/serializers.py:1383
+msgid "Cannot change max_hosts."
+msgstr ""
+
+#: ascender/api/serializers.py:1424
+#, python-brace-format
+msgid "Cannot change local_path for {scm_type}-based projects"
+msgstr ""
+
+#: ascender/api/serializers.py:1428
+msgid "This path is already being used by another manual project."
+msgstr ""
+
+#: ascender/api/serializers.py:1430
+msgid "SCM branch cannot be used with archive projects."
+msgstr ""
+
+#: ascender/api/serializers.py:1432
+msgid "SCM refspec can only be used with git projects."
+msgstr ""
+
+#: ascender/api/serializers.py:1434
+msgid "SCM track_submodules can only be used with git projects."
+msgstr ""
+
+#: ascender/api/serializers.py:1465
+msgid ""
+"Only Container Registry credentials can be associated with an Execution "
+"Environment"
+msgstr ""
+
+#: ascender/api/serializers.py:1473
+msgid "Cannot change the organization of an execution environment"
+msgstr ""
+
+#: ascender/api/serializers.py:1554
+msgid ""
+"One or more job templates depend on branch override behavior for this "
+"project (ids: {})."
+msgstr ""
+
+#: ascender/api/serializers.py:1563
+msgid "Update options must be set to false for manual projects."
+msgstr ""
+
+#: ascender/api/serializers.py:1568
+msgid "Array of playbooks available within this project."
+msgstr ""
+
+#: ascender/api/serializers.py:1585
+msgid ""
+"Array of inventory files and directories available within this project, not "
+"comprehensive."
+msgstr ""
+
+#: ascender/api/serializers.py:1628 ascender/api/serializers.py:3462
+msgid "A count of all plays and tasks for the job run."
+msgstr ""
+
+#: ascender/api/serializers.py:1768
+msgid "Smart inventories must specify host_filter"
+msgstr ""
+
+#: ascender/api/serializers.py:1793
+msgid ""
+"The source_vars for the related auto-created inventory source, special to "
+"constructed inventory."
+msgstr ""
+
+#: ascender/api/serializers.py:1800
+msgid ""
+"The cache timeout for the related auto-created inventory source, special to "
+"constructed inventory"
+msgstr ""
+
+#: ascender/api/serializers.py:1806
+msgid ""
+"The limit to restrict the returned hosts for the related auto-created "
+"inventory source, special to constructed inventory."
+msgstr ""
+
+#: ascender/api/serializers.py:1814
+msgid ""
+"The verbosity level for the related auto-created inventory source, special "
+"to constructed inventory"
+msgstr ""
+
+#: ascender/api/serializers.py:1963
+#, python-format
+msgid "Invalid port specification: %s"
+msgstr ""
+
+#: ascender/api/serializers.py:1974
+msgid "Cannot create Host for Smart or Constructed Inventories"
+msgstr ""
+
+#: ascender/api/serializers.py:1992
+msgid "A Group with that name already exists."
+msgstr ""
+
+#: ascender/api/serializers.py:2063
+msgid "A Host with that name already exists."
+msgstr ""
+
+#: ascender/api/serializers.py:2068
+msgid "Invalid group name."
+msgstr ""
+
+#: ascender/api/serializers.py:2073
+msgid "Cannot create Group for Smart or Constructed Inventories"
+msgstr ""
+
+#: ascender/api/serializers.py:2097
+msgid "Primary Key ID of inventory to add hosts to."
+msgstr ""
+
+#: ascender/api/serializers.py:2104
+msgid ""
+"List of hosts to be created, JSON. e.g. [{\"name\": \"example.com\"}, {\"name"
+"\": \"127.0.0.1\"}]"
+msgstr ""
+
+#: ascender/api/serializers.py:2124 ascender/main/access.py:405 ascender/main/access.py:416
+#, python-format
+msgid ""
+"You have already reached the maximum number of %s hosts allowed for your "
+"organization. Contact your System Administrator for assistance."
+msgstr ""
+
+#: ascender/api/serializers.py:2141 ascender/main/access.py:386
+msgid "Host count exceeds available instances."
+msgstr ""
+
+#: ascender/api/serializers.py:2142
+msgid "Number of hosts allowed by license has been exceeded."
+msgstr ""
+
+#: ascender/api/serializers.py:2148
+msgid ""
+"Hosts can only be created in manual inventories (not smart or constructed "
+"types)."
+msgstr ""
+
+#: ascender/api/serializers.py:2150
+msgid "Number of hosts exceeds system setting BULK_HOST_MAX_CREATE"
+msgstr ""
+
+#: ascender/api/serializers.py:2153
+#, python-brace-format
+msgid "Inventory with id {inv.id} not found or lack permissions to add hosts."
+msgstr ""
+
+#: ascender/api/serializers.py:2158
+#, python-brace-format
+msgid ""
+"Hostnames must be unique in an inventory. Duplicates found: "
+"{duplicate_new_names}"
+msgstr ""
+
+#: ascender/api/serializers.py:2177
+#, python-brace-format
+msgid "cannot create host, host creation error {e}"
+msgstr ""
+
+#: ascender/api/serializers.py:2212
+msgid "List of hosts ids to be deleted, e.g. [105, 130, 131, 200]"
+msgstr ""
+
+#: ascender/api/serializers.py:2284
+#, python-brace-format
+msgid "cannot delete hosts, host deletion error {e}"
+msgstr ""
+
+#: ascender/api/serializers.py:2347
+msgid "Cloud credential to use for inventory updates."
+msgstr ""
+
+#: ascender/api/serializers.py:2379
+msgid "`{}` is a prohibited environment variable"
+msgstr ""
+
+#: ascender/api/serializers.py:2468
+msgid "Cannot use manual project for SCM-based inventory."
+msgstr ""
+
+#: ascender/api/serializers.py:2473
+msgid "Cannot create Inventory Source for Smart or Constructed Inventories"
+msgstr ""
+
+#: ascender/api/serializers.py:2521
+msgid "Cannot change field '{}' on a constructed inventory source."
+msgstr ""
+
+#: ascender/api/serializers.py:2524
+msgid "Project required for scm type sources."
+msgstr ""
+
+#: ascender/api/serializers.py:2526
+msgid "constructed not a valid source for inventory"
+msgstr ""
+
+#: ascender/api/serializers.py:2530
+#, python-format
+msgid "Cannot set %s if not SCM type."
+msgstr ""
+
+#: ascender/api/serializers.py:2534 ascender/api/serializers.py:3203
+#: ascender/api/serializers.py:3205
+msgid "Project does not allow overriding branch."
+msgstr ""
+
+#: ascender/api/serializers.py:2611
+msgid "The project used for this job."
+msgstr ""
+
+#: ascender/api/serializers.py:2862
+msgid "Modifications not allowed for managed credential types"
+msgstr ""
+
+#: ascender/api/serializers.py:2872
+msgid ""
+"Modifications to inputs are not allowed for credential types that are in use"
+msgstr ""
+
+#: ascender/api/serializers.py:2875
+#, python-format
+msgid "Must be 'cloud' or 'net', not %s"
+msgstr ""
+
+#: ascender/api/serializers.py:2880
+msgid "'ask_at_runtime' is not supported for custom credentials."
+msgstr ""
+
+#: ascender/api/serializers.py:2918
+msgid "Credential Type"
+msgstr ""
+
+#: ascender/api/serializers.py:2985
+msgid "Modifications not allowed for managed credentials"
+msgstr ""
+
+#: ascender/api/serializers.py:2997 ascender/api/serializers.py:3076
+msgid "Galaxy credentials must be owned by an Organization."
+msgstr ""
+
+#: ascender/api/serializers.py:3012
+msgid ""
+"You cannot change the credential type of the credential, as it may break the "
+"functionality of the resources using it."
+msgstr ""
+
+#: ascender/api/serializers.py:3020
+msgid "Vault IDs cannot be changed once they have been created."
+msgstr ""
+
+#: ascender/api/serializers.py:3032
+msgid ""
+"Write-only field used to add user to owner role. If provided, do not give "
+"either team or organization. Only valid for creation."
+msgstr ""
+
+#: ascender/api/serializers.py:3040
+msgid ""
+"Write-only field used to add team to owner role. If provided, do not give "
+"either user or organization. Only valid for creation."
+msgstr ""
+
+#: ascender/api/serializers.py:3047
+msgid ""
+"Inherit permissions from organization roles. If provided on creation, do not "
+"give either user or team."
+msgstr ""
+
+#: ascender/api/serializers.py:3064
+msgid "Missing 'user', 'team', or 'organization'."
+msgstr ""
+
+#: ascender/api/serializers.py:3069
+msgid ""
+"Only one of 'user', 'team', or 'organization' should be provided, received "
+"{} fields."
+msgstr ""
+
+#: ascender/api/serializers.py:3090
+msgid ""
+"Credential organization must be set and match before assigning to a team"
+msgstr ""
+
+#: ascender/api/serializers.py:3193
+msgid "This field is required."
+msgstr ""
+
+#: ascender/api/serializers.py:3199
+msgid "Playbook not found for project."
+msgstr ""
+
+#: ascender/api/serializers.py:3201
+msgid "Must select playbook for project."
+msgstr ""
+
+#: ascender/api/serializers.py:3247
+msgid "Must be a Personal Access Token."
+msgstr ""
+
+#: ascender/api/serializers.py:3249
+msgid "Must match the selected webhook service."
+msgstr ""
+
+#: ascender/api/serializers.py:3338
+msgid "Cannot enable provisioning callback without an inventory set."
+msgstr ""
+
+#: ascender/api/serializers.py:3340
+msgid "You must either set a default value or ask to prompt on launch."
+msgstr ""
+
+#: ascender/api/serializers.py:3342 ascender/main/models/jobs.py:314
+msgid "Job Templates must have a project assigned."
+msgstr ""
+
+#: ascender/api/serializers.py:3493
+msgid "No change to job limit"
+msgstr ""
+
+#: ascender/api/serializers.py:3493
+msgid "All failed and unreachable hosts"
+msgstr ""
+
+#: ascender/api/serializers.py:3506
+msgid "Missing passwords needed to start: {}"
+msgstr ""
+
+#: ascender/api/serializers.py:3524
+msgid "Relaunch by host status not available until job finishes running."
+msgstr ""
+
+#: ascender/api/serializers.py:3538
+msgid "Job Template Project is missing or undefined."
+msgstr ""
+
+#: ascender/api/serializers.py:3540
+msgid "Job Template Inventory is missing or undefined."
+msgstr ""
+
+#: ascender/api/serializers.py:3580
+msgid "Unknown, job may have been run before launch configurations were saved."
+msgstr ""
+
+#: ascender/api/serializers.py:3660 ascender/main/tasks/jobs.py:1838
+msgid "{} are prohibited from use in ad hoc commands."
+msgstr ""
+
+#: ascender/api/serializers.py:3729 ascender/api/views/__init__.py:4122
+#, python-brace-format
+msgid ""
+"Standard Output too large to display ({text_size} bytes), only download "
+"supported for sizes over {supported_size} bytes."
+msgstr ""
+
+#: ascender/api/serializers.py:4086
+msgid "Provided variable {} has no database value to replace with."
+msgstr ""
+
+#: ascender/api/serializers.py:4106
+msgid "\"$encrypted$ is a reserved keyword, may not be used for {}.\""
+msgstr ""
+
+#: ascender/api/serializers.py:4612
+msgid "A project is required to run a job."
+msgstr ""
+
+#: ascender/api/serializers.py:4620
+msgid "The inventory associated with this Job Template is being deleted."
+msgstr ""
+
+#: ascender/api/serializers.py:4622 ascender/api/serializers.py:4763
+msgid "The provided inventory is being deleted."
+msgstr ""
+
+#: ascender/api/serializers.py:4629
+msgid "Cannot assign multiple {} credentials."
+msgstr ""
+
+#: ascender/api/serializers.py:4631
+msgid "Cannot assign a Credential of kind `{}`"
+msgstr ""
+
+#: ascender/api/serializers.py:4643
+msgid ""
+"Removing {} credential at launch time without replacement is not supported. "
+"Provided list lacked credential(s): {}."
+msgstr ""
+
+#: ascender/api/serializers.py:4761
+msgid "The inventory associated with this Workflow is being deleted."
+msgstr ""
+
+#: ascender/api/serializers.py:4786
+msgid ""
+"Primary key of the template for this job, can be a job template or inventory "
+"source."
+msgstr ""
+
+#: ascender/api/serializers.py:4815
+msgid ""
+"List of jobs to be launched, JSON. e.g. [{\"unified_job_template\": 7}, "
+"{\"unified_job_template\": 10}]"
+msgstr ""
+
+#: ascender/api/serializers.py:4825
+msgid ""
+"Inherit permissions from this organization. If not provided, a organization "
+"the user is a member of will be selected automatically."
+msgstr ""
+
+#: ascender/api/serializers.py:4842
+msgid "Number of requested jobs exceeds system setting BULK_JOB_MAX_LAUNCH"
+msgstr ""
+
+#: ascender/api/serializers.py:4847
+msgid "Identifier {node['identifier']} not unique"
+msgstr ""
+
+#: ascender/api/serializers.py:4883
+#, python-brace-format
+msgid "Template types {type_names} not allowed in bulk jobs"
+msgstr ""
+
+#: ascender/api/serializers.py:4922
+#, python-brace-format
+msgid ""
+"{model_name} {not_allowed} not found or you don't have permissions to access "
+"it"
+msgstr ""
+
+#: ascender/api/serializers.py:5027
+#, python-brace-format
+msgid ""
+"Organization {requested_org.id} not found or you don't have permissions to "
+"access it"
+msgstr ""
+
+#: ascender/api/serializers.py:5093
+msgid "Message type '{}' invalid, must be either 'message' or 'body'"
+msgstr ""
+
+#: ascender/api/serializers.py:5099
+msgid "Expected string for '{}', found {}, "
+msgstr ""
+
+#: ascender/api/serializers.py:5103
+msgid "Messages cannot contain newlines (found newline in {} event)"
+msgstr ""
+
+#: ascender/api/serializers.py:5109
+msgid "Expected dict for 'messages' field, found {}"
+msgstr ""
+
+#: ascender/api/serializers.py:5113
+msgid ""
+"Event '{}' invalid, must be one of 'started', 'success', 'error', or "
+"'workflow_approval'"
+msgstr ""
+
+#: ascender/api/serializers.py:5119
+msgid "Expected dict for event '{}', found {}"
+msgstr ""
+
+#: ascender/api/serializers.py:5125
+msgid ""
+"Workflow Approval event '{}' invalid, must be one of 'running', 'approved', "
+"'timed_out', or 'denied'"
+msgstr ""
+
+#: ascender/api/serializers.py:5132
+msgid "Expected dict for workflow approval event '{}', found {}"
+msgstr ""
+
+#: ascender/api/serializers.py:5159
+msgid "Unable to render message '{}': {}"
+msgstr ""
+
+#: ascender/api/serializers.py:5161
+msgid "Field '{}' unavailable"
+msgstr ""
+
+#: ascender/api/serializers.py:5163
+msgid "Security error due to field '{}'"
+msgstr ""
+
+#: ascender/api/serializers.py:5195
+msgid "Webhook body for '{}' is not valid. The following gave an error ({})."
+msgstr ""
+
+#: ascender/api/serializers.py:5213
+msgid ""
+"Missing required fields for Notification Configuration: notification_type"
+msgstr ""
+
+#: ascender/api/serializers.py:5240
+msgid "No values specified for field '{}'"
+msgstr ""
+
+#: ascender/api/serializers.py:5245
+msgid "HTTP method must be either 'POST' or 'PUT'."
+msgstr ""
+
+#: ascender/api/serializers.py:5247
+msgid "Missing required fields for Notification Configuration: {}."
+msgstr ""
+
+#: ascender/api/serializers.py:5250
+msgid "Configuration field '{}' incorrect type, expected {}."
+msgstr ""
+
+#: ascender/api/serializers.py:5264
+msgid "Notification body"
+msgstr ""
+
+#: ascender/api/serializers.py:5348
+msgid ""
+"Valid DTSTART required in rrule. Value should start with: DTSTART:"
+"YYYYMMDDTHHMMSSZ"
+msgstr ""
+
+#: ascender/api/serializers.py:5350
+msgid ""
+"DTSTART cannot be a naive datetime.  Specify ;TZINFO= or YYYYMMDDTHHMMSSZZ."
+msgstr ""
+
+#: ascender/api/serializers.py:5352
+msgid "Multiple DTSTART is not supported."
+msgstr ""
+
+#: ascender/api/serializers.py:5354
+msgid "One or more rule required in rrule."
+msgstr ""
+
+#: ascender/api/serializers.py:5356
+msgid "EXDATE not allowed in rrule."
+msgstr ""
+
+#: ascender/api/serializers.py:5358
+msgid "RDATE not allowed in rrule."
+msgstr ""
+
+#: ascender/api/serializers.py:5361
+msgid "INTERVAL required in rrule"
+msgstr ""
+
+#: ascender/api/serializers.py:5363
+msgid "SECONDLY is not supported"
+msgstr ""
+
+#: ascender/api/serializers.py:5365
+msgid "BYDAY with numeric prefix not supported"
+msgstr ""
+
+#: ascender/api/serializers.py:5367
+msgid "RRULE may not contain both COUNT and UNTIL"
+msgstr ""
+
+#: ascender/api/serializers.py:5372
+msgid "COUNT > 999 is unsupported"
+msgstr ""
+
+#: ascender/api/serializers.py:5380
+msgid "rrule parsing failed validation: {}"
+msgstr ""
+
+#: ascender/api/serializers.py:5393
+msgid ""
+"The timezone this schedule runs in. This field is extracted from the RRULE. "
+"If the timezone in the RRULE is a link to another timezone, the link will be "
+"reflected in this field."
+msgstr ""
+
+#: ascender/api/serializers.py:5397
+msgid ""
+"The date this schedule will end. This field is computed from the RRULE. If "
+"the schedule does not end an empty string will be returned"
+msgstr ""
+
+#: ascender/api/serializers.py:5451
+msgid "Inventory Source must be a cloud resource."
+msgstr ""
+
+#: ascender/api/serializers.py:5453
+msgid "Manual Project cannot have a schedule set."
+msgstr ""
+
+#: ascender/api/serializers.py:5522
+msgid ""
+"Count of jobs in the running or waiting state that are targeted for this "
+"instance"
+msgstr ""
+
+#: ascender/api/serializers.py:5523
+msgid "Count of all jobs that target this instance"
+msgstr ""
+
+#: ascender/api/serializers.py:5526
+msgid "Primary keys of receptor addresses to peer to."
+msgstr ""
+
+#: ascender/api/serializers.py:5681
+msgid "Can only create instances on Kubernetes or OpenShift."
+msgstr ""
+
+#: ascender/api/serializers.py:5687
+msgid "Cannot enable peers_from_control_nodes if listener_port is not set."
+msgstr ""
+
+#: ascender/api/serializers.py:5693
+msgid "Can only create execution or hop nodes."
+msgstr ""
+
+#: ascender/api/serializers.py:5696
+msgid "Cannot change node type."
+msgstr ""
+
+#: ascender/api/serializers.py:5704
+msgid "Can only change the state on Kubernetes or OpenShift."
+msgstr ""
+
+#: ascender/api/serializers.py:5706
+msgid "Can only change instances to the 'deprovisioning' state."
+msgstr ""
+
+#: ascender/api/serializers.py:5708
+msgid "Cannot deprovision managed nodes."
+msgstr ""
+
+#: ascender/api/serializers.py:5711
+msgid "Can only create instances in the 'installed' state."
+msgstr ""
+
+#: ascender/api/serializers.py:5720
+msgid "Cannot change hostname."
+msgstr ""
+
+#: ascender/api/serializers.py:5732
+msgid "Cannot change listener port."
+msgstr ""
+
+#: ascender/api/serializers.py:5734
+msgid "Cannot change listener port for managed nodes."
+msgstr ""
+
+#: ascender/api/serializers.py:5741
+msgid "Cannot peer to the same instance more than once."
+msgstr ""
+
+#: ascender/api/serializers.py:5749
+msgid "Cannot change peers."
+msgstr ""
+
+#: ascender/api/serializers.py:5752
+msgid "Setting peers manually for managed nodes is not allowed."
+msgstr ""
+
+#: ascender/api/serializers.py:5756
+msgid "Instance cannot peer to its own address."
+msgstr ""
+
+#: ascender/api/serializers.py:5762
+#, python-brace-format
+msgid "Instance {p.instance.hostname} is already peered to this instance."
+msgstr ""
+
+#: ascender/api/serializers.py:5768
+msgid "Cannot change peers_from_control_nodes for managed nodes."
+msgstr ""
+
+#: ascender/api/serializers.py:5824
+msgid "Count of all jobs that target this instance group"
+msgstr ""
+
+#: ascender/api/serializers.py:5828
+msgid ""
+"Indicates whether instances in this group are containerized.Containerized "
+"groups have a designated Openshift or Kubernetes cluster."
+msgstr ""
+
+#: ascender/api/serializers.py:5838
+msgid "Policy Instance Percentage"
+msgstr ""
+
+#: ascender/api/serializers.py:5839
+msgid ""
+"Minimum percentage of all instances that will be automatically assigned to "
+"this group when new instances come online."
+msgstr ""
+
+#: ascender/api/serializers.py:5846
+msgid "Policy Instance Minimum"
+msgstr ""
+
+#: ascender/api/serializers.py:5847
+msgid ""
+"Static minimum number of Instances that will be automatically assign to this "
+"group when new instances come online."
+msgstr ""
+
+#: ascender/api/serializers.py:5854
+msgid "Max Concurrent Jobs"
+msgstr ""
+
+#: ascender/api/serializers.py:5855
+msgid ""
+"Maximum number of concurrent jobs to run on a group. When set to zero, no "
+"maximum is enforced."
+msgstr ""
+
+#: ascender/api/serializers.py:5862
+msgid "Max Forks"
+msgstr ""
+
+#: ascender/api/serializers.py:5863
+msgid ""
+"Maximum number of forks to execute concurrently on a group. When set to "
+"zero, no maximum is enforced."
+msgstr ""
+
+#: ascender/api/serializers.py:5868
+msgid "Policy Instance List"
+msgstr ""
+
+#: ascender/api/serializers.py:5869
+msgid "List of exact-match Instances that will be assigned to this group"
+msgstr ""
+
+#: ascender/api/serializers.py:5913
+#, python-format
+msgid "%s instance group policy_instance_list may not be changed."
+msgstr ""
+
+#: ascender/api/serializers.py:5916
+msgid "Duplicate entry {}."
+msgstr ""
+
+#: ascender/api/serializers.py:5918
+msgid "{} is not a valid hostname of an existing instance."
+msgstr ""
+
+#: ascender/api/serializers.py:5920 ascender/api/serializers.py:5930
+#: ascender/api/serializers.py:5935
+msgid "Containerized instances may not be managed via the API"
+msgstr ""
+
+#: ascender/api/serializers.py:5927
+#, python-format
+msgid ""
+"%s instance group policy_instance_percentage may not be changed from the "
+"initial value set by the installer."
+msgstr ""
+
+#: ascender/api/serializers.py:5940 ascender/api/serializers.py:5943
+#, python-format
+msgid "%s instance group name may not be changed."
+msgstr ""
+
+#: ascender/api/serializers.py:5950
+#, python-format
+msgid "%s instance group is_container_group may not be changed."
+msgstr ""
+
+#: ascender/api/serializers.py:5956
+msgid "Only Kubernetes credentials can be associated with an Instance Group"
+msgstr ""
+
+#: ascender/api/serializers.py:5963
+msgid ""
+"is_container_group must be True when associating a credential to an Instance "
+"Group"
+msgstr ""
+
+#: ascender/api/serializers.py:6008
+msgid ""
+"When present, shows the field name of the role or relationship that changed."
+msgstr ""
+
+#: ascender/api/serializers.py:6009
+msgid ""
+"When present, shows the model on which the role or relationship was defined."
+msgstr ""
+
+#: ascender/api/serializers.py:6061
+msgid ""
+"A summary of the new and changed values when an object is created, updated, "
+"or deleted"
+msgstr ""
+
+#: ascender/api/serializers.py:6064
+msgid ""
+"For create, update, and delete events this is the object type that was "
+"affected. For associate and disassociate events this is the object type "
+"associated or disassociated with object2."
+msgstr ""
+
+#: ascender/api/serializers.py:6069
+msgid ""
+"Unpopulated for create, update, and delete events. For associate and "
+"disassociate events this is the object type that object1 is being associated "
+"with."
+msgstr ""
+
+#: ascender/api/serializers.py:6073
+msgid "The action taken with respect to the given object(s)."
+msgstr ""
+
+#: ascender/api/views/__init__.py:161
+msgid "Not found."
+msgstr ""
+
+#: ascender/api/views/__init__.py:168
+msgid "Dashboard"
+msgstr ""
+
+#: ascender/api/views/__init__.py:264
+msgid "Dashboard Jobs Graphs"
+msgstr ""
+
+#: ascender/api/views/__init__.py:306
+#, python-format
+msgid "Unknown period \"%s\""
+msgstr ""
+
+#: ascender/api/views/__init__.py:362
+msgid "Instances"
+msgstr ""
+
+#: ascender/api/views/__init__.py:374
+msgid "Instance Detail"
+msgstr ""
+
+#: ascender/api/views/__init__.py:401
+msgid "Instance Jobs"
+msgstr ""
+
+#: ascender/api/views/__init__.py:414
+msgid "Peers"
+msgstr ""
+
+#: ascender/api/views/__init__.py:424 ascender/api/views/__init__.py:433
+msgid "Receptor Addresses"
+msgstr ""
+
+#: ascender/api/views/__init__.py:440
+msgid "Receptor Address Detail"
+msgstr ""
+
+#: ascender/api/views/__init__.py:448
+msgid "Instance's Instance Groups"
+msgstr ""
+
+#: ascender/api/views/__init__.py:456
+#, python-brace-format
+msgid ""
+"Cannot change instance group membership of control-only node: {parent."
+"hostname}."
+msgstr ""
+
+#: ascender/api/views/__init__.py:458
+#, python-brace-format
+msgid ""
+"Cannot change instance group membership of hop node : {parent.hostname}."
+msgstr ""
+
+#: ascender/api/views/__init__.py:466
+#, python-brace-format
+msgid "Cannot disassociate hybrid instance {parent.hostname} from {sub.name}."
+msgstr ""
+
+#: ascender/api/views/__init__.py:471
+msgid "Instance Health Check"
+msgstr ""
+
+#: ascender/api/views/__init__.py:506
+msgid "Instance Groups"
+msgstr ""
+
+#: ascender/api/views/__init__.py:513
+msgid "Instance Group Detail"
+msgstr ""
+
+#: ascender/api/views/__init__.py:526
+msgid "Instance Group Running Jobs"
+msgstr ""
+
+#: ascender/api/views/__init__.py:551
+msgid "Instance Group's Instances"
+msgstr ""
+
+#: ascender/api/views/__init__.py:560
+#, python-brace-format
+msgid ""
+"Cannot change instance group membership of control-only node: {sub.hostname}."
+msgstr ""
+
+#: ascender/api/views/__init__.py:562
+#, python-brace-format
+msgid "Cannot change instance group membership of hop node : {sub.hostname}."
+msgstr ""
+
+#: ascender/api/views/__init__.py:570
+#, python-brace-format
+msgid "Cannot disassociate hybrid node {sub.hostname} from {parent.name}."
+msgstr ""
+
+#: ascender/api/views/__init__.py:575
+msgid "Schedules"
+msgstr ""
+
+#: ascender/api/views/__init__.py:588
+msgid "Schedule Recurrence Rule Preview"
+msgstr ""
+
+#: ascender/api/views/__init__.py:626
+msgid "Cannot assign credential when related template is null."
+msgstr ""
+
+#: ascender/api/views/__init__.py:631
+msgid "Related template cannot accept {} on launch."
+msgstr ""
+
+#: ascender/api/views/__init__.py:633
+msgid ""
+"Credential that requires user input on launch cannot be used in saved launch "
+"configuration."
+msgstr ""
+
+#: ascender/api/views/__init__.py:638
+msgid "Related template is not configured to accept credentials on launch."
+msgstr ""
+
+#: ascender/api/views/__init__.py:641
+#, python-brace-format
+msgid ""
+"This launch configuration already provides a {credential_type} credential."
+msgstr ""
+
+#: ascender/api/views/__init__.py:644
+#, python-brace-format
+msgid "Related template already uses {credential_type} credential."
+msgstr ""
+
+#: ascender/api/views/__init__.py:670
+msgid "Schedule Jobs List"
+msgstr ""
+
+#: ascender/api/views/__init__.py:748 ascender/api/views/__init__.py:4300
+msgid ""
+"You cannot assign an Organization participation role as a child role for a "
+"Team."
+msgstr ""
+
+#: ascender/api/views/__init__.py:752 ascender/api/views/__init__.py:4314
+msgid "You cannot grant system-level permissions to a team."
+msgstr ""
+
+#: ascender/api/views/__init__.py:759 ascender/api/views/__init__.py:4306
+msgid ""
+"You cannot grant credential access to a team when the Organization field "
+"isn't set, or belongs to a different organization"
+msgstr ""
+
+#: ascender/api/views/__init__.py:840
+msgid "Only the 'pull' field can be edited for managed execution environments."
+msgstr ""
+
+#: ascender/api/views/__init__.py:900
+msgid "Project Schedules"
+msgstr ""
+
+#: ascender/api/views/__init__.py:910
+msgid "Project SCM Inventory Sources"
+msgstr ""
+
+#: ascender/api/views/__init__.py:997
+msgid "Project Update Events List"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1016
+msgid "System Job Events List"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1044
+msgid "Project Update SCM Inventory Updates"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1084
+msgid "Me"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1092
+msgid "OAuth 2 Applications"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1100
+msgid "OAuth 2 Application Detail"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1112
+msgid "OAuth 2 Application Tokens"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1132
+msgid "OAuth2 Tokens"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1140
+msgid "OAuth2 User Tokens"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1151
+msgid "OAuth2 User Authorized Access Tokens"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1165
+msgid "Organization OAuth2 Applications"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1176
+msgid "OAuth2 Personal Access Tokens"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1190
+msgid "OAuth Token Detail"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1246 ascender/api/views/__init__.py:4268
+msgid ""
+"You cannot grant credential access to a user not in the credentials' "
+"organization"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1250 ascender/api/views/__init__.py:4272
+msgid "You cannot grant private credential access to another user"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1342
+#, python-format
+msgid "Cannot change %s."
+msgstr ""
+
+#: ascender/api/views/__init__.py:1348
+msgid "Cannot delete user."
+msgstr ""
+
+#: ascender/api/views/__init__.py:1369
+msgid "Deletion not allowed for managed credential types"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1371
+msgid "Credential types that are in use cannot be deleted"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1475
+msgid "Deletion not allowed for managed credentials"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1515
+msgid "External Credential Test"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1547
+msgid "Credential Input Source Detail"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1554 ascender/api/views/__init__.py:1561
+msgid "Credential Input Sources"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1576
+msgid "External Credential Type Test"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1610
+msgid "Host Metrics List"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1621
+msgid "Host Metric Detail"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1633
+msgid "Host Metrics Summary Monthly"
+msgstr ""
+
+#: ascender/api/views/__init__.py:1670
+msgid "The inventory for this host is already being deleted."
+msgstr ""
+
+#: ascender/api/views/__init__.py:1672
+msgid "Delete constructed inventory hosts from input inventory."
+msgstr ""
+
+#: ascender/api/views/__init__.py:1835
+msgid "Cyclical Group association."
+msgstr ""
+
+#: ascender/api/views/__init__.py:1987
+msgid "Inventory subset argument must be a string."
+msgstr ""
+
+#: ascender/api/views/__init__.py:1991
+msgid "Subset does not use any supported syntax."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2033
+msgid "Inventory Source List"
+msgstr ""
+
+#: ascender/api/views/__init__.py:2045
+msgid "Inventory Sources Update"
+msgstr ""
+
+#: ascender/api/views/__init__.py:2077
+msgid "Could not start because `can_update` returned False"
+msgstr ""
+
+#: ascender/api/views/__init__.py:2085
+msgid "No inventory sources to update."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2103
+msgid "Inventory Source Schedules"
+msgstr ""
+
+#: ascender/api/views/__init__.py:2129
+msgid "Notification Templates can only be assigned when source is one of {}."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2218
+msgid "Source already has credential assigned."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2415
+msgid "Job Template Schedules"
+msgstr ""
+
+#: ascender/api/views/__init__.py:2450
+msgid "Field '{}' is missing from survey spec."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2452
+msgid "Expected {} for field '{}', received {} type."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2455
+msgid "'spec' doesn't contain any items."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2466
+#, python-format
+msgid "Survey question %s is not a json object."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2470
+#, python-brace-format
+msgid "'{field_name}' missing from survey question {idx}"
+msgstr ""
+
+#: ascender/api/views/__init__.py:2482
+#, python-brace-format
+msgid "'{field_name}' in survey question {idx} expected to be {type_label}."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2490
+#, python-format
+msgid "'variable' '%(item)s' duplicated in survey question %(survey)s."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2502
+#, python-brace-format
+msgid ""
+"'{survey_item[type]}' in survey question {idx} is not one of "
+"'{allowed_types}' allowed question types."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2515
+#, python-brace-format
+msgid ""
+"Default value {survey_item[default]} in survey question {idx} expected to be "
+"{type_label}."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2527
+#, python-brace-format
+msgid "The {min_or_max} limit in survey question {idx} expected to be integer."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2538
+#, python-brace-format
+msgid "Survey question {idx} of type {survey_item[type]} must specify choices."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2553
+msgid "Multiple Choice (Single Select) can only have one default value."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2558
+msgid "Default choice must be answered from the choices listed."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2568
+#, python-brace-format
+msgid ""
+"$encrypted$ is a reserved keyword for password question defaults, survey "
+"question {idx} is type {survey_item[type]}."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2584
+#, python-brace-format
+msgid ""
+"$encrypted$ is a reserved keyword, may not be used for new default in "
+"position {idx}."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2640
+#, python-brace-format
+msgid "Cannot assign multiple {credential_type} credentials."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2643
+msgid "Cannot assign a Credential of kind `{}`."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2741
+msgid "Cannot start automatically, an inventory is required."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2766
+msgid "No matching host could be found!"
+msgstr ""
+
+#: ascender/api/views/__init__.py:2769
+msgid "Multiple hosts matched the request!"
+msgstr ""
+
+#: ascender/api/views/__init__.py:2774
+msgid "Cannot start automatically, user input required!"
+msgstr ""
+
+#: ascender/api/views/__init__.py:2780
+msgid "Host callback job already pending."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2796 ascender/api/views/__init__.py:3492
+msgid "Error starting job!"
+msgstr ""
+
+#: ascender/api/views/__init__.py:2924 ascender/api/views/__init__.py:2943
+msgid "Cycle detected."
+msgstr ""
+
+#: ascender/api/views/__init__.py:2935
+msgid "Relationship not allowed."
+msgstr ""
+
+#: ascender/api/views/__init__.py:3153
+msgid "Cannot relaunch slice workflow job orphaned from job template."
+msgstr ""
+
+#: ascender/api/views/__init__.py:3155
+msgid "Cannot relaunch sliced workflow job after slice count has changed."
+msgstr ""
+
+#: ascender/api/views/__init__.py:3184
+msgid "Workflow Job Template Schedules"
+msgstr ""
+
+#: ascender/api/views/__init__.py:3306 ascender/api/views/__init__.py:3984
+msgid "Superuser privileges needed."
+msgstr ""
+
+#: ascender/api/views/__init__.py:3336
+msgid "System Job Template Schedules"
+msgstr ""
+
+#: ascender/api/views/__init__.py:3472
+#, python-brace-format
+msgid "Wait until job finishes before retrying on {status_value} hosts."
+msgstr ""
+
+#: ascender/api/views/__init__.py:3478
+#, python-brace-format
+msgid "Cannot retry on {status_value} hosts, playbook stats not available."
+msgstr ""
+
+#: ascender/api/views/__init__.py:3484
+#, python-brace-format
+msgid "Cannot relaunch because previous job had 0 {status_value} hosts."
+msgstr ""
+
+#: ascender/api/views/__init__.py:3513
+msgid "Cannot create schedule because job requires credential passwords."
+msgstr ""
+
+#: ascender/api/views/__init__.py:3517
+msgid "Cannot create schedule because job was launched by legacy method."
+msgstr ""
+
+#: ascender/api/views/__init__.py:3518
+msgid "Cannot create schedule because a related resource is missing."
+msgstr ""
+
+#: ascender/api/views/__init__.py:3576
+msgid "Job Host Summaries List"
+msgstr ""
+
+#: ascender/api/views/__init__.py:3622
+msgid "Job Event Children List"
+msgstr ""
+
+#: ascender/api/views/__init__.py:3652
+msgid "Job Events List"
+msgstr ""
+
+#: ascender/api/views/__init__.py:3937
+msgid "Ad Hoc Command Events List"
+msgstr ""
+
+#: ascender/api/views/__init__.py:4162
+msgid "Delete not allowed while there are pending notifications"
+msgstr ""
+
+#: ascender/api/views/__init__.py:4169
+msgid "Notification Template Test"
+msgstr ""
+
+#: ascender/api/views/__init__.py:4397 ascender/api/views/__init__.py:4412
+msgid "User does not have permission to approve or deny this workflow."
+msgstr ""
+
+#: ascender/api/views/__init__.py:4399 ascender/api/views/__init__.py:4414
+msgid "This workflow step has already been approved or denied."
+msgstr ""
+
+#: ascender/api/views/analytics.py:46
+msgid "Automation Analytics"
+msgstr ""
+
+#: ascender/api/views/analytics.py:255
+msgid "Authorized"
+msgstr ""
+
+#: ascender/api/views/analytics.py:259
+msgid "Reports"
+msgstr ""
+
+#: ascender/api/views/analytics.py:264
+msgid "Report"
+msgstr ""
+
+#: ascender/api/views/analytics.py:268
+msgid "Report Options"
+msgstr ""
+
+#: ascender/api/views/analytics.py:272
+msgid "Adoption Rate"
+msgstr ""
+
+#: ascender/api/views/analytics.py:276
+msgid "Event Explorer"
+msgstr ""
+
+#: ascender/api/views/analytics.py:280
+msgid "Host Explorer"
+msgstr ""
+
+#: ascender/api/views/analytics.py:284
+msgid "Job Explorer"
+msgstr ""
+
+#: ascender/api/views/analytics.py:288
+msgid "Probe Templates"
+msgstr ""
+
+#: ascender/api/views/analytics.py:292
+msgid "Probe Template For Hosts"
+msgstr ""
+
+#: ascender/api/views/analytics.py:296
+msgid "ROI Templates"
+msgstr ""
+
+#: ascender/api/views/bulk.py:23
+msgid "Bulk"
+msgstr ""
+
+#: ascender/api/views/instance_install_bundle.py:48
+msgid "Install Bundle"
+msgstr ""
+
+#: ascender/api/views/instance_install_bundle.py:58
+msgid "Install bundle can only be generated for execution or hop nodes."
+msgstr ""
+
+#: ascender/api/views/inventory.py:55
+msgid "Inventory Update Events List"
+msgstr ""
+
+#: ascender/api/views/inventory.py:85
+msgid ""
+"You cannot turn a regular inventory into a \"smart\" or \"constructed\" "
+"inventory."
+msgstr ""
+
+#: ascender/api/views/inventory.py:98
+#, python-brace-format
+msgid "{0}"
+msgstr ""
+
+#: ascender/api/views/labels.py:56
+#, python-brace-format
+msgid ""
+"Maximum number of labels for {self.parent_model._meta.verbose_name_raw} "
+"reached."
+msgstr ""
+
+#: ascender/api/views/labels.py:67
+msgid "Labels"
+msgstr ""
+
+#: ascender/api/views/mesh_visualizer.py:13
+msgid "Mesh Visualizer"
+msgstr ""
+
+#: ascender/api/views/metrics.py:30
+msgid "Metrics"
+msgstr ""
+
+#: ascender/api/views/mixin.py:41
+msgid "Cannot delete job resource when associated workflow job is running."
+msgstr ""
+
+#: ascender/api/views/mixin.py:46
+msgid "Cannot delete running job resource."
+msgstr ""
+
+#: ascender/api/views/mixin.py:51
+msgid "Job has not finished processing events."
+msgstr ""
+
+#: ascender/api/views/mixin.py:147
+msgid "Related job {} is still processing events."
+msgstr ""
+
+#: ascender/api/views/organization.py:216
+#, python-brace-format
+msgid "Credential must be a Galaxy credential, not {sub.credential_type.name}."
+msgstr ""
+
+#: ascender/api/views/root.py:41 ascender/templates/rest_framework/api.html:28
+msgid "REST API"
+msgstr ""
+
+#: ascender/api/views/root.py:51
+msgid "AWX REST API"
+msgstr ""
+
+#: ascender/api/views/root.py:66
+msgid "API OAuth 2 Authorization Root"
+msgstr ""
+
+#: ascender/api/views/root.py:138
+msgid "Version 2"
+msgstr ""
+
+#: ascender/api/views/root.py:148
+msgid "Ping"
+msgstr ""
+
+#: ascender/api/views/root.py:183
+msgid "Subscriptions"
+msgstr ""
+
+#: ascender/api/views/root.py:204 ascender/api/views/root.py:243
+msgid "Invalid Subscription"
+msgstr ""
+
+#: ascender/api/views/root.py:206 ascender/api/views/root.py:245
+msgid "The provided credentials are invalid (HTTP 401)."
+msgstr ""
+
+#: ascender/api/views/root.py:208 ascender/api/views/root.py:247
+msgid "Unable to connect to proxy server."
+msgstr ""
+
+#: ascender/api/views/root.py:210 ascender/api/views/root.py:249
+msgid "Could not connect to subscription service."
+msgstr ""
+
+#: ascender/api/views/root.py:222
+msgid "Attach Subscription"
+msgstr ""
+
+#: ascender/api/views/root.py:234
+msgid "No subscription pool ID provided."
+msgstr ""
+
+#: ascender/api/views/root.py:261
+msgid "Error processing subscription metadata."
+msgstr ""
+
+#: ascender/api/views/root.py:266 ascender/conf/apps.py:12
+msgid "Configuration"
+msgstr ""
+
+#: ascender/api/views/root.py:328
+msgid "Invalid subscription data"
+msgstr ""
+
+#: ascender/api/views/root.py:333
+msgid "Invalid JSON"
+msgstr ""
+
+#: ascender/api/views/root.py:337 ascender/api/views/root.py:342
+msgid "Legacy license submitted. A subscription manifest is now required."
+msgstr ""
+
+#: ascender/api/views/root.py:351
+msgid "Invalid manifest submitted."
+msgstr ""
+
+#: ascender/api/views/root.py:357
+msgid "Invalid License"
+msgstr ""
+
+#: ascender/api/views/root.py:368
+msgid "Invalid subscription"
+msgstr ""
+
+#: ascender/api/views/root.py:376
+msgid "Failed to remove license."
+msgstr ""
+
+#: ascender/api/views/webhooks.py:140
+msgid "Webhook ignored"
+msgstr ""
+
+#: ascender/api/views/webhooks.py:151
+msgid "Webhook previously received, aborting."
+msgstr ""
+
+#: ascender/conf/conf.py:20
+msgid "Bud Frogs"
+msgstr ""
+
+#: ascender/conf/conf.py:21
+msgid "Bunny"
+msgstr ""
+
+#: ascender/conf/conf.py:22
+msgid "Cheese"
+msgstr ""
+
+#: ascender/conf/conf.py:23
+msgid "Daemon"
+msgstr ""
+
+#: ascender/conf/conf.py:24
+msgid "Default Cow"
+msgstr ""
+
+#: ascender/conf/conf.py:25
+msgid "Dragon"
+msgstr ""
+
+#: ascender/conf/conf.py:26
+msgid "Elephant in Snake"
+msgstr ""
+
+#: ascender/conf/conf.py:27
+msgid "Elephant"
+msgstr ""
+
+#: ascender/conf/conf.py:28
+msgid "Eyes"
+msgstr ""
+
+#: ascender/conf/conf.py:29
+msgid "Hello Kitty"
+msgstr ""
+
+#: ascender/conf/conf.py:30
+msgid "Kitty"
+msgstr ""
+
+#: ascender/conf/conf.py:31
+msgid "Luke Koala"
+msgstr ""
+
+#: ascender/conf/conf.py:32
+msgid "Meow"
+msgstr ""
+
+#: ascender/conf/conf.py:33
+msgid "Milk"
+msgstr ""
+
+#: ascender/conf/conf.py:34
+msgid "Moofasa"
+msgstr ""
+
+#: ascender/conf/conf.py:35
+msgid "Moose"
+msgstr ""
+
+#: ascender/conf/conf.py:36
+msgid "Ren"
+msgstr ""
+
+#: ascender/conf/conf.py:37
+msgid "Sheep"
+msgstr ""
+
+#: ascender/conf/conf.py:38
+msgid "Small Cow"
+msgstr ""
+
+#: ascender/conf/conf.py:39
+msgid "Stegosaurus"
+msgstr ""
+
+#: ascender/conf/conf.py:40
+msgid "Stimpy"
+msgstr ""
+
+#: ascender/conf/conf.py:41
+msgid "Super Milker"
+msgstr ""
+
+#: ascender/conf/conf.py:42
+msgid "Three Eyes"
+msgstr ""
+
+#: ascender/conf/conf.py:43
+msgid "Turkey"
+msgstr ""
+
+#: ascender/conf/conf.py:44
+msgid "Turtle"
+msgstr ""
+
+#: ascender/conf/conf.py:45
+msgid "Tux"
+msgstr ""
+
+#: ascender/conf/conf.py:46
+msgid "Udder"
+msgstr ""
+
+#: ascender/conf/conf.py:47
+msgid "Vader Koala"
+msgstr ""
+
+#: ascender/conf/conf.py:48
+msgid "Vader"
+msgstr ""
+
+#: ascender/conf/conf.py:49
+msgid "WWW"
+msgstr ""
+
+#: ascender/conf/conf.py:52
+msgid "Cow Selection"
+msgstr ""
+
+#: ascender/conf/conf.py:53
+msgid "Select which cow to use with cowsay when running jobs."
+msgstr ""
+
+#: ascender/conf/conf.py:54 ascender/conf/conf.py:75
+msgid "Cows"
+msgstr ""
+
+#: ascender/conf/conf.py:73
+msgid "Example Read-Only Setting"
+msgstr ""
+
+#: ascender/conf/conf.py:74
+msgid "Example setting that cannot be changed."
+msgstr ""
+
+#: ascender/conf/conf.py:90
+msgid "Example Setting"
+msgstr ""
+
+#: ascender/conf/conf.py:91
+msgid "Example setting which can be different for each user."
+msgstr ""
+
+#: ascender/conf/conf.py:92 ascender/conf/registry.py:78 ascender/conf/views.py:51
+msgid "User"
+msgstr ""
+
+#: ascender/conf/fields.py:59 ascender/sso/fields.py:567
+#, python-brace-format
+msgid ""
+"Expected None, True, False, a string or list of strings but got {input_type} "
+"instead."
+msgstr ""
+
+#: ascender/conf/fields.py:103 ascender/conf/fields.py:125
+#, python-brace-format
+msgid "Expected list of strings but got {input_type} instead."
+msgstr ""
+
+#: ascender/conf/fields.py:103
+#, python-brace-format
+msgid "{path} is not a valid path choice."
+msgstr ""
+
+#: ascender/conf/fields.py:126
+#, python-brace-format
+msgid "{path} is not a valid path choice. You must provide an absolute path."
+msgstr ""
+
+#: ascender/conf/fields.py:127
+#, python-brace-format
+msgid "{scontext} is not a valid mount option. Allowed types are {mount_types}"
+msgstr ""
+
+#: ascender/conf/fields.py:128
+#, python-brace-format
+msgid ""
+"Invalid syntax. A string HOST-DIR[:CONTAINER-DIR[:OPTIONS]] is expected but "
+"got {path}."
+msgstr ""
+
+#: ascender/conf/fields.py:190
+msgid "Enter a valid URL"
+msgstr ""
+
+#: ascender/conf/fields.py:227
+#, python-brace-format
+msgid "\"{input}\" is not a valid string."
+msgstr ""
+
+#: ascender/conf/fields.py:240
+#, python-brace-format
+msgid "Expected a list of tuples of max length 2 but got {input_type} instead."
+msgstr ""
+
+#: ascender/conf/registry.py:72 ascender/conf/tests/unit/test_registry.py:92
+msgid "All"
+msgstr ""
+
+#: ascender/conf/registry.py:72 ascender/conf/tests/unit/test_registry.py:92
+msgid "Changed"
+msgstr ""
+
+#: ascender/conf/registry.py:79
+msgid "User-Defaults"
+msgstr ""
+
+#: ascender/conf/registry.py:141
+msgid "This value has been set manually in a settings file."
+msgstr ""
+
+#: ascender/conf/tests/unit/test_registry.py:42
+#: ascender/conf/tests/unit/test_registry.py:47
+#: ascender/conf/tests/unit/test_registry.py:58
+#: ascender/conf/tests/unit/test_registry.py:68
+#: ascender/conf/tests/unit/test_registry.py:74
+#: ascender/conf/tests/unit/test_registry.py:75
+#: ascender/conf/tests/unit/test_registry.py:82
+#: ascender/conf/tests/unit/test_registry.py:84
+#: ascender/conf/tests/unit/test_registry.py:90
+#: ascender/conf/tests/unit/test_registry.py:92
+#: ascender/conf/tests/unit/test_registry.py:96
+#: ascender/conf/tests/unit/test_registry.py:97
+#: ascender/conf/tests/unit/test_registry.py:103
+#: ascender/conf/tests/unit/test_registry.py:107
+#: ascender/conf/tests/unit/test_registry.py:135
+#: ascender/conf/tests/unit/test_registry.py:147
+#: ascender/conf/tests/unit/test_settings.py:71
+#: ascender/conf/tests/unit/test_settings.py:82
+#: ascender/conf/tests/unit/test_settings.py:91
+#: ascender/conf/tests/unit/test_settings.py:100
+#: ascender/conf/tests/unit/test_settings.py:110
+#: ascender/conf/tests/unit/test_settings.py:118
+#: ascender/conf/tests/unit/test_settings.py:130
+#: ascender/conf/tests/unit/test_settings.py:140
+#: ascender/conf/tests/unit/test_settings.py:146
+#: ascender/conf/tests/unit/test_settings.py:156
+#: ascender/conf/tests/unit/test_settings.py:167
+#: ascender/conf/tests/unit/test_settings.py:179
+#: ascender/conf/tests/unit/test_settings.py:188
+#: ascender/conf/tests/unit/test_settings.py:204
+#: ascender/conf/tests/unit/test_settings.py:217
+#: ascender/conf/tests/unit/test_settings.py:229
+#: ascender/conf/tests/unit/test_settings.py:238
+#: ascender/conf/tests/unit/test_settings.py:253
+#: ascender/conf/tests/unit/test_settings.py:261
+#: ascender/conf/tests/unit/test_settings.py:274
+#: ascender/conf/tests/unit/test_settings.py:294
+#: ascender/conf/tests/unit/test_settings.py:313
+#: ascender/conf/tests/unit/test_settings.py:323
+#: ascender/conf/tests/unit/test_settings.py:344 ascender/main/conf.py:23
+#: ascender/main/conf.py:32 ascender/main/conf.py:41 ascender/main/conf.py:53
+#: ascender/main/conf.py:64 ascender/main/conf.py:79 ascender/main/conf.py:94
+#: ascender/main/conf.py:108 ascender/main/conf.py:118 ascender/main/conf.py:131
+#: ascender/main/conf.py:144 ascender/main/conf.py:157 ascender/main/conf.py:170
+#: ascender/main/conf.py:182 ascender/main/conf.py:190 ascender/main/conf.py:199
+#: ascender/main/conf.py:208 ascender/main/conf.py:221 ascender/main/conf.py:230
+#: ascender/main/conf.py:329 ascender/main/conf.py:787 ascender/main/conf.py:796
+#: ascender/main/conf.py:808 ascender/main/conf.py:817 ascender/main/conf.py:858
+#: ascender/main/conf.py:875 ascender/main/conf.py:884 ascender/main/conf.py:893
+msgid "System"
+msgstr ""
+
+#: ascender/conf/tests/unit/test_registry.py:91
+#: ascender/conf/tests/unit/test_registry.py:92
+msgid "OtherSystem"
+msgstr ""
+
+#: ascender/conf/views.py:43
+msgid "Setting Categories"
+msgstr ""
+
+#: ascender/conf/views.py:64
+msgid "Setting Detail"
+msgstr ""
+
+#: ascender/conf/views.py:154
+msgid "Logging Connectivity Test"
+msgstr ""
+
+#: ascender/main/access.py:106
+#, python-format
+msgid "Required related field %s for permission check."
+msgstr ""
+
+#: ascender/main/access.py:122
+#, python-format
+msgid "Bad data found in related field %s."
+msgstr ""
+
+#: ascender/main/access.py:372
+msgid "License is missing."
+msgstr ""
+
+#: ascender/main/access.py:374
+msgid "License has expired."
+msgstr ""
+
+#: ascender/main/access.py:382
+#, python-format
+msgid "License count of %s instances has been reached."
+msgstr ""
+
+#: ascender/main/access.py:384
+#, python-format
+msgid "License count of %s instances has been exceeded."
+msgstr ""
+
+#: ascender/main/access.py:1006
+msgid "Unable to change inventory on a host."
+msgstr ""
+
+#: ascender/main/access.py:1021 ascender/main/access.py:1070
+msgid "Cannot associate two items from different inventories."
+msgstr ""
+
+#: ascender/main/access.py:1060
+msgid "Unable to change inventory on a group."
+msgstr ""
+
+#: ascender/main/access.py:1327
+msgid "Unable to change organization on a team."
+msgstr ""
+
+#: ascender/main/access.py:1343
+msgid "The {} role cannot be assigned to a team"
+msgstr ""
+
+#: ascender/main/access.py:1605
+msgid "Insufficient access to Job Template credentials."
+msgstr ""
+
+#: ascender/main/access.py:1788 ascender/main/access.py:2218
+msgid "Job was launched with secret prompts provided by another user."
+msgstr ""
+
+#: ascender/main/access.py:1797
+msgid "Job has been orphaned from its job template and organization."
+msgstr ""
+
+#: ascender/main/access.py:1799
+msgid "Job was launched with prompted fields you do not have access to."
+msgstr ""
+
+#: ascender/main/access.py:1801
+msgid ""
+"Job was launched with unknown prompted fields. Organization admin "
+"permissions required."
+msgstr ""
+
+#: ascender/main/access.py:2208
+msgid "Workflow Job was launched with unknown prompts."
+msgstr ""
+
+#: ascender/main/access.py:2220
+msgid "Job was launched with prompts you lack access to."
+msgstr ""
+
+#: ascender/main/access.py:2222
+msgid "Job was launched with prompts no longer accepted."
+msgstr ""
+
+#: ascender/main/access.py:2234
+msgid ""
+"You do not have permission to the workflow job resources required for "
+"relaunch."
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:134
+msgid "General platform configuration."
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:185
+msgid "Counts of objects such as organizations, inventories, and projects"
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:238
+msgid "Counts of users and teams by organization"
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:248
+msgid "Counts of credentials by credential type"
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:262
+msgid "Inventories, their inventory sources, and host counts"
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:280
+msgid "Counts of projects by source control type"
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:288
+msgid "Cluster topology and capacity"
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:340
+msgid "Metadata about the analytics collected"
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:447 ascender/main/analytics/collectors.py:452
+msgid "Automation task records"
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:457
+msgid "Data on jobs run"
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:501
+msgid "Data on job templates"
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:526
+msgid "Data on workflow runs"
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:564
+msgid "Data on workflows"
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:597
+msgid "Host Metric data, incremental/full sync"
+msgstr ""
+
+#: ascender/main/analytics/collectors.py:618
+msgid "HostMetricSummaryMonthly export, full sync"
+msgstr ""
+
+#: ascender/main/apps.py:7
+msgid "Main"
+msgstr ""
+
+#: ascender/main/conf.py:21
+msgid "Enable Activity Stream"
+msgstr ""
+
+#: ascender/main/conf.py:22
+msgid "Enable capturing activity for the activity stream."
+msgstr ""
+
+#: ascender/main/conf.py:30
+msgid "Enable Activity Stream for Inventory Sync"
+msgstr ""
+
+#: ascender/main/conf.py:31
+msgid ""
+"Enable capturing activity for the activity stream when running inventory "
+"sync."
+msgstr ""
+
+#: ascender/main/conf.py:39
+msgid "All Users Visible to Organization Admins"
+msgstr ""
+
+#: ascender/main/conf.py:40
+msgid ""
+"Controls whether any Organization Admin can view all users and teams, even "
+"those not associated with their Organization."
+msgstr ""
+
+#: ascender/main/conf.py:48
+msgid "Organization Admins Can Manage Users and Teams"
+msgstr ""
+
+#: ascender/main/conf.py:50
+msgid ""
+"Controls whether any Organization Admin has the privileges to create and "
+"manage users and teams. You may want to disable this ability if you are "
+"using an LDAP or SAML integration."
+msgstr ""
+
+#: ascender/main/conf.py:62
+msgid "Base URL of the service"
+msgstr ""
+
+#: ascender/main/conf.py:63
+msgid ""
+"This setting is used by services like notifications to render a valid url to "
+"the service."
+msgstr ""
+
+#: ascender/main/conf.py:71
+msgid "Remote Host Headers"
+msgstr ""
+
+#: ascender/main/conf.py:73
+msgid ""
+"HTTP headers and meta keys to search to determine remote host name or IP. "
+"Add additional items to this list, such as \"HTTP_X_FORWARDED_FOR\", if "
+"behind a reverse proxy. See the \"Proxy Support\" section of the AAP "
+"Installation guide for more details."
+msgstr ""
+
+#: ascender/main/conf.py:86
+msgid "Proxy IP Allowed List"
+msgstr ""
+
+#: ascender/main/conf.py:88
+msgid ""
+"If the service is behind a reverse proxy/load balancer, use this setting to "
+"configure the proxy IP addresses from which the service should trust custom "
+"REMOTE_HOST_HEADERS header values. If this setting is an empty list (the "
+"default), the headers specified by REMOTE_HOST_HEADERS will be trusted "
+"unconditionally')"
+msgstr ""
+
+#: ascender/main/conf.py:102
+msgid "CSRF Trusted Origins List"
+msgstr ""
+
+#: ascender/main/conf.py:104
+msgid ""
+"If the service is behind a reverse proxy/load balancer, use this setting to "
+"configure the schema://addresses from which the service should trust Origin "
+"header values. "
+msgstr ""
+
+#: ascender/main/conf.py:116
+msgid "License"
+msgstr ""
+
+#: ascender/main/conf.py:117
+msgid ""
+"The license controls which features and functionality are enabled. Use /api/"
+"v2/config/ to update or change the license."
+msgstr ""
+
+#: ascender/main/conf.py:129
+msgid "Red Hat customer username"
+msgstr ""
+
+#: ascender/main/conf.py:130
+msgid "This username is used to send data to Automation Analytics"
+msgstr ""
+
+#: ascender/main/conf.py:142
+msgid "Red Hat customer password"
+msgstr ""
+
+#: ascender/main/conf.py:143
+msgid "This password is used to send data to Automation Analytics"
+msgstr ""
+
+#: ascender/main/conf.py:155
+msgid "Red Hat or Satellite username"
+msgstr ""
+
+#: ascender/main/conf.py:156
+msgid "This username is used to retrieve subscription and content information"
+msgstr ""
+
+#: ascender/main/conf.py:168
+msgid "Red Hat or Satellite password"
+msgstr ""
+
+#: ascender/main/conf.py:169
+msgid "This password is used to retrieve subscription and content information"
+msgstr ""
+
+#: ascender/main/conf.py:180
+msgid "Automation Analytics upload URL"
+msgstr ""
+
+#: ascender/main/conf.py:181
+msgid ""
+"This setting is used to to configure the upload URL for data collection for "
+"Automation Analytics."
+msgstr ""
+
+#: ascender/main/conf.py:189
+msgid "Unique identifier for an installation"
+msgstr ""
+
+#: ascender/main/conf.py:198
+msgid "The instance group where control plane tasks run"
+msgstr ""
+
+#: ascender/main/conf.py:207
+msgid ""
+"The instance group where user jobs run (currently only on non-VM installs)"
+msgstr ""
+
+#: ascender/main/conf.py:219
+msgid "Global default execution environment"
+msgstr ""
+
+#: ascender/main/conf.py:220
+msgid ""
+"The Execution Environment to be used when one has not been configured for a "
+"job template."
+msgstr ""
+
+#: ascender/main/conf.py:228
+msgid "Custom virtual environment paths"
+msgstr ""
+
+#: ascender/main/conf.py:229
+msgid ""
+"Paths where Tower will look for custom virtual environments (in addition to /"
+"var/lib/awx/venv/). Enter one path per line."
+msgstr ""
+
+#: ascender/main/conf.py:238
+msgid "Ansible Modules Allowed for Ad Hoc Jobs"
+msgstr ""
+
+#: ascender/main/conf.py:239
+msgid "List of modules allowed to be used by ad-hoc jobs."
+msgstr ""
+
+#: ascender/main/conf.py:240 ascender/main/conf.py:262 ascender/main/conf.py:271
+#: ascender/main/conf.py:285 ascender/main/conf.py:295 ascender/main/conf.py:305
+#: ascender/main/conf.py:318 ascender/main/conf.py:338 ascender/main/conf.py:348
+#: ascender/main/conf.py:358 ascender/main/conf.py:368 ascender/main/conf.py:381
+#: ascender/main/conf.py:394 ascender/main/conf.py:404 ascender/main/conf.py:414
+#: ascender/main/conf.py:426 ascender/main/conf.py:437 ascender/main/conf.py:447
+#: ascender/main/conf.py:457 ascender/main/conf.py:471 ascender/main/conf.py:486
+#: ascender/main/conf.py:501 ascender/main/conf.py:516 ascender/main/conf.py:533
+#: ascender/main/conf.py:545
+msgid "Jobs"
+msgstr ""
+
+#: ascender/main/conf.py:249
+msgid "Always"
+msgstr ""
+
+#: ascender/main/conf.py:250
+msgid "Never"
+msgstr ""
+
+#: ascender/main/conf.py:251
+msgid "Only On Job Template Definitions"
+msgstr ""
+
+#: ascender/main/conf.py:254
+msgid "When can extra variables contain Jinja templates?"
+msgstr ""
+
+#: ascender/main/conf.py:256
+msgid ""
+"Ansible allows variable substitution via the Jinja2 templating language for "
+"--extra-vars. This poses a potential security risk where users with the "
+"ability to specify extra vars at job launch time can use Jinja2 templates to "
+"run arbitrary Python.  It is recommended that this value be set to \"template"
+"\" or \"never\"."
+msgstr ""
+
+#: ascender/main/conf.py:269
+msgid "Job execution path"
+msgstr ""
+
+#: ascender/main/conf.py:270
+msgid ""
+"The directory in which the service will create new temporary directories for "
+"job execution and isolation (such as credential files)."
+msgstr ""
+
+#: ascender/main/conf.py:279
+msgid "Paths to expose to isolated jobs"
+msgstr ""
+
+#: ascender/main/conf.py:281
+msgid ""
+"List of paths that would otherwise be hidden to expose to isolated jobs. "
+"Enter one path per line. Volumes will be mounted from the execution node to "
+"the container. The supported format is HOST-DIR[:CONTAINER-DIR[:OPTIONS]]. "
+msgstr ""
+
+#: ascender/main/conf.py:293
+msgid "Extra Environment Variables"
+msgstr ""
+
+#: ascender/main/conf.py:294
+msgid ""
+"Additional environment variables set for playbook runs, inventory updates, "
+"project updates, and notification sending."
+msgstr ""
+
+#: ascender/main/conf.py:303
+msgid "K8S Ansible Runner Keep-Alive Message Interval"
+msgstr ""
+
+#: ascender/main/conf.py:304
+msgid ""
+"Only applies to jobs running in a Container Group. If not 0, send a message "
+"every so-many seconds to keep connection open."
+msgstr ""
+
+#: ascender/main/conf.py:313
+msgid "Environment Variables for Galaxy Commands"
+msgstr ""
+
+#: ascender/main/conf.py:315
+msgid ""
+"Additional environment variables set for invocations of ansible-galaxy "
+"within project updates. Useful if you must use a proxy server for ansible-"
+"galaxy but not git."
+msgstr ""
+
+#: ascender/main/conf.py:327
+msgid "Gather data for Automation Analytics"
+msgstr ""
+
+#: ascender/main/conf.py:328
+msgid ""
+"Enables the service to gather data on automation and send it to Automation "
+"Analytics."
+msgstr ""
+
+#: ascender/main/conf.py:336
+msgid "Run Project Updates With Higher Verbosity"
+msgstr ""
+
+#: ascender/main/conf.py:337
+msgid ""
+"Adds the CLI -vvv flag to ansible-playbook runs of project_update.yml used "
+"for project updates."
+msgstr ""
+
+#: ascender/main/conf.py:346
+msgid "Enable Role Download"
+msgstr ""
+
+#: ascender/main/conf.py:347
+msgid ""
+"Allows roles to be dynamically downloaded from a requirements.yml file for "
+"SCM projects."
+msgstr ""
+
+#: ascender/main/conf.py:356
+msgid "Enable Collection(s) Download"
+msgstr ""
+
+#: ascender/main/conf.py:357
+msgid ""
+"Allows collections to be dynamically downloaded from a requirements.yml file "
+"for SCM projects."
+msgstr ""
+
+#: ascender/main/conf.py:366
+msgid "Enable Ansible 2.9 Compatibility"
+msgstr ""
+
+#: ascender/main/conf.py:367
+msgid ""
+"If enabled, sets ANSIBLE_COLLECTIONS_PATHS for legacy Ansible 2.9 "
+"compatibility."
+msgstr ""
+
+#: ascender/main/conf.py:376
+msgid "Follow symlinks"
+msgstr ""
+
+#: ascender/main/conf.py:378
+msgid ""
+"Follow symbolic links when scanning for playbooks. Be aware that setting "
+"this to True can lead to infinite recursion if a link points to a parent "
+"directory of itself."
+msgstr ""
+
+#: ascender/main/conf.py:389
+msgid "Expose host paths for Container Groups"
+msgstr ""
+
+#: ascender/main/conf.py:391
+msgid ""
+"Expose paths via hostPath for the Pods created by a Container Group. "
+"HostPath volumes present many security risks, and it is a best practice to "
+"avoid the use of HostPaths when possible. "
+msgstr ""
+
+#: ascender/main/conf.py:402
+msgid "Ignore Ansible Galaxy SSL Certificate Verification"
+msgstr ""
+
+#: ascender/main/conf.py:403
+msgid ""
+"If set to true, certificate validation will not be done when installing "
+"content from any Galaxy server."
+msgstr ""
+
+#: ascender/main/conf.py:412
+msgid "Standard Output Maximum Display Size"
+msgstr ""
+
+#: ascender/main/conf.py:413
+msgid ""
+"Maximum Size of Standard Output in bytes to display before requiring the "
+"output be downloaded."
+msgstr ""
+
+#: ascender/main/conf.py:422
+msgid "Job Event Standard Output Maximum Display Size"
+msgstr ""
+
+#: ascender/main/conf.py:424
+msgid ""
+"Maximum Size of Standard Output in bytes to display for a single job or ad "
+"hoc command event. `stdout` will end with `…` when truncated."
+msgstr ""
+
+#: ascender/main/conf.py:435
+msgid "Job Event Maximum Websocket Messages Per Second"
+msgstr ""
+
+#: ascender/main/conf.py:436
+msgid ""
+"Maximum number of messages to update the UI live job output with per second. "
+"Value of 0 means no limit."
+msgstr ""
+
+#: ascender/main/conf.py:445
+msgid "Maximum Scheduled Jobs"
+msgstr ""
+
+#: ascender/main/conf.py:446
+msgid ""
+"Maximum number of the same job template that can be waiting to run when "
+"launching from a schedule before no more are created."
+msgstr ""
+
+#: ascender/main/conf.py:455
+msgid "Ansible Callback Plugins"
+msgstr ""
+
+#: ascender/main/conf.py:456
+msgid ""
+"List of paths to search for extra callback plugins to be used when running "
+"jobs. Enter one path per line."
+msgstr ""
+
+#: ascender/main/conf.py:466
+msgid "Default Job Timeout"
+msgstr ""
+
+#: ascender/main/conf.py:468
+msgid ""
+"Maximum time in seconds to allow jobs to run. Use value of 0 to indicate "
+"that no timeout should be imposed. A timeout set on an individual job "
+"template will override this."
+msgstr ""
+
+#: ascender/main/conf.py:481
+msgid "Default Job Idle Timeout"
+msgstr ""
+
+#: ascender/main/conf.py:483
+msgid ""
+"If no output is detected from ansible in this number of seconds the "
+"execution will be terminated. Use value of 0 to indicate that no idle "
+"timeout should be imposed."
+msgstr ""
+
+#: ascender/main/conf.py:496
+msgid "Default Inventory Update Timeout"
+msgstr ""
+
+#: ascender/main/conf.py:498
+msgid ""
+"Maximum time in seconds to allow inventory updates to run. Use value of 0 to "
+"indicate that no timeout should be imposed. A timeout set on an individual "
+"inventory source will override this."
+msgstr ""
+
+#: ascender/main/conf.py:511
+msgid "Default Project Update Timeout"
+msgstr ""
+
+#: ascender/main/conf.py:513
+msgid ""
+"Maximum time in seconds to allow project updates to run. Use value of 0 to "
+"indicate that no timeout should be imposed. A timeout set on an individual "
+"project will override this."
+msgstr ""
+
+#: ascender/main/conf.py:526
+msgid "Per-Host Ansible Fact Cache Timeout"
+msgstr ""
+
+#: ascender/main/conf.py:528
+msgid ""
+"Maximum time, in seconds, that stored Ansible facts are considered valid "
+"since the last time they were modified. Only valid, non-stale, facts will be "
+"accessible by a playbook. Note, this does not influence the deletion of "
+"ansible_facts from the database. Use a value of 0 to indicate that no "
+"timeout should be imposed."
+msgstr ""
+
+#: ascender/main/conf.py:543
+msgid "Maximum number of forks per job"
+msgstr ""
+
+#: ascender/main/conf.py:544
+msgid ""
+"Saving a Job Template with more than this number of forks will result in an "
+"error. When set to 0, no limit is applied."
+msgstr ""
+
+#: ascender/main/conf.py:554
+msgid "Logging Aggregator"
+msgstr ""
+
+#: ascender/main/conf.py:555
+msgid "Hostname/IP where external logs will be sent to."
+msgstr ""
+
+#: ascender/main/conf.py:556 ascender/main/conf.py:566 ascender/main/conf.py:578
+#: ascender/main/conf.py:588 ascender/main/conf.py:600 ascender/main/conf.py:619
+#: ascender/main/conf.py:633 ascender/main/conf.py:642 ascender/main/conf.py:652
+#: ascender/main/conf.py:666 ascender/main/conf.py:675 ascender/main/conf.py:690
+#: ascender/main/conf.py:705 ascender/main/conf.py:722 ascender/main/conf.py:737
+#: ascender/main/conf.py:750 ascender/main/conf.py:759 ascender/main/conf.py:777
+msgid "Logging"
+msgstr ""
+
+#: ascender/main/conf.py:564
+msgid "Logging Aggregator Port"
+msgstr ""
+
+#: ascender/main/conf.py:565
+msgid ""
+"Port on Logging Aggregator to send logs to (if required and not provided in "
+"Logging Aggregator)."
+msgstr ""
+
+#: ascender/main/conf.py:576
+msgid "Logging Aggregator Type"
+msgstr ""
+
+#: ascender/main/conf.py:577
+msgid "Format messages for the chosen log aggregator."
+msgstr ""
+
+#: ascender/main/conf.py:586
+msgid "Logging Aggregator Username"
+msgstr ""
+
+#: ascender/main/conf.py:587
+msgid "Username for external log aggregator (if required; HTTP/s only)."
+msgstr ""
+
+#: ascender/main/conf.py:598
+msgid "Logging Aggregator Password/Token"
+msgstr ""
+
+#: ascender/main/conf.py:599
+msgid ""
+"Password or authentication token for external log aggregator (if required; "
+"HTTP/s only)."
+msgstr ""
+
+#: ascender/main/conf.py:608
+msgid "Loggers Sending Data to Log Aggregator Form"
+msgstr ""
+
+#: ascender/main/conf.py:610
+msgid ""
+"List of loggers that will send HTTP logs to the collector, these can include "
+"any or all of: \n"
+"awx - service logs\n"
+"activity_stream - activity stream records\n"
+"job_events - callback data from Ansible job events\n"
+"system_tracking - facts gathered from scan jobs\n"
+"broadcast_websocket - errors pertaining to websockets broadcast metrics\n"
+"job_lifecycle - logs related to processing of a job\n"
+msgstr ""
+
+#: ascender/main/conf.py:626
+msgid "Log System Tracking Facts Individually"
+msgstr ""
+
+#: ascender/main/conf.py:628
+msgid ""
+"If set, system tracking facts will be sent for each package, service, or "
+"other item found in a scan, allowing for greater search query granularity. "
+"If unset, facts will be sent as a single dictionary, allowing for greater "
+"efficiency in fact processing."
+msgstr ""
+
+#: ascender/main/conf.py:640
+msgid "Enable External Logging"
+msgstr ""
+
+#: ascender/main/conf.py:641
+msgid "Enable sending logs to external log aggregator."
+msgstr ""
+
+#: ascender/main/conf.py:650
+msgid "Cluster-wide unique identifier."
+msgstr ""
+
+#: ascender/main/conf.py:651
+msgid "Useful to uniquely identify instances."
+msgstr ""
+
+#: ascender/main/conf.py:660
+msgid "Logging Aggregator Protocol"
+msgstr ""
+
+#: ascender/main/conf.py:662
+msgid ""
+"Protocol used to communicate with log aggregator.  HTTPS/HTTP assumes HTTPS "
+"unless http:// is explicitly used in the Logging Aggregator hostname."
+msgstr ""
+
+#: ascender/main/conf.py:673
+msgid "TCP Connection Timeout"
+msgstr ""
+
+#: ascender/main/conf.py:674
+msgid ""
+"Number of seconds for a TCP connection to external log aggregator to "
+"timeout. Applies to HTTPS and TCP log aggregator protocols."
+msgstr ""
+
+#: ascender/main/conf.py:683
+msgid "Enable/disable HTTPS certificate verification"
+msgstr ""
+
+#: ascender/main/conf.py:685
+msgid ""
+"Flag to control enable/disable of certificate verification when "
+"LOG_AGGREGATOR_PROTOCOL is \"https\". If enabled, the log handler will "
+"verify certificate sent by external log aggregator before establishing "
+"connection."
+msgstr ""
+
+#: ascender/main/conf.py:698
+msgid "Logging Aggregator Level Threshold"
+msgstr ""
+
+#: ascender/main/conf.py:700
+msgid ""
+"Level threshold used by log handler. Severities from lowest to highest are "
+"DEBUG, INFO, WARNING, ERROR, CRITICAL. Messages less severe than the "
+"threshold will be ignored by log handler. (messages under category awx."
+"anlytics ignore this setting)"
+msgstr ""
+
+#: ascender/main/conf.py:713
+msgid "Maximum number of messages that can be stored in the log action queue"
+msgstr ""
+
+#: ascender/main/conf.py:715
+msgid ""
+"Defines how large the rsyslog action queue can grow in number of messages "
+"stored. This can have an impact on memory utilization. When the queue "
+"reaches 75% of this number, the queue will start writing to disk (queue."
+"highWatermark in rsyslog). When it reaches 90%, NOTICE, INFO, and DEBUG "
+"messages will start to be discarded (queue.discardMark with queue."
+"discardSeverity=5)."
+msgstr ""
+
+#: ascender/main/conf.py:730
+msgid "Maximum disk persistence for rsyslogd action queuing (in GB)"
+msgstr ""
+
+#: ascender/main/conf.py:732
+msgid ""
+"Amount of data to store (in gigabytes) if an rsyslog action takes time to "
+"process an incoming message (defaults to 1). Equivalent to the rsyslogd "
+"queue.maxdiskspace setting on the action (e.g. omhttp). It stores files in "
+"the directory specified by LOG_AGGREGATOR_MAX_DISK_USAGE_PATH."
+msgstr ""
+
+#: ascender/main/conf.py:744
+msgid "File system location for rsyslogd disk persistence"
+msgstr ""
+
+#: ascender/main/conf.py:746
+msgid ""
+"Location to persist logs that should be retried after an outage of the "
+"external log aggregator (defaults to /var/lib/awx). Equivalent to the "
+"rsyslogd queue.spoolDirectory setting."
+msgstr ""
+
+#: ascender/main/conf.py:757
+msgid "Enable rsyslogd debugging"
+msgstr ""
+
+#: ascender/main/conf.py:758
+msgid ""
+"Enabled high verbosity debugging for rsyslogd.  Useful for debugging "
+"connection issues for external log aggregation."
+msgstr ""
+
+#: ascender/main/conf.py:766
+msgid "Log Format For API 4XX Errors"
+msgstr ""
+
+#: ascender/main/conf.py:768
+msgid ""
+"The format of logged messages when an API 4XX error occurs, the following "
+"variables will be substituted: \n"
+"status_code - The HTTP status code of the error\n"
+"user_name - The user name attempting to use the API\n"
+"url_path - The URL path to the API endpoint called\n"
+"remote_addr - The remote address seen for the user\n"
+"error - The error set by the api endpoint\n"
+"Variables need to be in the format {<variable name>}."
+msgstr ""
+
+#: ascender/main/conf.py:785
+msgid "Last gather date for Automation Analytics."
+msgstr ""
+
+#: ascender/main/conf.py:793
+msgid ""
+"Last gathered entries from the data collection service of Automation "
+"Analytics"
+msgstr ""
+
+#: ascender/main/conf.py:804
+msgid "Automation Analytics Gather Interval"
+msgstr ""
+
+#: ascender/main/conf.py:805
+msgid "Interval (in seconds) between data gathering."
+msgstr ""
+
+#: ascender/main/conf.py:819
+msgid ""
+"Indicates whether the instance is part of a kubernetes-based deployment."
+msgstr ""
+
+#: ascender/main/conf.py:826 ascender/main/conf.py:827
+msgid "Max jobs to allow bulk jobs to launch"
+msgstr ""
+
+#: ascender/main/conf.py:828 ascender/main/conf.py:838 ascender/main/conf.py:848
+msgid "Bulk Actions"
+msgstr ""
+
+#: ascender/main/conf.py:836 ascender/main/conf.py:837
+msgid "Max number of hosts to allow to be created in a single bulk action"
+msgstr ""
+
+#: ascender/main/conf.py:846 ascender/main/conf.py:847
+msgid "Max number of hosts to allow to be deleted in a single bulk action"
+msgstr ""
+
+#: ascender/main/conf.py:856
+msgid "Enable Preview of New User Interface"
+msgstr ""
+
+#: ascender/main/conf.py:857
+msgid "Enable preview of new user interface."
+msgstr ""
+
+#: ascender/main/conf.py:866
+msgid ""
+"Default model for AWX - no subscription. Deletion of host_metrics will not "
+"be considered for purposes of managed host counting"
+msgstr ""
+
+#: ascender/main/conf.py:869
+msgid ""
+"Usage based on unique managed nodes in a large historical time frame and "
+"delete functionality for no longer used managed nodes"
+msgstr ""
+
+#: ascender/main/conf.py:874
+msgid "Defines subscription usage model and shows Host Metrics"
+msgstr ""
+
+#: ascender/main/conf.py:882
+msgid "Last cleanup date for HostMetrics"
+msgstr ""
+
+#: ascender/main/conf.py:891
+msgid "Last computing date of HostMetricSummaryMonthly"
+msgstr ""
+
+#: ascender/main/conf.py:900
+msgid "Enable or Disable tmp dir cleanup"
+msgstr ""
+
+#: ascender/main/conf.py:902
+msgid "Enable or Disable TMP Dir cleanup"
+msgstr ""
+
+#: ascender/main/conf.py:910
+msgid "Debug Web Requests"
+msgstr ""
+
+#: ascender/main/conf.py:912
+msgid "Debug web request python timing"
+msgstr ""
+
+#: ascender/main/conf.py:920
+msgid "Container Run Options"
+msgstr ""
+
+#: ascender/main/conf.py:922
+msgid ""
+"List of options to pass to podman run example: ['--network', 'slirp4netns:"
+"enable_ipv6=true', '--log-level', 'debug']"
+msgstr ""
+
+#: ascender/main/conf.py:930
+msgid "Release Receptor Work"
+msgstr ""
+
+#: ascender/main/conf.py:932
+msgid "Release receptor work"
+msgstr ""
+
+#: ascender/main/conf.py:958 ascender/main/conf.py:982 ascender/sso/conf.py:1655
+msgid "\n"
+msgstr ""
+
+#: ascender/main/constants.py:19
+msgid "Sudo"
+msgstr ""
+
+#: ascender/main/constants.py:20
+msgid "Su"
+msgstr ""
+
+#: ascender/main/constants.py:21
+msgid "Pbrun"
+msgstr ""
+
+#: ascender/main/constants.py:22
+msgid "Pfexec"
+msgstr ""
+
+#: ascender/main/constants.py:23
+msgid "DZDO"
+msgstr ""
+
+#: ascender/main/constants.py:24
+msgid "Pmrun"
+msgstr ""
+
+#: ascender/main/constants.py:25
+msgid "Runas"
+msgstr ""
+
+#: ascender/main/constants.py:26
+msgid "Enable"
+msgstr ""
+
+#: ascender/main/constants.py:27
+msgid "Doas"
+msgstr ""
+
+#: ascender/main/constants.py:28
+msgid "Ksu"
+msgstr ""
+
+#: ascender/main/constants.py:29
+msgid "Machinectl"
+msgstr ""
+
+#: ascender/main/constants.py:30
+msgid "Sesu"
+msgstr ""
+
+#: ascender/main/constants.py:32
+msgid "None"
+msgstr ""
+
+#: ascender/main/credential_plugins/aim.py:12
+msgid "CyberArk CCP URL"
+msgstr ""
+
+#: ascender/main/credential_plugins/aim.py:18
+msgid "Web Service ID"
+msgstr ""
+
+#: ascender/main/credential_plugins/aim.py:20
+msgid "The CCP Web Service ID. Leave blank to default to AIMWebService."
+msgstr ""
+
+#: ascender/main/credential_plugins/aim.py:24
+msgid "Application ID"
+msgstr ""
+
+#: ascender/main/credential_plugins/aim.py:30
+msgid "Client Key"
+msgstr ""
+
+#: ascender/main/credential_plugins/aim.py:37
+#: ascender/main/credential_plugins/hashivault.py:46
+msgid "Client Certificate"
+msgstr ""
+
+#: ascender/main/credential_plugins/aim.py:44
+msgid "Verify SSL Certificates"
+msgstr ""
+
+#: ascender/main/credential_plugins/aim.py:52
+msgid "Object Query"
+msgstr ""
+
+#: ascender/main/credential_plugins/aim.py:54
+msgid ""
+"Lookup query for the object. Ex: Safe=TestSafe;Object=testAccountName123"
+msgstr ""
+
+#: ascender/main/credential_plugins/aim.py:56
+msgid "Object Query Format"
+msgstr ""
+
+#: ascender/main/credential_plugins/aim.py:59
+msgid "Object Property"
+msgstr ""
+
+#: ascender/main/credential_plugins/aim.py:61
+msgid ""
+"The property of the object to return. Available properties: Username, "
+"Password and Address."
+msgstr ""
+
+#: ascender/main/credential_plugins/aim.py:65
+msgid "Reason"
+msgstr ""
+
+#: ascender/main/credential_plugins/aim.py:67
+msgid ""
+"Object request reason. This is only needed if it is required by the object's "
+"policy."
+msgstr ""
+
+#: ascender/main/credential_plugins/aws_secretsmanager.py:12
+msgid "AWS Access Key"
+msgstr ""
+
+#: ascender/main/credential_plugins/aws_secretsmanager.py:17
+msgid "AWS Secret Key"
+msgstr ""
+
+#: ascender/main/credential_plugins/aws_secretsmanager.py:25
+msgid "AWS Secrets Manager Region"
+msgstr ""
+
+#: ascender/main/credential_plugins/aws_secretsmanager.py:27
+msgid "Region which the secrets manager is located"
+msgstr ""
+
+#: ascender/main/credential_plugins/aws_secretsmanager.py:31
+msgid "AWS Secret Name"
+msgstr ""
+
+#: ascender/main/credential_plugins/azure_kv.py:19
+msgid "Vault URL (DNS Name)"
+msgstr ""
+
+#: ascender/main/credential_plugins/azure_kv.py:23
+#: ascender/main/credential_plugins/dsv.py:25
+#: ascender/main/models/credential/__init__.py:877
+msgid "Client ID"
+msgstr ""
+
+#: ascender/main/credential_plugins/azure_kv.py:30
+#: ascender/main/models/credential/__init__.py:884
+msgid "Tenant ID"
+msgstr ""
+
+#: ascender/main/credential_plugins/azure_kv.py:33
+msgid "Cloud Environment"
+msgstr ""
+
+#: ascender/main/credential_plugins/azure_kv.py:34
+msgid "Specify which azure cloud environment to use."
+msgstr ""
+
+#: ascender/main/credential_plugins/azure_kv.py:42
+msgid "Secret Name"
+msgstr ""
+
+#: ascender/main/credential_plugins/azure_kv.py:44
+msgid "The name of the secret to look up."
+msgstr ""
+
+#: ascender/main/credential_plugins/azure_kv.py:48
+#: ascender/main/credential_plugins/conjur.py:46
+msgid "Secret Version"
+msgstr ""
+
+#: ascender/main/credential_plugins/azure_kv.py:50
+#: ascender/main/credential_plugins/conjur.py:48
+#: ascender/main/credential_plugins/hashivault.py:170
+msgid ""
+"Used to specify a specific secret version (if left empty, the latest version "
+"will be used)."
+msgstr ""
+
+#: ascender/main/credential_plugins/centrify_vault.py:10
+#: ascender/main/credential_plugins/centrify_vault.py:12
+msgid "Centrify Tenant URL"
+msgstr ""
+
+#: ascender/main/credential_plugins/centrify_vault.py:17
+msgid "Centrify API User"
+msgstr ""
+
+#: ascender/main/credential_plugins/centrify_vault.py:19
+msgid ""
+"Centrify API User, having necessary permissions as mentioned in support doc"
+msgstr ""
+
+#: ascender/main/credential_plugins/centrify_vault.py:23
+msgid "Centrify API Password"
+msgstr ""
+
+#: ascender/main/credential_plugins/centrify_vault.py:25
+msgid "Password of Centrify API User with necessary permissions"
+msgstr ""
+
+#: ascender/main/credential_plugins/centrify_vault.py:30
+msgid "OAuth2 Application ID"
+msgstr ""
+
+#: ascender/main/credential_plugins/centrify_vault.py:32
+msgid "Application ID of the configured OAuth2 Client (defaults to 'awx')"
+msgstr ""
+
+#: ascender/main/credential_plugins/centrify_vault.py:37
+msgid "OAuth2 Scope"
+msgstr ""
+
+#: ascender/main/credential_plugins/centrify_vault.py:39
+msgid "Scope of the configured OAuth2 Client (defaults to 'awx')"
+msgstr ""
+
+#: ascender/main/credential_plugins/centrify_vault.py:46
+msgid "Account Name"
+msgstr ""
+
+#: ascender/main/credential_plugins/centrify_vault.py:48
+msgid ""
+"Local system account or Domain account name enrolled in Centrify Vault. eg. "
+"(root or DOMAIN/Administrator)"
+msgstr ""
+
+#: ascender/main/credential_plugins/centrify_vault.py:52
+msgid "System Name"
+msgstr ""
+
+#: ascender/main/credential_plugins/centrify_vault.py:54
+msgid "Machine Name enrolled with in Centrify Portal"
+msgstr ""
+
+#: ascender/main/credential_plugins/conjur.py:15
+msgid "Conjur URL"
+msgstr ""
+
+#: ascender/main/credential_plugins/conjur.py:21
+msgid "API Key"
+msgstr ""
+
+#: ascender/main/credential_plugins/conjur.py:27
+#: ascender/main/migrations/_inventory_source_vars.py:144
+msgid "Account"
+msgstr ""
+
+#: ascender/main/credential_plugins/conjur.py:32
+#: ascender/main/credential_plugins/hashivault.py:92
+#: ascender/main/credential_plugins/tss.py:19
+#: ascender/main/models/credential/__init__.py:597
+#: ascender/main/models/credential/__init__.py:631
+#: ascender/main/models/credential/__init__.py:672
+#: ascender/main/models/credential/__init__.py:743
+#: ascender/main/models/credential/__init__.py:807
+#: ascender/main/models/credential/__init__.py:870
+#: ascender/main/models/credential/__init__.py:968
+#: ascender/main/models/credential/__init__.py:1121
+msgid "Username"
+msgstr ""
+
+#: ascender/main/credential_plugins/conjur.py:35
+msgid "Public Key Certificate"
+msgstr ""
+
+#: ascender/main/credential_plugins/conjur.py:40
+msgid "Secret Identifier"
+msgstr ""
+
+#: ascender/main/credential_plugins/conjur.py:42
+msgid "The identifier for the secret e.g., /some/identifier"
+msgstr ""
+
+#: ascender/main/credential_plugins/dsv.py:12
+msgid "Tenant"
+msgstr ""
+
+#: ascender/main/credential_plugins/dsv.py:13
+msgid "The tenant e.g. \"ex\" when the URL is https://ex.secretsvaultcloud.com"
+msgstr ""
+
+#: ascender/main/credential_plugins/dsv.py:18
+msgid "Top-level Domain (TLD)"
+msgstr ""
+
+#: ascender/main/credential_plugins/dsv.py:19
+msgid ""
+"The TLD of the tenant e.g. \"com\" when the URL is https://ex."
+"secretsvaultcloud.com"
+msgstr ""
+
+#: ascender/main/credential_plugins/dsv.py:38
+msgid "Secret Path"
+msgstr ""
+
+#: ascender/main/credential_plugins/dsv.py:40
+msgid "The secret path e.g. /test/secret1"
+msgstr ""
+
+#: ascender/main/credential_plugins/dsv.py:44 ascender/main/credential_plugins/tss.py:46
+msgid "Secret Field"
+msgstr ""
+
+#: ascender/main/credential_plugins/dsv.py:45 ascender/main/credential_plugins/tss.py:47
+msgid "The field to extract from the secret"
+msgstr ""
+
+#: ascender/main/credential_plugins/dsv.py:50
+msgid "Should the secret be base64 decoded?"
+msgstr ""
+
+#: ascender/main/credential_plugins/dsv.py:51
+msgid ""
+"Specify whether the secret should be base64 decoded, typically used for "
+"storing files, such as SSH keys"
+msgstr ""
+
+#: ascender/main/credential_plugins/dsv.py:64
+msgid "URL template"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:16
+msgid "Server URL"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:19
+msgid "The URL to the HashiCorp Vault"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:23
+#: ascender/main/models/credential/__init__.py:905
+#: ascender/main/models/credential/__init__.py:924
+#: ascender/main/models/credential/__init__.py:943
+msgid "Token"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:26
+msgid "The access token used to authenticate to the Vault server"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:30
+msgid "CA Certificate"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:33
+msgid ""
+"The CA certificate used to verify the SSL certificate of the Vault server"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:35
+msgid "AppRole role_id"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:35
+msgid "The Role ID for AppRole Authentication"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:38
+msgid "AppRole secret_id"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:42
+msgid "The Secret ID for AppRole Authentication"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:50
+msgid ""
+"The PEM-encoded client certificate used for TLS client authentication. This "
+"should include the certificate and any intermediate certififcates."
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:56
+msgid "Client Certificate Key"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:60
+msgid "The certificate private key used for TLS client authentication."
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:64
+msgid "TLS Authentication Role"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:68
+msgid ""
+"The role configured in Hashicorp Vault for TLS client authentication. If not "
+"provided, Hashicorp Vault may assign roles based on the certificate used."
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:74
+msgid "Namespace name (Vault Enterprise only)"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:77
+msgid "Name of the namespace to use when authenticate and retrieve secrets"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:81
+msgid "Kubernetes role"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:85
+msgid ""
+"The Role for Kubernetes Authentication. This is the named role, configured "
+"in Vault server, for AWX pod auth policies. see https://www.vaultproject.io/"
+"docs/auth/kubernetes#configuration"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:95
+msgid "Username for user authentication."
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:99
+#: ascender/main/credential_plugins/tss.py:31
+#: ascender/main/models/credential/__init__.py:598
+#: ascender/main/models/credential/__init__.py:632
+#: ascender/main/models/credential/__init__.py:675
+#: ascender/main/models/credential/__init__.py:810
+#: ascender/main/models/credential/__init__.py:873
+#: ascender/main/models/credential/__init__.py:976
+msgid "Password"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:102
+msgid "Password for user authentication."
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:106
+#: ascender/main/credential_plugins/hashivault.py:130
+msgid "Path to Auth"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:110
+msgid ""
+"The Authentication path to use if one isn't provided in the metadata when "
+"linking to an input field. Defaults to 'approle'"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:116
+msgid "Path to Secret"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:133
+msgid "The path where the Authentication method is mounted e.g, approle"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:143
+msgid "API Version"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:145
+msgid ""
+"API v1 is for static key/value lookups.  API v2 is for versioned key/value "
+"lookups."
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:153
+msgid "Name of Secret Backend"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:155
+msgid ""
+"The name of the kv secret backend (if left empty, the first segment of the "
+"secret path will be used)."
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:162
+#: ascender/main/migrations/_inventory_source_vars.py:149
+msgid "Key Name"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:164
+msgid "The name of the key to look up in the secret."
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:168
+msgid "Secret Version (v2 only)"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:181
+msgid "Unsigned Public Key"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:188
+msgid "Role Name"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:188
+msgid "The name of the role used to sign."
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:191
+msgid "Valid Principals"
+msgstr ""
+
+#: ascender/main/credential_plugins/hashivault.py:193
+msgid ""
+"Valid principals (either usernames or hostnames) that the certificate should "
+"be signed for."
+msgstr ""
+
+#: ascender/main/credential_plugins/tss.py:13
+msgid "Secret Server URL"
+msgstr ""
+
+#: ascender/main/credential_plugins/tss.py:14
+msgid ""
+"The Base URL of Secret Server e.g. https://myserver/SecretServer or https://"
+"mytenant.secretservercloud.com"
+msgstr ""
+
+#: ascender/main/credential_plugins/tss.py:20
+msgid "The (Application) user username"
+msgstr ""
+
+#: ascender/main/credential_plugins/tss.py:25
+msgid "Domain"
+msgstr ""
+
+#: ascender/main/credential_plugins/tss.py:26
+msgid "The (Application) user domain"
+msgstr ""
+
+#: ascender/main/credential_plugins/tss.py:32
+msgid "The corresponding password"
+msgstr ""
+
+#: ascender/main/credential_plugins/tss.py:40
+msgid "Secret ID"
+msgstr ""
+
+#: ascender/main/credential_plugins/tss.py:41
+msgid "The integer ID of the secret"
+msgstr ""
+
+#: ascender/main/fields.py:65
+#, python-brace-format
+msgid "'{value}' is not one of ['{allowed_values}']"
+msgstr ""
+
+#: ascender/main/fields.py:455
+#, python-brace-format
+msgid "{type} provided in relative path {path}, expected {expected_type}"
+msgstr ""
+
+#: ascender/main/fields.py:459
+#, python-brace-format
+msgid "{type} provided, expected {expected_type}"
+msgstr ""
+
+#: ascender/main/fields.py:463
+#, python-brace-format
+msgid "Schema validation error in relative path {path} ({error})"
+msgstr ""
+
+#: ascender/main/fields.py:564
+#, python-format
+msgid "required for %s"
+msgstr ""
+
+#: ascender/main/fields.py:629
+msgid "secret values must be of type string, not {}"
+msgstr ""
+
+#: ascender/main/fields.py:666
+#, python-format
+msgid "cannot be set unless \"%s\" is set"
+msgstr ""
+
+#: ascender/main/fields.py:694
+msgid "must be set when SSH key is encrypted."
+msgstr ""
+
+#: ascender/main/fields.py:704
+msgid "should not be set when SSH key is not encrypted."
+msgstr ""
+
+#: ascender/main/fields.py:752
+msgid "'dependencies' is not supported for custom credentials."
+msgstr ""
+
+#: ascender/main/fields.py:764
+msgid "\"tower\" is a reserved field name"
+msgstr ""
+
+#: ascender/main/fields.py:771
+#, python-format
+msgid "field IDs must be unique (%s)"
+msgstr ""
+
+#: ascender/main/fields.py:785
+msgid "{} is not a {}"
+msgstr ""
+
+#: ascender/main/fields.py:796
+#, python-brace-format
+msgid "{sub_key} not allowed for {element_type} type ({element_id})"
+msgstr ""
+
+#: ascender/main/fields.py:856
+msgid ""
+"Environment variable {} may affect Ansible configuration so its use is not "
+"allowed in credentials."
+msgstr ""
+
+#: ascender/main/fields.py:862
+msgid "Environment variable {} is not allowed to be used in credentials."
+msgstr ""
+
+#: ascender/main/fields.py:886
+msgid ""
+"Must define unnamed file injector in order to reference `tower.filename`."
+msgstr ""
+
+#: ascender/main/fields.py:893
+msgid "Cannot directly reference reserved `tower` namespace container."
+msgstr ""
+
+#: ascender/main/fields.py:903
+msgid "Must use multi-file syntax when injecting multiple files"
+msgstr ""
+
+#: ascender/main/fields.py:917
+#, python-brace-format
+msgid "{sub_key} uses an undefined field ({error_msg})"
+msgstr ""
+
+#: ascender/main/fields.py:922
+msgid "Encountered unsafe code execution: {}"
+msgstr ""
+
+#: ascender/main/fields.py:925
+#, python-brace-format
+msgid ""
+"Syntax error rendering template for {sub_key} inside of {type} ({error_msg})"
+msgstr ""
+
+#: ascender/main/middleware.py:127
+msgid "Formats of all available named urls"
+msgstr ""
+
+#: ascender/main/middleware.py:128
+msgid ""
+"Read-only list of key-value pairs that shows the standard format of all "
+"available named URLs."
+msgstr ""
+
+#: ascender/main/middleware.py:129 ascender/main/middleware.py:141
+msgid "Named URL"
+msgstr ""
+
+#: ascender/main/middleware.py:136
+msgid "List of all named url graph nodes."
+msgstr ""
+
+#: ascender/main/middleware.py:138
+msgid ""
+"Read-only list of key-value pairs that exposes named URL graph topology. Use "
+"this list to programmatically generate named URLs for resources"
+msgstr ""
+
+#: ascender/main/migrations/_inventory_source_vars.py:142
+msgid "Image ID"
+msgstr ""
+
+#: ascender/main/migrations/_inventory_source_vars.py:143
+msgid "Availability Zone"
+msgstr ""
+
+#: ascender/main/migrations/_inventory_source_vars.py:145
+msgid "Instance ID"
+msgstr ""
+
+#: ascender/main/migrations/_inventory_source_vars.py:146
+msgid "Instance State"
+msgstr ""
+
+#: ascender/main/migrations/_inventory_source_vars.py:147
+msgid "Platform"
+msgstr ""
+
+#: ascender/main/migrations/_inventory_source_vars.py:148
+msgid "Instance Type"
+msgstr ""
+
+#: ascender/main/migrations/_inventory_source_vars.py:150
+msgid "Region"
+msgstr ""
+
+#: ascender/main/migrations/_inventory_source_vars.py:151
+msgid "Security Group"
+msgstr ""
+
+#: ascender/main/migrations/_inventory_source_vars.py:152
+msgid "Tags"
+msgstr ""
+
+#: ascender/main/migrations/_inventory_source_vars.py:153
+msgid "Tag None"
+msgstr ""
+
+#: ascender/main/migrations/_inventory_source_vars.py:154
+msgid "VPC ID"
+msgstr ""
+
+#: ascender/main/models/activity_stream.py:27
+msgid "Entity Created"
+msgstr ""
+
+#: ascender/main/models/activity_stream.py:28
+msgid "Entity Updated"
+msgstr ""
+
+#: ascender/main/models/activity_stream.py:29
+msgid "Entity Deleted"
+msgstr ""
+
+#: ascender/main/models/activity_stream.py:30
+msgid "Entity Associated with another Entity"
+msgstr ""
+
+#: ascender/main/models/activity_stream.py:31
+msgid "Entity was Disassociated with another Entity"
+msgstr ""
+
+#: ascender/main/models/activity_stream.py:44
+msgid "The cluster node the activity took place on."
+msgstr ""
+
+#: ascender/main/models/ad_hoc_commands.py:101
+msgid "No valid inventory."
+msgstr ""
+
+#: ascender/main/models/ad_hoc_commands.py:108
+msgid "You must provide a machine / SSH credential."
+msgstr ""
+
+#: ascender/main/models/ad_hoc_commands.py:119
+#: ascender/main/models/ad_hoc_commands.py:127
+msgid "Invalid type for ad hoc command"
+msgstr ""
+
+#: ascender/main/models/ad_hoc_commands.py:122
+msgid "Unsupported module for ad hoc commands."
+msgstr ""
+
+#: ascender/main/models/ad_hoc_commands.py:130
+#, python-format
+msgid "No argument passed to %s module."
+msgstr ""
+
+#: ascender/main/models/base.py:41 ascender/main/models/base.py:47
+#: ascender/main/models/base.py:52 ascender/main/models/base.py:57
+msgid "Run"
+msgstr ""
+
+#: ascender/main/models/base.py:42 ascender/main/models/base.py:48
+#: ascender/main/models/base.py:53 ascender/main/models/base.py:58
+msgid "Check"
+msgstr ""
+
+#: ascender/main/models/base.py:43
+msgid "Scan"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:98
+msgid ""
+"Specify the type of credential you want to create. Refer to the "
+"documentation for details on each type."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:110
+#: ascender/main/models/credential/__init__.py:353
+msgid ""
+"Enter inputs using either JSON or YAML syntax. Refer to the documentation "
+"for example syntax."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:335
+#: ascender/main/models/credential/__init__.py:594
+msgid "Machine"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:336
+#: ascender/main/models/credential/__init__.py:642
+msgid "Vault"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:337
+#: ascender/main/models/credential/__init__.py:668
+msgid "Network"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:338
+#: ascender/main/models/credential/__init__.py:627
+msgid "Source Control"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:339
+msgid "Cloud"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:340
+#: ascender/main/models/credential/__init__.py:1109
+msgid "Container Registry"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:341
+msgid "Personal Access Token"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:342
+msgid "Insights"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:343
+msgid "External"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:344
+msgid "Kubernetes"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:345
+msgid "Galaxy/Automation Hub"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:346
+msgid "Cryptography"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:358
+msgid ""
+"Enter injectors using either JSON or YAML syntax. Refer to the documentation "
+"for example syntax."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:417
+#, python-format
+msgid "adding %s credential type"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:599
+#: ascender/main/models/credential/__init__.py:679
+msgid "SSH Private Key"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:602
+msgid "Signed SSH Certificate"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:607
+#: ascender/main/models/credential/__init__.py:634
+#: ascender/main/models/credential/__init__.py:682
+msgid "Private Key Passphrase"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:610
+msgid "Privilege Escalation Method"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:612
+msgid ""
+"Specify a method for \"become\" operations. This is equivalent to specifying "
+"the --become-method Ansible parameter."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:616
+msgid "Privilege Escalation Username"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:619
+msgid "Privilege Escalation Password"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:633
+msgid "SCM Private Key"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:646
+msgid "Vault Password"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:649
+msgid "Vault Identifier"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:653
+msgid ""
+"Specify an (optional) Vault ID. This is equivalent to specifying the --vault-"
+"id Ansible parameter for providing multiple Vault passwords.  Note: this "
+"feature only works in Ansible 2.4+."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:688
+msgid "Authorize"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:693
+msgid "Authorize Password"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:708
+msgid "Amazon Web Services"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:712
+msgid "Access Key"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:715
+msgid "Secret Key"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:721
+msgid "STS Token"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:725
+msgid ""
+"Security Token Service (STS) is a web service that enables you to request "
+"temporary, limited-privilege credentials for AWS Identity and Access "
+"Management (IAM) users."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:739 ascender/main/models/inventory.py:927
+msgid "OpenStack"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:746
+msgid "Password (API Key)"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:752
+msgid "Host (Authentication URL)"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:754
+msgid ""
+"The host to authenticate with.  For example, https://openstack.business.com/"
+"v2.0/"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:758
+msgid "Project (Tenant Name)"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:763
+msgid "Project (Domain Name)"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:768
+msgid "Domain Name"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:771
+msgid ""
+"OpenStack domains define administrative boundaries. It is only needed for "
+"Keystone v3 authentication URLs. Refer to the documentation for common "
+"scenarios."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:779
+msgid "Region Name"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:781
+msgid "For some cloud providers, like OVH, region must be specified"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:785
+#: ascender/main/models/credential/__init__.py:987
+#: ascender/main/models/credential/__init__.py:1090
+#: ascender/main/models/credential/__init__.py:1133
+msgid "Verify SSL"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:797 ascender/main/models/inventory.py:925
+msgid "VMware vCenter"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:803
+msgid "VCenter Host"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:805
+msgid ""
+"Enter the hostname or IP address that corresponds to your VMware vCenter."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:822 ascender/main/models/inventory.py:923
+msgid "Google Compute Engine"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:828
+msgid "Service Account Email Address"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:830
+msgid ""
+"The email address assigned to the Google Compute Engine service account."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:837
+msgid ""
+"The Project ID is the GCE assigned identification. It is often constructed "
+"as three words or two words followed by a three-digit number. Examples: "
+"project-id-000 and another-project-id"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:845
+msgid "RSA Private Key"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:850
+msgid ""
+"Paste the contents of the PEM file associated with the service account email."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:860 ascender/main/models/inventory.py:924
+msgid "Microsoft Azure Resource Manager"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:866
+msgid "Subscription ID"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:868
+msgid "Subscription ID is an Azure construct, which is mapped to a username."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:887
+msgid "Azure Cloud Environment"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:889
+msgid ""
+"Environment variable AZURE_CLOUD_ENVIRONMENT when using Azure GovCloud or "
+"Azure stack."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:899
+msgid "GitHub Personal Access Token"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:908
+msgid "This token needs to come from your profile settings in GitHub"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:918
+msgid "GitLab Personal Access Token"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:927
+msgid "This token needs to come from your profile settings in GitLab"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:937
+msgid "Bitbucket Data Center HTTP Access Token"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:946
+msgid "This token needs to come from your user settings in Bitbucket"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:956
+#: ascender/main/models/credential/__init__.py:962
+msgid "CIQ Ascender Automation Platform"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:964
+msgid "CIQ Ascender Automation Platform base URL to authenticate with."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:971
+msgid ""
+"CIQ Ascender Automation Platform username id to authenticate as.This should "
+"not be set if an OAuth token is being used."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:982
+msgid "OAuth Token"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:985
+msgid ""
+"An OAuth token to use to authenticate with.This should not be set if "
+"username/password are being used."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1010
+msgid "CIQ Mountain Access Token"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1016
+msgid "Access Token"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1019
+msgid "A CIQ Mountain Access token."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1034
+msgid "CIQ Depot"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1040
+msgid "CIQ Depot Server"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1042
+msgid "A CIQ Depot server."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1047
+msgid "CIQ Depot User"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1049
+msgid "A CIQ Depot user."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1053
+msgid "CIQ Depot Token"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1056
+msgid "A CIQ Depot Token."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1073
+msgid "OpenShift or Kubernetes API Bearer Token"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1078
+msgid "OpenShift or Kubernetes API Endpoint"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1080
+msgid "The OpenShift or Kubernetes API Endpoint to authenticate with."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1084
+msgid "API authentication bearer token"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1096
+msgid "Certificate Authority data"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1114
+msgid "Authentication URL"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1116
+msgid "Authentication endpoint for the container registry."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1126
+msgid "Password or Token"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1129
+msgid "A password or token used to authenticate with"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1146
+msgid "Ansible Galaxy/Automation Hub API Token"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1151
+msgid "Galaxy Server URL"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1153
+msgid "The URL of the Galaxy instance to connect to."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1157
+msgid "Auth Server URL"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1159
+msgid "The URL of a Keycloak server token_endpoint, if using SSO auth."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1163
+msgid "API Token"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1166
+msgid "A token to use for authentication against the Galaxy instance."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1176
+#: ascender/main/models/credential/__init__.py:1181
+msgid "GPG Public Key"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1185
+msgid "GPG Public Key used to validate content signatures."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1195
+msgid "Terraform backend configuration"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1201
+msgid "Backend configuration"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1205
+msgid "Terraform backend config as Hashicorp configuration language."
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1244
+msgid "Target must be a non-external credential"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1249
+msgid "Source must be an external credential"
+msgstr ""
+
+#: ascender/main/models/credential/__init__.py:1255
+msgid "Input field must be defined on target credential (options are {})."
+msgstr ""
+
+#: ascender/main/models/events.py:168 ascender/main/models/events.py:791
+msgid "Host Failed"
+msgstr ""
+
+#: ascender/main/models/events.py:169
+msgid "Host Started"
+msgstr ""
+
+#: ascender/main/models/events.py:170 ascender/main/models/events.py:792
+msgid "Host OK"
+msgstr ""
+
+#: ascender/main/models/events.py:171
+msgid "Host Failure"
+msgstr ""
+
+#: ascender/main/models/events.py:172 ascender/main/models/events.py:798
+msgid "Host Skipped"
+msgstr ""
+
+#: ascender/main/models/events.py:173 ascender/main/models/events.py:793
+msgid "Host Unreachable"
+msgstr ""
+
+#: ascender/main/models/events.py:174 ascender/main/models/events.py:188
+msgid "No Hosts Remaining"
+msgstr ""
+
+#: ascender/main/models/events.py:175
+msgid "Host Polling"
+msgstr ""
+
+#: ascender/main/models/events.py:176
+msgid "Host Async OK"
+msgstr ""
+
+#: ascender/main/models/events.py:177
+msgid "Host Async Failure"
+msgstr ""
+
+#: ascender/main/models/events.py:178
+msgid "Item OK"
+msgstr ""
+
+#: ascender/main/models/events.py:179
+msgid "Item Failed"
+msgstr ""
+
+#: ascender/main/models/events.py:180
+msgid "Item Skipped"
+msgstr ""
+
+#: ascender/main/models/events.py:181
+msgid "Host Retry"
+msgstr ""
+
+#: ascender/main/models/events.py:183
+msgid "File Difference"
+msgstr ""
+
+#: ascender/main/models/events.py:184
+msgid "Playbook Started"
+msgstr ""
+
+#: ascender/main/models/events.py:185
+msgid "Running Handlers"
+msgstr ""
+
+#: ascender/main/models/events.py:186
+msgid "Including File"
+msgstr ""
+
+#: ascender/main/models/events.py:187
+msgid "No Hosts Matched"
+msgstr ""
+
+#: ascender/main/models/events.py:189
+msgid "Task Started"
+msgstr ""
+
+#: ascender/main/models/events.py:191
+msgid "Variables Prompted"
+msgstr ""
+
+#: ascender/main/models/events.py:192
+msgid "Gathering Facts"
+msgstr ""
+
+#: ascender/main/models/events.py:193
+msgid "internal: on Import for Host"
+msgstr ""
+
+#: ascender/main/models/events.py:194
+msgid "internal: on Not Import for Host"
+msgstr ""
+
+#: ascender/main/models/events.py:195
+msgid "Play Started"
+msgstr ""
+
+#: ascender/main/models/events.py:196
+msgid "Playbook Complete"
+msgstr ""
+
+#: ascender/main/models/events.py:199 ascender/main/models/events.py:807
+msgid "Debug"
+msgstr ""
+
+#: ascender/main/models/events.py:200 ascender/main/models/events.py:808
+msgid "Verbose"
+msgstr ""
+
+#: ascender/main/models/events.py:201 ascender/main/models/events.py:809
+msgid "Deprecated"
+msgstr ""
+
+#: ascender/main/models/events.py:202 ascender/main/models/events.py:810
+msgid "Warning"
+msgstr ""
+
+#: ascender/main/models/events.py:203 ascender/main/models/events.py:811
+msgid "System Warning"
+msgstr ""
+
+#: ascender/main/models/events.py:204 ascender/main/models/events.py:812
+#: ascender/main/models/unified_jobs.py:81
+msgid "Error"
+msgstr ""
+
+#: ascender/main/models/execution_environments.py:17
+msgid "Always pull container before running."
+msgstr ""
+
+#: ascender/main/models/execution_environments.py:18
+msgid "Only pull the image if not present before running."
+msgstr ""
+
+#: ascender/main/models/execution_environments.py:19
+msgid "Never pull container before running."
+msgstr ""
+
+#: ascender/main/models/execution_environments.py:29
+msgid ""
+"The organization used to determine access to this execution environment."
+msgstr ""
+
+#: ascender/main/models/execution_environments.py:33
+msgid "image location"
+msgstr ""
+
+#: ascender/main/models/execution_environments.py:34
+msgid ""
+"The full image location, including the container registry, image name, and "
+"version tag."
+msgstr ""
+
+#: ascender/main/models/execution_environments.py:51
+msgid "Pull image before running?"
+msgstr ""
+
+#: ascender/main/models/ha.py:75
+msgid "Field source and target must be unique together."
+msgstr ""
+
+#: ascender/main/models/ha.py:79
+msgid "The source instance of this peer link."
+msgstr ""
+
+#: ascender/main/models/ha.py:80
+msgid "The target receptor address of this peer link."
+msgstr ""
+
+#: ascender/main/models/ha.py:83
+msgid "Adding"
+msgstr ""
+
+#: ascender/main/models/ha.py:84
+msgid "Established"
+msgstr ""
+
+#: ascender/main/models/ha.py:85
+msgid "Removing"
+msgstr ""
+
+#: ascender/main/models/ha.py:88
+msgid "Indicates the current life cycle stage of this peer link."
+msgstr ""
+
+#: ascender/main/models/ha.py:103
+msgid "Field ip_address must be unique."
+msgstr ""
+
+#: ascender/main/models/ha.py:135
+msgid "Total system memory of this instance in bytes."
+msgstr ""
+
+#: ascender/main/models/ha.py:141
+msgid "Any error details from the last health check."
+msgstr ""
+
+#: ascender/main/models/ha.py:146
+msgid ""
+"Last time instance ran its heartbeat task for main cluster nodes. Last known "
+"connection to receptor mesh for execution nodes."
+msgstr ""
+
+#: ascender/main/models/ha.py:151
+msgid "The last time a health check was initiated on this instance."
+msgstr ""
+
+#: ascender/main/models/ha.py:156
+msgid ""
+"Last time a health check was ran on this instance to refresh cpu, memory, "
+"and capacity."
+msgstr ""
+
+#: ascender/main/models/ha.py:177
+msgid "Control plane node"
+msgstr ""
+
+#: ascender/main/models/ha.py:178
+msgid "Execution plane node"
+msgstr ""
+
+#: ascender/main/models/ha.py:179
+msgid "Controller and execution"
+msgstr ""
+
+#: ascender/main/models/ha.py:180
+msgid "Message-passing node, no execution capability"
+msgstr ""
+
+#: ascender/main/models/ha.py:182
+msgid "Role that this node plays in the mesh."
+msgstr ""
+
+#: ascender/main/models/ha.py:185
+msgid "Provisioning"
+msgstr ""
+
+#: ascender/main/models/ha.py:186
+msgid "Provisioning Failure"
+msgstr ""
+
+#: ascender/main/models/ha.py:187
+msgid "Installed"
+msgstr ""
+
+#: ascender/main/models/ha.py:188
+msgid "Ready"
+msgstr ""
+
+#: ascender/main/models/ha.py:189
+msgid "Unavailable"
+msgstr ""
+
+#: ascender/main/models/ha.py:190
+msgid "De-provisioning"
+msgstr ""
+
+#: ascender/main/models/ha.py:191
+msgid "De-provisioning Failure"
+msgstr ""
+
+#: ascender/main/models/ha.py:194
+msgid "Indicates the current life cycle stage of this instance."
+msgstr ""
+
+#: ascender/main/models/ha.py:197
+msgid "If True, this instance is managed by the control plane."
+msgstr ""
+
+#: ascender/main/models/ha.py:402
+msgid "Failed to connect to Redis"
+msgstr ""
+
+#: ascender/main/models/ha.py:417
+msgid "Instances that are members of this InstanceGroup"
+msgstr ""
+
+#: ascender/main/models/ha.py:452
+msgid ""
+"Maximum number of concurrent jobs to run on this group. Zero means no limit."
+msgstr ""
+
+#: ascender/main/models/ha.py:453
+msgid "Max forks to execute on this group. Zero means no limit."
+msgstr ""
+
+#: ascender/main/models/ha.py:454
+msgid "Percentage of Instances to automatically assign to this group"
+msgstr ""
+
+#: ascender/main/models/ha.py:455
+msgid ""
+"Static minimum number of Instances to automatically assign to this group"
+msgstr ""
+
+#: ascender/main/models/ha.py:457
+msgid ""
+"List of exact-match Instances that will always be automatically assigned to "
+"this group"
+msgstr ""
+
+#: ascender/main/models/inventory.py:85
+msgid "Hosts have a direct link to this inventory."
+msgstr ""
+
+#: ascender/main/models/inventory.py:86
+msgid "Hosts for inventory generated using the host_filter property."
+msgstr ""
+
+#: ascender/main/models/inventory.py:87
+msgid "Parse list of source inventories with the constructed inventory plugin."
+msgstr ""
+
+#: ascender/main/models/inventory.py:92
+msgid "inventories"
+msgstr ""
+
+#: ascender/main/models/inventory.py:99
+msgid "Organization containing this inventory."
+msgstr ""
+
+#: ascender/main/models/inventory.py:107
+msgid "Inventory variables in JSON or YAML format."
+msgstr ""
+
+#: ascender/main/models/inventory.py:113
+msgid ""
+"This field is deprecated and will be removed in a future release. Flag "
+"indicating whether any hosts in this inventory have failed."
+msgstr ""
+
+#: ascender/main/models/inventory.py:118
+msgid ""
+"This field is deprecated and will be removed in a future release. Total "
+"number of hosts in this inventory."
+msgstr ""
+
+#: ascender/main/models/inventory.py:123
+msgid ""
+"This field is deprecated and will be removed in a future release. Number of "
+"hosts in this inventory with active failures."
+msgstr ""
+
+#: ascender/main/models/inventory.py:128
+msgid ""
+"This field is deprecated and will be removed in a future release. Total "
+"number of groups in this inventory."
+msgstr ""
+
+#: ascender/main/models/inventory.py:134
+msgid ""
+"This field is deprecated and will be removed in a future release. Flag "
+"indicating whether this inventory has any external inventory sources."
+msgstr ""
+
+#: ascender/main/models/inventory.py:140
+msgid ""
+"Total number of external inventory sources configured within this inventory."
+msgstr ""
+
+#: ascender/main/models/inventory.py:145
+msgid "Number of external inventory sources in this inventory with failures."
+msgstr ""
+
+#: ascender/main/models/inventory.py:152
+msgid "Kind of inventory being represented."
+msgstr ""
+
+#: ascender/main/models/inventory.py:158
+msgid "Filter that will be applied to the hosts of this inventory."
+msgstr ""
+
+#: ascender/main/models/inventory.py:165
+msgid ""
+"Only valid for constructed inventories, this links to the inventories that "
+"will be used."
+msgstr ""
+
+#: ascender/main/models/inventory.py:196
+msgid "Flag indicating the inventory is being deleted."
+msgstr ""
+
+#: ascender/main/models/inventory.py:202
+msgid "Labels associated with this inventory."
+msgstr ""
+
+#: ascender/main/models/inventory.py:274
+msgid "Could not parse subset as slice specification."
+msgstr ""
+
+#: ascender/main/models/inventory.py:278
+msgid "Slice number must be less than total number of slices."
+msgstr ""
+
+#: ascender/main/models/inventory.py:280
+msgid "Slice number must be 1 or higher."
+msgstr ""
+
+#: ascender/main/models/inventory.py:535
+msgid "Is this host online and available for running jobs?"
+msgstr ""
+
+#: ascender/main/models/inventory.py:541
+msgid ""
+"The value used by the remote inventory source to uniquely identify the host"
+msgstr ""
+
+#: ascender/main/models/inventory.py:547
+msgid "Host variables in JSON or YAML format."
+msgstr ""
+
+#: ascender/main/models/inventory.py:571
+msgid "Inventory source(s) that created or modified this host."
+msgstr ""
+
+#: ascender/main/models/inventory.py:576
+msgid "Arbitrary JSON structure of most recent ansible_facts, per-host."
+msgstr ""
+
+#: ascender/main/models/inventory.py:582
+msgid "The date and time ansible_facts was last modified."
+msgstr ""
+
+#: ascender/main/models/inventory.py:689
+msgid "Group variables in JSON or YAML format."
+msgstr ""
+
+#: ascender/main/models/inventory.py:696
+msgid "Hosts associated directly with this group."
+msgstr ""
+
+#: ascender/main/models/inventory.py:702
+msgid "Inventory source(s) that created or modified this group."
+msgstr ""
+
+#: ascender/main/models/inventory.py:869
+msgid "When the host was first automated against"
+msgstr ""
+
+#: ascender/main/models/inventory.py:870
+msgid "When the host was last automated against"
+msgstr ""
+
+#: ascender/main/models/inventory.py:871
+msgid "When the host was last deleted"
+msgstr ""
+
+#: ascender/main/models/inventory.py:872
+msgid "How many times was the host automated"
+msgstr ""
+
+#: ascender/main/models/inventory.py:873
+msgid "How many times was the host deleted"
+msgstr ""
+
+#: ascender/main/models/inventory.py:875
+msgid ""
+"Boolean flag saying whether the host is deleted and therefore not counted "
+"into the subscription consumption"
+msgstr ""
+
+#: ascender/main/models/inventory.py:877
+msgid "How many inventories contain this host"
+msgstr ""
+
+#: ascender/main/models/inventory.py:904
+msgid "How many unique hosts are consumed from the license"
+msgstr ""
+
+#: ascender/main/models/inventory.py:905
+msgid "'License capacity as max. number of unique hosts"
+msgstr ""
+
+#: ascender/main/models/inventory.py:906
+msgid ""
+"How many hosts were added in the associated month, consuming more license "
+"capacity"
+msgstr ""
+
+#: ascender/main/models/inventory.py:907
+msgid ""
+"How many hosts were deleted in the associated month, freeing the license "
+"capacity"
+msgstr ""
+
+#: ascender/main/models/inventory.py:919
+msgid "File, Directory or Script"
+msgstr ""
+
+#: ascender/main/models/inventory.py:920
+msgid "Template additional groups and hostvars at runtime"
+msgstr ""
+
+#: ascender/main/models/inventory.py:921
+msgid "Sourced from a Project"
+msgstr ""
+
+#: ascender/main/models/inventory.py:922
+msgid "Amazon EC2"
+msgstr ""
+
+#: ascender/main/models/inventory.py:928
+msgid "Terraform State"
+msgstr ""
+
+#: ascender/main/models/inventory.py:958
+msgid "Inventory source variables in YAML or JSON format."
+msgstr ""
+
+#: ascender/main/models/inventory.py:964
+msgid ""
+"Inventory source SCM branch. Project default used if blank. Only allowed if "
+"project allow_override field is set to true."
+msgstr ""
+
+#: ascender/main/models/inventory.py:970
+msgid ""
+"Retrieve the enabled state from the given dict of host variables. The "
+"enabled variable may be specified as \"foo.bar\", in which case the lookup "
+"will traverse into nested dicts, equivalent to: from_dict.get(\"foo\", {})."
+"get(\"bar\", default)"
+msgstr ""
+
+#: ascender/main/models/inventory.py:980
+msgid ""
+"Only used when enabled_var is set. Value when the host is considered "
+"enabled. For example if enabled_var=\"status.power_state\"and enabled_value="
+"\"powered_on\" with host variables:{   \"status\": {     \"power_state\": "
+"\"powered_on\",     \"created\": \"2020-08-04T18:13:04+00:00\",     \"healthy"
+"\": true    },    \"name\": \"foobar\",    \"ip_address\": \"192.168.2.1\"}"
+"The host would be marked enabled. If power_state where any value other than "
+"powered_on then the host would be disabled when imported. If the key is not "
+"found then the host will be enabled"
+msgstr ""
+
+#: ascender/main/models/inventory.py:1001
+msgid ""
+"This field is deprecated and will be removed in a future release. Regex "
+"where only matching hosts will be imported."
+msgstr ""
+
+#: ascender/main/models/inventory.py:1005
+msgid "Overwrite local groups and hosts from remote inventory source."
+msgstr ""
+
+#: ascender/main/models/inventory.py:1009
+msgid "Overwrite local variables from remote inventory source."
+msgstr ""
+
+#: ascender/main/models/inventory.py:1014 ascender/main/models/jobs.py:155
+#: ascender/main/models/projects.py:135
+msgid "The amount of time (in seconds) to run before the task is canceled."
+msgstr ""
+
+#: ascender/main/models/inventory.py:1024
+msgid "Enter host, group or pattern match"
+msgstr ""
+
+#: ascender/main/models/inventory.py:1046
+#, python-format
+msgid ""
+"Cloud-based inventory sources (such as %s) require credentials for the "
+"matching cloud service."
+msgstr ""
+
+#: ascender/main/models/inventory.py:1051
+msgid "Credential is required for a cloud source."
+msgstr ""
+
+#: ascender/main/models/inventory.py:1053
+msgid ""
+"Credentials of type machine, source control, insights and vault are "
+"disallowed for custom inventory sources."
+msgstr ""
+
+#: ascender/main/models/inventory.py:1055
+msgid ""
+"Credentials of type insights and vault are disallowed for scm inventory "
+"sources."
+msgstr ""
+
+#: ascender/main/models/inventory.py:1114
+msgid "Project containing inventory file used as source."
+msgstr ""
+
+#: ascender/main/models/inventory.py:1261
+msgid "Cannot set source_path if not SCM type."
+msgstr ""
+
+#: ascender/main/models/inventory.py:1305
+msgid ""
+"Inventory files from this Project Update were used for the inventory update."
+msgstr ""
+
+#: ascender/main/models/inventory.py:1316 ascender/main/models/jobs.py:586
+#: ascender/main/models/projects.py:305 ascender/main/models/projects.py:548
+msgid "SCM Revision"
+msgstr ""
+
+#: ascender/main/models/inventory.py:1317
+msgid ""
+"The SCM Revision from the Project used for this inventory update.  Only "
+"applicable to inventories source from scm"
+msgstr ""
+
+#: ascender/main/models/inventory.py:1415
+msgid "Inventory script contents"
+msgstr ""
+
+#: ascender/main/models/jobs.py:73
+msgid ""
+"If enabled, textual changes made to any templated files on the host are "
+"shown in the standard output"
+msgstr ""
+
+#: ascender/main/models/jobs.py:105
+msgid ""
+"Branch to use in job run. Project default used if blank. Only allowed if "
+"project allow_override field is set to true."
+msgstr ""
+
+#: ascender/main/models/jobs.py:160
+msgid ""
+"If enabled, the service will act as an Ansible Fact Cache Plugin; persisting "
+"facts at the end of a playbook run to the database and caching facts for use "
+"by Ansible."
+msgstr ""
+
+#: ascender/main/models/jobs.py:257
+msgid ""
+"The number of jobs to slice into at runtime. Will cause the Job Template to "
+"launch a workflow if value is greater than 1."
+msgstr ""
+
+#: ascender/main/models/jobs.py:310
+msgid "Job Template must provide 'inventory' or allow prompting for it."
+msgstr ""
+
+#: ascender/main/models/jobs.py:324
+#, python-brace-format
+msgid "Maximum number of forks ({settings.MAX_FORKS}) exceeded."
+msgstr ""
+
+#: ascender/main/models/jobs.py:474
+msgid "Project is missing."
+msgstr ""
+
+#: ascender/main/models/jobs.py:478
+msgid "Project does not allow override of branch."
+msgstr ""
+
+#: ascender/main/models/jobs.py:482
+msgid "Job inventory does not have enough hosts for slicing"
+msgstr ""
+
+#: ascender/main/models/jobs.py:492 ascender/main/models/workflow.py:599
+msgid "Field is not configured to prompt on launch."
+msgstr ""
+
+#: ascender/main/models/jobs.py:495
+msgid "Saved launch configurations cannot provide passwords needed to start."
+msgstr ""
+
+#: ascender/main/models/jobs.py:503
+msgid "Job Template {} is missing or undefined."
+msgstr ""
+
+#: ascender/main/models/jobs.py:587
+msgid "The SCM Revision from the Project used for this job, if available"
+msgstr ""
+
+#: ascender/main/models/jobs.py:595
+msgid ""
+"The SCM Refresh task used to make sure the playbooks were available for the "
+"job run"
+msgstr ""
+
+#: ascender/main/models/jobs.py:600
+msgid ""
+"If part of a sliced job, the ID of the inventory slice operated on. If not "
+"part of sliced job, parameter is not used."
+msgstr ""
+
+#: ascender/main/models/jobs.py:605
+msgid ""
+"If ran as part of sliced jobs, the total number of slices. If 1, job is not "
+"part of a sliced job."
+msgstr ""
+
+#: ascender/main/models/jobs.py:684
+#, python-brace-format
+msgid "{status_value} is not a valid status option."
+msgstr ""
+
+#: ascender/main/models/jobs.py:883
+msgid ""
+"Inventory applied as a prompt, assuming job template prompts for inventory"
+msgstr ""
+
+#: ascender/main/models/jobs.py:1071
+msgid "job host summaries"
+msgstr ""
+
+#: ascender/main/models/jobs.py:1142
+msgid "Remove jobs older than a certain number of days"
+msgstr ""
+
+#: ascender/main/models/jobs.py:1143
+msgid "Remove activity stream entries older than a certain number of days"
+msgstr ""
+
+#: ascender/main/models/jobs.py:1144
+msgid "Removes expired browser sessions from the database"
+msgstr ""
+
+#: ascender/main/models/jobs.py:1145
+msgid "Removes expired OAuth 2 access tokens and refresh tokens"
+msgstr ""
+
+#: ascender/main/models/jobs.py:1209
+#, python-brace-format
+msgid "Variables {list_of_keys} are not allowed for system jobs."
+msgstr ""
+
+#: ascender/main/models/jobs.py:1224
+msgid "days must be a positive integer."
+msgstr ""
+
+#: ascender/main/models/label.py:32
+msgid "Organization this label belongs to."
+msgstr ""
+
+#: ascender/main/models/mixins.py:335
+#, python-brace-format
+msgid ""
+"Variables {list_of_keys} are not allowed on launch. Check the Prompt on "
+"Launch setting on the {model_name} to include Extra Variables."
+msgstr ""
+
+#: ascender/main/models/mixins.py:489
+msgid "The container image to be used for execution."
+msgstr ""
+
+#: ascender/main/models/mixins.py:517
+msgid "Local absolute file path containing a custom Python virtualenv to use"
+msgstr ""
+
+#: ascender/main/models/mixins.py:523
+msgid "{} is not a valid virtualenv in {}"
+msgstr ""
+
+#: ascender/main/models/mixins.py:567 ascender/main/models/mixins.py:602
+msgid "Service that webhook requests will be accepted from"
+msgstr ""
+
+#: ascender/main/models/mixins.py:568
+msgid "Shared secret that the webhook service will use to sign requests"
+msgstr ""
+
+#: ascender/main/models/mixins.py:575 ascender/main/models/mixins.py:609
+msgid "Personal Access Token for posting back the status to the service API"
+msgstr ""
+
+#: ascender/main/models/mixins.py:611
+msgid "Unique identifier of the event that triggered this webhook"
+msgstr ""
+
+#: ascender/main/models/notifications.py:43
+msgid "Email"
+msgstr ""
+
+#: ascender/main/models/notifications.py:44
+msgid "Slack"
+msgstr ""
+
+#: ascender/main/models/notifications.py:45
+msgid "Twilio"
+msgstr ""
+
+#: ascender/main/models/notifications.py:46
+msgid "Pagerduty"
+msgstr ""
+
+#: ascender/main/models/notifications.py:47
+msgid "Grafana"
+msgstr ""
+
+#: ascender/main/models/notifications.py:48 ascender/main/models/unified_jobs.py:549
+msgid "Webhook"
+msgstr ""
+
+#: ascender/main/models/notifications.py:49
+msgid "Mattermost"
+msgstr ""
+
+#: ascender/main/models/notifications.py:50
+msgid "Rocket.Chat"
+msgstr ""
+
+#: ascender/main/models/notifications.py:51
+msgid "IRC"
+msgstr ""
+
+#: ascender/main/models/notifications.py:79
+msgid "Optional custom messages for notification template."
+msgstr ""
+
+#: ascender/main/models/notifications.py:202 ascender/main/models/unified_jobs.py:76
+msgid "Pending"
+msgstr ""
+
+#: ascender/main/models/notifications.py:203 ascender/main/models/unified_jobs.py:79
+msgid "Successful"
+msgstr ""
+
+#: ascender/main/models/notifications.py:204 ascender/main/models/unified_jobs.py:80
+msgid "Failed"
+msgstr ""
+
+#: ascender/main/models/notifications.py:518
+msgid "status must be either running, succeeded or failed"
+msgstr ""
+
+#: ascender/main/models/oauth.py:32
+msgid "application"
+msgstr ""
+
+#: ascender/main/models/oauth.py:39
+msgid "Confidential"
+msgstr ""
+
+#: ascender/main/models/oauth.py:40
+msgid "Public"
+msgstr ""
+
+#: ascender/main/models/oauth.py:46
+msgid "Authorization code"
+msgstr ""
+
+#: ascender/main/models/oauth.py:47
+msgid "Resource owner password-based"
+msgstr ""
+
+#: ascender/main/models/oauth.py:62
+msgid "Organization containing this application."
+msgstr ""
+
+#: ascender/main/models/oauth.py:71
+msgid ""
+"Used for more stringent verification of access to an application when "
+"creating a token."
+msgstr ""
+
+#: ascender/main/models/oauth.py:74
+msgid ""
+"Set to Public or Confidential depending on how secure the client device is."
+msgstr ""
+
+#: ascender/main/models/oauth.py:76
+msgid ""
+"Set True to skip authorization step for completely trusted applications."
+msgstr ""
+
+#: ascender/main/models/oauth.py:78
+msgid ""
+"The Grant type the user must use for acquire tokens for this application."
+msgstr ""
+
+#: ascender/main/models/oauth.py:85
+msgid "access token"
+msgstr ""
+
+#: ascender/main/models/oauth.py:94
+msgid "The user representing the token owner"
+msgstr ""
+
+#: ascender/main/models/oauth.py:109
+msgid ""
+"Allowed scopes, further restricts user's permissions. Must be a simple space-"
+"separated string with allowed scopes ['read', 'write']."
+msgstr ""
+
+#: ascender/main/models/oauth.py:131
+msgid ""
+"OAuth2 Tokens cannot be created by users associated with an external "
+"authentication provider ({})"
+msgstr ""
+
+#: ascender/main/models/organization.py:44
+msgid "Maximum number of hosts allowed to be managed by this organization."
+msgstr ""
+
+#: ascender/main/models/organization.py:54
+msgid "The default execution environment for jobs run by this organization."
+msgstr ""
+
+#: ascender/main/models/projects.py:50 ascender/main/models/unified_jobs.py:543
+msgid "Manual"
+msgstr ""
+
+#: ascender/main/models/projects.py:51
+msgid "Git"
+msgstr ""
+
+#: ascender/main/models/projects.py:52
+msgid "Subversion"
+msgstr ""
+
+#: ascender/main/models/projects.py:54
+msgid "Remote Archive"
+msgstr ""
+
+#: ascender/main/models/projects.py:80
+msgid ""
+"Local path (relative to PROJECTS_ROOT) containing playbooks and related "
+"files for this project."
+msgstr ""
+
+#: ascender/main/models/projects.py:88
+msgid "SCM Type"
+msgstr ""
+
+#: ascender/main/models/projects.py:89
+msgid "Specifies the source control system used to store the project."
+msgstr ""
+
+#: ascender/main/models/projects.py:95
+msgid "SCM URL"
+msgstr ""
+
+#: ascender/main/models/projects.py:96
+msgid "The location where the project is stored."
+msgstr ""
+
+#: ascender/main/models/projects.py:102
+msgid "SCM Branch"
+msgstr ""
+
+#: ascender/main/models/projects.py:103
+msgid "Specific branch, tag or commit to checkout."
+msgstr ""
+
+#: ascender/main/models/projects.py:109
+msgid "SCM refspec"
+msgstr ""
+
+#: ascender/main/models/projects.py:110
+msgid "For git projects, an additional refspec to fetch."
+msgstr ""
+
+#: ascender/main/models/projects.py:114
+msgid "Discard any local changes before syncing the project."
+msgstr ""
+
+#: ascender/main/models/projects.py:118
+msgid "Delete the project before syncing."
+msgstr ""
+
+#: ascender/main/models/projects.py:122
+msgid "Track submodules latest commits on defined branch."
+msgstr ""
+
+#: ascender/main/models/projects.py:150
+msgid "Invalid SCM URL."
+msgstr ""
+
+#: ascender/main/models/projects.py:153
+msgid "SCM URL is required."
+msgstr ""
+
+#: ascender/main/models/projects.py:161
+msgid "Insights Credential is required for an Insights Project."
+msgstr ""
+
+#: ascender/main/models/projects.py:165
+msgid "Credential kind must be 'insights'."
+msgstr ""
+
+#: ascender/main/models/projects.py:167
+msgid "Credential kind must be 'scm'."
+msgstr ""
+
+#: ascender/main/models/projects.py:182
+msgid "Invalid credential."
+msgstr ""
+
+#: ascender/main/models/projects.py:273
+msgid "The default execution environment for jobs run using this project."
+msgstr ""
+
+#: ascender/main/models/projects.py:277
+msgid "Update the project when a job is launched that uses the project."
+msgstr ""
+
+#: ascender/main/models/projects.py:282
+msgid ""
+"The number of seconds after the last project update ran that a new project "
+"update will be launched as a job dependency."
+msgstr ""
+
+#: ascender/main/models/projects.py:286
+msgid ""
+"Allow changing the SCM branch or revision in a job template that uses this "
+"project."
+msgstr ""
+
+#: ascender/main/models/projects.py:297
+msgid ""
+"An optional credential used for validating files in the project against "
+"unexpected changes."
+msgstr ""
+
+#: ascender/main/models/projects.py:306
+msgid "The last revision fetched by a project update"
+msgstr ""
+
+#: ascender/main/models/projects.py:313
+msgid "Playbook Files"
+msgstr ""
+
+#: ascender/main/models/projects.py:314
+msgid "List of playbooks found in the project"
+msgstr ""
+
+#: ascender/main/models/projects.py:321
+msgid "Inventory Files"
+msgstr ""
+
+#: ascender/main/models/projects.py:322
+msgid ""
+"Suggested list of content that could be Ansible inventory in the project"
+msgstr ""
+
+#: ascender/main/models/projects.py:361
+msgid "Organization cannot be changed when in use by job templates."
+msgstr ""
+
+#: ascender/main/models/projects.py:495
+msgid "Last project update failed due to signature validation failure."
+msgstr ""
+
+#: ascender/main/models/projects.py:497
+msgid "Missing a revision to run due to failed project update."
+msgstr ""
+
+#: ascender/main/models/projects.py:541
+msgid "Parts of the project update playbook that will be run."
+msgstr ""
+
+#: ascender/main/models/projects.py:549
+msgid ""
+"The SCM Revision discovered by this update for the given project and branch."
+msgstr ""
+
+#: ascender/main/models/rbac.py:33
+msgid "System Administrator"
+msgstr ""
+
+#: ascender/main/models/rbac.py:34
+msgid "System Auditor"
+msgstr ""
+
+#: ascender/main/models/rbac.py:35
+msgid "Ad Hoc"
+msgstr ""
+
+#: ascender/main/models/rbac.py:36
+msgid "Admin"
+msgstr ""
+
+#: ascender/main/models/rbac.py:37
+msgid "Project Admin"
+msgstr ""
+
+#: ascender/main/models/rbac.py:38
+msgid "Inventory Admin"
+msgstr ""
+
+#: ascender/main/models/rbac.py:39
+msgid "Credential Admin"
+msgstr ""
+
+#: ascender/main/models/rbac.py:40
+msgid "Job Template Admin"
+msgstr ""
+
+#: ascender/main/models/rbac.py:41
+msgid "Execution Environment Admin"
+msgstr ""
+
+#: ascender/main/models/rbac.py:42
+msgid "Workflow Admin"
+msgstr ""
+
+#: ascender/main/models/rbac.py:43
+msgid "Notification Admin"
+msgstr ""
+
+#: ascender/main/models/rbac.py:44
+msgid "Auditor"
+msgstr ""
+
+#: ascender/main/models/rbac.py:45
+msgid "Execute"
+msgstr ""
+
+#: ascender/main/models/rbac.py:46
+msgid "Member"
+msgstr ""
+
+#: ascender/main/models/rbac.py:47
+msgid "Read"
+msgstr ""
+
+#: ascender/main/models/rbac.py:48
+msgid "Update"
+msgstr ""
+
+#: ascender/main/models/rbac.py:49
+msgid "Use"
+msgstr ""
+
+#: ascender/main/models/rbac.py:50
+msgid "Approve"
+msgstr ""
+
+#: ascender/main/models/rbac.py:54
+msgid "Can manage all aspects of the system"
+msgstr ""
+
+#: ascender/main/models/rbac.py:55
+msgid "Can view all aspects of the system"
+msgstr ""
+
+#: ascender/main/models/rbac.py:56
+#, python-format
+msgid "May run ad hoc commands on the %s"
+msgstr ""
+
+#: ascender/main/models/rbac.py:57
+#, python-format
+msgid "Can manage all aspects of the %s"
+msgstr ""
+
+#: ascender/main/models/rbac.py:58
+#, python-format
+msgid "Can manage all projects of the %s"
+msgstr ""
+
+#: ascender/main/models/rbac.py:59
+#, python-format
+msgid "Can manage all inventories of the %s"
+msgstr ""
+
+#: ascender/main/models/rbac.py:60
+#, python-format
+msgid "Can manage all credentials of the %s"
+msgstr ""
+
+#: ascender/main/models/rbac.py:61
+#, python-format
+msgid "Can manage all job templates of the %s"
+msgstr ""
+
+#: ascender/main/models/rbac.py:62
+#, python-format
+msgid "Can manage all execution environments of the %s"
+msgstr ""
+
+#: ascender/main/models/rbac.py:63
+#, python-format
+msgid "Can manage all workflows of the %s"
+msgstr ""
+
+#: ascender/main/models/rbac.py:64
+#, python-format
+msgid "Can manage all notifications of the %s"
+msgstr ""
+
+#: ascender/main/models/rbac.py:65
+#, python-format
+msgid "Can view all aspects of the %s"
+msgstr ""
+
+#: ascender/main/models/rbac.py:67
+msgid "May run any executable resources in the organization"
+msgstr ""
+
+#: ascender/main/models/rbac.py:68
+#, python-format
+msgid "May run the %s"
+msgstr ""
+
+#: ascender/main/models/rbac.py:70
+#, python-format
+msgid "User is a member of the %s"
+msgstr ""
+
+#: ascender/main/models/rbac.py:71
+#, python-format
+msgid "May view settings for the %s"
+msgstr ""
+
+#: ascender/main/models/rbac.py:72
+#, python-format
+msgid "May update the %s"
+msgstr ""
+
+#: ascender/main/models/rbac.py:73
+#, python-format
+msgid "Can use the %s in a job template"
+msgstr ""
+
+#: ascender/main/models/rbac.py:74
+msgid "Can approve or deny a workflow approval node"
+msgstr ""
+
+#: ascender/main/models/rbac.py:140
+msgid "roles"
+msgstr ""
+
+#: ascender/main/models/rbac.py:440
+msgid "role_ancestors"
+msgstr ""
+
+#: ascender/main/models/receptor_address.py:20
+msgid "Receptor address must be unique."
+msgstr ""
+
+#: ascender/main/models/receptor_address.py:24
+msgid "Routable address for this instance."
+msgstr ""
+
+#: ascender/main/models/receptor_address.py:25
+msgid "Port for the address."
+msgstr ""
+
+#: ascender/main/models/receptor_address.py:26
+msgid "Websocket path."
+msgstr ""
+
+#: ascender/main/models/receptor_address.py:28
+msgid "Protocol to use for the Receptor listener, 'tcp', 'wss', or 'ws'."
+msgstr ""
+
+#: ascender/main/models/receptor_address.py:30
+msgid "If True, only routable within the Kubernetes cluster."
+msgstr ""
+
+#: ascender/main/models/receptor_address.py:31
+msgid "If True, this address is the canonical address for the instance."
+msgstr ""
+
+#: ascender/main/models/receptor_address.py:32
+msgid "If True, control plane cluster nodes should automatically peer to it."
+msgstr ""
+
+#: ascender/main/models/schedules.py:79
+msgid "Enables processing of this schedule."
+msgstr ""
+
+#: ascender/main/models/schedules.py:80
+msgid "The first occurrence of the schedule occurs on or after this time."
+msgstr ""
+
+#: ascender/main/models/schedules.py:82
+msgid ""
+"The last occurrence of the schedule occurs before this time, aftewards the "
+"schedule expires."
+msgstr ""
+
+#: ascender/main/models/schedules.py:84
+msgid "A value representing the schedules iCal recurrence rule."
+msgstr ""
+
+#: ascender/main/models/schedules.py:85
+msgid "The next time that the scheduled action will run."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:75
+msgid "New"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:77
+msgid "Waiting"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:78
+msgid "Running"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:82
+msgid "Canceled"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:86
+msgid "Never Updated"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:90
+msgid "OK"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:91
+msgid "Missing"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:95
+msgid "No External Source"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:102
+msgid "Updating"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:173
+msgid "The organization used to determine access to this template."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:472
+msgid "Field is not allowed on launch."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:499
+#, python-brace-format
+msgid ""
+"Variables {list_of_keys} provided, but this template cannot accept variables."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:544
+msgid "Relaunch"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:545
+msgid "Callback"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:546
+msgid "Scheduled"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:547
+msgid "Dependency"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:548
+msgid "Workflow"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:550
+msgid "Sync"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:600
+msgid "The node the job executed on."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:606
+msgid "The instance that managed the execution environment."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:633
+msgid "The date and time the job was queued for starting."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:636
+msgid ""
+"If True, the task manager has already processed potential dependencies for "
+"this job."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:642
+msgid "The date and time the job finished execution."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:649
+msgid "The date and time when the cancel request was sent."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:656
+msgid "Elapsed time in seconds that the job ran."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:682
+msgid ""
+"A status field to indicate the state of the job if it wasn't able to run and "
+"capture stdout"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:709
+msgid "The Instance group the job was run under"
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:716
+msgid "A cached list with pk values from preferred instance groups."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:718
+msgid "Number of forks an instance consumes when running this job."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:725
+msgid "The organization used to determine access to this unified job."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:735
+msgid ""
+"The Collections names and versions installed in the execution environment."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:742
+msgid "The version of Ansible Core installed in the execution environment."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:749
+msgid "Playbook stats from the Ansible playbook_on_stats event."
+msgstr ""
+
+#: ascender/main/models/unified_jobs.py:752
+msgid "The Receptor work unit ID associated with this job."
+msgstr ""
+
+#: ascender/main/models/workflow.py:87
+msgid ""
+"If enabled then the node will only run if all of the parent nodes have met "
+"the criteria to reach this node"
+msgstr ""
+
+#: ascender/main/models/workflow.py:186
+msgid ""
+"An identifier for this node that is unique within its workflow. It is copied "
+"to workflow job nodes corresponding to this node."
+msgstr ""
+
+#: ascender/main/models/workflow.py:268
+msgid ""
+"Indicates that a job will not be created when True. Workflow runtime "
+"semantics will mark this True if the node is in a path that will decidedly "
+"not be ran. A value of False means the node may not run."
+msgstr ""
+
+#: ascender/main/models/workflow.py:276
+msgid ""
+"An identifier coresponding to the workflow job template node that this node "
+"was created from."
+msgstr ""
+
+#: ascender/main/models/workflow.py:339
+#, python-brace-format
+msgid ""
+"Bad launch configuration starting template {template_pk} as part of workflow "
+"{workflow_pk}. Errors:\n"
+"{error_text}"
+msgstr ""
+
+#: ascender/main/models/workflow.py:652
+msgid ""
+"If automatically created for a sliced job run, the job template the workflow "
+"job was created from."
+msgstr ""
+
+#: ascender/main/models/workflow.py:798 ascender/main/models/workflow.py:839
+msgid ""
+"The amount of time (in seconds) before the approval node expires and fails."
+msgstr ""
+
+#: ascender/main/models/workflow.py:845
+msgid ""
+"The time this approval will expire. This is the created time plus timeout, "
+"used for filtering."
+msgstr ""
+
+#: ascender/main/models/workflow.py:847
+msgid ""
+"Shows when an approval node (with a timeout assigned to it) has timed out."
+msgstr ""
+
+#: ascender/main/notifications/grafana_backend.py:84
+msgid "Error converting time {} or timeEnd {} to int."
+msgstr ""
+
+#: ascender/main/notifications/grafana_backend.py:86
+msgid "Error converting time {} and/or timeEnd {} to int."
+msgstr ""
+
+#: ascender/main/notifications/grafana_backend.py:101
+#: ascender/main/notifications/grafana_backend.py:103
+msgid "Error sending notification grafana: {}"
+msgstr ""
+
+#: ascender/main/notifications/irc_backend.py:57
+msgid "Exception connecting to irc server: {}"
+msgstr ""
+
+#: ascender/main/notifications/mattermost_backend.py:46
+#: ascender/main/notifications/mattermost_backend.py:48
+msgid "Error sending notification mattermost: {}"
+msgstr ""
+
+#: ascender/main/notifications/pagerduty_backend.py:80
+msgid "Exception connecting to PagerDuty: {}"
+msgstr ""
+
+#: ascender/main/notifications/pagerduty_backend.py:86
+#: ascender/main/notifications/slack_backend.py:55
+#: ascender/main/notifications/twilio_backend.py:49
+msgid "Exception sending messages: {}"
+msgstr ""
+
+#: ascender/main/notifications/rocketchat_backend.py:46
+#: ascender/main/notifications/rocketchat_backend.py:48
+msgid "Error sending notification rocket.chat: {}"
+msgstr ""
+
+#: ascender/main/notifications/twilio_backend.py:39
+msgid "Exception connecting to Twilio: {}"
+msgstr ""
+
+#: ascender/main/notifications/twilio_backend.py:45
+msgid "FROM: {} / TO: {}"
+msgstr ""
+
+#: ascender/main/scheduler/dag_workflow.py:163
+#, python-brace-format
+msgid ""
+"No error handling path for workflow job node(s) [{node_status}]. Workflow "
+"job node(s) missing unified job template and error handling path [{no_ufjt}]."
+msgstr ""
+
+#: ascender/main/scheduler/kubernetes.py:79 ascender/main/scheduler/kubernetes.py:96
+msgid "Invalid openshift or k8s cluster credential"
+msgstr ""
+
+#: ascender/main/scheduler/kubernetes.py:82
+msgid ""
+"Failed to create secret for container group {} because additional service "
+"account role rules are needed.  Add get, create and delete role rules for "
+"secret resources for your cluster credential."
+msgstr ""
+
+#: ascender/main/scheduler/kubernetes.py:99
+msgid ""
+"Failed to delete secret for container group {} because additional service "
+"account role rules are needed.  Add create and delete role rules for secret "
+"resources for your cluster credential."
+msgstr ""
+
+#: ascender/main/scheduler/kubernetes.py:119
+msgid ""
+"Failed to create imagePullSecret: {}. Check that openshift or k8s credential "
+"has permission to create a secret."
+msgstr ""
+
+#: ascender/main/scheduler/task_manager.py:207
+msgid "No error handling paths found, marking workflow as failed"
+msgstr ""
+
+#: ascender/main/scheduler/task_manager.py:246
+msgid ""
+"Workflow Job spawned from workflow could not start because it would result "
+"in recursion (spawn order, most recent first: {})"
+msgstr ""
+
+#: ascender/main/scheduler/task_manager.py:258
+msgid ""
+"Job spawned from workflow could not start because it was missing a related "
+"resource such as project or inventory"
+msgstr ""
+
+#: ascender/main/scheduler/task_manager.py:268
+msgid ""
+"Job spawned from workflow could not start because it was not in the right "
+"state or required manual credentials"
+msgstr ""
+
+#: ascender/main/scheduler/task_manager.py:557
+#, python-brace-format
+msgid "waiting for {blocked_by._meta.model_name}-{blocked_by.id} to finish"
+msgstr ""
+
+#: ascender/main/scheduler/task_manager.py:643
+msgid ""
+"This job is not ready to start because there is not enough available "
+"capacity."
+msgstr ""
+
+#: ascender/main/scheduler/task_manager.py:691
+#, python-brace-format
+msgid "The approval node {name} ({pk}) has expired after {timeout} seconds."
+msgstr ""
+
+#: ascender/main/tasks/jobs.py:1072
+msgid "Job could not start because it does not have a valid inventory."
+msgstr ""
+
+#: ascender/main/tasks/jobs.py:1076
+msgid "Job could not start because it does not have a valid project."
+msgstr ""
+
+#: ascender/main/tasks/jobs.py:1080
+msgid "Job could not start because no Execution Environment could be found."
+msgstr ""
+
+#: ascender/main/tasks/system.py:124
+msgid "Instance received normal shutdown signal"
+msgstr ""
+
+#: ascender/main/tasks/system.py:630
+msgid "Another cluster node has determined this instance to be unresponsive"
+msgstr ""
+
+#: ascender/main/tasks/system.py:763
+msgid ""
+"Scheduled job could not start because it                     was not in the "
+"right state or required manual credentials"
+msgstr ""
+
+#: ascender/main/tests/unit/scheduler/test_dag_workflow.py:473
+#: ascender/main/tests/unit/scheduler/test_dag_workflow.py:517
+#: ascender/main/tests/unit/scheduler/test_dag_workflow.py:530
+msgid ""
+"No error handling path for workflow job node(s) [({},{})]. Workflow job "
+"node(s) missing unified job template and error handling path []."
+msgstr ""
+
+#: ascender/main/tests/unit/scheduler/test_dag_workflow.py:489
+#: ascender/main/tests/unit/scheduler/test_dag_workflow.py:505
+msgid ""
+"No error handling path for workflow job node(s) []. Workflow job node(s) "
+"missing unified job template and error handling path [{}]."
+msgstr ""
+
+#: ascender/main/tests/unit/tasks/test_runner_callback.py:28
+#: ascender/main/tests/unit/tasks/test_runner_callback.py:31
+msgid "2"
+msgstr ""
+
+#: ascender/main/tests/unit/tasks/test_runner_callback.py:32
+msgid "3"
+msgstr ""
+
+#: ascender/main/utils/common.py:252
+#, python-format
+msgid "Unsupported SCM type \"%s\""
+msgstr ""
+
+#: ascender/main/utils/common.py:259 ascender/main/utils/common.py:276
+#: ascender/main/utils/common.py:296
+#, python-format
+msgid "Invalid %s URL"
+msgstr ""
+
+#: ascender/main/utils/common.py:261 ascender/main/utils/common.py:306
+#, python-format
+msgid "Unsupported %s URL"
+msgstr ""
+
+#: ascender/main/utils/common.py:308
+#, python-format
+msgid "Unsupported host \"%s\" for file:// URL"
+msgstr ""
+
+#: ascender/main/utils/common.py:310
+#, python-format
+msgid "Host is required for %s URL"
+msgstr ""
+
+#: ascender/main/utils/common.py:328
+#, python-format
+msgid "Username must be \"git\" for SSH access to %s."
+msgstr ""
+
+#: ascender/main/utils/common.py:664
+#, python-brace-format
+msgid "Input type `{data_type}` is not a dictionary"
+msgstr ""
+
+#: ascender/main/utils/common.py:694
+#, python-brace-format
+msgid "Variables not compatible with JSON standard (error: {json_error})"
+msgstr ""
+
+#: ascender/main/utils/common.py:699
+#, python-brace-format
+msgid ""
+"Cannot parse as JSON (error: {json_error}) or YAML (error: {yaml_error})."
+msgstr ""
+
+#: ascender/main/utils/licensing.py:58
+msgid "Invalid manifest: a subscription manifest zip file is required."
+msgstr ""
+
+#: ascender/main/utils/licensing.py:63
+msgid "Invalid manifest: missing required files."
+msgstr ""
+
+#: ascender/main/utils/licensing.py:72
+msgid "Invalid manifest: signature verification failed."
+msgstr ""
+
+#: ascender/main/utils/licensing.py:82
+msgid "Invalid manifest: manifest contains no subscriptions."
+msgstr ""
+
+#: ascender/main/utils/licensing.py:483
+#, python-format
+msgid "Error importing License: %s"
+msgstr ""
+
+#: ascender/main/validators.py:65
+#, python-format
+msgid "Invalid certificate or key: %s..."
+msgstr ""
+
+#: ascender/main/validators.py:81
+#, python-format
+msgid "Invalid private key: unsupported type \"%s\""
+msgstr ""
+
+#: ascender/main/validators.py:85
+#, python-format
+msgid "Unsupported PEM object type: \"%s\""
+msgstr ""
+
+#: ascender/main/validators.py:110
+msgid "Invalid base64-encoded data"
+msgstr ""
+
+#: ascender/main/validators.py:131
+msgid "Exactly one private key is required."
+msgstr ""
+
+#: ascender/main/validators.py:133
+msgid "At least one private key is required."
+msgstr ""
+
+#: ascender/main/validators.py:135
+#, python-format
+msgid ""
+"At least %(min_keys)d private keys are required, only %(key_count)d provided."
+msgstr ""
+
+#: ascender/main/validators.py:138
+#, python-format
+msgid "Only one private key is allowed, %(key_count)d provided."
+msgstr ""
+
+#: ascender/main/validators.py:140
+#, python-format
+msgid ""
+"No more than %(max_keys)d private keys are allowed, %(key_count)d provided."
+msgstr ""
+
+#: ascender/main/validators.py:145
+msgid "Exactly one certificate is required."
+msgstr ""
+
+#: ascender/main/validators.py:147
+msgid "At least one certificate is required."
+msgstr ""
+
+#: ascender/main/validators.py:149
+#, python-format
+msgid ""
+"At least %(min_certs)d certificates are required, only %(cert_count)d "
+"provided."
+msgstr ""
+
+#: ascender/main/validators.py:152
+#, python-format
+msgid "Only one certificate is allowed, %(cert_count)d provided."
+msgstr ""
+
+#: ascender/main/validators.py:154
+#, python-format
+msgid ""
+"No more than %(max_certs)d certificates are allowed, %(cert_count)d provided."
+msgstr ""
+
+#: ascender/main/validators.py:289
+#, python-brace-format
+msgid "The container image name {value} is not valid"
+msgstr ""
+
+#: ascender/main/views.py:29
+msgid "API Error"
+msgstr ""
+
+#: ascender/main/views.py:66
+msgid "Bad Request"
+msgstr ""
+
+#: ascender/main/views.py:67
+msgid "The request could not be understood by the server."
+msgstr ""
+
+#: ascender/main/views.py:74
+msgid "Forbidden"
+msgstr ""
+
+#: ascender/main/views.py:75
+msgid "You don't have permission to access the requested resource."
+msgstr ""
+
+#: ascender/main/views.py:82
+msgid "Not Found"
+msgstr ""
+
+#: ascender/main/views.py:83
+msgid "The requested resource could not be found."
+msgstr ""
+
+#: ascender/main/views.py:90
+msgid "Server Error"
+msgstr ""
+
+#: ascender/main/views.py:91
+msgid "A server error has occurred."
+msgstr ""
+
+#: ascender/sso/apps.py:8
+msgid "Single Sign-On"
+msgstr ""
+
+#: ascender/sso/conf.py:53
+msgid ""
+"Mapping to organization admins/users from social auth accounts. This "
+"setting\n"
+"controls which users are placed into which organizations based on their\n"
+"username and email address. Configuration details are available in the\n"
+"documentation."
+msgstr ""
+
+#: ascender/sso/conf.py:82
+msgid ""
+"Mapping of team members (users) from social auth accounts. Configuration\n"
+"details are available in the documentation."
+msgstr ""
+
+#: ascender/sso/conf.py:102
+msgid "Authentication Backends"
+msgstr ""
+
+#: ascender/sso/conf.py:103
+msgid ""
+"List of authentication backends that are enabled based on license features "
+"and other authentication settings."
+msgstr ""
+
+#: ascender/sso/conf.py:115
+msgid "Social Auth Organization Map"
+msgstr ""
+
+#: ascender/sso/conf.py:127
+msgid "Social Auth Team Map"
+msgstr ""
+
+#: ascender/sso/conf.py:139
+msgid "Social Auth User Fields"
+msgstr ""
+
+#: ascender/sso/conf.py:141
+msgid ""
+"When set to an empty list `[]`, this setting prevents new user accounts from "
+"being created. Only users who have previously logged in using social auth or "
+"have a user account with a matching email address will be able to login."
+msgstr ""
+
+#: ascender/sso/conf.py:155
+msgid "Use Email address for usernames"
+msgstr ""
+
+#: ascender/sso/conf.py:156
+msgid ""
+"Enabling this setting will tell social auth to use the full Email as "
+"username instead of the full name"
+msgstr ""
+
+#: ascender/sso/conf.py:174
+msgid "LDAP Server URI"
+msgstr ""
+
+#: ascender/sso/conf.py:176
+msgid ""
+"URI to connect to LDAP server, such as \"ldap://ldap.example.com:389\" (non-"
+"SSL) or \"ldaps://ldap.example.com:636\" (SSL). Multiple LDAP servers may be "
+"specified by separating with spaces or commas. LDAP authentication is "
+"disabled if this parameter is empty."
+msgstr ""
+
+#: ascender/sso/conf.py:181 ascender/sso/conf.py:198 ascender/sso/conf.py:209
+#: ascender/sso/conf.py:220 ascender/sso/conf.py:237 ascender/sso/conf.py:255
+#: ascender/sso/conf.py:274 ascender/sso/conf.py:290 ascender/sso/conf.py:305
+#: ascender/sso/conf.py:319 ascender/sso/conf.py:330 ascender/sso/conf.py:350
+#: ascender/sso/conf.py:365 ascender/sso/conf.py:380 ascender/sso/conf.py:398
+#: ascender/sso/conf.py:430
+msgid "LDAP"
+msgstr ""
+
+#: ascender/sso/conf.py:192
+msgid "LDAP Bind DN"
+msgstr ""
+
+#: ascender/sso/conf.py:194
+msgid ""
+"DN (Distinguished Name) of user to bind for all search queries. This is the "
+"system user account we will use to login to query LDAP for other user "
+"information. Refer to the documentation for example syntax."
+msgstr ""
+
+#: ascender/sso/conf.py:207
+msgid "LDAP Bind Password"
+msgstr ""
+
+#: ascender/sso/conf.py:208
+msgid "Password used to bind LDAP user account."
+msgstr ""
+
+#: ascender/sso/conf.py:218
+msgid "LDAP Start TLS"
+msgstr ""
+
+#: ascender/sso/conf.py:219
+msgid "Whether to enable TLS when the LDAP connection is not using SSL."
+msgstr ""
+
+#: ascender/sso/conf.py:228
+msgid "LDAP Connection Options"
+msgstr ""
+
+#: ascender/sso/conf.py:230
+msgid ""
+"Additional options to set for the LDAP connection.  LDAP referrals are "
+"disabled by default (to prevent certain LDAP queries from hanging with AD). "
+"Option names should be strings (e.g. \"OPT_REFERRALS\"). Refer to https://"
+"www.python-ldap.org/doc/html/ldap.html#options for possible options and "
+"values that can be set."
+msgstr ""
+
+#: ascender/sso/conf.py:246
+msgid "LDAP User Search"
+msgstr ""
+
+#: ascender/sso/conf.py:248
+msgid ""
+"LDAP search query to find users.  Any user that matches the given pattern "
+"will be able to login to the service.  The user should also be mapped into "
+"an organization (as defined in the AUTH_LDAP_ORGANIZATION_MAP setting).  If "
+"multiple search queries need to be supported use of \"LDAPUnion\" is "
+"possible. See the documentation for details."
+msgstr ""
+
+#: ascender/sso/conf.py:266
+msgid "LDAP User DN Template"
+msgstr ""
+
+#: ascender/sso/conf.py:268
+msgid ""
+"Alternative to user search, if user DNs are all of the same format. This "
+"approach is more efficient for user lookups than searching if it is usable "
+"in your organizational environment. If this setting has a value it will be "
+"used instead of AUTH_LDAP_USER_SEARCH."
+msgstr ""
+
+#: ascender/sso/conf.py:283
+msgid "LDAP User Attribute Map"
+msgstr ""
+
+#: ascender/sso/conf.py:285
+msgid ""
+"Mapping of LDAP user schema to API user attributes. The default setting is "
+"valid for ActiveDirectory but users with other LDAP configurations may need "
+"to change the values. Refer to the documentation for additional details."
+msgstr ""
+
+#: ascender/sso/conf.py:299
+msgid "LDAP Group Search"
+msgstr ""
+
+#: ascender/sso/conf.py:301
+msgid ""
+"Users are mapped to organizations based on their membership in LDAP groups. "
+"This setting defines the LDAP search query to find groups. Unlike the user "
+"search, group search does not support LDAPSearchUnion."
+msgstr ""
+
+#: ascender/sso/conf.py:313
+msgid "LDAP Group Type"
+msgstr ""
+
+#: ascender/sso/conf.py:315
+msgid ""
+"The group type may need to be changed based on the type of the LDAP server.  "
+"Values are listed at: https://django-auth-ldap.readthedocs.io/en/stable/"
+"groups.html#types-of-groups"
+msgstr ""
+
+#: ascender/sso/conf.py:328
+msgid "LDAP Group Type Parameters"
+msgstr ""
+
+#: ascender/sso/conf.py:329
+msgid "Key value parameters to send the chosen group type init method."
+msgstr ""
+
+#: ascender/sso/conf.py:343
+msgid "LDAP Require Group"
+msgstr ""
+
+#: ascender/sso/conf.py:345
+msgid ""
+"Group DN required to login. If specified, user must be a member of this "
+"group to login via LDAP. If not set, everyone in LDAP that matches the user "
+"search will be able to login to the service. Only one require group is "
+"supported."
+msgstr ""
+
+#: ascender/sso/conf.py:361
+msgid "LDAP Deny Group"
+msgstr ""
+
+#: ascender/sso/conf.py:363
+msgid ""
+"Group DN denied from login. If specified, user will not be allowed to login "
+"if a member of this group.  Only one deny group is supported."
+msgstr ""
+
+#: ascender/sso/conf.py:374
+msgid "LDAP User Flags By Group"
+msgstr ""
+
+#: ascender/sso/conf.py:376
+msgid ""
+"Retrieve users from a given group. At this time, superuser and system "
+"auditors are the only groups supported. Refer to the documentation for more "
+"detail."
+msgstr ""
+
+#: ascender/sso/conf.py:391
+msgid "LDAP Organization Map"
+msgstr ""
+
+#: ascender/sso/conf.py:393
+msgid ""
+"Mapping between organization admins/users and LDAP groups. This controls "
+"which users are placed into which organizations relative to their LDAP group "
+"memberships. Configuration details are available in the documentation."
+msgstr ""
+
+#: ascender/sso/conf.py:428
+msgid "LDAP Team Map"
+msgstr ""
+
+#: ascender/sso/conf.py:429
+msgid ""
+"Mapping between team members (users) and LDAP groups. Configuration details "
+"are available in the documentation."
+msgstr ""
+
+#: ascender/sso/conf.py:463
+msgid "RADIUS Server"
+msgstr ""
+
+#: ascender/sso/conf.py:464
+msgid ""
+"Hostname/IP of RADIUS server. RADIUS authentication is disabled if this "
+"setting is empty."
+msgstr ""
+
+#: ascender/sso/conf.py:465 ascender/sso/conf.py:478 ascender/sso/conf.py:489
+#: ascender/sso/models.py:13
+msgid "RADIUS"
+msgstr ""
+
+#: ascender/sso/conf.py:476
+msgid "RADIUS Port"
+msgstr ""
+
+#: ascender/sso/conf.py:477
+msgid "Port of RADIUS server."
+msgstr ""
+
+#: ascender/sso/conf.py:487
+msgid "RADIUS Secret"
+msgstr ""
+
+#: ascender/sso/conf.py:488
+msgid "Shared secret for authenticating to RADIUS server."
+msgstr ""
+
+#: ascender/sso/conf.py:503
+msgid "TACACS+ Server"
+msgstr ""
+
+#: ascender/sso/conf.py:504
+msgid "Hostname of TACACS+ server."
+msgstr ""
+
+#: ascender/sso/conf.py:505 ascender/sso/conf.py:517 ascender/sso/conf.py:529
+#: ascender/sso/conf.py:541 ascender/sso/conf.py:553 ascender/sso/conf.py:563
+#: ascender/sso/models.py:13
+msgid "TACACS+"
+msgstr ""
+
+#: ascender/sso/conf.py:515
+msgid "TACACS+ Port"
+msgstr ""
+
+#: ascender/sso/conf.py:516
+msgid "Port number of TACACS+ server."
+msgstr ""
+
+#: ascender/sso/conf.py:527
+msgid "TACACS+ Secret"
+msgstr ""
+
+#: ascender/sso/conf.py:528
+msgid "Shared secret for authenticating to TACACS+ server."
+msgstr ""
+
+#: ascender/sso/conf.py:539
+msgid "TACACS+ Auth Session Timeout"
+msgstr ""
+
+#: ascender/sso/conf.py:540
+msgid "TACACS+ session timeout value in seconds, 0 disables timeout."
+msgstr ""
+
+#: ascender/sso/conf.py:551
+msgid "TACACS+ Authentication Protocol"
+msgstr ""
+
+#: ascender/sso/conf.py:552
+msgid "Choose the authentication protocol used by TACACS+ client."
+msgstr ""
+
+#: ascender/sso/conf.py:561
+msgid "TACACS+ client address sending enabled"
+msgstr ""
+
+#: ascender/sso/conf.py:562
+msgid "Enable the client address sending by TACACS+ client."
+msgstr ""
+
+#: ascender/sso/conf.py:576
+msgid "Google OAuth2 Callback URL"
+msgstr ""
+
+#: ascender/sso/conf.py:577 ascender/sso/conf.py:669 ascender/sso/conf.py:732
+#: ascender/sso/conf.py:885 ascender/sso/conf.py:972
+msgid ""
+"Provide this URL as the callback URL for your application as part of your "
+"registration process. Refer to the documentation for more detail."
+msgstr ""
+
+#: ascender/sso/conf.py:578 ascender/sso/conf.py:590 ascender/sso/conf.py:602
+#: ascender/sso/conf.py:614 ascender/sso/conf.py:630 ascender/sso/conf.py:642
+#: ascender/sso/conf.py:654
+msgid "Google OAuth2"
+msgstr ""
+
+#: ascender/sso/conf.py:588
+msgid "Google OAuth2 Key"
+msgstr ""
+
+#: ascender/sso/conf.py:589
+msgid "The OAuth2 key from your web application."
+msgstr ""
+
+#: ascender/sso/conf.py:600
+msgid "Google OAuth2 Secret"
+msgstr ""
+
+#: ascender/sso/conf.py:601
+msgid "The OAuth2 secret from your web application."
+msgstr ""
+
+#: ascender/sso/conf.py:612
+msgid "Google OAuth2 Allowed Domains"
+msgstr ""
+
+#: ascender/sso/conf.py:613
+msgid ""
+"Update this setting to restrict the domains who are allowed to login using "
+"Google OAuth2."
+msgstr ""
+
+#: ascender/sso/conf.py:623
+msgid "Google OAuth2 Extra Arguments"
+msgstr ""
+
+#: ascender/sso/conf.py:625
+msgid ""
+"Extra arguments for Google OAuth2 login. You can restrict it to only allow a "
+"single domain to authenticate, even if the user is logged in with multple "
+"Google accounts. Refer to the documentation for more detail."
+msgstr ""
+
+#: ascender/sso/conf.py:640
+msgid "Google OAuth2 Organization Map"
+msgstr ""
+
+#: ascender/sso/conf.py:652
+msgid "Google OAuth2 Team Map"
+msgstr ""
+
+#: ascender/sso/conf.py:668
+msgid "GitHub OAuth2 Callback URL"
+msgstr ""
+
+#: ascender/sso/conf.py:670 ascender/sso/conf.py:682 ascender/sso/conf.py:693
+#: ascender/sso/conf.py:705 ascender/sso/conf.py:717 ascender/sso/conf.py:933
+msgid "GitHub OAuth2"
+msgstr ""
+
+#: ascender/sso/conf.py:680
+msgid "GitHub OAuth2 Key"
+msgstr ""
+
+#: ascender/sso/conf.py:681
+msgid "The OAuth2 key (Client ID) from your GitHub developer application."
+msgstr ""
+
+#: ascender/sso/conf.py:691
+msgid "GitHub OAuth2 Secret"
+msgstr ""
+
+#: ascender/sso/conf.py:692
+msgid ""
+"The OAuth2 secret (Client Secret) from your GitHub developer application."
+msgstr ""
+
+#: ascender/sso/conf.py:703
+msgid "GitHub OAuth2 Organization Map"
+msgstr ""
+
+#: ascender/sso/conf.py:715
+msgid "GitHub OAuth2 Team Map"
+msgstr ""
+
+#: ascender/sso/conf.py:731
+msgid "GitHub Organization OAuth2 Callback URL"
+msgstr ""
+
+#: ascender/sso/conf.py:733 ascender/sso/conf.py:745 ascender/sso/conf.py:756
+#: ascender/sso/conf.py:768 ascender/sso/conf.py:779 ascender/sso/conf.py:791
+msgid "GitHub Organization OAuth2"
+msgstr ""
+
+#: ascender/sso/conf.py:743
+msgid "GitHub Organization OAuth2 Key"
+msgstr ""
+
+#: ascender/sso/conf.py:744 ascender/sso/conf.py:823
+msgid "The OAuth2 key (Client ID) from your GitHub organization application."
+msgstr ""
+
+#: ascender/sso/conf.py:754
+msgid "GitHub Organization OAuth2 Secret"
+msgstr ""
+
+#: ascender/sso/conf.py:755 ascender/sso/conf.py:834
+msgid ""
+"The OAuth2 secret (Client Secret) from your GitHub organization application."
+msgstr ""
+
+#: ascender/sso/conf.py:766
+msgid "GitHub Organization Name"
+msgstr ""
+
+#: ascender/sso/conf.py:767
+msgid ""
+"The name of your GitHub organization, as used in your organization's URL: "
+"https://github.com/<yourorg>/."
+msgstr ""
+
+#: ascender/sso/conf.py:777
+msgid "GitHub Organization OAuth2 Organization Map"
+msgstr ""
+
+#: ascender/sso/conf.py:789
+msgid "GitHub Organization OAuth2 Team Map"
+msgstr ""
+
+#: ascender/sso/conf.py:805
+msgid "GitHub Team OAuth2 Callback URL"
+msgstr ""
+
+#: ascender/sso/conf.py:807 ascender/sso/conf.py:1071
+msgid ""
+"Create an organization-owned application at https://github.com/organizations/"
+"<yourorg>/settings/applications and obtain an OAuth2 key (Client ID) and "
+"secret (Client Secret). Provide this URL as the callback URL for your "
+"application."
+msgstr ""
+
+#: ascender/sso/conf.py:812 ascender/sso/conf.py:824 ascender/sso/conf.py:835
+#: ascender/sso/conf.py:847 ascender/sso/conf.py:858 ascender/sso/conf.py:870
+msgid "GitHub Team OAuth2"
+msgstr ""
+
+#: ascender/sso/conf.py:822
+msgid "GitHub Team OAuth2 Key"
+msgstr ""
+
+#: ascender/sso/conf.py:833
+msgid "GitHub Team OAuth2 Secret"
+msgstr ""
+
+#: ascender/sso/conf.py:845
+msgid "GitHub Team ID"
+msgstr ""
+
+#: ascender/sso/conf.py:846
+msgid ""
+"Find the numeric team ID using the Github API: http://fabian-kostadinov."
+"github.io/2015/01/16/how-to-find-a-github-team-id/."
+msgstr ""
+
+#: ascender/sso/conf.py:856
+msgid "GitHub Team OAuth2 Organization Map"
+msgstr ""
+
+#: ascender/sso/conf.py:868
+msgid "GitHub Team OAuth2 Team Map"
+msgstr ""
+
+#: ascender/sso/conf.py:884
+msgid "GitHub Enterprise OAuth2 Callback URL"
+msgstr ""
+
+#: ascender/sso/conf.py:886 ascender/sso/conf.py:898 ascender/sso/conf.py:911
+#: ascender/sso/conf.py:922 ascender/sso/conf.py:945 ascender/sso/conf.py:957
+#: ascender/sso/conf.py:985 ascender/sso/conf.py:998 ascender/sso/conf.py:1088
+#: ascender/sso/conf.py:1101
+msgid "GitHub Enterprise OAuth2"
+msgstr ""
+
+#: ascender/sso/conf.py:896
+msgid "GitHub Enterprise URL"
+msgstr ""
+
+#: ascender/sso/conf.py:897 ascender/sso/conf.py:984 ascender/sso/conf.py:1087
+msgid ""
+"The URL for your Github Enterprise instance, e.g.: http(s)://hostname/. "
+"Refer to Github Enterprise documentation for more details."
+msgstr ""
+
+#: ascender/sso/conf.py:907
+msgid "GitHub Enterprise API URL"
+msgstr ""
+
+#: ascender/sso/conf.py:909 ascender/sso/conf.py:996 ascender/sso/conf.py:1099
+msgid ""
+"The API URL for your GitHub Enterprise instance, e.g.: http(s)://hostname/"
+"api/v3/. Refer to Github Enterprise documentation for more details."
+msgstr ""
+
+#: ascender/sso/conf.py:920
+msgid "GitHub Enterprise OAuth2 Key"
+msgstr ""
+
+#: ascender/sso/conf.py:921
+msgid ""
+"The OAuth2 key (Client ID) from your GitHub Enterprise developer application."
+msgstr ""
+
+#: ascender/sso/conf.py:931
+msgid "GitHub Enterprise OAuth2 Secret"
+msgstr ""
+
+#: ascender/sso/conf.py:932
+msgid ""
+"The OAuth2 secret (Client Secret) from your GitHub Enterprise developer "
+"application."
+msgstr ""
+
+#: ascender/sso/conf.py:943
+msgid "GitHub Enterprise OAuth2 Organization Map"
+msgstr ""
+
+#: ascender/sso/conf.py:955
+msgid "GitHub Enterprise OAuth2 Team Map"
+msgstr ""
+
+#: ascender/sso/conf.py:971
+msgid "GitHub Enterprise Organization OAuth2 Callback URL"
+msgstr ""
+
+#: ascender/sso/conf.py:973 ascender/sso/conf.py:1009 ascender/sso/conf.py:1020
+#: ascender/sso/conf.py:1032 ascender/sso/conf.py:1043 ascender/sso/conf.py:1055
+msgid "GitHub Enterprise Organization OAuth2"
+msgstr ""
+
+#: ascender/sso/conf.py:983
+msgid "GitHub Enterprise Organization URL"
+msgstr ""
+
+#: ascender/sso/conf.py:994
+msgid "GitHub Enterprise Organization API URL"
+msgstr ""
+
+#: ascender/sso/conf.py:1007
+msgid "GitHub Enterprise Organization OAuth2 Key"
+msgstr ""
+
+#: ascender/sso/conf.py:1008 ascender/sso/conf.py:1111
+msgid ""
+"The OAuth2 key (Client ID) from your GitHub Enterprise organization "
+"application."
+msgstr ""
+
+#: ascender/sso/conf.py:1018
+msgid "GitHub Enterprise Organization OAuth2 Secret"
+msgstr ""
+
+#: ascender/sso/conf.py:1019 ascender/sso/conf.py:1122
+msgid ""
+"The OAuth2 secret (Client Secret) from your GitHub Enterprise organization "
+"application."
+msgstr ""
+
+#: ascender/sso/conf.py:1030
+msgid "GitHub Enterprise Organization Name"
+msgstr ""
+
+#: ascender/sso/conf.py:1031
+msgid ""
+"The name of your GitHub Enterprise organization, as used in your "
+"organization's URL: https://github.com/<yourorg>/."
+msgstr ""
+
+#: ascender/sso/conf.py:1041
+msgid "GitHub Enterprise Organization OAuth2 Organization Map"
+msgstr ""
+
+#: ascender/sso/conf.py:1053
+msgid "GitHub Enterprise Organization OAuth2 Team Map"
+msgstr ""
+
+#: ascender/sso/conf.py:1069
+msgid "GitHub Enterprise Team OAuth2 Callback URL"
+msgstr ""
+
+#: ascender/sso/conf.py:1076 ascender/sso/conf.py:1112 ascender/sso/conf.py:1123
+#: ascender/sso/conf.py:1135 ascender/sso/conf.py:1146 ascender/sso/conf.py:1158
+msgid "GitHub Enterprise Team OAuth2"
+msgstr ""
+
+#: ascender/sso/conf.py:1086
+msgid "GitHub Enterprise Team URL"
+msgstr ""
+
+#: ascender/sso/conf.py:1097
+msgid "GitHub Enterprise Team API URL"
+msgstr ""
+
+#: ascender/sso/conf.py:1110
+msgid "GitHub Enterprise Team OAuth2 Key"
+msgstr ""
+
+#: ascender/sso/conf.py:1121
+msgid "GitHub Enterprise Team OAuth2 Secret"
+msgstr ""
+
+#: ascender/sso/conf.py:1133
+msgid "GitHub Enterprise Team ID"
+msgstr ""
+
+#: ascender/sso/conf.py:1134
+msgid ""
+"Find the numeric team ID using the Github Enterprise API: http://fabian-"
+"kostadinov.github.io/2015/01/16/how-to-find-a-github-team-id/."
+msgstr ""
+
+#: ascender/sso/conf.py:1144
+msgid "GitHub Enterprise Team OAuth2 Organization Map"
+msgstr ""
+
+#: ascender/sso/conf.py:1156
+msgid "GitHub Enterprise Team OAuth2 Team Map"
+msgstr ""
+
+#: ascender/sso/conf.py:1172
+msgid "Azure AD OAuth2 Callback URL"
+msgstr ""
+
+#: ascender/sso/conf.py:1173
+msgid ""
+"Provide this URL as the callback URL for your application as part of your "
+"registration process. Refer to the documentation for more detail. "
+msgstr ""
+
+#: ascender/sso/conf.py:1174 ascender/sso/conf.py:1186 ascender/sso/conf.py:1197
+#: ascender/sso/conf.py:1209 ascender/sso/conf.py:1221
+msgid "Azure AD OAuth2"
+msgstr ""
+
+#: ascender/sso/conf.py:1184
+msgid "Azure AD OAuth2 Key"
+msgstr ""
+
+#: ascender/sso/conf.py:1185
+msgid "The OAuth2 key (Client ID) from your Azure AD application."
+msgstr ""
+
+#: ascender/sso/conf.py:1195
+msgid "Azure AD OAuth2 Secret"
+msgstr ""
+
+#: ascender/sso/conf.py:1196
+msgid "The OAuth2 secret (Client Secret) from your Azure AD application."
+msgstr ""
+
+#: ascender/sso/conf.py:1207
+msgid "Azure AD OAuth2 Organization Map"
+msgstr ""
+
+#: ascender/sso/conf.py:1219
+msgid "Azure AD OAuth2 Team Map"
+msgstr ""
+
+#: ascender/sso/conf.py:1235
+msgid "OIDC Key"
+msgstr ""
+
+#: ascender/sso/conf.py:1237 ascender/sso/conf.py:1248 ascender/sso/conf.py:1260
+#: ascender/sso/conf.py:1270
+msgid "Generic OIDC"
+msgstr ""
+
+#: ascender/sso/conf.py:1246
+msgid "OIDC Secret"
+msgstr ""
+
+#: ascender/sso/conf.py:1247
+msgid "The OIDC secret (Client Secret) from your IDP."
+msgstr ""
+
+#: ascender/sso/conf.py:1258
+msgid "OIDC Provider URL"
+msgstr ""
+
+#: ascender/sso/conf.py:1259
+msgid ""
+"The URL for your OIDC provider including the path up to /.well-known/openid-"
+"configuration"
+msgstr ""
+
+#: ascender/sso/conf.py:1268
+msgid "Verify OIDC Provider Certificate"
+msgstr ""
+
+#: ascender/sso/conf.py:1269
+msgid "Verify the OIDC provider ssl certificate."
+msgstr ""
+
+#: ascender/sso/conf.py:1291
+msgid "Automatically Create Organizations and Teams on SAML Login"
+msgstr ""
+
+#: ascender/sso/conf.py:1292
+msgid ""
+"When enabled (the default), mapped Organizations and Teams will be created "
+"automatically on successful SAML login."
+msgstr ""
+
+#: ascender/sso/conf.py:1293 ascender/sso/conf.py:1308 ascender/sso/conf.py:1320
+#: ascender/sso/conf.py:1335 ascender/sso/conf.py:1347 ascender/sso/conf.py:1358
+#: ascender/sso/conf.py:1368 ascender/sso/conf.py:1381 ascender/sso/conf.py:1392
+#: ascender/sso/conf.py:1409 ascender/sso/conf.py:1454 ascender/sso/conf.py:1486
+#: ascender/sso/conf.py:1498 ascender/sso/conf.py:1510 ascender/sso/conf.py:1522
+#: ascender/sso/conf.py:1534 ascender/sso/conf.py:1555 ascender/sso/conf.py:1583
+#: ascender/sso/models.py:13
+msgid "SAML"
+msgstr ""
+
+#: ascender/sso/conf.py:1302
+msgid "SAML Assertion Consumer Service (ACS) URL"
+msgstr ""
+
+#: ascender/sso/conf.py:1304
+msgid ""
+"Register the service as a service provider (SP) with each identity provider "
+"(IdP) you have configured. Provide your SP Entity ID and this ACS URL for "
+"your application."
+msgstr ""
+
+#: ascender/sso/conf.py:1318
+msgid "SAML Service Provider Metadata URL"
+msgstr ""
+
+#: ascender/sso/conf.py:1319
+msgid ""
+"If your identity provider (IdP) allows uploading an XML metadata file, you "
+"can download one from this URL."
+msgstr ""
+
+#: ascender/sso/conf.py:1329
+msgid "SAML Service Provider Entity ID"
+msgstr ""
+
+#: ascender/sso/conf.py:1331
+msgid ""
+"The application-defined unique identifier used as the audience of the SAML "
+"service provider (SP) configuration. This is usually the URL for the service."
+msgstr ""
+
+#: ascender/sso/conf.py:1345
+msgid "SAML Service Provider Public Certificate"
+msgstr ""
+
+#: ascender/sso/conf.py:1346
+msgid ""
+"Create a keypair to use as a service provider (SP) and include the "
+"certificate content here."
+msgstr ""
+
+#: ascender/sso/conf.py:1356
+msgid "SAML Service Provider Private Key"
+msgstr ""
+
+#: ascender/sso/conf.py:1357
+msgid ""
+"Create a keypair to use as a service provider (SP) and include the private "
+"key content here."
+msgstr ""
+
+#: ascender/sso/conf.py:1366
+msgid "SAML Service Provider Organization Info"
+msgstr ""
+
+#: ascender/sso/conf.py:1367
+msgid ""
+"Provide the URL, display name, and the name of your app. Refer to the "
+"documentation for example syntax."
+msgstr ""
+
+#: ascender/sso/conf.py:1379
+msgid "SAML Service Provider Technical Contact"
+msgstr ""
+
+#: ascender/sso/conf.py:1380
+msgid ""
+"Provide the name and email address of the technical contact for your service "
+"provider. Refer to the documentation for example syntax."
+msgstr ""
+
+#: ascender/sso/conf.py:1390
+msgid "SAML Service Provider Support Contact"
+msgstr ""
+
+#: ascender/sso/conf.py:1391
+msgid ""
+"Provide the name and email address of the support contact for your service "
+"provider. Refer to the documentation for example syntax."
+msgstr ""
+
+#: ascender/sso/conf.py:1401
+msgid "SAML Enabled Identity Providers"
+msgstr ""
+
+#: ascender/sso/conf.py:1403
+msgid ""
+"Configure the Entity ID, SSO URL and certificate for each identity provider "
+"(IdP) in use. Multiple SAML IdPs are supported. Some IdPs may provide user "
+"data using attribute names that differ from the default OIDs. Attribute "
+"names may be overridden for each IdP. Refer to the Ansible documentation for "
+"additional details and syntax."
+msgstr ""
+
+#: ascender/sso/conf.py:1452
+msgid "SAML Security Config"
+msgstr ""
+
+#: ascender/sso/conf.py:1453
+msgid ""
+"A dict of key value pairs that are passed to the underlying python-saml "
+"security setting https://github.com/onelogin/python-saml#settings"
+msgstr ""
+
+#: ascender/sso/conf.py:1484
+msgid "SAML Service Provider extra configuration data"
+msgstr ""
+
+#: ascender/sso/conf.py:1485
+msgid ""
+"A dict of key value pairs to be passed to the underlying python-saml Service "
+"Provider configuration setting."
+msgstr ""
+
+#: ascender/sso/conf.py:1496
+msgid "SAML IDP to extra_data attribute mapping"
+msgstr ""
+
+#: ascender/sso/conf.py:1497
+msgid ""
+"A list of tuples that maps IDP attributes to extra_attributes. Each "
+"attribute will be a list of values, even if only 1 value."
+msgstr ""
+
+#: ascender/sso/conf.py:1508
+msgid "SAML Organization Map"
+msgstr ""
+
+#: ascender/sso/conf.py:1520
+msgid "SAML Team Map"
+msgstr ""
+
+#: ascender/sso/conf.py:1532
+msgid "SAML Organization Attribute Mapping"
+msgstr ""
+
+#: ascender/sso/conf.py:1533
+msgid "Used to translate user organization membership."
+msgstr ""
+
+#: ascender/sso/conf.py:1553
+msgid "SAML Team Attribute Mapping"
+msgstr ""
+
+#: ascender/sso/conf.py:1554
+msgid "Used to translate user team membership."
+msgstr ""
+
+#: ascender/sso/conf.py:1581
+msgid "SAML User Flags Attribute Mapping"
+msgstr ""
+
+#: ascender/sso/conf.py:1582
+msgid "Used to map super users and system auditors from SAML."
+msgstr ""
+
+#: ascender/sso/conf.py:1602
+msgid "Minimum number of characters in local password"
+msgstr ""
+
+#: ascender/sso/conf.py:1603
+msgid ""
+"Minimum number of characters required in a local password. 0 means no minimum"
+msgstr ""
+
+#: ascender/sso/conf.py:1613
+msgid "Minimum number of digit characters in local password"
+msgstr ""
+
+#: ascender/sso/conf.py:1614
+msgid ""
+"Minimum number of digit characters required in a local password. 0 means no "
+"minimum"
+msgstr ""
+
+#: ascender/sso/conf.py:1624
+msgid "Minimum number of uppercase characters in local password"
+msgstr ""
+
+#: ascender/sso/conf.py:1625
+msgid ""
+"Minimum number of uppercase characters required in a local password. 0 means "
+"no minimum"
+msgstr ""
+
+#: ascender/sso/conf.py:1635
+msgid "Minimum number of special characters in local password"
+msgstr ""
+
+#: ascender/sso/conf.py:1636
+msgid ""
+"Minimum number of special characters required in a local password. 0 means "
+"no minimum"
+msgstr ""
+
+#: ascender/sso/fields.py:78
+msgid "Invalid field."
+msgstr ""
+
+#: ascender/sso/fields.py:246
+#, python-brace-format
+msgid "Invalid connection option(s): {invalid_options}."
+msgstr ""
+
+#: ascender/sso/fields.py:322
+msgid "Base"
+msgstr ""
+
+#: ascender/sso/fields.py:322
+msgid "One Level"
+msgstr ""
+
+#: ascender/sso/fields.py:322
+msgid "Subtree"
+msgstr ""
+
+#: ascender/sso/fields.py:338
+#, python-brace-format
+msgid "Expected a list of three items but got {length} instead."
+msgstr ""
+
+#: ascender/sso/fields.py:339
+#, python-brace-format
+msgid "Expected an instance of LDAPSearch but got {input_type} instead."
+msgstr ""
+
+#: ascender/sso/fields.py:370
+#, python-brace-format
+msgid ""
+"Expected an instance of LDAPSearch or LDAPSearchUnion but got {input_type} "
+"instead."
+msgstr ""
+
+#: ascender/sso/fields.py:404
+#, python-brace-format
+msgid "Invalid user attribute(s): {invalid_attrs}."
+msgstr ""
+
+#: ascender/sso/fields.py:420
+#, python-brace-format
+msgid "Expected an instance of LDAPGroupType but got {input_type} instead."
+msgstr ""
+
+#: ascender/sso/fields.py:421
+#, python-brace-format
+msgid "Missing required parameters in {dependency}."
+msgstr ""
+
+#: ascender/sso/fields.py:422
+#, python-brace-format
+msgid ""
+"Invalid group_type parameters. Expected instance of dict but got "
+"{parameters_type} instead."
+msgstr ""
+
+#: ascender/sso/fields.py:471
+#, python-brace-format
+msgid "Invalid key(s): {invalid_keys}."
+msgstr ""
+
+#: ascender/sso/fields.py:494
+#, python-brace-format
+msgid "Invalid user flag: \"{invalid_flag}\"."
+msgstr ""
+
+#: ascender/sso/fields.py:632
+#, python-brace-format
+msgid "Invalid language code(s) for org info: {invalid_lang_codes}."
+msgstr ""
+
+#: ascender/sso/social_base_pipeline.py:17
+#, python-brace-format
+msgid "An account cannot be found for {0}"
+msgstr ""
+
+#: ascender/sso/social_base_pipeline.py:22
+msgid "Your account is inactive"
+msgstr ""
+
+#: ascender/sso/validators.py:24 ascender/sso/validators.py:51
+#, python-format
+msgid "DN must include \"%%(user)s\" placeholder for username: %s"
+msgstr ""
+
+#: ascender/sso/validators.py:31
+#, python-format
+msgid "Invalid DN: %s"
+msgstr ""
+
+#: ascender/sso/validators.py:63
+#, python-format
+msgid "Invalid filter: %s"
+msgstr ""
+
+#: ascender/sso/validators.py:74
+msgid "TACACS+ secret does not allow non-ascii characters"
+msgstr ""
+
+#: ascender/templates/error.html:4
+msgid "AWX"
+msgstr ""
+
+#: ascender/templates/rest_framework/api.html:4
+msgid "ASCENDER REST API"
+msgstr ""
+
+#: ascender/templates/rest_framework/api.html:42
+msgid "API Guide"
+msgstr ""
+
+#: ascender/templates/rest_framework/api.html:43
+msgid "Back to application"
+msgstr ""
+
+#: ascender/templates/rest_framework/api.html:44
+msgid "Resize"
+msgstr ""
+
+#: ascender/ui/apps.py:8 ascender/ui/conf.py:18 ascender/ui/conf.py:34 ascender/ui/conf.py:44
+#: ascender/ui/conf.py:60 ascender/ui/conf.py:76 ascender/ui/conf.py:86 ascender/ui/conf.py:95
+msgid "UI"
+msgstr ""
+
+#: ascender/ui/conf.py:15
+msgid "Off"
+msgstr ""
+
+#: ascender/ui/conf.py:15
+msgid "Anonymous"
+msgstr ""
+
+#: ascender/ui/conf.py:15
+msgid "Detailed"
+msgstr ""
+
+#: ascender/ui/conf.py:16
+msgid "User Analytics Tracking State"
+msgstr ""
+
+#: ascender/ui/conf.py:17
+msgid "Enable or Disable User Analytics Tracking."
+msgstr ""
+
+#: ascender/ui/conf.py:27
+msgid "Custom Login Info"
+msgstr ""
+
+#: ascender/ui/conf.py:29
+msgid ""
+"If needed, you can add specific information (such as a legal notice or a "
+"disclaimer) to a text box in the login modal using this setting. Any content "
+"added must be in plain text or an HTML fragment, as other markup languages "
+"are not supported."
+msgstr ""
+
+#: ascender/ui/conf.py:42
+msgid "Disable Menu Gradient"
+msgstr ""
+
+#: ascender/ui/conf.py:43
+msgid "Disable loading the CSS file for custom UI appearance."
+msgstr ""
+
+#: ascender/ui/conf.py:53
+msgid "Custom Login Logo"
+msgstr ""
+
+#: ascender/ui/conf.py:55 ascender/ui/conf.py:71
+msgid ""
+"To set up a custom logo, provide a file that you create. For the custom logo "
+"to look its best, use a .png file with a transparent background. GIF, PNG "
+"and JPEG formats are supported."
+msgstr ""
+
+#: ascender/ui/conf.py:69
+msgid "Custom Menu Logo"
+msgstr ""
+
+#: ascender/ui/conf.py:84
+msgid "Max Job Events Retrieved by UI"
+msgstr ""
+
+#: ascender/ui/conf.py:85
+msgid ""
+"Maximum number of job events for the UI to retrieve within a single request."
+msgstr ""
+
+#: ascender/ui/conf.py:93
+msgid "Enable Live Updates in the UI"
+msgstr ""
+
+#: ascender/ui/conf.py:94
+msgid ""
+"If disabled, the page will not refresh when events are received. Reloading "
+"the page will be required to get the latest details."
+msgstr ""
+
+#: ascender/ui/fields.py:28
+msgid ""
+"Invalid format for custom logo. Must be a data URL with a base64-encoded "
+"GIF, PNG or JPEG image."
+msgstr ""
+
+#: ascender/ui/fields.py:29
+msgid "Invalid base64-encoded data in data URL."
+msgstr ""
+
+#: ascender/ui/urls.py:18
+#, python-format
+msgid "%s Upgrading"
+msgstr ""
+
+#: ascender/ui/urls.py:19
+msgid "Logo"
+msgstr ""
+
+#: ascender/ui/urls.py:20
+msgid "Loading"
+msgstr ""
+
+#: ascender/ui/urls.py:21
+#, python-format
+msgid "%s is currently upgrading."
+msgstr ""
+
+#: ascender/ui/urls.py:22
+msgid "This page will refresh when complete."
+msgstr ""

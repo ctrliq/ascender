@@ -29,7 +29,7 @@ django-valkey
 djangorestframework>=3.18.0 # first release declaring Django 6.1 support; floor was 3.17.2 for CVE-2026-73228 CVE-2026-73229
 filelock
 GitPython>=3.1.58  # GHSA-hh9p-6wh2-4mfc GHSA-9rj7-rf2p-w77r GHSA-4gmw-gg2m-w46p GHSA-hmq2-w58f-27jc GHSA-wvpp-8hx9-p66j GHSA-jm78-9fvv-mhgr
-inflection  # used by vendored awx/dab (formerly a django-ansible-base dep)
+inflection  # used by vendored ascender/dab (formerly a django-ansible-base dep)
 jinja2>=3.1.6  # CVE-2025-27516
 jsonschema
 kubernetes
@@ -40,9 +40,9 @@ prometheus-client
 psycopg
 psutil
 pygithub
-pyjwt[crypto]  # used by vendored awx/dab jwt_consumer (formerly a django-ansible-base dep)
+pyjwt[crypto]  # used by vendored ascender/dab jwt_consumer (formerly a django-ansible-base dep)
 pyopenssl>=26.4.0  # tracks cryptography pin above (pyopenssl 26.3.0 requires cryptography>=49)
-pyparsing>=3  # 3.x renamed the API; the grammar in awx/main/utils/filters.py needs ignore_whitespace(), which 2.x does not have
+pyparsing>=3  # 3.x renamed the API; the grammar in ascender/main/utils/filters.py needs ignore_whitespace(), which 2.x does not have
 python-dsv-sdk>=1.0.4
 python-tss-sdk>=1.2.1
 python-ldap>=3.4.5  # CVE-2025-61911 CVE-2025-61912

@@ -14,7 +14,7 @@ nodes:
 - role: control-plane
   extraMounts:
   - hostPath: /path/to/awx
-    containerPath: /awx_devel
+    containerPath: /ascender_devel
   extraPortMappings:
   - containerPort: 30080
     hostPort: 30080
@@ -27,7 +27,7 @@ Start Kind cluster
 
 Verify Ascender source tree is mounted in the kind-control-plane container
 ```bash
- docker exec -it kind-control-plane ls /awx_devel
+ docker exec -it kind-control-plane ls /ascender_devel
 ```
 
 ## Deploy the AWX Operator
@@ -71,7 +71,7 @@ In the root of awx-operator:
 ```bash
  ansible-playbook ansible/instantiate-awx-deployment.yml \
     -e development_mode=yes \
-    -e image=ghcr.io/ansible/awx_kube_devel \
+    -e image=ghcr.io/ansible/ascender_kube_devel \
     -e image_version=devel \
     -e image_pull_policy=Always \
     -e service_type=nodeport \
@@ -104,8 +104,8 @@ export COMPOSE_TAG=<IMAGE_TAG>
 In the root of the Ascender repo:
 
 ```bash
-make awx-kube-dev-build
-docker push $DEV_DOCKER_TAG_BASE/awx_kube_devel:$COMPOSE_TAG
+make ascender-kube-dev-build
+docker push $DEV_DOCKER_TAG_BASE/ascender_kube_devel:$COMPOSE_TAG
 ```
 
 In the root of awx-operator:
@@ -113,7 +113,7 @@ In the root of awx-operator:
 ```bash
  ansible-playbook ansible/instantiate-awx-deployment.yml \
     -e development_mode=yes \
-    -e image=$DEV_DOCKER_TAG_BASE/awx_kube_devel \
+    -e image=$DEV_DOCKER_TAG_BASE/ascender_kube_devel \
     -e image_version=$COMPOSE_TAG \
     -e image_pull_policy=Always \
     -e service_type=nodeport \

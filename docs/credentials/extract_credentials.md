@@ -13,7 +13,7 @@ If necessary, credentials and encrypted settings can be extracted using the Asce
 
 ```python
 $ awx-manage shell
->>> from awx.main.utils import decrypt_field
+>>> from ascender.main.utils import decrypt_field
 >>> print(decrypt_field(Credential.objects.get(name="my private key"), "ssh_key_data")) # Example for a credential
 >>> print(decrypt_field(Setting.objects.get(key='SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET'), 'value')) # Example for a setting
 ```

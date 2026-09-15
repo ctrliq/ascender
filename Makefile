@@ -9,7 +9,7 @@ NPM_BIN ?= npm
 KIND_BIN ?= $(shell which kind)
 CHROMIUM_BIN=/tmp/chrome-linux/chrome
 GIT_BRANCH ?= $(shell git rev-parse --abbrev-ref HEAD)
-MANAGEMENT_COMMAND ?= awx-manage
+MANAGEMENT_COMMAND ?= ascender-manage
 VERSION ?= $(shell $(PYTHON) tools/scripts/scm_version.py 2> /dev/null)
 
 # NOTE: This defaults the container image version to the branch that's active
@@ -30,7 +30,7 @@ TACACS ?= false
 
 EDITABLE_DEPENDENCIES ?= false
 
-VENV_BASE ?= /var/lib/awx/venv
+VENV_BASE ?= /var/lib/ascender/venv
 
 DEV_DOCKER_OWNER ?= ctrliq
 # Docker will only accept lowercase, so github names like Paul need to be paul
@@ -44,11 +44,11 @@ RECEPTOR_IMAGE ?= quay.io/ansible/receptor:devel
 # Python packages to install only from source (not from binary wheels)
 # Comma separated list
 SRC_ONLY_PKGS ?= cffi,pycparser,psycopg,twilio
-# These should be upgraded in the AWX and Ansible venv before attempting
+# These should be upgraded in the Ascender and Ansible venv before attempting
 # to install the actual requirements
 VENV_BOOTSTRAP ?= pip==26.2.1 setuptools==84.0.0 setuptools_scm[toml]==10.2.3 wheel==0.48.0
 
-NAME ?= awx
+NAME ?= ascender
 
 # TAR build parameters
 SDIST_TAR_NAME=$(NAME)-$(VERSION)
@@ -61,7 +61,7 @@ I18N_FLAG_FILE = .i18n_built
 ## PLATFORMS defines the target platforms for  the manager image be build to provide support to multiple
 PLATFORMS ?= linux/amd64,linux/arm64  # linux/ppc64le,linux/s390x
 
-.PHONY: awx-link clean clean-tmp clean-venv requirements requirements_dev \
+.PHONY: ascender-link clean clean-tmp clean-venv requirements requirements_dev \
 	develop refresh adduser migrate dbchange \
 	receiver test test_unit test_coverage coverage_html \
 	sdist \
@@ -85,14 +85,14 @@ clean-schema:
 
 clean-languages:
 	rm -f $(I18N_FLAG_FILE)
-	find ./awx/locale/ -type f -regex '.*\.mo$$' -delete
+	find ./ascender/locale/ -type f -regex '.*\.mo$$' -delete
 
 ## Remove temporary build files, compiled Python files.
 clean: clean-ui clean-api clean-dist
-	rm -rf awx/public
-	rm -rf awx/lib/site-packages
-	rm -rf awx/job_status
-	rm -rf awx/job_output
+	rm -rf ascender/public
+	rm -rf ascender/lib/site-packages
+	rm -rf ascender/job_status
+	rm -rf ascender/job_output
 	rm -rf reports
 	rm -rf tmp
 	rm -rf $(I18N_FLAG_FILE)
@@ -104,7 +104,7 @@ clean-api:
 	find . -type f -regex ".*\.py[co]$$" -delete
 	find . -depth -type d -name "__pycache__" -delete
 	rm -rf requirements/vendor
-	rm -rf awx/projects
+	rm -rf ascender/projects
 
 ## convenience target to assert environment variables are defined
 guard-%:
@@ -113,12 +113,12 @@ guard-%:
 	    exit 1; \
 	fi
 
-virtualenv: virtualenv_awx
+virtualenv: virtualenv_ascender
 
 # flit is needed for offline install of certain packages, specifically ptyprocess
 # it is needed for setup, but not always recognized as a setup dependency
 # similar to pip, setuptools, and wheel, these are all needed here as a bootstrapping issues
-virtualenv_awx:
+virtualenv_ascender:
 	if [ "$(VENV_BASE)" ]; then \
 		if [ ! -d "$(VENV_BASE)" ]; then \
 			mkdir $(VENV_BASE); \
@@ -129,9 +129,9 @@ virtualenv_awx:
 		fi; \
 	fi
 
-## Install third-party requirements needed for AWX's environment.
+## Install third-party requirements needed for Ascender's environment.
 # this does not use system site packages intentionally
-requirements_awx: virtualenv_awx
+requirements_ascender: virtualenv_ascender
 	if [[ "$(PIP_OPTIONS)" == *"--no-index"* ]]; then \
 	    cat requirements/requirements.txt requirements/requirements_local.txt | UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/awx/bin/pip install $(PIP_OPTIONS) -r /dev/stdin ; \
 	else \
@@ -139,12 +139,12 @@ requirements_awx: virtualenv_awx
 	fi
 	$(VENV_BASE)/awx/bin/pip uninstall --yes -r requirements/requirements_tower_uninstall.txt
 
-requirements_awx_dev:
+requirements_ascender_dev:
 	UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/awx/bin/pip install -r requirements/requirements_dev.txt
 
-requirements: requirements_awx
+requirements: requirements_ascender
 
-requirements_dev: requirements_awx requirements_awx_dev
+requirements_dev: requirements_ascender requirements_ascender_dev
 
 requirements_test: requirements
 
@@ -159,11 +159,11 @@ develop:
 	fi
 
 version_file:
-	mkdir -p /var/lib/awx/; \
+	mkdir -p /var/lib/ascender/; \
 	if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	$(PYTHON) -c "import awx; print(awx.__version__)" > /var/lib/awx/.awx_version; \
+	$(PYTHON) -c "import ascender; print(ascender.__version__)" > /var/lib/ascender/.ascender_version; \
 
 ## Refresh development environment after pulling new code.
 refresh: clean requirements_dev version_file develop migrate
@@ -213,10 +213,10 @@ uvicorn: collectstatic
 	fi; \
 	root_path="$${AWX_MOUNT_PATH%/}"; \
 	uvicorn --host 127.0.0.1 --port 8051 --workers $(UVICORN_WORKERS) --ws auto --no-server-header \
-		$${root_path:+--root-path "$$root_path"} awx.asgi:channel_layer
+		$${root_path:+--root-path "$$root_path"} ascender.asgi:channel_layer
 
-awx-autoreload:
-	@/awx_devel/tools/docker-compose/awx-autoreload /awx_devel/awx
+ascender-autoreload:
+	@/ascender_devel/tools/docker-compose/ascender-autoreload /ascender_devel/ascender
 
 ## Run to start the background task dispatcher for development.
 dispatcher:
@@ -241,7 +241,7 @@ jupyter:
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	DJANGO_SETTINGS_MODULE=awx.settings.development $(PYTHON) -m notebook --IdentityProvider.token= --ip 0.0.0.0 --port 9888 --allow-root --no-browser
+	DJANGO_SETTINGS_MODULE=ascender.settings.development $(PYTHON) -m notebook --IdentityProvider.token= --ip 0.0.0.0 --port 9888 --allow-root --no-browser
 
 ## Start the rsyslog configurer process in background in development environment.
 run-rsyslog-configurer:
@@ -293,13 +293,13 @@ lint:
 	@echo "fi" >> .git/hooks/pre-commit
 	@chmod +x .git/hooks/pre-commit
 
-genschema: awx-link reports
+genschema: ascender-link reports
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
 	$(MANAGEMENT_COMMAND) spectacular --format openapi-json --file schema.json
 
-genschema-yaml: awx-link reports
+genschema-yaml: ascender-link reports
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
@@ -318,19 +318,19 @@ api-lint:
 ## rather than part of the build, its committed output is what everything else
 ## consumes, and its peer range wants TypeScript 5 where this project is on 6.
 ## npx fetches it for the length of this command and leaves nothing behind.
-ui-api-types: awx-link awx/ui/node_modules
+ui-api-types: ascender-link ascender/ui/node_modules
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	$(MANAGEMENT_COMMAND) spectacular --format openapi-json --file awx/ui/.schema.json
-	$(NPM_BIN) --prefix awx/ui run generate-api-types
-	rm -f awx/ui/.schema.json
+	$(MANAGEMENT_COMMAND) spectacular --format openapi-json --file ascender/ui/.schema.json
+	$(NPM_BIN) --prefix ascender/ui run generate-api-types
+	rm -f ascender/ui/.schema.json
 
-## Run egg_info_dev to generate awx.egg-info for development.
-awx-link:
-	[ -d "/awx_devel/awx.egg-info" ] || $(PYTHON) /awx_devel/tools/scripts/egg_info_dev
+## Run egg_info_dev to generate ascender.egg-info for development.
+ascender-link:
+	[ -d "/ascender_devel/ascender.egg-info" ] || $(PYTHON) /ascender_devel/tools/scripts/egg_info_dev
 
-TEST_DIRS ?= awx/main/tests/unit awx/main/tests/functional awx/conf/tests awx/sso/tests
+TEST_DIRS ?= ascender/main/tests/unit ascender/main/tests/functional ascender/conf/tests ascender/sso/tests
 PYTEST_ARGS ?= -n auto --dist=loadfile
 ## Run all API unit tests.
 test:
@@ -338,8 +338,8 @@ test:
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(PYTEST_ARGS) $(TEST_DIRS)
-	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
-	awx-manage check_settings
+	ascender-manage check_migrations --dry-run --check -n 'missing_migration_file'
+	ascender-manage check_settings
 
 ## Run all API unit tests without parallel execution (safer but slower).
 test-serial:
@@ -347,8 +347,8 @@ test-serial:
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(TEST_DIRS)
-	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
-	awx-manage check_settings
+	ascender-manage check_migrations --dry-run --check -n 'missing_migration_file'
+	ascender-manage check_settings
 
 ## Run tests with limited parallel workers (safer than auto).
 test-safe:
@@ -356,8 +356,8 @@ test-safe:
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n 2 --dist=loadfile $(TEST_DIRS)
-	awx-manage check_migrations --dry-run --check -n 'missing_migration_file'
-	awx-manage check_settings
+	ascender-manage check_migrations --dry-run --check -n 'missing_migration_file'
+	ascender-manage check_settings
 
 test_migrations:
 	if [ "$(VENV_BASE)" ]; then \
@@ -372,13 +372,13 @@ test_migrations:
 DOCKER_RUNNER_OPTS ?=
 
 docker-runner:
-	docker run -u $(shell id -u) --rm -v $(shell pwd):/awx_devel/:Z --workdir=/awx_devel $(DOCKER_RUNNER_OPTS) $(DEVEL_IMAGE_NAME) $(AWX_DOCKER_CMD)
+	docker run -u $(shell id -u) --rm -v $(shell pwd):/ascender_devel/:Z --workdir=/ascender_devel $(DOCKER_RUNNER_OPTS) $(DEVEL_IMAGE_NAME) $(AWX_DOCKER_CMD)
 
 test_unit:
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	py.test awx/main/tests/unit awx/conf/tests/unit awx/sso/tests/unit
+	py.test ascender/main/tests/unit ascender/conf/tests/unit ascender/sso/tests/unit
 
 ## Run all API unit tests with coverage enabled.
 test_coverage:
@@ -408,62 +408,62 @@ bulk_data:
 # UI TASKS
 # --------------------------------------
 
-UI_BUILD_FLAG_FILE = awx/ui/.ui-built
+UI_BUILD_FLAG_FILE = ascender/ui/.ui-built
 
 clean-ui:
 	rm -rf node_modules
-	rm -rf awx/ui/node_modules
-	rm -rf awx/ui/build
-	rm -rf awx/ui/src/locales/_build
+	rm -rf ascender/ui/node_modules
+	rm -rf ascender/ui/build
+	rm -rf ascender/ui/src/locales/_build
 	rm -rf $(UI_BUILD_FLAG_FILE)
         # the collectstatic command doesn't like it if this dir doesn't exist.
-	mkdir -p awx/ui/build/static
+	mkdir -p ascender/ui/build/static
 
-awx/ui/node_modules:
-	NODE_OPTIONS=--max-old-space-size=6144 $(NPM_BIN) --prefix awx/ui --loglevel warn --force ci --ignore-scripts
+ascender/ui/node_modules:
+	NODE_OPTIONS=--max-old-space-size=6144 $(NPM_BIN) --prefix ascender/ui --loglevel warn --force ci --ignore-scripts
 
 $(UI_BUILD_FLAG_FILE):
-	$(MAKE) awx/ui/node_modules
+	$(MAKE) ascender/ui/node_modules
 	$(PYTHON) tools/scripts/compilemessages.py
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run compile-strings
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run build
+	$(NPM_BIN) --prefix ascender/ui --loglevel warn run compile-strings
+	$(NPM_BIN) --prefix ascender/ui --loglevel warn run build
 	touch $@
 
 ui-release: $(UI_BUILD_FLAG_FILE)
 
-ui-devel: awx/ui/node_modules
+ui-devel: ascender/ui/node_modules
 	@$(MAKE) -B $(UI_BUILD_FLAG_FILE)
-	@if [ -d "/var/lib/awx" ] ; then \
-		mkdir -p /var/lib/awx/public/static/css; \
-		mkdir -p /var/lib/awx/public/static/js; \
-		mkdir -p /var/lib/awx/public/static/media; \
-		cp -r awx/ui/build/static/css/* /var/lib/awx/public/static/css; \
-		cp -r awx/ui/build/static/js/* /var/lib/awx/public/static/js; \
-		cp -r awx/ui/build/static/media/* /var/lib/awx/public/static/media; \
+	@if [ -d "/var/lib/ascender" ] ; then \
+		mkdir -p /var/lib/ascender/public/static/css; \
+		mkdir -p /var/lib/ascender/public/static/js; \
+		mkdir -p /var/lib/ascender/public/static/media; \
+		cp -r ascender/ui/build/static/css/* /var/lib/ascender/public/static/css; \
+		cp -r ascender/ui/build/static/js/* /var/lib/ascender/public/static/js; \
+		cp -r ascender/ui/build/static/media/* /var/lib/ascender/public/static/media; \
 	fi
 
 ## Start the Vite dev server on port 3001, proxying the API to TARGET.
-ui-devel-test: awx/ui/node_modules
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run start
+ui-devel-test: ascender/ui/node_modules
+	$(NPM_BIN) --prefix ascender/ui --loglevel warn run start
 
-ui-lint: awx/ui/node_modules
-	$(NPM_BIN) run --prefix awx/ui lint
-	$(NPM_BIN) run --prefix awx/ui prettier-check
-	$(NPM_BIN) run --prefix awx/ui check-strings
+ui-lint: ascender/ui/node_modules
+	$(NPM_BIN) run --prefix ascender/ui lint
+	$(NPM_BIN) run --prefix ascender/ui prettier-check
+	$(NPM_BIN) run --prefix ascender/ui check-strings
 
-ui-type-check: awx/ui/node_modules
-	$(NPM_BIN) run --prefix awx/ui type-check
+ui-type-check: ascender/ui/node_modules
+	$(NPM_BIN) run --prefix ascender/ui type-check
 
-ui-test: awx/ui/node_modules
-	$(NPM_BIN) run --prefix awx/ui test
+ui-test: ascender/ui/node_modules
+	$(NPM_BIN) run --prefix ascender/ui test
 
-ui-test-screens: awx/ui/node_modules
-	$(NPM_BIN) run --prefix awx/ui pretest
-	$(NPM_BIN) run --prefix awx/ui test-screens
+ui-test-screens: ascender/ui/node_modules
+	$(NPM_BIN) run --prefix ascender/ui pretest
+	$(NPM_BIN) run --prefix ascender/ui test-screens
 
-ui-test-general: awx/ui/node_modules
-	$(NPM_BIN) run --prefix awx/ui pretest
-	$(NPM_BIN) run --prefix awx/ui/ test-general
+ui-test-general: ascender/ui/node_modules
+	$(NPM_BIN) run --prefix ascender/ui pretest
+	$(NPM_BIN) run --prefix ascender/ui/ test-general
 
 HEADLESS ?= no
 ifeq ($(HEADLESS), yes)
@@ -472,6 +472,9 @@ else
 dist/$(SDIST_TAR_FILE): $(UI_BUILD_FLAG_FILE)
 endif
 	$(PYTHON) -m build -s
+	ln -sf $(SDIST_TAR_FILE) dist/ascender.tar.gz
+# ascender-install pip installs dist/awx.tar.gz by that path from its own
+# repository, so the old name stays beside the new one until it moves.
 	ln -sf $(SDIST_TAR_FILE) dist/awx.tar.gz
 
 sdist: dist/$(SDIST_TAR_FILE)
@@ -484,7 +487,7 @@ sdist: dist/$(SDIST_TAR_FILE)
 # This directory is bind-mounted inside of the development container and
 # needs to be pre-created for permissions to be set correctly. Otherwise,
 # Docker will create this directory as root.
-awx/projects:
+ascender/projects:
 	@mkdir -p $@
 
 COMPOSE_UP_OPTS ?=
@@ -505,8 +508,8 @@ docker-compose-sources: .git/hooks/pre-commit
 	fi;
 
 	ansible-playbook -i tools/docker-compose/inventory tools/docker-compose/ansible/sources.yml \
-	    -e awx_image=$(DEV_DOCKER_TAG_BASE)/ascender_devel \
-	    -e awx_image_tag=$(COMPOSE_TAG) \
+	    -e ascender_image=$(DEV_DOCKER_TAG_BASE)/ascender_devel \
+	    -e ascender_image_tag=$(COMPOSE_TAG) \
 	    -e receptor_image=$(RECEPTOR_IMAGE) \
 	    -e control_plane_node_count=$(CONTROL_PLANE_NODE_COUNT) \
 	    -e execution_node_count=$(EXECUTION_NODE_COUNT) \
@@ -520,7 +523,7 @@ docker-compose-sources: .git/hooks/pre-commit
 		-e install_editable_dependencies=$(EDITABLE_DEPENDENCIES) \
 	    $(EXTRA_SOURCES_ANSIBLE_OPTS)
 
-docker-compose: awx/projects docker-compose-sources
+docker-compose: ascender/projects docker-compose-sources
 	ansible-galaxy install --ignore-certs -r tools/docker-compose/ansible/requirements.yml;
 	ansible-playbook -i tools/docker-compose/inventory tools/docker-compose/ansible/initialize_containers.yml \
 	    -e enable_vault=$(VAULT) \
@@ -534,18 +537,18 @@ docker-compose-up:
 docker-compose-down:
 	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml $(COMPOSE_OPTS) down --remove-orphans
 
-docker-compose-credential-plugins: awx/projects docker-compose-sources
+docker-compose-credential-plugins: ascender/projects docker-compose-sources
 	echo -e "\033[0;31mTo generate a CyberArk Conjur API key: docker exec -it tools_conjur_1 conjurctl account create quick-start\033[0m"
-	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml -f tools/docker-credential-plugins-override.yml up --no-recreate awx_1 --remove-orphans
+	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml -f tools/docker-credential-plugins-override.yml up --no-recreate ascender_1 --remove-orphans
 
-docker-compose-test: awx/projects docker-compose-sources
-	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml run --rm --service-ports awx_1 /bin/bash
+docker-compose-test: ascender/projects docker-compose-sources
+	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml run --rm --service-ports ascender_1 /bin/bash
 
-docker-compose-runtest: awx/projects docker-compose-sources
-	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml run --rm --service-ports awx_1 /start_tests.sh
+docker-compose-runtest: ascender/projects docker-compose-sources
+	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml run --rm --service-ports ascender_1 /start_tests.sh
 
-docker-compose-build-schema: awx/projects docker-compose-sources
-	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml run --rm --service-ports --no-deps awx_1 make genschema
+docker-compose-build-schema: ascender/projects docker-compose-sources
+	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml run --rm --service-ports --no-deps ascender_1 make genschema
 
 SCHEMA_DIFF_BASE_BRANCH ?= devel
 detect-schema-change: genschema
@@ -554,7 +557,7 @@ detect-schema-change: genschema
 	# diff exits with 1 when files differ - capture but don't fail
 	-diff -u -b reference-schema.json schema.json
 
-docker-compose-clean: awx/projects
+docker-compose-clean: ascender/projects
 	$(DOCKER_COMPOSE) -f tools/docker-compose/_sources/docker-compose.yml rm -sf
 
 docker-compose-container-group-clean:
@@ -631,7 +634,7 @@ Dockerfile: tools/ansible/roles/dockerfile/templates/Dockerfile.j2
 		-e headless=$(HEADLESS)
 
 ## Build awx image for deployment on Kubernetes environment.
-awx-kube-build: Dockerfile
+ascender-kube-build: Dockerfile
 	DOCKER_BUILDKIT=1 docker build -f Dockerfile \
 		--build-arg VERSION=$(VERSION) \
 		--build-arg SETUPTOOLS_SCM_PRETEND_VERSION=$(VERSION) \
@@ -639,9 +642,9 @@ awx-kube-build: Dockerfile
 		-t $(DEV_DOCKER_TAG_BASE)/ascender:$(COMPOSE_TAG) .
 
 ## Build multi-arch awx image for deployment on Kubernetes environment.
-awx-kube-buildx: Dockerfile
-	- docker buildx create --name awx-kube-buildx
-	docker buildx use awx-kube-buildx
+ascender-kube-buildx: Dockerfile
+	- docker buildx create --name ascender-kube-buildx
+	docker buildx use ascender-kube-buildx
 	- docker buildx build \
 		--push \
 		--build-arg VERSION=$(VERSION) \
@@ -650,11 +653,11 @@ awx-kube-buildx: Dockerfile
 		--platform=$(PLATFORMS) \
 		--tag $(DEV_DOCKER_TAG_BASE)/ascender:$(COMPOSE_TAG) \
 		-f Dockerfile .
-	- docker buildx rm awx-kube-buildx
+	- docker buildx rm ascender-kube-buildx
 
 
 .PHONY: Dockerfile.kube-dev
-## Generate Docker.kube-dev for awx_kube_devel image
+## Generate Docker.kube-dev for ascender_kube_devel image
 Dockerfile.kube-dev: tools/ansible/roles/dockerfile/templates/Dockerfile.j2
 	ansible-playbook tools/ansible/dockerfile.yml \
 	    -e dockerfile_name=Dockerfile.kube-dev \
@@ -662,17 +665,17 @@ Dockerfile.kube-dev: tools/ansible/roles/dockerfile/templates/Dockerfile.j2
 	    -e template_dest=_build_kube_dev \
 	    -e receptor_image=$(RECEPTOR_IMAGE)
 
-## Build awx_kube_devel image for development on local Kubernetes environment.
-awx-kube-dev-build: Dockerfile.kube-dev
+## Build ascender_kube_devel image for development on local Kubernetes environment.
+ascender-kube-dev-build: Dockerfile.kube-dev
 	DOCKER_BUILDKIT=1 docker build -f Dockerfile.kube-dev \
 	    --build-arg BUILDKIT_INLINE_CACHE=1 \
 	    --cache-from=$(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG) \
 	    -t $(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG) .
 
-## Build and push multi-arch awx_kube_devel image for development on local Kubernetes environment.
-awx-kube-dev-buildx: Dockerfile.kube-dev
-	- docker buildx create --name awx-kube-dev-buildx
-	docker buildx use awx-kube-dev-buildx
+## Build and push multi-arch ascender_kube_devel image for development on local Kubernetes environment.
+ascender-kube-dev-buildx: Dockerfile.kube-dev
+	- docker buildx create --name ascender-kube-dev-buildx
+	docker buildx use ascender-kube-dev-buildx
 	- docker buildx build \
 		--push \
 		--build-arg BUILDKIT_INLINE_CACHE=1 \
@@ -680,9 +683,9 @@ awx-kube-dev-buildx: Dockerfile.kube-dev
 		--platform=$(PLATFORMS) \
 		--tag $(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG) \
 		-f Dockerfile.kube-dev .
-	- docker buildx rm awx-kube-dev-buildx
+	- docker buildx rm ascender-kube-dev-buildx
 
-kind-dev-load: awx-kube-dev-build
+kind-dev-load: ascender-kube-dev-build
 	$(KIND_BIN) load docker-image $(DEV_DOCKER_TAG_BASE)/ascender_kube_devel:$(COMPOSE_TAG)
 
 # Translation TASKS
@@ -690,11 +693,11 @@ kind-dev-load: awx-kube-dev-build
 
 ## generate UI .pot file, an empty template of strings yet to be translated
 pot: $(UI_BUILD_FLAG_FILE)
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run extract-template --clean
+	$(NPM_BIN) --prefix ascender/ui --loglevel warn run extract-template --clean
 
 ## generate UI .po files for each locale (will update translated strings for `en`)
 po: $(UI_BUILD_FLAG_FILE)
-	$(NPM_BIN) --prefix awx/ui --loglevel warn run extract-strings -- --clean
+	$(NPM_BIN) --prefix ascender/ui --loglevel warn run extract-strings -- --clean
 
 ## generate API django .pot .po
 messages:

@@ -1,6 +1,6 @@
 ---
-awx_image: ansible/awx
-awx_image_tag: "{{ awx_docker_version }}"
+ascender_image: ctrliq/ascender
+ascender_image_tag: "{{ ascender_docker_version }}"
 dockerfile_name: 'Dockerfile'
 headless: no
 tag_latest: yes

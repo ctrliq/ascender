@@ -1,9 +1,9 @@
 #!/bin/bash
 set +x
 
-cd /awx_devel
+cd /ascender_devel
 make clean
-make awx-link
+make ascender-link
 
 if [[ ! $@ ]]; then
     make test

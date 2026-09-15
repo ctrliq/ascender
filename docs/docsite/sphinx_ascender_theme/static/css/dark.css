@@ -1,6 +1,6 @@
 /*! Dark mode, scoped to html[data-theme="dark"] and stamped on the document
  * element by extrahead.html. Palette from the Ascender UI dark theme,
- * awx/ui/src/themes/dark.css.
+ * ascender/ui/src/themes/dark.css.
  */
 html[data-theme="dark"] {
     color-scheme: dark;

@@ -48,7 +48,7 @@ enabling copy capability for resources is available for developers.
 First, create a `/copy/` URL endpoint for the target resource.
 
 Second, create a view class as handler to the `/copy/` endpoint. This view class should be subclassed
-from `awx.api.generics.CopyAPIView`. Here is an example:
+from `ascender.api.generics.CopyAPIView`. Here is an example:
 ```python
 class JobTemplateCopy(CopyAPIView):
 

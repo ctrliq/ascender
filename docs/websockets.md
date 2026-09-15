@@ -30,7 +30,7 @@ gets routed to uWSGI or Daphne, as required.**
 
 The notable modules for this component are:
 
-* `awx/main/consumers.py` - the django-channels "consumers" where websocket
+* `ascender/main/consumers.py` - the django-channels "consumers" where websocket
   clients are actually handled (think of these like views, but specific to
   websockets).
 
@@ -39,12 +39,12 @@ The notable modules for this component are:
     to the local Valkey instance where wsrelay (discussed below) will pick it
     up and relay it out to the web nodes.
 
-* `awx/main/wsrelay.py` (formerly `awx/main/wsbroadcast.py`) - an asyncio
+* `ascender/main/wsrelay.py` (formerly `ascender/main/wsbroadcast.py`) - an asyncio
   websockets _client_ that connects to the "relay" (fka. "broadcast")
   endpoint. This is a daemon. It formerly ran in each web container, but now
   runs in each task container instead.
 
-* `awx/main/management/commands/run_ws_heartbeat.py` - discussed below, used to
+* `ascender/main/management/commands/run_ws_heartbeat.py` - discussed below, used to
   send a heartbeat payload to pg_notify every few seconds, so that all task
   pods running `wsrelay.py` (above) know about each web pod.
 

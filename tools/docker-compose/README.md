@@ -27,12 +27,12 @@ Here are the main `make` targets:
 
 Notable files:
 
-- `tools/docker-compose/inventory` file - used to configure the AWX development environment.
+- `tools/docker-compose/inventory` file - used to configure the Ascender development environment.
 - `tools/docker-compose/ansible/migrate.yml` - playbook for migrating data from Local Docker to the Development Environment
 
 ### Prerequisites
 
-- [Docker](https://docs.docker.com/engine/installation/) on the host where AWX will be deployed. After installing Docker, the Docker service must be started (depending on your OS, you may have to add the local user that uses Docker to the `docker` group, refer to the documentation for details)
+- [Docker](https://docs.docker.com/engine/installation/) on the host where Ascender will be deployed. After installing Docker, the Docker service must be started (depending on your OS, you may have to add the local user that uses Docker to the `docker` group, refer to the documentation for details)
 - [Docker Compose](https://docs.docker.com/compose/install/).
 - [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) will need to be installed as we use it to template files needed for the docker-compose.
 - OpenSSL.
@@ -52,15 +52,15 @@ Use on other platforms is untested, and may require local changes.
 
 In the [`inventory` file](./inventory), set your `pg_password`, `broadcast_websocket_secret`, `secret_key`, and any other settings you need for your deployment.
 
-AWX requires access to a PostgreSQL database, and by default, one will be created and deployed in a container, and data will be persisted to a docker volume. When the container is stopped, the database files will still exist in the docker volume. An external database can be used by setting the `pg_host`, `pg_hostname`, and `pg_username`.
+Ascender requires access to a PostgreSQL database, and by default, one will be created and deployed in a container, and data will be persisted to a docker volume. When the container is stopped, the database files will still exist in the docker volume. An external database can be used by setting the `pg_host`, `pg_hostname`, and `pg_username`.
 
-> If you are coming from a Local Docker installation of AWX, consider migrating your data first, see the [data migration section](#migrating-data-from-local-docker) below.
+> If you are coming from a Local Docker installation of Ascender, consider migrating your data first, see the [data migration section](#migrating-data-from-local-docker) below.
 
 ## Starting the Development Environment
 
 ### Build the Image
 
-The AWX base container image (defined in the Dockerfile templated from [Dockerfile.j2](./../ansible/roles/dockerfile/templates/Dockerfile.j2)) contains basic OS dependencies and symbolic links into the development environment that make running the services easy.
+The Ascender base container image (defined in the Dockerfile templated from [Dockerfile.j2](./../ansible/roles/dockerfile/templates/Dockerfile.j2)) contains basic OS dependencies and symbolic links into the development environment that make running the services easy.
 
 Run the following to build the image:
 
@@ -70,16 +70,16 @@ $ make docker-compose-build
 
 > The image will need to be rebuilt if there are any changes to Dockerfile.j2 or any of the files used by the templated Dockerfile.
 
-Once the build completes, you will have a `ansible/awx_devel` image in your local image cache. Use the `docker images` command to view it, as follows:
+Once the build completes, you will have a `ctrliq/ascender_devel` image in your local image cache. Use the `docker images` command to view it, as follows:
 
 ```bash
 (host)$ docker images
 
 REPOSITORY                                   TAG                 IMAGE ID            CREATED             SIZE
-ansible/awx_devel                            latest              ba9ec3e8df74        26 minutes ago      1.42GB
+ctrliq/ascender_devel                            latest              ba9ec3e8df74        26 minutes ago      1.42GB
 ```
 
-> By default, this image will be tagged with your branch name. You can specify a custom tag by setting an environment variable, for example: `DEVEL_IMAGE_NAME=quay.io/your_user/awx_devel:17.0.1`
+> By default, this image will be tagged with your branch name. You can specify a custom tag by setting an environment variable, for example: `DEVEL_IMAGE_NAME=quay.io/your_user/ascender_devel:17.0.1`
 
 #### Customizing the Receptor Image
 
@@ -96,7 +96,7 @@ If you need to create a new receptor image, you can check out receptor and build
 CONTAINERCMD=docker TAG=quay.io/ansible/receptor:release_1.1 make container
 ```
 
-Then that can be used by AWX like this:
+Then that can be used by Ascender like this:
 
 ```bash
 export RECEPTOR_IMAGE=quay.io/ansible/receptor:release_1.1
@@ -104,7 +104,7 @@ make docker-compose-build
 make docker-compose
 ```
 
-### Run AWX
+### Run Ascender
 
 ##### Start the containers
 
@@ -122,12 +122,12 @@ $ make docker-compose
 
 If you have encountered the infinitely-repeating `Waiting for postgres to be ready to accept connections` message during the execution, try to do the following:
 
-1. Stop and delete AWX-related docker containers.
+1. Stop and delete Ascender-related docker containers.
 2. Delete all associated docker volumes.
 3. Delete all associated docker networks.
 4. Repeat the process from scratch.
 
-If you have **only** AWX-related container entities in your system, you can simply stop and delete everything using the following commands:
+If you have **only** Ascender-related container entities in your system, you can simply stop and delete everything using the following commands:
 
 ```bash
 docker stop $(docker ps -a -q)
@@ -140,7 +140,7 @@ docker network prune
 
 A cluster (of containers) with execution nodes and a hop node can be created by the docker-compose Makefile target.
 By default, it will create 1 hybrid node.
-You can switch the type of AWX nodes between hybrid and control with `MAIN_NODE_TYPE`.
+You can switch the type of Ascender nodes between hybrid and control with `MAIN_NODE_TYPE`.
 
 ```
 MAIN_NODE_TYPE=control EXECUTION_NODE_COUNT=2 COMPOSE_TAG=devel make docker-compose
@@ -156,14 +156,14 @@ CONTROL_PLANE_NODE_COUNT=2 EXECUTION_NODE_COUNT=3 COMPOSE_TAG=devel make docker-
 ```
 
 This will spin up a topology represented below.
-(names are the receptor node names, which differ from the AWX Instance names and network address in some cases)
+(names are the receptor node names, which differ from the Ascender Instance names and network address in some cases)
 
 ```
                                             ┌──────────────┐
                                             │              │
 ┌──────────────┐                 ┌──────────┤  receptor-1  │
 │              │                 │          │              │
-│    awx_1     │◄──────────┐     │          └──────────────┘
+│    ascender_1     │◄──────────┐     │          └──────────────┘
 │              │           │     ▼
 └──────┬───────┘    ┌──────┴───────┐        ┌──────────────┐
        │            │              │        │              │
@@ -171,7 +171,7 @@ This will spin up a topology represented below.
        ▼            │              │        │              │
 ┌──────────────┐    └──────────────┘        └──────────────┘
 │              │                 ▲
-│    awx_2     │                 │          ┌──────────────┐
+│    ascender_2     │                 │          ┌──────────────┐
 │              │                 │          │              │
 └──────────────┘                 └──────────┤  receptor-3  │
                                             │              │
@@ -179,11 +179,11 @@ This will spin up a topology represented below.
 ```
 
 All execution (`receptor-*`) nodes connect to the hop node.
-Only the `awx_1` node connects to the hop node out of the AWX cluster.
-`awx_1` connects to `awx_2`, fulfilling the requirement that the AWX cluster is fully connected.
+Only the `ascender_1` node connects to the hop node out of the Ascender cluster.
+`ascender_1` connects to `ascender_2`, fulfilling the requirement that the Ascender cluster is fully connected.
 
-For example, if a job is launched with `awx_2` as the `controller_node` and `receptor-3` as the `execution_node`,
-then `awx_2` communicates to `receptor-3` via `awx_1` and then `receptor-hop`.
+For example, if a job is launched with `ascender_2` as the `controller_node` and `receptor-3` as the `execution_node`,
+then `ascender_2` communicates to `receptor-3` via `ascender_1` and then `receptor-hop`.
 
 
 ##### Wait for migrations to complete
@@ -191,37 +191,37 @@ then `awx_2` communicates to `receptor-3` via `awx_1` and then `receptor-hop`.
 The first time you start the environment, database migrations need to run in order to build the PostgreSQL database. It will take few moments, but eventually you will see output in your terminal session that looks like the following:
 
 ```bash
-awx_1        | Operations to perform:
-awx_1        |   Synchronize unmigrated apps: solo, api, staticfiles, debug_toolbar, messages, channels, ui, rest_framework, polymorphic
-awx_1        |   Apply all migrations: sso, taggit, sessions, sites, kombu_transport_django, social_auth, contenttypes, auth, conf, main
-awx_1        | Synchronizing apps without migrations:
-awx_1        |   Creating tables...
-awx_1        |     Running deferred SQL...
-awx_1        |   Installing custom SQL...
-awx_1        | Running migrations:
-awx_1        |   Rendering model states... DONE
-awx_1        |   Applying contenttypes.0001_initial... OK
-awx_1        |   Applying contenttypes.0002_remove_content_type_name... OK
-awx_1        |   Applying auth.0001_initial... OK
+ascender_1        | Operations to perform:
+ascender_1        |   Synchronize unmigrated apps: solo, api, staticfiles, debug_toolbar, messages, channels, ui, rest_framework, polymorphic
+ascender_1        |   Apply all migrations: sso, taggit, sessions, sites, kombu_transport_django, social_auth, contenttypes, auth, conf, main
+ascender_1        | Synchronizing apps without migrations:
+ascender_1        |   Creating tables...
+ascender_1        |     Running deferred SQL...
+ascender_1        |   Installing custom SQL...
+ascender_1        | Running migrations:
+ascender_1        |   Rendering model states... DONE
+ascender_1        |   Applying contenttypes.0001_initial... OK
+ascender_1        |   Applying contenttypes.0002_remove_content_type_name... OK
+ascender_1        |   Applying auth.0001_initial... OK
 ...
 ```
 
 ##### Clean and build the UI
 
 ```bash
-$ docker exec tools_awx_1 make clean-ui ui-devel
+$ docker exec tools_ascender_1 make clean-ui ui-devel
 ```
 
-See [the ui development documentation](../../awx/ui/README.md) for more information on using the frontend development, build, and test tooling.
+See [the ui development documentation](../../ascender/ui/README.md) for more information on using the frontend development, build, and test tooling.
 
-Once migrations are completed and the UI is built, you can begin using AWX. The UI can be reached in your browser at `https://localhost:8043/#/home`, and the API can be found at `https://localhost:8043/api/v2`.
+Once migrations are completed and the UI is built, you can begin using Ascender. The UI can be reached in your browser at `https://localhost:8043/#/home`, and the API can be found at `https://localhost:8043/api/v2`.
 
 ##### Create an admin user
 
-Before you can log into AWX, you need to create an admin user. With this user you will be able to create more users, and begin configuring the server. From within the container shell, run the following command:
+Before you can log into Ascender, you need to create an admin user. With this user you will be able to create more users, and begin configuring the server. From within the container shell, run the following command:
 
 ```bash
-$ docker exec -ti tools_awx_1 awx-manage createsuperuser
+$ docker exec -ti tools_ascender_1 ascender-manage createsuperuser
 ```
 
 > Remember the username and password, as you will use them to log into the web interface for the first time.
@@ -231,7 +231,7 @@ $ docker exec -ti tools_awx_1 awx-manage createsuperuser
 Optionally, you may also want to load some demo data. This will create a demo project, inventory, and job template.
 
 ```bash
-$ docker exec tools_awx_1 awx-manage create_preload_data
+$ docker exec tools_ascender_1 ascender-manage create_preload_data
 ```
 
 > This information will persist in the database running in the `tools_postgres_1` container, until the container is removed. You may periodically need to recreate
@@ -246,7 +246,7 @@ migrate your data to the development environment via the migrate.yml playbook us
 
 Upgrading AWX involves checking out the new source code and re-running the make target. Download a newer release from [https://github.com/ansible/awx/releases](https://github.com/ansible/awx/releases) and re-populate the inventory file with your customized variables.
 
-After updating the inventory file with any custom values, run the make target from the root of your AWX clone.
+After updating the inventory file with any custom values, run the make target from the root of your Ascender clone.
 
 ```bash
 $ make docker-compose
@@ -255,7 +255,7 @@ $ make docker-compose
 ## Extras
 
 - [Start a shell](#start-a-shell)
-- [Start AWX from the container shell](#start-awx-from-the-container-shell)
+- [Start Ascender from the container shell](#start-ascender-from-the-container-shell)
 - [Start a Cluster](#start-a-cluster)
 - [Start with Minikube](#start-with-minikube)
 - [SAML and OIDC Integration](#saml-and-oidc-integration)
@@ -264,15 +264,15 @@ $ make docker-compose
 
 ### Start a Shell
 
-To run `awx-manage` commands and modify things inside the container, you will want to start a shell session on the _awx_ container. In a new terminal session, use the `docker exec` command to start the shell session:
+To run `ascender-manage` commands and modify things inside the container, you will want to start a shell session on the _awx_ container. In a new terminal session, use the `docker exec` command to start the shell session:
 
 ```bash
-(host)$ docker exec -it tools_awx_1 bash
+(host)$ docker exec -it tools_ascender_1 bash
 ```
 
 This creates a session in the _awx_ containers, just as if you were using `ssh`, and allows you execute commands within the running container.
 
-### Start AWX from the container shell
+### Start Ascender from the container shell
 
 Often times you'll want to start the development environment without immediately starting all of the services in the _awx_ container, and instead be taken directly to a shell. You can do this with the following:
 
@@ -302,19 +302,19 @@ need to call `bootstrap_development.sh` first.
 
 ### Start a Cluster
 
-Certain features or bugs are only applicable when running a cluster of AWX nodes. To bring up a 3 node cluster development environment simply run the below command.
+Certain features or bugs are only applicable when running a cluster of Ascender nodes. To bring up a 3 node cluster development environment simply run the below command.
 
 ```bash
 (host)$ CONTROL_PLANE_NODE_COUNT=3 make docker-compose
 ```
 
-`CONTROL_PLANE_NODE_COUNT` is configurable and defaults to 1, effectively a non-clustered AWX.
+`CONTROL_PLANE_NODE_COUNT` is configurable and defaults to 1, effectively a non-clustered Ascender.
 
-Note that you may see multiple messages of the form `2021-03-04 20:11:47,666 WARNING [-] awx.main.wsrelay Connection from awx_2 to awx_5 failed: 'Cannot connect to host awx_5:8013 ssl:False [Name or service not known]'.`. This can happen when you bring up a cluster of many nodes, say 10, then you bring up a cluster of less nodes, say 3. In this example, there will be 7 `Instance` records in the database that represent AWX instances. The AWX development environment mimics the VM deployment (vs. kubernetes) and expects the missing nodes to be brought back to healthy by the admin. The warning message you are seeing is all of the AWX nodes trying to connect the websocket backplane. You can manually delete the `Instance` records from the database i.e. `Instance.objects.get(hostname='awx_9').delete()` to stop the warnings.
+Note that you may see multiple messages of the form `2021-03-04 20:11:47,666 WARNING [-] ascender.main.wsrelay Connection from ascender_2 to ascender_5 failed: 'Cannot connect to host ascender_5:8013 ssl:False [Name or service not known]'.`. This can happen when you bring up a cluster of many nodes, say 10, then you bring up a cluster of less nodes, say 3. In this example, there will be 7 `Instance` records in the database that represent Ascender instances. The Ascender development environment mimics the VM deployment (vs. kubernetes) and expects the missing nodes to be brought back to healthy by the admin. The warning message you are seeing is all of the Ascender nodes trying to connect the websocket backplane. You can manually delete the `Instance` records from the database i.e. `Instance.objects.get(hostname='ascender_9').delete()` to stop the warnings.
 
 ### Start with Minikube
 
-To bring up a 1 node AWX + minikube that is accessible from AWX run the following.
+To bring up a 1 node Ascender + minikube that is accessible from Ascender run the following.
 
 Start minikube
 
@@ -322,7 +322,7 @@ Start minikube
 (host)$minikube start --cpus=4  --memory=8g --addons=ingress
 ```
 
-Start AWX
+Start Ascender
 
 ```bash
 (host)$ make docker-compose-container-group
@@ -341,7 +341,7 @@ If you want to clean all things once your are done, you can do:
 ```
 
 ### SAML and OIDC Integration
-Keycloak can be used as both a SAML and OIDC provider and can be used to test AWX social auth. This section describes how to build a reference Keycloak instance and plumb it with AWX for testing purposes.
+Keycloak can be used as both a SAML and OIDC provider and can be used to test Ascender social auth. This section describes how to build a reference Keycloak instance and plumb it with Ascender for testing purposes.
 
 First, be sure that you have the ctrliq.ascender collection installed by running `make install_collection`.
 Next, make sure you have your containers running by running `make docker-compose`.
@@ -370,7 +370,7 @@ docker run --rm -e KEYCLOAK_USER=admin -e KEYCLOAK_PASSWORD=admin --net=_sources
 
 Once you see a message like: `WFLYSRV0051: Admin console listening on http://127.0.0.1:9990` you can stop the container.
 
-Now that we have performed the one time setup anytime you want to run a Keycloak instance alongside AWX we can start docker-compose with the KEYCLOAK option to get a Keycloak instance with the command:
+Now that we have performed the one time setup anytime you want to run a Keycloak instance alongside Ascender we can start docker-compose with the KEYCLOAK option to get a Keycloak instance with the command:
 ```bash
 KEYCLOAK=true make docker-compose
 ```
@@ -379,30 +379,30 @@ Go ahead and stop your existing docker-compose run and restart with Keycloak bef
 
 Once the containers come up a new port (8443) should be exposed and the Keycloak interface should be running on that port. Connect to this through a url like `https://localhost:8443` to confirm that Keycloak has stared. If you wanted to login and look at Keycloak itself you could select the "Administration console" link and log into the UI the username/password set in the previous `docker run` command. For more information about Keycloak and links to their documentation see their project at https://github.com/keycloak/keycloak.
 
-Now we are ready to configure and plumb Keycloak with AWX. To do this we have provided a playbook which will:
-* Create a certificate for SAML data exchange between Keycloak and AWX.
-* Create a realm in Keycloak with a client for AWX via SAML and OIDC and 3 users.
-* Backup and configure the SMAL and OIDC adapter in AWX. NOTE: the private key of any existing SAML or OIDC adapters can not be backed up through the API, you need a DB backup to recover this.
+Now we are ready to configure and plumb Keycloak with Ascender. To do this we have provided a playbook which will:
+* Create a certificate for SAML data exchange between Keycloak and Ascender.
+* Create a realm in Keycloak with a client for Ascender via SAML and OIDC and 3 users.
+* Backup and configure the SMAL and OIDC adapter in Ascender. NOTE: the private key of any existing SAML or OIDC adapters can not be backed up through the API, you need a DB backup to recover this.
 
-Before we can run the playbook we need to understand that SAML works by sending redirects between AWX and Keycloak through the browser. Because of this we have to tell both AWX and Keycloak how they will construct the redirect URLs. On the Keycloak side, this is done within the realm configuration and on the AWX side its done through the SAML settings. The playbook requires a variable called `container_reference` to be set. The container_reference variable needs to be how your browser will be able to talk to the running containers.  Here are some examples of how to choose a proper container_reference.
-* If you develop on a mac which runs a Fedora VM which has AWX running within that and the browser you use to access AWX runs on the mac. The the VM with the container has its own IP that is mapped to a name like `tower.home.net`. In this scenario your "container_reference" could be either the IP of the VM or the tower.home.net friendly name.
-* If you are on a Fedora work station running AWX and also using a browser on your workstation you could use localhost, your work stations IP or hostname as the container_reference.
+Before we can run the playbook we need to understand that SAML works by sending redirects between Ascender and Keycloak through the browser. Because of this we have to tell both Ascender and Keycloak how they will construct the redirect URLs. On the Keycloak side, this is done within the realm configuration and on the Ascender side its done through the SAML settings. The playbook requires a variable called `container_reference` to be set. The container_reference variable needs to be how your browser will be able to talk to the running containers.  Here are some examples of how to choose a proper container_reference.
+* If you develop on a mac which runs a Fedora VM which has Ascender running within that and the browser you use to access Ascender runs on the mac. The the VM with the container has its own IP that is mapped to a name like `tower.home.net`. In this scenario your "container_reference" could be either the IP of the VM or the tower.home.net friendly name.
+* If you are on a Fedora work station running Ascender and also using a browser on your workstation you could use localhost, your work stations IP or hostname as the container_reference.
 
-In addition, OIDC works similar but slightly differently. OIDC has browser redirection but OIDC will also communicate from the AWX docker instance to the Keycloak docker instance directly. Any hostnames you might have are likely not propagated down into the AWX container. So we need a method for both the browser and AWX container to talk to Keycloak. For this we will likely use your machines IP address. This can be passed in as a variable called `oidc_reference`. If unset this will default to container_reference which may be viable for some configurations.
+In addition, OIDC works similar but slightly differently. OIDC has browser redirection but OIDC will also communicate from the Ascender docker instance to the Keycloak docker instance directly. Any hostnames you might have are likely not propagated down into the Ascender container. So we need a method for both the browser and Ascender container to talk to Keycloak. For this we will likely use your machines IP address. This can be passed in as a variable called `oidc_reference`. If unset this will default to container_reference which may be viable for some configurations.
 
 In addition to container_reference, there are some additional variables which you can override if you need/choose to do so. Here are their names and default values:
 ```yaml
     keycloak_user: admin
     keycloak_pass: admin
-    cert_subject:  "/C=US/ST=NC/L=Durham/O=awx/CN="
+    cert_subject:  "/C=US/ST=NC/L=Durham/O=ascender/CN="
 ```
 
 * keycloak_(user|pass) need to change if you modified the user when starting the initial container above.
-* cert_subject will be the subject line of the certificate shared between AWX and keycloak you can change this if you like or just use the defaults.
+* cert_subject will be the subject line of the certificate shared between Ascender and keycloak you can change this if you like or just use the defaults.
 
 To override any of the variables above you can add more `-e` arguments to the playbook run below. For example, if you simply need to change the `keycloak_pass` add the argument `-e keycloak_pass=my_secret_pass` to the following ansible-playbook command.
 
-In addition, you may need to override the username or password to get into your AWX instance. We log into AWX in order to read and write the SAML and OIDC settings. This can be done in several ways because we are using the ctrliq.ascender collection. The easiest way is to set environment variables such as `CONTROLLER_USERNAME`. See the ctrliq.ascender documentation for more information on setting environment variables. In the example provided below we are showing an example of specifying a username/password for authentication.
+In addition, you may need to override the username or password to get into your Ascender instance. We log into Ascender in order to read and write the SAML and OIDC settings. This can be done in several ways because we are using the ctrliq.ascender collection. The easiest way is to set environment variables such as `CONTROLLER_USERNAME`. See the ctrliq.ascender documentation for more information on setting environment variables. In the example provided below we are showing an example of specifying a username/password for authentication.
 
 Now that we have all of our variables covered we can run the playbook like:
 ```bash
@@ -416,27 +416,27 @@ Once the playbook is done running both SAML and OIDC should now be setup in your
 2. awx_admin:admin123
 3. awx_auditor:audit123
 
-The first account is a normal user. The second account has the SMAL attribute is_superuser set in Keycloak so will be a super user in AWX if logged in through SAML. The third account has the SAML is_system_auditor attribute in Keycloak so it will be a system auditor in AWX if logged in through SAML. To log in with one of these Keycloak users go to the AWX login screen and click the small "Sign In With SAML Keycloak" button at the bottom of the login box.
+The first account is a normal user. The second account has the SMAL attribute is_superuser set in Keycloak so will be a super user in Ascender if logged in through SAML. The third account has the SAML is_system_auditor attribute in Keycloak so it will be a system auditor in Ascender if logged in through SAML. To log in with one of these Keycloak users go to the Ascender login screen and click the small "Sign In With SAML Keycloak" button at the bottom of the login box.
 
-Note: The OIDC adapter performs authentication only, not authorization. So any user created in AWX will not have any permissions on it at all.
+Note: The OIDC adapter performs authentication only, not authorization. So any user created in Ascender will not have any permissions on it at all.
 
-If you Keycloak configuration is not working and you need to rerun the playbook to try a different `container_reference` or `oidc_reference` you can log into the Keycloak admin console on port 8443 and select the AWX realm in the upper left drop down. Then make sure you are on "Ream Settings" in the Configure menu option and click the trash can next to AWX in the main page window pane. This will completely remove the AWX ream (which has both SAML and OIDC settings) enabling you to re-run the plumb playbook.
+If you Keycloak configuration is not working and you need to rerun the playbook to try a different `container_reference` or `oidc_reference` you can log into the Keycloak admin console on port 8443 and select the Ascender realm in the upper left drop down. Then make sure you are on "Ream Settings" in the Configure menu option and click the trash can next to Ascender in the main page window pane. This will completely remove the Ascender ream (which has both SAML and OIDC settings) enabling you to re-run the plumb playbook.
 
 ### OpenLDAP Integration
 
-OpenLDAP is an LDAP provider that can be used to test AWX with LDAP integration. This section describes how to build a reference OpenLDAP instance and plumb it with your AWX for testing purposes.
+OpenLDAP is an LDAP provider that can be used to test Ascender with LDAP integration. This section describes how to build a reference OpenLDAP instance and plumb it with your Ascender for testing purposes.
 
 First, be sure that you have the ctrliq.ascender collection installed by running `make install_collection`.
 
-Anytime you want to run an OpenLDAP instance alongside AWX we can start docker-compose with the LDAP option to get an LDAP instance with the command:
+Anytime you want to run an OpenLDAP instance alongside Ascender we can start docker-compose with the LDAP option to get an LDAP instance with the command:
 ```bash
 LDAP=true make docker-compose
 ```
 
 Once the containers come up two new ports (389, 636) should be exposed and the LDAP server should be running on those ports. The first port (389) is non-SSL and the second port (636) is SSL enabled.
 
-Now we are ready to configure and plumb OpenLDAP with AWX. To do this we have provided a playbook which will:
-* Backup and configure the LDAP adapter in AWX. NOTE: this will back up your existing settings but the password fields can not be backed up through the API, you need a DB backup to recover this.
+Now we are ready to configure and plumb OpenLDAP with Ascender. To do this we have provided a playbook which will:
+* Backup and configure the LDAP adapter in Ascender. NOTE: this will back up your existing settings but the password fields can not be backed up through the API, you need a DB backup to recover this.
 
 Note: The default configuration will utilize the non-tls connection. If you want to use the tls configuration you will need to work through TLS negotiation issues because the LDAP server is using a self signed certificate.
 
@@ -454,24 +454,24 @@ Once the playbook is done running LDAP should now be setup in your development e
 3. awx_ldap_auditor:audit123
 4. awx_ldap_org_admin:orgadmin123
 
-The first account is a normal user. The second account will be a super user in AWX. The third account will be a system auditor in AWX. The fourth account is an org admin. All users belong to an org called "LDAP Organization". To log in with one of these users go to the AWX login screen enter the username/password.
+The first account is a normal user. The second account will be a super user in Ascender. The third account will be a system auditor in Ascender. The fourth account is an org admin. All users belong to an org called "LDAP Organization". To log in with one of these users go to the Ascender login screen enter the username/password.
 
 
 ### - tacacs+ Integration
 
-tacacs+ is an networking protocol that provides external authentication which can be used with AWX. This section describes how to build a reference tacacs+ instance and plumb it with your AWX for testing purposes.
+tacacs+ is an networking protocol that provides external authentication which can be used with Ascender. This section describes how to build a reference tacacs+ instance and plumb it with your Ascender for testing purposes.
 
 First, be sure that you have the ctrliq.ascender collection installed by running `make install_collection`.
 
-Anytime you want to run a tacacs+ instance alongside AWX we can start docker-compose with the TACACS option to get a containerized instance with the command:
+Anytime you want to run a tacacs+ instance alongside Ascender we can start docker-compose with the TACACS option to get a containerized instance with the command:
 ```bash
 TACACS=true make docker-compose
 ```
 
 Once the containers come up a new port (49) should be exposed and the tacacs+ server should be running on those ports.
 
-Now we are ready to configure and plumb tacacs+ with AWX. To do this we have provided a playbook which will:
-* Backup and configure the tacacsplus adapter in AWX. NOTE: this will back up your existing settings but the password fields can not be backed up through the API, you need a DB backup to recover this.
+Now we are ready to configure and plumb tacacs+ with Ascender. To do this we have provided a playbook which will:
+* Backup and configure the tacacsplus adapter in Ascender. NOTE: this will back up your existing settings but the password fields can not be backed up through the API, you need a DB backup to recover this.
 
 ```bash
 export CONTROLLER_USERNAME=<your username>
@@ -483,7 +483,7 @@ Once the playbook is done running tacacs+ should now be setup in your developmen
 
 ### HashiVault Integration
 
-Run a HashiVault container alongside of AWX.
+Run a HashiVault container alongside of Ascender.
 
 ```bash
 VAULT=true make docker-compose
@@ -502,14 +502,14 @@ This will perform the unseal and also display the root token for login.
 For demo purposes, Vault will be auto-configured to include a Key Value (KV) vault called `my_engine` along with a secret called `my_key` in `/my_engine/my_root/my_folder`.
 The secret value is `this_is_the_secret_value`.
 
-To create a secret connected to this vault in AWX you can run the following playbook:
+To create a secret connected to this vault in Ascender you can run the following playbook:
 ```bash
 export CONTROLLER_USERNAME=<your username>
 export CONTROLLER_PASSWORD=<your password>
 ansible-playbook tools/docker-compose/ansible/plumb_vault.yml -e enable_ldap=false
 ```
 
-This will create the following items in your AWX instance:
+This will create the following items in your Ascender instance:
 * A credential called `Vault Lookup Cred` tied to the vault instance.
 * A credential called `Vault UserPass Lookup Cred` tied to the vault instance.
 * A custom credential type called `Vault Custom Cred Type`.
@@ -529,11 +529,11 @@ If you have a playbook like:
         var: the_secret_from_vault
 ```
 
-And run it through AWX with the credential `Credential From Vault via Token Auth` tied to it, the debug should result in `this_is_the_secret_value`. If you run it through AWX with the credential `Credential From Vault via Userpass Auth`, the debug should result in `this_is_the_userpass_secret_value`. 
+And run it through Ascender with the credential `Credential From Vault via Token Auth` tied to it, the debug should result in `this_is_the_secret_value`. If you run it through Ascender with the credential `Credential From Vault via Userpass Auth`, the debug should result in `this_is_the_userpass_secret_value`. 
 
 ### HashiVault with LDAP
 
-If you wish to have your OpenLDAP container connected to the Vault container, you will first need to have the OpenLDAP container running alongside AWX and Vault. 
+If you wish to have your OpenLDAP container connected to the Vault container, you will first need to have the OpenLDAP container running alongside Ascender and Vault. 
 
 
 ```bash
@@ -563,12 +563,12 @@ ansible-playbook tools/docker-compose/ansible/plumb_vault.yml -e enable_ldap=tru
 
 ```
 
-This will populate your AWX instance with LDAP specific items. 
+This will populate your Ascender instance with LDAP specific items. 
 
 - A vault LDAP Lookup Cred tied to the LDAP `awx_ldap_vault` user called `Vault LDAP Lookup Cred`
 - A credential called `Credential From HashiCorp Vault via LDAP Auth`  which is of the created type using the `Vault LDAP Lookup Cred` to get the secret.
 
-And run it through AWX with the credential `Credential From HashiCorp Vault via LDAP Auth` tied to it, the debug should result in `this_is_the_ldap_secret_value`.
+And run it through Ascender with the credential `Credential From HashiCorp Vault via LDAP Auth` tied to it, the debug should result in `this_is_the_ldap_secret_value`.
 
 The extremely non-obvious input is the fact that the fact prefixes "data/" unexpectedly.
 This was discovered by inspecting the secret with the vault CLI, which may help with future troubleshooting.

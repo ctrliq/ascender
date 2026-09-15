@@ -25,8 +25,8 @@ def write_hash(f, h):
 
 
 def main():
-    settings_file = "/etc/tower/settings.py"
-    hash_file = "/var/lib/awx/.configsha"
+    settings_file = "/etc/ascender/settings.py"
+    hash_file = "/var/lib/ascender/.configsha"
 
     while 1:
         rpc = childutils.getRPCInterface(os.environ)
@@ -50,7 +50,7 @@ def main():
                     group = proc['group']
                     name = proc['name']
                     program = "{}:{}".format(group, name)
-                    if group == "tower-processes":
+                    if group == "ascender-processes":
                         sys.stderr.write('Restarting %s\n' % program)
                         rpc.supervisor.stopProcess(program)
                         rpc.supervisor.startProcess(program)

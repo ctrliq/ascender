@@ -4,7 +4,7 @@ Much of the code in Ascender around ansible and `ansible-playbook` invocation ha
 
 ### Lifecycle
 
-In Ascender, a task of a certain job type is kicked off (_i.e._, RunJob, RunProjectUpdate, RunInventoryUpdate, etc.) in `awx/main/tasks/jobs.py`. A temp directory is built to house `ansible-runner` parameters (_i.e._, `envvars`, `cmdline`, `extravars`, etc.). The `temp` directory is filled with the various concepts in Ascender (_i.e._, `ssh` keys, `extra vars`, etc.). The code then builds a set of parameters to be passed to the `ansible-runner` Python module interface, `ansible-runner.interface.run()`. This is where Ascender passes control to `ansible-runner`. Feedback is gathered by Ascender via callbacks and handlers passed in.
+In Ascender, a task of a certain job type is kicked off (_i.e._, RunJob, RunProjectUpdate, RunInventoryUpdate, etc.) in `ascender/main/tasks/jobs.py`. A temp directory is built to house `ansible-runner` parameters (_i.e._, `envvars`, `cmdline`, `extravars`, etc.). The `temp` directory is filled with the various concepts in Ascender (_i.e._, `ssh` keys, `extra vars`, etc.). The code then builds a set of parameters to be passed to the `ansible-runner` Python module interface, `ansible-runner.interface.run()`. This is where Ascender passes control to `ansible-runner`. Feedback is gathered by Ascender via callbacks and handlers passed in.
 
 The callbacks and handlers are:
 * `event_handler`: Called each time a new event is created in `ansible-runner`. Ascender will dispatch the event to `valkey` to be processed on the other end by the callback receiver.

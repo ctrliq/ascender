@@ -10,7 +10,7 @@ Note: This environment has only been tested on Linux.
 ```
 $ minikube start \
     --mount \
-    --mount-string="/path/to/awx:/awx_devel" \
+    --mount-string="/path/to/awx:/ascender_devel" \
     --cpus=4 \
     --memory=8g \
     --addons=ingress
@@ -22,7 +22,7 @@ Ensure that your Ascender source code is properly mounted inside of the minikube
 
 ```
 $ minikube ssh
-$ ls -la /awx_devel
+$ ls -la /ascender_devel
 ```
 
 ## Deploy the AWX Operator
@@ -61,7 +61,7 @@ In the root of awx-operator:
 ```
 $ ansible-playbook ansible/instantiate-awx-deployment.yml \
     -e development_mode=yes \
-    -e image=ghcr.io/ansible/awx_kube_devel \
+    -e image=ghcr.io/ansible/ascender_kube_devel \
     -e image_version=devel \
     -e image_pull_policy=Always \
     -e service_type=nodeport \
@@ -92,8 +92,8 @@ registry:
 In the root of the Ascender repo:
 
 ```
-$ make awx-kube-dev-build
-$ docker push ghcr.io/ansible/awx_kube_devel:${COMPOSE_TAG}
+$ make ascender-kube-dev-build
+$ docker push ghcr.io/ansible/ascender_kube_devel:${COMPOSE_TAG}
 ```
 
 In the root of awx-operator:
@@ -101,7 +101,7 @@ In the root of awx-operator:
 ```
 $ ansible-playbook ansible/instantiate-awx-deployment.yml \
     -e development_mode=yes \
-    -e image=ghcr.io/ansible/awx_kube_devel \
+    -e image=ghcr.io/ansible/ascender_kube_devel \
     -e image_version=${COMPOSE_TAG} \
     -e image_pull_policy=Always \
     -e service_type=nodeport \

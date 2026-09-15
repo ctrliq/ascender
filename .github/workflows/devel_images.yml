@@ -21,12 +21,12 @@ jobs:
       fail-fast: false
       matrix:
         build-targets:
-          - image-name: awx_devel
+          - image-name: ascender_devel
             make-target: docker-compose-buildx
-          #- image-name: awx_kube_devel
-          #  make-target: awx-kube-dev-buildx
+          #- image-name: ascender_kube_devel
+          #  make-target: ascender-kube-dev-buildx
           #- image-name: awx
-          #  make-target: awx-kube-buildx
+          #  make-target: ascender-kube-buildx
     steps:
       - name: Skipping build of Ascender image for non-Ascender repository
         run: |
@@ -77,11 +77,11 @@ jobs:
             -e registry=ghcr.io \
             -e registry_username=${{ github.actor }} \
             -e registry_password=${{ secrets.GITHUB_TOKEN }} \
-            -e awx_image=${{ github.repository }}_devel \
-            -e awx_version=${{ steps.date.outputs.year }}.${{ steps.date.outputs.month }}.${{ steps.date.outputs.day }}+git${{ steps.short-sha.outputs.sha }} \
+            -e ascender_image=${{ github.repository }}_devel \
+            -e ascender_version=${{ steps.date.outputs.year }}.${{ steps.date.outputs.month }}.${{ steps.date.outputs.day }}+git${{ steps.short-sha.outputs.sha }} \
             -e ansible_python_interpreter=$(which python3) \
             -e push=yes \
-            -e awx_official=no \
+            -e ascender_official=no \
             -e build_platforms=linux/amd64 \
             -e "build_cache_from=type=gha,scope=${{ github.repository }}-devel" \
             -e "build_cache_to=type=gha,scope=${{ github.repository }}-devel,mode=max"

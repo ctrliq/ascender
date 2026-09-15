@@ -14,7 +14,7 @@ for c in ';/?:@=&[]':
 
 
 def _get_named_url_graph(url, auth):
-    """Get the graph data structure AWX used to manage all named URLs.
+    """Get the graph data structure Ascender uses to manage all named URLs.
 
     Args:
         url: String representing the URL of tower configuration endpoint where
@@ -80,7 +80,7 @@ def _get_named_url_identifier(url, named_url_graph, resource, tower_host, auth, 
             component from.
         named_url_graph: The graph structure used to DFS against.
         resource: Key name of the current graph node.
-        tower_host: String representing the host name of AWX backend.
+        tower_host: String representing the host name of Ascender backend.
         auth: Tuple of username + password to authenticate connection to AWX.
         ret: list of strings storing components that would later be joined into
             the final named URL identifier.
@@ -107,7 +107,7 @@ def main(username=None, password=None, tower_host=None, resource=None, pk=None):
     Args:
         username: String representing the username needed to authenticating AWX.
         password: String representing the password needed to authenticating AWX.
-        tower_host: String representing the host name of AWX backend.
+        tower_host: String representing the host name of Ascender backend.
         resource: REST API name of a specific resource, e.g. name for resource inventory
             is 'inventories'.
         pk: Primary key of the resource object whose named URL will be derived.
