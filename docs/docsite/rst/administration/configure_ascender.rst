@@ -60,7 +60,7 @@ System
 .. index::
    pair: configuration; system
 
-The System tab allows you to define the base URL for the Ascender host, configure alerts, enable activity capturing, control visibility of users, enable certain Ascender features and functionality through a license file, and configure logging aggregation options.
+The System tab allows you to define the base URL for the Ascender host, configure alerts, enable activity capturing, control visibility of users, and configure logging aggregation options.
 
 1. From the left navigation bar, click **Settings**.
 

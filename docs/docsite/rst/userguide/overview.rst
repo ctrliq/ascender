@@ -252,7 +252,7 @@ Limit the number of hosts per organization
 .. index::
    pair: features; limiting, hosts
 
-Lots of large organizations have instances shared among many organizations. They do not want any one organization to be able to use all the licensed hosts, this feature allows superusers to set a specified upper limit on how many licensed hosts may be allocated to each organization. The Ascender algorithm factors changes in the limit for an organization and the number of total hosts across all organizations. Any inventory updates will fail if an inventory sync brings an organization out of compliance with the policy. Additionally, superusers are able to 'over-allocate' their licenses, with a warning.
+Lots of large organizations have instances shared among many organizations, and do not want any one organization using all the hosts. A superuser can set an upper limit on each organization through its **Max Hosts**, and bulk host creation refuses to take an organization past it.
 
 
 Inventory Plugins

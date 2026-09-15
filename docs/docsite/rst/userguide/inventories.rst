@@ -444,7 +444,7 @@ An example problem is demonstrated here that involves filtering hosts by process
 
 .. note::
 
-  Like with Smart Inventories, hosts in constructed inventories are not counted against your license allotment because they are referencing the original inventory host. Also, hosts that are disabled in the original inventories will not be included in the constructed inventory.
+  Like with Smart Inventories, hosts in constructed inventories are not counted against an organization's host limit, because they reference the original inventory host. Also, hosts that are disabled in the original inventories will not be included in the constructed inventory.
 
 An inventory update ran via ``ansible-inventory`` creates the constructed inventory contents. This is always configured to update-on-launch before a job, but you can still select a cache timeout value in case this takes too long.
 
