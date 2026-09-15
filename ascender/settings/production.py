@@ -15,7 +15,7 @@ from split_settings.tools import optional, include
 
 # Load default settings.
 from .defaults import *  # NOQA
-from awx.settings.environment import environment_setting
+from ascender.settings.environment import environment_setting
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG

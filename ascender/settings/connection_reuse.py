@@ -1,4 +1,4 @@
-from awx.settings.environment import environment_setting
+from ascender.settings.environment import environment_setting
 
 # Django's default is 0: open a connection for each request and close it when
 # the response is sent. For a process that serves one request after another

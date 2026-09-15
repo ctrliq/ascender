@@ -1,4 +1,4 @@
-from awx.settings.environment import environment_setting
+from ascender.settings.environment import environment_setting
 
 # What the uwsgi path used to work out to: harakiri of 115 seconds less a five
 # second margin. uvicorn serves the web process now and uwsgi is no longer

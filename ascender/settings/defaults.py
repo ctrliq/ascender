@@ -14,7 +14,7 @@ from datetime import timedelta
 
 # python-ldap
 import ldap
-from awx.settings.environment import environment_setting
+from ascender.settings.environment import environment_setting
 
 DEBUG = True
 SQL_DEBUG = DEBUG

@@ -13,7 +13,7 @@ release to move in.
 
 import pytest
 
-from awx.settings.environment import environment_setting
+from ascender.settings.environment import environment_setting
 
 
 @pytest.fixture
