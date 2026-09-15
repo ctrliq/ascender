@@ -244,9 +244,14 @@ class ApiV2ConfigView(APIView):
         )
 
     def delete(self, request):
-        try:
-            settings.LICENSE = {}
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except Exception:
-            # FIX: Log
-            return Response({"error": _("Failed to remove license.")}, status=status.HTTP_400_BAD_REQUEST)
+        """There is no subscription to remove.
+
+        This used to clear the LICENSE setting, a key the conf migrations
+        deleted and this change unregisters. Writing it back would put a row
+        under a name nothing reads. Answered the same way as POST, so a client
+        that removes a licence before installing one is told why.
+        """
+        return Response(
+            {"error": _("Ascender does not use subscriptions. There is no licence to remove.")},
+            status=status.HTTP_400_BAD_REQUEST,
+        )

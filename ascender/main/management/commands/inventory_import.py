@@ -19,39 +19,22 @@ from django.db import connection, transaction
 from django.utils.encoding import smart_str
 
 # DRF error class to distinguish license exceptions
-from rest_framework.exceptions import PermissionDenied
 
 # Ascender inventory imports
-from ascender.main.models.inventory import Inventory, InventorySource, InventoryUpdate, Host
+from ascender.main.models.inventory import Inventory, InventorySource, InventoryUpdate
 from ascender.main.models.jobs import JobHostSummary
 from ascender.main.utils.mem_inventory import MemInventory, dict_to_mem_data
 from ascender.main.utils.safe_yaml import sanitize_jinja
 
 # other Ascender imports
 from ascender.main.models.rbac import batch_role_ancestor_rebuilding
-from ascender.main.utils import ignore_inventory_computed_fields, get_licenser
+from ascender.main.utils import ignore_inventory_computed_fields
 from ascender.main.utils.execution_environments import get_default_execution_environment
 from ascender.main.signals import disable_activity_stream
 from ascender.main.constants import STANDARD_INVENTORY_UPDATE_ENV
 from ascender.main.utils.pglock import advisory_lock
 
 logger = logging.getLogger('awx.main.commands.inventory_import')
-
-LICENSE_EXPIRED_MESSAGE = '''\
-Subscription expired.
-Contact us (https://www.redhat.com/contact) for subscription extension information.'''
-
-LICENSE_NON_EXISTANT_MESSAGE = '''\
-No subscription.
-Contact us (https://www.redhat.com/contact) for subscription information.'''
-
-LICENSE_MESSAGE = '''\
-%(new_count)d instances have been automated, system is subscribed for %(instance_count)d.
-Contact us (https://www.redhat.com/contact) for upgrade information.'''
-
-DEMO_LICENSE_MESSAGE = '''\
-Demo mode free subscription count exceeded. Current automated instances are %(new_count)d, demo mode allows %(instance_count)d.
-Contact us (https://www.redhat.com/contact) for subscription information.'''
 
 
 def functioning_dir(path):
@@ -807,66 +790,6 @@ class Command(BaseCommand):
         self._create_update_group_hosts()
         self._relink_orphaned_job_host_summaries()
 
-    def remote_tower_license_compare(self, local_license_type):
-        # this requires https://github.com/ansible/ansible/pull/52747
-        source_vars = self.all_group.variables
-        remote_license_type = source_vars.get('tower_metadata', {}).get('license_type', None)
-        if remote_license_type is None:
-            raise PermissionDenied('Unexpected Error: Tower inventory plugin missing needed metadata!')
-        if local_license_type != remote_license_type:
-            raise PermissionDenied('Tower server licenses must match: source: {} local: {}'.format(remote_license_type, local_license_type))
-
-    def check_license(self):
-        license_info = get_licenser().validate()
-        local_license_type = license_info.get('license_type', 'UNLICENSED')
-        if local_license_type == 'UNLICENSED':
-            logger.error(LICENSE_NON_EXISTANT_MESSAGE)
-            raise PermissionDenied('No license found!')
-        elif local_license_type == 'open':
-            return
-        instance_count = license_info.get('instance_count', 0)
-        free_instances = license_info.get('free_instances', 0)
-        time_remaining = license_info.get('time_remaining', 0)
-        automated_count = license_info.get('automated_instances', 0)
-        hard_error = license_info.get('trial', False) is True or license_info['instance_count'] == 10
-        if time_remaining <= 0:
-            if hard_error:
-                logger.error(LICENSE_EXPIRED_MESSAGE)
-                raise PermissionDenied("Subscription has expired!")
-            else:
-                logger.warning(LICENSE_EXPIRED_MESSAGE)
-        if free_instances < 0:
-            d = {
-                'new_count': automated_count,
-                'instance_count': instance_count,
-            }
-            if hard_error:
-                logger.error(LICENSE_MESSAGE % d)
-                raise PermissionDenied('Subscription count exceeded!')
-            else:
-                logger.warning(LICENSE_MESSAGE % d)
-
-    def check_org_host_limit(self):
-        license_info = get_licenser().validate()
-        if license_info.get('license_type', 'UNLICENSED') == 'open':
-            return
-
-        org = self.inventory.organization
-        if org is None or org.max_hosts == 0:
-            return
-
-        active_count = Host.objects.org_active_count(org.id)
-        if active_count > org.max_hosts:
-            raise PermissionDenied('Host limit for organization exceeded!')
-
-    def mark_license_failure(self, save=True):
-        self.inventory_update.license_error = True
-        self.inventory_update.save(update_fields=['license_error'])
-
-    def mark_org_limits_failure(self, save=True):
-        self.inventory_update.org_host_limit_error = True
-        self.inventory_update.save(update_fields=['org_host_limit_error'])
-
     def handle(self, *args, **options):
         # Load inventory and related objects from database.
         inventory_name = options.get('inventory_name', None)
@@ -992,19 +915,6 @@ class Command(BaseCommand):
         # (even though inventory_import.Command.handle -- which calls
         # perform_update -- has its own lock, inventory_ID_import)
         with advisory_lock('inventory_{}_perform_update'.format(self.inventory.id)):
-            try:
-                self.check_license()
-            except PermissionDenied as e:
-                self.mark_license_failure(save=True)
-                raise e
-
-            try:
-                # Check the per-org host limits
-                self.check_org_host_limit()
-            except PermissionDenied as e:
-                self.mark_org_limits_failure(save=True)
-                raise e
-
             if settings.SQL_DEBUG:
                 queries_before = len(connection.queries)
 
@@ -1041,43 +951,23 @@ class Command(BaseCommand):
                 self.all_group.debug_tree()
 
             with batch_role_ancestor_rebuilding():
-                # If using with transaction.atomic() with try ... catch,
-                # with transaction.atomic() must be inside the try section of the code as per Django docs
-                try:
-                    # Ensure that this is managed as an atomic SQL transaction,
-                    # and thus properly rolled back if there is an issue.
-                    with transaction.atomic():
-                        # Merge/overwrite inventory into database.
-                        if settings.SQL_DEBUG:
-                            logger.warning('loading into database...')
-                        with ignore_inventory_computed_fields():
-                            if getattr(settings, 'ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC', True):
+                # Ensure that this is managed as an atomic SQL transaction,
+                # and thus properly rolled back if there is an issue.
+                with transaction.atomic():
+                    # Merge/overwrite inventory into database.
+                    if settings.SQL_DEBUG:
+                        logger.warning('loading into database...')
+                    with ignore_inventory_computed_fields():
+                        if getattr(settings, 'ACTIVITY_STREAM_ENABLED_FOR_INVENTORY_SYNC', True):
+                            self.load_into_database()
+                        else:
+                            with disable_activity_stream():
                                 self.load_into_database()
-                            else:
-                                with disable_activity_stream():
-                                    self.load_into_database()
-                            if settings.SQL_DEBUG:
-                                queries_before2 = len(connection.queries)
-                            self.inventory.update_computed_fields()
                         if settings.SQL_DEBUG:
-                            logger.warning('update computed fields took %d queries', len(connection.queries) - queries_before2)
-
-                        # Check if the license is valid.
-                        # If the license is not valid, a CommandError will be thrown,
-                        # and inventory update will be marked as invalid.
-                        # with transaction.atomic() will roll back the changes.
-                        license_fail = True
-                        self.check_license()
-
-                        # Check the per-org host limits
-                        license_fail = False
-                        self.check_org_host_limit()
-                except PermissionDenied as e:
-                    if license_fail:
-                        self.mark_license_failure(save=True)
-                    else:
-                        self.mark_org_limits_failure(save=True)
-                    raise e
+                            queries_before2 = len(connection.queries)
+                        self.inventory.update_computed_fields()
+                    if settings.SQL_DEBUG:
+                        logger.warning('update computed fields took %d queries', len(connection.queries) - queries_before2)
 
                 if settings.SQL_DEBUG:
                     logger.warning('Inventory import completed for %s in %0.1fs', self.inventory_source.name, time.time() - begin)

@@ -398,6 +398,14 @@ export interface paths {
      *     of getting a bare 405.
      */
     post: operations['config_create'];
+    /**
+     * @description There is no subscription to remove.
+     *
+     *     This used to clear the LICENSE setting, a key the conf migrations
+     *     deleted and this change unregisters. Writing it back would put a row
+     *     under a name nothing reads. Answered the same way as POST, so a client
+     *     that removes a licence before installing one is told why.
+     */
     delete: operations['config_destroy'];
     options?: never;
     head?: never;
@@ -14214,10 +14222,6 @@ export interface components {
        * @default []
        */
       CSRF_TRUSTED_ORIGINS: string[];
-      /** @description The license controls which features and functionality are enabled. Use /api/v2/config/ to update or change the license. */
-      readonly LICENSE: {
-        [key: string]: unknown;
-      };
       /**
        * Unique identifier for an installation
        * @default 00000000-0000-0000-0000-000000000000

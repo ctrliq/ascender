@@ -17,7 +17,7 @@ from ascender.dab.lib.utils.models import prevent_search
 
 # Ascender
 from ascender.main.models.rbac import Role, RoleAncestorEntry
-from ascender.main.utils import parse_yaml_or_json, get_licenser, polymorphic
+from ascender.main.utils import parse_yaml_or_json, polymorphic
 from ascender.main.utils.execution_environments import get_default_execution_environment
 from ascender.main.utils.encryption import decrypt_value, get_encryption_key, is_encrypted
 from ascender.main.utils.polymorphic import build_polymorphic_ctypes_map
@@ -37,6 +37,13 @@ __all__ = [
     'TaskManagerInventoryUpdateMixin',
     'ExecutionEnvironmentMixin',
 ]
+
+#: What a commit status posted back to GitHub, GitLab or Bitbucket is labelled
+#: with. It used to be 'ansible/awx' or 'ansible/tower' depending on the licence
+#: type, and the open branch is the one that is left. Named here rather than
+#: written at both call sites because it is a string other people's branch
+#: protection rules match on, so moving it is a decision rather than a rename.
+WEBHOOK_STATUS_CONTEXT = 'ansible/awx'
 
 
 class ResourceMixin(models.Model):
@@ -670,17 +677,16 @@ class WebhookMixin(models.Model):
             logger.debug("Skipping webhook job status change: '{}'".format(status))
             return
         try:
-            license_type = get_licenser().validate().get('license_type')
             if self.webhook_service == 'bitbucket_dc':
                 data = {
                     'state': statuses[status],
-                    'key': 'ansible/awx' if license_type == 'open' else 'ansible/tower',
+                    'key': WEBHOOK_STATUS_CONTEXT,
                     'url': self.get_ui_url(),
                 }
             else:
                 data = {
                     'state': statuses[status],
-                    'context': 'ansible/awx' if license_type == 'open' else 'ansible/tower',
+                    'context': WEBHOOK_STATUS_CONTEXT,
                     'target_url': self.get_ui_url(),
                 }
             k, v = service_header[self.webhook_service]

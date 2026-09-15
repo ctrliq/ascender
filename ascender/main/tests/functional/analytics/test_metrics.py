@@ -31,8 +31,6 @@ EXPECTED_VALUES = {
     'ascender_instance_cpu': 0.0,
     'ascender_instance_memory': 0.0,
     'ascender_instance_info': 1.0,
-    'ascender_license_instance_total': 0,
-    'ascender_license_instance_free': 0,
     'ascender_pending_jobs_total': 0,
     'ascender_database_connections_total': 1,
 }

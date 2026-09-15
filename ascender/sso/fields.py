@@ -207,7 +207,7 @@ class AuthenticationBackendsField(fields.StringListField):
 
     @classmethod
     def get_all_required_settings(cls):
-        all_required_settings = set(['LICENSE'])
+        all_required_settings = set()
         for required_settings in cls.REQUIRED_BACKEND_SETTINGS.values():
             all_required_settings.update(required_settings)
         return all_required_settings

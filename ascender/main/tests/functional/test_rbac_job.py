@@ -163,10 +163,10 @@ class TestJobRelaunchAccess:
 
         access = JobAccess(u)
         if can_start:
-            assert access.can_start(job_with_links, validate_license=False)
+            assert access.can_start(job_with_links)
         else:
             with pytest.raises(PermissionDenied):
-                access.can_start(job_with_links, validate_license=False)
+                access.can_start(job_with_links)
 
     def test_job_relaunch_credential_access(self, inventory, project, credential, net_credential):
         jt = JobTemplate.objects.create(name='testjt', inventory=inventory, project=project)
@@ -176,23 +176,23 @@ class TestJobRelaunchAccess:
         # Job is unchanged from JT, user has ability to launch
         jt_user = User.objects.create(username='jobtemplateuser')
         jt.execute_role.members.add(jt_user)
-        assert jt_user.can_access(Job, 'start', job, validate_license=False)
+        assert jt_user.can_access(Job, 'start', job)
 
         # Job has prompted net credential, launch denied w/ message
         job = jt.create_unified_job(credentials=[net_credential])
         with pytest.raises(PermissionDenied):
-            jt_user.can_access(Job, 'start', job, validate_license=False)
+            jt_user.can_access(Job, 'start', job)
 
     def test_prompted_credential_relaunch_denied(self, inventory, project, net_credential, rando):
         jt = JobTemplate.objects.create(name='testjt', inventory=inventory, project=project, ask_credential_on_launch=True)
         job = jt.create_unified_job()
         jt.execute_role.members.add(rando)
-        assert rando.can_access(Job, 'start', job, validate_license=False)
+        assert rando.can_access(Job, 'start', job)
 
         # Job has prompted net credential, rando lacks permission to use it
         job = jt.create_unified_job(credentials=[net_credential])
         with pytest.raises(PermissionDenied):
-            rando.can_access(Job, 'start', job, validate_license=False)
+            rando.can_access(Job, 'start', job)
 
     def test_prompted_credential_relaunch_allowed(self, inventory, project, net_credential, rando):
         jt = JobTemplate.objects.create(name='testjt', inventory=inventory, project=project, ask_credential_on_launch=True)
@@ -202,7 +202,7 @@ class TestJobRelaunchAccess:
         # Job has prompted net credential, but rando can use it
         net_credential.use_role.members.add(rando)
         job.credentials.add(net_credential)
-        assert rando.can_access(Job, 'start', job, validate_license=False)
+        assert rando.can_access(Job, 'start', job)
 
     def test_credential_relaunch_recreation_permission(self, inventory, project, net_credential, credential, rando):
         jt = JobTemplate.objects.create(name='testjt', inventory=inventory, project=project, ask_credential_on_launch=True)
@@ -214,7 +214,7 @@ class TestJobRelaunchAccess:
         # Relaunch blocked by the net credential
         job.credentials.add(credential)
         job.credentials.add(net_credential)
-        assert not rando.can_access(Job, 'start', job, validate_license=False)
+        assert not rando.can_access(Job, 'start', job)
 
     @pytest.mark.job_runtime_vars
     def test_callback_relaunchable_by_user(self, job_template, rando):
@@ -222,7 +222,7 @@ class TestJobRelaunchAccess:
             job = job_template.create_unified_job(_eager_fields={'launch_type': 'callback'}, limit='host2')
         assert 'limit' in job.launch_config.prompts_dict()  # sanity assertion
         job_template.execute_role.members.add(rando)
-        can_access, messages = rando.can_access_with_errors(Job, 'start', job, validate_license=False)
+        can_access, messages = rando.can_access_with_errors(Job, 'start', job)
         assert can_access, messages
 
     def test_other_user_prompts(self, inventory, project, alice, bob):
@@ -233,9 +233,9 @@ class TestJobRelaunchAccess:
             job = jt.create_unified_job(extra_vars={'job_var': 'foo2', 'my_secret': '$encrypted$foo'})
 
         assert 'job_var' in job.launch_config.extra_data
-        assert bob.can_access(Job, 'start', job, validate_license=False)
+        assert bob.can_access(Job, 'start', job)
         with pytest.raises(PermissionDenied):
-            alice.can_access(Job, 'start', job, validate_license=False)
+            alice.can_access(Job, 'start', job)
 
 
 @pytest.mark.django_db

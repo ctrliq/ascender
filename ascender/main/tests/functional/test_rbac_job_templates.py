@@ -2,14 +2,13 @@ from unittest import mock
 import pytest
 
 from ascender.api.versioning import reverse
-from ascender.main.access import BaseAccess, JobTemplateAccess, ScheduleAccess
+from ascender.main.access import JobTemplateAccess, ScheduleAccess
 from ascender.main.models.jobs import JobTemplate
 from ascender.main.models import Project, Organization, Inventory, Schedule, User
 
 
-@mock.patch.object(BaseAccess, 'check_license', return_value=None)
 @pytest.mark.django_db
-def test_job_template_access_superuser(check_license, user, deploy_jobtemplate):
+def test_job_template_access_superuser(user, deploy_jobtemplate):
     # GIVEN a superuser
     u = user('admin', True)
     # WHEN access to a job template is checked

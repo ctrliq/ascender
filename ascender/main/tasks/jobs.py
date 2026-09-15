@@ -78,7 +78,6 @@ from ascender.main.utils.common import (
     ScheduleWorkflowManager,
     ScheduleTaskManager,
 )
-from ascender.conf.license import get_license
 from ascender.main.utils.handlers import SpecialInventoryHandler
 from ascender.main.tasks.system import update_smart_memberships_for_inventory, update_inventory_computed_fields
 from ascender.main.utils.update_model import update_model
@@ -1351,7 +1350,7 @@ class RunProjectUpdate(BaseTask):
                 'projects_root': settings.PROJECTS_ROOT.rstrip('/'),
                 'local_path': os.path.basename(project_update.project.local_path),
                 'project_path': project_update.get_project_path(check_if_exists=False),  # deprecated
-                'awx_license_type': get_license().get('license_type', 'UNLICENSED'),
+                'awx_license_type': 'open',
                 'awx_version': get_ascender_version(),
                 'scm_url': scm_url,
                 'scm_branch': scm_branch,

@@ -273,18 +273,6 @@ Any time the user changes a setting in Ascender (_e.g._, in `api/v2/settings`), 
 This task allows the user to turn on a global profiler in their system, so that Ascender can profile all of the SQL queries that they make.  This is a "fanout" style task (meaning all nodes execute it), and one of the main benefits is that it assists with identifying slow queries.
 
 
-#### Gather Analytics
-
-The analytics collection `gather()` and `ship()` functions are called by an `awx-manage gather_analytics --ship` command, which runs on whichever instance it is invoked on. When these functions are called by Celery beat (currently at midnight local time), it is run on one `execution_node` by the Python in the Ascender virtualenv.
-
-For more details about analytics, please visit the [Usability Analytics and Data Collection](https://docs.ansible.com/ansible-tower/latest/html/administration/usability_data_collection.html) page.
-
-
-#### Run Administrative Checks
-
-This task checks that the license currently in use is valid and alerts the admin user(s) via email when they are in danger of going over capacity and/or when the license is about to expire. Specifically (in cases of going over capacity), it triggers when the node count is at or over 90% of what the license allows.
-
-
 #### Purge Old Stdout Files
 
 Ascender sometimes buffers `stdout` for playbook runs to disk _when users download stdout for a job run_.  This task implements a periodic cleanup of the directory where this data is stored.

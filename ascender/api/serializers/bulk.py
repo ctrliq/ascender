@@ -31,7 +31,7 @@ from ascender.main.models import (
     WorkflowJobNode,
     WorkflowJobTemplate,
 )
-from ascender.main.utils import parse_yaml_or_json, get_licenser
+from ascender.main.utils import parse_yaml_or_json
 from ascender.main.signals import update_inventory_computed_fields
 from ascender.api.versioning import reverse
 from ascender.api.serializers.host import (
@@ -72,10 +72,6 @@ class BulkHostCreateSerializer(serializers.Serializer):
         read_only_fields = ()
 
     def raise_if_host_counts_violated(self, attrs):
-        from ascender.api.serializers.base import logger
-
-        validation_info = get_licenser().validate()
-
         org = attrs['inventory'].organization
 
         if org:
@@ -90,20 +86,6 @@ class BulkHostCreateSerializer(serializers.Serializer):
                         " for assistance." % org.max_hosts
                     )
                 )
-
-            # Don't check license if it is open license
-        if validation_info.get('license_type', 'UNLICENSED') == 'open':
-            return
-
-        sys_free_instances = validation_info.get('free_instances', 0)
-        system_net_new_host_count = Host.objects.exclude(name__in=new_hosts).count()
-
-        if system_net_new_host_count > sys_free_instances:
-            hard_error = validation_info.get('trial', False) is True or validation_info['instance_count'] == 10
-            if hard_error:
-                # Only raise permission error for trial, otherwise just log a warning as we do in other inventory import situations
-                raise PermissionDenied(_("Host count exceeds available instances."))
-            logger.warning(_("Number of hosts allowed by license has been exceeded."))
 
     def validate(self, attrs):
         request = self.context.get('request', None)
