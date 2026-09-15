@@ -196,9 +196,7 @@ def _get_or_set_enterprise_user(username, password, provider):
 
 
 class RADIUSBackend(BaseRADIUSBackend):
-    """
-    Custom Radius backend to verify license status
-    """
+    """RADIUS authentication, which answers only when a server is configured."""
 
     def authenticate(self, request, username, password):
         if not django_settings.RADIUS_SERVER:
@@ -329,9 +327,7 @@ class AscenderSAMLIdentityProvider(BaseSAMLIdentityProvider):
 
 
 class SAMLAuth(BaseSAMLAuth):
-    """
-    Custom SAMLAuth backend to verify license status
-    """
+    """SAML authentication, which answers only when the SP keys are configured."""
 
     def get_idp(self, idp_name):
         idp_config = self.setting('ENABLED_IDPS')[idp_name]

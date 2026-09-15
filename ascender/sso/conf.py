@@ -96,7 +96,7 @@ register(
     'AUTHENTICATION_BACKENDS',
     field_class=AuthenticationBackendsField,
     label=_('Authentication Backends'),
-    help_text=_('List of authentication backends that are enabled based on license features and other authentication settings.'),
+    help_text=_('List of authentication backends that are enabled, which follows whether each one has the settings it requires.'),
     read_only=True,
     depends_on=AuthenticationBackendsField.get_all_required_settings(),
     category=_('Authentication'),
