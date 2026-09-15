@@ -167,7 +167,7 @@ msgstr "حذف المشروع"
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:168
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:295
 #: screens/Instances/InstanceList/InstanceListItem.tsx:183
-#: screens/TopologyView/Tooltip.tsx:280
+#: screens/TopologyView/Tooltip.tsx:282
 msgid "{forks, plural, one {# fork} other {# forks}}"
 msgstr "{forks, plural, one {# تفريعة} other {# تفريعات}}"
 
@@ -206,7 +206,7 @@ msgstr "انقر لتبديل القيمة الافتراضية"
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:181
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:313
 #: screens/Instances/InstanceList/InstanceListItem.tsx:197
-#: screens/TopologyView/Tooltip.tsx:302
+#: screens/TopologyView/Tooltip.tsx:304
 msgid "RAM {0}"
 msgstr "ذاكرة الوصول العشوائي {0}"
 
@@ -602,7 +602,7 @@ msgstr "الخيارات"
 msgid "For more information, refer to the"
 msgstr "لمزيد من المعلومات، راجع"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:366
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:369
 msgid "Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried."
 msgstr "الحد الأقصى لعدد مرات إعادة محاولة مهمة هذه العقدة تلقائيًا بعد الفشل قبل اتباع مسارات فشلها. لا تتم إعادة محاولة المهام الملغاة أبدًا."
 
@@ -663,7 +663,7 @@ msgid "Instance Type"
 msgstr "نوع المثيل"
 
 #: components/ExpandCollapse/ExpandCollapse.tsx:49
-#: components/PaginatedTable/HeaderRow.tsx:55
+#: components/PaginatedTable/HeaderRow.tsx:57
 msgid "Expand"
 msgstr "توسيع"
 
@@ -687,7 +687,7 @@ msgstr "التشغيل التالي"
 msgid "SCM update"
 msgstr "تحديث SCM"
 
-#: screens/TopologyView/Tooltip.tsx:247
+#: screens/TopologyView/Tooltip.tsx:249
 msgid "IP address"
 msgstr "عنوان IP"
 
@@ -961,7 +961,7 @@ msgstr "عرض وتحرير خيارات التصحيح"
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:162
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:288
 #: screens/Instances/InstanceList/InstanceListItem.tsx:176
-#: screens/TopologyView/Tooltip.tsx:273
+#: screens/TopologyView/Tooltip.tsx:275
 msgid "CPU {0}"
 msgstr "المعالج {0}"
 
@@ -1113,7 +1113,7 @@ msgstr "إلغاء تحرير الاشتراك"
 #~ msgid "Prompt for credentials on launch."
 #~ msgstr "المطالبة ببيانات الاعتماد عند الإطلاق."
 
-#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:55
+#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:56
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupItem.tsx:54
 msgid "Edit group"
 msgstr "تحرير المجموعة"
@@ -1124,8 +1124,8 @@ msgid "Copy full revision to clipboard."
 msgstr "نسخ المراجعة الكاملة إلى الحافظة."
 
 #: components/PromptDetail/PromptDetail.tsx:190
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:364
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:365
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:367
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:368
 msgid "Max Retries"
 msgstr "الحد الأقصى لإعادة المحاولات"
 
@@ -1145,7 +1145,7 @@ msgstr "الحد الأقصى لعدد المهام التي تعمل بشكل �
 msgid "Select a credential Type"
 msgstr "حدد نوع بيانات اعتماد"
 
-#: components/CodeEditor/VariablesDetail.tsx:108
+#: components/CodeEditor/VariablesDetail.tsx:111
 msgid "Error:"
 msgstr "خطأ:"
 
@@ -1264,7 +1264,7 @@ msgstr "حدد العناصر من القائمة"
 msgid "Inventory Sync"
 msgstr "مزامنة المخزون"
 
-#: components/About/About.tsx:46
+#: components/About/About.tsx:50
 msgid "Copyright"
 msgstr "حقوق النشر"
 
@@ -1336,7 +1336,7 @@ msgstr "أنواع العقد"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:463
 #: screens/Template/shared/JobTemplate.helptext.tsx:72
 #: screens/Template/Survey/SurveyQuestionForm.tsx:312
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:309
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:312
 msgid "documentation"
 msgstr "التوثيق"
 
@@ -1378,9 +1378,9 @@ msgstr "قالب مهمة سير العمل هذا قيد الاستخدام ح�
 #: screens/Inventory/Inventories.tsx:106
 #: screens/Inventory/Inventories.tsx:120
 #: screens/Inventory/Inventory.tsx:78
-#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:78
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:196
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:283
+#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:87
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:197
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:284
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:112
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:174
 #: screens/Inventory/SmartInventory.tsx:77
@@ -1475,7 +1475,7 @@ msgstr "بحث تقريبي في حقول المعرّف أو الاسم أو ا
 msgid "Launch management job"
 msgstr "إطلاق مهمة الإدارة"
 
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:150
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:151
 msgid "Add existing group"
 msgstr "إضافة مجموعة موجودة"
 
@@ -1512,7 +1512,7 @@ msgstr "تمكين تصعيد الامتيازات"
 msgid "Filter..."
 msgstr "تصفية..."
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:213
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:216
 msgid "Timeout seconds"
 msgstr "ثوانٍ المهلة"
 
@@ -1722,7 +1722,7 @@ msgstr "إنشاء مخزون موحّد جديد"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:119
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:22
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:116
-#: screens/Host/HostDetail/HostDetail.tsx:75
+#: screens/Host/HostDetail/HostDetail.tsx:78
 #: screens/Host/HostGroups/HostGroupItem.tsx:44
 #: screens/Host/HostGroups/HostGroupsList.tsx:167
 #: screens/Host/HostGroups/HostGroupsList.tsx:184
@@ -1758,13 +1758,13 @@ msgstr "إنشاء مخزون موحّد جديد"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:164
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:83
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:102
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:41
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:201
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:216
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:222
-#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:46
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:125
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:147
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:42
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:202
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:217
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:223
+#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:47
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:124
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:146
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:81
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupItem.tsx:46
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:171
@@ -1776,9 +1776,9 @@ msgstr "إنشاء مخزون موحّد جديد"
 #: screens/Inventory/InventoryList/InventoryList.tsx:227
 #: screens/Inventory/InventoryList/InventoryList.tsx:236
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:108
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:189
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:204
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:245
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:190
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:205
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:246
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:215
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:214
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:72
@@ -1832,7 +1832,7 @@ msgstr "إنشاء مخزون موحّد جديد"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:94
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:131
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:163
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:182
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:185
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:74
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:94
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/SystemJobTemplatesList.tsx:80
@@ -1865,7 +1865,7 @@ msgstr "مفتاح تكوين المضيف"
 msgid "Hosts remaining"
 msgstr "المضيفون المتبقون"
 
-#: components/About/About.tsx:48
+#: components/About/About.tsx:52
 msgid "Ctrl IQ, Inc."
 msgstr "Ctrl IQ, Inc."
 
@@ -1950,10 +1950,10 @@ msgstr "تمت الموافقة"
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:192
 #: screens/Instances/InstanceList/InstanceList.tsx:237
 #: screens/Instances/InstanceList/InstanceListItem.tsx:211
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:225
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:65
-#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:52
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:148
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:226
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:66
+#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:53
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:147
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupItem.tsx:51
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:189
 #: screens/Inventory/InventoryHosts/InventoryHostItem.tsx:119
@@ -1961,8 +1961,8 @@ msgstr "تمت الموافقة"
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:142
 #: screens/Inventory/InventoryList/InventoryList.tsx:240
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:151
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:246
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:55
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:247
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:56
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:217
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:91
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:109
@@ -2493,7 +2493,7 @@ msgstr "النطاق"
 msgid "{0} (deleted)"
 msgstr "{0} (محذوف)"
 
-#: screens/Host/HostDetail/HostDetail.tsx:85
+#: screens/Host/HostDetail/HostDetail.tsx:88
 msgid "The inventory that this host belongs to."
 msgstr "المخزون الذي ينتمي إليه هذا المضيف."
 
@@ -2701,7 +2701,7 @@ msgstr "إنشاء مخزون ذكي جديد"
 msgid "Delete Schedule"
 msgstr "حذف الجدول"
 
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:310
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:311
 msgid "Failed to disassociate one or more hosts."
 msgstr "فشل إلغاء ربط مضيف واحد أو أكثر."
 
@@ -2732,9 +2732,9 @@ msgid "Last automated"
 msgstr "آخر أتمتة"
 
 #: screens/Host/HostGroups/HostGroupItem.tsx:53
-#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:60
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:57
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:63
+#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:61
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:58
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:64
 msgid "Edit Group"
 msgstr "تحرير المجموعة"
 
@@ -2832,8 +2832,8 @@ msgstr "0 (عادي)"
 
 #: components/Workflow/WorkflowNodeHelp.tsx:134
 #: components/Workflow/WorkflowNodeHelp.tsx:170
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:350
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:351
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:353
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:354
 msgid "Node Alias"
 msgstr "الاسم المستعار للعقدة"
 
@@ -2847,7 +2847,7 @@ msgstr "زر إرسال البحث"
 msgid "POST"
 msgstr "POST"
 
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:98
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:99
 msgid "You do not have permission to delete the following Groups: {itemsUnableToDelete}"
 msgstr "ليس لديك إذن لحذف المجموعات التالية: {itemsUnableToDelete}"
 
@@ -3203,7 +3203,7 @@ msgstr "معلومات"
 msgid "<0>Note: Instances may be re-associated with this instance group if they are managed by <1>policy rules.</1></0>"
 msgstr "<0>ملاحظة: قد تتم إعادة ربط المثيلات بمجموعة المثيلات هذه إذا كانت مُدارة بواسطة <1>قواعد السياسة.</1></0>"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:198
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:201
 msgid "Timeout minutes"
 msgstr "دقائق المهلة"
 
@@ -3211,7 +3211,7 @@ msgstr "دقائق المهلة"
 msgid "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
 msgstr "مصدر المخزون هذا قيد الاستخدام حاليًا من قبل موارد أخرى تعتمد عليه. هل أنت متأكد من أنك تريد حذفه؟"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:245
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:248
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.tsx:47
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.tsx:54
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:187
@@ -3362,7 +3362,7 @@ msgstr "مقارنة أقل من أو يساوي."
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:366
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:197
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:202
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:103
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:104
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:378
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:71
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:75
@@ -3411,7 +3411,7 @@ msgstr "مزامنة المشروع"
 
 #: screens/Host/HostGroups/HostGroupsList.tsx:240
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:251
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:270
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:271
 msgid "Select Groups"
 msgstr "حدد المجموعات"
 
@@ -3447,8 +3447,8 @@ msgstr "الرقم المرتبط بـ \"خدمة\n"
 msgid "This field will be retrieved from an external secret management system using the specified credential."
 msgstr "سيتم استرجاع هذا الحقل من نظام إدارة أسرار خارجي باستخدام بيانات الاعتماد المُحددة."
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:272
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:282
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:275
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:285
 msgid "Context Template"
 msgstr "قالب السياق"
 
@@ -3491,7 +3491,7 @@ msgstr "حدد الخيار (الخيارات)"
 msgid "The project revision is currently out of date.  Please refresh to fetch the most recent revision."
 msgstr "مراجعة المشروع قديمة حاليًا. يرجى التحديث لجلب أحدث مراجعة."
 
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:289
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:290
 msgid "Select Hosts"
 msgstr "حدد المضيفين"
 
@@ -3509,14 +3509,14 @@ msgstr "GitHub Team"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:99
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:111
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:149
-#: screens/Host/HostDetail/HostDetail.tsx:92
+#: screens/Host/HostDetail/HostDetail.tsx:95
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:93
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:111
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:55
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:324
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:169
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:174
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:53
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:54
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:88
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:337
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:139
@@ -3785,7 +3785,7 @@ msgid "This table gives a few useful parameters of the constructed\n"
 msgstr "يعطي هذا الجدول بعض المعلمات المفيدة لملحق المخزون\n"
 "               المُنشأ. للحصول على القائمة الكاملة للمعلمات "
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:324
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:327
 msgid "Convergence select"
 msgstr "تحديد التقارب"
 
@@ -3813,7 +3813,7 @@ msgstr "إذا تم التمكين، فسيتم عرض التغييرات الت
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:240
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:274
 #: screens/Instances/InstanceList/InstanceListItem.tsx:262
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:311
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:314
 msgid "for more info."
 msgstr "لمزيد من المعلومات."
 
@@ -4071,11 +4071,11 @@ msgid "Tags for the Annotation"
 msgstr "وسوم التعليق"
 
 #: screens/Inventory/Inventories.tsx:122
-#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:73
+#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:82
 #: screens/Inventory/InventoryHosts/InventoryHostItem.tsx:102
 #: screens/Inventory/InventoryHosts/InventoryHostItem.tsx:105
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:141
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:184
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:185
 msgid "Related Groups"
 msgstr "المجموعات ذات الصلة"
 
@@ -4094,15 +4094,15 @@ msgstr "حذف بيانات الاعتماد"
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:287
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:118
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:129
-#: screens/Host/HostDetail/HostDetail.tsx:114
+#: screens/Host/HostDetail/HostDetail.tsx:117
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:126
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:130
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:361
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:341
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:186
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:191
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:66
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:71
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:67
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:72
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:110
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:352
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:117
@@ -4214,7 +4214,7 @@ msgid "Float"
 msgstr "Float"
 
 #. placeholder {0}: host.id
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:61
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:62
 msgid "host-description-{0}"
 msgstr "host-description-{0}"
 
@@ -4336,7 +4336,7 @@ msgstr "إنشاء رمز مستخدم مميز"
 msgid "View all instance groups"
 msgstr "عرض جميع مجموعات المثيلات"
 
-#: screens/TopologyView/Tooltip.tsx:163
+#: screens/TopologyView/Tooltip.tsx:165
 msgid "Click on a node icon to display the details."
 msgstr "انقر على أيقونة عقدة لعرض التفاصيل."
 
@@ -4563,7 +4563,7 @@ msgstr "عرض تفاصيل المؤسسة"
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:306
 #: screens/Credential/CredentialList/CredentialList.tsx:214
 #: screens/Host/HostDetail/HostDetail.tsx:62
-#: screens/Host/HostDetail/HostDetail.tsx:129
+#: screens/Host/HostDetail/HostDetail.tsx:132
 #: screens/Host/HostGroups/HostGroupsList.tsx:247
 #: screens/Host/HostList/HostList.tsx:229
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:117
@@ -4581,16 +4581,16 @@ msgstr "عرض تفاصيل المؤسسة"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventorySyncButton.tsx:51
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:205
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:211
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:88
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:296
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:307
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:89
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:297
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:308
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:60
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:125
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:258
 #: screens/Inventory/InventoryHosts/InventoryHostItem.tsx:143
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:203
 #: screens/Inventory/InventoryList/InventoryList.tsx:298
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:277
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:278
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:385
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:242
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:254
@@ -4619,7 +4619,7 @@ msgstr "عرض تفاصيل المؤسسة"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:431
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.tsx:399
 #: screens/TopologyView/MeshGraph.tsx:448
-#: screens/TopologyView/Tooltip.tsx:171
+#: screens/TopologyView/Tooltip.tsx:173
 #: screens/User/UserDetail/UserDetail.tsx:145
 #: screens/User/UserList/UserList.tsx:182
 #: screens/User/UserRoles/UserRolesList.tsx:247
@@ -4804,7 +4804,7 @@ msgstr "المؤسسة"
 msgid "{brandName} logo"
 msgstr "شعار {brandName}"
 
-#: screens/Job/Job.tsx:236
+#: screens/Job/Job.tsx:238
 msgid "View Job Details"
 msgstr "عرض تفاصيل المهمة"
 
@@ -4964,10 +4964,10 @@ msgstr "حدد سؤالاً لحذفه"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:294
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:148
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:641
-#: screens/Host/HostDetail/HostDetail.tsx:99
+#: screens/Host/HostDetail/HostDetail.tsx:102
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:62
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:166
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:47
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:48
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:95
 #: screens/Inventory/shared/InventoryForm.tsx:120
 #: screens/Inventory/shared/InventoryGroupForm.tsx:68
@@ -5029,8 +5029,8 @@ msgstr "المهام"
 msgid "Unreachable Hosts"
 msgstr "المضيفون غير القابلين للوصول"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:228
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:239
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:231
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:242
 msgid "On timeout"
 msgstr "عند انتهاء المهلة"
 
@@ -5069,7 +5069,7 @@ msgstr "تم نسخ المخزون بنجاح"
 msgid "If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime."
 msgstr "إذا تم التمكين، فسيؤدي ذلك إلى تخزين الحقائق المجمعة بحيث يمكن عرضها على مستوى المضيف. يتم الاحتفاظ بالحقائق وحقنها في ذاكرة التخزين المؤقت للحقائق في وقت التشغيل."
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:254
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:257
 msgid "The number of distinct users that must approve before the workflow continues. A single denial always denies the node."
 msgstr "عدد المستخدمين المميزين الذين يجب أن يوافقوا قبل أن يستمر سير العمل. الرفض الواحد يرفض العقدة دائمًا."
 
@@ -5397,7 +5397,7 @@ msgstr "المؤسسة (الاسم)"
 msgid "Reload"
 msgstr "إعادة تحميل"
 
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:161
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:162
 msgid "Add new host"
 msgstr "إضافة مضيف جديد"
 
@@ -5509,7 +5509,7 @@ msgstr "السماح بتجاوز الفرع"
 msgid "Create new source"
 msgstr "إنشاء مصدر جديد"
 
-#: screens/TopologyView/Tooltip.tsx:234
+#: screens/TopologyView/Tooltip.tsx:236
 msgid "Download Bundle"
 msgstr "تنزيل الحزمة"
 
@@ -5600,13 +5600,13 @@ msgstr "التمرير للتالي"
 msgid "system"
 msgstr "النظام"
 
-#: components/PaginatedTable/HeaderRow.tsx:60
+#: components/PaginatedTable/HeaderRow.tsx:63
 #: screens/Template/Survey/SurveyList.tsx:118
 msgid "Row select"
 msgstr "تحديد الصف"
 
 #: screens/Inventory/Inventory.tsx:242
-#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:158
+#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:173
 #: screens/Inventory/SmartInventory.tsx:209
 msgid "View Inventory Details"
 msgstr "عرض تفاصيل المخزون"
@@ -5677,7 +5677,7 @@ msgid "Play Count"
 msgstr "عدد التشغيلات"
 
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:128
-#: screens/TopologyView/Tooltip.tsx:256
+#: screens/TopologyView/Tooltip.tsx:258
 msgid "Instance groups"
 msgstr "مجموعات المثيلات"
 
@@ -5857,9 +5857,9 @@ msgstr "تخطي الوسوم"
 
 #: screens/Host/HostList/HostListItem.tsx:80
 #: screens/Host/HostList/HostListItem.tsx:85
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:74
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:77
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:81
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:75
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:78
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:82
 msgid "Edit Host"
 msgstr "تحرير المضيف"
 
@@ -5867,7 +5867,7 @@ msgstr "تحرير المضيف"
 msgid "Filter by successful jobs"
 msgstr "التصفية حسب المهام الناجحة"
 
-#: components/About/About.tsx:47
+#: components/About/About.tsx:51
 msgid "Red Hat, Inc."
 msgstr "Red Hat, Inc."
 
@@ -5956,8 +5956,8 @@ msgstr "3 (تصحيح)"
 msgid "Track submodules"
 msgstr "تتبع الوحدات الفرعية"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:250
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:261
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:253
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:264
 msgid "Required approvals"
 msgstr "الموافقات المطلوبة"
 
@@ -6309,7 +6309,7 @@ msgstr "إلغاء المهمة"
 msgid "First Name"
 msgstr "الاسم الأول"
 
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:132
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:131
 msgid "Show only root groups"
 msgstr "عرض المجموعات الجذرية فقط"
 
@@ -6391,6 +6391,10 @@ msgstr "لا يمكن تشغيل فحوصات الصحة إلا على عقد ا
 msgid "Visualizer"
 msgstr "أداة التصور"
 
+#: screens/Template/shared/JobTemplate.helptext.tsx:49
+msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
+msgstr "استدعاءات التزويد: تمكّن إنشاء عنوان URL لاستدعاء التزويد. باستخدام عنوان URL، يمكن للمضيف الاتصال بـ Ascender وطلب تحديث التكوين باستخدام قالب المهمة هذا."
+
 #: components/JobList/JobListItem.tsx:159
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:183
@@ -6403,7 +6407,7 @@ msgstr "إعادة إطلاق المهمة"
 #~ msgstr "الحصول على الاشتراك"
 
 #: components/HostToggle/HostToggle.tsx:82
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:68
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:69
 msgid "Toggle host"
 msgstr "تبديل المضيف"
 
@@ -6437,7 +6441,7 @@ msgstr "كلمة مرور Vault | {credId}"
 msgid "Are you sure you want to remove {0} access from {1}?  Doing so affects all members of the team."
 msgstr "هل أنت متأكد من أنك تريد إزالة وصول {0} من {1}؟ سيؤثر ذلك على جميع أعضاء الفريق."
 
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:160
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:161
 msgid "Add existing host"
 msgstr "إضافة مضيف موجود"
 
@@ -6526,7 +6530,7 @@ msgstr "تحديث"
 msgid "Date search input"
 msgstr "إدخال بحث التاريخ"
 
-#: screens/Host/HostDetail/HostDetail.tsx:120
+#: screens/Host/HostDetail/HostDetail.tsx:123
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:116
 msgid "Delete Host"
 msgstr "حذف المضيف"
@@ -6541,7 +6545,7 @@ msgstr "عرض إعدادات المهام"
 
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:114
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:125
-#: screens/Host/HostDetail/HostDetail.tsx:110
+#: screens/Host/HostDetail/HostDetail.tsx:113
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:122
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:126
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:357
@@ -6595,7 +6599,7 @@ msgid "Normal User"
 msgstr "مستخدم عادي"
 
 #. placeholder {0}: host.id
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:56
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:57
 msgid "host-name-{0}"
 msgstr "host-name-{0}"
 
@@ -6667,8 +6671,8 @@ msgid "Application not found."
 msgstr "لم يتم العثور على التطبيق."
 
 #: components/PromptDetail/PromptDetail.tsx:183
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:333
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:339
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:336
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:342
 msgid "Any"
 msgstr "أي"
 
@@ -6724,7 +6728,7 @@ msgstr "أدوار المستخدم"
 msgid "{brandName} Subscription"
 msgstr "اشتراك {brandName}"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:208
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:211
 msgid "min"
 msgstr "دقيقة"
 
@@ -6819,7 +6823,7 @@ msgid "Constructed inventory parameters table"
 msgstr "جدول معلمات المخزون المُنشأ"
 
 #. placeholder {0}: inventoryGroup.name
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:92
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:93
 msgid "Failed to delete group {0}."
 msgstr "فشل حذف المجموعة {0}."
 
@@ -6953,12 +6957,12 @@ msgstr "متابعة"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:110
 #: screens/Host/HostGroups/HostGroupsList.tsx:176
 #: screens/Host/HostList/HostList.tsx:162
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:210
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:139
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:211
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:138
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:180
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:132
 #: screens/Inventory/InventoryList/InventoryList.tsx:221
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:198
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:199
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:101
 #: screens/Organization/OrganizationList/OrganizationList.tsx:133
 #: screens/Project/ProjectList/ProjectList.tsx:209
@@ -7143,8 +7147,8 @@ msgstr "يجب أن يكون هذا الحقل رقمًا وأن تكون قيم
 #: components/LaunchButton/ReLaunchDropDown.tsx:53
 #: components/PromptDetail/PromptDetail.tsx:183
 #: screens/Metrics/Metrics.tsx:91
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:333
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:342
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:336
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:345
 msgid "All"
 msgstr "الكل"
 
@@ -7347,7 +7351,7 @@ msgstr "مهلة ذاكرة التخزين المؤقت (ثوانٍ)"
 msgid "Logout"
 msgstr "تسجيل الخروج"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:223
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:226
 msgid "sec"
 msgstr "ثانية"
 
@@ -7441,7 +7445,7 @@ msgstr "مزامنة"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:68
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:157
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:157
-#: screens/Host/HostDetail/HostDetail.tsx:81
+#: screens/Host/HostDetail/HostDetail.tsx:84
 #: screens/Host/HostList/HostList.tsx:154
 #: screens/Host/HostList/HostList.tsx:172
 #: screens/Host/HostList/HostListItem.tsx:63
@@ -7450,8 +7454,8 @@ msgstr "مزامنة"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:177
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:88
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:106
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:45
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:223
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:46
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:224
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:87
 #: screens/Inventory/InventoryHosts/InventoryHostItem.tsx:96
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:124
@@ -7487,7 +7491,7 @@ msgstr "مزامنة"
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:166
 #: screens/Template/Survey/SurveyQuestionForm.tsx:214
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:114
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:187
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:190
 #: screens/User/shared/UserTokenForm.tsx:69
 #: screens/User/UserOrganizations/UserOrganizationList.tsx:77
 #: screens/User/UserOrganizations/UserOrganizationListItem.tsx:28
@@ -7562,7 +7566,7 @@ msgstr "المنطقة الزمنية المحلية"
 msgid "No Status Available"
 msgstr "لا توجد حالة متاحة"
 
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:256
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:257
 msgid "Disassociate host from group?"
 msgstr "إلغاء ربط المضيف من المجموعة؟"
 
@@ -7791,7 +7795,7 @@ msgstr "مقدار الوقت (بالثواني) للتشغيل قبل إلغا�
 
 #: screens/Host/HostGroups/HostGroupsList.tsx:252
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:263
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:282
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:283
 msgid "Failed to disassociate one or more groups."
 msgstr "فشل إلغاء ربط مجموعة واحدة أو أكثر."
 
@@ -8016,7 +8020,7 @@ msgstr "رموز المستخدم المميزة"
 msgid "View RADIUS settings"
 msgstr "عرض إعدادات RADIUS"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:145
+#: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:147
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.tsx:339
 msgid "ALL"
 msgstr "الكل"
@@ -8306,7 +8310,7 @@ msgstr "استرجاع الحالة المُفعّلة من dict متغيرات 
 msgid "Inventory Source Sync Error"
 msgstr "خطأ في مزامنة مصدر المخزون"
 
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:257
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:258
 msgid ""
 "\n"
 "                        Note that only hosts directly in this group can\n"
@@ -8345,7 +8349,7 @@ msgid "Job ID"
 msgstr "معرّف المهمة"
 
 #: components/PromptDetail/PromptDetail.tsx:181
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:295
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:298
 msgid "Convergence"
 msgstr "التقارب"
 
@@ -8522,7 +8526,7 @@ msgstr "المضيفون"
 
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:199
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:82
-#: screens/TopologyView/Tooltip.tsx:308
+#: screens/TopologyView/Tooltip.tsx:310
 msgid "Capacity"
 msgstr "السعة"
 
@@ -8652,7 +8656,7 @@ msgstr "تحديد"
 
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:125
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:76
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:105
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:106
 msgid "Select a row to delete"
 msgstr "حدد صفًا للحذف"
 
@@ -8735,7 +8739,7 @@ msgstr "GitHub"
 msgid "Are you sure you want to remove this link?"
 msgstr "هل أنت متأكد من أنك تريد إزالة هذا الرابط؟"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:276
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:279
 msgid "A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. Use this to show the approver relevant context from previous job steps. Available variables come from set_stats data of parent nodes."
 msgstr "قالب Jinja2 يتم عرضه مع آثار set_stats الأولية عند إنشاء الموافقة. استخدم هذا لإظهار السياق ذي الصلة للموافِق من خطوات المهمة السابقة. تأتي المتغيرات المتاحة من بيانات set_stats للعقد الأصلية."
 
@@ -8818,7 +8822,7 @@ msgstr "فشل حذف تطبيق واحد أو أكثر."
 msgid "Miscellaneous Authentication"
 msgstr "المصادقة المتنوعة"
 
-#: screens/TopologyView/Tooltip.tsx:228
+#: screens/TopologyView/Tooltip.tsx:230
 msgid "Download bundle"
 msgstr "تنزيل الحزمة"
 
@@ -9078,11 +9082,11 @@ msgstr "خيارات التحديث"
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:257
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:104
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:116
-#: screens/Host/HostDetail/HostDetail.tsx:95
+#: screens/Host/HostDetail/HostDetail.tsx:98
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:98
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:116
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:179
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:55
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
 #: screens/Job/JobDetail/JobDetail.tsx:583
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:451
@@ -9130,8 +9134,8 @@ msgstr "خطأ"
 msgid "IRC Server Port"
 msgstr "منفذ خادم IRC"
 
-#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:60
-#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:61
+#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:69
+#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:70
 msgid "Back to Groups"
 msgstr "العودة إلى المجموعات"
 
@@ -9275,7 +9279,7 @@ msgstr "المستخدمون"
 msgid "Edit Notification Template"
 msgstr "تحرير قالب الإشعار"
 
-#: components/About/About.tsx:58
+#: components/About/About.tsx:62
 msgid "Brand Image"
 msgstr "صورة العلامة التجارية"
 
@@ -9287,7 +9291,7 @@ msgstr "الأول"
 msgid "LDAP settings"
 msgstr "إعدادات LDAP"
 
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:236
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:237
 msgid "Disassociate related group(s)?"
 msgstr "إلغاء ربط المجموعة (المجموعات) ذات الصلة؟"
 
@@ -9300,7 +9304,7 @@ msgstr "إلغاء ربط المجموعة (المجموعات) ذات الصل�
 #: screens/Job/JobDetail/JobDetail.tsx:428
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:251
 #: screens/Template/shared/JobTemplateForm.tsx:502
-#: screens/TopologyView/Tooltip.tsx:266
+#: screens/TopologyView/Tooltip.tsx:268
 msgid "Forks"
 msgstr "التفريعات"
 
@@ -9577,7 +9581,7 @@ msgstr "تكون العلامات مفيدة عندما يكون لديك Playbo
 msgid "Events"
 msgstr "الأحداث"
 
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:130
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:129
 msgid "Group type"
 msgstr "نوع المجموعة"
 
@@ -9677,7 +9681,7 @@ msgstr "عرض إعدادات GitHub"
 msgid "/ (project root)"
 msgstr "/ (جذر المشروع)"
 
-#: screens/TopologyView/Tooltip.tsx:333
+#: screens/TopologyView/Tooltip.tsx:335
 msgid "Last seen"
 msgstr "آخر ظهور"
 
@@ -9911,7 +9915,7 @@ msgstr "إلغاء البحث"
 #: screens/Inventory/Inventories.tsx:102
 #: screens/Inventory/Inventories.tsx:128
 #: screens/Inventory/Inventory.tsx:75
-#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:68
+#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:77
 #: screens/Inventory/InventoryHost/InventoryHost.tsx:86
 #: screens/Inventory/InventorySource/InventorySource.tsx:105
 #: screens/Inventory/SmartInventory.tsx:75
@@ -9969,8 +9973,8 @@ msgstr "إلغاء البحث"
 #: screens/Template/Templates.tsx:48
 #: screens/Template/WorkflowJobTemplate.tsx:129
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:149
-#: screens/TopologyView/Tooltip.tsx:156
-#: screens/TopologyView/Tooltip.tsx:189
+#: screens/TopologyView/Tooltip.tsx:158
+#: screens/TopologyView/Tooltip.tsx:191
 #: screens/User/User.tsx:73
 #: screens/User/Users.tsx:34
 #: screens/User/Users.tsx:40
@@ -10038,7 +10042,7 @@ msgstr "إذا كان مُفعّلاً، فستقترن عقد التحكم به
 msgid "and click on Update Revision on Launch"
 msgstr "وانقر على تحديث المراجعة عند الإطلاق"
 
-#: components/About/About.tsx:55
+#: components/About/About.tsx:59
 #: components/AppContainer/PageHeaderToolbar.tsx:180
 msgid "About"
 msgstr "حول"
@@ -10261,7 +10265,7 @@ msgstr "تخطي كل"
 msgid "Create New Schedule"
 msgstr "إنشاء جدول جديد"
 
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:151
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:152
 msgid "Add new group"
 msgstr "إضافة مجموعة جديدة"
 
@@ -10440,7 +10444,7 @@ msgstr "إعادة الإطلاق من العقدة الفاشلة"
 msgid "View all tokens."
 msgstr "عرض جميع الرموز المميزة."
 
-#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:103
+#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:107
 msgid "View Inventory Groups"
 msgstr "عرض مجموعات المخزون"
 
@@ -10683,8 +10687,8 @@ msgid "Webhook Credential"
 msgstr "بيانات اعتماد Webhook"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:49
-msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ansible AWX and request a configuration update using this job template."
-msgstr "استدعاءات التزويد: تمكّن إنشاء عنوان URL لاستدعاء التزويد. باستخدام عنوان URL، يمكن للمضيف الاتصال بـ Ansible AWX وطلب تحديث التكوين باستخدام قالب المهمة هذا."
+#~ msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ansible AWX and request a configuration update using this job template."
+#~ msgstr "استدعاءات التزويد: تمكّن إنشاء عنوان URL لاستدعاء التزويد. باستخدام عنوان URL، يمكن للمضيف الاتصال بـ Ansible AWX وطلب تحديث التكوين باستخدام قالب المهمة هذا."
 
 #: screens/User/shared/UserTokenForm.tsx:30
 msgid "Please enter a value."
@@ -10698,7 +10702,7 @@ msgstr "تم التحديث"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:340
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:141
 #: screens/Project/ProjectList/ProjectListItem.tsx:292
-#: screens/TopologyView/Tooltip.tsx:327
+#: screens/TopologyView/Tooltip.tsx:329
 msgid "Last modified"
 msgstr "آخر تعديل"
 
@@ -10725,7 +10729,7 @@ msgstr "المضيفون المتاحون"
 msgid "Logging"
 msgstr "التسجيل"
 
-#: screens/TopologyView/Tooltip.tsx:212
+#: screens/TopologyView/Tooltip.tsx:214
 msgid "Instance status"
 msgstr "حالة المثيل"
 
@@ -10921,11 +10925,11 @@ msgstr "عنوان بريد إلكتروني غير صالح"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:74
 #: components/TemplateList/TemplateList.tsx:255
 #: components/TemplateList/TemplateListItem.tsx:161
-#: screens/Host/HostDetail/HostDetail.tsx:77
+#: screens/Host/HostDetail/HostDetail.tsx:80
 #: screens/Host/HostList/HostList.tsx:171
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:41
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:224
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:62
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:225
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:63
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:83
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:139
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:106
@@ -11014,7 +11018,7 @@ msgstr "خطأ في الحذف"
 msgid "Failed to delete one or more inventory sources."
 msgstr "فشل حذف مصدر مخزون واحد أو أكثر."
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:352
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:355
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "إذا تم تحديده، فسيتم عرض هذا الحقل على العقدة بدلاً من اسم المورد عند عرض سير العمل"
 
@@ -11034,7 +11038,7 @@ msgstr "تنسيق وقت غير صالح"
 msgid "Unknown Project"
 msgstr "مشروع غير معروف"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:301
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:304
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "الشروط المسبقة لتشغيل هذه العقدة عند وجود عدة عقد أصلية. راجع"
 
@@ -11121,7 +11125,7 @@ msgstr "النمط المستخدم لاستهداف المضيفين في ال�
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:197
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:269
 #: screens/Template/shared/JobTemplateForm.tsx:577
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:190
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:193
 msgid "Timeout"
 msgstr "المهلة"
 
@@ -11236,7 +11240,7 @@ msgstr "قالب سير العمل"
 msgid "Approval"
 msgstr "الموافقة"
 
-#: screens/TopologyView/Tooltip.tsx:176
+#: screens/TopologyView/Tooltip.tsx:178
 msgid "Failed to update instance."
 msgstr "فشل تحديث المثيل."
 
@@ -11301,7 +11305,7 @@ msgstr "فشل حذف الجدول."
 msgid "<0>Note: This instance may be re-associated with this instance group if it is managed by <1>policy rules.</1></0>"
 msgstr "<0>ملاحظة: قد تتم إعادة ربط هذا المثيل بمجموعة المثيلات هذه إذا كان مُدارًا بواسطة <1>قواعد النهج.</1></0>"
 
-#: screens/TopologyView/Tooltip.tsx:220
+#: screens/TopologyView/Tooltip.tsx:222
 msgid "Instance type"
 msgstr "نوع المثيل"
 
@@ -11347,9 +11351,9 @@ msgstr "اختر نوع المورد الذي سيتلقى أدوارًا جدي
 #: screens/Instances/InstanceList/InstanceListItem.tsx:143
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.tsx:33
 #: screens/Instances/InstancePeers/InstancePeerListItem.tsx:55
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:54
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:55
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:106
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:47
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:48
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:125
 #: screens/Organization/OrganizationList/OrganizationListItem.tsx:39
 #: screens/Organization/shared/OrganizationForm.tsx:120
@@ -11391,7 +11395,7 @@ msgstr "مرحبًا بك في Red Hat Ansible Automation Platform!\n"
 msgid "Provisioning fail"
 msgstr "فشل التوفير"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:232
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:235
 msgid "Whether the approval node is automatically approved or denied when the timeout expires."
 msgstr "ما إذا كانت عقدة الموافقة تتم الموافقة عليها أو رفضها تلقائيًا عند انتهاء المهلة."
 
@@ -11641,7 +11645,7 @@ msgstr "تشغيل"
 msgid "If you only want to remove access for this particular user, please remove them from the team."
 msgstr "إذا كنت تريد فقط إزالة الوصول لهذا المستخدم المعين، يرجى إزالته من الفريق."
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:246
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:249
 #: screens/WorkflowApproval/shared/WorkflowApprovalButton.tsx:52
 #: screens/WorkflowApproval/shared/WorkflowApprovalButton.tsx:55
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:187
@@ -11751,9 +11755,9 @@ msgstr "اترك هذا الحقل فارغًا لجعل بيئة التنفيذ
 
 #: screens/Host/HostGroups/HostGroupsList.tsx:251
 #: screens/InstanceGroup/Instances/InstanceList.tsx:395
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:299
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:300
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:262
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:281
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:282
 #: screens/User/UserTeams/UserTeamList.tsx:269
 msgid "Failed to associate."
 msgstr "فشل الربط."
@@ -11769,7 +11773,7 @@ msgstr "فشل الربط."
 #: screens/Inventory/InventoryHost/InventoryHost.tsx:96
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:245
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:147
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:264
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:265
 #: util/getRelatedResourceDeleteDetails.ts:150
 msgid "Groups"
 msgstr "المجموعات"
@@ -11800,7 +11804,7 @@ msgstr "تجاهل التغييرات المحلية قبل المزامنة"
 msgid "The number of hosts you have automated against is below your subscription count."
 msgstr "عدد المضيفين الذين قمت بالأتمتة عليهم أقل من عدد اشتراكك."
 
-#: screens/Host/HostDetail/HostDetail.tsx:132
+#: screens/Host/HostDetail/HostDetail.tsx:135
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:128
 msgid "Failed to delete host."
 msgstr "فشل حذف المضيف."
@@ -11839,12 +11843,12 @@ msgstr "فشل حذف المضيف."
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:106
 #: screens/Host/HostGroups/HostGroupsList.tsx:172
 #: screens/Host/HostList/HostList.tsx:158
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:206
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:135
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:207
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:134
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:176
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:128
 #: screens/Inventory/InventoryList/InventoryList.tsx:217
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:194
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:195
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:97
 #: screens/Organization/OrganizationList/OrganizationList.tsx:129
 #: screens/Project/ProjectList/ProjectList.tsx:213
@@ -11961,7 +11965,7 @@ msgstr "تبديل بدء الإشعار"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:464
 #: components/TemplateList/TemplateListItem.tsx:264
 #: components/TemplateList/TemplateListItem.tsx:274
-#: screens/Host/HostDetail/HostDetail.tsx:83
+#: screens/Host/HostDetail/HostDetail.tsx:86
 #: screens/Host/HostList/HostList.tsx:173
 #: screens/Host/HostList/HostListItem.tsx:67
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:47

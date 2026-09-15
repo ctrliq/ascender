@@ -165,7 +165,7 @@ msgstr "プロジェクトの削除"
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:168
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:295
 #: screens/Instances/InstanceList/InstanceListItem.tsx:183
-#: screens/TopologyView/Tooltip.tsx:280
+#: screens/TopologyView/Tooltip.tsx:282
 msgid "{forks, plural, one {# fork} other {# forks}}"
 msgstr "{forks, plural, one {# フォーク} other {# フォーク}}"
 
@@ -204,7 +204,7 @@ msgstr "クリックしてデフォルト値を切り替えます"
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:181
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:313
 #: screens/Instances/InstanceList/InstanceListItem.tsx:197
-#: screens/TopologyView/Tooltip.tsx:302
+#: screens/TopologyView/Tooltip.tsx:304
 msgid "RAM {0}"
 msgstr "メモリー {0}"
 
@@ -600,7 +600,7 @@ msgstr "オプション"
 msgid "For more information, refer to the"
 msgstr "詳細については、以下を参照してください"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:366
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:369
 msgid "Maximum number of times this node's job is automatically retried after failing before its failure paths are followed. Canceled jobs are never retried."
 msgstr "このノードのジョブが失敗パスをたどる前に、失敗後に自動的に再試行される最大回数。キャンセルされたジョブは再試行されません。"
 
@@ -661,7 +661,7 @@ msgid "Instance Type"
 msgstr "インスタンスタイプ"
 
 #: components/ExpandCollapse/ExpandCollapse.tsx:49
-#: components/PaginatedTable/HeaderRow.tsx:55
+#: components/PaginatedTable/HeaderRow.tsx:57
 msgid "Expand"
 msgstr "展開"
 
@@ -685,7 +685,7 @@ msgstr "次回実行日時"
 msgid "SCM update"
 msgstr "SCM 更新"
 
-#: screens/TopologyView/Tooltip.tsx:247
+#: screens/TopologyView/Tooltip.tsx:249
 msgid "IP address"
 msgstr "IP アドレス"
 
@@ -959,7 +959,7 @@ msgstr "デバッグオプションの表示と編集"
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:162
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:288
 #: screens/Instances/InstanceList/InstanceListItem.tsx:176
-#: screens/TopologyView/Tooltip.tsx:273
+#: screens/TopologyView/Tooltip.tsx:275
 msgid "CPU {0}"
 msgstr "CPU {0}"
 
@@ -1111,7 +1111,7 @@ msgstr "サブスクリプションの編集の取り消し"
 #~ msgid "Prompt for credentials on launch."
 #~ msgstr "起動時に認証情報を要求します。"
 
-#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:55
+#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:56
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupItem.tsx:54
 msgid "Edit group"
 msgstr "グループの編集"
@@ -1122,8 +1122,8 @@ msgid "Copy full revision to clipboard."
 msgstr "完全なリビジョンをクリップボードにコピーします。"
 
 #: components/PromptDetail/PromptDetail.tsx:190
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:364
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:365
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:367
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:368
 msgid "Max Retries"
 msgstr "最大再試行回数"
 
@@ -1143,7 +1143,7 @@ msgstr "このグループで同時に実行するジョブの最大数。\n"
 msgid "Select a credential Type"
 msgstr "認証情報タイプの選択"
 
-#: components/CodeEditor/VariablesDetail.tsx:108
+#: components/CodeEditor/VariablesDetail.tsx:111
 msgid "Error:"
 msgstr "エラー:"
 
@@ -1262,7 +1262,7 @@ msgstr "リストからアイテムの選択"
 msgid "Inventory Sync"
 msgstr "インベントリー同期"
 
-#: components/About/About.tsx:46
+#: components/About/About.tsx:50
 msgid "Copyright"
 msgstr "著作権"
 
@@ -1334,7 +1334,7 @@ msgstr "ノードタイプ"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:463
 #: screens/Template/shared/JobTemplate.helptext.tsx:72
 #: screens/Template/Survey/SurveyQuestionForm.tsx:312
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:309
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:312
 msgid "documentation"
 msgstr "ドキュメント"
 
@@ -1376,9 +1376,9 @@ msgstr "このワークフロージョブテンプレートは、現在他のリ
 #: screens/Inventory/Inventories.tsx:106
 #: screens/Inventory/Inventories.tsx:120
 #: screens/Inventory/Inventory.tsx:78
-#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:78
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:196
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:283
+#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:87
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:197
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:284
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:112
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:174
 #: screens/Inventory/SmartInventory.tsx:77
@@ -1473,7 +1473,7 @@ msgstr "ID、名前、または説明フィールドのあいまい検索。"
 msgid "Launch management job"
 msgstr "管理ジョブの起動"
 
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:150
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:151
 msgid "Add existing group"
 msgstr "既存グループの追加"
 
@@ -1510,7 +1510,7 @@ msgstr "権限昇格の有効化"
 msgid "Filter..."
 msgstr "フィルター..."
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:213
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:216
 msgid "Timeout seconds"
 msgstr "タイムアウトの秒数"
 
@@ -1720,7 +1720,7 @@ msgstr "新規フェデレーションインベントリーの作成"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:119
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:22
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:116
-#: screens/Host/HostDetail/HostDetail.tsx:75
+#: screens/Host/HostDetail/HostDetail.tsx:78
 #: screens/Host/HostGroups/HostGroupItem.tsx:44
 #: screens/Host/HostGroups/HostGroupsList.tsx:167
 #: screens/Host/HostGroups/HostGroupsList.tsx:184
@@ -1756,13 +1756,13 @@ msgstr "新規フェデレーションインベントリーの作成"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:164
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:83
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:102
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:41
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:201
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:216
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:222
-#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:46
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:125
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:147
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:42
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:202
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:217
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:223
+#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:47
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:124
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:146
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:81
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupItem.tsx:46
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:171
@@ -1774,9 +1774,9 @@ msgstr "新規フェデレーションインベントリーの作成"
 #: screens/Inventory/InventoryList/InventoryList.tsx:227
 #: screens/Inventory/InventoryList/InventoryList.tsx:236
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:108
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:189
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:204
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:245
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:190
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:205
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:246
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:215
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:214
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:72
@@ -1830,7 +1830,7 @@ msgstr "新規フェデレーションインベントリーの作成"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:94
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:131
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:163
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:182
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:185
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:74
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:94
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/SystemJobTemplatesList.tsx:80
@@ -1863,7 +1863,7 @@ msgstr "ホスト設定キー"
 msgid "Hosts remaining"
 msgstr "残りのホスト"
 
-#: components/About/About.tsx:48
+#: components/About/About.tsx:52
 msgid "Ctrl IQ, Inc."
 msgstr "Ctrl IQ, Inc."
 
@@ -1948,10 +1948,10 @@ msgstr "承認済"
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:192
 #: screens/Instances/InstanceList/InstanceList.tsx:237
 #: screens/Instances/InstanceList/InstanceListItem.tsx:211
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:225
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:65
-#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:52
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:148
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:226
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:66
+#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:53
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:147
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupItem.tsx:51
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:189
 #: screens/Inventory/InventoryHosts/InventoryHostItem.tsx:119
@@ -1959,8 +1959,8 @@ msgstr "承認済"
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:142
 #: screens/Inventory/InventoryList/InventoryList.tsx:240
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:151
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:246
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:55
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:247
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:56
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:217
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:91
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:109
@@ -2491,7 +2491,7 @@ msgstr "範囲"
 msgid "{0} (deleted)"
 msgstr "{0} (削除済み)"
 
-#: screens/Host/HostDetail/HostDetail.tsx:85
+#: screens/Host/HostDetail/HostDetail.tsx:88
 msgid "The inventory that this host belongs to."
 msgstr "このホストが属するインベントリー。"
 
@@ -2699,7 +2699,7 @@ msgstr "新規スマートインベントリーの作成"
 msgid "Delete Schedule"
 msgstr "スケジュールの削除"
 
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:310
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:311
 msgid "Failed to disassociate one or more hosts."
 msgstr "1 つ以上のホストの関連付けを解除できませんでした。"
 
@@ -2730,9 +2730,9 @@ msgid "Last automated"
 msgstr "最後に自動化"
 
 #: screens/Host/HostGroups/HostGroupItem.tsx:53
-#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:60
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:57
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:63
+#: screens/Inventory/InventoryGroups/InventoryGroupItem.tsx:61
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:58
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:64
 msgid "Edit Group"
 msgstr "グループの編集"
 
@@ -2830,8 +2830,8 @@ msgstr "0 (正常)"
 
 #: components/Workflow/WorkflowNodeHelp.tsx:134
 #: components/Workflow/WorkflowNodeHelp.tsx:170
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:350
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:351
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:353
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:354
 msgid "Node Alias"
 msgstr "ノードのエイリアス"
 
@@ -2845,7 +2845,7 @@ msgstr "検索送信ボタン"
 msgid "POST"
 msgstr "POST"
 
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:98
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:99
 msgid "You do not have permission to delete the following Groups: {itemsUnableToDelete}"
 msgstr "次のグループを削除する権限がありません: {itemsUnableToDelete}"
 
@@ -3201,7 +3201,7 @@ msgstr "情報"
 msgid "<0>Note: Instances may be re-associated with this instance group if they are managed by <1>policy rules.</1></0>"
 msgstr "< 0 >注：インスタンスは、< 1 >ポリシールールによって管理されている場合、このインスタンスグループに再関連付けることができます。</ 1 ></ 0 >"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:198
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:201
 msgid "Timeout minutes"
 msgstr "タイムアウト (分)"
 
@@ -3209,7 +3209,7 @@ msgstr "タイムアウト (分)"
 msgid "This inventory source is currently being used by other resources that rely on it. Are you sure you want to delete it?"
 msgstr "このインベントリーソースは、現在それに依存している他のリソースで使用されています。削除してもよろしいですか?"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:245
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:248
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.tsx:47
 #: screens/WorkflowApproval/shared/WorkflowDenyButton.tsx:54
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:187
@@ -3359,7 +3359,7 @@ msgstr "Less than or equal to の比較条件"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:366
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:197
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:202
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:103
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:104
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:378
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:71
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:75
@@ -3408,7 +3408,7 @@ msgstr "プロジェクトの同期"
 
 #: screens/Host/HostGroups/HostGroupsList.tsx:240
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:251
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:270
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:271
 msgid "Select Groups"
 msgstr "グループの選択"
 
@@ -3444,8 +3444,8 @@ msgstr "Twilio の「Messaging\n"
 msgid "This field will be retrieved from an external secret management system using the specified credential."
 msgstr "このフィールドは、指定された認証情報を使用して外部のシークレット管理システムから取得されます。"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:272
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:282
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:275
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:285
 msgid "Context Template"
 msgstr "コンテキストテンプレート"
 
@@ -3488,7 +3488,7 @@ msgstr "オプションの選択"
 msgid "The project revision is currently out of date.  Please refresh to fetch the most recent revision."
 msgstr "プロジェクトのリビジョンが現在古くなっています。更新して最新のリビジョンを取得してください。"
 
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:289
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:290
 msgid "Select Hosts"
 msgstr "ホストの選択"
 
@@ -3506,14 +3506,14 @@ msgstr "GitHub チーム"
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:99
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:111
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:149
-#: screens/Host/HostDetail/HostDetail.tsx:92
+#: screens/Host/HostDetail/HostDetail.tsx:95
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:93
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:111
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:55
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:324
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:169
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:174
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:53
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:54
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:88
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:337
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:139
@@ -3782,7 +3782,7 @@ msgid "This table gives a few useful parameters of the constructed\n"
 msgstr "この表には、構築済みインベントリープラグインの\n"
 "               いくつかの便利なパラメーターが記載されています。パラメーターの完全なリストについては "
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:324
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:327
 msgid "Convergence select"
 msgstr "収束 (コンバージェンス) 選択"
 
@@ -3810,7 +3810,7 @@ msgstr "有効にすると、サポートされている場合に Ansible タス
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:240
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:274
 #: screens/Instances/InstanceList/InstanceListItem.tsx:262
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:311
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:314
 msgid "for more info."
 msgstr "(詳細情報)"
 
@@ -4068,11 +4068,11 @@ msgid "Tags for the Annotation"
 msgstr "アノテーションのタグ"
 
 #: screens/Inventory/Inventories.tsx:122
-#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:73
+#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:82
 #: screens/Inventory/InventoryHosts/InventoryHostItem.tsx:102
 #: screens/Inventory/InventoryHosts/InventoryHostItem.tsx:105
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:141
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:184
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:185
 msgid "Related Groups"
 msgstr "関連するグループ"
 
@@ -4091,15 +4091,15 @@ msgstr "認証情報の削除"
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:287
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:118
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:129
-#: screens/Host/HostDetail/HostDetail.tsx:114
+#: screens/Host/HostDetail/HostDetail.tsx:117
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:126
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:130
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:361
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:341
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:186
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:191
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:66
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:71
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:67
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:72
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:110
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:352
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:117
@@ -4211,7 +4211,7 @@ msgid "Float"
 msgstr "浮動"
 
 #. placeholder {0}: host.id
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:61
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:62
 msgid "host-description-{0}"
 msgstr "host-description-{0}"
 
@@ -4333,7 +4333,7 @@ msgstr "ユーザートークンの作成"
 msgid "View all instance groups"
 msgstr "すべてのインスタンスグループの表示"
 
-#: screens/TopologyView/Tooltip.tsx:163
+#: screens/TopologyView/Tooltip.tsx:165
 msgid "Click on a node icon to display the details."
 msgstr "ノードアイコンをクリックして詳細を表示します。"
 
@@ -4560,7 +4560,7 @@ msgstr "組織の詳細の表示"
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:306
 #: screens/Credential/CredentialList/CredentialList.tsx:214
 #: screens/Host/HostDetail/HostDetail.tsx:62
-#: screens/Host/HostDetail/HostDetail.tsx:129
+#: screens/Host/HostDetail/HostDetail.tsx:132
 #: screens/Host/HostGroups/HostGroupsList.tsx:247
 #: screens/Host/HostList/HostList.tsx:229
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:117
@@ -4578,16 +4578,16 @@ msgstr "組織の詳細の表示"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventorySyncButton.tsx:51
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:205
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:211
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:88
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:296
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:307
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:89
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:297
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:308
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:60
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:125
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:258
 #: screens/Inventory/InventoryHosts/InventoryHostItem.tsx:143
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:203
 #: screens/Inventory/InventoryList/InventoryList.tsx:298
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:277
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:278
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:385
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:242
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:254
@@ -4616,7 +4616,7 @@ msgstr "組織の詳細の表示"
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:431
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.tsx:399
 #: screens/TopologyView/MeshGraph.tsx:448
-#: screens/TopologyView/Tooltip.tsx:171
+#: screens/TopologyView/Tooltip.tsx:173
 #: screens/User/UserDetail/UserDetail.tsx:145
 #: screens/User/UserList/UserList.tsx:182
 #: screens/User/UserRoles/UserRolesList.tsx:247
@@ -4801,7 +4801,7 @@ msgstr "オラグナイゼーション"
 msgid "{brandName} logo"
 msgstr "{brandName} ロゴ"
 
-#: screens/Job/Job.tsx:236
+#: screens/Job/Job.tsx:238
 msgid "View Job Details"
 msgstr "ジョブの詳細の表示"
 
@@ -4961,10 +4961,10 @@ msgstr "削除する質問の選択"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:294
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:148
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:641
-#: screens/Host/HostDetail/HostDetail.tsx:99
+#: screens/Host/HostDetail/HostDetail.tsx:102
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:62
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:166
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:47
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:48
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:95
 #: screens/Inventory/shared/InventoryForm.tsx:120
 #: screens/Inventory/shared/InventoryGroupForm.tsx:68
@@ -5026,8 +5026,8 @@ msgstr "タスク"
 msgid "Unreachable Hosts"
 msgstr "到達不能なホスト"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:228
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:239
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:231
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:242
 msgid "On timeout"
 msgstr "タイムアウト時"
 
@@ -5066,7 +5066,7 @@ msgstr "インベントリーが正常にコピーされました"
 msgid "If enabled, this will store gathered facts so they can be viewed at the host level. Facts are persisted and injected into the fact cache at runtime."
 msgstr "有効にすると、収集されたファクトが保存され、ホストレベルで表示できるようになります。ファクトは永続化され、実行時にファクトキャッシュに注入されます。"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:254
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:257
 msgid "The number of distinct users that must approve before the workflow continues. A single denial always denies the node."
 msgstr "ワークフローが続行される前に承認する必要がある個別ユーザーの数。1 回の拒否で常にノードが拒否されます。"
 
@@ -5394,7 +5394,7 @@ msgstr "組織 (名前)"
 msgid "Reload"
 msgstr "再読み込み"
 
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:161
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:162
 msgid "Add new host"
 msgstr "新規ホストの追加"
 
@@ -5506,7 +5506,7 @@ msgstr "ブランチの上書き許可"
 msgid "Create new source"
 msgstr "新規ソースの作成"
 
-#: screens/TopologyView/Tooltip.tsx:234
+#: screens/TopologyView/Tooltip.tsx:236
 msgid "Download Bundle"
 msgstr "バンドルのダウンロード"
 
@@ -5597,13 +5597,13 @@ msgstr "次へスクロール"
 msgid "system"
 msgstr "システム"
 
-#: components/PaginatedTable/HeaderRow.tsx:60
+#: components/PaginatedTable/HeaderRow.tsx:63
 #: screens/Template/Survey/SurveyList.tsx:118
 msgid "Row select"
 msgstr "行の選択"
 
 #: screens/Inventory/Inventory.tsx:242
-#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:158
+#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:173
 #: screens/Inventory/SmartInventory.tsx:209
 msgid "View Inventory Details"
 msgstr "インベントリーの詳細の表示"
@@ -5674,7 +5674,7 @@ msgid "Play Count"
 msgstr "再生回数"
 
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:128
-#: screens/TopologyView/Tooltip.tsx:256
+#: screens/TopologyView/Tooltip.tsx:258
 msgid "Instance groups"
 msgstr "インスタンスグループ"
 
@@ -5854,9 +5854,9 @@ msgstr "スキップタグ"
 
 #: screens/Host/HostList/HostListItem.tsx:80
 #: screens/Host/HostList/HostListItem.tsx:85
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:74
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:77
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:81
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:75
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:78
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:82
 msgid "Edit Host"
 msgstr "ホストの編集"
 
@@ -5864,7 +5864,7 @@ msgstr "ホストの編集"
 msgid "Filter by successful jobs"
 msgstr "成功ジョブによるフィルター"
 
-#: components/About/About.tsx:47
+#: components/About/About.tsx:51
 msgid "Red Hat, Inc."
 msgstr "Red Hat, Inc."
 
@@ -5953,8 +5953,8 @@ msgstr "3 (デバッグ)"
 msgid "Track submodules"
 msgstr "サブモジュールを追跡する"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:250
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:261
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:253
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:264
 msgid "Required approvals"
 msgstr "必要な承認"
 
@@ -6306,7 +6306,7 @@ msgstr "ジョブの取り消し"
 msgid "First Name"
 msgstr "名"
 
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:132
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:131
 msgid "Show only root groups"
 msgstr "root グループのみを表示"
 
@@ -6388,6 +6388,10 @@ msgstr "ヘルスチェックは、実行ノードでのみ実行できます。
 msgid "Visualizer"
 msgstr "ビジュアライザー"
 
+#: screens/Template/shared/JobTemplate.helptext.tsx:49
+msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ascender and request a configuration update using this job template."
+msgstr "プロビジョニングコールバック: プロビジョニングコールバック URL の作成を有効にします。この URL を使用して、ホストは Ascender に接続し、このジョブテンプレートを使用して設定の更新を要求できます。"
+
 #: components/JobList/JobListItem.tsx:159
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:183
@@ -6400,7 +6404,7 @@ msgstr "ジョブの再起動"
 #~ msgstr "サブスクリプションの取得"
 
 #: components/HostToggle/HostToggle.tsx:82
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:68
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:69
 msgid "Toggle host"
 msgstr "ホストの切り替え"
 
@@ -6434,7 +6438,7 @@ msgstr "Vault パスワード | {credId}"
 msgid "Are you sure you want to remove {0} access from {1}?  Doing so affects all members of the team."
 msgstr "{1} から {0} のアクセスを削除しますか? これを行うと、チームのすべてのメンバーに影響します。"
 
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:160
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:161
 msgid "Add existing host"
 msgstr "既存ホストの追加"
 
@@ -6523,7 +6527,7 @@ msgstr "更新"
 msgid "Date search input"
 msgstr "日付検索入力"
 
-#: screens/Host/HostDetail/HostDetail.tsx:120
+#: screens/Host/HostDetail/HostDetail.tsx:123
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:116
 msgid "Delete Host"
 msgstr "ホストの削除"
@@ -6538,7 +6542,7 @@ msgstr "ジョブ設定の表示"
 
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:114
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:125
-#: screens/Host/HostDetail/HostDetail.tsx:110
+#: screens/Host/HostDetail/HostDetail.tsx:113
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:122
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:126
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:357
@@ -6592,7 +6596,7 @@ msgid "Normal User"
 msgstr "標準ユーザー"
 
 #. placeholder {0}: host.id
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:56
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:57
 msgid "host-name-{0}"
 msgstr "host-name-{0}"
 
@@ -6664,8 +6668,8 @@ msgid "Application not found."
 msgstr "アプリケーションが見つかりません。"
 
 #: components/PromptDetail/PromptDetail.tsx:183
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:333
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:339
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:336
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:342
 msgid "Any"
 msgstr "任意"
 
@@ -6721,7 +6725,7 @@ msgstr "ユーザーロール"
 msgid "{brandName} Subscription"
 msgstr "{brandName} サブスクリプション"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:208
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:211
 msgid "min"
 msgstr "分"
 
@@ -6816,7 +6820,7 @@ msgid "Constructed inventory parameters table"
 msgstr "構築されたインベントリパラメータテーブル"
 
 #. placeholder {0}: inventoryGroup.name
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:92
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:93
 msgid "Failed to delete group {0}."
 msgstr "グループ {0} を削除できませんでした。"
 
@@ -6950,12 +6954,12 @@ msgstr "フォロー"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:110
 #: screens/Host/HostGroups/HostGroupsList.tsx:176
 #: screens/Host/HostList/HostList.tsx:162
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:210
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:139
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:211
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:138
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:180
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:132
 #: screens/Inventory/InventoryList/InventoryList.tsx:221
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:198
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:199
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:101
 #: screens/Organization/OrganizationList/OrganizationList.tsx:133
 #: screens/Project/ProjectList/ProjectList.tsx:209
@@ -7140,8 +7144,8 @@ msgstr "このフィールドは数値で、{min} より大きい値である必
 #: components/LaunchButton/ReLaunchDropDown.tsx:53
 #: components/PromptDetail/PromptDetail.tsx:183
 #: screens/Metrics/Metrics.tsx:91
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:333
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:342
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:336
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:345
 msgid "All"
 msgstr "すべて"
 
@@ -7344,7 +7348,7 @@ msgstr "キャッシュのタイムアウト (秒)"
 msgid "Logout"
 msgstr "ログアウト"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:223
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:226
 msgid "sec"
 msgstr "秒"
 
@@ -7438,7 +7442,7 @@ msgstr "同期"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:68
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:157
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:157
-#: screens/Host/HostDetail/HostDetail.tsx:81
+#: screens/Host/HostDetail/HostDetail.tsx:84
 #: screens/Host/HostList/HostList.tsx:154
 #: screens/Host/HostList/HostList.tsx:172
 #: screens/Host/HostList/HostListItem.tsx:63
@@ -7447,8 +7451,8 @@ msgstr "同期"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:177
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:88
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:106
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:45
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:223
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:46
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:224
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:87
 #: screens/Inventory/InventoryHosts/InventoryHostItem.tsx:96
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:124
@@ -7484,7 +7488,7 @@ msgstr "同期"
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:166
 #: screens/Template/Survey/SurveyQuestionForm.tsx:214
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:114
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:187
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:190
 #: screens/User/shared/UserTokenForm.tsx:69
 #: screens/User/UserOrganizations/UserOrganizationList.tsx:77
 #: screens/User/UserOrganizations/UserOrganizationListItem.tsx:28
@@ -7559,7 +7563,7 @@ msgstr "ローカルタイムゾーン"
 msgid "No Status Available"
 msgstr "ステータス情報はありません"
 
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:256
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:257
 msgid "Disassociate host from group?"
 msgstr "ホストのグループとの関連付けを解除しますか?"
 
@@ -7788,7 +7792,7 @@ msgstr "ジョブがキャンセルされるまでの実行時間 (秒単位)。
 
 #: screens/Host/HostGroups/HostGroupsList.tsx:252
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:263
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:282
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:283
 msgid "Failed to disassociate one or more groups."
 msgstr "1 つ以上のグループの関連付けを解除できませんでした。"
 
@@ -8013,7 +8017,7 @@ msgstr "ユーザートークン"
 msgid "View RADIUS settings"
 msgstr "RADIUS 設定の表示"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:145
+#: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:147
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.tsx:339
 msgid "ALL"
 msgstr "すべて"
@@ -8302,7 +8306,7 @@ msgstr "指定されたホスト変数のdictから有効な状態を取得し�
 msgid "Inventory Source Sync Error"
 msgstr "インベントリーソース同期エラー"
 
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:257
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:258
 msgid ""
 "\n"
 "                        Note that only hosts directly in this group can\n"
@@ -8341,7 +8345,7 @@ msgid "Job ID"
 msgstr "ジョブ ID:"
 
 #: components/PromptDetail/PromptDetail.tsx:181
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:295
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:298
 msgid "Convergence"
 msgstr "収束 (コンバージェンス)"
 
@@ -8518,7 +8522,7 @@ msgstr "ホスト"
 
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:199
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:82
-#: screens/TopologyView/Tooltip.tsx:308
+#: screens/TopologyView/Tooltip.tsx:310
 msgid "Capacity"
 msgstr "容量"
 
@@ -8648,7 +8652,7 @@ msgstr "選択"
 
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:125
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:76
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:105
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:106
 msgid "Select a row to delete"
 msgstr "削除する行を選択してください"
 
@@ -8731,7 +8735,7 @@ msgstr "GitHub"
 msgid "Are you sure you want to remove this link?"
 msgstr "このリンクを削除してもよろしいですか?"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:276
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:279
 msgid "A Jinja2 template rendered with upstream set_stats artifacts when the approval is created. Use this to show the approver relevant context from previous job steps. Available variables come from set_stats data of parent nodes."
 msgstr "承認が作成されたときに、アップストリームの set_stats アーティファクトでレンダリングされる Jinja2 テンプレート。これを使用して、以前のジョブステップの関連コンテキストを承認者に表示します。使用可能な変数は、親ノードの set_stats データから取得されます。"
 
@@ -8814,7 +8818,7 @@ msgstr "1 つ以上のアプリケーションを削除できませんでした�
 msgid "Miscellaneous Authentication"
 msgstr "その他の認証"
 
-#: screens/TopologyView/Tooltip.tsx:228
+#: screens/TopologyView/Tooltip.tsx:230
 msgid "Download bundle"
 msgstr "バンドルのダウンロード"
 
@@ -9074,11 +9078,11 @@ msgstr "オプションの更新"
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:257
 #: screens/CredentialType/CredentialTypeDetails/CredentialTypeDetails.tsx:104
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:116
-#: screens/Host/HostDetail/HostDetail.tsx:95
+#: screens/Host/HostDetail/HostDetail.tsx:98
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:98
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:116
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:179
-#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:55
+#: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
 #: screens/Job/JobDetail/JobDetail.tsx:583
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:451
@@ -9126,8 +9130,8 @@ msgstr "エラー"
 msgid "IRC Server Port"
 msgstr "IRC サーバーポート"
 
-#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:60
-#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:61
+#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:69
+#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:70
 msgid "Back to Groups"
 msgstr "グループに戻る"
 
@@ -9271,7 +9275,7 @@ msgstr "ユーザー"
 msgid "Edit Notification Template"
 msgstr "通知テンプレートの編集"
 
-#: components/About/About.tsx:58
+#: components/About/About.tsx:62
 msgid "Brand Image"
 msgstr "ブランドイメージ"
 
@@ -9283,7 +9287,7 @@ msgstr "最初"
 msgid "LDAP settings"
 msgstr "LDAP 設定"
 
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:236
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:237
 msgid "Disassociate related group(s)?"
 msgstr "関連するグループの関連付けを解除しますか?"
 
@@ -9296,7 +9300,7 @@ msgstr "関連するグループの関連付けを解除しますか?"
 #: screens/Job/JobDetail/JobDetail.tsx:428
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:251
 #: screens/Template/shared/JobTemplateForm.tsx:502
-#: screens/TopologyView/Tooltip.tsx:266
+#: screens/TopologyView/Tooltip.tsx:268
 msgid "Forks"
 msgstr "フォーク"
 
@@ -9573,7 +9577,7 @@ msgstr "タグは、大規模な playbook があり、play またはタスクの
 msgid "Events"
 msgstr "イベント"
 
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:130
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:129
 msgid "Group type"
 msgstr "グループタイプ"
 
@@ -9673,7 +9677,7 @@ msgstr "GitHub 設定の表示"
 msgid "/ (project root)"
 msgstr "/ (プロジェクト root)"
 
-#: screens/TopologyView/Tooltip.tsx:333
+#: screens/TopologyView/Tooltip.tsx:335
 msgid "Last seen"
 msgstr "最終表示"
 
@@ -9907,7 +9911,7 @@ msgstr "ルックアップの取り消し"
 #: screens/Inventory/Inventories.tsx:102
 #: screens/Inventory/Inventories.tsx:128
 #: screens/Inventory/Inventory.tsx:75
-#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:68
+#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:77
 #: screens/Inventory/InventoryHost/InventoryHost.tsx:86
 #: screens/Inventory/InventorySource/InventorySource.tsx:105
 #: screens/Inventory/SmartInventory.tsx:75
@@ -9965,8 +9969,8 @@ msgstr "ルックアップの取り消し"
 #: screens/Template/Templates.tsx:48
 #: screens/Template/WorkflowJobTemplate.tsx:129
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:149
-#: screens/TopologyView/Tooltip.tsx:156
-#: screens/TopologyView/Tooltip.tsx:189
+#: screens/TopologyView/Tooltip.tsx:158
+#: screens/TopologyView/Tooltip.tsx:191
 #: screens/User/User.tsx:73
 #: screens/User/Users.tsx:34
 #: screens/User/Users.tsx:40
@@ -10034,7 +10038,7 @@ msgstr "有効にすると、コントロールノードはこのインスタン
 msgid "and click on Update Revision on Launch"
 msgstr "そして、起動時のリビジョン更新をクリックします"
 
-#: components/About/About.tsx:55
+#: components/About/About.tsx:59
 #: components/AppContainer/PageHeaderToolbar.tsx:180
 msgid "About"
 msgstr "情報"
@@ -10257,7 +10261,7 @@ msgstr "すべてをスキップ"
 msgid "Create New Schedule"
 msgstr "新規スケジュールの作成"
 
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:151
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:152
 msgid "Add new group"
 msgstr "新規グループの追加"
 
@@ -10436,7 +10440,7 @@ msgstr "失敗したノードから再起動"
 msgid "View all tokens."
 msgstr "すべてのトークンを表示します。"
 
-#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:103
+#: screens/Inventory/InventoryGroup/InventoryGroup.tsx:107
 msgid "View Inventory Groups"
 msgstr "インベントリーグループの表示"
 
@@ -10679,8 +10683,8 @@ msgid "Webhook Credential"
 msgstr "Webhook の認証情報"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:49
-msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ansible AWX and request a configuration update using this job template."
-msgstr "プロビジョニングコールバック: プロビジョニングコールバック URL の作成を有効にします。この URL を使用して、ホストは Ansible AWX に接続し、このジョブテンプレートを使用して設定の更新を要求できます。"
+#~ msgid "Provisioning callbacks: Enables creation of a provisioning callback URL. Using the URL a host can contact Ansible AWX and request a configuration update using this job template."
+#~ msgstr "プロビジョニングコールバック: プロビジョニングコールバック URL の作成を有効にします。この URL を使用して、ホストは Ansible AWX に接続し、このジョブテンプレートを使用して設定の更新を要求できます。"
 
 #: screens/User/shared/UserTokenForm.tsx:30
 msgid "Please enter a value."
@@ -10694,7 +10698,7 @@ msgstr "更新"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:340
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:141
 #: screens/Project/ProjectList/ProjectListItem.tsx:292
-#: screens/TopologyView/Tooltip.tsx:327
+#: screens/TopologyView/Tooltip.tsx:329
 msgid "Last modified"
 msgstr "最終変更日時"
 
@@ -10721,7 +10725,7 @@ msgstr "利用可能なホスト"
 msgid "Logging"
 msgstr "ロギング"
 
-#: screens/TopologyView/Tooltip.tsx:212
+#: screens/TopologyView/Tooltip.tsx:214
 msgid "Instance status"
 msgstr "インスタンスの状態"
 
@@ -10917,11 +10921,11 @@ msgstr "無効なメールアドレスです"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:74
 #: components/TemplateList/TemplateList.tsx:255
 #: components/TemplateList/TemplateListItem.tsx:161
-#: screens/Host/HostDetail/HostDetail.tsx:77
+#: screens/Host/HostDetail/HostDetail.tsx:80
 #: screens/Host/HostList/HostList.tsx:171
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:41
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:224
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:62
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:225
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:63
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:83
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:139
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:106
@@ -11010,7 +11014,7 @@ msgstr "エラーの削除"
 msgid "Failed to delete one or more inventory sources."
 msgstr "1 つ以上のインベントリーリソースを削除できませんでした。"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:352
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:355
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "指定した場合に、ワークフローを表示すると、リソース名の代わりにこのフィールドがノードに表示されます"
 
@@ -11030,7 +11034,7 @@ msgstr "無効な時間形式です"
 msgid "Unknown Project"
 msgstr "不明なプロジェクト"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:301
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:304
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "複数の親がある場合にこのノードを実行するための前提条件。参照:"
 
@@ -11117,7 +11121,7 @@ msgstr "インベントリー内のホストをターゲットにするために
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:197
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:269
 #: screens/Template/shared/JobTemplateForm.tsx:577
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:190
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:193
 msgid "Timeout"
 msgstr "タイムアウト"
 
@@ -11232,7 +11236,7 @@ msgstr "ワークフローテンプレート"
 msgid "Approval"
 msgstr "承認"
 
-#: screens/TopologyView/Tooltip.tsx:176
+#: screens/TopologyView/Tooltip.tsx:178
 msgid "Failed to update instance."
 msgstr "インスタンスの更新に失敗しました。"
 
@@ -11297,7 +11301,7 @@ msgstr "スケジュールを削除できませんでした。"
 msgid "<0>Note: This instance may be re-associated with this instance group if it is managed by <1>policy rules.</1></0>"
 msgstr "<0>注記: このインスタンスが<1>ポリシールール</1>によって管理されている場合、このインスタンスグループに再度関連付けられる可能性があります。</0>"
 
-#: screens/TopologyView/Tooltip.tsx:220
+#: screens/TopologyView/Tooltip.tsx:222
 msgid "Instance type"
 msgstr "インスタンスタイプ"
 
@@ -11343,9 +11347,9 @@ msgstr "新しいロールを受け取るリソースのタイプを選択しま
 #: screens/Instances/InstanceList/InstanceListItem.tsx:143
 #: screens/Instances/InstanceListenerAddressList/InstanceListenerAddressListItem.tsx:33
 #: screens/Instances/InstancePeers/InstancePeerListItem.tsx:55
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:54
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostListItem.tsx:55
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:106
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:47
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:48
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:125
 #: screens/Organization/OrganizationList/OrganizationListItem.tsx:39
 #: screens/Organization/shared/OrganizationForm.tsx:120
@@ -11387,7 +11391,7 @@ msgstr "Red Hat Ansible Automation Platform へようこそ!\n"
 msgid "Provisioning fail"
 msgstr "プロビジョニング失敗"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:232
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:235
 msgid "Whether the approval node is automatically approved or denied when the timeout expires."
 msgstr "承認ノードがタイムアウトの期限切れ時に自動的に承認されるか拒否されるか。"
 
@@ -11637,7 +11641,7 @@ msgstr "オン"
 msgid "If you only want to remove access for this particular user, please remove them from the team."
 msgstr "この特定のユーザーのアクセスのみを削除する場合は、チームから削除してください。"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:246
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:249
 #: screens/WorkflowApproval/shared/WorkflowApprovalButton.tsx:52
 #: screens/WorkflowApproval/shared/WorkflowApprovalButton.tsx:55
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:187
@@ -11747,9 +11751,9 @@ msgstr "実行環境をシステム全体で利用できるようにするには
 
 #: screens/Host/HostGroups/HostGroupsList.tsx:251
 #: screens/InstanceGroup/Instances/InstanceList.tsx:395
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:299
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:300
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:262
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:281
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:282
 #: screens/User/UserTeams/UserTeamList.tsx:269
 msgid "Failed to associate."
 msgstr "関連付けに失敗しました。"
@@ -11765,7 +11769,7 @@ msgstr "関連付けに失敗しました。"
 #: screens/Inventory/InventoryHost/InventoryHost.tsx:96
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:245
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:147
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:264
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:265
 #: util/getRelatedResourceDeleteDetails.ts:150
 msgid "Groups"
 msgstr "グループ"
@@ -11796,7 +11800,7 @@ msgstr "同期する前にローカル変更を破棄する"
 msgid "The number of hosts you have automated against is below your subscription count."
 msgstr "自動化したホストの数がサブスクリプション数を下回っています。"
 
-#: screens/Host/HostDetail/HostDetail.tsx:132
+#: screens/Host/HostDetail/HostDetail.tsx:135
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:128
 msgid "Failed to delete host."
 msgstr "ホストを削除できませんでした。"
@@ -11835,12 +11839,12 @@ msgstr "ホストを削除できませんでした。"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:106
 #: screens/Host/HostGroups/HostGroupsList.tsx:172
 #: screens/Host/HostList/HostList.tsx:158
-#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:206
-#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:135
+#: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:207
+#: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:134
 #: screens/Inventory/InventoryHostGroups/InventoryHostGroupsList.tsx:176
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:128
 #: screens/Inventory/InventoryList/InventoryList.tsx:217
-#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:194
+#: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupList.tsx:195
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:97
 #: screens/Organization/OrganizationList/OrganizationList.tsx:129
 #: screens/Project/ProjectList/ProjectList.tsx:213
@@ -11957,7 +11961,7 @@ msgstr "通知開始の切り替え"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:464
 #: components/TemplateList/TemplateListItem.tsx:264
 #: components/TemplateList/TemplateListItem.tsx:274
-#: screens/Host/HostDetail/HostDetail.tsx:83
+#: screens/Host/HostDetail/HostDetail.tsx:86
 #: screens/Host/HostList/HostList.tsx:173
 #: screens/Host/HostList/HostListItem.tsx:67
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:47
