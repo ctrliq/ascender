@@ -17,7 +17,6 @@ from rest_framework import status
 
 from ascender import MODE
 from ascender.api.generics import APIView
-from ascender.main.analytics import all_collectors
 from ascender.main.ha import is_ha_environment
 from ascender.main.utils import get_ascender_version
 from ascender.api.versioning import reverse, drf_reverse
@@ -124,7 +123,6 @@ class ApiVersionRootView(APIView):
         data['workflow_job_nodes'] = reverse('api:workflow_job_node_list', request=request)
         data['mesh_visualizer'] = reverse('api:mesh_visualizer_view', request=request)
         data['bulk'] = reverse('api:bulk', request=request)
-        data['analytics'] = reverse('api:analytics_root_view', request=request)
         return Response(data)
 
 
@@ -203,7 +201,6 @@ class ApiV2ConfigView(APIView):
             version=get_ascender_version(),
             eula='',
             analytics_status=pendo_state,
-            analytics_collectors=all_collectors(),
             become_methods=PRIVILEGE_ESCALATION_METHODS,
         )
 
