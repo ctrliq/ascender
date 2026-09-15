@@ -140,7 +140,7 @@ class CallbackBrokerWorker(BaseWorker):
             logger.error(f'profiling is disabled, wrote {filepath}')
 
     def work_loop(self, *args, **kw):
-        if settings.AWX_CALLBACK_PROFILE:
+        if settings.ASCENDER_CALLBACK_PROFILE:
             signal.signal(signal.SIGUSR1, self.toggle_profiling)
         return super(CallbackBrokerWorker, self).work_loop(*args, **kw)
 

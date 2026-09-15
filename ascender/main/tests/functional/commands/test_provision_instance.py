@@ -27,7 +27,7 @@ def test_register_self_openshift():
     assert not Instance.objects.exists()
     assert not InstanceGroup.objects.exists()
 
-    with override_settings(AWX_AUTO_DEPROVISION_INSTANCES=True, CLUSTER_HOST_ID='foo_node', SYSTEM_UUID='12345'):
+    with override_settings(ASCENDER_AUTO_DEPROVISION_INSTANCES=True, CLUSTER_HOST_ID='foo_node', SYSTEM_UUID='12345'):
         Command().handle()
     inst = Instance.objects.first()
     assert inst.hostname == 'foo_node'

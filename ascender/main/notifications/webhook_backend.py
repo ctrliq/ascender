@@ -95,7 +95,7 @@ class WebhookBackend(AscenderBaseEmailBackend, CustomNotificationBase):
                     headers=headers,
                     verify=(not self.disable_ssl_verification),
                     allow_redirects=False,  # override default behaviour for redirects
-                    timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+                    timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
                 )
 
                 # either success or error reached if this conditional fires

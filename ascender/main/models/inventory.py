@@ -475,7 +475,7 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
         delete_inventory.delay(self.pk, user_id)
 
     def _update_host_smart_inventory_memeberships(self):
-        if self.kind == 'smart' and settings.AWX_REBUILD_SMART_MEMBERSHIP:
+        if self.kind == 'smart' and settings.ASCENDER_REBUILD_SMART_MEMBERSHIP:
 
             def on_commit():
                 from ascender.main.tasks.system import update_host_smart_inventory_memberships
@@ -649,7 +649,7 @@ class Host(CommonModelNameNotUnique, RelatedJobsMixin):
         return host_name
 
     def _update_host_smart_inventory_memeberships(self):
-        if settings.AWX_REBUILD_SMART_MEMBERSHIP:
+        if settings.ASCENDER_REBUILD_SMART_MEMBERSHIP:
 
             def on_commit():
                 from ascender.main.tasks.system import update_host_smart_inventory_memberships

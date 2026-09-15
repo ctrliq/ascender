@@ -211,7 +211,7 @@ class Instance(HasPolicyEditsMixin, BaseModel):
             )
         if self.node_type in ('hybrid', 'control'):
             capacity_consumed += (
-                settings.AWX_CONTROL_NODE_TASK_IMPACT * UnifiedJob.objects.filter(controller_node=self.hostname, status__in=('running', 'waiting')).count()
+                settings.ASCENDER_CONTROL_NODE_TASK_IMPACT * UnifiedJob.objects.filter(controller_node=self.hostname, status__in=('running', 'waiting')).count()
             )
         return capacity_consumed
 

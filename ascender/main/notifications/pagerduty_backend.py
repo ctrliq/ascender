@@ -96,7 +96,7 @@ class PagerDutyBackend(AscenderBaseEmailBackend, CustomNotificationBase):
                         "client": m.from_email,
                     },
                     headers=get_ascender_http_client_headers(),
-                    timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+                    timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
                 )
                 r.raise_for_status()
                 sent_messages += 1

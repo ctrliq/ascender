@@ -157,7 +157,7 @@ class PodManager(object):
         # in Configuration.__init__. Container group API traffic was never proxied
         # before that, and on OpenShift the injected cluster-wide proxy makes TLS
         # verification against the cluster CA fail, so this stays opt-in.
-        if not settings.AWX_CONTAINER_GROUP_K8S_API_USE_PROXY:
+        if not settings.ASCENDER_CONTAINER_GROUP_K8S_API_USE_PROXY:
             cfg.proxy = None
             cfg.proxy_headers = None
 

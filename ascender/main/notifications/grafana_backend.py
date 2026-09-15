@@ -107,7 +107,7 @@ class GrafanaBackend(AscenderBaseEmailBackend, CustomNotificationBase):
                 json=grafana_data,
                 headers=grafana_headers,
                 verify=(not self.grafana_no_verify_ssl),
-                timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+                timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
             )
             if r.status_code >= 400:
                 logger.error(smart_str(_("Error sending notification grafana: {}").format(r.status_code)))

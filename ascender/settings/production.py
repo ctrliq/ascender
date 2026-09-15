@@ -15,6 +15,7 @@ from split_settings.tools import optional, include
 
 # Load default settings.
 from .defaults import *  # NOQA
+from ascender.settings.environment import environment_setting
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -56,12 +57,12 @@ del this_module
 
 # Load settings from any .py files in the global conf.d directory specified in
 # the environment, defaulting to /etc/tower/conf.d/.
-settings_dir = os.environ.get('AWX_SETTINGS_DIR', '/etc/tower/conf.d/')
+settings_dir = environment_setting('SETTINGS_DIR', '/etc/tower/conf.d/')
 settings_files = os.path.join(settings_dir, '*.py')
 
 # Load remaining settings from the global settings file specified in the
 # environment, defaulting to /etc/tower/settings.py.
-settings_file = os.environ.get('AWX_SETTINGS_FILE', '/etc/tower/settings.py')
+settings_file = environment_setting('SETTINGS_FILE', '/etc/tower/settings.py')
 
 # Attempt to load settings from /etc/tower/settings.py first, followed by
 # /etc/tower/conf.d/*.py.
@@ -87,7 +88,7 @@ except IOError:
             LOGGING = {}
         else:
             msg = 'No AWX configuration found at %s.' % settings_file
-            msg += '\nDefine the AWX_SETTINGS_FILE environment variable to '
+            msg += '\nDefine the ASCENDER_SETTINGS_FILE environment variable to '
             msg += 'specify an alternate path.'
             raise ImproperlyConfigured(msg)
     else:
@@ -135,6 +136,19 @@ _FORMER_NAMES = {
     'AWX_RUNNER_KEEPALIVE_SECONDS': 'ASCENDER_RUNNER_KEEPALIVE_SECONDS',
     'AWX_SHOW_PLAYBOOK_LINKS': 'ASCENDER_SHOW_PLAYBOOK_LINKS',
     'AWX_TASK_ENV': 'ASCENDER_TASK_ENV',
+    'AWX_AUTO_DEPROVISION_INSTANCES': 'ASCENDER_AUTO_DEPROVISION_INSTANCES',
+    'AWX_CALLBACK_PROFILE': 'ASCENDER_CALLBACK_PROFILE',
+    'AWX_CONTAINER_GROUP_DEFAULT_JOB_LABEL': 'ASCENDER_CONTAINER_GROUP_DEFAULT_JOB_LABEL',
+    'AWX_CONTAINER_GROUP_DEFAULT_NAMESPACE': 'ASCENDER_CONTAINER_GROUP_DEFAULT_NAMESPACE',
+    'AWX_CONTAINER_GROUP_K8S_API_TIMEOUT': 'ASCENDER_CONTAINER_GROUP_K8S_API_TIMEOUT',
+    'AWX_CONTAINER_GROUP_K8S_API_USE_PROXY': 'ASCENDER_CONTAINER_GROUP_K8S_API_USE_PROXY',
+    'AWX_CONTAINER_GROUP_POD_PENDING_TIMEOUT': 'ASCENDER_CONTAINER_GROUP_POD_PENDING_TIMEOUT',
+    'AWX_CONTROL_NODE_TASK_IMPACT': 'ASCENDER_CONTROL_NODE_TASK_IMPACT',
+    'AWX_NOTIFICATION_REQUEST_TIMEOUT': 'ASCENDER_NOTIFICATION_REQUEST_TIMEOUT',
+    'AWX_REBUILD_SMART_MEMBERSHIP': 'ASCENDER_REBUILD_SMART_MEMBERSHIP',
+    'AWX_REQUEST_PROFILE_WITH_DOT': 'ASCENDER_REQUEST_PROFILE_WITH_DOT',
+    'AWX_RUNNER_OMIT_ENV_FILES': 'ASCENDER_RUNNER_OMIT_ENV_FILES',
+    'AWX_RUNNER_SUPPRESS_OUTPUT_FILE': 'ASCENDER_RUNNER_SUPPRESS_OUTPUT_FILE',
 }
 for _former, _current in _FORMER_NAMES.items():
     _scope = locals()

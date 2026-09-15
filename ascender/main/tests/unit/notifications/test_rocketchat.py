@@ -33,7 +33,7 @@ def test_send_messages():
             data='{"text": "test subject"}',
             headers={'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'},
             verify=True,
-            timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+            timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
         )
         assert sent_messages == 1
 
@@ -120,6 +120,6 @@ def test_send_messages_with_no_verify_ssl():
             data='{"text": "test subject"}',
             headers={'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'},
             verify=False,
-            timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+            timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
         )
         assert sent_messages == 1
