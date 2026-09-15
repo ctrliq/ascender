@@ -538,7 +538,7 @@ function Visualizer({ template }: VisualizerProps) {
               })
             );
           }
-        } else if (node.isEdited) {
+        } else if (node.isEdited && node.originalNodeObject) {
           // An edited node carries whatever the modal left on it, which is
           // the template it now runs.
           const nodeTemplate = node.fullUnifiedJobTemplate as NodeTemplate;
