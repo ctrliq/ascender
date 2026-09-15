@@ -14753,7 +14753,7 @@ export interface components {
        * @default true
        */
       UI_LIVE_UPDATES_ENABLED: boolean;
-      /** @description List of authentication backends that are enabled based on license features and other authentication settings. */
+      /** @description List of authentication backends that are enabled, which follows whether each one has the settings it requires. */
       readonly AUTHENTICATION_BACKENDS: string[];
       /**
        * @description Mapping to organization admins/users from social auth accounts. This setting

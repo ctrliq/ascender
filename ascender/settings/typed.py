@@ -341,7 +341,6 @@ class AscenderSettings(Protocol):
     LANGUAGE_COOKIE_PATH: str
     LANGUAGE_COOKIE_SAMESITE: Any
     LANGUAGE_COOKIE_SECURE: bool
-    LICENSE: dict[Any, Any]
     LISTENER_DATABASES: dict[str, Any]
     LOCALE_PATHS: tuple[Any, ...]
     LOCAL_PASSWORD_MIN_DIGITS: int
