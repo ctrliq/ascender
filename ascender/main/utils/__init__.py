@@ -11,4 +11,3 @@ from ascender.main.utils.encryption import (  # noqa
     decrypt_value,
     encrypt_dict,
 )
-from ascender.main.utils.licensing import get_licenser  # noqa

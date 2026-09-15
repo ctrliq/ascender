@@ -625,7 +625,6 @@ CELERYBEAT_SCHEDULE = {
         'schedule': timedelta(seconds=CLUSTER_NODE_HEARTBEAT_PERIOD),
         'options': {'expires': 50},
     },
-    'gather_analytics': {'task': 'ascender.main.tasks.system.gather_analytics', 'schedule': timedelta(minutes=5)},
     'task_manager': {'task': 'ascender.main.scheduler.tasks.task_manager', 'schedule': timedelta(seconds=20), 'options': {'expires': 20}},
     'dependency_manager': {'task': 'ascender.main.scheduler.tasks.dependency_manager', 'schedule': timedelta(seconds=20), 'options': {'expires': 20}},
     'k8s_reaper': {'task': 'ascender.main.tasks.system.awx_k8s_reaper', 'schedule': timedelta(seconds=60), 'options': {'expires': 50}},
@@ -826,12 +825,9 @@ PENDO_TRACKING_STATE = "off"
 
 # Enables Insights data collection.
 # Note: This setting may be overridden by database settings.
-INSIGHTS_TRACKING_STATE = False
 
 # Last gather date for Analytics
-AUTOMATION_ANALYTICS_LAST_GATHER = None
 # Last gathered entries for expensive Analytics
-AUTOMATION_ANALYTICS_LAST_ENTRIES = ''
 
 # Default list of modules allowed for ad hoc commands.
 # Note: This setting may be overridden by database settings.
@@ -975,8 +971,6 @@ DISABLE_LOCAL_AUTH = False
 # Note: This setting may be overridden by database settings.
 ASCENDER_URL_BASE = "https://ascenderhost"
 
-INSIGHTS_AGENT_MIME = 'application/example'
-INSIGHTS_CERT_PATH = "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
 
 # Settings related to external logger configuration
 LOG_AGGREGATOR_ENABLED = False

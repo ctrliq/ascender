@@ -105,7 +105,7 @@ class SettingSingletonDetail(RetrieveUpdateDestroyAPIView):
         user = self.request.user if self.category_slug == 'user' else None
         settings_change_list = []
         for key, value in serializer.validated_data.items():
-            if key == 'LICENSE' or settings_registry.is_setting_read_only(key):
+            if settings_registry.is_setting_read_only(key):
                 continue
             if settings_registry.is_setting_encrypted(key) and isinstance(value, str) and value.startswith('$encrypted$'):
                 continue
@@ -131,7 +131,7 @@ class SettingSingletonDetail(RetrieveUpdateDestroyAPIView):
 
     def perform_destroy(self, instance):
         settings_change_list = []
-        for setting in self.get_queryset().exclude(key='LICENSE'):
+        for setting in self.get_queryset():
             if settings_registry.get_setting_field(setting.key).read_only:
                 continue
             setting.delete()

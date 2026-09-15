@@ -7,7 +7,6 @@ from prometheus_client import CollectorRegistry, Gauge, Info, generate_latest
 from django.db.models import Avg, Count, DurationField, ExpressionWrapper, F, Max
 from django.utils import timezone
 
-from ascender.conf.license import get_license
 from ascender.main.utils import get_ascender_version
 from ascender.main.models import UnifiedJob
 from ascender.main.analytics.collectors import (
@@ -175,29 +174,19 @@ def metrics():
         registry=REGISTRY,
     )
 
-    LICENSE_INSTANCE_TOTAL = Gauge('ascender_license_instance_total', 'Total number of managed hosts provided by your license', registry=REGISTRY)
-    LICENSE_INSTANCE_FREE = Gauge('ascender_license_instance_free', 'Number of remaining managed hosts provided by your license', registry=REGISTRY)
-
     DATABASE_CONNECTIONS = Gauge('ascender_database_connections_total', 'Number of connections to database', registry=REGISTRY)
 
-    license_info = get_license()
     SYSTEM_INFO.info(
         {
             'install_uuid': settings.INSTALL_UUID,
-            'insights_analytics': str(settings.INSIGHTS_TRACKING_STATE),
             'tower_url_base': settings.ASCENDER_URL_BASE,
             'ascender_version': get_ascender_version(),
             'tower_version': get_ascender_version(),
-            'license_type': license_info.get('license_type', 'UNLICENSED'),
-            'license_expiry': str(license_info.get('time_remaining', 0)),
             'pendo_tracking': settings.PENDO_TRACKING_STATE,
             'external_logger_enabled': str(settings.LOG_AGGREGATOR_ENABLED),
             'external_logger_type': getattr(settings, 'LOG_AGGREGATOR_TYPE', 'None'),
         }
     )
-
-    LICENSE_INSTANCE_TOTAL.set(str(license_info.get('instance_count', 0)))
-    LICENSE_INSTANCE_FREE.set(str(license_info.get('free_instances', 0)))
 
     current_counts = counts(None)
 

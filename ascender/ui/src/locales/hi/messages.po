@@ -54,7 +54,7 @@ msgstr "वर्कफ़्लो अनुमोदन नहीं मिल
 msgid "Browse…"
 msgstr "ब्राउज़ करें…"
 
-#: screens/Setting/Settings.tsx:121
+#: screens/Setting/Settings.tsx:117
 msgid "TACACS+"
 msgstr "TACACS+"
 
@@ -172,7 +172,7 @@ msgid "{forks, plural, one {# fork} other {# forks}}"
 msgstr "{forks, plural, one {# फ़ोर्क} other {# फ़ोर्क}}"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:220
-#: routeConfig.tsx:119
+#: routeConfig.tsx:111
 #: screens/ActivityStream/ActivityStream.tsx:112
 #: screens/ActivityStream/ActivityStream.tsx:185
 #: screens/Dashboard/Dashboard.tsx:89
@@ -237,7 +237,7 @@ msgstr "हेल्थ चेक चल रहा है"
 msgid "Failed to copy inventory."
 msgstr "इन्वेंटरी कॉपी करने में विफल।"
 
-#: screens/Setting/Settings.tsx:115
+#: screens/Setting/Settings.tsx:114
 msgid "SAML"
 msgstr "SAML"
 
@@ -274,8 +274,8 @@ msgstr "अंतिम जॉब अपडेट लोड करने मे�
 
 #: routeConfig.tsx:93
 #: screens/SubscriptionUsage/SubscriptionUsage.tsx:17
-msgid "Subscription Usage"
-msgstr "सदस्यता उपयोग"
+#~ msgid "Subscription Usage"
+#~ msgstr "सदस्यता उपयोग"
 
 #: components/TemplateList/TemplateListItem.tsx:102
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:159
@@ -671,7 +671,7 @@ msgstr "विस्तृत करें"
 msgid "Promote Child Groups and Hosts"
 msgstr "चाइल्ड समूहों और होस्ट्स को प्रोत्साहित करें"
 
-#: screens/Setting/Settings.tsx:75
+#: screens/Setting/Settings.tsx:74
 msgid "Google OAuth2"
 msgstr "Google OAuth2"
 
@@ -708,12 +708,12 @@ msgstr "एक या अधिक इंस्टेंस समूह हट�
 msgid "JSON:"
 msgstr "JSON:"
 
-#: routeConfig.tsx:59
+#: routeConfig.tsx:56
 #: screens/ActivityStream/ActivityStream.tsx:167
 msgid "Views"
 msgstr "दृश्य"
 
-#: routeConfig.tsx:88
+#: routeConfig.tsx:85
 #: screens/HostMetrics/HostMetrics.tsx:30
 #: screens/HostMetrics/HostMetrics.tsx:66
 #: screens/HostMetrics/HostMetrics.tsx:109
@@ -771,7 +771,7 @@ msgstr "कृपया 1 और 31 के बीच एक दिन संख�
 msgid "No"
 msgstr "नहीं"
 
-#: screens/Setting/Settings.tsx:109
+#: screens/Setting/Settings.tsx:108
 msgid "Miscellaneous System"
 msgstr "विविध सिस्टम"
 
@@ -871,11 +871,11 @@ msgstr "टोकन पर वापस"
 msgid "Webhooks: Enable webhook for this template."
 msgstr "वेबहुक: इस टेम्पलेट के लिए वेबहुक सक्षम करें।"
 
-#: screens/Setting/Settings.tsx:90
+#: screens/Setting/Settings.tsx:89
 msgid "LDAP 5"
 msgstr "LDAP 5"
 
-#: components/Lookup/HostFilterLookup.tsx:390
+#: components/Lookup/HostFilterLookup.tsx:386
 #: components/Lookup/Lookup.tsx:237
 msgid "Lookup modal"
 msgstr "लुकअप मोडल"
@@ -951,7 +951,7 @@ msgstr "निष्पादन वातावरण नहीं मिला
 msgid "Create New Organization"
 msgstr "नया संगठन बनाएं"
 
-#: screens/Setting/SettingList.tsx:119
+#: screens/Setting/SettingList.tsx:108
 msgid "View and edit debug options"
 msgstr "डिबग विकल्प देखें और संपादित करें"
 
@@ -1056,8 +1056,8 @@ msgid "and click on Update Revision on Launch."
 msgstr "और लॉन्च पर रिवीज़न अपडेट करें पर क्लिक करें।"
 
 #: screens/Setting/Subscription/SubscriptionEdit/EulaStep.tsx:14
-msgid "End User License Agreement"
-msgstr "अंतिम उपयोगकर्ता लाइसेंस अनुबंध"
+#~ msgid "End User License Agreement"
+#~ msgstr "अंतिम उपयोगकर्ता लाइसेंस अनुबंध"
 
 #: screens/Project/shared/Project.helptext.tsx:94
 msgid "Delete the local repository in its entirety prior to performing an update. Depending on the size of the repository this may significantly increase the amount of time required to complete an update."
@@ -1106,8 +1106,8 @@ msgid "Health checks are asynchronous tasks. See the"
 msgstr "हेल्थ चेक एसिंक्रोनस कार्य हैं। देखें"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:94
-msgid "Cancel subscription edit"
-msgstr "सदस्यता संपादन रद्द करें"
+#~ msgid "Cancel subscription edit"
+#~ msgstr "सदस्यता संपादन रद्द करें"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:19
 #~ msgid "Prompt for credentials on launch."
@@ -1189,8 +1189,8 @@ msgid "Select a webhook service."
 msgstr "एक वेबहुक सेवा चुनें।"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:80
-msgid "Out of compliance"
-msgstr "अनुपालन से बाहर"
+#~ msgid "Out of compliance"
+#~ msgstr "अनुपालन से बाहर"
 
 #: screens/Job/JobOutput/EmptyOutput.tsx:65
 msgid "Failure Explanation:"
@@ -1201,7 +1201,7 @@ msgstr "विफलता स्पष्टीकरण:"
 msgid "February"
 msgstr "फ़रवरी"
 
-#: screens/Setting/Settings.tsx:195
+#: screens/Setting/Settings.tsx:181
 msgid "View all settings"
 msgstr "सभी सेटिंग्स देखें"
 
@@ -1325,7 +1325,7 @@ msgstr "वर्कफ़्लो अनुमोदन"
 msgid "Node types"
 msgstr "नोड प्रकार"
 
-#: components/Lookup/HostFilterLookup.tsx:430
+#: components/Lookup/HostFilterLookup.tsx:426
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:246
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:238
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:272
@@ -1364,7 +1364,7 @@ msgstr "प्लेबुक प्रारंभ हुई"
 msgid "This workflow job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "यह वर्कफ़्लो जॉब टेम्पलेट वर्तमान में अन्य संसाधनों द्वारा उपयोग किया जा रहा है। क्या आप वाकई इसे हटाना चाहते हैं?"
 
-#: routeConfig.tsx:129
+#: routeConfig.tsx:121
 #: screens/ActivityStream/ActivityStream.tsx:114
 #: screens/ActivityStream/ActivityStream.tsx:187
 #: screens/Dashboard/Dashboard.tsx:67
@@ -1385,7 +1385,6 @@ msgstr "यह वर्कफ़्लो जॉब टेम्पलेट �
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:174
 #: screens/Inventory/SmartInventory.tsx:77
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:109
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:101
 #: util/getRelatedResourceDeleteDetails.ts:155
 msgid "Hosts"
 msgstr "होस्ट्स"
@@ -1479,7 +1478,7 @@ msgstr "प्रबंधन जॉब लॉन्च करें"
 msgid "Add existing group"
 msgstr "मौजूदा समूह जोड़ें"
 
-#: screens/Setting/Settings.tsx:89
+#: screens/Setting/Settings.tsx:88
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
@@ -1649,7 +1648,7 @@ msgstr "नई फ़ेडरेटेड इन्वेंटरी बना
 #: components/Lookup/ExecutionEnvironmentLookup.tsx:213
 #: components/Lookup/ExecutionEnvironmentLookup.tsx:220
 #: components/Lookup/HostFilterLookup.tsx:117
-#: components/Lookup/HostFilterLookup.tsx:446
+#: components/Lookup/HostFilterLookup.tsx:442
 #: components/Lookup/HostListItem.tsx:15
 #: components/Lookup/InstanceGroupsLookup.tsx:121
 #: components/Lookup/InstanceGroupsLookup.tsx:132
@@ -1797,7 +1796,7 @@ msgstr "नई फ़ेडरेटेड इन्वेंटरी बना
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:177
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:127
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:108
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:90
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:87
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:87
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:110
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvListItem.tsx:23
@@ -1807,7 +1806,7 @@ msgstr "नई फ़ेडरेटेड इन्वेंटरी बना
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.tsx:68
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.tsx:85
 #: screens/Organization/OrganizationTeams/OrganizationTeamListItem.tsx:24
-#: screens/Organization/shared/OrganizationForm.tsx:63
+#: screens/Organization/shared/OrganizationForm.tsx:61
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:177
 #: screens/Project/ProjectList/ProjectList.tsx:186
 #: screens/Project/ProjectList/ProjectList.tsx:221
@@ -1862,8 +1861,8 @@ msgid "Host Config Key"
 msgstr "होस्ट कॉन्फ़िग कुंजी"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:121
-msgid "Hosts remaining"
-msgstr "शेष होस्ट्स"
+#~ msgid "Hosts remaining"
+#~ msgstr "शेष होस्ट्स"
 
 #: components/About/About.tsx:52
 msgid "Ctrl IQ, Inc."
@@ -1900,8 +1899,8 @@ msgid "Selected items list."
 msgstr "चयनित आइटमों की सूची।"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:100
-msgid "{automatedInstancesCount} since {automatedInstancesSinceDateTime}"
-msgstr "{automatedInstancesSinceDateTime} से {automatedInstancesCount}"
+#~ msgid "{automatedInstancesCount} since {automatedInstancesSinceDateTime}"
+#~ msgstr "{automatedInstancesSinceDateTime} से {automatedInstancesCount}"
 
 #: screens/Host/HostList/HostListItem.tsx:58
 #: screens/Inventory/InventoryHosts/InventoryHostItem.tsx:91
@@ -1991,7 +1990,7 @@ msgstr "क्रियाएं"
 msgid "Event summary not available"
 msgstr "इवेंट सारांश उपलब्ध नहीं"
 
-#: routeConfig.tsx:63
+#: routeConfig.tsx:60
 #: screens/Dashboard/Dashboard.tsx:28
 #: screens/Dashboard/Dashboard.tsx:60
 msgid "Dashboard"
@@ -2024,7 +2023,6 @@ msgstr "कुंजी"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:355
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:434
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:563
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:94
 #: screens/User/shared/UserForm.tsx:115
 #: screens/User/UserDetail/UserDetail.tsx:79
 #: screens/User/UserList/UserList.tsx:118
@@ -2083,7 +2081,7 @@ msgstr "वर्कफ़्लो पुनः लॉन्च करें"
 msgid "This project is currently on sync and cannot be clicked until sync process completed"
 msgstr "यह प्रोजेक्ट वर्तमान में सिंक पर है और सिंक प्रक्रिया पूर्ण होने तक इस पर क्लिक नहीं किया जा सकता"
 
-#: routeConfig.tsx:157
+#: routeConfig.tsx:149
 #: screens/ActivityStream/ActivityStream.tsx:199
 msgid "Administration"
 msgstr "प्रशासन"
@@ -2110,8 +2108,8 @@ msgid "View Miscellaneous System settings"
 msgstr "विविध सिस्टम सेटिंग्स देखें"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:61
-msgid "Select your Ansible Automation Platform subscription to use."
-msgstr "उपयोग करने के लिए अपनी Ansible Automation Platform सदस्यता चुनें।"
+#~ msgid "Select your Ansible Automation Platform subscription to use."
+#~ msgstr "उपयोग करने के लिए अपनी Ansible Automation Platform सदस्यता चुनें।"
 
 #: screens/Credential/shared/TypeInputsSubForm.tsx:30
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:61
@@ -2177,7 +2175,7 @@ msgstr "भूमिकाएं सही ढंग से असाइन क�
 msgid "Failed to disassociate one or more teams."
 msgstr "एक या अधिक टीमों को अलग करने में विफल।"
 
-#: components/AppContainer/AppContainer.tsx:61
+#: components/AppContainer/AppContainer.tsx:65
 msgid "brand logo"
 msgstr "ब्रांड लोगो"
 
@@ -2192,7 +2190,6 @@ msgstr "{0, plural, one {यह क्रेडेंशियल प्रक�
 
 #: screens/Login/Login.tsx:342
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:155
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:103
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
 msgid "Password"
@@ -2250,8 +2247,8 @@ msgid "View all Templates."
 msgstr "सभी टेम्पलेट देखें।"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:160
-msgid "Subscription type"
-msgstr "सदस्यता प्रकार"
+#~ msgid "Subscription type"
+#~ msgstr "सदस्यता प्रकार"
 
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:85
 msgid "Select a row to remove"
@@ -2328,8 +2325,8 @@ msgid "IRC"
 msgstr "IRC"
 
 #: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:310
-msgid "Subscription capacity"
-msgstr "सदस्यता क्षमता"
+#~ msgid "Subscription capacity"
+#~ msgstr "सदस्यता क्षमता"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/DeleteAllNodesModal.tsx:40
 msgid "Remove All Nodes"
@@ -2399,7 +2396,7 @@ msgstr ""
 msgid "The project is currently syncing and the revision will be available after the sync is complete."
 msgstr "प्रोजेक्ट वर्तमान में सिंक हो रहा है और सिंक पूरा होने के बाद रिवीज़न उपलब्ध होगा।"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:170
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:158
 msgid "Delete Organization"
 msgstr "संगठन हटाएं"
 
@@ -2408,8 +2405,8 @@ msgid "This schedule is missing an Inventory"
 msgstr "इस शेड्यूल में इन्वेंटरी अनुपस्थित है"
 
 #: screens/Setting/SettingList.tsx:108
-msgid "View and edit your subscription information"
-msgstr "अपनी सदस्यता जानकारी देखें और संपादित करें"
+#~ msgid "View and edit your subscription information"
+#~ msgstr "अपनी सदस्यता जानकारी देखें और संपादित करें"
 
 #. placeholder {0}: role.name
 #: components/ResourceAccessList/ResourceAccessListItem.tsx:79
@@ -2425,7 +2422,7 @@ msgstr "IRC सर्वर पता"
 msgid "Management job launch error"
 msgstr "प्रबंधन जॉब लॉन्च त्रुटि"
 
-#: components/Lookup/HostFilterLookup.tsx:313
+#: components/Lookup/HostFilterLookup.tsx:309
 #: components/Lookup/Lookup.tsx:182
 msgid "Search"
 msgstr "खोजें"
@@ -2434,7 +2431,7 @@ msgstr "खोजें"
 msgid "confirm edit login redirect"
 msgstr "लॉगिन रीडायरेक्ट संपादन की पुष्टि करें"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:123
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:111
 msgid "The Instance Groups for this Organization to run on."
 msgstr "इस संगठन के चलने के लिए इंस्टेंस समूह।"
 
@@ -2555,12 +2552,12 @@ msgid "Job Slice"
 msgstr "जॉब स्लाइस"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:84
-msgid "Red Hat subscription manifest"
-msgstr "Red Hat सदस्यता मैनिफ़ेस्ट"
+#~ msgid "Red Hat subscription manifest"
+#~ msgstr "Red Hat सदस्यता मैनिफ़ेस्ट"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:209
-msgid "If you are ready to upgrade or renew, please <0>contact us.</0>"
-msgstr "यदि आप अपग्रेड या नवीनीकरण के लिए तैयार हैं, तो कृपया <0>हमसे संपर्क करें।</0>"
+#~ msgid "If you are ready to upgrade or renew, please <0>contact us.</0>"
+#~ msgstr "यदि आप अपग्रेड या नवीनीकरण के लिए तैयार हैं, तो कृपया <0>हमसे संपर्क करें।</0>"
 
 #: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:174
 msgid "Enable log system tracking facts individually"
@@ -2637,7 +2634,7 @@ msgstr "बहु-चयन"
 msgid "Zoom in"
 msgstr "ज़ूम इन करें"
 
-#: routeConfig.tsx:181
+#: routeConfig.tsx:173
 #: screens/ActivityStream/ActivityStream.tsx:120
 #: screens/ActivityStream/ActivityStream.tsx:207
 #: screens/InstanceGroup/InstanceGroup.tsx:81
@@ -2653,7 +2650,7 @@ msgstr "ज़ूम इन करें"
 msgid "Instances"
 msgstr "इंस्टेंस"
 
-#: components/Lookup/HostFilterLookup.tsx:382
+#: components/Lookup/HostFilterLookup.tsx:378
 msgid "Please select an organization before editing the host filter"
 msgstr "होस्ट फ़िल्टर संपादित करने से पहले कृपया एक संगठन चुनें"
 
@@ -2714,7 +2711,7 @@ msgstr "एक या अधिक होस्ट्स को अलग कर
 msgid "JOB ID:"
 msgstr "जॉब ID:"
 
-#: routeConfig.tsx:171
+#: routeConfig.tsx:163
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:91
 msgid "Management Jobs"
 msgstr "प्रबंधन जॉब्स"
@@ -2754,8 +2751,8 @@ msgid "Host Started"
 msgstr "होस्ट प्रारंभ हुआ"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:64
-msgid "Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to <0>subscription allocations</0> on the Red Hat Customer Portal."
-msgstr "अपनी सदस्यता वाला Red Hat सदस्यता मैनिफ़ेस्ट अपलोड करें। अपना सदस्यता मैनिफ़ेस्ट जनरेट करने के लिए, Red Hat Customer Portal पर <0>सदस्यता आवंटन</0> पर जाएं।"
+#~ msgid "Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to <0>subscription allocations</0> on the Red Hat Customer Portal."
+#~ msgstr "अपनी सदस्यता वाला Red Hat सदस्यता मैनिफ़ेस्ट अपलोड करें। अपना सदस्यता मैनिफ़ेस्ट जनरेट करने के लिए, Red Hat Customer Portal पर <0>सदस्यता आवंटन</0> पर जाएं।"
 
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:98
 #: screens/Application/Applications.tsx:94
@@ -2856,7 +2853,7 @@ msgstr "आपके पास निम्न समूह हटाने क�
 msgid "HTTP Method"
 msgstr "HTTP विधि"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:107
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:95
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "इस संगठन के भीतर कार्यों के लिए उपयोग किया जाने वाला निष्पादन वातावरण। इसका उपयोग तब फ़ॉलबैक के रूप में किया जाएगा जब प्रोजेक्ट, कार्य टेम्पलेट या वर्कफ़्लो स्तर पर कोई निष्पादन वातावरण स्पष्ट रूप से असाइन नहीं किया गया हो।"
 
@@ -2866,8 +2863,8 @@ msgid "Notification type"
 msgstr "सूचना प्रकार"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:88
-msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>User Guide</1>."
-msgstr "सब्सक्रिप्शन मैनिफ़ेस्ट Red Hat सब्सक्रिप्शन का एक निर्यात है। सब्सक्रिप्शन मैनिफ़ेस्ट जनरेट करने के लिए, <0>access.redhat.com</0> पर जाएं। अधिक जानकारी के लिए, <1>उपयोगकर्ता गाइड</1> देखें।"
+#~ msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>User Guide</1>."
+#~ msgstr "सब्सक्रिप्शन मैनिफ़ेस्ट Red Hat सब्सक्रिप्शन का एक निर्यात है। सब्सक्रिप्शन मैनिफ़ेस्ट जनरेट करने के लिए, <0>access.redhat.com</0> पर जाएं। अधिक जानकारी के लिए, <1>उपयोगकर्ता गाइड</1> देखें।"
 
 #: screens/User/UserToken/UserToken.tsx:103
 msgid "View Tokens"
@@ -3036,7 +3033,6 @@ msgstr "Azure AD सेटिंग्स"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:323
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:368
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:426
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:171
 msgid "True"
 msgstr "सत्य"
 
@@ -3081,7 +3077,7 @@ msgstr "विस्तृत है"
 msgid "Service account JSON file"
 msgstr "सेवा खाता JSON फ़ाइल"
 
-#: screens/Organization/shared/OrganizationForm.tsx:90
+#: screens/Organization/shared/OrganizationForm.tsx:74
 msgid "Select the Instance Groups for this Organization to run on."
 msgstr "इस संगठन के चलने के लिए इंस्टेंस समूह चुनें।"
 
@@ -3129,7 +3125,7 @@ msgstr "होस्ट विफल"
 
 #: components/AddRole/AddResourceRole.tsx:221
 #: components/AddRole/AddResourceRole.tsx:222
-#: routeConfig.tsx:150
+#: routeConfig.tsx:142
 #: screens/ActivityStream/ActivityStream.tsx:117
 #: screens/ActivityStream/ActivityStream.tsx:196
 #: screens/Organization/Organization.tsx:139
@@ -3223,11 +3219,11 @@ msgstr "यह इन्वेंटरी स्रोत वर्तमान
 msgid "Deny"
 msgstr "अस्वीकार करें"
 
-#: screens/Setting/Settings.tsx:78
+#: screens/Setting/Settings.tsx:77
 msgid "Generic OIDC"
 msgstr "जेनेरिक OIDC"
 
-#: screens/Setting/Settings.tsx:86
+#: screens/Setting/Settings.tsx:85
 msgid "LDAP 1"
 msgstr "LDAP 1"
 
@@ -3372,7 +3368,7 @@ msgstr "इससे कम या बराबर तुलना।"
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:164
 #: screens/Job/JobDetail/JobDetail.tsx:655
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:493
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:176
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:374
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:127
 #: screens/Team/TeamDetail/TeamDetail.tsx:77
@@ -3420,8 +3416,8 @@ msgid "Read"
 msgstr "पढ़ें"
 
 #: screens/Setting/Subscription/Subscription.tsx:27
-msgid "View Settings"
-msgstr "सेटिंग्स देखें"
+#~ msgid "View Settings"
+#~ msgstr "सेटिंग्स देखें"
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:153
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:156
@@ -3496,7 +3492,7 @@ msgid "Select Hosts"
 msgstr "होस्ट्स चुनें"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:93
-#: screens/Setting/Settings.tsx:63
+#: screens/Setting/Settings.tsx:62
 msgid "GitHub Team"
 msgstr "GitHub Team"
 
@@ -3522,7 +3518,7 @@ msgstr "GitHub Team"
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:139
 #: screens/Job/JobDetail/JobDetail.tsx:579
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:446
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:110
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:326
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:351
@@ -3606,7 +3602,7 @@ msgstr "स्मार्ट इन्वेंटरी होस्ट वि
 msgid "Sign in with Google"
 msgstr "Google से साइन इन करें"
 
-#: contexts/Config.tsx:238
+#: contexts/Config.tsx:204
 msgid "Failed to retrieve configuration."
 msgstr "कॉन्फ़िगरेशन प्राप्त करने में विफल।"
 
@@ -3637,7 +3633,7 @@ msgstr "यह क्रिया इस उपयोगकर्ता की �
 #: components/FormActionGroup/FormActionGroup.tsx:39
 #: components/FormActionGroup/FormActionGroup.tsx:48
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
-#: components/Lookup/HostFilterLookup.tsx:411
+#: components/Lookup/HostFilterLookup.tsx:407
 #: components/Lookup/Lookup.tsx:259
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:248
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:47
@@ -3661,7 +3657,6 @@ msgstr "यह क्रिया इस उपयोगकर्ता की �
 #: screens/Setting/shared/SharedFields.tsx:160
 #: screens/Setting/shared/SharedFields.tsx:166
 #: screens/Setting/shared/SharedFields.tsx:370
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:97
 #: screens/Team/TeamRoles/TeamRolesList.tsx:234
 #: screens/Team/TeamRoles/TeamRolesList.tsx:237
 #: screens/Template/Survey/SurveyList.tsx:95
@@ -3700,7 +3695,7 @@ msgid "Sync all"
 msgstr "सभी सिंक करें"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:71
-#: screens/Setting/Settings.tsx:53
+#: screens/Setting/Settings.tsx:52
 msgid "Azure AD Tenant"
 msgstr "Azure AD Tenant"
 
@@ -3729,7 +3724,7 @@ msgstr "न्यूनतम लंबाई"
 msgid "This field must be a number and have a value less than {max}"
 msgstr "इस फ़ील्ड में एक संख्या होनी चाहिए और इसका मान {max} से कम होना चाहिए"
 
-#: components/Lookup/HostFilterLookup.tsx:369
+#: components/Lookup/HostFilterLookup.tsx:365
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:122
 msgid "Smart host filter"
 msgstr "स्मार्ट होस्ट फ़िल्टर"
@@ -3808,7 +3803,7 @@ msgstr "इस फ़ील्ड में एक संख्या होन�
 msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
 msgstr "यदि सक्षम है, तो जहाँ समर्थित हो वहाँ Ansible कार्यों द्वारा किए गए परिवर्तन दिखाएँ। यह Ansible के --diff मोड के समतुल्य है।"
 
-#: components/Lookup/HostFilterLookup.tsx:432
+#: components/Lookup/HostFilterLookup.tsx:428
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:248
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:240
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:274
@@ -3920,8 +3915,8 @@ msgid "Workflow Job Templates"
 msgstr "वर्कफ़्लो जॉब टेम्पलेट"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:155
-msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
-msgstr "अमान्य फ़ाइल प्रारूप। कृपया एक मान्य Red Hat सदस्यता मैनिफ़ेस्ट अपलोड करें।"
+#~ msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
+#~ msgstr "अमान्य फ़ाइल प्रारूप। कृपया एक मान्य Red Hat सदस्यता मैनिफ़ेस्ट अपलोड करें।"
 
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:120
 msgid "Toggle Legend"
@@ -3984,8 +3979,8 @@ msgstr "कोई नहीं"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:73
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:74
-msgid "Automation Analytics"
-msgstr "Automation Analytics"
+#~ msgid "Automation Analytics"
+#~ msgstr "Automation Analytics"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:374
 msgid "Local Time Zone"
@@ -4001,7 +3996,7 @@ msgstr "डिफ़ॉल्ट उत्तर"
 msgid "Delete Job Template"
 msgstr "जॉब टेम्पलेट हटाएं"
 
-#: routeConfig.tsx:196
+#: routeConfig.tsx:188
 #: screens/TopologyView/TopologyView.tsx:16
 #: screens/TopologyView/TopologyView.tsx:46
 msgid "Topology View"
@@ -4110,8 +4105,8 @@ msgstr "क्रेडेंशियल हटाएं"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:471
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:473
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:160
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:159
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:163
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:347
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:113
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:117
@@ -4127,15 +4122,14 @@ msgstr "क्रेडेंशियल हटाएं"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:151
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:155
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:139
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:143
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:100
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:95
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:99
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:229
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:100
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:105
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:92
@@ -4312,8 +4306,8 @@ msgid "Select a metric"
 msgstr "एक मेट्रिक चुनें"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:270
-msgid "Save successful!"
-msgstr "सफलतापूर्वक सहेजा गया!"
+#~ msgid "Save successful!"
+#~ msgstr "सफलतापूर्वक सहेजा गया!"
 
 #: screens/User/Users.tsx:39
 msgid "Create user token"
@@ -4448,7 +4442,7 @@ msgid "Edit Template"
 msgstr "टेम्पलेट संपादित करें"
 
 #: components/Lookup/ApplicationLookup.tsx:114
-#: routeConfig.tsx:186
+#: routeConfig.tsx:178
 #: screens/Application/Applications.tsx:24
 #: screens/Application/Applications.tsx:34
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:109
@@ -4480,7 +4474,7 @@ msgstr "प्रोजेक्ट रिवीज़न रीफ़्रे�
 msgid "Optionally select the credential to use to send status updates back to the webhook service."
 msgstr "वैकल्पिक रूप से वेबहुक सेवा को स्थिति अपडेट वापस भेजने के लिए उपयोग किए जाने वाले क्रेडेंशियल का चयन करें।"
 
-#: screens/Setting/Settings.tsx:112
+#: screens/Setting/Settings.tsx:111
 msgid "RADIUS"
 msgstr "RADIUS"
 
@@ -4557,7 +4551,7 @@ msgstr "संगठन विवरण देखें"
 #: components/Schedule/ScheduleToggle/ScheduleToggle.tsx:86
 #: components/Schedule/shared/SchedulePromptableFields.tsx:90
 #: components/TemplateList/TemplateList.tsx:311
-#: contexts/Config.tsx:234
+#: contexts/Config.tsx:200
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:145
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:174
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:306
@@ -4601,7 +4595,7 @@ msgstr "संगठन विवरण देखें"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:501
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:237
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:190
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:185
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:173
 #: screens/Organization/OrganizationList/OrganizationList.tsx:193
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:382
 #: screens/Project/ProjectList/ProjectList.tsx:294
@@ -4793,14 +4787,14 @@ msgstr "लिंक संपादित करें"
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:97
 #: screens/Organization/shared/OrganizationForm.tsx:78
-msgid "Max Hosts"
-msgstr "अधिकतम होस्ट्स"
+#~ msgid "Max Hosts"
+#~ msgstr "अधिकतम होस्ट्स"
 
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:140
 msgid "Oragnization"
 msgstr "संगठन"
 
-#: components/AppContainer/AppContainer.tsx:61
+#: components/AppContainer/AppContainer.tsx:65
 msgid "{brandName} logo"
 msgstr "{brandName} लोगो"
 
@@ -4817,8 +4811,8 @@ msgid "per page"
 msgstr "प्रति पृष्ठ"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:156
-msgid "Upload a .zip file"
-msgstr "एक .zip फ़ाइल अपलोड करें"
+#~ msgid "Upload a .zip file"
+#~ msgstr "एक .zip फ़ाइल अपलोड करें"
 
 #: screens/Setting/SAML/SAML.tsx:26
 msgid "View SAML settings"
@@ -4864,7 +4858,7 @@ msgstr "वर्कफ़्लो अनुमोदित संदेश"
 
 #: components/Schedule/ScheduleList/ScheduleList.tsx:197
 #: components/Schedule/ScheduleList/ScheduleList.tsx:269
-#: routeConfig.tsx:73
+#: routeConfig.tsx:70
 #: screens/ActivityStream/ActivityStream.tsx:108
 #: screens/ActivityStream/ActivityStream.tsx:173
 #: screens/Inventory/Inventories.tsx:130
@@ -4898,7 +4892,7 @@ msgstr "सिस्टम चेतावनी"
 
 #: components/AdHocCommands/AdHocExecutionEnvironmentStep.tsx:114
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.tsx:108
-#: routeConfig.tsx:191
+#: routeConfig.tsx:183
 #: screens/ActivityStream/ActivityStream.tsx:123
 #: screens/ActivityStream/ActivityStream.tsx:215
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:127
@@ -5082,8 +5076,8 @@ msgid "View all Instances."
 msgstr "सभी इंस्टेंस देखें।"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:210
-msgid "Subscription Management"
-msgstr "सदस्यता प्रबंधन"
+#~ msgid "Subscription Management"
+#~ msgstr "सदस्यता प्रबंधन"
 
 #: components/Lookup/PeersLookup.tsx:153
 #: components/Lookup/PeersLookup.tsx:160
@@ -5128,7 +5122,7 @@ msgstr "संक्षिप्त करें"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:129
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:566
 #: components/TemplateList/TemplateListItem.tsx:325
-#: routeConfig.tsx:104
+#: routeConfig.tsx:96
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:272
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:124
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
@@ -5160,7 +5154,6 @@ msgstr "स्थिति चुनें"
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:178
 #: components/Schedule/shared/ScheduleFormFields.tsx:155
 #: components/Schedule/shared/ScheduleFormFields.tsx:223
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:225
 msgid "Month"
 msgstr "माह"
 
@@ -5174,7 +5167,7 @@ msgstr "माह"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:543
 #: components/TemplateList/TemplateListItem.tsx:301
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:152
-#: routeConfig.tsx:114
+#: routeConfig.tsx:106
 #: screens/ActivityStream/ActivityStream.tsx:111
 #: screens/ActivityStream/ActivityStream.tsx:184
 #: screens/Credential/CredentialList/CredentialList.tsx:195
@@ -5226,8 +5219,8 @@ msgid "Select a row to approve"
 msgstr "अनुमोदित करने के लिए एक पंक्ति चुनें"
 
 #: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:177
-msgid "Unique Hosts"
-msgstr "अद्वितीय होस्ट्स"
+#~ msgid "Unique Hosts"
+#~ msgstr "अद्वितीय होस्ट्स"
 
 #: screens/Job/JobDetail/JobDetail.tsx:651
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:247
@@ -5282,7 +5275,7 @@ msgstr "मार्च"
 msgid "Image"
 msgstr "इमेज"
 
-#: components/Lookup/HostFilterLookup.tsx:393
+#: components/Lookup/HostFilterLookup.tsx:389
 msgid "Perform a search to define a host filter"
 msgstr "होस्ट फ़िल्टर परिभाषित करने के लिए एक खोज करें"
 
@@ -5412,8 +5405,8 @@ msgstr "टीमों पर वापस"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:54
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:66
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:228
-msgid "Submit"
-msgstr "सबमिट करें"
+#~ msgid "Submit"
+#~ msgstr "सबमिट करें"
 
 #. placeholder {0}: forks ?? 0
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:278
@@ -5468,7 +5461,6 @@ msgstr "आवृत्ति विवरण"
 #: components/LaunchPrompt/LaunchPrompt.tsx:182
 #: components/Schedule/shared/SchedulePromptableFields.tsx:154
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:67
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:76
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:234
 msgid "Next"
 msgstr "अगला"
@@ -5568,7 +5560,7 @@ msgid "View Credential Details"
 msgstr "क्रेडेंशियल विवरण देखें"
 
 #: components/NotificationList/NotificationList.tsx:221
-#: routeConfig.tsx:166
+#: routeConfig.tsx:158
 #: screens/Inventory/Inventories.tsx:134
 #: screens/Inventory/InventorySource/InventorySource.tsx:121
 #: screens/ManagementJob/ManagementJob.tsx:129
@@ -5630,7 +5622,6 @@ msgstr "पिछले दो सप्ताह"
 #: components/LaunchPrompt/LaunchPrompt.tsx:180
 #: components/Schedule/shared/SchedulePromptableFields.tsx:152
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:91
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:87
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:91
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:94
 msgid "Back"
@@ -5693,8 +5684,8 @@ msgid "Click to rearrange the order of the survey questions"
 msgstr "सर्वेक्षण प्रश्नों का क्रम पुनर्व्यवस्थित करने के लिए क्लिक करें"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:38
-msgid "Subscription Details"
-msgstr "सदस्यता विवरण"
+#~ msgid "Subscription Details"
+#~ msgstr "सदस्यता विवरण"
 
 #: components/Schedule/shared/UnsupportedRRuleAlert.tsx:22
 msgid "This schedule uses complex rules that are not supported in the\n"
@@ -5755,7 +5746,7 @@ msgstr "निष्पादन वातावरण संपादित क
 msgid "Management job"
 msgstr "प्रबंधन जॉब"
 
-#: components/Lookup/HostFilterLookup.tsx:422
+#: components/Lookup/HostFilterLookup.tsx:418
 msgid "Searching by ansible_facts requires special syntax. Refer to the"
 msgstr "ansible_facts द्वारा खोज के लिए विशेष सिंटैक्स की आवश्यकता होती है। देखें"
 
@@ -5765,7 +5756,7 @@ msgstr "लिंक स्थिति प्रकार"
 
 #: components/TemplateList/TemplateList.tsx:212
 #: components/TemplateList/TemplateList.tsx:275
-#: routeConfig.tsx:109
+#: routeConfig.tsx:101
 #: screens/ActivityStream/ActivityStream.tsx:110
 #: screens/ActivityStream/ActivityStream.tsx:182
 #: screens/ExecutionEnvironment/ExecutionEnvironment.tsx:77
@@ -5827,7 +5818,7 @@ msgstr "सोर्स कंट्रोल ब्रांच"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:236
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:533
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:289
-#: routeConfig.tsx:176
+#: routeConfig.tsx:168
 #: screens/ActivityStream/ActivityStream.tsx:121
 #: screens/ActivityStream/ActivityStream.tsx:209
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:109
@@ -5837,7 +5828,7 @@ msgstr "सोर्स कंट्रोल ब्रांच"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:242
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:120
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:250
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:122
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:110
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:424
 #: util/getRelatedResourceDeleteDetails.ts:316
 msgid "Instance Groups"
@@ -5898,12 +5889,12 @@ msgid "{0} more"
 msgstr "{0} और"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:64
-msgid "This data is used to enhance\n"
-"                   future releases of the Tower Software and help\n"
-"                   streamline customer experience and success."
-msgstr "इस डेटा का उपयोग Tower सॉफ़्टवेयर के भविष्य के\n"
-"                   रिलीज़ को बेहतर बनाने और ग्राहक अनुभव और सफलता को\n"
-"                   सुव्यवस्थित करने में मदद के लिए किया जाता है।"
+#~ msgid "This data is used to enhance\n"
+#~ "                   future releases of the Tower Software and help\n"
+#~ "                   streamline customer experience and success."
+#~ msgstr "इस डेटा का उपयोग Tower सॉफ़्टवेयर के भविष्य के\n"
+#~ "                   रिलीज़ को बेहतर बनाने और ग्राहक अनुभव और सफलता को\n"
+#~ "                   सुव्यवस्थित करने में मदद के लिए किया जाता है।"
 
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:245
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:174
@@ -5977,7 +5968,7 @@ msgid "Survey"
 msgstr "सर्वेक्षण"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:261
-#: routeConfig.tsx:140
+#: routeConfig.tsx:132
 #: screens/ActivityStream/ActivityStream.tsx:115
 #: screens/ActivityStream/ActivityStream.tsx:193
 #: screens/Organization/OrganizationList/OrganizationList.tsx:115
@@ -6016,8 +6007,8 @@ msgid "Delete Workflow Approval"
 msgstr "वर्कफ़्लो अनुमोदन हटाएं"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:129
-msgid "Hosts deleted"
-msgstr "होस्ट्स हटाए गए"
+#~ msgid "Hosts deleted"
+#~ msgstr "होस्ट्स हटाए गए"
 
 #: screens/TopologyView/Header.tsx:106
 #: screens/TopologyView/Header.tsx:109
@@ -6054,8 +6045,8 @@ msgid "{interval, plural, one {# month} other {# months}}"
 msgstr "{interval, plural, one {# माह} other {# माह}}"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:109
-msgid "Last recalculation date:"
-msgstr "अंतिम पुनर्गणना तिथि:"
+#~ msgid "Last recalculation date:"
+#~ msgstr "अंतिम पुनर्गणना तिथि:"
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:130
 #: components/AdHocCommands/AdHocDetailsStep.tsx:182
@@ -6132,16 +6123,16 @@ msgstr "स्किप टैग तब उपयोगी होते है�
 msgid "View User Details"
 msgstr "उपयोगकर्ता विवरण देखें"
 
-#: routeConfig.tsx:78
+#: routeConfig.tsx:75
 #: screens/ActivityStream/ActivityStream.tsx:34
 #: screens/ActivityStream/ActivityStream.tsx:135
-#: screens/Setting/Settings.tsx:46
+#: screens/Setting/Settings.tsx:45
 msgid "Activity Stream"
 msgstr "गतिविधि स्ट्रीम"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:185
-msgid "Expires on UTC"
-msgstr "UTC पर समाप्त होता है"
+#~ msgid "Expires on UTC"
+#~ msgstr "UTC पर समाप्त होता है"
 
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:246
 #: components/Lookup/MultiCredentialsLookup.tsx:186
@@ -6340,7 +6331,7 @@ msgstr "निर्मित इन्वेंटरी प्लगइन क
 msgid "This field must not contain spaces"
 msgstr "इस फ़ील्ड में रिक्त स्थान नहीं होने चाहिए"
 
-#: routeConfig.tsx:161
+#: routeConfig.tsx:153
 #: screens/ActivityStream/ActivityStream.tsx:118
 #: screens/ActivityStream/ActivityStream.tsx:202
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:115
@@ -6509,8 +6500,8 @@ msgstr "समूह"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:48
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:56
-msgid "Request subscription"
-msgstr "सदस्यता अनुरोध करें"
+#~ msgid "Request subscription"
+#~ msgstr "सदस्यता अनुरोध करें"
 
 #: components/PromptDetail/PromptProjectDetail.tsx:152
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:272
@@ -6553,7 +6544,6 @@ msgstr "जॉब्स सेटिंग्स देखें"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:349
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:151
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:343
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:225
 #: screens/User/UserDetail/UserDetail.tsx:122
 msgid "edit"
 msgstr "संपादित करें"
@@ -6576,8 +6566,8 @@ msgid "Template not found."
 msgstr "टेम्पलेट नहीं मिला।"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:170
-msgid "Trial"
-msgstr "परीक्षण"
+#~ msgid "Trial"
+#~ msgstr "परीक्षण"
 
 #: screens/ActivityStream/ActivityStream.tsx:246
 #: screens/ActivityStream/ActivityStream.tsx:252
@@ -6692,7 +6682,7 @@ msgstr "अनुभाग संक्षिप्त करें"
 msgid "More information for {label}"
 msgstr "{label} के लिए अधिक जानकारी"
 
-#: routeConfig.tsx:136
+#: routeConfig.tsx:128
 #: screens/ActivityStream/ActivityStream.tsx:190
 #: screens/Credential/Credential.tsx:90
 #: screens/Credential/Credentials.tsx:32
@@ -6725,8 +6715,8 @@ msgid "User Roles"
 msgstr "उपयोगकर्ता भूमिकाएं"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:211
-msgid "{brandName} Subscription"
-msgstr "{brandName} सदस्यता"
+#~ msgid "{brandName} Subscription"
+#~ msgstr "{brandName} सदस्यता"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:211
 msgid "min"
@@ -6847,7 +6837,7 @@ msgstr "क्रेडेंशियल नहीं मिला।"
 msgid "{minutes} min {seconds} sec"
 msgstr "{minutes} मिनट {seconds} सेकंड"
 
-#: components/AppContainer/AppContainer.tsx:152
+#: components/AppContainer/AppContainer.tsx:156
 msgid "Your session is about to expire"
 msgstr "आपका सत्र समाप्त होने वाला है"
 
@@ -6863,8 +6853,8 @@ msgstr "API टोकन"
 msgid "Control the level of output Ansible will produce for inventory source update jobs."
 msgstr "इन्वेंटरी स्रोत अपडेट जॉब्स के लिए Ansible द्वारा उत्पादित आउटपुट के स्तर को नियंत्रित करें।"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:130
-#: screens/Organization/shared/OrganizationForm.tsx:108
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:118
+#: screens/Organization/shared/OrganizationForm.tsx:92
 msgid "Galaxy Credentials"
 msgstr "Galaxy क्रेडेंशियल"
 
@@ -6986,7 +6976,7 @@ msgid "Note: This field assumes the remote name is \"origin\"."
 msgstr "नोट: यह फ़ील्ड मानता है कि रिमोट का नाम “origin” है।"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:83
-#: screens/Setting/Settings.tsx:57
+#: screens/Setting/Settings.tsx:56
 msgid "GitHub Default"
 msgstr "GitHub डिफ़ॉल्ट"
 
@@ -7054,8 +7044,8 @@ msgstr "वर्कफ़्लो जॉब टेम्पलेट"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:95
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:144
-msgid "Past three years"
-msgstr "पिछले तीन वर्ष"
+#~ msgid "Past three years"
+#~ msgstr "पिछले तीन वर्ष"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.tsx:42
 msgid "Execute when the parent node results in a failure state."
@@ -7074,7 +7064,7 @@ msgstr "2 (अधिक विस्तृत)"
 #~ msgid "Webhook credential for this workflow job template."
 #~ msgstr "इस वर्कफ़्लो जॉब टेम्पलेट के लिए वेबहुक क्रेडेंशियल।"
 
-#: components/Lookup/HostFilterLookup.tsx:372
+#: components/Lookup/HostFilterLookup.tsx:368
 msgid "Populate the hosts for this inventory by using a search\n"
 "              filter. Example: ansible_facts__ansible_distribution:\"RedHat\".\n"
 "              Refer to the documentation for further syntax and\n"
@@ -7100,8 +7090,8 @@ msgstr "तिथि"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:35
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:218
-msgid "User and Automation Analytics"
-msgstr "उपयोगकर्ता और Automation Analytics"
+#~ msgid "User and Automation Analytics"
+#~ msgstr "उपयोगकर्ता और Automation Analytics"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:46
 msgid "Privilege escalation: If enabled, run this playbook as an administrator."
@@ -7137,8 +7127,8 @@ msgid "Failed to load related groups."
 msgstr "संबंधित समूह लोड करने में विफल।"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:102
-msgid "Subscription Compliance"
-msgstr "सदस्यता अनुपालन"
+#~ msgid "Subscription Compliance"
+#~ msgstr "सदस्यता अनुपालन"
 
 #: util/validators.ts:97
 msgid "This field must be a number and have a value greater than {min}"
@@ -7285,8 +7275,8 @@ msgid "Delete the project before syncing"
 msgstr "सिंक करने से पहले प्रोजेक्ट हटाएं"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:155
-msgid "Unlimited"
-msgstr "असीमित"
+#~ msgid "Unlimited"
+#~ msgstr "असीमित"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:102
 msgid "File, directory or script"
@@ -7297,7 +7287,7 @@ msgstr "फ़ाइल, निर्देशिका या स्क्र�
 msgid "Resource type"
 msgstr "संसाधन प्रकार"
 
-#: screens/Organization/shared/OrganizationForm.tsx:100
+#: screens/Organization/shared/OrganizationForm.tsx:84
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "वह निष्पादन वातावरण जो इस संगठन के भीतर जॉब्स के लिए उपयोग किया जाएगा। इसका उपयोग फ़ॉलबैक के रूप में तब किया जाएगा जब प्रोजेक्ट, जॉब टेम्पलेट या वर्कफ़्लो स्तर पर स्पष्ट रूप से कोई निष्पादन वातावरण असाइन नहीं किया गया हो।"
 
@@ -7345,8 +7335,8 @@ msgstr "एप्लिकेशन नाम"
 msgid "Cache timeout (seconds)"
 msgstr "कैश टाइमआउट (सेकंड)"
 
-#: components/AppContainer/AppContainer.tsx:102
-#: components/AppContainer/AppContainer.tsx:172
+#: components/AppContainer/AppContainer.tsx:106
+#: components/AppContainer/AppContainer.tsx:176
 #: components/AppContainer/PageHeaderToolbar.tsx:223
 msgid "Logout"
 msgstr "लॉग आउट"
@@ -7424,7 +7414,7 @@ msgstr "सिंक करें"
 #: components/HostForm/HostForm.tsx:147
 #: components/Lookup/ApplicationLookup.tsx:123
 #: components/Lookup/ApplicationLookup.tsx:141
-#: components/Lookup/HostFilterLookup.tsx:447
+#: components/Lookup/HostFilterLookup.tsx:443
 #: components/Lookup/HostListItem.tsx:16
 #: components/NotificationList/NotificationList.tsx:230
 #: components/PromptDetail/PromptDetail.tsx:170
@@ -7476,9 +7466,9 @@ msgstr "सिंक करें"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:161
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:126
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:116
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:94
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:91
 #: screens/Organization/OrganizationList/OrganizationList.tsx:125
-#: screens/Organization/shared/OrganizationForm.tsx:71
+#: screens/Organization/shared/OrganizationForm.tsx:69
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:178
 #: screens/Project/ProjectList/ProjectList.tsx:191
 #: screens/Project/ProjectList/ProjectListItem.tsx:266
@@ -7582,7 +7572,7 @@ msgid "Edit Team"
 msgstr "टीम संपादित करें"
 
 #: screens/Setting/SettingList.tsx:96
-#: screens/Setting/Settings.tsx:124
+#: screens/Setting/Settings.tsx:120
 msgid "User Interface"
 msgstr "उपयोगकर्ता इंटरफ़ेस"
 
@@ -7639,8 +7629,8 @@ msgid "Sign in with SAML {samlIDP}"
 msgstr "SAML {samlIDP} से साइन इन करें"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:126
-msgid "Browse"
-msgstr "ब्राउज़ करें"
+#~ msgid "Browse"
+#~ msgstr "ब्राउज़ करें"
 
 #: components/NotificationList/NotificationList.tsx:237
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:133
@@ -7725,7 +7715,6 @@ msgstr "जॉब रद्द करने की पुष्टि करे�
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:323
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:368
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:426
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:171
 msgid "False"
 msgstr "असत्य"
 
@@ -7768,8 +7757,8 @@ msgid "Start date/time"
 msgstr "प्रारंभ तिथि/समय"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:37
-msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>this Tower documentation page</0>. Uncheck the following boxes to disable this feature."
-msgstr "डिफ़ॉल्ट रूप से, हम सेवा उपयोग पर एनालिटिक्स डेटा एकत्र करते हैं और Red Hat को भेजते हैं। सेवा द्वारा एकत्र किए गए डेटा की दो श्रेणियां हैं। अधिक जानकारी के लिए, <0>यह Tower दस्तावेज़ पृष्ठ</0> देखें। इस सुविधा को अक्षम करने के लिए निम्नलिखित बॉक्स अनचेक करें।"
+#~ msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>this Tower documentation page</0>. Uncheck the following boxes to disable this feature."
+#~ msgstr "डिफ़ॉल्ट रूप से, हम सेवा उपयोग पर एनालिटिक्स डेटा एकत्र करते हैं और Red Hat को भेजते हैं। सेवा द्वारा एकत्र किए गए डेटा की दो श्रेणियां हैं। अधिक जानकारी के लिए, <0>यह Tower दस्तावेज़ पृष्ठ</0> देखें। इस सुविधा को अक्षम करने के लिए निम्नलिखित बॉक्स अनचेक करें।"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:240
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:240
@@ -7785,8 +7774,8 @@ msgid "Sign in with GitHub Organizations"
 msgstr "GitHub Organizations से साइन इन करें"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:279
-msgid "Redirecting to subscription detail"
-msgstr "सदस्यता विवरण पर रीडायरेक्ट किया जा रहा है"
+#~ msgid "Redirecting to subscription detail"
+#~ msgstr "सदस्यता विवरण पर रीडायरेक्ट किया जा रहा है"
 
 #: screens/Job/Job.helptext.tsx:17
 #: screens/Template/shared/JobTemplate.helptext.tsx:20
@@ -7864,8 +7853,8 @@ msgid "Host OK"
 msgstr "होस्ट ठीक है"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:196
-msgid "Days remaining"
-msgstr "शेष दिन"
+#~ msgid "Days remaining"
+#~ msgstr "शेष दिन"
 
 #: screens/Setting/AzureAD/AzureAD.tsx:45
 msgid "View Azure AD settings"
@@ -7897,11 +7886,10 @@ msgstr "{0, plural, one {यह इंस्टेंस वर्तमान �
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:31
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:45
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:54
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:67
@@ -7936,8 +7924,8 @@ msgid "Project Sync Error"
 msgstr "प्रोजेक्ट सिंक त्रुटि"
 
 #: screens/Setting/SettingList.tsx:112
-msgid "Subscription settings"
-msgstr "सदस्यता सेटिंग्स"
+#~ msgid "Subscription settings"
+#~ msgstr "सदस्यता सेटिंग्स"
 
 #: components/TemplateList/TemplateList.tsx:308
 #: screens/Credential/CredentialList/CredentialList.tsx:211
@@ -8036,8 +8024,8 @@ msgstr "jinja2 एक्सप्रेशन से वेरिएबल्स
 "              आप जान सकें कि उन एक्सप्रेशन के परिणामी मान क्या हैं।"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:137
-msgid "Active hosts previously deleted"
-msgstr "पहले हटाए गए सक्रिय होस्ट्स"
+#~ msgid "Active hosts previously deleted"
+#~ msgstr "पहले हटाए गए सक्रिय होस्ट्स"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:326
 msgid "It is hard to give a specification for\n"
@@ -8124,7 +8112,7 @@ msgstr "डीप्रोविज़निंग विफल"
 msgid "See Django"
 msgstr "Django देखें"
 
-#: components/AppContainer/AppContainer.tsx:70
+#: components/AppContainer/AppContainer.tsx:74
 msgid "Global navigation"
 msgstr "वैश्विक नेविगेशन"
 
@@ -8416,8 +8404,8 @@ msgstr "इन्वेंटरी सिंक"
 msgid "Remote Archive"
 msgstr "रिमोट संग्रह"
 
-#: screens/Setting/SettingList.tsx:118
-#: screens/Setting/Settings.tsx:127
+#: screens/Setting/SettingList.tsx:107
+#: screens/Setting/Settings.tsx:123
 msgid "Troubleshooting"
 msgstr "समस्या निवारण"
 
@@ -8472,7 +8460,7 @@ msgid "Destination Channels or Users"
 msgstr "गंतव्य चैनल या उपयोगकर्ता"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:98
-#: screens/Setting/Settings.tsx:66
+#: screens/Setting/Settings.tsx:65
 msgid "GitHub Enterprise"
 msgstr "GitHub Enterprise"
 
@@ -8492,7 +8480,7 @@ msgstr "वह प्रोजेक्ट जिसमें वह प्ल�
 msgid "Select Credential Type"
 msgstr "क्रेडेंशियल प्रकार चुनें"
 
-#: screens/Setting/Settings.tsx:87
+#: screens/Setting/Settings.tsx:86
 msgid "LDAP 2"
 msgstr "LDAP 2"
 
@@ -8508,19 +8496,19 @@ msgid "Source Control Update"
 msgstr "सोर्स कंट्रोल अपडेट"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:76
-msgid "This data is used to enhance\n"
-"                   future releases of the Software and to provide\n"
-"                   Automation Analytics."
-msgstr "इस डेटा का उपयोग सॉफ़्टवेयर के भविष्य के\n"
-"                   रिलीज़ को बेहतर बनाने और Automation Analytics\n"
-"                   प्रदान करने के लिए किया जाता है।"
+#~ msgid "This data is used to enhance\n"
+#~ "                   future releases of the Software and to provide\n"
+#~ "                   Automation Analytics."
+#~ msgstr "इस डेटा का उपयोग सॉफ़्टवेयर के भविष्य के\n"
+#~ "                   रिलीज़ को बेहतर बनाने और Automation Analytics\n"
+#~ "                   प्रदान करने के लिए किया जाता है।"
 
 #: components/PromptDetail/PromptProjectDetail.tsx:56
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:110
 msgid "Track submodules latest commit on branch"
 msgstr "ब्रांच पर सबमॉड्यूल का नवीनतम कमिट ट्रैक करें"
 
-#: components/Lookup/HostFilterLookup.tsx:442
+#: components/Lookup/HostFilterLookup.tsx:438
 msgid "hosts"
 msgstr "होस्ट्स"
 
@@ -8648,7 +8636,7 @@ msgid "Answer variable name"
 msgstr "उत्तर वेरिएबल नाम"
 
 #: components/JobList/JobListItem.tsx:110
-#: components/Lookup/HostFilterLookup.tsx:403
+#: components/Lookup/HostFilterLookup.tsx:399
 #: components/Lookup/Lookup.tsx:250
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
@@ -8665,20 +8653,20 @@ msgid "Custom virtual environment {virtualEnvironment} must be replaced by an ex
 msgstr "कस्टम वर्चुअल वातावरण {virtualEnvironment} को एक निष्पादन वातावरण से बदला जाना चाहिए। निष्पादन वातावरण में माइग्रेट करने के बारे में अधिक जानकारी के लिए <0>दस्तावेज़ीकरण।</0> देखें"
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:99
-msgid "The maximum number of hosts allowed to be managed by\n"
-"            this organization. Value defaults to 0 which means no limit.\n"
-"            Refer to the Ansible documentation for more details."
-msgstr "इस संगठन द्वारा प्रबंधित किए जाने की अनुमति वाले होस्ट्स की\n"
-"            अधिकतम संख्या। मान डिफ़ॉल्ट रूप से 0 होता है जिसका अर्थ है कोई सीमा नहीं।\n"
-"            अधिक विवरण के लिए Ansible दस्तावेज़ीकरण देखें।"
+#~ msgid "The maximum number of hosts allowed to be managed by\n"
+#~ "            this organization. Value defaults to 0 which means no limit.\n"
+#~ "            Refer to the Ansible documentation for more details."
+#~ msgstr "इस संगठन द्वारा प्रबंधित किए जाने की अनुमति वाले होस्ट्स की\n"
+#~ "            अधिकतम संख्या। मान डिफ़ॉल्ट रूप से 0 होता है जिसका अर्थ है कोई सीमा नहीं।\n"
+#~ "            अधिक विवरण के लिए Ansible दस्तावेज़ीकरण देखें।"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:281
 msgid "IRC Nick"
 msgstr "IRC निक"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:175
-msgid "Expires on"
-msgstr "इस पर समाप्त होता है"
+#~ msgid "Expires on"
+#~ msgstr "इस पर समाप्त होता है"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:99
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
@@ -8818,7 +8806,7 @@ msgstr "इन्वेंटरी स्रोत सिंक रद्द �
 msgid "Failed to delete one or more applications."
 msgstr "एक या अधिक एप्लिकेशन हटाने में विफल।"
 
-#: screens/Setting/Settings.tsx:106
+#: screens/Setting/Settings.tsx:105
 msgid "Miscellaneous Authentication"
 msgstr "विविध प्रमाणीकरण"
 
@@ -8832,7 +8820,7 @@ msgid "Content Loading"
 msgstr "सामग्री लोड हो रही है"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:193
-#: routeConfig.tsx:124
+#: routeConfig.tsx:116
 #: screens/ActivityStream/ActivityStream.tsx:113
 #: screens/ActivityStream/ActivityStream.tsx:186
 #: screens/Dashboard/Dashboard.tsx:78
@@ -8870,7 +8858,7 @@ msgstr "इस फ़ील्ड में एक पूर्णांक ह�
 msgid "START"
 msgstr "प्रारंभ"
 
-#: routeConfig.tsx:100
+#: routeConfig.tsx:92
 #: screens/ActivityStream/ActivityStream.tsx:179
 msgid "Resources"
 msgstr "संसाधन"
@@ -9090,7 +9078,7 @@ msgstr "अपडेट विकल्प"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
 #: screens/Job/JobDetail/JobDetail.tsx:583
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:451
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:115
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:331
 #: screens/Team/TeamDetail/TeamDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:356
@@ -9202,8 +9190,8 @@ msgid "Successful"
 msgstr "सफल"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:275
-msgid "Redirecting to dashboard"
-msgstr "डैशबोर्ड पर रीडायरेक्ट किया जा रहा है"
+#~ msgid "Redirecting to dashboard"
+#~ msgstr "डैशबोर्ड पर रीडायरेक्ट किया जा रहा है"
 
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:142
 msgid "This instance group is currently being by other resources. Are you sure you want to delete it?"
@@ -9264,7 +9252,7 @@ msgstr "उन्नत"
 
 #: components/AddRole/AddResourceRole.tsx:211
 #: components/AddRole/AddResourceRole.tsx:212
-#: routeConfig.tsx:145
+#: routeConfig.tsx:137
 #: screens/ActivityStream/ActivityStream.tsx:116
 #: screens/ActivityStream/ActivityStream.tsx:195
 #: screens/Team/Teams.tsx:32
@@ -9308,7 +9296,7 @@ msgstr "संबंधित समूह को अलग करें?"
 msgid "Forks"
 msgstr "फ़ोर्क्स"
 
-#: screens/Setting/Settings.tsx:85
+#: screens/Setting/Settings.tsx:84
 msgid "LDAP Default"
 msgstr "LDAP डिफ़ॉल्ट"
 
@@ -9376,7 +9364,7 @@ msgid "Play"
 msgstr "प्ले"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:108
-#: screens/Setting/Settings.tsx:72
+#: screens/Setting/Settings.tsx:71
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise Team"
 
@@ -9479,7 +9467,7 @@ msgstr "संबंधित खोज प्रकार"
 msgid "User details"
 msgstr "उपयोगकर्ता विवरण"
 
-#: components/AppContainer/AppContainer.tsx:176
+#: components/AppContainer/AppContainer.tsx:180
 msgid "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 msgstr "{sessionCountdown, plural, one {निष्क्रियता के कारण आपको # सेकंड में लॉग आउट कर दिया जाएगा} other {निष्क्रियता के कारण आपको # सेकंड में लॉग आउट कर दिया जाएगा}}"
 
@@ -9512,7 +9500,7 @@ msgstr "बाहरी सीक्रेट प्रबंधन सिस्
 
 #: components/JobList/JobList.tsx:202
 #: components/JobList/JobList.tsx:293
-#: routeConfig.tsx:68
+#: routeConfig.tsx:65
 #: screens/ActivityStream/ActivityStream.tsx:107
 #: screens/ActivityStream/ActivityStream.tsx:172
 #: screens/Dashboard/shared/LineChart.tsx:118
@@ -9532,7 +9520,7 @@ msgstr "बाहरी सीक्रेट प्रबंधन सिस्
 #: screens/Job/Jobs.tsx:38
 #: screens/Job/Jobs.tsx:49
 #: screens/Setting/SettingList.tsx:66
-#: screens/Setting/Settings.tsx:81
+#: screens/Setting/Settings.tsx:80
 #: screens/Template/Template.tsx:168
 #: screens/Template/Templates.tsx:52
 #: screens/Template/WorkflowJobTemplate.tsx:153
@@ -9634,7 +9622,7 @@ msgstr "एक इन्वेंटरी चुनी जानी चाह�
 msgid "Source Control Branch"
 msgstr "सोर्स कंट्रोल ब्रांच"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:174
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:162
 msgid "This organization is currently being by other resources. Are you sure you want to delete it?"
 msgstr "यह संगठन वर्तमान में अन्य संसाधनों द्वारा उपयोग किया जा रहा है। क्या आप वाकई इसे हटाना चाहते हैं?"
 
@@ -9646,12 +9634,12 @@ msgstr "यह संगठन वर्तमान में अन्य स�
 msgid "System Administrator"
 msgstr "सिस्टम प्रशासक"
 
-#: routeConfig.tsx:203
-#: routeConfig.tsx:207
+#: routeConfig.tsx:195
+#: routeConfig.tsx:199
 #: screens/ActivityStream/ActivityStream.tsx:124
 #: screens/ActivityStream/ActivityStream.tsx:219
 #: screens/ActivityStream/ActivityStream.tsx:221
-#: screens/Setting/Settings.tsx:45
+#: screens/Setting/Settings.tsx:44
 msgid "Settings"
 msgstr "सेटिंग्स"
 
@@ -9746,7 +9734,6 @@ msgstr "विफलताओं वाले इन्वेंटरी स्
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:132
 #: screens/Project/ProjectList/ProjectList.tsx:222
 #: screens/Project/ProjectList/ProjectListItem.tsx:183
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:60
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:158
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:216
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.tsx:87
@@ -9833,8 +9820,8 @@ msgid "Created by (username)"
 msgstr "द्वारा बनाया गया (उपयोगकर्ता नाम)"
 
 #: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:310
-msgid "Subscriptions consumed"
-msgstr "उपभोग की गई सदस्यताएं"
+#~ msgid "Subscriptions consumed"
+#~ msgstr "उपभोग की गई सदस्यताएं"
 
 #: screens/Dashboard/Dashboard.tsx:84
 msgid "Inventory sync failures"
@@ -9877,7 +9864,7 @@ msgid "Sign in with Azure AD Tenant"
 msgstr "Azure AD Tenant से साइन इन करें"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:66
-#: screens/Setting/Settings.tsx:50
+#: screens/Setting/Settings.tsx:49
 msgid "Azure AD Default"
 msgstr "Azure AD डिफ़ॉल्ट"
 
@@ -9933,37 +9920,36 @@ msgstr "लुकअप रद्द करें"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:96
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
-#: screens/Setting/Settings.tsx:47
-#: screens/Setting/Settings.tsx:51
-#: screens/Setting/Settings.tsx:54
-#: screens/Setting/Settings.tsx:58
-#: screens/Setting/Settings.tsx:61
-#: screens/Setting/Settings.tsx:64
-#: screens/Setting/Settings.tsx:67
-#: screens/Setting/Settings.tsx:70
-#: screens/Setting/Settings.tsx:73
-#: screens/Setting/Settings.tsx:76
-#: screens/Setting/Settings.tsx:79
-#: screens/Setting/Settings.tsx:82
+#: screens/Setting/Settings.tsx:46
+#: screens/Setting/Settings.tsx:50
+#: screens/Setting/Settings.tsx:53
+#: screens/Setting/Settings.tsx:57
+#: screens/Setting/Settings.tsx:60
+#: screens/Setting/Settings.tsx:63
+#: screens/Setting/Settings.tsx:66
+#: screens/Setting/Settings.tsx:69
+#: screens/Setting/Settings.tsx:72
+#: screens/Setting/Settings.tsx:75
+#: screens/Setting/Settings.tsx:78
+#: screens/Setting/Settings.tsx:81
+#: screens/Setting/Settings.tsx:90
 #: screens/Setting/Settings.tsx:91
 #: screens/Setting/Settings.tsx:92
 #: screens/Setting/Settings.tsx:93
 #: screens/Setting/Settings.tsx:94
 #: screens/Setting/Settings.tsx:95
-#: screens/Setting/Settings.tsx:96
-#: screens/Setting/Settings.tsx:104
-#: screens/Setting/Settings.tsx:107
-#: screens/Setting/Settings.tsx:110
-#: screens/Setting/Settings.tsx:113
-#: screens/Setting/Settings.tsx:116
-#: screens/Setting/Settings.tsx:119
-#: screens/Setting/Settings.tsx:122
-#: screens/Setting/Settings.tsx:125
-#: screens/Setting/Settings.tsx:128
+#: screens/Setting/Settings.tsx:103
+#: screens/Setting/Settings.tsx:106
+#: screens/Setting/Settings.tsx:109
+#: screens/Setting/Settings.tsx:112
+#: screens/Setting/Settings.tsx:115
+#: screens/Setting/Settings.tsx:118
+#: screens/Setting/Settings.tsx:121
+#: screens/Setting/Settings.tsx:124
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:52
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:61
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:74
@@ -10030,7 +10016,7 @@ msgstr "अंतिम नाम"
 msgid "Add a node between these two"
 msgstr ""
 
-#: components/AppContainer/AppContainer.tsx:112
+#: components/AppContainer/AppContainer.tsx:116
 msgid "Navigation"
 msgstr "नेविगेशन"
 
@@ -10075,7 +10061,7 @@ msgstr "{pluralizedItemName} हटाएं?"
 msgid "Prompt on launch"
 msgstr "लॉन्च पर संकेत"
 
-#: screens/Setting/SettingList.tsx:123
+#: screens/Setting/SettingList.tsx:112
 msgid "Troubleshooting settings"
 msgstr "समस्या निवारण सेटिंग्स"
 
@@ -10085,14 +10071,14 @@ msgstr "टेम्पलेट लॉन्च करें"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:61
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:62
-msgid "User analytics"
-msgstr "उपयोगकर्ता एनालिटिक्स"
+#~ msgid "User analytics"
+#~ msgstr "उपयोगकर्ता एनालिटिक्स"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:44
-msgid "If you do not have a subscription, you can visit\n"
-"            Red Hat to obtain a trial subscription."
-msgstr "यदि आपके पास कोई सदस्यता नहीं है, तो आप ट्रायल सदस्यता प्राप्त करने के लिए\n"
-"            Red Hat पर जा सकते हैं।"
+#~ msgid "If you do not have a subscription, you can visit\n"
+#~ "            Red Hat to obtain a trial subscription."
+#~ msgstr "यदि आपके पास कोई सदस्यता नहीं है, तो आप ट्रायल सदस्यता प्राप्त करने के लिए\n"
+#~ "            Red Hat पर जा सकते हैं।"
 
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:195
 msgid "{intervalValue, plural, one {day} other {days}}"
@@ -10130,7 +10116,7 @@ msgstr "यह क्रिया निम्न को सॉफ़्ट ड�
 msgid "Listener Addresses"
 msgstr "लिसनर पते"
 
-#: screens/Setting/Settings.tsx:88
+#: screens/Setting/Settings.tsx:87
 msgid "LDAP 3"
 msgstr "LDAP 3"
 
@@ -10146,7 +10132,7 @@ msgstr "लिंक जोड़ें"
 msgid "Recipient List"
 msgstr "प्राप्तकर्ता सूची"
 
-#: screens/Organization/shared/OrganizationForm.tsx:123
+#: screens/Organization/shared/OrganizationForm.tsx:107
 msgid "Note: The order of these credentials sets precedence for the sync and lookup of the content. Select more than one to enable drag."
 msgstr "नोट: इन क्रेडेंशियल्स का क्रम सामग्री के सिंक और लुकअप के लिए प्राथमिकता निर्धारित करता है। खींचने को सक्षम करने के लिए एक से अधिक चुनें।"
 
@@ -10184,8 +10170,8 @@ msgid "Failed to delete inventory source {name}."
 msgstr "इन्वेंटरी स्रोत {name} हटाने में विफल।"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:225
-msgid "End user license agreement"
-msgstr "अंतिम उपयोगकर्ता लाइसेंस अनुबंध"
+#~ msgid "End user license agreement"
+#~ msgstr "अंतिम उपयोगकर्ता लाइसेंस अनुबंध"
 
 #: components/Workflow/WorkflowLegend.tsx:72
 #: components/Workflow/WorkflowLinkHelp.tsx:26
@@ -10194,7 +10180,7 @@ msgstr "अंतिम उपयोगकर्ता लाइसेंस अ
 msgid "On Condition"
 msgstr "स्थिति पर"
 
-#: routeConfig.tsx:83
+#: routeConfig.tsx:80
 #: screens/ActivityStream/ActivityStream.tsx:109
 #: screens/ActivityStream/ActivityStream.tsx:175
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:159
@@ -10393,7 +10379,7 @@ msgid "An error occurred"
 msgstr "एक त्रुटि हुई"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:88
-#: screens/Setting/Settings.tsx:60
+#: screens/Setting/Settings.tsx:59
 msgid "GitHub Organization"
 msgstr "GitHub Organization"
 
@@ -10458,8 +10444,8 @@ msgid "Less than comparison."
 msgstr "इससे कम तुलना।"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:97
-msgid "Hosts automated"
-msgstr "स्वचालित होस्ट्स"
+#~ msgid "Hosts automated"
+#~ msgstr "स्वचालित होस्ट्स"
 
 #: screens/Project/shared/Project.helptext.tsx:97
 msgid "Allow changing the Source Control branch or revision in a job template that uses this project."
@@ -10631,8 +10617,8 @@ msgstr ""
 #: screens/Setting/SettingList.tsx:107
 #: screens/Setting/Settings.tsx:118
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:165
-msgid "Subscription"
-msgstr "सदस्यता"
+#~ msgid "Subscription"
+#~ msgstr "सदस्यता"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.tsx:191
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.tsx:133
@@ -10641,8 +10627,8 @@ msgstr "बराबर नहीं"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:94
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:142
-msgid "Past two years"
-msgstr "पिछले दो वर्ष"
+#~ msgid "Past two years"
+#~ msgstr "पिछले दो वर्ष"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:317
 msgid "IRC nick"
@@ -10716,16 +10702,16 @@ msgstr "नोड को पुनः कॉन्फ़िगर करने �
 msgid "Federated Inventory"
 msgstr "फ़ेडरेटेड इन्वेंटरी"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:188
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:176
 msgid "Failed to delete organization."
 msgstr "संगठन हटाने में विफल।"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:146
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:154
-msgid "Hosts available"
-msgstr "उपलब्ध होस्ट्स"
+#~ msgid "Hosts available"
+#~ msgstr "उपलब्ध होस्ट्स"
 
-#: screens/Setting/Settings.tsx:103
+#: screens/Setting/Settings.tsx:102
 msgid "Logging"
 msgstr "लॉगिंग"
 
@@ -10804,7 +10790,6 @@ msgstr "नोड संपादित करें"
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.tsx:52
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.tsx:198
 #: screens/Setting/shared/SharedFields.tsx:553
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:127
 #: screens/Template/shared/PlaybookSelect.tsx:146
 msgid "Clear"
 msgstr "साफ़ करें"
@@ -10824,8 +10809,8 @@ msgid "End"
 msgstr "समाप्ति"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:113
-msgid "Hosts imported"
-msgstr "आयातित होस्ट्स"
+#~ msgid "Hosts imported"
+#~ msgstr "आयातित होस्ट्स"
 
 #: screens/Job/JobOutput/HostEventModal.tsx:202
 msgid "YAML tab"
@@ -10870,7 +10855,7 @@ msgstr "LDAP1"
 msgid "Add container group"
 msgstr "कंटेनर समूह जोड़ें"
 
-#: components/AppContainer/AppContainer.tsx:164
+#: components/AppContainer/AppContainer.tsx:168
 msgid "Continue"
 msgstr "जारी रखें"
 
@@ -11070,7 +11055,7 @@ msgid "All job types"
 msgstr "सभी जॉब प्रकार"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:103
-#: screens/Setting/Settings.tsx:69
+#: screens/Setting/Settings.tsx:68
 msgid "GitHub Enterprise Organization"
 msgstr "GitHub Enterprise Organization"
 
@@ -11105,8 +11090,8 @@ msgid "Simple key select"
 msgstr "सरल कुंजी चयन"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:84
-msgid "You have automated against more hosts than your subscription allows."
-msgstr "आपने अपनी सदस्यता की अनुमति से अधिक होस्ट्स के विरुद्ध स्वचालन किया है।"
+#~ msgid "You have automated against more hosts than your subscription allows."
+#~ msgstr "आपने अपनी सदस्यता की अनुमति से अधिक होस्ट्स के विरुद्ध स्वचालन किया है।"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:135
 msgid "Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied."
@@ -11154,33 +11139,32 @@ msgstr "{numJobsToCancel, plural, one {चयनित कार्य रद्
 #: screens/Organization/Organizations.tsx:31
 #: screens/Project/Projects.tsx:28
 #: screens/Project/Projects.tsx:37
-#: screens/Setting/Settings.tsx:48
-#: screens/Setting/Settings.tsx:52
-#: screens/Setting/Settings.tsx:55
-#: screens/Setting/Settings.tsx:59
-#: screens/Setting/Settings.tsx:62
-#: screens/Setting/Settings.tsx:65
-#: screens/Setting/Settings.tsx:68
-#: screens/Setting/Settings.tsx:71
-#: screens/Setting/Settings.tsx:74
-#: screens/Setting/Settings.tsx:77
-#: screens/Setting/Settings.tsx:80
-#: screens/Setting/Settings.tsx:83
+#: screens/Setting/Settings.tsx:47
+#: screens/Setting/Settings.tsx:51
+#: screens/Setting/Settings.tsx:54
+#: screens/Setting/Settings.tsx:58
+#: screens/Setting/Settings.tsx:61
+#: screens/Setting/Settings.tsx:64
+#: screens/Setting/Settings.tsx:67
+#: screens/Setting/Settings.tsx:70
+#: screens/Setting/Settings.tsx:73
+#: screens/Setting/Settings.tsx:76
+#: screens/Setting/Settings.tsx:79
+#: screens/Setting/Settings.tsx:82
+#: screens/Setting/Settings.tsx:96
 #: screens/Setting/Settings.tsx:97
 #: screens/Setting/Settings.tsx:98
 #: screens/Setting/Settings.tsx:99
 #: screens/Setting/Settings.tsx:100
 #: screens/Setting/Settings.tsx:101
-#: screens/Setting/Settings.tsx:102
-#: screens/Setting/Settings.tsx:105
-#: screens/Setting/Settings.tsx:108
-#: screens/Setting/Settings.tsx:111
-#: screens/Setting/Settings.tsx:114
-#: screens/Setting/Settings.tsx:117
-#: screens/Setting/Settings.tsx:120
-#: screens/Setting/Settings.tsx:123
-#: screens/Setting/Settings.tsx:126
-#: screens/Setting/Settings.tsx:129
+#: screens/Setting/Settings.tsx:104
+#: screens/Setting/Settings.tsx:107
+#: screens/Setting/Settings.tsx:110
+#: screens/Setting/Settings.tsx:113
+#: screens/Setting/Settings.tsx:116
+#: screens/Setting/Settings.tsx:119
+#: screens/Setting/Settings.tsx:122
+#: screens/Setting/Settings.tsx:125
 #: screens/Team/Teams.tsx:30
 #: screens/Template/Templates.tsx:49
 #: screens/User/Users.tsx:33
@@ -11356,7 +11340,7 @@ msgstr "उस संसाधन का प्रकार चुनें ज�
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:48
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:125
 #: screens/Organization/OrganizationList/OrganizationListItem.tsx:39
-#: screens/Organization/shared/OrganizationForm.tsx:120
+#: screens/Organization/shared/OrganizationForm.tsx:104
 #: screens/Project/ProjectList/ProjectListItem.tsx:174
 #: screens/Team/TeamList/TeamListItem.tsx:40
 #: screens/Template/Survey/SurveyListItem.tsx:45
@@ -11386,10 +11370,10 @@ msgid "Sender e-mail"
 msgstr "प्रेषक ई-मेल"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:40
-msgid "Welcome to Red Hat Ansible Automation Platform!\n"
-"              Please complete the steps below to activate your subscription."
-msgstr "Red Hat Ansible Automation Platform में आपका स्वागत है!\n"
-"              अपनी सदस्यता सक्रिय करने के लिए कृपया नीचे दिए गए चरण पूरे करें।"
+#~ msgid "Welcome to Red Hat Ansible Automation Platform!\n"
+#~ "              Please complete the steps below to activate your subscription."
+#~ msgstr "Red Hat Ansible Automation Platform में आपका स्वागत है!\n"
+#~ "              अपनी सदस्यता सक्रिय करने के लिए कृपया नीचे दिए गए चरण पूरे करें।"
 
 #: components/StatusLabel/StatusLabel.tsx:73
 msgid "Provisioning fail"
@@ -11404,8 +11388,8 @@ msgid "Time in seconds to consider an inventory sync to be current. During job r
 msgstr "किसी इन्वेंटरी सिंक को वर्तमान मानने के लिए सेकंड में समय। जॉब रन और कॉलबैक के दौरान कार्य सिस्टम नवीनतम सिंक के टाइमस्टैम्प का मूल्यांकन करेगा। यदि यह कैश टाइमआउट से पुराना है, तो इसे वर्तमान नहीं माना जाता है, और एक नया इन्वेंटरी सिंक किया जाएगा।"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:204
-msgid "Automation controller version"
-msgstr "Automation controller संस्करण"
+#~ msgid "Automation controller version"
+#~ msgstr "Automation controller संस्करण"
 
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:90
 msgid "Access Token Expiration"
@@ -11494,8 +11478,8 @@ msgid "Sets the current life cycle stage of this instance. Default is \"installe
 msgstr "इस इंस्टेंस का वर्तमान जीवन चक्र चरण सेट करता है। डिफ़ॉल्ट \"installed\" है।"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:65
-msgid "Compliant"
-msgstr "अनुपालक"
+#~ msgid "Compliant"
+#~ msgstr "अनुपालक"
 
 #: screens/Inventory/InventorySource/InventorySource.tsx:186
 msgid "View inventory source details"
@@ -11531,12 +11515,12 @@ msgid "Failed to delete one or more workflow approval."
 msgstr "एक या अधिक वर्कफ़्लो अनुमोदन हटाने में विफल।"
 
 #: screens/Organization/shared/OrganizationForm.tsx:79
-msgid "The maximum number of hosts allowed to be managed by this organization.\n"
-"            Value defaults to 0 which means no limit. Refer to the Ansible\n"
-"            documentation for more details."
-msgstr "इस संगठन द्वारा प्रबंधित किए जाने की अनुमति वाले होस्ट्स की अधिकतम संख्या।\n"
-"            मान डिफ़ॉल्ट रूप से 0 होता है जिसका अर्थ है कोई सीमा नहीं। अधिक विवरण के लिए Ansible\n"
-"            दस्तावेज़ीकरण देखें।"
+#~ msgid "The maximum number of hosts allowed to be managed by this organization.\n"
+#~ "            Value defaults to 0 which means no limit. Refer to the Ansible\n"
+#~ "            documentation for more details."
+#~ msgstr "इस संगठन द्वारा प्रबंधित किए जाने की अनुमति वाले होस्ट्स की अधिकतम संख्या।\n"
+#~ "            मान डिफ़ॉल्ट रूप से 0 होता है जिसका अर्थ है कोई सीमा नहीं। अधिक विवरण के लिए Ansible\n"
+#~ "            दस्तावेज़ीकरण देखें।"
 
 #: screens/Team/TeamRoles/TeamRolesList.tsx:250
 #: screens/User/UserRoles/UserRolesList.tsx:244
@@ -11550,8 +11534,8 @@ msgid "Workflow Job Template Nodes"
 msgstr "वर्कफ़्लो जॉब टेम्पलेट नोड्स"
 
 #: components/Lookup/HostFilterLookup.tsx:147
-msgid "Insights system ID"
-msgstr "Insights सिस्टम ID"
+#~ msgid "Insights system ID"
+#~ msgstr "Insights सिस्टम ID"
 
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:103
 msgid "Authorization Code Expiration"
@@ -11666,8 +11650,8 @@ msgid "Minimum percentage of all instances that will be automatically assigned t
 msgstr "नए इंस्टेंस ऑनलाइन आने पर इस समूह को स्वचालित रूप से असाइन किए जाने वाले सभी इंस्टेंसों का न्यूनतम प्रतिशत।"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:113
-msgid "Automation Analytics dashboard"
-msgstr "Automation Analytics डैशबोर्ड"
+#~ msgid "Automation Analytics dashboard"
+#~ msgstr "Automation Analytics डैशबोर्ड"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:393
 msgid "Source Phone Number"
@@ -11727,8 +11711,8 @@ msgid "Please select an Inventory or check the Prompt on Launch option"
 msgstr "कृपया एक इन्वेंटरी चुनें या लॉन्च पर संकेत विकल्प चेक करें"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:123
-msgid "Learn more about Automation Analytics"
-msgstr "Automation Analytics के बारे में अधिक जानें"
+#~ msgid "Learn more about Automation Analytics"
+#~ msgstr "Automation Analytics के बारे में अधिक जानें"
 
 #: screens/Template/Survey/SurveyReorderModal.tsx:242
 msgid "Survey preview modal"
@@ -11801,8 +11785,8 @@ msgid "Discard local changes before syncing"
 msgstr "सिंक करने से पहले स्थानीय परिवर्तन त्यागें"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:69
-msgid "The number of hosts you have automated against is below your subscription count."
-msgstr "आपने जिन होस्ट्स के विरुद्ध स्वचालन किया है उनकी संख्या आपकी सदस्यता गणना से कम है।"
+#~ msgid "The number of hosts you have automated against is below your subscription count."
+#~ msgstr "आपने जिन होस्ट्स के विरुद्ध स्वचालन किया है उनकी संख्या आपकी सदस्यता गणना से कम है।"
 
 #: screens/Host/HostDetail/HostDetail.tsx:135
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:128
@@ -11905,8 +11889,8 @@ msgid "Account SID"
 msgstr "खाता SID"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:85
-msgid "Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics."
-msgstr "Automation Analytics सक्षम करने के लिए अपने Red Hat या Red Hat Satellite क्रेडेंशियल्स प्रदान करें।"
+#~ msgid "Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics."
+#~ msgstr "Automation Analytics सक्षम करने के लिए अपने Red Hat या Red Hat Satellite क्रेडेंशियल्स प्रदान करें।"
 
 #: screens/Template/shared/PlaybookSelect.tsx:134
 #: screens/Template/shared/PlaybookSelect.tsx:135
@@ -11937,8 +11921,6 @@ msgstr "टोकन हटाने में त्रुटि"
 
 #: screens/Dashboard/DashboardGraph.tsx:109
 #: screens/Dashboard/DashboardGraph.tsx:120
-#: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:125
-#: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:136
 msgid "Select period"
 msgstr "अवधि चुनें"
 
@@ -11950,7 +11932,7 @@ msgstr "सूचना प्रारंभ टॉगल करें"
 #: components/JobList/JobListItem.tsx:274
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
-#: components/Lookup/HostFilterLookup.tsx:448
+#: components/Lookup/HostFilterLookup.tsx:444
 #: components/Lookup/HostListItem.tsx:17
 #: components/Lookup/InventoryLookup.tsx:159
 #: components/Lookup/InventoryLookup.tsx:167
@@ -12030,8 +12012,8 @@ msgstr "नोड हटाने की पुष्टि करें"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:93
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:141
-msgid "Past year"
-msgstr "पिछला वर्ष"
+#~ msgid "Past year"
+#~ msgstr "पिछला वर्ष"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:198
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:176

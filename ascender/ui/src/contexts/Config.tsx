@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect, useMemo } from 'react';
-import { useMatch } from 'react-router';
 
 import { useLingui } from '@lingui/react/macro';
 import {
@@ -16,35 +15,6 @@ import ErrorDetail from 'components/ErrorDetail';
 import { dynamicActivate, locales } from 'i18nLoader';
 import { setCustomTheme, applyTheme, getSavedThemeId } from 'themeRegistry';
 import { useSession } from './Session';
-
-/**
- * What the subscription reports about itself.
- *
- * Which of these it carries follows the licence type, and the counts are only
- * there once the subscription tracks hosts, so every field is optional and the
- * index signature keeps the rest reachable.
- */
-export interface LicenseInfo {
-  valid_key?: boolean;
-  compliant?: boolean;
-  subscription_name?: string;
-  product_name?: string;
-  license_type?: string;
-  trial?: boolean;
-  /** Unix seconds, which the detail and the banner format. */
-  license_date?: number;
-  time_remaining?: number;
-  instance_count?: number;
-  current_instances?: number;
-  free_instances?: number;
-  available_instances?: number;
-  automated_instances?: number;
-  deleted_instances?: number;
-  reactivated_instances?: number;
-  /** Unix seconds: when the automated host count started counting. */
-  automated_since?: number;
-  [key: string]: unknown;
-}
 
 /**
  * What the config context carries. Assembled from several endpoints in the
@@ -66,10 +36,6 @@ export interface CurrentUser {
 export interface ConfigValue {
   /** The current user, as /api/v2/me returns them. */
   me?: CurrentUser;
-  /** The end user licence agreement, shown by the subscription wizard. */
-  eula?: string;
-  /** The subscription, whose fields differ by licence type. */
-  license_info?: LicenseInfo;
   version?: string;
   toJSON?: () => string;
   isLoading?: boolean;
@@ -271,11 +237,9 @@ export const useUserProfile = (): UserProfile => {
   };
 };
 
-export const useAuthorizedPath = () => {
-  const config = useConfig();
-  const subscriptionMgmtRoute = useMatch({
-    path: '/subscription_management',
-    end: false,
-  });
-  return !!config.license_info?.valid_key && !subscriptionMgmtRoute;
-};
+export const useAuthorizedPath = () =>
+  // Kept as a hook rather than removed so its callers read the same. It used to
+  // answer false when the licence had no valid key, which sent the whole app to
+  // the subscription wizard. There is no subscription and no wizard, and the
+  // open licence is always valid, so there is nothing left for it to refuse.
+  true;

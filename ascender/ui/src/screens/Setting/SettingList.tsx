@@ -104,17 +104,6 @@ function SettingList() {
       ],
     },
     {
-      header: t`Subscription`,
-      description: t`View and edit your subscription information`,
-      id: 'subscription',
-      routes: [
-        {
-          title: t`Subscription settings`,
-          path: '/settings/subscription',
-        },
-      ],
-    },
-    {
       header: t`Troubleshooting`,
       description: t`View and edit debug options`,
       id: 'troubleshooting',
@@ -139,39 +128,31 @@ function SettingList() {
 
   return (
     <PageSection className="ascender-setting-list__split-layout">
-      {settingRoutes.map(({ description, header, id, routes }) => {
-        if (
-          id === 'subscription' &&
-          config?.license_info?.license_type === 'open'
-        ) {
-          return null;
-        }
-        return (
-          <Card className="ascender-setting-list__card" isCompact key={header}>
-            <CardHeader className="ascender-setting-list__card-header">
-              <CardTitle>{header}</CardTitle>
-              <div className="ascender-setting-list__card-description">
-                {description}
-              </div>
-            </CardHeader>
-            <DataList aria-label={`${id}-settings`} isCompact>
-              {routes.map(({ title, path }) => (
-                <DataListItem key={title}>
-                  <DataListItemRow>
-                    <DataListItemCells
-                      dataListCells={[
-                        <DataListCell key={title}>
-                          <Link to={path}>{title}</Link>
-                        </DataListCell>,
-                      ]}
-                    />
-                  </DataListItemRow>
-                </DataListItem>
-              ))}
-            </DataList>
-          </Card>
-        );
-      })}
+      {settingRoutes.map(({ description, header, id, routes }) => (
+        <Card className="ascender-setting-list__card" isCompact key={header}>
+          <CardHeader className="ascender-setting-list__card-header">
+            <CardTitle>{header}</CardTitle>
+            <div className="ascender-setting-list__card-description">
+              {description}
+            </div>
+          </CardHeader>
+          <DataList aria-label={`${id}-settings`} isCompact>
+            {routes.map(({ title, path }) => (
+              <DataListItem key={title}>
+                <DataListItemRow>
+                  <DataListItemCells
+                    dataListCells={[
+                      <DataListCell key={title}>
+                        <Link to={path}>{title}</Link>
+                      </DataListCell>,
+                    ]}
+                  />
+                </DataListItemRow>
+              </DataListItem>
+            ))}
+          </DataList>
+        </Card>
+      ))}
     </PageSection>
   );
 }

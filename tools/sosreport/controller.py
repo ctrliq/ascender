@@ -11,7 +11,6 @@ SOSREPORT_CONTROLLER_COMMANDS = [
     "ascender-manage list_instances",  # controller cluster configuration
     "ascender-manage run_dispatcher --status",  # controller dispatch worker status
     "ascender-manage run_callback_receiver --status",  # controller callback worker status
-    "ascender-manage check_license --data",  # controller license status
     "ascender-manage run_wsrelay --status",  # controller websocket relay status
     "supervisorctl status",  # controller process status
     "/var/lib/ascender/venv/awx/bin/pip freeze",  # pip package list

@@ -333,7 +333,7 @@ class WorkflowJobTemplateCopy(CopyAPIView):
                     if not user.can_access(item.__class__, 'use', item):
                         setattr(obj, field_name, None)
                 elif field_name in ['unified_job_template']:
-                    if not user.can_access(item.__class__, 'start', item, validate_license=False):
+                    if not user.can_access(item.__class__, 'start', item):
                         setattr(obj, field_name, None)
                 elif field_name in ['credentials']:
                     for cred in item.all():

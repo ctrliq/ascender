@@ -37,28 +37,28 @@ class TestKeyRegeneration:
 
     def test_encrypted_setting_values(self):
         # test basic decryption
-        settings.REDHAT_PASSWORD = 'sensitive'
-        s = Setting.objects.filter(key='REDHAT_PASSWORD').first()
+        settings.LOG_AGGREGATOR_PASSWORD = 'sensitive'
+        s = Setting.objects.filter(key='LOG_AGGREGATOR_PASSWORD').first()
         assert s.value.startswith(PREFIX)
-        assert settings.REDHAT_PASSWORD == 'sensitive'
+        assert settings.LOG_AGGREGATOR_PASSWORD == 'sensitive'
 
         # re-key the setting value
         new_key = regenerate_secret_key.Command().handle()
-        new_setting = Setting.objects.filter(key='REDHAT_PASSWORD').first()
+        new_setting = Setting.objects.filter(key='LOG_AGGREGATOR_PASSWORD').first()
         assert s.value != new_setting.value
 
         # wipe out the local cache so the value is pulled from the DB again
-        settings.cache.delete('REDHAT_PASSWORD')
+        settings.cache.delete('LOG_AGGREGATOR_PASSWORD')
 
         # verify that the old SECRET_KEY doesn't work
         settings._ascender_conf_memoizedcache.clear()
         with pytest.raises(InvalidToken):
-            settings.REDHAT_PASSWORD
+            settings.LOG_AGGREGATOR_PASSWORD
 
         # verify that the new SECRET_KEY *does* work
         settings._ascender_conf_memoizedcache.clear()
         with override_settings(SECRET_KEY=new_key):
-            assert settings.REDHAT_PASSWORD == 'sensitive'
+            assert settings.LOG_AGGREGATOR_PASSWORD == 'sensitive'
 
     def test_encrypted_notification_secrets(self, notification_template_with_encrypt):
         # test basic decryption

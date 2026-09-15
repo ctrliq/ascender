@@ -158,15 +158,8 @@ develop:
 	    $(PYTHON) setup.py develop; \
 	fi
 
-version_file:
-	mkdir -p /var/lib/ascender/; \
-	if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
-	fi; \
-	$(PYTHON) -c "import ascender; print(ascender.__version__)" > /var/lib/ascender/.ascender_version; \
-
 ## Refresh development environment after pulling new code.
-refresh: clean requirements_dev version_file develop migrate
+refresh: clean requirements_dev develop migrate
 
 ## Create Django superuser.
 adduser:

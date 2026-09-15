@@ -9,25 +9,25 @@ the following fields (some fields may not be visible to all users):
 * `project_local_paths`: List of directories beneath `project_base_dir` to
   use when creating/editing a manual project.
 * `time_zone`: The configured time zone for the server.
-* `license_info`: Information about the current license.
-* `version`: Version of Ansible Tower package installed.
-* `eula`: The current End-User License Agreement
+* `version`: Version of the Ascender package installed.
+* `analytics_status`: Whether user analytics tracking is off, anonymous or
+  detailed.
+* `become_methods`: The privilege escalation methods available to a job.
+* `user_ldap_fields`: Present when LDAP is enabled: the user fields LDAP
+  manages, which are read-only for a user with an `ldap_dn`.
 {% endifmeth %}
 
 {% ifmeth POST %}
-# Install or update an existing license
+# No licence to install
 
-(_New in Ansible Tower 2.0.0_) Make a POST request to this resource as a super
-user to install or update the existing license.  The license data itself can
-be POSTed as a normal json data structure.
-
-(_New in Ansible Tower 2.1.1_) The POST must include a `eula_accepted` boolean
-element indicating acceptance of the End-User License Agreement.
+Ascender does not use subscriptions. This method took a Red Hat entitlement
+manifest and answers `400` instead, rather than a bare `405`, so a client that
+posts one is told why.
 {% endifmeth %}
 
 {% ifmeth DELETE %}
-# Delete an existing license
+# No licence to remove
 
-(_New in Ansible Tower 2.0.0_) Make a DELETE request to this resource as a super
-user to delete the existing license
+Ascender does not use subscriptions. This method cleared the installed licence
+and answers `400`, the same way POST does.
 {% endifmeth %}

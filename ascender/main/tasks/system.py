@@ -37,7 +37,6 @@ from dateutil.parser import parse as parse_date
 
 # Ascender
 from ascender import __version__ as awx_application_version
-from ascender.main.access import access_registry
 from ascender.main.models import (
     Schedule,
     AscenderScheduleState,
@@ -47,7 +46,6 @@ from ascender.main.models import (
     Notification,
     Inventory,
     SmartInventoryMembership,
-    Job,
     convert_jsonfields,
 )
 from ascender.main.constants import BROADCAST_CHANNEL, SETTINGS_CHANGE_CHANNEL, ACTIVE_STATES, FORMER_JOB_FOLDER_PREFIX, JOB_FOLDER_PREFIX
@@ -57,14 +55,11 @@ from ascender.main.utils.common import ignore_inventory_computed_fields, ignore_
 
 from ascender.main.utils.reload import stop_local_services
 from ascender.main.utils.pglock import advisory_lock
-from ascender.main.tasks.helpers import is_run_threshold_reached
 from ascender.main.tasks.receptor import get_receptor_ctl, worker_info, worker_cleanup, administrative_workunit_reaper, write_receptor_config
 from ascender.main.consumers import emit_channel_notification
-from ascender.main import analytics
 from ascender.conf import settings_registry
 from ascender.main.analytics.subsystem_metrics import DispatcherMetrics
 
-from rest_framework.exceptions import PermissionDenied
 
 logger = logging.getLogger('awx.main.tasks.system')
 
@@ -363,12 +358,6 @@ def send_notifications(notification_list, job_id=None):
                 notification.save(update_fields=update_fields)
             except Exception:
                 logger.exception('Error saving notification {} result.'.format(notification.id))
-
-
-@task(queue=get_task_queuename)
-def gather_analytics():
-    if is_run_threshold_reached(getattr(settings, 'AUTOMATION_ANALYTICS_LAST_GATHER', None), settings.AUTOMATION_ANALYTICS_GATHER_INTERVAL):
-        analytics.gather()
 
 
 @task(queue=get_task_queuename)
@@ -750,12 +739,6 @@ def awx_periodic_scheduler():
             schedule.update_computed_fields()
         schedules = Schedule.objects.enabled().between(last_run, run_now)
 
-        invalid_license = False
-        try:
-            access_registry[Job](None).check_license(quiet=True)
-        except PermissionDenied as e:
-            invalid_license = e
-
         for schedule in schedules:
             template = schedule.unified_job_template
             schedule.update_computed_fields()  # To update next_run timestamp.
@@ -766,13 +749,6 @@ def awx_periodic_scheduler():
                 job_kwargs = schedule.get_job_kwargs()
                 new_unified_job = schedule.unified_job_template.create_unified_job(**job_kwargs)
                 logger.debug('Spawned {} from schedule {}-{}.'.format(new_unified_job.log_format, schedule.name, schedule.pk))
-
-                if invalid_license:
-                    new_unified_job.status = 'failed'
-                    new_unified_job.job_explanation = str(invalid_license)
-                    new_unified_job.save(update_fields=['status', 'job_explanation'])
-                    new_unified_job.websocket_emit_status("failed")
-                    raise invalid_license
                 can_start = new_unified_job.signal_start()
             except Exception:
                 logger.exception('Error spawning scheduled job.')
