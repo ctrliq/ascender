@@ -1,17 +1,13 @@
 # Copyright (c) 2018 Ansible, Inc.
 # All Rights Reserved.
 
-import base64
-import json
 import logging
 import operator
 from collections import OrderedDict
 
 from ascender.settings.typed import settings
-from django.utils.encoding import smart_str
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
-from django.template.loader import render_to_string
 from django.utils.translation import gettext_lazy as _
 
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -21,15 +17,11 @@ from rest_framework import status
 
 from ascender import MODE
 from ascender.api.generics import APIView
-from ascender.conf.registry import settings_registry
-from ascender.main.analytics import all_collectors
 from ascender.main.ha import is_ha_environment
 from ascender.main.utils import get_ascender_version
-from ascender.main.utils.licensing import validate_entitlement_manifest
 from ascender.api.versioning import reverse, drf_reverse
 from ascender.main.constants import PRIVILEGE_ESCALATION_METHODS
 from ascender.main.models import Project, Organization, Instance, InstanceGroup
-from ascender.main.utils.licensing import get_licenser
 
 logger = logging.getLogger('awx.api.views.root')
 
@@ -130,7 +122,6 @@ class ApiVersionRootView(APIView):
         data['workflow_job_nodes'] = reverse('api:workflow_job_node_list', request=request)
         data['mesh_visualizer'] = reverse('api:mesh_visualizer_view', request=request)
         data['bulk'] = reverse('api:bulk', request=request)
-        data['analytics'] = reverse('api:analytics_root_view', request=request)
         return Response(data)
 
 
@@ -196,20 +187,12 @@ class ApiV2ConfigView(APIView):
     def get(self, request, format=None):
         '''Return various sitewide configuration settings'''
 
-        license_data = get_licenser().validate()
-
-        if not license_data.get('valid_key', False):
-            license_data = {}
-
         pendo_state = settings.PENDO_TRACKING_STATE if settings.PENDO_TRACKING_STATE in ('off', 'anonymous', 'detailed') else 'off'
 
         data = dict(
             time_zone=settings.TIME_ZONE,
-            license_info=license_data,
             version=get_ascender_version(),
-            eula=render_to_string("eula.md") if license_data.get('license_type', 'UNLICENSED') != 'open' else '',
             analytics_status=pendo_state,
-            analytics_collectors=all_collectors(),
             become_methods=PRIVILEGE_ESCALATION_METHODS,
         )
 
@@ -239,53 +222,28 @@ class ApiV2ConfigView(APIView):
         return Response(data)
 
     def post(self, request):
-        if not isinstance(request.data, dict):
-            return Response({"error": _("Invalid subscription data")}, status=status.HTTP_400_BAD_REQUEST)
-        try:
-            data_actual = json.dumps(request.data)
-        except Exception:
-            logger.info(smart_str("Invalid JSON submitted for license."), extra=dict(actor=request.user.username))
-            return Response({"error": _("Invalid JSON")}, status=status.HTTP_400_BAD_REQUEST)
+        """There is no subscription to submit.
 
-        license_data = json.loads(data_actual)
-        if 'license_key' in license_data:
-            return Response({"error": _('Legacy license submitted. A subscription manifest is now required.')}, status=status.HTTP_400_BAD_REQUEST)
-        if 'manifest' in license_data:
-            try:
-                json_actual = json.loads(base64.b64decode(license_data['manifest']))
-                if 'license_key' in json_actual:
-                    return Response({"error": _('Legacy license submitted. A subscription manifest is now required.')}, status=status.HTTP_400_BAD_REQUEST)
-            except Exception:
-                pass
-            try:
-                license_data = validate_entitlement_manifest(license_data['manifest'])
-            except ValueError as e:
-                return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-            except Exception:
-                logger.exception('Invalid manifest submitted. {}')
-                return Response({"error": _('Invalid manifest submitted.')}, status=status.HTTP_400_BAD_REQUEST)
-
-            try:
-                license_data_validated = get_licenser().license_from_manifest(license_data)
-            except Exception:
-                logger.warning(smart_str("Invalid subscription submitted."), extra=dict(actor=request.user.username))
-                return Response({"error": _("Invalid License")}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            license_data_validated = get_licenser().validate()
-
-        # If the license is valid, write it to the database.
-        if license_data_validated['valid_key']:
-            if not settings_registry.is_setting_read_only('ASCENDER_URL_BASE'):
-                settings.ASCENDER_URL_BASE = "{}://{}".format(request.scheme, request.get_host())
-            return Response(license_data_validated)
-
-        logger.warning(smart_str("Invalid subscription submitted."), extra=dict(actor=request.user.username))
-        return Response({"error": _("Invalid subscription")}, status=status.HTTP_400_BAD_REQUEST)
+        This used to take an entitlement manifest, validate its signature and
+        write the resulting licence to the database. Ascender has no
+        subscription, so there is nothing a manifest could say. The method stays
+        rather than disappearing so a client that posts one is told why instead
+        of getting a bare 405.
+        """
+        return Response(
+            {"error": _("Ascender does not use subscriptions. There is no licence to install.")},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     def delete(self, request):
-        try:
-            settings.LICENSE = {}
-            return Response(status=status.HTTP_204_NO_CONTENT)
-        except Exception:
-            # FIX: Log
-            return Response({"error": _("Failed to remove license.")}, status=status.HTTP_400_BAD_REQUEST)
+        """There is no subscription to remove.
+
+        This used to clear the LICENSE setting, a key the conf migrations
+        deleted and this change unregisters. Writing it back would put a row
+        under a name nothing reads. Answered the same way as POST, so a client
+        that removes a licence before installing one is told why.
+        """
+        return Response(
+            {"error": _("Ascender does not use subscriptions. There is no licence to remove.")},
+            status=status.HTTP_400_BAD_REQUEST,
+        )

@@ -188,33 +188,6 @@ To configure playbooks to use source control, in the Project **Details** tab:
     This link offers a very similar playbook to the one created manually in the instructions found in the :ref:`qs_start`. Using it will not alter or harm your system in anyway.
 
 
-SCM Type - Red Hat Insights
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-.. index::
-   pair: projects; playbooks
-   pair: Insights; source control
-   single: playbooks; source control
-
-To configure playbooks to use Red Hat Insights, in the Project **Details** tab:
-
-1. Select **Red Hat Insights** from the **SCM Type** drop-down menu list.
-
-2. Red Hat Insights requires a credential for authentication. Select from the **Credential** field the appropriate credential for use with Insights.
-
-3. In the **SCM Update Options**, optionally select the launch behavior, if applicable.
-
-  -  **Clean** - Removes any local modifications prior to performing an update.
-  -  **Delete** - Deletes the local repository in its entirety prior to performing an update. Depending on the size of the repository this may significantly increase the amount of time required to complete an update.
-  -  **Update Revision on Launch** - Updates the revision of the project to the current revision in the remote source control, as well as cache the roles directory from :ref:`Galaxy <ug_galaxy>` or :ref:`Collections <ug_collections>`. Ascender ensures that the local revision matches and that the roles and collections are up-to-date with the last update. Also, to avoid job overflows if jobs are spawned faster than the project can sync, selecting this allows you to configure a Cache Timeout to cache prior project syncs for a certain number of seconds.
-
-  .. image:: ../common/images/projects-create-scm-insights.png
-     :alt: Create New Project form for Red Hat Insights Source Control Credential Type.
-
-
-3. Click **Save** to save your project.
-
-
 SCM Type - Remote Archive
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 

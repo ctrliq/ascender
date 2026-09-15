@@ -37,7 +37,6 @@ from dateutil.parser import parse as parse_date
 
 # Ascender
 from ascender import __version__ as awx_application_version
-from ascender.main.access import access_registry
 from ascender.main.models import (
     Schedule,
     AscenderScheduleState,
@@ -47,7 +46,6 @@ from ascender.main.models import (
     Notification,
     Inventory,
     SmartInventoryMembership,
-    Job,
     convert_jsonfields,
 )
 from ascender.main.constants import BROADCAST_CHANNEL, SETTINGS_CHANGE_CHANNEL, ACTIVE_STATES, FORMER_JOB_FOLDER_PREFIX, JOB_FOLDER_PREFIX
@@ -57,14 +55,11 @@ from ascender.main.utils.common import ignore_inventory_computed_fields, ignore_
 
 from ascender.main.utils.reload import stop_local_services
 from ascender.main.utils.pglock import advisory_lock
-from ascender.main.tasks.helpers import is_run_threshold_reached
 from ascender.main.tasks.receptor import get_receptor_ctl, worker_info, worker_cleanup, administrative_workunit_reaper, write_receptor_config
 from ascender.main.consumers import emit_channel_notification
-from ascender.main import analytics
 from ascender.conf import settings_registry
 from ascender.main.analytics.subsystem_metrics import DispatcherMetrics
 
-from rest_framework.exceptions import PermissionDenied
 
 logger = logging.getLogger('awx.main.tasks.system')
 
@@ -366,12 +361,6 @@ def send_notifications(notification_list, job_id=None):
 
 
 @task(queue=get_task_queuename)
-def gather_analytics():
-    if is_run_threshold_reached(getattr(settings, 'AUTOMATION_ANALYTICS_LAST_GATHER', None), settings.AUTOMATION_ANALYTICS_GATHER_INTERVAL):
-        analytics.gather()
-
-
-@task(queue=get_task_queuename)
 def purge_old_stdout_files():
     nowtime = time.time()
     for f in os.listdir(settings.JOBOUTPUT_ROOT):
@@ -606,7 +595,7 @@ def cluster_node_heartbeat(dispatch_time=None, worker_tasks=None):
         elif (nowtime - last_last_seen) > timedelta(seconds=settings.CLUSTER_NODE_HEARTBEAT_PERIOD + 2):
             logger.warning(f'Heartbeat skew - interval={(nowtime - last_last_seen).total_seconds():.4f}, expected={settings.CLUSTER_NODE_HEARTBEAT_PERIOD}')
     else:
-        if settings.AWX_AUTO_DEPROVISION_INSTANCES:
+        if settings.ASCENDER_AUTO_DEPROVISION_INSTANCES:
             changed, this_inst = Instance.objects.register(ip_address=os.environ.get('MY_POD_IP'), node_type='control', node_uuid=settings.SYSTEM_UUID)
             if changed:
                 logger.warning(f'Recreated instance record {this_inst.hostname} after unexpected removal')
@@ -638,7 +627,7 @@ def cluster_node_heartbeat(dispatch_time=None, worker_tasks=None):
         except Exception:
             logger.exception('failed to reap jobs for {}'.format(other_inst.hostname))
         try:
-            if settings.AWX_AUTO_DEPROVISION_INSTANCES and other_inst.node_type == "control":
+            if settings.ASCENDER_AUTO_DEPROVISION_INSTANCES and other_inst.node_type == "control":
                 deprovision_hostname = other_inst.hostname
                 other_inst.delete()  # FIXME: what about associated inbound links?
                 logger.info("Host {} Automatically Deprovisioned.".format(deprovision_hostname))
@@ -721,7 +710,7 @@ def awx_k8s_reaper():
             logger.debug('{} is no longer active, reaping orphaned k8s pod'.format(job.log_format))
             try:
                 pm = PodManager(job)
-                pm.kube_api.delete_namespaced_pod(name=pods[job.id], namespace=pm.namespace, _request_timeout=settings.AWX_CONTAINER_GROUP_K8S_API_TIMEOUT)
+                pm.kube_api.delete_namespaced_pod(name=pods[job.id], namespace=pm.namespace, _request_timeout=settings.ASCENDER_CONTAINER_GROUP_K8S_API_TIMEOUT)
             except Exception:
                 logger.exception("Failed to delete orphaned pod {} from {}".format(job.log_format, group))
 
@@ -750,12 +739,6 @@ def awx_periodic_scheduler():
             schedule.update_computed_fields()
         schedules = Schedule.objects.enabled().between(last_run, run_now)
 
-        invalid_license = False
-        try:
-            access_registry[Job](None).check_license(quiet=True)
-        except PermissionDenied as e:
-            invalid_license = e
-
         for schedule in schedules:
             template = schedule.unified_job_template
             schedule.update_computed_fields()  # To update next_run timestamp.
@@ -766,13 +749,6 @@ def awx_periodic_scheduler():
                 job_kwargs = schedule.get_job_kwargs()
                 new_unified_job = schedule.unified_job_template.create_unified_job(**job_kwargs)
                 logger.debug('Spawned {} from schedule {}-{}.'.format(new_unified_job.log_format, schedule.name, schedule.pk))
-
-                if invalid_license:
-                    new_unified_job.status = 'failed'
-                    new_unified_job.job_explanation = str(invalid_license)
-                    new_unified_job.save(update_fields=['status', 'job_explanation'])
-                    new_unified_job.websocket_emit_status("failed")
-                    raise invalid_license
                 can_start = new_unified_job.signal_start()
             except Exception:
                 logger.exception('Error spawning scheduled job.')

@@ -197,7 +197,7 @@ class InstanceManager(models.Manager):
             ip_address = ""
 
         with advisory_lock('instance_registration_%s' % hostname):
-            if settings.AWX_AUTO_DEPROVISION_INSTANCES:
+            if settings.ASCENDER_AUTO_DEPROVISION_INSTANCES:
                 # detect any instances with the same IP address.
                 # if one exists, set it to ""
                 if ip_address:

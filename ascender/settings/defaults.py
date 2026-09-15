@@ -14,6 +14,7 @@ from datetime import timedelta
 
 # python-ldap
 import ldap
+from ascender.settings.environment import environment_setting
 
 DEBUG = True
 SQL_DEBUG = DEBUG
@@ -98,7 +99,7 @@ LISTENER_DATABASES = {
 # the K8S cluster where awx itself is running)
 IS_K8S = False
 
-AWX_CONTAINER_GROUP_K8S_API_TIMEOUT = 10
+ASCENDER_CONTAINER_GROUP_K8S_API_TIMEOUT = 10
 # Whether container group Kubernetes API calls should be routed through the
 # HTTP_PROXY/HTTPS_PROXY environment variables of the task container. The Python
 # Kubernetes client started honouring those on its own in 34.1, but this traffic
@@ -106,14 +107,14 @@ AWX_CONTAINER_GROUP_K8S_API_TIMEOUT = 10
 # verification against the cluster CA (the client verifies against the cluster
 # credential's CA data or the service account CA, never the system trust store).
 # Leave disabled unless the cluster API really is only reachable through a proxy.
-AWX_CONTAINER_GROUP_K8S_API_USE_PROXY = False
-AWX_CONTAINER_GROUP_DEFAULT_NAMESPACE = os.getenv('MY_POD_NAMESPACE', 'default')
-AWX_CONTAINER_GROUP_DEFAULT_JOB_LABEL = os.getenv('AWX_CONTAINER_GROUP_DEFAULT_JOB_LABEL', 'ansible_job')
+ASCENDER_CONTAINER_GROUP_K8S_API_USE_PROXY = False
+ASCENDER_CONTAINER_GROUP_DEFAULT_NAMESPACE = os.getenv('MY_POD_NAMESPACE', 'default')
+ASCENDER_CONTAINER_GROUP_DEFAULT_JOB_LABEL = os.getenv('ASCENDER_CONTAINER_GROUP_DEFAULT_JOB_LABEL', 'ansible_job')
 # Timeout when waiting for pod to enter running state. If the pod is still in pending state , it will be terminated. Valid time units are "s", "m", "h". Example : "5m" , "10s".
-AWX_CONTAINER_GROUP_POD_PENDING_TIMEOUT = "2h"
+ASCENDER_CONTAINER_GROUP_POD_PENDING_TIMEOUT = "2h"
 
 # How much capacity controlling a task costs a hybrid or control node
-AWX_CONTROL_NODE_TASK_IMPACT = 1
+ASCENDER_CONTROL_NODE_TASK_IMPACT = 1
 
 # Internationalization
 # https://docs.djangoproject.com/en/dev/topics/i18n/
@@ -337,7 +338,7 @@ START_TASK_LIMIT = 100
 # Without it the dispatcher worker running send_notifications is held for as
 # long as the far end keeps the connection open. Matches the default timeout of
 # the email backend.
-AWX_NOTIFICATION_REQUEST_TIMEOUT = 30
+ASCENDER_NOTIFICATION_REQUEST_TIMEOUT = 30
 
 # Time out task managers if they take longer than this many seconds, plus TASK_MANAGER_TIMEOUT_GRACE_PERIOD
 # We have the grace period so the task manager can bail out before the timeout.
@@ -624,7 +625,6 @@ CELERYBEAT_SCHEDULE = {
         'schedule': timedelta(seconds=CLUSTER_NODE_HEARTBEAT_PERIOD),
         'options': {'expires': 50},
     },
-    'gather_analytics': {'task': 'ascender.main.tasks.system.gather_analytics', 'schedule': timedelta(minutes=5)},
     'task_manager': {'task': 'ascender.main.scheduler.tasks.task_manager', 'schedule': timedelta(seconds=20), 'options': {'expires': 20}},
     'dependency_manager': {'task': 'ascender.main.scheduler.tasks.dependency_manager', 'schedule': timedelta(seconds=20), 'options': {'expires': 20}},
     'k8s_reaper': {'task': 'ascender.main.tasks.system.awx_k8s_reaper', 'schedule': timedelta(seconds=60), 'options': {'expires': 50}},
@@ -766,7 +766,7 @@ ASCENDER_TASK_ENV = {}
 GALAXY_TASK_ENV = {'ANSIBLE_FORCE_COLOR': 'false', 'GIT_SSH_COMMAND': "ssh -o StrictHostKeyChecking=no"}
 
 # Rebuild Host Smart Inventory memberships.
-AWX_REBUILD_SMART_MEMBERSHIP = False
+ASCENDER_REBUILD_SMART_MEMBERSHIP = False
 
 # By default, allow arbitrary Jinja templating in extra_vars defined on a Job Template
 ALLOW_JINJA_IN_EXTRA_VARS = 'template'
@@ -817,7 +817,7 @@ ASCENDER_ISOLATION_BASE_PATH = tempfile.gettempdir()
 ASCENDER_ANSIBLE_CALLBACK_PLUGINS = ""
 
 # Automatically remove nodes that have missed their heartbeats after some time
-AWX_AUTO_DEPROVISION_INSTANCES = False
+ASCENDER_AUTO_DEPROVISION_INSTANCES = False
 
 # Enable Pendo on the UI, possible values are 'off', 'anonymous', and 'detailed'
 # Note: This setting may be overridden by database settings.
@@ -825,12 +825,9 @@ PENDO_TRACKING_STATE = "off"
 
 # Enables Insights data collection.
 # Note: This setting may be overridden by database settings.
-INSIGHTS_TRACKING_STATE = False
 
 # Last gather date for Analytics
-AUTOMATION_ANALYTICS_LAST_GATHER = None
 # Last gathered entries for expensive Analytics
-AUTOMATION_ANALYTICS_LAST_ENTRIES = ''
 
 # Default list of modules allowed for ad hoc commands.
 # Note: This setting may be overridden by database settings.
@@ -974,8 +971,6 @@ DISABLE_LOCAL_AUTH = False
 # Note: This setting may be overridden by database settings.
 ASCENDER_URL_BASE = "https://ascenderhost"
 
-INSIGHTS_AGENT_MIME = 'application/example'
-INSIGHTS_CERT_PATH = "/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem"
 
 # Settings related to external logger configuration
 LOG_AGGREGATOR_ENABLED = False
@@ -1100,9 +1095,9 @@ handler_config = {
 }
 
 # If running on a VM, we log to files. When running in a container, we log to stdout.
-logging_mode = os.getenv('AWX_LOGGING_MODE', 'file')
+logging_mode = environment_setting('LOGGING_MODE', 'file')
 if logging_mode not in ('file', 'stdout'):
-    raise Exception("AWX_LOGGING_MODE must be 'file' or 'stdout'")
+    raise Exception("ASCENDER_LOGGING_MODE must be 'file' or 'stdout'")
 
 for name, config in handler_config.items():
     # Common log handler config. Don't define a level here, it's set by settings.LOG_AGGREGATOR_LEVEL
@@ -1140,20 +1135,20 @@ ASCENDER_REQUEST_PROFILE = False
 # ~ yum install graphviz
 # ~ dot -o profile.png -Tpng /var/log/ascender/profile/some-profile-data.dot
 #
-AWX_REQUEST_PROFILE_WITH_DOT = False
+ASCENDER_REQUEST_PROFILE_WITH_DOT = False
 
 # Allow profiling callback workers via SIGUSR1
-AWX_CALLBACK_PROFILE = False
+ASCENDER_CALLBACK_PROFILE = False
 
 # Delete temporary directories created to store playbook run-time
 ASCENDER_CLEANUP_PATHS = True
 
 # Allow ansible-runner to store env folder (may contain sensitive information)
-AWX_RUNNER_OMIT_ENV_FILES = True
+ASCENDER_RUNNER_OMIT_ENV_FILES = True
 
 # Allow ansible-runner to save ansible output
 # (changing to False may cause performance issues)
-AWX_RUNNER_SUPPRESS_OUTPUT_FILE = True
+ASCENDER_RUNNER_SUPPRESS_OUTPUT_FILE = True
 
 # https://github.com/ansible/ansible-runner/pull/1191/files
 # Interval in seconds between the last message and keep-alive messages that

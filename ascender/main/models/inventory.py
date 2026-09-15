@@ -56,7 +56,6 @@ from ascender.main.models.credential.injectors import _openstack_data
 from ascender.main.utils import _inventory_updates
 from ascender.main.utils.safe_yaml import sanitize_jinja
 from ascender.main.utils.execution_environments import to_container_path, get_control_plane_execution_environment
-from ascender.main.utils.licensing import OPEN_PRODUCT_NAME, server_product_name
 
 __all__ = ['Inventory', 'Host', 'Group', 'InventorySource', 'InventoryUpdate', 'SmartInventoryMembership', 'HostMetric', 'HostMetricSummaryMonthly']
 
@@ -475,7 +474,7 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
         delete_inventory.delay(self.pk, user_id)
 
     def _update_host_smart_inventory_memeberships(self):
-        if self.kind == 'smart' and settings.AWX_REBUILD_SMART_MEMBERSHIP:
+        if self.kind == 'smart' and settings.ASCENDER_REBUILD_SMART_MEMBERSHIP:
 
             def on_commit():
                 from ascender.main.tasks.system import update_host_smart_inventory_memberships
@@ -649,7 +648,7 @@ class Host(CommonModelNameNotUnique, RelatedJobsMixin):
         return host_name
 
     def _update_host_smart_inventory_memeberships(self):
-        if settings.AWX_REBUILD_SMART_MEMBERSHIP:
+        if settings.ASCENDER_REBUILD_SMART_MEMBERSHIP:
 
             def on_commit():
                 from ascender.main.tasks.system import update_host_smart_inventory_memberships
@@ -1514,8 +1513,6 @@ class PluginFileInjector(object):
         if self.plugin_name is not None:
             if self.get_alternate_plugin(source_vars) is not None:
                 pass  # user selected an alternate supported plugin, keep it
-            elif hasattr(self, 'downstream_namespace') and server_product_name() != OPEN_PRODUCT_NAME:
-                source_vars['plugin'] = f'{self.downstream_namespace}.{self.downstream_collection}.{self.plugin_name}'
             elif self.use_fqcn:
                 source_vars['plugin'] = f'{self.namespace}.{self.collection}.{self.plugin_name}'
             else:
@@ -1666,8 +1663,6 @@ class satellite6(PluginFileInjector):
     plugin_name = 'foreman'
     namespace = 'theforeman'
     collection = 'foreman'
-    downstream_namespace = 'redhat'
-    downstream_collection = 'satellite'
     use_fqcn = True
 
     def get_plugin_env(self, inventory_update, private_data_dir, private_data_files):

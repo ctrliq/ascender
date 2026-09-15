@@ -321,22 +321,6 @@ HashiCorp Vault Signed SSH
 This is considered part of the secret management capability. See :ref:`ug_credentials_hashivaultssh` for more detail.
 
 
-Insights
-^^^^^^^^^^^
-
-.. index::
-   pair: credential types; insights
-
-Selecting this credential type enables synchronization of cloud inventory with Red Hat Insights.
-
-|Credentials - create Insights credential|
-
-.. |Credentials - create Insights credential| image:: ../common/images/credentials-create-insights-credential.png
-    :alt: Credentials - create Insights credential form
-
-Insights credentials consist of the Insights **Username** and **Password**, which is the user’s Red Hat Customer Portal Account username and password.
-
-
 Machine
 ^^^^^^^^
 

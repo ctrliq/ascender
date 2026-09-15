@@ -30,7 +30,7 @@ class Command(BaseCommand):
 
     def _register_hostname(self, hostname, node_type, uuid):
         if not hostname:
-            if not settings.AWX_AUTO_DEPROVISION_INSTANCES:
+            if not settings.ASCENDER_AUTO_DEPROVISION_INSTANCES:
                 raise CommandError('Registering with values from settings only intended for use in K8s installs')
 
             from ascender.main.management.commands.register_queue import RegisterQueue

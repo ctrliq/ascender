@@ -10,7 +10,6 @@ from ascender.main.dispatch import get_task_queuename
 from ascender.main.dispatch.publish import task
 from ascender.main.models.inventory import HostMetric, HostMetricSummaryMonthly
 from ascender.main.tasks.helpers import is_run_threshold_reached
-from ascender.conf.license import get_license
 from ascender.main.utils.db import bulk_update_sorted_by_id
 
 logger = logging.getLogger('awx.main.tasks.host_metrics')
@@ -251,10 +250,10 @@ class HostMetricSummaryMonthlyTask:
         summary.hosts_added = hosts_added
         summary.hosts_deleted = hosts_deleted
 
-        # Set subscription count for current month
+        # license_capacity counted against a subscription. There is none, so the
+        # column keeps the zero the subscription branch already produced.
         if month == datetime.date.today().replace(day=1):
-            license_info = get_license()
-            summary.license_capacity = license_info.get('instance_count', 0)
+            summary.license_capacity = 0
         return summary
 
     @staticmethod

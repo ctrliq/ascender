@@ -53,7 +53,6 @@ from ascender.api.views.bulk import (
 from ascender.api.views.mesh_visualizer import MeshVisualizer
 
 from ascender.api.views.metrics import MetricsView
-from ascender.api.views.analytics import AWX_ANALYTICS_API_PREFIX
 
 from .organization import urls as organization_urls
 from .user import urls as user_urls
@@ -95,7 +94,6 @@ from .oauth2_root import urls as oauth2_root_urls
 from .workflow_approval_template import urls as workflow_approval_template_urls
 from .workflow_approval import urls as workflow_approval_urls
 from .workflow_approval_vote import urls as workflow_approval_vote_urls
-from .analytics import urls as analytics_urls
 from .receptor_address import urls as receptor_address_urls
 
 v2_urls = [
@@ -159,7 +157,6 @@ v2_urls = [
     path('unified_job_templates/', UnifiedJobTemplateList.as_view(), name='unified_job_template_list'),
     path('unified_jobs/', UnifiedJobList.as_view(), name='unified_job_list'),
     path('activity_stream/', include(activity_stream_urls)),
-    path(f'{AWX_ANALYTICS_API_PREFIX}/', include(analytics_urls)),
     path('workflow_approval_templates/', include(workflow_approval_template_urls)),
     path('workflow_approvals/', include(workflow_approval_urls)),
     path('workflow_approval_votes/', include(workflow_approval_vote_urls)),

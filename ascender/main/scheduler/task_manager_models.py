@@ -51,7 +51,7 @@ class TaskManagerInstanceGroup:
         self.instance_hostnames = tuple([instance.hostname for instance in _instances if instance.hostname in task_manager_instances])
         self.max_concurrent_jobs = obj.max_concurrent_jobs
         self.max_forks = obj.max_forks
-        self.control_task_impact = kwargs.get('control_task_impact', settings.AWX_CONTROL_NODE_TASK_IMPACT)
+        self.control_task_impact = kwargs.get('control_task_impact', settings.ASCENDER_CONTROL_NODE_TASK_IMPACT)
 
     def consume_capacity(self, task):
         """We only consume capacity on an instance group level if it is a container group. Otherwise we consume capacity on an instance level."""
@@ -134,7 +134,7 @@ class TaskManagerInstances:
         self.instances_by_hostname = dict()
         self.instance_groups_container_group_jobs = dict()
         self.instance_groups_container_group_consumed_forks = dict()
-        self.control_task_impact = kwargs.get('control_task_impact', settings.AWX_CONTROL_NODE_TASK_IMPACT)
+        self.control_task_impact = kwargs.get('control_task_impact', settings.ASCENDER_CONTROL_NODE_TASK_IMPACT)
 
         if instances is None:
             instances = (
@@ -170,7 +170,7 @@ class TaskManagerInstanceGroups:
         self.task_manager_instances = task_manager_instances if task_manager_instances is not None else TaskManagerInstances()
         self.controlplane_ig = None
         self.pk_ig_map = dict()
-        self.control_task_impact = kwargs.get('control_task_impact', settings.AWX_CONTROL_NODE_TASK_IMPACT)
+        self.control_task_impact = kwargs.get('control_task_impact', settings.ASCENDER_CONTROL_NODE_TASK_IMPACT)
         self.controlplane_ig_name = kwargs.get('controlplane_ig_name', settings.DEFAULT_CONTROL_PLANE_QUEUE_NAME)
 
         if instance_groups is not None:  # for testing
@@ -265,7 +265,7 @@ class TaskManagerInstanceGroups:
 class TaskManagerModels:
     def __init__(self, **kwargs):
         # We want to avoid calls to settings over and over in loops, so cache this information here
-        kwargs['control_task_impact'] = kwargs.get('control_task_impact', settings.AWX_CONTROL_NODE_TASK_IMPACT)
+        kwargs['control_task_impact'] = kwargs.get('control_task_impact', settings.ASCENDER_CONTROL_NODE_TASK_IMPACT)
         kwargs['controlplane_ig_name'] = kwargs.get('controlplane_ig_name', settings.DEFAULT_CONTROL_PLANE_QUEUE_NAME)
         self.instances = TaskManagerInstances(**kwargs)
         self.instance_groups = TaskManagerInstanceGroups(task_manager_instances=self.instances, **kwargs)

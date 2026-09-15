@@ -245,7 +245,7 @@ Running the Update Inventory Computed Fields task in the background, in response
 
 The `smart_inventories` field in Ascender uses a membership lookup table that identifies the set of every Smart Inventory a host is associated with. This particular task generates memberships and is launched whenever certain conditions are met (_e.g._, a new host is added or an existing host is modified).
 
-An important thing to note is that this task is only run if the `AWX_REBUILD_SMART_MEMBERSHIP` is set to `True` (default is `False`).
+An important thing to note is that this task is only run if the `ASCENDER_REBUILD_SMART_MEMBERSHIP` is set to `True` (default is `False`).
 
 For more information, visit the [Smart Inventories section](https://docs.ansible.com/ansible-tower/latest/html/userguide/inventories.html#smart-inventories) of the Tower User Guide's "Inventory" page or the Ascender documentation page [Inventory Refresh Overview page](github.com/ctrliq/ascender/blob/main/docs/inventory_refresh.md#inventory-changes) in this repo.
 
@@ -271,18 +271,6 @@ Any time the user changes a setting in Ascender (_e.g._, in `api/v2/settings`), 
 #### Profile SQL
 
 This task allows the user to turn on a global profiler in their system, so that Ascender can profile all of the SQL queries that they make.  This is a "fanout" style task (meaning all nodes execute it), and one of the main benefits is that it assists with identifying slow queries.
-
-
-#### Gather Analytics
-
-The analytics collection `gather()` and `ship()` functions are called by an `awx-manage gather_analytics --ship` command, which runs on whichever instance it is invoked on. When these functions are called by Celery beat (currently at midnight local time), it is run on one `execution_node` by the Python in the Ascender virtualenv.
-
-For more details about analytics, please visit the [Usability Analytics and Data Collection](https://docs.ansible.com/ansible-tower/latest/html/administration/usability_data_collection.html) page.
-
-
-#### Run Administrative Checks
-
-This task checks that the license currently in use is valid and alerts the admin user(s) via email when they are in danger of going over capacity and/or when the license is about to expire. Specifically (in cases of going over capacity), it triggers when the node count is at or over 90% of what the license allows.
 
 
 #### Purge Old Stdout Files

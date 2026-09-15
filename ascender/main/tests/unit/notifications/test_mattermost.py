@@ -29,6 +29,6 @@ def test_send_messages():
             'http://example.com',
             json={'text': 'test subject'},
             verify=True,
-            timeout=settings.AWX_NOTIFICATION_REQUEST_TIMEOUT,
+            timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
         )
         assert sent_messages == 1

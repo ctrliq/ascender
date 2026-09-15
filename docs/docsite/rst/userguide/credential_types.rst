@@ -72,8 +72,6 @@ In the V2 CredentialType model, the relationships are defined as follows:
 +----------+--------------------------------------------------------------+
 |          | Lots of others                                               |
 +----------+--------------------------------------------------------------+
-| Insights | Insights                                                     |
-+----------+--------------------------------------------------------------+
 | Galaxy   | galaxy.ansible.com, cloud.redhat.com                         |
 +----------+--------------------------------------------------------------+
 |          | on-premise Automation Hub                                    |

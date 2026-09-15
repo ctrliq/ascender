@@ -39,7 +39,6 @@ CSRF_COOKIE_SECURE = False
 # Disable Pendo on the UI for development/test.
 # Note: This setting may be overridden by database settings.
 PENDO_TRACKING_STATE = "off"
-INSIGHTS_TRACKING_STATE = False
 
 # debug toolbar and swagger assume that requirements/requirements_dev.txt are installed
 
@@ -55,7 +54,7 @@ INSTALL_UUID = '00000000-0000-0000-0000-000000000000'
 
 CLUSTER_HOST_ID = socket.gethostname()
 
-AWX_CALLBACK_PROFILE = True
+ASCENDER_CALLBACK_PROFILE = True
 
 # ======================!!!!!!! FOR DEVELOPMENT ONLY !!!!!!!=================================
 # Disable normal scheduled/triggered task managers (DependencyManager, TaskManager, WorkflowManager).

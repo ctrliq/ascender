@@ -14,7 +14,6 @@ import ContentLoading from 'components/ContentLoading';
 import DeleteButton from 'components/DeleteButton';
 import ErrorDetail from 'components/ErrorDetail';
 import useRequest, { useDismissableError } from 'hooks/useRequest';
-import { useConfig } from 'contexts/Config';
 import ExecutionEnvironmentDetail from 'components/ExecutionEnvironmentDetail';
 import InstanceGroupLabels from 'components/InstanceGroupLabels';
 import { relatedResourceDeleteRequests } from 'util/getRelatedResourceDeleteDetails';
@@ -29,7 +28,6 @@ function OrganizationDetail({ organization }: OrganizationDetailProps) {
   const {
     name,
     description,
-    max_hosts,
     created,
     modified,
     summary_fields,
@@ -39,7 +37,6 @@ function OrganizationDetail({ organization }: OrganizationDetailProps) {
   const [hasContentLoading, setHasContentLoading] = useState(true);
   const [instanceGroups, setInstanceGroups] = useState<InstanceGroup[]>([]);
   const navigate = useNavigate();
-  const { license_info = {} } = useConfig();
   const { t } = useLingui();
 
   useEffect(() => {
@@ -92,15 +89,6 @@ function OrganizationDetail({ organization }: OrganizationDetailProps) {
           dataCy="organization-detail-name"
         />
         <Detail label={t`Description`} value={description} />
-        {license_info?.license_type !== 'open' && (
-          <Detail
-            label={t`Max Hosts`}
-            value={`${max_hosts}`}
-            helpText={t`The maximum number of hosts allowed to be managed by
-            this organization. Value defaults to 0 which means no limit.
-            Refer to the Ansible documentation for more details.`}
-          />
-        )}
         <ExecutionEnvironmentDetail
           executionEnvironment={summary_fields?.default_environment}
           isDefaultEnvironment

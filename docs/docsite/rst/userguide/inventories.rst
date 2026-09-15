@@ -72,7 +72,7 @@ The ``host`` model has a related endpoint, ``smart_inventories`` that identifies
 
 .. note::
 
-  To update the memberships more frequently, you can change the file-based setting ``AWX_REBUILD_SMART_MEMBERSHIP`` to **True** (default is False). This will update memberships in the following events:
+  To update the memberships more frequently, you can change the file-based setting ``ASCENDER_REBUILD_SMART_MEMBERSHIP`` to **True** (default is False). This will update memberships in the following events:
 
   - a new host is added
   - an existing host is modified (updated or deleted)

@@ -9,7 +9,6 @@ import ContentLoading from 'components/ContentLoading';
 import { FormSubmitError } from 'components/FormField';
 import { FormColumnLayout } from 'components/FormLayout';
 import { useSettings } from 'contexts/Settings';
-import { useConfig } from 'contexts/Config';
 import useModal from 'hooks/useModal';
 import useRequest from 'hooks/useRequest';
 import { SettingsAPI } from 'api';
@@ -24,7 +23,6 @@ function UIEdit() {
   const navigate = useNavigate();
   const { isModalOpen, toggleModal, closeModal } = useModal();
   const { PUT: options = {} } = useSettings();
-  const { license_info } = useConfig();
 
   const {
     isLoading,
@@ -121,7 +119,7 @@ function UIEdit() {
                 <ChoiceField
                   name="PENDO_TRACKING_STATE"
                   config={uiData.PENDO_TRACKING_STATE}
-                  isDisabled={license_info?.license_type === 'open'}
+                  isDisabled
                 />
                 <TextAreaField
                   name="CUSTOM_LOGIN_INFO"

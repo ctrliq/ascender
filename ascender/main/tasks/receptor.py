@@ -475,7 +475,7 @@ class AWXReceptorJob:
 
             receptor_params = {
                 "secret_kube_pod": spec_yaml,
-                "pod_pending_timeout": getattr(settings, 'AWX_CONTAINER_GROUP_POD_PENDING_TIMEOUT', "5m"),
+                "pod_pending_timeout": getattr(settings, 'ASCENDER_CONTAINER_GROUP_POD_PENDING_TIMEOUT', "5m"),
             }
 
             if self.credential:

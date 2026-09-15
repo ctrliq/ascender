@@ -11,12 +11,10 @@ import yaml
 from django.core.management.base import CommandError
 
 # for license errors
-from rest_framework.exceptions import PermissionDenied
 
 # Ascender
 from ascender.main.management.commands import inventory_import
 from ascender.main.models import Inventory, Host, Group, InventorySource
-from ascender.main.utils.mem_inventory import MemGroup
 
 TEST_INVENTORY_CONTENT = {
     "_meta": {"hostvars": {}},
@@ -158,7 +156,6 @@ class TestMigrationCases:
 
 @pytest.mark.django_db
 @pytest.mark.inventory_import
-@mock.patch.object(inventory_import.Command, 'check_license', mock.MagicMock())
 @mock.patch.object(inventory_import.Command, 'set_logging_level', mock_logging)
 class TestInvalidOptionsFunctional:
     def test_invalid_options_invalid_source(self, inventory):
@@ -186,7 +183,6 @@ class TestInvalidOptionsFunctional:
 
 @pytest.mark.django_db
 @pytest.mark.inventory_import
-@mock.patch.object(inventory_import.Command, 'check_license', new=mock.MagicMock())
 @mock.patch.object(inventory_import.Command, 'set_logging_level', new=mock_logging)
 class TestINIImports:
     @mock.patch.object(inventory_import, 'AnsibleInventoryLoader', MockLoader)
@@ -386,18 +382,6 @@ class TestEnabledVar:
 
     def test_enabled_var_is_enabled_value(self, cmd):
         assert cmd._get_enabled({'foo': {'bar': 'barfoo'}}) is True
-
-
-def test_tower_version_compare():
-    cmd = inventory_import.Command()
-    cmd.inventory_source = InventorySource(source='tower')
-    cmd.all_group = MemGroup('all')
-    # mimic example from https://github.com/ansible/ansible/pull/52747
-    # until that is merged, this is the best testing we can do
-    cmd.all_group.variables = {'tower_metadata': {"ansible_version": "2.7.5", "license_type": "open", "version": "2.0.1-1068-g09684e2c41"}}
-    with pytest.raises(PermissionDenied):
-        cmd.remote_tower_license_compare('very_supported')
-    cmd.remote_tower_license_compare('open')
 
 
 @pytest.mark.django_db

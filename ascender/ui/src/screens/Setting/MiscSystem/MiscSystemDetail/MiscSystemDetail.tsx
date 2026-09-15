@@ -18,11 +18,7 @@ import useRequest from 'hooks/useRequest';
 import { useConfig } from 'contexts/Config';
 import { useSettings } from 'contexts/Settings';
 import { SettingDetail } from '../../shared';
-import {
-  formatJson,
-  pluck,
-  sortNestedDetails,
-} from '../../shared/settingUtils';
+import { pluck, sortNestedDetails } from '../../shared/settingUtils';
 
 function MiscSystemDetail() {
   const { t } = useLingui();
@@ -66,10 +62,7 @@ function MiscSystemDetail() {
       Object.keys(systemData).forEach((key) => {
         mergedData[key] = {
           ...options[key],
-          value:
-            key === 'AUTOMATION_ANALYTICS_LAST_ENTRIES'
-              ? (formatJson(systemData[key]) ?? '')
-              : systemData[key],
+          value: systemData[key],
         };
       });
       return sortNestedDetails(mergedData);
@@ -98,11 +91,6 @@ function MiscSystemDetail() {
       id: 0,
     },
   ];
-
-  // Display this detail in a code editor for readability
-  if (options?.AUTOMATION_ANALYTICS_LAST_ENTRIES) {
-    options.AUTOMATION_ANALYTICS_LAST_ENTRIES.type = 'nested object';
-  }
 
   return (
     <>

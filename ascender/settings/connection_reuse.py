@@ -1,4 +1,4 @@
-import os
+from ascender.settings.environment import environment_setting
 
 # Django's default is 0: open a connection for each request and close it when
 # the response is sent. For a process that serves one request after another
@@ -22,7 +22,7 @@ def is_web_process():
     supervisor programs set, and which is what will answer it if the server
     ever becomes daphne or uvicorn.
     '''
-    if os.environ.get('AWX_WEB_PROCESS'):
+    if environment_setting('WEB_PROCESS'):
         return True
     try:
         import uwsgi  # noqa: F401

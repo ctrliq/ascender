@@ -2,8 +2,6 @@
 # All Rights Reserved.
 
 # Python
-import os
-import sys
 import logging
 from functools import reduce
 
@@ -28,7 +26,6 @@ from ascender.main.fields import AskForField
 from ascender.main.utils import (
     get_object_or_400,
     get_pk_from_dict,
-    get_licenser,
 )
 from ascender.main.models import (
     ActivityStream,
@@ -369,7 +366,11 @@ class BaseAccess(object):
                 if role_field == 'read_role':
                     return self.user.can_access(type(resource), 'read', resource)
                 access_method_type = {'admin_role': 'change', 'execute_role': 'start'}[role_field]
-                return self.user.can_access(type(resource), access_method_type, resource, None)
+                # can_change takes the submitted data as its second argument and
+                # can_start does not. The None used to land on can_start's
+                # validate_license parameter, which is gone.
+                extra_args = (None,) if access_method_type == 'change' else ()
+                return self.user.can_access(type(resource), access_method_type, resource, *extra_args)
             return self.user in role
 
         if new and changed and (not user_has_resource_access(new)):
@@ -379,76 +380,6 @@ class BaseAccess(object):
             return False  # User lacks access to existing resource
 
         return True  # User has access to both, permission check passed
-
-    def check_license(self, add_host_name=None, feature=None, check_expiration=True, quiet=False):
-        validation_info = get_licenser().validate()
-        if validation_info.get('license_type', 'UNLICENSED') == 'open':
-            return
-
-        if ('test' in sys.argv or 'py.test' in sys.argv[0] or 'jenkins' in sys.argv) and not os.environ.get('SKIP_LICENSE_FIXUP_FOR_TEST', ''):
-            validation_info['free_instances'] = 99999999
-            validation_info['time_remaining'] = 99999999
-            validation_info['grace_period_remaining'] = 99999999
-
-        if quiet:
-            report_violation = lambda message: None
-        else:
-            report_violation = lambda message: logger.warning(message)
-        if validation_info.get('trial', False) is True:
-
-            def report_violation(message):  # noqa
-                raise PermissionDenied(message)
-
-        if check_expiration and validation_info.get('time_remaining', None) is None:
-            raise PermissionDenied(_("License is missing."))
-        elif check_expiration and validation_info.get("grace_period_remaining") <= 0:
-            report_violation(_("License has expired."))
-
-        free_instances = validation_info.get('free_instances', 0)
-        instance_count = validation_info.get('instance_count', 0)
-
-        if add_host_name:
-            host_exists = Host.objects.filter(name=add_host_name).exists()
-            if not host_exists and free_instances == 0:
-                report_violation(_("License count of %s instances has been reached.") % instance_count)
-            elif not host_exists and free_instances < 0:
-                report_violation(_("License count of %s instances has been exceeded.") % instance_count)
-        elif not add_host_name and free_instances < 0:
-            report_violation(_("Host count exceeds available instances."))
-
-    def check_org_host_limit(self, data, add_host_name=None):
-        validation_info = get_licenser().validate()
-        if validation_info.get('license_type', 'UNLICENSED') == 'open':
-            return
-
-        inventory = get_object_from_data('inventory', Inventory, data)
-        if inventory is None:  # In this case a missing inventory error is launched
-            return  # further down the line, so just ignore it.
-
-        org = inventory.organization
-        if org is None or org.max_hosts == 0:
-            return
-
-        active_count = Host.objects.org_active_count(org.id)
-        if active_count > org.max_hosts:
-            raise PermissionDenied(
-                _(
-                    "You have already reached the maximum number of %s hosts"
-                    " allowed for your organization. Contact your System Administrator"
-                    " for assistance." % org.max_hosts
-                )
-            )
-
-        if add_host_name:
-            host_exists = Host.objects.filter(inventory__organization=org.id, name=add_host_name).exists()
-            if not host_exists and active_count == org.max_hosts:
-                raise PermissionDenied(
-                    _(
-                        "You have already reached the maximum number of %s hosts"
-                        " allowed for your organization. Contact your System Administrator"
-                        " for assistance." % org.max_hosts
-                    )
-                )
 
     def get_user_capabilities(self, obj, method_list=[], parent_obj=None, capabilities_cache={}):
         if obj is None:
@@ -525,7 +456,7 @@ class BaseAccess(object):
                 access_method = getattr(self, "can_%s" % method)
                 return access_method(obj)
             elif method in ['start']:
-                return self.can_start(obj, validate_license=False)
+                return self.can_start(obj)
             elif method in ['attach', 'unattach']:  # parent/sub-object call
                 access_method = getattr(self, "can_%s" % method)
                 if type(parent_obj) == Team:
@@ -1040,12 +971,6 @@ class HostAccess(BaseAccess):
         if not self.check_related('inventory', Inventory, data):
             return False
 
-        # Check to see if we have enough licenses
-        self.check_license(add_host_name=data.get('name', None))
-
-        # Check the per-org limit
-        self.check_org_host_limit(data, add_host_name=data.get('name', None))
-
         return True
 
     def can_change(self, obj, data):
@@ -1053,10 +978,6 @@ class HostAccess(BaseAccess):
         inventory_pk = get_pk_from_dict(data, 'inventory')
         if obj and inventory_pk and obj.inventory.pk != inventory_pk:
             raise PermissionDenied(_('Unable to change inventory on a host.'))
-
-        # Prevent renaming a host that might exceed license count
-        if data and 'name' in data:
-            self.check_license(add_host_name=data['name'])
 
         # Checks for admin or change permission on inventory, controls whether
         # the user can edit variable data.
@@ -1160,7 +1081,7 @@ class InventorySourceAccess(NotificationAttachMixin, UnifiedCredentialsMixin, Ba
         else:
             return False
 
-    def can_start(self, obj, validate_license=True):
+    def can_start(self, obj):
         if obj and obj.inventory:
             return self.user in obj.inventory.update_role
         return False
@@ -1205,8 +1126,8 @@ class InventoryUpdateAccess(BaseAccess):
         # Inventory cascade deletes to inventory update, descends from org admin
         return self.user in obj.inventory_source.inventory.admin_role
 
-    def can_start(self, obj, validate_license=True):
-        return InventorySourceAccess(self.user).can_start(obj, validate_license=validate_license)
+    def can_start(self, obj):
+        return InventorySourceAccess(self.user).can_start(obj)
 
     @check_superuser
     def can_delete(self, obj):
@@ -1526,7 +1447,7 @@ class ProjectAccess(NotificationAttachMixin, BaseAccess):
         )
 
     @check_superuser
-    def can_start(self, obj, validate_license=True):
+    def can_start(self, obj):
         return obj and self.user in obj.update_role
 
     def can_delete(self, obj):
@@ -1560,7 +1481,7 @@ class ProjectUpdateAccess(BaseAccess):
         # Project updates cascade delete with project, admin role descends from org admin
         return self.user in obj.project.admin_role
 
-    def can_start(self, obj, validate_license=True):
+    def can_start(self, obj):
         # for relaunching
         try:
             if obj and obj.project:
@@ -1662,14 +1583,7 @@ class JobTemplateAccess(NotificationAttachMixin, UnifiedCredentialsMixin, BaseAc
             raise PermissionDenied(_('Insufficient access to Job Template credentials.'))
         return user_can_copy
 
-    def can_start(self, obj, validate_license=True):
-        # Check license.
-        if validate_license:
-            self.check_license()
-
-            # Check the per-org limit
-            self.check_org_host_limit({'inventory': obj.inventory})
-
+    def can_start(self, obj):
         # Super users can start any job
         if self.user.is_superuser:
             return True
@@ -1803,7 +1717,7 @@ class JobAccess(BaseAccess):
 
         return qs.filter(Q(job_template__in=JobTemplate.accessible_objects(self.user, 'read_role')) | Q(organization__in=org_access_qs)).distinct()
 
-    def can_add(self, data, validate_license=True):
+    def can_add(self, data):
         raise NotImplementedError('Direct job creation not possible in v2 API')
 
     def can_change(self, obj, data):
@@ -1815,13 +1729,7 @@ class JobAccess(BaseAccess):
             return False
         return self.user in obj.organization.admin_role
 
-    def can_start(self, obj, validate_license=True):
-        if validate_license:
-            self.check_license()
-
-            # Check the per-org limit
-            self.check_org_host_limit({'inventory': obj.inventory})
-
+    def can_start(self, obj):
         # A super user can relaunch a job
         if self.user.is_superuser:
             return True
@@ -1891,7 +1799,7 @@ class SystemJobTemplateAccess(BaseAccess):
     model = SystemJobTemplate
 
     @check_superuser
-    def can_start(self, obj, validate_license=True):
+    def can_start(self, obj):
         '''Only a superuser can start a job from a SystemJobTemplate'''
         return False
 
@@ -1903,7 +1811,7 @@ class SystemJobAccess(BaseAccess):
 
     model = SystemJob
 
-    def can_start(self, obj, validate_license=True):
+    def can_start(self, obj):
         return False  # no relaunching of system jobs
 
 
@@ -2160,7 +2068,7 @@ class WorkflowJobTemplateAccess(NotificationAttachMixin, BaseAccess):
                     if self.user not in cred.use_role:
                         missing_credentials.append(cred.name)
                 ujt = node.unified_job_template
-                if ujt and not self.user.can_access(UnifiedJobTemplate, 'start', ujt, validate_license=False):
+                if ujt and not self.user.can_access(UnifiedJobTemplate, 'start', ujt):
                     missing_ujt.append(ujt.name)
             if missing_ujt:
                 self.messages['templates_unable_to_copy'] = missing_ujt
@@ -2171,14 +2079,7 @@ class WorkflowJobTemplateAccess(NotificationAttachMixin, BaseAccess):
 
         return self.check_related('organization', Organization, {'reference_obj': obj}, role_field='workflow_admin_role', mandatory=True)
 
-    def can_start(self, obj, validate_license=True):
-        if validate_license:
-            # check basic license, node count
-            self.check_license()
-
-            # Check the per-org limit
-            self.check_org_host_limit({'inventory': obj.inventory})
-
+    def can_start(self, obj):
         # Super users can start any job
         if self.user.is_superuser:
             return True
@@ -2248,13 +2149,7 @@ class WorkflowJobAccess(BaseAccess):
             return self.user in obj.workflow_job_template.execute_role
         return super(WorkflowJobAccess, self).get_method_capability(method, obj, parent_obj)
 
-    def can_start(self, obj, validate_license=True):
-        if validate_license:
-            self.check_license()
-
-            # Check the per-org limit
-            self.check_org_host_limit({'inventory': obj.inventory})
-
+    def can_start(self, obj):
         if self.user.is_superuser:
             return True
 
@@ -2325,15 +2220,9 @@ class AdHocCommandAccess(BaseAccess):
 
     read_via = (Inventory, 'inventory')
 
-    def can_add(self, data, validate_license=True):
+    def can_add(self, data):
         if not data:  # So the browseable API will work
             return True
-
-        if validate_license:
-            self.check_license()
-
-            # Check the per-org limit
-            self.check_org_host_limit(data)
 
         # If a credential is provided, the user should have use access to it.
         if not self.check_related('credential', Credential, data, role_field='use_role'):
@@ -2353,13 +2242,12 @@ class AdHocCommandAccess(BaseAccess):
     def can_delete(self, obj):
         return obj.inventory is not None and self.user in obj.inventory.organization.admin_role
 
-    def can_start(self, obj, validate_license=True):
+    def can_start(self, obj):
         return self.can_add(
             {
                 'credential': obj.credential_id,
                 'inventory': obj.inventory_id,
-            },
-            validate_license=validate_license,
+            }
         )
 
     def can_cancel(self, obj):
@@ -2524,10 +2412,10 @@ class UnifiedJobTemplateAccess(BaseAccess):
             )
         )
 
-    def can_start(self, obj, validate_license=True):
+    def can_start(self, obj):
         access_class = access_registry[obj.__class__]
         access_instance = access_class(self.user)
-        return access_instance.can_start(obj, validate_license=validate_license)
+        return access_instance.can_start(obj)
 
     def get_queryset(self):
         return super(UnifiedJobTemplateAccess, self).get_queryset().filter(workflowapprovaltemplate__isnull=True)
@@ -2691,7 +2579,7 @@ class NotificationTemplateAccess(BaseAccess):
         return self.can_change(obj, None)
 
     @check_superuser
-    def can_start(self, obj, validate_license=True):
+    def can_start(self, obj):
         if obj.organization is None:
             return False
         return self.user in obj.organization.notification_admin_role
@@ -2964,7 +2852,7 @@ class WorkflowApprovalAccess(BaseAccess):
     def can_use(self, obj):
         return True
 
-    def can_start(self, obj, validate_license=True):
+    def can_start(self, obj):
         return True
 
     read_via = (WorkflowJobTemplate, 'unified_job_node__workflow_job__unified_job_template')
@@ -3005,7 +2893,7 @@ class WorkflowApprovalTemplateAccess(BaseAccess):
     def can_change(self, obj, data):
         return self.user.can_access(WorkflowJobTemplate, 'change', obj.workflow_job_template, data={})
 
-    def can_start(self, obj, validate_license=False):
+    def can_start(self, obj):
         # for copying WFJTs that contain approval nodes
         if self.user.is_superuser:
             return True

@@ -1,15 +1,11 @@
 from unittest import mock
 import pytest
 
-from ascender.main.access import (
-    BaseAccess,
-    OrganizationAccess,
-)
+from ascender.main.access import OrganizationAccess
 
 
-@mock.patch.object(BaseAccess, 'check_license', return_value=None)
 @pytest.mark.django_db
-def test_organization_access_admin(cl, organization, user):
+def test_organization_access_admin(organization, user):
     '''can_change because I am an admin of that org'''
     a = user('admin', False)
     organization.admin_role.members.add(a)
@@ -24,9 +20,8 @@ def test_organization_access_admin(cl, organization, user):
     assert len(org.member_role.members.all()) == 1
 
 
-@mock.patch.object(BaseAccess, 'check_license', return_value=None)
 @pytest.mark.django_db
-def test_organization_access_user(cl, organization, user):
+def test_organization_access_user(organization, user):
     access = OrganizationAccess(user('user', False))
     organization.member_role.members.add(user('user', False))
 

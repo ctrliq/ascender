@@ -74,7 +74,7 @@ class TaskBase:
         # We want to avoid calling settings in loops, so cache these settings at init time
         self.start_task_limit = settings.START_TASK_LIMIT
         self.task_manager_timeout = settings.TASK_MANAGER_TIMEOUT
-        self.control_task_impact = settings.AWX_CONTROL_NODE_TASK_IMPACT
+        self.control_task_impact = settings.ASCENDER_CONTROL_NODE_TASK_IMPACT
 
         for m in self.subsystem_metrics.METRICS:
             if m.startswith(self.prefix):

@@ -143,10 +143,6 @@ function HostFilterLookup({
       name: t`Last job`,
       key: 'last_job',
     },
-    {
-      name: t`Insights system ID`,
-      key: 'insights_system_id',
-    },
   ];
 
   const searchColumns = buildSearchColumns();

@@ -659,7 +659,6 @@ def test_job_launch_unprompted_vars_with_survey(mocker, survey_spec_factory, job
     job_template.survey_spec = survey_spec_factory('survey_var')
     job_template.save()
 
-    mocker.patch('ascender.main.access.BaseAccess.check_license')
     mock_job = mocker.MagicMock(spec=Job, id=968, extra_vars={"job_launch_var": 3, "survey_var": 4})
     mocker.patch.object(JobTemplate, 'create_unified_job', return_value=mock_job)
     mocker.patch('ascender.api.serializers.JobSerializer.to_representation', return_value={})
@@ -688,7 +687,6 @@ def test_callback_accept_prompted_extra_var(mocker, survey_spec_factory, job_tem
     job_template.survey_spec = survey_spec_factory('survey_var')
     job_template.save()
 
-    mocker.patch('ascender.main.access.BaseAccess.check_license')
     mock_job = mocker.MagicMock(spec=Job, id=968, extra_vars={"job_launch_var": 3, "survey_var": 4})
     mocker.patch.object(UnifiedJobTemplate, 'create_unified_job', return_value=mock_job)
     mocker.patch('ascender.api.serializers.JobSerializer.to_representation', return_value={})
@@ -715,7 +713,6 @@ def test_callback_ignore_unprompted_extra_var(mocker, survey_spec_factory, job_t
     job_template.host_config_key = "foo"
     job_template.save()
 
-    mocker.patch('ascender.main.access.BaseAccess.check_license')
     mock_job = mocker.MagicMock(spec=Job, id=968, extra_vars={"job_launch_var": 3, "survey_var": 4})
     mocker.patch.object(UnifiedJobTemplate, 'create_unified_job', return_value=mock_job)
     mocker.patch('ascender.api.serializers.JobSerializer.to_representation', return_value={})
@@ -743,7 +740,6 @@ def test_callback_find_matching_hosts(mocker, get, job_template_prompts, admin_u
     job_template.save()
     host_with_alias = Host(name='localhost', inventory=job_template.inventory)
     host_with_alias.save()
-    mocker.patch('ascender.main.access.BaseAccess.check_license')
     r = get(reverse('api:job_template_callback', kwargs={'pk': job_template.pk}), user=admin_user, expect=200)
     assert tuple(r.data['matching_hosts']) == ('localhost',)
 
@@ -756,6 +752,5 @@ def test_callback_extra_var_takes_priority_over_host_name(mocker, get, job_templ
     job_template.save()
     host_with_alias = Host(name='localhost', variables={'ansible_host': 'foobar'}, inventory=job_template.inventory)
     host_with_alias.save()
-    mocker.patch('ascender.main.access.BaseAccess.check_license')
     r = get(reverse('api:job_template_callback', kwargs={'pk': job_template.pk}), user=admin_user, expect=200)
     assert not r.data['matching_hosts']
