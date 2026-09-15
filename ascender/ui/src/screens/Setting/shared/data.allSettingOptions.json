@@ -4541,17 +4541,6 @@
                   "type": "string"
               }
           },
-          "LICENSE": {
-              "type": "nested object",
-              "label": "License",
-              "help_text": "The license controls which features and functionality are enabled. Use /api/v2/config/ to update or change the license.",
-              "category": "System",
-              "category_slug": "system",
-              "defined_in_file": false,
-              "child": {
-                  "type": "field"
-              }
-          },
           "INSTALL_UUID": {
               "type": "string",
               "label": "Unique identifier for an installation",
@@ -5276,7 +5265,7 @@
           "AUTHENTICATION_BACKENDS": {
               "type": "list",
               "label": "Authentication Backends",
-              "help_text": "List of authentication backends that are enabled based on license features and other authentication settings.",
+              "help_text": "List of authentication backends that are enabled, which follows whether each one has the settings it requires.",
               "category": "Authentication",
               "category_slug": "authentication",
               "defined_in_file": false,

@@ -66,7 +66,7 @@ describe('<InventoryDetail />', () => {
         results: [
           {
             id: 14,
-            name: 'insights',
+            name: 'gce',
           },
         ],
       },
