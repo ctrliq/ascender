@@ -8,7 +8,6 @@ import { useLingui } from '@lingui/react/macro';
 import { Button } from '@patternfly/react-core';
 import { CaretLeftIcon } from '@patternfly/react-icons';
 import { CardBody, CardActionsRow } from 'components/Card';
-import CodeDetail from 'components/DetailList/CodeDetail';
 import ContentError from 'components/ContentError';
 import ContentLoading from 'components/ContentLoading';
 import { DetailList } from 'components/DetailList';
@@ -100,36 +99,17 @@ function MiscSystemDetail() {
         {!isLoading && Boolean(error) && <ContentError error={error} />}
         {!isLoading && system && (
           <DetailList>
-            {system.map(([key, detail]) => {
-              if (key === 'AUTOMATION_ANALYTICS_LAST_ENTRIES') {
-                return (
-                  <CodeDetail
-                    key={key}
-                    dataCy={key}
-                    helpText={detail?.help_text}
-                    label={detail?.label}
-                    mode="javascript"
-                    rows={4}
-                    value={
-                      detail?.value
-                        ? JSON.stringify(detail.value, undefined, 2)
-                        : ''
-                    }
-                  />
-                );
-              }
-              return (
-                <SettingDetail
-                  key={key}
-                  id={key}
-                  helpText={detail?.help_text}
-                  label={detail?.label}
-                  type={detail?.type}
-                  unit={detail?.unit}
-                  value={detail?.value}
-                />
-              );
-            })}
+            {system.map(([key, detail]) => (
+              <SettingDetail
+                key={key}
+                id={key}
+                helpText={detail?.help_text}
+                label={detail?.label}
+                type={detail?.type}
+                unit={detail?.unit}
+                value={detail?.value}
+              />
+            ))}
           </DetailList>
         )}
         {me?.is_superuser && (
