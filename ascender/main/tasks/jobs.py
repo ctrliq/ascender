@@ -1783,7 +1783,7 @@ class RunInventoryUpdate(SourceControlMixin, BaseTask):
             # canceling exceptions will be handled in the global post_run_hook
             cmd.perform_update(options, data, inventory_update)
         except PermissionDenied as exc:
-            logger.exception('License error saving {} content'.format(inventory_update.log_format))
+            logger.exception('Permission denied saving {} content'.format(inventory_update.log_format))
             raise PostRunError(str(exc), status='error')
         except PostRunError:
             logger.exception('Error saving {} content, rolling back changes'.format(inventory_update.log_format))
