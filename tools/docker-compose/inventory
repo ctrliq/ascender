@@ -2,7 +2,7 @@ localhost ansible_connection=local ansible_python_interpreter=auto
 
 [all:vars]
 
-# AWX-Managed Database Settings
+# Ascender-Managed Database Settings
 # If left blank, these will be generated upon install.
 # Values are written out to tools/docker-compose/_sources/secrets/
 # pg_password=""
@@ -15,5 +15,5 @@ localhost ansible_connection=local ansible_python_interpreter=auto
 # pg_username=""
 # pg_hostname=""
 
-# awx_image="ghcr.io/ansible/awx_devel"
+# ascender_image="ghcr.io/ctrliq/ascender_devel"
 # migrate_local_docker=false

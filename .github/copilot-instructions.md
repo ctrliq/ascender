@@ -9,10 +9,10 @@ Ascender is a web-based UI, REST API, and task engine built on top of [Ansible](
 
 ## Runtime Environment
 
-All development tooling runs inside the **`tools_awx_1` Docker container**. The repository root is mounted at `/awx_devel` inside the container. The host working directory (`/root/ascender`) does not have the project's Python environment. Always prefix commands with:
+All development tooling runs inside the **`tools_ascender_1` Docker container**. The repository root is mounted at `/ascender_devel` inside the container. The host working directory (`/root/ascender`) does not have the project's Python environment. Always prefix commands with:
 
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && <command>"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && <command>"
 ```
 
 Supporting containers also running:
@@ -34,57 +34,57 @@ Config in `pyproject.toml` under `[tool.ruff]` and `[tool.ruff.format]`: `line-l
 
 ```bash
 # Check (CI-style):
-docker exec tools_awx_1 bash -c "cd /awx_devel && ruff format --check awx"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && ruff format --check awx"
 # Auto-fix:
-docker exec tools_awx_1 bash -c "cd /awx_devel && ruff format awx"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && ruff format awx"
 ```
 
 ### Ruff (linting)
-Config in `pyproject.toml` under `[tool.ruff.lint]`. Selects 48 rules explicitly rather than by class, ported from the `[flake8]` block this replaced: the `E7xx` statement checks, `F4xx` through `F9xx`, and `W2xx`/`W3xx`/`W605`. `preview = true` is required because `E265`, `E266` and `W391` are still preview rules and are silently inert without it. Excludes `awx/ui/node_modules`, `env`.
+Config in `pyproject.toml` under `[tool.ruff.lint]`. Selects 48 rules explicitly rather than by class, ported from the `[flake8]` block this replaced: the `E7xx` statement checks, `F4xx` through `F9xx`, and `W2xx`/`W3xx`/`W605`. `preview = true` is required because `E265`, `E266` and `W391` are still preview rules and are silently inert without it. Excludes `ascender/ui/node_modules`, `env`.
 
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && ruff check awx"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && ruff check awx"
 ```
 
 ### Yamllint
 Config in `.yamllint` (root). `line-length` and `truthy` rules are disabled. Ignores `.github`, `.tox`, `tools/docker-compose/_sources`, and a few test data paths.
 
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && yamllint -s ."
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && yamllint -s ."
 ```
 
 ---
 
 ## Running Tests
 
-Tests run against PostgreSQL, the same backend Ascender deploys on, with an in-memory channel layer. Settings: `awx.main.tests.settings_for_test` (configured in `pyproject.toml`). Default pytest flags: `--reuse-db --nomigrations --tb=native --timeout=300`.
+Tests run against PostgreSQL, the same backend Ascender deploys on, with an in-memory channel layer. Settings: `ascender.main.tests.settings_for_test` (configured in `pyproject.toml`). Default pytest flags: `--reuse-db --nomigrations --tb=native --timeout=300`.
 
 ### Unit tests (~15 seconds, run frequently)
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n auto --dist=loadfile awx/main/tests/unit/"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n auto --dist=loadfile ascender/main/tests/unit/"
 ```
 Result: 1139 passed, 1 skipped.
 
 ### Functional tests (~3 minutes)
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n auto --dist=loadfile awx/main/tests/functional/"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n auto --dist=loadfile ascender/main/tests/functional/"
 ```
 Result: 1987 passed, 5 skipped.
 
 ### Full test suite (all dirs, ~4 minutes)
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n auto --dist=loadfile awx/main/tests/unit awx/main/tests/functional awx/conf/tests awx/sso/tests"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n auto --dist=loadfile ascender/main/tests/unit ascender/main/tests/functional ascender/conf/tests ascender/sso/tests"
 ```
 
 ### Migration check (always run after model changes)
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && awx-manage check_migrations --dry-run --check -n 'missing_migration_file'"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && ascender-manage check_migrations --dry-run --check -n 'missing_migration_file'"
 ```
 Expected output: `No changes detected`
 
 ### Target a single test file
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider awx/main/tests/unit/test_capacity.py"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider ascender/main/tests/unit/test_capacity.py"
 ```
 
 ---
@@ -94,15 +94,15 @@ docker exec tools_awx_1 bash -c "cd /awx_devel && PYTHONDONTWRITEBYTECODE=1 py.t
 After changing any Django model, always generate and commit the migration:
 
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && awx-manage makemigrations"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && ascender-manage makemigrations"
 ```
 
 Then verify no missing migration file:
 ```bash
-docker exec tools_awx_1 bash -c "cd /awx_devel && awx-manage check_migrations --dry-run --check -n 'missing_migration_file'"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && ascender-manage check_migrations --dry-run --check -n 'missing_migration_file'"
 ```
 
-Migration files live in `awx/main/migrations/` (218 existing files).
+Migration files live in `ascender/main/migrations/` (218 existing files).
 
 ---
 
@@ -110,19 +110,19 @@ Migration files live in `awx/main/migrations/` (218 existing files).
 
 | Path | Purpose |
 |---|---|
-| `awx/` | Main Django application package |
-| `awx/api/` | DRF REST API – views, serializers, permissions, fields, pagination |
-| `awx/conf/` | DB-backed dynamic settings system + tests |
-| `awx/main/` | Core business logic |
-| `awx/main/models/` | ORM models: jobs, inventory, credentials, workflows, orgs, RBAC, schedules |
-| `awx/main/tasks/` | Background task system (dispatcher-based) |
-| `awx/main/migrations/` | 218 Django migrations |
-| `awx/main/tests/unit/` | Fast isolated unit tests (~1139 tests) |
-| `awx/main/tests/functional/` | Django TestClient-based API tests (~1987 tests) |
-| `awx/main/tests/settings_for_test.py` | Test settings (PostgreSQL, in-memory cache) |
-| `awx/settings/` | Settings modules: `defaults.py`, `development.py`, `production.py` |
-| `awx/sso/` | SSO/LDAP/SAML backends + tests |
-| `awx/ui/` | UI / React frontend (npm) |
+| `ascender/` | Main Django application package |
+| `ascender/api/` | DRF REST API – views, serializers, permissions, fields, pagination |
+| `ascender/conf/` | DB-backed dynamic settings system + tests |
+| `ascender/main/` | Core business logic |
+| `ascender/main/models/` | ORM models: jobs, inventory, credentials, workflows, orgs, RBAC, schedules |
+| `ascender/main/tasks/` | Background task system (dispatcher-based) |
+| `ascender/main/migrations/` | 218 Django migrations |
+| `ascender/main/tests/unit/` | Fast isolated unit tests (~1139 tests) |
+| `ascender/main/tests/functional/` | Django TestClient-based API tests (~1987 tests) |
+| `ascender/main/tests/settings_for_test.py` | Test settings (PostgreSQL, in-memory cache) |
+| `ascender/settings/` | Settings modules: `defaults.py`, `development.py`, `production.py` |
+| `ascender/sso/` | SSO/LDAP/SAML backends + tests |
+| `ascender/ui/` | UI / React frontend (npm) |
 | `requirements/` | Pinned deps: `requirements.txt`, `requirements_dev.txt`, `requirements_git.txt` |
 | `tools/` | Docker Compose, Ansible build playbooks, dev scripts |
 | `docs/` | Project documentation |
@@ -161,11 +161,11 @@ make .git/hooks/pre-commit
 
 ## Key Conventions
 
-- **`awx-manage`** is the Django management command (equivalent of `django-admin` with project settings loaded). It is in `PATH` inside the container.
-- **RBAC** is implemented in `awx/main/access.py` — one class per model, `can_*` methods.
-- **API views** use a generic base in `awx/api/generics.py`. Most views are in `awx/api/views/`.
-- **Serializers** are in `awx/api/serializers.py` (large file, ~5000 lines) and `awx/api/fields.py`.
-- **Tasks** (background jobs) are in `awx/main/tasks/` — add new tasks there.
-- **Signals** are in `awx/main/signals.py`.
-- **URL routing**: `awx/urls.py` → `awx/api/urls/` for the API, `awx/main/urls.py` for main app.
-- **Dynamic settings** stored in DB use `awx/conf/` — settings definitions go in `awx/conf/conf.py` and `awx/main/conf.py`.
+- **`ascender-manage`** is the Django management command (equivalent of `django-admin` with project settings loaded). It is in `PATH` inside the container.
+- **RBAC** is implemented in `ascender/main/access.py` — one class per model, `can_*` methods.
+- **API views** use a generic base in `ascender/api/generics.py`. Most views are in `ascender/api/views/`.
+- **Serializers** are in `ascender/api/serializers.py` (large file, ~5000 lines) and `ascender/api/fields.py`.
+- **Tasks** (background jobs) are in `ascender/main/tasks/` — add new tasks there.
+- **Signals** are in `ascender/main/signals.py`.
+- **URL routing**: `ascender/urls.py` → `ascender/api/urls/` for the API, `ascender/main/urls.py` for main app.
+- **Dynamic settings** stored in DB use `ascender/conf/` — settings definitions go in `ascender/conf/conf.py` and `ascender/main/conf.py`.

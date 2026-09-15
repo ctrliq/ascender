@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 if [ -z "$AWX_IGNORE_BLACK" ] && [ -z "$AWX_IGNORE_RUFF" ] ; then
-	python_files_changed=$(git diff --cached --name-only --diff-filter=AM awx/ tools/ | grep -E '\.py$')
+	python_files_changed=$(git diff --cached --name-only --diff-filter=AM ascender/ tools/ | grep -E '\.py$')
 	if [ "x$python_files_changed" != "x" ] ; then
 		ruff format --check $python_files_changed || \
 		if [ $? != 0 ] ; then

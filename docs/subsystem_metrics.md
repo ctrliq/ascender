@@ -10,10 +10,10 @@ m.pipe_execute() # save the values to Redis
 
 ## Endpoint reflects Redis
 
-The endpoint reflects whatever values are in Redis. The metrics are stored in a Redis hash set called `awx_metrics`, and each metric is a field in this hash set. When a POST or GET is made to the endpoint, the view will load the data stored in Redis, format it to be Prometheus-compatible, and return it as a response. You can view the metrics in Redis by connecting to an instance via a client.
+The endpoint reflects whatever values are in Redis. The metrics are stored in a Redis hash set called `ascender_metrics`, and each metric is a field in this hash set. When a POST or GET is made to the endpoint, the view will load the data stored in Redis, format it to be Prometheus-compatible, and return it as a response. You can view the metrics in Redis by connecting to an instance via a client.
 
 ```
-valkey /run/valkey/valkey.sock> hget awx_metrics callback_receiver_events_insert_db
+valkey /run/valkey/valkey.sock> hget ascender_metrics callback_receiver_events_insert_db
 "100"
 ```
 
@@ -100,15 +100,15 @@ The above metrics are designed to override whatever values are in Redis. Calling
 Example, the following metric captures how many events are batch-inserted into the database.
 
 ```
-callback_receiver_batch_events_insert_db_bucket{le="10",node="awx_1"} 1
-callback_receiver_batch_events_insert_db_bucket{le="50",node="awx_1"} 5
-callback_receiver_batch_events_insert_db_bucket{le="150",node="awx_1"} 5
-callback_receiver_batch_events_insert_db_bucket{le="350",node="awx_1"} 5
-callback_receiver_batch_events_insert_db_bucket{le="650",node="awx_1"} 5
-callback_receiver_batch_events_insert_db_bucket{le="2000",node="awx_1"} 5
-callback_receiver_batch_events_insert_db_bucket{le="+Inf",node="awx_1"} 5
-callback_receiver_batch_events_insert_db_count{node="awx_1"} 5
-callback_receiver_batch_events_insert_db_sum{node="awx_1"} 5
+callback_receiver_batch_events_insert_db_bucket{le="10",node="ascender_1"} 1
+callback_receiver_batch_events_insert_db_bucket{le="50",node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_bucket{le="150",node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_bucket{le="350",node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_bucket{le="650",node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_bucket{le="2000",node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_bucket{le="+Inf",node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_count{node="ascender_1"} 5
+callback_receiver_batch_events_insert_db_sum{node="ascender_1"} 5
 ```
 
 The histogram is cumulative, meaning each successive bucket includes the values in the *preceding* bucket. In the above, one occurrence of the insertion process resulted in less than 10 events being inserted into the database. Four (5-1) occurrences resulted in between 10 and 50 events being inserted into the database.
@@ -120,9 +120,9 @@ Periodically, the `Metrics` object will broadcast the full metrics dataset to ot
 This data received from other metrics is stored in Redis as a JSON string. For example, in a cluster with three control nodes, each Redis instance will contain the following keys.
 
 ```
-awx_metrics_instance_awx_1
-awx_metrics_instance_awx_2
-awx_metrics_instance_awx_3
+ascender_metrics_instance_ascender_1
+ascender_metrics_instance_ascender_2
+ascender_metrics_instance_ascender_3
 ```
 
 The `api/v2/metrics` endpoint will load the data from each of these instances, format it into Prometheus, and return it as a response.

@@ -8,7 +8,11 @@ requires = ["setuptools==84.0.0", "setuptools_scm[toml]==10.2.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "awx"
+# Renamed from awx. An installed distribution keeps whatever name it was built
+# under, so the version lookup in ascender/__init__.py reads both, and the
+# Makefile still leaves a dist/awx.tar.gz symlink beside the new one for a
+# caller that builds from source by that path.
+name = "ascender"
 # Two entries rather than one: a combined { name, email } renders as a single
 # "Author-email: Red Hat <info@ansible.com>" header, where setup.cfg produced
 # separate Author and Author-email fields. This keeps the metadata identical.
@@ -20,8 +24,8 @@ dynamic = ["version"]
 # Both names run the same entry point. `ascender-manage` is the name the
 # product has, and `awx-manage` is the one the installers, the operator and
 # people's own scripts call, so it stays until they have all moved.
-ascender-manage = "awx:manage"
-awx-manage = "awx:manage"
+ascender-manage = "ascender:manage"
+awx-manage = "ascender:manage"
 
 # The group a credential plugin registers against is a published name: anything
 # third party declares itself under `awx.credential_plugins` and cannot be
@@ -29,28 +33,28 @@ awx-manage = "awx:manage"
 # reads both, so a plugin written against either is found. They are asserted
 # identical by a test, which is what keeps the two lists from drifting.
 [project.entry-points."ascender.credential_plugins"]
-conjur = "awx.main.credential_plugins.conjur:conjur_plugin"
-hashivault_kv = "awx.main.credential_plugins.hashivault:hashivault_kv_plugin"
-hashivault_ssh = "awx.main.credential_plugins.hashivault:hashivault_ssh_plugin"
-azure_kv = "awx.main.credential_plugins.azure_kv:azure_keyvault_plugin"
-aim = "awx.main.credential_plugins.aim:aim_plugin"
-centrify_vault_kv = "awx.main.credential_plugins.centrify_vault:centrify_plugin"
-thycotic_dsv = "awx.main.credential_plugins.dsv:dsv_plugin"
-thycotic_tss = "awx.main.credential_plugins.tss:tss_plugin"
-aws_secretsmanager_credential = "awx.main.credential_plugins.aws_secretsmanager:aws_secretmanager_plugin"
-github_app_lookup = "awx.main.credential_plugins.github_app:github_app_plugin"
+conjur = "ascender.main.credential_plugins.conjur:conjur_plugin"
+hashivault_kv = "ascender.main.credential_plugins.hashivault:hashivault_kv_plugin"
+hashivault_ssh = "ascender.main.credential_plugins.hashivault:hashivault_ssh_plugin"
+azure_kv = "ascender.main.credential_plugins.azure_kv:azure_keyvault_plugin"
+aim = "ascender.main.credential_plugins.aim:aim_plugin"
+centrify_vault_kv = "ascender.main.credential_plugins.centrify_vault:centrify_plugin"
+thycotic_dsv = "ascender.main.credential_plugins.dsv:dsv_plugin"
+thycotic_tss = "ascender.main.credential_plugins.tss:tss_plugin"
+aws_secretsmanager_credential = "ascender.main.credential_plugins.aws_secretsmanager:aws_secretmanager_plugin"
+github_app_lookup = "ascender.main.credential_plugins.github_app:github_app_plugin"
 
 [project.entry-points."awx.credential_plugins"]
-conjur = "awx.main.credential_plugins.conjur:conjur_plugin"
-hashivault_kv = "awx.main.credential_plugins.hashivault:hashivault_kv_plugin"
-hashivault_ssh = "awx.main.credential_plugins.hashivault:hashivault_ssh_plugin"
-azure_kv = "awx.main.credential_plugins.azure_kv:azure_keyvault_plugin"
-aim = "awx.main.credential_plugins.aim:aim_plugin"
-centrify_vault_kv = "awx.main.credential_plugins.centrify_vault:centrify_plugin"
-thycotic_dsv = "awx.main.credential_plugins.dsv:dsv_plugin"
-thycotic_tss = "awx.main.credential_plugins.tss:tss_plugin"
-aws_secretsmanager_credential = "awx.main.credential_plugins.aws_secretsmanager:aws_secretmanager_plugin"
-github_app_lookup = "awx.main.credential_plugins.github_app:github_app_plugin"
+conjur = "ascender.main.credential_plugins.conjur:conjur_plugin"
+hashivault_kv = "ascender.main.credential_plugins.hashivault:hashivault_kv_plugin"
+hashivault_ssh = "ascender.main.credential_plugins.hashivault:hashivault_ssh_plugin"
+azure_kv = "ascender.main.credential_plugins.azure_kv:azure_keyvault_plugin"
+aim = "ascender.main.credential_plugins.aim:aim_plugin"
+centrify_vault_kv = "ascender.main.credential_plugins.centrify_vault:centrify_plugin"
+thycotic_dsv = "ascender.main.credential_plugins.dsv:dsv_plugin"
+thycotic_tss = "ascender.main.credential_plugins.tss:tss_plugin"
+aws_secretsmanager_credential = "ascender.main.credential_plugins.aws_secretsmanager:aws_secretmanager_plugin"
+github_app_lookup = "ascender.main.credential_plugins.github_app:github_app_plugin"
 
 [tool.setuptools]
 # `ascender` is a handful of lines that make every awx module importable under
@@ -61,7 +65,7 @@ include-package-data = true
 
 # Active on purpose: the built version comes from git describe by way of
 # setuptools_scm. Note that this takes precedence over the project version, so
-# the VERSION file that awx.get_version() reads does not reach the built
+# the VERSION file that ascender.get_version() reads does not reach the built
 # metadata, only the running application.
 [tool.setuptools_scm]
 
@@ -70,7 +74,7 @@ include-package-data = true
 # AWX, whose Ruff config selects 12 rules where ours selects 48. Copying theirs
 # would have dropped 36 checks silently.
 line-length = 160
-exclude = [".git", "__pycache__", ".tox", "awx/ui/node_modules", "env"]
+exclude = [".git", "__pycache__", ".tox", "ascender/ui/node_modules", "env"]
 
 # target-version is left unset on purpose, which means ruff's default of py39.
 # It is not only a lint setting, the formatter reads it too: at py314 it rewrites
@@ -108,7 +112,7 @@ select = [
 # Moved here from pytest.ini. One value changed on the way, python_files, and
 # the reason is below.
 [tool.pytest.ini_options]
-DJANGO_SETTINGS_MODULE = "awx.main.tests.settings_for_test"
+DJANGO_SETTINGS_MODULE = "ascender.main.tests.settings_for_test"
 
 # pytest.ini said every .py, which made collection import the whole repository
 # looking for tests, including modules that parse argv and call sys.exit at
@@ -141,9 +145,9 @@ filterwarnings = [
 # expressions, so they are literal strings: a backslash in them is the regex's,
 # not TOML's.
 [tool.coverage.run]
-source = ["awx"]
+source = ["ascender"]
 branch = true
-omit = ["awx/main/migrations/*"]
+omit = ["ascender/main/migrations/*"]
 
 [tool.coverage.report]
 exclude_lines = [

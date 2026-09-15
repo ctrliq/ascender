@@ -14,28 +14,33 @@ pre-commit-user
 
 # Tower
 awx-dev
-awx/settings/local_*.py*
-awx/job_status
-awx/projects
-awx/job_output
-awx/public/media
-awx/public/static
-awx/ui/tests/test-results.xml
-awx/ui/client/src/local_settings.json
-awx/main/fixtures
-awx/*.log
-tower/tower_warnings.log
+ascender/settings/local_*.py*
+ascender/job_status
+ascender/projects
+ascender/job_output
+ascender/public/media
+ascender/public/static
+ascender/ui/tests/test-results.xml
+ascender/ui/client/src/local_settings.json
+ascender/main/fixtures
+ascender/*.log
+ascender/ascender_warnings.log
 celerybeat-schedule
-awx/ui/static
-awx/ui/build_test
-awx/ui/client/languages
-awx/ui/templates/ui/index.html
-awx/ui/templates/ui/installing.html
-awx/ui/node_modules/
-#awx/ui/src/locales/*/messages.js
-awx/ui/coverage/
-awx/ui/build
-awx/ui/.env.local
+ascender/ui/static
+ascender/ui/build_test
+ascender/ui/client/languages
+ascender/ui/templates/ui/index.html
+ascender/ui/templates/ui/installing.html
+ascender/ui/node_modules/
+#ascender/ui/src/locales/*/messages.js
+ascender/ui/coverage/
+ascender/ui/build
+# The Playwright run leaves these behind. Named by what they are rather than by
+# where the package sits, so moving the package cannot strand them unignored,
+# which is how a build directory ended up in a pull request during this rename.
+**/ui/e2e/test-results/
+**/ui/e2e/fixtures.json
+ascender/ui/.env.local
 rsyslog.pid
 tools/docker-compose/ansible/awx_dump.sql
 tools/docker-compose/Dockerfile
@@ -79,9 +84,9 @@ __pycache__
 **/npm-debug.log*
 
 # UI build flag files
-awx/ui/.deps_built
-awx/ui/.release_built
-awx/ui/.release_deps_built
+ascender/ui/.deps_built
+ascender/ui/.release_built
+ascender/ui/.release_deps_built
 
 # Testing
 .cache
@@ -144,8 +149,8 @@ requirements/vendor
 *credentials*.y*ml*
 
 # AWX python libs populated by requirements.txt
-awx/lib/.deps_built
-awx/lib/site-packages
+ascender/lib/.deps_built
+ascender/lib/site-packages
 venv/*
 use_dev_supervisor.txt
 

@@ -1,4 +1,4 @@
-### Constructed inventory in AWX
+### Constructed inventory in Ascender
 
 Constructed inventory is a separate "kind" of inventory, along-side of
 normal (manual) inventories and "smart" inventories.

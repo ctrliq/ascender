@@ -159,7 +159,7 @@ Following is an example of using the personal token to access an API endpoint us
 
 ::
 
-	curl -H "Authorization: Bearer <token>" -H "Content-Type: application/json" -d '{}' https://awx/api/v2/job_templates/5/launch/
+	curl -H "Authorization: Bearer <token>" -H "Content-Type: application/json" -d '{}' https://ascender/api/v2/job_templates/5/launch/
 
 
 In Ascender, the OAuth 2 system is built on top of the `Django Oauth Toolkit`_, which provides dedicated endpoints for authorizing, revoking, and refreshing tokens. These endpoints can be found under the ``/api/v2/users/<USER_ID>/personal_tokens/`` endpoint, which also provides detailed examples on some typical usage of those endpoints. These special OAuth 2 endpoints only support using the ``x-www-form-urlencoded`` **Content-type**, so none of the ``api/o/*`` endpoints accept ``application/json``. 
@@ -173,7 +173,7 @@ In Ascender, the OAuth 2 system is built on top of the `Django Oauth Toolkit`_, 
 
 Alternatively, you can :ref:`add tokens <ug_tokens_auth_create>` for users through the Ascender user interface, as well as configure the expiration of an access token and its associated refresh token (if applicable).  
 
-.. image:: ../common/images/configure-awx-system-misc-sys-token-expire.png
+.. image:: ../common/images/configure-ascender-system-misc-sys-token-expire.png
 
 
 Token scope mask over RBAC system
@@ -294,7 +294,7 @@ Refer to `Django's Test Your Authorization Server`_ toolkit to test this flow.
 
 You may specify the number of seconds an authorization code remains valid in the **System settings** screen: 
 
-.. image:: ../common/images/configure-awx-system-misc-sys-authcode-expire.png
+.. image:: ../common/images/configure-ascender-system-misc-sys-authcode-expire.png
 
 
 Requesting an access token after this duration will fail. The duration defaults to 600 seconds (10 minutes), based on the `RFC6749 <https://tools.ietf.org/html/rfc6749>`_ recommendation. 
@@ -459,7 +459,7 @@ Alternatively, you can use the ``manage`` utility, :ref:`ag_manage_utility_revok
 
 This setting can be configured at the system-level in the Ascender User Interface: 
 
-.. image:: ../common/images/configure-awx-system-oauth2-tokens-toggle.png
+.. image:: ../common/images/configure-ascender-system-oauth2-tokens-toggle.png
 
 
 Upon success, a response of ``200 OK`` displays. Verify the deletion by checking whether the token is present in the ``/api/v2/tokens/`` endpoint.

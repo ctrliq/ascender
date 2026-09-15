@@ -21,7 +21,7 @@ To set up and use Prometheus, you will need to install Prometheus on a virtual m
 
     .. note:: Alternatively, you can provide an OAuth2 token (which can be generated at ``/api/v2/users/N/personal_tokens/``). By default, the config assumes a user with username=admin and password=password.
 
- Using an OAuth2 Token, created at the ``/api/v2/tokens`` endpoint to authenticate prometheus with Ascender, the following example provides a valid scrape config if the URL for your Ascender's metrics endpoint was ``https://awx_host:443/metrics``.
+ Using an OAuth2 Token, created at the ``/api/v2/tokens`` endpoint to authenticate prometheus with Ascender, the following example provides a valid scrape config if the URL for your Ascender's metrics endpoint was ``https://ascender_host:443/metrics``.
 
  ::
 

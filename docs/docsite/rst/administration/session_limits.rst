@@ -23,4 +23,4 @@ To make changes to your session limits, navigate to the **Miscellaneous System s
 .. note::
   To make the best use of session limits, disable ``AUTH_BASIC_ENABLED`` by changing the value to ``False``, as it falls outside of the scope of session limit enforcement. Alternatively, in the System Settings of the Ascender UI, toggle the **Enable HTTP Basic Auth** to off.
 
-.. image:: ../common/images/configure-awx-session-limits.png
+.. image:: ../common/images/configure-ascender-session-limits.png

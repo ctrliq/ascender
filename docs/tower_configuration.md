@@ -40,7 +40,7 @@ Each Django app in Ascender should have a `conf.py` file where related settings 
 from django.utils.translation import ugettext_lazy as _
 
 # Ascender
-from awx.conf import fields, register
+from ascender.conf import fields, register
 
 # Other dependencies
 # ...
@@ -71,7 +71,7 @@ Here are the details for each argument:
 | Argument Name               | Argument Value Type                                                  | Description                                                                                                                                                                   |
 |--------------------------|-------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `setting`                | `str`                                                             | Name of the setting. Usually all-capital connected by underscores like `'FOO_BAR'`                                                                                            |
-| `field_class`            | a subclass of DRF serializer field available in `awx.conf.fields` | The class wrapping around value of the configuration, responsible for retrieving, setting, validating and storing configuration values.                                       |
+| `field_class`            | a subclass of DRF serializer field available in `ascender.conf.fields` | The class wrapping around value of the configuration, responsible for retrieving, setting, validating and storing configuration values.                                       |
 | `**field_related_kwargs` | `**kwargs`                                                          | Key-worded arguments needed to initialize an instance of `field_class`.                                                                                                       |
 | `category_slug`          | `str`                                                             | The actual identifier used for finding individual setting categories.                                                                                                         |
 | `category`               | transformable string, like `_('foobar')`                          | The human-readable form of `category_slug`, mainly for display.                                                                                                               |
@@ -93,11 +93,11 @@ def custom_validate(serializer, attrs):
 ```
 ...where the argument `serializer` refers to the underlying `SettingSingletonSerializer` object, and `attrs` refers to a dictionary of input items.
 
-At the end of `conf.py`, register defined custom validation methods to different configuration categories (`category_slug`) using `awx.conf.register_validate`:
+At the end of `conf.py`, register defined custom validation methods to different configuration categories (`category_slug`) using `ascender.conf.register_validate`:
 ```python
 # conf.py
 ...
-from awx.conf import register_validate
+from ascender.conf import register_validate
 ...
 def validate_a(serializer, attrs):
 ...

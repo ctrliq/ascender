@@ -108,7 +108,7 @@ In addition to the job attributes, there are some other variables that can be ad
 - ``job_friendly_name`` - (string) the friendly name of the job
 - ``job_metadata`` - (string) job metadata as a JSON string, for example::
 
-    {'url': 'https://awxhost/$/jobs/playbook/13',
+    {'url': 'https://ascenderhost/$/jobs/playbook/13',
      'traceback': '',
      'status': 'running',
      'started': '2019-08-07T21:46:38.362630+00:00',

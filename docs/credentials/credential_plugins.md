@@ -47,7 +47,7 @@ registered using setuptools entrypoints
 (https://setuptools.readthedocs.io/en/latest/setuptools.html#dynamic-discovery-of-services-and-plugins)
 
 Example plugins officially supported in Ascender can be found in the source code at
-`awx.main.credential_plugins`.
+`ascender.main.credential_plugins`.
 
 For instructions on writing and installing your own custom credential plugin, see: https://github.com/ansible/awx-custom-credential-plugin-example
 
@@ -59,7 +59,7 @@ string in `/etc/tower/conf.d/postgres.py` using an external system rather than
 storing the password in plaintext on your disk), doing so is fairly easy:
 
 ```python
-from awx.main.credential_plugins import hashivault
+from ascender.main.credential_plugins import hashivault
 hashivault.hashivault_kv_plugin.backend(
     url='https://hcv.example.org',
     token='some-valid-token',
@@ -85,7 +85,7 @@ its password from a HashiCorp Vault:
     types (in this example, `1` and `15`):
 
 ```shell
-~ curl -sik "https://awx.example.org/api/v2/credential_types/?name=Machine" \
+~ curl -sik "https://ascender.example.org/api/v2/credential_types/?name=Machine" \
     -H "Authorization: Bearer <token>"
 HTTP/1.1 200 OK
 {
@@ -98,7 +98,7 @@ HTTP/1.1 200 OK
 ```
 
 ```shell
-~ curl -sik "https://awx.example.org/api/v2/credential_types/?name__startswith=HashiCorp" \
+~ curl -sik "https://ascender.example.org/api/v2/credential_types/?name__startswith=HashiCorp" \
     -H "Authorization: Bearer <token>"
 HTTP/1.1 200 OK
 {
@@ -113,7 +113,7 @@ HTTP/1.1 200 OK
 2.  Create a Machine and a HashiCorp Vault Credential:
 
 ```shell
-~ curl -sik "https://awx.example.org/api/v2/credentials/" \
+~ curl -sik "https://ascender.example.org/api/v2/credentials/" \
     -H "Authorization: Bearer <token>" \
     -H "Content-Type: application/json" \
     -X POST \
@@ -128,7 +128,7 @@ HTTP/1.1 201 Created
 ```
 
 ```shell
-~ curl -sik "https://awx.example.org/api/v2/credentials/" \
+~ curl -sik "https://ascender.example.org/api/v2/credentials/" \
     -H "Authorization: Bearer <token>" \
     -H "Content-Type: application/json" \
     -X POST \
@@ -145,7 +145,7 @@ HTTP/1.1 201 Created
 3.  Link the Machine Credential to the HashiCorp Vault Credential:
 
 ```shell
-~ curl -sik "https://awx.example.org/api/v2/credentials/1/input_sources/" \
+~ curl -sik "https://ascender.example.org/api/v2/credentials/1/input_sources/" \
     -H "Authorization: Bearer <token>" \
     -H "Content-Type: application/json" \
     -X POST \
@@ -167,7 +167,7 @@ a public key using HashiCorp Vault:
     types (in this example, `1` and `16`):
 
 ```shell
-~ curl -sik "https://awx.example.org/api/v2/credential_types/?name=Machine" \
+~ curl -sik "https://ascender.example.org/api/v2/credential_types/?name=Machine" \
     -H "Authorization: Bearer <token>"
 HTTP/1.1 200 OK
 {
@@ -180,7 +180,7 @@ HTTP/1.1 200 OK
 ```
 
 ```shell
-~ curl -sik "https://awx.example.org/api/v2/credential_types/?name__startswith=HashiCorp" \
+~ curl -sik "https://ascender.example.org/api/v2/credential_types/?name__startswith=HashiCorp" \
     -H "Authorization: Bearer <token>"
 HTTP/1.1 200 OK
 {
@@ -194,7 +194,7 @@ HTTP/1.1 200 OK
 2.  Create a Machine and a HashiCorp Vault Credential:
 
 ```shell
-~ curl -sik "https://awx.example.org/api/v2/credentials/" \
+~ curl -sik "https://ascender.example.org/api/v2/credentials/" \
     -H "Authorization: Bearer <token>" \
     -H "Content-Type: application/json" \
     -X POST \
@@ -209,7 +209,7 @@ HTTP/1.1 201 Created
 ```
 
 ```shell
-~ curl -sik "https://awx.example.org/api/v2/credentials/" \
+~ curl -sik "https://ascender.example.org/api/v2/credentials/" \
     -H "Authorization: Bearer <token>" \
     -H "Content-Type: application/json" \
     -X POST \
@@ -226,7 +226,7 @@ HTTP/1.1 201 Created
 3.  Link the Machine Credential to the HashiCorp Vault Credential:
 
 ```shell
-~ curl -sik "https://awx.example.org/api/v2/credentials/1/input_sources/" \
+~ curl -sik "https://ascender.example.org/api/v2/credentials/1/input_sources/" \
     -H "Authorization: Bearer <token>" \
     -H "Content-Type: application/json" \
     -X POST \

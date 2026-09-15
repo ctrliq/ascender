@@ -72,7 +72,7 @@ jobs:
           python3 -m pip install docker==6.1.3 requests==2.31.0 --force-reinstall
           # The arm64 runner image does not ship with ansible preinstalled.
           # Constrained to the same tested minor series as the other CI
-          # scripts (see .github/actions/awx_devel_image/action.yml).
+          # scripts (see .github/actions/ascender_devel_image/action.yml).
           if ! command -v ansible-playbook > /dev/null 2>&1; then
             python3 -m pip install 'ansible-core~=2.21.0'
           fi
@@ -87,13 +87,13 @@ jobs:
             -e registry=ghcr.io \
             -e registry_username=${{ github.actor }} \
             -e registry_password=${{ secrets.GITHUB_TOKEN }} \
-            -e awx_image=${{ github.repository }} \
-            -e awx_version=${{ github.event.inputs.version }} \
-            -e awx_image_tag=${{ github.event.inputs.version }}-${{ matrix.arch }} \
+            -e ascender_image=${{ github.repository }} \
+            -e ascender_version=${{ github.event.inputs.version }} \
+            -e ascender_image_tag=${{ github.event.inputs.version }}-${{ matrix.arch }} \
             -e ansible_python_interpreter=$(which python3) \
             -e push=yes \
             -e tag_latest=no \
-            -e awx_official=no \
+            -e ascender_official=no \
             -e build_platforms=linux/${{ matrix.arch }} \
             -e "build_cache_from=type=gha,scope=${{ github.repository }}-release-${{ matrix.arch }}" \
             -e "build_cache_to=type=gha,scope=${{ github.repository }}-release-${{ matrix.arch }},mode=max"
@@ -177,6 +177,6 @@ jobs:
         run: |
           ansible-playbook -v tools/ansible/stage.yml \
             -e repo=${{ github.repository }} \
-            -e awx_image=ghcr.io/${{ github.repository }} \
+            -e ascender_image=ghcr.io/${{ github.repository }} \
             -e version=${{ github.event.inputs.version }} \
             -e github_token=${{ secrets.GITHUB_TOKEN }}

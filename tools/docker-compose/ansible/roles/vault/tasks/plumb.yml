@@ -15,7 +15,7 @@
     credential_type: HashiCorp Vault Secret Lookup
     name: Vault Lookup Cred
     organization: Default
-    controller_host: "{{ awx_host }}"
+    controller_host: "{{ ascender_host }}"
     controller_username: admin
     controller_password: "{{ admin_password }}"
     validate_certs: false
@@ -35,7 +35,7 @@
   ctrliq.ascender.credential_type:
     name: Vault Custom Cred Type
     kind: cloud
-    controller_host: "{{ awx_host }}"
+    controller_host: "{{ ascender_host }}"
     controller_username: admin
     controller_password: "{{ admin_password }}"
     validate_certs: false
@@ -53,7 +53,7 @@
 - name: Create a credential of the custom type for token auth
   ctrliq.ascender.credential:
     credential_type: "{{ custom_vault_cred_type.id }}"
-    controller_host: "{{ awx_host }}"
+    controller_host: "{{ ascender_host }}"
     controller_username: admin
     controller_password: "{{ admin_password }}"
     validate_certs: false
@@ -67,7 +67,7 @@
     input_field_name: password
     target_credential: "{{ custom_credential_via_token.id }}"
     source_credential: "{{ vault_cred.id }}"
-    controller_host: "{{ awx_host }}"
+    controller_host: "{{ ascender_host }}"
     controller_username: admin
     controller_password: "{{ admin_password }}"
     validate_certs: false
@@ -83,7 +83,7 @@
     credential_type: HashiCorp Vault Secret Lookup
     name: Vault LDAP Lookup Cred
     organization: Default
-    controller_host: "{{ awx_host }}"
+    controller_host: "{{ ascender_host }}"
     controller_username: admin
     controller_password: "{{ admin_password }}"
     validate_certs: false
@@ -101,7 +101,7 @@
 - name: Create a credential from the Vault LDAP Custom Cred Type
   ctrliq.ascender.credential:
     credential_type: "{{ custom_vault_cred_type.id }}"
-    controller_host: "{{ awx_host }}"
+    controller_host: "{{ ascender_host }}"
     controller_username: admin
     controller_password: "{{ admin_password }}"
     validate_certs: false
@@ -116,7 +116,7 @@
     input_field_name: password
     target_credential: "{{ custom_credential_via_ldap.id }}"
     source_credential: "{{ vault_ldap_cred.id }}"
-    controller_host: "{{ awx_host }}"
+    controller_host: "{{ ascender_host }}"
     controller_username: admin
     controller_password: "{{ admin_password }}"
     validate_certs: false
@@ -133,7 +133,7 @@
     credential_type: HashiCorp Vault Secret Lookup
     name: Vault UserPass Lookup Cred
     organization: Default
-    controller_host: "{{ awx_host }}"
+    controller_host: "{{ ascender_host }}"
     controller_username: admin
     controller_password: "{{ admin_password }}"
     validate_certs: false
@@ -150,7 +150,7 @@
 - name: Create a credential from the Vault UserPass Custom Cred Type
   ctrliq.ascender.credential:
     credential_type: "{{ custom_vault_cred_type.id }}"
-    controller_host: "{{ awx_host }}"
+    controller_host: "{{ ascender_host }}"
     controller_username: admin
     controller_password: "{{ admin_password }}"
     validate_certs: false
@@ -164,7 +164,7 @@
     input_field_name: password
     target_credential: "{{ custom_credential_via_userpass.id }}"
     source_credential: "{{ vault_userpass_cred.id }}"
-    controller_host: "{{ awx_host }}"
+    controller_host: "{{ ascender_host }}"
     controller_username: admin
     controller_password: "{{ admin_password }}"
     validate_certs: false

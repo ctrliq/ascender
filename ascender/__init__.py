@@ -1,66 +1,133 @@
-# Copyright (c) 2026 Ascender
+# Copyright (c) 2015 Ansible, Inc.
 # All Rights Reserved.
-"""The platform, importable under the name the product has.
+from __future__ import absolute_import, unicode_literals
 
-`import ascender.main.models` and `import awx.main.models` return the same
-module object. There is one package on disk, still `awx/`, and this makes the
-Ascender name work everywhere the AWX one does, which is what lets the
-installers, ascender-collection and any third party credential plugin move off
-`awx.` at their own pace instead of on the day the directory is renamed.
-
-Aliasing rather than re-exporting is the point. Two module objects for
-`awx.main.models` would mean two copies of every Django model, registered twice
-in the app registry, and the second registration is an error rather than a
-subtle problem. So every name resolves to one module:
-
-    >>> import awx.main.models, ascender.main.models
-    >>> ascender.main.models is awx.main.models
-    True
-
-When the directory is eventually renamed the same machinery runs the other way
-round, with `awx` as the alias, and nothing that imports either name notices.
-"""
-
-import importlib
+import os
 import sys
-from importlib.abc import Loader, MetaPathFinder
-from importlib.machinery import ModuleSpec
-
-import awx
-
-ALIAS = 'ascender'
-PACKAGE = 'awx'
+import warnings
+from importlib.metadata import PackageNotFoundError, version as _get_version
 
 
-class _AliasLoader(Loader):
-    """Hand back the module the real name resolves to, rather than a new one."""
+def get_version():
+    version_from_file = get_version_from_file()
+    if version_from_file:
+        return version_from_file
+    else:
+        from setuptools_scm import get_version
 
-    def create_module(self, spec):
-        module = importlib.import_module(PACKAGE + spec.name[len(ALIAS) :])
-        sys.modules[spec.name] = module
-        return module
-
-    def exec_module(self, module):
-        """Already executed under its real name, so there is nothing to run."""
-
-
-class _AliasFinder(MetaPathFinder):
-    """Answer for anything under `ascender.`, before the path finder sees it.
-
-    It has to come first in sys.meta_path. The ordinary finder would search the
-    `awx/` directory, find the file and import it a second time under the new
-    name, which is the duplicate the docstring above warns about.
-    """
-
-    def find_spec(self, fullname, path=None, target=None):
-        if not fullname.startswith(ALIAS + '.'):
-            return None
-        return ModuleSpec(fullname, _AliasLoader())
+        version = get_version(root='..', relative_to=__file__)
+        return version
 
 
-if not any(isinstance(finder, _AliasFinder) for finder in sys.meta_path):
-    sys.meta_path.insert(0, _AliasFinder())
+def get_version_from_file():
+    vf = version_file()
+    if vf:
+        with open(vf, 'r') as file:
+            return file.read().strip()
 
-# `ascender` is `awx` itself, so __version__, manage() and everything else the
-# package exposes are reachable under either name without listing them here.
-sys.modules[ALIAS] = awx
+
+def version_file():
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    version_file = os.path.join(current_dir, '..', 'VERSION')
+
+    if os.path.exists(version_file):
+        return version_file
+
+
+try:
+    # Either name: the distribution was called awx before the rename, so an
+    # environment installed by an older release still carries that metadata and
+    # would otherwise fall through to reading the version out of git, which is
+    # not there in an installed tree.
+    __version__ = _get_version('ascender')
+except PackageNotFoundError:
+    try:
+        __version__ = _get_version('awx')
+    except PackageNotFoundError:
+        __version__ = get_version()
+
+__all__ = ['__version__']
+
+
+# Check for the presence/absence of "devonly" module to determine if running
+# from a source code checkout or release packaage.
+try:
+    import ascender.devonly  # noqa
+
+    MODE = 'development'
+except ImportError:  # pragma: no cover
+    MODE = 'production'
+
+
+try:
+    import django  # noqa: F401
+except ImportError:
+    pass
+else:
+    from django.db import connection
+
+
+def oauth2_getattribute(self, attr):
+    # Custom method to override
+    # oauth2_provider.settings.OAuth2ProviderSettings.__getattribute__
+    from ascender.settings.typed import settings
+    from oauth2_provider.settings import DEFAULTS
+
+    val = None
+    if (isinstance(attr, str)) and (attr in DEFAULTS) and (not attr.startswith('_')):
+        # certain Django OAuth Toolkit migrations actually reference
+        # setting lookups for references to model classes (e.g.,
+        # oauth2_settings.REFRESH_TOKEN_MODEL)
+        # If we're doing an OAuth2 setting lookup *while running* a migration,
+        # don't do our usual database settings lookup
+        val = settings.OAUTH2_PROVIDER.get(attr)
+    if val is None:
+        val = object.__getattribute__(self, attr)
+    return val
+
+
+def prepare_env():
+    # Update the default settings environment variable based on current mode.
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'awx.settings.%s' % MODE)
+    # Hide DeprecationWarnings when running in production.  Need to first load
+    # settings to apply our filter after Django's own warnings filter.
+    from django.conf import settings
+
+    if not settings.DEBUG:  # pragma: no cover
+        warnings.simplefilter('ignore', DeprecationWarning)
+
+    # Monkeypatch Oauth2 toolkit settings class to check for settings
+    # in django.conf settings each time, not just once during import
+    import oauth2_provider.settings
+
+    oauth2_provider.settings.OAuth2ProviderSettings.__getattribute__ = oauth2_getattribute
+
+
+def manage():
+    # Prepare the Ascender environment.
+    prepare_env()
+    # Now run the command (or display the version).
+    from django.conf import settings
+    from django.core.management import execute_from_command_line
+
+    # enforce the postgres version is a minimum of 12 (we need this for partitioning); if not, then terminate program with exit code of 1
+    # In the future if we require a feature of a version of postgres > 12 this should be updated to reflect that.
+    # The return of connection.pg_version is something like 12013
+    if not os.getenv('SKIP_PG_VERSION_CHECK', False) and not MODE == 'development':
+        if (connection.pg_version // 10000) < 12:
+            sys.stderr.write("At a minimum, postgres version 12 is required\n")
+            sys.exit(1)
+
+    if len(sys.argv) >= 2 and sys.argv[1] in ('version', '--version'):  # pragma: no cover
+        sys.stdout.write('%s\n' % __version__)
+    # If running as a user without permission to read settings, display an
+    # error message.  Allow --help to still work.
+    elif not os.getenv('SKIP_SECRET_KEY_CHECK', False) and settings.SECRET_KEY == 'permission-denied':
+        if len(sys.argv) == 1 or len(sys.argv) >= 2 and sys.argv[1] in ('-h', '--help', 'help'):
+            execute_from_command_line(sys.argv)
+            sys.stdout.write('\n')
+        prog = os.path.basename(sys.argv[0])
+        sys.stdout.write('Permission denied: %s must be run as root or awx.\n' % prog)
+        sys.exit(1)
+    else:
+        execute_from_command_line(sys.argv)

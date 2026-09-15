@@ -27,12 +27,12 @@ wait_for() {
         log_message "Attempt ${attempt}"
 
         timeout "${TIMEOUT}" \
-                /bin/bash -c "awx-manage check" &>/dev/null
+                /bin/bash -c "ascender-manage check" &>/dev/null
         check=$?
 
         if [ $check -eq 0 ]; then
             timeout "${TIMEOUT}" \
-                    /bin/bash -c "! awx-manage showmigrations | grep '\[ \]'" &>/dev/null \
+                    /bin/bash -c "! ascender-manage showmigrations | grep '\[ \]'" &>/dev/null \
                 && return || rc=$?
         fi
 

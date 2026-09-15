@@ -1,25 +1,26 @@
+recursive-include ascender *.py
 recursive-include awx *.py
 recursive-include ascender *.py
-recursive-include awx/dab *.md
-recursive-include awx *.po
-recursive-include awx *.mo
-recursive-include awx/static *
-recursive-include awx/templates *.html
-recursive-include awx/api/templates *.md *.html *.yml
-recursive-include awx/ui/build *.html
-recursive-include awx/ui/build *
-recursive-include awx/playbooks *.yml
+recursive-include ascender/dab *.md
+recursive-include ascender *.po
+recursive-include ascender *.mo
+recursive-include ascender/static *
+recursive-include ascender/templates *.html
+recursive-include ascender/api/templates *.md *.html *.yml
+recursive-include ascender/ui/build *.html
+recursive-include ascender/ui/build *
+recursive-include ascender/playbooks *.yml
 recursive-include requirements *.txt
 recursive-include requirements *.yml
 recursive-include licenses *
-recursive-exclude awx devonly.py*
-recursive-exclude awx/main/tests *
-recursive-exclude awx/settings local_settings.py*
+recursive-exclude ascender devonly.py*
+recursive-exclude ascender/main/tests *
+recursive-exclude ascender/settings local_settings.py*
 include tools/scripts/request_tower_configuration.sh
 include tools/scripts/request_tower_configuration.ps1
 include tools/scripts/automation-controller-service
 include tools/scripts/rsyslog-4xx-recovery
-include tools/scripts/awx-python
+include tools/scripts/ascender-python
 include tools/sosreport/*
 include Makefile
-prune awx/projects
+prune ascender/projects

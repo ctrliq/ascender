@@ -656,7 +656,7 @@ Fact Caching
 
 Ascender can store and retrieve facts on a per-host basis through an Ansible Fact Cache plugin. This behavior is configurable on a per-job template basis. Fact caching is turned off by default but can be enabled to serve fact requests for all hosts in an inventory related to the job running. This allows you to use job templates with ``--limit`` while still having access to the entire inventory of host facts. A global timeout setting that the plugin enforces per-host, can be specified (in seconds) through the Jobs settings menu:
 
-.. image:: ../common/images/configure-awx-jobs-fact-cache-timeout.png
+.. image:: ../common/images/configure-ascender-jobs-fact-cache-timeout.png
     :alt: Jobs Settings window showing the location of the Per-Host Ansible Fact Cache Timeout parameter from the Edit Details screen.
 
 Upon launching a job that uses fact cache (``use_fact_cache=True``), Ascender will store all ``ansible_facts`` associated with each host in the inventory associated with the job.  The Ansible Fact Cache plugin that ships with Ascender will only be enabled on jobs with fact cache enabled (``use_fact_cache=True``).

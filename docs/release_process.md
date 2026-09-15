@@ -118,7 +118,7 @@ This workflow will take the generated images and promote them to quay.io in addi
 
 6. Once the workflow is finished, verify that the new image is present on the [Repository Tags](https://quay.io/repository/ansible/awx?tag=latest&tab=tags) on Quay:
 
-![Verify released Ascender image](img/verify-released-awx-image.png)
+![Verify released Ascender image](img/verify-released-ascender-image.png)
 
 7. Go to the ctrliq.ascender collection on [Ansible Galaxy](https://galaxy.ansible.com/ctrliq/ascender) and validate the latest version matches and was updated recently:
 
@@ -138,7 +138,7 @@ This workflow will take the generated images and promote them to quay.io.
 
 2. Once complete, verify the image is on the [awx-operator Quay repository](https://quay.io/repository/ansible/awx-operator?tab=tags):
 
-![Verify released awx-operator image](img/verify-released-awx-operator-image.png)
+![Verify released awx-operator image](img/verify-released-ascender-operator-image.png)
 
 ## Send notifications
 

@@ -58,7 +58,7 @@ A typical response might look like:
 	Content-Length: 0
 	Connection: keep-alive
 	Location: /accounts/profile/
-	X-API-Session-Cookie-Name: awx_sessionid
+	X-API-Session-Cookie-Name: ascender_sessionid
 	Expires: <date>
 	Cache-Control: max-age=0, no-cache, no-store, must-revalidate, private
 	Vary: Cookie, Accept-Language, Origin
@@ -70,7 +70,7 @@ A typical response might look like:
 	Set-Cookie: userLoggedIn=true; Path=/
 	Set-Cookie: current_user=<user cookie data>; Path=/
 	Set-Cookie: csrftoken=<csrftoken>; Path=/; SameSite=Lax
-	Set-Cookie: awx_sessionid=<your session id>; expires=<date>; HttpOnly; Max-Age=1800; Path=/; SameSite=Lax
+	Set-Cookie: ascender_sessionid=<your session id>; expires=<date>; HttpOnly; Max-Age=1800; Path=/; SameSite=Lax
 	Strict-Transport-Security: max-age=15768000
 
 
@@ -98,7 +98,7 @@ For more information about the Basic HTTP Authentication scheme, see `RFC 7617 <
 
 	You can disable the Basic Auth for security purposes from the Miscellaneous Authentication settings of the Ascender UI Settings menu:
 
-	.. image:: ../common/images/configure-awx-auth-basic-off.png
+	.. image:: ../common/images/configure-ascender-auth-basic-off.png
 
 .. _api_oauth2_auth:
 
@@ -111,7 +111,7 @@ OAuth (Open Authorization) is an open standard for token-based authentication an
 
 	By default, external users such as those created by SSO are not allowed to generate OAuth tokens for security purposes. This can be changed from the Miscellaneous Authentication settings of the Ascender UI Settings menu:
 
-	.. image:: ../common/images/configure-awx-external-tokens-off.png 
+	.. image:: ../common/images/configure-ascender-external-tokens-off.png 
 
 The different methods for obtaining OAuth 2 Access Tokens in Ascender are:
 

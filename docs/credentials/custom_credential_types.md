@@ -188,9 +188,13 @@ certificate/key data:
             "template": "[mycloud]\ntoken={{api_token}}"
         },
         "env": {
-            "MY_CLOUD_INI_FILE": "{{tower.filename}}"
+            "MY_CLOUD_INI_FILE": "{{ascender.filename}}"
         }
     }
+
+The namespace was called `tower` before the rename. Both names resolve to the
+same thing, so a credential type written against `{{tower.filename}}` keeps
+working and does not need editing.
 
 3.3 adds the ability for a single ``Credential Type`` to inject multiple files:
 
@@ -200,8 +204,8 @@ certificate/key data:
             "template.key": "{{key}}"
         },
         "env": {
-            "MY_CERT": "{{tower.filename.cert}",
-            "MY_KEY": "{{tower.filename.key}}"
+            "MY_CERT": "{{ascender.filename.cert}",
+            "MY_KEY": "{{ascender.filename.key}}"
         }
     }
 

@@ -4,6 +4,6 @@
 # All Rights Reserved.
 
 if __name__ == '__main__':
-    from awx import manage
+    from ascender import manage
 
     manage()

@@ -1,0 +1,58 @@
+# Copyright (c) 2016 Ansible, Inc.
+# All Rights Reserved.
+
+import logging
+import requests
+import json
+
+from ascender.settings.typed import settings
+from django.utils.encoding import smart_str
+from django.utils.translation import gettext_lazy as _
+
+from ascender.main.notifications.base import AscenderBaseEmailBackend
+from ascender.main.utils import get_ascender_http_client_headers
+from ascender.main.notifications.custom_notification_base import CustomNotificationBase
+
+logger = logging.getLogger('awx.main.notifications.rocketchat_backend')
+
+
+class RocketChatBackend(AscenderBaseEmailBackend, CustomNotificationBase):
+    init_parameters = {"rocketchat_url": {"label": "Target URL", "type": "string"}, "rocketchat_no_verify_ssl": {"label": "Verify SSL", "type": "bool"}}
+    recipient_parameter = "rocketchat_url"
+    sender_parameter = None
+
+    def __init__(self, rocketchat_no_verify_ssl=False, rocketchat_username=None, rocketchat_icon_url=None, fail_silently=False, **kwargs):
+        # Django 6.1 deprecated BaseEmailBackend.fail_silently: a subclass that
+        # supports it owns the attribute instead of passing it up.
+        super(RocketChatBackend, self).__init__()
+        self.fail_silently = fail_silently
+        self.rocketchat_no_verify_ssl = rocketchat_no_verify_ssl
+        self.rocketchat_username = rocketchat_username
+        self.rocketchat_icon_url = rocketchat_icon_url
+
+    def format_body(self, body):
+        return body
+
+    def send_messages(self, messages):
+        sent_messages = 0
+        for m in messages:
+            payload = {"text": m.subject}
+            for opt, optval in {'rocketchat_icon_url': 'icon_url', 'rocketchat_username': 'username'}.items():
+                optvalue = getattr(self, opt)
+                if optvalue is not None:
+                    payload[optval] = optvalue.strip()
+
+            r = requests.post(
+                "{}".format(m.recipients()[0]),
+                data=json.dumps(payload),
+                headers=get_ascender_http_client_headers(),
+                verify=(not self.rocketchat_no_verify_ssl),
+                timeout=settings.ASCENDER_NOTIFICATION_REQUEST_TIMEOUT,
+            )
+
+            if r.status_code >= 400:
+                logger.error(smart_str(_("Error sending notification rocket.chat: {}").format(r.status_code)))
+                if not self.fail_silently:
+                    raise Exception(smart_str(_("Error sending notification rocket.chat: {}").format(r.status_code)))
+            sent_messages += 1
+        return sent_messages

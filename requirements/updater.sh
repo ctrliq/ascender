@@ -115,7 +115,7 @@ main() {
     exit
   fi
 
-  if [[ ! -d /awx_devel ]] ; then
+  if [[ ! -d /ascender_devel ]] ; then
       echo "This script should be run inside the awx container" >&2
       exit
   fi
@@ -131,8 +131,8 @@ main() {
 
   generate_requirements "${input_requirements}"
 
-  echo "Changing $base_dir to /awx_devel/requirements"
-  cat requirements.txt | sed "s:$base_dir:/awx_devel/requirements:" > "${dest_requirements}"
+  echo "Changing $base_dir to /ascender_devel/requirements"
+  cat requirements.txt | sed "s:$base_dir:/ascender_devel/requirements:" > "${dest_requirements}"
 
   _cleanup
   return 0

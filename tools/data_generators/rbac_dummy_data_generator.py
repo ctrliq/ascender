@@ -27,14 +27,14 @@ base_dir = os.path.abspath(  # Convert into absolute path string
 if base_dir not in sys.path:
     sys.path.insert(1, base_dir)
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "awx.settings.development")  # noqa
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ascender.settings.development")  # noqa
 django.setup()  # noqa
 
 
 from django.db import transaction  # noqa
 
 # awx
-from awx.main.models import (  # noqa
+from ascender.main.models import (  # noqa
     Credential,
     CredentialType,
     Group,
@@ -54,10 +54,10 @@ from awx.main.models import (  # noqa
     WorkflowJobTemplateNode,
     batch_role_ancestor_rebuilding,
 )
-from awx.main.models.schedules import Schedule  # noqa
+from ascender.main.models.schedules import Schedule  # noqa
 
-from awx.main.signals import disable_activity_stream, disable_computed_fields  # noqa
-from awx.main.utils.common import create_partition  # noqa
+from ascender.main.signals import disable_activity_stream, disable_computed_fields  # noqa
+from ascender.main.utils.common import create_partition  # noqa
 
 
 option_list = [
@@ -237,7 +237,7 @@ class Rollback(Exception):
 
 
 # Normally the modified_by field is populated automatically from the current
-# request (awx.main.request_context), but since this runs outside the
+# request (ascender.main.request_context), but since this runs outside the
 # request-response cycle that won't work. It is disabled here.
 def mock_save(self, *args, **kwargs):
     return super(PrimordialModel, self).save(*args, **kwargs)
@@ -698,7 +698,7 @@ def make_the_data():
                     wfjt.labels.add(next(label_gen))
 
             # Disable logging here, because it will mess up output format
-            logger = logging.getLogger('awx.main')
+            logger = logging.getLogger('ascender.main')
             logger.propagate = False
 
             print('# Creating %d jobs' % n_jobs)

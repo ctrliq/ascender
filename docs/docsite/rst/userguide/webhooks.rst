@@ -62,7 +62,7 @@ Ascender has the ability to run jobs based on a triggered webhook event coming i
 
 	d. Click **Save**. Now your job template is set up to be able to post back to GitHub. An example of one may look like this:
 
-	.. image:: ../common/images/webhooks-awx-to-github-status.png
+	.. image:: ../common/images/webhooks-ascender-to-github-status.png
 		:alt: An example GitHub status that shows all checks have passed
 
 .. _ug_webhooks_setup_github:
@@ -151,7 +151,7 @@ Ascender has the ability to run jobs based on a triggered webhook event coming i
 
 	d. Click **Save**. Now your job template is set up to be able to post back to GitLab. An example of one may look like this:
 
-	.. image:: ../common/images/webhooks-awx-to-gitlab-status.png
+	.. image:: ../common/images/webhooks-ascender-to-gitlab-status.png
 		:alt: An example GitLab status message
 
 

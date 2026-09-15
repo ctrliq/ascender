@@ -3,31 +3,31 @@
 ---
 services:
 {% if editable_dependencies | length > 0 %}
-  init_awx:
-    image: "{{ awx_image }}:{{ awx_image_tag }}"
-    container_name: tools_init_awx
-    command: /awx_devel/tools/docker-compose/editable_dependencies/install.sh
+  init_ascender:
+    image: "{{ ascender_image }}:{{ ascender_image_tag }}"
+    container_name: tools_init_ascender
+    command: /ascender_devel/tools/docker-compose/editable_dependencies/install.sh
     user: root
     working_dir: "/"
     environment:
       RUN_MIGRATIONS: 1
     volumes:
-      - "../../../:/awx_devel"
+      - "../../../:/ascender_devel"
 {% for editable_dependency in editable_dependencies %}
       - "{{ editable_dependency }}:/editable_dependencies/{{ editable_dependency | basename }}"
 {% endfor %}
-      - "var_lib_awx:/var/lib/awx"
+      - "var_lib_awx:/var/lib/ascender"
 {% endif %}
 {% for i in range(control_plane_node_count|int) %}
   {% set container_postfix = loop.index %}
   {% set awx_sdb_port_start = 7899 + (loop.index0*1000) | int %}
   {% set awx_sdb_port_end = 7999 + (loop.index0*1000) | int %}
-  # Primary AWX Development Container
-  awx_{{ container_postfix }}:
+  # Primary Ascender Development Container
+  ascender_{{ container_postfix }}:
     user: "{{ ansible_user_uid }}"
-    image: "{{ awx_image }}:{{ awx_image_tag }}"
-    container_name: tools_awx_{{ container_postfix }}
-    hostname: awx_{{ container_postfix }}
+    image: "{{ ascender_image }}:{{ ascender_image_tag }}"
+    container_name: tools_ascender_{{ container_postfix }}
+    hostname: ascender_{{ container_postfix }}
     command: launch_awx.sh
     environment:
       OS: "{{ os_info.stdout }}"
@@ -50,22 +50,22 @@ services:
     networks:
       - awx
       - service-mesh
-    working_dir: "/awx_devel"
+    working_dir: "/ascender_devel"
     volumes:
 {% if editable_dependencies | length > 0 %}
-      - "var_lib_awx:/var/lib/awx"
+      - "var_lib_awx:/var/lib/ascender"
 {% for editable_dependency in editable_dependencies %}
       - "{{ editable_dependency }}:/editable_dependencies/{{ editable_dependency | basename }}"
 {% endfor %}
 {% endif %}
-      - "../../../:/awx_devel"
+      - "../../../:/ascender_devel"
       - "../../docker-compose/supervisor.conf:/etc/supervisord.conf"
-      - "../../docker-compose/_sources/database.py:/etc/tower/conf.d/database.py"
-      - "../../docker-compose/_sources/websocket_secret.py:/etc/tower/conf.d/websocket_secret.py"
-      - "../../docker-compose/_sources/local_settings.py:/etc/tower/conf.d/local_settings.py"
+      - "../../docker-compose/_sources/database.py:/etc/ascender/conf.d/database.py"
+      - "../../docker-compose/_sources/websocket_secret.py:/etc/ascender/conf.d/websocket_secret.py"
+      - "../../docker-compose/_sources/local_settings.py:/etc/ascender/conf.d/local_settings.py"
       - "../../docker-compose/_sources/nginx.conf:/etc/nginx/nginx.conf"
       - "../../docker-compose/_sources/nginx.locations.conf:/etc/nginx/conf.d/nginx.locations.conf"
-      - "../../docker-compose/_sources/SECRET_KEY:/etc/tower/SECRET_KEY"
+      - "../../docker-compose/_sources/SECRET_KEY:/etc/ascender/SECRET_KEY"
       - "../../docker-compose/_sources/receptor/receptor-awx-{{ loop.index }}.conf:/etc/receptor/receptor.conf"
       - "../../docker-compose/_sources/receptor/receptor-awx-{{ loop.index }}.conf.lock:/etc/receptor/receptor.conf.lock"
 {% if sign_work|bool %}
@@ -74,7 +74,7 @@ services:
 {% endif %}
       # - "../../docker-compose/_sources/certs:/etc/receptor/certs"  # TODO: optionally generate certs
       - "/sys/fs/cgroup:/sys/fs/cgroup"
-      - "~/.kube/config:/var/lib/awx/.kube/config"
+      - "~/.kube/config:/var/lib/ascender/.kube/config"
       - "valkey_socket_{{ container_postfix }}:/var/run/valkey/:rw"
     privileged: true
     depends_on:
@@ -83,7 +83,7 @@ services:
       valkey_{{ container_postfix }}:
         condition: service_started
 {% if editable_dependencies | length > 0 %}
-      init_awx:
+      init_ascender:
         condition: service_completed_successfully
 {% endif %}
     tty: true
@@ -128,7 +128,7 @@ services:
     depends_on:
   {% for i in range(control_plane_node_count|int) -%}
   {% set container_postfix = loop.index %}
-    - "awx_{{ container_postfix }}"
+    - "ascender_{{ container_postfix }}"
   {% endfor %}
 {% endif %}
 {% if enable_keycloak|bool %}
@@ -237,7 +237,7 @@ services:
       - "../../docker-compose/_sources/receptor/receptor-hop.conf:/etc/receptor/receptor.conf"
   {% for i in range(execution_node_count|int) %}
   receptor-{{ loop.index }}:
-    image: "{{ awx_image }}:{{ awx_image_tag }}"
+    image: "{{ ascender_image }}:{{ ascender_image_tag }}"
     user: "{{ ansible_user_uid }}"
     container_name: tools_receptor_{{ loop.index }}
     hostname: receptor-{{ loop.index }}
@@ -247,7 +247,7 @@ services:
     networks:
       - awx
     volumes:
-      - "../../../:/awx_devel"  # not used, but mounted so that any in-place installs can be used for whole cluster
+      - "../../../:/ascender_devel"  # not used, but mounted so that any in-place installs can be used for whole cluster
       - "../../docker-compose/_sources/receptor/receptor-worker-{{ loop.index }}.conf:/etc/receptor/receptor.conf"
       - "/sys/fs/cgroup:/sys/fs/cgroup"
       - "../../docker-compose/_sources/receptor/work_public_key.pem:/etc/receptor/work_public_key.pem"

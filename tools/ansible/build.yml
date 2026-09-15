@@ -9,16 +9,16 @@
         chdir: '../../'
       register: scm_version
       failed_when: not scm_version.stdout
-      when: awx_version is not defined
+      when: ascender_version is not defined
 
-    - name: Set awx_version
+    - name: Set ascender_version
       set_fact:
-        awx_version: "{{ scm_version.stdout }}"
-      when: awx_version is not defined
+        ascender_version: "{{ scm_version.stdout }}"
+      when: ascender_version is not defined
 
-    - name: Set awx_docker_version with + replaced by _
+    - name: Set ascender_docker_version with + replaced by _
       set_fact:
-        awx_docker_version: "{{ awx_version | replace('+', '_') }}"
+        ascender_docker_version: "{{ ascender_version | replace('+', '_') }}"
 
     - include_role:
         name: dockerfile

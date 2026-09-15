@@ -58,9 +58,9 @@ Defining and Running Tasks
 --------------------------
 
 Tasks are defined in Ascender's source code, and generally live in the
-`awx.main.tasks` module.  Tasks can be defined as simple functions:
+`ascender.main.tasks` module.  Tasks can be defined as simple functions:
 
-    from awx.main.dispatch.publish import task
+    from ascender.main.dispatch.publish import task
 
     @task()
     def add(a, b):
@@ -86,13 +86,13 @@ appropriate AMQP queue:
         "uuid": "<some_unique_string>",
         "args": [1, 1],
         "kwargs": {},
-        "task": "awx.main.tasks.system.add"
+        "task": "ascender.main.tasks.system.add"
     }
 
 When a background worker receives the message, it deserializes it and runs the
 associated Python code:
 
-    awx.main.tasks.system.add(123)
+    ascender.main.tasks.system.add(123)
 
 
 Dispatcher Implementation
@@ -141,7 +141,7 @@ awx-manage run_dispatcher --reload
 
 * * *
 
-In the following sections, we will go further into the details regarding Ascender tasks.  They are all decorated by `@task()` in [awx/awx/main/tasks.py](github.com/ctrliq/ascender/blob/main/awx/main/tasks.py)
+In the following sections, we will go further into the details regarding Ascender tasks.  They are all decorated by `@task()` in [ascender/awx/main/tasks.py](github.com/ctrliq/ascender/blob/main/awx/main/tasks.py)
 
 ## Housekeeping Tasks
 
