@@ -1,38 +1,23 @@
 # Copyright (c) 2015 Ansible, Inc.
 # All Rights Reserved.
 import os
-import logging
 import django
-from ascender import __version__ as tower_version
 
 # Prepare the Ascender environment.
-from ascender import prepare_env, MODE
+from ascender import prepare_env
 from channels.routing import get_default_application  # noqa
 
 prepare_env()  # NOQA
 
 
 """
-ASGI config for AWX project.
+ASGI config for the Ascender project.
 
 It exposes the ASGI callable as a module-level variable named ``channel_layer``.
 
 For more information on this file, see
 https://channels.readthedocs.io/en/latest/deploying.html
 """
-
-if MODE == 'production':
-    logger = logging.getLogger('awx.main.models.jobs')
-    try:
-        fd = open("/var/lib/ascender/.tower_version", "r")
-        if fd.read().strip() != tower_version:
-            raise ValueError()
-    except FileNotFoundError:
-        pass
-    except ValueError as e:
-        logger.error("Missing or incorrect metadata for controller version.  Ensure controller was installed using the setup playbook.")
-        raise Exception("Missing or incorrect metadata for controller version.  Ensure controller was installed using the setup playbook.") from e
-
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "ascender.settings")
 django.setup()
