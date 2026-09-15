@@ -873,7 +873,7 @@ msgstr "Webhooks: Enable webhook for this template."
 msgid "LDAP 5"
 msgstr "LDAP 5"
 
-#: components/Lookup/HostFilterLookup.tsx:390
+#: components/Lookup/HostFilterLookup.tsx:386
 #: components/Lookup/Lookup.tsx:237
 msgid "Lookup modal"
 msgstr "Lookup modal"
@@ -1323,7 +1323,7 @@ msgstr "Workflow Approval"
 msgid "Node types"
 msgstr "Node types"
 
-#: components/Lookup/HostFilterLookup.tsx:430
+#: components/Lookup/HostFilterLookup.tsx:426
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:246
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:238
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:272
@@ -1646,7 +1646,7 @@ msgstr "Create new federated inventory"
 #: components/Lookup/ExecutionEnvironmentLookup.tsx:213
 #: components/Lookup/ExecutionEnvironmentLookup.tsx:220
 #: components/Lookup/HostFilterLookup.tsx:117
-#: components/Lookup/HostFilterLookup.tsx:446
+#: components/Lookup/HostFilterLookup.tsx:442
 #: components/Lookup/HostListItem.tsx:15
 #: components/Lookup/InstanceGroupsLookup.tsx:121
 #: components/Lookup/InstanceGroupsLookup.tsx:132
@@ -1794,7 +1794,7 @@ msgstr "Create new federated inventory"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:177
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:127
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:108
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:90
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:87
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:87
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:110
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvListItem.tsx:23
@@ -1804,7 +1804,7 @@ msgstr "Create new federated inventory"
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.tsx:68
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.tsx:85
 #: screens/Organization/OrganizationTeams/OrganizationTeamListItem.tsx:24
-#: screens/Organization/shared/OrganizationForm.tsx:63
+#: screens/Organization/shared/OrganizationForm.tsx:61
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:177
 #: screens/Project/ProjectList/ProjectList.tsx:186
 #: screens/Project/ProjectList/ProjectList.tsx:221
@@ -2173,7 +2173,7 @@ msgstr "Failed to assign roles properly"
 msgid "Failed to disassociate one or more teams."
 msgstr "Failed to disassociate one or more teams."
 
-#: components/AppContainer/AppContainer.tsx:61
+#: components/AppContainer/AppContainer.tsx:65
 msgid "brand logo"
 msgstr "brand logo"
 
@@ -2394,7 +2394,7 @@ msgstr "If enabled, hosts can be deleted from this inventory while jobs are runn
 msgid "The project is currently syncing and the revision will be available after the sync is complete."
 msgstr "The project is currently syncing and the revision will be available after the sync is complete."
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:170
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:158
 msgid "Delete Organization"
 msgstr "Delete Organization"
 
@@ -2420,7 +2420,7 @@ msgstr "IRC server address"
 msgid "Management job launch error"
 msgstr "Management job launch error"
 
-#: components/Lookup/HostFilterLookup.tsx:313
+#: components/Lookup/HostFilterLookup.tsx:309
 #: components/Lookup/Lookup.tsx:182
 msgid "Search"
 msgstr "Search"
@@ -2429,7 +2429,7 @@ msgstr "Search"
 msgid "confirm edit login redirect"
 msgstr "confirm edit login redirect"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:123
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:111
 msgid "The Instance Groups for this Organization to run on."
 msgstr "The Instance Groups for this Organization to run on."
 
@@ -2648,7 +2648,7 @@ msgstr "Zoom in"
 msgid "Instances"
 msgstr "Instances"
 
-#: components/Lookup/HostFilterLookup.tsx:382
+#: components/Lookup/HostFilterLookup.tsx:378
 msgid "Please select an organization before editing the host filter"
 msgstr "Please select an organization before editing the host filter"
 
@@ -2851,7 +2851,7 @@ msgstr "You do not have permission to delete the following Groups: {itemsUnableT
 msgid "HTTP Method"
 msgstr "HTTP Method"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:107
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:95
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 
@@ -3075,7 +3075,7 @@ msgstr "Is expanded"
 msgid "Service account JSON file"
 msgstr "Service account JSON file"
 
-#: screens/Organization/shared/OrganizationForm.tsx:90
+#: screens/Organization/shared/OrganizationForm.tsx:74
 msgid "Select the Instance Groups for this Organization to run on."
 msgstr "Select the Instance Groups for this Organization to run on."
 
@@ -3366,7 +3366,7 @@ msgstr "Less than or equal to comparison."
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:164
 #: screens/Job/JobDetail/JobDetail.tsx:655
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:493
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:176
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:374
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:127
 #: screens/Team/TeamDetail/TeamDetail.tsx:77
@@ -3516,7 +3516,7 @@ msgstr "GitHub Team"
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:139
 #: screens/Job/JobDetail/JobDetail.tsx:579
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:446
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:110
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:326
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:351
@@ -3600,7 +3600,7 @@ msgstr "View smart inventory host details"
 msgid "Sign in with Google"
 msgstr "Sign in with Google"
 
-#: contexts/Config.tsx:237
+#: contexts/Config.tsx:204
 msgid "Failed to retrieve configuration."
 msgstr "Failed to retrieve configuration."
 
@@ -3631,7 +3631,7 @@ msgstr "This action will disassociate all roles for this user from the selected 
 #: components/FormActionGroup/FormActionGroup.tsx:39
 #: components/FormActionGroup/FormActionGroup.tsx:48
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
-#: components/Lookup/HostFilterLookup.tsx:411
+#: components/Lookup/HostFilterLookup.tsx:407
 #: components/Lookup/Lookup.tsx:259
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:248
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:47
@@ -3722,7 +3722,7 @@ msgstr "Minimum length"
 msgid "This field must be a number and have a value less than {max}"
 msgstr "This field must be a number and have a value less than {max}"
 
-#: components/Lookup/HostFilterLookup.tsx:369
+#: components/Lookup/HostFilterLookup.tsx:365
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:122
 msgid "Smart host filter"
 msgstr "Smart host filter"
@@ -3801,7 +3801,7 @@ msgstr "This field must be a number and have a value between {0} and {1}"
 msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
 msgstr "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
 
-#: components/Lookup/HostFilterLookup.tsx:432
+#: components/Lookup/HostFilterLookup.tsx:428
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:248
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:240
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:274
@@ -4103,8 +4103,8 @@ msgstr "Delete Credential"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:471
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:473
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:160
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:159
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:163
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:347
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:113
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:117
@@ -4120,8 +4120,8 @@ msgstr "Delete Credential"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:151
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:155
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:139
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:143
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4549,7 +4549,7 @@ msgstr "View Organization Details"
 #: components/Schedule/ScheduleToggle/ScheduleToggle.tsx:86
 #: components/Schedule/shared/SchedulePromptableFields.tsx:90
 #: components/TemplateList/TemplateList.tsx:311
-#: contexts/Config.tsx:233
+#: contexts/Config.tsx:200
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:145
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:174
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:306
@@ -4593,7 +4593,7 @@ msgstr "View Organization Details"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:501
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:237
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:190
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:185
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:173
 #: screens/Organization/OrganizationList/OrganizationList.tsx:193
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:382
 #: screens/Project/ProjectList/ProjectList.tsx:294
@@ -4785,14 +4785,14 @@ msgstr "Edit Link"
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:97
 #: screens/Organization/shared/OrganizationForm.tsx:78
-msgid "Max Hosts"
-msgstr "Max Hosts"
+#~ msgid "Max Hosts"
+#~ msgstr "Max Hosts"
 
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:140
 msgid "Oragnization"
 msgstr "Oragnization"
 
-#: components/AppContainer/AppContainer.tsx:61
+#: components/AppContainer/AppContainer.tsx:65
 msgid "{brandName} logo"
 msgstr "{brandName} logo"
 
@@ -5273,7 +5273,7 @@ msgstr "March"
 msgid "Image"
 msgstr "Image"
 
-#: components/Lookup/HostFilterLookup.tsx:393
+#: components/Lookup/HostFilterLookup.tsx:389
 msgid "Perform a search to define a host filter"
 msgstr "Perform a search to define a host filter"
 
@@ -5744,7 +5744,7 @@ msgstr "Edit Execution Environment"
 msgid "Management job"
 msgstr "Management job"
 
-#: components/Lookup/HostFilterLookup.tsx:422
+#: components/Lookup/HostFilterLookup.tsx:418
 msgid "Searching by ansible_facts requires special syntax. Refer to the"
 msgstr "Searching by ansible_facts requires special syntax. Refer to the"
 
@@ -5826,7 +5826,7 @@ msgstr "source control branch"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:242
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:120
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:250
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:122
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:110
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:424
 #: util/getRelatedResourceDeleteDetails.ts:316
 msgid "Instance Groups"
@@ -6835,7 +6835,7 @@ msgstr "Credential not found."
 msgid "{minutes} min {seconds} sec"
 msgstr "{minutes} min {seconds} sec"
 
-#: components/AppContainer/AppContainer.tsx:152
+#: components/AppContainer/AppContainer.tsx:156
 msgid "Your session is about to expire"
 msgstr "Your session is about to expire"
 
@@ -6851,8 +6851,8 @@ msgstr "API Token"
 msgid "Control the level of output Ansible will produce for inventory source update jobs."
 msgstr "Control the level of output Ansible will produce for inventory source update jobs."
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:130
-#: screens/Organization/shared/OrganizationForm.tsx:108
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:118
+#: screens/Organization/shared/OrganizationForm.tsx:92
 msgid "Galaxy Credentials"
 msgstr "Galaxy Credentials"
 
@@ -7062,7 +7062,7 @@ msgstr "2 (More Verbose)"
 #~ msgid "Webhook credential for this workflow job template."
 #~ msgstr "Webhook credential for this workflow job template."
 
-#: components/Lookup/HostFilterLookup.tsx:372
+#: components/Lookup/HostFilterLookup.tsx:368
 msgid "Populate the hosts for this inventory by using a search\n"
 "              filter. Example: ansible_facts__ansible_distribution:\"RedHat\".\n"
 "              Refer to the documentation for further syntax and\n"
@@ -7285,7 +7285,7 @@ msgstr "File, directory or script"
 msgid "Resource type"
 msgstr "Resource type"
 
-#: screens/Organization/shared/OrganizationForm.tsx:100
+#: screens/Organization/shared/OrganizationForm.tsx:84
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 
@@ -7333,8 +7333,8 @@ msgstr "Application name"
 msgid "Cache timeout (seconds)"
 msgstr "Cache timeout (seconds)"
 
-#: components/AppContainer/AppContainer.tsx:102
-#: components/AppContainer/AppContainer.tsx:172
+#: components/AppContainer/AppContainer.tsx:106
+#: components/AppContainer/AppContainer.tsx:176
 #: components/AppContainer/PageHeaderToolbar.tsx:223
 msgid "Logout"
 msgstr "Logout"
@@ -7412,7 +7412,7 @@ msgstr "Sync"
 #: components/HostForm/HostForm.tsx:147
 #: components/Lookup/ApplicationLookup.tsx:123
 #: components/Lookup/ApplicationLookup.tsx:141
-#: components/Lookup/HostFilterLookup.tsx:447
+#: components/Lookup/HostFilterLookup.tsx:443
 #: components/Lookup/HostListItem.tsx:16
 #: components/NotificationList/NotificationList.tsx:230
 #: components/PromptDetail/PromptDetail.tsx:170
@@ -7464,9 +7464,9 @@ msgstr "Sync"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:161
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:126
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:116
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:94
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:91
 #: screens/Organization/OrganizationList/OrganizationList.tsx:125
-#: screens/Organization/shared/OrganizationForm.tsx:71
+#: screens/Organization/shared/OrganizationForm.tsx:69
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:178
 #: screens/Project/ProjectList/ProjectList.tsx:191
 #: screens/Project/ProjectList/ProjectListItem.tsx:266
@@ -7884,7 +7884,7 @@ msgstr "{0, plural, one {This instance is currently being used by other resource
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8110,7 +8110,7 @@ msgstr "Deprovisioning fail"
 msgid "See Django"
 msgstr "See Django"
 
-#: components/AppContainer/AppContainer.tsx:70
+#: components/AppContainer/AppContainer.tsx:74
 msgid "Global navigation"
 msgstr "Global navigation"
 
@@ -8506,7 +8506,7 @@ msgstr "Source Control Update"
 msgid "Track submodules latest commit on branch"
 msgstr "Track submodules latest commit on branch"
 
-#: components/Lookup/HostFilterLookup.tsx:442
+#: components/Lookup/HostFilterLookup.tsx:438
 msgid "hosts"
 msgstr "hosts"
 
@@ -8634,7 +8634,7 @@ msgid "Answer variable name"
 msgstr "Answer variable name"
 
 #: components/JobList/JobListItem.tsx:110
-#: components/Lookup/HostFilterLookup.tsx:403
+#: components/Lookup/HostFilterLookup.tsx:399
 #: components/Lookup/Lookup.tsx:250
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
@@ -8651,12 +8651,12 @@ msgid "Custom virtual environment {virtualEnvironment} must be replaced by an ex
 msgstr "Custom virtual environment {virtualEnvironment} must be replaced by an execution environment. For more information about migrating to execution environments see <0>the documentation.</0>"
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:99
-msgid "The maximum number of hosts allowed to be managed by\n"
-"            this organization. Value defaults to 0 which means no limit.\n"
-"            Refer to the Ansible documentation for more details."
-msgstr "The maximum number of hosts allowed to be managed by\n"
-"            this organization. Value defaults to 0 which means no limit.\n"
-"            Refer to the Ansible documentation for more details."
+#~ msgid "The maximum number of hosts allowed to be managed by\n"
+#~ "            this organization. Value defaults to 0 which means no limit.\n"
+#~ "            Refer to the Ansible documentation for more details."
+#~ msgstr "The maximum number of hosts allowed to be managed by\n"
+#~ "            this organization. Value defaults to 0 which means no limit.\n"
+#~ "            Refer to the Ansible documentation for more details."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:281
 msgid "IRC Nick"
@@ -9076,7 +9076,7 @@ msgstr "Update options"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
 #: screens/Job/JobDetail/JobDetail.tsx:583
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:451
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:115
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:331
 #: screens/Team/TeamDetail/TeamDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:356
@@ -9465,7 +9465,7 @@ msgstr "Related search type"
 msgid "User details"
 msgstr "User details"
 
-#: components/AppContainer/AppContainer.tsx:176
+#: components/AppContainer/AppContainer.tsx:180
 msgid "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 msgstr "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 
@@ -9620,7 +9620,7 @@ msgstr "An inventory must be selected"
 msgid "Source Control Branch"
 msgstr "Source Control Branch"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:174
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:162
 msgid "This organization is currently being by other resources. Are you sure you want to delete it?"
 msgstr "This organization is currently being by other resources. Are you sure you want to delete it?"
 
@@ -9918,7 +9918,7 @@ msgstr "Cancel lookup"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:96
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -10014,7 +10014,7 @@ msgstr "Last Name"
 msgid "Add a node between these two"
 msgstr "Add a node between these two"
 
-#: components/AppContainer/AppContainer.tsx:112
+#: components/AppContainer/AppContainer.tsx:116
 msgid "Navigation"
 msgstr "Navigation"
 
@@ -10130,7 +10130,7 @@ msgstr "Add Link"
 msgid "Recipient List"
 msgstr "Recipient List"
 
-#: screens/Organization/shared/OrganizationForm.tsx:123
+#: screens/Organization/shared/OrganizationForm.tsx:107
 msgid "Note: The order of these credentials sets precedence for the sync and lookup of the content. Select more than one to enable drag."
 msgstr "Note: The order of these credentials sets precedence for the sync and lookup of the content. Select more than one to enable drag."
 
@@ -10700,7 +10700,7 @@ msgstr "Click the Edit button below to reconfigure the node."
 msgid "Federated Inventory"
 msgstr "Federated Inventory"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:188
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:176
 msgid "Failed to delete organization."
 msgstr "Failed to delete organization."
 
@@ -10853,7 +10853,7 @@ msgstr "LDAP1"
 msgid "Add container group"
 msgstr "Add container group"
 
-#: components/AppContainer/AppContainer.tsx:164
+#: components/AppContainer/AppContainer.tsx:168
 msgid "Continue"
 msgstr "Continue"
 
@@ -11338,7 +11338,7 @@ msgstr "Choose the type of resource that will be receiving new roles.  For examp
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:48
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:125
 #: screens/Organization/OrganizationList/OrganizationListItem.tsx:39
-#: screens/Organization/shared/OrganizationForm.tsx:120
+#: screens/Organization/shared/OrganizationForm.tsx:104
 #: screens/Project/ProjectList/ProjectListItem.tsx:174
 #: screens/Team/TeamList/TeamListItem.tsx:40
 #: screens/Template/Survey/SurveyListItem.tsx:45
@@ -11513,12 +11513,12 @@ msgid "Failed to delete one or more workflow approval."
 msgstr "Failed to delete one or more workflow approval."
 
 #: screens/Organization/shared/OrganizationForm.tsx:79
-msgid "The maximum number of hosts allowed to be managed by this organization.\n"
-"            Value defaults to 0 which means no limit. Refer to the Ansible\n"
-"            documentation for more details."
-msgstr "The maximum number of hosts allowed to be managed by this organization.\n"
-"            Value defaults to 0 which means no limit. Refer to the Ansible\n"
-"            documentation for more details."
+#~ msgid "The maximum number of hosts allowed to be managed by this organization.\n"
+#~ "            Value defaults to 0 which means no limit. Refer to the Ansible\n"
+#~ "            documentation for more details."
+#~ msgstr "The maximum number of hosts allowed to be managed by this organization.\n"
+#~ "            Value defaults to 0 which means no limit. Refer to the Ansible\n"
+#~ "            documentation for more details."
 
 #: screens/Team/TeamRoles/TeamRolesList.tsx:250
 #: screens/User/UserRoles/UserRolesList.tsx:244
@@ -11532,8 +11532,8 @@ msgid "Workflow Job Template Nodes"
 msgstr "Workflow Job Template Nodes"
 
 #: components/Lookup/HostFilterLookup.tsx:147
-msgid "Insights system ID"
-msgstr "Insights system ID"
+#~ msgid "Insights system ID"
+#~ msgstr "Insights system ID"
 
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:103
 msgid "Authorization Code Expiration"
@@ -11930,7 +11930,7 @@ msgstr "Toggle notification start"
 #: components/JobList/JobListItem.tsx:274
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
-#: components/Lookup/HostFilterLookup.tsx:448
+#: components/Lookup/HostFilterLookup.tsx:444
 #: components/Lookup/HostListItem.tsx:17
 #: components/Lookup/InventoryLookup.tsx:159
 #: components/Lookup/InventoryLookup.tsx:167

@@ -52,7 +52,7 @@ msgstr "ワークフローの承認が見つかりません。"
 msgid "Browse…"
 msgstr "参照…"
 
-#: screens/Setting/Settings.tsx:121
+#: screens/Setting/Settings.tsx:117
 msgid "TACACS+"
 msgstr "TACACS+"
 
@@ -170,7 +170,7 @@ msgid "{forks, plural, one {# fork} other {# forks}}"
 msgstr "{forks, plural, one {# フォーク} other {# フォーク}}"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:220
-#: routeConfig.tsx:119
+#: routeConfig.tsx:111
 #: screens/ActivityStream/ActivityStream.tsx:112
 #: screens/ActivityStream/ActivityStream.tsx:185
 #: screens/Dashboard/Dashboard.tsx:89
@@ -235,7 +235,7 @@ msgstr "実行中の可用性チェック"
 msgid "Failed to copy inventory."
 msgstr "インベントリーをコピーできませんでした。"
 
-#: screens/Setting/Settings.tsx:115
+#: screens/Setting/Settings.tsx:114
 msgid "SAML"
 msgstr "SAML"
 
@@ -272,8 +272,8 @@ msgstr "最後のジョブ更新を読み込めません"
 
 #: routeConfig.tsx:93
 #: screens/SubscriptionUsage/SubscriptionUsage.tsx:17
-msgid "Subscription Usage"
-msgstr "サブスクリプションの使用状況"
+#~ msgid "Subscription Usage"
+#~ msgstr "サブスクリプションの使用状況"
 
 #: components/TemplateList/TemplateListItem.tsx:102
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:159
@@ -669,7 +669,7 @@ msgstr "展開"
 msgid "Promote Child Groups and Hosts"
 msgstr "子グループおよびホストのプロモート"
 
-#: screens/Setting/Settings.tsx:75
+#: screens/Setting/Settings.tsx:74
 msgid "Google OAuth2"
 msgstr "Google OAuth2"
 
@@ -706,12 +706,12 @@ msgstr "1 つ以上のインスタンスグループを削除できませんで�
 msgid "JSON:"
 msgstr "JSON:"
 
-#: routeConfig.tsx:59
+#: routeConfig.tsx:56
 #: screens/ActivityStream/ActivityStream.tsx:167
 msgid "Views"
 msgstr "ビュー"
 
-#: routeConfig.tsx:88
+#: routeConfig.tsx:85
 #: screens/HostMetrics/HostMetrics.tsx:30
 #: screens/HostMetrics/HostMetrics.tsx:66
 #: screens/HostMetrics/HostMetrics.tsx:109
@@ -769,7 +769,7 @@ msgstr "1 から 31 までの日付を選択してください。"
 msgid "No"
 msgstr "不可"
 
-#: screens/Setting/Settings.tsx:109
+#: screens/Setting/Settings.tsx:108
 msgid "Miscellaneous System"
 msgstr "その他のシステム"
 
@@ -869,11 +869,11 @@ msgstr "トークンに戻る"
 msgid "Webhooks: Enable webhook for this template."
 msgstr "Webhook: このテンプレートの webhook を有効にします。"
 
-#: screens/Setting/Settings.tsx:90
+#: screens/Setting/Settings.tsx:89
 msgid "LDAP 5"
 msgstr "LDAP 5"
 
-#: components/Lookup/HostFilterLookup.tsx:390
+#: components/Lookup/HostFilterLookup.tsx:386
 #: components/Lookup/Lookup.tsx:237
 msgid "Lookup modal"
 msgstr "ルックアップモーダル"
@@ -949,7 +949,7 @@ msgstr "実行環境が見つかりません。"
 msgid "Create New Organization"
 msgstr "新規組織の作成"
 
-#: screens/Setting/SettingList.tsx:119
+#: screens/Setting/SettingList.tsx:108
 msgid "View and edit debug options"
 msgstr "デバッグオプションの表示と編集"
 
@@ -1054,8 +1054,8 @@ msgid "and click on Update Revision on Launch."
 msgstr "[起動時にリビジョンを更新]をクリックします。"
 
 #: screens/Setting/Subscription/SubscriptionEdit/EulaStep.tsx:14
-msgid "End User License Agreement"
-msgstr "使用許諾契約書"
+#~ msgid "End User License Agreement"
+#~ msgstr "使用許諾契約書"
 
 #: screens/Project/shared/Project.helptext.tsx:94
 msgid "Delete the local repository in its entirety prior to performing an update. Depending on the size of the repository this may significantly increase the amount of time required to complete an update."
@@ -1104,8 +1104,8 @@ msgid "Health checks are asynchronous tasks. See the"
 msgstr "ヘルスチェックは非同期タスクです。"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:94
-msgid "Cancel subscription edit"
-msgstr "サブスクリプションの編集の取り消し"
+#~ msgid "Cancel subscription edit"
+#~ msgstr "サブスクリプションの編集の取り消し"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:19
 #~ msgid "Prompt for credentials on launch."
@@ -1187,8 +1187,8 @@ msgid "Select a webhook service."
 msgstr "webhook サービスを選択します。"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:80
-msgid "Out of compliance"
-msgstr "コンプライアンス違反"
+#~ msgid "Out of compliance"
+#~ msgstr "コンプライアンス違反"
 
 #: screens/Job/JobOutput/EmptyOutput.tsx:65
 msgid "Failure Explanation:"
@@ -1199,7 +1199,7 @@ msgstr "失敗の説明:"
 msgid "February"
 msgstr "2 月"
 
-#: screens/Setting/Settings.tsx:195
+#: screens/Setting/Settings.tsx:181
 msgid "View all settings"
 msgstr "すべての設定の表示"
 
@@ -1323,7 +1323,7 @@ msgstr "ワークフローの承認"
 msgid "Node types"
 msgstr "ノードタイプ"
 
-#: components/Lookup/HostFilterLookup.tsx:430
+#: components/Lookup/HostFilterLookup.tsx:426
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:246
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:238
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:272
@@ -1362,7 +1362,7 @@ msgstr "Playbook の開始"
 msgid "This workflow job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "このワークフロージョブテンプレートは、現在他のリソースによって使用されています。削除してもよろしいですか?"
 
-#: routeConfig.tsx:129
+#: routeConfig.tsx:121
 #: screens/ActivityStream/ActivityStream.tsx:114
 #: screens/ActivityStream/ActivityStream.tsx:187
 #: screens/Dashboard/Dashboard.tsx:67
@@ -1383,7 +1383,6 @@ msgstr "このワークフロージョブテンプレートは、現在他のリ
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:174
 #: screens/Inventory/SmartInventory.tsx:77
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:109
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:101
 #: util/getRelatedResourceDeleteDetails.ts:155
 msgid "Hosts"
 msgstr "ホスト"
@@ -1477,7 +1476,7 @@ msgstr "管理ジョブの起動"
 msgid "Add existing group"
 msgstr "既存グループの追加"
 
-#: screens/Setting/Settings.tsx:89
+#: screens/Setting/Settings.tsx:88
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
@@ -1647,7 +1646,7 @@ msgstr "新規フェデレーションインベントリーの作成"
 #: components/Lookup/ExecutionEnvironmentLookup.tsx:213
 #: components/Lookup/ExecutionEnvironmentLookup.tsx:220
 #: components/Lookup/HostFilterLookup.tsx:117
-#: components/Lookup/HostFilterLookup.tsx:446
+#: components/Lookup/HostFilterLookup.tsx:442
 #: components/Lookup/HostListItem.tsx:15
 #: components/Lookup/InstanceGroupsLookup.tsx:121
 #: components/Lookup/InstanceGroupsLookup.tsx:132
@@ -1795,7 +1794,7 @@ msgstr "新規フェデレーションインベントリーの作成"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:177
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:127
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:108
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:90
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:87
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:87
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvList.tsx:110
 #: screens/Organization/OrganizationExecEnvList/OrganizationExecEnvListItem.tsx:23
@@ -1805,7 +1804,7 @@ msgstr "新規フェデレーションインベントリーの作成"
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.tsx:68
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.tsx:85
 #: screens/Organization/OrganizationTeams/OrganizationTeamListItem.tsx:24
-#: screens/Organization/shared/OrganizationForm.tsx:63
+#: screens/Organization/shared/OrganizationForm.tsx:61
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:177
 #: screens/Project/ProjectList/ProjectList.tsx:186
 #: screens/Project/ProjectList/ProjectList.tsx:221
@@ -1860,8 +1859,8 @@ msgid "Host Config Key"
 msgstr "ホスト設定キー"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:121
-msgid "Hosts remaining"
-msgstr "残りのホスト"
+#~ msgid "Hosts remaining"
+#~ msgstr "残りのホスト"
 
 #: components/About/About.tsx:52
 msgid "Ctrl IQ, Inc."
@@ -1898,8 +1897,8 @@ msgid "Selected items list."
 msgstr "選択された項目のリスト。"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:100
-msgid "{automatedInstancesCount} since {automatedInstancesSinceDateTime}"
-msgstr "{automatedInstancesSinceDateTime} 以来 {automatedInstancesCount}"
+#~ msgid "{automatedInstancesCount} since {automatedInstancesSinceDateTime}"
+#~ msgstr "{automatedInstancesSinceDateTime} 以来 {automatedInstancesCount}"
 
 #: screens/Host/HostList/HostListItem.tsx:58
 #: screens/Inventory/InventoryHosts/InventoryHostItem.tsx:91
@@ -1989,7 +1988,7 @@ msgstr "アクション"
 msgid "Event summary not available"
 msgstr "イベントの概要はありません"
 
-#: routeConfig.tsx:63
+#: routeConfig.tsx:60
 #: screens/Dashboard/Dashboard.tsx:28
 #: screens/Dashboard/Dashboard.tsx:60
 msgid "Dashboard"
@@ -2022,7 +2021,6 @@ msgstr "キー"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:355
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:434
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:563
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:94
 #: screens/User/shared/UserForm.tsx:115
 #: screens/User/UserDetail/UserDetail.tsx:79
 #: screens/User/UserList/UserList.tsx:118
@@ -2081,7 +2079,7 @@ msgstr "ワークフローの再起動"
 msgid "This project is currently on sync and cannot be clicked until sync process completed"
 msgstr "このプロジェクトは現在同期中であり、同期プロセスが完了するまでクリックできません"
 
-#: routeConfig.tsx:157
+#: routeConfig.tsx:149
 #: screens/ActivityStream/ActivityStream.tsx:199
 msgid "Administration"
 msgstr "管理"
@@ -2108,8 +2106,8 @@ msgid "View Miscellaneous System settings"
 msgstr "その他のシステム設定の表示"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:61
-msgid "Select your Ansible Automation Platform subscription to use."
-msgstr "使用する Ansible Automation Platform サブスクリプションを選択します。"
+#~ msgid "Select your Ansible Automation Platform subscription to use."
+#~ msgstr "使用する Ansible Automation Platform サブスクリプションを選択します。"
 
 #: screens/Credential/shared/TypeInputsSubForm.tsx:30
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:61
@@ -2175,7 +2173,7 @@ msgstr "ロールを正しく割り当てられませんでした"
 msgid "Failed to disassociate one or more teams."
 msgstr "1 つ以上のチームの関連付けを解除できませんでした。"
 
-#: components/AppContainer/AppContainer.tsx:61
+#: components/AppContainer/AppContainer.tsx:65
 msgid "brand logo"
 msgstr "ブランドロゴ"
 
@@ -2190,7 +2188,6 @@ msgstr "{0, plural, one {This credential type is currently being used by some cr
 
 #: screens/Login/Login.tsx:342
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:155
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:103
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
 msgid "Password"
@@ -2248,8 +2245,8 @@ msgid "View all Templates."
 msgstr "すべてのテンプレートを表示します。"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:160
-msgid "Subscription type"
-msgstr "サブスクリプションタイプ"
+#~ msgid "Subscription type"
+#~ msgstr "サブスクリプションタイプ"
 
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:85
 msgid "Select a row to remove"
@@ -2326,8 +2323,8 @@ msgid "IRC"
 msgstr "IRC"
 
 #: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:310
-msgid "Subscription capacity"
-msgstr "サブスクリプション容量"
+#~ msgid "Subscription capacity"
+#~ msgstr "サブスクリプション容量"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/DeleteAllNodesModal.tsx:40
 msgid "Remove All Nodes"
@@ -2397,7 +2394,7 @@ msgstr ""
 msgid "The project is currently syncing and the revision will be available after the sync is complete."
 msgstr "プロジェクトは現在同期中であり、同期が完了するとリビジョンが利用可能になります。"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:170
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:158
 msgid "Delete Organization"
 msgstr "組織の削除"
 
@@ -2406,8 +2403,8 @@ msgid "This schedule is missing an Inventory"
 msgstr "このスケジュールにはインベントリーがありません"
 
 #: screens/Setting/SettingList.tsx:108
-msgid "View and edit your subscription information"
-msgstr "サブスクリプション情報の表示および編集"
+#~ msgid "View and edit your subscription information"
+#~ msgstr "サブスクリプション情報の表示および編集"
 
 #. placeholder {0}: role.name
 #: components/ResourceAccessList/ResourceAccessListItem.tsx:79
@@ -2423,7 +2420,7 @@ msgstr "IRC サーバーアドレス"
 msgid "Management job launch error"
 msgstr "管理ジョブの起動エラー"
 
-#: components/Lookup/HostFilterLookup.tsx:313
+#: components/Lookup/HostFilterLookup.tsx:309
 #: components/Lookup/Lookup.tsx:182
 msgid "Search"
 msgstr "検索"
@@ -2432,7 +2429,7 @@ msgstr "検索"
 msgid "confirm edit login redirect"
 msgstr "ログインリダイレクトの編集の確認"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:123
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:111
 msgid "The Instance Groups for this Organization to run on."
 msgstr "この組織を実行するインスタンスグループ。"
 
@@ -2553,12 +2550,12 @@ msgid "Job Slice"
 msgstr "ジョブスライス"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:84
-msgid "Red Hat subscription manifest"
-msgstr "Red Hat サブスクリプションマニュフェスト"
+#~ msgid "Red Hat subscription manifest"
+#~ msgstr "Red Hat サブスクリプションマニュフェスト"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:209
-msgid "If you are ready to upgrade or renew, please <0>contact us.</0>"
-msgstr "アップグレードまたは更新の準備ができましたら、<0>お問い合わせください</0>。"
+#~ msgid "If you are ready to upgrade or renew, please <0>contact us.</0>"
+#~ msgstr "アップグレードまたは更新の準備ができましたら、<0>お問い合わせください</0>。"
 
 #: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:174
 msgid "Enable log system tracking facts individually"
@@ -2635,7 +2632,7 @@ msgstr "複数選択"
 msgid "Zoom in"
 msgstr "ズームイン"
 
-#: routeConfig.tsx:181
+#: routeConfig.tsx:173
 #: screens/ActivityStream/ActivityStream.tsx:120
 #: screens/ActivityStream/ActivityStream.tsx:207
 #: screens/InstanceGroup/InstanceGroup.tsx:81
@@ -2651,7 +2648,7 @@ msgstr "ズームイン"
 msgid "Instances"
 msgstr "インスタンス"
 
-#: components/Lookup/HostFilterLookup.tsx:382
+#: components/Lookup/HostFilterLookup.tsx:378
 msgid "Please select an organization before editing the host filter"
 msgstr "組織を選択してからホストフィルターを編集します。"
 
@@ -2712,7 +2709,7 @@ msgstr "1 つ以上のホストの関連付けを解除できませんでした�
 msgid "JOB ID:"
 msgstr "ジョブ ID:"
 
-#: routeConfig.tsx:171
+#: routeConfig.tsx:163
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:91
 msgid "Management Jobs"
 msgstr "管理ジョブ"
@@ -2752,8 +2749,8 @@ msgid "Host Started"
 msgstr "ホストの開始"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:64
-msgid "Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to <0>subscription allocations</0> on the Red Hat Customer Portal."
-msgstr "サブスクリプションを含む Red Hat Subscription Manifest をアップロードします。サブスクリプションマニフェストを生成するには、Red Hat カスタマーポータルの <0>サブスクリプション割り当て</0> にアクセスします。"
+#~ msgid "Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to <0>subscription allocations</0> on the Red Hat Customer Portal."
+#~ msgstr "サブスクリプションを含む Red Hat Subscription Manifest をアップロードします。サブスクリプションマニフェストを生成するには、Red Hat カスタマーポータルの <0>サブスクリプション割り当て</0> にアクセスします。"
 
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:98
 #: screens/Application/Applications.tsx:94
@@ -2854,7 +2851,7 @@ msgstr "次のグループを削除する権限がありません: {itemsUnableT
 msgid "HTTP Method"
 msgstr "HTTP メソッド"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:107
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:95
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "この組織内のジョブに使用される実行環境。プロジェクト、ジョブテンプレート、またはワークフローのレベルで実行環境が明示的に割り当てられていない場合のフォールバックとして使用されます。"
 
@@ -2864,8 +2861,8 @@ msgid "Notification type"
 msgstr "通知タイプ"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:88
-msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>User Guide</1>."
-msgstr "サブスクリプションマニフェストは、Red Hat サブスクリプションのエクスポートです。サブスクリプションマニフェストを生成するには、<0>access.redhat.com</0> にアクセスしてください。詳細については、<1>ユーザーガイド</1>を参照してください。"
+#~ msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>User Guide</1>."
+#~ msgstr "サブスクリプションマニフェストは、Red Hat サブスクリプションのエクスポートです。サブスクリプションマニフェストを生成するには、<0>access.redhat.com</0> にアクセスしてください。詳細については、<1>ユーザーガイド</1>を参照してください。"
 
 #: screens/User/UserToken/UserToken.tsx:103
 msgid "View Tokens"
@@ -3034,7 +3031,6 @@ msgstr "Azure AD の設定"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:323
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:368
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:426
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:171
 msgid "True"
 msgstr "True"
 
@@ -3079,7 +3075,7 @@ msgstr "展開"
 msgid "Service account JSON file"
 msgstr "サービスアカウント JSON ファイル"
 
-#: screens/Organization/shared/OrganizationForm.tsx:90
+#: screens/Organization/shared/OrganizationForm.tsx:74
 msgid "Select the Instance Groups for this Organization to run on."
 msgstr "この組織を実行するインスタンスグループを選択します。"
 
@@ -3127,7 +3123,7 @@ msgstr "ホストの失敗"
 
 #: components/AddRole/AddResourceRole.tsx:221
 #: components/AddRole/AddResourceRole.tsx:222
-#: routeConfig.tsx:150
+#: routeConfig.tsx:142
 #: screens/ActivityStream/ActivityStream.tsx:117
 #: screens/ActivityStream/ActivityStream.tsx:196
 #: screens/Organization/Organization.tsx:139
@@ -3221,11 +3217,11 @@ msgstr "このインベントリーソースは、現在それに依存してい
 msgid "Deny"
 msgstr "拒否"
 
-#: screens/Setting/Settings.tsx:78
+#: screens/Setting/Settings.tsx:77
 msgid "Generic OIDC"
 msgstr "汎用 OIDC"
 
-#: screens/Setting/Settings.tsx:86
+#: screens/Setting/Settings.tsx:85
 msgid "LDAP 1"
 msgstr "LDAP 1"
 
@@ -3369,7 +3365,7 @@ msgstr "Less than or equal to の比較条件"
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:164
 #: screens/Job/JobDetail/JobDetail.tsx:655
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:493
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:176
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:374
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:127
 #: screens/Team/TeamDetail/TeamDetail.tsx:77
@@ -3417,8 +3413,8 @@ msgid "Read"
 msgstr "読み込み"
 
 #: screens/Setting/Subscription/Subscription.tsx:27
-msgid "View Settings"
-msgstr "設定の表示"
+#~ msgid "View Settings"
+#~ msgstr "設定の表示"
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:153
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:156
@@ -3493,7 +3489,7 @@ msgid "Select Hosts"
 msgstr "ホストの選択"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:93
-#: screens/Setting/Settings.tsx:63
+#: screens/Setting/Settings.tsx:62
 msgid "GitHub Team"
 msgstr "GitHub チーム"
 
@@ -3519,7 +3515,7 @@ msgstr "GitHub チーム"
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:139
 #: screens/Job/JobDetail/JobDetail.tsx:579
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:446
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:110
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:326
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:351
@@ -3603,7 +3599,7 @@ msgstr "スマートインベントリーホストの詳細の表示"
 msgid "Sign in with Google"
 msgstr "Google でサインイン"
 
-#: contexts/Config.tsx:238
+#: contexts/Config.tsx:204
 msgid "Failed to retrieve configuration."
 msgstr "構成を取得できませんでした。"
 
@@ -3634,7 +3630,7 @@ msgstr "このアクションにより、このユーザーのすべてのロー
 #: components/FormActionGroup/FormActionGroup.tsx:39
 #: components/FormActionGroup/FormActionGroup.tsx:48
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
-#: components/Lookup/HostFilterLookup.tsx:411
+#: components/Lookup/HostFilterLookup.tsx:407
 #: components/Lookup/Lookup.tsx:259
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:248
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:47
@@ -3658,7 +3654,6 @@ msgstr "このアクションにより、このユーザーのすべてのロー
 #: screens/Setting/shared/SharedFields.tsx:160
 #: screens/Setting/shared/SharedFields.tsx:166
 #: screens/Setting/shared/SharedFields.tsx:370
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:97
 #: screens/Team/TeamRoles/TeamRolesList.tsx:234
 #: screens/Team/TeamRoles/TeamRolesList.tsx:237
 #: screens/Template/Survey/SurveyList.tsx:95
@@ -3697,7 +3692,7 @@ msgid "Sync all"
 msgstr "すべてを同期"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:71
-#: screens/Setting/Settings.tsx:53
+#: screens/Setting/Settings.tsx:52
 msgid "Azure AD Tenant"
 msgstr "Azure AD Tenant"
 
@@ -3726,7 +3721,7 @@ msgstr "最小長"
 msgid "This field must be a number and have a value less than {max}"
 msgstr "このフィールドは数値で、{max} 未満の値である必要があります"
 
-#: components/Lookup/HostFilterLookup.tsx:369
+#: components/Lookup/HostFilterLookup.tsx:365
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:122
 msgid "Smart host filter"
 msgstr "スマートホストフィルター"
@@ -3805,7 +3800,7 @@ msgstr "このフィールドは数値で、{0} から {1} までの値である
 msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
 msgstr "有効にすると、サポートされている場合に Ansible タスクによって行われた変更を表示します。これは Ansible の --diff モードと同等です。"
 
-#: components/Lookup/HostFilterLookup.tsx:432
+#: components/Lookup/HostFilterLookup.tsx:428
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:248
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:240
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:274
@@ -3917,8 +3912,8 @@ msgid "Workflow Job Templates"
 msgstr "ワークフロージョブテンプレート"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:155
-msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
-msgstr "ファイル形式が無効です。有効な Red Hat サブスクリプションマニフェストをアップロードしてください。"
+#~ msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
+#~ msgstr "ファイル形式が無効です。有効な Red Hat サブスクリプションマニフェストをアップロードしてください。"
 
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:120
 msgid "Toggle Legend"
@@ -3981,8 +3976,8 @@ msgstr "なし"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:73
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:74
-msgid "Automation Analytics"
-msgstr "自動化アナリティクス"
+#~ msgid "Automation Analytics"
+#~ msgstr "自動化アナリティクス"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:374
 msgid "Local Time Zone"
@@ -3998,7 +3993,7 @@ msgstr "デフォルトの応答"
 msgid "Delete Job Template"
 msgstr "ジョブテンプレートの削除"
 
-#: routeConfig.tsx:196
+#: routeConfig.tsx:188
 #: screens/TopologyView/TopologyView.tsx:16
 #: screens/TopologyView/TopologyView.tsx:46
 msgid "Topology View"
@@ -4107,8 +4102,8 @@ msgstr "認証情報の削除"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:471
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:473
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:160
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:159
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:163
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:347
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:113
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:117
@@ -4124,15 +4119,14 @@ msgstr "認証情報の削除"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:151
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:155
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:139
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:143
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:100
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:95
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:99
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:229
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:100
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:105
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:92
@@ -4309,8 +4303,8 @@ msgid "Select a metric"
 msgstr "メトリクスの選択"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:270
-msgid "Save successful!"
-msgstr "正常に保存が実行されました!"
+#~ msgid "Save successful!"
+#~ msgstr "正常に保存が実行されました!"
 
 #: screens/User/Users.tsx:39
 msgid "Create user token"
@@ -4445,7 +4439,7 @@ msgid "Edit Template"
 msgstr "テンプレートの編集"
 
 #: components/Lookup/ApplicationLookup.tsx:114
-#: routeConfig.tsx:186
+#: routeConfig.tsx:178
 #: screens/Application/Applications.tsx:24
 #: screens/Application/Applications.tsx:34
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:109
@@ -4477,7 +4471,7 @@ msgstr "プロジェクトリビジョンの更新"
 msgid "Optionally select the credential to use to send status updates back to the webhook service."
 msgstr "(任意) ステータス更新を webhook サービスに送り返すために使用する認証情報を選択します。"
 
-#: screens/Setting/Settings.tsx:112
+#: screens/Setting/Settings.tsx:111
 msgid "RADIUS"
 msgstr "RADIUS"
 
@@ -4554,7 +4548,7 @@ msgstr "組織の詳細の表示"
 #: components/Schedule/ScheduleToggle/ScheduleToggle.tsx:86
 #: components/Schedule/shared/SchedulePromptableFields.tsx:90
 #: components/TemplateList/TemplateList.tsx:311
-#: contexts/Config.tsx:234
+#: contexts/Config.tsx:200
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:145
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:174
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:306
@@ -4598,7 +4592,7 @@ msgstr "組織の詳細の表示"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:501
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:237
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:190
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:185
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:173
 #: screens/Organization/OrganizationList/OrganizationList.tsx:193
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:382
 #: screens/Project/ProjectList/ProjectList.tsx:294
@@ -4790,14 +4784,14 @@ msgstr "リンクの編集"
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:97
 #: screens/Organization/shared/OrganizationForm.tsx:78
-msgid "Max Hosts"
-msgstr "最大ホスト数"
+#~ msgid "Max Hosts"
+#~ msgstr "最大ホスト数"
 
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:140
 msgid "Oragnization"
 msgstr "オラグナイゼーション"
 
-#: components/AppContainer/AppContainer.tsx:61
+#: components/AppContainer/AppContainer.tsx:65
 msgid "{brandName} logo"
 msgstr "{brandName} ロゴ"
 
@@ -4814,8 +4808,8 @@ msgid "per page"
 msgstr "項目/ページ"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:156
-msgid "Upload a .zip file"
-msgstr ".zip ファイルをアップロードする"
+#~ msgid "Upload a .zip file"
+#~ msgstr ".zip ファイルをアップロードする"
 
 #: screens/Setting/SAML/SAML.tsx:26
 msgid "View SAML settings"
@@ -4861,7 +4855,7 @@ msgstr "ワークフロー承認メッセージ"
 
 #: components/Schedule/ScheduleList/ScheduleList.tsx:197
 #: components/Schedule/ScheduleList/ScheduleList.tsx:269
-#: routeConfig.tsx:73
+#: routeConfig.tsx:70
 #: screens/ActivityStream/ActivityStream.tsx:108
 #: screens/ActivityStream/ActivityStream.tsx:173
 #: screens/Inventory/Inventories.tsx:130
@@ -4895,7 +4889,7 @@ msgstr "システム警告"
 
 #: components/AdHocCommands/AdHocExecutionEnvironmentStep.tsx:114
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.tsx:108
-#: routeConfig.tsx:191
+#: routeConfig.tsx:183
 #: screens/ActivityStream/ActivityStream.tsx:123
 #: screens/ActivityStream/ActivityStream.tsx:215
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:127
@@ -5079,8 +5073,8 @@ msgid "View all Instances."
 msgstr "すべてのインスタンスを表示します。"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:210
-msgid "Subscription Management"
-msgstr "サブスクリプション管理"
+#~ msgid "Subscription Management"
+#~ msgstr "サブスクリプション管理"
 
 #: components/Lookup/PeersLookup.tsx:153
 #: components/Lookup/PeersLookup.tsx:160
@@ -5125,7 +5119,7 @@ msgstr "折りたたむ"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:129
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:566
 #: components/TemplateList/TemplateListItem.tsx:325
-#: routeConfig.tsx:104
+#: routeConfig.tsx:96
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:272
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:124
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
@@ -5157,7 +5151,6 @@ msgstr "状態の選択"
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:178
 #: components/Schedule/shared/ScheduleFormFields.tsx:155
 #: components/Schedule/shared/ScheduleFormFields.tsx:223
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:225
 msgid "Month"
 msgstr "月"
 
@@ -5171,7 +5164,7 @@ msgstr "月"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:543
 #: components/TemplateList/TemplateListItem.tsx:301
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:152
-#: routeConfig.tsx:114
+#: routeConfig.tsx:106
 #: screens/ActivityStream/ActivityStream.tsx:111
 #: screens/ActivityStream/ActivityStream.tsx:184
 #: screens/Credential/CredentialList/CredentialList.tsx:195
@@ -5223,8 +5216,8 @@ msgid "Select a row to approve"
 msgstr "承認する行を選択"
 
 #: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:177
-msgid "Unique Hosts"
-msgstr "ユニークなホスト"
+#~ msgid "Unique Hosts"
+#~ msgstr "ユニークなホスト"
 
 #: screens/Job/JobDetail/JobDetail.tsx:651
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:247
@@ -5279,7 +5272,7 @@ msgstr "3 月"
 msgid "Image"
 msgstr "イメージ"
 
-#: components/Lookup/HostFilterLookup.tsx:393
+#: components/Lookup/HostFilterLookup.tsx:389
 msgid "Perform a search to define a host filter"
 msgstr "検索を実行して、ホストフィルターを定義します。"
 
@@ -5409,8 +5402,8 @@ msgstr "チームに戻る"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:54
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:66
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:228
-msgid "Submit"
-msgstr "送信"
+#~ msgid "Submit"
+#~ msgstr "送信"
 
 #. placeholder {0}: forks ?? 0
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:278
@@ -5465,7 +5458,6 @@ msgstr "頻度の詳細"
 #: components/LaunchPrompt/LaunchPrompt.tsx:182
 #: components/Schedule/shared/SchedulePromptableFields.tsx:154
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:67
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:76
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:234
 msgid "Next"
 msgstr "次へ"
@@ -5565,7 +5557,7 @@ msgid "View Credential Details"
 msgstr "認証情報の詳細の表示"
 
 #: components/NotificationList/NotificationList.tsx:221
-#: routeConfig.tsx:166
+#: routeConfig.tsx:158
 #: screens/Inventory/Inventories.tsx:134
 #: screens/Inventory/InventorySource/InventorySource.tsx:121
 #: screens/ManagementJob/ManagementJob.tsx:129
@@ -5627,7 +5619,6 @@ msgstr "過去 2 週間"
 #: components/LaunchPrompt/LaunchPrompt.tsx:180
 #: components/Schedule/shared/SchedulePromptableFields.tsx:152
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:91
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:87
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:91
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:94
 msgid "Back"
@@ -5690,8 +5681,8 @@ msgid "Click to rearrange the order of the survey questions"
 msgstr "クリックして、 Survey の質問の順序を並べ替えます"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:38
-msgid "Subscription Details"
-msgstr "サブスクリプションの詳細"
+#~ msgid "Subscription Details"
+#~ msgstr "サブスクリプションの詳細"
 
 #: components/Schedule/shared/UnsupportedRRuleAlert.tsx:22
 msgid "This schedule uses complex rules that are not supported in the\n"
@@ -5752,7 +5743,7 @@ msgstr "実行環境の編集"
 msgid "Management job"
 msgstr "管理ジョブ"
 
-#: components/Lookup/HostFilterLookup.tsx:422
+#: components/Lookup/HostFilterLookup.tsx:418
 msgid "Searching by ansible_facts requires special syntax. Refer to the"
 msgstr "ansible_facts による検索には特別な構文が必要です。詳細は、以下を参照してください。"
 
@@ -5762,7 +5753,7 @@ msgstr "リンク状態のタイプ"
 
 #: components/TemplateList/TemplateList.tsx:212
 #: components/TemplateList/TemplateList.tsx:275
-#: routeConfig.tsx:109
+#: routeConfig.tsx:101
 #: screens/ActivityStream/ActivityStream.tsx:110
 #: screens/ActivityStream/ActivityStream.tsx:182
 #: screens/ExecutionEnvironment/ExecutionEnvironment.tsx:77
@@ -5824,7 +5815,7 @@ msgstr "ソースコントロールのブランチ"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:236
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:533
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:289
-#: routeConfig.tsx:176
+#: routeConfig.tsx:168
 #: screens/ActivityStream/ActivityStream.tsx:121
 #: screens/ActivityStream/ActivityStream.tsx:209
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:109
@@ -5834,7 +5825,7 @@ msgstr "ソースコントロールのブランチ"
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:242
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:120
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:250
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:122
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:110
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:424
 #: util/getRelatedResourceDeleteDetails.ts:316
 msgid "Instance Groups"
@@ -5895,12 +5886,12 @@ msgid "{0} more"
 msgstr "{0} 以上"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:64
-msgid "This data is used to enhance\n"
-"                   future releases of the Tower Software and help\n"
-"                   streamline customer experience and success."
-msgstr "このデータは、Tower ソフトウェアの将来の\n"
-"                   リリースを強化し、顧客体験と成功の\n"
-"                   合理化を支援するために使用されます。"
+#~ msgid "This data is used to enhance\n"
+#~ "                   future releases of the Tower Software and help\n"
+#~ "                   streamline customer experience and success."
+#~ msgstr "このデータは、Tower ソフトウェアの将来の\n"
+#~ "                   リリースを強化し、顧客体験と成功の\n"
+#~ "                   合理化を支援するために使用されます。"
 
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:245
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:174
@@ -5974,7 +5965,7 @@ msgid "Survey"
 msgstr "Survey"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:261
-#: routeConfig.tsx:140
+#: routeConfig.tsx:132
 #: screens/ActivityStream/ActivityStream.tsx:115
 #: screens/ActivityStream/ActivityStream.tsx:193
 #: screens/Organization/OrganizationList/OrganizationList.tsx:115
@@ -6013,8 +6004,8 @@ msgid "Delete Workflow Approval"
 msgstr "ワークフロー承認の削除"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:129
-msgid "Hosts deleted"
-msgstr "ホストを削除しました"
+#~ msgid "Hosts deleted"
+#~ msgstr "ホストを削除しました"
 
 #: screens/TopologyView/Header.tsx:106
 #: screens/TopologyView/Header.tsx:109
@@ -6051,8 +6042,8 @@ msgid "{interval, plural, one {# month} other {# months}}"
 msgstr "{interval, plural, one {# か月} other {# か月}}"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:109
-msgid "Last recalculation date:"
-msgstr "最終再計算日："
+#~ msgid "Last recalculation date:"
+#~ msgstr "最終再計算日："
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:130
 #: components/AdHocCommands/AdHocDetailsStep.tsx:182
@@ -6129,16 +6120,16 @@ msgstr "スキップタグは、大規模な playbook があり、play または
 msgid "View User Details"
 msgstr "ユーザーの詳細の表示"
 
-#: routeConfig.tsx:78
+#: routeConfig.tsx:75
 #: screens/ActivityStream/ActivityStream.tsx:34
 #: screens/ActivityStream/ActivityStream.tsx:135
-#: screens/Setting/Settings.tsx:46
+#: screens/Setting/Settings.tsx:45
 msgid "Activity Stream"
 msgstr "アクティビティーストリーム"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:185
-msgid "Expires on UTC"
-msgstr "有効期限 (UTC)"
+#~ msgid "Expires on UTC"
+#~ msgstr "有効期限 (UTC)"
 
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:246
 #: components/Lookup/MultiCredentialsLookup.tsx:186
@@ -6337,7 +6328,7 @@ msgstr "構築されたインベントリプラグインの使用方法"
 msgid "This field must not contain spaces"
 msgstr "このフィールドにスペースを含めることはできません"
 
-#: routeConfig.tsx:161
+#: routeConfig.tsx:153
 #: screens/ActivityStream/ActivityStream.tsx:118
 #: screens/ActivityStream/ActivityStream.tsx:202
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:115
@@ -6506,8 +6497,8 @@ msgstr "グループ"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:48
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:56
-msgid "Request subscription"
-msgstr "サブスクリプションの要求"
+#~ msgid "Request subscription"
+#~ msgstr "サブスクリプションの要求"
 
 #: components/PromptDetail/PromptProjectDetail.tsx:152
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:272
@@ -6550,7 +6541,6 @@ msgstr "ジョブ設定の表示"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:349
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:151
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:343
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:225
 #: screens/User/UserDetail/UserDetail.tsx:122
 msgid "edit"
 msgstr "編集"
@@ -6573,8 +6563,8 @@ msgid "Template not found."
 msgstr "テンプレートが見つかりません。"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:170
-msgid "Trial"
-msgstr "トライアル"
+#~ msgid "Trial"
+#~ msgstr "トライアル"
 
 #: screens/ActivityStream/ActivityStream.tsx:246
 #: screens/ActivityStream/ActivityStream.tsx:252
@@ -6689,7 +6679,7 @@ msgstr "セクションを折りたたむ"
 msgid "More information for {label}"
 msgstr "{label} の詳細情報"
 
-#: routeConfig.tsx:136
+#: routeConfig.tsx:128
 #: screens/ActivityStream/ActivityStream.tsx:190
 #: screens/Credential/Credential.tsx:90
 #: screens/Credential/Credentials.tsx:32
@@ -6722,8 +6712,8 @@ msgid "User Roles"
 msgstr "ユーザーロール"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:211
-msgid "{brandName} Subscription"
-msgstr "{brandName} サブスクリプション"
+#~ msgid "{brandName} Subscription"
+#~ msgstr "{brandName} サブスクリプション"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:211
 msgid "min"
@@ -6844,7 +6834,7 @@ msgstr "認証情報が見つかりません。"
 msgid "{minutes} min {seconds} sec"
 msgstr "{minutes} 分 {seconds} 秒"
 
-#: components/AppContainer/AppContainer.tsx:152
+#: components/AppContainer/AppContainer.tsx:156
 msgid "Your session is about to expire"
 msgstr "セッションの有効期限が近づいています"
 
@@ -6860,8 +6850,8 @@ msgstr "API トークン"
 msgid "Control the level of output Ansible will produce for inventory source update jobs."
 msgstr "Ansibleがインベントリソースアップデートジョブのために生成する出力レベルを制御します。"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:130
-#: screens/Organization/shared/OrganizationForm.tsx:108
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:118
+#: screens/Organization/shared/OrganizationForm.tsx:92
 msgid "Galaxy Credentials"
 msgstr "Galaxy 認証情報"
 
@@ -6983,7 +6973,7 @@ msgid "Note: This field assumes the remote name is \"origin\"."
 msgstr "注記: このフィールドは、リモート名が「origin」であることを前提としています。"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:83
-#: screens/Setting/Settings.tsx:57
+#: screens/Setting/Settings.tsx:56
 msgid "GitHub Default"
 msgstr "GitHub のデフォルト"
 
@@ -7051,8 +7041,8 @@ msgstr "ワークフロージョブテンプレート"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:95
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:144
-msgid "Past three years"
-msgstr "3年"
+#~ msgid "Past three years"
+#~ msgstr "3年"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.tsx:42
 msgid "Execute when the parent node results in a failure state."
@@ -7071,7 +7061,7 @@ msgstr "2 (より詳細)"
 #~ msgid "Webhook credential for this workflow job template."
 #~ msgstr "このワークフロージョブテンプレートの Webhook 認証情報。"
 
-#: components/Lookup/HostFilterLookup.tsx:372
+#: components/Lookup/HostFilterLookup.tsx:368
 msgid "Populate the hosts for this inventory by using a search\n"
 "              filter. Example: ansible_facts__ansible_distribution:\"RedHat\".\n"
 "              Refer to the documentation for further syntax and\n"
@@ -7097,8 +7087,8 @@ msgstr "日付"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:35
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:218
-msgid "User and Automation Analytics"
-msgstr "ユーザーおよび自動化アナリティクス"
+#~ msgid "User and Automation Analytics"
+#~ msgstr "ユーザーおよび自動化アナリティクス"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:46
 msgid "Privilege escalation: If enabled, run this playbook as an administrator."
@@ -7134,8 +7124,8 @@ msgid "Failed to load related groups."
 msgstr "関連グループの読み込みに失敗しました。"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:102
-msgid "Subscription Compliance"
-msgstr "サブスクリプションのコンプライアンス"
+#~ msgid "Subscription Compliance"
+#~ msgstr "サブスクリプションのコンプライアンス"
 
 #: util/validators.ts:97
 msgid "This field must be a number and have a value greater than {min}"
@@ -7282,8 +7272,8 @@ msgid "Delete the project before syncing"
 msgstr "プロジェクトを削除してから同期する"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:155
-msgid "Unlimited"
-msgstr "制限なし"
+#~ msgid "Unlimited"
+#~ msgstr "制限なし"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:102
 msgid "File, directory or script"
@@ -7294,7 +7284,7 @@ msgstr "ファイル、ディレクトリー、またはスクリプト"
 msgid "Resource type"
 msgstr "リソースタイプ"
 
-#: screens/Organization/shared/OrganizationForm.tsx:100
+#: screens/Organization/shared/OrganizationForm.tsx:84
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "この組織内のジョブに使用される実行環境。これは、実行環境がプロジェクト、ジョブテンプレート、またはワークフローレベルで明示的に割り当てられていない場合にフォールバックとして使用されます。"
 
@@ -7342,8 +7332,8 @@ msgstr "アプリケーション名"
 msgid "Cache timeout (seconds)"
 msgstr "キャッシュのタイムアウト (秒)"
 
-#: components/AppContainer/AppContainer.tsx:102
-#: components/AppContainer/AppContainer.tsx:172
+#: components/AppContainer/AppContainer.tsx:106
+#: components/AppContainer/AppContainer.tsx:176
 #: components/AppContainer/PageHeaderToolbar.tsx:223
 msgid "Logout"
 msgstr "ログアウト"
@@ -7421,7 +7411,7 @@ msgstr "同期"
 #: components/HostForm/HostForm.tsx:147
 #: components/Lookup/ApplicationLookup.tsx:123
 #: components/Lookup/ApplicationLookup.tsx:141
-#: components/Lookup/HostFilterLookup.tsx:447
+#: components/Lookup/HostFilterLookup.tsx:443
 #: components/Lookup/HostListItem.tsx:16
 #: components/NotificationList/NotificationList.tsx:230
 #: components/PromptDetail/PromptDetail.tsx:170
@@ -7473,9 +7463,9 @@ msgstr "同期"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:161
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:126
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:116
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:94
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:91
 #: screens/Organization/OrganizationList/OrganizationList.tsx:125
-#: screens/Organization/shared/OrganizationForm.tsx:71
+#: screens/Organization/shared/OrganizationForm.tsx:69
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:178
 #: screens/Project/ProjectList/ProjectList.tsx:191
 #: screens/Project/ProjectList/ProjectListItem.tsx:266
@@ -7579,7 +7569,7 @@ msgid "Edit Team"
 msgstr "チームの編集"
 
 #: screens/Setting/SettingList.tsx:96
-#: screens/Setting/Settings.tsx:124
+#: screens/Setting/Settings.tsx:120
 msgid "User Interface"
 msgstr "ユーザーインターフェース"
 
@@ -7636,8 +7626,8 @@ msgid "Sign in with SAML {samlIDP}"
 msgstr "SAML {samlIDP} でサインイン"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:126
-msgid "Browse"
-msgstr "参照"
+#~ msgid "Browse"
+#~ msgstr "参照"
 
 #: components/NotificationList/NotificationList.tsx:237
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:133
@@ -7722,7 +7712,6 @@ msgstr "取り消しジョブの確認"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:323
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:368
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:426
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:171
 msgid "False"
 msgstr "False"
 
@@ -7765,8 +7754,8 @@ msgid "Start date/time"
 msgstr "開始日時"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:37
-msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>this Tower documentation page</0>. Uncheck the following boxes to disable this feature."
-msgstr "デフォルトでは、サービスの使用状況に関する分析データを収集し、Red Hat に送信します。サービスによって収集されるデータには 2 つのカテゴリーがあります。詳細については、<0>この Tower ドキュメントページ</0>を参照してください。この機能を無効にするには、次のボックスのチェックを外してください。"
+#~ msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>this Tower documentation page</0>. Uncheck the following boxes to disable this feature."
+#~ msgstr "デフォルトでは、サービスの使用状況に関する分析データを収集し、Red Hat に送信します。サービスによって収集されるデータには 2 つのカテゴリーがあります。詳細については、<0>この Tower ドキュメントページ</0>を参照してください。この機能を無効にするには、次のボックスのチェックを外してください。"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:240
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:240
@@ -7782,8 +7771,8 @@ msgid "Sign in with GitHub Organizations"
 msgstr "GitHub 組織でサインイン"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:279
-msgid "Redirecting to subscription detail"
-msgstr "サブスクリプションの詳細へのリダイレクト"
+#~ msgid "Redirecting to subscription detail"
+#~ msgstr "サブスクリプションの詳細へのリダイレクト"
 
 #: screens/Job/Job.helptext.tsx:17
 #: screens/Template/shared/JobTemplate.helptext.tsx:20
@@ -7861,8 +7850,8 @@ msgid "Host OK"
 msgstr "ホスト OK"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:196
-msgid "Days remaining"
-msgstr "残りの日数"
+#~ msgid "Days remaining"
+#~ msgstr "残りの日数"
 
 #: screens/Setting/AzureAD/AzureAD.tsx:45
 msgid "View Azure AD settings"
@@ -7894,11 +7883,10 @@ msgstr "{0, plural, one {このインスタンスは現在、他のリソース�
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:31
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:45
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:54
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:67
@@ -7933,8 +7921,8 @@ msgid "Project Sync Error"
 msgstr "プロジェクトの同期エラー"
 
 #: screens/Setting/SettingList.tsx:112
-msgid "Subscription settings"
-msgstr "サブスクリプション設定"
+#~ msgid "Subscription settings"
+#~ msgstr "サブスクリプション設定"
 
 #: components/TemplateList/TemplateList.tsx:308
 #: screens/Credential/CredentialList/CredentialList.tsx:211
@@ -8033,8 +8021,8 @@ msgstr "jinja2 式から変数を作成します。定義した構築済みグ�
 "              結果の値がわかります。"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:137
-msgid "Active hosts previously deleted"
-msgstr "以前に削除されたアクティブなホスト"
+#~ msgid "Active hosts previously deleted"
+#~ msgstr "以前に削除されたアクティブなホスト"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:326
 msgid "It is hard to give a specification for\n"
@@ -8121,7 +8109,7 @@ msgstr "プロビジョニング解除に失敗"
 msgid "See Django"
 msgstr "Django を参照"
 
-#: components/AppContainer/AppContainer.tsx:70
+#: components/AppContainer/AppContainer.tsx:74
 msgid "Global navigation"
 msgstr "グローバルナビゲーション"
 
@@ -8412,8 +8400,8 @@ msgstr "インベントリーの同期"
 msgid "Remote Archive"
 msgstr "リモートアーカイブ"
 
-#: screens/Setting/SettingList.tsx:118
-#: screens/Setting/Settings.tsx:127
+#: screens/Setting/SettingList.tsx:107
+#: screens/Setting/Settings.tsx:123
 msgid "Troubleshooting"
 msgstr "トラブルシューティング"
 
@@ -8468,7 +8456,7 @@ msgid "Destination Channels or Users"
 msgstr "送信先チャネルまたはユーザー"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:98
-#: screens/Setting/Settings.tsx:66
+#: screens/Setting/Settings.tsx:65
 msgid "GitHub Enterprise"
 msgstr "GitHub Enterprise"
 
@@ -8488,7 +8476,7 @@ msgstr "このジョブが実行する playbook が含まれるプロジェク�
 msgid "Select Credential Type"
 msgstr "認証情報タイプの選択"
 
-#: screens/Setting/Settings.tsx:87
+#: screens/Setting/Settings.tsx:86
 msgid "LDAP 2"
 msgstr "LDAP 2"
 
@@ -8504,19 +8492,19 @@ msgid "Source Control Update"
 msgstr "ソースコントロールの更新"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:76
-msgid "This data is used to enhance\n"
-"                   future releases of the Software and to provide\n"
-"                   Automation Analytics."
-msgstr "このデータは、ソフトウェアの将来のリリースを強化し、\n"
-"                   Automation Analytics を提供するために\n"
-"                   使用されます。"
+#~ msgid "This data is used to enhance\n"
+#~ "                   future releases of the Software and to provide\n"
+#~ "                   Automation Analytics."
+#~ msgstr "このデータは、ソフトウェアの将来のリリースを強化し、\n"
+#~ "                   Automation Analytics を提供するために\n"
+#~ "                   使用されます。"
 
 #: components/PromptDetail/PromptProjectDetail.tsx:56
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:110
 msgid "Track submodules latest commit on branch"
 msgstr "ブランチでのサブモジュールの最新のコミットを追跡する"
 
-#: components/Lookup/HostFilterLookup.tsx:442
+#: components/Lookup/HostFilterLookup.tsx:438
 msgid "hosts"
 msgstr "ホスト"
 
@@ -8644,7 +8632,7 @@ msgid "Answer variable name"
 msgstr "回答の変数名"
 
 #: components/JobList/JobListItem.tsx:110
-#: components/Lookup/HostFilterLookup.tsx:403
+#: components/Lookup/HostFilterLookup.tsx:399
 #: components/Lookup/Lookup.tsx:250
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
@@ -8661,20 +8649,20 @@ msgid "Custom virtual environment {virtualEnvironment} must be replaced by an ex
 msgstr "カスタム仮想環境 {virtualEnvironment} は、実行環境に置き換える必要があります。実行環境への移行の詳細については、<0>ドキュメント</0> を参照してください。"
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:99
-msgid "The maximum number of hosts allowed to be managed by\n"
-"            this organization. Value defaults to 0 which means no limit.\n"
-"            Refer to the Ansible documentation for more details."
-msgstr "この組織で管理できるホストの最大数。\n"
-"            値のデフォルトは 0 で、制限なしを意味します。\n"
-"            詳細については Ansible のドキュメントを参照してください。"
+#~ msgid "The maximum number of hosts allowed to be managed by\n"
+#~ "            this organization. Value defaults to 0 which means no limit.\n"
+#~ "            Refer to the Ansible documentation for more details."
+#~ msgstr "この組織で管理できるホストの最大数。\n"
+#~ "            値のデフォルトは 0 で、制限なしを意味します。\n"
+#~ "            詳細については Ansible のドキュメントを参照してください。"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:281
 msgid "IRC Nick"
 msgstr "IRC ニック"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:175
-msgid "Expires on"
-msgstr "有効期限:"
+#~ msgid "Expires on"
+#~ msgstr "有効期限:"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:99
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
@@ -8814,7 +8802,7 @@ msgstr "インベントリーソース同期の取り消し"
 msgid "Failed to delete one or more applications."
 msgstr "1 つ以上のアプリケーションを削除できませんでした。"
 
-#: screens/Setting/Settings.tsx:106
+#: screens/Setting/Settings.tsx:105
 msgid "Miscellaneous Authentication"
 msgstr "その他の認証"
 
@@ -8828,7 +8816,7 @@ msgid "Content Loading"
 msgstr "コンテンツの読み込み"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:193
-#: routeConfig.tsx:124
+#: routeConfig.tsx:116
 #: screens/ActivityStream/ActivityStream.tsx:113
 #: screens/ActivityStream/ActivityStream.tsx:186
 #: screens/Dashboard/Dashboard.tsx:78
@@ -8866,7 +8854,7 @@ msgstr "このフィールドは整数でなければなりません"
 msgid "START"
 msgstr "開始"
 
-#: routeConfig.tsx:100
+#: routeConfig.tsx:92
 #: screens/ActivityStream/ActivityStream.tsx:179
 msgid "Resources"
 msgstr "リソース"
@@ -9086,7 +9074,7 @@ msgstr "オプションの更新"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
 #: screens/Job/JobDetail/JobDetail.tsx:583
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:451
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:115
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:331
 #: screens/Team/TeamDetail/TeamDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:356
@@ -9198,8 +9186,8 @@ msgid "Successful"
 msgstr "成功"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:275
-msgid "Redirecting to dashboard"
-msgstr "ダッシュボードへのリダイレクト"
+#~ msgid "Redirecting to dashboard"
+#~ msgstr "ダッシュボードへのリダイレクト"
 
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:142
 msgid "This instance group is currently being by other resources. Are you sure you want to delete it?"
@@ -9260,7 +9248,7 @@ msgstr "詳細"
 
 #: components/AddRole/AddResourceRole.tsx:211
 #: components/AddRole/AddResourceRole.tsx:212
-#: routeConfig.tsx:145
+#: routeConfig.tsx:137
 #: screens/ActivityStream/ActivityStream.tsx:116
 #: screens/ActivityStream/ActivityStream.tsx:195
 #: screens/Team/Teams.tsx:32
@@ -9304,7 +9292,7 @@ msgstr "関連するグループの関連付けを解除しますか?"
 msgid "Forks"
 msgstr "フォーク"
 
-#: screens/Setting/Settings.tsx:85
+#: screens/Setting/Settings.tsx:84
 msgid "LDAP Default"
 msgstr "LDAP のデフォルト"
 
@@ -9372,7 +9360,7 @@ msgid "Play"
 msgstr "プレイ"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:108
-#: screens/Setting/Settings.tsx:72
+#: screens/Setting/Settings.tsx:71
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise チーム"
 
@@ -9475,7 +9463,7 @@ msgstr "関連する検索タイプ"
 msgid "User details"
 msgstr "ユーザーの詳細"
 
-#: components/AppContainer/AppContainer.tsx:176
+#: components/AppContainer/AppContainer.tsx:180
 msgid "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 msgstr "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 
@@ -9508,7 +9496,7 @@ msgstr "外部のシークレット管理システムからフィールドにデ
 
 #: components/JobList/JobList.tsx:202
 #: components/JobList/JobList.tsx:293
-#: routeConfig.tsx:68
+#: routeConfig.tsx:65
 #: screens/ActivityStream/ActivityStream.tsx:107
 #: screens/ActivityStream/ActivityStream.tsx:172
 #: screens/Dashboard/shared/LineChart.tsx:118
@@ -9528,7 +9516,7 @@ msgstr "外部のシークレット管理システムからフィールドにデ
 #: screens/Job/Jobs.tsx:38
 #: screens/Job/Jobs.tsx:49
 #: screens/Setting/SettingList.tsx:66
-#: screens/Setting/Settings.tsx:81
+#: screens/Setting/Settings.tsx:80
 #: screens/Template/Template.tsx:168
 #: screens/Template/Templates.tsx:52
 #: screens/Template/WorkflowJobTemplate.tsx:153
@@ -9630,7 +9618,7 @@ msgstr "インベントリーを選択する必要があります"
 msgid "Source Control Branch"
 msgstr "ソースコントロールブランチ"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:174
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:162
 msgid "This organization is currently being by other resources. Are you sure you want to delete it?"
 msgstr "この組織は、現在他のリソースで使用されています。削除してもよろしいですか?"
 
@@ -9642,12 +9630,12 @@ msgstr "この組織は、現在他のリソースで使用されています。
 msgid "System Administrator"
 msgstr "システム管理者"
 
-#: routeConfig.tsx:203
-#: routeConfig.tsx:207
+#: routeConfig.tsx:195
+#: routeConfig.tsx:199
 #: screens/ActivityStream/ActivityStream.tsx:124
 #: screens/ActivityStream/ActivityStream.tsx:219
 #: screens/ActivityStream/ActivityStream.tsx:221
-#: screens/Setting/Settings.tsx:45
+#: screens/Setting/Settings.tsx:44
 msgid "Settings"
 msgstr "設定"
 
@@ -9742,7 +9730,6 @@ msgstr "障害のある在庫ソース"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:132
 #: screens/Project/ProjectList/ProjectList.tsx:222
 #: screens/Project/ProjectList/ProjectListItem.tsx:183
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:60
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:158
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:216
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.tsx:87
@@ -9829,8 +9816,8 @@ msgid "Created by (username)"
 msgstr "作成者 (ユーザー名)"
 
 #: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:310
-msgid "Subscriptions consumed"
-msgstr "消費されたサブスクリプション"
+#~ msgid "Subscriptions consumed"
+#~ msgstr "消費されたサブスクリプション"
 
 #: screens/Dashboard/Dashboard.tsx:84
 msgid "Inventory sync failures"
@@ -9873,7 +9860,7 @@ msgid "Sign in with Azure AD Tenant"
 msgstr "Azure AD Tenant でサインイン"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:66
-#: screens/Setting/Settings.tsx:50
+#: screens/Setting/Settings.tsx:49
 msgid "Azure AD Default"
 msgstr "Azure AD (デフォルト)"
 
@@ -9929,37 +9916,36 @@ msgstr "ルックアップの取り消し"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:96
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
-#: screens/Setting/Settings.tsx:47
-#: screens/Setting/Settings.tsx:51
-#: screens/Setting/Settings.tsx:54
-#: screens/Setting/Settings.tsx:58
-#: screens/Setting/Settings.tsx:61
-#: screens/Setting/Settings.tsx:64
-#: screens/Setting/Settings.tsx:67
-#: screens/Setting/Settings.tsx:70
-#: screens/Setting/Settings.tsx:73
-#: screens/Setting/Settings.tsx:76
-#: screens/Setting/Settings.tsx:79
-#: screens/Setting/Settings.tsx:82
+#: screens/Setting/Settings.tsx:46
+#: screens/Setting/Settings.tsx:50
+#: screens/Setting/Settings.tsx:53
+#: screens/Setting/Settings.tsx:57
+#: screens/Setting/Settings.tsx:60
+#: screens/Setting/Settings.tsx:63
+#: screens/Setting/Settings.tsx:66
+#: screens/Setting/Settings.tsx:69
+#: screens/Setting/Settings.tsx:72
+#: screens/Setting/Settings.tsx:75
+#: screens/Setting/Settings.tsx:78
+#: screens/Setting/Settings.tsx:81
+#: screens/Setting/Settings.tsx:90
 #: screens/Setting/Settings.tsx:91
 #: screens/Setting/Settings.tsx:92
 #: screens/Setting/Settings.tsx:93
 #: screens/Setting/Settings.tsx:94
 #: screens/Setting/Settings.tsx:95
-#: screens/Setting/Settings.tsx:96
-#: screens/Setting/Settings.tsx:104
-#: screens/Setting/Settings.tsx:107
-#: screens/Setting/Settings.tsx:110
-#: screens/Setting/Settings.tsx:113
-#: screens/Setting/Settings.tsx:116
-#: screens/Setting/Settings.tsx:119
-#: screens/Setting/Settings.tsx:122
-#: screens/Setting/Settings.tsx:125
-#: screens/Setting/Settings.tsx:128
+#: screens/Setting/Settings.tsx:103
+#: screens/Setting/Settings.tsx:106
+#: screens/Setting/Settings.tsx:109
+#: screens/Setting/Settings.tsx:112
+#: screens/Setting/Settings.tsx:115
+#: screens/Setting/Settings.tsx:118
+#: screens/Setting/Settings.tsx:121
+#: screens/Setting/Settings.tsx:124
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:52
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:61
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:74
@@ -10026,7 +10012,7 @@ msgstr "姓"
 msgid "Add a node between these two"
 msgstr ""
 
-#: components/AppContainer/AppContainer.tsx:112
+#: components/AppContainer/AppContainer.tsx:116
 msgid "Navigation"
 msgstr "ナビゲーション"
 
@@ -10071,7 +10057,7 @@ msgstr "{pluralizedItemName} を削除しますか?"
 msgid "Prompt on launch"
 msgstr "起動プロンプト"
 
-#: screens/Setting/SettingList.tsx:123
+#: screens/Setting/SettingList.tsx:112
 msgid "Troubleshooting settings"
 msgstr "トラブルシューティング設定"
 
@@ -10081,14 +10067,14 @@ msgstr "テンプレートの起動"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:61
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:62
-msgid "User analytics"
-msgstr "ユーザーアナリティクス"
+#~ msgid "User analytics"
+#~ msgstr "ユーザーアナリティクス"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:44
-msgid "If you do not have a subscription, you can visit\n"
-"            Red Hat to obtain a trial subscription."
-msgstr "サブスクリプションをお持ちでない場合は、Red Hat に\n"
-"            アクセスしてトライアルサブスクリプションを取得できます。"
+#~ msgid "If you do not have a subscription, you can visit\n"
+#~ "            Red Hat to obtain a trial subscription."
+#~ msgstr "サブスクリプションをお持ちでない場合は、Red Hat に\n"
+#~ "            アクセスしてトライアルサブスクリプションを取得できます。"
 
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:195
 msgid "{intervalValue, plural, one {day} other {days}}"
@@ -10126,7 +10112,7 @@ msgstr "このアクションでは、次の項目がソフト削除されます
 msgid "Listener Addresses"
 msgstr "リスナーアドレス"
 
-#: screens/Setting/Settings.tsx:88
+#: screens/Setting/Settings.tsx:87
 msgid "LDAP 3"
 msgstr "LDAP 3"
 
@@ -10142,7 +10128,7 @@ msgstr "リンクの追加"
 msgid "Recipient List"
 msgstr "受信者リスト"
 
-#: screens/Organization/shared/OrganizationForm.tsx:123
+#: screens/Organization/shared/OrganizationForm.tsx:107
 msgid "Note: The order of these credentials sets precedence for the sync and lookup of the content. Select more than one to enable drag."
 msgstr "注: 資格情報の順序は、コンテンツの同期と検索の優先順位を設定します。ドラッグを有効にするには、1 つ以上選択してください。"
 
@@ -10180,8 +10166,8 @@ msgid "Failed to delete inventory source {name}."
 msgstr "インベントリーソース {name} を削除できませんでした。"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:225
-msgid "End user license agreement"
-msgstr "使用許諾契約書"
+#~ msgid "End user license agreement"
+#~ msgstr "使用許諾契約書"
 
 #: components/Workflow/WorkflowLegend.tsx:72
 #: components/Workflow/WorkflowLinkHelp.tsx:26
@@ -10190,7 +10176,7 @@ msgstr "使用許諾契約書"
 msgid "On Condition"
 msgstr "条件時"
 
-#: routeConfig.tsx:83
+#: routeConfig.tsx:80
 #: screens/ActivityStream/ActivityStream.tsx:109
 #: screens/ActivityStream/ActivityStream.tsx:175
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:159
@@ -10389,7 +10375,7 @@ msgid "An error occurred"
 msgstr "エラーが発生しました"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:88
-#: screens/Setting/Settings.tsx:60
+#: screens/Setting/Settings.tsx:59
 msgid "GitHub Organization"
 msgstr "GitHub 組織"
 
@@ -10454,8 +10440,8 @@ msgid "Less than comparison."
 msgstr "Less than の比較条件"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:97
-msgid "Hosts automated"
-msgstr "自動化されたホスト"
+#~ msgid "Hosts automated"
+#~ msgstr "自動化されたホスト"
 
 #: screens/Project/shared/Project.helptext.tsx:97
 msgid "Allow changing the Source Control branch or revision in a job template that uses this project."
@@ -10627,8 +10613,8 @@ msgstr ""
 #: screens/Setting/SettingList.tsx:107
 #: screens/Setting/Settings.tsx:118
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:165
-msgid "Subscription"
-msgstr "サブスクリプション"
+#~ msgid "Subscription"
+#~ msgstr "サブスクリプション"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.tsx:191
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.tsx:133
@@ -10637,8 +10623,8 @@ msgstr "等しくない"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:94
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:142
-msgid "Past two years"
-msgstr "2年"
+#~ msgid "Past two years"
+#~ msgstr "2年"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:317
 msgid "IRC nick"
@@ -10712,16 +10698,16 @@ msgstr "下の編集ボタンをクリックして、ノードを再構成しま
 msgid "Federated Inventory"
 msgstr "フェデレーションインベントリー"
 
-#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:188
+#: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:176
 msgid "Failed to delete organization."
 msgstr "組織を削除できませんでした。"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:146
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:154
-msgid "Hosts available"
-msgstr "利用可能なホスト"
+#~ msgid "Hosts available"
+#~ msgstr "利用可能なホスト"
 
-#: screens/Setting/Settings.tsx:103
+#: screens/Setting/Settings.tsx:102
 msgid "Logging"
 msgstr "ロギング"
 
@@ -10800,7 +10786,6 @@ msgstr "ノードの編集"
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.tsx:52
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.tsx:198
 #: screens/Setting/shared/SharedFields.tsx:553
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:127
 #: screens/Template/shared/PlaybookSelect.tsx:146
 msgid "Clear"
 msgstr "消去"
@@ -10820,8 +10805,8 @@ msgid "End"
 msgstr "終了"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:113
-msgid "Hosts imported"
-msgstr "インポートされたホスト"
+#~ msgid "Hosts imported"
+#~ msgstr "インポートされたホスト"
 
 #: screens/Job/JobOutput/HostEventModal.tsx:202
 msgid "YAML tab"
@@ -10866,7 +10851,7 @@ msgstr "LDAP1"
 msgid "Add container group"
 msgstr "コンテナーグループの追加"
 
-#: components/AppContainer/AppContainer.tsx:164
+#: components/AppContainer/AppContainer.tsx:168
 msgid "Continue"
 msgstr "続行"
 
@@ -11066,7 +11051,7 @@ msgid "All job types"
 msgstr "すべてのジョブタイプ"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:103
-#: screens/Setting/Settings.tsx:69
+#: screens/Setting/Settings.tsx:68
 msgid "GitHub Enterprise Organization"
 msgstr "GitHub Enterprise 組織"
 
@@ -11101,8 +11086,8 @@ msgid "Simple key select"
 msgstr "簡易キー選択"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:84
-msgid "You have automated against more hosts than your subscription allows."
-msgstr "サブスクリプションで許可されているよりも多くのホストに対して自動化しました。"
+#~ msgid "You have automated against more hosts than your subscription allows."
+#~ msgstr "サブスクリプションで許可されているよりも多くのホストに対して自動化しました。"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:135
 msgid "Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied."
@@ -11150,33 +11135,32 @@ msgstr "{numJobsToCancel, plural, one {選択したジョブをキャンセル} 
 #: screens/Organization/Organizations.tsx:31
 #: screens/Project/Projects.tsx:28
 #: screens/Project/Projects.tsx:37
-#: screens/Setting/Settings.tsx:48
-#: screens/Setting/Settings.tsx:52
-#: screens/Setting/Settings.tsx:55
-#: screens/Setting/Settings.tsx:59
-#: screens/Setting/Settings.tsx:62
-#: screens/Setting/Settings.tsx:65
-#: screens/Setting/Settings.tsx:68
-#: screens/Setting/Settings.tsx:71
-#: screens/Setting/Settings.tsx:74
-#: screens/Setting/Settings.tsx:77
-#: screens/Setting/Settings.tsx:80
-#: screens/Setting/Settings.tsx:83
+#: screens/Setting/Settings.tsx:47
+#: screens/Setting/Settings.tsx:51
+#: screens/Setting/Settings.tsx:54
+#: screens/Setting/Settings.tsx:58
+#: screens/Setting/Settings.tsx:61
+#: screens/Setting/Settings.tsx:64
+#: screens/Setting/Settings.tsx:67
+#: screens/Setting/Settings.tsx:70
+#: screens/Setting/Settings.tsx:73
+#: screens/Setting/Settings.tsx:76
+#: screens/Setting/Settings.tsx:79
+#: screens/Setting/Settings.tsx:82
+#: screens/Setting/Settings.tsx:96
 #: screens/Setting/Settings.tsx:97
 #: screens/Setting/Settings.tsx:98
 #: screens/Setting/Settings.tsx:99
 #: screens/Setting/Settings.tsx:100
 #: screens/Setting/Settings.tsx:101
-#: screens/Setting/Settings.tsx:102
-#: screens/Setting/Settings.tsx:105
-#: screens/Setting/Settings.tsx:108
-#: screens/Setting/Settings.tsx:111
-#: screens/Setting/Settings.tsx:114
-#: screens/Setting/Settings.tsx:117
-#: screens/Setting/Settings.tsx:120
-#: screens/Setting/Settings.tsx:123
-#: screens/Setting/Settings.tsx:126
-#: screens/Setting/Settings.tsx:129
+#: screens/Setting/Settings.tsx:104
+#: screens/Setting/Settings.tsx:107
+#: screens/Setting/Settings.tsx:110
+#: screens/Setting/Settings.tsx:113
+#: screens/Setting/Settings.tsx:116
+#: screens/Setting/Settings.tsx:119
+#: screens/Setting/Settings.tsx:122
+#: screens/Setting/Settings.tsx:125
 #: screens/Team/Teams.tsx:30
 #: screens/Template/Templates.tsx:49
 #: screens/User/Users.tsx:33
@@ -11352,7 +11336,7 @@ msgstr "新しいロールを受け取るリソースのタイプを選択しま
 #: screens/Inventory/InventoryRelatedGroups/InventoryRelatedGroupListItem.tsx:48
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:125
 #: screens/Organization/OrganizationList/OrganizationListItem.tsx:39
-#: screens/Organization/shared/OrganizationForm.tsx:120
+#: screens/Organization/shared/OrganizationForm.tsx:104
 #: screens/Project/ProjectList/ProjectListItem.tsx:174
 #: screens/Team/TeamList/TeamListItem.tsx:40
 #: screens/Template/Survey/SurveyListItem.tsx:45
@@ -11382,10 +11366,10 @@ msgid "Sender e-mail"
 msgstr "送信者のメール"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:40
-msgid "Welcome to Red Hat Ansible Automation Platform!\n"
-"              Please complete the steps below to activate your subscription."
-msgstr "Red Hat Ansible Automation Platform へようこそ!\n"
-"              サブスクリプションをアクティブ化するには、以下の手順を完了してください。"
+#~ msgid "Welcome to Red Hat Ansible Automation Platform!\n"
+#~ "              Please complete the steps below to activate your subscription."
+#~ msgstr "Red Hat Ansible Automation Platform へようこそ!\n"
+#~ "              サブスクリプションをアクティブ化するには、以下の手順を完了してください。"
 
 #: components/StatusLabel/StatusLabel.tsx:73
 msgid "Provisioning fail"
@@ -11400,8 +11384,8 @@ msgid "Time in seconds to consider an inventory sync to be current. During job r
 msgstr "インベントリの同期が最新であると見なす時間（秒単位）。ジョブの実行とコールバック中、タスクシステムは最新の同期のタイムスタンプを評価します。キャッシュタイムアウトよりも古い場合、現在のものとは見なされず、新しいインベントリ同期が実行されます。"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:204
-msgid "Automation controller version"
-msgstr "自動化コントローラーバージョン"
+#~ msgid "Automation controller version"
+#~ msgstr "自動化コントローラーバージョン"
 
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:90
 msgid "Access Token Expiration"
@@ -11490,8 +11474,8 @@ msgid "Sets the current life cycle stage of this instance. Default is \"installe
 msgstr "このインスタンスの現在のライフサイクルステージを設定します。デフォルトは \"installed\" です。"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:65
-msgid "Compliant"
-msgstr "有効"
+#~ msgid "Compliant"
+#~ msgstr "有効"
 
 #: screens/Inventory/InventorySource/InventorySource.tsx:186
 msgid "View inventory source details"
@@ -11527,12 +11511,12 @@ msgid "Failed to delete one or more workflow approval."
 msgstr "1 つ以上のワークフロー承認を削除できませんでした。"
 
 #: screens/Organization/shared/OrganizationForm.tsx:79
-msgid "The maximum number of hosts allowed to be managed by this organization.\n"
-"            Value defaults to 0 which means no limit. Refer to the Ansible\n"
-"            documentation for more details."
-msgstr "この組織で管理できるホストの最大数。\n"
-"            値のデフォルトは 0 で、制限なしを意味します。詳細については Ansible の\n"
-"            ドキュメントを参照してください。"
+#~ msgid "The maximum number of hosts allowed to be managed by this organization.\n"
+#~ "            Value defaults to 0 which means no limit. Refer to the Ansible\n"
+#~ "            documentation for more details."
+#~ msgstr "この組織で管理できるホストの最大数。\n"
+#~ "            値のデフォルトは 0 で、制限なしを意味します。詳細については Ansible の\n"
+#~ "            ドキュメントを参照してください。"
 
 #: screens/Team/TeamRoles/TeamRolesList.tsx:250
 #: screens/User/UserRoles/UserRolesList.tsx:244
@@ -11546,8 +11530,8 @@ msgid "Workflow Job Template Nodes"
 msgstr "ワークフロージョブテンプレートノード"
 
 #: components/Lookup/HostFilterLookup.tsx:147
-msgid "Insights system ID"
-msgstr "Insights システム ID"
+#~ msgid "Insights system ID"
+#~ msgstr "Insights システム ID"
 
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:103
 msgid "Authorization Code Expiration"
@@ -11662,8 +11646,8 @@ msgid "Minimum percentage of all instances that will be automatically assigned t
 msgstr "新しいインスタンスがオンラインになると、このグループに自動的に割り当てられるすべてのインスタンスの最小パーセンテージ。"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:113
-msgid "Automation Analytics dashboard"
-msgstr "自動化アナリティクスダッシュボード"
+#~ msgid "Automation Analytics dashboard"
+#~ msgstr "自動化アナリティクスダッシュボード"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:393
 msgid "Source Phone Number"
@@ -11723,8 +11707,8 @@ msgid "Please select an Inventory or check the Prompt on Launch option"
 msgstr "インベントリーを選択するか、または起動プロンプトオプションにチェックを付けてください。"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:123
-msgid "Learn more about Automation Analytics"
-msgstr "自動化アナリティクスについて"
+#~ msgid "Learn more about Automation Analytics"
+#~ msgstr "自動化アナリティクスについて"
 
 #: screens/Template/Survey/SurveyReorderModal.tsx:242
 msgid "Survey preview modal"
@@ -11797,8 +11781,8 @@ msgid "Discard local changes before syncing"
 msgstr "同期する前にローカル変更を破棄する"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:69
-msgid "The number of hosts you have automated against is below your subscription count."
-msgstr "自動化したホストの数がサブスクリプション数を下回っています。"
+#~ msgid "The number of hosts you have automated against is below your subscription count."
+#~ msgstr "自動化したホストの数がサブスクリプション数を下回っています。"
 
 #: screens/Host/HostDetail/HostDetail.tsx:135
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:128
@@ -11901,8 +11885,8 @@ msgid "Account SID"
 msgstr "アカウント SID"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:85
-msgid "Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics."
-msgstr "Red Hat または Red Hat Satellite の認証情報を提供して、自動化アナリティクスを有効にします。"
+#~ msgid "Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics."
+#~ msgstr "Red Hat または Red Hat Satellite の認証情報を提供して、自動化アナリティクスを有効にします。"
 
 #: screens/Template/shared/PlaybookSelect.tsx:134
 #: screens/Template/shared/PlaybookSelect.tsx:135
@@ -11933,8 +11917,6 @@ msgstr "トークンの削除中にエラーが発生しました"
 
 #: screens/Dashboard/DashboardGraph.tsx:109
 #: screens/Dashboard/DashboardGraph.tsx:120
-#: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:125
-#: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:136
 msgid "Select period"
 msgstr "期間の選択"
 
@@ -11946,7 +11928,7 @@ msgstr "通知開始の切り替え"
 #: components/JobList/JobListItem.tsx:274
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
-#: components/Lookup/HostFilterLookup.tsx:448
+#: components/Lookup/HostFilterLookup.tsx:444
 #: components/Lookup/HostListItem.tsx:17
 #: components/Lookup/InventoryLookup.tsx:159
 #: components/Lookup/InventoryLookup.tsx:167
@@ -12026,8 +12008,8 @@ msgstr "ノードの削除の確認"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:93
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:141
-msgid "Past year"
-msgstr "過去1年以内"
+#~ msgid "Past year"
+#~ msgstr "過去1年以内"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:198
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:176
