@@ -84,7 +84,7 @@ class HostManager(models.Manager.from_queryset(HostLatestSummaryQuerySet)):
     """Custom manager class for Hosts model."""
 
     def active_count(self):
-        """Return count of active, unique hosts for licensing.
+        """Return count of active, unique hosts, which host metrics reports.
         Construction of query involves:
          - remove any ordering specified in model's Meta
          - Exclude hosts sourced from another Ascender

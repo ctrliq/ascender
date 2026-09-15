@@ -823,8 +823,6 @@ ASCENDER_AUTO_DEPROVISION_INSTANCES = False
 # Note: This setting may be overridden by database settings.
 PENDO_TRACKING_STATE = "off"
 
-# Enables Insights data collection.
-# Note: This setting may be overridden by database settings.
 
 # Last gather date for Analytics
 # Last gathered entries for expensive Analytics

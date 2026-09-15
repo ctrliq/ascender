@@ -10,7 +10,6 @@ import yaml
 # Django
 from django.core.management.base import CommandError
 
-# for license errors
 
 # Ascender
 from ascender.main.management.commands import inventory_import

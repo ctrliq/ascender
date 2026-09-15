@@ -32,7 +32,6 @@ def test_survey_edit_access(job_template, workflow_job_template, survey_spec_fac
         )
 
 
-# Test normal operations with survey license work
 @pytest.mark.django_db
 @pytest.mark.survey
 def test_survey_spec_view_allowed(deploy_jobtemplate, get, admin_user):
