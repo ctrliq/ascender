@@ -210,13 +210,12 @@ describe('<SurveyQuestionForm />', () => {
     );
   });
 
-  // The default-toggle renders a styled CheckIcon whose `selected` prop drives
-  // a modifier class. In the real DOM we proxy that prop by asserting
-  // the icon's class changes when toggled.
+  // The default-toggle is a button whose aria-pressed (and a modifier class the
+  // stylesheet colours) says whether the choice is the default.
   const toggleButton = (choice: string) =>
     document.querySelector(`[data-ouia-component-id="${choice}-button"]`);
   const iconClass = (choice: string) =>
-    toggleButton(choice)!.querySelector('svg')!.getAttribute('class');
+    toggleButton(choice)!.getAttribute('aria-pressed');
 
   test('should activate default values, multiselect', async () => {
     renderWithContexts(

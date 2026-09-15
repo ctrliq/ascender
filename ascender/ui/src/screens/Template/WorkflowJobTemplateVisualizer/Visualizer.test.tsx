@@ -230,6 +230,74 @@ describe('Visualizer', () => {
     expect(WorkflowJobTemplateNodesAPI.destroy).toHaveBeenCalledWith(11);
   });
 
+  test('Successfully saves a node added and deleted in the same session', async () => {
+    vi.mocked(workflowReducer).mockImplementation((state: WorkflowState) => {
+      const newState = {
+        ...state,
+        isLoading: false,
+      };
+
+      if (newState.nodes.length === 0) {
+        // Node 2 is what add -> edit -> delete leaves behind: it was never
+        // posted, so it has no originalNodeObject to update or destroy.
+        newState.nodes = [
+          startNode,
+          {
+            id: 2,
+            isEdited: true,
+            isDeleted: true,
+            fullUnifiedJobTemplate: {
+              id: 3,
+              name: 'PING',
+              type: 'job_template',
+            },
+          },
+          {
+            id: 3,
+            isDeleted: true,
+            fullUnifiedJobTemplate: {
+              id: 4,
+              name: 'A Playbook',
+              type: 'job_template',
+            },
+            originalNodeObject: {
+              id: 9000,
+              success_nodes: [],
+              failure_nodes: [],
+              always_nodes: [],
+            },
+          },
+        ];
+        newState.links = [];
+      }
+
+      return newState;
+    });
+    vi.mocked(WorkflowJobTemplatesAPI.readNodes).mockResolvedValue({
+      data: {
+        count: 0,
+        results: [],
+      },
+    } as unknown as ApiResponse<Paginated<WorkflowJobTemplateNode>>);
+    const { container } = renderVisualizer();
+    await waitFor(() =>
+      expect(
+        container.querySelector('button#visualizer-save')
+      ).toBeInTheDocument()
+    );
+    fireEvent.click(container.querySelector('button#visualizer-save')!);
+    // Only the node that exists server side is destroyed
+    await waitFor(() =>
+      expect(WorkflowJobTemplateNodesAPI.destroy).toHaveBeenCalledWith(9000)
+    );
+    expect(WorkflowJobTemplateNodesAPI.destroy).toHaveBeenCalledTimes(1);
+    expect(WorkflowJobTemplateNodesAPI.update).not.toHaveBeenCalled();
+    expect(WorkflowJobTemplatesAPI.createNode).not.toHaveBeenCalled();
+    expect(
+      screen.queryByText('Error saving the workflow!')
+    ).not.toBeInTheDocument();
+  });
+
   test('Successfully changes link type', async () => {
     const { container } = renderVisualizer();
     await waitFor(() =>

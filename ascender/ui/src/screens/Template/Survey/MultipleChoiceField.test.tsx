@@ -4,15 +4,23 @@ import { FormRoot } from 'components/Form';
 import { renderWithContexts } from '../../../../testUtils/rtlContexts';
 import MultipleChoiceField from './MultipleChoiceField';
 
-// The tick encodes its selected state as a modifier class, which the
-// stylesheet colours; the class is the state itself.
-const SELECTED_CLASS = 'ascender-multiple-choice-field__check-icon--selected';
+// The default toggle shows its state two ways that must agree: a modifier
+// class on the button, which the stylesheet colours, and aria-pressed.
+const SELECTED_CLASS =
+  'ascender-multiple-choice-field__default-toggle--selected';
 
 const isSelected = (ouiaId: string) => {
-  const icon = document.querySelector(
-    `[data-ouia-component-id="${ouiaId}"] svg`
-  );
-  return icon!.classList.contains(SELECTED_CLASS);
+  const button = document.querySelector(
+    `[data-ouia-component-id="${ouiaId}"]`
+  )!;
+  const byClass = button.classList.contains(SELECTED_CLASS);
+  const byAria = button.getAttribute('aria-pressed') === 'true';
+  if (byClass !== byAria) {
+    throw new Error(
+      `${ouiaId}: class=${byClass} aria-pressed=${byAria} disagree`
+    );
+  }
+  return byClass;
 };
 
 const toggleButton = (ouiaId: string) =>
@@ -37,6 +45,7 @@ describe('<MultipleChoiceField/>', () => {
     );
 
     expect(isSelected('alex-button')).toBe(true);
+    expect(isSelected('athena-button')).toBe(false);
 
     fireEvent.click(toggleButton('alex-button')!);
     await waitFor(() => expect(isSelected('alex-button')).toBe(false));
