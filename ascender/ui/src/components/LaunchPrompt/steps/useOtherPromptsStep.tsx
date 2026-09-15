@@ -1,4 +1,4 @@
-import type { LaunchableResource } from 'types/api';
+import type { LaunchableResource, WorkflowJobTemplate } from 'types/api';
 import React, { useState } from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'components/Form';
@@ -44,7 +44,8 @@ const FIELD_NAMES = [
 export default function useOtherPromptsStep(
   launchConfig: LaunchConfig,
   resource: LaunchableResource | null,
-  labels: LabelInput[]
+  labels: LabelInput[],
+  workflowTemplate: WorkflowJobTemplate | null = null
 ): LaunchStep {
   const { t } = useLingui();
   const [variablesField] = useField('extra_vars');
@@ -74,6 +75,14 @@ export default function useOtherPromptsStep(
     ? validateVariables()
     : false;
 
+  // A limit on the workflow replaces the node's, including a nested workflow's, so it goes first.
+  let limitWarning: string | undefined;
+  if (typeof workflowTemplate?.limit === 'string') {
+    limitWarning = t`This workflow (${workflowTemplate.name}) sets its own limit, which is used in place of this node's limit when the workflow runs.`;
+  } else if (resource?.type === 'workflow_job_template') {
+    limitWarning = t`This limit is applied to all workflow nodes within this workflow (${resource?.name ?? ''}) that prompt for a limit, in place of the limit set on each node.`;
+  }
+
   return {
     step: !shouldShowPrompt(launchConfig)
       ? null
@@ -88,6 +97,7 @@ export default function useOtherPromptsStep(
           component: (
             <OtherPromptsStep
               launchConfig={launchConfig}
+              limitWarning={limitWarning}
               variablesMode={variablesMode}
               onVarModeChange={handleModeChange}
             />
