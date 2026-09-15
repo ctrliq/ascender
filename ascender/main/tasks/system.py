@@ -57,10 +57,8 @@ from ascender.main.utils.common import ignore_inventory_computed_fields, ignore_
 
 from ascender.main.utils.reload import stop_local_services
 from ascender.main.utils.pglock import advisory_lock
-from ascender.main.tasks.helpers import is_run_threshold_reached
 from ascender.main.tasks.receptor import get_receptor_ctl, worker_info, worker_cleanup, administrative_workunit_reaper, write_receptor_config
 from ascender.main.consumers import emit_channel_notification
-from ascender.main import analytics
 from ascender.conf import settings_registry
 from ascender.main.analytics.subsystem_metrics import DispatcherMetrics
 
@@ -363,12 +361,6 @@ def send_notifications(notification_list, job_id=None):
                 notification.save(update_fields=update_fields)
             except Exception:
                 logger.exception('Error saving notification {} result.'.format(notification.id))
-
-
-@task(queue=get_task_queuename)
-def gather_analytics():
-    if is_run_threshold_reached(getattr(settings, 'AUTOMATION_ANALYTICS_LAST_GATHER', None), settings.AUTOMATION_ANALYTICS_GATHER_INTERVAL):
-        analytics.gather()
 
 
 @task(queue=get_task_queuename)
