@@ -173,22 +173,15 @@ Use this command to delete all sessions that have expired. Refer to `Django's do
 For more information on OAuth2 token management in the Ascender user interface, see the :ref:`ug_applications_auth` section of the |atu|.
 
 
-Analytics gathering
+Host metrics
 ~~~~~~~~~~~~~~~~~~~~~
 
 .. index:: 
    single: awx-manage; data collection
-   single: awx-manage; analytics gathering
+   single: awx-manage; host metrics
 
 
-Use this command to gather analytics on-demand outside of the predefined window (default is 4 hours):
-
-::
-
-	$ awx-manage gather_analytics --ship
-
-
-For customers with disconnected environments who want to collect usage information about unique hosts automated across a time period, use this command: 
+To collect usage information about unique hosts automated across a time period, use this command: 
 
 ::
 

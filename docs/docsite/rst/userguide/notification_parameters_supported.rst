@@ -73,7 +73,7 @@ This section describes the list of supported job attributes and the proper synta
       - ``name`` - (string) name of the project
       - ``description`` - (string) optional description of the project
       - ``status`` - (choices) one of new, pending, waiting, running, successful, failed, error, canceled, never updated, ok, or missing
-      - ``scm_type (choice)`` - one of (empty string), git, hg, svn, insights
+      - ``scm_type (choice)`` - one of (empty string), git, svn, archive
    - ``job_template``
       - ``id`` - (int) database ID for job template
       - ``name`` - (string) name of job template

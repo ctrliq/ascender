@@ -153,15 +153,6 @@ Bringing the flexibility of the Ansible command line, you can now prompt for any
 - limits
 
 
-Red Hat Insights Integration
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.. index::
-   pair: features; playbooks, Red Hat Insights
-
-Ascender supports integration with Red Hat Insights, which allows Insights playbooks to be used as a Project.
-
-
 Enhanced User Interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
