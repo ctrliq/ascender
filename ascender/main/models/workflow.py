@@ -378,7 +378,7 @@ class WorkflowJobTemplateNode(WorkflowNodeBase):
                 if not user.can_access(item.__class__, 'use', item):
                     continue
             if field_name in ['unified_job_template']:
-                if not user.can_access(item.__class__, 'start', item, validate_license=False):
+                if not user.can_access(item.__class__, 'start', item):
                     continue
             create_kwargs[field_name] = item
         create_kwargs['workflow_job_template'] = workflow_job_template

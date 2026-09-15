@@ -52,7 +52,7 @@ msgstr "Workflow Approval not found."
 msgid "Browse…"
 msgstr "Browse…"
 
-#: screens/Setting/Settings.tsx:121
+#: screens/Setting/Settings.tsx:117
 msgid "TACACS+"
 msgstr "TACACS+"
 
@@ -170,7 +170,7 @@ msgid "{forks, plural, one {# fork} other {# forks}}"
 msgstr "{forks, plural, one {# fork} other {# forks}}"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:220
-#: routeConfig.tsx:119
+#: routeConfig.tsx:111
 #: screens/ActivityStream/ActivityStream.tsx:112
 #: screens/ActivityStream/ActivityStream.tsx:185
 #: screens/Dashboard/Dashboard.tsx:89
@@ -235,7 +235,7 @@ msgstr "Running health check"
 msgid "Failed to copy inventory."
 msgstr "Failed to copy inventory."
 
-#: screens/Setting/Settings.tsx:115
+#: screens/Setting/Settings.tsx:114
 msgid "SAML"
 msgstr "SAML"
 
@@ -272,8 +272,8 @@ msgstr "Unable to load last job update"
 
 #: routeConfig.tsx:93
 #: screens/SubscriptionUsage/SubscriptionUsage.tsx:17
-msgid "Subscription Usage"
-msgstr "Subscription Usage"
+#~ msgid "Subscription Usage"
+#~ msgstr "Subscription Usage"
 
 #: components/TemplateList/TemplateListItem.tsx:102
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:159
@@ -669,7 +669,7 @@ msgstr "Expand"
 msgid "Promote Child Groups and Hosts"
 msgstr "Promote Child Groups and Hosts"
 
-#: screens/Setting/Settings.tsx:75
+#: screens/Setting/Settings.tsx:74
 msgid "Google OAuth2"
 msgstr "Google OAuth2"
 
@@ -706,12 +706,12 @@ msgstr "Failed to delete one or more instance groups."
 msgid "JSON:"
 msgstr "JSON:"
 
-#: routeConfig.tsx:59
+#: routeConfig.tsx:56
 #: screens/ActivityStream/ActivityStream.tsx:167
 msgid "Views"
 msgstr "Views"
 
-#: routeConfig.tsx:88
+#: routeConfig.tsx:85
 #: screens/HostMetrics/HostMetrics.tsx:30
 #: screens/HostMetrics/HostMetrics.tsx:66
 #: screens/HostMetrics/HostMetrics.tsx:109
@@ -769,7 +769,7 @@ msgstr "Please select a day number between 1 and 31."
 msgid "No"
 msgstr "No"
 
-#: screens/Setting/Settings.tsx:109
+#: screens/Setting/Settings.tsx:108
 msgid "Miscellaneous System"
 msgstr "Miscellaneous System"
 
@@ -869,7 +869,7 @@ msgstr "Back to Tokens"
 msgid "Webhooks: Enable webhook for this template."
 msgstr "Webhooks: Enable webhook for this template."
 
-#: screens/Setting/Settings.tsx:90
+#: screens/Setting/Settings.tsx:89
 msgid "LDAP 5"
 msgstr "LDAP 5"
 
@@ -949,7 +949,7 @@ msgstr "Execution environment not found."
 msgid "Create New Organization"
 msgstr "Create New Organization"
 
-#: screens/Setting/SettingList.tsx:119
+#: screens/Setting/SettingList.tsx:108
 msgid "View and edit debug options"
 msgstr "View and edit debug options"
 
@@ -1054,8 +1054,8 @@ msgid "and click on Update Revision on Launch."
 msgstr "and click on Update Revision on Launch."
 
 #: screens/Setting/Subscription/SubscriptionEdit/EulaStep.tsx:14
-msgid "End User License Agreement"
-msgstr "End User License Agreement"
+#~ msgid "End User License Agreement"
+#~ msgstr "End User License Agreement"
 
 #: screens/Project/shared/Project.helptext.tsx:94
 msgid "Delete the local repository in its entirety prior to performing an update. Depending on the size of the repository this may significantly increase the amount of time required to complete an update."
@@ -1104,8 +1104,8 @@ msgid "Health checks are asynchronous tasks. See the"
 msgstr "Health checks are asynchronous tasks. See the"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:94
-msgid "Cancel subscription edit"
-msgstr "Cancel subscription edit"
+#~ msgid "Cancel subscription edit"
+#~ msgstr "Cancel subscription edit"
 
 #: screens/Template/shared/WorkflowJobTemplate.helptext.js:19
 #~ msgid "Prompt for credentials on launch."
@@ -1187,8 +1187,8 @@ msgid "Select a webhook service."
 msgstr "Select a webhook service."
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:80
-msgid "Out of compliance"
-msgstr "Out of compliance"
+#~ msgid "Out of compliance"
+#~ msgstr "Out of compliance"
 
 #: screens/Job/JobOutput/EmptyOutput.tsx:65
 msgid "Failure Explanation:"
@@ -1199,7 +1199,7 @@ msgstr "Failure Explanation:"
 msgid "February"
 msgstr "February"
 
-#: screens/Setting/Settings.tsx:195
+#: screens/Setting/Settings.tsx:181
 msgid "View all settings"
 msgstr "View all settings"
 
@@ -1362,7 +1362,7 @@ msgstr "Playbook Started"
 msgid "This workflow job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "This workflow job template is currently being used by other resources. Are you sure you want to delete it?"
 
-#: routeConfig.tsx:129
+#: routeConfig.tsx:121
 #: screens/ActivityStream/ActivityStream.tsx:114
 #: screens/ActivityStream/ActivityStream.tsx:187
 #: screens/Dashboard/Dashboard.tsx:67
@@ -1383,7 +1383,6 @@ msgstr "This workflow job template is currently being used by other resources. A
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:174
 #: screens/Inventory/SmartInventory.tsx:77
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:109
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:101
 #: util/getRelatedResourceDeleteDetails.ts:155
 msgid "Hosts"
 msgstr "Hosts"
@@ -1477,7 +1476,7 @@ msgstr "Launch management job"
 msgid "Add existing group"
 msgstr "Add existing group"
 
-#: screens/Setting/Settings.tsx:89
+#: screens/Setting/Settings.tsx:88
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
@@ -1860,8 +1859,8 @@ msgid "Host Config Key"
 msgstr "Host Config Key"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:121
-msgid "Hosts remaining"
-msgstr "Hosts remaining"
+#~ msgid "Hosts remaining"
+#~ msgstr "Hosts remaining"
 
 #: components/About/About.tsx:52
 msgid "Ctrl IQ, Inc."
@@ -1898,8 +1897,8 @@ msgid "Selected items list."
 msgstr "Selected items list."
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:100
-msgid "{automatedInstancesCount} since {automatedInstancesSinceDateTime}"
-msgstr "{automatedInstancesCount} since {automatedInstancesSinceDateTime}"
+#~ msgid "{automatedInstancesCount} since {automatedInstancesSinceDateTime}"
+#~ msgstr "{automatedInstancesCount} since {automatedInstancesSinceDateTime}"
 
 #: screens/Host/HostList/HostListItem.tsx:58
 #: screens/Inventory/InventoryHosts/InventoryHostItem.tsx:91
@@ -1989,7 +1988,7 @@ msgstr "Actions"
 msgid "Event summary not available"
 msgstr "Event summary not available"
 
-#: routeConfig.tsx:63
+#: routeConfig.tsx:60
 #: screens/Dashboard/Dashboard.tsx:28
 #: screens/Dashboard/Dashboard.tsx:60
 msgid "Dashboard"
@@ -2022,7 +2021,6 @@ msgstr "Key"
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:355
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:434
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:563
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:94
 #: screens/User/shared/UserForm.tsx:115
 #: screens/User/UserDetail/UserDetail.tsx:79
 #: screens/User/UserList/UserList.tsx:118
@@ -2081,7 +2079,7 @@ msgstr "relaunch workflow"
 msgid "This project is currently on sync and cannot be clicked until sync process completed"
 msgstr "This project is currently on sync and cannot be clicked until sync process completed"
 
-#: routeConfig.tsx:157
+#: routeConfig.tsx:149
 #: screens/ActivityStream/ActivityStream.tsx:199
 msgid "Administration"
 msgstr "Administration"
@@ -2108,8 +2106,8 @@ msgid "View Miscellaneous System settings"
 msgstr "View Miscellaneous System settings"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:61
-msgid "Select your Ansible Automation Platform subscription to use."
-msgstr "Select your Ansible Automation Platform subscription to use."
+#~ msgid "Select your Ansible Automation Platform subscription to use."
+#~ msgstr "Select your Ansible Automation Platform subscription to use."
 
 #: screens/Credential/shared/TypeInputsSubForm.tsx:30
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:61
@@ -2190,7 +2188,6 @@ msgstr "{0, plural, one {This credential type is currently being used by some cr
 
 #: screens/Login/Login.tsx:342
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:155
-#: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:103
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
 msgid "Password"
@@ -2248,8 +2245,8 @@ msgid "View all Templates."
 msgstr "View all Templates."
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:160
-msgid "Subscription type"
-msgstr "Subscription type"
+#~ msgid "Subscription type"
+#~ msgstr "Subscription type"
 
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:85
 msgid "Select a row to remove"
@@ -2326,8 +2323,8 @@ msgid "IRC"
 msgstr "IRC"
 
 #: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:310
-msgid "Subscription capacity"
-msgstr "Subscription capacity"
+#~ msgid "Subscription capacity"
+#~ msgstr "Subscription capacity"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/DeleteAllNodesModal.tsx:40
 msgid "Remove All Nodes"
@@ -2406,8 +2403,8 @@ msgid "This schedule is missing an Inventory"
 msgstr "This schedule is missing an Inventory"
 
 #: screens/Setting/SettingList.tsx:108
-msgid "View and edit your subscription information"
-msgstr "View and edit your subscription information"
+#~ msgid "View and edit your subscription information"
+#~ msgstr "View and edit your subscription information"
 
 #. placeholder {0}: role.name
 #: components/ResourceAccessList/ResourceAccessListItem.tsx:79
@@ -2553,12 +2550,12 @@ msgid "Job Slice"
 msgstr "Job Slice"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:84
-msgid "Red Hat subscription manifest"
-msgstr "Red Hat subscription manifest"
+#~ msgid "Red Hat subscription manifest"
+#~ msgstr "Red Hat subscription manifest"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:209
-msgid "If you are ready to upgrade or renew, please <0>contact us.</0>"
-msgstr "If you are ready to upgrade or renew, please <0>contact us.</0>"
+#~ msgid "If you are ready to upgrade or renew, please <0>contact us.</0>"
+#~ msgstr "If you are ready to upgrade or renew, please <0>contact us.</0>"
 
 #: screens/Setting/Logging/LoggingEdit/LoggingEdit.tsx:174
 msgid "Enable log system tracking facts individually"
@@ -2635,7 +2632,7 @@ msgstr "Multi-Select"
 msgid "Zoom in"
 msgstr "Zoom in"
 
-#: routeConfig.tsx:181
+#: routeConfig.tsx:173
 #: screens/ActivityStream/ActivityStream.tsx:120
 #: screens/ActivityStream/ActivityStream.tsx:207
 #: screens/InstanceGroup/InstanceGroup.tsx:81
@@ -2712,7 +2709,7 @@ msgstr "Failed to disassociate one or more hosts."
 msgid "JOB ID:"
 msgstr "JOB ID:"
 
-#: routeConfig.tsx:171
+#: routeConfig.tsx:163
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:91
 msgid "Management Jobs"
 msgstr "Management Jobs"
@@ -2752,8 +2749,8 @@ msgid "Host Started"
 msgstr "Host Started"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:64
-msgid "Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to <0>subscription allocations</0> on the Red Hat Customer Portal."
-msgstr "Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to <0>subscription allocations</0> on the Red Hat Customer Portal."
+#~ msgid "Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to <0>subscription allocations</0> on the Red Hat Customer Portal."
+#~ msgstr "Upload a Red Hat Subscription Manifest containing your subscription. To generate your subscription manifest, go to <0>subscription allocations</0> on the Red Hat Customer Portal."
 
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:98
 #: screens/Application/Applications.tsx:94
@@ -2864,8 +2861,8 @@ msgid "Notification type"
 msgstr "Notification type"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:88
-msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>User Guide</1>."
-msgstr "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>User Guide</1>."
+#~ msgid "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>User Guide</1>."
+#~ msgstr "A subscription manifest is an export of a Red Hat Subscription. To generate a subscription manifest, go to <0>access.redhat.com</0>. For more information, see the <1>User Guide</1>."
 
 #: screens/User/UserToken/UserToken.tsx:103
 msgid "View Tokens"
@@ -3034,7 +3031,6 @@ msgstr "Azure AD settings"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:323
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:368
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:426
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:171
 msgid "True"
 msgstr "True"
 
@@ -3127,7 +3123,7 @@ msgstr "Host Failed"
 
 #: components/AddRole/AddResourceRole.tsx:221
 #: components/AddRole/AddResourceRole.tsx:222
-#: routeConfig.tsx:150
+#: routeConfig.tsx:142
 #: screens/ActivityStream/ActivityStream.tsx:117
 #: screens/ActivityStream/ActivityStream.tsx:196
 #: screens/Organization/Organization.tsx:139
@@ -3221,11 +3217,11 @@ msgstr "This inventory source is currently being used by other resources that re
 msgid "Deny"
 msgstr "Deny"
 
-#: screens/Setting/Settings.tsx:78
+#: screens/Setting/Settings.tsx:77
 msgid "Generic OIDC"
 msgstr "Generic OIDC"
 
-#: screens/Setting/Settings.tsx:86
+#: screens/Setting/Settings.tsx:85
 msgid "LDAP 1"
 msgstr "LDAP 1"
 
@@ -3418,8 +3414,8 @@ msgid "Read"
 msgstr "Read"
 
 #: screens/Setting/Subscription/Subscription.tsx:27
-msgid "View Settings"
-msgstr "View Settings"
+#~ msgid "View Settings"
+#~ msgstr "View Settings"
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:153
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:156
@@ -3494,7 +3490,7 @@ msgid "Select Hosts"
 msgstr "Select Hosts"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:93
-#: screens/Setting/Settings.tsx:63
+#: screens/Setting/Settings.tsx:62
 msgid "GitHub Team"
 msgstr "GitHub Team"
 
@@ -3604,7 +3600,7 @@ msgstr "View smart inventory host details"
 msgid "Sign in with Google"
 msgstr "Sign in with Google"
 
-#: contexts/Config.tsx:238
+#: contexts/Config.tsx:237
 msgid "Failed to retrieve configuration."
 msgstr "Failed to retrieve configuration."
 
@@ -3659,7 +3655,6 @@ msgstr "This action will disassociate all roles for this user from the selected 
 #: screens/Setting/shared/SharedFields.tsx:160
 #: screens/Setting/shared/SharedFields.tsx:166
 #: screens/Setting/shared/SharedFields.tsx:370
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:97
 #: screens/Team/TeamRoles/TeamRolesList.tsx:234
 #: screens/Team/TeamRoles/TeamRolesList.tsx:237
 #: screens/Template/Survey/SurveyList.tsx:95
@@ -3698,7 +3693,7 @@ msgid "Sync all"
 msgstr "Sync all"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:71
-#: screens/Setting/Settings.tsx:53
+#: screens/Setting/Settings.tsx:52
 msgid "Azure AD Tenant"
 msgstr "Azure AD Tenant"
 
@@ -3918,8 +3913,8 @@ msgid "Workflow Job Templates"
 msgstr "Workflow Job Templates"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:155
-msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
-msgstr "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
+#~ msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
+#~ msgstr "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
 
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:120
 msgid "Toggle Legend"
@@ -3982,8 +3977,8 @@ msgstr "None"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:73
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:74
-msgid "Automation Analytics"
-msgstr "Automation Analytics"
+#~ msgid "Automation Analytics"
+#~ msgstr "Automation Analytics"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:374
 msgid "Local Time Zone"
@@ -3999,7 +3994,7 @@ msgstr "Default Answer(s)"
 msgid "Delete Job Template"
 msgstr "Delete Job Template"
 
-#: routeConfig.tsx:196
+#: routeConfig.tsx:188
 #: screens/TopologyView/TopologyView.tsx:16
 #: screens/TopologyView/TopologyView.tsx:46
 msgid "Topology View"
@@ -4133,7 +4128,6 @@ msgstr "Delete Credential"
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:100
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:95
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:99
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:229
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:100
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:105
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:92
@@ -4310,8 +4304,8 @@ msgid "Select a metric"
 msgstr "Select a metric"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:270
-msgid "Save successful!"
-msgstr "Save successful!"
+#~ msgid "Save successful!"
+#~ msgstr "Save successful!"
 
 #: screens/User/Users.tsx:39
 msgid "Create user token"
@@ -4446,7 +4440,7 @@ msgid "Edit Template"
 msgstr "Edit Template"
 
 #: components/Lookup/ApplicationLookup.tsx:114
-#: routeConfig.tsx:186
+#: routeConfig.tsx:178
 #: screens/Application/Applications.tsx:24
 #: screens/Application/Applications.tsx:34
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:109
@@ -4478,7 +4472,7 @@ msgstr "Refresh project revision"
 msgid "Optionally select the credential to use to send status updates back to the webhook service."
 msgstr "Optionally select the credential to use to send status updates back to the webhook service."
 
-#: screens/Setting/Settings.tsx:112
+#: screens/Setting/Settings.tsx:111
 msgid "RADIUS"
 msgstr "RADIUS"
 
@@ -4555,7 +4549,7 @@ msgstr "View Organization Details"
 #: components/Schedule/ScheduleToggle/ScheduleToggle.tsx:86
 #: components/Schedule/shared/SchedulePromptableFields.tsx:90
 #: components/TemplateList/TemplateList.tsx:311
-#: contexts/Config.tsx:234
+#: contexts/Config.tsx:233
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:145
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:174
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:306
@@ -4815,8 +4809,8 @@ msgid "per page"
 msgstr "per page"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:156
-msgid "Upload a .zip file"
-msgstr "Upload a .zip file"
+#~ msgid "Upload a .zip file"
+#~ msgstr "Upload a .zip file"
 
 #: screens/Setting/SAML/SAML.tsx:26
 msgid "View SAML settings"
@@ -4862,7 +4856,7 @@ msgstr "Workflow approved message"
 
 #: components/Schedule/ScheduleList/ScheduleList.tsx:197
 #: components/Schedule/ScheduleList/ScheduleList.tsx:269
-#: routeConfig.tsx:73
+#: routeConfig.tsx:70
 #: screens/ActivityStream/ActivityStream.tsx:108
 #: screens/ActivityStream/ActivityStream.tsx:173
 #: screens/Inventory/Inventories.tsx:130
@@ -4896,7 +4890,7 @@ msgstr "System Warning"
 
 #: components/AdHocCommands/AdHocExecutionEnvironmentStep.tsx:114
 #: components/LaunchPrompt/steps/ExecutionEnvironmentStep.tsx:108
-#: routeConfig.tsx:191
+#: routeConfig.tsx:183
 #: screens/ActivityStream/ActivityStream.tsx:123
 #: screens/ActivityStream/ActivityStream.tsx:215
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentList.tsx:127
@@ -5080,8 +5074,8 @@ msgid "View all Instances."
 msgstr "View all Instances."
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:210
-msgid "Subscription Management"
-msgstr "Subscription Management"
+#~ msgid "Subscription Management"
+#~ msgstr "Subscription Management"
 
 #: components/Lookup/PeersLookup.tsx:153
 #: components/Lookup/PeersLookup.tsx:160
@@ -5126,7 +5120,7 @@ msgstr "Collapse"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:129
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:566
 #: components/TemplateList/TemplateListItem.tsx:325
-#: routeConfig.tsx:104
+#: routeConfig.tsx:96
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:272
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:124
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
@@ -5158,7 +5152,6 @@ msgstr "Select status"
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:178
 #: components/Schedule/shared/ScheduleFormFields.tsx:155
 #: components/Schedule/shared/ScheduleFormFields.tsx:223
-#: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:225
 msgid "Month"
 msgstr "Month"
 
@@ -5172,7 +5165,7 @@ msgstr "Month"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:543
 #: components/TemplateList/TemplateListItem.tsx:301
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:152
-#: routeConfig.tsx:114
+#: routeConfig.tsx:106
 #: screens/ActivityStream/ActivityStream.tsx:111
 #: screens/ActivityStream/ActivityStream.tsx:184
 #: screens/Credential/CredentialList/CredentialList.tsx:195
@@ -5224,8 +5217,8 @@ msgid "Select a row to approve"
 msgstr "Select a row to approve"
 
 #: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:177
-msgid "Unique Hosts"
-msgstr "Unique Hosts"
+#~ msgid "Unique Hosts"
+#~ msgstr "Unique Hosts"
 
 #: screens/Job/JobDetail/JobDetail.tsx:651
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:247
@@ -5410,8 +5403,8 @@ msgstr "Back to Teams"
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:54
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:66
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:228
-msgid "Submit"
-msgstr "Submit"
+#~ msgid "Submit"
+#~ msgstr "Submit"
 
 #. placeholder {0}: forks ?? 0
 #: screens/InstanceGroup/InstanceDetails/InstanceDetails.tsx:278
@@ -5466,7 +5459,6 @@ msgstr "Frequency Details"
 #: components/LaunchPrompt/LaunchPrompt.tsx:182
 #: components/Schedule/shared/SchedulePromptableFields.tsx:154
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:67
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:76
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:234
 msgid "Next"
 msgstr "Next"
@@ -5566,7 +5558,7 @@ msgid "View Credential Details"
 msgstr "View Credential Details"
 
 #: components/NotificationList/NotificationList.tsx:221
-#: routeConfig.tsx:166
+#: routeConfig.tsx:158
 #: screens/Inventory/Inventories.tsx:134
 #: screens/Inventory/InventorySource/InventorySource.tsx:121
 #: screens/ManagementJob/ManagementJob.tsx:129
@@ -5628,7 +5620,6 @@ msgstr "Past two weeks"
 #: components/LaunchPrompt/LaunchPrompt.tsx:180
 #: components/Schedule/shared/SchedulePromptableFields.tsx:152
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:91
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:87
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:91
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:94
 msgid "Back"
@@ -5691,8 +5682,8 @@ msgid "Click to rearrange the order of the survey questions"
 msgstr "Click to rearrange the order of the survey questions"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:38
-msgid "Subscription Details"
-msgstr "Subscription Details"
+#~ msgid "Subscription Details"
+#~ msgstr "Subscription Details"
 
 #: components/Schedule/shared/UnsupportedRRuleAlert.tsx:22
 msgid "This schedule uses complex rules that are not supported in the\n"
@@ -5763,7 +5754,7 @@ msgstr "Link state types"
 
 #: components/TemplateList/TemplateList.tsx:212
 #: components/TemplateList/TemplateList.tsx:275
-#: routeConfig.tsx:109
+#: routeConfig.tsx:101
 #: screens/ActivityStream/ActivityStream.tsx:110
 #: screens/ActivityStream/ActivityStream.tsx:182
 #: screens/ExecutionEnvironment/ExecutionEnvironment.tsx:77
@@ -5825,7 +5816,7 @@ msgstr "source control branch"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:236
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:533
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:289
-#: routeConfig.tsx:176
+#: routeConfig.tsx:168
 #: screens/ActivityStream/ActivityStream.tsx:121
 #: screens/ActivityStream/ActivityStream.tsx:209
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupList.tsx:109
@@ -5896,12 +5887,12 @@ msgid "{0} more"
 msgstr "{0} more"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:64
-msgid "This data is used to enhance\n"
-"                   future releases of the Tower Software and help\n"
-"                   streamline customer experience and success."
-msgstr "This data is used to enhance\n"
-"                   future releases of the Tower Software and help\n"
-"                   streamline customer experience and success."
+#~ msgid "This data is used to enhance\n"
+#~ "                   future releases of the Tower Software and help\n"
+#~ "                   streamline customer experience and success."
+#~ msgstr "This data is used to enhance\n"
+#~ "                   future releases of the Tower Software and help\n"
+#~ "                   streamline customer experience and success."
 
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:245
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:174
@@ -5975,7 +5966,7 @@ msgid "Survey"
 msgstr "Survey"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:261
-#: routeConfig.tsx:140
+#: routeConfig.tsx:132
 #: screens/ActivityStream/ActivityStream.tsx:115
 #: screens/ActivityStream/ActivityStream.tsx:193
 #: screens/Organization/OrganizationList/OrganizationList.tsx:115
@@ -6014,8 +6005,8 @@ msgid "Delete Workflow Approval"
 msgstr "Delete Workflow Approval"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:129
-msgid "Hosts deleted"
-msgstr "Hosts deleted"
+#~ msgid "Hosts deleted"
+#~ msgstr "Hosts deleted"
 
 #: screens/TopologyView/Header.tsx:106
 #: screens/TopologyView/Header.tsx:109
@@ -6052,8 +6043,8 @@ msgid "{interval, plural, one {# month} other {# months}}"
 msgstr "{interval, plural, one {# month} other {# months}}"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:109
-msgid "Last recalculation date:"
-msgstr "Last recalculation date:"
+#~ msgid "Last recalculation date:"
+#~ msgstr "Last recalculation date:"
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:130
 #: components/AdHocCommands/AdHocDetailsStep.tsx:182
@@ -6130,16 +6121,16 @@ msgstr "Skip tags are useful when you have a large playbook, and you want to ski
 msgid "View User Details"
 msgstr "View User Details"
 
-#: routeConfig.tsx:78
+#: routeConfig.tsx:75
 #: screens/ActivityStream/ActivityStream.tsx:34
 #: screens/ActivityStream/ActivityStream.tsx:135
-#: screens/Setting/Settings.tsx:46
+#: screens/Setting/Settings.tsx:45
 msgid "Activity Stream"
 msgstr "Activity Stream"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:185
-msgid "Expires on UTC"
-msgstr "Expires on UTC"
+#~ msgid "Expires on UTC"
+#~ msgstr "Expires on UTC"
 
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:246
 #: components/Lookup/MultiCredentialsLookup.tsx:186
@@ -6338,7 +6329,7 @@ msgstr "How to use constructed inventory plugin"
 msgid "This field must not contain spaces"
 msgstr "This field must not contain spaces"
 
-#: routeConfig.tsx:161
+#: routeConfig.tsx:153
 #: screens/ActivityStream/ActivityStream.tsx:118
 #: screens/ActivityStream/ActivityStream.tsx:202
 #: screens/CredentialType/CredentialTypeList/CredentialTypeList.tsx:115
@@ -6507,8 +6498,8 @@ msgstr "Group"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:48
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:56
-msgid "Request subscription"
-msgstr "Request subscription"
+#~ msgid "Request subscription"
+#~ msgstr "Request subscription"
 
 #: components/PromptDetail/PromptProjectDetail.tsx:152
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:272
@@ -6551,7 +6542,6 @@ msgstr "View Jobs settings"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:349
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:151
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:343
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:225
 #: screens/User/UserDetail/UserDetail.tsx:122
 msgid "edit"
 msgstr "edit"
@@ -6574,8 +6564,8 @@ msgid "Template not found."
 msgstr "Template not found."
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:170
-msgid "Trial"
-msgstr "Trial"
+#~ msgid "Trial"
+#~ msgstr "Trial"
 
 #: screens/ActivityStream/ActivityStream.tsx:246
 #: screens/ActivityStream/ActivityStream.tsx:252
@@ -6690,7 +6680,7 @@ msgstr "Collapse section"
 msgid "More information for {label}"
 msgstr "More information for {label}"
 
-#: routeConfig.tsx:136
+#: routeConfig.tsx:128
 #: screens/ActivityStream/ActivityStream.tsx:190
 #: screens/Credential/Credential.tsx:90
 #: screens/Credential/Credentials.tsx:32
@@ -6723,8 +6713,8 @@ msgid "User Roles"
 msgstr "User Roles"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:211
-msgid "{brandName} Subscription"
-msgstr "{brandName} Subscription"
+#~ msgid "{brandName} Subscription"
+#~ msgstr "{brandName} Subscription"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:211
 msgid "min"
@@ -6984,7 +6974,7 @@ msgid "Note: This field assumes the remote name is \"origin\"."
 msgstr "Note: This field assumes the remote name is \"origin\"."
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:83
-#: screens/Setting/Settings.tsx:57
+#: screens/Setting/Settings.tsx:56
 msgid "GitHub Default"
 msgstr "GitHub Default"
 
@@ -7052,8 +7042,8 @@ msgstr "Workflow Job Template"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:95
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:144
-msgid "Past three years"
-msgstr "Past three years"
+#~ msgid "Past three years"
+#~ msgstr "Past three years"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.tsx:42
 msgid "Execute when the parent node results in a failure state."
@@ -7098,8 +7088,8 @@ msgstr "Date"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:35
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:218
-msgid "User and Automation Analytics"
-msgstr "User and Automation Analytics"
+#~ msgid "User and Automation Analytics"
+#~ msgstr "User and Automation Analytics"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:46
 msgid "Privilege escalation: If enabled, run this playbook as an administrator."
@@ -7135,8 +7125,8 @@ msgid "Failed to load related groups."
 msgstr "Failed to load related groups."
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:102
-msgid "Subscription Compliance"
-msgstr "Subscription Compliance"
+#~ msgid "Subscription Compliance"
+#~ msgstr "Subscription Compliance"
 
 #: util/validators.ts:97
 msgid "This field must be a number and have a value greater than {min}"
@@ -7283,8 +7273,8 @@ msgid "Delete the project before syncing"
 msgstr "Delete the project before syncing"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:155
-msgid "Unlimited"
-msgstr "Unlimited"
+#~ msgid "Unlimited"
+#~ msgstr "Unlimited"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:102
 msgid "File, directory or script"
@@ -7580,7 +7570,7 @@ msgid "Edit Team"
 msgstr "Edit Team"
 
 #: screens/Setting/SettingList.tsx:96
-#: screens/Setting/Settings.tsx:124
+#: screens/Setting/Settings.tsx:120
 msgid "User Interface"
 msgstr "User Interface"
 
@@ -7637,8 +7627,8 @@ msgid "Sign in with SAML {samlIDP}"
 msgstr "Sign in with SAML {samlIDP}"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:126
-msgid "Browse"
-msgstr "Browse"
+#~ msgid "Browse"
+#~ msgstr "Browse"
 
 #: components/NotificationList/NotificationList.tsx:237
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:133
@@ -7723,7 +7713,6 @@ msgstr "Confirm cancel job"
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:323
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:368
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:426
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:171
 msgid "False"
 msgstr "False"
 
@@ -7766,8 +7755,8 @@ msgid "Start date/time"
 msgstr "Start date/time"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:37
-msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>this Tower documentation page</0>. Uncheck the following boxes to disable this feature."
-msgstr "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>this Tower documentation page</0>. Uncheck the following boxes to disable this feature."
+#~ msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>this Tower documentation page</0>. Uncheck the following boxes to disable this feature."
+#~ msgstr "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>this Tower documentation page</0>. Uncheck the following boxes to disable this feature."
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:240
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:240
@@ -7783,8 +7772,8 @@ msgid "Sign in with GitHub Organizations"
 msgstr "Sign in with GitHub Organizations"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:279
-msgid "Redirecting to subscription detail"
-msgstr "Redirecting to subscription detail"
+#~ msgid "Redirecting to subscription detail"
+#~ msgstr "Redirecting to subscription detail"
 
 #: screens/Job/Job.helptext.tsx:17
 #: screens/Template/shared/JobTemplate.helptext.tsx:20
@@ -7862,8 +7851,8 @@ msgid "Host OK"
 msgstr "Host OK"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:196
-msgid "Days remaining"
-msgstr "Days remaining"
+#~ msgid "Days remaining"
+#~ msgstr "Days remaining"
 
 #: screens/Setting/AzureAD/AzureAD.tsx:45
 msgid "View Azure AD settings"
@@ -7899,7 +7888,6 @@ msgstr "{0, plural, one {This instance is currently being used by other resource
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:31
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:45
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:54
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:67
@@ -7934,8 +7922,8 @@ msgid "Project Sync Error"
 msgstr "Project Sync Error"
 
 #: screens/Setting/SettingList.tsx:112
-msgid "Subscription settings"
-msgstr "Subscription settings"
+#~ msgid "Subscription settings"
+#~ msgstr "Subscription settings"
 
 #: components/TemplateList/TemplateList.tsx:308
 #: screens/Credential/CredentialList/CredentialList.tsx:211
@@ -8034,8 +8022,8 @@ msgstr "Create vars from jinja2 expressions. This can be useful\n"
 "              that you know what the resultant values of those expressions are."
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:137
-msgid "Active hosts previously deleted"
-msgstr "Active hosts previously deleted"
+#~ msgid "Active hosts previously deleted"
+#~ msgstr "Active hosts previously deleted"
 
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:326
 msgid "It is hard to give a specification for\n"
@@ -8414,8 +8402,8 @@ msgstr "Inventory sync"
 msgid "Remote Archive"
 msgstr "Remote Archive"
 
-#: screens/Setting/SettingList.tsx:118
-#: screens/Setting/Settings.tsx:127
+#: screens/Setting/SettingList.tsx:107
+#: screens/Setting/Settings.tsx:123
 msgid "Troubleshooting"
 msgstr "Troubleshooting"
 
@@ -8470,7 +8458,7 @@ msgid "Destination Channels or Users"
 msgstr "Destination Channels or Users"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:98
-#: screens/Setting/Settings.tsx:66
+#: screens/Setting/Settings.tsx:65
 msgid "GitHub Enterprise"
 msgstr "GitHub Enterprise"
 
@@ -8490,7 +8478,7 @@ msgstr "The project containing the playbook this job will execute."
 msgid "Select Credential Type"
 msgstr "Select Credential Type"
 
-#: screens/Setting/Settings.tsx:87
+#: screens/Setting/Settings.tsx:86
 msgid "LDAP 2"
 msgstr "LDAP 2"
 
@@ -8506,12 +8494,12 @@ msgid "Source Control Update"
 msgstr "Source Control Update"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:76
-msgid "This data is used to enhance\n"
-"                   future releases of the Software and to provide\n"
-"                   Automation Analytics."
-msgstr "This data is used to enhance\n"
-"                   future releases of the Software and to provide\n"
-"                   Automation Analytics."
+#~ msgid "This data is used to enhance\n"
+#~ "                   future releases of the Software and to provide\n"
+#~ "                   Automation Analytics."
+#~ msgstr "This data is used to enhance\n"
+#~ "                   future releases of the Software and to provide\n"
+#~ "                   Automation Analytics."
 
 #: components/PromptDetail/PromptProjectDetail.tsx:56
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:110
@@ -8675,8 +8663,8 @@ msgid "IRC Nick"
 msgstr "IRC Nick"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:175
-msgid "Expires on"
-msgstr "Expires on"
+#~ msgid "Expires on"
+#~ msgstr "Expires on"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:99
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
@@ -8816,7 +8804,7 @@ msgstr "Cancel Inventory Source Sync"
 msgid "Failed to delete one or more applications."
 msgstr "Failed to delete one or more applications."
 
-#: screens/Setting/Settings.tsx:106
+#: screens/Setting/Settings.tsx:105
 msgid "Miscellaneous Authentication"
 msgstr "Miscellaneous Authentication"
 
@@ -8830,7 +8818,7 @@ msgid "Content Loading"
 msgstr "Content Loading"
 
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:193
-#: routeConfig.tsx:124
+#: routeConfig.tsx:116
 #: screens/ActivityStream/ActivityStream.tsx:113
 #: screens/ActivityStream/ActivityStream.tsx:186
 #: screens/Dashboard/Dashboard.tsx:78
@@ -8868,7 +8856,7 @@ msgstr "This field must be an integer"
 msgid "START"
 msgstr "START"
 
-#: routeConfig.tsx:100
+#: routeConfig.tsx:92
 #: screens/ActivityStream/ActivityStream.tsx:179
 msgid "Resources"
 msgstr "Resources"
@@ -9200,8 +9188,8 @@ msgid "Successful"
 msgstr "Successful"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:275
-msgid "Redirecting to dashboard"
-msgstr "Redirecting to dashboard"
+#~ msgid "Redirecting to dashboard"
+#~ msgstr "Redirecting to dashboard"
 
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:142
 msgid "This instance group is currently being by other resources. Are you sure you want to delete it?"
@@ -9262,7 +9250,7 @@ msgstr "Advanced"
 
 #: components/AddRole/AddResourceRole.tsx:211
 #: components/AddRole/AddResourceRole.tsx:212
-#: routeConfig.tsx:145
+#: routeConfig.tsx:137
 #: screens/ActivityStream/ActivityStream.tsx:116
 #: screens/ActivityStream/ActivityStream.tsx:195
 #: screens/Team/Teams.tsx:32
@@ -9306,7 +9294,7 @@ msgstr "Disassociate related group(s)?"
 msgid "Forks"
 msgstr "Forks"
 
-#: screens/Setting/Settings.tsx:85
+#: screens/Setting/Settings.tsx:84
 msgid "LDAP Default"
 msgstr "LDAP Default"
 
@@ -9374,7 +9362,7 @@ msgid "Play"
 msgstr "Play"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:108
-#: screens/Setting/Settings.tsx:72
+#: screens/Setting/Settings.tsx:71
 msgid "GitHub Enterprise Team"
 msgstr "GitHub Enterprise Team"
 
@@ -9510,7 +9498,7 @@ msgstr "Populate field from an external secret management system"
 
 #: components/JobList/JobList.tsx:202
 #: components/JobList/JobList.tsx:293
-#: routeConfig.tsx:68
+#: routeConfig.tsx:65
 #: screens/ActivityStream/ActivityStream.tsx:107
 #: screens/ActivityStream/ActivityStream.tsx:172
 #: screens/Dashboard/shared/LineChart.tsx:118
@@ -9530,7 +9518,7 @@ msgstr "Populate field from an external secret management system"
 #: screens/Job/Jobs.tsx:38
 #: screens/Job/Jobs.tsx:49
 #: screens/Setting/SettingList.tsx:66
-#: screens/Setting/Settings.tsx:81
+#: screens/Setting/Settings.tsx:80
 #: screens/Template/Template.tsx:168
 #: screens/Template/Templates.tsx:52
 #: screens/Template/WorkflowJobTemplate.tsx:153
@@ -9644,12 +9632,12 @@ msgstr "This organization is currently being by other resources. Are you sure yo
 msgid "System Administrator"
 msgstr "System Administrator"
 
-#: routeConfig.tsx:203
-#: routeConfig.tsx:207
+#: routeConfig.tsx:195
+#: routeConfig.tsx:199
 #: screens/ActivityStream/ActivityStream.tsx:124
 #: screens/ActivityStream/ActivityStream.tsx:219
 #: screens/ActivityStream/ActivityStream.tsx:221
-#: screens/Setting/Settings.tsx:45
+#: screens/Setting/Settings.tsx:44
 msgid "Settings"
 msgstr "Settings"
 
@@ -9744,7 +9732,6 @@ msgstr "Inventory sources with failures"
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:132
 #: screens/Project/ProjectList/ProjectList.tsx:222
 #: screens/Project/ProjectList/ProjectListItem.tsx:183
-#: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:60
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:158
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:216
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.tsx:87
@@ -9831,8 +9818,8 @@ msgid "Created by (username)"
 msgstr "Created by (username)"
 
 #: screens/SubscriptionUsage/ChartComponents/UsageChart.tsx:310
-msgid "Subscriptions consumed"
-msgstr "Subscriptions consumed"
+#~ msgid "Subscriptions consumed"
+#~ msgstr "Subscriptions consumed"
 
 #: screens/Dashboard/Dashboard.tsx:84
 msgid "Inventory sync failures"
@@ -9875,7 +9862,7 @@ msgid "Sign in with Azure AD Tenant"
 msgstr "Sign in with Azure AD Tenant"
 
 #: screens/Setting/AzureAD/AzureADDetail/AzureADDetail.tsx:66
-#: screens/Setting/Settings.tsx:50
+#: screens/Setting/Settings.tsx:49
 msgid "Azure AD Default"
 msgstr "Azure AD Default"
 
@@ -9935,33 +9922,32 @@ msgstr "Cancel lookup"
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
-#: screens/Setting/Settings.tsx:47
-#: screens/Setting/Settings.tsx:51
-#: screens/Setting/Settings.tsx:54
-#: screens/Setting/Settings.tsx:58
-#: screens/Setting/Settings.tsx:61
-#: screens/Setting/Settings.tsx:64
-#: screens/Setting/Settings.tsx:67
-#: screens/Setting/Settings.tsx:70
-#: screens/Setting/Settings.tsx:73
-#: screens/Setting/Settings.tsx:76
-#: screens/Setting/Settings.tsx:79
-#: screens/Setting/Settings.tsx:82
+#: screens/Setting/Settings.tsx:46
+#: screens/Setting/Settings.tsx:50
+#: screens/Setting/Settings.tsx:53
+#: screens/Setting/Settings.tsx:57
+#: screens/Setting/Settings.tsx:60
+#: screens/Setting/Settings.tsx:63
+#: screens/Setting/Settings.tsx:66
+#: screens/Setting/Settings.tsx:69
+#: screens/Setting/Settings.tsx:72
+#: screens/Setting/Settings.tsx:75
+#: screens/Setting/Settings.tsx:78
+#: screens/Setting/Settings.tsx:81
+#: screens/Setting/Settings.tsx:90
 #: screens/Setting/Settings.tsx:91
 #: screens/Setting/Settings.tsx:92
 #: screens/Setting/Settings.tsx:93
 #: screens/Setting/Settings.tsx:94
 #: screens/Setting/Settings.tsx:95
-#: screens/Setting/Settings.tsx:96
-#: screens/Setting/Settings.tsx:104
-#: screens/Setting/Settings.tsx:107
-#: screens/Setting/Settings.tsx:110
-#: screens/Setting/Settings.tsx:113
-#: screens/Setting/Settings.tsx:116
-#: screens/Setting/Settings.tsx:119
-#: screens/Setting/Settings.tsx:122
-#: screens/Setting/Settings.tsx:125
-#: screens/Setting/Settings.tsx:128
+#: screens/Setting/Settings.tsx:103
+#: screens/Setting/Settings.tsx:106
+#: screens/Setting/Settings.tsx:109
+#: screens/Setting/Settings.tsx:112
+#: screens/Setting/Settings.tsx:115
+#: screens/Setting/Settings.tsx:118
+#: screens/Setting/Settings.tsx:121
+#: screens/Setting/Settings.tsx:124
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:52
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:61
 #: screens/Setting/UI/UIDetail/UIDetail.tsx:74
@@ -10073,7 +10059,7 @@ msgstr "Delete {pluralizedItemName}?"
 msgid "Prompt on launch"
 msgstr "Prompt on launch"
 
-#: screens/Setting/SettingList.tsx:123
+#: screens/Setting/SettingList.tsx:112
 msgid "Troubleshooting settings"
 msgstr "Troubleshooting settings"
 
@@ -10083,14 +10069,14 @@ msgstr "Launch Template"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:61
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:62
-msgid "User analytics"
-msgstr "User analytics"
+#~ msgid "User analytics"
+#~ msgstr "User analytics"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:44
-msgid "If you do not have a subscription, you can visit\n"
-"            Red Hat to obtain a trial subscription."
-msgstr "If you do not have a subscription, you can visit\n"
-"            Red Hat to obtain a trial subscription."
+#~ msgid "If you do not have a subscription, you can visit\n"
+#~ "            Red Hat to obtain a trial subscription."
+#~ msgstr "If you do not have a subscription, you can visit\n"
+#~ "            Red Hat to obtain a trial subscription."
 
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:195
 msgid "{intervalValue, plural, one {day} other {days}}"
@@ -10128,7 +10114,7 @@ msgstr "This action will soft delete the following:"
 msgid "Listener Addresses"
 msgstr "Listener Addresses"
 
-#: screens/Setting/Settings.tsx:88
+#: screens/Setting/Settings.tsx:87
 msgid "LDAP 3"
 msgstr "LDAP 3"
 
@@ -10182,8 +10168,8 @@ msgid "Failed to delete inventory source {name}."
 msgstr "Failed to delete inventory source {name}."
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionEdit.tsx:225
-msgid "End user license agreement"
-msgstr "End user license agreement"
+#~ msgid "End user license agreement"
+#~ msgstr "End user license agreement"
 
 #: components/Workflow/WorkflowLegend.tsx:72
 #: components/Workflow/WorkflowLinkHelp.tsx:26
@@ -10192,7 +10178,7 @@ msgstr "End user license agreement"
 msgid "On Condition"
 msgstr "On Condition"
 
-#: routeConfig.tsx:83
+#: routeConfig.tsx:80
 #: screens/ActivityStream/ActivityStream.tsx:109
 #: screens/ActivityStream/ActivityStream.tsx:175
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:159
@@ -10391,7 +10377,7 @@ msgid "An error occurred"
 msgstr "An error occurred"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:88
-#: screens/Setting/Settings.tsx:60
+#: screens/Setting/Settings.tsx:59
 msgid "GitHub Organization"
 msgstr "GitHub Organization"
 
@@ -10456,8 +10442,8 @@ msgid "Less than comparison."
 msgstr "Less than comparison."
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:97
-msgid "Hosts automated"
-msgstr "Hosts automated"
+#~ msgid "Hosts automated"
+#~ msgstr "Hosts automated"
 
 #: screens/Project/shared/Project.helptext.tsx:97
 msgid "Allow changing the Source Control branch or revision in a job template that uses this project."
@@ -10629,8 +10615,8 @@ msgstr "Concurrent jobs: If enabled, simultaneous runs of this workflow job temp
 #: screens/Setting/SettingList.tsx:107
 #: screens/Setting/Settings.tsx:118
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:165
-msgid "Subscription"
-msgstr "Subscription"
+#~ msgid "Subscription"
+#~ msgstr "Subscription"
 
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/LinkModals/LinkModal.tsx:191
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/RunStep.tsx:133
@@ -10639,8 +10625,8 @@ msgstr "Not equals"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:94
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:142
-msgid "Past two years"
-msgstr "Past two years"
+#~ msgid "Past two years"
+#~ msgstr "Past two years"
 
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:317
 msgid "IRC nick"
@@ -10720,10 +10706,10 @@ msgstr "Failed to delete organization."
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:146
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:154
-msgid "Hosts available"
-msgstr "Hosts available"
+#~ msgid "Hosts available"
+#~ msgstr "Hosts available"
 
-#: screens/Setting/Settings.tsx:103
+#: screens/Setting/Settings.tsx:102
 msgid "Logging"
 msgstr "Logging"
 
@@ -10802,7 +10788,6 @@ msgstr "Edit Node"
 #: screens/Credential/shared/CredentialFormFields/GceFileUploadField.tsx:52
 #: screens/Inventory/shared/InventorySourceSubForms/SCMSubForm.tsx:198
 #: screens/Setting/shared/SharedFields.tsx:553
-#: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:127
 #: screens/Template/shared/PlaybookSelect.tsx:146
 msgid "Clear"
 msgstr "Clear"
@@ -10822,8 +10807,8 @@ msgid "End"
 msgstr "End"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:113
-msgid "Hosts imported"
-msgstr "Hosts imported"
+#~ msgid "Hosts imported"
+#~ msgstr "Hosts imported"
 
 #: screens/Job/JobOutput/HostEventModal.tsx:202
 msgid "YAML tab"
@@ -11068,7 +11053,7 @@ msgid "All job types"
 msgstr "All job types"
 
 #: screens/Setting/GitHub/GitHubDetail/GitHubDetail.tsx:103
-#: screens/Setting/Settings.tsx:69
+#: screens/Setting/Settings.tsx:68
 msgid "GitHub Enterprise Organization"
 msgstr "GitHub Enterprise Organization"
 
@@ -11103,8 +11088,8 @@ msgid "Simple key select"
 msgstr "Simple key select"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:84
-msgid "You have automated against more hosts than your subscription allows."
-msgstr "You have automated against more hosts than your subscription allows."
+#~ msgid "You have automated against more hosts than your subscription allows."
+#~ msgstr "You have automated against more hosts than your subscription allows."
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:135
 msgid "Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied."
@@ -11152,33 +11137,32 @@ msgstr "{numJobsToCancel, plural, one {Cancel selected job} other {Cancel select
 #: screens/Organization/Organizations.tsx:31
 #: screens/Project/Projects.tsx:28
 #: screens/Project/Projects.tsx:37
-#: screens/Setting/Settings.tsx:48
-#: screens/Setting/Settings.tsx:52
-#: screens/Setting/Settings.tsx:55
-#: screens/Setting/Settings.tsx:59
-#: screens/Setting/Settings.tsx:62
-#: screens/Setting/Settings.tsx:65
-#: screens/Setting/Settings.tsx:68
-#: screens/Setting/Settings.tsx:71
-#: screens/Setting/Settings.tsx:74
-#: screens/Setting/Settings.tsx:77
-#: screens/Setting/Settings.tsx:80
-#: screens/Setting/Settings.tsx:83
+#: screens/Setting/Settings.tsx:47
+#: screens/Setting/Settings.tsx:51
+#: screens/Setting/Settings.tsx:54
+#: screens/Setting/Settings.tsx:58
+#: screens/Setting/Settings.tsx:61
+#: screens/Setting/Settings.tsx:64
+#: screens/Setting/Settings.tsx:67
+#: screens/Setting/Settings.tsx:70
+#: screens/Setting/Settings.tsx:73
+#: screens/Setting/Settings.tsx:76
+#: screens/Setting/Settings.tsx:79
+#: screens/Setting/Settings.tsx:82
+#: screens/Setting/Settings.tsx:96
 #: screens/Setting/Settings.tsx:97
 #: screens/Setting/Settings.tsx:98
 #: screens/Setting/Settings.tsx:99
 #: screens/Setting/Settings.tsx:100
 #: screens/Setting/Settings.tsx:101
-#: screens/Setting/Settings.tsx:102
-#: screens/Setting/Settings.tsx:105
-#: screens/Setting/Settings.tsx:108
-#: screens/Setting/Settings.tsx:111
-#: screens/Setting/Settings.tsx:114
-#: screens/Setting/Settings.tsx:117
-#: screens/Setting/Settings.tsx:120
-#: screens/Setting/Settings.tsx:123
-#: screens/Setting/Settings.tsx:126
-#: screens/Setting/Settings.tsx:129
+#: screens/Setting/Settings.tsx:104
+#: screens/Setting/Settings.tsx:107
+#: screens/Setting/Settings.tsx:110
+#: screens/Setting/Settings.tsx:113
+#: screens/Setting/Settings.tsx:116
+#: screens/Setting/Settings.tsx:119
+#: screens/Setting/Settings.tsx:122
+#: screens/Setting/Settings.tsx:125
 #: screens/Team/Teams.tsx:30
 #: screens/Template/Templates.tsx:49
 #: screens/User/Users.tsx:33
@@ -11384,10 +11368,10 @@ msgid "Sender e-mail"
 msgstr "Sender e-mail"
 
 #: screens/Setting/Subscription/SubscriptionEdit/SubscriptionStep.tsx:40
-msgid "Welcome to Red Hat Ansible Automation Platform!\n"
-"              Please complete the steps below to activate your subscription."
-msgstr "Welcome to Red Hat Ansible Automation Platform!\n"
-"              Please complete the steps below to activate your subscription."
+#~ msgid "Welcome to Red Hat Ansible Automation Platform!\n"
+#~ "              Please complete the steps below to activate your subscription."
+#~ msgstr "Welcome to Red Hat Ansible Automation Platform!\n"
+#~ "              Please complete the steps below to activate your subscription."
 
 #: components/StatusLabel/StatusLabel.tsx:73
 msgid "Provisioning fail"
@@ -11402,8 +11386,8 @@ msgid "Time in seconds to consider an inventory sync to be current. During job r
 msgstr "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:204
-msgid "Automation controller version"
-msgstr "Automation controller version"
+#~ msgid "Automation controller version"
+#~ msgstr "Automation controller version"
 
 #: screens/Setting/MiscAuthentication/MiscAuthenticationEdit/MiscAuthenticationEdit.tsx:90
 msgid "Access Token Expiration"
@@ -11492,8 +11476,8 @@ msgid "Sets the current life cycle stage of this instance. Default is \"installe
 msgstr "Sets the current life cycle stage of this instance. Default is \"installed.\""
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:65
-msgid "Compliant"
-msgstr "Compliant"
+#~ msgid "Compliant"
+#~ msgstr "Compliant"
 
 #: screens/Inventory/InventorySource/InventorySource.tsx:186
 msgid "View inventory source details"
@@ -11664,8 +11648,8 @@ msgid "Minimum percentage of all instances that will be automatically assigned t
 msgstr "Minimum percentage of all instances that will be automatically assigned to this group when new instances come online."
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:113
-msgid "Automation Analytics dashboard"
-msgstr "Automation Analytics dashboard"
+#~ msgid "Automation Analytics dashboard"
+#~ msgstr "Automation Analytics dashboard"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:393
 msgid "Source Phone Number"
@@ -11725,8 +11709,8 @@ msgid "Please select an Inventory or check the Prompt on Launch option"
 msgstr "Please select an Inventory or check the Prompt on Launch option"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:123
-msgid "Learn more about Automation Analytics"
-msgstr "Learn more about Automation Analytics"
+#~ msgid "Learn more about Automation Analytics"
+#~ msgstr "Learn more about Automation Analytics"
 
 #: screens/Template/Survey/SurveyReorderModal.tsx:242
 msgid "Survey preview modal"
@@ -11799,8 +11783,8 @@ msgid "Discard local changes before syncing"
 msgstr "Discard local changes before syncing"
 
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:69
-msgid "The number of hosts you have automated against is below your subscription count."
-msgstr "The number of hosts you have automated against is below your subscription count."
+#~ msgid "The number of hosts you have automated against is below your subscription count."
+#~ msgstr "The number of hosts you have automated against is below your subscription count."
 
 #: screens/Host/HostDetail/HostDetail.tsx:135
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:128
@@ -11903,8 +11887,8 @@ msgid "Account SID"
 msgstr "Account SID"
 
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:85
-msgid "Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics."
-msgstr "Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics."
+#~ msgid "Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics."
+#~ msgstr "Provide your Red Hat or Red Hat Satellite credentials to enable Automation Analytics."
 
 #: screens/Template/shared/PlaybookSelect.tsx:134
 #: screens/Template/shared/PlaybookSelect.tsx:135
@@ -11935,8 +11919,6 @@ msgstr "Error deleting tokens"
 
 #: screens/Dashboard/DashboardGraph.tsx:109
 #: screens/Dashboard/DashboardGraph.tsx:120
-#: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:125
-#: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:136
 msgid "Select period"
 msgstr "Select period"
 
@@ -12028,8 +12010,8 @@ msgstr "Confirm node removal"
 
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:93
 #: screens/SubscriptionUsage/SubscriptionUsageChart.tsx:141
-msgid "Past year"
-msgstr "Past year"
+#~ msgid "Past year"
+#~ msgstr "Past year"
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:198
 #: components/Schedule/shared/FrequencyDetailSubform.tsx:176

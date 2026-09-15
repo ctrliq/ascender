@@ -110,17 +110,6 @@ register(
 )
 
 register(
-    'LICENSE',
-    field_class=fields.DictField,
-    default=lambda: {},
-    label=_('License'),
-    help_text=_('The license controls which features and functionality are enabled. Use /api/v2/config/ to update or change the license.'),
-    category=_('System'),
-    category_slug='system',
-)
-
-
-register(
     'INSTALL_UUID',
     field_class=fields.CharField,
     label=_('Unique identifier for an installation'),

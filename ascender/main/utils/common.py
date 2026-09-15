@@ -41,7 +41,6 @@ from django.utils.timezone import now
 from django.apps import apps
 
 # Ascender
-from ascender.conf.license import get_license
 from ascender.main.utils.licensing import OPEN_PRODUCT_NAME
 
 logger = logging.getLogger('awx.main.utils')
@@ -232,10 +231,12 @@ def get_ascender_version():
 
 
 def get_ascender_http_client_headers():
-    license = get_license().get('license_type', 'UNLICENSED')
+    # The third field used to be the licence type. There is one licence now, so
+    # the string it produced is written out rather than looked up, which keeps
+    # the User-Agent on the wire byte for byte what it was.
     headers = {
         'Content-Type': 'application/json',
-        'User-Agent': '{} {} ({})'.format(OPEN_PRODUCT_NAME, get_ascender_version(), license),
+        'User-Agent': '{} {} (open)'.format(OPEN_PRODUCT_NAME, get_ascender_version()),
     }
     return headers
 

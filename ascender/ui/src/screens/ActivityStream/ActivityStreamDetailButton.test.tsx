@@ -43,7 +43,7 @@ describe('<ActivityStreamDetailButton />', () => {
               setting: [
                 {
                   category: 'system',
-                  name: 'INSIGHTS_TRACKING_STATE',
+                  name: 'ACTIVITY_STREAM_ENABLED',
                 },
               ],
             },
@@ -81,7 +81,7 @@ describe('<ActivityStreamDetailButton />', () => {
     assertDetail('Time', '5/25/2021, 6:17:59 PM');
     assertDetail('Initiated by', 'Bob');
     assertDetail('Setting category', 'system');
-    assertDetail('Setting name', 'INSIGHTS_TRACKING_STATE');
+    assertDetail('Setting name', 'ACTIVITY_STREAM_ENABLED');
     assertDetail('Action', 'foo');
 
     // the changes payload is rendered into a read-only code editor. The Ace
