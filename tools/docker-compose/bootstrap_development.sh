@@ -5,8 +5,14 @@ set +x
 if [ -f "/ascender_devel/manage.py" ]; then
     cd /ascender_devel
 else
-    echo "Failed to find awx source tree, map your development tree volume"
+    echo "Failed to find the Ascender source tree, map your development tree volume"
 fi
+
+# Before anything runs a management command: STATICFILES_DIRS names this
+# directory, and Django's system check warns once per command while it is
+# missing. Creating it after the migrations meant that warning on every call up
+# to that point.
+mkdir -p /ascender_devel/ascender/ui/build/static
 
 make ascender-link
 
@@ -22,9 +28,6 @@ if [[ -n "$RUN_MIGRATIONS" ]]; then
 else
     wait-for-migrations
 fi
-
-# Make sure that the UI static file directory exists, Django complains otherwise.
-mkdir -p /ascender_devel/ascender/ui/build/static
 
 if output=$(ascender-manage createsuperuser --noinput --username=admin --email=admin@localhost 2> /dev/null); then
     echo $output
