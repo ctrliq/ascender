@@ -70,6 +70,7 @@ describe('<Login />', () => {
       value: {
         getItem: vi.fn(() => '42'),
         setItem: vi.fn(() => null),
+        removeItem: vi.fn(() => null),
       },
       writable: true,
     });
@@ -252,6 +253,35 @@ describe('<Login />', () => {
 
     await waitFor(() => expect(RootAPI.login).toHaveBeenCalledTimes(1));
     expect(RootAPI.login).toHaveBeenCalledWith('un', 'pw');
+  });
+
+  test("applies the account's theme from the /me reply on login", async () => {
+    vi.mocked(MeAPI.read).mockResolvedValue({
+      data: { results: [{ id: 42, preferred_theme: 'light' }] },
+    } as unknown as ResponseOf<typeof MeAPI.read>);
+    // Signed out until the login call answers, as the cookie check would be.
+    let signedIn = false;
+    vi.mocked(RootAPI.login).mockImplementation(async () => {
+      signedIn = true;
+      return {} as never;
+    });
+    const { container, user } = renderWithContexts(
+      <AscenderLogin isAuthenticated={() => signedIn} />
+    );
+    await waitForLoginForm(container);
+    expect(document.documentElement.getAttribute('data-theme')).toBe('default');
+
+    await user.type(getUsernameInput(container), 'un');
+    await user.type(getPasswordInput(container), 'pw');
+    await user.click(getSubmitButton());
+
+    await waitFor(() =>
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+    );
+    // Mirrored for the next paint (this file stands localStorage in with a
+    // mock, so the write is what can be seen).
+    expect(window.localStorage.setItem).toHaveBeenCalledWith('theme', 'light');
+    sessionStorage.removeItem('theme');
   });
 
   test('render Redirect to / when already authenticated as a new user', async () => {
@@ -456,6 +486,49 @@ describe('<Login />', () => {
     expect(submit).toHaveBeenCalled();
     submit.mockRestore();
     form.remove();
+  });
+
+  test('restores the saved theme before handing off to a provider', async () => {
+    vi.mocked(AuthAPI.read).mockResolvedValue({
+      data: {
+        saml: {
+          login_url: '/sso/login/saml/?idp=corp',
+          complete_url: 'https://localhost:8043/sso/complete/saml/',
+        },
+      },
+    } as unknown as ResponseOf<typeof AuthAPI.read>);
+    document.cookie = 'csrftoken=TESTTOKEN';
+    const submit = vi
+      .spyOn(HTMLFormElement.prototype, 'submit')
+      .mockImplementation(() => {});
+    // This file's beforeEach stands localStorage in with a mock whose
+    // getItem answers '42' for the session user id; the saved theme has to
+    // come from the same mock.
+    vi.mocked(window.localStorage.getItem).mockImplementation((key) =>
+      key === 'theme' ? 'dark' : '42'
+    );
+
+    const { container } = renderWithContexts(
+      <AscenderLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    // The login screen itself paints in the default theme.
+    expect(sessionStorage.getItem('theme')).toBe('default');
+
+    const button = await waitFor(() =>
+      container.querySelector('[data-cy="social-auth-saml"]')
+    );
+    (button as HTMLElement).click();
+
+    // Leaving for the provider unloads the page without an unmount, so the
+    // saved theme has to be back in place by the time the form is submitted.
+    expect(submit).toHaveBeenCalled();
+    expect(sessionStorage.getItem('theme')).toBe('dark');
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+
+    submit.mockRestore();
+    document.querySelector('form[action^="/sso/login/saml/"]')?.remove();
+    sessionStorage.removeItem('theme');
   });
 
   test('SAML auth buttons shown', async () => {

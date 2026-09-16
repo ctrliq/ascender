@@ -13143,6 +13143,11 @@ export interface components {
       password: string;
       /** @default  */
       preferred_language: string;
+      /**
+       * @description The id of the UI theme this user prefers, followed from any browser they sign in with. Blank means the default theme.
+       * @default
+       */
+      preferred_theme: string;
     };
     PatchedWorkflowApprovalTemplateRequest: {
       name?: string | null;
@@ -13956,6 +13961,11 @@ export interface components {
       readonly ldap_dn: string;
       /** @default  */
       preferred_language: string;
+      /**
+       * @description The id of the UI theme this user prefers, followed from any browser they sign in with. Blank means the default theme.
+       * @default
+       */
+      preferred_theme: string;
       /** Format: date-time */
       readonly last_login: string | null;
       /** @description Set if the account is managed by an external service */
@@ -18553,6 +18563,11 @@ export interface components {
       readonly ldap_dn: string;
       /** @default  */
       preferred_language: string;
+      /**
+       * @description The id of the UI theme this user prefers, followed from any browser they sign in with. Blank means the default theme.
+       * @default
+       */
+      preferred_theme: string;
       /** Format: date-time */
       readonly last_login: string | null;
       /** @description Set if the account is managed by an external service */
@@ -18682,6 +18697,11 @@ export interface components {
       password: string;
       /** @default  */
       preferred_language: string;
+      /**
+       * @description The id of the UI theme this user prefers, followed from any browser they sign in with. Blank means the default theme.
+       * @default
+       */
+      preferred_theme: string;
     };
     /**
      * @description * `0` - 0 (WARNING)

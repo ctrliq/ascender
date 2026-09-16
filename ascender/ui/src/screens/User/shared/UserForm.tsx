@@ -221,13 +221,18 @@ export interface UserFormValues {
   preferred_theme: string;
 }
 
-/** What the form posts: the values, minus the two the form only uses itself. */
+/**
+ * What the form posts: the values minus the confirmation, with the theme
+ * only when the user is editing themselves, since that is the only case the
+ * field is offered in.
+ */
 export type UserFormPayload = Omit<
   UserFormValues,
   'confirm_password' | 'preferred_theme'
 > & {
   is_superuser: boolean;
   is_system_auditor: boolean;
+  preferred_theme?: string;
 };
 
 export interface UserFormProps {
@@ -245,6 +250,7 @@ function UserForm({
   submitError,
 }: UserFormProps) {
   const { t } = useLingui();
+  const { me = {} } = useConfig();
   const handleValidateAndSubmit = (
     values: UserFormValues,
     { setErrors }: SubmitHelpers<UserFormValues>
@@ -266,8 +272,10 @@ function UserForm({
       if (!submitValues.password) {
         delete (submitValues as Partial<UserFormPayload>).password;
       }
-      if (preferred_theme) {
-        applyTheme(preferred_theme, true);
+      // Anyone else's form starts the theme from this browser's own theme,
+      // which is not theirs to be given.
+      if (user.id && me.id === user.id) {
+        submitValues.preferred_theme = preferred_theme;
       }
       handleSubmit(submitValues);
     }
@@ -295,7 +303,7 @@ function UserForm({
           confirm_password: '',
           user_type: userType,
           preferred_language: user.preferred_language || '',
-          preferred_theme: getStoredThemeId(),
+          preferred_theme: user.preferred_theme || getStoredThemeId(),
         } as UserFormValues
       }
       onSubmit={handleValidateAndSubmit}
@@ -307,7 +315,8 @@ function UserForm({
             <FormSubmitError error={submitError} />
             <FormActionGroup
               onCancel={() => {
-                applyTheme(getSavedThemeId(), true);
+                // Undo the live preview the theme field gives.
+                applyTheme(getSavedThemeId());
                 handleCancel();
               }}
               onSubmit={formik.handleSubmit}
