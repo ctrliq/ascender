@@ -196,7 +196,7 @@ msgstr "शनिवार"
 msgid "Press Enter to edit. Press ESC to stop editing."
 msgstr "संपादित करने के लिए Enter दबाएं। संपादन रोकने के लिए ESC दबाएं।"
 
-#: screens/Template/Survey/MultipleChoiceField.tsx:107
+#: screens/Template/Survey/MultipleChoiceField.tsx:114
 msgid "Click to toggle default value"
 msgstr "डिफ़ॉल्ट मान टॉगल करने के लिए क्लिक करें"
 
@@ -995,7 +995,7 @@ msgid "This schedule uses complex rules that are not supported in the\n"
 msgstr "यह शेड्यूल जटिल नियमों का उपयोग करता है जो UI में\n"
 "  समर्थित नहीं हैं। कृपया इस शेड्यूल को प्रबंधित करने के लिए API का उपयोग करें।"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:149
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:161
 #: components/Workflow/WorkflowLinkHelp.tsx:47
 #: screens/Credential/shared/ExternalTestModal.tsx:102
 #: screens/Template/shared/JobTemplateForm.tsx:300
@@ -1401,7 +1401,7 @@ msgid "E-mail"
 msgstr "ई-मेल"
 
 #: components/JobList/JobList.tsx:219
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:160
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:172
 #: components/PromptDetail/PromptDetail.tsx:253
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:111
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:457
@@ -2117,7 +2117,7 @@ msgstr "विविध सिस्टम सेटिंग्स देखे
 msgid "Type Details"
 msgstr "प्रकार विवरण"
 
-#: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:85
+#: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:94
 msgid "Other prompts"
 msgstr "अन्य संकेत"
 
@@ -2336,7 +2336,7 @@ msgstr "सभी नोड्स हटाएं"
 msgid "Association modal"
 msgstr "संबद्धता मोडल"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:153
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:165
 #: screens/Template/shared/JobTemplateForm.tsx:304
 msgid "Check"
 msgstr "जांच"
@@ -2563,7 +2563,7 @@ msgstr "जॉब स्लाइस"
 msgid "Enable log system tracking facts individually"
 msgstr "लॉग सिस्टम को फ़ैक्ट्स को व्यक्तिगत रूप से ट्रैक करने में सक्षम करें"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/useWorkflowNodeSteps.ts:461
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/useWorkflowNodeSteps.ts:465
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "पासवर्ड के लिए संकेत देने वाले क्रेडेंशियल्स वाले जॉब टेम्पलेट नोड्स बनाते या संपादित करते समय नहीं चुने जा सकते"
 
@@ -2678,7 +2678,7 @@ msgstr "आउटपुट कॉपी करें"
 msgid "No results found"
 msgstr "कोई परिणाम नहीं मिला"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:206
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:218
 #: components/PromptDetail/PromptDetail.tsx:432
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:523
@@ -3750,7 +3750,7 @@ msgstr "Subversion"
 msgid "Failed to delete one or more execution environments"
 msgstr "एक या अधिक निष्पादन वातावरण हटाने में विफल"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:90
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:102
 #: components/PromptDetail/PromptDetail.tsx:419
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:528
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:281
@@ -3798,7 +3798,7 @@ msgstr "इस फ़ील्ड में एक संख्या होन�
 #~ msgstr "पूर्ण"
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:193
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:200
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:212
 #: screens/Template/shared/JobTemplate.helptext.tsx:21
 msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
 msgstr "यदि सक्षम है, तो जहाँ समर्थित हो वहाँ Ansible कार्यों द्वारा किए गए परिवर्तन दिखाएँ। यह Ansible के --diff मोड के समतुल्य है।"
@@ -4358,8 +4358,8 @@ msgstr "नेस्टेड समूह नाम पर फ़िल्ट�
 msgid "Allow Deletes While In Use"
 msgstr ""
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:781
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:783
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:784
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:786
 msgid "Error saving the workflow!"
 msgstr "वर्कफ़्लो सहेजने में त्रुटि!"
 
@@ -4952,7 +4952,7 @@ msgstr "हटाने के लिए एक प्रश्न चुने�
 
 #: components/AdHocCommands/AdHocPreviewStep.tsx:69
 #: components/HostForm/HostForm.tsx:156
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:129
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:141
 #: components/PromptDetail/PromptDetail.tsx:230
 #: components/PromptDetail/PromptDetail.tsx:439
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:294
@@ -5116,7 +5116,7 @@ msgstr "संक्षिप्त करें"
 
 #: components/JobList/JobListItem.tsx:335
 #: components/LabelLists/LabelLists.tsx:56
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:246
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:217
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:129
@@ -5193,8 +5193,8 @@ msgid "Minimum number of instances that will be automatically\n"
 msgstr "नए इंस्टेंस ऑनलाइन आने पर इस समूह को स्वचालित रूप से\n"
 "          असाइन किए जाने वाले इंस्टेंसों की न्यूनतम संख्या।"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:111
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:112
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:123
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:124
 #: components/PromptDetail/PromptDetail.tsx:323
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:255
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:590
@@ -5466,7 +5466,7 @@ msgid "Next"
 msgstr "अगला"
 
 #: components/LabelSelect/LabelSelect.tsx:204
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:252
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:264
 #: components/MultiSelect/TagMultiSelect.tsx:134
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:149
 #: screens/Inventory/shared/InventoryForm.tsx:97
@@ -5834,8 +5834,8 @@ msgstr "सोर्स कंट्रोल ब्रांच"
 msgid "Instance Groups"
 msgstr "इंस्टेंस समूह"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:120
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:121
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:132
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:133
 #: components/PromptDetail/PromptDetail.tsx:357
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:275
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:615
@@ -6508,6 +6508,11 @@ msgstr "समूह"
 msgid "{scm_update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{scm_update_cache_timeout, plural, one {# सेकंड} other {# सेकंड}}"
 
+#. placeholder {0}: workflowTemplate.name
+#: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:81
+msgid "This workflow ({0}) sets its own limit, which is used in place of this node's limit when the workflow runs."
+msgstr ""
+
 #: components/Schedule/ScheduleToggle/ScheduleToggle.tsx:79
 msgid "Toggle schedule"
 msgstr "शेड्यूल टॉगल करें"
@@ -7110,7 +7115,7 @@ msgstr "एक या अधिक समूह हटाने में वि
 msgid "Confirm Disable Local Authorization"
 msgstr "स्थानीय प्राधिकरण अक्षम करने की पुष्टि करें"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:785
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:788
 msgid "There was an error saving the workflow."
 msgstr "वर्कफ़्लो सहेजने में त्रुटि हुई।"
 
@@ -8854,7 +8859,7 @@ msgstr "इस फ़ील्ड में एक पूर्णांक ह�
 
 #: components/Workflow/WorkflowStartNode.tsx:67
 #: screens/Job/WorkflowOutput/WorkflowOutput.tsx:73
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:323
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:324
 msgid "START"
 msgstr "प्रारंभ"
 
@@ -9285,7 +9290,7 @@ msgstr "संबंधित समूह को अलग करें?"
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:172
 #: components/AdHocCommands/AdHocDetailsStep.tsx:173
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:69
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:73
 #: components/PromptDetail/PromptDetail.tsx:415
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:158
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:509
@@ -9295,6 +9300,11 @@ msgstr "संबंधित समूह को अलग करें?"
 #: screens/TopologyView/Tooltip.tsx:268
 msgid "Forks"
 msgstr "फ़ोर्क्स"
+
+#. placeholder {0}: resource?.name ?? ''
+#: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:83
+msgid "This limit is applied to all workflow nodes within this workflow ({0}) that prompt for a limit, in place of the limit set on each node."
+msgstr ""
 
 #: screens/Setting/Settings.tsx:84
 msgid "LDAP Default"
@@ -9606,7 +9616,7 @@ msgstr "निर्मित इन्वेंटरी विवरण दे
 msgid "An inventory must be selected"
 msgstr "एक इन्वेंटरी चुनी जानी चाहिए"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:58
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:62
 #: components/PromptDetail/PromptDetail.tsx:306
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:155
 #: components/PromptDetail/PromptProjectDetail.tsx:106
@@ -10719,7 +10729,7 @@ msgstr "लॉगिंग"
 msgid "Instance status"
 msgstr "इंस्टेंस स्थिति"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:146
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:158
 #: screens/Template/shared/JobTemplateForm.tsx:297
 msgid "Choose a job type"
 msgstr "एक जॉब प्रकार चुनें"
@@ -10982,7 +10992,7 @@ msgstr "पृष्ठांकन"
 msgid "Check whether the given field's value is present in the list provided; expects a comma-separated list of items."
 msgstr "जांचें कि दिए गए फ़ील्ड का मान प्रदान की गई सूची में मौजूद है या नहीं; आइटमों की अल्पविराम-पृथक सूची अपेक्षित है।"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:198
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:210
 #: components/PromptDetail/PromptDetail.tsx:431
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:522
@@ -11101,7 +11111,7 @@ msgstr "नियमित एक्सप्रेशन जहां केव
 msgid "The pattern used to target hosts in the inventory. Leaving the field blank, all, and * will all target all hosts in the inventory. You can find more information about Ansible's host patterns"
 msgstr "इन्वेंटरी में होस्ट्स को लक्षित करने के लिए उपयोग किया जाने वाला पैटर्न। फ़ील्ड को रिक्त छोड़ने, all, और * सभी इन्वेंटरी में सभी होस्ट्स को लक्षित करेंगे। आप Ansible के होस्ट पैटर्न के बारे में अधिक जानकारी पा सकते हैं"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:100
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:112
 #: components/PromptDetail/PromptDetail.tsx:196
 #: components/PromptDetail/PromptDetail.tsx:425
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:518
@@ -11450,7 +11460,7 @@ msgstr "इस सूची को भरने के लिए कृपया
 #: components/AdHocCommands/AdHocDetailsStep.tsx:152
 #: components/AdHocCommands/AdHocDetailsStep.tsx:153
 #: components/JobList/JobList.tsx:249
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:79
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:83
 #: components/PromptDetail/PromptDetail.tsx:311
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:161
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:103
@@ -11610,8 +11620,8 @@ msgstr "प्रोविज़निंग कॉलबैक URL के न�
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:199
 #: components/HostToggle/HostToggle.tsx:72
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:206
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:208
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:218
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:220
 #: components/PromptDetail/PromptDetail.tsx:432
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:523
