@@ -7,6 +7,7 @@ Lifted out of ascender/api/serializers.py, which had grown to 6,558 lines and
 136 classes. Nothing here changed on the way across.
 """
 
+import re
 from datetime import timedelta
 from oauthlib.common import generate_token
 from django.conf import settings
@@ -36,6 +37,13 @@ class UserSerializer(BaseSerializer):
     password = serializers.CharField(required=False, default='', allow_blank=True, help_text=_('Field used to change the password.'))
     ldap_dn = serializers.CharField(source='profile.ldap_dn', read_only=True)
     preferred_language = serializers.CharField(required=False, allow_blank=True, default='')
+    preferred_theme = serializers.CharField(
+        required=False,
+        allow_blank=True,
+        default='',
+        max_length=32,
+        help_text=_('The id of the UI theme this user prefers, followed from any browser they sign in with. Blank means the default theme.'),
+    )
     external_account = serializers.SerializerMethodField(help_text=_('Set if the account is managed by an external service'))
     is_system_auditor = serializers.BooleanField(default=False)
     show_capabilities = ['edit', 'delete']
@@ -55,6 +63,7 @@ class UserSerializer(BaseSerializer):
             'password',
             'ldap_dn',
             'preferred_language',
+            'preferred_theme',
             'last_login',
             'external_account',
         )
@@ -71,11 +80,12 @@ class UserSerializer(BaseSerializer):
         if obj and type(self) is UserSerializer:
             ret['auth'] = obj.social_auth.values('provider', 'uid')
         ret['preferred_language'] = obj.profile.language
+        ret['preferred_theme'] = obj.profile.theme
         return ret
 
     def get_validation_exclusions(self, obj=None):
         ret = super(UserSerializer, self).get_validation_exclusions(obj)
-        ret.extend(['password', 'is_system_auditor', 'preferred_language'])
+        ret.extend(['password', 'is_system_auditor', 'preferred_language', 'preferred_theme'])
         return ret
 
     def validate_preferred_language(self, value):
@@ -83,6 +93,14 @@ class UserSerializer(BaseSerializer):
 
         if value not in SUPPORTED_UI_LOCALES:
             raise serializers.ValidationError(_('Unsupported language code. Must be one of: {}.'.format(', '.join(sorted(SUPPORTED_UI_LOCALES - {''})))))
+        return value
+
+    def validate_preferred_theme(self, value):
+        # The themes are stylesheets bundled into the UI, plus one an
+        # administrator can upload, so the API cannot know the full list.
+        # It only insists on the shape of an id: what a stylesheet is named.
+        if not re.fullmatch(r'[a-z0-9][a-z0-9_-]*', value or '') and value != '':
+            raise serializers.ValidationError(_('A theme id is lowercase letters, digits, hyphens and underscores.'))
         return value
 
     def validate_password(self, value):
@@ -134,8 +152,13 @@ class UserSerializer(BaseSerializer):
         obj.profile.language = language
         obj.profile.save(update_fields=['language'])
 
+    def _update_preferred_theme(self, obj, theme):
+        obj.profile.theme = theme
+        obj.profile.save(update_fields=['theme'])
+
     def create(self, validated_data):
         preferred_language = validated_data.pop('preferred_language', None)
+        preferred_theme = validated_data.pop('preferred_theme', None)
         new_password = validated_data.pop('password', None)
         is_system_auditor = validated_data.pop('is_system_auditor', None)
         obj = super(UserSerializer, self).create(validated_data)
@@ -144,10 +167,13 @@ class UserSerializer(BaseSerializer):
             obj.is_system_auditor = is_system_auditor
         if preferred_language is not None:
             self._update_preferred_language(obj, preferred_language)
+        if preferred_theme is not None:
+            self._update_preferred_theme(obj, preferred_theme)
         return obj
 
     def update(self, obj, validated_data):
         preferred_language = validated_data.pop('preferred_language', None)
+        preferred_theme = validated_data.pop('preferred_theme', None)
         new_password = validated_data.pop('password', None)
         is_system_auditor = validated_data.pop('is_system_auditor', None)
         obj = super(UserSerializer, self).update(obj, validated_data)
@@ -156,6 +182,8 @@ class UserSerializer(BaseSerializer):
             obj.is_system_auditor = is_system_auditor
         if preferred_language is not None:
             self._update_preferred_language(obj, preferred_language)
+        if preferred_theme is not None:
+            self._update_preferred_theme(obj, preferred_theme)
         return obj
 
     def get_related(self, obj):

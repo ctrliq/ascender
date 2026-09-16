@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
-import { WorkflowApprovalsAPI } from 'api';
+import { UsersAPI, WorkflowApprovalsAPI } from 'api';
 import type { ResponseOf } from '../../../testUtils/responseOf';
 import { renderWithContexts } from '../../../testUtils/rtlContexts';
 import PageHeaderToolbar from './PageHeaderToolbar';
@@ -127,5 +127,40 @@ describe('PageHeaderToolbar', () => {
     expect(badge).toHaveAccessibleName('Pending Workflow Approvals');
     // nothing interactive inside it: one tab stop, not two
     expect(badge.querySelector('button, a')).toBeNull();
+  });
+
+  test('choosing a theme applies it and saves it to the account', async () => {
+    localStorage.removeItem('theme');
+    vi.mocked(UsersAPI.update).mockResolvedValue(
+      {} as unknown as ResponseOf<typeof UsersAPI.update>
+    );
+    const { user } = renderWithContexts(
+      <PageHeaderToolbar
+        onAboutClick={onAboutClick}
+        onLogoutClick={onLogoutClick}
+        loggedInUser={{ id: 1 }}
+      />
+    );
+    await screen.findByRole('button', { name: 'Info' });
+
+    await user.click(screen.getByRole('button', { name: 'Theme' }));
+    // The items are labelled from the stylesheets' Name comments, which the
+    // test build does not read, so find the item by its id instead.
+    const dark = await waitFor(() => {
+      const item = document.querySelector(
+        '[data-ouia-component-id="theme-dark-dropdown-item"] [role="menuitem"]'
+      );
+      if (!item) throw new Error('theme menu not open');
+      return item;
+    });
+    await user.click(dark);
+
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    expect(localStorage.getItem('theme')).toBe('dark');
+    await waitFor(() =>
+      expect(UsersAPI.update).toHaveBeenCalledWith(1, {
+        preferred_theme: 'dark',
+      })
+    );
   });
 });

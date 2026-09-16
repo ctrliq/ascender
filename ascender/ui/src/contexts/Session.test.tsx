@@ -60,4 +60,24 @@ describe('SessionProvider', () => {
     await cachedOptions(['options', '/api/v2/job_templates/'], fetch);
     expect(fetch).toHaveBeenCalledTimes(2);
   });
+
+  // The cached theme mirrors the account's and is what the next sign-in
+  // paints with before /api/v2/me/ answers, so logging out leaves it alone.
+  test('keeps the cached theme on logout', async () => {
+    const user = userEvent.setup();
+    localStorage.setItem('theme', 'light');
+
+    render(
+      <MemoryRouter>
+        <SessionProvider>
+          <LogoutButton />
+        </SessionProvider>
+      </MemoryRouter>
+    );
+    await user.click(await screen.findByRole('button', { name: 'Logout' }));
+    await waitFor(() => expect(RootAPI.logout).toHaveBeenCalled());
+
+    expect(localStorage.getItem('theme')).toBe('light');
+    localStorage.removeItem('theme');
+  });
 });

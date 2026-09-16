@@ -45,6 +45,62 @@ def test_preferred_language_in_representation():
     assert data['preferred_language'] == 'ja'
 
 
+@pytest.mark.django_db
+def test_preferred_theme_update_persists():
+    user = User.objects.create_user(username='themeuser1', password='Password1!')
+    serializer = UserSerializer(user, data={'preferred_theme': 'dark'}, partial=True)
+    assert serializer.is_valid(), serializer.errors
+    serializer.save()
+    user.profile.refresh_from_db()
+    assert user.profile.theme == 'dark'
+
+
+@pytest.mark.django_db
+def test_preferred_theme_clear():
+    user = User.objects.create_user(username='themeuser2', password='Password1!')
+    user.profile.theme = 'dark'
+    user.profile.save()
+    serializer = UserSerializer(user, data={'preferred_theme': ''}, partial=True)
+    assert serializer.is_valid(), serializer.errors
+    serializer.save()
+    user.profile.refresh_from_db()
+    assert user.profile.theme == ''
+
+
+@pytest.mark.django_db
+def test_preferred_theme_untouched_when_absent():
+    user = User.objects.create_user(username='themeuser3', password='Password1!')
+    user.profile.theme = 'light'
+    user.profile.save()
+    serializer = UserSerializer(user, data={'first_name': 'Theme'}, partial=True)
+    assert serializer.is_valid(), serializer.errors
+    serializer.save()
+    user.profile.refresh_from_db()
+    assert user.profile.theme == 'light'
+
+
+@pytest.mark.parametrize('value', ['Dark', 'my theme', '../etc', 'a' * 33, '-dash'])
+def test_preferred_theme_rejects_bad_ids(value):
+    serializer = UserSerializer(data={'preferred_theme': value}, partial=True)
+    serializer.is_valid()
+    assert 'preferred_theme' in serializer.errors
+
+
+@pytest.mark.parametrize('value', ['', 'default', 'awx', 'custom', 'my-theme_2'])
+def test_preferred_theme_accepts_ids(value):
+    serializer = UserSerializer()
+    assert serializer.validate_preferred_theme(value) == value
+
+
+@pytest.mark.django_db
+def test_preferred_theme_in_representation():
+    user = User.objects.create_user(username='themeuser4', password='Password1!')
+    user.profile.theme = 'light'
+    user.profile.save()
+    data = UserSerializer(user).to_representation(user)
+    assert data['preferred_theme'] == 'light'
+
+
 @pytest.mark.parametrize(
     "password,min_length,min_digits,min_upper,min_special,expect_error",
     [

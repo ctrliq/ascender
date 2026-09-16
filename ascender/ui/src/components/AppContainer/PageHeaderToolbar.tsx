@@ -24,6 +24,7 @@ import useRequest from 'hooks/useRequest';
 import getDocsBaseUrl from 'util/getDocsBaseUrl';
 import { useConfig } from 'contexts/Config';
 import { getThemes, applyTheme, getStoredThemeId } from 'themeRegistry';
+import { saveThemeToAccount } from '../../accountTheme';
 import useWsPendingApprovalCount from './useWsPendingApprovalCount';
 import './PageHeaderToolbar.css';
 
@@ -62,6 +63,11 @@ function PageHeaderToolbar({
     setIsThemeOpen(false);
     const theme = applyTheme(themeId, true);
     setCurrentThemeId(theme.id);
+    // Applied and cached locally already; recording it on the account is
+    // what carries it to the user's other browsers.
+    if (loggedInUser?.id) {
+      saveThemeToAccount(loggedInUser.id, theme.id);
+    }
   };
 
   const config = useConfig();

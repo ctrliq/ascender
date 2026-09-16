@@ -13,7 +13,8 @@ import useRequest, { useDismissableError } from 'hooks/useRequest';
 import AlertModal from 'components/AlertModal';
 import ErrorDetail from 'components/ErrorDetail';
 import { dynamicActivate, locales } from 'i18nLoader';
-import { setCustomTheme, applyTheme, getSavedThemeId } from 'themeRegistry';
+import { setCustomTheme } from 'themeRegistry';
+import { applyAccountTheme } from '../accountTheme';
 import { useSession } from './Session';
 
 /**
@@ -28,6 +29,8 @@ import { useSession } from './Session';
 export interface CurrentUser {
   id?: number;
   username?: string;
+  /** The id of the theme the account asks for; empty when none is recorded. */
+  preferred_theme?: string;
   is_superuser?: boolean;
   is_system_auditor?: boolean;
   [key: string]: unknown;
@@ -90,21 +93,14 @@ export const ConfigProvider = ({ children }: { children: React.ReactNode }) => {
 
       // The themes that ship with the product are bundled at build time, so an
       // administrator's own stylesheet can only arrive here, once the settings
-      // have loaded. Install it and then re-apply the saved choice.
-      //
-      // The saved id is read from localStorage rather than through
-      // getStoredThemeId, which prefers sessionStorage. App.js applies the
-      // stored theme before these settings exist, so a saved custom theme is
-      // unknown at that point and applyTheme falls back to the default, writing
-      // "default" into sessionStorage as it goes. Reading the session value back
-      // here would return that fallback and the custom theme would never appear.
-      // localStorage still holds the real preference, because that early call
-      // does not persist.
+      // have loaded. Install it before applying the account's choice, which
+      // may well be that stylesheet: App.tsx applied the browser's cached
+      // theme on mount, before either was known.
       setCustomTheme(
         uiConfig.CUSTOM_THEME as string,
         uiConfig.CUSTOM_THEME_NAME as string
       );
-      applyTheme(getSavedThemeId());
+      applyAccountTheme(me);
 
       const [
         { data: adminOrgData },
