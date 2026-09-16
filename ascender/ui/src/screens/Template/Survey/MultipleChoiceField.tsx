@@ -10,7 +10,7 @@ import {
   Button,
   InputGroup as PFInputGroup,
 } from '@patternfly/react-core';
-import PFCheckIcon from '@patternfly/react-icons/dist/js/icons/check-icon';
+import CheckIcon from '@patternfly/react-icons/dist/js/icons/check-icon';
 import Popover from 'components/Popover';
 import type { SurveyChoice } from './SurveyQuestionForm';
 import './MultipleChoiceField.css';
@@ -104,7 +104,15 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
             />
             <Button
               variant="control"
+              className={[
+                'ascender-multiple-choice-field__default-toggle',
+                isDefault &&
+                  'ascender-multiple-choice-field__default-toggle--selected',
+              ]
+                .filter(Boolean)
+                .join(' ')}
               aria-label={t`Click to toggle default value`}
+              aria-pressed={isDefault}
               ouiaId={choice ? `${choice}-button` : 'new-choice-button'}
               isDisabled={!choice.trim()}
               onClick={() => {
@@ -137,15 +145,7 @@ function MultipleChoiceField({ label, tooltip }: MultipleChoiceFieldProps) {
                   : formattedChoicesHelpers.setValue(newValues);
               }}
             >
-              <PFCheckIcon
-                className={[
-                  'ascender-multiple-choice-field__check-icon',
-                  isDefault &&
-                    'ascender-multiple-choice-field__check-icon--selected',
-                ]
-                  .filter(Boolean)
-                  .join(' ')}
-              />
+              <CheckIcon />
             </Button>
           </PFInputGroup>
         )
