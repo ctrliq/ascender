@@ -677,24 +677,6 @@
               "category_slug": "bulk",
               "default": 100
           },
-          "SUBSCRIPTION_USAGE_MODEL": {
-              "type": "choice",
-              "required": false,
-              "label": "Defines subscription usage model and shows Host Metrics",
-              "category": "System",
-              "category_slug": "system",
-              "default": "",
-              "choices": [
-                  [
-                      "",
-                      "Default model for Ascender - no subscription. Deletion of host_metrics will not be considered for purposes of managed host counting"
-                  ],
-                  [
-                      "unique_managed_hosts",
-                      "Usage based on unique managed nodes in a large historical time frame and delete functionality for no longer used managed nodes"
-                  ]
-              ]
-          },
           "CLEANUP_HOST_METRICS_LAST_TS": {
               "type": "datetime",
               "required": true,
@@ -5058,23 +5040,6 @@
               "category": "Bulk Actions",
               "category_slug": "bulk",
               "defined_in_file": false
-          },
-          "SUBSCRIPTION_USAGE_MODEL": {
-              "type": "choice",
-              "label": "Defines subscription usage model and shows Host Metrics",
-              "category": "System",
-              "category_slug": "system",
-              "defined_in_file": false,
-              "choices": [
-                  [
-                      "",
-                      "Default model for Ascender - no subscription. Deletion of host_metrics will not be considered for purposes of managed host counting"
-                  ],
-                  [
-                      "unique_managed_hosts",
-                      "Usage based on unique managed nodes in a large historical time frame and delete functionality for no longer used managed nodes"
-                  ]
-              ]
           },
           "CLEANUP_HOST_METRICS_LAST_TS": {
               "type": "datetime",

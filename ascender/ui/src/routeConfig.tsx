@@ -214,12 +214,6 @@ function getRouteConfig(userProfile: Partial<UserProfile> = {}) {
   const deleteRouteGroup = (name: string) => {
     routeConfig = routeConfig.filter(({ groupId }) => !groupId.includes(name));
   };
-  if (
-    userProfile?.systemConfig?.SUBSCRIPTION_USAGE_MODEL !==
-    'unique_managed_hosts'
-  ) {
-    deleteRoute('host_metrics');
-  }
   if (userProfile?.isSuperUser || userProfile?.isSystemAuditor)
     return routeConfig;
   deleteRoute('host_metrics');
