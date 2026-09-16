@@ -114,7 +114,7 @@ class Command(BaseCommand):
         # queries it makes (specifically, conf.settings queries).
         # This block is meant to serve as a sort of bail-out for the situation
         # where migrations aren't yet finished (similar to the migration
-        # detection middleware that the uwsgi processes have) or when instance
+        # detection middleware that the web processes have) or when instance
         # registration isn't done yet
         if migrating:
             logger.info('AWX is currently migrating, retry in 10s...')

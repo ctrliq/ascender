@@ -40,12 +40,11 @@ There are two main deployment types, virtual machines (VM) or K8S. Ansible Autom
   - callback receiver
   - receptor (*managed under systemd)
   - valkey (*managed under systemd)
-  - uwsgi
-  - daphne
+  - uvicorn
   - rsyslog
 - For K8S deployments, these background processes are containerized
   - `awx-ee`: receptor
-  - `awx-web`: uwsgi, daphne, wsbroadcast, rsyslog
+  - `awx-web`: uvicorn, wsbroadcast, rsyslog
   - `awx-task`: dispatcher, callback receiver
   - `valkey`: valkey
 - Each control node is monolithic and contains all the necessary components for handling API requests and running jobs.
