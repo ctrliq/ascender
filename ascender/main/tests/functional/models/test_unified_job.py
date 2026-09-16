@@ -285,12 +285,19 @@ class TestTaskImpact:
 
 
 @pytest.mark.django_db
-class TestCanceledJobFinishedTime:
-    """Tests for ansible/awx#3988 — canceled pending jobs should not set finished."""
+class TestTerminalJobTimestamps:
+    """A job reaching a terminal state always gets a `finished` time.
 
-    def test_cancel_pending_job_no_finished_time(self):
-        """A job canceled before it ever started should have finished=None."""
-        jt = JobTemplate.objects.create(name='test-jt-3988')
+    PR #343 (ansible/awx#3988) stopped stamping `finished` on jobs that never
+    started. The jobs list orders by `-finished`, and NULLs sort first on that
+    ordering, so every job canceled while pending or failed before launch was
+    pinned to the top of the list forever. `finished` now records when the job
+    reached its terminal state regardless of whether it ever ran; `started`
+    remains NULL for jobs that never ran.
+    """
+
+    def test_cancel_pending_job_sets_finished_not_started(self):
+        jt = JobTemplate.objects.create(name='test-jt-cancel-pending')
         job = jt.create_unified_job()
         assert job.started is None
         job.status = 'canceled'
@@ -298,13 +305,28 @@ class TestCanceledJobFinishedTime:
         job.refresh_from_db()
         assert job.status == 'canceled'
         assert job.started is None
-        assert job.finished is None
+        assert job.finished is not None
+        assert job.elapsed == 0
+
+    @pytest.mark.parametrize('status', ['failed', 'error'])
+    def test_fail_before_launch_sets_finished_not_started(self, status):
+        """The task manager's pre-start failure paths save with update_fields."""
+        jt = JobTemplate.objects.create(name='test-jt-fail-%s' % status)
+        job = jt.create_unified_job()
+        job.status = status
+        job.job_explanation = 'failed before launch'
+        job.save(update_fields=['status', 'job_explanation'])
+        job.refresh_from_db()
+        assert job.status == status
+        assert job.started is None
+        assert job.finished is not None
+        assert job.job_explanation == 'failed before launch'
 
     def test_cancel_running_job_sets_finished_time(self):
         """A job canceled while running should record a finished time."""
         from django.utils.timezone import now
 
-        jt = JobTemplate.objects.create(name='test-jt-3988-running')
+        jt = JobTemplate.objects.create(name='test-jt-cancel-running')
         job = jt.create_unified_job()
         job.status = 'running'
         job.started = now()
@@ -321,7 +343,7 @@ class TestCanceledJobFinishedTime:
         """Regression: normal completion still sets finished correctly."""
         from django.utils.timezone import now
 
-        jt = JobTemplate.objects.create(name='test-jt-3988-success')
+        jt = JobTemplate.objects.create(name='test-jt-success')
         job = jt.create_unified_job()
         job.status = 'running'
         job.started = now()
@@ -330,3 +352,23 @@ class TestCanceledJobFinishedTime:
         job.save()
         job.refresh_from_db()
         assert job.finished is not None
+
+    def test_terminal_jobs_never_sort_above_finished_jobs(self):
+        """The list's default `-finished` ordering must not float a never-started job."""
+        from django.utils.timezone import now
+
+        jt = JobTemplate.objects.create(name='test-jt-ordering')
+        ran = jt.create_unified_job()
+        ran.status = 'running'
+        ran.started = now()
+        ran.save()
+        ran.status = 'successful'
+        ran.save()
+        never_ran = jt.create_unified_job()
+        never_ran.status = 'canceled'
+        never_ran.save()
+        ordered = list(jt.jobs.order_by('-finished').values_list('id', flat=True))
+        # Both have a finished time, so the one that finished later (the
+        # cancel) legitimately comes first; what matters is neither is NULL.
+        assert ordered == [never_ran.id, ran.id]
+        assert not jt.jobs.filter(finished__isnull=True).exists()
