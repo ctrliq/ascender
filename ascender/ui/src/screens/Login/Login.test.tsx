@@ -70,6 +70,7 @@ describe('<Login />', () => {
       value: {
         getItem: vi.fn(() => '42'),
         setItem: vi.fn(() => null),
+        removeItem: vi.fn(() => null),
       },
       writable: true,
     });
@@ -252,6 +253,35 @@ describe('<Login />', () => {
 
     await waitFor(() => expect(RootAPI.login).toHaveBeenCalledTimes(1));
     expect(RootAPI.login).toHaveBeenCalledWith('un', 'pw');
+  });
+
+  test("applies the account's theme from the /me reply on login", async () => {
+    vi.mocked(MeAPI.read).mockResolvedValue({
+      data: { results: [{ id: 42, preferred_theme: 'light' }] },
+    } as unknown as ResponseOf<typeof MeAPI.read>);
+    // Signed out until the login call answers, as the cookie check would be.
+    let signedIn = false;
+    vi.mocked(RootAPI.login).mockImplementation(async () => {
+      signedIn = true;
+      return {} as never;
+    });
+    const { container, user } = renderWithContexts(
+      <AscenderLogin isAuthenticated={() => signedIn} />
+    );
+    await waitForLoginForm(container);
+    expect(document.documentElement.getAttribute('data-theme')).toBe('default');
+
+    await user.type(getUsernameInput(container), 'un');
+    await user.type(getPasswordInput(container), 'pw');
+    await user.click(getSubmitButton());
+
+    await waitFor(() =>
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+    );
+    // Mirrored for the next paint (this file stands localStorage in with a
+    // mock, so the write is what can be seen).
+    expect(window.localStorage.setItem).toHaveBeenCalledWith('theme', 'light');
+    sessionStorage.removeItem('theme');
   });
 
   test('render Redirect to / when already authenticated as a new user', async () => {

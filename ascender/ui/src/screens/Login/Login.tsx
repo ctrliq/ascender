@@ -35,6 +35,7 @@ import { useSession } from 'contexts/Session';
 import { applyTheme, getSavedThemeId, clearSessionTheme } from 'themeRegistry';
 import LoadingSpinner from 'components/LoadingSpinner';
 import { SESSION_REDIRECT_URL, SESSION_USER_ID } from '../../constants';
+import { applyAccountTheme } from '../../accountTheme';
 import '../../login.css';
 
 const loginLogoSrc = 'static/media/Ascender_logo.svg';
@@ -134,6 +135,10 @@ function AscenderLogin({ alt, isAuthenticated }: AscenderLoginProps) {
       if (isAuthenticated(document.cookie)) {
         const { data } = await MeAPI.read();
         const newUserId = data.results[0]?.id;
+        // The reply carries the account's theme too. Applying it here, before
+        // this screen unmounts and hands over to the app, spares the app a
+        // paint in the default theme while it asks /api/v2/me/ again.
+        applyAccountTheme(data.results[0]);
         const cacheKey = `isNewUser-${newUserId}`;
         const cached = window.sessionStorage.getItem(cacheKey);
         if (cached !== null) {
