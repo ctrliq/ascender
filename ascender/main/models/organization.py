@@ -159,7 +159,7 @@ class Team(CommonModelNameNotUnique, ResourceMixin):
 class Profile(CreatedModifiedModel):
     """
     Profile model related to User object. Stores LDAP DN for users loaded from
-    LDAP and the user's preferred UI language.
+    LDAP and the user's preferred UI language and theme.
     """
 
     class Meta:
@@ -172,6 +172,14 @@ class Profile(CreatedModifiedModel):
     )
     language = models.CharField(
         max_length=8,
+        default='',
+        blank=True,
+    )
+    # The id of a UI theme (the stylesheet's file name, or "custom" for the
+    # one an administrator uploads). Empty means no preference has been
+    # recorded and the UI falls back to its default.
+    theme = models.CharField(
+        max_length=32,
         default='',
         blank=True,
     )

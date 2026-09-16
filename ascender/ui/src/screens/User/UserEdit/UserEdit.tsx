@@ -6,6 +6,7 @@ import { CardBody } from 'components/Card';
 import { UsersAPI } from 'api';
 import { useConfig } from 'contexts/Config';
 import { dynamicActivate, locales } from 'i18nLoader';
+import { applyTheme } from 'themeRegistry';
 import UserForm from '../shared/UserForm';
 import type { UserFormPayload } from '../shared/UserForm';
 
@@ -27,6 +28,9 @@ function UserEdit({ user }: UserEditProps) {
       const { organization, ...payload } = values;
       await UsersAPI.update(user.id, payload);
       if (me?.id === user.id) {
+        if (values.preferred_theme) {
+          applyTheme(values.preferred_theme, true);
+        }
         const lang = values.preferred_language;
         if (lang && Object.keys(locales).includes(lang)) {
           localStorage.setItem('preferred_language', lang);

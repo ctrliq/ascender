@@ -53,4 +53,28 @@ describe('<UserEdit />', () => {
 
     expect(history.location.pathname).toEqual('/users/1/details');
   });
+
+  test('saving your own user records and applies the theme', async () => {
+    localStorage.removeItem('theme');
+    sessionStorage.removeItem('theme');
+    const { user } = renderWithContexts(
+      <UserEdit
+        user={{ ...mockData, preferred_theme: 'light' } as unknown as User}
+      />,
+      { context: { config: { me: { id: 1, is_superuser: true } } } }
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() => {
+      expect(UsersAPI.update).toHaveBeenCalledWith(
+        1,
+        expect.objectContaining({ preferred_theme: 'light' })
+      );
+    });
+    await waitFor(() =>
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light')
+    );
+    expect(localStorage.getItem('theme')).toBe('light');
+  });
 });

@@ -44,7 +44,7 @@ Choose one from the palette icon in the top navigation bar, or from the **Prefer
 .. image:: ../common/images/ug-theme-selector.png
    :alt: Theme drop-down open from the palette icon in the top navigation bar, listing Classic, Dark, Default, and Light with Default selected.
 
-The choice is stored in your browser rather than on your Ascender account. It applies to the browser you set it in, so signing in from another browser or machine starts from **Default** again, and anyone sharing a browser profile shares the theme.
+The choice is stored on your Ascender account, so it follows you to any browser or machine you sign in from, including sign-ins through SAML or another single sign-on provider. Picking a theme from the palette icon saves it to your account too. A theme chosen in a browser before this preference existed on the account is adopted by the account the next time you sign in from that browser. In the API, the preference is the ``preferred_theme`` field of the user.
 
 
 

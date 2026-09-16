@@ -152,6 +152,11 @@ function SessionProvider({ children }: { children: React.ReactNode }) {
       window.localStorage.removeItem(SESSION_USER_ID);
     }
     sessionStorage.clear();
+    // The theme belongs to the account now; localStorage only caches it for
+    // the paint before /api/v2/me/ answers. Left behind, the next person to
+    // sign in on this browser would be shown it, and an account without a
+    // preference of its own would adopt it (see applyAccountTheme).
+    localStorage.removeItem('theme');
     // Both caches are keyed by what was asked for and not by who asked, and
     // logging out does not reload the tab, so the next user to log in here
     // would be answered from the last one's reads. The `actions` an OPTIONS

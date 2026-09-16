@@ -458,6 +458,49 @@ describe('<Login />', () => {
     form.remove();
   });
 
+  test('restores the saved theme before handing off to a provider', async () => {
+    vi.mocked(AuthAPI.read).mockResolvedValue({
+      data: {
+        saml: {
+          login_url: '/sso/login/saml/?idp=corp',
+          complete_url: 'https://localhost:8043/sso/complete/saml/',
+        },
+      },
+    } as unknown as ResponseOf<typeof AuthAPI.read>);
+    document.cookie = 'csrftoken=TESTTOKEN';
+    const submit = vi
+      .spyOn(HTMLFormElement.prototype, 'submit')
+      .mockImplementation(() => {});
+    // This file's beforeEach stands localStorage in with a mock whose
+    // getItem answers '42' for the session user id; the saved theme has to
+    // come from the same mock.
+    vi.mocked(window.localStorage.getItem).mockImplementation((key) =>
+      key === 'theme' ? 'dark' : '42'
+    );
+
+    const { container } = renderWithContexts(
+      <AscenderLogin isAuthenticated={() => false} />
+    );
+    await waitForLoginForm(container);
+    // The login screen itself paints in the default theme.
+    expect(sessionStorage.getItem('theme')).toBe('default');
+
+    const button = await waitFor(() =>
+      container.querySelector('[data-cy="social-auth-saml"]')
+    );
+    (button as HTMLElement).click();
+
+    // Leaving for the provider unloads the page without an unmount, so the
+    // saved theme has to be back in place by the time the form is submitted.
+    expect(submit).toHaveBeenCalled();
+    expect(sessionStorage.getItem('theme')).toBe('dark');
+    expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+
+    submit.mockRestore();
+    document.querySelector('form[action^="/sso/login/saml/"]')?.remove();
+    sessionStorage.removeItem('theme');
+  });
+
   test('SAML auth buttons shown', async () => {
     vi.mocked(AuthAPI.read).mockResolvedValue({
       data: {

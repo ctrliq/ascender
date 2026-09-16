@@ -219,4 +219,46 @@ describe('<UserForm />', () => {
 
     expect(screen.queryByText('User Type')).not.toBeInTheDocument();
   });
+
+  test('sends the theme when the user edits themselves', async () => {
+    const handleSubmit = vi.fn();
+    const { user } = renderWithContexts(
+      <UserForm
+        user={{ ...mockData, preferred_theme: 'light' }}
+        handleSubmit={handleSubmit}
+        handleCancel={vi.fn()}
+      />,
+      { context: { config: { me: { id: 1, is_superuser: true } } } }
+    );
+    await screen.findByRole('button', { name: 'Save' });
+    expect(screen.getByText('Preferred Theme')).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() => expect(handleSubmit).toHaveBeenCalled());
+    expect(handleSubmit.mock.calls[0]?.[0]).toMatchObject({
+      preferred_theme: 'light',
+    });
+  });
+
+  test("does not send this browser's theme for another user", async () => {
+    const handleSubmit = vi.fn();
+    const { user } = renderWithContexts(
+      <UserForm
+        user={mockData}
+        handleSubmit={handleSubmit}
+        handleCancel={vi.fn()}
+      />,
+      { context: { config: { me: { id: 2, is_superuser: true } } } }
+    );
+    await screen.findByRole('button', { name: 'Save' });
+    expect(screen.queryByText('Preferred Theme')).not.toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'Save' }));
+
+    await waitFor(() => expect(handleSubmit).toHaveBeenCalled());
+    expect(handleSubmit.mock.calls[0]?.[0]).not.toHaveProperty(
+      'preferred_theme'
+    );
+  });
 });

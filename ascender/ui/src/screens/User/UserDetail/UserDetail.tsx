@@ -94,7 +94,8 @@ function UserDetail({ user }: UserDetailProps) {
             value={(() => {
               const themes = getThemes();
               const current = themes.find(
-                (th: { id: string }) => th.id === getStoredThemeId()
+                (th: { id: string }) =>
+                  th.id === (user.preferred_theme || getStoredThemeId())
               );
               return current ? current.name : t`Default`;
             })()}

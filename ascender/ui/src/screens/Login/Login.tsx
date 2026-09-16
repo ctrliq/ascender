@@ -191,6 +191,11 @@ function AscenderLogin({ alt, isAuthenticated }: AscenderLoginProps) {
   // view, so navigate there with a CSRF-carrying form rather than a link.
   const startSocialLogin = (loginUrl?: string) => {
     setSessionRedirect();
+    // Submitting the form unloads the page, which skips this component's
+    // effect cleanup. Put the saved theme back here, or the login screen's
+    // default stays in sessionStorage for the app to paint with when the
+    // provider sends the browser back.
+    applyTheme(getSavedThemeId());
     const form = document.createElement('form');
     form.method = 'post';
     form.action = loginUrl ?? '';
