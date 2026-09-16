@@ -40,6 +40,36 @@ def test_bulk_host_create_num_queries(organization, inventory, post, get, user, 
 
 
 @pytest.mark.django_db
+def test_bulk_host_create_counts_existing_hosts_in_the_right_organization(post, user):
+    """max_hosts is measured against the organization being written to.
+
+    The net-new count subtracted existing names belonging to organization 1
+    whatever organization was being written to, so anywhere else a host that
+    already existed counted as new and the limit could refuse a request that
+    was inside it.
+    """
+    # organization 1 exists and is not the one under test
+    Organization.objects.create(name='other')
+
+    org = Organization.objects.create(name='under-test', max_hosts=2)
+    assert org.id != 1
+    existing_inv = Inventory.objects.create(name='existing', organization=org)
+    target_inv = Inventory.objects.create(name='target', organization=org)
+
+    # the organization already knows host-1, in another of its inventories
+    Host.objects.create(name='host-1', inventory=existing_inv)
+
+    # so this adds one name the organization has not seen, against a limit of two
+    admin = user('org-admin', True)
+    post(
+        reverse('api:bulk_host_create'),
+        {'inventory': target_inv.id, 'hosts': [{'name': 'host-1'}, {'name': 'host-2'}]},
+        admin,
+        expect=201,
+    )
+
+
+@pytest.mark.django_db
 def test_bulk_host_create_rbac(organization, inventory, post, get, user):
     '''
     If I am a...

@@ -7478,7 +7478,7 @@ export interface components {
        */
       deleted_counter: number;
       /**
-       * @description Boolean flag saying whether the host is deleted and therefore not counted into the subscription consumption
+       * @description Boolean flag saying whether the host is deleted and therefore no longer counted as automated
        * @default false
        */
       deleted: boolean | null;
@@ -7489,13 +7489,9 @@ export interface components {
       readonly id: number;
       /** Format: date */
       readonly date: string;
-      /** @description How many unique hosts are consumed from the license */
-      readonly license_consumed: number;
-      /** @description 'License capacity as max. number of unique hosts */
-      readonly license_capacity: number;
-      /** @description How many hosts were added in the associated month, consuming more license capacity */
+      /** @description How many hosts were first automated in the associated month */
       readonly hosts_added: number;
-      /** @description How many hosts were deleted in the associated month, freeing the license capacity */
+      /** @description How many hosts were deleted in the associated month */
       readonly hosts_deleted: number;
       /** @description Manually entered number indirectly managed hosts for a certain month */
       readonly indirectly_managed_hosts: number;
@@ -11578,13 +11574,6 @@ export interface components {
        */
       BULK_HOST_MAX_DELETE: number;
       /**
-       * Defines subscription usage model and shows Host Metrics
-       * @default
-       */
-      SUBSCRIPTION_USAGE_MODEL:
-        | components['schemas']['SUBSCRIPTIONUSAGEMODELEnum']
-        | components['schemas']['BlankEnum'];
-      /**
        * Last cleanup date for HostMetrics
        * Format: date-time
        */
@@ -14036,12 +14025,6 @@ export interface components {
       readonly name: string;
       readonly description: string;
     };
-    /**
-     * @description * `` - Default model for Ascender - no subscription. Deletion of host_metrics will not be considered for purposes of managed host counting
-     *     * `unique_managed_hosts` - Usage based on unique managed nodes in a large historical time frame and delete functionality for no longer used managed nodes
-     * @enum {string}
-     */
-    SUBSCRIPTIONUSAGEMODELEnum: 'unique_managed_hosts';
     Schedule: {
       /** @description A value representing the schedules iCal recurrence rule. */
       rrule: string | null;
@@ -14600,13 +14583,6 @@ export interface components {
        * @default 250
        */
       BULK_HOST_MAX_DELETE: number;
-      /**
-       * Defines subscription usage model and shows Host Metrics
-       * @default
-       */
-      SUBSCRIPTION_USAGE_MODEL:
-        | components['schemas']['SUBSCRIPTIONUSAGEMODELEnum']
-        | components['schemas']['BlankEnum'];
       /**
        * Last cleanup date for HostMetrics
        * Format: date-time
@@ -16626,13 +16602,6 @@ export interface components {
        * @default 250
        */
       BULK_HOST_MAX_DELETE: number;
-      /**
-       * Defines subscription usage model and shows Host Metrics
-       * @default
-       */
-      SUBSCRIPTION_USAGE_MODEL:
-        | components['schemas']['SUBSCRIPTIONUSAGEMODELEnum']
-        | components['schemas']['BlankEnum'];
       /**
        * Last cleanup date for HostMetrics
        * Format: date-time

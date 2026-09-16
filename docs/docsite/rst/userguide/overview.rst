@@ -252,7 +252,7 @@ Limit the number of hosts per organization
 .. index::
    pair: features; limiting, hosts
 
-Lots of large organizations have instances shared among many organizations, and do not want any one organization using all the hosts. A superuser can set an upper limit on each organization through its **Max Hosts**, and bulk host creation refuses to take an organization past it.
+Lots of large organizations have instances shared among many organizations, and do not want any one organization using all the hosts. A superuser can set an upper limit on an organization by writing ``max_hosts`` through the API, at ``/api/v2/organizations/N/``; there is no field for it in the web interface. Bulk host creation refuses to take an organization past that limit.
 
 
 Inventory Plugins
