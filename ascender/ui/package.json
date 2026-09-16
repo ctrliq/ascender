@@ -28,7 +28,7 @@
     "dompurify": "^3.4.14",
     "has-ansi": "6.0.2",
     "html-entities": "2.6.0",
-    "js-yaml": "5.2.2",
+    "js-yaml": "5.4.2",
     "luxon": "^3.7.2",
     "react": "19.2.7",
     "react-dom": "19.2.7",
