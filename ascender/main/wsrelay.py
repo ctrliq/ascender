@@ -21,7 +21,7 @@ from ascender.main.analytics.broadcast_websocket import (
     RelayWebsocketStatsManager,
 )
 
-logger = logging.getLogger('awx.main.wsrelay')
+logger = logging.getLogger('ascender.main.wsrelay')
 
 
 def wrap_broadcast_msg(group, message: str):

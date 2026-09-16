@@ -8,7 +8,7 @@ from collections import OrderedDict
 
 # Logger is used for any data-related messages so that the log level
 # can be adjusted on command invocation
-logger = logging.getLogger('awx.main.commands.inventory_import')
+logger = logging.getLogger('ascender.main.commands.inventory_import')
 
 
 __all__ = ['MemHost', 'MemGroup', 'MemInventory', 'mem_data_to_dict', 'dict_to_mem_data']

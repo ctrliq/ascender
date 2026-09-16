@@ -59,7 +59,7 @@ from ascender.api.views.job_template import (
     JobTemplateSurveySpec,
 )
 
-logger = logging.getLogger('awx.api.views.workflow')
+logger = logging.getLogger('ascender.api.views.workflow')
 
 
 def _approval_vote_comment(request):

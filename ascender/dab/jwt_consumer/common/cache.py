@@ -6,7 +6,7 @@ from django.core.cache import caches
 
 from ascender.dab.lib.utils.settings import get_setting
 
-logger = logging.getLogger('awx.dab.jwt_consumer.common.cache')
+logger = logging.getLogger('ascender.dab.jwt_consumer.common.cache')
 
 
 # This setting allows a service to override which django cache we want to use

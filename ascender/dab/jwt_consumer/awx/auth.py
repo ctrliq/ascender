@@ -5,7 +5,7 @@ from django.apps import apps
 
 from ascender.dab.jwt_consumer.common.auth import JWTAuthentication
 
-logger = logging.getLogger('awx.dab.jwt_consumer.awx.auth')
+logger = logging.getLogger('ascender.dab.jwt_consumer.awx.auth')
 
 
 class AwxJWTAuthentication(JWTAuthentication):

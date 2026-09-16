@@ -50,7 +50,7 @@ from . import injectors as builtin_injectors
 
 __all__ = ['Credential', 'CredentialType', 'CredentialInputSource', 'build_safe_env']
 
-logger = logging.getLogger('awx.main.models.credential')
+logger = logging.getLogger('ascender.main.models.credential')
 
 # The groups a credential plugin can register against, in precedence order.
 # `ascender.credential_plugins` is the name the product has; `awx.credential_plugins`

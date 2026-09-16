@@ -9,7 +9,7 @@ from cryptography.hazmat.primitives.asymmetric import padding
 
 from ascender.dab.lib.utils.settings import get_setting
 
-logger = logging.getLogger('awx.dab.jwt_consumer.common.util')
+logger = logging.getLogger('ascender.dab.jwt_consumer.common.util')
 
 _SHARED_SECRET = 'trusted_proxy'
 

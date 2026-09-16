@@ -9,7 +9,7 @@ from ascender.main.models.oauth import OAuth2RefreshToken
 class Command(BaseCommand):
     def init_logging(self):
         log_levels = dict(enumerate([logging.ERROR, logging.INFO, logging.DEBUG, 0]))
-        self.logger = logging.getLogger('awx.main.commands.cleanup_tokens')
+        self.logger = logging.getLogger('ascender.main.commands.cleanup_tokens')
         self.logger.setLevel(log_levels.get(self.verbosity, 0))
         handler = logging.StreamHandler()
         handler.setFormatter(logging.Formatter('%(message)s'))

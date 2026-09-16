@@ -13,7 +13,7 @@ from ascender.main.notifications.base import AscenderBaseEmailBackend
 from ascender.main.utils import get_ascender_http_client_headers
 from ascender.main.notifications.custom_notification_base import CustomNotificationBase
 
-logger = logging.getLogger('awx.main.notifications.rocketchat_backend')
+logger = logging.getLogger('ascender.main.notifications.rocketchat_backend')
 
 
 class RocketChatBackend(AscenderBaseEmailBackend, CustomNotificationBase):

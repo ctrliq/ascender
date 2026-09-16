@@ -8,7 +8,7 @@ from ascender.dab.lib.utils.settings import get_setting
 if TYPE_CHECKING:
     from django.db import models
 
-logger = logging.getLogger('awx.dab.lib.utils.create_system_user')
+logger = logging.getLogger('ascender.dab.lib.utils.create_system_user')
 
 """
 These functions are in its own file because it is loaded during migrations so it has no access to models.

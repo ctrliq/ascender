@@ -21,7 +21,7 @@ from ascender.main.models.events import AdHocCommandEvent, UnpartitionedAdHocCom
 from ascender.main.models.unified_jobs import UnifiedJob
 from ascender.main.models.notifications import JobNotificationMixin, NotificationTemplate
 
-logger = logging.getLogger('awx.main.models.ad_hoc_commands')
+logger = logging.getLogger('ascender.main.models.ad_hoc_commands')
 
 __all__ = ['AdHocCommand']
 

@@ -19,7 +19,7 @@ from ascender.main.analytics.broadcast_websocket import (
 from ascender.main.analytics.subsystem_metrics import WebsocketsMetricsServer
 from ascender.main.wsrelay import WebSocketRelayManager
 
-logger = logging.getLogger('awx.main.wsrelay')
+logger = logging.getLogger('ascender.main.wsrelay')
 
 
 class Command(BaseCommand):

@@ -31,7 +31,7 @@ from ascender.conf.models import Setting
 # FIXME: Gracefully handle when settings are accessed before the database is
 # ready (or during migrations).
 
-logger = logging.getLogger('awx.conf.settings')
+logger = logging.getLogger('ascender.conf.settings')
 
 SETTING_MEMORY_TTL = 5
 

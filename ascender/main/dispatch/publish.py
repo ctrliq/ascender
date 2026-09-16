@@ -9,7 +9,7 @@ from django_guid import get_guid
 from . import pg_bus_conn
 from ascender.main.utils import is_testing
 
-logger = logging.getLogger('awx.main.dispatch')
+logger = logging.getLogger('ascender.main.dispatch')
 
 
 def serialize_task(f):

@@ -11,7 +11,7 @@ from ascender.settings.typed import settings
 
 from . import consumers
 
-logger = logging.getLogger('awx.main.routing')
+logger = logging.getLogger('ascender.main.routing')
 _application = None
 
 

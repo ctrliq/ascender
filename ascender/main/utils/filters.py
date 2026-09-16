@@ -23,11 +23,11 @@ from django_guid.log_filters import CorrelationId
 from ascender import MODE
 from ascender.main.constants import LOGGER_BLOCKLIST
 from ascender.main.utils.common import get_search_fields
-from ascender.main.constants import ANALYTICS_LOGGER_PREFIX
+from ascender.main.constants import ANALYTICS_LOGGER_PREFIX, LEGACY_SERVICE_LOGGER_PREFIX, SERVICE_LOGGER_PREFIX
 
 __all__ = ['SmartFilter', 'ExternalLoggerEnabled', 'DynamicLevelFilter']
 
-logger = logging.getLogger('awx.main.utils')
+logger = logging.getLogger('ascender.main.utils')
 
 
 class FieldFromSettings(object):
@@ -105,6 +105,12 @@ class ExternalLoggerEnabled(Filter):
                 base_name, trailing_path = record.name.split('.', 1)
             else:
                 base_name = record.name
+            # LOG_AGGREGATOR_LOGGERS is a database setting, so an install made
+            # before the service loggers were renamed still has awx stored in
+            # it. Reading that as the new prefix is what stops the rename
+            # quietly cutting a deployment off from its own aggregator.
+            if base_name == SERVICE_LOGGER_PREFIX:
+                return bool(SERVICE_LOGGER_PREFIX in loggers or LEGACY_SERVICE_LOGGER_PREFIX in loggers)
             return bool(base_name in loggers)
 
 

@@ -17,7 +17,7 @@ __all__ = [
     'ansible_encryption',
 ]
 
-logger = logging.getLogger('awx.dab.lib.utils.encryption')
+logger = logging.getLogger('ascender.dab.lib.utils.encryption')
 
 
 ENCRYPTED_STRING = '$encrypted$'

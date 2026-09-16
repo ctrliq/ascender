@@ -3,7 +3,7 @@ import logging
 from ascender.settings.typed import settings
 from django.contrib.auth.backends import ModelBackend
 
-logger = logging.getLogger('awx.main.backends')
+logger = logging.getLogger('ascender.main.backends')
 
 
 class AWXModelBackend(ModelBackend):

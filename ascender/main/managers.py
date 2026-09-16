@@ -13,7 +13,7 @@ from ascender.main.constants import RECEPTOR_PENDING
 
 ___all__ = ['HostManager', 'InstanceManager', 'DeferJobCreatedManager', 'UUID_DEFAULT']
 
-logger = logging.getLogger('awx.main.managers')
+logger = logging.getLogger('ascender.main.managers')
 UUID_DEFAULT = '00000000-0000-0000-0000-000000000000'
 
 

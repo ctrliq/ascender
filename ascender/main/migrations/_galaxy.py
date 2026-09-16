@@ -10,7 +10,7 @@ from django.utils.timezone import now
 from ascender.main.models import CredentialType as ModernCredentialType
 from ascender.main.utils.common import set_current_apps
 
-logger = logging.getLogger('awx.main.migrations')
+logger = logging.getLogger('ascender.main.migrations')
 
 
 def migrate_galaxy_settings(apps, schema_editor):

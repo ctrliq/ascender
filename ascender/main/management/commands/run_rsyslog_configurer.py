@@ -8,7 +8,7 @@ from ascender.main.dispatch import pg_bus_conn
 from ascender.main.dispatch.worker.task import TaskWorker
 from ascender.main.utils.external_logging import reconfigure_rsyslog
 
-logger = logging.getLogger('awx.main.rsyslog_configurer')
+logger = logging.getLogger('ascender.main.rsyslog_configurer')
 
 
 class Command(BaseCommand):

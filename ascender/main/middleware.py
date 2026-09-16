@@ -29,7 +29,7 @@ from ascender.conf.settings import SETTING_CACHE_VERSION_KEY
 from ascender.main.utils.profiling import AscenderProfiler
 from ascender.main.utils.common import memoize
 
-logger = logging.getLogger('awx.main.middleware')
+logger = logging.getLogger('ascender.main.middleware')
 perf_logger = logging.getLogger('ascender.analytics.performance')
 
 

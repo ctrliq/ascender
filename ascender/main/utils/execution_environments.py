@@ -9,7 +9,7 @@ from ascender.main.models.execution_environments import ExecutionEnvironment
 # Named rather than derived from __name__: the logger names stay awx.* while
 # the package is ascender.*, so LOGGING and anything filtering on them keep
 # matching. The diagnostic names move in their own change.
-logger = logging.getLogger('awx.main.utils.execution_environments')
+logger = logging.getLogger('ascender.main.utils.execution_environments')
 
 
 def get_control_plane_execution_environment():

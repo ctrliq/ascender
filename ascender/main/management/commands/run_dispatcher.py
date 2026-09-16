@@ -13,7 +13,7 @@ from ascender.main.dispatch.pool import AutoscalePool
 from ascender.main.dispatch.worker import AWXConsumerPG, TaskWorker
 from ascender.main.analytics.subsystem_metrics import DispatcherMetricsServer
 
-logger = logging.getLogger('awx.main.dispatch')
+logger = logging.getLogger('ascender.main.dispatch')
 
 
 class Command(BaseCommand):

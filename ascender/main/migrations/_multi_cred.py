@@ -1,6 +1,6 @@
 import logging
 
-logger = logging.getLogger('awx.main.migrations')
+logger = logging.getLogger('ascender.main.migrations')
 
 
 def migrate_to_multi_cred(app, schema_editor):

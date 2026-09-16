@@ -22,7 +22,7 @@ DATA_URI_RE = re.compile(r'.*')  # FIXME
 __all__ = ['OAuth2AccessToken', 'OAuth2Application', 'OAuth2RefreshToken', 'OAuth2IDToken']
 
 
-logger = logging.getLogger('awx.main.models.oauth')
+logger = logging.getLogger('ascender.main.models.oauth')
 
 
 class OAuth2Application(AbstractApplication):
