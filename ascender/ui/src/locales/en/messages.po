@@ -1083,7 +1083,7 @@ msgstr "View all Teams."
 msgid "This field must be a regular expression"
 msgstr "This field must be a regular expression"
 
-#: screens/Job/JobDetail/JobDetail.tsx:602
+#: screens/Job/JobDetail/JobDetail.tsx:601
 msgid "Artifacts"
 msgstr "Artifacts"
 
@@ -1152,7 +1152,7 @@ msgid "Controls whether or not this instance is managed by policy. If enabled, t
 msgstr "Controls whether or not this instance is managed by policy. If enabled, the instance will be available for automatic assignment to and unassignment from instance groups based on policy rules."
 
 #: components/JobList/JobList.tsx:257
-#: screens/Job/JobDetail/JobDetail.tsx:253
+#: screens/Job/JobDetail/JobDetail.tsx:252
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:246
 msgid "Finished"
 msgstr "Finished"
@@ -1403,7 +1403,7 @@ msgstr "E-mail"
 #: components/PromptDetail/PromptDetail.tsx:253
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:111
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:457
-#: screens/Job/JobDetail/JobDetail.tsx:306
+#: screens/Job/JobDetail/JobDetail.tsx:305
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:185
 #: screens/Template/shared/JobTemplateForm.tsx:342
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:140
@@ -1446,7 +1446,7 @@ msgstr "option to the"
 msgid "Failed to delete user."
 msgstr "Failed to delete user."
 
-#: screens/Job/JobDetail/JobDetail.tsx:405
+#: screens/Job/JobDetail/JobDetail.tsx:404
 msgid "Container Group"
 msgstr "Container Group"
 
@@ -1530,7 +1530,7 @@ msgstr "Failed to delete notification."
 msgid "Show less"
 msgstr "Show less"
 
-#: screens/Job/JobDetail/JobDetail.tsx:353
+#: screens/Job/JobDetail/JobDetail.tsx:352
 #: screens/Project/ProjectList/ProjectList.tsx:224
 #: screens/Project/ProjectList/ProjectListItem.tsx:207
 msgid "Revision"
@@ -2131,7 +2131,7 @@ msgstr "Parent node outcome required before the condition is evaluated."
 #: components/Workflow/WorkflowNodeHelp.tsx:41
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:101
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:29
-#: screens/Job/JobDetail/JobDetail.tsx:260
+#: screens/Job/JobDetail/JobDetail.tsx:259
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:73
 msgid "Job Template"
 msgstr "Job Template"
@@ -2545,7 +2545,7 @@ msgid "Delete Execution Environment"
 msgstr "Delete Execution Environment"
 
 #: components/JobList/JobListItem.tsx:366
-#: screens/Job/JobDetail/JobDetail.tsx:413
+#: screens/Job/JobDetail/JobDetail.tsx:412
 msgid "Job Slice"
 msgstr "Job Slice"
 
@@ -2603,7 +2603,7 @@ msgstr "Use one IRC channel or username per line. The pound\n"
 msgid "Microsoft Azure Resource Manager"
 msgstr "Microsoft Azure Resource Manager"
 
-#: screens/Job/JobDetail/JobDetail.tsx:664
+#: screens/Job/JobDetail/JobDetail.tsx:663
 #: screens/Job/JobOutput/JobOutput.tsx:1203
 #: screens/Job/JobOutput/JobOutput.tsx:1204
 #: screens/Job/WorkflowOutput/WorkflowOutput.tsx:134
@@ -2615,7 +2615,7 @@ msgstr "Job Delete Error"
 msgid "On days"
 msgstr "On days"
 
-#: screens/Job/JobDetail/JobDetail.tsx:384
+#: screens/Job/JobDetail/JobDetail.tsx:383
 msgid "Execution Node"
 msgstr "Execution Node"
 
@@ -2811,7 +2811,7 @@ msgid "Question"
 msgstr "Question"
 
 #: components/PromptDetail/PromptProjectDetail.tsx:96
-#: screens/Job/JobDetail/JobDetail.tsx:312
+#: screens/Job/JobDetail/JobDetail.tsx:311
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:192
 #: screens/Project/shared/ProjectForm.tsx:316
 msgid "Source Control Type"
@@ -3025,7 +3025,7 @@ msgstr "Azure AD settings"
 
 #: components/JobList/JobListItem.tsx:371
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
-#: screens/Job/JobDetail/JobDetail.tsx:422
+#: screens/Job/JobDetail/JobDetail.tsx:421
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:263
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:293
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:323
@@ -3324,7 +3324,7 @@ msgstr "Type answer then click checkbox on right to select answer as\n"
 msgid "Survey Question Order"
 msgstr "Survey Question Order"
 
-#: screens/Job/JobDetail/JobDetail.tsx:248
+#: screens/Job/JobDetail/JobDetail.tsx:247
 msgid "Unknown Start Date"
 msgstr "Unknown Start Date"
 
@@ -3364,7 +3364,7 @@ msgstr "Less than or equal to comparison."
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:85
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:109
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:164
-#: screens/Job/JobDetail/JobDetail.tsx:655
+#: screens/Job/JobDetail/JobDetail.tsx:654
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:493
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:374
@@ -3514,7 +3514,7 @@ msgstr "GitHub Team"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:88
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:337
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:139
-#: screens/Job/JobDetail/JobDetail.tsx:579
+#: screens/Job/JobDetail/JobDetail.tsx:578
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:446
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:326
@@ -3702,11 +3702,11 @@ msgstr "Azure AD Tenant"
 msgid "Create new Instance"
 msgstr "Create new Instance"
 
-#: screens/Job/JobDetail/JobDetail.tsx:195
+#: screens/Job/JobDetail/JobDetail.tsx:194
 msgid "Project Update Status"
 msgstr "Project Update Status"
 
-#: screens/Job/JobDetail/JobDetail.tsx:390
+#: screens/Job/JobDetail/JobDetail.tsx:389
 msgid "Controller Node"
 msgstr "Controller Node"
 
@@ -3884,8 +3884,8 @@ msgstr "Default Execution Environment"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:150
 #: components/TemplateList/TemplateListItem.tsx:279
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:256
-#: screens/Job/JobDetail/JobDetail.tsx:181
-#: screens/Job/JobDetail/JobDetail.tsx:215
+#: screens/Job/JobDetail/JobDetail.tsx:180
+#: screens/Job/JobDetail/JobDetail.tsx:214
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:222
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:232
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:43
@@ -4120,8 +4120,8 @@ msgstr "Delete Credential"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:139
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:143
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:119
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:123
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4170,7 +4170,7 @@ msgstr "View JSON examples at"
 msgid "Destination SMS Number(s)"
 msgstr "Destination SMS Number(s)"
 
-#: screens/Job/JobDetail/JobDetail.tsx:438
+#: screens/Job/JobDetail/JobDetail.tsx:437
 msgid "No timeout specified"
 msgstr "No timeout specified"
 
@@ -4756,7 +4756,7 @@ msgid "Delete this node"
 msgstr "Delete this node"
 
 #: components/JobList/JobListItem.tsx:264
-#: screens/Job/JobDetail/JobDetail.tsx:292
+#: screens/Job/JobDetail/JobDetail.tsx:291
 msgid "Source Workflow Job"
 msgstr "Source Workflow Job"
 
@@ -4965,7 +4965,7 @@ msgstr "Select a question to delete"
 #: screens/Inventory/shared/InventoryGroupForm.tsx:68
 #: screens/Inventory/shared/SmartInventoryForm.tsx:101
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:133
-#: screens/Job/JobDetail/JobDetail.tsx:590
+#: screens/Job/JobDetail/JobDetail.tsx:589
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:484
 #: screens/Template/shared/JobTemplateForm.tsx:495
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:261
@@ -5125,7 +5125,7 @@ msgstr "Collapse"
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:124
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
 #: screens/Inventory/shared/InventoryForm.tsx:89
-#: screens/Job/JobDetail/JobDetail.tsx:492
+#: screens/Job/JobDetail/JobDetail.tsx:491
 #: screens/Labels/Labels.tsx:13
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:399
 #: screens/Template/shared/JobTemplateForm.tsx:480
@@ -5171,7 +5171,7 @@ msgstr "Month"
 #: screens/Credential/CredentialList/CredentialList.tsx:195
 #: screens/Credential/Credentials.tsx:16
 #: screens/Credential/Credentials.tsx:27
-#: screens/Job/JobDetail/JobDetail.tsx:468
+#: screens/Job/JobDetail/JobDetail.tsx:467
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:372
 #: screens/Template/shared/JobTemplateForm.tsx:465
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:54
@@ -5196,7 +5196,7 @@ msgstr "Minimum number of instances that will be automatically\n"
 #: components/PromptDetail/PromptDetail.tsx:323
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:255
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:590
-#: screens/Job/JobDetail/JobDetail.tsx:517
+#: screens/Job/JobDetail/JobDetail.tsx:516
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:433
 #: screens/Template/shared/JobTemplateForm.tsx:625
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:267
@@ -5220,7 +5220,7 @@ msgstr "Select a row to approve"
 #~ msgid "Unique Hosts"
 #~ msgstr "Unique Hosts"
 
-#: screens/Job/JobDetail/JobDetail.tsx:651
+#: screens/Job/JobDetail/JobDetail.tsx:650
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:247
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:251
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:219
@@ -5837,7 +5837,7 @@ msgstr "Instance Groups"
 #: components/PromptDetail/PromptDetail.tsx:357
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:275
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:615
-#: screens/Job/JobDetail/JobDetail.tsx:544
+#: screens/Job/JobDetail/JobDetail.tsx:543
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:459
 #: screens/Template/shared/JobTemplateForm.tsx:637
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:279
@@ -5908,7 +5908,7 @@ msgstr "Nested groups inventory definition:"
 #~ msgid "Prompt for limit on launch."
 #~ msgstr "Prompt for limit on launch."
 
-#: screens/Job/JobDetail/JobDetail.tsx:247
+#: screens/Job/JobDetail/JobDetail.tsx:246
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:215
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.tsx:84
 msgid "Started"
@@ -6078,7 +6078,7 @@ msgstr "Output tab"
 msgid "Denied"
 msgstr "Denied"
 
-#: screens/Job/JobDetail/JobDetail.tsx:254
+#: screens/Job/JobDetail/JobDetail.tsx:253
 msgid "Unknown Finish Date"
 msgstr "Unknown Finish Date"
 
@@ -6093,7 +6093,7 @@ msgstr "Multiple Choice"
 #: components/AdHocCommands/AdHocCredentialStep.tsx:111
 #: components/AdHocCommands/AdHocCredentialStep.tsx:112
 #: components/AdHocCommands/AdHocCredentialStep.tsx:124
-#: screens/Job/JobDetail/JobDetail.tsx:446
+#: screens/Job/JobDetail/JobDetail.tsx:445
 msgid "Machine Credential"
 msgstr "Machine Credential"
 
@@ -6259,7 +6259,7 @@ msgstr "Start message"
 msgid "Scope for the token's access"
 msgstr "Scope for the token's access"
 
-#: screens/Job/JobDetail/JobDetail.tsx:569
+#: screens/Job/JobDetail/JobDetail.tsx:568
 msgid "Module Name"
 msgstr "Module Name"
 
@@ -7030,7 +7030,7 @@ msgstr "Choose a Playbook Directory"
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
-#: screens/Job/JobDetail/JobDetail.tsx:275
+#: screens/Job/JobDetail/JobDetail.tsx:274
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:85
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:224
 msgid "Workflow Job Template"
@@ -7550,7 +7550,7 @@ msgstr "File upload rejected. Please select a single .json file."
 msgid "Local time zone"
 msgstr "Local time zone"
 
-#: screens/Job/JobDetail/JobDetail.tsx:209
+#: screens/Job/JobDetail/JobDetail.tsx:208
 msgid "No Status Available"
 msgstr "No Status Available"
 
@@ -7884,7 +7884,7 @@ msgstr "{0, plural, one {This instance is currently being used by other resource
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:81
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8038,7 +8038,7 @@ msgstr "It is hard to give a specification for\n"
 "            actual facts will differ system-to-system."
 
 #: components/JobList/JobListItem.tsx:371
-#: screens/Job/JobDetail/JobDetail.tsx:421
+#: screens/Job/JobDetail/JobDetail.tsx:420
 msgid "Job Slice Parent"
 msgstr "Job Slice Parent"
 
@@ -8320,7 +8320,7 @@ msgstr ""
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:234
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:281
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.tsx:51
-#: screens/Job/JobDetail/JobDetail.tsx:370
+#: screens/Job/JobDetail/JobDetail.tsx:369
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:263
 msgid "Verbosity"
 msgstr "Verbosity"
@@ -8330,7 +8330,7 @@ msgstr "Verbosity"
 msgid "Mattermost"
 msgstr "Mattermost"
 
-#: screens/Job/JobDetail/JobDetail.tsx:225
+#: screens/Job/JobDetail/JobDetail.tsx:224
 msgid "Job ID"
 msgstr "Job ID"
 
@@ -8396,7 +8396,7 @@ msgstr "Inventory sync"
 #: components/Lookup/ProjectLookup.tsx:165
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:166
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:234
-#: screens/Job/JobDetail/JobDetail.tsx:79
+#: screens/Job/JobDetail/JobDetail.tsx:78
 #: screens/Project/ProjectList/ProjectList.tsx:201
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:105
 msgid "Remote Archive"
@@ -8987,7 +8987,7 @@ msgstr "Sources"
 msgid "Textarea"
 msgstr "Textarea"
 
-#: screens/Job/JobDetail/JobDetail.tsx:237
+#: screens/Job/JobDetail/JobDetail.tsx:236
 msgid "Unknown Status"
 msgstr "Unknown Status"
 
@@ -9074,7 +9074,7 @@ msgstr "Update options"
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:179
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
-#: screens/Job/JobDetail/JobDetail.tsx:583
+#: screens/Job/JobDetail/JobDetail.tsx:582
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:451
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:331
@@ -9160,7 +9160,7 @@ msgstr "{0, plural, one {# source with sync failures.} other {# sources with syn
 msgid "Back to Instances"
 msgstr "Back to Instances"
 
-#: screens/Job/JobDetail/JobDetail.tsx:321
+#: screens/Job/JobDetail/JobDetail.tsx:320
 msgid "Inventory Source"
 msgstr "Inventory Source"
 
@@ -9287,7 +9287,7 @@ msgstr "Disassociate related group(s)?"
 #: components/PromptDetail/PromptDetail.tsx:415
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:158
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:509
-#: screens/Job/JobDetail/JobDetail.tsx:428
+#: screens/Job/JobDetail/JobDetail.tsx:427
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:251
 #: screens/Template/shared/JobTemplateForm.tsx:502
 #: screens/TopologyView/Tooltip.tsx:268
@@ -9611,7 +9611,7 @@ msgstr "An inventory must be selected"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:102
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:501
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:286
-#: screens/Job/JobDetail/JobDetail.tsx:346
+#: screens/Job/JobDetail/JobDetail.tsx:345
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:232
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:240
 #: screens/Template/shared/JobTemplateForm.tsx:423
@@ -9656,8 +9656,8 @@ msgid "This has already been acted on"
 msgstr "This has already been acted on"
 
 #: screens/Job/JobDetail/JobDetail.tsx:78
-msgid "Red Hat Insights"
-msgstr "Red Hat Insights"
+#~ msgid "Red Hat Insights"
+#~ msgstr "Red Hat Insights"
 
 #: screens/Setting/GitHub/GitHub.tsx:59
 msgid "View GitHub Settings"
@@ -9697,7 +9697,7 @@ msgid "When not checked, a merge will be performed, combining local variables wi
 msgstr "When not checked, a merge will be performed, combining local variables with those found on the external source."
 
 #: components/JobList/JobListItem.tsx:144
-#: screens/Job/JobDetail/JobDetail.tsx:642
+#: screens/Job/JobDetail/JobDetail.tsx:641
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:172
@@ -9725,7 +9725,7 @@ msgstr "Inventory sources with failures"
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:117
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:215
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:77
-#: screens/Job/JobDetail/JobDetail.tsx:231
+#: screens/Job/JobDetail/JobDetail.tsx:230
 #: screens/Job/JobOutput/HostEventModal.tsx:167
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:167
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:178
@@ -9918,7 +9918,7 @@ msgstr "Cancel lookup"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:88
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -10507,8 +10507,8 @@ msgstr "This field must be at least {0} characters"
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
-#: screens/Job/JobDetail/JobDetail.tsx:181
-#: screens/Job/JobDetail/JobDetail.tsx:333
+#: screens/Job/JobDetail/JobDetail.tsx:180
+#: screens/Job/JobDetail/JobDetail.tsx:332
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:99
 msgid "Source"
 msgstr "Source"
@@ -10632,7 +10632,7 @@ msgstr "Not equals"
 msgid "IRC nick"
 msgstr "IRC nick"
 
-#: screens/Job/JobDetail/JobDetail.tsx:575
+#: screens/Job/JobDetail/JobDetail.tsx:574
 msgid "Module Arguments"
 msgstr "Module Arguments"
 
@@ -10724,7 +10724,7 @@ msgstr "Choose a job type"
 
 #. placeholder {0}: job.name
 #: components/JobList/JobListItem.tsx:145
-#: screens/Job/JobDetail/JobDetail.tsx:643
+#: screens/Job/JobDetail/JobDetail.tsx:642
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:173
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:164
 msgid "Cancel {0}"
@@ -10896,7 +10896,7 @@ msgstr "{draggedName} is now at position {0}."
 msgid "Invalid date format"
 msgstr "Invalid date format"
 
-#: screens/Job/JobDetail/JobDetail.tsx:397
+#: screens/Job/JobDetail/JobDetail.tsx:396
 msgid "Instance Group"
 msgstr "Instance Group"
 
@@ -11017,7 +11017,7 @@ msgstr "Code editor"
 msgid "Invalid time format"
 msgstr "Invalid time format"
 
-#: screens/Job/JobDetail/JobDetail.tsx:189
+#: screens/Job/JobDetail/JobDetail.tsx:188
 msgid "Unknown Project"
 msgstr "Unknown Project"
 
@@ -11103,7 +11103,7 @@ msgstr "The pattern used to target hosts in the inventory. Leaving the field bla
 #: components/PromptDetail/PromptDetail.tsx:196
 #: components/PromptDetail/PromptDetail.tsx:425
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:518
-#: screens/Job/JobDetail/JobDetail.tsx:436
+#: screens/Job/JobDetail/JobDetail.tsx:435
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:223
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:197
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:269
@@ -11458,7 +11458,7 @@ msgstr "Please run a job to populate this list."
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:176
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:263
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:334
-#: screens/Job/JobDetail/JobDetail.tsx:364
+#: screens/Job/JobDetail/JobDetail.tsx:363
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:257
 #: screens/Template/shared/JobTemplateForm.tsx:522
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:208
@@ -11496,8 +11496,8 @@ msgstr "Associate"
 #: components/JobList/JobListItem.tsx:197
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:96
-#: screens/Job/JobDetail/JobDetail.tsx:623
-#: screens/Job/JobDetail/JobDetail.tsx:631
+#: screens/Job/JobDetail/JobDetail.tsx:622
+#: screens/Job/JobDetail/JobDetail.tsx:630
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:204
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:204
 msgid "Relaunch"
@@ -11570,8 +11570,8 @@ msgstr "Delete User Token"
 msgid "encrypted"
 msgstr "encrypted"
 
-#: screens/Job/JobDetail/JobDetail.tsx:122
-#: screens/Job/JobDetail/JobDetail.tsx:148
+#: screens/Job/JobDetail/JobDetail.tsx:121
+#: screens/Job/JobDetail/JobDetail.tsx:147
 msgid "Unknown Inventory"
 msgstr "Unknown Inventory"
 
@@ -11656,7 +11656,7 @@ msgid "Source Phone Number"
 msgstr "Source Phone Number"
 
 #. placeholder {0}: job.timeout
-#: screens/Job/JobDetail/JobDetail.tsx:438
+#: screens/Job/JobDetail/JobDetail.tsx:437
 msgid "{0} seconds"
 msgstr "{0} seconds"
 
@@ -11771,7 +11771,7 @@ msgstr "Error message body"
 
 #. placeholder {0}: job.name
 #: components/JobList/JobListItem.tsx:146
-#: screens/Job/JobDetail/JobDetail.tsx:644
+#: screens/Job/JobDetail/JobDetail.tsx:643
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
 msgid "Failed to cancel {0}"
@@ -11842,7 +11842,7 @@ msgid "Created By (Username)"
 msgstr "Created By (Username)"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:156
-#: screens/Job/JobDetail/JobDetail.tsx:358
+#: screens/Job/JobDetail/JobDetail.tsx:357
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:245
 #: screens/Template/shared/JobTemplateForm.tsx:441
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:48
@@ -11954,9 +11954,9 @@ msgstr "Toggle notification start"
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:107
 #: screens/Inventory/InventoryList/InventoryList.tsx:202
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:60
-#: screens/Job/JobDetail/JobDetail.tsx:108
-#: screens/Job/JobDetail/JobDetail.tsx:127
-#: screens/Job/JobDetail/JobDetail.tsx:134
+#: screens/Job/JobDetail/JobDetail.tsx:107
+#: screens/Job/JobDetail/JobDetail.tsx:126
+#: screens/Job/JobDetail/JobDetail.tsx:133
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:207
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:217
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:143

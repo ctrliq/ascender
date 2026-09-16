@@ -70,15 +70,15 @@ class MetricsTester:
 
     def add_old_summaries(self):
         """These records don't correspond with Host metrics"""
-        mk_host_metric_summary(self.below(4), license_consumed=100, hosts_added=10, hosts_deleted=5)
-        mk_host_metric_summary(self.below(3), license_consumed=105, hosts_added=20, hosts_deleted=10)
-        mk_host_metric_summary(self.below(2), license_consumed=115, hosts_added=60, hosts_deleted=75)
+        mk_host_metric_summary(self.below(4), hosts_added=10, hosts_deleted=5)
+        mk_host_metric_summary(self.below(3), hosts_added=20, hosts_deleted=10)
+        mk_host_metric_summary(self.below(2), hosts_added=60, hosts_deleted=75)
 
     def assert_add_old_summaries(self):
         """Old summary records should be untouched"""
-        self.expected_summaries[self.below(4)] = {"date": self.below(4), "license_consumed": 100, "hosts_added": 10, "hosts_deleted": 5}
-        self.expected_summaries[self.below(3)] = {"date": self.below(3), "license_consumed": 105, "hosts_added": 20, "hosts_deleted": 10}
-        self.expected_summaries[self.below(2)] = {"date": self.below(2), "license_consumed": 115, "hosts_added": 60, "hosts_deleted": 75}
+        self.expected_summaries[self.below(4)] = {"date": self.below(4), "hosts_added": 10, "hosts_deleted": 5}
+        self.expected_summaries[self.below(3)] = {"date": self.below(3), "hosts_added": 20, "hosts_deleted": 10}
+        self.expected_summaries[self.below(2)] = {"date": self.below(2), "hosts_added": 60, "hosts_deleted": 75}
 
         self.assert_host_metric_summaries()
 
@@ -92,7 +92,6 @@ class MetricsTester:
 
             assert self.expected_summaries[summary.date] == {
                 "date": summary.date,
-                "license_consumed": summary.license_consumed,
                 "hosts_added": summary.hosts_added,
                 "hosts_deleted": summary.hosts_deleted,
             }
@@ -132,14 +131,14 @@ class MetricsTesterOldData(MetricsTester):
         Other months are unchanged (same as month 2)
         """
         self.expected_summaries = {
-            self.above(1): {"date": self.above(1), "license_consumed": 6, "hosts_added": 0, "hosts_deleted": 0},
-            self.above(2): {"date": self.above(2), "license_consumed": 5, "hosts_added": 0, "hosts_deleted": 1},
+            self.above(1): {"date": self.above(1), "hosts_added": 0, "hosts_deleted": 0},
+            self.above(2): {"date": self.above(2), "hosts_added": 0, "hosts_deleted": 1},
         }
         # no change in months 3+
         idx = 3
         month = self.above(idx)
         while month <= beginning_of_the_month():
-            self.expected_summaries[self.above(idx)] = {"date": self.above(idx), "license_consumed": 5, "hosts_added": 0, "hosts_deleted": 0}
+            self.expected_summaries[self.above(idx)] = {"date": self.above(idx), "hosts_added": 0, "hosts_deleted": 0}
             month += relativedelta(months=1)
             idx += 1
 
@@ -165,8 +164,8 @@ class MetricsTesterOldData(MetricsTester):
         """
         self.expected_summaries[self.above(2)] |= {'hosts_deleted': 0}
         for idx in range(2, self.threshold):
-            self.expected_summaries[self.above(idx)] |= {'license_consumed': 6}
-        self.expected_summaries[beginning_of_the_month()] |= {'license_consumed': 4, 'hosts_deleted': 2}
+            self.expected_summaries[self.above(idx)] |= {}
+        self.expected_summaries[beginning_of_the_month()] |= {'hosts_deleted': 2}
 
         self.assert_host_metric_summaries()
 
@@ -187,7 +186,6 @@ class MetricsTesterOldData(MetricsTester):
 
     def assert_add_metrics(self):
         """Summary in current month is updated"""
-        self.expected_summaries[beginning_of_the_month()]['license_consumed'] = 6
         self.expected_summaries[beginning_of_the_month()]['hosts_added'] = 2
 
         self.assert_host_metric_summaries()
@@ -216,17 +214,17 @@ class MetricsTesterActualData(MetricsTester):
 
     def assert_create_metrics(self):
         self.expected_summaries = {
-            self.above(1): {"date": self.above(1), "license_consumed": 4, "hosts_added": 5, "hosts_deleted": 1},
-            self.above(2): {"date": self.above(2), "license_consumed": 7, "hosts_added": 5, "hosts_deleted": 2},
-            self.above(3): {"date": self.above(3), "license_consumed": 6, "hosts_added": 0, "hosts_deleted": 1},
-            self.above(4): {"date": self.above(4), "license_consumed": 11, "hosts_added": 6, "hosts_deleted": 1},
-            self.above(5): {"date": self.above(5), "license_consumed": 10, "hosts_added": 0, "hosts_deleted": 1},
+            self.above(1): {"date": self.above(1), "hosts_added": 5, "hosts_deleted": 1},
+            self.above(2): {"date": self.above(2), "hosts_added": 5, "hosts_deleted": 2},
+            self.above(3): {"date": self.above(3), "hosts_added": 0, "hosts_deleted": 1},
+            self.above(4): {"date": self.above(4), "hosts_added": 6, "hosts_deleted": 1},
+            self.above(5): {"date": self.above(5), "hosts_added": 0, "hosts_deleted": 1},
         }
         # no change in months 6+
         idx = 6
         month = self.above(idx)
         while month <= beginning_of_the_month():
-            self.expected_summaries[self.above(idx)] = {"date": self.above(idx), "license_consumed": 10, "hosts_added": 0, "hosts_deleted": 0}
+            self.expected_summaries[self.above(idx)] = {"date": self.above(idx), "hosts_added": 0, "hosts_deleted": 0}
             month += relativedelta(months=1)
             idx += 1
 
@@ -256,14 +254,11 @@ class MetricsTesterActualData(MetricsTester):
         Summaries since month 2 were changed
         Current month has 2 deletions (host_16, host_17)
         """
-        self.expected_summaries[self.above(2)] |= {'license_consumed': 8, 'hosts_deleted': 1}
-        self.expected_summaries[self.above(3)] |= {'license_consumed': 8, 'hosts_deleted': 0}
-        self.expected_summaries[self.above(4)] |= {'license_consumed': 14, 'hosts_deleted': 0}
+        self.expected_summaries[self.above(2)] |= {'hosts_deleted': 1}
+        self.expected_summaries[self.above(3)] |= {'hosts_deleted': 0}
+        self.expected_summaries[self.above(4)] |= {'hosts_deleted': 0}
 
-        # month 5 had hosts_deleted 1 => license_consumed == 14 - 1
-        for idx in range(5, self.threshold):
-            self.expected_summaries[self.above(idx)] |= {'license_consumed': 13}
-        self.expected_summaries[beginning_of_the_month()] |= {'license_consumed': 11, 'hosts_deleted': 2}
+        self.expected_summaries[beginning_of_the_month()] |= {'hosts_deleted': 2}
 
         self.assert_host_metric_summaries()
 
@@ -285,9 +280,8 @@ class MetricsTesterActualData(MetricsTester):
         """
         Two metrics were deleted in current month by change_metrics()
         Two metrics are added now
-        => license_consumed is equal to the previous month (13 - 2 + 2)
         """
-        self.expected_summaries[beginning_of_the_month()] |= {'license_consumed': 13, 'hosts_added': 2}
+        self.expected_summaries[beginning_of_the_month()] |= {'hosts_added': 2}
 
         self.assert_host_metric_summaries()
 
@@ -358,14 +352,12 @@ class MetricsTesterCombinedData(MetricsTester):
         """
         for date, summary in self.old_data.expected_summaries.items():
             if date <= months_ago(self.threshold):
-                license_consumed = summary['license_consumed']
                 hosts_added = summary['hosts_added']
                 hosts_deleted = summary['hosts_deleted']
             else:
-                license_consumed = summary['license_consumed'] + self.actual_data.expected_summaries[date]['license_consumed']
                 hosts_added = summary['hosts_added'] + self.actual_data.expected_summaries[date]['hosts_added']
                 hosts_deleted = summary['hosts_deleted'] + self.actual_data.expected_summaries[date]['hosts_deleted']
-            self.expected_summaries[date] = {'date': date, 'license_consumed': license_consumed, 'hosts_added': hosts_added, 'hosts_deleted': hosts_deleted}
+            self.expected_summaries[date] = {'date': date, 'hosts_added': hosts_added, 'hosts_deleted': hosts_deleted}
 
 
 def months_ago(num, fmt="date"):

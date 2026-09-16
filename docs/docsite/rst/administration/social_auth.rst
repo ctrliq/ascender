@@ -297,7 +297,7 @@ Organization mapping
 
 You will need to control which users are placed into which organizations based on their username and email address (mapping out your organization admins/users from social or enterprise-level authentication accounts).  
 
-Dictionary keys are organization names. Organizations will be created, if not already present and if the license allows for multiple organizations. Otherwise, the single default organization is used regardless of the key.  
+Dictionary keys are organization names. Organizations will be created if not already present.  
 
 Values are dictionaries defining the options for each organization's membership.  For each organization, it is possible to specify which users are automatically users of the organization and also which users can administer the organization. 
 
@@ -352,8 +352,7 @@ Team mapping is the mapping of team members (users) from social auth accounts. K
 **organization**: string. The name of the organization to which the team
 belongs.  The team will be created if the combination of organization and
 team name does not exist.  The organization will first be created if it
-does not exist.  If the license does not allow for multiple organizations,
-the team will always be assigned to the single default organization.
+does not exist.
 
 **users**: None, True/False, string or list/tuple of strings.
 

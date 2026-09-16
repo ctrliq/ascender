@@ -1,6 +1,6 @@
 Make a GET request to this resource to retrieve aggregate statistics about inventory suitable for graphing.
 
-Including fetching the number of total hosts tracked by Tower over an amount of time and the current success or
+Including fetching the number of total hosts tracked by Ascender over an amount of time and the current success or
 failed status of hosts which have run jobs within an Inventory.
 
 ## Parameters and Filtering

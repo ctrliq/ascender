@@ -11,7 +11,6 @@ from rest_framework import serializers
 # Ascender
 from ascender.conf import fields, register, register_validate
 from ascender.main.models import ExecutionEnvironment
-from ascender.main.constants import SUBSCRIPTION_USAGE_MODEL_UNIQUE_HOSTS
 
 logger = logging.getLogger('awx.main.conf')
 
@@ -755,23 +754,6 @@ register(
     help_text=_('Max number of hosts to allow to be deleted in a single bulk action'),
     category=_('Bulk Actions'),
     category_slug='bulk',
-)
-
-register(
-    'SUBSCRIPTION_USAGE_MODEL',
-    field_class=fields.ChoiceField,
-    choices=[
-        ('', _('Default model for Ascender - no subscription. Deletion of host_metrics will not be considered for purposes of managed host counting')),
-        (
-            SUBSCRIPTION_USAGE_MODEL_UNIQUE_HOSTS,
-            _('Usage based on unique managed nodes in a large historical time frame and delete functionality for no longer used managed nodes'),
-        ),
-    ],
-    default='',
-    allow_blank=True,
-    label=_('Defines subscription usage model and shows Host Metrics'),
-    category=_('System'),
-    category_slug='system',
 )
 
 register(

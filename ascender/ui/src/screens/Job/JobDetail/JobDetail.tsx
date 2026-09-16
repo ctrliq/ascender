@@ -75,7 +75,6 @@ function JobDetail({ job, inventorySourceLabels = [] }: JobDetailProps) {
     '': t`Manual`,
     git: t`Git`,
     svn: t`Subversion`,
-    insights: t`Red Hat Insights`,
     archive: t`Remote Archive`,
   };
 

@@ -29,7 +29,7 @@ const projectData = {
     credential: {
       id: 100,
       credential_type_id: 5,
-      kind: 'insights',
+      kind: 'scm',
     },
     signature_validation_credential: {
       id: 200,
@@ -79,7 +79,7 @@ vi.mock('../shared/ProjectForm', async () => {
         scm_update_cache_timeout: 3,
         allow_override: false,
         summary_fields: {
-          credential: { id: 100, credential_type_id: 5, kind: 'insights' },
+          credential: { id: 100, credential_type_id: 5, kind: 'scm' },
           signature_validation_credential: {
             id: 200,
             credential_type_id: 6,

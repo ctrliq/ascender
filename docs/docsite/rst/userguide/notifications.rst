@@ -550,7 +550,7 @@ In the :ref:`System Settings <configure_ascender_system>`, you can replace the d
 .. image:: ../common/images/configure-ascender-system-misc-baseurl.png
    :alt: Configuring base URL with preferred hostname
 
-Refreshing your license also changes the notification hostname. New installations of Ascender should not have to set the hostname for notifications.
+New installations of Ascender should not have to set the hostname for notifications.
 
 Reset the ``AWX_URL_BASE``
 ------------------------------
@@ -562,9 +562,9 @@ Reset the ``AWX_URL_BASE``
 
 The primary way that Ascender determines how the base URL (``AWX_URL_BASE``) is defined is by looking at an incoming request and setting the server address based on that incoming request. 
 
-Ascender takes settings values from the database first. If no settings values are found, it falls back to using the values from the settings files.  If a user posts a license by navigating to the Ascender host's IP address, the posted license is written to the settings entry in the database.
+Ascender takes settings values from the database first. If no settings values are found, it falls back to using the values from the settings files.
 
-To change the ``AWX_URL_BASE`` if the wrong address has been picked up, navigate to **Miscellaneous System settings** from the Settings menu using the DNS entry you wish to appear in notifications, and re-add your license. 
+To change the ``AWX_URL_BASE`` if the wrong address has been picked up, navigate to **Miscellaneous System settings** from the Settings menu and set it to the DNS entry you wish to appear in notifications.
 
 
 

@@ -279,11 +279,9 @@ def mk_host_metric(hostname, first_automation, last_automation=None, last_delete
                 raise e
 
 
-def mk_host_metric_summary(date, license_consumed=0, license_capacity=0, hosts_added=0, hosts_deleted=0, indirectly_managed_hosts=0, persisted=True):
+def mk_host_metric_summary(date, hosts_added=0, hosts_deleted=0, indirectly_managed_hosts=0, persisted=True):
     summary = HostMetricSummaryMonthly(
         date=date,
-        license_consumed=license_consumed,
-        license_capacity=license_capacity,
         hosts_added=hosts_added,
         hosts_deleted=hosts_deleted,
         indirectly_managed_hosts=indirectly_managed_hosts,

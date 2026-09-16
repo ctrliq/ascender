@@ -1083,7 +1083,7 @@ msgstr "모든 팀 보기."
 msgid "This field must be a regular expression"
 msgstr "이 필드는 정규 표현식이어야 합니다"
 
-#: screens/Job/JobDetail/JobDetail.tsx:602
+#: screens/Job/JobDetail/JobDetail.tsx:601
 msgid "Artifacts"
 msgstr "아티팩트"
 
@@ -1152,7 +1152,7 @@ msgid "Controls whether or not this instance is managed by policy. If enabled, t
 msgstr "이 인스턴스가 정책에 의해 관리되는지 여부를 제어합니다. 활성화된 경우, 인스턴스는 정책 규칙에 따라 인스턴스 그룹에 대한 자동 할당 및 할당 해제에 사용할 수 있습니다."
 
 #: components/JobList/JobList.tsx:257
-#: screens/Job/JobDetail/JobDetail.tsx:253
+#: screens/Job/JobDetail/JobDetail.tsx:252
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:246
 msgid "Finished"
 msgstr "완료"
@@ -1403,7 +1403,7 @@ msgstr "이메일"
 #: components/PromptDetail/PromptDetail.tsx:253
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:111
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:457
-#: screens/Job/JobDetail/JobDetail.tsx:306
+#: screens/Job/JobDetail/JobDetail.tsx:305
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:185
 #: screens/Template/shared/JobTemplateForm.tsx:342
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:140
@@ -1446,7 +1446,7 @@ msgstr "옵션"
 msgid "Failed to delete user."
 msgstr "사용자를 삭제하지 못했습니다."
 
-#: screens/Job/JobDetail/JobDetail.tsx:405
+#: screens/Job/JobDetail/JobDetail.tsx:404
 msgid "Container Group"
 msgstr "컨테이너 그룹"
 
@@ -1530,7 +1530,7 @@ msgstr "알림을 삭제하지 못했습니다."
 msgid "Show less"
 msgstr "더 적은 수를 표시"
 
-#: screens/Job/JobDetail/JobDetail.tsx:353
+#: screens/Job/JobDetail/JobDetail.tsx:352
 #: screens/Project/ProjectList/ProjectList.tsx:224
 #: screens/Project/ProjectList/ProjectListItem.tsx:207
 msgid "Revision"
@@ -2131,7 +2131,7 @@ msgstr "조건이 평가되기 전에 부모 노드 결과가 필요합니다."
 #: components/Workflow/WorkflowNodeHelp.tsx:41
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:101
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:29
-#: screens/Job/JobDetail/JobDetail.tsx:260
+#: screens/Job/JobDetail/JobDetail.tsx:259
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:73
 msgid "Job Template"
 msgstr "작업 템플릿"
@@ -2545,7 +2545,7 @@ msgid "Delete Execution Environment"
 msgstr "실행 환경 삭제"
 
 #: components/JobList/JobListItem.tsx:366
-#: screens/Job/JobDetail/JobDetail.tsx:413
+#: screens/Job/JobDetail/JobDetail.tsx:412
 msgid "Job Slice"
 msgstr "작업 분할"
 
@@ -2603,7 +2603,7 @@ msgstr "한 줄에 하나의 IRC 채널 또는 사용자 이름을 사용합니�
 msgid "Microsoft Azure Resource Manager"
 msgstr "Microsoft Azure Resource Manager"
 
-#: screens/Job/JobDetail/JobDetail.tsx:664
+#: screens/Job/JobDetail/JobDetail.tsx:663
 #: screens/Job/JobOutput/JobOutput.tsx:1203
 #: screens/Job/JobOutput/JobOutput.tsx:1204
 #: screens/Job/WorkflowOutput/WorkflowOutput.tsx:134
@@ -2615,7 +2615,7 @@ msgstr "작업 삭제 오류"
 msgid "On days"
 msgstr "요일에"
 
-#: screens/Job/JobDetail/JobDetail.tsx:384
+#: screens/Job/JobDetail/JobDetail.tsx:383
 msgid "Execution Node"
 msgstr "실행 노드"
 
@@ -2811,7 +2811,7 @@ msgid "Question"
 msgstr "질문"
 
 #: components/PromptDetail/PromptProjectDetail.tsx:96
-#: screens/Job/JobDetail/JobDetail.tsx:312
+#: screens/Job/JobDetail/JobDetail.tsx:311
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:192
 #: screens/Project/shared/ProjectForm.tsx:316
 msgid "Source Control Type"
@@ -3025,7 +3025,7 @@ msgstr "Azure AD 설정"
 
 #: components/JobList/JobListItem.tsx:371
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
-#: screens/Job/JobDetail/JobDetail.tsx:422
+#: screens/Job/JobDetail/JobDetail.tsx:421
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:263
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:293
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:323
@@ -3323,7 +3323,7 @@ msgstr "답을 입력한 다음 확인란 오른쪽을 클릭하여 답변을 �
 msgid "Survey Question Order"
 msgstr "설문 조사 질문 순서"
 
-#: screens/Job/JobDetail/JobDetail.tsx:248
+#: screens/Job/JobDetail/JobDetail.tsx:247
 msgid "Unknown Start Date"
 msgstr "알 수 없는 시작일"
 
@@ -3363,7 +3363,7 @@ msgstr "비교 값보다 적거나 같습니다."
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:85
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:109
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:164
-#: screens/Job/JobDetail/JobDetail.tsx:655
+#: screens/Job/JobDetail/JobDetail.tsx:654
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:493
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:374
@@ -3513,7 +3513,7 @@ msgstr "GitHub 팀"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:88
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:337
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:139
-#: screens/Job/JobDetail/JobDetail.tsx:579
+#: screens/Job/JobDetail/JobDetail.tsx:578
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:446
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:326
@@ -3701,11 +3701,11 @@ msgstr "Azure AD Tenant"
 msgid "Create new Instance"
 msgstr "새 인스턴스 만들기"
 
-#: screens/Job/JobDetail/JobDetail.tsx:195
+#: screens/Job/JobDetail/JobDetail.tsx:194
 msgid "Project Update Status"
 msgstr "프로젝트 업데이트 상태"
 
-#: screens/Job/JobDetail/JobDetail.tsx:390
+#: screens/Job/JobDetail/JobDetail.tsx:389
 msgid "Controller Node"
 msgstr "컨트롤러 노드"
 
@@ -3883,8 +3883,8 @@ msgstr "기본 실행 환경"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:150
 #: components/TemplateList/TemplateListItem.tsx:279
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:256
-#: screens/Job/JobDetail/JobDetail.tsx:181
-#: screens/Job/JobDetail/JobDetail.tsx:215
+#: screens/Job/JobDetail/JobDetail.tsx:180
+#: screens/Job/JobDetail/JobDetail.tsx:214
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:222
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:232
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:43
@@ -4119,8 +4119,8 @@ msgstr "인증 정보 삭제"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:139
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:143
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:119
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:123
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4169,7 +4169,7 @@ msgstr "에서 JSON 예제 보기"
 msgid "Destination SMS Number(s)"
 msgstr "대상 SMS 번호"
 
-#: screens/Job/JobDetail/JobDetail.tsx:438
+#: screens/Job/JobDetail/JobDetail.tsx:437
 msgid "No timeout specified"
 msgstr "시간 초과가 지정되지 않음"
 
@@ -4755,7 +4755,7 @@ msgid "Delete this node"
 msgstr "이 노드 삭제"
 
 #: components/JobList/JobListItem.tsx:264
-#: screens/Job/JobDetail/JobDetail.tsx:292
+#: screens/Job/JobDetail/JobDetail.tsx:291
 msgid "Source Workflow Job"
 msgstr "소스 워크플로 작업"
 
@@ -4964,7 +4964,7 @@ msgstr "삭제할 질문을 선택"
 #: screens/Inventory/shared/InventoryGroupForm.tsx:68
 #: screens/Inventory/shared/SmartInventoryForm.tsx:101
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:133
-#: screens/Job/JobDetail/JobDetail.tsx:590
+#: screens/Job/JobDetail/JobDetail.tsx:589
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:484
 #: screens/Template/shared/JobTemplateForm.tsx:495
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:261
@@ -5124,7 +5124,7 @@ msgstr "접기"
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:124
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
 #: screens/Inventory/shared/InventoryForm.tsx:89
-#: screens/Job/JobDetail/JobDetail.tsx:492
+#: screens/Job/JobDetail/JobDetail.tsx:491
 #: screens/Labels/Labels.tsx:13
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:399
 #: screens/Template/shared/JobTemplateForm.tsx:480
@@ -5170,7 +5170,7 @@ msgstr "월"
 #: screens/Credential/CredentialList/CredentialList.tsx:195
 #: screens/Credential/Credentials.tsx:16
 #: screens/Credential/Credentials.tsx:27
-#: screens/Job/JobDetail/JobDetail.tsx:468
+#: screens/Job/JobDetail/JobDetail.tsx:467
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:372
 #: screens/Template/shared/JobTemplateForm.tsx:465
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:54
@@ -5195,7 +5195,7 @@ msgstr "새 인스턴스가 온라인 상태가 될 때 이 그룹에 자동으�
 #: components/PromptDetail/PromptDetail.tsx:323
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:255
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:590
-#: screens/Job/JobDetail/JobDetail.tsx:517
+#: screens/Job/JobDetail/JobDetail.tsx:516
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:433
 #: screens/Template/shared/JobTemplateForm.tsx:625
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:267
@@ -5219,7 +5219,7 @@ msgstr "승인할 행 선택"
 #~ msgid "Unique Hosts"
 #~ msgstr "독특한 호스트"
 
-#: screens/Job/JobDetail/JobDetail.tsx:651
+#: screens/Job/JobDetail/JobDetail.tsx:650
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:247
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:251
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:219
@@ -5836,7 +5836,7 @@ msgstr "인스턴스 그룹"
 #: components/PromptDetail/PromptDetail.tsx:357
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:275
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:615
-#: screens/Job/JobDetail/JobDetail.tsx:544
+#: screens/Job/JobDetail/JobDetail.tsx:543
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:459
 #: screens/Template/shared/JobTemplateForm.tsx:637
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:279
@@ -5907,7 +5907,7 @@ msgstr "중첩된 그룹 인벤토리 정의:"
 #~ msgid "Prompt for limit on launch."
 #~ msgstr "시작 시 제한을 입력하라는 메시지를 표시합니다."
 
-#: screens/Job/JobDetail/JobDetail.tsx:247
+#: screens/Job/JobDetail/JobDetail.tsx:246
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:215
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.tsx:84
 msgid "Started"
@@ -6077,7 +6077,7 @@ msgstr "출력 탭"
 msgid "Denied"
 msgstr "거부됨"
 
-#: screens/Job/JobDetail/JobDetail.tsx:254
+#: screens/Job/JobDetail/JobDetail.tsx:253
 msgid "Unknown Finish Date"
 msgstr "알 수 없는 완료일"
 
@@ -6092,7 +6092,7 @@ msgstr "다중 선택 옵션"
 #: components/AdHocCommands/AdHocCredentialStep.tsx:111
 #: components/AdHocCommands/AdHocCredentialStep.tsx:112
 #: components/AdHocCommands/AdHocCredentialStep.tsx:124
-#: screens/Job/JobDetail/JobDetail.tsx:446
+#: screens/Job/JobDetail/JobDetail.tsx:445
 msgid "Machine Credential"
 msgstr "시스템 인증 정보"
 
@@ -6258,7 +6258,7 @@ msgstr "시작 메시지"
 msgid "Scope for the token's access"
 msgstr "토큰 액세스 범위"
 
-#: screens/Job/JobDetail/JobDetail.tsx:569
+#: screens/Job/JobDetail/JobDetail.tsx:568
 msgid "Module Name"
 msgstr "모듈 이름"
 
@@ -7029,7 +7029,7 @@ msgstr "Playbook 디렉토리 선택"
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
-#: screens/Job/JobDetail/JobDetail.tsx:275
+#: screens/Job/JobDetail/JobDetail.tsx:274
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:85
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:224
 msgid "Workflow Job Template"
@@ -7549,7 +7549,7 @@ msgstr "파일 업로드가 거부되었습니다. 단일 .json 파일을 선택
 msgid "Local time zone"
 msgstr "현지 시간대"
 
-#: screens/Job/JobDetail/JobDetail.tsx:209
+#: screens/Job/JobDetail/JobDetail.tsx:208
 msgid "No Status Available"
 msgstr "사용 가능한 상태 없음"
 
@@ -7883,7 +7883,7 @@ msgstr "{0, plural, one {이 인스턴스는 현재 다른 리소스에서 사�
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:81
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8037,7 +8037,7 @@ msgstr "시스템 팩트를 채우려면 `gather_facts: true`가\n"
 "            다릅니다."
 
 #: components/JobList/JobListItem.tsx:371
-#: screens/Job/JobDetail/JobDetail.tsx:421
+#: screens/Job/JobDetail/JobDetail.tsx:420
 msgid "Job Slice Parent"
 msgstr "작업 분할 부모"
 
@@ -8318,7 +8318,7 @@ msgstr ""
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:234
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:281
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.tsx:51
-#: screens/Job/JobDetail/JobDetail.tsx:370
+#: screens/Job/JobDetail/JobDetail.tsx:369
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:263
 msgid "Verbosity"
 msgstr "상세 정보"
@@ -8328,7 +8328,7 @@ msgstr "상세 정보"
 msgid "Mattermost"
 msgstr "가장 중요"
 
-#: screens/Job/JobDetail/JobDetail.tsx:225
+#: screens/Job/JobDetail/JobDetail.tsx:224
 msgid "Job ID"
 msgstr "작업 ID"
 
@@ -8394,7 +8394,7 @@ msgstr "인벤토리 동기화"
 #: components/Lookup/ProjectLookup.tsx:165
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:166
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:234
-#: screens/Job/JobDetail/JobDetail.tsx:79
+#: screens/Job/JobDetail/JobDetail.tsx:78
 #: screens/Project/ProjectList/ProjectList.tsx:201
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:105
 msgid "Remote Archive"
@@ -8985,7 +8985,7 @@ msgstr "소스"
 msgid "Textarea"
 msgstr "텍스트 영역"
 
-#: screens/Job/JobDetail/JobDetail.tsx:237
+#: screens/Job/JobDetail/JobDetail.tsx:236
 msgid "Unknown Status"
 msgstr "알 수 없는 상태"
 
@@ -9072,7 +9072,7 @@ msgstr "업데이트 옵션"
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:179
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
-#: screens/Job/JobDetail/JobDetail.tsx:583
+#: screens/Job/JobDetail/JobDetail.tsx:582
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:451
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:331
@@ -9158,7 +9158,7 @@ msgstr "{0, plural, one {# 개 소스에서 동기화 실패.} other {# 개 소�
 msgid "Back to Instances"
 msgstr "인스턴스로 돌아가기"
 
-#: screens/Job/JobDetail/JobDetail.tsx:321
+#: screens/Job/JobDetail/JobDetail.tsx:320
 msgid "Inventory Source"
 msgstr "인벤토리 소스"
 
@@ -9285,7 +9285,7 @@ msgstr "관련 그룹을 분리하시겠습니까?"
 #: components/PromptDetail/PromptDetail.tsx:415
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:158
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:509
-#: screens/Job/JobDetail/JobDetail.tsx:428
+#: screens/Job/JobDetail/JobDetail.tsx:427
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:251
 #: screens/Template/shared/JobTemplateForm.tsx:502
 #: screens/TopologyView/Tooltip.tsx:268
@@ -9609,7 +9609,7 @@ msgstr "인벤토리를 선택해야 함"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:102
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:501
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:286
-#: screens/Job/JobDetail/JobDetail.tsx:346
+#: screens/Job/JobDetail/JobDetail.tsx:345
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:232
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:240
 #: screens/Template/shared/JobTemplateForm.tsx:423
@@ -9654,8 +9654,8 @@ msgid "This has already been acted on"
 msgstr "이 작업은 이미 수행되었습니다."
 
 #: screens/Job/JobDetail/JobDetail.tsx:78
-msgid "Red Hat Insights"
-msgstr "Red Hat Insights"
+#~ msgid "Red Hat Insights"
+#~ msgstr "Red Hat Insights"
 
 #: screens/Setting/GitHub/GitHub.tsx:59
 msgid "View GitHub Settings"
@@ -9695,7 +9695,7 @@ msgid "When not checked, a merge will be performed, combining local variables wi
 msgstr "선택하지 않으면 병합이 수행되어 로컬 변수와 외부 소스에 있는 변수를 결합합니다."
 
 #: components/JobList/JobListItem.tsx:144
-#: screens/Job/JobDetail/JobDetail.tsx:642
+#: screens/Job/JobDetail/JobDetail.tsx:641
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:172
@@ -9723,7 +9723,7 @@ msgstr "실패가 있는 재고 소스"
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:117
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:215
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:77
-#: screens/Job/JobDetail/JobDetail.tsx:231
+#: screens/Job/JobDetail/JobDetail.tsx:230
 #: screens/Job/JobOutput/HostEventModal.tsx:167
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:167
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:178
@@ -9916,7 +9916,7 @@ msgstr "검색 취소"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:88
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -10505,8 +10505,8 @@ msgstr "이 필드는 최소 {0}자 이상이어야 합니다"
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
-#: screens/Job/JobDetail/JobDetail.tsx:181
-#: screens/Job/JobDetail/JobDetail.tsx:333
+#: screens/Job/JobDetail/JobDetail.tsx:180
+#: screens/Job/JobDetail/JobDetail.tsx:332
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:99
 msgid "Source"
 msgstr "소스"
@@ -10630,7 +10630,7 @@ msgstr "같지 않음"
 msgid "IRC nick"
 msgstr "IRC 닉네임"
 
-#: screens/Job/JobDetail/JobDetail.tsx:575
+#: screens/Job/JobDetail/JobDetail.tsx:574
 msgid "Module Arguments"
 msgstr "모듈 인수"
 
@@ -10722,7 +10722,7 @@ msgstr "작업 유형 선택"
 
 #. placeholder {0}: job.name
 #: components/JobList/JobListItem.tsx:145
-#: screens/Job/JobDetail/JobDetail.tsx:643
+#: screens/Job/JobDetail/JobDetail.tsx:642
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:173
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:164
 msgid "Cancel {0}"
@@ -10894,7 +10894,7 @@ msgstr ""
 msgid "Invalid date format"
 msgstr ""
 
-#: screens/Job/JobDetail/JobDetail.tsx:397
+#: screens/Job/JobDetail/JobDetail.tsx:396
 msgid "Instance Group"
 msgstr "인스턴스 그룹"
 
@@ -11015,7 +11015,7 @@ msgstr ""
 msgid "Invalid time format"
 msgstr "유효하지 않은 시간 형식입니다"
 
-#: screens/Job/JobDetail/JobDetail.tsx:189
+#: screens/Job/JobDetail/JobDetail.tsx:188
 msgid "Unknown Project"
 msgstr "알 수 없는 프로젝트"
 
@@ -11101,7 +11101,7 @@ msgstr "인벤토리의 호스트를 대상으로 지정하는 데 사용되는 
 #: components/PromptDetail/PromptDetail.tsx:196
 #: components/PromptDetail/PromptDetail.tsx:425
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:518
-#: screens/Job/JobDetail/JobDetail.tsx:436
+#: screens/Job/JobDetail/JobDetail.tsx:435
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:223
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:197
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:269
@@ -11456,7 +11456,7 @@ msgstr "이 목록을 채우려면 작업을 실행하십시오."
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:176
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:263
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:334
-#: screens/Job/JobDetail/JobDetail.tsx:364
+#: screens/Job/JobDetail/JobDetail.tsx:363
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:257
 #: screens/Template/shared/JobTemplateForm.tsx:522
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:208
@@ -11494,8 +11494,8 @@ msgstr "연결"
 #: components/JobList/JobListItem.tsx:197
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:96
-#: screens/Job/JobDetail/JobDetail.tsx:623
-#: screens/Job/JobDetail/JobDetail.tsx:631
+#: screens/Job/JobDetail/JobDetail.tsx:622
+#: screens/Job/JobDetail/JobDetail.tsx:630
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:204
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:204
 msgid "Relaunch"
@@ -11568,8 +11568,8 @@ msgstr "사용자 토큰 삭제"
 msgid "encrypted"
 msgstr "암호화"
 
-#: screens/Job/JobDetail/JobDetail.tsx:122
-#: screens/Job/JobDetail/JobDetail.tsx:148
+#: screens/Job/JobDetail/JobDetail.tsx:121
+#: screens/Job/JobDetail/JobDetail.tsx:147
 msgid "Unknown Inventory"
 msgstr "알 수 없는 인벤토리"
 
@@ -11654,7 +11654,7 @@ msgid "Source Phone Number"
 msgstr "소스 전화 번호"
 
 #. placeholder {0}: job.timeout
-#: screens/Job/JobDetail/JobDetail.tsx:438
+#: screens/Job/JobDetail/JobDetail.tsx:437
 msgid "{0} seconds"
 msgstr "{0} 초"
 
@@ -11769,7 +11769,7 @@ msgstr "오류 메시지 본문"
 
 #. placeholder {0}: job.name
 #: components/JobList/JobListItem.tsx:146
-#: screens/Job/JobDetail/JobDetail.tsx:644
+#: screens/Job/JobDetail/JobDetail.tsx:643
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
 msgid "Failed to cancel {0}"
@@ -11840,7 +11840,7 @@ msgid "Created By (Username)"
 msgstr "(사용자 이름)에 의해 생성됨"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:156
-#: screens/Job/JobDetail/JobDetail.tsx:358
+#: screens/Job/JobDetail/JobDetail.tsx:357
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:245
 #: screens/Template/shared/JobTemplateForm.tsx:441
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:48
@@ -11952,9 +11952,9 @@ msgstr "알림 시작 전환"
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:107
 #: screens/Inventory/InventoryList/InventoryList.tsx:202
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:60
-#: screens/Job/JobDetail/JobDetail.tsx:108
-#: screens/Job/JobDetail/JobDetail.tsx:127
-#: screens/Job/JobDetail/JobDetail.tsx:134
+#: screens/Job/JobDetail/JobDetail.tsx:107
+#: screens/Job/JobDetail/JobDetail.tsx:126
+#: screens/Job/JobDetail/JobDetail.tsx:133
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:207
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:217
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:143

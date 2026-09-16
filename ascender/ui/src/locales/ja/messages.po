@@ -1083,7 +1083,7 @@ msgstr "すべてのチームを表示します。"
 msgid "This field must be a regular expression"
 msgstr "このフィールドは正規表現でなければなりません"
 
-#: screens/Job/JobDetail/JobDetail.tsx:602
+#: screens/Job/JobDetail/JobDetail.tsx:601
 msgid "Artifacts"
 msgstr "アーティファクト"
 
@@ -1152,7 +1152,7 @@ msgid "Controls whether or not this instance is managed by policy. If enabled, t
 msgstr "このインスタンスがポリシーによって管理されるかどうかを制御します。有効にすると、ポリシールールに基づいてインスタンスグループへの自動割り当てとインスタンスグループからの割り当て解除が可能になります。"
 
 #: components/JobList/JobList.tsx:257
-#: screens/Job/JobDetail/JobDetail.tsx:253
+#: screens/Job/JobDetail/JobDetail.tsx:252
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:246
 msgid "Finished"
 msgstr "終了日時"
@@ -1403,7 +1403,7 @@ msgstr "メール"
 #: components/PromptDetail/PromptDetail.tsx:253
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:111
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:457
-#: screens/Job/JobDetail/JobDetail.tsx:306
+#: screens/Job/JobDetail/JobDetail.tsx:305
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:185
 #: screens/Template/shared/JobTemplateForm.tsx:342
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:140
@@ -1446,7 +1446,7 @@ msgstr "以下へのオプション:"
 msgid "Failed to delete user."
 msgstr "ユーザーを削除できませんでした。"
 
-#: screens/Job/JobDetail/JobDetail.tsx:405
+#: screens/Job/JobDetail/JobDetail.tsx:404
 msgid "Container Group"
 msgstr "コンテナーグループ"
 
@@ -1530,7 +1530,7 @@ msgstr "通知を削除できませんでした。"
 msgid "Show less"
 msgstr "簡易表示"
 
-#: screens/Job/JobDetail/JobDetail.tsx:353
+#: screens/Job/JobDetail/JobDetail.tsx:352
 #: screens/Project/ProjectList/ProjectList.tsx:224
 #: screens/Project/ProjectList/ProjectListItem.tsx:207
 msgid "Revision"
@@ -2131,7 +2131,7 @@ msgstr "条件が評価される前に、親ノードの結果が必要です。
 #: components/Workflow/WorkflowNodeHelp.tsx:41
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateList.tsx:101
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:29
-#: screens/Job/JobDetail/JobDetail.tsx:260
+#: screens/Job/JobDetail/JobDetail.tsx:259
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:73
 msgid "Job Template"
 msgstr "ジョブテンプレート"
@@ -2545,7 +2545,7 @@ msgid "Delete Execution Environment"
 msgstr "実行環境の削除"
 
 #: components/JobList/JobListItem.tsx:366
-#: screens/Job/JobDetail/JobDetail.tsx:413
+#: screens/Job/JobDetail/JobDetail.tsx:412
 msgid "Job Slice"
 msgstr "ジョブスライス"
 
@@ -2603,7 +2603,7 @@ msgstr "1 行につき 1 つの IRC チャネルまたはユーザー名を使�
 msgid "Microsoft Azure Resource Manager"
 msgstr "Microsoft Azure Resource Manager"
 
-#: screens/Job/JobDetail/JobDetail.tsx:664
+#: screens/Job/JobDetail/JobDetail.tsx:663
 #: screens/Job/JobOutput/JobOutput.tsx:1203
 #: screens/Job/JobOutput/JobOutput.tsx:1204
 #: screens/Job/WorkflowOutput/WorkflowOutput.tsx:134
@@ -2615,7 +2615,7 @@ msgstr "ジョブ削除エラー"
 msgid "On days"
 msgstr "曜日"
 
-#: screens/Job/JobDetail/JobDetail.tsx:384
+#: screens/Job/JobDetail/JobDetail.tsx:383
 msgid "Execution Node"
 msgstr "実行ノード"
 
@@ -2811,7 +2811,7 @@ msgid "Question"
 msgstr "質問"
 
 #: components/PromptDetail/PromptProjectDetail.tsx:96
-#: screens/Job/JobDetail/JobDetail.tsx:312
+#: screens/Job/JobDetail/JobDetail.tsx:311
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:192
 #: screens/Project/shared/ProjectForm.tsx:316
 msgid "Source Control Type"
@@ -3025,7 +3025,7 @@ msgstr "Azure AD の設定"
 
 #: components/JobList/JobListItem.tsx:371
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
-#: screens/Job/JobDetail/JobDetail.tsx:422
+#: screens/Job/JobDetail/JobDetail.tsx:421
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:263
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:293
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:323
@@ -3323,7 +3323,7 @@ msgstr "回答を入力し、右側のチェックボックスをクリックし
 msgid "Survey Question Order"
 msgstr "Survey 質問の順序"
 
-#: screens/Job/JobDetail/JobDetail.tsx:248
+#: screens/Job/JobDetail/JobDetail.tsx:247
 msgid "Unknown Start Date"
 msgstr "不明な開始日"
 
@@ -3363,7 +3363,7 @@ msgstr "Less than or equal to の比較条件"
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:85
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:109
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:164
-#: screens/Job/JobDetail/JobDetail.tsx:655
+#: screens/Job/JobDetail/JobDetail.tsx:654
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:493
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:374
@@ -3513,7 +3513,7 @@ msgstr "GitHub チーム"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:88
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:337
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:139
-#: screens/Job/JobDetail/JobDetail.tsx:579
+#: screens/Job/JobDetail/JobDetail.tsx:578
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:446
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:326
@@ -3701,11 +3701,11 @@ msgstr "Azure AD Tenant"
 msgid "Create new Instance"
 msgstr "新規インスタンスの作成"
 
-#: screens/Job/JobDetail/JobDetail.tsx:195
+#: screens/Job/JobDetail/JobDetail.tsx:194
 msgid "Project Update Status"
 msgstr "プロジェクトステータスの更新"
 
-#: screens/Job/JobDetail/JobDetail.tsx:390
+#: screens/Job/JobDetail/JobDetail.tsx:389
 msgid "Controller Node"
 msgstr "コントローラーノード"
 
@@ -3883,8 +3883,8 @@ msgstr "デフォルトの実行環境"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:150
 #: components/TemplateList/TemplateListItem.tsx:279
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:256
-#: screens/Job/JobDetail/JobDetail.tsx:181
-#: screens/Job/JobDetail/JobDetail.tsx:215
+#: screens/Job/JobDetail/JobDetail.tsx:180
+#: screens/Job/JobDetail/JobDetail.tsx:214
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:222
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:232
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:43
@@ -4119,8 +4119,8 @@ msgstr "認証情報の削除"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:139
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:143
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:119
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:123
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4169,7 +4169,7 @@ msgstr "次の場所でJSONの例を表示します。"
 msgid "Destination SMS Number(s)"
 msgstr "送信先 SMS 番号"
 
-#: screens/Job/JobDetail/JobDetail.tsx:438
+#: screens/Job/JobDetail/JobDetail.tsx:437
 msgid "No timeout specified"
 msgstr "タイムアウトが指定されていません"
 
@@ -4755,7 +4755,7 @@ msgid "Delete this node"
 msgstr "このノードの削除"
 
 #: components/JobList/JobListItem.tsx:264
-#: screens/Job/JobDetail/JobDetail.tsx:292
+#: screens/Job/JobDetail/JobDetail.tsx:291
 msgid "Source Workflow Job"
 msgstr "ソースワークフローのジョブ"
 
@@ -4964,7 +4964,7 @@ msgstr "削除する質問の選択"
 #: screens/Inventory/shared/InventoryGroupForm.tsx:68
 #: screens/Inventory/shared/SmartInventoryForm.tsx:101
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:133
-#: screens/Job/JobDetail/JobDetail.tsx:590
+#: screens/Job/JobDetail/JobDetail.tsx:589
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:484
 #: screens/Template/shared/JobTemplateForm.tsx:495
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:261
@@ -5124,7 +5124,7 @@ msgstr "折りたたむ"
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:124
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
 #: screens/Inventory/shared/InventoryForm.tsx:89
-#: screens/Job/JobDetail/JobDetail.tsx:492
+#: screens/Job/JobDetail/JobDetail.tsx:491
 #: screens/Labels/Labels.tsx:13
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:399
 #: screens/Template/shared/JobTemplateForm.tsx:480
@@ -5170,7 +5170,7 @@ msgstr "月"
 #: screens/Credential/CredentialList/CredentialList.tsx:195
 #: screens/Credential/Credentials.tsx:16
 #: screens/Credential/Credentials.tsx:27
-#: screens/Job/JobDetail/JobDetail.tsx:468
+#: screens/Job/JobDetail/JobDetail.tsx:467
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:372
 #: screens/Template/shared/JobTemplateForm.tsx:465
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:54
@@ -5195,7 +5195,7 @@ msgstr "新しいインスタンスがオンラインになったときに、こ
 #: components/PromptDetail/PromptDetail.tsx:323
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:255
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:590
-#: screens/Job/JobDetail/JobDetail.tsx:517
+#: screens/Job/JobDetail/JobDetail.tsx:516
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:433
 #: screens/Template/shared/JobTemplateForm.tsx:625
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:267
@@ -5219,7 +5219,7 @@ msgstr "承認する行を選択"
 #~ msgid "Unique Hosts"
 #~ msgstr "ユニークなホスト"
 
-#: screens/Job/JobDetail/JobDetail.tsx:651
+#: screens/Job/JobDetail/JobDetail.tsx:650
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:247
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:251
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:219
@@ -5836,7 +5836,7 @@ msgstr "インスタンスグループ"
 #: components/PromptDetail/PromptDetail.tsx:357
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:275
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:615
-#: screens/Job/JobDetail/JobDetail.tsx:544
+#: screens/Job/JobDetail/JobDetail.tsx:543
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:459
 #: screens/Template/shared/JobTemplateForm.tsx:637
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:279
@@ -5907,7 +5907,7 @@ msgstr "ネストされたグループのインベントリ定義："
 #~ msgid "Prompt for limit on launch."
 #~ msgstr "起動時に制限を要求します。"
 
-#: screens/Job/JobDetail/JobDetail.tsx:247
+#: screens/Job/JobDetail/JobDetail.tsx:246
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalList.tsx:215
 #: screens/WorkflowApproval/WorkflowApprovalList/WorkflowApprovalListItem.tsx:84
 msgid "Started"
@@ -6077,7 +6077,7 @@ msgstr "出力タブ"
 msgid "Denied"
 msgstr "拒否済み"
 
-#: screens/Job/JobDetail/JobDetail.tsx:254
+#: screens/Job/JobDetail/JobDetail.tsx:253
 msgid "Unknown Finish Date"
 msgstr "不明な終了日"
 
@@ -6092,7 +6092,7 @@ msgstr "複数選択"
 #: components/AdHocCommands/AdHocCredentialStep.tsx:111
 #: components/AdHocCommands/AdHocCredentialStep.tsx:112
 #: components/AdHocCommands/AdHocCredentialStep.tsx:124
-#: screens/Job/JobDetail/JobDetail.tsx:446
+#: screens/Job/JobDetail/JobDetail.tsx:445
 msgid "Machine Credential"
 msgstr "マシンの認証情報"
 
@@ -6258,7 +6258,7 @@ msgstr "開始メッセージ"
 msgid "Scope for the token's access"
 msgstr "トークンのアクセスのスコープ"
 
-#: screens/Job/JobDetail/JobDetail.tsx:569
+#: screens/Job/JobDetail/JobDetail.tsx:568
 msgid "Module Name"
 msgstr "モジュール名"
 
@@ -7029,7 +7029,7 @@ msgstr "Playbook ディレクトリーの選択"
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
-#: screens/Job/JobDetail/JobDetail.tsx:275
+#: screens/Job/JobDetail/JobDetail.tsx:274
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:85
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:224
 msgid "Workflow Job Template"
@@ -7549,7 +7549,7 @@ msgstr "ファイルのアップロードが拒否されました。単一の .j
 msgid "Local time zone"
 msgstr "ローカルタイムゾーン"
 
-#: screens/Job/JobDetail/JobDetail.tsx:209
+#: screens/Job/JobDetail/JobDetail.tsx:208
 msgid "No Status Available"
 msgstr "ステータス情報はありません"
 
@@ -7883,7 +7883,7 @@ msgstr "{0, plural, one {このインスタンスは現在、他のリソース�
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:81
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8037,7 +8037,7 @@ msgstr "システムのファクトを設定するには、`gather_facts: true`\
 "            異なります。"
 
 #: components/JobList/JobListItem.tsx:371
-#: screens/Job/JobDetail/JobDetail.tsx:421
+#: screens/Job/JobDetail/JobDetail.tsx:420
 msgid "Job Slice Parent"
 msgstr "ジョブスライスの親"
 
@@ -8318,7 +8318,7 @@ msgstr ""
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:234
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:281
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.tsx:51
-#: screens/Job/JobDetail/JobDetail.tsx:370
+#: screens/Job/JobDetail/JobDetail.tsx:369
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:263
 msgid "Verbosity"
 msgstr "詳細"
@@ -8328,7 +8328,7 @@ msgstr "詳細"
 msgid "Mattermost"
 msgstr "Mattermost"
 
-#: screens/Job/JobDetail/JobDetail.tsx:225
+#: screens/Job/JobDetail/JobDetail.tsx:224
 msgid "Job ID"
 msgstr "ジョブ ID:"
 
@@ -8394,7 +8394,7 @@ msgstr "インベントリーの同期"
 #: components/Lookup/ProjectLookup.tsx:165
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:166
 #: components/UserAndTeamAccessAdd/UserAndTeamAccessAdd.tsx:234
-#: screens/Job/JobDetail/JobDetail.tsx:79
+#: screens/Job/JobDetail/JobDetail.tsx:78
 #: screens/Project/ProjectList/ProjectList.tsx:201
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:105
 msgid "Remote Archive"
@@ -8985,7 +8985,7 @@ msgstr "ソース"
 msgid "Textarea"
 msgstr "テキストエリア"
 
-#: screens/Job/JobDetail/JobDetail.tsx:237
+#: screens/Job/JobDetail/JobDetail.tsx:236
 msgid "Unknown Status"
 msgstr "[ステータス不明]"
 
@@ -9072,7 +9072,7 @@ msgstr "オプションの更新"
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:179
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
-#: screens/Job/JobDetail/JobDetail.tsx:583
+#: screens/Job/JobDetail/JobDetail.tsx:582
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:451
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:331
@@ -9158,7 +9158,7 @@ msgstr "{0, plural, one {# 個のソースで同期に失敗しました。} oth
 msgid "Back to Instances"
 msgstr "インスタンスに戻る"
 
-#: screens/Job/JobDetail/JobDetail.tsx:321
+#: screens/Job/JobDetail/JobDetail.tsx:320
 msgid "Inventory Source"
 msgstr "インベントリーソース"
 
@@ -9285,7 +9285,7 @@ msgstr "関連するグループの関連付けを解除しますか?"
 #: components/PromptDetail/PromptDetail.tsx:415
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:158
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:509
-#: screens/Job/JobDetail/JobDetail.tsx:428
+#: screens/Job/JobDetail/JobDetail.tsx:427
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:251
 #: screens/Template/shared/JobTemplateForm.tsx:502
 #: screens/TopologyView/Tooltip.tsx:268
@@ -9609,7 +9609,7 @@ msgstr "インベントリーを選択する必要があります"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:102
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:501
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:286
-#: screens/Job/JobDetail/JobDetail.tsx:346
+#: screens/Job/JobDetail/JobDetail.tsx:345
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:232
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:240
 #: screens/Template/shared/JobTemplateForm.tsx:423
@@ -9654,8 +9654,8 @@ msgid "This has already been acted on"
 msgstr "これはすでに処理されています"
 
 #: screens/Job/JobDetail/JobDetail.tsx:78
-msgid "Red Hat Insights"
-msgstr "Red Hat Insights"
+#~ msgid "Red Hat Insights"
+#~ msgstr "Red Hat Insights"
 
 #: screens/Setting/GitHub/GitHub.tsx:59
 msgid "View GitHub Settings"
@@ -9695,7 +9695,7 @@ msgid "When not checked, a merge will be performed, combining local variables wi
 msgstr "チェックされていない場合、ローカル変数と外部ソースで見つかったものを組み合わせてマージが実行されます。"
 
 #: components/JobList/JobListItem.tsx:144
-#: screens/Job/JobDetail/JobDetail.tsx:642
+#: screens/Job/JobDetail/JobDetail.tsx:641
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:172
@@ -9723,7 +9723,7 @@ msgstr "障害のある在庫ソース"
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:117
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:215
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:77
-#: screens/Job/JobDetail/JobDetail.tsx:231
+#: screens/Job/JobDetail/JobDetail.tsx:230
 #: screens/Job/JobOutput/HostEventModal.tsx:167
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:167
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:178
@@ -9916,7 +9916,7 @@ msgstr "ルックアップの取り消し"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:88
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -10505,8 +10505,8 @@ msgstr "このフィールドは {0} 文字以上でなければなりません"
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
-#: screens/Job/JobDetail/JobDetail.tsx:181
-#: screens/Job/JobDetail/JobDetail.tsx:333
+#: screens/Job/JobDetail/JobDetail.tsx:180
+#: screens/Job/JobDetail/JobDetail.tsx:332
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:99
 msgid "Source"
 msgstr "ソース"
@@ -10630,7 +10630,7 @@ msgstr "等しくない"
 msgid "IRC nick"
 msgstr "IRC ニック"
 
-#: screens/Job/JobDetail/JobDetail.tsx:575
+#: screens/Job/JobDetail/JobDetail.tsx:574
 msgid "Module Arguments"
 msgstr "モジュール引数"
 
@@ -10722,7 +10722,7 @@ msgstr "ジョブタイプの選択"
 
 #. placeholder {0}: job.name
 #: components/JobList/JobListItem.tsx:145
-#: screens/Job/JobDetail/JobDetail.tsx:643
+#: screens/Job/JobDetail/JobDetail.tsx:642
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:173
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:164
 msgid "Cancel {0}"
@@ -10894,7 +10894,7 @@ msgstr ""
 msgid "Invalid date format"
 msgstr ""
 
-#: screens/Job/JobDetail/JobDetail.tsx:397
+#: screens/Job/JobDetail/JobDetail.tsx:396
 msgid "Instance Group"
 msgstr "インスタンスグループ"
 
@@ -11015,7 +11015,7 @@ msgstr ""
 msgid "Invalid time format"
 msgstr "無効な時間形式です"
 
-#: screens/Job/JobDetail/JobDetail.tsx:189
+#: screens/Job/JobDetail/JobDetail.tsx:188
 msgid "Unknown Project"
 msgstr "不明なプロジェクト"
 
@@ -11101,7 +11101,7 @@ msgstr "インベントリー内のホストをターゲットにするために
 #: components/PromptDetail/PromptDetail.tsx:196
 #: components/PromptDetail/PromptDetail.tsx:425
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:518
-#: screens/Job/JobDetail/JobDetail.tsx:436
+#: screens/Job/JobDetail/JobDetail.tsx:435
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:223
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:197
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:269
@@ -11456,7 +11456,7 @@ msgstr "ジョブを実行してこのリストに入力してください。"
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:176
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:263
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:334
-#: screens/Job/JobDetail/JobDetail.tsx:364
+#: screens/Job/JobDetail/JobDetail.tsx:363
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:257
 #: screens/Template/shared/JobTemplateForm.tsx:522
 #: screens/Template/shared/WorkflowJobTemplateForm.tsx:208
@@ -11494,8 +11494,8 @@ msgstr "関連付け"
 #: components/JobList/JobListItem.tsx:197
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:96
-#: screens/Job/JobDetail/JobDetail.tsx:623
-#: screens/Job/JobDetail/JobDetail.tsx:631
+#: screens/Job/JobDetail/JobDetail.tsx:622
+#: screens/Job/JobDetail/JobDetail.tsx:630
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:204
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:204
 msgid "Relaunch"
@@ -11568,8 +11568,8 @@ msgstr "ユーザートークンの削除"
 msgid "encrypted"
 msgstr "暗号化"
 
-#: screens/Job/JobDetail/JobDetail.tsx:122
-#: screens/Job/JobDetail/JobDetail.tsx:148
+#: screens/Job/JobDetail/JobDetail.tsx:121
+#: screens/Job/JobDetail/JobDetail.tsx:147
 msgid "Unknown Inventory"
 msgstr "不明なインベントリ"
 
@@ -11654,7 +11654,7 @@ msgid "Source Phone Number"
 msgstr "発信元の電話番号"
 
 #. placeholder {0}: job.timeout
-#: screens/Job/JobDetail/JobDetail.tsx:438
+#: screens/Job/JobDetail/JobDetail.tsx:437
 msgid "{0} seconds"
 msgstr "{0} 秒"
 
@@ -11769,7 +11769,7 @@ msgstr "エラーメッセージボディー"
 
 #. placeholder {0}: job.name
 #: components/JobList/JobListItem.tsx:146
-#: screens/Job/JobDetail/JobDetail.tsx:644
+#: screens/Job/JobDetail/JobDetail.tsx:643
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
 #: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
 msgid "Failed to cancel {0}"
@@ -11840,7 +11840,7 @@ msgid "Created By (Username)"
 msgstr "作成者 (ユーザー名)"
 
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:156
-#: screens/Job/JobDetail/JobDetail.tsx:358
+#: screens/Job/JobDetail/JobDetail.tsx:357
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:245
 #: screens/Template/shared/JobTemplateForm.tsx:441
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:48
@@ -11952,9 +11952,9 @@ msgstr "通知開始の切り替え"
 #: screens/Inventory/InventoryDetail/InventoryDetail.tsx:107
 #: screens/Inventory/InventoryList/InventoryList.tsx:202
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:60
-#: screens/Job/JobDetail/JobDetail.tsx:108
-#: screens/Job/JobDetail/JobDetail.tsx:127
-#: screens/Job/JobDetail/JobDetail.tsx:134
+#: screens/Job/JobDetail/JobDetail.tsx:107
+#: screens/Job/JobDetail/JobDetail.tsx:126
+#: screens/Job/JobDetail/JobDetail.tsx:133
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:207
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:217
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:143

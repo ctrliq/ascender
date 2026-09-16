@@ -9,7 +9,6 @@ const userProfile = {
   isOrgAdmin: 0,
   isNotificationAdmin: 0,
   isExecEnvAdmin: 0,
-  systemConfig: { SUBSCRIPTION_USAGE_MODEL: 'unique_managed_hosts' },
 };
 
 const filterPaths = (sidebar: AppRouteGroup[]) => {

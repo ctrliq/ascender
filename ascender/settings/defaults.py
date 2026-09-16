@@ -823,8 +823,6 @@ ASCENDER_AUTO_DEPROVISION_INSTANCES = False
 # Note: This setting may be overridden by database settings.
 PENDO_TRACKING_STATE = "off"
 
-# Enables Insights data collection.
-# Note: This setting may be overridden by database settings.
 
 # Last gather date for Analytics
 # Last gathered entries for expensive Analytics
@@ -1254,11 +1252,6 @@ ASCENDER_MOUNT_ISOLATED_PATHS_ON_K8S = False
 
 # This is overridden downstream via /etc/ascender/conf.d/cluster_host_id.py
 CLUSTER_HOST_ID = socket.gethostname()
-
-# License compliance for total host count. Possible values:
-# - '': No model - Subscription not counted from Host Metrics
-# - 'unique_managed_hosts': Compliant = automated - deleted hosts (using /api/v2/host_metrics/)
-SUBSCRIPTION_USAGE_MODEL = ''
 
 # Host metrics cleanup - last time of the task/command run
 CLEANUP_HOST_METRICS_LAST_TS = None

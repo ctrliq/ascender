@@ -77,7 +77,7 @@ class BulkHostCreateSerializer(serializers.Serializer):
         if org:
             org_active_count = Host.objects.org_active_count(org.id)
             new_hosts = [h['name'] for h in attrs['hosts']]
-            org_net_new_host_count = len(new_hosts) - Host.objects.filter(inventory__organization=1, name__in=new_hosts).values('name').distinct().count()
+            org_net_new_host_count = len(new_hosts) - Host.objects.filter(inventory__organization=org.id, name__in=new_hosts).values('name').distinct().count()
             if org.max_hosts > 0 and org_active_count + org_net_new_host_count > org.max_hosts:
                 raise PermissionDenied(
                     _(

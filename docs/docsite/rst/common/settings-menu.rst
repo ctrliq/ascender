@@ -1,7 +1,5 @@
 .. index::
    single: controller settings menu
-   single: license, viewing
-   pair: settings menu; view license
    pair: settings menu; configure the controller
 
 

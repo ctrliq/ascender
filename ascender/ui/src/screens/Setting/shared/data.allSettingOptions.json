@@ -677,24 +677,6 @@
               "category_slug": "bulk",
               "default": 100
           },
-          "SUBSCRIPTION_USAGE_MODEL": {
-              "type": "choice",
-              "required": false,
-              "label": "Defines subscription usage model and shows Host Metrics",
-              "category": "System",
-              "category_slug": "system",
-              "default": "",
-              "choices": [
-                  [
-                      "",
-                      "Default model for Ascender - no subscription. Deletion of host_metrics will not be considered for purposes of managed host counting"
-                  ],
-                  [
-                      "unique_managed_hosts",
-                      "Usage based on unique managed nodes in a large historical time frame and delete functionality for no longer used managed nodes"
-                  ]
-              ]
-          },
           "CLEANUP_HOST_METRICS_LAST_TS": {
               "type": "datetime",
               "required": true,
@@ -4541,17 +4523,6 @@
                   "type": "string"
               }
           },
-          "LICENSE": {
-              "type": "nested object",
-              "label": "License",
-              "help_text": "The license controls which features and functionality are enabled. Use /api/v2/config/ to update or change the license.",
-              "category": "System",
-              "category_slug": "system",
-              "defined_in_file": false,
-              "child": {
-                  "type": "field"
-              }
-          },
           "INSTALL_UUID": {
               "type": "string",
               "label": "Unique identifier for an installation",
@@ -5070,23 +5041,6 @@
               "category_slug": "bulk",
               "defined_in_file": false
           },
-          "SUBSCRIPTION_USAGE_MODEL": {
-              "type": "choice",
-              "label": "Defines subscription usage model and shows Host Metrics",
-              "category": "System",
-              "category_slug": "system",
-              "defined_in_file": false,
-              "choices": [
-                  [
-                      "",
-                      "Default model for Ascender - no subscription. Deletion of host_metrics will not be considered for purposes of managed host counting"
-                  ],
-                  [
-                      "unique_managed_hosts",
-                      "Usage based on unique managed nodes in a large historical time frame and delete functionality for no longer used managed nodes"
-                  ]
-              ]
-          },
           "CLEANUP_HOST_METRICS_LAST_TS": {
               "type": "datetime",
               "label": "Last cleanup date for HostMetrics",
@@ -5276,7 +5230,7 @@
           "AUTHENTICATION_BACKENDS": {
               "type": "list",
               "label": "Authentication Backends",
-              "help_text": "List of authentication backends that are enabled based on license features and other authentication settings.",
+              "help_text": "List of authentication backends that are enabled, which follows whether each one has the settings it requires.",
               "category": "Authentication",
               "category_slug": "authentication",
               "defined_in_file": false,

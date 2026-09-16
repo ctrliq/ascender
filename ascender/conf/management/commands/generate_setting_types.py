@@ -71,7 +71,7 @@ def setting_names():
     Every setting name the settings object answers to.
 
     dir() is not enough on its own: a setting that only the conf registry
-    provides, CUSTOM_LOGO and LICENSE among them, answers to getattr without
+    provides, CUSTOM_LOGO among them, answers to getattr without
     appearing there, so the registry is unioned in. Leaving them out is how the
     first version of this file missed eight settings that views read.
     """

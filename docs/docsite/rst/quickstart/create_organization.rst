@@ -9,7 +9,7 @@ An organization is a logical collection of users, teams, projects, and inventori
 From the left navigation bar, click **Organizations**. 
 
 .. note::
-    Ascender creates a default organization automatically. Users of Tower with a Self-support level license only have the 
+    Ascender creates a default organization automatically.
 
 |Organizations - default view|
 

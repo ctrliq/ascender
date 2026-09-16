@@ -18,8 +18,6 @@ from django.core.management.base import BaseCommand, CommandError
 from django.db import connection, transaction
 from django.utils.encoding import smart_str
 
-# DRF error class to distinguish license exceptions
-
 # Ascender inventory imports
 from ascender.main.models.inventory import Inventory, InventorySource, InventoryUpdate
 from ascender.main.models.jobs import JobHostSummary

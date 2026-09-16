@@ -38,8 +38,6 @@ class Command(BaseCommand):
             result.values(
                 'id',
                 'date',
-                'license_consumed',
-                'license_capacity',
                 'hosts_added',
                 'hosts_deleted',
                 'indirectly_managed_hosts',
