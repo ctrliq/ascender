@@ -109,8 +109,7 @@ def test_python_and_js_licenses():
             if item not in [r.lower() for r in requirements.keys()] and item != 'awx':
                 errors.append(" license file %s does not correspond to an existing requirement; it should be removed." % (licenses[item]['filename'],))
                 continue
-            # uWSGI has a linking exception
-            if licenses[item]['gpl'] and item != 'uwsgi':
+            if licenses[item]['gpl']:
                 errors.append(" license for %s is GPL. This software cannot be used." % (item,))
             if licenses[item]['source_required']:
                 version = requirements[item]['version']

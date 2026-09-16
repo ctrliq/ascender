@@ -4,9 +4,6 @@
 Which processes keep a database connection between requests, and which do not.
 """
 
-import sys
-from types import ModuleType
-
 import pytest
 
 from ascender.settings.connection_reuse import DEFAULT_WEB_CONN_MAX_AGE, is_web_process, set_conn_max_age
@@ -18,21 +15,12 @@ def databases():
 
 
 @pytest.fixture(autouse=True)
-def no_web_markers(monkeypatch):
-    """Start every test from a process that claims to be neither web nor uwsgi."""
+def no_web_marker(monkeypatch):
+    """Start every test from a process that does not claim to serve HTTP."""
     monkeypatch.delenv('AWX_WEB_PROCESS', raising=False)
-    monkeypatch.delitem(sys.modules, 'uwsgi', raising=False)
-
-
-@pytest.fixture
-def under_uwsgi(monkeypatch):
-    monkeypatch.setitem(sys.modules, 'uwsgi', ModuleType('uwsgi'))
 
 
 class TestIsWebProcess:
-    def test_uwsgi_is_a_web_process(self, under_uwsgi):
-        assert is_web_process() is True
-
     def test_the_marker_is_a_web_process(self, monkeypatch):
         monkeypatch.setenv('AWX_WEB_PROCESS', '1')
         assert is_web_process() is True
@@ -45,11 +33,6 @@ class TestWebProcess:
     def test_a_web_process_keeps_its_connection(self, databases, monkeypatch):
         monkeypatch.setenv('AWX_WEB_PROCESS', '1')
 
-        set_conn_max_age(databases)
-
-        assert databases['default']['CONN_MAX_AGE'] == DEFAULT_WEB_CONN_MAX_AGE
-
-    def test_uwsgi_keeps_its_connection(self, databases, under_uwsgi):
         set_conn_max_age(databases)
 
         assert databases['default']['CONN_MAX_AGE'] == DEFAULT_WEB_CONN_MAX_AGE

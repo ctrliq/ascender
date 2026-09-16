@@ -34,8 +34,8 @@ def test_every_middleware_is_async_capable(path, cls):
 
 @pytest.mark.parametrize('path,cls', middleware_classes(), ids=lambda v: v if isinstance(v, str) else '')
 def test_every_middleware_still_handles_a_sync_request(path, cls):
-    """Async capable must not mean async only while uwsgi is what serves."""
-    assert getattr(cls, 'sync_capable', True), f'{path} is async only, and nothing serves ASGI yet'
+    """Async capable must not mean async only: Django still calls the chain synchronously."""
+    assert getattr(cls, 'sync_capable', True), f'{path} is async only, and the sync path still runs it'
 
 
 def test_the_traceback_middleware_adapts_to_the_response_it_is_given():

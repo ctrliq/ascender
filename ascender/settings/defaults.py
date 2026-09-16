@@ -58,8 +58,8 @@ DATABASES = {
 }
 
 # Optional manual override for statement_timeout (ms) on web worker DB
-# connections.  uvicorn serves the web process, so this is what it uses; a
-# deployment still running uwsgi derives it from harakiri instead.
+# connections. A web process, which is uvicorn, takes this when it is set and
+# DEFAULT_WEB_TIMEOUT_MS when it is not.
 DATABASE_STATEMENT_TIMEOUT = None
 
 # How many days of job events to keep, for the cleanup_job_events command.

@@ -17,19 +17,10 @@ def is_web_process():
     '''
     Whether this process serves HTTP.
 
-    Under uwsgi the module import answers it, which covers every deployment
-    today. Anything else says so with AWX_WEB_PROCESS, which the web
-    supervisor programs set, and which is what will answer it if the server
-    ever becomes daphne or uvicorn.
+    A web process says so with AWX_WEB_PROCESS, which the supervisor programs
+    that run uvicorn set. Nothing else here serves HTTP.
     '''
-    if environment_setting('WEB_PROCESS'):
-        return True
-    try:
-        import uwsgi  # noqa: F401
-
-        return True
-    except ImportError:
-        return False
+    return bool(environment_setting('WEB_PROCESS'))
 
 
 def set_conn_max_age(DATABASES, DATABASE_CONN_MAX_AGE=None):
