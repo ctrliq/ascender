@@ -301,5 +301,5 @@ class HostMetricSerializer(BaseSerializer):
 class HostMetricSummaryMonthlySerializer(BaseSerializer):
     class Meta:
         model = HostMetricSummaryMonthly
-        read_only_fields = ("id", "date", "license_consumed", "license_capacity", "hosts_added", "hosts_deleted", "indirectly_managed_hosts")
+        read_only_fields = ("id", "date", "hosts_added", "hosts_deleted", "indirectly_managed_hosts")
         fields = read_only_fields

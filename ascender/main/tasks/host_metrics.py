@@ -99,10 +99,6 @@ class HostMetricSummaryMonthlyTask:
     - hosts_added are HostMetric records with first_automation in given month
     - hosts_deleted are HostMetric records with deleted=True and last_deleted in given month
     - - HostMetrics soft-deleted before <threshold> also increases hosts_deleted in their last_deleted month
-    - license_consumed is license_consumed(previous month) + hosts_added - hosts_deleted
-    - - license_consumed for HostMetricSummaryMonthly.date < [threshold] is computed also from
-        all HostMetrics.first_automation < [threshold]
-    - license_capacity is set only for current month, and it's never updated (value taken from current subscription)
     """
 
     def __init__(self):
@@ -119,37 +115,19 @@ class HostMetricSummaryMonthlyTask:
         self._load_hosts_added()
         self._load_hosts_deleted()
 
-        # Get first month after last hard delete
-        month = self._get_first_month()
-        license_consumed = self._get_license_consumed_before(month)
-
         # Fill record for each month
+        month = self._get_first_month()
         while month <= datetime.date.today().replace(day=1):
-            summary = self._find_or_create_summary(month)
-            # Update summary and update license_consumed by hosts added/removed this month
-            self._update_summary(summary, month, license_consumed)
-            license_consumed = summary.license_consumed
-
+            self._update_summary(self._find_or_create_summary(month), month)
             month = month + relativedelta(months=1)
 
         # Create/Update stats
         HostMetricSummaryMonthly.objects.bulk_create(self.records_to_create)
 
-        bulk_update_sorted_by_id(HostMetricSummaryMonthly, self.records_to_update, ['license_consumed', 'hosts_added', 'hosts_deleted'])
+        bulk_update_sorted_by_id(HostMetricSummaryMonthly, self.records_to_update, ['hosts_added', 'hosts_deleted'])
 
         # Set timestamp of last run
         settings.HOST_METRIC_SUMMARY_TASK_LAST_TS = now()
-
-    def _get_license_consumed_before(self, month):
-        license_consumed = 0
-        for metric_month, metric in self.host_metrics.items():
-            if metric_month < month:
-                hosts_added = metric.get('hosts_added', 0)
-                hosts_deleted = metric.get('hosts_deleted', 0)
-                license_consumed = license_consumed + hosts_added - hosts_deleted
-            else:
-                break
-        return license_consumed
 
     def _load_existing_summaries(self):
         """Find all summaries newer than host metrics delete threshold"""
@@ -238,22 +216,16 @@ class HostMetricSummaryMonthlyTask:
                 break
         return summary
 
-    def _update_summary(self, summary, month, license_consumed):
-        """Updates the metric with hosts added and deleted and set license info for current month"""
+    def _update_summary(self, summary, month):
+        """Record how many hosts were first automated and deleted in the month"""
         # Get month counts from host metrics, zero if not found
         hosts_added, hosts_deleted = 0, 0
         if metric := self.host_metrics.get(month, None):
             hosts_added = metric.get('hosts_added', 0)
             hosts_deleted = metric.get('hosts_deleted', 0)
 
-        summary.license_consumed = license_consumed + hosts_added - hosts_deleted
         summary.hosts_added = hosts_added
         summary.hosts_deleted = hosts_deleted
-
-        # license_capacity counted against a subscription. There is none, so the
-        # column keeps the zero the subscription branch already produced.
-        if month == datetime.date.today().replace(day=1):
-            summary.license_capacity = 0
         return summary
 
     @staticmethod

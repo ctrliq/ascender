@@ -900,9 +900,7 @@ class HostMetric(models.Model):
     last_deleted = models.DateTimeField(null=True, db_index=True, help_text=_('When the host was last deleted'))
     automated_counter = models.BigIntegerField(default=0, help_text=_('How many times was the host automated'))
     deleted_counter = models.IntegerField(default=0, help_text=_('How many times was the host deleted'))
-    deleted = models.BooleanField(
-        default=False, help_text=_('Boolean flag saying whether the host is deleted and therefore not counted into the subscription consumption')
-    )
+    deleted = models.BooleanField(default=False, help_text=_('Boolean flag saying whether the host is deleted and therefore no longer counted as automated'))
     used_in_inventories = models.IntegerField(null=True, help_text=_('How many inventories contain this host'))
 
     objects = models.Manager()
@@ -930,10 +928,8 @@ class HostMetricSummaryMonthly(models.Model):
     """
 
     date = models.DateField(unique=True)
-    license_consumed = models.BigIntegerField(default=0, help_text=_("How many unique hosts are consumed from the license"))
-    license_capacity = models.BigIntegerField(default=0, help_text=_("'License capacity as max. number of unique hosts"))
-    hosts_added = models.IntegerField(default=0, help_text=_("How many hosts were added in the associated month, consuming more license capacity"))
-    hosts_deleted = models.IntegerField(default=0, help_text=_("How many hosts were deleted in the associated month, freeing the license capacity"))
+    hosts_added = models.IntegerField(default=0, help_text=_("How many hosts were first automated in the associated month"))
+    hosts_deleted = models.IntegerField(default=0, help_text=_("How many hosts were deleted in the associated month"))
     indirectly_managed_hosts = models.IntegerField(default=0, help_text=("Manually entered number indirectly managed hosts for a certain month"))
 
 
