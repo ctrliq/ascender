@@ -23,7 +23,7 @@ jobs:
     # costs nothing for the jobs that do not open a connection.
     #
     # The credentials have to match the fallback in ascender/settings/defaults.py:
-    # the suite itself is told where to connect through AWX_TEST_DATABASE_*
+    # the suite itself is told where to connect through ASCENDER_TEST_DATABASE_*
     # below, but the ascender-manage checks that make test runs afterwards load
     # the development settings, and the throwaway container has no settings
     # files for those to read, so they connect with the fallback.
@@ -96,11 +96,11 @@ jobs:
         env:
           DOCKER_RUNNER_OPTS: >-
             --network host
-            -e AWX_TEST_DATABASE_HOST=127.0.0.1
-            -e AWX_TEST_DATABASE_PORT=5432
-            -e AWX_TEST_DATABASE_NAME=ascender
-            -e AWX_TEST_DATABASE_USER=ascender
-            -e AWX_TEST_DATABASE_PASSWORD=ascenderpass
+            -e ASCENDER_TEST_DATABASE_HOST=127.0.0.1
+            -e ASCENDER_TEST_DATABASE_PORT=5432
+            -e ASCENDER_TEST_DATABASE_NAME=ascender
+            -e ASCENDER_TEST_DATABASE_USER=ascender
+            -e ASCENDER_TEST_DATABASE_PASSWORD=ascenderpass
         run: AWX_DOCKER_CMD='${{ matrix.tests.command }}' make docker-runner
 
   dev-env:

@@ -3,7 +3,7 @@
 # sclorg container scripts: a directory mounted here wins over the image's own
 # start/ directory, and the files are sourced rather than executed.
 #
-# The suite builds its own database (test_awx_pg, plus a test_awx_pg_gwN per
+# The suite builds its own database (test_ascender_pg, plus a test_ascender_pg_gwN per
 # worker under xdist), which the application role cannot do: the image creates
 # POSTGRESQL_USER without CREATEDB. Granting it here means a fresh development
 # environment can run `make test` without anyone first discovering the failure

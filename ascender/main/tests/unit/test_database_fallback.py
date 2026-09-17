@@ -5,7 +5,7 @@
 The block in ascender/settings/defaults.py is the fallback for a process started
 with no settings files at all. Every real path supplies its own: the operator
 writes credentials.py, the development environment writes database.py, and the
-test settings build their own from AWX_TEST_DATABASE_*.
+test settings build their own from ASCENDER_TEST_DATABASE_*.
 
 That is the whole reason the fallback could take the Ascender name without a
 migration, and the reason the deployed name could not. These tests keep both
@@ -14,6 +14,7 @@ halves of that honest.
 
 import pathlib
 
+from ascender.main.tests.settings_for_test import _test_database_setting
 from ascender.settings.defaults import DATABASES
 
 
@@ -36,7 +37,7 @@ def test_the_suite_builds_its_own_connection_rather_than_taking_the_fallback():
     """
     source = pathlib.Path(__file__).resolve().parents[2] / 'tests' / 'settings_for_test.py'
 
-    assert 'AWX_TEST_DATABASE_NAME' in source.read_text()
+    assert 'ASCENDER_TEST_DATABASE_' in source.read_text()
 
 
 def test_the_development_environment_writes_its_own():
@@ -47,3 +48,31 @@ def test_the_development_environment_writes_its_own():
 
     assert template.exists()
     assert 'DATABASES' in template.read_text()
+
+
+def test_the_ascender_names_win_over_the_awx_ones(monkeypatch):
+    """Both set is what a developer who exported the old names years ago and
+    then copied the new ones out of ci.yml ends up with.
+    """
+    monkeypatch.setenv('ASCENDER_TEST_DATABASE_NAME', 'from-ascender')
+    monkeypatch.setenv('AWX_TEST_DATABASE_NAME', 'from-awx')
+
+    assert _test_database_setting('NAME', 'fallback') == 'from-ascender'
+
+
+def test_the_awx_names_are_still_honoured(monkeypatch):
+    """They are exported in developers' shells and by anything outside this
+    repository that runs the suite. Dropping them would not fail loudly: the
+    lookup would miss and the suite would connect to the default instead.
+    """
+    monkeypatch.delenv('ASCENDER_TEST_DATABASE_NAME', raising=False)
+    monkeypatch.setenv('AWX_TEST_DATABASE_NAME', 'from-awx')
+
+    assert _test_database_setting('NAME', 'fallback') == 'from-awx'
+
+
+def test_the_default_is_taken_when_neither_name_is_set(monkeypatch):
+    monkeypatch.delenv('ASCENDER_TEST_DATABASE_NAME', raising=False)
+    monkeypatch.delenv('AWX_TEST_DATABASE_NAME', raising=False)
+
+    assert _test_database_setting('NAME', 'fallback') == 'fallback'
