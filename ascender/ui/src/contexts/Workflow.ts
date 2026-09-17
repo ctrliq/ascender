@@ -3,6 +3,7 @@ import type {
   WorkflowAction,
   WorkflowState,
 } from 'components/Workflow/workflowReducer';
+import type { WorkflowJobTemplate } from 'types/api';
 
 /**
  * The visualiser's reducer, shared with every node, link and control it draws.
@@ -17,3 +18,7 @@ export const WorkflowDispatchContext =
 export const WorkflowStateContext = React.createContext<WorkflowState | null>(
   null
 );
+
+/** The workflow job template the visualiser edits, for the node modals. */
+export const WorkflowTemplateContext =
+  React.createContext<WorkflowJobTemplate | null>(null);

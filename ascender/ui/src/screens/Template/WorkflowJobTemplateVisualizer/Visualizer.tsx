@@ -6,6 +6,7 @@ import { useLingui } from '@lingui/react/macro';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
+  WorkflowTemplateContext,
 } from 'contexts/Workflow';
 import { getAddedAndRemoved } from 'util/lists';
 import { stringIsUUID } from 'util/strings';
@@ -760,8 +761,10 @@ function Visualizer({ template }: VisualizerProps) {
         {linkToDelete && <LinkDeleteModal />}
         {linkToEdit && <LinkEditModal />}
         {addLinkSourceNode && addLinkTargetNode && <LinkAddModal />}
-        {addNodeSource && <NodeAddModal />}
-        {nodeToEdit && <NodeEditModal />}
+        <WorkflowTemplateContext.Provider value={template}>
+          {addNodeSource && <NodeAddModal />}
+          {nodeToEdit && <NodeEditModal />}
+        </WorkflowTemplateContext.Provider>
         {showUnsavedChangesModal && (
           <UnsavedChangesModal
             onExit={() =>
