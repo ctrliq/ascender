@@ -93,7 +93,12 @@ include(optional('/etc/ascender/conf.d/*.py'), scope=locals())
 # only the defaults.
 # this needs to stay at the bottom of this file
 try:
-    if os.getenv('ASCENDER_KUBE_DEVEL', os.getenv('AWX_KUBE_DEVEL', False)):
+    # Either name, non-empty, which is what the launch scripts test with
+    # [ -n "${ASCENDER_KUBE_DEVEL}${AWX_KUBE_DEVEL}" ]. A getenv fallback would
+    # disagree with them: the new name set but empty is a hit for getenv, so the
+    # old name would be skipped and this path would choose local_*.py while the
+    # scripts had already entered kube devel mode.
+    if os.getenv('ASCENDER_KUBE_DEVEL') or os.getenv('AWX_KUBE_DEVEL'):
         include(optional('development_kube.py'), scope=locals())
     else:
         include(optional('local_*.py'), scope=locals())
