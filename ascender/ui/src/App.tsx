@@ -24,7 +24,7 @@ import { isAuthenticated } from 'util/auth';
 import { getLanguageWithoutRegionCode } from 'util/language';
 import type { AppRouteGroup } from './routeConfig';
 import { dynamicActivate, locales } from './i18nLoader';
-import getRouteConfig from './routeConfig';
+import getRouteConfig, { prefetchPopularScreens } from './routeConfig';
 import { getStoredThemeId, applyTheme } from './themeRegistry';
 import { SESSION_REDIRECT_URL } from './constants';
 import queryClient from './queryClient';
@@ -49,6 +49,12 @@ function ErrorFallback({ error }: ErrorFallbackProps) {
 const RenderAppContainer = () => {
   const userProfile = useUserProfile();
   const navRouteConfig = getRouteConfig(userProfile);
+
+  // Here rather than at module scope, so nothing is warmed on the login page:
+  // there is no session to open a screen with until this container mounts.
+  useEffect(() => {
+    prefetchPopularScreens();
+  }, []);
 
   return (
     <AppContainer navRouteConfig={navRouteConfig}>

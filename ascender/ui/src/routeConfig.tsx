@@ -5,6 +5,49 @@ import React from 'react';
 // all twenty-six shipped in the first bundle whether or not anyone opened them.
 import { Trans } from '@lingui/react/macro';
 
+// The screens most sessions open. Warmed during idle once the authenticated
+// shell has painted, rather than shipped in the entry bundle: import()
+// populates the module registry, so when the route renders React.lazy resolves
+// from it with no fetch and no Suspense fallback. Same result as a static
+// import, without the screens entering the first bundle everyone downloads.
+const POPULAR_SCREENS = [
+  () => import('screens/Template'),
+  () => import('screens/Inventory'),
+  () => import('screens/Host'),
+  () => import('screens/Project'),
+  () => import('screens/Credential'),
+];
+
+interface SaveDataConnection {
+  saveData?: boolean;
+  effectiveType?: string;
+}
+
+export function prefetchPopularScreens(): void {
+  if (typeof window === 'undefined') return;
+
+  // Nothing speculative on a metered or slow connection: the point is to spend
+  // idle bandwidth nobody misses, and there it is bandwidth somebody pays for.
+  const { connection } = navigator as Navigator & { connection?: SaveDataConnection };
+  if (connection?.saveData) return;
+  if (/(^|-)2g$/.test(connection?.effectiveType ?? '')) return;
+
+  const warm = () => {
+    POPULAR_SCREENS.forEach((load) => {
+      // A failure here costs nothing: the route still loads it on demand.
+      load().catch(() => {});
+    });
+  };
+
+  // The timeout matters. Without it a busy tab may never reach idle, which is
+  // exactly the machine where the click latency is worst.
+  if (typeof window.requestIdleCallback === 'function') {
+    window.requestIdleCallback(warm, { timeout: 3000 });
+  } else {
+    window.setTimeout(warm, 1500);
+  }
+}
+
 const ActivityStream = React.lazy(() => import('screens/ActivityStream'));
 const Applications = React.lazy(() => import('screens/Application'));
 const CredentialTypes = React.lazy(() => import('screens/CredentialType'));
