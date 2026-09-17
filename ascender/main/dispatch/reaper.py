@@ -8,7 +8,7 @@ from django.contrib.contenttypes.models import ContentType
 
 from ascender.main.models import Instance, UnifiedJob, WorkflowJob
 
-logger = logging.getLogger('awx.main.dispatch')
+logger = logging.getLogger('ascender.main.dispatch')
 
 
 def startup_reaping():

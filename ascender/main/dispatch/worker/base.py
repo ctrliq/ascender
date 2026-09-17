@@ -24,9 +24,9 @@ from ascender.main.utils.db import set_connection_name
 import ascender.main.analytics.subsystem_metrics as s_metrics
 
 if 'run_callback_receiver' in sys.argv:
-    logger = logging.getLogger('awx.main.commands.run_callback_receiver')
+    logger = logging.getLogger('ascender.main.commands.run_callback_receiver')
 else:
-    logger = logging.getLogger('awx.main.dispatch')
+    logger = logging.getLogger('ascender.main.dispatch')
 
 
 def signame(sig):

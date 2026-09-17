@@ -59,7 +59,7 @@ from ascender.main.utils.execution_environments import to_container_path, get_co
 
 __all__ = ['Inventory', 'Host', 'Group', 'InventorySource', 'InventoryUpdate', 'SmartInventoryMembership', 'HostMetric', 'HostMetricSummaryMonthly']
 
-logger = logging.getLogger('awx.main.models.inventory')
+logger = logging.getLogger('ascender.main.models.inventory')
 
 
 class InventoryConstructedInventoryMembership(models.Model):
@@ -1328,7 +1328,7 @@ class InventoryUpdate(UnifiedJob, InventorySourceOptions, JobNotificationMixin, 
         'ProjectUpdate',
         related_name='scm_inventory_updates',
         help_text=_('Inventory files from this Project Update were used for the inventory update.'),
-        on_delete=models.CASCADE,
+        on_delete=models.SET_NULL,
         blank=True,
         default=None,
         null=True,

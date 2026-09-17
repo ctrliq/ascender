@@ -23,7 +23,7 @@ pytestmark = pytest.mark.skipif(connection.vendor != 'postgresql', reason='exerc
 
 def _command(batch_size=100000):
     command = Command()
-    command.logger = logging.getLogger('awx.main.commands.cleanup_jobs')
+    command.logger = logging.getLogger('ascender.main.commands.cleanup_jobs')
     command.cutoff = now() - timedelta(days=1)
     command.dry_run = False
     command.batch_size = batch_size

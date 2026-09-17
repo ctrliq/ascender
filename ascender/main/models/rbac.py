@@ -24,7 +24,7 @@ __all__ = [
     'role_summary_fields_generator',
 ]
 
-logger = logging.getLogger('awx.main.models.rbac')
+logger = logging.getLogger('ascender.main.models.rbac')
 
 ROLE_SINGLETON_SYSTEM_ADMINISTRATOR = 'system_administrator'
 ROLE_SINGLETON_SYSTEM_AUDITOR = 'system_auditor'

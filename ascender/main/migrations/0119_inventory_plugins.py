@@ -9,7 +9,7 @@ from ascender.main.models.base import VarsDictProperty
 
 from ._inventory_source_vars import FrozenInjectors
 
-logger = logging.getLogger('awx.main.migrations')
+logger = logging.getLogger('ascender.main.migrations')
 
 
 def _get_inventory_sources(InventorySource):

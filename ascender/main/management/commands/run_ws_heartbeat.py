@@ -10,7 +10,7 @@ from ascender.settings.typed import settings
 
 from ascender.main.dispatch import pg_bus_conn
 
-logger = logging.getLogger('awx.main.commands.run_ws_heartbeat')
+logger = logging.getLogger('ascender.main.commands.run_ws_heartbeat')
 
 
 class Command(BaseCommand):

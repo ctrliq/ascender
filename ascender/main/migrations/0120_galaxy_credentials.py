@@ -9,7 +9,7 @@ import django.db.models.deletion
 
 from ascender.main.migrations import _galaxy as galaxy
 
-logger = logging.getLogger('awx.main.migrations')
+logger = logging.getLogger('ascender.main.migrations')
 
 
 class Migration(migrations.Migration):

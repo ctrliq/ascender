@@ -3,7 +3,7 @@ import logging
 from ascender.main.models import CredentialType
 from django.db.models import Q
 
-logger = logging.getLogger('awx.main.migrations')
+logger = logging.getLogger('ascender.main.migrations')
 
 DEPRECATED_CRED_KIND = {
     'rax': {

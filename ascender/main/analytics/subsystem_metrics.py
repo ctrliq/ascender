@@ -15,7 +15,7 @@ from ascender.main.consumers import emit_channel_notification
 from ascender.main.utils import is_testing
 
 root_key = settings.SUBSYSTEM_METRICS_VALKEY_KEY_PREFIX
-logger = logging.getLogger('awx.main.analytics')
+logger = logging.getLogger('ascender.main.analytics')
 
 
 class MetricsNamespace:

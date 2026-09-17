@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.encoding import iri_to_uri
 
 FrozenInjectors = dict()
-logger = logging.getLogger('awx.main.migrations')
+logger = logging.getLogger('ascender.main.migrations')
 
 
 class PluginFileInjector(object):

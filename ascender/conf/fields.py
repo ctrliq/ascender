@@ -16,7 +16,7 @@ from rest_framework.serializers import PrimaryKeyRelatedField  # noqa
 # Ascender
 from ascender.main.constants import CONTAINER_VOLUMES_MOUNT_TYPES, MAX_ISOLATED_PATH_COLON_DELIMITER
 
-logger = logging.getLogger('awx.conf.fields')
+logger = logging.getLogger('ascender.conf.fields')
 
 # Use DRF fields to convert/validate settings:
 # - to_representation(obj) should convert a native Python object to a primitive

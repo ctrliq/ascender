@@ -25,9 +25,9 @@ from ascender.main.dispatch import reaper
 from ascender.main.utils.common import convert_mem_str_to_bytes, get_mem_effective_capacity, log_excess_runtime
 
 if 'run_callback_receiver' in sys.argv:
-    logger = logging.getLogger('awx.main.commands.run_callback_receiver')
+    logger = logging.getLogger('ascender.main.commands.run_callback_receiver')
 else:
-    logger = logging.getLogger('awx.main.dispatch')
+    logger = logging.getLogger('ascender.main.dispatch')
 
 # Workers inherit the loaded Django app registry from the parent process, which only
 # the fork start method provides. Python 3.14 changed the Linux default to forkserver,

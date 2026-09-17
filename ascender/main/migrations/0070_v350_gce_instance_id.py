@@ -8,7 +8,7 @@ from django.db import migrations
 
 from ascender.main.migrations._inventory_source import set_new_instance_id, back_out_new_instance_id
 
-logger = logging.getLogger('awx.main.migrations')
+logger = logging.getLogger('ascender.main.migrations')
 
 
 # new value introduced in ascender/settings/defaults.py, frozen in time here

@@ -7,7 +7,7 @@ from rest_framework.settings import api_settings, import_from_string
 from ascender.dab.lib.utils.imports import import_object
 from ascender.dab.lib.utils.views.base_view import AnsibleBaseView
 
-logger = logging.getLogger('awx.dab.lib.utils.views.django_app_api')
+logger = logging.getLogger('ascender.dab.lib.utils.views.django_app_api')
 
 
 # Determine and load the parent view

@@ -43,7 +43,7 @@ from django.apps import apps
 # Ascender
 from ascender.main.utils.licensing import OPEN_PRODUCT_NAME
 
-logger = logging.getLogger('awx.main.utils')
+logger = logging.getLogger('ascender.main.utils')
 
 __all__ = [
     'get_object_or_400',

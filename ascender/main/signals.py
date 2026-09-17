@@ -66,7 +66,7 @@ from ascender.conf.utils import conf_to_dict
 
 __all__ = []
 
-logger = logging.getLogger('awx.main.signals')
+logger = logging.getLogger('ascender.main.signals')
 analytics_logger = logging.getLogger('ascender.analytics.activity_stream')
 
 # Update has_active_failures for inventory/groups when a Host/Group is deleted,

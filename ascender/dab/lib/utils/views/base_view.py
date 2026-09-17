@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 from ascender.dab.lib.utils.settings import get_function_from_setting, get_setting
 
-logger = logging.getLogger('awx.dab.lib.utils.views.base_view')
+logger = logging.getLogger('ascender.dab.lib.utils.views.base_view')
 
 
 class AnsibleBaseView(APIView):

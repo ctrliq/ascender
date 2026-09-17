@@ -28,7 +28,7 @@ DEFAULT_APPROVAL_TIMEOUT_BODY = CustomNotificationBase.DEFAULT_APPROVAL_TIMEOUT_
 DEFAULT_APPROVAL_DENIED_MSG = CustomNotificationBase.DEFAULT_APPROVAL_DENIED_MSG
 DEFAULT_APPROVAL_DENIED_BODY = CustomNotificationBase.DEFAULT_APPROVAL_DENIED_BODY
 
-logger = logging.getLogger('awx.main.notifications.pagerduty_backend')
+logger = logging.getLogger('ascender.main.notifications.pagerduty_backend')
 
 # The Events API v1 endpoint pygerduty posted to. The subdomain and token
 # belong to the REST API and were never part of triggering an incident, but

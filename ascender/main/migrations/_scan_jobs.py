@@ -1,6 +1,6 @@
 import logging
 
-logger = logging.getLogger('awx.main.migrations')
+logger = logging.getLogger('ascender.main.migrations')
 
 
 def remove_scan_type_nodes(apps, schema_editor):

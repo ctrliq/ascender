@@ -14,7 +14,7 @@ from ascender.dab.lib.logging import thread_local
 # Named rather than derived from __name__: the logger names stay awx.* while
 # the package is ascender.*, so LOGGING and anything filtering on them keep
 # matching. The diagnostic names move in their own change.
-logger = logging.getLogger('awx.dab.lib.middleware.logging.log_request')
+logger = logging.getLogger('ascender.dab.lib.middleware.logging.log_request')
 
 
 class LogTracebackMiddleware:

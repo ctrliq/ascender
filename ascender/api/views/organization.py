@@ -56,7 +56,7 @@ from ascender.api.views.mixin import RelatedJobsPreventDeleteMixin, Organization
 from ascender.main import models
 from ascender.api import serializers
 
-logger = logging.getLogger('awx.api.views.organization')
+logger = logging.getLogger('ascender.api.views.organization')
 
 
 class OrganizationList(OrganizationCountsMixin, ListCreateAPIView):

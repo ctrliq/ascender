@@ -139,7 +139,7 @@ class Command(BaseCommand):
         )
 
     def handle(self, *args, **options):
-        self.logger = logging.getLogger('awx.main.commands.cleanup_job_events')
+        self.logger = logging.getLogger('ascender.main.commands.cleanup_job_events')
         days = options['days']
         if days is None:
             days = getattr(settings, 'JOB_EVENT_RETENTION_DAYS', 0) or 0

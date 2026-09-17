@@ -13,7 +13,7 @@ from ascender.main.utils.common import log_excess_runtime
 from ascender.main.utils.db import bulk_update_sorted_by_id
 from ascender.main.models import Host
 
-logger = logging.getLogger('awx.main.tasks.facts')
+logger = logging.getLogger('ascender.main.tasks.facts')
 system_tracking_logger = logging.getLogger('ascender.analytics.system_tracking')
 
 

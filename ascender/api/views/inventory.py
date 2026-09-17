@@ -55,7 +55,7 @@ from ascender.api.views import (
 )
 from ascender.api.views.ad_hoc_command import AdHocCommandList
 
-logger = logging.getLogger('awx.api.views.organization')
+logger = logging.getLogger('ascender.api.views.organization')
 
 
 class InventoryUpdateEventsList(SubListAPIView):
