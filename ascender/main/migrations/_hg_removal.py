@@ -2,7 +2,7 @@ import logging
 
 from ascender.main.utils.common import set_current_apps
 
-logger = logging.getLogger('awx.main.migrations')
+logger = logging.getLogger('ascender.main.migrations')
 
 
 def delete_hg_scm(apps, schema_editor):

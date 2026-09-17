@@ -10,7 +10,7 @@ from django.http import HttpRequest
 from rest_framework.request import Request
 from rest_framework.settings import api_settings
 
-logger = logging.getLogger('awx.dab.lib.channels.middleware')
+logger = logging.getLogger('ascender.dab.lib.channels.middleware')
 
 
 @database_sync_to_async

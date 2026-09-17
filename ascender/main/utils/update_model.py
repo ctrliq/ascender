@@ -6,7 +6,7 @@ import time
 
 from ascender.main.tasks.signals import signal_callback
 
-logger = logging.getLogger('awx.main.tasks.utils')
+logger = logging.getLogger('ascender.main.tasks.utils')
 
 
 def update_model(model, pk, _attempt=0, _max_attempts=5, select_for_update=False, **updates):

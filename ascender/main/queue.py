@@ -25,7 +25,7 @@ class AnsibleJSONEncoder(json.JSONEncoder):
 class CallbackQueueDispatcher(object):
     def __init__(self):
         self.queue = getattr(settings, 'CALLBACK_QUEUE', '')
-        self.logger = logging.getLogger('awx.main.queue.CallbackQueueDispatcher')
+        self.logger = logging.getLogger('ascender.main.queue.CallbackQueueDispatcher')
         self.connection = valkey.Valkey.from_url(settings.BROKER_URL)
 
     def dispatch(self, obj):

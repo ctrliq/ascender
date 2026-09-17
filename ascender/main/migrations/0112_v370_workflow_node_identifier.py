@@ -4,7 +4,7 @@ from django.db import migrations, models
 import uuid
 import logging
 
-logger = logging.getLogger('awx.main.migrations')
+logger = logging.getLogger('ascender.main.migrations')
 
 
 def create_uuid(apps, schema_editor):

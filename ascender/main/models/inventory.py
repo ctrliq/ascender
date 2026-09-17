@@ -59,7 +59,7 @@ from ascender.main.utils.execution_environments import to_container_path, get_co
 
 __all__ = ['Inventory', 'Host', 'Group', 'InventorySource', 'InventoryUpdate', 'SmartInventoryMembership', 'HostMetric', 'HostMetricSummaryMonthly']
 
-logger = logging.getLogger('awx.main.models.inventory')
+logger = logging.getLogger('ascender.main.models.inventory')
 
 
 class InventoryConstructedInventoryMembership(models.Model):

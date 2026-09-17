@@ -6,7 +6,7 @@ import logging
 import re
 from typing import Optional
 
-logger = logging.getLogger('awx.dab.lib.utils.duration')
+logger = logging.getLogger('ascender.dab.lib.utils.duration')
 
 
 DURATION_CHAR_TO_SECONDS = {

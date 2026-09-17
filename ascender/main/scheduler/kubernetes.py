@@ -12,7 +12,7 @@ from django.utils.translation import gettext_lazy as _
 from ascender.main.utils.common import parse_yaml_or_json, deepmerge
 from ascender.main.utils.execution_environments import get_default_pod_spec
 
-logger = logging.getLogger('awx.main.scheduler')
+logger = logging.getLogger('ascender.main.scheduler')
 
 
 class PodManager(object):

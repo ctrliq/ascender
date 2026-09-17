@@ -9,7 +9,7 @@ from ascender.main.models import (
 
 import logging
 
-logger = logging.getLogger('awx.main.scheduler.dependency_graph')
+logger = logging.getLogger('ascender.main.scheduler.dependency_graph')
 
 
 class DependencyGraph(object):

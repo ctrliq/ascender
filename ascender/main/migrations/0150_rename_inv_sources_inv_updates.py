@@ -8,7 +8,7 @@ from ascender.main.models.credential import ManagedCredentialType, CredentialTyp
 # Named rather than derived from __name__: the logger names stay awx.* while
 # the package is ascender.*, so LOGGING and anything filtering on them keep
 # matching. The diagnostic names move in their own change.
-logger = logging.getLogger('awx.main.migrations.0150_rename_inv_sources_inv_updates')
+logger = logging.getLogger('ascender.main.migrations.0150_rename_inv_sources_inv_updates')
 
 
 def forwards(apps, schema_editor):

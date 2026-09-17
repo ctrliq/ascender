@@ -32,7 +32,7 @@ from ascender.main.signals import disable_activity_stream
 from ascender.main.constants import STANDARD_INVENTORY_UPDATE_ENV
 from ascender.main.utils.pglock import advisory_lock
 
-logger = logging.getLogger('awx.main.commands.inventory_import')
+logger = logging.getLogger('ascender.main.commands.inventory_import')
 
 
 def functioning_dir(path):

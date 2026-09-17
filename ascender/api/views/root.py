@@ -23,7 +23,7 @@ from ascender.api.versioning import reverse, drf_reverse
 from ascender.main.constants import PRIVILEGE_ESCALATION_METHODS
 from ascender.main.models import Project, Organization, Instance, InstanceGroup
 
-logger = logging.getLogger('awx.api.views.root')
+logger = logging.getLogger('ascender.api.views.root')
 
 
 class ApiRootView(APIView):

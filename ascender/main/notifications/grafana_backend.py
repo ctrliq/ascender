@@ -29,7 +29,7 @@ DEFAULT_APPROVAL_TIMEOUT_BODY = CustomNotificationBase.DEFAULT_APPROVAL_TIMEOUT_
 DEFAULT_APPROVAL_DENIED_MSG = CustomNotificationBase.DEFAULT_APPROVAL_DENIED_MSG
 DEFAULT_APPROVAL_DENIED_BODY = CustomNotificationBase.DEFAULT_APPROVAL_DENIED_BODY
 
-logger = logging.getLogger('awx.main.notifications.grafana_backend')
+logger = logging.getLogger('ascender.main.notifications.grafana_backend')
 
 
 class GrafanaBackend(AscenderBaseEmailBackend, CustomNotificationBase):

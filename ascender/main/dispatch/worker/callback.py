@@ -23,7 +23,7 @@ from ascender.main.utils.profiling import AscenderProfiler
 import ascender.main.analytics.subsystem_metrics as s_metrics
 from .base import BaseWorker
 
-logger = logging.getLogger('awx.main.commands.run_callback_receiver')
+logger = logging.getLogger('ascender.main.commands.run_callback_receiver')
 
 
 def job_stats_wrapup(job_identifier, event=None):

@@ -65,7 +65,7 @@ __all__ = [
 ]
 
 
-logger = logging.getLogger('awx.main.models.workflow')
+logger = logging.getLogger('ascender.main.models.workflow')
 
 # Sanity ceiling for the retry budget; retries have no delay between attempts,
 # so an unbounded user value could flood the jobs table before failure paths run

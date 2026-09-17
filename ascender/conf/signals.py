@@ -13,7 +13,7 @@ from ascender.conf import settings_registry
 from ascender.conf.models import Setting
 from ascender.conf.settings import bump_setting_cache_version
 
-logger = logging.getLogger('awx.conf.signals')
+logger = logging.getLogger('ascender.conf.signals')
 
 __all__ = []
 

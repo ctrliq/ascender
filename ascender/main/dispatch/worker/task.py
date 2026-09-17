@@ -14,7 +14,7 @@ from ascender.main.tasks.system import dispatch_startup, inform_cluster_of_shutd
 
 from .base import BaseWorker
 
-logger = logging.getLogger('awx.main.dispatch')
+logger = logging.getLogger('ascender.main.dispatch')
 
 
 TASK_NAME_PREFIXES = ('ascender.', 'awx.')

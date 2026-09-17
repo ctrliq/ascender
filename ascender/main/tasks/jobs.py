@@ -18,7 +18,7 @@ import urllib.parse as urlparse
 # Django
 from ascender.settings.typed import settings
 
-logger = logging.getLogger('awx.main.tasks.jobs')
+logger = logging.getLogger('ascender.main.tasks.jobs')
 
 
 # Runner
@@ -84,7 +84,7 @@ from ascender.main.utils.update_model import update_model
 from rest_framework.exceptions import PermissionDenied
 from django.utils.translation import gettext_lazy as _
 
-logger = logging.getLogger('awx.main.tasks.jobs')
+logger = logging.getLogger('ascender.main.tasks.jobs')
 
 
 def with_path_cleanup(f):
@@ -1787,7 +1787,7 @@ class RunInventoryUpdate(SourceControlMixin, BaseTask):
             counter=self.runner_callback.event_ct,
             initial_line=self.runner_callback.end_line,
         )
-        inv_logger = logging.getLogger('awx.main.commands.inventory_import')
+        inv_logger = logging.getLogger('ascender.main.commands.inventory_import')
         formatter = inv_logger.handlers[0].formatter
         formatter.job_start = inventory_update.started
         handler.formatter = formatter

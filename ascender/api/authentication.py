@@ -14,7 +14,7 @@ from rest_framework import authentication
 # Django-OAuth-Toolkit
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
-logger = logging.getLogger('awx.api.authentication')
+logger = logging.getLogger('ascender.api.authentication')
 
 
 class LoggedBasicAuthentication(authentication.BasicAuthentication):

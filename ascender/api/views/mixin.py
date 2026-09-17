@@ -24,7 +24,7 @@ from ascender.main.models.inventory import Inventory
 from ascender.main.models.jobs import JobTemplate
 from ascender.api.exceptions import ActiveJobConflict
 
-logger = logging.getLogger('awx.api.views.mixin')
+logger = logging.getLogger('ascender.api.views.mixin')
 
 
 class UnifiedJobDeletionMixin(object):

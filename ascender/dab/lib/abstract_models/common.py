@@ -13,7 +13,7 @@ from ascender.dab.lib.utils.encryption import ansible_encryption
 from ascender.dab.lib.utils.models import current_user_or_system_user, is_system_user
 from ascender.dab.lib.utils.response import get_relative_url
 
-logger = logging.getLogger('awx.dab.lib.abstract_models.common')
+logger = logging.getLogger('ascender.dab.lib.abstract_models.common')
 
 
 def get_cls_view_basename(cls):

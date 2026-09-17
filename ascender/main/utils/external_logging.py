@@ -32,7 +32,7 @@ from ascender.settings.typed import settings
 from ascender.main.utils.reload import supervisor_service_command
 from ascender.main.dispatch.publish import task
 
-logger = logging.getLogger('awx.main.utils.external_logging')
+logger = logging.getLogger('ascender.main.utils.external_logging')
 
 # Where the external log queue spools when the setting does not name somewhere
 # usable. One definition because it is the same path in two places, and because

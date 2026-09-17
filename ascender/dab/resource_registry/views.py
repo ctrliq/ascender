@@ -29,7 +29,7 @@ from ascender.dab.rest_filters.rest_framework.type_filter_backend import TypeFil
 # Inlined from ansible_base.rest_pagination.default_paginator (app not vendored)
 DEFAULT_MAX_PAGE_SIZE = 200
 
-logger = logging.getLogger('awx.dab.resource_registry.views')
+logger = logging.getLogger('ascender.dab.resource_registry.views')
 
 
 class HasResourceRegistryPermissions(permissions.BasePermission):

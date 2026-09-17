@@ -5,7 +5,7 @@ from rest_framework import routers
 
 from ascender.dab.resource_registry import views
 
-logger = logging.getLogger('awx.dab.resource_registry.urls')
+logger = logging.getLogger('ascender.dab.resource_registry.urls')
 
 service_router = routers.SimpleRouter()
 
