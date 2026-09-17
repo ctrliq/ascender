@@ -282,7 +282,7 @@ RUN for dir in \
       /var/lib/ascender/rsyslog \
       /var/lib/ascender/rsyslog/conf.d \
       /var/lib/ascender/.local/share/containers/storage \
-      /var/run/awx-rsyslog \
+      /var/run/ascender-rsyslog \
       /var/log/nginx \
       /var/lib/pgsql \
       /var/run/supervisor \
@@ -315,6 +315,10 @@ RUN ln -s /etc/ascender /etc/tower \
 # has to keep resolving until that moves.
 RUN ln -s /var/run/ascender-receptor /var/run/awx-receptor
 
+# And the rsyslog socket directory, which ascender-install and the operator both
+# name in their own compose files and templates.
+RUN ln -s /var/run/ascender-rsyslog /var/run/awx-rsyslog
+
 {% if (build_dev|bool) or (kube_dev|bool) %}
 # The development tree is mounted in from outside, at /ascender_devel. The old
 # path is an alias onto it so a compose file or an operator deployment still
@@ -333,7 +337,7 @@ RUN for dir in \
       /var/lib/ascender/venv/awx/lib/python3.14/site-packages \
       /var/lib/ascender/projects \
       /var/lib/ascender/rsyslog \
-      /var/run/awx-rsyslog \
+      /var/run/ascender-rsyslog \
       /.ansible \
       /var/lib/shared/overlay-images \
       /var/lib/shared/overlay-layers \

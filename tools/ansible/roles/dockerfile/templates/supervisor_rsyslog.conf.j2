@@ -6,7 +6,7 @@ logfile_maxbytes = 0
 pidfile = /var/run/supervisor/supervisor.rsyslog.pid
 
 [program:rsyslogd]
-command = rsyslogd -n -i /var/run/awx-rsyslog/rsyslog.pid -f /var/lib/ascender/rsyslog/rsyslog.conf
+command = rsyslogd -n -i /var/run/ascender-rsyslog/rsyslog.pid -f /var/lib/ascender/rsyslog/rsyslog.conf
 autorestart = true
 startsecs = 0
 stopasgroup=true
