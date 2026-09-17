@@ -129,6 +129,11 @@ virtualenv_ascender:
 		fi; \
 		if [ ! -e "$(VENV_BASE)/awx" ]; then \
 			ln -s ascender $(VENV_BASE)/awx; \
+		elif [ ! -L "$(VENV_BASE)/awx" ]; then \
+			echo "NOTE: $(VENV_BASE)/awx is a real virtualenv from before the rename."; \
+			echo "      Every target here now installs into $(VENV_BASE)/ascender, so that"; \
+			echo "      one no longer receives updates. Remove it to get the link instead:"; \
+			echo "          rm -rf $(VENV_BASE)/awx && make virtualenv_ascender"; \
 		fi; \
 	fi
 
