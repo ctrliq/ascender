@@ -60,7 +60,7 @@ ASCENDER_CALLBACK_PROFILE = True
 # Disable normal scheduled/triggered task managers (DependencyManager, TaskManager, WorkflowManager).
 # Allows user to trigger task managers directly for debugging and profiling purposes.
 # Only works in combination with settings.SETTINGS_MODULE == 'ascender.settings.development'
-AWX_DISABLE_TASK_MANAGERS = False
+ASCENDER_DISABLE_TASK_MANAGERS = False
 
 # Needed for launching runserver in debug mode
 # ======================!!!!!!! FOR DEVELOPMENT ONLY !!!!!!!=================================
@@ -93,13 +93,31 @@ include(optional('/etc/ascender/conf.d/*.py'), scope=locals())
 # only the defaults.
 # this needs to stay at the bottom of this file
 try:
-    if os.getenv('AWX_KUBE_DEVEL', False):
+    if os.getenv('ASCENDER_KUBE_DEVEL', os.getenv('AWX_KUBE_DEVEL', False)):
         include(optional('development_kube.py'), scope=locals())
     else:
         include(optional('local_*.py'), scope=locals())
 except ImportError:
     traceback.print_exc()
     sys.exit(1)
+
+# AWX_DISABLE_TASK_MANAGERS was the name until the rebrand, and it is the kind of
+# setting that lives in someone's own local_settings.py rather than in this
+# repository, so the rename cannot reach it. Read after the override chain above,
+# so a file setting either name still beats the default here.
+#
+# Dropping the old name would not have failed: the toggle would have been ignored
+# and the task managers would have kept running, which for a debugging switch
+# reads as the debugger being broken rather than as a renamed setting.
+#
+# The old name applies only while the current one is still at its default, which
+# is the same rule, and the same limitation, as _FORMER_NAMES in production.py:
+# the test is whether anything changed the current name, and a file setting it to
+# False explicitly cannot be told apart from a file not mentioning it. So writing
+# both names with conflicting values resolves to the old one. Write one.
+if 'AWX_DISABLE_TASK_MANAGERS' in locals():
+    if ASCENDER_DISABLE_TASK_MANAGERS == DEFAULTS_SNAPSHOT.get('ASCENDER_DISABLE_TASK_MANAGERS'):
+        ASCENDER_DISABLE_TASK_MANAGERS = AWX_DISABLE_TASK_MANAGERS  # NOQA
 
 # The below runs AFTER all of the custom settings are imported
 # because conf.d files will define DATABASES and this should modify that
