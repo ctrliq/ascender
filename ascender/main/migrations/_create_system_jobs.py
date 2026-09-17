@@ -2,7 +2,7 @@ import logging
 
 from django.utils.timezone import now
 
-logger = logging.getLogger('awx.main.migrations')
+logger = logging.getLogger('ascender.main.migrations')
 
 __all__ = ['create_clearsessions_jt', 'create_cleartokens_jt']
 

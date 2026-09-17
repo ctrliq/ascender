@@ -4,7 +4,7 @@ import logging
 from django.utils.timezone import now
 from django.conf import settings
 
-logger = logging.getLogger('awx.conf.settings')
+logger = logging.getLogger('ascender.conf.settings')
 
 __all__ = ['rename_setting']
 

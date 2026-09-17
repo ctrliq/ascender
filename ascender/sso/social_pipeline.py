@@ -10,7 +10,7 @@ from ascender.sso.common import (
     reconcile_users_org_team_mappings,
 )
 
-logger = logging.getLogger('awx.sso.social_pipeline')
+logger = logging.getLogger('ascender.sso.social_pipeline')
 
 
 def _update_m2m_from_expression(user, opts, remove=True):

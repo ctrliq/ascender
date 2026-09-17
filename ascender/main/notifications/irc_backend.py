@@ -19,7 +19,7 @@ from django.utils.translation import gettext_lazy as _
 from ascender.main.notifications.base import AscenderBaseEmailBackend
 from ascender.main.notifications.custom_notification_base import CustomNotificationBase
 
-logger = logging.getLogger('awx.main.notifications.irc_backend')
+logger = logging.getLogger('ascender.main.notifications.irc_backend')
 
 # A line is at most 512 bytes including the trailing CRLF (RFC 2812 section 2.3).
 MAX_LINE_LENGTH = 510

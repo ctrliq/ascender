@@ -41,7 +41,7 @@ from ansible_runner.utils.capacity import get_cpu_count, get_mem_in_bytes
 
 __all__ = ('Instance', 'InstanceGroup', 'InstanceLink', 'AscenderScheduleState')
 
-logger = logging.getLogger('awx.main.models.ha')
+logger = logging.getLogger('ascender.main.models.ha')
 
 
 class HasPolicyEditsMixin(HasEditsMixin):

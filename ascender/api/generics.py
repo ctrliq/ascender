@@ -68,7 +68,7 @@ __all__ = [
     'BaseUsersList',
 ]
 
-logger = logging.getLogger('awx.api.generics')
+logger = logging.getLogger('ascender.api.generics')
 analytics_logger = logging.getLogger('ascender.analytics.performance')
 
 

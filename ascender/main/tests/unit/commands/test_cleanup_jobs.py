@@ -126,7 +126,7 @@ class TestFindPartitionsToDrop:
     """The partition list comes back as table names that have to be read as dates."""
 
     def _delete_meta(self, children):
-        delete_meta = DeleteMeta(logging.getLogger('awx.main.commands.cleanup_jobs'), Job, now() - timedelta(days=1), dry_run=False)
+        delete_meta = DeleteMeta(logging.getLogger('ascender.main.commands.cleanup_jobs'), Job, now() - timedelta(days=1), dry_run=False)
         cursor = mock.MagicMock()
         cursor.fetchall.return_value = [(name,) for name in children]
         connection = mock.MagicMock()

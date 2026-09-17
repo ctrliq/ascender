@@ -6,7 +6,7 @@ from ascender.main.analytics.subsystem_metrics import DispatcherMetrics, Callbac
 from ascender.main.dispatch.publish import task
 from ascender.main.dispatch import get_task_queuename
 
-logger = logging.getLogger('awx.main.scheduler')
+logger = logging.getLogger('ascender.main.scheduler')
 
 
 @task(queue=get_task_queuename)

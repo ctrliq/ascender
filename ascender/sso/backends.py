@@ -39,7 +39,7 @@ from social_core.backends.saml import SAMLIdentityProvider as BaseSAMLIdentityPr
 from ascender.sso.models import UserEnterpriseAuth
 from ascender.sso.common import create_org_and_teams, reconcile_users_org_team_mappings
 
-logger = logging.getLogger('awx.sso.backends')
+logger = logging.getLogger('ascender.sso.backends')
 
 
 class LDAPSettings(BaseLDAPSettings):

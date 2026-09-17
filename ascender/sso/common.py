@@ -7,7 +7,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.utils import IntegrityError
 from ascender.main.models import Organization, Team
 
-logger = logging.getLogger('awx.sso.common')
+logger = logging.getLogger('ascender.sso.common')
 
 
 def get_orgs_by_ids(names=None):

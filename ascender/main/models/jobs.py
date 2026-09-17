@@ -53,7 +53,7 @@ from ascender.main.models.mixins import (
 )
 from ascender.main.constants import JOB_VARIABLE_PREFIXES
 
-logger = logging.getLogger('awx.main.models.jobs')
+logger = logging.getLogger('ascender.main.models.jobs')
 
 __all__ = ['JobTemplate', 'JobLaunchConfig', 'Job', 'JobHostSummary', 'SystemJobTemplate', 'SystemJob']
 

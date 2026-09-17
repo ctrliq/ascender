@@ -11,7 +11,7 @@ from django.utils.translation import gettext_lazy as _
 from ascender.main.notifications.base import AscenderBaseEmailBackend
 from ascender.main.notifications.custom_notification_base import CustomNotificationBase
 
-logger = logging.getLogger('awx.main.notifications.mattermost_backend')
+logger = logging.getLogger('ascender.main.notifications.mattermost_backend')
 
 
 class MattermostBackend(AscenderBaseEmailBackend, CustomNotificationBase):

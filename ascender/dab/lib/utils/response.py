@@ -11,7 +11,7 @@ from rest_framework.reverse import reverse as drf_reverse
 
 from ascender.dab.lib.utils.settings import get_setting
 
-logger = logging.getLogger('awx.dab.lib.utils.response')
+logger = logging.getLogger('ascender.dab.lib.utils.response')
 
 
 class CSVBuffer:

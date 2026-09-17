@@ -15,7 +15,7 @@ from ascender.main.constants import MINIMAL_EVENTS, ANSIBLE_RUNNER_NEEDS_UPDATE_
 from ascender.main.utils.update_model import update_model
 from ascender.main.queue import CallbackQueueDispatcher
 
-logger = logging.getLogger('awx.main.tasks.callback')
+logger = logging.getLogger('ascender.main.tasks.callback')
 
 
 def _setting_as_bool(value, default):

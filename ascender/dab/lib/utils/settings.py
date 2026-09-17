@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from ascender.dab.lib.utils.imports import import_object
 from ascender.dab.lib.utils.validation import to_python_boolean
 
-logger = logging.getLogger('awx.dab.lib.utils.settings')
+logger = logging.getLogger('ascender.dab.lib.utils.settings')
 
 
 class SettingNotSetException(Exception):

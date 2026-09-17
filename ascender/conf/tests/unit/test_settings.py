@@ -397,7 +397,7 @@ def test_database_error_without_sqlstate_is_logged_not_raised(settings, caplog, 
     error.__cause__ = cause
     with mock.patch('django.db.backends.base.base.BaseDatabaseWrapper.ensure_connection') as mock_ensure:
         mock_ensure.side_effect = error
-        with caplog.at_level('WARNING', logger='awx.conf.settings'):
+        with caplog.at_level('WARNING', logger='ascender.conf.settings'):
             assert getattr(settings, 'ASCENDER_VAR', 'unavailable') == 'unavailable'
 
     assert 'Database settings are not available, using defaults. error: connection failed' in caplog.text
@@ -413,7 +413,7 @@ def test_database_error_with_sqlstate_names_it(settings, caplog):
     error.__cause__ = psycopg.errors.TooManyConnections('too many clients')
     with mock.patch('django.db.backends.base.base.BaseDatabaseWrapper.ensure_connection') as mock_ensure:
         mock_ensure.side_effect = error
-        with caplog.at_level('WARNING', logger='awx.conf.settings'):
+        with caplog.at_level('WARNING', logger='ascender.conf.settings'):
             assert getattr(settings, 'ASCENDER_VAR', 'unavailable') == 'unavailable'
 
     assert 'SQL Error state: 53300 - TooManyConnections' in caplog.text

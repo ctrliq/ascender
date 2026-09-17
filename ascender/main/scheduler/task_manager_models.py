@@ -9,7 +9,7 @@ from ascender.main.models import (
     InstanceGroup,
 )
 
-logger = logging.getLogger('awx.main.scheduler')
+logger = logging.getLogger('ascender.main.scheduler')
 
 
 class TaskManagerInstance:
