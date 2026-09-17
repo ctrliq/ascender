@@ -215,7 +215,12 @@ RUN ln -s /var/lib/ascender/venv/ascender/bin/ascender-manage /usr/bin/ascender-
 # The venv moved from venv/awx to venv/ascender. ascender-install builds its own
 # receptor image against the old path, and so may anything else pointing into
 # this one, so the old name stays as a link rather than a rename people chase.
-RUN ln -s ascender /var/lib/ascender/venv/awx
+#
+# -n so this does not dereference the link the builder stage already made and
+# COPY carried over: plain ln -s would resolve venv/awx, land inside it, and
+# leave venv/ascender/ascender pointing at itself instead. -f so it is the same
+# command whether or not the link arrived.
+RUN ln -sfn ascender /var/lib/ascender/venv/awx
 
 {%if build_dev|bool %}
 COPY --from={{ receptor_image }} /usr/bin/receptor /usr/bin/receptor

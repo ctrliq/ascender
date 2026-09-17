@@ -123,17 +123,16 @@ virtualenv_ascender:
 		if [ ! -d "$(VENV_BASE)" ]; then \
 			mkdir $(VENV_BASE); \
 		fi; \
+		if [ ! -e "$(VENV_BASE)/ascender" ] && [ -d "$(VENV_BASE)/awx" ] && [ ! -L "$(VENV_BASE)/awx" ]; then \
+			echo "Moving $(VENV_BASE)/awx to $(VENV_BASE)/ascender, and linking the old name to it."; \
+			mv $(VENV_BASE)/awx $(VENV_BASE)/ascender; \
+		fi; \
 		if [ ! -d "$(VENV_BASE)/ascender" ]; then \
 			$(PYTHON) -m venv $(VENV_BASE)/ascender; \
 			$(VENV_BASE)/ascender/bin/pip install $(PIP_OPTIONS) $(VENV_BOOTSTRAP); \
 		fi; \
-		if [ ! -e "$(VENV_BASE)/awx" ]; then \
-			ln -s ascender $(VENV_BASE)/awx; \
-		elif [ ! -L "$(VENV_BASE)/awx" ]; then \
-			echo "NOTE: $(VENV_BASE)/awx is a real virtualenv from before the rename."; \
-			echo "      Every target here now installs into $(VENV_BASE)/ascender, so that"; \
-			echo "      one no longer receives updates. Remove it to get the link instead:"; \
-			echo "          rm -rf $(VENV_BASE)/awx && make virtualenv_ascender"; \
+		if [ ! -e "$(VENV_BASE)/awx" ] || [ -L "$(VENV_BASE)/awx" ]; then \
+			ln -sfn ascender $(VENV_BASE)/awx; \
 		fi; \
 	fi
 
