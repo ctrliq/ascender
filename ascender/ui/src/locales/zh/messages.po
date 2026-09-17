@@ -194,7 +194,7 @@ msgstr "周六"
 msgid "Press Enter to edit. Press ESC to stop editing."
 msgstr "按 Enter 进行编辑。按 ESC 停止编辑。"
 
-#: screens/Template/Survey/MultipleChoiceField.tsx:107
+#: screens/Template/Survey/MultipleChoiceField.tsx:114
 msgid "Click to toggle default value"
 msgstr "点击以切换默认值"
 
@@ -993,7 +993,7 @@ msgid "This schedule uses complex rules that are not supported in the\n"
 msgstr "此调度使用 UI 中不支持的复杂规则。\n"
 "  请使用 API 来管理此调度。"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:149
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:161
 #: components/Workflow/WorkflowLinkHelp.tsx:47
 #: screens/Credential/shared/ExternalTestModal.tsx:102
 #: screens/Template/shared/JobTemplateForm.tsx:300
@@ -1399,7 +1399,7 @@ msgid "E-mail"
 msgstr "电子邮件"
 
 #: components/JobList/JobList.tsx:219
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:160
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:172
 #: components/PromptDetail/PromptDetail.tsx:253
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:111
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:457
@@ -2115,7 +2115,7 @@ msgstr "查看杂项系统设置"
 msgid "Type Details"
 msgstr "类型详情"
 
-#: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:85
+#: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:94
 msgid "Other prompts"
 msgstr "其他提示"
 
@@ -2334,7 +2334,7 @@ msgstr "删除所有节点"
 msgid "Association modal"
 msgstr "关联模态"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:153
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:165
 #: screens/Template/shared/JobTemplateForm.tsx:304
 msgid "Check"
 msgstr "检查"
@@ -2561,7 +2561,7 @@ msgstr "作业分片"
 msgid "Enable log system tracking facts individually"
 msgstr "单独启用日志系统跟踪事实"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/useWorkflowNodeSteps.ts:461
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/useWorkflowNodeSteps.ts:465
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "在创建或编辑节点时无法选择具有提示密码凭证的作业模板"
 
@@ -2676,7 +2676,7 @@ msgstr "复制输出"
 msgid "No results found"
 msgstr "没有找到结果"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:206
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:218
 #: components/PromptDetail/PromptDetail.tsx:432
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:523
@@ -3747,7 +3747,7 @@ msgstr "Subversion"
 msgid "Failed to delete one or more execution environments"
 msgstr "删除一个或多个执行环境失败"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:90
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:102
 #: components/PromptDetail/PromptDetail.tsx:419
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:528
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:281
@@ -3795,7 +3795,7 @@ msgstr "此字段必须是数字，且值介于 {0} 和 {1} 之间"
 #~ msgstr "完成"
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:193
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:200
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:212
 #: screens/Template/shared/JobTemplate.helptext.tsx:21
 msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
 msgstr "如果启用，在受支持的情况下显示 Ansible 任务所做的更改。这等同于 Ansible 的 --diff 模式。"
@@ -4355,8 +4355,8 @@ msgstr "按嵌套组名称筛选"
 msgid "Allow Deletes While In Use"
 msgstr ""
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:781
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:783
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:784
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:786
 msgid "Error saving the workflow!"
 msgstr "保存工作流时出错！"
 
@@ -4949,7 +4949,7 @@ msgstr "选择要删除的问题"
 
 #: components/AdHocCommands/AdHocPreviewStep.tsx:69
 #: components/HostForm/HostForm.tsx:156
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:129
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:141
 #: components/PromptDetail/PromptDetail.tsx:230
 #: components/PromptDetail/PromptDetail.tsx:439
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:294
@@ -5113,7 +5113,7 @@ msgstr "折叠"
 
 #: components/JobList/JobListItem.tsx:335
 #: components/LabelLists/LabelLists.tsx:56
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:246
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:217
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:129
@@ -5190,8 +5190,8 @@ msgid "Minimum number of instances that will be automatically\n"
 msgstr "当新实例上线时将自动分配给此组的\n"
 "          最小实例数。"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:111
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:112
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:123
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:124
 #: components/PromptDetail/PromptDetail.tsx:323
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:255
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:590
@@ -5463,7 +5463,7 @@ msgid "Next"
 msgstr "下一"
 
 #: components/LabelSelect/LabelSelect.tsx:204
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:252
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:264
 #: components/MultiSelect/TagMultiSelect.tsx:134
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:149
 #: screens/Inventory/shared/InventoryForm.tsx:97
@@ -5831,8 +5831,8 @@ msgstr "源控制分支"
 msgid "Instance Groups"
 msgstr "实例组"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:120
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:121
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:132
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:133
 #: components/PromptDetail/PromptDetail.tsx:357
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:275
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:615
@@ -6505,6 +6505,11 @@ msgstr "组"
 msgid "{scm_update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{scm_update_cache_timeout, plural, one {# 秒} other {# 秒}}"
 
+#. placeholder {0}: workflowTemplate.name
+#: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:81
+msgid "This workflow ({0}) sets its own limit, which is used in place of this node's limit when the workflow runs."
+msgstr ""
+
 #: components/Schedule/ScheduleToggle/ScheduleToggle.tsx:79
 msgid "Toggle schedule"
 msgstr "删除调度"
@@ -7107,7 +7112,7 @@ msgstr "删除一个或多个组失败。"
 msgid "Confirm Disable Local Authorization"
 msgstr "确认禁用本地授权"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:785
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:788
 msgid "There was an error saving the workflow."
 msgstr "保存工作流时出错。"
 
@@ -8850,7 +8855,7 @@ msgstr "此字段必须是整数"
 
 #: components/Workflow/WorkflowStartNode.tsx:67
 #: screens/Job/WorkflowOutput/WorkflowOutput.tsx:73
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:323
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:324
 msgid "START"
 msgstr "开始"
 
@@ -9281,7 +9286,7 @@ msgstr "解除关联相关的组？"
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:172
 #: components/AdHocCommands/AdHocDetailsStep.tsx:173
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:69
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:73
 #: components/PromptDetail/PromptDetail.tsx:415
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:158
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:509
@@ -9291,6 +9296,11 @@ msgstr "解除关联相关的组？"
 #: screens/TopologyView/Tooltip.tsx:268
 msgid "Forks"
 msgstr "Forks"
+
+#. placeholder {0}: resource?.name ?? ''
+#: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:83
+msgid "This limit is applied to all workflow nodes within this workflow ({0}) that prompt for a limit, in place of the limit set on each node."
+msgstr ""
 
 #: screens/Setting/Settings.tsx:84
 msgid "LDAP Default"
@@ -9602,7 +9612,7 @@ msgstr "查看已建库存明细"
 msgid "An inventory must be selected"
 msgstr "必须选择一个清单"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:58
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:62
 #: components/PromptDetail/PromptDetail.tsx:306
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:155
 #: components/PromptDetail/PromptProjectDetail.tsx:106
@@ -10715,7 +10725,7 @@ msgstr "日志记录"
 msgid "Instance status"
 msgstr "实例状态"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:146
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:158
 #: screens/Template/shared/JobTemplateForm.tsx:297
 msgid "Choose a job type"
 msgstr "选择作业类型"
@@ -10978,7 +10988,7 @@ msgstr "分页"
 msgid "Check whether the given field's value is present in the list provided; expects a comma-separated list of items."
 msgstr "检查给定字段的值是否出现在提供的列表中；需要一个以逗号分隔的项目列表。"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:198
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:210
 #: components/PromptDetail/PromptDetail.tsx:431
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:522
@@ -11097,7 +11107,7 @@ msgstr "仅导入主机名与这个正则表达式匹配的主机。该过滤器
 msgid "The pattern used to target hosts in the inventory. Leaving the field blank, all, and * will all target all hosts in the inventory. You can find more information about Ansible's host patterns"
 msgstr "用于将字段保留为清单中的目标主机的模式。留空、所有和 * 将针对清单中的所有主机。您可以找到有关 Ansible 主机模式的更多信息"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:100
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:112
 #: components/PromptDetail/PromptDetail.tsx:196
 #: components/PromptDetail/PromptDetail.tsx:425
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:518
@@ -11446,7 +11456,7 @@ msgstr "请运行一个作业来填充此列表。"
 #: components/AdHocCommands/AdHocDetailsStep.tsx:152
 #: components/AdHocCommands/AdHocDetailsStep.tsx:153
 #: components/JobList/JobList.tsx:249
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:79
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:83
 #: components/PromptDetail/PromptDetail.tsx:311
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:161
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:103
@@ -11606,8 +11616,8 @@ msgstr "启用创建置备回调 URL。使用该 URL，主机可以联系 {brand
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:199
 #: components/HostToggle/HostToggle.tsx:72
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:206
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:208
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:218
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:220
 #: components/PromptDetail/PromptDetail.tsx:432
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:523

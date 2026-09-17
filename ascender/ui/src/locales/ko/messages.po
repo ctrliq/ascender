@@ -194,7 +194,7 @@ msgstr "토요일"
 msgid "Press Enter to edit. Press ESC to stop editing."
 msgstr "Enter를 눌러 편집합니다. ESC를 눌러 편집을 중지합니다."
 
-#: screens/Template/Survey/MultipleChoiceField.tsx:107
+#: screens/Template/Survey/MultipleChoiceField.tsx:114
 msgid "Click to toggle default value"
 msgstr "기본값을 토글하려면 클릭합니다."
 
@@ -993,7 +993,7 @@ msgid "This schedule uses complex rules that are not supported in the\n"
 msgstr "이 일정은 UI에서 지원되지 않는 복잡한 규칙을\n"
 "  사용합니다. 이 일정을 관리하려면 API를 사용하십시오."
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:149
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:161
 #: components/Workflow/WorkflowLinkHelp.tsx:47
 #: screens/Credential/shared/ExternalTestModal.tsx:102
 #: screens/Template/shared/JobTemplateForm.tsx:300
@@ -1399,7 +1399,7 @@ msgid "E-mail"
 msgstr "이메일"
 
 #: components/JobList/JobList.tsx:219
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:160
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:172
 #: components/PromptDetail/PromptDetail.tsx:253
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:111
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:457
@@ -2115,7 +2115,7 @@ msgstr "기타 시스템 설정 보기"
 msgid "Type Details"
 msgstr "유형 세부 정보"
 
-#: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:85
+#: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:94
 msgid "Other prompts"
 msgstr "기타 프롬프트"
 
@@ -2334,7 +2334,7 @@ msgstr "모든 노드 제거"
 msgid "Association modal"
 msgstr "연결 모달"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:153
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:165
 #: screens/Template/shared/JobTemplateForm.tsx:304
 msgid "Check"
 msgstr "확인"
@@ -2561,7 +2561,7 @@ msgstr "작업 분할"
 msgid "Enable log system tracking facts individually"
 msgstr "로그 시스템 추적 사실을 개별적으로 활성화"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/useWorkflowNodeSteps.ts:461
+#: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/useWorkflowNodeSteps.ts:465
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "노드를 생성하거나 편집할 때 암호를 입력하라는 인증 정보가 있는 작업 템플릿을 선택할 수 없습니다."
 
@@ -2676,7 +2676,7 @@ msgstr "출력 복사"
 msgid "No results found"
 msgstr "결과를 찾을 수 없음"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:206
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:218
 #: components/PromptDetail/PromptDetail.tsx:432
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:523
@@ -3747,7 +3747,7 @@ msgstr "Subversion"
 msgid "Failed to delete one or more execution environments"
 msgstr "하나 이상의 실행 환경을 삭제하지 못했습니다."
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:90
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:102
 #: components/PromptDetail/PromptDetail.tsx:419
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:528
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:281
@@ -3795,7 +3795,7 @@ msgstr "이 필드는 숫자여야 하며 {0}과(와) {1} 사이의 값이어야
 #~ msgstr "완료"
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:193
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:200
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:212
 #: screens/Template/shared/JobTemplate.helptext.tsx:21
 msgid "If enabled, show the changes made by Ansible tasks, where supported. This is equivalent to Ansible's --diff mode."
 msgstr "활성화하면 지원되는 경우 Ansible 작업으로 변경된 사항을 표시합니다. 이는 Ansible의 --diff 모드와 동일합니다."
@@ -4355,8 +4355,8 @@ msgstr "중첩된 그룹 이름 필터링"
 msgid "Allow Deletes While In Use"
 msgstr ""
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:781
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:783
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:784
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:786
 msgid "Error saving the workflow!"
 msgstr "워크플로우를 저장하는 동안 오류가 발생했습니다!"
 
@@ -4949,7 +4949,7 @@ msgstr "삭제할 질문을 선택"
 
 #: components/AdHocCommands/AdHocPreviewStep.tsx:69
 #: components/HostForm/HostForm.tsx:156
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:129
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:141
 #: components/PromptDetail/PromptDetail.tsx:230
 #: components/PromptDetail/PromptDetail.tsx:439
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:294
@@ -5113,7 +5113,7 @@ msgstr "접기"
 
 #: components/JobList/JobListItem.tsx:335
 #: components/LabelLists/LabelLists.tsx:56
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:246
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:217
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:129
@@ -5190,8 +5190,8 @@ msgid "Minimum number of instances that will be automatically\n"
 msgstr "새 인스턴스가 온라인 상태가 될 때 이 그룹에 자동으로\n"
 "          할당되는 최소 인스턴스 수입니다."
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:111
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:112
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:123
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:124
 #: components/PromptDetail/PromptDetail.tsx:323
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:255
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:590
@@ -5463,7 +5463,7 @@ msgid "Next"
 msgstr "다음"
 
 #: components/LabelSelect/LabelSelect.tsx:204
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:252
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:264
 #: components/MultiSelect/TagMultiSelect.tsx:134
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:149
 #: screens/Inventory/shared/InventoryForm.tsx:97
@@ -5831,8 +5831,8 @@ msgstr "소스 제어 분기"
 msgid "Instance Groups"
 msgstr "인스턴스 그룹"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:120
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:121
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:132
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:133
 #: components/PromptDetail/PromptDetail.tsx:357
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:275
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:615
@@ -6505,6 +6505,11 @@ msgstr "그룹"
 msgid "{scm_update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{scm_update_cache_timeout, plural, one {# 초} other {# 초}}"
 
+#. placeholder {0}: workflowTemplate.name
+#: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:81
+msgid "This workflow ({0}) sets its own limit, which is used in place of this node's limit when the workflow runs."
+msgstr ""
+
 #: components/Schedule/ScheduleToggle/ScheduleToggle.tsx:79
 msgid "Toggle schedule"
 msgstr "일정 전환"
@@ -7107,7 +7112,7 @@ msgstr "하나 이상의 그룹을 삭제하지 못했습니다."
 msgid "Confirm Disable Local Authorization"
 msgstr "로컬 인증 비활성화 확인"
 
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:785
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:788
 msgid "There was an error saving the workflow."
 msgstr "워크플로를 저장하는 동안 오류가 발생했습니다."
 
@@ -8850,7 +8855,7 @@ msgstr "이 필드는 정수여야 합니다"
 
 #: components/Workflow/WorkflowStartNode.tsx:67
 #: screens/Job/WorkflowOutput/WorkflowOutput.tsx:73
-#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:323
+#: screens/Template/WorkflowJobTemplateVisualizer/Visualizer.tsx:324
 msgid "START"
 msgstr "시작"
 
@@ -9281,7 +9286,7 @@ msgstr "관련 그룹을 분리하시겠습니까?"
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:172
 #: components/AdHocCommands/AdHocDetailsStep.tsx:173
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:69
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:73
 #: components/PromptDetail/PromptDetail.tsx:415
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:158
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:509
@@ -9291,6 +9296,11 @@ msgstr "관련 그룹을 분리하시겠습니까?"
 #: screens/TopologyView/Tooltip.tsx:268
 msgid "Forks"
 msgstr "포크"
+
+#. placeholder {0}: resource?.name ?? ''
+#: components/LaunchPrompt/steps/useOtherPromptsStep.tsx:83
+msgid "This limit is applied to all workflow nodes within this workflow ({0}) that prompt for a limit, in place of the limit set on each node."
+msgstr ""
 
 #: screens/Setting/Settings.tsx:84
 msgid "LDAP Default"
@@ -9602,7 +9612,7 @@ msgstr "구축된 재고 세부 정보 보기"
 msgid "An inventory must be selected"
 msgstr "인벤토리를 선택해야 함"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:58
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:62
 #: components/PromptDetail/PromptDetail.tsx:306
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:155
 #: components/PromptDetail/PromptProjectDetail.tsx:106
@@ -10715,7 +10725,7 @@ msgstr "로깅"
 msgid "Instance status"
 msgstr "인스턴스 상태"
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:146
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:158
 #: screens/Template/shared/JobTemplateForm.tsx:297
 msgid "Choose a job type"
 msgstr "작업 유형 선택"
@@ -10978,7 +10988,7 @@ msgstr "페이지 번호"
 msgid "Check whether the given field's value is present in the list provided; expects a comma-separated list of items."
 msgstr "지정된 필드의 값이 제공된 목록에 있는지 확인합니다. 쉼표로 구분된 항목 목록이 있어야 합니다."
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:198
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:210
 #: components/PromptDetail/PromptDetail.tsx:431
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:522
@@ -11097,7 +11107,7 @@ msgstr "호스트 이름과 일치하는 정규 표현식을 가져옵니다. �
 msgid "The pattern used to target hosts in the inventory. Leaving the field blank, all, and * will all target all hosts in the inventory. You can find more information about Ansible's host patterns"
 msgstr "인벤토리의 호스트를 대상으로 지정하는 데 사용되는 패턴입니다. 필드를 비워두면 all 및 *는 인벤토리의 모든 호스트를 대상으로 합니다. Ansible의 호스트 패턴에 대한 자세한 정보를 찾을 수 있습니다."
 
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:100
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:112
 #: components/PromptDetail/PromptDetail.tsx:196
 #: components/PromptDetail/PromptDetail.tsx:425
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:518
@@ -11446,7 +11456,7 @@ msgstr "이 목록을 채우려면 작업을 실행하십시오."
 #: components/AdHocCommands/AdHocDetailsStep.tsx:152
 #: components/AdHocCommands/AdHocDetailsStep.tsx:153
 #: components/JobList/JobList.tsx:249
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:79
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:83
 #: components/PromptDetail/PromptDetail.tsx:311
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:161
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:103
@@ -11606,8 +11616,8 @@ msgstr "프로비저닝 콜백 URL 생성을 활성화합니다. 이 URL을 사�
 
 #: components/AdHocCommands/AdHocDetailsStep.tsx:199
 #: components/HostToggle/HostToggle.tsx:72
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:206
-#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:208
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:218
+#: components/LaunchPrompt/steps/OtherPromptsStep.tsx:220
 #: components/PromptDetail/PromptDetail.tsx:432
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:523

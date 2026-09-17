@@ -3,8 +3,10 @@ import { screen, waitFor, fireEvent, act } from '@testing-library/react';
 import {
   WorkflowDispatchContext,
   WorkflowStateContext,
+  WorkflowTemplateContext,
 } from 'contexts/Workflow';
 import { useUserProfile } from 'contexts/Config';
+import type { WorkflowJobTemplate } from 'types/api';
 import {
   InventorySourcesAPI,
   JobTemplatesAPI,
@@ -1146,5 +1148,52 @@ describe('Edit existing node', () => {
         }
       );
     });
+  });
+
+  test('Warns that the limit of the workflow replaces the limit of the node', async () => {
+    vi.mocked(JobTemplatesAPI.readLaunch).mockResolvedValue({
+      data: { ...jtLaunchConfig, ask_limit_on_launch: true },
+    } as unknown as ResponseOf<typeof JobTemplatesAPI.readLaunch>);
+    renderWithContexts(
+      <WorkflowDispatchContext.Provider value={dispatch}>
+        <WorkflowStateContext.Provider
+          value={
+            {
+              nodeToEdit: {
+                id: 2,
+                identifier: 'Foo',
+                fullUnifiedJobTemplate: mockJobTemplate,
+              },
+            } as unknown as WorkflowState
+          }
+        >
+          <WorkflowTemplateContext.Provider
+            value={
+              {
+                id: 7,
+                name: 'Nightly',
+                limit: '!disabled',
+              } as unknown as WorkflowJobTemplate
+            }
+          >
+            <NodeModal askLinkType={false} onSave={onSave} title="Edit Node" />
+          </WorkflowTemplateContext.Provider>
+        </WorkflowStateContext.Provider>
+      </WorkflowDispatchContext.Provider>
+    );
+    await waitForWizard();
+    await waitFor(() =>
+      expect(document.querySelector('#other-prompts-step')).toBeInTheDocument()
+    );
+    fireEvent.click(document.querySelector('#other-prompts-step')!);
+    await waitFor(() =>
+      expect(document.querySelector('input#prompt-limit')).toBeInTheDocument()
+    );
+
+    expect(
+      document.querySelector(
+        '[title^="This workflow (Nightly) sets its own limit"]'
+      )
+    ).toBeInTheDocument();
   });
 });
