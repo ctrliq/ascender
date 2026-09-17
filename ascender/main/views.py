@@ -95,7 +95,7 @@ def handle_500(request):
 
 @csrf_exempt
 def handle_csp_violation(request):
-    logger = logging.getLogger('awx')
+    logger = logging.getLogger('ascender')
     logger.error(json.loads(request.body))
     return HttpResponse(content=None)
 

@@ -13,7 +13,7 @@ from ascender.main.access import check_user_access
 from ascender.main.models import Inventory, UnifiedJob
 from ascender.main.utils import get_object_or_400
 
-logger = logging.getLogger('awx.api.permissions')
+logger = logging.getLogger('ascender.api.permissions')
 
 __all__ = [
     'ModelAccessPermission',

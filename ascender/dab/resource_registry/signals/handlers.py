@@ -10,7 +10,7 @@ from django.db import connection
 from ascender.dab.resource_registry.models import Resource, init_resource_from_object
 from ascender.dab.resource_registry.registry import get_registry
 
-logger = logging.getLogger('awx.dab.resource_registry.signals.handlers')
+logger = logging.getLogger('ascender.dab.resource_registry.signals.handlers')
 
 
 @lru_cache(maxsize=1)

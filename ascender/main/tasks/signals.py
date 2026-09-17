@@ -2,7 +2,7 @@ import signal
 import functools
 import logging
 
-logger = logging.getLogger('awx.main.tasks.signals')
+logger = logging.getLogger('ascender.main.tasks.signals')
 
 
 __all__ = ['with_signal_handling', 'signal_callback']

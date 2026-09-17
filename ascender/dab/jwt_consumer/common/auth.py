@@ -22,7 +22,7 @@ from ascender.dab.resource_registry.models import Resource, ResourceType
 from ascender.dab.resource_registry.signals.handlers import no_reverse_sync
 from ascender.dab.resource_registry.utils.settings import resource_server_defined
 
-logger = logging.getLogger("awx.dab.jwt_consumer.common.auth")
+logger = logging.getLogger("ascender.dab.jwt_consumer.common.auth")
 
 
 class GatewayLockedException(Exception):

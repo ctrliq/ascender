@@ -12,7 +12,7 @@ from django.utils.encoding import smart_str, smart_bytes
 
 __all__ = ['get_encryption_key', 'encrypt_field', 'decrypt_field', 'encrypt_value', 'decrypt_value', 'encrypt_dict']
 
-logger = logging.getLogger('awx.main.utils.encryption')
+logger = logging.getLogger('ascender.main.utils.encryption')
 
 
 class Fernet256(Fernet):

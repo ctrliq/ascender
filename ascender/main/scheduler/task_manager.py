@@ -48,7 +48,7 @@ from ascender.main.scheduler.task_manager_models import TaskManagerModels
 import ascender.main.analytics.subsystem_metrics as s_metrics
 from ascender.main.utils import decrypt_field
 
-logger = logging.getLogger('awx.main.scheduler')
+logger = logging.getLogger('ascender.main.scheduler')
 
 
 def timeit(func):

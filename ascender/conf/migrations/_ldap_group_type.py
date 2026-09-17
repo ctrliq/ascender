@@ -4,7 +4,7 @@ from django.conf import settings
 
 import logging
 
-logger = logging.getLogger('awx.conf.migrations')
+logger = logging.getLogger('ascender.conf.migrations')
 
 
 def fill_ldap_group_type_params(apps, schema_editor):

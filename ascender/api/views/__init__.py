@@ -72,7 +72,7 @@ from ascender.api.views.mixin import (
 )
 from ascender.api.pagination import UnifiedJobEventPagination
 
-logger = logging.getLogger('awx.api.views')
+logger = logging.getLogger('ascender.api.views')
 
 
 def unpartitioned_event_horizon(cls):

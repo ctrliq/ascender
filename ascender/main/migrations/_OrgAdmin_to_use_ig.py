@@ -2,7 +2,7 @@ import logging
 
 from ascender.main.models import Organization
 
-logger = logging.getLogger('awx.main.migrations')
+logger = logging.getLogger('ascender.main.migrations')
 
 
 def migrate_org_admin_to_use(apps, schema_editor):

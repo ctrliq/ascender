@@ -34,16 +34,16 @@ Config in `pyproject.toml` under `[tool.ruff]` and `[tool.ruff.format]`: `line-l
 
 ```bash
 # Check (CI-style):
-docker exec tools_ascender_1 bash -c "cd /ascender_devel && ruff format --check awx"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && ruff format --check ascender"
 # Auto-fix:
-docker exec tools_ascender_1 bash -c "cd /ascender_devel && ruff format awx"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && ruff format ascender"
 ```
 
 ### Ruff (linting)
 Config in `pyproject.toml` under `[tool.ruff.lint]`. Selects 48 rules explicitly rather than by class, ported from the `[flake8]` block this replaced: the `E7xx` statement checks, `F4xx` through `F9xx`, and `W2xx`/`W3xx`/`W605`. `preview = true` is required because `E265`, `E266` and `W391` are still preview rules and are silently inert without it. Excludes `ascender/ui/node_modules`, `env`.
 
 ```bash
-docker exec tools_ascender_1 bash -c "cd /ascender_devel && ruff check awx"
+docker exec tools_ascender_1 bash -c "cd /ascender_devel && ruff check ascender"
 ```
 
 ### Yamllint
@@ -142,7 +142,7 @@ Migration files live in `ascender/main/migrations/` (218 existing files).
 
 | File | Trigger | Purpose |
 |---|---|---|
-| `devel_images.yml` | Push to `main` or `feature_*` | Builds and pushes `awx_devel` Docker image to GHCR |
+| `devel_images.yml` | Push to `main` or `feature_*` | Builds and pushes the `ascender_devel` Docker image to GHCR |
 | `stage.yml` | Manual (`workflow_dispatch`) | Builds and stages a release |
 | `promote.yml` | Manual | Promotes a staged release |
 

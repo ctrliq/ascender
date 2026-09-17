@@ -19,7 +19,7 @@ from ascender.api.permissions import WebhookKeyPermission
 from ascender.main.models import Job, JobTemplate, Project, ProjectUpdate, WorkflowJob, WorkflowJobTemplate
 from ascender.main.constants import JOB_VARIABLE_PREFIXES
 
-logger = logging.getLogger('awx.api.views.webhooks')
+logger = logging.getLogger('ascender.api.views.webhooks')
 
 
 class WebhookKeyView(GenericAPIView):

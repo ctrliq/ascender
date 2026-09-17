@@ -18,7 +18,7 @@ from ascender.dab.lib.utils.create_system_user import create_system_user, get_sy
 from ascender.dab.lib.utils.encryption import ENCRYPTED_STRING
 from ascender.dab.lib.utils.string import make_json_safe
 
-logger = logging.getLogger('awx.dab.lib.utils.models')
+logger = logging.getLogger('ascender.dab.lib.utils.models')
 
 # Handle type hints of AbstractUser during linting
 if TYPE_CHECKING:

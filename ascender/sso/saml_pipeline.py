@@ -11,7 +11,7 @@ from ascender.settings.typed import settings
 from ascender.main.models import Team
 from ascender.sso.common import create_org_and_teams, reconcile_users_org_team_mappings, get_orgs_by_ids
 
-logger = logging.getLogger('awx.sso.saml_pipeline')
+logger = logging.getLogger('ascender.sso.saml_pipeline')
 
 
 def populate_user(backend, details, user=None, *args, **kwargs):

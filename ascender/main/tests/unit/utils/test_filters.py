@@ -13,12 +13,14 @@ from django.db.models import Q
     'params, logger_name, expected',
     [
         # skip all records if enabled_flag = False
-        ({'enabled_flag': False}, 'awx.main', False),
+        ({'enabled_flag': False}, 'ascender.main', False),
         # skip all records if the host is undefined
-        ({'enabled_flag': True}, 'awx.main', False),
+        ({'enabled_flag': True}, 'ascender.main', False),
         # skip all records if underlying logger is used by handlers themselves
-        ({'enabled_flag': True}, 'awx.main.utils.handlers', False),
-        ({'enabled_flag': True, 'enabled_loggers': ['awx']}, 'awx.main', True),
+        ({'enabled_flag': True, 'enabled_loggers': ['ascender']}, 'ascender.main.utils.handlers', False),
+        ({'enabled_flag': True, 'enabled_loggers': ['ascender']}, 'ascender.main', True),
+        # the selector an install stored before the rename still picks the service loggers up
+        ({'enabled_flag': True, 'enabled_loggers': ['awx']}, 'ascender.main', True),
         ({'enabled_flag': True, 'enabled_loggers': ['abc']}, 'ascender.analytics.xyz', False),
         ({'enabled_flag': True, 'enabled_loggers': ['xyz']}, 'ascender.analytics.xyz', True),
     ],

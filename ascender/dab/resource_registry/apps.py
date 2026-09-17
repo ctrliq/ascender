@@ -8,7 +8,7 @@ from django.db.utils import IntegrityError
 import ascender.dab.lib.checks  # noqa: F401 - register checks
 from ascender.dab.lib.utils.db import migrations_are_complete
 
-logger = logging.getLogger("awx.dab.resource_registry.apps")
+logger = logging.getLogger("ascender.dab.resource_registry.apps")
 
 
 def _sync_resource_types(registry, resource_type_cls, content_type_cls):

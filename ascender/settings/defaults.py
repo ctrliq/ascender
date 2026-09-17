@@ -1036,7 +1036,7 @@ LOGGING = {
         'external_logger': {
             'class': 'ascender.main.utils.handlers.RSysLogHandler',
             'formatter': 'json',
-            'address': '/var/run/awx-rsyslog/rsyslog.sock',
+            'address': '/var/run/ascender-rsyslog/rsyslog.sock',
             'filters': ['external_log_enabled', 'dynamic_level_filter', 'guid'],
         },
     },
@@ -1046,24 +1046,24 @@ LOGGING = {
         'daphne': {'handlers': ['console', 'file', 'ascender_warnings'], 'level': 'INFO'},
         'rest_framework.request': {'handlers': ['console', 'file', 'ascender_warnings'], 'level': 'WARNING', 'propagate': False},
         'py.warnings': {'handlers': ['console']},
-        'awx': {'handlers': ['console', 'file', 'ascender_warnings', 'external_logger'], 'level': 'DEBUG'},
-        'awx.conf': {'handlers': ['null'], 'level': 'WARNING'},
-        'awx.conf.settings': {'handlers': ['null'], 'level': 'WARNING'},
-        'awx.main': {'handlers': ['null']},
-        'awx.main.commands.run_callback_receiver': {'handlers': ['callback_receiver'], 'level': 'INFO'},  # very noisey debug-level logs
-        'awx.main.dispatch': {'handlers': ['dispatcher']},
-        'awx.main.consumers': {'handlers': ['console', 'file', 'ascender_warnings'], 'level': 'INFO'},
-        'awx.main.rsyslog_configurer': {'handlers': ['rsyslog_configurer']},
-        'awx.main.cache_clear': {'handlers': ['cache_clear']},
-        'awx.main.ws_heartbeat': {'handlers': ['ws_heartbeat']},
-        'awx.main.wsrelay': {'handlers': ['wsrelay']},
-        'awx.main.commands.inventory_import': {'handlers': ['inventory_import'], 'propagate': False},
-        'awx.main.tasks': {'handlers': ['task_system', 'external_logger', 'console'], 'propagate': False},
-        'awx.main.analytics': {'handlers': ['task_system', 'external_logger', 'console'], 'level': 'INFO', 'propagate': False},
-        'awx.main.scheduler': {'handlers': ['task_system', 'external_logger', 'console'], 'propagate': False},
-        'awx.main.access': {'level': 'INFO'},  # very verbose debug-level logs
-        'awx.main.signals': {'level': 'INFO'},  # very verbose debug-level logs
-        'awx.api.permissions': {'level': 'INFO'},  # very verbose debug-level logs
+        'ascender': {'handlers': ['console', 'file', 'ascender_warnings', 'external_logger'], 'level': 'DEBUG'},
+        'ascender.conf': {'handlers': ['null'], 'level': 'WARNING'},
+        'ascender.conf.settings': {'handlers': ['null'], 'level': 'WARNING'},
+        'ascender.main': {'handlers': ['null']},
+        'ascender.main.commands.run_callback_receiver': {'handlers': ['callback_receiver'], 'level': 'INFO'},  # very noisey debug-level logs
+        'ascender.main.dispatch': {'handlers': ['dispatcher']},
+        'ascender.main.consumers': {'handlers': ['console', 'file', 'ascender_warnings'], 'level': 'INFO'},
+        'ascender.main.rsyslog_configurer': {'handlers': ['rsyslog_configurer']},
+        'ascender.main.cache_clear': {'handlers': ['cache_clear']},
+        'ascender.main.ws_heartbeat': {'handlers': ['ws_heartbeat']},
+        'ascender.main.wsrelay': {'handlers': ['wsrelay']},
+        'ascender.main.commands.inventory_import': {'handlers': ['inventory_import'], 'propagate': False},
+        'ascender.main.tasks': {'handlers': ['task_system', 'external_logger', 'console'], 'propagate': False},
+        'ascender.main.analytics': {'handlers': ['task_system', 'external_logger', 'console'], 'level': 'INFO', 'propagate': False},
+        'ascender.main.scheduler': {'handlers': ['task_system', 'external_logger', 'console'], 'propagate': False},
+        'ascender.main.access': {'level': 'INFO'},  # very verbose debug-level logs
+        'ascender.main.signals': {'level': 'INFO'},  # very verbose debug-level logs
+        'ascender.api.permissions': {'level': 'INFO'},  # very verbose debug-level logs
         'ascender.analytics': {'handlers': ['external_logger'], 'level': 'INFO', 'propagate': False},
         'ascender.analytics.broadcast_websocket': {'handlers': ['console', 'file', 'wsrelay', 'external_logger'], 'level': 'INFO', 'propagate': False},
         'ascender.analytics.performance': {'handlers': ['console', 'file', 'ascender_warnings', 'external_logger'], 'level': 'DEBUG', 'propagate': False},

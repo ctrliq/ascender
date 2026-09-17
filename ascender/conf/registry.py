@@ -11,7 +11,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
 
-logger = logging.getLogger('awx.conf.registry')
+logger = logging.getLogger('ascender.conf.registry')
 
 __all__ = ['settings_registry']
 

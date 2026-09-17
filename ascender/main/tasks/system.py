@@ -61,7 +61,7 @@ from ascender.conf import settings_registry
 from ascender.main.analytics.subsystem_metrics import DispatcherMetrics
 
 
-logger = logging.getLogger('awx.main.tasks.system')
+logger = logging.getLogger('ascender.main.tasks.system')
 
 OPENSSH_KEY_ERROR = '''\
 It looks like you're trying to use a private key in OpenSSH format, which \
@@ -71,7 +71,7 @@ Try upgrading OpenSSH or providing your private key in an different format. \
 
 
 def dispatch_startup():
-    startup_logger = logging.getLogger('awx.main.tasks')
+    startup_logger = logging.getLogger('ascender.main.tasks')
 
     # TODO: Enable this on VM installs
     if settings.IS_K8S:

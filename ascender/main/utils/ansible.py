@@ -10,7 +10,7 @@ from configparser import ConfigParser
 # Django
 from django.utils.encoding import smart_str
 
-logger = logging.getLogger('awx.main.utils.ansible')
+logger = logging.getLogger('ascender.main.utils.ansible')
 
 
 __all__ = ['skip_directory', 'could_be_playbook', 'could_be_inventory']
