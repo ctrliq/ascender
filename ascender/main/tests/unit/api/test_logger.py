@@ -185,7 +185,7 @@ def test_rsyslog_conf_template(enabled, log_type, host, port, protocol, errorfil
     # Set test settings
     logging_defaults = getattr(settings, 'LOGGING')
     setattr(mock_settings, 'LOGGING', logging_defaults)
-    setattr(mock_settings, 'LOGGING["handlers"]["external_logger"]["address"]', '/var/run/awx-rsyslog/rsyslog.sock')
+    setattr(mock_settings, 'LOGGING["handlers"]["external_logger"]["address"]', '/var/run/ascender-rsyslog/rsyslog.sock')
     setattr(mock_settings, 'LOG_AGGREGATOR_ENABLED', enabled)
     setattr(mock_settings, 'LOG_AGGREGATOR_TYPE', log_type)
     setattr(mock_settings, 'LOG_AGGREGATOR_HOST', host)

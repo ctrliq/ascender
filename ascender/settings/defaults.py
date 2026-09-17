@@ -1036,7 +1036,7 @@ LOGGING = {
         'external_logger': {
             'class': 'ascender.main.utils.handlers.RSysLogHandler',
             'formatter': 'json',
-            'address': '/var/run/awx-rsyslog/rsyslog.sock',
+            'address': '/var/run/ascender-rsyslog/rsyslog.sock',
             'filters': ['external_log_enabled', 'dynamic_level_filter', 'guid'],
         },
     },
