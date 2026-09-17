@@ -6,7 +6,7 @@ import subprocess
 import logging
 import os
 
-logger = logging.getLogger('awx.main.utils.reload')
+logger = logging.getLogger('ascender.main.utils.reload')
 
 
 def supervisor_service_command(command, service='*', communicate=True):

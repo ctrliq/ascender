@@ -5,7 +5,7 @@ from django.utils.encoding import smart_str
 from ascender.main.utils.common import set_current_apps
 from ascender.main.utils.common import parse_yaml_or_json
 
-logger = logging.getLogger('awx.main.migrations')
+logger = logging.getLogger('ascender.main.migrations')
 
 
 def _get_instance_id(from_dict, new_id, default=''):

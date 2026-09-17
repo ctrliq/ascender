@@ -10,7 +10,7 @@ from ascender.main.dispatch import get_task_queuename
 
 from . import pg_bus_conn
 
-logger = logging.getLogger('awx.main.dispatch')
+logger = logging.getLogger('ascender.main.dispatch')
 
 
 class Control(object):

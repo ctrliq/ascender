@@ -7,7 +7,7 @@ from ascender.main.dispatch import pg_bus_conn
 from ascender.main.constants import FORMER_SETTINGS_CHANGE_CHANNEL, SETTINGS_CHANGE_CHANNEL
 from ascender.main.dispatch.worker.task import TaskWorker
 
-logger = logging.getLogger('awx.main.cache_clear')
+logger = logging.getLogger('ascender.main.cache_clear')
 
 
 class Command(BaseCommand):

@@ -19,7 +19,12 @@ import pytest
 from django.conf import settings
 
 from ascender.main.tests.functional.api.test_settings import _mock_logging_defaults
-from ascender.main.utils.external_logging import DEFAULT_SPOOL_DIRECTORY, construct_rsyslog_conf_template
+from ascender.main.utils.external_logging import (
+    ACTION_QUEUE_FILENAME,
+    DEFAULT_SPOOL_DIRECTORY,
+    LEGACY_ACTION_QUEUE_FILENAME,
+    construct_rsyslog_conf_template,
+)
 
 
 @pytest.fixture
@@ -37,7 +42,7 @@ def conf():
 def test_the_queue_is_written_to_disk(conf):
     """Otherwise a restart loses whatever had not been delivered."""
     assert f'queue.spoolDirectory="{DEFAULT_SPOOL_DIRECTORY}"' in conf
-    assert 'queue.filename="awx-external-logger-action-queue"' in conf
+    assert 'queue.filename="ascender-external-logger-action-queue"' in conf
 
 
 def test_the_queue_survives_a_shutdown(conf):
@@ -162,3 +167,45 @@ def test_a_spool_directory_that_cannot_be_entered_falls_back(tmp_path):
 
     assert f'queue.spoolDirectory="{unsearchable}"' not in conf
     assert f'queue.spoolDirectory="{DEFAULT_SPOOL_DIRECTORY}"' in conf
+
+
+def test_a_queue_left_under_the_old_name_is_reported(tmp_path, caplog):
+    """The rename starts a fresh queue, so anything the old one still held stays
+    on disk undelivered. rsyslog reads back only the queue it is configured with
+    and nothing prunes the rest, so the files are recoverable only if the upgrade
+    says they are there. This is the one case the rename can lose records in: an
+    upgrade applied while the aggregator was already unreachable.
+    """
+    (tmp_path / f'{LEGACY_ACTION_QUEUE_FILENAME}.00000001').write_text('')
+    (tmp_path / f'{LEGACY_ACTION_QUEUE_FILENAME}.qi').write_text('')
+
+    with caplog.at_level('WARNING'):
+        conf = _conf_with_spool(str(tmp_path))
+
+    assert f'{LEGACY_ACTION_QUEUE_FILENAME}.00000001' in caplog.text
+    assert f'{LEGACY_ACTION_QUEUE_FILENAME}.qi' in caplog.text
+    assert str(tmp_path) in caplog.text
+    assert f'queue.filename="{ACTION_QUEUE_FILENAME}"' in conf
+
+
+def test_nothing_is_reported_when_no_old_queue_exists(tmp_path, caplog):
+    """Every install that never spooled under the old name, which is every fresh
+    one and every upgrade where the aggregator was reachable, has to stay silent.
+    A warning on each config rebuild would train people to ignore the real one.
+    """
+    with caplog.at_level('WARNING'):
+        _conf_with_spool(str(tmp_path))
+
+    assert 'will not be sent' not in caplog.text
+
+
+def test_the_new_queue_files_are_not_mistaken_for_the_old_ones(tmp_path, caplog):
+    """The two names share no prefix, and the check has to keep it that way: a
+    glob that matched the running queue would warn about live files forever.
+    """
+    (tmp_path / f'{ACTION_QUEUE_FILENAME}.00000001').write_text('')
+
+    with caplog.at_level('WARNING'):
+        _conf_with_spool(str(tmp_path))
+
+    assert 'will not be sent' not in caplog.text

@@ -2485,3 +2485,76 @@ def test_administrative_workunit_reaper(work_unit_data, expected_function_call):
         simple_command.assert_called()
     else:
         simple_command.assert_not_called()
+
+
+def _source_control_project(revision='abc123'):
+    project = mock.Mock()
+    project.get_project_path.return_value = '/projects/_8__demo'
+    project.get_cache_path.return_value = '/projects/.__awx_cache/_8__demo'
+    project.scm_type = 'git'
+    project.scm_branch = 'main'
+    project.scm_revision = revision
+    project.cache_id = revision
+    return project
+
+
+# (task class, dependency project update present, revision checked out on disk, expected sync needs)
+@pytest.mark.parametrize(
+    'task_class,has_dependency,local_revision,expected',
+    [
+        (jobs.RunInventoryUpdate, False, 'abc123', ['update_git', 'install_roles', 'install_collections']),
+        (jobs.RunInventoryUpdate, True, 'abc123', []),
+        (jobs.RunInventoryUpdate, True, 'old456', ['update_git', 'install_roles', 'install_collections']),
+        (jobs.RunJob, False, 'abc123', []),
+        (jobs.RunJob, False, 'old456', ['update_git', 'install_roles', 'install_collections']),
+    ],
+)
+@mock.patch('ascender.main.tasks.jobs.os.path.exists', return_value=True)
+@mock.patch('ascender.main.tasks.jobs.git.Repo')
+def test_get_sync_needs_reuses_dependency_project_update(repo, path_exists, task_class, has_dependency, local_revision, expected):
+    repo.return_value.head.commit.hexsha = local_revision
+    task = task_class()
+    task.instance = mock.Mock(spec=InventoryUpdate if task_class is jobs.RunInventoryUpdate else Job)
+    dependency = mock.Mock(spec=ProjectUpdate) if has_dependency else None
+
+    with mock.patch.object(jobs.SourceControlMixin, 'get_dependency_project_update', return_value=dependency):
+        assert task.get_sync_needs(_source_control_project()) == expected
+
+
+def test_get_dependency_project_update_is_none_for_jobs():
+    task = jobs.RunJob()
+    task.instance = mock.Mock(spec=Job)
+
+    assert task.get_dependency_project_update(_source_control_project()) is None
+
+
+@mock.patch('ascender.main.tasks.jobs.RunProjectUpdate.make_local_copy')
+@mock.patch('ascender.main.tasks.jobs.SourceControlMixin.get_sync_needs', return_value=[])
+def test_sync_and_copy_without_lock_links_reused_dependency(get_sync_needs, make_local_copy):
+    """An inventory update that reuses its dependency's sync points source_project_update at it."""
+    project = _source_control_project()
+    dependency = mock.Mock(spec=ProjectUpdate)
+    task = jobs.RunInventoryUpdate()
+    task.instance = mock.Mock(spec=InventoryUpdate)
+    task.instance.pk = 42
+    task.update_model = mock.Mock(return_value=task.instance)
+
+    with mock.patch.object(jobs.SourceControlMixin, 'get_dependency_project_update', return_value=dependency):
+        task.sync_and_copy_without_lock(project, '/fake/private_data_dir')
+
+    task.update_model.assert_called_once_with(42, scm_revision='abc123', source_project_update=dependency)
+    make_local_copy.assert_called_once_with(project, '/fake/private_data_dir')
+
+
+@mock.patch('ascender.main.tasks.jobs.RunProjectUpdate.make_local_copy')
+@mock.patch('ascender.main.tasks.jobs.SourceControlMixin.get_sync_needs', return_value=[])
+def test_sync_and_copy_without_lock_job_sets_only_revision(get_sync_needs, make_local_copy):
+    project = _source_control_project()
+    task = jobs.RunJob()
+    task.instance = mock.Mock(spec=Job)
+    task.instance.pk = 7
+    task.update_model = mock.Mock(return_value=task.instance)
+
+    task.sync_and_copy_without_lock(project, '/fake/private_data_dir')
+
+    task.update_model.assert_called_once_with(7, scm_revision='abc123')

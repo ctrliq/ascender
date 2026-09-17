@@ -3,7 +3,7 @@ import logging
 from django.utils.timezone import now
 from ascender.main.utils.encryption import decrypt_field, encrypt_field
 
-logger = logging.getLogger('awx.conf.settings')
+logger = logging.getLogger('ascender.conf.settings')
 
 __all__ = ['clear_old_license', 'prefill_rh_credentials']
 

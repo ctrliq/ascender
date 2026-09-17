@@ -12,7 +12,7 @@ from ascender.main.models.inventory import HostMetric, HostMetricSummaryMonthly
 from ascender.main.tasks.helpers import is_run_threshold_reached
 from ascender.main.utils.db import bulk_update_sorted_by_id
 
-logger = logging.getLogger('awx.main.tasks.host_metrics')
+logger = logging.getLogger('ascender.main.tasks.host_metrics')
 
 
 @task(queue=get_task_queuename)

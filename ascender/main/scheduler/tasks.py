@@ -10,7 +10,7 @@ from ascender.main.scheduler import TaskManager, DependencyManager, WorkflowMana
 from ascender.main.dispatch.publish import task
 from ascender.main.dispatch import get_task_queuename
 
-logger = logging.getLogger('awx.main.scheduler')
+logger = logging.getLogger('ascender.main.scheduler')
 
 
 def run_manager(manager, prefix):

@@ -32,7 +32,7 @@ from ascender.main.notifications.grafana_backend import GrafanaBackend
 from ascender.main.notifications.rocketchat_backend import RocketChatBackend
 from ascender.main.notifications.irc_backend import IrcBackend
 
-logger = logging.getLogger('awx.main.models.notifications')
+logger = logging.getLogger('ascender.main.models.notifications')
 
 __all__ = ['NotificationTemplate', 'Notification']
 

@@ -3,10 +3,13 @@ from unittest import mock
 import os
 import tempfile
 import shutil
+from datetime import timedelta
 
-from ascender.main.tasks.jobs import RunJob
+from django.utils.timezone import now
+
+from ascender.main.tasks.jobs import RunJob, RunInventoryUpdate
 from ascender.main.tasks.system import execution_node_health_check, _batched_delete_inventory, _cleanup_images_and_files
-from ascender.main.models import Host, Instance, Inventory, Job
+from ascender.main.models import Host, Instance, Inventory, InventoryUpdate, Job, Project
 
 
 @pytest.fixture
@@ -106,3 +109,69 @@ class TestBatchedDeleteInventory:
         _batched_delete_inventory(inventory)
 
         assert not Inventory.objects.filter(id=inventory_id).exists()
+
+
+@pytest.mark.django_db
+class TestGetDependencyProjectUpdate:
+    """Run the real query behind SourceControlMixin.get_dependency_project_update.
+
+    The unit tests in unit/test_tasks.py patch this method, so the dependent_jobs
+    subquery and the project and status filters are only exercised here.
+    """
+
+    @staticmethod
+    def make_update(project, status, finished, dependency_of=None):
+        update = project.create_project_update(_eager_fields=dict(launch_type='dependency', status=status, finished=finished))
+        if dependency_of is not None:
+            dependency_of.dependent_jobs.add(update)
+        return update
+
+    @pytest.fixture
+    def task(self, scm_inventory_source):
+        task = RunInventoryUpdate()
+        task.instance = scm_inventory_source.create_inventory_update()
+        return task
+
+    def test_only_the_successful_dependency_of_the_source_project_is_reused(self, task, project, organization):
+        other_project = Project.objects.create(name='other-proj', organization=organization, scm_type='git', scm_url='localhost')
+        finished = now()
+        wanted = self.make_update(project, 'successful', finished, dependency_of=task.instance)
+        self.make_update(project, 'failed', finished + timedelta(seconds=1), dependency_of=task.instance)
+        self.make_update(project, 'canceled', finished + timedelta(seconds=2), dependency_of=task.instance)
+        self.make_update(other_project, 'successful', finished + timedelta(seconds=3), dependency_of=task.instance)
+        # A successful update of the same project that was not a dependency does not count either
+        self.make_update(project, 'successful', finished + timedelta(seconds=4))
+
+        assert task.get_dependency_project_update(project) == wanted
+
+    def test_most_recently_finished_successful_dependency_wins(self, task, project):
+        finished = now()
+        # The latest to finish is neither the first nor the last by pk, so no pk ordering can pick it
+        self.make_update(project, 'successful', finished, dependency_of=task.instance)
+        newest = self.make_update(project, 'successful', finished + timedelta(minutes=2), dependency_of=task.instance)
+        self.make_update(project, 'successful', finished + timedelta(minutes=1), dependency_of=task.instance)
+
+        assert task.get_dependency_project_update(project) == newest
+
+    @pytest.mark.parametrize('status', ['failed', 'canceled', 'error', 'running'])
+    def test_unsuccessful_dependency_means_no_reuse(self, task, project, status):
+        self.make_update(project, status, now(), dependency_of=task.instance)
+
+        assert task.get_dependency_project_update(project) is None
+
+    def test_inventory_update_without_dependencies_has_nothing_to_reuse(self, task, project):
+        # Updates exist for the project, but none of them is a dependency of this inventory update
+        self.make_update(project, 'successful', now())
+
+        assert task.get_dependency_project_update(project) is None
+
+
+@pytest.mark.django_db
+def test_deleting_a_reused_dependency_keeps_the_inventory_updates(scm_inventory_source, project):
+    dependency = project.create_project_update(_eager_fields=dict(launch_type='dependency', status='successful', finished=now()))
+    reusers = [scm_inventory_source.create_inventory_update(_eager_fields=dict(source_project_update=dependency)) for _ in range(2)]
+
+    dependency.delete()
+
+    survivors = InventoryUpdate.objects.filter(pk__in=[iu.pk for iu in reusers])
+    assert [iu.source_project_update_id for iu in survivors] == [None, None]

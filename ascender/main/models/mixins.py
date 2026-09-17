@@ -24,7 +24,7 @@ from ascender.main.utils.polymorphic import build_polymorphic_ctypes_map
 from ascender.main.fields import AskForField
 from ascender.main.constants import ACTIVE_STATES
 
-logger = logging.getLogger('awx.main.models.mixins')
+logger = logging.getLogger('ascender.main.models.mixins')
 
 
 __all__ = [

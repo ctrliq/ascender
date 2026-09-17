@@ -57,7 +57,7 @@ from ascender.api.versioning import reverse
 from ascender.api.fields import BooleanNullField, CharNullField, ChoiceNullField
 
 
-logger = logging.getLogger('awx.api.serializers')
+logger = logging.getLogger('ascender.api.serializers')
 
 
 DEFAULT_SUMMARY_FIELDS = ('id', 'name', 'description')  # , 'created_by', 'modified_by')#, 'type')

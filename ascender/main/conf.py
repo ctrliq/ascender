@@ -12,7 +12,7 @@ from rest_framework import serializers
 from ascender.conf import fields, register, register_validate
 from ascender.main.models import ExecutionEnvironment
 
-logger = logging.getLogger('awx.main.conf')
+logger = logging.getLogger('ascender.main.conf')
 
 register(
     'ACTIVITY_STREAM_ENABLED',
@@ -544,12 +544,12 @@ register(
 register(
     'LOG_AGGREGATOR_LOGGERS',
     field_class=fields.StringListField,
-    default=['awx', 'activity_stream', 'job_events', 'system_tracking', 'broadcast_websocket', 'job_lifecycle'],
+    default=['ascender', 'activity_stream', 'job_events', 'system_tracking', 'broadcast_websocket', 'job_lifecycle'],
     label=_('Loggers Sending Data to Log Aggregator Form'),
     help_text=_(
         'List of loggers that will send HTTP logs to the collector, these can '
         'include any or all of: \n'
-        'awx - service logs\n'
+        'ascender - service logs, which awx also selects on a deployment that predates the rename\n'
         'activity_stream - activity stream records\n'
         'job_events - callback data from Ansible job events\n'
         'system_tracking - facts gathered from scan jobs\n'

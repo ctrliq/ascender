@@ -85,7 +85,7 @@ __all__ = [
     'consumer_access',
 ]
 
-logger = logging.getLogger('awx.main.access')
+logger = logging.getLogger('ascender.main.access')
 
 access_registry = {
     # <model_class>: <access_class>,

@@ -13,7 +13,7 @@ from django.views.generic.base import RedirectView
 from django.utils.encoding import smart_str
 from ascender.settings.typed import settings
 
-logger = logging.getLogger('awx.sso.views')
+logger = logging.getLogger('ascender.sso.views')
 
 
 class BaseRedirectView(RedirectView):

@@ -1,6 +1,6 @@
 import logging
 
-logger = logging.getLogger('awx.dab.resource_registry.utils.sso_provider')
+logger = logging.getLogger('ascender.dab.resource_registry.utils.sso_provider')
 
 try:
     from social_django.utils import load_strategy

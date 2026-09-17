@@ -62,7 +62,7 @@ from ascender.main.fields import AskForField, OrderedManyToManyField
 
 __all__ = ['UnifiedJobTemplate', 'UnifiedJob', 'StdoutMaxBytesExceeded']
 
-logger = logging.getLogger('awx.main.models.unified_jobs')
+logger = logging.getLogger('ascender.main.models.unified_jobs')
 logger_job_lifecycle = logging.getLogger('ascender.analytics.job_lifecycle')
 # NOTE: ACTIVE_STATES moved to constants because it is used by parent modules
 

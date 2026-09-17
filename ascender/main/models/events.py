@@ -26,7 +26,7 @@ from ascender.main.utils import ignore_inventory_computed_fields, camelcase_to_u
 
 analytics_logger = logging.getLogger('ascender.analytics.job_events')
 
-logger = logging.getLogger('awx.main.models.events')
+logger = logging.getLogger('ascender.main.models.events')
 
 __all__ = ['JobEvent', 'ProjectUpdateEvent', 'AdHocCommandEvent', 'InventoryUpdateEvent', 'SystemJobEvent']
 

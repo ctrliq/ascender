@@ -69,7 +69,7 @@ Draft4Validator.VALIDATORS['enum'] = __enum_validate__
 
 import logging
 
-logger = logging.getLogger('awx.main.fields')
+logger = logging.getLogger('ascender.main.fields')
 
 
 class JSONBlob(JSONField):

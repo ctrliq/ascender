@@ -71,13 +71,13 @@ ENV_BLOCKLIST = frozenset(
 
 # loggers that may be called in process of emitting a log
 LOGGER_BLOCKLIST = (
-    'awx.main.utils.handlers',
-    'awx.main.utils.formatters',
-    'awx.main.utils.filters',
-    'awx.main.utils.encryption',
-    'awx.main.utils.log',
+    'ascender.main.utils.handlers',
+    'ascender.main.utils.formatters',
+    'ascender.main.utils.filters',
+    'ascender.main.utils.encryption',
+    'ascender.main.utils.log',
     # loggers that may be called getting logging settings
-    'awx.conf',
+    'ascender.conf',
 )
 
 # Reported version for node seen in receptor mesh but for which capacity check
@@ -89,6 +89,14 @@ RECEPTOR_PENDING = 'ansible-runner-???'
 # so does anything a deployment has pointed at its external log aggregator. Four
 # places parse the prefix back out of a record name, so it is defined once.
 ANALYTICS_LOGGER_PREFIX = 'ascender.analytics'
+
+# The service loggers are the platform's own diagnostics, and their names reach
+# further than the code: LOG_AGGREGATOR_LOGGERS is a database setting holding
+# the first segment of the names a deployment forwards, so an install made
+# before the rename still says awx there. The filter accepts either, which is
+# why both are named here rather than only the one the code emits.
+SERVICE_LOGGER_PREFIX = 'ascender'
+LEGACY_SERVICE_LOGGER_PREFIX = 'awx'
 
 # Naming pattern for Ascender jobs in /tmp folder, like /tmp/ascender_42_xiwm
 # also update ascenderkit.api.pages.unified_jobs in ctrliq/ascender-kit if changed,
