@@ -9,7 +9,7 @@ from django.utils.timezone import now
 
 from ascender.main.tasks.jobs import RunJob, RunInventoryUpdate
 from ascender.main.tasks.system import execution_node_health_check, _batched_delete_inventory, _cleanup_images_and_files
-from ascender.main.models import Host, Instance, Inventory, Job, Project
+from ascender.main.models import Host, Instance, Inventory, InventoryUpdate, Job, Project
 
 
 @pytest.fixture
@@ -164,3 +164,14 @@ class TestGetDependencyProjectUpdate:
         self.make_update(project, 'successful', now())
 
         assert task.get_dependency_project_update(project) is None
+
+
+@pytest.mark.django_db
+def test_deleting_a_reused_dependency_keeps_the_inventory_updates(scm_inventory_source, project):
+    dependency = project.create_project_update(_eager_fields=dict(launch_type='dependency', status='successful', finished=now()))
+    reusers = [scm_inventory_source.create_inventory_update(_eager_fields=dict(source_project_update=dependency)) for _ in range(2)]
+
+    dependency.delete()
+
+    survivors = InventoryUpdate.objects.filter(pk__in=[iu.pk for iu in reusers])
+    assert [iu.source_project_update_id for iu in survivors] == [None, None]
