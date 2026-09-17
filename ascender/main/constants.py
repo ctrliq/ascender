@@ -127,7 +127,12 @@ MAX_ISOLATED_PATH_COLON_DELIMITER = 2
 
 SURVEY_TYPE_MAPPING = {'text': str, 'textarea': str, 'password': str, 'multiplechoice': str, 'multiselect': str, 'integer': int, 'float': (float, int)}
 
+# Every job gets one copy of each meta variable per prefix, so a playbook hook
+# can read ascender_job_id without knowing what the platform used to be called.
+# awx and tower stay because playbooks in the field name them, and this list is
+# the only thing that decides: nothing else spells the prefixes out.
 JOB_VARIABLE_PREFIXES = [
+    'ascender',
     'awx',
     'tower',
 ]

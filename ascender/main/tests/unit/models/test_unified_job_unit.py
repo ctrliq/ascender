@@ -138,3 +138,29 @@ class TestMetaVars:
             assert '{}_job_template_id'.format(name) in data
             assert data['{}_job_template_id'.format(name)] == 92
             assert data['{}_job_template_name'.format(name)] == 'jobs-jt'
+
+
+def test_ascender_is_offered_as_a_job_variable_prefix():
+    """A playbook hook should be able to read ascender_job_id. The prefixes are
+    additive: awx and tower stay because playbooks in the field name them, so
+    this asserts presence rather than the exact list.
+    """
+    assert 'ascender' in JOB_VARIABLE_PREFIXES
+    assert 'awx' in JOB_VARIABLE_PREFIXES
+    assert 'tower' in JOB_VARIABLE_PREFIXES
+
+
+def test_every_prefix_gets_the_same_meta_variables():
+    """One prefix silently carrying fewer variables than another is the failure
+    worth pinning: the list is the only thing that decides, and each caller
+    loops it, so a variable added under one name must appear under all of them.
+    """
+    job = Job(id=1, name='job', launch_type='manual')
+
+    meta_vars = job.awx_meta_vars()
+
+    suffixes = {}
+    for prefix in JOB_VARIABLE_PREFIXES:
+        suffixes[prefix] = {k[len(prefix) + 1 :] for k in meta_vars if k.startswith(f'{prefix}_')}
+    assert len({frozenset(v) for v in suffixes.values()}) == 1, suffixes
+    assert suffixes['ascender'], 'no ascender_ meta variables were produced'
