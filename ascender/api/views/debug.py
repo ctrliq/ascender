@@ -17,10 +17,10 @@ class TaskManagerDebugView(APIView):
 
     def get(self, request):
         TaskManager().schedule()
-        if not settings.AWX_DISABLE_TASK_MANAGERS:
-            msg = f"Running {self.prefix} manager. To disable other triggers to the {self.prefix} manager, set AWX_DISABLE_TASK_MANAGERS to True"
+        if not settings.ASCENDER_DISABLE_TASK_MANAGERS:
+            msg = f"Running {self.prefix} manager. To disable other triggers to the {self.prefix} manager, set ASCENDER_DISABLE_TASK_MANAGERS to True"
         else:
-            msg = f"AWX_DISABLE_TASK_MANAGERS is True, this view is the only way to trigger the {self.prefix} manager"
+            msg = f"ASCENDER_DISABLE_TASK_MANAGERS is True, this view is the only way to trigger the {self.prefix} manager"
         return Response(msg)
 
 
@@ -32,10 +32,10 @@ class DependencyManagerDebugView(APIView):
 
     def get(self, request):
         DependencyManager().schedule()
-        if not settings.AWX_DISABLE_TASK_MANAGERS:
-            msg = f"Running {self.prefix} manager. To disable other triggers to the {self.prefix} manager, set AWX_DISABLE_TASK_MANAGERS to True"
+        if not settings.ASCENDER_DISABLE_TASK_MANAGERS:
+            msg = f"Running {self.prefix} manager. To disable other triggers to the {self.prefix} manager, set ASCENDER_DISABLE_TASK_MANAGERS to True"
         else:
-            msg = f"AWX_DISABLE_TASK_MANAGERS is True, this view is the only way to trigger the {self.prefix} manager"
+            msg = f"ASCENDER_DISABLE_TASK_MANAGERS is True, this view is the only way to trigger the {self.prefix} manager"
         return Response(msg)
 
 
@@ -47,10 +47,10 @@ class WorkflowManagerDebugView(APIView):
 
     def get(self, request):
         WorkflowManager().schedule()
-        if not settings.AWX_DISABLE_TASK_MANAGERS:
-            msg = f"Running {self.prefix} manager. To disable other triggers to the {self.prefix} manager, set AWX_DISABLE_TASK_MANAGERS to True"
+        if not settings.ASCENDER_DISABLE_TASK_MANAGERS:
+            msg = f"Running {self.prefix} manager. To disable other triggers to the {self.prefix} manager, set ASCENDER_DISABLE_TASK_MANAGERS to True"
         else:
-            msg = f"AWX_DISABLE_TASK_MANAGERS is True, this view is the only way to trigger the {self.prefix} manager"
+            msg = f"ASCENDER_DISABLE_TASK_MANAGERS is True, this view is the only way to trigger the {self.prefix} manager"
         return Response(msg)
 
 

@@ -5,7 +5,9 @@ if [ `id -u` -ge 500 ]; then
     rm /tmp/passwd
 fi
 
-if [ -n "${AWX_KUBE_DEVEL}" ]; then
+# Either name: the variable is set outside this tree, so the new one cannot be
+# rolled out with this file. Non-empty if either is set.
+if [ -n "${ASCENDER_KUBE_DEVEL}${AWX_KUBE_DEVEL}" ]; then
     pushd /ascender_devel
     make ascender-link
     popd

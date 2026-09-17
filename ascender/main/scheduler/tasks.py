@@ -14,8 +14,8 @@ logger = logging.getLogger('ascender.main.scheduler')
 
 
 def run_manager(manager, prefix):
-    if MODE == 'development' and settings.AWX_DISABLE_TASK_MANAGERS:
-        logger.debug(f"Not running {prefix} manager, AWX_DISABLE_TASK_MANAGERS is True. Trigger with GET to /api/debug/{prefix}_manager/")
+    if MODE == 'development' and settings.ASCENDER_DISABLE_TASK_MANAGERS:
+        logger.debug(f"Not running {prefix} manager, ASCENDER_DISABLE_TASK_MANAGERS is True. Trigger with GET to /api/debug/{prefix}_manager/")
         return
     manager().schedule()
 
