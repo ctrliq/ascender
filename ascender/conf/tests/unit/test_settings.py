@@ -12,7 +12,7 @@ from unittest import mock
 
 from django.conf import LazySettings
 from django.core.cache.backends.locmem import LocMemCache
-from django.core.exceptions import ImproperlyConfigured
+from django.core.exceptions import ImproperlyConfigured, SynchronousOnlyOperation
 from django.db.utils import Error as DBError, OperationalError
 from django.utils.translation import gettext_lazy as _
 import psycopg
@@ -417,3 +417,63 @@ def test_database_error_with_sqlstate_names_it(settings, caplog):
             assert getattr(settings, 'ASCENDER_VAR', 'unavailable') == 'unavailable'
 
     assert 'SQL Error state: 53300 - TooManyConnections' in caplog.text
+
+
+def test_a_settings_query_runs_on_another_thread_when_the_caller_has_a_loop():
+    """Django refuses database access from the thread running an event loop, so
+    the ASGI middleware that reads settings on the loop would raise rather than
+    read. The query has to move to a thread of its own.
+    """
+    import asyncio
+    import threading
+
+    from ascender.conf.settings import _read_from_db
+
+    calling_thread = threading.current_thread().ident
+    ran_on = []
+
+    def query():
+        ran_on.append(threading.current_thread().ident)
+        if len(ran_on) == 1:
+            # What Django raises for database access on the loop thread.
+            raise SynchronousOnlyOperation('cannot call this from an async context')
+        return 'answered'
+
+    async def read_from_the_loop():
+        return _read_from_db(query)
+
+    assert asyncio.run(read_from_the_loop()) == 'answered'
+    assert ran_on[-1] != calling_thread, 'the retry ran on the calling thread'
+
+
+def test_a_settings_query_stays_on_the_caller_thread_when_it_can():
+    """The thread hop is for the loop only. Every other caller, which is every
+    caller today, pays nothing for it.
+    """
+    import threading
+
+    from ascender.conf.settings import _read_from_db
+
+    here = threading.current_thread().ident
+    assert _read_from_db(lambda: threading.current_thread().ident) == here
+
+
+def test_the_thread_closes_its_connection():
+    """A connection belongs to its thread and nothing reuses this one. Left open
+    it is collected later, and psycopg warns it was deleted while still open.
+    """
+    from unittest import mock
+
+    from ascender.conf.settings import _read_from_db
+
+    calls = []
+
+    def query():
+        if not calls:
+            calls.append('first')
+            raise SynchronousOnlyOperation('cannot call this from an async context')
+        return 'answered'
+
+    with mock.patch('ascender.conf.settings.connection') as conn:
+        assert _read_from_db(query) == 'answered'
+    assert conn.close.called, 'the thread left its connection open'
