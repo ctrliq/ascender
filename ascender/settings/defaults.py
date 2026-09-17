@@ -36,7 +36,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 # connection even to fail usefully.
 #
 # Deliberately plain values rather than an environment lookup. The tree already
-# carries DATABASE_* for the compose environment and AWX_TEST_DATABASE_* for the
+# carries DATABASE_* for the compose environment and ASCENDER_TEST_DATABASE_* for the
 # test settings, and a third scheme here would earn nothing: anything that needs
 # to point somewhere else is supplying a settings file anyway.
 #

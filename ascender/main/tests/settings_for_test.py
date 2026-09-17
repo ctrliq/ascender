@@ -1,4 +1,5 @@
 # Python
+import os
 import uuid
 
 # Load development settings for base variables.
@@ -30,20 +31,35 @@ _dev_database = DATABASES.get('default', {})  # noqa: F405
 if 'postgresql' not in _dev_database.get('ENGINE', '') and 'pg' not in _dev_database.get('ENGINE', ''):
     _dev_database = {}
 
+
+def _test_database_setting(name, default):
+    """ASCENDER_TEST_DATABASE_<name>, falling back to the AWX_ name.
+
+    The old names are read second rather than dropped because they are exported
+    in developers' shells and by anything outside this repository that runs the
+    suite. Dropping them would not fail loudly: the lookup would miss and fall
+    through to the default, running the suite against a different database than
+    the one the environment asked for.
+    """
+    return os.getenv(f'ASCENDER_TEST_DATABASE_{name}', os.getenv(f'AWX_TEST_DATABASE_{name}', default))
+
+
 DATABASES = {
     'default': {
         'ENGINE': 'ascender.main.db.profiled_pg',
-        'NAME': os.getenv('AWX_TEST_DATABASE_NAME', _dev_database.get('NAME', 'ascender')),  # noqa
-        'USER': os.getenv('AWX_TEST_DATABASE_USER', _dev_database.get('USER', 'ascender')),  # noqa
-        'PASSWORD': os.getenv('AWX_TEST_DATABASE_PASSWORD', _dev_database.get('PASSWORD', 'ascenderpass')),  # noqa
-        'HOST': os.getenv('AWX_TEST_DATABASE_HOST', _dev_database.get('HOST', '127.0.0.1')),  # noqa
-        'PORT': os.getenv('AWX_TEST_DATABASE_PORT', str(_dev_database.get('PORT', '5432'))),  # noqa
+        'NAME': _test_database_setting('NAME', _dev_database.get('NAME', 'ascender')),
+        'USER': _test_database_setting('USER', _dev_database.get('USER', 'ascender')),
+        'PASSWORD': _test_database_setting('PASSWORD', _dev_database.get('PASSWORD', 'ascenderpass')),
+        'HOST': _test_database_setting('HOST', _dev_database.get('HOST', '127.0.0.1')),
+        'PORT': _test_database_setting('PORT', str(_dev_database.get('PORT', '5432'))),
         'ATOMIC_REQUESTS': True,
         # The test database is disposable, so durability buys nothing and costs
         # a real amount of wall clock: every commit would otherwise wait on an
         # fsync. Scoped to this connection, so it cannot affect a real database.
         'OPTIONS': {'options': '-c synchronous_commit=off'},
-        'TEST': {'NAME': os.getenv('AWX_TEST_DATABASE_TEST_NAME', 'test_awx_pg')},  # noqa
+        # Created and dropped by the test runner, so the rename strands nothing:
+        # a leftover test_awx_pg from an earlier checkout is simply ignored.
+        'TEST': {'NAME': _test_database_setting('TEST_NAME', 'test_ascender_pg')},
     }
 }
 
