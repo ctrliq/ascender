@@ -148,7 +148,7 @@ requirements_dev: requirements_ascender requirements_ascender_dev
 
 requirements_test: requirements
 
-## "Install" awx package in development mode.
+## "Install" the ascender package in development mode.
 develop:
 	@if [ "$(VIRTUAL_ENV)" ]; then \
 	    pip uninstall -y awx; \
@@ -378,7 +378,7 @@ test_coverage:
 	@if [ "$(VENV_BASE)" ]; then \
 		. $(VENV_BASE)/awx/bin/activate; \
 	fi; \
-	py.test --create-db --cov=awx --cov-report=xml --junitxml=./reports/junit.xml $(TEST_DIRS)
+	py.test --create-db --cov=ascender --cov-report=xml --junitxml=./reports/junit.xml $(TEST_DIRS)
 
 ## Output test coverage as HTML (into htmlcov directory).
 coverage_html:
