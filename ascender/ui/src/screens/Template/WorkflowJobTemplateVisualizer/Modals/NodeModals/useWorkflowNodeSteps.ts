@@ -24,7 +24,10 @@ import useOtherPromptsStep from 'components/LaunchPrompt/steps/useOtherPromptsSt
 import useSurveyStep from 'components/LaunchPrompt/steps/useSurveyStep';
 import usePreviewStep from 'components/LaunchPrompt/steps/usePreviewStep';
 import useInstanceGroupsStep from 'components/LaunchPrompt/steps/useInstanceGroupsStep';
-import { WorkflowStateContext } from 'contexts/Workflow';
+import {
+  WorkflowStateContext,
+  WorkflowTemplateContext,
+} from 'contexts/Workflow';
 import { jsonToYaml } from 'util/yaml';
 import { stringIsUUID } from 'util/strings';
 import useNodeTypeStep from './NodeTypeStep/useNodeTypeStep';
@@ -362,6 +365,7 @@ export default function useWorkflowNodeSteps(
 ) {
   const { t } = useLingui();
   const { nodeToEdit } = useContext(WorkflowStateContext) as WorkflowState;
+  const workflowTemplate = useContext(WorkflowTemplateContext);
   const {
     resetForm,
     values: formikValues,
@@ -384,7 +388,7 @@ export default function useWorkflowNodeSteps(
     useCredentialsStep(launchConfig, resource, resourceDefaultCredentials),
     useExecutionEnvironmentStep(launchConfig, resource),
     useInstanceGroupsStep(launchConfig, resource, instanceGroups),
-    useOtherPromptsStep(launchConfig, resource, labels),
+    useOtherPromptsStep(launchConfig, resource, labels, workflowTemplate),
     useSurveyStep(launchConfig, surveyConfig, resource, visited),
   ];
 

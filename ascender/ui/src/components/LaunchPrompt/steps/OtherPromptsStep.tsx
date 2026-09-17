@@ -2,6 +2,7 @@ import React from 'react';
 import { useLingui } from '@lingui/react/macro';
 import { useField } from 'components/Form';
 import {
+  Alert,
   Form,
   FormGroup,
   Switch,
@@ -24,6 +25,8 @@ import './OtherPromptsStep.css';
 
 export interface OtherPromptsStepProps {
   launchConfig: LaunchConfig;
+  /** Shown under the limit field, when a workflow replaces the limit set there. */
+  limitWarning?: string;
   variablesMode?: VariablesMode;
   onVarModeChange?: (mode: VariablesMode) => void;
   [key: string]: unknown;
@@ -31,6 +34,7 @@ export interface OtherPromptsStepProps {
 
 function OtherPromptsStep({
   launchConfig,
+  limitWarning,
   variablesMode,
   onVarModeChange,
 }: OtherPromptsStepProps) {
@@ -78,6 +82,14 @@ function OtherPromptsStep({
             name="limit"
             label={t`Limit`}
             tooltip={helpTextSource.limit}
+          />
+        )}
+        {launchConfig.ask_limit_on_launch && limitWarning && (
+          <Alert
+            ouiaId="OtherPromptsStep-limit-alert"
+            variant="warning"
+            isInline
+            title={limitWarning}
           />
         )}
         {launchConfig.ask_verbosity_on_launch && (
