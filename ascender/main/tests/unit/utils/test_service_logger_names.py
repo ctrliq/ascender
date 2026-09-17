@@ -30,7 +30,6 @@ def test_the_prefixes_are_what_the_rest_of_the_code_assumes():
         'ascender.main',
         'ascender.main.dispatch',
         'ascender.main.scheduler',
-        'ascender.conf.settings',
         'ascender.api.permissions',
     ],
 )
@@ -40,6 +39,14 @@ def test_a_service_record_is_forwarded_under_either_selector(record_name, stored
     enabled = ExternalLoggerEnabled(enabled_flag=True, enabled_loggers=[stored_selector])
 
     assert enabled.filter(record=_record(record_name)) is True
+
+
+def test_a_blocklisted_logger_is_never_forwarded():
+    """ascender.conf is on LOGGER_BLOCKLIST: reading a setting to decide whether
+    to forward a log line about reading a setting does not end well."""
+    enabled = ExternalLoggerEnabled(enabled_flag=True, enabled_loggers=['ascender', 'awx'])
+
+    assert enabled.filter(record=_record('ascender.conf.settings')) is False
 
 
 def test_a_logger_nobody_selected_is_not_forwarded():
