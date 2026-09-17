@@ -13,8 +13,8 @@ SOSREPORT_CONTROLLER_COMMANDS = [
     "ascender-manage run_callback_receiver --status",  # controller callback worker status
     "ascender-manage run_wsrelay --status",  # controller websocket relay status
     "supervisorctl status",  # controller process status
-    "/var/lib/ascender/venv/awx/bin/pip freeze",  # pip package list
-    "/var/lib/ascender/venv/awx/bin/pip freeze -l",  # pip package list without globally-installed packages
+    "/var/lib/ascender/venv/ascender/bin/pip freeze",  # pip package list
+    "/var/lib/ascender/venv/ascender/bin/pip freeze -l",  # pip package list without globally-installed packages
     "/var/lib/ascender/venv/ansible/bin/pip freeze",  # pip package list
     "/var/lib/ascender/venv/ansible/bin/pip freeze -l",  # pip package list without globally-installed packages
     "tree -d /var/lib/ascender",  # show me the dirs

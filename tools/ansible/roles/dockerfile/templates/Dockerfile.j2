@@ -101,7 +101,7 @@ RUN cd /tmp && make requirements_ascender_dev
 # Copy source into builder, build sdist, install it into awx venv
 COPY . /tmp/src/
 WORKDIR /tmp/src/
-RUN make sdist && /var/lib/ascender/venv/awx/bin/pip install dist/ascender.tar.gz
+RUN make sdist && /var/lib/ascender/venv/ascender/bin/pip install dist/ascender.tar.gz
 
 {% if not headless|bool %}
 # collectstatic only needs settings that import cleanly and define nothing.
@@ -109,7 +109,7 @@ RUN make sdist && /var/lib/ascender/venv/awx/bin/pip install dist/ascender.tar.g
 # 1.0.0 builds the module from an import spec, and a path with no source
 # suffix yields no spec, so include() fails before collectstatic starts.
 RUN touch /tmp/empty_settings.py \
-    && AWX_SETTINGS_FILE=/tmp/empty_settings.py SKIP_SECRET_KEY_CHECK=yes SKIP_PG_VERSION_CHECK=yes /var/lib/ascender/venv/awx/bin/awx-manage collectstatic --noinput --clear \
+    && AWX_SETTINGS_FILE=/tmp/empty_settings.py SKIP_SECRET_KEY_CHECK=yes SKIP_PG_VERSION_CHECK=yes /var/lib/ascender/venv/ascender/bin/awx-manage collectstatic --noinput --clear \
     && rm -f /tmp/empty_settings.py
 {% endif %}
 
@@ -209,8 +209,13 @@ COPY --from=builder /var/lib/ascender /var/lib/ascender
 
 # Both names on PATH. The installers and the operator exec awx-manage inside
 # this container by absolute path, so the old link stays until they move.
-RUN ln -s /var/lib/ascender/venv/awx/bin/ascender-manage /usr/bin/ascender-manage \
-    && ln -s /var/lib/ascender/venv/awx/bin/awx-manage /usr/bin/awx-manage
+RUN ln -s /var/lib/ascender/venv/ascender/bin/ascender-manage /usr/bin/ascender-manage \
+    && ln -s /var/lib/ascender/venv/ascender/bin/awx-manage /usr/bin/awx-manage
+
+# The venv moved from venv/awx to venv/ascender. ascender-install builds its own
+# receptor image against the old path, and so may anything else pointing into
+# this one, so the old name stays as a link rather than a rename people chase.
+RUN ln -s ascender /var/lib/ascender/venv/awx
 
 {%if build_dev|bool %}
 COPY --from={{ receptor_image }} /usr/bin/receptor /usr/bin/receptor
@@ -267,8 +272,8 @@ RUN ln -s /usr/bin/ascender-python /usr/bin/awx-python
 {% endif %}
 
 {% if (build_dev|bool) or (kube_dev|bool) %}
-RUN echo /ascender_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/ascender.egg-link && \
-    echo /ascender_devel > /var/lib/ascender/venv/awx/lib/python3.14/site-packages/ascender.pth && \
+RUN echo /ascender_devel > /var/lib/ascender/venv/ascender/lib/python3.14/site-packages/ascender.egg-link && \
+    echo /ascender_devel > /var/lib/ascender/venv/ascender/lib/python3.14/site-packages/ascender.pth && \
     ln -sf /ascender_devel/tools/docker-compose/ascender-manage /usr/local/bin/ascender-manage && \
     ln -sf /ascender_devel/tools/docker-compose/ascender-manage /usr/local/bin/awx-manage && \
     ln -sf /ascender_devel/tools/scripts/ascender-python /usr/bin/ascender-python && \
@@ -332,9 +337,9 @@ RUN for dir in \
       /etc/containers \
       /var/lib/ascender/.local \
       /var/lib/ascender/venv \
-      /var/lib/ascender/venv/awx/bin \
-      /var/lib/ascender/venv/awx/lib/python3.14 \
-      /var/lib/ascender/venv/awx/lib/python3.14/site-packages \
+      /var/lib/ascender/venv/ascender/bin \
+      /var/lib/ascender/venv/ascender/lib/python3.14 \
+      /var/lib/ascender/venv/ascender/lib/python3.14/site-packages \
       /var/lib/ascender/projects \
       /var/lib/ascender/rsyslog \
       /var/run/ascender-rsyslog \
@@ -364,7 +369,7 @@ RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
 ENV HOME="/var/lib/ascender"
 
 {% if build_dev|bool %}
-ENV PATH="/var/lib/ascender/venv/awx/bin/:${PATH}"
+ENV PATH="/var/lib/ascender/venv/ascender/bin/:${PATH}"
 
 EXPOSE 8043 8013 8080 22
 

@@ -123,9 +123,12 @@ virtualenv_ascender:
 		if [ ! -d "$(VENV_BASE)" ]; then \
 			mkdir $(VENV_BASE); \
 		fi; \
-		if [ ! -d "$(VENV_BASE)/awx" ]; then \
-			$(PYTHON) -m venv $(VENV_BASE)/awx; \
-			$(VENV_BASE)/awx/bin/pip install $(PIP_OPTIONS) $(VENV_BOOTSTRAP); \
+		if [ ! -d "$(VENV_BASE)/ascender" ]; then \
+			$(PYTHON) -m venv $(VENV_BASE)/ascender; \
+			$(VENV_BASE)/ascender/bin/pip install $(PIP_OPTIONS) $(VENV_BOOTSTRAP); \
+		fi; \
+		if [ ! -e "$(VENV_BASE)/awx" ]; then \
+			ln -s ascender $(VENV_BASE)/awx; \
 		fi; \
 	fi
 
@@ -133,14 +136,14 @@ virtualenv_ascender:
 # this does not use system site packages intentionally
 requirements_ascender: virtualenv_ascender
 	if [[ "$(PIP_OPTIONS)" == *"--no-index"* ]]; then \
-	    cat requirements/requirements.txt requirements/requirements_local.txt | UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/awx/bin/pip install $(PIP_OPTIONS) -r /dev/stdin ; \
+	    cat requirements/requirements.txt requirements/requirements_local.txt | UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/ascender/bin/pip install $(PIP_OPTIONS) -r /dev/stdin ; \
 	else \
-	    cat requirements/requirements.txt requirements/requirements_git.txt | UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/awx/bin/pip install $(PIP_OPTIONS) --no-binary $(SRC_ONLY_PKGS) -r /dev/stdin ; \
+	    cat requirements/requirements.txt requirements/requirements_git.txt | UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/ascender/bin/pip install $(PIP_OPTIONS) --no-binary $(SRC_ONLY_PKGS) -r /dev/stdin ; \
 	fi
-	$(VENV_BASE)/awx/bin/pip uninstall --yes -r requirements/requirements_tower_uninstall.txt
+	$(VENV_BASE)/ascender/bin/pip uninstall --yes -r requirements/requirements_tower_uninstall.txt
 
 requirements_ascender_dev:
-	UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/awx/bin/pip install -r requirements/requirements_dev.txt
+	UWSGI_PROFILE_OVERRIDE=xml=false $(VENV_BASE)/ascender/bin/pip install -r requirements/requirements_dev.txt
 
 requirements: requirements_ascender
 
@@ -168,7 +171,7 @@ adduser:
 ## Create database tables and apply any new migrations.
 migrate:
 	if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	$(MANAGEMENT_COMMAND) migrate --noinput
 
@@ -178,13 +181,13 @@ dbchange:
 
 supervisor:
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	supervisord --pidfile=/tmp/supervisor_pid -n -c /etc/supervisord.conf
 
 collectstatic:
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	$(PYTHON) manage.py collectstatic --clear --noinput > /dev/null 2>&1
 
@@ -202,7 +205,7 @@ UVICORN_WORKERS ?= 5
 # default of "/" mean what uwsgi's mount made it mean: no prefix at all.
 uvicorn: collectstatic
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	root_path="$${AWX_MOUNT_PATH%/}"; \
 	uvicorn --host 127.0.0.1 --port 8051 --workers $(UVICORN_WORKERS) --ws auto --no-server-header \
@@ -214,14 +217,14 @@ ascender-autoreload:
 ## Run to start the background task dispatcher for development.
 dispatcher:
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	$(PYTHON) manage.py run_dispatcher
 
 ## Run to start the zeromq callback receiver
 receiver:
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	$(PYTHON) manage.py run_callback_receiver
 
@@ -232,35 +235,35 @@ nginx:
 ## `pip install notebook`; run `import django; django.setup()` in the first cell).
 jupyter:
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	DJANGO_SETTINGS_MODULE=ascender.settings.development $(PYTHON) -m notebook --IdentityProvider.token= --ip 0.0.0.0 --port 9888 --allow-root --no-browser
 
 ## Start the rsyslog configurer process in background in development environment.
 run-rsyslog-configurer:
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	$(PYTHON) manage.py run_rsyslog_configurer
 
 ## Start cache_clear process in background in development environment.
 run-cache-clear:
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	$(PYTHON) manage.py run_cache_clear
 
 ## Start the wsrelay process in background in development environment.
 run-wsrelay:
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	$(PYTHON) manage.py run_wsrelay
 
 ## Start the heartbeat process in background in development environment.
 run-ws-heartbeat:
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	$(PYTHON) manage.py run_ws_heartbeat
 
@@ -288,13 +291,13 @@ lint:
 
 genschema: ascender-link reports
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	$(MANAGEMENT_COMMAND) spectacular --format openapi-json --file schema.json
 
 genschema-yaml: ascender-link reports
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	$(MANAGEMENT_COMMAND) spectacular --format openapi --file schema.yaml
 check: format
@@ -313,7 +316,7 @@ api-lint:
 ## npx fetches it for the length of this command and leaves nothing behind.
 ui-api-types: ascender-link ascender/ui/node_modules
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	$(MANAGEMENT_COMMAND) spectacular --format openapi-json --file ascender/ui/.schema.json
 	$(NPM_BIN) --prefix ascender/ui run generate-api-types
@@ -328,7 +331,7 @@ PYTEST_ARGS ?= -n auto --dist=loadfile
 ## Run all API unit tests.
 test:
 	if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(PYTEST_ARGS) $(TEST_DIRS)
 	ascender-manage check_migrations --dry-run --check -n 'missing_migration_file'
@@ -337,7 +340,7 @@ test:
 ## Run all API unit tests without parallel execution (safer but slower).
 test-serial:
 	if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider $(TEST_DIRS)
 	ascender-manage check_migrations --dry-run --check -n 'missing_migration_file'
@@ -346,7 +349,7 @@ test-serial:
 ## Run tests with limited parallel workers (safer than auto).
 test-safe:
 	if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider -n 2 --dist=loadfile $(TEST_DIRS)
 	ascender-manage check_migrations --dry-run --check -n 'missing_migration_file'
@@ -354,7 +357,7 @@ test-safe:
 
 test_migrations:
 	if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	PYTHONDONTWRITEBYTECODE=1 py.test -p no:cacheprovider --migrations -m migration_test $(PYTEST_ARGS) $(TEST_DIRS)
 
@@ -369,14 +372,14 @@ docker-runner:
 
 test_unit:
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	py.test ascender/main/tests/unit ascender/conf/tests/unit ascender/sso/tests/unit
 
 ## Run all API unit tests with coverage enabled.
 test_coverage:
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	py.test --create-db --cov=ascender --cov-report=xml --junitxml=./reports/junit.xml $(TEST_DIRS)
 
@@ -393,7 +396,7 @@ DATA_GEN_PRESET = ""
 ## Make fake data
 bulk_data:
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	$(PYTHON) tools/data_generators/rbac_dummy_data_generator.py --preset=$(DATA_GEN_PRESET)
 
@@ -695,7 +698,7 @@ po: $(UI_BUILD_FLAG_FILE)
 ## generate API django .pot .po
 messages:
 	@if [ "$(VENV_BASE)" ]; then \
-		. $(VENV_BASE)/awx/bin/activate; \
+		. $(VENV_BASE)/ascender/bin/activate; \
 	fi; \
 	$(PYTHON) manage.py makemessages -l en_us --keep-pot
 
