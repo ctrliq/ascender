@@ -691,15 +691,29 @@ class BaseTask(object):
 class SourceControlMixin(BaseTask):
     """Utility methods for tasks that run use content from source control"""
 
+    def get_dependency_project_update(self, project):
+        """Return the successful update of project that this inventory update depended on, if any."""
+        if not isinstance(self.instance, InventoryUpdate):
+            return None
+        return (
+            ProjectUpdate.objects.filter(
+                pk__in=self.instance.dependent_jobs.values_list('pk', flat=True),
+                project=project,
+                status='successful',
+            )
+            .order_by('-finished')
+            .first()
+        )
+
     def get_sync_needs(self, project, scm_branch=None):
         project_path = project.get_project_path(check_if_exists=False)
         job_revision = project.scm_revision
         sync_needs = []
         source_update_tag = 'update_{}'.format(project.scm_type)
         branch_override = bool(scm_branch and scm_branch != project.scm_branch)
-        # TODO: skip syncs for inventory updates. Now, UI needs a link added so clients can link to project
-        # source_project is only a field on inventory sources.
-        if isinstance(self.instance, InventoryUpdate):
+        # An inventory update that depended on its source project's update reuses that sync the
+        # way a job does. Without one, nothing else refreshed the tree, so it still syncs.
+        if isinstance(self.instance, InventoryUpdate) and self.get_dependency_project_update(project) is None:
             sync_needs.append(source_update_tag)
         elif not project.scm_type:
             pass  # manual projects are not synced, user has responsibility for that
@@ -790,7 +804,12 @@ class SourceControlMixin(BaseTask):
         else:
             # Case where a local sync is not needed, meaning that local tree is
             # up-to-date with project, job is running project current version
-            self.instance = self.update_model(self.instance.pk, scm_revision=project.scm_revision)
+            update_fields = {'scm_revision': project.scm_revision}
+            dependency_update = self.get_dependency_project_update(project)
+            if dependency_update is not None:
+                # Link the reused sync: the UI and the collections path in build_env read this field.
+                update_fields['source_project_update'] = dependency_update
+            self.instance = self.update_model(self.instance.pk, **update_fields)
             # Project update does not copy the folder, so copy here
             RunProjectUpdate.make_local_copy(project, private_data_dir)
 
