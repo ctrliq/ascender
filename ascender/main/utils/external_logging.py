@@ -21,6 +21,7 @@ ascender/main/tests/unit/utils/test_external_logging_durability.py, so a change
 that weakens one says which one.
 """
 
+import glob
 import logging
 import os
 import shutil
@@ -38,6 +39,36 @@ logger = logging.getLogger('awx.main.utils.external_logging')
 # usable. One definition because it is the same path in two places, and because
 # the filesystem rename moved it there in #985.
 DEFAULT_SPOOL_DIRECTORY = '/var/lib/ascender'
+
+# The name rsyslog gives the queue files it writes inside the spool directory.
+# Unlike the template name a few lines down, this one is a filename on disk, so
+# an upgrade does not carry the old queue over: rsyslog reads back the queue
+# named here and nothing else. The old name stays defined so the upgrade can
+# see what it left behind and say so.
+ACTION_QUEUE_FILENAME = 'ascender-external-logger-action-queue'
+LEGACY_ACTION_QUEUE_FILENAME = 'awx-external-logger-action-queue'
+
+
+def warn_about_abandoned_spool(spool_directory):
+    """Log the queue files left under the previous name, if there are any.
+
+    The disk queue only holds records when the in memory queue fills, which
+    means the aggregator was unreachable. So these files exist only on an
+    upgrade that happened while external logging was already failing, and what
+    they hold is records the platform accepted and never delivered. Nothing
+    reads them now and nothing deletes them, so the one thing that makes them
+    recoverable is knowing they are there.
+    """
+    leftovers = sorted(glob.glob(os.path.join(spool_directory, f'{LEGACY_ACTION_QUEUE_FILENAME}*')))
+    if not leftovers:
+        return
+    logger.warning(
+        'External log records spooled under the previous queue name are still in %s and will not be sent: %s. '
+        'The queue is now named %s. Deliver those files or remove them.',
+        spool_directory,
+        ', '.join(os.path.basename(path) for path in leftovers),
+        ACTION_QUEUE_FILENAME,
+    )
 
 
 def construct_rsyslog_conf_template(settings=settings):
@@ -66,14 +97,11 @@ def construct_rsyslog_conf_template(settings=settings):
         logger.warning('Cannot spool external logs in %s, using %s instead.', spool_directory, DEFAULT_SPOOL_DIRECTORY)
         spool_directory = DEFAULT_SPOOL_DIRECTORY
 
+    warn_about_abandoned_spool(spool_directory)
+
     queue_options = [
         f'queue.spoolDirectory="{spool_directory}"',
-        # Not renamed with the template above. This is the name of the spool
-        # file on disk, so changing it would start a new queue at upgrade and
-        # leave whatever was still spooled in the old one, losing those records
-        # with nothing logged to say so. The template name is safe because it is
-        # declared and referenced in the config generated right here.
-        'queue.filename="awx-external-logger-action-queue"',
+        f'queue.filename="{ACTION_QUEUE_FILENAME}"',
         f'queue.maxDiskSpace="{max_disk_space_action_queue}g"',  # overall disk space for all queue files
         'queue.maxFileSize="100m"',  # individual file size
         'queue.type="LinkedList"',
