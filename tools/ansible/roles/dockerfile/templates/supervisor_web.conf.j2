@@ -40,7 +40,7 @@ environment = AWX_WEB_PROCESS=1
 command = make uvicorn
 directory = /ascender_devel
 {% else %}
-command = /var/lib/ascender/venv/awx/bin/uvicorn --host 127.0.0.1 --port 8051 --workers 5 --ws auto --no-server-header --timeout-graceful-shutdown 110 --limit-concurrency 512 ascender.asgi:channel_layer
+command = /var/lib/ascender/venv/ascender/bin/uvicorn --host 127.0.0.1 --port 8051 --workers 5 --ws auto --no-server-header --timeout-graceful-shutdown 110 --limit-concurrency 512 ascender.asgi:channel_layer
 directory = /var/lib/ascender
 {% endif %}
 autorestart = true

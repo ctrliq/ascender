@@ -199,7 +199,7 @@ Requirements for `dot_enabled=True`
 **Note:** The profiling code will run as if `dot_enabled=False` when `gprof2dot`
 package is not found
 ```
-/var/lib/awx/venv/awx/bin/pip3 install gprof2dot
+/var/lib/awx/venv/ascender/bin/pip3 install gprof2dot
 ```
 
 Below is the signature of the `@profile` decorator.

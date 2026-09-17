@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Enable Ascender virtualenv
-for venv_path in /var/lib/ascender/venv/awx; do
+for venv_path in /var/lib/ascender/venv/ascender; do
   if [ -f $venv_path/bin/activate ]; then
     . $venv_path/bin/activate
   fi

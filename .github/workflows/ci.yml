@@ -50,11 +50,11 @@ jobs:
           - name: api-migrations
             command: /start_tests.sh test_migrations
           - name: api-lint
-            command: /var/lib/ascender/venv/awx/bin/tox -e linters
+            command: /var/lib/ascender/venv/ascender/bin/tox -e linters
           # Advisory while the diagnostics that are already in the tree are worked
           # through: the job reports them, it does not fail the pull request.
           - name: api-type-check
-            command: /var/lib/ascender/venv/awx/bin/tox -e typecheck
+            command: /var/lib/ascender/venv/ascender/bin/tox -e typecheck
             advisory: true
           # Audits what the image installed rather than resolving requirements.txt
           # again, so it sees the versions that ship. Advisory until the backlog
@@ -62,9 +62,9 @@ jobs:
           # Blocking, unlike the advisory run above: it covers only the packages
           # that already report nothing, so it fails when one of them regresses.
           - name: api-type-check-strict
-            command: /var/lib/ascender/venv/awx/bin/tox -e typecheck-strict
+            command: /var/lib/ascender/venv/ascender/bin/tox -e typecheck-strict
           - name: api-dependency-audit
-            command: /bin/bash -c "/var/lib/ascender/venv/awx/bin/pip install --quiet pip-audit && /var/lib/ascender/venv/awx/bin/pip-audit --progress-spinner=off"
+            command: /bin/bash -c "/var/lib/ascender/venv/ascender/bin/pip install --quiet pip-audit && /var/lib/ascender/venv/ascender/bin/pip-audit --progress-spinner=off"
             advisory: true
           # The UI's API types are generated from the serializers and committed.
           # This regenerates them and fails if the committed copy has drifted,
