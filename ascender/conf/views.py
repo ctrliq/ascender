@@ -31,7 +31,7 @@ from ascender.conf.models import Setting
 from ascender.conf.serializers import SettingCategorySerializer, SettingSingletonSerializer
 from ascender.conf import settings_registry
 from ascender.main.utils.external_logging import reconfigure_rsyslog
-from ascender.main.constants import ANALYTICS_LOGGER_PREFIX
+from ascender.main.constants import ANALYTICS_LOGGER_PREFIX, LEGACY_SERVICE_LOGGER_PREFIX, SERVICE_LOGGER_PREFIX
 
 SettingCategory = collections.namedtuple('SettingCategory', ('url', 'slug', 'name'))
 
@@ -150,6 +150,25 @@ class SettingSingletonDetail(RetrieveUpdateDestroyAPIView):
                 settings.ASCENDER_URL_BASE = url
 
 
+def connection_test_logger_name(enabled_loggers):
+    """The logger the connectivity test message goes through.
+
+    The first selector stored in LOG_AGGREGATOR_LOGGERS decides. The service
+    selector maps to the service logger, whether the install stores it under its
+    current name or under awx from before the rename: that logger is the one
+    carrying the external_logger handler for service records, and a record named
+    plain awx would reach no handler at all. Any other selector is an analytics
+    headline name, so the record is filed under the analytics prefix.
+    """
+    try:
+        selector = enabled_loggers[0]
+    except IndexError:
+        return SERVICE_LOGGER_PREFIX
+    if selector in (SERVICE_LOGGER_PREFIX, LEGACY_SERVICE_LOGGER_PREFIX):
+        return SERVICE_LOGGER_PREFIX
+    return f'{ANALYTICS_LOGGER_PREFIX}.{selector}'
+
+
 class SettingLoggingTest(GenericAPIView):
     name = _('Logging Connectivity Test')
     model = Setting
@@ -164,13 +183,7 @@ class SettingLoggingTest(GenericAPIView):
             return Response({'error': 'Logging not enabled'}, status=status.HTTP_409_CONFLICT)
 
         # Send test message to configured logger based on db settings
-        try:
-            default_logger = settings.LOG_AGGREGATOR_LOGGERS[0]
-            if default_logger != 'awx':
-                default_logger = f'{ANALYTICS_LOGGER_PREFIX}.{default_logger}'
-        except IndexError:
-            default_logger = 'awx'
-        logging.getLogger(default_logger).error('AWX Connection Test Message')
+        logging.getLogger(connection_test_logger_name(settings.LOG_AGGREGATOR_LOGGERS)).error('Ascender Connection Test Message')
 
         hostname = getattr(settings, 'LOG_AGGREGATOR_HOST', None)
         protocol = getattr(settings, 'LOG_AGGREGATOR_PROTOCOL', None)

@@ -14,7 +14,8 @@ quietly stop forwarding, which is the failure this file exists to prevent.
 
 import pytest
 
-from ascender.main.constants import LEGACY_SERVICE_LOGGER_PREFIX, SERVICE_LOGGER_PREFIX
+from ascender.conf.views import connection_test_logger_name
+from ascender.main.constants import ANALYTICS_LOGGER_PREFIX, LEGACY_SERVICE_LOGGER_PREFIX, SERVICE_LOGGER_PREFIX
 from ascender.main.utils.filters import ExternalLoggerEnabled
 
 
@@ -60,6 +61,23 @@ def test_the_legacy_selector_does_not_forward_everything():
     enabled = ExternalLoggerEnabled(enabled_flag=True, enabled_loggers=['awx'])
 
     assert enabled.filter(record=_record('django.request')) is False
+
+
+@pytest.mark.parametrize('stored_selector', ['ascender', 'awx'])
+def test_the_connection_test_message_goes_through_the_service_logger_under_either_selector(stored_selector):
+    """The settings page's connectivity test sends a record through the first
+    selected logger. A record named plain awx would reach no handler now that the
+    service loggers are configured under ascender, so both selectors map there.
+    """
+    assert connection_test_logger_name([stored_selector, 'activity_stream']) == SERVICE_LOGGER_PREFIX
+
+
+def test_the_connection_test_message_defaults_to_the_service_logger():
+    assert connection_test_logger_name([]) == SERVICE_LOGGER_PREFIX
+
+
+def test_the_connection_test_message_follows_an_analytics_selector():
+    assert connection_test_logger_name(['job_events', 'ascender']) == f'{ANALYTICS_LOGGER_PREFIX}.job_events'
 
 
 def _record(name):
