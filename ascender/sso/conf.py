@@ -388,8 +388,11 @@ def _register_ldap(append=None):
         help_text=_(
             'Mapping between organization admins/users and LDAP groups. This '
             'controls which users are placed into which organizations '
-            'relative to their LDAP group memberships. Configuration details '
-            'are available in the documentation.'
+            'relative to their LDAP group memberships. A role may instead be '
+            'driven by a trigger rule, given as triggers_admins, triggers_users '
+            'or triggers_auditors, which matches on the user\'s LDAP attributes '
+            'as well as their groups. Configuration details are available in '
+            'the documentation.'
         ),
         category=_('LDAP'),
         category_slug='ldap',
@@ -422,7 +425,12 @@ def _register_ldap(append=None):
         field_class=LDAPTeamMapField,
         default={},
         label=_('LDAP Team Map'),
-        help_text=_('Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.'),
+        help_text=_(
+            'Mapping between team members (users) and LDAP groups. Membership '
+            'may instead be driven by a trigger rule, given as triggers, which '
+            'matches on the user\'s LDAP attributes as well as their groups. '
+            'Configuration details are available in the documentation.'
+        ),
         category=_('LDAP'),
         category_slug='ldap',
         placeholder=collections.OrderedDict(

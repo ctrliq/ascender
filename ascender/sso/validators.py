@@ -8,6 +8,9 @@ import ldap
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
+# Ascender
+from ascender.dab.authentication.utils.validation import validate_trigger_data
+
 __all__ = [
     'validate_ldap_dn',
     'validate_ldap_dn_with_user',
@@ -15,6 +18,7 @@ __all__ = [
     'validate_ldap_filter',
     'validate_ldap_filter_with_user',
     'validate_tacacsplus_disallow_nonascii',
+    'validate_ldap_trigger_rule',
 ]
 
 
@@ -72,3 +76,61 @@ def validate_tacacsplus_disallow_nonascii(value):
         value.encode('ascii')
     except (UnicodeEncodeError, UnicodeDecodeError):
         raise ValidationError(_('TACACS+ secret does not allow non-ascii characters'))
+
+
+def validate_ldap_trigger_rule(triggers):
+    """
+    The problems with an LDAP org/team map trigger rule, keyed by where they are.
+
+    On top of the platform's own trigger definition this refuses a rule that
+    would only be half applied, because the evaluator honours one trigger type
+    and one group operator within it and silently ignores the rest, and a rule
+    that cannot match anyone, because with remove set that quietly strips the
+    role from the whole directory.
+
+    Used both when a rule is saved and when it is evaluated, because the
+    settings these maps live in can also be written to a settings file, which
+    never passes through the serializer.
+    """
+    if not isinstance(triggers, dict):
+        return {'triggers': _('Expected a dictionary but got {}.').format(type(triggers).__name__)}
+
+    errors = validate_trigger_data(triggers)
+
+    if len(triggers) > 1:
+        errors['triggers'] = _('Only one of {} may be given.').format(', '.join(sorted(triggers)))
+
+    groups = triggers.get('groups')
+    if isinstance(groups, dict):
+        if len(groups) > 1:
+            errors['triggers.groups'] = _('Only one of {} may be given.').format(', '.join(sorted(groups)))
+        elif not groups:
+            errors['triggers.groups'] = _('One of has_or, has_and or has_not is required.')
+
+    attributes = triggers.get('attributes')
+    if isinstance(attributes, dict):
+        if not set(attributes) - {'join_condition'}:
+            errors['triggers.attributes'] = _('At least one attribute is required.')
+        errors.update(_validate_trigger_patterns(attributes))
+
+    return errors
+
+
+def _validate_trigger_patterns(attributes):
+    """
+    Nothing compiles the patterns a matches condition holds, and the evaluator
+    runs them on every login. One that does not compile would raise there, for
+    every user, so it is refused here instead.
+    """
+    errors = {}
+    for attribute, condition in attributes.items():
+        if not isinstance(condition, dict):
+            continue
+        pattern = condition.get('matches')
+        if not isinstance(pattern, str):
+            continue
+        try:
+            re.compile(pattern)
+        except re.error as e:
+            errors['triggers.attributes.{}.matches'.format(attribute)] = _('Invalid regular expression: {}.').format(e)
+    return errors

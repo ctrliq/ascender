@@ -1299,6 +1299,11 @@ ANSIBLE_BASE_TEAM_MODEL = 'main.Team'
 ANSIBLE_BASE_ORGANIZATION_MODEL = 'main.Organization'
 ANSIBLE_BASE_RESOURCE_CONFIG_MODULE = 'ascender.resource_api'
 
+# Fold case when a trigger rule in an LDAP org/team map compares group DNs or
+# user attributes.  Upstream this is the FEATURE_CASE_INSENSITIVE_AUTH_MAPS_ENABLED
+# django-flags flag; django-flags is not a dependency here.
+AUTH_MAP_CASE_INSENSITIVE = False
+
 # The setting below was formerly produced by including ascender.dab's dynamic_settings
 # (deleted along with ascender/dab/lib/dynamic_config); DEFAULT_FILTER_BACKENDS, the other
 # surviving piece of that include, moved into the REST_FRAMEWORK definition above.
