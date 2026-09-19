@@ -4,7 +4,6 @@ import type { Http } from '../Base';
 /** What /api/v2/config/ reports about the install. */
 export interface ConfigResponse {
   version?: string;
-  analytics_status?: string;
   ansible_version?: string;
   project_base_dir?: string;
   project_local_paths?: string[];

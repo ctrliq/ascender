@@ -187,12 +187,9 @@ class ApiV2ConfigView(APIView):
     def get(self, request, format=None):
         '''Return various sitewide configuration settings'''
 
-        pendo_state = settings.PENDO_TRACKING_STATE if settings.PENDO_TRACKING_STATE in ('off', 'anonymous', 'detailed') else 'off'
-
         data = dict(
             time_zone=settings.TIME_ZONE,
             version=get_ascender_version(),
-            analytics_status=pendo_state,
             become_methods=PRIVILEGE_ESCALATION_METHODS,
         )
 

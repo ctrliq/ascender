@@ -44,7 +44,6 @@ def config(since, **kwargs):
         'tower_url_base': settings.ASCENDER_URL_BASE,
         'ascender_version': get_ascender_version(),
         'tower_version': get_ascender_version(),
-        'pendo_tracking': settings.PENDO_TRACKING_STATE,
         'authentication_backends': settings.AUTHENTICATION_BACKENDS,
         'logging_aggregators': settings.LOG_AGGREGATOR_LOGGERS,
         'external_logger_enabled': settings.LOG_AGGREGATOR_ENABLED,

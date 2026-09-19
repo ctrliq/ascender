@@ -13,14 +13,6 @@ from django.utils.translation import gettext_lazy as _
 from ascender.conf import fields
 
 
-class PendoTrackingStateField(fields.ChoiceField):
-    def to_internal_value(self, data):
-        # Any false/null values get converted to 'off'.
-        if data in fields.BooleanField.FALSE_VALUES or data in fields.BooleanField.NULL_VALUES:
-            return 'off'
-        return super(PendoTrackingStateField, self).to_internal_value(data)
-
-
 class CustomLogoField(fields.CharField):
     CUSTOM_LOGO_RE = re.compile(r'^data:image/(?:png|jpeg|gif);base64,([A-Za-z0-9+/=]+?)$')
 

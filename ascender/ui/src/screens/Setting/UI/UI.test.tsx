@@ -17,7 +17,6 @@ describe('<UI />', () => {
       data: {
         CUSTOM_LOGIN_INFO: '',
         CUSTOM_LOGO: '',
-        PENDO_TRACKING_STATE: 'off',
       },
     } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
@@ -41,7 +40,7 @@ describe('<UI />', () => {
   test('should render user interface details', async () => {
     renderUI(['/settings/ui/details']);
     expect(
-      await screen.findByText('User Analytics Tracking State')
+      await screen.findByText('Custom Login Info')
     ).toBeInTheDocument();
   });
 
@@ -52,7 +51,6 @@ describe('<UI />', () => {
         CUSTOM_LOGO: '',
         CUSTOM_TITLE: '',
         CUSTOM_HEADER_LOGO: '',
-        PENDO_TRACKING_STATE: 'off',
       },
     } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
     renderUI(['/settings/ui/edit']);

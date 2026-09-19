@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import {
   Button,
@@ -20,8 +20,6 @@ import { Plural, Trans, useLingui } from '@lingui/react/macro';
 
 import { useConfig, useAuthorizedPath } from 'contexts/Config';
 import { useSession } from 'contexts/Session';
-import issuePendoIdentity from 'util/issuePendoIdentity';
-import type { PendoConfig } from 'util/issuePendoIdentity';
 import useBrandName from 'hooks/useBrandName';
 import type { AppRouteGroup } from '../../routeConfig';
 import About from '../About';
@@ -51,15 +49,6 @@ function AppContainer({ navRouteConfig = [], children }: AppContainerProps) {
 
   const handleAboutModalOpen = () => setIsAboutModalOpen(true);
   const handleAboutModalClose = () => setIsAboutModalOpen(false);
-
-  useEffect(() => {
-    if ('analytics_status' in config) {
-      // The guard above is what says the config has been read; PendoConfig
-      // names the fields pendo is given out of it.
-      issuePendoIdentity(config as unknown as PendoConfig);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config.analytics_status]);
 
   const brandName = useBrandName();
   const alt = brandName ? t`${brandName} logo` : t`brand logo`;

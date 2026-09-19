@@ -27,7 +27,6 @@ describe('<UIEdit />', () => {
         CUSTOM_LOGO: 'data:mock/jpeg;',
         CUSTOM_TITLE: '',
         CUSTOM_HEADER_LOGO: '',
-        PENDO_TRACKING_STATE: 'detailed',
       },
     } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
@@ -61,9 +60,6 @@ describe('<UIEdit />', () => {
     await renderEdit();
     expect(screen.getByText('Custom Login Info')).toBeInTheDocument();
     expect(screen.getByText('Custom Login Logo')).toBeInTheDocument();
-    expect(
-      screen.getByText('User Analytics Tracking State')
-    ).toBeInTheDocument();
   });
 
   test('should successfully send default values to api on form revert all', async () => {
@@ -100,7 +96,6 @@ describe('<UIEdit />', () => {
       CUSTOM_LOGO: '',
       CUSTOM_TITLE: '',
       CUSTOM_HEADER_LOGO: '',
-      PENDO_TRACKING_STATE: 'detailed',
     });
   });
 
@@ -111,19 +106,6 @@ describe('<UIEdit />', () => {
       expect(history.location.pathname).toEqual('/settings/ui/details')
     );
     expect(history.location.state?.hardReload).toEqual(undefined);
-  });
-
-  test('should navigate to ui detail with reload param on successful submission where PENDO_TRACKING_STATE changes', async () => {
-    const { user, container } = await renderEdit();
-    await user.selectOptions(
-      container.querySelector('#PENDO_TRACKING_STATE')!,
-      'off'
-    );
-    await user.click(screen.getByRole('button', { name: 'Save' }));
-    await waitFor(() =>
-      expect(history.location.pathname).toEqual('/settings/ui/details')
-    );
-    expect(history.location.state?.hardReload).toEqual(true);
   });
 
   test('should navigate to ui detail when cancel is clicked', async () => {
