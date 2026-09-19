@@ -39,7 +39,7 @@ LOGGING['loggers']['channels_valkey.core'] = {
     'level': 'DEBUG'
 }
 
-tail -f /var/log/tower/tower.log
+tail -f /var/log/ascender/ascender.log
 2021-04-28 20:53:51,230 INFO     channels_valkey.core 1 of 4 channels over capacity in group broadcast-group_send
 2021-04-28 20:53:51,231 INFO     channels_valkey.core 1 of 1 channels over capacity in group job_events-49
 ```
