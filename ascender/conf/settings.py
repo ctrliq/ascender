@@ -225,20 +225,49 @@ def get_settings_to_cache(registry):
     return dict([(key, SETTING_CACHE_NOTSET) for key in get_writeable_settings(registry)])
 
 
-# Will first attempt to get the setting from the database in synchronous mode.
-# If call from async context, it will attempt to get the setting from the database in a thread.
+def _read_from_db(query):
+    """Run a settings query, on another thread if this one runs an event loop.
+
+    Django refuses database access from the thread running the loop and raises
+    SynchronousOnlyOperation rather than blocking it. The settings machinery is
+    reached from both sides: ASGI middleware reads settings on the loop, and
+    everything else reads them from a worker thread. So the query moves to a
+    thread of its own, and the answer does not depend on who asked.
+
+    Swallowing the exception instead would be worse than it looks. Of the
+    settings this registry knows about, most have no file default, so the
+    database is the only place they exist: falling back would not degrade the
+    answer, it would silently drop settings the caller can see from any other
+    thread.
+
+    The query has to finish inside the thread. A queryset is lazy, so returning
+    one would carry the evaluation back out to the caller's thread and raise
+    there instead.
+    """
+    try:
+        return query()
+    except SynchronousOnlyOperation:
+
+        def run():
+            try:
+                return query()
+            finally:
+                # A connection belongs to its thread and nothing will reuse
+                # this one. Left open it is collected later, and psycopg warns
+                # that it was deleted while still open.
+                connection.close()
+
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            return executor.submit(run).result()
+
+
 def _get_setting_from_db(registry, key):
-    def get_settings_from_db_sync(registry, key):
+    def get_settings_from_db_sync():
         field = registry.get_setting_field(key)
         if not field.read_only or key == 'INSTALL_UUID':
             return Setting.objects.filter(key=key, user__isnull=True).order_by('pk').first()
 
-    try:
-        return get_settings_from_db_sync(registry, key)
-    except SynchronousOnlyOperation:
-        with ThreadPoolExecutor(max_workers=1) as executor:
-            future = executor.submit(get_settings_from_db_sync, registry, key)
-            return future.result()
+    return _read_from_db(get_settings_from_db_sync)
 
 
 def get_cache_value(value):
@@ -347,7 +376,7 @@ class SettingsWrapper(UserSettingsHolder):
         settings_to_cache = get_settings_to_cache(self.registry)
         setting_ids = {}
         # Load all settings defined in the database.
-        for setting in Setting.objects.filter(key__in=settings_to_cache.keys(), user__isnull=True).order_by('pk'):
+        for setting in _read_from_db(lambda: list(Setting.objects.filter(key__in=settings_to_cache.keys(), user__isnull=True).order_by('pk'))):
             if settings_to_cache[setting.key] != SETTING_CACHE_NOTSET:
                 continue
             if self.registry.is_setting_encrypted(setting.key):
@@ -526,7 +555,7 @@ class SettingsWrapper(UserSettingsHolder):
     def __dir__(self):
         keys = []
         with _ctit_db_wrapper(trans_safe=True):
-            for setting in Setting.objects.filter(key__in=self.all_supported_settings, user__isnull=True):
+            for setting in _read_from_db(lambda: list(Setting.objects.filter(key__in=self.all_supported_settings, user__isnull=True))):
                 # Skip returning settings that have been overridden but are
                 # considered to be "not set".
                 if setting.value is None and SETTING_CACHE_NOTSET == SETTING_CACHE_NONE:
@@ -542,7 +571,7 @@ class SettingsWrapper(UserSettingsHolder):
         set_locally = False
         if setting in self.all_supported_settings:
             with _ctit_db_wrapper(trans_safe=True):
-                set_locally = Setting.objects.filter(key=setting, user__isnull=True).exists()
+                set_locally = _read_from_db(lambda: Setting.objects.filter(key=setting, user__isnull=True).exists())
         set_on_default = getattr(self.default_settings, 'is_overridden', lambda s: False)(setting)
         return set_locally or set_on_default
 
