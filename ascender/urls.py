@@ -24,7 +24,16 @@ urlpatterns = [
     re_path(r'^login/', handle_login_redirect),
 ]
 
-if settings.SETTINGS_MODULE == 'ascender.settings.development':
+# Keyed on the app rather than the settings module name. The module is named
+# by DJANGO_SETTINGS_MODULE, which ascender/__init__.py still sets under the
+# old package name, so comparing against 'ascender.settings.development' never
+# matched and the djdt namespace was never registered: the toolbar then raised
+# NoReverseMatch from its own render on every request it was active for.
+#
+# Asking whether the app is installed is the question this actually wants, and
+# it stays right whatever the module is called, including for a local settings
+# file that takes the toolbar back out.
+if 'debug_toolbar' in settings.INSTALLED_APPS:
     try:
         import debug_toolbar
 
