@@ -155,10 +155,6 @@ class SettingsRegistry(object):
             except Exception:
                 logger.warning('Unable to retrieve default value for setting "%s".', setting, exc_info=True)
 
-        # PENDO_TRACKING_STATE was read-only under the open licence, which is
-        # the only licence there is, so it is read-only outright.
-        if setting == 'PENDO_TRACKING_STATE':
-            field_instance.read_only = True
 
         return field_instance
 

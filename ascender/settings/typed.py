@@ -407,7 +407,6 @@ class AscenderSettings(Protocol):
     ORG_ADMINS_CAN_SEE_ALL_USERS: bool
     PASSWORD_HASHERS: list[Any]
     PASSWORD_RESET_TIMEOUT: int
-    PENDO_TRACKING_STATE: str
     PREPEND_WWW: bool
     PROJECTS_ROOT: str
     PROJECT_UPDATE_VVV: bool

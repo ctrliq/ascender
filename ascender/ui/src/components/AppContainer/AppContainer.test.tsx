@@ -1,4 +1,3 @@
-import type { Mock } from 'vitest';
 import React from 'react';
 import { screen, waitFor, within } from '@testing-library/react';
 import { MeAPI, RootAPI } from 'api';
@@ -12,18 +11,6 @@ import {
 import AppContainer from './AppContainer';
 
 vi.mock('../../api');
-vi.mock('../../util/bootstrapPendo');
-
-declare global {
-  // The bootstrap helper reads pendo off the global object, and a global is
-  // declared with var whether or not anything else in the file uses one.
-  /* eslint-disable-next-line vars-on-top */
-  var pendo: { initialize: Mock };
-}
-
-global.pendo = {
-  initialize: vi.fn(),
-};
 
 describe('<AppContainer />', () => {
   const version = '222';
@@ -32,7 +19,6 @@ describe('<AppContainer />', () => {
     vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
       data: {
         BRAND_NAME: 'Ascender Automation',
-        PENDO_API_KEY: 'some-pendo-key',
       },
     } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
     vi.mocked(MeAPI.read).mockResolvedValue({
@@ -72,7 +58,6 @@ describe('<AppContainer />', () => {
       {
         context: {
           config: {
-            analytics_status: 'detailed',
             ansible_version: null,
             version: '9000',
             me: { is_superuser: true },
@@ -106,49 +91,12 @@ describe('<AppContainer />', () => {
     expect(container.querySelector('#group_one')).toBeInTheDocument();
     expect(container.querySelector('#group_two')).toBeInTheDocument();
 
-    await waitFor(() =>
-      expect(global.pendo.initialize).toHaveBeenCalledTimes(1)
-    );
-  });
-
-  test('Pendo not initialized when key is missing', async () => {
-    vi.mocked(RootAPI.readAssetVariables).mockResolvedValue({
-      data: {
-        BRAND_NAME: 'Ascender Automation',
-        PENDO_API_KEY: '',
-      },
-    } as unknown as ResponseOf<typeof RootAPI.readAssetVariables>);
-    renderWithContexts(<AppContainer />, {
-      context: {
-        config: {
-          analytics_status: 'detailed',
-          ansible_version: null,
-          version: '9000',
-          me: { is_superuser: true },
-          toJSON: () => '/config/',
-        },
-      },
-    });
-    // give the pendo identity effect a chance to run before asserting it didn't
-    await waitFor(() => expect(RootAPI.readAssetVariables).toHaveBeenCalled());
-    expect(global.pendo.initialize).toHaveBeenCalledTimes(0);
-  });
-
-  test('Pendo not initialized when status is analytics off', async () => {
-    renderWithContexts(<AppContainer />, {
-      context: {
-        config: {
-          analytics_status: 'off',
-          ansible_version: null,
-          version: '9000',
-          me: { is_superuser: true },
-          toJSON: () => '/config/',
-        },
-      },
-    });
-    // analytics off short-circuits before readAssetVariables; allow effects to flush
-    await waitFor(() => expect(screen.getByRole('banner')).toBeInTheDocument());
-    expect(global.pendo.initialize).toHaveBeenCalledTimes(0);
+    // readAssetVariables resolves after the first render and names the logo.
+    // Waiting for it keeps that state update inside the test; without it React
+    // lands the update after the test has ended and warns about act().
+    expect(
+      await screen.findAllByAltText('Ascender Automation logo')
+    ).not.toHaveLength(0);
   });
 
   test('opening the about modal renders prefetched config data', async () => {

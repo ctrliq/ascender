@@ -6,17 +6,7 @@ from django.utils.translation import gettext_lazy as _
 
 # Ascender
 from ascender.conf import register, fields
-from ascender.ui.fields import PendoTrackingStateField, CustomLogoField, CustomThemeField  # noqa
-
-register(
-    'PENDO_TRACKING_STATE',
-    field_class=PendoTrackingStateField,
-    choices=[('off', _('Off')), ('anonymous', _('Anonymous')), ('detailed', _('Detailed'))],
-    label=_('User Analytics Tracking State'),
-    help_text=_('Enable or Disable User Analytics Tracking.'),
-    category=_('UI'),
-    category_slug='ui',
-)
+from ascender.ui.fields import CustomLogoField, CustomThemeField  # noqa
 
 register(
     'CUSTOM_LOGIN_INFO',

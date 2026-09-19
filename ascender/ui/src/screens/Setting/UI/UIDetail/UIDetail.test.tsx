@@ -19,7 +19,6 @@ describe('<UIDetail />', () => {
       data: {
         CUSTOM_LOGIN_INFO: 'mock info',
         CUSTOM_LOGO: 'data:image/png',
-        PENDO_TRACKING_STATE: 'off',
       },
     } as unknown as ResponseOf<typeof SettingsAPI.readCategory>);
   });
@@ -44,7 +43,7 @@ describe('<UIDetail />', () => {
   test('initially renders without crashing', async () => {
     await renderDetail();
     expect(
-      screen.getByText('User Analytics Tracking State')
+      screen.getByText('Custom Login Info')
     ).toBeInTheDocument();
   });
 
@@ -60,7 +59,6 @@ describe('<UIDetail />', () => {
 
   test('should render expected details', async () => {
     await renderDetail();
-    assertDetail('User Analytics Tracking State', 'off');
     assertDetail('Custom Login Info', 'mock info');
     const logoLabel = screen.getByText('Custom Login Logo');
     const logoValue = logoLabel.nextElementSibling;

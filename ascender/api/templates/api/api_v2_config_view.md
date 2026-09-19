@@ -10,8 +10,6 @@ the following fields (some fields may not be visible to all users):
   use when creating/editing a manual project.
 * `time_zone`: The configured time zone for the server.
 * `version`: Version of the Ascender package installed.
-* `analytics_status`: Whether user analytics tracking is off, anonymous or
-  detailed.
 * `become_methods`: The privilege escalation methods available to a job.
 * `user_ldap_fields`: Present when LDAP is enabled: the user fields LDAP
   manages, which are read-only for a user with an `ldap_dn`.

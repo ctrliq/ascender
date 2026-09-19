@@ -12,14 +12,14 @@ $ awx-manage profile_sql --threshold 2 --minutes 5
 
 ...where threshold is the max query time in seconds, and minutes it the number of minutes to record.
 For the next five minutes (in this example), any Ascender Python process that generates a SQL query
-that runs for >2s will be recorded in a `.sqlite` database in `/var/log/tower/profile`.
+that runs for >2s will be recorded in a `.sqlite` database in `/var/log/ascender/profile`.
 
 This is a useful tool for logging all queries at a per-process level, or filtering and searching for
 queries within a certain code branch.  For example, if you observed that certain HTTP requests were
 particularly slow, you could enable profiling, perform the slow request, and then search the log:
 
 ```
-$ sqlite3 -column -header /var/log/tower/profile/uwsgi.sqlite
+$ sqlite3 -column -header /var/log/ascender/profile/uvicorn.sqlite
 sqlite> .schema queries
 CREATE TABLE queries (
     id INTEGER PRIMARY KEY,
@@ -204,7 +204,7 @@ package is not found
 
 Below is the signature of the `@profile` decorator.
 ```
-@profile(name, dest='/var/log/tower/profile', dot_enabled=True)
+@profile(name, dest='/var/log/ascender/profile', dot_enabled=True)
 ```
 
 ```
@@ -221,7 +221,7 @@ well as a dot graph if enabled. The profile data summary can be viewed in a
 text editor. The dot graph can be viewed using `xdot`.
 
 ```
-bash-4.4$ ls -aln /var/log/tower/profile/
+bash-4.4$ ls -aln /var/log/ascender/profile/
 total 24
 drwxr-xr-x 2 awx  root 4096 Oct 15 13:23 .
 drwxrwxr-x 1 root root 4096 Oct 15 13:23 ..
@@ -232,7 +232,7 @@ drwxrwxr-x 1 root root 4096 Oct 15 13:23 ..
 ```
 
 ```
-xdot /var/log/tower/profile/2.001s-task_manager_profile-2303-272858af-3bda-45ec-af9e-7067aa86e4f3.dot
+xdot /var/log/ascender/profile/2.001s-task_manager_profile-2303-272858af-3bda-45ec-af9e-7067aa86e4f3.dot
 ```
 
 
@@ -244,7 +244,7 @@ accurate absolute timing of a code path.
 
 Below is the signature of the `@timing` decorator.
 ```
-@timing(name, dest='/var/log/tower/timing')
+@timing(name, dest='/var/log/ascender/timing')
 ```
 
 ```
