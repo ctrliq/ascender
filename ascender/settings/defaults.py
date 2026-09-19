@@ -819,10 +819,6 @@ ASCENDER_ANSIBLE_CALLBACK_PLUGINS = ""
 # Automatically remove nodes that have missed their heartbeats after some time
 ASCENDER_AUTO_DEPROVISION_INSTANCES = False
 
-# Enable Pendo on the UI, possible values are 'off', 'anonymous', and 'detailed'
-# Note: This setting may be overridden by database settings.
-PENDO_TRACKING_STATE = "off"
-
 
 # Last gather date for Analytics
 # Last gathered entries for expensive Analytics

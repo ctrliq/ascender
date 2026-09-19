@@ -13,7 +13,6 @@ import useModal from 'hooks/useModal';
 import useRequest from 'hooks/useRequest';
 import { SettingsAPI } from 'api';
 import {
-  ChoiceField,
   FileUploadField,
   TextAreaField,
 } from '../../shared/SharedFields';
@@ -58,17 +57,9 @@ function UIEdit() {
     useCallback(
       async (values: Record<string, unknown>) => {
         await SettingsAPI.updateAll(values);
-        if (
-          values?.PENDO_TRACKING_STATE !== uiData?.PENDO_TRACKING_STATE?.value
-        ) {
-          navigate('/settings/ui/details', {
-            state: { hardReload: true },
-          });
-        } else {
-          navigate('/settings/ui/details');
-        }
+        navigate('/settings/ui/details');
       },
-      [navigate, uiData]
+      [navigate]
     ),
     null
   );
@@ -105,7 +96,6 @@ function UIEdit() {
       {!isLoading && uiData && (
         <FormRoot
           initialValues={{
-            PENDO_TRACKING_STATE: uiData?.PENDO_TRACKING_STATE?.value ?? 'off',
             CUSTOM_LOGIN_INFO: uiData?.CUSTOM_LOGIN_INFO?.value ?? '',
             CUSTOM_TITLE: uiData?.CUSTOM_TITLE?.value ?? '',
             CUSTOM_LOGO: uiData?.CUSTOM_LOGO?.value ?? '',
@@ -116,11 +106,6 @@ function UIEdit() {
           {(formik) => (
             <Form autoComplete="off" onSubmit={formik.handleSubmit}>
               <FormColumnLayout>
-                <ChoiceField
-                  name="PENDO_TRACKING_STATE"
-                  config={uiData.PENDO_TRACKING_STATE}
-                  isDisabled
-                />
                 <TextAreaField
                   name="CUSTOM_LOGIN_INFO"
                   config={uiData.CUSTOM_LOGIN_INFO}

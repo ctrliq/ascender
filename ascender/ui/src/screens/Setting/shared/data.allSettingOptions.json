@@ -807,20 +807,6 @@
               "category_slug": "authentication",
               "default": ""
           },
-          "PENDO_TRACKING_STATE": {
-            "type": "choice",
-            "required": true,
-            "label": "User Analytics Tracking State",
-            "help_text": "Enable or Disable User Analytics Tracking.",
-            "category": "UI",
-            "category_slug": "ui",
-            "default": "off",
-            "choices": [
-              ["off", "Off"],
-              ["anonymous", "Anonymous"],
-              ["detailed", "Detailed"]
-            ]
-          },
           "ALLOW_METRICS_FOR_ANONYMOUS_USERS": {
               "type": "boolean",
               "required": false,
@@ -5155,28 +5141,6 @@
               "category": "Authentication",
               "category_slug": "authentication",
               "defined_in_file": false
-          },
-          "PENDO_TRACKING_STATE": {
-              "type": "choice",
-              "label": "User Analytics Tracking State",
-              "help_text": "Enable or Disable User Analytics Tracking.",
-              "category": "UI",
-              "category_slug": "ui",
-              "defined_in_file": false,
-              "choices": [
-                  [
-                      "off",
-                      "Off"
-                  ],
-                  [
-                      "anonymous",
-                      "Anonymous"
-                  ],
-                  [
-                      "detailed",
-                      "Detailed"
-                  ]
-              ]
           },
           "CUSTOM_LOGIN_INFO": {
               "type": "string",

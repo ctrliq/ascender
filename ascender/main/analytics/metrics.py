@@ -182,7 +182,6 @@ def metrics():
             'tower_url_base': settings.ASCENDER_URL_BASE,
             'ascender_version': get_ascender_version(),
             'tower_version': get_ascender_version(),
-            'pendo_tracking': settings.PENDO_TRACKING_STATE,
             'external_logger_enabled': str(settings.LOG_AGGREGATOR_ENABLED),
             'external_logger_type': getattr(settings, 'LOG_AGGREGATOR_TYPE', 'None'),
         }
