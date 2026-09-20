@@ -559,15 +559,18 @@ def on_populate_user(sender, **kwargs):
     org_roles_and_ldap_attributes = {'admin_role': 'admins', 'auditor_role': 'auditors', 'member_role': 'users'}
     desired_org_states = {}
     for org_name, org_opts in org_map.items():
-        remove = bool(org_opts.get('remove', True))
+        org_remove = bool(org_opts.get('remove', True))
         desired_org_states[org_name] = {}
         for org_role_name in org_roles_and_ldap_attributes.keys():
             ldap_name = org_roles_and_ldap_attributes[org_role_name]
             opts = org_opts.get(ldap_name, None)
-            remove = bool(org_opts.get('remove_{}'.format(ldap_name), remove))
+            # Each role falls back to the entry's remove, not to whatever the
+            # role before it was given, which is how the social auth path has
+            # always read the same options.
+            role_remove = bool(org_opts.get('remove_{}'.format(ldap_name), org_remove))
             triggers = org_opts.get('triggers_{}'.format(ldap_name), None)
             desired_org_states[org_name][org_role_name] = _update_m2m_from_map(
-                ldap_user, opts, remove, triggers, 'organization {} {}'.format(org_name, ldap_name)
+                ldap_user, opts, role_remove, triggers, 'organization {} {}'.format(org_name, ldap_name)
             )
 
         # If everything returned None (because there was no configuration) we can remove this org from our map

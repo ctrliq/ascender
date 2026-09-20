@@ -358,3 +358,24 @@ def test_an_entry_with_no_attributes_does_not_blow_up():
 
     assert _update_m2m_from_map(ldap_user, None, True, {'attributes': {'mail': {'equals': 'a@example.com'}}}, 'test map') is False
     assert _update_m2m_from_map(ldap_user, None, False, {'attributes': {'mail': {'equals': 'a@example.com'}}}, 'test map') is None
+
+
+@pytest.mark.django_db
+def test_remove_for_one_org_role_does_not_decide_the_others(existing_normal_user):
+    """
+    remove_admins says what happens to admins. The roles evaluated after it keep
+    their own default, which is the entry's remove, and that is true.
+    """
+    orgs, _teams = _populate(
+        existing_normal_user,
+        organization_map={
+            'Example Org': {
+                'admins': [OTHER_GROUP_DN],
+                'remove_admins': False,
+                'users': [OTHER_GROUP_DN],
+                'auditors': [OTHER_GROUP_DN],
+            }
+        },
+    )
+
+    assert orgs == {'Example Org': {'admin_role': None, 'auditor_role': False, 'member_role': False}}
