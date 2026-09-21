@@ -2,6 +2,7 @@ import collections
 import copy
 import inspect
 import json
+import os
 import re
 
 import six
@@ -206,12 +207,35 @@ class AuthenticationBackendsField(fields.StringListField):
         ]
     )
 
+    # Settings that become optional for a given backend when Azure AD
+    # Workload Identity is available, because that backend can then
+    # authenticate via a client_assertion (RFC 7523 JWT-bearer) instead of a
+    # static secret. See
+    # social_core.backends.azuread.AzureADOAuth2.client_assertion(), which
+    # these backends inherit and which takes the exact same "no client
+    # secret configured -> fall back to a federated credential" path.
+    WORKLOAD_IDENTITY_OPTIONAL_SETTINGS = {
+        'social_core.backends.azuread.AzureADOAuth2': ['SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET'],
+        'social_core.backends.azuread_tenant.AzureADTenantOAuth2': ['SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET'],
+    }
+
     @classmethod
     def get_all_required_settings(cls):
         all_required_settings = set()
         for required_settings in cls.REQUIRED_BACKEND_SETTINGS.values():
             all_required_settings.update(required_settings)
         return all_required_settings
+
+    @staticmethod
+    def _workload_identity_available():
+        """Whether an Azure AD Workload Identity federated credential is
+        usable in this pod, mirroring the sources
+        AzureADOAuth2.client_assertion() itself falls back to: the token
+        file path from AZURE_FEDERATED_TOKEN_FILE/OAUTH2_FEDERATED_TOKEN_FILE
+        (set by the AKS/Azure Workload Identity webhook), which must
+        actually exist and be readable."""
+        token_path = os.environ.get('OAUTH2_FEDERATED_TOKEN_FILE') or os.environ.get('AZURE_FEDERATED_TOKEN_FILE')
+        return bool(token_path) and os.path.isfile(token_path)
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('default', self._default_from_required_settings)
@@ -224,12 +248,20 @@ class AuthenticationBackendsField(fields.StringListField):
             backends = settings._ascender_conf_settings._get_default('AUTHENTICATION_BACKENDS')
         except AttributeError:
             backends = self.REQUIRED_BACKEND_SETTINGS.keys()
+
+        workload_identity_available = self._workload_identity_available()
+
         # Filter which authentication backends are enabled based on their
-        # required settings being defined and non-empty.
+        # required settings being defined and non-empty. A setting listed in
+        # WORKLOAD_IDENTITY_OPTIONAL_SETTINGS for this backend is skipped
+        # when a workload identity federated credential is available, since
+        # the backend can authenticate without it in that case.
         for backend, required_settings in self.REQUIRED_BACKEND_SETTINGS.items():
             if backend not in backends:
                 continue
-            if all([getattr(settings, rs, None) for rs in required_settings]):
+            optional_settings = self.WORKLOAD_IDENTITY_OPTIONAL_SETTINGS.get(backend, [])
+            effectively_required = [rs for rs in required_settings if not (workload_identity_available and rs in optional_settings)]
+            if all([getattr(settings, rs, None) for rs in effectively_required]):
                 continue
             backends = [x for x in backends if x != backend]
         return backends

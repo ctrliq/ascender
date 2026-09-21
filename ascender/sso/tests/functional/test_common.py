@@ -495,3 +495,52 @@ class TestAzureADTenantOAuth2:
             backends = field._default_from_required_settings()
             assert 'social_core.backends.azuread.AzureADOAuth2' in backends
             assert 'social_core.backends.azuread_tenant.AzureADTenantOAuth2' not in backends
+
+    def test_azuread_tenant_secret_optional_with_workload_identity(self, tmp_path, monkeypatch):
+        """Backend should be enabled without a secret when a workload identity
+        federated credential token file is present, mirroring the fallback
+        social_core.backends.azuread.AzureADOAuth2.client_assertion() itself
+        uses instead of a static client secret."""
+        token_file = tmp_path / 'azure-identity-token'
+        token_file.write_text('fake-jwt')
+        monkeypatch.setenv('AZURE_FEDERATED_TOKEN_FILE', str(token_file))
+
+        with override_settings(
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY='test-client-id',
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET='',
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID='test-tenant-id',
+        ):
+            field = AuthenticationBackendsField()
+            backends = field._default_from_required_settings()
+            assert 'social_core.backends.azuread_tenant.AzureADTenantOAuth2' in backends
+
+    def test_azuread_tenant_secret_still_required_without_token_file(self, monkeypatch):
+        """The federated-token env var alone isn't enough - the file it points
+        at must actually exist and be readable, same as
+        AzureADOAuth2.client_assertion() requires."""
+        monkeypatch.setenv('AZURE_FEDERATED_TOKEN_FILE', '/does/not/exist')
+
+        with override_settings(
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY='test-client-id',
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET='',
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID='test-tenant-id',
+        ):
+            field = AuthenticationBackendsField()
+            backends = field._default_from_required_settings()
+            assert 'social_core.backends.azuread_tenant.AzureADTenantOAuth2' not in backends
+
+    def test_azuread_tenant_still_requires_key_and_tenant_id_with_workload_identity(self, tmp_path, monkeypatch):
+        """Workload identity only makes SECRET optional - KEY and TENANT_ID
+        are unaffected and still gate the backend."""
+        token_file = tmp_path / 'azure-identity-token'
+        token_file.write_text('fake-jwt')
+        monkeypatch.setenv('AZURE_FEDERATED_TOKEN_FILE', str(token_file))
+
+        with override_settings(
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_KEY='',
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET='',
+            SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_TENANT_ID='test-tenant-id',
+        ):
+            field = AuthenticationBackendsField()
+            backends = field._default_from_required_settings()
+            assert 'social_core.backends.azuread_tenant.AzureADTenantOAuth2' not in backends
