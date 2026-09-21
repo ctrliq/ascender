@@ -16,7 +16,7 @@
     "@codemirror/view": "^6.43.11",
     "@dagrejs/dagre": "^3.0.0",
     "@lezer/highlight": "^1.2.3",
-    "@lingui/react": "^6.6.0",
+    "@lingui/react": "^6.7.0",
     "@patternfly/patternfly": "^6.5.2",
     "@patternfly/react-core": "^6.5.1",
     "@patternfly/react-icons": "^6.5.1",
