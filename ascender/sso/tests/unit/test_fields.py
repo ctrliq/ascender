@@ -327,6 +327,36 @@ class TestLDAPTriggersField:
             field.to_internal_value(data)
         assert expected_message in str(excinfo.value)
 
+    @pytest.mark.parametrize(
+        "data, expected_message",
+        [
+            # has_and and has_not over an empty list match every user, so an
+            # operand that looks like no constraint hands out the role instead.
+            ({'groups': {'has_and': []}}, 'triggers.groups.has_and'),
+            ({'groups': {'has_not': []}}, 'triggers.groups.has_not'),
+            # And has_or and in over an empty list match nobody, which revokes.
+            ({'groups': {'has_or': []}}, 'triggers.groups.has_or'),
+            ({'attributes': {'mail': {'in': []}}}, 'triggers.attributes.mail.in'),
+            # Same for the string operators, where empty means everyone.
+            ({'attributes': {'mail': {'contains': ''}}}, 'triggers.attributes.mail.contains'),
+            ({'attributes': {'mail': {'ends_with': ''}}}, 'triggers.attributes.mail.ends_with'),
+            ({'attributes': {'mail': {'matches': ''}}}, 'triggers.attributes.mail.matches'),
+            ({'attributes': {'mail': {'equals': ''}}}, 'triggers.attributes.mail.equals'),
+            # Only the first operator of an attribute is evaluated
+            ({'attributes': {'mail': {'equals': 'a@example.com', 'contains': 'b'}}}, 'triggers.attributes.mail'),
+        ],
+    )
+    def test_an_operand_that_constrains_nothing_is_refused(self, data, expected_message):
+        field = LDAPTriggersField()
+        with pytest.raises(ValidationError) as excinfo:
+            field.to_internal_value(data)
+        assert expected_message in str(excinfo.value)
+
+    def test_an_attribute_with_no_operator_still_asks_whether_it_is_there(self):
+        """An empty condition is the documented way of matching on presence."""
+        data = {'attributes': {'department': {}}}
+        assert LDAPTriggersField().to_internal_value(data) == data
+
     def test_a_valid_pattern_is_accepted(self):
         data = {'attributes': {'mail': {'matches': r'^.*@example\.com$'}}}
         assert LDAPTriggersField().to_internal_value(data) == data

@@ -210,6 +210,17 @@ ATTRS = {'mail': ['christopher.pall@example.com'], 'department': ['Private Cloud
         (None, True, {'groups': {}}, None),
         (None, True, {'attributes': {'join_condition': 'and'}}, None),
         (None, True, {'attributes': {'mail': {'matches': '['}}}, None),
+        # An empty operand would otherwise decide the whole directory: has_and
+        # and has_not match everyone, has_or and in match nobody.
+        (None, True, {'groups': {'has_and': []}}, None),
+        (None, True, {'groups': {'has_not': []}}, None),
+        (None, True, {'groups': {'has_or': []}}, None),
+        (None, True, {'attributes': {'mail': {'in': []}}}, None),
+        (None, True, {'attributes': {'mail': {'contains': ''}}}, None),
+        (None, True, {'attributes': {'mail': {'ends_with': ''}}}, None),
+        (None, True, {'attributes': {'mail': {'matches': ''}}}, None),
+        # And only the first operator of an attribute would be evaluated
+        (None, True, {'attributes': {'mail': {'equals': 'christopher.pall@example.com', 'contains': 'nothing'}}}, None),
         # And a rule that is not even a mapping, which a settings file can hold
         (None, True, 'always', None),
         # An empty trigger rule is no rule at all

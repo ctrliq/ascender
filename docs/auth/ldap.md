@@ -127,7 +127,7 @@ A rule is one of four things:
 | `always` | everyone who logs in |
 | `never` | nobody |
 
-Attributes are matched with `equals`, `matches` (a regular expression),
+Attributes are matched with one of `equals`, `matches` (a regular expression),
 `contains`, `ends_with` or `in` (a list). An attribute given an empty condition
 matches anyone who has that attribute at all. `matches` ignores case, while the
 rest do not, so `{"matches": "^private cloud$"}` and
@@ -145,13 +145,20 @@ with `join_condition`, either `or` (the default) or `and`:
 ```
 
 The attribute names are the directory's own, not the names they are mapped to in
-`AUTH_LDAP_USER_ATTR_MAP`, and any attribute of the entry can be matched. Spell
-them the way the directory returns them, `sAMAccountName` rather than
-`samaccountname`, which is what `AUTH_LDAP_USER_ATTR_MAP` already asks for.
+`AUTH_LDAP_USER_ATTR_MAP`, and any attribute of the entry can be matched. They
+are matched the way the protocol treats them, without regard to case, so
+`sAMAccountName` and `samaccountname` name the same attribute. The values are
+not: `equals`, `contains`, `ends_with` and `in` are case sensitive unless
+`AUTH_MAP_CASE_INSENSITIVE` is on.
 
-Only one trigger, and one group operator within `groups`, is evaluated. Writing
-more than one is refused rather than half applied, and so is a rule that could
-not match anyone: an empty body, or a pattern that does not compile.
+Only one trigger, one group operator within `groups`, and one operator per
+attribute are evaluated. Writing more than one is refused rather than half
+applied.
+
+So is a rule that constrains nothing, because it still decides. An empty body,
+an empty operand, or a pattern that does not compile would either hand the role
+to everyone who logs in or take it from everyone, and `remove` then carries that
+across the whole directory.
 
 ## How a rule and a group DN list fit together
 

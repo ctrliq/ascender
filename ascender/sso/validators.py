@@ -82,11 +82,20 @@ def validate_ldap_trigger_rule(triggers):
     """
     The problems with an LDAP org/team map trigger rule, keyed by where they are.
 
-    On top of the platform's own trigger definition this refuses a rule that
-    would only be half applied, because the evaluator honours one trigger type
-    and one group operator within it and silently ignores the rest, and a rule
-    that cannot match anyone, because with remove set that quietly strips the
-    role from the whole directory.
+    On top of the platform's own trigger definition this refuses two kinds of
+    rule the evaluator would take somewhere the person writing it did not mean
+    to go.
+
+    One is the rule that is only half applied, because the evaluator honours one
+    trigger type, one group operator within it and one operator per attribute,
+    and silently ignores whatever else is there.
+
+    The other is the rule that constrains nothing, which is worse than it looks.
+    An empty rule body, or an empty operand, still decides: has_and and has_not
+    over an empty list match every user, so do contains, ends_with and matches
+    against an empty string, while has_or and in over an empty list match none.
+    With remove set, both answers reach the whole directory, one handing out the
+    role and the other taking it away.
 
     Used both when a rule is saved and when it is evaluated, because the
     settings these maps live in can also be written to a settings file, which
@@ -106,31 +115,50 @@ def validate_ldap_trigger_rule(triggers):
             errors['triggers.groups'] = _('Only one of {} may be given.').format(', '.join(sorted(groups)))
         elif not groups:
             errors['triggers.groups'] = _('One of has_or, has_and or has_not is required.')
+        for operator, group_dns in groups.items():
+            if isinstance(group_dns, list) and not group_dns:
+                errors['triggers.groups.{}'.format(operator)] = _('At least one group DN is required.')
 
     attributes = triggers.get('attributes')
     if isinstance(attributes, dict):
         if not set(attributes) - {'join_condition'}:
             errors['triggers.attributes'] = _('At least one attribute is required.')
-        errors.update(_validate_trigger_patterns(attributes))
+        errors.update(_validate_attribute_conditions(attributes))
 
     return errors
 
 
-def _validate_trigger_patterns(attributes):
+#: In the order the evaluator looks for them, which is also the order it stops in.
+ATTRIBUTE_OPERATORS = ('equals', 'matches', 'contains', 'ends_with', 'in')
+
+
+def _validate_attribute_conditions(attributes):
     """
-    Nothing compiles the patterns a matches condition holds, and the evaluator
-    runs them on every login. One that does not compile would raise there, for
-    every user, so it is refused here instead.
+    The problems with the conditions an attributes trigger holds.
+
+    A condition with no operator at all is left alone: that is the documented
+    way of asking whether the user has the attribute, whatever its value.
     """
     errors = {}
     for attribute, condition in attributes.items():
-        if not isinstance(condition, dict):
+        if attribute == 'join_condition' or not isinstance(condition, dict):
             continue
-        pattern = condition.get('matches')
-        if not isinstance(pattern, str):
-            continue
-        try:
-            re.compile(pattern)
-        except re.error as e:
-            errors['triggers.attributes.{}.matches'.format(attribute)] = _('Invalid regular expression: {}.').format(e)
+
+        operators = [operator for operator in ATTRIBUTE_OPERATORS if operator in condition]
+        if len(operators) > 1:
+            errors['triggers.attributes.{}'.format(attribute)] = _('Only one of {} may be given.').format(', '.join(sorted(operators)))
+
+        for operator in operators:
+            operand = condition[operator]
+            key = 'triggers.attributes.{}.{}'.format(attribute, operator)
+            if isinstance(operand, (str, list)) and not operand:
+                errors[key] = _('An empty value matches either everyone or no one, so it cannot be used as a condition.')
+            elif operator == 'matches' and isinstance(operand, str):
+                # Nothing else compiles these, and the evaluator runs them on
+                # every login, so one that does not compile would raise there.
+                try:
+                    re.compile(operand)
+                except re.error as e:
+                    errors[key] = _('Invalid regular expression: {}.').format(e)
+
     return errors
