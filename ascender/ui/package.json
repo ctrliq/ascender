@@ -13,7 +13,7 @@
     "@codemirror/legacy-modes": "^6.5.4",
     "@codemirror/search": "^6.7.2",
     "@codemirror/state": "^6.7.4",
-    "@codemirror/view": "^6.43.11",
+    "@codemirror/view": "^6.43.12",
     "@dagrejs/dagre": "^3.0.0",
     "@lezer/highlight": "^1.2.3",
     "@lingui/react": "^6.6.0",
