@@ -155,7 +155,6 @@ class SettingsRegistry(object):
             except Exception:
                 logger.warning('Unable to retrieve default value for setting "%s".', setting, exc_info=True)
 
-
         return field_instance
 
 
