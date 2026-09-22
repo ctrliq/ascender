@@ -183,6 +183,9 @@ def test_login_redirect_override_scheme(get, patch, admin, settings):
     # visitor who is not logged in; it must not be storable.
     response = patch(url, user=admin, data={'LOGIN_REDIRECT_OVERRIDE': 'javascript:alert(1)'}, expect=400)
     assert 'LOGIN_REDIRECT_OVERRIDE' in response.data
+    # A value urlsplit cannot parse is a field error too, not a server error.
+    response = patch(url, user=admin, data={'LOGIN_REDIRECT_OVERRIDE': '//[::1'}, expect=400)
+    assert 'LOGIN_REDIRECT_OVERRIDE' in response.data
     assert settings.LOGIN_REDIRECT_OVERRIDE == 'https://idp.example.com/start'
     patch(url, user=admin, data={'LOGIN_REDIRECT_OVERRIDE': ''}, expect=200)
 

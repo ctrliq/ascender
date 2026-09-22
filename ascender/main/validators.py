@@ -303,9 +303,16 @@ def validate_login_redirect_url(value):
     accepted; nothing else about the URL is checked, so a plain internal
     hostname keeps working. The scheme is read the way a browser reads it:
     leading whitespace and embedded tabs and newlines do not hide it.
+
+    A value the parser cannot split at all (an unclosed IPv6 bracket, say)
+    is refused the same way, rather than escaping as a server error.
     """
     if not value:
         return
-    scheme = urllib.parse.urlsplit(value).scheme
+    message = _('Enter a path on this server, or an http or https URL.')
+    try:
+        scheme = urllib.parse.urlsplit(value).scheme
+    except ValueError:
+        raise ValidationError(message)
     if scheme and scheme not in ('http', 'https'):
-        raise ValidationError(_('Enter a path on this server, or an http or https URL.'))
+        raise ValidationError(message)

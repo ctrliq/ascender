@@ -250,6 +250,12 @@ def test_login_redirect_url_accepts_paths_and_http(value):
         'vbscript:msgbox(1)',
         'mailto:someone@example.com',
         'ftp://files.example.com/',
+        # urlsplit raises ValueError on these; that must surface as a field
+        # error, not a 500 from the settings API.
+        '//[::1',
+        'http://[::1',
+        'http://[::1]]/x',
+        'http://[1:2:3:4:5:6:7:8:9]/',
     ],
 )
 def test_login_redirect_url_rejects_other_schemes(value):
