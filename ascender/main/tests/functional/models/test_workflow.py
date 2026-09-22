@@ -969,6 +969,29 @@ class TestCombinedArtifacts:
 
 
 @pytest.mark.django_db
+class TestRelaunchVariableOverrides:
+    def test_override_reaches_the_node_and_beats_its_artifacts(self, organization, job_template):
+        # what the feature is for: a node that succeeded published a wrong value
+        # with set_stats, and the relaunch corrects it for the nodes downstream
+        wfjt = WorkflowJobTemplate.objects.create(organization=organization, name='overrides')
+        wfj = WorkflowJob.objects.create(workflow_job_template=wfjt, extra_vars='{"target": "old"}')
+        parent = WorkflowJobNode.objects.create(
+            workflow_job=wfj,
+            unified_job_template=job_template,
+            ancestor_artifacts={'target': 'from-a-bad-node'},
+        )
+        child = WorkflowJobNode.objects.create(workflow_job=wfj, unified_job_template=job_template)
+        parent.success_nodes.add(child)
+
+        # workflow variables already outrank what a parent published
+        assert child.get_job_kwargs()['extra_vars']['target'] == 'old'
+
+        wfj.apply_relaunch_extra_vars({'target': 'corrected'})
+        child = WorkflowJobNode.objects.get(pk=child.pk)
+        assert child.get_job_kwargs()['extra_vars']['target'] == 'corrected'
+
+
+@pytest.mark.django_db
 class TestApprovalContextMessage:
     @pytest.fixture
     def approval(self):

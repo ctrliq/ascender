@@ -101,6 +101,9 @@ function WorkflowReLaunchDropDown({
           key="relaunch_failed_new_vars"
           aria-label={newVarsAriaLabel}
           onClick={() => {
+            // unlike the entries that relaunch on the spot, this one opens a
+            // modal, and the menu would otherwise stay open behind it
+            setIsOpen(false);
             setIsAskingForVars(true);
           }}
           isDisabled={isLaunching}

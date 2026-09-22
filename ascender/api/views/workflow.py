@@ -425,7 +425,12 @@ class WorkflowJobRelaunch(GenericAPIView):
         only applies to a relaunch from failed nodes: that is the run you cannot
         redo any other way, since a plain launch starts the whole workflow over
         and can be prompted normally."""
-        extra_vars = parse_yaml_or_json(request.data.get('extra_vars') or {}, silent_failure=False)
+        if 'extra_vars' not in request.data:
+            return {}
+        # Whatever was sent goes to the parser as it came, so a payload that is
+        # not a mapping (a list, a bare null) is rejected rather than read as
+        # "no variables".
+        extra_vars = parse_yaml_or_json(request.data['extra_vars'], silent_failure=False)
         if not extra_vars:
             return {}
         if not from_failed:

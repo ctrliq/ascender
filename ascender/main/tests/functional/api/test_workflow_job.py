@@ -274,3 +274,73 @@ def test_workflow_job_relaunch_vars_keep_survey_passwords_encrypted(wfjt, job_te
     assert changed.extra_vars_dict['token'].startswith('$encrypted$')
     assert decrypt_value(get_encryption_key('value', pk=None), changed.extra_vars_dict['token']) == 'new-secret'
     assert changed.survey_passwords['token'] == '$encrypted$'
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('payload', [[], ['colour'], None, False, 'a string'])
+def test_workflow_job_relaunch_vars_reject_payloads_that_are_not_a_mapping(wfjt, job_template, post, admin_user, payload):
+    # a falsy payload is still a payload: it must be refused rather than read
+    # as "no variables were sent"
+    wfj = _failed_workflow_job(wfjt, job_template)
+    wfj.allow_overwrite_flow_vars_on_relaunch = True
+    wfj.save()
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    post(url, {'nodes': 'failed', 'extra_vars': payload}, admin_user, expect=400)
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_vars_refuse_the_encrypted_keyword(wfjt, job_template, post, admin_user):
+    # $encrypted$ means "keep the stored value" for a survey password and
+    # nothing else; on a plain variable it is a reserved word, as it is on launch
+    wfj = _failed_workflow_job(wfjt, job_template)
+    wfj.allow_overwrite_flow_vars_on_relaunch = True
+    wfj.save()
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, {'nodes': 'failed', 'extra_vars': {'colour': '$encrypted$'}}, admin_user, expect=400)
+    assert 'reserved keyword' in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_vars_check_a_survey_answer_of_encrypted(wfjt, job_template, post, admin_user):
+    # the sentinel does not buy a text answer its way out of survey validation
+    wfjt.allow_overwrite_flow_vars_on_relaunch = True
+    wfjt.survey_enabled = True
+    wfjt.survey_spec = {
+        'name': 'colours',
+        'description': '',
+        'spec': [
+            {
+                'variable': 'colour',
+                'question_name': 'colour',
+                'type': 'multiplechoice',
+                'choices': ['red', 'green'],
+                'required': True,
+                'default': 'red',
+            }
+        ],
+    }
+    wfjt.save()
+    wfj = _failed_workflow_job(wfjt, job_template)
+    wfj.allow_overwrite_flow_vars_on_relaunch = True
+    wfj.save()
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, {'nodes': 'failed', 'extra_vars': {'colour': '$encrypted$'}}, admin_user, expect=400)
+    assert 'reserved keyword' in str(resp.data)
+    assert 'expected to be one of' not in str(resp.data)
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_vars_keep_a_password_the_survey_no_longer_asks_for(wfjt, job_template, post, admin_user):
+    from ascender.main.models import WorkflowJob
+
+    # the survey lost the password question after the run; the value the run
+    # stored is still a secret, so $encrypted$ still means "keep it"
+    wfjt.allow_overwrite_flow_vars_on_relaunch = True
+    wfjt.save()
+    wfj = _failed_workflow_job(wfjt, job_template, extra_vars='{"token": "old-secret"}')
+    wfj.allow_overwrite_flow_vars_on_relaunch = True
+    wfj.survey_passwords = {'token': '$encrypted$'}
+    wfj.save()
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, {'nodes': 'failed', 'extra_vars': {'token': '$encrypted$'}}, admin_user, expect=201)
+    assert WorkflowJob.objects.get(pk=resp.data['id']).extra_vars_dict['token'] == 'old-secret'

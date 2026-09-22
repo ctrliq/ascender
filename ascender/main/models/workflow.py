@@ -1009,23 +1009,50 @@ class WorkflowJob(UnifiedJob, WorkflowJobOptions, SurveyJobMixin, JobNotificatio
     def has_unpartitioned_events(self):
         return False  # workflow jobs do not have events
 
-    def validate_relaunch_extra_vars(self, extra_vars):
-        """Check variables handed to a relaunch against the workflow's survey.
+    def relaunch_password_variables(self):
+        """The keys of this run whose value is a survey password.
 
-        Only the answers the survey defines are validated. Everything else is a
-        plain workflow variable, and allow_overwrite_flow_vars_on_relaunch is
-        what decides whether those are allowed at all. Returns a list of error
-        strings, empty when the variables can be used."""
+        Both the ones the run itself recorded and the ones the template asks for
+        now: the survey may have been edited since, and a key that was a
+        password on either side is treated as one, so a relaunch never turns a
+        stored secret back into plain text."""
+        keys = set(self.survey_passwords or {})
+        wfjt = self.workflow_job_template
+        if wfjt is not None:
+            keys |= set(wfjt.survey_password_variables())
+        return keys
+
+    def validate_relaunch_extra_vars(self, extra_vars):
+        """Check the variables handed to a relaunch.
+
+        The answers the survey defines are validated as a launch validates them,
+        and $encrypted$ is refused wherever it is not a survey password. Every
+        other key is a plain workflow variable, and
+        allow_overwrite_flow_vars_on_relaunch is what decides whether those are
+        allowed at all. Returns a list of error strings, empty when the
+        variables can be used."""
+        errors = []
+        password_keys = self.relaunch_password_variables()
+        # $encrypted$ means "keep the value the run used", which only a survey
+        # password has. Anywhere else it is a reserved word rather than a value,
+        # as it is on launch.
+        reserved = set()
+        for key, value in extra_vars.items():
+            if value == REPLACE_STR and key not in password_keys:
+                reserved.add(key)
+                errors.append(_('"$encrypted$" is a reserved keyword, may not be used for {key}.').format(key=key))
         wfjt = self.workflow_job_template
         if wfjt is None or not (wfjt.survey_enabled and wfjt.survey_spec):
-            return []
-        errors = []
+            return errors
         for survey_element in wfjt.survey_spec.get('spec', []):
             key = survey_element.get('variable')
+            if key not in extra_vars or key in reserved:
+                continue
             # A password answer left at $encrypted$ keeps its stored value, so
             # there is nothing new to validate for it.
-            if key in extra_vars and extra_vars[key] != REPLACE_STR:
-                errors += wfjt._survey_element_validation(survey_element, extra_vars)
+            if survey_element.get('type') == 'password' and extra_vars[key] == REPLACE_STR:
+                continue
+            errors += wfjt._survey_element_validation(survey_element, extra_vars)
         return errors
 
     def apply_relaunch_extra_vars(self, extra_vars):
@@ -1034,13 +1061,16 @@ class WorkflowJob(UnifiedJob, WorkflowJobOptions, SurveyJobMixin, JobNotificatio
         The job was copied from the original run, so its extra_vars already hold
         what that run used; only the keys handed in here change. Survey password
         answers are stored encrypted, exactly as they would be on a launch."""
-        overrides = {key: value for key, value in extra_vars.items() if value != REPLACE_STR}
+        password_keys = self.relaunch_password_variables()
+        # A password answer sent back as $encrypted$ is the run's own value
+        # coming home; leave the stored one alone. Every other key is taken as
+        # it was sent.
+        overrides = {key: value for key, value in extra_vars.items() if not (value == REPLACE_STR and key in password_keys)}
         if not overrides:
             return
         merged = self.extra_vars_dict
         merged.update(overrides)
-        wfjt = self.workflow_job_template
-        changed_passwords = set(wfjt.survey_password_variables() if wfjt else []) & set(overrides)
+        changed_passwords = password_keys & set(overrides)
         if changed_passwords:
             encrypt_dict(merged, changed_passwords)
             survey_passwords = dict(self.survey_passwords or {})

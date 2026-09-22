@@ -905,7 +905,7 @@ msgstr "Hipchat"
 msgid "Refresh Token"
 msgstr "رمز التحديث المميز"
 
-#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:139
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:146
 msgid "These are the variables the workflow ran with. Whatever is left here replaces them for the nodes that run again; nodes carried forward keep the results they already had."
 msgstr ""
 
@@ -3636,8 +3636,8 @@ msgstr "سيؤدي هذا الإجراء إلى إلغاء ربط جميع ال�
 #: components/DisassociateButton/DisassociateButton.tsx:160
 #: components/FormActionGroup/FormActionGroup.tsx:39
 #: components/FormActionGroup/FormActionGroup.tsx:48
-#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:126
-#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:130
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:133
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
 #: components/Lookup/HostFilterLookup.tsx:407
 #: components/Lookup/Lookup.tsx:259
@@ -4962,7 +4962,7 @@ msgstr "حدد سؤالاً لحذفه"
 
 #: components/AdHocCommands/AdHocPreviewStep.tsx:69
 #: components/HostForm/HostForm.tsx:156
-#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:141
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:148
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:141
 #: components/PromptDetail/PromptDetail.tsx:230
 #: components/PromptDetail/PromptDetail.tsx:439
@@ -5699,7 +5699,7 @@ msgstr "انقر لإعادة ترتيب أسئلة الاستبيان"
 #~ msgstr "تفاصيل الاشتراك"
 
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:62
-#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:101
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:108
 msgid "Relaunch from canceled node with new variables"
 msgstr ""
 
@@ -6218,7 +6218,7 @@ msgid "Leave blank to generate a new webhook key on save"
 msgstr "اتركه فارغًا لإنشاء مفتاح webhook جديد عند الحفظ"
 
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:63
-#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:102
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:109
 msgid "Relaunch from failed node with new variables"
 msgstr ""
 
@@ -8284,6 +8284,10 @@ msgstr "المهمة"
 #: components/WorkflowOutputNavigation/WorkflowOutputNavigation.tsx:192
 msgid "Workflow Jobs ({total})"
 msgstr "مهام سير العمل ({total})"
+
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:100
+msgid "Variables must be a mapping of names to values."
+msgstr ""
 
 #: components/Search/AdvancedSearch.tsx:310
 msgid "Set type disabled for related search field fuzzy searches"
@@ -11541,8 +11545,8 @@ msgstr "ربط"
 #: components/JobList/JobListItem.tsx:199
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
 #: components/LaunchButton/WorkflowReLaunchDropDown.tsx:145
-#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:116
-#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:121
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:123
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
 #: screens/Job/JobDetail/JobDetail.tsx:622
 #: screens/Job/JobDetail/JobDetail.tsx:630
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:204

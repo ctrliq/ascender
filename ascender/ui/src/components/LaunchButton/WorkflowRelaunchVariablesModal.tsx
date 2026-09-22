@@ -93,6 +93,13 @@ function WorkflowRelaunchVariablesModal({
       setParseError((err as Error).message);
       return;
     }
+    // parseVariableField answers with whatever the document held, and a
+    // sequence parses just as happily as a mapping. Say so here rather than
+    // let the relaunch fail on it.
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed)) {
+      setParseError(t`Variables must be a mapping of names to values.`);
+      return;
+    }
     setParseError(null);
     onConfirm(parsed);
   };

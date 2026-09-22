@@ -69,6 +69,26 @@ describe('WorkflowRelaunchVariablesModal', () => {
     expect(onConfirm).not.toHaveBeenCalled();
   });
 
+  test('refuses a sequence, which parses but is not a mapping', async () => {
+    readDetail('["colour", "size"]');
+    const onConfirm = vi.fn();
+    const { user } = renderWithContexts(
+      <WorkflowRelaunchVariablesModal
+        jobId={7}
+        onConfirm={onConfirm}
+        onCancel={() => {}}
+      />
+    );
+
+    await waitFor(() => expect(editor()).toBeInTheDocument());
+    await user.click(screen.getByRole('button', { name: 'Relaunch' }));
+
+    expect(
+      await screen.findByText('Variables must be a mapping of names to values.')
+    ).toBeInTheDocument();
+    expect(onConfirm).not.toHaveBeenCalled();
+  });
+
   test('closes without relaunching when cancelled', async () => {
     readDetail('{"colour": "red"}');
     const onCancel = vi.fn();
