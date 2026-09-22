@@ -1197,7 +1197,10 @@ register(
     allow_blank=True,
     default='',
     label=_('Azure AD OAuth2 Secret'),
-    help_text=_('The OAuth2 secret (Client Secret) from your Azure AD application.'),
+    help_text=_(
+        'The OAuth2 secret (Client Secret) from your Azure AD application. '
+        'Leave blank when using Azure Workload Identity or another client assertion source.'
+    ),
     category=_('Azure AD OAuth2'),
     category_slug='azuread-oauth2',
     encrypted=True,
@@ -1260,7 +1263,10 @@ register(
     allow_blank=True,
     default='',
     label=_('Azure AD Tenant OAuth2 Secret'),
-    help_text=_('The OAuth2 secret (Client Secret) from your Azure AD application.'),
+    help_text=_(
+        'The OAuth2 secret (Client Secret) from your Azure AD application. '
+        'Leave blank when using Azure Workload Identity or another client assertion source.'
+    ),
     category=_('Azure AD Tenant OAuth2'),
     category_slug='azuread-oauth2-tenant',
     encrypted=True,
