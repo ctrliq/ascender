@@ -207,16 +207,23 @@ class AuthenticationBackendsField(fields.StringListField):
         ]
     )
 
-    # Settings that become optional for a given backend when Azure AD
-    # Workload Identity is available, because that backend can then
-    # authenticate via a client_assertion (RFC 7523 JWT-bearer) instead of a
-    # static secret. See
-    # social_core.backends.azuread.AzureADOAuth2.client_assertion(), which
-    # these backends inherit and which takes the exact same "no client
-    # secret configured -> fall back to a federated credential" path.
+    # SECRET is optional when AzureADOAuth2.client_assertion() has a usable source.
     WORKLOAD_IDENTITY_OPTIONAL_SETTINGS = {
         'social_core.backends.azuread.AzureADOAuth2': ['SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET'],
         'social_core.backends.azuread_tenant.AzureADTenantOAuth2': ['SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET'],
+    }
+
+    # Per-backend Django settings mirroring social-core CLIENT_ASSERTION /
+    # FEDERATED_TOKEN_FILE (in addition to the shared WI env token-file path).
+    CLIENT_ASSERTION_SETTINGS = {
+        'social_core.backends.azuread.AzureADOAuth2': (
+            'SOCIAL_AUTH_AZUREAD_OAUTH2_CLIENT_ASSERTION',
+            'SOCIAL_AUTH_AZUREAD_OAUTH2_FEDERATED_TOKEN_FILE',
+        ),
+        'social_core.backends.azuread_tenant.AzureADTenantOAuth2': (
+            'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_CLIENT_ASSERTION',
+            'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_FEDERATED_TOKEN_FILE',
+        ),
     }
 
     @classmethod
@@ -227,15 +234,25 @@ class AuthenticationBackendsField(fields.StringListField):
         return all_required_settings
 
     @staticmethod
-    def _workload_identity_available():
-        """Whether an Azure AD Workload Identity federated credential is
-        usable in this pod, mirroring the sources
-        AzureADOAuth2.client_assertion() itself falls back to: the token
-        file path from AZURE_FEDERATED_TOKEN_FILE/OAUTH2_FEDERATED_TOKEN_FILE
-        (set by the AKS/Azure Workload Identity webhook), which must
-        actually exist and be readable."""
-        token_path = os.environ.get('OAUTH2_FEDERATED_TOKEN_FILE') or os.environ.get('AZURE_FEDERATED_TOKEN_FILE')
-        return bool(token_path) and os.path.isfile(token_path)
+    def _token_file_exists(path):
+        return bool(path) and os.path.isfile(path)
+
+    @classmethod
+    def _client_assertion_available(cls, backend):
+        """True when social-core can obtain a client assertion for this backend."""
+        env_token_path = os.environ.get('OAUTH2_FEDERATED_TOKEN_FILE') or os.environ.get('AZURE_FEDERATED_TOKEN_FILE')
+        if cls._token_file_exists(env_token_path):
+            return True
+
+        assertion_setting, token_file_setting = cls.CLIENT_ASSERTION_SETTINGS.get(backend, (None, None))
+        if not assertion_setting:
+            return False
+
+        from django.conf import settings
+
+        if getattr(settings, assertion_setting, None):
+            return True
+        return cls._token_file_exists(getattr(settings, token_file_setting, None))
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('default', self._default_from_required_settings)
@@ -249,18 +266,15 @@ class AuthenticationBackendsField(fields.StringListField):
         except AttributeError:
             backends = self.REQUIRED_BACKEND_SETTINGS.keys()
 
-        workload_identity_available = self._workload_identity_available()
-
-        # Filter which authentication backends are enabled based on their
-        # required settings being defined and non-empty. A setting listed in
-        # WORKLOAD_IDENTITY_OPTIONAL_SETTINGS for this backend is skipped
-        # when a workload identity federated credential is available, since
-        # the backend can authenticate without it in that case.
+        # Enable backends whose required settings are set; skip optional SECRET
+        # when a client assertion source is available for that backend.
         for backend, required_settings in self.REQUIRED_BACKEND_SETTINGS.items():
             if backend not in backends:
                 continue
             optional_settings = self.WORKLOAD_IDENTITY_OPTIONAL_SETTINGS.get(backend, [])
-            effectively_required = [rs for rs in required_settings if not (workload_identity_available and rs in optional_settings)]
+            effectively_required = [
+                rs for rs in required_settings if not (rs in optional_settings and self._client_assertion_available(backend))
+            ]
             if all([getattr(settings, rs, None) for rs in effectively_required]):
                 continue
             backends = [x for x in backends if x != backend]
