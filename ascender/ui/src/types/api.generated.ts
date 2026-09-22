@@ -9551,13 +9551,6 @@ export interface components {
       /** @description The default execution environment for jobs run by this organization. */
       default_environment?: number | null;
     };
-    /**
-     * @description * `off` - Off
-     *     * `anonymous` - Anonymous
-     *     * `detailed` - Detailed
-     * @enum {string}
-     */
-    PENDOTRACKINGSTATEEnum: 'off' | 'anonymous' | 'detailed';
     PaginatedActivityStreamList: {
       /** @example 123 */
       count: number;
@@ -11451,14 +11444,14 @@ export interface components {
       /**
        * Loggers Sending Data to Log Aggregator Form
        * @description List of loggers that will send HTTP logs to the collector, these can include any or all of:
-       *     awx - service logs
+       *     ascender - service logs, which awx also selects on a deployment that predates the rename
        *     activity_stream - activity stream records
        *     job_events - callback data from Ansible job events
        *     system_tracking - facts gathered from scan jobs
        *     broadcast_websocket - errors pertaining to websockets broadcast metrics
        *     job_lifecycle - logs related to processing of a job
        * @default [
-       *       "awx",
+       *       "ascender",
        *       "activity_stream",
        *       "job_events",
        *       "system_tracking",
@@ -14466,14 +14459,14 @@ export interface components {
       /**
        * Loggers Sending Data to Log Aggregator Form
        * @description List of loggers that will send HTTP logs to the collector, these can include any or all of:
-       *     awx - service logs
+       *     ascender - service logs, which awx also selects on a deployment that predates the rename
        *     activity_stream - activity stream records
        *     job_events - callback data from Ansible job events
        *     system_tracking - facts gathered from scan jobs
        *     broadcast_websocket - errors pertaining to websockets broadcast metrics
        *     job_lifecycle - logs related to processing of a job
        * @default [
-       *       "awx",
+       *       "ascender",
        *       "activity_stream",
        *       "job_events",
        *       "system_tracking",
@@ -14685,16 +14678,6 @@ export interface components {
        * @default false
        */
       ALLOW_METRICS_FOR_ANONYMOUS_USERS: boolean;
-      /**
-       * User Analytics Tracking State
-       * @description Enable or Disable User Analytics Tracking.
-       *
-       *     * `off` - Off
-       *     * `anonymous` - Anonymous
-       *     * `detailed` - Detailed
-       * @default off
-       */
-      readonly PENDO_TRACKING_STATE: components['schemas']['PENDOTRACKINGSTATEEnum'];
       /**
        * @description If needed, you can add specific information (such as a legal notice or a disclaimer) to a text box in the login modal using this setting. Any content added must be in plain text or an HTML fragment, as other markup languages are not supported.
        * @default
@@ -16490,14 +16473,14 @@ export interface components {
       /**
        * Loggers Sending Data to Log Aggregator Form
        * @description List of loggers that will send HTTP logs to the collector, these can include any or all of:
-       *     awx - service logs
+       *     ascender - service logs, which awx also selects on a deployment that predates the rename
        *     activity_stream - activity stream records
        *     job_events - callback data from Ansible job events
        *     system_tracking - facts gathered from scan jobs
        *     broadcast_websocket - errors pertaining to websockets broadcast metrics
        *     job_lifecycle - logs related to processing of a job
        * @default [
-       *       "awx",
+       *       "ascender",
        *       "activity_stream",
        *       "job_events",
        *       "system_tracking",

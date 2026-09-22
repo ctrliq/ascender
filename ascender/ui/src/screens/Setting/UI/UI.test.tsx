@@ -39,9 +39,7 @@ describe('<UI />', () => {
 
   test('should render user interface details', async () => {
     renderUI(['/settings/ui/details']);
-    expect(
-      await screen.findByText('Custom Login Info')
-    ).toBeInTheDocument();
+    expect(await screen.findByText('Custom Login Info')).toBeInTheDocument();
   });
 
   test('should render user interface edit', async () => {
