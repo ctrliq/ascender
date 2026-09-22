@@ -29,7 +29,7 @@ from ascender.api.views.labels import LabelSubListCreateAttachDetachView
 from ascender.api.views.mixin import RelatedJobsPreventDeleteMixin, UnifiedJobDeletionMixin
 from ascender.main import models
 from ascender.main.scheduler.dag_workflow import WorkflowDAG
-from ascender.main.utils import ScheduleWorkflowManager, getattrd
+from ascender.main.utils import ScheduleWorkflowManager, getattrd, parse_yaml_or_json
 from collections import OrderedDict
 from django.contrib.contenttypes.models import ContentType
 from django.db.models import Q
@@ -418,9 +418,34 @@ class WorkflowJobRelaunch(GenericAPIView):
     def get(self, request, *args, **kwargs):
         return Response({})
 
+    def _relaunch_extra_vars(self, request, obj, from_failed):
+        """Read the variables a relaunch wants to overwrite, if it sends any.
+
+        Overwriting is off unless the workflow job template turned it on, and it
+        only applies to a relaunch from failed nodes: that is the run you cannot
+        redo any other way, since a plain launch starts the whole workflow over
+        and can be prompted normally."""
+        extra_vars = parse_yaml_or_json(request.data.get('extra_vars') or {}, silent_failure=False)
+        if not extra_vars:
+            return {}
+        if not from_failed:
+            raise ParseError(_('Variables can only be overwritten when relaunching from failed nodes.'))
+        if not obj.allow_overwrite_flow_vars_on_relaunch:
+            raise ParseError(
+                _(
+                    'This workflow job does not allow overwriting variables on relaunch. '
+                    'Enable allow_overwrite_flow_vars_on_relaunch on its workflow job template; runs started after that carry the setting.'
+                )
+            )
+        errors = obj.validate_relaunch_extra_vars(extra_vars)
+        if errors:
+            raise ParseError({'variables_needed_to_start': errors})
+        return extra_vars
+
     def post(self, request, *args, **kwargs):
         obj = self.get_object()
         from_failed = request.data.get('nodes') == 'failed'
+        extra_vars = self._relaunch_extra_vars(request, obj, from_failed)
         if obj.is_sliced_job:
             if from_failed:
                 raise ParseError(_('Cannot relaunch a sliced workflow job from failed nodes.'))
@@ -441,7 +466,7 @@ class WorkflowJobRelaunch(GenericAPIView):
                         _('Cannot relaunch from failed nodes: this workflow failed because a node has no job template, which relaunching cannot recover.')
                     )
                 raise ParseError(_('This workflow job has no failed nodes to relaunch from.'))
-        new_workflow_job = obj.create_relaunch_workflow_job(from_failed=from_failed)
+        new_workflow_job = obj.create_relaunch_workflow_job(from_failed=from_failed, extra_vars=extra_vars)
         new_workflow_job.signal_start()
 
         data = serializers.WorkflowJobSerializer(new_workflow_job, context=self.get_serializer_context()).data

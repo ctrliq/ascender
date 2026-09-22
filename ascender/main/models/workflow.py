@@ -49,6 +49,7 @@ from ascender.main.models.jobs import LaunchTimeConfigBase, LaunchTimeConfig, Jo
 from ascender.main.models.credential import Credential
 from ascender.main.redact import REPLACE_STR
 from ascender.main.utils import ScheduleWorkflowManager
+from ascender.main.utils.encryption import encrypt_dict
 
 __all__ = [
     'WorkflowJobTemplate',
@@ -667,6 +668,10 @@ class WorkflowJobOptions(LaunchTimeConfigBase):
         'InstanceGroup', related_name='workflow_job_instance_groups', blank=True, editable=False, through='WorkflowJobInstanceGroupMembership'
     )
     allow_simultaneous = models.BooleanField(default=False)
+    allow_overwrite_flow_vars_on_relaunch = models.BooleanField(
+        default=False,
+        help_text=_("Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run."),
+    )
 
     extra_vars_dict = VarsDictProperty('extra_vars', True)
 
@@ -774,8 +779,10 @@ class WorkflowJobOptions(LaunchTimeConfigBase):
                 new_node.ancestor_artifacts = artifacts
                 new_node.save(update_fields=['prior_run_succeeded', 'prior_run_elapsed', 'ancestor_artifacts'])
 
-    def create_relaunch_workflow_job(self, from_failed=False):
+    def create_relaunch_workflow_job(self, from_failed=False, extra_vars=None):
         new_workflow_job = self.copy_unified_job()
+        if extra_vars:
+            new_workflow_job.apply_relaunch_extra_vars(extra_vars)
         if self.unified_job_template_id is None:
             new_workflow_job.copy_nodes_from_original(original=self, mark_succeeded_as_prior=from_failed)
         elif from_failed:
@@ -1001,6 +1008,46 @@ class WorkflowJob(UnifiedJob, WorkflowJobOptions, SurveyJobMixin, JobNotificatio
     @property
     def has_unpartitioned_events(self):
         return False  # workflow jobs do not have events
+
+    def validate_relaunch_extra_vars(self, extra_vars):
+        """Check variables handed to a relaunch against the workflow's survey.
+
+        Only the answers the survey defines are validated. Everything else is a
+        plain workflow variable, and allow_overwrite_flow_vars_on_relaunch is
+        what decides whether those are allowed at all. Returns a list of error
+        strings, empty when the variables can be used."""
+        wfjt = self.workflow_job_template
+        if wfjt is None or not (wfjt.survey_enabled and wfjt.survey_spec):
+            return []
+        errors = []
+        for survey_element in wfjt.survey_spec.get('spec', []):
+            key = survey_element.get('variable')
+            # A password answer left at $encrypted$ keeps its stored value, so
+            # there is nothing new to validate for it.
+            if key in extra_vars and extra_vars[key] != REPLACE_STR:
+                errors += wfjt._survey_element_validation(survey_element, extra_vars)
+        return errors
+
+    def apply_relaunch_extra_vars(self, extra_vars):
+        """Overwrite this job's variables with the ones given at relaunch time.
+
+        The job was copied from the original run, so its extra_vars already hold
+        what that run used; only the keys handed in here change. Survey password
+        answers are stored encrypted, exactly as they would be on a launch."""
+        overrides = {key: value for key, value in extra_vars.items() if value != REPLACE_STR}
+        if not overrides:
+            return
+        merged = self.extra_vars_dict
+        merged.update(overrides)
+        wfjt = self.workflow_job_template
+        changed_passwords = set(wfjt.survey_password_variables() if wfjt else []) & set(overrides)
+        if changed_passwords:
+            encrypt_dict(merged, changed_passwords)
+            survey_passwords = dict(self.survey_passwords or {})
+            survey_passwords.update({key: REPLACE_STR for key in changed_passwords})
+            self.survey_passwords = survey_passwords
+        self.extra_vars = json.dumps(merged)
+        self.save(update_fields=['extra_vars', 'survey_passwords'])
 
     def _get_parent_field_name(self):
         if self.job_template_id:

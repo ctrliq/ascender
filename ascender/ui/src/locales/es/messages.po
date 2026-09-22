@@ -277,7 +277,7 @@ msgstr "No se puede cargar la última actualización del trabajo"
 
 #: components/TemplateList/TemplateListItem.tsx:102
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:159
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:92
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:99
 msgid "(Prompt on launch)"
 msgstr "(Preguntar al ejecutar)"
 
@@ -381,7 +381,7 @@ msgstr "Rama que se va a extraer. Además de las ramas, puede introducir etiquet
 #: screens/Template/Survey/SurveyList.tsx:120
 #: screens/Template/Survey/SurveyListItem.tsx:71
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:99
-#: screens/User/UserDetail/UserDetail.tsx:105
+#: screens/User/UserDetail/UserDetail.tsx:106
 #: screens/User/UserRoles/UserRolesList.tsx:159
 #: screens/User/UserRoles/UserRolesListItem.tsx:35
 msgid "Type"
@@ -592,7 +592,7 @@ msgstr "{0, plural, one {You cannot cancel the following job because it is not r
 #: screens/Inventory/shared/InventoryForm.tsx:100
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:116
 #: screens/Template/shared/JobTemplateForm.tsx:649
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:290
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:291
 msgid "Options"
 msgstr "Opciones"
 
@@ -753,7 +753,7 @@ msgstr "Frecuencia de repetición"
 msgid "File Difference"
 msgstr "Diferencias del fichero"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:40
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:56
 msgid "Relaunch from canceled node"
 msgstr "Volver a ejecutar desde el nodo cancelado"
 
@@ -903,11 +903,15 @@ msgstr "HipChat"
 msgid "Refresh Token"
 msgstr "Actualizar token"
 
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:139
+msgid "These are the variables the workflow ran with. Whatever is left here replaces them for the nodes that run again; nodes carried forward keep the results they already had."
+msgstr ""
+
 #: screens/Inventory/Inventories.tsx:110
 msgid "Host details"
 msgstr "Detalles del host"
 
-#: screens/User/shared/UserForm.tsx:254
+#: screens/User/shared/UserForm.tsx:260
 msgid "This value does not match the password you entered previously. Please confirm that password."
 msgstr "Este valor no coincide con la contraseña introducida anteriormente. Confirme la contraseña."
 
@@ -920,7 +924,7 @@ msgstr "¿Disociar grupo del host?"
 msgid "Destination SMS number(s)"
 msgstr "Números SMS del destinatario"
 
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:226
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:227
 msgid "Source control branch"
 msgstr "Rama de fuente de control"
 
@@ -1182,7 +1186,7 @@ msgid "Select the inventory that this host will belong to."
 msgstr "Seleccione el inventario al que pertenecerá este host."
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:25
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:18
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:19
 msgid "Select a webhook service."
 msgstr "Seleccione un servicio de webhook."
 
@@ -1204,7 +1208,7 @@ msgid "View all settings"
 msgstr "Ver todas las configuraciones"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:27
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:20
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:21
 msgid "Webhook services can use this as a shared secret."
 msgstr "Los servicios de webhook pueden usar esto como un secreto compartido."
 
@@ -1358,7 +1362,7 @@ msgstr "Filtrar por trabajos fallidos"
 msgid "Playbook Started"
 msgstr "Playbook iniciado"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:272
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:279
 msgid "This workflow job template is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "Esta plantilla de trabajo del flujo de trabajo está siendo utilizada por otros recursos. ¿Está seguro de que desea eliminarla?"
 
@@ -1406,7 +1410,7 @@ msgstr "Correo electrónico"
 #: screens/Job/JobDetail/JobDetail.tsx:305
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:185
 #: screens/Template/shared/JobTemplateForm.tsx:342
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:140
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:147
 msgid "Job Type"
 msgstr "Tipo de trabajo"
 
@@ -1418,7 +1422,7 @@ msgstr "Ningún servidor corresponde"
 #~ msgid "Only Group By"
 #~ msgstr "Agrupar solo por"
 
-#: screens/Login/Login.tsx:170
+#: screens/Login/Login.tsx:175
 msgid "There was a problem logging in. Please try again."
 msgstr "Hubo un problema al iniciar sesión. Inténtelo de nuevo."
 
@@ -1442,7 +1446,7 @@ msgstr "Protocolo"
 msgid "option to the"
 msgstr "opción a"
 
-#: screens/User/UserDetail/UserDetail.tsx:148
+#: screens/User/UserDetail/UserDetail.tsx:149
 msgid "Failed to delete user."
 msgstr "No se pudo eliminar el usuario."
 
@@ -1480,7 +1484,7 @@ msgstr "Agregar grupo existente"
 msgid "LDAP 4"
 msgstr "LDAP 4"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:38
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:54
 msgid "Failed node"
 msgstr "Nodo fallido"
 
@@ -1599,7 +1603,7 @@ msgstr "Copiado"
 msgid "Failed to cancel one or more jobs."
 msgstr "No se pudo cancelar una o varias tareas."
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:141
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:142
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerToolbar.tsx:75
 msgid "Total Nodes"
 msgstr "Nodos totales"
@@ -1817,14 +1821,14 @@ msgstr "Crear nuevo inventario federado"
 #: screens/Team/TeamList/TeamListItem.tsx:42
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:178
 #: screens/Template/shared/JobTemplateForm.tsx:329
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:158
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:159
 #: screens/Template/Survey/SurveyList.tsx:119
 #: screens/Template/Survey/SurveyList.tsx:119
 #: screens/Template/Survey/SurveyListItem.tsx:50
 #: screens/Template/Survey/SurveyReorderModal.tsx:272
 #: screens/Template/Survey/SurveyReorderModal.tsx:272
 #: screens/Template/Survey/SurveyReorderModal.tsx:290
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:113
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:120
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:75
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/InventorySourcesList.tsx:94
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:131
@@ -2012,7 +2016,7 @@ msgstr "Clave"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:344
+#: screens/Login/Login.tsx:354
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:197
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:306
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:356
@@ -2070,8 +2074,8 @@ msgstr "Elemento fallido"
 msgid "Team Roles"
 msgstr "Roles de equipo"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:91
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:117
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:140
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:169
 msgid "relaunch workflow"
 msgstr "volver a ejecutar flujo de trabajo"
 
@@ -2124,7 +2128,7 @@ msgstr "Otros avisos"
 msgid "Parent node outcome required before the condition is evaluated."
 msgstr "Resultado del nodo primario necesario antes de evaluar la condición."
 
-#: components/JobList/JobListItem.tsx:242
+#: components/JobList/JobListItem.tsx:244
 #: components/TemplateList/TemplateList.tsx:229
 #: components/TemplateList/TemplateListItem.tsx:170
 #: components/Workflow/WorkflowLegend.tsx:30
@@ -2173,7 +2177,7 @@ msgstr "No se pudieron asignar correctamente los roles"
 msgid "Failed to disassociate one or more teams."
 msgstr "No se pudo disociar uno o más equipos."
 
-#: components/AppContainer/AppContainer.tsx:65
+#: components/AppContainer/AppContainer.tsx:54
 msgid "brand logo"
 msgstr "logotipo de la marca"
 
@@ -2186,7 +2190,7 @@ msgstr "El campo coincide con la expresión regular dada."
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.tsx:342
+#: screens/Login/Login.tsx:352
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:155
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2205,7 +2209,7 @@ msgstr "Ver detalles del inventario federado"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:52
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:135
 #: screens/Template/shared/JobTemplateForm.tsx:695
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:63
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:65
 msgid "Concurrent Jobs"
 msgstr "Tareas concurrentes"
 
@@ -2493,7 +2497,7 @@ msgstr "{0} (eliminado)"
 msgid "The inventory that this host belongs to."
 msgstr "Seleccione el inventario al que pertenecerá este host."
 
-#: screens/Login/Login.tsx:327
+#: screens/Login/Login.tsx:337
 msgid "Log In"
 msgstr "Iniciar sesión"
 
@@ -2537,7 +2541,7 @@ msgstr "ESTADO:"
 msgid "boolean"
 msgstr "boolean"
 
-#: components/AppContainer/PageHeaderToolbar.tsx:215
+#: components/AppContainer/PageHeaderToolbar.tsx:221
 msgid "User Details"
 msgstr "Detalles del usuario"
 
@@ -2545,7 +2549,7 @@ msgstr "Detalles del usuario"
 msgid "Delete Execution Environment"
 msgstr "Eliminar entorno de ejecución"
 
-#: components/JobList/JobListItem.tsx:366
+#: components/JobList/JobListItem.tsx:368
 #: screens/Job/JobDetail/JobDetail.tsx:412
 msgid "Job Slice"
 msgstr "Fracción de tareas"
@@ -2986,7 +2990,7 @@ msgstr "{0, plural, one {Introduzca un número de teléfono válido.} other {Int
 msgid "Facts"
 msgstr "Eventos"
 
-#: screens/Login/Login.tsx:351
+#: screens/Login/Login.tsx:361
 msgid "or"
 msgstr "o"
 
@@ -3024,7 +3028,7 @@ msgstr "Ver detalles de la tarea"
 msgid "Azure AD settings"
 msgstr "Configuración de Azure AD"
 
-#: components/JobList/JobListItem.tsx:371
+#: components/JobList/JobListItem.tsx:373
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:421
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:263
@@ -3056,7 +3060,7 @@ msgstr "Contraseña de SSH"
 msgid "View OIDC settings"
 msgstr "Ver la configuración de OIDC"
 
-#: components/AppContainer/PageHeaderToolbar.tsx:172
+#: components/AppContainer/PageHeaderToolbar.tsx:178
 msgid "Help"
 msgstr "Ayuda"
 
@@ -3091,7 +3095,7 @@ msgstr "No se pudo eliminar {0}."
 
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:190
 #: screens/Template/shared/JobTemplateForm.tsx:750
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:320
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:327
 msgid "Webhook details"
 msgstr "Detalles de Webhook"
 
@@ -3190,7 +3194,7 @@ msgstr "Capacidad usada"
 msgid "Instance ID"
 msgstr "ID de instancia"
 
-#: components/AppContainer/PageHeaderToolbar.tsx:158
+#: components/AppContainer/PageHeaderToolbar.tsx:164
 msgid "Info"
 msgstr "Información"
 
@@ -3373,8 +3377,8 @@ msgstr "Menor o igual que la comparación."
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:528
 #: screens/Template/Survey/SurveyList.tsx:83
 #: screens/Template/Survey/SurveyToolbar.tsx:105
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:274
-#: screens/User/UserDetail/UserDetail.tsx:137
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:281
+#: screens/User/UserDetail/UserDetail.tsx:138
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:84
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:386
 msgid "Delete"
@@ -3421,8 +3425,8 @@ msgstr "Lectura"
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:156
 #: screens/Template/shared/JobTemplateForm.tsx:677
 #: screens/Template/shared/JobTemplateForm.tsx:680
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:293
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:296
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:294
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:297
 msgid "Enable Webhook"
 msgstr "Habilitar Webhook"
 
@@ -3520,8 +3524,8 @@ msgstr "Equipo GitHub"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:326
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:351
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:189
-#: screens/User/UserDetail/UserDetail.tsx:112
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:196
+#: screens/User/UserDetail/UserDetail.tsx:113
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:67
 #: screens/User/UserTokenList/UserTokenList.tsx:155
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:237
@@ -3596,11 +3600,11 @@ msgstr "Agosto"
 msgid "View smart inventory host details"
 msgstr "Ver detalles del host de inventario inteligente"
 
-#: screens/Login/Login.tsx:250
+#: screens/Login/Login.tsx:260
 msgid "Sign in with Google"
 msgstr "Iniciar sesión con Google"
 
-#: contexts/Config.tsx:204
+#: contexts/Config.tsx:200
 msgid "Failed to retrieve configuration."
 msgstr "No se pudo recuperar la configuración."
 
@@ -3630,6 +3634,8 @@ msgstr "Esta acción disociará todos los roles de este usuario de los equipos s
 #: components/DisassociateButton/DisassociateButton.tsx:160
 #: components/FormActionGroup/FormActionGroup.tsx:39
 #: components/FormActionGroup/FormActionGroup.tsx:48
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:126
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:130
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
 #: components/Lookup/HostFilterLookup.tsx:407
 #: components/Lookup/Lookup.tsx:259
@@ -3875,7 +3881,7 @@ msgstr "Deshabilitados"
 msgid "Default Execution Environment"
 msgstr "Entorno de ejecución predeterminado"
 
-#: components/JobList/JobListItem.tsx:290
+#: components/JobList/JobListItem.tsx:292
 #: components/Lookup/ProjectLookup.tsx:131
 #: components/Lookup/ProjectLookup.tsx:136
 #: components/Lookup/ProjectLookup.tsx:192
@@ -3916,7 +3922,7 @@ msgstr "Plantillas de trabajo para flujo de trabajo"
 #~ msgid "Invalid file format. Please upload a valid Red Hat Subscription Manifest."
 #~ msgstr "Formato de archivo no válido. Cargue un manifiesto de suscripción de Red Hat válido."
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:120
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:121
 msgid "Toggle Legend"
 msgstr "Alternar leyenda"
 
@@ -4016,7 +4022,7 @@ msgstr "Extraído de un proyecto"
 msgid "Destination Channels"
 msgstr "Canales destinatarios"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:285
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:292
 msgid "Failed to delete workflow job template."
 msgstr "No se pudo eliminar la plantilla de trabajo del flujo de trabajo."
 
@@ -4132,16 +4138,16 @@ msgstr "Eliminar credencial"
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:105
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:92
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:96
-#: screens/Setting/UI/UIDetail/UIDetail.tsx:116
-#: screens/Setting/UI/UIDetail/UIDetail.tsx:121
+#: screens/Setting/UI/UIDetail/UIDetail.tsx:115
+#: screens/Setting/UI/UIDetail/UIDetail.tsx:120
 #: screens/Team/TeamDetail/TeamDetail.tsx:62
 #: screens/Team/TeamDetail/TeamDetail.tsx:66
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:497
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:499
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:244
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:246
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:251
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:253
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.tsx:286
-#: screens/User/UserDetail/UserDetail.tsx:126
+#: screens/User/UserDetail/UserDetail.tsx:127
 msgid "Edit"
 msgstr "Editar"
 
@@ -4271,6 +4277,10 @@ msgstr "No tiene permiso para desvincular lo siguiente: {itemsUnableToDisassocia
 msgid "Failed to update capacity adjustment."
 msgstr "No se pudo actualizar el ajuste de capacidad."
 
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:69
+msgid "Overwriting Variables on Relaunch"
+msgstr ""
+
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:74
 msgid "Minimum percentage of all instances that will be automatically\n"
 "          assigned to this group when new instances come online."
@@ -4342,8 +4352,8 @@ msgstr "Salir sin guardar"
 msgid "Date operator select"
 msgstr "Selección de operador de fecha"
 
-#: components/AppContainer/PageHeaderToolbar.tsx:101
 #: components/AppContainer/PageHeaderToolbar.tsx:107
+#: components/AppContainer/PageHeaderToolbar.tsx:113
 msgid "Theme"
 msgstr "Tema"
 
@@ -4468,7 +4478,7 @@ msgid "Refresh project revision"
 msgstr "Actualizar la revisión del proyecto"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:28
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:21
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:22
 msgid "Optionally select the credential to use to send status updates back to the webhook service."
 msgstr "Opcionalmente, seleccione la credencial que se utilizará para enviar actualizaciones de estado al servicio de webhook."
 
@@ -4549,7 +4559,7 @@ msgstr "Ver detalles de la organización"
 #: components/Schedule/ScheduleToggle/ScheduleToggle.tsx:86
 #: components/Schedule/shared/SchedulePromptableFields.tsx:90
 #: components/TemplateList/TemplateList.tsx:311
-#: contexts/Config.tsx:200
+#: contexts/Config.tsx:196
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:145
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:174
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:306
@@ -4605,14 +4615,14 @@ msgstr "Ver detalles de la organización"
 #: screens/Team/TeamRoles/TeamRolesList.tsx:264
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:537
 #: screens/Template/TemplateSurvey.tsx:154
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:282
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:289
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:244
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:259
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeModal.tsx:431
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.tsx:399
 #: screens/TopologyView/MeshGraph.tsx:448
 #: screens/TopologyView/Tooltip.tsx:173
-#: screens/User/UserDetail/UserDetail.tsx:145
+#: screens/User/UserDetail/UserDetail.tsx:146
 #: screens/User/UserList/UserList.tsx:182
 #: screens/User/UserRoles/UserRolesList.tsx:247
 #: screens/User/UserRoles/UserRolesList.tsx:258
@@ -4655,7 +4665,7 @@ msgid "Clean"
 msgstr "Limpiar"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:26
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:19
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:20
 msgid "Webhook services can launch jobs with this workflow job template by making a POST request to this URL."
 msgstr "Los servicios de webhook pueden lanzar trabajos con esta plantilla de trabajo de flujo de trabajo realizando una solicitud POST a esta URL."
 
@@ -4721,7 +4731,7 @@ msgstr "No se pudo alternar el host."
 msgid "denied"
 msgstr "denegado"
 
-#: screens/Login/Login.tsx:240
+#: screens/Login/Login.tsx:250
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "Iniciar sesión con organizaciones GitHub Enterprise"
 
@@ -4755,7 +4765,7 @@ msgstr "Inicializado por"
 msgid "Delete this node"
 msgstr "Eliminar este nodo"
 
-#: components/JobList/JobListItem.tsx:264
+#: components/JobList/JobListItem.tsx:266
 #: screens/Job/JobDetail/JobDetail.tsx:291
 msgid "Source Workflow Job"
 msgstr "Tarea del flujo de trabajo de origen"
@@ -4792,7 +4802,7 @@ msgstr "Modificar enlace"
 msgid "Oragnization"
 msgstr "Oragnización"
 
-#: components/AppContainer/AppContainer.tsx:65
+#: components/AppContainer/AppContainer.tsx:54
 msgid "{brandName} logo"
 msgstr "{brandName} Logotipo"
 
@@ -4909,8 +4919,8 @@ msgstr "Entornos de ejecución"
 #~ msgid "Prompt for job type on launch."
 #~ msgstr "Preguntar por el tipo de trabajo al ejecutar."
 
-#: components/JobList/JobListItem.tsx:230
-#: components/JobList/JobListItem.tsx:238
+#: components/JobList/JobListItem.tsx:232
+#: components/JobList/JobListItem.tsx:240
 msgid "Schedule"
 msgstr "Planificar"
 
@@ -4950,6 +4960,7 @@ msgstr "Seleccione una pregunta para eliminar"
 
 #: components/AdHocCommands/AdHocPreviewStep.tsx:69
 #: components/HostForm/HostForm.tsx:156
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:141
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:141
 #: components/PromptDetail/PromptDetail.tsx:230
 #: components/PromptDetail/PromptDetail.tsx:439
@@ -4968,8 +4979,8 @@ msgstr "Seleccione una pregunta para eliminar"
 #: screens/Job/JobDetail/JobDetail.tsx:589
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:484
 #: screens/Template/shared/JobTemplateForm.tsx:495
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:261
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:232
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:262
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:239
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:341
 msgid "Variables"
 msgstr "Variables"
@@ -5049,7 +5060,7 @@ msgstr "Área de texto"
 msgid "View User Interface settings"
 msgstr "Ver la configuración de la interfaz de usuario"
 
-#: screens/Login/Login.tsx:230
+#: screens/Login/Login.tsx:240
 msgid "Sign in with GitHub Teams"
 msgstr "Iniciar sesión con equipos GitHub"
 
@@ -5112,7 +5123,7 @@ msgstr "Día"
 msgid "Collapse"
 msgstr "Contraer"
 
-#: components/JobList/JobListItem.tsx:335
+#: components/JobList/JobListItem.tsx:337
 #: components/LabelLists/LabelLists.tsx:56
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:258
 #: components/PromptDetail/PromptDetail.tsx:393
@@ -5129,8 +5140,8 @@ msgstr "Contraer"
 #: screens/Labels/Labels.tsx:13
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:399
 #: screens/Template/shared/JobTemplateForm.tsx:480
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:244
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:208
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:245
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:215
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:317
 msgid "Labels"
 msgstr "Etiquetas"
@@ -5155,7 +5166,7 @@ msgstr "Seleccionar estado"
 msgid "Month"
 msgstr "Mes"
 
-#: components/JobList/JobListItem.tsx:311
+#: components/JobList/JobListItem.tsx:313
 #: components/LaunchPrompt/steps/CredentialsStep.tsx:297
 #: components/LaunchPrompt/steps/useCredentialsStep.tsx:32
 #: components/Lookup/MultiCredentialsLookup.tsx:162
@@ -5200,7 +5211,7 @@ msgstr "Número mínimo de instancias que se asignarán automáticamente\n"
 #: screens/Job/JobDetail/JobDetail.tsx:516
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:433
 #: screens/Template/shared/JobTemplateForm.tsx:625
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:267
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:268
 msgid "Job Tags"
 msgstr "Etiquetas de trabajo"
 
@@ -5224,8 +5235,8 @@ msgstr "Selecciona una fila para aprobar"
 #: screens/Job/JobDetail/JobDetail.tsx:650
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:247
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:251
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:219
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:223
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:222
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:226
 msgid "Delete Job"
 msgstr "Eliminar tarea"
 
@@ -5470,7 +5481,7 @@ msgstr "Siguiente"
 #: screens/Credential/shared/CredentialFormFields/BecomeMethodField.tsx:149
 #: screens/Inventory/shared/InventoryForm.tsx:97
 #: screens/Template/shared/JobTemplateForm.tsx:489
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:253
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:254
 msgid "Create"
 msgstr "Crear"
 
@@ -5626,7 +5637,7 @@ msgstr "Últimas dos semanas"
 msgid "Back"
 msgstr "Volver"
 
-#: screens/User/UserDetail/UserDetail.tsx:110
+#: screens/User/UserDetail/UserDetail.tsx:111
 msgid "Last Login"
 msgstr "Último inicio de sesión"
 
@@ -5642,7 +5653,7 @@ msgstr "Copiar error"
 msgid "Back to applications"
 msgstr "Volver a las aplicaciones"
 
-#: screens/User/UserDetail/UserDetail.tsx:106
+#: screens/User/UserDetail/UserDetail.tsx:107
 msgid "login type"
 msgstr "tipo de inicio de sesión"
 
@@ -5685,6 +5696,11 @@ msgstr "Haga clic para cambiar el orden de las preguntas de la encuesta"
 #: screens/Setting/Subscription/SubscriptionDetail/SubscriptionDetail.tsx:38
 #~ msgid "Subscription Details"
 #~ msgstr "Detalles de la suscripción"
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:62
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:101
+msgid "Relaunch from canceled node with new variables"
+msgstr ""
 
 #: components/Schedule/shared/UnsupportedRRuleAlert.tsx:22
 msgid "This schedule uses complex rules that are not supported in the\n"
@@ -5780,7 +5796,7 @@ msgstr "Probar notificación"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:336
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:363
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:201
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:208
 msgid "Enabled Options"
 msgstr "Opciones habilitadas"
 
@@ -5803,7 +5819,7 @@ msgid "This step contains errors"
 msgstr "Este paso contiene errores"
 
 #: screens/Template/shared/JobTemplateForm.tsx:434
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:237
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:238
 msgid "source control branch"
 msgstr "rama de fuente de control"
 
@@ -5841,7 +5857,7 @@ msgstr "Grupos de instancias"
 #: screens/Job/JobDetail/JobDetail.tsx:543
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:459
 #: screens/Template/shared/JobTemplateForm.tsx:637
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:279
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:280
 msgid "Skip Tags"
 msgstr "Omitir etiquetas"
 
@@ -5915,8 +5931,8 @@ msgstr "Definición de inventario de grupos anidados:"
 msgid "Started"
 msgstr "Iniciado"
 
-#: components/AppContainer/PageHeaderToolbar.tsx:128
-#: components/AppContainer/PageHeaderToolbar.tsx:137
+#: components/AppContainer/PageHeaderToolbar.tsx:134
+#: components/AppContainer/PageHeaderToolbar.tsx:143
 msgid "Pending Workflow Approvals"
 msgstr "Aprobaciones de flujos de trabajo pendientes"
 
@@ -5933,7 +5949,7 @@ msgstr "Canónico"
 
 #: components/Workflow/WorkflowNodeHelp.tsx:156
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:154
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:146
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:147
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:254
 msgid "Elapsed"
 msgstr "Tiempo transcurrido"
@@ -6200,6 +6216,11 @@ msgstr "Seleccione los grupos de instancias en los que se ejecutará esta planti
 msgid "Leave blank to generate a new webhook key on save"
 msgstr "Deje en blanco para generar una nueva clave de webhook al guardar"
 
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:63
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:102
+msgid "Relaunch from failed node with new variables"
+msgstr ""
+
 #: screens/User/shared/UserForm.tsx:55
 #: screens/User/UserDetail/UserDetail.tsx:60
 #: screens/User/UserList/UserListItem.tsx:36
@@ -6387,8 +6408,8 @@ msgstr "Devoluciones de llamada de aprovisionamiento: habilita la creación de u
 
 #: components/JobList/JobListItem.tsx:159
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:183
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:183
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:199
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:184
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:202
 msgid "Relaunch Job"
 msgstr "Volver a ejecutar la tarea"
 
@@ -6471,7 +6492,7 @@ msgstr ""
 msgid "Credential"
 msgstr "Credencial"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:63
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:85
 msgid "First node"
 msgstr "Primer nodo"
 
@@ -6480,7 +6501,7 @@ msgstr "Primer nodo"
 msgid "{update_cache_timeout, plural, one {# second} other {# seconds}}"
 msgstr "{update_cache_timeout, plural, one {# segundo} other {# segundos}}"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:177
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:184
 msgid "Webhook Credentials"
 msgstr "Credenciales de Webhook"
 
@@ -6548,7 +6569,7 @@ msgstr "Ver la configuración de las tareas"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:349
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:151
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:343
-#: screens/User/UserDetail/UserDetail.tsx:122
+#: screens/User/UserDetail/UserDetail.tsx:123
 msgid "edit"
 msgstr "modificar"
 
@@ -6737,7 +6758,7 @@ msgstr "Fuentes de inventario"
 msgid "If enabled, simultaneous runs of this job template will be allowed."
 msgstr "Si está habilitado, se permitirán ejecuciones simultáneas de esta plantilla de trabajo."
 
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:312
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:313
 msgid "Enable Concurrent Jobs"
 msgstr "Activar los trabajos concurrentes"
 
@@ -6841,7 +6862,7 @@ msgstr "No se encontró la credencial."
 msgid "{minutes} min {seconds} sec"
 msgstr "{minutes} min. {seconds} seg"
 
-#: components/AppContainer/AppContainer.tsx:156
+#: components/AppContainer/AppContainer.tsx:145
 msgid "Your session is about to expire"
 msgstr "Su sesión está a punto de expirar"
 
@@ -7032,7 +7053,7 @@ msgstr "Git"
 msgid "Choose a Playbook Directory"
 msgstr "Elegir un directorio de playbook"
 
-#: components/JobList/JobListItem.tsx:252
+#: components/JobList/JobListItem.tsx:254
 #: components/TemplateList/TemplateListItem.tsx:169
 #: components/Workflow/WorkflowNodeHelp.tsx:45
 #: screens/ExecutionEnvironment/ExecutionEnvironmentTemplate/ExecutionEnvironmentTemplateListItem.tsx:30
@@ -7339,9 +7360,9 @@ msgstr "Nombre de la aplicación"
 msgid "Cache timeout (seconds)"
 msgstr "Tiempo de espera de la caché (segundos)"
 
-#: components/AppContainer/AppContainer.tsx:106
-#: components/AppContainer/AppContainer.tsx:176
-#: components/AppContainer/PageHeaderToolbar.tsx:223
+#: components/AppContainer/AppContainer.tsx:95
+#: components/AppContainer/AppContainer.tsx:165
+#: components/AppContainer/PageHeaderToolbar.tsx:229
 msgid "Logout"
 msgstr "Finalización de la sesión"
 
@@ -7349,7 +7370,7 @@ msgstr "Finalización de la sesión"
 msgid "sec"
 msgstr "seg"
 
-#: screens/Login/Login.tsx:281
+#: screens/Login/Login.tsx:291
 msgid "Sign in with {label}"
 msgstr "Iniciar sesión con {label}"
 
@@ -7383,8 +7404,8 @@ msgstr "{0, selectordinal, one {The first {dayOfWeek}} two {The second {dayOfWee
 msgid "Failed Host Count"
 msgstr "Recuento de hosts fallidos"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:47
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:51
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:69
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:73
 msgid "Relaunch from:"
 msgstr "Volver a ejecutar desde:"
 
@@ -7482,9 +7503,9 @@ msgstr "Sincronizar"
 #: screens/Team/TeamList/TeamList.tsx:120
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:180
 #: screens/Template/shared/JobTemplateForm.tsx:337
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:166
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:167
 #: screens/Template/Survey/SurveyQuestionForm.tsx:214
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:114
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:121
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:190
 #: screens/User/shared/UserTokenForm.tsx:69
 #: screens/User/UserOrganizations/UserOrganizationList.tsx:77
@@ -7511,7 +7532,7 @@ msgstr "Elija los roles que se aplicarán a los recursos seleccionados. Tenga en
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:317
 #: screens/Template/shared/WebhookSubForm.tsx:193
 #: screens/Template/shared/WebhookSubForm.tsx:199
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:164
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:171
 msgid "Webhook URL"
 msgstr "URL de Webhook"
 
@@ -7540,7 +7561,7 @@ msgstr "En o después de"
 msgid "Max concurrent jobs"
 msgstr "Máximo de trabajos simultáneos"
 
-#: screens/User/UserDetail/UserDetail.tsx:133
+#: screens/User/UserDetail/UserDetail.tsx:134
 msgid "Delete User"
 msgstr "Eliminar usuario"
 
@@ -7580,7 +7601,7 @@ msgstr "Modificar equipo"
 msgid "User Interface"
 msgstr "Interfaz de usuario"
 
-#: screens/Login/Login.tsx:235
+#: screens/Login/Login.tsx:245
 msgid "Sign in with GitHub Enterprise"
 msgstr "Iniciar sesión con GitHub Enterprise"
 
@@ -7612,7 +7633,7 @@ msgstr "Iniciar sesión con GitHub Enterprise"
 #: screens/Project/shared/ProjectForm.tsx:295
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:52
 #: screens/Team/shared/TeamForm.tsx:55
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:179
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:180
 #: screens/Template/Survey/SurveyQuestionForm.tsx:31
 #: screens/User/shared/UserForm.tsx:202
 #: util/validators.ts:237
@@ -7628,7 +7649,7 @@ msgstr "Nunca expira"
 msgid "View job {0}"
 msgstr "Ver tarea {0}"
 
-#: screens/Login/Login.tsx:267
+#: screens/Login/Login.tsx:277
 msgid "Sign in with SAML {samlIDP}"
 msgstr "Iniciar sesión con SAML {samlIDP}"
 
@@ -7739,7 +7760,7 @@ msgstr "Versión de startswith que no distingue mayúsculas de minúsculas."
 msgid "Unsaved changes modal"
 msgstr "Modal de cambios no guardados"
 
-#: screens/Login/Login.tsx:245
+#: screens/Login/Login.tsx:255
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "Iniciar sesión con equipos de GitHub Enterprise"
 
@@ -7773,7 +7794,7 @@ msgstr "URL de Grafana"
 msgid "GitHub settings"
 msgstr "Configuración de GitHub"
 
-#: screens/Login/Login.tsx:225
+#: screens/Login/Login.tsx:235
 msgid "Sign in with GitHub Organizations"
 msgstr "Iniciar sesión con las organizaciones GitHub"
 
@@ -7896,7 +7917,7 @@ msgstr "{0, plural, one {Esta instancia está siendo utilizada actualmente por o
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:45
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:54
-#: screens/Setting/UI/UIDetail/UIDetail.tsx:67
+#: screens/Setting/UI/UIDetail/UIDetail.tsx:66
 msgid "Back to Settings"
 msgstr "Volver a Configuración"
 
@@ -7905,7 +7926,7 @@ msgstr "Volver a Configuración"
 #: screens/Template/Survey/SurveyList.tsx:121
 #: screens/Template/Survey/SurveyList.tsx:121
 #: screens/Template/Survey/SurveyListItem.tsx:74
-#: screens/User/UserDetail/UserDetail.tsx:99
+#: screens/User/UserDetail/UserDetail.tsx:100
 msgid "Default"
 msgstr "Predeterminado"
 
@@ -7966,7 +7987,7 @@ msgstr "Confirmar la contraseña"
 msgid "Personal access token"
 msgstr "Token de acceso personal"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:57
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:79
 msgid "Relaunch from first node"
 msgstr "Volver a ejecutar desde el primer nodo"
 
@@ -8012,6 +8033,10 @@ msgstr "Tokens de usuario"
 msgid "View RADIUS settings"
 msgstr "Ver la configuración de RADIUS"
 
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:319
+msgid "Allow Overwriting Variables on Relaunch"
+msgstr ""
+
 #: screens/Job/WorkflowOutput/WorkflowOutputNode.tsx:147
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.tsx:339
 msgid "ALL"
@@ -8043,7 +8068,7 @@ msgstr "Es difícil dar una especificación para\n"
 "            el inventario que tiene `gather_facts: true`. Los\n"
 "            hechos reales diferirán de un sistema a otro."
 
-#: components/JobList/JobListItem.tsx:371
+#: components/JobList/JobListItem.tsx:373
 #: screens/Job/JobDetail/JobDetail.tsx:420
 msgid "Job Slice Parent"
 msgstr "Fraccionamiento de los trabajos principales"
@@ -8116,7 +8141,7 @@ msgstr "Fallo de desaprovisionamiento"
 msgid "See Django"
 msgstr "Ver Django"
 
-#: components/AppContainer/AppContainer.tsx:74
+#: components/AppContainer/AppContainer.tsx:63
 msgid "Global navigation"
 msgstr "Navegación global"
 
@@ -8374,7 +8399,7 @@ msgstr "Nota: El orden en que se seleccionan establece la precedencia de ejecuci
 msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 msgstr "No se permiten credenciales que requieran contraseñas al iniciar. Elimine o reemplace las siguientes credenciales por una del mismo tipo para continuar: {0}"
 
-#: screens/Login/Login.tsx:255
+#: screens/Login/Login.tsx:265
 msgid "Sign in with OIDC"
 msgstr "Iniciar sesión con SAML "
 
@@ -8546,7 +8571,7 @@ msgstr "Editar inventario"
 msgid "Failed to user token."
 msgstr "Error en el token de usuario."
 
-#: screens/Login/Login.tsx:267
+#: screens/Login/Login.tsx:277
 msgid "Sign in with SAML"
 msgstr "Iniciar sesión con SAML"
 
@@ -8700,7 +8725,7 @@ msgstr "Documentación del flujo de trabajo"
 msgid "January"
 msgstr "Enero"
 
-#: screens/Login/Login.tsx:210
+#: screens/Login/Login.tsx:220
 msgid "Sign in with Azure AD"
 msgstr "Iniciar sesión con Azure AD"
 
@@ -8905,7 +8930,7 @@ msgstr "Mes pasado"
 msgid "Execution Environment"
 msgstr "Entorno de ejecución"
 
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:268
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:275
 msgid "Delete Workflow Job Template"
 msgstr "Eliminar plantilla de trabajo del flujo de trabajo"
 
@@ -9085,7 +9110,7 @@ msgstr "Actualizar opciones"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:331
 #: screens/Team/TeamDetail/TeamDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:356
-#: screens/User/UserDetail/UserDetail.tsx:114
+#: screens/User/UserDetail/UserDetail.tsx:115
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:72
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:242
 msgid "Last Modified"
@@ -9355,7 +9380,7 @@ msgstr "No se pudo alternar la notificación."
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:105
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:324
 #: screens/Template/shared/WebhookSubForm.tsx:205
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:170
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:177
 msgid "Webhook Key"
 msgstr "Clave de Webhook"
 
@@ -9458,7 +9483,7 @@ msgstr "Dirección URL para las llamadas callback"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:329
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:174
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:194
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:201
 #: screens/User/UserTokenList/UserTokenList.tsx:159
 msgid "Modified"
 msgstr "Modificado"
@@ -9471,17 +9496,21 @@ msgstr "ADVERTENCIA: "
 msgid "Related search type"
 msgstr "Tipo de búsqueda relacionada"
 
-#: components/AppContainer/PageHeaderToolbar.tsx:211
+#: components/AppContainer/PageHeaderToolbar.tsx:217
 msgid "User details"
 msgstr "Detalles del usuario"
 
-#: components/AppContainer/AppContainer.tsx:180
+#: components/AppContainer/AppContainer.tsx:169
 msgid "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 msgstr "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 
 #: screens/Template/shared/JobTemplate.helptext.tsx:35
 msgid "If enabled, the job template will prevent adding any inventory or organization instance groups to the list of preferred instances groups to run on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "Si está habilitado, la plantilla de trabajo impedirá agregar grupos de instancias de inventario u organización a la lista de grupos de instancias preferidos en los que ejecutarse. Nota: si esta configuración está habilitada y proporcionó una lista vacía, se aplicarán los grupos de instancias globales."
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:60
+msgid "Failed node, new variables"
+msgstr ""
 
 #: screens/Team/TeamRoles/TeamRolesList.tsx:215
 #: screens/User/UserRoles/UserRolesList.tsx:209
@@ -9625,7 +9654,7 @@ msgstr "Debe seleccionar un inventario"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:232
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:240
 #: screens/Template/shared/JobTemplateForm.tsx:423
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:135
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:142
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:289
 msgid "Source Control Branch"
 msgstr "Rama de fuente de control"
@@ -9711,7 +9740,7 @@ msgstr "Si no se marca, se realizará una fusión, combinando las variables loca
 #: screens/Job/JobOutput/JobOutput.tsx:1214
 #: screens/Job/JobOutput/JobOutput.tsx:1215
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:172
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:163
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:164
 msgid "Job Cancel Error"
 msgstr "Error en la cancelación de tarea"
 
@@ -9762,7 +9791,7 @@ msgstr "No se pudo recuperar el objeto de recurso de nodo completo."
 msgid "Pending"
 msgstr "Pendiente"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:130
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:131
 msgid "Toggle Tools"
 msgstr "Alternar herramientas"
 
@@ -9808,7 +9837,7 @@ msgstr "Alternar herramientas"
 #: screens/Team/TeamList/TeamListItem.tsx:47
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:192
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:203
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:122
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:129
 #: screens/User/UserList/UserList.tsx:157
 #: screens/User/UserList/UserListItem.tsx:71
 #: screens/User/UserTeams/UserTeamList.tsx:187
@@ -9817,7 +9846,7 @@ msgstr "Alternar herramientas"
 msgid "Organization"
 msgstr "Organización"
 
-#: screens/Login/Login.tsx:305
+#: screens/Login/Login.tsx:315
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "Su sesión ha expirado. Inicie sesión para continuar."
 
@@ -9867,7 +9896,7 @@ msgstr "La búsqueda se desactiva durante la ejecución de la tarea"
 msgid "Third"
 msgstr "Tercero"
 
-#: screens/Login/Login.tsx:215
+#: screens/Login/Login.tsx:225
 msgid "Sign in with Azure AD Tenant"
 msgstr "Iniciar sesión con Azure AD Tenant"
 
@@ -9960,7 +9989,7 @@ msgstr "Cancelar búsqueda"
 #: screens/Setting/Settings.tsx:124
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:52
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:61
-#: screens/Setting/UI/UIDetail/UIDetail.tsx:74
+#: screens/Setting/UI/UIDetail/UIDetail.tsx:73
 #: screens/Team/Team.tsx:67
 #: screens/Team/Teams.tsx:31
 #: screens/Template/Template.tsx:148
@@ -10020,11 +10049,15 @@ msgstr "{0, plural, one {This credential is currently being used by other resour
 msgid "Last Name"
 msgstr "Apellido"
 
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:18
+msgid "If enabled, a relaunch from the failed node may be given variables that overwrite the ones the original run used. Useful when an earlier node left a value behind that has to be corrected before the workflow can go on."
+msgstr ""
+
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerLink.tsx:61
 msgid "Add a node between these two"
 msgstr ""
 
-#: components/AppContainer/AppContainer.tsx:116
+#: components/AppContainer/AppContainer.tsx:105
 msgid "Navigation"
 msgstr "Navegación"
 
@@ -10037,7 +10070,7 @@ msgid "and click on Update Revision on Launch"
 msgstr "y haga clic en Actualizar revisión al ejecutar"
 
 #: components/About/About.tsx:59
-#: components/AppContainer/PageHeaderToolbar.tsx:180
+#: components/AppContainer/PageHeaderToolbar.tsx:186
 msgid "About"
 msgstr "Acerca de"
 
@@ -10100,7 +10133,7 @@ msgstr "Nombre"
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:88
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:141
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:66
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:73
 msgid "Webhooks"
 msgstr "Webhooks"
 
@@ -10404,7 +10437,7 @@ msgid "Select Teams"
 msgstr "Seleccionar equipos"
 
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:155
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:147
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:148
 msgid "Elapsed time that the job ran"
 msgstr "Tiempo transcurrido de la ejecución de la tarea "
 
@@ -10430,7 +10463,7 @@ msgstr "Copiar proyecto"
 #~ msgid "Prompt for verbosity on launch."
 #~ msgstr "Preguntar por la verbosidad al ejecutar."
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:41
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:57
 msgid "Relaunch from failed node"
 msgstr "Volver a ejecutar desde el nodo fallido"
 
@@ -10513,7 +10546,7 @@ msgstr "Confirmar eliminación de enlace"
 msgid "This field must be at least {0} characters"
 msgstr "Este campo debe tener al menos {0} caracteres"
 
-#: components/JobList/JobListItem.tsx:218
+#: components/JobList/JobListItem.tsx:220
 #: components/PromptDetail/PromptInventorySourceDetail.tsx:81
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:233
 #: screens/Inventory/shared/InventorySourceForm.tsx:180
@@ -10614,11 +10647,11 @@ msgstr "Cuenta token"
 msgid "Edit Login redirect override URL"
 msgstr "Editar la URL de redirección de inicio de sesión"
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:27
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:28
 msgid "Webhooks: Enable webhook for this workflow job template."
 msgstr ""
 
-#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:25
+#: screens/Template/shared/WorkflowJobTemplate.helptext.tsx:26
 msgid "Concurrent jobs: If enabled, simultaneous runs of this workflow job template will be allowed."
 msgstr ""
 
@@ -10736,7 +10769,7 @@ msgstr "Seleccionar un tipo de tarea"
 #: components/JobList/JobListItem.tsx:145
 #: screens/Job/JobDetail/JobDetail.tsx:642
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:173
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:164
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
 msgid "Cancel {0}"
 msgstr "Cancelar {0}"
 
@@ -10770,12 +10803,12 @@ msgstr "Fuentes de inventario total"
 #~ msgid "Provide a host pattern to further constrain the list of hosts that will be managed or affected by the workflow."
 #~ msgstr "Proporcione un patrón de host para restringir aún más la lista de hosts que serán gestionados o afectados por el flujo de trabajo."
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:38
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:54
 msgid "Canceled node"
 msgstr "Nodo cancelado"
 
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:107
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:111
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:108
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:112
 msgid "Edit workflow"
 msgstr "Editar el flujo de trabajo"
 
@@ -10863,7 +10896,7 @@ msgstr "LDAP1"
 msgid "Add container group"
 msgstr "Agregar grupo de contenedores"
 
-#: components/AppContainer/AppContainer.tsx:168
+#: components/AppContainer/AppContainer.tsx:157
 msgid "Continue"
 msgstr "Continuar"
 
@@ -10926,7 +10959,7 @@ msgstr "Dirección de correo electrónico no válida"
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:83
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:139
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:106
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:117
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:124
 msgid "Activity"
 msgstr "Actividad"
 
@@ -11015,7 +11048,7 @@ msgstr "No se pudo eliminar una o más fuentes de inventario."
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "Si se especifica, este campo se mostrará en el nodo en lugar del nombre del recurso cuando se vea el flujo de trabajo"
 
-#: screens/Login/Login.tsx:220
+#: screens/Login/Login.tsx:230
 msgid "Sign in with GitHub"
 msgstr "Iniciar sesión con GitHub"
 
@@ -11471,8 +11504,8 @@ msgstr "Ejecute un trabajo para rellenar esta lista."
 #: screens/Job/JobDetail/JobDetail.tsx:363
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:257
 #: screens/Template/shared/JobTemplateForm.tsx:522
-#: screens/Template/shared/WorkflowJobTemplateForm.tsx:208
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:153
+#: screens/Template/shared/WorkflowJobTemplateForm.tsx:209
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:160
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:282
 msgid "Limit"
 msgstr "Límite"
@@ -11503,13 +11536,15 @@ msgstr "Este proyecto está siendo utilizado actualmente por otros recursos. ¿E
 msgid "Associate"
 msgstr "Asociar"
 
-#: components/JobList/JobListItem.tsx:197
+#: components/JobList/JobListItem.tsx:199
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:96
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:145
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:116
+#: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:121
 #: screens/Job/JobDetail/JobDetail.tsx:622
 #: screens/Job/JobDetail/JobDetail.tsx:630
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:204
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:204
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:207
 msgid "Relaunch"
 msgstr "Relanzar"
 
@@ -11540,6 +11575,10 @@ msgstr "Asociar error del rol"
 #: util/getRelatedResourceDeleteDetails.ts:291
 msgid "Workflow Job Template Nodes"
 msgstr "Nodos de plantilla de trabajo para flujo de trabajo"
+
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:59
+msgid "Canceled node, new variables"
+msgstr ""
 
 #: components/Lookup/HostFilterLookup.tsx:147
 #~ msgid "Insights system ID"
@@ -11608,7 +11647,7 @@ msgstr "Reintentar servidor"
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:281
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:309
 #: screens/Template/shared/WebhookSubForm.tsx:154
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:158
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:165
 msgid "Webhook Service"
 msgstr "Servicio de Webhook"
 
@@ -11700,12 +11739,12 @@ msgstr "Junio"
 #: screens/ManagementJob/ManagementJobList/LaunchManagementPrompt.tsx:67
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:503
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:512
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:250
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:259
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:257
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:266
 msgid "Launch"
 msgstr "Ejecutar"
 
-#: components/JobList/JobListItem.tsx:359
+#: components/JobList/JobListItem.tsx:361
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:219
 msgid "Explanation"
 msgstr "Explicación"
@@ -11783,7 +11822,7 @@ msgstr "Cuerpo del mensaje de error"
 #: components/JobList/JobListItem.tsx:146
 #: screens/Job/JobDetail/JobDetail.tsx:643
 #: screens/Job/JobOutput/shared/OutputToolbar.tsx:174
-#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:165
+#: screens/Job/WorkflowOutput/WorkflowOutputToolbar.tsx:166
 msgid "Failed to cancel {0}"
 msgstr "No se ha podido cancelar {0}"
 
@@ -11859,7 +11898,7 @@ msgstr "Creado por (nombre de usuario)"
 msgid "Playbook"
 msgstr "Playbook"
 
-#: screens/Login/Login.tsx:168
+#: screens/Login/Login.tsx:173
 msgid "Invalid username or password. Please try again."
 msgstr "Nombre de usuario o contraseña no válidos. Intente de nuevo."
 
@@ -11937,7 +11976,7 @@ msgid "Toggle notification start"
 msgstr "Iniciar alternancia de notificaciones"
 
 #: components/HostForm/HostForm.tsx:62
-#: components/JobList/JobListItem.tsx:274
+#: components/JobList/JobListItem.tsx:276
 #: components/LaunchPrompt/steps/InventoryStep.tsx:111
 #: components/LaunchPrompt/steps/useInventoryStep.tsx:39
 #: components/Lookup/HostFilterLookup.tsx:444
@@ -11969,7 +12008,7 @@ msgstr "Iniciar alternancia de notificaciones"
 #: screens/Job/JobDetail/JobDetail.tsx:133
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:207
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:217
-#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:143
+#: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:150
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/JobTemplatesList.tsx:38
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:296
 msgid "Inventory"
