@@ -175,6 +175,19 @@ def test_radius_settings(get, put, patch, delete, admin, settings):
 
 
 @pytest.mark.django_db
+def test_login_redirect_override_scheme(get, patch, admin, settings):
+    url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'authentication'})
+    patch(url, user=admin, data={'LOGIN_REDIRECT_OVERRIDE': '/sso/login/saml/?idp=corp'}, expect=200)
+    patch(url, user=admin, data={'LOGIN_REDIRECT_OVERRIDE': 'https://idp.example.com/start'}, expect=200)
+    # A URL the browser would run instead of fetch would execute for every
+    # visitor who is not logged in; it must not be storable.
+    response = patch(url, user=admin, data={'LOGIN_REDIRECT_OVERRIDE': 'javascript:alert(1)'}, expect=400)
+    assert 'LOGIN_REDIRECT_OVERRIDE' in response.data
+    assert settings.LOGIN_REDIRECT_OVERRIDE == 'https://idp.example.com/start'
+    patch(url, user=admin, data={'LOGIN_REDIRECT_OVERRIDE': ''}, expect=200)
+
+
+@pytest.mark.django_db
 def test_tacacsplus_settings(get, put, patch, admin):
     url = reverse('api:setting_singleton_detail', kwargs={'category_slug': 'tacacsplus'})
     response = get(url, user=admin, expect=200)
