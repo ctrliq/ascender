@@ -47,6 +47,9 @@ function NotificationTemplateDetail({
       /api/annotations endpoint will be added automatically to the base
       Grafana URL.`,
     grafanaTags: t`Use one Annotation Tag per line, without commas.`,
+    matrixRooms: t`One room per line, as a room ID (!abcdef:example.org) or
+      a room alias (#automation:example.org). The user the access token
+      belongs to must already be a member of every room.`,
     ircTargets: t`Use one IRC channel or username per line. The pound
         symbol (#) for channels, and the at (@) symbol for users, are not
         required.`,
@@ -295,6 +298,33 @@ function NotificationTemplateDetail({
             />
           </>
         )}
+        {template.notification_type === 'matrix' && (
+          <>
+            <Detail
+              label={t`Homeserver URL`}
+              value={configuration.homeserver_url}
+              dataCy="nt-detail-matrix-homeserver-url"
+            />
+            <ArrayDetail
+              label={t`Destination Rooms`}
+              helpText={helpText.matrixRooms}
+              value={configuration.rooms}
+              dataCy="nt-detail-matrix-rooms"
+            />
+            <Detail
+              label={t`Send HTML Formatted Body`}
+              value={configuration.use_html ? t`True` : t`False`}
+              dataCy="nt-detail-matrix-use-html"
+            />
+            <Detail
+              label={t`Disable SSL Verification`}
+              value={
+                configuration.disable_ssl_verification ? t`True` : t`False`
+              }
+              dataCy="nt-detail-disable-ssl"
+            />
+          </>
+        )}
         {template.notification_type === 'mattermost' && (
           <>
             <Detail
@@ -523,7 +553,7 @@ function CustomMessageDetails({
   type: string;
 }) {
   const showMessages = type !== 'webhook';
-  const showBodies = ['email', 'pagerduty', 'webhook'].includes(type);
+  const showBodies = ['email', 'matrix', 'pagerduty', 'webhook'].includes(type);
   const { t } = useLingui();
   return (
     <>

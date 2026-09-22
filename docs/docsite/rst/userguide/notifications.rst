@@ -88,6 +88,7 @@ Notification Types
    triple: notifications; types; Email
    triple: notifications; types; Grafana
    triple: notifications; types; IRC
+   triple: notifications; types; Matrix
    triple: notifications; types; Mattermost
    triple: notifications; types; pagerduty
    triple: notifications; types; Rocket.Chat
@@ -170,6 +171,21 @@ Connectivity information is straightforward:
 
 .. image:: ../common/images/notification-template-irc.png
    :alt: IRC notification template
+
+
+Matrix
+-------
+
+The Matrix notification type sends messages into `Matrix <https://matrix.org>`_ rooms on any homeserver (for example Synapse, Conduit or Dendrite). Messages are sent as an ordinary Matrix user, so first create or pick the account the notifications should come from, obtain an access token for it, and invite it to every room that should receive notifications. The parameters that can be specified are:
+
+- Homeserver URL (required): The base URL of the homeserver's client API, for example ``https://matrix.example.org``. The ``/_matrix/client/v3`` paths are added automatically.
+- Access Token (required): The access token of the sending user. It is stored encrypted.
+- Destination Rooms (required): One room per line, as a room ID (``!abcdef:example.org``) or a room alias (``#automation:example.org``).
+- Send HTML Formatted Body: Selected by default. The notification message is always sent as plain text. With this option on, the notification body is also sent as HTML (``org.matrix.custom.html``), so the link back to the job is clickable in clients that render HTML; other clients show the plain text.
+- Disable SSL Verification: Turns off verification of the authenticity of the homeserver's certificate. Environments that use internal or private CA's should select this option to disable verification.
+
+When you :ref:`customize the messages <ug_custom_notifications>` for a Matrix notification, the *message* is the plain-text version and the *body* is the HTML version of the same notification.
+
 
 Mattermost
 ------------

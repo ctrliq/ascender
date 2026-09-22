@@ -60,7 +60,7 @@ class NotificationTemplateTest(GenericAPIView):
     def post(self, request, *args, **kwargs):
         obj = self.get_object()
         msg = "Notification Test {} {}".format(obj.id, settings.ASCENDER_URL_BASE)
-        if obj.notification_type in ('email', 'pagerduty'):
+        if obj.notification_type in ('email', 'pagerduty', 'matrix'):
             body = "Test Notification {} {}".format(obj.id, settings.ASCENDER_URL_BASE)
         elif obj.notification_type in ('webhook', 'grafana'):
             body = '{{"body": "Test Notification {} {}"}}'.format(obj.id, settings.ASCENDER_URL_BASE)

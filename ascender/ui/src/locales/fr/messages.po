@@ -34,7 +34,7 @@ msgstr "Copier dans le presse-papiers"
 msgid "Select Input Inventories for the constructed inventory plugin."
 msgstr "Sélectionnez Inventaires d'entrée pour le plugin d'inventaire construit."
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:608
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:671
 msgid "Choose an HTTP method"
 msgstr "Choisissez une méthode HTTP"
 
@@ -56,7 +56,7 @@ msgstr "Navigation...."
 msgid "TACACS+"
 msgstr "TACACS+"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:670
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:700
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:265
 msgid "Workflow timed out message body"
 msgstr "Corps du message d’expiration de flux de travail"
@@ -123,7 +123,7 @@ msgstr "Message de modification"
 msgid "Host Polling"
 msgstr "Interrogation de l'hôte"
 
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:240
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:241
 msgid "Failed to delete one or more notification template."
 msgstr "N'a pas réussi à supprimer un ou plusieurs modèles de notification."
 
@@ -212,7 +212,7 @@ msgstr "RAM {0}"
 msgid "The plugin parameter is required."
 msgstr "Le paramètre du plugin est requis."
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:394
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:457
 msgid "Pagerduty subdomain"
 msgstr "Sous-domaine Pagerduty"
 
@@ -341,7 +341,7 @@ msgstr "Branche à extraire. En plus des branches, vous pouvez saisir des balise
 #: components/JobList/JobList.tsx:265
 #: components/JobList/JobListItem.tsx:127
 #: components/Lookup/ProjectLookup.tsx:159
-#: components/NotificationList/NotificationList.tsx:263
+#: components/NotificationList/NotificationList.tsx:264
 #: components/NotificationList/NotificationListItem.tsx:60
 #: components/PromptDetail/PromptDetail.tsx:175
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:214
@@ -369,7 +369,7 @@ msgstr "Branche à extraire. En plus des branches, vous pouvez saisir des balise
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:216
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:90
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:111
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:179
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:180
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:135
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:130
 #: screens/Project/ProjectList/ProjectList.tsx:195
@@ -381,7 +381,7 @@ msgstr "Branche à extraire. En plus des branches, vous pouvez saisir des balise
 #: screens/Template/Survey/SurveyList.tsx:120
 #: screens/Template/Survey/SurveyListItem.tsx:71
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/ProjectsList.tsx:99
-#: screens/User/UserDetail/UserDetail.tsx:105
+#: screens/User/UserDetail/UserDetail.tsx:106
 #: screens/User/UserRoles/UserRolesList.tsx:159
 #: screens/User/UserRoles/UserRolesListItem.tsx:35
 msgid "Type"
@@ -455,7 +455,7 @@ msgstr "Remplacer les variables"
 msgid "{dateStr} by <0>{username}</0>"
 msgstr "{dateStr} par <0>{username}</0>"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:569
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:632
 msgid "Basic auth password"
 msgstr "Mot de passe d'auth de base"
 
@@ -543,7 +543,7 @@ msgid "Add Roles"
 msgstr "Ajouter des rôles"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:46
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:231
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:232
 msgid "The base URL of the Grafana server - the\n"
 "      /api/annotations endpoint will be added automatically to the base\n"
 "      Grafana URL."
@@ -556,7 +556,7 @@ msgstr "L'URL de base du serveur Grafana - le point de\n"
 msgid "Instance group used capacity"
 msgstr "La capacité utilisée par le groupe d'instances"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:612
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:675
 msgid "PUT"
 msgstr "PLACER"
 
@@ -584,7 +584,7 @@ msgstr "Groupe de conteneurs"
 msgid "{0, plural, one {You cannot cancel the following job because it is not running:} other {You cannot cancel the following jobs because they are not running:}}"
 msgstr "{0, plural, one {You cannot cancel the following job because it is not running:} other {You cannot cancel the following jobs because they are not running:}}"
 
-#: components/NotificationList/NotificationList.tsx:264
+#: components/NotificationList/NotificationList.tsx:265
 #: components/NotificationList/NotificationListItem.tsx:64
 #: screens/Credential/shared/TypeInputsSubForm.tsx:52
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:88
@@ -907,7 +907,7 @@ msgstr "Actualiser Jeton"
 msgid "Host details"
 msgstr "Informations sur l'hôte"
 
-#: screens/User/shared/UserForm.tsx:254
+#: screens/User/shared/UserForm.tsx:260
 msgid "This value does not match the password you entered previously. Please confirm that password."
 msgstr "Cette valeur ne correspond pas au mot de passe que vous avez entré précédemment. Veuillez confirmer ce mot de passe."
 
@@ -916,7 +916,7 @@ msgstr "Cette valeur ne correspond pas au mot de passe que vous avez entré pré
 msgid "Disassociate group from host?"
 msgstr "Dissocier le groupe de l'hôte ?"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:530
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:593
 msgid "Destination SMS number(s)"
 msgstr "Numéro(s) de SMS de destination"
 
@@ -1011,7 +1011,7 @@ msgstr "Choisissez les ressources qui recevront de nouveaux rôles.  Vous pourre
 msgid "May"
 msgstr "Mai"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:477
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:540
 msgid "Destination channels"
 msgstr "Canaux de destination"
 
@@ -1039,6 +1039,10 @@ msgstr "Recharger la sortie"
 #: screens/Inventory/InventoryHost/InventoryHost.tsx:114
 msgid "Host not found."
 msgstr "Hôte non trouvé."
+
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:384
+msgid "Matrix Options"
+msgstr ""
 
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.tsx:44
 msgid "1 (Info)"
@@ -1163,7 +1167,7 @@ msgid "Dragging started for {0}."
 msgstr ""
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:43
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:126
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:127
 msgid "The amount of time (in seconds) before the email\n"
 "        notification stops trying to reach the host and times out. Ranges\n"
 "        from 1 to 120 seconds."
@@ -1306,12 +1310,12 @@ msgstr "Rôles"
 msgid "Test Notification"
 msgstr "Notification test"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:301
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:351
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:419
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:347
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:426
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:575
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:331
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:381
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:449
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:410
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:489
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:638
 msgid "Target URL"
 msgstr "URL cible"
 
@@ -1328,10 +1332,10 @@ msgstr "Types de nœud"
 #: screens/InstanceGroup/Instances/InstanceListItem.tsx:238
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:272
 #: screens/Instances/InstanceList/InstanceListItem.tsx:260
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:58
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:79
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:137
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:463
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:61
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:82
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:138
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:526
 #: screens/Template/shared/JobTemplate.helptext.tsx:72
 #: screens/Template/Survey/SurveyQuestionForm.tsx:312
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:312
@@ -1418,7 +1422,7 @@ msgstr "Aucun hôte correspondant"
 #~ msgid "Only Group By"
 #~ msgstr "Grouper seulement par"
 
-#: screens/Login/Login.tsx:170
+#: screens/Login/Login.tsx:175
 msgid "There was a problem logging in. Please try again."
 msgstr "Il y a eu un problème de connexion. Veuillez réessayer."
 
@@ -1442,7 +1446,7 @@ msgstr "Protocole"
 msgid "option to the"
 msgstr "l'option à la"
 
-#: screens/User/UserDetail/UserDetail.tsx:148
+#: screens/User/UserDetail/UserDetail.tsx:149
 msgid "Failed to delete user."
 msgstr "Impossible de supprimer l'utilisateur."
 
@@ -1522,7 +1526,7 @@ msgstr "Ressource connexe"
 msgid "Are you sure you want to exit the Workflow Creator without saving your changes?"
 msgstr "Voulez-vous vraiment quitter le flux de travail Creator sans enregistrer vos modifications ?"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:505
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:535
 msgid "Failed to delete notification."
 msgstr "N'a pas réussi à supprimer la notification."
 
@@ -1577,7 +1581,7 @@ msgstr "Jetons"
 msgid "Select the source inventories for this federated inventory. When a job is launched, hosts will be routed to each source inventory's instance group automatically."
 msgstr "Sélectionnez les inventaires sources pour cet inventaire fédéré. Lorsqu'un job est lancé, les hôtes seront acheminés automatiquement vers le groupe d'instances de chaque inventaire source."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:337
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:367
 msgid "API Service/Integration Key"
 msgstr "Service API/Clé d’intégration"
 
@@ -1661,7 +1665,7 @@ msgstr "Créer un nouvel inventaire fédéré"
 #: components/Lookup/ProjectLookup.tsx:154
 #: components/Lookup/ProjectLookup.tsx:183
 #: components/NotificationList/NotificationList.tsx:225
-#: components/NotificationList/NotificationList.tsx:262
+#: components/NotificationList/NotificationList.tsx:263
 #: components/NotificationList/NotificationListItem.tsx:55
 #: components/OptionsList/OptionsList.tsx:93
 #: components/PaginatedTable/PaginatedTable.tsx:114
@@ -1789,9 +1793,9 @@ msgstr "Créer un nouvel inventaire fédéré"
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:97
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:107
 #: screens/ManagementJob/ManagementJobList/ManagementJobListItem.tsx:81
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:159
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:162
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:121
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:177
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:178
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:127
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:108
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:87
@@ -1866,6 +1870,10 @@ msgstr "Clé de configuration de l’hôte"
 msgid "Ctrl IQ, Inc."
 msgstr "Ctrl IQ, Inc."
 
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:375
+msgid "Destination rooms"
+msgstr ""
+
 #: screens/Template/TemplateSurvey.tsx:157
 msgid "Failed to update survey."
 msgstr "N'a pas réussi à mettre à jour l'enquête."
@@ -1888,7 +1896,7 @@ msgstr "détails"
 msgid "Failed"
 msgstr "Échec"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:246
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:249
 msgid "ID of the Dashboard"
 msgstr "ID du tableau de bord (facultatif)"
 
@@ -1964,7 +1972,7 @@ msgstr "Approuvé"
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:91
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:109
 #: screens/ManagementJob/ManagementJobList/ManagementJobListItem.tsx:87
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:183
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:184
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:147
 #: screens/Organization/OrganizationList/OrganizationList.tsx:144
 #: screens/Organization/OrganizationList/OrganizationListItem.tsx:54
@@ -2012,15 +2020,15 @@ msgstr "Clé"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:344
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:197
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:306
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:356
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:414
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:149
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:355
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:434
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:563
+#: screens/Login/Login.tsx:354
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:444
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:150
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:418
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:497
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:626
 #: screens/User/shared/UserForm.tsx:115
 #: screens/User/UserDetail/UserDetail.tsx:79
 #: screens/User/UserList/UserList.tsx:118
@@ -2043,7 +2051,7 @@ msgstr ""
 msgid "Confirm"
 msgstr "Confirmer"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:559
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:589
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:157
 msgid "Success message body"
 msgstr "Corps du message de réussite"
@@ -2110,7 +2118,7 @@ msgstr "Voir les paramètres divers du système"
 #~ msgstr "Sélectionnez votre abonnement à la Plateforme d'Automatisation Ansible à utiliser."
 
 #: screens/Credential/shared/TypeInputsSubForm.tsx:30
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:61
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:62
 #: screens/Project/shared/ProjectForm.tsx:365
 msgid "Type Details"
 msgstr "Détails sur le type"
@@ -2173,7 +2181,7 @@ msgstr "Impossible d'assigner les rôles correctement"
 msgid "Failed to disassociate one or more teams."
 msgstr "N'a pas réussi à dissocier une ou plusieurs équipes."
 
-#: components/AppContainer/AppContainer.tsx:65
+#: components/AppContainer/AppContainer.tsx:54
 msgid "brand logo"
 msgstr "logo de la marque"
 
@@ -2186,8 +2194,8 @@ msgstr "Le champ correspond à l'expression régulière donnée."
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.tsx:342
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:155
+#: screens/Login/Login.tsx:352
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
 msgid "Password"
@@ -2411,7 +2419,7 @@ msgstr "Il manque un inventaire pour cette programmation d’horaire"
 msgid "Remove {0} chip"
 msgstr "Supprimer {0} chip"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:309
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:310
 msgid "IRC server address"
 msgstr "Adresse du serveur IRC"
 
@@ -2492,7 +2500,7 @@ msgstr "{0} (supprimé)"
 msgid "The inventory that this host belongs to."
 msgstr "Inventaire auquel cet hôte appartiendra."
 
-#: screens/Login/Login.tsx:327
+#: screens/Login/Login.tsx:337
 msgid "Log In"
 msgstr "Connexion"
 
@@ -2504,14 +2512,14 @@ msgstr "{intervalValue, plural, one {week} other {weeks}}"
 msgid "You do not have permission to delete {pluralizedItemName}: {itemsUnableToDelete}"
 msgstr "Vous n'avez pas l'autorisation de supprimer :  {pluralizedItemName}: {itemsUnableToDelete}"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:493
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:556
 msgid "Notification color"
 msgstr "Couleur de la notification"
 
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:212
 #: screens/Job/JobOutput/HostEventModal.tsx:161
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:202
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:161
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:205
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:162
 msgid "Host"
 msgstr "Hôte"
 
@@ -2536,7 +2544,7 @@ msgstr "ÉTAT :"
 msgid "boolean"
 msgstr "boolean"
 
-#: components/AppContainer/PageHeaderToolbar.tsx:215
+#: components/AppContainer/PageHeaderToolbar.tsx:221
 msgid "User Details"
 msgstr "Détails de l'utilisateur"
 
@@ -2569,10 +2577,10 @@ msgstr "Les modèles de Job dont les informations d'identification demandent un 
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "Empêcher le repli des groupes d'instances : s'il est activé, l'inventaire empêchera l'ajout de tout groupe d'instances d'organisation à la liste des groupes d'instances préférés pour exécuter les modèles de tâches associés. Remarque : si ce paramètre est activé et que vous avez fourni une liste vide, les groupes d'instances globaux seront appliqués."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:60
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:81
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:139
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:465
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:63
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:84
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:140
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:528
 #: screens/Template/shared/JobTemplate.helptext.tsx:74
 #: screens/Template/Survey/SurveyQuestionForm.tsx:314
 msgid "for more information."
@@ -2590,8 +2598,8 @@ msgstr "Supprimer l’inventaire"
 msgid "Source Control Refspec"
 msgstr "Refspec Contrôle de la source"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:50
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:286
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:53
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:287
 msgid "Use one IRC channel or username per line. The pound\n"
 "        symbol (#) for channels, and the at (@) symbol for users, are not\n"
 "        required."
@@ -2769,8 +2777,8 @@ msgstr "4 (Débogage de la connexion)"
 msgid "Base path used for locating playbooks. Directories found inside this path will be listed in the playbook directory drop-down. Together the base path and selected playbook directory provide the full path used to locate playbooks."
 msgstr "Chemin de base utilisé pour localiser les playbooks. Les répertoires trouvés dans ce chemin seront répertoriés dans la liste déroulante du répertoire des playbooks. Ensemble, le chemin de base et le répertoire de playbook sélectionné fournissent le chemin complet utilisé pour localiser les playbooks."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:436
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:590
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:466
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:653
 msgid "HTTP Headers"
 msgstr "En-têtes HTTP"
 
@@ -2782,10 +2790,10 @@ msgstr "Zoom arrière"
 msgid "Item OK"
 msgstr "Élément OK"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:316
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:361
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:367
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:440
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:346
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:391
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:430
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:503
 msgid "Icon URL"
 msgstr "Icône URL"
 
@@ -2797,7 +2805,7 @@ msgstr "Sélectionnez les groupes d’instances sur lesquels la synchronisation 
 msgid "Select the port that Receptor will listen on for incoming connections, e.g. 27199."
 msgstr "Sélectionnez le port sur lequel le récepteur écoutera les connexions entrantes, par exemple 27199."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:550
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:580
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:148
 msgid "Success message"
 msgstr "Message de réussite"
@@ -2838,7 +2846,7 @@ msgstr "Alias de nœud"
 msgid "Search submit button"
 msgstr "Bouton de soumission de recherche"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:611
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:674
 msgid "POST"
 msgstr "PUBLICATION"
 
@@ -2846,14 +2854,18 @@ msgstr "PUBLICATION"
 msgid "You do not have permission to delete the following Groups: {itemsUnableToDelete}"
 msgstr "Vous n'avez pas la permission de supprimer les groupes suivants : {itemsUnableToDelete}"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:431
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:599
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:461
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:662
 msgid "HTTP Method"
 msgstr "Méthode HTTP"
 
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:95
 msgid "The execution environment that will be used for jobs inside of this organization. This will be used as a fallback when an execution environment has not been explicitly assigned at the project, job template or workflow level."
 msgstr "L'environnement d'exécution qui sera utilisé pour les tâches au sein de cette organisation. Il sera utilisé comme solution de repli lorsqu'aucun environnement d'exécution n'a été explicitement attribué au niveau du projet, du modèle de tâche ou du flux de travail."
+
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:315
+msgid "Send HTML Formatted Body"
+msgstr ""
 
 #: components/NotificationList/NotificationList.tsx:234
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:130
@@ -2895,7 +2907,7 @@ msgid "Enabled Value"
 msgstr "Valeur activée"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:49
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:234
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:235
 msgid "Use one Annotation Tag per line, without commas."
 msgstr "Entrez une balise d'annotation par ligne, sans virgule."
 
@@ -2985,7 +2997,7 @@ msgstr "{0, plural, one {Veuillez saisir un numéro de téléphone valide.} othe
 msgid "Facts"
 msgstr "Facts"
 
-#: screens/Login/Login.tsx:351
+#: screens/Login/Login.tsx:361
 msgid "or"
 msgstr "ou"
 
@@ -3026,11 +3038,13 @@ msgstr "Paramètres AD Azure"
 #: components/JobList/JobListItem.tsx:371
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
 #: screens/Job/JobDetail/JobDetail.tsx:421
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:263
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:293
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:323
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:368
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:426
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:296
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:316
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:322
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:353
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:398
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:456
 msgid "True"
 msgstr "Vrai"
 
@@ -3055,7 +3069,7 @@ msgstr "Mot de passe SSH"
 msgid "View OIDC settings"
 msgstr "Voir les paramètres de l'OIDC"
 
-#: components/AppContainer/PageHeaderToolbar.tsx:172
+#: components/AppContainer/PageHeaderToolbar.tsx:178
 msgid "Help"
 msgstr "Aide"
 
@@ -3113,7 +3127,7 @@ msgstr "Cette fonctionnalité est obsolète et sera supprimée dans une prochain
 msgid "Running Jobs"
 msgstr "Jobs en cours d'exécution"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:410
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:473
 msgid "Client identifier"
 msgstr "Identifiant client"
 
@@ -3189,7 +3203,7 @@ msgstr "Capacité utilisée"
 msgid "Instance ID"
 msgstr "ID d'instance"
 
-#: components/AppContainer/PageHeaderToolbar.tsx:158
+#: components/AppContainer/PageHeaderToolbar.tsx:164
 msgid "Info"
 msgstr "Info"
 
@@ -3305,7 +3319,7 @@ msgstr "Échec de désynchronisation des hôtes"
 msgid "Host details modal"
 msgstr "Détails sur l'hôte modal"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:489
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:519
 msgid "Delete Notification"
 msgstr "Supprimer la notification"
 
@@ -3364,7 +3378,7 @@ msgstr "Moins ou égal à la comparaison."
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:109
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:164
 #: screens/Job/JobDetail/JobDetail.tsx:654
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:493
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:523
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:164
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:374
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:127
@@ -3373,7 +3387,7 @@ msgstr "Moins ou égal à la comparaison."
 #: screens/Template/Survey/SurveyList.tsx:83
 #: screens/Template/Survey/SurveyToolbar.tsx:105
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:274
-#: screens/User/UserDetail/UserDetail.tsx:137
+#: screens/User/UserDetail/UserDetail.tsx:138
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:84
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:386
 msgid "Delete"
@@ -3429,8 +3443,8 @@ msgstr "Activer le webhook"
 msgid "view the constructed inventory plugin docs here."
 msgstr "voir les documents du plugin d'inventaire construit ici."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:65
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:505
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:68
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:568
 msgid "The number associated with the \"Messaging\n"
 "        Service\" in Twilio with the format +18005550199."
 msgstr "Le numéro associé au « Service de\n"
@@ -3466,7 +3480,7 @@ msgid "Cannot run health check on hop nodes."
 msgstr "Impossible d’effectuer des bilans de fonctionnement sur les nœuds Hop."
 
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.tsx:100
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:150
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:151
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.tsx:77
 msgid "Modified by (username)"
 msgstr "Modifié par (nom d'utilisateur)"
@@ -3514,13 +3528,13 @@ msgstr "GitHub Team"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:337
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:139
 #: screens/Job/JobDetail/JobDetail.tsx:578
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:446
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:476
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:98
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:326
 #: screens/Team/TeamDetail/TeamDetail.tsx:54
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:351
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:189
-#: screens/User/UserDetail/UserDetail.tsx:112
+#: screens/User/UserDetail/UserDetail.tsx:113
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:67
 #: screens/User/UserTokenList/UserTokenList.tsx:155
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:237
@@ -3595,11 +3609,11 @@ msgstr "Août"
 msgid "View smart inventory host details"
 msgstr "Voir les détails de l'hôte de l'inventaire smart"
 
-#: screens/Login/Login.tsx:250
+#: screens/Login/Login.tsx:260
 msgid "Sign in with Google"
 msgstr "Connectez-vous avec Google"
 
-#: contexts/Config.tsx:204
+#: contexts/Config.tsx:200
 msgid "Failed to retrieve configuration."
 msgstr "Impossible de récupérer la configuration."
 
@@ -4011,7 +4025,7 @@ msgstr "Détails de la source"
 msgid "Sourced from a project"
 msgstr "Provenance d'un projet"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:378
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:408
 msgid "Destination Channels"
 msgstr "Canaux de destination"
 
@@ -4058,7 +4072,7 @@ msgstr "Spécifications des pods personnalisés"
 msgid "View all Hosts."
 msgstr "Voir tous les hôtes."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:256
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:259
 msgid "Tags for the Annotation"
 msgstr "Balises pour l'annotation"
 
@@ -4099,8 +4113,8 @@ msgstr "Supprimer les informations d’identification"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:352
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:117
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:154
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:471
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:473
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:501
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:503
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:160
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:147
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:151
@@ -4131,8 +4145,8 @@ msgstr "Supprimer les informations d’identification"
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:105
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:92
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:96
-#: screens/Setting/UI/UIDetail/UIDetail.tsx:116
-#: screens/Setting/UI/UIDetail/UIDetail.tsx:121
+#: screens/Setting/UI/UIDetail/UIDetail.tsx:115
+#: screens/Setting/UI/UIDetail/UIDetail.tsx:120
 #: screens/Team/TeamDetail/TeamDetail.tsx:62
 #: screens/Team/TeamDetail/TeamDetail.tsx:66
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:497
@@ -4140,7 +4154,7 @@ msgstr "Supprimer les informations d’identification"
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:244
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:246
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeViewModal.tsx:286
-#: screens/User/UserDetail/UserDetail.tsx:126
+#: screens/User/UserDetail/UserDetail.tsx:127
 msgid "Edit"
 msgstr "Modifier"
 
@@ -4165,7 +4179,7 @@ msgstr "Installé"
 msgid "View JSON examples at"
 msgstr "Voir des exemples JSON sur"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:399
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:429
 msgid "Destination SMS Number(s)"
 msgstr "Numéro(s) de SMS de destination"
 
@@ -4255,7 +4269,7 @@ msgstr "Sélectionner les instances"
 msgid "Resources are missing from this template."
 msgstr "Ressources manquantes dans ce modèle."
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:249
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:250
 msgid "Grafana API key"
 msgstr "Clé API Grafana"
 
@@ -4341,8 +4355,8 @@ msgstr "Sortir sans sauvegarder"
 msgid "Date operator select"
 msgstr "Sélection de l'opérateur de date"
 
-#: components/AppContainer/PageHeaderToolbar.tsx:101
 #: components/AppContainer/PageHeaderToolbar.tsx:107
+#: components/AppContainer/PageHeaderToolbar.tsx:113
 msgid "Theme"
 msgstr "Thème"
 
@@ -4391,7 +4405,7 @@ msgstr "Sélectionnez les informations d'identification pour accéder aux nœuds
 #~ msgid "Prompt for diff mode on launch."
 #~ msgstr "Demander le mode différentiel au lancement."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:342
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:372
 msgid "Client Identifier"
 msgstr "Identifiant client"
 
@@ -4538,7 +4552,7 @@ msgstr "Voir les détails de l'organisation"
 #: components/JobList/JobList.tsx:345
 #: components/LaunchButton/LaunchButton.tsx:305
 #: components/LaunchPrompt/LaunchPrompt.tsx:118
-#: components/NotificationList/NotificationList.tsx:292
+#: components/NotificationList/NotificationList.tsx:293
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:172
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:268
 #: components/ResourceAccessList/ResourceAccessList.tsx:282
@@ -4548,7 +4562,7 @@ msgstr "Voir les détails de l'organisation"
 #: components/Schedule/ScheduleToggle/ScheduleToggle.tsx:86
 #: components/Schedule/shared/SchedulePromptableFields.tsx:90
 #: components/TemplateList/TemplateList.tsx:311
-#: contexts/Config.tsx:200
+#: contexts/Config.tsx:196
 #: screens/Application/ApplicationDetails/ApplicationDetails.tsx:145
 #: screens/Application/ApplicationsList/ApplicationsList.tsx:174
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:306
@@ -4589,8 +4603,8 @@ msgstr "Voir les détails de l'organisation"
 #: screens/Inventory/shared/InventorySourceSyncButton.tsx:59
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:173
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:132
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:501
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:237
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:531
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:238
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:190
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:173
 #: screens/Organization/OrganizationList/OrganizationList.tsx:193
@@ -4611,7 +4625,7 @@ msgstr "Voir les détails de l'organisation"
 #: screens/Template/WorkflowJobTemplateVisualizer/VisualizerNode.tsx:399
 #: screens/TopologyView/MeshGraph.tsx:448
 #: screens/TopologyView/Tooltip.tsx:173
-#: screens/User/UserDetail/UserDetail.tsx:145
+#: screens/User/UserDetail/UserDetail.tsx:146
 #: screens/User/UserList/UserList.tsx:182
 #: screens/User/UserRoles/UserRolesList.tsx:247
 #: screens/User/UserRoles/UserRolesList.tsx:258
@@ -4720,21 +4734,21 @@ msgstr "Impossible de changer d'hôte."
 msgid "denied"
 msgstr "refusé"
 
-#: screens/Login/Login.tsx:240
+#: screens/Login/Login.tsx:250
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "Connectez-vous avec GitHub Enterprise Organizations"
 
 #: screens/ActivityStream/ActivityStream.tsx:119
 #: screens/ActivityStream/ActivityStream.tsx:205
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:116
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:170
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:171
 #: screens/NotificationTemplate/NotificationTemplates.tsx:15
 #: screens/NotificationTemplate/NotificationTemplates.tsx:26
 #: util/getRelatedResourceDeleteDetails.ts:213
 msgid "Notification Templates"
 msgstr "Modèles de notification"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:541
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:571
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:139
 msgid "Start message body"
 msgstr "Démarrer le corps du message"
@@ -4791,7 +4805,7 @@ msgstr "Modifier le lien"
 msgid "Oragnization"
 msgstr "Oragnisation"
 
-#: components/AppContainer/AppContainer.tsx:65
+#: components/AppContainer/AppContainer.tsx:54
 msgid "{brandName} logo"
 msgstr "{brandName} logo"
 
@@ -4848,7 +4862,7 @@ msgstr "Voir tous les Jobs"
 msgid "Failed to delete one or more user tokens."
 msgstr "N'a pas réussi à supprimer un ou plusieurs jetons d'utilisateur."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:586
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:616
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:202
 msgid "Workflow approved message"
 msgstr "Message de flux de travail approuvé"
@@ -4999,7 +5013,7 @@ msgstr "Annuler Sync Projet"
 msgid "Sync all sources"
 msgstr "Synchroniser toutes les sources"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:402
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:465
 msgid "API service/integration key"
 msgstr "Service API/Clé d’intégration"
 
@@ -5048,7 +5062,7 @@ msgstr "Zone de texte"
 msgid "View User Interface settings"
 msgstr "Voir les paramètres de l'interface utilisateur"
 
-#: screens/Login/Login.tsx:230
+#: screens/Login/Login.tsx:240
 msgid "Sign in with GitHub Teams"
 msgstr "Connectez-vous avec GitHub Teams"
 
@@ -5180,7 +5194,7 @@ msgid "Credentials"
 msgstr "Informations d’identification"
 
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:42
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:125
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:126
 msgid "Use one email address per line to create a recipient list for this type of notification."
 msgstr "Saisir une adresse email par ligne pour créer une liste des destinataires pour ce type de notification."
 
@@ -5206,8 +5220,13 @@ msgstr "Balises Job"
 msgid "Failed to sync some or all inventory sources."
 msgstr "N'a pas réussi à synchroniser une partie ou la totalité des sources d'inventaire."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:311
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:361
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:304
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:359
+msgid "Homeserver URL"
+msgstr ""
+
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:341
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:424
 msgid "Channel"
 msgstr "Canal"
 
@@ -5276,7 +5295,7 @@ msgstr "Image"
 msgid "Perform a search to define a host filter"
 msgstr "Effectuez une recherche ci-dessus pour définir un filtre d'hôte"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:506
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:536
 msgid "Notification test failed."
 msgstr "Le test de notification a échoué."
 
@@ -5345,8 +5364,8 @@ msgstr "Certificat de validation de la signature du contenu"
 msgid "Edit application"
 msgstr "Modifier l’application"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:111
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:220
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:114
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:221
 msgid "Use TLS"
 msgstr "Utiliser TLS"
 
@@ -5410,7 +5429,7 @@ msgstr "Retour Haut de page"
 #~ msgid "{0, plural, one {# fork} other {# forks}}"
 #~ msgstr ""
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:384
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:414
 msgid "Notification Color"
 msgstr "Couleur des notifications"
 
@@ -5481,8 +5500,8 @@ msgstr "Voulez-vous vraiment demander l'annulation de ce job ?"
 #: screens/Instances/InstancePeers/InstancePeerList.tsx:273
 #: screens/Instances/InstancePeers/InstancePeerList.tsx:332
 #: screens/Instances/InstancePeers/InstancePeerListItem.tsx:68
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:218
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:187
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:221
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:188
 msgid "Port"
 msgstr "Port"
 
@@ -5502,7 +5521,7 @@ msgstr "Créer une nouvelle source"
 msgid "Download Bundle"
 msgstr "Téléchargement du Bundle"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:610
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:640
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:220
 msgid "Workflow denied message"
 msgstr "Message de flux de travail refusé"
@@ -5528,7 +5547,7 @@ msgstr "Détails de l'option"
 msgid "Add team permissions"
 msgstr "Ajouter les permissions de l'équipe"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:521
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:584
 msgid "Source phone number"
 msgstr "Numéro de téléphone de la source"
 
@@ -5624,7 +5643,7 @@ msgstr "Les deux dernières semaines"
 msgid "Back"
 msgstr "Retour"
 
-#: screens/User/UserDetail/UserDetail.tsx:110
+#: screens/User/UserDetail/UserDetail.tsx:111
 msgid "Last Login"
 msgstr "Dernière connexion"
 
@@ -5640,7 +5659,7 @@ msgstr "Erreur de copie"
 msgid "Back to applications"
 msgstr "Retour aux applications"
 
-#: screens/User/UserDetail/UserDetail.tsx:106
+#: screens/User/UserDetail/UserDetail.tsx:107
 msgid "login type"
 msgstr "type de connexion"
 
@@ -5652,7 +5671,7 @@ msgstr "Détails du groupe"
 msgid "No JSON Available"
 msgstr "Pas de JSON disponible"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:325
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:326
 msgid "Destination channels or users"
 msgstr "Canaux ou utilisateurs de destination"
 
@@ -5669,8 +5688,8 @@ msgstr "Play - Nombre"
 msgid "Instance groups"
 msgstr "Groupes d'instances"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:67
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:507
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:70
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:570
 msgid "Use one phone number per line to specify where to\n"
 "        route SMS messages. Phone numbers should be formatted +11231231234. For more information see Twilio documentation"
 msgstr "Utilisez un numéro de téléphone par ligne pour spécifier où\n"
@@ -5713,10 +5732,11 @@ msgstr "Application"
 msgid "End date"
 msgstr "Date de fin"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:262
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:321
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:366
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:424
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:265
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:320
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:351
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:396
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:454
 msgid "Disable SSL Verification"
 msgstr "Désactiver la vérification SSL"
 
@@ -5913,8 +5933,8 @@ msgstr "Définition de l'inventaire des groupes imbriqués :"
 msgid "Started"
 msgstr "Démarré"
 
-#: components/AppContainer/PageHeaderToolbar.tsx:128
-#: components/AppContainer/PageHeaderToolbar.tsx:137
+#: components/AppContainer/PageHeaderToolbar.tsx:134
+#: components/AppContainer/PageHeaderToolbar.tsx:143
 msgid "Pending Workflow Approvals"
 msgstr "En attente d'approbation des flux de travail"
 
@@ -6212,7 +6232,7 @@ msgstr "Ce groupe de conteneurs est actuellement utilisé par d'autres ressource
 msgid "More information"
 msgstr "Plus d'informations"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:251
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:254
 msgid "ID of the Panel"
 msgstr "ID du panneau (facultatif)"
 
@@ -6249,7 +6269,7 @@ msgstr "Première automatisation"
 msgid "Initiated By"
 msgstr "Initié par"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:532
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:562
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:130
 msgid "Start message"
 msgstr "Message de départ"
@@ -6296,6 +6316,12 @@ msgstr "Annuler le job"
 #: screens/User/UserList/UserListItem.tsx:68
 msgid "First Name"
 msgstr "Prénom"
+
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:50
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:350
+#~ msgid "One room per line, as a room ID (!abcdef:example.org) or\n"
+#~ "      a room alias (#automation:example.org)."
+#~ msgstr ""
 
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:131
 msgid "Show only root groups"
@@ -6523,6 +6549,10 @@ msgstr "Recharger"
 msgid "Date search input"
 msgstr "Saisie de recherche par date"
 
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:309
+msgid "Destination Rooms"
+msgstr ""
+
 #: screens/Host/HostDetail/HostDetail.tsx:123
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:116
 msgid "Delete Host"
@@ -6546,7 +6576,7 @@ msgstr "Voir les paramètres des Jobs"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:349
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:151
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:343
-#: screens/User/UserDetail/UserDetail.tsx:122
+#: screens/User/UserDetail/UserDetail.tsx:123
 msgid "edit"
 msgstr "modifier"
 
@@ -6579,6 +6609,10 @@ msgstr "Mise à jour introuvable"
 msgid "Time"
 msgstr "Durée"
 
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:391
+msgid "Send HTML formatted body"
+msgstr ""
+
 #: screens/InstanceGroup/InstanceGroups.tsx:19
 #: screens/InstanceGroup/InstanceGroups.tsx:33
 msgid "Create new instance group"
@@ -6595,8 +6629,8 @@ msgstr "Utilisateur normal"
 msgid "host-name-{0}"
 msgstr "nom-hôte-{0}"
 
-#: components/NotificationList/NotificationList.tsx:242
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:138
+#: components/NotificationList/NotificationList.tsx:243
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:139
 msgid "Pagerduty"
 msgstr "Pagerduty"
 
@@ -6747,8 +6781,8 @@ msgstr "Activer les tâches parallèles"
 msgid "Smart Inventory"
 msgstr "Inventaire smart"
 
-#: components/NotificationList/NotificationList.tsx:244
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:140
+#: components/NotificationList/NotificationList.tsx:245
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:141
 msgid "Slack"
 msgstr "Slack"
 
@@ -6839,15 +6873,15 @@ msgstr "Informations d'identification introuvables."
 msgid "{minutes} min {seconds} sec"
 msgstr "{minutes} min {seconds} sec"
 
-#: components/AppContainer/AppContainer.tsx:156
+#: components/AppContainer/AppContainer.tsx:145
 msgid "Your session is about to expire"
 msgstr "Votre session est sur le point d'expirer"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:294
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:295
 msgid "IRC server password"
 msgstr "Mot de passe du serveur IRC"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:387
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:450
 msgid "API Token"
 msgstr "Token API"
 
@@ -6932,7 +6966,7 @@ msgstr "Suivez"
 #: components/Lookup/MultiCredentialsLookup.tsx:230
 #: components/Lookup/OrganizationLookup.tsx:160
 #: components/Lookup/ProjectLookup.tsx:173
-#: components/NotificationList/NotificationList.tsx:254
+#: components/NotificationList/NotificationList.tsx:255
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:197
 #: components/Schedule/ScheduleList/ScheduleList.tsx:242
 #: components/TemplateList/TemplateList.tsx:242
@@ -7157,7 +7191,7 @@ msgstr "* Ce champ sera récupéré dans un système externe de gestion des secr
 msgid "Confirm Delete"
 msgstr "Confirmer Effacer"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:658
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:688
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:256
 msgid "Workflow timed out message"
 msgstr "Message d'expiration de flux de travail"
@@ -7314,11 +7348,11 @@ msgstr "Variable activée"
 #: screens/Credential/shared/CredentialForm.tsx:450
 #: screens/Credential/shared/CredentialForm.tsx:456
 #: screens/Credential/shared/CredentialPlugins/CredentialPluginPrompt/CredentialPluginPrompt.tsx:81
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:482
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:512
 msgid "Test"
 msgstr "Test"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:332
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:362
 msgid "Pagerduty Subdomain"
 msgstr "Sous-domaine Pagerduty"
 
@@ -7337,9 +7371,9 @@ msgstr "Nom de l'application"
 msgid "Cache timeout (seconds)"
 msgstr "Expiration du délai d’attente du cache (secondes)"
 
-#: components/AppContainer/AppContainer.tsx:106
-#: components/AppContainer/AppContainer.tsx:176
-#: components/AppContainer/PageHeaderToolbar.tsx:223
+#: components/AppContainer/AppContainer.tsx:95
+#: components/AppContainer/AppContainer.tsx:165
+#: components/AppContainer/PageHeaderToolbar.tsx:229
 msgid "Logout"
 msgstr "Déconnexion"
 
@@ -7347,7 +7381,7 @@ msgstr "Déconnexion"
 msgid "sec"
 msgstr "sec"
 
-#: screens/Login/Login.tsx:281
+#: screens/Login/Login.tsx:291
 msgid "Sign in with {label}"
 msgstr "Connectez-vous avec {label}"
 
@@ -7465,7 +7499,7 @@ msgstr "Sync"
 #: screens/Job/JobOutput/HostEventModal.tsx:163
 #: screens/ManagementJob/ManagementJobList/ManagementJobList.tsx:108
 #: screens/ManagementJob/ManagementJobList/ManagementJobListItem.tsx:86
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:161
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:164
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:126
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:116
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:91
@@ -7513,7 +7547,7 @@ msgstr "Choisissez les rôles à appliquer aux ressources sélectionnées.  Note
 msgid "Webhook URL"
 msgstr "URL du webhook"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:268
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:269
 msgid "Tags for the annotation (optional)"
 msgstr "Balises pour l'annotation (facultatif)"
 
@@ -7538,7 +7572,7 @@ msgstr "Le ou après"
 msgid "Max concurrent jobs"
 msgstr "Jobs Simultanées"
 
-#: screens/User/UserDetail/UserDetail.tsx:133
+#: screens/User/UserDetail/UserDetail.tsx:134
 msgid "Delete User"
 msgstr "Supprimer l’utilisateur"
 
@@ -7578,7 +7612,7 @@ msgstr "Modifier l’équipe"
 msgid "User Interface"
 msgstr "Interface utilisateur"
 
-#: screens/Login/Login.tsx:235
+#: screens/Login/Login.tsx:245
 msgid "Sign in with GitHub Enterprise"
 msgstr "Connectez-vous à GitHub Enterprise"
 
@@ -7606,7 +7640,7 @@ msgstr "Connectez-vous à GitHub Enterprise"
 #: screens/Inventory/shared/SmartInventoryForm.tsx:75
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:91
 #: screens/NotificationTemplate/shared/NotificationTemplateForm.tsx:128
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:557
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:620
 #: screens/Project/shared/ProjectForm.tsx:295
 #: screens/Project/shared/ProjectSubForms/ManualSubForm.tsx:52
 #: screens/Team/shared/TeamForm.tsx:55
@@ -7626,7 +7660,7 @@ msgstr "N’expire jamais"
 msgid "View job {0}"
 msgstr "Voir Job {0}"
 
-#: screens/Login/Login.tsx:267
+#: screens/Login/Login.tsx:277
 msgid "Sign in with SAML {samlIDP}"
 msgstr "Connectez-vous avec SAML {samlIDP}"
 
@@ -7670,7 +7704,7 @@ msgstr "Sélectionnez l'application à laquelle ce jeton appartiendra, ou laisse
 msgid "Listener Port"
 msgstr "Port de l'écouteur"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:292
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:295
 msgid "SSL Connection"
 msgstr "Connexion SSL"
 
@@ -7703,7 +7737,7 @@ msgstr "ici"
 msgid "Failed to fetch the updated project data."
 msgstr "Échec de la récupération des données de projet mises à jour."
 
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:195
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:196
 msgid "Notification sent successfully"
 msgstr "Notification envoyée avec succès"
 
@@ -7712,11 +7746,13 @@ msgid "Confirm cancel job"
 msgstr "Confirmer l'annulation du job"
 
 #: screens/ExecutionEnvironment/ExecutionEnvironmentDetails/ExecutionEnvironmentDetails.tsx:74
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:263
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:293
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:323
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:368
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:426
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:266
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:296
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:316
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:322
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:353
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:398
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:456
 msgid "False"
 msgstr "Faux"
 
@@ -7737,7 +7773,7 @@ msgstr "Version non sensible à la casse de startswith."
 msgid "Unsaved changes modal"
 msgstr "Annuler les modifications non enregistrées"
 
-#: screens/Login/Login.tsx:245
+#: screens/Login/Login.tsx:255
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "Connectez-vous avec GitHub Enterprise Teams"
 
@@ -7762,8 +7798,8 @@ msgstr "Date/Heure de début"
 #~ msgid "By default, we collect and transmit analytics data on the service usage to Red Hat. There are two categories of data collected by the service. For more information, see <0>this Tower documentation page</0>. Uncheck the following boxes to disable this feature."
 #~ msgstr "Par défaut, nous collectons et transmettons des données d'analyse sur l'utilisation du service à Red Hat. Il existe deux catégories de données collectées par le service. Pour plus d'informations, consultez <0>cette page de documentation de Tower</0>. Décochez les cases suivantes pour désactiver cette fonctionnalité."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:240
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:240
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:243
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:241
 msgid "Grafana URL"
 msgstr "URL Grafana"
 
@@ -7771,7 +7807,7 @@ msgstr "URL Grafana"
 msgid "GitHub settings"
 msgstr "Paramètres de GitHub"
 
-#: screens/Login/Login.tsx:225
+#: screens/Login/Login.tsx:235
 msgid "Sign in with GitHub Organizations"
 msgstr "Connectez-vous avec GitHub Organizations"
 
@@ -7810,6 +7846,12 @@ msgstr "Réussi"
 #: screens/Template/shared/JobTemplate.helptext.tsx:40
 msgid "Concurrent jobs: If enabled, simultaneous runs of this job template will be allowed."
 msgstr "Jobs simultanés : si activé, les exécutions simultanées de ce modèle de job seront autorisées."
+
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:345
+msgid "The base URL of the Matrix homeserver's client API,\n"
+"      for example https://matrix.example.org. The /_matrix/client/v3 paths\n"
+"      are added automatically."
+msgstr ""
 
 #: screens/Job/JobOutput/JobOutputSearch.tsx:139
 msgid "Task Started"
@@ -7894,7 +7936,7 @@ msgstr "{0, plural, one {Cette instance est actuellement utilisée par d'autres 
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:45
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:54
-#: screens/Setting/UI/UIDetail/UIDetail.tsx:67
+#: screens/Setting/UI/UIDetail/UIDetail.tsx:66
 msgid "Back to Settings"
 msgstr "Retour aux paramètres"
 
@@ -7903,7 +7945,7 @@ msgstr "Retour aux paramètres"
 #: screens/Template/Survey/SurveyList.tsx:121
 #: screens/Template/Survey/SurveyList.tsx:121
 #: screens/Template/Survey/SurveyListItem.tsx:74
-#: screens/User/UserDetail/UserDetail.tsx:99
+#: screens/User/UserDetail/UserDetail.tsx:100
 msgid "Default"
 msgstr "Par défaut"
 
@@ -7916,7 +7958,7 @@ msgstr "La fin ne correspondait pas à une valeur attendue ({0})"
 msgid "Add instance group"
 msgstr "Ajouter un groupe d'instances"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:213
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:216
 msgid "Sender Email"
 msgstr "E-mail de l’expéditeur"
 
@@ -7985,7 +8027,7 @@ msgstr "Supprimer l’accès de l’équipe"
 msgid "Authentication"
 msgstr "Authentification"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:169
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:170
 msgid "Recipient list"
 msgstr "Liste de destinataires"
 
@@ -8089,15 +8131,15 @@ msgstr "Personnaliser les spécifications du pod"
 msgid "{0, selectordinal, one {The first {weekday} of {month}} two {The second {weekday} of {month}} =3 {The third {weekday} of {month}} =4 {The fourth {weekday} of {month}} =5 {The fifth {weekday} of {month}}}"
 msgstr "{0, selectordinal, one {The first {weekday} de {month}} two {The second {weekday} de {month}} =3 {The third {weekday} de {month}} =4 {The fourth {weekday} de {month}} =5 {The fifth {weekday} of {month}}}"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:69
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:552
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:72
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:615
 msgid "Specify HTTP Headers in JSON format. Refer to\n"
 "      the Ansible Controller documentation for example syntax."
 msgstr "Spécifiez les en-têtes HTTP au format JSON. Reportez-vous à\n"
 "      la documentation d'Ansible Controller pour un exemple de syntaxe."
 
-#: components/NotificationList/NotificationList.tsx:243
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:139
+#: components/NotificationList/NotificationList.tsx:244
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:140
 msgid "Rocket.Chat"
 msgstr "Rocket.Chat"
 
@@ -8109,12 +8151,12 @@ msgstr "Fréquence Détails de l'exception"
 msgid "Deprovisioning fail"
 msgstr "Échec du déprovisionnement"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:73
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:131
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:76
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:132
 msgid "See Django"
 msgstr "Voir Django"
 
-#: components/AppContainer/AppContainer.tsx:74
+#: components/AppContainer/AppContainer.tsx:63
 msgid "Global navigation"
 msgstr "Navigation globale"
 
@@ -8216,7 +8258,7 @@ msgstr "Dissocier"
 msgid "Authorization grant type"
 msgstr "Type d'autorisation"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:262
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:263
 msgid "ID of the panel (optional)"
 msgstr "ID du panneau (facultatif)"
 
@@ -8286,7 +8328,7 @@ msgstr "Première exécution"
 msgid "No Hosts Remaining"
 msgstr "Aucun hôte restant"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:256
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:257
 msgid "ID of the dashboard (optional)"
 msgstr "ID du tableau de bord (facultatif)"
 
@@ -8328,8 +8370,8 @@ msgstr ""
 msgid "Verbosity"
 msgstr "Verbosité"
 
-#: components/NotificationList/NotificationList.tsx:241
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:137
+#: components/NotificationList/NotificationList.tsx:242
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:138
 msgid "Mattermost"
 msgstr "Mattermost"
 
@@ -8372,7 +8414,7 @@ msgstr "Remarque : L'ordre dans lequel ces éléments sont sélectionnés défin
 msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 msgstr "Les informations d’identification qui nécessitent des mots de passe au lancement ne sont pas autorisées. Veuillez supprimer ou remplacer les informations d’identification suivantes par une du même type afin de continuer : {0}"
 
-#: screens/Login/Login.tsx:255
+#: screens/Login/Login.tsx:265
 msgid "Sign in with OIDC"
 msgstr "Connectez-vous avec OIDC"
 
@@ -8456,7 +8498,7 @@ msgstr "Environnement d'exécution manquant"
 msgid "Link to an available node"
 msgstr "Lien vers un nœud disponible"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:286
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:289
 msgid "Destination Channels or Users"
 msgstr "Canaux ou utilisateurs de destination"
 
@@ -8544,7 +8586,7 @@ msgstr "Modifier l'inventaire"
 msgid "Failed to user token."
 msgstr "Échec du jeton d'utilisateur."
 
-#: screens/Login/Login.tsx:267
+#: screens/Login/Login.tsx:277
 msgid "Sign in with SAML"
 msgstr "Connectez-vous avec SAML"
 
@@ -8627,7 +8669,7 @@ msgstr "Type de client"
 #~ msgid "Prompt for instance groups on launch."
 #~ msgstr "Demander les groupes d'instances au lancement."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:646
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:676
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:247
 msgid "Workflow pending message body"
 msgstr "Corps du message d'exécution de flux de travail"
@@ -8661,7 +8703,7 @@ msgstr "L'environnement virtuel personnalisé {virtualEnvironment} doit être re
 #~ "            cette organisation. La valeur par défaut est 0, ce qui signifie aucune limite.\n"
 #~ "            Reportez-vous à la documentation d'Ansible pour plus de détails."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:281
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:284
 msgid "IRC Nick"
 msgstr "IRC Nick"
 
@@ -8698,7 +8740,7 @@ msgstr "Documentation de flux de travail"
 msgid "January"
 msgstr "Janvier"
 
-#: screens/Login/Login.tsx:210
+#: screens/Login/Login.tsx:220
 msgid "Sign in with Azure AD"
 msgstr "Connectez-vous avec Azure AD"
 
@@ -8955,11 +8997,12 @@ msgstr "Le fichier d'inventaire à synchroniser par cette source. Vous pouvez s�
 msgid "View all Jobs."
 msgstr "Voir tous les Jobs."
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:276
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:334
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:374
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:447
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:583
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:277
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:335
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:396
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:437
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:510
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:646
 msgid "Disable SSL verification"
 msgstr "Désactiver la vérification SSL"
 
@@ -9032,7 +9075,7 @@ msgstr "Sélectionnez une instance pour effectuer un bilan de fonctionnement."
 msgid "Hybrid node"
 msgstr "Noeud hybride"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:186
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:189
 msgid "Notification Type"
 msgstr "Type de notification"
 
@@ -9078,12 +9121,12 @@ msgstr "Mettre à jour les options"
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
 #: screens/Job/JobDetail/JobDetail.tsx:582
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:451
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:481
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:103
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:331
 #: screens/Team/TeamDetail/TeamDetail.tsx:55
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:356
-#: screens/User/UserDetail/UserDetail.tsx:114
+#: screens/User/UserDetail/UserDetail.tsx:115
 #: screens/User/UserTokenDetail/UserTokenDetail.tsx:72
 #: screens/WorkflowApproval/WorkflowApprovalDetail/WorkflowApprovalDetail.tsx:242
 msgid "Last Modified"
@@ -9104,6 +9147,10 @@ msgstr "Nom d’identification"
 msgid "Command"
 msgstr "Commande"
 
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:368
+msgid "Access token"
+msgstr ""
+
 #: components/JobList/JobList.tsx:244
 #: components/StatusLabel/StatusLabel.tsx:57
 #: components/Workflow/WorkflowNodeHelp.tsx:90
@@ -9119,7 +9166,7 @@ msgstr "Commande"
 msgid "Error"
 msgstr "Erreur"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:271
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:274
 msgid "IRC Server Port"
 msgstr "Port du serveur IRC"
 
@@ -9216,7 +9263,7 @@ msgstr "Supprimer ce lien"
 msgid "Go to previous page"
 msgstr "Obtenir la page précédente"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:598
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:628
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:211
 msgid "Workflow approved message body"
 msgstr "Corps de message de flux de travail approuvé"
@@ -9233,7 +9280,7 @@ msgstr "Renvoie les résultats qui satisfont celui-ci ou tout autre filtre."
 msgid "required"
 msgstr "requis"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:622
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:652
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:229
 msgid "Workflow denied message body"
 msgstr "Corps de message de flux de travail refusé"
@@ -9345,7 +9392,7 @@ msgstr "docs.ansible.com"
 msgid "Edit Schedule"
 msgstr "Modifier la programmation"
 
-#: components/NotificationList/NotificationList.tsx:296
+#: components/NotificationList/NotificationList.tsx:297
 msgid "Failed to toggle notification."
 msgstr "N'a pas réussi à basculer la notification."
 
@@ -9469,11 +9516,11 @@ msgstr "AVERTISSEMENT : "
 msgid "Related search type"
 msgstr "Type de recherche connexe"
 
-#: components/AppContainer/PageHeaderToolbar.tsx:211
+#: components/AppContainer/PageHeaderToolbar.tsx:217
 msgid "User details"
 msgstr "Informations sur l'utilisateur"
 
-#: components/AppContainer/AppContainer.tsx:180
+#: components/AppContainer/AppContainer.tsx:169
 msgid "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 msgstr "{sessionCountdown, plural, one {You will be logged out in # second due to inactivity} other {You will be logged out in # seconds due to inactivity}}"
 
@@ -9541,7 +9588,7 @@ msgstr "Afficher les détails de l'hôte de l'inventaire construit"
 msgid "Copy Credential"
 msgstr "Copier les identifiants"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:486
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:549
 #: screens/User/UserTokens/UserTokens.tsx:66
 msgid "Token"
 msgstr "Jeton"
@@ -9556,8 +9603,8 @@ msgid "Deprovisioning"
 msgstr "Déprovisionnement"
 
 #: components/DetailList/LaunchedByDetail.tsx:37
-#: components/NotificationList/NotificationList.tsx:246
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:142
+#: components/NotificationList/NotificationList.tsx:247
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:143
 msgid "Webhook"
 msgstr "Webhook"
 
@@ -9735,8 +9782,8 @@ msgstr "Sources d'inventaire avec défaillances"
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:77
 #: screens/Job/JobDetail/JobDetail.tsx:230
 #: screens/Job/JobOutput/HostEventModal.tsx:167
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:167
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:178
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:170
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:179
 #: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateListItem.tsx:132
 #: screens/Project/ProjectList/ProjectList.tsx:222
 #: screens/Project/ProjectList/ProjectListItem.tsx:183
@@ -9795,9 +9842,9 @@ msgstr "Basculer les outils"
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:139
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:236
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:113
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:173
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:183
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:181
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:176
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:186
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:182
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:181
 #: screens/Project/ProjectList/ProjectListItem.tsx:272
 #: screens/Project/ProjectList/ProjectListItem.tsx:283
@@ -9815,12 +9862,12 @@ msgstr "Basculer les outils"
 msgid "Organization"
 msgstr "Organisation"
 
-#: screens/Login/Login.tsx:305
+#: screens/Login/Login.tsx:315
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "Votre session a expiré. Veuillez vous connecter pour continuer là où vous vous êtes arrêté."
 
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.tsx:96
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:146
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:147
 #: screens/Organization/OrganizationTeams/OrganizationTeamList.tsx:73
 msgid "Created by (username)"
 msgstr "Créé par (nom d'utilisateur)"
@@ -9843,7 +9890,7 @@ msgstr "Cet inventaire est actuellement utilisé par d'autres ressources. Êtes-
 msgid "Test External Credential"
 msgstr "Tester les informations d'identification externes"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:634
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:664
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:238
 msgid "Workflow pending message"
 msgstr "Message de flux de travail en attente"
@@ -9865,7 +9912,7 @@ msgstr "La recherche est désactivée pendant que le job est en cours"
 msgid "Third"
 msgstr "Troisième"
 
-#: screens/Login/Login.tsx:215
+#: screens/Login/Login.tsx:225
 msgid "Sign in with Azure AD Tenant"
 msgstr "Connectez-vous avec Azure AD Tenant"
 
@@ -9958,7 +10005,7 @@ msgstr "Annuler la recherche"
 #: screens/Setting/Settings.tsx:124
 #: screens/Setting/TACACS/TACACSDetail/TACACSDetail.tsx:52
 #: screens/Setting/Troubleshooting/TroubleshootingDetail/TroubleshootingDetail.tsx:61
-#: screens/Setting/UI/UIDetail/UIDetail.tsx:74
+#: screens/Setting/UI/UIDetail/UIDetail.tsx:73
 #: screens/Team/Team.tsx:67
 #: screens/Team/Teams.tsx:31
 #: screens/Template/Template.tsx:148
@@ -10022,7 +10069,7 @@ msgstr "Nom"
 msgid "Add a node between these two"
 msgstr ""
 
-#: components/AppContainer/AppContainer.tsx:116
+#: components/AppContainer/AppContainer.tsx:105
 msgid "Navigation"
 msgstr "Navigation"
 
@@ -10035,7 +10082,7 @@ msgid "and click on Update Revision on Launch"
 msgstr "et cliquez sur Mise à jour de la révision au lancement"
 
 #: components/About/About.tsx:59
-#: components/AppContainer/PageHeaderToolbar.tsx:180
+#: components/AppContainer/PageHeaderToolbar.tsx:186
 msgid "About"
 msgstr "À propos de "
 
@@ -10134,7 +10181,7 @@ msgstr "dissocier"
 msgid "Add Link"
 msgstr "Ajouter un lien"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:207
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:210
 msgid "Recipient List"
 msgstr "Liste de destinataires"
 
@@ -10311,6 +10358,11 @@ msgstr "Fourches max"
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironment.helptext.tsx:18
 msgid "Examples:"
 msgstr "Exemples :"
+
+#: components/NotificationList/NotificationList.tsx:241
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:137
+msgid "Matrix"
+msgstr ""
 
 #: screens/Project/shared/ProjectSubForms/SvnSubForm.tsx:31
 msgid "Revision #"
@@ -10604,7 +10656,7 @@ msgstr "Transmettez des modifications supplémentaires de ligne de commande. Il 
 msgid "When not checked, local child hosts and groups not found on the external source will remain untouched by the inventory update process."
 msgstr "Si cette case n'est pas cochée, les hôtes enfants locaux et les groupes introuvables sur la source externe ne seront pas touchés par le processus de mise à jour de l'inventaire."
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:514
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:577
 msgid "Account token"
 msgstr "Token de compte"
 
@@ -10636,7 +10688,7 @@ msgstr "Différent de"
 #~ msgid "Past two years"
 #~ msgstr "Location de fonds de terres Recours au travail à forfait Bail avec partage des risques"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:317
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:318
 msgid "IRC nick"
 msgstr "IRC nick"
 
@@ -10644,15 +10696,15 @@ msgstr "IRC nick"
 msgid "Module Arguments"
 msgstr "Arguments du module"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:63
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:468
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:66
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:531
 msgid "Specify a notification color. Acceptable colors are hex\n"
 "        color code (example: #3af or #789abc)."
 msgstr "Spécifiez une couleur de notification. Les couleurs acceptables sont un code\n"
 "        de couleur hexadécimal (exemple : #3af ou #789abc)."
 
-#: components/NotificationList/NotificationList.tsx:245
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:141
+#: components/NotificationList/NotificationList.tsx:246
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:142
 msgid "Twilio"
 msgstr "Twilio"
 
@@ -10822,7 +10874,7 @@ msgstr "Fin"
 msgid "YAML tab"
 msgstr "Onglet YAML"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:300
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:301
 msgid "IRC server port"
 msgstr "Port du serveur IRC"
 
@@ -10848,8 +10900,8 @@ msgstr "Exécutez tous les"
 msgid "Example URLs for Remote Archive Source Control include:"
 msgstr "Voici des exemples d'URL pour le contrôle de source d'archive distante :"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:108
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:215
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:111
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:216
 msgid "Use SSL"
 msgstr "Utiliser SSL"
 
@@ -10861,7 +10913,7 @@ msgstr "LDAP1"
 msgid "Add container group"
 msgstr "Ajouter un groupe de conteneurs"
 
-#: components/AppContainer/AppContainer.tsx:168
+#: components/AppContainer/AppContainer.tsx:157
 msgid "Continue"
 msgstr "Continuer"
 
@@ -10890,7 +10942,7 @@ msgstr "La plage de dates sélectionnée doit avoir au moins une occurrence de c
 msgid "Successful jobs"
 msgstr "Tâches ayant réussi"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:568
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:598
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:166
 msgid "Error message"
 msgstr "Message d'erreur"
@@ -10940,8 +10992,8 @@ msgstr "Longueur maximale"
 msgid "Cloud"
 msgstr "Cloud"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:230
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:208
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:233
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:209
 msgid "Email Options"
 msgstr "Options d'email"
 
@@ -11013,7 +11065,7 @@ msgstr "N'a pas réussi à supprimer une ou plusieurs sources d'inventaire."
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "S'il est spécifié, ce champ sera affiché sur le nœud au lieu du nom de la ressource lors de la visualisation du flux de travail"
 
-#: screens/Login/Login.tsx:220
+#: screens/Login/Login.tsx:230
 msgid "Sign in with GitHub"
 msgstr "Connectez-vous à GitHub"
 
@@ -11112,8 +11164,8 @@ msgstr "Le modèle utilisé pour cibler les hôtes dans l'inventaire. En laissan
 #: components/PromptDetail/PromptDetail.tsx:425
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:518
 #: screens/Job/JobDetail/JobDetail.tsx:435
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:223
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:197
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:226
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:198
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:269
 #: screens/Template/shared/JobTemplateForm.tsx:577
 #: screens/Template/WorkflowJobTemplateVisualizer/Modals/NodeModals/NodeTypeStep/NodeTypeStep.tsx:193
@@ -11263,7 +11315,7 @@ msgstr "Clés directes"
 msgid "Disassociate?"
 msgstr "Dissocier ?"
 
-#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:199
+#: screens/NotificationTemplate/NotificationTemplateList/NotificationTemplateList.tsx:200
 msgid "Notification timed out"
 msgstr "La notification a expiré."
 
@@ -11360,8 +11412,8 @@ msgstr "Sélectionné"
 msgid "Edit credential type"
 msgstr "Modifier le type d’identification"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:55
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:460
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:58
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:523
 msgid "One Slack channel per line. The pound symbol (#)\n"
 "        is required for channels. To respond to or start a thread to a specific message add the parent message Id to the channel where the parent message Id is 16 digits. A dot (.) must be manually inserted after the 10th digit.  ie:#destination-channel, 1231257890.006423. See Slack"
 msgstr "Un canal Slack par ligne. Le symbole dièse (#)\n"
@@ -11371,7 +11423,7 @@ msgstr "Un canal Slack par ligne. Le symbole dièse (#)\n"
 msgid "Launch template"
 msgstr "Lancer le modèle"
 
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:179
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:180
 msgid "Sender e-mail"
 msgstr "E-mail de l'expéditeur"
 
@@ -11659,7 +11711,7 @@ msgstr "Pourcentage minimum de toutes les instances qui seront automatiquement a
 #~ msgid "Automation Analytics dashboard"
 #~ msgstr "Tableau de bord d’Automation Analytics."
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:393
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:423
 msgid "Source Phone Number"
 msgstr "Numéro de téléphone de la source"
 
@@ -11739,6 +11791,11 @@ msgstr "Instance introuvable."
 msgid "Workflow node view modal"
 msgstr "Vue modale du nœud de flux de travail"
 
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:348
+#~ msgid "An access token for the user the notifications are sent\n"
+#~ "      as. That user must already be a member of every destination room."
+#~ msgstr ""
+
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:96
 msgid "Leave this field blank to make the execution environment globally available."
 msgstr "Laissez ce champ vide pour rendre l'environnement d'exécution globalement disponible."
@@ -11772,7 +11829,7 @@ msgstr "Groupes"
 msgid "{interval, plural, one {# week} other {# weeks}}"
 msgstr "{interval, plural, one {# semaine} other {# semaines}}"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:577
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:607
 #: screens/NotificationTemplate/shared/CustomMessagesSubForm.tsx:175
 msgid "Error message body"
 msgstr "Corps du message d'erreur"
@@ -11816,7 +11873,7 @@ msgstr "N'a pas réussi à supprimer l'hôte."
 #: components/Lookup/MultiCredentialsLookup.tsx:226
 #: components/Lookup/OrganizationLookup.tsx:156
 #: components/Lookup/ProjectLookup.tsx:177
-#: components/NotificationList/NotificationList.tsx:250
+#: components/NotificationList/NotificationList.tsx:251
 #: components/RelatedTemplateList/RelatedTemplateList.tsx:193
 #: components/Schedule/ScheduleList/ScheduleList.tsx:238
 #: components/TemplateList/TemplateList.tsx:238
@@ -11857,7 +11914,7 @@ msgstr "Créé par (nom d'utilisateur)"
 msgid "Playbook"
 msgstr "Playbook"
 
-#: screens/Login/Login.tsx:168
+#: screens/Login/Login.tsx:173
 msgid "Invalid username or password. Please try again."
 msgstr "Nom d’utilisateur et/ou mot de passe non valide. Veuillez réessayer."
 
@@ -11877,7 +11934,7 @@ msgstr "Répertoire Playbook"
 msgid "Create New Workflow Template"
 msgstr "Créer un nouveau modèle de flux de travail"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:276
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:279
 msgid "IRC Server Address"
 msgstr "Adresse du serveur IRC"
 
@@ -11889,8 +11946,8 @@ msgstr "utilisateur ldap"
 msgid "Back to Organizations"
 msgstr "Retour à Organisations"
 
-#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:405
-#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:539
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:435
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:602
 msgid "Account SID"
 msgstr "SID de compte"
 
@@ -11912,6 +11969,13 @@ msgid "If yes make invalid entries a fatal error, otherwise skip and\n"
 "              continue."
 msgstr "Si oui, considérer les entrées non valides comme une erreur fatale, sinon ignorer et\n"
 "              continuer."
+
+#: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:50
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:348
+msgid "One room per line, as a room ID (!abcdef:example.org) or\n"
+"      a room alias (#automation:example.org). The user the access token\n"
+"      belongs to must already be a member of every room."
+msgstr ""
 
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:79
 msgid "Running jobs"
@@ -12027,6 +12091,12 @@ msgstr "Confirmer la suppression du nœud"
 #: components/Schedule/shared/ScheduleFormFields.tsx:222
 msgid "Week"
 msgstr "Semaine"
+
+#: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:351
+msgid "Send the message body as HTML (org.matrix.custom.html)\n"
+"      alongside the plain-text message, so the job link is clickable.\n"
+"      Clients that cannot render HTML fall back to the plain text."
+msgstr ""
 
 #: components/NotificationList/NotificationListItem.tsx:103
 #: components/StatusLabel/StatusLabel.tsx:52

@@ -9294,6 +9294,7 @@ export interface components {
      * @description * `email` - Email
      *     * `grafana` - Grafana
      *     * `irc` - IRC
+     *     * `matrix` - Matrix
      *     * `mattermost` - Mattermost
      *     * `pagerduty` - Pagerduty
      *     * `rocketchat` - Rocket.Chat
@@ -9306,6 +9307,7 @@ export interface components {
       | 'email'
       | 'grafana'
       | 'irc'
+      | 'matrix'
       | 'mattermost'
       | 'pagerduty'
       | 'rocketchat'
