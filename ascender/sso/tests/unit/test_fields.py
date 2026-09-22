@@ -3,7 +3,15 @@ from unittest import mock
 
 from rest_framework.exceptions import ValidationError
 
-from ascender.sso.fields import SAMLOrgAttrField, SAMLTeamAttrField, SAMLUserFlagsAttrField, LDAPGroupTypeParamsField, LDAPServerURIField
+from ascender.sso.fields import (
+    SAMLOrgAttrField,
+    SAMLTeamAttrField,
+    SAMLUserFlagsAttrField,
+    LDAPGroupTypeParamsField,
+    LDAPServerURIField,
+    LDAPSingleTeamMapField,
+    LDAPTriggersField,
+)
 
 
 class TestSAMLOrgAttrField:
@@ -233,3 +241,164 @@ class TestLDAPServerURIField:
         else:
             with pytest.raises(exception):
                 field.run_validators(ldap_uri)
+
+
+class TestLDAPTriggersField:
+    @pytest.mark.parametrize(
+        "data",
+        [
+            {'always': {}},
+            {'never': {}},
+            {'groups': {'has_or': ['CN=viewers,OU=Groups,DC=example,DC=com']}},
+            {'groups': {'has_and': ['CN=a,DC=example,DC=com', 'CN=b,DC=example,DC=com']}},
+            {'groups': {'has_not': ['CN=b,DC=example,DC=com']}},
+            {'attributes': {'mail': {'equals': 'someone@example.com'}}},
+            {'attributes': {'join_condition': 'and', 'mail': {'ends_with': '@example.com'}, 'department': {'equals': 'Private Cloud'}}},
+            {'attributes': {'mail': {'in': ['a@example.com', 'b@example.com']}}},
+            {'attributes': {'department': {}}},
+        ],
+    )
+    def test_internal_value_valid(self, data):
+        assert LDAPTriggersField().to_internal_value(data) == data
+
+    @pytest.mark.parametrize(
+        "data, expected_message",
+        [
+            ({'group': {'has_or': ['CN=a,DC=example,DC=com']}}, 'triggers.group'),
+            ({'groups': {'has_maybe': ['CN=a,DC=example,DC=com']}}, 'triggers.groups.has_maybe'),
+            ({'groups': {'has_or': 'CN=a,DC=example,DC=com'}}, 'triggers.groups.has_or'),
+            ({'attributes': {'join_condition': 'maybe'}}, 'triggers.attributes.join_condition'),
+            ({'attributes': {'mail': {'starts_with': 'someone'}}}, 'triggers.attributes.mail.starts_with'),
+            ({'attributes': {'mail': {'in': 'someone@example.com'}}}, 'triggers.attributes.mail.in'),
+        ],
+    )
+    def test_internal_value_invalid(self, data, expected_message):
+        field = LDAPTriggersField()
+        with pytest.raises(ValidationError) as excinfo:
+            field.to_internal_value(data)
+        assert expected_message in str(excinfo.value)
+
+    def test_a_team_map_entry_takes_a_rule_beside_its_group_dns(self):
+        """
+        The thing this whole change is for: naming a person in a team map without
+        inventing a directory group for them.
+        """
+        data = {
+            'organization': 'Test Org',
+            'users': ['CN=viewers,OU=Groups,DC=example,DC=com'],
+            'triggers': {'attributes': {'mail': {'equals': 'someone@example.com'}}},
+            'remove': True,
+        }
+        assert LDAPSingleTeamMapField().to_internal_value(data) == data
+
+    @pytest.mark.parametrize(
+        "data, expected_message",
+        [
+            # Only one top level trigger type is ever evaluated, so several would
+            # silently honour one and drop the rest.
+            ({'always': {}, 'never': {}}, 'triggers'),
+            ({'groups': {'has_or': ['CN=a,DC=example,DC=com']}, 'attributes': {'mail': {'equals': 'a@example.com'}}}, 'triggers'),
+            # And the same within groups, where has_or wins over the rest.
+            ({'groups': {'has_or': ['CN=a,DC=example,DC=com'], 'has_not': ['CN=b,DC=example,DC=com']}}, 'triggers.groups'),
+        ],
+    )
+    def test_a_rule_that_would_only_be_half_applied_is_refused(self, data, expected_message):
+        field = LDAPTriggersField()
+        with pytest.raises(ValidationError) as excinfo:
+            field.to_internal_value(data)
+        assert expected_message in str(excinfo.value)
+
+    @pytest.mark.parametrize(
+        "data, expected_message",
+        [
+            # A rule that matches nobody would, with remove set, strip the role
+            # from the whole directory rather than do nothing.
+            ({'attributes': {}}, 'triggers.attributes'),
+            ({'attributes': {'join_condition': 'and'}}, 'triggers.attributes'),
+            ({'groups': {}}, 'triggers.groups'),
+            # And a pattern that does not compile would raise on every login.
+            ({'attributes': {'mail': {'matches': '['}}}, 'triggers.attributes.mail.matches'),
+            ({'attributes': {'mail': {'matches': '(unclosed'}}}, 'triggers.attributes.mail.matches'),
+        ],
+    )
+    def test_a_rule_that_could_not_work_is_refused(self, data, expected_message):
+        field = LDAPTriggersField()
+        with pytest.raises(ValidationError) as excinfo:
+            field.to_internal_value(data)
+        assert expected_message in str(excinfo.value)
+
+    @pytest.mark.parametrize(
+        "data, expected_message",
+        [
+            # has_and and has_not over an empty list match every user, so an
+            # operand that looks like no constraint hands out the role instead.
+            ({'groups': {'has_and': []}}, 'triggers.groups.has_and'),
+            ({'groups': {'has_not': []}}, 'triggers.groups.has_not'),
+            # And has_or and in over an empty list match nobody, which revokes.
+            ({'groups': {'has_or': []}}, 'triggers.groups.has_or'),
+            ({'attributes': {'mail': {'in': []}}}, 'triggers.attributes.mail.in'),
+            # Same for the string operators, where empty means everyone.
+            ({'attributes': {'mail': {'contains': ''}}}, 'triggers.attributes.mail.contains'),
+            ({'attributes': {'mail': {'ends_with': ''}}}, 'triggers.attributes.mail.ends_with'),
+            ({'attributes': {'mail': {'matches': ''}}}, 'triggers.attributes.mail.matches'),
+            ({'attributes': {'mail': {'equals': ''}}}, 'triggers.attributes.mail.equals'),
+            # Only the first operator of an attribute is evaluated
+            ({'attributes': {'mail': {'equals': 'a@example.com', 'contains': 'b'}}}, 'triggers.attributes.mail'),
+        ],
+    )
+    def test_an_operand_that_constrains_nothing_is_refused(self, data, expected_message):
+        field = LDAPTriggersField()
+        with pytest.raises(ValidationError) as excinfo:
+            field.to_internal_value(data)
+        assert expected_message in str(excinfo.value)
+
+    def test_an_attribute_with_no_operator_still_asks_whether_it_is_there(self):
+        """An empty condition is the documented way of matching on presence."""
+        data = {'attributes': {'department': {}}}
+        assert LDAPTriggersField().to_internal_value(data) == data
+
+    def test_a_valid_pattern_is_accepted(self):
+        data = {'attributes': {'mail': {'matches': r'^.*@example\.com$'}}}
+        assert LDAPTriggersField().to_internal_value(data) == data
+
+    def test_a_rule_survives_being_read_back(self):
+        """What the settings API hands the UI has to be what was saved."""
+        field = LDAPSingleTeamMapField()
+        data = {
+            'organization': 'Test Org',
+            'users': ['CN=viewers,OU=Groups,DC=example,DC=com'],
+            'triggers': {'attributes': {'join_condition': 'and', 'mail': {'ends_with': '@example.com'}, 'department': {'equals': 'Private Cloud'}}},
+            'remove': True,
+        }
+        assert field.to_representation(field.to_internal_value(data)) == data
+
+    @pytest.mark.parametrize(
+        "data, expected",
+        [
+            (
+                {'organization': 'Test Org', 'users': ['CN=viewers,OU=Groups,DC=example,DC=com'], 'remove': True},
+                {'organization': 'Test Org', 'users': ['CN=viewers,OU=Groups,DC=example,DC=com'], 'remove': True},
+            ),
+            # A bare string is folded by StringListBooleanField, which lowercases
+            # before deciding whether it is really a boolean. Long standing, and
+            # harmless because is_member_of folds the DN it compares anyway.
+            (
+                {'organization': 'Test Org', 'users': 'CN=viewers,OU=Groups,DC=example,DC=com'},
+                {'organization': 'Test Org', 'users': 'cn=viewers,ou=groups,dc=example,dc=com'},
+            ),
+            ({'organization': 'Test Org', 'users': True, 'remove': False}, {'organization': 'Test Org', 'users': True, 'remove': False}),
+        ],
+    )
+    def test_an_entry_without_a_rule_is_untouched(self, data, expected):
+        """The shape every existing configuration has. No triggers key appears."""
+        field = LDAPSingleTeamMapField()
+        assert field.to_representation(field.to_internal_value(data)) == expected
+
+    def test_an_email_in_the_group_dn_list_is_still_refused(self):
+        """
+        It is not a DN, and silently never matching is how this went unnoticed in
+        the first place.
+        """
+        field = LDAPSingleTeamMapField()
+        with pytest.raises(ValidationError):
+            field.to_internal_value({'organization': 'Test Org', 'users': ['someone@example.com']})

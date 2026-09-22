@@ -11839,7 +11839,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_ORGANIZATION_MAP: {
@@ -11849,7 +11849,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_TEAM_MAP: {
@@ -11966,7 +11966,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_1_ORGANIZATION_MAP: {
@@ -11976,7 +11976,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_1_TEAM_MAP: {
@@ -12093,7 +12093,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_2_ORGANIZATION_MAP: {
@@ -12103,7 +12103,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_2_TEAM_MAP: {
@@ -12220,7 +12220,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_3_ORGANIZATION_MAP: {
@@ -12230,7 +12230,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_3_TEAM_MAP: {
@@ -12347,7 +12347,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_4_ORGANIZATION_MAP: {
@@ -12357,7 +12357,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_4_TEAM_MAP: {
@@ -12474,7 +12474,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_5_ORGANIZATION_MAP: {
@@ -12484,7 +12484,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_5_TEAM_MAP: {
@@ -14861,7 +14861,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_ORGANIZATION_MAP: {
@@ -14871,7 +14871,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_TEAM_MAP: {
@@ -14988,7 +14988,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_1_ORGANIZATION_MAP: {
@@ -14998,7 +14998,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_1_TEAM_MAP: {
@@ -15115,7 +15115,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_2_ORGANIZATION_MAP: {
@@ -15125,7 +15125,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_2_TEAM_MAP: {
@@ -15242,7 +15242,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_3_ORGANIZATION_MAP: {
@@ -15252,7 +15252,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_3_TEAM_MAP: {
@@ -15369,7 +15369,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_4_ORGANIZATION_MAP: {
@@ -15379,7 +15379,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_4_TEAM_MAP: {
@@ -15496,7 +15496,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_5_ORGANIZATION_MAP: {
@@ -15506,7 +15506,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_5_TEAM_MAP: {
@@ -16868,7 +16868,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_ORGANIZATION_MAP: {
@@ -16878,7 +16878,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_TEAM_MAP: {
@@ -16995,7 +16995,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_1_ORGANIZATION_MAP: {
@@ -17005,7 +17005,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_1_TEAM_MAP: {
@@ -17122,7 +17122,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_2_ORGANIZATION_MAP: {
@@ -17132,7 +17132,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_2_TEAM_MAP: {
@@ -17249,7 +17249,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_3_ORGANIZATION_MAP: {
@@ -17259,7 +17259,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_3_TEAM_MAP: {
@@ -17376,7 +17376,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_4_ORGANIZATION_MAP: {
@@ -17386,7 +17386,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_4_TEAM_MAP: {
@@ -17503,7 +17503,7 @@ export interface components {
       };
       /**
        * LDAP Organization Map
-       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. Configuration details are available in the documentation.
+       * @description Mapping between organization admins/users and LDAP groups. This controls which users are placed into which organizations relative to their LDAP group memberships. A role may instead be driven by a trigger rule, given as triggers_admins, triggers_users or triggers_auditors, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_5_ORGANIZATION_MAP: {
@@ -17513,7 +17513,7 @@ export interface components {
       };
       /**
        * LDAP Team Map
-       * @description Mapping between team members (users) and LDAP groups. Configuration details are available in the documentation.
+       * @description Mapping between team members (users) and LDAP groups. Membership may instead be driven by a trigger rule, given as triggers, which matches on the user's LDAP attributes as well as their groups. Configuration details are available in the documentation.
        * @default {}
        */
       AUTH_LDAP_5_TEAM_MAP: {

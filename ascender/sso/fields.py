@@ -32,6 +32,7 @@ from ascender.sso.validators import (  # noqa
     validate_ldap_dn_with_user,
     validate_ldap_filter,
     validate_ldap_filter_with_user,
+    validate_ldap_trigger_rule,
     validate_tacacsplus_disallow_nonascii,
 )
 
@@ -511,6 +512,20 @@ class LDAPDNMapField(fields.StringListBooleanField):
     child = LDAPDNField()
 
 
+class LDAPTriggersField(fields.DictField):
+    """
+    An AAP style trigger rule, validated against the same trigger definition the
+    platform's authenticator maps use.
+    """
+
+    def to_internal_value(self, data):
+        data = super(LDAPTriggersField, self).to_internal_value(data)
+        errors = validate_ldap_trigger_rule(data)
+        if errors:
+            raise ValidationError([_('%(key)s: %(error)s') % {'key': key, 'error': errors[key]} for key in sorted(errors)])
+        return data
+
+
 class LDAPSingleOrganizationMapField(HybridDictField):
     admins = LDAPDNMapField(allow_null=True, required=False)
     users = LDAPDNMapField(allow_null=True, required=False)
@@ -518,6 +533,9 @@ class LDAPSingleOrganizationMapField(HybridDictField):
     remove_admins = fields.BooleanField(required=False)
     remove_users = fields.BooleanField(required=False)
     remove_auditors = fields.BooleanField(required=False)
+    triggers_admins = LDAPTriggersField(allow_null=True, required=False)
+    triggers_users = LDAPTriggersField(allow_null=True, required=False)
+    triggers_auditors = LDAPTriggersField(allow_null=True, required=False)
 
     child = _Forbidden()
 
@@ -530,6 +548,7 @@ class LDAPSingleTeamMapField(HybridDictField):
     organization = fields.CharField()
     users = LDAPDNMapField(allow_null=True, required=False)
     remove = fields.BooleanField(required=False)
+    triggers = LDAPTriggersField(allow_null=True, required=False)
 
     child = _Forbidden()
 
