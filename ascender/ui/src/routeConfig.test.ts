@@ -1,5 +1,5 @@
 import type { AppRouteGroup } from './routeConfig';
-import getRouteConfig from './routeConfig';
+import getRouteConfig, { prefetchPopularScreens } from './routeConfig';
 
 vi.mock('util/webWorker', () => ({ default: vi.fn() }));
 
@@ -277,5 +277,71 @@ describe('getRouteConfig', () => {
       '/applications',
       '/execution_environments',
     ]);
+  });
+});
+
+describe('prefetchPopularScreens', () => {
+  const setConnection = (connection: unknown) => {
+    Object.defineProperty(navigator, 'connection', {
+      value: connection,
+      configurable: true,
+    });
+  };
+
+  afterEach(() => {
+    setConnection(undefined);
+    vi.unstubAllGlobals();
+  });
+
+  test('warms the screens during idle', () => {
+    const idle = vi.fn();
+    vi.stubGlobal('requestIdleCallback', idle);
+
+    prefetchPopularScreens();
+
+    expect(idle).toHaveBeenCalledTimes(1);
+    // Without a timeout a busy tab may never reach idle, which is the machine
+    // where the click latency is worst.
+    expect(idle.mock.calls[0]?.[1]).toEqual({ timeout: 3000 });
+  });
+
+  test('falls back to a timer where requestIdleCallback is missing', () => {
+    vi.stubGlobal('requestIdleCallback', undefined);
+    const timeout = vi.spyOn(window, 'setTimeout');
+
+    prefetchPopularScreens();
+
+    expect(timeout).toHaveBeenCalled();
+    timeout.mockRestore();
+  });
+
+  test('stays off when the connection asks to save data', () => {
+    const idle = vi.fn();
+    vi.stubGlobal('requestIdleCallback', idle);
+    setConnection({ saveData: true });
+
+    prefetchPopularScreens();
+
+    expect(idle).not.toHaveBeenCalled();
+  });
+
+  test('stays off on a 2g connection', () => {
+    const idle = vi.fn();
+    vi.stubGlobal('requestIdleCallback', idle);
+    setConnection({ effectiveType: 'slow-2g' });
+
+    prefetchPopularScreens();
+
+    expect(idle).not.toHaveBeenCalled();
+  });
+
+  test('runs on a fast connection', () => {
+    const idle = vi.fn();
+    vi.stubGlobal('requestIdleCallback', idle);
+    setConnection({ effectiveType: '4g' });
+
+    prefetchPopularScreens();
+
+    expect(idle).toHaveBeenCalledTimes(1);
   });
 });
