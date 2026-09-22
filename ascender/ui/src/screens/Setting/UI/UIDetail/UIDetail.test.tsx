@@ -42,9 +42,7 @@ describe('<UIDetail />', () => {
 
   test('initially renders without crashing', async () => {
     await renderDetail();
-    expect(
-      screen.getByText('Custom Login Info')
-    ).toBeInTheDocument();
+    expect(screen.getByText('Custom Login Info')).toBeInTheDocument();
   });
 
   test('should render expected tabs', async () => {

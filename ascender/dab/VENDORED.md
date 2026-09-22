@@ -17,6 +17,7 @@ under our control.
 | `resource_registry/` | `ansible_base/resource_registry/` | see prune list below |
 | `rest_filters/` | `ansible_base/rest_filters/` | `ansible_id_backend.py` removed (required DAB RBAC) |
 | `lib/` | `ansible_base/lib/` | only the submodules the three apps and awx use |
+| `authentication/utils/` | `ansible_base/authentication/utils/` | trigger evaluation only, see below |
 
 Module paths were rewritten `ansible_base.*` -> `awx.dab.*`. `ansible_base/lib/utils/views/ansible_base.py`
 was renamed to `lib/utils/views/base_view.py` (the filename collided with the package rename).
@@ -28,6 +29,19 @@ Do not rename the labels.
 
 ## Pruned relative to upstream
 
+- `authentication/`: everything except the trigger evaluator. The app's models
+  (`Authenticator`, `AuthenticatorMap`, `AuthenticatorUser`), migrations, serializers,
+  views, backends and the 18 authenticator plugins are all left upstream, because they
+  move auth configuration out of settings and into database rows, which is not how
+  Ascender is configured. What is kept is the half that answers "does this rule apply
+  to this user?": `utils/trigger_definition.py` verbatim, and from `utils/claims.py` the
+  pure functions `process_groups`, `process_user_attributes` and their helpers, which
+  take plain dicts and touch no models. `create_claims` and `update_user_claims`, which
+  turn that answer into memberships, are not vendored: `ascender/sso/backends.py` does
+  that against the existing `AUTH_LDAP_*_MAP` settings instead. `utils/validation.py`
+  has no upstream counterpart as a module; it is
+  `AuthenticatorMapSerializer._validate_trigger_data` from
+  `authentication/serializers/authenticator_map.py`, which only used `self` to recurse.
 - `jwt_consumer/eda/`, `jwt_consumer/hub/` — consumers for services we do not run.
 - `jwt_consumer/{views,urls}.py` and `redirect.html` — the PlatformUIRedirectView that bounces
   browsers to the AAP platform UI; its urlconf was never mounted here, and the html file was
@@ -61,6 +75,15 @@ Do not rename the labels.
 
 ## Local modifications
 
+- `authentication/utils/claims.py::_is_case_insensitivity_enabled` — upstream reads the
+  `FEATURE_CASE_INSENSITIVE_AUTH_MAPS_ENABLED` flag through `flags.state.flag_enabled`.
+  django-flags is not a dependency here, so it reads the `AUTH_MAP_CASE_INSENSITIVE`
+  Django setting instead (defined in `ascender/settings/defaults.py`, default off).
+- `authentication/utils/claims.py::process_user_attributes` — the `join_condition` pop
+  mutates the trigger dict it is given. Upstream always passes a dict freshly loaded
+  from a `JSONField`, so it never notices; ours come from the settings cache and would
+  lose `join_condition` after the first login. The function now copies first. Covered by
+  `ascender/main/tests/functional/test_dab_authentication_triggers.py`.
 - `lib/dynamic_config/settings_logic.py` — removed upstream's auto-injection of the DAB
   RBAC app into INSTALLED_APPS whenever jwt_consumer is installed. Before vendoring, this
   injection was live: existing databases have 10 `dab_rbac` migrations applied and empty

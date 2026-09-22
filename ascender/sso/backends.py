@@ -36,7 +36,9 @@ from social_core.backends.saml import SAMLAuth as BaseSAMLAuth
 from social_core.backends.saml import SAMLIdentityProvider as BaseSAMLIdentityProvider
 
 # Ansible Tower
+from ascender.dab.authentication.utils.claims import TriggerResult, process_groups, process_user_attributes
 from ascender.sso.models import UserEnterpriseAuth
+from ascender.sso.validators import validate_ldap_trigger_rule
 from ascender.sso.common import create_org_and_teams, reconcile_users_org_team_mappings
 
 logger = logging.getLogger('ascender.sso.backends')
@@ -409,6 +411,110 @@ def _update_m2m_from_groups(ldap_user, opts, remove=True):
     return None
 
 
+#: A trigger rule that could not be evaluated, as distinct from one that did not
+#: match: the first has no opinion, the second is an answer.
+UNUSABLE_RULE = object()
+
+
+def _ldap_user_attributes(ldap_user):
+    """
+    The LDAP entry to match a rule against, as attribute name to list of values.
+
+    Populating the user reads the entry already, so as long as anything is
+    mapped in AUTH_LDAP_USER_ATTR_MAP this costs no extra query.  The keys are
+    the directory's own names (mail, department, ...), which is what the same
+    triggers match against under AAP.
+
+    It is returned untouched on purpose.  django-auth-ldap decodes the entry
+    into an ldap.cidict, which looks attributes up without regard to case, as
+    the protocol says they should be.  Copying it into a plain dict would make
+    a rule naming samAccountName miss an entry holding sAMAccountName, and with
+    remove set a miss revokes.
+    """
+    return getattr(ldap_user, 'attrs', None) or {}
+
+
+def _ldap_user_group_dns(ldap_user):
+    """The user's group DNs, in the lower case normal form django-auth-ldap keeps them in."""
+    return [str(group_dn).lower() for group_dn in ldap_user._get_groups().get_group_dns()]
+
+
+def _lowercase_group_dns(trigger):
+    """The group DNs a trigger names, folded the way is_member_of folds them."""
+    return {operator: [str(group_dn).lower() for group_dn in dns] if isinstance(dns, list) else dns for operator, dns in trigger.items()}
+
+
+def _update_m2m_from_triggers(ldap_user, triggers, map_id):
+    """
+    Evaluate an AAP style trigger rule against the LDAP user.
+
+    Returns:
+        True - the rule matched
+        False - the rule explicitly denied the user
+        None - the rule does not apply to this user
+        UNUSABLE_RULE - the rule cannot be evaluated at all
+    """
+    # These maps can be written to a settings file as well as saved through the
+    # API, so a rule reaching here may never have been validated.
+    errors = validate_ldap_trigger_rule(triggers)
+    if errors:
+        logger.warning(
+            "The trigger rule in mapping {} will be ignored: {}".format(map_id, '; '.join('{}: {}'.format(key, errors[key]) for key in sorted(errors)))
+        )
+        return UNUSABLE_RULE
+
+    tracking_id = str(uuid.uuid4())
+    trigger_result = TriggerResult.SKIP
+    for trigger_type, trigger in triggers.items():
+        if trigger_type == 'groups':
+            # django-auth-ldap holds DNs in their normal form, which is lower
+            # case, and is_member_of folds whatever a map names before comparing.
+            # So do the same here: a group DN written the way the directory
+            # prints it has always worked in these maps and has to keep working.
+            trigger_result = process_groups(_lowercase_group_dns(trigger), _ldap_user_group_dns(ldap_user), map_id, tracking_id)
+        elif trigger_type == 'attributes':
+            trigger_result = process_user_attributes(trigger, _ldap_user_attributes(ldap_user), map_id, tracking_id)
+        elif trigger_type == 'always':
+            trigger_result = TriggerResult.ALLOW
+        elif trigger_type == 'never':
+            trigger_result = TriggerResult.DENY
+
+    if trigger_result is TriggerResult.ALLOW:
+        return True
+    if trigger_result is TriggerResult.DENY:
+        return False
+    return None
+
+
+def _update_m2m_from_map(ldap_user, opts, remove=True, triggers=None, map_id=''):
+    """
+    Evaluate one role of one LDAP org/team map entry.
+
+    Without a trigger rule this is exactly _update_m2m_from_groups, which is what
+    every existing configuration uses.  With one, the rule is evaluated first and
+    the group DN options are the fallback for a user the rule says nothing about.
+    """
+    if not triggers:
+        return _update_m2m_from_groups(ldap_user, opts, remove)
+
+    state = _update_m2m_from_triggers(ldap_user, triggers, map_id)
+    if state is UNUSABLE_RULE:
+        # A rule nobody can evaluate decides nothing.  Anything else here, the
+        # revoke below included, would turn one typo into every user in the
+        # directory losing the role.
+        return _update_m2m_from_groups(ldap_user, opts, remove)
+    if state is not None:
+        return state
+
+    # The rule did not apply to this user.  Fall back to the group DNs, and if
+    # those say nothing either then remove behaves like an AAP revoke: a rule
+    # the user does not meet costs them the membership.
+    state = _update_m2m_from_groups(ldap_user, opts, remove)
+    if state is None and remove:
+        return False
+    return state
+
+
 @receiver(populate_user, dispatch_uid='populate-ldap-user')
 def on_populate_user(sender, **kwargs):
     """
@@ -453,13 +559,19 @@ def on_populate_user(sender, **kwargs):
     org_roles_and_ldap_attributes = {'admin_role': 'admins', 'auditor_role': 'auditors', 'member_role': 'users'}
     desired_org_states = {}
     for org_name, org_opts in org_map.items():
-        remove = bool(org_opts.get('remove', True))
+        org_remove = bool(org_opts.get('remove', True))
         desired_org_states[org_name] = {}
         for org_role_name in org_roles_and_ldap_attributes.keys():
             ldap_name = org_roles_and_ldap_attributes[org_role_name]
             opts = org_opts.get(ldap_name, None)
-            remove = bool(org_opts.get('remove_{}'.format(ldap_name), remove))
-            desired_org_states[org_name][org_role_name] = _update_m2m_from_groups(ldap_user, opts, remove)
+            # Each role falls back to the entry's remove, not to whatever the
+            # role before it was given, which is how the social auth path has
+            # always read the same options.
+            role_remove = bool(org_opts.get('remove_{}'.format(ldap_name), org_remove))
+            triggers = org_opts.get('triggers_{}'.format(ldap_name), None)
+            desired_org_states[org_name][org_role_name] = _update_m2m_from_map(
+                ldap_user, opts, role_remove, triggers, 'organization {} {}'.format(org_name, ldap_name)
+            )
 
         # If everything returned None (because there was no configuration) we can remove this org from our map
         # This will prevent us from loading the org in the next query
@@ -473,7 +585,8 @@ def on_populate_user(sender, **kwargs):
             continue
         users_opts = team_opts.get('users', None)
         remove = bool(team_opts.get('remove', True))
-        state = _update_m2m_from_groups(ldap_user, users_opts, remove)
+        triggers = team_opts.get('triggers', None)
+        state = _update_m2m_from_map(ldap_user, users_opts, remove, triggers, 'team {}'.format(team_name))
         if state is not None:
             organization = team_opts['organization']
             if organization not in desired_team_states:

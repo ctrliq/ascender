@@ -12,10 +12,7 @@ import { useSettings } from 'contexts/Settings';
 import useModal from 'hooks/useModal';
 import useRequest from 'hooks/useRequest';
 import { SettingsAPI } from 'api';
-import {
-  FileUploadField,
-  TextAreaField,
-} from '../../shared/SharedFields';
+import { FileUploadField, TextAreaField } from '../../shared/SharedFields';
 import { RevertAllAlert, RevertFormActionGroup } from '../../shared';
 
 function UIEdit() {
