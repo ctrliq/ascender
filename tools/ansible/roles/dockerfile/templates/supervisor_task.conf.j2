@@ -47,7 +47,11 @@ directory = /ascender_devel
 command = ascender-manage run_callback_receiver
 directory = /var/lib/ascender
 {% endif %}
-autorestart = true
+# unexpected, not true: the receiver exits 0 when it gives up replacing
+# workers that keep dying.  Restarting it there would hide the problem, so
+# leave it stopped and let the liveness probe fail the container.  A crash
+# still exits non-zero and is still restarted.
+autorestart = unexpected
 startsecs = 30
 stopasgroup=true
 killasgroup=true
