@@ -57,7 +57,10 @@ class AWXConsumerBase(object):
         if pool is None:
             self.pool = WorkerPool()
         self.pool.init_workers(self.worker.work_loop)
-        self.valkey = valkey.Valkey.from_url(settings.BROKER_URL)
+        # Timed out rather than untimed: the supervision loop in
+        # AWXConsumerValkey calls llen() on this every check, and a call that
+        # blocks forever would stop the parent replacing dead workers at all.
+        self.valkey = valkey.Valkey.from_url(settings.BROKER_URL, socket_timeout=settings.CALLBACK_QUEUE_SOCKET_TIMEOUT)
 
     @property
     def listening_on(self):
