@@ -240,21 +240,25 @@ class WorkerPool(object):
         for idx in range(self.min_workers):
             self.up()
 
-    def up(self):
-        idx = len(self.workers)
+    def spawn(self, idx):
         # It's important to close these because we're _about_ to fork, and we
         # don't want the forked processes to inherit the open sockets
         # for the DB and cache connections (that way lies race conditions)
         django_connection.close()
         django_cache.close()
         worker = self.pool_cls(self.queue_size, self.target, (idx,) + self.target_args)
-        self.workers.append(worker)
         try:
             worker.start()
         except Exception:
             logger.exception('could not fork')
         else:
             logger.debug('scaling up worker pid:{}'.format(worker.pid))
+        return worker
+
+    def up(self):
+        idx = len(self.workers)
+        worker = self.spawn(idx)
+        self.workers.append(worker)
         return idx, worker
 
     def debug(self, *args, **kwargs):
@@ -301,6 +305,30 @@ class WorkerPool(object):
             write_attempt_order.append(preferred_queue)
         logger.error("could not write payload to any queue, attempted order: {}".format(write_attempt_order))
         return None
+
+    def cleanup(self):
+        """
+        Replace worker processes that have exited, and report how many.
+
+        Workers are forked children, so when one is killed (OOM, segfault)
+        nothing else notices.  The parent keeps running, which means supervisor
+        and the pod liveness probe both keep reporting healthy while that
+        worker stops consuming.
+
+        Replacements keep the dead worker's slot so that idx stays stable.
+        Anything the dead worker had already buffered is lost with it; that
+        happens at the kill, not here.  This is only correct for pools whose
+        workers fetch their own work.  AutoscalePool overrides it with a
+        version that first recovers the dead worker's pending messages.
+        """
+        respawned = 0
+        for idx, worker in enumerate(self.workers):
+            if worker.alive:
+                continue
+            logger.error('worker pid:{} is gone (exit={}), respawning'.format(worker.pid, worker.exitcode))
+            self.workers[idx] = self.spawn(idx)
+            respawned += 1
+        return respawned
 
     def stop(self, signum):
         try:
