@@ -149,14 +149,62 @@ class AWXConsumerBase(object):
 
 
 class AWXConsumerValkey(AWXConsumerBase):
+    pool_check_interval = 60
+    # Past this many respawns in a row, stop replacing workers and exit, so
+    # supervisor and then the kubelet can escalate instead of us quietly
+    # re-forking into whatever keeps killing them.
+    max_consecutive_respawns = 5
+
     def run(self, *args, **kwargs):
         super(AWXConsumerValkey, self).run(*args, **kwargs)
         self.worker.on_start()
         logger.info(f'Callback receiver started with pid={os.getpid()}')
         db.connection.close()  # logs use database, so close connection
+        self.last_queue_depth = None
+        self.consecutive_respawns = 0
 
-        while True:
-            time.sleep(60)
+        last_check = time.time()
+        while not self.should_stop:
+            # tick faster than the check interval so shutdown stays responsive
+            time.sleep(1)
+            if time.time() - last_check < self.pool_check_interval:
+                continue
+            last_check = time.time()
+            if self.pool.cleanup():
+                self.consecutive_respawns += 1
+                if self.consecutive_respawns > self.max_consecutive_respawns:
+                    logger.error(
+                        f'replaced callback receiver workers on {self.consecutive_respawns} consecutive checks; '
+                        'exiting so this is escalated rather than hidden'
+                    )
+                    return
+            else:
+                self.consecutive_respawns = 0
+            self.check_queue_depth()
+
+    def check_queue_depth(self):
+        """
+        Warn when the callback queue is not draining.
+
+        Workers only report the queue depth while they are popping events, see
+        CallbackBrokerWorker.record_read_metrics, so when consumption stops the
+        metric goes stale instead of rising.  Every signal we had was published
+        by the thing that stopped, which is why a stalled receiver can sit
+        unnoticed for days.  Checking from the parent catches that whether the
+        workers died or are merely wedged.
+        """
+        try:
+            depth = self.valkey.llen(settings.CALLBACK_QUEUE)
+        except Exception:
+            logger.exception('could not read callback queue depth from valkey')
+            return
+        previous, self.last_queue_depth = self.last_queue_depth, depth
+        if depth and previous is not None and depth >= previous:
+            logger.warning(
+                f'callback queue depth is not decreasing: {previous} -> {depth} over '
+                f'{self.pool_check_interval}s with {len(self.pool)} workers; events are '
+                'being produced faster than they are consumed, or a worker is stalled'
+            )
 
 
 class AWXConsumerPG(AWXConsumerBase):
