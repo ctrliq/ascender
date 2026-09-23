@@ -172,7 +172,7 @@ class AWXConsumerValkey(AWXConsumerBase):
             last_check = time.time()
             if self.pool.cleanup():
                 self.consecutive_respawns += 1
-                if self.consecutive_respawns > self.max_consecutive_respawns:
+                if self.consecutive_respawns >= self.max_consecutive_respawns:
                     logger.error(
                         f'replaced callback receiver workers on {self.consecutive_respawns} consecutive checks; '
                         'exiting so this is escalated rather than hidden'
