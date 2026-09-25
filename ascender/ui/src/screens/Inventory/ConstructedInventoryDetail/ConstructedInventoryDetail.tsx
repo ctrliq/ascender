@@ -245,7 +245,8 @@ function ConstructedInventoryDetail({
             dataCy="constructed-inventory-instance-groups"
           />
         )}
-        {inventory.prevent_instance_group_fallback && (
+        {(inventory.prevent_instance_group_fallback ||
+          inventory.allow_jobs_while_syncing) && (
           <Detail
             fullWidth
             label={t`Enabled Options`}
@@ -258,6 +259,15 @@ function ConstructedInventoryDetail({
                     <Popover
                       header={t`Prevent Instance Group Fallback`}
                       content={helpText.preventInstanceGroupFallback}
+                    />
+                  </Content>
+                )}
+                {inventory.allow_jobs_while_syncing && (
+                  <Content component={ContentVariants.li}>
+                    {t`Allow Jobs While Syncing`}
+                    <Popover
+                      header={t`Allow Jobs While Syncing`}
+                      content={helpText.allowJobsWhileSyncing}
                     />
                   </Content>
                 )}

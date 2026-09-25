@@ -30,7 +30,7 @@ msgstr "要重新调整调查问题的顺序，将问题拖放到所需的位置
 msgid "Copy to clipboard"
 msgstr "复制到剪贴板"
 
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:118
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:125
 msgid "Select Input Inventories for the constructed inventory plugin."
 msgstr "为构建的库存插件选择输入库存。"
 
@@ -103,7 +103,7 @@ msgstr "保留数据的天数"
 msgid "{intervalValue, plural, one {year} other {years}}"
 msgstr "{intervalValue, plural, one {year} other {years}}"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:350
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:360
 msgid "Constructed Inventory Source Sync Error"
 msgstr "构建的库存源同步错误"
 
@@ -208,7 +208,7 @@ msgstr "点击以切换默认值"
 msgid "RAM {0}"
 msgstr "RAM {0}"
 
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:46
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:53
 msgid "The plugin parameter is required."
 msgstr "插件参数是必需的。"
 
@@ -363,7 +363,7 @@ msgstr "要检出的分支。除了分支之外，您还可以输入标签、提
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:74
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:182
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:93
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:107
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:117
 #: screens/Inventory/InventoryList/InventoryList.tsx:238
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:136
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:216
@@ -418,7 +418,7 @@ msgid "Timed out"
 msgstr "超时"
 
 #. placeholder {0}: header || t`Items`
-#: components/Lookup/Lookup.tsx:236
+#: components/Lookup/Lookup.tsx:237
 msgid "Select {0}"
 msgstr "选择 {0}"
 
@@ -589,6 +589,7 @@ msgstr "{0, plural, one {You cannot cancel the following job because it is not r
 #: screens/Credential/shared/TypeInputsSubForm.tsx:52
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:88
 #: screens/Instances/Shared/InstanceForm.tsx:106
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:177
 #: screens/Inventory/shared/InventoryForm.tsx:100
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:116
 #: screens/Template/shared/JobTemplateForm.tsx:649
@@ -608,7 +609,7 @@ msgstr "此节点的作业在遵循其失败路径之前失败后自动重试的
 msgid "You cannot select multiple vault credentials with the same vault ID. Doing so will automatically deselect the other with the same vault ID."
 msgstr "您不能选择具有相同 vault ID 的多个 vault 凭证。这样做会自动取消选择具有相同的 vault ID 的另一个凭证。"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:353
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:363
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:364
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:357
 msgid "Cancel Sync"
@@ -639,8 +640,8 @@ msgstr "GPG 公钥"
 msgid "Source Control URL"
 msgstr "源控制 URL"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:316
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:171
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:326
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:191
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:182
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:269
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:339
@@ -851,9 +852,9 @@ msgid "You may apply a number of possible variables in the\n"
 msgstr "您可以在消息中应用多个可能的变量。\n"
 "                如需更多信息，请参阅"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:377
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:387
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:208
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:214
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:224
 msgid "Failed to delete inventory."
 msgstr "删除清单失败。"
 
@@ -874,7 +875,7 @@ msgid "LDAP 5"
 msgstr "LDAP 5"
 
 #: components/Lookup/HostFilterLookup.tsx:386
-#: components/Lookup/Lookup.tsx:237
+#: components/Lookup/Lookup.tsx:238
 msgid "Lookup modal"
 msgstr "查找模式"
 
@@ -1762,7 +1763,7 @@ msgstr "创建新联邦库存"
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostListItem.tsx:49
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:164
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:83
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:102
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:112
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:42
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:202
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:217
@@ -1787,7 +1788,7 @@ msgstr "创建新联邦库存"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:215
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:214
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:72
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:82
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:89
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:65
 #: screens/Inventory/shared/InventoryForm.tsx:56
 #: screens/Inventory/shared/InventoryGroupForm.tsx:54
@@ -2024,7 +2025,7 @@ msgstr "密钥"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:354
+#: screens/Login/Login.tsx:345
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2198,7 +2199,7 @@ msgstr "字段与给出的正则表达式匹配。"
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 
-#: screens/Login/Login.tsx:352
+#: screens/Login/Login.tsx:343
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2433,7 +2434,7 @@ msgid "Management job launch error"
 msgstr "管理作业启动错误"
 
 #: components/Lookup/HostFilterLookup.tsx:309
-#: components/Lookup/Lookup.tsx:182
+#: components/Lookup/Lookup.tsx:183
 msgid "Search"
 msgstr "搜索"
 
@@ -2482,7 +2483,7 @@ msgstr "周末日"
 msgid "Execution environment copied successfully"
 msgstr "执行环境复制成功"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:351
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:361
 msgid "Cancel Constructed Inventory Source Sync"
 msgstr "取消构建的库存源同步"
 
@@ -2504,7 +2505,7 @@ msgstr "{0}（已删除）"
 msgid "The inventory that this host belongs to."
 msgstr "此主机要属于的清单。"
 
-#: screens/Login/Login.tsx:337
+#: screens/Login/Login.tsx:328
 msgid "Log In"
 msgstr "登录"
 
@@ -2590,9 +2591,9 @@ msgstr "如果启用，则该清单将阻止将任何机构实例组添加到运
 msgid "for more information."
 msgstr "更多信息。"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:361
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:371
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:192
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:197
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:207
 msgid "Delete Inventory"
 msgstr "删除清单"
 
@@ -2688,6 +2689,10 @@ msgstr "复制输出"
 msgid "No results found"
 msgstr "没有找到结果"
 
+#: screens/Inventory/shared/Inventory.helptext.tsx:214
+msgid "Allow Jobs While Syncing: If enabled, jobs against this inventory do not wait for a sync of it to finish."
+msgstr ""
+
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:218
 #: components/PromptDetail/PromptDetail.tsx:432
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
@@ -2703,6 +2708,10 @@ msgstr "关"
 #: screens/Inventory/Inventories.tsx:57
 msgid "Create new smart inventory"
 msgstr "创建新智能清单"
+
+#: screens/Inventory/shared/Inventory.helptext.tsx:204
+msgid "If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update."
+msgstr ""
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:664
 msgid "Delete Schedule"
@@ -2929,9 +2938,9 @@ msgstr "使用JSON或YAML语法输入库存变量。使用单选按钮在两者�
 #~ msgid "Username / password"
 #~ msgstr "用户名/密码"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:291
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:301
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:143
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:115
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:122
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:91
 msgid "Input Inventories"
 msgstr "输入库存"
@@ -3001,12 +3010,12 @@ msgstr "{0, plural, one {请输入有效的电话号码。} other {请输入有�
 msgid "Facts"
 msgstr "事实"
 
-#: screens/Login/Login.tsx:361
+#: screens/Login/Login.tsx:352
 msgid "or"
 msgstr "或"
 
 #: components/AssociateModal/AssociateModal.tsx:69
-#: components/Lookup/Lookup.tsx:236
+#: components/Lookup/Lookup.tsx:237
 #: components/PaginatedTable/PaginatedTable.tsx:77
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:59
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:36
@@ -3112,7 +3121,7 @@ msgstr "拒绝 {0} 失败。"
 msgid "Webhook details"
 msgstr "Webhook 详情"
 
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:109
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:116
 #: screens/Inventory/shared/SmartInventoryForm.tsx:95
 msgid "Select the Instance Groups for this Inventory to run on."
 msgstr "选择要运行此清单的实例组。"
@@ -3271,7 +3280,7 @@ msgstr "{intervalValue, plural, one {hour} other {hours}}"
 
 #: components/AdHocCommands/useAdHocDetailsStep.tsx:68
 #: components/LaunchPrompt/steps/useSurveyStep.tsx:145
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:58
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:65
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:39
 #: screens/Template/shared/JobTemplateForm.tsx:240
 #: screens/User/shared/UserForm.tsx:131
@@ -3370,9 +3379,9 @@ msgstr "小于或等于比较。"
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:168
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:140
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:144
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:366
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:376
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:197
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:202
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:212
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:104
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:378
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:71
@@ -3524,9 +3533,9 @@ msgstr "GitHub Team"
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:93
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:111
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:55
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:324
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:334
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:169
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:174
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:184
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:54
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:88
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:337
@@ -3613,7 +3622,7 @@ msgstr "8 月"
 msgid "View smart inventory host details"
 msgstr "查看智能清单主机详情"
 
-#: screens/Login/Login.tsx:260
+#: screens/Login/Login.tsx:251
 msgid "Sign in with Google"
 msgstr "使用 Google 登录"
 
@@ -3651,7 +3660,7 @@ msgstr "此操作将从所选团队中解除该用户的所有角色。"
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
 #: components/Lookup/HostFilterLookup.tsx:407
-#: components/Lookup/Lookup.tsx:259
+#: components/Lookup/Lookup.tsx:260
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:248
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:47
 #: components/Schedule/shared/ScheduleForm.tsx:624
@@ -3994,6 +4003,14 @@ msgstr "创建新通知模板"
 msgid "None"
 msgstr "无"
 
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:267
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:269
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:94
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:183
+#: screens/Inventory/shared/InventoryForm.tsx:117
+msgid "Allow Jobs While Syncing"
+msgstr ""
+
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:73
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:74
 #~ msgid "Automation Analytics"
@@ -4110,9 +4127,9 @@ msgstr "删除凭证"
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:126
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:130
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:361
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:341
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:351
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:186
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:191
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:201
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:67
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:72
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:110
@@ -4197,7 +4214,7 @@ msgstr "未指定超时"
 msgid "On Timeout"
 msgstr "超时时"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:207
+#: screens/Inventory/shared/Inventory.helptext.tsx:208
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
 msgstr "防止实例组 Fallback：如果启用，则该清单将阻止将任何机构实例组添加到运行相关作业模板的首选实例组列表中。"
 
@@ -4374,7 +4391,7 @@ msgstr "主题"
 msgid "Filter on nested group name"
 msgstr "按嵌套组名称筛选"
 
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:84
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:89
 #: screens/Inventory/shared/InventoryForm.tsx:111
 msgid "Allow Deletes While In Use"
 msgstr "允许在使用中删除"
@@ -4525,7 +4542,7 @@ msgstr "删除同行？"
 msgid "Search text input"
 msgstr "搜索文本输入"
 
-#: components/Lookup/Lookup.tsx:99
+#: components/Lookup/Lookup.tsx:100
 msgid "That value was not found. Please enter or select a valid value."
 msgstr "未找到该值。请输入或选择一个有效值。"
 
@@ -4592,10 +4609,10 @@ msgstr "查看机构详情"
 #: screens/Instances/InstanceList/InstanceListItem.tsx:275
 #: screens/Instances/InstancePeers/InstancePeerList.tsx:343
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:114
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:374
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:384
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventorySyncButton.tsx:51
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:205
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:211
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:221
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:89
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:297
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:308
@@ -4744,7 +4761,7 @@ msgstr "切换主机失败。"
 msgid "denied"
 msgstr "拒绝"
 
-#: screens/Login/Login.tsx:250
+#: screens/Login/Login.tsx:241
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "使用 GitHub Enterprise Organizations 登录"
 
@@ -4982,10 +4999,10 @@ msgstr "选择要删除的问题"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:641
 #: screens/Host/HostDetail/HostDetail.tsx:102
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:62
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:166
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:176
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:48
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:95
-#: screens/Inventory/shared/InventoryForm.tsx:120
+#: screens/Inventory/shared/InventoryForm.tsx:126
 #: screens/Inventory/shared/InventoryGroupForm.tsx:68
 #: screens/Inventory/shared/SmartInventoryForm.tsx:101
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:133
@@ -5073,7 +5090,7 @@ msgstr "文本区"
 msgid "View User Interface settings"
 msgstr "查看用户界面设置"
 
-#: screens/Login/Login.tsx:240
+#: screens/Login/Login.tsx:231
 msgid "Sign in with GitHub Teams"
 msgstr "使用 GitHub Teams 登录"
 
@@ -5145,9 +5162,9 @@ msgstr "折叠"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:566
 #: components/TemplateList/TemplateListItem.tsx:325
 #: routeConfig.tsx:96
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:272
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:282
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:124
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:155
 #: screens/Inventory/shared/InventoryForm.tsx:89
 #: screens/Job/JobDetail/JobDetail.tsx:491
 #: screens/Labels/Labels.tsx:13
@@ -5809,8 +5826,8 @@ msgstr "测试通知"
 #: components/PromptDetail/PromptProjectDetail.tsx:143
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:112
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:262
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:251
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:135
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:252
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:336
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:363
@@ -5859,7 +5876,7 @@ msgstr "源控制分支"
 #: screens/InstanceGroup/InstanceGroups.tsx:32
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:250
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:242
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:120
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:130
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:250
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:110
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:424
@@ -6842,7 +6859,7 @@ msgstr "系统管理员对所有资源的访问权限是不受限制的。"
 msgid "Failure"
 msgstr "失败"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:352
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:362
 msgid "Failed to cancel Constructed Inventory Source Sync"
 msgstr "取消构建的库存源同步失败"
 
@@ -7387,7 +7404,7 @@ msgstr "没有作业"
 msgid "Application name"
 msgstr "应用程序名"
 
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:145
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:152
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.tsx:111
 msgid "Cache timeout (seconds)"
 msgstr "缓存超时（秒）"
@@ -7402,7 +7419,7 @@ msgstr "退出"
 msgid "sec"
 msgstr "秒"
 
-#: screens/Login/Login.tsx:291
+#: screens/Login/Login.tsx:282
 msgid "Sign in with {label}"
 msgstr "使用 {label} 登陆"
 
@@ -7500,7 +7517,7 @@ msgstr "同步"
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:45
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:177
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:88
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:106
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:116
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:46
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:224
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:87
@@ -7509,7 +7526,7 @@ msgstr "同步"
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:140
 #: screens/Inventory/InventoryList/InventoryList.tsx:213
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:232
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:90
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:97
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:63
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:73
 #: screens/Inventory/shared/InventoryForm.tsx:64
@@ -7633,7 +7650,7 @@ msgstr "编辑团队"
 msgid "User Interface"
 msgstr "用户界面"
 
-#: screens/Login/Login.tsx:245
+#: screens/Login/Login.tsx:236
 msgid "Sign in with GitHub Enterprise"
 msgstr "使用 GitHub Enterprise 登录"
 
@@ -7646,7 +7663,7 @@ msgstr "使用 GitHub Enterprise 登录"
 #: components/Schedule/shared/ScheduleFormFields.tsx:76
 #: screens/Credential/shared/CredentialForm.tsx:101
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:106
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:100
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:107
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:83
 #: screens/Inventory/shared/InventoryForm.tsx:78
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.tsx:54
@@ -7681,7 +7698,7 @@ msgstr "永不过期"
 msgid "View job {0}"
 msgstr "查看作业 {0}"
 
-#: screens/Login/Login.tsx:277
+#: screens/Login/Login.tsx:268
 msgid "Sign in with SAML {samlIDP}"
 msgstr "使用 SAML {samlIDP} 登陆"
 
@@ -7794,7 +7811,7 @@ msgstr "开头不区分大小写的版本。"
 msgid "Unsaved changes modal"
 msgstr "未保存的修改 modal"
 
-#: screens/Login/Login.tsx:255
+#: screens/Login/Login.tsx:246
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "使用 GitHub Enterprise Teams 登录"
 
@@ -7828,7 +7845,7 @@ msgstr "Grafana URL"
 msgid "GitHub settings"
 msgstr "GitHub 设置"
 
-#: screens/Login/Login.tsx:235
+#: screens/Login/Login.tsx:226
 msgid "Sign in with GitHub Organizations"
 msgstr "使用 GitHub Organizations 登录"
 
@@ -8287,10 +8304,10 @@ msgstr "授权授予类型"
 msgid "ID of the panel (optional)"
 msgstr "面板 ID（可选）"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:257
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:259
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:79
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:127
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:258
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:260
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:84
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:137
 #: screens/Inventory/shared/InventoryForm.tsx:105
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:145
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:345
@@ -8443,7 +8460,7 @@ msgstr "注：选择它们的顺序设定执行优先级。选择多个来启用
 msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 msgstr "不允许在启动时需要密码的凭证。请删除以下凭证或将其替换为相同类型的凭证以继续: {0}"
 
-#: screens/Login/Login.tsx:265
+#: screens/Login/Login.tsx:256
 msgid "Sign in with OIDC"
 msgstr "使用 OIDC 登陆"
 
@@ -8619,7 +8636,7 @@ msgstr "编辑清单"
 msgid "Failed to user token."
 msgstr "用户令牌失败。"
 
-#: screens/Login/Login.tsx:277
+#: screens/Login/Login.tsx:268
 msgid "Sign in with SAML"
 msgstr "使用 SAML 登陆"
 
@@ -8713,7 +8730,7 @@ msgstr "回答变量名称"
 
 #: components/JobList/JobListItem.tsx:110
 #: components/Lookup/HostFilterLookup.tsx:399
-#: components/Lookup/Lookup.tsx:250
+#: components/Lookup/Lookup.tsx:251
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
 msgstr "选择"
@@ -8773,7 +8790,7 @@ msgstr "工作流文档"
 msgid "January"
 msgstr "1 月"
 
-#: screens/Login/Login.tsx:220
+#: screens/Login/Login.tsx:211
 msgid "Sign in with Azure AD"
 msgstr "使用 Azure AD 登陆"
 
@@ -8828,7 +8845,7 @@ msgstr "同步项目失败。"
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:210
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:109
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:116
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:126
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:125
 msgid "Total hosts"
 msgstr "主机总数"
@@ -9150,7 +9167,7 @@ msgstr "更新选项"
 #: screens/Host/HostDetail/HostDetail.tsx:98
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:98
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:116
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:179
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:189
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
 #: screens/Job/JobDetail/JobDetail.tsx:582
@@ -9322,7 +9339,7 @@ msgstr "工作流拒绝的消息正文"
 msgid "Generic OIDC settings"
 msgstr "通用 OIDC 设置"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:210
+#: screens/Inventory/shared/Inventory.helptext.tsx:211
 msgid "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
 msgstr "允许在使用中删除：如果启用，则可以在有作业针对此清单运行时从中删除主机。"
 
@@ -9534,7 +9551,7 @@ msgstr "删除链接"
 msgid "Provisioning Callback URL"
 msgstr "部署回调 URL"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:329
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:339
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:174
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:201
 #: screens/User/UserTokenList/UserTokenList.tsx:159
@@ -9873,7 +9890,7 @@ msgstr "切换工具"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:102
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:193
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:98
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:109
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:119
 #: screens/Inventory/InventoryList/InventoryList.tsx:209
 #: screens/Inventory/InventoryList/InventoryList.tsx:239
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:139
@@ -9899,7 +9916,7 @@ msgstr "切换工具"
 msgid "Organization"
 msgstr "机构（Organization）"
 
-#: screens/Login/Login.tsx:315
+#: screens/Login/Login.tsx:306
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "您的会话已过期。请登录以继续使用会话过期前所在的位置。"
 
@@ -9917,9 +9934,9 @@ msgstr "创建者（用户名）"
 msgid "Inventory sync failures"
 msgstr "清单同步失败"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:364
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:374
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:195
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:200
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:210
 msgid "This inventory is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "其他资源目前正在使用此清单。确定要删除它吗？"
 
@@ -9949,7 +9966,7 @@ msgstr "作业运行时会禁用搜索"
 msgid "Third"
 msgstr "第三"
 
-#: screens/Login/Login.tsx:225
+#: screens/Login/Login.tsx:216
 msgid "Sign in with Azure AD Tenant"
 msgstr "使用 Azure AD Tenant 登录"
 
@@ -9962,7 +9979,7 @@ msgstr "Azure AD 默认"
 msgid "Case-insensitive version of endswith."
 msgstr "结尾不区分大小写的版本。"
 
-#: components/Lookup/Lookup.tsx:257
+#: components/Lookup/Lookup.tsx:258
 msgid "Cancel lookup"
 msgstr "取消查找"
 
@@ -11106,7 +11123,7 @@ msgstr "删除一个或多个清单源失败。"
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "如果指定，则在查看工作流时此字段将显示在节点上，而不是资源名称"
 
-#: screens/Login/Login.tsx:230
+#: screens/Login/Login.tsx:221
 msgid "Sign in with GitHub"
 msgstr "使用 GitHub 登陆"
 
@@ -11555,7 +11572,7 @@ msgstr "请运行一个作业来填充此列表。"
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:103
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:507
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:187
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:162
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:169
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:176
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:263
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:334
@@ -12070,7 +12087,7 @@ msgstr "切换通知开始"
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:47
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.tsx:128
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostListItem.tsx:57
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:107
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:117
 #: screens/Inventory/InventoryList/InventoryList.tsx:202
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:60
 #: screens/Job/JobDetail/JobDetail.tsx:107

@@ -32,7 +32,7 @@ msgstr "لإعادة ترتيب أسئلة الاستبيان، اسحبها و�
 msgid "Copy to clipboard"
 msgstr "نسخ إلى الحافظة"
 
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:118
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:125
 msgid "Select Input Inventories for the constructed inventory plugin."
 msgstr "حدد مخزونات الإدخال لملحق المخزون المُنشأ."
 
@@ -105,7 +105,7 @@ msgstr "أيام البيانات المراد الاحتفاظ بها"
 msgid "{intervalValue, plural, one {year} other {years}}"
 msgstr "{intervalValue, plural, one {سنة} other {سنوات}}"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:350
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:360
 msgid "Constructed Inventory Source Sync Error"
 msgstr "خطأ في مزامنة مصدر المخزون المُنشأ"
 
@@ -210,7 +210,7 @@ msgstr "انقر لتبديل القيمة الافتراضية"
 msgid "RAM {0}"
 msgstr "ذاكرة الوصول العشوائي {0}"
 
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:46
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:53
 msgid "The plugin parameter is required."
 msgstr "معلمة الملحق مطلوبة."
 
@@ -365,7 +365,7 @@ msgstr "الفرع المراد سحبه. بالإضافة إلى الفروع،
 #: screens/InstanceGroup/InstanceGroupList/InstanceGroupListItem.tsx:74
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:182
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:93
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:107
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:117
 #: screens/Inventory/InventoryList/InventoryList.tsx:238
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:136
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:216
@@ -420,7 +420,7 @@ msgid "Timed out"
 msgstr "انتهت المهلة"
 
 #. placeholder {0}: header || t`Items`
-#: components/Lookup/Lookup.tsx:236
+#: components/Lookup/Lookup.tsx:237
 msgid "Select {0}"
 msgstr "حدد {0}"
 
@@ -591,6 +591,7 @@ msgstr "{0, plural, one {لا يمكنك إلغاء المهمة التالية 
 #: screens/Credential/shared/TypeInputsSubForm.tsx:52
 #: screens/InstanceGroup/shared/ContainerGroupForm.tsx:88
 #: screens/Instances/Shared/InstanceForm.tsx:106
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:177
 #: screens/Inventory/shared/InventoryForm.tsx:100
 #: screens/Project/shared/ProjectSubForms/SharedFields.tsx:116
 #: screens/Template/shared/JobTemplateForm.tsx:649
@@ -610,7 +611,7 @@ msgstr "الحد الأقصى لعدد مرات إعادة محاولة مهمة
 msgid "You cannot select multiple vault credentials with the same vault ID. Doing so will automatically deselect the other with the same vault ID."
 msgstr "لا يمكنك تحديد عدة بيانات اعتماد vault بنفس معرّف vault. سيؤدي ذلك تلقائيًا إلى إلغاء تحديد الآخر الذي يحمل نفس معرّف vault."
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:353
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:363
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:364
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:357
 msgid "Cancel Sync"
@@ -641,8 +642,8 @@ msgstr "مفتاح GPG العام"
 msgid "Source Control URL"
 msgstr "عنوان URL للتحكم بالمصدر"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:316
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:171
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:326
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:191
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:182
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:269
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:339
@@ -853,9 +854,9 @@ msgid "You may apply a number of possible variables in the\n"
 msgstr "يمكنك تطبيق عدد من المتغيرات الممكنة في\n"
 "                الرسالة. لمزيد من المعلومات، راجع"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:377
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:387
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:208
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:214
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:224
 msgid "Failed to delete inventory."
 msgstr "فشل حذف المخزون."
 
@@ -876,7 +877,7 @@ msgid "LDAP 5"
 msgstr "LDAP 5"
 
 #: components/Lookup/HostFilterLookup.tsx:386
-#: components/Lookup/Lookup.tsx:237
+#: components/Lookup/Lookup.tsx:238
 msgid "Lookup modal"
 msgstr "نافذة البحث"
 
@@ -1764,7 +1765,7 @@ msgstr "إنشاء مخزون موحّد جديد"
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostListItem.tsx:49
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:164
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:83
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:102
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:112
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:42
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:202
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:217
@@ -1789,7 +1790,7 @@ msgstr "إنشاء مخزون موحّد جديد"
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:215
 #: screens/Inventory/InventorySources/InventorySourceList.tsx:214
 #: screens/Inventory/InventorySources/InventorySourceListItem.tsx:72
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:82
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:89
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:65
 #: screens/Inventory/shared/InventoryForm.tsx:56
 #: screens/Inventory/shared/InventoryGroupForm.tsx:54
@@ -2026,7 +2027,7 @@ msgstr "المفتاح"
 #: components/AddRole/AddResourceRole.tsx:65
 #: components/ResourceAccessList/ResourceAccessList.tsx:178
 #: components/ResourceAccessList/ResourceAccessList.tsx:231
-#: screens/Login/Login.tsx:354
+#: screens/Login/Login.tsx:345
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:200
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:336
 #: screens/NotificationTemplate/NotificationTemplateDetail/NotificationTemplateDetail.tsx:386
@@ -2200,7 +2201,7 @@ msgstr "الحقل يطابق التعبير النمطي المحدد."
 msgid "{0, plural, one {This credential type is currently being used by some credentials and cannot be deleted.} other {Credential types that are being used by credentials cannot be deleted. Are you sure you want to delete anyway?}}"
 msgstr "{0, plural, one {نوع بيانات الاعتماد هذا قيد الاستخدام حاليًا من قبل بعض بيانات الاعتماد ولا يمكن حذفه.} other {لا يمكن حذف أنواع بيانات الاعتماد التي تستخدمها بيانات الاعتماد. هل أنت متأكد من أنك تريد الحذف على أي حال؟}}"
 
-#: screens/Login/Login.tsx:352
+#: screens/Login/Login.tsx:343
 #: screens/NotificationTemplate/shared/TypeInputsSubForm.tsx:156
 #: screens/Template/Survey/SurveyQuestionForm.tsx:82
 #: screens/User/shared/UserForm.tsx:127
@@ -2435,7 +2436,7 @@ msgid "Management job launch error"
 msgstr "خطأ في إطلاق مهمة الإدارة"
 
 #: components/Lookup/HostFilterLookup.tsx:309
-#: components/Lookup/Lookup.tsx:182
+#: components/Lookup/Lookup.tsx:183
 msgid "Search"
 msgstr "بحث"
 
@@ -2484,7 +2485,7 @@ msgstr "يوم عطلة نهاية الأسبوع"
 msgid "Execution environment copied successfully"
 msgstr "تم نسخ بيئة التنفيذ بنجاح"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:351
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:361
 msgid "Cancel Constructed Inventory Source Sync"
 msgstr "إلغاء مزامنة مصدر المخزون المُنشأ"
 
@@ -2506,7 +2507,7 @@ msgstr "{0} (محذوف)"
 msgid "The inventory that this host belongs to."
 msgstr "المخزون الذي ينتمي إليه هذا المضيف."
 
-#: screens/Login/Login.tsx:337
+#: screens/Login/Login.tsx:328
 msgid "Log In"
 msgstr "تسجيل الدخول"
 
@@ -2592,9 +2593,9 @@ msgstr "إذا كان مُفعّلاً، فسيمنع المخزون إضافة 
 msgid "for more information."
 msgstr "لمزيد من المعلومات."
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:361
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:371
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:192
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:197
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:207
 msgid "Delete Inventory"
 msgstr "حذف المخزون"
 
@@ -2690,6 +2691,10 @@ msgstr "نسخ المخرجات"
 msgid "No results found"
 msgstr "لم يتم العثور على نتائج"
 
+#: screens/Inventory/shared/Inventory.helptext.tsx:214
+msgid "Allow Jobs While Syncing: If enabled, jobs against this inventory do not wait for a sync of it to finish."
+msgstr ""
+
 #: components/LaunchPrompt/steps/OtherPromptsStep.tsx:218
 #: components/PromptDetail/PromptDetail.tsx:432
 #: components/PromptDetail/PromptJobTemplateDetail.tsx:164
@@ -2705,6 +2710,10 @@ msgstr "إيقاف"
 #: screens/Inventory/Inventories.tsx:57
 msgid "Create new smart inventory"
 msgstr "إنشاء مخزون ذكي جديد"
+
+#: screens/Inventory/shared/Inventory.helptext.tsx:204
+msgid "If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update."
+msgstr ""
 
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:664
 msgid "Delete Schedule"
@@ -2931,9 +2940,9 @@ msgstr "أدخل متغيرات المخزون باستخدام صيغة JSON أ
 #~ msgid "Username / password"
 #~ msgstr "اسم المستخدم / كلمة المرور"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:291
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:301
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:143
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:115
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:122
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:91
 msgid "Input Inventories"
 msgstr "مخزونات الإدخال"
@@ -3003,12 +3012,12 @@ msgstr "{0, plural, one {يرجى إدخال رقم هاتف صالح.} other {�
 msgid "Facts"
 msgstr "الحقائق"
 
-#: screens/Login/Login.tsx:361
+#: screens/Login/Login.tsx:352
 msgid "or"
 msgstr "أو"
 
 #: components/AssociateModal/AssociateModal.tsx:69
-#: components/Lookup/Lookup.tsx:236
+#: components/Lookup/Lookup.tsx:237
 #: components/PaginatedTable/PaginatedTable.tsx:77
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:59
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:36
@@ -3114,7 +3123,7 @@ msgstr "فشل رفض {0}."
 msgid "Webhook details"
 msgstr "تفاصيل Webhook"
 
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:109
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:116
 #: screens/Inventory/shared/SmartInventoryForm.tsx:95
 msgid "Select the Instance Groups for this Inventory to run on."
 msgstr "حدد مجموعات المثيلات التي سيعمل عليها هذا المخزون."
@@ -3273,7 +3282,7 @@ msgstr "{intervalValue, plural, one {ساعة} other {ساعات}}"
 
 #: components/AdHocCommands/useAdHocDetailsStep.tsx:68
 #: components/LaunchPrompt/steps/useSurveyStep.tsx:145
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:58
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:65
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:39
 #: screens/Template/shared/JobTemplateForm.tsx:240
 #: screens/User/shared/UserForm.tsx:131
@@ -3373,9 +3382,9 @@ msgstr "مقارنة أقل من أو يساوي."
 #: screens/HostMetrics/HostMetricsDeleteButton.tsx:168
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:140
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:144
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:366
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:376
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:197
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:202
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:212
 #: screens/Inventory/InventoryGroups/InventoryGroupsList.tsx:104
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:378
 #: screens/Inventory/shared/InventoryGroupsDeleteModal.tsx:71
@@ -3527,9 +3536,9 @@ msgstr "GitHub Team"
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:93
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:111
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:55
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:324
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:334
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:169
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:174
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:184
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:54
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:88
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:337
@@ -3616,7 +3625,7 @@ msgstr "أغسطس"
 msgid "View smart inventory host details"
 msgstr "عرض تفاصيل مضيف المخزون الذكي"
 
-#: screens/Login/Login.tsx:260
+#: screens/Login/Login.tsx:251
 msgid "Sign in with Google"
 msgstr "تسجيل الدخول باستخدام Google"
 
@@ -3654,7 +3663,7 @@ msgstr "سيؤدي هذا الإجراء إلى إلغاء ربط جميع ال�
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:137
 #: components/LaunchPrompt/LaunchPrompt.tsx:181
 #: components/Lookup/HostFilterLookup.tsx:407
-#: components/Lookup/Lookup.tsx:259
+#: components/Lookup/Lookup.tsx:260
 #: components/PaginatedTable/ToolbarDeleteButton.tsx:248
 #: components/ResourceAccessList/DeleteRoleConfirmationModal.tsx:47
 #: components/Schedule/shared/ScheduleForm.tsx:624
@@ -3997,6 +4006,14 @@ msgstr "إنشاء قالب إشعار جديد"
 msgid "None"
 msgstr "لا شيء"
 
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:267
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:269
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:94
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:183
+#: screens/Inventory/shared/InventoryForm.tsx:117
+msgid "Allow Jobs While Syncing"
+msgstr ""
+
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:73
 #: screens/Setting/Subscription/SubscriptionEdit/AnalyticsStep.tsx:74
 #~ msgid "Automation Analytics"
@@ -4113,9 +4130,9 @@ msgstr "حذف بيانات الاعتماد"
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:126
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:130
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:361
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:341
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:351
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:186
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:191
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:201
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:67
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:72
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:110
@@ -4200,7 +4217,7 @@ msgstr "لم يتم تحديد مهلة"
 msgid "On Timeout"
 msgstr "عند انتهاء المهلة"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:207
+#: screens/Inventory/shared/Inventory.helptext.tsx:208
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
 msgstr "منع الرجوع إلى مجموعة المثيلات: إذا كان مُفعّلاً، فسيمنع المخزون إضافة أي مجموعات مثيلات مؤسسة إلى قائمة مجموعات المثيلات المفضلة لتشغيل قوالب المهام المرتبطة عليها."
 
@@ -4377,7 +4394,7 @@ msgstr "السمة"
 msgid "Filter on nested group name"
 msgstr "التصفية حسب اسم المجموعة المتداخلة"
 
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:84
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:89
 #: screens/Inventory/shared/InventoryForm.tsx:111
 msgid "Allow Deletes While In Use"
 msgstr "السماح بالحذف أثناء الاستخدام"
@@ -4528,7 +4545,7 @@ msgstr "إزالة الأقران؟"
 msgid "Search text input"
 msgstr "إدخال نص البحث"
 
-#: components/Lookup/Lookup.tsx:99
+#: components/Lookup/Lookup.tsx:100
 msgid "That value was not found. Please enter or select a valid value."
 msgstr "لم يتم العثور على تلك القيمة. يرجى إدخال أو تحديد قيمة صالحة."
 
@@ -4595,10 +4612,10 @@ msgstr "عرض تفاصيل المؤسسة"
 #: screens/Instances/InstanceList/InstanceListItem.tsx:275
 #: screens/Instances/InstancePeers/InstancePeerList.tsx:343
 #: screens/Instances/Shared/RemoveInstanceButton.tsx:114
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:374
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:384
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventorySyncButton.tsx:51
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:205
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:211
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:221
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:89
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:297
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:308
@@ -4747,7 +4764,7 @@ msgstr "فشل تبديل المضيف."
 msgid "denied"
 msgstr "مرفوض"
 
-#: screens/Login/Login.tsx:250
+#: screens/Login/Login.tsx:241
 msgid "Sign in with GitHub Enterprise Organizations"
 msgstr "تسجيل الدخول باستخدام GitHub Enterprise Organizations"
 
@@ -4985,10 +5002,10 @@ msgstr "حدد سؤالاً لحذفه"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:641
 #: screens/Host/HostDetail/HostDetail.tsx:102
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:62
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:166
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:176
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:48
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:95
-#: screens/Inventory/shared/InventoryForm.tsx:120
+#: screens/Inventory/shared/InventoryForm.tsx:126
 #: screens/Inventory/shared/InventoryGroupForm.tsx:68
 #: screens/Inventory/shared/SmartInventoryForm.tsx:101
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:133
@@ -5076,7 +5093,7 @@ msgstr "منطقة نص"
 msgid "View User Interface settings"
 msgstr "عرض إعدادات واجهة المستخدم"
 
-#: screens/Login/Login.tsx:240
+#: screens/Login/Login.tsx:231
 msgid "Sign in with GitHub Teams"
 msgstr "تسجيل الدخول باستخدام GitHub Teams"
 
@@ -5148,9 +5165,9 @@ msgstr "طي"
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:566
 #: components/TemplateList/TemplateListItem.tsx:325
 #: routeConfig.tsx:96
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:272
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:282
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:124
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:155
 #: screens/Inventory/shared/InventoryForm.tsx:89
 #: screens/Job/JobDetail/JobDetail.tsx:491
 #: screens/Labels/Labels.tsx:13
@@ -5812,8 +5829,8 @@ msgstr "إشعار الاختبار"
 #: components/PromptDetail/PromptProjectDetail.tsx:143
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:112
 #: screens/Credential/CredentialDetail/CredentialDetail.tsx:262
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:251
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:135
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:252
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:145
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:325
 #: screens/Project/ProjectDetail/ProjectDetail.tsx:336
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:363
@@ -5862,7 +5879,7 @@ msgstr "فرع التحكم بالمصدر"
 #: screens/InstanceGroup/InstanceGroups.tsx:32
 #: screens/Instances/InstanceDetail/InstanceDetail.tsx:250
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:242
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:120
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:130
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:250
 #: screens/Organization/OrganizationDetail/OrganizationDetail.tsx:110
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:424
@@ -6845,7 +6862,7 @@ msgstr "يتمتع مسؤولو النظام بوصول غير مقيد إلى �
 msgid "Failure"
 msgstr "فشل"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:352
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:362
 msgid "Failed to cancel Constructed Inventory Source Sync"
 msgstr "فشل إلغاء مزامنة مصدر المخزون المُنشأ"
 
@@ -7390,7 +7407,7 @@ msgstr "لا توجد مهام"
 msgid "Application name"
 msgstr "اسم التطبيق"
 
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:145
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:152
 #: screens/Inventory/shared/InventorySourceSubForms/SharedFields.tsx:111
 msgid "Cache timeout (seconds)"
 msgstr "مهلة ذاكرة التخزين المؤقت (ثوانٍ)"
@@ -7405,7 +7422,7 @@ msgstr "تسجيل الخروج"
 msgid "sec"
 msgstr "ثانية"
 
-#: screens/Login/Login.tsx:291
+#: screens/Login/Login.tsx:282
 msgid "Sign in with {label}"
 msgstr "تسجيل الدخول باستخدام {label}"
 
@@ -7503,7 +7520,7 @@ msgstr "مزامنة"
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:45
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:177
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:88
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:106
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:116
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:46
 #: screens/Inventory/InventoryGroupHosts/InventoryGroupHostList.tsx:224
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:87
@@ -7512,7 +7529,7 @@ msgstr "مزامنة"
 #: screens/Inventory/InventoryHosts/InventoryHostList.tsx:140
 #: screens/Inventory/InventoryList/InventoryList.tsx:213
 #: screens/Inventory/InventorySourceDetail/InventorySourceDetail.tsx:232
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:90
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:97
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:63
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:73
 #: screens/Inventory/shared/InventoryForm.tsx:64
@@ -7636,7 +7653,7 @@ msgstr "تحرير الفريق"
 msgid "User Interface"
 msgstr "واجهة المستخدم"
 
-#: screens/Login/Login.tsx:245
+#: screens/Login/Login.tsx:236
 msgid "Sign in with GitHub Enterprise"
 msgstr "تسجيل الدخول باستخدام GitHub Enterprise"
 
@@ -7649,7 +7666,7 @@ msgstr "تسجيل الدخول باستخدام GitHub Enterprise"
 #: components/Schedule/shared/ScheduleFormFields.tsx:76
 #: screens/Credential/shared/CredentialForm.tsx:101
 #: screens/ExecutionEnvironment/shared/ExecutionEnvironmentForm.tsx:106
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:100
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:107
 #: screens/Inventory/shared/FederatedInventoryForm.tsx:83
 #: screens/Inventory/shared/InventoryForm.tsx:78
 #: screens/Inventory/shared/InventorySourceSubForms/AzureSubForm.tsx:54
@@ -7684,7 +7701,7 @@ msgstr "لا تنتهي صلاحيته أبدًا"
 msgid "View job {0}"
 msgstr "عرض المهمة {0}"
 
-#: screens/Login/Login.tsx:277
+#: screens/Login/Login.tsx:268
 msgid "Sign in with SAML {samlIDP}"
 msgstr "تسجيل الدخول باستخدام SAML {samlIDP}"
 
@@ -7797,7 +7814,7 @@ msgstr "نسخة غير حساسة لحالة الأحرف من startswith."
 msgid "Unsaved changes modal"
 msgstr "نافذة التغييرات غير المحفوظة"
 
-#: screens/Login/Login.tsx:255
+#: screens/Login/Login.tsx:246
 msgid "Sign in with GitHub Enterprise Teams"
 msgstr "تسجيل الدخول باستخدام GitHub Enterprise Teams"
 
@@ -7831,7 +7848,7 @@ msgstr "عنوان URL لـ Grafana"
 msgid "GitHub settings"
 msgstr "إعدادات GitHub"
 
-#: screens/Login/Login.tsx:235
+#: screens/Login/Login.tsx:226
 msgid "Sign in with GitHub Organizations"
 msgstr "تسجيل الدخول باستخدام GitHub Organizations"
 
@@ -8291,10 +8308,10 @@ msgstr "نوع منح التفويض"
 msgid "ID of the panel (optional)"
 msgstr "معرّف اللوحة (اختياري)"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:257
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:259
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:79
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:127
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:258
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:260
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:84
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:137
 #: screens/Inventory/shared/InventoryForm.tsx:105
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:145
 #: screens/Template/JobTemplateDetail/JobTemplateDetail.tsx:345
@@ -8447,7 +8464,7 @@ msgstr "ملاحظة: الترتيب الذي يتم به تحديد هذه يح
 msgid "Credentials that require passwords on launch are not permitted.  Please remove or replace the following credentials with a credential of the same type in order to proceed: {0}"
 msgstr "بيانات الاعتماد التي تتطلب كلمات مرور عند التشغيل غير مسموح بها. يرجى إزالة أو استبدال بيانات الاعتماد التالية بأخرى من النوع نفسه للمتابعة: {0}"
 
-#: screens/Login/Login.tsx:265
+#: screens/Login/Login.tsx:256
 msgid "Sign in with OIDC"
 msgstr "تسجيل الدخول باستخدام OIDC"
 
@@ -8623,7 +8640,7 @@ msgstr "تحرير المخزون"
 msgid "Failed to user token."
 msgstr "فشل رمز المستخدم المميز."
 
-#: screens/Login/Login.tsx:277
+#: screens/Login/Login.tsx:268
 msgid "Sign in with SAML"
 msgstr "تسجيل الدخول باستخدام SAML"
 
@@ -8717,7 +8734,7 @@ msgstr "اسم متغير الإجابة"
 
 #: components/JobList/JobListItem.tsx:110
 #: components/Lookup/HostFilterLookup.tsx:399
-#: components/Lookup/Lookup.tsx:250
+#: components/Lookup/Lookup.tsx:251
 #: components/Pagination/Pagination.tsx:36
 msgid "Select"
 msgstr "تحديد"
@@ -8777,7 +8794,7 @@ msgstr "توثيق سير العمل"
 msgid "January"
 msgstr "يناير"
 
-#: screens/Login/Login.tsx:220
+#: screens/Login/Login.tsx:211
 msgid "Sign in with Azure AD"
 msgstr "تسجيل الدخول باستخدام Azure AD"
 
@@ -8832,7 +8849,7 @@ msgstr "فشل مزامنة المشروع."
 
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:210
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:109
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:116
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:126
 #: screens/Inventory/SmartInventoryDetail/SmartInventoryDetail.tsx:125
 msgid "Total hosts"
 msgstr "إجمالي المضيفين"
@@ -9154,7 +9171,7 @@ msgstr "خيارات التحديث"
 #: screens/Host/HostDetail/HostDetail.tsx:98
 #: screens/InstanceGroup/ContainerGroupDetails/ContainerGroupDetails.tsx:98
 #: screens/InstanceGroup/InstanceGroupDetails/InstanceGroupDetails.tsx:116
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:179
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:189
 #: screens/Inventory/InventoryGroupDetail/InventoryGroupDetail.tsx:56
 #: screens/Inventory/InventoryHostDetail/InventoryHostDetail.tsx:91
 #: screens/Job/JobDetail/JobDetail.tsx:582
@@ -9326,7 +9343,7 @@ msgstr "نص رسالة رفض سير العمل"
 msgid "Generic OIDC settings"
 msgstr "إعدادات OIDC العامة"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:210
+#: screens/Inventory/shared/Inventory.helptext.tsx:211
 msgid "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
 msgstr "السماح بالحذف أثناء الاستخدام: إذا تم التمكين، يمكن حذف المضيفين من هذا المخزون أثناء تشغيل المهام عليه."
 
@@ -9538,7 +9555,7 @@ msgstr "إزالة الرابط"
 msgid "Provisioning Callback URL"
 msgstr "عنوان URL لاستدعاء التوفير"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:329
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:339
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:174
 #: screens/Template/WorkflowJobTemplateDetail/WorkflowJobTemplateDetail.tsx:201
 #: screens/User/UserTokenList/UserTokenList.tsx:159
@@ -9877,7 +9894,7 @@ msgstr "تبديل الأدوات"
 #: screens/ExecutionEnvironment/ExecutionEnvironmentList/ExecutionEnvironmentListItem.tsx:102
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:193
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:98
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:109
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:119
 #: screens/Inventory/InventoryList/InventoryList.tsx:209
 #: screens/Inventory/InventoryList/InventoryList.tsx:239
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:139
@@ -9903,7 +9920,7 @@ msgstr "تبديل الأدوات"
 msgid "Organization"
 msgstr "المؤسسة"
 
-#: screens/Login/Login.tsx:315
+#: screens/Login/Login.tsx:306
 msgid "Your session has expired. Please log in to continue where you left off."
 msgstr "انتهت جلستك. يرجى تسجيل الدخول للمتابعة من حيث توقفت."
 
@@ -9921,9 +9938,9 @@ msgstr "تم الإنشاء بواسطة (اسم المستخدم)"
 msgid "Inventory sync failures"
 msgstr "إخفاقات مزامنة المخزون"
 
-#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:364
+#: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:374
 #: screens/Inventory/FederatedInventoryDetail/FederatedInventoryDetail.tsx:195
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:200
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:210
 msgid "This inventory is currently being used by other resources. Are you sure you want to delete it?"
 msgstr "هذا المخزون قيد الاستخدام حاليًا من قبل موارد أخرى. هل أنت متأكد من أنك تريد حذفه؟"
 
@@ -9953,7 +9970,7 @@ msgstr "البحث مُعطّل أثناء تشغيل المهمة"
 msgid "Third"
 msgstr "الثالث"
 
-#: screens/Login/Login.tsx:225
+#: screens/Login/Login.tsx:216
 msgid "Sign in with Azure AD Tenant"
 msgstr "تسجيل الدخول باستخدام Azure AD Tenant"
 
@@ -9966,7 +9983,7 @@ msgstr "Azure AD Default"
 msgid "Case-insensitive version of endswith."
 msgstr "نسخة غير حساسة لحالة الأحرف من endswith."
 
-#: components/Lookup/Lookup.tsx:257
+#: components/Lookup/Lookup.tsx:258
 msgid "Cancel lookup"
 msgstr "إلغاء البحث"
 
@@ -11110,7 +11127,7 @@ msgstr "فشل حذف مصدر مخزون واحد أو أكثر."
 msgid "If specified, this field will be shown on the node instead of the resource name when viewing the workflow"
 msgstr "إذا تم تحديده، فسيتم عرض هذا الحقل على العقدة بدلاً من اسم المورد عند عرض سير العمل"
 
-#: screens/Login/Login.tsx:230
+#: screens/Login/Login.tsx:221
 msgid "Sign in with GitHub"
 msgstr "تسجيل الدخول باستخدام GitHub"
 
@@ -11559,7 +11576,7 @@ msgstr "يرجى تشغيل مهمة لملء هذه القائمة."
 #: components/PromptDetail/PromptWFJobTemplateDetail.tsx:103
 #: components/Schedule/ScheduleDetail/ScheduleDetail.tsx:507
 #: screens/Inventory/ConstructedInventoryDetail/ConstructedInventoryDetail.tsx:187
-#: screens/Inventory/shared/ConstructedInventoryForm.tsx:162
+#: screens/Inventory/shared/ConstructedInventoryForm.tsx:169
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:176
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:263
 #: screens/Inventory/shared/ConstructedInventoryHint.tsx:334
@@ -12074,7 +12091,7 @@ msgstr "تبديل بدء الإشعار"
 #: screens/Inventory/AdvancedInventoryHostDetail/AdvancedInventoryHostDetail.tsx:47
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostList.tsx:128
 #: screens/Inventory/AdvancedInventoryHosts/AdvancedInventoryHostListItem.tsx:57
-#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:107
+#: screens/Inventory/InventoryDetail/InventoryDetail.tsx:117
 #: screens/Inventory/InventoryList/InventoryList.tsx:202
 #: screens/Inventory/InventoryList/InventoryListItem.tsx:60
 #: screens/Job/JobDetail/JobDetail.tsx:107
