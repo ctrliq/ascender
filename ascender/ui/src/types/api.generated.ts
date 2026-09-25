@@ -11183,6 +11183,12 @@ export interface components {
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
       /**
+       * Hide System Roles from Access Lists
+       * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
+       * @default false
+       */
+      ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
+      /**
        * Base URL of the service
        * Format: uri
        * @description This setting is used by services like notifications to render a valid url to the service.
@@ -14188,6 +14194,12 @@ export interface components {
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
       /**
+       * Hide System Roles from Access Lists
+       * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
+       * @default false
+       */
+      ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
+      /**
        * Base URL of the service
        * Format: uri
        * @description This setting is used by services like notifications to render a valid url to the service.
@@ -16216,6 +16228,12 @@ export interface components {
        * @default true
        */
       MANAGE_ORGANIZATION_AUTH: boolean;
+      /**
+       * Hide System Roles from Access Lists
+       * @description When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).
+       * @default false
+       */
+      ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS: boolean;
       /**
        * Base URL of the service
        * Format: uri

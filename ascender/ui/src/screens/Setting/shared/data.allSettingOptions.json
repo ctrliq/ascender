@@ -29,6 +29,15 @@
               "category_slug": "system",
               "default": true
           },
+          "ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS": {
+              "type": "boolean",
+              "required": true,
+              "label": "Hide System Roles from Access Lists",
+              "help_text": "When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).",
+              "category": "System",
+              "category_slug": "system",
+              "default": false
+          },
           "MANAGE_ORGANIZATION_AUTH": {
               "type": "boolean",
               "required": true,
@@ -4456,6 +4465,14 @@
               "type": "boolean",
               "label": "All Users Visible to Organization Admins",
               "help_text": "Controls whether any Organization Admin can view all users and teams, even those not associated with their Organization.",
+              "category": "System",
+              "category_slug": "system",
+              "defined_in_file": false
+          },
+          "ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS": {
+              "type": "boolean",
+              "label": "Hide System Roles from Access Lists",
+              "help_text": "When enabled, the System Administrator and System Auditor roles are hidden from the access lists of resources. Users appear in an access list only through roles they actually hold on it (organization membership, team roles, direct grants).",
               "category": "System",
               "category_slug": "system",
               "defined_in_file": false

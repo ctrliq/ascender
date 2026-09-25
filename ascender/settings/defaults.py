@@ -960,6 +960,7 @@ CALLBACK_QUEUE = "callback_tasks"
 # Note: This setting may be overridden by database settings.
 ORG_ADMINS_CAN_SEE_ALL_USERS = True
 MANAGE_ORGANIZATION_AUTH = True
+ASCENDER_HIDE_SYSTEM_ROLES_FROM_ACCESS = False
 DISABLE_LOCAL_AUTH = False
 
 # Note: This setting may be overridden by database settings.
