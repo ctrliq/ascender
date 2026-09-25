@@ -48,7 +48,7 @@ from ascender.main.models.mixins import (
 from ascender.main.models.jobs import LaunchTimeConfigBase, LaunchTimeConfig, JobTemplate
 from ascender.main.models.credential import Credential
 from ascender.main.redact import REPLACE_STR
-from ascender.main.utils import ScheduleWorkflowManager
+from ascender.main.utils import ScheduleWorkflowManager, parse_yaml_or_json
 from ascender.main.utils.encryption import encrypt_dict
 
 __all__ = [
@@ -1068,16 +1068,24 @@ class WorkflowJob(UnifiedJob, WorkflowJobOptions, SurveyJobMixin, JobNotificatio
         overrides = {key: value for key, value in extra_vars.items() if not (value == REPLACE_STR and key in password_keys)}
         if not overrides:
             return
+        changed_passwords = password_keys & set(overrides)
+        encrypt_dict(overrides, changed_passwords)
+        masked = {key: REPLACE_STR for key in changed_passwords}
         merged = self.extra_vars_dict
         merged.update(overrides)
-        changed_passwords = password_keys & set(overrides)
-        if changed_passwords:
-            encrypt_dict(merged, changed_passwords)
-            survey_passwords = dict(self.survey_passwords or {})
-            survey_passwords.update({key: REPLACE_STR for key in changed_passwords})
-            self.survey_passwords = survey_passwords
         self.extra_vars = json.dumps(merged)
+        self.survey_passwords = {**(self.survey_passwords or {}), **masked}
         self.save(update_fields=['extra_vars', 'survey_passwords'])
+        # A later relaunch of this job rebuilds it from its launch config, not
+        # from extra_vars, so the overrides go there too. Otherwise relaunching
+        # the corrected run would bring back the values it replaced.
+        try:
+            config = self.launch_config
+        except ObjectDoesNotExist:
+            return
+        config.extra_data = {**parse_yaml_or_json(config.extra_data), **overrides}
+        config.survey_passwords = {**(config.survey_passwords or {}), **masked}
+        config.save(update_fields=['extra_data', 'survey_passwords'])
 
     def _get_parent_field_name(self):
         if self.job_template_id:

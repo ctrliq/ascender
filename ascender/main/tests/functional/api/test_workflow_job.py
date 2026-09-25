@@ -344,3 +344,32 @@ def test_workflow_job_relaunch_vars_keep_a_password_the_survey_no_longer_asks_fo
     url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
     resp = post(url, {'nodes': 'failed', 'extra_vars': {'token': '$encrypted$'}}, admin_user, expect=201)
     assert WorkflowJob.objects.get(pk=resp.data['id']).extra_vars_dict['token'] == 'old-secret'
+
+
+@pytest.mark.django_db
+def test_workflow_job_relaunch_of_a_relaunch_keeps_the_overwritten_vars(wfjt, job_template, post, admin_user):
+    from ascender.main.models import WorkflowJob, WorkflowJobNode
+
+    # launched for real, so the run has a launch config: that config, not the
+    # job's extra_vars, is what a plain relaunch rebuilds the job from
+    wfjt.allow_overwrite_flow_vars_on_relaunch = True
+    wfjt.ask_variables_on_launch = True
+    wfjt.save()
+    wfj = wfjt.create_unified_job(extra_vars={'colour': 'red'})
+    wfj.status = 'failed'
+    wfj.save()
+    node = WorkflowJobNode.objects.create(workflow_job=wfj, unified_job_template=job_template, identifier='n1')
+    node.job = job_template.create_job()
+    node.job.status = 'failed'
+    node.job.save()
+    node.save()
+
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, {'nodes': 'failed', 'extra_vars': {'colour': 'blue'}}, admin_user, expect=201)
+    corrected = WorkflowJob.objects.get(pk=resp.data['id'])
+    assert corrected.extra_vars_dict['colour'] == 'blue'
+
+    # relaunching the corrected run must not bring red back
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': corrected.pk})
+    resp = post(url, {}, admin_user, expect=201)
+    assert WorkflowJob.objects.get(pk=resp.data['id']).extra_vars_dict['colour'] == 'blue'
