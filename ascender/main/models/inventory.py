@@ -77,7 +77,14 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
     an inventory source contains lists and hosts.
     """
 
-    FIELDS_TO_PRESERVE_AT_COPY = ['hosts', 'groups', 'instance_groups', 'prevent_instance_group_fallback', 'allow_deletes_while_in_use']
+    FIELDS_TO_PRESERVE_AT_COPY = [
+        'hosts',
+        'groups',
+        'instance_groups',
+        'prevent_instance_group_fallback',
+        'allow_deletes_while_in_use',
+        'allow_jobs_while_syncing',
+    ]
     KIND_CHOICES = [
         ('', _('Hosts have a direct link to this inventory.')),
         ('smart', _('Hosts for inventory generated using the host_filter property.')),
@@ -214,6 +221,14 @@ class Inventory(CommonModelNameNotUnique, ResourceMixin, RelatedJobsMixin):
         help_text=_(
             'If enabled, hosts can be deleted from this inventory while jobs are running against it. '
             'By default those deletions are rejected until the running jobs finish.'
+        ),
+    )
+    allow_jobs_while_syncing = models.BooleanField(
+        default=False,
+        help_text=_(
+            'If enabled, jobs and ad hoc commands against this inventory start while it is being synced, '
+            'using the hosts it had before the sync. By default they wait for the sync to finish. '
+            'A job whose template updates the inventory on launch still waits for that update.'
         ),
     )
 

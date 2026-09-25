@@ -198,6 +198,7 @@ function useInventoryHelpTextStrings() {
     sourcePath: t`The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input.`,
     preventInstanceGroupFallback: t`If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied.`,
     allowDeletesWhileInUse: t`If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish.`,
+    allowJobsWhileSyncing: t`If enabled, jobs and ad hoc commands against this inventory start while it is being synced, using the hosts it had before the sync. By default they wait for the sync to finish. A job whose template updates the inventory on launch still waits for that update.`,
     enabledOptions: (
       <>
         <p>
@@ -205,6 +206,9 @@ function useInventoryHelpTextStrings() {
         </p>
         <p>
           {t`Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it.`}
+        </p>
+        <p>
+          {t`Allow Jobs While Syncing: If enabled, jobs against this inventory do not wait for a sync of it to finish.`}
         </p>
       </>
     ),
