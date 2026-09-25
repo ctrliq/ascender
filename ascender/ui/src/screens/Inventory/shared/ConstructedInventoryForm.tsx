@@ -16,8 +16,15 @@ import {
 } from '@patternfly/react-core';
 import { VariablesField } from 'components/CodeEditor';
 import FormActionGroup from 'components/FormActionGroup/FormActionGroup';
-import FormField, { FormSubmitError } from 'components/FormField';
-import { FormFullWidthLayout, FormColumnLayout } from 'components/FormLayout';
+import FormField, {
+  CheckboxField,
+  FormSubmitError,
+} from 'components/FormField';
+import {
+  FormCheckboxLayout,
+  FormFullWidthLayout,
+  FormColumnLayout,
+} from 'components/FormLayout';
 import InstanceGroupsLookup from 'components/Lookup/InstanceGroupsLookup';
 import InventoryLookup from 'components/Lookup/InventoryLookup';
 import OrganizationLookup from 'components/Lookup/OrganizationLookup';
@@ -165,6 +172,19 @@ function ConstructedInventoryFormFields({
         tooltip={options.limit?.help_text}
       />
       <FormFullWidthLayout>
+        <FormGroup
+          fieldId="constructed-inventory-option-checkboxes"
+          label={t`Options`}
+        >
+          <FormCheckboxLayout>
+            <CheckboxField
+              id="option-allow-jobs-while-syncing"
+              name="allow_jobs_while_syncing"
+              label={t`Allow Jobs While Syncing`}
+              tooltip={helpText.allowJobsWhileSyncing}
+            />
+          </FormCheckboxLayout>
+        </FormGroup>
         <VariablesField
           id="source_vars"
           name="source_vars"
@@ -190,6 +210,7 @@ export interface ConstructedInventoryFormValues {
   update_cache_timeout: number;
   verbosity: number;
   source_vars: string;
+  allow_jobs_while_syncing: boolean;
 }
 
 export interface ConstructedInventoryFormProps {
@@ -226,6 +247,8 @@ function ConstructedInventoryForm({
     source_vars:
       constructedInventory?.source_vars ||
       '---\nplugin: constructed\nstrict: true',
+    allow_jobs_while_syncing:
+      constructedInventory?.allow_jobs_while_syncing || false,
   };
 
   return (
