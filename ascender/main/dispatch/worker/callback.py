@@ -71,7 +71,11 @@ class CallbackBrokerWorker(BaseWorker):
 
     def __init__(self):
         self.buff = {}
-        self.valkey = valkey.Valkey.from_url(settings.BROKER_URL)
+        # Without a socket timeout, a blpop against a connection that died
+        # quietly blocks forever and the worker stops consuming while still
+        # looking alive to everything above it.  Timing out instead raises
+        # into the handler in read(), which reconnects on the next pass.
+        self.valkey = valkey.Valkey.from_url(settings.BROKER_URL, socket_timeout=settings.CALLBACK_QUEUE_SOCKET_TIMEOUT)
         self.subsystem_metrics = s_metrics.CallbackReceiverMetrics(auto_pipe_execute=False)
         self.queue_pop = 0
         self.queue_name = settings.CALLBACK_QUEUE
@@ -118,7 +122,14 @@ class CallbackBrokerWorker(BaseWorker):
         # buffer stat recording to once per (by default) 5s
         if time.time() - self.last_stats > settings.JOB_EVENT_STATISTICS_INTERVAL:
             try:
-                self.valkey.set(f'ascender_callback_receiver_statistics_{self.pid}', self.debug())
+                # Expire it, or a respawned worker leaves the dead pid's key
+                # behind and run_callback_receiver --status reports workers
+                # that no longer exist.
+                self.valkey.set(
+                    f'ascender_callback_receiver_statistics_{self.pid}',
+                    self.debug(),
+                    ex=settings.JOB_EVENT_STATISTICS_INTERVAL * 12,
+                )
                 self.last_stats = time.time()
             except Exception:
                 logger.exception("encountered an error communicating with valkey")
