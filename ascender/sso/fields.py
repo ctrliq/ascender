@@ -2,6 +2,7 @@ import collections
 import copy
 import inspect
 import json
+import os
 import re
 
 import six
@@ -206,12 +207,52 @@ class AuthenticationBackendsField(fields.StringListField):
         ]
     )
 
+    # SECRET is optional when AzureADOAuth2.client_assertion() has a usable source.
+    WORKLOAD_IDENTITY_OPTIONAL_SETTINGS = {
+        'social_core.backends.azuread.AzureADOAuth2': ['SOCIAL_AUTH_AZUREAD_OAUTH2_SECRET'],
+        'social_core.backends.azuread_tenant.AzureADTenantOAuth2': ['SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_SECRET'],
+    }
+
+    # Per-backend Django settings mirroring social-core CLIENT_ASSERTION /
+    # FEDERATED_TOKEN_FILE (in addition to the shared WI env token-file path).
+    CLIENT_ASSERTION_SETTINGS = {
+        'social_core.backends.azuread.AzureADOAuth2': (
+            'SOCIAL_AUTH_AZUREAD_OAUTH2_CLIENT_ASSERTION',
+            'SOCIAL_AUTH_AZUREAD_OAUTH2_FEDERATED_TOKEN_FILE',
+        ),
+        'social_core.backends.azuread_tenant.AzureADTenantOAuth2': (
+            'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_CLIENT_ASSERTION',
+            'SOCIAL_AUTH_AZUREAD_TENANT_OAUTH2_FEDERATED_TOKEN_FILE',
+        ),
+    }
+
     @classmethod
     def get_all_required_settings(cls):
         all_required_settings = set()
         for required_settings in cls.REQUIRED_BACKEND_SETTINGS.values():
             all_required_settings.update(required_settings)
         return all_required_settings
+
+    @staticmethod
+    def _token_file_exists(path):
+        return bool(path) and os.path.isfile(path)
+
+    @classmethod
+    def _client_assertion_available(cls, backend):
+        """True when social-core can obtain a client assertion for this backend."""
+        env_token_path = os.environ.get('OAUTH2_FEDERATED_TOKEN_FILE') or os.environ.get('AZURE_FEDERATED_TOKEN_FILE')
+        if cls._token_file_exists(env_token_path):
+            return True
+
+        assertion_setting, token_file_setting = cls.CLIENT_ASSERTION_SETTINGS.get(backend, (None, None))
+        if not assertion_setting:
+            return False
+
+        from django.conf import settings
+
+        if getattr(settings, assertion_setting, None):
+            return True
+        return cls._token_file_exists(getattr(settings, token_file_setting, None))
 
     def __init__(self, *args, **kwargs):
         kwargs.setdefault('default', self._default_from_required_settings)
@@ -224,12 +265,17 @@ class AuthenticationBackendsField(fields.StringListField):
             backends = settings._ascender_conf_settings._get_default('AUTHENTICATION_BACKENDS')
         except AttributeError:
             backends = self.REQUIRED_BACKEND_SETTINGS.keys()
-        # Filter which authentication backends are enabled based on their
-        # required settings being defined and non-empty.
+
+        # Enable backends whose required settings are set; skip optional SECRET
+        # when a client assertion source is available for that backend.
         for backend, required_settings in self.REQUIRED_BACKEND_SETTINGS.items():
             if backend not in backends:
                 continue
-            if all([getattr(settings, rs, None) for rs in required_settings]):
+            optional_settings = self.WORKLOAD_IDENTITY_OPTIONAL_SETTINGS.get(backend, [])
+            effectively_required = [
+                rs for rs in required_settings if not (rs in optional_settings and self._client_assertion_available(backend))
+            ]
+            if all([getattr(settings, rs, None) for rs in effectively_required]):
                 continue
             backends = [x for x in backends if x != backend]
         return backends
