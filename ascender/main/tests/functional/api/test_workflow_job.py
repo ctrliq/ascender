@@ -373,3 +373,39 @@ def test_workflow_job_relaunch_of_a_relaunch_keeps_the_overwritten_vars(wfjt, jo
     url = reverse("api:workflow_job_relaunch", kwargs={'pk': corrected.pk})
     resp = post(url, {}, admin_user, expect=201)
     assert WorkflowJob.objects.get(pk=resp.data['id']).extra_vars_dict['colour'] == 'blue'
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize('still_allowed, status', [(True, 201), (False, 403)])
+def test_workflow_job_relaunch_of_a_relaunch_by_a_user_without_prompting(wfjt, job_template, post, rando, still_allowed, status):
+    from ascender.main.models import WorkflowJob, WorkflowJobNode
+
+    # the template does not prompt for variables, which is the case the
+    # overwrite exists for; the corrected run's variables sit in its launch
+    # config and must not read as prompts the template stopped accepting
+    wfjt.allow_overwrite_flow_vars_on_relaunch = True
+    wfjt.extra_vars = '{"colour": "red"}'
+    wfjt.save()
+    wfjt.execute_role.members.add(rando)
+    job_template.execute_role.members.add(rando)
+    wfj = wfjt.create_unified_job()
+    wfj.status = 'failed'
+    wfj.created_by = rando
+    wfj.save()
+    node = WorkflowJobNode.objects.create(workflow_job=wfj, unified_job_template=job_template, identifier='n1')
+    node.job = job_template.create_job()
+    node.job.status = 'failed'
+    node.job.save()
+    node.save()
+
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': wfj.pk})
+    resp = post(url, {'nodes': 'failed', 'extra_vars': {'colour': 'blue'}}, rando, expect=201)
+    corrected = WorkflowJob.objects.get(pk=resp.data['id'])
+
+    # once the template stops allowing the overwrite, the usual rule is back
+    wfjt.allow_overwrite_flow_vars_on_relaunch = still_allowed
+    wfjt.save()
+    url = reverse("api:workflow_job_relaunch", kwargs={'pk': corrected.pk})
+    resp = post(url, {}, rando, expect=status)
+    if status == 201:
+        assert WorkflowJob.objects.get(pk=resp.data['id']).extra_vars_dict['colour'] == 'blue'

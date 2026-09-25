@@ -2179,7 +2179,13 @@ class WorkflowJobAccess(BaseAccess):
                 raise PermissionDenied(_("Job was launched with secret prompts provided by another user."))
             if not JobLaunchConfigAccess(self.user).can_add({'reference_obj': config}):
                 raise PermissionDenied(_('Job was launched with prompts you lack access to.'))
-            if config.has_unprompted(template):
+            # A run corrected by a relaunch from failed nodes keeps the variables
+            # it was given in its launch config, so relaunching it again runs
+            # with them. While the template still allows that overwrite, anyone
+            # who can relaunch could hand those same variables in themselves,
+            # so they are not prompts the template stopped accepting.
+            ignore_variables = getattr(template, 'allow_overwrite_flow_vars_on_relaunch', False)
+            if config.has_unprompted(template, ignore_variables=ignore_variables):
                 raise PermissionDenied(_('Job was launched with prompts no longer accepted.'))
 
         return True  # passed config checks
