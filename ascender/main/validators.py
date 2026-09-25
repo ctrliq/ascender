@@ -5,6 +5,7 @@
 import base64
 import binascii
 import re
+import urllib.parse
 
 # Django
 from django.utils.translation import gettext_lazy as _
@@ -290,3 +291,28 @@ def validate_container_image_name(value):
     # fmt: on
     if not regex.fullmatch(value):
         raise ValidationError(_(f"The container image name {value} is not valid"))
+
+
+def validate_login_redirect_url(value):
+    """
+    Refuse a login redirect a browser would run rather than fetch.
+
+    The value is handed to ``window.location`` for every visitor who is not
+    logged in, so a ``javascript:`` or ``data:`` URL here would execute in
+    each of their browsers. A path on this server or an http(s) URL is
+    accepted; nothing else about the URL is checked, so a plain internal
+    hostname keeps working. The scheme is read the way a browser reads it:
+    leading whitespace and embedded tabs and newlines do not hide it.
+
+    A value the parser cannot split at all (an unclosed IPv6 bracket, say)
+    is refused the same way, rather than escaping as a server error.
+    """
+    if not value:
+        return
+    message = _('Enter a path on this server, or an http or https URL.')
+    try:
+        scheme = urllib.parse.urlsplit(value).scheme
+    except ValueError:
+        raise ValidationError(message)
+    if scheme and scheme not in ('http', 'https'):
+        raise ValidationError(message)
