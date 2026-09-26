@@ -136,7 +136,10 @@ class WebhookBackend(AscenderBaseEmailBackend, CustomNotificationBase):
                     break
 
                 redirect_origin = _origin(url)
-                if redirect_origin is None or redirect_origin != original_origin:
+                if redirect_origin is None:
+                    err = f"Webhook notification received redirect to an invalid URL {url_next_log_safe} from {url_log_safe}"
+                    break
+                if redirect_origin != original_origin:
                     logger.warning("Redirect changed origin; stripping credentials")
                     auth = None
                     headers = get_ascender_http_client_headers()

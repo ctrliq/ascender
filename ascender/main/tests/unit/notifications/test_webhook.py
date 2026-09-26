@@ -414,10 +414,9 @@ def test_send_messages_logs_base64_encoded_urls_in_redirects():
         )
         backend.send_messages([message])
 
-        # Should log the redirect warning, then the cross-origin credential strip warning
-        assert logger_mock.warning.call_count == 2
-        warning_msg = logger_mock.warning.call_args_list[0][0][0]
-        assert logger_mock.warning.call_args_list[1][0][0] == "Redirect changed origin; stripping credentials"
+        # Should log the redirect warning
+        logger_mock.warning.assert_called_once()
+        warning_msg = logger_mock.warning.call_args[0][0]
 
         # The dangerous URL should NOT appear in raw form in the log
         assert '\n' not in warning_msg, "Raw newline should not be in log message (log injection risk)"
@@ -498,15 +497,36 @@ def test_send_messages_redirect_strips_credentials_on_host_change():
         assert sent_messages == 1
 
 
-@pytest.mark.parametrize('location', ['http://[bad/', 'http://[zz]/', 'http://example.com:xx/', 'http://example.com:0/'])
-def test_send_messages_redirect_strips_credentials_on_malformed_location(location):
+@pytest.mark.parametrize('location', ['http://[bad/', 'http://[zz]/', 'http://example.com:xx/'])
+def test_send_messages_redirect_to_malformed_location_fails(location):
+    with (
+        mock.patch('ascender.main.notifications.webhook_backend.requests') as requests_mock,
+        mock.patch('ascender.main.notifications.webhook_backend.get_ascender_http_client_headers') as version_mock,
+        mock.patch('ascender.main.notifications.webhook_backend.logger') as logger_mock,
+    ):
+        requests_mock.post.return_value = mock.Mock(status_code=301, headers={"Location": location})
+        version_mock.return_value = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
+        backend = webhook_backend.WebhookBackend('POST', None, fail_silently=True, username='user', password='secret')
+        message = EmailMessage('test subject', {'text': 'test body'}, [], ['http://example.com'])
+        sent_messages = backend.send_messages([message])
+        assert requests_mock.post.call_count == 1
+        logger_mock.error.assert_called_once()
+        assert 'invalid URL' in logger_mock.error.call_args[0][0]
+        assert sent_messages == 0
+
+        backend = webhook_backend.WebhookBackend('POST', None, username='user', password='secret')
+        with pytest.raises(Exception, match='invalid URL'):
+            backend.send_messages([message])
+
+
+def test_send_messages_redirect_strips_credentials_on_port_zero():
     safe_headers = {'Content-Type': 'application/json', 'User-Agent': 'Ascender 0.0.1.dev (open)'}
     with (
         mock.patch('ascender.main.notifications.webhook_backend.requests') as requests_mock,
         mock.patch('ascender.main.notifications.webhook_backend.get_ascender_http_client_headers') as version_mock,
     ):
         requests_mock.post.side_effect = [
-            mock.Mock(status_code=301, headers={"Location": location}),
+            mock.Mock(status_code=301, headers={"Location": 'http://example.com:0/'}),
             mock.Mock(status_code=200),
         ]
         version_mock.return_value = safe_headers
