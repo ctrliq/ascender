@@ -19,6 +19,19 @@ export function isJobRunning(status: JobStatus | string | undefined): boolean {
   return RUNNING_STATUSES.includes(status as JobStatus);
 }
 
+/**
+ * Whether this job's relaunch may be handed variables that overwrite the ones
+ * it ran with, which only a workflow job carries. Read off the job rather than
+ * narrowed by its type, because the job lists hold the union of every job kind
+ * and only the workflow ones are sent the field.
+ */
+export function canOverwriteRelaunchVars(job: unknown): boolean {
+  return Boolean(
+    (job as { allow_overwrite_flow_vars_on_relaunch?: boolean | null } | null)
+      ?.allow_overwrite_flow_vars_on_relaunch
+  );
+}
+
 // Overloaded so a caller that names the type in the call gets that model
 // rather than the union of all six, which shares only the base methods.
 export function getJobModel(type: 'ad_hoc_command'): typeof AdHocCommandsAPI;

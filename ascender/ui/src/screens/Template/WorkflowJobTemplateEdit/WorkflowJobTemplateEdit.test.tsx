@@ -60,6 +60,7 @@ const submittedValues: WorkflowJobTemplateFormValues = {
   webhook_key: '',
   webhook_service: '',
   allow_simultaneous: false,
+  allow_overwrite_flow_vars_on_relaunch: false,
   ask_inventory_on_launch: false,
   ask_limit_on_launch: false,
   ask_scm_branch_on_launch: false,
@@ -190,6 +191,7 @@ describe('<WorkflowJobTemplateEdit/>', () => {
         webhook_url: '',
         webhook_service: '',
         allow_simultaneous: false,
+        allow_overwrite_flow_vars_on_relaunch: false,
         ask_inventory_on_launch: false,
         ask_limit_on_launch: false,
         ask_scm_branch_on_launch: false,
@@ -278,6 +280,7 @@ describe('<WorkflowJobTemplateEdit/>', () => {
       webhook_key: '',
       webhook_service: '',
       allow_simultaneous: false,
+      allow_overwrite_flow_vars_on_relaunch: false,
       ask_inventory_on_launch: false,
       ask_limit_on_launch: false,
       ask_scm_branch_on_launch: false,
@@ -312,6 +315,7 @@ describe('<WorkflowJobTemplateEdit/>', () => {
     await waitFor(() =>
       expect(WorkflowJobTemplatesAPI.update).toHaveBeenCalledWith(6, {
         allow_simultaneous: false,
+        allow_overwrite_flow_vars_on_relaunch: false,
         ask_inventory_on_launch: false,
         ask_labels_on_launch: false,
         ask_limit_on_launch: false,

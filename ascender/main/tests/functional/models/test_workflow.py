@@ -408,6 +408,15 @@ class TestWorkflowDAGFunctional(TransactionTestCase):
         relaunched = wfj.create_relaunch_workflow_job(from_failed=True)
         assert relaunched.extra_vars == '{"my_var": "carried-value"}'
 
+    def test_relaunch_from_failed_overwrites_extra_vars(self):
+        # a relaunch may be handed variables that replace the ones the original
+        # run carried; the keys it does not mention are left alone
+        wfj = self.workflow_job(states=['successful', 'failed', None, None, None])
+        wfj.extra_vars = '{"my_var": "stale-value", "kept": 1}'
+        wfj.save()
+        relaunched = wfj.create_relaunch_workflow_job(from_failed=True, extra_vars={'my_var': 'corrected'})
+        assert relaunched.extra_vars_dict == {'my_var': 'corrected', 'kept': 1}
+
     def test_relaunch_from_failed_reruns_canceled_node(self):
         # a node canceled in the prior run (status 'canceled') is treated like a
         # failure: it re-runs while the successful node is carried forward
@@ -684,6 +693,13 @@ class TestWorkflowJobTemplate:
         nodes[1].failure_nodes.add(nodes[2])
         return wfjt
 
+    def test_relaunch_var_overwriting_reaches_the_job(self, wfjt):
+        # the relaunch endpoint reads the flag off the job, so launching has to
+        # carry it over from the template the run came from
+        wfjt.allow_overwrite_flow_vars_on_relaunch = True
+        wfjt.save()
+        assert wfjt.create_unified_job().allow_overwrite_flow_vars_on_relaunch is True
+
     def test_node_parentage(self, wfjt):
         # test success parent
         wfjt_node = wfjt.workflow_job_template_nodes.all()[1]
@@ -950,6 +966,29 @@ class TestCombinedArtifacts:
         WorkflowJobNode.objects.create(workflow_job=wfj, job=job)
         # mostly, we just care that this assertion finishes in finite time
         assert wfj.get_effective_artifacts() == {'foo': 'bar'}
+
+
+@pytest.mark.django_db
+class TestRelaunchVariableOverrides:
+    def test_override_reaches_the_node_and_beats_its_artifacts(self, organization, job_template):
+        # what the feature is for: a node that succeeded published a wrong value
+        # with set_stats, and the relaunch corrects it for the nodes downstream
+        wfjt = WorkflowJobTemplate.objects.create(organization=organization, name='overrides')
+        wfj = WorkflowJob.objects.create(workflow_job_template=wfjt, extra_vars='{"target": "old"}')
+        parent = WorkflowJobNode.objects.create(
+            workflow_job=wfj,
+            unified_job_template=job_template,
+            ancestor_artifacts={'target': 'from-a-bad-node'},
+        )
+        child = WorkflowJobNode.objects.create(workflow_job=wfj, unified_job_template=job_template)
+        parent.success_nodes.add(child)
+
+        # workflow variables already outrank what a parent published
+        assert child.get_job_kwargs()['extra_vars']['target'] == 'old'
+
+        wfj.apply_relaunch_extra_vars({'target': 'corrected'})
+        child = WorkflowJobNode.objects.get(pk=child.pk)
+        assert child.get_job_kwargs()['extra_vars']['target'] == 'corrected'
 
 
 @pytest.mark.django_db

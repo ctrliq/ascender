@@ -13247,6 +13247,11 @@ export interface components {
       survey_enabled: boolean | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @default false */
       ask_variables_on_launch: boolean | null;
       /** @description Inventory applied as a prompt, assuming job template prompts for inventory */
@@ -19042,6 +19047,11 @@ export interface components {
       extra_vars: string | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @description If automatically created for a sliced job run, the job template the workflow job was created from. */
       job_template?: number | null;
       /** @default false */
@@ -19142,6 +19152,11 @@ export interface components {
       workflow_job_template?: number | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @description If automatically created for a sliced job run, the job template the workflow job was created from. */
       job_template?: number | null;
       /** @default false */
@@ -19178,6 +19193,11 @@ export interface components {
       workflow_job_template?: number | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @description If automatically created for a sliced job run, the job template the workflow job was created from. */
       job_template?: number | null;
       /** @default false */
@@ -19383,6 +19403,11 @@ export interface components {
       survey_enabled: boolean | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @default false */
       ask_variables_on_launch: boolean | null;
       /** @description Inventory applied as a prompt, assuming job template prompts for inventory */
@@ -19713,6 +19738,11 @@ export interface components {
       survey_enabled: boolean | null;
       /** @default false */
       allow_simultaneous: boolean | null;
+      /**
+       * @description Allow a relaunch from failed nodes to be given variables that overwrite the ones carried over from the original run.
+       * @default false
+       */
+      allow_overwrite_flow_vars_on_relaunch: boolean | null;
       /** @default false */
       ask_variables_on_launch: boolean | null;
       /** @description Inventory applied as a prompt, assuming job template prompts for inventory */
