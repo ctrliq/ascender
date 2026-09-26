@@ -522,7 +522,7 @@ msgstr "イベント"
 msgid "Repeat Frequency"
 msgstr "繰り返しの頻度"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:177
+#: screens/Inventory/shared/Inventory.helptext.tsx:180
 msgid "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 msgstr "構築されたインベントリプラグインを構成するために使用される変数。このプラグインの設定方法の詳細については、"
 
@@ -722,8 +722,8 @@ msgstr "統計"
 msgid "Create new credential Type"
 msgstr "新規認証情報タイプの作成"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:104
-#: screens/Inventory/shared/Inventory.helptext.tsx:123
+#: screens/Inventory/shared/Inventory.helptext.tsx:107
+#: screens/Inventory/shared/Inventory.helptext.tsx:126
 msgid "If you want the Inventory Source to update on launch, click on Update on Launch, and also go to "
 msgstr "インベントリーソースを起動時に更新する場合は、「起動時に更新」をクリックし、次の場所にも移動します: "
 
@@ -741,7 +741,7 @@ msgid "Start Time"
 msgstr "開始時刻"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:46
-#: screens/Inventory/shared/Inventory.helptext.tsx:190
+#: screens/Inventory/shared/Inventory.helptext.tsx:193
 msgid "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."
 msgstr "変数は JSON または YAML 構文にする必要があります。ラジオボタンを使用してこの構文を切り替えます。"
 
@@ -983,7 +983,7 @@ msgstr "{interval, plural, one {# 年} other {# 年}}"
 msgid "Inventory Source Sync"
 msgstr "インベントリーソース同期"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:152
+#: screens/Inventory/shared/Inventory.helptext.tsx:155
 msgid "Inventory Plugins"
 msgstr "インベントリプラグイン"
 
@@ -1053,7 +1053,7 @@ msgstr "1 (情報)"
 msgid "Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance."
 msgstr "インスタンスを有効または無効に設定します。無効にした場合には、ジョブはこのインスタンスに割り当てられません。"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:106
+#: screens/Inventory/shared/Inventory.helptext.tsx:109
 msgid "and click on Update Revision on Launch."
 msgstr "[起動時にリビジョンを更新]をクリックします。"
 
@@ -1552,8 +1552,8 @@ msgstr "1 つ以上のジョブを削除できませんでした。"
 msgid "Run Command"
 msgstr "コマンドの実行"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:162
-#: screens/Inventory/shared/Inventory.helptext.tsx:185
+#: screens/Inventory/shared/Inventory.helptext.tsx:165
+#: screens/Inventory/shared/Inventory.helptext.tsx:188
 msgid "plugin configuration guide."
 msgstr "プラグイン設定ガイドを参照してください。"
 
@@ -2074,8 +2074,8 @@ msgstr "項目の失敗"
 msgid "Team Roles"
 msgstr "チームロール"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:140
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:169
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:143
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:172
 msgid "relaunch workflow"
 msgstr "ワークフローの再起動"
 
@@ -2390,7 +2390,7 @@ msgstr "この構築済みインベントリー入力は \n"
 "            制限 (ホストパターン) を使用して、それら 2 つの\n"
 "            グループの共通部分にあるホストのみを返します。"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:200
+#: screens/Inventory/shared/Inventory.helptext.tsx:203
 msgid "If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish."
 msgstr ""
 
@@ -2569,7 +2569,7 @@ msgstr "システムトラッキングファクトを個別に有効化"
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "ノードの作成時または編集時に、パスワードの入力を求める認証情報を持つジョブテンプレートを選択できない"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:199
+#: screens/Inventory/shared/Inventory.helptext.tsx:202
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "有効化されると、インベントリーは、関連付けられたジョブテンプレートを実行する優先インスタンスグループのリストに、組織インスタンスグループを追加することを阻止します。注記: この設定が有効で空のリストを指定した場合、グローバルインスタンスグループが適用されます。"
 
@@ -4125,8 +4125,8 @@ msgstr "認証情報の削除"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:119
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:123
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:120
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:124
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4183,7 +4183,7 @@ msgstr "タイムアウトが指定されていません"
 msgid "On Timeout"
 msgstr "タイムアウト時"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:204
+#: screens/Inventory/shared/Inventory.helptext.tsx:207
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
 msgstr "インスタンスグループフォールバックの防止: 有効にすると、インベントリーは、関連付けられたジョブテンプレートを実行する優先インスタンスグループのリストに組織インスタンスグループを追加することを防ぎます。"
 
@@ -4749,7 +4749,7 @@ msgstr "通知テンプレート"
 msgid "Start message body"
 msgstr "開始メッセージのボディー"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:133
+#: screens/Inventory/shared/Inventory.helptext.tsx:136
 msgid "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "在庫同期に使用するブランチ。空白の場合はプロジェクトのデフォルトが使用されます。プロジェクトのALLOW_OVERRIDEフィールドがTRUEに設定されている場合にのみ許可されます。"
 
@@ -5041,7 +5041,7 @@ msgstr "タイムアウト時"
 msgid "Create New Team"
 msgstr "新規チームの作成"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:154
+#: screens/Inventory/shared/Inventory.helptext.tsx:157
 msgid "in the documentation and the"
 msgstr "ドキュメンテーションと"
 
@@ -6179,7 +6179,7 @@ msgid "Resource deleted"
 msgstr "リソースが削除されました"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:52
-#: screens/Inventory/shared/Inventory.helptext.tsx:193
+#: screens/Inventory/shared/Inventory.helptext.tsx:196
 msgid "YAML:"
 msgstr "YAML:"
 
@@ -6333,7 +6333,7 @@ msgstr "インスタンスの切り替え"
 msgid "Back to Inventories"
 msgstr "インベントリーに戻る"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:118
+#: screens/Inventory/shared/Inventory.helptext.tsx:121
 msgid "After every project update where the SCM revision changes, refresh the inventory from the selected source before executing job tasks. This is intended for static content, like the Ansible inventory .ini file format."
 msgstr "SCMリビジョンが変更されるプロジェクトの更新のたびに、ジョブタスクを実行する前に、選択したソースからインベントリを更新します。これは、Ansibleインベントリ.iniファイル形式などの静的コンテンツを対象としています。"
 
@@ -7165,7 +7165,7 @@ msgstr "このフィールドは数値で、{min} より大きい値である必
 msgid "All"
 msgstr "すべて"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:183
+#: screens/Inventory/shared/Inventory.helptext.tsx:186
 msgid "constructed inventory"
 msgstr "建設されたインベントリ"
 
@@ -7909,7 +7909,7 @@ msgstr "{0, plural, one {このインスタンスは現在、他のリソース�
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:81
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8319,7 +8319,7 @@ msgstr "残りのホストがありません"
 msgid "ID of the dashboard (optional)"
 msgstr "ダッシュボード ID (オプション)"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:132
+#: screens/Inventory/shared/Inventory.helptext.tsx:135
 msgid "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
 msgstr "指定されたホスト変数のdictから有効な状態を取得します。有効な変数は、ドット表記を使用して指定できます。例： 'foo.bar'"
 
@@ -8518,6 +8518,10 @@ msgstr "LDAP 2"
 msgid "Examples include:"
 msgstr "例には次が含まれます。"
 
+#: screens/Inventory/shared/Inventory.helptext.tsx:91
+msgid "Inventory variables this source added on an earlier sync are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them."
+msgstr ""
+
 #: components/JobList/JobList.tsx:222
 #: components/JobList/JobListItem.tsx:68
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:44
@@ -8698,7 +8702,7 @@ msgstr "IRC ニック"
 #~ msgid "Expires on"
 #~ msgstr "有効期限:"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:99
+#: screens/Inventory/shared/Inventory.helptext.tsx:102
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "このインベントリを使用してジョブを実行するたびに、ジョブタスクを実行する前に、選択したソースからインベントリを更新します。"
 
@@ -8976,7 +8980,7 @@ msgstr "1 人以上のユーザーを削除できませんでした。"
 msgid "On Success"
 msgstr "成功時"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:198
+#: screens/Inventory/shared/Inventory.helptext.tsx:201
 msgid "The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input."
 msgstr "このソースによって同期されるインベントリファイル。ドロップダウンから選択するか、入力内にファイルを入力します。"
 
@@ -9271,7 +9275,7 @@ msgstr "ワークフロー拒否メッセージのボディー"
 msgid "Generic OIDC settings"
 msgstr "汎用 OIDC 設定"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:207
+#: screens/Inventory/shared/Inventory.helptext.tsx:210
 msgid "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
 msgstr ""
 
@@ -9733,7 +9737,7 @@ msgstr "Playbook の実行中に使用する並列または同時プロセスの
 msgid "View all Workflow Approvals."
 msgstr "すべてのワークフロー承認を表示します。"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:91
+#: screens/Inventory/shared/Inventory.helptext.tsx:94
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "チェックされていない場合、ローカル変数と外部ソースで見つかったものを組み合わせてマージが実行されます。"
 
@@ -9959,7 +9963,7 @@ msgstr "ルックアップの取り消し"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:88
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -10067,7 +10071,7 @@ msgstr "ナビゲーション"
 msgid "If enabled, control nodes will peer to this instance automatically. If disabled, instance will be connected only to associated peers."
 msgstr "有効にすると、コントロールノードはこのインスタンスを自動的にピアリングします。無効にすると、インスタンスは関連付けられたピアにのみ接続されます。"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:125
+#: screens/Inventory/shared/Inventory.helptext.tsx:128
 msgid "and click on Update Revision on Launch"
 msgstr "そして、起動時のリビジョン更新をクリックします"
 
@@ -10274,7 +10278,7 @@ msgstr "詳細の編集"
 msgid "Deleted"
 msgstr "削除済み"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:134
+#: screens/Inventory/shared/Inventory.helptext.tsx:137
 msgid "This field is ignored unless an Enabled Variable is set. If the enabled variable matches this value, the host will be enabled on import."
 msgstr "有効な変数が設定されていない限り、このフィールドは無視されます。有効な変数がこの値と一致すると、インポート時にこのホストが有効になります。"
 
@@ -11070,7 +11074,7 @@ msgstr "不明なプロジェクト"
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "複数の親がある場合にこのノードを実行するための前提条件。参照:"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:146
+#: screens/Inventory/shared/Inventory.helptext.tsx:149
 msgid "Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see"
 msgstr "インベントリソースを構成するために使用される変数。このプラグインの設定方法の詳細については、"
 
@@ -11136,7 +11140,7 @@ msgstr "簡易キー選択"
 #~ msgid "You have automated against more hosts than your subscription allows."
 #~ msgstr "サブスクリプションで許可されているよりも多くのホストに対して自動化しました。"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:135
+#: screens/Inventory/shared/Inventory.helptext.tsx:138
 msgid "Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied."
 msgstr "一致するホスト名のみがインポートされる正規表現。このフィルターは、インベントリープラグインフィルターが適用された後、後処理ステップとして適用されます。"
 
@@ -11426,7 +11430,7 @@ msgstr "プロビジョニング失敗"
 msgid "Whether the approval node is automatically approved or denied when the timeout expires."
 msgstr "承認ノードがタイムアウトの期限切れ時に自動的に承認されるか拒否されるか。"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:130
+#: screens/Inventory/shared/Inventory.helptext.tsx:133
 msgid "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
 msgstr "インベントリの同期が最新であると見なす時間（秒単位）。ジョブの実行とコールバック中、タスクシステムは最新の同期のタイムスタンプを評価します。キャッシュタイムアウトよりも古い場合、現在のものとは見なされず、新しいインベントリ同期が実行されます。"
 
@@ -11540,7 +11544,7 @@ msgstr "関連付け"
 
 #: components/JobList/JobListItem.tsx:199
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:145
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:148
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:123
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
 #: screens/Job/JobDetail/JobDetail.tsx:622

@@ -522,7 +522,7 @@ msgstr "이벤트"
 msgid "Repeat Frequency"
 msgstr "반복 빈도"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:177
+#: screens/Inventory/shared/Inventory.helptext.tsx:180
 msgid "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 msgstr "구성된 인벤토리 플러그인을 구성하는 데 사용되는 변수입니다. 이 플러그인을 구성하는 방법에 대한 자세한 설명은 다음을 참조하십시오."
 
@@ -722,8 +722,8 @@ msgstr "호스트 통계"
 msgid "Create new credential Type"
 msgstr "새 인증 정보 유형 만들기"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:104
-#: screens/Inventory/shared/Inventory.helptext.tsx:123
+#: screens/Inventory/shared/Inventory.helptext.tsx:107
+#: screens/Inventory/shared/Inventory.helptext.tsx:126
 msgid "If you want the Inventory Source to update on launch, click on Update on Launch, and also go to "
 msgstr "인벤토리 소스를 시작 시 업데이트하려면 시작 시 업데이트를 클릭하고 다음 위치로도 이동하십시오: "
 
@@ -741,7 +741,7 @@ msgid "Start Time"
 msgstr "시작 시간"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:46
-#: screens/Inventory/shared/Inventory.helptext.tsx:190
+#: screens/Inventory/shared/Inventory.helptext.tsx:193
 msgid "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."
 msgstr "변수는 JSON 또는 YAML 구문이어야 합니다. 라디오 버튼을 사용하여 둘 사이를 전환합니다."
 
@@ -983,7 +983,7 @@ msgstr "{interval, plural, one {# 년} other {# 년}}"
 msgid "Inventory Source Sync"
 msgstr "인벤토리 소스 동기화"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:152
+#: screens/Inventory/shared/Inventory.helptext.tsx:155
 msgid "Inventory Plugins"
 msgstr "인벤토리 플러그인"
 
@@ -1053,7 +1053,7 @@ msgstr "1 (정보)"
 msgid "Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance."
 msgstr "인스턴스 활성화 또는 비활성화를 설정합니다. 비활성화된 경우 작업이 이 인스턴스에 할당되지 않습니다."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:106
+#: screens/Inventory/shared/Inventory.helptext.tsx:109
 msgid "and click on Update Revision on Launch."
 msgstr "update Revision on Launch를 클릭합니다."
 
@@ -1552,8 +1552,8 @@ msgstr "하나 이상의 작업을 삭제하지 못했습니다."
 msgid "Run Command"
 msgstr "명령 실행"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:162
-#: screens/Inventory/shared/Inventory.helptext.tsx:185
+#: screens/Inventory/shared/Inventory.helptext.tsx:165
+#: screens/Inventory/shared/Inventory.helptext.tsx:188
 msgid "plugin configuration guide."
 msgstr "플러그인 구성 가이드."
 
@@ -2074,8 +2074,8 @@ msgstr "항목 실패"
 msgid "Team Roles"
 msgstr "팀 역할"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:140
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:169
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:143
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:172
 msgid "relaunch workflow"
 msgstr "워크플로우 다시 시작"
 
@@ -2390,7 +2390,7 @@ msgstr "이 구성된 인벤토리 입력은 \n"
 "            제한(호스트 패턴)을 사용하여 해당 두 그룹의 \n"
 "            교집합에 있는 호스트만 반환합니다."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:200
+#: screens/Inventory/shared/Inventory.helptext.tsx:203
 msgid "If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish."
 msgstr ""
 
@@ -2569,7 +2569,7 @@ msgstr "로그 시스템 추적 사실을 개별적으로 활성화"
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "노드를 생성하거나 편집할 때 암호를 입력하라는 인증 정보가 있는 작업 템플릿을 선택할 수 없습니다."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:199
+#: screens/Inventory/shared/Inventory.helptext.tsx:202
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "활성화하면 인벤토리에서 연결된 작업 템플릿을 실행하는 기본 인스턴스 그룹 목록에 조직 인스턴스 그룹을 추가하지 않습니다. 참고: 이 설정이 활성화되어 있고 빈 목록을 제공한 경우 글로벌 인스턴스 그룹이 적용됩니다."
 
@@ -4125,8 +4125,8 @@ msgstr "인증 정보 삭제"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:119
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:123
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:120
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:124
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4183,7 +4183,7 @@ msgstr "시간 초과가 지정되지 않음"
 msgid "On Timeout"
 msgstr "시간 초과 시"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:204
+#: screens/Inventory/shared/Inventory.helptext.tsx:207
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
 msgstr "인스턴스 그룹 폴백 방지: 활성화된 경우, 인벤토리에서 연결된 작업 템플릿을 실행하도록 기본 인스턴스 그룹 목록에 조직 인스턴스 그룹을 추가할 수 없습니다."
 
@@ -4749,7 +4749,7 @@ msgstr "알림 템플릿"
 msgid "Start message body"
 msgstr "메시지 본문 시작"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:133
+#: screens/Inventory/shared/Inventory.helptext.tsx:136
 msgid "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "인벤토리 동기화 시 사용할 분기. 비어 있는 경우 프로젝트 기본값이 사용됩니다. 프로젝트 allow_override 필드가 true로 설정된 경우에만 허용됩니다."
 
@@ -5041,7 +5041,7 @@ msgstr "시간 초과 시"
 msgid "Create New Team"
 msgstr "새 팀 만들기"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:154
+#: screens/Inventory/shared/Inventory.helptext.tsx:157
 msgid "in the documentation and the"
 msgstr "설명서 및"
 
@@ -6179,7 +6179,7 @@ msgid "Resource deleted"
 msgstr "삭제된 리소스"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:52
-#: screens/Inventory/shared/Inventory.helptext.tsx:193
+#: screens/Inventory/shared/Inventory.helptext.tsx:196
 msgid "YAML:"
 msgstr "YAML:"
 
@@ -6333,7 +6333,7 @@ msgstr "인스턴스 전환"
 msgid "Back to Inventories"
 msgstr "인벤토리로 돌아가기"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:118
+#: screens/Inventory/shared/Inventory.helptext.tsx:121
 msgid "After every project update where the SCM revision changes, refresh the inventory from the selected source before executing job tasks. This is intended for static content, like the Ansible inventory .ini file format."
 msgstr "SCM 개정이 변경되는 프로젝트가 업데이트될 때마다 작업 작업을 실행하기 전에 선택한 소스에서 인벤토리를 새로 고칩니다. 이것은 Ansible 인벤토리 .ini 파일 형식과 같은 정적 콘텐츠를 위한 것입니다."
 
@@ -7165,7 +7165,7 @@ msgstr "이 필드는 숫자여야 하며 {min}보다 큰 값이어야 합니다
 msgid "All"
 msgstr "모두"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:183
+#: screens/Inventory/shared/Inventory.helptext.tsx:186
 msgid "constructed inventory"
 msgstr "건설 인벤토리"
 
@@ -7909,7 +7909,7 @@ msgstr "{0, plural, one {이 인스턴스는 현재 다른 리소스에서 사�
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:81
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8319,7 +8319,7 @@ msgstr "남아 있는 호스트가 없음"
 msgid "ID of the dashboard (optional)"
 msgstr "대시보드 ID (선택 사항)"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:132
+#: screens/Inventory/shared/Inventory.helptext.tsx:135
 msgid "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
 msgstr "주어진 호스트 변수 딕트에서 활성화된 상태를 검색합니다. 활성화된 변수는 점 표기법 (예: 'foo.bar') 을 사용하여 지정할 수 있습니다."
 
@@ -8518,6 +8518,10 @@ msgstr "LDAP 2"
 msgid "Examples include:"
 msgstr "예제는 다음과 같습니다."
 
+#: screens/Inventory/shared/Inventory.helptext.tsx:91
+msgid "Inventory variables this source added on an earlier sync are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them."
+msgstr ""
+
 #: components/JobList/JobList.tsx:222
 #: components/JobList/JobListItem.tsx:68
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:44
@@ -8698,7 +8702,7 @@ msgstr "IRC 닉네임"
 #~ msgid "Expires on"
 #~ msgstr "만료일"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:99
+#: screens/Inventory/shared/Inventory.helptext.tsx:102
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "작업이 이 인벤토리를 사용하여 실행될 때마다 작업 작업을 실행하기 전에 선택한 소스에서 인벤토리를 새로 고칩니다."
 
@@ -8976,7 +8980,7 @@ msgstr "하나 이상의 사용자를 삭제하지 못했습니다."
 msgid "On Success"
 msgstr "성공 시"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:198
+#: screens/Inventory/shared/Inventory.helptext.tsx:201
 msgid "The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input."
 msgstr "이 소스에 의해 동기화될 인벤토리 파일. 드롭다운에서 선택하거나 입력란에 파일을 입력할 수 있습니다."
 
@@ -9271,7 +9275,7 @@ msgstr "워크플로우 거부 메시지 본문"
 msgid "Generic OIDC settings"
 msgstr "일반 OIDC 설정"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:207
+#: screens/Inventory/shared/Inventory.helptext.tsx:210
 msgid "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
 msgstr ""
 
@@ -9733,7 +9737,7 @@ msgstr "플레이북을 실행하는 동안 사용할 병렬 또는 동시 프�
 msgid "View all Workflow Approvals."
 msgstr "모든 워크플로우 승인 보기."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:91
+#: screens/Inventory/shared/Inventory.helptext.tsx:94
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "선택하지 않으면 병합이 수행되어 로컬 변수와 외부 소스에 있는 변수를 결합합니다."
 
@@ -9959,7 +9963,7 @@ msgstr "검색 취소"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:88
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -10067,7 +10071,7 @@ msgstr "탐색"
 msgid "If enabled, control nodes will peer to this instance automatically. If disabled, instance will be connected only to associated peers."
 msgstr "활성화되면 제어 노드가 이 인스턴스를 자동으로 피어링합니다. 비활성화된 경우, 인스턴스는 연결된 동료에게만 연결됩니다."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:125
+#: screens/Inventory/shared/Inventory.helptext.tsx:128
 msgid "and click on Update Revision on Launch"
 msgstr "실행 시 버전 업데이트를 클릭합니다"
 
@@ -10274,7 +10278,7 @@ msgstr "세부 정보 편집"
 msgid "Deleted"
 msgstr "삭제됨"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:134
+#: screens/Inventory/shared/Inventory.helptext.tsx:137
 msgid "This field is ignored unless an Enabled Variable is set. If the enabled variable matches this value, the host will be enabled on import."
 msgstr "활성화된 변수가 설정되지 않은 경우 이 필드는 무시됩니다. 사용 가능한 변수가 이 값과 일치하면 호스트는 가져오기에서 활성화됩니다."
 
@@ -11070,7 +11074,7 @@ msgstr "알 수 없는 프로젝트"
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "여러 명의 부모가 있을 때 이 노드를 실행하기 위한 전제 조건"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:146
+#: screens/Inventory/shared/Inventory.helptext.tsx:149
 msgid "Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see"
 msgstr "인벤토리 소스를 구성하는 데 사용되는 변수입니다. 이 플러그인을 구성하는 방법에 대한 자세한 설명은 다음을 참조하십시오."
 
@@ -11136,7 +11140,7 @@ msgstr "간단한 키 선택"
 #~ msgid "You have automated against more hosts than your subscription allows."
 #~ msgstr "서브스크립션에서 허용하는 것보다 더 많은 호스트에 대해 자동화되었습니다."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:135
+#: screens/Inventory/shared/Inventory.helptext.tsx:138
 msgid "Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied."
 msgstr "호스트 이름과 일치하는 정규 표현식을 가져옵니다. 필터는 인벤토리 플러그인 필터를 적용한 후 사후 처리 단계로 적용됩니다."
 
@@ -11426,7 +11430,7 @@ msgstr "프로비저닝 실패"
 msgid "Whether the approval node is automatically approved or denied when the timeout expires."
 msgstr "시간 초과가 만료될 때 승인 노드가 자동으로 승인되거나 거부되는지 여부입니다."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:130
+#: screens/Inventory/shared/Inventory.helptext.tsx:133
 msgid "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
 msgstr "재고 동기화를 현재로 간주하는 데 걸리는 시간 (초) 입니다. 작업 실행 및 콜백 중에 작업 시스템은 최신 동기화의 타임스탬프를 평가합니다. 캐시 시간 초과보다 오래된 경우 현재로 간주되지 않으며 새 인벤토리 동기화가 수행됩니다."
 
@@ -11540,7 +11544,7 @@ msgstr "연결"
 
 #: components/JobList/JobListItem.tsx:199
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:145
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:148
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:123
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
 #: screens/Job/JobDetail/JobDetail.tsx:622

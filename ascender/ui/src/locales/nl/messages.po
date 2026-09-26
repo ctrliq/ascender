@@ -522,7 +522,7 @@ msgstr "Gebeurtenis"
 msgid "Repeat Frequency"
 msgstr "Frequentie herhalen"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:177
+#: screens/Inventory/shared/Inventory.helptext.tsx:180
 msgid "Variables used to configure the constructed inventory plugin. For a detailed description of how to configure this plugin, see"
 msgstr "Variabelen die worden gebruikt om de geconstrueerde voorraadplug-in te configureren. Zie voor een gedetailleerde beschrijving van het configureren van deze plug-in"
 
@@ -722,8 +722,8 @@ msgstr "Metrics"
 msgid "Create new credential Type"
 msgstr "Nieuw type toegangsgegevens maken"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:104
-#: screens/Inventory/shared/Inventory.helptext.tsx:123
+#: screens/Inventory/shared/Inventory.helptext.tsx:107
+#: screens/Inventory/shared/Inventory.helptext.tsx:126
 msgid "If you want the Inventory Source to update on launch, click on Update on Launch, and also go to "
 msgstr "Als u wilt dat de inventarisbron bij het starten wordt bijgewerkt, klikt u op Bijwerken bij starten en gaat u ook naar "
 
@@ -741,7 +741,7 @@ msgid "Start Time"
 msgstr "Starttijd"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:46
-#: screens/Inventory/shared/Inventory.helptext.tsx:190
+#: screens/Inventory/shared/Inventory.helptext.tsx:193
 msgid "Variables must be in JSON or YAML syntax. Use the radio button to toggle between the two."
 msgstr "Voer variabelen in met JSON- of YAML-syntaxis. Gebruik de radioknop om tussen de twee te wisselen."
 
@@ -983,7 +983,7 @@ msgstr "{interval, plural, one {# jaar} other {# jaar}}"
 msgid "Inventory Source Sync"
 msgstr "Synchronisatie inventarisbronnen"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:152
+#: screens/Inventory/shared/Inventory.helptext.tsx:155
 msgid "Inventory Plugins"
 msgstr "Voorraadplugins"
 
@@ -1053,7 +1053,7 @@ msgstr "1 (Info)"
 msgid "Set the instance enabled or disabled. If disabled, jobs will not be assigned to this instance."
 msgstr "Zet de instantie aan of uit. Indien uitgeschakeld, zullen er geen taken aan deze instantie worden toegewezen."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:106
+#: screens/Inventory/shared/Inventory.helptext.tsx:109
 msgid "and click on Update Revision on Launch."
 msgstr "en klik op Update Revision on Launch."
 
@@ -1552,8 +1552,8 @@ msgstr "Een of meer taken kunnen niet worden verwijderd."
 msgid "Run Command"
 msgstr "Opdracht uitvoeren"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:162
-#: screens/Inventory/shared/Inventory.helptext.tsx:185
+#: screens/Inventory/shared/Inventory.helptext.tsx:165
+#: screens/Inventory/shared/Inventory.helptext.tsx:188
 msgid "plugin configuration guide."
 msgstr "plugin configuratiegids."
 
@@ -2074,8 +2074,8 @@ msgstr "Item mislukt"
 msgid "Team Roles"
 msgstr "Teamrollen"
 
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:140
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:169
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:143
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:172
 msgid "relaunch workflow"
 msgstr "werkstroom opnieuw starten"
 
@@ -2390,7 +2390,7 @@ msgstr "Deze samengestelde inventarisinvoer \n"
 "            de limiet (hostpatroon) om alleen hosts te retourneren die \n"
 "            zich in de doorsnede van die twee groepen bevinden."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:200
+#: screens/Inventory/shared/Inventory.helptext.tsx:203
 msgid "If enabled, hosts can be deleted from this inventory while jobs are running against it. By default those deletions are rejected until the running jobs finish."
 msgstr ""
 
@@ -2569,7 +2569,7 @@ msgstr "Logboeksysteem dat feiten individueel bijhoudt inschakelen"
 msgid "Job Templates with credentials that prompt for passwords cannot be selected when creating or editing nodes"
 msgstr "Taaksjablonen met toegangsgegevens die om een wachtwoord vragen, kunnen niet worden geselecteerd tijdens het maken of bewerken van knooppunten"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:199
+#: screens/Inventory/shared/Inventory.helptext.tsx:202
 msgid "If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on. Note: If this setting is enabled and you provided an empty list, the global instance groups will be applied."
 msgstr "Indien ingeschakeld, voorkomt deze inventaris dat instantiegroepen voor een organisatie worden toegevoegd aan de lijst met voorkeursinstantiegroepen om gekoppelde taaksjablonen op uit te voeren. Opmerking: als deze instelling is ingeschakeld en u een lege lijst hebt opgegeven, worden de globale instantiegroepen toegepast."
 
@@ -4125,8 +4125,8 @@ msgstr "Toegangsgegevens verwijderen"
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:112
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:85
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:89
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:119
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:123
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:120
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:124
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:85
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:89
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:96
@@ -4183,7 +4183,7 @@ msgstr "Geen time-out gespecificeerd"
 msgid "On Timeout"
 msgstr "Bij time-out"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:204
+#: screens/Inventory/shared/Inventory.helptext.tsx:207
 msgid "Prevent Instance Group Fallback: If enabled, the inventory will prevent adding any organization instance groups to the list of preferred instances groups to run associated job templates on."
 msgstr "Instance Group Fallback voorkomen: Indien ingeschakeld, zal de inventaris voorkomen dat instantiegroepen van organisaties worden toegevoegd aan de lijst van voorkeursinstantiegroepen om geassocieerde taaksjablonen op uit te voeren."
 
@@ -4749,7 +4749,7 @@ msgstr "Berichtsjablonen"
 msgid "Start message body"
 msgstr "Body startbericht"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:133
+#: screens/Inventory/shared/Inventory.helptext.tsx:136
 msgid "Branch to use on inventory sync. Project default used if blank. Only allowed if project allow_override field is set to true."
 msgstr "Filiaal om te gebruiken bij voorraadsynchronisatie. Projectstandaard gebruikt indien leeg. Alleen toegestaan als het veld project allow_override is ingesteld op true."
 
@@ -5041,7 +5041,7 @@ msgstr "Bij time-out"
 msgid "Create New Team"
 msgstr "Nieuw team maken"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:154
+#: screens/Inventory/shared/Inventory.helptext.tsx:157
 msgid "in the documentation and the"
 msgstr "in de documentatie en de"
 
@@ -6179,7 +6179,7 @@ msgid "Resource deleted"
 msgstr "Bron verwijderd"
 
 #: screens/Inventory/shared/Inventory.helptext.tsx:52
-#: screens/Inventory/shared/Inventory.helptext.tsx:193
+#: screens/Inventory/shared/Inventory.helptext.tsx:196
 msgid "YAML:"
 msgstr "YAML:"
 
@@ -6333,7 +6333,7 @@ msgstr "Instantie wisselen"
 msgid "Back to Inventories"
 msgstr "Terug naar inventarissen"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:118
+#: screens/Inventory/shared/Inventory.helptext.tsx:121
 msgid "After every project update where the SCM revision changes, refresh the inventory from the selected source before executing job tasks. This is intended for static content, like the Ansible inventory .ini file format."
 msgstr "Na elke projectupdate waarbij de SCM-revisie verandert, vernieuwt u de inventaris van de geselecteerde bron voordat u projecttaken uitvoert. Dit is bedoeld voor statische content, zoals het Ansible inventory .ini bestandsformaat."
 
@@ -7165,7 +7165,7 @@ msgstr "Dit veld moet een getal zijn en een waarde groter dan {min} hebben"
 msgid "All"
 msgstr "Alle"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:183
+#: screens/Inventory/shared/Inventory.helptext.tsx:186
 msgid "constructed inventory"
 msgstr "geconstrueerde inventaris"
 
@@ -7909,7 +7909,7 @@ msgstr "{0, plural, one {Deze instantie wordt momenteel gebruikt door andere res
 #: screens/Setting/LDAP/LDAPDetail/LDAPDetail.tsx:105
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:70
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:44
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:81
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:82
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:44
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:45
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:54
@@ -8319,7 +8319,7 @@ msgstr "Geen resterende hosts"
 msgid "ID of the dashboard (optional)"
 msgstr "ID van het dashboard (optioneel)"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:132
+#: screens/Inventory/shared/Inventory.helptext.tsx:135
 msgid "Retrieve the enabled state from the given dict of host variables. The enabled variable may be specified using dot notation, e.g: 'foo.bar'"
 msgstr "Haal de ingeschakelde status op uit het gegeven dictaat van hostvariabelen. De ingeschakelde variabele kan worden opgegeven met behulp van puntnotatie, bijvoorbeeld: 'foo.bar'"
 
@@ -8518,6 +8518,10 @@ msgstr "LDAP 2"
 msgid "Examples include:"
 msgstr "Voorbeelden zijn onder meer:"
 
+#: screens/Inventory/shared/Inventory.helptext.tsx:91
+msgid "Inventory variables this source added on an earlier sync are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them."
+msgstr ""
+
 #: components/JobList/JobList.tsx:222
 #: components/JobList/JobListItem.tsx:68
 #: components/Schedule/ScheduleList/ScheduleListItem.tsx:44
@@ -8698,7 +8702,7 @@ msgstr "IRC-bijnaam"
 #~ msgid "Expires on"
 #~ msgstr "Verloopt op"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:99
+#: screens/Inventory/shared/Inventory.helptext.tsx:102
 msgid "Each time a job runs using this inventory, refresh the inventory from the selected source before executing job tasks."
 msgstr "Elke keer dat een taak wordt uitgevoerd met behulp van deze inventaris, vernieuwt u de inventaris van de geselecteerde bron voordat u projecttaken uitvoert."
 
@@ -8976,7 +8980,7 @@ msgstr "Een of meer gebruikers kunnen niet worden verwijderd."
 msgid "On Success"
 msgstr "Bij slagen"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:198
+#: screens/Inventory/shared/Inventory.helptext.tsx:201
 msgid "The inventory file to be synced by this source. You can select from the dropdown or enter a file within the input."
 msgstr "Het inventarisbestand dat door deze bron moet worden gesynchroniseerd. U kunt kiezen uit de vervolgkeuzelijst of een bestand invoeren binnen de invoer."
 
@@ -9271,7 +9275,7 @@ msgstr "Workflow geweigerde berichtbody"
 msgid "Generic OIDC settings"
 msgstr "Algemene OIDC-instellingen"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:207
+#: screens/Inventory/shared/Inventory.helptext.tsx:210
 msgid "Allow Deletes While In Use: If enabled, hosts can be deleted from this inventory while jobs are running against it."
 msgstr ""
 
@@ -9733,7 +9737,7 @@ msgstr "Het aantal parallelle of gelijktijdige processen dat gebruikt wordt bij 
 msgid "View all Workflow Approvals."
 msgstr "Geef alle workflowgoedkeuringen weer."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:91
+#: screens/Inventory/shared/Inventory.helptext.tsx:94
 msgid "When not checked, a merge will be performed, combining local variables with those found on the external source."
 msgstr "Indien niet aangevinkt, wordt een samenvoeging uitgevoerd, waarbij lokale variabelen worden gecombineerd met die op de externe bron."
 
@@ -9959,7 +9963,7 @@ msgstr "Opzoeken annuleren"
 #: screens/Setting/Jobs/JobsDetail/JobsDetail.tsx:65
 #: screens/Setting/Logging/LoggingDetail/LoggingDetail.tsx:77
 #: screens/Setting/MiscAuthentication/MiscAuthenticationDetail/MiscAuthenticationDetail.tsx:51
-#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:88
+#: screens/Setting/MiscSystem/MiscSystemDetail/MiscSystemDetail.tsx:89
 #: screens/Setting/OIDC/OIDCDetail/OIDCDetail.tsx:51
 #: screens/Setting/RADIUS/RADIUSDetail/RADIUSDetail.tsx:52
 #: screens/Setting/SAML/SAMLDetail/SAMLDetail.tsx:61
@@ -10067,7 +10071,7 @@ msgstr "Navigatie"
 msgid "If enabled, control nodes will peer to this instance automatically. If disabled, instance will be connected only to associated peers."
 msgstr "Indien ingeschakeld, zullen besturingsknooppunten automatisch naar dit exemplaar turen. Indien uitgeschakeld, wordt het exemplaar alleen verbonden met geassocieerde collega's."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:125
+#: screens/Inventory/shared/Inventory.helptext.tsx:128
 msgid "and click on Update Revision on Launch"
 msgstr "en klik op Herziening updaten bij opstarten"
 
@@ -10274,7 +10278,7 @@ msgstr "Details bewerken"
 msgid "Deleted"
 msgstr "Verwijderd"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:134
+#: screens/Inventory/shared/Inventory.helptext.tsx:137
 msgid "This field is ignored unless an Enabled Variable is set. If the enabled variable matches this value, the host will be enabled on import."
 msgstr "Dit veld wordt genegeerd, tenzij er een Ingeschakelde variabele is ingesteld. Als de ingeschakelde variabele overeenkomt met deze waarde, wordt de host bij het importeren ingeschakeld."
 
@@ -11070,7 +11074,7 @@ msgstr "Onbekend project"
 msgid "Preconditions for running this node when there are multiple parents. Refer to the"
 msgstr "Voorwaarden voor het uitvoeren van dit knooppunt wanneer er meerdere bovenliggende elementen zijn. Raadpleeg de"
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:146
+#: screens/Inventory/shared/Inventory.helptext.tsx:149
 msgid "Variables used to configure the inventory source. For a detailed description of how to configure this plugin, see"
 msgstr "Variabelen die worden gebruikt om de voorraadbron te configureren. Zie voor een gedetailleerde beschrijving van het configureren van deze plug-in"
 
@@ -11136,7 +11140,7 @@ msgstr "Eenvoudige sleutel selecteren"
 #~ msgid "You have automated against more hosts than your subscription allows."
 #~ msgstr "Je hebt tegen meer hosts geautomatiseerd dan je abonnement toelaat."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:135
+#: screens/Inventory/shared/Inventory.helptext.tsx:138
 msgid "Regular expression where only matching host names will be imported. The filter is applied as a post-processing step after any inventory plugin filters are applied."
 msgstr "Reguliere expressie waarbij alleen overeenkomende hostnamen worden geïmporteerd. Het filter wordt toegepast als een nabewerkingsstap nadat eventuele filters voor inventarisplugins zijn toegepast."
 
@@ -11426,7 +11430,7 @@ msgstr "Bevoorrading mislukt"
 msgid "Whether the approval node is automatically approved or denied when the timeout expires."
 msgstr "Of het goedkeuringsknooppunt automatisch wordt goedgekeurd of geweigerd wanneer de time-out verloopt."
 
-#: screens/Inventory/shared/Inventory.helptext.tsx:130
+#: screens/Inventory/shared/Inventory.helptext.tsx:133
 msgid "Time in seconds to consider an inventory sync to be current. During job runs and callbacks the task system will evaluate the timestamp of the latest sync. If it is older than Cache Timeout, it is not considered current, and a new inventory sync will be performed."
 msgstr "Tijd in seconden om een voorraadsynchronisatie als actueel te beschouwen. Tijdens taakruns en callbacks evalueert het taaksysteem de tijdstempel van de nieuwste synchronisatie. Als het ouder is dan Cache Timeout, wordt het niet als actueel beschouwd en wordt een nieuwe voorraadsynchronisatie uitgevoerd."
 
@@ -11540,7 +11544,7 @@ msgstr "Associëren"
 
 #: components/JobList/JobListItem.tsx:199
 #: components/LaunchButton/ReLaunchDropDown.tsx:86
-#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:145
+#: components/LaunchButton/WorkflowReLaunchDropDown.tsx:148
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:123
 #: components/LaunchButton/WorkflowRelaunchVariablesModal.tsx:128
 #: screens/Job/JobDetail/JobDetail.tsx:622

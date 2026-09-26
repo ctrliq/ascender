@@ -88,6 +88,9 @@ function useInventoryHelpTextStrings() {
           {t`If checked, all variables for child groups and hosts will be removed and replaced by those found on the external source.`}
           <br />
           <br />
+          {t`Inventory variables this source added on an earlier sync are removed once the source no longer provides them, unless they were edited since or another source of this inventory still provides them.`}
+          <br />
+          <br />
           {t`When not checked, a merge will be performed, combining local variables with those found on the external source.`}
         </>
       ),
