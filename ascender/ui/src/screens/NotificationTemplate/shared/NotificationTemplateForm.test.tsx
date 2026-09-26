@@ -56,6 +56,7 @@ const allDefaultMessages = {
   ...defaultMessages,
   grafana: defaults,
   irc: defaults,
+  matrix: defaults,
   mattermost: defaults,
   pagerduty: defaults,
   rocketchat: defaults,
@@ -94,6 +95,17 @@ const secretTemplates = [
       nickname: 'awx',
       targets: ['#alerts'],
       use_ssl: false,
+    }),
+  },
+  {
+    type: 'matrix',
+    fieldName: 'notification_configuration.access_token',
+    template: buildTemplate('matrix', {
+      homeserver_url: 'https://matrix.example.org',
+      access_token: '$encrypted$',
+      rooms: ['#automation:example.org'],
+      use_html: true,
+      disable_ssl_verification: false,
     }),
   },
   {

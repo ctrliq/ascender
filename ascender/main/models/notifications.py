@@ -31,6 +31,7 @@ from ascender.main.notifications.mattermost_backend import MattermostBackend
 from ascender.main.notifications.grafana_backend import GrafanaBackend
 from ascender.main.notifications.rocketchat_backend import RocketChatBackend
 from ascender.main.notifications.irc_backend import IrcBackend
+from ascender.main.notifications.matrix_backend import MatrixBackend
 
 logger = logging.getLogger('ascender.main.models.notifications')
 
@@ -48,6 +49,7 @@ class NotificationTemplate(CommonModelNameNotUnique):
         ('mattermost', _('Mattermost'), MattermostBackend),
         ('rocketchat', _('Rocket.Chat'), RocketChatBackend),
         ('irc', _('IRC'), IrcBackend),
+        ('matrix', _('Matrix'), MatrixBackend),
     ]
     NOTIFICATION_TYPE_CHOICES = sorted([(x[0], x[1]) for x in NOTIFICATION_TYPES])
     CLASS_FOR_NOTIFICATION_TYPE = dict([(x[0], x[2]) for x in NOTIFICATION_TYPES])

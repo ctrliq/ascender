@@ -79,6 +79,33 @@ describe('<NotificationTemplateDetail />', () => {
     await assertCommonDetails();
   });
 
+  test('should render the Matrix type details', async () => {
+    const matrixTemplate = {
+      ...mockTemplate,
+      notification_type: 'matrix',
+      notification_configuration: {
+        homeserver_url: 'https://matrix.example.org',
+        access_token: '$encrypted$',
+        rooms: ['!abcdef:example.org', '#automation:example.org'],
+        use_html: true,
+        disable_ssl_verification: false,
+      },
+    };
+    renderWithContexts(
+      <NotificationTemplateDetail
+        template={matrixTemplate as unknown as NotificationTemplate}
+        defaultMessages={defaultMessages}
+      />
+    );
+    expect(await screen.findByText('Homeserver URL')).toBeInTheDocument();
+    assertDetail('Homeserver URL', 'https://matrix.example.org');
+    assertDetail('Send HTML Formatted Body', 'True');
+    assertDetail('Disable SSL Verification', 'False');
+    expect(screen.getByText('!abcdef:example.org')).toBeInTheDocument();
+    expect(screen.getByText('#automation:example.org')).toBeInTheDocument();
+    expect(screen.queryByText('$encrypted$')).not.toBeInTheDocument();
+  });
+
   test('should render Details when defaultMessages is missing', async () => {
     renderWithContexts(
       <NotificationTemplateDetail
